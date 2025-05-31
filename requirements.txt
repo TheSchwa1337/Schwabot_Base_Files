@@ -1,0 +1,17 @@
+numpy>=1.21.0
+pandas>=1.3.0
+scipy>=1.7.0
+matplotlib>=3.4.0
+react>=17.0.0
+react-dom>=17.0.0
+chart.js>=3.7.0
+react-chartjs-2>=4.0.0
+tailwindcss>=2.2.0
+typescript>=4.5.0
+@types/react>=17.0.0
+@types/react-dom>=17.0.0
+streamlit>=1.0.0
+psutil>=5.8.0
+gputil>=1.4.0
+flask>=2.0.0
+pyyaml>=5.4.0 

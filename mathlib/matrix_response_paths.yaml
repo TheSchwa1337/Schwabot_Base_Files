@@ -1,0 +1,69 @@
+# Matrix Response Paths for Schwabot v0.3
+# Defines fallback logic for different line states
+
+# Safe state responses
+safe:
+  action: "hold"
+  description: "Normal operation, continue current strategy"
+  retry_delay: 0
+  max_retries: 0
+  fallback_strategy: null
+
+# Warning state responses
+warn:
+  action: "delay_entry"
+  description: "Temporary delay to allow system stabilization"
+  retry_delay: 1000  # ms
+  max_retries: 3
+  fallback_strategy: "lightweight_hold"
+
+# Failure state responses
+fail:
+  action: "matrix_realign"
+  description: "Realign strategy matrix with current market state"
+  retry_delay: 5000  # ms
+  max_retries: 1
+  fallback_strategy: "safe_mode_hold"
+
+# ZPE risk state responses
+ZPE-risk:
+  action: "cooldown_abort"
+  description: "Immediate halt and cooldown period"
+  retry_delay: 30000  # ms
+  max_retries: 0
+  fallback_strategy: "emergency_hold"
+
+# Strategy fallbacks
+fallback_strategies:
+  lightweight_hold:
+    description: "Minimal strategy with reduced hash load"
+    max_cpu_time: 15  # μs
+    max_temp: 70  # °C
+    hash_retry_limit: 2
+
+  safe_mode_hold:
+    description: "Conservative strategy with full safety checks"
+    max_cpu_time: 10  # μs
+    max_temp: 65  # °C
+    hash_retry_limit: 1
+
+  emergency_hold:
+    description: "Emergency strategy with minimal operations"
+    max_cpu_time: 5  # μs
+    max_temp: 60  # °C
+    hash_retry_limit: 0
+
+# Retry configuration
+retry_config:
+  base_delay: 1000  # ms
+  max_delay: 30000  # ms
+  backoff_factor: 2
+  jitter: true
+  jitter_factor: 0.1
+
+# Memory persistence
+memory_config:
+  max_history: 1000
+  flush_interval: 60  # seconds
+  backup_interval: 300  # seconds
+  compression: true 

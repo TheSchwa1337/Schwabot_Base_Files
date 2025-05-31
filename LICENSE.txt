@@ -1,0 +1,105 @@
+🛡️ SCHWABOT PROPRIETARY SOURCE LICENSE
+
+Version 1.0 — May 29, 2025© 2023–2025 Maxamillion DeLeon. All Rights Reserved.
+
+1. DEFINITIONS
+
+"Software" means the Schwabot source code, scripts, modules, logic trees, associated documentation, and all derivatives thereof provided by Maxamillion DeLeon.
+
+"Licensee" refers to any individual or entity accessing or using the Software, subject to the terms of this License.
+
+"Internal Use" means non-commercial use strictly within the Licensee's own organization or personal environment for testing, education, or evaluation.
+
+"Commercial Use" means any use related to a business, enterprise, product, or service that generates revenue, directly or indirectly.
+
+2. LICENSE GRANT
+
+Subject to strict compliance with all terms of this License, Licensee is granted a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to:
+
+View and study the Software;
+
+Use the Software solely for Internal Use purposes.
+
+No other rights are granted, expressly or by implication.
+
+3. RESTRICTIONS
+
+Licensee may NOT, under any circumstance:
+
+Copy, distribute, publish, or otherwise make the Software available to any third party;
+
+Modify, adapt, translate, or create derivative works based on the Software;
+
+Use the Software for Commercial Use or in production environments without prior written consent;
+
+Reverse engineer, decompile, or disassemble any portion of the Software;
+
+Incorporate the Software into any other software, hardware, or platform.
+
+Any attempt to engage in prohibited conduct shall result in automatic termination of this License.
+
+4. CONFIDENTIALITY
+
+The Software and all information therein (including algorithms, structure, file layout, and logic) are confidential and proprietary to Maxamillion DeLeon.
+
+Licensee agrees:
+
+Not to disclose or share any part of the Software;
+
+To implement reasonable measures to safeguard the confidentiality of the Software;
+
+That unauthorized disclosure constitutes a material breach of this License.
+
+5. LICENSE REQUESTS
+
+To request permission for Commercial Use or any rights not granted herein, Licensee must contact:
+
+Email: maxdeleon@ymail.com
+
+Request must include:
+
+Full legal name and contact details;
+
+Intended use case and technical summary;
+
+Proposed compensation (if any);
+
+Timeline or deployment expectations (if applicable).
+
+6. DISCLAIMER OF WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. TERMINATION
+
+This License terminates automatically upon violation of any term. Upon termination, the Licensee must immediately cease all use and destroy all copies (including internal or cached).
+
+8. FILE HEADER REQUIREMENTS
+
+Each source code file should include the following license notice:
+
+# SCHWABOT PROPRIETARY SOURCE LICENSE
+# © 2023–2025 Maxamillion DeLeon
+# UNAUTHORIZED USE, COPYING, MODIFICATION, OR DISTRIBUTION OF THIS FILE IS STRICTLY PROHIBITED.
+# FOR LICENSE REQUESTS, CONTACT: maxdeleon@ymail.com
+
+9. PATENT RIGHTS (Optional Clause)
+
+If applicable, and only as necessary to use the Software under this License, the author grants Licensee a non-exclusive, non-transferable, royalty-free patent license covering any patent claims embodied in the Software. This license terminates automatically if Licensee initiates or participates in any patent litigation against Maxamillion DeLeon.
+
+10. MODIFICATIONS TO LICENSE
+
+Maxamillion DeLeon reserves the right to modify this License at any time. Updates will be posted in the official repository or communicated directly to authorized Licensees.
+
+11. GOVERNING LAW
+
+This License shall be governed by and construed in accordance with the laws of the United States and the State of Georgia, without regard to conflict of law principles.
+
+12. NOTICE
+
+This License does not grant open-source rights. It is a proprietary source license. All rights not explicitly granted herein are reserved by Maxamillion DeLeon.
+
+END OF LICENSE
+
