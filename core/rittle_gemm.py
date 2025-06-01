@@ -1,5 +1,6 @@
 import numpy as np
 import hashlib
+from unified_mathematical_processor import UnifiedMathematicalProcessor
 
 class RittleGEMM:
     """
@@ -63,4 +64,13 @@ class RittleGEMM:
     def allocate_volume(self, activations):
         """Volume allocation: sum_{i=1}^{10} (R_i[t] * Activation_i)"""
         idx = (self.pointer - 1) % self.ring_size
-        return float(np.sum(self.rings[:, idx] * np.array(activations))) 
+        return float(np.sum(self.rings[:, idx] * np.array(activations)))
+
+# Create an instance of the processor
+processor = UnifiedMathematicalProcessor()
+
+# Run the complete analysis
+results = processor.run_complete_analysis()
+
+# Generate a summary report
+processor.generate_summary_report(results) 

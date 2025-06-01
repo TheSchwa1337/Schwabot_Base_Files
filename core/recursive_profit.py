@@ -9,6 +9,11 @@ from typing import Dict, List, Any, Optional
 from collections import deque
 import datetime
 import logging
+import time
+import math
+import json
+import hashlib
+import matplotlib.pyplot as plt
 
 @dataclass
 class RecursiveMarketState:
@@ -353,4 +358,150 @@ class RecursiveProfitAllocationSystem:
             'profit_allocation': profit_allocation,
             'quantum_coherence': new_state.quantum_coherence,
             'system_status': 'optimal' if new_state.quantum_coherence > 0.9 else 'stable'
-        } 
+        }
+
+class RiskMonitor:
+    def __init__(self, risk_manager):
+        self.risk_manager = risk_manager
+        self.market_data_source = None  # Placeholder for market data source
+
+    def connect_to_market_data(self, source):
+        self.market_data_source = source
+
+    def fetch_market_data(self):
+        if self.market_data_source:
+            return self.market_data_source.get_current_price()
+        else:
+            raise Exception("Market data source not connected.")
+
+    def update_risk_manager(self):
+        current_price = self.fetch_market_data()
+        expected_return = 0.1  # Example expected return
+
+        risk_info = self.risk_manager.evaluate_risk(current_price, expected_return)
+        if risk_info:
+            print(f"Current Price: {current_price}")
+            print(f"Expected Return: {expected_return}%")
+            print(f"Risk Information: Stop Loss = {risk_info['stop_loss']}, Take Profit = {risk_info['take_profit']}")
+
+    def run(self):
+        while True:
+            self.update_risk_manager()
+            time.sleep(60)  # Check market data every minute
+
+class DormantState:
+    def __init__(self, delta_h, delta_v, decay_t, primary_hash, ferris_wheel_tag):
+        self.delta_h = delta_h
+        self.delta_v = delta_v
+        self.decay_t = decay_t
+        self.primary_hash = primary_hash
+        self.ferris_wheel_tag = ferris_wheel_tag
+
+def check_dormant_state(P_t, tick, shell, signals):
+    dormant_flags = []
+    if not pattern_match(P_t): dormant_flags.append('D0')
+    if dip_zone_active(P_t): dormant_flags.append('D1')
+    if not hash_confirmed(P_t): dormant_flags.append('D2')
+    ...
+    return dormant_flags
+
+# Example usage
+P_t = ...  # Current price
+tick = ...  # Current tick number
+shell = ...  # Current shell state
+signals = ...  # Current signals
+dormant_states = check_dormant_state(P_t, tick, shell, signals)
+
+def sigmoid_decay(t, t0, lambda_val):
+    return 1 / (1 + math.exp(-lambda_val * (t - t0)))
+
+# Example usage
+t = ...  # Current tick number
+t0 = ...  # Last confirmed strategy ping
+lambda_val = ...  # Decay sensitivity
+decay_factor = sigmoid_decay(t, t0, lambda_val)
+
+def store_vault_echo(vault_echo, timestamp):
+    with open(f'/state/ghostshell/dormant/batch_{timestamp}.json', 'w') as file:
+        json.dump(vault_echo, file)
+
+def cosine_similarity(hash1, hash2):
+    return np.dot(hash1, hash2) / (np.linalg.norm(hash1) * np.linalg.norm(hash2))
+
+def reactivate_dormant(dormant_state):
+    # Reload strategy matrix from matrix_store/
+    reload_strategy_matrix()
+
+    # Rebroadcast ghost ping to AI matrix validators
+    rebroadcast_ghost_ping()
+
+    # Reinject vector into Ferris logic wheel
+    inject_vector_into_ferris_wheel()
+
+def calculate_checksum(file_path):
+    with open(file_path, 'rb') as file:
+        data = file.read()
+        return hashlib.sha256(data).hexdigest()
+
+def validate_documents(documents):
+    for doc in documents:
+        checksum = calculate_checksum(doc)
+        if checksum != expected_checksums[doc]:
+            print(f"Checksum mismatch for {doc}. Expected: {expected_checksums[doc]}, Got: {checksum}")
+            return False
+    return True
+
+# Example usage
+if __name__ == "__main__":
+    risk_manager = RiskManager(max_loss_percentage=10)
+    risk_monitor = RiskMonitor(risk_manager)
+
+    # Connect to a market data source (e.g., API, database)
+    risk_monitor.connect_to_market_data(MarketDataSource())
+
+    risk_monitor.run()
+
+# Example of testing the dormant logic engine
+def test_dormant_logic():
+    # Test with different scenarios
+    pass
+
+test_dormant_logic()
+
+def check_pattern_recursion(current_hash, dormant_hashes, threshold=0.76):
+    for dormant_hash in dormant_hashes:
+        if cosine_similarity(current_hash, dormant_hash) > threshold:
+            return True
+    return False
+
+# Example usage
+current_hash = ...  # Current hash
+dormant_hashes = ...  # List of dormant hashes
+if check_pattern_recursion(current_hash, dormant_hashes):
+    print("Pattern recursion detected.")
+else:
+    print("No pattern recursion detected.")
+
+def visualize_dormant_field(dormant_states):
+    # Plot dormant states on a grid or heatmap
+    pass
+
+# Example usage
+dormant_states = ...  # List of dormant states
+visualize_dormant_field(dormant_states)
+
+def find_cross_shell_resonance(dormant_hashes):
+    # Find matches between dormant hashes across different shells
+    pass
+
+# Example usage
+dormant_hashes = ...  # List of dormant hashes
+resonances = find_cross_shell_resonance(dormant_hashes)
+print("Cross-shell resonances found:", resonances)
+
+def integrate_dormant_logic():
+    # Scan every 16 ticks, apply decay curve compensation, and check for pattern recursion.
+    pass
+
+# Example usage
+integrate_dormant_logic() 

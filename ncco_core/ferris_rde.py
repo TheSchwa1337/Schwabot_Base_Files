@@ -31,7 +31,15 @@ class FerrisRDE:
     
     def __init__(self, rde_cfg: str | Path, ferris_cfg: str | Path):
         self.rde = RDEEngine(rde_cfg)
-        self.ferris = FerrisWheel(ferris_cfg)
+        self.ferris_wheel = FerrisWheel(ferris_cfg)
+        self.strategy_mapping = {
+            0: "hold",
+            1: "flip"
+        }
+        self._strategy_performance = {}
+        self._mode_weights = {mode: 1.0 for mode in self.rde.get_bit_modes()}
+        self._spin_outcomes = []
+        self._last_spin = None
         
         # Strategy mapping based on bit modes
         self._mode_strategy_map = {
@@ -39,16 +47,6 @@ class FerrisRDE:
             8: ["hedge", "flip"],        # Medium precision -> balanced strategies
             42: ["aggressive", "spec"]   # High precision -> aggressive strategies
         }
-        
-        # Performance tracking
-        self._strategy_performance: Dict[str, float] = {}
-        self._mode_weights: Dict[int, float] = {
-            mode: 1.0 for mode in self.rde.bit_modes
-        }
-        
-        # Integration state
-        self._last_spin: Optional[Dict] = None
-        self._spin_outcomes: List[Dict] = []
 
     def update_market_state(self, signals: Dict[str, float]) -> None:
         """Update both RDE and Ferris Wheel with new market signals."""
@@ -66,7 +64,7 @@ class FerrisRDE:
         weights = self._get_strategy_weights(strategies)
         
         # Update Ferris Wheel with weighted strategies
-        self.ferris.update_strategies(strategies, weights)
+        self.ferris_wheel.update_strategies(strategies, weights)
         
         # Log the spin
         self._log_spin(spin_tag, current_mode, strategies, weights)
@@ -105,10 +103,15 @@ class FerrisRDE:
         
         # Log to file
         log_dir = Path("~/Schwabot/init/ferris_rde_logs").expanduser()
-        log_dir.mkdir(parents=True, exist_ok=True)
+        if not log_dir.exists():
+            log_dir.mkdir(parents=True, exist_ok=True)
         
         log_file = log_dir / f"{spin_tag}_ferris.json"
-        log_file.write_text(json.dumps(spin_data, indent=2))
+        try:
+            with open(log_file, 'w') as file:
+                json.dump(spin_data, file, indent=2)
+        except Exception as e:
+            print(f"Error logging spin data: {e}")
 
     def update_strategy_performance(self, strategy: str, performance: float) -> None:
         """Update performance metrics for a strategy."""
@@ -119,7 +122,7 @@ class FerrisRDE:
 
     def _update_mode_weights(self) -> None:
         """Update bit mode weights based on strategy performance."""
-        mode_performance = {mode: 0.0 for mode in self.rde.bit_modes}
+        mode_performance = {mode: 0.0 for mode in self.rde.get_bit_modes()}
         
         # Aggregate performance by mode
         for mode, strategies in self._mode_strategy_map.items():
@@ -167,9 +170,20 @@ class FerrisRDE:
     def reset_performance(self) -> None:
         """Reset all performance metrics."""
         self._strategy_performance.clear()
-        self._mode_weights = {mode: 1.0 for mode in self.rde.bit_modes}
+        self._mode_weights = {mode: 1.0 for mode in self.rde.get_bit_modes()}
         self._spin_outcomes.clear()
         self._last_spin = None
+
+    def train(self, data, labels):
+        """Train the model with input data and labels"""
+        try:
+            # Initialize a simple neural network
+            self.model = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+            
+            # Train the model
+            self.model.fit(data, labels)
+        except Exception as e:
+            print(f"Error training model: {e}")
 
 # Example usage:
 """

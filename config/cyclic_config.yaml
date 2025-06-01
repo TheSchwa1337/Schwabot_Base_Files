@@ -1,0 +1,57 @@
+# Cyclic System Configuration
+# =========================
+
+# Pattern matching thresholds
+pattern_matching:
+  min_confidence: 0.76  # Minimum confidence for pattern match
+  max_history: 1000    # Maximum pattern history to keep
+  symmetry_threshold: 0.95  # Threshold for symmetry break detection
+
+# Vector normalization
+vector_processing:
+  scale_factor: 1000   # Scale factor for vector normalization
+  precision: 3         # Number of decimal places to keep
+  min_vector_length: 1 # Minimum vector length
+
+# Hash generation
+hashing:
+  algorithm: "sha256"  # Hash algorithm to use
+  salt_length: 16      # Length of salt for hash generation
+  cache_size: 1000     # Size of hash cache
+
+# Event handling
+events:
+  pattern_match:
+    priority: 1        # Event priority (1 = highest)
+    max_queue_size: 1000
+    timeout_ms: 100    # Maximum time to process event
+    
+  symmetry_break:
+    priority: 2
+    max_queue_size: 100
+    timeout_ms: 50
+    
+  node_activation:
+    priority: 3
+    max_queue_size: 500
+    timeout_ms: 200
+
+# Memory management
+memory:
+  pattern_cache_size: 1000  # Size of pattern cache
+  vector_cache_size: 500    # Size of vector cache
+  cleanup_interval: 3600    # Cache cleanup interval in seconds
+
+# Logging
+logging:
+  level: "INFO"
+  pattern_matches: true
+  symmetry_breaks: true
+  node_activations: true
+  memory_updates: false
+
+# Performance tuning
+performance:
+  batch_size: 100      # Batch size for pattern processing
+  num_workers: 4       # Number of worker threads
+  use_gpu: false       # Whether to use GPU acceleration 

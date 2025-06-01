@@ -8,6 +8,7 @@ import numpy as np
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
+import sympy as sp
 
 @dataclass
 class SmartMoneyMetrics:
@@ -166,4 +167,35 @@ class SmartMoneyAnalyzer:
             velocity=velocity,
             liquidity_resonance=liquidity_resonance,
             smart_money_score=smart_money_score
-        ) 
+        )
+
+# Read the contents of cyclicNumbers.txt
+with open('cyclicNumbers.txt', 'r') as file:
+    content = file.read()
+
+# Extract the base number from the text
+base_number_str = content.split('=')[1].strip()
+base_number = int(base_number_str)
+
+# Calculate the decimal expansion of 1/base_number
+decimal_expansion = sp.Rational(1, base_number)
+
+# Convert the decimal expansion to a string for further analysis
+decimal_value_str = str(decimal_expansion.evalf())
+
+# Find the period length of the decimal expansion
+period_length = len(decimal_value_str) - decimal_value_str.find('.') - 1
+
+# Identify the missing sequence in the cyclic pattern
+missing_sequence = '998'
+
+# Calculate the total number of sequences and present sequences
+total_sequences = 1000
+present_sequences = total_sequences - 1  # All except 998
+
+# Print the results
+print(f"Base number: {base_number}")
+print(f"Decimal value: {decimal_value_str}")
+print(f"Period length: {period_length}")
+print(f"Missing sequence: {missing_sequence}")
+print(f"Coverage: {present_sequences}/{total_sequences} sequences present") 

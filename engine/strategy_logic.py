@@ -42,3 +42,48 @@ def evaluate_tick(pkt: dict, rings) -> list:
         ))
     
     return signals 
+
+# Example test function for dle_engine
+def test_dle_engine():
+    # Sample packet data
+    pkt = {
+        'mid_price': 100.5,
+        'ts': 1634829600,  # Example timestamp
+        'volume': 100.0
+    }
+    
+    # Mock rings object with some example values
+    rings = {
+        'prev_mid': 100.0,
+        'R3': 100.5,
+        'R5': 101.0,
+        'R8': 102.5,
+        'R10': 104.0
+    }
+    
+    # Evaluate the tick using the original logic
+    signals = evaluate_tick(pkt, rings)
+    print("Original Logic Signals:", signals)
+    
+    # Implement dle_engine here and test it
+    # For example, add new logic to handle a different trading strategy
+    
+    # Example of adding new logic for dle_engine
+    def dle_engine_logic(delta_mu):
+        if delta_mu > 0.1:
+            return 'BUY_FILL'
+        elif delta_mu < -0.1:
+            return 'SELL_FILL'
+        else:
+            return 'HOLD'
+    
+    # Apply the new logic to the tick
+    signals_dle = []
+    for delta_mu in [delta_mu_trigger(delta_mu, band=(0.001, 0.005)) for delta_mu in range(-2, 3)]:
+        signal = dle_engine_logic(delta_mu)
+        signals_dle.append((signal, pkt['mid_price'], delta_mu))
+    
+    print("dle_engine Logic Signals:", signals_dle)
+
+# Run the test function
+test_dle_engine() 
