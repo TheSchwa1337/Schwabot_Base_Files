@@ -15,6 +15,10 @@ try:
     import talib
 except ImportError:
     talib = None
+from dataclasses import dataclass, field
+import logging
+from core.risk_manager import RiskManager
+from core.risk_monitor import RiskMonitor
 
 class CoreMathLib:
     """
@@ -36,6 +40,15 @@ class CoreMathLib:
             profit_coef: Profit take coefficient (alpha)
             threshold: Decision threshold for hash-based execution
         """
+        # Check if all parameters are valid floats
+        if not isinstance(base_volume, float) or not isinstance(tick_freq, float) or \
+           not isinstance(profit_coef, float) or not isinstance(threshold, float):
+            raise ValueError("All parameters must be of type float.")
+        
+        # Check if any parameter is off (e.g., less than 0)
+        if base_volume < 0 or tick_freq < 0 or profit_coef < 0 or threshold < 0:
+            raise ValueError("All parameters must be non-negative.")
+        
         self.base_volume = base_volume
         self.tick_freq = tick_freq
         self.delta_t = 1.0 / tick_freq
@@ -424,3 +437,111 @@ class CoreMathLib:
         results['entropy'] = entropy
         
         return results 
+
+    def calculate_matrix_decay(self) -> float:
+        # Calculate matrix decay based on the given parameters
+        decay_rate = (self.profit_coef - 1) / self.tick_freq
+        return decay_rate * self.base_volume
+
+# Define a function to calculate the topology of a Klein Bottle
+def klein_bottle(point):
+    # Implement the calculation logic for the Klein Bottle's topology
+    pass
+
+# Define a function to calculate Shannon entropy
+def entropy(data):
+    # Implement the calculation logic for Shannon entropy
+    pass
+
+# Define a recursive operation with a depth limit
+def recursive_operation(depth_limit):
+    # Implement the recursive operation logic
+    pass 
+
+@dataclass
+class ProfitNode:
+    trade_id: str
+    pattern_id: str
+    parent_id: Optional[str]
+    entry_ts: float
+    exit_ts: float
+    raw_profit: float
+    smart_money_score: float
+    stop_cause: Optional[str] = None          # from StopLossManager
+    lattice_phase: Optional[str] = None       # ALPHA/BETA/…
+    children: List["ProfitNode"] = field(default_factory=list)
+
+    # dynamic metrics – filled by ProfitTreeBuilder
+    depth: int = 0
+    branch_profit: float = 0.0
+    fractal_weight: float = 1.0               # from mathlib
+    adjusted_profit: float = 0.0              # raw × weight
+    path_entropy: float = 0.0                 # Σ|Δ H|
+
+@dataclass
+class ProfitTree:
+    pattern_id: str
+    root_nodes: List[ProfitNode]
+    total_profit: float = 0.0
+    max_depth: int = 0
+    max_width: int = 0
+    fractal_kappa: float = 0.0                # global complexity score 
+
+def compute_features(tick: Tick) -> dict[str, float]:
+    """Return at minimum: {'delta_p', 'sigma', 'rsi', 'confidence'}""" 
+
+features = mathlib.compute_features(tick)
+frame    = dlt.forward(features)
+fig      = alif.render(frame) 
+
+class ERTHelper:
+    def __init__(self, base_volume: float = 1.0, 
+                 tick_freq: float = 1.0, 
+                 profit_coef: float = 0.8,
+                 threshold: float = 0.5):
+        self.math_lib = CoreMathLib(base_volume, tick_freq, profit_coef, threshold)
+
+    def run_ert(self) -> float:
+        # Perform calculations using CPU
+        decay_rate = self.math_lib.calculate_matrix_decay()
+        
+        # Simulate GPU computation (hypothetical)
+        gpu_computation_result = self.gpu_compute(decay_rate)
+        
+        return gpu_computation_result
+
+    def cpu_compute(self, decay_rate: float) -> float:
+        # Example CPU computation
+        result = decay_rate * 2.0 + 3.5
+        return result
+
+    def gpu_compute(self, decay_rate: float) -> float:
+        # Hypothetical GPU computation using a hypothetical library
+        # This is just a placeholder for demonstration purposes
+        import hypothetical_gpu_library as hgpu
+        
+        # Convert decay rate to a format suitable for GPU computation
+        decay_rate_gpu = np.array([decay_rate])
+        
+        # Perform GPU computation
+        result_gpu = hgpu.perform_computation(decay_rate_gpu)
+        
+        return result_gpu.item()
+
+# Example usage
+ert_helper = ERTHelper()
+result = ert_helper.run_ert()
+print(f"ERT Result: {result}") 
+
+# Create risk manager
+risk_manager = RiskManager(
+    max_portfolio_risk=0.02,
+    max_position_size=0.1,
+    max_drawdown=0.15
+)
+
+# Create risk monitor
+risk_monitor = RiskMonitor(risk_manager)
+
+# Start monitoring
+risk_monitor.start_monitoring() 

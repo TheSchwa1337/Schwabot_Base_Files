@@ -8,6 +8,11 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 from enum import Enum
 from datetime import datetime, timedelta
+from quantum_visualizer import PanicDriftVisualizer
+from pattern_metrics import PatternMetrics
+import matplotlib.pyplot as plt
+import seaborn as sns
+import mathlib
 
 class PhaseDomain(Enum):
     SHORT = "short"    # Seconds to Hours
@@ -57,6 +62,9 @@ class DLTWaveformEngine:
             PhaseDomain.MID: 5,     # 5+ echoes with entropy consistency
             PhaseDomain.SHORT: 10   # 10+ phase-aligned echoes
         }
+        
+        self.metrics = PatternMetrics()
+        self.panic_viz = PanicDriftVisualizer()
         
     def update_phase_trust(self, phase: PhaseDomain, success: bool, entropy: float):
         """Update trust metrics for a phase domain"""
@@ -199,3 +207,250 @@ class DLTWaveformEngine:
         should_trigger = score > 0.7  # Example threshold
         
         return should_trigger, score 
+
+    def update_signals(self, tick_data):
+        pattern = tick_data.get("pattern", None)
+
+        if pattern:
+            H, G = self.metrics.get_entropy_and_coherence(pattern)
+            self.panic_viz.add_data_point(time.time(), H, G)
+
+            if H > 4.5 and G < 0.4:
+                print(f"[PANIC] Collapse Detected: H={H:.2f}, G={G:.2f}")
+                tick_data["panic_zone"] = True
+
+    def review_visuals(self):
+        self.panic_viz.render()
+
+class PatternMetrics:
+    def __init__(self):
+        # Initialize any necessary variables or models here
+
+    def entropy(self, pattern_data):
+        # Implement entropy calculation logic here
+        pass
+
+    def coherence(self, pattern_data):
+        # Implement coherence calculation logic here
+        pass
+
+    def get_entropy_and_coherence(self, pattern_data):
+        H = self.entropy(pattern_data)
+        G = self.coherence(pattern_data)
+        return H, G
+
+class PanicDriftVisualizer:
+    def __init__(self):
+        self.timestamps = []
+        self.entropy_values = []
+        self.coherence_values = []
+        self.panic_zones = []
+
+    def add_data_point(self, timestamp, entropy, coherence):
+        self.timestamps.append(timestamp)
+        self.entropy_values.append(entropy)
+        self.coherence_values.append(coherence)
+        self.panic_zones.append(entropy > 4.5 and coherence < 0.4)
+
+    def render(self):
+        plt.figure(figsize=(12,6))
+        plt.plot(self.timestamps, self.entropy_values, label="Entropy", color="orange")
+        plt.plot(self.timestamps, self.coherence_values, label="Coherence", color="cyan")
+
+        for i, flag in enumerate(self.panic_zones):
+            if flag:
+                plt.axvline(self.timestamps[i], color="red", linestyle="--", alpha=0.4)
+
+        plt.title("Entropy & Coherence with Panic Collapse Zones")
+        plt.xlabel("Time")
+        plt.ylabel("Value")
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show() 
+
+class SmartMoneyAnalyzer:
+    def __init__(self):
+        self.spoof_scores = []
+        self.wall_scores = []
+        self.velocity_metrics = {}
+        self.liquidity_resonances = []
+
+    def update(self, spoof_score, wall_score, velocity_metric, liquidity_resonance):
+        self.spoof_scores.append(spoof_score)
+        self.wall_scores.append(wall_score)
+        if velocity_metric not in self.velocity_metrics:
+            self.velocity_metrics[velocity_metric] = []
+        self.velocity_metrics[velocity_metric].append(1)  # Mark as present
+        if liquidity_resonance not in self.liquidity_resonances:
+            self.liquidity_resonances.append(liquidity_resonance)
+
+    def plot_spoof_scores(self):
+        plt.figure(figsize=(10, 5))
+        sns.histplot(self.spoof_scores, bins=20, kde=True)
+        plt.title('Spoof Score Distribution')
+        plt.xlabel('Spoof Score')
+        plt.ylabel('Frequency')
+        plt.show()
+
+    def plot_wall_scores(self):
+        plt.figure(figsize=(10, 5))
+        sns.histplot(self.wall_scores, bins=20, kde=True)
+        plt.title('Wall Score Distribution')
+        plt.xlabel('Wall Score')
+        plt.ylabel('Frequency')
+        plt.show()
+
+    def plot_velocity_metrics(self):
+        plt.figure(figsize=(10, 5))
+        for metric in self.velocity_metrics:
+            sns.histplot(self.velocity_metrics[metric], bins=20, kde=True)
+            plt.title(f'Velocity Metric: {metric}')
+            plt.xlabel('Presence')
+            plt.ylabel('Frequency')
+            plt.show()
+
+    def plot_liquidity_resonances(self):
+        plt.figure(figsize=(10, 5))
+        sns.histplot(self.liquidity_resonances, bins=20, kde=True)
+        plt.title('Liquidity Resonance Distribution')
+        plt.xlabel('Resonance')
+        plt.ylabel('Frequency')
+        plt.show()
+
+    def get_pattern_average_smart_money_score(self, pattern_trades):
+        if not pattern_trades:
+            return 0
+        return np.mean([t.smart_money_metrics.smart_money_score for t in pattern_trades]) 
+
+class SmartMoneyIntegration:
+    def __init__(self):
+        self.analyzer = SmartMoneyAnalyzer()
+        self.trade_history = []
+
+    def update_metrics(self, spoof_score, wall_score, velocity_metric, liquidity_resonance):
+        if not (0 <= spoof_score <= 1 and 0 <= wall_score <= 1):
+            raise ValueError("Spoof score and Wall score must be between 0 and 1.")
+        self.analyzer.update(spoof_score, wall_score, velocity_metric, liquidity_resonance)
+        self.trade_history.append({
+            'spoof_score': spoof_score,
+            'wall_score': wall_score,
+            'velocity_metric': velocity_metric,
+            'liquidity_resonance': liquidity_resonance
+        })
+
+    def plot_spoof_scores(self):
+        self.analyzer.plot_spoof_scores()
+
+    def plot_wall_scores(self):
+        self.analyzer.plot_wall_scores()
+
+    def plot_velocity_metrics(self):
+        self.analyzer.plot_velocity_metrics()
+
+    def plot_liquidity_resonances(self):
+        self.analyzer.plot_liquidity_resonances()
+
+    def get_pattern_average_smart_money_score(self, pattern_id):
+        if not isinstance(pattern_id, str):
+            raise ValueError("Pattern ID must be a string.")
+        pattern_trades = [t for t in self.trade_history if t['pattern_id'] == pattern_id]
+        return self.analyzer.get_pattern_average_smart_money_score(pattern_trades)
+
+    def add_strategy_replay_rule(self, rule_name, condition, action):
+        # Implement strategy replay logic here
+        print(f"Adding strategy replay rule: {rule_name} with condition '{condition}' and action '{action}'")
+
+    def calculate_profit_tree_metrics(self):
+        if not self.trade_history:
+            return "No trades available to analyze."
+
+        profit_trees = {}
+        for trade in self.trade_history:
+            pattern_id = trade.get('pattern_id', 'UNKNOWN')
+            if pattern_id not in profit_trees:
+                profit_trees[pattern_id] = []
+
+            # Calculate depth and width of the tree
+            depth = 1
+            current_level = [trade]
+            while current_level:
+                next_level = []
+                for node in current_level:
+                    if node.get('parent_trade'):
+                        next_level.append(node['parent_trade'])
+                current_level = next_level
+                depth += 1
+
+            # Calculate width of the tree
+            width = max(len(level) for level in profit_trees[pattern_id])
+
+            # Store metrics
+            profit_trees[pattern_id].append({
+                'depth': depth,
+                'width': width
+            })
+
+        return profit_trees
+
+# Example usage
+sm_integration = SmartMoneyIntegration()
+
+# Update metrics with example data
+sm_integration.update_metrics(0.8, 1, 'HIGH_UP', 'SWEEP_RESONANCE')
+
+# Plot various metrics
+sm_integration.plot_spoof_scores()
+sm_integration.plot_wall_scores()
+sm_integration.plot_velocity_metrics()
+sm_integration.plot_liquidity_resonances()
+
+# Get average Smart Money score for a pattern
+pattern_id = 'PATTERN_A'
+average_score = sm_integration.get_pattern_average_smart_money_score(pattern_id)
+print(f'Average Smart Money Score for Pattern {pattern_id}: {average_score}')
+
+# Add strategy replay rule
+sm_integration.add_strategy_replay_rule('Rule1', 'spoof_score > 0.9', 'revert_trade')
+
+# Calculate profit tree metrics
+profit_trees = sm_integration.calculate_profit_tree_metrics()
+print("Profit Tree Metrics:")
+for pattern, metrics in profit_trees.items():
+    print(f"Pattern: {pattern}")
+    for metric in metrics:
+        print(f"Depth: {metric['depth']}, Width: {metric['width']}")
+
+# Define a point in 3D space
+point = (1.0, 2.0, 3.0)
+
+# Use the klein_bottle function to calculate the topology of a Klein Bottle
+klein_bottle_topology = mathlib.klein_bottle(point)
+print(f"Klein Bottle Topology: {klein_bottle_topology}")
+
+# Define some data for entropy calculation
+data = [1, 2, 3, 4, 5]
+
+# Use the entropy function to calculate Shannon entropy
+entropy_value = mathlib.entropy(data)
+print(f"Shannon Entropy: {entropy_value}")
+
+# Define a recursive operation with a depth limit
+depth_limit = 5
+result = mathlib.recursive_operation(depth_limit)
+print(f"Recursive Operation Result (Depth Limit {depth_limit}): {result}")
+
+# Define a function to calculate the topology of a Klein Bottle
+def klein_bottle(point):
+    # Implement the calculation logic for the Klein Bottle's topology
+    pass
+
+# Define a function to calculate Shannon entropy
+def entropy(data):
+    # Implement the calculation logic for Shannon entropy
+    pass
+
+# Define a recursive operation with a depth limit
+def recursive_operation(depth_limit):
+    # Implement the recursive operation logic
+    pass 

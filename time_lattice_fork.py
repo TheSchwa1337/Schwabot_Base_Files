@@ -9,6 +9,72 @@ from dataclasses import dataclass
 from enum import Enum
 import hashlib
 from datetime import datetime
+import subprocess
+
+# Global Logic Checks
+def validate_input(data):
+    if not isinstance(data, list) or not all(isinstance(item, (int, float)) for item in data):
+        raise ValueError("Input must be a list of numbers.")
+
+def handle_error(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+    return wrapper
+
+# Aggregate Checks
+def test_function(func):
+    # Test with various inputs
+    test_cases = [
+        ([1, 2, 3], "Test case 1"),
+        ([], "Test case 2"),
+        (["a", "b"], "Test case 3")
+    ]
+    
+    for i, (input_data, description) in enumerate(test_cases):
+        result = func(input_data)
+        print(f"Test case {i+1}: {description} - Result: {result}")
+
+# Example functions
+@handle_error
+def calculate_rsi(prices: List[float]) -> float:
+    """Calculate RSI with quantum-inspired smoothing"""
+    validate_input(prices)
+    
+    delta = np.diff(prices, prepend=prices[0])
+    gain = np.where(delta > 0, delta, 0)
+    loss = np.where(delta < 0, -delta, 0)
+    
+    avg_gain = np.zeros_like(prices)
+    avg_loss = np.zeros_like(prices)
+    
+    avg_gain[0] = gain[0]
+    avg_loss[0] = loss[0]
+    
+    for i in range(1, len(prices)):
+        avg_gain[i] = (avg_gain[i-1] * (self.rsi_period - 1) + gain[i]) / self.rsi_period
+        avg_loss[i] = (avg_loss[i-1] * (self.rsi_period - 1) + loss[i]) / self.rsi_period
+        
+    with np.errstate(divide='ignore', invalid='ignore'):
+        rs = np.where(avg_loss != 0, avg_gain / avg_loss, 100)
+        rsi = 100 - (100 / (1 + rs))
+        
+    return rsi
+
+@handle_error
+def compute_ghost_hash(timestamp: float, pattern_id: str) -> str:
+    """Generate ghost pattern hash"""
+    validate_input([timestamp, pattern_id])
+    
+    data = f"{timestamp}_{pattern_id}"
+    return hashlib.sha256(data.encode()).hexdigest()
+
+# Test the functions
+test_function(calculate_rsi)
+test_function(compute_ghost_hash)
 
 class NodeType(Enum):
     ALPHA = "alpha"  # Root/ground-signal, low-entropy
@@ -183,6 +249,8 @@ class TimeLatticeFork:
                     volume: float,
                     timestamp: float) -> Dict:
         """Process a new price tick through the lattice"""
+        validate_input([price, volume, timestamp])
+        
         # Calculate RSI
         prices = np.array([n.value for nodes in self.nodes.values() for n in nodes])
         if len(prices) >= self.rsi_period:
@@ -220,3 +288,34 @@ class TimeLatticeFork:
             'entropy': entropy,
             'ghost_hash': ghost_hash
         } 
+
+class ShellAccumulator:
+    def __init__(self, command):
+        self.command = command
+        self.data = []
+
+    def accumulate(self):
+        try:
+            # Run the shell command and capture output
+            result = subprocess.run(self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            
+            if result.returncode == 0:
+                # Process the output line by line
+                for line in result.stdout.splitlines():
+                    self.data.append(line.strip())
+            else:
+                print(f"Error: {result.stderr}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def get_accumulated_data(self):
+        return self.data
+
+# Example usage
+if __name__ == "__main__":
+    accumulator = ShellAccumulator("tail -f /var/log/syslog")
+    accumulator.accumulate()
+    
+    accumulated_data = accumulator.get_accumulated_data()
+    for line in accumulated_data:
+        print(line) 

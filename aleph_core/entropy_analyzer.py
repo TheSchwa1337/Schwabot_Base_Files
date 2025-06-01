@@ -16,9 +16,15 @@ class EntropyAnalyzer:
     def analyze_entropy_distribution(self, entropy_values: List[int]) -> Dict:
         """
         Comprehensive statistical analysis of entropy tag distribution.
+        
+        Args:
+            entropy_values (List[int]): A list of entropy values.
+            
+        Returns:
+            Dict: A dictionary containing statistical analysis results.
         """
         if not entropy_values:
-            return {}
+            raise ValueError("Entropy values cannot be empty.")
         
         counter = Counter(entropy_values)
         unique_count = len(counter)
@@ -26,7 +32,7 @@ class EntropyAnalyzer:
         
         # Basic statistics
         mean_entropy = np.mean(entropy_values)
-        std_entropy = np.std(entropy_values)
+        std_entropy = np.std(entropy_values, ddof=1)  # Use sample standard deviation
         min_entropy = min(entropy_values)
         max_entropy = max(entropy_values)
         
