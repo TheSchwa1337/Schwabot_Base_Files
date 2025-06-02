@@ -19,10 +19,16 @@ import os
 import sys
 import argparse
 from pathlib import Path
+import numpy as np
+from typing import List, Optional, Union
 
 # Schwabot Blueprint: canonical file/folder structure
 SCHWABOT_BLUEPRINT = {
-    "core": ["mathlib.py", "mathlib_v2.py", "rittle_gemm.py", "wall_logic.py", "bit_sequencer.py"],
+    "core": [
+        "mathlib.py", "mathlib_v2.py", "rittle_gemm.py",
+        "wall_logic.py", "bit_sequencer.py",
+        "tetragram_matrix.py", "entropy_encoder.py"
+    ],
     "engine": ["tick_engine.py", "strategy_logic.py", "wall_controller.py", "execution_engine.py", "risk_manager.py"],
     "models": ["enums.py", "schemas.py"],
     "config": ["settings.yaml", "pairs.yaml", "logging.yaml"],
@@ -33,6 +39,11 @@ SCHWABOT_BLUEPRINT = {
 # Tag/pipe for programmatic access
 UFS_APP_PIPE = "UFS_APP"
 
+# Import necessary modules
+from core.system_state_manager import SystemStateManager
+from core.tetragram_matrix import ALL_TETRAGRAMS, update_tetragram_dynamic_stats
+from core.entropy_encoder import process_and_encode_entropy_data
+from datetime import datetime
 
 def scaffold_blueprint(blueprint):
     """Create all folders and files as defined in the blueprint."""
@@ -76,6 +87,10 @@ def main():
     parser.add_argument("--init", action="store_true", help="Generate all required files/folders")
     parser.add_argument("--validate", action="store_true", help="Check for missing or outdated modules")
     parser.add_argument("--visual", action="store_true", help="Launch visual trimmer/order book manager")
+    parser.add_argument("--entropy", action="store_true", help="Run entropy code preview logic")
+    parser.add_argument("--show-hooks", action="store_true", help="Print all registered event names and their callback counts.")
+    parser.add_argument("--trigger-test-event", type=str, help="Manually trigger a specific test event by name.")
+    parser.add_argument("--get-tetragram-stats", type=str, help="Display dynamic stats for a given tetragram code.")
     args = parser.parse_args()
 
     if args.init:
@@ -84,7 +99,15 @@ def main():
         validate_blueprint(SCHWABOT_BLUEPRINT)
     if args.visual:
         launch_visualizer()
-    if not (args.init or args.validate or args.visual):
+    if args.entropy:
+        UFSApp.run_entropy_encoder_preview()
+    if args.show_hooks:
+        show_hooks()
+    elif args.trigger_test_event:
+        trigger_test_event(args.trigger_test_event)
+    elif args.get_tetragram_stats:
+        get_tetragram_stats(args.get_tetragram_stats)
+    if not (args.init or args.validate or args.visual or args.entropy or args.show_hooks or args.trigger_test_event or args.get_tetragram_stats):
         parser.print_help()
 
 # Allow programmatic import and use
@@ -113,6 +136,91 @@ class UFSApp:
         }
         
         return BitSequencer(config)
+    @staticmethod
+    def run_entropy_encoder_preview():
+        from core.rittle_gemm import extract_ring_triplets, encode_triplets_to_tetragrams
+        import numpy as np
+
+        ring_snapshot = np.array([
+            [1.2, 0.8, 0.9],
+            [0.7, 1.3, 0.6],
+            [0.5, 0.4, 0.7]
+        ])
+        triplets = extract_ring_triplets(ring_snapshot)
+        tetragrams = encode_triplets_to_tetragrams(triplets)
+        print("[Entropy Preview] Tetragram Codes →", tetragrams)
+
+def encode_ring_to_tetragram(ring_snapshot: np.ndarray) -> str:
+    """
+    Project 3-point entropy pattern into 3-base symbol.
+    
+    Parameters:
+    ring_snapshot (np.ndarray): A snapshot of the RITTLE-GEMM RingLayer states.
+    
+    Returns:
+    str: A string representing the 81-symbol pattern.
+    """
+    # Calculate the standard deviation for the last three rings
+    entropy_vector = [np.std(ring) for ring in ring_snapshot[-3:]]
+    
+    # Map the entropy values to 3-base symbols ('A', 'B', 'C')
+    base_symbols = ['A' if e < 0.5 else 'B' if e < 1.0 else 'C' for e in entropy_vector]
+    
+    # Join the base symbols into a single string
+    return ''.join(base_symbols)
+
+def encode_triplet_to_tetragram(triplet: np.ndarray) -> str:
+    entropies = [np.std(v) if isinstance(v, (list, np.ndarray)) else abs(v) for v in triplet]
+    return ''.join(['A' if e < 0.5 else 'B' if e < 1.0 else 'C' for e in entropies])
+
+def get_tetragram_from_ring(ring_snapshot: np.ndarray) -> list:
+    triplets = [ring_snapshot[i:i+3] for i in range(len(ring_snapshot)-2)]
+    return [encode_triplet_to_tetragram(t) for t in triplets]
+
+def node_update(triplet: np.ndarray):
+    # Placeholder for node update logic
+    print("Node update triggered with triplet:", triplet)
+
+def encode_entropy_pattern(entropy_vector: list) -> str:
+    return ''.join(['A' if e < 0.5 else 'B' if e < 1.0 else 'C' for e in entropy_vector])
+
+class MyModule:
+    def __init__(self):
+        self.node_update_hook = NodeUpdateHook()
+
+    def subscribe_to_node_updates(self, callback):
+        self.node_update_hook.register(callback)
+
+    def unsubscribe_from_node_updates(self, callback):
+        self.node_update_hook.unregister(callback)
+
+    def trigger_node_updates(self, triplet):
+        self.node_update_hook.trigger(triplet)
+
+def show_hooks():
+    """Print all registered event names and their callback counts."""
+    hook_manager = UFSApp.get_hook_manager()
+    for event_name in hook_manager.registered_events:
+        print(f"Event: {event_name}, Callbacks: {hook_manager.callback_counts[event_name]}")
+
+def trigger_test_event(event_name):
+    """Manually test hook integrations by triggering a specific event."""
+    hook_manager = UFSApp.get_hook_manager()
+    if event_name in hook_manager.registered_events:
+        print(f"Triggering event: {event_name}")
+        hook_manager.trigger(event_name)
+    else:
+        print(f"Event '{event_name}' not found.")
+
+def get_tetragram_stats(tetragram_code):
+    """Display dynamic stats for a given tetragram."""
+    if tetragram_code in ALL_TETRAGRAMS:
+        stats = TETRAGRAM_STATS.get(tetragram_code, {})
+        print(f"Stats for Tetragram '{tetragram_code}':")
+        for key, value in stats.items():
+            print(f"{key}: {value}")
+    else:
+        print(f"Tetragram '{tetragram_code}' not found.")
 
 if __name__ == "__main__":
     main() 

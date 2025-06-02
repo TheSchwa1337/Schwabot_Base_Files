@@ -51,8 +51,8 @@ class RiskManager:
     
     def __init__(self,
                  max_portfolio_risk: float = 0.02,  # 2% max portfolio risk
-                 max_position_size: float = 0.1,    # 10% max position size
-                 max_drawdown: float = 0.15,        # 15% max drawdown
+                 max_position_size: float = 1.0,    # 100% max position size
+                 max_drawdown: float = 0.1,         # 10% max drawdown
                  var_confidence: float = 0.95,      # 95% VaR confidence
                  update_interval: float = 1.0):     # 1 second update interval
         
@@ -67,6 +67,8 @@ class RiskManager:
         self.portfolio_risk: Optional[PortfolioRisk] = None
         self.risk_history: List[PortfolioRisk] = []
         self.last_update = datetime.now()
+        self.ghost_shell_stops = {}
+        self.risk_metrics = {}
         
         # Initialize logging
         self.logger = logging.getLogger(__name__)
@@ -111,6 +113,15 @@ class RiskManager:
             remaining_capacity = 1.0 - self.portfolio_risk.total_exposure
             position_size = min(position_size, remaining_capacity)
             
+        # Adjust for active ghost shell stops
+        if symbol in self.ghost_shell_stops:
+            stop_info = self.ghost_shell_stops[symbol]
+            stop_distance = abs(price - stop_info['stop_price']) / price
+            
+            # Reduce position size if stop is too close
+            if stop_distance < 0.01:  # 1% minimum distance
+                position_size *= 0.5
+                
         return position_size
         
     def calculate_dynamic_stop_loss(self,
@@ -131,6 +142,12 @@ class RiskManager:
         stop_loss = price - (stop_distance * vol_adjustment)
         take_profit = price + (stop_distance * vol_adjustment * 1.5)  # 1.5x risk:reward
         
+        # Integrate with ghost shell stops
+        if symbol in self.ghost_shell_stops:
+            ghost_stop = self.ghost_shell_stops[symbol]['stop_price']
+            # Use tighter of the two stops
+            stop_loss = max(stop_loss, ghost_stop)
+            
         return stop_loss, take_profit
         
     def update_portfolio_risk(self, positions: Dict[str, PositionRisk]) -> PortfolioRisk:
@@ -281,4 +298,93 @@ class RiskManager:
                 }
                 for symbol, pos in self.positions.items()
             }
-        } 
+        }
+        
+    def integrate_ghost_shell_stop(self, symbol: str, stop_info: Dict):
+        """Integrate ghost shell stop loss into risk management"""
+        self.ghost_shell_stops[symbol] = stop_info
+        
+        # Calculate potential loss
+        current_price = self.get_current_price(symbol)
+        stop_price = stop_info['stop_price']
+        quantity = stop_info['quantity']
+        
+        potential_loss = abs(current_price - stop_price) * quantity
+        
+        # Update risk metrics
+        if symbol not in self.risk_metrics:
+            self.risk_metrics[symbol] = {}
+            
+        self.risk_metrics[symbol].update({
+            'potential_loss': potential_loss,
+            'stop_distance': abs(current_price - stop_price) / current_price,
+            'last_update': datetime.now()
+        })
+        
+        # Check if stop needs adjustment
+        self._check_stop_adjustment(symbol)
+        
+    def _check_stop_adjustment(self, symbol: str):
+        """Check if ghost shell stop needs adjustment based on risk metrics"""
+        if symbol not in self.risk_metrics:
+            return
+            
+        metrics = self.risk_metrics[symbol]
+        stop_info = self.ghost_shell_stops[symbol]
+        
+        # Calculate volatility
+        volatility = self.calculate_volatility(symbol)
+        
+        # Adjust stop if volatility has changed significantly
+        if volatility > metrics.get('last_volatility', 0) * 1.5:
+            new_stop = self._calculate_adjusted_stop(symbol, volatility)
+            if new_stop != stop_info['stop_price']:
+                self._update_stop_price(symbol, new_stop)
+                
+        # Update last volatility
+        metrics['last_volatility'] = volatility
+        
+    def _calculate_adjusted_stop(self, symbol: str, volatility: float) -> float:
+        """Calculate adjusted stop price based on volatility"""
+        current_price = self.get_current_price(symbol)
+        base_distance = volatility * 2.0  # 2x volatility as base distance
+        
+        # Adjust for market conditions
+        if self.is_market_volatile():
+            base_distance *= 1.5
+            
+        return current_price - base_distance
+        
+    def _update_stop_price(self, symbol: str, new_stop: float):
+        """Update ghost shell stop price"""
+        try:
+            # Cancel existing stop
+            self.cancel_ghost_shell_stop(symbol)
+            
+            # Place new stop
+            stop_info = self.ghost_shell_stops[symbol]
+            self.place_ghost_shell_stop(
+                symbol=symbol,
+                stop_price=new_stop,
+                quantity=stop_info['quantity']
+            )
+            
+            self.logger.info(f"Updated ghost shell stop for {symbol} to {new_stop}")
+            
+        except Exception as e:
+            self.logger.error(f"Error updating stop price: {str(e)}")
+            
+    def is_market_volatile(self) -> bool:
+        """Check if market is currently volatile"""
+        # Implement market volatility check logic
+        return False  # Placeholder
+        
+    def calculate_volatility(self, symbol: str) -> float:
+        """Calculate current market volatility"""
+        # Implement volatility calculation logic
+        return 0.0  # Placeholder
+        
+    def get_current_price(self, symbol: str) -> float:
+        """Get current price for symbol"""
+        # Implement price fetching logic
+        return 0.0  # Placeholder 

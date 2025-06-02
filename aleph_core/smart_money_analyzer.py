@@ -9,6 +9,11 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 import sympy as sp
+from behavior_pattern_tracker import BehaviorPatternTracker
+import logging
+import multiprocessing
+from market_data import OrderBook, TradeHistory
+from user_behavior import UserBehaviorData
 
 @dataclass
 class SmartMoneyMetrics:
@@ -19,6 +24,16 @@ class SmartMoneyMetrics:
     liquidity_resonance: str = "NORMAL"  # Liquidity interaction state
     smart_money_score: float = 0.0  # Aggregated Smart Money score
 
+@dataclass
+class MarketData:
+    order_book: OrderBook
+    trade_history: TradeHistory
+
+@dataclass
+class UserBehavior:
+    login_times: List[datetime]
+    transaction_volumes: Dict[str, int]
+
 class SmartMoneyAnalyzer:
     """
     Analyzes market microstructure for Smart Money patterns including:
@@ -28,22 +43,82 @@ class SmartMoneyAnalyzer:
     - Velocity analysis (price/volume movement)
     """
     
-    def __init__(self,
-                 spoof_threshold: float = 0.7,
-                 wall_size_multiplier: float = 2.0,
-                 velocity_period: int = 5,
-                 liquidity_window: int = 10):
-        self.spoof_threshold = spoof_threshold
-        self.wall_size_multiplier = wall_size_multiplier
-        self.velocity_period = velocity_period
-        self.liquidity_window = liquidity_window
-        
-        # Internal state
-        self.order_book_history: List[Dict] = []
-        self.price_history: List[float] = []
-        self.volume_history: List[float] = []
-        self.trade_history: List[Dict] = []
-        
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        self.log_file = 'app.log'
+        self.setup_logging()
+        self.behavior_tracker = BehaviorPatternTracker()
+
+    def setup_logging(self):
+        handler = logging.FileHandler(self.log_file)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+
+    def read_base_number(self, file_path: str) -> int:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            base_number_str = content.split('=')[1].strip()
+            return int(base_number_str)
+
+    def calculate_decimal_expansion(self, base_number: int) -> sp.Rational:
+        return sp.Rational(1, base_number)
+
+    def find_period_length(self, decimal_expansion: sp.Rational) -> int:
+        decimal_value_str = str(decimal_expansion.evalf())
+        return len(decimal_value_str) - decimal_value_str.find('.') - 1
+
+    def track_pattern(self, triplet: str, context: str, action: str, fractal_depth: int) -> str:
+        # Example pattern tracking logic
+        self.logger.info(f"Tracking pattern: {triplet}, {context}, {action}, {fractal_depth}")
+        return f"Pattern tracked: {triplet}"
+
+    def _apply_temporal_decay(self, current_time: float):
+        # Example temporal decay logic
+        self.logger.info(f"Applying temporal decay at time: {current_time}")
+
+    def get_basket_swapper_data(self) -> Dict:
+        # Example method to retrieve basket swapper data
+        return {"data": "basket swapper data"}
+
+    def process_basket_swapper_data(self, data: Dict) -> str:
+        # Example processing logic for basket swapper data
+        return f"Processed data from basket swapper: {data}"
+
+    def analyze_smart_money_metrics(self, market_data: MarketData, user_behavior: UserBehavior):
+        base_number = self.read_base_number('cyclicNumbers.txt')
+        decimal_expansion = self.calculate_decimal_expansion(base_number)
+        period_length, missing_sequence = self.find_period_length(decimal_expansion)
+
+        self.logger.info(f"Base number: {base_number}")
+        self.logger.info(f"Decimal value: {decimal_expansion.evalf()}")
+        self.logger.info(f"Period length: {period_length}")
+        self.logger.info(f"Missing sequence: {missing_sequence}")
+
+        triplet = "triplet1"
+        context = "context1"
+        action = "action1"
+        fractal_depth = 5
+        pattern_hash = self.track_pattern(triplet, context, action, fractal_depth)
+        self.logger.info(f"Tracked pattern: {pattern_hash}")
+
+        current_time = datetime.now().timestamp()
+        self._apply_temporal_decay(current_time)
+
+        basket_swapper_data = self.get_basket_swapper_data()
+        processed_data = self.process_basket_swapper_data(basket_swapper_data)
+        self.logger.info(f"Processed basket swapper data: {processed_data}")
+
+    def run_analysis(self):
+        # Example market data and user behavior
+        order_book = OrderBook()
+        trade_history = TradeHistory()
+        user_behavior = UserBehavior(login_times=[], transaction_volumes={})
+
+        with multiprocessing.Pool(processes=4) as pool:
+            pool.apply_async(self.analyze_smart_money_metrics, args=(MarketData(order_book, trade_history), user_behavior))
+
     def calculate_spoof_score(self, current_book: Dict, previous_book: Dict) -> float:
         """
         Calculate spoofing score based on order book changes.
@@ -169,33 +244,6 @@ class SmartMoneyAnalyzer:
             smart_money_score=smart_money_score
         )
 
-# Read the contents of cyclicNumbers.txt
-with open('cyclicNumbers.txt', 'r') as file:
-    content = file.read()
-
-# Extract the base number from the text
-base_number_str = content.split('=')[1].strip()
-base_number = int(base_number_str)
-
-# Calculate the decimal expansion of 1/base_number
-decimal_expansion = sp.Rational(1, base_number)
-
-# Convert the decimal expansion to a string for further analysis
-decimal_value_str = str(decimal_expansion.evalf())
-
-# Find the period length of the decimal expansion
-period_length = len(decimal_value_str) - decimal_value_str.find('.') - 1
-
-# Identify the missing sequence in the cyclic pattern
-missing_sequence = '998'
-
-# Calculate the total number of sequences and present sequences
-total_sequences = 1000
-present_sequences = total_sequences - 1  # All except 998
-
-# Print the results
-print(f"Base number: {base_number}")
-print(f"Decimal value: {decimal_value_str}")
-print(f"Period length: {period_length}")
-print(f"Missing sequence: {missing_sequence}")
-print(f"Coverage: {present_sequences}/{total_sequences} sequences present") 
+if __name__ == "__main__":
+    sma = SmartMoneyAnalyzer()
+    sma.run_analysis() 

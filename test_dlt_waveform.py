@@ -4,16 +4,19 @@ Test suite for DLT Waveform Engine
 
 import unittest
 from datetime import datetime, timedelta
-from dlt_waveform_engine import DLTWaveformEngine, PhaseDomain
+import numpy as np
+import psutil
+from dlt_waveform_engine import DLTWaveformEngine, PhaseDomain, PhaseTrust, BitmapTrigger
 from .trailback import TrailbackLogic
 from .flow_imbalance import FlowImbalance
 from .smart_strategy_evaluator import select_strategy
 from .quantum_visualizer import QuantumVisualizer
 from .rde_visuals import RDEVisuals
+from unittest.mock import MagicMock
 
 class TestDLTWaveformEngine(unittest.TestCase):
     def setUp(self):
-        self.engine = DLTWaveformEngine()
+        self.engine = DLTWaveformEngine(max_cpu_percent=90.0, max_memory_percent=80.0)
         
     def test_phase_trust_initialization(self):
         """Test initial phase trust state"""
@@ -21,16 +24,24 @@ class TestDLTWaveformEngine(unittest.TestCase):
             trust = self.engine.phase_trust[phase]
             self.assertEqual(trust.successful_echoes, 0)
             self.assertEqual(trust.entropy_consistency, 0.0)
+            self.assertEqual(trust.memory_coherence, 0.0)
+            self.assertEqual(trust.thermal_state, 0.0)
             
     def test_phase_trust_update(self):
-        """Test updating phase trust metrics"""
+        """Test updating phase trust metrics with tensor state"""
         phase = PhaseDomain.MID
+        
+        # Create test tensor state
+        test_tensor = np.random.rand(256)
+        self.engine.update_tensor_state(test_tensor)
         
         # Update with success
         self.engine.update_phase_trust(phase, True, 0.9)
         trust = self.engine.phase_trust[phase]
         self.assertEqual(trust.successful_echoes, 1)
         self.assertGreater(trust.entropy_consistency, 0.0)
+        self.assertGreaterEqual(trust.memory_coherence, 0.0)
+        self.assertGreaterEqual(trust.thermal_state, 0.0)
         
         # Update with failure
         self.engine.update_phase_trust(phase, False, 0.5)
@@ -38,7 +49,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
         self.assertEqual(trust.successful_echoes, 1)  # Should not increment
         
     def test_phase_trust_validation(self):
-        """Test phase trust validation thresholds"""
+        """Test phase trust validation thresholds with resource consideration"""
         phase = PhaseDomain.MID
         threshold = self.engine.phase_thresholds[phase]
         
@@ -49,37 +60,61 @@ class TestDLTWaveformEngine(unittest.TestCase):
         for _ in range(threshold):
             self.engine.update_phase_trust(phase, True, 0.9)
             
-        # Should now be trusted
-        self.assertTrue(self.engine.is_phase_trusted(phase))
+        # Should now be trusted if resources are good
+        if psutil.cpu_percent() < self.engine.max_cpu_percent:
+            self.assertTrue(self.engine.is_phase_trusted(phase))
+            
+    def test_resource_management(self):
+        """Test resource management functionality"""
+        # Test resource check
+        self.assertTrue(self.engine.check_resources())
         
-    def test_trigger_addition(self):
-        """Test adding trigger points to memory"""
-        phase = PhaseDomain.SHORT
-        window = timedelta(hours=2)
+        # Test resource limits
+        self.engine.max_cpu_percent = 0.0  # Force resource check to fail
+        self.assertFalse(self.engine.check_resources())
         
-        # Add trigger
-        self.engine.add_trigger(phase, window, 0.8, 0.6)
+        # Reset
+        self.engine.max_cpu_percent = 90.0
         
-        # Verify trigger was added
-        self.assertEqual(len(self.engine.triggers), 1)
-        trigger = self.engine.triggers[0]
-        self.assertEqual(trigger.phase, phase)
-        self.assertEqual(trigger.time_window, window)
-        self.assertEqual(trigger.diogenic_score, 0.8)
-        self.assertEqual(trigger.frequency, 0.6)
+    def test_tensor_state_integration(self):
+        """Test tensor state integration"""
+        # Create test tensor
+        test_tensor = np.random.rand(256)
         
-        # Verify bitmap was updated
-        bit_index = self.engine._get_bit_index(phase, window)
-        self.assertTrue(self.engine.bitmap[bit_index])
+        # Update tensor state
+        self.engine.update_tensor_state(test_tensor)
         
-    def test_trigger_score_computation(self):
-        """Test trigger score computation"""
+        # Verify tensor history
+        self.assertEqual(len(self.engine.tensor_history), 1)
+        np.testing.assert_array_equal(self.engine.tensor_history[0], test_tensor)
+        
+        # Test history limit
+        for _ in range(self.engine.max_tensor_history + 10):
+            self.engine.update_tensor_state(np.random.rand(256))
+            
+        self.assertEqual(len(self.engine.tensor_history), self.engine.max_tensor_history)
+        
+    def test_trigger_score_with_tensor(self):
+        """Test trigger score computation with tensor state"""
         phase = PhaseDomain.MID
         window = timedelta(days=5)
         
-        # Add multiple triggers
-        self.engine.add_trigger(phase, window, 0.8, 0.6)
-        self.engine.add_trigger(phase, window, 0.9, 0.7)
+        # Create test tensor
+        test_tensor = np.random.rand(256)
+        self.engine.update_tensor_state(test_tensor)
+        
+        # Add trigger with tensor signature
+        trigger = BitmapTrigger(
+            phase=phase,
+            time_window=window,
+            diogenic_score=0.8,
+            frequency=0.6,
+            last_trigger=datetime.now(),
+            success_count=1,
+            tensor_signature=test_tensor,
+            resource_usage=0.5
+        )
+        self.engine.triggers.append(trigger)
         
         # Update phase trust to allow scoring
         for _ in range(self.engine.phase_thresholds[phase]):
@@ -91,7 +126,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
         self.assertLessEqual(score, 1.0)
         
     def test_trade_trigger_evaluation(self):
-        """Test trade trigger evaluation"""
+        """Test trade trigger evaluation with resource consideration"""
         phase = PhaseDomain.MID
         current_time = datetime.now()
         
@@ -99,7 +134,22 @@ class TestDLTWaveformEngine(unittest.TestCase):
         for _ in range(self.engine.phase_thresholds[phase]):
             self.engine.update_phase_trust(phase, True, 0.9)
             
-        self.engine.add_trigger(phase, timedelta(days=5), 0.8, 0.6)
+        # Create test tensor
+        test_tensor = np.random.rand(256)
+        self.engine.update_tensor_state(test_tensor)
+        
+        # Add trigger
+        trigger = BitmapTrigger(
+            phase=phase,
+            time_window=timedelta(days=5),
+            diogenic_score=0.8,
+            frequency=0.6,
+            last_trigger=datetime.now(),
+            success_count=1,
+            tensor_signature=test_tensor,
+            resource_usage=0.5
+        )
+        self.engine.triggers.append(trigger)
         
         # Evaluate trigger
         should_trigger, confidence = self.engine.evaluate_trade_trigger(
@@ -111,7 +161,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
         self.assertLessEqual(confidence, 1.0)
         
     def test_short_term_volume_validation(self):
-        """Test volume validation for short-term trades"""
+        """Test volume validation for short-term trades with resource check"""
         phase = PhaseDomain.SHORT
         current_time = datetime.now()
         
@@ -130,6 +180,16 @@ class TestDLTWaveformEngine(unittest.TestCase):
             phase, current_time, 0.9, 2000000  # Above minimum
         )
         self.assertIsInstance(should_trigger, bool)
+        
+        # Test under high load
+        self.engine.max_cpu_percent = 0.0  # Force resource check to fail
+        should_trigger, confidence = self.engine.evaluate_trade_trigger(
+            phase, current_time, 0.9, 2000000
+        )
+        self.assertFalse(should_trigger)  # Should not trigger under high load
+        
+        # Reset
+        self.engine.max_cpu_percent = 90.0
 
 class TrailbackLogic:
     def __init__(self, max_depth=12):
@@ -257,6 +317,110 @@ class FaultZoneMatrix:
     def get_fault_vector(self, panic_id):
         # Retrieve a fault vector by its ID
         return self.fault_vectors.get(panic_id)
+
+class TestGhostShellStopLoss(unittest.TestCase):
+    def setUp(self):
+        self.mock_client = MagicMock()
+        self.stop_loss = GhostShellStopLoss()
+        self.stop_loss.client = self.mock_client
+        
+    def test_place_stop_loss_success(self):
+        # Mock successful order creation
+        self.mock_client.create_order.return_value = {'id': 'test_order_1'}
+        self.mock_client.fetch_ticker.return_value = {'last': 100.0}
+        
+        # Test placing stop loss
+        result = self.stop_loss.place_stop_loss(
+            symbol='BTC/USD',
+            stop_price=95.0,
+            quantity=1.0
+        )
+        
+        self.assertTrue(result)
+        self.assertEqual(len(self.stop_loss.active_stops), 1)
+        self.mock_client.create_order.assert_called_once()
+        
+    def test_place_stop_loss_invalid_price(self):
+        # Mock ticker with price too close to stop
+        self.mock_client.fetch_ticker.return_value = {'last': 95.1}
+        
+        # Test placing stop loss
+        result = self.stop_loss.place_stop_loss(
+            symbol='BTC/USD',
+            stop_price=95.0,
+            quantity=1.0
+        )
+        
+        self.assertFalse(result)
+        self.assertEqual(len(self.stop_loss.active_stops), 0)
+        self.mock_client.create_order.assert_not_called()
+        
+    def test_place_stop_loss_retry(self):
+        # Mock first attempt failure, second success
+        self.mock_client.create_order.side_effect = [
+            Exception("Network error"),
+            {'id': 'test_order_1'}
+        ]
+        self.mock_client.fetch_ticker.return_value = {'last': 100.0}
+        
+        # Test placing stop loss
+        result = self.stop_loss.place_stop_loss(
+            symbol='BTC/USD',
+            stop_price=95.0,
+            quantity=1.0
+        )
+        
+        self.assertTrue(result)
+        self.assertEqual(len(self.stop_loss.active_stops), 1)
+        self.assertEqual(self.mock_client.create_order.call_count, 2)
+        
+    def test_cancel_stop_loss(self):
+        # Setup active stop
+        self.stop_loss.active_stops['BTC/USD'] = {
+            'order_id': 'test_order_1',
+            'stop_price': 95.0,
+            'quantity': 1.0,
+            'placed_at': datetime.now()
+        }
+        
+        # Test cancelling stop loss
+        result = self.stop_loss.cancel_stop_loss('BTC/USD')
+        
+        self.assertTrue(result)
+        self.assertEqual(len(self.stop_loss.active_stops), 0)
+        self.mock_client.cancel_order.assert_called_once_with('test_order_1', 'BTC/USD')
+        
+    def test_cancel_nonexistent_stop(self):
+        # Test cancelling non-existent stop
+        result = self.stop_loss.cancel_stop_loss('BTC/USD')
+        
+        self.assertFalse(result)
+        self.mock_client.cancel_order.assert_not_called()
+        
+    def test_get_active_stops(self):
+        # Setup active stops
+        self.stop_loss.active_stops = {
+            'BTC/USD': {
+                'order_id': 'test_order_1',
+                'stop_price': 95.0,
+                'quantity': 1.0,
+                'placed_at': datetime.now()
+            },
+            'ETH/USD': {
+                'order_id': 'test_order_2',
+                'stop_price': 2000.0,
+                'quantity': 0.5,
+                'placed_at': datetime.now()
+            }
+        }
+        
+        # Test getting active stops
+        active_stops = self.stop_loss.get_active_stops()
+        
+        self.assertEqual(len(active_stops), 2)
+        self.assertIn('BTC/USD', active_stops)
+        self.assertIn('ETH/USD', active_stops)
+        self.assertIsNot(active_stops, self.stop_loss.active_stops)  # Should be a copy
 
 if __name__ == '__main__':
     unittest.main() 

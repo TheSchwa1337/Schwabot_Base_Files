@@ -13,19 +13,55 @@ class PatternMatcher:
         self.match_history = []
         
     def hamming_distance(self, pattern1: List[int], pattern2: List[int]) -> int:
-        """Calculate Hamming distance between patterns."""
+        """
+        Calculate Hamming distance between patterns.
+        
+        Args:
+            pattern1 (List[int]): The first pattern.
+            pattern2 (List[int]): The second pattern.
+            
+        Returns:
+            int: The Hamming distance between the two patterns.
+        """
         return sum(1 for i in range(len(pattern1)) if pattern1[i] != pattern2[i])
     
     def manhattan_distance(self, pattern1: List[int], pattern2: List[int]) -> float:
-        """Calculate Manhattan distance between patterns."""
+        """
+        Calculate Manhattan distance between patterns.
+        
+        Args:
+            pattern1 (List[int]): The first pattern.
+            pattern2 (List[int]): The second pattern.
+            
+        Returns:
+            float: The Manhattan distance between the two patterns.
+        """
         return sum(abs(pattern1[i] - pattern2[i]) for i in range(len(pattern1)))
     
     def euclidean_distance(self, pattern1: List[int], pattern2: List[int]) -> float:
-        """Calculate Euclidean distance between patterns."""
+        """
+        Calculate Euclidean distance between patterns.
+        
+        Args:
+            pattern1 (List[int]): The first pattern.
+            pattern2 (List[int]): The second pattern.
+            
+        Returns:
+            float: The Euclidean distance between the two patterns.
+        """
         return np.sqrt(sum((pattern1[i] - pattern2[i])**2 for i in range(len(pattern1))))
     
     def cosine_similarity(self, pattern1: List[int], pattern2: List[int]) -> float:
-        """Calculate cosine similarity between pattern vectors."""
+        """
+        Calculate cosine similarity between pattern vectors.
+        
+        Args:
+            pattern1 (List[int]): The first pattern.
+            pattern2 (List[int]): The second pattern.
+            
+        Returns:
+            float: The cosine similarity between the two patterns.
+        """
         dot_product = sum(pattern1[i] * pattern2[i] for i in range(len(pattern1)))
         norm1 = np.sqrt(sum(x**2 for x in pattern1))
         norm2 = np.sqrt(sum(x**2 for x in pattern2))
@@ -37,6 +73,13 @@ class PatternMatcher:
     def comprehensive_similarity(self, pattern1: List[int], pattern2: List[int]) -> Dict[str, float]:
         """
         Calculate comprehensive similarity metrics.
+        
+        Args:
+            pattern1 (List[int]): The first pattern.
+            pattern2 (List[int]): The second pattern.
+            
+        Returns:
+            dict: A dictionary containing various similarity scores.
         """
         hamming_dist = self.hamming_distance(pattern1, pattern2)
         manhattan_dist = self.manhattan_distance(pattern1, pattern2)
