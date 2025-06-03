@@ -97,7 +97,7 @@ class BasketLogController:
                 'operation_type': operation_type,
                 'user_id': user_id,
                 'transaction_id': transaction_id,
-                **context or {}
+                **(context or {})
             }
         )
         

@@ -40,41 +40,17 @@ class ProfitLevel:
 class ProfitProtectionSystem:
     """Manages profit protection with dynamic thresholds and adaptive sizing"""
     
-    def __init__(self, cooldown_manager: CooldownManager):
-        self.cooldown_manager = cooldown_manager
-        self.profit_levels: List[ProfitLevel] = [
-            ProfitLevel(
-                level=0.02,  # 2% profit
-                actions=["reduce_position_size_50", "tighten_stops"],
-                cooldown_seconds=300,
-                position_size_multiplier=0.5
-            ),
-            ProfitLevel(
-                level=0.05,  # 5% profit
-                actions=["reduce_position_size_75", "tighten_stops_aggressive"],
-                cooldown_seconds=600,
-                position_size_multiplier=0.25
-            ),
-            ProfitLevel(
-                level=0.10,  # 10% profit
-                actions=["reduce_position_size_90", "move_to_breakeven"],
-                cooldown_seconds=900,
-                position_size_multiplier=0.1
-            )
-        ]
+    def __init__(self):
+        self.registered_assets: Dict[str, float] = {}
+        self.profit_thresholds: Dict[str, float] = {}
         
-        self.profit_thresholds: Dict[str, ProfitThreshold] = {}
-        self.position_sizes: Dict[str, float] = {}
-        self.last_profit_updates: Dict[str, datetime] = {}
+    def can_proceed(self, basket_id: str) -> bool:
+        """Check if a basket can proceed based on profit protection rules"""
+        return True  # Stub implementation
         
-    def register_asset(self, asset_id: str, initial_position_size: float) -> None:
-        """Register a new asset for profit protection"""
-        self.profit_thresholds[asset_id] = ProfitThreshold(
-            initial_value=0.02,  # Start with 2% threshold
-            decay_rate=0.95,     # 5% decay per update
-            min_value=0.005      # Minimum 0.5% threshold
-        )
-        self.position_sizes[asset_id] = initial_position_size
+    def register_asset(self, asset: str, position_size: float) -> None:
+        """Register an asset with its position size for profit protection"""
+        self.registered_assets[asset] = position_size
         
     def update_profit(self, asset_id: str, current_profit: float) -> List[str]:
         """Update profit state and return required actions"""

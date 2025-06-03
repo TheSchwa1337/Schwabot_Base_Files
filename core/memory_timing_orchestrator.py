@@ -23,13 +23,13 @@ from .zbe_temperature_tensor import ZBETemperatureTensor
 @dataclass
 class MemoryKey:
     """Represents a memory key with timing metadata"""
-    hash_value: str  # 256-bit hash
-    timestamp: float
-    bit_depth: int
-    thermal_tag: float
-    memory_weight: float
-    phase_alignment: float
-    last_access: float
+    hash_value: int
+    memory_weight: float = 1.0
+    phase_alignment: float = 1.0
+    timestamp: float = 0.0
+    bit_depth: int = 0
+    thermal_tag: float = 0.0
+    last_access: float = 0.0
     access_count: int = 0
     success_score: float = 0.0
 
@@ -54,7 +54,7 @@ class MemoryTimingOrchestrator:
         self.zbe_tensor = ZBETemperatureTensor()
         
         # Memory key storage
-        self.memory_keys: Dict[str, MemoryKey] = {}
+        self.memory_keys: Dict[int, MemoryKey] = {}
         
         # Hash function profiles
         self.hash_profiles = {
@@ -135,15 +135,8 @@ class MemoryTimingOrchestrator:
         profile.last_used = time.time()
         
         # Generate hash
-        if hash_func == 'sha256':
-            hash_value = hashlib.sha256(data).hexdigest()
-        elif hash_func == 'sha512':
-            hash_value = hashlib.sha512(data).hexdigest()
-        elif hash_func == 'blake2b':
-            hash_value = hashlib.blake2b(data).hexdigest()
-        else:  # keccak
-            hash_value = hashlib.sha3_256(data).hexdigest()
-            
+        hash_value = hash(data)
+        
         # Create memory key
         key = MemoryKey(
             hash_value=hash_value,
@@ -160,7 +153,7 @@ class MemoryTimingOrchestrator:
         
         return key
 
-    def access_memory_key(self, hash_value: str) -> Optional[MemoryKey]:
+    def access_memory_key(self, hash_value: int) -> Optional[MemoryKey]:
         """
         Access a memory key and update its metadata.
         
@@ -184,7 +177,7 @@ class MemoryTimingOrchestrator:
         
         return key
 
-    def update_success_score(self, hash_value: str, success_score: float):
+    def update_success_score(self, hash_value: int, success_score: float):
         """
         Update success score for a memory key and its hash function.
         

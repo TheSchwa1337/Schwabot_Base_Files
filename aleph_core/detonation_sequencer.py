@@ -4,13 +4,14 @@ Manages the execution of trading strategies with Smart Money integration.
 """
 
 import numpy as np
-from typing import Dict, List, Tuple, Optional
-from dataclasses import dataclass
+from typing import Dict, List, Tuple, Optional, Any
+from dataclasses import dataclass, field
 from datetime import datetime
 import hashlib
 import unittest
 from aleph_core.entropy_analyzer import EntropyAnalyzer
 from .smart_money_analyzer import SmartMoneyAnalyzer, SmartMoneyMetrics
+import json
 
 @dataclass
 class DetonationState:
@@ -23,6 +24,12 @@ class DetonationState:
     velocity: str
     liquidity_resonance: str
     timestamp: datetime
+    phase: int = 0
+    active: bool = True
+    phase_velocity_classification: Optional[str] = None
+    routing_tag: Optional[str] = None
+    sequence_id: Optional[str] = None
+    pattern_hash: Optional[str] = None
 
 @dataclass
 class PatternMetrics:
@@ -32,8 +39,13 @@ class PatternMetrics:
     momentum: float = 0.0
     volatility: float = 0.0
     correlation: float = 0.0
+    latency_ms: float = 0.0
 
-class DetonationSequencer:
+@dataclass
+class DetonationHistory:
+    detonation_history: List[DetonationState] = field(default_factory=list)
+
+class DetonationSequencer(DetonationHistory):
     """
     Manages the execution of trading strategies with Smart Money integration.
     Uses market microstructure analysis to enhance decision making.
@@ -42,11 +54,12 @@ class DetonationSequencer:
     def __init__(self,
                  confidence_threshold: float = 0.7,
                  smart_money_threshold: float = 0.6):
+        super().__init__()
         self.confidence_threshold = confidence_threshold
         self.smart_money_threshold = smart_money_threshold
         self.smart_money = SmartMoneyAnalyzer()
         self.current_state: Optional[DetonationState] = None
-        self.detonation_history: List[DetonationState] = []
+        self.sequence_id_counter = 0
         self.pattern_metrics = PatternMetrics()
         self.sequence_history = []
         self.last_update = datetime.now()
@@ -138,6 +151,17 @@ class DetonationSequencer:
                 should_detonate = True
             else:
                 should_detonate = False
+        
+        # Update state attributes
+        state.phase_velocity_classification = self.evaluate_velocity_matrix(state)
+        state.routing_tag = (
+            "HIGH_PRIORITY" if state.confidence > 0.9 and state.smart_money_score > 0.8 else
+            "MID_PRIORITY" if state.confidence > 0.7 else
+            "LOW_PRIORITY"
+        )
+        self.sequence_id_counter += 1
+        state.sequence_id = f"DSEQ-{self.sequence_id_counter:05d}"
+        state.pattern_hash = self.generate_batch_hash(state.sequence_id, state.timestamp)
         
         return {
             'detonation_activated': should_detonate,
@@ -238,6 +262,41 @@ class DetonationSequencer:
             'history': self.sequence_history[-5:],  # Last 5 sequences
             'timestamp': self.current_state.timestamp
         } 
+
+    def evaluate_velocity_matrix(self, state: DetonationState) -> str:
+        if state.velocity == "HIGH_UP" and state.spoof_score < 0.3:
+            return "BULL_SURGE"
+        elif state.velocity == "HIGH_DOWN" and state.wall_score > 0.7:
+            return "BEAR_WALL"
+        elif state.spoof_score > 0.8:
+            return "SPOOF_ZONE"
+        return "NEUTRAL"
+
+    def export_detonation_log(self, filepath: str = "detonation_log.json") -> None:
+        with open(filepath, "w") as f:
+            json.dump([s.__dict__ for s in self.detonation_history], f, indent=2, default=str)
+
+    def get_recent_summary(self) -> Dict[str, Any]:
+        return {
+            'last_pattern': self.current_state.pattern_id,
+            'detonated': self.current_state.active,
+            'routing_tag': self.current_state.routing_tag,
+            'velocity_class': self.current_state.phase_velocity_classification,
+            'phase': self.current_state.phase,
+            'timestamp': self.current_state.timestamp.isoformat()
+        }
+
+    def generate_batch_hash(self, sequence_id: str, timestamp: datetime.datetime) -> str:
+        key = f"{sequence_id}-{timestamp.timestamp()}"
+        return hashlib.sha256(key.encode()).hexdigest()
+
+    def get_heatmap_matrix(self) -> np.ndarray:
+        matrix = np.zeros((10, 10))
+        for s in self.detonation_history:
+            x = int(s.confidence * 10) % 10
+            y = int(s.smart_money_score * 10) % 10
+            matrix[x][y] += 1
+        return matrix
 
 class TestEntropyAnalyzer(unittest.TestCase):
     def test_empty_entropy_values(self):

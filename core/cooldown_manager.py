@@ -107,8 +107,9 @@ class CooldownRule:
 class CooldownManager:
     """Enhanced cooldown manager with fractal integration"""
     
-    def __init__(self, rules: List[CooldownRule]):
-        self._rules = sorted(rules, key=lambda r: r.priority, reverse=True)
+    def __init__(self, rules: List[CooldownRule] = None):
+        self.rules = rules or []
+        self.active_cooldowns: Dict[str, float] = {}
         self._tick_counter = 0
         self._profit_history: Dict[str, List[float]] = {}
         self._last_profit_update: Dict[str, float] = {}
@@ -164,7 +165,7 @@ class CooldownManager:
                         self._apply_fractal_correction(target_id, match)
         
         # Activate rules
-        for rule in self._rules:
+        for rule in self.rules:
             rule.maybe_activate(event, payload, self._tick_counter)
 
     def _apply_fractal_correction(self, target_id: str, match: TripletMatch) -> None:
@@ -194,7 +195,7 @@ class CooldownManager:
             if target_id in self._fractal_states:
                 fractal_state = self._fractal_states[target_id][-1]
 
-        for rule in self._rules:
+        for rule in self.rules:
             if not rule.still_active(self._tick_counter, current_profit, fractal_state):
                 continue
 
@@ -216,7 +217,7 @@ class CooldownManager:
             if target_id in self._fractal_states:
                 fractal_state = self._fractal_states[target_id][-1]
 
-        for rule in self._rules:
+        for rule in self.rules:
             if rule.still_active(self._tick_counter, current_profit, fractal_state):
                 if rule.scope == CooldownScope.GLOBAL or (rule.scope == scope and (rule.target_id is None or rule.target_id == target_id)):
                     actions.extend(rule.actions)
