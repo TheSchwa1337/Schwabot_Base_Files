@@ -27,6 +27,14 @@ class PlotSign:
     confidence: float
     tensor_factors: Dict[str, np.ndarray]
 
+class DummyKMeans:
+    def fit(self, X): pass
+    def transform(self, X): return np.zeros((X.shape[0], 1))
+
+class DummyScaler:
+    def fit(self, X): pass
+    def transform(self, X): return X
+
 class PlotSignEngine:
     """Engine for extracting interpretable plot signs from market tensors"""
     
@@ -34,7 +42,8 @@ class PlotSignEngine:
         self,
         num_components: int = 3,
         history_size: int = 100,
-        resonance_threshold: float = 0.7
+        resonance_threshold: float = 0.7,
+        offline_mode=True
     ):
         self.num_components = num_components
         self.history_size = history_size
@@ -62,6 +71,12 @@ class PlotSignEngine:
         
         # Initialize plot sign templates
         self.plot_sign_templates = self._initialize_plot_sign_templates()
+
+        if offline_mode:
+            from fallback_tensorly import fake_parafac as parafac
+            from fallback_tensorly import fake_tucker as tucker
+            self.kmeans = DummyKMeans()
+            self.scaler = DummyScaler()
 
     def _initialize_plot_sign_templates(self) -> Dict[str, Dict]:
         """Initialize templates for different types of plot signs"""
@@ -272,6 +287,15 @@ class PlotSignEngine:
         resonance_change = abs(recent_resonance - previous_resonance)
         
         return has_phase_transition and resonance_change > 0.3
+
+def fake_parafac(tensor, rank, normalize_factors=True):
+    u, s, vh = np.linalg.svd(tensor.reshape(tensor.shape[0], -1), full_matrices=False)
+    return (u[:, :rank], s[:rank], vh[:rank, :])
+
+def fake_tucker(tensor, ranks, normalize_factors=True):
+    core = tensor
+    factors = [np.eye(dim, min(dim, rank)) for dim, rank in zip(tensor.shape, ranks)]
+    return (core, factors)
 
 # Example usage:
 """

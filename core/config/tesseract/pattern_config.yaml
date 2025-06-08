@@ -1,0 +1,114 @@
+pattern_analysis:
+  dimensions:
+    market_sentiment:
+      weight: 0.15
+      update_interval: 1.0
+      smoothing_factor: 0.1
+      threshold: 0.7
+      memory_size: 1000
+
+    price_momentum:
+      weight: 0.2
+      window_size: 20
+      smoothing_factor: 0.1
+      threshold: 0.6
+      memory_size: 1000
+
+    volume_pressure:
+      weight: 0.15
+      window_size: 15
+      smoothing_factor: 0.1
+      threshold: 0.65
+      memory_size: 1000
+
+    volatility_index:
+      weight: 0.15
+      window_size: 30
+      smoothing_factor: 0.1
+      threshold: 0.7
+      memory_size: 1000
+
+    temporal_phase:
+      weight: 0.1
+      window_size: 50
+      smoothing_factor: 0.1
+      threshold: 0.6
+      memory_size: 1000
+
+    liquidity_depth:
+      weight: 0.1
+      window_size: 25
+      smoothing_factor: 0.1
+      threshold: 0.65
+      memory_size: 1000
+
+    whale_activity:
+      weight: 0.1
+      window_size: 40
+      smoothing_factor: 0.1
+      threshold: 0.75
+      memory_size: 1000
+
+    technical_signal:
+      weight: 0.05
+      window_size: 10
+      smoothing_factor: 0.1
+      threshold: 0.6
+      memory_size: 1000
+
+  pattern_recognition:
+    min_pattern_length: 5
+    max_pattern_length: 100
+    similarity_threshold: 0.8
+    pattern_memory_size: 1000
+    pattern_decay_rate: 0.1
+    pattern_confidence_threshold: 0.7
+    pattern_validation_window: 20
+
+  pattern_matching:
+    algorithm: "quantum_fuzzy_match"
+    match_threshold: 0.85
+    max_patterns: 100
+    pattern_lifetime: 3600
+    pattern_cleanup_interval: 300
+    pattern_merge_threshold: 0.9
+
+  pattern_evolution:
+    mutation_rate: 0.05
+    crossover_rate: 0.7
+    selection_pressure: 0.8
+    population_size: 100
+    generation_limit: 1000
+    fitness_threshold: 0.8
+
+  pattern_validation:
+    min_occurrences: 3
+    confidence_threshold: 0.7
+    validation_window: 100
+    false_positive_threshold: 0.1
+    pattern_stability_threshold: 0.8
+
+  pattern_optimization:
+    learning_rate: 0.01
+    momentum: 0.9
+    weight_decay: 0.0001
+    batch_size: 32
+    epochs: 100
+    early_stopping_patience: 10
+
+  pattern_visualization:
+    enabled: true
+    update_rate: 1000
+    show_grid: true
+    show_labels: true
+    show_timestamps: true
+    color_scheme: "quantum"
+    dimension_colors:
+      market_sentiment: "#3B82F6"
+      price_momentum: "#10B981"
+      volume_pressure: "#F59E0B"
+      volatility_index: "#EF4444"
+      temporal_phase: "#8B5CF6"
+      liquidity_depth: "#EC4899"
+      whale_activity: "#06B6D4"
+      technical_signal: "#F97316" 

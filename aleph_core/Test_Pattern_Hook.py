@@ -21,6 +21,9 @@ import threading
 from queue import Queue
 import asyncio
 
+# File for local pattern log storage
+LOG_FILE = Path("logs/pattern_log.json")
+
 @dataclass
 class PatternEvent:
     pattern_name: str
@@ -77,7 +80,9 @@ class EventBus:
         self.subscribers[pattern_name].append(callback)
 
 class PatternHookManager:
-    def __init__(self):
+    def __init__(self, mode="async"):
+        self.gpu_processed = False
+        self.mode = mode
         self.event_bus = EventBus()
         self.gpu_available = self._check_gpu()
         self.pattern_cache = {}
@@ -90,8 +95,9 @@ class PatternHookManager:
         except:
             return False
             
-    def initialize(self):
+    async def initialize(self):
         self.event_bus.start()
+        logging.info("[HookManager] Initialized.")
         
     def register(self, pattern_name: str, callback, use_gpu: bool = False):
         if pattern_name not in self.hook_registry:
@@ -101,24 +107,17 @@ class PatternHookManager:
             'use_gpu': use_gpu and self.gpu_available
         })
         
-    def trigger(self, pattern_name: str, pattern_hash: str, metadata: Dict):
-        event = PatternEvent(
-            pattern_name=pattern_name,
-            pattern_hash=pattern_hash,
-            metadata=metadata,
-            timestamp=datetime.utcnow().timestamp()
-        )
-        
-        if self.gpu_available:
-            # Process pattern matching on GPU
-            try:
-                gpu_data = cp.array(metadata.get('pattern_data', []))
-                # GPU processing logic here
-                event.gpu_processed = True
-            except Exception as e:
-                logging.error(f"GPU processing failed: {e}")
-                
-        self.event_bus.publish(event)
+    async def trigger(self, pattern_hash: str, metadata: dict) -> dict:
+        try:
+            raw = metadata.get('pattern_data', [])
+            if not isinstance(raw, (list, np.ndarray)):
+                raise ValueError("Invalid pattern_data format")
+            cp.array(raw)  # GPU warm-up logic
+            metadata['gpu_processed'] = True
+        except Exception as e:
+            logging.error(f"[GPU] Processing failed for {pattern_hash}: {e}")
+            metadata['gpu_processed'] = False
+        return metadata
 
 # Initialize global hook manager
 HOOK_MANAGER = PatternHookManager()
@@ -168,23 +167,20 @@ def log_pattern_match(pattern_name, pattern_hash, metadata):
             "pattern": pattern_name,
             "hash": pattern_hash,
             "confidence": metadata.get("confidence", 0),
-            "nodes": metadata.get("matched_nodes", 0)
+            "gpu_processed": metadata.get("gpu_processed", False)
         }
-
+        LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
         if LOG_FILE.exists():
-            with open(LOG_FILE, "r") as fp:
-                data = json.load(fp)
+            with open(LOG_FILE, "r") as f:
+                data = json.load(f)
         else:
             data = []
-
         data.append(entry)
-
-        with open(LOG_FILE, "w") as fp:
-            json.dump(data, fp, indent=4)
-
-        print(f"[Logger] Pattern '{pattern_name}' recorded.")
+        with open(LOG_FILE, "w") as f:
+            json.dump(data, f, indent=4)
+        logging.info(f"[Log] Pattern {pattern_name} recorded to JSON.")
     except Exception as e:
-        print(f"[Error] Failed to log pattern match: {e}")
+        logging.error(f"[Log] Failed to write to JSON file: {e}")
 
 register_hook()
 
@@ -348,7 +344,7 @@ def send_pattern_match_to_kafka(pattern_name, pattern_hash, metadata):
             "pattern": pattern_name,
             "hash": pattern_hash,
             "confidence": metadata.get("confidence", 0),
-            "nodes": metadata.get("matched_nodes", 0)
+            "gpu_processed": metadata.get("gpu_processed", False)
         }
         producer.send('pattern_matches', value=message)
         producer.flush()

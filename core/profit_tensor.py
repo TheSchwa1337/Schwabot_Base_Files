@@ -170,4 +170,59 @@ class ProfitTensorStore:
             'top_tensors': self.get_top_tensors(5),
             'storage_path': self.storage_path,
             'last_save': datetime.now().isoformat()
-        } 
+        }
+
+    def _calculate_profit_slope(self, history: List[float]) -> float:
+        if len(history) < 5:
+            return 0.0
+        x = np.arange(len(history[-5:]))
+        y = np.array(history[-5:])
+        m, _ = np.polyfit(x, y, 1)
+        return m
+
+    def bitfold_rebalance(self, sha_key: str):
+        stats = self.get_tensor_stats(sha_key)
+        correlation = self.get_thermal_profit_correlation(sha_key)
+        
+        # Calculate profit slope
+        slope = self._calculate_profit_slope(stats['profit_history'])
+        
+        if sha_key in self.tensor_map:
+            entry = self.tensor_map[sha_key]
+            
+            # GAN-style rebinding logic
+            if correlation < -0.5 and stats['volatility_std'] > 0.2:
+                entry.tensor = np.random.normal(loc=np.mean(entry.tensor), scale=stats['volatility_std'], size=entry.tensor.shape)
+                print(f"GAN-style tensor reset triggered for {sha_key} with correlation {correlation:.2f} and volatility {stats['volatility_std']:.2f}")
+            
+            if slope > 0.01 and correlation > 0.6:
+                entry.bit_depth = 81
+            elif slope < -0.01 and correlation < -0.2:
+                entry.bit_depth = 8
+            
+            # ZBE Thermal Bias Hook (if ZBE is running)
+            if hasattr(self, 'zbe_temp'):
+                temp_diff = abs(stats['avg_thermal'] - self.zbe_temp)
+                if temp_diff > 25 and correlation < 0.2:
+                    entry.bit_depth = 4  # Emergency fallback
+            
+            # Tensor Volatility Index
+            volatility_index = self.get_tensor_volatility(sha_key)
+            
+            # Add entropy index weight during bit depth recommendations
+            if volatility_index > 0.1:
+                entry.bit_depth += int(volatility_index * 2)  # Example: Increase by 2 for volatility
+            
+            # Set self.zbe_temp externally in the runtime cycle
+            # This is a placeholder, you need to implement this logic based on your application's architecture
+            # For example, if ZBE is running as a separate process or service:
+            # self.zbe_temp = live_zbe_reading()
+        else:
+            print(f"Tensor {sha_key} not found in tensor_map")
+
+    def get_tensor_volatility(self, sha_key: str) -> float:
+        entry = self.tensor_map.get(sha_key)
+        if not entry or len(entry.profit_history) < 10:
+            return 0.0
+        diffs = np.diff(entry.profit_history[-10:])
+        return np.std(diffs) 

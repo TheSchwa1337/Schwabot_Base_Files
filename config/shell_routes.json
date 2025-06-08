@@ -1,0 +1,57 @@
+{
+  "0x8845": {
+    "entry_point": "rde",
+    "primary_route": "rde->sfs->cooldown_zpe",
+    "fallback_route": "rde->ufs->cooldown_zbe",
+    "bounce_back_map": {
+      "timeout": "rde->sfs->cooldown_zpe",
+      "error": "rde->ufs->cooldown_zbe",
+      "invalid_state": "rde->sfs->cooldown_zpe"
+    },
+    "cooldown_zone": "zpe"
+  },
+  "0x7A3B": {
+    "entry_point": "rde",
+    "primary_route": "rde->ufs->cooldown_zbe",
+    "fallback_route": "rde->sfs->cooldown_zpe",
+    "bounce_back_map": {
+      "timeout": "rde->ufs->cooldown_zbe",
+      "error": "rde->sfs->cooldown_zpe",
+      "invalid_state": "rde->ufs->cooldown_zbe"
+    },
+    "cooldown_zone": "zbe"
+  },
+  "0x9F2C": {
+    "entry_point": "rde",
+    "primary_route": "rde->sfs->cooldown_zpe",
+    "fallback_route": "rde->ufs->cooldown_zbe",
+    "bounce_back_map": {
+      "timeout": "rde->sfs->cooldown_zpe",
+      "error": "rde->ufs->cooldown_zbe",
+      "invalid_state": "rde->sfs->cooldown_zpe"
+    },
+    "cooldown_zone": "zpe"
+  },
+  "0xB4E1": {
+    "entry_point": "rde",
+    "primary_route": "rde->ufs->cooldown_zbe",
+    "fallback_route": "rde->sfs->cooldown_zpe",
+    "bounce_back_map": {
+      "timeout": "rde->ufs->cooldown_zbe",
+      "error": "rde->sfs->cooldown_zpe",
+      "invalid_state": "rde->ufs->cooldown_zbe"
+    },
+    "cooldown_zone": "zbe"
+  },
+  "0xC5D8": {
+    "entry_point": "rde",
+    "primary_route": "rde->sfs->cooldown_zpe",
+    "fallback_route": "rde->ufs->cooldown_zbe",
+    "bounce_back_map": {
+      "timeout": "rde->sfs->cooldown_zpe",
+      "error": "rde->ufs->cooldown_zbe",
+      "invalid_state": "rde->sfs->cooldown_zpe"
+    },
+    "cooldown_zone": "zpe"
+  }
+} 

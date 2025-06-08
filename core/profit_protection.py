@@ -9,6 +9,8 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from datetime import datetime
 from .cooldown_manager import CooldownManager, CooldownScope, CooldownRule
+import json
+import hashlib
 
 @dataclass
 class ProfitThreshold:
@@ -42,50 +44,52 @@ class ProfitProtectionSystem:
     
     def __init__(self):
         self.registered_assets: Dict[str, float] = {}
-        self.profit_thresholds: Dict[str, float] = {}
+        self.profit_thresholds: Dict[str, ProfitThreshold] = {}
+        self.position_sizes: Dict[str, float] = {}
+        self.position_sizes = {}
+        self.last_profit_updates: Dict[str, datetime] = {}
+        self.cooldown_manager = CooldownManager(rules=create_profit_protection_rules())
+        self.profit_levels: List[ProfitLevel] = [
+            ProfitLevel(ProfitThreshold(decay_rate=0.95)),  # Example use
+            ProfitLevel(ProfitThreshold(decay_rate=0.90))
+        ]
         
     def can_proceed(self, basket_id: str) -> bool:
         """Check if a basket can proceed based on profit protection rules"""
         return True  # Stub implementation
         
-    def register_asset(self, asset: str, position_size: float) -> None:
-        """Register an asset with its position size for profit protection"""
-        self.registered_assets[asset] = position_size
+    def register_asset(self, asset_id: str, decay_rate: float = 0.97):
+        self.registered_assets[asset_id] = 1.0
+        self.profit_thresholds[asset_id] = ProfitThreshold(decay_rate=decay_rate)
+        self.position_sizes[asset_id] = 1.0
+        self.last_profit_updates[asset_id] = datetime.now()
         
-    def update_profit(self, asset_id: str, current_profit: float) -> List[str]:
-        """Update profit state and return required actions"""
-        if asset_id not in self.profit_thresholds:
-            return []
-            
-        # Update profit threshold
-        threshold = self.profit_thresholds[asset_id]
-        threshold.update()
-        
-        # Update cooldown manager
-        self.cooldown_manager.update_profit(asset_id, current_profit)
-        
-        # Determine required actions
-        actions = []
-        for level in sorted(self.profit_levels, key=lambda x: x.level, reverse=True):
-            if current_profit >= level.level:
-                # Apply cooldown
-                self.cooldown_manager.register_event(
-                    "profit_level_reached",
-                    {
-                        "asset_id": asset_id,
-                        "profit_level": level.level,
-                        "current_profit": current_profit
-                    }
-                )
-                
-                # Update position size
+    def log_profit_snapshot(self, asset_id: str, profit: float):
+        data = {
+            "asset_id": asset_id,
+            "profit": profit,
+            "threshold": self.profit_thresholds[asset_id].current_value,
+            "position_size": self.position_sizes[asset_id],
+            "timestamp": datetime.now().isoformat()
+        }
+        encoded = json.dumps(data, sort_keys=True).encode()
+        return hashlib.sha256(encoded).hexdigest()
+
+    def update_profit(self, asset_id: str, profit: float):
+        snapshot_hash = self.log_profit_snapshot(asset_id, profit)
+
+        # Threshold decay
+        if asset_id in self.profit_thresholds:
+            self.profit_thresholds[asset_id].current_value *= self.profit_thresholds[asset_id].decay_rate
+
+        # Evaluate profit levels
+        for level in self.profit_levels:
+            if profit >= level.level:
                 self.position_sizes[asset_id] *= level.position_size_multiplier
-                
-                # Add actions
-                actions.extend(level.actions)
-                break
-                
-        return actions
+                break  # Only apply first matching level
+
+        self.last_profit_updates[asset_id] = datetime.now()
+        return snapshot_hash
         
     def get_position_size(self, asset_id: str) -> float:
         """Get current position size for asset"""
@@ -109,6 +113,20 @@ class ProfitProtectionSystem:
             "position_size": self.position_sizes[asset_id],
             "time_since_update": (datetime.now() - self.last_profit_updates.get(asset_id, datetime.now())).total_seconds()
         }
+
+    def adjust_threshold_by_volatility(self, asset_id: str, volatility_score: float):
+        """Adjust decay rate based on volatility"""
+        if asset_id in self.profit_thresholds:
+            threshold = self.profit_thresholds[asset_id]
+            # Example: higher volatility means slower decay
+            decay_adjustment = max(0.85, min(1.0, 1.1 - volatility_score))
+            threshold.decay_rate *= decay_adjustment
+
+    def apply_trend_sniffer_adjustments(self, asset_id: str, trend_strength: float, direction: str):
+        if direction == "up" and trend_strength > 0.7:
+            self.position_sizes[asset_id] *= 1.1
+        elif direction == "down" and trend_strength > 0.5:
+            self.position_sizes[asset_id] *= 0.85
 
 def create_profit_protection_rules() -> List[CooldownRule]:
     """Create profit protection cooldown rules"""
@@ -149,3 +167,9 @@ def create_profit_protection_rules() -> List[CooldownRule]:
             priority=85
         )
     ] 
+
+system = ProfitProtectionSystem()
+system.register_asset("BTC", decay_rate=0.96)
+system.update_profit("BTC", profit=0.18)
+system.adjust_threshold_by_volatility("BTC", volatility_score=0.91)
+system.apply_trend_sniffer_adjustments("BTC", trend_strength=0.8, direction="up") 

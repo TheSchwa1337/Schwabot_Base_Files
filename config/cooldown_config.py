@@ -5,6 +5,8 @@ Contains default settings and rule definitions for the cooldown management syste
 
 from typing import Dict, Any, List
 from core.cooldown_manager import CooldownRule, CooldownScope, CooldownAction
+from copy import deepcopy
+import logging
 
 # Default cooldown durations
 DEFAULT_COOLDOWN_CONFIG = {
@@ -198,9 +200,17 @@ STRATEGY_COOLDOWN_CONFIG = {
     }
 }
 
-def get_cooldown_rules(asset: str = None, strategy: str = None) -> List[CooldownRule]:
+# Global timing key map
+TIMING_KEY_MAP = {
+    "TIMING_PARADOX": "paradox_resolution",
+    "TIMING_PHASE": "phase_transition",
+    "TIMING_RECURSION": "recursion_depth",
+    "TIMING_ECHO": "echo_memory"
+}
+
+def build_cooldown_config(asset: str = None, strategy: str = None) -> List[CooldownRule]:
     """
-    Get cooldown rules with asset and strategy specific modifications.
+    Build a cooldown configuration based on user inputs for asset and strategy.
     
     Args:
         asset: Asset symbol (e.g., 'BTC/USD')
@@ -209,41 +219,38 @@ def get_cooldown_rules(asset: str = None, strategy: str = None) -> List[Cooldown
     Returns:
         List of CooldownRule objects
     """
-    rules = DEFAULT_COOLDOWN_RULES.copy()
-    
-    # Apply asset-specific modifications
-    if asset and asset in ASSET_COOLDOWN_CONFIG:
+    rules = deepcopy(DEFAULT_COOLDOWN_RULES)
+
+    # Check for unknowns
+    if asset and asset not in ASSET_COOLDOWN_CONFIG:
+        logging.warning(f"[CooldownConfig] Unknown asset '{asset}' — skipping asset-specific rules.")
+    if strategy and strategy not in STRATEGY_COOLDOWN_CONFIG:
+        logging.warning(f"[CooldownConfig] Unknown strategy '{strategy}' — skipping strategy-specific rules.")
+
+    # Asset-specific overrides
+    if asset in ASSET_COOLDOWN_CONFIG:
+        conf = ASSET_COOLDOWN_CONFIG[asset]
+        timing = conf.get('timing_based', {})
         for rule in rules:
-            if rule.rule_id.startswith("SL_") and rule.scope == CooldownScope.ASSET_SPECIFIC:
-                rule.cooldown_duration_seconds = ASSET_COOLDOWN_CONFIG[asset]['stop_loss_cooldown']
-            elif rule.rule_id.startswith("TP_") and rule.scope == CooldownScope.ASSET_SPECIFIC:
-                rule.cooldown_duration_seconds = ASSET_COOLDOWN_CONFIG[asset]['take_profit_cooldown']
-            elif rule.rule_id.startswith("TIMING_") and rule.scope == CooldownScope.ASSET_SPECIFIC:
-                timing_config = ASSET_COOLDOWN_CONFIG[asset]['timing_based']
-                if rule.rule_id == "TIMING_PARADOX":
-                    rule.cooldown_duration_seconds = timing_config['paradox_resolution']
-                elif rule.rule_id == "TIMING_PHASE":
-                    rule.cooldown_duration_seconds = timing_config['phase_transition']
-                elif rule.rule_id == "TIMING_RECURSION":
-                    rule.cooldown_duration_seconds = timing_config['recursion_depth']
-                elif rule.rule_id == "TIMING_ECHO":
-                    rule.cooldown_duration_seconds = timing_config['echo_memory']
-    
-    # Apply strategy-specific modifications
-    if strategy and strategy in STRATEGY_COOLDOWN_CONFIG:
+            if rule.scope == CooldownScope.ASSET_SPECIFIC:
+                if rule.rule_id.startswith("SL_"):
+                    rule.cooldown_duration_seconds = conf.get('stop_loss_cooldown', rule.cooldown_duration_seconds)
+                elif rule.rule_id.startswith("TP_"):
+                    rule.cooldown_duration_seconds = conf.get('take_profit_cooldown', rule.cooldown_duration_seconds)
+                elif TIMING_KEY_MAP.get(rule.rule_id):
+                    key = TIMING_KEY_MAP[rule.rule_id]
+                    rule.cooldown_duration_seconds = timing.get(key, rule.cooldown_duration_seconds)
+
+    # Strategy-specific overrides
+    if strategy in STRATEGY_COOLDOWN_CONFIG:
+        conf = STRATEGY_COOLDOWN_CONFIG[strategy]
+        timing = conf.get('timing_based', {})
         for rule in rules:
             if rule.scope == CooldownScope.STRATEGY_SPECIFIC:
                 if rule.rule_id.startswith("TP_"):
-                    rule.cooldown_duration_ticks = STRATEGY_COOLDOWN_CONFIG[strategy]['min_cooldown_ticks']
-                elif rule.rule_id.startswith("TIMING_"):
-                    timing_config = STRATEGY_COOLDOWN_CONFIG[strategy]['timing_based']
-                    if rule.rule_id == "TIMING_PARADOX":
-                        rule.cooldown_duration_seconds = timing_config['paradox_resolution']
-                    elif rule.rule_id == "TIMING_PHASE":
-                        rule.cooldown_duration_seconds = timing_config['phase_transition']
-                    elif rule.rule_id == "TIMING_RECURSION":
-                        rule.cooldown_duration_seconds = timing_config['recursion_depth']
-                    elif rule.rule_id == "TIMING_ECHO":
-                        rule.cooldown_duration_seconds = timing_config['echo_memory']
-    
+                    rule.cooldown_duration_ticks = conf.get("min_cooldown_ticks", 0)
+                elif TIMING_KEY_MAP.get(rule.rule_id):
+                    key = TIMING_KEY_MAP[rule.rule_id]
+                    rule.cooldown_duration_seconds = timing.get(key, rule.cooldown_duration_seconds)
+
     return rules 

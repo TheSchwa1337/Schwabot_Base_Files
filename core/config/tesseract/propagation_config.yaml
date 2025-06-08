@@ -1,0 +1,81 @@
+# Zygote Propagation Engine Configuration
+# ====================================
+
+# Core parameters
+core:
+  memory_window: 100
+  temporal_coherence_threshold: 0.6
+  phase_stability_threshold: 0.5
+  anomaly_confidence_threshold: 0.8
+  klein_bottle_threshold: 0.7
+
+# GAN configuration
+gan_config:
+  input_dim: 3
+  hidden_dim: 64
+  latent_dim: 32
+  learning_rate: 0.0001
+  batch_size: 32
+  epochs: 100
+  early_stopping_patience: 10
+  anomaly_threshold: 2.0
+
+# Phase handling
+phase:
+  velocity_window: 10
+  stability_window: 20
+  alignment_threshold: 0.7
+  drift_threshold: 0.3
+  correction_strength: 0.5
+
+# Plasma detection
+plasma:
+  energy_threshold: 1.5
+  turbulence_threshold: 0.8
+  decay_rate: 0.1
+  stabilization_factor: 0.7
+
+# Archetype matching
+archetype:
+  vector_weight: 0.7
+  phase_weight: 0.3
+  min_confidence: 0.6
+  max_angle: 0.785  # 45 degrees in radians
+  spectral_entropy_threshold: 2.0
+
+# Memory management
+memory:
+  max_history_size: 1000
+  decay_rate: 0.015
+  refresh_threshold: 0.5
+  base_value: 100.0
+
+# Logging and monitoring
+monitoring:
+  trace_export_interval: 3600  # seconds
+  summary_interval: 300  # seconds
+  log_level: INFO
+  export_path: "logs/propagation_traces"
+
+# Integration points
+integration:
+  strategy_mapper:
+    enabled: true
+    update_interval: 1.0  # seconds
+    confidence_threshold: 0.7
+  coldbase_sync:
+    enabled: true
+    sync_interval: 60  # seconds
+    batch_size: 100
+  matrix_overlay:
+    enabled: true
+    update_frequency: 0.5  # seconds
+    overlay_threshold: 0.8
+
+# Safety thresholds
+safety:
+  max_propagation_rate: 10  # per second
+  min_confidence: 0.5
+  max_anomaly_score: 3.0
+  emergency_cooldown: 5.0  # seconds
+  fallback_strategy: "neutral_hold" 

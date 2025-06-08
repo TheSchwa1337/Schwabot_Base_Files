@@ -1,0 +1,76 @@
+# GPU Configuration for Schwabot v0.042b
+# Manages GPU offloading, thermal thresholds, and profit tracking
+
+# GPU Safety Limits
+gpu_safety:
+  max_utilization: 0.8  # 80% max GPU load
+  max_temperature: 75.0  # 75°C max temp
+  min_data_size: 1000  # Minimum data size for GPU offload
+  memory_pool_size: 1024  # MB
+  stream_pool_size: 4
+  batch_size: 1000
+  sync_interval: 100
+
+# Thermal Management
+thermal:
+  optimal_temp: 60.0  # Optimal operating temperature
+  max_temp: 85.0  # Maximum safe temperature
+  thermal_decay: 0.95  # 5% decay per update
+  efficiency_threshold: 0.5  # Minimum thermal efficiency for GPU use
+
+# Bit Depth Configuration
+bit_depths:
+  - depth: 4
+    profit_threshold: 0.1
+    thermal_threshold: 70.0
+    memory_limit: 0.5
+  - depth: 8
+    profit_threshold: 0.2
+    thermal_threshold: 65.0
+    memory_limit: 0.6
+  - depth: 16
+    profit_threshold: 0.3
+    thermal_threshold: 60.0
+    memory_limit: 0.7
+  - depth: 42
+    profit_threshold: 0.4
+    thermal_threshold: 55.0
+    memory_limit: 0.8
+  - depth: 81
+    profit_threshold: 0.5
+    thermal_threshold: 50.0
+    memory_limit: 0.9
+
+# Profit Tracking
+profit:
+  history_window: 1000  # Number of operations to track
+  min_profit_threshold: 0.2  # Minimum profit to consider GPU
+  profit_decay: 0.95  # 5% decay per update
+  thermal_weight: 0.3  # Weight of thermal efficiency in profit calculation
+
+# Fault Handling
+faults:
+  max_retries: 3
+  retry_delay: 1.0  # seconds
+  error_threshold: 3  # Number of errors before fallback
+  timeout: 30.0  # seconds
+
+# Logging
+logging:
+  level: INFO
+  file: logs/gpu_offload.log
+  metrics_file: logs/gpu_metrics.json
+  profile_file: logs/gpu_profile.json
+
+# Environment Overrides
+environment:
+  force_cpu: false  # Set to true to force CPU-only mode
+  debug_mode: false
+  profiling_enabled: true
+
+# Device Selection
+devices:
+  gpu_ids: [0]  # List of GPU device IDs to use
+  memory_limit: 0.8  # Maximum GPU memory usage (0-1)
+  temperature_threshold: 80.0  # Temperature threshold for device selection
+  utilization_threshold: 0.9  # Utilization threshold for device selection 

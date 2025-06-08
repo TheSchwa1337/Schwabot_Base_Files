@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import logging
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 from .zbe_temperature_tensor import ZBETemperatureTensor
 from .profit_tensor import ProfitTensorStore
@@ -52,6 +54,8 @@ class ProfitSweepAllocator:
             81: 16
         }
 
+        self.depth_memory: Dict[int, List[str]] = {d: [] for d in self.bit_depth_factor}
+
     def _normalize_tensor(self, tensor: np.ndarray, bit_depth: int) -> np.ndarray:
         max_val = 2 ** bit_depth - 1
         return np.clip(tensor / max_val, 0, 1)
@@ -63,10 +67,17 @@ class ProfitSweepAllocator:
         drift = np.abs(tensor - avg)
         return np.any(drift > threshold)
 
-    def _update_plot(self, current_tensor: np.ndarray):
+    def _update_plot(self):
+        sha_key = self.choose_next_sha_key() or "default"
+        bit_depth = self.get_optimal_bit_depth(sha_key)
+        
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        x, y = np.meshgrid(range(...), range(...))  # depending on tensor shape
+        
         try:
             # Normalize tensor values based on bit depth
-            normalized_tensor = self._normalize_tensor(current_tensor, self.get_optimal_bit_depth())
+            normalized_tensor = self._normalize_tensor(self.zbe_tensor.get_current_tensor(), bit_depth)
             
             # Plot surface
             ax.plot_surface(x[:,:,0], y[:,:,0], normalized_tensor[:,:,0], cmap='viridis', alpha=0.8)
@@ -223,4 +234,32 @@ class ProfitSweepAllocator:
             'wall_pressure_count': len(self.wall_pressure_map),
             'current_temp': self.zbe_tensor.read_cpu_temperature(),
             'tensor_weights': self.zbe_tensor.get_current_tensor_weights().tolist()
-        } 
+        }
+
+    def check_drift_alert(self, threshold: float = 5.0) -> bool:
+        temps = [s.thermal_tag for s in self.sweep_log if s.thermal_tag]
+        if len(temps) < 2:
+            return False
+        drift = np.max(temps) - np.min(temps)
+        return drift > threshold
+
+    def reinforce_depth(self, sha_key: str, bit_depth: int):
+        if sha_key not in self.depth_memory[bit_depth]:
+            self.depth_memory[bit_depth].append(sha_key)
+
+    def tag_heat_cluster(self, sha_key: str):
+        zones = self.assign_profit_zones(sha_key)
+        return {
+            'sha_key': sha_key,
+            'zone_count': len(zones),
+            'avg_thermal': np.mean([z['thermal'] for z in zones]) if zones else None
+        }
+
+    def score_sweep(self, sweep: SweepSignal) -> float:
+        # Example scoring logic
+        return sweep.volume * np.exp(-sweep.entropy / 10)
+
+    def rebind_zone(self, sha_key: str, new_volume: float):
+        for zone in self.assign_profit_zones(sha_key):
+            if abs(zone['volume'] - new_volume) > 0.2 * zone['volume']:
+                zone['volume'] = (zone['volume'] + new_volume) / 2 

@@ -1,0 +1,12 @@
+# Hook Trigger Config
+# θ: Entropy threshold (see Hook(S_t) inequality)
+# δ: Symbolic drift threshold (see Δ_sym)
+# τ: Zalgo collapse threshold (see 𝒵(t))
+# ε: ColdBase similarity threshold (see similarity formula)
+# q: Tsallis entropy parameter
+
+entropy_threshold: 1.2   # θ
+symbolic_drift_threshold: 12  # δ (bits)
+zalgo_collapse_threshold: 0.85  # τ
+coldbase_similarity_threshold: 0.92  # ε
+entropy_q: 2.0  # q (Tsallis) 

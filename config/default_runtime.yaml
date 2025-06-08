@@ -1,0 +1,8 @@
+# Default Runtime Config
+# Default paths, entropy type, and GPU flags
+
+entropy_type: shannon  # ℋ(x; θ)
+gpu_enabled: true
+model_path: models/gan_filter.pt
+shell_history_path: data/shell_history.pkl
+coldbase_path: data/coldbase_store.pkl 

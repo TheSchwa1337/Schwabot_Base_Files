@@ -35,4 +35,24 @@ basket_swap:
         cooldown_seconds: 180
         scope: BASKET
         actions: ["monitor_only"]
-        priority: 85 
+        priority: 85
+  basket_triggers:
+    core_stability:
+      swap_conditions:
+        - metric: "drawdown"
+          threshold: 0.10
+          action: "reduce_exposure"
+        - metric: "entropy"
+          threshold: 0.7
+          action: "freeze_allocation"
+    
+    volatility_hedge:
+      swap_conditions:
+        - metric: "iv_rv_spread"
+          threshold: 0.05
+          action: "increase_exposure"
+        - metric: "skew"
+          threshold: 0.1
+          action: "adjust_position"
+    
+    # ... other baskets 

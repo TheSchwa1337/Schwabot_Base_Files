@@ -98,4 +98,71 @@ phase_shells:
 
   drift_negative:
     angle_range: [0.0, 3.04159]  # 0 to π - 0.1
-    stability_factor: 0.8 
+    stability_factor: 0.8
+
+# GAN Configuration
+gan_config:
+  threshold: 0.85
+  window_size: 50
+  min_confidence: 0.7
+  anomaly_weight: 0.3
+  reconstruction_weight: 0.4
+  latent_weight: 0.3
+  training:
+    batch_size: 32
+    epochs: 100
+    learning_rate: 0.001
+    early_stopping_patience: 10
+
+# Matrix Overlay Configuration
+matrix_overlay:
+  min_pattern_length: 10
+  max_pattern_length: 100
+  confidence_threshold: 0.7
+  fft_window: 50
+  freq_threshold: 0.1
+  pattern_types:
+    long_term:
+      freq_range: [0.0, 0.1]
+      min_amplitude: 0.3
+    medium_term:
+      freq_range: [0.1, 0.3]
+      min_amplitude: 0.2
+    short_term:
+      freq_range: [0.3, 0.5]
+      min_amplitude: 0.1
+  export:
+    max_history: 1000
+    format: "json"
+    compression: true
+
+# Symbolic Anchor Configuration
+symbolic_anchor:
+  sync_interval: 100
+  max_history: 1000
+  hash_algorithm: "sha256"
+  compression: true
+  validation:
+    min_confidence: 0.8
+    max_age: 3600  # seconds
+  storage:
+    type: "coldbase"
+    path: "data/symbolic_anchors"
+    backup: true
+
+GAN Configuration:
+  enabled: true
+  model_path: "models/gan_filter"
+  online_training: true
+  save_interval: 1000
+  config:
+    latent_dim: 32
+    hidden_dim: 64
+    num_layers: 3
+    learning_rate: 0.001
+    batch_size: 32
+    num_epochs: 100
+    entropy_weight: 0.1
+    gradient_weight: 0.1
+    anomaly_threshold: 0.85
+    use_gpu: true 
