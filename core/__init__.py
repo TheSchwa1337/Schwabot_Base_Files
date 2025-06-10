@@ -7,9 +7,8 @@ It provides the foundation for quantitative trading, pattern recognition, and st
 """
 
 # Core Mathematical Components
-from .mathlib import CoreMathLib
+from .mathlib import CoreMathLib, GradedProfitVector
 from .math_core import BaseAnalyzer, AnalysisResult
-from .mathlib_v2 import SmartStop
 
 # Trading Logic Components
 from .basket_swapper import BasketSwapper, SwapCriteria
@@ -27,9 +26,9 @@ from .dormant_engine import DormantState
 __all__ = [
     # Core Math
     'CoreMathLib',
+    'GradedProfitVector',
     'BaseAnalyzer',
     'AnalysisResult',
-    'SmartStop',
     
     # Trading Logic
     'BasketSwapper',

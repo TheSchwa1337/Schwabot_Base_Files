@@ -13,6 +13,7 @@ from typing import Dict, List, Optional
 import numpy as np
 from datetime import datetime
 from scripts.tesseract_control import TesseractController
+from schwabot_math.klein_logic import KleinDecayField
 
 class TesseractMonitor:
     """Monitors tesseract pattern processing and system health."""
@@ -23,6 +24,7 @@ class TesseractMonitor:
         self._setup_logging()
         self.metrics_history = []
         self.alert_history = []
+        self.klein = KleinDecayField()
         
     def _setup_logging(self):
         """Setup logging configuration."""
@@ -39,14 +41,21 @@ class TesseractMonitor:
         # Process pattern
         result = self.controller.process_pattern(pattern_hash)
         
+        # Klein Drift Integration
+        pattern_data = np.asarray(result['pattern']) if 'pattern' in result else np.array([0.0])
+        drift_vector = self.klein.compute_decay_vector(pattern_data)
+        drift_strength = np.linalg.norm(drift_vector)
+        drift_entropy = -np.sum(drift_vector * np.log2(drift_vector + 1e-10))
+        
         # Collect metrics
         metrics = {
             'timestamp': time.time(),
             'coherence': result['coherence'],
             'homeostasis': result['homeostasis'],
             'stability': result['metrics']['stability'],
-            'entropy': -np.sum(np.array(result['pattern']) * np.log2(np.array(result['pattern']) + 1e-10)),
-            'pattern_variance': np.var(result['pattern'])
+            'entropy': drift_entropy,
+            'drift_strength': drift_strength,
+            'pattern_variance': np.var(pattern_data) if pattern_data.size > 0 else 0.0
         }
         
         # Update history

@@ -16,6 +16,7 @@ from tools.phase_hash_utils import match_cyclic_number, Δt_prime_drift
 from tools.euler_trigger_index import EulerSignatureMap
 from .fractal_core import ForeverFractalCore, FractalState
 from .triplet_matcher import TripletMatcher, TripletMatch
+from .config import load_yaml_config, ConfigError, MATRIX_RESPONSE_SCHEMA
 import time
 import numpy as np
 from collections import deque
@@ -186,24 +187,20 @@ class MatrixFaultResolver:
     
     def _load_fallback_strategies(self, config_path: Optional[str]) -> Dict:
         """Load fallback strategies from YAML config"""
-        if config_path is None:
-            return {
-                'zpe_risk': {
-                    'fallback_strategy': 'cooldown_abort',
-                    'max_retries': 2
-                },
-                'drift_loop': {
-                    'fallback_strategy': 'entropy_realign',
-                    'max_retries': 3
-                }
-            }
-            
         try:
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)
-        except Exception as e:
-            logging.error(f"Error loading fallback strategies: {e}")
-            return {}
+            if config_path is None:
+                # Use centralized config loader with schema validation
+                return load_yaml_config('matrix_response_paths.yaml', schema=MATRIX_RESPONSE_SCHEMA)
+            else:
+                # Use provided config path
+                with open(config_path, 'r') as f:
+                    config = yaml.safe_load(f)
+                    # Validate against schema
+                    validate_config(config, MATRIX_RESPONSE_SCHEMA)
+                    return config
+        except (ConfigError, FileNotFoundError) as e:
+            logging.warning(f"Error loading config: {e}, using default fallback strategies")
+            return MATRIX_RESPONSE_SCHEMA.default_values
     
     def handle_fault(self, fault_type: str, severity: float,
                     phase_angle: float, z_score: float) -> Tuple[str, str]:

@@ -1,14 +1,30 @@
+# --- GPU Optional Decorator ---
+try:
+    import cupy as cp
+    GPU_ENABLED = True
+except ImportError:
+    cp = np
+    GPU_ENABLED = False
+
+def gpu_optional(func):
+    def wrapper(*args, **kwargs):
+        if GPU_ENABLED:
+            return func(*args, cp=cp, **kwargs)
+        return func(*args, cp=np, **kwargs)
+    return wrapper
+
 from dataclasses import dataclass
 import numpy as np
 import time
 
-def atr(high, low, close, period=14):
+@gpu_optional
+def atr(high, low, close, period=14, cp=np):
     """Average True Range calculation."""
-    high = np.asarray(high)
-    low = np.asarray(low)
-    close = np.asarray(close)
-    tr = np.maximum(high[1:] - low[1:], np.abs(high[1:] - close[:-1]), np.abs(low[1:] - close[:-1]))
-    return np.mean(tr[-period:]) if len(tr) >= period else np.mean(tr)
+    high = cp.asarray(high)
+    low = cp.asarray(low)
+    close = cp.asarray(close)
+    tr = cp.maximum(high[1:] - low[1:], cp.abs(high[1:] - close[:-1]), cp.abs(low[1:] - close[:-1]))
+    return float(cp.mean(tr[-period:])) if len(tr) >= period else float(cp.mean(tr))
 
 @dataclass
 class PsiStack:
@@ -28,17 +44,22 @@ def zeta_trigger(delta_mu: float, band: tuple[float, float]) -> bool:
     """Trigger ζ-node if delta_mu is within band."""
     return band[0] <= delta_mu <= band[1]
 
-def vwap(prices: np.ndarray, volumes: np.ndarray) -> float:
+@gpu_optional
+def vwap(prices, volumes, cp=np):
     """Volume Weighted Average Price."""
-    return np.sum(prices * volumes) / np.sum(volumes) if np.sum(volumes) > 0 else 0.0
+    prices = cp.asarray(prices)
+    volumes = cp.asarray(volumes)
+    return float(cp.sum(prices * volumes) / cp.sum(volumes)) if cp.sum(volumes) > 0 else 0.0
 
-def rsi(prices: np.ndarray, period: int = 14) -> float:
+@gpu_optional
+def rsi(prices, period: int = 14, cp=np):
     """Relative Strength Index."""
-    deltas = np.diff(prices)
-    gain = np.mean(deltas[deltas > 0]) if np.any(deltas > 0) else 0.0
-    loss = -np.mean(deltas[deltas < 0]) if np.any(deltas < 0) else 0.0
+    prices = cp.asarray(prices)
+    deltas = cp.diff(prices)
+    gain = cp.mean(deltas[deltas > 0]) if cp.any(deltas > 0) else 0.0
+    loss = -cp.mean(deltas[deltas < 0]) if cp.any(deltas < 0) else 0.0
     rs = gain / loss if loss > 0 else 0.0
-    return 100 - (100 / (1 + rs)) if loss > 0 else 100.0
+    return float(100 - (100 / (1 + rs))) if loss > 0 else 100.0
 
 def klein_bottle_collapse(dim: int = 50) -> np.ndarray:
     """Simulate Klein bottle collapse field."""
