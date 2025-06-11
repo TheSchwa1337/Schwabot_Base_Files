@@ -35,6 +35,9 @@ from .line_render_engine import LineRenderEngine
 # Adaptive Profit Chain Components
 from .adaptive_profit_chain import APCFSystem
 
+# Drift Shell Engine
+from .drift_shell_engine import DriftShellEngine
+
 # Export all public components
 __all__ = [
     # Core Math
@@ -70,5 +73,12 @@ __all__ = [
     'LineRenderEngine',
     
     # Adaptive Profit Chain
-    'APCFSystem'
+    'APCFSystem',
+
+    # Drift Shell Engine
+    'DriftShellEngine',
+
+    # New components
+    'NCCOManager',
+    'SFSSSRouter'
 ] 
