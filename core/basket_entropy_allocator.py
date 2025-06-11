@@ -10,7 +10,12 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from dataclasses import dataclass
 from datetime import datetime
-import unittest
+import logging
+from pathlib import Path
+from config.io_utils import load_config, ensure_config_exists
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 @dataclass
 class EntropyBand:
@@ -25,7 +30,18 @@ class EntropyBand:
 class BasketEntropyAllocator:
     """Manages entropy-guided allocation for baskets"""
     
-    def __init__(self):
+    def __init__(self, config_path: Path = None):
+        # Load configuration
+        if config_path is None:
+            config_path = ensure_config_exists('matrix_response_paths.yaml')
+        
+        try:
+            self.config = load_config(config_path)
+            logger.info(f"BasketEntropyAllocator initialized with config from {config_path}")
+        except ValueError as e:
+            logger.warning(f"Failed to load config: {e}, using defaults")
+            self.config = {}
+        
         # Define entropy bands
         self.entropy_bands = [
             EntropyBand(0.0, 0.2, 0.1, 0.8, 0.9, 0.1),  # Low entropy
@@ -50,6 +66,9 @@ class BasketEntropyAllocator:
                 'avg_profit': 0.0
             } for i in range(len(self.entropy_bands))}
         }
+        
+        # Initialize phase memory for basket tracking
+        self.phase_memory: Dict[str, Dict] = {}
 
     def calculate_allocation_weights(
         self,
@@ -197,6 +216,61 @@ class BasketEntropyAllocator:
         
         return max(scores.items(), key=lambda x: x[1])[0]
 
+    def update_phase_entry(
+        self,
+        basket_id: str,
+        sha_key: str,
+        phase_depth: int,
+        trust_score: float,
+        current_metrics: Dict[str, float]
+    ):
+        """Update phase entry for a basket"""
+        self.phase_memory[basket_id] = {
+            'sha_key': sha_key,
+            'phase_depth': phase_depth,
+            'trust_score': trust_score,
+            'metrics': current_metrics.copy(),
+            'timestamp': datetime.now()
+        }
+        logger.info(f"Updated phase entry for basket {basket_id}")
+
+    def check_basket_swap_condition(self, basket_id: str) -> Tuple[str, float]:
+        """Check if basket should swap and return phase/urgency"""
+        if basket_id not in self.phase_memory:
+            return 'NORMAL', 0.0
+        
+        entry = self.phase_memory[basket_id]
+        metrics = entry['metrics']
+        
+        # Calculate swap urgency based on metrics
+        urgency = 0.0
+        
+        # High entropy rate increases urgency
+        if metrics.get('entropy_rate', 0) > 0.8:
+            urgency += 0.3
+        
+        # Low trust score increases urgency
+        if entry['trust_score'] < 0.4:
+            urgency += 0.4
+        
+        # High thermal state increases urgency
+        if metrics.get('thermal_state', 0) > 0.7:
+            urgency += 0.3
+        
+        # Determine phase
+        if urgency > 0.7:
+            return 'SMART_MONEY', urgency
+        else:
+            return 'NORMAL', urgency
+
+# Data Provider Interface
+class DataProvider:
+    """Abstract interface for data providers"""
+    
+    def get_price(self, symbol: str) -> float:
+        """Get current price for a symbol"""
+        raise NotImplementedError("Subclasses must implement this method.")
+
 # Example usage
 if __name__ == "__main__":
     allocator = BasketEntropyAllocator()
@@ -219,50 +293,23 @@ if __name__ == "__main__":
     # Get optimal band
     optimal_band = allocator.get_optimal_band(market_entropy)
     print(f"\nOptimal band: {optimal_band}")
-
-class TestBasketPhaseMap(unittest.TestCase):
-    def test_update_phase_entry(self):
-        phase_map = BasketEntropyAllocator()
-        
-        metrics = {
-            'profit_gradient': 0.002,
-            'variance_of_returns': 0.5,
-            'memory_coherence_score': 0.7,
-            'entropy_rate': 0.4,
-            'thermal_state': 0.5
-        }
-        
-        phase_map.update_phase_entry(
-            basket_id="test_basket",
-            sha_key="test_sha",
-            phase_depth=42,
-            trust_score=0.8,
-            current_metrics=metrics
-        )
-        
-        self.assertIn("test_basket", phase_map.phase_memory)
-
-    def test_check_basket_swap_condition(self):
-        phase_map = BasketEntropyAllocator()
-        
-        metrics = {
-            'profit_gradient': 0.002,
-            'variance_of_returns': 0.5,
-            'memory_coherence_score': 0.7,
-            'entropy_rate': 0.4,
-            'thermal_state': 0.5
-        }
-        
-        phase_map.update_phase_entry(
-            basket_id="test_basket",
-            sha_key="test_sha",
-            phase_depth=42,
-            trust_score=0.8,
-            current_metrics=metrics
-        )
-        
-        phase, urgency = phase_map.check_basket_swap_condition("test_basket")
-        self.assertIn(phase, ['SMART_MONEY', 'NORMAL'])
-
-if __name__ == "__main__":
-    unittest.main() 
+    
+    # Test phase entry
+    test_metrics = {
+        'profit_gradient': 0.002,
+        'variance_of_returns': 0.5,
+        'memory_coherence_score': 0.7,
+        'entropy_rate': 0.4,
+        'thermal_state': 0.5
+    }
+    
+    allocator.update_phase_entry(
+        basket_id="test_basket",
+        sha_key="test_sha",
+        phase_depth=42,
+        trust_score=0.8,
+        current_metrics=test_metrics
+    )
+    
+    phase, urgency = allocator.check_basket_swap_condition("test_basket")
+    print(f"\nBasket phase: {phase}, urgency: {urgency:.2f}") 

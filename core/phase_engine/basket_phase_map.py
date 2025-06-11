@@ -10,6 +10,12 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import numpy as np
 from dataclasses import dataclass
+from pathlib import Path
+import yaml
+import os
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @dataclass
 class PhaseMetrics:
@@ -246,4 +252,50 @@ if __name__ == "__main__":
     
     # Check swap condition
     phase, urgency = phase_map.check_basket_swap_condition("test_basket")
-    print(f"Current phase: {phase}, Swap urgency: {urgency:.2f}") 
+    print(f"Current phase: {phase}, Swap urgency: {urgency:.2f}")
+
+def load_config():
+    config_path = Path(__file__).resolve().parent / 'config/matrix_response_paths.yaml'
+    
+    if not config_path.exists():
+        logging.error(f"Config file {config_path} not found.")
+        raise FileNotFoundError(f"Config file {config_path} not found.")
+    
+    with open(config_path, 'r') as file:
+        logging.info("Loading configuration from YAML file.")
+        return yaml.safe_load(file)
+
+def create_default_config():
+    config_path = Path(__file__).resolve().parent / 'config/matrix_response_paths.yaml'
+    
+    if not config_path.exists():
+        default_config = {
+            "response_paths": [
+                "path/to/response1",
+                "path/to/response2"
+            ]
+        }
+        
+        with open(config_path, 'w') as file:
+            yaml.safe_dump(default_config, file)
+
+class DataProvider:
+    def get_price(self):
+        raise NotImplementedError()
+
+# Example implementation for historical data
+class HistoricalDataProvider(DataProvider):
+    def __init__(self, historical_data):
+        self.historical_data = historical_data
+    
+    def get_price(self, timestamp):
+        return self.historical_data.get(timestamp, None)
+
+# Example usage during backtesting
+historical_data = {
+    "2023-10-01": 100.0,
+    "2023-10-02": 105.0,
+    # Add more historical data as needed
+}
+
+data_provider = HistoricalDataProvider(historical_data) 

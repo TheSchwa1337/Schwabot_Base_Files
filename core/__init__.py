@@ -22,6 +22,19 @@ from .enhanced_fractal_core import QuantizationProfile
 from .cyclic_core import CyclicPattern
 from .dormant_engine import DormantState
 
+# Logging and Monitoring Components
+from .basket_log_controller import BasketLogController, LogEntry
+
+# Entropy and Allocation Components
+from .basket_entropy_allocator import BasketEntropyAllocator, EntropyBand, DataProvider
+
+# Matrix and Rendering Components
+from .matrix_fault_resolver import MatrixFaultResolver
+from .line_render_engine import LineRenderEngine
+
+# Adaptive Profit Chain Components
+from .adaptive_profit_chain import APCFSystem
+
 # Export all public components
 __all__ = [
     # Core Math
@@ -41,5 +54,21 @@ __all__ = [
     # Advanced Math
     'QuantizationProfile',
     'CyclicPattern',
-    'DormantState'
+    'DormantState',
+    
+    # Logging and Monitoring
+    'BasketLogController',
+    'LogEntry',
+    
+    # Entropy and Allocation
+    'BasketEntropyAllocator',
+    'EntropyBand',
+    'DataProvider',
+    
+    # Matrix and Rendering
+    'MatrixFaultResolver',
+    'LineRenderEngine',
+    
+    # Adaptive Profit Chain
+    'APCFSystem'
 ] 

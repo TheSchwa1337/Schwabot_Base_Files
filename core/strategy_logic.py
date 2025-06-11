@@ -1,9 +1,8 @@
 """
-Strategy Logic
-=============
+Strategy Logic Module
+===================
 
-Coordinates all components for thermal-aware profit allocation.
-Routes signals through orchestrator and manages strategy execution.
+Core strategy management and execution logic with phase-aware adaptation.
 """
 
 from typing import Dict, List, Optional, Tuple, Any
@@ -22,6 +21,7 @@ from .profit_tensor import ProfitTensorStore
 from .fault_bus import FaultBus, FaultBusEvent
 from .bitmap_engine import BitmapEngine
 from .memory_timing_orchestrator import MemoryTimingOrchestrator
+from .phase_engine import BasketPhaseMap, DataProvider
 
 logger = logging.getLogger(__name__)
 
@@ -33,15 +33,20 @@ class StrategyState:
     thermal_history: List[float]
     last_update: float
     is_active: bool = True
+    performance_score: float = 0.0
+    last_phase: str = "NORMAL"
+    phase_urgency: float = 0.0
 
 class StrategyLogic:
-    def __init__(self):
+    def __init__(self, data_provider: Optional[DataProvider] = None):
         self.sweep_allocator = ProfitSweepAllocator()
         self.zbe_tensor = ZBETemperatureTensor()
         self.profit_store = ProfitTensorStore()
         self.fault_bus = FaultBus()
         self.bitmap_engine = BitmapEngine()
         self.orchestrator = MemoryTimingOrchestrator()
+        self.phase_map = BasketPhaseMap()
+        self.data_provider = data_provider
         
         # Strategy state tracking
         self.strategy_states: Dict[str, StrategyState] = {}
@@ -61,9 +66,14 @@ class StrategyLogic:
         def handle_profit_fault(event: FaultBusEvent):
             if event.severity < 0.2:
                 self._optimize_profit_strategies()
+                
+        def handle_phase_fault(event: FaultBusEvent):
+            if event.severity > 0.7:
+                self._trigger_phase_fallback(event.basket_id)
         
         self.fault_bus.register_handler("thermal_high", handle_thermal_fault)
         self.fault_bus.register_handler("profit_low", handle_profit_fault)
+        self.fault_bus.register_handler("phase_unstable", handle_phase_fault)
 
     def process_tick(self, tick_data: Dict) -> Optional[Dict]:
         """
@@ -211,6 +221,53 @@ class StrategyLogic:
             # Implement re-alignment logic here
             print("Drift detected, attempting to correct...")
             # Example: Resample or interpolate tensors
+
+    def update_strategy_state(self, basket_id: str, metrics: Dict[str, float]) -> None:
+        """Update strategy state with new metrics and phase information"""
+        if basket_id not in self.strategy_states:
+            self.strategy_states[basket_id] = StrategyState()
+            
+        # Update phase map
+        self.phase_map.update_phase_entry(
+            basket_id=basket_id,
+            sha_key=metrics.get('sha_key', ''),
+            phase_depth=metrics.get('phase_depth', 64),
+            trust_score=metrics.get('trust_score', 0.5),
+            current_metrics=metrics
+        )
+        
+        # Check phase conditions
+        phase, urgency = self.phase_map.check_basket_swap_condition(basket_id)
+        state = self.strategy_states[basket_id]
+        state.last_phase = phase
+        state.phase_urgency = urgency
+        
+        # Trigger fallback if needed
+        if phase in ['UNSTABLE', 'OVERLOADED'] and urgency > 0.5:
+            self._trigger_phase_fallback(basket_id)
+
+    def _trigger_phase_fallback(self, basket_id: str) -> None:
+        """Trigger fallback strategy for unstable phase"""
+        state = self.strategy_states.get(basket_id)
+        if not state:
+            return
+            
+        self.logger.info(f"Triggering phase fallback for basket {basket_id}")
+        self.logger.info(f"Phase: {state.last_phase}, Urgency: {state.phase_urgency}")
+        
+        # Deactivate current strategy
+        state.is_active = False
+        
+        # Emit fault event
+        self.fault_bus.emit(
+            "phase_unstable",
+            basket_id=basket_id,
+            severity=state.phase_urgency,
+            metadata={
+                'phase': state.last_phase,
+                'urgency': state.phase_urgency
+            }
+        )
 
 class TensorSyncMonitor:
     def __init__(self, tolerance=0.05):

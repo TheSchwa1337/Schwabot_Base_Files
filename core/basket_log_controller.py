@@ -8,6 +8,7 @@ Manages log levels, metrics tracking, and system state monitoring.
 
 from typing import Dict, List, Optional, Any
 import logging
+import logging.handlers
 import json
 from datetime import datetime
 import os
@@ -187,7 +188,16 @@ class BasketLogController:
         entries = self.metrics_history[-count:]
         if level:
             entries = [e for e in entries if e.level == level]
-        return [asdict(entry) for entry in entries]
+        
+        # Convert to dict and handle datetime serialization
+        result = []
+        for entry in entries:
+            entry_dict = asdict(entry)
+            # Convert datetime to string for JSON serialization
+            entry_dict['timestamp'] = entry_dict['timestamp'].isoformat()
+            result.append(entry_dict)
+        
+        return result
 
     def clear_history(self):
         """Clear metrics history"""

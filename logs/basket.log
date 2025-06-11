@@ -1,0 +1,6 @@
+2025-06-11 02:47:44,220 - SchwabotBasket - WARNING - Alert: memory_coherence exceeds threshold (0.80 > 0.25)
+2025-06-11 02:47:44,221 - SchwabotBasket - WARNING - Alert: trust_score exceeds threshold (0.90 > 0.35)
+2025-06-11 02:47:44,222 - SchwabotBasket - INFO - Basket swap initiated | Metrics: {"thermal_state": 0.6, "entropy_rate": 0.7, "memory_coherence": 0.8, "trust_score": 0.9}
+2025-06-11 02:48:02,748 - SchwabotBasket - WARNING - Alert: memory_coherence exceeds threshold (0.80 > 0.25)
+2025-06-11 02:48:02,748 - SchwabotBasket - WARNING - Alert: trust_score exceeds threshold (0.90 > 0.35)
+2025-06-11 02:48:02,749 - SchwabotBasket - INFO - Basket swap initiated | Metrics: {"thermal_state": 0.6, "entropy_rate": 0.7, "memory_coherence": 0.8, "trust_score": 0.9}
