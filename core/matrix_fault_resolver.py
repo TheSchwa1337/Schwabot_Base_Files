@@ -21,7 +21,7 @@ import time
 import numpy as np
 from collections import deque
 
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 @dataclass
 class FaultState:
@@ -199,7 +199,7 @@ class MatrixFaultResolver:
                     validate_config(config, MATRIX_RESPONSE_SCHEMA)
                     return config
         except (ConfigError, FileNotFoundError) as e:
-            logging.warning(f"Error loading config: {e}, using default fallback strategies")
+            logger.warning(f"Error loading config: {e}, using default fallback strategies")
             return MATRIX_RESPONSE_SCHEMA.default_values
     
     def handle_fault(self, fault_type: str, severity: float,

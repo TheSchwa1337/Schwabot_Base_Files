@@ -19,11 +19,6 @@ from .pod_management import PodNode, PodConfig
 from .fitness_oracle import FitnessOracle, FitnessScore
 from .evolution_engine import EvolutionEngine, MutationProposal
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -48,26 +43,12 @@ class GlobalRegistry:
 class GenesisCore:
     """Central nervous system for the fractal-hive"""
     
-    def __init__(
-        self,
-        config_path: Optional[str] = None,
-        health_check_interval: float = 5.0,
-        max_cpu_percent: float = 80.0,
-        max_memory_percent: float = 70.0
-    ):
-        self.health_check_interval = health_check_interval
-        self.max_cpu_percent = max_cpu_percent
-        self.max_memory_percent = max_memory_percent
-        self.config = self._load_config(config_path)
+    def __init__(self, config_path: Optional[str] = None):
+        """Initialize the genesis core.
         
-        # Initialize components
-        self.registry = GlobalRegistry(
-            pod_versions={},
-            mutation_history=[],
-            system_events=[],
-            last_snapshot=datetime.now()
-        )
-        
+        Args:
+            config_path: Optional path to configuration file
+        """
         self.health = SystemHealth(
             cpu_usage=0.0,
             memory_usage=0.0,
@@ -78,6 +59,25 @@ class GenesisCore:
             critical_alerts=[]
         )
         
+        self.registry = GlobalRegistry(
+            pod_versions={},
+            mutation_history=[],
+            system_events=[],
+            last_snapshot=datetime.now()
+        )
+        
+        # Load configuration
+        try:
+            if config_path:
+                with open(config_path, 'r') as f:
+                    self.config = yaml.safe_load(f)
+            else:
+                self.config = {}
+            logger.info("Genesis core initialized with configuration")
+        except Exception as e:
+            logger.error(f"Failed to load genesis core config: {e}")
+            self.config = {}
+        
         # Thread safety
         self.registry_lock = threading.Lock()
         self.health_lock = threading.Lock()
@@ -86,18 +86,6 @@ class GenesisCore:
         self.fitness_oracle: Optional[FitnessOracle] = None
         self.evolution_engine: Optional[EvolutionEngine] = None
         
-    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
-        if config_path is None:
-            config_path = Path(__file__).parent / "config" / "tesseract" / "pattern_config.yaml"
-            
-        try:
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)
-        except Exception as e:
-            logger.error(f"Failed to load config: {str(e)}")
-            return {}
-            
     def register_pod(self, pod: PodNode) -> bool:
         """Register a pod in the global registry"""
         try:
@@ -190,11 +178,11 @@ class GenesisCore:
         critical_alerts = []
         
         # Check CPU usage
-        if self.health.cpu_usage > self.max_cpu_percent:
+        if self.health.cpu_usage > self.config.get('max_cpu_percent', 80.0):
             critical_alerts.append(f"High CPU usage: {self.health.cpu_usage}%")
             
         # Check memory usage
-        if self.health.memory_usage > self.max_memory_percent:
+        if self.health.memory_usage > self.config.get('max_memory_percent', 70.0):
             critical_alerts.append(f"High memory usage: {self.health.memory_usage}%")
             
         # Update critical alerts

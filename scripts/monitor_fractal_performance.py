@@ -20,14 +20,7 @@ from core.triplet_matcher import TripletMatcher
 from core.rittle_gemm import RittleGEMM
 from ncco_core.ncco import NCCOCore
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/fractal_performance.log'),
-        logging.StreamHandler()
-    ]
-)
+logger = logging.getLogger(__name__)
 
 class FractalPerformanceMonitor:
     """Monitors Forever Fractal performance metrics"""
@@ -244,7 +237,7 @@ class FractalPerformanceMonitor:
             self._log_metrics()
             
         except Exception as e:
-            logging.error(f"Error in monitoring cycle: {e}")
+            logger.error(f"Error in monitoring cycle: {e}")
             
     def _check_performance_thresholds(self):
         """Check if metrics exceed performance thresholds"""
@@ -253,29 +246,29 @@ class FractalPerformanceMonitor:
         # Check system metrics
         system_metrics = self.metrics['system_metrics'][-1]
         if system_metrics['cpu_percent'] > thresholds['max_cpu_usage']:
-            logging.warning(f"CPU usage exceeds threshold: {system_metrics['cpu_percent']}%")
+            logger.warning(f"CPU usage exceeds threshold: {system_metrics['cpu_percent']}%")
         if system_metrics['memory_percent'] > thresholds['max_memory_usage']:
-            logging.warning(f"Memory usage exceeds threshold: {system_metrics['memory_percent']}%")
+            logger.warning(f"Memory usage exceeds threshold: {system_metrics['memory_percent']}%")
             
         # Check vector quantization
         vector_metrics = self.metrics['vector_quantization'][-1]
         if vector_metrics['quantization_time'] > thresholds['max_latency'] / 1000:
-            logging.warning(f"Vector quantization latency exceeds threshold: {vector_metrics['quantization_time']}s")
+            logger.warning(f"Vector quantization latency exceeds threshold: {vector_metrics['quantization_time']}s")
             
         # Check triplet coherence
         triplet_metrics = self.metrics['triplet_coherence'][-1]
         if triplet_metrics['coherence_time'] > thresholds['max_latency'] / 1000:
-            logging.warning(f"Triplet coherence latency exceeds threshold: {triplet_metrics['coherence_time']}s")
+            logger.warning(f"Triplet coherence latency exceeds threshold: {triplet_metrics['coherence_time']}s")
             
     def _log_metrics(self):
         """Log current metrics"""
         for category, metrics in self.metrics.items():
             if metrics:
                 latest = metrics[-1]
-                logging.info(f"{category.upper()} Metrics:")
+                logger.info(f"{category.upper()} Metrics:")
                 for key, value in latest.items():
                     if key != 'timestamp':
-                        logging.info(f"  {key}: {value}")
+                        logger.info(f"  {key}: {value}")
 
 def main():
     """Main monitoring loop"""

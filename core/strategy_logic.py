@@ -6,7 +6,7 @@ Coordinates all components for thermal-aware profit allocation.
 Routes signals through orchestrator and manages strategy execution.
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from datetime import datetime
 import logging
@@ -22,6 +22,8 @@ from .profit_tensor import ProfitTensorStore
 from .fault_bus import FaultBus, FaultBusEvent
 from .bitmap_engine import BitmapEngine
 from .memory_timing_orchestrator import MemoryTimingOrchestrator
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class StrategyState:
@@ -48,7 +50,6 @@ class StrategyLogic:
         self._register_fault_handlers()
         
         # Initialize logging
-        logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
     def _register_fault_handlers(self):

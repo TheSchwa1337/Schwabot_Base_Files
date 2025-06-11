@@ -12,6 +12,8 @@ from datetime import datetime
 import logging
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class PatternState:
     """Current state of a quantum-cellular pattern"""
@@ -31,12 +33,7 @@ class PatternMetrics:
         self.log_dir.mkdir(exist_ok=True)
         
         # Setup logging
-        logging.basicConfig(
-            filename=self.log_dir / "pattern_metrics.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('PatternMetrics')
+        self.logger = logging.getLogger(__name__)
         
         # Pattern state thresholds
         self.state_thresholds = {

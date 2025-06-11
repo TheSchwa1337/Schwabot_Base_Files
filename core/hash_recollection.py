@@ -1,23 +1,28 @@
 """
-SHA-256 Hash-Based Recollection System
-=====================================
-
-Implements a sophisticated pattern recognition system using SHA-256 hashing
-and entropy compression for high-frequency trading pattern detection.
+Hash Recollection System
+Manages hash-based pattern recognition and memory optimization.
 """
 
-import numpy as np
-import hashlib
-from typing import Dict, List, Optional, Tuple, Set
-from dataclasses import dataclass
-from datetime import datetime
 import logging
-import cupy as cp
-from collections import deque
 import threading
 from queue import Queue
-import asyncio
+from collections import deque
+from typing import Dict, List, Optional, Any
+from dataclasses import dataclass
+from datetime import datetime
+import numpy as np
+import yaml
+from pathlib import Path
+
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    CUPY_AVAILABLE = False
+
 from .bit_operations import BitOperations
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class HashEntry:
@@ -44,20 +49,28 @@ class EntropyState:
     tier: Optional[int] = None
 
 class HashRecollectionSystem:
-    """
-    Core system for hash-based pattern recollection and profit pathway detection
-    """
+    """Manages hash-based pattern recognition"""
     
-    def __init__(self, 
-                 gpu_enabled: bool = True,
-                 cache_size: int = 1000000,
-                 sync_interval: int = 100):
+    def __init__(self, config_path: Optional[str] = None):
+        """Initialize the hash recollection system.
         
-        self.gpu_enabled = gpu_enabled and self._check_gpu()
-        self.cache_size = cache_size
-        self.sync_interval = sync_interval
-        
-        # Initialize hash database
+        Args:
+            config_path: Optional path to configuration file
+        """
+        # Load configuration
+        try:
+            if config_path:
+                with open(config_path, 'r') as f:
+                    self.config = yaml.safe_load(f)
+            else:
+                self.config = {}
+            logger.info("Hash recollection system initialized with configuration")
+        except Exception as e:
+            logger.error(f"Failed to load hash recollection config: {e}")
+            self.config = {}
+            
+        # Initialize state
+        self.gpu_enabled = self._check_gpu()
         self.hash_database: Dict[int, HashEntry] = {}
         self.entropy_history = deque(maxlen=1000)
         self.profit_history = deque(maxlen=1000)
@@ -82,9 +95,6 @@ class HashRecollectionSystem:
         
         # Tetragram matrix (81 states)
         self.tetragram_matrix = np.zeros((3, 3, 3, 3), dtype=np.float32)
-        
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
 
     def _check_gpu(self) -> bool:
         """Check if GPU is available and initialize CuPy"""
@@ -107,7 +117,7 @@ class HashRecollectionSystem:
         self.cpu_thread = threading.Thread(target=self._cpu_worker)
         self.cpu_thread.start()
         
-        self.logger.info("Hash recollection system started")
+        logger.info("Hash recollection system started")
 
     def stop(self):
         """Stop the hash recollection system"""
@@ -116,7 +126,7 @@ class HashRecollectionSystem:
             self.gpu_thread.join()
         if self.cpu_thread:
             self.cpu_thread.join()
-        self.logger.info("Hash recollection system stopped")
+        logger.info("Hash recollection system stopped")
 
     def _gpu_worker(self):
         """GPU worker thread for parallel hash computation"""
@@ -141,7 +151,7 @@ class HashRecollectionSystem:
                     self.result_queue.put((batch[i], int(hash_value)))
                 
             except Exception as e:
-                self.logger.error(f"GPU worker error: {e}")
+                logger.error(f"GPU worker error: {e}")
 
     def _cpu_worker(self):
         """CPU worker thread for pattern recognition and strategy execution"""
@@ -156,11 +166,11 @@ class HashRecollectionSystem:
                 
                 # Synchronize with GPU periodically
                 tick_counter += 1
-                if tick_counter % self.sync_interval == 0:
+                if tick_counter % self.config.get('sync_interval', 100) == 0:
                     self._synchronize_gpu_cpu()
                 
             except Exception as e:
-                self.logger.error(f"CPU worker error: {e}")
+                logger.error(f"CPU worker error: {e}")
 
     def _gpu_compute_hashes(self, entropy_array: cp.ndarray) -> cp.ndarray:
         """Compute SHA-256 hashes in parallel on GPU"""
@@ -308,7 +318,7 @@ class HashRecollectionSystem:
         entry.confidence = confidence
         
         # Emit pattern match event with bit pattern data
-        self.logger.info(
+        logger.info(
             f"Pattern match: hash={hash_value}, confidence={confidence:.3f}, "
             f"tier={entry.tier}, pattern_strength={pattern_analysis['pattern_strength']:.3f}"
         )

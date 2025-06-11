@@ -17,11 +17,6 @@ from core.fractal_core import FractalCore
 from core.spectral_state import SpectralState
 from core.behavior_pattern_tracker import BehaviorPatternTracker
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 class MathematicalStructuresMonitor:

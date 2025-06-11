@@ -1,6 +1,8 @@
 """
-Panic Pause Manager for Schwabot System
-Manages trading pauses during panic zones
+Panic Pause Manager
+=================
+
+Manages trading pauses during panic zones and high-risk conditions.
 """
 
 from typing import Dict, List, Optional, Any
@@ -10,6 +12,8 @@ import threading
 import logging
 from pathlib import Path
 from .event_bus import EventBus
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class PauseState:
@@ -43,12 +47,7 @@ class PanicPauseManager:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "panic_pause.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('PanicPauseManager')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

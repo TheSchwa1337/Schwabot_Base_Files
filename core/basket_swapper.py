@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from datetime import datetime
 import numpy as np
 import logging
-import yaml
 from pathlib import Path
+from core.config import ConfigLoader, ConfigError
 
 from core.basket_swap_logic import BasketSwapLogic
 from .cooldown_manager import CooldownManager
@@ -18,11 +18,6 @@ from .time_entropy import TimeEntropyEdgeCase
 from .bitmap_engine import BitmapEngine
 from .profit_tensor import ProfitTensorStore
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -37,31 +32,100 @@ class BasketSwapper:
     """Manages basket swapping with profit protection and cooldown integration"""
     
     def __init__(self, config_path: Optional[str] = None):
+        """Initialize the basket swapper.
+        
+        Args:
+            config_path: Optional path to configuration file
+        """
+        # Initialize components
         self.cooldown_manager = CooldownManager()
         self.profit_protection = ProfitProtection()
         self.swap_criteria = SwapCriteria()
         self.time_entropy = TimeEntropyEdgeCase()
         self.bitmap_engine = BitmapEngine()
         self.profit_tensor = ProfitTensorStore()
-        self.basket_swap_logic = BasketSwapLogic(config_path)
-        self.config = self._load_config(config_path)
         
-    def _load_config(self, config_path):
-        with open(config_path, 'r') as f:
-            data = yaml.safe_load(f)
-        if 'basket_swap' not in data:
-            raise ValueError("Missing 'basket_swap' root key in config.")
-        config = data['basket_swap']
-        self._validate_config_schema(config)
-        return config
-        
-    def _validate_config_schema(self, cfg):
-        required_keys = ['signal_weights', 'thresholds']
-        for key in required_keys:
-            if key not in cfg:
-                raise ValueError(f"Missing required key: {key}")
-        # ... further checks as in your example ...
+        # Initialize configuration
+        self.config_loader = ConfigLoader()
+        try:
+            if config_path:
+                self.config = self.config_loader.load_yaml(config_path)
+            else:
+                self.config = self.config_loader.load_yaml("basket_swapper_config.yaml")
+        except ConfigError as e:
+            logger.warning(f"Failed to load config from {config_path}: {e}")
+            self.config = self.config_loader.load_yaml("defaults.yaml")
             
+        # Initialize swap logic with config
+        self.basket_swap_logic = BasketSwapLogic(config_path)
+        
+        logger.info("BasketSwapper initialized with configuration")
+        
+    def process_swap_request(self, request: Dict[str, Any]) -> bool:
+        """Process a basket swap request.
+        
+        Args:
+            request: Dictionary containing swap request data
+            
+        Returns:
+            bool: True if swap was successful
+        """
+        try:
+            # Validate request
+            if not self._validate_request(request):
+                logger.warning(f"Invalid swap request received: {request}")
+                return False
+                
+            # Check cooldown
+            if self.cooldown_manager.is_in_cooldown(request.get("basket_id")):
+                logger.info(f"Basket {request.get('basket_id')} is in cooldown")
+                return False
+                
+            # Check profit protection
+            if not self.profit_protection.validate_swap(request):
+                logger.info("Swap rejected by profit protection")
+                return False
+                
+            # Process swap signal
+            swap_action = self.basket_swap_logic.process_swap_signal(request)
+            if not swap_action:
+                return False
+                
+            # Update cooldown
+            self.cooldown_manager.record_swap(request.get("basket_id"))
+            
+            logger.info(f"Successfully processed swap request: {request.get('basket_id')}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error processing swap request: {e}")
+            return False
+            
+    def _validate_request(self, request: Dict[str, Any]) -> bool:
+        """Validate a swap request.
+        
+        Args:
+            request: Dictionary containing swap request data
+            
+        Returns:
+            bool: True if request is valid
+        """
+        required_fields = self.config.get("required_fields", ["basket_id", "assets"])
+        return all(field in request for field in required_fields)
+        
+    def get_swap_history(self) -> List[Dict[str, Any]]:
+        """Get the swap history.
+        
+        Returns:
+            List[Dict[str, Any]]: List of swap actions
+        """
+        return self.basket_swap_logic.get_swap_history()
+        
+    def clear_history(self) -> None:
+        """Clear the swap history."""
+        self.basket_swap_logic.clear_history()
+        logger.info("Swap history cleared")
+
     def register_basket(self, basket_id: str, assets: List[str], 
                        initial_weights: Optional[Dict[str, float]] = None):
         """Register a new basket for swapping"""
@@ -219,14 +283,6 @@ class BasketSwapper:
             logger.error(f"Weight validation failed: {str(e)}")
             return False
             
-    def get_swap_history(self, basket_id: Optional[str] = None) -> List[Any]:
-        """Get swap history, optionally filtered by basket"""
-        return self.basket_swap_logic.get_swap_history(basket_id)
-        
-    def clear_history(self):
-        """Clear swap history"""
-        self.basket_swap_logic.clear_history() 
-
     def _should_override(self, basket_id: str, pkt: Dict[str, Any], rings: Dict[str, Any]) -> bool:
         try:
             # Check for drift exit

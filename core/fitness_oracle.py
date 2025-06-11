@@ -14,11 +14,6 @@ import yaml
 
 from .pod_management import PodMetrics, PodNode
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -46,31 +41,27 @@ class FitnessScore:
 class FitnessOracle:
     """Evaluates pod performance and guides evolution"""
     
-    def __init__(
-        self,
-        config_path: Optional[str] = None,
-        regime_window: int = 1000,
-        min_regime_confidence: float = 0.7
-    ):
-        self.regime_window = regime_window
-        self.min_regime_confidence = min_regime_confidence
-        self.config = self._load_config(config_path)
-        self.regime_history: List[RegimeMetrics] = []
-        self.current_regime: Optional[RegimeMetrics] = None
-        self.pod_scores: Dict[str, List[FitnessScore]] = {}
+    def __init__(self, config_path: Optional[str] = None):
+        """Initialize the fitness oracle.
         
-    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
-        if config_path is None:
-            config_path = Path(__file__).parent / "config" / "tesseract" / "pattern_config.yaml"
-            
+        Args:
+            config_path: Optional path to configuration file
+        """
+        self.regime_metrics: Dict[str, RegimeMetrics] = {}
+        self.fitness_history: Dict[str, List[FitnessScore]] = {}
+        
+        # Load configuration
         try:
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)
+            if config_path:
+                with open(config_path, 'r') as f:
+                    self.config = yaml.safe_load(f)
+            else:
+                self.config = {}
+            logger.info("Fitness oracle initialized with configuration")
         except Exception as e:
-            logger.error(f"Failed to load config: {str(e)}")
-            return {}
-            
+            logger.error(f"Failed to load fitness oracle config: {e}")
+            self.config = {}
+
     def detect_regime(self, market_data: Dict[str, Any]) -> Optional[RegimeMetrics]:
         """Detect current market regime from market data"""
         try:

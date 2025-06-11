@@ -10,6 +10,8 @@ import threading
 import logging
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class EventState:
     """State container for event data"""
@@ -30,12 +32,7 @@ class EventBus:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "event_bus.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('EventBus')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

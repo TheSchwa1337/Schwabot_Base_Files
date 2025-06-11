@@ -11,6 +11,8 @@ import logging
 from pathlib import Path
 from .event_bus import EventBus, EventState
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class MetricState:
     """State container for a single metric"""
@@ -43,12 +45,7 @@ class PhaseState:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "phase_state.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('PhaseState')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

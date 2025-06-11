@@ -1,24 +1,26 @@
 """
-NCCO Generator for Schwabot System
-Creates and manages Neural Circuit Control Objects for decision tracking
+NCCO Generator
+============
+
+Generates and manages NCCOs (Nominal Channel Control Objects) for decision tracking.
 """
 
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
-from datetime import datetime
-import threading
 import logging
-import json
-import os
+import threading
 from pathlib import Path
-from uuid import uuid4
+import time
+from datetime import datetime
+import json
+
 from .event_bus import EventBus
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class NCCOState:
     """Container for NCCO state"""
-    ncco_id: str
-    ncco_type: str
     timestamp: float
     price: float
     strategy: str
@@ -44,12 +46,7 @@ class NCCOGenerator:
         # Setup logging
         self.log_dir = Path(log_dir) / "ncco"
         self.log_dir.mkdir(parents=True, exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "ncco_generator.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('NCCOGenerator')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()
@@ -91,8 +88,6 @@ class NCCOGenerator:
             
             # Create NCCO state
             ncco = NCCOState(
-                ncco_id=str(uuid4())[:8],
-                ncco_type=ncco_type,
                 timestamp=timestamp,
                 price=current_price,
                 strategy=strategy,

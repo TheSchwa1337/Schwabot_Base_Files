@@ -14,6 +14,8 @@ from pathlib import Path
 from .event_bus import EventBus
 from .ncco_generator import NCCOGenerator
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class ReplayState:
     """Container for replay state"""
@@ -42,12 +44,7 @@ class ReplayEngine:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "replay_engine.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('ReplayEngine')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

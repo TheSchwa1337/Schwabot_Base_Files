@@ -7,7 +7,7 @@ routes through Ferris → RDE → SFS/UFS → Cooldown → Profit Overlay,
 and maintains recursive memory state.
 """
 
-from typing import Dict, List, Optional, Tuple, Set
+from typing import Dict, List, Optional, Tuple, Set, Any
 from dataclasses import dataclass
 import json
 import logging
@@ -15,6 +15,8 @@ import threading
 from datetime import datetime
 import numpy as np
 from pathlib import Path
+import time
+from collections import deque
 
 from .hash_trigger_engine import HashTriggerEngine
 from .dormant_engine import DormantEngine
@@ -22,9 +24,11 @@ from .collapse_engine import CollapseEngine
 from .bitmap_engine import BitmapEngine
 from .hash_recollection import HashRecollectionSystem
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class TriggerState:
-    """Represents the current state of a trigger"""
+    """State of a trigger in the sequencer"""
     trigger_id: str
     hash_value: int
     route: str

@@ -15,6 +15,8 @@ import GPUtil
 import logging
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
 # Constants for drift band thresholds
 DRIFT_THRESHOLDS = {
     'SAFE': 0.2,    # 20% drift
@@ -67,12 +69,7 @@ class SystemMonitor:
         self.metrics_history: List[SystemMetrics] = []
         
         # Setup logging
-        logging.basicConfig(
-            filename=self.log_dir / "system_metrics.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('SystemMonitor')
+        self.logger = logging.getLogger(__name__)
     
     def get_system_metrics(self) -> Dict:
         """Get current system metrics"""

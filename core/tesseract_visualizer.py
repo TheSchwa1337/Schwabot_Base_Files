@@ -20,6 +20,8 @@ import time
 from .tensor_visualization_controller import TensorVisualizationController
 from .tesseract_processor import TesseractProcessor
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class TesseractMetrics:
     """Container for tesseract-specific metrics"""
@@ -71,7 +73,6 @@ class TesseractVisualizer:
         }
         
         # Initialize logging
-        logging.basicConfig(level=logging.DEBUG if debug_mode else logging.INFO)
         self.logger = logging.getLogger(__name__)
         
         # Control flags

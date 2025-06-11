@@ -1,3 +1,8 @@
+"""
+Tesseract Configuration Loader
+Handles loading and merging of Tesseract configuration files.
+"""
+
 import os
 import yaml
 from typing import Dict, Any, Optional
@@ -9,7 +14,6 @@ from datetime import datetime
 
 # Setup logger
 logger = logging.getLogger("TesseractConfig")
-logging.basicConfig(level=logging.INFO)
 
 # Optional utility for deep dict merge
 def deep_merge(dict1: Dict, dict2: Dict) -> Dict:
@@ -35,11 +39,14 @@ class TesseractConfig:
     def _load_config(self, filename: str) -> Dict[str, Any]:
         """Load a YAML configuration file."""
         config_path = self.config_dir / filename
-        if not config_path.exists():
-            raise FileNotFoundError(f"Configuration file not found: {config_path}")
-        
-        with open(config_path, 'r') as f:
-            return yaml.safe_load(f) or {}
+        try:
+            with open(config_path, 'r') as f:
+                config = yaml.safe_load(f)
+            logger.info(f"Loaded config from {filename}")
+            return config
+        except Exception as e:
+            logger.error(f"Failed to load config from {filename}: {e}")
+            return {}
 
     def get_quantum_params(self) -> Dict[str, Any]:
         """Get quantum-cellular synchronization parameters."""

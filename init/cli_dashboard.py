@@ -16,6 +16,8 @@ from .event_bus import EventBus
 from .ncco_generator import NCCOGenerator
 from .replay_engine import ReplayEngine
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class DashboardState:
     """Container for dashboard state"""
@@ -43,12 +45,7 @@ class CLIDashboard:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "cli_dashboard.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('CLIDashboard')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

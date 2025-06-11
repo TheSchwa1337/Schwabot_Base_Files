@@ -16,11 +16,6 @@ import random
 from .pod_management import PodNode, PodConfig
 from .fitness_oracle import FitnessOracle, FitnessScore
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -45,17 +40,12 @@ class EvolutionState:
 class EvolutionEngine:
     """Drives genetic changes in the system"""
     
-    def __init__(
-        self,
-        config_path: Optional[str] = None,
-        mutation_rate: float = 0.05,
-        crossover_rate: float = 0.7,
-        selection_pressure: float = 0.8
-    ):
-        self.mutation_rate = mutation_rate
-        self.crossover_rate = crossover_rate
-        self.selection_pressure = selection_pressure
-        self.config = self._load_config(config_path)
+    def __init__(self, config_path: Optional[str] = None):
+        """Initialize the evolution engine.
+        
+        Args:
+            config_path: Optional path to configuration file
+        """
         self.state = EvolutionState(
             generation=0,
             active_mutations=[],
@@ -64,18 +54,18 @@ class EvolutionEngine:
             current_focus={}
         )
         
-    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
-        if config_path is None:
-            config_path = Path(__file__).parent / "config" / "tesseract" / "pattern_config.yaml"
-            
+        # Load configuration
         try:
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)
+            if config_path:
+                with open(config_path, 'r') as f:
+                    self.config = yaml.safe_load(f)
+            else:
+                self.config = {}
+            logger.info("Evolution engine initialized with configuration")
         except Exception as e:
-            logger.error(f"Failed to load config: {str(e)}")
-            return {}
-            
+            logger.error(f"Failed to load evolution engine config: {e}")
+            self.config = {}
+        
     def propose_mutations(
         self,
         pod: PodNode,
@@ -154,19 +144,19 @@ class EvolutionEngine:
         """Check if core math should be mutated"""
         return (
             'robustness' in guidance['focus_areas'] and
-            random.random() < self.mutation_rate * 0.5  # Lower rate for core math
+            random.random() < self.config.get('mutation_rate', 0.05) * 0.5  # Lower rate for core math
         )
         
     def _should_mutate_indicators(self, guidance: Dict[str, Any]) -> bool:
         """Check if indicators should be mutated"""
         return (
             'novelty' in guidance['focus_areas'] and
-            random.random() < self.mutation_rate
+            random.random() < self.config.get('mutation_rate', 0.05)
         )
         
     def _should_mutate_strategy(self, guidance: Dict[str, Any]) -> bool:
         """Check if strategy should be mutated"""
-        return random.random() < self.mutation_rate
+        return random.random() < self.config.get('mutation_rate', 0.05)
         
     def _propose_core_math_mutations(
         self,

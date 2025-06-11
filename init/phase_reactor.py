@@ -12,6 +12,8 @@ from pathlib import Path
 from .event_bus import EventBus
 from .phase_state import PhaseState, PhaseMetrics
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class PolicyAction:
     """Container for policy action configuration"""
@@ -46,12 +48,7 @@ class PhaseReactor:
         # Setup logging
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(exist_ok=True)
-        logging.basicConfig(
-            filename=self.log_dir / "phase_reactor.log",
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('PhaseReactor')
+        self.logger = logging.getLogger(__name__)
         
         # Thread safety
         self._lock = threading.Lock()

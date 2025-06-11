@@ -16,6 +16,8 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 import threading
 
+logger = logging.getLogger(__name__)
+
 # Constants
 COLLISION_THRESHOLDS = {
     'safe': 120,
@@ -82,11 +84,7 @@ class LineRenderEngine:
         self._lock = threading.Lock()
         
         # Setup logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('LineRenderEngine')
+        self.logger = logging.getLogger(__name__)
         
         # Initialize memory monitoring
         self._last_memory_check = datetime.now()

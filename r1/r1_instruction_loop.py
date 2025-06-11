@@ -1,16 +1,23 @@
+"""
+R1 Instruction Loop
+=================
+
+Monitors hash log and executes pattern-based instructions.
+"""
+
 import os
 import json
 import time
 import logging
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
+
 R1_DIR = os.path.dirname(os.path.abspath(__file__))
 SCHWABOT_HASH_LOG = os.path.join(R1_DIR, '../../schwabot/hashes/BTC_tick_hashes.log')
 PATTERNS_FILE = os.path.join(R1_DIR, '../memory_map/profitable_patterns.json')
 NEXT_COMMAND = os.path.join(R1_DIR, 'instructions/next_command.json')
 LOG_FILE = os.path.join(R1_DIR, 'logs/r1_activity.log')
-
-logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
 POLL_INTERVAL = 2  # seconds
 

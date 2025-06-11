@@ -13,6 +13,8 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class ShellRoute:
     """Represents a shell route configuration"""
@@ -31,11 +33,7 @@ class ShellPortalMapper:
         self.load_config()
         
         # Setup logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger('ShellPortalMapper')
+        self.logger = logging.getLogger(__name__)
         
     def load_config(self) -> None:
         """Load shell route configuration"""

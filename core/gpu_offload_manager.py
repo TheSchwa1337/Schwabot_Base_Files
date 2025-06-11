@@ -23,6 +23,7 @@ import os
 import yaml
 import cProfile
 from threading import Semaphore
+from datetime import datetime
 
 # Try to import CuPy
 try:
@@ -36,73 +37,57 @@ from .zbe_temperature_tensor import ZBETemperatureTensor
 from .profit_tensor import ProfitTensorStore
 from .fault_bus import FaultBus, FaultBusEvent
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class OffloadState:
-    """Represents the state of a GPU offload operation"""
-    timestamp: float
+    """State of a GPU offload operation"""
     operation_id: str
-    data_size: int
-    gpu_utilization: float
-    gpu_memory_used: float
-    gpu_temperature: float
-    execution_time: float
-    success: bool
-    fallback_used: bool
-    profit_potential: float = 0.0
-    thermal_efficiency: float = 0.0
-    bit_depth: int = 4
-    error_message: Optional[str] = None
+    start_time: datetime
+    end_time: Optional[datetime] = None
+    status: str = "pending"
+    error: Optional[str] = None
+    memory_used: int = 0
+    compute_time: float = 0.0
 
 class GPUOffloadManager:
     """
     Manages GPU offloading operations with thermal-aware execution and profit tracking
     """
     
-    def __init__(self, 
-                 config_path: str = "config/gpu_config.yaml",
-                 max_gpu_utilization: float = 0.8,
-                 max_gpu_temperature: float = 75.0,
-                 min_data_size_gpu: int = 1000):
+    def __init__(self, config_path: Optional[str] = None):
         """
         Initialize GPU offload manager
         
         Args:
-            config_path: Path to GPU configuration file
-            max_gpu_utilization: Maximum allowed GPU utilization (0-1)
-            max_gpu_temperature: Maximum allowed GPU temperature (°C)
-            min_data_size_gpu: Minimum data size to consider GPU offload
+            config_path: Optional path to configuration file
         """
-        self.config_path = Path(config_path)
-        
         # Load configuration
-        self.config = self._load_config()
+        try:
+            if config_path:
+                with open(config_path, 'r') as f:
+                    self.config = yaml.safe_load(f)
+            else:
+                self.config = {}
+            logger.info("GPU offload manager initialized with configuration")
+        except Exception as e:
+            logger.error(f"Failed to load GPU offload manager config: {e}")
+            self.config = {}
         
-        # Override defaults with config values
-        self.max_gpu_utilization = self.config['gpu_safety']['max_utilization']
-        self.max_gpu_temperature = self.config['gpu_safety']['max_temperature']
-        self.min_data_size_gpu = self.config['gpu_safety']['min_data_size']
-        self.max_concurrent_ops = self.config['gpu_safety'].get('max_concurrent_ops', 4)
-        
-        # Initialize components
-        self.zbe_tensor = ZBETemperatureTensor()
-        self.profit_store = ProfitTensorStore()
-        self.fault_bus = FaultBus()
-        
-        # GPU availability check
-        self.gpu_available = CUPY_AVAILABLE and self._check_gpu()
-        if (os.getenv("SCHWABOT_FORCE_CPU", "0") == "1" or 
-            self.config['environment']['force_cpu']):
-            self.gpu_available = False
+        # Initialize GPU state
+        self.gpu_available = self._check_gpu()
+        if not self.gpu_available:
+            logger.warning("GPU not available, running in CPU-only mode")
             
         # Memory pool setup
         self.mem_pool = None
         if self.gpu_available:
             try:
-                pool_size = self.config['gpu_safety']['memory_pool_size'] * 1024 * 1024  # Convert MB to bytes
+                pool_size = self.config.get('gpu_safety', {}).get('memory_pool_size', 1024) * 1024 * 1024  # Convert MB to bytes
                 self.mem_pool = cp.cuda.MemoryPool()
                 cp.cuda.set_allocator(self.mem_pool.malloc)
             except Exception as e:
-                self.logger.error(f"Failed to initialize memory pool: {e}")
+                logger.error(f"Failed to initialize memory pool: {e}")
                 
         # Initialize state
         self.offload_history: List[OffloadState] = []
@@ -113,16 +98,7 @@ class GPUOffloadManager:
         # Thread safety
         self._lock = threading.Lock()
         self._running = False
-        self.semaphore = Semaphore(self.max_concurrent_ops)
-        
-        # Setup logging
-        log_config = self.config['logging']
-        logging.basicConfig(
-            level=getattr(logging, log_config['level']),
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            filename=log_config['file']
-        )
-        self.logger = logging.getLogger('GPUOffloadManager')
+        self.semaphore = Semaphore(self.config.get('max_concurrent_ops', 4))
         
         # Start worker thread
         self.start()
@@ -137,7 +113,7 @@ class GPUOffloadManager:
                 self.gpu_available = False
         
         def handle_profit_fault(event: FaultBusEvent):
-            self.min_data_size_gpu += 512
+            self.config['gpu_safety']['min_data_size'] += 512
         
         self.fault_bus.register_handler("thermal_high", handle_thermal_fault)
         self.fault_bus.register_handler("profit_low", handle_profit_fault)
@@ -154,13 +130,13 @@ class GPUOffloadManager:
             
             # Check GPU metrics
             gpu = GPUtil.getGPUs()[0]
-            if (gpu.temperature > self.max_gpu_temperature or
-                gpu.load > self.max_gpu_utilization):
+            if (gpu.temperature > self.config['gpu_safety']['max_temperature'] or
+                gpu.load > self.config['gpu_safety']['max_utilization']):
                 return False
                 
             return True
         except Exception as e:
-            self.logger.error(f"GPU check failed: {e}")
+            logger.error(f"GPU check failed: {e}")
             return False
             
     def _load_config(self) -> Dict:
@@ -169,7 +145,7 @@ class GPUOffloadManager:
             with open(self.config_path, 'r') as f:
                 return yaml.safe_load(f)
         except Exception as e:
-            self.logger.error(f"Failed to load config from {self.config_path}: {e}")
+            logger.error(f"Failed to load config from {self.config_path}: {e}")
             return {
                 'gpu_safety': {
                     'max_utilization': 0.8,
@@ -210,8 +186,8 @@ class GPUOffloadManager:
             current_util = gpu.load
             
             # Check against thresholds
-            if (current_temp > self.max_gpu_temperature or 
-                current_util > self.max_gpu_utilization):
+            if (current_temp > self.config['gpu_safety']['max_temperature'] or 
+                current_util > self.config['gpu_safety']['max_utilization']):
                 return False
                 
             # Get thermal efficiency from ZBE tensor
@@ -221,7 +197,7 @@ class GPUOffloadManager:
             return thermal_efficiency > self.config['thermal']['efficiency_threshold']
             
         except Exception as e:
-            self.logger.error(f"GPU health check failed: {e}")
+            logger.error(f"GPU health check failed: {e}")
             return False
             
     def _should_offload(self, data: Union[np.ndarray, List]) -> bool:
@@ -239,7 +215,7 @@ class GPUOffloadManager:
             return False
             
         # Check data size
-        return len(data) >= self.min_data_size_gpu
+        return len(data) >= self.config['gpu_safety']['min_data_size']
         
     def _execute_gpu(self, func: Callable, data: Union[np.ndarray, List]) -> Any:
         """Execute function on GPU with memory pool"""
@@ -341,13 +317,13 @@ class GPUOffloadManager:
             return {}
             
         total = len(self.offload_history)
-        successful = sum(1 for s in self.offload_history if s.success)
-        gpu_used = sum(1 for s in self.offload_history if not s.fallback_used)
+        successful = sum(1 for s in self.offload_history if s.status == "completed")
+        gpu_used = sum(1 for s in self.offload_history if s.status == "completed" and not s.error)
         
         return {
             'success_rate': successful / total if total > 0 else 0.0,
             'gpu_usage_rate': gpu_used / total if total > 0 else 0.0,
-            'avg_execution_time': sum(s.execution_time for s in self.offload_history) / total if total > 0 else 0.0
+            'avg_execution_time': sum(s.compute_time for s in self.offload_history if s.status == "completed") / total if total > 0 else 0.0
         }
 
     def start(self) -> None:
@@ -357,7 +333,7 @@ class GPUOffloadManager:
                 self._running = True
                 self.worker_thread = threading.Thread(target=self._worker_loop)
                 self.worker_thread.start()
-                self.logger.info("GPU offload manager started")
+                logger.info("GPU offload manager started")
                 
     def stop(self) -> None:
         """Stop the offload manager"""
@@ -365,7 +341,7 @@ class GPUOffloadManager:
             if self._running:
                 self._running = False
                 self.worker_thread.join()
-                self.logger.info("GPU offload manager stopped")
+                logger.info("GPU offload manager stopped")
                 
     def _worker_loop(self) -> None:
         """Main worker loop for processing offload operations"""
@@ -383,7 +359,7 @@ class GPUOffloadManager:
             except Queue.Empty:
                 continue
             except Exception as e:
-                self.logger.error(f"Worker loop error: {e}")
+                logger.error(f"Worker loop error: {e}")
                 
     def _process_operation(self, operation: Dict) -> OffloadState:
         """Process a single operation with thermal and profit tracking"""
@@ -432,36 +408,25 @@ class GPUOffloadManager:
                 
                 # Create state
                 state = OffloadState(
-                    timestamp=time.time(),
                     operation_id=operation_id,
-                    data_size=len(data) if hasattr(data, '__len__') else 0,
-                    gpu_utilization=GPUtil.getGPUs()[0].load if self.gpu_available else 0.0,
-                    gpu_memory_used=GPUtil.getGPUs()[0].memoryUsed if self.gpu_available else 0.0,
-                    gpu_temperature=current_temp,
-                    execution_time=time.time() - start_time,
-                    success=True,
-                    fallback_used=fallback_used,
-                    profit_potential=profit_potential,
-                    thermal_efficiency=thermal_efficiency,
-                    bit_depth=bit_depth
+                    start_time=datetime.fromtimestamp(start_time),
+                    end_time=datetime.fromtimestamp(time.time()),
+                    status="completed" if result is not None else "failed",
+                    error=str(result) if result is not None else None,
+                    memory_used=GPUtil.getGPUs()[0].memoryUsed if self.gpu_available else 0,
+                    compute_time=time.time() - start_time
                 )
                 
             except Exception as e:
                 # Handle error
                 state = OffloadState(
-                    timestamp=time.time(),
                     operation_id=operation_id,
-                    data_size=len(data) if hasattr(data, '__len__') else 0,
-                    gpu_utilization=0.0,
-                    gpu_memory_used=0.0,
-                    gpu_temperature=current_temp,
-                    execution_time=time.time() - start_time,
-                    success=False,
-                    fallback_used=True,
-                    profit_potential=0.0,
-                    thermal_efficiency=thermal_efficiency,
-                    bit_depth=4,
-                    error_message=str(e)
+                    start_time=datetime.fromtimestamp(start_time),
+                    end_time=datetime.fromtimestamp(time.time()),
+                    status="failed",
+                    error=str(e),
+                    memory_used=0,
+                    compute_time=time.time() - start_time
                 )
                 
                 # Push fault event
@@ -506,9 +471,9 @@ if __name__ == "__main__":
     )
     
     print(f"Operation {result.operation_id}:")
-    print(f"Success: {result.success}")
-    print(f"GPU used: {not result.fallback_used}")
-    print(f"Execution time: {result.execution_time:.3f}s")
+    print(f"Success: {result.status == 'completed' and not result.error}")
+    print(f"GPU used: {result.status == 'completed' and not result.error}")
+    print(f"Execution time: {result.compute_time:.3f}s")
     
     # Get statistics
     stats = manager.get_gpu_stats()

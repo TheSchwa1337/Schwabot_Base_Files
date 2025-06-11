@@ -7,39 +7,43 @@ across the Schwabot system. Integrates with UMPipeline, TimingManager, and
 TripletMatcher for optimal memory-key timing and thermal-aware execution.
 """
 
-from typing import Dict, List, Optional, Tuple, Set
+from typing import Dict, List, Optional, Tuple, Set, Any
 from dataclasses import dataclass
 import numpy as np
 import hashlib
 import time
 from datetime import datetime
 import logging
+from pathlib import Path
+import yaml
+import threading
+from queue import Queue
+import psutil
 
 from .timing_manager import TimingManager, TimingState
 from .ump_pipeline import UMPipeline, MemoryEntry
 from .triplet_matcher import TripletMatcher, TripletMatch
 from .zbe_temperature_tensor import ZBETemperatureTensor
 
+logger = logging.getLogger(__name__)
+
 @dataclass
 class MemoryKey:
-    """Represents a memory key with timing metadata"""
-    hash_value: int
-    memory_weight: float = 1.0
-    phase_alignment: float = 1.0
-    timestamp: float = 0.0
-    bit_depth: int = 0
-    thermal_tag: float = 0.0
-    last_access: float = 0.0
-    access_count: int = 0
-    success_score: float = 0.0
+    """Memory key with timing information"""
+    key: int
+    timestamp: float
+    access_count: int
+    last_access: float
+    memory_usage: int
+    thermal_state: float
 
 @dataclass
 class HashFunctionProfile:
-    """Profile for a specific hash function"""
+    """Profile for hash function performance"""
     name: str
     bit_depth: int
-    thermal_cost: float
-    memory_impact: float
+    thermal_efficiency: float
+    memory_efficiency: float
     success_rate: float
     last_used: float
     usage_count: int = 0
@@ -63,10 +67,6 @@ class MemoryTimingOrchestrator:
             'blake2b': HashFunctionProfile('blake2b', 256, 0.8, 0.9, 0.0, 0.0),
             'keccak': HashFunctionProfile('keccak', 256, 1.2, 1.1, 0.0, 0.0)
         }
-        
-        # Initialize logging
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
 
     def select_hash_function(self, bit_depth: int, thermal_state: float) -> str:
         """
@@ -95,11 +95,11 @@ class MemoryTimingOrchestrator:
             score = profile.success_rate
             
             # Adjust for thermal impact
-            thermal_penalty = (profile.thermal_cost * thermal_state) / 100.0
+            thermal_penalty = (profile.thermal_efficiency * thermal_state) / 100.0
             score -= thermal_penalty
             
             # Adjust for memory impact
-            memory_penalty = profile.memory_impact * 0.1
+            memory_penalty = profile.memory_efficiency * 0.1
             score -= memory_penalty
             
             # Add recency bonus
@@ -139,13 +139,12 @@ class MemoryTimingOrchestrator:
         
         # Create memory key
         key = MemoryKey(
-            hash_value=hash_value,
+            key=hash_value,
             timestamp=time.time(),
-            bit_depth=bit_depth,
-            thermal_tag=thermal_state,
-            memory_weight=1.0,
-            phase_alignment=self.timing_manager.calculate_phase_transition(time.time()),
-            last_access=time.time()
+            access_count=0,
+            last_access=time.time(),
+            memory_usage=0,
+            thermal_state=thermal_state
         )
         
         # Store key
@@ -173,7 +172,7 @@ class MemoryTimingOrchestrator:
         # Update memory weight based on access pattern
         time_since_creation = time.time() - key.timestamp
         access_frequency = key.access_count / (time_since_creation + 1)
-        key.memory_weight = min(1.0, access_frequency * 0.1)
+        key.memory_usage = min(1.0, access_frequency * 0.1)
         
         return key
 
@@ -189,11 +188,11 @@ class MemoryTimingOrchestrator:
             return
             
         key = self.memory_keys[hash_value]
-        key.success_score = success_score
+        key.success_rate = success_score
         
         # Update hash function profile
         for profile in self.hash_profiles.values():
-            if profile.bit_depth >= key.bit_depth:
+            if profile.bit_depth >= key.memory_usage:
                 # Update success rate with exponential moving average
                 profile.success_rate = (0.9 * profile.success_rate + 
                                      0.1 * success_score)
@@ -208,17 +207,17 @@ class MemoryTimingOrchestrator:
                 name: {
                     'usage_count': profile.usage_count,
                     'success_rate': profile.success_rate,
-                    'thermal_cost': profile.thermal_cost
+                    'thermal_efficiency': profile.thermal_efficiency
                 }
                 for name, profile in self.hash_profiles.items()
             },
             'memory_weight_distribution': {
                 'high': sum(1 for k in self.memory_keys.values() 
-                          if k.memory_weight > 0.7),
+                          if k.memory_usage > 0.7),
                 'medium': sum(1 for k in self.memory_keys.values() 
-                            if 0.3 <= k.memory_weight <= 0.7),
+                            if 0.3 <= k.memory_usage <= 0.7),
                 'low': sum(1 for k in self.memory_keys.values() 
-                          if k.memory_weight < 0.3)
+                          if k.memory_usage < 0.3)
             }
         }
 
@@ -250,11 +249,11 @@ if __name__ == "__main__":
     print(f"Generated key: {key}")
     
     # Access key
-    accessed_key = orchestrator.access_memory_key(key.hash_value)
+    accessed_key = orchestrator.access_memory_key(key.key)
     print(f"Accessed key: {accessed_key}")
     
     # Update success score
-    orchestrator.update_success_score(key.hash_value, 0.8)
+    orchestrator.update_success_score(key.key, 0.8)
     
     # Get stats
     stats = orchestrator.get_memory_stats()

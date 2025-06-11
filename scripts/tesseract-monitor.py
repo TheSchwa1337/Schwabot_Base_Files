@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Tesseract Monitoring Script
+Tesseract Monitor
+===============
+
 Monitors tesseract pattern processing and system health.
 """
 
@@ -14,6 +16,8 @@ import numpy as np
 from datetime import datetime
 from scripts.tesseract_control import TesseractController
 from schwabot_math.klein_logic import KleinDecayField
+
+logger = logging.getLogger(__name__)
 
 class TesseractMonitor:
     """Monitors tesseract pattern processing and system health."""
@@ -30,11 +34,7 @@ class TesseractMonitor:
         """Setup logging configuration."""
         log_config = self.config.get('logging', {})
         if log_config.get('enabled', True):
-            logging.basicConfig(
-                filename=log_config.get('file', 'logs/tesseract.log'),
-                level=getattr(logging, log_config.get('level', 'INFO')),
-                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-            )
+            pass  # Logging is now handled by the centralized system
     
     def monitor_patterns(self, pattern_hash: str) -> Dict:
         """Monitor pattern processing and collect metrics."""

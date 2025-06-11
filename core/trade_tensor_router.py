@@ -6,11 +6,12 @@ Coordinates tensor routing and execution across the Nominal Channel system.
 Manages tensor state transitions, profit allocation, and thermal-aware execution.
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from datetime import datetime
 import numpy as np
 import logging
+import time
 
 from .profit_tensor import ProfitTensorStore
 from .bitmap_engine import BitmapEngine
@@ -18,6 +19,8 @@ from .zbe_temperature_tensor import ZBETemperatureTensor
 from .basket_tensor_feedback import BasketTensorFeedback
 from .fault_bus import FaultBus, FaultBusEvent
 from .memory_timing_orchestrator import MemoryTimingOrchestrator
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class TensorRoute:
@@ -43,7 +46,6 @@ class TradeTensorRouter:
         self.memory_orchestrator = MemoryTimingOrchestrator()
         
         # Initialize logging
-        logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         
         # Route history for analysis

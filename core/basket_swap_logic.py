@@ -9,14 +9,9 @@ from dataclasses import dataclass
 from datetime import datetime
 import numpy as np
 import logging
-import yaml
 from pathlib import Path
+from core.config import ConfigLoader, ConfigError
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -33,158 +28,91 @@ class BasketSwapLogic:
     """Manages basket swap operations with SP Core integration"""
     
     def __init__(self, config_path: Optional[str] = None):
-        self.history: List[SwapAction] = []
-        self.last_swap_time: Dict[str, datetime] = {}
-        self.config = self._load_config(config_path)
-        
-    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
-        if config_path is None:
-            config_path = Path(__file__).parent.parent / "config" / "basket_swap_config.yaml"
-            
-        try:
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)['basket_swap']
-        except Exception as e:
-            logger.error(f"Failed to load config: {str(e)}")
-            return {}
-            
-    def _sanitize_score(self, score: Optional[float], fallback: float = 0.0) -> float:
-        """Sanitize a score value to prevent NaN/inf leakage"""
-        if score is None or not isinstance(score, (float, int)):
-            return fallback
-        if np.isnan(score) or np.isinf(score):
-            return fallback
-        return float(score)
-        
-    def _calculate_signal_strength(self, trust_score: float, entropy_score: float, 
-                                 phase_depth: float) -> float:
-        """Calculate signal strength with sanitization"""
-        try:
-            # Sanitize inputs
-            trust_score = self._sanitize_score(trust_score)
-            entropy_score = self._sanitize_score(entropy_score)
-            phase_depth = self._sanitize_score(phase_depth)
-            
-            # Calculate entropy component safely
-            entropy_component = 1.0 / entropy_score if entropy_score > 0 else 0.0
-            
-            # Calculate weighted signal strength
-            weights = self.config.get('signal_weights', {
-                'trust_score': 0.4,
-                'entropy_component': 0.3,
-                'phase_depth': 0.3
-            })
-            
-            signal_strength = (
-                trust_score * weights['trust_score'] +
-                entropy_component * weights['entropy_component'] +
-                phase_depth * weights['phase_depth']
-            )
-            
-            return self._sanitize_score(signal_strength)
-            
-        except Exception as e:
-            logger.warning(f"Signal strength calculation failed: {str(e)}")
-            return 0.0
-            
-    def _should_override(self, basket_id: str, pkt: Dict[str, Any], 
-                        rings: Dict[str, Any]) -> bool:
-        """Check if swap should be overridden"""
-        try:
-            # Check for drift exit
-            if pkt.get("force_drift_exit", False):
-                logger.warning(f"[SP OVERRIDE] Drift exit triggered for basket {basket_id}")
-                return True
-                
-            # Check for ZPE override
-            if pkt.get("force_zpe_override", False):
-                logger.warning(f"[SP OVERRIDE] ZPE override triggered for basket {basket_id}")
-                return True
-                
-            return False
-            
-        except Exception as e:
-            logger.error(f"Override check failed: {str(e)}")
-            return False
-        
-    def apply_swap(self, trigger_type: str, asset_adjustments: Dict[str, float], 
-                  fallback: Optional[str] = None, pkt: Optional[Dict[str, Any]] = None,
-                  rings: Optional[Dict[str, Any]] = None) -> bool:
-        """
-        Apply a swap operation with enhanced signal handling.
+        """Initialize the basket swap logic.
         
         Args:
-            trigger_type: Type of trigger that initiated the swap
-            asset_adjustments: Dictionary of asset symbols to position size adjustments
-            fallback: Optional fallback strategy if primary swap fails
-            pkt: Optional packet data for override checks
-            rings: Optional rings data for override checks
+            config_path: Optional path to configuration file
+        """
+        self.history: List[SwapAction] = []
+        self.last_swap_time: Dict[str, datetime] = {}
+        
+        # Initialize configuration
+        self.config_loader = ConfigLoader()
+        try:
+            if config_path:
+                self.config = self.config_loader.load_yaml(config_path)
+            else:
+                self.config = self.config_loader.load_yaml("basket_swap_config.yaml")
+        except ConfigError as e:
+            logger.warning(f"Failed to load config from {config_path}: {e}")
+            self.config = self.config_loader.load_yaml("defaults.yaml")
+            
+        logger.info("BasketSwapLogic initialized with configuration")
+        
+    def process_swap_signal(self, signal: Dict[str, Any]) -> Optional[SwapAction]:
+        """Process a swap signal and generate appropriate action.
+        
+        Args:
+            signal: Dictionary containing swap signal data
             
         Returns:
-            bool: True if swap was successful
+            Optional[SwapAction]: Generated swap action if signal is valid
         """
         try:
-            # Calculate signal strength
-            signal_strength = self._calculate_signal_strength(
-                trust_score=asset_adjustments.get('trust_score', 0.0),
-                entropy_score=asset_adjustments.get('entropy_score', 0.0),
-                phase_depth=asset_adjustments.get('phase_depth', 0.0)
-            )
-            
-            # Check for override
-            override_triggered = False
-            if pkt and rings:
-                override_triggered = self._should_override(
-                    basket_id=asset_adjustments.get('basket_id', 'unknown'),
-                    pkt=pkt,
-                    rings=rings
-                )
-            
-            # Create swap action with enhanced metadata
-            swap_action = SwapAction(
-                trigger_type=trigger_type,
-                asset_adjustments=asset_adjustments,
-                fallback=fallback,
-                signal_strength=signal_strength,
-                override_triggered=override_triggered
-            )
-            
-            # Record in history
-            self.history.append(swap_action)
-            
-            # Update last swap time for affected assets
-            for asset in asset_adjustments.keys():
-                self.last_swap_time[asset] = datetime.now()
+            if not self._validate_signal(signal):
+                logger.warning(f"Invalid swap signal received: {signal}")
+                return None
                 
-            # Log swap details
-            logger.info(
-                f"Swap applied: type={trigger_type}, "
-                f"signal_strength={signal_strength:.3f}, "
-                f"override={override_triggered}"
-            )
-                
-            return True
+            action = self._create_swap_action(signal)
+            self.history.append(action)
+            self.last_swap_time[action.trigger_type] = action.timestamp
+            
+            logger.info(f"Processed swap signal: {action.trigger_type}")
+            return action
             
         except Exception as e:
-            logger.error(f"Swap application failed: {str(e)}")
-            return False
+            logger.error(f"Error processing swap signal: {e}")
+            return None
             
-    def get_swap_history(self, asset: Optional[str] = None) -> List[SwapAction]:
-        """Get swap history, optionally filtered by asset"""
-        if asset is None:
-            return self.history
+    def _validate_signal(self, signal: Dict[str, Any]) -> bool:
+        """Validate a swap signal.
+        
+        Args:
+            signal: Dictionary containing swap signal data
             
-        return [
-            action for action in self.history
-            if asset in action.asset_adjustments
-        ]
+        Returns:
+            bool: True if signal is valid
+        """
+        required_fields = self.config.get("required_fields", ["trigger_type", "asset_adjustments"])
+        return all(field in signal for field in required_fields)
         
-    def get_last_swap_time(self, asset: str) -> Optional[datetime]:
-        """Get the last swap time for an asset"""
-        return self.last_swap_time.get(asset)
+    def _create_swap_action(self, signal: Dict[str, Any]) -> SwapAction:
+        """Create a swap action from a validated signal.
         
-    def clear_history(self):
-        """Clear swap history"""
+        Args:
+            signal: Dictionary containing swap signal data
+            
+        Returns:
+            SwapAction: Created swap action
+        """
+        return SwapAction(
+            trigger_type=signal["trigger_type"],
+            asset_adjustments=signal["asset_adjustments"],
+            fallback=signal.get("fallback"),
+            signal_strength=signal.get("signal_strength", 0.0),
+            override_triggered=signal.get("override_triggered", False)
+        )
+        
+    def get_swap_history(self) -> List[SwapAction]:
+        """Get the swap action history.
+        
+        Returns:
+            List[SwapAction]: List of swap actions
+        """
+        return self.history
+        
+    def clear_history(self) -> None:
+        """Clear the swap action history."""
         self.history.clear()
-        self.last_swap_time.clear() 
+        self.last_swap_time.clear()
+        logger.info("Swap history cleared") 
