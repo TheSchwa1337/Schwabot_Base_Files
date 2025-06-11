@@ -115,6 +115,35 @@ const AdvancedMonitoringDashboard: React.FC<DashboardProps> = ({ integration }) 
     }
   });
 
+  // WebSocket connection
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8765');
+    
+    ws.onopen = () => {
+      console.log('Connected to Schwabot WebSocket server');
+    };
+    
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setDashboardData(prevData => ({
+        ...prevData,
+        ...data
+      }));
+    };
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    ws.onclose = () => {
+      console.log('Disconnected from Schwabot WebSocket server');
+    };
+    
+    return () => {
+      ws.close();
+    };
+  }, []);
+
   // Subscribe to integration updates
   useEffect(() => {
     const unsubscribe = integration.subscribe((metrics: any) => {
@@ -216,17 +245,6 @@ const AdvancedMonitoringDashboard: React.FC<DashboardProps> = ({ integration }) 
       unsubscribe();
     };
   }, [integration]);
-
-  useEffect(() => {
-    // Subscribe to dashboard updates
-    const subscription = window.dashboardIntegration.subscribe((data: DashboardData) => {
-      setDashboardData(data);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
 
   const ProfitTrajectoryChart = () => (
     <div className="bg-gray-800 rounded-lg p-6">
