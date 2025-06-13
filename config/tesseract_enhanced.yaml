@@ -1,0 +1,41 @@
+alert_bus:
+  channels:
+  - log
+  - console
+  enabled: true
+  severity_levels:
+    HIGH: 3
+    INFO: 0
+    LOW: 1
+    MEDIUM: 2
+debug:
+  test_mode: false
+  verbose_logging: false
+dimensions:
+  labels:
+  - price
+  - volume
+  - volatility
+  - momentum
+  - rsi
+  - macd
+  - bb_upper
+  - bb_lower
+monitoring:
+  alerts:
+    coherence_indexed_threshold: 0.8
+    coherence_threshold: 0.5
+    var_indexed_threshold: 1.5
+    var_threshold: 0.05
+processing:
+  baseline_reset_flip_frequency: 100
+  max_pattern_history: 1000
+  max_shell_history: 500
+  profit_blend_alpha: 0.7
+strategies:
+  inversion_burst_rebound:
+    trigger_prefix: e1a7
+  momentum_cascade:
+    trigger_prefix: f2b8
+  volatility_breakout:
+    trigger_prefix: a3c9

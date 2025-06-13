@@ -40,130 +40,103 @@ class BitOperations:
         Returns:
             42-bit integer representation
         """
-        # Convert to 64-bit float first
         float_bytes = struct.pack('d', value)
         float_int = int.from_bytes(float_bytes, byteorder='little')
-        
-        # Extract 42 bits (6 bits for exponent, 36 bits for mantissa)
         exponent = (float_int >> 52) & 0x7FF
         mantissa = float_int & 0xFFFFFFFFFFFFF
-        
-        # Combine into 42-bit representation
         return ((exponent & 0x3F) << 36) | (mantissa & 0xFFFFFFFFF)
     
     def calculate_bit_density(self, value: int, collapse_type: str = 'mid') -> float:
         """
-        Calculate bit density for a value
+        Calculate bit density for a value using 2/4/8-bit collapse blocks
         
         Args:
-            value: Input value
-            collapse_type: Type of collapse ('long', 'mid', or 'short')
+            value: Input integer value
+            collapse_type: One of ['long', 'mid', 'short']
             
         Returns:
-            Bit density value
+            Bit density score (0.0 to 1.0)
         """
-        # Convert to binary string
         binary = bin(value)[2:].zfill(42)
-        
-        # Calculate density based on collapse type
+
         if collapse_type == 'long':
-            # Use 8-bit blocks
-            blocks = [binary[i:i+8] for i in range(0, len(binary), 8)]
-            density = sum(1 for block in blocks if '1' in block) / len(blocks)
+            block_size = 8
         elif collapse_type == 'mid':
-            # Use 4-bit blocks
-            blocks = [binary[i:i+4] for i in range(0, len(binary), 4)]
-            density = sum(1 for block in blocks if '1' in block) / len(blocks)
-        else:  # short
-            # Use 2-bit blocks
-            blocks = [binary[i:i+2] for i in range(0, len(binary), 2)]
-            density = sum(1 for block in blocks if '1' in block) / len(blocks)
-            
-        return density
+            block_size = 4
+        else:
+            block_size = 2
+
+        blocks = [binary[i:i + block_size] for i in range(0, len(binary), block_size)]
+        return sum(1 for block in blocks if '1' in block) / len(blocks)
     
     def update_position_cache(self, value: int, density: float, tier: int, collapse_type: str):
-        """Update position cache with new value"""
-        self.position_cache[value] = BitPosition(
-            value=value,
-            density=density,
-            tier=tier,
-            collapse_type=collapse_type
-        )
+        """
+        Store current bit position with density and tier metadata
         
-        # Update density map
+        Args:
+            value: Encoded integer value
+            density: Computed density
+            tier: Profit tier
+            collapse_type: Collapse category
+        """
+        self.position_cache[value] = BitPosition(value, density, tier, collapse_type)
         binary = bin(value)[2:].zfill(42)
         for i, bit in enumerate(binary):
             if bit == '1':
                 self.density_map[i] += 1
-                
-        # Update tier history
         self.tier_history.append((tier, density))
         
     def get_profit_tier(self, value: int) -> int:
         """
-        Calculate profit tier based on bit patterns
+        Compute profit tier [0–7] based on weighted bit densities
         
         Args:
-            value: Input value
+            value: Bit-encoded integer
             
         Returns:
-            Profit tier (0-7)
+            Integer tier from 0 (low) to 7 (high)
         """
-        # Calculate densities for all collapse types
         long_density = self.calculate_bit_density(value, 'long')
         mid_density = self.calculate_bit_density(value, 'mid')
         short_density = self.calculate_bit_density(value, 'short')
-        
-        # Weight the densities
-        weighted_density = (
-            long_density * 0.4 +  # Long-term patterns
-            mid_density * 0.4 +   # Medium-term patterns
-            short_density * 0.2   # Short-term patterns
-        )
-        
-        # Map to profit tier (0-7)
+        weighted_density = (long_density * 0.4 + mid_density * 0.4 + short_density * 0.2)
         return int(weighted_density * 7)
         
     def analyze_bit_pattern(self, value: int) -> Dict[str, float]:
         """
-        Analyze bit pattern for trading signals
+        Analyze a 42-bit pattern for long/mid/short-term signal strengths
         
         Args:
-            value: Input value
+            value: Input 42-bit encoded integer
             
         Returns:
-            Dictionary of pattern metrics
+            Dictionary of density metrics and pattern strength
         """
-        # Calculate densities
-        long_density = self.calculate_bit_density(value, 'long')
-        mid_density = self.calculate_bit_density(value, 'mid')
-        short_density = self.calculate_bit_density(value, 'short')
-        
-        # Calculate tier
+        long_d = self.calculate_bit_density(value, 'long')
+        mid_d = self.calculate_bit_density(value, 'mid')
+        short_d = self.calculate_bit_density(value, 'short')
         tier = self.get_profit_tier(value)
-        
-        # Calculate pattern strength
-        pattern_strength = (
-            long_density * 0.5 +   # Long-term stability
-            mid_density * 0.3 +    # Medium-term trends
-            short_density * 0.2    # Short-term signals
-        )
-        
+        strength = long_d * 0.5 + mid_d * 0.3 + short_d * 0.2
+
         return {
-            'long_density': long_density,
-            'mid_density': mid_density,
-            'short_density': short_density,
+            'long_density': long_d,
+            'mid_density': mid_d,
+            'short_density': short_d,
             'tier': tier,
-            'pattern_strength': pattern_strength,
+            'pattern_strength': strength,
             'density_map': self.density_map.tolist()
         }
         
     def get_tier_history(self) -> List[Tuple[int, float]]:
-        """Get history of tier changes"""
+        """Return chronological tier/density log"""
         return self.tier_history
         
+    def debug_binary(self, value: int) -> str:
+        """Return 42-bit binary string for inspection"""
+        return bin(value)[2:].zfill(42)
+        
     def clear_cache(self):
-        """Clear position cache and reset density map"""
+        """Clear bit cache, density map, and tier history"""
         self.position_cache.clear()
         self.density_map.fill(0)
         self.tier_history.clear() 

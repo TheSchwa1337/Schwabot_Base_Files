@@ -1,14 +1,21 @@
 """
-42-bit Sequencer Module
+42-bit Sequencer Module (v1.0)
 
 Implements a sophisticated bit-sequencing system using collapse gates and shard-based pattern matching.
 Integrates with UFS_APP pipeline for price trigger functions and connection handling.
 """
 
 import numpy as np
+import pandas as pd
+import logging
+import yaml
+from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 from collections import deque
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @dataclass
 class ShardConfig:
@@ -30,6 +37,26 @@ class BlockWeightState:
         if self.weight_history is None:
             self.weight_history = deque(maxlen=100)
 
+class DataProvider:
+    """Base class for data providers."""
+    def get_price(self, symbol: str, timestamp: float) -> float:
+        raise NotImplementedError("Subclasses must implement get_price")
+
+class HistoricalDataProvider(DataProvider):
+    """Historical data provider using CSV files."""
+    def __init__(self, file_path: str):
+        try:
+            self.data = pd.read_csv(file_path)
+            self.data.set_index('timestamp', inplace=True)
+        except Exception as e:
+            logging.error(f"Failed to load historical data: {e}")
+            raise
+
+    def get_price(self, symbol: str, timestamp: float) -> float:
+        if timestamp not in self.data.index:
+            raise ValueError(f"No data for timestamp {timestamp}")
+        return self.data.loc[timestamp, f'{symbol}_price']
+
 class DeltaPiConverter:
     """Converts price/volume data into delta pi values for tree sequencing."""
     
@@ -46,11 +73,8 @@ class DeltaPiConverter:
         if len(self.price_buffer) < 2:
             return 0.0
             
-        # Compute pi = price * volume
         current_pi = price * volume
         prev_pi = self.price_buffer[-2] * self.volume_buffer[-2]
-        
-        # Delta pi = (current_pi - prev_pi) / prev_pi
         return (current_pi - prev_pi) / (prev_pi + 1e-8)
 
 class BitSequencer:
@@ -61,8 +85,9 @@ class BitSequencer:
         self.shards = {}
         self.collapse_matrix = None
         self.delta_pi = DeltaPiConverter()
-        self.ferris_stack = deque(maxlen=1000)  # Ferris request stack
+        self.ferris_stack = deque(maxlen=1000)
         self._initialize_shards()
+        self.compute_collapse_matrix()
     
     def _initialize_shards(self):
         """Initialize shard structures based on configuration."""
@@ -73,8 +98,8 @@ class BitSequencer:
                 'prime_index': cfg.prime_index,
                 'threshold': cfg.collapse_threshold,
                 'weight': cfg.weight,
-                'block_weights': deque(maxlen=100),  # Store recent block distribution weights
-                'weight_state': BlockWeightState()  # Initialize weight state
+                'block_weights': deque(maxlen=100),
+                'weight_state': BlockWeightState()
             }
     
     def _update_block_weight_state(self, shard_name: str, new_weight: float) -> float:
@@ -82,39 +107,30 @@ class BitSequencer:
         shard = self.shards[shard_name]
         state = shard['weight_state']
         
-        # Update weight history
         state.weight_history.append(new_weight)
         
-        # Calculate quantum coherence
         if len(state.weight_history) > 1:
-            # Measure coherence based on weight stability
             weight_diff = abs(state.weight_history[-1] - state.weight_history[-2])
             state.coherence = max(0.0, min(1.0, 1.0 - weight_diff))
             
-            # Calculate entropy for homeostasis
             weights = np.array(list(state.weight_history))
             state.entropy = -np.sum(weights * np.log2(weights + 1e-10))
             
-            # Update homeostasis based on entropy and coherence
-            target_entropy = 0.5  # Target entropy level
+            target_entropy = 0.5
             entropy_diff = abs(state.entropy - target_entropy)
             state.homeostasis = max(0.0, min(1.0, 1.0 - entropy_diff))
         
-        # Apply quantum correction if coherence is low
         if state.coherence < 0.7:
-            # Apply quantum correction to stabilize weights
             correction = np.mean(list(state.weight_history[-5:])) if len(state.weight_history) >= 5 else new_weight
             new_weight = 0.7 * new_weight + 0.3 * correction
         
-        # Apply homeostasis regulation
         if state.homeostasis < 0.8:
-            # Regulate weight to maintain homeostasis
             target_weight = np.median(list(state.weight_history[-10:])) if len(state.weight_history) >= 10 else new_weight
             new_weight = 0.8 * new_weight + 0.2 * target_weight
         
         state.last_update = new_weight
         return new_weight
-    
+
     def compute_collapse_matrix(self, input_bits: int = 44) -> np.ndarray:
         """Compute the collapse matrix for transforming input bits to 42-bit output."""
         # Create initial 44x44 identity
@@ -148,38 +164,29 @@ class BitSequencer:
     
     def process_price_data(self, price_data: np.ndarray, volume_data: np.ndarray) -> Dict[str, float]:
         """Process price data through the sequencer to generate signals."""
-        # Convert to delta pi values
         delta_pi_values = []
         for p, v in zip(price_data, volume_data):
             delta_pi = self.delta_pi.compute_delta_pi(p, v)
             delta_pi_values.append(delta_pi)
         
-        # Transform through collapse matrix
         transformed = np.matmul(self.collapse_matrix, np.array(delta_pi_values))
         
-        # Extract shard values and detect collapse events
         signals = {}
         for name, shard in self.shards.items():
             shard_value = self._extract_shard_value(transformed, shard['prime_index'])
             shard['values'].append(shard_value)
             
-            # Update block weights based on recent performance
             if len(shard['values']) > 1:
                 weight = abs(shard['values'][-1] - shard['values'][-2])
-                # Apply enhanced weight synchronization
                 synchronized_weight = self._update_block_weight_state(name, weight)
                 shard['block_weights'].append(synchronized_weight)
             
-            # Detect collapse events based on threshold
             if shard_value > shard['threshold']:
                 shard['collapse_events'].append(len(shard['values']) - 1)
-                # Apply enhanced pattern sync from block weights
                 weight_sync = np.mean(list(shard['block_weights'])) if shard['block_weights'] else 1.0
-                # Incorporate quantum coherence and homeostasis
                 state = shard['weight_state']
                 signals[name] = shard_value * shard['weight'] * weight_sync * state.coherence * state.homeostasis
                 
-                # Add to Ferris stack for execution
                 self.ferris_stack.append({
                     'shard': name,
                     'value': shard_value,
@@ -220,29 +227,80 @@ class BitSequencer:
         """Update connection forge based on sequencer signals."""
         updates = {}
         for name, signal in signals.items():
-            # Use Ferris stack to modulate connection updates
             recent_ferris = [f for f in self.ferris_stack if f['shard'] == name]
             if recent_ferris:
-                # Boost update based on recent Ferris activity
-                boost = len(recent_ferris) / 10.0  # Normalize by max stack size
+                boost = len(recent_ferris) / 10.0
                 updates[name] = signal * (1.0 + boost)
             else:
                 updates[name] = signal
         return updates
 
-# Example usage
-if __name__ == "__main__":
-    # Example configuration
-    config = {
-        'fast': ShardConfig(prime_index=2, collapse_threshold=0.7, weight=0.4),
-        'mid': ShardConfig(prime_index=3, collapse_threshold=0.8, weight=0.3),
-        'slow': ShardConfig(prime_index=7, collapse_threshold=0.9, weight=0.3)
+def load_config(file_name: str) -> dict:
+    """Load configuration from YAML file."""
+    config_path = Path(__file__).resolve().parent / 'config' / file_name
+    try:
+        with open(config_path, 'r') as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        logging.error(f"Config file {file_name} not found.")
+        raise ValueError("Config file not found.")
+    except yaml.YAMLError as e:
+        logging.error(f"Error parsing config file {file_name}: {e}")
+        raise ValueError("Error parsing config file.")
+
+def create_default_config(file_name: str):
+    """Create default configuration file."""
+    default_config = {
+        'fast': {'prime_index': 2, 'collapse_threshold': 0.7, 'weight': 0.4},
+        'mid': {'prime_index': 3, 'collapse_threshold': 0.8, 'weight': 0.3},
+        'slow': {'prime_index': 7, 'collapse_threshold': 0.9, 'weight': 0.3}
     }
     
-    sequencer = BitSequencer(config)
-    # Example price data processing
-    price_data = np.random.randn(44)  # Example 44-bit input
-    volume_data = np.random.randn(44)  # Example volume data
-    signals = sequencer.process_price_data(price_data, volume_data)
-    profit_corridor = sequencer.get_profit_corridor(signals)
-    connection_updates = sequencer.update_connection_forge(signals) 
+    config_path = Path(__file__).resolve().parent / 'config' / file_name
+    with open(config_path, 'w') as f:
+        yaml.safe_dump(default_config, f)
+
+def main():
+    """Main execution function."""
+    try:
+        # Load or create configuration
+        try:
+            config_data = load_config('sequencer_config.yaml')
+        except ValueError:
+            create_default_config('sequencer_config.yaml')
+            config_data = load_config('sequencer_config.yaml')
+        
+        # Convert config to ShardConfig objects
+        config = {
+            name: ShardConfig(**cfg) 
+            for name, cfg in config_data.items()
+        }
+        
+        # Initialize sequencer
+        sequencer = BitSequencer(config)
+        
+        # Load historical data
+        provider = HistoricalDataProvider('data/historical_prices.csv')
+        
+        # Example timestamps (replace with actual data)
+        timestamps = [1.0, 2.0, 3.0]  # Example timestamps
+        
+        # Get price and volume data
+        price_data = np.array([provider.get_price('BTC', ts) for ts in timestamps])
+        volume_data = np.array([provider.get_price('BTC_VOL', ts) for ts in timestamps])
+        
+        # Process data and get signals
+        signals = sequencer.process_price_data(price_data, volume_data)
+        
+        # Update connections
+        updates = sequencer.update_connection_forge(signals)
+        
+        logging.info(f"Generated signals: {signals}")
+        logging.info(f"Connection updates: {updates}")
+        
+    except Exception as e:
+        logging.error(f"Error in main execution: {e}")
+        raise
+
+if __name__ == "__main__":
+    main() 

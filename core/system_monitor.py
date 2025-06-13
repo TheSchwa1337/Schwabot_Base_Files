@@ -21,7 +21,7 @@ import svgwrite
 from core.unified_observability_tensor import UnifiedObservabilityTensor
 from core.tensor_visualization_controller import TensorVisualizationController
 from core.basket_swapper import BasketSwapper
-from core.basket_phase_map import BasketPhaseMap
+from core.phase_engine.basket_phase_map import BasketPhaseMap
 from core.basket_tensor_feedback import BasketTensorFeedback
 from core.basket_entropy_allocator import BasketEntropyAllocator
 from core.basket_log_controller import BasketLogController

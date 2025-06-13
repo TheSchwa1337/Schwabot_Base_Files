@@ -52,24 +52,24 @@ class DriftExitDetector:
         # Initialize consciousness state tracking
         self.consciousness_states = {
             'BULL': {
-                'entropy_range': (0.0, 0.3),
-                'paradox_range': (0.0, 2.0),
-                'drift_confidence_range': (0.65, 1.0)
+                'entropy_range': (-0.2, 0),
+                'paradox_range': (1, 3),
+                'drift_confidence_range': (0.65, 1)
             },
             'BEAR': {
-                'entropy_range': (0.3, 0.7),
-                'paradox_range': (2.0, 5.0),
-                'drift_confidence_range': (0.42, 0.65)
+                'entropy_range': (0, 0.2),
+                'paradox_range': (3, 7),
+                'drift_confidence_range': (0.42, 1)
             },
             'CRAB': {
-                'entropy_range': (0.4, 0.6),
-                'paradox_range': (1.0, 3.0),
-                'drift_confidence_range': (0.5, 0.7)
+                'entropy_range': (-0.1, 0.1),
+                'paradox_range': (1, 5),
+                'drift_confidence_range': (0.5, 1)
             },
             'BLACK_SWAN': {
-                'entropy_range': (0.7, 1.0),
-                'paradox_range': (5.0, float('inf')),
-                'drift_confidence_range': (0.0, 0.42)
+                'entropy_range': (-0.3, -0.2),
+                'paradox_range': (7, 10),
+                'drift_confidence_range': (0.3, 1)
             }
         }
 
@@ -112,15 +112,15 @@ class DriftExitDetector:
             self.drift_metrics[pair] = self.drift_metrics[pair][-self.window_size:]
         
         # Determine consciousness state
-        consciousness = self._determine_consciousness_state(metrics)
+        consciousness = self._determine_consciousness_state(market_signal)
         
         # Check for drift exit conditions
-        if self._check_drift_exit_conditions(metrics, consciousness):
-            return 'drift_exit', self._calculate_exit_urgency(metrics, consciousness)
+        if self._check_drift_exit_conditions(consciousness, entropy_delta, paradox_pressure, drift_confidence):
+            return 'drift_exit', self._calculate_exit_urgency(entropy_delta, paradox_pressure, drift_confidence, consciousness)
             
         # Check for ghost exit trigger
         if self._check_ghost_exit_trigger(metrics, consciousness):
-            return 'ghost_exit_trigger', self._calculate_exit_urgency(metrics, consciousness)
+            return 'ghost_exit_trigger', self._calculate_exit_urgency(entropy_delta, paradox_pressure, drift_confidence, consciousness)
             
         return 'hold', 0.0
 
@@ -166,46 +166,48 @@ class DriftExitDetector:
             # Unstable zone: high entropy and unprofitable
             return entropy_rate / (abs(profit_gradient) + epsilon) * 100
 
-    def _determine_consciousness_state(self, metrics: DriftMetrics) -> str:
+    def _determine_consciousness_state(self, market_signal: Dict) -> str:
         """Determine current market consciousness state"""
         for state, ranges in self.consciousness_states.items():
             if (
-                ranges['entropy_range'][0] <= metrics.entropy_delta <= ranges['entropy_range'][1] and
-                ranges['paradox_range'][0] <= metrics.paradox_pressure <= ranges['paradox_range'][1] and
-                ranges['drift_confidence_range'][0] <= metrics.drift_confidence <= ranges['drift_confidence_range'][1]
+                ranges['entropy_range'][0] <= market_signal['entropy_rate'] <= ranges['entropy_range'][1] and
+                ranges['paradox_range'][0] <= market_signal['profit_gradient'] <= ranges['paradox_range'][1] and
+                ranges['drift_confidence_range'][0] <= market_signal['volume_profile'] <= ranges['drift_confidence_range'][1]
             ):
                 return state
         return 'UNKNOWN'
 
     def _check_drift_exit_conditions(
         self,
-        metrics: DriftMetrics,
-        consciousness: str
+        consciousness: str,
+        entropy_delta: float,
+        paradox_pressure: float,
+        drift_confidence: float
     ) -> bool:
         """Check if drift exit conditions are met"""
         if consciousness == 'BULL':
             return (
-                metrics.entropy_delta < self.drift_thresholds['entropy_delta'] and
-                metrics.drift_confidence < self.drift_thresholds['drift_confidence'] and
-                metrics.volume_profile > self.drift_thresholds['volume_profile']
+                entropy_delta < -0.2 and
+                drift_confidence < 0.65 and
+                paradox_pressure > 3.0
             )
         elif consciousness == 'BEAR':
             return (
-                metrics.entropy_delta > abs(self.drift_thresholds['entropy_delta']) and
-                metrics.drift_confidence < self.drift_thresholds['drift_confidence'] and
-                metrics.paradox_pressure > self.drift_thresholds['paradox_pressure']
+                entropy_delta > 0.2 and
+                drift_confidence < 0.42 and
+                paradox_pressure > 3.0
             )
         elif consciousness == 'CRAB':
             return (
-                abs(metrics.entropy_delta) > 0.1 and
-                metrics.drift_confidence < 0.5 and
-                metrics.trend_strength > self.drift_thresholds['trend_strength']
+                abs(entropy_delta) > 0.1 and
+                drift_confidence < 0.5 and
+                paradox_pressure > 3.0
             )
         elif consciousness == 'BLACK_SWAN':
             return (
-                metrics.paradox_pressure > self.drift_thresholds['paradox_pressure'] * 2 and
-                metrics.entropy_delta < -0.2 and
-                metrics.drift_confidence < 0.3
+                paradox_pressure > 7.0 and
+                entropy_delta < -0.3 and
+                drift_confidence < 0.3
             )
         return False
 
@@ -243,7 +245,9 @@ class DriftExitDetector:
 
     def _calculate_exit_urgency(
         self,
-        metrics: DriftMetrics,
+        entropy_delta: float,
+        paradox_pressure: float,
+        drift_confidence: float,
         consciousness: str
     ) -> float:
         """Calculate exit urgency based on metrics and consciousness"""
@@ -252,27 +256,27 @@ class DriftExitDetector:
         
         if consciousness == 'BULL':
             urgency = (
-                (self.drift_thresholds['entropy_delta'] - metrics.entropy_delta) * 0.4 +
-                (self.drift_thresholds['drift_confidence'] - metrics.drift_confidence) * 0.3 +
-                (metrics.volume_profile - self.drift_thresholds['volume_profile']) * 0.3
+                (0.2 - entropy_delta) * 0.4 +
+                (0.65 - drift_confidence) * 0.3 +
+                (paradox_pressure - 3.0) * 0.3
             )
         elif consciousness == 'BEAR':
             urgency = (
-                (metrics.entropy_delta - abs(self.drift_thresholds['entropy_delta'])) * 0.4 +
-                (self.drift_thresholds['drift_confidence'] - metrics.drift_confidence) * 0.3 +
-                (metrics.paradox_pressure - self.drift_thresholds['paradox_pressure']) * 0.3
+                (-0.2 - entropy_delta) * 0.4 +
+                (0.42 - drift_confidence) * 0.3 +
+                (paradox_pressure - 3.0) * 0.3
             )
         elif consciousness == 'CRAB':
             urgency = (
-                abs(metrics.entropy_delta) * 0.4 +
-                (0.5 - metrics.drift_confidence) * 0.3 +
-                (metrics.trend_strength - self.drift_thresholds['trend_strength']) * 0.3
+                abs(entropy_delta) * 0.4 +
+                (0.5 - drift_confidence) * 0.3 +
+                (paradox_pressure - 3.0) * 0.3
             )
         elif consciousness == 'BLACK_SWAN':
             urgency = (
-                (metrics.paradox_pressure - self.drift_thresholds['paradox_pressure'] * 2) * 0.4 +
-                (0.3 - metrics.drift_confidence) * 0.3 +
-                (metrics.thermal_state - 0.8) * 0.3
+                (paradox_pressure - 7.0) * 0.4 +
+                (0.3 - drift_confidence) * 0.3 +
+                (paradox_pressure - 3.0) * 0.3
             )
             
         return float(np.clip(urgency, 0.0, 1.0))
@@ -288,8 +292,8 @@ class DriftExitDetector:
             
         return {
             'total_detections': len(metrics),
-            'drift_exits': sum(1 for m in metrics if m.entropy_delta < self.drift_thresholds['entropy_delta']),
-            'ghost_triggers': sum(1 for m in metrics if m.drift_confidence < self.drift_thresholds['drift_confidence']),
+            'drift_exits': sum(1 for m in metrics if m.entropy_delta < -0.2),
+            'ghost_triggers': sum(1 for m in metrics if m.drift_confidence < 0.42),
             'avg_paradox_pressure': float(np.mean([m.paradox_pressure for m in metrics])),
             'avg_drift_confidence': float(np.mean([m.drift_confidence for m in metrics])),
             'consciousness_distribution': {

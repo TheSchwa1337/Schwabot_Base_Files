@@ -1,0 +1,514 @@
+2025-06-12 18:35:29,469 - INFO - Schwabot setup initialized at: C:\Users\maxde\OneDrive\Documents
+2025-06-12 18:35:29,470 - INFO - ============================================================
+2025-06-12 18:35:29,470 - INFO - STARTING SCHWABOT SETUP
+2025-06-12 18:35:29,470 - INFO - ============================================================
+2025-06-12 18:35:29,470 - INFO - 
+--- Checking Python version ---
+2025-06-12 18:35:29,471 - INFO - Python version 3.12 is compatible
+2025-06-12 18:35:29,519 - INFO - 
+--- Creating directories ---
+2025-06-12 18:35:29,519 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config
+2025-06-12 18:35:29,520 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config\schemas
+2025-06-12 18:35:29,521 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\tests
+2025-06-12 18:35:29,522 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\logs
+2025-06-12 18:35:29,522 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data
+2025-06-12 18:35:29,523 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data\matrix_logs
+2025-06-12 18:35:29,524 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core
+2025-06-12 18:35:29,525 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core\tests
+2025-06-12 18:35:29,529 - INFO - 
+--- Installing dependencies ---
+2025-06-12 18:35:29,530 - INFO - Installing dependencies...
+2025-06-12 18:35:32,771 - ERROR - Failed to install dependencies: Command '['c:\\Users\\maxde\\OneDrive\\Documents\\.venv\\Scripts\\python.exe', '-m', 'pip', 'install', '-r', 'C:\\Users\\maxde\\OneDrive\\Documents\\requirements.txt']' returned non-zero exit status 1.
+2025-06-12 18:35:32,771 - ERROR - Error output: ERROR: Invalid requirement: '@types/react>=17.0.0': Expected package name at the start of dependency specifier
+    @types/react>=17.0.0
+    ^ (from line 26 of C:\Users\maxde\OneDrive\Documents\requirements.txt)
+
+2025-06-12 18:35:32,775 - INFO - 
+--- Validating config files ---
+2025-06-12 18:35:32,808 - ERROR - Failed to validate config files: No module named 'pydantic'
+2025-06-12 18:35:32,812 - INFO - 
+--- Testing imports ---
+2025-06-12 18:35:35,532 - INFO - 
+--- Testing config system ---
+2025-06-12 18:35:35,537 - ERROR - Config system test failed: No module named 'pydantic'
+2025-06-12 18:35:35,542 - INFO - 
+--- Testing Enhanced Tesseract Processor ---
+2025-06-12 18:35:35,729 - ERROR - Enhanced Tesseract Processor test failed: No module named 'sympy'
+2025-06-12 18:35:35,733 - INFO - 
+--- Running basic tests ---
+2025-06-12 18:35:35,734 - INFO - Running tests: tests/test_config_loading.py
+2025-06-12 18:35:35,803 - WARNING - Test output: 
+2025-06-12 18:35:35,803 - WARNING - Test errors: c:\Users\maxde\OneDrive\Documents\.venv\Scripts\python.exe: No module named pytest
+
+2025-06-12 18:35:35,811 - INFO - Setup report saved to: C:\Users\maxde\OneDrive\Documents\setup_report.json
+2025-06-12 18:35:35,812 - INFO - 
+============================================================
+2025-06-12 18:35:35,812 - WARNING - SETUP COMPLETED WITH WARNINGS
+2025-06-12 18:35:35,813 - WARNING - Failed steps: Installing dependencies, Validating config files, Testing config system, Testing Enhanced Tesseract Processor
+2025-06-12 18:35:35,813 - INFO - The system may still be functional, but some features might not work correctly.
+2025-06-12 18:35:35,813 - INFO - ============================================================
+2025-06-12 18:36:47,597 - INFO - Schwabot setup initialized at: C:\Users\maxde\OneDrive\Documents
+2025-06-12 18:36:47,597 - INFO - ============================================================
+2025-06-12 18:36:47,598 - INFO - STARTING SCHWABOT SETUP
+2025-06-12 18:36:47,598 - INFO - ============================================================
+2025-06-12 18:36:47,598 - INFO - 
+--- Checking Python version ---
+2025-06-12 18:36:47,598 - INFO - Python version 3.12 is compatible
+2025-06-12 18:36:47,599 - INFO - [SUCCESS] Checking Python version completed successfully
+2025-06-12 18:36:47,599 - INFO - 
+--- Creating directories ---
+2025-06-12 18:36:47,599 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config
+2025-06-12 18:36:47,600 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config\schemas
+2025-06-12 18:36:47,600 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\tests
+2025-06-12 18:36:47,601 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\logs
+2025-06-12 18:36:47,601 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data
+2025-06-12 18:36:47,602 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data\matrix_logs
+2025-06-12 18:36:47,602 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core
+2025-06-12 18:36:47,603 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core\tests
+2025-06-12 18:36:47,603 - INFO - [SUCCESS] Creating directories completed successfully
+2025-06-12 18:36:47,603 - INFO - 
+--- Installing dependencies ---
+2025-06-12 18:36:47,604 - INFO - Installing dependencies...
+2025-06-12 18:36:51,580 - ERROR - Failed to install dependencies: Command '['c:\\Users\\maxde\\OneDrive\\Documents\\.venv\\Scripts\\python.exe', '-m', 'pip', 'install', '-r', 'C:\\Users\\maxde\\OneDrive\\Documents\\requirements.txt']' returned non-zero exit status 1.
+2025-06-12 18:36:51,581 - ERROR - Error output: ERROR: Could not find a version that satisfies the requirement pyseal>=0.1.0 (from versions: none)
+ERROR: No matching distribution found for pyseal>=0.1.0
+
+2025-06-12 18:36:51,581 - ERROR - [FAILED] Installing dependencies failed
+2025-06-12 18:36:51,581 - INFO - 
+--- Validating config files ---
+2025-06-12 18:36:51,609 - ERROR - Failed to validate config files: No module named 'pydantic'
+2025-06-12 18:36:51,609 - ERROR - [FAILED] Validating config files failed
+2025-06-12 18:36:51,609 - INFO - 
+--- Testing imports ---
+2025-06-12 18:36:51,749 - INFO - [OK] Critical import successful: numpy
+2025-06-12 18:36:51,776 - INFO - [OK] Critical import successful: scipy
+2025-06-12 18:36:52,326 - INFO - [OK] Critical import successful: pandas
+2025-06-12 18:36:52,327 - INFO - [OK] Critical import successful: yaml
+2025-06-12 18:36:52,327 - INFO - [OK] Critical import successful: pathlib
+2025-06-12 18:36:52,328 - INFO - [OK] Critical import successful: logging
+2025-06-12 18:36:52,328 - INFO - [OK] Critical import successful: datetime
+2025-06-12 18:36:52,328 - INFO - [OK] Critical import successful: typing
+2025-06-12 18:36:52,330 - WARNING - [WARN] Optional import failed: rich - No module named 'rich'
+2025-06-12 18:36:52,332 - WARNING - [WARN] Optional import failed: pydantic - No module named 'pydantic'
+2025-06-12 18:36:52,335 - WARNING - [WARN] Optional import failed: pytest - No module named 'pytest'
+2025-06-12 18:36:52,335 - INFO - [SUCCESS] Testing imports completed successfully
+2025-06-12 18:36:52,336 - INFO - 
+--- Testing config system ---
+2025-06-12 18:36:52,345 - ERROR - Config system test failed: No module named 'pydantic'
+2025-06-12 18:36:52,345 - ERROR - [FAILED] Testing config system failed
+2025-06-12 18:36:52,346 - INFO - 
+--- Testing Enhanced Tesseract Processor ---
+2025-06-12 18:36:52,474 - ERROR - Enhanced Tesseract Processor test failed: No module named 'sympy'
+2025-06-12 18:36:52,475 - ERROR - [FAILED] Testing Enhanced Tesseract Processor failed
+2025-06-12 18:36:52,475 - INFO - 
+--- Running basic tests ---
+2025-06-12 18:36:52,475 - INFO - Running tests: tests/test_config_loading.py
+2025-06-12 18:36:52,546 - WARNING - [WARN] Some tests failed in tests/test_config_loading.py
+2025-06-12 18:36:52,546 - WARNING - Test output: 
+2025-06-12 18:36:52,546 - WARNING - Test errors: c:\Users\maxde\OneDrive\Documents\.venv\Scripts\python.exe: No module named pytest
+
+2025-06-12 18:36:52,547 - INFO - [SUCCESS] Running basic tests completed successfully
+2025-06-12 18:36:52,549 - INFO - Setup report saved to: C:\Users\maxde\OneDrive\Documents\setup_report.json
+2025-06-12 18:36:52,550 - INFO - 
+============================================================
+2025-06-12 18:36:52,551 - WARNING - SETUP COMPLETED WITH WARNINGS
+2025-06-12 18:36:52,552 - WARNING - Failed steps: Installing dependencies, Validating config files, Testing config system, Testing Enhanced Tesseract Processor
+2025-06-12 18:36:52,552 - INFO - The system may still be functional, but some features might not work correctly.
+2025-06-12 18:36:52,553 - INFO - ============================================================
+2025-06-12 18:38:13,616 - INFO - Schwabot setup initialized at: C:\Users\maxde\OneDrive\Documents
+2025-06-12 18:38:13,616 - INFO - ============================================================
+2025-06-12 18:38:13,617 - INFO - STARTING SCHWABOT SETUP
+2025-06-12 18:38:13,617 - INFO - ============================================================
+2025-06-12 18:38:13,617 - INFO - 
+--- Checking Python version ---
+2025-06-12 18:38:13,617 - INFO - Python version 3.12 is compatible
+2025-06-12 18:38:13,617 - INFO - [SUCCESS] Checking Python version completed successfully
+2025-06-12 18:38:13,617 - INFO - 
+--- Creating directories ---
+2025-06-12 18:38:13,618 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config
+2025-06-12 18:38:13,618 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\config\schemas
+2025-06-12 18:38:13,619 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\tests
+2025-06-12 18:38:13,619 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\logs
+2025-06-12 18:38:13,620 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data
+2025-06-12 18:38:13,621 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\data\matrix_logs
+2025-06-12 18:38:13,621 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core
+2025-06-12 18:38:13,622 - INFO - Created/verified directory: C:\Users\maxde\OneDrive\Documents\core\tests
+2025-06-12 18:38:13,623 - INFO - [SUCCESS] Creating directories completed successfully
+2025-06-12 18:38:13,623 - INFO - 
+--- Installing dependencies ---
+2025-06-12 18:38:13,624 - INFO - Installing dependencies...
+2025-06-12 18:40:35,375 - INFO - Dependencies installed successfully
+2025-06-12 18:40:35,376 - INFO - [SUCCESS] Installing dependencies completed successfully
+2025-06-12 18:40:35,376 - INFO - 
+--- Validating config files ---
+2025-06-12 18:40:36,199 - INFO - Creating default config: tesseract_enhanced.yaml
+2025-06-12 18:40:36,215 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\tesseract_enhanced.yaml
+2025-06-12 18:40:36,215 - INFO - Validated config file: tesseract_enhanced.yaml
+2025-06-12 18:40:36,216 - INFO - Creating default config: fractal_core.yaml
+2025-06-12 18:40:36,230 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\fractal_core.yaml
+2025-06-12 18:40:36,230 - INFO - Validated config file: fractal_core.yaml
+2025-06-12 18:40:36,241 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\matrix_response_paths.yaml
+2025-06-12 18:40:36,241 - INFO - Validated config file: matrix_response_paths.yaml
+2025-06-12 18:40:36,242 - INFO - Creating default config: risk_config.yaml
+2025-06-12 18:40:36,255 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\risk_config.yaml
+2025-06-12 18:40:36,255 - INFO - Validated config file: risk_config.yaml
+2025-06-12 18:40:36,256 - INFO - [SUCCESS] Validating config files completed successfully
+2025-06-12 18:40:36,256 - INFO - 
+--- Testing imports ---
+2025-06-12 18:40:36,377 - INFO - [OK] Critical import successful: numpy
+2025-06-12 18:40:36,392 - INFO - [OK] Critical import successful: scipy
+2025-06-12 18:40:37,209 - INFO - [OK] Critical import successful: pandas
+2025-06-12 18:40:37,209 - INFO - [OK] Critical import successful: yaml
+2025-06-12 18:40:37,209 - INFO - [OK] Critical import successful: pathlib
+2025-06-12 18:40:37,210 - INFO - [OK] Critical import successful: logging
+2025-06-12 18:40:37,210 - INFO - [OK] Critical import successful: datetime
+2025-06-12 18:40:37,210 - INFO - [OK] Critical import successful: typing
+2025-06-12 18:40:37,213 - INFO - [OK] Optional import successful: rich
+2025-06-12 18:40:37,213 - INFO - [OK] Optional import successful: pydantic
+2025-06-12 18:40:37,367 - INFO - [OK] Optional import successful: pytest
+2025-06-12 18:40:37,368 - INFO - [SUCCESS] Testing imports completed successfully
+2025-06-12 18:40:37,368 - INFO - 
+--- Testing config system ---
+2025-06-12 18:40:37,370 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\fractal_core.yaml
+2025-06-12 18:40:37,370 - INFO - [OK] Config loading test passed
+2025-06-12 18:40:37,371 - INFO - [OK] Path standardization test passed
+2025-06-12 18:40:37,475 - INFO - Successfully loaded config: C:\Users\maxde\OneDrive\Documents\config\fractal_core.yaml
+2025-06-12 18:40:37,475 - INFO - Configuration reloaded successfully
+2025-06-12 18:40:37,475 - INFO - Dashboard bridge initialized with config: C:\Users\maxde\OneDrive\Documents\config\fractal_core.yaml
+2025-06-12 18:40:37,476 - INFO - [OK] Dashboard integration test passed
+2025-06-12 18:40:37,476 - INFO - [SUCCESS] Testing config system completed successfully
+2025-06-12 18:40:37,476 - INFO - 
+--- Testing Enhanced Tesseract Processor ---
+2025-06-12 18:40:38,087 - ERROR - Enhanced Tesseract Processor test failed: cannot import name 'ConfigLoader' from 'core.config' (C:\Users\maxde\OneDrive\Documents\core\config\__init__.py)
+2025-06-12 18:40:38,088 - ERROR - [FAILED] Testing Enhanced Tesseract Processor failed
+2025-06-12 18:40:38,088 - INFO - 
+--- Running basic tests ---
+2025-06-12 18:40:38,089 - INFO - Running tests: tests/test_config_loading.py
+2025-06-12 18:40:41,144 - WARNING - [WARN] Some tests failed in tests/test_config_loading.py
+2025-06-12 18:40:41,144 - WARNING - Test output: ============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-8.4.0, pluggy-1.6.0 -- c:\Users\maxde\OneDrive\Documents\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\maxde\OneDrive\Documents
+plugins: asyncio-1.0.0, cov-6.2.1, mock-3.14.1
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 20 items
+
+tests/test_config_loading.py::TestConfigUtils::test_standardize_config_path_relative PASSED [  5%]
+tests/test_config_loading.py::TestConfigUtils::test_standardize_config_path_absolute FAILED [ 10%]
+tests/test_config_loading.py::TestConfigUtils::test_create_default_tesseract_config PASSED [ 15%]
+tests/test_config_loading.py::TestConfigUtils::test_create_default_fractal_config PASSED [ 20%]
+tests/test_config_loading.py::TestConfigUtils::test_merge_configs PASSED [ 25%]
+tests/test_config_loading.py::TestConfigUtils::test_validate_config_structure PASSED [ 30%]
+tests/test_config_loading.py::TestConfigFileOperations::test_save_and_load_yaml_config PASSED [ 35%]
+tests/test_config_loading.py::TestConfigFileOperations::test_load_yaml_config_missing_file_create_default PASSED [ 40%]
+tests/test_config_loading.py::TestConfigFileOperations::test_load_yaml_config_missing_file_no_default FAILED [ 45%]
+tests/test_config_loading.py::TestConfigFileOperations::test_load_yaml_config_invalid_yaml PASSED [ 50%]
+tests/test_config_loading.py::TestEnhancedTesseractProcessor::test_processor_initialization_with_config FAILED [ 55%]
+tests/test_config_loading.py::TestEnhancedTesseractProcessor::test_processor_missing_config_creates_default FAILED [ 60%]
+tests/test_config_loading.py::TestDashboardIntegration::test_dashboard_bridge_initialization PASSED [ 65%]
+tests/test_config_loading.py::TestDashboardIntegration::test_dashboard_status_update PASSED [ 70%]
+tests/test_config_loading.py::TestDashboardIntegration::test_dashboard_export_json PASSED [ 75%]
+tests/test_config_loading.py::TestIntegrationScenarios::test_full_config_loading_chain PASSED [ 80%]
+tests/test_config_loading.py::TestIntegrationScenarios::test_config_validation_with_missing_keys PASSED [ 85%]
+tests/test_config_loading.py::TestIntegrationScenarios::test_config_path_resolution_from_different_locations PASSED [ 90%]
+tests/test_config_loading.py::test_processor_with_temp_config FAILED     [ 95%]
+tests/test_config_loading.py::test_dashboard_with_temp_config PASSED     [100%]
+
+================================== FAILURES ===================================
+____________ TestConfigUtils.test_standardize_config_path_absolute ____________
+
+self = <tests.test_config_loading.TestConfigUtils object at 0x000002AD4CEDC260>
+
+    def test_standardize_config_path_absolute(self):
+        """Test path standardization for absolute paths"""
+        absolute_path = Path("/tmp/test_config.yaml")
+        standardized = standardize_config_path(absolute_path)
+    
+>       assert standardized == absolute_path
+E       AssertionError: assert WindowsPath('C:/tmp/test_config.yaml') == WindowsPath('/tmp/test_config.yaml')
+
+tests\test_config_loading.py:54: AssertionError
+___ TestConfigFileOperations.test_load_yaml_config_missing_file_no_default ____
+
+config_path = WindowsPath('C:/Users/maxde/AppData/Local/Temp/tmpva8cog78/missing_config.yaml')
+create_default = False, schema = None
+
+    def load_yaml_config(config_path: Union[str, Path],
+                        create_default: bool = True,
+                        schema: Optional[Type] = None) -> Dict[str, Any]:
+        """
+        Load YAML configuration with robust error handling and optional schema validation
+    
+        Args:
+            config_path: Path to YAML configuration file
+            create_default: Whether to create default config if missing
+            schema: Optional Pydantic schema class for validation
+    
+        Returns:
+            Dictionary containing configuration data
+    
+        Raises:
+            ConfigNotFoundError: If config file not found and create_default is False
+            ConfigValidationError: If configuration validation fails
+            ConfigError: For other configuration-related errors
+        """
+        standardized_path = standardize_config_path(config_path)
+    
+        try:
+            if not standardized_path.exists():
+                if create_default:
+                    logger.info(f"Config file not found, creating default: {standardized_path}")
+                    create_default_config(standardized_path)
+                else:
+>                   raise ConfigNotFoundError(f"Configuration file not found: {standardized_path}")
+E                   config.config_utils.ConfigNotFoundError: Configuration file not found: C:\Users\maxde\AppData\Local\Temp\tmpva8cog78\missing_config.yaml
+
+config\config_utils.py:95: ConfigNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+self = <tests.test_config_loading.TestConfigFileOperations object at 0x000002AD4CEDCBC0>
+
+    def test_load_yaml_config_missing_file_no_default(self):
+        """Test loading missing YAML file without default creation"""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir) / "missing_config.yaml"
+    
+            with pytest.raises(ConfigNotFoundError):
+>               load_yaml_config(temp_path, create_default=False)
+
+tests\test_config_loading.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config_path = WindowsPath('C:/Users/maxde/AppData/Local/Temp/tmpva8cog78/missing_config.yaml')
+create_default = False, schema = None
+
+    def load_yaml_config(config_path: Union[str, Path],
+                        create_default: bool = True,
+                        schema: Optional[Type] = None) -> Dict[str, Any]:
+        """
+        Load YAML configuration with robust error handling and optional schema validation
+    
+        Args:
+            config_path: Path to YAML configuration file
+            create_default: Whether to create default config if missing
+            schema: Optional Pydantic schema class for validation
+    
+        Returns:
+            Dictionary containing configuration data
+    
+        Raises:
+            ConfigNotFoundError: If config file not found and create_default is False
+            ConfigValidationError: If configuration validation fails
+            ConfigError: For other configuration-related errors
+        """
+        standardized_path = standardize_config_path(config_path)
+    
+        try:
+            if not standardized_path.exists():
+                if create_default:
+                    logger.info(f"Config file not found, creating default: {standardized_path}")
+                    create_default_config(standardized_path)
+                else:
+                    raise ConfigNotFoundError(f"Configuration file not found: {standardized_path}")
+    
+            # Load YAML content
+            with open(standardized_path, 'r', encoding='utf-8') as f:
+                config_data = yaml.safe_load(f)
+    
+            if config_data is None:
+                config_data = {}
+    
+            # Validate with schema if provided and pydantic is available
+            if schema and PYDANTIC_AVAILABLE:
+                try:
+                    validated_config = schema(**config_data)
+                    logger.debug(f"Configuration validated successfully with {schema.__name__}")
+                    return asdict(validated_config) if hasattr(validated_config, '__dict__') else config_data
+                except Exception as e:
+                    raise ConfigValidationError(f"Schema validation failed for {standardized_path}: {e}")
+            elif schema and not PYDANTIC_AVAILABLE:
+                logger.warning("Schema validation requested but Pydantic not available")
+    
+            logger.info(f"Successfully loaded config: {standardized_path}")
+            return config_data
+    
+        except yaml.YAMLError as e:
+            raise ConfigError(f"Error parsing YAML file {standardized_path}: {e}")
+        except FileNotFoundError:
+            raise ConfigNotFoundError(f"Configuration file not found: {standardized_path}")
+        except Exception as e:
+>           raise ConfigError(f"Unexpected error loading config {standardized_path}: {e}")
+E           config.config_utils.ConfigError: Unexpected error loading config C:\Users\maxde\AppData\Local\Temp\tmpva8cog78\missing_config.yaml: Configuration file not found: C:\Users\maxde\AppData\Local\Temp\tmpva8cog78\missing_config.yaml
+
+config\config_utils.py:123: ConfigError
+__ TestEnhancedTesseractProcessor.test_processor_initialization_with_config ___
+
+args = (<tests.test_config_loading.TestEnhancedTesseractProcessor object at 0x000002AD4CEDCEF0>,)
+keywargs = {}
+
+    @wraps(func)
+    def patched(*args, **keywargs):
+>       with self.decoration_helper(patched,
+                                    args,
+                                    keywargs) as (newargs, newkeywargs):
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1393: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1375: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:526: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:513: in resolve_name
+    mod = importlib.import_module(modname)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core\__init__.py:14: in <module>
+    from .basket_swapper import BasketSwapper, SwapCriteria
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """
+    Basket Swapper with SP Core Integration
+    Implements sophisticated basket swapping system with SP Core integration.
+    """
+    
+    from typing import Dict, List, Optional, Any
+    from dataclasses import dataclass
+    from datetime import datetime
+    import numpy as np
+    import logging
+    from pathlib import Path
+>   from core.config import ConfigLoader, ConfigError
+E   ImportError: cannot import name 'ConfigLoader' from 'core.config' (C:\Users\maxde\OneDrive\Documents\core\config\__init__.py)
+
+core\basket_swapper.py:12: ImportError
+_ TestEnhancedTesseractProcessor.test_processor_missing_config_creates_default _
+
+args = (<tests.test_config_loading.TestEnhancedTesseractProcessor object at 0x000002AD4CEDD0A0>,)
+keywargs = {}
+
+    @wraps(func)
+    def patched(*args, **keywargs):
+>       with self.decoration_helper(patched,
+                                    args,
+                                    keywargs) as (newargs, newkeywargs):
+
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1393: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1375: in decoration_helper
+    arg = exit_stack.enter_context(patching)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\contextlib.py:526: in enter_context
+    result = _enter(cm)
+             ^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:513: in resolve_name
+    mod = importlib.import_module(modname)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core\__init__.py:14: in <module>
+    from .basket_swapper import BasketSwapper, SwapCriteria
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """
+    Basket Swapper with SP Core Integration
+    Implements sophisticated basket swapping system with SP Core integration.
+    """
+    
+    from typing import Dict, List, Optional, Any
+    from dataclasses import dataclass
+    from datetime import datetime
+    import numpy as np
+    import logging
+    from pathlib import Path
+>   from core.config import ConfigLoader, ConfigError
+E   ImportError: cannot import name 'ConfigLoader' from 'core.config' (C:\Users\maxde\OneDrive\Documents\core\config\__init__.py)
+
+core\basket_swapper.py:12: ImportError
+_______________________ test_processor_with_temp_config _______________________
+
+temp_config_file = WindowsPath('C:/Users/maxde/AppData/Local/Temp/tmpu1p5_1su.yaml')
+
+    def test_processor_with_temp_config(temp_config_file):
+        """Test processor initialization with temporary config file"""
+>       with patch('core.enhanced_tesseract_processor.QuantumCellularRiskMonitor'), \
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             patch('core.enhanced_tesseract_processor.RiskIndexer'), \
+             patch('core.enhanced_tesseract_processor.ZygotShell'):
+
+tests\test_config_loading.py:414: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\AppData\Local\Programs\Python\Python312\Lib\unittest\mock.py:1451: in __enter__
+    self.target = self.getter()
+                  ^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\pkgutil.py:513: in resolve_name
+    mod = importlib.import_module(modname)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+core\__init__.py:14: in <module>
+    from .basket_swapper import BasketSwapper, SwapCriteria
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """
+    Basket Swapper with SP Core Integration
+    Implements sophisticated basket swapping system with SP Core integration.
+    """
+    
+    from typing import Dict, List, Optional, Any
+    from dataclasses import dataclass
+    from datetime import datetime
+    import numpy as np
+    import logging
+    from pathlib import Path
+>   from core.config import ConfigLoader, ConfigError
+E   ImportError: cannot import name 'ConfigLoader' from 'core.config' (C:\Users\maxde\OneDrive\Documents\core\config\__init__.py)
+
+core\basket_swapper.py:12: ImportError
+=========================== short test summary info ===========================
+FAILED tests/test_config_loading.py::TestConfigUtils::test_standardize_config_path_absolute
+FAILED tests/test_config_loading.py::TestConfigFileOperations::test_load_yaml_config_missing_file_no_default
+FAILED tests/test_config_loading.py::TestEnhancedTesseractProcessor::test_processor_initialization_with_config
+FAILED tests/test_config_loading.py::TestEnhancedTesseractProcessor::test_processor_missing_config_creates_default
+FAILED tests/test_config_loading.py::test_processor_with_temp_config - Import...
+======================== 5 failed, 15 passed in 1.90s =========================
+
+2025-06-12 18:40:41,179 - WARNING - Test errors: 
+2025-06-12 18:40:41,179 - INFO - [SUCCESS] Running basic tests completed successfully
+2025-06-12 18:40:41,181 - INFO - Setup report saved to: C:\Users\maxde\OneDrive\Documents\setup_report.json
+2025-06-12 18:40:41,182 - INFO - 
+============================================================
+2025-06-12 18:40:41,183 - WARNING - SETUP COMPLETED WITH WARNINGS
+2025-06-12 18:40:41,183 - WARNING - Failed steps: Testing Enhanced Tesseract Processor
+2025-06-12 18:40:41,183 - INFO - The system may still be functional, but some features might not work correctly.
+2025-06-12 18:40:41,184 - INFO - ============================================================

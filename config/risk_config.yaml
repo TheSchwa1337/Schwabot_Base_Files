@@ -1,0 +1,14 @@
+monitoring:
+  alert_channels:
+  - log
+  - email
+  check_interval: 60
+  metrics:
+  - total_exposure
+  - portfolio_volatility
+  - current_drawdown
+  - var_95
+risk_limits:
+  max_drawdown: 0.05
+  max_position_size: 0.1
+  var_threshold: 0.02

@@ -19,6 +19,9 @@ from datetime import datetime
 import hashlib
 import json
 import os
+from pathlib import Path
+from core.config_utils import get_profile_params_from_yaml, create_default_fractal_config
+from core.constants import DEFAULT_FRACTAL_PATH
 
 @dataclass
 class QuantizationProfile:
@@ -45,13 +48,22 @@ class FractalState:
 class EnhancedFractalCore:
     """Enhanced implementation of the Forever Fractal mathematical framework"""
     
-    def __init__(self, profile: Optional[QuantizationProfile] = None):
+    def __init__(self, profile: QuantizationProfile = None, config_path: Path = None):
         """Initialize the enhanced fractal core
         
         Args:
             profile: Optional quantization profile
+            config_path: Path to configuration file
         """
-        self.profile = profile or QuantizationProfile()
+        if profile:
+            self.profile = profile
+        else:
+            config_path = config_path or DEFAULT_FRACTAL_PATH
+            if not config_path.exists():
+                create_default_fractal_config(config_path)
+            params = get_profile_params_from_yaml(config_path)
+            self.profile = QuantizationProfile(**params)
+        self.validate_profile()
         self.state_history: List[FractalState] = []
         self.mirror_memory: Dict[Tuple[int], float] = {}
         self.cyclic_patterns: Dict[int, Dict] = {}
@@ -72,6 +84,45 @@ class EnhancedFractalCore:
         self.entropy_slope_history: List[float] = []
         self.harmonic_power_history: List[float] = []
         self.cpu_render_history: List[float] = []
+        
+        # Pattern-detection setup (placeholder — can be tuned in YAML later)
+        self.edge_patterns: Dict[str, Dict[str, Any]] = {
+            "inverse_profit_fork": {
+                "profit_gradient_range": (-0.05, 0.05),
+            },
+            "shadow_pump": {
+                "profit_gradient_range": (0.05, 0.2),
+            },
+            "paradox_spike": {
+                "entropy_gradient_range": (-0.1, 0.1),
+            },
+            "thermal_breakdown": {
+                "thermal_threshold": 0.6,
+            },
+        }
+
+        # Runtime performance metrics for pattern analytics
+        self.performance_metrics: Dict[str, Any] = {
+            "total_detections": 0,
+            "successful_detections": 0,
+            "avg_profit": 0.0,
+            "avg_thermal_cost": 0.0,
+            "pattern_performance": {
+                pattern: {
+                    "count": 0,
+                    "success_rate": 0.0,
+                    "avg_profit": 0.0,
+                    "avg_thermal": 0.0,
+                }
+                for pattern in [*self.edge_patterns]
+            },
+        }
+        
+    def validate_profile(self):
+        if not (0 < self.profile.epsilon_q < 1):
+            raise ValueError("epsilon_q must be in (0, 1)")
+        if self.profile.terms <= 0 or self.profile.dimension <= 0:
+            raise ValueError("terms and dimension must be > 0")
         
     def _initialize_vector_bank(self):
         """Initialize the vector bank with pre-generated lattice points"""

@@ -6,18 +6,24 @@ This module defines the event types and payloads for the Schwabot bus system,
 including pattern matching, node activation, and memory updates.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Union, Tuple
 import numpy as np
 from datetime import datetime
+from pathlib import Path
+import yaml
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from jsonschema import validate
+import pytest
 
 @dataclass
 class BusEvent:
     """Base class for all bus events"""
     event_type: str
     source: str
-    timestamp: datetime
-    payload: Dict[str, Any]
+    timestamp: datetime = field(default_factory=datetime.utcnow)
+    payload: Dict[str, Any] = field(default_factory=dict)
     
     def __post_init__(self):
         if not self.timestamp:
@@ -26,21 +32,11 @@ class BusEvent:
 @dataclass
 class PatternMatchEvent(BusEvent):
     """Event for pattern matches in cyclic analysis"""
-    pattern_hash: str
-    confidence: float
-    vector: np.ndarray
-    
-    def __init__(self, source: str, pattern_hash: str, confidence: float, vector: np.ndarray):
-        super().__init__(
-            event_type="pattern_match",
-            source=source,
-            timestamp=None,
-            payload={
-                "pattern_hash": pattern_hash,
-                "confidence": confidence,
-                "vector": vector.tolist()
-            }
-        )
+    def __init__(self, source: str, **kwargs):
+        super().__init__(source=source)
+        self.pattern_hash = kwargs.get('pattern_hash', None)
+        self.confidence = kwargs.get('confidence', None)
+        self.vector = kwargs.get('vector', None)
 
 @dataclass
 class NodeActivationEvent(BusEvent):
@@ -167,6 +163,51 @@ def create_event(event_type: str, source: str, **kwargs) -> BusEvent:
         
     return EVENT_TYPES[event_type](source=source, **kwargs)
 
+# Centralized Config Loader Utility
+def load_yaml_config(path: Path) -> dict:
+    if not path.exists():
+        raise FileNotFoundError(f"Config not found: {path}")
+    
+    try:
+        with path.open("r") as f:
+            config = yaml.safe_load(f)
+        
+        # Define a JSON schema for the configuration
+        schema = {
+            "type": "object",
+            "properties": {
+                "fractal": {
+                    "type": "object",
+                    "properties": {
+                        "decay_power": {"type": "number"}
+                    },
+                    "required": ["decay_power"]
+                }
+            },
+            "required": ["fractal"]
+        }
+        
+        # Validate the configuration against the schema
+        validate(instance=config, schema=schema)
+        
+        return config
+    except yaml.YAMLError as e:
+        raise ValueError(f"YAML parse error in {path}: {e}")
+
+def create_default_config(path: Path, defaults: dict):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w") as f:
+        yaml.dump(defaults, f)
+
+# Unit Tests for Config Paths
+def test_matrix_config_loads():
+    from core.matrix_fault_resolver import MatrixFaultResolver
+    resolver = MatrixFaultResolver()  # should not crash
+
+def test_invalid_yaml_throws():
+    with pytest.raises(ValueError):
+        load_yaml_config(Path("tests/fixtures/bad_config.yaml"))
+
 # Example usage
 if __name__ == "__main__":
     # Create a BusCore instance
@@ -183,7 +224,8 @@ if __name__ == "__main__":
     source = "cyclic_core"
     payload = {
         "pattern_hash": "abc123",
-        "confidence": 0.95
+        "confidence": 0.95,
+        "vector": np.array([1, 2, 3])  # Example vector
     }
     updated_event = bus_core.update_event_state(event_type, source, timestamp, payload)
     print(f"Updated event state: {updated_event}") 

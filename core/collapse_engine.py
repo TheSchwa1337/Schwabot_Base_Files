@@ -12,6 +12,13 @@ from dataclasses import dataclass
 import numpy as np
 from .cursor_engine import Cursor, CursorState
 from .braid_pattern_engine import BraidPattern, BraidPatternEngine
+import logging
+from pathlib import Path
+import yaml
+
+# Setup logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @dataclass
 class CollapseState:
@@ -24,14 +31,21 @@ class CollapseState:
     metadata: Dict
 
 class CollapseEngine:
-    """Manages truth collapse detection and trade generation"""
-    
-    def __init__(self, loop_threshold: float = 0.01):
-        self.loop_threshold = loop_threshold
+    """
+    Manages collapse states and ghost entry resolution.
+    """
+
+    def __init__(self, config_path=None):
+        self.loop_threshold = 0.01
         self.collapse_history: List[CollapseState] = []
         self.mirror_trade_history: List[Dict] = []
         self.ghost_entry_history: List[Dict] = []
+        self.config = load_matrix_config(config_path)
         
+    @property
+    def matrix_config(self):
+        return self.config
+
     def check_collapse(self, cursor_states: List[CursorState], 
                       pattern: Optional[BraidPattern] = None) -> CollapseState:
         """
@@ -204,20 +218,27 @@ class CollapseEngine:
         self.mirror_trade_history.clear()
         self.ghost_entry_history.clear()
 
-# Example usage
-if __name__ == "__main__":
-    # Initialize collapse engine
+    def resolve_ghost_entries(self, collapse_state: dict) -> None:
+        print(f"Ghost entries: {collapse_state['ghost_entries']}")
+
+def load_matrix_config(config_path=None):
+    if config_path is None:
+        config_path = Path(__file__).resolve().parent.joinpath('config/matrix_response_paths.yaml')
+    
+    try:
+        with open(config_path, 'r') as file:
+            return yaml.safe_load(file)
+    except FileNotFoundError:
+        logger.warning("Config not found; using default fallback.")
+        return {"defaults": True}
+
+def main():
+    collapse_state = {
+        "ghost_entries": ["entry1", "entry2"]
+    }
+
     engine = CollapseEngine()
-    
-    # Test collapse detection
-    test_states = [
-        CursorState(triplet=(0.1, 0.2, 0.3), delta_idx=1, braid_angle=45.0, timestamp=1.0),
-        CursorState(triplet=(0.2, 0.3, 0.4), delta_idx=-1, braid_angle=225.0, timestamp=2.0),
-        CursorState(triplet=(0.3, 0.4, 0.5), delta_idx=1, braid_angle=45.0, timestamp=3.0)
-    ]
-    
-    collapse_state = engine.check_collapse(test_states)
-    print(f"Collapse detected: {collapse_state.is_collapsed}")
-    print(f"Loop sum: {collapse_state.loop_sum}")
-    print(f"Mirror trades: {collapse_state.mirror_trades}")
-    print(f"Ghost entries: {collapse_state.ghost_entries}") 
+    engine.resolve_ghost_entries(collapse_state)
+
+if __name__ == "__main__":
+    main() 

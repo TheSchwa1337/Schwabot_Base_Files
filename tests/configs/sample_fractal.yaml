@@ -1,0 +1,9 @@
+profile:
+  name: test
+  type: quantization
+  parameters:
+    decay_power: 2.0
+    terms: 10
+    dimension: 6
+    epsilon_q: 0.01
+    precision: 0.0005

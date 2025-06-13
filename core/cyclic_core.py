@@ -30,13 +30,20 @@ class CyclicPattern:
     coherence_score: float = 0.0
     is_mirror: bool = False
 
+    def __post_init__(self):
+        self.hash_value = self.generate_pattern_hash(np.array([self.triplet]))
+
 class CyclicCore:
     """Core implementation of cyclic number analysis with fractal integration"""
     
+    COHERENCE_CORRECTION_THRESHOLD = 0.9
+    COHERENCE_CONFIDENCE_BOOST = 0.7
+    
+    MAX_STATES = 128
+    
     def __init__(self):
-        self.decimal_expansion = self._generate_decimal_expansion()
-        self.triplets = self._extract_triplets()
         self.pattern_cache = {}
+        self.fractal_states = []
         
         # Initialize fractal components
         self.fractal_core = ForeverFractalCore(
@@ -49,7 +56,8 @@ class CyclicCore:
             epsilon=0.1,
             min_coherence=0.7
         )
-        self.fractal_states: List[FractalState] = []
+        self.decimal_expansion = self._generate_decimal_expansion()
+        self.triplets = self._extract_triplets()
         
     def _generate_decimal_expansion(self) -> str:
         """Generate the decimal expansion of 1/998001"""
@@ -75,10 +83,8 @@ class CyclicCore:
         Returns:
             Tuple of (is_valid, confidence)
         """
-        # Normalize vector to 3-digit code
-        code = str(int(abs(vector[0]) * 1000)).zfill(3)
+        code = str(round(abs(vector[0]) * 1000)).zfill(3)
         
-        # Generate fractal state
         fractal_vector = self.fractal_core.generate_fractal_vector(
             t=time.time(),
             phase_shift=vector[0]
@@ -90,36 +96,33 @@ class CyclicCore:
             phase=vector[0],
             entropy=abs(vector[0])
         )
-        
-        # Store fractal state
+
+        # 👇 prevent future access errors
+        fractal_state.coherence_score = 0.0
+        fractal_state.is_mirror = False
+
         self.fractal_states.append(fractal_state)
-        
-        # Check for triplet matches
+        if len(self.fractal_states) > self.MAX_STATES:
+            self.fractal_states.pop(0)
+
         if len(self.fractal_states) >= 3:
             recent_states = self.fractal_states[-3:]
             match = self.triplet_matcher.find_matching_triplet(recent_states)
             if match:
                 fractal_state.coherence_score = match.coherence
                 fractal_state.is_mirror = match.is_mirror
-                
-                # Apply fractal correction if needed
-                if match.coherence > 0.9:
+                if match.coherence > self.COHERENCE_CORRECTION_THRESHOLD:
                     self._apply_fractal_correction(match)
-        
-        # Check if code exists in triplets
+
         is_valid = code in self.triplets
-        
-        # Calculate confidence based on position in sequence
+        confidence = 0.0
+
         if is_valid:
             position = self.triplets.index(code)
             confidence = 1.0 - (position / len(self.triplets))
-            
-            # Adjust confidence based on fractal coherence
-            if fractal_state.coherence_score > 0.7:
-                confidence *= (1.0 + fractal_state.coherence_score)
-        else:
-            confidence = 0.0
-            
+            if fractal_state.coherence_score > self.COHERENCE_CORRECTION_THRESHOLD:
+                confidence *= (1.0 + self.COHERENCE_CONFIDENCE_BOOST)
+
         return is_valid, confidence
     
     def _apply_fractal_correction(self, match: TripletMatch) -> None:
@@ -178,20 +181,14 @@ class CyclicCore:
         Returns:
             Hash string
         """
-        # Combine vector with its position in sequence
-        code = str(int(abs(vector[0]) * 1000)).zfill(3)
-        if code in self.triplets:
-            position = self.triplets.index(code)
-            data = f"{code}:{position}"
-        else:
-            data = f"{code}:missing"
-            
-        # Add fractal state to hash
+        code = str(round(abs(vector[0]) * 1000)).zfill(3)
+        base = f"{code}:{self.triplets.index(code) if code in self.triplets else 'NA'}"
+        
         if self.fractal_states:
-            fractal_state = self.fractal_states[-1]
-            data += f":{fractal_state.coherence_score}:{fractal_state.is_mirror}"
-            
-        return hashlib.sha256(data.encode()).hexdigest()
+            last = self.fractal_states[-1]
+            base += f":{last.coherence_score:.4f}:{int(last.is_mirror)}"
+    
+        return hashlib.sha256(base.encode()).hexdigest()
     
     def match_pattern(self, vector: np.ndarray) -> Optional[CyclicPattern]:
         """
@@ -310,4 +307,21 @@ if __name__ == "__main__":
     metrics = core.get_fractal_metrics()
     print("\nFractal Metrics:")
     for key, value in metrics.items():
-        print(f"  {key}: {value}") 
+        print(f"  {key}: {value}")
+
+# Example usage of CyclicPattern
+pattern_obj = CyclicPattern(
+    triplet="123",
+    position=0,
+    confidence=0.95,
+    fractal_state=FractalState(
+        vector=np.array([0.998]),
+        timestamp=time.time(),
+        phase=0.998,
+        entropy=abs(0.998)
+    ),
+    coherence_score=0.98,
+    is_mirror=False
+)
+
+core.pattern_cache[pattern_obj.hash_value] = pattern_obj 

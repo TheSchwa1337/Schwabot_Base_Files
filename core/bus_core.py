@@ -10,11 +10,28 @@ from typing import Dict, List, Optional, Callable, Any, Tuple
 from dataclasses import dataclass
 import numpy as np
 from datetime import datetime
+from pathlib import Path
+import yaml
 from .cursor_engine import Cursor, CursorState
 from .braid_pattern_engine import BraidPattern, BraidPatternEngine
 from .fractal_core import ForeverFractalCore, FractalState
 from .triplet_matcher import TripletMatcher, TripletMatch
 from .cooldown_manager import CooldownManager, CooldownScope, FractalCooldownState
+
+# Logging Configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# YAML Configuration for logging and other settings
+config_path = Path("config.yaml")
+if config_path.exists():
+    with config_path.open("r") as file:
+        config = yaml.safe_load(file)
+else:
+    config = {
+        "log_level": "INFO",
+        "log_format": "%(asctime)s - %(levelname)s - %(message)s"
+    }
+logging.basicConfig(level=config["log_level"], format=config["log_format"])
 
 @dataclass
 class BusEvent:
@@ -27,7 +44,7 @@ class BusEvent:
 class BusCore:
     """Core event bus implementation with fractal integration"""
     
-    def __init__(self):
+    def __init__(self, log_path: Optional[Path] = None):
         self.cursor = Cursor()
         self.pattern_engine = BraidPatternEngine()
         self.handlers: Dict[str, List[Callable]] = {}
@@ -46,6 +63,10 @@ class BusCore:
         )
         self.cooldown_manager = CooldownManager([])
         
+        self.log_path = log_path or Path("logs/fractal_corrections.json")
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        self.log_path.touch(exist_ok=True)
+        
     def register_handler(self, event_type: str, handler: Callable):
         """Register a handler for a specific event type"""
         if event_type not in self.handlers:
@@ -54,97 +75,119 @@ class BusCore:
         
     def dispatch_event(self, event: BusEvent):
         """Dispatch an event to registered handlers with fractal state"""
-        self.event_history.append(event)
-        
-        # Generate fractal state if not provided
-        if event.fractal_state is None:
-            fractal_vector = self.fractal_core.generate_fractal_vector(
-                t=event.timestamp,
-                phase_shift=event.data.get('phase_angle', 0.0)
-            )
-            event.fractal_state = FractalCooldownState(
-                vector=fractal_vector,
-                phase=event.data.get('phase_angle', 0.0),
-                entropy=event.data.get('entropy', 0.0),
-                timestamp=event.timestamp
-            )
-        
-        # Check for triplet matches
-        if len(self.event_history) >= 3:
-            recent_events = self.event_history[-3:]
-            recent_states = [e.fractal_state for e in recent_events]
-            match = self.triplet_matcher.find_matching_triplet(recent_states)
-            if match:
-                event.fractal_state.coherence_score = match.coherence
-                event.fractal_state.is_mirror = match.is_mirror
+        try:
+            logging.info(f"Dispatching event: {event.type}")
+            self.event_history.append(event)
+            
+            # Generate fractal state if not provided
+            if event.fractal_state is None:
+                fractal_vector = self.fractal_core.generate_fractal_vector(
+                    t=event.timestamp,
+                    phase_shift=event.data.get('phase_angle', 0.0) if isinstance(event.data, dict) else 0.0
+                )
+                event.fractal_state = FractalCooldownState(
+                    vector=fractal_vector,
+                    phase=event.data.get('phase_angle', 0.0),
+                    entropy=event.data.get('entropy', 0.0),
+                    timestamp=event.timestamp
+                )
+            
+            # Check for triplet matches
+            if len(self.event_history) >= 3:
+                recent_events = self.event_history[-3:]
+                recent_states = [e.fractal_state for e in recent_events]
+                match = self.triplet_matcher.find_matching_triplet(recent_states)
+                if match:
+                    event.fractal_state.coherence_score = match.coherence
+                    event.fractal_state.is_mirror = match.is_mirror
+                    
+                    # Apply fractal correction if needed
+                    if match.coherence > 0.9:
+                        self._apply_fractal_correction(event, match)
+            
+            # Register with cooldown manager
+            self.cooldown_manager.register_event(event.type, event.data)
+            
+            # Dispatch to handlers
+            if event.type in self.handlers:
+                for handler in self.handlers[event.type]:
+                    handler(event)
                 
-                # Apply fractal correction if needed
-                if match.coherence > 0.9:
-                    self._apply_fractal_correction(event, match)
-        
-        # Register with cooldown manager
-        self.cooldown_manager.register_event(event.type, event.data)
-        
-        # Dispatch to handlers
-        if event.type in self.handlers:
-            for handler in self.handlers[event.type]:
-                handler(event)
+        except Exception as e:
+            logging.error(f"Error dispatching event: {event.type}. Error: {e}")
                 
     def _apply_fractal_correction(self, event: BusEvent, match: TripletMatch) -> None:
         """Apply fractal-based correction to event state"""
-        # Get correction vector
-        correction = self.fractal_core.compute_correction_vector(match.states)
-        
-        # Update event state
-        event.fractal_state.vector = correction
-        
-        # Dispatch correction event
-        self.dispatch_event(BusEvent(
-            type="fractal_correction",
-            data={
-                "original_vector": event.fractal_state.vector,
-                "corrected_vector": correction,
-                "coherence": match.coherence
-            },
-            timestamp=event.timestamp,
-            fractal_state=event.fractal_state
-        ))
+        try:
+            correction = self.fractal_core.compute_correction_vector(match.states)
+            original_vector = event.fractal_state.vector.copy()
+            event.fractal_state.vector = correction
+            
+            correction_event = BusEvent(
+                type="fractal_correction",
+                data={
+                    "original_vector": original_vector,
+                    "corrected_vector": correction,
+                    "coherence": match.coherence
+                },
+                timestamp=event.timestamp,
+                fractal_state=event.fractal_state
+            )
+            self.dispatch_event(correction_event)
+            
+            with self.log_path.open("a") as log_file:
+                log_entry = {
+                    "timestamp": event.timestamp,
+                    "event_type": event.type,
+                    "original_vector": original_vector,
+                    "corrected_vector": correction,
+                    "coherence": match.coherence
+                }
+                log_file.write(f"{yaml.dump(log_entry)}\n")
+                
+        except Exception as e:
+            logging.error(f"Error applying fractal correction: {e}")
                 
     def process_tick(self, triplet: tuple, timestamp: float):
         """Process a new tick through the cursor and pattern engine with fractal state"""
-        # Process through cursor
-        pattern = self.cursor.tick(triplet, timestamp)
-        
-        # Generate fractal state
-        fractal_vector = self.fractal_core.generate_fractal_vector(
-            t=timestamp,
-            phase_shift=pattern.phase if pattern else 0.0
-        )
-        
-        fractal_state = FractalCooldownState(
-            vector=fractal_vector,
-            phase=pattern.phase if pattern else 0.0,
-            entropy=pattern.entropy if pattern else 0.0,
-            timestamp=timestamp
-        )
-        
-        # Dispatch cursor state event
-        self.dispatch_event(BusEvent(
-            type="cursor_state",
-            data=self.cursor.state,
-            timestamp=timestamp,
-            fractal_state=fractal_state
-        ))
-        
-        # If pattern detected, dispatch pattern event
-        if pattern:
+        try:
+            logging.info(f"Processing tick: {triplet} at {timestamp}")
+            # Process through cursor
+            pattern = self.cursor.tick(triplet, timestamp)
+            
+            # Generate fractal state
+            fractal_vector = self.fractal_core.generate_fractal_vector(
+                t=timestamp,
+                phase_shift=pattern.phase if pattern else 0.0
+            )
+            
+            fractal_state = FractalCooldownState(
+                vector=fractal_vector,
+                phase=pattern.phase if pattern else 0.0,
+                entropy=pattern.entropy if pattern else 0.0,
+                timestamp=timestamp
+            )
+            
+            # Dispatch cursor state event
             self.dispatch_event(BusEvent(
-                type="braid_pattern",
-                data=pattern,
+                type="cursor_state",
+                data=self.cursor.state,
                 timestamp=timestamp,
                 fractal_state=fractal_state
             ))
             
+            # If pattern detected, dispatch pattern event
+            if pattern:
+                self.dispatch_event(BusEvent(
+                    type="braid_pattern",
+                    data=pattern,
+                    timestamp=timestamp,
+                    fractal_state=fractal_state
+                ))
+                
+        except Exception as e:
+            logging.error(f"Error processing tick: {e}")
+        
     def get_cursor_state(self) -> Optional[CursorState]:
         """Get current cursor state"""
         return self.cursor.state
