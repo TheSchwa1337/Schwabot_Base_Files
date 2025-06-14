@@ -11,6 +11,8 @@ import cupy as cp
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 import logging
+import yaml
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -27,8 +29,10 @@ class MetricTensors:
 class GPUMetrics:
     """GPU-accelerated metric calculations"""
     
-    def __init__(self, window_size: int = 1000):
+    def __init__(self, window_size: int = 20, hist_bins: int = 100, trust_weights: Tuple[float, float, float] = (0.45, 0.35, 0.2)):
         self.window_size = window_size
+        self.hist_bins = hist_bins
+        self.trust_weights = trust_weights
         self.tensors = None
         self._initialize_tensors()
         
@@ -43,23 +47,27 @@ class GPUMetrics:
             bit_depths=cp.zeros(self.window_size, dtype=cp.int32)
         )
         
-    def update(self, price: float, volume: float, bit_depth: int):
+    def _roll(self, tensor):
+        tensor[:] = cp.roll(tensor, -1, axis=0)
+        
+    def _fetch(self, x):
+        return x.get() if hasattr(x, 'get') else x
+
+    def update(self, price: Optional[float] = None, volume: Optional[float] = None, bit_depth: Optional[int] = None):
+        self._update(price, volume, bit_depth)
+        
+    def _update(self, price=None, volume=None, bit_depth=None):
         """Update metric tensors with new data"""
-        # Shift all tensors left
-        for tensor in [
-            self.tensors.price_history,
-            self.tensors.volume_history,
-            self.tensors.entropy_history,
-            self.tensors.drift_vectors,
-            self.tensors.trust_scores,
-            self.tensors.bit_depths
-        ]:
-            cp.roll(tensor, -1, axis=0)
-            
-        # Update with new values
-        self.tensors.price_history[-1] = price
-        self.tensors.volume_history[-1] = volume
-        self.tensors.bit_depths[-1] = bit_depth
+        # Apply roll first
+        if price is not None:
+            self._roll(self.tensors.price_history)
+            self.tensors.price_history[-1] = price
+        if volume is not None:
+            self._roll(self.tensors.volume_history)
+            self.tensors.volume_history[-1] = volume
+        if bit_depth is not None:
+            self._roll(self.tensors.bit_depths)
+            self.tensors.bit_depths[-1] = bit_depth
         
         # Recalculate derived metrics
         self._update_entropy()
@@ -72,7 +80,8 @@ class GPUMetrics:
         price_changes = cp.diff(self.tensors.price_history)
         
         # Calculate probability distribution
-        hist, _ = cp.histogram(price_changes, bins=50, density=True)
+        hist_bins = self.hist_bins
+        hist, _ = cp.histogram(price_changes, bins=hist_bins, density=True)
         hist = cp.clip(hist, 1e-10, None)  # Avoid log(0)
         
         # Calculate entropy
@@ -104,27 +113,24 @@ class GPUMetrics:
         volatility = cp.std(returns)
         
         # Calculate volume stability
-        volume_stability = 1.0 / (1.0 + cp.std(self.tensors.volume_history))
+        vol_stab = 1.0 / (1.0 + cp.std(self.tensors.volume_history))
         
         # Calculate entropy stability
-        entropy_stability = 1.0 / (1.0 + cp.std(self.tensors.entropy_history))
+        ent_stab = 1.0 / (1.0 + cp.std(self.tensors.entropy_history))
         
         # Combine into trust score
-        self.tensors.trust_scores[-1] = (
-            0.4 * (1.0 / (1.0 + volatility)) +
-            0.3 * volume_stability +
-            0.3 * entropy_stability
-        )
+        w1, w2, w3 = self.trust_weights
+        trust = w1 * (1.0 / (1.0 + volatility)) + w2 * vol_stab + w3 * ent_stab
+        self._roll(self.tensors.trust_scores)
+        self.tensors.trust_scores[-1] = trust
         
     def get_metrics(self) -> Dict[str, float]:
         """Get current metric values"""
         return {
-            'entropy_rate': float(self.tensors.entropy_history[-1]),
-            'drift_vector': self.tensors.drift_vectors[-1].get().tolist(),
-            'trust_score': float(self.tensors.trust_scores[-1]),
-            'volatility': float(cp.std(cp.diff(cp.log(self.tensors.price_history)))),
-            'volume_stability': float(1.0 / (1.0 + cp.std(self.tensors.volume_history))),
-            'entropy_stability': float(1.0 / (1.0 + cp.std(self.tensors.entropy_history)))
+            'entropy': float(self.tensors.entropy_history[-1]),
+            'drift': self._fetch(self.tensors.drift_vectors[-1]),
+            'trust': float(self.tensors.trust_scores[-1]),
+            'volatility': float(cp.std(cp.diff(cp.log(self.tensors.price_history))))
         }
         
     def compare_tensors(self, other: 'GPUMetrics') -> float:
@@ -157,4 +163,44 @@ class GPUMetrics:
     def get_trust_trend(self, window: int = 20) -> float:
         """Calculate trend in trust scores"""
         trust_scores = self.tensors.trust_scores[-window:]
-        return float(cp.polyfit(cp.arange(window), trust_scores, 1)[0]) 
+        if cp.count_nonzero(trust_scores) < 2:
+            return 0.0
+        trust_scores_cpu = cp.asnumpy(trust_scores)
+        trend = np.polyfit(np.arange(len(trust_scores_cpu)), trust_scores_cpu, 1)[0]
+        return float(trend)
+
+    def _on_price_tick(self, data):
+        price     = data['price']
+        bit_depth = data.get('bit_depth',0)
+        self._update(price=price, volume=None, bit_depth=bit_depth)
+
+    def _on_volume_tick(self, data):
+        volume = data['volume']
+        self._update(price=None, volume=volume, bit_depth=None)
+
+    def save_state(self, name):
+        """Save the current state of the metrics."""
+        state = {k: v.tolist() for k, v in self.tensors.__dict__.items()}
+        with open(f'{name}.json', 'w') as file:
+            json.dump(state, file)
+
+    def load_state(self, name):
+        """Load the state from a saved JSON file."""
+        with open(f'{name}.json', 'r') as file:
+            state = json.load(file)
+        for key, value in state.items():
+            arr = cp.asarray(value)
+            self.tensors.__dict__[key][-len(arr):] = arr
+
+    def __repr__(self):
+        return f"GPUMetrics(price_history={self._fetch(self.tensors.price_history)}, volume_history={self._fetch(self.tensors.volume_history)}, entropy_history={self._fetch(self.tensors.entropy_history)}, drift_vectors={self._fetch(self.tensors.drift_vectors)}, trust_scores={self._fetch(self.tensors.trust_scores)}, bit_depths={self._fetch(self.tensors.bit_depths)})"
+
+# Example usage
+save_state('gpu_metrics', {
+    'price_history': _fetch(self.tensors.price_history),
+    'volume_history': _fetch(self.tensors.volume_history),
+    'entropy_history': _fetch(self.tensors.entropy_history),
+    'drift_vectors': _fetch(self.tensors.drift_vectors),
+    'trust_scores': _fetch(self.tensors.trust_scores),
+    'bit_depths': _fetch(self.tensors.bit_depths)
+}) 

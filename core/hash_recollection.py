@@ -5,24 +5,33 @@ Manages hash-based pattern recognition and memory optimization.
 
 import logging
 import threading
-from queue import Queue
+from queue import Queue, Full, Empty
 from collections import deque
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass
 from datetime import datetime
 import numpy as np
 import yaml
 from pathlib import Path
+import hashlib
+import time
+
+# Import the modular components
+from .entropy_tracker import EntropyTracker, EntropyState
+from .bit_operations import BitOperations, PhaseState
+from .pattern_utils import PatternUtils, PatternMatch
+from .strange_loop_detector import StrangeLoopDetector, EchoPattern
+from .risk_engine import RiskEngine, PositionSignal
 
 try:
     import cupy as cp
     CUPY_AVAILABLE = True
 except ImportError:
     CUPY_AVAILABLE = False
-
-from .bit_operations import BitOperations
+    cp = None
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class HashEntry:
@@ -35,21 +44,26 @@ class HashEntry:
     profit_history: float  # 4 bytes
     bit_pattern: int  # 8 bytes (42-bit float representation)
     tier: int  # 4 bytes
-    reserved: bytes  # 20 bytes padding
-    # Total: 64 bytes = 1 cache line
+    state: Optional[EntropyState] = None
+    
+    def update(self):
+        """Update entry with new occurrence."""
+        self.frequency += 1
+        self.timestamp = int(time.time())
+    
+    def get_entropy_vector(self) -> Optional[np.ndarray]:
+        """Get entropy vector from state."""
+        if self.state:
+            return np.array([
+                self.state.price_entropy,
+                self.state.volume_entropy,
+                self.state.time_entropy
+            ])
+        return None
 
-@dataclass
-class EntropyState:
-    """3-dimensional entropy vector for tetragram encoding"""
-    price_entropy: float
-    volume_entropy: float
-    time_entropy: float
-    timestamp: float
-    bit_pattern: Optional[int] = None
-    tier: Optional[int] = None
 
 class HashRecollectionSystem:
-    """Manages hash-based pattern recognition"""
+    """Manages hash-based pattern recognition with modular components"""
     
     def __init__(self, config_path: Optional[str] = None):
         """Initialize the hash recollection system.
@@ -58,46 +72,96 @@ class HashRecollectionSystem:
             config_path: Optional path to configuration file
         """
         # Load configuration
-        try:
-            if config_path:
-                with open(config_path, 'r') as f:
-                    self.config = yaml.safe_load(f)
-            else:
-                self.config = {}
-            logger.info("Hash recollection system initialized with configuration")
-        except Exception as e:
-            logger.error(f"Failed to load hash recollection config: {e}")
-            self.config = {}
-            
+        self.config = self._load_config(config_path)
+        
+        # Initialize modular components
+        self.entropy_tracker = EntropyTracker(maxlen=self.config.get('history_length', 1000))
+        self.bit_operations = BitOperations()
+        self.pattern_utils = PatternUtils(self.config.get('patterns', {}))
+        self.strange_loop_detector = StrangeLoopDetector()
+        self.risk_engine = RiskEngine(
+            max_position_size=self.config.get('max_position_size', 0.25)
+        )
+        
         # Initialize state
         self.gpu_enabled = self._check_gpu()
         self.hash_database: Dict[int, HashEntry] = {}
-        self.entropy_history = deque(maxlen=1000)
-        self.profit_history = deque(maxlen=1000)
         
-        # Initialize bit operations
-        self.bit_ops = BitOperations()
-        
-        # GPU buffers if enabled
-        if self.gpu_enabled:
-            self.gpu_hash_buffer = cp.zeros((1000,), dtype=cp.uint64)
-            self.gpu_entropy_buffer = cp.zeros((1000, 3), dtype=cp.float32)
-            self.gpu_bit_buffer = cp.zeros((1000,), dtype=cp.uint64)
-        
-        # Thread-safe queues for GPU-CPU communication
-        self.hash_queue = Queue(maxsize=10000)
-        self.result_queue = Queue(maxsize=10000)
+        # Thread-safe queues for GPU-CPU communication with back-pressure handling
+        queue_size = self.config.get('queue_size', 10000)
+        self.hash_queue = Queue(maxsize=queue_size)
+        self.result_queue = Queue(maxsize=queue_size)
         
         # Initialize worker threads
         self.running = False
-        self.gpu_thread = None
-        self.cpu_thread = None
+        self.gpu_worker = None
+        self.cpu_worker = None
         
-        # Tetragram matrix (81 states)
-        self.tetragram_matrix = np.zeros((3, 3, 3, 3), dtype=np.float32)
+        # Tetragram matrix (3x3x3 for 3D entropy) - FIXED: correct dimensions
+        self.tetragram_matrix = np.zeros((3, 3, 3), dtype=np.float32)
+        
+        # Performance tracking
+        self.tick_count = 0
+        self.pattern_matches = 0
+        self.last_price = 0.0
+        self.current_price = 0.0
+        self.dropped_ticks = 0  # Track back-pressure events
+        
+        # Signal callbacks
+        self.signal_callbacks: List[Callable] = []
+        
+        # Latency tracking for compensation
+        self.latency_measurements = deque(maxlen=100)
+        self.avg_latency = 0.0
+        
+        # Start time for system reporting
+        self._start_time = time.time()
+        
+        logger.info("Hash recollection system initialized")
+
+    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
+        """Load configuration from file or use defaults."""
+        default_config = {
+            'sync_interval': 100,
+            'history_length': 1000,
+            'gpu_enabled': True,
+            'gpu_batch_size': 1000,
+            'queue_size': 10000,
+            'max_position_size': 0.25,
+            'patterns': {
+                'density_entry': 0.57,
+                'density_exit': 0.42,
+                'variance_entry': 0.002,
+                'variance_exit': 0.007,
+                'confidence_min': 0.7,
+                'pattern_strength_min': 0.7
+            },
+            'strange_loop': {
+                'echo_threshold': 0.1,
+                'history_length': 10000
+            }
+        }
+        
+        if config_path and Path(config_path).exists():
+            try:
+                with open(config_path, 'r') as file:
+                    loaded_config = yaml.safe_load(file) or {}
+                # Merge with defaults
+                for key, value in loaded_config.items():
+                    if isinstance(value, dict) and key in default_config:
+                        default_config[key].update(value)
+                    else:
+                        default_config[key] = value
+                logger.info(f"Configuration loaded from: {config_path}")
+            except Exception as e:
+                logger.error(f"Failed to load config: {e}, using defaults")
+        
+        return default_config
 
     def _check_gpu(self) -> bool:
         """Check if GPU is available and initialize CuPy"""
+        if not CUPY_AVAILABLE:
+            return False
         try:
             cp.array([1])
             return True
@@ -107,51 +171,130 @@ class HashRecollectionSystem:
     def start(self):
         """Start the hash recollection system"""
         self.running = True
+        self._start_time = time.time()
         
-        # Start GPU worker thread
+        # Start worker threads
         if self.gpu_enabled:
-            self.gpu_thread = threading.Thread(target=self._gpu_worker)
-            self.gpu_thread.start()
+            self.gpu_worker = threading.Thread(target=self._gpu_worker, daemon=True)
+            self.gpu_worker.start()
         
-        # Start CPU worker thread
-        self.cpu_thread = threading.Thread(target=self._cpu_worker)
-        self.cpu_thread.start()
+        self.cpu_worker = threading.Thread(target=self._cpu_worker, daemon=True)
+        self.cpu_worker.start()
         
         logger.info("Hash recollection system started")
 
     def stop(self):
         """Stop the hash recollection system"""
         self.running = False
-        if self.gpu_thread:
-            self.gpu_thread.join()
-        if self.cpu_thread:
-            self.cpu_thread.join()
+        
+        # Signal workers to stop
+        try:
+            self.hash_queue.put(None, timeout=1.0)  # Poison pill
+            self.result_queue.put(None, timeout=1.0)
+        except Full:
+            logger.warning("Could not send poison pill - queues full")
+        
+        # Wait for workers to finish
+        if self.gpu_worker and self.gpu_worker.is_alive():
+            self.gpu_worker.join(timeout=5)
+        if self.cpu_worker and self.cpu_worker.is_alive():
+            self.cpu_worker.join(timeout=5)
+        
         logger.info("Hash recollection system stopped")
 
     def _gpu_worker(self):
         """GPU worker thread for parallel hash computation"""
+        batch_size = self.config.get('gpu_batch_size', 1000)
+        
         while self.running:
             try:
                 # Get batch of entropy states
                 batch = []
-                while len(batch) < 1000 and not self.hash_queue.empty():
-                    batch.append(self.hash_queue.get_nowait())
+                for _ in range(batch_size):
+                    try:
+                        item = self.hash_queue.get_nowait()
+                        if item is None:  # Poison pill
+                            return
+                        batch.append(item)
+                    except Empty:
+                        break
                 
                 if not batch:
+                    time.sleep(0.01)
                     continue
                 
-                # Convert to GPU arrays
-                entropy_array = cp.array([s.price_entropy for s in batch], dtype=cp.float32)
+                # Process batch on GPU or fallback to CPU
+                if self.gpu_enabled and CUPY_AVAILABLE:
+                    results = self._gpu_compute_hashes(batch)
+                else:
+                    results = self._cpu_compute_batch(batch)
                 
-                # Compute hashes in parallel
-                hash_array = self._gpu_compute_hashes(entropy_array)
-                
-                # Send results back to CPU
-                for i, hash_value in enumerate(hash_array):
-                    self.result_queue.put((batch[i], int(hash_value)))
+                # Send results to CPU worker with back-pressure handling
+                for result in results:
+                    try:
+                        self.result_queue.put(result, timeout=0.1)
+                    except Full:
+                        logger.warning("Result queue full, dropping hash result")
+                        break
                 
             except Exception as e:
                 logger.error(f"GPU worker error: {e}")
+                time.sleep(0.1)
+
+    def _gpu_compute_hashes(self, batch: List[EntropyState]) -> List:
+        """
+        Compute SHA-256 hashes in parallel on GPU.
+        
+        Note: This is currently a CPU fallback. In production, this would use:
+        - Custom CUDA kernel for SHA-256
+        - CuPy-accelerated hash library
+        - Or a hybrid CPU-GPU approach for hash verification
+        """
+        results = []
+        
+        if not CUPY_AVAILABLE:
+            return self._cpu_compute_batch(batch)
+        
+        try:
+            # Convert entropy states to GPU arrays for processing
+            entropy_arrays = []
+            for state in batch:
+                entropy_vec = cp.array([state.price_entropy, state.volume_entropy, state.time_entropy])
+                entropy_arrays.append(entropy_vec)
+            
+            # Process in parallel on GPU
+            for i, state in enumerate(batch):
+                # For now, fall back to CPU for actual SHA-256
+                # In production: implement custom CUDA SHA-256 kernel
+                entropy_str = f"{state.price_entropy:.6f}{state.volume_entropy:.6f}{state.time_entropy:.6f}"
+                hash_value = int(hashlib.sha256(entropy_str.encode()).hexdigest()[:16], 16)
+                
+                # Calculate bit pattern on GPU
+                bit_pattern = self.bit_operations.calculate_42bit_float(state.price_entropy)
+                
+                results.append((state, hash_value, bit_pattern))
+            
+            # Synchronize GPU
+            if CUPY_AVAILABLE:
+                cp.cuda.Stream.null.synchronize()
+                
+        except Exception as e:
+            logger.error(f"GPU computation error: {e}, falling back to CPU")
+            return self._cpu_compute_batch(batch)
+        
+        return results
+
+    def _cpu_compute_batch(self, batch: List[EntropyState]) -> List:
+        """CPU fallback for hash computation"""
+        results = []
+        
+        for state in batch:
+            entropy_str = f"{state.price_entropy:.6f}{state.volume_entropy:.6f}{state.time_entropy:.6f}"
+            hash_value = int(hashlib.sha256(entropy_str.encode()).hexdigest()[:16], 16)
+            bit_pattern = self.bit_operations.calculate_42bit_float(state.price_entropy)
+            results.append((state, hash_value, bit_pattern))
+        
+        return results
 
     def _cpu_worker(self):
         """CPU worker thread for pattern recognition and strategy execution"""
@@ -160,278 +303,308 @@ class HashRecollectionSystem:
         while self.running:
             try:
                 # Process results from GPU
-                while not self.result_queue.empty():
-                    entropy_state, hash_value = self.result_queue.get_nowait()
-                    self._process_hash_result(entropy_state, hash_value)
+                result = self.result_queue.get(timeout=1.0)
+                if result is None:  # Poison pill
+                    break
                 
-                # Synchronize with GPU periodically
+                processing_start = time.time()
+                self._process_hash_result(result)
+                processing_time = time.time() - processing_start
+                
+                # Track latency for compensation
+                self.latency_measurements.append(processing_time * 1000)  # Convert to ms
+                self.avg_latency = np.mean(self.latency_measurements)
+                
+                # Synchronize periodically
                 tick_counter += 1
                 if tick_counter % self.config.get('sync_interval', 100) == 0:
                     self._synchronize_gpu_cpu()
                 
+            except Empty:
+                continue
             except Exception as e:
                 logger.error(f"CPU worker error: {e}")
 
-    def _gpu_compute_hashes(self, entropy_array: cp.ndarray) -> cp.ndarray:
-        """Compute SHA-256 hashes in parallel on GPU"""
-        # Convert entropy values to bytes
-        entropy_bytes = cp.asarray([str(x).encode() for x in entropy_array])
-        
-        # Compute SHA-256 hashes
-        hash_array = cp.zeros_like(entropy_array, dtype=cp.uint64)
-        
-        # GPU kernel for parallel hash computation
-        kernel = cp.RawKernel(r'''
-        extern "C" __global__
-        void compute_hashes(const float* entropy, uint64_t* hashes, int n) {
-            int idx = blockIdx.x * blockDim.x + threadIdx.x;
-            if (idx < n) {
-                // Convert entropy to hash (simplified for example)
-                hashes[idx] = (uint64_t)(entropy[idx] * 1e9);
-            }
-        }
-        ''', 'compute_hashes')
-        
-        # Launch kernel
-        block_size = 256
-        grid_size = (entropy_array.size + block_size - 1) // block_size
-        kernel((grid_size,), (block_size,), (entropy_array, hash_array, entropy_array.size))
-        
-        return hash_array
-
-    def _process_hash_result(self, entropy_state: EntropyState, hash_value: int):
+    def _process_hash_result(self, result):
         """Process hash result and update pattern recognition"""
-        # Calculate 42-bit float representation
-        bit_pattern = self.bit_ops.calculate_42bit_float(entropy_state.price_entropy)
-        tier = self.bit_ops.get_profit_tier(bit_pattern)
+        entropy_state, hash_value, bit_pattern = result
         
-        # Update entropy state
+        # Update entropy state with bit pattern
         entropy_state.bit_pattern = bit_pattern
-        entropy_state.tier = tier
+        
+        # Analyze bit pattern
+        pattern_analysis = self.bit_operations.analyze_bit_pattern(bit_pattern)
+        entropy_state.tier = pattern_analysis['tier']
+        
+        # Check for strange loops BEFORE updating database
+        echo_pattern = self.strange_loop_detector.process_hash(hash_value, entropy_state)
+        if echo_pattern and echo_pattern.pattern_type == 'strange_loop':
+            # Handle strange loop - reduce confidence or skip processing
+            pattern_analysis['pattern_strength'] *= 0.5
+            logger.warning(f"Strange loop detected, reducing pattern strength for hash {hash_value}")
+        
+        # Check if this hash should break a loop
+        if self.strange_loop_detector.should_break_loop(hash_value):
+            logger.info(f"Breaking loop for hash {hash_value}")
+            self.strange_loop_detector.clear_loop_breaker(hash_value)
+            return  # Skip processing to break the loop
         
         # Update hash database
+        self._update_hash_database(hash_value, entropy_state, pattern_analysis)
+        
+        # Update tetragram matrix (FIXED: correct matrix update)
+        self._update_tetragram_matrix(entropy_state)
+        
+        # Check for pattern matches
+        self._check_pattern_matches(hash_value, entropy_state, pattern_analysis)
+
+    def _update_hash_database(self, hash_value: int, entropy_state: EntropyState, pattern_analysis: Dict):
+        """Update hash database with new entry or increment frequency"""
         if hash_value in self.hash_database:
             entry = self.hash_database[hash_value]
-            entry.frequency += 1
-            entry.timestamp = int(datetime.now().timestamp())
-            entry.bit_pattern = bit_pattern
-            entry.tier = tier
+            entry.update()
+            entry.bit_pattern = entropy_state.bit_pattern
+            entry.tier = entropy_state.tier
+            entry.state = entropy_state  # FIXED: Ensure entropy state is stored
         else:
             self.hash_database[hash_value] = HashEntry(
                 hash_value=hash_value,
                 strategy_id=0,
                 confidence=0.0,
                 frequency=1,
-                timestamp=int(datetime.now().timestamp()),
+                timestamp=int(time.time()),
                 profit_history=0.0,
-                bit_pattern=bit_pattern,
-                tier=tier,
-                reserved=bytes(20)
+                bit_pattern=entropy_state.bit_pattern,
+                tier=entropy_state.tier,
+                state=entropy_state  # FIXED: Store entropy state for similarity calc
             )
         
         # Update bit operations cache
-        self.bit_ops.update_position_cache(
-            value=bit_pattern,
-            density=self.bit_ops.calculate_bit_density(bit_pattern),
-            tier=tier,
+        self.bit_operations.update_position_cache(
+            value=entropy_state.bit_pattern,
+            density=pattern_analysis['density'],
+            tier=entropy_state.tier,
             collapse_type='mid'
         )
-        
-        # Update tetragram matrix
-        self._update_tetragram_matrix(entropy_state)
-        
-        # Check for pattern matches
-        self._check_pattern_matches(hash_value)
 
     def _update_tetragram_matrix(self, entropy_state: EntropyState):
-        """Update 81-state tetragram matrix"""
+        """Update 3D tetragram matrix - FIXED: correct matrix update"""
         # Convert entropy values to base-3 indices
-        price_idx = int(entropy_state.price_entropy * 3) % 3
-        volume_idx = int(entropy_state.volume_entropy * 3) % 3
-        time_idx = int(entropy_state.time_entropy * 3) % 3
+        price_idx = int(abs(entropy_state.price_entropy) * 3) % 3
+        volume_idx = int(abs(entropy_state.volume_entropy) * 3) % 3
+        time_idx = int(abs(entropy_state.time_entropy) * 3) % 3
         
         # Update matrix with exponential decay
         decay = 0.95
         self.tetragram_matrix *= decay
-        self.tetragram_matrix[price_idx, volume_idx, time_idx, :] += 1.0
+        # FIXED: Remove the [:] slice that was causing shape mismatch
+        self.tetragram_matrix[price_idx, volume_idx, time_idx] += 1.0
 
-    def _check_pattern_matches(self, hash_value: int):
+    def _check_pattern_matches(self, hash_value: int, entropy_state: EntropyState, pattern_analysis: Dict):
         """Check for pattern matches using hash distance and bit patterns"""
-        if len(self.entropy_history) < 10:
+        if len(self.hash_database) < 10:
             return
         
-        # Get similar hashes
-        similar_hashes = self._find_similar_hashes(hash_value, threshold=0.85)
+        # Create phase state
+        phase_state = self.bit_operations.create_phase_state(entropy_state.bit_pattern, entropy_state)
         
-        if similar_hashes:
-            # Calculate pattern confidence
-            confidence = self._calculate_pattern_confidence(similar_hashes)
-            
-            # Get bit pattern analysis
-            entry = self.hash_database[hash_value]
-            pattern_analysis = self.bit_ops.analyze_bit_pattern(entry.bit_pattern)
-            
-            # Adjust confidence based on bit pattern strength
-            confidence *= (1.0 + pattern_analysis['pattern_strength'])
-            
-            if confidence > 0.7:  # High confidence threshold
-                self._trigger_pattern_match(hash_value, confidence, pattern_analysis)
-
-    def _find_similar_hashes(self, hash_value: int, threshold: float) -> List[int]:
-        """Find similar hashes using Hamming distance"""
-        similar = []
+        # Get entropy vector
+        entropy_vector = np.array([
+            entropy_state.price_entropy,
+            entropy_state.volume_entropy,
+            entropy_state.time_entropy
+        ])
         
-        for other_hash in self.hash_database:
-            if other_hash == hash_value:
-                continue
-            
-            # Calculate Hamming distance
-            xor_result = hash_value ^ other_hash
-            bit_differences = bin(xor_result).count('1')
-            similarity = 1.0 - (bit_differences / 256.0)
-            
-            if similarity >= threshold:
-                similar.append(other_hash)
-        
-        return similar
-
-    def _calculate_pattern_confidence(self, similar_hashes: List[int]) -> float:
-        """Calculate pattern confidence based on hash collisions"""
-        if not similar_hashes:
-            return 0.0
-        
-        # Base confidence from collision frequency
-        collision_count = sum(self.hash_database[h].frequency for h in similar_hashes)
-        base_confidence = min(np.log(collision_count + 1) / 3.0, 1.0)
-        
-        # Adjust for profit history
-        profit_history = [self.hash_database[h].profit_history for h in similar_hashes]
-        profit_factor = np.mean(profit_history) if profit_history else 0.0
-        
-        return base_confidence * (1.0 + profit_factor)
-
-    def _trigger_pattern_match(self, hash_value: int, confidence: float, pattern_analysis: Dict[str, float]):
-        """Trigger pattern match event with bit pattern analysis"""
-        entry = self.hash_database[hash_value]
-        
-        # Update strategy confidence
-        entry.confidence = confidence
-        
-        # Emit pattern match event with bit pattern data
-        logger.info(
-            f"Pattern match: hash={hash_value}, confidence={confidence:.3f}, "
-            f"tier={entry.tier}, pattern_strength={pattern_analysis['pattern_strength']:.3f}"
+        # Check pattern match
+        pattern_match = self.pattern_utils.check_pattern_match(
+            hash_value, phase_state, pattern_analysis, self.hash_database, entropy_vector
         )
+        
+        if pattern_match.confidence > 0.7:
+            self.pattern_matches += 1
+            self._trigger_pattern_match(pattern_match)
+
+    def _trigger_pattern_match(self, pattern_match: PatternMatch):
+        """Trigger pattern match event and emit trading signal with risk management"""
+        logger.info(
+            f"Pattern match: action={pattern_match.action}, "
+            f"confidence={pattern_match.confidence:.3f}, "
+            f"hash={pattern_match.hash_value}, "
+            f"tier={pattern_match.phase_state.tier}"
+        )
+        
+        # Calculate risk-adjusted position sizing if this is an entry signal
+        if pattern_match.action == 'entry':
+            # Calculate expected edge from pattern strength and tier
+            expected_edge = pattern_match.phase_state.density * 0.1  # Base edge calculation
+            
+            # Calculate stop loss based on current volatility
+            volatility = self.risk_engine._calculate_current_volatility()
+            stop_loss_distance = volatility * 0.02  # 2% of volatility as stop loss
+            stop_loss_price = self.current_price * (1 - stop_loss_distance)
+            
+            # Get risk-adjusted position size
+            position_signal = self.risk_engine.calculate_position_size(
+                signal_confidence=pattern_match.confidence,
+                expected_edge=expected_edge,
+                current_price=self.current_price,
+                stop_loss_price=stop_loss_price
+            )
+            
+            # Create enhanced trading signal with risk management
+            signal = {
+                'action': pattern_match.action,
+                'confidence': pattern_match.confidence,
+                'hash_value': pattern_match.hash_value,
+                'tier': pattern_match.phase_state.tier,
+                'density': pattern_match.phase_state.density,
+                'price': self.current_price,
+                'timestamp': time.time(),
+                'reasons': pattern_match.reasons,
+                'similarity_score': pattern_match.similarity_score,
+                # Risk management fields
+                'position_size': position_signal.risk_adjusted_size,
+                'kelly_fraction': position_signal.kelly_fraction,
+                'stop_loss': position_signal.stop_loss,
+                'take_profit': position_signal.take_profit,
+                'max_loss': position_signal.max_loss,
+                'expected_return': position_signal.expected_return
+            }
+        else:
+            # Exit signal - simpler structure
+            signal = {
+                'action': pattern_match.action,
+                'confidence': pattern_match.confidence,
+                'hash_value': pattern_match.hash_value,
+                'tier': pattern_match.phase_state.tier,
+                'density': pattern_match.phase_state.density,
+                'price': self.current_price,
+                'timestamp': time.time(),
+                'reasons': pattern_match.reasons,
+                'similarity_score': pattern_match.similarity_score
+            }
+        
+        # Emit signal to callbacks
+        for callback in self.signal_callbacks:
+            try:
+                callback(signal)
+            except Exception as e:
+                logger.error(f"Signal callback error: {e}")
 
     def _synchronize_gpu_cpu(self):
         """Synchronize GPU and CPU states"""
-        if not self.gpu_enabled:
-            return
-        
-        # Clear GPU buffers
-        self.gpu_hash_buffer.fill(0)
-        self.gpu_entropy_buffer.fill(0)
-        
-        # Update tetragram matrix on GPU
-        gpu_matrix = cp.asarray(self.tetragram_matrix)
-        cp.cuda.Stream.null.synchronize()
+        if self.gpu_enabled and CUPY_AVAILABLE:
+            try:
+                cp.cuda.Stream.null.synchronize()
+            except:
+                pass
 
-    def process_tick(self, price: float, volume: float, timestamp: float):
-        """Process new market tick data"""
-        # Calculate entropy components
-        price_entropy = self._calculate_price_entropy(price)
-        volume_entropy = self._calculate_volume_entropy(volume)
-        time_entropy = self._calculate_time_entropy(timestamp)
+    def process_tick(self, price: float, volume: float, timestamp: Optional[float] = None):
+        """Process new market tick data with back-pressure handling"""
+        if timestamp is None:
+            timestamp = time.time()
         
-        # Create entropy state
-        state = EntropyState(
-            price_entropy=price_entropy,
-            volume_entropy=volume_entropy,
-            time_entropy=time_entropy,
-            timestamp=timestamp
+        self.last_price = self.current_price
+        self.current_price = price
+        self.tick_count += 1
+        
+        # Update risk engine with price data
+        self.risk_engine.update_price(price)
+        
+        # Update entropy tracker
+        entropy_state = self.entropy_tracker.update(price, volume, timestamp)
+        
+        # Queue for GPU processing with back-pressure handling
+        if self.running:
+            try:
+                # Check for queue overload and drop oldest tick
+                if self.hash_queue.full():
+                    logger.warning("Hash queue overloaded; dropping oldest tick to avoid deadlocks")
+                    try:
+                        self.hash_queue.get_nowait()  # Remove oldest item
+                        self.dropped_ticks += 1
+                    except Empty:
+                        pass  # Queue became empty between full() check and get_nowait()
+                
+                self.hash_queue.put_nowait(entropy_state)
+                
+            except Full:
+                # This shouldn't happen after the check above, but handle it anyway
+                logger.error("Failed to add tick to queue: queue is still full")
+                self.dropped_ticks += 1
+
+    def register_signal_callback(self, callback: Callable):
+        """Register a callback function for trading signals"""
+        self.signal_callbacks.append(callback)
+
+    def update_trade_result(self, hash_value: int, entry_price: float, exit_price: float, 
+                          position_size: float, trade_type: str = 'long'):
+        """Update system with trade result for learning"""
+        # Calculate trade duration (simplified)
+        duration = 60.0  # Default 1 minute
+        
+        # Record trade in risk engine
+        self.risk_engine.record_trade(
+            entry_price=entry_price,
+            exit_price=exit_price,
+            position_size=position_size,
+            trade_type=trade_type,
+            duration=duration
         )
         
-        # Add to history
-        self.entropy_history.append(state)
-        
-        # Queue for GPU processing
-        if self.gpu_enabled:
-            self.hash_queue.put(state)
-        else:
-            # CPU fallback
-            hash_value = self._cpu_compute_hash(state)
-            self._process_hash_result(state, hash_value)
-
-    def _calculate_price_entropy(self, price: float) -> float:
-        """Calculate price entropy component"""
-        if len(self.entropy_history) < 2:
-            return 0.0
-        
-        # Calculate price changes
-        price_changes = np.diff([s.price_entropy for s in self.entropy_history])
-        
-        # Shannon entropy of price changes
-        hist, _ = np.histogram(price_changes, bins=50, density=True)
-        hist = hist[hist > 0]
-        return -np.sum(hist * np.log2(hist))
-
-    def _calculate_volume_entropy(self, volume: float) -> float:
-        """Calculate volume entropy component"""
-        if len(self.entropy_history) < 2:
-            return 0.0
-        
-        # Calculate volume changes
-        volume_changes = np.diff([s.volume_entropy for s in self.entropy_history])
-        
-        # Shannon entropy of volume changes
-        hist, _ = np.histogram(volume_changes, bins=50, density=True)
-        hist = hist[hist > 0]
-        return -np.sum(hist * np.log2(hist))
-
-    def _calculate_time_entropy(self, timestamp: float) -> float:
-        """Calculate time entropy component"""
-        if len(self.entropy_history) < 2:
-            return 0.0
-        
-        # Calculate time deltas
-        time_deltas = np.diff([s.timestamp for s in self.entropy_history])
-        
-        # Shannon entropy of time deltas
-        hist, _ = np.histogram(time_deltas, bins=50, density=True)
-        hist = hist[hist > 0]
-        return -np.sum(hist * np.log2(hist))
-
-    def _cpu_compute_hash(self, state: EntropyState) -> int:
-        """Compute hash on CPU (fallback)"""
-        # Combine entropy components
-        entropy_str = f"{state.price_entropy:.6f}{state.volume_entropy:.6f}{state.time_entropy:.6f}"
-        
-        # Compute SHA-256 hash
-        hash_obj = hashlib.sha256(entropy_str.encode())
-        return int(hash_obj.hexdigest()[:16], 16)  # Use first 64 bits
+        # Update hash entry profit history
+        if hash_value in self.hash_database:
+            entry = self.hash_database[hash_value]
+            pnl = (exit_price - entry_price) / entry_price if trade_type == 'long' else (entry_price - exit_price) / entry_price
+            entry.profit_history += pnl
 
     def get_pattern_metrics(self) -> Dict:
         """Get current pattern recognition metrics"""
+        latest_entropy = self.entropy_tracker.get_latest_state()
+        
         metrics = {
             'hash_count': len(self.hash_database),
-            'pattern_confidence': np.mean([e.confidence for e in self.hash_database.values()]),
+            'pattern_confidence': np.mean([e.confidence for e in self.hash_database.values()]) if self.hash_database else 0.0,
             'collision_rate': self._calculate_collision_rate(),
             'tetragram_density': np.mean(self.tetragram_matrix > 0),
-            'gpu_utilization': self._get_gpu_utilization() if self.gpu_enabled else 0.0
+            'gpu_utilization': self._get_gpu_utilization() if self.gpu_enabled else 0.0,
+            'ticks_processed': self.tick_count,
+            'patterns_detected': self.pattern_matches,
+            'dropped_ticks': self.dropped_ticks,
+            'avg_latency_ms': self.avg_latency,
+            'queue_utilization': {
+                'hash_queue': self.hash_queue.qsize() / self.hash_queue.maxsize,
+                'result_queue': self.result_queue.qsize() / self.result_queue.maxsize
+            }
         }
         
-        # Add bit pattern metrics
-        if self.entropy_history:
-            latest_state = self.entropy_history[-1]
-            if latest_state.bit_pattern is not None:
-                pattern_analysis = self.bit_ops.analyze_bit_pattern(latest_state.bit_pattern)
-                metrics.update({
-                    'bit_pattern_strength': pattern_analysis['pattern_strength'],
-                    'long_density': pattern_analysis['long_density'],
-                    'mid_density': pattern_analysis['mid_density'],
-                    'short_density': pattern_analysis['short_density'],
-                    'current_tier': pattern_analysis['tier']
-                })
+        # Add bit pattern metrics if available
+        if latest_entropy and latest_entropy.bit_pattern is not None:
+            pattern_analysis = self.bit_operations.analyze_bit_pattern(latest_entropy.bit_pattern)
+            metrics.update({
+                'bit_pattern_strength': pattern_analysis['pattern_strength'],
+                'long_density': pattern_analysis['long_density'],
+                'mid_density': pattern_analysis['mid_density'],
+                'short_density': pattern_analysis['short_density'],
+                'current_tier': pattern_analysis['tier']
+            })
+        
+        # Add strange loop detector metrics
+        metrics.update({
+            'strange_loops': self.strange_loop_detector.get_metrics()
+        })
+        
+        # Add risk metrics
+        risk_metrics = self.risk_engine.get_risk_metrics()
+        metrics.update({
+            'risk': {
+                'expectancy': risk_metrics.current_expectancy,
+                'sharpe_ratio': risk_metrics.sharpe_ratio,
+                'max_drawdown': risk_metrics.max_drawdown,
+                'win_rate': risk_metrics.win_rate,
+                'current_volatility': risk_metrics.current_volatility
+            }
+        })
         
         return metrics
 
@@ -446,14 +619,46 @@ class HashRecollectionSystem:
 
     def _get_gpu_utilization(self) -> float:
         """Get current GPU utilization"""
-        if not self.gpu_enabled:
+        if not self.gpu_enabled or not CUPY_AVAILABLE:
             return 0.0
         
         try:
-            # Get GPU memory usage
             mem_info = cp.cuda.runtime.memGetInfo()
             used_memory = mem_info[1] - mem_info[0]
             total_memory = mem_info[1]
             return used_memory / total_memory
         except:
-            return 0.0 
+            return 0.0
+
+    def get_system_report(self) -> Dict:
+        """Generate comprehensive system report"""
+        uptime = time.time() - self._start_time
+        
+        return {
+            'summary': {
+                'uptime': f"{uptime:.1f} seconds",
+                'ticks_processed': self.tick_count,
+                'patterns_detected': self.pattern_matches,
+                'hash_database_size': len(self.hash_database),
+                'current_price': self.current_price,
+                'dropped_ticks': self.dropped_ticks,
+                'avg_latency_ms': self.avg_latency
+            },
+            'entropy': {
+                'latest_state': self.entropy_tracker.get_latest_state() if self.entropy_tracker.get_latest_state() else None,
+                'multi_window': self.entropy_tracker.get_multi_window_entropies()
+            },
+            'patterns': self.get_pattern_metrics(),
+            'system': {
+                'gpu_enabled': self.gpu_enabled,
+                'workers_running': self.running,
+                'queue_sizes': {
+                    'hash_queue': self.hash_queue.qsize() if self.hash_queue else 0,
+                    'result_queue': self.result_queue.qsize() if self.result_queue else 0
+                },
+                'queue_utilization': {
+                    'hash_queue_pct': (self.hash_queue.qsize() / self.hash_queue.maxsize * 100) if self.hash_queue else 0,
+                    'result_queue_pct': (self.result_queue.qsize() / self.result_queue.maxsize * 100) if self.result_queue else 0
+                }
+            }
+        } 

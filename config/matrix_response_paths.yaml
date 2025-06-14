@@ -165,4 +165,45 @@ GAN Configuration:
     entropy_weight: 0.1
     gradient_weight: 0.1
     anomaly_threshold: 0.85
-    use_gpu: true 
+    use_gpu: true
+
+default_paths:
+  hold: "/data/matrix/hold"
+  active: "/data/matrix/active"
+  data_directory: "data"
+  log_directory: "logs"
+
+render_settings:
+  resolution: "1080p"
+  background_color: "#121212"
+  line_thickness: 2
+
+matrix_response_paths:
+  data_directory: "data/matrix"
+  log_directory: "logs/matrix"
+  backup_directory: "backups/matrix"
+  temp_directory: "temp/matrix"
+
+# Matrix overlay settings
+overlay_settings:
+  fft_window: 50
+  freq_threshold: 0.1
+  confidence_threshold: 0.7
+  min_pattern_length: 10
+  max_pattern_length: 100
+
+# Fault resolution settings
+fault_resolution:
+  retry_attempts: 3
+  retry_delay_seconds: 5
+  fallback_enabled: true
+  error_logging: true
+
+# Performance monitoring
+monitoring:
+  enable_metrics: true
+  metrics_interval: 300
+  log_performance: true
+  alert_thresholds:
+    response_time_ms: 1000
+    error_rate_percent: 5 

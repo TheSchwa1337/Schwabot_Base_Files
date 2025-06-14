@@ -1,40 +1,151 @@
 """
 Configuration I/O Utilities
-==========================
+===========================
 
-Provides standardized configuration loading and default generation utilities.
+Centralized YAML configuration loading with schema validation and default generation.
+Ensures consistent behavior across all Schwabot modules.
 """
 
 import yaml
-from pathlib import Path
-from typing import Dict, Any
 import logging
+from pathlib import Path
+from typing import Dict, Any, Optional
+from jsonschema import validate, ValidationError
 
 logger = logging.getLogger(__name__)
+
+class ConfigError(Exception):
+    """Custom exception for configuration-related errors."""
+    pass
 
 def load_config(config_path: Path) -> Dict[str, Any]:
     """
     Load YAML configuration file with error handling.
     
     Args:
-        config_path: Path to the YAML configuration file
+        config_path: Path to the configuration file
         
     Returns:
-        Dict containing configuration data
+        Dictionary containing configuration data
         
     Raises:
-        ValueError: If config file not found or invalid format
+        ValueError: If config cannot be loaded or parsed
     """
     try:
-        with open(config_path, 'r') as file:
-            config = yaml.safe_load(file)
-            if not isinstance(config, dict):
-                raise ValueError("YAML format invalid — expected dict.")
-            return config
-    except FileNotFoundError:
-        raise ValueError(f"Config file not found at {config_path}")
+        if not config_path.exists():
+            raise FileNotFoundError(f"Configuration file not found: {config_path}")
+            
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+            
+        if config is None:
+            config = {}
+            
+        logger.info(f"Successfully loaded config from {config_path}")
+        return config
+        
     except yaml.YAMLError as e:
-        raise ValueError(f"Error parsing YAML file {config_path}: {e}")
+        raise ValueError(f"Invalid YAML in {config_path}: {e}")
+    except Exception as e:
+        raise ValueError(f"Error loading config from {config_path}: {e}")
+
+def load_yaml_config(config_path: Path, schema: Optional[Dict] = None) -> Dict[str, Any]:
+    """
+    Load YAML configuration with optional schema validation.
+    
+    Args:
+        config_path: Path to the YAML configuration file
+        schema: Optional JSON schema for validation
+        
+    Returns:
+        The loaded configuration data as a dictionary
+        
+    Raises:
+        FileNotFoundError: If the configuration file does not exist
+        ConfigError: If schema validation fails
+        yaml.YAMLError: If there's an error parsing the YAML file
+    """
+    if not config_path.exists():
+        raise FileNotFoundError(f"Config not found at {config_path}")
+
+    try:
+        with open(config_path, "r", encoding='utf-8') as f:
+            data = yaml.safe_load(f) or {}
+            
+        if schema:
+            try:
+                validate(instance=data, schema=schema)
+                logger.debug(f"Schema validation passed for {config_path}")
+            except ValidationError as e:
+                raise ConfigError(f"YAML schema validation error for {config_path}: {e}")
+                
+        return data
+        
+    except yaml.YAMLError as e:
+        raise ConfigError(f"YAML parsing error for {config_path}: {e}")
+
+def ensure_config_exists(filename: str, defaults: Optional[Dict] = None) -> Path:
+    """
+    Ensure a configuration file exists, creating it with defaults if necessary.
+    
+    Args:
+        filename: Name of the configuration file
+        defaults: Default configuration to write if file doesn't exist
+        
+    Returns:
+        Path to the configuration file
+    """
+    # Determine config path relative to this file
+    config_dir = Path(__file__).resolve().parent
+    config_path = config_dir / filename
+    
+    if not config_path.exists():
+        if defaults:
+            config_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(config_path, 'w', encoding='utf-8') as f:
+                yaml.safe_dump(defaults, f, indent=2, default_flow_style=False)
+            logger.info(f"Created default config file at {config_path}")
+        else:
+            logger.warning(f"Config file {config_path} does not exist and no defaults provided")
+            
+    return config_path
+
+def save_config(config_path: Path, config_data: Dict[str, Any]) -> None:
+    """
+    Save configuration data to YAML file.
+    
+    Args:
+        config_path: Path where to save the configuration
+        config_data: Configuration data to save
+    """
+    try:
+        config_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(config_path, 'w', encoding='utf-8') as f:
+            yaml.safe_dump(config_data, f, indent=2, default_flow_style=False)
+        logger.info(f"Configuration saved to {config_path}")
+    except Exception as e:
+        logger.error(f"Error saving config to {config_path}: {e}")
+        raise
+
+def validate_config_schema(config_data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
+    """
+    Validate configuration data against a schema.
+    
+    Args:
+        config_data: Configuration data to validate
+        schema: JSON schema for validation
+        
+    Returns:
+        True if validation passes
+        
+    Raises:
+        ConfigError: If validation fails
+    """
+    try:
+        validate(instance=config_data, schema=schema)
+        return True
+    except ValidationError as e:
+        raise ConfigError(f"Configuration validation failed: {e}")
 
 def create_default_config(config_path: Path = None) -> None:
     """
@@ -119,26 +230,4 @@ def get_config_path(filename: str) -> Path:
     Returns:
         Path object pointing to the config file
     """
-    return Path(__file__).resolve().parent / filename
-
-def ensure_config_exists(filename: str) -> Path:
-    """
-    Ensure a config file exists, creating default if necessary.
-    
-    Args:
-        filename: Name of the config file
-        
-    Returns:
-        Path object pointing to the config file
-    """
-    config_path = get_config_path(filename)
-    
-    if not config_path.exists():
-        if filename == 'matrix_response_paths.yaml':
-            create_default_config(config_path)
-        elif filename == 'line_render_engine_config.yaml':
-            create_line_render_config(config_path)
-        else:
-            logger.warning(f"No default generator for {filename}")
-    
-    return config_path 
+    return Path(__file__).resolve().parent / filename 

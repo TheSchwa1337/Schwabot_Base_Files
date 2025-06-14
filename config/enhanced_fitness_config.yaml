@@ -1,0 +1,191 @@
+# Enhanced Fitness Oracle Configuration
+# ====================================
+# Mathematical parameters for the central orchestrator
+
+# Regime-Specific Weight Configurations
+# Different market regimes require different emphasis on factors
+regime_weights:
+  trending:
+    profit: 0.4      # Strong emphasis on profit signals in trending markets
+    momentum: 0.3    # Momentum is critical in trends
+    regime: 0.2      # Regime confidence matters
+    pattern: 0.1     # Patterns less important in strong trends
+    
+  ranging:
+    profit: 0.2      # Lower profit emphasis in ranging markets
+    momentum: 0.1    # Momentum less reliable in ranges
+    regime: 0.4      # Regime identification is crucial
+    pattern: 0.3     # Patterns more important in ranges
+    
+  volatile:
+    profit: 0.3      # Moderate profit emphasis
+    momentum: 0.2    # Some momentum consideration
+    regime: 0.3      # Regime uncertainty
+    pattern: 0.2     # Patterns can be unreliable
+    
+  breakout:
+    profit: 0.5      # Maximum profit emphasis during breakouts
+    momentum: 0.3    # High momentum importance
+    regime: 0.1      # Regime less important during transitions
+    pattern: 0.1     # Patterns may be breaking
+    
+  consolidation:
+    profit: 0.15     # Low profit emphasis during consolidation
+    momentum: 0.05   # Minimal momentum
+    regime: 0.4      # Regime identification critical
+    pattern: 0.4     # Pattern analysis very important
+
+# Fitness Thresholds for Trading Decisions
+# These determine when to take action based on overall fitness
+fitness_thresholds:
+  strong_buy: 0.75    # Very high confidence buy signal
+  buy: 0.35           # Standard buy signal
+  hold: 0.15          # Neutral zone - hold position
+  sell: -0.35         # Standard sell signal
+  strong_sell: -0.75  # Very high confidence sell signal
+
+# Risk Management Parameters
+risk_parameters:
+  max_position_size: 0.8        # Maximum 80% of capital in single position
+  base_stop_loss: 0.02          # Base 2% stop loss
+  base_take_profit: 0.04        # Base 4% take profit
+  volatility_multiplier: 2.0    # How much volatility affects risk levels
+  confidence_multiplier: 1.5    # How confidence affects position sizing
+  min_position_size: 0.01       # Minimum 1% position size
+
+# Adaptation and Learning Parameters
+adaptation:
+  learning_rate: 0.05           # How quickly to adapt weights
+  min_confidence: 0.6           # Minimum confidence threshold
+  performance_window: 50        # Number of trades to evaluate performance
+  adaptation_frequency: 100     # How often to run adaptation (ticks)
+  weight_decay: 0.99           # Decay factor for old performance data
+
+# Profit Tier Detection (JuMBO-style)
+profit_tier_detection:
+  z_score_threshold: 2.0        # Statistical significance threshold
+  cluster_min_count: 3          # Minimum anomalies for tier detection
+  cluster_window: 5             # Window for clustering analysis
+  tier_persistence: 10          # How long tier signal persists
+  min_profit_magnitude: 0.02    # Minimum profit to consider as tier
+
+# Recursive Loop Detection
+loop_detection:
+  price_similarity_threshold: 0.01    # 1% price similarity
+  condition_similarity_count: 5       # Number of similar conditions
+  pattern_memory_window: 10           # Window for pattern analysis
+  loop_cooldown_period: 20            # Cooldown after loop detection
+
+# Engine-Specific Parameters
+engines:
+  profit_oracle:
+    tick_window: 256              # Window for profit analysis
+    min_confidence: 0.65          # Minimum signal confidence
+    projection_multiplier: 1.2    # Profit projection scaling
+    
+  regime_detector:
+    window_size: 20               # Analysis window size
+    min_confidence: 0.6           # Minimum regime confidence
+    volatility_weight: 0.4        # Volatility importance
+    trend_weight: 0.4            # Trend importance
+    volume_weight: 0.2           # Volume importance
+    
+  rittle_gemm:
+    ring_size: 1000              # Ring buffer size
+    profit_correlation_window: 20 # Window for profit correlation
+    anomaly_cluster_threshold: 2  # Threshold for anomaly clustering
+    
+  fault_bus:
+    correlation_decay: 0.95       # Correlation decay factor
+    min_correlation: 0.3          # Minimum correlation threshold
+    temporal_buffer_size: 1000    # Buffer for temporal analysis
+
+# Technical Analysis Parameters
+technical_analysis:
+  volatility:
+    lookback_period: 20           # Period for volatility calculation
+    annualization_factor: 252    # Days for annualized volatility
+    
+  trend_strength:
+    polynomial_degree: 1          # Degree for trend fitting
+    normalization_method: "mean"  # How to normalize trend
+    
+  momentum:
+    short_period: 3               # Short-term moving average
+    long_period: 5                # Long-term moving average
+    
+  volume_analysis:
+    average_window: 20            # Window for volume averaging
+    surge_threshold: 2.0          # Volume surge detection threshold
+
+# Market Data Processing
+market_data:
+  required_history: 20            # Minimum history required
+  max_history: 1000              # Maximum history to maintain
+  price_smoothing: false         # Whether to smooth price data
+  volume_smoothing: false        # Whether to smooth volume data
+  outlier_detection: true        # Enable outlier detection
+  outlier_threshold: 3.0         # Z-score threshold for outliers
+
+# Performance Tracking
+performance:
+  track_individual_engines: true   # Track performance of each engine
+  track_regime_performance: true   # Track performance by regime
+  track_factor_importance: true    # Track which factors matter most
+  update_frequency: 10            # How often to update metrics
+  
+  metrics:
+    - "fitness_accuracy"          # How accurate fitness predictions are
+    - "profit_prediction_error"   # Error in profit predictions
+    - "regime_classification_accuracy"  # Accuracy of regime detection
+    - "pattern_signal_quality"    # Quality of pattern signals
+    - "risk_adjusted_returns"     # Risk-adjusted performance
+
+# Logging and Debugging
+logging:
+  level: "INFO"                   # Logging level
+  log_fitness_components: true    # Log individual fitness components
+  log_engine_outputs: false      # Log raw engine outputs (verbose)
+  log_adaptation_changes: true    # Log when weights are adapted
+  log_special_conditions: true    # Log profit tiers, loops, etc.
+  
+  files:
+    fitness_log: "logs/fitness_oracle.log"
+    performance_log: "logs/performance.log"
+    adaptation_log: "logs/adaptation.log"
+
+# Alert and Notification Settings
+alerts:
+  profit_tier_detected: true      # Alert when profit tier is found
+  recursive_loop_warning: true    # Alert when loop is detected
+  low_confidence_warning: true    # Alert when confidence drops
+  regime_change_alert: true       # Alert on regime changes
+  
+  thresholds:
+    low_confidence: 0.4           # Threshold for low confidence alert
+    high_volatility: 0.5          # Threshold for volatility alert
+    unusual_pattern: 0.8          # Threshold for unusual pattern alert
+
+# Emergency Controls
+emergency:
+  auto_hold_on_loop: true         # Automatically hold when loop detected
+  reduce_size_on_low_confidence: true  # Reduce position on low confidence
+  max_consecutive_losses: 5       # Max losses before emergency stop
+  emergency_fitness_threshold: -0.9    # Emergency stop fitness level
+  
+  cooldown:
+    after_loop_detection: 30      # Seconds to cool down after loop
+    after_emergency_stop: 300     # Seconds to cool down after emergency
+    after_profit_tier: 60         # Seconds to cool down after tier
+
+# Backtesting and Simulation
+backtesting:
+  enable_adaptation: true         # Allow weight adaptation during backtest
+  track_what_if_scenarios: true   # Track alternative decisions
+  simulate_slippage: true         # Include slippage in simulations
+  slippage_model: "linear"        # Type of slippage model
+  
+  simulation_parameters:
+    commission: 0.001             # Commission rate
+    slippage_rate: 0.0005         # Base slippage rate
+    latency_ms: 100               # Execution latency 

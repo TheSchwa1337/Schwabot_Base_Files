@@ -1,6 +1,7 @@
 """
 Diogenic Logic Trading (DLT) Waveform Engine
 Implements recursive pattern recognition and phase validation for trading decisions
+Enhanced with profit-fault correlation and JuMBO-style anomaly detection
 """
 
 import numpy as np
@@ -20,6 +21,18 @@ import time
 import psutil
 import threading
 import logging
+import os
+from pathlib import Path
+
+# Enhanced imports for profit-fault correlation
+try:
+    from core.fault_bus import FaultBus, FaultType, FaultBusEvent
+    from profit_cycle_navigator import ProfitCycleNavigator, ProfitVector, ProfitCycleState
+    ENHANCED_MODE = True
+except ImportError:
+    # Fallback mode if enhanced modules not available
+    ENHANCED_MODE = False
+    logging.warning("Enhanced profit-fault correlation modules not available. Running in basic mode.")
 
 class PhaseDomain(Enum):
     SHORT = "short"    # Seconds to Hours
@@ -35,6 +48,8 @@ class PhaseTrust:
     trust_threshold: float = 0.8
     memory_coherence: float = 0.0  # Added for tensor state integration
     thermal_state: float = 0.0     # Added for resource management
+    profit_correlation: float = 0.0  # NEW: Correlation with profit outcomes
+    fault_sensitivity: float = 0.0   # NEW: Sensitivity to fault events
 
 @dataclass 
 class BitmapTrigger:
@@ -47,11 +62,13 @@ class BitmapTrigger:
     success_count: int
     tensor_signature: np.ndarray  # Added for tensor state tracking
     resource_usage: float = 0.0   # Added for resource management
+    profit_correlation: float = 0.0  # NEW: Historical profit correlation
+    anomaly_strength: float = 0.0    # NEW: JuMBO-style anomaly detection
 
 class BitmapCascadeManager:
     """
-    Manages multiple bitmap tiers (4, 8, 16, 42, 81) for signal amplification and memory-driven propagation.
-    Enables recursive trade logic and feedback from quantum visualizer/metrics.
+    Enhanced bitmap cascade manager with profit-fault correlation
+    Manages multiple bitmap tiers for signal amplification and memory-driven propagation.
     """
     def __init__(self):
         self.bitmaps = {
@@ -62,140 +79,132 @@ class BitmapCascadeManager:
             81: np.zeros(81, dtype=bool),
         }
         self.memory_log = []  # List of dicts: {hash, bitmap_size, outcome, timestamp, ...}
-
-    def update_bitmap(self, tier: int, idx: int, signal: bool):
+        self.profit_correlations = {}  # Track profit correlation per bitmap tier
+        self.anomaly_clusters = {}     # Track anomaly clusters per tier
+        
+    def update_bitmap(self, tier: int, idx: int, signal: bool, profit_context: float = None):
+        """Enhanced bitmap update with profit correlation tracking"""
         self.bitmaps[tier][idx % tier] = signal
+        
+        # Track profit correlation if provided
+        if profit_context is not None:
+            if tier not in self.profit_correlations:
+                self.profit_correlations[tier] = []
+            self.profit_correlations[tier].append({
+                'index': idx,
+                'signal': signal,
+                'profit': profit_context,
+                'timestamp': datetime.now()
+            })
+        
         # Propagate up if needed (example: 16 triggers 42/81)
         if signal and tier == 16:
             self.bitmaps[42][idx % 42] = True
             self.bitmaps[81][(idx * 3) % 81] = True
 
     def readout(self):
-        return {k: np.where(v)[0].tolist() for k, v in self.bitmaps.items() if np.any(v)}
-
-    def is_valid_state(self):
-        return np.sum(self.bitmaps[42]) > 3 and np.sum(self.bitmaps[81]) > 5
-
-    def select_bitmap(self, sha_hash, entropy, system_state):
-        # Example: Use memory_log to select the best bitmap for current conditions
-        # Could use a scoring function, RL, or simple heuristics
-        # For now, just return 16 as default
-        return 16
-
-    def update_log(self, sha_hash, bitmap_size, outcome, timestamp):
-        self.memory_log.append({
-            "hash": sha_hash, "bitmap_size": bitmap_size,
-            "outcome": outcome, "timestamp": timestamp
-        })
-
-    def adapt_from_metrics(self, metrics):
-        # Implement logic to adapt bitmap selection based on metrics
-        pass
-
-class GhostShellStopLoss:
-    def __init__(self, max_retries=3, timeout=5.0):
-        self.max_retries = max_retries
-        self.timeout = timeout
-        self.active_stops = {}  # symbol -> stop_info
-        self.logger = logging.getLogger(__name__)
+        """Enhanced readout with profit correlation data"""
+        basic_readout = {k: np.where(v)[0].tolist() for k, v in self.bitmaps.items() if np.any(v)}
         
-    def place_stop_loss(self, symbol: str, stop_price: float, quantity: float, 
-                       order_type: str = 'stop_market') -> bool:
-        """Place a ghost shell stop loss with retry logic"""
-        for attempt in range(self.max_retries):
-            try:
-                # Validate stop price
-                if not self._validate_stop_price(symbol, stop_price):
-                    self.logger.warning(f"Invalid stop price for {symbol}: {stop_price}")
-                    return False
-                    
-                # Place stop order
-                order = self.client.create_order(
-                    symbol=symbol,
-                    type=order_type,
-                    side='sell',
-                    amount=quantity,
-                    price=stop_price,
-                    params={'stopPrice': stop_price}
-                )
-                
-                # Store stop info
-                self.active_stops[symbol] = {
-                    'order_id': order['id'],
-                    'stop_price': stop_price,
-                    'quantity': quantity,
-                    'placed_at': datetime.now()
-                }
-                
-                self.logger.info(f"Placed ghost shell stop for {symbol} at {stop_price}")
-                return True
-                
-            except Exception as e:
-                self.logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
-                if attempt == self.max_retries - 1:
-                    return False
-                time.sleep(1.0)  # Back off before retry
-                
-        return False
+        # Add profit correlation summaries
+        correlation_summary = {}
+        for tier, correlations in self.profit_correlations.items():
+            if correlations:
+                profits = [c['profit'] for c in correlations[-20:]]  # Last 20 entries
+                correlation_summary[f'tier_{tier}_avg_profit'] = np.mean(profits)
+                correlation_summary[f'tier_{tier}_profit_std'] = np.std(profits)
         
-    def _validate_stop_price(self, symbol: str, stop_price: float) -> bool:
-        """Validate stop price against current market conditions"""
-        try:
-            ticker = self.client.fetch_ticker(symbol)
-            current_price = ticker['last']
-            
-            # Check if stop is too close to current price
-            if abs(stop_price - current_price) / current_price < 0.001:  # 0.1% minimum distance
-                return False
-                
-            # Check if stop is within reasonable range
-            if stop_price < current_price * 0.5 or stop_price > current_price * 1.5:
-                return False
-                
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Error validating stop price: {str(e)}")
-            return False
-            
-    def cancel_stop_loss(self, symbol: str) -> bool:
-        """Cancel an active ghost shell stop loss"""
-        if symbol not in self.active_stops:
-            return False
-            
-        try:
-            order_id = self.active_stops[symbol]['order_id']
-            self.client.cancel_order(order_id, symbol)
-            del self.active_stops[symbol]
-            self.logger.info(f"Cancelled ghost shell stop for {symbol}")
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Error cancelling stop loss: {str(e)}")
-            return False
-            
-    def get_active_stops(self) -> Dict[str, Dict]:
-        """Get all active ghost shell stops"""
-        return self.active_stops.copy()
+        return {
+            'bitmap_state': basic_readout,
+            'profit_correlations': correlation_summary
+        }
+
+    def detect_profit_anomaly(self, tier: int, current_profit: float) -> Tuple[bool, float]:
+        """Detect JuMBO-style profit anomalies for specific tier"""
+        if tier not in self.profit_correlations or len(self.profit_correlations[tier]) < 10:
+            return False, 0.0
+        
+        recent_profits = [c['profit'] for c in self.profit_correlations[tier][-20:]]
+        mean_profit = np.mean(recent_profits)
+        std_profit = np.std(recent_profits)
+        
+        if std_profit == 0:
+            return False, 0.0
+        
+        z_score = abs(current_profit - mean_profit) / std_profit
+        
+        # Check for anomaly cluster (multiple recent anomalies)
+        anomaly_count = sum(1 for p in recent_profits[-5:] if abs(p - mean_profit) / std_profit > 2.0)
+        
+        if z_score > 2.5 and anomaly_count >= 2:
+            anomaly_strength = min(z_score / 5.0, 1.0)
+            return True, anomaly_strength
+        
+        return False, 0.0
+
+class WaveformAuditLogger:
+    """Enhanced audit logger with profit-fault correlation tracking"""
+    
+    def __init__(self, log_dir: str = "logs"):
+        self.log_dir = Path(log_dir)
+        self.log_dir.mkdir(exist_ok=True)
+        self.audit_file = self.log_dir / "waveform_audit.log"
+        self.profit_file = self.log_dir / "profit_correlation.log"
+        
+    def log_waveform_event(self, event_type: str, entropy: float, coherence: float, 
+                          profit_context: Optional[float] = None, metadata: Optional[Dict] = None):
+        """Log waveform processing events with profit correlation"""
+        log_entry = {
+            "event": event_type,
+            "entropy": entropy,
+            "coherence": coherence,
+            "profit_context": profit_context,
+            "timestamp": time.time(),
+            "metadata": metadata or {}
+        }
+        
+        with open(self.audit_file, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+    
+    def log_profit_correlation(self, sha_hash: str, profit_delta: float, fault_context: Dict):
+        """Log profit-fault correlations for analysis"""
+        correlation_entry = {
+            "sha_hash": sha_hash,
+            "profit_delta": profit_delta,
+            "fault_context": fault_context,
+            "timestamp": time.time()
+        }
+        
+        with open(self.profit_file, "a") as f:
+            f.write(json.dumps(correlation_entry) + "\n")
 
 class DLTWaveformEngine:
     """
-    Core engine for Diogenic Logic Trading pattern recognition
+    Enhanced core engine for Diogenic Logic Trading pattern recognition
+    Now includes profit-fault correlation and recursive loop prevention
     """
     
     def __init__(self, max_cpu_percent: float = 80.0, max_memory_percent: float = 70.0):
+        # Setup logging
+        self.logger = logging.getLogger(__name__)
+        
         # Resource management
         self.max_cpu_percent = max_cpu_percent
         self.max_memory_percent = max_memory_percent
         self.resource_lock = threading.Lock()
         
         # Trading parameters
-        self.max_position_size = 1.0  # Maximum position size as a fraction of portfolio
-        self.current_symbol = None    # Current trading symbol
-        self.trade_vector = np.zeros(10000, dtype=np.float32)  # Trade vector for logging
+        self.max_position_size = 1.0  
+        self.current_symbol = None    
+        self.trade_vector = np.zeros(10000, dtype=np.float32)
         
-        # Initialize ZBE adapter
-        self.zbe = ZBEAdapter()
+        # Initialize enhanced fault bus and profit navigator
+        self.fault_bus = FaultBus()
+        self.profit_navigator = ProfitCycleNavigator(self.fault_bus)
+        
+        # Waveform integrity tracking
+        self.blacklist_hashes = set()
+        self.file_integrity_cache = {}
         
         # 16-bit trading map (4-bit, 8-bit, 16-bit allocations)
         self.state_maps = {
@@ -206,14 +215,14 @@ class DLTWaveformEngine:
             81: np.zeros(81, dtype=np.int8),  # Ternary: -1, 0, 1 or 0, 1, 2
         }
         
-        # Phase trust tracking with enhanced metrics
+        # Enhanced phase trust tracking with profit correlation
         self.phase_trust: Dict[PhaseDomain, PhaseTrust] = {
             PhaseDomain.SHORT: PhaseTrust(0, 0.0, datetime.now()),
             PhaseDomain.MID: PhaseTrust(0, 0.0, datetime.now()),
             PhaseDomain.LONG: PhaseTrust(0, 0.0, datetime.now())
         }
         
-        # Trigger memory with tensor state integration
+        # Trigger memory with enhanced correlation tracking
         self.triggers: List[BitmapTrigger] = []
         
         # Phase validation thresholds with dynamic adjustment
@@ -222,9 +231,6 @@ class DLTWaveformEngine:
             PhaseDomain.MID: 5,     # 5+ echoes with entropy consistency
             PhaseDomain.SHORT: 10   # 10+ phase-aligned echoes
         }
-        
-        self.metrics = PatternMetrics()
-        self.panic_viz = PanicDriftVisualizer()
         
         self.data = None
         self.processed_data = None
@@ -235,23 +241,49 @@ class DLTWaveformEngine:
         self.entropy_thresholds = {'SHORT': 4.0, 'MID': 3.5, 'LONG': 3.0}
         self.coherence_thresholds = {'SHORT': 0.6, 'MID': 0.5, 'LONG': 0.4}
         
-        # Unified tensor state
+        # Unified tensor state with profit correlation
         self.tensor_map = np.zeros(256)
         self.tensor_history: List[np.ndarray] = []
         self.max_tensor_history = 1000
         
+        # Enhanced components
         self.bitmap_cascade = BitmapCascadeManager()
-        self.tensor_reverse_mapper = TensorReverseMapper()
-        self.sha256_resolver = SHA256BitmapResolver()
+        self.audit_logger = WaveformAuditLogger()
         
         # Resource monitoring
         self.last_resource_check = datetime.now()
         self.resource_check_interval = timedelta(seconds=5)
         
-        self.ghost_shell_stop = GhostShellStopLoss()
+        # JuMBO-style pattern detection
+        self.pattern_hash_history = {}
+        self.loop_detection_window = 50
+        
+    def validate_waveform_file(self, path: str) -> str:
+        """Validate waveform file integrity and detect tampering"""
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"Waveform file not found: {path}")
+        
+        # Compute SHA256 hash
+        with open(path, "rb") as f:
+            file_content = f.read()
+            sha_hash = hashlib.sha256(file_content).hexdigest()
+        
+        # Check against blacklist
+        if sha_hash in self.blacklist_hashes:
+            raise ValueError(f"Tampered waveform file detected! SHA256: {sha_hash}")
+        
+        # Cache for future reference
+        self.file_integrity_cache[path] = {
+            'sha_hash': sha_hash,
+            'last_checked': datetime.now(),
+            'file_size': len(file_content)
+        }
+        
+        self.logger.info(f"Waveform file validated: {path} (SHA: {sha_hash[:16]})")
+        return sha_hash
         
     def check_resources(self) -> bool:
-        """Check if system resources are within acceptable limits"""
+        """Enhanced resource checking with fault correlation"""
         with self.resource_lock:
             current_time = datetime.now()
             if current_time - self.last_resource_check < self.resource_check_interval:
@@ -262,13 +294,35 @@ class DLTWaveformEngine:
             
             self.last_resource_check = current_time
             
+            # Create fault events for resource issues
+            if cpu_percent > self.max_cpu_percent:
+                fault_event = FaultBusEvent(
+                    tick=int(time.time()),
+                    module="resource_monitor",
+                    type=FaultType.THERMAL_HIGH,
+                    severity=cpu_percent / 100.0,
+                    metadata={"cpu_percent": cpu_percent}
+                )
+                self.fault_bus.push(fault_event)
+                
+            if memory_percent > self.max_memory_percent:
+                fault_event = FaultBusEvent(
+                    tick=int(time.time()),
+                    module="resource_monitor",
+                    type=FaultType.GPU_OVERLOAD,
+                    severity=memory_percent / 100.0,
+                    metadata={"memory_percent": memory_percent}
+                )
+                self.fault_bus.push(fault_event)
+            
             if cpu_percent > self.max_cpu_percent or memory_percent > self.max_memory_percent:
-                print(f"[WARN] Resource limits exceeded - CPU: {cpu_percent}%, Memory: {memory_percent}%")
+                self.logger.warning(f"Resource limits exceeded - CPU: {cpu_percent}%, Memory: {memory_percent}%")
                 return False
+                
             return True
         
-    def update_phase_trust(self, phase: PhaseDomain, success: bool, entropy: float):
-        """Update trust metrics for a phase domain with enhanced tensor state integration"""
+    def update_phase_trust(self, phase: PhaseDomain, success: bool, entropy: float, profit_delta: float = None):
+        """Enhanced phase trust update with profit correlation"""
         trust = self.phase_trust[phase]
         
         if success:
@@ -279,581 +333,326 @@ class DLTWaveformEngine:
             if self.tensor_history:
                 recent_tensors = self.tensor_history[-3:]
                 trust.memory_coherence = np.mean([np.std(t) for t in recent_tensors])
+                
+            # Update profit correlation if provided
+            if profit_delta is not None:
+                trust.profit_correlation = (trust.profit_correlation * 0.9 + profit_delta * 0.1)
         
         # Update thermal state based on resource usage
         trust.thermal_state = psutil.cpu_percent() / 100.0
         
+        # Update fault sensitivity based on recent fault events
+        recent_faults = [e for e in self.fault_bus.memory_log[-10:]]
+        if recent_faults:
+            avg_severity = np.mean([e.severity for e in recent_faults])
+            trust.fault_sensitivity = (trust.fault_sensitivity * 0.8 + avg_severity * 0.2)
+        
         trust.last_validation = datetime.now()
         
     def is_phase_trusted(self, phase: PhaseDomain) -> bool:
-        """Check if a phase domain has sufficient trust for trading with resource consideration"""
+        """Enhanced phase trust checking with profit correlation"""
         if not self.check_resources():
             return False
             
         trust = self.phase_trust[phase]
-        return (trust.successful_echoes >= self.phase_thresholds[phase] and 
-                trust.entropy_consistency > 0.8 and
-                trust.thermal_state < 0.9)  # Don't trust if system is too hot
         
-    def compute_trigger_score(self, t: datetime, phase: PhaseDomain) -> float:
-        """
-        Compute trigger score based on bitmap pattern, phase, and tensor state
-        Returns score between 0 and 1
-        """
-        if not self.is_phase_trusted(phase):
-            return 0.0
-            
-        # Get relevant triggers for this phase
-        phase_triggers = [tr for tr in self.triggers if tr.phase == phase]
+        # Enhanced trust criteria including profit correlation
+        base_trust = (trust.successful_echoes >= self.phase_thresholds[phase] and 
+                     trust.entropy_consistency > 0.8 and
+                     trust.thermal_state < 0.9)
         
-        if not phase_triggers:
-            return 0.0
-            
-        # Compute weighted sum of diogenic scores and frequencies
-        total_score = 0.0
-        total_weight = 0.0
+        # Additional profit correlation check
+        profit_trust = trust.profit_correlation > -0.1  # Not consistently losing money
         
-        for trigger in phase_triggers:
-            # Weight by recency and success
-            time_weight = np.exp(-(t - trigger.last_trigger).total_seconds() / 86400)  # 24h decay
-            success_weight = np.log(1 + trigger.success_count)
-            
-            # Add tensor state weight
-            tensor_weight = 0.0
-            if self.tensor_history:
-                current_tensor = self.tensor_history[-1]
-                tensor_similarity = np.mean(np.abs(current_tensor - trigger.tensor_signature))
-                tensor_weight = np.exp(-tensor_similarity)
-            
-            # Combine weights
-            weight = time_weight * success_weight * (1 + tensor_weight)
-            score = trigger.diogenic_score * trigger.frequency
-            
-            # Adjust score based on resource usage
-            if trigger.resource_usage > 0.8:  # High resource usage
-                score *= 0.8  # Penalize high resource usage
-            
-            total_score += score * weight
-            total_weight += weight
-            
-        if total_weight == 0:
-            return 0.0
-            
-        return total_score / total_weight
+        return base_trust and profit_trust
         
-    def update_tensor_state(self, new_tensor: np.ndarray):
-        """Update unified tensor state with history tracking"""
-        self.tensor_map = new_tensor
-        self.tensor_history.append(new_tensor.copy())
+    def detect_recursive_loop(self, entropy: float, coherence: float, current_profit: float) -> bool:
+        """Detect recursive loops in profit patterns using SHA-based detection"""
+        # Create pattern signature
+        pattern_key = f"{entropy:.4f}_{coherence:.4f}_{current_profit:.4f}"
+        pattern_hash = hashlib.sha256(pattern_key.encode()).hexdigest()[:16]
         
-        # Keep history limited
-        if len(self.tensor_history) > self.max_tensor_history:
-            self.tensor_history = self.tensor_history[-self.max_tensor_history:]
+        # Check for recursive patterns
+        if pattern_hash in self.pattern_hash_history:
+            self.pattern_hash_history[pattern_hash]['count'] += 1
+            self.pattern_hash_history[pattern_hash]['last_seen'] = datetime.now()
             
-    def evaluate_trade_trigger(self, phase: PhaseDomain, 
-                             current_time: datetime,
-                             entropy: float,
-                             volume: float) -> Tuple[bool, float]:
-        """
-        Evaluate if current conditions match a trusted trigger pattern
-        Returns (should_trigger, confidence)
-        """
-        # Check resources first
-        if not self.check_resources():
-            return False, 0.0
-            
-        # Check phase trust
-        if not self.is_phase_trusted(phase):
-            return False, 0.0
-            
-        # Compute trigger score
-        score = self.compute_trigger_score(current_time, phase)
+            # If pattern repeats too often, it's likely a false loop
+            if self.pattern_hash_history[pattern_hash]['count'] > 5:
+                # Create recursive loop fault event
+                loop_event = FaultBusEvent(
+                    tick=int(time.time()),
+                    module="pattern_detector",
+                    type=FaultType.RECURSIVE_LOOP,
+                    severity=min(self.pattern_hash_history[pattern_hash]['count'] / 10.0, 1.0),
+                    metadata={
+                        'pattern_hash': pattern_hash,
+                        'repeat_count': self.pattern_hash_history[pattern_hash]['count'],
+                        'entropy': entropy,
+                        'coherence': coherence,
+                        'profit': current_profit
+                    },
+                    sha_signature=pattern_hash
+                )
+                self.fault_bus.push(loop_event)
+                return True
+        else:
+            self.pattern_hash_history[pattern_hash] = {
+                'count': 1,
+                'first_seen': datetime.now(),
+                'last_seen': datetime.now(),
+                'entropy': entropy,
+                'coherence': coherence,
+                'profit': current_profit
+            }
         
-        # Additional validation for short-term trades
-        if phase == PhaseDomain.SHORT:
-            if volume < 1000000:  # Example minimum volume
-                return False, 0.0
-                
-        # Final decision with resource consideration
-        should_trigger = score > 0.7  # Example threshold
+        # Clean old patterns
+        cutoff_time = datetime.now() - timedelta(hours=1)
+        self.pattern_hash_history = {
+            k: v for k, v in self.pattern_hash_history.items()
+            if v['last_seen'] > cutoff_time
+        }
         
-        # If system is under heavy load, increase threshold
-        if psutil.cpu_percent() > self.max_cpu_percent * 0.8:
-            should_trigger = score > 0.85  # Higher threshold under load
-            
-        # Place ghost shell stop if triggering trade
-        if should_trigger:
-            stop_price = self.calculate_stop_price(score, entropy)
-            if not self.ghost_shell_stop.place_stop_loss(
-                symbol=self.current_symbol,
-                stop_price=stop_price,
-                quantity=self.calculate_position_size(score)
-            ):
-                return False, 0.0  # Don't trigger if stop placement fails
-                
-        return should_trigger, score
+        return False
 
-    def update_signals(self, tick_data):
-        """Update signals with tensor state integration"""
-        if not self.check_resources():
-            return
-            
-        pattern = tick_data.get("pattern", None)
-
-        if pattern:
-            H, G = self.metrics.get_entropy_and_coherence(pattern)
-            self.panic_viz.add_data_point(time.time(), H, G)
-
-            # Update tensor state
-            if 'tensor_state' in tick_data:
-                self.update_tensor_state(tick_data['tensor_state'])
-
-            if H > 4.5 and G < 0.4:
-                print(f"[PANIC] Collapse Detected: H={H:.2f}, G={G:.2f}")
-                tick_data["panic_zone"] = True
-
-    def review_visuals(self):
-        """Review visuals with resource check"""
-        if self.check_resources():
-            self.panic_viz.render()
-
-    def register_hook(self, hook_name: str, hook_function: Callable):
-        self.hooks[hook_name] = hook_function
-
-    def trigger_hooks(self, event, **kwargs):
-        if event in self.hooks:
-            for hook in self.hooks[event]:
-                hook(**kwargs)
-
-    def load_data(self, filename):
+    def load_data(self, filename: str):
+        """Enhanced data loading with integrity validation"""
         try:
-            with open(filename, 'r') as f:
+            # Validate file integrity
+            file_hash = self.validate_waveform_file(filename)
+            
+            with open(filename, "r") as f:
                 lines = f.readlines()
-                if len(lines) == 1 and lines[0].strip().startswith('['):
+                if len(lines) == 1 and lines[0].strip().startswith("["):
                     self.data = json.loads(lines[0])
                 else:
                     self.data = [float(line.strip()) for line in lines if line.strip()]
-            print(f"[DLT] Loaded {len(self.data)} waveform entries.")
+                    
+            self.logger.info(f"Loaded {len(self.data)} waveform entries from {filename}")
+            
+            # Log audit event
+            self.audit_logger.log_waveform_event(
+                "load_data", 
+                entropy=0.0, 
+                coherence=0.0,
+                metadata={'file_hash': file_hash, 'data_points': len(self.data)}
+            )
+            
             self.trigger_hooks("on_waveform_loaded", data=self.data)
+            
+        except FileNotFoundError:
+            self.logger.error(f"Waveform file not found: {filename}")
+            self.data = None
         except Exception as e:
-            print(f"[DLT] Error loading data: {e}")
+            self.logger.error(f"Error loading data: {e}")
             self.data = None
 
-    def normalize(self, x, min_val=0.0, max_val=1.0):
-        raw_min, raw_max = -1.0, 1.0
-        return min_val + ((x - raw_min) / (raw_max - raw_min)) * (max_val - min_val)
-
     def process_waveform(self):
+        """Enhanced waveform processing with profit correlation and loop detection"""
         if self.data is None:
             raise ValueError("Data not loaded. Please call load_data first.")
-        self.processed_data = [self.normalize(x) for x in self.data]
-        print("[DLT] Waveform normalized.")
-        metrics = PatternMetrics()
-        entropy = metrics.entropy(self.processed_data)
-        coherence = metrics.coherence(self.processed_data)
-        print(f"[DLT] Entropy: {entropy}, Coherence: {coherence}")
-        self.trigger_hooks("on_entropy_vector_generated", entropy=self.processed_data)
-
-        # Compress waveform into tensor space
-        compressed_signals = TradeSignalCompressor().compress(self.processed_data)
-        
-        # Inject signals into ZBE Adapter
-        for signal in compressed_signals:
-            self.zbe.inject(signal[0], signal[1])
-
-        # Example: After updating the 16-bit trading map, propagate to cascade
-        for idx, bit in enumerate(self.state_maps[16]):
-            if bit:
-                self.bitmap_cascade.update_bitmap(16, idx, True)
-        # Optionally propagate to other tiers based on logic
-        # ... existing code ...
-        # Trigger new hook for bitmap cascade state
-        self.trigger_hooks("on_bitmap_cascade_updated", cascade_state=self.bitmap_cascade.readout())
-        # ... existing code ...
-
-    def entropy_symbol_summary(self):
-        if not self.data or len(self.data) < 3:
-            print("[DLT] Not enough data for entropy trigram.")
+            
+        try:
+            self.processed_data = [self.normalize(x) for x in self.data]
+            self.logger.info("Waveform normalized")
+            
+            # Calculate entropy and coherence
+            entropy = self.calculate_entropy(self.processed_data)
+            coherence = self.calculate_coherence(self.processed_data)
+            
+            self.logger.info(f"Entropy: {entropy:.4f}, Coherence: {coherence:.4f}")
+            
+            # Get current profit context from navigator
+            current_time = datetime.now()
+            profit_vector = self.profit_navigator.update_market_state(
+                current_price=100.0,  # Placeholder - should come from market data
+                current_volume=1000.0,
+                timestamp=current_time
+            )
+            
+            # Detect recursive loops
+            is_loop = self.detect_recursive_loop(entropy, coherence, profit_vector.magnitude)
+            
+            if is_loop:
+                self.logger.warning("Recursive loop detected - breaking cycle")
+                return
+            
+            # Check for profit anomalies in bitmap cascade
+            for tier in [16, 42, 81]:
+                is_anomaly, anomaly_strength = self.bitmap_cascade.detect_profit_anomaly(
+                    tier, profit_vector.magnitude
+                )
+                if is_anomaly:
+                    self.logger.info(f"Profit anomaly detected in tier {tier}: strength {anomaly_strength:.3f}")
+                    
+                    # Create anomaly fault event
+                    anomaly_event = FaultBusEvent(
+                        tick=int(time.time()),
+                        module="bitmap_cascade",
+                        type=FaultType.PROFIT_ANOMALY,
+                        severity=anomaly_strength,
+                        metadata={
+                            'tier': tier,
+                            'profit_magnitude': profit_vector.magnitude,
+                            'anomaly_strength': anomaly_strength
+                        },
+                        profit_context=profit_vector.magnitude
+                    )
+                    self.fault_bus.push(anomaly_event)
+            
+            # Update bitmap cascade with profit context
+            for idx, bit in enumerate(self.state_maps[16]):
+                if bit:
+                    self.bitmap_cascade.update_bitmap(
+                        16, idx, True, profit_context=profit_vector.magnitude
+                    )
+            
+            # Log audit event with profit correlation
+            self.audit_logger.log_waveform_event(
+                "process_waveform",
+                entropy=entropy,
+                coherence=coherence,
+                profit_context=profit_vector.magnitude,
+                metadata={
+                    'profit_confidence': profit_vector.confidence,
+                    'profit_direction': profit_vector.direction,
+                    'anomaly_strength': profit_vector.anomaly_strength
+                }
+            )
+            
+            # Trigger hooks with enhanced context
+            self.trigger_hooks("on_entropy_vector_generated", 
+                             entropy=self.processed_data,
+                             profit_vector=profit_vector)
+            self.trigger_hooks("on_bitmap_cascade_updated", 
+                             cascade_state=self.bitmap_cascade.readout())
+            
+        except Exception as e:
+            self.logger.error(f"Waveform processing failed: {e}")
             return
-        entropy_chunks = [stdev(self.data[i:i+3]) for i in range(0, len(self.data) - 2, 3)]
-        for i in range(0, len(entropy_chunks), 3):
-            chunk = entropy_chunks[i:i+3]
-            if len(chunk) == 3:
-                trigram = self.encode_entropy_pattern(chunk)
-                print(f"Entropy Trigram [{i//3}]: {trigram} from {chunk}")
 
-    def encode_entropy_pattern(self, pattern: List[float]) -> str:
-        """Encode entropy pattern into a string representation"""
-        if not pattern or len(pattern) != 3:
-            return "XXX"  # Invalid pattern
-            
-        # Encode based on relative magnitudes
-        encoded = []
-        for i in range(len(pattern)):
-            if i > 0:
-                if pattern[i] > pattern[i-1]:
-                    encoded.append('U')  # Up
-                elif pattern[i] < pattern[i-1]:
-                    encoded.append('D')  # Down
-                else:
-                    encoded.append('S')  # Same
-            else:
-                encoded.append('S')  # First element
-                
-        return ''.join(encoded)
-
-    def generate_output(self):
-        if self.processed_data is None:
-            raise ValueError("Data not processed. Please call process_waveform first.")
-        plot_entropy_waveform(self.processed_data)
-
-        log_path = f"logs/trade_vector_{datetime.now().isoformat()}.log"
-        with open(log_path, 'w') as log:
-            for i, val in enumerate(self.trade_vector):
-                if val > 0:
-                    log.write(f"{i}: {val}\n")
-        print(f"[DLT] Trade vector log saved → {log_path}")
-
-    def run(self, prompt_entropy=False):
-        try:
-            self.load_data('waveform_data.txt')
-            self.process_waveform()
-            self.generate_output()
-            if prompt_entropy:
-                self.entropy_symbol_summary()
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-    def zbe_trigger(self, entropy, coherence, phase):
-        e_thresh, c_thresh = self.entropy_thresholds[phase], self.coherence_thresholds[phase]
-        return entropy >= e_thresh and coherence >= c_thresh
-
-    def sha_waveform_index(self, price_block):
-        raw = ''.join(map(str, price_block)).encode()
-        hash_val = hashlib.sha256(raw).hexdigest()
-        idx = int(hash_val[:2], 16)  # 0-255
-        # Map to 42 or 81 as needed
-        return idx % 42, idx % 81
-
-    def activate_trade_signal(self, tick_idx, price_block, entropy, coherence):
-        if self.zbe_trigger(entropy, coherence, 'SHORT'):  # Example phase
-            self.state_maps[16][tick_idx % 16] = 1
-            idx = self.sha_waveform_index(price_block)
-            self.tensor_map[idx] += entropy * coherence  # Weighted boost
-
-    def update_state_maps(self, features: dict):
-        """
-        Update all state maps (4, 8, 16, 42, 81) based on extracted features.
-        Features might include entropy, phase, SHA index, etc.
-        """
-        # Example: Map entropy zones to 4-bit
-        entropy = features.get('entropy', 0)
-        if entropy < 0.2: self.state_maps[4][0] = True
-        elif entropy < 0.6: self.state_maps[4][1] = True
-        elif entropy < 1.0: self.state_maps[4][2] = True
-        else: self.state_maps[4][3] = True
-
-        # Example: Map phase alignment to 8-bit
-        phase = features.get('phase', 0)
-        self.state_maps[8][phase] = True
-
-        # ...repeat for 16, 42, 81 as needed, using your prime/Euler/tensor logic
-
-    def select_likely_scenario(self):
-        """
-        Analyze all state maps and select the most probable/profitable scenario.
-        This could use a scoring function, ML model, or rule-based logic.
-        """
-        # Example: Weighted sum of active bits, or more advanced tensor contraction
-        scores = {k: np.sum(v) for k, v in self.state_maps.items()}
-        best_map = max(scores, key=scores.get)
-        return best_map, self.state_maps[best_map]
-
-    def propagate_tick(self, price_block, entropy, system_state):
-        sha_idx = self.sha256_resolver.resolve_index(price_block)
-        bitmap_size = self.bitmap_cascade.select_bitmap(sha_idx, entropy, system_state)
-        self.bitmap_cascade.update_bitmap(bitmap_size, sha_idx % bitmap_size, True)
-        # After outcome is known:
-        # self.bitmap_cascade.update_log(sha_idx, bitmap_size, outcome, time.time())
-
-    def feedback_from_visualizer(self, metrics):
-        self.bitmap_cascade.adapt_from_metrics(metrics)
-
-    def calculate_stop_price(self, score: float, entropy: float) -> float:
-        """Calculate stop price based on score and entropy"""
-        base_price = self.get_current_price()
-        volatility = self.calculate_volatility()
-        
-        # Adjust stop distance based on score and entropy
-        stop_distance = volatility * (1.0 - score) * (1.0 + entropy)
-        
-        return base_price - stop_distance
-        
-    def calculate_position_size(self, score: float) -> float:
-        """Calculate position size based on score and risk parameters"""
-        base_size = self.max_position_size * score
-        risk_adjustment = 1.0 - (psutil.cpu_percent() / 100.0)  # Reduce size under load
-        
-        return base_size * risk_adjustment
-
-    def get_current_price(self) -> float:
-        """Get current price for the trading symbol"""
-        if not self.current_symbol:
-            raise ValueError("No trading symbol set")
-        try:
-            # This is a placeholder - implement actual price fetching logic
-            return 100.0  # Example price
-        except Exception as e:
-            print(f"[ERROR] Failed to get current price: {e}")
-            return 0.0
-
-    def calculate_volatility(self) -> float:
-        """Calculate current market volatility"""
-        if not self.processed_data or len(self.processed_data) < 20:
-            return 0.01  # Default low volatility
-            
-        # Calculate rolling standard deviation
-        returns = np.diff(np.log(self.processed_data))
-        return np.std(returns[-20:])  # Last 20 periods
-
-class PatternMetrics:
-    def __init__(self):
-        self.entropy_window = 20  # Window size for entropy calculation
-        self.coherence_threshold = 0.5  # Threshold for coherence calculation
-
-    def entropy(self, data: List[float]) -> float:
+    def calculate_entropy(self, data: List[float]) -> float:
         """Calculate Shannon entropy of the data"""
         if not data or len(data) < 2:
             return 0.0
             
         # Normalize data to [0,1] range
-        data_norm = (data - np.min(data)) / (np.max(data) - np.min(data))
+        data_norm = (np.array(data) - np.min(data)) / (np.max(data) - np.min(data) + 1e-8)
         
         # Create histogram
         hist, _ = np.histogram(data_norm, bins=20, density=True)
         hist = hist[hist > 0]  # Remove zero bins
         
         # Calculate entropy
-        entropy = -np.sum(hist * np.log2(hist))
+        entropy = -np.sum(hist * np.log2(hist + 1e-8))
         return entropy
-
-    def coherence(self, data: List[float]) -> float:
+    
+    def calculate_coherence(self, data: List[float]) -> float:
         """Calculate pattern coherence using autocorrelation"""
         if not data or len(data) < 2:
             return 0.0
             
         # Calculate autocorrelation
-        data_norm = (data - np.mean(data)) / np.std(data)
+        data_norm = (np.array(data) - np.mean(data)) / (np.std(data) + 1e-8)
         autocorr = np.correlate(data_norm, data_norm, mode='full')
         autocorr = autocorr[len(autocorr)//2:]
         
         # Normalize and calculate coherence
-        autocorr = autocorr / autocorr[0]
-        coherence = np.mean(np.abs(autocorr[:self.entropy_window]))
+        autocorr = autocorr / (autocorr[0] + 1e-8)
+        coherence = np.mean(np.abs(autocorr[:min(20, len(autocorr))]))
         
         return coherence
 
-    def get_entropy_and_coherence(self, pattern: List[float]) -> Tuple[float, float]:
-        """Get both entropy and coherence metrics for a pattern"""
-        return self.entropy(pattern), self.coherence(pattern)
+    def normalize(self, x, min_val=0.0, max_val=1.0):
+        raw_min, raw_max = -1.0, 1.0
+        return min_val + ((x - raw_min) / (raw_max - raw_min)) * (max_val - min_val)
 
-class TradeSignalCompressor:
-    def compress(self, waveform: List[float]) -> np.ndarray:
-        """
-        Compress normalized waveform into phase-symbol tensor: 
-        Shape (N, 4): [timestamp, entropy, coherence, trigram_code]
-        """
-        compressed = []
-        for i in range(0, len(waveform) - 2, 3):
-            chunk = waveform[i:i+3]
-            entropy = stdev(chunk)
-            coherence = 1 - entropy  # crude example
-            trigram = self.encode_entropy_pattern(chunk)
-            compressed.append([i, entropy, coherence, int.from_bytes(trigram.encode(), 'little')])
-        return np.array(compressed)
+    def register_hook(self, hook_name: str, hook_function: Callable):
+        """Register a callback for a specific event."""
+        if hook_name not in self.hooks:
+            self.hooks[hook_name] = []
+        self.hooks[hook_name].append(hook_function)
 
-class ZBEAdapter:
-    """
-    Executes Zero-Bounce trade calls directly from validated entropy hooks.
-    """
-    def __init__(self):
-        self.execution_vector = np.zeros(10000, dtype=np.uint8)
-    
-    def inject(self, vector_idx: int, signal_strength: float):
-        """
-        Insert into trade relay vector. Only values > threshold execute.
-        """
-        if signal_strength > 0.75:
-            self.execution_vector[vector_idx] += 1
-            self.execute_trade(vector_idx)
+    def trigger_hooks(self, event: str, **kwargs):
+        """Safely trigger registered callbacks."""
+        for hook in self.hooks.get(event, []):
+            try:
+                hook(**kwargs)
+            except Exception as e:
+                self.logger.error(f"Hook '{event}' failed: {e}")
 
-    def execute_trade(self, idx):
-        print(f"[ZBE] Executing trade vector {idx}")
-        # This is a stub. Hook into actual trade or logging mechanism.
-
-    def flush(self):
-        self.execution_vector[:] = 0
-
-def encode_entropy_pattern(chunk: List[float]) -> str:
-    # Implement your own logic to encode entropy pattern into a string
-    pass
-
-class TensorReverseMapper:
-    def __init__(self):
-        self.tensor_meta: Dict[int, List[Dict]] = {}
-    def store_meta(self, index: int, pattern: List[float], phase: str, entropy: float, coherence: float):
-        entry = {
-            "pattern": pattern,
-            "phase": phase,
-            "entropy": entropy,
-            "coherence": coherence,
-            "timestamp": time.time(),
+    def get_profit_correlations(self) -> Dict:
+        """Get current profit correlations from fault bus and bitmap cascade"""
+        return {
+            'fault_correlations': self.fault_bus.export_correlation_matrix(),
+            'bitmap_correlations': self.bitmap_cascade.readout(),
+            'phase_trust': {
+                phase.value: {
+                    'profit_correlation': trust.profit_correlation,
+                    'fault_sensitivity': trust.fault_sensitivity,
+                    'entropy_consistency': trust.entropy_consistency
+                }
+                for phase, trust in self.phase_trust.items()
+            }
         }
-        self.tensor_meta.setdefault(index, []).append(entry)
-    def retrieve_top_patterns(self, limit: int = 10) -> List[Dict]:
-        flat_list = [item for sublist in self.tensor_meta.values() for item in sublist]
-        return sorted(flat_list, key=lambda x: x["entropy"] - x["coherence"], reverse=True)[:limit]
 
-class SHA256BitmapResolver:
-    def __init__(self):
-        self.index_space = 256
-    def resolve_index(self, data_block: List[float]) -> int:
-        byte_string = str(data_block).encode("utf-8")
-        digest = hashlib.sha256(byte_string).hexdigest()
-        return int(digest[:4], 16) % self.index_space
+    def export_comprehensive_log(self, file_path: str = None) -> str:
+        """Export comprehensive log including fault bus, profit correlations, and navigation state"""
+        comprehensive_data = {
+            'timestamp': datetime.now().isoformat(),
+            'fault_bus_log': json.loads(self.fault_bus.export_memory_log()),
+            'correlation_matrix': json.loads(self.fault_bus.export_correlation_matrix()),
+            'navigation_log': json.loads(self.profit_navigator.export_navigation_log()),
+            'profit_correlations': self.get_profit_correlations(),
+            'pattern_hash_history': {
+                k: {
+                    'count': v['count'],
+                    'first_seen': v['first_seen'].isoformat(),
+                    'last_seen': v['last_seen'].isoformat(),
+                    'entropy': v['entropy'],
+                    'coherence': v['coherence'],
+                    'profit': v['profit']
+                }
+                for k, v in self.pattern_hash_history.items()
+            }
+        }
+        
+        output = json.dumps(comprehensive_data, indent=2)
+        if file_path:
+            with open(file_path, 'w') as f:
+                f.write(output)
+        return output
 
-def should_enter_trade(bit_score, zbe_state, ghost_state) -> str:
-    if bit_score > 128 and zbe_state == "stable" and ghost_state == "clear":
-        return "ENTER"
-    elif bit_score < 64 or zbe_state in ("spike", "chaotic"):
-        return "EXIT"
-    elif 64 <= bit_score <= 128 and ghost_state == "murky":
-        return "HOLD"
-    else:
-        return "IGNORE"
-
-# Example usage
-engine = DLTWaveformEngine()
-engine.register_hook("on_waveform_loaded", lambda tick_seed: print(f"Tick seed loaded: {tick_seed}"))
-engine.register_hook("on_entropy_vector_generated", lambda entropy: print(f"Entropy vector generated: {entropy}"))
-engine.register_hook("on_phase_trust_update", lambda trust_updates: print(f"Phase trust updated: {trust_updates}"))
-
-# Simulate waveform processing
-engine.process_waveform()
-engine.generate_output()
-
+# Example usage with enhanced functionality
 if __name__ == "__main__":
-    test_data = [0.1, 0.5, 0.9, 0.3, 0.6, 0.2]
+    logging.basicConfig(level=logging.INFO)
     
+    # Create enhanced engine
     engine = DLTWaveformEngine()
-    engine.register_hook("on_entropy_vector_generated", lambda entropy: print(f"Entropy vector generated: {entropy}"))
+    
+    # Register enhanced hooks
+    engine.register_hook("on_waveform_loaded", 
+                        lambda data, **kwargs: print(f"Loaded {len(data)} waveform entries"))
+    engine.register_hook("on_entropy_vector_generated", 
+                        lambda entropy, profit_vector, **kwargs: 
+                        print(f"Entropy generated with profit magnitude: {profit_vector.magnitude:.4f}"))
+    
+    # Simulate processing with profit correlation
+    test_data = [0.1, 0.5, 0.9, 0.3, 0.6, 0.2] * 10  # Repeated pattern to test loop detection
     engine.data = test_data
-    engine.process_waveform()
-
-def entropy_to_bitmap_transform(entropy_vector, phase_weights):
-    """
-    Map entropy to bitmap ID.
-    E(t) → B(n) where n ∈ {4, 8, 16, 42, 81}
-    """
-    activation_probability = np.exp(-np.array(entropy_vector) / np.array(phase_weights))
-    bitmap_id = np.argmax(activation_probability * np.array([4, 8, 16, 42, 81]))
-    return bitmap_id, activation_probability
-
-def generate_sha_key(bitmap_array):
-    bits = ''.join(['1' if b else '0' for b in bitmap_array])
-    return hashlib.sha256(bits.encode()).hexdigest()
-
-class BitmapEngine:
-    def __init__(self, tensor_map):
-        self.tensor_map = tensor_map
-
-    def lookup_profit_tensor(self, sha_key):
-        return self.tensor_map.get(sha_key, None) 
-
-@dataclass
-class FaultBusEvent:
-    tick: int
-    module: str
-    type: str
-    severity: float
-    timestamp: str = datetime.now().isoformat()
-
-class FaultBus:
-    def __init__(self):
-        self.queue = []
-
-    def push(self, event: FaultBusEvent):
-        self.queue.append(event)
-
-    def dispatch(self, resolver):
-        for event in self.queue:
-            resolver.handle_fault(event.type, event.severity)
-        self.queue.clear() 
-
-class ClassicalAPIBridge:
-    def __init__(self, api_client):
-        self.client = api_client
-
-    def execute_trade(self, symbol, side, qty, strategy_metadata):
-        response = self.client.create_order(symbol=symbol, side=side, qty=qty)
-        self.log_execution(symbol, side, qty, strategy_metadata)
-        return response
-
-    def log_execution(self, symbol, side, qty, metadata):
-        print(f"Executed {side} {qty} {symbol} @ {datetime.now().isoformat()} | {metadata}") 
-
-class QuantumStrategySynthesizer:
-    def __init__(self, cross_entropy_map, asset_bridge):
-        self.cross_entropy_map = cross_entropy_map
-        self.asset_bridge = asset_bridge
-
-    def update_market_entropy(self, asset, entropy):
-        self.cross_entropy_map[asset] = entropy
-
-    def trigger_cross_asset_response(self, asset, sha_key):
-        correlated_assets = self.asset_bridge.get(asset, [])
-        for target in correlated_assets:
-            mapped_key = self.map_sha_to_target(target, sha_key)
-            self.route_tensor(target, mapped_key)
-
-    def map_sha_to_target(self, asset, key):
-        return hashlib.sha256((asset + key).encode()).hexdigest() 
-
-class TensorFieldOrchestrator:
-    def __init__(self):
-        self.trust_weights = {}  # SHA -> score
-        self.optimal_temp = 60.0
-
-    def recursive_memory_dynamics(self, sha_key, history):
-        decay = self.trust_weights.get(sha_key, 1.0) * np.exp(-0.05 * len(history))
-        reinforcement = sum([h['profit'] for h in history[-3:]])
-        self.trust_weights[sha_key] = decay + reinforcement
-        return self.trust_weights[sha_key]
-
-    def thermal_execution_optimization(self, cpu_temp, base_rate):
-        multiplier = max(0, 1 - 0.03 * (cpu_temp - self.optimal_temp))
-        return base_rate * multiplier 
-
-class OfflineTrainer:
-    def __init__(self, orchestrator):
-        self.history = []
-        self.orchestrator = orchestrator
-
-    def simulate_batch(self, entropy_data, sha_keys, profit_data):
-        for entropy, key, profit in zip(entropy_data, sha_keys, profit_data):
-            score = self.orchestrator.recursive_memory_dynamics(key, self.history)
-            print(f"[SIM] SHA: {key[:6]}... → Score: {score:.3f}")
-            self.history.append({'sha': key, 'profit': profit}) 
-
-vector = lookup_profit_tensor(sha_key)
-score = orchestrator.recursive_memory_dynamics(sha_key, tensor_history)
-output = vector * score 
-
-entropy_vector = lattice_fork.process_tick(pkt)
-bitmap_id, _ = entropy_to_bitmap_transform(entropy_vector)
-sha_key = generate_sha_key(bitmap_resolution_map[bitmap_id])
-tensor = lookup_profit_tensor(sha_key) 
-
-weight = orchestrator.recursive_memory_dynamics(sha_key, history)
-if weight > adaptive_threshold:
-    execute_trade(...) 
+    
+    try:
+        engine.process_waveform()
+        
+        # Dispatch fault bus events
+        import asyncio
+        asyncio.run(engine.fault_bus.dispatch())
+        
+        # Export comprehensive log
+        print("\n=== Comprehensive Analysis ===")
+        log_output = engine.export_comprehensive_log()
+        print(log_output[:1000] + "..." if len(log_output) > 1000 else log_output)
+        
+    except Exception as e:
+        logging.error(f"Processing failed: {e}")
+        print(f"Error: {e}") 

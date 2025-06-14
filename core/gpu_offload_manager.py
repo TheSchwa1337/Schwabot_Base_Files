@@ -16,7 +16,7 @@ import threading
 import time
 from pathlib import Path
 import json
-from queue import Queue
+from queue import Queue, Empty
 import psutil
 import GPUtil
 import os
@@ -24,6 +24,7 @@ import yaml
 import cProfile
 from threading import Semaphore
 from datetime import datetime
+from enum import Enum
 
 # Try to import CuPy
 try:
@@ -39,6 +40,13 @@ from .fault_bus import FaultBus, FaultBusEvent
 
 logger = logging.getLogger(__name__)
 
+class FaultType(Enum):
+    THERMAL_CRITICAL = "thermal_critical"
+    PROFIT_CRITICAL = "profit_critical"
+    BITMAP_OVERFLOW = "bitmap_overflow"
+    BITMAP_CORRUPT = "bitmap_corrupt"
+    GPU_MEMORY_EXHAUSTED = "gpu_memory_exhausted"
+
 @dataclass
 class OffloadState:
     """State of a GPU offload operation"""
@@ -49,13 +57,15 @@ class OffloadState:
     error: Optional[str] = None
     memory_used: int = 0
     compute_time: float = 0.0
+    fallback_used: bool = False
+    fallback_reason: Optional[str] = None
 
 class GPUOffloadManager:
     """
     Manages GPU offloading operations with thermal-aware execution and profit tracking
     """
     
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: Optional[str] = None, fault_bus=None):
         """
         Initialize GPU offload manager
         
@@ -99,6 +109,11 @@ class GPUOffloadManager:
         self._lock = threading.Lock()
         self._running = False
         self.semaphore = Semaphore(self.config.get('max_concurrent_ops', 4))
+        
+        # Placeholders for injection (can be set externally)
+        self.zbe_tensor = None
+        self.profit_store = None
+        self.fault_bus = fault_bus or FaultBus()
         
         # Start worker thread
         self.start()
@@ -267,6 +282,10 @@ class GPUOffloadManager:
         except:
             return 0.0, 0.0, 0.0
             
+    def enqueue_operation(self, operation):
+        with self._lock:
+            self.operation_queue.put(operation)
+
     def offload(self, 
                 operation_id: str,
                 data: Union[np.ndarray, List],
@@ -293,7 +312,7 @@ class GPUOffloadManager:
         }
         
         # Add to queue
-        self.operation_queue.put(operation)
+        self.enqueue_operation(operation)
         
         # Wait for result
         result = self.result_queue.get()
@@ -333,6 +352,7 @@ class GPUOffloadManager:
                 self._running = True
                 self.worker_thread = threading.Thread(target=self._worker_loop)
                 self.worker_thread.start()
+                self._start_fault_watcher()  # Start fault watcher thread
                 logger.info("GPU offload manager started")
                 
     def stop(self) -> None:
@@ -356,7 +376,7 @@ class GPUOffloadManager:
                 # Put result in result queue
                 self.result_queue.put(result)
                 
-            except Queue.Empty:
+            except Empty:
                 continue
             except Exception as e:
                 logger.error(f"Worker loop error: {e}")
@@ -375,34 +395,27 @@ class GPUOffloadManager:
             
             try:
                 # Get current thermal conditions
-                current_temp = self.zbe_tensor.read_cpu_temperature()
-                thermal_efficiency = self.zbe_tensor.get_thermal_stats()['thermal_efficiency']
+                gpus = GPUtil.getGPUs()
+                current_temp = gpus[0].temperature if gpus else 0
+                thermal_efficiency = gpus[0].load if gpus else 0
                 
                 # Calculate profit potential
-                profit_potential = self.profit_store.get_profit_potential(operation_id)
+                profit_potential = self.profit_store.get_profit_potential(operation_id) if self.profit_store else 0
                 
                 # Get current bit depth
-                bit_depth = self.zbe_tensor.get_optimal_bit_depth()
+                bit_depth = self.zbe_tensor.get_optimal_bit_depth() if self.zbe_tensor else 8
                 depth_config = self._get_bit_depth_config(bit_depth)
                 
-                # Check if we should use GPU
-                if (self.gpu_available and 
-                    self._check_gpu_health() and 
-                    self._should_offload(data) and
-                    thermal_efficiency > self.config['thermal']['efficiency_threshold']):
-                    
-                    # Execute on GPU
+                # Determine if we should use GPU
+                use_gpu = self.gpu_available and not (
+                    self.fault_bus.has_critical("thermal") or 
+                    self.fault_bus.has_critical("bitmap")
+                )
+
+                if use_gpu:
                     result = self._execute_gpu(gpu_func, data)
                     fallback_used = False
-                    
-                    # Update profit tensor
-                    self.profit_store.update_profit(
-                        operation_id,
-                        profit_potential,
-                        thermal_efficiency
-                    )
                 else:
-                    # Execute on CPU
                     result = cpu_func(data)
                     fallback_used = True
                 
@@ -413,33 +426,47 @@ class GPUOffloadManager:
                     end_time=datetime.fromtimestamp(time.time()),
                     status="completed" if result is not None else "failed",
                     error=str(result) if result is not None else None,
-                    memory_used=GPUtil.getGPUs()[0].memoryUsed if self.gpu_available else 0,
-                    compute_time=time.time() - start_time
+                    memory_used=gpus[0].memoryUsed if gpus else 0,
+                    compute_time=time.time() - start_time,
+                    fallback_used=fallback_used,
+                    fallback_reason="thermal" if not use_gpu and not self.gpu_available else (
+                        "bitmap" if not use_gpu and self.fault_bus.has_critical("bitmap") else None
+                    )
                 )
                 
+            except cp.cuda.memory.OutOfMemoryError as e:
+                # Handle memory exhaustion fault
+                logger.error(f"GPU Memory Exhausted: {e}")
+                self.fault_bus.push(FaultBusEvent(
+                    tick=int(time.time()), module="gpu_offload",
+                    type="gpu_memory_exhausted", severity=1.0,
+                    metadata={"op_id": operation_id, "pool": getattr(self.mem_pool, 'used_bytes', None)}
+                ))
+                fallback_used = True
+                
             except Exception as e:
-                # Handle error
+                # Handle other errors
                 state = OffloadState(
                     operation_id=operation_id,
                     start_time=datetime.fromtimestamp(start_time),
                     end_time=datetime.fromtimestamp(time.time()),
                     status="failed",
                     error=str(e),
-                    memory_used=0,
-                    compute_time=time.time() - start_time
+                    memory_used=gpus[0].memoryUsed if gpus else 0,
+                    compute_time=time.time() - start_time,
+                    fallback_used=True,
+                    fallback_reason=str(e)
                 )
                 
                 # Push fault event
                 self.fault_bus.push(FaultBusEvent(
-                    tick=int(time.time()),
-                    module="gpu_offload",
-                    type="operation_failed",
-                    severity=0.8,
-                    metadata={"error": str(e)}
+                    tick=int(time.time()), module="gpu_offload", type="operation_failed",
+                    severity=0.8, metadata={"error": str(e)}
                 ))
             
             # Add to history
-            self.offload_history.append(state)
+            with self._lock:
+                self.offload_history.append(state)
             
             # Clean old history entries
             history_window = self.config['profit']['history_window']
@@ -449,32 +476,70 @@ class GPUOffloadManager:
             profiler.disable()
             return state
 
+    def _start_fault_watcher(self):
+        """Start a thread to watch for faults and react accordingly"""
+        def watcher():
+            while self._running:
+                fault = self.fault_bus.pop(timeout=2)
+                if not fault:
+                    continue
+
+                if fault.type == FaultType.THERMAL_CRITICAL:
+                    self.gpu_available = False
+                    self._cooldown_until = time.time() + 60  # cooldown 60s
+                elif fault.type == FaultType.PROFIT_CRITICAL:
+                    self.config['gpu_safety']['min_data_size'] += 1024  # scale up
+                elif fault.type == FaultType.BITMAP_OVERFLOW:
+                    self._handle_bitmap_overflow(fault)
+                elif fault.type == FaultType.BITMAP_CORRUPT:
+                    self._flag_result_as_corrupt(fault.metadata)
+        threading.Thread(target=watcher, daemon=True).start()
+
+    def _handle_bitmap_overflow(self, fault):
+        # Handle bitmap overflow
+        logger.error(f"Bitmap Overflow: {fault.metadata}")
+        # Add logic to handle overflow
+
+    def _flag_result_as_corrupt(self, metadata):
+        # Implement logic to flag a result as corrupt
+        logger.error(f"Result flagged as corrupt: {metadata}")
+
+    def save_offload_log(self, path="offload_log.json"):
+        with open(path, 'w') as f:
+            json.dump([vars(s) for s in self.offload_history], f, indent=2)
+
 # Example usage
 if __name__ == "__main__":
-    # Initialize manager
-    manager = GPUOffloadManager()
-    
-    # Example GPU and CPU functions
+    manager = GPUOffloadManager(fault_bus=DummyFaultBus())
+    manager.start()
+
     def gpu_process(data):
         return cp.square(data)
-        
+
     def cpu_process(data):
         return np.square(data)
-    
-    # Test offload
-    data = np.random.rand(1000)
-    result = manager.offload(
-        operation_id="test_square",
-        data=data,
-        gpu_func=gpu_process,
-        cpu_func=cpu_process
-    )
-    
-    print(f"Operation {result.operation_id}:")
-    print(f"Success: {result.status == 'completed' and not result.error}")
-    print(f"GPU used: {result.status == 'completed' and not result.error}")
-    print(f"Execution time: {result.compute_time:.3f}s")
-    
-    # Get statistics
-    stats = manager.get_gpu_stats()
-    print(f"GPU stats: {stats}") 
+
+    try:
+        data = np.random.rand(1000)
+        result = manager.offload(
+            operation_id="test_square",
+            data=data,
+            gpu_func=gpu_process,
+            cpu_func=cpu_process
+        )
+
+        print(f"Operation {result.operation_id}:")
+        print(f"Success: {result.status == 'completed' and not result.error}")
+        print(f"GPU used: {not result.fallback_used}")
+        print(f"Execution time: {result.compute_time:.3f}s")
+
+        stats = manager.get_gpu_stats()
+        print(f"GPU stats: {stats}")
+
+        # Save offload log
+        manager.save_offload_log()
+
+    except Exception as e:
+        print(f"[FATAL] Offload failed with error: {e}")
+        manager.save_offload_log("crashlog.json")
+        raise 

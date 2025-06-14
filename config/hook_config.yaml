@@ -1,0 +1,101 @@
+debug:
+  clusters: false
+  drifts: false
+  simulate_strategy: false
+
+hooks:
+  ncco_manager:
+    enabled: true
+    thermal_zones: ["cool", "normal", "warm"]
+    profit_zones: ["surging", "stable"]
+    confidence_threshold: 0.6
+    cooldown_seconds: 30
+    max_thermal_temp: 80.0
+    description: "NCCO Manager for pattern recognition and clustering"
+    
+  sfsss_router:
+    enabled: true
+    thermal_zones: ["cool", "normal"]
+    profit_zones: ["surging"]
+    confidence_threshold: 0.7
+    cooldown_seconds: 45
+    max_thermal_temp: 75.0
+    description: "SFSSS Router for strategy switching"
+    
+  cluster_mapper:
+    enabled: true
+    thermal_zones: ["cool", "normal", "warm"]
+    profit_zones: ["surging", "stable", "volatile"]
+    confidence_threshold: 0.5
+    cooldown_seconds: 20
+    max_thermal_temp: 85.0
+    description: "Cluster Mapper for market state clustering"
+    
+  drift_engine:
+    enabled: true
+    thermal_zones: ["cool", "normal"]
+    profit_zones: ["surging", "volatile"]
+    confidence_threshold: 0.8
+    cooldown_seconds: 60
+    max_thermal_temp: 70.0
+    description: "Drift Shell Engine for trend analysis"
+    
+  echo_logger:
+    enabled: true
+    thermal_zones: ["cool", "normal", "warm", "hot"]
+    profit_zones: ["surging", "stable", "drawdown", "volatile"]
+    confidence_threshold: 0.3
+    cooldown_seconds: 5
+    max_thermal_temp: 90.0
+    description: "Echo Logger for system feedback"
+    
+  vault_router:
+    enabled: true
+    thermal_zones: ["cool", "normal", "warm"]
+    profit_zones: ["surging", "stable"]
+    confidence_threshold: 0.9
+    cooldown_seconds: 120
+    max_thermal_temp: 75.0
+    description: "Vault Router for profit locking decisions"
+
+thresholds:
+  thermal_critical_temp: 85.0
+  profit_vector_minimum: 0.3
+  memory_confidence_minimum: 0.4
+  hook_failure_threshold: 0.2
+
+echo_feedback:
+  enabled: true
+  success_weight: 0.7
+  failure_weight: 0.3
+  decay_factor: 0.95
+
+# Hook routing priority matrix
+routing_matrix:
+  high_profit_surge:
+    thermal_zones: ["cool", "normal"]
+    profit_zones: ["surging"]
+    active_hooks: ["sfsss_router", "vault_router", "drift_engine"]
+    
+  stable_operation:
+    thermal_zones: ["normal", "warm"]
+    profit_zones: ["stable"]
+    active_hooks: ["ncco_manager", "cluster_mapper", "echo_logger"]
+    
+  thermal_stress:
+    thermal_zones: ["hot", "critical"]
+    profit_zones: ["any"]
+    active_hooks: ["echo_logger"]
+    
+  volatile_market:
+    thermal_zones: ["cool", "normal"]
+    profit_zones: ["volatile", "drawdown"]
+    active_hooks: ["cluster_mapper", "drift_engine", "echo_logger"]
+
+# Performance monitoring settings
+monitoring:
+  performance_window: 100  # Number of executions to track
+  statistics_interval: 300  # Seconds between statistics updates
+  cleanup_interval: 3600    # Seconds between performance cleanup
+  auto_throttle_enabled: true
+  throttle_recovery_time: 600  # Seconds before retry after throttling 

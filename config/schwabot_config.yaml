@@ -1,0 +1,230 @@
+# Schwabot Configuration
+# Mathematical parameters for profit-fault correlation and recursive loop detection
+
+# Fault Bus Configuration
+fault_bus:
+  log_path: "logs/faults"
+  severity_thresholds:
+    info: 0.1
+    warning: 0.5
+    critical: 0.9
+  
+  # Recursive Loop Detection
+  loop_detection:
+    window_size: 100
+    similarity_threshold: 0.95
+    max_pattern_age_hours: 1
+    max_repetitions: 5
+  
+  # Profit-Fault Correlation
+  correlation:
+    decay_factor: 0.95
+    min_correlation: 0.3
+    temporal_buffer_size: 1000
+    correlation_threshold: 0.5
+
+# Profit Cycle Navigator Configuration
+profit_navigator:
+  initial_portfolio: 10000.0
+  
+  # Cycle Detection Parameters
+  cycle_detection:
+    cycle_window: 100
+    min_profit_threshold: 0.02
+    anomaly_threshold: 2.5
+    correlation_threshold: 0.5
+    detection_window: 50
+  
+  # JuMBO-style Anomaly Detection (inspired by Orion Nebula research)
+  jumbo_anomaly:
+    z_score_threshold: 2.5
+    cluster_min_count: 3
+    anomaly_strength_multiplier: 2.0
+    max_anomaly_strength: 1.0
+  
+  # Risk Management
+  risk_management:
+    max_position_size: 0.3      # 30% of portfolio
+    stop_loss_ratio: 0.02       # 2% stop loss
+    take_profit_ratio: 0.06     # 6% take profit
+    max_risk_per_trade: 0.02    # 2% risk per trade
+    max_total_exposure: 0.3     # 30% total exposure
+  
+  # Volume Optimization (Kelly Criterion-inspired)
+  volume_optimization:
+    max_risk_per_trade: 0.02
+    max_win_probability: 0.9
+    min_expected_return: 0.01
+
+# DLT Waveform Engine Configuration
+waveform_engine:
+  # Resource Management
+  resource_limits:
+    max_cpu_percent: 80.0
+    max_memory_percent: 70.0
+    resource_check_interval_seconds: 5
+  
+  # Phase Trust Thresholds
+  phase_thresholds:
+    SHORT: 10    # 10+ phase-aligned echoes
+    MID: 5       # 5+ echoes with entropy consistency  
+    LONG: 3      # 3+ successful echoes in 90d
+  
+  # Entropy and Coherence Thresholds
+  entropy_thresholds:
+    SHORT: 4.0
+    MID: 3.5
+    LONG: 3.0
+  
+  coherence_thresholds:
+    SHORT: 0.6
+    MID: 0.5
+    LONG: 0.4
+  
+  # Tensor State Management
+  tensor_config:
+    tensor_map_size: 256
+    max_tensor_history: 1000
+    
+  # Bitmap Cascade Configuration
+  bitmap_cascade:
+    tiers: [4, 8, 16, 42, 81]
+    profit_correlation_window: 20
+    anomaly_cluster_threshold: 2
+  
+  # Pattern Recognition
+  pattern_recognition:
+    entropy_calculation_bins: 20
+    coherence_window: 20
+    autocorr_max_lag: 20
+
+# Stop Loss Pattern Book Configuration
+stop_patterns:
+  # Threshold Configuration
+  thresholds:
+    warning: 0.02      # 2% loss warning
+    alert: 0.05        # 5% loss alert  
+    trigger: 0.08      # 8% loss trigger
+    recovery: 0.03     # 3% recovery threshold
+  
+  # Duration Limits
+  duration:
+    min_duration: 3    # Minimum pattern duration
+    max_duration: 20   # Maximum pattern tracking
+  
+  # Confidence Requirements
+  confidence:
+    threshold: 0.7     # Minimum confidence for validation
+
+# Exchange and Trading Configuration
+trading:
+  # Exchange Configuration
+  exchange:
+    id: "binance"
+    sandbox: true
+    enable_rate_limit: true
+    update_interval_seconds: 30
+  
+  # Trading Pairs
+  pairs:
+    - "BTC/USDT"
+    - "ETH/USDT"
+    - "BNB/USDT"
+  
+  # Order Management
+  orders:
+    default_order_type: "market"
+    slippage_tolerance: 0.001   # 0.1% slippage tolerance
+    min_order_size_usd: 10.0    # Minimum $10 orders
+
+# Mathematical Models Configuration
+mathematical_models:
+  # Fourier Analysis for Cycle Detection
+  fourier_analysis:
+    fft_window_size: 100
+    dominant_frequency_threshold: 0.1
+    phase_mapping:
+      accumulation: [0.0, 0.2]
+      markup: [0.2, 0.4]
+      distribution: [0.4, 0.6]
+      markdown: [0.6, 0.8]
+      re_accumulation: [0.8, 1.0]
+  
+  # Statistical Analysis
+  statistics:
+    z_score_window: 50
+    variance_threshold: 1e-8
+    correlation_decay: 0.95
+    moving_average_alpha: 0.1
+  
+  # Hash-based Pattern Recognition
+  hash_patterns:
+    sha_truncate_length: 16
+    pattern_similarity_threshold: 0.95
+    hash_history_size: 1000
+    collision_threshold: 5
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # File Logging
+  files:
+    audit_log: "logs/waveform_audit.log"
+    profit_correlation: "logs/profit_correlation.log"
+    trading_log: "logs/trading.log"
+    fault_log: "logs/faults.log"
+  
+  # Log Rotation
+  rotation:
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+# Performance Monitoring
+monitoring:
+  # Metrics Collection
+  metrics:
+    - "total_trades"
+    - "winning_trades" 
+    - "total_profit"
+    - "max_drawdown"
+    - "sharpe_ratio"
+    - "profit_factor"
+    - "win_rate"
+  
+  # Alert Thresholds
+  alerts:
+    max_drawdown_percent: 10.0
+    min_sharpe_ratio: 0.5
+    max_consecutive_losses: 5
+    
+# Emergency Controls
+emergency:
+  # Auto-stop Conditions
+  auto_stop:
+    max_daily_loss_percent: 5.0
+    max_drawdown_percent: 15.0
+    consecutive_fault_threshold: 10
+    resource_overload_duration_minutes: 5
+  
+  # Manual Override
+  manual_controls:
+    emergency_stop_enabled: true
+    position_size_override: true
+    risk_limit_override: false
+
+# Backtesting Configuration (for testing)
+backtesting:
+  # Data Configuration
+  data:
+    start_date: "2024-01-01"
+    end_date: "2024-12-31" 
+    timeframe: "1h"
+    commission: 0.001  # 0.1% commission
+  
+  # Simulation Parameters
+  simulation:
+    initial_capital: 10000.0
+    slippage: 0.0005  # 0.05% slippage
+    latency_ms: 100   # 100ms execution latency 
