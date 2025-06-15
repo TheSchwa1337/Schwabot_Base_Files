@@ -19,9 +19,9 @@ from hashlib import sha256
 from concurrent.futures import ThreadPoolExecutor
 import threading
 
-# Import config loading utilities and schema
-from config.io_utils import load_config, ensure_config_exists, ConfigError
-from config.matrix_response_schema import MATRIX_RESPONSE_SCHEMA, LINE_RENDER_SCHEMA
+# Import standardized configuration management
+from config import load_config, ensure_config_exists, ConfigError
+from config.matrix_response_schema import LINE_RENDER_SCHEMA
 
 # Import mathematical utility functions
 from .render_math_utils import (
@@ -64,37 +64,33 @@ class LineRenderEngine:
     
     def __init__(self, config_filename: str = 'line_render_engine_config.yaml'):
         """
-        Initialize the line render engine.
+        Initialize the line render engine with standardized configuration.
         
         Args:
-            config_filename: Name of the configuration file within the 'config' directory
+            config_filename: Name of the configuration file
         """
-        # Construct config path relative to the repository root
-        config_dir = Path(__file__).resolve().parent.parent / 'config'
-        config_path = config_dir / config_filename
-        
-        # Ensure default config exists
-        default_config = LINE_RENDER_SCHEMA.default_values
+        self.config_filename = config_filename
         
         try:
-            # Create config if it doesn't exist
-            if not config_path.exists():
-                config_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(config_path, 'w', encoding='utf-8') as f:
-                    yaml.safe_dump(default_config, f, indent=2, default_flow_style=False)
-                logger.info(f"Created default config at {config_path}")
+            # Ensure config exists with defaults
+            default_config = LINE_RENDER_SCHEMA.default_values
+            ensure_config_exists(config_filename, default_config)
             
-            self.config = load_config(config_path)
-            logger.info(f"LineRenderEngine initialized with config from {config_path}")
+            # Load configuration using standardized system
+            self.config = load_config(config_filename, LINE_RENDER_SCHEMA.schema)
+            logger.info(f"LineRenderEngine initialized with config: {config_filename}")
             
+        except ConfigError as e:
+            logger.error(f"Configuration error: {e}. Using default config.")
+            self.config = LINE_RENDER_SCHEMA.default_values
         except Exception as e:
-            logger.error(f"Failed to load config from {config_path}: {e}. Using default config.")
-            self.config = default_config
+            logger.error(f"Unexpected error loading config: {e}. Using defaults.")
+            self.config = LINE_RENDER_SCHEMA.default_values
             
         # Initialize state management
         self.line_history: Dict[str, LineState] = {}
         self.matrix_state = "hold"
-        self.load_matrix_paths()
+        self._load_matrix_paths()
         
         # Initialize performance settings
         perf_settings = self.config.get('performance_settings', {})
@@ -112,24 +108,31 @@ class LineRenderEngine:
         self._render_count = 0
         self._total_render_time = 0.0
         
-    def load_matrix_paths(self):
-        """Load matrix response paths from YAML with validation"""
-        matrix_config_path = Path(__file__).resolve().parent.parent / 'config' / 'matrix_response_paths.yaml'
-        
+    def _load_matrix_paths(self):
+        """Load matrix response paths using standardized configuration"""
         try:
-            # Create default matrix config if it doesn't exist
-            if not matrix_config_path.exists():
-                matrix_config_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(matrix_config_path, 'w', encoding='utf-8') as f:
-                    yaml.safe_dump(MATRIX_RESPONSE_SCHEMA.default_values, f, indent=2, default_flow_style=False)
-                logger.info(f"Created default matrix config at {matrix_config_path}")
+            # Use standardized config loading for matrix paths
+            from config.matrix_response_schema import MATRIX_RESPONSE_SCHEMA
             
-            self.matrix_paths = load_config(matrix_config_path)
-            logger.info(f"Matrix paths loaded from {matrix_config_path}")
+            matrix_config_file = 'matrix_response_paths.yaml'
+            ensure_config_exists(matrix_config_file, MATRIX_RESPONSE_SCHEMA.default_values)
             
-        except Exception as e:
-            logger.warning(f"Error loading matrix paths from {matrix_config_path}: {e}. Using defaults.")
+            self.matrix_paths = load_config(matrix_config_file, MATRIX_RESPONSE_SCHEMA.schema)
+            logger.info(f"Matrix paths loaded successfully")
+            
+        except ConfigError as e:
+            logger.warning(f"Error loading matrix paths: {e}. Using defaults.")
+            from config.matrix_response_schema import MATRIX_RESPONSE_SCHEMA
             self.matrix_paths = MATRIX_RESPONSE_SCHEMA.default_values
+        except Exception as e:
+            logger.error(f"Unexpected error loading matrix paths: {e}")
+            # Fallback to minimal default
+            self.matrix_paths = {
+                'default_paths': {
+                    'hold': '/data/matrix/hold',
+                    'active': '/data/matrix/active'
+                }
+            }
         
     def _generate_line_id(self, line_data: Dict[str, Any]) -> str:
         """Generate a unique ID for a line based on its data."""

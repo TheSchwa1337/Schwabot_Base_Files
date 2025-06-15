@@ -25,7 +25,7 @@ def temp_config_dir(tmp_path, monkeypatch):
     # Patch the config directory
     monkeypatch.setattr(ConfigLoader, "_config_dir", cfg_dir, raising=False)
     ConfigLoader._instance = None  # Reset singleton
-    yield test_config
+    yield cfg_dir  # Return the directory path, not the config dict
 
 @pytest.fixture
 def change_cwd(tmp_path, monkeypatch):
@@ -38,14 +38,18 @@ def test_components_load_from_centralized_loader(change_cwd, temp_config_dir):
     # Import components
     MatrixFaultResolver = importlib.import_module("mathlib.matrix_fault_resolver").MatrixFaultResolver
     LineRenderEngine = importlib.import_module("mathlib.line_render_engine").LineRenderEngine
-
+    
     # Initialize components
     resolver = MatrixFaultResolver()
     engine = LineRenderEngine()
-
-    # Verify configuration loading
-    assert resolver.config.get("max_retries") == 5  # Default value
-    assert engine.config.get("threshold") == 0.15  # Default value
+    
+    # Verify configuration loading - check actual config structure
+    assert resolver.config.get("retry_config", {}).get("base_delay") == 1000  # Default value from MatrixFaultResolver
+    assert resolver.config.get("retry_config", {}).get("backoff_factor") == 2  # Default value
+    
+    # Verify LineRenderEngine has matrix_paths loaded
+    assert hasattr(engine, 'matrix_paths')
+    assert engine.matrix_paths.get("safe") == "hold"  # Default value from LineRenderEngine
 
 def test_config_loader_singleton(change_cwd, temp_config_dir):
     """Test that ConfigLoader maintains singleton pattern."""

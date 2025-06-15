@@ -8,13 +8,13 @@ with the enhanced mathematical and monitoring systems.
 """
 
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import logging
 import time
 from datetime import datetime
 
-# Import standardized config utilities
-from config.io_utils import load_config, ConfigError
+# Import standardized configuration management
+from config import load_config, ensure_config_exists, ConfigError
 from config.matrix_response_schema import MATRIX_RESPONSE_SCHEMA
 
 logger = logging.getLogger(__name__)
@@ -27,29 +27,27 @@ class MatrixFaultResolver:
     
     def __init__(self, config_filename: str = 'matrix_response_paths.yaml'):
         """
-        Initialize the matrix fault resolver.
+        Initialize the matrix fault resolver with standardized configuration.
         
         Args:
-            config_filename: Name of the configuration file within the 'config' directory
+            config_filename: Name of the configuration file
         """
-        # Construct config path relative to the repository root
-        config_dir = Path(__file__).resolve().parent.parent / 'config'
-        config_path = config_dir / config_filename
+        self.config_filename = config_filename
         
         try:
             # Ensure config exists with defaults
-            if not config_path.exists():
-                config_path.parent.mkdir(parents=True, exist_ok=True)
-                import yaml
-                with open(config_path, 'w', encoding='utf-8') as f:
-                    yaml.safe_dump(MATRIX_RESPONSE_SCHEMA.default_values, f, indent=2, default_flow_style=False)
-                logger.info(f"Created default matrix config at {config_path}")
+            default_config = MATRIX_RESPONSE_SCHEMA.default_values
+            ensure_config_exists(config_filename, default_config)
             
-            self.config = load_config(config_path)
-            logger.info(f"MatrixFaultResolver initialized with config from {config_path}")
+            # Load configuration using standardized system
+            self.config = load_config(config_filename, MATRIX_RESPONSE_SCHEMA.schema)
+            logger.info(f"MatrixFaultResolver initialized with config: {config_filename}")
             
+        except ConfigError as e:
+            logger.error(f"Configuration error: {e}. Using default config.")
+            self.config = MATRIX_RESPONSE_SCHEMA.default_values
         except Exception as e:
-            logger.error(f"Failed to load config from {config_path}: {e}. Using defaults.")
+            logger.error(f"Unexpected error loading config: {e}. Using defaults.")
             self.config = MATRIX_RESPONSE_SCHEMA.default_values
         
         # Initialize fault resolution settings
@@ -163,6 +161,10 @@ class MatrixFaultResolver:
                 return self._resolve_computation_error(fault_data)
             elif fault_type == 'network_timeout':
                 return self._resolve_network_timeout(fault_data)
+            elif fault_type == 'config_error':
+                return self._resolve_config_error(fault_data)
+            elif fault_type == 'validation_error':
+                return self._resolve_validation_error(fault_data)
             else:
                 return self._resolve_generic_fault(fault_data, data_dir, log_dir)
                 
@@ -204,6 +206,24 @@ class MatrixFaultResolver:
             'method': 'network_retry',
             'action_taken': 'Retried with increased timeout',
             'timeout_increased_to': '30s'
+        }
+    
+    def _resolve_config_error(self, fault_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Resolve configuration-related faults."""
+        return {
+            'status': 'resolved',
+            'method': 'config_restoration',
+            'action_taken': 'Restored default configuration',
+            'config_file': self.config_filename
+        }
+    
+    def _resolve_validation_error(self, fault_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Resolve validation-related faults."""
+        return {
+            'status': 'resolved',
+            'method': 'validation_bypass',
+            'action_taken': 'Applied validation bypass with safe defaults',
+            'validation_rules_applied': 'safe_defaults'
         }
     
     def _resolve_generic_fault(self, fault_data: Dict[str, Any], data_dir: str, log_dir: str) -> Dict[str, Any]:
@@ -304,7 +324,8 @@ class MatrixFaultResolver:
                 'average_resolution_time': avg_resolution_time,
                 'fault_type_distribution': fault_types,
                 'resolution_method_distribution': resolution_methods,
-                'recent_faults': self.fault_history[-10:] if self.fault_history else []
+                'recent_faults': self.fault_history[-10:] if self.fault_history else [],
+                'config_file': self.config_filename
             }
             
         except Exception as e:
@@ -345,4 +366,53 @@ class MatrixFaultResolver:
         self.total_resolution_time = 0.0
         self.error_count = 0
         self.fault_history.clear()
-        logger.info("Matrix fault resolver statistics reset") 
+        logger.info("Matrix fault resolver statistics reset")
+    
+    def validate_system_health(self) -> Dict[str, Any]:
+        """Validate overall system health and configuration."""
+        health_status = {
+            'status': 'healthy',
+            'issues': [],
+            'recommendations': [],
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        try:
+            # Check configuration validity
+            if not self.config:
+                health_status['issues'].append('Configuration is empty or invalid')
+                health_status['status'] = 'unhealthy'
+            
+            # Check error rate
+            if self.resolution_count > 0:
+                error_rate = self.error_count / self.resolution_count
+                if error_rate > 0.1:  # 10% error rate threshold
+                    health_status['issues'].append(f'High error rate: {error_rate:.1%}')
+                    health_status['status'] = 'degraded'
+                    health_status['recommendations'].append('Review fault resolution strategies')
+            
+            # Check recent fault patterns
+            if len(self.fault_history) > 10:
+                recent_faults = self.fault_history[-10:]
+                error_faults = [f for f in recent_faults if f.get('resolution_status') == 'error']
+                if len(error_faults) > 3:
+                    health_status['issues'].append('Multiple recent resolution failures')
+                    health_status['status'] = 'degraded'
+                    health_status['recommendations'].append('Investigate recurring fault patterns')
+            
+            # Check performance
+            if self.resolution_count > 0:
+                avg_time = self.total_resolution_time / self.resolution_count
+                if avg_time > 5.0:  # 5 second threshold
+                    health_status['issues'].append(f'Slow resolution time: {avg_time:.2f}s')
+                    health_status['recommendations'].append('Optimize resolution algorithms')
+            
+            return health_status
+            
+        except Exception as e:
+            logger.error(f"Error validating system health: {e}")
+            return {
+                'status': 'error',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            } 

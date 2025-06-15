@@ -8,7 +8,7 @@ and triplet matching in matrix fault resolution.
 
 import math
 import numpy as np
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Dict, Optional, Any
 from dataclasses import dataclass
 import time
 import unittest
@@ -16,10 +16,34 @@ import matplotlib.pyplot as plt
 import json
 import os
 from datetime import datetime
-from zygot_shell import compute_stability_index
-from stability_trigger import check_shell_trade_signal
-from site_zone_controller import is_in_site_zone
-from shell_drift import post_euler_phase_drift
+
+# Stub implementations for missing modules
+def compute_stability_index(volume_signal, volatility_map, config=None) -> float:
+    """Compute stability index from volume and volatility data."""
+    if not volume_signal or not volatility_map:
+        return 0.0
+    # Simple stability calculation
+    vol_ratio = volatility_map / (volume_signal + 1e-8)
+    return 1.0 - min(vol_ratio, 1.0)
+
+def check_shell_trade_signal(volume_signal, volatility_map, config=None) -> bool:
+    """Check if shell trade signal is active."""
+    if not config:
+        return volume_signal > 150
+    threshold = config.get('alpha_v', 15.8)
+    return volume_signal > threshold * 10
+
+def is_in_site_zone(profit_pct, stability, price, trust_score) -> bool:
+    """Check if parameters are in valid site zone."""
+    return (profit_pct > 0.02 and stability > 0.8 and 
+            price > 10000 and trust_score > 0.8)
+
+def post_euler_phase_drift(phase: float) -> tuple:
+    """Calculate post-Euler phase drift returning loss and profit shells."""
+    drift = phase * 0.95 + 0.1 * np.sin(phase)
+    loss_shell = -abs(drift * 0.02)  # 2% loss shell
+    profit_shell = abs(drift * 0.05)  # 5% profit shell
+    return loss_shell, profit_shell
 
 @dataclass
 class FractalState:

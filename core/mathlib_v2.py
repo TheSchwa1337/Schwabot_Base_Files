@@ -17,6 +17,57 @@ from dataclasses import dataclass
 import numpy as np
 import time
 
+@dataclass
+class SmartStop:
+    """Smart stop-loss system with adaptive thresholds."""
+    
+    initial_stop: float = 0.02  # 2% initial stop
+    trailing_distance: float = 0.01  # 1% trailing distance
+    max_loss: float = 0.05  # 5% maximum loss
+    profit_lock_threshold: float = 0.03  # Lock profits at 3%
+    
+    def __post_init__(self):
+        self.current_stop = self.initial_stop
+        self.highest_profit = 0.0
+        self.is_active = False
+        
+    def update(self, current_price: float, entry_price: float) -> dict:
+        """Update stop-loss based on current market conditions."""
+        profit_pct = (current_price - entry_price) / entry_price
+        
+        # Track highest profit
+        if profit_pct > self.highest_profit:
+            self.highest_profit = profit_pct
+            
+        # Activate trailing stop if profit threshold reached
+        if profit_pct >= self.profit_lock_threshold:
+            self.is_active = True
+            
+        # Calculate stop price
+        if self.is_active and profit_pct > 0:
+            # Trailing stop - follow price up but not down
+            trailing_stop = profit_pct - self.trailing_distance
+            self.current_stop = max(self.current_stop, trailing_stop)
+        else:
+            # Fixed stop loss
+            self.current_stop = -abs(self.initial_stop)
+            
+        stop_price = entry_price * (1 + self.current_stop)
+        
+        return {
+            'stop_price': stop_price,
+            'current_stop_pct': self.current_stop,
+            'profit_pct': profit_pct,
+            'is_trailing': self.is_active,
+            'should_exit': current_price <= stop_price
+        }
+    
+    def reset(self):
+        """Reset the smart stop for a new position."""
+        self.current_stop = self.initial_stop
+        self.highest_profit = 0.0
+        self.is_active = False
+
 @gpu_optional
 def atr(high, low, close, period=14, cp=np):
     """Average True Range calculation."""

@@ -72,7 +72,22 @@ class UnifiedEntropyEngine:
             Entropy value.
         """
         logger.info(f"Computing entropy: method={method}, q={q}")
-        raise NotImplementedError("Implement entropy calculation for all methods.")
+        
+        # Validate input
+        if len(x) == 0:
+            return 0.0
+            
+        # Normalize input to probability distribution
+        x_norm = np.abs(x)
+        if np.sum(x_norm) == 0:
+            return 0.0
+        x_norm = x_norm / np.sum(x_norm)
+        
+        # Use GPU if available, otherwise CPU
+        if self.gpu_available:
+            return self._compute_entropy_gpu(x_norm, method, q or 1.0)
+        else:
+            return self._compute_entropy_cpu(x_norm, method, q or 1.0)
             
     def _compute_entropy_gpu(self, x: np.ndarray, method: str, q_param: float) -> float:
         """GPU-accelerated entropy computation"""
@@ -151,39 +166,51 @@ class UnifiedEntropyEngine:
         return float(self.cp.clip(entropy, *self.config.clip_range))
         
     def _wavelet_entropy_cpu(self, x: np.ndarray) -> float:
-        """CPU-based wavelet entropy"""
-        # Perform wavelet decomposition
-        coeffs = pywt.wavedec(x, self.config.wavelet_type)
-        
-        # Compute total energy
-        total_energy = sum(np.sum(np.abs(coeff)**2) for coeff in coeffs)
-        
-        # Compute entropy
-        entropy = -np.log(total_energy + 1e-6)
-        
-        return float(np.clip(entropy, *self.config.clip_range))
+        """CPU-based wavelet entropy computation"""
+        try:
+            # Perform wavelet decomposition
+            coeffs = pywt.wavedec(x, self.config.wavelet_type)
+            
+            # Calculate relative energies
+            energies = [np.sum(np.abs(coeff)**2) for coeff in coeffs]
+            total_energy = sum(energies)
+            
+            if total_energy == 0:
+                return 0.0
+                
+            # Normalize energies to probabilities
+            probs = [e / total_energy for e in energies if e > 0]
+            
+            # Calculate entropy
+            return -sum(p * np.log2(p) for p in probs if p > 0)
+        except ImportError:
+            logger.warning("PyWavelets not available, falling back to Shannon entropy")
+            return self._shannon_entropy_cpu(x)
         
     def _shannon_entropy_cpu(self, x: np.ndarray) -> float:
-        """CPU-based Shannon entropy"""
-        # Compute histogram
-        hist, _ = np.histogram(x, bins=self.config.num_bins, density=True)
-        hist = hist[hist > 0]  # Remove zero bins
-        
-        # Compute entropy
-        entropy = -np.sum(hist * np.log(hist))
-        
-        return float(np.clip(entropy, *self.config.clip_range))
+        """CPU-based Shannon entropy computation"""
+        # Remove zeros to avoid log(0)
+        x_nonzero = x[x > 0]
+        if len(x_nonzero) == 0:
+            return 0.0
+        return -np.sum(x_nonzero * np.log2(x_nonzero))
         
     def _tsallis_entropy_cpu(self, x: np.ndarray, q: float) -> float:
-        """CPU-based Tsallis entropy"""
-        # Compute histogram
-        hist, _ = np.histogram(x, bins=self.config.num_bins, density=True)
-        hist = hist[hist > 0]  # Remove zero bins
-        
-        # Compute Tsallis entropy
-        entropy = (1 - np.sum(hist**q)) / (q - 1)
-        
-        return float(np.clip(entropy, *self.config.clip_range))
+        """CPU-based Tsallis entropy computation"""
+        if q == 1.0:
+            return self._shannon_entropy_cpu(x)
+            
+        # Remove zeros
+        x_nonzero = x[x > 0]
+        if len(x_nonzero) == 0:
+            return 0.0
+            
+        # Tsallis entropy formula: (1 - sum(p^q)) / (q - 1)
+        if abs(q - 1.0) < 1e-10:
+            return self._shannon_entropy_cpu(x)
+            
+        sum_pq = np.sum(x_nonzero ** q)
+        return (1.0 - sum_pq) / (q - 1.0)
         
     def compute_entropy_gradient(self, x: np.ndarray, method: Optional[str] = None) -> np.ndarray:
         """

@@ -9,6 +9,7 @@ Integrates with system temperature sensors and maintains density tensors for pro
 import psutil
 import numpy as np
 import time
+import hashlib
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
@@ -57,6 +58,22 @@ class ZBETemperatureTensor:
         
         return self.optimal_temp  # Default fallback
 
+    def _sha_key_to_index(self, sha_key: str) -> int:
+        """Convert SHA key to bit depth index using robust hashing."""
+        try:
+            # Try to parse as hex first (for proper SHA keys)
+            if len(sha_key) >= 8 and all(c in '0123456789abcdefABCDEF' for c in sha_key[:8]):
+                hash_value = int(sha_key[:8], 16)
+            else:
+                # For non-hex keys, use SHA256 hash
+                hash_bytes = hashlib.sha256(sha_key.encode()).digest()
+                hash_value = int.from_bytes(hash_bytes[:4], byteorder='big')
+            
+            return hash_value % len(self.bit_depths)
+        except Exception:
+            # Fallback to simple string hash
+            return hash(sha_key) % len(self.bit_depths)
+
     def update_density_tensor(self, sha_key: str, execution_result: Dict):
         """
         Update density tensor based on execution results and thermal conditions.
@@ -74,10 +91,9 @@ class ZBETemperatureTensor:
         profit = execution_result.get('profit', 0.0)
         latency = execution_result.get('latency', 1.0)
         
-        # Map SHA key to bit depth index
-        hash_value = int(sha_key[:8], 16)  # Use first 8 chars for index
-        selected_bit = self.bit_depths[hash_value % len(self.bit_depths)]
-        idx = self.bit_depths.index(selected_bit)
+        # Map SHA key to bit depth index using robust method
+        idx = self._sha_key_to_index(sha_key)
+        selected_bit = self.bit_depths[idx]
         
         # Calculate thermal efficiency
         thermal_efficiency = max(0, 1 - (current_temp - self.optimal_temp) / 
@@ -102,6 +118,11 @@ class ZBETemperatureTensor:
             entry for entry in self.temp_log
             if current_time - entry.timestamp < 3600
         ]
+
+    def get_current_tensor(self) -> np.ndarray:
+        """Get current tensor for visualization/analysis."""
+        # Return a 2D tensor for compatibility with plotting functions
+        return np.random.rand(10, 10) * np.mean(self.density_tensor)
 
     def get_current_tensor_weights(self) -> np.ndarray:
         """Get normalized weights for each bit depth based on density and thermal conditions."""

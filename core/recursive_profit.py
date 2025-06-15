@@ -397,29 +397,39 @@ class DormantState:
         self.primary_hash = primary_hash
         self.ferris_wheel_tag = ferris_wheel_tag
 
-def check_dormant_state(P_t, tick, shell, signals):
-    dormant_flags = []
-    if not pattern_match(P_t): dormant_flags.append('D0')
-    if dip_zone_active(P_t): dormant_flags.append('D1')
-    if not hash_confirmed(P_t): dormant_flags.append('D2')
-    ...
-    return dormant_flags
+def pattern_match(P_t: float) -> bool:
+    """
+    Simple pattern matching function for profit values.
+    
+    Args:
+        P_t: Profit value at time t
+        
+    Returns:
+        True if pattern matches, False otherwise
+    """
+    # Simple pattern matching - check if profit is within expected range
+    return -1.0 <= P_t <= 1.0
 
-# Example usage
-P_t = ...  # Current price
-tick = ...  # Current tick number
-shell = ...  # Current shell state
-signals = ...  # Current signals
-dormant_states = check_dormant_state(P_t, tick, shell, signals)
+def check_dormant_state(P_t: float, tick: int, shell: str, signals: dict) -> List[str]:
+    """Check if system should enter dormant state based on profit patterns."""
+    dormant_flags = []
+    
+    # Check pattern match
+    if not pattern_match(P_t): 
+        dormant_flags.append('D0')
+    
+    # Check profit threshold
+    if abs(P_t) < 0.001:
+        dormant_flags.append('D1')
+    
+    # Check tick frequency
+    if tick % 100 == 0:
+        dormant_flags.append('D2')
+    
+    return dormant_flags
 
 def sigmoid_decay(t, t0, lambda_val):
     return 1 / (1 + math.exp(-lambda_val * (t - t0)))
-
-# Example usage
-t = ...  # Current tick number
-t0 = ...  # Last confirmed strategy ping
-lambda_val = ...  # Decay sensitivity
-decay_factor = sigmoid_decay(t, t0, lambda_val)
 
 def store_vault_echo(vault_echo, timestamp):
     with open(f'/state/ghostshell/dormant/batch_{timestamp}.json', 'w') as file:
@@ -451,22 +461,50 @@ def validate_documents(documents):
             return False
     return True
 
-# Example usage
+# Example usage - moved to main block to avoid import errors
 if __name__ == "__main__":
+    # Example usage
+    P_t = 0.5  # Current price
+    tick = 100  # Current tick number
+    shell = "active"  # Current shell state
+    signals = {"volume": 1000}  # Current signals
+    dormant_states = check_dormant_state(P_t, tick, shell, signals)
+
+    # Example usage
+    t = 1000  # Current tick number
+    t0 = 900  # Last confirmed strategy ping
+    lambda_val = 0.1  # Decay sensitivity
+    decay_factor = sigmoid_decay(t, t0, lambda_val)
+
+    # Example usage
+    current_hash = np.array([0.1, 0.2, 0.3])  # Current hash
+    dormant_hashes = [np.array([0.1, 0.2, 0.3]), np.array([0.4, 0.5, 0.6])]  # List of dormant hashes
+    if check_pattern_recursion(current_hash, dormant_hashes):
+        print("Pattern recursion detected.")
+    else:
+        print("No pattern recursion detected.")
+
+    # Example usage
+    dormant_states = []  # List of dormant states
+    visualize_dormant_field(dormant_states)
+
+    # Example usage
+    dormant_hashes = []  # List of dormant hashes
+    resonances = find_cross_shell_resonance(dormant_hashes)
+    print("Cross-shell resonances found:", resonances)
+
+    # Example usage
+    integrate_dormant_logic()
+
     risk_manager = RiskManager(max_loss_percentage=10)
     risk_monitor = RiskMonitor(risk_manager)
 
     # Connect to a market data source (e.g., API, database)
-    risk_monitor.connect_to_market_data(MarketDataSource())
+    # risk_monitor.connect_to_market_data(MarketDataSource())
+    # risk_monitor.run()
 
-    risk_monitor.run()
-
-# Example of testing the dormant logic engine
-def test_dormant_logic():
-    # Test with different scenarios
-    pass
-
-test_dormant_logic()
+    # Example of testing the dormant logic engine
+    test_dormant_logic()
 
 def check_pattern_recursion(current_hash, dormant_hashes, threshold=0.76):
     for dormant_hash in dormant_hashes:
@@ -474,34 +512,18 @@ def check_pattern_recursion(current_hash, dormant_hashes, threshold=0.76):
             return True
     return False
 
-# Example usage
-current_hash = ...  # Current hash
-dormant_hashes = ...  # List of dormant hashes
-if check_pattern_recursion(current_hash, dormant_hashes):
-    print("Pattern recursion detected.")
-else:
-    print("No pattern recursion detected.")
-
 def visualize_dormant_field(dormant_states):
     # Plot dormant states on a grid or heatmap
     pass
-
-# Example usage
-dormant_states = ...  # List of dormant states
-visualize_dormant_field(dormant_states)
 
 def find_cross_shell_resonance(dormant_hashes):
     # Find matches between dormant hashes across different shells
     pass
 
-# Example usage
-dormant_hashes = ...  # List of dormant hashes
-resonances = find_cross_shell_resonance(dormant_hashes)
-print("Cross-shell resonances found:", resonances)
-
 def integrate_dormant_logic():
     # Scan every 16 ticks, apply decay curve compensation, and check for pattern recursion.
     pass
 
-# Example usage
-integrate_dormant_logic() 
+def test_dormant_logic():
+    # Test with different scenarios
+    pass 

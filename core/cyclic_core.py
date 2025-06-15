@@ -16,22 +16,57 @@ from typing import List, Dict, Optional, Tuple
 import hashlib
 from dataclasses import dataclass
 from .fractal_core import ForeverFractalCore, FractalState
-from .triplet_matcher import TripletMatcher, TripletMatch
 import time
+
+# Stub implementations for missing classes
+@dataclass
+class TripletMatch:
+    """Container for triplet match results"""
+    states: List[FractalState]
+    coherence: float
+    is_mirror: bool
+
+class TripletMatcher:
+    """Stub implementation for triplet matching"""
+    
+    def __init__(self, fractal_core, epsilon=0.1, min_coherence=0.7):
+        self.fractal_core = fractal_core
+        self.epsilon = epsilon
+        self.min_coherence = min_coherence
+    
+    def find_matching_triplet(self, states: List[FractalState]) -> Optional[TripletMatch]:
+        """Find matching triplet in states"""
+        if len(states) < 3:
+            return None
+        
+        # Simple coherence calculation
+        coherence = np.mean([s.entropy for s in states])
+        is_mirror = len(states) % 2 == 0
+        
+        if coherence > self.min_coherence:
+            return TripletMatch(
+                states=states,
+                coherence=coherence,
+                is_mirror=is_mirror
+            )
+        return None
 
 @dataclass
 class CyclicPattern:
     """Container for cyclic pattern data with fractal state"""
     triplet: str
     position: int
-    hash_value: str
     confidence: float
+    hash_value: str = ""
     fractal_state: Optional[FractalState] = None
     coherence_score: float = 0.0
     is_mirror: bool = False
 
     def __post_init__(self):
-        self.hash_value = self.generate_pattern_hash(np.array([self.triplet]))
+        if not self.hash_value:
+            # Generate a simple hash if not provided
+            base = f"{self.triplet}:{self.position}:{self.confidence:.4f}"
+            self.hash_value = hashlib.sha256(base.encode()).hexdigest()[:16]
 
 class CyclicCore:
     """Core implementation of cyclic number analysis with fractal integration"""
@@ -127,12 +162,15 @@ class CyclicCore:
     
     def _apply_fractal_correction(self, match: TripletMatch) -> None:
         """Apply fractal-based correction to state"""
-        # Get correction vector
-        correction = self.fractal_core.compute_correction_vector(match.states)
-        
-        # Update fractal state
-        if self.fractal_states:
-            self.fractal_states[-1].vector = correction
+        # Get correction vector - simplified implementation
+        if match.states:
+            # Simple correction: average of state vectors
+            vectors = [np.array(state.vector) for state in match.states]
+            correction = np.mean(vectors, axis=0).tolist()
+            
+            # Update fractal state
+            if self.fractal_states:
+                self.fractal_states[-1].vector = correction
     
     def detect_symmetry_break(self, vector: np.ndarray) -> bool:
         """
@@ -309,19 +347,24 @@ if __name__ == "__main__":
     for key, value in metrics.items():
         print(f"  {key}: {value}")
 
-# Example usage of CyclicPattern
-pattern_obj = CyclicPattern(
-    triplet="123",
-    position=0,
-    confidence=0.95,
-    fractal_state=FractalState(
+    # Example usage of CyclicPattern
+    fractal_state = FractalState(
         vector=np.array([0.998]),
         timestamp=time.time(),
         phase=0.998,
         entropy=abs(0.998)
-    ),
-    coherence_score=0.98,
-    is_mirror=False
-)
+    )
+    # Add missing attributes
+    fractal_state.coherence_score = 0.98
+    fractal_state.is_mirror = False
+    
+    pattern_obj = CyclicPattern(
+        triplet="123",
+        position=0,
+        confidence=0.95,
+        fractal_state=fractal_state,
+        coherence_score=0.98,
+        is_mirror=False
+    )
 
-core.pattern_cache[pattern_obj.hash_value] = pattern_obj 
+    core.pattern_cache[pattern_obj.hash_value] = pattern_obj 

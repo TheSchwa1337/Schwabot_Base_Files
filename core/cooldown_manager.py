@@ -8,18 +8,35 @@ from enum import Enum, auto
 from typing import Dict, List, Optional, Callable, Any, Tuple
 import time
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 from .fractal_core import ForeverFractalCore, FractalState
 from .triplet_matcher import TripletMatcher, TripletMatch
+import threading
+import logging
 
 class CooldownScope(Enum):
     """Scope of cooldown application"""
     GLOBAL = auto()         # affects entire system
     ASSET = auto()          # specific asset
+    ASSET_SPECIFIC = auto() # asset-specific cooldown
     STRATEGY = auto()       # specific strategy
     BASKET = auto()         # specific basket
     PROFIT_LEVEL = auto()   # profit-based cooldown
     FRACTAL = auto()        # fractal-based cooldown
+
+class CooldownAction(Enum):
+    """Enumeration of cooldown actions"""
+    HOLD = "hold"
+    DELAY = "delay"
+    ABORT = "abort"
+    RETRY = "retry"
+    ESCALATE = "escalate"
+    BLOCK_NEW_ENTRIES = "block_new_entries"
+    INCREASE_STOP_DISTANCE = "increase_stop_distance"
+    REDUCE_POSITION_SIZE = "reduce_position_size"
+    MONITOR_ONLY = "monitor_only"
+    REDUCE_LEVERAGE = "reduce_leverage"
+    FLAG_FOR_REVIEW = "flag_for_review"
 
 @dataclass
 class FractalCooldownState:
