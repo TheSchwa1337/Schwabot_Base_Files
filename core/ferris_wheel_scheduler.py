@@ -101,21 +101,21 @@ class FerrisWheelScheduler:
         }
 
 # Example usage of DataProvider during backtesting
-historical_data = ['price1', 'price2', 'price3']
-backtest_provider = HistoricalDataProvider(historical_data)
-scheduler = FerrisWheelScheduler(
-    drift_engine=None,  # Placeholder for actual drift engine
-    cluster_mapper=None,  # Placeholder for actual cluster mapper
-    strategy_bundler=None,  # Placeholder for actual strategy bundler
-    echo_logger=None,  # Placeholder for actual echo logger
-    vault_router=None,  # Placeholder for actual vault router
-    config=scheduler.config
-)
-scheduler.tick_loop(debug_clusters=True, debug_drifts=True, simulate_strategy=True)
+if __name__ == "__main__":
+    historical_data = ['price1', 'price2', 'price3']
+    backtest_provider = HistoricalDataProvider(historical_data)
+    scheduler = FerrisWheelScheduler(
+        drift_engine=None,  # Placeholder for actual drift engine
+        cluster_mapper=None,  # Placeholder for actual cluster mapper
+        strategy_bundler=None,  # Placeholder for actual strategy bundler
+        echo_logger=None,  # Placeholder for actual echo logger
+        vault_router=None,  # Placeholder for actual vault router
+        config={}  # Use empty config instead of referencing scheduler.config
+    )
+    scheduler.tick_loop(debug_clusters=True, debug_drifts=True, simulate_strategy=True)
 
 # tests/test_ferris_wheel_scheduler.py
 import unittest
-from core.ferris_wheel_scheduler import FerrisWheelScheduler
 
 class TestFerrisWheelScheduler(unittest.TestCase):
     def test_config_loading(self):

@@ -193,14 +193,4 @@ class GPUMetrics:
             self.tensors.__dict__[key][-len(arr):] = arr
 
     def __repr__(self):
-        return f"GPUMetrics(price_history={self._fetch(self.tensors.price_history)}, volume_history={self._fetch(self.tensors.volume_history)}, entropy_history={self._fetch(self.tensors.entropy_history)}, drift_vectors={self._fetch(self.tensors.drift_vectors)}, trust_scores={self._fetch(self.tensors.trust_scores)}, bit_depths={self._fetch(self.tensors.bit_depths)})"
-
-# Example usage
-save_state('gpu_metrics', {
-    'price_history': _fetch(self.tensors.price_history),
-    'volume_history': _fetch(self.tensors.volume_history),
-    'entropy_history': _fetch(self.tensors.entropy_history),
-    'drift_vectors': _fetch(self.tensors.drift_vectors),
-    'trust_scores': _fetch(self.tensors.trust_scores),
-    'bit_depths': _fetch(self.tensors.bit_depths)
-}) 
+        return f"GPUMetrics(price_history={self._fetch(self.tensors.price_history)}, volume_history={self._fetch(self.tensors.volume_history)}, entropy_history={self._fetch(self.tensors.entropy_history)}, drift_vectors={self._fetch(self.tensors.drift_vectors)}, trust_scores={self._fetch(self.tensors.trust_scores)}, bit_depths={self._fetch(self.tensors.bit_depths)})" 

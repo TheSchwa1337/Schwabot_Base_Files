@@ -93,7 +93,8 @@ class CollapseConfidenceEngine:
         logger.info("Collapse Confidence Engine initialized with mathematical scoring")
     
     def calculate_collapse_confidence(self, profit_delta: float, braid_signal: float, 
-                                    paradox_signal: float, recent_volatility: List[float]) -> CollapseState:
+                                    paradox_signal: float, recent_volatility: List[float],
+                                    coherence_measure: Optional[float] = None) -> CollapseState:
         """
         Calculate mathematically rigorous confidence score for collapse event.
         
@@ -102,6 +103,7 @@ class CollapseConfidenceEngine:
             braid_signal: Current braid fractal signal
             paradox_signal: Current paradox fractal signal  
             recent_volatility: Recent volatility measurements
+            coherence_measure: Optional external coherence measure (overrides calculated coherence)
             
         Returns:
             CollapseState with calculated confidence and components
@@ -114,8 +116,11 @@ class CollapseConfidenceEngine:
         braid_volatility = self._calculate_braid_volatility(recent_volatility)
         self.volatility_history.append(braid_volatility)
         
-        # Calculate fractal coherence
-        coherence = self._calculate_fractal_coherence()
+        # Calculate fractal coherence (use external measure if provided)
+        if coherence_measure is not None:
+            coherence = np.clip(coherence_measure, 0.0, 1.0)
+        else:
+            coherence = self._calculate_fractal_coherence()
         
         # Determine coherence amplification (λ)
         lambda_param = self._calculate_coherence_amplification(coherence, profit_delta)
@@ -135,7 +140,8 @@ class CollapseConfidenceEngine:
             "coherence_factor": coherence ** lambda_param,
             "lambda_amplification": lambda_param,
             "raw_score": raw_confidence,
-            "normalization_factor": normalized_confidence / max(raw_confidence, 1e-6)
+            "normalization_factor": normalized_confidence / max(raw_confidence, 1e-6),
+            "external_coherence": coherence_measure is not None
         }
         
         # Create collapse state

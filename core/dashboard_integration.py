@@ -1,218 +1,666 @@
 """
-Dashboard Integration Module
+Dashboard Integration v1.0
 ==========================
 
-Connects the Ferris RDE system with the advanced monitoring dashboard,
-enabling real-time visualization of pattern matching, hash validation,
-and system performance metrics.
+Advanced integration layer connecting Schwabot backend systems
+to the React TSX dashboard with real-time data streaming.
+
+Provides:
+- WebSocket API for React dashboard
+- REST API endpoints
+- Real-time entropy and anti-pole data streaming
+- Trading signal distribution
+- Performance monitoring
 """
 
-from typing import Dict, List, Optional, Tuple
+import json
+import asyncio
+import logging
+import time
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional, Any, Set
+from aiohttp import web, WSMsgType
+from aiohttp.web_ws import WebSocketResponse
+import aiohttp_cors
+from collections import deque
 import numpy as np
-from datetime import datetime
-from dataclasses import dataclass
-from .hook_manager import HookRegistry
-from ncco_core.ferris_rde import FerrisRDE
-from ncco_core.quantum_visualizer import QuantumVisualizer
-from .hash_recollection import HashRecollectionSystem
+
+# Core Schwabot imports
+try:
+    from .entropy_bridge import EntropyBridge, EntropyFlowData, EntropyBridgeConfig
+    from .quantum_antipole_engine import QuantumAntiPoleEngine, QAConfig
+    from .profit_navigator import AntiPoleProfitNavigator
+    from .ferris_wheel_scheduler import FerrisWheelScheduler
+    from .thermal_zone_manager import ThermalZoneManager
+except ImportError:
+    EntropyBridge = None
+    EntropyFlowData = None
+    QuantumAntiPoleEngine = None
+    AntiPoleProfitNavigator = None
+    FerrisWheelScheduler = None
+    ThermalZoneManager = None
 
 @dataclass
-class DashboardMetrics:
-    """Container for dashboard metrics"""
-    pattern_confidence: float
-    hash_validation_rate: float
-    gpu_utilization: float
-    cpu_utilization: float
-    profit_trajectory: Dict[str, float]
-    basket_state: Dict[str, float]
-    lattice_phase: str
-    pattern_hash: str
-    timestamp: float
-    hash_metrics: Dict[str, float]  # Added hash recollection metrics
+class DashboardConfig:
+    """Configuration for dashboard integration"""
+    # Server settings
+    host: str = "localhost"
+    port: int = 8768
+    
+    # Data streaming
+    max_history_points: int = 1000
+    update_frequency: float = 10.0  # Hz
+    
+    # CORS settings
+    cors_origins: List[str] = None
+    
+    # Component integration
+    enable_entropy_bridge: bool = True
+    enable_profit_navigator: bool = True
+    enable_thermal_monitoring: bool = True
+    
+    def __post_init__(self):
+        if self.cors_origins is None:
+            self.cors_origins = ["http://localhost:3000", "http://localhost:3001"]
+
+@dataclass
+class DashboardData:
+    """Complete dashboard data package"""
+    timestamp: datetime
+    market_data: Dict[str, float]
+    entropy_data: Dict[str, Any]
+    antipole_data: Dict[str, Any]
+    trading_signals: Dict[str, Any]
+    thermal_data: Dict[str, Any]
+    performance_metrics: Dict[str, Any]
+    system_health: Dict[str, Any]
 
 class DashboardIntegration:
-    """Integrates Ferris RDE with dashboard monitoring"""
+    """
+    Main dashboard integration server providing real-time data to React frontend
+    """
     
-    def __init__(self, ferris_rde: FerrisRDE, hook_registry: HookRegistry):
-        self.ferris_rde = ferris_rde
-        self.hook_registry = hook_registry
-        self.quantum_visualizer = QuantumVisualizer()
-        self.metrics_history: List[DashboardMetrics] = []
+    def __init__(self, config: Optional[DashboardConfig] = None):
+        self.config = config or DashboardConfig()
+        self.log = logging.getLogger("dashboard.integration")
         
-        # Initialize hash recollection system
-        self.hash_system = HashRecollectionSystem(gpu_enabled=True)
-        self.hash_system.start()
+        # Web application
+        self.app = web.Application()
+        self.setup_routes()
+        self.setup_cors()
         
-        # Register dashboard hooks
-        self._register_hooks()
+        # WebSocket connections
+        self.websocket_connections: Set[WebSocketResponse] = set()
         
-    def _register_hooks(self):
-        """Register dashboard-specific hooks"""
-        self.hook_registry.register("on_pattern_matched", self._handle_pattern_match)
-        self.hook_registry.register("on_hash_validated", self._handle_hash_validation)
-        self.hook_registry.register("on_ferris_spin", self._handle_ferris_spin)
+        # Data storage
+        self.current_data: Optional[DashboardData] = None
+        self.data_history: deque[DashboardData] = deque(maxlen=self.config.max_history_points)
         
-    def _handle_pattern_match(self, pattern_name: str, pattern_hash: str, metadata: Dict):
-        """Handle pattern match events"""
-        # Process tick data through hash system
-        self.hash_system.process_tick(
-            price=metadata.get("price", 0.0),
-            volume=metadata.get("volume", 0.0),
-            timestamp=datetime.utcnow().timestamp()
+        # Component integrations
+        self.entropy_bridge: Optional[EntropyBridge] = None
+        self.profit_navigator: Optional[AntiPoleProfitNavigator] = None
+        self.thermal_manager: Optional[ThermalZoneManager] = None
+        
+        # Update tracking
+        self.last_update = 0.0
+        self.update_interval = 1.0 / self.config.update_frequency
+        self.frame_count = 0
+        
+        # Initialize components
+        self._init_components()
+        
+        self.log.info(f"DashboardIntegration initialized on {self.config.host}:{self.config.port}")
+    
+    def _init_components(self):
+        """Initialize integrated components"""
+        
+        # Entropy bridge
+        if self.config.enable_entropy_bridge and EntropyBridge:
+            try:
+                entropy_config = EntropyBridgeConfig(
+                    websocket_port=8767,  # Different port to avoid conflicts
+                    use_existing_entropy=True,
+                    use_quantum_engine=True
+                )
+                self.entropy_bridge = EntropyBridge(entropy_config)
+                self.log.info("✓ EntropyBridge integration enabled")
+            except Exception as e:
+                self.log.warning(f"EntropyBridge init failed: {e}")
+        
+        # Profit navigator
+        if self.config.enable_profit_navigator and AntiPoleProfitNavigator:
+            try:
+                self.profit_navigator = AntiPoleProfitNavigator(
+                    initial_balance=100000.0,
+                    max_position_size=0.25
+                )
+                self.log.info("✓ AntiPoleProfitNavigator integration enabled")
+            except Exception as e:
+                self.log.warning(f"AntiPoleProfitNavigator init failed: {e}")
+        
+        # Thermal monitoring
+        if self.config.enable_thermal_monitoring and ThermalZoneManager:
+            try:
+                self.thermal_manager = ThermalZoneManager()
+                self.log.info("✓ ThermalZoneManager integration enabled")
+            except Exception as e:
+                self.log.warning(f"ThermalZoneManager init failed: {e}")
+    
+    def setup_routes(self):
+        """Setup HTTP routes and WebSocket endpoints"""
+        
+        # REST API endpoints
+        self.app.router.add_get('/api/status', self.get_status)
+        self.app.router.add_get('/api/current-data', self.get_current_data)
+        self.app.router.add_get('/api/history/{limit}', self.get_history)
+        self.app.router.add_get('/api/statistics', self.get_statistics)
+        self.app.router.add_get('/api/health', self.get_health)
+        
+        # Configuration endpoints
+        self.app.router.add_get('/api/config', self.get_config)
+        self.app.router.add_post('/api/config', self.set_config)
+        
+        # WebSocket endpoint for real-time data
+        self.app.router.add_get('/ws/live-data', self.websocket_handler)
+        
+        # Static file serving (for development)
+        self.app.router.add_static('/', 'static/', name='static')
+    
+    def setup_cors(self):
+        """Setup CORS for cross-origin requests"""
+        cors = aiohttp_cors.setup(self.app, defaults={
+            origin: aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+                allow_methods="*"
+            ) for origin in self.config.cors_origins
+        })
+        
+        # Add CORS to all routes
+        for route in list(self.app.router.routes()):
+            cors.add(route)
+    
+    async def process_market_tick(self, price: float, volume: float, 
+                                timestamp: Optional[datetime] = None) -> DashboardData:
+        """
+        Process market tick and generate complete dashboard data
+        """
+        timestamp = timestamp or datetime.utcnow()
+        current_time = time.time()
+        
+        # Rate limiting
+        if current_time - self.last_update < self.update_interval:
+            return self.current_data
+        
+        # Gather data from all sources
+        dashboard_data = await self._gather_dashboard_data(price, volume, timestamp)
+        
+        # Store and distribute
+        self.current_data = dashboard_data
+        self.data_history.append(dashboard_data)
+        
+        # Broadcast to WebSocket connections
+        await self._broadcast_to_websockets(dashboard_data)
+        
+        self.last_update = current_time
+        self.frame_count += 1
+        
+        return dashboard_data
+    
+    async def _gather_dashboard_data(self, price: float, volume: float, 
+                                   timestamp: datetime) -> DashboardData:
+        """Gather data from all integrated components"""
+        
+        # Market data
+        market_data = {
+            'price': price,
+            'volume': volume,
+            'timestamp': timestamp.timestamp()
+        }
+        
+        # Entropy data
+        entropy_data = await self._gather_entropy_data(price, volume, timestamp)
+        
+        # Anti-pole data
+        antipole_data = await self._gather_antipole_data(price, volume, timestamp)
+        
+        # Trading signals
+        trading_signals = await self._gather_trading_signals(price, volume, timestamp)
+        
+        # Thermal data
+        thermal_data = await self._gather_thermal_data()
+        
+        # Performance metrics
+        performance_metrics = self._gather_performance_metrics()
+        
+        # System health
+        system_health = self._gather_system_health()
+        
+        return DashboardData(
+            timestamp=timestamp,
+            market_data=market_data,
+            entropy_data=entropy_data,
+            antipole_data=antipole_data,
+            trading_signals=trading_signals,
+            thermal_data=thermal_data,
+            performance_metrics=performance_metrics,
+            system_health=system_health
         )
+    
+    async def _gather_entropy_data(self, price: float, volume: float, 
+                                 timestamp: datetime) -> Dict[str, Any]:
+        """Gather entropy data from bridge"""
+        entropy_data = {
+            'hash_entropy': 0.0,
+            'quantum_entropy': 0.0,
+            'combined_entropy': 0.0,
+            'entropy_tier': 'NEUTRAL',
+            'coherence': 0.0,
+            'ap_rsi': 50.0
+        }
         
-        # Get hash system metrics
-        hash_metrics = self.hash_system.get_pattern_metrics()
+        if self.entropy_bridge:
+            try:
+                flow_data = await self.entropy_bridge.process_market_tick(price, volume, timestamp)
+                entropy_data.update({
+                    'hash_entropy': flow_data.hash_entropy,
+                    'quantum_entropy': flow_data.quantum_entropy,
+                    'combined_entropy': flow_data.combined_entropy,
+                    'entropy_tier': flow_data.entropy_tier,
+                    'coherence': flow_data.coherence,
+                    'ap_rsi': flow_data.ap_rsi,
+                    'computation_time': flow_data.computation_time_ms
+                })
+            except Exception as e:
+                self.log.warning(f"Entropy data gathering error: {e}")
         
-        metrics = DashboardMetrics(
-            pattern_confidence=metadata.get("confidence", 0.0),
-            hash_validation_rate=self._calculate_hash_rate(),
-            gpu_utilization=self._get_gpu_utilization(),
-            cpu_utilization=self._get_cpu_utilization(),
-            profit_trajectory=self._get_profit_trajectory(),
-            basket_state=self._get_basket_state(),
-            lattice_phase=metadata.get("lattice_phase", "UNKNOWN"),
-            pattern_hash=pattern_hash,
-            timestamp=datetime.utcnow().timestamp(),
-            hash_metrics=hash_metrics  # Include hash system metrics
-        )
-        self.metrics_history.append(metrics)
-        self._update_dashboard(metrics)
+        return entropy_data
+    
+    async def _gather_antipole_data(self, price: float, volume: float, 
+                                  timestamp: datetime) -> Dict[str, Any]:
+        """Gather anti-pole specific data"""
+        antipole_data = {
+            'pole_count': 0,
+            'vector_strength': 0.0,
+            'capt_transform': [],
+            'phi_surface': [],
+            'stability_ratio': 0.0
+        }
         
-    def _handle_hash_validation(self, hash_value: str, is_valid: bool, metadata: Dict):
-        """Handle hash validation events"""
-        # Update hash validation metrics
-        pass
+        if self.entropy_bridge and self.entropy_bridge.quantum_engine:
+            try:
+                # Get last processed frame from quantum engine
+                if hasattr(self.entropy_bridge.quantum_engine, 'current_quantum_state'):
+                    # Extract anti-pole specific metrics
+                    engine = self.entropy_bridge.quantum_engine
+                    if hasattr(engine, 'frame_count') and engine.frame_count > 0:
+                        # Get performance metrics
+                        metrics = engine.get_performance_metrics()
+                        antipole_data.update({
+                            'frames_processed': metrics.get('frames_processed', 0),
+                            'buffer_fill': metrics.get('buffer_fill', 0.0)
+                        })
+            except Exception as e:
+                self.log.warning(f"Anti-pole data gathering error: {e}")
         
-    def _handle_ferris_spin(self, spin_data: Dict):
-        """Handle Ferris wheel spin events"""
-        # Update Ferris wheel metrics
-        pass
+        return antipole_data
+    
+    async def _gather_trading_signals(self, price: float, volume: float, 
+                                    timestamp: datetime) -> Dict[str, Any]:
+        """Gather trading signals from profit navigator"""
+        trading_signals = {
+            'recommendation': 'HOLD',
+            'confidence': 0.0,
+            'signal_strength': 0.0,
+            'opportunities': [],
+            'portfolio_value': 0.0,
+            'unrealized_pnl': 0.0
+        }
         
-    def _calculate_hash_rate(self) -> float:
-        """Calculate current hash validation rate"""
-        # Implement hash rate calculation
-        return 0.0
+        if self.profit_navigator:
+            try:
+                # Process through profit navigator
+                tick_report = await self.profit_navigator.process_market_tick(price, volume, timestamp)
+                
+                trading_signals.update({
+                    'opportunities': [
+                        {
+                            'type': opp.get('opportunity_type', 'UNKNOWN'),
+                            'confidence': opp.get('confidence', 0.0),
+                            'tier': opp.get('profit_tier', 'BRONZE'),
+                            'expected_return': opp.get('expected_return', 0.0)
+                        }
+                        for opp in tick_report.get('opportunities', [])
+                    ],
+                    'portfolio_value': tick_report.get('portfolio_state', {}).get('total_value', 0.0),
+                    'unrealized_pnl': tick_report.get('portfolio_state', {}).get('unrealized_pnl', 0.0),
+                    'recommendations': tick_report.get('recommendations', [])
+                })
+                
+                # Extract primary recommendation
+                recommendations = tick_report.get('recommendations', [])
+                if recommendations:
+                    primary_rec = recommendations[0]
+                    trading_signals['recommendation'] = primary_rec.get('action', 'HOLD')
+                    trading_signals['confidence'] = primary_rec.get('confidence', 0.0)
+                
+            except Exception as e:
+                self.log.warning(f"Trading signals gathering error: {e}")
         
-    def _get_gpu_utilization(self) -> float:
-        """Get current GPU utilization"""
-        # Get GPU utilization from hash system
-        return self.hash_system.get_pattern_metrics()['gpu_utilization']
+        return trading_signals
+    
+    async def _gather_thermal_data(self) -> Dict[str, Any]:
+        """Gather thermal monitoring data"""
+        thermal_data = {
+            'temperature': 25.0,
+            'thermal_state': 'NORMAL',
+            'cooldown_active': False,
+            'cpu_usage': 0.0,
+            'memory_usage': 0.0,
+            'safe_to_trade': True
+        }
         
-    def _get_cpu_utilization(self) -> float:
-        """Get current CPU utilization"""
-        # Implement CPU utilization monitoring
-        return 0.0
+        if self.thermal_manager:
+            try:
+                thermal_state = self.thermal_manager.get_thermal_state()
+                thermal_data.update({
+                    'temperature': thermal_state.get('temperature', 25.0),
+                    'thermal_state': thermal_state.get('state', 'NORMAL'),
+                    'cooldown_active': thermal_state.get('cooldown_active', False),
+                    'cpu_usage': thermal_state.get('cpu_usage', 0.0),
+                    'memory_usage': thermal_state.get('memory_usage', 0.0),
+                    'safe_to_trade': thermal_state.get('safe', True)
+                })
+            except Exception as e:
+                self.log.warning(f"Thermal data gathering error: {e}")
         
-    def _get_profit_trajectory(self) -> Dict[str, float]:
-        """Get current profit trajectory"""
-        # Implement profit trajectory calculation
-        return {}
+        return thermal_data
+    
+    def _gather_performance_metrics(self) -> Dict[str, Any]:
+        """Gather performance metrics"""
+        return {
+            'frame_count': self.frame_count,
+            'update_frequency': self.config.update_frequency,
+            'websocket_connections': len(self.websocket_connections),
+            'data_history_size': len(self.data_history),
+            'last_update': self.last_update
+        }
+    
+    def _gather_system_health(self) -> Dict[str, Any]:
+        """Gather system health status"""
+        return {
+            'entropy_bridge_active': self.entropy_bridge is not None,
+            'profit_navigator_active': self.profit_navigator is not None,
+            'thermal_manager_active': self.thermal_manager is not None,
+            'websocket_server_running': True,
+            'api_server_running': True
+        }
+    
+    async def _broadcast_to_websockets(self, dashboard_data: DashboardData):
+        """Broadcast data to all WebSocket connections"""
+        if not self.websocket_connections:
+            return
         
-    def _get_basket_state(self) -> Dict[str, float]:
-        """Get current basket state"""
-        # Implement basket state retrieval
-        return {}
-        
-    def _update_dashboard(self, metrics: DashboardMetrics):
-        """Update dashboard with new metrics"""
-        # Convert metrics to dashboard format
-        dashboard_data = {
-            "patternData": [{
-                "timestamp": metrics.timestamp,
-                "confidence": metrics.pattern_confidence,
-                "patternType": "XRP_Breakout",  # Example
-                "nodes": 4  # Example
-            }],
-            "entropyLattice": self._get_entropy_lattice_data(),
-            "smartMoneyFlow": self._get_smart_money_flow(),
-            "hookPerformance": self._get_hook_performance(),
-            "tetragramMatrix": self._get_tetragram_matrix(),
-            "profitTrajectory": [{
-                "timestamp": metrics.timestamp,
-                "entryPrice": metrics.profit_trajectory.get("entry", 0),
-                "currentPrice": metrics.profit_trajectory.get("current", 0),
-                "targetPrice": metrics.profit_trajectory.get("target", 0),
-                "stopLoss": metrics.profit_trajectory.get("stop_loss", 0),
-                "confidence": metrics.pattern_confidence,
-                "latticePhase": metrics.lattice_phase
-            }],
-            "basketState": metrics.basket_state,
-            "patternMetrics": {
-                "successRate": self._calculate_success_rate(),
-                "averageProfit": self._calculate_average_profit(),
-                "patternFrequency": self._calculate_pattern_frequency(),
-                "cooldownEfficiency": self._calculate_cooldown_efficiency()
-            },
-            "hashMetrics": {  # Added hash system metrics
-                "hashCount": metrics.hash_metrics['hash_count'],
-                "patternConfidence": metrics.hash_metrics['pattern_confidence'],
-                "collisionRate": metrics.hash_metrics['collision_rate'],
-                "tetragramDensity": metrics.hash_metrics['tetragram_density'],
-                "gpuUtilization": metrics.hash_metrics['gpu_utilization']
+        # Create message
+        message = {
+            'type': 'dashboard_update',
+            'timestamp': dashboard_data.timestamp.isoformat(),
+            'data': {
+                'market': dashboard_data.market_data,
+                'entropy': dashboard_data.entropy_data,
+                'antipole': dashboard_data.antipole_data,
+                'trading': dashboard_data.trading_signals,
+                'thermal': dashboard_data.thermal_data,
+                'performance': dashboard_data.performance_metrics,
+                'health': dashboard_data.system_health
             }
         }
         
-        # Update quantum visualizer
-        self.quantum_visualizer.plot_quantum_patterns(
-            self._convert_to_history_format(dashboard_data),
-            "logs/quantum_patterns.png"
+        message_json = json.dumps(message, default=str)
+        
+        # Send to all connections
+        disconnected = set()
+        for ws in self.websocket_connections:
+            try:
+                await ws.send_str(message_json)
+            except Exception as e:
+                self.log.warning(f"WebSocket send error: {e}")
+                disconnected.add(ws)
+        
+        # Remove disconnected connections
+        self.websocket_connections -= disconnected
+    
+    # HTTP Route Handlers
+    async def get_status(self, request):
+        """Get system status"""
+        return web.json_response({
+            'status': 'running',
+            'timestamp': datetime.utcnow().isoformat(),
+            'frame_count': self.frame_count,
+            'websocket_connections': len(self.websocket_connections),
+            'components': {
+                'entropy_bridge': self.entropy_bridge is not None,
+                'profit_navigator': self.profit_navigator is not None,
+                'thermal_manager': self.thermal_manager is not None
+            }
+        })
+    
+    async def get_current_data(self, request):
+        """Get current dashboard data"""
+        if not self.current_data:
+            return web.json_response({'error': 'No data available'}, status=404)
+        
+        return web.json_response(asdict(self.current_data), default=str)
+    
+    async def get_history(self, request):
+        """Get historical data"""
+        limit = int(request.match_info.get('limit', 100))
+        limit = min(limit, len(self.data_history))
+        
+        history = list(self.data_history)[-limit:]
+        return web.json_response([asdict(item) for item in history], default=str)
+    
+    async def get_statistics(self, request):
+        """Get system statistics"""
+        stats = {
+            'total_frames': self.frame_count,
+            'update_frequency': self.config.update_frequency,
+            'history_size': len(self.data_history),
+            'websocket_connections': len(self.websocket_connections)
+        }
+        
+        # Add component statistics
+        if self.entropy_bridge:
+            stats['entropy_bridge'] = self.entropy_bridge.get_statistics()
+        
+        if self.profit_navigator:
+            stats['profit_navigator'] = self.profit_navigator.get_comprehensive_status()
+        
+        return web.json_response(stats, default=str)
+    
+    async def get_health(self, request):
+        """Get system health check"""
+        health = {
+            'healthy': True,
+            'timestamp': datetime.utcnow().isoformat(),
+            'components': {}
+        }
+        
+        # Check component health
+        try:
+            if self.entropy_bridge:
+                health['components']['entropy_bridge'] = 'healthy'
+            else:
+                health['components']['entropy_bridge'] = 'disabled'
+            
+            if self.profit_navigator:
+                health['components']['profit_navigator'] = 'healthy'
+            else:
+                health['components']['profit_navigator'] = 'disabled'
+            
+            if self.thermal_manager:
+                thermal_state = self.thermal_manager.get_thermal_state()
+                health['components']['thermal_manager'] = 'healthy' if thermal_state.get('safe', True) else 'warning'
+            else:
+                health['components']['thermal_manager'] = 'disabled'
+                
+        except Exception as e:
+            health['healthy'] = False
+            health['error'] = str(e)
+        
+        return web.json_response(health)
+    
+    async def get_config(self, request):
+        """Get current configuration"""
+        return web.json_response(asdict(self.config))
+    
+    async def set_config(self, request):
+        """Update configuration"""
+        try:
+            data = await request.json()
+            # Update configuration fields
+            for key, value in data.items():
+                if hasattr(self.config, key):
+                    setattr(self.config, key, value)
+            
+            return web.json_response({'status': 'updated'})
+        except Exception as e:
+            return web.json_response({'error': str(e)}, status=400)
+    
+    async def websocket_handler(self, request):
+        """Handle WebSocket connections"""
+        ws = WebSocketResponse()
+        await ws.prepare(request)
+        
+        self.websocket_connections.add(ws)
+        client_addr = request.remote
+        self.log.info(f"WebSocket client connected: {client_addr}")
+        
+        try:
+            # Send initial data if available
+            if self.current_data:
+                await self._broadcast_to_websockets(self.current_data)
+            
+            # Handle incoming messages
+            async for msg in ws:
+                if msg.type == WSMsgType.TEXT:
+                    try:
+                        data = json.loads(msg.data)
+                        await self._handle_websocket_message(ws, data)
+                    except json.JSONDecodeError:
+                        await ws.send_str(json.dumps({'error': 'Invalid JSON'}))
+                elif msg.type == WSMsgType.ERROR:
+                    self.log.error(f'WebSocket error: {ws.exception()}')
+                    break
+        
+        except Exception as e:
+            self.log.warning(f"WebSocket error: {e}")
+        
+        finally:
+            self.websocket_connections.discard(ws)
+            self.log.info(f"WebSocket client disconnected: {client_addr}")
+        
+        return ws
+    
+    async def _handle_websocket_message(self, ws: WebSocketResponse, data: Dict):
+        """Handle incoming WebSocket message"""
+        msg_type = data.get('type')
+        
+        if msg_type == 'ping':
+            await ws.send_str(json.dumps({'type': 'pong', 'timestamp': time.time()}))
+        
+        elif msg_type == 'get_history':
+            limit = data.get('limit', 100)
+            history = list(self.data_history)[-limit:]
+            await ws.send_str(json.dumps({
+                'type': 'history_data',
+                'data': [asdict(item) for item in history]
+            }, default=str))
+        
+        elif msg_type == 'get_statistics':
+            stats = await self.get_statistics(None)
+            await ws.send_str(json.dumps({
+                'type': 'statistics_data',
+                'data': json.loads(stats.text)
+            }))
+    
+    async def start_server(self):
+        """Start the dashboard integration server"""
+        runner = web.AppRunner(self.app)
+        await runner.setup()
+        
+        site = web.TCPSite(runner, self.config.host, self.config.port)
+        await site.start()
+        
+        self.log.info(f"🚀 Dashboard integration server started on http://{self.config.host}:{self.config.port}")
+        self.log.info(f"📊 WebSocket endpoint: ws://{self.config.host}:{self.config.port}/ws/live-data")
+        self.log.info(f"🔌 API base URL: http://{self.config.host}:{self.config.port}/api/")
+    
+    async def stop_server(self):
+        """Stop the dashboard integration server"""
+        # Close all WebSocket connections
+        for ws in list(self.websocket_connections):
+            await ws.close()
+        
+        self.log.info("Dashboard integration server stopped")
+
+# Example usage and testing
+if __name__ == "__main__":
+    import asyncio
+    
+    async def test_dashboard_integration():
+        """Test the dashboard integration"""
+        logging.basicConfig(level=logging.INFO)
+        
+        # Create dashboard integration
+        config = DashboardConfig(
+            host="localhost",
+            port=8768,
+            update_frequency=10.0,
+            enable_entropy_bridge=True,
+            enable_profit_navigator=True
         )
         
-    def _get_entropy_lattice_data(self) -> List[Dict]:
-        """Get entropy lattice visualization data"""
-        # Get tetragram matrix from hash system
-        matrix = self.hash_system.tetragram_matrix
-        return [{
-            "x": i,
-            "y": j,
-            "z": k,
-            "value": float(matrix[i, j, k, 0])
-        } for i in range(3) for j in range(3) for k in range(3)]
+        dashboard = DashboardIntegration(config)
         
-    def _get_smart_money_flow(self) -> List[Dict]:
-        """Get smart money flow data"""
-        # Implement smart money flow calculation
-        return []
+        # Start server
+        await dashboard.start_server()
         
-    def _get_hook_performance(self) -> List[Dict]:
-        """Get hook performance metrics"""
-        # Implement hook performance tracking
-        return []
+        print("🌐 Dashboard Integration Server running...")
+        print(f"📊 Dashboard: http://localhost:8768/")
+        print(f"🔌 WebSocket: ws://localhost:8768/ws/live-data")
+        print(f"📡 API: http://localhost:8768/api/status")
         
-    def _get_tetragram_matrix(self) -> List[Dict]:
-        """Get tetragram matrix data"""
-        # Get tetragram matrix from hash system
-        matrix = self.hash_system.tetragram_matrix
-        return [{
-            "i": i,
-            "j": j,
-            "k": k,
-            "l": l,
-            "value": float(matrix[i, j, k, l])
-        } for i in range(3) for j in range(3) for k in range(3) for l in range(3)]
+        # Simulate market data for testing
+        base_price = 45000.0
+        base_volume = 1000000.0
         
-    def _calculate_success_rate(self) -> float:
-        """Calculate pattern success rate"""
-        # Implement success rate calculation
-        return 0.0
+        try:
+            for i in range(100):
+                import math
+                import numpy as np
+                
+                price = base_price + 2000 * math.sin(i * 0.1) + np.random.randn() * 400
+                volume = base_volume + np.random.randn() * 180000
+                
+                # Process market tick
+                dashboard_data = await dashboard.process_market_tick(price, volume)
+                
+                if i % 10 == 0:
+                    print(f"📈 Tick {i}: ${price:,.2f} | "
+                          f"Entropy: {dashboard_data.entropy_data.get('combined_entropy', 0):.3f} | "
+                          f"AP-RSI: {dashboard_data.entropy_data.get('ap_rsi', 50):.1f} | "
+                          f"Connections: {len(dashboard.websocket_connections)}")
+                
+                await asyncio.sleep(1.0 / config.update_frequency)  # Maintain update frequency
         
-    def _calculate_average_profit(self) -> float:
-        """Calculate average profit"""
-        # Implement average profit calculation
-        return 0.0
+        except KeyboardInterrupt:
+            print("🛑 Stopping dashboard integration...")
         
-    def _calculate_pattern_frequency(self) -> float:
-        """Calculate pattern frequency"""
-        # Implement pattern frequency calculation
-        return 0.0
-        
-    def _calculate_cooldown_efficiency(self) -> float:
-        """Calculate cooldown efficiency"""
-        # Implement cooldown efficiency calculation
-        return 0.0
-        
-    def _convert_to_history_format(self, dashboard_data: Dict) -> List[Dict]:
-        """Convert dashboard data to history format for quantum visualizer"""
-        # Implement data format conversion
-        return [] 
+        finally:
+            await dashboard.stop_server()
+    
+    # Run test
+    asyncio.run(test_dashboard_integration()) 

@@ -1,0 +1,69 @@
+2025-06-16 14:09:08,898 | __main__ | INFO | Starting Complete Integrated Anti-Pole System
+2025-06-16 14:09:08,899 | __main__ | INFO | Hash Affinity Vault initialized
+2025-06-16 14:09:08,899 | __main__ | INFO | Mock component suite loaded
+2025-06-16 14:09:08,900 | __main__ | INFO | Advanced Test Harness initialized
+2025-06-16 14:09:08,900 | __main__ | INFO | Strategy Execution Mapper initialized
+2025-06-16 14:09:08,900 | core.system_clock_sequencer | INFO | Registered task: Monitor thermal state and adjust performance (5s)
+2025-06-16 14:09:08,901 | core.system_clock_sequencer | INFO | Registered task: Analyze vault patterns and detect anomalies (15s)
+2025-06-16 14:09:08,901 | core.system_clock_sequencer | INFO | Registered task: Generate trading signals from recent patterns (30s)
+2025-06-16 14:09:08,902 | core.system_clock_sequencer | INFO | Registered task: Process entropy data and update bridges (5m)
+2025-06-16 14:09:08,902 | core.system_clock_sequencer | INFO | Registered task: Perform vault cleanup and optimization (15m)
+2025-06-16 14:09:08,903 | core.system_clock_sequencer | INFO | Registered task: Update dashboard with latest metrics (1m)
+2025-06-16 14:09:08,903 | core.system_clock_sequencer | INFO | Registered task: Comprehensive system health assessment (1h)
+2025-06-16 14:09:08,903 | core.system_clock_sequencer | INFO | Registered task: Optimize system performance and cleanup (4h)
+2025-06-16 14:09:08,904 | __main__ | INFO | System Clock Sequencer initialized
+2025-06-16 14:09:08,904 | core.system_clock_sequencer | INFO | Registered task: Simulate realistic market price movements (5s)
+2025-06-16 14:09:08,904 | core.system_clock_sequencer | INFO | Registered task: Execute generated trading signals (15s)
+2025-06-16 14:09:08,905 | core.system_clock_sequencer | INFO | Registered task: Update demo statistics and progress (30s)
+2025-06-16 14:09:08,905 | core.system_clock_sequencer | INFO | Registered task: Showcase system performance metrics (1m)
+2025-06-16 14:09:08,906 | __main__ | INFO | Complete system initialization finished
+2025-06-16 14:09:08,937 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:08,942 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:08,968 | core.system_clock_sequencer | INFO | Performing system optimization
+2025-06-16 14:09:08,971 | __main__ | INFO | 
+================================================================================
+2025-06-16 14:09:08,971 | __main__ | INFO | SYSTEM PERFORMANCE SHOWCASE
+2025-06-16 14:09:08,971 | __main__ | INFO | ================================================================================
+2025-06-16 14:09:08,972 | __main__ | INFO | System Uptime: 0s
+2025-06-16 14:09:08,972 | __main__ | INFO | System Health: 1.000
+2025-06-16 14:09:08,972 | __main__ | INFO | Active Tasks: 12/12
+2025-06-16 14:09:08,972 | __main__ | INFO | Avg Cycle Time: 0.0ms
+2025-06-16 14:09:08,973 | __main__ | INFO | 
+Vault Performance:
+2025-06-16 14:09:08,973 | __main__ | INFO |    Total Ticks: 1
+2025-06-16 14:09:08,973 | __main__ | INFO |    Hash Correlations: 1
+2025-06-16 14:09:08,973 | __main__ | INFO |    Recent Anomalies: 0
+2025-06-16 14:09:08,974 | __main__ | INFO |    Vault Utilization: 0.0%
+2025-06-16 14:09:08,974 | __main__ | INFO | 
+Demo Statistics:
+2025-06-16 14:09:08,974 | __main__ | INFO |    Signals Generated: 0
+2025-06-16 14:09:08,974 | __main__ | INFO |    Trades Executed: 0
+2025-06-16 14:09:08,974 | __main__ | INFO |    Current BTC Price: $45,016.09
+2025-06-16 14:09:08,975 | __main__ | INFO |    Thermal Events: 0
+2025-06-16 14:09:08,975 | __main__ | INFO | ================================================================================
+2025-06-16 14:09:09,990 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:09,991 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:10,994 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:10,995 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:11,997 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:11,998 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:13,001 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:13,002 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:14,017 | core.system_clock_sequencer | ERROR | Task Monitor thermal state and adjust performance failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:14,018 | core.system_clock_sequencer | WARNING | Disabled task Monitor thermal state and adjust performance due to repeated failures
+2025-06-16 14:09:14,019 | core.system_clock_sequencer | ERROR | Task Comprehensive system health assessment failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:14,019 | core.system_clock_sequencer | WARNING | Disabled task Comprehensive system health assessment due to repeated failures
+2025-06-16 14:09:24,107 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:25,110 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:26,117 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:27,131 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:28,146 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:29,161 | core.system_clock_sequencer | ERROR | Task Execute generated trading signals failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:29,162 | core.system_clock_sequencer | WARNING | Disabled task Execute generated trading signals due to repeated failures
+2025-06-16 14:09:39,272 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:40,275 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:41,282 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:42,284 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:43,285 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:44,305 | core.system_clock_sequencer | ERROR | Task Generate trading signals from recent patterns failed: 'coroutine' object has no attribute 'get'
+2025-06-16 14:09:44,306 | core.system_clock_sequencer | WARNING | Disabled task Generate trading signals from recent patterns due to repeated failures

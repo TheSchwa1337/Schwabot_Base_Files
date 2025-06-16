@@ -1,0 +1,149 @@
+# Anti-Pole Theory Configuration
+# ==============================
+# Configuration for the Anti-Pole Profit Navigator system
+
+# Core Anti-Pole Vector Parameters
+antipole:
+  # Cool-state detection thresholds
+  mu_c: 0.015                    # Cool-state mean threshold
+  sigma_c: 0.007                 # Cool-state standard deviation
+  tau_icap: 0.65                 # ICAP activation threshold (0-1)
+  epsilon: 1e-9                  # Division by zero protection
+  
+  # Hash entropy calculation
+  hash_window: 256               # SHA-256 entropy buffer size
+  sha_seed: "schwabot_antipole"  # Seed for hash calculations
+  
+  # Thermal and performance
+  thermal_decay: 0.95            # Thermal decay coefficient
+  profit_amplification: 1.2     # Profit signal amplification factor
+  recursion_depth: 8             # Maximum recursion depth for stability
+  
+  # Profit tier thresholds
+  profit_tiers:
+    platinum: 0.8                # Platinum tier threshold
+    gold: 0.6                   # Gold tier threshold  
+    silver: 0.4                 # Silver tier threshold
+    bronze: 0.2                 # Bronze tier threshold
+
+# ZBE Thermal Controller Settings
+thermal:
+  # Thermal load calculation weights
+  temp_weight: 0.4              # CPU temperature weight
+  cpu_weight: 0.3               # CPU usage weight
+  memory_weight: 0.2            # Memory usage weight
+  io_weight: 0.1                # I/O operations weight
+  
+  # Cooldown thresholds
+  cooldown_threshold: 0.75      # Thermal load threshold for cooldown
+  emergency_threshold: 0.95     # Emergency stop threshold
+  
+  # Cooldown durations (seconds)
+  cooldown_durations:
+    emergency: 600              # 10 minutes
+    critical: 300               # 5 minutes
+    hot: 120                    # 2 minutes
+    warm: 60                    # 1 minute
+    default: 30                 # 30 seconds
+  
+  # Buffer sizes
+  window_size: 32               # Thermal metrics buffer size
+  history_size: 1000            # Thermal history retention
+
+# Tesseract Visualization Settings
+visualization:
+  # WebSocket server
+  websocket_port: 8765          # WebSocket server port
+  max_connections: 10           # Maximum concurrent connections
+  
+  # Glyph management
+  max_glyphs: 1000             # Maximum active glyphs
+  glyph_lifetime: 60           # Glyph lifetime in seconds
+  
+  # 4D space bounds
+  space_bounds:
+    x: [-10.0, 10.0]           # Price momentum axis
+    y: [-10.0, 10.0]           # Volume intensity axis
+    z: [-10.0, 10.0]           # Hash entropy axis
+    w: [-5.0, 5.0]             # Anti-pole drift axis
+  
+  # Color schemes (RGBA)
+  colors:
+    cold: [0.2, 0.4, 0.8, 0.7]
+    cool: [0.2, 0.8, 0.6, 0.8]
+    warm: [0.8, 0.8, 0.2, 0.8]
+    hot: [0.9, 0.5, 0.1, 0.9]
+    critical: [0.9, 0.2, 0.2, 1.0]
+    emergency: [1.0, 0.0, 0.0, 1.0]
+    platinum: [0.9, 0.9, 0.9, 1.0]
+    gold: [1.0, 0.8, 0.0, 1.0]
+    silver: [0.7, 0.7, 0.8, 1.0]
+    bronze: [0.8, 0.5, 0.2, 1.0]
+
+# Portfolio Management Settings
+portfolio:
+  # Trading parameters
+  initial_balance: 100000.0     # Starting balance in USD
+  max_position_size: 0.25       # Maximum position size (25% of portfolio)
+  min_trade_size: 0.001         # Minimum trade size in BTC
+  
+  # Risk management
+  max_drawdown: 0.20            # Maximum allowed drawdown (20%)
+  stop_loss_factor: 0.5         # Stop loss as fraction of expected return
+  take_profit_factor: 1.0       # Take profit as fraction of expected return
+  
+  # Performance tracking
+  performance_window: 100       # Number of trades for performance calculation
+  sharpe_lookback: 30           # Days for Sharpe ratio calculation
+
+# Market Data Settings
+market:
+  # Data sources
+  primary_exchange: "binance"    # Primary exchange for data
+  backup_exchanges: ["coinbase", "kraken"]  # Backup exchanges
+  
+  # Tick processing
+  tick_interval: 1.0            # Seconds between ticks
+  price_precision: 2            # Decimal places for price
+  volume_precision: 8           # Decimal places for volume
+  
+  # Market regime detection
+  regime_window: 100            # Ticks for regime detection
+  volatility_threshold: 0.02    # Volatility threshold for regime classification
+
+# Logging Configuration
+logging:
+  level: INFO                   # Log level (DEBUG, INFO, WARNING, ERROR)
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # File logging
+  file_logging: true
+  log_file: "logs/antipole_navigator.log"
+  max_file_size: 10485760      # 10MB
+  backup_count: 5
+  
+  # Event logging
+  log_antipole_ready: true      # Log Anti-Pole ready events
+  log_thermal_events: true     # Log thermal events
+  log_trades: true             # Log trade executions
+  log_opportunities: true      # Log profit opportunities
+
+# Development and Debug Settings
+debug:
+  # Demo mode
+  demo_mode: false             # Enable demo mode with simulated data
+  demo_duration: 300           # Demo duration in seconds
+  demo_tick_rate: 1.0          # Demo tick rate in seconds
+  
+  # Testing
+  enable_backtesting: false    # Enable backtesting mode
+  backtest_start: "2023-01-01" # Backtest start date
+  backtest_end: "2023-12-31"   # Backtest end date
+  
+  # Simulation
+  simulate_thermal: false      # Simulate thermal conditions
+  simulate_latency: false      # Simulate network latency
+  
+  # Export settings
+  export_frames: false         # Export Tesseract frames to files
+  export_directory: "exports/" # Directory for exported data 
