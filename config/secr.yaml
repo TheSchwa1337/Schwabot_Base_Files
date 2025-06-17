@@ -1,0 +1,252 @@
+# SECR Configuration
+# Sustainment-Encoded Collapse Resolver System
+# =============================================
+
+# Global SECR Settings
+global:
+  enabled: true
+  log_level: "INFO"
+  max_failure_keys: 10000
+  evaluation_window_ticks: 16
+  stability_threshold: 0.8
+
+# Failure Classification Thresholds
+classification:
+  gpu_lag_ms: 180
+  cpu_stall_ms: 120
+  ram_pressure_pct: 85
+  entropy_spike_sigma: 2.0
+  thermal_halt_temp: 85
+  api_timeout_ms: 5000
+  batch_miss_tolerance_ms: 1000
+
+# Pressure Index Calculation Weights
+pressure_weights:
+  beta: 0.3    # GPU kernel latency weight
+  gamma: 0.2   # CPU context switch weight
+  delta: 0.4   # GC events weight
+
+# Performance Group Resolver Settings
+perf:
+  cpu_threshold: 80.0
+  gpu_threshold: 85.0
+  temp_threshold_cpu: 85.0
+  temp_threshold_gpu: 83.0
+  pressure_threshold: 0.7
+  
+  # GPU Lag Resolution
+  gpu_lag:
+    batch_reduction_factor: 0.5
+    timeout_extension_factor: 200  # Additional ms per severity
+    cooldown_ticks: 32
+    memory_limit_factor: 0.7
+    
+  # CPU Stall Resolution
+  cpu_stall:
+    thread_reduction_factor: 0.4
+    priority_adjustment_factor: -5
+    core_limit_minimum: 1
+    
+  # RAM Pressure Resolution
+  ram_pressure:
+    batch_reduction_factor: 0.6
+    memory_usage_target: 0.9
+    gc_frequency_multiplier: 20
+    buffer_size_minimum: 1024
+
+# Order Group Resolver Settings
+order:
+  # Batch Miss Resolution
+  batch_miss:
+    timeout_padding_factor: 500  # Additional ms per severity
+    batch_reduction_factor: 0.5
+    tick_buffer_factor: 100
+    icap_adjustment_factor: 0.2
+    retry_attempts_multiplier: 5
+    
+  # Slip Drift Resolution
+  slip_drift:
+    slippage_tolerance_multiplier: 1.5
+    spread_buffer_multiplier: 1.0
+    price_staleness_limit: 500
+    order_book_refresh_rate: 200
+    
+  # Partial Fill Resolution
+  partial_fill:
+    fill_threshold_adjustment: -0.1
+    liquidity_requirement_multiplier: 1.0
+
+# Entropy Group Resolver Settings
+entropy:
+  # Entropy Spike Resolution
+  entropy_spike:
+    gate_threshold_multiplier: 2.0
+    phase_lock_duration_factor: 16
+    corridor_width_multiplier: 1.0
+    smoothing_factor_base: 0.1
+    
+  # ICAP Collapse Resolution
+  icap_collapse:
+    icap_floor_multiplier: 2.0
+    corridor_expansion_factor: 0.5
+    exit_only_threshold: 0.9
+    recovery_mode_persistence: 64
+    
+  # Phase Invert Resolution
+  phase_invert:
+    temporal_buffer_extension_factor: 8
+    compensation_mode_persistence: 32
+
+# Thermal Group Resolver Settings
+thermal:
+  processing_reduction_factor: 0.5
+  cooling_pause_duration_factor: 30
+  cpu_throttle_minimum: 0.3
+  gpu_throttle_minimum: 0.2
+  monitoring_interval_minimum: 1
+
+# Network Group Resolver Settings
+net:
+  timeout_multiplier_base: 1.0
+  retry_delay_factor: 1000
+  connection_timeout_base: 5000
+  connection_timeout_multiplier: 1.0
+
+# Resource Allocator Settings
+allocator:
+  max_history: 1000
+  
+  # Strategy-specific settings
+  strategies:
+    performance:
+      priority_gpu_threshold: 0.6
+      split_workload_threshold: 0.4
+      batch_size_reduction_factor: 0.5
+      
+    order:
+      cpu_preference_weight: 0.9
+      timing_priority_boost: true
+      reliability_weight: 0.8
+
+# Configuration Injector Settings
+injector:
+  max_snapshots: 100
+  backup_retention_count: 50
+  
+  # Validation Rules
+  validation:
+    strategy:
+      batch_size_multiplier_range: [0.1, 2.0]
+      risk_tolerance_range: [0.0, 1.0]
+      icap_adjustment_range: [-0.5, 0.5]
+      
+    engine:
+      gpu_queue_limit_range: [1, 1000]
+      thread_pool_size_range: [1, 64]
+      max_memory_usage_range: [0.1, 0.95]
+      
+    risk:
+      position_size_reduction_range: [0.0, 0.8]
+      corridor_width_multiplier_range: [0.5, 3.0]
+      slippage_tolerance_range: [0.001, 0.5]
+      
+    timing:
+      api_timeout_multiplier_range: [0.5, 5.0]
+
+# Watchdog Settings
+watchdog:
+  evaluation_window: 16
+  stability_threshold: 0.8
+  baseline_window: 100
+  
+  # Outcome Evaluation Weights
+  outcome_weights:
+    profit: 0.4
+    latency: 0.2
+    error: 0.2
+    stability: 0.1
+    efficiency: 0.1
+    
+  # SchwaFit Interface
+  schwafit:
+    queue_size: 1000
+    batch_size: 32
+    training_data_retention: 1000
+
+# Adaptive ICAP Tuner Settings
+adaptive_icap:
+  initial_threshold: 0.4
+  adjustment_alpha: 0.05
+  bounds: [0.1, 0.85]
+  learning_window: 100
+  
+  # Sensitivity Settings
+  volatility_sensitivity: 0.3
+  profit_weight: 0.6
+  stability_weight: 0.4
+  
+  # Pattern Tracking
+  pattern_tracking:
+    icap_collapse_history: 20
+    entropy_spike_history: 50
+    profit_correlation_history: 20
+    
+  # Market-based Adjustment Thresholds
+  market_thresholds:
+    high_volatility: 0.15
+    low_volatility: 0.05
+    low_volume: 0.5
+    volatility_adjustment_factor: 0.3
+    volume_adjustment_factor: 0.2
+
+# Patch Configuration Defaults
+patch_defaults:
+  persistence_ticks: 16
+  priority: 1
+  
+  # Emergency Patch Settings
+  emergency:
+    persistence_ticks: 4
+    priority: 10
+    
+  # Long-term Patch Settings
+  long_term:
+    persistence_ticks: 64
+    priority: 1
+
+# Integration Settings
+integration:
+  # Existing System Hooks
+  hooks:
+    strategy_execution_mapper: true
+    profit_navigator: true
+    fractal_core: true
+    entropy_bridge: true
+    gpu_metrics: true
+    thermal_zone_manager: true
+    
+  # Data Paths
+  data_paths:
+    phantom_corridors: "data/phantom_corridors.json"
+    config_backups: "data/config_backups"
+    training_data: "data/secr_training"
+    
+  # Monitoring Endpoints
+  monitoring:
+    metrics_port: 7777
+    dashboard_integration: true
+    cli_access: true
+
+# Development and Debug Settings
+debug:
+  enabled: false
+  verbose_logging: false
+  simulation_mode: false
+  force_failures: false
+  mock_metrics: false
+  
+  # Testing Overrides
+  testing:
+    accelerated_time: false
+    deterministic_random: false
+    bypass_validation: false 

@@ -1,0 +1,205 @@
+{
+  "system": {
+    "update_interval": 0.1,
+    "sustainment_threshold": 0.65,
+    "thermal_management": true,
+    "gpu_acceleration": true,
+    "debug_mode": false
+  },
+  "dashboard": {
+    "web_port": 5000,
+    "websocket_port": 8765,
+    "enable_react_dashboard": true,
+    "enable_python_dashboard": false,
+    "enable_tesseract_integration": true
+  },
+  "apis": {
+    "coinbase": {
+      "enabled": false,
+      "api_key": "YOUR_COINBASE_API_KEY",
+      "api_secret": "YOUR_COINBASE_API_SECRET",
+      "passphrase": "YOUR_COINBASE_PASSPHRASE",
+      "sandbox": true,
+      "rate_limit": 10
+    },
+    "binance": {
+      "enabled": false,
+      "api_key": "YOUR_BINANCE_API_KEY",
+      "api_secret": "YOUR_BINANCE_API_SECRET",
+      "testnet": true,
+      "rate_limit": 1200
+    },
+    "coinmarket_cap": {
+      "enabled": false,
+      "api_key": "YOUR_CMC_API_KEY",
+      "endpoints": [
+        "cryptocurrency/listings/latest",
+        "cryptocurrency/quotes/latest"
+      ]
+    },
+    "coin_gecko": {
+      "enabled": false,
+      "api_key": "",
+      "free_tier": true
+    },
+    "ccxt_exchanges": [
+      {
+        "name": "kraken",
+        "enabled": false,
+        "api_key": "",
+        "api_secret": "",
+        "testnet": true
+      }
+    ]
+  },
+  "trading": {
+    "enabled": false,
+    "max_position_size": 0.1,
+    "risk_per_trade": 0.02,
+    "stop_loss_percent": 0.05,
+    "take_profit_percent": 0.15,
+    "allowed_symbols": [
+      "BTC/USD",
+      "ETH/USD", 
+      "BTC/USDT",
+      "ETH/USDT"
+    ],
+    "strategies": {
+      "momentum": {
+        "enabled": true,
+        "weight": 0.3
+      },
+      "reversal": {
+        "enabled": true,
+        "weight": 0.2
+      },
+      "anti_pole": {
+        "enabled": true,
+        "weight": 0.5
+      }
+    }
+  },
+  "visualization": {
+    "enable_tesseract": true,
+    "enable_advanced_tesseract": true,
+    "update_frequency": 10.0,
+    "export_data": true,
+    "tesseract_settings": {
+      "projection_type": "4d_hypercube",
+      "rotation_speed": 0.01,
+      "color_scheme": "thermal",
+      "show_fractals": true
+    },
+    "chart_settings": {
+      "show_entropy": true,
+      "show_patterns": true,
+      "show_risk_radar": true,
+      "show_performance": true
+    }
+  },
+  "sustainment_framework": {
+    "principle_weights": {
+      "anticipation": 1.0,
+      "integration": 1.2,
+      "responsiveness": 0.8,
+      "simplicity": 1.0,
+      "economy": 1.3,
+      "survivability": 1.5,
+      "continuity": 1.1,
+      "improvisation": 0.9
+    },
+    "thresholds": {
+      "critical_sustainment_index": 0.65,
+      "warning_sustainment_index": 0.75,
+      "survivability_threshold": 0.85,
+      "integration_threshold": 0.70,
+      "economy_threshold": 0.75
+    },
+    "correction_settings": {
+      "auto_correction": true,
+      "correction_strength": 0.1,
+      "max_corrections_per_minute": 5
+    }
+  },
+  "hardware": {
+    "thermal_monitoring": {
+      "enabled": true,
+      "cpu_temp_threshold": 80.0,
+      "gpu_temp_threshold": 85.0,
+      "cooldown_enabled": true
+    },
+    "gpu_settings": {
+      "prefer_gpu": true,
+      "fallback_to_cpu": true,
+      "memory_limit_gb": 8.0,
+      "tensor_processing": true
+    },
+    "performance": {
+      "max_cpu_percent": 80,
+      "max_memory_percent": 75,
+      "disk_space_min_gb": 10
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file_logging": true,
+    "log_directory": "logs",
+    "max_log_files": 10,
+    "log_rotation_mb": 100,
+    "components": {
+      "sustainment_controller": "INFO",
+      "visual_bridge": "INFO",
+      "dashboard_server": "INFO",
+      "api_connections": "INFO"
+    }
+  },
+  "data_sources": {
+    "market_data": {
+      "primary_source": "coinbase",
+      "fallback_sources": ["binance", "kraken"],
+      "data_retention_hours": 24,
+      "tick_storage": true
+    },
+    "entropy_calculation": {
+      "window_size": 100,
+      "update_interval_seconds": 1.0,
+      "sources": ["price", "volume", "orderbook"]
+    },
+    "pattern_recognition": {
+      "enabled_patterns": [
+        "trend_continuation",
+        "mean_reversion", 
+        "breakout_signal",
+        "anti_pole_formation",
+        "support_resistance"
+      ],
+      "confidence_threshold": 0.7,
+      "pattern_history_limit": 1000
+    }
+  },
+  "security": {
+    "encryption": {
+      "encrypt_api_keys": true,
+      "encryption_key_file": "config/.encryption_key"
+    },
+    "access_control": {
+      "dashboard_password": "",
+      "api_authentication": false,
+      "allowed_ips": ["127.0.0.1", "localhost"]
+    }
+  },
+  "export": {
+    "data_export": {
+      "enabled": true,
+      "export_directory": "exports",
+      "formats": ["json", "csv"],
+      "export_interval_minutes": 60
+    },
+    "backup": {
+      "auto_backup": true,
+      "backup_directory": "backups",
+      "backup_interval_hours": 6,
+      "max_backups": 24
+    }
+  }
+} 

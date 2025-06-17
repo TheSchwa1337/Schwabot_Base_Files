@@ -67,9 +67,13 @@ class CoreMathLib:
     Schwafit validation, and recursive trade logic support.
     """
 
-    def __init__(self):
-        """Initialize the math library."""
-        pass
+    def __init__(self, base_volume: float = 1000.0, tick_freq: float = 60.0, 
+                 profit_coef: float = 1.0, threshold: float = 0.5):
+        """Initialize the math library with trading parameters."""
+        self.base_volume = base_volume
+        self.tick_freq = tick_freq
+        self.profit_coef = profit_coef
+        self.threshold = threshold
 
     # --- VECTOR OPS ---
 
@@ -113,6 +117,128 @@ class CoreMathLib:
         """
         norm = np.linalg.norm(v)
         return v if norm == 0 else v / norm
+
+    # --- ADVANCED TRADING STRATEGIES ---
+    
+    def apply_advanced_strategies(self, prices: np.ndarray, volumes: np.ndarray) -> Dict[str, Any]:
+        """
+        Apply comprehensive trading strategies to price and volume data.
+        
+        Args:
+            prices: Price series
+            volumes: Volume series
+            
+        Returns:
+            Dictionary containing all strategy results
+        """
+        results = {}
+        
+        # Calculate returns
+        returns = np.diff(prices) / prices[:-1]
+        results['returns'] = returns
+        
+        # Bollinger Bands
+        price_mean = np.mean(prices)
+        price_std = np.std(prices)
+        results['bollinger_upper'] = price_mean + 2 * price_std
+        results['bollinger_lower'] = price_mean - 2 * price_std
+        results['upper_band'] = np.full_like(prices, results['bollinger_upper'])
+        results['lower_band'] = np.full_like(prices, results['bollinger_lower'])
+        
+        # Momentum and Mean Reversion
+        window = min(20, len(prices) // 2)
+        if window > 1:
+            momentum = np.zeros_like(prices)
+            mean_reversion = np.zeros_like(prices)
+            
+            for i in range(window, len(prices)):
+                window_prices = prices[i-window:i]
+                momentum[i] = (prices[i] - np.mean(window_prices)) / np.std(window_prices)
+                mean_reversion[i] = (np.mean(window_prices) - prices[i]) / np.std(window_prices)
+        else:
+            momentum = np.zeros_like(prices)
+            mean_reversion = np.zeros_like(prices)
+            
+        results['momentum'] = momentum
+        results['mean_reversion'] = mean_reversion
+        
+        # Z-scores (normalized price deviations)
+        z_scores = (prices - price_mean) / price_std
+        results['z_scores'] = z_scores
+        
+        # Volume Price Trend (VPT)
+        vpt = np.zeros_like(prices)
+        for i in range(1, len(prices)):
+            price_change_pct = (prices[i] - prices[i-1]) / prices[i-1]
+            vpt[i] = vpt[i-1] + volumes[i] * price_change_pct
+        results['vpt'] = vpt
+        
+        # Profit ratios
+        profit_ratios = np.where(prices[:-1] != 0, returns, 0)
+        results['profit_ratios'] = np.append(profit_ratios, profit_ratios[-1])
+        
+        # Risk metrics
+        results['std'] = price_std
+        results['sharpe_ratio'] = np.mean(returns) / np.std(returns) if np.std(returns) != 0 else 0.0
+        results['log_return'] = np.sum(np.log(1 + returns)) if np.all(returns > -1) else 0.0
+        
+        # Entropy
+        results['entropy'] = self.shell_entropy(prices / np.sum(prices))
+        
+        return results
+    
+    def tick_bound_execution(self, price: float, lower_bound: float, upper_bound: float, 
+                           hash_data: str) -> str:
+        """
+        Make trading decisions based on price bounds and hash analysis.
+        
+        Args:
+            price: Current price
+            lower_bound: Lower trading bound
+            upper_bound: Upper trading bound
+            hash_data: Hash data for decision making
+            
+        Returns:
+            Trading decision string
+        """
+        # Simple bound-based decision logic
+        if price <= lower_bound:
+            return "BUY"
+        elif price >= upper_bound:
+            return "SELL"
+        else:
+            # Use hash for neutral zone decisions
+            hash_val = int(sha256_hash(hash_data)[:8], 16)
+            if hash_val % 3 == 0:
+                return "HOLD"
+            elif hash_val % 3 == 1:
+                return "WEAK_BUY"
+            else:
+                return "WEAK_SELL"
+    
+    def allocate_volume(self, base_volume: float, tick: int, total_ticks: int, 
+                       method: str = 'sine') -> float:
+        """
+        Allocate volume based on tick position and method.
+        
+        Args:
+            base_volume: Base volume amount
+            tick: Current tick
+            total_ticks: Total ticks in period
+            method: Allocation method ('sine', 'linear', 'exponential')
+            
+        Returns:
+            Allocated volume
+        """
+        if method == 'sine':
+            phase = (2 * np.pi * tick) / total_ticks
+            return base_volume * (1 + 0.5 * np.sin(phase))
+        elif method == 'linear':
+            return base_volume * (1 + tick / total_ticks)
+        elif method == 'exponential':
+            return base_volume * np.exp(tick / total_ticks - 1)
+        else:
+            return base_volume
 
     # --- G(e) GRADING LOGIC ---
 

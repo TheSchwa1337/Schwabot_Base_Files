@@ -1,0 +1,498 @@
+# Enhanced Sustainment Principles Configuration v3.0
+# ====================================================
+# Deep mathematical framework configuration for the 8 principles of sustainment
+# with complete system integration and mathematical hierarchy support
+
+# Global Mathematical Framework Settings
+global:
+  enabled: true
+  mathematical_framework_version: "3.0"
+  sustainment_threshold: 0.65
+  emergency_threshold: 0.30
+  calculation_interval_ms: 1000
+  correction_interval_ms: 500
+  history_retention_count: 1000
+  logging_level: "INFO"
+  
+  # Deep integration settings
+  cross_controller_integration: true
+  gpu_acceleration: true
+  mathematical_synthesis: true
+  real_time_correction: true
+
+# Mathematical Hierarchy Parameters
+mathematical_hierarchy:
+  # Core mathematical constants
+  epsilon: 1.0e-8
+  convergence_tolerance: 1.0e-6
+  max_iterations: 1000
+  
+  # Sustainment index calculation
+  sustainment_index:
+    formula: "SI(t) = Σᵢ wᵢ Pᵢ(t)"
+    normalization: "softmax"
+    confidence_weighting: true
+    temporal_smoothing: 0.1
+  
+  # Principle weighting (must sum to 1.0)
+  principle_weights:
+    anticipation: 0.15      # Predictive modeling
+    integration: 0.15       # System coherence
+    responsiveness: 0.12    # Real-time adaptation
+    simplicity: 0.10        # Complexity management
+    economy: 0.15           # Resource efficiency
+    survivability: 0.13     # Risk management  
+    continuity: 0.10        # Persistent operation
+    improvisation: 0.10     # Creative adaptation
+
+# Individual Principle Mathematical Models
+principles:
+  
+  # Principle 1: Anticipation
+  # A(t) = τ · ∂/∂t[E[ψ(x,t)]] + K·∇²Φ
+  anticipation:
+    mathematical_model: "kalman_prediction_with_entropy_derivative"
+    parameters:
+      tau: 0.1                    # Time constant
+      kalman_gain: 0.3           # Kalman filter gain
+      prediction_window: 20       # Buffer size for predictions
+      error_decay_rate: 0.1      # Prediction error decay
+      entropy_derivative_weight: 0.3  # Weight of entropy component
+      confidence_buildup_rate: 0.05   # How fast confidence increases
+    
+    thresholds:
+      threshold: 0.5
+      confidence_threshold: 0.7
+      emergency_threshold: 0.2
+    
+    integration_hooks:
+      thermal_zone: 
+        prediction_window_adjustment: true
+        thermal_forecast_integration: true
+      fractal_core:
+        forecasting_enhancement: true
+        recursive_prediction_depth: 5
+      quantum_engine:
+        state_prediction_improvement: true
+        wavefunction_evolution_tau: 0.9
+  
+  # Principle 2: Integration  
+  # I(t) = ∑ᵢ softmax(αᵢ·hᵢ) · sᵢ
+  integration:
+    mathematical_model: "softmax_weighted_aggregation"
+    parameters:
+      softmax_alpha: 1.0         # Softmax temperature
+      min_subsystems_confidence: 5  # Min subsystems for full confidence
+      weight_balance_importance: 0.7  # Weight balance vs score importance
+      score_importance: 0.3
+      variance_penalty: 0.5      # Penalty for high score variance
+    
+    thresholds:
+      threshold: 0.6
+      confidence_threshold: 0.7
+      emergency_threshold: 0.3
+    
+    cross_controller_weights:
+      # Matrix defining how controllers integrate (8x8)
+      thermal_zone: [1.0, 0.8, 0.6, 0.4, 0.7, 0.3, 0.5, 0.2]
+      cooldown: [0.8, 1.0, 0.5, 0.3, 0.6, 0.4, 0.7, 0.3]
+      fractal_core: [0.6, 0.5, 1.0, 0.9, 0.4, 0.8, 0.9, 0.6]
+      quantum_engine: [0.4, 0.3, 0.9, 1.0, 0.5, 0.9, 0.8, 0.7]
+      gpu_flash: [0.7, 0.6, 0.4, 0.5, 1.0, 0.6, 0.3, 0.4]
+      profit_navigator: [0.3, 0.4, 0.8, 0.9, 0.6, 1.0, 0.9, 0.5]
+      strategy_mapper: [0.5, 0.7, 0.9, 0.8, 0.3, 0.9, 1.0, 0.8]
+      visual_bridge: [0.2, 0.3, 0.6, 0.7, 0.4, 0.5, 0.8, 1.0]
+  
+  # Principle 3: Responsiveness
+  # R(t) = e^(-ℓ/λ) · σ(Δt)
+  responsiveness:
+    mathematical_model: "exponential_latency_decay"
+    parameters:
+      max_latency_lambda: 100.0   # Maximum acceptable latency
+      consistency_weight: 0.5     # Weight of latency consistency
+      latency_std_penalty: 1.0    # Penalty for latency variance
+      response_buffer_size: 20    # Latency measurement buffer
+    
+    thresholds:
+      threshold: 0.7
+      confidence_threshold: 0.7
+      emergency_threshold: 0.3
+    
+    integration_hooks:
+      thermal_zone:
+        response_time_target: 50    # Target response time (ms)
+        emergency_boost_factor: 2.0
+      gpu_flash:
+        batch_size_optimization: true
+        memory_response_tuning: true
+      cooldown:
+        dynamic_cooldown_adjustment: true
+  
+  # Principle 4: Simplicity
+  # S(t) = 1 - K(ops)/K_max + entropy_penalty
+  simplicity:
+    mathematical_model: "complexity_normalization"
+    parameters:
+      max_operations: 1000        # Maximum operation count
+      strategy_penalty_factor: 0.02  # Penalty per active strategy
+      trend_penalty_weight: 1.0   # Weight of complexity trend penalty
+      complexity_buffer_size: 20  # Buffer for complexity tracking
+    
+    thresholds:
+      threshold: 0.6
+      confidence_threshold: 0.8
+      emergency_threshold: 0.2
+    
+    integration_hooks:
+      strategy_mapper:
+        complexity_pruning_threshold: 0.5
+        automatic_simplification: true
+      fractal_core:
+        computation_simplification: true
+        terms_reduction_factor: 0.9
+  
+  # Principle 5: Economy
+  # E(t) = ΔProfit/(ΔCPU + ΔGPU + ΔMem)
+  economy:
+    mathematical_model: "profit_per_resource_efficiency"
+    parameters:
+      cpu_cost_factor: 1.0        # CPU cost weighting
+      gpu_cost_factor: 2.0        # GPU cost weighting (higher)
+      memory_cost_factor: 0.001   # Memory cost weighting
+      sigmoid_normalization: true  # Use sigmoid for bounds
+      consistency_importance: 0.3  # Weight of efficiency consistency
+      efficiency_buffer_size: 20   # Buffer for efficiency tracking
+    
+    thresholds:
+      threshold: 0.5
+      confidence_threshold: 0.7
+      emergency_threshold: 0.1
+    
+    integration_hooks:
+      gpu_flash:
+        memory_optimization_target: 1.1
+        efficiency_monitoring: true
+      quantum_engine:
+        computation_cost_reduction: 1.2
+        resource_optimization: true
+      profit_navigator:
+        profit_targeting_factor: 1.1
+  
+  # Principle 6: Survivability
+  # Sv(t) = ∫ ∂²U/∂ψ² dψ (positive curvature)
+  survivability:
+    mathematical_model: "utility_curvature_analysis"
+    parameters:
+      curvature_weight: 0.7       # Weight of utility curvature
+      shock_response_weight: 0.3  # Weight of shock response
+      shock_buffer_size: 10       # Buffer for shock tracking
+      utility_buffer_size: 10     # Buffer for utility history
+      min_curvature_history: 3    # Min points for curvature calc
+      recovery_normalization: 1.0 # Recovery response normalization
+    
+    thresholds:
+      threshold: 0.6
+      confidence_threshold: 0.6
+      emergency_threshold: 0.2
+    
+    integration_hooks:
+      thermal_zone:
+        shock_protection_boost: 2.0
+        emergency_cooling_trigger: 0.3
+      profit_navigator:
+        risk_adjustment_threshold: 0.5
+        conservative_mode_trigger: 0.3
+      quantum_engine:
+        stability_enhancement: true
+  
+  # Principle 7: Continuity
+  # C(t) = (1/T)∫[t-T,t] ψ(τ)dτ · coherence_factor
+  continuity:
+    mathematical_model: "integral_memory_coherence"
+    parameters:
+      continuity_window: 50       # Integration window size
+      integral_memory_weight: 0.6 # Weight of integral memory
+      stability_weight: 0.2       # Weight of stability
+      uptime_weight: 0.2          # Weight of uptime
+      fluctuation_penalty_max: 0.3  # Max penalty for fluctuations
+      min_buffer_penalty: 10      # Min buffer size for penalty calc
+    
+    thresholds:
+      threshold: 0.6
+      confidence_threshold: 0.7
+      emergency_threshold: 0.3
+    
+    integration_hooks:
+      all_controllers:
+        uptime_monitoring: true
+        stability_tracking: true
+        coherence_maintenance: true
+  
+  # Principle 8: Improvisation (Transcendence)
+  # Im(t) = lim[n→∞] ||Φⁿ⁺¹ - Φⁿ|| < δ
+  improvisation:
+    mathematical_model: "convergence_analysis"
+    parameters:
+      convergence_threshold: 0.01  # Convergence detection threshold
+      convergence_weight: 0.4      # Weight of convergence component
+      proximity_weight: 0.4        # Weight of proximity component
+      improvement_weight: 0.2      # Weight of improvement rate
+      iteration_buffer_size: 20    # Buffer for iteration tracking
+      min_iterations_rate: 5       # Min iterations for rate calc
+    
+    thresholds:
+      threshold: 0.7
+      confidence_threshold: 0.7
+      emergency_threshold: 0.2
+    
+    adaptation_parameters:
+      learning_rate: 0.1
+      momentum: 0.9
+      adaptive_learning: true
+
+# Controller-Specific Sustainment Thresholds
+controller_thresholds:
+  thermal_zone: 0.70      # High threshold for thermal management
+  cooldown: 0.60          # Moderate threshold for cooldown
+  fractal_core: 0.65      # Standard threshold for fractal processing
+  quantum_engine: 0.75    # High threshold for quantum operations
+  gpu_flash: 0.70         # High threshold for GPU operations
+  profit_navigator: 0.80  # Highest threshold for profit systems
+  strategy_mapper: 0.60   # Moderate threshold for strategy
+  visual_bridge: 0.50     # Lower threshold for visualization
+
+# Mathematical Correction System
+correction_system:
+  # Correction generation parameters
+  correction_gain: 0.1                # How aggressively to correct
+  adaptation_rate: 0.02               # Rate of system adaptation
+  emergency_correction_factor: 2.0    # Emergency correction multiplier
+  
+  # Correction application timing
+  correction_interval_seconds: 2.0
+  emergency_response_time_ms: 500
+  correction_expiry_seconds: 30
+  emergency_expiry_seconds: 60
+  
+  # Correction strategies per principle and controller
+  correction_strategies:
+    anticipation:
+      thermal_zone:
+        increase_prediction_window:
+          parameters: {window_size_factor: 1.2}
+          priority: 5
+        enhance_thermal_forecasting:
+          parameters: {forecast_depth: 1.1}
+          priority: 7
+      
+      fractal_core:
+        enhance_forecasting:
+          parameters: {depth_factor: 1.1}
+          priority: 6
+        improve_recursive_prediction:
+          parameters: {recursion_depth: 5}
+          priority: 8
+      
+      quantum_engine:
+        improve_state_prediction:
+          parameters: {tau_adjustment: 0.9}
+          priority: 8
+        enhance_wavefunction_evolution:
+          parameters: {evolution_rate: 1.1}
+          priority: 7
+    
+    responsiveness:
+      thermal_zone:
+        reduce_response_time:
+          parameters: {speed_factor: 0.8}
+          priority: 8
+        emergency_response_boost:
+          parameters: {boost_factor: 2.0}
+          priority: 10
+      
+      gpu_flash:
+        increase_batch_efficiency:
+          parameters: {batch_multiplier: 1.1}
+          priority: 6
+        optimize_memory_access:
+          parameters: {optimization_level: 1.2}
+          priority: 7
+      
+      cooldown:
+        decrease_cooldown_time:
+          parameters: {time_factor: 0.9}
+          priority: 5
+        dynamic_cooldown_adjustment:
+          parameters: {adaptive_rate: 1.1}
+          priority: 6
+    
+    economy:
+      gpu_flash:
+        optimize_memory_usage:
+          parameters: {efficiency_target: 1.1}
+          priority: 7
+        reduce_computational_overhead:
+          parameters: {optimization_factor: 1.2}
+          priority: 8
+      
+      quantum_engine:
+        reduce_computation_cost:
+          parameters: {cost_reduction: 1.2}
+          priority: 8
+        optimize_field_calculations:
+          parameters: {efficiency_boost: 1.15}
+          priority: 7
+      
+      profit_navigator:
+        increase_profit_targeting:
+          parameters: {targeting_factor: 1.1}
+          priority: 9
+        optimize_trade_efficiency:
+          parameters: {efficiency_boost: 1.2}
+          priority: 8
+    
+    simplicity:
+      strategy_mapper:
+        reduce_strategy_complexity:
+          parameters: {pruning_factor: 0.9}
+          priority: 6
+        consolidate_strategies:
+          parameters: {consolidation_threshold: 0.8}
+          priority: 7
+      
+      fractal_core:
+        simplify_computation:
+          parameters: {terms_reduction: 0.9}
+          priority: 5
+        reduce_computational_depth:
+          parameters: {depth_factor: 0.8}
+          priority: 6
+  
+  # Emergency correction protocols
+  emergency_protocols:
+    thermal_zone:
+      - action: "emergency_cooling"
+        parameters: {boost_factor: 3.0}
+        trigger_threshold: 0.2
+        priority: 15
+      - action: "reduce_thermal_load"
+        parameters: {load_reduction: 0.5}
+        trigger_threshold: 0.25
+        priority: 12
+    
+    gpu_flash:
+      - action: "emergency_memory_cleanup"
+        parameters: {aggressive_cleanup: true}
+        trigger_threshold: 0.2
+        priority: 15
+      - action: "reduce_batch_processing"
+        parameters: {batch_reduction: 0.5}
+        trigger_threshold: 0.25
+        priority: 12
+    
+    quantum_engine:
+      - action: "emergency_field_simplification"
+        parameters: {emergency_mode: true}
+        trigger_threshold: 0.2
+        priority: 15
+      - action: "reduce_quantum_complexity"
+        parameters: {complexity_reduction: 0.7}
+        trigger_threshold: 0.25
+        priority: 12
+    
+    profit_navigator:
+      - action: "emergency_risk_reduction"
+        parameters: {risk_factor: 0.3}
+        trigger_threshold: 0.2
+        priority: 15
+      - action: "conservative_trading_mode"
+        parameters: {conservative_factor: 0.5}
+        trigger_threshold: 0.25
+        priority: 12
+
+# Integration and Synthesis Configuration
+mathematical_synthesis:
+  # Synthesis timing
+  synthesis_interval_seconds: 5.0
+  fast_synthesis_mode: false
+  emergency_synthesis_interval_seconds: 1.0
+  
+  # Cross-controller integration
+  cross_controller_influence: true
+  influence_decay_rate: 0.1
+  integration_momentum: 0.9
+  
+  # Mathematical coherence
+  coherence_enforcement: true
+  coherence_threshold: 0.8
+  mathematical_consistency_checking: true
+  
+  # GPU acceleration for synthesis
+  gpu_acceleration: true
+  gpu_batch_synthesis: true
+  gpu_vector_operations: true
+
+# Performance and Monitoring
+performance_monitoring:
+  enable_detailed_metrics: true
+  calculation_time_threshold_ms: 10.0
+  memory_usage_threshold_mb: 100.0
+  
+  # Performance alerts
+  alerts:
+    sustainment_index_critical: 0.3
+    principle_failure_consecutive: 3
+    calculation_failure_rate_threshold: 0.1
+    synthesis_time_threshold_ms: 50.0
+    correction_failure_rate_threshold: 0.2
+  
+  # Metrics export
+  export_metrics: true
+  export_interval_seconds: 60
+  export_format: "json"
+  export_location: "logs/sustainment_metrics"
+  
+  # Historical analysis
+  trend_analysis_window: 100
+  performance_trending: true
+  predictive_performance_analysis: true
+
+# Development and Testing
+development:
+  debug_mode: false
+  test_mode: false
+  mock_controllers: false
+  detailed_logging: false
+  
+  # Testing parameters
+  test_sustainment_threshold: 0.5
+  test_correction_aggressiveness: 2.0
+  test_synthesis_speed: 0.5
+  
+  # Validation
+  mathematical_validation: true
+  principle_calculation_validation: true
+  integration_validation: true
+  correction_effectiveness_validation: true
+
+# Advanced Mathematical Features
+advanced_features:
+  # Quantum-enhanced calculations
+  quantum_enhanced_sustainment: true
+  quantum_principle_entanglement: true
+  quantum_correction_superposition: true
+  
+  # Fractal-based analysis
+  fractal_sustainment_analysis: true
+  recursive_principle_calculation: true
+  self_similar_correction_patterns: true
+  
+  # Machine learning integration
+  adaptive_principle_weights: true
+  predictive_sustainment_modeling: true
+  correction_effectiveness_learning: true
+  
+  # Mathematical optimization
+  mathematical_optimization_engine: true
+  gradient_based_corrections: true
+  multi_objective_sustainment_optimization: true 

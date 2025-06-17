@@ -492,12 +492,77 @@ class HashRecollectionSystem:
                 logger.error(f"Signal callback error: {e}")
 
     def _synchronize_gpu_cpu(self):
-        """Synchronize GPU and CPU states"""
-        if self.gpu_enabled and CUPY_AVAILABLE:
-            try:
-                cp.cuda.Stream.null.synchronize()
-            except:
-                pass
+        """Synchronize GPU and CPU states with memory management and metrics"""
+        if not self.gpu_enabled or not CUPY_AVAILABLE:
+            return
+        
+        try:
+            # Synchronize CUDA streams
+            cp.cuda.Stream.null.synchronize()
+            
+            # Get memory info for metrics
+            mem_info = cp.cuda.runtime.memGetInfo()
+            free_memory = mem_info[0]
+            total_memory = mem_info[1]
+            used_memory = total_memory - free_memory
+            
+            # Calculate queue depths
+            hash_queue_depth = self.hash_queue.qsize() if self.hash_queue else 0
+            result_queue_depth = self.result_queue.qsize() if self.result_queue else 0
+            
+            # Export to Prometheus metrics if available
+            sync_metrics = {
+                'gpu_memory_used_bytes': used_memory,
+                'gpu_memory_total_bytes': total_memory,
+                'gpu_memory_utilization': used_memory / total_memory,
+                'hash_queue_depth': hash_queue_depth,
+                'result_queue_depth': result_queue_depth,
+                'sync_timestamp': time.time()
+            }
+            
+            # Store metrics for monitoring
+            if not hasattr(self, '_sync_metrics'):
+                self._sync_metrics = []
+            self._sync_metrics.append(sync_metrics)
+            
+            # Keep only last 100 sync metrics
+            if len(self._sync_metrics) > 100:
+                self._sync_metrics = self._sync_metrics[-100:]
+            
+            # Memory cleanup if usage is high (>80%)
+            memory_usage = used_memory / total_memory
+            if memory_usage > 0.8:
+                logger.warning(f"High GPU memory usage: {memory_usage:.1%}")
+                cp.get_default_memory_pool().free_all_blocks()
+                
+                # Force garbage collection on GPU
+                cp.cuda.runtime.deviceSynchronize()
+                
+            # Flush pending GPU hashes back to CPU for clustering if queue is getting full
+            if hash_queue_depth > self.hash_queue.maxsize * 0.8:
+                logger.info("High queue depth - flushing GPU results to CPU")
+                
+                # Process any pending results immediately
+                while not self.result_queue.empty():
+                    try:
+                        result = self.result_queue.get_nowait()
+                        self._process_hash_result(result)
+                    except Empty:
+                        break
+            
+            # Log sync info at debug level
+            logger.debug(f"GPU sync: {memory_usage:.1%} memory, {hash_queue_depth}/{result_queue_depth} queue depths")
+            
+        except Exception as e:
+            logger.error(f"GPU synchronization error: {e}")
+            # Fallback to CPU-only mode if sync fails repeatedly
+            if not hasattr(self, '_sync_errors'):
+                self._sync_errors = 0
+            self._sync_errors += 1
+            
+            if self._sync_errors > 10:
+                logger.error("Too many GPU sync errors - disabling GPU")
+                self.gpu_enabled = False
 
     def process_tick(self, price: float, volume: float, timestamp: Optional[float] = None):
         """Process new market tick data with back-pressure handling"""

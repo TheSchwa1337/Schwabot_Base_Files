@@ -106,7 +106,7 @@ def print_results(results: Dict[str, Dict[str, any]]):
     
     all_ok = True
     for filename, result in results.items():
-        status = "✅" if result['exists'] and result['syntax_ok'] and result['schema_ok'] else "❌"
+        status = "[OK]" if result['exists'] and result['syntax_ok'] and result['schema_ok'] else "[FAIL]"
         print(f"\n{status} {filename}")
         
         if not result['exists']:
@@ -128,7 +128,7 @@ def print_results(results: Dict[str, Dict[str, any]]):
                 print(f"    - {error}")
                 
     print("\n" + "=" * 50)
-    print(f"Overall Status: {'✅ All OK' if all_ok else '❌ Issues Found'}")
+    print(f"Overall Status: {'[OK] All OK' if all_ok else '[FAIL] Issues Found'}")
     
 def main():
     parser = argparse.ArgumentParser(description="Validate YAML configuration files")

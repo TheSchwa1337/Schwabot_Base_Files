@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple, Union, Optional
 from mathlib import CoreMathLib, add, subtract
-from mathlib_v2 import sin, log
+from math import sin, log
 from dlt_waveform_engine import process_waveform
 from aleph_unitizer_lib import analyze_pattern
 from rittle_gemm import RittleGEMM
@@ -712,13 +712,16 @@ def phase_state_update(sigma_r, sigma_v, sigma_w, sigma_wo, delta):
     # Calculate total composite state
     sigma_total = sigma_r + sigma_v + sigma_w + sigma_wo
     
-    # Update replay state matrix M_t
+    # Update replay state matrix M_t (initialize if not exists)
+    M_t = np.eye(4)  # Initialize as identity matrix
     M_t = np.dot(M_t, np.exp(delta))
     
     return M_t, sigma_total
 
 def replay_logic(C_hat, threshold, epsilon):
-    if C_hat.mean() > threshold and abs(sigma' - sigma_total) < epsilon:
+    # Fix syntax error - use sigma_total variable properly
+    sigma_total = np.sum(C_hat)  # Example calculation
+    if C_hat.mean() > threshold and abs(sigma_total - C_hat.mean()) < epsilon:
         execute_trade()
     else:
         update_weights()

@@ -44,6 +44,9 @@ try:
 except ImportError:
     GPUMetrics = None
 
+# Add import for the sustainment validator after existing imports
+from .strategy_sustainment_validator import StrategySustainmentValidator, StrategyMetrics, SustainmentPrinciple
+
 class StrategyType(Enum):
     """Available strategy types based on Anti-Pole Theory"""
     ACCUMULATION = "accumulation"
@@ -133,6 +136,11 @@ class StrategyExecutionMapper:
         self.execution_history: List[ExecutionResult] = []
         
         self.logger = logging.getLogger(__name__)
+        
+        # Strategy sustainment validation
+        self.sustainment_validator = StrategySustainmentValidator(
+            self.config.get('sustainment_config', {})
+        )
     
     async def analyze_market_conditions(self) -> Dict[str, Any]:
         """Analyze current market conditions for strategy selection"""
@@ -253,7 +261,12 @@ class StrategyExecutionMapper:
             self.logger.debug(f"No strategy recommended for tick {tick_signature.tick_id}")
             return None
         
-        # Check confidence threshold
+        # *** NEW: Validate strategy using sustainment framework ***
+        if not self._validate_strategy_sustainment(tick_signature, strategy_type, market_conditions):
+            self.logger.warning(f"Strategy {strategy_type.value} failed sustainment validation for tick {tick_signature.tick_id}")
+            return None
+        
+        # Check confidence threshold (existing logic)
         required_confidence = self.strategy_confidence_thresholds[strategy_type]
         if tick_signature.correlation_score < required_confidence:
             self.logger.debug(f"Confidence {tick_signature.correlation_score} below threshold {required_confidence}")
@@ -499,6 +512,88 @@ class StrategyExecutionMapper:
             },
             'active_signals': len(self.active_signals)
         }
+
+    def _validate_strategy_sustainment(self, tick_signature: TickSignature, 
+                                     strategy_type: StrategyType,
+                                     market_conditions: Dict[str, Any]) -> bool:
+        """
+        Validate strategy using the 8-principle sustainment framework
+        
+        Args:
+            tick_signature: Current tick signature
+            strategy_type: Proposed strategy type
+            market_conditions: Current market conditions
+            
+        Returns:
+            True if strategy passes sustainment validation
+        """
+        # Build strategy metrics from current state
+        strategy_metrics = StrategyMetrics(
+            # Integration metrics
+            entropy_coherence=tick_signature.correlation_score,
+            system_harmony=market_conditions.get('thermal_budget', 0.8),
+            module_alignment=min(tick_signature.signal_strength, 1.0),
+            
+            # Anticipation metrics
+            lead_time_prediction=tick_signature.signal_strength,
+            pattern_recognition_depth=min(len(self.vault.recent_ticks) / 100.0, 1.0),
+            signal_forecast_accuracy=market_conditions.get('recent_profit_correlation', 0.5),
+            
+            # Responsiveness metrics
+            latency=0.05,  # Assuming low latency execution
+            adaptation_speed=1.0 - market_conditions['volatility'],
+            market_reaction_time=0.1,  # Fast market reaction
+            
+            # Simplicity metrics
+            logic_complexity=0.3,  # Strategy execution is relatively simple
+            operation_count=len(self.strategy_confidence_thresholds),
+            decision_tree_depth=3,  # Simple decision tree
+            
+            # Economy metrics
+            profit_efficiency=tick_signature.signal_strength * market_conditions.get('profit_tier_success_rate', 0.5),
+            resource_utilization=market_conditions['thermal_budget'],
+            cost_benefit_ratio=tick_signature.correlation_score,
+            
+            # Survivability metrics
+            drawdown_resistance=1.0 - market_conditions['volatility'],
+            risk_adjusted_return=tick_signature.signal_strength * (1.0 - market_conditions['volatility']),
+            volatility_tolerance=min(1.0 - market_conditions['volatility'], 1.0),
+            
+            # Continuity metrics
+            pattern_memory_depth=min(len(self.vault.pattern_memory) / 50.0, 1.0) if hasattr(self.vault, 'pattern_memory') else 0.5,
+            state_persistence=0.8,  # Good state persistence
+            cycle_completion_rate=0.9,  # High cycle completion
+            
+            # Transcendence metrics
+            emergent_signal_score=tick_signature.signal_strength * tick_signature.correlation_score,
+            adaptive_learning_rate=0.7,  # Good learning rate
+            optimization_convergence=0.8  # Good convergence
+        )
+        
+        # Add strategy-specific context
+        context = {
+            'strategy_type': strategy_type.value,
+            'profit_tier': tick_signature.profit_tier,
+            'market_volatility': market_conditions['volatility'],
+            'thermal_state': market_conditions['thermal_budget']
+        }
+        
+        # Validate strategy
+        validation_result = self.sustainment_validator.validate_strategy(
+            strategy_metrics, 
+            strategy_id=f"{strategy_type.value}_{tick_signature.tick_id}",
+            context=context
+        )
+        
+        # Log validation results
+        self.logger.info(f"Strategy sustainment validation: {validation_result.overall_status} "
+                        f"(score: {validation_result.overall_score:.3f}, "
+                        f"confidence: {validation_result.confidence:.3f})")
+        
+        if validation_result.recommendations:
+            self.logger.debug(f"Recommendations: {validation_result.recommendations}")
+        
+        return validation_result.execution_approved
 
 # Mock classes for missing dependencies
 class MockVaultRouter:

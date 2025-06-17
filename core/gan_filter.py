@@ -1,22 +1,18 @@
 """
-GAN-Based Anomaly Detection
-==========================
+GAN-Based Anomaly Detection with Sustainment Integration
+=======================================================
 
 Implements a GAN-based anomaly detection system for shell states,
 with entropy-regularized training and reconstruction error tracking.
-Uses proper mathematical definitions for entropy, phase analysis,
-and composite anomaly scoring.
+Now integrated with the 8-principle sustainment framework.
 
-GAN Filter
-==========
-
-Implements entropy-regularized GAN for anomaly detection:
+Mathematical Foundation:
 - L_GAN = E[log D(x)] + E[log(1 - D(G(z)))] + α‖ℋ_real−ℋ_fake‖
+- Sustainment integration: SI(GAN) = Σᵢ wᵢ Pᵢ(anomaly_metrics)
 
 Invariants:
 - GAN anomaly monotonicity: Reconstruction-error ↑ ⇒ anomaly score ↑
-
-See docs/math/gan.md for details.
+- Sustainment coherence: Anomaly detection respects all 8 principles
 """
 
 import numpy as np
@@ -35,6 +31,29 @@ from scipy.stats import wasserstein_distance
 from scipy.fft import fft, fftfreq
 import hashlib
 import time
+
+# Sustainment framework integration
+try:
+    from .mathlib_v3 import SustainmentMathLib, MathematicalContext, SustainmentVector
+    from .sustainment_integration_hooks import ControllerIntegrationInterface, SustainmentCorrection
+    SUSTAINMENT_AVAILABLE = True
+except ImportError:
+    SustainmentMathLib = None
+    MathematicalContext = None
+    SustainmentVector = None
+    ControllerIntegrationInterface = None
+    SustainmentCorrection = None
+    SUSTAINMENT_AVAILABLE = False
+
+# UFS/NCCO integration
+try:
+    from .ufs_registry import UFSRegistry
+    from .ufs_echo_logger import UFSEchoLogger
+    UFS_AVAILABLE = True
+except ImportError:
+    UFSRegistry = None
+    UFSEchoLogger = None
+    UFS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -792,3 +811,390 @@ class GANFilter:
         confidence = min(score / self.config.anomaly_threshold, 1.0)
         
         return is_anomaly, confidence 
+
+class SustainmentAwareGANFilter(GANFilter):
+    """
+    Enhanced GAN Filter with full sustainment framework integration.
+    Implements ControllerIntegrationInterface for seamless integration.
+    """
+    
+    def __init__(self, config: Dict[str, Any], input_dim: int):
+        super().__init__(config, input_dim)
+        
+        # Sustainment integration
+        if SUSTAINMENT_AVAILABLE:
+            self.sustainment_lib = SustainmentMathLib(
+                sustainment_threshold=config.get('sustainment_threshold', 0.7),
+                adaptation_rate=config.get('adaptation_rate', 0.02)
+            )
+        else:
+            self.sustainment_lib = None
+            logger.warning("Sustainment framework not available")
+        
+        # UFS integration for logging and file system management
+        if UFS_AVAILABLE:
+            self.ufs_registry = UFSRegistry()
+            self.ufs_logger = UFSEchoLogger(
+                log_path=config.get('ufs_log_path', 'logs/gan_ufs_echo.jsonl')
+            )
+        else:
+            self.ufs_registry = None
+            self.ufs_logger = None
+            logger.warning("UFS system not available")
+        
+        # Performance metrics for sustainment
+        self.performance_metrics = {
+            'anomaly_detection_rate': 0.0,
+            'false_positive_rate': 0.0,
+            'processing_latency_ms': 0.0,
+            'model_accuracy': 0.0,
+            'correction_success_rate': 0.0,
+            'uptime_ratio': 1.0,
+            'resource_efficiency': 1.0
+        }
+        
+        # Sustainment state tracking
+        self.sustainment_history = []
+        self.last_sustainment_check = time.time()
+        self.sustainment_check_interval = 5.0  # seconds
+        
+        logger.info("Sustainment-aware GAN Filter initialized")
+    
+    def get_sustainment_metrics(self) -> Dict[str, float]:
+        """
+        Get current metrics for sustainment calculation.
+        Implements ControllerIntegrationInterface.
+        """
+        # Update performance metrics
+        self._update_performance_metrics()
+        
+        # Calculate current state for sustainment
+        current_metrics = {
+            # Current system state
+            'price': getattr(self, 'last_price', 0.0),
+            'entropy': self._calculate_current_entropy(),
+            'volume': getattr(self, 'last_volume', 0.0),
+            
+            # System performance metrics  
+            'latency_ms': self.performance_metrics['processing_latency_ms'],
+            'operations_count': len(self.tick_cache),
+            'active_strategies': len([c for c in self.cluster_db.values() if c.profit_factor > 1.0]),
+            'profit_delta': self._calculate_profit_delta(),
+            'cpu_cost': self._estimate_cpu_cost(),
+            'gpu_cost': self._estimate_gpu_cost(),
+            'memory_cost': self._estimate_memory_cost(),
+            'shock_magnitude': self._calculate_shock_magnitude(),
+            'system_state': self.performance_metrics['model_accuracy'],
+            'uptime_ratio': self.performance_metrics['uptime_ratio'],
+            'optimization_state': self.performance_metrics['correction_success_rate'],
+            'adaptation_rate': self.performance_metrics['anomaly_detection_rate'],
+            
+            # GAN-specific metrics
+            'anomaly_threshold': self.config.anomaly_threshold,
+            'model_loss': self._get_latest_loss(),
+            'reconstruction_quality': self._calculate_reconstruction_quality(),
+            'cluster_count': len(self.cluster_db),
+            'correction_rate': self.performance_metrics['correction_success_rate']
+        }
+        
+        return current_metrics
+    
+    def apply_sustainment_correction(self, correction: 'SustainmentCorrection') -> bool:
+        """
+        Apply sustainment correction to the GAN filter.
+        Implements ControllerIntegrationInterface.
+        """
+        try:
+            correction_type = correction.correction_type
+            parameters = correction.parameters
+            magnitude = correction.magnitude
+            
+            logger.info(f"Applying GAN correction: {correction_type} with magnitude {magnitude}")
+            
+            if correction_type == 'reduce_anomaly_threshold':
+                # Lower threshold for more sensitive detection
+                new_threshold = self.config.anomaly_threshold * (1 - magnitude * 0.1)
+                self.config.anomaly_threshold = max(0.1, new_threshold)
+                return True
+                
+            elif correction_type == 'increase_learning_rate':
+                # Boost learning for faster adaptation
+                boost_factor = 1 + magnitude * 0.2
+                for param_group in self.g_optimizer.param_groups:
+                    param_group['lr'] *= boost_factor
+                for param_group in self.d_optimizer.param_groups:
+                    param_group['lr'] *= boost_factor
+                return True
+                
+            elif correction_type == 'cleanup_clusters':
+                # Remove low-performing clusters
+                old_count = len(self.cluster_db)
+                threshold = parameters.get('profit_threshold', 1.0)
+                self.cluster_db = {
+                    k: v for k, v in self.cluster_db.items() 
+                    if v.profit_factor >= threshold
+                }
+                new_count = len(self.cluster_db)
+                logger.info(f"Cleaned {old_count - new_count} clusters")
+                return True
+                
+            elif correction_type == 'emergency_reset':
+                # Emergency reset for critical situations
+                self._emergency_reset(parameters)
+                return True
+                
+            elif correction_type == 'optimize_batch_size':
+                # Adjust batch size for performance
+                factor = parameters.get('factor', 1.0)
+                new_batch_size = max(1, int(self.config.batch_size * factor))
+                self.config.batch_size = new_batch_size
+                return True
+                
+            else:
+                logger.warning(f"Unknown correction type: {correction_type}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Failed to apply correction {correction_type}: {e}")
+            return False
+    
+    def get_integration_weights(self) -> Dict[str, float]:
+        """
+        Get weights for integration with other controllers.
+        Implements ControllerIntegrationInterface.
+        """
+        # Calculate weights based on current performance and state
+        accuracy = self.performance_metrics['model_accuracy']
+        efficiency = self.performance_metrics['resource_efficiency']
+        uptime = self.performance_metrics['uptime_ratio']
+        
+        return {
+            'anticipation': 0.8 * accuracy,  # High for prediction accuracy
+            'integration': 0.6 * efficiency,  # Medium for system integration
+            'responsiveness': 0.9 * (1.0 / max(0.1, self.performance_metrics['processing_latency_ms'] / 100.0)),
+            'simplicity': 0.4,  # Lower - GAN is inherently complex
+            'economy': 0.7 * efficiency,  # High for resource optimization
+            'survivability': 0.8 * uptime,  # High for system resilience
+            'continuity': 0.9 * uptime,  # High for continuous operation
+            'improvisation': 0.7 * self.performance_metrics['correction_success_rate']  # Adaptation capability
+        }
+    
+    def calculate_sustainment_vector(self) -> Optional['SustainmentVector']:
+        """Calculate current sustainment vector for this controller"""
+        if not self.sustainment_lib or not SUSTAINMENT_AVAILABLE:
+            return None
+        
+        metrics = self.get_sustainment_metrics()
+        context = MathematicalContext(
+            current_state=metrics,
+            system_metrics=metrics,
+            gpu_state={'gpu_usage': self.performance_metrics.get('gpu_usage', 0.0)},
+            thermal_state={'temperature': self._estimate_thermal_load()}
+        )
+        
+        return self.sustainment_lib.calculate_sustainment_vector(context)
+    
+    def detect_with_sustainment(self, vector: np.ndarray, 
+                               context: Optional[Dict[str, Any]] = None) -> Tuple['GANAnomalyMetrics', Optional['SustainmentVector']]:
+        """
+        Enhanced detection that includes sustainment analysis.
+        """
+        start_time = time.time()
+        
+        # Standard anomaly detection
+        anomaly_metrics = self.detect(vector)
+        
+        # Calculate sustainment if available
+        sustainment_vector = None
+        if self.sustainment_lib and SUSTAINMENT_AVAILABLE:
+            # Update context with detection results
+            detection_context = {
+                'anomaly_score': anomaly_metrics.anomaly_score,
+                'reconstruction_error': anomaly_metrics.reconstruction_error,
+                'is_anomaly': anomaly_metrics.is_anomaly,
+                'confidence': anomaly_metrics.confidence
+            }
+            if context:
+                detection_context.update(context)
+            
+            # Update metrics and calculate sustainment
+            self.last_price = detection_context.get('price', self.last_price if hasattr(self, 'last_price') else 0.0)
+            self.last_volume = detection_context.get('volume', self.last_volume if hasattr(self, 'last_volume') else 0.0)
+            
+            sustainment_vector = self.calculate_sustainment_vector()
+        
+        # Log to UFS if available
+        if self.ufs_logger and UFS_AVAILABLE:
+            self.ufs_logger.log_cluster_memory(
+                cluster_id=f"gan_detection_{int(time.time())}",
+                strategy_id="anomaly_detection",
+                entropy_signature=anomaly_metrics.anomaly_score
+            )
+        
+        processing_time = time.time() - start_time
+        self.performance_metrics['processing_latency_ms'] = processing_time * 1000
+        
+        return anomaly_metrics, sustainment_vector
+    
+    def _update_performance_metrics(self):
+        """Update internal performance metrics for sustainment"""
+        try:
+            # Calculate anomaly detection rate
+            if len(self.tick_cache) > 0:
+                anomalies = sum(1 for result in self.tick_cache.values() 
+                               if result.anomaly_metrics.is_anomaly)
+                self.performance_metrics['anomaly_detection_rate'] = anomalies / len(self.tick_cache)
+            
+            # Calculate model accuracy from training history
+            if self.training_history:
+                recent_losses = self.training_history[-10:]  # Last 10 epochs
+                avg_d_loss = np.mean([h['d_loss'] for h in recent_losses])
+                # Convert loss to accuracy (inverse relationship)
+                self.performance_metrics['model_accuracy'] = max(0.0, 1.0 - avg_d_loss)
+            
+            # Calculate correction success rate
+            if len(self.cluster_db) > 0:
+                successful_clusters = sum(1 for cluster in self.cluster_db.values() 
+                                        if cluster.profit_factor > 1.0)
+                self.performance_metrics['correction_success_rate'] = successful_clusters / len(self.cluster_db)
+            
+            # Estimate resource efficiency
+            cluster_efficiency = min(1.0, len(self.cluster_db) / 100.0)  # Optimal around 100 clusters
+            self.performance_metrics['resource_efficiency'] = cluster_efficiency
+            
+        except Exception as e:
+            logger.error(f"Error updating performance metrics: {e}")
+    
+    def _calculate_current_entropy(self) -> float:
+        """Calculate current system entropy"""
+        if len(self.tick_cache) == 0:
+            return 0.5
+        
+        # Get recent anomaly scores
+        recent_results = list(self.tick_cache.values())[-10:]
+        scores = [r.anomaly_metrics.anomaly_score for r in recent_results]
+        
+        # Calculate entropy of score distribution
+        if len(scores) > 1:
+            hist, _ = np.histogram(scores, bins=10, density=True)
+            hist = hist[hist > 0]
+            if len(hist) > 0:
+                return -np.sum(hist * np.log2(hist + 1e-10))
+        
+        return 0.5
+    
+    def _calculate_profit_delta(self) -> float:
+        """Calculate current profit delta"""
+        if len(self.tick_cache) < 2:
+            return 0.0
+        
+        recent_results = list(self.tick_cache.values())[-10:]
+        profits = [r.profit_signal.get('anomaly_profit', 0.0) for r in recent_results]
+        
+        if len(profits) >= 2:
+            return profits[-1] - profits[-2]
+        return 0.0
+    
+    def _estimate_cpu_cost(self) -> float:
+        """Estimate CPU cost based on operations"""
+        base_cost = 1.0
+        complexity_factor = len(self.cluster_db) / 100.0
+        return base_cost * (1.0 + complexity_factor)
+    
+    def _estimate_gpu_cost(self) -> float:
+        """Estimate GPU cost based on model complexity"""
+        base_cost = 2.0
+        if torch.cuda.is_available() and self.config.use_gpu:
+            # Factor in batch size and model size
+            model_complexity = (self.config.hidden_dim * self.config.num_layers) / 1000.0
+            batch_factor = self.config.batch_size / 32.0
+            return base_cost * model_complexity * batch_factor
+        return 0.0
+    
+    def _estimate_memory_cost(self) -> float:
+        """Estimate memory cost"""
+        cache_cost = len(self.tick_cache) * 0.001  # Small cost per cached item
+        cluster_cost = len(self.cluster_db) * 0.01  # Larger cost per cluster
+        return cache_cost + cluster_cost
+    
+    def _calculate_shock_magnitude(self) -> float:
+        """Calculate current shock magnitude"""
+        if len(self.tick_cache) < 5:
+            return 0.0
+        
+        recent_results = list(self.tick_cache.values())[-5:]
+        anomaly_scores = [r.anomaly_metrics.anomaly_score for r in recent_results]
+        
+        # Calculate variance as shock indicator
+        return float(np.var(anomaly_scores))
+    
+    def _get_latest_loss(self) -> float:
+        """Get latest training loss"""
+        if self.training_history:
+            return self.training_history[-1].get('d_loss', 0.0)
+        return 0.0
+    
+    def _calculate_reconstruction_quality(self) -> float:
+        """Calculate reconstruction quality metric"""
+        if len(self.tick_cache) == 0:
+            return 1.0
+        
+        recent_results = list(self.tick_cache.values())[-10:]
+        recon_errors = [r.anomaly_metrics.reconstruction_error for r in recent_results]
+        
+        if recon_errors:
+            avg_error = np.mean(recon_errors)
+            # Convert error to quality (inverse relationship)
+            return max(0.0, 1.0 - avg_error)
+        return 1.0
+    
+    def _estimate_thermal_load(self) -> float:
+        """Estimate thermal load from processing"""
+        base_load = 0.3
+        processing_load = min(0.5, self.performance_metrics['processing_latency_ms'] / 1000.0)
+        gpu_load = 0.2 if (torch.cuda.is_available() and self.config.use_gpu) else 0.0
+        return base_load + processing_load + gpu_load
+    
+    def _emergency_reset(self, parameters: Dict[str, Any]):
+        """Emergency reset for critical situations"""
+        logger.warning("Performing emergency GAN reset")
+        
+        # Clear problematic clusters
+        self.cluster_db.clear()
+        
+        # Reset thresholds to defaults
+        self.config.anomaly_threshold = 0.85
+        
+        # Clear cache if too large
+        if len(self.tick_cache) > 1000:
+            self.tick_cache.clear()
+        
+        # Reset optimizers if needed
+        if parameters.get('reset_optimizers', False):
+            self.g_optimizer = torch.optim.Adam(
+                self.generator.parameters(),
+                lr=self.config.learning_rate,
+                betas=(0.5, 0.999)
+            )
+            self.d_optimizer = torch.optim.Adam(
+                self.discriminator.parameters(),
+                lr=self.config.learning_rate,
+                betas=(0.5, 0.999)
+            )
+    
+    def get_ufs_status(self) -> Dict[str, Any]:
+        """Get UFS integration status"""
+        if not UFS_AVAILABLE:
+            return {'status': 'unavailable'}
+        
+        return {
+            'status': 'available',
+            'registry_entries': len(self.ufs_registry.ufs) if self.ufs_registry else 0,
+            'log_path': getattr(self.ufs_logger, 'log_path', None) if self.ufs_logger else None,
+            'last_update': getattr(self.ufs_registry, 'last_update', None) if self.ufs_registry else None
+        }
+
+# Maintain backward compatibility
+GANFilter = SustainmentAwareGANFilter
+
+# ... rest of existing code unchanged ... 
