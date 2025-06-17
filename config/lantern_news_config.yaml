@@ -1,0 +1,257 @@
+# Lantern News Intelligence Bridge Configuration
+# =============================================
+# Mathematical integration between news intelligence and Lantern Core
+# for BTC hash correlation and profit-optimized lexicon analysis
+
+# Core Processing Configuration
+processing:
+  # Backlog management to prevent over-saturation
+  max_backlog_size: 500
+  processing_batch_size: 10
+  
+  # Auto-throttling to integrate with BTC processor controls
+  auto_throttle_enabled: true
+  throttle_memory_threshold_gb: 8
+  throttle_cpu_threshold_percent: 70
+  
+  # Processing intervals
+  continuous_processing_interval: 60  # seconds
+  emergency_cleanup_interval: 300     # seconds
+
+# Hash Correlation Settings
+hash_correlation:
+  # Correlation threshold for meaningful matches
+  correlation_threshold: 0.3
+  
+  # Time window for hash correlation analysis
+  hash_correlation_window: 3600  # 1 hour in seconds
+  
+  # Hamming distance calculation settings
+  hash_comparison_length: 16  # Use first 16 chars of hash
+  similarity_threshold: 0.2   # Minimum similarity for correlation
+  
+  # Hash caching
+  correlation_cache_ttl: 86400  # 24 hours
+  max_correlation_cache_size: 1000
+
+# Lexicon Integration Settings
+lexicon:
+  # Profit optimization parameters
+  profit_weight_factor: 0.7
+  profit_update_multiplier: 100
+  
+  # Word fitness thresholds
+  min_profit_fitness: 0.1
+  high_profit_threshold: 0.8
+  
+  # Lexicon update intervals
+  lexicon_update_interval: 300  # 5 minutes
+  lexicon_save_interval: 1800   # 30 minutes
+  
+  # Story generation parameters
+  max_story_length: 12
+  min_story_length: 5
+  story_bias_towards_news_words: 0.6
+
+# Entropy and Complexity Analysis
+entropy:
+  # Entropy classification thresholds
+  entropy_threshold: 0.6
+  high_entropy_threshold: 0.7
+  low_entropy_threshold: 0.4
+  
+  # Complexity factors
+  relevance_boost: 0.2
+  keyword_count_boost: 0.1
+  max_entropy_adjustment: 0.3
+
+# Vector Bias Analysis
+vector_bias:
+  # Sentiment thresholds for bias determination
+  long_sentiment_threshold: 0.5
+  short_sentiment_threshold: -0.5
+  
+  # Lexicon word influence weights
+  lexicon_override_strength: 0.8
+  sentiment_base_weight: 0.6
+  
+  # Warning detection
+  warning_word_priority: true
+  rotation_balance_threshold: 0.1
+
+# Priority Calculation
+priority:
+  # Weight factors for processing priority
+  correlation_weight: 0.4
+  sentiment_weight: 0.3
+  relevance_weight: 0.2
+  profit_potential_weight: 0.1
+  
+  # Recency boost parameters
+  recency_decay_seconds: 1800  # 30 minutes
+  max_recency_boost: 2.0
+
+# Memory Integration
+memory:
+  # Memory agent integration
+  memory_agent_enabled: true
+  store_processed_events: true
+  
+  # Hash recollection system
+  hash_system_enabled: true
+  store_correlations: true
+  
+  # Event storage format
+  event_type: "lantern_news_event"
+  include_full_news_data: true
+  include_lantern_analysis: true
+
+# Performance and Resource Management
+performance:
+  # Memory management
+  max_memory_usage_mb: 512
+  gc_trigger_threshold: 0.8
+  
+  # Processing limits
+  max_concurrent_correlations: 50
+  correlation_timeout_seconds: 30
+  
+  # Cache management
+  cache_cleanup_interval: 3600  # 1 hour
+  max_cache_memory_mb: 128
+
+# Integration with BTC Processor
+btc_processor_integration:
+  # Controller integration
+  controller_enabled: true
+  
+  # Feature throttling based on processor state
+  throttle_on_high_memory: true
+  throttle_on_high_cpu: true
+  
+  # Features to disable during throttling
+  disable_features_on_throttle:
+    - "mining_analysis"
+    - "storage"
+    - "nonce_sequences"
+  
+  # Auto-recovery thresholds
+  recovery_memory_threshold_gb: 6
+  recovery_cpu_threshold_percent: 50
+  recovery_delay_seconds: 300
+
+# Monitoring and Alerting
+monitoring:
+  # Metrics collection
+  collect_metrics: true
+  metrics_retention_hours: 168  # 1 week
+  
+  # Performance monitoring
+  monitor_processing_time: true
+  monitor_memory_usage: true
+  monitor_correlation_accuracy: true
+  
+  # Alert thresholds
+  backlog_overflow_alert: 450  # 90% of max backlog
+  correlation_rate_alert: 0.1  # Alert if < 10% correlation rate
+  processing_delay_alert: 120  # Alert if processing delay > 2 minutes
+
+# Advanced Features
+advanced:
+  # Experimental features
+  enable_deep_hash_analysis: false
+  enable_pattern_recognition: false
+  enable_predictive_correlation: false
+  
+  # Research and development
+  collect_training_data: false
+  export_correlation_matrices: false
+  
+  # Debug settings
+  debug_mode: false
+  verbose_logging: false
+  correlation_debug_output: false
+
+# Mathematical Constants and Parameters
+mathematical:
+  # Correlation calculation weights
+  sentiment_factor_weight: 0.3
+  relevance_factor_weight: 0.2
+  hash_factor_weight: 0.2
+  lexicon_factor_weight: 0.2
+  time_factor_weight: 0.1
+  
+  # Exponential decay parameters
+  time_decay_lambda: 1.0
+  correlation_decay_rate: 0.95
+  
+  # Normalization constants
+  max_correlation_score: 1.0
+  correlation_scaling_factor: 1.0
+  
+  # Hash similarity calculation
+  hamming_distance_normalization: 64  # bit length
+  binary_comparison_precision: 64
+
+# Sustainability and Long-term Operation
+sustainability:
+  # Resource conservation
+  enable_adaptive_processing: true
+  reduce_frequency_on_low_activity: true
+  
+  # Data retention policies
+  max_event_retention_days: 30
+  archive_old_correlations: true
+  
+  # System health maintenance
+  periodic_cleanup_enabled: true
+  cleanup_interval_hours: 24
+  maintenance_window_hours: [2, 4]  # 2 AM to 4 AM
+
+# News Source Integration Weights
+news_source_weights:
+  # Source credibility for correlation calculation
+  "Google News": 0.8
+  "Yahoo Finance": 0.9
+  "Twitter": 0.6
+  "NewsAPI": 0.8
+  "Polygon": 0.9
+  
+  # Processing priority by source
+  priority_weights:
+    "Yahoo Finance": 1.0    # Financial news highest priority
+    "Google News": 0.8
+    "Twitter": 0.6          # Social signals lower priority
+    "NewsAPI": 0.7
+    "Polygon": 0.9
+
+# Error Handling and Recovery
+error_handling:
+  # Retry settings
+  max_retries: 3
+  retry_delay_seconds: 5
+  exponential_backoff: true
+  
+  # Fallback behavior
+  continue_on_correlation_error: true
+  fallback_to_basic_analysis: true
+  
+  # Error reporting
+  log_errors: true
+  alert_on_critical_errors: true
+  error_recovery_timeout: 300
+
+# Development and Testing
+development:
+  # Testing mode
+  test_mode: false
+  mock_btc_data: false
+  simulate_correlations: false
+  
+  # Development features
+  enable_correlation_visualization: false
+  export_debug_data: false
+  
+  # Performance testing
+  benchmark_mode: false
+  collect_timing_data: false 

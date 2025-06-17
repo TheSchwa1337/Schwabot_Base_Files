@@ -1,0 +1,213 @@
+# News Intelligence Engine Configuration
+# =====================================
+
+# API Credentials (set via environment variables for security)
+twitter:
+  bearer_token: "${TWITTER_BEARER_TOKEN}"  # Get from Twitter Developer Portal
+  api_key: "${TWITTER_API_KEY}"
+  api_secret: "${TWITTER_API_SECRET}"
+  access_token: "${TWITTER_ACCESS_TOKEN}"
+  access_token_secret: "${TWITTER_ACCESS_TOKEN_SECRET}"
+
+google_news:
+  # Using RSS feeds (free) - no API key needed
+  enabled: true
+  rss_endpoint: "https://news.google.com/rss/search"
+
+yahoo_finance:
+  # Using RSS feeds (free) - no API key needed  
+  enabled: true
+  rss_endpoint: "https://feeds.finance.yahoo.com/rss/2.0/headline"
+
+# Rate Limiting Configuration
+rate_limits:
+  google_news:
+    requests_per_hour: 100
+    burst_limit: 10
+  
+  yahoo_news:
+    requests_per_hour: 200
+    burst_limit: 20
+  
+  twitter:
+    requests_per_day: 15  # Free tier limit
+    burst_limit: 5
+
+# Keyword Tracking Configuration
+keywords:
+  crypto:
+    - "bitcoin"
+    - "btc" 
+    - "cryptocurrency"
+    - "crypto"
+    - "blockchain"
+    - "ethereum"
+    - "eth"
+    - "coinbase"
+    - "binance"
+    - "mining"
+    - "defi"
+    - "nft"
+  
+  influencers:
+    - "trump"
+    - "donald trump"
+    - "elon musk"
+    - "musk"
+    - "tesla"
+    
+  economic:
+    - "fed"
+    - "federal reserve"
+    - "inflation"
+    - "interest rates"
+    - "recession"
+    - "economy"
+
+# Monitored Twitter Accounts
+twitter_accounts:
+  - "elonmusk"           # Elon Musk
+  - "realDonaldTrump"    # Donald Trump
+  - "Bitcoin"            # Bitcoin official
+  - "coinbase"           # Coinbase
+  - "binance"            # Binance
+  - "federalreserve"     # Federal Reserve
+
+# Search Queries for News Sources
+search_queries:
+  google_news:
+    - "bitcoin cryptocurrency"
+    - "bitcoin price"
+    - "cryptocurrency market"
+    - "bitcoin regulation"
+    - "crypto adoption"
+    - "trump bitcoin"
+    - "elon musk bitcoin"
+    - "federal reserve bitcoin"
+  
+  crypto_specific:
+    - "BTC price prediction"
+    - "bitcoin institutional adoption"
+    - "cryptocurrency regulation"
+    - "bitcoin ETF"
+
+# Sentiment Analysis Configuration
+sentiment:
+  # Sentiment score thresholds
+  positive_threshold: 0.1
+  negative_threshold: -0.1
+  
+  # Relevance scoring weights
+  keyword_weight: 0.4
+  source_credibility_weight: 0.3
+  recency_weight: 0.3
+  
+  # Source credibility scores (0.0 to 1.0)
+  source_credibility:
+    "Google News": 0.8
+    "Yahoo Finance": 0.9
+    "Twitter": 0.6
+    "CNN": 0.7
+    "Fox": 0.7
+    "Reuters": 0.9
+    "Bloomberg": 0.9
+
+# Memory and Storage Configuration
+memory:
+  max_items_in_memory: 1000
+  retention_hours: 168  # 1 week
+  hash_key_length: 16
+  
+  # Persistence settings
+  save_to_disk: true
+  backup_interval_minutes: 30
+  backup_directory: "data/news_backups"
+
+# Integration Settings
+integration:
+  # Memory agent integration
+  memory_agent_enabled: true
+  
+  # Hash recollection system
+  hash_system_enabled: true
+  
+  # Sustainment hooks
+  hooks_enabled: true
+  sentiment_alert_threshold: 0.5
+  
+  # Dashboard integration
+  dashboard_enabled: true
+  websocket_updates: true
+
+# Monitoring Configuration
+monitoring:
+  # Continuous monitoring settings
+  default_interval_minutes: 15
+  min_interval_minutes: 5
+  max_interval_minutes: 60
+  
+  # Auto-adjust interval based on market volatility
+  adaptive_intervals: true
+  high_volatility_interval: 5
+  low_volatility_interval: 30
+  
+  # News volume thresholds for interval adjustment
+  high_volume_threshold: 20  # news items per hour
+  low_volume_threshold: 5    # news items per hour
+
+# Alert Configuration  
+alerts:
+  # Market moving events
+  market_moving_sentiment_threshold: 0.7
+  high_relevance_threshold: 0.8
+  
+  # Social momentum alerts
+  social_momentum_threshold: 0.6
+  twitter_volume_spike_threshold: 10  # tweets per hour
+  
+  # Key event detection
+  detect_regulatory_news: true
+  detect_adoption_news: true
+  detect_technical_analysis: false
+
+# Dashboard Display Configuration
+dashboard:
+  # News ticker settings
+  ticker_max_items: 10
+  ticker_scroll_speed: 50  # pixels per second
+  
+  # Sentiment gauge settings
+  sentiment_history_hours: 24
+  volatility_smoothing_factor: 0.8
+  
+  # Headlines display
+  max_headlines_displayed: 15
+  headline_max_length: 80
+  
+  # Update frequencies
+  real_time_updates: true
+  update_interval_seconds: 30
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_file: "logs/news_intelligence.log"
+  max_file_size_mb: 50
+  backup_count: 5
+  
+  # What to log
+  log_api_calls: true
+  log_sentiment_analysis: true
+  log_memory_operations: false
+  log_rate_limiting: true
+
+# Development and Testing
+development:
+  # Mock data for testing
+  use_mock_data: false
+  mock_data_file: "test_data/mock_news.json"
+  
+  # Testing settings
+  test_mode: false
+  disable_api_calls: false
+  simulate_rate_limits: false 

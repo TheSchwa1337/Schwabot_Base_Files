@@ -1,0 +1,239 @@
+# BTC Data Processor Configuration
+# ===============================
+
+# WebSocket Configuration for BTC price data
+websocket:
+  uri: "wss://stream.binance.com:9443/ws/btcusdt@trade"
+  reconnect_interval_ms: 5000
+  ping_interval_ms: 30000
+  pong_timeout_ms: 10000
+
+# Buffer Configuration
+buffer:
+  size: 10000
+  hash_buffer_size: 5000
+  correlation_buffer_size: 3000
+  timing_buffer_size: 1000
+
+# Processing Parameters
+processing:
+  batch_size: 100
+  max_workers: 8
+  update_interval_ms: 100
+  entropy_threshold: 0.7
+  correlation_threshold: 0.8
+
+# GPU Configuration
+gpu:
+  enabled: true
+  cuda_streams: 3
+  memory_fraction: 0.8
+  precision: "fp16"
+  processing_modes:
+    - "hash_generation"
+    - "correlation_analysis"
+    - "entropy_calculation"
+
+# Hash Generation Configuration
+hash_generation:
+  algorithm: "sha256"
+  salt_length: 16
+  iterations: 1000
+  output_length: 64
+  deterministic_output: true
+  precision: 8
+  include_timestamp: true
+  hash_format: "hex"
+  timing_buffer_size: 1000
+  max_allowed_time_ms: 100
+  timing_check_interval_ms: 5000
+  timing_anomaly_threshold_ms: 50
+
+# Bitcoin Mining Algorithm Analysis
+mining_analysis:
+  enabled: true
+  target_difficulty_tracking: true
+  nonce_pattern_analysis: true
+  block_time_analysis: true
+  hash_rate_estimation: true
+  asic_correlation_analysis: true
+  mining_pools:
+    - "antpool"
+    - "f2pool"
+    - "slushpool"
+    - "viabtc"
+  difficulty_adjustment_tracking: true
+  mempool_analysis: true
+  
+# Block Structure Analysis
+block_analysis:
+  enabled: true
+  block_header_analysis: true
+  merkle_root_tracking: true
+  timestamp_analysis: true
+  transaction_analysis: true
+  coinbase_analysis: true
+  block_reward_tracking: true
+  fee_analysis: true
+  block_size_tracking: true
+  witness_data_analysis: true
+  
+# Mining Hardware Correlation
+hardware_correlation:
+  enabled: true
+  asic_miner_types:
+    - "antminer_s19"
+    - "antminer_s17"
+    - "whatsminer_m30s"
+    - "avalon_1246"
+  gpu_mining_analysis: true
+  cpu_mining_analysis: true
+  hash_rate_comparison: true
+  power_efficiency_tracking: true
+  thermal_analysis: true
+  
+# Time Log Scaling Functions
+time_scaling:
+  enabled: true
+  log_scale_analysis: true
+  difficulty_adjustment_period: 2016  # blocks
+  target_block_time: 600  # seconds (10 minutes)
+  time_variance_tracking: true
+  scaling_factors:
+    - 1
+    - 10
+    - 100
+    - 1000
+    - 10000
+  exponential_backoff: true
+  
+# Sequence Analysis for Mining Solutions
+sequence_analysis:
+  enabled: true
+  nonce_sequence_tracking: true
+  hash_pattern_recognition: true
+  solution_probability_analysis: true
+  backlog_generation: true
+  sequential_mining_simulation: true
+  brute_force_analysis: true
+  rainbow_table_generation: false  # Resource intensive
+  
+# Block Mining Information Storage
+mining_information_storage:
+  enabled: true
+  block_template_storage: true
+  candidate_blocks: true
+  mining_statistics: true
+  historical_data_retention: 100000  # blocks
+  compression_enabled: true
+  storage_format: "parquet"
+  backup_enabled: true
+  
+# Network Analysis
+network_analysis:
+  enabled: true
+  peer_to_peer_analysis: true
+  propagation_delay_tracking: true
+  orphan_block_analysis: true
+  fork_detection: true
+  network_hashrate_estimation: true
+  geographical_distribution: true
+
+# Data Validation
+data_validation:
+  price_range:
+    min: 1000
+    max: 1000000
+  volume_range:
+    min: 0
+    max: 1000000
+  timestamp_delay_threshold_ms: 5000
+  required_fields:
+    - "price"
+    - "volume"
+    - "timestamp"
+
+# Correlation Analysis
+correlation_analysis:
+  window_size: 1000
+  min_data_points: 100
+  update_frequency_ms: 1000
+  metrics:
+    - "price_volume"
+    - "price_entropy"
+    - "volume_entropy"
+    - "hash_correlation"
+    - "mining_difficulty_correlation"
+    - "block_time_correlation"
+
+# Entropy Analysis
+entropy_analysis:
+  window_size: 500
+  min_entropy: 0.5
+  max_entropy: 1.0
+  update_frequency_ms: 2000
+  validation_methods:
+    - "shannon"
+    - "kolmogorov"
+    - "renyi"
+
+# Memory Management
+memory:
+  enabled: true
+  short_term_size: 10000
+  mid_term_size: 50000
+  long_term_size: 100000
+  short_term_ttl: 3600     # 1 hour
+  mid_term_ttl: 86400      # 24 hours
+  long_term_ttl: 604800    # 1 week
+  max_thermal_threshold: 85.0
+  min_coherence_threshold: 0.3
+  quota: 1073741824        # 1GB
+  pressure_threshold: 0.8
+  cpu_threshold: 0.85
+  gpu_threshold: 0.9
+  check_interval_ms: 5000
+
+# Load Balancing
+load_balancing:
+  enabled: true
+  rebalance_interval_ms: 1000
+  cpu_overload_threshold: 80
+  gpu_overload_threshold: 85
+  error_threshold: 5
+  error_cooldown_ms: 30000
+  monitor_interval_ms: 500
+
+# Performance Monitoring
+performance_monitoring:
+  enabled: true
+  metrics:
+    - "processing_time"
+    - "queue_sizes"
+    - "memory_usage"
+    - "gpu_utilization"
+    - "hash_generation_rate"
+    - "mining_analysis_performance"
+  alert_thresholds:
+    processing_time_ms: 1000
+    queue_size: 1000
+    memory_usage_percent: 90
+    gpu_utilization_percent: 95
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_enabled: true
+  file_path: "logs/btc_processor.log"
+  file_max_size_mb: 100
+  file_backup_count: 5
+  console_output: true
+
+# Integration Settings
+integration:
+  test_mode: false
+  mock_data: false
+  simulation_speed: 1.0
+  random_seed: 42
+  debug_mode: false 

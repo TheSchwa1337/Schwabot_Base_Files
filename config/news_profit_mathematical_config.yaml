@@ -1,0 +1,505 @@
+# News-Profit Mathematical Bridge Configuration
+# ============================================
+# Configuration for bare-bones profit extraction from news events
+# Focus: Facts → Hash Correlation → Profit Cycles → CCXT Execution
+
+# Core Mathematical Parameters
+mathematical:
+  # Hash correlation thresholds
+  correlation_threshold: 0.25          # Minimum correlation for profit signal
+  profit_crystallization_threshold: 0.15  # Minimum profit to execute trades
+  hash_window_minutes: 60             # Time window for hash correlation analysis
+  
+  # Keyword extraction limits
+  max_keywords_per_event: 10          # Maximum keywords extracted per news item
+  keyword_weight_factors:
+    crypto_core: 1.0                  # bitcoin, btc, crypto, blockchain
+    market_action: 0.8                # buy, sell, surge, crash, pump, dump
+    institutional: 0.9                # etf, regulation, sec, institutional
+    entities: 0.7                     # trump, musk, tesla, microstrategy
+  
+  # Hash generation parameters
+  keyword_hash_length: 32             # Length of keyword hash
+  temporal_hash_length: 32            # Length of temporal hash
+  corroboration_hash_length: 32       # Length of corroboration hash
+  
+  # Entropy classification
+  entropy_classes: 4                  # Number of entropy classes (0-3)
+  entropy_thresholds:
+    low: 0.3                          # Below this = class 0
+    medium: 0.6                       # Below this = class 1
+    high: 0.8                         # Below this = class 2
+    maximum: 1.0                      # Above high = class 3
+
+# Hash Correlation Analysis
+correlation:
+  # Correlation methods and weights
+  hamming_weight: 0.5                 # Weight for Hamming distance similarity
+  bit_pattern_weight: 0.3             # Weight for bit pattern correlation
+  temporal_weight: 0.2                # Weight for temporal correlation
+  
+  # BTC hash integration
+  btc_hash_buffer_size: 10            # Number of recent BTC hashes to correlate
+  mock_btc_patterns: 5                # Number of mock patterns for testing
+  base_btc_price: 42000.0            # Base BTC price for mock data
+  
+  # Correlation analysis
+  min_correlation_for_analysis: 0.1   # Minimum correlation to include in analysis
+  correlation_analysis_window: 100    # Number of correlations for distribution analysis
+
+# Profit Timing Calculation
+timing:
+  # Entry/exit timing parameters
+  base_entry_delay_minutes: 10        # Base delay before entry
+  correlation_multiplier_factor: 1.0  # Factor for correlation-based timing adjustment
+  
+  # Exit timing calculation
+  base_exit_window_minutes: 30        # Base window for exit timing
+  entropy_exit_multiplier: 1.0        # Multiplier based on entropy class
+  profit_weight_multiplier: 1.0       # Multiplier based on profit weight
+  
+  # Confidence and risk
+  min_confidence_threshold: 0.3       # Minimum confidence for valid timing
+  max_risk_factor: 0.7                # Maximum acceptable risk factor
+  confidence_boost_correlation: 0.5   # Boost confidence by correlation strength
+  confidence_boost_profit_weight: 0.5 # Boost confidence by profit weight
+
+# News Source Trust Hierarchy
+trust_hierarchy:
+  # High trust financial sources
+  bloomberg: 0.95
+  reuters: 0.90
+  associated_press: 0.90
+  wall_street_journal: 0.90
+  
+  # Crypto-specific trusted sources
+  coinbase: 0.90
+  binance: 0.85
+  kraken: 0.80
+  coindesk: 0.80
+  bitcoin_magazine: 0.75
+  cointelegraph: 0.70
+  
+  # General financial media
+  cnbc: 0.80
+  marketwatch: 0.75
+  yahoo_finance: 0.70
+  
+  # Social media sources (lower trust)
+  twitter: 0.30
+  reddit: 0.20
+  telegram: 0.10
+  
+  # Default for unknown sources
+  unknown: 0.10
+
+# Keyword Categories for Factual Extraction
+keyword_categories:
+  # Core crypto/BTC keywords that directly affect price
+  crypto_core:
+    - bitcoin
+    - btc
+    - cryptocurrency
+    - crypto
+    - blockchain
+    - mining
+    - hash
+    - block
+    - transaction
+    - wallet
+    - exchange
+    - defi
+    - web3
+  
+  # Market action keywords
+  market_action:
+    - buy
+    - sell
+    - trade
+    - price
+    - pump
+    - dump
+    - surge
+    - crash
+    - rise
+    - fall
+    - break
+    - breakout
+    - support
+    - resistance
+    - volume
+    - rally
+    - correction
+    - dip
+  
+  # Institutional/regulatory keywords
+  institutional:
+    - etf
+    - institutional
+    - regulation
+    - sec
+    - cftc
+    - approved
+    - banned
+    - legal
+    - government
+    - central_bank
+    - fed
+    - policy
+    - compliance
+    - license
+    - framework
+    - custody
+    - adoption
+  
+  # Important entity keywords
+  entities:
+    - trump
+    - biden
+    - musk
+    - tesla
+    - microstrategy
+    - saylor
+    - blackrock
+    - fidelity
+    - coinbase
+    - binance
+    - goldman
+    - jpmorgan
+    - morgan_stanley
+    - grayscale
+    - ark_invest
+    - cathie_wood
+
+# Profit Execution via CCXT
+ccxt_integration:
+  # Trade execution parameters
+  default_position_size: 0.1          # Default position size as fraction of portfolio
+  max_position_size: 0.3              # Maximum position size
+  min_trade_size_btc: 0.001           # Minimum trade size in BTC
+  
+  # Risk management
+  default_stop_loss: 0.02             # 2% stop loss
+  default_take_profit: 0.06           # 6% take profit
+  max_portfolio_risk: 0.05            # Maximum 5% portfolio risk per trade
+  
+  # Execution timing
+  execution_timeout_seconds: 30        # Timeout for trade execution
+  retry_attempts: 3                   # Number of retry attempts for failed trades
+  retry_delay_seconds: 5              # Delay between retry attempts
+  
+  # Dry run settings
+  default_dry_run: true               # Default to dry run mode for safety
+  dry_run_logging: true               # Log dry run trades
+  
+  # Exchange settings
+  preferred_exchange: "binance"        # Preferred exchange for execution
+  backup_exchanges: ["coinbase", "kraken"]  # Backup exchanges
+  enable_rate_limiting: true          # Enable exchange rate limiting
+
+# Performance Monitoring
+monitoring:
+  # Performance metrics
+  track_processing_time: true         # Track pipeline processing time
+  track_correlation_accuracy: true    # Track correlation prediction accuracy
+  track_profit_realization: true      # Track actual vs predicted profits
+  
+  # Analytics retention
+  metrics_retention_hours: 168        # 1 week of metrics retention
+  detailed_logs_retention_hours: 24   # 24 hours of detailed logs
+  
+  # Alert thresholds
+  low_correlation_rate_threshold: 0.1  # Alert if correlation rate < 10%
+  low_success_rate_threshold: 0.2     # Alert if success rate < 20%
+  high_processing_time_threshold: 30   # Alert if processing > 30 seconds
+
+# Event Processing Pipeline
+pipeline:
+  # Extraction settings
+  max_news_items_per_batch: 50        # Maximum news items per processing batch
+  corroboration_keyword_overlap: 2    # Minimum keyword overlap for corroboration
+  
+  # Mathematical signature generation
+  fibonacci_weight_limit: 20          # Limit for Fibonacci weight calculation
+  vector_normalization_factor: 1000.0 # Factor for normalizing mathematical vectors
+  
+  # Processing limits
+  max_signatures_per_batch: 100       # Maximum signatures per processing batch
+  max_correlations_per_batch: 200     # Maximum correlations per batch
+  max_timings_per_batch: 50           # Maximum profit timings per batch
+  
+  # Error handling
+  continue_on_extraction_error: true   # Continue processing if extraction fails
+  continue_on_correlation_error: true  # Continue processing if correlation fails
+  max_retries_per_item: 3             # Maximum retries per failed item
+
+# Integration with Existing Systems
+system_integration:
+  # BTC Processor integration
+  btc_processor:
+    enabled: true
+    hash_buffer_integration: true
+    status_polling_interval: 60       # Seconds between status polls
+    fallback_to_mock: true            # Use mock data if processor unavailable
+  
+  # Profit Navigator integration
+  profit_navigator:
+    enabled: true
+    market_state_creation: true
+    trade_signal_integration: true
+    fallback_mode: true               # Continue without navigator if unavailable
+  
+  # Fractal Controller integration
+  fractal_controller:
+    enabled: true
+    fractal_signal_integration: true
+    thermal_awareness: false          # Disable thermal awareness for news processing
+    gpu_acceleration: false           # Disable GPU for news processing
+  
+  # Hash Recollection System
+  hash_system:
+    enabled: true
+    store_correlations: true
+    correlation_ttl_hours: 24         # Time to live for stored correlations
+  
+  # Entropy Tracker integration
+  entropy_tracker:
+    enabled: true
+    window_size: 100                  # Size of entropy tracking window
+    track_news_entropy: true          # Track entropy of news events
+
+# Advanced Processing Allocation and Thermal Management
+processing_allocation:
+  # Base allocation percentages (user configurable)
+  default_cpu_allocation: 70.0       # Default 70% CPU allocation
+  default_gpu_allocation: 30.0       # Default 30% GPU allocation
+  
+  # Processing modes
+  available_modes:
+    - "hybrid"                        # Balanced CPU/GPU usage
+    - "cpu_only"                      # CPU-only processing
+    - "gpu_preferred"                 # Prefer GPU when available
+    - "thermal_aware"                 # Dynamic based on thermal state
+  default_mode: "hybrid"
+  
+  # Dynamic allocation settings
+  dynamic_allocation_enabled: true    # Enable thermal-aware dynamic allocation
+  thermal_scaling_enabled: true      # Enable thermal scaling of allocations
+  min_cpu_allocation: 10.0           # Minimum CPU allocation percentage
+  min_gpu_allocation: 5.0            # Minimum GPU allocation percentage
+  max_cpu_allocation: 95.0           # Maximum CPU allocation percentage
+  max_gpu_allocation: 90.0           # Maximum GPU allocation percentage
+  
+  # GPU operation thresholds
+  min_gpu_operation_size: 100        # Minimum operation size for GPU processing
+  gpu_complexity_threshold: 1.5      # Complexity factor for GPU preference
+  
+  # Allocation adjustment parameters
+  thermal_adjustment_sensitivity: 0.8 # How sensitive to thermal changes (0.0-1.0)
+  load_balancing_factor: 0.3         # Factor for load-based adjustments
+  allocation_smoothing: 0.9          # Smoothing factor for allocation changes
+
+# Thermal Management Integration
+thermal_management:
+  # Thermal integration settings
+  thermal_integration_enabled: true  # Enable thermal management integration
+  thermal_monitoring_interval: 10.0  # Seconds between thermal state updates
+  thermal_history_retention: 100     # Number of thermal states to retain
+  
+  # Temperature thresholds for processing allocation
+  cpu_temperature_thresholds:
+    normal: 65.0                      # Below this = normal CPU allocation
+    warm: 75.0                        # Above this = reduce CPU allocation
+    hot: 80.0                         # Above this = significant CPU reduction
+    critical: 85.0                    # Above this = emergency CPU reduction
+  
+  gpu_temperature_thresholds:
+    normal: 60.0                      # Below this = normal GPU allocation  
+    warm: 70.0                        # Above this = reduce GPU allocation
+    hot: 75.0                         # Above this = significant GPU reduction
+    critical: 83.0                    # Above this = emergency GPU reduction
+  
+  # Thermal scaling factors (multipliers for allocation)
+  thermal_scaling_factors:
+    normal: 1.0                       # No scaling at normal temps
+    warm: 0.8                         # 20% reduction at warm temps
+    hot: 0.5                          # 50% reduction at hot temps
+    critical: 0.2                     # 80% reduction at critical temps
+  
+  # Emergency thermal protection
+  emergency_thermal_threshold: 85.0   # Emergency shutdown threshold
+  thermal_emergency_cpu_allocation: 10.0  # Emergency CPU allocation
+  thermal_emergency_gpu_allocation: 5.0   # Emergency GPU allocation
+  thermal_cooldown_seconds: 60       # Cooldown period after thermal emergency
+  
+  # Thermal efficiency monitoring
+  track_thermal_efficiency: true     # Track thermal efficiency metrics
+  thermal_efficiency_window: 50      # Window size for efficiency calculation
+  min_thermal_efficiency: 0.3        # Minimum efficiency before throttling
+
+# GPU Cool-down and Load Management (SERC Integration)
+gpu_cooldown_management:
+  # Cool-down cycle management
+  enable_gpu_cooldown: true          # Enable GPU cool-down management
+  cooldown_cycle_minutes: 15         # GPU cool-down cycle length
+  active_processing_minutes: 10      # Active processing time per cycle
+  cooldown_rest_minutes: 5           # Rest time per cycle
+  
+  # Load-based cool-down adjustment
+  load_based_cooldown: true          # Adjust cooldown based on load
+  high_load_threshold: 0.8           # Load threshold for extended cooldown
+  extended_cooldown_multiplier: 1.5  # Multiplier for high-load cooldown
+  
+  # Thermal-driven cool-down
+  thermal_driven_cooldown: true      # Enable thermal-driven cooldown
+  thermal_cooldown_trigger: 75.0     # Temperature to trigger cooldown
+  forced_cooldown_duration: 300      # Forced cooldown duration (seconds)
+  
+  # Processing burst management
+  enable_burst_processing: true      # Allow burst processing when cool
+  burst_duration_seconds: 120        # Maximum burst duration
+  burst_cooldown_ratio: 2.0          # Cooldown = burst_duration * ratio
+  max_burst_frequency: 4             # Maximum bursts per hour
+
+# CPU Scaling Factor Controls  
+cpu_scaling_controls:
+  # CPU allocation scaling
+  enable_cpu_scaling: true           # Enable CPU allocation scaling
+  cpu_scaling_sensitivity: 0.7       # Sensitivity to CPU load changes
+  cpu_load_target: 75.0              # Target CPU load percentage
+  cpu_scale_up_threshold: 60.0       # Scale up CPU allocation above this load
+  cpu_scale_down_threshold: 85.0     # Scale down CPU allocation above this load
+  
+  # CPU performance optimization
+  cpu_optimization_mode: "adaptive"  # adaptive, conservative, aggressive
+  cpu_thread_scaling: true           # Scale thread count with allocation
+  cpu_priority_adjustment: true      # Adjust process priority with allocation
+  
+  # CPU thermal protection
+  cpu_thermal_protection: true       # Enable CPU thermal protection
+  cpu_thermal_throttle_temp: 78.0    # Temperature to start throttling
+  cpu_thermal_emergency_temp: 85.0   # Temperature for emergency measures
+  cpu_thermal_recovery_temp: 70.0    # Temperature to resume normal operation
+
+# Processing Load Tracking (SERC Data Pipeline Integration)
+load_tracking:
+  # Load history tracking
+  enable_load_tracking: true         # Enable processing load tracking
+  load_history_window: 100           # Number of load samples to retain
+  allocation_history_window: 50      # Number of allocation adjustments to track
+  thermal_history_window: 100        # Number of thermal samples to track
+  
+  # Performance metrics
+  track_operation_timing: true       # Track individual operation timings
+  track_allocation_effectiveness: true # Track effectiveness of allocations
+  track_thermal_correlation: true    # Track thermal/performance correlation
+  
+  # SERC integration logging
+  serc_logging_enabled: true         # Enable SERC-compatible logging
+  serc_log_interval: 30              # Seconds between SERC log entries
+  serc_log_file: "logs/news_profit_serc.log"
+  serc_metrics_retention_hours: 24   # Hours to retain SERC metrics
+  
+  # Data pipeline integration
+  pipeline_integration: true         # Integrate with existing data pipelines
+  pipeline_batch_size: 50            # Batch size for pipeline integration
+  pipeline_flush_interval: 60        # Seconds between pipeline flushes
+
+# Advanced Settings Panel Configuration
+advanced_settings:
+  # UI control settings
+  enable_advanced_panel: true        # Enable advanced settings panel in UI
+  show_thermal_monitoring: true      # Show thermal monitoring in UI
+  show_allocation_controls: true     # Show allocation controls in UI
+  show_performance_metrics: true     # Show performance metrics in UI
+  
+  # Real-time monitoring
+  real_time_updates: true            # Enable real-time UI updates
+  update_interval_seconds: 5         # Seconds between UI updates
+  chart_history_minutes: 60          # Minutes of history to show in charts
+  
+  # Safety controls
+  require_confirmation_allocation_changes: true  # Require confirmation for allocation changes
+  max_allocation_change_per_minute: 10.0  # Maximum allocation change per minute
+  allocation_safety_limits: true     # Enforce allocation safety limits
+  
+  # Expert mode settings
+  expert_mode_available: true        # Allow expert mode access
+  expert_mode_requires_confirmation: true  # Require confirmation for expert mode
+  expert_thermal_override: false     # Allow thermal safety overrides in expert mode
+  expert_allocation_override: false  # Allow allocation limit overrides in expert mode
+
+# API and UI Configuration
+api:
+  # Endpoint settings
+  enable_cors: true                   # Enable CORS for frontend integration
+  max_request_size_mb: 10             # Maximum request size
+  request_timeout_seconds: 300        # Request timeout
+  
+  # Rate limiting
+  enable_rate_limiting: false         # Disable rate limiting for internal use
+  max_requests_per_minute: 1000       # Maximum requests per minute
+  
+  # Response formatting
+  include_debug_info: false           # Include debug information in responses
+  pretty_print_json: true             # Pretty print JSON responses
+  
+  # Authentication (placeholder for future)
+  require_authentication: false       # Future authentication requirement
+  api_key_validation: false           # Future API key validation
+
+# Logging Configuration
+logging:
+  # Log levels
+  root_level: INFO                    # Root logging level
+  news_profit_level: INFO             # News-profit specific logging level
+  correlation_level: DEBUG            # Correlation calculation logging
+  execution_level: INFO               # Trade execution logging
+  
+  # Log output
+  console_logging: true               # Enable console logging
+  file_logging: true                  # Enable file logging
+  log_file_path: "logs/news_profit_bridge.log"
+  max_log_file_size_mb: 50           # Maximum log file size
+  log_file_backup_count: 5           # Number of backup log files
+  
+  # Log content
+  log_pipeline_stages: true          # Log each pipeline stage
+  log_correlation_details: false     # Log detailed correlation calculations
+  log_timing_calculations: true      # Log profit timing calculations
+  log_execution_details: true        # Log trade execution details
+
+# Development and Testing
+development:
+  # Testing mode
+  test_mode: false                    # Enable test mode
+  mock_news_generation: true          # Generate mock news for testing
+  mock_btc_data: true                 # Use mock BTC data
+  mock_execution: true                # Mock trade execution
+  
+  # Debug features
+  debug_correlation_calculations: false  # Debug correlation math
+  debug_timing_calculations: false    # Debug timing calculations
+  debug_pipeline_flow: false          # Debug pipeline execution flow
+  
+  # Performance testing
+  benchmark_mode: false               # Enable benchmark mode
+  performance_profiling: false        # Enable performance profiling
+  memory_monitoring: false            # Monitor memory usage
+
+# Security and Safety
+security:
+  # Input validation
+  validate_news_sources: true         # Validate news source URLs
+  sanitize_text_input: true          # Sanitize text inputs
+  max_text_length: 10000             # Maximum text length per news item
+  
+  # Execution safety
+  require_confirmation_real_trades: true  # Require confirmation for real trades
+  max_daily_trades: 50                # Maximum trades per day
+  max_daily_volume_btc: 1.0           # Maximum daily trading volume in BTC
+  
+  # System protection
+  memory_limit_mb: 1000               # Maximum memory usage
+  cpu_usage_limit_percent: 80         # Maximum CPU usage
+  processing_timeout_seconds: 300     # Maximum processing time per batch 
