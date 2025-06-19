@@ -445,18 +445,140 @@ class CoreMathLib:
 
 # Define a function to calculate the topology of a Klein Bottle
 def klein_bottle(point):
-    # Implement the calculation logic for the Klein Bottle's topology
-    pass
+    """
+    Calculate Klein Bottle parametric equations
+    Klein bottle: a non-orientable surface in 4D space
+    
+    Args:
+        point: tuple (u, v) where u,v ∈ [0, 2π]
+    
+    Returns:
+        tuple: (x, y, z, w) coordinates in 4D space
+    """
+    import math
+    
+    u, v = point
+    
+    # Klein bottle parametric equations (4D embedding)
+    x = (2 + math.cos(v/2) * math.sin(u) - math.sin(v/2) * math.sin(2*u)) * math.cos(v)
+    y = (2 + math.cos(v/2) * math.sin(u) - math.sin(v/2) * math.sin(2*u)) * math.sin(v)
+    z = math.sin(v/2) * math.sin(u) + math.cos(v/2) * math.sin(2*u)
+    
+    # For 3D projection, we can use a simple projection
+    w = 0  # Fourth dimension set to 0 for 3D visualization
+    
+    return (x, y, z, w)
 
 # Define a function to calculate Shannon entropy
 def entropy(data):
-    # Implement the calculation logic for Shannon entropy
-    pass
+    """
+    Calculate Shannon entropy of data
+    
+    Args:
+        data: array-like data for entropy calculation
+    
+    Returns:
+        float: Shannon entropy value
+    """
+    import numpy as np
+    
+    if len(data) == 0:
+        return 0.0
+    
+    # Convert to numpy array if not already
+    data = np.array(data)
+    
+    # Calculate probability distribution
+    unique_values, counts = np.unique(data, return_counts=True)
+    probabilities = counts / len(data)
+    
+    # Remove zero probabilities to avoid log(0)
+    probabilities = probabilities[probabilities > 0]
+    
+    # Calculate Shannon entropy: H = -Σ p(x) * log2(p(x))
+    if len(probabilities) == 0:
+        return 0.0
+    
+    entropy_value = -np.sum(probabilities * np.log2(probabilities))
+    
+    return entropy_value
 
 # Define a recursive operation with a depth limit
-def recursive_operation(depth_limit):
-    # Implement the recursive operation logic
-    pass 
+def recursive_operation(depth_limit, current_depth=0, operation_type='fibonacci'):
+    """
+    Perform recursive mathematical operation with depth limit
+    
+    Args:
+        depth_limit: target number (for fibonacci) or maximum recursion depth
+        current_depth: current recursion depth (for internal use)
+        operation_type: type of operation ('fibonacci', 'factorial', 'power')
+    
+    Returns:
+        float: result of recursive operation
+    """
+    if operation_type == 'fibonacci':
+        # Standard fibonacci: F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)
+        if depth_limit <= 0:
+            return 0.0
+        elif depth_limit == 1:
+            return 1.0
+        else:
+            return (recursive_operation(depth_limit - 1, 0, operation_type) + 
+                   recursive_operation(depth_limit - 2, 0, operation_type))
+    
+    elif operation_type == 'factorial':
+        # Standard factorial: n! = n * (n-1)!
+        if depth_limit <= 1:
+            return 1.0
+        else:
+            return depth_limit * recursive_operation(depth_limit - 1, 0, operation_type)
+    
+    elif operation_type == 'power':
+        # Power of 2: 2^n
+        if depth_limit <= 0:
+            return 1.0
+        else:
+            return 2.0 * recursive_operation(depth_limit - 1, 0, operation_type)
+    
+    else:
+        # Default geometric series using current_depth for recursion control
+        if current_depth >= depth_limit:
+            return 1.0  # Base case
+        else:
+            return 1.0 + 0.5 * recursive_operation(depth_limit, current_depth + 1, operation_type)
+
+# === MISSING MATHEMATICAL FUNCTIONS FOR MATHLIB_V2 COMPATIBILITY ===
+# These functions are imported by mathlib_v2.py but were missing from mathlib.py
+
+def add(a: Union[float, int, np.ndarray], b: Union[float, int, np.ndarray]) -> Union[float, np.ndarray]:
+    """
+    Mathematical addition operation with support for scalars and numpy arrays
+    
+    Args:
+        a: First operand (scalar or array)
+        b: Second operand (scalar or array)
+    
+    Returns:
+        Result of a + b (scalar or array)
+    """
+    return a + b
+
+
+def subtract(a: Union[float, int, np.ndarray], b: Union[float, int, np.ndarray]) -> Union[float, np.ndarray]:
+    """
+    Mathematical subtraction operation with support for scalars and numpy arrays
+    
+    Args:
+        a: First operand (scalar or array)  
+        b: Second operand (scalar or array)
+    
+    Returns:
+        Result of a - b (scalar or array)
+    """
+    return a - b
+
+
+# === PROFIT NODE AND TREE CLASSES FOR ADVANCED ANALYTICS ===
 
 @dataclass
 class ProfitNode:
@@ -478,6 +600,7 @@ class ProfitNode:
     adjusted_profit: float = 0.0              # raw × weight
     path_entropy: float = 0.0                 # Σ|Δ H|
 
+
 @dataclass
 class ProfitTree:
     pattern_id: str
@@ -485,16 +608,67 @@ class ProfitTree:
     total_profit: float = 0.0
     max_depth: int = 0
     max_width: int = 0
-    fractal_kappa: float = 0.0                # global complexity score 
+    fractal_kappa: float = 0.0                # global complexity score
 
-def compute_features(tick: Tick) -> dict[str, float]:
-    """Return at minimum: {'delta_p', 'sigma', 'rsi', 'confidence'}""" 
 
-features = mathlib.compute_features(tick)
-frame    = dlt.forward(features)
-fig      = alif.render(frame) 
+# === FEATURE COMPUTATION FOR TRADING SYSTEM ===
+
+def compute_features(prices: List[float], volumes: List[float]) -> Dict[str, float]:
+    """
+    Compute feature vector for trading decisions
+    
+    Args:
+        prices: List of price values
+        volumes: List of volume values
+    
+    Returns:
+        Dictionary with computed features: delta_p, sigma, rsi, confidence
+    """
+    if len(prices) < 2:
+        return {'delta_p': 0.0, 'sigma': 0.0, 'rsi': 50.0, 'confidence': 0.0}
+    
+    # Price delta
+    delta_p = prices[-1] - prices[-2] if len(prices) >= 2 else 0.0
+    
+    # Volatility (standard deviation)
+    sigma = float(np.std(prices)) if len(prices) > 1 else 0.0
+    
+    # Simple RSI approximation
+    gains = []
+    losses = []
+    for i in range(1, len(prices)):
+        change = prices[i] - prices[i-1]
+        if change > 0:
+            gains.append(change)
+        else:
+            losses.append(abs(change))
+    
+    avg_gain = np.mean(gains) if gains else 0.0
+    avg_loss = np.mean(losses) if losses else 0.0
+    
+    if avg_loss == 0:
+        rsi = 100.0
+    else:
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+    
+    # Confidence based on volume consistency
+    volume_stability = 1.0 - (np.std(volumes) / np.mean(volumes)) if len(volumes) > 1 and np.mean(volumes) > 0 else 0.5
+    confidence = float(np.clip(volume_stability, 0.0, 1.0))
+    
+    return {
+        'delta_p': float(delta_p),
+        'sigma': sigma,
+        'rsi': float(rsi),
+        'confidence': confidence
+    }
+
+
+# === ERT HELPER CLASS FOR GPU/CPU COMPUTATIONS ===
 
 class ERTHelper:
+    """Enhanced Risk Trading Helper for mathematical computations"""
+    
     def __init__(self, base_volume: float = 1.0, 
                  tick_freq: float = 1.0, 
                  profit_coef: float = 0.8,
@@ -502,36 +676,19 @@ class ERTHelper:
         self.math_lib = CoreMathLib(base_volume, tick_freq, profit_coef, threshold)
 
     def run_ert(self) -> float:
+        """Run Enhanced Risk Trading computation"""
         # Perform calculations using CPU
         decay_rate = self.math_lib.calculate_matrix_decay()
         
-        # Simulate GPU computation (hypothetical)
-        gpu_computation_result = self.gpu_compute(decay_rate)
+        # Use CPU computation (GPU computation would require additional libraries)
+        result = self.cpu_compute(decay_rate)
         
-        return gpu_computation_result
-
-    def cpu_compute(self, decay_rate: float) -> float:
-        # Example CPU computation
-        result = decay_rate * 2.0 + 3.5
         return result
 
-    def gpu_compute(self, decay_rate: float) -> float:
-        # Hypothetical GPU computation using a hypothetical library
-        # This is just a placeholder for demonstration purposes
-        import hypothetical_gpu_library as hgpu
-        
-        # Convert decay rate to a format suitable for GPU computation
-        decay_rate_gpu = np.array([decay_rate])
-        
-        # Perform GPU computation
-        result_gpu = hgpu.perform_computation(decay_rate_gpu)
-        
-        return result_gpu.item()
-
-# Example usage
-ert_helper = ERTHelper()
-result = ert_helper.run_ert()
-print(f"ERT Result: {result}") 
+    def cpu_compute(self, decay_rate: float) -> float:
+        """CPU-based mathematical computation"""
+        result = decay_rate * 2.0 + 3.5
+        return result
 
 # Create risk manager
 risk_manager = RiskManager(

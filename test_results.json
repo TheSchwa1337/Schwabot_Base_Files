@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-06-19T00:50:20.182161",
+  "duration": "0:00:24.335615",
+  "total_tests": 6,
+  "passed_tests": 4,
+  "success_rate": 0.6666666666666666,
+  "test_details": [
+    {
+      "name": "Tick Management",
+      "passed": true
+    },
+    {
+      "name": "Ghost Data Recovery",
+      "passed": true
+    },
+    {
+      "name": "ALEPH Core Modules",
+      "passed": false
+    },
+    {
+      "name": "NCCO System",
+      "passed": true
+    },
+    {
+      "name": "Integrated System",
+      "passed": false
+    },
+    {
+      "name": "Error Handling",
+      "passed": true
+    }
+  ]
+}

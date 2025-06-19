@@ -1,0 +1,101 @@
+2025-06-19 00:41:09,658 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:41:09,676 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_corrupted_test.json
+2025-06-19 00:41:09,696 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_malformed_test.json
+2025-06-19 00:41:09,726 - root - WARNING - Core modules not available: cannot import name 'SmartMoneyAnalyzer' from 'aleph_core' (C:\Users\maxde\OneDrive\Documents\aleph_core\__init__.py)
+2025-06-19 00:41:09,730 - core.integrated_alif_aleph_system - WARNING - ALEPH modules not available - running in simulation mode
+2025-06-19 00:41:09,731 - core.integrated_alif_aleph_system - INFO - Integrated ALIF/ALEPH System initialized
+2025-06-19 00:41:09,844 - core.integrated_alif_aleph_system - INFO - Tick processing loop started
+2025-06-19 00:41:09,844 - core.integrated_alif_aleph_system - INFO - Health monitoring loop started
+2025-06-19 00:41:09,846 - core.integrated_alif_aleph_system - INFO - Recovery monitoring loop started
+2025-06-19 00:41:09,848 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:41:20,199 - core.tick_management_system - ERROR - Callback error: Simulated callback error
+2025-06-19 00:44:56,871 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:44:56,875 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_corrupted_test.json
+2025-06-19 00:44:56,878 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_malformed_test.json
+2025-06-19 00:44:56,893 - core.integrated_alif_aleph_system - INFO - ALEPH modules initialized successfully
+2025-06-19 00:44:56,894 - core.integrated_alif_aleph_system - INFO - Integrated ALIF/ALEPH System initialized
+2025-06-19 00:44:56,904 - core.integrated_alif_aleph_system - INFO - Tick processing loop started
+2025-06-19 00:44:56,904 - core.integrated_alif_aleph_system - INFO - Health monitoring loop started
+2025-06-19 00:44:56,905 - core.integrated_alif_aleph_system - INFO - Recovery monitoring loop started
+2025-06-19 00:44:56,905 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:44:57,393 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'values'
+2025-06-19 00:44:57,904 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:44:58,405 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:44:58,910 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:44:59,420 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:44:59,928 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:00,429 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:00,930 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:01,439 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:01,948 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:02,453 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:02,954 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:03,462 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:03,964 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:04,467 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:04,977 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:05,479 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:05,990 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:06,493 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:07,001 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:07,252 - core.tick_management_system - ERROR - Callback error: Simulated callback error
+2025-06-19 00:45:57,399 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:45:57,403 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_corrupted_test.json
+2025-06-19 00:45:57,408 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_malformed_test.json
+2025-06-19 00:45:57,424 - core.integrated_alif_aleph_system - INFO - ALEPH modules initialized successfully
+2025-06-19 00:45:57,426 - core.integrated_alif_aleph_system - INFO - Integrated ALIF/ALEPH System initialized
+2025-06-19 00:45:57,440 - core.integrated_alif_aleph_system - INFO - Tick processing loop started
+2025-06-19 00:45:57,440 - core.integrated_alif_aleph_system - INFO - Health monitoring loop started
+2025-06-19 00:45:57,441 - core.integrated_alif_aleph_system - INFO - Recovery monitoring loop started
+2025-06-19 00:45:57,442 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:45:57,929 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'values'
+2025-06-19 00:45:58,433 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:58,940 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:59,451 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:45:59,952 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:00,454 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:00,975 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:01,478 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:01,987 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:02,497 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:02,998 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:03,500 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:04,009 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:04,514 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:05,021 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:05,531 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:06,035 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:06,539 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:07,040 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:07,544 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:46:07,786 - core.tick_management_system - ERROR - Callback error: Simulated callback error
+2025-06-19 00:50:09,595 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:50:09,599 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_corrupted_test.json
+2025-06-19 00:50:09,602 - core.ghost_data_recovery - INFO - Recovered file saved: test_logs\recovered\recovered_malformed_test.json
+2025-06-19 00:50:09,613 - core.integrated_alif_aleph_system - INFO - ALEPH modules initialized successfully
+2025-06-19 00:50:09,613 - core.integrated_alif_aleph_system - INFO - Integrated ALIF/ALEPH System initialized
+2025-06-19 00:50:09,618 - core.integrated_alif_aleph_system - INFO - Tick processing loop started
+2025-06-19 00:50:09,619 - core.integrated_alif_aleph_system - INFO - Health monitoring loop started
+2025-06-19 00:50:09,620 - core.integrated_alif_aleph_system - INFO - Recovery monitoring loop started
+2025-06-19 00:50:09,620 - core.ghost_data_recovery - INFO - Starting full system recovery scan...
+2025-06-19 00:50:10,112 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'values'
+2025-06-19 00:50:10,618 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:11,132 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:11,635 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:12,138 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:12,644 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:13,146 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:13,646 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:14,153 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:14,661 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:15,165 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:15,670 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:16,175 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:16,677 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:17,186 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:17,690 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:18,191 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:18,702 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:19,206 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:19,709 - core.integrated_alif_aleph_system - ERROR - Smart money analysis error: 'list' object has no attribute 'items'
+2025-06-19 00:50:19,953 - core.tick_management_system - ERROR - Callback error: Simulated callback error

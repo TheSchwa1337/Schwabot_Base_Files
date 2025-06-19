@@ -286,7 +286,7 @@ class DetonationSequencer(DetonationHistory):
             'timestamp': self.current_state.timestamp.isoformat()
         }
 
-    def generate_batch_hash(self, sequence_id: str, timestamp: datetime.datetime) -> str:
+    def generate_batch_hash(self, sequence_id: str, timestamp: datetime) -> str:
         key = f"{sequence_id}-{timestamp.timestamp()}"
         return hashlib.sha256(key.encode()).hexdigest()
 

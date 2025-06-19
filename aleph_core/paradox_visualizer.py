@@ -1,5 +1,6 @@
 """
-Paradox Visualizer - TPF (Triangle Paradox Fractal) visualization engine.
+Paradox Visualizer for high-dimensional fractal state tracking.
+Provides comprehensive pattern matching and clustering for TPF systems.
 """
 
 import numpy as np
@@ -7,7 +8,14 @@ from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 from datetime import datetime
 from sklearn.cluster import DBSCAN, AgglomerativeClustering
-from sklearn.feature_extraction.text import CountVectorizer
+
+try:
+    from sklearn.feature_extraction.text import CountVectorizer
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    SKLEARN_AVAILABLE = False
+    CountVectorizer = None
+    DBSCAN = None
 
 @dataclass
 class ParadoxState:
@@ -187,26 +195,90 @@ class ParadoxVisualizer:
         Returns:
             List[List[int]]: A list of clusters, where each cluster is a list of pattern indices.
         """
+        if not SKLEARN_AVAILABLE:
+            # Simple fallback clustering based on pattern similarity
+            clusters = []
+            used_indices = set()
+            
+            for i, pattern1 in enumerate(patterns):
+                if i in used_indices:
+                    continue
+                    
+                cluster = [i]
+                used_indices.add(i)
+                
+                for j, pattern2 in enumerate(patterns[i+1:], i+1):
+                    if j in used_indices:
+                        continue
+                        
+                    similarity = self.comprehensive_similarity(pattern1, pattern2)
+                    if similarity['composite_similarity'] >= threshold:
+                        cluster.append(j)
+                        used_indices.add(j)
+                
+                if len(cluster) > 1:  # Only include clusters with more than one pattern
+                    clusters.append(cluster)
+            
+            return clusters
+        
+        # Convert patterns to string format for CountVectorizer
+        pattern_strings = [' '.join(map(str, pattern)) for pattern in patterns]
+        
         # Convert patterns to vectors
         vectorizer = CountVectorizer()
-        X = vectorizer.fit_transform(patterns)
+        X = vectorizer.fit_transform(pattern_strings)
         
         # Use DBSCAN for clustering
-        dbscan = DBSCAN(eps=threshold, min_samples=2)
-        labels = dbscan.fit_predict(X)
+        dbscan = DBSCAN(eps=1.0-threshold, min_samples=2)  # Convert similarity to distance
+        labels = dbscan.fit_predict(X.toarray())
         
         clusters = []
         for label in set(labels):
-            cluster = [i for i, l in enumerate(labels) if l == label]
-            clusters.append(cluster)
+            if label != -1:  # Ignore noise points
+                cluster = [i for i, l in enumerate(labels) if l == label]
+                clusters.append(cluster)
         
-        return clusters 
+        return clusters
+
+    def hamming_distance(self, pattern1: List[int], pattern2: List[int]) -> float:
+        """Calculate Hamming distance between two patterns."""
+        if len(pattern1) != len(pattern2):
+            return float('inf')  # Infinite distance for different lengths
+        return sum(1 for a, b in zip(pattern1, pattern2) if a != b)
+    
+    def manhattan_distance(self, pattern1: List[int], pattern2: List[int]) -> float:
+        """Calculate Manhattan distance between two patterns."""
+        if len(pattern1) != len(pattern2):
+            return float('inf')
+        return sum(abs(a - b) for a, b in zip(pattern1, pattern2))
+    
+    def euclidean_distance(self, pattern1: List[int], pattern2: List[int]) -> float:
+        """Calculate Euclidean distance between two patterns."""
+        if len(pattern1) != len(pattern2):
+            return float('inf')
+        return np.sqrt(sum((a - b) ** 2 for a, b in zip(pattern1, pattern2)))
+    
+    def cosine_similarity(self, pattern1: List[int], pattern2: List[int]) -> float:
+        """Calculate Cosine similarity between two patterns."""
+        if len(pattern1) != len(pattern2):
+            return 0.0
+        
+        dot_product = sum(a * b for a, b in zip(pattern1, pattern2))
+        magnitude_a = np.sqrt(sum(a ** 2 for a in pattern1))
+        magnitude_b = np.sqrt(sum(b ** 2 for b in pattern2))
+        
+        if magnitude_a == 0 or magnitude_b == 0:
+            return 0.0
+        
+        return dot_product / (magnitude_a * magnitude_b)
 
 def test_comprehensive_similarity():
+    """Test comprehensive similarity function"""
+    pattern_visualizer = ParadoxVisualizer()
     pattern1 = [1, 2, 3]
     pattern2 = [1, 2, 4]
     
-    result = pattern_matcher.comprehensive_similarity(pattern1, pattern2)
+    result = pattern_visualizer.comprehensive_similarity(pattern1, pattern2)
     assert 'hamming_similarity' in result
     assert 'manhattan_similarity' in result
     assert 'euclidean_similarity' in result
@@ -214,6 +286,8 @@ def test_comprehensive_similarity():
     assert 'composite_similarity' in result
 
 def test_find_pattern_clusters():
+    """Test pattern clustering function"""
+    pattern_visualizer = ParadoxVisualizer()
     patterns = [
         [1, 2, 3],
         [1, 2, 4],
@@ -221,11 +295,13 @@ def test_find_pattern_clusters():
         [5, 6, 7]
     ]
     
-    clusters = pattern_matcher.find_pattern_clusters(patterns)
+    clusters = pattern_visualizer.find_pattern_clusters(patterns)
     assert len(clusters) == 2
     assert any([i in cluster for i in range(0, 2)])
     assert any([i in cluster for i in range(2, 4)])
 
-# Run tests
-test_comprehensive_similarity()
-test_find_pattern_clusters() 
+if __name__ == "__main__":
+    # Run tests only when module is executed directly
+    test_comprehensive_similarity()
+    test_find_pattern_clusters()
+    print("✅ ParadoxVisualizer tests completed successfully") 

@@ -1,0 +1,5 @@
+{
+  "reason": "invalid_structure",
+  "timestamp": "20250619_010904_860449",
+  "data": "{'tick_id': 2, 'timestamp': '2025-06-19T01:09:04.860449', 'action': 'EXECUTE', 'confidence': 1.0, 'smart_money_score': 0.0, 'pattern_confidence': 0.0, 'detonation_approved': False, 'risk_assessment': 'MEDIUM', 'execution_priority': 'MEDIUM'}"
+}

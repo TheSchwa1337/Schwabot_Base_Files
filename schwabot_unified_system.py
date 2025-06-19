@@ -19,7 +19,16 @@ import numpy as np
 
 from enhanced_fitness_oracle import EnhancedFitnessOracle, UnifiedFitnessScore, MarketSnapshot
 from schwabot_integration import SchwabotOrchestrator
-from config.enhanced_fitness_config import *
+# Specific imports from enhanced fitness config
+from config.enhanced_fitness_config import (
+    UnifiedMathematicalProcessor,
+    AnalysisResult,
+    EnhancedFitnessOracle,
+    MathematicalCore,
+    FitnessMetrics,
+    TradingParameters,
+    OptimizationConfig
+)
 
 logger = logging.getLogger(__name__)
 
@@ -276,7 +285,7 @@ class UnifiedSchwabotSystem:
         end_time = start_time + timedelta(minutes=duration_minutes)
         
         # Mock market data provider
-        async def market_data_provider():
+        async def market_data_provider() -> Any:
             while datetime.now() < end_time:
                 yield {
                     "timestamp": datetime.now(),
@@ -350,7 +359,7 @@ class UnifiedSchwabotSystem:
         return report
 
 # Example usage and demonstration
-async def demo_unified_system():
+async def demo_unified_system() -> Any:
     """Demonstrate the unified system in action"""
     logging.basicConfig(level=logging.INFO, 
                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

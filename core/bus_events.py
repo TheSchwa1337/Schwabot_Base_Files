@@ -38,12 +38,8 @@ class PatternMatchEvent(BusEvent):
         self.confidence = kwargs.get('confidence', None)
         self.vector = kwargs.get('vector', None)
 
-@dataclass
 class NodeActivationEvent(BusEvent):
     """Event for node activation/deactivation"""
-    node_id: str
-    status: str  # "active", "dormant", "locked"
-    reason: str
     
     def __init__(self, source: str, node_id: str, status: str, reason: str):
         super().__init__(
@@ -56,13 +52,12 @@ class NodeActivationEvent(BusEvent):
                 "reason": reason
             }
         )
+        self.node_id = node_id
+        self.status = status
+        self.reason = reason
 
-@dataclass
 class MemoryUpdateEvent(BusEvent):
     """Event for memory lane updates"""
-    lane_id: str
-    data: Any
-    operation: str  # "push", "pop", "update"
     
     def __init__(self, source: str, lane_id: str, data: Any, operation: str):
         super().__init__(
@@ -75,12 +70,12 @@ class MemoryUpdateEvent(BusEvent):
                 "operation": operation
             }
         )
+        self.lane_id = lane_id
+        self.data = data
+        self.operation = operation
 
-@dataclass
 class SymmetryBreakEvent(BusEvent):
     """Event for symmetry break detection"""
-    vector: np.ndarray
-    break_type: str  # "998", "inversion", "corruption"
     
     def __init__(self, source: str, vector: np.ndarray, break_type: str):
         super().__init__(
@@ -92,6 +87,8 @@ class SymmetryBreakEvent(BusEvent):
                 "break_type": break_type
             }
         )
+        self.vector = vector
+        self.break_type = break_type
 
 # Event type registry
 EVENT_TYPES = {

@@ -23,6 +23,8 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional, Set
 from pathlib import Path
 from dataclasses import asdict
+import platform
+import os
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,7 +43,67 @@ except ImportError:
     CORE_SYSTEMS_AVAILABLE = False
     print("⚠️ Core systems not available - API will run in mock mode")
 
+# Import the bare except handling framework
+from .bare_except_handling_fixes import (
+    safe_run_fix_bare_except, 
+    FallbackStrategy, 
+    ErrorSeverity
+)
+
+# =====================================
+# WINDOWS CLI COMPATIBILITY HANDLER
+# =====================================
+
+class WindowsCliCompatibilityHandler:
+    """
+    Handles Windows CLI compatibility issues including emoji rendering
+    and ASIC implementation for plain text output explanations
+    """
+    
+    @staticmethod
+    def is_windows_cli() -> bool:
+        """Detect if running in Windows CLI environment"""
+        return (platform.system() == "Windows" and 
+                ("cmd" in os.environ.get("COMSPEC", "").lower() or
+                 "powershell" in os.environ.get("PSModulePath", "").lower()))
+    
+    @staticmethod
+    def safe_print(message: str, use_emoji: bool = True) -> str:
+        """Print message safely with Windows CLI compatibility"""
+        if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
+            emoji_to_asic_mapping = {
+                '✅': '[SUCCESS]',
+                '❌': '[ERROR]',
+                '🔧': '[PROCESSING]',
+                '🚀': '[LAUNCH]',
+                '⚠️': '[WARNING]',
+                '📊': '[DATA]',
+                '🔍': '[SEARCH]',
+                '💥': '[CRITICAL]'
+            }
+            
+            safe_message = message
+            for emoji, asic_replacement in emoji_to_asic_mapping.items():
+                safe_message = safe_message.replace(emoji, asic_replacement)
+            
+            return safe_message
+        
+        return message
+    
+    @staticmethod
+    def log_safe(logger, level: str, message: str):
+        """Log message safely with Windows CLI compatibility"""
+        safe_message = WindowsCliCompatibilityHandler.safe_print(message)
+        try:
+            getattr(logger, level.lower())(safe_message)
+        except UnicodeEncodeError:
+            ascii_message = safe_message.encode('ascii', errors='replace').decode('ascii')
+            getattr(logger, level.lower())(ascii_message)
+
 logger = logging.getLogger(__name__)
+
+# Windows CLI compatibility handler
+cli_handler = WindowsCliCompatibilityHandler()
 
 # Data models
 class APIKeyRequest(BaseModel):
@@ -124,44 +186,53 @@ def store_api_key(key_hash: str, exchange: str, testnet: bool) -> str:
     return key_id
 
 def get_stream_data() -> StreamData:
-    """Get current stream data from core systems"""
-    if not CORE_SYSTEMS_AVAILABLE:
-        # Mock data for development
-        return StreamData(
-            time=datetime.now().isoformat(),
-            entropy=0.45 + 0.3 * (time.time() % 10) / 10,
-            pattern="anti_pole_formation",
-            confidence=0.85,
-            hash_count=1247,
-            sustainment_index=0.73
-        )
-    
-    # Get real data from systems
+    """Get current streaming data for dashboard"""
     current_time = datetime.now().isoformat()
     
-    # Hash recollection data
+    # Hash recollection data with structured error handling
     hash_data = {}
     if hash_system:
-        try:
-            hash_data = hash_system.get_current_metrics()
-        except:
-            pass
+        def get_hash_metrics():
+            return hash_system.get_current_metrics()
+        
+        hash_data = safe_run_fix_bare_except(
+            fn=get_hash_metrics,
+            context="hash_system_metrics",
+            fallback_strategy=FallbackStrategy.RETURN_EMPTY,
+            default_value={},
+            error_severity=ErrorSeverity.MEDIUM,
+            metadata={'system_component': 'hash_system', 'operation': 'get_current_metrics'}
+        ) or {}
     
-    # Sustainment data
+    # Sustainment data with structured error handling
     sustainment_data = {}
     if sustainment_controller:
-        try:
-            sustainment_data = sustainment_controller.get_sustainment_status()
-        except:
-            pass
+        def get_sustainment_status():
+            return sustainment_controller.get_sustainment_status()
+        
+        sustainment_data = safe_run_fix_bare_except(
+            fn=get_sustainment_status,
+            context="sustainment_controller_status",
+            fallback_strategy=FallbackStrategy.RETURN_EMPTY,
+            default_value={},
+            error_severity=ErrorSeverity.MEDIUM,
+            metadata={'system_component': 'sustainment_controller', 'operation': 'get_sustainment_status'}
+        ) or {}
     
-    # UI bridge data
+    # UI bridge data with structured error handling
     ui_data = {}
     if ui_bridge:
-        try:
-            ui_data = ui_bridge.get_ui_state()
-        except:
-            pass
+        def get_ui_state():
+            return ui_bridge.get_ui_state()
+        
+        ui_data = safe_run_fix_bare_except(
+            fn=get_ui_state,
+            context="ui_bridge_state",
+            fallback_strategy=FallbackStrategy.RETURN_EMPTY,
+            default_value={},
+            error_severity=ErrorSeverity.MEDIUM,
+            metadata={'system_component': 'ui_bridge', 'operation': 'get_ui_state'}
+        ) or {}
     
     return StreamData(
         time=current_time,
@@ -344,11 +415,16 @@ async def broadcast_signal(signal_data: Dict[str, Any]) -> None:
     for connection in active_connections:
         try:
             await connection.send_text(message)
-        except:
+        except Exception as e:
+            # Use structured error handling instead of bare except
+            cli_handler.log_safe(logger, 'debug', f"🔧 WebSocket connection failed: {type(e).__name__}: {str(e)}")
             disconnected.add(connection)
     
-    # Clean up disconnected
+    # Clean up disconnected connections
     active_connections -= disconnected
+    
+    if disconnected:
+        cli_handler.log_safe(logger, 'debug', f"🔧 Cleaned up {len(disconnected)} disconnected WebSocket connections")
 
 # Export data endpoint
 @app.get("/api/export")

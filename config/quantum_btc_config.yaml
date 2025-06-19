@@ -1,0 +1,250 @@
+# Quantum BTC Intelligence Core Configuration
+# Enhanced integration of BTC processing with mathematical frameworks
+
+# Core System Configuration
+core:
+  # Processing intervals (seconds)
+  hash_correlation_interval: 1.0
+  pressure_calculation_interval: 2.0
+  profit_vector_interval: 3.0
+  stability_check_interval: 5.0
+  decision_loop_interval: 1.0
+  integration_monitoring_interval: 10.0
+  
+  # Execution modes
+  default_execution_mode: "hybrid_intelligence"
+  allowed_modes:
+    - "quantum_hash_sync"
+    - "altitude_pressure"
+    - "profit_vector_navigation"
+    - "multivector_stabilized"
+    - "deterministic_logic"
+    - "hybrid_intelligence"
+
+# Altitude Adjustment Parameters
+altitude:
+  # Pressure calculation parameters
+  base_pressure: 1.0
+  altitude_factor: 0.33        # Reduced density at "altitude"
+  velocity_factor: 2.0         # Speed compensation multiplier
+  density_threshold: 0.15      # Minimum market density
+  
+  # Volume-to-altitude mapping
+  volume_normalization: 10000.0  # Normalize volume to 0-1 scale
+  max_altitude: 1.0               # Maximum altitude (minimum density)
+  
+  # Pressure differential thresholds
+  min_pressure_differential: 0.15
+  max_pressure_differential: 2.0
+  emergency_pressure_threshold: 3.0
+
+# Hash Correlation Configuration
+hash_correlation:
+  # Correlation thresholds
+  min_correlation_threshold: 0.25
+  high_correlation_threshold: 0.7
+  excellent_correlation_threshold: 0.9
+  
+  # Hash quality assessment
+  min_entropy_threshold: 0.6
+  max_entropy_threshold: 1.0
+  
+  # History tracking
+  correlation_history_size: 1000
+  quality_assessment_window: 10
+  
+  # Pool hash simulation (for testing)
+  simulate_pool_hash: true
+  pool_hash_update_interval: 30.0
+
+# Profit Vector Navigation
+profit_vector:
+  # Vector magnitude thresholds
+  min_vector_magnitude: 0.1
+  significant_vector_magnitude: 0.3
+  strong_vector_magnitude: 0.5
+  
+  # Confidence thresholds
+  min_confidence: 0.5
+  high_confidence: 0.8
+  
+  # Trajectory stability
+  stability_window: 10
+  min_stability: 0.6
+  
+  # Portfolio parameters
+  initial_portfolio_value: 10000.0
+  max_position_size: 0.3       # 30% of portfolio
+  base_position_size: 0.1      # 10% default position
+
+# Multivector Stability Regulation
+stability:
+  # System stability thresholds
+  min_stability_index: 0.7
+  target_stability_index: 0.85
+  critical_stability_threshold: 0.5
+  
+  # Resource optimization targets
+  optimal_cpu_usage: 70.0      # Target CPU usage percentage
+  max_cpu_usage: 85.0          # Maximum before corrections
+  optimal_memory_gb: 8.0       # Target memory usage
+  max_memory_gb: 12.0          # Maximum before cleanup
+  max_active_processes: 50     # Process count threshold
+  
+  # Coherence calculation weights
+  coherence_weights:
+    hash_correlation: 0.4
+    pressure_stability: 0.3
+    profit_confidence: 0.3
+  
+  # Stability correction parameters
+  correction_delay: 5.0        # Seconds between corrections
+  correction_aggressiveness: 0.5  # How aggressively to apply corrections
+
+# Deterministic Decision Framework
+decision:
+  # Core decision thresholds
+  min_deterministic_confidence: 0.8
+  min_mathematical_certainty: 0.6
+  min_execution_readiness: 0.75
+  
+  # Multi-factor weights for deterministic confidence
+  confidence_weights:
+    hash_factor: 0.25
+    pressure_factor: 0.25
+    vector_factor: 0.25
+    stability_factor: 0.25
+  
+  # Execution timing
+  immediate_execution_threshold: 0.9
+  delayed_execution_minutes: 10
+  preparation_delay_seconds: 5
+  
+  # Risk management
+  stop_loss_percentage: 0.02    # 2% stop loss
+  take_profit_percentage: 0.06  # 6% take profit
+  max_hold_hours: 24           # Maximum position hold time
+  
+  # Position sizing parameters
+  confidence_position_multiplier: 1.0
+  stability_position_multiplier: 1.0
+  max_exposure_multiplier: 2.0
+
+# Performance Tracking
+performance:
+  # Metrics tracking
+  track_hash_sync_accuracy: true
+  track_profit_realization: true
+  track_stability_maintenance: true
+  
+  # History sizes
+  execution_history_size: 1000
+  metrics_history_size: 500
+  correlation_tracking_size: 1000
+  
+  # Performance targets
+  target_hash_sync_accuracy: 0.7
+  target_profit_realization_rate: 0.6
+  target_stability_score: 0.8
+  
+  # Reporting intervals
+  performance_report_interval: 300.0  # 5 minutes
+  detailed_analysis_interval: 3600.0  # 1 hour
+
+# Integration Configuration
+integration:
+  # Component enabling/disabling
+  enable_btc_processor: true
+  enable_waveform_engine: true
+  enable_profit_navigator: true
+  enable_temporal_execution: true
+  enable_memory_diagnostics: true
+  
+  # Fallback behavior
+  fallback_mode: "basic_operation"
+  graceful_degradation: true
+  component_timeout_seconds: 30.0
+  
+  # Data synchronization
+  sync_interval: 1.0
+  max_sync_delay: 5.0
+  sync_retry_attempts: 3
+
+# Market Data Configuration (for simulation)
+market_data:
+  # Simulation parameters
+  simulate_market_data: true
+  base_btc_price: 50000.0
+  price_volatility: 2000.0
+  base_volume: 1000.0
+  volume_variance: 200.0
+  
+  # Real data sources (when available)
+  enable_real_data: false
+  data_sources:
+    - "binance"
+    - "coinbase"
+    - "kraken"
+  
+  # Update intervals
+  price_update_interval: 1.0
+  volume_update_interval: 5.0
+  market_condition_interval: 10.0
+
+# Logging and Monitoring
+logging:
+  # Log levels
+  core_log_level: "INFO"
+  decision_log_level: "INFO"
+  performance_log_level: "DEBUG"
+  
+  # Windows CLI compatibility
+  enable_cli_compatibility: true
+  use_asic_text_rendering: true
+  safe_unicode_handling: true
+  
+  # Log rotation
+  max_log_file_size_mb: 100
+  max_log_files: 10
+  
+  # Special logging
+  log_quantum_decisions: true
+  log_stability_corrections: true
+  log_hash_correlations: true
+
+# Emergency Procedures
+emergency:
+  # Emergency thresholds
+  critical_cpu_usage: 95.0
+  critical_memory_usage: 14.0  # GB
+  critical_stability_index: 0.3
+  
+  # Emergency actions
+  enable_emergency_shutdown: true
+  emergency_position_liquidation: true
+  emergency_resource_cleanup: true
+  
+  # Recovery procedures
+  auto_recovery_enabled: true
+  recovery_delay_minutes: 5
+  max_recovery_attempts: 3
+
+# Advanced Features
+advanced:
+  # Quantum features
+  enable_quantum_hash_sync: true
+  enable_altitude_optimization: true
+  enable_multivector_regulation: true
+  
+  # Machine learning integration
+  enable_pattern_learning: true
+  learning_rate: 0.01
+  pattern_memory_size: 10000
+  
+  # Experimental features
+  enable_experimental_features: false
+  experimental_risk_tolerance: 0.1
+  
+  # Research and development
+  enable_research_logging: true
+  research_data_retention_days: 30 

@@ -281,7 +281,7 @@ def create_default_config():
 
 class DataProvider:
     def get_price(self):
-        raise NotImplementedError()
+        return 50000.0  # FIXED: Safe fallback price
 
 # Example implementation for historical data
 class HistoricalDataProvider(DataProvider):

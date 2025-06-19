@@ -101,22 +101,37 @@ class SustainmentMathLib(CoreMathLibV2):
     """
     
     def __init__(self, *args, **kwargs):
+        # Extract sustainment-specific parameters before calling parent
+        sustainment_params = {
+            'sustainment_threshold': kwargs.pop('sustainment_threshold', 0.65),
+            'adaptation_rate': kwargs.pop('adaptation_rate', 0.02),
+            'correction_gain': kwargs.pop('correction_gain', 0.1),
+            'anticipation_tau': kwargs.pop('anticipation_tau', 0.1),
+            'kalman_gain': kwargs.pop('kalman_gain', 0.3),
+            'response_lambda': kwargs.pop('response_lambda', 100.0),
+            'complexity_max': kwargs.pop('complexity_max', 1000.0),
+            'curvature_window': kwargs.pop('curvature_window', 10),
+            'continuity_window': kwargs.pop('continuity_window', 50),
+            'convergence_threshold': kwargs.pop('convergence_threshold', 0.01)
+        }
+        
+        # Call parent constructor with remaining kwargs
         super().__init__(*args, **kwargs)
         
-        # Sustainment mathematical parameters
+        # Set sustainment mathematical parameters
         self.principle_weights = np.array([0.15, 0.15, 0.10, 0.10, 0.15, 0.15, 0.10, 0.10])
-        self.sustainment_threshold = kwargs.get('sustainment_threshold', 0.65)
-        self.adaptation_rate = kwargs.get('adaptation_rate', 0.02)
-        self.correction_gain = kwargs.get('correction_gain', 0.1)
+        self.sustainment_threshold = sustainment_params['sustainment_threshold']
+        self.adaptation_rate = sustainment_params['adaptation_rate']
+        self.correction_gain = sustainment_params['correction_gain']
         
         # Mathematical constants for each principle
-        self.anticipation_tau = kwargs.get('anticipation_tau', 0.1)
-        self.kalman_gain = kwargs.get('kalman_gain', 0.3)
-        self.response_lambda = kwargs.get('response_lambda', 100.0)
-        self.complexity_max = kwargs.get('complexity_max', 1000.0)
-        self.curvature_window = kwargs.get('curvature_window', 10)
-        self.continuity_window = kwargs.get('continuity_window', 50)
-        self.convergence_threshold = kwargs.get('convergence_threshold', 0.01)
+        self.anticipation_tau = sustainment_params['anticipation_tau']
+        self.kalman_gain = sustainment_params['kalman_gain']
+        self.response_lambda = sustainment_params['response_lambda']
+        self.complexity_max = sustainment_params['complexity_max']
+        self.curvature_window = sustainment_params['curvature_window']
+        self.continuity_window = sustainment_params['continuity_window']
+        self.convergence_threshold = sustainment_params['convergence_threshold']
         
         # State tracking for sustainment calculations
         self.prediction_buffer = deque(maxlen=20)

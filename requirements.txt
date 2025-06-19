@@ -10,6 +10,7 @@ scipy>=1.10.0
 scikit-learn>=1.3.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
+sympy>=1.12.0
 
 # Web Framework & API
 flask>=2.3.0
@@ -32,6 +33,7 @@ celery>=5.3.0
 pyyaml>=6.0
 python-dotenv>=1.0.0
 configparser>=6.0.0
+jsonschema>=4.21.0
 
 # UI & Visualization
 dearpygui>=1.10.0
@@ -46,8 +48,12 @@ asyncpg>=0.28.0
 
 # System Monitoring
 psutil>=5.9.0
-gpustat>=1.1.0
+GPUtil>=1.4.0
 py-cpuinfo>=9.0.0
+
+# GPU Acceleration (Required by the codebase)
+torch>=2.0.0
+cupy-cuda12x>=12.0.0  # For CUDA 12.x, adjust version based on your CUDA version
 
 # Logging & Debugging
 loguru>=0.7.0
@@ -64,9 +70,8 @@ cryptography>=41.0.0
 python-jose>=3.3.0
 passlib>=1.7.4
 
-# Optional GPU Acceleration
-# torch>=2.0.0  # Uncomment if using PyTorch for GPU acceleration
-# tensorflow>=2.13.0  # Uncomment if using TensorFlow for GPU acceleration
+# Technical Analysis (for trading algorithms)
+TA-Lib>=0.4.28
 
 # Development Tools (Optional)
 black>=23.7.0
@@ -77,4 +82,38 @@ pre-commit>=3.3.0
 # Production Deployment (Optional)
 gunicorn>=21.2.0
 supervisor>=4.2.0
-docker>=6.1.0 
+docker>=6.1.0
+
+# Linting and type checking tools for CI
+flake8
+mypy
+black
+isort
+
+# =====================================
+# FUTURE ENHANCEMENTS - ADD WHEN NEEDED
+# =====================================
+
+# Enhanced Linting & Code Quality
+# pylint>=2.17.0          # More comprehensive linting than flake8
+# bandit>=1.7.0           # Security vulnerability scanning (CRITICAL for trading)
+# safety>=2.3.0           # Dependency vulnerability checking
+# pre-commit>=3.3.0       # Git hooks for pre-commit checks
+
+# Type Checking Enhancements
+# types-requests>=2.31.0  # Type stubs for requests library
+# types-PyYAML>=6.0.0     # Type stubs for YAML
+# types-psutil>=5.9.0     # Type stubs for psutil
+
+# Testing & Coverage
+# pytest-cov>=4.1.0       # Coverage reporting
+# pytest-mock>=3.11.0     # Mocking for tests
+# pytest-xdist>=3.3.0     # Parallel test execution
+
+# Performance & Profiling (Critical for high-frequency trading)
+# memory-profiler>=0.61.0 # Memory usage profiling
+# line-profiler>=4.1.0    # Line-by-line profiling
+
+# Code Documentation
+# sphinx>=7.0.0           # Documentation generation
+# sphinx-rtd-theme>=1.3.0 # ReadTheDocs theme 

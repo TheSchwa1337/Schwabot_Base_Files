@@ -20,13 +20,14 @@ P̄(χ) = e^(-Δ̄Ψᵢ) · (1-Fₖ(t))
 __version__ = "4.0.0"
 __author__ = "Schwabot Engineering Team"
 
-from .vector import AntiPoleVector, AntiPoleConfig
+from .vector import AntiPoleVector, AntiPoleConfig, AntiPoleState
 from .zbe_controller import ZBEThermalCooldown, ThermalState
 from .tesseract_bridge import TesseractVisualizer, GlyphPacket
 
 __all__ = [
     'AntiPoleVector',
-    'AntiPoleConfig', 
+    'AntiPoleConfig',
+    'AntiPoleState',
     'ZBEThermalCooldown',
     'ThermalState',
     'TesseractVisualizer',

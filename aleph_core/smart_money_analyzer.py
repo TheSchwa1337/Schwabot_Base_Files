@@ -9,11 +9,45 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 import sympy as sp
-from behavior_pattern_tracker import BehaviorPatternTracker
 import logging
 import multiprocessing
-from market_data import OrderBook, TradeHistory
-from user_behavior import UserBehaviorData
+
+try:
+    from behavior_pattern_tracker import BehaviorPatternTracker
+    BEHAVIOR_TRACKER_AVAILABLE = True
+except ImportError:
+    BehaviorPatternTracker = None
+    BEHAVIOR_TRACKER_AVAILABLE = False
+
+try:
+    from scipy import stats
+    SCIPY_AVAILABLE = True
+except ImportError:
+    stats = None
+    SCIPY_AVAILABLE = False
+
+try:
+    from market_data import OrderBook, TradeHistory
+    MARKET_DATA_AVAILABLE = True
+except ImportError:
+    # Create simple mock classes
+    class OrderBook:
+        def __init__(self):
+            pass
+    
+    class TradeHistory:
+        def __init__(self):
+            pass
+    MARKET_DATA_AVAILABLE = False
+
+try:
+    from user_behavior import UserBehaviorData
+    USER_BEHAVIOR_AVAILABLE = True
+except ImportError:
+    class UserBehaviorData:
+        def __init__(self):
+            pass
+    USER_BEHAVIOR_AVAILABLE = False
 
 @dataclass
 class SmartMoneyMetrics:
@@ -45,7 +79,11 @@ class SmartMoneyAnalyzer:
     
     def __init__(self):
         self.logger = self._configure_logger()
-        self.behavior_tracker = BehaviorPatternTracker()
+        
+        if BEHAVIOR_TRACKER_AVAILABLE:
+            self.behavior_tracker = BehaviorPatternTracker()
+        else:
+            self.behavior_tracker = None
 
         self.price_history = []
         self.volume_history = []

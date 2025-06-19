@@ -1,0 +1,291 @@
+# Enhanced Thermal-Aware BTC Processor Configuration
+# =================================================
+# Comprehensive configuration for thermal-aware BTC processing optimization
+
+# =============================================================================
+# THERMAL PROCESSING MODES AND THRESHOLDS
+# =============================================================================
+thermal_processing:
+  # Temperature thresholds for automatic mode switching (Celsius)
+  temperature_thresholds:
+    optimal_max: 65.0          # Switch from optimal performance above this
+    balanced_max: 75.0         # Switch from balanced processing above this
+    efficient_max: 85.0        # Switch from thermal efficient above this
+    throttle_max: 90.0         # Switch to emergency throttle above this
+    critical_shutdown: 95.0    # Emergency shutdown above this
+    
+  # Processing allocation by thermal mode
+  processing_allocations:
+    optimal_performance:
+      gpu: 0.85                # 85% GPU utilization
+      cpu: 0.15                # 15% CPU utilization
+      memory_intensive: true   # Allow memory-intensive operations
+      batch_size_multiplier: 1.0
+      hash_complexity: "high"
+      
+    balanced_processing:
+      gpu: 0.60                # 60% GPU utilization
+      cpu: 0.40                # 40% CPU utilization
+      memory_intensive: true   # Allow memory-intensive operations
+      batch_size_multiplier: 0.8
+      hash_complexity: "medium"
+      
+    thermal_efficient:
+      gpu: 0.30                # 30% GPU utilization
+      cpu: 0.70                # 70% CPU utilization
+      memory_intensive: false  # Minimize memory usage
+      batch_size_multiplier: 0.6
+      hash_complexity: "low"
+      
+    emergency_throttle:
+      gpu: 0.10                # 10% GPU utilization
+      cpu: 0.90                # 90% CPU utilization
+      memory_intensive: false  # Minimize memory usage
+      batch_size_multiplier: 0.4
+      hash_complexity: "minimal"
+      
+    critical_protection:
+      gpu: 0.05                # 5% GPU utilization
+      cpu: 0.95                # 95% CPU utilization
+      memory_intensive: false  # Minimize memory usage
+      batch_size_multiplier: 0.2
+      hash_complexity: "emergency"
+
+# =============================================================================
+# BURST PROCESSING CONFIGURATION
+# =============================================================================
+burst_processing:
+  # Burst activation parameters
+  max_duration_seconds: 300        # 5 minutes maximum burst duration
+  cooldown_ratio: 2.0              # Cooldown = 2x burst duration
+  thermal_headroom_required: 10.0  # °C headroom needed to activate burst
+  
+  # Profit thresholds for burst activation
+  profit_threshold_for_burst: 0.02 # 2% profit opportunity required
+  min_profit_rate_btc_per_hour: 0.001  # Minimum BTC/hour rate
+  
+  # Burst processing intensity
+  burst_gpu_allocation: 0.95       # 95% GPU during burst
+  burst_cpu_allocation: 0.05       # 5% CPU during burst
+  burst_memory_multiplier: 1.5     # 1.5x normal memory allocation
+  
+  # Safety parameters
+  emergency_stop_conditions:
+    temperature_spike_per_minute: 5.0  # Stop if temp rises 5°C/min
+    memory_pressure_threshold: 0.9     # Stop if memory >90%
+    error_rate_threshold: 0.1          # Stop if error rate >10%
+    
+  # Burst optimization
+  adaptive_burst_sizing: true      # Adjust burst intensity based on conditions
+  predictive_burst_timing: true    # Use thermal prediction for burst timing
+  profit_opportunity_detection: true # Monitor for high-profit opportunities
+
+# =============================================================================
+# MEMORY PIPELINE INTEGRATION
+# =============================================================================
+memory_strategy:
+  # Thermal-aware memory management
+  thermal_priority_processing: true    # Process hot data first
+  adaptive_retention_levels: true     # Adjust retention based on temperature
+  emergency_compression: true         # Enable emergency compression when hot
+  thermal_aware_caching: true        # Cache frequently accessed data when hot
+  
+  # Retention adjustments by thermal mode
+  retention_adjustments:
+    optimal_performance:
+      short_term_hours: 1.0          # Standard retention
+      mid_term_hours: 168.0          # 1 week
+      long_term_hours: 8760.0        # 1 year
+      
+    balanced_processing:
+      short_term_hours: 1.0          # Standard retention
+      mid_term_hours: 168.0          # 1 week
+      long_term_hours: 8760.0        # 1 year
+      
+    thermal_efficient:
+      short_term_hours: 1.0          # Standard retention
+      mid_term_hours: 120.0          # 5 days
+      long_term_hours: 4380.0        # 6 months
+      
+    emergency_throttle:
+      short_term_hours: 0.5          # 30 minutes
+      mid_term_hours: 48.0           # 2 days
+      long_term_hours: 720.0         # 1 month
+      
+    critical_protection:
+      short_term_hours: 0.25         # 15 minutes
+      mid_term_hours: 24.0           # 1 day
+      long_term_hours: 168.0         # 1 week
+  
+  # Memory compression settings
+  compression_strategy:
+    temperature_trigger: 80.0        # Start compression above 80°C
+    aggressive_compression_temp: 85.0 # Aggressive compression above 85°C
+    compression_ratios:
+      normal: 2.0                    # 2:1 compression ratio
+      aggressive: 5.0                # 5:1 compression ratio
+      emergency: 10.0                # 10:1 compression ratio
+
+# =============================================================================
+# BTC PROCESSING STRATEGIES
+# =============================================================================
+processing_strategies:
+  # Strategy selection weights by thermal mode
+  strategy_weights:
+    optimal_performance:
+      high_frequency_burst: 0.4      # Favor burst processing when cool
+      sustained_throughput: 0.3
+      thermal_conservative: 0.1
+      profit_optimized: 0.2
+      adaptive_hybrid: 0.0
+      
+    balanced_processing:
+      high_frequency_burst: 0.2
+      sustained_throughput: 0.4      # Favor sustained processing
+      thermal_conservative: 0.2
+      profit_optimized: 0.2
+      adaptive_hybrid: 0.0
+      
+    thermal_efficient:
+      high_frequency_burst: 0.1
+      sustained_throughput: 0.2
+      thermal_conservative: 0.5      # Favor thermal conservation
+      profit_optimized: 0.1
+      adaptive_hybrid: 0.1
+      
+    emergency_throttle:
+      high_frequency_burst: 0.0
+      sustained_throughput: 0.1
+      thermal_conservative: 0.8      # Prioritize thermal conservation
+      profit_optimized: 0.0
+      adaptive_hybrid: 0.1
+      
+    critical_protection:
+      high_frequency_burst: 0.0
+      sustained_throughput: 0.0
+      thermal_conservative: 1.0      # Only thermal conservation
+      profit_optimized: 0.0
+      adaptive_hybrid: 0.0
+
+# =============================================================================
+# PERFORMANCE MONITORING AND OPTIMIZATION
+# =============================================================================
+performance_monitoring:
+  # Monitoring intervals
+  thermal_monitoring_interval: 5.0     # Check thermal state every 5 seconds
+  performance_update_interval: 10.0    # Update performance metrics every 10 seconds
+  optimization_cycle_interval: 30.0    # Run optimization every 30 seconds
+  
+  # Performance thresholds
+  efficiency_thresholds:
+    excellent: 0.9                    # >90% efficiency
+    good: 0.7                         # >70% efficiency
+    acceptable: 0.5                   # >50% efficiency
+    poor: 0.3                         # >30% efficiency
+    critical: 0.1                     # >10% efficiency
+    
+  # Alert thresholds
+  alert_conditions:
+    thermal_warning_temp: 80.0        # Warning above 80°C
+    thermal_critical_temp: 90.0       # Critical above 90°C
+    efficiency_warning: 0.5           # Warning below 50% efficiency
+    memory_warning: 0.8               # Warning above 80% memory usage
+    error_rate_warning: 0.05          # Warning above 5% error rate
+
+# =============================================================================
+# OPTIMIZATION ALGORITHMS
+# =============================================================================
+optimization:
+  # Thermal prediction
+  thermal_prediction:
+    enabled: true
+    prediction_window_minutes: 15     # Predict 15 minutes ahead
+    temperature_trend_samples: 10     # Use last 10 samples for trend
+    
+  # Adaptive processing
+  adaptive_processing:
+    enabled: true
+    adaptation_sensitivity: 0.1       # How quickly to adapt (0.0-1.0)
+    stability_threshold: 0.05         # Minimum change to trigger adaptation
+    
+  # Caching optimization
+  thermal_aware_caching:
+    enabled: true
+    cache_priority_by_temp: true      # Prioritize cache when hot
+    dynamic_cache_sizing: true        # Adjust cache size based on thermal state
+    cache_size_multipliers:
+      cool: 1.0                       # Normal cache size when cool
+      normal: 1.2                     # 20% larger cache when normal
+      warm: 1.5                       # 50% larger cache when warm
+      hot: 2.0                        # 100% larger cache when hot
+
+# =============================================================================
+# INTEGRATION WITH EXISTING SYSTEMS
+# =============================================================================
+system_integration:
+  # Visual controller integration
+  visual_controller:
+    thermal_mode_updates: true        # Update visual controller with thermal mode
+    bit_mapping_intensity_scaling: true # Scale bit mapping with thermal state
+    real_time_metrics_display: true   # Show real-time thermal metrics
+    
+  # Pipeline manager integration
+  pipeline_manager:
+    thermal_memory_optimization: true # Optimize memory based on thermal state
+    dynamic_retention_adjustment: true # Adjust retention dynamically
+    emergency_cleanup_triggers: true  # Enable emergency cleanup
+    
+  # API coordinator integration
+  api_coordinator:
+    thermal_rate_limiting: true       # Adjust API rates based on thermal state
+    priority_request_handling: true   # Handle high-priority requests when hot
+    thermal_load_balancing: true      # Balance load based on thermal conditions
+
+# =============================================================================
+# SAFETY AND EMERGENCY PROCEDURES
+# =============================================================================
+safety:
+  # Emergency shutdown procedures
+  emergency_shutdown:
+    automatic_triggers: true          # Enable automatic emergency procedures
+    temperature_shutdown_threshold: 95.0 # Shutdown at 95°C
+    memory_pressure_shutdown: 0.95    # Shutdown at 95% memory pressure
+    
+  # Recovery procedures
+  recovery:
+    auto_recovery_enabled: true       # Enable automatic recovery
+    recovery_temperature_threshold: 75.0 # Recover when temp drops below 75°C
+    recovery_cooldown_minutes: 10     # Wait 10 minutes before recovery
+    gradual_recovery: true            # Gradually increase processing after recovery
+    
+  # Logging and alerting
+  logging:
+    thermal_events: true              # Log all thermal events
+    performance_degradation: true     # Log performance issues
+    emergency_procedures: true        # Log emergency procedures
+    recovery_events: true             # Log recovery events
+    
+  # Notification settings
+  notifications:
+    thermal_warnings: true            # Send thermal warnings
+    emergency_alerts: true            # Send emergency alerts
+    performance_reports: true         # Send performance reports
+    recovery_notifications: true      # Send recovery notifications
+
+# =============================================================================
+# DEVELOPMENT AND TESTING
+# =============================================================================
+development:
+  # Testing modes
+  thermal_simulation: false          # Enable thermal simulation for testing
+  mock_thermal_data: false           # Use mock thermal data
+  debug_thermal_decisions: false     # Debug thermal decision making
+  
+  # Development overrides
+  disable_emergency_shutdown: false  # DANGER: Disable emergency shutdown
+  force_thermal_mode: null           # Force specific thermal mode for testing
+  thermal_simulation_parameters:
+    base_temperature: 70.0           # Base temperature for simulation
+    temperature_variance: 10.0       # ±10°C variance
+    heating_rate: 1.0                # 1°C per minute heating rate
+    cooling_rate: 2.0                # 2°C per minute cooling rate 

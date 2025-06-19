@@ -1,0 +1,330 @@
+# Ghost Meta Layer Configuration
+# ====================================
+# 
+# Complete configuration for Ghost Protocol mathematical framework
+# including hash decoding, meta-layer weighting, shadow tracking,
+# and integration with foundation systems.
+
+# Hash Decoder Configuration
+hash_decoder:
+  # SHA256 segment mapping (deterministic bit allocation)
+  segment_mapping:
+    geometric:
+      start_bit: 0
+      end_bit: 64
+      description: "Collapse geometry patterns, Δ-reversal sequences"
+    smart_money:
+      start_bit: 64
+      end_bit: 128
+      description: "Smart money velocity, wall positions, spoof scores"
+    depth:
+      start_bit: 128
+      end_bit: 192
+      description: "Market depth dynamics, synthetic curve parameters"
+    timeband:
+      start_bit: 192
+      end_bit: 256
+      description: "Time-based profit correlation, slot density"
+  
+  # Interpretability thresholds
+  similarity_thresholds:
+    high_similarity: 0.85      # Strong pattern match
+    medium_similarity: 0.65    # Moderate pattern match
+    low_similarity: 0.45       # Weak pattern match
+    noise_threshold: 0.25      # Filter noise patterns
+  
+  # Vector normalization methods
+  vectorization:
+    geometric:
+      method: "minmax"          # Min-max normalization [0,1]
+      precision: 8              # 8-bit quantization
+    smart_money:
+      method: "sigmoid"         # Sigmoid normalization for bounded values
+      precision: 8
+    depth:
+      method: "log_normalize"   # Log normalization for power-law data
+      precision: 8
+    timeband:
+      method: "circular"        # Circular normalization for time signals
+      precision: 8
+  
+  # Registry management
+  registry:
+    max_entries: 10000         # Maximum hash registry size
+    cleanup_threshold: 12000   # Trigger cleanup at this size
+    min_trade_count: 3         # Minimum trades to keep hash
+    profit_correlation_weight: 0.6  # Weight for profit correlation scoring
+
+# Meta-Layer Weighting Engine Configuration
+meta_weighting:
+  # Default strategy selection
+  strategy: "hybrid_dynamic"   # entropy_adaptive, performance_based, volatility_scaled, regime_dependent, hybrid_dynamic
+  
+  # Adaptation parameters
+  adaptation_speed: 0.1        # Speed of weight adaptation (0.0-1.0)
+  min_history_length: 100      # Minimum history for reliable weighting
+  entropy_window_size: 50      # Window size for entropy calculation
+  volatility_lookback_hours: 24  # Hours of volatility history
+  
+  # Layer weight bounds (enforce reasonable ranges)
+  weight_bounds:
+    geometric:
+      min: 0.10
+      max: 0.50
+    smart_money:
+      min: 0.15
+      max: 0.60
+    depth:
+      min: 0.05
+      max: 0.40
+    timeband:
+      min: 0.05
+      max: 0.40
+  
+  # Market regime specific weight mappings
+  regime_mappings:
+    bull_trending:
+      geometric: 0.35          # Favor geometric patterns in trends
+      smart_money: 0.25
+      depth: 0.20
+      timeband: 0.20
+    bear_trending:
+      geometric: 0.30
+      smart_money: 0.40        # Favor smart money in downtrends
+      depth: 0.15
+      timeband: 0.15
+    sideways_ranging:
+      geometric: 0.20
+      smart_money: 0.30
+      depth: 0.30              # Favor depth in ranging markets
+      timeband: 0.20
+    high_volatility:
+      geometric: 0.15
+      smart_money: 0.50        # Favor smart money in volatile markets
+      depth: 0.25
+      timeband: 0.10
+    low_volatility:
+      geometric: 0.35          # Favor patterns in low vol
+      smart_money: 0.25
+      depth: 0.15
+      timeband: 0.25           # Favor time patterns in low vol
+    thin_liquidity:
+      geometric: 0.25
+      smart_money: 0.25
+      depth: 0.40              # Critical in thin markets
+      timeband: 0.10
+    news_driven:
+      geometric: 0.10
+      smart_money: 0.60        # Smart money dominates news events
+      depth: 0.20
+      timeband: 0.10
+    breakout_pending:
+      geometric: 0.30          # Patterns important for breakouts
+      smart_money: 0.35
+      depth: 0.25
+      timeband: 0.10
+  
+  # Entropy analysis parameters
+  entropy:
+    calculation_method: "shannon"  # shannon, renyi, kolmogorov
+    bin_count: 20              # Bins for histogram-based entropy
+    renyi_alpha: 2.0          # Alpha parameter for Renyi entropy
+    min_samples: 10           # Minimum samples for entropy calculation
+  
+  # Volatility analysis parameters
+  volatility:
+    calculation_window: 24     # Hours for volatility calculation
+    annualization_factor: 8760 # Hours per year for annualization
+    percentile_history: 1000   # Historical periods for percentile calculation
+    outlier_threshold: 3.0     # Standard deviations for outlier detection
+  
+  # Performance tracking
+  performance:
+    tracking_window: 200       # Number of recent trades to track
+    decay_factor: 0.95        # Exponential decay for older performance
+    confidence_boost: 1.2     # Boost factor for high-confidence successes
+    penalty_factor: 0.8       # Penalty factor for failures
+
+# Shadow Tracker Configuration
+shadow_tracker:
+  # Database settings
+  database:
+    path: "ghost_shadow_tracker.db"
+    max_records: 100000       # Maximum database records
+    cleanup_interval_hours: 24 # Cleanup frequency
+    backup_enabled: true       # Enable automatic backups
+    backup_interval_hours: 168 # Weekly backups
+  
+  # Tracking parameters
+  tracking:
+    horizon_hours: 24         # How long to track signals
+    min_confidence_for_analysis: 0.3  # Minimum confidence to analyze
+    opportunity_cost_threshold: 0.01  # 1% minimum opportunity cost
+    volatility_adjustment_factor: 1.5 # Risk adjustment for volatility
+    risk_free_rate: 0.02      # Annual risk-free rate for calculations
+    transaction_cost_estimate: 0.001  # 0.1% estimated transaction costs
+  
+  # Analysis parameters
+  analysis:
+    batch_size: 1000          # Signals per analysis batch
+    pattern_similarity_threshold: 0.75  # Threshold for pattern clustering
+    significant_pattern_min_count: 3    # Minimum occurrences for pattern
+    confidence_threshold_suggestions: true  # Generate threshold recommendations
+    market_regime_analysis: true         # Include regime-based analysis
+  
+  # Profit calculation methods
+  profit_calculation:
+    # Direction inference methods
+    direction_inference:
+      geometric_momentum_weight: 1.0    # Geometric = follow momentum
+      smart_money_reversal_weight: -1.0 # Smart money = counter momentum
+      depth_neutral_weight: 0.0         # Depth = direction neutral
+      timeband_momentum_weight: 0.5     # Timeband = weak momentum
+    
+    # Risk adjustments
+    risk_adjustments:
+      confidence_scaling: true          # Scale by signal confidence
+      volatility_penalty: true          # Penalize high volatility
+      liquidity_adjustment: true        # Adjust for liquidity conditions
+      time_decay: true                  # Apply time-based decay
+    
+    # Time horizon analysis
+    time_horizons:
+      short_term_hours: 1      # 1 hour analysis
+      medium_term_hours: 4     # 4 hour analysis
+      long_term_hours: 24      # 24 hour analysis
+      max_tracking_hours: 48   # Maximum tracking period
+
+# Integration Configuration
+integration:
+  # Foundation system connections
+  foundation_systems:
+    thermal_processor:
+      enabled: true
+      profit_data_endpoint: "get_thermal_profit_data"
+      adaptation_signal: "thermal_mode_change"
+      weight_adjustment_factor: 1.2    # Boost thermal-correlated signals
+    
+    multi_bit_processor:
+      enabled: true
+      profit_data_endpoint: "get_multi_bit_profit_data"
+      bit_level_signal: "bit_level_change"
+      phaser_correlation_boost: 1.5    # Boost 42-bit phaser signals
+    
+    hf_trading_processor:
+      enabled: true
+      profit_data_endpoint: "get_hf_trading_profit_data"
+      execution_signal: "trade_execution_complete"
+      latency_weight_factor: 0.8       # Weight by execution speed
+  
+  # Event bus configuration
+  event_bus:
+    ghost_signal_topic: "ghost.signal.generated"
+    weight_update_topic: "ghost.weights.updated"
+    shadow_analysis_topic: "ghost.shadow.analysis"
+    registry_update_topic: "ghost.registry.updated"
+    
+  # Synchronization settings
+  synchronization:
+    weight_update_frequency_ms: 1000   # Update weights every second
+    registry_sync_frequency_ms: 5000   # Sync registry every 5 seconds
+    shadow_update_frequency_ms: 60000  # Update shadows every minute
+    cross_system_sync_timeout_ms: 2000 # Timeout for cross-system calls
+
+# Advanced Mathematical Configuration
+mathematics:
+  # Hash generation parameters
+  hash_generation:
+    salt_length: 16           # Bytes of salt for hash generation
+    timestamp_quantization: 60 # Quantize timestamps to minutes
+    vector_compression_ratio: 0.8  # Compression ratio for input vectors
+    deterministic_seed: 42    # Seed for reproducible randomness
+  
+  # Similarity calculation
+  similarity:
+    hamming_distance_method: "bitwise"  # bitwise, segment_weighted
+    segment_weights:          # Weights for segment-based similarity
+      geometric: 1.0
+      smart_money: 1.2        # Higher weight for smart money patterns
+      depth: 0.8
+      timeband: 0.9
+    distance_normalization: "minmax"    # minmax, zscore, none
+  
+  # Confidence calculation
+  confidence:
+    base_confidence_method: "weighted_average"  # weighted_average, geometric_mean, harmonic_mean
+    layer_interaction_bonus: 0.1      # Bonus for multiple layer agreement
+    historical_performance_weight: 0.4 # Weight of historical performance
+    pattern_novelty_penalty: 0.2       # Penalty for completely novel patterns
+    volatility_confidence_scaling: true # Scale confidence by market volatility
+  
+  # Profit correlation calculation
+  profit_correlation:
+    correlation_method: "pearson"      # pearson, spearman, kendall
+    minimum_samples: 5                 # Minimum samples for correlation
+    outlier_removal: true              # Remove profit outliers
+    outlier_threshold: 2.5             # Standard deviations for outliers
+    temporal_decay_factor: 0.95        # Decay older profit correlations
+
+# Optimization and Performance
+optimization:
+  # Caching configuration
+  caching:
+    similarity_cache_size: 10000      # Maximum cached similarity calculations
+    analysis_cache_ttl_minutes: 30    # Cache TTL for analysis results
+    registry_cache_sync_frequency: 300 # Seconds between registry cache syncs
+  
+  # Memory management
+  memory:
+    max_active_signals: 1000          # Maximum signals in active memory
+    history_cleanup_frequency: 3600   # Seconds between history cleanup
+    ghost_state_compression: true     # Compress stored ghost states
+    
+  # Performance monitoring
+  monitoring:
+    latency_tracking: true            # Track component latencies
+    memory_usage_tracking: true       # Track memory usage
+    error_rate_monitoring: true       # Monitor error rates
+    performance_alerting_threshold: 100 # Alert if latency > 100ms
+
+# Security and Validation
+security:
+  # Input validation
+  validation:
+    max_vector_size: 1000            # Maximum input vector size
+    confidence_range_check: true      # Validate confidence in [0,1]
+    hash_format_validation: true      # Validate hash format
+    timestamp_sanity_check: true      # Check timestamp reasonableness
+  
+  # Data integrity
+  integrity:
+    hash_verification: true           # Verify hash integrity
+    registry_checksum: true           # Maintain registry checksums
+    database_consistency_check: true  # Regular consistency checks
+    backup_verification: true         # Verify backup integrity
+
+# Debugging and Development
+debugging:
+  # Logging configuration
+  logging:
+    level: "INFO"                    # DEBUG, INFO, WARNING, ERROR
+    component_specific_levels:
+      hash_decoder: "DEBUG"
+      meta_weighting: "INFO"
+      shadow_tracker: "INFO"
+    log_rotation: true               # Enable log rotation
+    max_log_size_mb: 100            # Maximum log file size
+  
+  # Development features
+  development:
+    simulation_mode: false           # Run in simulation mode
+    detailed_metrics: true           # Collect detailed metrics
+    profiling_enabled: false        # Enable performance profiling
+    test_signal_injection: false     # Allow test signal injection
+  
+  # Visualization support
+  visualization:
+    hash_heatmap_generation: true    # Generate hash similarity heatmaps
+    weight_history_plotting: true    # Plot weight adaptation history
+    shadow_profit_charts: true       # Generate shadow profit charts
+    pattern_cluster_visualization: true # Visualize pattern clusters 

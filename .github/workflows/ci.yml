@@ -1,0 +1,24 @@
+name: Lint and Type Check
+
+on: [push, pull_request]
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run flake8
+        run: flake8 core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py tests/
+      - name: Run mypy
+        run: mypy core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py
+      - name: Run black (check only)
+        run: black --check .
+      - name: Run isort (check only)
+        run: isort --check-only . 

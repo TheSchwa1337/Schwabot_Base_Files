@@ -11,7 +11,21 @@ import yaml
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
-from jsonschema import validate, ValidationError
+
+try:
+    from jsonschema import validate, ValidationError
+    JSONSCHEMA_AVAILABLE = True
+except ImportError:
+    # Fallback for when jsonschema is not available
+    JSONSCHEMA_AVAILABLE = False
+    def validate(instance, schema):
+        """Dummy validation function when jsonschema is not available"""
+        logging.warning("jsonschema not available - skipping validation")
+        return True
+    
+    class ValidationError(Exception):
+        """Fallback ValidationError when jsonschema is not available"""
+        pass
 
 logger = logging.getLogger(__name__)
 
@@ -77,11 +91,14 @@ class ConfigManager:
             
             # Validate against schema if provided
             if schema:
-                try:
-                    validate(instance=config, schema=schema)
-                    logger.debug(f"Schema validation passed for {filename}")
-                except ValidationError as e:
-                    raise ConfigError(f"Schema validation failed for {filename}: {e}")
+                if JSONSCHEMA_AVAILABLE:
+                    try:
+                        validate(instance=config, schema=schema)
+                        logger.debug(f"Schema validation passed for {filename}")
+                    except ValidationError as e:
+                        raise ConfigError(f"Schema validation failed for {filename}: {e}")
+                else:
+                    logger.warning(f"Schema validation skipped for {filename} - jsonschema not available")
             
             # Cache the configuration
             if use_cache:

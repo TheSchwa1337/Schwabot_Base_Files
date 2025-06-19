@@ -1,0 +1,428 @@
+# Multi-bit BTC Data Processing Configuration
+# ==========================================
+# Configuration for multi-bit BTC processing leveraging 4-bit → 8-bit → 42-bit phaser system
+
+# =============================================================================
+# BIT LEVEL PROGRESSION AND PROCESSING
+# =============================================================================
+bit_level_progression:
+  # Automatic progression settings
+  auto_progression: true              # Enable automatic bit level progression
+  thermal_gating: true               # Gate progression on thermal conditions
+  efficiency_monitoring: true        # Monitor efficiency for progression decisions
+  
+  # Performance thresholds for bit level progression
+  performance_thresholds:
+    bit_4_to_8: 0.70                # 70% efficiency to progress from 4-bit to 8-bit
+    bit_8_to_16: 0.75               # 75% efficiency to progress from 8-bit to 16-bit
+    bit_16_to_32: 0.80              # 80% efficiency to progress from 16-bit to 32-bit
+    bit_32_to_42: 0.85              # 85% efficiency to progress from 32-bit to 42-bit phaser
+    bit_42_to_64: 0.90              # 90% efficiency to progress from 42-bit to 64-bit
+    
+  # Regression thresholds (when to step down bit levels)
+  regression_thresholds:
+    efficiency_drop_threshold: 0.40  # Drop bit level if efficiency falls below 40%
+    thermal_emergency_regression: true # Automatically regress during thermal emergencies
+    memory_pressure_regression: true # Regress when memory pressure is high
+    
+  # Bit level stability requirements
+  stability_requirements:
+    min_duration_seconds: 60         # Minimum time at bit level before progression
+    stability_check_samples: 10      # Number of efficiency samples to evaluate
+    variance_threshold: 0.1          # Maximum efficiency variance for stability
+
+# =============================================================================
+# 42-BIT PHASER SYSTEM CONFIGURATION
+# =============================================================================
+phaser_system:
+  # Core phaser settings
+  enable_42_bit_phaser: true          # Enable the 42-bit phaser system
+  phaser_prediction_window: 15        # Minutes to predict market movements ahead
+  pattern_recognition_depth: 1000     # Historical data points for pattern analysis
+  entropy_calculation_method: "shannon" # Method for entropy calculation
+  correlation_threshold: 0.6          # Minimum correlation for pattern matching
+  
+  # Phaser operating modes
+  operating_modes:
+    pattern_recognition:
+      enabled: true
+      priority: 1                     # Highest priority mode
+      thermal_requirement: "balanced_or_better"
+      cpu_allocation: 0.3
+      memory_allocation: 0.4
+      
+    market_prediction:
+      enabled: true
+      priority: 2                     # High priority when thermal conditions allow
+      thermal_requirement: "optimal_performance"
+      cpu_allocation: 0.5
+      memory_allocation: 0.6
+      prediction_accuracy_target: 0.75
+      
+    entropy_analysis:
+      enabled: true
+      priority: 3                     # Medium priority
+      thermal_requirement: "balanced_or_better"
+      cpu_allocation: 0.4
+      memory_allocation: 0.3
+      analysis_frequency_seconds: 30
+      
+    profit_optimization:
+      enabled: true
+      priority: 2                     # High priority for profit opportunities
+      thermal_requirement: "optimal_or_balanced"
+      cpu_allocation: 0.6
+      memory_allocation: 0.5
+      profit_threshold_btc: 0.001     # Minimum BTC profit to trigger optimization
+      
+    trend_correlation:
+      enabled: true
+      priority: 4                     # Lower priority background analysis
+      thermal_requirement: "any"
+      cpu_allocation: 0.2
+      memory_allocation: 0.2
+      correlation_timeframes: ["1m", "5m", "15m", "1h", "4h", "1d"]
+  
+  # Phaser performance optimization
+  performance_optimization:
+    adaptive_resource_allocation: true # Dynamically allocate resources
+    thermal_scaling: true            # Scale phaser intensity with thermal state
+    burst_mode_enhancement: true     # Enhanced processing during burst mode
+    predictive_caching: true         # Cache predicted patterns
+    
+  # Phaser accuracy and validation
+  accuracy_validation:
+    enable_prediction_tracking: true  # Track prediction accuracy
+    accuracy_history_length: 1000    # Number of predictions to track
+    min_accuracy_threshold: 0.6      # Minimum acceptable accuracy
+    accuracy_degradation_action: "reduce_complexity" # Action when accuracy drops
+
+# =============================================================================
+# BIT ENGINE CONFIGURATIONS
+# =============================================================================
+bit_engines:
+  # 4-bit Base Engine
+  bit_4_engine:
+    name: "4-bit Base Pattern Engine"
+    precision_bits: 4
+    max_patterns: 10                  # Maximum patterns to track simultaneously
+    processing_speed: "fast"          # Optimized for speed
+    memory_footprint: "minimal"       # Minimal memory usage
+    supported_patterns:
+      - "simple_trend"                # Basic up/down trend detection
+      - "basic_support_resistance"    # Simple support/resistance levels
+      - "volume_spike"                # Volume anomaly detection
+    thermal_requirements:
+      min_thermal_mode: "any"         # Can run in any thermal mode
+      optimal_thermal_mode: "balanced_processing"
+      
+  # 8-bit Enhanced Engine
+  bit_8_engine:
+    name: "8-bit Enhanced Analysis Engine"
+    precision_bits: 8
+    max_patterns: 25
+    processing_speed: "balanced"
+    memory_footprint: "moderate"
+    supported_patterns:
+      - "price_channels"              # Price channel detection
+      - "volume_patterns"             # Complex volume analysis
+      - "momentum_signals"            # Momentum indicator patterns
+      - "breakout_patterns"           # Breakout/breakdown detection
+      - "reversal_signals"            # Trend reversal identification
+    thermal_requirements:
+      min_thermal_mode: "thermal_efficient"
+      optimal_thermal_mode: "balanced_processing"
+      
+  # 16-bit Standard Engine
+  bit_16_engine:
+    name: "16-bit Standard Technical Engine"
+    precision_bits: 16
+    max_patterns: 50
+    processing_speed: "balanced"
+    memory_footprint: "standard"
+    supported_patterns:
+      - "fibonacci_levels"            # Fibonacci retracement/extension levels
+      - "elliott_waves"               # Elliott wave pattern recognition
+      - "technical_indicators"        # RSI, MACD, Bollinger Bands patterns
+      - "candlestick_patterns"        # Japanese candlestick formations
+      - "chart_patterns"              # Head & shoulders, triangles, flags
+    thermal_requirements:
+      min_thermal_mode: "thermal_efficient"
+      optimal_thermal_mode: "balanced_processing"
+      
+  # 32-bit Advanced Engine
+  bit_32_engine:
+    name: "32-bit Advanced Analysis Engine"
+    precision_bits: 32
+    max_patterns: 100
+    processing_speed: "thorough"
+    memory_footprint: "high"
+    supported_patterns:
+      - "complex_harmonics"           # Harmonic pattern analysis
+      - "multi_timeframe_analysis"    # Cross-timeframe pattern correlation
+      - "correlation_patterns"        # Inter-market correlation analysis
+      - "algorithmic_signatures"      # Algorithmic trading pattern detection
+      - "market_microstructure"       # Order book and tape analysis
+    thermal_requirements:
+      min_thermal_mode: "balanced_processing"
+      optimal_thermal_mode: "optimal_performance"
+      
+  # 42-bit Phaser Engine
+  bit_42_phaser_engine:
+    name: "42-bit Phaser Prediction Engine"
+    precision_bits: 42
+    max_patterns: 200
+    processing_speed: "intensive"
+    memory_footprint: "very_high"
+    phaser_capabilities: true
+    supported_patterns:
+      - "market_prediction"           # Future price movement prediction
+      - "entropy_analysis"            # Market entropy and chaos analysis
+      - "profit_optimization"         # Profit opportunity identification
+      - "phase_transitions"           # Market phase change detection
+      - "quantum_patterns"            # Advanced mathematical patterns
+    thermal_requirements:
+      min_thermal_mode: "balanced_processing"
+      optimal_thermal_mode: "optimal_performance"
+      burst_mode_compatible: true
+      
+  # 64-bit Deep Engine
+  bit_64_engine:
+    name: "64-bit Deep Analysis Engine"
+    precision_bits: 64
+    max_patterns: 500
+    processing_speed: "comprehensive"
+    memory_footprint: "maximum"
+    supported_patterns:
+      - "deep_market_analysis"        # Deep learning pattern recognition
+      - "algorithmic_trading_signals" # Advanced algorithmic signal detection
+      - "ai_pattern_recognition"      # AI-powered pattern discovery
+      - "fractal_analysis"            # Fractal pattern analysis
+      - "neural_network_patterns"     # Neural network-identified patterns
+    thermal_requirements:
+      min_thermal_mode: "optimal_performance"
+      optimal_thermal_mode: "optimal_performance"
+      burst_mode_recommended: true
+
+# =============================================================================
+# BIT MAPPING STRATEGIES
+# =============================================================================
+bit_mapping_strategies:
+  # Strategy selection based on conditions
+  strategy_selection:
+    thermal_adaptive_strategy: true   # Automatically select strategy based on thermal state
+    performance_priority_weighting: 0.4 # Weight for performance considerations
+    accuracy_priority_weighting: 0.6 # Weight for accuracy considerations
+    
+  # Individual strategy configurations
+  precision_first:
+    name: "Precision-First Strategy"
+    description: "Prioritize accuracy over processing speed"
+    bit_level_preference: [64, 42, 32, 16, 8, 4] # Prefer higher bit levels
+    thermal_requirements: ["optimal_performance", "balanced_processing"]
+    accuracy_target: 0.9
+    performance_tolerance: 0.6
+    
+  performance_first:
+    name: "Performance-First Strategy"
+    description: "Prioritize processing speed over accuracy"
+    bit_level_preference: [4, 8, 16, 32, 42, 64] # Prefer lower bit levels
+    thermal_requirements: ["any"]
+    accuracy_target: 0.7
+    performance_tolerance: 0.9
+    
+  thermal_adaptive:
+    name: "Thermal-Adaptive Strategy"
+    description: "Adapt bit levels and precision based on thermal conditions"
+    thermal_bit_mapping:
+      optimal_performance: 64         # Use 64-bit when cool
+      balanced_processing: 42         # Use 42-bit phaser when balanced
+      thermal_efficient: 32           # Use 32-bit when warm
+      emergency_throttle: 16          # Use 16-bit when hot
+      critical_protection: 8          # Use 8-bit in emergency
+    dynamic_adjustment: true
+    thermal_hysteresis: 2.0           # °C hysteresis to prevent oscillation
+    
+  profit_driven:
+    name: "Profit-Driven Strategy"
+    description: "Focus processing on profit-generating opportunities"
+    profit_threshold_btc: 0.001       # Minimum profit opportunity
+    high_profit_bit_level: 42         # Use phaser for high-profit opportunities
+    standard_profit_bit_level: 32     # Use advanced for standard opportunities
+    low_profit_bit_level: 16          # Use standard for low opportunities
+    
+  balanced_approach:
+    name: "Balanced Strategy"
+    description: "Balance accuracy, performance, and thermal considerations"
+    default_bit_level: 32             # Default to 32-bit processing
+    thermal_scaling_factor: 0.8       # Scale down by 20% per thermal level
+    performance_scaling_factor: 1.2   # Scale up by 20% for good performance
+    accuracy_threshold: 0.75          # Minimum accuracy requirement
+
+# =============================================================================
+# THERMAL INTEGRATION
+# =============================================================================
+thermal_integration:
+  # Thermal adaptation settings
+  thermal_adaptation:
+    enable_thermal_bit_scaling: true  # Scale bit levels with temperature
+    enable_emergency_bit_reduction: true # Reduce bits in thermal emergency
+    enable_optimal_bit_boosting: true # Boost bits when thermal conditions are optimal
+    thermal_hysteresis_celsius: 2.0   # Prevent thermal oscillation
+    
+  # Thermal mode to bit level mapping
+  thermal_bit_mapping:
+    optimal_performance:
+      recommended_bit_level: 64
+      max_bit_level: 64
+      phaser_mode_allowed: true
+      burst_processing_enabled: true
+      
+    balanced_processing:
+      recommended_bit_level: 42
+      max_bit_level: 64
+      phaser_mode_allowed: true
+      burst_processing_enabled: true
+      
+    thermal_efficient:
+      recommended_bit_level: 32
+      max_bit_level: 42
+      phaser_mode_allowed: false
+      burst_processing_enabled: false
+      
+    emergency_throttle:
+      recommended_bit_level: 16
+      max_bit_level: 32
+      phaser_mode_allowed: false
+      burst_processing_enabled: false
+      
+    critical_protection:
+      recommended_bit_level: 8
+      max_bit_level: 16
+      phaser_mode_allowed: false
+      burst_processing_enabled: false
+  
+  # Emergency thermal procedures
+  emergency_procedures:
+    immediate_bit_reduction: true     # Immediately reduce bit level in emergency
+    phaser_system_shutdown: true      # Shutdown phaser system if overheating
+    pattern_database_compression: true # Compress pattern database to save memory
+    prediction_suspension: true       # Suspend prediction generation
+
+# =============================================================================
+# PATTERN RECOGNITION AND ANALYSIS
+# =============================================================================
+pattern_recognition:
+  # Pattern database configuration
+  pattern_database:
+    max_patterns_stored: 10000        # Maximum patterns in database
+    pattern_expiry_hours: 168         # 1 week pattern retention
+    pattern_compression_enabled: true # Compress old patterns
+    similarity_threshold: 0.8         # Pattern similarity detection threshold
+    
+  # Pattern analysis settings
+  analysis_settings:
+    real_time_analysis: true          # Enable real-time pattern analysis
+    historical_depth_hours: 720       # 30 days of historical analysis
+    pattern_strength_threshold: 0.6   # Minimum strength for pattern recognition
+    cross_timeframe_analysis: true    # Analyze patterns across timeframes
+    
+  # Pattern matching algorithms
+  matching_algorithms:
+    fuzzy_matching: true              # Enable fuzzy pattern matching
+    geometric_matching: true          # Enable geometric pattern matching
+    statistical_matching: true        # Enable statistical pattern matching
+    ai_enhanced_matching: true        # Enable AI-enhanced pattern matching (if available)
+    
+  # Pattern validation
+  validation:
+    enable_pattern_validation: true   # Validate patterns against historical data
+    validation_sample_size: 1000      # Sample size for validation
+    min_validation_accuracy: 0.7      # Minimum accuracy for pattern acceptance
+    false_positive_filtering: true    # Filter false positive patterns
+
+# =============================================================================
+# PERFORMANCE MONITORING AND OPTIMIZATION
+# =============================================================================
+performance_monitoring:
+  # Monitoring intervals
+  bit_level_monitoring_interval: 10   # Check bit level performance every 10 seconds
+  phaser_monitoring_interval: 5       # Monitor phaser system every 5 seconds
+  pattern_analysis_interval: 15       # Analyze patterns every 15 seconds
+  overall_performance_interval: 30    # Overall performance check every 30 seconds
+  
+  # Performance thresholds and alerts
+  performance_thresholds:
+    excellent_efficiency: 0.9         # >90% efficiency
+    good_efficiency: 0.75             # >75% efficiency
+    acceptable_efficiency: 0.6        # >60% efficiency
+    poor_efficiency: 0.4              # >40% efficiency
+    critical_efficiency: 0.2          # >20% efficiency
+    
+  # Performance optimization
+  optimization:
+    enable_automatic_optimization: true # Automatically optimize performance
+    optimization_frequency_minutes: 5  # Run optimization every 5 minutes
+    adaptive_bit_level_adjustment: true # Automatically adjust bit levels
+    resource_allocation_optimization: true # Optimize resource allocation
+    
+  # Alert conditions
+  alerts:
+    efficiency_degradation_alert: 0.5  # Alert when efficiency drops below 50%
+    bit_level_regression_alert: true   # Alert on bit level regression
+    phaser_system_failure_alert: true  # Alert on phaser system issues
+    thermal_adaptation_alert: true     # Alert on thermal adaptations
+
+# =============================================================================
+# INTEGRATION WITH EXISTING SYSTEMS
+# =============================================================================
+system_integration:
+  # Enhanced thermal-aware BTC processor integration
+  thermal_btc_processor:
+    enable_integration: true          # Enable integration with thermal processor
+    thermal_callback_registration: true # Register for thermal callbacks
+    shared_metrics_reporting: true    # Share metrics with thermal processor
+    coordinated_burst_processing: true # Coordinate burst processing
+    
+  # Visual controller integration
+  visual_controller:
+    bit_level_visualization: true     # Visualize current bit level
+    phaser_status_display: true       # Display phaser system status
+    pattern_recognition_overlay: true # Overlay pattern recognition results
+    performance_metrics_display: true # Display performance metrics
+    
+  # Pipeline manager integration
+  pipeline_manager:
+    pattern_data_retention: true      # Store pattern data in pipeline
+    prediction_data_caching: true     # Cache prediction data
+    entropy_data_archival: true       # Archive entropy calculations
+    coordinated_memory_management: true # Coordinate memory usage
+    
+  # API coordinator integration
+  api_coordinator:
+    prediction_api_endpoints: true    # Expose prediction data via API
+    pattern_api_endpoints: true       # Expose pattern data via API
+    real_time_bit_level_api: true     # Real-time bit level status API
+    performance_metrics_api: true     # Performance metrics API
+
+# =============================================================================
+# DEVELOPMENT AND TESTING
+# =============================================================================
+development:
+  # Testing and simulation
+  enable_simulation_mode: false      # Enable simulation mode for testing
+  mock_pattern_generation: false     # Generate mock patterns for testing
+  simulated_market_data: false       # Use simulated market data
+  debug_bit_level_decisions: false   # Debug bit level progression decisions
+  debug_phaser_operations: false     # Debug phaser system operations
+  
+  # Development overrides
+  force_bit_level: null              # Force specific bit level (testing only)
+  disable_thermal_integration: false # Disable thermal integration (testing only)
+  override_performance_thresholds: false # Override performance thresholds
+  
+  # Logging and debugging
+  verbose_logging: false             # Enable verbose logging
+  pattern_recognition_logging: false # Log pattern recognition details
+  phaser_operation_logging: false    # Log phaser operations
+  performance_metrics_logging: true  # Log performance metrics 

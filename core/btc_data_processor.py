@@ -35,6 +35,7 @@ from core.zygot_shell import ZygotShell
 from core.gpu_offload_manager import GPUOffloadManager
 from core.thermal_map_allocator import ThermalMapAllocator, MemoryRegion
 from core.bitcoin_mining_analyzer import BitcoinMiningAnalyzer
+from schwabot_unified_math import calculate_btc_processor_metrics, MathConstants
 
 logger = logging.getLogger(__name__)
 
@@ -743,12 +744,19 @@ class BTCDataProcessor:
             return False
             
     async def _process_price_data(self, data: Dict) -> Dict:
-        """Process BTC price data with core mathematical integration and error handling"""
+        """Process BTC price data with complete altitude adjustment integration and sustainment monitoring"""
         try:
             # Get base metrics with error checking
             price = float(data['price'])
             volume = float(data['volume'])
             timestamp = datetime.now().isoformat()
+            
+            # Calculate price velocity (rate of change)
+            if len(self.data_buffer) > 1:
+                prev_price = self.data_buffer[-1]['price']
+                price_velocity = (price - prev_price) / prev_price
+            else:
+                price_velocity = 0.0
             
             # Calculate entropy with error handling
             try:
@@ -783,6 +791,54 @@ class BTCDataProcessor:
                 logger.error(f"Anti-pole vector error: {e}")
                 antipole_state = {'delta_psi_bar': 0.0}
                 
+            # Calculate current execution confidence
+            try:
+                from schwabot_unified_math import execution_confidence_scalar
+                current_xi = execution_confidence_scalar(
+                    T=np.array([recursive_metrics.get('coherence', 0.0)]),
+                    delta_theta=antipole_state.get('delta_psi_bar', 0.0),
+                    epsilon=recursive_metrics.get('coherence', 0.0),
+                    sigma_f=entropy,
+                    tau_p=0.1  # Profit time factor
+                )
+            except Exception as e:
+                logger.error(f"Execution confidence calculation error: {e}")
+                current_xi = 0.0
+            
+            # === ALTITUDE ADJUSTMENT INTEGRATION ===
+            try:
+                # Get previous values for reflex calculation
+                previous_xi = getattr(self, '_previous_xi', current_xi)
+                previous_entropy = getattr(self, '_previous_entropy', entropy)
+                
+                # Calculate complete altitude metrics
+                altitude_metrics = calculate_btc_processor_metrics(
+                    volume=volume,
+                    price_velocity=price_velocity,
+                    profit_residual=0.03,  # 3% profit potential (adjust based on your strategy)
+                    current_hash=self._get_current_hash(),
+                    pool_hash=await self._get_pool_hash_safe(),
+                    echo_memory=getattr(self, 'echo_hash_memory', []),
+                    tick_entropy=entropy,
+                    phase_confidence=recursive_metrics.get('coherence', 0.5),
+                    current_xi=current_xi,
+                    previous_xi=previous_xi,
+                    previous_entropy=previous_entropy,
+                    time_delta=1.0
+                )
+                
+                # Store for next iteration
+                self._previous_xi = current_xi
+                self._previous_entropy = entropy
+                
+            except Exception as e:
+                logger.error(f"Altitude metrics calculation error: {e}")
+                altitude_metrics = {
+                    'altitude_state': {'market_altitude': 0.5, 'stam_zone': 'mid'},
+                    'should_execute': False,
+                    'integrated_confidence': 0.0
+                }
+            
             # Calculate drift shell variance with error handling
             try:
                 drift_variance = self.drift_engine.drift_variance(
@@ -799,10 +855,17 @@ class BTCDataProcessor:
                 'timestamp': timestamp,
                 'price': price,
                 'volume': volume,
+                'price_velocity': price_velocity,
                 'entropy': entropy,
                 'recursive_metrics': recursive_metrics,
                 'antipole_state': antipole_state,
-                'drift_variance': drift_variance
+                'drift_variance': drift_variance,
+                'execution_confidence': current_xi,
+                'altitude_metrics': altitude_metrics,  # NEW: Complete altitude data
+                'should_execute': altitude_metrics['should_execute'],  # NEW: Execution decision
+                'market_altitude': altitude_metrics['altitude_state']['market_altitude'],  # NEW
+                'stam_zone': altitude_metrics['altitude_state']['stam_zone'],  # NEW
+                'execution_readiness': altitude_metrics.get('execution_readiness', 0.0)  # NEW
             }
             return processed
             
@@ -816,195 +879,27 @@ class BTCDataProcessor:
                 'entropy': 0.0,
                 'recursive_metrics': {'coherence': 0.0, 'psi': 0.0},
                 'antipole_state': {'delta_psi_bar': 0.0},
-                'drift_variance': 0.0
+                'drift_variance': 0.0,
+                'altitude_metrics': {'should_execute': False},
+                'should_execute': False
             }
-            
-    async def _generate_hashes(self):
-        """Generate BTC price hashes with precise timing"""
-        while True:
-            try:
-                if not self.data_buffer:
-                    await asyncio.sleep(0.1)
-                    continue
-                    
-                # Get latest data
-                latest_data = self.data_buffer[-1]
-                
-                # Record start time
-                start_time = time.perf_counter()
-                
-                # Generate hash
-                if self.use_gpu:
-                    hash_value = await self._generate_hash_gpu(latest_data)
-                else:
-                    hash_value = await self._generate_hash_cpu(latest_data)
-                    
-                # Record end time and calculate duration
-                end_time = time.perf_counter()
-                duration = end_time - start_time
-                
-                # Update timing statistics
-                self._update_hash_timing_stats(duration)
-                
-                # Store hash with timing information
-                hash_entry = {
-                    'hash': hash_value,
-                    'timestamp': latest_data['timestamp'],
-                    'generation_time': duration,
-                    'price': latest_data['price']
-                }
-                
-                self.hash_buffer.append(hash_entry)
-                self.timing_buffer.append(duration)
-                
-                # Maintain hash buffer size
-                if len(self.hash_buffer) > self.config['hash_buffer_size']:
-                    self.hash_buffer.pop(0)
-                    self.timing_buffer.pop(0)
-                    
-                # Update last hash time
-                self.last_hash_time = end_time
-                
-            except Exception as e:
-                logger.error(f"Hash generation error: {e}")
-                continue
-                
-    def _update_hash_timing_stats(self, duration: float):
-        """Update hash generation timing statistics"""
-        self.hash_generation_stats['total_hashes'] += 1
-        self.hash_generation_stats['total_time'] += duration
-        self.hash_generation_stats['min_time'] = min(self.hash_generation_stats['min_time'], duration)
-        self.hash_generation_stats['max_time'] = max(self.hash_generation_stats['max_time'], duration)
-        
-    async def _generate_hash_gpu(self, data: Dict) -> str:
-        """Generate hash using GPU acceleration with mathematical integration"""
-        with torch.cuda.stream(self.streams[0]):
-            # Convert data to tensor
-            price_tensor = torch.tensor(data['price'], device=self.device)
-            volume_tensor = torch.tensor(data['volume'], device=self.device)
-            
-            # Get recursive metrics
-            recursive_metrics = data.get('recursive_metrics', {})
-            coherence = torch.tensor(recursive_metrics.get('coherence', 0), device=self.device)
-            
-            # Get anti-pole state
-            antipole_state = data.get('antipole_state', {})
-            delta_psi = torch.tensor(antipole_state.get('delta_psi_bar', 0), device=self.device)
-            
-            # Combine all metrics for hash computation
-            combined = torch.cat([
-                price_tensor,
-                volume_tensor,
-                coherence,
-                delta_psi
-            ])
-            
-            # Apply mathematical transformations
-            transformed = self._apply_mathematical_transforms(combined)
-            
-            # Generate hash
-            hash_tensor = self._compute_hash_gpu(transformed)
-            
-            # Convert back to CPU and format
-            hash_value = hash_tensor.cpu().numpy().tobytes().hex()
-            return hash_value
-            
-    def _apply_mathematical_transforms(self, tensor: torch.Tensor) -> torch.Tensor:
-        """Apply mathematical transformations to tensor data with error handling"""
+
+    def _get_current_hash(self) -> str:
+        """Get current hash safely"""
+        if hasattr(self, 'hash_buffer') and self.hash_buffer:
+            return self.hash_buffer[-1].get('hash', 'default_hash')
+        return 'default_hash'
+
+    async def _get_pool_hash_safe(self) -> str:
+        """Get pool hash safely"""
         try:
-            # Apply phase angle transformation with error checking
-            phase_angle = torch.atan2(tensor[1], tensor[0])
-            if torch.isnan(phase_angle) or torch.isinf(phase_angle):
-                phase_angle = torch.zeros(1, device=tensor.device)
-                
-            # Apply drift transformation with bounds checking
-            drift = (tensor[-1] - tensor[0]) / (len(tensor) - 1)
-            drift = torch.clamp(drift, -1.0, 1.0)
-            
-            # Apply recursive transformation
-            recursive_transform = self.recursive_engine.transform_tensor(tensor)
-            
-            # Apply anti-pole transformation
-            antipole_transform = self.antipole_vector.transform_tensor(tensor)
-            
-            # Combine transformations with error checking
-            transformed = torch.cat([
-                tensor,
-                phase_angle.unsqueeze(0),
-                drift.unsqueeze(0),
-                recursive_transform,
-                antipole_transform
-            ])
-            
-            # Validate transformed tensor
-            if torch.isnan(transformed).any() or torch.isinf(transformed).any():
-                logger.warning("Invalid values in transformed tensor, applying correction")
-                transformed = torch.nan_to_num(transformed, nan=0.0, posinf=1.0, neginf=-1.0)
-                
-            return transformed
-            
-        except Exception as e:
-            logger.error(f"Mathematical transformation error: {e}")
-            # Return safe fallback tensor
-            return torch.zeros_like(tensor)
-            
-    def _compute_hash_gpu(self, tensor: torch.Tensor) -> torch.Tensor:
-        """Compute hash using GPU operations with error handling"""
-        try:
-            # Apply SHA-256-like operations on GPU with error checking
-            hash_tensor = torch.nn.functional.linear(tensor, torch.randn(32, device=self.device))
-            
-            # Ensure deterministic output with bounds checking
-            hash_tensor = torch.clamp(hash_tensor, -1.0, 1.0)
-            hash_tensor = torch.round(hash_tensor * 1e6) / 1e6
-            
-            # Validate hash tensor
-            if torch.isnan(hash_tensor).any() or torch.isinf(hash_tensor).any():
-                logger.warning("Invalid values in hash tensor, applying correction")
-                hash_tensor = torch.nan_to_num(hash_tensor, nan=0.0, posinf=1.0, neginf=-1.0)
-                
-            return hash_tensor
-            
-        except Exception as e:
-            logger.error(f"GPU hash computation error: {e}")
-            # Return safe fallback hash
-            return torch.zeros(32, device=self.device)
-            
-    async def _generate_hash_cpu(self, data: Dict) -> str:
-        """Generate hash using CPU with mathematical integration and error handling"""
-        try:
-            # Get recursive metrics with error checking
-            recursive_metrics = data.get('recursive_metrics', {})
-            coherence = recursive_metrics.get('coherence', 0)
-            if not isinstance(coherence, (int, float)):
-                coherence = 0
-                
-            # Get anti-pole state with error checking
-            antipole_state = data.get('antipole_state', {})
-            delta_psi = antipole_state.get('delta_psi_bar', 0)
-            if not isinstance(delta_psi, (int, float)):
-                delta_psi = 0
-                
-            # Create deterministic string representation with mathematical components
-            data_str = (
-                f"{float(data['price']):.8f}:"
-                f"{float(data['volume']):.8f}:"
-                f"{data['timestamp']}:"
-                f"{float(coherence):.8f}:"
-                f"{float(delta_psi):.8f}"
-            )
-            
-            # Generate SHA-256 hash with error checking
-            try:
-                hash_obj = hashlib.sha256(data_str.encode())
-                return hash_obj.hexdigest()
-            except Exception as e:
-                logger.error(f"SHA-256 hash generation error: {e}")
-                return "0" * 64  # Return safe fallback hash
-                
-        except Exception as e:
-            logger.error(f"CPU hash generation error: {e}")
-            return "0" * 64  # Return safe fallback hash
+            # If you have a pool hash source, use it here
+            # For now, simulate with current time-based hash
+            import time
+            current_time = str(int(time.time()))
+            return hashlib.sha256(current_time.encode()).hexdigest()[:16]
+        except Exception:
+            return 'default_pool_hash'
         
     async def _monitor_hash_timing(self):
         """Monitor hash generation timing and performance"""
@@ -1096,11 +991,49 @@ class BTCDataProcessor:
             }
             
     async def _calculate_entropy_correlation(self, data: torch.Tensor) -> float:
-        """Calculate entropy correlation"""
-        with torch.cuda.stream(self.streams[2]):
-            # Implement entropy correlation calculation
-            # This is a placeholder for the actual implementation
-            return torch.randn(1).item()
+        """Calculate entropy correlation using information theory"""
+        try:
+            with torch.cuda.stream(self.streams[2]):
+                # Convert tensor to numpy for entropy calculation
+                if data.is_cuda:
+                    data_np = data.cpu().numpy()
+                else:
+                    data_np = data.numpy()
+                
+                # Flatten data for histogram
+                data_flat = data_np.flatten()
+                
+                # Calculate histogram for probability distribution
+                hist, _ = np.histogram(data_flat, bins=50, density=True)
+                
+                # Remove zero probabilities to avoid log(0)
+                hist = hist[hist > 0]
+                
+                # Calculate Shannon entropy: H = -Σ p(x) * log2(p(x))
+                if len(hist) > 0:
+                    entropy = -np.sum(hist * np.log2(hist + 1e-10))
+                else:
+                    entropy = 0.0
+                
+                # Normalize entropy to [0, 1] range
+                max_entropy = np.log2(len(hist)) if len(hist) > 0 else 1.0
+                normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+                
+                # Calculate correlation with recent price data
+                if len(self.data_buffer) > 1:
+                    recent_prices = [d.get('price', 0) for d in list(self.data_buffer)[-10:]]
+                    price_variance = np.var(recent_prices) if len(recent_prices) > 1 else 0.0
+                    
+                    # Entropy-price correlation
+                    correlation = normalized_entropy * (1.0 - np.exp(-price_variance / 1000.0))
+                else:
+                    correlation = normalized_entropy
+                
+                return float(correlation)
+                
+        except Exception as e:
+            logger.error(f"Error calculating entropy correlation: {e}")
+            return 0.0
             
     def get_latest_data(self) -> Dict:
         """Get latest processed data"""
@@ -1112,13 +1045,104 @@ class BTCDataProcessor:
         }
         
     def _get_latest_correlations(self) -> Dict:
-        """Get latest correlation data"""
-        # Implement correlation data retrieval
-        # This is a placeholder for the actual implementation
-        return {
-            'price_volume': 0.0,
-            'price_entropy': 0.0
-        }
+        """Get latest correlation data from processing history"""
+        try:
+            if len(self.data_buffer) < 2:
+                return {
+                    'price_volume': 0.0,
+                    'price_entropy': 0.0,
+                    'volume_entropy': 0.0,
+                    'price_momentum': 0.0,
+                    'hash_price_correlation': 0.0
+                }
+            
+            # Get recent data for correlation calculation
+            recent_data = list(self.data_buffer)[-20:]  # Last 20 data points
+            
+            prices = [d.get('price', 0) for d in recent_data]
+            volumes = [d.get('volume', 0) for d in recent_data]
+            
+            # Price-Volume correlation
+            if len(prices) > 1 and len(volumes) > 1 and np.std(prices) > 0 and np.std(volumes) > 0:
+                price_volume_corr = np.corrcoef(prices, volumes)[0, 1]
+                if np.isnan(price_volume_corr):
+                    price_volume_corr = 0.0
+            else:
+                price_volume_corr = 0.0
+            
+            # Price entropy (volatility measure)
+            if len(prices) > 1:
+                price_returns = np.diff(prices) / np.array(prices[:-1])
+                price_returns = price_returns[np.isfinite(price_returns)]
+                if len(price_returns) > 0:
+                    hist, _ = np.histogram(price_returns, bins=10, density=True)
+                    hist = hist[hist > 0]
+                    price_entropy = -np.sum(hist * np.log2(hist + 1e-10)) if len(hist) > 0 else 0.0
+                    price_entropy = price_entropy / np.log2(len(hist)) if len(hist) > 0 else 0.0
+                else:
+                    price_entropy = 0.0
+            else:
+                price_entropy = 0.0
+            
+            # Volume entropy
+            if len(volumes) > 1 and np.std(volumes) > 0:
+                volume_normalized = (volumes - np.mean(volumes)) / np.std(volumes)
+                hist, _ = np.histogram(volume_normalized, bins=10, density=True)
+                hist = hist[hist > 0]
+                volume_entropy = -np.sum(hist * np.log2(hist + 1e-10)) if len(hist) > 0 else 0.0
+                volume_entropy = volume_entropy / np.log2(len(hist)) if len(hist) > 0 else 0.0
+            else:
+                volume_entropy = 0.0
+            
+            # Price momentum correlation
+            if len(prices) > 3:
+                momentum = np.array(prices[1:]) - np.array(prices[:-1])
+                momentum_smoothed = np.convolve(momentum, np.ones(3)/3, mode='valid')
+                if len(momentum_smoothed) > 1 and np.std(momentum_smoothed) > 0:
+                    price_momentum = np.corrcoef(prices[-len(momentum_smoothed):], momentum_smoothed)[0, 1]
+                    if np.isnan(price_momentum):
+                        price_momentum = 0.0
+                else:
+                    price_momentum = 0.0
+            else:
+                price_momentum = 0.0
+            
+            # Hash-Price correlation (if hash data available)
+            if len(self.hash_buffer) >= len(prices):
+                # Simple hash-to-numeric conversion for correlation
+                hash_values = []
+                for hash_str in list(self.hash_buffer)[-len(prices):]:
+                    hash_numeric = int(hash_str[:8], 16) % 1000000  # Convert to numeric
+                    hash_values.append(hash_numeric)
+                
+                if len(hash_values) == len(prices) and np.std(hash_values) > 0 and np.std(prices) > 0:
+                    hash_price_corr = np.corrcoef(hash_values, prices)[0, 1]
+                    if np.isnan(hash_price_corr):
+                        hash_price_corr = 0.0
+                else:
+                    hash_price_corr = 0.0
+            else:
+                hash_price_corr = 0.0
+            
+            return {
+                'price_volume': float(price_volume_corr),
+                'price_entropy': float(price_entropy),
+                'volume_entropy': float(volume_entropy),
+                'price_momentum': float(price_momentum),
+                'hash_price_correlation': float(hash_price_corr),
+                'last_updated': time.time()
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating latest correlations: {e}")
+            return {
+                'price_volume': 0.0,
+                'price_entropy': 0.0,
+                'volume_entropy': 0.0,
+                'price_momentum': 0.0,
+                'hash_price_correlation': 0.0,
+                'error': str(e)
+            }
         
     def _get_hash_timing_stats(self) -> Dict:
         """Get hash generation timing statistics"""

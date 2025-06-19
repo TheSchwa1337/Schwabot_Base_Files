@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Unified Schwabot Integration Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 60px 1fr;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar main";
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            grid-area: header;
+            background: rgba(30, 30, 50, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .header h1 {
+            color: #00ff88;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .connection-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected { background: #00ff88; }
+        .status-disconnected { background: #ff4444; }
+        .status-connecting { background: #ffaa00; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background: rgba(20, 20, 35, 0.95);
+            border-right: 2px solid #333;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .panel-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .panel-toggle:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .panel-toggle input[type="checkbox"] {
+            accent-color: #00ff88;
+        }
+
+        .system-info {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .system-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        /* Main Dashboard */
+        .main-dashboard {
+            grid-area: main;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .panels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        /* Panel Styles */
+        .panel {
+            background: rgba(30, 30, 50, 0.9);
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel:hover {
+            border-color: #00ff88;
+            box-shadow: 0 5px 25px rgba(0, 255, 136, 0.2);
+        }
+
+        .panel.hidden {
+            display: none;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .panel-title {
+            color: #00ff88;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .panel-status {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Specific Panel Types */
+        .optimization-monitor {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.05));
+        }
+
+        .hash-visualization {
+            background: linear-gradient(135deg, rgba(255, 100, 255, 0.1), rgba(200, 0, 200, 0.05));
+        }
+
+        .gpu-monitor {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 140, 0, 0.05));
+        }
+
+        .path-visualizer {
+            background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 150, 255, 0.05));
+        }
+
+        .trading-monitor {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 200, 0, 0.05));
+        }
+
+        .thermal-visualization {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 50, 0, 0.05));
+        }
+
+        /* Data Visualization */
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .data-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #00ff88;
+        }
+
+        .data-label {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Hash Visualization */
+        .hash-canvas {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hash-pulse {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 100, 255, 0.8), transparent);
+            border-radius: 50%;
+            animation: hashPulse 2s infinite;
+        }
+
+        @keyframes hashPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+        }
+
+        /* GPU Load Visualization */
+        .gpu-bars {
+            display: flex;
+            height: 100px;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 10px;
+        }
+
+        .gpu-bar {
+            flex: 1;
+            background: linear-gradient(to top, #ff6b00, #ffaa00);
+            min-height: 5px;
+            border-radius: 2px 2px 0 0;
+            transition: height 0.5s;
+        }
+
+        /* ALIF/ALEPH Path Visualization */
+        .path-container {
+            height: 150px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .path-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #00bfff, #0080ff);
+            animation: pathFlow 3s infinite;
+        }
+
+        @keyframes pathFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        /* Error States */
+        .error-state {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #ff6b6b;
+            margin-top: 10px;
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            color: #888;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333;
+            border-top: 2px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header"
+                    "main";
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .panels-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🌟 Unified Schwabot Integration Dashboard</h1>
+            <div class="connection-status">
+                <span id="connectionText">Connecting...</span>
+                <div id="statusIndicator" class="status-indicator status-connecting"></div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h3>📊 Visual Panels</h3>
+            <div id="panelToggles">
+                <!-- Panel toggles will be generated here -->
+            </div>
+
+            <div class="system-info">
+                <h3>🔧 System Status</h3>
+                <div class="system-metric">
+                    <span>Mode:</span>
+                    <span class="metric-value" id="systemMode">Unknown</span>
+                </div>
+                <div class="system-metric">
+                    <span>Uptime:</span>
+                    <span class="metric-value" id="systemUptime">0s</span>
+                </div>
+                <div class="system-metric">
+                    <span>CPU:</span>
+                    <span class="metric-value" id="cpuUsage">0%</span>
+                </div>
+                <div class="system-metric">
+                    <span>GPU:</span>
+                    <span class="metric-value" id="gpuUsage">0%</span>
+                </div>
+                <div class="system-metric">
+                    <span>Memory:</span>
+                    <span class="metric-value" id="memoryUsage">0%</span>
+                </div>
+                <div class="system-metric">
+                    <span>Clients:</span>
+                    <span class="metric-value" id="connectedClients">0</span>
+                </div>
+                <div class="system-metric">
+                    <span>Optimization:</span>
+                    <span class="metric-value" id="optimizationMode">Unknown</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Dashboard -->
+        <main class="main-dashboard">
+            <div class="panels-grid" id="panelsGrid">
+                <!-- Panels will be generated here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        class UnifiedDashboard {
+            constructor() {
+                this.ws = null;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
+                this.reconnectDelay = 1000;
+                
+                this.systemState = null;
+                this.visualPanels = {};
+                this.dataStreams = {};
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.connect();
+            }
+
+            setupEventListeners() {
+                // Handle page visibility change
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible' && (!this.ws || this.ws.readyState !== WebSocket.OPEN)) {
+                        this.connect();
+                    }
+                });
+
+                // Handle window beforeunload
+                window.addEventListener('beforeunload', () => {
+                    if (this.ws) {
+                        this.ws.close();
+                    }
+                });
+            }
+
+            connect() {
+                const wsUrl = 'ws://localhost:8765';
+                console.log('🔌 Connecting to unified WebSocket server:', wsUrl);
+
+                this.updateConnectionStatus('connecting', 'Connecting...');
+
+                try {
+                    this.ws = new WebSocket(wsUrl);
+                    this.setupWebSocketHandlers();
+                } catch (error) {
+                    console.error('❌ WebSocket connection failed:', error);
+                    this.handleConnectionError();
+                }
+            }
+
+            setupWebSocketHandlers() {
+                this.ws.onopen = () => {
+                    console.log('✅ Connected to unified Schwabot integration core');
+                    this.updateConnectionStatus('connected', 'Connected');
+                    this.reconnectAttempts = 0;
+                    
+                    // Subscribe to all data streams
+                    this.send({
+                        type: 'subscribe_data_stream',
+                        streams: ['system_metrics', 'optimization_decisions', 'hash_visualizations', 
+                                 'gpu_load_data', 'alif_aleph_paths', 'trading_signals', 'thermal_data']
+                    });
+                };
+
+                this.ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        this.handleMessage(data);
+                    } catch (error) {
+                        console.error('❌ Error parsing WebSocket message:', error);
+                    }
+                };
+
+                this.ws.onclose = () => {
+                    console.log('🔌 WebSocket connection closed');
+                    this.updateConnectionStatus('disconnected', 'Disconnected');
+                    this.handleReconnect();
+                };
+
+                this.ws.onerror = (error) => {
+                    console.error('❌ WebSocket error:', error);
+                    this.handleConnectionError();
+                };
+            }
+
+            handleMessage(data) {
+                console.log('📨 Received message:', data.type);
+
+                switch (data.type) {
+                    case 'initial_state':
+                        this.handleInitialState(data);
+                        break;
+                    case 'unified_system_update':
+                        this.handleSystemUpdate(data);
+                        break;
+                    case 'panel_state_update':
+                        this.handlePanelUpdate(data);
+                        break;
+                    case 'system_update':
+                        this.handleSystemEvent(data);
+                        break;
+                    case 'subscription_confirmed':
+                        console.log('✅ Subscribed to data streams:', data.streams);
+                        break;
+                    case 'error':
+                        console.error('❌ Server error:', data.message);
+                        break;
+                }
+            }
+
+            handleInitialState(data) {
+                console.log('🚀 Received initial state');
+                
+                this.systemState = data.system_state;
+                this.visualPanels = data.visual_panels;
+                
+                this.updateSystemInfo();
+                this.generatePanelToggles();
+                this.generatePanels();
+            }
+
+            handleSystemUpdate(data) {
+                this.systemState = data.system_state;
+                this.dataStreams = data.data_streams;
+                
+                this.updateSystemInfo();
+                this.updatePanelData(data.panel_states);
+            }
+
+            handlePanelUpdate(data) {
+                if (this.visualPanels[data.panel_id]) {
+                    this.visualPanels[data.panel_id] = data.panel_state;
+                    this.updatePanelVisibility(data.panel_id, data.panel_state.is_visible);
+                }
+            }
+
+            handleSystemEvent(data) {
+                console.log('🔔 System event:', data.update_type, data.data);
+                // Handle system-level events like optimization mode changes
+            }
+
+            updateConnectionStatus(status, text) {
+                const indicator = document.getElementById('statusIndicator');
+                const textElement = document.getElementById('connectionText');
+                
+                indicator.className = `status-indicator status-${status}`;
+                textElement.textContent = text;
+            }
+
+            updateSystemInfo() {
+                if (!this.systemState) return;
+
+                document.getElementById('systemMode').textContent = this.systemState.mode || 'Unknown';
+                document.getElementById('systemUptime').textContent = this.formatUptime(this.systemState.uptime_seconds);
+                document.getElementById('cpuUsage').textContent = `${(this.systemState.cpu_usage || 0).toFixed(1)}%`;
+                document.getElementById('gpuUsage').textContent = `${(this.systemState.gpu_usage || 0).toFixed(1)}%`;
+                document.getElementById('memoryUsage').textContent = `${(this.systemState.memory_usage || 0).toFixed(1)}%`;
+                document.getElementById('connectedClients').textContent = this.systemState.connected_clients || 0;
+                document.getElementById('optimizationMode').textContent = this.systemState.optimization_mode || 'Unknown';
+            }
+
+            generatePanelToggles() {
+                const container = document.getElementById('panelToggles');
+                container.innerHTML = '';
+
+                Object.entries(this.visualPanels).forEach(([panelId, panelState]) => {
+                    const toggle = document.createElement('div');
+                    toggle.className = 'panel-toggle';
+                    toggle.innerHTML = `
+                        <input type="checkbox" id="toggle-${panelId}" 
+                               ${panelState.is_visible ? 'checked' : ''}>
+                        <label for="toggle-${panelId}">${this.formatPanelName(panelId)}</label>
+                    `;
+                    
+                    const checkbox = toggle.querySelector('input');
+                    checkbox.addEventListener('change', () => {
+                        this.togglePanel(panelId, checkbox.checked);
+                    });
+                    
+                    container.appendChild(toggle);
+                });
+            }
+
+            generatePanels() {
+                const container = document.getElementById('panelsGrid');
+                container.innerHTML = '';
+
+                Object.entries(this.visualPanels).forEach(([panelId, panelState]) => {
+                    const panel = this.createPanel(panelId, panelState);
+                    container.appendChild(panel);
+                });
+            }
+
+            createPanel(panelId, panelState) {
+                const panel = document.createElement('div');
+                panel.className = `panel ${panelState.panel_type} ${panelState.is_visible ? '' : 'hidden'}`;
+                panel.id = `panel-${panelId}`;
+                
+                panel.innerHTML = `
+                    <div class="panel-header">
+                        <div class="panel-title">${this.formatPanelName(panelId)}</div>
+                        <div class="panel-status">Active</div>
+                    </div>
+                    <div class="panel-content" id="content-${panelId}">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Loading panel data...
+                        </div>
+                    </div>
+                `;
+
+                return panel;
+            }
+
+            updatePanelData(panelStates) {
+                Object.entries(panelStates || {}).forEach(([panelId, panelState]) => {
+                    const contentElement = document.getElementById(`content-${panelId}`);
+                    if (!contentElement) return;
+
+                    const dataSource = panelState.data_source;
+                    const streamData = this.dataStreams[dataSource];
+
+                    if (streamData) {
+                        this.renderPanelContent(panelId, panelState.panel_type, streamData);
+                    }
+                });
+            }
+
+            renderPanelContent(panelId, panelType, data) {
+                const contentElement = document.getElementById(`content-${panelId}`);
+                if (!contentElement || !data) return;
+
+                switch (panelType) {
+                    case 'optimization_monitor':
+                        this.renderOptimizationMonitor(contentElement, data);
+                        break;
+                    case 'hash_visualization':
+                        this.renderHashVisualization(contentElement, data);
+                        break;
+                    case 'gpu_monitor':
+                        this.renderGpuMonitor(contentElement, data);
+                        break;
+                    case 'path_visualizer':
+                        this.renderPathVisualizer(contentElement, data);
+                        break;
+                    case 'trading_monitor':
+                        this.renderTradingMonitor(contentElement, data);
+                        break;
+                    case 'thermal_visualization':
+                        this.renderThermalVisualization(contentElement, data);
+                        break;
+                    default:
+                        this.renderGenericData(contentElement, data);
+                }
+            }
+
+            renderOptimizationMonitor(element, data) {
+                element.innerHTML = `
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Decision</div>
+                            <div class="data-value">${data.decision || 'Unknown'}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">CPU Usage</div>
+                            <div class="data-value">${(data.cpu_usage || 0).toFixed(1)}%</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">GPU Usage</div>
+                            <div class="data-value">${(data.gpu_usage || 0).toFixed(1)}%</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Reason</div>
+                            <div class="data-value">${data.reason || 'N/A'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderHashVisualization(element, data) {
+                element.innerHTML = `
+                    <div class="hash-canvas" id="hash-canvas-${Date.now()}">
+                        <div class="hash-pulse" style="left: ${(data.hash_correlation || 0) * 80}%; top: 50%;"></div>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Hash Correlation</div>
+                            <div class="data-value">${(data.hash_correlation || 0).toFixed(4)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Pulse Intensity</div>
+                            <div class="data-value">${(data.pulse_intensity || 0).toFixed(2)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Decay Rate</div>
+                            <div class="data-value">${(data.decay_rate || 0).toFixed(3)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Crossover</div>
+                            <div class="data-value">${data.crossover_activity ? 'Active' : 'Inactive'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderGpuMonitor(element, data) {
+                const barCount = 20;
+                const bars = Array.from({length: barCount}, (_, i) => {
+                    const height = Math.random() * (data.color_intensity || 0.5) * 100;
+                    return `<div class="gpu-bar" style="height: ${height}%;"></div>`;
+                }).join('');
+
+                element.innerHTML = `
+                    <div class="gpu-bars">${bars}</div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Processing Lag</div>
+                            <div class="data-value">${(data.processing_lag || 0).toFixed(1)}ms</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Drift Differential</div>
+                            <div class="data-value">${(data.drift_differential || 0).toFixed(3)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderPathVisualizer(element, data) {
+                element.innerHTML = `
+                    <div class="path-container">
+                        <div class="path-line" style="top: 30%; width: 60%;"></div>
+                        <div class="path-line" style="top: 70%; width: 40%; animation-delay: 1s;"></div>
+                    </div>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">ALIF Strength</div>
+                            <div class="data-value">${(data.alif_strength || 0).toFixed(3)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">ALEPH Strength</div>
+                            <div class="data-value">${(data.aleph_strength || 0).toFixed(3)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Crossover Points</div>
+                            <div class="data-value">${(data.crossover_points || []).length}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Path Stability</div>
+                            <div class="data-value">${(data.path_stability || 0).toFixed(3)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderTradingMonitor(element, data) {
+                element.innerHTML = `
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Entropy Level</div>
+                            <div class="data-value">${(data.entropy_level || 0).toFixed(4)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Signal Strength</div>
+                            <div class="data-value">${(data.signal_strength || 0).toFixed(3)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Market State</div>
+                            <div class="data-value">${data.market_state || 'Unknown'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderThermalVisualization(element, data) {
+                element.innerHTML = `
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Thermal Factor</div>
+                            <div class="data-value">${(data.thermal_factor || 0).toFixed(3)}</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Temperature</div>
+                            <div class="data-value">${((data.thermal_factor || 0) * 100).toFixed(1)}°C</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderGenericData(element, data) {
+                element.innerHTML = `
+                    <div class="data-item">
+                        <div class="data-label">Data</div>
+                        <div class="data-value">${JSON.stringify(data, null, 2)}</div>
+                    </div>
+                `;
+            }
+
+            togglePanel(panelId, visible) {
+                this.send({
+                    type: 'toggle_panel',
+                    panel_id: panelId,
+                    visible: visible
+                });
+                
+                this.updatePanelVisibility(panelId, visible);
+            }
+
+            updatePanelVisibility(panelId, visible) {
+                const panel = document.getElementById(`panel-${panelId}`);
+                if (panel) {
+                    if (visible) {
+                        panel.classList.remove('hidden');
+                    } else {
+                        panel.classList.add('hidden');
+                    }
+                }
+            }
+
+            formatPanelName(panelId) {
+                return panelId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            }
+
+            formatUptime(seconds) {
+                if (seconds < 60) return `${seconds.toFixed(0)}s`;
+                if (seconds < 3600) return `${(seconds / 60).toFixed(1)}m`;
+                return `${(seconds / 3600).toFixed(1)}h`;
+            }
+
+            send(data) {
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify(data));
+                } else {
+                    console.warn('⚠️ WebSocket not connected, cannot send message');
+                }
+            }
+
+            handleConnectionError() {
+                this.updateConnectionStatus('disconnected', 'Connection failed');
+            }
+
+            handleReconnect() {
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    console.log(`🔄 Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+                    
+                    setTimeout(() => {
+                        this.connect();
+                    }, this.reconnectDelay * this.reconnectAttempts);
+                } else {
+                    console.error('❌ Max reconnection attempts reached');
+                    this.updateConnectionStatus('disconnected', 'Connection lost');
+                }
+            }
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🌟 Initializing Unified Schwabot Dashboard...');
+            new UnifiedDashboard();
+        });
+    </script>
+</body>
+</html> 

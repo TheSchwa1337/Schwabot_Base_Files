@@ -1,0 +1,11 @@
+{
+  "tick_id": 21,
+  "timestamp": "2025-06-19T00:41:20.331081",
+  "entropy": 0.5589628099946621,
+  "echo_strength": 0.3676995842858635,
+  "drift_score": 0.006788928280306965,
+  "alif_action": "broadcast_glyph",
+  "aleph_action": "hold",
+  "compression_mode": "\u0394_DRIFT",
+  "validated": false
+}

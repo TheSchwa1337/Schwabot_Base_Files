@@ -1,0 +1,99 @@
+{
+  "session_summary": {
+    "start_time": "2025-06-19T01:09:03.849783",
+    "end_time": "2025-06-19T01:09:15.886151",
+    "total_runtime": "0:00:00.004477"
+  },
+  "health_metrics": {
+    "uptime": "0:00:00.004477",
+    "total_ticks_processed": 3,
+    "successful_trades": 0,
+    "failed_trades": 0,
+    "ghost_recoveries": 21,
+    "system_errors": 0,
+    "average_tick_time": 0.0,
+    "memory_usage_mb": 0.0,
+    "cpu_usage_percent": 0.0
+  },
+  "tick_manager_status": {
+    "tick_count": 3,
+    "compression_mode": "LO_SYNC",
+    "alif_compressed": false,
+    "aleph_compressed": false,
+    "ghost_ticks_pending": 0,
+    "recent_error_count": 0,
+    "drift_correction_factor": 1.0,
+    "counters": {
+      "tick_count": 3,
+      "entry_attempts": 3,
+      "entry_suppressed": 0,
+      "compression_count": 0,
+      "visual_broadcasts": 3,
+      "echo_confirmations": 3,
+      "echo_failures": 0,
+      "strategy_confirms": 3,
+      "fallbacks_triggered": 0,
+      "hash_reloads": 0,
+      "path_conflicts": 0,
+      "drift_ticks": 0,
+      "visual_panel_refreshes": 0,
+      "ghost_ticks_recovered": 0,
+      "stack_timeouts": 0,
+      "pipe_integrity_failures": 0
+    }
+  },
+  "recent_decisions": [
+    {
+      "tick_id": 1,
+      "action": "EXECUTE",
+      "confidence": 1.0,
+      "timestamp": "2025-06-19T01:09:04.357395"
+    },
+    {
+      "tick_id": 2,
+      "action": "EXECUTE",
+      "confidence": 1.0,
+      "timestamp": "2025-06-19T01:09:04.860449"
+    },
+    {
+      "tick_id": 3,
+      "action": "EXECUTE",
+      "confidence": 1.0,
+      "timestamp": "2025-06-19T01:09:05.370397"
+    }
+  ],
+  "recovery_stats": {
+    "log_recovery": {
+      "scanned": 21,
+      "corrupted": 21,
+      "recovered": 21,
+      "quarantined": 0
+    },
+    "vector_status": {
+      "valid_vectors": 0,
+      "corrupted_vectors": 0,
+      "recovered_vectors": 0,
+      "integrity_score": 1.0
+    },
+    "shadow_status": {
+      "recovery_count": 0,
+      "desync_threshold": 5.0
+    },
+    "recovery_stats": {
+      "session_start": "2025-06-19 01:09:03.850781",
+      "total_recoveries": 21,
+      "recovery_success_rate": 1.0,
+      "last_recovery": "2025-06-19 01:09:15.930149"
+    },
+    "corruption_metrics": {
+      "corrupted_files": 42,
+      "recovered_files": 42,
+      "quarantined_files": 0,
+      "string_mismatches": 0,
+      "vector_realignments": 0,
+      "shadow_desync_events": 0,
+      "panic_recoveries": 0,
+      "last_corruption_time": null
+    }
+  }
+}

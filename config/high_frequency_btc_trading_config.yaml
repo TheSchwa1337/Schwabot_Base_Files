@@ -1,0 +1,378 @@
+# High-Frequency BTC Trading Integration Configuration
+# ===================================================
+# Configuration for Area #3: High-Frequency BTC Trading Integration
+# Building on thermal-aware foundation (Area #1) and multi-bit processing (Area #2)
+
+# =============================================================================
+# TRADING EXECUTION PARAMETERS
+# =============================================================================
+execution_config:
+  # Latency and speed requirements
+  max_latency_milliseconds: 5.0          # Maximum acceptable execution latency
+  target_latency_milliseconds: 1.0       # Target execution latency
+  ultra_fast_threshold_ms: 1.0           # Ultra-fast execution threshold
+  burst_mode_latency_ms: 0.5             # Burst mode target latency
+  
+  # Position and order management
+  position_size_btc: 0.01                # Base position size in BTC
+  max_positions: 10                      # Maximum concurrent positions
+  max_position_correlation: 0.7          # Maximum correlation between positions
+  position_scaling_enabled: true         # Enable dynamic position scaling
+  
+  # Profit and loss targets
+  profit_target_basis_points: 10         # 0.1% base profit target
+  stop_loss_basis_points: 5              # 0.05% base stop loss
+  slippage_tolerance_basis_points: 2     # 0.02% maximum slippage tolerance
+  dynamic_targets_enabled: true          # Enable dynamic profit/loss targets
+  
+  # Order execution settings
+  market_order_preference: 0.7           # Preference for market orders (0-1)
+  limit_order_offset_bp: 1               # Limit order offset in basis points
+  order_timeout_seconds: 30              # Order timeout
+  partial_fill_threshold: 0.8            # Minimum fill percentage to accept
+
+# =============================================================================
+# THERMAL INTEGRATION SETTINGS
+# =============================================================================
+thermal_trading:
+  # Enable thermal-aware trading
+  thermal_integration_enabled: true      # Enable thermal integration
+  thermal_position_scaling: true         # Scale positions with thermal state
+  thermal_speed_adjustment: true         # Adjust execution speed with thermal state
+  burst_trading_enabled: true            # Enable thermal burst trading
+  emergency_position_closure: true       # Close positions in thermal emergency
+  
+  # Thermal strategy mapping
+  thermal_strategy_mapping:
+    optimal_performance:                  # When system is cool (≤65°C)
+      strategy: "optimal_aggressive"
+      position_multiplier: 1.5           # Increase position sizes by 50%
+      execution_speed: "ultra_fast"       # <1ms execution target
+      profit_target_multiplier: 1.2      # Increase profit targets
+      burst_mode_enabled: true           # Enable burst mode
+      
+    balanced_processing:                  # Normal temperature (65-75°C)
+      strategy: "balanced_consistent"
+      position_multiplier: 1.0           # Normal position sizes
+      execution_speed: "very_fast"       # 1-5ms execution target
+      profit_target_multiplier: 1.0      # Normal profit targets
+      burst_mode_enabled: true           # Allow burst mode
+      
+    thermal_efficient:                   # Warm temperature (75-85°C)
+      strategy: "efficient_conservative"
+      position_multiplier: 0.7           # Reduce position sizes by 30%
+      execution_speed: "fast"            # 5-10ms execution target
+      profit_target_multiplier: 0.8      # Lower profit targets
+      burst_mode_enabled: false          # Disable burst mode
+      
+    emergency_throttle:                  # Hot temperature (85-90°C)
+      strategy: "throttle_safety"
+      position_multiplier: 0.3           # Reduce position sizes by 70%
+      execution_speed: "standard"        # 10-50ms execution target
+      profit_target_multiplier: 0.6      # Much lower profit targets
+      burst_mode_enabled: false          # No burst mode
+      
+    critical_protection:                 # Critical temperature (>90°C)
+      strategy: "critical_halt"
+      position_multiplier: 0.0           # No new positions
+      execution_speed: "conservative"    # Slow execution only
+      profit_target_multiplier: 0.0      # No profit targets
+      burst_mode_enabled: false          # Emergency mode only
+  
+  # Burst trading configuration
+  burst_trading:
+    thermal_headroom_required: 10.0      # °C headroom required for burst
+    max_burst_duration_seconds: 300      # 5 minutes maximum burst
+    burst_cooldown_ratio: 2.0            # Cooldown = 2x burst duration
+    burst_profit_threshold: 0.02         # 2% profit opportunity for burst
+    burst_position_multiplier: 1.5       # Position size multiplier during burst
+    burst_latency_target_ms: 0.5         # Ultra-low latency during burst
+
+# =============================================================================
+# MULTI-BIT TRADING INTEGRATION
+# =============================================================================
+multi_bit_trading:
+  # Enable multi-bit integration
+  multi_bit_integration_enabled: true    # Enable multi-bit processor integration
+  phaser_trading_enabled: true           # Enable 42-bit phaser trading
+  bit_level_signal_adaptation: true      # Adapt signals based on bit level
+  pattern_confidence_weighting: true     # Weight patterns by confidence
+  
+  # Bit level to signal strength mapping
+  bit_level_signal_mapping:
+    4:                                    # 4-bit processing level
+      signal_strength: "noise"           # Filter out most 4-bit signals
+      confidence_threshold: 0.9          # Very high threshold
+      position_multiplier: 0.3           # Small positions only
+      execution_priority: 5               # Low priority
+      
+    8:                                    # 8-bit processing level
+      signal_strength: "low"             # Low strength signals
+      confidence_threshold: 0.8          # High threshold
+      position_multiplier: 0.5           # Reduced positions
+      execution_priority: 4               # Below normal priority
+      
+    16:                                   # 16-bit processing level
+      signal_strength: "medium"          # Medium strength signals
+      confidence_threshold: 0.75         # Standard threshold
+      position_multiplier: 1.0           # Normal positions
+      execution_priority: 3               # Normal priority
+      
+    32:                                   # 32-bit processing level
+      signal_strength: "high"            # High strength signals
+      confidence_threshold: 0.7          # Lower threshold
+      position_multiplier: 1.2           # Increased positions
+      execution_priority: 2               # High priority
+      
+    42:                                   # 42-bit phaser level
+      signal_strength: "critical"        # Critical strength signals
+      confidence_threshold: 0.65         # Phaser threshold
+      position_multiplier: 1.5           # Large positions
+      execution_priority: 1               # Highest priority
+      phaser_mode_enabled: true          # Enable phaser features
+      
+    64:                                   # 64-bit deep analysis level
+      signal_strength: "critical"        # Critical strength signals
+      confidence_threshold: 0.6          # Deep analysis threshold
+      position_multiplier: 1.8           # Largest positions
+      execution_priority: 1               # Highest priority
+      deep_analysis_enabled: true        # Enable deep features
+  
+  # Signal processing configuration
+  signal_processing:
+    aggregation_window_ms: 100           # Signal aggregation window
+    pattern_confidence_threshold: 0.75   # Minimum pattern confidence
+    prediction_weight: 0.6               # Weight of predictions in decisions
+    correlation_threshold: 0.6           # Pattern correlation threshold
+    signal_decay_rate: 0.1               # Signal strength decay rate per second
+    max_signal_age_ms: 1000              # Maximum signal age before expiry
+  
+  # 42-bit phaser trading settings
+  phaser_trading:
+    enable_market_prediction: true       # Enable market prediction trading
+    enable_entropy_analysis: true        # Enable entropy-based trading
+    enable_profit_optimization: true     # Enable profit optimization
+    prediction_window_minutes: 15        # Prediction horizon
+    entropy_trading_threshold: 0.7       # Minimum entropy for trading
+    phaser_confidence_boost: 0.1         # Confidence boost for phaser signals
+    phaser_latency_target_ms: 0.8        # Target latency for phaser trades
+
+# =============================================================================
+# HIGH-FREQUENCY OPTIMIZATION
+# =============================================================================
+hf_optimization:
+  # Performance optimization
+  enable_microsecond_timing: true        # Enable microsecond precision timing
+  precompute_trade_parameters: true      # Precompute common parameters
+  cache_market_data: true                # Cache frequently accessed market data
+  parallel_signal_processing: true       # Process signals in parallel
+  adaptive_latency_optimization: true    # Adapt to network latency changes
+  order_book_pre_positioning: true       # Pre-position in order book
+  
+  # Execution optimization
+  execution_workers: 2                   # Number of execution workers
+  signal_processors: 4                   # Number of signal processing workers
+  queue_optimization: true               # Optimize queue performance
+  memory_pool_enabled: true              # Use memory pools for objects
+  cpu_affinity_enabled: true             # Set CPU affinity for workers
+  
+  # Network and connectivity
+  low_latency_networking: true           # Enable low-latency network settings
+  connection_pooling: true               # Pool exchange connections
+  websocket_compression: false           # Disable compression for speed
+  tcp_nodelay: true                      # Disable Nagle's algorithm
+  receive_buffer_size: 65536             # TCP receive buffer size
+  send_buffer_size: 65536                # TCP send buffer size
+  
+  # Data optimization
+  market_data_compression: false         # Disable compression for speed
+  tick_data_batching: true               # Batch tick data for efficiency
+  pattern_cache_size: 10000              # Pattern recognition cache size
+  signal_cache_ttl_ms: 500               # Signal cache time-to-live
+  
+  # Algorithm optimization
+  fast_math_enabled: true                # Enable fast math operations
+  vectorized_calculations: true          # Use vectorized calculations
+  lookup_table_optimization: true        # Use lookup tables for common calculations
+  branch_prediction_hints: true          # Optimize branch prediction
+
+# =============================================================================
+# RISK MANAGEMENT
+# =============================================================================
+risk_management:
+  # Position and exposure limits
+  max_daily_loss_btc: 0.1                # Maximum daily loss in BTC
+  max_drawdown_percent: 5.0              # Maximum drawdown percentage
+  max_leverage: 3.0                      # Maximum leverage allowed
+  position_concentration_limit: 0.3      # Maximum position concentration
+  
+  # Correlation and diversification
+  position_correlation_limit: 0.7        # Maximum position correlation
+  sector_exposure_limit: 0.5             # Maximum sector exposure
+  strategy_diversification_min: 3        # Minimum number of strategies
+  
+  # Dynamic risk adjustment
+  volatility_risk_adjustment: true       # Adjust risk for volatility
+  thermal_risk_multiplier: 1.5           # Risk multiplier for thermal state
+  market_condition_adjustment: true      # Adjust for market conditions
+  time_based_risk_scaling: true          # Scale risk by time of day
+  
+  # Emergency conditions
+  emergency_shutdown_conditions:
+    consecutive_losses: 5                 # Maximum consecutive losses
+    hourly_loss_btc: 0.05                # Maximum hourly loss in BTC
+    thermal_emergency: true              # Shutdown on thermal emergency
+    market_volatility_threshold: 0.1     # Emergency volatility threshold
+    latency_degradation_threshold: 10.0  # Emergency latency threshold (ms)
+    exchange_connectivity_loss: true     # Shutdown on exchange disconnect
+  
+  # Risk monitoring
+  risk_monitoring_interval_seconds: 10   # Risk monitoring frequency
+  position_monitoring_interval_seconds: 1 # Position monitoring frequency
+  drawdown_calculation_method: "peak_to_trough" # Drawdown calculation method
+  risk_metrics_retention_hours: 24       # Risk metrics retention period
+
+# =============================================================================
+# TRADING MODES AND STRATEGIES
+# =============================================================================
+trading_modes:
+  # High-frequency trading modes
+  market_making:
+    enabled: true                        # Enable market making mode
+    bid_ask_spread_target: 0.001         # Target bid-ask spread
+    inventory_target: 0.5                # Target inventory level
+    quote_refresh_interval_ms: 100       # Quote refresh interval
+    max_quote_size_btc: 0.05             # Maximum quote size
+    
+  momentum_scalping:
+    enabled: true                        # Enable momentum scalping
+    momentum_threshold: 0.002            # Momentum detection threshold
+    scalp_target_bp: 5                   # Scalping profit target (basis points)
+    max_hold_time_seconds: 60            # Maximum hold time
+    
+  arbitrage_hunting:
+    enabled: false                       # Enable arbitrage hunting
+    min_arbitrage_opportunity: 0.001     # Minimum arbitrage opportunity
+    execution_window_ms: 500             # Arbitrage execution window
+    cross_exchange_enabled: false        # Cross-exchange arbitrage
+    
+  news_reaction:
+    enabled: true                        # Enable news reaction trading
+    news_latency_target_ms: 50           # News reaction latency target
+    sentiment_threshold: 0.7             # News sentiment threshold
+    position_hold_time_minutes: 5        # News position hold time
+    
+  pattern_breakout:
+    enabled: true                        # Enable pattern breakout trading
+    breakout_confirmation_bars: 2        # Bars for breakout confirmation
+    false_breakout_protection: true      # Protect against false breakouts
+    pattern_strength_threshold: 0.8      # Pattern strength threshold
+    
+  thermal_burst:
+    enabled: true                        # Enable thermal burst trading
+    thermal_opportunity_threshold: 0.05  # Thermal opportunity threshold
+    burst_profit_multiplier: 1.5         # Profit multiplier during burst
+    thermal_signal_boost: 0.2            # Signal boost during optimal thermal
+
+# =============================================================================
+# INTEGRATION WITH FOUNDATION SYSTEMS
+# =============================================================================
+system_integration:
+  # Area #1: Enhanced Thermal-Aware BTC Processor integration
+  thermal_btc_processor:
+    enable_integration: true             # Enable thermal processor integration
+    thermal_callback_registration: true # Register for thermal callbacks
+    shared_metrics_reporting: true       # Share metrics with thermal processor
+    coordinated_burst_processing: true   # Coordinate burst processing
+    thermal_state_caching: true         # Cache thermal state for speed
+    thermal_prediction_enabled: true     # Enable thermal state prediction
+    
+  # Area #2: Multi-bit BTC Processor integration
+  multi_bit_processor:
+    enable_integration: true             # Enable multi-bit processor integration
+    bit_level_callback_registration: true # Register for bit level callbacks
+    pattern_data_sharing: true          # Share pattern recognition data
+    phaser_coordination: true           # Coordinate with phaser system
+    signal_aggregation_enabled: true    # Aggregate signals from multi-bit
+    prediction_integration: true        # Integrate multi-bit predictions
+    
+  # Visual controller integration
+  visual_controller:
+    hf_trading_visualization: true       # Visualize HF trading activity
+    real_time_metrics_display: true     # Display real-time metrics
+    trade_execution_overlay: true       # Overlay trade executions
+    thermal_trading_correlation: true   # Show thermal-trading correlation
+    
+  # API coordinator integration
+  api_coordinator:
+    hf_trading_endpoints: true           # Expose HF trading endpoints
+    real_time_status_api: true           # Real-time status API
+    trade_execution_api: true            # Trade execution API
+    metrics_streaming_api: true         # Streaming metrics API
+    
+  # Pipeline manager integration
+  pipeline_manager:
+    trading_data_retention: true        # Retain trading data
+    execution_data_archival: true       # Archive execution data
+    coordinated_memory_management: true # Coordinate memory usage
+    performance_data_pipeline: true     # Performance data pipeline
+
+# =============================================================================
+# MONITORING AND PERFORMANCE
+# =============================================================================
+monitoring:
+  # Performance monitoring
+  latency_monitoring_enabled: true      # Enable latency monitoring
+  execution_time_tracking: true         # Track execution times
+  throughput_monitoring: true           # Monitor trading throughput
+  success_rate_tracking: true           # Track success rates
+  
+  # Alert thresholds
+  latency_alert_threshold_ms: 10.0      # Latency alert threshold
+  success_rate_alert_threshold: 0.9     # Success rate alert threshold
+  position_limit_alert_threshold: 0.8   # Position limit alert threshold
+  drawdown_alert_threshold: 0.03        # Drawdown alert threshold (3%)
+  
+  # Metrics collection
+  metrics_collection_interval_ms: 1000  # Metrics collection interval
+  metrics_retention_hours: 48           # Metrics retention period
+  detailed_execution_logging: true      # Detailed execution logging
+  performance_analytics_enabled: true   # Enable performance analytics
+  
+  # Reporting
+  daily_performance_report: true        # Generate daily performance reports
+  thermal_correlation_analysis: true    # Analyze thermal correlation
+  multi_bit_effectiveness_analysis: true # Analyze multi-bit effectiveness
+  real_time_dashboard_updates: true     # Real-time dashboard updates
+
+# =============================================================================
+# DEVELOPMENT AND TESTING
+# =============================================================================
+development:
+  # Testing and simulation
+  enable_simulation_mode: false         # Enable simulation mode for testing
+  mock_exchange_enabled: false          # Use mock exchange for testing
+  simulated_latency_ms: 0               # Simulated network latency
+  paper_trading_mode: true              # Enable paper trading mode
+  
+  # Development overrides
+  force_thermal_mode: null              # Force specific thermal mode (testing)
+  force_bit_level: null                 # Force specific bit level (testing)
+  disable_risk_management: false        # Disable risk management (testing)
+  override_latency_requirements: false  # Override latency requirements
+  
+  # Debugging and logging
+  verbose_logging: false                # Enable verbose logging
+  execution_debug_logging: false        # Debug execution details
+  signal_processing_debug: false        # Debug signal processing
+  thermal_integration_debug: false      # Debug thermal integration
+  multi_bit_integration_debug: false    # Debug multi-bit integration
+  performance_profiling: false          # Enable performance profiling
+  
+  # Testing configuration
+  test_signal_generation: false         # Generate test signals
+  stress_test_mode: false               # Enable stress testing
+  load_test_configuration:
+    max_signals_per_second: 1000        # Maximum signals per second for testing
+    max_concurrent_positions: 50        # Maximum positions for testing
+    test_duration_minutes: 60           # Test duration 

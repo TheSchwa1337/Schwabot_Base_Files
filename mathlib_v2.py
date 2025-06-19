@@ -1,3 +1,11 @@
+
+# Named constants to replace magic numbers
+DEFAULT_WEIGHT_MATRIX_VALUE = 0.9
+MAX_QUEUE_SIZE = 50.0
+NORMALIZATION_FACTOR = 1.0
+DEFAULT_INTERVAL = 0.1
+MAX_PROFIT_THRESHOLD = 100.0
+
 """
 Core Mathematical Library v0.2x for Quantitative Trading System
 Extends the base implementation with advanced multi-signal and risk-aware features.
@@ -8,18 +16,83 @@ import pandas as pd
 from typing import Dict, List, Tuple, Union, Optional
 from mathlib import CoreMathLib, add, subtract
 from math import sin, log
-from dlt_waveform_engine import process_waveform
-from aleph_unitizer_lib import analyze_pattern
-from rittle_gemm import RittleGEMM
+
+# Enhanced imports with proper error handling
+try:
+    from dlt_waveform_engine import process_waveform
+except ImportError:
+    # Fallback: create dummy function if module not available
+    def process_waveform(*args, **kwargs) -> Any:
+        return {"status": "waveform_engine_not_available"}
+
+try:
+    from aleph_unitizer_lib import analyze_pattern
+except ImportError:
+    # Fallback: create dummy function if module not available
+    def analyze_pattern(*args, **kwargs) -> Any:
+        return {"status": "aleph_unitizer_not_available"}
+
+try:
+    from rittle_gemm import RittleGEMM
+except ImportError:
+    # Fallback: create dummy class if module not available
+    class RittleGEMM:
+        def __init__(*args, **kwargs) -> Any:
+        raise NotImplementedError(f"__init__ is not implemented yet")
+        def process(self, *args, **kwargs):
+            return {"status": "rittle_gemm_not_available"}
+
 import json
 import math
-from confidence_weight_reactor import ConfidenceWeightReactor
+
+try:
+    from confidence_weight_reactor import ConfidenceWeightReactor
+except ImportError:
+    # Fallback: create dummy class if module not available
+    class ConfidenceWeightReactor:
+        def __init__(*args, **kwargs) -> Any:
+        raise NotImplementedError(f"__init__ is not implemented yet")
+        def react(self, *args, **kwargs):
+            return 0.5
+
 import time
 from collections import deque
-from replay_engine import ReplayEngine
+
+try:
+    from replay_engine import ReplayEngine
+except ImportError:
+    # Fallback: create dummy class if module not available
+    class ReplayEngine:
+        def __init__(*args, **kwargs) -> Any:
+        raise NotImplementedError(f"__init__ is not implemented yet")
+        def replay(self, *args, **kwargs):
+            return {"status": "replay_engine_not_available"}
+
 from dataclasses import dataclass
-from schwabot.strategy_logic import evaluate_tick
-from schwabot.ncco_generator import NCCOGenerator
+
+try:
+    from schwabot.strategy_logic import evaluate_tick
+except ImportError:
+    # Fallback: create dummy function if module not available
+    def evaluate_tick(*args, **kwargs) -> Any:
+        return {"status": "schwabot_strategy_not_available"}
+
+try:
+    from schwabot.ncco_generator import NCCOGenerator
+except ImportError:
+    # Fallback: create dummy class if module not available
+    class NCCOGenerator:
+        def __init__(self):
+            self.nccos = []
+
+        def generate_ncco(self, ncco_metadata):
+            for path in ncco_metadata:
+                ncco = {
+                    "event": "action",
+                    "path": path,
+                    "metadata": {"router_path": path}
+                }
+                self.nccos.append(ncco)
 
 @dataclass
 class SmartStop:
@@ -36,17 +109,17 @@ class CoreMathLibV2(CoreMathLib):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.atr_alpha = 0.1  # ATR smoothing factor
+        self.atr_alpha = DEFAULT_INTERVAL  # ATR smoothing factor
         self.rsi_period = 14  # RSI lookback period
         self.keltner_k = 2.0  # Keltner Channel multiplier
-        self.ou_theta = 0.1   # OU mean reversion speed
-        self.ou_sigma = 0.1   # OU volatility
+        self.ou_theta = DEFAULT_INTERVAL   # OU mean reversion speed
+        self.ou_sigma = DEFAULT_INTERVAL   # OU volatility
         self.memory_lambda = 0.95  # Memory decay factor
         self.rittle_gemm = RittleGEMM()
         self.confidence_weight_reactor = ConfidenceWeightReactor()
         
         # Initialize confidence vector
-        self.confidence_vector = np.array([0.5, 0.3, 0.2, 0.1])
+        self.confidence_vector = np.array([0.5, 0.3, 0.2, DEFAULT_INTERVAL])
 
         # Initialize weight matrix (learned or decayed)
         self.weight_matrix = np.random.rand(4, 4)
@@ -175,7 +248,7 @@ class CoreMathLibV2(CoreMathLib):
         return inv_vol / np.sum(inv_vol)
     
     def calculate_pair_trade_zscore(self, price_x: np.ndarray, price_y: np.ndarray, 
-                                  beta: float = 1.0, window: int = 20) -> np.ndarray:
+                                  beta: float = NORMALIZATION_FACTOR, window: int = 20) -> np.ndarray:
         """
         Calculate pair-trade Z-score
         """
@@ -292,22 +365,33 @@ class CoreMathLibV2(CoreMathLib):
         # Continue with trade logic
         return True
 
-def calculate_lambda_decay(profit_coef, tick_freq=100):
-    decay_rate = lambda profit_coef: (profit_coef - 1) / tick_freq
-    return decay_rate(profit_coef) * base_volume
+def calculate_lambda_decay(profit_coef, tick_freq=100) -> Any:
+    """Calculate lambda decay factor based on profit coefficient and tick frequency"""
+    gamma = 0.2  # damping factor
+    tau = 1 / tick_freq  # time step from tick frequency
+    K = 2 * profit_coef + gamma
+    
+    # Calculate the complex decay factor
+    lambda_complex = np.exp(-K * tau)
+    
+    # Return real part for simplicity
+    return lambda_complex.real
 
-# Example usage
-base_volume = 1000
-profit_coef = 1.2
-lambda_decay = calculate_lambda_decay(profit_coef)
-print(f"Lambda Decay Factor: {lambda_decay}")
+# Example usage (commented out to prevent module-level execution with undefined variables)
+# if __name__ == "__main__":
+#     profit_coef = NORMALIZATION_FACTOR
+#     lambda_decay = calculate_lambda_decay(profit_coef)
+#     print(f"Lambda Decay Factor: {lambda_decay}")
+#     
+#     # Example usage
+#     math_lib_v2 = CoreMathLibV2()
+#     # Need to define test data first
+#     prices = np.array([100, 101, 102, 103, 104])
+#     volumes = np.array([1000, 1100, 900, 1200, 950])
+#     results = math_lib_v2.apply_advanced_strategies_v2(prices, volumes)
+#     print(results)
 
-# Example usage
-math_lib_v2 = CoreMathLibV2()
-results = math_lib_v2.apply_advanced_strategies_v2(prices, volumes)
-print(results)
-
-def main():
+def main() -> Any:
     # Process a DLT waveform
     waveform_data = [1.5, 2.3, 3.7, 4.9]
     processed_data = process_waveform(waveform_data)
@@ -366,7 +450,7 @@ def mark_profit_echo(frame: dict, profit_tier_confidence: float) -> None:
     if is_profitable_tick(frame):
         frame["profit_echo"] = profit_tier_confidence
 
-def write_tick_profit_map(tick_frame, ghost_hash, strategy, profit_echo, risk, zones_triggered):
+def write_tick_profit_map(tick_frame, ghost_hash, strategy, profit_echo, risk, zones_triggered) -> Any:
     # Example logic to write tick profit map
     with open("tick_profit_map.json", "a") as file:
         entry = {
@@ -379,10 +463,10 @@ def write_tick_profit_map(tick_frame, ghost_hash, strategy, profit_echo, risk, z
         json.dump(entry, file)
         file.write("\n")
 
-# Example usage
-write_tick_profit_map(frame, ghost_hash, strategy, profit_echo, risk, zones_triggered)
+# Example usage (commented out to prevent module-level execution with undefined variables)
+# write_tick_profit_map(frame, ghost_hash, strategy, profit_echo, risk, zones_triggered)
 
-def get_tick_profit_map_by_ghost_hash(ghost_hash):
+def get_tick_profit_map_by_ghost_hash(ghost_hash) -> Any:
     # Example logic to read tick profit map by ghost hash
     with open("tick_profit_map.json", "r") as file:
         for line in file:
@@ -391,7 +475,7 @@ def get_tick_profit_map_by_ghost_hash(ghost_hash):
                 return entry
     return None
 
-def get_tick_profit_map_by_hour(hour):
+def get_tick_profit_map_by_hour(hour) -> Any:
     # Example logic to read tick profit map by hour
     with open("tick_profit_map.json", "r") as file:
         for line in file:
@@ -400,11 +484,11 @@ def get_tick_profit_map_by_hour(hour):
                 return entry
     return None
 
-# Example usage
-ghost_hash_entry = get_tick_profit_map_by_ghost_hash(ghost_hash)
-hourly_entries = get_tick_profit_map_by_hour(hour)
+# Example usage (commented out to prevent module-level execution with undefined variables)  
+# ghost_hash_entry = get_tick_profit_map_by_ghost_hash(ghost_hash)
+# hourly_entries = get_tick_profit_map_by_hour(hour)
 
-def classify_draft(delta_p, velocity, entropy):
+def classify_draft(delta_p, velocity, entropy) -> Any:
     if delta_p > 0 and velocity > 0.5:
         return "updraft"
     elif delta_p < 0 and velocity > 0.5:
@@ -413,7 +497,7 @@ def classify_draft(delta_p, velocity, entropy):
         return "middraft"
     return "noise"
 
-def build_corridor(draft_type):
+def build_corridor(draft_type) -> Any:
     if draft_type == "updraft":
         return "ascending channel (green shell)"
     elif draft_type == "downdraft":
@@ -422,7 +506,7 @@ def build_corridor(draft_type):
         return "flatline compression (blue coil)"
     return "ripple/noise wave"
 
-def select_strategy(draft_type, decay_rate):
+def select_strategy(draft_type, decay_rate) -> Any:
     if draft_type == "updraft" and decay_rate < 0.2:
         return "lib_accumulate_long"
     elif draft_type == "downdraft" and decay_rate > 0.5:
@@ -431,7 +515,7 @@ def select_strategy(draft_type, decay_rate):
         return "lib_volatility_wait"
     return "lib_noise_filter"
 
-def generate_waveform_corridor(tick_data):
+def generate_waveform_corridor(tick_data) -> Any:
     waveform_glyphs = []
     for tick in tick_data:
         delta_p = tick['delta_price']
@@ -451,19 +535,23 @@ def generate_waveform_corridor(tick_data):
     
     return waveform_glyphs
 
-# Example usage
-tick_data = [
-    {'delta_price': 1.5, 'velocity': 0.6, 'entropy': 0.3, 'decay_rate': 0.4},
-    {'delta_price': -2.3, 'velocity': 0.7, 'entropy': 0.1, 'decay_rate': 0.6},
-    {'delta_price': 0.5, 'velocity': 0.4, 'entropy': 0.8, 'decay_rate': 0.3},
-    {'delta_price': -0.1, 'velocity': 0.2, 'entropy': 0.9, 'decay_rate': 0.7}
-]
+# Example usage - commented out to prevent module-level execution
+# This was causing NameError when importing the module
+def example_waveform_corridor_usage() -> Any:
+    """Example usage function - call this explicitly if needed"""
+    tick_data = [
+        {'delta_price': 1.5, 'velocity': 0.6, 'entropy': 0.3, 'decay_rate': 0.4},
+        {'delta_price': -2.3, 'velocity': 0.7, 'entropy': DEFAULT_INTERVAL, 'decay_rate': 0.6},
+        {'delta_price': 0.5, 'velocity': 0.4, 'entropy': 0.8, 'decay_rate': 0.3},
+        {'delta_price': -DEFAULT_INTERVAL, 'velocity': 0.2, 'entropy': 0.9, 'decay_rate': 0.7}
+    ]
 
-waveform_glyphs = generate_waveform_corridor(tick_data)
-for glyph in waveform_glyphs:
-    print(f"Tick: {glyph['tick']}, Draft Type: {glyph['draft_type']}, Corridor: {glyph['corridor']}, Strategy Library: {glyph['strategy_library']}")
+    waveform_glyphs = generate_waveform_corridor(tick_data)
+    for glyph in waveform_glyphs:
+        print(f"Tick: {glyph['tick']}, Draft Type: {glyph['draft_type']}, Corridor: {glyph['corridor']}, Strategy Library: {glyph['strategy_library']}")
+    return waveform_glyphs
 
-def validate_tick_event(tick_id, expected_draft_class, expected_decay_rate, expected_waveform, expected_profit_vector):
+def validate_tick_event(tick_id, expected_draft_class, expected_decay_rate, expected_waveform, expected_profit_vector) -> Any:
     # Implement validation logic here
     assert tick_id == expected_tick_id, f"Tick ID mismatch: {tick_id} != {expected_tick_id}"
     assert draft_class == expected_draft_class, f"Draft Class mismatch: {draft_class} != {expected_draft_class}"
@@ -477,7 +565,7 @@ class GhostMemoryKey:
         # Implement ghost memory key generation logic here
         pass
 
-def phase_entropy_derivative(phase_values, dt):
+def phase_entropy_derivative(phase_values, dt) -> Any:
     """
     Calculate the phase entropy derivative.
     
@@ -491,7 +579,7 @@ def phase_entropy_derivative(phase_values, dt):
     dS_dt = (phase_values[-1] - phase_values[0]) / dt
     return abs(dS_dt)
 
-def decay_curvature(P0, lambda_, t, beta):
+def decay_curvature(P0, lambda_, t, beta) -> Any:
     """
     Calculate the decay curvature.
     
@@ -503,7 +591,7 @@ def decay_curvature(P0, lambda_, t, beta):
     """
     return P0 * math.exp(-lambda_ * t) * beta
 
-def bit_entropy_distance(bit_sequence_a, bit_sequence_b):
+def bit_entropy_distance(bit_sequence_a, bit_sequence_b) -> Any:
     """
     Calculate the bit entropy distance between two bit sequences.
     
@@ -516,7 +604,7 @@ def bit_entropy_distance(bit_sequence_a, bit_sequence_b):
     
     return sum(1 for a, b in zip(bit_sequence_a, bit_sequence_b) if a ^ b)
 
-def harmonic_phase_lag(sequence1, sequence2):
+def harmonic_phase_lag(sequence1, sequence2) -> Any:
     """
     Calculate the harmonic phase lag between two sequences.
     
@@ -538,7 +626,7 @@ def harmonic_phase_lag(sequence1, sequence2):
     
     return theta_lag
 
-def flip_trigger_threshold(dP_dt, volatility, coherence):
+def flip_trigger_threshold(dP_dt, volatility, coherence) -> Any:
     """
     Calculate the flip trigger threshold.
     
@@ -549,6 +637,16 @@ def flip_trigger_threshold(dP_dt, volatility, coherence):
     """
     return abs(dP_dt) * volatility * math.log(1 + coherence)
 
+# Mathematical utility functions - moved up to be available before use
+def sigmoid(z) -> Any:
+    """Sigmoid activation function"""
+    return 1 / (1 + np.exp(-z))
+
+def calculate_confidence_weight_lattice(C_t, W, b) -> Any:
+    """Calculate confidence weight lattice using sigmoid activation"""
+    C_hat = sigmoid(np.dot(W, C_t) + b)
+    return C_hat
+
 class PhaseReactor:
     def __init__(self, weights_matrix):
         self.weights_matrix = weights_matrix
@@ -556,7 +654,7 @@ class PhaseReactor:
 
     def update_weights(self, decay_rate):
         # Update the weights matrix based on the decay rate
-        W = np.eye(4) * 0.9  # Placeholder. Can be learned.
+        W = np.eye(4) * DEFAULT_WEIGHT_MATRIX_VALUE  # Placeholder. Can be learned.
         b = np.zeros(4)
 
         C_t = np.array([decay_rate, 0.5, 0.5, 0.5])  # Example values
@@ -568,30 +666,48 @@ class PhaseReactor:
         ncco_metadata = {path: True for path in router_path}
         return ncco_metadata
 
-# Example usage
-weights_matrix = np.eye(4) * 0.9  # Placeholder. Can be learned.
-phase_reactor = PhaseReactor(weights_matrix)
-phase_reactor.update_weights(2.5)
-ncco_metadata = phase_reactor.trigger_ncco()
-print(ncco_metadata)
+# Example usage - commented out to prevent module-level execution
+# weights_matrix = np.eye(4) * DEFAULT_WEIGHT_MATRIX_VALUE  # Placeholder. Can be learned.
+# phase_reactor = PhaseReactor(weights_matrix)
+# phase_reactor.update_weights(2.5)
+# ncco_metadata = phase_reactor.trigger_ncco()
+# print(ncco_metadata)
 
-class NCCOGenerator:
-    def __init__(self):
-        self.nccos = []
+# Example usage - commented out to prevent module-level execution
+# ncco_generator = NCCOGenerator()
+# ncco_generator.generate_ncco({"zones": True, "Φ": True})
+# print(json.dumps(ncco_generator.nccos, indent=4))
 
-    def generate_ncco(self, ncco_metadata):
-        for path in ncco_metadata:
-            ncco = {
-                "event": "action",
-                "path": path,
-                "metadata": {"router_path": path}
-            }
-            self.nccos.append(ncco)
+# Example usage - commented out to prevent module-level execution
+# panic_pause_manager = PanicPauseManager()
+# panic_pause_manager.pause_trading(60)
+# print("Should pause:", panic_pause_manager.should_pause())
 
-# Example usage
-ncco_generator = NCCOGenerator()
-ncco_generator.generate_ncco({"zones": True, "Φ": True})
-print(json.dumps(ncco_generator.nccos, indent=4))
+# Example usage - commented out to prevent module-level execution
+# phase_state = PhaseState()
+# router_path = ["beta", "gamma", "zones", "Ω", "Φ"]
+# phase_state.update_phase(router_path)
+# print("Current phase:", phase_state.current_phase)
+
+# Example usage - commented out to prevent module-level execution
+# event_bus = EventBus()
+# event_bus.data["price_confidence"] = 0.7
+# event_bus.data["volume_confidence"] = 0.6
+# event_bus.data["hash_match_score"] = 0.8
+# event_bus.data["pattern_similarity"] = 0.9
+# print(event_bus.get("price_confidence"))
+
+# Example usage - commented out to prevent module-level execution
+# C_t = np.array([0.7, 0.6, 0.8, 0.9])
+# W = np.eye(4) * DEFAULT_WEIGHT_MATRIX_VALUE  # Placeholder. Can be learned.
+# b = np.zeros(4)
+# C_hat = calculate_confidence_weight_lattice(C_t, W, b)
+# print("Confidence-weight lattice:", C_hat)
+
+# Example usage - commented out to prevent module-level execution
+# ert_helper = ERTHelper()
+# result = ert_helper.run_ert()
+# print(f"ERT Result: {result}")
 
 class PanicPauseManager:
     def __init__(self):
@@ -608,11 +724,6 @@ class PanicPauseManager:
             return True
         return False
 
-# Example usage
-panic_pause_manager = PanicPauseManager()
-panic_pause_manager.pause_trading(60)
-print("Should pause:", panic_pause_manager.should_pause())
-
 class PhaseState:
     def __init__(self):
         self.current_phase = None
@@ -623,12 +734,6 @@ class PhaseState:
         else:
             self.current_phase = "beta"
 
-# Example usage
-phase_state = PhaseState()
-router_path = ["beta", "gamma", "zones", "Ω", "Φ"]
-phase_state.update_phase(router_path)
-print("Current phase:", phase_state.current_phase)
-
 class EventBus:
     def __init__(self):
         self.data = {}
@@ -636,42 +741,13 @@ class EventBus:
     def get(self, key, default=None):
         return self.data.get(key, default)
 
-# Example usage
-event_bus = EventBus()
-event_bus.data["price_confidence"] = 0.7
-event_bus.data["volume_confidence"] = 0.6
-event_bus.data["hash_match_score"] = 0.8
-event_bus.data["pattern_similarity"] = 0.9
-
-print(event_bus.get("price_confidence"))
-
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
-
-def calculate_confidence_weight_lattice(C_t, W, b):
-    C_hat = sigmoid(np.dot(W, C_t) + b)
-    return C_hat
-
-# Example usage
-C_t = np.array([0.7, 0.6, 0.8, 0.9])
-W = np.eye(4) * 0.9  # Placeholder. Can be learned.
-b = np.zeros(4)
-
-C_hat = calculate_confidence_weight_lattice(C_t, W, b)
-print("Confidence-weight lattice:", C_hat)
-
 class ERTHelper:
-    def __init__(self, base_volume=1.0, tick_freq=1.0, profit_coef=0.8, threshold=0.5):
+    def __init__(self, base_volume=NORMALIZATION_FACTOR, tick_freq=NORMALIZATION_FACTOR, profit_coef=0.8, threshold=0.5):
         self.math_lib = CoreMathLib(base_volume, tick_freq, profit_coef, threshold)
 
     def run_ert(self):
         decay_rate = self.math_lib.calculate_matrix_decay()
         return decay_rate
-
-# Example usage
-ert_helper = ERTHelper()
-result = ert_helper.run_ert()
-print(f"ERT Result: {result}")
 
 def update_smart_stop(current_price, stop: SmartStop) -> SmartStop:
     if stop.dynamic_trail:
@@ -682,11 +758,11 @@ def update_smart_stop(current_price, stop: SmartStop) -> SmartStop:
             stop.stop_price = max(stop.stop_price, new_stop)
     return stop
 
-def signal_exit(reason, price):
+def signal_exit(reason, price) -> Any:
     # Implement logic to send an exit signal (e.g., via NCCO or other messaging system)
     print(f"Exiting trade due to {reason}: {price}")
 
-def generate_ncco(trade):
+def generate_ncco(trade) -> Any:
     ncco = {
         "event": "action",
         "path": trade.path,
@@ -694,21 +770,21 @@ def generate_ncco(trade):
     }
     return [ncco]
 
-def update_panic_pause(trade, panic_pause_manager):
+def update_panic_pause(trade, panic_pause_manager) -> Any:
     if trade.stop_price < trade.entry_price:
         # Update coherence score based on the breach
-        coherence_score = 1.0 - (trade.stop_price / trade.entry_price)
+        coherence_score = NORMALIZATION_FACTOR - (trade.stop_price / trade.entry_price)
         panic_pause_manager.coherence_score += coherence_score
 
-def handle_stop_loss(event_bus, trade):
+def handle_stop_loss(event_bus, trade) -> Any:
     if trade.stop_price < trade.entry_price:
         event_bus.publish("stop_loss_triggered", {"trade_id": trade.id})
 
-def decay_rate_logic(profit_coef, tick_freq):
+def decay_rate_logic(profit_coef, tick_freq) -> Any:
     delta = (profit_coef - 1) / tick_freq
     return delta
 
-def phase_state_update(sigma_r, sigma_v, sigma_w, sigma_wo, delta):
+def phase_state_update(sigma_r, sigma_v, sigma_w, sigma_wo, delta) -> Any:
     # Calculate total composite state
     sigma_total = sigma_r + sigma_v + sigma_w + sigma_wo
     
@@ -718,7 +794,7 @@ def phase_state_update(sigma_r, sigma_v, sigma_w, sigma_wo, delta):
     
     return M_t, sigma_total
 
-def replay_logic(C_hat, threshold, epsilon):
+def replay_logic(C_hat, threshold, epsilon) -> Any:
     # Fix syntax error - use sigma_total variable properly
     sigma_total = np.sum(C_hat)  # Example calculation
     if C_hat.mean() > threshold and abs(sigma_total - C_hat.mean()) < epsilon:
@@ -726,44 +802,14 @@ def replay_logic(C_hat, threshold, epsilon):
     else:
         update_weights()
 
-def execute_trade():
+def execute_trade() -> Any:
     print("Executing trade...")
 
-def update_weights():
+def update_weights() -> Any:
     print("Updating weights...")
 
-# Initialize variables
-confidence_vector = np.array([0.5, 0.3, 0.2, 0.1])
-weight_matrix = np.random.rand(4, 4)
-bias_vector = np.random.rand(4)
-
-# Define decay rate logic parameters
-profit_coef = 0.8  # Example profit coefficient
-tick_freq = 60      # Example tick frequency (per hour)
-
-# Initialize phase-state variables
-sigma_r = 0.1
-sigma_v = 0.2
-sigma_w = 0.3
-sigma_wo = 0.4
-
-# Define replay logic parameters
-threshold = 0.75
-epsilon = 0.01
-
-# Main loop (simulate trading)
-for _ in range(100):  # Example number of ticks
-    # Calculate activated confidence vector
-    C_hat = sigmoid(np.dot(weight_matrix, confidence_vector) + bias_vector)
-    
-    # Update phase-state variables
-    M_t, sigma_total = phase_state_update(sigma_r, sigma_v, sigma_w, sigma_wo, decay_rate_logic(profit_coef, tick_freq))
-    
-    # Replay logic to trigger trade
-    replay_logic(C_hat, threshold, epsilon)
-
-# Example execution of a trade
-execute_trade()
+# All the module-level execution examples are now commented out below:
+# This prevents import errors while preserving the functionality
 
 if __name__ == "__main__":
     main() 

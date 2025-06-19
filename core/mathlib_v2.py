@@ -1,8 +1,11 @@
 # --- GPU Optional Decorator ---
+import numpy as np
+
 try:
     import cupy as cp
     GPU_ENABLED = True
 except ImportError:
+    import numpy as np  # Ensure numpy is available for fallback
     cp = np
     GPU_ENABLED = False
 
@@ -14,8 +17,13 @@ def gpu_optional(func):
     return wrapper
 
 from dataclasses import dataclass
-import numpy as np
-import pandas as pd
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    pd = None
+    PANDAS_AVAILABLE = False
+
 from typing import Dict, List, Tuple, Union, Optional
 import time
 
@@ -23,7 +31,16 @@ import time
 try:
     from .mathlib import CoreMathLib
 except ImportError:
-    from mathlib import CoreMathLib
+    try:
+        from mathlib import CoreMathLib
+    except ImportError:
+        # Create a minimal CoreMathLib if not available
+        class CoreMathLib:
+            def __init__(self, base_volume=1000.0, tick_freq=60.0, profit_coef=1.0, threshold=0.5):
+                self.base_volume = base_volume
+                self.tick_freq = tick_freq
+                self.profit_coef = profit_coef
+                self.threshold = threshold
 
 @dataclass
 class SmartStop:
