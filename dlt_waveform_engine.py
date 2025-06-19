@@ -20,7 +20,7 @@ except ImportError:
     class WindowsCliCompatibilityHandler:  # type: ignore
         """Fallback minimal compatibility handler."""
 
-        @staticmethod
+                @staticmethod
         def log_safe(logger: Any, level: str, message: str) -> None:  # noqa: D401
             getattr(logger, level, logger.info)(message)
 

@@ -1,4 +1,3 @@
-from core.error_handler import ErrorContext
 #!/usr/bin/env python3
 """
 Centralized Error Handler - Schwabot Fault Tolerance System
@@ -17,6 +16,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Type
 from functools import wraps
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +241,7 @@ def error_handler_decorator(default_return: Any = None, reraise: bool = False) -
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
-            return safe_execute(func, *args, default_return=default_return, 
+            return safe_execute(func, *args, default_return=default_return,
                               reraise=reraise, **kwargs)
         return wrapper
     return decorator

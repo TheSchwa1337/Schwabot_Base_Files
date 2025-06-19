@@ -182,8 +182,7 @@ def main() -> None:
     # Phase 2: Type Annotation Enforcement
     safe_print("=" * 60)
     type_stats = phase2_type_annotation_enforcement()
-    phase_success[1]
-    = type_stats['functions_fixed'] > 0 or type_stats['parameters_fixed'] > 0 or type_stats['returns_fixed'] > 0
+    phase_success[1] = type_stats['functions_fixed'] > 0 or type_stats['parameters_fixed'] > 0 or type_stats['returns_fixed'] > 0
 
     # Phase 3: Import Standardization
     safe_print("=" * 60)

@@ -1,4 +1,3 @@
-from typing import Any
 #!/usr/bin/env python3
 """
 Best Practices Enforcer - Centralized Code Quality Management
@@ -50,7 +49,7 @@ class EnforcementResult:
 class BestPracticesEnforcer:
     """Centralized enforcer for all established best practices"""
 
-    def __init__(self) -> Any:
+    def __init__(self) -> None:
         self._patterns: List[CodePattern] = []
         self._register_core_patterns()
 
@@ -96,6 +95,7 @@ class BestPracticesEnforcer:
                 description="Ensure mathematical functions have proper type annotations",
                 pattern=r'def\s+(
     calculate|compute|process|analyze|evaluate|estimate|predict|forecast|simulate|optimize|minimize|maximize)\s*\(([^)]*)\)\s*:',
+    
                 replacement=r'def \1(\2) -> Union[float, Dict[str, Any]]:',
                 severity="MEDIUM",
                 category="mathematical_functions"
@@ -199,7 +199,7 @@ class BestPracticesEnforcer:
 class PreCommitHook:
     """Pre-commit hook infrastructure for automated best practices enforcement"""
 
-    def __init__(self) -> Any:
+    def __init__(self) -> None:
         self.enforcer = BestPracticesEnforcer()
 
     def run_pre_commit_check(self, staged_files: List[str]) -> bool:
@@ -207,41 +207,28 @@ class PreCommitHook:
         logger.info("Running pre-commit best practices check...")
 
         all_passed = True
-        results = []
 
         for file_path in staged_files:
             if file_path.endswith('.py'):
                 result = self.enforcer.enforce_on_file(file_path)
-                results.append(result)
-
                 if not result.success:
-                    all_passed = False
                     logger.error(f"Pre-commit check failed for {file_path}")
-                    for issue in result.issues_found:
-                        logger.error(f"  - {issue}")
-
-        # Generate summary
-        total_files = len(results)
-        successful_files = sum(1 for r in results if r.success)
-        total_patterns_applied = sum(len(r.patterns_applied) for r in results)
-
-        logger.info(f"Pre-commit check summary:")
-        logger.info(f"  - Files processed: {total_files}")
-        logger.info(f"  - Files passed: {successful_files}")
-        logger.info(f"  - Patterns applied: {total_patterns_applied}")
+                    all_passed = False
+                else:
+                    logger.info(f"Pre-commit check passed for {file_path}")
 
         return all_passed
 
     def create_git_hook_script(self, output_path: str = ".git/hooks/pre-commit") -> None:
         """Create a git pre-commit hook script"""
-        hook_content = '''#!/bin/bash
-# Pre-commit hook for best practices enforcement
+        script_content = '''#!/bin/bash
+# Pre-commit hook for Schwabot best practices enforcement
 
 # Get staged Python files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
 
 if [ -n "$STAGED_FILES" ]; then
-    echo "Running best practices enforcement on staged Python files..."
+    echo "Running Schwabot best practices check..."
     python -c "
 import sys
 from core.best_practices_enforcer import PreCommitHook
@@ -250,48 +237,51 @@ hook = PreCommitHook()
 success = hook.run_pre_commit_check(sys.argv[1:])
 
 if not success:
-    print('❌ Pre-commit check failed. Please fix the issues above.')
+    print('❌ Pre-commit check failed!')
     sys.exit(1)
 else:
-    print('✅ Pre-commit check passed.')
+    print('✅ Pre-commit check passed!')
 " $STAGED_FILES
 fi
 '''
 
         # Ensure the hooks directory exists
-        hook_path = Path(output_path)
-        hook_path.parent.mkdir(parents=True, exist_ok=True)
+        import os
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-        # Write the hook script
-        with open(hook_path, 'w') as f:
-            f.write(hook_content)
+        with open(output_path, 'w') as f:
+            f.write(script_content)
 
-        # Make it executable
-        hook_path.chmod(0o755)
+        # Make the script executable
+        import stat
+from typing import Any
+from typing import List
+from typing import Union
+        os.chmod(output_path, stat.S_IRWXU)
 
         logger.info(f"Created pre-commit hook at {output_path}")
 
 
-# Global instances for easy access
-best_practices_enforcer = BestPracticesEnforcer()
-pre_commit_hook = PreCommitHook()
-
-
+# Convenience functions
 def enforce_best_practices_on_file(file_path: str) -> EnforcementResult:
-    """Convenience function for enforcing best practices on a file"""
-    return best_practices_enforcer.enforce_on_file(file_path)
+    """Convenience function to enforce best practices on a single file"""
+    enforcer = BestPracticesEnforcer()
+    return enforcer.enforce_on_file(file_path)
 
 
 def enforce_best_practices_on_directory(directory: str) -> List[EnforcementResult]:
-    """Convenience function for enforcing best practices on a directory"""
-    return best_practices_enforcer.enforce_on_directory(directory)
+    """Convenience function to enforce best practices on a directory"""
+    enforcer = BestPracticesEnforcer()
+    return enforcer.enforce_on_directory(directory)
 
 
 def setup_pre_commit_hook() -> None:
-    """Setup the pre-commit hook for the repository"""
-    pre_commit_hook.create_git_hook_script()
+    """Set up the pre-commit hook"""
+    hook = PreCommitHook()
+    hook.create_git_hook_script()
 
 
 def run_pre_commit_check(staged_files: List[str]) -> bool:
     """Run pre-commit check on staged files"""
-    return pre_commit_hook.run_pre_commit_check(staged_files)
+    hook = PreCommitHook()
+    return hook.run_pre_commit_check(staged_files)

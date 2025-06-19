@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class ObsoleteFileCleaner:
     """Systematic cleaner for obsolete and problematic files"""
 
-    def __init__(self, root_dir -> Any: str = ".") -> Any:
+    def __init__(self, root_dir: str = ".") -> Any:
         self.root_dir = Path(root_dir)
         self.removed_files: List[str] = []
         self.removed_dirs: List[str] = []

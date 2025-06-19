@@ -3,16 +3,17 @@
 # WINDOWS CLI COMPATIBILITY HANDLER
 # =====================================
 
+from typing import Any
 class WindowsCliCompatibilityHandler:
     """Windows CLI compatibility for emoji and Unicode handling"""
-    
+
     @staticmethod
     def is_windows_cli() -> bool:
         """Detect if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and 
+        return (platform.system() == "Windows" and
                 ("cmd" in os.environ.get("COMSPEC", "").lower() or
                  "powershell" in os.environ.get("PSModulePath", "").lower()))
-    
+
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
         """Print message safely with Windows CLI compatibility"""
@@ -24,7 +25,7 @@ class WindowsCliCompatibilityHandler:
             for emoji, marker in emoji_mapping.items():
                 message = message.replace(emoji, marker)
         return message
-    
+
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
         """Log message safely with Windows CLI compatibility"""
