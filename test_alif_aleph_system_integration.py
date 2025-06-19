@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 ALIF/ALEPH System Integration Test
 =================================
 Comprehensive test of the integrated ALIF/ALEPH system including:
@@ -36,9 +42,9 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def is_windows_cli() -> bool:
         """Detect if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and 
-                ("cmd" in os.environ.get("COMSPEC", "").lower() or
-                 "powershell" in os.environ.get("PSModulePath", "").lower()))
+        return (platform.system() == "Windows" and )
+                ("cmd" in os.environ.get("COMSPEC", "").lower() or)
+(                 "powershell" in os.environ.get("PSModulePath", "").lower()))
     
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
@@ -144,14 +150,14 @@ class ALIFALEPHSystemIntegrationTester:
             from ncco_core import NCCO, generate_nccos, score_nccos
             
             # Test basic functionality
-            test_ncco = NCCO(
+            test_ncco = NCCO()
                 id=1,
                 price_delta=0.05,
                 base_price=50000.0,
                 bit_mode=1,
                 score=0.85,
                 pre_commit_id="test_integration_123"
-            )
+(            )
             
             # Test generation and scoring
             nccos = generate_nccos(3)
@@ -181,7 +187,8 @@ class ALIFALEPHSystemIntegrationTester:
             for i in range(3):
                 tick_context = tick_manager.run_tick_cycle()
                 if tick_context:
-                    self.cli_handler.log_safe(logger, 'info', f"🔄 Processed tick {tick_context.tick_id}")
+                    self.cli_handler.\
+                        log_safe(logger, 'info', f"🔄 Processed tick {tick_context.tick_id}")
                 
                 import time
                 time.sleep(0.1)
@@ -233,11 +240,11 @@ class ALIFALEPHSystemIntegrationTester:
             from core.integrated_alif_aleph_system import create_integrated_system
             
             # Create integrated system
-            system = create_integrated_system(
+            system = create_integrated_system()
                 tick_interval=1.0,
                 log_directory="test_integration_logs",
                 enable_recovery=True
-            )
+(            )
             
             # Test system status
             status = system.get_system_status()
@@ -309,8 +316,10 @@ class ALIFALEPHSystemIntegrationTester:
         ]
         
         for test_method in test_methods:
-            test_name = test_method.__name__.replace('test_', '').replace('_', ' ').title()
-            self.cli_handler.log_safe(logger, 'info', f"🔄 Running {test_name}...")
+            test_name = test_method.__name__.\
+                replace('test_', '').replace('_', ' ').title()
+            self.cli_handler.\
+                log_safe(logger, 'info', f"🔄 Running {test_name}...")
             
             try:
                 result = test_method()
@@ -324,7 +333,8 @@ class ALIFALEPHSystemIntegrationTester:
         # Calculate and display results
         passed_tests = sum(1 for _, result, _ in self.test_results if result)
         total_tests = len(self.test_results)
-        success_rate = (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+        success_rate = (passed_tests / total_tests) \
+            * 100 if total_tests > 0 else 0
         
         self.cli_handler.log_safe(logger, 'info', "\n" + "=" * 60)
         self.cli_handler.log_safe(logger, 'info', "📊 INTEGRATION TEST RESULTS SUMMARY")
@@ -332,18 +342,23 @@ class ALIFALEPHSystemIntegrationTester:
         
         for test_name, result, details in self.test_results:
             status = "✅ PASS" if result else "❌ FAIL"
-            self.cli_handler.log_safe(logger, 'info', f"{status} - {test_name}: {details}")
+            self.cli_handler.log_safe(logger, 'info', f"{status} \
+                - {test_name}: {details}")
         
-        self.cli_handler.log_safe(logger, 'info', f"\n📈 Overall Results: {passed_tests}/{total_tests} tests passed ({success_rate:.1f}%)")
+        self.cli_handler.\
+            log_safe(logger, 'info', f"\n📈 Overall Results: {passed_tests}/{total_tests} tests passed ({success_rate:.1f}%)")
         
         if passed_tests == total_tests:
-            self.cli_handler.log_safe(logger, 'info', "🎉 ALL INTEGRATION TESTS PASSED! ALIF/ALEPH system is fully operational.")
+            self.cli_handler.\
+                log_safe(logger, 'info', "🎉 ALL INTEGRATION TESTS PASSED! ALIF/ALEPH system is fully operational.")
             return True
         elif passed_tests >= total_tests * 0.8:
-            self.cli_handler.log_safe(logger, 'info', "⚠️ Most integration tests passed. System functional with minor issues.")
+            self.cli_handler.\
+                log_safe(logger, 'info', "⚠️ Most integration tests passed. System functional with minor issues.")
             return True
         else:
-            self.cli_handler.log_safe(logger, 'error', "❌ Multiple integration test failures. System needs attention.")
+            self.cli_handler.\
+                log_safe(logger, 'error', "❌ Multiple integration test failures. System needs attention.")
             return False
 
 def run_alif_aleph_integration_test() -> bool:
@@ -353,10 +368,10 @@ def run_alif_aleph_integration_test() -> bool:
 
 if __name__ == "__main__":
     # Configure logging for test output
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+(    )
     
     success = run_alif_aleph_integration_test()
     sys.exit(0 if success else 1) 

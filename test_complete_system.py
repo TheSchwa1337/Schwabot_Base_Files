@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """
+from datetime import datetime
+from datetime import timedelta
+from typing import Set
+
 Complete System Test Runner
 ===========================
 Comprehensive test of the integrated ALIF/ALEPH system including:
@@ -21,14 +25,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 def setup_logging():
     """Setup comprehensive logging"""
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
             logging.StreamHandler(),
             logging.FileHandler('test_system.log')
         ]
-    )
+(    )
 
 def test_tick_management():
     """Test tick management system"""
@@ -45,10 +49,10 @@ def test_tick_management():
         def test_callback(tick_context, alif_result, aleph_result):
             nonlocal tick_count
             tick_count += 1
-            print(f"  ✅ Tick {tick_context.tick_id}: "
+            print(f"  ✅ Tick {tick_context.tick_id}: ")
                   f"ALIF={alif_result['action']}, "
                   f"ALEPH={aleph_result['action']}, "
-                  f"Entropy={tick_context.entropy:.3f}")
+(                  f"Entropy={tick_context.entropy:.3f}")
         
         tick_manager.register_callback(test_callback)
         
@@ -126,8 +130,8 @@ def test_aleph_cores():
             entropy_values = [1, 5, 12, 23, 34, 45, 56, 67, 78, 89]
             results = entropy_analyzer.analyze_entropy_distribution(entropy_values)
             
-            print(f"  📊 Entropy Analysis: Mean={results['mean']:.2f}, "
-                  f"Std={results['std']:.2f}, Coverage={results['coverage_percentage']:.1f}%")
+            print(f"  📊 Entropy Analysis: Mean={results['mean']:.2f}, ")
+(                  f"Std={results['std']:.2f}, Coverage={results['coverage_percentage']:.1f}%")
             
         except ImportError:
             print("  ⚠️ EntropyAnalyzer not available - using simulation")
@@ -139,16 +143,16 @@ def test_aleph_cores():
             
             # Test detonation
             payload = {"pattern": "test_pattern", "confidence": 0.85}
-            result = detonator.initiate_detonation(
+            result = detonator.initiate_detonation()
                 payload=payload,
                 price=50000.0,
                 volume=100.0,
                 order_book={"bids": [[49000, 1.0]], "asks": [[51000, 1.0]]},
                 trades=[{"price": 50000, "volume": 0.1, "side": "buy"}]
-            )
+(            )
             
-            print(f"  💥 Detonation Result: {result['detonation_activated']}, "
-                  f"Confidence={result['confidence']:.2f}")
+            print(f"  💥 Detonation Result: {result['detonation_activated']}, ")
+(                  f"Confidence={result['confidence']:.2f}")
             
         except ImportError:
             print("  ⚠️ DetonationSequencer not available - using simulation")
@@ -167,14 +171,14 @@ def test_ncco_system():
         from ncco_core import NCCO
         
         # Create test NCCO
-        ncco = NCCO(
+        ncco = NCCO()
             id=1,
             price_delta=0.05,
             base_price=50000.0,
             bit_mode=1,
             score=0.85,
             pre_commit_id="test_commit_123"
-        )
+(        )
         
         print(f"  🔧 NCCO Created: {ncco}")
         print(f"  📊 NCCO Score: {ncco.score}")
@@ -193,21 +197,21 @@ def test_integrated_system():
         from core.integrated_alif_aleph_system import create_integrated_system
         
         # Create system with fast ticks for testing
-        system = create_integrated_system(
+        system = create_integrated_system()
             tick_interval=0.5,
             log_directory="test_integration_logs",
             enable_recovery=True
-        )
+(        )
         
         # Collect decisions
         decisions_collected = []
         
         def decision_callback(decision):
             decisions_collected.append(decision)
-            print(f"    [Decision {decision.tick_id}] {decision.action} "
-                  f"(confidence: {decision.confidence:.2f}, "
+            print(f"    [Decision {decision.tick_id}] {decision.action} ")
+                  f"(confidence: {decision.confidence:.2f}, ")
                   f"risk: {decision.risk_assessment}, "
-                  f"priority: {decision.execution_priority})")
+(                  f"priority: {decision.execution_priority})")
         
         system.register_decision_callback(decision_callback)
         
@@ -222,9 +226,9 @@ def test_integrated_system():
             status = system.get_system_status()
             
             if len(decisions_collected) % 5 == 0 and len(decisions_collected) > 0:
-                print(f"    📊 Status: Uptime={status['uptime']}, "
+                print(f"    📊 Status: Uptime={status['uptime']}, ")
                       f"Ticks={status['health_metrics']['total_ticks_processed']}, "
-                      f"Decisions={len(decisions_collected)}")
+(                      f"Decisions={len(decisions_collected)}")
             
             time.sleep(1.0)
         
@@ -232,7 +236,7 @@ def test_integrated_system():
         final_status = system.get_system_status()
         recent_decisions = system.get_recent_decisions(count=5)
         
-        print(f"  📋 Final Results:")
+        print("  📋 Final Results:")
         print(f"    Total Ticks: {final_status['health_metrics']['total_ticks_processed']}")
         print(f"    Total Decisions: {len(decisions_collected)}")
         print(f"    Success Rate: {final_status['health_metrics']['success_rate']:.1%}")

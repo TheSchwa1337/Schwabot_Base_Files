@@ -8,7 +8,8 @@ Tests the following systems:
 - MemoryKeyDiagnosticsPipelineCorrector
 - WindowsCliCompatibilityHandler with ASIC text output
 
-This ensures all naming conventions are proper and Windows CLI issues are resolved.
+This ensures all naming conventions are proper \
+    and Windows CLI issues are resolved.
 """
 
 import sys
@@ -55,12 +56,12 @@ def test_intelligent_systems_naming():
     print("\nTesting Properly Named Intelligent Systems...")
     
     try:
-        from dlt_waveform_engine import (
+        from dlt_waveform_engine import ()
             DLTWaveformEngine,
             PostFailureRecoveryIntelligenceLoop,
             TemporalExecutionCorrectionLayer,
             MemoryKeyDiagnosticsPipelineCorrector
-        )
+(        )
         
         # Test engine initialization
         engine = DLTWaveformEngine()
@@ -89,7 +90,8 @@ def test_intelligent_systems_naming():
             assert key in status, f"Missing status key: {key}"
             print(f"[SUCCESS] Status reporting includes: {key}")
         
-        print("[SUCCESS] All intelligent systems properly named and integrated")
+        print("[SUCCESS] All intelligent systems properly named \
+            and integrated")
         return True
         
     except Exception as e:
@@ -189,11 +191,11 @@ def main():
             results.append(False)
     
     print("\n" + "="*60)
-    print("VERIFICATION RESULTS:")
+    print("VERIFICATION, RESULTS:")
     
     for i, (test, result) in enumerate(zip(tests, results)):
         status = "[PASS]" if result else "[FAIL]"
-        print(f"{status} {test.__name__}")
+        print(f"{status}, {test.__name__}")
     
     success_count = sum(results)
     total_count = len(results)
@@ -204,7 +206,7 @@ def main():
         print("\n[SUCCESS] All intelligent systems properly implemented!")
         print("- PostFailureRecoveryIntelligenceLoop (formerly Gap 4)")
         print("- TemporalExecutionCorrectionLayer (formerly Gap 5)")
-        print("- MemoryKeyDiagnosticsPipelineCorrector")
+        print("-, MemoryKeyDiagnosticsPipelineCorrector")
         print("- WindowsCliCompatibilityHandler with ASIC text output")
         print("- Proper naming conventions throughout")
         print("- Windows CLI emoji issues resolved")

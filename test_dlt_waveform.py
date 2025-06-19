@@ -1,4 +1,8 @@
 """
+from datetime import datetime
+from datetime import timedelta
+import pandas as pd
+
 Test suite for DLT Waveform Engine
 """
 
@@ -16,7 +20,8 @@ from unittest.mock import MagicMock
 
 class TestDLTWaveformEngine(unittest.TestCase):
     def setUp(self):
-        self.engine = DLTWaveformEngine(max_cpu_percent=90.0, max_memory_percent=80.0)
+        self.engine = DLTWaveformEngine(max_cpu_percent=90.\
+            0, max_memory_percent=80.0)
         
     def test_phase_trust_initialization(self):
         """Test initial phase trust state"""
@@ -86,13 +91,15 @@ class TestDLTWaveformEngine(unittest.TestCase):
         
         # Verify tensor history
         self.assertEqual(len(self.engine.tensor_history), 1)
-        np.testing.assert_array_equal(self.engine.tensor_history[0], test_tensor)
+        np.testing.\
+            assert_array_equal(self.engine.tensor_history[0], test_tensor)
         
         # Test history limit
         for _ in range(self.engine.max_tensor_history + 10):
             self.engine.update_tensor_state(np.random.rand(256))
             
-        self.assertEqual(len(self.engine.tensor_history), self.engine.max_tensor_history)
+        self.assertEqual(len(self.\
+            engine.tensor_history), self.engine.max_tensor_history)
         
     def test_trigger_score_with_tensor(self):
         """Test trigger score computation with tensor state"""
@@ -104,7 +111,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
         self.engine.update_tensor_state(test_tensor)
         
         # Add trigger with tensor signature
-        trigger = BitmapTrigger(
+        trigger = BitmapTrigger()
             phase=phase,
             time_window=window,
             diogenic_score=0.8,
@@ -113,7 +120,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
             success_count=1,
             tensor_signature=test_tensor,
             resource_usage=0.5
-        )
+(        )
         self.engine.triggers.append(trigger)
         
         # Update phase trust to allow scoring
@@ -139,7 +146,7 @@ class TestDLTWaveformEngine(unittest.TestCase):
         self.engine.update_tensor_state(test_tensor)
         
         # Add trigger
-        trigger = BitmapTrigger(
+        trigger = BitmapTrigger()
             phase=phase,
             time_window=timedelta(days=5),
             diogenic_score=0.8,
@@ -148,13 +155,13 @@ class TestDLTWaveformEngine(unittest.TestCase):
             success_count=1,
             tensor_signature=test_tensor,
             resource_usage=0.5
-        )
+(        )
         self.engine.triggers.append(trigger)
         
         # Evaluate trigger
-        should_trigger, confidence = self.engine.evaluate_trade_trigger(
+        should_trigger, confidence = self.engine.evaluate_trade_trigger()
             phase, current_time, 0.9, 2000000
-        )
+(        )
         
         self.assertIsInstance(should_trigger, bool)
         self.assertGreaterEqual(confidence, 0.0)
@@ -170,22 +177,22 @@ class TestDLTWaveformEngine(unittest.TestCase):
             self.engine.update_phase_trust(phase, True, 0.9)
             
         # Test with low volume
-        should_trigger, confidence = self.engine.evaluate_trade_trigger(
+        should_trigger, confidence = self.engine.evaluate_trade_trigger()
             phase, current_time, 0.9, 500000  # Below minimum
-        )
+(        )
         self.assertFalse(should_trigger)
         
         # Test with sufficient volume
-        should_trigger, confidence = self.engine.evaluate_trade_trigger(
+        should_trigger, confidence = self.engine.evaluate_trade_trigger()
             phase, current_time, 0.9, 2000000  # Above minimum
-        )
+(        )
         self.assertIsInstance(should_trigger, bool)
         
         # Test under high load
         self.engine.max_cpu_percent = 0.0  # Force resource check to fail
-        should_trigger, confidence = self.engine.evaluate_trade_trigger(
+        should_trigger, confidence = self.engine.evaluate_trade_trigger()
             phase, current_time, 0.9, 2000000
-        )
+(        )
         self.assertFalse(should_trigger)  # Should not trigger under high load
         
         # Reset
@@ -207,9 +214,9 @@ class TrailbackLogic:
         volumes = [x[1] for x in recent]
         if len(prices) < depth:
             return False
-        return (
+        return ()
             max(prices) - min(prices) < 0.25 * sum(volumes) / len(volumes)
-        )
+(        )
 
 class FlowImbalance:
     def __init__(self):
@@ -286,12 +293,12 @@ class RDECore:
         self.trailback.record(delta, volume, ts)
         self.flow.update(orderbook['bids'][0][1], orderbook['asks'][0][1])
         flow_side = self.flow.dominant_side()
-        strategy = select_strategy(
+        strategy = select_strategy()
             trailback_result=self.trailback.detect_absorption(),
             flow_dominance=flow_side,
             vacuum_flag=detect_liquidity_vacuum(orderbook),
             pattern_state=pattern_label
-        )
+(        )
         meta["smart_strategy"] = strategy
 
     def log_spin(self, spin_data):
@@ -330,11 +337,11 @@ class TestGhostShellStopLoss(unittest.TestCase):
         self.mock_client.fetch_ticker.return_value = {'last': 100.0}
         
         # Test placing stop loss
-        result = self.stop_loss.place_stop_loss(
+        result = self.stop_loss.place_stop_loss()
             symbol='BTC/USD',
             stop_price=95.0,
             quantity=1.0
-        )
+(        )
         
         self.assertTrue(result)
         self.assertEqual(len(self.stop_loss.active_stops), 1)
@@ -345,11 +352,11 @@ class TestGhostShellStopLoss(unittest.TestCase):
         self.mock_client.fetch_ticker.return_value = {'last': 95.1}
         
         # Test placing stop loss
-        result = self.stop_loss.place_stop_loss(
+        result = self.stop_loss.place_stop_loss()
             symbol='BTC/USD',
             stop_price=95.0,
             quantity=1.0
-        )
+(        )
         
         self.assertFalse(result)
         self.assertEqual(len(self.stop_loss.active_stops), 0)
@@ -364,11 +371,11 @@ class TestGhostShellStopLoss(unittest.TestCase):
         self.mock_client.fetch_ticker.return_value = {'last': 100.0}
         
         # Test placing stop loss
-        result = self.stop_loss.place_stop_loss(
+        result = self.stop_loss.place_stop_loss()
             symbol='BTC/USD',
             stop_price=95.0,
             quantity=1.0
-        )
+(        )
         
         self.assertTrue(result)
         self.assertEqual(len(self.stop_loss.active_stops), 1)
@@ -388,7 +395,8 @@ class TestGhostShellStopLoss(unittest.TestCase):
         
         self.assertTrue(result)
         self.assertEqual(len(self.stop_loss.active_stops), 0)
-        self.mock_client.cancel_order.assert_called_once_with('test_order_1', 'BTC/USD')
+        self.mock_client.\
+            cancel_order.assert_called_once_with('test_order_1', 'BTC/USD')
         
     def test_cancel_nonexistent_stop(self):
         # Test cancelling non-existent stop
@@ -420,7 +428,8 @@ class TestGhostShellStopLoss(unittest.TestCase):
         self.assertEqual(len(active_stops), 2)
         self.assertIn('BTC/USD', active_stops)
         self.assertIn('ETH/USD', active_stops)
-        self.assertIsNot(active_stops, self.stop_loss.active_stops)  # Should be a copy
+        self.assertIsNot(active_stops, self.\
+            stop_loss.active_stops)  # Should be a copy
 
 if __name__ == '__main__':
     unittest.main() 

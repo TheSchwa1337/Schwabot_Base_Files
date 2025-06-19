@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
+from datetime import datetime
+from datetime import timezone
+
 Final Steps 1-5 Verification Test Using Existing Components
 ===========================================================
 
 This test uses the actual existing components in the codebase to verify
-that all Steps 1-5 are working correctly and our original intent has been achieved.
+that all Steps 1-5 are working correctly \
+    and our original intent has been achieved.
 """
 
 import asyncio
@@ -139,7 +143,7 @@ async def test_final_steps_1_5_verification():
             phase_decision = await phase_controller.make_phase_gate_decision(test_signal, test_market_data)
             
             if phase_decision:
-                print(f"   ✅ Phase gate decision made")
+                print("   ✅ Phase gate decision made")
                 print(f"   🚦 Gate type: {phase_decision.gate_type.value}")
                 print(f"   🎯 Decision: {phase_decision.decision.value}")
                 print(f"   📊 Confidence: {phase_decision.confidence:.3f}")
@@ -189,12 +193,12 @@ async def test_final_steps_1_5_verification():
                 'volatility_24h': 0.035
             }
             
-            routing_decision = await routing_engine.optimize_profit_routing(
+            routing_decision = await routing_engine.optimize_profit_routing()
                 test_trade_signal, test_phase_decision, test_market_data
-            )
+(            )
             
             if routing_decision:
-                print(f"   ✅ Profit routing decision made")
+                print("   ✅ Profit routing decision made")
                 print(f"   📊 Selected routes: {len(routing_decision.selected_routes)}")
                 for route_id in routing_decision.selected_routes:
                     allocation = routing_decision.route_allocations[route_id]
@@ -218,12 +222,12 @@ async def test_final_steps_1_5_verification():
         print("-" * 60)
         
         try:
-            from core.unified_mathematical_trading_controller import (
+            from core.unified_mathematical_trading_controller import ()
                 UnifiedMathematicalTradingController,
                 create_unified_mathematical_trading_system,
                 TradingMode,
                 SystemHealthStatus
-            )
+(            )
             
             print("   🎛️ Testing unified controller orchestration...")
             
@@ -235,19 +239,19 @@ async def test_final_steps_1_5_verification():
             }
             
             # Create unified system
-            unified_controller = create_unified_mathematical_trading_system(
+            unified_controller = create_unified_mathematical_trading_system()
                 config=test_config,
                 trading_mode=TradingMode.SIMULATION
-            )
+(            )
             
-            print(f"   ✅ Unified controller created")
+            print("   ✅ Unified controller created")
             print(f"   🎯 Trading mode: {unified_controller.trading_mode.value}")
             print(f"   💚 System health: {unified_controller.system_health.value}")
             print(f"   ⚙️ Configuration: {len(unified_controller.config)} parameters")
             
             # Test system status
             system_status = unified_controller.get_system_status()
-            print(f"   📊 System status retrieved")
+            print("   📊 System status retrieved")
             print(f"   🎛️ Trading mode: {system_status['trading_mode']}")
             print(f"   💚 System health: {system_status['system_health']}")
             
@@ -285,7 +289,8 @@ async def test_final_steps_1_5_verification():
                 verification_results['integration'] = True
                 
             else:
-                failed_steps = [step for step, result in verification_results.items() if not result]
+                failed_steps = \
+                    [step for step, result in verification_results.items() if not result]
                 print(f"   ⚠️ Integration test skipped due to failed steps: {failed_steps}")
                 verification_results['integration'] = False
                 
@@ -326,7 +331,8 @@ async def test_final_steps_1_5_verification():
             print("   📋 Steps 1-5 processes are fully implemented and working")
             
             print("\n🎯 UNIFIED MATHEMATICAL TRADING SYSTEM VERIFIED:")
-            print("   1️⃣ Mathematical validation with Klein bottle + fractal analysis ✅")
+            print("   1️⃣ Mathematical validation with Klein bottle \
+                + fractal analysis ✅")
             print("   2️⃣ CCXT execution management with risk controls ✅")
             print("   3️⃣ Phase gate control with entropy-driven 4b/8b/42b routing ✅")
             print("   4️⃣ Profit routing with sustainment-aware optimization ✅")
@@ -366,7 +372,8 @@ if __name__ == "__main__":
         print("\n" + "="*90)
         print("🎉 COMPLETE VERIFICATION SUCCESS!")
         print("🎯 OUR ORIGINAL INTENT HAS BEEN FULLY ACHIEVED!")
-        print("✅ Mathematical system works correctly and coherently within existing system")
+        print("✅ Mathematical system works correctly \
+            and coherently within existing system")
         print("✅ All foundations are in place to ensure everything works correctly")
         print("✅ Steps 1-5 processes are fully implemented and functional")
         print("")

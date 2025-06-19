@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """
-Test for Import/Export Issues Fix - Mathematical Foundation Module Loading Resolution
+from datetime import datetime
+from typing import Any
+from typing import Dict
+
+Test for Import/Export Issues Fix \
+    - Mathematical Foundation Module Loading Resolution
 ===================================================================================
 
 This test verifies that Import/Export Issues have been resolved:
@@ -43,15 +48,18 @@ def test_import_export_issues_fix() -> Dict[str, Any]:
     results['tests_total'] += 1
     try:
         from mathlib_v2 import CoreMathLibV2, SmartStop
-        print("   ✅ Successfully imported CoreMathLibV2 and SmartStop from mathlib_v2.py")
+        print("   ✅ Successfully imported CoreMathLibV2 \
+            and SmartStop from mathlib_v2.py")
         
         # Test instantiation
         math_v2 = CoreMathLibV2()
         smart_stop = SmartStop(entry_price=100.0, stop_price=95.0)
-        print("   ✅ Successfully instantiated CoreMathLibV2 and SmartStop classes")
+        print("   ✅ Successfully instantiated CoreMathLibV2 \
+            and SmartStop classes")
         
         results['tests_passed'] += 1
-        results['success_items'].append("mathlib_v2.py import and instantiation working")
+        results['success_items'].append("mathlib_v2.py import \
+            and instantiation working")
     except Exception as e:
         print(f"   ❌ mathlib_v2.py import still failing: {e}")
         print(f"   Full traceback: {traceback.format_exc()}")
@@ -116,7 +124,8 @@ def test_import_export_issues_fix() -> Dict[str, Any]:
         print(f"   ✅ Package functions work: entropy={test_entropy:.3f}, add={test_add}, subtract={test_subtract}")
         
         results['tests_passed'] += 1
-        results['success_items'].append("Package-level imports and exports working")
+        results['success_items'].append("Package-level imports \
+            and exports working")
     except Exception as e:
         print(f"   ❌ Package-level import issue: {e}")
         results['critical_issues'].append(f"Package imports failed: {e}")
@@ -130,7 +139,8 @@ def test_import_export_issues_fix() -> Dict[str, Any]:
         math_v2 = CoreMathLibV2()
         
         # Test that it can handle missing dependencies gracefully
-        # These should either work or return fallback responses without crashing
+        # These should either work \
+            or return fallback responses without crashing
         test_attributes = ['confidence_weight_reactor', 'rittle_gemm']
         fallback_count = 0
         
@@ -184,24 +194,29 @@ def test_import_export_issues_fix() -> Dict[str, Any]:
         results['critical_issues'].append(f"Import pattern testing failed: {e}")
     
     # Calculate final status
-    success_rate = results['tests_passed'] / results['tests_total'] if results['tests_total'] > 0 else 0
+    success_rate = results['tests_passed'] \
+        / results['tests_total'] if results['tests_total'] > 0 else 0
     
     if success_rate == 1.0:
         results['overall_status'] = 'FULLY_FIXED'
         status_emoji = "🎉"
-        status_msg = "ALL TESTS PASSED - IMPORT/EXPORT ISSUES COMPLETELY FIXED!"
+        status_msg = "ALL TESTS PASSED \
+            - IMPORT/EXPORT ISSUES COMPLETELY FIXED!"
     elif success_rate >= 0.8:
         results['overall_status'] = 'MOSTLY_FIXED'
         status_emoji = "✅"
-        status_msg = f"MOSTLY FIXED - {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"MOSTLY FIXED \
+            - {results['tests_passed']}/{results['tests_total']} tests passed"
     elif success_rate >= 0.6:
         results['overall_status'] = 'PARTIALLY_FIXED'
         status_emoji = "⚠️"
-        status_msg = f"PARTIALLY FIXED - {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"PARTIALLY FIXED \
+            - {results['tests_passed']}/{results['tests_total']} tests passed"
     else:
         results['overall_status'] = 'STILL_BROKEN'
         status_emoji = "❌"
-        status_msg = f"STILL BROKEN - Only {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"STILL BROKEN \
+            - Only {results['tests_passed']}/{results['tests_total']} tests passed"
     
     print(f"\n{status_emoji} FINAL STATUS: {status_msg}")
     print("=" * 60)

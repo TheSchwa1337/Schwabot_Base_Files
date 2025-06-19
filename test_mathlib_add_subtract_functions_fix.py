@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-Test for MathLib Add/Subtract Functions Fix - Missing Basic Mathematical Operations Resolution
+from datetime import datetime
+from typing import Any
+from typing import Dict
+
+Test for MathLib Add/Subtract Functions Fix \
+    - Missing Basic Mathematical Operations Resolution
 ============================================================================================
 
-This test verifies that the missing add() and subtract() functions have been
+This test verifies that the missing add(and, subtract) functions have been
 properly added to mathlib.py and can be imported by mathlib_v2.py, fixing
 the critical gap in our mathematical foundation's basic operations.
 """
@@ -15,7 +20,7 @@ import numpy as np
 
 def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
     """
-    Test that the missing add() and subtract() mathematical functions have been properly fixed
+    Test that the missing add(and, subtract) mathematical functions have been properly fixed
     
     Returns:
         Dict with test results and status
@@ -47,7 +52,8 @@ def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
         if test_result_add == 8.0 and test_result_subtract == 6.0:
             print(f"   ✅ Functions work correctly: add(5,3)={test_result_add}, subtract(10,4)={test_result_subtract}")
             results['tests_passed'] += 1
-            results['success_items'].append("Direct mathlib import and function execution")
+            results['success_items'].append("Direct mathlib import \
+                and function execution")
         else:
             results['critical_issues'].append(f"Functions return incorrect values: add={test_result_add}, subtract={test_result_subtract}")
     except Exception as e:
@@ -68,7 +74,8 @@ def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
         if pkg_add_result == 10.0 and pkg_subtract_result == 9.0:
             print(f"   ✅ Package functions work: add(7.5,2.5)={pkg_add_result}, subtract(15,6)={pkg_subtract_result}")
             results['tests_passed'] += 1
-            results['success_items'].append("Mathlib package import and function execution")
+            results['success_items'].append("Mathlib package import \
+                and function execution")
         else:
             results['critical_issues'].append(f"Package functions incorrect: add={pkg_add_result}, subtract={pkg_subtract_result}")
     except Exception as e:
@@ -110,8 +117,9 @@ def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
         expected_add = np.array([5.0, 7.0, 9.0])
         expected_subtract = np.array([3.0, 3.0, 3.0])
         
-        if np.allclose(add_result, expected_add) and np.allclose(subtract_result, expected_subtract):
-            print(f"   ✅ Array operations work correctly")
+        if np.allclose(add_result, expected_add) \
+            and np.allclose(subtract_result, expected_subtract):
+            print("   ✅ Array operations work correctly")
             print(f"      add([1,2,3], [4,5,6]) = {add_result}")
             print(f"      subtract([4,5,6], [1,2,3]) = {subtract_result}")
             results['tests_passed'] += 1
@@ -140,7 +148,8 @@ def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
         add_result = add(test_values, 5.0)
         subtract_result = subtract(test_values, 3.0)
         
-        print(f"   ✅ Cross-library operations: add(array, scalar) and subtract(array, scalar) work")
+        print("   ✅ Cross-library operations: add(array, scalar) \
+            and subtract(array, scalar) work")
         results['tests_passed'] += 1
         results['success_items'].append("Cross-library mathematical compatibility verified")
     except Exception as e:
@@ -148,24 +157,29 @@ def test_mathlib_add_subtract_functions_fix() -> Dict[str, Any]:
         results['critical_issues'].append(f"Cross-library compatibility: {e}")
     
     # Calculate final status
-    success_rate = results['tests_passed'] / results['tests_total'] if results['tests_total'] > 0 else 0
+    success_rate = results['tests_passed'] \
+        / results['tests_total'] if results['tests_total'] > 0 else 0
     
     if success_rate == 1.0:
         results['overall_status'] = 'FULLY_FIXED'
         status_emoji = "🎉"
-        status_msg = "ALL TESTS PASSED - ADD/SUBTRACT FUNCTIONS COMPLETELY FIXED!"
+        status_msg = "ALL TESTS PASSED \
+            - ADD/SUBTRACT FUNCTIONS COMPLETELY FIXED!"
     elif success_rate >= 0.8:
         results['overall_status'] = 'MOSTLY_FIXED'
         status_emoji = "✅"
-        status_msg = f"MOSTLY FIXED - {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"MOSTLY FIXED \
+            - {results['tests_passed']}/{results['tests_total']} tests passed"
     elif success_rate >= 0.6:
         results['overall_status'] = 'PARTIALLY_FIXED'
         status_emoji = "⚠️"
-        status_msg = f"PARTIALLY FIXED - {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"PARTIALLY FIXED \
+            - {results['tests_passed']}/{results['tests_total']} tests passed"
     else:
         results['overall_status'] = 'STILL_BROKEN'
         status_emoji = "❌"
-        status_msg = f"STILL BROKEN - Only {results['tests_passed']}/{results['tests_total']} tests passed"
+        status_msg = f"STILL BROKEN \
+            - Only {results['tests_passed']}/{results['tests_total']} tests passed"
     
     print(f"\n{status_emoji} FINAL STATUS: {status_msg}")
     print("=" * 60)

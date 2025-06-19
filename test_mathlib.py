@@ -83,12 +83,12 @@ def plot_results(prices: np.ndarray, results: dict, volumes: np.ndarray = None, 
 
 def main() -> None:
     # Initialize the mathematical library
-    math_lib = CoreMathLib(
+    math_lib = CoreMathLib()
         base_volume=1.0,
         tick_freq=1.0,
         profit_coef=0.8,
         threshold=0.5
-    )
+(    )
     
     # Generate test data
     prices, volumes = generate_test_data(n_samples=1000)
@@ -97,7 +97,7 @@ def main() -> None:
     results = math_lib.apply_advanced_strategies(prices, volumes)
     
     # Print some statistics
-    print("\nTrading Statistics:")
+    print("\nTrading, Statistics:")
     print(f"Sharpe Ratio: {results['sharpe_ratio']:.4f}")
     print(f"Cumulative Log Return: {results['log_return']:.4f}")
     print(f"Price Entropy: {results['entropy']:.4f}")
@@ -117,7 +117,7 @@ def main() -> None:
         print(f"Tick {i}: Price={price:.2f}, Decision={decision}")
     
     # Demonstrate volume allocation
-    print("\nVolume Allocation:")
+    print("\nVolume, Allocation:")
     for i in range(5):
         volume = math_lib.allocate_volume(1.0, i, 10, method='sine')
         print(f"Tick {i}: Volume={volume:.4f}")

@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 """
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+
 ALIF/ALEPH System Diagnostic Test
 ================================
 Quick diagnostic test to identify specific issues in the integrated ALIF/ALEPH system.
-Tests core functionality and provides detailed error reporting for troubleshooting.
+Tests core functionality \
+    and provides detailed error reporting for troubleshooting.
 """
 
 import sys
@@ -34,9 +41,9 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def is_windows_cli() -> bool:
         """Detect if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and 
-                ("cmd" in os.environ.get("COMSPEC", "").lower() or
-                 "powershell" in os.environ.get("PSModulePath", "").lower()))
+        return (platform.system() == "Windows" and )
+                ("cmd" in os.environ.get("COMSPEC", "").lower() or)
+(                 "powershell" in os.environ.get("PSModulePath", "").lower()))
     
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
@@ -112,7 +119,8 @@ class ALIFALEPHSystemDiagnosticTester:
         
     def test_critical_imports(self) -> bool:
         """Test all critical module imports"""
-        self.cli_handler.log_safe(logger, 'info', "🧪 Testing Critical Imports...")
+        self.cli_handler.\
+            log_safe(logger, 'info', "🧪 Testing Critical Imports...")
         
         try:
             from aleph_core import DetonationSequencer, EntropyAnalyzer, PatternMatcher, SmartMoneyAnalyzer
@@ -155,16 +163,17 @@ class ALIFALEPHSystemDiagnosticTester:
 
     def test_system_creation(self) -> bool:
         """Test system creation and status retrieval"""
-        self.cli_handler.log_safe(logger, 'info', "\n🧪 Testing System Creation...")
+        self.cli_handler.\
+            log_safe(logger, 'info', "\n🧪 Testing System Creation...")
         
         try:
             from core.integrated_alif_aleph_system import create_integrated_system
             
-            system = create_integrated_system(
+            system = create_integrated_system()
                 tick_interval=1.0,
                 log_directory="test_diagnostic_logs",
                 enable_recovery=True
-            )
+(            )
             
             self.cli_handler.log_safe(logger, 'info', "  ✅ Integrated system created successfully")
             
@@ -183,7 +192,8 @@ class ALIFALEPHSystemDiagnosticTester:
 
     def test_system_start_stop_cycle(self) -> bool:
         """Test complete system start/stop cycle"""
-        self.cli_handler.log_safe(logger, 'info', "\n🧪 Testing System Start/Stop...")
+        self.cli_handler.\
+            log_safe(logger, 'info', "\n🧪 Testing System Start/Stop...")
         
         try:
             from core.integrated_alif_aleph_system import create_integrated_system
@@ -244,13 +254,16 @@ class ALIFALEPHSystemDiagnosticTester:
         
         for test_name, result in test_results:
             status = "✅ PASS" if result else "❌ FAIL"
-            self.cli_handler.log_safe(logger, 'info', f"{status} - {test_name}")
+            self.cli_handler.log_safe(logger, 'info', f"{status} \
+                - {test_name}")
         
         passed_tests = sum(1 for _, result in test_results if result)
         total_tests = len(test_results)
-        success_rate = (passed_tests / total_tests) * 100 if total_tests > 0 else 0
+        success_rate = (passed_tests / total_tests) \
+            * 100 if total_tests > 0 else 0
         
-        self.cli_handler.log_safe(logger, 'info', f"\n📊 Overall: {passed_tests}/{total_tests} tests passed ({success_rate:.1f}%)")
+        self.cli_handler.\
+            log_safe(logger, 'info', f"\n📊 Overall: {passed_tests}/{total_tests} tests passed ({success_rate:.1f}%)")
         
         return passed_tests == total_tests
 
@@ -261,10 +274,10 @@ def run_alif_aleph_diagnostic_test() -> bool:
 
 if __name__ == "__main__":
     # Configure logging for diagnostic output
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+(    )
     
     success = run_alif_aleph_diagnostic_test()
     sys.exit(0 if success else 1) 

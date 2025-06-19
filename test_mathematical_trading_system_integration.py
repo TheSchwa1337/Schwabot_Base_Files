@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
+from datetime import datetime
+from datetime import timezone
+
 Mathematical Trading System Integration Test
 ===========================================
 
 Comprehensive integration test that validates the complete unified mathematical trading system
-by verifying each component and their integration into a cohesive mathematical framework.
+by verifying each component \
+    and their integration into a cohesive mathematical framework.
 
 This test confirms that our mathematical trading system integration has been achieved:
 - Mathematical validation core works correctly and coherently
@@ -147,7 +151,7 @@ async def test_mathematical_trading_system_integration():
             phase_decision = await phase_controller.make_phase_gate_decision(test_signal, test_market_data)
             
             if phase_decision:
-                print(f"   ✅ Phase gate decision made")
+                print("   ✅ Phase gate decision made")
                 print(f"   🚦 Gate type: {phase_decision.gate_type.value}")
                 print(f"   🎯 Decision: {phase_decision.decision.value}")
                 print(f"   📊 Confidence: {phase_decision.confidence:.3f}")
@@ -197,12 +201,12 @@ async def test_mathematical_trading_system_integration():
                 'volatility_24h': 0.035
             }
             
-            routing_decision = await routing_engine.optimize_profit_routing(
+            routing_decision = await routing_engine.optimize_profit_routing()
                 test_trade_signal, test_phase_decision, test_market_data
-            )
+(            )
             
             if routing_decision:
-                print(f"   ✅ Profit routing decision made")
+                print("   ✅ Profit routing decision made")
                 print(f"   💰 Optimization mode: {routing_decision.optimization_mode.value}")
                 print(f"   📊 Expected profit: {routing_decision.expected_profit:.3f}")
                 print(f"   🎯 Risk score: {routing_decision.risk_score:.3f}")
@@ -244,7 +248,7 @@ async def test_mathematical_trading_system_integration():
             pipeline_result = simulate_unified_pipeline()
             
             if pipeline_result and pipeline_result['status'] == 'completed':
-                print(f"   ✅ Unified pipeline simulation completed")
+                print("   ✅ Unified pipeline simulation completed")
                 print(f"   📊 Pipeline ID: {pipeline_result['pipeline_id']}")
                 print(f"   🎯 Overall confidence: {pipeline_result['overall_confidence']:.3f}")
                 print(f"   ✅ Mathematical validation: {pipeline_result['mathematical_validation']}")
@@ -262,7 +266,8 @@ async def test_mathematical_trading_system_integration():
         # COMPREHENSIVE RESULTS SUMMARY
         total_components = len(verification_results)
         passed_components = sum(verification_results.values())
-        success_rate = passed_components / total_components if total_components > 0 else 0
+        success_rate = passed_components \
+            / total_components if total_components > 0 else 0
         
         print("\n" + "="*90)
         print("📊 MATHEMATICAL TRADING SYSTEM INTEGRATION RESULTS")

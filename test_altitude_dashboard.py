@@ -46,14 +46,15 @@ def test_dashboard_classes():
     print("\n🧪 Testing dashboard classes...")
     
     try:
-        from schwabot_altitude_adjustment_dashboard import (
+        from schwabot_altitude_adjustment_dashboard import ()
             AltitudeMetrics, QuantumState, SystemState, SchwabotAltitudeDashboard
-        )
+(        )
         
         # Test AltitudeMetrics
         altitude = AltitudeMetrics()
         print(f"✅ AltitudeMetrics - STAM Zone: {altitude.stam_zone}")
-        print(f"✅ AltitudeMetrics - Speed Multiplier: {altitude.required_speed_multiplier:.2f}x")
+        print(f"✅ AltitudeMetrics \
+            - Speed Multiplier: {altitude.required_speed_multiplier:.2f}x")
         
         # Test QuantumState
         quantum = QuantumState()
@@ -67,7 +68,8 @@ def test_dashboard_classes():
         
         # Test Dashboard
         dashboard = SchwabotAltitudeDashboard()
-        print(f"✅ Dashboard - Initialized with simulation: {not dashboard.simulation_active}")
+        print(f"✅ Dashboard \
+            - Initialized with simulation: {not dashboard.simulation_active}")
         
         return True
         
@@ -122,7 +124,8 @@ def test_core_system_integration():
     available_systems = sum([bundler_available, constraints_available, bridge_available, test_suite_available])
     print(f"📊 Core Systems: {available_systems}/4 Available")
     
-    return available_systems >= 0  # Pass even if no systems available (simulation mode)
+    return \
+        available_systems >= 0  # Pass even if no systems available (simulation, mode)
 
 def test_mathematical_calculations():
     """Test mathematical calculations"""
@@ -137,7 +140,8 @@ def test_mathematical_calculations():
         speed_multiplier = altitude.required_speed_multiplier
         expected_speed = np.sqrt(1.0 / 0.5)  # √(baseline/density)
         
-        assert abs(speed_multiplier - expected_speed) < 0.01, f"Speed calculation error: {speed_multiplier} vs {expected_speed}"
+        assert abs(speed_multiplier \
+            - expected_speed) < 0.01, f"Speed calculation error: {speed_multiplier} vs {expected_speed}"
         print(f"✅ Speed Multiplier Calculation: {speed_multiplier:.2f}x")
         
         # Test STAM zone logic
@@ -214,11 +218,11 @@ def test_visualization_components():
         
         # Test gauge creation
         altitude = dashboard.system_state.altitude_metrics.market_altitude
-        fig_gauge = go.Figure(go.Indicator(
+        fig_gauge = go.Figure(go.Indicator()
             mode="gauge+number",
             value=altitude * 100,
             domain={'x': [0, 1], 'y': [0, 1]}
-        ))
+(        ))
         print("✅ Gauge Visualization: Created")
         
         # Test scatter plot
@@ -229,11 +233,11 @@ def test_visualization_components():
         # Test radar chart
         quantum_data = dashboard.system_state.quantum_state.multivector_data
         fig_radar = go.Figure()
-        fig_radar.add_trace(go.Scatterpolar(
+        fig_radar.add_trace(go.Scatterpolar()
             r=[d['value'] for d in quantum_data],
             theta=[d['metric'] for d in quantum_data],
-            fill='toself'
-        ))
+            fill='tosel'
+(        ))
         print("✅ Radar Chart: Created")
         
         return True
@@ -290,7 +294,8 @@ def run_comprehensive_test():
         print("⚠️ Most tests passed. Dashboard should work with limited functionality.")
         return True
     else:
-        print("❌ Multiple test failures. Please check dependencies and core systems.")
+        print("❌ Multiple test failures. Please check dependencies \
+            and core systems.")
         return False
 
 if __name__ == "__main__":

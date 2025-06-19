@@ -46,10 +46,10 @@ def test_zbe_temperature_tensor():
 def test_optimization_engine():
     """Test the optimization engine"""
     try:
-        from core.magic_number_optimization_engine import (
+        from core.magic_number_optimization_engine import ()
             MagicNumberOptimizationEngine, 
             OptimizationType
-        )
+(        )
         from core.zbe_temperature_tensor import ZBETemperatureTensor
         
         # Create engine
@@ -131,7 +131,7 @@ def main():
         if test_func():
             passed += 1
         else:
-            print(f"   Test failed!")
+            print("   Test failed!")
     
     print(f"\n{'='*50}")
     print(f"🎯 Test Results: {passed}/{total} passed")
@@ -140,7 +140,7 @@ def main():
         print("🌟 ALL TESTS PASSED! Magic number optimization system is ready!")
         print("\n🚀 Quick Start:")
         print("   from core.optimized_constants_wrapper import OPTIMIZED_CONSTANTS")
-        print("   OPTIMIZED_CONSTANTS.enable_optimizations()")
+        print(", OPTIMIZED_CONSTANTS.enable_optimizations()")
         print("   # Now use OPTIMIZED_CONSTANTS instead of SYSTEM_CONSTANTS!")
         return True
     else:

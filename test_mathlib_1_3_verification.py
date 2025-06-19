@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """
+from dataclasses import field
+from datetime import datetime
+from datetime import timezone
+import pandas as pd
+
 MathLib 1-3 Comprehensive Verification Test
 ===========================================
 
-This test verifies that all mathematical libraries (MathLib 1, 2, and 3) are working
-correctly and are properly integrated, addressing our original intent to ensure:
+This test verifies that all mathematical libraries (MathLib 1, 2, \
+    and 3) are working
+correctly \
+    and are properly integrated, addressing our original intent to ensure:
 
 1. MathLib 1 (mathlib.py) - Core mathematical operations work correctly
 2. MathLib 2 (mathlib_v2.py) - Advanced trading algorithms work correctly  
@@ -29,7 +36,8 @@ async def test_mathlib_1_3_comprehensive_verification():
     """Comprehensive verification of all MathLib versions 1-3"""
     print("🧮 MATHLIB 1-3 COMPREHENSIVE VERIFICATION TEST")
     print("="*80)
-    print("🎯 VERIFYING: All mathematical libraries work correctly and coherently")
+    print("🎯 VERIFYING: All mathematical libraries work correctly \
+        and coherently")
     print("✅ MathLib 1: Core mathematical operations")
     print("✅ MathLib 2: Advanced trading algorithms")
     print("✅ MathLib 3: Sustainment framework integration")
@@ -50,13 +58,13 @@ async def test_mathlib_1_3_comprehensive_verification():
             print("   🧮 Testing MathLib 1 core functionality...")
             
             # Initialize MathLib 1
-            mathlib_v1 = CoreMathLib(
+            mathlib_v1 = CoreMathLib()
                 base_volume=1000.0,
                 tick_freq=60.0,
                 profit_coef=1.2,
                 threshold=0.5
-            )
-            print(f"   ✅ MathLib 1 initialized")
+(            )
+            print("   ✅ MathLib 1 initialized")
             print(f"      📊 Base volume: {mathlib_v1.base_volume}")
             print(f"      ⏱️ Tick frequency: {mathlib_v1.tick_freq}")
             print(f"      💰 Profit coefficient: {mathlib_v1.profit_coef}")
@@ -69,7 +77,7 @@ async def test_mathlib_1_3_comprehensive_verification():
             cosine_sim = mathlib_v1.cosine_similarity(test_vector_a, test_vector_b)
             euclidean_dist = mathlib_v1.euclidean_distance(test_vector_a, test_vector_b)
             
-            print(f"   ✅ Vector operations:")
+            print("   ✅ Vector operations:")
             print(f"      🔗 Cosine similarity: {cosine_sim:.4f}")
             print(f"      📏 Euclidean distance: {euclidean_dist:.4f}")
             
@@ -83,7 +91,7 @@ async def test_mathlib_1_3_comprehensive_verification():
             }
             graded_vector = mathlib_v1.grading_vector(trade_data)
             
-            print(f"   ✅ Graded Profit Vector:")
+            print("   ✅ Graded Profit Vector:")
             print(f"      💰 Profit: {graded_vector.profit}")
             print(f"      📊 Volume: {graded_vector.volume_allocated}")
             print(f"      🎯 Signal strength: {graded_vector.signal_strength}")
@@ -102,7 +110,7 @@ async def test_mathlib_1_3_comprehensive_verification():
             # Test recursive operations
             fib_result = recursive_operation(8, operation_type='fibonacci')
             factorial_result = recursive_operation(5, operation_type='factorial')
-            print(f"   ✅ Recursive operations:")
+            print("   ✅ Recursive operations:")
             print(f"      🔢 Fibonacci(8): {fib_result}")
             print(f"      🔢 Factorial(5): {factorial_result}")
             
@@ -123,17 +131,19 @@ async def test_mathlib_1_3_comprehensive_verification():
             print("   📈 Testing MathLib 2 advanced functionality...")
             
             # Initialize MathLib 2
-            mathlib_v2 = CoreMathLibV2(
+            mathlib_v2 = CoreMathLibV2()
                 base_volume=1000.0,
                 tick_freq=60.0,
                 profit_coef=1.2,
                 threshold=0.5
-            )
-            print(f"   ✅ MathLib 2 initialized")
+(            )
+            print("   ✅ MathLib 2 initialized")
             
             # Test sample market data
-            test_prices = np.array([100.0, 102.0, 98.0, 105.0, 97.0, 103.0, 99.0, 101.0])
-            test_volumes = np.array([1000.0, 1500.0, 800.0, 2000.0, 1200.0, 1800.0, 900.0, 1300.0])
+            test_prices = np.array([100.\
+                0, 102.0, 98.0, 105.0, 97.0, 103.0, 99.0, 101.0])
+            test_volumes = np.array([1000.\
+                0, 1500.0, 800.0, 2000.0, 1200.0, 1800.0, 900.0, 1300.0])
             test_high = test_prices * 1.02
             test_low = test_prices * 0.98
             
@@ -154,10 +164,11 @@ async def test_mathlib_1_3_comprehensive_verification():
             
             # Test Smart Stop system
             smart_stop = SmartStop()
-            stop_result_1 = smart_stop.update(105.0, 100.0)  # Profitable position
+            stop_result_1 = smart_stop.update(105.\
+                0, 100.0)  # Profitable position
             stop_result_2 = smart_stop.update(98.0, 100.0)   # Losing position
             
-            print(f"   ✅ Smart Stop system:")
+            print("   ✅ Smart Stop system:")
             print(f"      📈 Profitable position profit: {stop_result_1['profit_pct']:.2f}%")
             print(f"      📉 Losing position profit: {stop_result_2['profit_pct']:.2f}%")
             
@@ -168,7 +179,7 @@ async def test_mathlib_1_3_comprehensive_verification():
             
             # Test advanced strategies
             extended_results = mathlib_v2.apply_advanced_strategies_v2(test_prices, test_volumes, test_high, test_low)
-            print(f"   ✅ Advanced strategies:")
+            print("   ✅ Advanced strategies:")
             print(f"      📊 Strategy results: {len(extended_results)} metrics")
             if 'sharpe_ratio' in extended_results:
                 print(f"      📈 Sharpe ratio: {extended_results['sharpe_ratio']:.4f}")
@@ -192,14 +203,14 @@ async def test_mathlib_1_3_comprehensive_verification():
             print("   🌟 Testing MathLib 3 sustainment framework...")
             
             # Initialize MathLib 3
-            mathlib_v3 = SustainmentMathLib(
+            mathlib_v3 = SustainmentMathLib()
                 base_volume=1000.0,
                 tick_freq=60.0,
                 profit_coef=1.2,
                 threshold=0.5,
                 sustainment_threshold=0.65
-            )
-            print(f"   ✅ MathLib 3 initialized")
+(            )
+            print("   ✅ MathLib 3 initialized")
             print(f"      🌟 Sustainment threshold: {mathlib_v3.sustainment_threshold}")
             print(f"      🔄 Adaptation rate: {mathlib_v3.adaptation_rate}")
             
@@ -207,31 +218,31 @@ async def test_mathlib_1_3_comprehensive_verification():
             context = create_test_context()
             sustainment_vector = mathlib_v3.calculate_sustainment_vector(context)
             
-            print(f"   ✅ Sustainment vector calculation:")
+            print("   ✅ Sustainment vector calculation:")
             print(f"      📊 Principles count: {len(sustainment_vector.principles)}")
             
             # Test individual sustainment principles
             si_value = sustainment_vector.sustainment_index()
             is_sustainable = sustainment_vector.is_sustainable()
             
-            print(f"   ✅ Sustainment metrics:")
+            print("   ✅ Sustainment metrics:")
             print(f"      🌟 Sustainment Index: {si_value:.4f}")
             print(f"      ✅ Is Sustainable: {is_sustainable}")
             
             # Test principle calculations
-            test_context = MathematicalContext(
+            test_context = MathematicalContext()
                 current_state={'price': 100.0, 'volume': 1500.0},
                 timestamp=datetime.now(timezone.utc),
                 system_metrics={'cpu_usage': 0.3, 'memory_usage': 0.4, 'gpu_usage': 0.2},
                 market_data={'volatility': 0.025, 'liquidity': 0.8}
-            )
+(            )
             
             # Test individual principles
             anticipation_score, anticipation_conf = mathlib_v3.calculate_anticipation_principle(test_context)
             integration_score, integration_conf = mathlib_v3.calculate_integration_principle(test_context)
             responsiveness_score, responsiveness_conf = mathlib_v3.calculate_responsiveness_principle(test_context)
             
-            print(f"   ✅ Individual principles:")
+            print("   ✅ Individual principles:")
             print(f"      🔮 Anticipation: {anticipation_score:.4f} (conf: {anticipation_conf:.4f})")
             print(f"      🔗 Integration: {integration_score:.4f} (conf: {integration_conf:.4f})")
             print(f"      ⚡ Responsiveness: {responsiveness_score:.4f} (conf: {responsiveness_conf:.4f})")
@@ -244,12 +255,13 @@ async def test_mathlib_1_3_comprehensive_verification():
             v3_cosine = mathlib_v3.cosine_similarity(vector_a, vector_b)
             v3_distance = mathlib_v3.euclidean_distance(vector_a, vector_b)
             
-            print(f"   ✅ Inherited operations from MathLib 1 & 2:")
+            print("   ✅ Inherited operations from MathLib 1 & 2:")
             print(f"      🔗 Cosine similarity: {v3_cosine:.4f}")
             print(f"      📏 Euclidean distance: {v3_distance:.4f}")
             
             verification_results['mathlib_v3'] = True
-            print("   ✅ MATHLIB 3: Sustainment framework integration - VERIFIED")
+            print("   ✅ MATHLIB 3: Sustainment framework integration \
+                - VERIFIED")
             
         except Exception as e:
             print(f"   ❌ MATHLIB 3 FAILED: {e}")
@@ -263,9 +275,9 @@ async def test_mathlib_1_3_comprehensive_verification():
             print("   🔄 Testing cross-library mathematical consistency...")
             
             # Test that all libraries can work together
-            if all([verification_results.get('mathlib_v1', False),
+            if all([verification_results.get('mathlib_v1', False),)
                    verification_results.get('mathlib_v2', False),
-                   verification_results.get('mathlib_v3', False)]):
+(                   verification_results.get('mathlib_v3', False)]):
                 
                 print("   ✅ All individual libraries verified, testing integration...")
                 
@@ -277,7 +289,7 @@ async def test_mathlib_1_3_comprehensive_verification():
                 v2_cosine = mathlib_v2.cosine_similarity(test_vector_a, test_vector_b)
                 v3_cosine = mathlib_v3.cosine_similarity(test_vector_a, test_vector_b)
                 
-                print(f"   ✅ Cross-library consistency check:")
+                print("   ✅ Cross-library consistency check:")
                 print(f"      📊 MathLib 1 cosine: {v1_cosine:.6f}")
                 print(f"      📊 MathLib 2 cosine: {v2_cosine:.6f}")
                 print(f"      📊 MathLib 3 cosine: {v3_cosine:.6f}")
@@ -296,12 +308,13 @@ async def test_mathlib_1_3_comprehensive_verification():
                 # Test that MathLib 3 can use sustainment-enhanced operations
                 sustainment_enhanced_result = mathlib_v3.calculate_sustainment_vector(context)
                 
-                print(f"   ✅ Sustainment-enhanced operations:")
+                print("   ✅ Sustainment-enhanced operations:")
                 print(f"      🌟 Enhanced result available: {sustainment_enhanced_result is not None}")
                 print(f"      📊 Sustainment principles: {len(sustainment_enhanced_result.principles)}")
                 
             else:
-                print("   ⚠️ Cannot test integration - some individual libraries failed")
+                print("   ⚠️ Cannot test integration \
+                    - some individual libraries failed")
                 verification_results['cross_integration'] = False
             
         except Exception as e:
@@ -324,14 +337,14 @@ async def test_mathlib_1_3_comprehensive_verification():
             # Test the analyze() method that was fixed in Step 1
             analysis_result = analyzer.analyze()
             
-            print(f"   ✅ Core mathematical validation:")
+            print("   ✅ Core mathematical validation:")
             print(f"      🧮 Analysis result: {analysis_result is not None}")
             print(f"      📊 Analysis confidence: {analysis_result.confidence:.4f}")
             print(f"      🔗 Mathematical validity available: {'mathematical_validity' in analysis_result.data}")
             
             # Test that UnifiedMathematicalProcessor can use all MathLibs
             complete_results = processor.run_complete_analysis()
-            print(f"   ✅ Unified processor integration:")
+            print("   ✅ Unified processor integration:")
             print(f"      📋 Complete analysis results: {len(complete_results)}")
             
             verification_results['core_validation'] = True

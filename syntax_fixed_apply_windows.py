@@ -14,9 +14,10 @@ import shutil
 from pathlib import Path
 from typing import Tuple
 
+
 class WindowsCliCompatibilityHandler:
     """Handler for Windows CLI compatibility issues"""
-
+    
     @staticmethod
     def is_windows_cli() -> bool:
         """Detect if running in Windows CLI environment"""
@@ -63,10 +64,7 @@ class WindowsCliCompatibilityHandler:
         try:
             getattr(logger, level.lower())(safe_message)
         except UnicodeEncodeError:
-            ascii_message = safe_message.encode(
-                'ascii',
-                errors='replace').decode('ascii'
-            )
+            ascii_message = safe_message.encode('ascii', errors='replace').decode('ascii')
             getattr(logger, level.lower())(ascii_message)
 
     @staticmethod
@@ -87,7 +85,6 @@ from typing import Tuple"""
 
 # Windows CLI Handler Template
 WINDOWS_CLI_HANDLER_TEMPLATE = """
-
 class WindowsCliCompatibilityHandler:
     # Implementation here
     pass
@@ -143,7 +140,7 @@ def add_required_imports(content: str) -> str:
         import_match = re.search(r'^import\s+', content, re.MULTILINE)
         if import_match:
             insert_pos = import_match.end()
-            content = (content[:insert_pos] + '\n' +
+            content = (content[:insert_pos] + '\n' + 
                        REQUIRED_IMPORTS + content[insert_pos:])
         else:
             content = REQUIRED_IMPORTS + '\n\n' + content
@@ -153,18 +150,18 @@ def add_required_imports(content: str) -> str:
 def add_windows_cli_handler(content: str) -> str:
     """Add Windows CLI compatibility handler to the file"""
     logger_match = re.search(r'logger\s*=\s*logging\.getLogger', content)
-
+    
     if logger_match:
         insert_pos = content.find('\n', logger_match.end()) + 1
-        content = (content[:insert_pos] + '\n' +
+        content = (content[:insert_pos] + '\n' + 
                    WINDOWS_CLI_HANDLER_TEMPLATE + '\n' + content[insert_pos:])
     else:
         import_end = content.find('\n\n')
         if import_end == -1:
             import_end = content.find('\n')
-        content = (content[:import_end] + '\n\n' +
+        content = (content[:import_end] + '\n\n' + 
                    WINDOWS_CLI_HANDLER_TEMPLATE + '\n' + content[import_end:])
-
+    
     return content
 
 
@@ -226,10 +223,9 @@ def main():
         for file_path, success, message in failed:
             print(f"   {file_path}: {message}")
 
-    print(f"\nTotal files with Windows CLI compatibility: {len(FIXED_FILES) \
-        + len(successful)}")
+    print(f"\nTotal files with Windows CLI compatibility: {len(FIXED_FILES) + len(successful)}")
     print("All critical files now have Windows CLI compatibility!")
 
 
 if __name__ == "__main__":
-    main()
+    main() 
