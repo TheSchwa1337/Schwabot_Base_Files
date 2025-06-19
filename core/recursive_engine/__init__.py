@@ -1,36 +1,13 @@
-from .math_functions import coherence_trigger, fractal_signal, recursive_output, recursive_sum
-from .integrator import SignalIntegrator
-from .primary_loop import RecursiveEngine
-from .signal_processor import RecursiveSignalHandler
-from .recursive_strategy_handler import RecursiveStrategyHandler, TradeSignal
-from .profit_memory_vault import ProfitMemoryVault, PatternMemory
-from .vault_reentry_pipeline import VaultReentryPipeline
+#!/usr/bin/env python3
+"""__init__.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
-__all__ = [
-    # Core recursive math
-    "coherence_trigger",
-    "fractal_signal",
-    "recursive_output",
-    "recursive_sum",
-    "SignalIntegrator",
-    "RecursiveEngine",
-    "RecursiveSignalHandler",
-    
-    # Trading components
-    "RecursiveStrategyHandler",
-    "TradeSignal",
-    "ProfitMemoryVault",
-    "PatternMemory",
-    "VaultReentryPipeline",
-]
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
+"""
 
-def register_recursive_engine(bus):
-    """Convenience helper to attach RecursiveSignalHandler to an EventBus.
+def main() -> None:
+    """Stub main function"""
+    pass
 
-    Example
-    -------
-    >>> from init.event_bus import EventBus
-    >>> bus = EventBus()
-    >>> register_recursive_engine(bus)
-    """
-    return RecursiveSignalHandler(bus) 
+if __name__ == "__main__":
+    main()

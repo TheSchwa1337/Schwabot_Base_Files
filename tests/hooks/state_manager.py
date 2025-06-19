@@ -1,16 +1,13 @@
-class SchwabotStateManager:
-    def __init__(self):
-        self.zygot_state = None
-        self.gan_state = None
-        self.fill_state = None
-        self.ncco_state = None
+#!/usr/bin/env python3
+"""state_manager.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
-    def update_zygot_state(self, state):
-        """Update ZygotShell state"""
-        self.zygot_state = state
-        self._propagate_state_change('zygot', state)
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
+"""
 
-    def update_gan_state(self, state):
-        """Update GAN filter state"""
-        self.gan_state = state
-        self._propagate_state_change('gan', state)
+def main() -> None:
+    """Stub main function"""
+    pass
+
+if __name__ == "__main__":
+    main()

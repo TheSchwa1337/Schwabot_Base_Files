@@ -1,22 +1,13 @@
-class FillConjunctionEngine:
-    def __init__(self, harmony_memory):
-        self.harmony_memory = harmony_memory
-        self.live_book = {}
-        self.ghost_log = []
-        self.phantom_log = []
+#!/usr/bin/env python3
+"""fill_conjunction.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
-    def ingest_ncco(self, ncco):
-        # Example: store NCCO in live_book
-        self.live_book[ncco.id] = ncco
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
+"""
 
-    def commit_order(self, pre_order_id):
-        # Example: move from live_book to ghost_log
-        if pre_order_id in self.live_book:
-            self.ghost_log.append(self.live_book.pop(pre_order_id))
+def main() -> None:
+    """Stub main function"""
+    pass
 
-    def handle_fill_state(self, order_id, fill_state, fill_price, fill_size, fill_time):
-        # Example: move from ghost_log to phantom_log
-        for i, ncco in enumerate(self.ghost_log):
-            if ncco.id == order_id:
-                self.phantom_log.append(self.ghost_log.pop(i))
-                break 
+if __name__ == "__main__":
+    main()

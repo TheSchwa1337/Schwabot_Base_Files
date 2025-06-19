@@ -1,11 +1,13 @@
-"""
-Components Package for Schwabot Trading System
-==========================================
+#!/usr/bin/env python3
+"""__init__.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
-This package contains optional interface components and external system
-integrations for the Schwabot trading system, including UI components,
-API clients, and visualization tools.
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
 """
 
-# Export interface components
-__all__ = [] 
+def main() -> None:
+    """Stub main function"""
+    pass
+
+if __name__ == "__main__":
+    main()

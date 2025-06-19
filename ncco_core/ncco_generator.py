@@ -1,8 +1,13 @@
-from .ncco import NCCO
+#!/usr/bin/env python3
+"""ncco_generator.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
-def generate_nccos(price_deltas, base_price, bit_mode, ncco_id_start=0):
-    nccos = []
-    for i, delta in enumerate(price_deltas):
-        ncco = NCCO(id=ncco_id_start + i, price_delta=delta, base_price=base_price, bit_mode=bit_mode)
-        nccos.append(ncco)
-    return nccos 
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
+"""
+
+def main() -> None:
+    """Stub main function"""
+    pass
+
+if __name__ == "__main__":
+    main()

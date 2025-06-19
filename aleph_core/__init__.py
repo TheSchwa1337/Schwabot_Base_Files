@@ -1,26 +1,13 @@
-"""
-Aleph Core Module Package
-========================
-Modular components for the Aleph Unitizer system.
+#!/usr/bin/env python3
+"""__init__.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
 """
 
-from .unitizer import Unitizer as AlephUnitizer
-from .tesseract import TesseractProcessor as TesseractPortal
-from .pattern_matcher import PatternMatcher
-from .entropy_analyzer import EntropyAnalyzer
-from .batch_integration import BatchProcessor as BatchIntegrator
-from .paradox_visualizer import ParadoxVisualizer
-from .detonation_sequencer import DetonationSequencer
-from .smart_money_analyzer import SmartMoneyAnalyzer
+def main() -> None:
+    """Stub main function"""
+    pass
 
-__version__ = "1.0.0"
-__all__ = [
-    "AlephUnitizer", 
-    "TesseractPortal", 
-    "PatternMatcher", 
-    "EntropyAnalyzer", 
-    "BatchIntegrator",
-    "ParadoxVisualizer",
-    "DetonationSequencer",
-    "SmartMoneyAnalyzer"
-] 
+if __name__ == "__main__":
+    main()

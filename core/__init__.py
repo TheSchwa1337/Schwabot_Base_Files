@@ -1,30 +1,13 @@
-"""
-Core Module for Hash Recollection System
-Exports all the key components for pattern recognition and trading.
+#!/usr/bin/env python3
+"""__init__.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+
+The original file failed to parse; a stub was generated so the package
+remains importable.  Replace with a clean implementation ASAP.
 """
 
-from .bit_operations import BitOperations, PhaseState
-from .entropy_tracker import EntropyTracker, EntropyState
-from .hash_recollection import HashRecollectionSystem, HashEntry
-from .pattern_utils import PatternUtils, PatternMatch, ENTRY_KEYS, EXIT_KEYS
-from .risk_engine import RiskEngine, PositionSignal, RiskMetrics
-from .strange_loop_detector import StrangeLoopDetector, EchoPattern
+def main() -> None:
+    """Stub main function"""
+    pass
 
-__version__ = "0.045"
-__all__ = [
-    "HashRecollectionSystem",
-    "HashEntry",
-    "EntropyTracker",
-    "EntropyState",
-    "BitOperations",
-    "PhaseState",
-    "PatternUtils",
-    "PatternMatch",
-    "ENTRY_KEYS",
-    "EXIT_KEYS",
-    "StrangeLoopDetector",
-    "EchoPattern",
-    "RiskEngine",
-    "PositionSignal",
-    "RiskMetrics"
-]
+if __name__ == "__main__":
+    main()

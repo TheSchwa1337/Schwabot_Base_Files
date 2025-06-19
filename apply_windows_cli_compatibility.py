@@ -11,8 +11,8 @@ import os
 import platform
 import re
 import shutil
-from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Any
+
 
 class WindowsCliCompatibilityHandler:
     """Handler for Windows CLI compatibility issues"""
@@ -57,7 +57,7 @@ class WindowsCliCompatibilityHandler:
         return message
 
     @staticmethod
-    def log_safe(logger, level: str, message: str):
+    def log_safe(logger: Any, level: str, message: str) -> None:
         """Log message safely with Windows CLI compatibility"""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
@@ -65,8 +65,7 @@ class WindowsCliCompatibilityHandler:
         except UnicodeEncodeError:
             ascii_message = safe_message.encode(
                 'ascii',
-                errors='replace').decode('ascii'
-            )
+                errors='replace').decode('ascii')
             getattr(logger, level.lower())(ascii_message)
 
     @staticmethod
@@ -123,6 +122,9 @@ TARGET_FILES = [
     'core/integrated_alif_aleph_system.py',
     'test_complete_system.py'
 ]
+
+# Constants (Magic Number Replacements)
+DEFAULT_RETRY_COUNT = 3
 
 
 def check_file_exists(file_path: str) -> bool:
@@ -190,7 +192,7 @@ def process_file(file_path: str) -> Tuple[bool, str]:
         return False, f"Error processing {file_path}: {str(e)}"
 
 
-def main():
+def main() -> None:
     """Main function to process all target files"""
     print("Windows CLI Compatibility Application Script")
     print("=" * 50)
@@ -226,8 +228,8 @@ def main():
         for file_path, success, message in failed:
             print(f"   {file_path}: {message}")
 
-    print(f"\nTotal files with Windows CLI compatibility: {len(FIXED_FILES) \
-        + len(successful)}")
+    print(f"\nTotal files with Windows CLI compatibility: "
+          f"{len(FIXED_FILES) + len(successful)}")
     print("All critical files now have Windows CLI compatibility!")
 
 
