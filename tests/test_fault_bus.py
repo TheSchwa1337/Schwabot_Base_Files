@@ -1,23 +1,30 @@
-import json
-import sys
-import types
-import math
-from dataclasses import dataclass
-import pytest
+import psutil  # noqa: F401
+from core.fault_bus import FaultBus, FaultBusEvent, FaultType  # noqa: F401
+import json  # noqa: F401
+import sys  # noqa: F401
+import types  # noqa: F401
+import math  # noqa: F401
+from dataclasses import dataclass  # noqa: F401
+from unittest.mock import patch
 
 # Provide minimal numpy and corridor engine stubs for testing environments
 numpy_stub = types.SimpleNamespace(
-    mean=lambda x: sum(x)/len(x) if x else 0.0,
-    std=lambda x: math.sqrt(sum((i - sum(x)/len(x)) ** 2 for i in x) / len(x)) if x else 0.0,
-    zeros=lambda shape: [0.0] * shape if isinstance(shape, int) else [[0.0]*shape[1] for _ in range(shape[0])],
+    mean=lambda x: sum(x) / len(x) if x else 0.0,
+    std=lambda x: math.sqrt(sum((i - sum(x) / len(x)) ** 2 for i in x) / len(x)) if x else 0.0,
+    zeros=lambda shape: [0.0] * shape if isinstance(
+        shape,
+        int) else [[0.0] * shape[1] for _ in range(shape[0]
+                                                   )],
     exp=math.exp,
     sin=math.sin,
     array=lambda x: x,
-    linalg=types.SimpleNamespace(norm=lambda v: math.sqrt(sum(i*i for i in v))),
+    linalg=types.SimpleNamespace(norm=lambda v: math.sqrt(sum(i * i for i in v))),
     random=types.SimpleNamespace(
         choice=lambda seq, p=None: seq[0],
-        normal=lambda loc=0.0, scale=1.0, size=None: 0.0 if size is None else [0.0]*size,
-        uniform=lambda low=0.0, high=1.0, size=None: 0.0 if size is None else [0.0]*size,
+        normal=lambda loc=0.0, scale=1.0, size=None: 0.0 if size is None else [0.0] \
+            size,
+        uniform=lambda low=0.0, high=1.0, size=None: 0.0 if size is None else [0.0] \
+            size,
         seed=lambda x: None,
     ),
 )
@@ -30,11 +37,11 @@ sys.modules.setdefault("psutil", psutil_stub)
 
 for mod in [
     "core.hash_recollection",
-    "core.entropy_tracker",
-    "core.bit_operations",
-    "core.pattern_utils",
-    "core.strange_loop_detector",
-    "core.risk_engine",
+        "core.entropy_tracker",
+        "core.bit_operations",
+        "core.pattern_utils",
+        "core.strange_loop_detector",
+        "core.risk_engine",
 ]:
     m = types.ModuleType(mod)
     # Add dummy classes/vars required by core.__init__
@@ -60,6 +67,7 @@ for mod in [
     sys.modules.setdefault(mod, m)
 
 corridor_stub = types.ModuleType("future_corridor_engine")
+
 
 class ExecutionPath(types.SimpleNamespace):
     CPU_SYNC = "cpu_sync"
@@ -112,9 +120,6 @@ corridor_stub.ProfitTier = ProfitTier
 
 sys.modules.setdefault("core.future_corridor_engine", corridor_stub)
 
-from core.fault_bus import FaultBus, FaultBusEvent, FaultType
-import psutil
-
 
 def test_fault_bus_event_creation():
     event = FaultBusEvent(
@@ -131,8 +136,8 @@ def test_fault_bus_event_creation():
 
 
 def test_profit_context_and_path_metrics(tmp_path, monkeypatch):
-    monkeypatch.setattr(psutil, "cpu_percent", lambda interval=0.1: 0.0)
-    bus = FaultBus(log_path=str(tmp_path))
+    monkeypatch.setattr(psutil, "cpu_percent", lambda interval=0.1: 0.0)  # noqa: F841
+    bus = FaultBus(log_path=str(tmp_path))  # noqa: F841
 
     event = FaultBusEvent(
         tick=0,
@@ -155,4 +160,4 @@ def test_profit_context_and_path_metrics(tmp_path, monkeypatch):
     data = json.loads(corr_json)
     assert data
     assert data[0]["fault_type"] == FaultType.PROFIT_LOW.value
-    assert bus.correlation_matrix.correlations[FaultType.PROFIT_LOW].occurrence_count == 2 
+    assert bus.correlation_matrix.correlations[FaultType.PROFIT_LOW].occurrence_count == 2

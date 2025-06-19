@@ -1,8 +1,9 @@
-import sys
-import types
-import numpy as np
-import pytest
-from unittest.mock import patch, mock_open
+import sys  # noqa: F401
+import types  # noqa: F401
+import numpy as np  # noqa: F401
+import pytest  # noqa: F401
+from unittest.mock import patch, mock_open  # noqa: F401
+import unittest
 
 # Provide a minimal cupy stub so module imports succeed
 cupy_stub = types.SimpleNamespace(array=np.array, asarray=np.asarray)
@@ -30,10 +31,13 @@ def engine():
             }
         }
     }
-    
-    with patch('builtins.open', mock_open(read_data='{"metrics": {"window_sizes": {"short": 100, "medium": 500, "long": 1000}, "update_interval_ms": 1000, "gpu_acceleration": false, "drift_detection": {"window_size": 1000, "threshold": 0.7}, "entropy": {"bins": 50, "min_probability": 1e-10}}}')):
+
+    with patch(
+        'builtins.open',
+            mock_open(read_data='{"metrics": {"window_sizes": {"short": 100, "medium": 500, "long": 1000}, "update_interval_ms": 1000, "gpu_acceleration": false, "drift_detection": {"window_size": 1000, "threshold": 0.7}, "entropy": {"bins": 50, "min_probability": 1e-10}}}')
+    ):
         with patch('json.load', return_value=mock_config):
-            from core.phase_engine.phase_metrics_engine import PhaseMetricsEngine
+            from core.phase_engine.phase_metrics_engine import PhaseMetricsEngine  # noqa: F401
             eng = PhaseMetricsEngine()
             # Ensure GPU disabled for predictable CPU execution
             eng.use_gpu = False
@@ -97,16 +101,19 @@ def test_initialize_gpu_error_handling(monkeypatch):
             }
         }
     }
-    
+
     with patch('builtins.open', mock_open()):
         with patch('json.load', return_value=mock_config):
-            from core.phase_engine.phase_metrics_engine import PhaseMetricsEngine
+            from core.phase_engine.phase_metrics_engine import PhaseMetricsEngine  # noqa: F401
             eng = PhaseMetricsEngine()
             eng.use_gpu = True
 
             def raise_error(_):
                 raise RuntimeError('GPU failure')
 
-            monkeypatch.setattr('core.phase_engine.phase_metrics_engine.cp.array', raise_error)
+            monkeypatch.setattr(
+                'core.phase_engine.phase_metrics_engine.cp.array',
+                raise_error
+            )
             eng._initialize_gpu()
-            assert eng.use_gpu is False 
+            assert eng.use_gpu is False

@@ -13,7 +13,7 @@ class SchwabotMetrics:
             'order_latency': [],
             'fill_rates': []
         }
-        
+
     def record_zygot_metric(self, metric_name: str, value: float):
         """Record ZygotShell metric"""
         if metric_name in self.zygot_metrics:

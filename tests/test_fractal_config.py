@@ -2,6 +2,7 @@ from pathlib import Path
 from core.config_utils import get_profile_params_from_yaml
 from core.quantization_profile import QuantizationProfile
 
+
 def test_load_fractal_profile():
     path = Path("tests/configs/sample_fractal.yaml")
     params = get_profile_params_from_yaml(path)

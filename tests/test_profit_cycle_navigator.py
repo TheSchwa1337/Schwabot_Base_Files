@@ -1,8 +1,9 @@
-import pytest
-from datetime import datetime, timedelta
+import pytest  # noqa: F401
+from datetime import datetime, timedelta  # noqa: F821
+from unittest.mock import Mock
+from unittest.mock import patch
 
-from profit_cycle_navigator import ProfitCycleNavigator, ProfitCycleState
-from core.fault_bus import ProfitFaultCorrelation, FaultType
+from core.fault_bus import ProfitFaultCorrelation, FaultType  # noqa: F401
 
 
 class MockFaultBus:
@@ -39,7 +40,7 @@ def test_profit_cycle_navigation(monkeypatch):
             temporal_offset=1,
             confidence=1.0,
             occurrence_count=5,
-            last_seen=datetime.now(),
+            last_seen=datetime.now(),  # noqa: F821
         )],
         [],
         [ProfitFaultCorrelation(
@@ -49,7 +50,7 @@ def test_profit_cycle_navigation(monkeypatch):
             temporal_offset=1,
             confidence=1.0,
             occurrence_count=5,
-            last_seen=datetime.now(),
+            last_seen=datetime.now(),  # noqa: F821
         )],
     ]
 
@@ -66,22 +67,34 @@ def test_profit_cycle_navigation(monkeypatch):
     def fake_detect_cycle_phase(profit, ts):
         return next(phase_iter)
 
-    monkeypatch.setattr(navigator.detector, "detect_cycle_phase", fake_detect_cycle_phase)
+    monkeypatch.setattr(
+        navigator.detector,
+        "detect_cycle_phase",
+        fake_detect_cycle_phase
+    )
 
     anomaly_iter = iter([
         (False, 0.0, "normal"),
         (False, 0.0, "normal"),
         (True, 0.6, "profit_binary"),
     ])
-    monkeypatch.setattr(navigator.detector, "detect_anomaly_cluster", lambda ctx: next(anomaly_iter))
+    monkeypatch.setattr(
+        navigator.detector,
+        "detect_anomaly_cluster",
+        lambda ctx: next(anomaly_iter)
+    )
 
-    base_time = datetime(2021, 1, 1)
+    base_time = datetime(2021, 1, 1)  # noqa: F821
     prices = [100.0, 100.5, 99.0]
     signals = []
     vectors = []
 
     for i, price in enumerate(prices):
-        pv = navigator.update_market_state(price, 1000, base_time + timedelta(minutes=i))
+        pv = navigator.update_market_state(
+            price,
+            1000,
+            base_time + timedelta(minutes=i)
+        )
         signals.append(navigator.get_trade_signal())
         vectors.append(pv)
         bus.advance()
@@ -100,10 +113,11 @@ def test_profit_cycle_navigation(monkeypatch):
     assert navigator.navigation_log[1]["new_state"] == "SEEKING"
     assert signals[1] is None
 
-    # Step 3: high confidence with negative correlation should trigger ENTERING again
+    # Step 3: high confidence with negative correlation should trigger ENTERING
+    # again
     # (The state machine prioritizes confidence over anomaly detection)
     pv3 = vectors[2]
     assert navigator.navigation_log[2]["new_state"] == "ENTERING"
     assert pv3.direction == -1  # Should be short due to negative correlation
     assert pv3.anomaly_strength == pytest.approx(0.6, rel=1e-2)
-    assert signals[2] and signals[2]["action"] == "ENTER" 
+    assert signals[2] and signals[2]["action"] == "ENTER"

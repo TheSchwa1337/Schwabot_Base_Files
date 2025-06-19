@@ -1,10 +1,11 @@
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
-import time
-
 from quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+from unittest.mock import patch
+
+matplotlib.use("Agg")
 
 
 def test_add_data_point_limit():
@@ -39,4 +40,4 @@ def test_plot_entropy_waveform_executes(monkeypatch):
     monkeypatch.setattr(plt, "show", fake_show)
 
     plot_entropy_waveform(data)
-    assert called.get("show") is True 
+    assert called.get("show") is True

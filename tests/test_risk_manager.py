@@ -4,8 +4,8 @@ Test suite for the Risk Management System
 
 import unittest
 from datetime import datetime
-import numpy as np
 from core.risk_manager import RiskManager, PositionRisk, RiskLevel
+
 
 class TestRiskManager(unittest.TestCase):
     def setUp(self):
@@ -17,21 +17,21 @@ class TestRiskManager(unittest.TestCase):
             var_confidence=0.95,
             update_interval=1.0
         )
-        
+
     def test_kelly_fraction_calculation(self):
         """Test Kelly Criterion fraction calculation"""
         # Test case 1: 60% win rate, 1:1 win/loss ratio
         kelly = self.risk_manager.calculate_kelly_fraction(0.6, 1.0)
         self.assertAlmostEqual(kelly, 0.2, places=2)
-        
+
         # Test case 2: 70% win rate, 2:1 win/loss ratio
         kelly = self.risk_manager.calculate_kelly_fraction(0.7, 2.0)
         self.assertAlmostEqual(kelly, 0.4, places=2)
-        
+
         # Test case 3: Invalid win rate
         kelly = self.risk_manager.calculate_kelly_fraction(1.5, 1.0)
         self.assertEqual(kelly, 0.0)
-        
+
     def test_position_size_calculation(self):
         """Test position size calculation"""
         # Test case 1: Normal conditions
@@ -44,7 +44,7 @@ class TestRiskManager(unittest.TestCase):
         )
         self.assertGreater(size, 0.0)
         self.assertLessEqual(size, self.risk_manager.max_position_size)
-        
+
         # Test case 2: High volatility
         size = self.risk_manager.calculate_position_size(
             symbol="BTC/USD",
@@ -54,7 +54,7 @@ class TestRiskManager(unittest.TestCase):
             win_loss_ratio=1.0
         )
         self.assertLess(size, 0.1)  # Should be reduced due to high volatility
-        
+
     def test_dynamic_stop_loss(self):
         """Test dynamic stop-loss calculation"""
         stop_loss, take_profit = self.risk_manager.calculate_dynamic_stop_loss(
@@ -63,10 +63,13 @@ class TestRiskManager(unittest.TestCase):
             volatility=0.02,
             atr=1000.0
         )
-        
+
         self.assertLess(stop_loss, 50000.0)  # Stop loss should be below entry
-        self.assertGreater(take_profit, 50000.0)  # Take profit should be above entry
-        
+        self.assertGreater(
+            take_profit,
+            50000.0
+        )  # Take profit should be above entry
+
     def test_portfolio_risk_update(self):
         """Test portfolio risk metrics update"""
         # Create test positions
@@ -98,16 +101,16 @@ class TestRiskManager(unittest.TestCase):
                 timestamp=datetime.now()
             )
         }
-        
+
         # Update portfolio risk
         portfolio_risk = self.risk_manager.update_portfolio_risk(positions)
-        
+
         # Verify portfolio risk metrics
         self.assertIsNotNone(portfolio_risk)
         self.assertEqual(portfolio_risk.total_exposure, 0.15)  # 0.1 + 0.05
         self.assertGreater(portfolio_risk.portfolio_volatility, 0.0)
         self.assertGreater(portfolio_risk.var_95, 0.0)
-        
+
     def test_risk_limits(self):
         """Test risk limit checks"""
         # Create test position
@@ -124,14 +127,18 @@ class TestRiskManager(unittest.TestCase):
             volatility=0.02,
             timestamp=datetime.now()
         )
-        
+
         # Test position size limit
-        self.assertFalse(self.risk_manager.check_risk_limits("BTC/USD", position))
-        
+        self.assertFalse(
+            self.risk_manager.check_risk_limits(
+                "BTC/USD", position))
+
         # Test with valid position size
         position.size = 0.05
-        self.assertTrue(self.risk_manager.check_risk_limits("BTC/USD", position))
-        
+        self.assertTrue(
+            self.risk_manager.check_risk_limits(
+                "BTC/USD", position))
+
     def test_risk_report(self):
         """Test risk report generation"""
         # Create test positions
@@ -150,13 +157,13 @@ class TestRiskManager(unittest.TestCase):
                 timestamp=datetime.now()
             )
         }
-        
+
         # Update portfolio risk
         self.risk_manager.update_portfolio_risk(self.risk_manager.positions)
-        
+
         # Get risk report
         report = self.risk_manager.get_risk_report()
-        
+
         # Verify report structure
         self.assertIn("timestamp", report)
         self.assertIn("total_exposure", report)
@@ -165,6 +172,7 @@ class TestRiskManager(unittest.TestCase):
         self.assertIn("risk_level", report)
         self.assertIn("var_95", report)
         self.assertIn("position_risks", report)
-        
+
+
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

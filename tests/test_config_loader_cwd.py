@@ -1,17 +1,19 @@
+from unittest.mock import patch
+
 """
 Tests for the configuration loader's working directory handling.
 """
 
-import pytest
-import importlib
-import yaml
-from pathlib import Path
-from core.config import ConfigLoader, ConfigError
+import pytest  # noqa: F401
+import importlib  # noqa: F401
+import yaml  # noqa: F401
+from core.config import ConfigLoader, ConfigError  # noqa: F401
+
 
 @pytest.fixture
 def temp_config_dir(tmp_path, monkeypatch):
     """Create a temporary config directory with test configuration."""
-    cfg_dir = tmp_path / "config"
+    cfg_dir = tmp_path / "config"  # noqa: F841
     cfg_dir.mkdir()
     cfg_file = cfg_dir / "matrix_response_paths.yaml"
     test_config = {
@@ -23,9 +25,10 @@ def temp_config_dir(tmp_path, monkeypatch):
     cfg_file.write_text(yaml.safe_dump(test_config))
 
     # Patch the config directory
-    monkeypatch.setattr(ConfigLoader, "_config_dir", cfg_dir, raising=False)
+    monkeypatch.setattr(ConfigLoader, "_config_dir", cfg_dir, raising=False)  # noqa: F841
     ConfigLoader._instance = None  # Reset singleton
     yield cfg_dir  # Return the directory path, not the config dict
+
 
 @pytest.fixture
 def change_cwd(tmp_path, monkeypatch):
@@ -33,23 +36,34 @@ def change_cwd(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     yield tmp_path
 
+
 def test_components_load_from_centralized_loader(change_cwd, temp_config_dir):
     """Test that components load configuration from the centralized loader."""
     # Import components
-    MatrixFaultResolver = importlib.import_module("mathlib.matrix_fault_resolver").MatrixFaultResolver
-    LineRenderEngine = importlib.import_module("mathlib.line_render_engine").LineRenderEngine
-    
+    MatrixFaultResolver = importlib.import_module(  # noqa: F401
+        "mathlib.matrix_fault_resolver").MatrixFaultResolver
+    LineRenderEngine = importlib.import_module(  # noqa: F401
+        "mathlib.line_render_engine").LineRenderEngine
+
     # Initialize components
     resolver = MatrixFaultResolver()
     engine = LineRenderEngine()
-    
+
     # Verify configuration loading - check actual config structure
-    assert resolver.config.get("retry_config", {}).get("base_delay") == 1000  # Default value from MatrixFaultResolver
-    assert resolver.config.get("retry_config", {}).get("backoff_factor") == 2  # Default value
-    
+    assert resolver.config.get(
+        "retry_config",
+        {}).get("base_delay"
+                ) == 1000  # Default value from MatrixFaultResolver
+    assert resolver.config.get(
+        "retry_config",
+        {}).get("backoff_factor"
+                ) == 2  # Default value
+
     # Verify LineRenderEngine has matrix_paths loaded
     assert hasattr(engine, 'matrix_paths')
-    assert engine.matrix_paths.get("safe") == "hold"  # Default value from LineRenderEngine
+    # Default value from LineRenderEngine
+    assert engine.matrix_paths.get("safe") == "hold"
+
 
 def test_config_loader_singleton(change_cwd, temp_config_dir):
     """Test that ConfigLoader maintains singleton pattern."""
@@ -57,22 +71,24 @@ def test_config_loader_singleton(change_cwd, temp_config_dir):
     loader2 = ConfigLoader()
     assert loader1 is loader2
 
+
 def test_config_loader_defaults(change_cwd, temp_config_dir):
     """Test that ConfigLoader provides default values when config is missing."""
     loader = ConfigLoader()
     config = loader.load_yaml("nonexistent.yaml", create_default=True)
     assert isinstance(config, dict)
 
+
 def test_config_loader_error_handling(change_cwd, temp_config_dir):
     """Test ConfigLoader error handling."""
     loader = ConfigLoader()
-    
+
     # Test loading nonexistent file without defaults
     with pytest.raises(ConfigError):
         loader.load_yaml("nonexistent.yaml", create_default=False)
-    
+
     # Test loading invalid YAML
     invalid_file = temp_config_dir / "invalid.yaml"
     invalid_file.write_text("invalid: yaml: content: [")
     with pytest.raises(ConfigError):
-        loader.load_yaml("invalid.yaml") 
+        loader.load_yaml("invalid.yaml")

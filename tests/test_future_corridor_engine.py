@@ -1,14 +1,15 @@
-import pytest
-np = pytest.importorskip("numpy")
-import hashlib
-from datetime import datetime
-
 from core.future_corridor_engine import (
+from unittest.mock import patch
+
     FutureCorridorEngine,
     CorridorState,
     ExecutionPath,
     ProfitTier,
 )
+from datetime import datetime
+import hashlib
+import pytest
+np = pytest.importorskip("numpy")
 
 
 @pytest.fixture
@@ -37,7 +38,10 @@ def test_profit_tier_classification(engine):
     high_state, _ = _make_state(100.0, 0.9)
     low_state, _ = _make_state(100.0, 0.1)
 
-    assert engine.calculate_profit_tier(high_state, 80.0) is ProfitTier.HIGHENTRY
+    assert engine.calculate_profit_tier(
+        high_state,
+        80.0
+    ) is ProfitTier.HIGHENTRY
     assert engine.calculate_profit_tier(low_state, 10.0) is ProfitTier.DISCARD
 
 
@@ -87,4 +91,4 @@ def test_recursive_intent_loop_simulation(engine):
     for res in results:
         assert res["dispatch_path"] in [e.value for e in ExecutionPath]
         assert 0.0 <= res["dispatch_confidence"] <= 1.0
-        assert res["profit_tier"] == ProfitTier.HIGHENTRY.name 
+        assert res["profit_tier"] == ProfitTier.HIGHENTRY.name

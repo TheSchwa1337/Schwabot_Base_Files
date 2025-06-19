@@ -27,9 +27,11 @@ def _write_valid_configs(directory: Path) -> None:
     (directory / "braid.yaml").write_text(
         "patterns:\n  - a\nconfidence_threshold: 0.1\n", encoding="utf-8"
     )
-    (directory / "logging.yaml").write_text(
-        "level: INFO\nformat: '%(levelname)s'\noutput: stdout\n", encoding="utf-8"
-    )
+    (
+        directory /
+        "logging.yaml").write_text(
+        "level: INFO\nformat: '%(levelname)s'\noutput: stdout\n",
+        encoding="utf-8")
 
 
 def _run_cli(cfg_dir: Path) -> subprocess.CompletedProcess:
@@ -59,4 +61,4 @@ def test_invalid_configs_exit_nonzero():
         )
         result = _run_cli(cfg_dir)
         assert result.returncode != 0
-        assert "Overall Status: [FAIL] Issues Found" in result.stdout 
+        assert "Overall Status: [FAIL] Issues Found" in result.stdout

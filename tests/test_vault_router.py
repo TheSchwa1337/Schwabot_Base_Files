@@ -1,9 +1,11 @@
 import pytest
 from core.vault_router import VaultRouter
 
+
 @pytest.fixture
 def router():
     return VaultRouter()
+
 
 @pytest.mark.parametrize("strategy,expected", [
     ({'strategy': 'Tier3_HighProfit'}, 'Executed high-profit trade!'),
@@ -13,4 +15,4 @@ def router():
 ])
 def test_trigger_execution(router, strategy, expected):
     result = router.trigger_execution(strategy)
-    assert expected in result 
+    assert expected in result
