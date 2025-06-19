@@ -71,7 +71,9 @@ python-jose>=3.3.0
 passlib>=1.7.4
 
 # Technical Analysis (for trading algorithms)
-TA-Lib>=0.4.28
+# NOTE: TA-Lib requires system dependencies to be installed first
+# See TALIB_INSTALLATION.md for detailed installation instructions
+# TA-Lib>=0.4.28
 
 # Development Tools (Optional)
 black>=23.7.0

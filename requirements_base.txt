@@ -1,0 +1,63 @@
+# Schwabot v1.0 - Base Requirements (Guaranteed Installation)
+# ============================================================
+# This file contains only the core dependencies that should install
+# without system-level dependencies or compilation issues.
+
+# Core Framework
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+
+# Mathematical & Scientific Computing
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Web Framework & API
+flask>=2.3.0
+flask-cors>=4.0.0
+websockets>=11.0.0
+requests>=2.31.0
+
+# Crypto Trading APIs
+ccxt>=4.0.0
+python-binance>=1.0.17
+
+# Data Processing & Storage
+sqlalchemy>=2.0.0
+redis>=4.6.0
+
+# Configuration & Serialization
+pyyaml>=6.0
+python-dotenv>=1.0.0
+jsonschema>=4.21.0
+
+# System Monitoring
+psutil>=5.9.0
+py-cpuinfo>=9.0.0
+
+# Async & Concurrency
+asyncio>=3.4.3
+aiohttp>=3.8.0
+
+# Logging & Debugging
+loguru>=0.7.0
+rich>=13.5.0
+colorama>=0.4.6
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Security & Encryption
+cryptography>=41.0.0
+
+# Development Tools
+black>=23.7.0
+flake8>=6.0.0
+
+# Additional utilities
+six>=1.16.0
+typing-extensions>=4.0.0
+certifi>=2017.4.17
+urllib3>=1.26.0 
