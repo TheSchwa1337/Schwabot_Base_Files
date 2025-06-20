@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""time_lattice_fork.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""Time-lattice fork – placeholder implementation.
 
-The original file failed to parse; a stub was generated so the package
-remains importable.  Replace with a clean implementation ASAP.
+This stub keeps the package importable until the real time-lattice
+fork logic is written. Replace with full implementation when ready.
 """
 
 def main() -> None:
-    """Stub main function"""
+    """Run a no-op placeholder."""
     pass
 
 if __name__ == "__main__":

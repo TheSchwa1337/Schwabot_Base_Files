@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""
-Type Enforcer - Centralized Type Annotation Management
-=====================================================
+"""Type Enforcer.
 
-Systematically adds missing type annotations to eliminate MEDIUM-priority
-flake8 issues. Provides intelligent type inference for mathematical and
-data processing functions with Windows CLI compatibility.
+Centralized type-annotation management utility. Systematically adds missing
+annotations to eliminate medium-priority Flake8 issues and provides
+intelligent type inference for mathematical and data-processing functions
+with Windows CLI compatibility.
 """
 
 import ast
@@ -18,9 +17,10 @@ logger = logging.getLogger(__name__)
 
 
 class TypeEnforcer:
-    """Centralized type annotation management with Windows CLI compatibility"""
+    """Add or correct type annotations in Python source files."""
 
-    def __init__(self: Any) -> Any:
+    def __init__(self: Any) -> None:
+        """Initialize type-pattern and function-pattern dictionaries."""
         self._type_patterns: Dict[str, str] = {
             # Mathematical patterns
             'price': 'float',
@@ -65,7 +65,7 @@ class TypeEnforcer:
             'exposure': 'float',
             'leverage': 'float',
 
-            # Data structure patterns
+            # Data-structure patterns
             'data': 'Dict[str, Any]',
             'result': 'Dict[str, Any]',
             'config': 'Dict[str, Any]',
@@ -116,7 +116,6 @@ class TypeEnforcer:
             'index': 'int',
             'size': 'int',
             'length': 'int',
-            'limit': 'int',
             'max': 'int',
             'min': 'int',
             'value': 'int',
@@ -172,8 +171,12 @@ class TypeEnforcer:
         }
 
     def enforce_type_annotations(self: Any, file_path: str) -> Dict[str, int]:
-        """Enforce type annotations in a file with Windows CLI compatibility"""
-        stats = {'functions_fixed': 0, 'parameters_fixed': 0, 'returns_fixed': 0}
+        """Enforce type annotations in a file with Windows CLI compatibility."""
+        stats: Dict[str, int] = {
+            'functions_fixed': 0,
+            'parameters_fixed': 0,
+            'returns_fixed': 0,
+        }
 
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -215,8 +218,12 @@ class TypeEnforcer:
 
         return '\n'.join(lines)
 
-    def _fix_function_annotations(self: Any, node: ast.FunctionDef, lines: List[str],
-                                stats: Dict[str, int]) -> List[str]:
+    def _fix_function_annotations(
+        self: Any,
+        node: ast.FunctionDef,
+        lines: List[str],
+        stats: Dict[str, int]
+    ) -> List[str]:
         """Fix type annotations for a function"""
         line_idx = node.lineno - 1  # Convert to 0-based index
 

@@ -16,15 +16,13 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 from __future__ import annotations
 
 import numpy as np
-import hashlib
 from datetime import datetime
-from typing import List, Tuple, Dict, Optional, Union, Callable
+from typing import List, Dict, Optional, Union
 import logging
 
 from core.type_defs import (
-    Tensor, Entropy, RecursionDepth, RecursionStack, Vector, Matrix,
-    GrayscaleValue, EntropyMap, DriftCoefficient, DriftVelocity,
-    QuantumState, EnergyLevel, WaveFunction, Complex
+    Tensor, Entropy, RecursionDepth, RecursionStack,
+    QuantumState
 )
 
 # Import from other core modules

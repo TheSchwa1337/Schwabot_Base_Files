@@ -22,3 +22,25 @@ jobs:
         run: black --check .
       - name: Run isort (check only)
         run: isort --check-only . 
+# FUTURE ENHANCEMENTS - UNCOMMENT WHEN NEEDED
+# =====================================
+
+# - name: Run pylint (Enhanced linting)
+#   run: pylint core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py --disable=C0114,C0116
+
+# - name: Security scan with bandit (CRITICAL for trading systems)
+#   run: bandit -r core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py
+
+# - name: Check dependencies for vulnerabilities
+#   run: safety check
+
+# - name: Run tests with coverage
+#   run: |
+#     pytest tests/ --cov=core --cov=dlt_waveform_engine --cov=multi_bit_btc_processor --cov=profit_routing_engine --cov-report=xml --cov-report=html
+
+# - name: Upload coverage to Codecov
+#   uses: codecov/codecov-action@v3
+#   with:
+#     file: ./coverage.xml
+#     flags: unittests
+#     name: codecov-umbrella

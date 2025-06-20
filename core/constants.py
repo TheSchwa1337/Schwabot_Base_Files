@@ -58,6 +58,7 @@ TEMPORAL_COMPRESSION_FACTOR = 0.8  # Time compression factor
 SVD_TOLERANCE = 1e-12  # Singular value decomposition tolerance
 EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 
+
 # Windows CLI compatibility handler
 class WindowsCliCompatibilityHandler:
     """Handles Windows CLI compatibility for cross-platform operation"""
@@ -65,9 +66,10 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def is_windows_cli() -> bool:
         """Check if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and
-                ("cmd" in os.environ.get("COMSPEC", "").lower() or
-                 "powershell" in os.environ.get("PSModulePath", "").lower()))
+        return platform.system() == "Windows" and (
+            "cmd" in os.environ.get("COMSPEC", "").lower()
+            or "powershell" in os.environ.get("PSModulePath", "").lower()
+        )
 
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
@@ -75,7 +77,8 @@ class WindowsCliCompatibilityHandler:
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             # Strip emojis for Windows CLI compatibility
             import re
-            message = re.sub(r'[^\w\s\-_.,!?]', '', message)
+
+            message = re.sub(r"[^\w\s\-_.,!?]", "", message)
         return message
 
     @staticmethod
@@ -91,7 +94,9 @@ class WindowsCliCompatibilityHandler:
         error_msg = str(error)
         if context:
             error_msg = f"{context}: {error_msg}"
-        return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
+        return WindowsCliCompatibilityHandler.safe_print(
+            error_msg, use_emoji=False
+        )
 
 
 # Shared constants across the Schwabot code-base
