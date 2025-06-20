@@ -10,22 +10,17 @@ Based on systematic elimination of 257+ flake8 issues.
 """
 
 import logging
-import sys
 from datetime import datetime
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Type
 from functools import wraps
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
+from typing import Any, Callable, Dict, List, Optional, Type
 
 logger = logging.getLogger(__name__)
 
 
 class ErrorSeverity(Enum):
-    """Error severity levels for consistent handling"""
+    """Error severity levels for consistent handling."""
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -34,7 +29,7 @@ class ErrorSeverity(Enum):
 
 @dataclass
 class ErrorContext:
-    """Context information for error handling"""
+    """Context information for error handling."""
     function_name: str
     module_name: str
     line_number: int
@@ -44,7 +39,7 @@ class ErrorContext:
 
 
 class ErrorHandler:
-    """Centralized error handling with consistent patterns"""
+    """Centralized error handling with consistent patterns."""
 
     def __init__(self) -> None:
         self._error_registry: Dict[Type[Exception], Callable] = {}
@@ -52,7 +47,7 @@ class ErrorHandler:
         self._register_default_handlers()
 
     def _register_default_handlers(self) -> None:
-        """Register default error handlers for common exceptions"""
+        """Register default error handlers for common exceptions."""
         self._error_registry.update({
             ImportError: self._handle_import_error,
             ValueError: self._handle_value_error,
@@ -72,7 +67,7 @@ class ErrorHandler:
                     reraise: bool = False,
                     **kwargs) -> Any:
         """
-        Safely execute a function with comprehensive error handling
+        Safely execute a function with comprehensive error handling.
 
         Args:
             func: Function to execute
@@ -85,10 +80,12 @@ class ErrorHandler:
             Function result or default_return if error occurs
         """
         if error_context is None:
+            func_code = getattr(func, '__code__', None)
+            line_number = func_code.co_firstlineno if func_code else 0
             error_context = ErrorContext(
                 function_name=func.__name__,
                 module_name=func.__module__,
-                line_number=getattr(func, '__code__', None).co_firstlineno if hasattr(func, '__code__') else 0
+                line_number=line_number
             )
 
         try:
@@ -102,12 +99,15 @@ class ErrorHandler:
 
             return default_return
 
-    def _handle_exception(self, exception: Exception, context: ErrorContext) -> None:
-        """Handle an exception with the appropriate handler"""
+    def _handle_exception(self, exception: Exception,
+                         context: ErrorContext) -> None:
+        """Handle an exception with the appropriate handler."""
         exception_type = type(exception)
 
         # Get the appropriate handler
-        handler = self._error_registry.get(exception_type, self._handle_generic_error)
+        handler = self._error_registry.get(
+            exception_type, self._handle_generic_error
+        )
 
         # Execute the handler
         handler(exception, context)
@@ -115,129 +115,137 @@ class ErrorHandler:
         # Record the error
         self._error_history.append(context)
 
-    def _handle_import_error(self, exception: ImportError, context: ErrorContext) -> None:
-        """Handle ImportError with fallback suggestions"""
+    def _handle_import_error(self, exception: ImportError,
+                           context: ErrorContext) -> None:
+        """Handle ImportError with fallback suggestions."""
         logger.warning(
             f"Import error in {context.module_name}.{context.function_name}: "
             f"Module '{exception.name}' not available. Using fallback."
         )
         context.severity = ErrorSeverity.LOW
 
-    def _handle_value_error(self, exception: ValueError, context: ErrorContext) -> None:
-        """Handle ValueError with parameter validation context"""
+    def _handle_value_error(self, exception: ValueError,
+                          context: ErrorContext) -> None:
+        """Handle ValueError with parameter validation context."""
         logger.error(
             f"Value error in {context.module_name}.{context.function_name}: "
             f"Invalid value provided: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_type_error(self, exception: TypeError, context: ErrorContext) -> None:
-        """Handle TypeError with type checking context"""
+    def _handle_type_error(self, exception: TypeError,
+                          context: ErrorContext) -> None:
+        """Handle TypeError with type checking context."""
         logger.error(
             f"Type error in {context.module_name}.{context.function_name}: "
             f"Type mismatch: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_key_error(self, exception: KeyError, context: ErrorContext) -> None:
-        """Handle KeyError with dictionary access context"""
+    def _handle_key_error(self, exception: KeyError,
+                         context: ErrorContext) -> None:
+        """Handle KeyError with dictionary access context."""
         logger.error(
             f"Key error in {context.module_name}.{context.function_name}: "
             f"Missing key: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_index_error(self, exception: IndexError, context: ErrorContext) -> None:
-        """Handle IndexError with list/array access context"""
+    def _handle_index_error(self, exception: IndexError,
+                           context: ErrorContext) -> None:
+        """Handle IndexError with list/array access context."""
         logger.error(
             f"Index error in {context.module_name}.{context.function_name}: "
             f"Invalid index: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_attribute_error(self, exception: AttributeError, context: ErrorContext) -> None:
-        """Handle AttributeError with object attribute access context"""
+    def _handle_attribute_error(self, exception: AttributeError,
+                              context: ErrorContext) -> None:
+        """Handle AttributeError with object attribute access context."""
         logger.error(
             f"Attribute error in {context.module_name}.{context.function_name}: "
             f"Missing attribute: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_file_not_found(self, exception: FileNotFoundError, context: ErrorContext) -> None:
-        """Handle FileNotFoundError with file path context"""
+    def _handle_file_not_found(self, exception: FileNotFoundError,
+                              context: ErrorContext) -> None:
+        """Handle FileNotFoundError with file path context."""
         logger.error(
             f"File not found in {context.module_name}.{context.function_name}: "
             f"File: {exception.filename}"
         )
         context.severity = ErrorSeverity.HIGH
 
-    def _handle_permission_error(self, exception: PermissionError, context: ErrorContext) -> None:
-        """Handle PermissionError with file system context"""
+    def _handle_permission_error(self, exception: PermissionError,
+                                context: ErrorContext) -> None:
+        """Handle PermissionError with file system context."""
         logger.error(
             f"Permission error in {context.module_name}.{context.function_name}: "
             f"Access denied: {exception.filename}"
         )
         context.severity = ErrorSeverity.HIGH
 
-    def _handle_connection_error(self, exception: ConnectionError, context: ErrorContext) -> None:
-        """Handle ConnectionError with network context"""
+    def _handle_connection_error(self, exception: ConnectionError,
+                                context: ErrorContext) -> None:
+        """Handle ConnectionError with network context."""
         logger.error(
             f"Connection error in {context.module_name}.{context.function_name}: "
             f"Network issue: {exception}"
         )
         context.severity = ErrorSeverity.HIGH
 
-    def _handle_timeout_error(self, exception: TimeoutError, context: ErrorContext) -> None:
-        """Handle TimeoutError with timing context"""
+    def _handle_timeout_error(self, exception: TimeoutError,
+                             context: ErrorContext) -> None:
+        """Handle TimeoutError with timing context."""
         logger.error(
             f"Timeout error in {context.module_name}.{context.function_name}: "
             f"Operation timed out: {exception}"
         )
         context.severity = ErrorSeverity.MEDIUM
 
-    def _handle_generic_error(self, exception: Exception, context: ErrorContext) -> None:
-        """Handle any unregistered exception type"""
+    def _handle_generic_error(self, exception: Exception,
+                             context: ErrorContext) -> None:
+        """Handle any unregistered exception type."""
         logger.error(
-            f"Unexpected error in {context.module_name}.{context.function_name}: "
+            f"Unhandled exception in {context.module_name}.{context.function_name}: "
             f"{type(exception).__name__}: {exception}"
         )
         context.severity = ErrorSeverity.CRITICAL
 
     def register_handler(self, exception_type: Type[Exception],
                         handler: Callable[[Exception, ErrorContext], None]) -> None:
-        """Register a custom error handler for a specific exception type"""
+        """Register a custom error handler for a specific exception type."""
         self._error_registry[exception_type] = handler
 
     def get_error_summary(self) -> Dict[str, int]:
-        """Get a summary of errors by severity"""
+        """Get summary of error counts by severity."""
         summary = {severity.value: 0 for severity in ErrorSeverity}
         for context in self._error_history:
             summary[context.severity.value] += 1
         return summary
 
     def clear_history(self) -> None:
-        """Clear the error history"""
+        """Clear error history."""
         self._error_history.clear()
 
 
-# Global error handler instance
-error_handler = ErrorHandler()
-
-
+# Convenience functions for easy error handling
 def safe_execute(func: Callable, *args,
                 error_context: Optional[ErrorContext] = None,
                 default_return: Any = None,
                 reraise: bool = False,
                 **kwargs) -> Any:
-    """Convenience function for safe execution"""
-    return error_handler.safe_execute(func, *args,
-                                     error_context=error_context,
-                                     default_return=default_return,
-                                     reraise=reraise, **kwargs)
+    """Convenience function for safe execution."""
+    handler = ErrorHandler()
+    return handler.safe_execute(func, *args, error_context=error_context,
+                              default_return=default_return, reraise=reraise, **kwargs)
 
 
-def error_handler_decorator(default_return: Any = None, reraise: bool = False) -> Callable:
-    """Decorator for automatic error handling"""
+def error_handler_decorator(default_return: Any = None,
+                           reraise: bool = False) -> Callable:
+    """Decorator for automatic error handling."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
@@ -248,14 +256,14 @@ def error_handler_decorator(default_return: Any = None, reraise: bool = False) -
 
 
 def safe_import_decorator(module_name: str, class_names: List[str]) -> Callable:
-    """Decorator for safe import handling"""
+    """Decorator for safe import handling."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
             try:
                 return func(*args, **kwargs)
             except ImportError as e:
-                logger.warning(f"Import error in {func.__name__}: {e}")
+                logger.warning(f"Import failed for {module_name}: {e}")
                 return None
         return wrapper
     return decorator

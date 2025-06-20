@@ -93,9 +93,7 @@ class BestPracticesEnforcer:
             CodePattern(
                 name="mathematical_function_patterns",
                 description="Ensure mathematical functions have proper type annotations",
-                pattern=r'def\s+(
-    calculate|compute|process|analyze|evaluate|estimate|predict|forecast|simulate|optimize|minimize|maximize)\s*\(([^)]*)\)\s*:',
-    
+                pattern=r'def\s+(calculate|compute|process|analyze|evaluate|estimate|predict|forecast|simulate|optimize|minimize|maximize)\s*\(([^)]*)\)\s*:',
                 replacement=r'def \1(\2) -> Union[float, Dict[str, Any]]:',
                 severity="MEDIUM",
                 category="mathematical_functions"
@@ -254,9 +252,6 @@ fi
 
         # Make the script executable
         import stat
-from typing import Any
-from typing import List
-from typing import Union
         os.chmod(output_path, stat.S_IRWXU)
 
         logger.info(f"Created pre-commit hook at {output_path}")

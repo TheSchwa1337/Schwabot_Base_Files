@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 """
-Mathematical Constants - Schwabot Unified Framework
+Constants - Core System Constants and Configuration
 ==================================================
 
-Core mathematical constants for the Schwabot trading system including:
-- Golden ratio and Fibonacci sequences for profit routing
-- Quantum mechanical constants for drift analysis 
-- Thermal dynamics constants for volume processing
-- Advanced signal processing constants
-
-Based on SP 1.27-AE framework and Nexus mathematical integration.
+Defines all mathematical constants, thresholds, and configuration values
+used throughout the Schwabot trading system. Includes Windows CLI compatibility
+handlers for cross-platform operation.
 """
 
 import os
@@ -18,147 +14,95 @@ import numpy as np
 from pathlib import Path
 from typing import Any
 
-
-# =====================================
-# ADVANCED MATHEMATICAL CONSTANTS
-# =====================================
-
-# Golden Ratio and Fibonacci Constants (Profit Routing)
+# Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
 FIBONACCI_SCALING = 1.272019649514069  # φ^(1/2) for fractal scaling
 INVERSE_PSI = 0.618033988749895  # 1/φ for counter-rotation
 
-# Quantum Mechanical Constants (Drift Analysis)
-PLANCK_CONSTANT = 6.62607015e-34  # Quantum energy scaling
-REDUCED_PLANCK = 1.0545718176461565e-34  # ℏ for angular momentum
-QUANTUM_ENTROPY_SCALE = 1.3806485e-23  # Boltzmann constant adaptation
+# Configuration directories
+CONFIG_DIR = Path(__file__).parent / "config"
+DATA_DIR = Path(__file__).parent / "data"
+LOG_DIR = Path(__file__).parent / "logs"
 
-# Thermal Dynamics Constants (Volume Processing)
-THERMAL_CONDUCTIVITY_BTC = 0.024  # W/(m·K) for BTC thermal modeling
-STEFAN_BOLTZMANN = 5.670374419e-8  # σ for thermal radiation
-AVOGADRO_TRADING = 6.02214076e23 / 1e15  # Scaled for tick processing
+# Mathematical thresholds and limits
+KELLY_SAFETY_FACTOR = 0.25  # Kelly criterion safety factor
+SHARPE_TARGET = 2.0  # Target Sharpe ratio
+MAX_POSITION_SIZE = 0.1  # Maximum position size (10%)
+MIN_POSITION_SIZE = 0.001  # Minimum position size (0.1%)
 
-# Signal Processing Constants (Advanced Drift)
-NYQUIST_SCALING = 2.0  # Sampling rate factor
+# Signal processing constants
+SAMPLE_RATE = 1000  # Hz - Signal sampling rate
+NYQUIST_FREQUENCY = SAMPLE_RATE / 2  # Nyquist frequency
 BUTTERWORTH_ORDER = 4  # Default filter order
-HAMMING_ALPHA = 0.54  # Window function parameter
-BLACKMAN_ALPHA = 0.16  # Advanced window parameter
 
-# Trading Mathematics Constants
-KELLY_SAFETY_FACTOR = 0.25  # Fractional Kelly criterion
-SHARPE_TARGET = 1.5  # Target Sharpe ratio
-MAX_DRAWDOWN_LIMIT = 0.15  # Maximum allowed drawdown
-VOLATILITY_NORMALIZATION = 252  # Trading days per year
-
-# Ferris Wheel Logic Constants (Temporal Cycles)
-FERRIS_PRIMARY_CYCLE = 16  # Primary rotation period
-FERRIS_HARMONIC_RATIOS = [1, 2, 4, 8, 16, 32]  # Harmonic subdivisions
-FERRIS_PHASE_OFFSET = np.pi / 4  # 45-degree phase shift
-
-# Hash Density Constants (Pattern Recognition)
-SHA256_ENTROPY_BITS = 256  # Full entropy for hash operations
+# Fractal and pattern analysis
+FRACTAL_DIMENSION_LIMIT = 2.5  # Maximum fractal dimension
 PATTERN_SIMILARITY_THRESHOLD = 0.95  # Pattern matching threshold
 RECURSIVE_DEPTH_LIMIT = 100  # Maximum recursion depth
-BLOOM_FILTER_BITS = 1024  # Bloom filter size
 
-# Drift Shell Constants (Ring Allocation)
-DEFAULT_SHELL_RADIUS = 144.44  # Base shell radius
-RING_ALLOCATION_FACTOR = 2 * np.pi  # 2πr/n allocation
-SUBSURFACE_DECAY_RATE = 0.1  # Exponential decay rate
-GRAYSCALE_ENTROPY_SCALE = 255.0  # 8-bit grayscale normalization
+# Thermal and entropy constants
+THERMAL_DECAY_RATE = 0.95  # Thermal state decay rate
+ENTROPY_THRESHOLD = 0.5  # Entropy threshold for state changes
+VOID_WELL_DEPTH = 0.1  # Void-well analysis depth
 
-# Zero Point Energy Constants (Quantum Trading)
-ZPE_CAVITY_LENGTH = 1e-6  # Micrometers for ZPE calculation
-ZPE_FREQUENCY_CUTOFF = 1e12  # Hz cutoff frequency
-VACUUM_IMPEDANCE = 376.730313668  # Ohms, Z₀
-
-# Matrix Operation Constants
-MATRIX_CONDITION_LIMIT = 1e12  # Condition number limit
-EIGENVALUE_TOLERANCE = 1e-10  # Eigenvalue computation tolerance
-SVD_TOLERANCE = 1e-12  # Singular value decomposition tolerance
-
-# API and System Constants
-MAX_API_RETRIES = 3  # Maximum API retry attempts
-API_TIMEOUT_SECONDS = 30.0  # API request timeout
+# Performance and latency thresholds
 LATENCY_THRESHOLD_MS = 100.0  # Latency warning threshold
-
-# Error Handling Constants
 MAX_ERROR_STACK_SIZE = 1000  # Maximum error history
 ERROR_DECAY_FACTOR = 0.95  # Error importance decay
-FALLBACK_TIMEOUT = 5.0  # Fallback system timeout
 
+# Ferris wheel and temporal analysis
+FERRIS_HARMONIC_RATIOS = [1, 2, 4, 8, 16, 32]  # Harmonic subdivisions
+TEMPORAL_COMPRESSION_FACTOR = 0.8  # Time compression factor
 
-# =====================================
-# WINDOWS CLI COMPATIBILITY HANDLER
-# =====================================
+# Advanced mathematical constants
+SVD_TOLERANCE = 1e-12  # Singular value decomposition tolerance
+EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 
+# Windows CLI compatibility handler
 class WindowsCliCompatibilityHandler:
-    """Windows CLI compatibility for emoji and Unicode handling"""
-    
+    """Handles Windows CLI compatibility for cross-platform operation"""
+
     @staticmethod
     def is_windows_cli() -> bool:
-        """Detect if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and 
+        """Check if running in Windows CLI environment"""
+        return (platform.system() == "Windows" and
                 ("cmd" in os.environ.get("COMSPEC", "").lower() or
                  "powershell" in os.environ.get("PSModulePath", "").lower()))
-    
+
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
-        """Print message safely with Windows CLI compatibility"""
+        """Safely print messages with optional emoji support"""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
-            emoji_mapping = {
-                '🚨': '[ALERT]', '⚠️': '[WARNING]', '✅': '[SUCCESS]',
-                '❌': '[ERROR]', '🔄': '[PROCESSING]', '🎯': '[TARGET]',
-                '📊': '[DATA]', '🔍': '[SEARCH]', '⚡': '[FAST]',
-                '🎉': '[COMPLETE]', '🔧': '[TOOLS]', '📈': '[PROFIT]'
-            }
-            for emoji, marker in emoji_mapping.items():
-                message = message.replace(emoji, marker)
+            # Strip emojis for Windows CLI compatibility
+            import re
+            message = re.sub(r'[^\w\s\-_.,!?]', '', message)
         return message
-    
+
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
-        """Log message safely with Windows CLI compatibility"""
+        """Safely log messages with CLI compatibility"""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
-        try:
+        if hasattr(logger, level.lower()):
             getattr(logger, level.lower())(safe_message)
-        except UnicodeEncodeError:
-            ascii_message = safe_message.encode('ascii', 
-                                             errors='replace').decode('ascii')
-            getattr(logger, level.lower())(ascii_message)
 
+    @staticmethod
+    def safe_format_error(error: Exception, context: str = "") -> str:
+        """Safely format error messages for CLI compatibility"""
+        error_msg = str(error)
+        if context:
+            error_msg = f"{context}: {error_msg}"
+        return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
 
-# =====================================
-# PATH AND CONFIGURATION CONSTANTS
-# =====================================
 
 # Shared constants across the Schwabot code-base
-CONFIG_DIR = Path(__file__).resolve().parent.parent / "config"
-DEFAULT_FRACTAL_PATH = CONFIG_DIR / "fractal_core.yaml"
-LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-CACHE_DIR = Path(__file__).resolve().parent.parent / ".cache"
-
-
-# =====================================
-# DERIVED MATHEMATICAL CONSTANTS
-# =====================================
+DEFAULT_TIMEOUT = 30.0  # Default timeout in seconds
+MAX_RETRY_ATTEMPTS = 3  # Maximum retry attempts
+DEFAULT_BATCH_SIZE = 1000  # Default batch processing size
 
 # Composite constants for advanced calculations
-QUANTUM_THERMAL_COUPLING = (PLANCK_CONSTANT * THERMAL_CONDUCTIVITY_BTC) / (
-    STEFAN_BOLTZMANN * QUANTUM_ENTROPY_SCALE)
-
-FERRIS_GOLDEN_HARMONIC = PSI_INFINITY * FERRIS_PRIMARY_CYCLE / (2 * np.pi)
-
-KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / np.sqrt(
-    VOLATILITY_NORMALIZATION)
-
-# Numerical stability constants
-EPSILON_FLOAT32 = np.finfo(np.float32).eps
-EPSILON_FLOAT64 = np.finfo(np.float64).eps
-MAX_SAFE_INTEGER = 2**53 - 1
+KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / np.sqrt(2)
+FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 
 # Performance optimization constants
 VECTORIZATION_THRESHOLD = 1000  # Use vectorized ops above this size
 PARALLEL_PROCESSING_THRESHOLD = 10000  # Use parallel processing above this
-MEMORY_CHUNK_SIZE = 1024 * 1024  # 1MB chunks for large operations

@@ -8,7 +8,7 @@ for cleaning price feeds and reducing noise before trading oracle processing.
 
 Mathematical foundations:
 - Kalman Filter: Optimal linear state estimation
-- Particle Filter: Non-linear Bayesian state estimation  
+- Particle Filter: Non-linear Bayesian state estimation
 - EMA: Exponential Moving Average with time-awareness
 - Adaptive filtering with dynamic parameter adjustment
 
@@ -173,7 +173,7 @@ class KalmanFilter:
             if np.min(eigenvals) < self.epsilon:
                 matrix += self.epsilon * np.eye(matrix.shape[0])
             return matrix
-        except:
+        except Exception:
             # Fallback: add regularization
             return matrix + self.epsilon * np.eye(matrix.shape[0])
     
@@ -182,7 +182,7 @@ class KalmanFilter:
         try:
             return multivariate_normal.logpdf(innovation, mean=np.zeros(len(innovation)), 
                                             cov=innovation_cov)
-        except:
+        except Exception:
             return 0.0
 
 

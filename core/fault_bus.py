@@ -49,6 +49,27 @@ except ImportError:
         ExecutionPath = Mock(name="ExecutionPath")
         ProfitTier = Mock(name="ProfitTier")
 
+# Import quantum visualizer with fallback
+try:
+    from quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
+except ImportError:
+    try:
+        from ncco_core.quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
+    except ImportError:
+        # Fallback: create dummy functions if module not available
+        def PanicDriftVisualizer(*args, **kwargs) -> Any:
+            return None
+
+        def plot_entropy_waveform(*args, **kwargs) -> Any:
+            return None
+
+# Import core type definitions
+try:
+    from core.type_defs import *
+except ImportError:
+    # Fallback type definitions if core module not available
+    pass
+
 # =====================================
 # WINDOWS CLI COMPATIBILITY HANDLER
 # =====================================
@@ -1073,6 +1094,7 @@ if __name__ == "__main__":
     print(json.dumps(fault_bus.get_path_statistics(), indent=2))
     print("\n=== Correlation Matrix ===")
     print(fault_bus.export_correlation_matrix())
+
 # FUTURE ENHANCEMENT NOTES
 # =====================================
 #
@@ -1097,24 +1119,3 @@ if __name__ == "__main__":
 # - This file handles system-wide fault events
 # - Review all exception handling for security implications
 # - Consider adding audit logging for fault events
-
-# Fix relative import issue - use absolute imports or try/except for optional imports
-try:
-    from quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
-except ImportError:
-    try:
-        from ncco_core.quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
-from core.type_defs import *
-from typing import Any
-from typing import Callable
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
-    except ImportError:
-        # Fallback: create dummy functions if module not available
-        def PanicDriftVisualizer(*args, **kwargs) -> Any:
-            return None
-
-        def plot_entropy_waveform(*args, **kwargs) -> Any:
-            return None

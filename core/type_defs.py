@@ -16,14 +16,15 @@ Based on systematic elimination of 257+ flake8 issues and SP 1.27-AE framework.
 
 from __future__ import annotations
 
-from typing import (
-    List, Dict, Tuple, Callable, Union, Optional, Any,
-    Protocol, TypeVar, Generic, NewType
-)
-import numpy as np
-from numpy.typing import NDArray
 from dataclasses import dataclass
 from datetime import datetime
+from typing import (
+    Any, Callable, Dict, Generic, List, NewType, Optional, Protocol, Tuple, TypeVar, Union
+)
+
+import numpy as np
+from numpy.typing import NDArray
+
 import logging
 
 # Configure logging
@@ -87,7 +88,8 @@ ThermalGradient = Callable[[float, float], Vector]  # ∇T(x, t)
 # Thermal system state
 @dataclass
 class ThermalState:
-    """Represents the state of a thermal system"""
+    """Represents the state of a thermal system."""
+
     temperature: Temperature
     pressure: Pressure
     conductivity: ThermalConductivity
@@ -110,7 +112,8 @@ LightTravelTime = Callable[[Distance, float], Time]  # Light travel time
 # Warp system state
 @dataclass
 class WarpState:
-    """Represents the state of a warp system"""
+    """Represents the state of a warp system."""
+
     warp_factor: WarpFactor
     velocity: LightSpeed
     distance: Distance
@@ -198,120 +201,102 @@ PredictionResult = Dict[str, Union[float, Vector, datetime]]
 OptimizationResult = Dict[str, Union[float, Vector, int]]
 
 # Validation types
-ValidationResult = Dict[str, Union[bool, str, float]]
-ComplianceResult = Dict[str, Union[bool, List[str]]]
-
-# =============================================================================
-# ERROR HANDLING TYPES
-# =============================================================================
-
-# Error contexts
-ErrorContext = Dict[str, Union[str, int, float]]
-ErrorSeverity = NewType('ErrorSeverity', str)  # 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'
-
-# Error results
-ErrorResult = Dict[str, Union[str, ErrorContext, ErrorSeverity]]
-
-# =============================================================================
-# CONFIGURATION TYPES
-# =============================================================================
-
-# Configuration types
-Config = Dict[str, Any]
-Parameters = Dict[str, Union[float, int, str, bool]]
-Settings = Dict[str, Union[str, int, float, bool]]
+ValidationResult = Dict[str, bool]
+ValidationError = Dict[str, str]
 
 # =============================================================================
 # PROTOCOL DEFINITIONS
 # =============================================================================
 
 class MathematicalFunction(Protocol):
-    """Protocol for mathematical functions"""
+    """Protocol for mathematical functions."""
+
     def __call__(self, *args: float) -> float:
+        """Call the mathematical function."""
         ...
+
 
 class VectorFunction(Protocol):
-    """Protocol for vector functions"""
+    """Protocol for vector functions."""
+
     def __call__(self, vector: Vector) -> Union[float, Vector]:
+        """Call the vector function."""
         ...
 
+
 class MatrixFunction(Protocol):
-    """Protocol for matrix functions"""
+    """Protocol for matrix functions."""
+
     def __call__(self, matrix: Matrix) -> Union[float, Vector, Matrix]:
+        """Call the matrix function."""
         ...
 
 # =============================================================================
-# TYPE VALIDATORS
+# VALIDATION FUNCTIONS
 # =============================================================================
 
 def validate_scalar(value: Any) -> Scalar:
-    """Validate and convert to scalar"""
-    try:
+    """Validate and convert value to scalar."""
+    if isinstance(value, (int, float)):
         return float(value)
-    except (ValueError, TypeError) as e:
-        raise ValueError(f"Cannot convert {value} to scalar: {e}")
+    raise ValueError(f"Cannot convert {type(value)} to scalar")
+
 
 def validate_vector(value: Any) -> Vector:
-    """Validate and convert to vector"""
-    if isinstance(value, np.ndarray):
+    """Validate and convert value to vector."""
+    if isinstance(value, np.ndarray) and value.ndim == 1:
         return value.astype(np.float64)
-    elif isinstance(value, (list, tuple)):
+    if isinstance(value, (list, tuple)):
         return np.array(value, dtype=np.float64)
-    else:
-        raise ValueError(f"Cannot convert {value} to vector")
+    raise ValueError(f"Cannot convert {type(value)} to vector")
+
 
 def validate_matrix(value: Any) -> Matrix:
-    """Validate and convert to matrix"""
-    if isinstance(value, np.ndarray):
-        if value.ndim != 2:
-            raise ValueError(f"Matrix must be 2D, got {value.ndim}D")
+    """Validate and convert value to matrix."""
+    if isinstance(value, np.ndarray) and value.ndim == 2:
         return value.astype(np.float64)
-    elif isinstance(value, (list, tuple)):
-        arr = np.array(value, dtype=np.float64)
-        if arr.ndim != 2:
-            raise ValueError(f"Matrix must be 2D, got {arr.ndim}D")
-        return arr
-    else:
-        raise ValueError(f"Cannot convert {value} to matrix")
+    if isinstance(value, (list, tuple)):
+        return np.array(value, dtype=np.float64)
+    raise ValueError(f"Cannot convert {type(value)} to matrix")
 
-# =============================================================================
-# TYPE CONVERSION UTILITIES
-# =============================================================================
 
 def to_price(value: Union[float, str]) -> Price:
-    """Convert value to Price type"""
+    """Convert value to Price type."""
     return Price(float(value))
 
+
 def to_volume(value: Union[float, str]) -> Volume:
-    """Convert value to Volume type"""
+    """Convert value to Volume type."""
     return Volume(float(value))
 
+
 def to_temperature(value: Union[float, str]) -> Temperature:
-    """Convert value to Temperature type"""
+    """Convert value to Temperature type."""
     return Temperature(float(value))
 
+
 def to_warp_factor(value: Union[float, str]) -> WarpFactor:
-    """Convert value to WarpFactor type"""
+    """Convert value to WarpFactor type."""
     return WarpFactor(float(value))
 
-# =============================================================================
-# TYPE CHECKING UTILITIES
-# =============================================================================
 
 def is_scalar(value: Any) -> bool:
-    """Check if value is a scalar"""
-    return isinstance(value, (int, float, np.number))
+    """Check if value is a scalar."""
+    return isinstance(value, (int, float))
+
 
 def is_vector(value: Any) -> bool:
-    """Check if value is a vector"""
+    """Check if value is a vector."""
     return isinstance(value, np.ndarray) and value.ndim == 1
 
+
 def is_matrix(value: Any) -> bool:
-    """Check if value is a matrix"""
+    """Check if value is a matrix."""
     return isinstance(value, np.ndarray) and value.ndim == 2
 
+
 def is_tensor(value: Any) -> bool:
-    """Check if value is a tensor (3D+)"""
+    """Check if value is a tensor."""
     return isinstance(value, np.ndarray) and value.ndim >= 3
 
 # =============================================================================
@@ -355,13 +340,7 @@ __all__ = [
 
     # Analysis and result types
     'AnalysisResult', 'PredictionResult', 'OptimizationResult',
-    'ValidationResult', 'ComplianceResult',
-
-    # Error handling types
-    'ErrorContext', 'ErrorSeverity', 'ErrorResult',
-
-    # Configuration types
-    'Config', 'Parameters', 'Settings',
+    'ValidationResult', 'ValidationError',
 
     # Protocols
     'MathematicalFunction', 'VectorFunction', 'MatrixFunction',
