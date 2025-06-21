@@ -9,6 +9,6 @@ from .base_api import ExchangeAPI
 from .coinbase_api import CoinbaseAPI
 
 __all__ = [
-    'ExchangeAPI',
-    'CoinbaseAPI',
-] 
+    "ExchangeAPI",
+    "CoinbaseAPI",
+]

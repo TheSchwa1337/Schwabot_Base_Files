@@ -1,86 +1,93 @@
 #!/usr/bin/env python3
-"""
-Schwabot Unified System
+"""Schwabot Unified System.
+
 =====================
 
+
+
 Unified system that integrates the Enhanced Fitness Oracle with simplified trading logic.
-This represents a cleaner architectural approach where complex analysis is delegated 
+
+This represents a cleaner architectural approach where complex analysis is delegated
+
 to specialized components while maintaining simple, maintainable trading logic.
 
+
+
 The architecture hierarchy is:
+
 Market Data -> Enhanced Fitness Oracle -> Simplified Scheduler -> Trade Execution
+
 """
 
 import asyncio
-import logging
-import json
-import platform
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
+from datetime import datetime
+from datetime import timedelta
+import json
+import logging
+import os
+import platform
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
-from enhanced_fitness_oracle import (
-    EnhancedFitnessOracle,
-    UnifiedFitnessScore,
-    MarketSnapshot
-)
-from schwabot_integration import SchwabotOrchestrator
-
-# Fallback imports for testing
 try:
-    from config.enhanced_fitness_config import (
-        UnifiedMathematicalProcessor,
-        AnalysisResult,
+    # Prefer the real package
+    from enhanced_fitness_oracle import (
         EnhancedFitnessOracle,
-        MathematicalCore,
-        FitnessMetrics,
-        TradingParameters,
-        OptimizationConfig
+        UnifiedFitnessScore,
     )
-except ImportError:
-    # Use mock objects for testing
-    from unittest.mock import Mock as UnifiedMathematicalProcessor
-    from unittest.mock import Mock as AnalysisResult
-    from unittest.mock import Mock as MathematicalCore
-    from unittest.mock import Mock as FitnessMetrics
-    from unittest.mock import Mock as TradingParameters
-    from unittest.mock import Mock as OptimizationConfig
+except ImportError:  # pragma: no cover – fallback stub for tests
+    # Fallback to a local config-stub version so the module still imports
+    from config.enhanced_fitness_config import (  # type: ignore
+        EnhancedFitnessOracle,
+        UnifiedFitnessScore,
+    )
+
+from schwabot_integration import SchwabotOrchestrator
 
 # =====================================
 # WINDOWS CLI COMPATIBILITY HANDLER
 # =====================================
 
+
 class WindowsCliCompatibilityHandler:
-    """Windows CLI compatibility for emoji and Unicode handling"""
-    
+    """Windows CLI compatibility for emoji and Unicode handling."""
+
     @staticmethod
     def is_windows_cli() -> bool:
-        """Detect if running in Windows CLI environment"""
-        return (platform.system() == "Windows" and 
-                ("cmd" in os.environ.get("COMSPEC", "").lower() or
-                 "powershell" in os.environ.get("PSModulePath", "").lower()))
-    
+        """Detect if running in Windows CLI environment."""
+        return platform.system() == "Windows" and (
+            "cmd" in os.environ.get("COMSPEC", "").lower()
+            or "powershell" in os.environ.get("PSModulePath", "").lower()
+        )
+
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
-        """Print message safely with Windows CLI compatibility"""
+        """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
-                '🚨': '[ALERT]', '⚠️': '[WARNING]', '✅': '[SUCCESS]',
-                '❌': '[ERROR]', '🔄': '[PROCESSING]', '🎯': '[TARGET]'
+                "🚨": "[ALERT]",
+                "⚠️": "[WARNING]",
+                "✅": "[SUCCESS]",
+                "❌": "[ERROR]",
+                "🔄": "[PROCESSING]",
+                "🎯": "[TARGET]",
             }
             for emoji, marker in emoji_mapping.items():
                 message = message.replace(emoji, marker)
         return message
-    
+
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
-        """Log message safely with Windows CLI compatibility"""
+        """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
             getattr(logger, level.lower())(safe_message)
         except UnicodeEncodeError:
-            ascii_message = safe_message.encode('ascii', errors='replace').decode('ascii')
+            ascii_message = safe_message.encode(
+                "ascii", errors="replace"
+            ).decode("ascii")
             getattr(logger, level.lower())(ascii_message)
 
 
@@ -93,9 +100,11 @@ DEFAULT_INDENT_SIZE = 4
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class TradeDecision:
-    """Simplified trade decision structure"""
+    """Simplified trade decision structure."""
+
     timestamp: datetime
     action: str  # "BUY", "SELL", "HOLD", "STRONG_BUY", "STRONG_SELL"
     symbol: str
@@ -106,38 +115,48 @@ class TradeDecision:
     take_profit: Optional[float] = None
     max_hold_time: Optional[timedelta] = None
 
+
 class SimplifiedFerrisWheelScheduler:
     """
+    
     Simplified scheduler that uses the Enhanced Fitness Oracle
     for ALL decision making - no more complex signal aggregation
     """
 
-    def __init__(self: Any, fitness_oracle: EnhancedFitnessOracle,
-        symbols: List[str] = ["BTC/USDT", "ETH/USDT"]):
+    def __init__(
+        self: Any,
+        fitness_oracle: EnhancedFitnessOracle,
+        symbols: Optional[List[str]] = None,
+    ):
+        """TODO: document __init__."""
         self.fitness_oracle = fitness_oracle
-        self.symbols = symbols
+        # Avoid mutable default argument – initialise lazily
+        self.symbols = symbols or ["BTC/USDT", "ETH/USDT"]
         self.tick_count = 0
         self.active_positions = {}
         self.trade_history = []
         self.performance_metrics = {
-            'total_trades': 0,
-            'winning_trades': 0,
-            'total_profit': 0.0,
-            'fitness_accuracy': 0.0
+            "total_trades": 0,
+            "winning_trades": 0,
+            "total_profit": 0.0,
+            "fitness_accuracy": 0.0,
         }
 
-        logger.info("Simplified FerrisWheelScheduler initialized for {symbols}")
+        logger.info(
+            "Simplified FerrisWheelScheduler initialized for {symbols}"
+        )
 
     async def tick_loop(
-        self,
-        market_data_provider,
-        max_ticks: Optional[int] = None
+        self, market_data_provider, max_ticks: Optional[int] = None
     ):
         """
+        
         Simplified tick loop that delegates ALL analysis to the Fitness Oracle
         This is much cleaner than the previous complex aggregation logic
         """
-        logger.info("Starting simplified tick loop with Fitness Oracle integration")
+        logger.info(
+            "Starting simplified tick loop with Fitness Oracle integration"
+        )
 
         while max_ticks is None or self.tick_count < max_ticks:
             try:
@@ -146,7 +165,9 @@ class SimplifiedFerrisWheelScheduler:
 
                 # === STEP 2: LET FITNESS ORACLE DO ALL THE ANALYSIS ===
                 # This is the key simplification - one call does everything
-                fitness_score = await self._analyze_with_fitness_oracle(market_data)
+                fitness_score = await self._analyze_with_fitness_oracle(
+                    market_data
+                )
 
                 # === STEP 3: MAKE TRADING DECISION BASED ON FITNESS ===
                 trade_decision = self._make_trading_decision(fitness_score)
@@ -163,11 +184,13 @@ class SimplifiedFerrisWheelScheduler:
                 await asyncio.sleep(1)  # 1-second ticks
 
             except Exception as e:
-                logger.error("Tick {self.tick_count} failed: {e}")
+                logger.error(
+                    f"Tick {self.tick_count} failed: {e}"
+                )
                 await asyncio.sleep(1)
 
     async def _get_market_data(self, provider) -> Dict[str, Any]:
-        """Get market data from provider (simplified)"""
+        """Get market data from provider (simplified)."""
         # In real implementation, this would fetch from exchange
         # For demo, we'll simulate realistic market data'
         base_price = 100.0
@@ -180,24 +203,34 @@ class SimplifiedFerrisWheelScheduler:
             "volume": volume_series[-1],
             "price_series": price_series,
             "volume_series": volume_series,
-            "timestamp": datetime.now()
+            "timestamp": datetime.now(),
         }
 
-    async def _analyze_with_fitness_oracle(self, market_data: Dict[str, Any]) -> UnifiedFitnessScore:
+    async def _analyze_with_fitness_oracle(
+        self, market_data: Dict[str, Any]
+    ) -> UnifiedFitnessScore:
         """
+        
         THIS IS THE KEY INTEGRATION POINT
         All complex analysis is delegated to the Fitness Oracle
         """
         # Capture market snapshot (this runs all the engines)
-        market_snapshot = await self.fitness_oracle.capture_market_snapshot(market_data)
+        market_snapshot = await self.fitness_oracle.capture_market_snapshot(
+            market_data
+        )
 
         # Calculate unified fitness (this makes the decision)
-        fitness_score = self.fitness_oracle.calculate_unified_fitness(market_snapshot)
+        fitness_score = self.fitness_oracle.calculate_unified_fitness(
+            market_snapshot
+        )
 
         return fitness_score
 
-    def _make_trading_decision(self: Any, fitness_score: UnifiedFitnessScore) -> TradeDecision:
+    def _make_trading_decision(
+        self: Any, fitness_score: UnifiedFitnessScore
+    ) -> TradeDecision:
         """
+        
         Convert fitness score to actionable trade decision
         This is much simpler than before - the Oracle did all the work
         """
@@ -210,10 +243,11 @@ class SimplifiedFerrisWheelScheduler:
         reasoning_parts = []
         if fitness_score.dominant_factors:
             top_factor = max(
-                fitness_score.dominant_factors.items(),
-                key=lambda x: abs(x[1])
+                fitness_score.dominant_factors.items(), key=lambda x: abs(x[1])
             )
-            reasoning_parts.append("Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})")
+            reasoning_parts.append(
+                "Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})"
+            )
 
         if fitness_score.profit_tier_detected:
             reasoning_parts.append("PROFIT TIER DETECTED")
@@ -222,7 +256,9 @@ class SimplifiedFerrisWheelScheduler:
             reasoning_parts.append("Loop warning - reduced confidence")
             confidence *= 0.5  # Reduce confidence on loop warning
 
-        reasoning = "Regime: {fitness_score.market_regime}, " + ", ".join(reasoning_parts)
+        reasoning = "Regime: {fitness_score.market_regime}, " + ", ".join(
+            reasoning_parts
+        )
 
         return TradeDecision(
             timestamp=fitness_score.timestamp,
@@ -233,11 +269,11 @@ class SimplifiedFerrisWheelScheduler:
             reasoning=reasoning,
             stop_loss=fitness_score.stop_loss,
             take_profit=fitness_score.take_profit,
-            max_hold_time=fitness_score.max_hold_time
+            max_hold_time=fitness_score.max_hold_time,
         )
 
     async def _execute_trade_decision(self, decision: TradeDecision):
-        """Execute the trade decision (simplified)"""
+        """Execute the trade decision (simplified)."""
         # In real implementation, this would call exchange API
 
         if decision.action in ["BUY", "STRONG_BUY"]:
@@ -247,10 +283,10 @@ class SimplifiedFerrisWheelScheduler:
             self.active_positions[decision.symbol] = new_position
 
             logger.info(
-                "🟢 {decision.action}: {decision.symbol} | "
-                "Size: {decision.position_size:.2f} | "
-                "Total Position: {new_position:.2f} | "
-                "Confidence: {decision.confidence:.3f}"
+                f"🟢 {decision.action}: {decision.symbol} | "
+                f"Size: {decision.position_size:.2f} | "
+                f"Total Position: {new_position:.2f} | "
+                f"Confidence: {decision.confidence:.3f}"
             )
 
         elif decision.action in ["SELL", "STRONG_SELL"]:
@@ -265,24 +301,26 @@ class SimplifiedFerrisWheelScheduler:
                 self.active_positions[decision.symbol] = new_position
 
             logger.info(
-                "🔴 {decision.action}: {decision.symbol} | "
-                "Reduction: {reduction:.2f} | "
-                "Remaining Position: {new_position:.2f} | "
-                "Confidence: {decision.confidence:.3f}"
+                f"🔴 {decision.action}: {decision.symbol} | "
+                f"Reduction: {reduction:.2f} | "
+                f"Remaining Position: {new_position:.2f} | "
+                f"Confidence: {decision.confidence:.3f}"
             )
 
         # Store trade in history
         self.trade_history.append(decision)
-        self.performance_metrics['total_trades'] += 1
+        self.performance_metrics["total_trades"] += 1
 
-    def _log_tick_summary(self: Any, fitness_score: UnifiedFitnessScore, decision: TradeDecision) -> None:
-        """Log summary of tick analysis and decision"""
+    def _log_tick_summary(
+        self: Any, fitness_score: UnifiedFitnessScore, decision: TradeDecision
+    ) -> None:
+        """Log summary of tick analysis and decision."""
         logger.info(
-            "Tick {self.tick_count} | "
-            "Fitness: {fitness_score.overall_fitness:.3f} | "
-            "Action: {decision.action} | "
-            "Regime: {fitness_score.market_regime} | "
-            "Confidence: {decision.confidence:.3f}"
+            f"Tick {self.tick_count} | "
+            f"Fitness: {fitness_score.overall_fitness:.3f} | "
+            f"Action: {decision.action} | "
+            f"Regime: {fitness_score.market_regime} | "
+            f"Confidence: {decision.confidence:.3f}"
         )
 
         # Log special conditions
@@ -290,40 +328,55 @@ class SimplifiedFerrisWheelScheduler:
             logger.warning("🎯 PROFIT TIER DETECTED - High opportunity!")
 
         if fitness_score.loop_warning:
-            logger.warning("⚠️ RECURSIVE LOOP WARNING - \
-                Pattern repetition detected!")
+            logger.warning(
+                "⚠️ RECURSIVE LOOP WARNING - \
+                Pattern repetition detected!"
+            )
 
-    def _update_performance_metrics(self: Any, fitness_score: UnifiedFitnessScore, decision: TradeDecision) -> None:
-        """Update performance tracking"""
+    def _update_performance_metrics(
+        self: Any, fitness_score: UnifiedFitnessScore, decision: TradeDecision
+    ) -> None:
+        """Update performance tracking."""
         # Simple performance tracking
         # In real implementation, this would be much more sophisticated
 
         if decision.action != "HOLD":
             # Track fitness accuracy (simplified)
-            if fitness_score.overall_fitness > 0 and decision.action in ["BUY", "STRONG_BUY"]:
-                self.performance_metrics['fitness_accuracy'] += 1
-            elif fitness_score.overall_fitness < 0 and decision.action in ["SELL", "STRONG_SELL"]:
-                self.performance_metrics['fitness_accuracy'] += 1
+            if fitness_score.overall_fitness > 0 and decision.action in [
+                "BUY",
+                "STRONG_BUY",
+            ]:
+                self.performance_metrics["fitness_accuracy"] += 1
+            elif fitness_score.overall_fitness < 0 and decision.action in [
+                "SELL",
+                "STRONG_SELL",
+            ]:
+                self.performance_metrics["fitness_accuracy"] += 1
 
         # Calculate accuracy percentage
-        if self.performance_metrics['total_trades'] > 0:
+        if self.performance_metrics["total_trades"] > 0:
             accuracy = (
-                self.performance_metrics['fitness_accuracy'] / self.performance_metrics['total_trades']
+                self.performance_metrics["fitness_accuracy"]
+                / self.performance_metrics["total_trades"]
             )
-            self.performance_metrics['fitness_accuracy_pct'] = accuracy
+            self.performance_metrics["fitness_accuracy_pct"] = accuracy
 
     def get_performance_summary(self: Any) -> Dict[str, Any]:
-        """Get performance summary"""
+        """Get performance summary."""
         return {
-            'tick_count': self.tick_count,
-            'active_positions': self.active_positions.copy(),
-            'performance_metrics': self.performance_metrics.copy(),
-            'recent_trades': self.trade_history[-10:] if self.trade_history else [],
-            'total_position_value': sum(self.active_positions.values())
+            "tick_count": self.tick_count,
+            "active_positions": self.active_positions.copy(),
+            "performance_metrics": self.performance_metrics.copy(),
+            "recent_trades": (
+                self.trade_history[-10:] if self.trade_history else []
+            ),
+            "total_position_value": sum(self.active_positions.values()),
         }
+
 
 class UnifiedSchwabotSystem:
     """
+    
     Complete unified system that combines:
     - Enhanced Fitness Oracle (for analysis)
         - Simplified FerrisWheelScheduler (for execution)
@@ -331,10 +384,10 @@ class UnifiedSchwabotSystem:
     """
 
     def __init__(
-        self,
-        config_path: str = "config/enhanced_fitness_config.yaml"
+        self, config_path: str = "config/enhanced_fitness_config.yaml"
     ):
         # Initialize the Enhanced Fitness Oracle
+        """TODO: document __init__."""
         self.fitness_oracle = EnhancedFitnessOracle(config_path)
 
         # Initialize the Simplified Scheduler
@@ -343,28 +396,31 @@ class UnifiedSchwabotSystem:
         # System monitoring
         self.system_start_time = datetime.now()
         self.system_metrics = {
-            'uptime': timedelta(0),
-            'total_decisions': 0,
-            'oracle_calls': 0,
-            'errors': 0
+            "uptime": timedelta(0),
+            "total_decisions": 0,
+            "oracle_calls": 0,
+            "errors": 0,
         }
 
         logger.info("Unified Schwabot System initialized")
 
     async def run_system(self, duration_minutes: int = 60):
-        """Run the complete system for specified duration"""
-        logger.info("Starting Unified Schwabot System for {duration_minutes} minutes")
+        """Run the complete system for specified duration."""
+        logger.info(
+            f"Starting Unified Schwabot System for {duration_minutes} minutes"
+        )
 
         start_time = datetime.now()
         end_time = start_time + timedelta(minutes=duration_minutes)
 
         # Mock market data provider
         async def market_data_provider() -> Any:
+            """TODO: document market_data_provider."""
             while datetime.now() < end_time:
                 yield {
                     "timestamp": datetime.now(),
                     "price": 100.0 + np.random.normal(0, 2),
-                    "volume": 1000 + np.random.normal(0, 200)
+                    "volume": 1000 + np.random.normal(0, 200),
                 }
                 await asyncio.sleep(1)
 
@@ -374,72 +430,94 @@ class UnifiedSchwabotSystem:
             await self.scheduler.tick_loop(market_data_provider(), max_ticks)
 
         except Exception as e:
-            logger.error("System error: {e}")
-            self.system_metrics['errors'] += 1
+            logger.error(f"System error: {e}")
+            self.system_metrics["errors"] += 1
 
         finally:
             # Update system metrics
-            self.system_metrics['uptime'] = datetime.now() - self.system_start_time
-            self.system_metrics['total_decisions'] = self.scheduler.tick_count
+            self.system_metrics["uptime"] = (
+                datetime.now() - self.system_start_time
+            )
+            self.system_metrics["total_decisions"] = self.scheduler.tick_count
 
             # Log final summary
             self._log_system_summary()
 
     def _log_system_summary(self: Any) -> None:
-        """Log comprehensive system summary"""
+        """Log comprehensive system summary."""
         scheduler_performance = self.scheduler.get_performance_summary()
 
         logger.info("=" * 50)
         logger.info("UNIFIED SCHWABOT SYSTEM SUMMARY")
         logger.info("=" * 50)
-        logger.info("System Uptime: {self.system_metrics['uptime']}")
-        logger.info("Total Ticks: {scheduler_performance['tick_count']}")
-        logger.info("Total Trades: {scheduler_performance['performance_metrics']['total_trades']}")
-        logger.info("Active Positions: {scheduler_performance['active_positions']}")
-        logger.info("Total Position Value: {scheduler_performance['total_position_value']:.2f}")
+        logger.info(f"System Uptime: {self.system_metrics['uptime']}")
+        logger.info(f"Total Ticks: {scheduler_performance['tick_count']}")
+        logger.info(
+            "Total Trades: {scheduler_performance['performance_metrics']['total_trades']}"
+        )
+        logger.info(
+            "Active Positions: {scheduler_performance['active_positions']}"
+        )
+        logger.info(
+            "Total Position Value: {scheduler_performance['total_position_value']:.2f}"
+        )
 
-        if 'fitness_accuracy_pct' in scheduler_performance['performance_metrics']:
-            accuracy = (
-                scheduler_performance['performance_metrics']['fitness_accuracy_pct']
-            )
-            logger.info("Fitness Accuracy: {accuracy:.1%}")
+        if (
+            "fitness_accuracy_pct"
+            in scheduler_performance["performance_metrics"]
+        ):
+            accuracy = scheduler_performance["performance_metrics"][
+                "fitness_accuracy_pct"
+            ]
+            logger.info(f"Fitness Accuracy: {accuracy:.1%}")
 
         logger.info("=" * 50)
 
-    def export_comprehensive_report(self: Any, filename: str = None) -> Dict[str, Any]:
-        """Export comprehensive system report"""
+    def export_comprehensive_report(
+        self: Any, filename: str = None
+    ) -> Dict[str, Any]:
+        """Export comprehensive system report."""
         if filename is None:
             filename = "schwabot_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
         report = {
-            'system_info': {
-                'start_time': self.system_start_time.isoformat(),
-                'uptime_seconds': self.system_metrics['uptime'].total_seconds(),
-                'version': "Unified System v1.0"
+            "system_info": {
+                "start_time": self.system_start_time.isoformat(),
+                "uptime_seconds": self.system_metrics[
+                    "uptime"
+                ].total_seconds(),
+                "version": "Unified System v1.0",
             },
-            'fitness_oracle': {
-                'config': self.fitness_oracle.config,
-                'current_regime': self.fitness_oracle.current_regime,
-                'market_history_length': len(self.fitness_oracle.market_history),
-                'fitness_history_length': len(self.fitness_oracle.fitness_history)
+            "fitness_oracle": {
+                "config": self.fitness_oracle.config,
+                "current_regime": self.fitness_oracle.current_regime,
+                "market_history_length": len(
+                    self.fitness_oracle.market_history
+                ),
+                "fitness_history_length": len(
+                    self.fitness_oracle.fitness_history
+                ),
             },
-            'scheduler_performance': self.scheduler.get_performance_summary(),
-            'system_metrics': self.system_metrics
+            "scheduler_performance": self.scheduler.get_performance_summary(),
+            "system_metrics": self.system_metrics,
         }
 
         # Export to file
-        with open(filename, 'w') as f:
+        with open(filename, "w") as f:
             json.dump(report, f, indent=2, default=str)
 
-        logger.info("Comprehensive report exported to {filename}")
+        logger.info(f"Comprehensive report exported to {filename}")
         return report
+
 
 # Example usage and demonstration
 
+
 async def demo_unified_system() -> Any:
-    """Demonstrate the unified system in action"""
-    logging.basicConfig(level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    """Demonstrate the unified system in action."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     # Initialize the unified system
@@ -450,69 +528,82 @@ async def demo_unified_system() -> Any:
         await system.run_system(duration_minutes=5)
 
         # Export comprehensive report
-        report = system.export_comprehensive_report()
+        system.export_comprehensive_report()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("DEMO COMPLETED SUCCESSFULLY")
-        print("="*60)
+        print("=" * 60)
         print("Check the exported report for detailed analysis")
 
     except KeyboardInterrupt:
         logger.info("Demo interrupted by user")
     except Exception as e:
-        logger.error("Demo failed: {e}")
+        logger.error(f"Demo failed: {e}")
+
 
 # Alternative integration with existing Schwabot Orchestrator
 
+
 class IntegratedSchwabotOrchestrator(SchwabotOrchestrator):
     """
+    
     Enhanced version of SchwabotOrchestrator that uses the Enhanced Fitness Oracle
     for decision making instead of complex internal logic
     """
 
     def __init__(self: Any, *args, **kwargs) -> None:
+        """TODO: document __init__."""
         super().__init__(*args, **kwargs)
 
         # Add the Enhanced Fitness Oracle
         self.fitness_oracle = EnhancedFitnessOracle()
 
-        logger.info("Integrated Schwabot Orchestrator with Enhanced Fitness Oracle")
+        logger.info(
+            "Integrated Schwabot Orchestrator with Enhanced Fitness Oracle"
+        )
 
-    async def _process_trading_pair(self, symbol: str, market_data: Dict, timestamp: datetime):
+    async def _process_trading_pair(
+        self, symbol: str, market_data: Dict, timestamp: datetime
+    ):
         """
         Override the original complex processing with Fitness Oracle
         """
         # Use Fitness Oracle for all analysis
-        market_snapshot = await self.fitness_oracle.capture_market_snapshot(market_data)
-        fitness_score = self.fitness_oracle.calculate_unified_fitness(market_snapshot)
+        market_snapshot = await self.fitness_oracle.capture_market_snapshot(
+            market_data
+        )
+        fitness_score = self.fitness_oracle.calculate_unified_fitness(
+            market_snapshot
+        )
 
         # Convert fitness score to trade signal format expected by parent class
         if fitness_score.action in ["BUY", "STRONG_BUY"]:
             trade_signal = {
-                'action': 'ENTER',
-                'direction': 'LONG',
-                'confidence': fitness_score.confidence,
-                'volume_weight': fitness_score.position_size,
-                'stop_loss': fitness_score.stop_loss,
-                'take_profit': fitness_score.take_profit,
-                'sha_signature': "fitness_{fitness_score.timestamp.timestamp()}"
+                "action": "ENTER",
+                "direction": "LONG",
+                "confidence": fitness_score.confidence,
+                "volume_weight": fitness_score.position_size,
+                "stop_loss": fitness_score.stop_loss,
+                "take_profit": fitness_score.take_profit,
+                "sha_signature": "fitness_{fitness_score.timestamp.timestamp()}",
             }
             await self._execute_trade_signal(symbol, trade_signal, market_data)
 
         elif fitness_score.action in ["SELL", "STRONG_SELL"]:
             trade_signal = {
-                'action': 'EXIT',
-                'reason': 'Fitness Oracle recommendation: {fitness_score.action}'
+                "action": "EXIT",
+                "reason": "Fitness Oracle recommendation: {fitness_score.action}",
             }
             await self._execute_trade_signal(symbol, trade_signal, market_data)
 
         # Log fitness-based decision
         self.logger.info(
-            "Fitness Oracle Decision for {symbol}: "
-            "Action={fitness_score.action}, "
-            "Fitness={fitness_score.overall_fitness:.3f}, "
-            "Confidence={fitness_score.confidence:.3f}"
+            f"Fitness Oracle Decision for {symbol}: "
+            f"Action={fitness_score.action}, "
+            f"Fitness={fitness_score.overall_fitness:.3f}, "
+            f"Confidence={fitness_score.confidence:.3f}"
         )
+
 
 if __name__ == "__main__":
     # Run the demo

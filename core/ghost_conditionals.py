@@ -19,6 +19,7 @@ _K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: float) -> float:  # noqa: D401
+    """TODO: document _sigmoid."""."""
     return 1.0 / (1.0 + math.exp(-_K * x))
 
 
@@ -32,4 +33,4 @@ def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
     xi_ghost
         Scalar intensity of current ghost signal, expected in [0, 1].
     """
-    return _sigmoid(delta_t * xi_ghost) 
+    return _sigmoid(delta_t * xi_ghost)

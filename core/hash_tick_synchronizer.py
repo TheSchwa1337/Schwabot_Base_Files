@@ -17,7 +17,11 @@ import hashlib
 import math
 from typing import Dict
 
-__all__: list[str] = ["compute_tick_hash", "sync_probability", "hash_match_check"]
+__all__: list[str] = [
+    "compute_tick_hash",
+    "sync_probability",
+    "hash_match_check",
+]
 
 # ---------------------------------------------------------------------------
 # Hash computation
@@ -42,8 +46,8 @@ def compute_tick_hash(
     """
     # Compute product and encode as bytes
     product = price * delta_volume * delta_time
-    data = f"{product:.10f}".encode('utf-8')
-    
+    data = f"{product:.10f}".encode("utf-8")
+
     # SHA256 hash
     hash_obj = hashlib.sha256(data)
     return hash_obj.hexdigest()
@@ -73,14 +77,16 @@ def hash_match_check(
     """
     if current_hash in hash_map:
         return True
-    
+
     # Fuzzy match via Hamming distance
     for known_hash in hash_map:
         if len(known_hash) == len(current_hash):
-            hamming_dist = sum(c1 != c2 for c1, c2 in zip(current_hash, known_hash))
+            hamming_dist = sum(
+                c1 != c2 for c1, c2 in zip(current_hash, known_hash)
+            )
             if hamming_dist <= tolerance:
                 return True
-    
+
     return False
 
 
@@ -103,11 +109,11 @@ def sync_probability(
     """
     if not xi_sync:
         return 0.0
-    
+
     if sigma <= 0:
         return 1.0 if tick_t1 == tick_t2 else 0.0
-    
+
     delta_tau = abs(tick_t1 - tick_t2)
-    gaussian_weight = math.exp(-(delta_tau ** 2) / (sigma ** 2))
-    
-    return gaussian_weight 
+    gaussian_weight = math.exp(-(delta_tau**2) / (sigma**2))
+
+    return gaussian_weight

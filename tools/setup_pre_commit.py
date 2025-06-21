@@ -1,34 +1,47 @@
 #!/usr/bin/env python3
-"""
-Setup Pre-Commit Hooks for Schwabot
+"""Setup Pre-Commit Hooks for Schwabot.
+
 ===================================
 
+
+
 This script installs and configures pre-commit hooks to enforce:
+
 - Flake8 compliance
+
 - Type checking with mypy
+
 - Code formatting with Black
+
 - Import sorting with isort
+
 - Custom Schwabot-specific validations
 
+
+
 Based on systematic elimination of 257+ flake8 issues.
+
 """
 
+import logging
+from pathlib import Path
 import subprocess
 import sys
-import os
-from pathlib import Path
-import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 def run_command(command: list[str], description: str) -> bool:
-    """Run a command and log the result"""
+    """Run a command and log the result."""
     logger.info(f"Running: {description}")
     try:
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        result = subprocess.run(
+            command, capture_output=True, text=True, check=True
+        )
         logger.info(f"✅ {description} completed successfully")
         if result.stdout:
             logger.debug(f"Output: {result.stdout}")
@@ -43,7 +56,7 @@ def run_command(command: list[str], description: str) -> bool:
 
 
 def check_prerequisites() -> bool:
-    """Check if required tools are installed"""
+    """Check if required tools are installed."""
     logger.info("Checking prerequisites...")
 
     # Check Python version
@@ -53,8 +66,11 @@ def check_prerequisites() -> bool:
 
     # Check if pip is available
     try:
-        subprocess.run([sys.executable, "-m", "pip", "--version"],
-                      capture_output=True, check=True)
+        subprocess.run(
+            [sys.executable, "-m", "pip", "--version"],
+            capture_output=True,
+            check=True,
+        )
     except subprocess.CalledProcessError:
         logger.error("❌ pip not available")
         return False
@@ -64,23 +80,22 @@ def check_prerequisites() -> bool:
 
 
 def install_pre_commit() -> bool:
-    """Install pre-commit package"""
+    """Install pre-commit package."""
     return run_command(
         [sys.executable, "-m", "pip", "install", "pre-commit"],
-        "Installing pre-commit package"
+        "Installing pre-commit package",
     )
 
 
 def install_hooks() -> bool:
-    """Install pre-commit hooks"""
+    """Install pre-commit hooks."""
     return run_command(
-        ["pre-commit", "install"],
-        "Installing pre-commit hooks"
+        ["pre-commit", "install"], "Installing pre-commit hooks"
     )
 
 
 def install_additional_dependencies() -> bool:
-    """Install additional dependencies for hooks"""
+    """Install additional dependencies for hooks."""
     dependencies = [
         "black",
         "flake8",
@@ -90,14 +105,13 @@ def install_additional_dependencies() -> bool:
         "mypy",
         "isort",
         "types-requests",
-        "types-PyYAML"
+        "types-PyYAML",
     ]
 
     logger.info("Installing additional dependencies...")
     for dep in dependencies:
         if not run_command(
-            [sys.executable, "-m", "pip", "install", dep],
-            f"Installing {dep}"
+            [sys.executable, "-m", "pip", "install", dep], f"Installing {dep}"
         ):
             return False
 
@@ -105,15 +119,15 @@ def install_additional_dependencies() -> bool:
 
 
 def run_initial_check() -> bool:
-    """Run pre-commit on all files"""
+    """Run pre-commit on all files."""
     return run_command(
         ["pre-commit", "run", "--all-files"],
-        "Running initial pre-commit check on all files"
+        "Running initial pre-commit check on all files",
     )
 
 
 def create_gitignore_entries() -> None:
-    """Add pre-commit related entries to .gitignore"""
+    """Add pre-commit related entries to .gitignore."""
     gitignore_path = Path(".gitignore")
 
     entries = [
@@ -140,22 +154,30 @@ def create_gitignore_entries() -> None:
 
 
 def main() -> None:
-    """Main setup function"""
+    """Configure pre-commit hooks."""
     logger.info("🚀 Setting up Pre-Commit Hooks for Schwabot")
     logger.info("=" * 50)
 
     # Check if we're in the right directory
     if not Path(".pre-commit-config.yaml").exists():
-        logger.error("❌ .pre-commit-config.yaml not found. Run this from the project root.")
+        logger.error(
+            "❌ .pre-commit-config.yaml not found. Run this from the project root."
+        )
         sys.exit(1)
 
     # Run setup steps
     steps = [
         ("Checking prerequisites", check_prerequisites),
         ("Installing pre-commit", install_pre_commit),
-        ("Installing additional dependencies", install_additional_dependencies),
+        (
+            "Installing additional dependencies",
+            install_additional_dependencies,
+        ),
         ("Installing hooks", install_hooks),
-        ("Creating .gitignore entries", lambda: create_gitignore_entries() or True),
+        (
+            "Creating .gitignore entries",
+            lambda: create_gitignore_entries() or True,
+        ),
     ]
 
     for step_name, step_func in steps:
@@ -180,7 +202,9 @@ def main() -> None:
         logger.info("   - Check specific file: pre-commit run --files file.py")
     else:
         logger.warning("⚠️ Setup completed but initial check had issues")
-        logger.info("💡 You can run 'pre-commit run --all-files' to see details")
+        logger.info(
+            "💡 You can run 'pre-commit run --all-files' to see details"
+        )
 
 
 if __name__ == "__main__":

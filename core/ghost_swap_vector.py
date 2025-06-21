@@ -18,8 +18,9 @@ numpy broadcasting errors.
 
 from __future__ import annotations
 
-import numpy as np
 from typing import Final
+
+import numpy as np
 
 __all__: list[str] = ["ghost_swap_vector"]
 
@@ -31,7 +32,7 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
-    """Vectorised logistic function 1 / (1 + exp(-k·x))."""
+    """Vectorised logistic function 1 / (1 + exp(-k·x))."""."""
     return 1.0 / (1.0 + np.exp(-k * x))
 
 
@@ -72,4 +73,4 @@ def ghost_swap_vector(
 
     if noise.shape != phi.shape:
         raise ValueError("noise must match output shape")
-    return phi + noise 
+    return phi + noise

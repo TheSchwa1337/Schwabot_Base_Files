@@ -34,7 +34,7 @@ __all__ = ["DualNumber", "dual_state_tracker"]
 
 @dataclass(slots=True)
 class DualNumber:
-    """A first-order dual number *x + ε·dx*."""
+    """A first-order dual number *x + ε·dx*."""."""
 
     x: float  # primal value
     dx: float  # derivative w.r.t. some scalar variable
@@ -42,7 +42,10 @@ class DualNumber:
     # ---------------------------------------------------------------------
     # Basic arithmetic
     # ---------------------------------------------------------------------
-    def __add__(self, other: "DualNumber | float") -> "DualNumber":  # noqa: D401
+    def __add__(
+        self, other: "DualNumber | float"
+    ) -> "DualNumber":  # noqa: D401
+        """TODO: document __add__."""."""
         if isinstance(other, DualNumber):
             return DualNumber(self.x + other.x, self.dx + other.dx)
         return DualNumber(self.x + float(other), self.dx)
@@ -50,24 +53,30 @@ class DualNumber:
     __radd__ = __add__
 
     def __sub__(self, other: "DualNumber | float") -> "DualNumber":
+        """TODO: document __sub__."""."""
         if isinstance(other, DualNumber):
             return DualNumber(self.x - other.x, self.dx - other.dx)
         return DualNumber(self.x - float(other), self.dx)
 
     def __rsub__(self, other: float) -> "DualNumber":
+        """TODO: document __rsub__."""."""
         return DualNumber(float(other) - self.x, -self.dx)
 
     def __mul__(self, other: "DualNumber | float") -> "DualNumber":
+        """TODO: document __mul__."""."""
         if isinstance(other, DualNumber):
-            return DualNumber(self.x * other.x, self.x * other.dx + self.dx * other.x)
+            return DualNumber(
+                self.x * other.x, self.x * other.dx + self.dx * other.x
+            )
         other_f = float(other)
         return DualNumber(self.x * other_f, self.dx * other_f)
 
     __rmul__ = __mul__
 
     def __truediv__(self, other: "DualNumber | float") -> "DualNumber":
+        """TODO: document __truediv__."""."""
         if isinstance(other, DualNumber):
-            denom = other.x ** 2
+            denom = other.x**2
             return DualNumber(
                 self.x / other.x,
                 (self.dx * other.x - self.x * other.dx) / denom,
@@ -76,24 +85,29 @@ class DualNumber:
         return DualNumber(self.x / other_f, self.dx / other_f)
 
     def __rtruediv__(self, other: float) -> "DualNumber":
-        denom = self.x ** 2
-        return DualNumber(float(other) / self.x, (-float(other) * self.dx) / denom)
+        """TODO: document __rtruediv__."""."""
+        denom = self.x**2
+        return DualNumber(
+            float(other) / self.x, (-float(other) * self.dx) / denom
+        )
 
     # ------------------------------------------------------------------
     # Convenience helpers
     # ------------------------------------------------------------------
     def as_tuple(self) -> Tuple[float, float]:
-        """Return ``(x, dx)`` tuple for downstream consumers."""
+        """Return ``(x, dx)`` tuple for downstream consumers."""."""
         return self.x, self.dx
 
     # Human-friendly representation --------------------------------------------------
     def __repr__(self) -> str:  # noqa: D401
+        """TODO: document __repr__."""."""
         return f"DualNumber(x={self.x:.6g}, dx={self.dx:.6g})"
 
 
 # -----------------------------------------------------------------------------
 # Public helper – minimal wrapper requested by Flake8 stub reports
 # -----------------------------------------------------------------------------
+
 
 def dual_state_tracker(value: float, derivative: float) -> DualNumber:
     """Wrap *value* and *derivative* into a :class:`DualNumber` instance.
@@ -110,4 +124,4 @@ def dual_state_tracker(value: float, derivative: float) -> DualNumber:
     DualNumber
         ``x + ε·dx`` dual-number form.
     """
-    return DualNumber(x=float(value), dx=float(derivative)) 
+    return DualNumber(x=float(value), dx=float(derivative))

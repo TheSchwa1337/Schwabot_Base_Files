@@ -24,7 +24,7 @@ __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 
 @dataclass(slots=True)
 class GlyphInstruction:
-    """Executable instruction derived from glyph vector processing."""
+    """Executable instruction derived from glyph vector processing."""."""
 
     action: str  # "buy", "sell", "hold", "wait"
     volume: float
@@ -108,4 +108,4 @@ def execute_glyph_vectors(
     vector_hash = hash(tuple(weighted_sum.round(6)))
     signature = f"glyph_{vector_hash & 0xFFFF:04x}"
 
-    return GlyphInstruction(action, volume, confidence, signature) 
+    return GlyphInstruction(action, volume, confidence, signature)

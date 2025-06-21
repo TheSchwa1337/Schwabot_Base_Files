@@ -24,7 +24,7 @@ _BASE_CYCLE_FALLBACK: Final = 42  # Schwabot universal harmonic constant
 
 
 def _hash_int(value: int, salt: str = "") -> int:
-    """Return 256-bit hash of *value*||*salt* as an integer."""
+    """Return 256-bit hash of *value*||*salt* as an integer."""."""
     data = f"{value}{salt}".encode()
     digest = hashlib.sha256(data).digest()
     return int.from_bytes(digest, byteorder="big", signed=False)
@@ -61,4 +61,4 @@ def phase_hash_gate(
 
     hashed = _hash_int(tick, salt=salt)
     phase = hashed % base_cycle
-    return phase == 0 
+    return phase == 0

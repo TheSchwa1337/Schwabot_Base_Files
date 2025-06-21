@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Analyze top 5 files with most E501 errors."""."""
+
+from collections import defaultdict
+
+
+def is_stub_file(filepath):
+    """Check if file is a stub."""."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            first_line = f.readline().strip()
+            return "TEMPORARY STUB GENERATED AUTOMATICALLY" in first_line
+    except:
+        return False
+
+def analyze_errors():
+    """Analyze E501 errors and find top 5 files."""."""
+    file_errors = defaultdict(int)
+    real_files = []
+    stub_files = []
+
+    with open('e501_errors.txt', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line or not line.startswith('.'):
+                continue
+
+            # Extract file path
+            parts = line.split(':')
+            if len(parts) >= 2:
+                filepath = parts[0]
+                file_errors[filepath] += 1
+
+                # Categorize as real or stub
+                if is_stub_file(filepath):
+                    stub_files.append(filepath)
+                else:
+                    real_files.append(filepath)
+
+    # Get top 5 real files with most errors
+    real_file_counts = {f: file_errors[f] for f in set(real_files)}
+    top_5 = sorted(
+        real_file_counts.items(),
+        key=lambda x: x[1],
+        reverse=True,
+    )[:5]
+
+    print("📊 E501 Error Analysis")
+    print("=" * 50)
+    print(
+        "Total unique files with errors: "
+        f"{len(file_errors)}"
+    )
+    print(
+        "Real code files: "
+        f"{len(set(real_files))}"
+    )
+    print(
+        "Stub files: "
+        f"{len(set(stub_files))}"
+    )
+
+    print(f"\n🏆 TOP 5 FILES WITH MOST E501 ERRORS:")
+    print("-" * 50)
+    for i, (filepath, count) in enumerate(top_5, 1):
+        print(f"{i}. {filepath}: {count} errors")
+
+    print(f"\n📋 TOTAL ERRORS BY CATEGORY:")
+    real_error_count = sum(file_errors[f] for f in set(real_files))
+    stub_error_count = sum(file_errors[f] for f in set(stub_files))
+
+    print(
+        "   Real code errors: "
+        f"{real_error_count}"
+    )
+    print(
+        "   Stub file errors: "
+        f"{stub_error_count}"
+    )
+
+    return top_5
+
+if __name__ == "__main__":
+    analyze_errors()

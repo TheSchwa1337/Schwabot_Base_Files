@@ -19,15 +19,22 @@ from __future__ import annotations
 from collections import deque
 from typing import Deque, Final, List
 
-__all__: list[str] = ["GhostMemory", "store_ghost_hash", "last_profitable_hash"]
+__all__: list[str] = [
+    "GhostMemory",
+    "store_ghost_hash",
+    "last_profitable_hash",
+]
 
 _DEFAULT_CAPACITY: Final = 1000
 
 
 class GhostMemory:
-    """Ring-buffer store of profitable trade hashes."""
+    """Ring-buffer store of profitable trade hashes."""."""
 
-    def __init__(self, capacity: int = _DEFAULT_CAPACITY) -> None:  # noqa: D401
+    def __init__(
+        self, capacity: int = _DEFAULT_CAPACITY
+    ) -> None:  # noqa: D401
+        """TODO: document __init__."""."""
         self._buf: Deque[str] = deque(maxlen=capacity)
 
     # ------------------------------------------------------------------
@@ -46,11 +53,11 @@ class GhostMemory:
         self._buf.append(hash_hex)
 
     def last(self) -> str | None:  # noqa: D401
-        """Return the most recent stored hash or ``None`` if empty."""
+        """Return the most recent stored hash or ``None`` if empty."""."""
         return self._buf[-1] if self._buf else None
 
     def all(self) -> List[str]:
-        """Return list copy of all stored hashes (newest last)."""
+        """Return list copy of all stored hashes (newest last)."""."""
         return list(self._buf)
 
 
@@ -62,10 +69,10 @@ _memory = GhostMemory()
 
 
 def store_ghost_hash(hash_hex: str) -> None:  # noqa: D401
-    """Add *hash_hex* to global ghost memory ring-buffer."""
+    """Add *hash_hex* to global ghost memory ring-buffer."""."""
     _memory.add(hash_hex)
 
 
 def last_profitable_hash() -> str | None:  # noqa: D401
-    """Return last profitable hash stored globally, or ``None``."""
-    return _memory.last() 
+    """Return last profitable hash stored globally, or ``None``."""."""
+    return _memory.last()

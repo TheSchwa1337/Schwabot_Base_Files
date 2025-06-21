@@ -1,52 +1,58 @@
 #!/usr/bin/env python3
-"""
-Establish Fault-Tolerant Standards - Complete Integration
+"""Establish Fault-Tolerant Standards - Complete Integration.
+
 =======================================================
 
+
+
 This script establishes all the fault-tolerant patterns we've built as the
+
 team's coding standards and sets up the pre-commit infrastructure.
 
+
+
 Based on our systematic elimination of 206+ HIGH issues and 51+ MEDIUM issues.
+
 """
 
-import sys
+import logging
 import os
 from pathlib import Path
-import logging
+import sys
 from typing import Dict
 
 # Add core to path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'core'))
+sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
 
 def safe_print(message: str, use_emoji: bool = True) -> None:
-    """Windows CLI-safe print function"""
-    if use_emoji and os.name == 'nt':
+    """Windows CLI-safe print function."""
+    if use_emoji and os.name == "nt":
         # Convert emojis to ASCII for Windows CLI
         emoji_map = {
-            '🔧': '[FIX]',
-            '✅': '[OK]',
-            '❌': '[ERROR]',
-            '🟠': '[HIGH]',
-            '🟡': '[MEDIUM]',
-            '🟢': '[LOW]',
-            '📝': '[STUB]',
-            '🎯': '[TARGET]',
-            '📊': '[STATS]',
-            '🎉': '[SUCCESS]',
-            '⚠️': '[WARN]',
-            '💡': '[INFO]',
-            '🚀': '[LAUNCH]',
-            '🔍': '[AUDIT]',
-            '📋': '[CHECKLIST]',
-            '⚙️': '[CONFIG]'
+            "🔧": "[FIX]",
+            "✅": "[OK]",
+            "❌": "[ERROR]",
+            "🟠": "[HIGH]",
+            "🟡": "[MEDIUM]",
+            "🟢": "[LOW]",
+            "📝": "[STUB]",
+            "🎯": "[TARGET]",
+            "📊": "[STATS]",
+            "🎉": "[SUCCESS]",
+            "⚠️": "[WARN]",
+            "💡": "[INFO]",
+            "🚀": "[LAUNCH]",
+            "🔍": "[AUDIT]",
+            "📋": "[CHECKLIST]",
+            "⚙️": "[CONFIG]",
         }
         for emoji, ascii_text in emoji_map.items():
             message = message.replace(emoji, ascii_text)
@@ -55,21 +61,24 @@ def safe_print(message: str, use_emoji: bool = True) -> None:
 
 
 def step1_validate_current_state() -> bool:
-    """Step 1: Validate current state and confirm we're ready to establish standards"""
+    """Step 1: Validate current state and confirm we're ready to establish standards."""
     safe_print("🚀 Step 1: Validating Current State")
-    safe_print("   Checking if we're ready to establish fault-tolerant standards...")
+    safe_print(
+        "   Checking if we're ready to establish fault-tolerant standards..."
+    )
 
     try:
         # Run compliance check to see current state
         from compliance_check import main as compliance_check
+
         results = compliance_check()
 
         # Count issues by severity
-        issue_counts = {'HIGH': 0, 'MEDIUM': 0, 'LOW': 0, 'CRITICAL': 0}
+        issue_counts = {"HIGH": 0, "MEDIUM": 0, "LOW": 0, "CRITICAL": 0}
 
         for result in results:
-            for issue in result.get('issues', []):
-                severity = issue.get('severity', 'UNKNOWN')
+            for issue in result.get("issues", []):
+                severity = issue.get("severity", "UNKNOWN")
                 if severity in issue_counts:
                     issue_counts[severity] += 1
 
@@ -80,11 +89,15 @@ def step1_validate_current_state() -> bool:
         safe_print(f"   ❌ CRITICAL issues: {issue_counts['CRITICAL']}")
 
         # Check if we're in a good state to establish standards
-        if issue_counts['HIGH'] == 0 and issue_counts['CRITICAL'] == 0:
-            safe_print("✅ Ready to establish standards - no critical blockers")
+        if issue_counts["HIGH"] == 0 and issue_counts["CRITICAL"] == 0:
+            safe_print(
+                "✅ Ready to establish standards - no critical blockers"
+            )
             return True
         else:
-            safe_print("⚠️ Critical issues remain - resolve before establishing standards")
+            safe_print(
+                "⚠️ Critical issues remain - resolve before establishing standards"
+            )
             return False
 
     except Exception as e:
@@ -93,15 +106,16 @@ def step1_validate_current_state() -> bool:
 
 
 def step2_apply_best_practices_enforcement() -> Dict[str, int]:
-    """Step 2: Apply best practices enforcement across the codebase"""
+    """Step 2: Apply best practices enforcement across the codebase."""
     safe_print("🚀 Step 2: Applying Best Practices Enforcement")
     safe_print("   Enforcing fault-tolerant patterns across all files...")
 
     try:
-        from core.best_practices_enforcer import enforce_best_practices_on_directory
+        from core.best_practices_enforcer import \
+            enforce_best_practices_on_directory
 
         # Apply best practices to all Python files
-        results = enforce_best_practices_on_directory('.')
+        results = enforce_best_practices_on_directory(".")
 
         # Calculate statistics
         total_files = len(results)
@@ -121,19 +135,24 @@ def step2_apply_best_practices_enforcement() -> Dict[str, int]:
             safe_print("⚠️ Some issues found - review the results")
 
         return {
-            'files_processed': total_files,
-            'files_successful': successful_files,
-            'patterns_applied': total_patterns_applied,
-            'issues_found': total_issues
+            "files_processed": total_files,
+            "files_successful": successful_files,
+            "patterns_applied": total_patterns_applied,
+            "issues_found": total_issues,
         }
 
     except Exception as e:
         safe_print(f"❌ Error applying best practices: {e}")
-        return {'files_processed': 0, 'files_successful': 0, 'patterns_applied': 0, 'issues_found': 1}
+        return {
+            "files_processed": 0,
+            "files_successful": 0,
+            "patterns_applied": 0,
+            "issues_found": 1,
+        }
 
 
 def step3_setup_pre_commit_infrastructure() -> bool:
-    """Step 3: Setup pre-commit hook infrastructure"""
+    """Step 3: Setup pre-commit hook infrastructure."""
     safe_print("🚀 Step 3: Setting Up Pre-Commit Infrastructure")
     safe_print("   Creating automated enforcement for future commits...")
 
@@ -154,7 +173,7 @@ def step3_setup_pre_commit_infrastructure() -> bool:
 
 
 def step4_create_team_onboarding_documentation() -> bool:
-    """Step 4: Create team onboarding documentation"""
+    """Step 4: Create team onboarding documentation."""
     safe_print("🚀 Step 4: Creating Team Onboarding Documentation")
     safe_print("   Setting up documentation for new team members...")
 
@@ -220,7 +239,7 @@ safe_print("✅ Success message")
 - Use the automated enforcers
 """
 
-        with open('QUICK_REFERENCE.md', 'w', encoding='utf-8') as f:
+        with open("QUICK_REFERENCE.md", "w", encoding="utf-8") as f:
             f.write(quick_ref_content)
 
         safe_print("✅ Quick reference guide created: QUICK_REFERENCE.md")
@@ -263,7 +282,7 @@ safe_print("✅ Success message")
 - [ ] Test the fix thoroughly
 """
 
-        with open('TEAM_CHECKLIST.md', 'w', encoding='utf-8') as f:
+        with open("TEAM_CHECKLIST.md", "w", encoding="utf-8") as f:
             f.write(checklist_content)
 
         safe_print("✅ Team checklist created: TEAM_CHECKLIST.md")
@@ -276,21 +295,22 @@ safe_print("✅ Success message")
 
 
 def step5_final_validation() -> bool:
-    """Step 5: Final validation of established standards"""
+    """Step 5: Final validation of established standards."""
     safe_print("🚀 Step 5: Final Validation")
     safe_print("   Validating that standards are properly established...")
 
     try:
         # Run compliance check again
         from compliance_check import main as compliance_check
+
         results = compliance_check()
 
         # Count issues by severity
-        issue_counts = {'HIGH': 0, 'MEDIUM': 0, 'LOW': 0, 'CRITICAL': 0}
+        issue_counts = {"HIGH": 0, "MEDIUM": 0, "LOW": 0, "CRITICAL": 0}
 
         for result in results:
-            for issue in result.get('issues', []):
-                severity = issue.get('severity', 'UNKNOWN')
+            for issue in result.get("issues", []):
+                severity = issue.get("severity", "UNKNOWN")
                 if severity in issue_counts:
                     issue_counts[severity] += 1
 
@@ -301,9 +321,11 @@ def step5_final_validation() -> bool:
         safe_print(f"   ❌ CRITICAL issues: {issue_counts['CRITICAL']}")
 
         # Success criteria
-        if issue_counts['HIGH'] == 0 and issue_counts['CRITICAL'] == 0:
+        if issue_counts["HIGH"] == 0 and issue_counts["CRITICAL"] == 0:
             safe_print("🎉 SUCCESS: Fault-tolerant standards established!")
-            safe_print("   Your codebase is now protected against HIGH and CRITICAL issues")
+            safe_print(
+                "   Your codebase is now protected against HIGH and CRITICAL issues"
+            )
             return True
         else:
             safe_print("⚠️ Some issues remain - review and address")
@@ -315,7 +337,7 @@ def step5_final_validation() -> bool:
 
 
 def main() -> None:
-    """Main function to establish fault-tolerant standards"""
+    """Main function to establish fault-tolerant standards."""
     safe_print("🎯 Establishing Fault-Tolerant Coding Standards")
     safe_print("   Based on systematic elimination of 257+ flake8 issues")
     safe_print("   This will create a robust, maintainable codebase")
@@ -337,7 +359,7 @@ def main() -> None:
     # Step 2: Apply best practices enforcement
     safe_print("=" * 60)
     enforcement_stats = step2_apply_best_practices_enforcement()
-    if enforcement_stats['issues_found'] == 0:
+    if enforcement_stats["issues_found"] == 0:
         steps_completed += 1
         safe_print("✅ Step 2 Complete: Best practices applied")
     else:
@@ -374,7 +396,9 @@ def main() -> None:
     safe_print(f"📊 Progress: {steps_completed}/{total_steps} steps completed")
 
     if steps_completed == total_steps:
-        safe_print("🎉 COMPLETE SUCCESS: Fault-tolerant standards fully established!")
+        safe_print(
+            "🎉 COMPLETE SUCCESS: Fault-tolerant standards fully established!"
+        )
         safe_print("")
         safe_print("📋 What's Now Available:")
         safe_print("   ✅ Centralized import resolution (safe_import)")
@@ -388,9 +412,13 @@ def main() -> None:
         safe_print("   1. Share DEVELOPMENT_STANDARDS.md with your team")
         safe_print("   2. Review QUICK_REFERENCE.md for essential patterns")
         safe_print("   3. Use TEAM_CHECKLIST.md in code reviews")
-        safe_print("   4. The pre-commit hook will automatically enforce standards")
+        safe_print(
+            "   4. The pre-commit hook will automatically enforce standards"
+        )
         safe_print("")
-        safe_print("🚀 Your codebase is now fault-tolerant and protected against")
+        safe_print(
+            "🚀 Your codebase is now fault-tolerant and protected against"
+        )
         safe_print("   the HIGH/MEDIUM error cycles we eliminated!")
     else:
         safe_print("⚠️ PARTIAL SUCCESS: Some steps need attention")

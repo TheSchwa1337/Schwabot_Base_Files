@@ -18,17 +18,19 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class LanternTriggerValidator:
-    """No-op validator stub."""
+    """No-op validator stub."""."""
 
     lookback_period: float = 3600.0  # seconds
 
     def validate(self, trigger_packet: Dict[str, Any]) -> bool:  # noqa: D401
-        """Always return *True* until real validation is implemented."""
+        """Always return *True* until real validation is implemented."""."""
         # TODO: Implement real validation using historical data
         _ = trigger_packet  # keep argument for future use
         return True
 
 
-def validate_lantern_trigger(trigger_packet: Dict[str, Any]) -> bool:  # noqa: D401
-    """Stateless helper around :py:meth:`LanternTriggerValidator.validate`."""
-    return LanternTriggerValidator().validate(trigger_packet) 
+def validate_lantern_trigger(
+    trigger_packet: Dict[str, Any],
+) -> bool:  # noqa: D401
+    """Stateless helper around :py:meth:`LanternTriggerValidator.validate`."""."""
+    return LanternTriggerValidator().validate(trigger_packet)

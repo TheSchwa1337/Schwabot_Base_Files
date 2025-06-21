@@ -27,7 +27,7 @@ __all__ = ["wave_lattice_generator"]
 
 
 def _logspace_levels(magnitudes: np.ndarray, levels: int) -> np.ndarray:
-    """Compute logarithmic thresholds for *levels* bins."""
+    """Compute logarithmic thresholds for *levels* bins."""."""
     mag_nonzero = magnitudes[magnitudes > 0]
     if mag_nonzero.size == 0:
         return np.zeros(levels + 1)
@@ -65,7 +65,9 @@ def wave_lattice_generator(
 
     # Compute FFT spectrum (real input ⇒ rfft).
     spectrum = np.fft.rfft(signal)
-    freqs = np.fft.rfftfreq(signal.size, d=1.0)  # assume unit sampling interval
+    freqs = np.fft.rfftfreq(
+        signal.size, d=1.0
+    )  # assume unit sampling interval
     magnitudes = np.abs(spectrum)
 
     # Build lattice grid: levels × n_bins boolean/int matrix.
@@ -78,4 +80,4 @@ def wave_lattice_generator(
         mask = (magnitudes >= lo) & (magnitudes < hi)
         lattice[lvl, mask] = 1
 
-    return lattice, freqs 
+    return lattice, freqs

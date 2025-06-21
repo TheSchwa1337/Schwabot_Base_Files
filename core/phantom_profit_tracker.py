@@ -8,11 +8,10 @@ truth.
 
 from __future__ import annotations
 
-from .ghost_profit_tracker import (
-    ProfitTracker as _GhostProfitTracker,  # rename to avoid export clash
-    register_profit as _register_profit,
-    profit_summary as _profit_summary,
-)
+from .ghost_profit_tracker import profit_summary as _profit_summary
+from .ghost_profit_tracker import \
+    ProfitTracker as _GhostProfitTracker  # rename to avoid export clash
+from .ghost_profit_tracker import register_profit as _register_profit
 
 __all__: list[str] = [
     "ProfitTracker",
@@ -23,4 +22,4 @@ __all__: list[str] = [
 # Public re-exports
 ProfitTracker = _GhostProfitTracker
 register_profit = _register_profit
-profit_summary = _profit_summary 
+profit_summary = _profit_summary

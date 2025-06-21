@@ -29,4 +29,4 @@ def phantom_exit_score(
     where ε_halt is *halt_bias*.
     """
     val = lambda_trust + profit_delta * zeta_derivative - halt_bias
-    return 1.0 / (1.0 + math.exp(-val)) 
+    return 1.0 / (1.0 + math.exp(-val))

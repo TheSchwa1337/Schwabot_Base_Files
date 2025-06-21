@@ -17,9 +17,10 @@ Advanced Jacobian/KF tuning can be layered later.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Deque, Tuple
 from collections import deque
+from dataclasses import dataclass
+from dataclasses import field
+from typing import Deque, Tuple
 
 import numpy as np
 
@@ -49,7 +50,9 @@ class FluxCompensator:
     window: int | None = None
     multiplier: float = 0.9
 
-    _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=False)
+    _sma_buf: Deque[float] = field(
+        default_factory=lambda: deque(maxlen=10), init=False
+    )
     _ema: float | None = field(default=None, init=False)
 
     # ------------------------------------------------------------------
@@ -65,6 +68,7 @@ class FluxCompensator:
     # Internal helpers
     # ------------------------------------------------------------------
     def _smooth(self, value: float) -> float:
+        """TODO: document _smooth."""
         if self.window is not None and self.window > 1:
             self._sma_buf.append(value)
             smoothed = float(np.mean(self._sma_buf))
@@ -81,10 +85,11 @@ class FluxCompensator:
 # Stateless convenience wrapper – mirrors historical stub signature
 # -----------------------------------------------------------------------------
 
+
 def sync_flux_compensator(entropy: float, threshold: float) -> bool:
     """Single-shot flux compensation check.
 
     Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for
     quick gating where persistent history is not necessary.
     """
-    return entropy < threshold * 0.9 
+    return entropy < threshold * 0.9

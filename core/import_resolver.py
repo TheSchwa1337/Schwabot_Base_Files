@@ -1,68 +1,67 @@
 #!/usr/bin/env python3
-"""
-Import Resolver - Centralized Import Resolution System
+"""Import Resolver - Centralized Import Resolution System.
+
 =====================================================
 
+
+
 Provides consistent import fallback patterns across the entire codebase.
+
 Eliminates the scattered try/except ImportError blocks that were causing
+
 flake8 issues and provides a unified approach to module dependencies.
+
 """
 
-from typing import Dict, Any, List, Callable, Optional
-from unittest.mock import Mock
 import logging
+from typing import Any, Callable, Dict, List, Optional
+from unittest.mock import Mock
 
 logger = logging.getLogger(__name__)
 
 
 class ImportResolver:
-    """Centralized import resolution with consistent fallback patterns"""
+    """Centralized import resolution with consistent fallback patterns."""
 
     def __init__(self) -> None:
+        """Initialize the import resolver."""
         self._import_cache: Dict[str, Any] = {}
         self._fallback_registry: Dict[str, Callable] = {}
         self._register_default_fallbacks()
 
     def _register_default_fallbacks(self) -> None:
-        """Register default fallback factories for common modules"""
-        self._fallback_registry.update({
-            'quantum_visualizer':
-                self._create_quantum_visualizer_fallback,
-            'future_corridor_engine':
-                self._create_corridor_engine_fallback,
-            'windows_cli_compatibility':
-                self._create_cli_compatibility_fallback,
-            'ncco_core':
-                self._create_ncco_core_fallback,
-            'schwabot':
-                self._create_schwabot_fallback,
-            'ccxt':
-                self._create_ccxt_fallback,
-            'websockets':
-                self._create_websockets_fallback,
-            'talib':
-                self._create_talib_fallback,
-            'psutil':
-                self._create_psutil_fallback,
-        })
+        """Register default fallback factories for common modules."""
+        self._fallback_registry.update(
+            {
+                "quantum_visualizer": self._create_quantum_visualizer_fallback,
+                "future_corridor_engine": self._create_corridor_engine_fallback,
+                "windows_cli_compatibility": self._create_cli_compatibility_fallback,
+                "ncco_core": self._create_ncco_core_fallback,
+                "schwabot": self._create_schwabot_fallback,
+                "ccxt": self._create_ccxt_fallback,
+                "websockets": self._create_websockets_fallback,
+                "talib": self._create_talib_fallback,
+                "psutil": self._create_psutil_fallback,
+            }
+        )
 
-    def safe_import(self, module_name: str, class_names: List[str],
-                   fallback_factory: Optional[Callable] = None) -> Dict[str, Any]:
-        """
-        Safely import modules with consistent fallback patterns
-
+    def safe_import(
+        self,
+        module_name: str,
+        class_names: List[str],
+        fallback_factory: Optional[Callable] = None,
+    ) -> Dict[str, Any]:
+        """Safely import modules with consistent fallback patterns.
+        
         Args:
             module_name: Name of the module to import
             class_names: List of class/function names to import from module
             fallback_factory: Custom fallback factory function
-
+        
         Returns:
             Dictionary mapping class names to imported objects or fallbacks
         """
-        cache_key = (
-            f"{module_name}:"
-            f"{','.join(class_names)}"
-        )
+        cache_key = f"{module_name}:" f"{','.join(class_names)}"
 
         if cache_key in self._import_cache:
             return self._import_cache[cache_key]
@@ -71,10 +70,7 @@ class ImportResolver:
 
         try:
             # Try to import the module
-            module = __import__(
-                module_name,
-                fromlist=class_names
-            )
+            module = __import__(module_name, fromlist=class_names)
 
             # Import each requested class/function
             for class_name in class_names:
@@ -82,8 +78,7 @@ class ImportResolver:
                     result[class_name] = getattr(module, class_name)
                 else:
                     logger.warning(
-                        f"Class {class_name} not found in "
-                        f"{module_name}"
+                        f"Class {class_name} not found in " f"{module_name}"
                     )
                     result[class_name] = self._create_generic_fallback(
                         class_name
@@ -91,8 +86,7 @@ class ImportResolver:
 
         except ImportError as e:
             logger.info(
-                f"Module {module_name} not available, "
-                f"using fallbacks: {e}"
+                f"Module {module_name} not available, " f"using fallbacks: {e}"
             )
 
             # Use custom fallback factory if provided
@@ -115,49 +109,53 @@ class ImportResolver:
         return result
 
     def _create_generic_fallback(self, class_name: str) -> Mock:
-        """Create a generic fallback mock for any class"""
+        """Create a generic fallback mock for any class."""
         mock = Mock(name=class_name)
         mock.__class__.__name__ = class_name
 
         # Add common methods that might be expected
-        if 'Visualizer' in class_name:
+        if "Visualizer" in class_name:
             mock.visualize = lambda *args, **kwargs: None
-        elif 'Engine' in class_name:
+        elif "Engine" in class_name:
             mock.process = lambda *args, **kwargs: None
-        elif 'Handler' in class_name:
+        elif "Handler" in class_name:
             mock.handle = lambda *args, **kwargs: None
-        elif 'Manager' in class_name:
+        elif "Manager" in class_name:
             mock.manage = lambda *args, **kwargs: None
 
         return mock
 
     def _create_quantum_visualizer_fallback(self, class_name: str) -> Mock:
-        """Create fallback for quantum visualizer components"""
+        """Create fallback for quantum visualizer components."""
         mock = Mock(name=class_name)
 
-        if class_name == 'PanicDriftVisualizer':
+        if class_name == "PanicDriftVisualizer":
             mock.visualize = lambda *args, **kwargs: None
             mock.plot = lambda *args, **kwargs: None
-        elif class_name == 'plot_entropy_waveform':
+        elif class_name == "plot_entropy_waveform":
             return lambda *args, **kwargs: None
 
         return mock
 
     def _create_corridor_engine_fallback(self, class_name: str) -> Mock:
-        """Create fallback for future corridor engine components"""
+        """Create fallback for future corridor engine components."""
         mock = Mock(name=class_name)
 
-        if class_name in ['FutureCorridorEngine', 'CorridorState',
-                         'ExecutionPath', 'ProfitTier']:
-            mock.process = lambda *args, **kwargs: {'status': 'fallback'}
-            mock.execute = lambda *args, **kwargs: {'status': 'fallback'}
-            mock.analyze = lambda *args, **kwargs: {'status': 'fallback'}
+        if class_name in [
+            "FutureCorridorEngine",
+            "CorridorState",
+            "ExecutionPath",
+            "ProfitTier",
+        ]:
+            mock.process = lambda *args, **kwargs: {"status": "fallback"}
+            mock.execute = lambda *args, **kwargs: {"status": "fallback"}
+            mock.analyze = lambda *args, **kwargs: {"status": "fallback"}
 
         return mock
 
     def _create_cli_compatibility_fallback(self, class_name: str) -> Mock:
-        """Create fallback for Windows CLI compatibility"""
-        if class_name == 'WindowsCliCompatibilityHandler':
+        """Create fallback for Windows CLI compatibility."""
+        if class_name == "WindowsCliCompatibilityHandler":
             mock = Mock(name=class_name)
             mock.is_windows_cli = lambda: False
             mock.safe_print = lambda message, use_emoji=True: message
@@ -167,68 +165,74 @@ class ImportResolver:
         return self._create_generic_fallback(class_name)
 
     def _create_ncco_core_fallback(self, class_name: str) -> Mock:
-        """Create fallback for NCCO core components"""
+        """Create fallback for NCCO core components."""
         mock = Mock(name=class_name)
         mock.generate = lambda *args, **kwargs: []
         mock.process = lambda *args, **kwargs: None
         return mock
 
     def _create_schwabot_fallback(self, class_name: str) -> Mock:
-        """Create fallback for Schwabot components"""
+        """Create fallback for Schwabot components."""
         mock = Mock(name=class_name)
-        mock.trade = lambda *args, **kwargs: {'status': 'fallback'}
-        mock.analyze = lambda *args, **kwargs: {'status': 'fallback'}
+        mock.trade = lambda *args, **kwargs: {"status": "fallback"}
+        mock.analyze = lambda *args, **kwargs: {"status": "fallback"}
         return mock
 
     def _create_ccxt_fallback(self, class_name: str) -> Mock:
-        """Create fallback for CCXT trading library"""
+        """Create fallback for CCXT trading library."""
         mock = Mock(name=class_name)
-        mock.fetch_ticker = lambda *args, **kwargs: {'last': 0.0}
-        mock.create_order = lambda *args, **kwargs: {'id': 'fallback'}
+        mock.fetch_ticker = lambda *args, **kwargs: {"last": 0.0}
+        mock.create_order = lambda *args, **kwargs: {"id": "fallback"}
         return mock
 
     def _create_websockets_fallback(self, class_name: str) -> Mock:
-        """Create fallback for WebSockets library"""
+        """Create fallback for WebSockets library."""
         mock = Mock(name=class_name)
         mock.connect = lambda *args, **kwargs: None
         mock.send = lambda *args, **kwargs: None
         return mock
 
     def _create_talib_fallback(self, class_name: str) -> Mock:
-        """Create fallback for TA-Lib technical analysis"""
+        """Create fallback for TA-Lib technical analysis."""
         mock = Mock(name=class_name)
         mock.SMA = lambda *args, **kwargs: [0.0] * len(args[0]) if args else []
-        mock.RSI = lambda *args, **kwargs: [50.0] * len(args[0]) if args else []
+        mock.RSI = lambda *args, **kwargs: (
+            [50.0] * len(args[0]) if args else []
+        )
         return mock
 
     def _create_psutil_fallback(self, class_name: str) -> Mock:
-        """Create fallback for psutil system monitoring"""
+        """Create fallback for psutil system monitoring."""
         mock = Mock(name=class_name)
         mock.cpu_percent = lambda *args, **kwargs: 50.0
         mock.virtual_memory = lambda: Mock(percent=50.0)
         return mock
 
-    def register_fallback(self, module_name: str,
-                         fallback_factory: Callable) -> None:
-        """Register a custom fallback factory for a module"""
+    def register_fallback(
+        self, module_name: str, fallback_factory: Callable
+    ) -> None:
+        """Register a custom fallback factory for a module."""
         self._fallback_registry[module_name] = fallback_factory
 
     def clear_cache(self) -> None:
-        """Clear the import cache"""
+        """Clear the import cache."""
         self._import_cache.clear()
 
     def get_import_status(self) -> Dict[str, bool]:
-        """Get status of all attempted imports"""
+        """Get status of all attempted imports."""
         status = {}
         for cache_key in self._import_cache.keys():
-            module_name = cache_key.split(':')[0]
+            module_name = cache_key.split(":")[0]
             status[module_name] = True
         return status
 
 
 # Convenience function for external use
-def safe_import(module_name: str, class_names: List[str],
-               fallback_factory: Optional[Callable] = None) -> Dict[str, Any]:
-    """Convenience function for safe imports"""
+def safe_import(
+    module_name: str,
+    class_names: List[str],
+    fallback_factory: Optional[Callable] = None,
+) -> Dict[str, Any]:
+    """Safely import classes from a module with fallback support."""
     resolver = ImportResolver()
     return resolver.safe_import(module_name, class_names, fallback_factory)

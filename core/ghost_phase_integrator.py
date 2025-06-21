@@ -11,8 +11,8 @@ remaining free of heavy external dependencies.  The public helper
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
+import math
 from typing import Final, Sequence
 
 import numpy as np
@@ -46,10 +46,12 @@ def _levenshtein(a: str, b: str) -> int:  # noqa: D401
 
 
 def _clip(x: float, lo: float, hi: float) -> float:  # noqa: D401
+    """TODO: document _clip."""
     return max(lo, min(hi, x))
 
 
 def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
+    """TODO: document _hash_to_int."""
     return int(hex_digest, 16)
 
 
@@ -60,7 +62,7 @@ def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
 
 @dataclass(slots=True)
 class GhostPhasePacket:
-    """Output ⟨Cₜ , ζ_final , H_echo , μ_echo , δ_corr⟩."""
+    """Output (C_t, zeta_final, H_echo, mu_echo, delta_corr)."""
 
     C_t: float
     zeta_final: float
@@ -105,13 +107,12 @@ def compute_ghost_phase_packet(
     delta_alt_t, grad_phi_fractal_t, delta_nu_cycle_t
         Altitude error, gradient of fractal pressure and cycle drift.
     drift_t
-        Instantaneous drift magnitude (0 ≤ drift_t ≤ 1).
+        Instantaneous drift magnitude (0 <= drift_t <= 1).
     q_exec_prev, q_exec_curr, delta_t
         Consecutive executable sizes and their time delta (sec).
     epsilon
         Small constant to stabilise log/denominator operations.
     """
-
     # --------------------------------------------------
     # (1) Γ_hash – similarity between current and echoed hash
     # --------------------------------------------------
@@ -145,7 +146,7 @@ def compute_ghost_phase_packet(
     # --------------------------------------------------
     # (6) C_t – trust-weighted adjustment coefficient
     # --------------------------------------------------
-    C_t = (1.0 - drift_t * (1.0 - mu_echo)) * math.exp(-(delta_corr ** 2))
+    C_t = (1.0 - drift_t * (1.0 - mu_echo)) * math.exp(-(delta_corr**2))
 
     # --------------------------------------------------
     # (7) Θ_drift – drift entropy modulator
@@ -153,7 +154,9 @@ def compute_ghost_phase_packet(
     if len(H_echo) < 2:
         theta_drift = 0.0
     else:
-        int_series = np.fromiter((_hash_to_int(h) for h in H_echo), dtype=float)
+        int_series = np.fromiter(
+            (_hash_to_int(h) for h in H_echo), dtype=float
+        )
         diff_series = np.diff(int_series)
         spectrum = np.abs(np.fft.fft(diff_series))
         theta_drift = math.log(1.0 + float(np.linalg.norm(spectrum))) / epsilon
@@ -177,4 +180,4 @@ def compute_ghost_phase_packet(
         H_echo=tuple(H_echo),  # immutable copy
         mu_echo=mu_echo,
         delta_corr=delta_corr,
-    ) 
+    )

@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
-"""
-Mathematical Library V1 - Core Mathematical Framework.
+"""Mathematical Library V1 - Core Mathematical Framework.
+
+
 
 Core mathematical library for Schwabot framework with essential functions
+
+
+
 for trading system calculations, statistical analysis, and numerical operations.
+
+
+
 """
 
 from __future__ import annotations
 
-import logging
 from decimal import getcontext
-from typing import TYPE_CHECKING, Any, Dict
+import logging
+from typing import Any, Dict, TYPE_CHECKING
 
 import numpy as np
 import numpy.typing as npt
@@ -37,17 +44,19 @@ class MathLib:
         self.epsilon = 1e-12
         logger.info(f"MathLib v{self.version} initialized")
 
-    def calculate(self: Self, operation: str, data: Vector, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def calculate(
+        self: Self, operation: str, data: Vector, *args: Any, **kwargs: Any
+    ) -> Dict[str, Any]:
         """Calculate various mathematical operations."""
         try:
             operations = {
-                'mean': self.mean,
-                'std': self.standard_deviation,
-                'variance': self.variance,
-                'median': self.median,
-                'entropy': self.shannon_entropy,
-                'volatility': self.volatility,
-                'returns': self.calculate_returns
+                "mean": self.mean,
+                "std": self.standard_deviation,
+                "variance": self.variance,
+                "median": self.median,
+                "entropy": self.shannon_entropy,
+                "volatility": self.volatility,
+                "returns": self.calculate_returns,
             }
 
             if operation not in operations:
@@ -55,7 +64,7 @@ class MathLib:
                     "operation": operation,
                     "error": f"Unknown operation: {operation}",
                     "available_operations": list(operations.keys()),
-                    "status": "error"
+                    "status": "error",
                 }
 
             result = operations[operation](data, *args, **kwargs)
@@ -65,7 +74,7 @@ class MathLib:
                 "result": result,
                 "data_length": len(data),
                 "version": self.version,
-                "status": "success"
+                "status": "success",
             }
 
         except Exception as e:
@@ -74,7 +83,7 @@ class MathLib:
                 "operation": operation,
                 "error": str(e),
                 "version": self.version,
-                "status": "error"
+                "status": "error",
             }
 
     def mean(self: Self, data: Vector) -> float:
@@ -114,9 +123,10 @@ class MathLib:
 def main() -> None:
     """Test function."""
     import numpy as np
+
     mathlib = MathLib()
     test_data = np.array([1, 2, 3, 4, 5])
-    result = mathlib.calculate('mean', test_data)
+    result = mathlib.calculate("mean", test_data)
     print(f"Test result: {result}")
 
 

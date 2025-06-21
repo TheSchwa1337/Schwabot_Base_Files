@@ -1,35 +1,40 @@
-from typing import Any
 #!/usr/bin/env python3
-"""
-Comprehensive Compliance Monitor - Schwabot Code Quality System
+"""Comprehensive Compliance Monitor - Schwabot Code Quality System.
+
 ==============================================================
 
+
+
 This tool provides comprehensive monitoring of code quality, working around
+
 environment issues and ensuring systematic tracking of all compliance metrics.
 
+
+
 Based on systematic elimination of 257+ flake8 issues.
+
 """
 
-import os
-import sys
-import subprocess
-import re
-import json
 import ast
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from datetime import datetime
+import json
 import logging
+from pathlib import Path
+from typing import Dict, List
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class CodeQualityMetrics:
-    """Comprehensive code quality metrics"""
+    """Comprehensive code quality metrics."""
+
     file_path: str
     total_lines: int = 0
     code_lines: int = 0
@@ -51,7 +56,8 @@ class CodeQualityMetrics:
 
 @dataclass
 class ComplianceReport:
-    """Comprehensive compliance report"""
+    """Comprehensive compliance report."""
+
     timestamp: datetime
     total_files: int = 0
     total_issues: int = 0
@@ -64,9 +70,10 @@ class ComplianceReport:
 
 
 class ComplianceMonitor:
-    """Comprehensive code compliance monitoring"""
+    """Comprehensive code compliance monitoring."""
 
     def __init__(self, root_dir: str = ".") -> None:
+        """TODO: document __init__."""
         self.root_dir = Path(root_dir)
         self.python_files: List[Path] = []
         self.quality_metrics: Dict[str, CodeQualityMetrics] = {}
@@ -74,24 +81,30 @@ class ComplianceMonitor:
 
         # Priority mappings
         self.priority_mapping = {
-            'E999': 'CRITICAL',  # Syntax errors
-            'F821': 'HIGH',      # Undefined names
-            'F722': 'HIGH',      # Syntax error in forward annotation
-            'E302': 'MEDIUM',    # Expected 2 blank lines
-            'E501': 'MEDIUM',    # Line too long
-            'W293': 'LOW',       # Blank line contains whitespace
-            'W291': 'LOW',       # Trailing whitespace
-            'F401': 'MEDIUM',    # Imported but unused
-            'F841': 'MEDIUM',    # Local variable assigned but never used
+            "E999": "CRITICAL",  # Syntax errors
+            "F821": "HIGH",  # Undefined names
+            "F722": "HIGH",  # Syntax error in forward annotation
+            "E302": "MEDIUM",  # Expected 2 blank lines
+            "E501": "MEDIUM",  # Line too long
+            "W293": "LOW",  # Blank line contains whitespace
+            "W291": "LOW",  # Trailing whitespace
+            "F401": "MEDIUM",  # Imported but unused
+            "F841": "MEDIUM",  # Local variable assigned but never used
         }
 
     def discover_python_files(self) -> List[Path]:
-        """Discover all Python files in the project"""
+        """Discover all Python files in the project."""
         logger.info("Discovering Python files...")
 
         exclude_patterns = {
-            '.venv', '__pycache__', 'build', 'dist', '.git',
-            'node_modules', '.pytest_cache', '*.pyc'
+            ".venv",
+            "__pycache__",
+            "build",
+            "dist",
+            ".git",
+            "node_modules",
+            ".pytest_cache",
+            "*.pyc",
         }
 
         python_files = []
@@ -107,12 +120,12 @@ class ComplianceMonitor:
         return python_files
 
     def analyze_file_quality(self, file_path: Path) -> CodeQualityMetrics:
-        """Analyze code quality metrics for a single file"""
+        """Analyze code quality metrics for a single file."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            lines = content.split('\n')
+            lines = content.split("\n")
             metrics = CodeQualityMetrics(file_path=str(file_path))
 
             # Basic line counting
@@ -125,7 +138,7 @@ class ComplianceMonitor:
                 stripped = line.strip()
                 if not stripped:
                     metrics.blank_lines += 1
-                elif stripped.startswith('#'):
+                elif stripped.startswith("#"):
                     metrics.comment_lines += 1
                 else:
                     metrics.code_lines += 1
@@ -139,16 +152,33 @@ class ComplianceMonitor:
                         metrics.trailing_whitespace += 1
 
                     # Check for blank lines with whitespace
-                    if stripped == '' and line != '':
+                    if stripped == "" and line != "":
                         metrics.blank_line_whitespace += 1
 
             # Parse AST for deeper analysis
             try:
                 tree = ast.parse(content)
-                metrics.functions = len([node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)])
-                metrics.classes = len([node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)])
+                metrics.functions = len(
+                    [
+                        node
+                        for node in ast.walk(tree)
+                        if isinstance(node, ast.FunctionDef)
+                    ]
+                )
+                metrics.classes = len(
+                    [
+                        node
+                        for node in ast.walk(tree)
+                        if isinstance(node, ast.ClassDef)
+                    ]
+                )
                 metrics.imports = len(
-    [node for node in ast.walk(tree) if isinstance(node, (ast.Import, ast.ImportFrom))])
+                    [
+                        node
+                        for node in ast.walk(tree)
+                        if isinstance(node, (ast.Import, ast.ImportFrom))
+                    ]
+                )
 
                 # Count type annotations
                 for node in ast.walk(tree):
@@ -170,20 +200,22 @@ class ComplianceMonitor:
 
             # Calculate complexity score (simple metric)
             metrics.complexity_score = (
-                metrics.functions * 0.1 +
-                metrics.classes * 0.2 +
-                metrics.long_lines * 0.05 +
-                metrics.missing_type_annotations * 0.1
+                metrics.functions * 0.1
+                + metrics.classes * 0.2
+                + metrics.long_lines * 0.05
+                + metrics.missing_type_annotations * 0.1
             )
 
             return metrics
 
         except Exception as e:
             logger.error(f"Error analyzing {file_path}: {e}")
-            return CodeQualityMetrics(file_path=str(file_path), syntax_errors=1)
+            return CodeQualityMetrics(
+                file_path=str(file_path), syntax_errors=1
+            )
 
     def run_static_analysis(self) -> Dict[str, List[Dict]]:
-        """Run static analysis using multiple approaches"""
+        """Run static analysis using multiple approaches."""
         logger.info("Running static analysis...")
 
         issues = {}
@@ -197,44 +229,54 @@ class ComplianceMonitor:
 
             # Check for specific issues
             if metrics.syntax_errors > 0:
-                file_issues.append({
-                    'line': 1,
-                    'code': 'E999',
-                    'message': 'Syntax error detected',
-                    'priority': 'CRITICAL'
-                })
+                file_issues.append(
+                    {
+                        "line": 1,
+                        "code": "E999",
+                        "message": "Syntax error detected",
+                        "priority": "CRITICAL",
+                    }
+                )
 
             if metrics.long_lines > 0:
-                file_issues.append({
-                    'line': 1,
-                    'code': 'E501',
-                    'message': f'{metrics.long_lines} lines too long',
-                    'priority': 'MEDIUM'
-                })
+                file_issues.append(
+                    {
+                        "line": 1,
+                        "code": "E501",
+                        "message": f"{metrics.long_lines} lines too long",
+                        "priority": "MEDIUM",
+                    }
+                )
 
             if metrics.trailing_whitespace > 0:
-                file_issues.append({
-                    'line': 1,
-                    'code': 'W291',
-                    'message': f'{metrics.trailing_whitespace} lines with trailing whitespace',
-                    'priority': 'LOW'
-                })
+                file_issues.append(
+                    {
+                        "line": 1,
+                        "code": "W291",
+                        "message": f"{metrics.trailing_whitespace} lines with trailing whitespace",
+                        "priority": "LOW",
+                    }
+                )
 
             if metrics.blank_line_whitespace > 0:
-                file_issues.append({
-                    'line': 1,
-                    'code': 'W293',
-                    'message': f'{metrics.blank_line_whitespace} blank lines with whitespace',
-                    'priority': 'LOW'
-                })
+                file_issues.append(
+                    {
+                        "line": 1,
+                        "code": "W293",
+                        "message": f"{metrics.blank_line_whitespace} blank lines with whitespace",
+                        "priority": "LOW",
+                    }
+                )
 
             if metrics.missing_type_annotations > 0:
-                file_issues.append({
-                    'line': 1,
-                    'code': 'F821',
-                    'message': f'{metrics.missing_type_annotations} missing type annotations',
-                    'priority': 'MEDIUM'
-                })
+                file_issues.append(
+                    {
+                        "line": 1,
+                        "code": "F821",
+                        "message": f"{metrics.missing_type_annotations} missing type annotations",
+                        "priority": "MEDIUM",
+                    }
+                )
 
             if file_issues:
                 issues[str(file_path)] = file_issues
@@ -243,7 +285,7 @@ class ComplianceMonitor:
         return issues
 
     def generate_compliance_report(self) -> ComplianceReport:
-        """Generate comprehensive compliance report"""
+        """Generate comprehensive compliance report."""
         logger.info("Generating compliance report...")
 
         report = ComplianceReport(timestamp=datetime.now())
@@ -260,10 +302,10 @@ class ComplianceMonitor:
         for file_issues in self.issues.values():
             for issue in file_issues:
                 total_issues += 1
-                priority = issue['priority']
-                if priority == 'CRITICAL' or priority == 'HIGH':
+                priority = issue["priority"]
+                if priority == "CRITICAL" or priority == "HIGH":
                     high_priority += 1
-                elif priority == 'MEDIUM':
+                elif priority == "MEDIUM":
                     medium_priority += 1
                 else:
                     low_priority += 1
@@ -275,55 +317,63 @@ class ComplianceMonitor:
 
         # Calculate compliance score (0-100)
         if report.total_files > 0:
-            files_without_issues = report.total_files - report.files_with_issues
-            report.compliance_score = (files_without_issues / report.total_files) * 100
+            files_without_issues = (
+                report.total_files - report.files_with_issues
+            )
+            report.compliance_score = (
+                files_without_issues / report.total_files
+            ) * 100
 
         report.metrics = self.quality_metrics
 
         return report
 
-    def save_report(self, report: ComplianceReport, filename: str = "compliance_report.json") -> None:
-        """Save compliance report to JSON file"""
+    def save_report(
+        self,
+        report: ComplianceReport,
+        filename: str = "compliance_report.json",
+    ) -> None:
+        """Save compliance report to JSON file."""
         report_data = {
-            'timestamp': report.timestamp.isoformat(),
-            'summary': {
-                'total_files': report.total_files,
-                'total_issues': report.total_issues,
-                'high_priority_issues': report.high_priority_issues,
-                'medium_priority_issues': report.medium_priority_issues,
-                'low_priority_issues': report.low_priority_issues,
-                'files_with_issues': report.files_with_issues,
-                'compliance_score': report.compliance_score
+            "timestamp": report.timestamp.isoformat(),
+            "summary": {
+                "total_files": report.total_files,
+                "total_issues": report.total_issues,
+                "high_priority_issues": report.high_priority_issues,
+                "medium_priority_issues": report.medium_priority_issues,
+                "low_priority_issues": report.low_priority_issues,
+                "files_with_issues": report.files_with_issues,
+                "compliance_score": report.compliance_score,
             },
-            'files_with_issues': list(self.issues.keys()),
-            'detailed_metrics': {
+            "files_with_issues": list(self.issues.keys()),
+            "detailed_metrics": {
                 path: {
-                    'total_lines': metrics.total_lines,
-                    'code_lines': metrics.code_lines,
-                    'comment_lines': metrics.comment_lines,
-                    'blank_lines': metrics.blank_lines,
-                    'functions': metrics.functions,
-                    'classes': metrics.classes,
-                    'imports': metrics.imports,
-                    'type_annotations': metrics.type_annotations,
-                    'missing_type_annotations': metrics.missing_type_annotations,
-                    'syntax_errors': metrics.syntax_errors,
-                    'long_lines': metrics.long_lines,
-                    'trailing_whitespace': metrics.trailing_whitespace,
-                    'blank_line_whitespace': metrics.blank_line_whitespace,
-                    'complexity_score': metrics.complexity_score
+                    "total_lines": metrics.total_lines,
+                    "code_lines": metrics.code_lines,
+                    "comment_lines": metrics.comment_lines,
+                    "blank_lines": metrics.blank_lines,
+                    "functions": metrics.functions,
+                    "classes": metrics.classes,
+                    "imports": metrics.imports,
+                    "type_annotations": metrics.type_annotations,
+                    "missing_type_annotations": metrics.missing_type_annotations,
+                    "syntax_errors": metrics.syntax_errors,
+                    "long_lines": metrics.long_lines,
+                    "trailing_whitespace": metrics.trailing_whitespace,
+                    "blank_line_whitespace": metrics.blank_line_whitespace,
+                    "complexity_score": metrics.complexity_score,
                 }
                 for path, metrics in report.metrics.items()
-            }
+            },
         }
 
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             json.dump(report_data, f, indent=2)
 
         logger.info(f"📄 Compliance report saved to {filename}")
 
     def print_summary(self, report: ComplianceReport) -> None:
-        """Print a human-readable summary"""
+        """Print a human-readable summary."""
         print("\n" + "=" * 60)
         print("SCHWABOT COMPLIANCE MONITORING REPORT")
         print("=" * 60)
@@ -349,15 +399,21 @@ class ComplianceMonitor:
                 issues = self.issues[file_path]
                 print(f"   {file_path}:")
                 for issue in issues:
-                    print(f"     - {issue['code']}: {issue['message']} ({issue['priority']})")
+                    print(
+                        f"     - {issue['code']}: {issue['message']} ({issue['priority']})"
+                    )
             print()
 
         # Quality metrics summary
         if report.metrics:
             total_functions = sum(m.functions for m in report.metrics.values())
             total_classes = sum(m.classes for m in report.metrics.values())
-            total_type_annotations = sum(m.type_annotations for m in report.metrics.values())
-            total_missing_annotations = sum(m.missing_type_annotations for m in report.metrics.values())
+            total_type_annotations = sum(
+                m.type_annotations for m in report.metrics.values()
+            )
+            total_missing_annotations = sum(
+                m.missing_type_annotations for m in report.metrics.values()
+            )
 
             print("📈 QUALITY METRICS:")
             print(f"   Total functions: {total_functions}")
@@ -367,8 +423,12 @@ class ComplianceMonitor:
 
             if total_type_annotations + total_missing_annotations > 0:
                 annotation_coverage = (
-    total_type_annotations / (total_type_annotations + total_missing_annotations)) * 100
-                print(f"   Type annotation coverage: {annotation_coverage:.1f}%")
+                    total_type_annotations
+                    / (total_type_annotations + total_missing_annotations)
+                ) * 100
+                print(
+                    f"   Type annotation coverage: {annotation_coverage:.1f}%"
+                )
             print()
 
         print("💡 RECOMMENDATIONS:")
@@ -384,7 +444,9 @@ class ComplianceMonitor:
         elif report.compliance_score >= 80:
             print("   ✅ Good compliance! Minor improvements needed.")
         else:
-            print("   ⚠️ Compliance needs improvement. Focus on high-priority issues.")
+            print(
+                "   ⚠️ Compliance needs improvement. Focus on high-priority issues."
+            )
 
         print()
         print("🛠️  NEXT STEPS:")
@@ -396,7 +458,7 @@ class ComplianceMonitor:
 
 
 def main() -> None:
-    """Main function"""
+    """Main function."""
     logger.info("🚀 Schwabot Comprehensive Compliance Monitor")
     logger.info("=" * 50)
 
@@ -412,7 +474,7 @@ def main() -> None:
 
     # Step 2: Run static analysis
     logger.info("Step 2: Running static analysis...")
-    issues = monitor.run_static_analysis()
+    monitor.run_static_analysis()
 
     # Step 3: Generate report
     logger.info("Step 3: Generating compliance report...")
@@ -424,11 +486,17 @@ def main() -> None:
 
     # Step 5: Provide actionable feedback
     if report.compliance_score >= 95:
-        logger.info("🎉 Excellent code quality! Your codebase is highly compliant.")
+        logger.info(
+            "🎉 Excellent code quality! Your codebase is highly compliant."
+        )
     elif report.compliance_score >= 80:
-        logger.info("✅ Good code quality! Minor improvements will bring you to excellence.")
+        logger.info(
+            "✅ Good code quality! Minor improvements will bring you to excellence."
+        )
     else:
-        logger.info("⚠️ Code quality needs attention. Focus on high-priority issues first.")
+        logger.info(
+            "⚠️ Code quality needs attention. Focus on high-priority issues first."
+        )
 
 
 if __name__ == "__main__":

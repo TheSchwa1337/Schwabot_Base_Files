@@ -19,7 +19,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class StrategyMapper:
-    """No-op strategy mapper stub (to be replaced with real logic)."""
+    """No-op strategy mapper stub (to be replaced with real logic)."""."""
 
     def map(self, execution_packet: Dict[str, Any]) -> Dict[str, Any]:
         """Return the execution packet unchanged.
@@ -34,6 +34,9 @@ class StrategyMapper:
 
 # Functional helper
 
-def map_strategy(execution_packet: Dict[str, Any]) -> Dict[str, Any]:  # noqa: D401
-    """Convenience wrapper around :py:meth:`StrategyMapper.map`."""
-    return StrategyMapper().map(execution_packet) 
+
+def map_strategy(
+    execution_packet: Dict[str, Any],
+) -> Dict[str, Any]:  # noqa: D401
+    """Convenience wrapper around :py:meth:`StrategyMapper.map`."""."""
+    return StrategyMapper().map(execution_packet)

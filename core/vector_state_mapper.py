@@ -27,7 +27,7 @@ __all__: list[str] = ["map_glyph_to_state"]
 
 
 def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
-    """Return cosine similarity of *v* against each row of *m* (1-D array)."""
+    """Return cosine similarity of *v* against each row of *m* (1-D array)."""."""
     dot = m @ v  # (n,) vector
     v_norm = np.linalg.norm(v)
     m_norm = np.linalg.norm(m, axis=1)
@@ -68,4 +68,4 @@ def map_glyph_to_state(
 
     sims = _cosine(glyph_vec, state_matrix)
     best_idx = int(np.argmax(sims))
-    return sims, best_idx 
+    return sims, best_idx

@@ -1,33 +1,45 @@
 #!/usr/bin/env python3
-"""
-Best Practices Enforcer - Centralized Code Quality Management
+"""Best Practices Enforcer - Centralized Code Quality Management.
+
 ============================================================
 
+
+
 Implements the fault-tolerant patterns we've established:
+
 1. Centralized import resolution (safe_import)
+
 2. Centralized error handling (error_handler)
+
 3. Type annotation enforcement (type_enforcer)
+
 4. Windows CLI compatibility
+
 5. Mathematical function patterns
 
+
+
 This ensures all new code follows our established patterns and prevents
+
 the HIGH/MEDIUM error cycles we've eliminated.
+
 """
 
 import ast
-import re
-from typing import Dict, List, Any, Optional, Tuple, Union
-from pathlib import Path
-import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from datetime import datetime
+import logging
+from pathlib import Path
+import re
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class CodePattern:
-    """Represents a code pattern that should be enforced"""
+    """Represents a code pattern that should be enforced."""
 
     name: str
     description: str
@@ -39,7 +51,7 @@ class CodePattern:
 
 @dataclass
 class EnforcementResult:
-    """Result of enforcing best practices on a file"""
+    """Result of enforcing best practices on a file."""
 
     file_path: str
     patterns_applied: List[str] = field(default_factory=list)
@@ -49,31 +61,47 @@ class EnforcementResult:
 
 
 class BestPracticesEnforcer:
-    """Centralized enforcer for all established best practices"""
+    """Centralized enforcer for all established best practices."""
 
     def __init__(self) -> None:
+        """Initialize the pre-commit hook enforcer."""
         self._patterns: List[CodePattern] = []
         self._register_core_patterns()
 
     def _register_core_patterns(self) -> None:
-        """Register all the core patterns we've established"""
-
+        """Register all the core patterns we've established."""
         # Import Resolution Patterns
         self._patterns.extend(
             [
                 CodePattern(
                     name="scattered_import_error_handling",
-                    description="Replace scattered try/except ImportError with safe_import",
-                    pattern=r"try:\s*import\s+(\w+).*?except\s+ImportError:.*?(\w+)\s*=\s*None",
-                    replacement=r'from core.import_resolver import safe_import\n\1_imports = safe_import("\1", ["\2"])\n\2 = \1_imports["\2"]',
+                    description=(
+                        "Replace scattered try/except ImportError with "
+                        "safe_import"
+                    ),
+                    pattern=(
+                        r"try:\s*import\s+(\w+).*?except\s+ImportError:.*?"
+                        r"(\w+\s*=\s*None)"
+                    ),
+                    replacement=(
+                        r'from core.import_resolver import safe_import\n'
+                        r'\1_imports = safe_import("\1", ["\2"])\n'
+                        r'\2 = \1_imports["\2"]'
+                    ),
                     severity="HIGH",
                     category="import_resolution",
                 ),
                 CodePattern(
                     name="bare_except_blocks",
-                    description="Replace bare except with error_handler.safe_execute",
+                    description=(
+                        "Replace bare except with error_handler.safe_execute"
+                    ),
                     pattern=r"try:\s*(.*?)\s*except:",
-                    replacement=r"from core.error_handler import safe_execute\nresult = safe_execute(lambda: \1, default_return=None)",
+                    replacement=(
+                        r"from core.error_handler import safe_execute\n"
+                        r"result = safe_execute(lambda: \1, "
+                        r"default_return=None)"
+                    ),
                     severity="CRITICAL",
                     category="error_handling",
                 ),
@@ -88,16 +116,36 @@ class BestPracticesEnforcer:
                 CodePattern(
                     name="windows_cli_unsafe_print",
                     description="Replace print with Windows CLI-safe version",
-                    pattern=r'print\s*\(\s*["\']([^"\']*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡])[^"\']*["\']\s*\)',
-                    replacement=r'from core.windows_cli_compatibility import safe_print\nsafe_print("\1")',
+                    pattern=(
+                        r'print\s*\(\s*["\']([^"\']*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡])'
+                        r'[^"\']*["\']\s*\)'
+                    ),
+                    replacement=(
+                        r'from core.windows_cli_compatibility import '
+                        r'safe_print\n'
+                        r'safe_print("\1")'
+                    ),
                     severity="MEDIUM",
                     category="windows_cli",
                 ),
                 CodePattern(
                     name="mathematical_function_patterns",
-                    description="Ensure mathematical functions have proper type annotations",
-                    pattern=r"def\s+(calculate|compute|process|analyze|evaluate|estimate|predict|forecast|simulate|optimize|minimize|maximize)\s*\(([^)]*)\)\s*:",
-                    replacement=r"def \1(\2) -> Union[float, Dict[str, Any]]:",
+                    description=(
+                        "Ensure mathematical functions have proper type "
+                        "annotations"
+                    ),
+                    pattern=(
+                        r"def\s+("
+                        r"calculate|compute|process|analyze|evaluate|"
+                        r"estimate|predict|forecast|simulate|"
+                        r"optimize|minimize|maximize"
+                        r")\s*\("
+                        r"([^)]*)"
+                        r"\)\s*:"
+                    ),
+                    replacement=(
+                        r"def \1(\2) -> Union[float, Dict[str, Any]]:"
+                    ),
                     severity="MEDIUM",
                     category="mathematical_functions",
                 ),
@@ -105,7 +153,7 @@ class BestPracticesEnforcer:
         )
 
     def enforce_on_file(self, file_path: str) -> EnforcementResult:
-        """Enforce all best practices on a single file"""
+        """Enforce all best practices on a single file."""
         result = EnforcementResult(file_path=file_path)
 
         try:
@@ -127,20 +175,26 @@ class BestPracticesEnforcer:
                             flags=re.DOTALL | re.MULTILINE,
                         )
                         result.patterns_applied.append(pattern.name)
-                        logger.info(f"Applied {pattern.name} to {file_path}")
+                        logger.info(
+                            f"Applied {pattern.name} to "
+                            f"{file_path}"
+                        )
                 except Exception as e:
                     result.issues_found.append(
                         f"Error applying {pattern.name}: {e}"
                     )
                     logger.warning(
-                        f"Error applying {pattern.name} to {file_path}: {e}"
+                        f"Error applying {pattern.name} to "
+                        f"{file_path}: {e}"
                     )
 
             # Write back if changes were made
             if content != original_content:
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
-                logger.info(f"Updated {file_path} with best practices")
+                logger.info(
+                    f"Updated {file_path} with best practices"
+                )
 
             # Validate the file still parses
             try:
@@ -153,17 +207,21 @@ class BestPracticesEnforcer:
                 # Revert changes if syntax is broken
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(original_content)
-                logger.error(f"Reverted {file_path} due to syntax error")
+                logger.error(
+                    f"Reverted {file_path} due to syntax error"
+                )
 
         except Exception as e:
             result.issues_found.append(f"File processing error: {e}")
             result.success = False
-            logger.error(f"Error processing {file_path}: {e}")
+            logger.error(
+                f"Error processing {file_path}: {e}"
+            )
 
         return result
 
     def enforce_on_directory(self, directory: str) -> List[EnforcementResult]:
-        """Enforce best practices on all Python files in a directory"""
+        """Enforce best practices on all Python files in a directory."""
         results = []
 
         for py_file in Path(directory).rglob("*.py"):
@@ -174,7 +232,7 @@ class BestPracticesEnforcer:
         return results
 
     def _should_skip_file(self, file_path: Path) -> bool:
-        """Determine if a file should be skipped"""
+        """Determine if a file should be skipped."""
         skip_patterns = [
             ".venv",
             "site-packages",
@@ -188,15 +246,15 @@ class BestPracticesEnforcer:
         return any(pattern in str(file_path) for pattern in skip_patterns)
 
     def add_custom_pattern(self, pattern: CodePattern) -> None:
-        """Add a custom pattern for enforcement"""
+        """Add a custom pattern for enforcement."""
         self._patterns.append(pattern)
 
     def get_patterns_by_category(self, category: str) -> List[CodePattern]:
-        """Get patterns by category"""
+        """Get patterns by category."""
         return [p for p in self._patterns if p.category == category]
 
     def get_statistics(self) -> Dict[str, int]:
-        """Get statistics about patterns"""
+        """Get statistics about patterns."""
         categories = {}
         severities = {}
 
@@ -216,14 +274,17 @@ class BestPracticesEnforcer:
 
 
 class PreCommitHook:
-    """Pre-commit hook infrastructure for automated best practices enforcement"""
+    """Provide pre-commit hook infrastructure for automated best-practice enforcement."""
 
     def __init__(self) -> None:
+        """TODO: document __init__."""
         self.enforcer = BestPracticesEnforcer()
 
     def run_pre_commit_check(self, staged_files: List[str]) -> bool:
-        """Run pre-commit checks on staged files"""
-        logger.info("Running pre-commit best practices check...")
+        """Run pre-commit checks on staged files."""
+        logger.info(
+            "Running pre-commit best practices check..."
+        )
 
         all_passed = True
 
@@ -231,22 +292,26 @@ class PreCommitHook:
             if file_path.endswith(".py"):
                 result = self.enforcer.enforce_on_file(file_path)
                 if not result.success:
-                    logger.error(f"Pre-commit check failed for {file_path}")
+                    logger.error(
+                        f"Pre-commit check failed for {file_path}"
+                    )
                     all_passed = False
                 else:
-                    logger.info(f"Pre-commit check passed for {file_path}")
+                    logger.info(
+                        f"Pre-commit check passed for {file_path}"
+                    )
 
         return all_passed
 
     def create_git_hook_script(
         self, output_path: str = ".git/hooks/pre-commit"
     ) -> None:
-        """Create a git pre-commit hook script"""
+        """Create a git pre-commit hook script."""
         script_content = """#!/bin/bash
 # Pre-commit hook for Schwabot best practices enforcement
 
 # Get staged Python files
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\\.py$')
 
 if [ -n "$STAGED_FILES" ]; then
     echo "Running Schwabot best practices check..."
@@ -284,7 +349,7 @@ fi
 
 # Convenience functions
 def enforce_best_practices_on_file(file_path: str) -> EnforcementResult:
-    """Convenience function to enforce best practices on a single file"""
+    """Enforce best practices on a single file."""
     enforcer = BestPracticesEnforcer()
     return enforcer.enforce_on_file(file_path)
 
@@ -292,18 +357,18 @@ def enforce_best_practices_on_file(file_path: str) -> EnforcementResult:
 def enforce_best_practices_on_directory(
     directory: str,
 ) -> List[EnforcementResult]:
-    """Convenience function to enforce best practices on a directory"""
+    """Enforce best practices on a directory."""
     enforcer = BestPracticesEnforcer()
     return enforcer.enforce_on_directory(directory)
 
 
 def setup_pre_commit_hook() -> None:
-    """Set up the pre-commit hook"""
+    """Set up the pre-commit hook."""
     hook = PreCommitHook()
     hook.create_git_hook_script()
 
 
 def run_pre_commit_check(staged_files: List[str]) -> bool:
-    """Run pre-commit check on staged files"""
+    """Run pre-commit check on staged files."""
     hook = PreCommitHook()
     return hook.run_pre_commit_check(staged_files)

@@ -19,11 +19,10 @@ what Schwabot already ships.
 
 from __future__ import annotations
 
-import hashlib
+from dataclasses import dataclass
 import math
 import time
-from dataclasses import dataclass
-from typing import Final, Tuple, Literal
+from typing import Final, Literal, Tuple
 
 import numpy as np
 
@@ -42,11 +41,13 @@ def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
 
 
 def _cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
+    """TODO: document _cosine_similarity."""
     if v1.shape != v2.shape:
         raise ValueError("vectors must share shape for cosine similarity")
     dot = float(np.dot(v1, v2))
     norm = float(np.linalg.norm(v1) * np.linalg.norm(v2))
     return 0.0 if norm == 0 else dot / norm
+
 
 # -----------------------------------------------------------------------------
 # Conditionals – each returns bool
@@ -63,20 +64,26 @@ _NEWS_OVERLAY_THRESHOLD: Final = 0.6
 
 
 def _hash_drift_detect(curr_hash: str, mem_hash: str) -> bool:
+    """TODO: document _hash_drift_detect."""
     return _hamming_dist(curr_hash, mem_hash) <= _HASH_EPS
 
 
 def _pool_stability_check(vol_series: np.ndarray) -> bool:
+    """TODO: document _pool_stability_check."""
     if vol_series.size == 0:
         return False
     return float(np.std(vol_series) / np.mean(vol_series)) < _POOL_STAB_EPS
 
 
 def _lantern_match(vec: np.ndarray, reference: np.ndarray) -> bool:
+    """TODO: document _lantern_match."""
     return _cosine_similarity(vec, reference) >= _VECTOR_COS_THRESHOLD
 
 
-def _ai_consensus(hashes: Tuple[str, str, str], weights: Tuple[float, float, float]) -> bool:
+def _ai_consensus(
+    hashes: Tuple[str, str, str], weights: Tuple[float, float, float]
+) -> bool:
+    """TODO: document _ai_consensus."""
     h1, h2, h3 = hashes
     if not (h1 == h2 == h3):
         return False
@@ -85,17 +92,20 @@ def _ai_consensus(hashes: Tuple[str, str, str], weights: Tuple[float, float, flo
 
 
 def _reentry_tolerance(opportunity_ts: float, now_ts: float) -> bool:
+    """TODO: document _reentry_tolerance."""
     decay = math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
     return decay >= _DECAY_THRESHOLD
 
 
 def _profit_lock_sync(curr_profit: float, projected_exit: float) -> bool:
+    """TODO: document _profit_lock_sync."""
     return curr_profit > projected_exit + _PROFIT_LOCK_EPS
 
 
 def _news_overlay_route(score: float) -> bool:
     """Return True if bearish news requires USDC hold."""
     return score > _NEWS_OVERLAY_THRESHOLD
+
 
 # -----------------------------------------------------------------------------
 # Dataclass container for all inputs (optional convenience)
@@ -104,6 +114,8 @@ def _news_overlay_route(score: float) -> bool:
 
 @dataclass(slots=True)
 class RouterInput:
+    """TODO: document RouterInput."""
+    
     tick_hash: str
     mem_hash: str
     pool_volumes: np.ndarray  # USDC pool volume window
@@ -130,6 +142,7 @@ class GhostRouter:
     """Evaluate conditional chain; return routing decision string."""
 
     def route(self, data: RouterInput) -> str:  # noqa: D401
+        """Determine routing decision via multi-step drift, consensus and risk checks."""
         # 1. Hash drift detection
         if not _hash_drift_detect(data.tick_hash, data.mem_hash):
             return "noop"
@@ -168,7 +181,7 @@ class GhostRouter:
 
 
 def ghost_router(data: RouterInput) -> str:  # noqa: D401
-    """Convenience wrapper around :class:`GhostRouter.route`."""
+    """Return routing decision using :class:`GhostRouter.route`."""
     return GhostRouter().route(data)
 
 
@@ -218,7 +231,9 @@ def compute_ghost_route(
 
     delta_H = H_t - H_prev
     # (1) Φ_t
-    phi_t = 1.0 / (1.0 + math.exp(-(beta1 * E_t - beta2 * abs(delta_H) + beta3 * D_t)))
+    phi_t = 1.0 / (
+        1.0 + math.exp(-(beta1 * E_t - beta2 * abs(delta_H) + beta3 * D_t))
+    )
 
     # (3) execution velocity
     v_exec = math.sqrt(P_res / (rho_t * phi_t + epsilon))
@@ -246,8 +261,11 @@ def compute_ghost_route(
     # (9) hash-tag
     if timestamp is None:
         import time as _time
+
         timestamp = _time.time()
     tag_data = f"{H_t}{route}{timestamp}".encode()
     tau_t = hashlib.sha256(tag_data).hexdigest()
 
-    return ExecPacket(volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t) 
+    return ExecPacket(
+        volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t
+    )

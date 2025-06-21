@@ -29,7 +29,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
 
     def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
-        """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
+        """Rudimentary Welch PSD replacement (Hann + overlap=0)."""."""
         if nperseg is None:
             nperseg = min(256, x.size)
         window = np.hanning(nperseg)
@@ -46,11 +46,12 @@ except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
         freqs = np.fft.rfftfreq(nperseg, 1.0 / fs)
         return freqs, psd
 
+
 __all__ = ["validate_entropy_envelope"]
 
 
 def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
-    """Compute spectral entropy (base-2) of a 1-D real signal."""
+    """Compute spectral entropy (base-2) of a 1-D real signal."""."""
     freqs, psd = welch(signal, fs=fs)
     psd_norm = psd / np.sum(psd)
     psd_norm = psd_norm[psd_norm > 0]  # avoid log(0)
@@ -88,9 +89,10 @@ def validate_entropy_envelope(
     entropy = _spectral_entropy(signal, fs=fs)
     return (min_entropy <= entropy <= max_entropy), entropy
 
+
 # -----------------------------------------------------------------------------
 # TODO: future improvements
 # -----------------------------------------------------------------------------
 # • Add permutation entropy
 # • Add Jensen–Shannon divergence to a reference distribution
-# • Dynamic threshold adaptation based on rolling statistics 
+# • Dynamic threshold adaptation based on rolling statistics

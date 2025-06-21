@@ -55,4 +55,4 @@ def phase_resonance_gate(
     if use_mask:
         tick &= _PHASE_MASK
 
-    return tick % base_cycle == 0 
+    return tick % base_cycle == 0

@@ -23,12 +23,13 @@ try:
     from scipy.fftpack import dct  # type: ignore
 
     def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+        """TODO: document _dct_block."""."""
         return dct(arr, type=2, norm="ortho")
 
 except ModuleNotFoundError:  # pragma: no cover – keep pure-NumPy fallback
 
     def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
-        """Fallback: approximate DCT-II via real FFT symmetry trick."""
+        """Fallback: approximate DCT-II via real FFT symmetry trick."""."""
         n = arr.shape[-1]
         extended = np.concatenate([arr, arr[..., ::-1]], axis=-1)
         spectrum = np.fft.rfft(extended)
@@ -39,14 +40,16 @@ __all__ = ["define_block_wave_transform"]
 
 
 def _shannon_entropy(block: np.ndarray) -> float:
-    """Compute Shannon entropy of a 1-D vector (base-2)."""
+    """Compute Shannon entropy of a 1-D vector (base-2)."""."""
     hist, _ = np.histogram(block, bins=32, density=True)
     # Filter zero probabilities to avoid log2(0).
     p = hist[hist > 0]
     return float(-np.sum(p * np.log2(p)))
 
 
-def define_block_wave_transform(signal: np.ndarray, block_size: int) -> Tuple[np.ndarray, np.ndarray]:
+def define_block_wave_transform(
+    signal: np.ndarray, block_size: int
+) -> Tuple[np.ndarray, np.ndarray]:
     """Apply a block-wise DCT transform and return entropy per block.
 
     Parameters
@@ -78,4 +81,4 @@ def define_block_wave_transform(signal: np.ndarray, block_size: int) -> Tuple[np
     entropies = np.apply_along_axis(_shannon_entropy, 1, transformed_blocks)
 
     # Flatten transformed back to 1-D for convenience.
-    return transformed_blocks.ravel(), entropies 
+    return transformed_blocks.ravel(), entropies

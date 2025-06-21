@@ -5,9 +5,8 @@ This stub keeps the package importable until the real time-lattice
 fork logic is written. Replace with full implementation when ready.
 """
 
-def main() -> None:
-    """Run a no-op placeholder."""
-    pass
 
+def main() -> None:
+    """Run a no-op placeholder."""."""
 if __name__ == "__main__":
     main()

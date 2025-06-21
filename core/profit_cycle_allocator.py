@@ -19,12 +19,15 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ProfitCycleAllocator:
-    """No-op profit cycle allocator stub."""
+    """No-op profit cycle allocator stub."""."""
 
     allocation_strategy: str = "noop"
 
-    def allocate(self, execution_packet: Dict[str, Any],
-                 cycles: Sequence[str] | None = None) -> Dict[str, Any]:
+    def allocate(
+        self,
+        execution_packet: Dict[str, Any],
+        cycles: Sequence[str] | None = None,
+    ) -> Dict[str, Any]:
         """Return the packet together with a trivial allocation map.
 
         Parameters
@@ -35,8 +38,10 @@ class ProfitCycleAllocator:
             Optional list of cycle names. If *None*, a single 'default'
             cycle is assumed.
         """
-        allocation = {name: execution_packet.get("volume", 0.0)
-                      for name in (cycles or ["default"])}
+        allocation = {
+            name: execution_packet.get("volume", 0.0)
+            for name in (cycles or ["default"])
+        }
         execution_packet = execution_packet.copy()
         execution_packet["cycle_allocation"] = allocation
         execution_packet["allocator"] = self.allocation_strategy
@@ -45,8 +50,9 @@ class ProfitCycleAllocator:
 
 # Functional helper
 
-def allocate_profit_cycle(execution_packet: Dict[str, Any],
-                          cycles: Sequence[str] | None = None
-                          ) -> Dict[str, Any]:  # noqa: D401
-    """Stateless wrapper around :py:meth:`ProfitCycleAllocator.allocate`."""
-    return ProfitCycleAllocator().allocate(execution_packet, cycles) 
+
+def allocate_profit_cycle(
+    execution_packet: Dict[str, Any], cycles: Sequence[str] | None = None
+) -> Dict[str, Any]:  # noqa: D401
+    """Stateless wrapper around :py:meth:`ProfitCycleAllocator.allocate`."""."""
+    return ProfitCycleAllocator().allocate(execution_packet, cycles)

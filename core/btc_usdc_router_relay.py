@@ -24,8 +24,8 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class BTCUSDCRouterRelay:
-    """BTC/USDC router with ghost conditional triggers."""
-    
+    """BTC/USDC router with ghost conditional triggers."""."""
+
     trigger_threshold: float = 0.5
     delta_tolerance: float = 0.1
 
@@ -50,15 +50,17 @@ class BTCUSDCRouterRelay:
             Trigger times τₖ.
         """
         if len(theta_values) != len(trigger_times):
-            raise ValueError("theta_values and trigger_times must have same length")
-        
+            raise ValueError(
+                "theta_values and trigger_times must have same length"
+            )
+
         theta_array = np.asarray(theta_values, dtype=float)
         zeta_array = np.asarray(zeta_series, dtype=float)
         times = np.asarray(timestamps, dtype=float)
         triggers = np.asarray(trigger_times, dtype=float)
-        
+
         theta_g_total = 0.0
-        
+
         # Sum over all k: θₖ·ζₖ(t) · δ(t − τₖ)
         for k, (theta_k, tau_k) in enumerate(zip(theta_array, triggers)):
             # Find zeta value at trigger time (interpolate if needed)
@@ -68,13 +70,13 @@ class BTCUSDCRouterRelay:
                 # Use index-based lookup if lengths don't match
                 idx = min(k, len(zeta_array) - 1)
                 zeta_k_t = zeta_array[idx]
-            
+
             # Dirac delta approximation: δ(t − τₖ) ≈ 1 if |t - τₖ| < tolerance
             for t in times:
                 if abs(t - tau_k) < self.delta_tolerance:
                     delta_term = 1.0 / self.delta_tolerance  # normalized
                     theta_g_total += theta_k * zeta_k_t * delta_term
-        
+
         return theta_g_total
 
     def route_flow_decision(
@@ -114,7 +116,7 @@ class BTCUSDCRouterRelay:
             # Neutral: maintain current flows
             routed_btc = btc_flow
             routed_usdc = usdc_flow
-        
+
         return routed_btc, routed_usdc
 
     def process_relay_cycle(
@@ -142,28 +144,29 @@ class BTCUSDCRouterRelay:
         """
         if len(btc_flows) != len(usdc_flows):
             raise ValueError("BTC and USDC flows must have same length")
-        
+
         btc_array = np.asarray(btc_flows, dtype=float)
         usdc_array = np.asarray(usdc_flows, dtype=float)
-        
+
         routed_btc = np.zeros_like(btc_array)
         routed_usdc = np.zeros_like(usdc_array)
-        
+
         # Compute ghost trigger for this cycle
         ghost_strength = self.compute_theta_g(
             theta_values, zeta_series, timestamps, trigger_times
         )
-        
+
         # Route each flow pair
         for i, (btc_flow, usdc_flow) in enumerate(zip(btc_array, usdc_array)):
             routed_btc[i], routed_usdc[i] = self.route_flow_decision(
                 btc_flow, usdc_flow, ghost_strength
             )
-        
+
         return routed_btc, routed_usdc
 
 
 # Functional helpers
+
 
 def compute_ghost_triggers(
     theta_values: Sequence[float],
@@ -172,9 +175,11 @@ def compute_ghost_triggers(
     trigger_times: Sequence[float],
     delta_tolerance: float = 0.1,
 ) -> float:  # noqa: D401
-    """Compute ghost conditional triggers Θᴳ(t)."""
+    """Compute ghost conditional triggers Θᴳ(t)."""."""
     relay = BTCUSDCRouterRelay(delta_tolerance=delta_tolerance)
-    return relay.compute_theta_g(theta_values, zeta_series, timestamps, trigger_times)
+    return relay.compute_theta_g(
+        theta_values, zeta_series, timestamps, trigger_times
+    )
 
 
 def route_btc_usdc_flow(
@@ -183,6 +188,8 @@ def route_btc_usdc_flow(
     ghost_trigger_strength: float,
     threshold: float = 0.5,
 ) -> tuple[float, float]:  # noqa: D401
-    """Route BTC/USDC flows using ghost trigger strength."""
+    """Route BTC/USDC flows using ghost trigger strength."""."""
     relay = BTCUSDCRouterRelay(trigger_threshold=threshold)
-    return relay.route_flow_decision(btc_flow, usdc_flow, ghost_trigger_strength) 
+    return relay.route_flow_decision(
+        btc_flow, usdc_flow, ghost_trigger_strength
+    )

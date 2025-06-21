@@ -24,8 +24,8 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ConditionalGlyphFeedback:
-    """Conditional glyph feedback loop processor."""
-    
+    """Conditional glyph feedback loop processor."""."""
+
     gamma: float = 1.0
     lambda_param: float = 0.5
     dx: float = 0.1
@@ -46,18 +46,20 @@ class ConditionalGlyphFeedback:
         """
         # Compute φ(x)
         phi_x = phi_func(x)
-        
+
         # Compute second derivative using finite differences
         phi_plus = phi_func(x + self.dx)
         phi_minus = phi_func(x - self.dx)
         phi_center = phi_func(x)
-        
+
         # Second derivative: ∂²φ/∂x² ≈ (φ(x+h) - 2φ(x) + φ(x-h)) / h²
-        second_derivative = (phi_plus - 2 * phi_center + phi_minus) / (self.dx ** 2)
-        
+        second_derivative = (phi_plus - 2 * phi_center + phi_minus) / (
+            self.dx**2
+        )
+
         # Apply formula: γ·∂²φ/∂x² − λ·φ
         nabla_phi = self.gamma * second_derivative - self.lambda_param * phi_x
-        
+
         return nabla_phi
 
     def process_news_feedback(
@@ -75,23 +77,26 @@ class ConditionalGlyphFeedback:
             Spatial positions corresponding to news values.
         """
         if len(news_values) != len(x_positions):
-            raise ValueError("news_values and x_positions must have same length")
-        
+            raise ValueError(
+                "news_values and x_positions must have same length"
+            )
+
         news_array = np.asarray(news_values, dtype=float)
         x_array = np.asarray(x_positions, dtype=float)
-        
+
         # Create interpolation function for news values
         def news_func(x: float) -> float:
             # Simple linear interpolation
+            """TODO: document news_func."""."""
             if len(news_array) < 2:
                 return news_array[0] if len(news_array) > 0 else 0.0
             return float(np.interp(x, x_array, news_array))
-        
+
         # Compute feedback gradient at each position
         feedback_gradients = np.zeros_like(x_array, dtype=float)
         for i, x_pos in enumerate(x_array):
             feedback_gradients[i] = self.compute_nabla_phi(news_func, x_pos)
-        
+
         return feedback_gradients
 
     def apply_conditional_feedback(
@@ -112,18 +117,21 @@ class ConditionalGlyphFeedback:
             Threshold for applying feedback.
         """
         if len(glyph_state) != len(feedback_gradients):
-            raise ValueError("glyph_state and feedback_gradients length mismatch")
-        
+            raise ValueError(
+                "glyph_state and feedback_gradients length mismatch"
+            )
+
         # Apply feedback only where condition is met
         condition_mask = np.abs(feedback_gradients) > condition_threshold
-        
+
         updated_state = glyph_state.copy()
         updated_state[condition_mask] += feedback_gradients[condition_mask]
-        
+
         return updated_state
 
 
 # Functional helpers
+
 
 def compute_news_flow_gradient(
     news_values: Sequence[float],
@@ -131,7 +139,7 @@ def compute_news_flow_gradient(
     gamma: float = 1.0,
     lambda_param: float = 0.5,
 ) -> np.ndarray:  # noqa: D401
-    """Compute news flow scalar feedback gradient."""
+    """Compute news flow scalar feedback gradient."""."""
     feedback = ConditionalGlyphFeedback(gamma=gamma, lambda_param=lambda_param)
     return feedback.process_news_feedback(news_values, x_positions)
 
@@ -142,8 +150,10 @@ def apply_feedback_loop(
     x_positions: Sequence[float],
     threshold: float = 0.5,
 ) -> np.ndarray:  # noqa: D401
-    """Apply complete conditional glyph feedback loop."""
+    """Apply complete conditional glyph feedback loop."""."""
     feedback = ConditionalGlyphFeedback()
     gradients = feedback.process_news_feedback(news_values, x_positions)
     glyph_array = np.asarray(glyph_state, dtype=float)
-    return feedback.apply_conditional_feedback(glyph_array, gradients, threshold) 
+    return feedback.apply_conditional_feedback(
+        glyph_array, gradients, threshold
+    )

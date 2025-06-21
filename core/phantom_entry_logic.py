@@ -51,4 +51,4 @@ def phantom_entry_probability(
     if zeta_final <= 0.0 or mu_echo < mu_threshold or not in_band:
         return 0.0
 
-    return max(0.0, min(1.0, base_prob)) 
+    return max(0.0, min(1.0, base_prob))

@@ -37,4 +37,4 @@ def compute_drift_vector(
     if current.shape != expected.shape:
         raise ValueError("current and expected must share shape")
 
-    return delta_t * (current - expected) 
+    return delta_t * (current - expected)

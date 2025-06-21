@@ -1,30 +1,42 @@
 #!/usr/bin/env python3
-"""
-Time-Series Filters - Schwabot Mathematical Framework
+"""Time-Series Filters - Schwabot Mathematical Framework.
+
 ===================================================
 
+
+
 Implements Kalman filters, Particle filters, and adaptive signal processing
+
 for cleaning price feeds and reducing noise before trading oracle processing.
 
+
+
 Mathematical foundations:
+
 - Kalman Filter: Optimal linear state estimation
+
 - Particle Filter: Non-linear Bayesian state estimation
+
 - EMA: Exponential Moving Average with time-awareness
+
 - Adaptive filtering with dynamic parameter adjustment
 
+
+
 Based on SxN-Math specifications for robust trading signal processing.
+
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from decimal import getcontext
+import logging
+from typing import Callable, List, Optional, Tuple
+
 import numpy as np
 import numpy.typing as npt
-from typing import Dict, List, Tuple, Optional, Callable, Any
-from decimal import Decimal, getcontext
-from dataclasses import dataclass
-import logging
 from scipy.stats import multivariate_normal
-import warnings
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -39,7 +51,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class KalmanState:
-    """State representation for Kalman filter"""
+    """State representation for Kalman filter."""
 
     x: StateVector  # State estimate
     P: Matrix  # Covariance matrix
@@ -50,7 +62,7 @@ class KalmanState:
 class KalmanFilter:
     """
     Linear Kalman Filter for optimal state estimation
-
+    
     Implements the standard predict-update cycle:
     Predict: x_k|k-1 = F * x_k-1|k-1 + B * u_k
              P_k|k-1 = F * P_k-1|k-1 * F^T + Q
@@ -70,7 +82,7 @@ class KalmanFilter:
     ):
         """
         Initialize Kalman Filter
-
+        
         Args:
             F: State transition matrix
             H: Observation matrix
@@ -98,9 +110,9 @@ class KalmanFilter:
         self.epsilon = 1e-12
 
         logger.info(
-            f"Kalman Filter initialized: {
-                self.state_dim}D state, {
-                self.obs_dim}D observations")
+            f"Kalman Filter initialized: "
+            f"{self.state_dim}D state, {self.obs_dim}D observations"
+        )
 
     def predict(
         self,
@@ -108,12 +120,13 @@ class KalmanFilter:
         B: Optional[Matrix] = None,
     ) -> KalmanState:
         """
+        
         Prediction step of Kalman filter
-
+        
         Args:
             control_input: Control vector u_k
             B: Control matrix
-
+        
         Returns:
             Predicted state
         """
@@ -142,12 +155,13 @@ class KalmanFilter:
         self, measurement: Vector, timestamp: float = 0.0
     ) -> KalmanState:
         """
+        
         Update step of Kalman filter
-
+        
         Args:
             measurement: Observation vector z_k
             timestamp: Measurement timestamp
-
+        
         Returns:
             Updated state
         """
@@ -180,7 +194,7 @@ class KalmanFilter:
             raise
 
     def _ensure_positive_definite(self, matrix: Matrix) -> Matrix:
-        """Ensure matrix is positive definite for numerical stability"""
+        """Ensure matrix is positive definite for numerical stability."""
         try:
             # Add small diagonal term if needed
             eigenvals = np.linalg.eigvals(matrix)
@@ -194,7 +208,8 @@ class KalmanFilter:
     def _calculate_likelihood(
         self, innovation: Vector, innovation_cov: Matrix
     ) -> float:
-        """Calculate log-likelihood of current measurement"""
+        """Calculate log-likelihood of current measurement."""
+    
         try:
             return multivariate_normal.logpdf(
                 innovation, mean=np.zeros(len(innovation)), cov=innovation_cov
@@ -205,7 +220,7 @@ class KalmanFilter:
 
 @dataclass
 class Particle:
-    """Single particle for particle filter"""
+    """Single particle for particle filter."""
 
     state: StateVector
     weight: float
@@ -214,8 +229,9 @@ class Particle:
 
 class ParticleFilter:
     """
+    
     Particle Filter for non-linear state estimation
-
+    
     Implements Sequential Monte Carlo estimation:
     1. Prediction: Sample from motion model
     2. Update: Weight particles by likelihood
@@ -255,7 +271,7 @@ class ParticleFilter:
         )
 
     def _initialize_particles(self) -> None:
-        """Initialize particles with uniform distribution"""
+        """Initialize particles with uniform distribution."""
         for i in range(self.n_particles):
             # Random initial state
             initial_state = np.random.randn(self.state_dim)
@@ -335,7 +351,7 @@ class ParticleFilter:
             raise
 
     def _resample(self) -> None:
-        """Systematic resampling of particles"""
+        """Systematic resampling of particles."""
         try:
             # Extract weights
             weights = np.array([p.weight for p in self.particles])
@@ -360,7 +376,7 @@ class ParticleFilter:
             raise
 
     def _systematic_resample(self, weights: Vector) -> List[int]:
-        """Systematic resampling algorithm"""
+        """Systematic resampling algorithm."""
         n = len(weights)
         indices = []
 
@@ -414,7 +430,7 @@ class ParticleFilter:
 class TimeAwareEMA:
     """
     Time-aware Exponential Moving Average
-
+    
     Adjusts smoothing factor based on actual time intervals
     rather than assuming regular sampling.
     """
@@ -422,7 +438,7 @@ class TimeAwareEMA:
     def __init__(self, alpha: float, initial_value: Optional[float] = None):
         """
         Initialize EMA filter
-
+        
         Args:
             alpha: Base smoothing factor (0 < α < 1)
             initial_value: Initial EMA value
@@ -480,11 +496,13 @@ class TimeAwareEMA:
 
 class AdaptiveFilter:
     """
+    
     Adaptive filter that switches between different filtering strategies
     based on signal characteristics and market conditions.
     """
 
     def __init__(self):
+        """TODO: document __init__."""
         self.filters = {
             "ema_fast": TimeAwareEMA(alpha=0.3),
             "ema_slow": TimeAwareEMA(alpha=0.1),
@@ -526,13 +544,13 @@ class AdaptiveFilter:
             return value
 
     def _update_volatility(self, value: float) -> None:
-        """Update rolling volatility estimate"""
+        """Update rolling volatility estimate."""
         self.volatility_window.append(value)
         if len(self.volatility_window) > 20:
             self.volatility_window.pop(0)
 
     def _select_filter(self) -> None:
-        """Select filter based on current volatility"""
+        """Select filter based on current volatility."""
         if len(self.volatility_window) >= 10:
             volatility = np.std(self.volatility_window)
 
@@ -548,12 +566,12 @@ class AdaptiveFilter:
 
 # Convenience functions for external API
 def warm_ema(alpha: float) -> TimeAwareEMA:
-    """Create a warm (initialized) EMA filter"""
+    """Create a warm (initialized) EMA filter."""
     return TimeAwareEMA(alpha)
 
 
 def main() -> None:
-    """Test and demonstration function"""
+    """Test and demonstration function."""
     # Test Kalman Filter
     print("Testing Kalman Filter...")
     F = np.array([[1, 1], [0, 1]])  # Position-velocity model

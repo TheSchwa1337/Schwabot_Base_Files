@@ -18,7 +18,8 @@ Future versions may include adaptive hysteresis or GPU-calibrated drift maps.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Final, Tuple
 
 __all__ = ["ThermalShift", "thermal_delta_switch"]
@@ -94,4 +95,4 @@ def thermal_delta_switch(
         Allowed delta before declaring instability.  Defaults to 2.5 °C.
     """
     delta = abs(current - previous)
-    return delta < threshold 
+    return delta < threshold

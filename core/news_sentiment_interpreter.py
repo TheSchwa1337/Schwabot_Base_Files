@@ -67,4 +67,4 @@ def weight_sentiment_events(
     """
     importance_weight = base_weight * event_importance
     decayed_sentiment = raw_sentiment * (decay_factor ** abs(raw_sentiment))
-    return decayed_sentiment * importance_weight 
+    return decayed_sentiment * importance_weight

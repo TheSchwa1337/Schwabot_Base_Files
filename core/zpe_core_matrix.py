@@ -45,15 +45,17 @@ def zpe_psi(
         Time parameter.
     """
     if not (len(amplitudes) == len(frequencies) == len(phases)):
-        raise ValueError("amplitudes, frequencies, and phases must have same length")
-    
+        raise ValueError(
+            "amplitudes, frequencies, and phases must have same length"
+        )
+
     a_arr = np.asarray(amplitudes, dtype=float)
     w_arr = np.asarray(frequencies, dtype=float)
     p_arr = np.asarray(phases, dtype=float)
-    
+
     # Compute sum of sinusoidal modes
     sine_terms = a_arr * np.sin(w_arr * t + p_arr)
-    
+
     return float(np.sum(sine_terms))
 
 
@@ -91,15 +93,15 @@ def zpe_xi(
         Width of integration domain Ω.
     """
     phi_arr = np.asarray(phi_values, dtype=float)
-    
+
     if len(phi_arr) == 0:
         return 0.0
     elif len(phi_arr) == 1:
         return float(phi_arr[0] * domain_width)
-    
+
     # Trapezoidal integration
     integral = float(np.trapz(phi_arr, dx=domain_width / (len(phi_arr) - 1)))
-    
+
     return integral
 
 
@@ -127,12 +129,12 @@ def zpe_g(
         Small constant to prevent division by zero.
     """
     # Exponential term: e^(−β·|∇Φ_zpe|²)
-    exp_term = math.exp(-beta * (grad_phi_magnitude ** 2))
-    
+    exp_term = math.exp(-beta * (grad_phi_magnitude**2))
+
     # Tanh term: tanh(Φ_zpe/Ξ_zpe)
     if abs(xi_zpe) < epsilon:
         tanh_term = math.tanh(phi_zpe / epsilon)
     else:
         tanh_term = math.tanh(phi_zpe / xi_zpe)
-    
-    return exp_term * tanh_term 
+
+    return exp_term * tanh_term

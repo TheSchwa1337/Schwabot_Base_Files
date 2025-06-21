@@ -30,4 +30,4 @@ def profit_feedback_delta(
     arr_zeta = np.asarray(zeta_trades, dtype=float)
     arr_tau = np.asarray(durations, dtype=float)
     arr_pnl = np.asarray(pnl, dtype=float)
-    return float(np.dot(arr_zeta * arr_tau, arr_pnl)) 
+    return float(np.dot(arr_zeta * arr_tau, arr_pnl))

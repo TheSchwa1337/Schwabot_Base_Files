@@ -1,5 +1,6 @@
-import platform
+"""TODO: document module."""
 import os
+import platform
 from typing import Any
 
 # =====================================
@@ -8,11 +9,11 @@ from typing import Any
 
 
 class WindowsCliCompatibilityHandler:
-    """Windows CLI compatibility for emoji and Unicode handling"""
+    """Windows CLI compatibility for emoji and Unicode handling."""
 
     @staticmethod
     def is_windows_cli() -> bool:
-        """Detect if running in Windows CLI environment"""
+        """Detect if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
             or "powershell" in os.environ.get("PSModulePath", "").lower()
@@ -20,7 +21,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
-        """Print message safely with Windows CLI compatibility"""
+        """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
                 "🚨": "[ALERT]",
@@ -36,7 +37,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
-        """Log message safely with Windows CLI compatibility"""
+        """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
             getattr(logger, level.lower())(safe_message)
@@ -49,7 +50,10 @@ class WindowsCliCompatibilityHandler:
 
 class SchwabotMetrics:
 
+    """TODO: document SchwabotMetrics."""
+    
     def __init__(self: Any) -> None:
+        """TODO: document __init__."""
         self.zygot_metrics = {
             "drift_resonance": [],
             "alignment_score": [],
@@ -59,6 +63,6 @@ class SchwabotMetrics:
         self.fill_metrics = {"order_latency": [], "fill_rates": []}
 
     def record_zygot_metric(self: Any, metric_name: str, value: float) -> None:
-        """Record ZygotShell metric"""
+        """Record ZygotShell metric."""
         if metric_name in self.zygot_metrics:
             self.zygot_metrics[metric_name].append(value)

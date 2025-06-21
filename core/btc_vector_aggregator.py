@@ -17,7 +17,12 @@ from typing import Sequence
 
 import numpy as np
 
-__all__: list[str] = ["btc_vector", "btc_eta", "btc_xi", "btc_spectral_aggregate"]
+__all__: list[str] = [
+    "btc_vector",
+    "btc_eta",
+    "btc_xi",
+    "btc_spectral_aggregate",
+]
 
 # ---------------------------------------------------------------------------
 # Core aggregation functions
@@ -42,15 +47,15 @@ def btc_vector(
     """
     if not (len(exit_prices) == len(entry_prices) == len(volume_weights)):
         raise ValueError("all input sequences must have same length")
-    
+
     exit_arr = np.asarray(exit_prices, dtype=float)
     entry_arr = np.asarray(entry_prices, dtype=float)
     vol_arr = np.asarray(volume_weights, dtype=float)
-    
+
     # Compute price differences weighted by volume
     price_diffs = exit_arr - entry_arr
     weighted_diffs = price_diffs * vol_arr
-    
+
     return float(np.sum(weighted_diffs))
 
 
@@ -72,10 +77,10 @@ def btc_eta(
     """
     if time_delta <= 0:
         raise ValueError("time_delta must be positive")
-    
+
     vol_sum = float(np.sum(volumes))
     price_velocity = price_delta / time_delta
-    
+
     return price_velocity * vol_sum
 
 
@@ -111,21 +116,23 @@ def btc_spectral_aggregate(
         Width of the frequency filter around f_peak.
     """
     xi_arr = np.asarray(xi_series, dtype=float)
-    
+
     if len(xi_arr) == 0:
         return np.array([], dtype=complex)
-    
+
     # Compute FFT
     xi_fft = np.fft.fft(xi_arr)
-    
+
     # Create frequency array
     n = len(xi_arr)
     freqs = np.fft.fftfreq(n)
-    
+
     # Create Gaussian filter centered at peak_frequency
-    filter_mask = np.exp(-((freqs - peak_frequency) ** 2) / (2 * filter_width ** 2))
-    
+    filter_mask = np.exp(
+        -((freqs - peak_frequency) ** 2) / (2 * filter_width**2)
+    )
+
     # Apply filter
     filtered_fft = xi_fft * filter_mask
-    
-    return filtered_fft 
+
+    return filtered_fft

@@ -5,17 +5,22 @@ This module contains all dataclass containers used for trading operations,
 order management, and exchange communication.
 """
 
+from dataclasses import dataclass
+from dataclasses import field
 import time
-from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from .enums import ExchangeType, OrderSide, OrderType, OrderStatus, DataType
+from .enums import DataType
+from .enums import ExchangeType
+from .enums import OrderSide
+from .enums import OrderStatus
+from .enums import OrderType
 
 
 @dataclass
 class ExchangeConfig:
-    """Exchange configuration container."""
-    
+    """Exchange configuration container."""."""
+
     exchange_type: ExchangeType
     api_key: str
     api_secret: str
@@ -30,8 +35,8 @@ class ExchangeConfig:
 
 @dataclass
 class OrderRequest:
-    """Order request container."""
-    
+    """Order request container."""."""
+
     symbol: str
     side: OrderSide
     order_type: OrderType
@@ -45,8 +50,8 @@ class OrderRequest:
 
 @dataclass
 class OrderResponse:
-    """Order response container."""
-    
+    """Order response container."""."""
+
     order_id: str
     client_order_id: Optional[str]
     symbol: str
@@ -65,8 +70,8 @@ class OrderResponse:
 
 @dataclass
 class MarketData:
-    """Market data container."""
-    
+    """Market data container."""."""
+
     symbol: str
     data_type: DataType
     timestamp: float
@@ -76,8 +81,8 @@ class MarketData:
 
 @dataclass
 class Balance:
-    """Balance container."""
-    
+    """Balance container."""."""
+
     currency: str
     available: float
     total: float
@@ -87,8 +92,8 @@ class Balance:
 
 @dataclass
 class PerformanceMetrics:
-    """Performance metrics for BTC integration."""
-    
+    """Performance metrics for BTC integration."""."""
+
     total_orders: int
     successful_orders: int
     failed_orders: int
@@ -99,4 +104,4 @@ class PerformanceMetrics:
     api_calls: int
     api_errors: int
     cache_hits: int
-    cache_misses: int 
+    cache_misses: int

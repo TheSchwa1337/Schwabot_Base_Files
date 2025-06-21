@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""
-Constants - Core System Constants and Configuration
+"""Constants - Core System Constants and Configuration.
+
 ==================================================
 
+
+
 Defines all mathematical constants, thresholds, and configuration values
+
 used throughout the Schwabot trading system. Includes Windows CLI compatibility
+
 handlers for cross-platform operation.
+
 """
 
 import os
-import platform
-import numpy as np
 from pathlib import Path
+import platform
 from typing import Any
+
+import numpy as np
 
 # Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
@@ -61,11 +67,11 @@ EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 
 # Windows CLI compatibility handler
 class WindowsCliCompatibilityHandler:
-    """Handles Windows CLI compatibility for cross-platform operation"""
-
+    """Handles Windows CLI compatibility for cross-platform operation."""
+    
     @staticmethod
     def is_windows_cli() -> bool:
-        """Check if running in Windows CLI environment"""
+        """Check if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
             or "powershell" in os.environ.get("PSModulePath", "").lower()
@@ -73,7 +79,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
-        """Safely print messages with optional emoji support"""
+        """Safely print messages with optional emoji support."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             # Strip emojis for Windows CLI compatibility
             import re
@@ -83,14 +89,14 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
-        """Safely log messages with CLI compatibility"""
+        """Safely log messages with CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         if hasattr(logger, level.lower()):
             getattr(logger, level.lower())(safe_message)
 
     @staticmethod
     def safe_format_error(error: Exception, context: str = "") -> str:
-        """Safely format error messages for CLI compatibility"""
+        """Safely format error messages for CLI compatibility."""
         error_msg = str(error)
         if context:
             error_msg = f"{context}: {error_msg}"

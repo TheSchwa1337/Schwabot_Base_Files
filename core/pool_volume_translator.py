@@ -26,6 +26,7 @@ _EPS: Final = 1e-9
 
 
 def _relative_volatility(volumes: np.ndarray) -> float:
+    """TODO: document _relative_volatility."""."""
     if volumes.size == 0:
         return 0.0
     mu = float(np.mean(volumes))
@@ -46,4 +47,4 @@ def translate_news_to_pool_vector(
     sentiment_clipped = max(min(sentiment, _CLIP_MAX), _CLIP_MIN)
     rel_vol = _relative_volatility(pool_volumes)
     raw = sentiment_clipped * rel_vol
-    return max(min(raw, _CLIP_MAX), _CLIP_MIN) 
+    return max(min(raw, _CLIP_MAX), _CLIP_MIN)

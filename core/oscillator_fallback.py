@@ -60,4 +60,4 @@ def fallback_oscillator(
         raise ValueError("damping must be non-negative")
     envelope = math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
-    return amplitude * envelope * math.cos(angle) 
+    return amplitude * envelope * math.cos(angle)

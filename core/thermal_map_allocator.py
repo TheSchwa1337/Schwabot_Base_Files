@@ -15,21 +15,35 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 
 from __future__ import annotations
 
-import numpy as np
 from datetime import datetime
-from typing import List, Tuple, Dict, Optional, Union, Callable
 import logging
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
-from core.type_defs import (
+import numpy as np
+
 from core.type_defs import *
-from typing import Callable
-from typing import Optional
-from typing import Tuple
-from typing import Union
-    Temperature, Pressure, ThermalConductivity, HeatCapacity,
-    ThermalField, ThermalGradient, ThermalState, Vector, Matrix,
-    GrayscaleValue, EntropyMap, HeatMap, Pixel, Image
-)
+from core.type_defs import Callable
+from core.type_defs import core.type_defs
+from core.type_defs import EntropyMap
+from core.type_defs import from
+from core.type_defs import GrayscaleValue
+from core.type_defs import HeatCapacity
+from core.type_defs import HeatMap
+from core.type_defs import Image
+from core.type_defs import import
+from core.type_defs import Matrix
+from core.type_defs import Optional
+from core.type_defs import Pixel
+from core.type_defs import Pressure
+from core.type_defs import Temperature
+from core.type_defs import ThermalConductivity
+from core.type_defs import ThermalField
+from core.type_defs import ThermalGradient
+from core.type_defs import ThermalState
+from core.type_defs import Tuple
+from core.type_defs import typing
+from core.type_defs import Union
+from core.type_defs import Vector
 
 # Configure logging
 logger = logging.getLogger(__name__)

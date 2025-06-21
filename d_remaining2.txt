@@ -1,0 +1,429 @@
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m83[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m83[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m126[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m629[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m216[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\config\mathematical_framework_config.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\config\mathematical_framework_config.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\config\mathematical_framework_config.py[m[36m:[m175[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\config\mathematical_framework_config.py[m[36m:[m513[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\config\schwabot_config.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mD211[m No blank lines allowed before class docstring
+[1m.\config\schwabot_config.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\__init__.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\__init__.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m51[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m51[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m458[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\advanced_mathematical_core.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\advanced_mathematical_core.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m83[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m95[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m95[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood
+[1m.\core\advanced_mathematical_core.py[m[36m:[m106[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m123[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m136[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m150[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m170[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m192[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m210[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\advanced_mathematical_core.py[m[36m:[m210[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m237[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m269[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m293[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m327[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m368[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m402[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m414[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m447[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m478[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m527[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m565[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m565[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\advanced_mathematical_core.py[m[36m:[m600[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m643[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\best_practices_enforcer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\best_practices_enforcer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\best_practices_enforcer.py[m[36m:[m62[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\best_practices_enforcer.py[m[36m:[m268[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\best_practices_enforcer.py[m[36m:[m268[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\best_practices_enforcer.py[m[36m:[m347[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\best_practices_enforcer.py[m[36m:[m355[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\constants.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\constants.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\constraints.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\constraints.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\drift_shell_engine.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\drift_shell_engine.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\drift_shell_engine.py[m[36m:[m393[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m24[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m24[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m147[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m256[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m279[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m294[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m328[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m358[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m382[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m409[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m438[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m451[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m491[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m555[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m555[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood
+[1m.\core\fault_bus.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m95[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m95[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m116[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m116[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m179[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\fault_bus.py[m[36m:[m196[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\fault_bus.py[m[36m:[m288[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m288[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m345[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m392[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m401[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m507[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\fault_bus.py[m[36m:[m535[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\fault_bus.py[m[36m:[m542[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m627[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m639[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m645[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m713[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m815[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\fault_bus.py[m[36m:[m972[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m986[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1008[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1065[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1121[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1184[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1214[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1237[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1253[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1260[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1282[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1289[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1295[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1301[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1305[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1339[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1361[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1366[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\fault_bus.py[m[36m:[m1383[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\filters.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m52[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m73[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m114[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m149[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m188[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m202[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m221[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m238[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m264[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m274[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m298[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m344[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m369[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m390[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m421[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m430[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m445[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m489[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\filters.py[m[36m:[m489[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m508[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m537[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m543[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m559[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\filters.py[m[36m:[m564[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\ghost_phase_integrator.py[m[36m:[m97[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\ghost_router.py[m[36m:[m117[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\ghost_router.py[m[36m:[m183[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\ghost_strategy_integrator.py[m[36m:[m232[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\ghost_strategy_integrator.py[m[36m:[m282[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\ghost_strategy_integrator.py[m[36m:[m413[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\ghost_strategy_integrator.py[m[36m:[m470[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\ghost_strategy_integrator.py[m[36m:[m470[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\glyph_hysteresis.py[m[36m:[m21[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\core\import_resolver.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\import_resolver.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\import_resolver.py[m[36m:[m50[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\import_resolver.py[m[36m:[m234[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\lantern_trigger_validator.py[m[36m:[m26[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\master_orchestrator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\master_orchestrator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\master_orchestrator.py[m[36m:[m39[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\master_orchestrator.py[m[36m:[m86[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\math_core.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\math_core.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\math_core.py[m[36m:[m87[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\math_core.py[m[36m:[m114[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m156[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m181[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m388[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m475[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m487[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m500[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m527[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m598[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m641[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m669[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m717[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m717[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m733[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m745[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m775[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m811[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathematical_optimization_bridge.py[m[36m:[m838[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\mathlib.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib.py[m[36m:[m30[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib.py[m[36m:[m78[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v2.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\mathlib_v2.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v2.py[m[36m:[m96[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v3.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\mathlib_v3.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m42[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m131[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m135[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m139[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m144[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m150[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m159[36m:[m1[36m:[m [1m[31mD402[m First line should not be the function's "signature"
+[1m.\core\mathlib_v3.py[m[36m:[m220[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m275[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m319[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m378[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m420[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m489[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m489[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v3.py[m[36m:[m547[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m573[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m623[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\mathlib_v3.py[m[36m:[m682[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v3.py[m[36m:[m689[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v3.py[m[36m:[m695[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\mathlib_v3.py[m[36m:[m702[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\quantum_drift_shell_engine.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\quantum_drift_shell_engine.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\quantum_drift_shell_engine.py[m[36m:[m424[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\risk_manager.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\risk_manager.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\risk_manager.py[m[36m:[m180[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\risk_manager.py[m[36m:[m409[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\risk_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\risk_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\risk_monitor.py[m[36m:[m176[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\risk_monitor.py[m[36m:[m231[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\risk_monitor.py[m[36m:[m586[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\risk_monitor.py[m[36m:[m976[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\route_verification_classifier.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\route_verification_classifier.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m111[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m168[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m213[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\route_verification_classifier.py[m[36m:[m213[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m249[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m321[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m395[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m451[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m468[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m511[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m542[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\route_verification_classifier.py[m[36m:[m542[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m560[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\route_verification_classifier.py[m[36m:[m603[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m144[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m221[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m452[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\schwabot_integration_orchestrator.py[m[36m:[m571[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\spectral_transform.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\spectral_transform.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m45[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m62[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m90[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m122[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m151[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m194[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m223[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m255[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m283[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m300[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m351[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\spectral_transform.py[m[36m:[m372[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\spectral_transform.py[m[36m:[m379[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\spectral_transform.py[m[36m:[m386[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\strategy_logic.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\strategy_logic.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\strategy_logic.py[m[36m:[m148[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\strategy_logic.py[m[36m:[m635[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\strategy_mapper.py[m[36m:[m41[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\system_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\system_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\system_monitor.py[m[36m:[m161[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\system_monitor.py[m[36m:[m227[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\tick_processor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\tick_processor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\tick_processor.py[m[36m:[m183[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\tick_processor.py[m[36m:[m687[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\triplet_matcher.py[m[36m:[m501[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\type_defs.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\type_defs.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\type_enforcer.py[m[36m:[m276[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\unified_api_coordinator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\unified_api_coordinator.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\unified_api_coordinator.py[m[36m:[m215[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\core\unified_api_coordinator.py[m[36m:[m661[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\demo_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\demo_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\dlt_waveform_engine.py[m[36m:[m38[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\dlt_waveform_engine.py[m[36m:[m78[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\dlt_waveform_engine.py[m[36m:[m86[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\dlt_waveform_engine.py[m[36m:[m94[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\filter_real_errors.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\fix_core_flake8.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\fix_flake8_comprehensive.py[m[36m:[m166[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\fix_whitespace_debug.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\fix_whitespace_debug.py[m[36m:[m69[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\launch_comprehensive_architecture_fix.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\launch_comprehensive_architecture_fix.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\launch_comprehensive_architecture_fix.py[m[36m:[m188[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\mathlib\__init__.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\mathlib\__init__.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\mathlib\__init__.py[m[36m:[m68[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\mathlib\__init__.py[m[36m:[m74[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\mathlib\__init__.py[m[36m:[m80[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\mathlib\__init__.py[m[36m:[m86[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\mathlib\__init__.py[m[36m:[m137[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\mathlib\__init__.py[m[36m:[m215[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\models\enums.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\models\enums.py[m[36m:[m59[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\models\enums.py[m[36m:[m65[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\models\schemas.py[m[36m:[m59[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\models\schemas.py[m[36m:[m67[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\models\schemas.py[m[36m:[m76[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\ncco_core\harmony_memory.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mD211[m No blank lines allowed before class docstring
+[1m.\ncco_core\harmony_memory.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\run_type_enforcer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\run_type_enforcer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_math.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_math.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_math.py[m[36m:[m76[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood
+[1m.\schwabot_unified_math.py[m[36m:[m157[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_math.py[m[36m:[m188[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_math.py[m[36m:[m188[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\schwabot_unified_math.py[m[36m:[m194[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_math.py[m[36m:[m832[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\schwabot_unified_system.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m140[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m140[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m179[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m198[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m198[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m198[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\schwabot_unified_system.py[m[36m:[m218[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m218[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m261[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m302[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m324[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m350[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m363[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m363[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m393[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m432[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m464[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m533[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\schwabot_unified_system.py[m[36m:[m533[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\schwabot_unified_system.py[m[36m:[m553[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\schwabot_unified_system.py[m[36m:[m553[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\start_schwabot.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\start_schwabot.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\start_schwabot.py[m[36m:[m37[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\start_schwabot.py[m[36m:[m51[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\system_integration_test.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\system_integration_test.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_bulletproof_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\test_bulletproof_cli_compatibility.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_bulletproof_cli_compatibility.py[m[36m:[m334[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\test_bulletproof_cli_compatibility.py[m[36m:[m436[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m64[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m64[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m80[36m:[m1[36m:[m [1m[31mD209[m Multi-line docstring closing quotes should be on a separate line
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m135[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m135[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m197[36m:[m1[36m:[m [1m[31mD209[m Multi-line docstring closing quotes should be on a separate line
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m197[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m230[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m243[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m292[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m383[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m515[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m558[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m573[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m626[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m626[36m:[m1[36m:[m [1m[31mD209[m Multi-line docstring closing quotes should be on a separate line
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m626[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m667[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m715[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m791[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m855[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m929[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m951[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m990[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\test_mathematical_trading_system_integration.py[m[36m:[m1037[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tests\hooks\metrics.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mD211[m No blank lines allowed before class docstring
+[1m.\tests\hooks\metrics.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mD204[m 1 blank line required after class docstring
+[1m.\tools\auto_whitespace_cleanup.py[m[36m:[m10[36m:[m1[36m:[m [1m[31mD209[m Multi-line docstring closing quotes should be on a separate line
+[1m.\tools\cleanup_obsolete_files.py[m[36m:[m283[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\complete_flake8_fix.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\complete_flake8_fix.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\complete_flake8_fix.py[m[36m:[m57[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\complete_flake8_fix.py[m[36m:[m74[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\complete_flake8_fix.py[m[36m:[m182[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\comprehensive_compliance_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\comprehensive_compliance_monitor.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\comprehensive_compliance_monitor.py[m[36m:[m456[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\critical_syntax_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\critical_syntax_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\critical_syntax_fixer.py[m[36m:[m197[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\establish_fault_tolerant_standards.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\establish_fault_tolerant_standards.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\establish_fault_tolerant_standards.py[m[36m:[m335[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\final_compliance_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\final_compliance_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\final_compliance_fixer.py[m[36m:[m347[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\final_mathematical_framework_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\final_mathematical_framework_fixer.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\final_mathematical_framework_fixer.py[m[36m:[m441[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\fix_remaining_critical.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\fix_remaining_critical.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\flake8_tracker.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\flake8_tracker.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\flake8_tracker.py[m[36m:[m503[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing
+[1m.\tools\resolve_parse_errors.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\resolve_parse_errors.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\setup_pre_commit.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\tools\setup_pre_commit.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\tools\setup_pre_commit.py[m[36m:[m148[36m:[m1[36m:[m [1m[31mD401[m First line should be in imperative mood; try rephrasing

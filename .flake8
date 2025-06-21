@@ -1,0 +1,7 @@
+[flake8]
+# Only lint active production code, ignore parked legacy files
+exclude = .git,__pycache__,maintenance/*,tools/*
+# Allow long docstrings & partial type-hints for now
+extend-ignore = D401,ANN101,ANN201
+max-complexity = 25
+max-line-length = 79 

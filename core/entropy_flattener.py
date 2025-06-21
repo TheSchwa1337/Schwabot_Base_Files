@@ -14,14 +14,20 @@ from typing import Sequence
 
 import numpy as np
 
-__all__: list[str] = ["entropy_flatten", "compute_second_derivative", "adaptive_smooth"]
+__all__: list[str] = [
+    "entropy_flatten",
+    "compute_second_derivative",
+    "adaptive_smooth",
+]
 
 # ---------------------------------------------------------------------------
 # Core flattening logic
 # ---------------------------------------------------------------------------
 
 
-def compute_second_derivative(signal: Sequence[float]) -> np.ndarray:  # noqa: D401
+def compute_second_derivative(
+    signal: Sequence[float],
+) -> np.ndarray:  # noqa: D401
     """Return second derivative ∂²S/∂t² using finite differences.
 
     Input signal must have at least 3 points for meaningful computation.
@@ -38,7 +44,7 @@ def compute_second_derivative(signal: Sequence[float]) -> np.ndarray:  # noqa: D
 
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
-    """Numerically stable softmax implementation."""
+    """Numerically stable softmax implementation."""."""
     x_shifted = x - np.max(x)
     exp_x = np.exp(x_shifted)
     return exp_x / np.sum(exp_x)
@@ -91,4 +97,4 @@ def adaptive_smooth(
     where η is the entropy coefficient and α controls smoothing strength.
     """
     weight = alpha * entropy_coeff
-    return (1.0 - weight) * current_value + weight * smoothed_value 
+    return (1.0 - weight) * current_value + weight * smoothed_value

@@ -1,32 +1,40 @@
 #!/usr/bin/env python3
-"""
-Fault Bus
+"""Fault Bus.
+
 ========
 
+
+
 Adaptive Recursive Path Router (ARPR) for Schwabot's profit navigation system.
+
 Handles system-wide event handling with intelligent sync/async path selection.
+
 Enhanced with profit-fault correlation and recursive loop detection.
+
 Enhanced with Windows CLI compatibility for cross-platform reliability.
+
 """
 
-# Named constants to replace magic numbers
-from pathlib import Path
-from collections import deque, defaultdict
-import platform
-import psutil
-import time
+from abc import ABC
+from abc import abstractmethod
 import asyncio
-import yaml  # Ensure yaml is installed in requirements.txt
+from collections import defaultdict
+from collections import deque
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-import numpy as np
 import hashlib
-import os
 import json
 import logging
-from typing import Dict, List, Optional, Callable, Tuple, Union, Any
-from datetime import datetime
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
+import os
+import platform
+import time
+# Named constants to replace magic numbers
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+import psutil
+
 DEFAULT_WEIGHT_MATRIX_VALUE = 0.9
 MAX_QUEUE_SIZE = 50.0
 NORMALIZATION_FACTOR = 1.0
@@ -36,21 +44,17 @@ MAX_PROFIT_THRESHOLD = 100.0
 
 # Import the Future Corridor Engine
 try:
-    from .future_corridor_engine import (
-        FutureCorridorEngine,
-        CorridorState,
-        ExecutionPath,
-        ProfitTier,
-    )
+    from .future_corridor_engine import CorridorState
+    from .future_corridor_engine import ExecutionPath
+    from .future_corridor_engine import FutureCorridorEngine
+    from .future_corridor_engine import ProfitTier
 except ImportError:
     # Fallback for testing when package import fails
     try:
-        from future_corridor_engine import (
-            FutureCorridorEngine,
-            CorridorState,
-            ExecutionPath,
-            ProfitTier,
-        )
+        from future_corridor_engine import CorridorState
+        from future_corridor_engine import ExecutionPath
+        from future_corridor_engine import FutureCorridorEngine
+        from future_corridor_engine import ProfitTier
     except ImportError:
         # Provide mock objects so that the rest of this module can still be
         # imported
@@ -63,19 +67,20 @@ except ImportError:
 
 # Import quantum visualizer with fallback
 try:
-    from quantum_visualizer import PanicDriftVisualizer, plot_entropy_waveform
+    from quantum_visualizer import PanicDriftVisualizer
+    from quantum_visualizer import plot_entropy_waveform
 except ImportError:
     try:
-        from ncco_core.quantum_visualizer import (
-            PanicDriftVisualizer,
-            plot_entropy_waveform,
-        )
+        from ncco_core.quantum_visualizer import PanicDriftVisualizer
+        from ncco_core.quantum_visualizer import plot_entropy_waveform
     except ImportError:
         # Fallback: create dummy functions if module not available
         def PanicDriftVisualizer(*args, **kwargs) -> Any:
+            """TODO: document PanicDriftVisualizer."""
             return None
 
         def plot_entropy_waveform(*args, **kwargs) -> Any:
+            """TODO: document plot_entropy_waveform."""
             return None
 
 
@@ -93,9 +98,10 @@ except ImportError:
 
 class WindowsCliCompatibilityHandler:
     """
+    
     Handles Windows CLI compatibility issues including emoji rendering
     and ASIC implementation for plain text output explanations
-
+    
     Addresses the CLI error issues mentioned in the comprehensive testing:
     - Emoji characters causing encoding errors on Windows
     - Need for ASIC plain text output
@@ -104,7 +110,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def is_windows_cli() -> bool:
-        """Detect if running in Windows CLI environment"""
+        """Detect if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
             or "powershell" in os.environ.get("PSModulePath", "").lower()
@@ -113,9 +119,10 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
         """
+        
         Print message safely with Windows CLI compatibility
         Implements ASIC plain text output for Windows environments
-
+        
         ASIC Implementation: Application-Specific Integrated Circuit approach
         provides specialized text rendering for Windows CLI environments
         """
@@ -152,7 +159,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
-        """Log message safely with Windows CLI compatibility"""
+        """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
             getattr(logger, level.lower())(safe_message)
@@ -165,7 +172,7 @@ class WindowsCliCompatibilityHandler:
 
     @staticmethod
     def safe_format_error(error: Exception, context: str = "") -> str:
-        """Format error messages safely for Windows CLI"""
+        """Format error messages safely for Windows CLI."""
         error_message = f"Error: {str(error)}"
         if context:
             error_message += f" | Context: {context}"
@@ -174,6 +181,8 @@ class WindowsCliCompatibilityHandler:
 
 
 class FaultType(Enum):
+    """TODO: document FaultType."""
+    
     THERMAL_HIGH = "thermal_high"
     THERMAL_CRITICAL = "thermal_critical"
     PROFIT_LOW = "profit_low"
@@ -190,6 +199,7 @@ class FaultType(Enum):
 
 @dataclass
 class FaultBusEvent:
+    """TODO: document FaultBusEvent."""
     tick: int
     module: str
     type: FaultType
@@ -201,6 +211,7 @@ class FaultBusEvent:
     age: float = 0.0
 
     def __post_init__(self) -> None:
+        """TODO: document __post_init__."""
         self.age = (
             datetime.now() - datetime.fromisoformat(self.timestamp)
         ).total_seconds()
@@ -208,7 +219,7 @@ class FaultBusEvent:
 
 @dataclass
 class PathSelectionMetrics:
-    """Metrics used for intelligent path selection"""
+    """Metrics used for intelligent path selection."""
 
     severity_score: float
     urgency_score: float
@@ -222,7 +233,7 @@ class PathSelectionMetrics:
 
 @dataclass
 class ProfitFaultCorrelation:
-    """Mathematical structure for profit-fault correlation tracking"""
+    """Mathematical structure for profit-fault correlation tracking."""
 
     fault_type: FaultType
     profit_delta: float
@@ -234,11 +245,11 @@ class ProfitFaultCorrelation:
 
 
 class RecursiveLoopDetector:
-    """Detects and prevents recursive profit cycles using SHA-based pattern recognition"""
-
+    """Detects and prevents recursive profit cycles using SHA-based pattern recognition."""
     def __init__(
         self, window_size: int = 100, similarity_threshold: float = 0.95
     ) -> None:
+        """TODO: document __init__."""
         self.window_size = window_size
         self.similarity_threshold = similarity_threshold
         self.pattern_history: deque = deque(maxlen=window_size)
@@ -248,7 +259,7 @@ class RecursiveLoopDetector:
     def compute_pattern_hash(
         self, profit_delta: float, fault_state: Dict, tick: int
     ) -> str:
-        """Compute SHA256 hash of current system state for pattern recognition"""
+        """Compute SHA256 hash of current system state for pattern recognition."""
         state_string = (
             f"{profit_delta:.6f}_{tick}_{hash(frozenset(fault_state.items()))}"
         )
@@ -257,20 +268,21 @@ class RecursiveLoopDetector:
     def detect_recursive_loop(
         self, current_hash: str, profit_delta: float
     ) -> Tuple[bool, float]:
-        """Detect recursive loops using SHA collision analysis"""
+        """Detect recursive loops using SHA collision analysis."""
         # Implementation continues...
         return False, 0.0
 
     def reset_pattern(self, sha_hash: str) -> None:
-        """Reset pattern detection for a specific hash"""
+        """Reset pattern detection for a specific hash."""
         if sha_hash in self.sha_collision_count:
             del self.sha_collision_count[sha_hash]
 
 
 class ProfitAnomalyDetector:
-    """JuMBO-style profit anomaly detection for identifying genuine profit tiers"""
+    """JuMBO-style profit anomaly detection for identifying genuine profit tiers."""
 
     def __init__(self, detection_window: int = 50) -> None:
+        """TODO: document __init__."""
         self.detection_window = detection_window
         self.profit_history: deque = deque(maxlen=detection_window)
         self.anomaly_clusters: List[Dict] = []
@@ -279,6 +291,7 @@ class ProfitAnomalyDetector:
         self, profit_delta: float, fault_context: Dict
     ) -> Tuple[bool, float]:
         """
+        
         Detect JuMBO-style profit anomalies using statistical clustering
         Returns (is_anomaly, anomaly_strength)
         """
@@ -317,11 +330,12 @@ class ProfitAnomalyDetector:
 
 
 class ProfitCorrelationMatrix:
-    """Mathematical correlation matrix between faults and profit outcomes"""
+    """Mathematical correlation matrix between faults and profit outcomes."""
 
     def __init__(
         self, decay_factor: float = 0.95, min_correlation: float = 0.3
     ) -> None:
+        """TODO: document __init__."""
         self.decay_factor = decay_factor
         self.min_correlation = min_correlation
         self.correlations: Dict[FaultType, ProfitFaultCorrelation] = {}
@@ -333,7 +347,7 @@ class ProfitCorrelationMatrix:
         profit_delta: float,
         temporal_offset: int,
     ) -> None:
-        """Update profit-fault correlation with exponential decay"""
+        """Update profit-fault correlation with exponential decay."""
         fault_type = fault_event.type
 
         if fault_type not in self.correlations:
@@ -380,7 +394,7 @@ class ProfitCorrelationMatrix:
     def get_predictive_correlations(
         self, threshold: float = 0.5
     ) -> List[ProfitFaultCorrelation]:
-        """Get correlations above threshold for predictive purposes"""
+        """Get correlations above threshold for predictive purposes."""
         return [
             corr
             for corr in self.correlations.values()
@@ -389,7 +403,7 @@ class ProfitCorrelationMatrix:
         ]
 
     def predict_profit_impact(self, fault_type: FaultType) -> Optional[float]:
-        """Predict profit impact based on historical correlations"""
+        """Predict profit impact based on historical correlations."""
         if fault_type in self.correlations:
             corr = self.correlations[fault_type]
             if corr.confidence > self.min_correlation:
@@ -398,7 +412,7 @@ class ProfitCorrelationMatrix:
 
 
 class FaultResolver(ABC):
-    """Base class for fault resolution strategies with execution time hints"""
+    """Base class for fault resolution strategies with execution time hints."""
 
     execution_time_hint: float = DEFAULT_INTERVAL  # Default to 100ms
 
@@ -406,6 +420,8 @@ class FaultResolver(ABC):
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
+    
         pass
 
 
@@ -417,6 +433,7 @@ class ThermalFaultResolver(FaultResolver):
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         if fault_type == FaultType.THERMAL_HIGH.value:
             logging.warning(f"High thermal load detected: {severity}")
             # Implement thermal mitigation strategy
@@ -433,6 +450,7 @@ class ProfitFaultResolver(FaultResolver):
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         if fault_type == FaultType.PROFIT_LOW.value:
             logging.warning(f"Low profit detected: {severity}")
             # Implement profit optimization strategy
@@ -449,6 +467,7 @@ class BitmapFaultResolver(FaultResolver):
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         if fault_type == FaultType.BITMAP_CORRUPT.value:
             logging.error(f"Bitmap corruption detected: {severity}")
             # Implement bitmap recovery strategy
@@ -465,6 +484,7 @@ class RecursiveLoopResolver(FaultResolver):
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         if fault_type == FaultType.RECURSIVE_LOOP.value:
             logging.warning(f"Recursive loop detected: {severity}")
             sha_hash = metadata.get("sha_hash") if metadata else None
@@ -479,7 +499,9 @@ fault_resolver_registry = {}
 
 
 def register_fault_resolver(name: str) -> Any:
+    """TODO: document register_fault_resolver."""
     def decorator(cls: type) -> Any:
+        """TODO: document decorator."""
         fault_resolver_registry[name] = cls()
         return cls
 
@@ -488,11 +510,13 @@ def register_fault_resolver(name: str) -> Any:
 
 @register_fault_resolver("gpu")
 class GPUFaultResolver(FaultResolver):
+    """TODO: document GPUFaultResolver."""
     execution_time_hint: float = 0.5  # GPU operations can be slower
 
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         if fault_type == FaultType.GPU_OVERLOAD.value:
             logging.warning(f"GPU overload: {severity}")
         elif fault_type == FaultType.GPU_DRIVER_CRASH.value:
@@ -500,19 +524,21 @@ class GPUFaultResolver(FaultResolver):
 
 
 class FallbackFaultResolver(FaultResolver):
-    """Fallback resolver for unhandled faults"""
+    """Fallback resolver for unhandled faults."""
 
     execution_time_hint: float = 0.01  # Very fast fallback
 
     def handle_fault(
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
+        """TODO: document handle_fault."""
         logging.warning(
             f"Unhandled fault via fallback: {fault_type}, Severity: {severity}"
         )
 
 
 class EventSeverity:
+    """TODO: document EventSeverity."""
     INFO = DEFAULT_INTERVAL
     WARNING = 0.5
     CRITICAL = 0.9
@@ -520,6 +546,7 @@ class EventSeverity:
 
 class FaultBus:
     """
+    
     Adaptive Recursive Path Router (ARPR) for Schwabot's profit navigation system.
     Intelligently routes fault events through sync or async paths based on:
     - System state and load
@@ -530,6 +557,7 @@ class FaultBus:
     """
 
     def __init__(self, log_path: str = "logs/faults") -> None:
+        """TODO: document __init__."""
         self.queue: List[FaultBusEvent] = []
         self.resolvers: Dict[str, FaultResolver] = {}
         self.fallback_resolver = FallbackFaultResolver()
@@ -602,9 +630,10 @@ class FaultBus:
     def register_handler(
         self, event_type: str
     ) -> Callable[[Callable], Callable]:
-        """Register event handler decorator"""
+        """Register event handler decorator."""
 
         def decorator(func: Callable) -> Callable:
+            """TODO: document decorator."""
             if event_type not in self.event_handlers:
                 self.event_handlers[event_type] = []
             self.event_handlers[event_type].append(func)
@@ -613,13 +642,13 @@ class FaultBus:
         return decorator
 
     def push(self, event: FaultBusEvent) -> None:
-        """Push event to queue after policy check"""
+        """Push event to queue after policy check."""
         condition = self.trigger_policies.get(event.type.value, lambda e: True)
         if condition(event):
             self.queue.append(event)
 
     def update_profit_context(self, profit_delta: float, tick: int) -> None:
-        """Update profit context and detect anomalies/loops"""
+        """Update profit context and detect anomalies/loops."""
         self.profit_history.append((profit_delta, tick, datetime.now()))
 
         # Get current fault state for pattern analysis
@@ -688,6 +717,7 @@ class FaultBus:
         self, event: FaultBusEvent
     ) -> PathSelectionMetrics:
         """
+        
         Calculate intelligent path selection score for sync vs async execution.
         Higher scores favor async execution for profit optimization.
         """
@@ -880,8 +910,11 @@ class FaultBus:
                         f"🎯 Enhanced Dispatch: {event.type.value}",
                     )
                     self.cli_handler.log_safe(
-                        logging, "info", f"   Path: {selected_path} (confidence: {
-                            dispatch_confidence:.3f})", )
+                        logging,
+                        "info",
+                        f"   Path: {selected_path} (confidence: {
+                            dispatch_confidence:.3f})",
+                    )
                     self.cli_handler.log_safe(
                         logging,
                         "info",
@@ -898,8 +931,11 @@ class FaultBus:
                         f"   ECMP: {ril_result['ecmp_magnitude']:.4f}",
                     )
                     self.cli_handler.log_safe(
-                        logging, "info", f"   Resonance: {
-                            ril_result['resonance_strength']:.3f}", )
+                        logging,
+                        "info",
+                        f"   Resonance: {
+                            ril_result['resonance_strength']:.3f}",
+                    )
 
                     # Route to appropriate execution path based on corridor
                     # engine decision
@@ -1001,7 +1037,8 @@ class FaultBus:
                 logging.debug(
                     f"✅ Enhanced SYNC completed: {
                         event.type.value} in {
-                        execution_time:.3f}s")
+                        execution_time:.3f}s"
+                )
                 self._trigger_event_handlers(event)
 
             except Exception as e:
@@ -1012,12 +1049,16 @@ class FaultBus:
                 logging.error(
                     f"❌ Enhanced SYNC failed: {
                         event.type.value} after {
-                        execution_time:.3f}s - {e}")
+                        execution_time:.3f}s - {e}"
+                )
 
             self.cli_handler.log_safe(
-                logging, "debug", f"✅ Enhanced SYNC completed: {
+                logging,
+                "debug",
+                f"✅ Enhanced SYNC completed: {
                     event.type.value} in {
-                    execution_time:.3f}s", )
+                    execution_time:.3f}s",
+            )
 
         except Exception as e:
             error_message = self.cli_handler.safe_format_error(
@@ -1064,12 +1105,16 @@ class FaultBus:
                 logging.error(
                     f"❌ Enhanced ASYNC failed: {
                         event.type.value} after {
-                        execution_time:.3f}s - {e}")
+                        execution_time:.3f}s - {e}"
+                )
 
             self.cli_handler.log_safe(
-                logging, "debug", f"✅ Enhanced ASYNC completed: {
+                logging,
+                "debug",
+                f"✅ Enhanced ASYNC completed: {
                     event.type.value} in {
-                    execution_time:.3f}s", )
+                    execution_time:.3f}s",
+            )
 
         except Exception as e:
             error_message = self.cli_handler.safe_format_error(
@@ -1118,7 +1163,8 @@ class FaultBus:
                 logging.error(
                     f"❌ GPU ASYNC failed: {
                         event.type.value} after {
-                        execution_time:.3f}s - {e}")
+                        execution_time:.3f}s - {e}"
+                )
 
             self.cli_handler.log_safe(
                 logging,
@@ -1126,9 +1172,12 @@ class FaultBus:
                 f"🔥 GPU_ASYNC dispatch for {event.type.value}",
             )
             self.cli_handler.log_safe(
-                logging, "debug", f"✅ GPU ASYNC completed: {
+                logging,
+                "debug",
+                f"✅ GPU ASYNC completed: {
                     event.type.value} in {
-                    execution_time:.3f}s", )
+                    execution_time:.3f}s",
+            )
 
         except Exception as e:
             error_message = self.cli_handler.safe_format_error(
@@ -1140,7 +1189,7 @@ class FaultBus:
         self, ril_result: Dict, execution_time: float, success: bool
     ) -> None:
         """Update corridor engine with execution feedback for learning"""
-        feedback_strength = NORMALIZATION_FACTOR if success else -0.5
+        NORMALIZATION_FACTOR if success else -0.5
 
         # Update thermal state based on execution
         if execution_time > NORMALIZATION_FACTOR:  # Slow execution
@@ -1316,7 +1365,7 @@ class FaultBus:
         return output
 
     def _get_resolver_for_event(self, event: FaultBusEvent) -> FaultResolver:
-        """Get appropriate resolver for event with fallback"""
+        """Get appropriate resolver for event with fallback."""
         resolver_key = self._get_resolver_key(event.type)
         return self.resolvers.get(resolver_key, self.fallback_resolver)
 
@@ -1358,6 +1407,7 @@ if __name__ == "__main__":
     # Register an event handler
     @fault_bus.register_handler("thermal_high")
     def handle_thermal_high(event: FaultBusEvent) -> Any:
+        """TODO: document handle_thermal_high."""
         print(f"🔥 Event handled: {event}")
 
     # Simulate profit updates with potential loops

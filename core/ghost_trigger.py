@@ -36,7 +36,7 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 
 
 def _logistic(x: float) -> float:
-    """Cheap logistic activation without `math.exp` overflow."""
+    """Cheap logistic activation without `math.exp` overflow."""."""
     if x >= 0:
         z = math.exp(-x)
         return 1.0 / (1.0 + z)
@@ -79,4 +79,4 @@ def ghost_trigger(
 
     # Normalise through logistic to keep range (0,1)
     score = _logistic(raw_score)
-    return score > threshold 
+    return score > threshold

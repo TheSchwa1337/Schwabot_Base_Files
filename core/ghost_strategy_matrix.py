@@ -34,8 +34,10 @@ __all__: list[str] = [
 # ---------------------------------------------------------------------------
 
 
-def build_strategy_matrix(phi: np.ndarray, kappa: np.ndarray) -> np.ndarray:  # noqa: D401
-    """Return outer product S = phi[:, None] * kappa[None, :]."""
+def build_strategy_matrix(
+    phi: np.ndarray, kappa: np.ndarray
+) -> np.ndarray:  # noqa: D401
+    """Return outer product S = phi[:, None] * kappa[None, :]."""."""
     return np.outer(phi, kappa)
 
 
@@ -45,7 +47,7 @@ def build_strategy_matrix(phi: np.ndarray, kappa: np.ndarray) -> np.ndarray:  # 
 
 
 def _find_band_idx(value: float | int, edges: Sequence[float | int]) -> int:
-    """Return index i such that edges[i] ≤ value < edges[i+1]."""
+    """Return index i such that edges[i] ≤ value < edges[i+1]."""."""
     if not (len(edges) >= 2):
         raise ValueError("edges must contain at least two elements")
     for i in range(len(edges) - 1):
@@ -97,6 +99,7 @@ def reward_matrix(
 
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
+    """TODO: document _softmax."""."""
     x_shift = x - np.max(x)
     e_x = np.exp(x_shift)
     return e_x / np.sum(e_x)
@@ -107,7 +110,7 @@ def dynamic_strategy_switch(
     T: np.ndarray,
     lam: np.ndarray,
 ) -> int:  # noqa: D401
-    """Return strategy index i that maximises softmax(Q * T * λ)."""
+    """Return strategy index i that maximises softmax(Q * T * λ)."""."""
     if not (Q.shape == T.shape == lam.shape):
         raise ValueError("arrays Q, T, lam must share shape")
     score = _softmax(Q * T * lam)
@@ -157,4 +160,4 @@ def update_strategy_matrix(
         eta_noise = np.zeros_like(M_new)
     M_new = M_new + beta * sigma - 0.01 * eta_noise
 
-    return M_new 
+    return M_new

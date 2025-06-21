@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
-"""schwabot_integration.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""Public Schwabot integration facade.
 
-The original file failed to parse; a stub was generated so the package
-remains importable.  Replace with a clean implementation ASAP.
+This *tiny* module exists so that high-level scripts can simply do::
+
+    from schwabot_integration import SchwabotOrchestrator
+
+without worrying about the internal package layout.
+
+The actual implementation lives in
+``core.schwabot_integration_orchestrator.SchwabotIntegrationOrchestrator`` –
+we just import it and re-export under the traditional name expected by older
+call-sites.
 """
 
-def main() -> None:
-    """Stub main function"""
-    pass
+from __future__ import annotations
 
-if __name__ == "__main__":
-    main()
+from core.schwabot_integration_orchestrator import (
+    SchwabotIntegrationOrchestrator as SchwabotOrchestrator,
+)
+
+__all__: list[str] = ["SchwabotOrchestrator"]
