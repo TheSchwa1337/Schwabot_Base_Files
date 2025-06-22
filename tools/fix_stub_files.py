@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # Regex to locate the malformed stub pattern (multiline, dot-quote sequence)
 STUB_PATTERN = re.compile(
     r'(def\s+main\s*\([^)]*\)\s*->[^:]*:\s*\n\s*)'  # function signature
-    r'("""Stub main function\."""\."""?)',  # bad docstring line
+    r'("""Stub\s+main\s+function\."""\s*\.\s*"""\s*)',  # bad docstring line (flexible whitespace)
     re.MULTILINE,
 )
 

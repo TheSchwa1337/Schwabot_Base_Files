@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""thermal_integration_demo.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
-
-The original file failed to parse; a stub was generated so the package
-remains importable.  Replace with a clean implementation ASAP.
-"""
+"""thermal_integration_demo.py"""
 
 
 def main() -> None:
-    """Stub main function."""."""
+    """Stub main function."""
+    pass
+
+
 if __name__ == "__main__":
     main()

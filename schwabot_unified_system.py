@@ -143,7 +143,7 @@ class SimplifiedFerrisWheelScheduler:
         }
 
         logger.info(
-            "Simplified FerrisWheelScheduler initialized for {symbols}"
+            f"Simplified FerrisWheelScheduler initialized for {symbols}"
         )
 
     async def tick_loop(
@@ -246,7 +246,7 @@ class SimplifiedFerrisWheelScheduler:
                 fitness_score.dominant_factors.items(), key=lambda x: abs(x[1])
             )
             reasoning_parts.append(
-                "Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})"
+                f"Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})"
             )
 
         if fitness_score.profit_tier_detected:
@@ -256,8 +256,8 @@ class SimplifiedFerrisWheelScheduler:
             reasoning_parts.append("Loop warning - reduced confidence")
             confidence *= 0.5  # Reduce confidence on loop warning
 
-        reasoning = "Regime: {fitness_score.market_regime}, " + ", ".join(
-            reasoning_parts
+        reasoning = (
+            f"Regime: {fitness_score.market_regime}, " + ", ".join(reasoning_parts)
         )
 
         return TradeDecision(
@@ -453,13 +453,13 @@ class UnifiedSchwabotSystem:
         logger.info(f"System Uptime: {self.system_metrics['uptime']}")
         logger.info(f"Total Ticks: {scheduler_performance['tick_count']}")
         logger.info(
-            "Total Trades: {scheduler_performance['performance_metrics']['total_trades']}"
+            f"Total Trades: {scheduler_performance['performance_metrics']['total_trades']}"
         )
         logger.info(
-            "Active Positions: {scheduler_performance['active_positions']}"
+            f"Active Positions: {scheduler_performance['active_positions']}"
         )
         logger.info(
-            "Total Position Value: {scheduler_performance['total_position_value']:.2f}"
+            f"Total Position Value: {scheduler_performance['total_position_value']:.2f}"
         )
 
         if (
@@ -478,7 +478,9 @@ class UnifiedSchwabotSystem:
     ) -> Dict[str, Any]:
         """Export comprehensive system report."""
         if filename is None:
-            filename = "schwabot_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            filename = (
+                f"schwabot_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            )
 
         report = {
             "system_info": {
@@ -585,14 +587,14 @@ class IntegratedSchwabotOrchestrator(SchwabotOrchestrator):
                 "volume_weight": fitness_score.position_size,
                 "stop_loss": fitness_score.stop_loss,
                 "take_profit": fitness_score.take_profit,
-                "sha_signature": "fitness_{fitness_score.timestamp.timestamp()}",
+                "sha_signature": f"fitness_{fitness_score.timestamp.timestamp()}",
             }
             await self._execute_trade_signal(symbol, trade_signal, market_data)
 
         elif fitness_score.action in ["SELL", "STRONG_SELL"]:
             trade_signal = {
                 "action": "EXIT",
-                "reason": "Fitness Oracle recommendation: {fitness_score.action}",
+                "reason": f"Fitness Oracle recommendation: {fitness_score.action}",
             }
             await self._execute_trade_signal(symbol, trade_signal, market_data)
 

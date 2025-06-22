@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""fix_all_flake8_now.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
-
-The original file failed to parse; a stub was generated so the package
-remains importable.  Replace with a clean implementation ASAP.
-"""
+"""fix_all_flake8_now.py"""
 
 
 def main() -> None:
-    """Stub main function."""."""
+    """Stub main function."""
+    pass
+
+
 if __name__ == "__main__":
     main()
