@@ -11,7 +11,7 @@ Patterns handled
 +----------------
 1. Trailing ``."""`` after a closed doc-string::
 
-       """Some text."""."""
+       """Some text."""
 
    becomes::
 

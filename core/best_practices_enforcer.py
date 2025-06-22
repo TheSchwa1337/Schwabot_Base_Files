@@ -76,15 +76,14 @@ class BestPracticesEnforcer:
                 CodePattern(
                     name="scattered_import_error_handling",
                     description=(
-                        "Replace scattered try/except ImportError with "
-                        "safe_import"
+                        "Replace scattered try/except ImportError with " "safe_import"
                     ),
                     pattern=(
                         r"try:\s*import\s+(\w+).*?except\s+ImportError:.*?"
                         r"(\w+\s*=\s*None)"
                     ),
                     replacement=(
-                        r'from core.import_resolver import safe_import\n'
+                        r"from core.import_resolver import safe_import\n"
                         r'\1_imports = safe_import("\1", ["\2"])\n'
                         r'\2 = \1_imports["\2"]'
                     ),
@@ -93,9 +92,7 @@ class BestPracticesEnforcer:
                 ),
                 CodePattern(
                     name="bare_except_blocks",
-                    description=(
-                        "Replace bare except with error_handler.safe_execute"
-                    ),
+                    description=("Replace bare except with error_handler.safe_execute"),
                     pattern=r"try:\s*(.*?)\s*except:",
                     replacement=(
                         r"from core.error_handler import safe_execute\n"
@@ -121,8 +118,8 @@ class BestPracticesEnforcer:
                         r'[^"\']*["\']\s*\)'
                     ),
                     replacement=(
-                        r'from core.windows_cli_compatibility import '
-                        r'safe_print\n'
+                        r"from core.windows_cli_compatibility import "
+                        r"safe_print\n"
                         r'safe_print("\1")'
                     ),
                     severity="MEDIUM",
@@ -131,8 +128,7 @@ class BestPracticesEnforcer:
                 CodePattern(
                     name="mathematical_function_patterns",
                     description=(
-                        "Ensure mathematical functions have proper type "
-                        "annotations"
+                        "Ensure mathematical functions have proper type " "annotations"
                     ),
                     pattern=(
                         r"def\s+("
@@ -143,9 +139,7 @@ class BestPracticesEnforcer:
                         r"([^)]*)"
                         r"\)\s*:"
                     ),
-                    replacement=(
-                        r"def \1(\2) -> Union[float, Dict[str, Any]]:"
-                    ),
+                    replacement=(r"def \1(\2) -> Union[float, Dict[str, Any]]:"),
                     severity="MEDIUM",
                     category="mathematical_functions",
                 ),
@@ -165,9 +159,7 @@ class BestPracticesEnforcer:
             # Apply each pattern
             for pattern in self._patterns:
                 try:
-                    if re.search(
-                        pattern.pattern, content, re.DOTALL | re.MULTILINE
-                    ):
+                    if re.search(pattern.pattern, content, re.DOTALL | re.MULTILINE):
                         content = re.sub(
                             pattern.pattern,
                             pattern.replacement,
@@ -175,48 +167,34 @@ class BestPracticesEnforcer:
                             flags=re.DOTALL | re.MULTILINE,
                         )
                         result.patterns_applied.append(pattern.name)
-                        logger.info(
-                            f"Applied {pattern.name} to "
-                            f"{file_path}"
-                        )
+                        logger.info(f"Applied {pattern.name} to " f"{file_path}")
                 except Exception as e:
-                    result.issues_found.append(
-                        f"Error applying {pattern.name}: {e}"
-                    )
+                    result.issues_found.append(f"Error applying {pattern.name}: {e}")
                     logger.warning(
-                        f"Error applying {pattern.name} to "
-                        f"{file_path}: {e}"
+                        f"Error applying {pattern.name} to " f"{file_path}: {e}"
                     )
 
             # Write back if changes were made
             if content != original_content:
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
-                logger.info(
-                    f"Updated {file_path} with best practices"
-                )
+                logger.info(f"Updated {file_path} with best practices")
 
             # Validate the file still parses
             try:
                 ast.parse(content)
             except SyntaxError as e:
-                result.issues_found.append(
-                    f"Syntax error after applying patterns: {e}"
-                )
+                result.issues_found.append(f"Syntax error after applying patterns: {e}")
                 result.success = False
                 # Revert changes if syntax is broken
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(original_content)
-                logger.error(
-                    f"Reverted {file_path} due to syntax error"
-                )
+                logger.error(f"Reverted {file_path} due to syntax error")
 
         except Exception as e:
             result.issues_found.append(f"File processing error: {e}")
             result.success = False
-            logger.error(
-                f"Error processing {file_path}: {e}"
-            )
+            logger.error(f"Error processing {file_path}: {e}")
 
         return result
 
@@ -259,12 +237,8 @@ class BestPracticesEnforcer:
         severities = {}
 
         for pattern in self._patterns:
-            categories[pattern.category] = (
-                categories.get(pattern.category, 0) + 1
-            )
-            severities[pattern.severity] = (
-                severities.get(pattern.severity, 0) + 1
-            )
+            categories[pattern.category] = categories.get(pattern.category, 0) + 1
+            severities[pattern.severity] = severities.get(pattern.severity, 0) + 1
 
         return {
             "total_patterns": len(self._patterns),
@@ -282,9 +256,7 @@ class PreCommitHook:
 
     def run_pre_commit_check(self, staged_files: List[str]) -> bool:
         """Run pre-commit checks on staged files."""
-        logger.info(
-            "Running pre-commit best practices check..."
-        )
+        logger.info("Running pre-commit best practices check...")
 
         all_passed = True
 
@@ -292,14 +264,10 @@ class PreCommitHook:
             if file_path.endswith(".py"):
                 result = self.enforcer.enforce_on_file(file_path)
                 if not result.success:
-                    logger.error(
-                        f"Pre-commit check failed for {file_path}"
-                    )
+                    logger.error(f"Pre-commit check failed for {file_path}")
                     all_passed = False
                 else:
-                    logger.info(
-                        f"Pre-commit check passed for {file_path}"
-                    )
+                    logger.info(f"Pre-commit check passed for {file_path}")
 
         return all_passed
 

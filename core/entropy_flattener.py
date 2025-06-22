@@ -44,7 +44,7 @@ def compute_second_derivative(
 
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
-    """Numerically stable softmax implementation."""."""
+    """Numerically stable softmax implementation."""
     x_shifted = x - np.max(x)
     exp_x = np.exp(x_shifted)
     return exp_x / np.sum(exp_x)

@@ -81,9 +81,7 @@ def hash_match_check(
     # Fuzzy match via Hamming distance
     for known_hash in hash_map:
         if len(known_hash) == len(current_hash):
-            hamming_dist = sum(
-                c1 != c2 for c1, c2 in zip(current_hash, known_hash)
-            )
+            hamming_dist = sum(c1 != c2 for c1, c2 in zip(current_hash, known_hash))
             if hamming_dist <= tolerance:
                 return True
 

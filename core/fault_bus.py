@@ -29,6 +29,7 @@ import logging
 import os
 import platform
 import time
+
 # Named constants to replace magic numbers
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
@@ -98,10 +99,10 @@ except ImportError:
 
 class WindowsCliCompatibilityHandler:
     """
-    
+
     Handles Windows CLI compatibility issues including emoji rendering
     and ASIC implementation for plain text output explanations
-    
+
     Addresses the CLI error issues mentioned in the comprehensive testing:
     - Emoji characters causing encoding errors on Windows
     - Need for ASIC plain text output
@@ -119,10 +120,10 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
         """
-        
+
         Print message safely with Windows CLI compatibility
         Implements ASIC plain text output for Windows environments
-        
+
         ASIC Implementation: Application-Specific Integrated Circuit approach
         provides specialized text rendering for Windows CLI environments
         """
@@ -165,9 +166,9 @@ class WindowsCliCompatibilityHandler:
             getattr(logger, level.lower())(safe_message)
         except UnicodeEncodeError:
             # Emergency ASCII fallback for Windows CLI
-            ascii_message = safe_message.encode(
-                "ascii", errors="replace"
-            ).decode("ascii")
+            ascii_message = safe_message.encode("ascii", errors="replace").decode(
+                "ascii"
+            )
             getattr(logger, level.lower())(ascii_message)
 
     @staticmethod
@@ -182,7 +183,7 @@ class WindowsCliCompatibilityHandler:
 
 class FaultType(Enum):
     """TODO: document FaultType."""
-    
+
     THERMAL_HIGH = "thermal_high"
     THERMAL_CRITICAL = "thermal_critical"
     PROFIT_LOW = "profit_low"
@@ -200,6 +201,7 @@ class FaultType(Enum):
 @dataclass
 class FaultBusEvent:
     """TODO: document FaultBusEvent."""
+
     tick: int
     module: str
     type: FaultType
@@ -246,6 +248,7 @@ class ProfitFaultCorrelation:
 
 class RecursiveLoopDetector:
     """Detects and prevents recursive profit cycles using SHA-based pattern recognition."""
+
     def __init__(
         self, window_size: int = 100, similarity_threshold: float = 0.95
     ) -> None:
@@ -291,7 +294,7 @@ class ProfitAnomalyDetector:
         self, profit_delta: float, fault_context: Dict
     ) -> Tuple[bool, float]:
         """
-        
+
         Detect JuMBO-style profit anomalies using statistical clustering
         Returns (is_anomaly, anomaly_strength)
         """
@@ -318,9 +321,7 @@ class ProfitAnomalyDetector:
 
             # Check for clustering (JuMBO-like behavior)
             recent_anomalies = [
-                p
-                for p in profits[-10:]
-                if abs(p - mean_profit) / std_profit > 2.0
+                p for p in profits[-10:] if abs(p - mean_profit) / std_profit > 2.0
             ]
             if len(recent_anomalies) >= 3:
                 # Multiple anomalies = potential profit tier
@@ -376,9 +377,7 @@ class ProfitCorrelationMatrix:
         corr.profit_delta = profit_delta
         corr.temporal_offset = temporal_offset
         corr.occurrence_count += 1
-        corr.confidence = min(
-            corr.occurrence_count / 10.0, NORMALIZATION_FACTOR
-        )
+        corr.confidence = min(corr.occurrence_count / 10.0, NORMALIZATION_FACTOR)
         corr.last_seen = datetime.now()
 
         # Store in temporal buffer for analysis
@@ -421,7 +420,7 @@ class FaultResolver(ABC):
         self, fault_type: str, severity: float, metadata: Optional[Dict] = None
     ) -> None:
         """TODO: document handle_fault."""
-    
+
         pass
 
 
@@ -500,6 +499,7 @@ fault_resolver_registry = {}
 
 def register_fault_resolver(name: str) -> Any:
     """TODO: document register_fault_resolver."""
+
     def decorator(cls: type) -> Any:
         """TODO: document decorator."""
         fault_resolver_registry[name] = cls()
@@ -511,6 +511,7 @@ def register_fault_resolver(name: str) -> Any:
 @register_fault_resolver("gpu")
 class GPUFaultResolver(FaultResolver):
     """TODO: document GPUFaultResolver."""
+
     execution_time_hint: float = 0.5  # GPU operations can be slower
 
     def handle_fault(
@@ -539,6 +540,7 @@ class FallbackFaultResolver(FaultResolver):
 
 class EventSeverity:
     """TODO: document EventSeverity."""
+
     INFO = DEFAULT_INTERVAL
     WARNING = 0.5
     CRITICAL = 0.9
@@ -546,7 +548,7 @@ class EventSeverity:
 
 class FaultBus:
     """
-    
+
     Adaptive Recursive Path Router (ARPR) for Schwabot's profit navigation system.
     Intelligently routes fault events through sync or async paths based on:
     - System state and load
@@ -614,22 +616,16 @@ class FaultBus:
         # Register fault resolvers from registry
         self.resolvers.update(fault_resolver_registry)
 
-        logging.info(
-            "🧠 FaultBus initialized with Future Corridor Engine integration"
-        )
+        logging.info("🧠 FaultBus initialized with Future Corridor Engine integration")
 
         # Windows CLI compatibility handler
         self.cli_handler = WindowsCliCompatibilityHandler()
 
-    def register_resolver(
-        self, fault_type: str, resolver: FaultResolver
-    ) -> None:
+    def register_resolver(self, fault_type: str, resolver: FaultResolver) -> None:
         """Register a resolver for a specific fault type."""
         self.resolvers[fault_type] = resolver
 
-    def register_handler(
-        self, event_type: str
-    ) -> Callable[[Callable], Callable]:
+    def register_handler(self, event_type: str) -> Callable[[Callable], Callable]:
         """Register event handler decorator."""
 
         def decorator(func: Callable) -> Callable:
@@ -684,9 +680,7 @@ class FaultBus:
 
         # Check for profit anomalies (potential genuine profit tiers)
         is_anomaly, anomaly_strength = (
-            self.anomaly_detector.detect_jumbo_profit_anomaly(
-                profit_delta, fault_state
-            )
+            self.anomaly_detector.detect_jumbo_profit_anomaly(profit_delta, fault_state)
         )
 
         if is_anomaly:
@@ -717,7 +711,7 @@ class FaultBus:
         self, event: FaultBusEvent
     ) -> PathSelectionMetrics:
         """
-        
+
         Calculate intelligent path selection score for sync vs async execution.
         Higher scores favor async execution for profit optimization.
         """
@@ -746,17 +740,14 @@ class FaultBus:
         )  # Normalize by max expected queue
         try:
             cpu_load = (
-                psutil.cpu_percent(interval=DEFAULT_INTERVAL)
-                / MAX_PROFIT_THRESHOLD
+                psutil.cpu_percent(interval=DEFAULT_INTERVAL) / MAX_PROFIT_THRESHOLD
             )
             system_load_score = (queue_load + cpu_load) / 2.0
         except Exception as e:
 
             # Windows CLI compatible error handling for CPU monitoring
 
-            error_message = self.cli_handler.safe_format_error(
-                e, "CPU monitoring"
-            )
+            error_message = self.cli_handler.safe_format_error(e, "CPU monitoring")
 
             self.cli_handler.log_safe(
                 logging,
@@ -784,9 +775,7 @@ class FaultBus:
             FaultType.PROFIT_CRITICAL,
             FaultType.PROFIT_ANOMALY,
         ]:
-            profit_opportunity_score = (
-                0.8  # High opportunity for profit events
-            )
+            profit_opportunity_score = 0.8  # High opportunity for profit events
 
         # Calculate weighted final score
         weights = self.path_selection_weights
@@ -803,9 +792,7 @@ class FaultBus:
         final_score = max(0.0, min(NORMALIZATION_FACTOR, final_score))
 
         # Determine selected path
-        selected_path = (
-            "async" if final_score >= self.async_threshold else "sync"
-        )
+        selected_path = "async" if final_score >= self.async_threshold else "sync"
 
         return PathSelectionMetrics(
             severity_score=severity_score,
@@ -865,12 +852,8 @@ class FaultBus:
                     )
 
                     # Update market data for ECMP calculation
-                    self.current_market_data["price_series"].append(
-                        current_price
-                    )
-                    self.current_market_data["volume_series"].append(
-                        current_volume
-                    )
+                    self.current_market_data["price_series"].append(current_price)
+                    self.current_market_data["volume_series"].append(current_volume)
                     self.current_market_data["volatility_series"].append(
                         current_volatility
                     )
@@ -889,8 +872,7 @@ class FaultBus:
 
                     # 🔬 Run Recursive Intent Loop (RIL) for complete navigation decision
                     ril_result = self.corridor_engine.recursive_intent_loop(
-                        t=event.tick
-                        * DEFAULT_INTERVAL,  # Convert tick to time
+                        t=event.tick * DEFAULT_INTERVAL,  # Convert tick to time
                         market_hash=corridor_state.hash_signature,
                         corridor_state=corridor_state,
                         profit_context=event.profit_context or 0.0,
@@ -947,9 +929,7 @@ class FaultBus:
                         )
                     elif selected_path == "gpu_async":
                         asyncio.create_task(
-                            self._dispatch_gpu_async_enhanced(
-                                event, ril_result
-                            )
+                            self._dispatch_gpu_async_enhanced(event, ril_result)
                         )
                     else:
                         # Fallback to original path selection
@@ -957,9 +937,7 @@ class FaultBus:
                         self.path_history.append(metrics)
 
                         if metrics.selected_path == "async":
-                            asyncio.create_task(
-                                self._dispatch_async(event, metrics)
-                            )
+                            asyncio.create_task(self._dispatch_async(event, metrics))
                         else:
                             self._dispatch_sync(event, metrics)
 
@@ -1009,9 +987,7 @@ class FaultBus:
         entropy_adjustment = event.severity + (event.age * DEFAULT_INTERVAL)
         return base_entropy + entropy_adjustment
 
-    def _dispatch_sync_enhanced(
-        self, event: FaultBusEvent, ril_result: Dict
-    ) -> None:
+    def _dispatch_sync_enhanced(self, event: FaultBusEvent, ril_result: Dict) -> None:
         """Enhanced synchronous dispatch with corridor intelligence"""
         try:
             start_time = time.time()
@@ -1020,19 +996,13 @@ class FaultBus:
             try:
                 # Apply corridor-based adjustments
                 if ril_result["activation_mode"] == "FULL_ACTIVATION":
-                    logging.info(
-                        f"🚀 FULL_ACTIVATION mode for {event.type.value}"
-                    )
+                    logging.info(f"🚀 FULL_ACTIVATION mode for {event.type.value}")
 
-                resolver.handle_fault(
-                    event.type.value, event.severity, event.metadata
-                )
+                resolver.handle_fault(event.type.value, event.severity, event.metadata)
                 execution_time = time.time() - start_time
 
                 # Update corridor engine with execution feedback
-                self._update_corridor_feedback(
-                    ril_result, execution_time, True
-                )
+                self._update_corridor_feedback(ril_result, execution_time, True)
 
                 logging.debug(
                     f"✅ Enhanced SYNC completed: {
@@ -1043,9 +1013,7 @@ class FaultBus:
 
             except Exception as e:
                 execution_time = time.time() - start_time
-                self._update_corridor_feedback(
-                    ril_result, execution_time, False
-                )
+                self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
                     f"❌ Enhanced SYNC failed: {
                         event.type.value} after {
@@ -1066,9 +1034,7 @@ class FaultBus:
             )
             self.cli_handler.log_safe(logging, "error", error_message)
 
-    async def _dispatch_async_enhanced(
-        self, event: FaultBusEvent, ril_result: Dict
-    ):
+    async def _dispatch_async_enhanced(self, event: FaultBusEvent, ril_result: Dict):
         """Enhanced asynchronous dispatch with corridor intelligence"""
         try:
             start_time = time.time()
@@ -1093,15 +1059,11 @@ class FaultBus:
                     )
 
                 execution_time = time.time() - start_time
-                self._update_corridor_feedback(
-                    ril_result, execution_time, True
-                )
+                self._update_corridor_feedback(ril_result, execution_time, True)
 
             except Exception as e:
                 execution_time = time.time() - start_time
-                self._update_corridor_feedback(
-                    ril_result, execution_time, False
-                )
+                self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
                     f"❌ Enhanced ASYNC failed: {
                         event.type.value} after {
@@ -1132,12 +1094,8 @@ class FaultBus:
 
             try:
                 logging.info(f"🔥 GPU_ASYNC dispatch for {event.type.value}")
-                logging.info(
-                    f"   ECMP Direction: {ril_result['ecmp_direction']}"
-                )
-                logging.info(
-                    f"   Target Price: ${ril_result['next_target_price']:.2f}"
-                )
+                logging.info(f"   ECMP Direction: {ril_result['ecmp_direction']}")
+                logging.info(f"   Target Price: ${ril_result['next_target_price']:.2f}")
 
                 # GPU-specific processing (placeholder for CUDA/tensor
                 # operations)
@@ -1151,15 +1109,11 @@ class FaultBus:
                 )
 
                 execution_time = time.time() - start_time
-                self._update_corridor_feedback(
-                    ril_result, execution_time, True
-                )
+                self._update_corridor_feedback(ril_result, execution_time, True)
 
             except Exception as e:
                 execution_time = time.time() - start_time
-                self._update_corridor_feedback(
-                    ril_result, execution_time, False
-                )
+                self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
                     f"❌ GPU ASYNC failed: {
                         event.type.value} after {
@@ -1230,15 +1184,15 @@ class FaultBus:
 
         # Keep series manageable
         if len(self.current_market_data["price_series"]) > 50:
-            self.current_market_data["price_series"] = (
-                self.current_market_data["price_series"][-30:]
-            )
-            self.current_market_data["volume_series"] = (
-                self.current_market_data["volume_series"][-30:]
-            )
-            self.current_market_data["volatility_series"] = (
-                self.current_market_data["volatility_series"][-30:]
-            )
+            self.current_market_data["price_series"] = self.current_market_data[
+                "price_series"
+            ][-30:]
+            self.current_market_data["volume_series"] = self.current_market_data[
+                "volume_series"
+            ][-30:]
+            self.current_market_data["volatility_series"] = self.current_market_data[
+                "volatility_series"
+            ][-30:]
 
     def get_corridor_analytics(self) -> Dict:
         """Get analytics from the corridor engine"""
@@ -1268,9 +1222,7 @@ class FaultBus:
         if not self.path_history:
             return {}
 
-        async_count = sum(
-            1 for m in self.path_history if m.selected_path == "async"
-        )
+        async_count = sum(1 for m in self.path_history if m.selected_path == "async")
         sync_count = len(self.path_history) - async_count
         avg_score = sum(m.final_score for m in self.path_history) / len(
             self.path_history
@@ -1287,18 +1239,14 @@ class FaultBus:
 
     def tune_async_threshold(self, new_threshold: float) -> None:
         """Dynamically tune the async threshold based on performance"""
-        self.async_threshold = max(
-            0.0, min(NORMALIZATION_FACTOR, new_threshold)
-        )
+        self.async_threshold = max(0.0, min(NORMALIZATION_FACTOR, new_threshold))
         logging.info(f"Async threshold tuned to: {self.async_threshold:.3f}")
 
     def get_profit_correlations(self) -> List[ProfitFaultCorrelation]:
         """Get current profit-fault correlations for analysis"""
         return self.correlation_matrix.get_predictive_correlations()
 
-    def predict_profit_from_fault(
-        self, fault_type: FaultType
-    ) -> Optional[float]:
+    def predict_profit_from_fault(self, fault_type: FaultType) -> Optional[float]:
         """Predict profit impact based on fault type"""
         return self.correlation_matrix.predict_profit_impact(fault_type)
 
@@ -1340,9 +1288,7 @@ class FaultBus:
                 f.write(output)
         return output
 
-    def export_correlation_matrix(
-        self, file_path: Optional[str] = None
-    ) -> str:
+    def export_correlation_matrix(self, file_path: Optional[str] = None) -> str:
         """Export profit-fault correlation matrix"""
         correlations = []
         for fault_type, corr in self.correlation_matrix.correlations.items():
@@ -1393,9 +1339,7 @@ class FaultBus:
             try:
                 handler(event)
             except Exception as e:
-                logging.error(
-                    f"Event handler failed for {event.type.value}: {e}"
-                )
+                logging.error(f"Event handler failed for {event.type.value}: {e}")
 
 
 # Example usage of the enhanced FaultBus class

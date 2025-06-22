@@ -29,7 +29,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
 
     def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
-        """Rudimentary Welch PSD replacement (Hann + overlap=0)."""."""
+        """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
         if nperseg is None:
             nperseg = min(256, x.size)
         window = np.hanning(nperseg)
@@ -51,7 +51,7 @@ __all__ = ["validate_entropy_envelope"]
 
 
 def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
-    """Compute spectral entropy (base-2) of a 1-D real signal."""."""
+    """Compute spectral entropy (base-2) of a 1-D real signal."""
     freqs, psd = welch(signal, fs=fs)
     psd_norm = psd / np.sum(psd)
     psd_norm = psd_norm[psd_norm > 0]  # avoid log(0)

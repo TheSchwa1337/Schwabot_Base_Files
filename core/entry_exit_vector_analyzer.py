@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class EntryExitVectorAnalyzer:
-    """Entry/exit vector analyzer with routing elasticity."""."""
+    """Entry/exit vector analyzer with routing elasticity."""
 
     dt: float = 1.0
     elasticity_threshold: float = 0.3

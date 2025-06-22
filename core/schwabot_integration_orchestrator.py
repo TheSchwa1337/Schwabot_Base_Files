@@ -122,9 +122,9 @@ class SchwabotIntegrationOrchestrator:
         self.event_queue: deque = deque(
             maxlen=self.config.get("max_event_queue", 10000)
         )
-        self.event_handlers: Dict[
-            SystemEvent, List[Callable[[SystemEvent], None]]
-        ] = defaultdict(list)
+        self.event_handlers: Dict[SystemEvent, List[Callable[[SystemEvent], None]]] = (
+            defaultdict(list)
+        )
 
         # System state
         self.system_status = ComponentStatus.UNINITIALIZED
@@ -152,9 +152,7 @@ class SchwabotIntegrationOrchestrator:
         # Setup signal handlers
         self._setup_signal_handlers()
 
-        logger.info(
-            f"SchwabotIntegrationOrchestrator v{self.version} initialized"
-        )
+        logger.info(f"SchwabotIntegrationOrchestrator v{self.version} initialized")
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration."""
@@ -235,11 +233,10 @@ class SchwabotIntegrationOrchestrator:
 
     def _setup_signal_handlers(self) -> None:
         """Setup signal handlers for graceful shutdown."""
+
         def signal_handler(signum: int, frame: Any) -> None:
             """TODO: document signal_handler."""
-            logger.info(
-                f"Received signal {signum}, initiating graceful shutdown"
-            )
+            logger.info(f"Received signal {signum}, initiating graceful shutdown")
             self.stop()
 
         signal.signal(signal.SIGINT, signal_handler)
@@ -252,9 +249,7 @@ class SchwabotIntegrationOrchestrator:
             logger.info(f"Registered component: {component_info.name}")
             return True
         except Exception as e:
-            logger.error(
-                f"Failed to register component {component_info.name}: {e}"
-            )
+            logger.error(f"Failed to register component {component_info.name}: {e}")
             return False
 
     def add_event_handler(
@@ -263,9 +258,7 @@ class SchwabotIntegrationOrchestrator:
         """Add event handler."""
         self.event_handlers[event_type].append(handler)
 
-    def add_system_callback(
-        self, callback: Callable[[str, Any], None]
-    ) -> None:
+    def add_system_callback(self, callback: Callable[[str, Any], None]) -> None:
         """Add system callback."""
         self.system_callbacks.append(callback)
 
@@ -298,9 +291,7 @@ class SchwabotIntegrationOrchestrator:
             await self._initialize_components()
 
             self.system_status = ComponentStatus.RUNNING
-            logger.info(
-                "Schwabot Integration Orchestrator started successfully"
-            )
+            logger.info("Schwabot Integration Orchestrator started successfully")
 
             return True
 
@@ -413,9 +404,7 @@ class SchwabotIntegrationOrchestrator:
             return True
 
         except Exception as e:
-            logger.error(
-                f"Error checking dependencies for {component_name}: {e}"
-            )
+            logger.error(f"Error checking dependencies for {component_name}: {e}")
             return False
 
     async def _initialize_component(self, component_name: str) -> bool:
@@ -428,9 +417,7 @@ class SchwabotIntegrationOrchestrator:
             logger.info(f"Initializing component: {component_name}")
 
             # Create component instance (this would integrate with actual components)
-            component_instance = await self._create_component_instance(
-                component_name
-            )
+            component_instance = await self._create_component_instance(component_name)
 
             if component_instance:
                 self.component_instances[component_name] = component_instance
@@ -443,15 +430,11 @@ class SchwabotIntegrationOrchestrator:
                     {"start_time": component_info.start_time},
                 )
 
-                logger.info(
-                    f"Component {component_name} initialized successfully"
-                )
+                logger.info(f"Component {component_name} initialized successfully")
                 return True
             else:
                 component_info.status = ComponentStatus.ERROR
-                component_info.last_error = (
-                    "Failed to create component instance"
-                )
+                component_info.last_error = "Failed to create component instance"
                 return False
 
         except Exception as e:
@@ -461,9 +444,7 @@ class SchwabotIntegrationOrchestrator:
             component_info.last_error = str(e)
             return False
 
-    async def _create_component_instance(
-        self, component_name: str
-    ) -> Optional[Any]:
+    async def _create_component_instance(self, component_name: str) -> Optional[Any]:
         """Instantiate real component classes instead of placeholder dicts."""
         try:
             if component_name == "strategy_logic":

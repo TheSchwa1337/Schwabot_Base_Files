@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ConditionalGlyphFeedback:
-    """Conditional glyph feedback loop processor."""."""
+    """Conditional glyph feedback loop processor."""
 
     gamma: float = 1.0
     lambda_param: float = 0.5
@@ -87,7 +87,7 @@ class ConditionalGlyphFeedback:
         # Create interpolation function for news values
         def news_func(x: float) -> float:
             # Simple linear interpolation
-            """TODO: document news_func."""."""
+            """TODO: document news_func."""
             if len(news_array) < 2:
                 return news_array[0] if len(news_array) > 0 else 0.0
             return float(np.interp(x, x_array, news_array))
@@ -139,7 +139,7 @@ def compute_news_flow_gradient(
     gamma: float = 1.0,
     lambda_param: float = 0.5,
 ) -> np.ndarray:  # noqa: D401
-    """Compute news flow scalar feedback gradient."""."""
+    """Compute news flow scalar feedback gradient."""
     feedback = ConditionalGlyphFeedback(gamma=gamma, lambda_param=lambda_param)
     return feedback.process_news_feedback(news_values, x_positions)
 
@@ -150,7 +150,7 @@ def apply_feedback_loop(
     x_positions: Sequence[float],
     threshold: float = 0.5,
 ) -> np.ndarray:  # noqa: D401
-    """Apply complete conditional glyph feedback loop."""."""
+    """Apply complete conditional glyph feedback loop."""
     feedback = ConditionalGlyphFeedback()
     gradients = feedback.process_news_feedback(news_values, x_positions)
     glyph_array = np.asarray(glyph_state, dtype=float)

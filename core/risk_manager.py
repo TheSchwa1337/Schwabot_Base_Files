@@ -132,9 +132,7 @@ class RiskManager:
         self.config = config or self._default_config()
 
         # Risk strategy
-        self.risk_strategy = RiskStrategy(
-            self.config.get("risk_strategy", "moderate")
-        )
+        self.risk_strategy = RiskStrategy(self.config.get("risk_strategy", "moderate"))
 
         # Risk parameters
         self.max_portfolio_risk = self.config.get(
@@ -152,9 +150,7 @@ class RiskManager:
         self.volatility_lookback = self.config.get(
             "volatility_lookback", 30
         )  # 30-day volatility
-        self.thermal_risk_multiplier = self.config.get(
-            "thermal_risk_multiplier", 1.5
-        )
+        self.thermal_risk_multiplier = self.config.get("thermal_risk_multiplier", 1.5)
 
         # Dynamic parameters
         self.volatility_adjustment = True
@@ -221,15 +217,11 @@ class RiskManager:
             positions = portfolio_data.get("positions", {})
 
             # Calculate current risk allocation
-            allocated_risk = self._calculate_allocated_risk(
-                positions, total_value
-            )
+            allocated_risk = self._calculate_allocated_risk(positions, total_value)
 
             # Calculate adjustments
             correlation_adj = self._calculate_correlation_adjustment(positions)
-            volatility_adj = self._calculate_volatility_adjustment(
-                portfolio_data
-            )
+            volatility_adj = self._calculate_volatility_adjustment(portfolio_data)
             thermal_adj = self._calculate_thermal_adjustment(positions)
 
             # Update risk budget
@@ -296,9 +288,7 @@ class RiskManager:
             logger.error(f"Failed to calculate allocated risk: {e}")
             return 0.0
 
-    def _calculate_correlation_adjustment(
-        self, positions: Dict[str, Any]
-    ) -> float:
+    def _calculate_correlation_adjustment(self, positions: Dict[str, Any]) -> float:
         """Calculate correlation-based risk adjustment."""
         try:
             if len(positions) < 2:
@@ -321,9 +311,7 @@ class RiskManager:
 
             # Convert to correlation adjustment
             # Higher concentration = higher correlation = higher risk adjustment
-            correlation_adj = (
-                1.0 + (concentration - 1.0 / len(positions)) * 2.0
-            )
+            correlation_adj = 1.0 + (concentration - 1.0 / len(positions)) * 2.0
 
             return max(0.5, min(correlation_adj, 2.0))
 
@@ -331,9 +319,7 @@ class RiskManager:
             logger.error(f"Failed to calculate correlation adjustment: {e}")
             return 1.0
 
-    def _calculate_volatility_adjustment(
-        self, portfolio_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_volatility_adjustment(self, portfolio_data: Dict[str, Any]) -> float:
         """Calculate volatility-based risk adjustment."""
         try:
             # Get portfolio volatility from risk history
@@ -342,8 +328,7 @@ class RiskManager:
 
             # Calculate recent volatility
             recent_values = [
-                h["total_value"]
-                for h in self.risk_history[-self.volatility_lookback :]
+                h["total_value"] for h in self.risk_history[-self.volatility_lookback :]
             ]
             if len(recent_values) < 2:
                 return 1.0
@@ -351,9 +336,9 @@ class RiskManager:
             returns = []
             for i in range(1, len(recent_values)):
                 if recent_values[i - 1] > 0:
-                    ret = (
-                        recent_values[i] - recent_values[i - 1]
-                    ) / recent_values[i - 1]
+                    ret = (recent_values[i] - recent_values[i - 1]) / recent_values[
+                        i - 1
+                    ]
                     returns.append(ret)
 
             if not returns:
@@ -370,18 +355,14 @@ class RiskManager:
             logger.error(f"Failed to calculate volatility adjustment: {e}")
             return 1.0
 
-    def _calculate_thermal_adjustment(
-        self, positions: Dict[str, Any]
-    ) -> float:
+    def _calculate_thermal_adjustment(self, positions: Dict[str, Any]) -> float:
         """Calculate thermal-based risk adjustment."""
         try:
             if not positions:
                 return 1.0
 
             # Calculate weighted thermal risk
-            total_value = sum(
-                abs(pos.get("value", 0)) for pos in positions.values()
-            )
+            total_value = sum(abs(pos.get("value", 0)) for pos in positions.values())
             if total_value <= 0:
                 return 1.0
 

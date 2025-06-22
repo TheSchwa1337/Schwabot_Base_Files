@@ -40,7 +40,7 @@ def execution_confidence(
     profit_decay: float,
 ) -> float:
     """Calculate execution confidence scalar Ξ.
-    
+
     Parameters
     ----------
     triplet_entropy : float
@@ -53,7 +53,7 @@ def execution_confidence(
         σ_f - Standard deviation of loop sums (0-1)
     profit_decay : float
         τ_p - Time-weighted profit modifier (0-0.3)
-    
+
     Returns
     -------
     float
@@ -65,14 +65,14 @@ def execution_confidence(
     try:
         # Ξ = (T · Δθ) + (ε × σ_f) + τ_p
         confidence = (
-            (triplet_entropy * theta_drift) +
-            (coherence * loop_volatility) +
-            profit_decay
+            (triplet_entropy * theta_drift)
+            + (coherence * loop_volatility)
+            + profit_decay
         )
-        
+
         # Ensure reasonable bounds
         return max(0.0, min(3.0, confidence))
-        
+
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing execution confidence: {e}")
         return 0.0
@@ -85,7 +85,7 @@ def entry_score(
     projected_profit: float,
 ) -> float:
     """Calculate entropy-weighted entry score 𝓔ₛ.
-    
+
     Parameters
     ----------
     harmony : float
@@ -96,7 +96,7 @@ def entry_score(
         𝓛 - Normalized liquidity depth score (0-1)
     projected_profit : float
         P̂ - Expected profit ratio (0-1)
-    
+
     Returns
     -------
     float
@@ -107,16 +107,11 @@ def entry_score(
     """
     try:
         # 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
-        score = (
-            harmony *
-            (1.0 - drift_penalty) *
-            liquidity_score *
-            projected_profit
-        )
-        
+        score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
+
         # Ensure valid range
         return max(0.0, min(1.0, score))
-        
+
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing entry score: {e}")
         return 0.0
@@ -128,7 +123,7 @@ def evaluate(
     gan_filter_result: Optional[bool] = None,
 ) -> Dict[str, Any]:
     """Main entry gate evaluation logic.
-    
+
     Parameters
     ----------
     confidence : float
@@ -137,7 +132,7 @@ def evaluate(
         𝓔ₛ - Entropy-weighted entry score
     gan_filter_result : bool, optional
         Result from GAN anomaly filter (if available)
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -149,9 +144,11 @@ def evaluate(
     """
     try:
         # Primary gate: both confidence and entry score must pass
-        if (confidence > MIN_CONFIDENCE_THRESHOLD and 
-            entry_score_val > MIN_ENTRY_SCORE_THRESHOLD):
-            
+        if (
+            confidence > MIN_CONFIDENCE_THRESHOLD
+            and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
+        ):
+
             # Check GAN filter if available
             if gan_filter_result is False:
                 return {
@@ -160,25 +157,24 @@ def evaluate(
                     "entry_score": entry_score_val,
                     "reason": "GAN anomaly filter rejection",
                 }
-            
+
             return {
                 "action": "execute",
                 "confidence": confidence,
                 "entry_score": entry_score_val,
                 "reason": "High confidence and entry score",
             }
-        
+
         # Secondary gate: route to GAN review if entry score in middle band
-        elif (confidence > 0.85 and 
-              entry_score_val > DEFER_ENTRY_SCORE_THRESHOLD):
-            
+        elif confidence > 0.85 and entry_score_val > DEFER_ENTRY_SCORE_THRESHOLD:
+
             return {
                 "action": "gan_review",
                 "confidence": confidence,
                 "entry_score": entry_score_val,
                 "reason": "Moderate scores - route to GAN filter",
             }
-        
+
         # Tertiary: cooldown for low scores
         else:
             reason_parts = []
@@ -186,14 +182,14 @@ def evaluate(
                 reason_parts.append(f"low confidence ({confidence:.3f})")
             if entry_score_val <= DEFER_ENTRY_SCORE_THRESHOLD:
                 reason_parts.append(f"low entry score ({entry_score_val:.3f})")
-            
+
             return {
                 "action": "cooldown",
                 "confidence": confidence,
                 "entry_score": entry_score_val,
                 "reason": "Cooldown: " + ", ".join(reason_parts),
             }
-            
+
     except Exception as e:
         logger.error(f"Error in entry gate evaluation: {e}")
         return {
@@ -239,9 +235,9 @@ def validate_inputs(
             0.0 <= liquidity_score <= 1.0,
             0.0 <= projected_profit <= 1.0,
         ]
-        
+
         return all(checks)
-        
+
     except Exception:
         return False
 
@@ -252,19 +248,19 @@ def main() -> None:
     xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
     es = entry_score(0.88, 0.12, 0.75, 0.03)
     result = evaluate(xi, es)
-    
+
     print(f"Test 1 - Ξ: {xi:.3f}, 𝓔ₛ: {es:.3f}")
     print(f"Decision: {result['action']} - {result['reason']}")
     print()
-    
+
     # Test case 2: Moderate confidence scenario
     xi2 = execution_confidence(0.65, 0.08, 0.78, 0.15, 0.02)
     es2 = entry_score(0.82, 0.08, 0.85, 0.025)
     result2 = evaluate(xi2, es2)
-    
+
     print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
     print(f"Decision: {result2['action']} - {result2['reason']}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

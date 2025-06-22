@@ -49,7 +49,7 @@ def scale_position(
     profit_weight: float = DEFAULT_PROFIT_WEIGHT,
 ) -> float:
     """Calculate position scale factor based on confidence and profit.
-    
+
     Parameters
     ----------
     confidence : float
@@ -68,7 +68,7 @@ def scale_position(
         Weight for confidence-based scaling
     profit_weight : float, optional
         Weight for profit-based scaling
-    
+
     Returns
     -------
     float
@@ -77,24 +77,26 @@ def scale_position(
     try:
         # Validate inputs
         if confidence < 0 or projected_profit < 0:
-            logger.warning(f"Invalid inputs: confidence={confidence}, profit={projected_profit}")
+            logger.warning(
+                f"Invalid inputs: confidence={confidence}, profit={projected_profit}"
+            )
             return base_scale
-        
+
         # Calculate confidence multiplier
         confidence_excess = max(0.0, confidence - confidence_threshold)
         confidence_multiplier = confidence_excess * confidence_weight
-        
+
         # Calculate profit multiplier
         profit_multiplier = projected_profit * profit_weight
-        
+
         # Combine multipliers
         scale_factor = base_scale * (1.0 + confidence_multiplier + profit_multiplier)
-        
+
         # Apply bounds
         scale_factor = max(min_scale, min(max_scale, scale_factor))
-        
+
         return scale_factor
-        
+
     except Exception as e:
         logger.error(f"Error calculating position scale: {e}")
         return base_scale
@@ -109,7 +111,7 @@ def calculate_position_size(
     **scaling_params,
 ) -> Tuple[float, Dict[str, float]]:
     """Calculate actual position size with risk management.
-    
+
     Parameters
     ----------
     base_position : float
@@ -124,7 +126,7 @@ def calculate_position_size(
         Maximum risk per trade as fraction of balance
     **scaling_params
         Additional scaling parameters
-    
+
     Returns
     -------
     Tuple[float, Dict[str, float]]
@@ -133,20 +135,18 @@ def calculate_position_size(
     """
     try:
         # Calculate scale factor
-        scale_factor = scale_position(
-            confidence, projected_profit, **scaling_params
-        )
-        
+        scale_factor = scale_position(confidence, projected_profit, **scaling_params)
+
         # Calculate scaled position
         scaled_position = base_position * scale_factor
-        
+
         # Apply risk management constraints
         max_position = account_balance * max_risk_per_trade
         risk_limited_position = min(scaled_position, max_position)
-        
+
         # Apply minimum position constraint
         final_position = max(MIN_POSITION_SIZE, risk_limited_position)
-        
+
         # Calculate details
         details = {
             "base_position": base_position,
@@ -158,9 +158,9 @@ def calculate_position_size(
             "scaling_applied": scale_factor != DEFAULT_BASE_SCALE,
             "risk_limited": scaled_position > max_position,
         }
-        
+
         return final_position, details
-        
+
     except Exception as e:
         logger.error(f"Error calculating position size: {e}")
         return base_position, {"error": str(e)}
@@ -172,7 +172,7 @@ def optimize_scaling_parameters(
     max_drawdown: float = 0.1,
 ) -> Dict[str, float]:
     """Optimize scaling parameters based on historical performance.
-    
+
     Parameters
     ----------
     historical_data : list
@@ -181,7 +181,7 @@ def optimize_scaling_parameters(
         Target Sharpe ratio
     max_drawdown : float, optional
         Maximum acceptable drawdown
-    
+
     Returns
     -------
     Dict[str, float]
@@ -195,18 +195,20 @@ def optimize_scaling_parameters(
                 "profit_weight": DEFAULT_PROFIT_WEIGHT,
                 "max_scale": DEFAULT_MAX_SCALE,
             }
-        
+
         # Extract performance metrics from historical data
         returns = []
         confidences = []
         profits = []
-        
+
         for trade in historical_data:
-            if all(key in trade for key in ["return", "confidence", "projected_profit"]):
+            if all(
+                key in trade for key in ["return", "confidence", "projected_profit"]
+            ):
                 returns.append(trade["return"])
                 confidences.append(trade["confidence"])
                 profits.append(trade["projected_profit"])
-        
+
         if not returns:
             logger.warning("No valid trade data found for optimization")
             return {
@@ -214,50 +216,52 @@ def optimize_scaling_parameters(
                 "profit_weight": DEFAULT_PROFIT_WEIGHT,
                 "max_scale": DEFAULT_MAX_SCALE,
             }
-        
+
         # Calculate current performance metrics
         returns_array = np.array(returns)
         mean_return = np.mean(returns_array)
         std_return = np.std(returns_array)
-        
+
         # Calculate Sharpe ratio
         sharpe_ratio = mean_return / std_return if std_return > 0 else 0
-        
+
         # Calculate maximum drawdown
         cumulative_returns = np.cumprod(1 + returns_array)
         running_max = np.maximum.accumulate(cumulative_returns)
         drawdowns = (cumulative_returns - running_max) / running_max
         max_dd = abs(np.min(drawdowns))
-        
+
         # Adjust parameters based on performance
         optimized_params = {
             "confidence_weight": DEFAULT_CONFIDENCE_WEIGHT,
             "profit_weight": DEFAULT_PROFIT_WEIGHT,
             "max_scale": DEFAULT_MAX_SCALE,
         }
-        
+
         # If Sharpe ratio is below target, reduce scaling aggressiveness
         if sharpe_ratio < target_sharpe:
             optimized_params["confidence_weight"] *= 0.8
             optimized_params["profit_weight"] *= 0.8
             optimized_params["max_scale"] *= 0.9
-        
+
         # If drawdown is too high, be more conservative
         if max_dd > max_drawdown:
             optimized_params["confidence_weight"] *= 0.7
             optimized_params["max_scale"] *= 0.8
-        
+
         # If performance is good, slightly increase aggressiveness
         if sharpe_ratio > target_sharpe and max_dd < max_drawdown * 0.5:
             optimized_params["confidence_weight"] *= 1.1
             optimized_params["profit_weight"] *= 1.1
-            optimized_params["max_scale"] = min(optimized_params["max_scale"] * 1.1, 8.0)
-        
+            optimized_params["max_scale"] = min(
+                optimized_params["max_scale"] * 1.1, 8.0
+            )
+
         logger.info(f"Optimized scaling parameters: {optimized_params}")
         logger.info(f"Historical Sharpe: {sharpe_ratio:.2f}, Max DD: {max_dd:.3f}")
-        
+
         return optimized_params
-        
+
     except Exception as e:
         logger.error(f"Error optimizing scaling parameters: {e}")
         return {
@@ -269,7 +273,7 @@ def optimize_scaling_parameters(
 
 class AutoScaler:
     """Main auto-scaling class with adaptive parameter optimization."""
-    
+
     def __init__(
         self,
         confidence_weight: float = DEFAULT_CONFIDENCE_WEIGHT,
@@ -278,7 +282,7 @@ class AutoScaler:
         adaptive_optimization: bool = True,
     ):
         """Initialize auto scaler.
-        
+
         Parameters
         ----------
         confidence_weight : float, optional
@@ -294,12 +298,12 @@ class AutoScaler:
         self.profit_weight = profit_weight
         self.max_scale = max_scale
         self.adaptive_optimization = adaptive_optimization
-        
+
         # Performance tracking
         self.trade_history: list = []
         self.optimization_counter = 0
         self.optimization_frequency = 50  # Optimize every N trades
-    
+
     def scale(
         self,
         base_position: float,
@@ -309,7 +313,7 @@ class AutoScaler:
         record_trade: bool = True,
     ) -> Tuple[float, Dict[str, float]]:
         """Scale position size using current parameters.
-        
+
         Parameters
         ----------
         base_position : float
@@ -322,7 +326,7 @@ class AutoScaler:
             Account balance
         record_trade : bool, optional
             Whether to record this trade for optimization
-        
+
         Returns
         -------
         Tuple[float, Dict[str, float]]
@@ -335,7 +339,7 @@ class AutoScaler:
             "profit_weight": self.profit_weight,
             "max_scale": self.max_scale,
         }
-        
+
         position_size, details = calculate_position_size(
             base_position,
             confidence,
@@ -343,7 +347,7 @@ class AutoScaler:
             account_balance,
             **scaling_params,
         )
-        
+
         # Record trade for optimization
         if record_trade:
             trade_record = {
@@ -354,18 +358,18 @@ class AutoScaler:
                 "scale_factor": details.get("scale_factor", 1.0),
                 "timestamp": __import__("time").time(),
             }
-            
+
             self.trade_history.append(trade_record)
-            
+
             # Keep history manageable
             if len(self.trade_history) > 1000:
                 self.trade_history = self.trade_history[-500:]
-        
+
         return position_size, details
-    
+
     def update_trade_result(self, trade_index: int, actual_return: float) -> None:
         """Update trade result for performance tracking.
-        
+
         Parameters
         ----------
         trade_index : int
@@ -376,78 +380,83 @@ class AutoScaler:
         try:
             if abs(trade_index) <= len(self.trade_history):
                 self.trade_history[trade_index]["return"] = actual_return
-                
+
                 # Check if it's time to optimize parameters
                 self.optimization_counter += 1
-                if (self.adaptive_optimization and 
-                    self.optimization_counter >= self.optimization_frequency):
+                if (
+                    self.adaptive_optimization
+                    and self.optimization_counter >= self.optimization_frequency
+                ):
                     self._optimize_parameters()
                     self.optimization_counter = 0
-                    
+
         except Exception as e:
             logger.error(f"Error updating trade result: {e}")
-    
+
     def _optimize_parameters(self) -> None:
         """Internal method to optimize scaling parameters."""
         try:
             # Only optimize if we have enough data with returns
             trades_with_returns = [
-                trade for trade in self.trade_history 
-                if "return" in trade
+                trade for trade in self.trade_history if "return" in trade
             ]
-            
+
             if len(trades_with_returns) < 20:
                 logger.info("Insufficient data for parameter optimization")
                 return
-            
+
             # Optimize parameters
             optimized_params = optimize_scaling_parameters(trades_with_returns)
-            
+
             # Update parameters
             old_params = {
                 "confidence_weight": self.confidence_weight,
                 "profit_weight": self.profit_weight,
                 "max_scale": self.max_scale,
             }
-            
+
             self.confidence_weight = optimized_params["confidence_weight"]
             self.profit_weight = optimized_params["profit_weight"]
             self.max_scale = optimized_params["max_scale"]
-            
-            logger.info(f"Updated scaling parameters from {old_params} to {optimized_params}")
-            
+
+            logger.info(
+                f"Updated scaling parameters from {old_params} to {optimized_params}"
+            )
+
         except Exception as e:
             logger.error(f"Error optimizing parameters: {e}")
-    
+
     def get_performance_summary(self) -> Dict[str, float]:
         """Get performance summary of recent trades."""
         try:
             trades_with_returns = [
-                trade for trade in self.trade_history 
-                if "return" in trade
+                trade for trade in self.trade_history if "return" in trade
             ]
-            
+
             if not trades_with_returns:
                 return {"error": "No completed trades found"}
-            
+
             returns = [trade["return"] for trade in trades_with_returns]
             scale_factors = [trade["scale_factor"] for trade in trades_with_returns]
-            
+
             # Calculate metrics
             mean_return = np.mean(returns)
             std_return = np.std(returns)
             sharpe_ratio = mean_return / std_return if std_return > 0 else 0
-            
+
             # Calculate scaling effectiveness
             mean_scale = np.mean(scale_factors)
             high_confidence_trades = [
-                trade for trade in trades_with_returns 
+                trade
+                for trade in trades_with_returns
                 if trade.get("confidence", 0) > DEFAULT_CONFIDENCE_THRESHOLD
             ]
-            
+
             high_conf_returns = [trade["return"] for trade in high_confidence_trades]
-            high_conf_mean_return = np.mean(high_conf_returns) if high_conf_returns else 0
-            
+            high_conf_mean_return = (
+                np.mean(high_conf_returns) if high_conf_returns else 0
+            )
+
             return {
                 "total_trades": len(trades_with_returns),
                 "mean_return": mean_return,
@@ -460,11 +469,11 @@ class AutoScaler:
                 "current_profit_weight": self.profit_weight,
                 "current_max_scale": self.max_scale,
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating performance summary: {e}")
             return {"error": str(e)}
-    
+
     def reset_history(self) -> None:
         """Reset trade history and optimization counter."""
         self.trade_history.clear()
@@ -479,7 +488,7 @@ def validate_scaling_inputs(
     account_balance: float,
 ) -> bool:
     """Validate inputs for scaling calculations.
-    
+
     Parameters
     ----------
     confidence : float
@@ -490,7 +499,7 @@ def validate_scaling_inputs(
         Base position size
     account_balance : float
         Account balance
-    
+
     Returns
     -------
     bool
@@ -500,23 +509,23 @@ def validate_scaling_inputs(
         # Check for reasonable ranges
         if not (0 <= confidence <= 5.0):
             return False
-        
+
         if not (0 <= projected_profit <= 1.0):
             return False
-        
+
         if not (0 < base_position <= account_balance):
             return False
-        
+
         if not (0 < account_balance):
             return False
-        
+
         # Check for finite values
         values = [confidence, projected_profit, base_position, account_balance]
         if not all(np.isfinite(val) for val in values):
             return False
-        
+
         return True
-        
+
     except Exception:
         return False
 
@@ -525,7 +534,7 @@ def main() -> None:
     """Demo function for testing auto scaler."""
     print("Auto Scaler Demo")
     print("=" * 30)
-    
+
     # Test basic scaling
     test_cases = [
         (1.0, 0.02, "Low confidence"),
@@ -533,38 +542,38 @@ def main() -> None:
         (1.5, 0.05, "High confidence"),
         (0.8, 0.01, "Very low confidence"),
     ]
-    
+
     base_pos = 100.0
     account_bal = 10000.0
-    
+
     for confidence, profit, description in test_cases:
         scale_factor = scale_position(confidence, profit)
         position_size, details = calculate_position_size(
             base_pos, confidence, profit, account_bal
         )
-        
+
         print(f"\n{description}:")
         print(f"  Confidence: {confidence:.2f}, Profit: {profit:.3f}")
         print(f"  Scale factor: {scale_factor:.2f}")
         print(f"  Position size: ${position_size:.2f}")
         print(f"  Risk %: {details['risk_percentage']:.2f}%")
-    
+
     # Test auto scaler class
     print(f"\nAuto Scaler Class Test:")
     scaler = AutoScaler()
-    
+
     # Simulate some trades
     for i in range(5):
         conf = 1.0 + i * 0.1
         prof = 0.02 + i * 0.01
         pos, details = scaler.scale(base_pos, conf, prof, account_bal)
-        
+
         # Simulate trade result
         actual_return = prof * np.random.uniform(0.5, 1.5)  # Random outcome
         scaler.update_trade_result(-1, actual_return)
-        
+
         print(f"  Trade {i+1}: Size=${pos:.2f}, Scale={details['scale_factor']:.2f}")
-    
+
     # Get performance summary
     summary = scaler.get_performance_summary()
     print(f"\nPerformance Summary:")
@@ -574,4 +583,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

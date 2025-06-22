@@ -62,7 +62,7 @@ class KalmanState:
 class KalmanFilter:
     """
     Linear Kalman Filter for optimal state estimation
-    
+
     Implements the standard predict-update cycle:
     Predict: x_k|k-1 = F * x_k-1|k-1 + B * u_k
              P_k|k-1 = F * P_k-1|k-1 * F^T + Q
@@ -82,7 +82,7 @@ class KalmanFilter:
     ):
         """
         Initialize Kalman Filter
-        
+
         Args:
             F: State transition matrix
             H: Observation matrix
@@ -120,13 +120,13 @@ class KalmanFilter:
         B: Optional[Matrix] = None,
     ) -> KalmanState:
         """
-        
+
         Prediction step of Kalman filter
-        
+
         Args:
             control_input: Control vector u_k
             B: Control matrix
-        
+
         Returns:
             Predicted state
         """
@@ -151,17 +151,15 @@ class KalmanFilter:
             logger.error(f"Kalman prediction failed: {e}")
             raise
 
-    def update(
-        self, measurement: Vector, timestamp: float = 0.0
-    ) -> KalmanState:
+    def update(self, measurement: Vector, timestamp: float = 0.0) -> KalmanState:
         """
-        
+
         Update step of Kalman filter
-        
+
         Args:
             measurement: Observation vector z_k
             timestamp: Measurement timestamp
-        
+
         Returns:
             Updated state
         """
@@ -209,7 +207,7 @@ class KalmanFilter:
         self, innovation: Vector, innovation_cov: Matrix
     ) -> float:
         """Calculate log-likelihood of current measurement."""
-    
+
         try:
             return multivariate_normal.logpdf(
                 innovation, mean=np.zeros(len(innovation)), cov=innovation_cov
@@ -229,9 +227,9 @@ class Particle:
 
 class ParticleFilter:
     """
-    
+
     Particle Filter for non-linear state estimation
-    
+
     Implements Sequential Monte Carlo estimation:
     1. Prediction: Sample from motion model
     2. Update: Weight particles by likelihood
@@ -266,18 +264,14 @@ class ParticleFilter:
         # Resampling threshold
         self.resample_threshold = n_particles / 3
 
-        logger.info(
-            f"Particle Filter initialized with {n_particles} particles"
-        )
+        logger.info(f"Particle Filter initialized with {n_particles} particles")
 
     def _initialize_particles(self) -> None:
         """Initialize particles with uniform distribution."""
         for i in range(self.n_particles):
             # Random initial state
             initial_state = np.random.randn(self.state_dim)
-            particle = Particle(
-                state=initial_state, weight=1.0 / self.n_particles
-            )
+            particle = Particle(state=initial_state, weight=1.0 / self.n_particles)
             self.particles.append(particle)
 
     def predict(self, process_noise_std: float = 0.1) -> None:
@@ -340,9 +334,7 @@ class ParticleFilter:
                 self._initialize_particles()
 
             # Check if resampling is needed
-            effective_particles = 1.0 / np.sum(
-                [p.weight**2 for p in self.particles]
-            )
+            effective_particles = 1.0 / np.sum([p.weight**2 for p in self.particles])
             if effective_particles < self.resample_threshold:
                 self._resample()
 
@@ -430,7 +422,7 @@ class ParticleFilter:
 class TimeAwareEMA:
     """
     Time-aware Exponential Moving Average
-    
+
     Adjusts smoothing factor based on actual time intervals
     rather than assuming regular sampling.
     """
@@ -438,7 +430,7 @@ class TimeAwareEMA:
     def __init__(self, alpha: float, initial_value: Optional[float] = None):
         """
         Initialize EMA filter
-        
+
         Args:
             alpha: Base smoothing factor (0 < α < 1)
             initial_value: Initial EMA value
@@ -472,11 +464,7 @@ class TimeAwareEMA:
                 return self.value
 
             # Calculate time delta
-            dt = (
-                timestamp - self.last_time
-                if self.last_time is not None
-                else 1.0
-            )
+            dt = timestamp - self.last_time if self.last_time is not None else 1.0
             dt = max(dt, 1e-6)  # Prevent division by zero
 
             # Time-adjusted smoothing factor
@@ -496,7 +484,7 @@ class TimeAwareEMA:
 
 class AdaptiveFilter:
     """
-    
+
     Adaptive filter that switches between different filtering strategies
     based on signal characteristics and market conditions.
     """
@@ -533,9 +521,7 @@ class AdaptiveFilter:
             self._select_filter()
 
             # Apply selected filter
-            filtered_value = self.filters[self.current_filter].update(
-                value, timestamp
-            )
+            filtered_value = self.filters[self.current_filter].update(value, timestamp)
 
             return filtered_value
 
@@ -555,13 +541,9 @@ class AdaptiveFilter:
             volatility = np.std(self.volatility_window)
 
             if volatility > self.volatility_threshold:
-                self.current_filter = (
-                    "ema_slow"  # Smooth more in high volatility
-                )
+                self.current_filter = "ema_slow"  # Smooth more in high volatility
             else:
-                self.current_filter = (
-                    "ema_fast"  # React faster in low volatility
-                )
+                self.current_filter = "ema_fast"  # React faster in low volatility
 
 
 # Convenience functions for external API

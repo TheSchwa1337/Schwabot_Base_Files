@@ -24,6 +24,7 @@ import numpy as np
 from .btc_vector_aggregator import btc_eta
 from .btc_vector_aggregator import btc_vector
 from .btc_vector_aggregator import btc_xi
+
 # Import all our mathematical modules
 from .ghost_phase_integrator import compute_ghost_phase_packet
 from .ghost_phase_integrator import GhostPhasePacket
@@ -275,10 +276,9 @@ class StrategyTriggerPipeline:
 
         return execution_packet
 
-    def _compute_glyph_mapping(
-        self, core_data: CoreVectorData
-    ) -> Dict[str, float]:
+    def _compute_glyph_mapping(self, core_data: CoreVectorData) -> Dict[str, float]:
         """Compute glyph mapping using mathematical core functions."""
+
         # Simple price function for glyph determinant
         def price_func(x: float, y: float) -> float:
             """TODO: document price_func."""
@@ -308,14 +308,8 @@ class StrategyTriggerPipeline:
     ) -> GhostPhasePacket:
         """Compute ghost phase integration packet."""
         # Get recent phantom memory events for echo
-        recent_events = self.phantom_memory.get_recent_events(
-            300.0
-        )  # 5 min window
-        h_echo = (
-            [current_hash]
-            if not recent_events
-            else [current_hash, current_hash]
-        )
+        recent_events = self.phantom_memory.get_recent_events(300.0)  # 5 min window
+        h_echo = [current_hash] if not recent_events else [current_hash, current_hash]
 
         # Compute phase packet with dummy values (would use real signals)
         phase_packet = compute_ghost_phase_packet(
@@ -428,7 +422,9 @@ class StrategyTriggerPipeline:
         thermal_weight = phase_packet.C_t
 
         # Generate strategy signature
-        strategy_signature = f"ghost_strat_{strategy_idx}_{int(phase_packet.mu_echo * 1000):03d}"
+        strategy_signature = (
+            f"ghost_strat_{strategy_idx}_{int(phase_packet.mu_echo * 1000):03d}"
+        )
 
         return StrategyExecutionPacket(
             action=action,
@@ -452,9 +448,7 @@ class GhostStrategyIntegrator:
     def __init__(self, **kwargs):
         """Initialize ghost strategy integrator."""
         self.trigger_pipeline = StrategyTriggerPipeline(**kwargs)
-        self.logger = logging.getLogger(
-            f"{__name__}.{self.__class__.__name__}"
-        )
+        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
     def process_market_data(
         self,
@@ -477,14 +471,10 @@ class GhostStrategyIntegrator:
         )
 
         # Log input data
-        self.logger.debug(
-            f"Processing market data: BTC=${btc_price}, Vol={btc_volume}"
-        )
+        self.logger.debug(f"Processing market data: BTC=${btc_price}, Vol={btc_volume}")
 
         # Execute trigger cycle
-        execution_packet = self.trigger_pipeline.process_trigger_cycle(
-            core_data
-        )
+        execution_packet = self.trigger_pipeline.process_trigger_cycle(core_data)
 
         # Log output decision
         self.logger.info(
@@ -500,8 +490,6 @@ class GhostStrategyIntegrator:
         return {
             "ferris_wheel_position": self.trigger_pipeline.ferris_wheel.cycle_position,
             "phantom_memory_events": self.trigger_pipeline.phantom_memory.event_count,
-            "hash_registry_size": len(
-                self.trigger_pipeline.ferris_wheel.hash_registry
-            ),
+            "hash_registry_size": len(self.trigger_pipeline.ferris_wheel.hash_registry),
             "strategy_matrix_shape": self.trigger_pipeline.strategy_matrix.shape,
         }

@@ -91,9 +91,9 @@ def safe_delta_calculation(
     price_now: float, price_prev: float, epsilon: float = EPSILON_FLOAT64
 ) -> float:
     """
-    
+
     Enhanced delta calculation with numerical stability
-    
+
     Implements: δ = (P_now - P_prev) / max(P_prev, ε)
     """
     return (price_now - price_prev) / max(abs(price_prev), epsilon)
@@ -103,9 +103,9 @@ def normalized_delta_tanh(
     price_now: float, price_prev: float, scaling_factor: float = 1.0
 ) -> float:
     """
-    
+
     Normalized delta bounded between -1 and 1 using tanh
-    
+
     Implements: tanh(scaling_factor * δ)
     """
     delta = safe_delta_calculation(price_now, price_prev)
@@ -114,9 +114,9 @@ def normalized_delta_tanh(
 
 def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
     """
-    
+
     Improved slope angle calculation using atan2 for better quadrant handling
-    
+
     Implements: θ = arctan2(gain_vector, tick_duration)
     """
     return np.arctan2(gain_vector, tick_duration)
@@ -127,13 +127,11 @@ def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
 # =====================================
 
 
-def shannon_entropy_stable(
-    prob_vector: Vector, epsilon: float = 1e-10
-) -> float:
+def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float:
     """
-    
+
     Numerically stable Shannon entropy calculation
-    
+
     Implements: H = -Σ p_i * log₂(p_i + ε)
     """
     prob_vector = np.clip(prob_vector, epsilon, 1.0)
@@ -141,9 +139,7 @@ def shannon_entropy_stable(
     return -np.sum(prob_vector * np.log2(prob_vector + epsilon))
 
 
-def kl_divergence_stable(
-    p: Vector, q: Vector, epsilon: float = 1e-10
-) -> float:
+def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
     """
     Kullback-Leibler divergence with numerical stability
 
@@ -151,11 +147,11 @@ def kl_divergence_stable(
     """
     p = np.clip(p, epsilon, 1.0)
     q = np.clip(q, epsilon, 1.0)
-    
+
     # Normalize distributions
     p = p / np.sum(p)
     q = q / np.sum(q)
-    
+
     return np.sum(p * np.log(p / q))
 
 
@@ -186,9 +182,7 @@ def stable_activation_matrix(
     Implements: tanh(clip(input @ (W + λI)))
     """
     # L2 regularization
-    regularized_weights = weight_matrix + lambda_reg * np.eye(
-        weight_matrix.shape[0]
-    )
+    regularized_weights = weight_matrix + lambda_reg * np.eye(weight_matrix.shape[0])
 
     # Matrix multiplication
     raw_score = input_array @ regularized_weights
@@ -259,9 +253,7 @@ def enhanced_thermal_dynamics(
     vol_scale = 1 + np.log1p(volatility)
 
     # Multi-factor thermal pressure
-    pressure = (
-        np.tanh(volume_current / (ema_volume + EPSILON_FLOAT64)) * vol_scale
-    )
+    pressure = np.tanh(volume_current / (ema_volume + EPSILON_FLOAT64)) * vol_scale
 
     # Temperature decay factor
     temp_decay = np.exp(-volatility / 10)
@@ -288,9 +280,7 @@ def adaptive_gaussian_kernel(time_delta: Vector, volatility: float) -> Vector:
     sigma = np.sqrt(1 + volatility) * 0.5
 
     # Normalized Gaussian with bounds checking
-    kernel = np.exp(-0.5 * (time_delta / sigma) ** 2) / (
-        sigma * np.sqrt(2 * np.pi)
-    )
+    kernel = np.exp(-0.5 * (time_delta / sigma) ** 2) / (sigma * np.sqrt(2 * np.pi))
 
     return np.clip(kernel, EPSILON_FLOAT64, 1.0)
 
@@ -470,9 +460,7 @@ def higuchi_fractal_dimension(time_series: Vector, k_max: int = 10) -> float:
         for m in range(k):
             ll = 0
             for i in range(1, int((n - m) / k)):
-                ll += abs(
-                    time_series[m + i * k] - time_series[m + (i - 1) * k]
-                )
+                ll += abs(time_series[m + i * k] - time_series[m + (i - 1) * k])
             ll = ll * (n - 1) / (k * int((n - m) / k) * k)
             lm.append(ll)
         lk.append(np.log(np.mean(lm)))
@@ -587,9 +575,7 @@ def api_entropy_reflection_penalty(
     penalized_confidence = confidence * penalty_factor
 
     # Entropy-based reflection penalty
-    error_entropy = shannon_entropy_stable(
-        np.array([api_errors, 1]) + EPSILON_FLOAT64
-    )
+    error_entropy = shannon_entropy_stable(np.array([api_errors, 1]) + EPSILON_FLOAT64)
     reflection_penalty = 1.0 - error_entropy / np.log2(2)  # Normalized
 
     final_confidence = penalized_confidence * reflection_penalty

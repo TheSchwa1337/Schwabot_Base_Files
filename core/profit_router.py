@@ -27,11 +27,13 @@ logger = logging.getLogger(__name__)
 # Base allocation matrix for different phases
 # Rows: [4-bit, 8-bit, 42-bit] phases
 # Cols: [USDC, XRP, BTC, ETH] assets
-BASE_ALLOCATION_MATRIX = np.array([
-    [0.70, 0.15, 0.10, 0.05],  # 4-bit: Conservative (high USDC)
-    [0.50, 0.20, 0.20, 0.10],  # 8-bit: Balanced
-    [0.20, 0.25, 0.35, 0.20],  # 42-bit: Aggressive (high BTC/ETH)
-])
+BASE_ALLOCATION_MATRIX = np.array(
+    [
+        [0.70, 0.15, 0.10, 0.05],  # 4-bit: Conservative (high USDC)
+        [0.50, 0.20, 0.20, 0.10],  # 8-bit: Balanced
+        [0.20, 0.25, 0.35, 0.20],  # 42-bit: Aggressive (high BTC/ETH)
+    ]
+)
 
 # Asset names and properties
 ASSETS = ["USDC", "XRP", "BTC", "ETH"]
@@ -45,8 +47,8 @@ ASSET_PROPERTIES = {
 # Substitution alternatives for each asset type
 SUBSTITUTION_ALTERNATIVES = {
     "USDC": ["USDT", "DAI", "BUSD"],  # Stable alternatives
-    "XRP": ["ADA", "DOT", "LINK"],    # Alt coin alternatives
-    "BTC": ["BTC", "WBTC"],           # BTC variants
+    "XRP": ["ADA", "DOT", "LINK"],  # Alt coin alternatives
+    "BTC": ["BTC", "WBTC"],  # BTC variants
     "ETH": ["ETH", "WETH", "STETH"],  # ETH variants
 }
 
@@ -61,7 +63,7 @@ def create_randomized_matrix(
     correlation_factor: float = 0.05,
 ) -> Tuple[np.ndarray, Dict[str, Any]]:
     """Create randomized allocation matrix with asset substitutions.
-    
+
     Parameters
     ----------
     base_matrix : np.ndarray
@@ -72,7 +74,7 @@ def create_randomized_matrix(
         Volatility-based adjustment factor (0-1)
     correlation_factor : float, optional
         Correlation-based adjustment factor (0-1)
-    
+
     Returns
     -------
     Tuple[np.ndarray, Dict[str, Any]]
@@ -83,32 +85,32 @@ def create_randomized_matrix(
         # Set random seed for deterministic behavior
         np.random.seed(substitution_seed)
         random.seed(substitution_seed)
-        
+
         # Copy base matrix
         randomized_matrix = base_matrix.copy()
         substitutions = {}
-        
+
         # Apply volatility adjustments
         for phase_idx in range(len(randomized_matrix)):
             for asset_idx, asset in enumerate(ASSETS):
                 vol = ASSET_PROPERTIES[asset]["volatility"]
-                
+
                 # Reduce allocation for high volatility assets in conservative phases
                 if phase_idx == 0 and vol > 0.1:  # 4-bit phase
                     adjustment = 1.0 - (vol * volatility_adjustment)
                     randomized_matrix[phase_idx, asset_idx] *= adjustment
-                
+
                 # Increase allocation for stable assets in aggressive phases
                 elif phase_idx == 2 and vol < 0.05:  # 42-bit phase
                     adjustment = 1.0 + (volatility_adjustment * 0.5)
                     randomized_matrix[phase_idx, asset_idx] *= adjustment
-        
+
         # Normalize rows to sum to 1.0
         for phase_idx in range(len(randomized_matrix)):
             row_sum = randomized_matrix[phase_idx].sum()
             if row_sum > 0:
                 randomized_matrix[phase_idx] /= row_sum
-        
+
         # Randomly substitute assets based on correlation
         for phase_idx in range(len(randomized_matrix)):
             for asset_idx, asset in enumerate(ASSETS):
@@ -118,7 +120,7 @@ def create_randomized_matrix(
                     if len(alternatives) > 1:
                         new_asset = random.choice(alternatives)
                         substitutions[f"phase_{phase_idx}_{asset}"] = new_asset
-        
+
         metadata = {
             "substitution_seed": substitution_seed,
             "volatility_adjustment": volatility_adjustment,
@@ -126,9 +128,9 @@ def create_randomized_matrix(
             "substitutions": substitutions,
             "matrix_sum_check": [randomized_matrix[i].sum() for i in range(3)],
         }
-        
+
         return randomized_matrix, metadata
-        
+
     except Exception as e:
         logger.error(f"Error creating randomized matrix: {e}")
         return base_matrix, {"error": str(e)}
@@ -141,7 +143,7 @@ def route_profit(
     min_allocation: float = 0.01,
 ) -> Dict[str, float]:
     """Route profit to assets based on phase and allocation matrix.
-    
+
     Parameters
     ----------
     profit_amount : float
@@ -152,7 +154,7 @@ def route_profit(
         Custom allocation matrix (default: base matrix)
     min_allocation : float, optional
         Minimum allocation per asset
-    
+
     Returns
     -------
     Dict[str, float]
@@ -162,32 +164,32 @@ def route_profit(
         if profit_amount <= 0:
             logger.warning(f"Invalid profit amount: {profit_amount}")
             return {asset: 0.0 for asset in ASSETS}
-        
+
         # Use base matrix if none provided
         if allocation_matrix is None:
             allocation_matrix = BASE_ALLOCATION_MATRIX
-        
+
         # Get phase index
         phase_idx = PHASE_MAPPING.get(phase_bit_depth, 1)  # Default to 8-bit
-        
+
         # Get allocation weights for this phase
         weights = allocation_matrix[phase_idx]
-        
+
         # Calculate allocations
         allocations = {}
         remaining_amount = profit_amount
-        
+
         for i, asset in enumerate(ASSETS):
             # Calculate base allocation
             allocation = profit_amount * weights[i]
-            
+
             # Apply minimum allocation constraint
             if allocation > 0 and allocation < min_allocation:
                 allocation = min_allocation
-            
+
             allocations[asset] = allocation
             remaining_amount -= allocation
-        
+
         # Distribute any remaining amount proportionally
         if remaining_amount > 0.01:  # Small threshold to avoid floating point issues
             total_weight = sum(weights)
@@ -195,13 +197,13 @@ def route_profit(
                 for i, asset in enumerate(ASSETS):
                     additional = remaining_amount * (weights[i] / total_weight)
                     allocations[asset] += additional
-        
+
         # Ensure non-negative allocations
         for asset in ASSETS:
             allocations[asset] = max(0.0, allocations[asset])
-        
+
         return allocations
-        
+
     except Exception as e:
         logger.error(f"Error routing profit: {e}")
         return {asset: 0.0 for asset in ASSETS}
@@ -212,14 +214,14 @@ def analyze_allocation_efficiency(
     market_conditions: Optional[Dict[str, float]] = None,
 ) -> Dict[str, Any]:
     """Analyze efficiency of profit allocation.
-    
+
     Parameters
     ----------
     allocations : Dict[str, float]
         Asset allocations to analyze
     market_conditions : Dict[str, float], optional
         Current market conditions (volatility, liquidity scores)
-    
+
     Returns
     -------
     Dict[str, Any]
@@ -227,33 +229,33 @@ def analyze_allocation_efficiency(
     """
     try:
         total_allocation = sum(allocations.values())
-        
+
         if total_allocation <= 0:
             return {"error": "No allocation to analyze"}
-        
+
         # Calculate allocation percentages
         percentages = {
             asset: (amount / total_allocation) * 100
             for asset, amount in allocations.items()
         }
-        
+
         # Calculate risk metrics
         risk_score = 0.0
         liquidity_score = 0.0
-        
+
         for asset, percentage in percentages.items():
             if asset in ASSET_PROPERTIES:
                 props = ASSET_PROPERTIES[asset]
                 risk_score += (percentage / 100) * props["volatility"]
                 liquidity_score += (percentage / 100) * props["liquidity"]
-        
+
         # Diversification score (higher is better)
         non_zero_allocations = sum(1 for amount in allocations.values() if amount > 0)
         diversification_score = non_zero_allocations / len(ASSETS)
-        
+
         # Stability score (higher USDC allocation = more stable)
         stability_score = percentages.get("USDC", 0) / 100
-        
+
         analysis = {
             "total_allocation": total_allocation,
             "percentages": percentages,
@@ -263,14 +265,18 @@ def analyze_allocation_efficiency(
             "stability_score": stability_score,
             "dominant_asset": max(percentages.items(), key=lambda x: x[1])[0],
         }
-        
+
         # Add market condition adjustments if provided
         if market_conditions:
-            analysis["market_adjusted_risk"] = risk_score * market_conditions.get("volatility_multiplier", 1.0)
-            analysis["market_adjusted_liquidity"] = liquidity_score * market_conditions.get("liquidity_multiplier", 1.0)
-        
+            analysis["market_adjusted_risk"] = risk_score * market_conditions.get(
+                "volatility_multiplier", 1.0
+            )
+            analysis["market_adjusted_liquidity"] = (
+                liquidity_score * market_conditions.get("liquidity_multiplier", 1.0)
+            )
+
         return analysis
-        
+
     except Exception as e:
         logger.error(f"Error analyzing allocation efficiency: {e}")
         return {"error": str(e)}
@@ -278,10 +284,10 @@ def analyze_allocation_efficiency(
 
 class ProfitRouter:
     """Main profit routing class with randomized substitution support."""
-    
+
     def __init__(self, randomization_enabled: bool = True):
         """Initialize profit router.
-        
+
         Parameters
         ----------
         randomization_enabled : bool, optional
@@ -291,14 +297,14 @@ class ProfitRouter:
         self.current_matrix = BASE_ALLOCATION_MATRIX.copy()
         self.substitution_metadata: Dict[str, Any] = {}
         self.allocation_history: List[Dict[str, Any]] = []
-    
+
     def update_matrix(
         self,
         substitution_seed: Optional[int] = None,
         volatility_adjustment: float = 0.1,
     ) -> None:
         """Update allocation matrix with new randomization.
-        
+
         Parameters
         ----------
         substitution_seed : int, optional
@@ -308,19 +314,20 @@ class ProfitRouter:
         """
         if not self.randomization_enabled:
             return
-        
+
         if substitution_seed is None:
             import time
+
             substitution_seed = int(time.time())
-        
+
         self.current_matrix, self.substitution_metadata = create_randomized_matrix(
             BASE_ALLOCATION_MATRIX,
             substitution_seed,
             volatility_adjustment,
         )
-        
+
         logger.info(f"Updated allocation matrix with seed {substitution_seed}")
-    
+
     def route(
         self,
         profit_amount: float,
@@ -328,7 +335,7 @@ class ProfitRouter:
         record_history: bool = True,
     ) -> Dict[str, float]:
         """Route profit using current allocation matrix.
-        
+
         Parameters
         ----------
         profit_amount : float
@@ -337,7 +344,7 @@ class ProfitRouter:
             Current phase bit depth
         record_history : bool, optional
             Whether to record this allocation in history
-        
+
         Returns
         -------
         Dict[str, float]
@@ -348,37 +355,39 @@ class ProfitRouter:
             phase_bit_depth,
             self.current_matrix,
         )
-        
+
         if record_history:
-            self.allocation_history.append({
-                "timestamp": __import__("time").time(),
-                "profit_amount": profit_amount,
-                "phase_bit_depth": phase_bit_depth,
-                "allocations": allocations.copy(),
-            })
-            
+            self.allocation_history.append(
+                {
+                    "timestamp": __import__("time").time(),
+                    "profit_amount": profit_amount,
+                    "phase_bit_depth": phase_bit_depth,
+                    "allocations": allocations.copy(),
+                }
+            )
+
             # Keep history size manageable
             if len(self.allocation_history) > 1000:
                 self.allocation_history = self.allocation_history[-500:]
-        
+
         return allocations
-    
+
     def get_allocation_summary(self) -> Dict[str, Any]:
         """Get summary of recent allocations."""
         if not self.allocation_history:
             return {"error": "No allocation history"}
-        
+
         recent_allocations = self.allocation_history[-10:]  # Last 10 allocations
-        
+
         # Calculate average allocations
         avg_allocations = {asset: 0.0 for asset in ASSETS}
         total_profit = 0.0
-        
+
         for record in recent_allocations:
             total_profit += record["profit_amount"]
             for asset, amount in record["allocations"].items():
                 avg_allocations[asset] += amount
-        
+
         # Convert to percentages
         if total_profit > 0:
             avg_percentages = {
@@ -387,7 +396,7 @@ class ProfitRouter:
             }
         else:
             avg_percentages = {asset: 0.0 for asset in ASSETS}
-        
+
         return {
             "recent_count": len(recent_allocations),
             "total_profit_routed": total_profit,
@@ -395,7 +404,7 @@ class ProfitRouter:
             "average_percentages": avg_percentages,
             "substitution_metadata": self.substitution_metadata,
         }
-    
+
     def reset_history(self) -> None:
         """Reset allocation history."""
         self.allocation_history.clear()
@@ -404,12 +413,12 @@ class ProfitRouter:
 
 def validate_allocation_matrix(matrix: np.ndarray) -> bool:
     """Validate allocation matrix format and constraints.
-    
+
     Parameters
     ----------
     matrix : np.ndarray
         Allocation matrix to validate
-    
+
     Returns
     -------
     bool
@@ -419,22 +428,22 @@ def validate_allocation_matrix(matrix: np.ndarray) -> bool:
         # Check shape
         if matrix.shape != (3, 4):
             return False
-        
+
         # Check non-negative values
         if np.any(matrix < 0):
             return False
-        
+
         # Check row sums (should be close to 1.0)
         row_sums = matrix.sum(axis=1)
         if not np.allclose(row_sums, 1.0, rtol=0.01):
             return False
-        
+
         # Check for NaN or infinite values
         if not np.all(np.isfinite(matrix)):
             return False
-        
+
         return True
-        
+
     except Exception:
         return False
 
@@ -444,37 +453,38 @@ def main() -> None:
     # Test basic routing
     print("Profit Router Demo")
     print("=" * 30)
-    
+
     # Test different phases
     test_profit = 1000.0
-    
+
     for phase in [4, 8, 42]:
         allocations = route_profit(test_profit, phase)
         print(f"\nPhase {phase}-bit allocation:")
         for asset, amount in allocations.items():
             percentage = (amount / test_profit) * 100
             print(f"  {asset}: ${amount:.2f} ({percentage:.1f}%)")
-    
+
     # Test randomized matrix
     print(f"\nRandomized Matrix Test:")
     randomized_matrix, metadata = create_randomized_matrix(
-        BASE_ALLOCATION_MATRIX, 
-        substitution_seed=12345
+        BASE_ALLOCATION_MATRIX, substitution_seed=12345
     )
-    
+
     print(f"Substitutions: {metadata.get('substitutions', {})}")
     print(f"Matrix sums: {metadata.get('matrix_sum_check', [])}")
-    
+
     # Test router class
     router = ProfitRouter(randomization_enabled=True)
     router.update_matrix(substitution_seed=67890)
-    
+
     # Route some profits
     for i, phase in enumerate([4, 8, 42, 8, 4]):
         profit = 500.0 + i * 100
         allocations = router.route(profit, phase)
-        print(f"\nRouter allocation {i+1} (phase {phase}): ${sum(allocations.values()):.2f}")
-    
+        print(
+            f"\nRouter allocation {i+1} (phase {phase}): ${sum(allocations.values()):.2f}"
+        )
+
     # Get summary
     summary = router.get_allocation_summary()
     print(f"\nRouter Summary:")
@@ -483,4 +493,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

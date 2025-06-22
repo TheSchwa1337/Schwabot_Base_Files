@@ -99,16 +99,12 @@ class MathematicalSequenceDetector:
         """Initialize sequence detector."""
         self.epsilon = Decimal("1e-10")
 
-    def detect_arithmetic_progression(
-        self, values: List[Decimal]
-    ) -> Dict[str, Any]:
+    def detect_arithmetic_progression(self, values: List[Decimal]) -> Dict[str, Any]:
         """Detect arithmetic progression in sequence."""
         if len(values) < 3:
             return {"is_ap": False, "common_difference": None}
 
-        differences = [
-            values[i + 1] - values[i] for i in range(len(values) - 1)
-        ]
+        differences = [values[i + 1] - values[i] for i in range(len(values) - 1)]
 
         # Check if all differences are approximately equal
         first_diff = differences[0]
@@ -124,9 +120,7 @@ class MathematicalSequenceDetector:
             ),
         }
 
-    def detect_geometric_progression(
-        self, values: List[Decimal]
-    ) -> Dict[str, Any]:
+    def detect_geometric_progression(self, values: List[Decimal]) -> Dict[str, Any]:
         """Detect geometric progression in sequence."""
         if len(values) < 3 or any(v == 0 for v in values[:-1]):
             return {"is_gp": False, "common_ratio": None}
@@ -141,9 +135,7 @@ class MathematicalSequenceDetector:
             "is_gp": is_gp,
             "common_ratio": float(first_ratio) if is_gp else None,
             "deviation": (
-                float(max(abs(r - first_ratio) for r in ratios))
-                if ratios
-                else 0.0
+                float(max(abs(r - first_ratio) for r in ratios)) if ratios else 0.0
             ),
         }
 
@@ -167,9 +159,7 @@ class MathematicalSequenceDetector:
         # Calculate ratio approximation to golden ratio
         golden_ratio = Decimal("1.618033988749895")
         if len(values) >= 4:
-            recent_ratio = (
-                values[-1] / values[-2] if values[-2] != 0 else Decimal("0")
-            )
+            recent_ratio = values[-1] / values[-2] if values[-2] != 0 else Decimal("0")
             ratio_to_golden = float(abs(recent_ratio - golden_ratio))
         else:
             ratio_to_golden = None
@@ -178,40 +168,31 @@ class MathematicalSequenceDetector:
             "is_fibonacci_like": fibonacci_like,
             "ratio_to_golden": ratio_to_golden,
             "max_deviation": max(deviations) if deviations else 0.0,
-            "avg_deviation": (
-                sum(deviations) / len(deviations) if deviations else 0.0
-            ),
+            "avg_deviation": (sum(deviations) / len(deviations) if deviations else 0.0),
         }
 
 
 class ThermalSignatureAnalyzer:
     """Analyzes thermal signatures for pattern matching."""
+
     def __init__(self) -> None:
         """Initialize thermal signature analyzer."""
         self.signature_cache = {}
         self.pattern_threshold = 0.8
 
-    def compute_thermal_signature(
-        self, thermal_values: List[float]
-    ) -> Decimal:
+    def compute_thermal_signature(self, thermal_values: List[float]) -> Decimal:
         """Compute thermal signature from values."""
         if not thermal_values:
             return Decimal("0.0")
 
         # Weighted sum with exponential decay
-        weights = [
-            Decimal(str(np.exp(-0.1 * i))) for i in range(len(thermal_values))
-        ]
-        weighted_sum = sum(
-            Decimal(str(v)) * w for v, w in zip(thermal_values, weights)
-        )
+        weights = [Decimal(str(np.exp(-0.1 * i))) for i in range(len(thermal_values))]
+        weighted_sum = sum(Decimal(str(v)) * w for v, w in zip(thermal_values, weights))
         weight_sum = sum(weights)
 
         return weighted_sum / weight_sum if weight_sum > 0 else Decimal("0.0")
 
-    def compare_thermal_signatures(
-        self, sig1: Decimal, sig2: Decimal
-    ) -> float:
+    def compare_thermal_signatures(self, sig1: Decimal, sig2: Decimal) -> float:
         """Compare two thermal signatures and return similarity score."""
         if sig1 == 0 and sig2 == 0:
             return 1.0
@@ -293,9 +274,7 @@ class VectorTripletMatcher:
         pattern_id = hashlib.md5(pattern_data.encode()).hexdigest()[:8]
 
         # Compute thermal signature
-        thermal_sig = self.thermal_analyzer.compute_thermal_signature(
-            list(values)
-        )
+        thermal_sig = self.thermal_analyzer.compute_thermal_signature(list(values))
 
         return TripletPattern(
             pattern_id=pattern_id,
@@ -316,9 +295,7 @@ class VectorTripletMatcher:
 
         # Check against all known patterns
         for pattern in self.known_patterns:
-            score = self._calculate_similarity(
-                test_decimals, list(pattern.values)
-            )
+            score = self._calculate_similarity(test_decimals, list(pattern.values))
 
             if score > best_score and score >= self.match_threshold:
                 best_score = score
@@ -365,9 +342,7 @@ class VectorTripletMatcher:
         norm_vals2 = [v / max_val2 for v in values2]
 
         # Calculate Euclidean distance
-        distance = sum(
-            (v1 - v2) ** 2 for v1, v2 in zip(norm_vals1, norm_vals2)
-        )
+        distance = sum((v1 - v2) ** 2 for v1, v2 in zip(norm_vals1, norm_vals2))
         distance = float(distance ** Decimal("0.5"))
 
         # Convert to similarity score
@@ -394,14 +369,10 @@ class VectorTripletMatcher:
             gp_analysis = self.sequence_detector.detect_geometric_progression(
                 decimal_triplet
             )
-            fib_analysis = self.sequence_detector.detect_fibonacci_like(
-                decimal_triplet
-            )
+            fib_analysis = self.sequence_detector.detect_fibonacci_like(decimal_triplet)
 
             # Thermal analysis
-            thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(
-                *triplet
-            )
+            thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(*triplet)
 
             # Pattern matching
             match_result = self.match_vector_triplet(tuple(triplet))
@@ -440,18 +411,10 @@ class VectorTripletMatcher:
             return {}
 
         # Count pattern types
-        ap_count = sum(
-            1 for a in analyses if a["arithmetic_progression"]["is_ap"]
-        )
-        gp_count = sum(
-            1 for a in analyses if a["geometric_progression"]["is_gp"]
-        )
-        fib_count = sum(
-            1 for a in analyses if a["fibonacci_like"]["is_fibonacci_like"]
-        )
-        match_count = sum(
-            1 for a in analyses if a["pattern_match"]["found_match"]
-        )
+        ap_count = sum(1 for a in analyses if a["arithmetic_progression"]["is_ap"])
+        gp_count = sum(1 for a in analyses if a["geometric_progression"]["is_gp"])
+        fib_count = sum(1 for a in analyses if a["fibonacci_like"]["is_fibonacci_like"])
+        match_count = sum(1 for a in analyses if a["pattern_match"]["found_match"])
 
         # Average metrics
         avg_similarity = sum(
@@ -468,22 +431,16 @@ class VectorTripletMatcher:
             "pattern_matches": match_count,
             "average_similarity_score": avg_similarity,
             "average_thermal_stability": avg_stability,
-            "dominant_pattern_type": self._find_dominant_pattern_type(
-                analyses
-            ),
+            "dominant_pattern_type": self._find_dominant_pattern_type(analyses),
         }
 
-    def _find_dominant_pattern_type(
-        self, analyses: List[Dict[str, Any]]
-    ) -> str:
+    def _find_dominant_pattern_type(self, analyses: List[Dict[str, Any]]) -> str:
         """Find the most common pattern type in analyses."""
         pattern_counts = {}
 
         for analysis in analyses:
             thermal_type = analysis["thermal_analysis"]["pattern_type"]
-            pattern_counts[thermal_type] = (
-                pattern_counts.get(thermal_type, 0) + 1
-            )
+            pattern_counts[thermal_type] = pattern_counts.get(thermal_type, 0) + 1
 
         return (
             max(pattern_counts.items(), key=lambda x: x[1])[0]
@@ -524,9 +481,7 @@ class TripletMatcher:
             )
             self.vector_matcher.register_pattern(pattern)
 
-    def match_triplet(
-        self, values: Tuple[float, float, float]
-    ) -> Dict[str, Any]:
+    def match_triplet(self, values: Tuple[float, float, float]) -> Dict[str, Any]:
         """Main triplet matching interface."""
         try:
             # Vector pattern matching
@@ -540,14 +495,10 @@ class TripletMatcher:
             gp_analysis = self.sequence_detector.detect_geometric_progression(
                 decimal_values
             )
-            fib_analysis = self.sequence_detector.detect_fibonacci_like(
-                decimal_values
-            )
+            fib_analysis = self.sequence_detector.detect_fibonacci_like(decimal_values)
 
             # Thermal analysis
-            thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(
-                *values
-            )
+            thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(*values)
 
             return {
                 "status": "success",
@@ -629,14 +580,10 @@ def main() -> None:
                 thermal_info = result["thermal_analysis"]
 
                 print(f"   Triplet {i + 1}: {triplet}")
-                print(
-                    f"      Match: {'✅' if match_info['found_match'] else '❌'}"
-                )
+                print(f"      Match: {'✅' if match_info['found_match'] else '❌'}")
                 if match_info["found_match"]:
                     print(f"      Pattern: {match_info['pattern_type']}")
-                    print(
-                        f"      Similarity: {match_info['similarity_score']:.3f}"
-                    )
+                    print(f"      Similarity: {match_info['similarity_score']:.3f}")
                 print(
                     f"      Thermal: {thermal_info['pattern_type']} "
                     f"(stability: {thermal_info['stability_score']:.3f})"
@@ -649,14 +596,10 @@ def main() -> None:
 
         if "summary" in sequence_result:
             summary = sequence_result["summary"]
-            print(
-                f"   Total triplets analyzed: {sequence_result['total_triplets']}"
-            )
+            print(f"   Total triplets analyzed: {sequence_result['total_triplets']}")
             print(f"   Pattern matches: {summary['pattern_matches']}")
             print(f"   Dominant pattern: {summary['dominant_pattern_type']}")
-            print(
-                f"   Avg similarity: {summary['average_similarity_score']:.3f}"
-            )
+            print(f"   Avg similarity: {summary['average_similarity_score']:.3f}")
 
         print("🎉 Triplet matcher demo completed!")
 

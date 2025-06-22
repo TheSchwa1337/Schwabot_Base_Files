@@ -55,9 +55,9 @@ logger = logging.getLogger(__name__)
 
 class SpectralTransform:
     """
-    
+
     Core spectral analysis engine for trading signals
-    
+
     Provides frequency domain analysis, wavelet decomposition,
     and entropy-based signal characterization.
     """
@@ -68,16 +68,14 @@ class SpectralTransform:
         self.epsilon = 1e-12  # Numerical stability constant
         logger.info("SpectralTransform engine initialized")
 
-    def fft_transform(
-        self, time_series: Vector
-    ) -> Tuple[ComplexVector, Vector]:
+    def fft_transform(self, time_series: Vector) -> Tuple[ComplexVector, Vector]:
         """
-        
+
         Fast Fourier Transform with frequency bins
-        
+
         Args:
             time_series: Input signal in time domain
-        
+
         Returns:
             (fft_coefficients, frequencies)
         """
@@ -96,16 +94,14 @@ class SpectralTransform:
             logger.error(f"FFT computation failed: {e}")
             raise
 
-    def power_spectral_density(
-        self, time_series: Vector
-    ) -> Tuple[Vector, Vector]:
+    def power_spectral_density(self, time_series: Vector) -> Tuple[Vector, Vector]:
         """
-        
+
         Compute Power Spectral Density using Welch's method
-        
+
         Args:
             time_series: Input signal
-        
+
         Returns:
             (frequencies, power_density)
         """
@@ -132,14 +128,14 @@ class SpectralTransform:
         wavelet: str = "morl",
     ) -> Tuple[Matrix, Vector]:
         """
-        
+
         Continuous Wavelet Transform for time-frequency analysis
-        
+
         Args:
             time_series: Input signal
             scales: Wavelet scales (auto-generated if None)
             wavelet: Wavelet type ('morl', 'mexh', 'cgau1')
-        
+
         Returns:
             (cwt_coefficients, scales_used)
         """
@@ -158,9 +154,7 @@ class SpectralTransform:
             logger.error(f"CWT computation failed: {e}")
             raise
 
-    def spectral_entropy(
-        self, time_series: Vector, base: float = 2.0
-    ) -> float:
+    def spectral_entropy(self, time_series: Vector, base: float = 2.0) -> float:
         """
         Calculate spectral entropy as measure of signal complexity
 
@@ -230,9 +224,7 @@ class SpectralTransform:
             logger.error(f"Dominant frequency detection failed: {e}")
             return 0.0
 
-    def bandpower(
-        self, time_series: Vector, freq_range: Tuple[float, float]
-    ) -> float:
+    def bandpower(self, time_series: Vector, freq_range: Tuple[float, float]) -> float:
         """
         Calculate power in specific frequency band
 
@@ -294,9 +286,9 @@ class SpectralTransform:
 
 class DLTWaveformEngine:
     """
-    
+
     DLT (Discrete Linear Transform) Waveform Engine
-    
+
     Specialized for trading signal analysis with entropy-based
     pattern detection and waveform characterization.
     """
@@ -307,9 +299,7 @@ class DLTWaveformEngine:
         self.waveform_memory: Dict[str, Any] = {}
         logger.info("DLT Waveform Engine initialized")
 
-    def analyze_waveform(
-        self, signal: Vector, signal_id: str = ""
-    ) -> Dict[str, Any]:
+    def analyze_waveform(self, signal: Vector, signal_id: str = "") -> Dict[str, Any]:
         """
         Comprehensive waveform analysis for trading signals
 
@@ -335,32 +325,24 @@ class DLTWaveformEngine:
             freqs, psd = self.spectral.power_spectral_density(signal)
             if len(psd) > 1:
                 analysis["peak_frequency_power"] = float(np.max(psd))
-                analysis["frequency_spread"] = float(
-                    np.std(freqs[psd > np.mean(psd)])
-                )
+                analysis["frequency_spread"] = float(np.std(freqs[psd > np.mean(psd)]))
 
             # Waveform complexity measure
-            cwt_coeffs, scales = self.spectral.continuous_wavelet_transform(
-                signal
-            )
+            cwt_coeffs, scales = self.spectral.continuous_wavelet_transform(signal)
             analysis["waveform_complexity"] = float(np.std(np.abs(cwt_coeffs)))
 
             # Cache results if ID provided
             if signal_id:
                 self.waveform_memory[signal_id] = analysis
 
-            logger.debug(
-                f"Waveform analysis completed for signal length {len(signal)}"
-            )
+            logger.debug(f"Waveform analysis completed for signal length {len(signal)}")
             return analysis
 
         except Exception as e:
             logger.error(f"Waveform analysis failed: {e}")
             return {"error": str(e)}
 
-    def entropy_threshold_trigger(
-        self, signal: Vector, threshold: float = 2.0
-    ) -> bool:
+    def entropy_threshold_trigger(self, signal: Vector, threshold: float = 2.0) -> bool:
         """
         Entropy-based trigger for ghost swap detection
 

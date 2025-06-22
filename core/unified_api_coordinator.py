@@ -212,9 +212,9 @@ class UnifiedAPICoordinator:
         self.total_latency = 0.0
 
         # Callbacks and hooks
-        self.data_callbacks: Dict[
-            str, List[Callable[[Dict[str, Any]], None]]
-        ] = defaultdict(list)
+        self.data_callbacks: Dict[str, List[Callable[[Dict[str, Any]], None]]] = (
+            defaultdict(list)
+        )
         self.error_callbacks: List[Callable[[str, str], None]] = []
 
         # Threading and async
@@ -337,9 +337,7 @@ class UnifiedAPICoordinator:
             adjusted_rate_limit = int(
                 base_rate_limit * exchange_config.rate_limit_multiplier
             )
-            self.rate_limiters[exchange_name] = RateLimiter(
-                adjusted_rate_limit
-            )
+            self.rate_limiters[exchange_name] = RateLimiter(adjusted_rate_limit)
 
             # Initialize connection status
             self.connections[exchange_name] = ConnectionStatus.DISCONNECTED
@@ -348,9 +346,7 @@ class UnifiedAPICoordinator:
             return True
 
         except Exception as e:
-            logger.error(
-                f"Failed to register exchange {exchange_config.name}: {e}"
-            )
+            logger.error(f"Failed to register exchange {exchange_config.name}: {e}")
             return False
 
     def add_data_callback(
@@ -378,9 +374,7 @@ class UnifiedAPICoordinator:
 
             exchange_config = self.exchanges[exchange]
             if endpoint not in exchange_config.endpoints:
-                raise ValueError(
-                    f"Endpoint {endpoint} not found for {exchange}"
-                )
+                raise ValueError(f"Endpoint {endpoint} not found for {exchange}")
 
             endpoint_config = exchange_config.endpoints[endpoint]
 
@@ -554,26 +548,18 @@ class UnifiedAPICoordinator:
             logger.error(f"Error generating auth headers: {e}")
             return {}
 
-    async def get_ticker(
-        self, exchange: str, symbol: str
-    ) -> Optional[Dict[str, Any]]:
+    async def get_ticker(self, exchange: str, symbol: str) -> Optional[Dict[str, Any]]:
         """Get ticker data for symbol."""
         try:
             params = (
-                {"product_id": symbol}
-                if exchange == "coinbase"
-                else {"symbol": symbol}
+                {"product_id": symbol} if exchange == "coinbase" else {"symbol": symbol}
             )
 
-            response = await self.make_request(
-                exchange, "ticker", params=params
-            )
+            response = await self.make_request(exchange, "ticker", params=params)
             return response.data if response and response.success else None
 
         except Exception as e:
-            logger.error(
-                f"Error getting ticker for {symbol} on {exchange}: {e}"
-            )
+            logger.error(f"Error getting ticker for {symbol} on {exchange}: {e}")
             return None
 
     async def get_order_book(
@@ -587,15 +573,11 @@ class UnifiedAPICoordinator:
                 else {"symbol": symbol, "limit": depth}
             )
 
-            response = await self.make_request(
-                exchange, "order_book", params=params
-            )
+            response = await self.make_request(exchange, "order_book", params=params)
             return response.data if response and response.success else None
 
         except Exception as e:
-            logger.error(
-                f"Error getting order book for {symbol} on {exchange}: {e}"
-            )
+            logger.error(f"Error getting order book for {symbol} on {exchange}: {e}")
             return None
 
     async def get_recent_trades(
@@ -609,24 +591,18 @@ class UnifiedAPICoordinator:
                 else {"symbol": symbol, "limit": limit}
             )
 
-            response = await self.make_request(
-                exchange, "trades", params=params
-            )
+            response = await self.make_request(exchange, "trades", params=params)
             return response.data if response and response.success else None
 
         except Exception as e:
-            logger.error(
-                f"Error getting trades for {symbol} on {exchange}: {e}"
-            )
+            logger.error(f"Error getting trades for {symbol} on {exchange}: {e}")
             return None
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get performance metrics."""
         try:
             avg_latency = self.total_latency / max(self.total_requests, 1)
-            success_rate = self.successful_requests / max(
-                self.total_requests, 1
-            )
+            success_rate = self.successful_requests / max(self.total_requests, 1)
 
             return {
                 "version": self.version,

@@ -50,9 +50,7 @@ class FluxCompensator:
     window: int | None = None
     multiplier: float = 0.9
 
-    _sma_buf: Deque[float] = field(
-        default_factory=lambda: deque(maxlen=10), init=False
-    )
+    _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=False)
     _ema: float | None = field(default=None, init=False)
 
     # ------------------------------------------------------------------

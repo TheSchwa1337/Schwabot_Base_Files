@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class MathLib:
     """Core mathematical library class."""
-    
+
     def __init__(self):
         """Initialize the MathLib component."""
         self.version = "1.0.0"

@@ -154,9 +154,7 @@ def compute_ghost_phase_packet(
     if len(H_echo) < 2:
         theta_drift = 0.0
     else:
-        int_series = np.fromiter(
-            (_hash_to_int(h) for h in H_echo), dtype=float
-        )
+        int_series = np.fromiter((_hash_to_int(h) for h in H_echo), dtype=float)
         diff_series = np.diff(int_series)
         spectrum = np.abs(np.fft.fft(diff_series))
         theta_drift = math.log(1.0 + float(np.linalg.norm(spectrum))) / epsilon

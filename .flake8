@@ -1,7 +1,47 @@
 [flake8]
 # Only lint active production code, ignore parked legacy files
-exclude = .git,__pycache__,maintenance/*,tools/*
+# First 'exclude' removed to avoid duplicate key (merged below)
 # Allow long docstrings & partial type-hints for now
 extend-ignore = D401,ANN101,ANN201
-max-complexity = 25
-max-line-length = 79 
+max-line-length = 79
+
+# Schwabot-specific exclusions
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    site-packages,
+    node_modules,
+    *.egg-info,
+    .pytest_cache,
+    .mypy_cache,
+    tests/deprecated/,
+    sandbox/,
+    build/,
+    dist/
+
+# Per-file exclusions for generated files
+per-file-ignores =
+    # Generated files
+    __init__.py:F401
+    # Test files
+    tests/*:E722,W291,W293
+    # Configuration files
+    setup.py:E722
+    # Documentation
+    docs/*:E722,W291,W293
+
+# Complexity settings
+max-complexity = 15
+
+# Docstring settings
+docstring-convention = google
+
+# Import order
+import-order-style = google
+
+# Naming conventions
+# Allow single letter variables for mathematical formulas
+good-names = i,j,k,n,x,y,z,a,b,c,d,e,f,g,h,l,m,o,p,q,r,s,t,u,v,w

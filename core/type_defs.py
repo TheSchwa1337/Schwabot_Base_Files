@@ -146,9 +146,7 @@ Image = NDArray[np.uint8]  # 2D image array
 Video = NDArray[np.uint8]  # 3D video array
 
 # Visual function types
-SpectralDensity = Callable[
-    [Signal, int], Spectrum
-]  # Spectral density function
+SpectralDensity = Callable[[Signal, int], Spectrum]  # Spectral density function
 PhaseCoherence = Callable[[Phase], float]  # Phase coherence function
 
 # =============================================================================
@@ -188,9 +186,7 @@ DriftCoefficient = NewType("DriftCoefficient", float)  # Drift coefficient
 DriftVelocity = NewType("DriftVelocity", float)  # Drift velocity
 
 # Drift functions
-DriftField = Callable[
-    [float, float, DriftCoefficient], DriftVelocity
-]  # Drift field
+DriftField = Callable[[float, float, DriftCoefficient], DriftVelocity]  # Drift field
 PhaseField = Callable[[float, float], float]  # Phase field
 
 # =============================================================================

@@ -6,7 +6,7 @@ from .ghost_news_vectorizer import sentiment_lambda
 
 __all__ = [
     "exec_gate",
-    "build_packet", 
+    "build_packet",
     "PhasePacket",
     "sentiment_lambda",
-] 
+]

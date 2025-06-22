@@ -122,20 +122,18 @@ class RouteFeatureExtractor:
 
     def extract_features(self, route: RouteVector) -> Vector:
         """
-        
+
         Extract numerical features from route vector
-        
+
         Args:
             route: Route vector to analyze
-        
+
         Returns:
             Feature vector for classification
         """
         try:
             # Normalize profit by volume
-            profit_per_unit = float(
-                route.profit / (route.volume + Decimal("1e-10"))
-            )
+            profit_per_unit = float(route.profit / (route.volume + Decimal("1e-10")))
 
             # Price movement magnitude
             price_change = float(
@@ -149,9 +147,7 @@ class RouteFeatureExtractor:
             risk_adjusted_return = profit_per_unit / (route.volatility + 1e-6)
 
             # Volume quality indicator
-            volume_quality = min(
-                1.0, float(route.volume) / 10.0
-            )  # Normalize volume
+            volume_quality = min(1.0, float(route.volume) / 10.0)  # Normalize volume
 
             # Trend alignment score
             trend_score = route.trend_strength * np.sign(profit_per_unit)
@@ -179,20 +175,18 @@ class RouteFeatureExtractor:
 
     def compute_risk_score(self, route: RouteVector) -> float:
         """
-        
+
         Compute risk score for route
-        
+
         Args:
             route: Route to analyze
-        
+
         Returns:
             Risk score (0 = low risk, 1 = high risk)
         """
         try:
             # Volatility component
-            vol_risk = min(
-                1.0, route.volatility / 0.5
-            )  # Normalize to 50% volatility
+            vol_risk = min(1.0, route.volatility / 0.5)  # Normalize to 50% volatility
 
             # Thermal cost component
             thermal_risk = min(
@@ -224,7 +218,7 @@ class RouteFeatureExtractor:
 
 class RouteClassifier:
     """
-    
+
     AI-powered route classifier using pattern recognition and probabilistic analysis
     """
 
@@ -260,12 +254,12 @@ class RouteClassifier:
 
     def classify_route(self, route: RouteVector) -> ClassificationResult:
         """
-        
+
         Classify a trading route and determine if override is needed
-        
+
         Args:
             route: Route vector to classify
-        
+
         Returns:
             Classification result with override decision
         """
@@ -274,9 +268,7 @@ class RouteClassifier:
             features = self.feature_extractor.extract_features(route)
 
             # Compute classification scores
-            classification_scores = self._compute_classification_scores(
-                features, route
-            )
+            classification_scores = self._compute_classification_scores(features, route)
 
             # Determine primary classification
             primary_class = max(
@@ -348,10 +340,7 @@ class RouteClassifier:
                 > self.classification_thresholds["optimal_efficiency"]
             ):
                 optimal_score *= 1.2
-            if (
-                route.volatility
-                < self.classification_thresholds["volatility_limit"]
-            ):
+            if route.volatility < self.classification_thresholds["volatility_limit"]:
                 optimal_score *= 1.1
             scores["optimal"] = min(1.0, optimal_score)
 
@@ -366,8 +355,7 @@ class RouteClassifier:
             if len(self.route_memory.get(route.asset_pair, [])) > 3:
                 recent_routes = self.route_memory[route.asset_pair][-3:]
                 if all(
-                    r.efficiency_ratio < route.efficiency_ratio
-                    for r in recent_routes
+                    r.efficiency_ratio < route.efficiency_ratio for r in recent_routes
                 ):
                     decay_score = 0.8
             scores["decaying"] = decay_score
@@ -376,10 +364,7 @@ class RouteClassifier:
             trap_score = 0.0
             if route.efficiency_ratio < 0:  # Negative efficiency
                 trap_score += 0.4
-            if (
-                route.volatility
-                > self.classification_thresholds["volatility_limit"]
-            ):
+            if route.volatility > self.classification_thresholds["volatility_limit"]:
                 trap_score += 0.3
             if float(route.thermal_index) > 3.0:  # High cost
                 trap_score += 0.2
@@ -406,9 +391,9 @@ class RouteClassifier:
         route: RouteVector,
     ) -> Tuple[bool, str, Optional[str]]:
         """
-        
+
         Determine if allocator decision should be overridden
-        
+
         Returns:
             (should_override, reason, alternative_route_id)
         """
@@ -428,10 +413,7 @@ class RouteClassifier:
                 return True, f"Risk score too high: {risk_score:.3f}", None
 
             # 3. Low confidence in any classification
-            if (
-                confidence
-                < self.classification_thresholds["minimum_confidence"]
-            ):
+            if confidence < self.classification_thresholds["minimum_confidence"]:
                 return (
                     True,
                     f"Classification confidence too low: {confidence:.3f}",
@@ -554,7 +536,7 @@ class RouteClassifier:
 
 class IntegratedRouteManager:
     """
-    
+
     Integrated manager that combines allocator and classifier decisions
     """
 
@@ -562,15 +544,11 @@ class IntegratedRouteManager:
         """TODO: document __init__."""
         self.classifier = RouteClassifier()
         self.approved_routes: Dict[str, RouteVector] = {}
-        self.rejected_routes: Dict[
-            str, Tuple[RouteVector, ClassificationResult]
-        ] = {}
+        self.rejected_routes: Dict[str, Tuple[RouteVector, ClassificationResult]] = {}
 
         logger.info("Integrated route manager initialized")
 
-    def validate_route(
-        self, route: RouteVector
-    ) -> Tuple[bool, ClassificationResult]:
+    def validate_route(self, route: RouteVector) -> Tuple[bool, ClassificationResult]:
         """
         Validate route through classifier and return decision
 
@@ -588,9 +566,7 @@ class IntegratedRouteManager:
             if result.override_decision:
                 # Route rejected
                 self.rejected_routes[route.route_id] = (route, result)
-                logger.warning(
-                    f"Route {route.route_id} rejected: {result.reason}"
-                )
+                logger.warning(f"Route {route.route_id} rejected: {result.reason}")
                 return False, result
             else:
                 # Route approved
@@ -616,13 +592,9 @@ class IntegratedRouteManager:
     def get_route_summary(self) -> Dict[str, Any]:
         """Get summary of route validation activity."""
         try:
-            total_routes = len(self.approved_routes) + len(
-                self.rejected_routes
-            )
+            total_routes = len(self.approved_routes) + len(self.rejected_routes)
             approval_rate = (
-                len(self.approved_routes) / total_routes
-                if total_routes > 0
-                else 0
+                len(self.approved_routes) / total_routes if total_routes > 0 else 0
             )
 
             # Get classifier stats

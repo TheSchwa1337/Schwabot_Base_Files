@@ -1,89 +1,91 @@
 #!/usr/bin/env python3
-"""Drift Shell Engine - Schwabot Ring Allocation Mathematics.
-
-========================================================
-
-
-
-Implements radial ring allocation with subsurface grayscale mapping.
-
-This provides the core mathematical framework for:
-
-- Ring allocation: R_n = 2πr/n where n ∈ Z+, r = shell_radius
-
-- Dynamic ring-depth mapping: D_i = f(t) · log₂(1 + |ΔP_t|/P_{t-1})
-
-- Subsurface grayscale entropy mapping
-
-- Unified lattice time rehash layer
-
-
-
-Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
-
 """
+Drift Shell Engine - Core drift field computation and ring allocation.
 
-from __future__ import annotations
+This module provides the core drift field computation engine for the Schwabot
+trading system, implementing radial partitioning and time-based quantum hashing.
+"""
 
 import hashlib
 import logging
-from typing import List, Optional, Tuple, Union
-
+from typing import Any, Callable, List, Optional, Tuple, Union
 import numpy as np
 
-from core.type_defs import DriftCoefficient
-from core.type_defs import DriftField
-from core.type_defs import DriftVelocity
-from core.type_defs import EntropyMap
-from core.type_defs import Matrix
-from core.type_defs import PriceState
-from core.type_defs import QuantumHash
-from core.type_defs import RingIndex
-from core.type_defs import ShellRadius
-from core.type_defs import StrategyId
-from core.type_defs import TimeSlot
+# Type aliases for better code clarity
+DriftField = Callable[[float, float, float], float]
+DriftVelocity = float
+PriceState = str
+TimeSlot = float
+StrategyId = str
+QuantumHash = str
+EntropyMap = np.ndarray
+Matrix = np.ndarray
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 
+class DriftCoefficient:
+    """Represents a drift coefficient value with validation."""
+
+    def __init__(self, value: float) -> None:
+        """Initialize drift coefficient with validation."""
+        if not isinstance(value, (int, float)):
+            raise TypeError("Drift coefficient must be numeric")
+        if value <= 0:
+            raise ValueError("Drift coefficient must be positive")
+        self.value = float(value)
+
+    def __float__(self) -> float:
+        """Return float representation."""
+        return self.value
+
+    def __repr__(self) -> str:
+        """Return string representation."""
+        return f"DriftCoefficient({self.value})"
+
+
 class RingIndex:
-    """Ring index type for drift shell allocation."""
+    """Represents a ring index with validation."""
+
     def __init__(self, value: int) -> None:
-        """TODO: document __init__."""
+        """Initialize ring index with validation."""
+        if not isinstance(value, int):
+            raise TypeError("Ring index must be an integer")
         if value < 0:
             raise ValueError("Ring index must be non-negative")
         self.value = value
 
     def __int__(self) -> int:
-        """TODO: document __int__."""
+        """Return integer representation."""
         return self.value
 
 
 class ShellRadius:
-    """Shell radius type for drift shell calculations."""
+    """Represents a shell radius with validation."""
 
     def __init__(self, value: float) -> None:
-        """TODO: document __init__."""
+        """Initialize shell radius with validation."""
+        if not isinstance(value, (int, float)):
+            raise TypeError("Shell radius must be numeric")
         if value <= 0:
             raise ValueError("Shell radius must be positive")
-        self.value = value
+        self.value = float(value)
 
     def __float__(self) -> float:
-        """TODO: document __float__."""
+        """Return float representation."""
         return self.value
 
 
 class DriftShellEngine:
-    """Implements radial ring allocation with subsurface grayscale mapping."""
+    """Core drift shell engine for radial partitioning and field computation."""
 
     def __init__(
         self, shell_radius: Union[float, ShellRadius] = 144.44
     ) -> None:
         """
-        
+
         Initialize drift shell engine.
-        
+
         Args:
             shell_radius: Radius of the drift shell (default: 144.44)
         """
@@ -106,17 +108,17 @@ class DriftShellEngine:
         drift_coefficient: Union[float, DriftCoefficient],
     ) -> DriftField:
         """
-        
+
         Allocate ring zone using radial partitioning.
-        
+
         Implements: R_n = 2πr/n where n ∈ Z+, r = shell_radius
-        
+
         This models harmonic drift sectors as equidistant radial logic zones.
-        
+
         Args:
             ring_index: Index of the ring to allocate
             drift_coefficient: Coefficient for drift field calculation
-        
+
         Returns:
             DriftField function for the allocated ring zone
         """
@@ -144,18 +146,18 @@ class DriftShellEngine:
         self, time: float, price_delta: float, base_price: float
     ) -> float:
         """
-        
+
         Calculate dynamic ring depth using momentum-triggered scaling.
-        
+
         Implements: D_i = f(t) · log₂(1 + |ΔP_t|/P_{t-1})
-        
+
         Handles momentum-triggered scaling for dynamic ring-depth mapping.
-        
+
         Args:
             time: Current time in minutes
             price_delta: Change in price
             base_price: Base price for normalization
-        
+
         Returns:
             Ring depth value
         """
@@ -175,21 +177,21 @@ class DriftShellEngine:
         strategy_id: StrategyId,
     ) -> QuantumHash:
         """
-        
+
         Create quantum hash for time-based triggers.
-        
+
         Implements: H_256 = SHA-256(P_t || T_t || S_t)
-        
+
         Universal hash function tied to:
         - Price state (P_t)
         - Time slot (T_t)
         - Strategy identifier (S_t)
-        
+
         Args:
             price_state: Current price state
             time_slot: Current time slot
             strategy_id: Strategy identifier
-        
+
         Returns:
             Quantum hash string
         """
@@ -225,28 +227,19 @@ class DriftShellEngine:
 
         Returns:
             Drift field value
-        """decay = np.exp(-time) * np.sin(x * y).
-        
+        """
+        decay = np.exp(-time) * np.sin(x * y)
         stability = (np.cos(z) * np.sqrt(1 + abs(x))) / (1 + 0.1 * abs(y))
-        
         return decay * stability
-        
-        
-        
-            def allocate_ring_drift(
-        
+
+    def allocate_ring_drift(
         self, layer_index: int, entropy_gradient: float
-        
-            ) -> float:
-        
+    ) -> float:
         """
-        
         Allocate ring drift across concentric tensor rings.
-        
-        
-        
+
         Uses Ψ∞ constant for allocation: Ψ∞ * sin(layer_index * entropy_gradient) / (1 + layer_index²)
-        """
+
         Args:
             layer_index: Index of the layer
             entropy_gradient: Entropy gradient value
@@ -292,105 +285,69 @@ class SubsurfaceGrayscaleMapper:
         """
         Generate entropy map from hash patterns.
 
-        Implements: G(x,y) = 1/(1 + e^(-H(x,y)))
-
-        where H(x,y) is the heatmap scalar from hash echo repetition patterns.
-
         Args:
             hash_patterns: List of hash pattern strings
 
         Returns:
-            Entropy map as 2D array
+            2D numpy array representing the entropy map
         """
         width, height = self.dimensions
-        heatmap = np.zeros((height, width))
+        entropy_map = np.zeros((height, width), dtype=np.float32)
 
-        # Compute hash heatmap
-        for pattern in hash_patterns:
-            # Use hash to seed random-like distribution
-            hash_int = int(pattern[:8], 16)  # Use first 8 chars
-            np.random.seed(hash_int)
+        for i, pattern in enumerate(hash_patterns):
+            # Convert hash to numeric values
+            hash_int = int(pattern[:8], 16)  # Use first 8 hex chars
+            
+            # Map to grid coordinates
+            x = (hash_int % width)
+            y = ((hash_int // width) % height)
+            
+            # Calculate entropy value
+            entropy_value = (hash_int % 256) / 255.0
+            entropy_map[y, x] = entropy_value
 
-            # Generate heatmap contribution
-            x_center = hash_int % width
-            y_center = (hash_int // width) % height
-
-            # Create Gaussian-like heat distribution
-            x, y = np.meshgrid(np.arange(width), np.arange(height))
-            sigma = 20.0
-            heat_contribution = np.exp(
-                -((x - x_center) ** 2 + (y - y_center) ** 2) / (2 * sigma**2)
-            )
-            heatmap += heat_contribution
-
-        # Normalize and apply sigmoid
-        heatmap = heatmap / np.max(heatmap) if np.max(heatmap) > 0 else heatmap
-        grayscale_map = 1 / (1 + np.exp(-heatmap))
-
-        return EntropyMap(grayscale_map)
+        return EntropyMap(entropy_map)
 
     def activate_zone(
         self, grayscale_map: EntropyMap, threshold: Optional[float] = None
     ) -> Matrix:
         """
-        Establish grayscale node activation thresholds.
-
-        Activation = {
-            1 if G(x,y) > μ + kσ
-            0 otherwise
-        }
+        Activate zones in grayscale map based on threshold.
 
         Args:
-            grayscale_map: Input grayscale map
-            threshold: Activation threshold (default: self.threshold)
+            grayscale_map: Input entropy map
+            threshold: Activation threshold (uses default if None)
 
         Returns:
             Binary activation matrix
         """
         if threshold is None:
             threshold = self.threshold
-
-        mean_val = np.mean(grayscale_map)
-        std_val = np.std(grayscale_map)
-        threshold_val = mean_val + threshold * std_val
-
-        return Matrix((grayscale_map > threshold_val).astype(float))
+            
+        activation_matrix = (grayscale_map > threshold).astype(np.float32)
+        return Matrix(activation_matrix)
 
 
 class LatticeTimeRehashEngine:
-        """Implements time-based hash triggers with Ferris logic cycles.""".
-        
-        
-            def __init__(self, cycle_duration: float = 3.75) -> None:
-        
+    """Engine for time-based lattice rehashing operations."""
+
+    def __init__(self, cycle_duration: float = 3.75) -> None:
         """
-        
-        Initialize time rehash engine.
-        
-        
-        
+        Initialize lattice time rehash engine.
+
         Args:
-        
             cycle_duration: Duration of each cycle in minutes
-        
         """
-        
         self.cycle_duration = cycle_duration
-        
-        
-        
-            def create_hash(
-        
+
+    def create_hash(
         self,
-        """
         price_state: PriceState,
         time_slot: TimeSlot,
         strategy_id: StrategyId,
     ) -> QuantumHash:
         """
-        Create quantum hash for time-based triggers.
-
-        Implements: H_256 = SHA-256(P_t || T_t || S_t)
+        Create quantum hash for lattice time rehashing.
 
         Args:
             price_state: Current price state
@@ -400,59 +357,50 @@ class LatticeTimeRehashEngine:
         Returns:
             Quantum hash string
         """
-        combined_data = f"{price_state}_{time_slot}_{strategy_id}"
+        combined_data = f"lattice_{price_state}_{time_slot}_{strategy_id}"
         return QuantumHash(hashlib.sha256(combined_data.encode()).hexdigest())
 
     def validate_cycle(self, current_time: float) -> TimeSlot:
         """
-        Validate and compute current cycle time slot.
-
-        Implements: τ_n = mod(t, Δt) where Δt = 3.75 min
+        Validate and compute current lattice cycle time slot.
 
         Args:
             current_time: Current time in minutes
 
         Returns:
-            Current time slot within the cycle
+            Current time slot within the lattice cycle
         """
         cycle_time = current_time % self.cycle_duration
         return TimeSlot(cycle_time)
 
 
 def main() -> None:
-    """Main function for testing drift shell engine."""
-    # Initialize engines
-    drift_engine = DriftShellEngine(shell_radius=144.44)
-    grayscale_mapper = SubsurfaceGrayscaleMapper(dimensions=(64, 64))
-    LatticeTimeRehashEngine()
-
-    # Test ring allocation
-    ring_field = drift_engine.allocate_ring_zone(
-        ring_index=5, drift_coefficient=0.1
+    """
+    Main function for testing drift shell engine functionality.
+    """
+    # Initialize drift shell engine
+    engine = DriftShellEngine(shell_radius=144.44)
+    
+    # Test ring zone allocation
+    drift_field = engine.allocate_ring_zone(
+        ring_index=0, drift_coefficient=1.0
     )
-    drift_value = ring_field(x=10.0, y=5.0, t=2.0)
-    print(f"Ring field value: {drift_value}")
-
+    
+    # Test drift field computation
+    drift_value = drift_field(10.0, 20.0, 1.0)
+    print(f"Drift field value: {drift_value}")
+    
     # Test ring depth calculation
-    depth = drift_engine.get_ring_depth(
-        time=2.0, price_delta=10.0, base_price=100.0
+    ring_depth = engine.get_ring_depth(
+        time=1.0, price_delta=5.0, base_price=100.0
     )
-    print(f"Ring depth: {depth}")
-
-    # Test hash creation
-    hash_result = drift_engine.create_hash(
-        price_state=PriceState(100.0),
-        time_slot=TimeSlot(1.5),
-        strategy_id=StrategyId("strategy_001"),
+    print(f"Ring depth: {ring_depth}")
+    
+    # Test quantum hash creation
+    quantum_hash = engine.create_hash(
+        price_state="100.50", time_slot=1.5, strategy_id="strategy_1"
     )
-    print(f"Quantum hash: {hash_result}")
-
-    # Test grayscale mapping
-    hash_patterns = ["a1b2c3d4", "e5f6g7h8", "i9j0k1l2"]
-    entropy_map = grayscale_mapper.generate_entropy_map(hash_patterns)
-    activation_matrix = grayscale_mapper.activate_zone(entropy_map)
-    print(f"Entropy map shape: {entropy_map.shape}")
-    print(f"Activation matrix shape: {activation_matrix.shape}")
+    print(f"Quantum hash: {quantum_hash}")
 
 
 if __name__ == "__main__":

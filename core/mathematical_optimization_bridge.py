@@ -123,7 +123,7 @@ class MultiVectorState:
 
 class MathematicalOptimizationBridge:
     """
-    
+
     Mathematical optimization bridge that enhances existing components
     with multi-vector operations and GEMM acceleration
     """
@@ -164,9 +164,7 @@ class MathematicalOptimizationBridge:
             "cache_hit_rate": 0.0,
         }
 
-        logger.info(
-            f"MathematicalOptimizationBridge v{self.version} initialized"
-        )
+        logger.info(f"MathematicalOptimizationBridge v{self.version} initialized")
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration."""
@@ -203,9 +201,7 @@ class MathematicalOptimizationBridge:
             start_time = time.time()
 
             # Check cache first
-            cache_key = (
-                f"gemm_{hash(str(A.shape))}_{hash(str(B.shape))}_{mode.value}"
-            )
+            cache_key = f"gemm_{hash(str(A.shape))}_{hash(str(B.shape))}_{mode.value}"
             if (
                 self.config.get("enable_caching", True)
                 and cache_key in self.matrix_cache
@@ -269,9 +265,7 @@ class MathematicalOptimizationBridge:
                 error=str(e),
             )
 
-    def _gemm_accelerated_multiply(
-        self, A: Matrix, B: Matrix, **kwargs
-    ) -> Matrix:
+    def _gemm_accelerated_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
         """GEMM-accelerated matrix multiplication."""
         try:
             # Use optimized BLAS GEMM if available
@@ -309,9 +303,7 @@ class MathematicalOptimizationBridge:
             logger.error(f"Error in dual number multiply: {e}")
             return A @ B
 
-    def _quantum_enhanced_multiply(
-        self, A: Matrix, B: Matrix, **kwargs
-    ) -> Matrix:
+    def _quantum_enhanced_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
         """Quantum-enhanced matrix multiplication."""
         try:
             # Apply quantum-inspired optimization
@@ -400,9 +392,9 @@ class MathematicalOptimizationBridge:
         **kwargs,
     ) -> OptimizationResult:
         """
-        
+
         Enhanced eigenvalue decomposition with multiple optimization modes
-        
+
         This ENHANCES existing eigenvalue operations
         """
         try:
@@ -417,9 +409,7 @@ class MathematicalOptimizationBridge:
                 cached_result = self.eigenvalue_cache[cache_key]
                 return OptimizationResult(
                     result=cached_result,
-                    operation_type=(
-                        MathematicalOperation.EIGENVALUE_DECOMPOSITION
-                    ),
+                    operation_type=(MathematicalOperation.EIGENVALUE_DECOMPOSITION),
                     optimization_mode=mode,
                     execution_time=0.0,
                     iterations=0,
@@ -437,9 +427,7 @@ class MathematicalOptimizationBridge:
                     A, **kwargs
                 )
             elif mode == OptimizationMode.ADAPTIVE:
-                eigenvalues, eigenvectors = self._adaptive_eigenvalue(
-                    A, **kwargs
-                )
+                eigenvalues, eigenvectors = self._adaptive_eigenvalue(A, **kwargs)
             else:
                 # Use existing robust matrix inverse if available
                 if "robust_matrix_inverse" in globals():
@@ -508,9 +496,7 @@ class MathematicalOptimizationBridge:
             logger.error(f"Error in quantum enhanced eigenvalue: {e}")
             raise
 
-    def _adaptive_eigenvalue(
-        self, A: Matrix, **kwargs
-    ) -> Tuple[Vector, Matrix]:
+    def _adaptive_eigenvalue(self, A: Matrix, **kwargs) -> Tuple[Vector, Matrix]:
         """Adaptive eigenvalue decomposition."""
         try:
             # Analyze matrix properties
@@ -539,9 +525,9 @@ class MathematicalOptimizationBridge:
         **kwargs,
     ) -> OptimizationResult:
         """
-        
+
         Multi-vector optimization that leverages all mathematical components
-        
+
         This ENHANCES existing optimization capabilities
         """
         try:
@@ -626,9 +612,7 @@ class MathematicalOptimizationBridge:
             # Optimize using dual number gradients
             result = optimize.minimize(
                 lambda x: objective_function(
-                    np.vectorize(lambda d: d.val if hasattr(d, "val") else d)(
-                        x
-                    )
+                    np.vectorize(lambda d: d.val if hasattr(d, "val") else d)(x)
                 ),
                 x_dual,
                 method="BFGS",
@@ -711,9 +695,7 @@ class MathematicalOptimizationBridge:
                     continue
 
             return (
-                best_result
-                if best_result is not None
-                else multi_state.primary_vector
+                best_result if best_result is not None else multi_state.primary_vector
             )
 
         except Exception as e:
@@ -795,10 +777,7 @@ class MathematicalOptimizationBridge:
             # Update operation-specific stats
             if operation_type == MathematicalOperation.MATRIX_MULTIPLY:
                 self.performance_stats["gemm_operations"] += 1
-            elif (
-                operation_type
-                == MathematicalOperation.EIGENVALUE_DECOMPOSITION
-            ):
+            elif operation_type == MathematicalOperation.EIGENVALUE_DECOMPOSITION:
                 self.performance_stats["eigenvalue_operations"] += 1
             elif operation_type == MathematicalOperation.OPTIMIZATION:
                 self.performance_stats["optimization_operations"] += 1
@@ -839,8 +818,7 @@ class MathematicalOptimizationBridge:
                 "optimization_operations": self.performance_stats[
                     "optimization_operations"
                 ],
-                "cache_size": len(self.matrix_cache)
-                + len(self.eigenvalue_cache),
+                "cache_size": len(self.matrix_cache) + len(self.eigenvalue_cache),
                 "multi_vector_states": len(self.multi_vector_states),
                 "operation_history_size": len(self.operation_history),
             }
@@ -917,14 +895,11 @@ def main() -> None:
         print(f"\n✅ Performance Summary:")
         print(f"   Total operations: {summary['total_operations']}")
         print(
-            f"   Average execution time: "
-            f"{summary['average_execution_time']:.6f}s"
+            f"   Average execution time: " f"{summary['average_execution_time']:.6f}s"
         )
         print(f"   Cache size: {summary['cache_size']}")
 
-        print(
-            "\n🎉 Mathematical optimization bridge test completed successfully!"
-        )
+        print("\n🎉 Mathematical optimization bridge test completed successfully!")
 
     except Exception as e:
         print(f"❌ Mathematical optimization bridge test failed: {e}")

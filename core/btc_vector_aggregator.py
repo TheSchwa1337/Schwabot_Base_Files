@@ -128,9 +128,7 @@ def btc_spectral_aggregate(
     freqs = np.fft.fftfreq(n)
 
     # Create Gaussian filter centered at peak_frequency
-    filter_mask = np.exp(
-        -((freqs - peak_frequency) ** 2) / (2 * filter_width**2)
-    )
+    filter_mask = np.exp(-((freqs - peak_frequency) ** 2) / (2 * filter_width**2))
 
     # Apply filter
     filtered_fft = xi_fft * filter_mask

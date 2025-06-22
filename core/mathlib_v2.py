@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class MathLibV2:
     """Enhanced mathematical library class."""
-    
+
     def __init__(self):
         """Initialize MathLibV2 with enhanced algorithms."""
         self.version = "2.0.0"
@@ -84,9 +84,7 @@ class MathLibV2:
             return data
         return np.convolve(data, np.ones(window) / window, mode="valid")
 
-    def exponential_smoothing(
-        self, data: np.ndarray, alpha: float = 0.3
-    ) -> np.ndarray:
+    def exponential_smoothing(self, data: np.ndarray, alpha: float = 0.3) -> np.ndarray:
         """Calculate exponential smoothing."""
         result = np.zeros_like(data)
         result[0] = data[0]

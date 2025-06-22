@@ -286,7 +286,6 @@ def error_handler_decorator(
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        """TODO: document decorator."""
         def wrapper(*args, **kwargs) -> Any:
             """TODO: document wrapper."""
             return safe_execute(
@@ -309,7 +308,6 @@ def safe_import_decorator(
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        """TODO: document decorator."""
         def wrapper(*args, **kwargs) -> Any:
             """TODO: document wrapper."""
             try:

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class MasterOrchestrator:
     """Master orchestration system."""
-    
+
     def __init__(self):
         """Initialize the master orchestrator."""
         self.initialized = True

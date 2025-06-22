@@ -48,9 +48,7 @@ def baseline_tensor_harmonizer(
 
     # Lotus Pulse compression
     min_len = min(len(price_deltas), len(volume_data) - 1)
-    lotus_pulse = np.mean(
-        price_deltas[:min_len] * volume_data[1 : min_len + 1]
-    )
+    lotus_pulse = np.mean(price_deltas[:min_len] * volume_data[1 : min_len + 1])
 
     return {
         "delta_mean": float(np.mean(price_deltas)),
@@ -59,9 +57,7 @@ def baseline_tensor_harmonizer(
         "tid_convergence": float(tid_convergence),
         "lotus_pulse": float(lotus_pulse),
         "tensor_entropy": float(
-            -np.sum(
-                np.abs(price_deltas) * np.log(np.abs(price_deltas) + 1e-10)
-            )
+            -np.sum(np.abs(price_deltas) * np.log(np.abs(price_deltas) + 1e-10))
         ),
         "status": "success",
     }

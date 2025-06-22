@@ -232,14 +232,10 @@ class StrategyLogic:
             return True
 
         except Exception as e:
-            logger.error(
-                f"Failed to register strategy {strategy_config.name}: {e}"
-            )
+            logger.error(f"Failed to register strategy {strategy_config.name}: {e}")
             return False
 
-    def process_market_data(
-        self, market_data: Dict[str, Any]
-    ) -> List[TradingSignal]:
+    def process_market_data(self, market_data: Dict[str, Any]) -> List[TradingSignal]:
         """Process market data and generate trading signals."""
         try:
             signals = []
@@ -272,9 +268,7 @@ class StrategyLogic:
 
             # Trim signal history if needed
             if len(self.signal_history) > self.max_signals_history:
-                self.signal_history = self.signal_history[
-                    -self.max_signals_history :
-                ]
+                self.signal_history = self.signal_history[-self.max_signals_history :]
 
             return filtered_signals
 
@@ -290,35 +284,22 @@ class StrategyLogic:
             signals = []
 
             if strategy_config.strategy_type == StrategyType.MEAN_REVERSION:
-                signals = self._mean_reversion_signals(
-                    strategy_config, market_data
-                )
+                signals = self._mean_reversion_signals(strategy_config, market_data)
             elif strategy_config.strategy_type == StrategyType.MOMENTUM:
                 signals = self._momentum_signals(strategy_config, market_data)
-            elif (
-                strategy_config.strategy_type
-                == StrategyType.STATISTICAL_ARBITRAGE
-            ):
+            elif strategy_config.strategy_type == StrategyType.STATISTICAL_ARBITRAGE:
                 signals = self._statistical_arbitrage_signals(
                     strategy_config, market_data
                 )
-            elif (
-                strategy_config.strategy_type == StrategyType.MACHINE_LEARNING
-            ):
+            elif strategy_config.strategy_type == StrategyType.MACHINE_LEARNING:
                 signals = self._ml_signals(strategy_config, market_data)
-            elif (
-                strategy_config.strategy_type == StrategyType.QUANTUM_ENHANCED
-            ):
-                signals = self._quantum_enhanced_signals(
-                    strategy_config, market_data
-                )
+            elif strategy_config.strategy_type == StrategyType.QUANTUM_ENHANCED:
+                signals = self._quantum_enhanced_signals(strategy_config, market_data)
 
             return signals
 
         except Exception as e:
-            logger.error(
-                f"Error generating signals for {strategy_config.name}: {e}"
-            )
+            logger.error(f"Error generating signals for {strategy_config.name}: {e}")
             return []
 
     def _mean_reversion_signals(
@@ -346,12 +327,8 @@ class StrategyLogic:
             z_score = (current_price - mean_price) / std_price
 
             # Get parameters
-            z_threshold = strategy_config.parameters.get(
-                "z_score_threshold", 2.0
-            )
-            strength = strategy_config.parameters.get(
-                "mean_reversion_strength", 0.8
-            )
+            z_threshold = strategy_config.parameters.get("z_score_threshold", 2.0)
+            strength = strategy_config.parameters.get("mean_reversion_strength", 0.8)
 
             # Generate signal based on z-score
             if z_score > z_threshold:
@@ -422,9 +399,7 @@ class StrategyLogic:
             momentum = (short_ma - long_ma) / long_ma
 
             # Get parameters
-            threshold = strategy_config.parameters.get(
-                "momentum_threshold", 0.02
-            )
+            threshold = strategy_config.parameters.get("momentum_threshold", 0.02)
             strength = strategy_config.parameters.get("trend_strength", 0.6)
 
             # Generate signal based on momentum
@@ -517,9 +492,7 @@ class StrategyLogic:
             logger.error(f"Error in quantum-enhanced signals: {e}")
             return []
 
-    def _filter_signals(
-        self, signals: List[TradingSignal]
-    ) -> List[TradingSignal]:
+    def _filter_signals(self, signals: List[TradingSignal]) -> List[TradingSignal]:
         """Filter and rank signals."""
         try:
             if not signals:
@@ -527,9 +500,7 @@ class StrategyLogic:
 
             # Filter by confidence threshold
             min_confidence = self.config.get("min_signal_confidence", 0.6)
-            filtered_signals = [
-                s for s in signals if s.confidence >= min_confidence
-            ]
+            filtered_signals = [s for s in signals if s.confidence >= min_confidence]
 
             # Sort by confidence (highest first)
             filtered_signals.sort(key=lambda x: x.confidence, reverse=True)
@@ -590,9 +561,7 @@ class StrategyLogic:
             performance.last_updated = time.time()
 
         except Exception as e:
-            logger.error(
-                f"Error updating performance for {strategy_name}: {e}"
-            )
+            logger.error(f"Error updating performance for {strategy_name}: {e}")
 
     def get_strategy_performance(
         self, strategy_name: str
@@ -672,9 +641,7 @@ def main() -> None:
 
         # Get system status
         status = strategy_logic.get_system_status()
-        print(
-            f"✅ System status: {status['enabled_strategies']} strategies enabled"
-        )
+        print(f"✅ System status: {status['enabled_strategies']} strategies enabled")
 
         print("\n🎉 Strategy logic test completed successfully!")
 

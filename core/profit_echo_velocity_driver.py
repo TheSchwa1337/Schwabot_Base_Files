@@ -36,7 +36,7 @@ class ProfitEchoVelocityDriver:
         xi_values: Sequence[float],
         epsilon_scaling: float,
     ) -> np.ndarray:
-        """Compute χₘ(t, v) = |ΔV|ⁿ · σ(Ξ·ε).
+        """Compute χₘ(t, v) = |ΔV|ⁿ * σ(Ξ*ε).
 
         Parameters
         ----------
@@ -58,11 +58,11 @@ class ProfitEchoVelocityDriver:
         # Compute |ΔV|ⁿ
         abs_delta_v_n = np.power(np.abs(delta_v), self.n_exponent)
 
-        # Compute σ(Ξ·ε) - sigmoid of xi * epsilon
+        # Compute σ(Ξ*ε) - sigmoid of xi * epsilon
         xi_epsilon = xi * epsilon_scaling
         sigma_xi_eps = 1.0 / (1.0 + np.exp(-xi_epsilon))
 
-        # Compute χₘ(t, v) = |ΔV|ⁿ · σ(Ξ·ε)
+        # Compute χₘ(t, v) = |ΔV|ⁿ * σ(Ξ*ε)
         chi_m = abs_delta_v_n * sigma_xi_eps
 
         return chi_m
@@ -203,7 +203,7 @@ def compute_volatility_burst_memory(
     n_exponent: float = 2.0,
     epsilon: float = 0.1,
 ) -> np.ndarray:  # noqa: D401
-    """Compute volatility burst memory χₘ(t, v)."""."""
+    """Compute volatility burst memory χₘ(t, v)."""
     driver = ProfitEchoVelocityDriver(n_exponent=n_exponent, epsilon=epsilon)
     return driver.compute_chi_m(volume_deltas, xi_values, epsilon)
 
@@ -214,7 +214,7 @@ def drive_profit_echo(
     profit_history: Sequence[float],
     epsilon: float = 0.1,
 ) -> float:  # noqa: D401
-    """Drive profit echo using volatility burst memory."""."""
+    """Drive profit echo using volatility burst memory."""
     driver = ProfitEchoVelocityDriver(epsilon=epsilon)
 
     # Compute chi_m values

@@ -1,4 +1,4 @@
-"""TODO: document module."""."""
+"""TODO: document module."""
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent  # project root
@@ -33,7 +33,7 @@ def fix_file(path: pathlib.Path) -> bool:
 
 
 def main():
-    """TODO: document main."""."""
+    """TODO: document main."""
     files_modified = 0
     for py_path in ROOT.rglob(f"*{PY_EXT}"):
         if py_path.is_file():

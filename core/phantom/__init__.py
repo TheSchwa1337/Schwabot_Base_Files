@@ -6,6 +6,6 @@ from .price_vector_synchronizer import ema
 
 __all__ = [
     "entry_score",
-    "exit_weight", 
+    "exit_weight",
     "ema",
-] 
+]

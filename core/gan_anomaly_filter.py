@@ -27,15 +27,15 @@ MIN_VALIDITY_SCORE = 0.0
 MAX_VALIDITY_SCORE = 1.0
 
 # Stub behavior modes
-STUB_MODE_PASS_ALL = "pass_all"        # Always return high validity
-STUB_MODE_RANDOM = "random"            # Random validity scores
-STUB_MODE_CONSERVATIVE = "conservative" # Lower validity for safety
-STUB_MODE_REALISTIC = "realistic"      # Simulate realistic behavior
+STUB_MODE_PASS_ALL = "pass_all"  # Always return high validity
+STUB_MODE_RANDOM = "random"  # Random validity scores
+STUB_MODE_CONSERVATIVE = "conservative"  # Lower validity for safety
+STUB_MODE_REALISTIC = "realistic"  # Simulate realistic behavior
 
 
 class GANAnomalyFilter:
     """GAN-based anomaly detection filter for trading signals."""
-    
+
     def __init__(
         self,
         model: Optional[Any] = None,
@@ -44,7 +44,7 @@ class GANAnomalyFilter:
         feature_dimensions: int = DEFAULT_FEATURE_DIMENSIONS,
     ):
         """Initialize GAN anomaly filter.
-        
+
         Parameters
         ----------
         model : Any, optional
@@ -60,28 +60,28 @@ class GANAnomalyFilter:
         self.validity_threshold = validity_threshold
         self.stub_mode = stub_mode
         self.feature_dimensions = feature_dimensions
-        
+
         # Performance tracking
         self.prediction_history: List[Dict[str, Any]] = []
         self.total_predictions = 0
         self.valid_predictions = 0
-        
+
         # Stub state for realistic mode
         self._stub_state = {
             "market_regime": 0.8,  # Simulated market stability
-            "noise_level": 0.1,    # Simulated noise in predictions
+            "noise_level": 0.1,  # Simulated noise in predictions
         }
-        
+
         logger.info(f"Initialized GAN filter in {stub_mode} mode")
-    
+
     def predict(self, features: np.ndarray) -> Dict[str, Any]:
         """Predict validity score for feature vector.
-        
+
         Parameters
         ----------
         features : np.ndarray
             Feature vector to evaluate
-        
+
         Returns
         -------
         Dict[str, Any]
@@ -95,14 +95,14 @@ class GANAnomalyFilter:
                     "is_valid": False,
                     "error": "Invalid feature vector",
                 }
-            
+
             # Use real model if available
             if self.model is not None:
                 return self._predict_with_model(features)
-            
+
             # Use stub prediction
             return self._predict_stub(features)
-            
+
         except Exception as e:
             logger.error(f"Error in GAN prediction: {e}")
             return {
@@ -110,15 +110,15 @@ class GANAnomalyFilter:
                 "is_valid": False,
                 "error": str(e),
             }
-    
+
     def is_valid(self, features: np.ndarray) -> bool:
         """Check if feature vector passes validity threshold.
-        
+
         Parameters
         ----------
         features : np.ndarray
             Feature vector to evaluate
-        
+
         Returns
         -------
         bool
@@ -126,15 +126,15 @@ class GANAnomalyFilter:
         """
         prediction = self.predict(features)
         return prediction.get("validity_score", 0.0) >= self.validity_threshold
-    
+
     def batch_predict(self, feature_batch: np.ndarray) -> List[Dict[str, Any]]:
         """Predict validity scores for batch of feature vectors.
-        
+
         Parameters
         ----------
         feature_batch : np.ndarray
             Batch of feature vectors (N x features)
-        
+
         Returns
         -------
         List[Dict[str, Any]]
@@ -143,43 +143,47 @@ class GANAnomalyFilter:
         try:
             if len(feature_batch.shape) != 2:
                 raise ValueError("Feature batch must be 2D array")
-            
+
             results = []
             for i in range(feature_batch.shape[0]):
                 result = self.predict(feature_batch[i])
                 results.append(result)
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Error in batch prediction: {e}")
-            return [{"validity_score": 0.0, "is_valid": False, "error": str(e)}] * len(feature_batch)
-    
+            return [{"validity_score": 0.0, "is_valid": False, "error": str(e)}] * len(
+                feature_batch
+            )
+
     def _predict_with_model(self, features: np.ndarray) -> Dict[str, Any]:
         """Predict using real GAN model."""
         try:
             # This would be the real model prediction
             # For now, assume model has a predict method that returns scores
-            if hasattr(self.model, 'predict'):
+            if hasattr(self.model, "predict"):
                 raw_score = self.model.predict(features.reshape(1, -1))[0]
-            elif hasattr(self.model, '__call__'):
+            elif hasattr(self.model, "__call__"):
                 raw_score = self.model(features)
             else:
                 raise ValueError("Model must have predict method or be callable")
-            
+
             # Ensure score is in valid range
-            validity_score = float(np.clip(raw_score, MIN_VALIDITY_SCORE, MAX_VALIDITY_SCORE))
-            
+            validity_score = float(
+                np.clip(raw_score, MIN_VALIDITY_SCORE, MAX_VALIDITY_SCORE)
+            )
+
             result = {
                 "validity_score": validity_score,
                 "is_valid": validity_score >= self.validity_threshold,
                 "model_type": str(type(self.model).__name__),
                 "features_used": len(features),
             }
-            
+
             self._record_prediction(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Error using real model: {e}")
             return {
@@ -187,43 +191,45 @@ class GANAnomalyFilter:
                 "is_valid": False,
                 "error": f"Model error: {e}",
             }
-    
+
     def _predict_stub(self, features: np.ndarray) -> Dict[str, Any]:
         """Generate stub prediction based on configured mode."""
         try:
             if self.stub_mode == STUB_MODE_PASS_ALL:
                 validity_score = 0.95
-                
+
             elif self.stub_mode == STUB_MODE_RANDOM:
                 validity_score = np.random.uniform(0.3, 0.9)
-                
+
             elif self.stub_mode == STUB_MODE_CONSERVATIVE:
                 # Conservative mode - lower scores to be safe
                 base_score = 0.6
                 feature_adjustment = np.mean(np.abs(features)) * 0.1
                 validity_score = base_score + feature_adjustment
-                
+
             elif self.stub_mode == STUB_MODE_REALISTIC:
                 # Realistic mode - simulate reasonable GAN behavior
                 validity_score = self._simulate_realistic_prediction(features)
-                
+
             else:
                 logger.warning(f"Unknown stub mode: {self.stub_mode}")
                 validity_score = 0.5
-            
+
             # Ensure valid range
-            validity_score = np.clip(validity_score, MIN_VALIDITY_SCORE, MAX_VALIDITY_SCORE)
-            
+            validity_score = np.clip(
+                validity_score, MIN_VALIDITY_SCORE, MAX_VALIDITY_SCORE
+            )
+
             result = {
                 "validity_score": float(validity_score),
                 "is_valid": validity_score >= self.validity_threshold,
                 "stub_mode": self.stub_mode,
                 "features_used": len(features),
             }
-            
+
             self._record_prediction(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Error in stub prediction: {e}")
             return {
@@ -231,17 +237,17 @@ class GANAnomalyFilter:
                 "is_valid": False,
                 "error": f"Stub error: {e}",
             }
-    
+
     def _simulate_realistic_prediction(self, features: np.ndarray) -> float:
         """Simulate realistic GAN prediction behavior."""
         try:
             # Base score from market regime
             base_score = self._stub_state["market_regime"]
-            
+
             # Feature-based adjustments
             feature_mean = np.mean(features)
             feature_std = np.std(features)
-            
+
             # Penalize extreme values (potential anomalies)
             if feature_std > 2.0 or abs(feature_mean) > 3.0:
                 anomaly_penalty = 0.3
@@ -249,87 +255,95 @@ class GANAnomalyFilter:
                 anomaly_penalty = 0.1
             else:
                 anomaly_penalty = 0.0
-            
+
             # Add some noise
             noise = np.random.normal(0, self._stub_state["noise_level"])
-            
+
             # Combine components
             validity_score = base_score - anomaly_penalty + noise
-            
+
             # Slowly drift market regime (simulate changing conditions)
             self._stub_state["market_regime"] += np.random.normal(0, 0.01)
-            self._stub_state["market_regime"] = np.clip(self._stub_state["market_regime"], 0.3, 0.95)
-            
+            self._stub_state["market_regime"] = np.clip(
+                self._stub_state["market_regime"], 0.3, 0.95
+            )
+
             return validity_score
-            
+
         except Exception as e:
             logger.error(f"Error in realistic simulation: {e}")
             return 0.5
-    
+
     def _validate_features(self, features: np.ndarray) -> bool:
         """Validate feature vector format."""
         try:
             # Check type
             if not isinstance(features, np.ndarray):
                 return False
-            
+
             # Check dimensions
             if len(features.shape) != 1:
                 return False
-            
+
             if len(features) != self.feature_dimensions:
-                logger.warning(f"Expected {self.feature_dimensions} features, got {len(features)}")
+                logger.warning(
+                    f"Expected {self.feature_dimensions} features, got {len(features)}"
+                )
                 # Allow different dimensions but log warning
-            
+
             # Check for invalid values
             if not np.all(np.isfinite(features)):
                 return False
-            
+
             return True
-            
+
         except Exception:
             return False
-    
+
     def _record_prediction(self, result: Dict[str, Any]) -> None:
         """Record prediction for performance tracking."""
         try:
             self.total_predictions += 1
             if result.get("is_valid", False):
                 self.valid_predictions += 1
-            
+
             # Keep recent history
-            self.prediction_history.append({
-                "timestamp": __import__("time").time(),
-                "validity_score": result.get("validity_score", 0.0),
-                "is_valid": result.get("is_valid", False),
-            })
-            
+            self.prediction_history.append(
+                {
+                    "timestamp": __import__("time").time(),
+                    "validity_score": result.get("validity_score", 0.0),
+                    "is_valid": result.get("is_valid", False),
+                }
+            )
+
             # Limit history size
             if len(self.prediction_history) > 1000:
                 self.prediction_history = self.prediction_history[-500:]
-                
+
         except Exception as e:
             logger.error(f"Error recording prediction: {e}")
-    
+
     def get_performance_stats(self) -> Dict[str, Any]:
         """Get performance statistics."""
         try:
             if self.total_predictions == 0:
                 return {"error": "No predictions made yet"}
-            
+
             valid_rate = self.valid_predictions / self.total_predictions
-            
+
             # Recent performance (last 100 predictions)
             recent_predictions = self.prediction_history[-100:]
             recent_valid_rate = (
-                sum(1 for p in recent_predictions if p["is_valid"]) / len(recent_predictions)
-                if recent_predictions else 0
+                sum(1 for p in recent_predictions if p["is_valid"])
+                / len(recent_predictions)
+                if recent_predictions
+                else 0
             )
-            
+
             # Average validity scores
             recent_scores = [p["validity_score"] for p in recent_predictions]
             avg_validity_score = np.mean(recent_scores) if recent_scores else 0
-            
+
             return {
                 "total_predictions": self.total_predictions,
                 "valid_predictions": self.valid_predictions,
@@ -340,24 +354,26 @@ class GANAnomalyFilter:
                 "stub_mode": self.stub_mode,
                 "has_real_model": self.model is not None,
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating performance stats: {e}")
             return {"error": str(e)}
-    
+
     def update_threshold(self, new_threshold: float) -> None:
         """Update validity threshold."""
         try:
             if MIN_VALIDITY_SCORE <= new_threshold <= MAX_VALIDITY_SCORE:
                 old_threshold = self.validity_threshold
                 self.validity_threshold = new_threshold
-                logger.info(f"Updated validity threshold from {old_threshold} to {new_threshold}")
+                logger.info(
+                    f"Updated validity threshold from {old_threshold} to {new_threshold}"
+                )
             else:
                 logger.warning(f"Invalid threshold: {new_threshold}")
-                
+
         except Exception as e:
             logger.error(f"Error updating threshold: {e}")
-    
+
     def reset_stats(self) -> None:
         """Reset performance statistics."""
         self.prediction_history.clear()
@@ -377,7 +393,7 @@ def create_feature_vector(
     projected_profit: float,
 ) -> np.ndarray:
     """Create feature vector from trading metrics.
-    
+
     Parameters
     ----------
     confidence : float
@@ -396,63 +412,67 @@ def create_feature_vector(
         Liquidity score
     projected_profit : float
         Projected profit ratio
-    
+
     Returns
     -------
     np.ndarray
         Feature vector for GAN evaluation
     """
-    return np.array([
-        confidence,
-        theta_drift,
-        coherence,
-        loop_volatility,
-        harmony,
-        drift_penalty,
-        liquidity_score,
-        projected_profit,
-    ])
+    return np.array(
+        [
+            confidence,
+            theta_drift,
+            coherence,
+            loop_volatility,
+            harmony,
+            drift_penalty,
+            liquidity_score,
+            projected_profit,
+        ]
+    )
 
 
 def main() -> None:
     """Demo function for testing GAN anomaly filter."""
     print("GAN Anomaly Filter Demo")
     print("=" * 30)
-    
+
     # Test different stub modes
     modes = [STUB_MODE_PASS_ALL, STUB_MODE_CONSERVATIVE, STUB_MODE_REALISTIC]
-    
+
     for mode in modes:
         print(f"\nTesting {mode} mode:")
         filter_instance = GANAnomalyFilter(stub_mode=mode)
-        
+
         # Create test feature vectors
         test_features = [
             np.array([1.2, 0.1, 0.9, 0.2, 0.8, 0.1, 0.9, 0.03]),  # Good signal
             np.array([0.8, 0.5, 0.3, 0.8, 0.4, 0.6, 0.3, 0.01]),  # Poor signal
             np.array([1.5, 0.2, 0.95, 0.15, 0.9, 0.05, 0.95, 0.05]),  # Excellent signal
         ]
-        
+
         for i, features in enumerate(test_features):
             result = filter_instance.predict(features)
-            print(f"  Test {i+1}: Score={result['validity_score']:.3f}, "
-                  f"Valid={result['is_valid']}")
-    
+            print(
+                f"  Test {i+1}: Score={result['validity_score']:.3f}, "
+                f"Valid={result['is_valid']}"
+            )
+
     # Test realistic mode with performance tracking
     print(f"\nRealistic Mode Performance Test:")
     realistic_filter = GANAnomalyFilter(stub_mode=STUB_MODE_REALISTIC)
-    
+
     # Generate multiple predictions
     for _ in range(20):
         # Random feature vector
         features = np.random.normal(0, 1, 8)
         realistic_filter.predict(features)
-    
+
     stats = realistic_filter.get_performance_stats()
     print(f"  Total predictions: {stats['total_predictions']}")
     print(f"  Valid rate: {stats['overall_valid_rate']:.2f}")
     print(f"  Average score: {stats['average_validity_score']:.3f}")
-    
+
     # Test feature vector creation
     print(f"\nFeature Vector Test:")
     feature_vec = create_feature_vector(1.2, 0.1, 0.9, 0.2, 0.8, 0.1, 0.9, 0.03)
@@ -461,4 +481,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

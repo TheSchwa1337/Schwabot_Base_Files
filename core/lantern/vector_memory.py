@@ -10,10 +10,7 @@ except ImportError:
     PCA = None
 
 
-def rolling_pca(
-    vecs: list[list[float]],
-    n_components: int = 4
-) -> np.ndarray:
+def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
     """Compute rolling PCA on vector history.
 
     Calculate principal axes for last N vectors to maintain
@@ -47,4 +44,4 @@ def rolling_pca(
 
     except Exception:
         # Fallback to identity matrix
-        return np.eye(n_components) 
+        return np.eye(n_components)

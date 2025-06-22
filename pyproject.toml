@@ -1,9 +1,211 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "schwabot"
+version = "0.5.0"
+description = "Advanced algorithmic trading system with mathematical precision"
+authors = [{name = "Schwabot Team", email = "team@schwabot.ai"}]
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+dependencies = [
+    "numpy>=1.21.0",
+    "pandas>=1.3.0",
+    "scipy>=1.7.0",
+    "matplotlib>=3.4.0",
+    "seaborn>=0.11.0",
+    "requests>=2.25.0",
+    "websockets>=10.0",
+    "asyncio-mqtt>=0.11.0",
+    "python-binance>=1.0.0",
+    "ccxt>=1.60.0",
+    "ta>=0.10.0",
+    "scikit-learn>=1.0.0",
+    "tensorflow>=2.8.0",
+    "torch>=1.12.0",
+    "plotly>=5.0.0",
+    "dash>=2.0.0",
+    "flask>=2.0.0",
+    "fastapi>=0.75.0",
+    "uvicorn>=0.17.0",
+    "pydantic>=1.8.0",
+    "sqlalchemy>=1.4.0",
+    "alembic>=1.7.0",
+    "redis>=4.0.0",
+    "celery>=5.2.0",
+    "prometheus-client>=0.12.0",
+    "structlog>=21.5.0",
+    "click>=8.0.0",
+    "rich>=12.0.0",
+    "typer>=0.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.18.0",
+    "pytest-cov>=3.0.0",
+    "pytest-mock>=3.7.0",
+    "pre-commit>=2.19.0",
+    "darglint>=1.8.0",
+    "pydocstyle>=6.1.0",
+    "bandit>=1.7.0",
+    "safety>=1.10.0",
+]
+
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.18.0",
+    "pytest-cov>=3.0.0",
+    "pytest-mock>=3.7.0",
+    "pytest-benchmark>=3.4.0",
+    "hypothesis>=6.50.0",
+    "factory-boy>=3.2.0",
+]
+
+docs = [
+    "sphinx>=4.5.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=0.17.0",
+    "sphinx-autodoc-typehints>=1.12.0",
+]
+
+[project.scripts]
+schwabot = "core.main:main"
+
+[tool.black]
+line-length = 120
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | tests/deprecated
+  | sandbox
+)/
+'''
+
 [tool.isort]
 profile = "google"
-line_length = 79
+line_length = 120
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
-combine_as_imports = true
-default_section = "THIRDPARTY"
-known_first_party = ["core", "tools", "tests", "schwabot", "mathlib"] 
+use_parentheses = true
+ensure_newline_before_comments = true
+known_first_party = ["core", "visualizer", "tests"]
+known_third_party = ["numpy", "pandas", "scipy", "matplotlib", "seaborn", "requests", "websockets", "asyncio_mqtt", "python_binance", "ccxt", "ta", "sklearn", "tensorflow", "torch", "plotly", "dash", "flask", "fastapi", "uvicorn", "pydantic", "sqlalchemy", "alembic", "redis", "celery", "prometheus_client", "structlog", "click", "rich", "typer"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "numpy.*",
+    "pandas.*",
+    "scipy.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "plotly.*",
+    "dash.*",
+    "flask.*",
+    "fastapi.*",
+    "uvicorn.*",
+    "sqlalchemy.*",
+    "redis.*",
+    "celery.*",
+    "tensorflow.*",
+    "torch.*",
+    "sklearn.*",
+    "ccxt.*",
+    "python_binance.*",
+    "websockets.*",
+    "asyncio_mqtt.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "performance: marks tests as performance tests",
+    "mathematical: marks tests as mathematical validation tests",
+]
+
+[tool.coverage.run]
+source = ["core", "visualizer"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*",
+    "*/site-packages/*",
+    "*/migrations/*",
+    "*/alembic/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "docs", "sandbox", "tests/deprecated"]
+skips = ["B101", "B601"]
+
+[tool.safety]
+output = "json" 

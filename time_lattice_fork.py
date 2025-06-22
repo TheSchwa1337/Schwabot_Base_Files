@@ -7,6 +7,9 @@ fork logic is written. Replace with full implementation when ready.
 
 
 def main() -> None:
-    """Run a no-op placeholder."""."""
+    """Run a no-op placeholder."""
+    pass
+
+
 if __name__ == "__main__":
     main()

@@ -83,12 +83,8 @@ class TradingConstraints:
         self.max_position_size = Decimal("1.0")  # 100% of portfolio
         self.max_leverage = Decimal("2.0")
         self.min_liquidity_ratio = Decimal("0.05")  # 5% cash minimum
-        self.max_sector_concentration = Decimal(
-            "0.30"
-        )  # 30% max in any sector
-        self.max_single_asset_weight = Decimal(
-            "0.20"
-        )  # 20% max in single asset
+        self.max_sector_concentration = Decimal("0.30")  # 30% max in any sector
+        self.max_single_asset_weight = Decimal("0.20")  # 20% max in single asset
         self.min_diversification_count = 3
         self.max_correlation_threshold = 0.85
 
@@ -137,11 +133,7 @@ class TradingConstraints:
         self, leverage: Union[float, Decimal]
     ) -> Optional[ConstraintViolation]:
         """Validate leverage constraints."""
-        lev = (
-            Decimal(str(leverage))
-            if not isinstance(leverage, Decimal)
-            else leverage
-        )
+        lev = Decimal(str(leverage)) if not isinstance(leverage, Decimal) else leverage
 
         if lev < Decimal("1.0"):
             return ConstraintViolation(
@@ -150,9 +142,7 @@ class TradingConstraints:
                 current_value=lev,
                 expected_range=(Decimal("1.0"), self.max_leverage),
                 severity="warning",
-                message=(
-                    f"Leverage {lev} is below 1.0 (no leverage)"
-                ),
+                message=(f"Leverage {lev} is below 1.0 (no leverage)"),
                 remediation_suggestion=(
                     "Consider using at least 1.0x leverage for normal trading"
                 ),
@@ -165,12 +155,8 @@ class TradingConstraints:
                 current_value=lev,
                 expected_range=(Decimal("1.0"), self.max_leverage),
                 severity="critical",
-                message=(
-                    f"Leverage {lev} exceeds maximum {self.max_leverage}"
-                ),
-                remediation_suggestion=(
-                    "Reduce leverage to acceptable levels"
-                ),
+                message=(f"Leverage {lev} exceeds maximum {self.max_leverage}"),
+                remediation_suggestion=("Reduce leverage to acceptable levels"),
             )
 
         return None
@@ -261,9 +247,7 @@ class MathematicalConstraints:
         self.numerical_tolerance = 1e-10
         self.max_gradient_norm = 1e6
 
-    def validate_matrix_properties(
-        self, matrix: Matrix
-    ) -> List[ConstraintViolation]:
+    def validate_matrix_properties(self, matrix: Matrix) -> List[ConstraintViolation]:
         """Validate matrix mathematical properties."""
         violations = []
 
@@ -338,8 +322,7 @@ class MathematicalConstraints:
                                 "potential instability"
                             ),
                             remediation_suggestion=(
-                                "Use regularization or alternative numerical "
-                                "methods"
+                                "Use regularization or alternative numerical " "methods"
                             ),
                         )
                     )
@@ -386,8 +369,7 @@ class MathematicalConstraints:
                         f"maximum {self.max_iterations}"
                     ),
                     remediation_suggestion=(
-                        "Consider using better initial guess or different "
-                        "algorithm"
+                        "Consider using better initial guess or different " "algorithm"
                     ),
                 )
             )
@@ -413,10 +395,7 @@ class MathematicalConstraints:
             )
 
         # Check gradient norm if provided
-        if (
-            gradient_norm is not None
-            and gradient_norm > self.max_gradient_norm
-        ):
+        if gradient_norm is not None and gradient_norm > self.max_gradient_norm:
             violations.append(
                 ConstraintViolation(
                     constraint_name="gradient_explosion",
@@ -487,8 +466,7 @@ class RiskConstraints:
                         f"limit {self.max_drawdown:.1%}"
                     ),
                     remediation_suggestion=(
-                        "Implement stop-loss mechanisms or reduce risk "
-                        "exposure"
+                        "Implement stop-loss mechanisms or reduce risk " "exposure"
                     ),
                 )
             )
@@ -579,9 +557,7 @@ class ConstraintValidator:
         risk_score = self._calculate_risk_score(violations)
 
         # Determine if valid
-        critical_violations = [
-            v for v in violations if v.severity == "critical"
-        ]
+        critical_violations = [v for v in violations if v.severity == "critical"]
         error_violations = [v for v in violations if v.severity == "error"]
 
         valid = len(critical_violations) == 0 and len(error_violations) == 0
@@ -631,9 +607,7 @@ class ConstraintValidator:
         risk_score = self._calculate_risk_score(violations)
 
         # Determine if valid
-        critical_violations = [
-            v for v in violations if v.severity == "critical"
-        ]
+        critical_violations = [v for v in violations if v.severity == "critical"]
         error_violations = [v for v in violations if v.severity == "error"]
 
         valid = len(critical_violations) == 0 and len(error_violations) == 0
@@ -648,18 +622,14 @@ class ConstraintValidator:
             execution_time=execution_time,
         )
 
-    def _calculate_risk_score(
-        self, violations: List[ConstraintViolation]
-    ) -> float:
+    def _calculate_risk_score(self, violations: List[ConstraintViolation]) -> float:
         """Calculate overall risk score from violations."""
         if not violations:
             return 0.0
 
         severity_weights = {"warning": 0.1, "error": 0.5, "critical": 1.0}
 
-        total_score = sum(
-            severity_weights.get(v.severity, 0.5) for v in violations
-        )
+        total_score = sum(severity_weights.get(v.severity, 0.5) for v in violations)
         normalized_score = min(total_score / len(violations), 1.0)
 
         return normalized_score
@@ -669,9 +639,7 @@ class ConstraintValidator:
         return {
             "version": self.version,
             "trading_constraints": {
-                "max_position_size": float(
-                    self.trading_constraints.max_position_size
-                ),
+                "max_position_size": float(self.trading_constraints.max_position_size),
                 "max_leverage": float(self.trading_constraints.max_leverage),
                 "min_liquidity_ratio": float(
                     self.trading_constraints.min_liquidity_ratio
@@ -687,15 +655,11 @@ class ConstraintValidator:
                 ),
             },
             "mathematical_constraints": {
-                "max_matrix_size": (
-                    self.mathematical_constraints.max_matrix_size
-                ),
+                "max_matrix_size": (self.mathematical_constraints.max_matrix_size),
                 "min_matrix_condition_number": (
                     self.mathematical_constraints.min_matrix_condition_number
                 ),
-                "max_iterations": (
-                    self.mathematical_constraints.max_iterations
-                ),
+                "max_iterations": (self.mathematical_constraints.max_iterations),
                 "numerical_tolerance": (
                     self.mathematical_constraints.numerical_tolerance
                 ),
@@ -757,9 +721,7 @@ def main() -> None:
 
         # Display constraint summary
         summary = validator.get_constraint_summary()
-        print(
-            f"📋 Constraint summary available with {len(summary)} categories"
-        )
+        print(f"📋 Constraint summary available with {len(summary)} categories")
 
         print("🎉 Constraint validation demo completed successfully!")
 

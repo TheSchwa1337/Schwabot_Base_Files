@@ -154,9 +154,7 @@ class TickProcessor:
         self.config = config or self._default_config()
 
         # Processing queues and buffers
-        self.tick_queue: deque = deque(
-            maxlen=self.config.get("max_queue_size", 10000)
-        )
+        self.tick_queue: deque = deque(maxlen=self.config.get("max_queue_size", 10000))
         self.processed_ticks: deque = deque(
             maxlen=self.config.get("max_history_size", 50000)
         )
@@ -225,21 +223,15 @@ class TickProcessor:
         return {
             "min_volume": 0.0,
             "max_volume": 1000000000.0,
-            "volume_spike_threshold": self.config.get(
-                "volume_spike_threshold", 5.0
-            ),
+            "volume_spike_threshold": self.config.get("volume_spike_threshold", 5.0),
             "volume_precision": 8,
         }
 
-    def add_tick_callback(
-        self, callback: Callable[[MarketTick], None]
-    ) -> None:
+    def add_tick_callback(self, callback: Callable[[MarketTick], None]) -> None:
         """Add callback for processed ticks."""
         self.tick_callbacks.append(callback)
 
-    def add_aggregate_callback(
-        self, callback: Callable[[TickAggregate], None]
-    ) -> None:
+    def add_aggregate_callback(self, callback: Callable[[TickAggregate], None]) -> None:
         """Add callback for aggregated data."""
         self.aggregate_callbacks.append(callback)
 
@@ -344,14 +336,10 @@ class TickProcessor:
                 price=float(tick_data["price"]),
                 volume=float(tick_data.get("volume", 0.0)),
                 bid=(
-                    float(tick_data.get("bid", 0.0))
-                    if tick_data.get("bid")
-                    else None
+                    float(tick_data.get("bid", 0.0)) if tick_data.get("bid") else None
                 ),
                 ask=(
-                    float(tick_data.get("ask", 0.0))
-                    if tick_data.get("ask")
-                    else None
+                    float(tick_data.get("ask", 0.0)) if tick_data.get("ask") else None
                 ),
                 bid_size=(
                     float(tick_data.get("bid_size", 0.0))
@@ -449,15 +437,13 @@ class TickProcessor:
                 return True
 
             # Calculate average volume for this symbol
-            recent_ticks = [
-                t for t in self.processed_ticks if t.symbol == tick.symbol
-            ][-100:]
+            recent_ticks = [t for t in self.processed_ticks if t.symbol == tick.symbol][
+                -100:
+            ]
             if len(recent_ticks) < 10:
                 return True
 
-            avg_volume = np.mean(
-                [t.volume for t in recent_ticks if t.volume > 0]
-            )
+            avg_volume = np.mean([t.volume for t in recent_ticks if t.volume > 0])
             if avg_volume <= 0:
                 return True
 
@@ -465,9 +451,7 @@ class TickProcessor:
             max_ratio = self.volume_filters["volume_spike_threshold"]
 
             if volume_ratio > max_ratio:
-                logger.warning(
-                    f"Volume spike detected: {volume_ratio:.2f}x average"
-                )
+                logger.warning(f"Volume spike detected: {volume_ratio:.2f}x average")
                 return False
 
             return True
@@ -531,12 +515,8 @@ class TickProcessor:
                 best_ask = order_book.asks[0].price
                 order_book.spread = best_ask - best_bid
                 order_book.mid_price = (best_bid + best_ask) / 2
-                order_book.total_bid_volume = sum(
-                    b.size for b in order_book.bids
-                )
-                order_book.total_ask_volume = sum(
-                    a.size for a in order_book.asks
-                )
+                order_book.total_bid_volume = sum(b.size for b in order_book.bids)
+                order_book.total_ask_volume = sum(a.size for a in order_book.asks)
 
             order_book.timestamp = tick.timestamp
 
@@ -634,14 +614,10 @@ class TickProcessor:
         """Get performance metrics."""
         try:
             avg_latency = (
-                np.mean(self.processing_latency)
-                if self.processing_latency
-                else 0.0
+                np.mean(self.processing_latency) if self.processing_latency else 0.0
             )
             max_latency = (
-                np.max(self.processing_latency)
-                if self.processing_latency
-                else 0.0
+                np.max(self.processing_latency) if self.processing_latency else 0.0
             )
 
             return {

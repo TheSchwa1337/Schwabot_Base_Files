@@ -68,7 +68,7 @@ EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 # Windows CLI compatibility handler
 class WindowsCliCompatibilityHandler:
     """Handles Windows CLI compatibility for cross-platform operation."""
-    
+
     @staticmethod
     def is_windows_cli() -> bool:
         """Check if running in Windows CLI environment."""
@@ -100,9 +100,7 @@ class WindowsCliCompatibilityHandler:
         error_msg = str(error)
         if context:
             error_msg = f"{context}: {error_msg}"
-        return WindowsCliCompatibilityHandler.safe_print(
-            error_msg, use_emoji=False
-        )
+        return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
 
 
 # Shared constants across the Schwabot code-base

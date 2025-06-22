@@ -115,7 +115,7 @@ def _news_overlay_route(score: float) -> bool:
 @dataclass(slots=True)
 class RouterInput:
     """TODO: document RouterInput."""
-    
+
     tick_hash: str
     mem_hash: str
     pool_volumes: np.ndarray  # USDC pool volume window
@@ -231,9 +231,7 @@ def compute_ghost_route(
 
     delta_H = H_t - H_prev
     # (1) Φ_t
-    phi_t = 1.0 / (
-        1.0 + math.exp(-(beta1 * E_t - beta2 * abs(delta_H) + beta3 * D_t))
-    )
+    phi_t = 1.0 / (1.0 + math.exp(-(beta1 * E_t - beta2 * abs(delta_H) + beta3 * D_t)))
 
     # (3) execution velocity
     v_exec = math.sqrt(P_res / (rho_t * phi_t + epsilon))
@@ -266,6 +264,4 @@ def compute_ghost_route(
     tag_data = f"{H_t}{route}{timestamp}".encode()
     tau_t = hashlib.sha256(tag_data).hexdigest()
 
-    return ExecPacket(
-        volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t
-    )
+    return ExecPacket(volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t)

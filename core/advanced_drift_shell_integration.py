@@ -58,31 +58,29 @@ logger = logging.getLogger(__name__)
 
 class GrayscaleDriftTensorCore:
     """
-    
+
     Unified grayscale entropy drift maps with recursive gamma-based routing
     """
 
     def __init__(self, psi_infinity: float = 1.618033988749) -> None:
         """
-        
+
         Initialize grayscale drift tensor core.
-        
+
         Args:
             psi_infinity: Golden ratio constant for allocation
         """
         self.psi_infinity = psi_infinity  # Golden ratio constant
 
-    def compute_drift_field(
-        self, x: float, y: float, z: float, time: float
-    ) -> float:
+    def compute_drift_field(self, x: float, y: float, z: float, time: float) -> float:
         """
-        
+
         Compute grayscale drift field tensor across grayscale layers.
-        
+
         Args:
             x, y, z: Spatial coordinates
             time: Current time
-        
+
         Returns:
             Drift field value
         """
@@ -90,20 +88,18 @@ class GrayscaleDriftTensorCore:
         stability = (np.cos(z) * np.sqrt(1 + abs(x))) / (1 + 0.1 * abs(y))
         return decay * stability
 
-    def allocate_ring_drift(
-        self, layer_index: int, entropy_gradient: float
-    ) -> float:
+    def allocate_ring_drift(self, layer_index: int, entropy_gradient: float) -> float:
         """
-        
+
         Allocate ring drift across concentric tensor rings.
-        
+
         Uses Ψ∞ constant for allocation:
         Ψ∞ * sin(layer_index * entropy_gradient) / (1 + layer_index²)
-        
+
         Args:
             layer_index: Index of the layer
             entropy_gradient: Entropy gradient value
-        
+
         Returns:
             Allocated drift value
         """
@@ -111,9 +107,7 @@ class GrayscaleDriftTensorCore:
             1 + layer_index * layer_index
         )
 
-    def gamma_node_coupling(
-        self, node_depth: int, drift_signal: float
-    ) -> float:
+    def gamma_node_coupling(self, node_depth: int, drift_signal: float) -> float:
         """
         Couple drift tensor signal to gamma-tree nodes recursively.
 
@@ -131,9 +125,7 @@ class GrayscaleDriftTensorCore:
 class AdvancedTensorMemoryFeedback:
     """Advanced tensor memory feedback with enhanced features."""
 
-    def __init__(
-        self, max_history: int = 100, decay_rate: float = 0.1
-    ) -> None:
+    def __init__(self, max_history: int = 100, decay_rate: float = 0.1) -> None:
         """
         Initialize advanced tensor memory feedback.
 
@@ -203,9 +195,7 @@ class AdvancedTensorMemoryFeedback:
         feedback_tensor = current_tensor.copy()
         total_weight = 1.0
 
-        for i, entry in enumerate(
-            reversed(self.history_stack[-recursion_depth:])
-        ):
+        for i, entry in enumerate(reversed(self.history_stack[-recursion_depth:])):
             # Base weight with exponential decay
             weight = np.exp(-i * self.decay_rate)
 
@@ -213,9 +203,7 @@ class AdvancedTensorMemoryFeedback:
             if use_metadata and "weight" in entry["metadata"]:
                 weight *= entry["metadata"]["weight"]
 
-            feedback_tensor += (
-                weight * entry["tensor"] * entry["entropy_delta"]
-            )
+            feedback_tensor += weight * entry["tensor"] * entry["entropy_delta"]
             total_weight += weight
 
         return Tensor(feedback_tensor / total_weight)
@@ -236,16 +224,12 @@ class AdvancedTensorMemoryFeedback:
                 "total_memory_mb": 0.0,
             }
 
-        avg_entropy = np.mean(
-            [entry["entropy_delta"] for entry in self.history_stack]
-        )
+        avg_entropy = np.mean([entry["entropy_delta"] for entry in self.history_stack])
         oldest_entry = self.history_stack[0]["timestamp"]
         newest_entry = self.history_stack[-1]["timestamp"]
 
         # Estimate memory usage
-        total_memory = sum(
-            entry["tensor"].nbytes for entry in self.history_stack
-        )
+        total_memory = sum(entry["tensor"].nbytes for entry in self.history_stack)
         total_memory_mb = total_memory / (1024 * 1024)
 
         return {
@@ -299,9 +283,7 @@ class AdvancedDriftShellIntegration:
         """
         # Initialize core components
         self.drift_engine = (
-            DriftShellEngine(shell_radius=shell_radius)
-            if DriftShellEngine
-            else None
+            DriftShellEngine(shell_radius=shell_radius) if DriftShellEngine else None
         )
         self.quantum_engine = (
             QuantumDriftShellEngine(energy_scale=energy_scale)
@@ -317,9 +299,7 @@ class AdvancedDriftShellIntegration:
         # Initialize advanced components
         self.grayscale_core = GrayscaleDriftTensorCore()
         self.tensor_memory = AdvancedTensorMemoryFeedback()
-        self.phase_harmonizer = (
-            PhaseDriftHarmonizer() if PhaseDriftHarmonizer else None
-        )
+        self.phase_harmonizer = PhaseDriftHarmonizer() if PhaseDriftHarmonizer else None
 
         logger.info("Initialized AdvancedDriftShellIntegration")
 
@@ -372,9 +352,7 @@ class AdvancedDriftShellIntegration:
         # 3. Quantum operations
         if self.quantum_engine and quantum_state is not None:
             energy = self.quantum_engine.compute_energy_level(quantum_state)
-            entropy = self.quantum_engine.compute_quantum_entropy(
-                quantum_state
-            )
+            entropy = self.quantum_engine.compute_quantum_entropy(quantum_state)
             results["quantum_energy"] = energy
             results["quantum_entropy"] = entropy
 
@@ -385,10 +363,8 @@ class AdvancedDriftShellIntegration:
                 """TODO: document temp_field."""
                 return self.thermal_allocator.compute_thermal_field(x, y, t)
 
-            thermal_entropy_map = (
-                self.thermal_allocator.generate_thermal_entropy_map(
-                    temp_field, dimensions=(32, 32), time=1.0
-                )
+            thermal_entropy_map = self.thermal_allocator.generate_thermal_entropy_map(
+                temp_field, dimensions=(32, 32), time=1.0
             )
             results["thermal_entropy_map"] = thermal_entropy_map
 
@@ -418,9 +394,7 @@ class AdvancedDriftShellIntegration:
 
         # 7. Phase harmonization
         if self.phase_harmonizer:
-            harmonized_tensor = self.phase_harmonizer.harmonize_phases(
-                current_tensor
-            )
+            harmonized_tensor = self.phase_harmonizer.harmonize_phases(current_tensor)
             coherence = self.phase_harmonizer.compute_phase_coherence(
                 current_tensor.flatten()
             )

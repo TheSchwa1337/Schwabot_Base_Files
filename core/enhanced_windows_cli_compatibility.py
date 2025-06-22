@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class EnhancedWindowsCliCompatibilityHandler:
     """
-    
+
     Enhanced Windows CLI compatibility handler with bulletproof emoji management
     and robust error handling for all CLI environments
     """
@@ -150,9 +150,9 @@ class EnhancedWindowsCliCompatibilityHandler:
     @classmethod
     def detect_cli_environment(cls) -> Dict[str, Any]:
         """
-        
+
         Detect CLI environment capabilities and limitations
-        
+
         Returns:
             Dictionary with environment information
         """
@@ -259,13 +259,13 @@ class EnhancedWindowsCliCompatibilityHandler:
     @classmethod
     def safe_emoji_print(cls, message: str, force_ascii: bool = False) -> str:
         """
-        
+
         Safely print message with emoji handling
-        
+
         Args:
             message: Message to print
             force_ascii: Force ASCII-only output
-        
+
         Returns:
             Safe message string
         """
@@ -297,13 +297,13 @@ class EnhancedWindowsCliCompatibilityHandler:
     @classmethod
     def safe_encoding_write(cls, text: str, stream=None) -> bool:
         """
-        
+
         Safely write text with proper encoding
-        
+
         Args:
             text: Text to write
             stream: Output stream (defaults to sys.stdout)
-        
+
         Returns:
             Success status
         """
@@ -313,9 +313,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         try:
             if hasattr(stream, "buffer"):
                 # Binary stream
-                encoded_text = text.encode(
-                    cls._detect_encoding(), errors="replace"
-                )
+                encoded_text = text.encode(cls._detect_encoding(), errors="replace")
                 stream.buffer.write(encoded_text)
                 stream.buffer.flush()
             else:
@@ -528,18 +526,14 @@ class EnhancedWindowsCliCompatibilityHandler:
         # Test encoding
         try:
             test_text = "Encoding test: special chars åÅæÆøØ"
-            results["encoding_test"] = cls.safe_encoding_write(
-                test_text, io.StringIO()
-            )
+            results["encoding_test"] = cls.safe_encoding_write(test_text, io.StringIO())
         except Exception:
             results["encoding_test"] = False
 
         # Test output
         try:
             test_stream = io.StringIO()
-            results["output_test"] = cls.safe_encoding_write(
-                "Output test", test_stream
-            )
+            results["output_test"] = cls.safe_encoding_write("Output test", test_stream)
         except Exception:
             results["output_test"] = False
 
@@ -566,9 +560,7 @@ def cli_safe(func: Callable) -> Callable:
         def my_function():
             print("🚀 This will work everywhere!")
     """
-    return EnhancedWindowsCliCompatibilityHandler.create_safe_function_wrapper(
-        func
-    )
+    return EnhancedWindowsCliCompatibilityHandler.create_safe_function_wrapper(func)
 
 
 # Convenience functions for common operations
@@ -577,9 +569,7 @@ def safe_print(message: str, force_ascii: bool = False) -> None:
     safe_message = EnhancedWindowsCliCompatibilityHandler.safe_emoji_print(
         message, force_ascii
     )
-    EnhancedWindowsCliCompatibilityHandler.safe_encoding_write(
-        safe_message + "\n"
-    )
+    EnhancedWindowsCliCompatibilityHandler.safe_encoding_write(safe_message + "\n")
 
 
 def safe_log(logger: Any, level: str, message: str, context: str = "") -> bool:
@@ -591,9 +581,7 @@ def safe_log(logger: Any, level: str, message: str, context: str = "") -> bool:
 
 def get_safe_reporter() -> Callable:
     """Get a safe validation reporter."""
-    return (
-        EnhancedWindowsCliCompatibilityHandler.create_safe_validation_reporter()
-    )
+    return EnhancedWindowsCliCompatibilityHandler.create_safe_validation_reporter()
 
 
 def get_cli_info() -> Dict[str, Any]:
@@ -629,10 +617,8 @@ def main():
     # Test progress indicator
     safe_print("\n🔄 Testing Progress Indicators:")
     for i in range(0, 101, 25):
-        progress = (
-            EnhancedWindowsCliCompatibilityHandler.safe_progress_indicator(
-                i, 100, "Progress:", "complete"
-            )
+        progress = EnhancedWindowsCliCompatibilityHandler.safe_progress_indicator(
+            i, 100, "Progress:", "complete"
         )
         safe_print(f"   {progress}")
 
@@ -640,17 +626,13 @@ def main():
     safe_print("\n🧪 Testing Validation Reporter:")
     reporter = get_safe_reporter()
     safe_print(
-        reporter(
-            "Core Math Integration", True, "All tests passed", {"speed": 125.5}
-        )
+        reporter("Core Math Integration", True, "All tests passed", {"speed": 125.5})
     )
     safe_print(reporter("Unicode Support", False, "Encoding issues detected"))
 
     # Run compatibility test
     safe_print("\n🎯 Running Compatibility Test:")
-    compat_results = (
-        EnhancedWindowsCliCompatibilityHandler.test_cli_compatibility()
-    )
+    compat_results = EnhancedWindowsCliCompatibilityHandler.test_cli_compatibility()
     for test, result in compat_results.items():
         if test != "environment":
             status = "✅ PASS" if result else "❌ FAIL"

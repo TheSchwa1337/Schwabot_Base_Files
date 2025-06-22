@@ -19,7 +19,7 @@ __all__: list[str] = ["HysteresisField"]
 @dataclass(slots=True)
 class HysteresisField:
     """TODO: document HysteresisField."""
-    
+
     activation_threshold: float = 0.7
     decay_threshold: float = 0.3
     _active: bool = False

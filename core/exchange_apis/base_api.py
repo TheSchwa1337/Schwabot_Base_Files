@@ -126,9 +126,7 @@ class ExchangeAPI(ABC):
 
         # Add signature if required
         if signed:
-            headers = self._sign_request(
-                method, endpoint, params, data, headers
-            )
+            headers = self._sign_request(method, endpoint, params, data, headers)
 
         # Make request
         try:
@@ -170,6 +168,7 @@ class ExchangeAPI(ABC):
         Returns:
             Updated headers with signature.
         """
+
     def get_ticker(self: "ExchangeAPI", symbol: str) -> MarketData:
         """Get ticker data for symbol.
 
@@ -195,9 +194,7 @@ class ExchangeAPI(ABC):
             self.safe_log("error", error_msg)
             raise
 
-    def get_order_book(
-        self: "ExchangeAPI", symbol: str, level: int = 2
-    ) -> MarketData:
+    def get_order_book(self: "ExchangeAPI", symbol: str, level: int = 2) -> MarketData:
         """Get order book for symbol.
 
         Args:
@@ -224,9 +221,7 @@ class ExchangeAPI(ABC):
             self.safe_log("error", error_msg)
             raise
 
-    def place_order(
-        self: "ExchangeAPI", order_request: OrderRequest
-    ) -> OrderResponse:
+    def place_order(self: "ExchangeAPI", order_request: OrderRequest) -> OrderResponse:
         """Place order on exchange.
 
         Args:
@@ -252,9 +247,7 @@ class ExchangeAPI(ABC):
 
             # Make API request
             endpoint = "/orders"
-            result = self._make_request(
-                "POST", endpoint, data=order_data, signed=True
-            )
+            result = self._make_request("POST", endpoint, data=order_data, signed=True)
 
             # Create order response
             price = None

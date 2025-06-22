@@ -45,9 +45,7 @@ def zpe_psi(
         Time parameter.
     """
     if not (len(amplitudes) == len(frequencies) == len(phases)):
-        raise ValueError(
-            "amplitudes, frequencies, and phases must have same length"
-        )
+        raise ValueError("amplitudes, frequencies, and phases must have same length")
 
     a_arr = np.asarray(amplitudes, dtype=float)
     w_arr = np.asarray(frequencies, dtype=float)

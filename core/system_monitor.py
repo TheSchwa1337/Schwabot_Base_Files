@@ -207,15 +207,11 @@ class SystemMonitor:
             },
         }
 
-    def add_alert_callback(
-        self, callback: Callable[[SystemAlert], None]
-    ) -> None:
+    def add_alert_callback(self, callback: Callable[[SystemAlert], None]) -> None:
         """Add callback for system alerts."""
         self.alert_callbacks.append(callback)
 
-    def add_metrics_callback(
-        self, callback: Callable[[SystemMetrics], None]
-    ) -> None:
+    def add_metrics_callback(self, callback: Callable[[SystemMetrics], None]) -> None:
         """Add callback for system metrics."""
         self.metrics_callbacks.append(callback)
 
@@ -499,9 +495,7 @@ class SystemMonitor:
             network_warning = self.thresholds["network"]["warning"]
             network_critical = self.thresholds["network"]["critical"]
 
-            total_network_io = (
-                metrics.network_io_sent + metrics.network_io_recv
-            )
+            total_network_io = metrics.network_io_sent + metrics.network_io_recv
 
             if total_network_io >= network_critical:
                 self._create_alert(
@@ -618,11 +612,7 @@ class SystemMonitor:
 
     def get_latest_metrics(self) -> Optional[SystemMetrics]:
         """Get latest system metrics."""
-        return (
-            self.system_metrics_history[-1]
-            if self.system_metrics_history
-            else None
-        )
+        return self.system_metrics_history[-1] if self.system_metrics_history else None
 
     def get_metrics_history(self, count: int = 100) -> List[SystemMetrics]:
         """Get system metrics history."""

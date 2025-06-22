@@ -51,12 +51,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Dual:
     """
-    
+
     Dual number for automatic differentiation
-    
+
     A dual number is of the form: a + b*ε where ε² = 0
     Used for forward-mode automatic differentiation.
-    
+
     Mathematical operations:
     (a + b*ε) + (c + d*ε) = (a + c) + (b + d)*ε
     (a + b*ε) * (c + d*ε) = ac + (ad + bc)*ε
@@ -105,9 +105,7 @@ class Dual:
         """Division: (a + b*ε) / (c + d*ε) = (a/c) + (bc - ad)/c²*ε."""
         if isinstance(other, Dual):
             val = self.val / other.val
-            eps = (self.eps * other.val - self.val * other.eps) / (
-                other.val**2
-            )
+            eps = (self.eps * other.val - self.val * other.eps) / (other.val**2)
             return Dual(val, eps)
         else:
             return Dual(self.val / other, self.eps / other)
@@ -162,9 +160,7 @@ class Dual:
         if self.val < 0:
             raise ValueError("Cannot take sqrt of negative number")
         sqrt_val = math.sqrt(self.val)
-        return Dual(
-            sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0
-        )
+        return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
     def tanh(self) -> Dual:
         """Hyperbolic tangent: tanh(a + b*ε) = tanh(a) + sech²(a)*b*ε."""
@@ -181,9 +177,7 @@ class MathLibV3:
         self.version = "3.0.0"
         self.initialized = True
         self.ai_models_loaded = False
-        logger.info(
-            f"MathLibV3 v{self.version} initialized with auto-diff support"
-        )
+        logger.info(f"MathLibV3 v{self.version} initialized with auto-diff support")
 
     def ai_calculate(self, operation: str, *args, **kwargs) -> Any:
         """AI-enhanced calculation method with automatic differentiation support."""
@@ -229,17 +223,17 @@ class MathLibV3:
         self, mu: float, sigma_squared: float, risk_tolerance: float = 0.25
     ) -> Dict[str, float]:
         """
-        
+
         Kelly criterion with automatic risk adjustment
-        
+
         Formula: f* = μ / σ² (optimal)
         Risk-adjusted: f = min(f* * risk_tolerance, max_allocation)
-        
+
         Args:
             mu: Expected return
             sigma_squared: Variance of returns
             risk_tolerance: Risk adjustment factor (0 < tolerance ≤ 1)
-        
+
         Returns:
             Dictionary with optimal allocation and risk metrics
         """
@@ -256,14 +250,10 @@ class MathLibV3:
 
             # Risk-adjusted allocation
             kelly_adjusted = min(kelly_optimal * risk_tolerance, 1.0)
-            kelly_adjusted = max(
-                kelly_adjusted, 0.0
-            )  # No negative allocations
+            kelly_adjusted = max(kelly_adjusted, 0.0)  # No negative allocations
 
             # Sharpe ratio approximation
-            sharpe_ratio = (
-                mu / math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
-            )
+            sharpe_ratio = mu / math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
 
             # Expected utility (Kelly criterion maximizes log utility)
             expected_utility = mu * kelly_adjusted - 0.5 * sigma_squared * (
@@ -284,16 +274,16 @@ class MathLibV3:
 
     def cvar_calculation(self, returns: Vector, alpha: float = 0.95) -> float:
         """
-        
+
         Conditional Value at Risk (CVaR) calculation
-        
+
         CVaR is the expected loss given that the loss exceeds VaR
         Formula: CVaR_α = E[X | X ≤ VaR_α]
-        
+
         Args:
             returns: Array of returns
             alpha: Confidence level (e.g., 0.95 for 95% CVaR)
-        
+
         Returns:
             CVaR value
         """
@@ -314,9 +304,7 @@ class MathLibV3:
 
             # Calculate CVaR (mean of returns below VaR)
             tail_returns = sorted_returns[sorted_returns <= var_value]
-            cvar = (
-                np.mean(tail_returns) if len(tail_returns) > 0 else var_value
-            )
+            cvar = np.mean(tail_returns) if len(tail_returns) > 0 else var_value
 
             return float(cvar)
 
@@ -328,13 +316,13 @@ class MathLibV3:
         self, market_data: Vector, risk_tolerance: float = 0.1
     ) -> Dict[str, Any]:
         """
-        
+
         AI-enhanced multi-dimensional profit optimization using gradient descent approach
-        
+
         Args:
             market_data: Historical price/return data
             risk_tolerance: Risk tolerance parameter
-        
+
         Returns:
             Optimization results with allocation and metrics
         """
@@ -517,9 +505,7 @@ class MathLibV3:
             smoothed = [historical_data[0]]
 
             for i in range(1, len(historical_data)):
-                smoothed.append(
-                    alpha * historical_data[i] + (1 - alpha) * smoothed[-1]
-                )
+                smoothed.append(alpha * historical_data[i] + (1 - alpha) * smoothed[-1])
 
             # Linear trend estimation
             x = np.arange(len(historical_data))
@@ -579,9 +565,7 @@ class MathLibV3:
             logger.error(f"Dual gradient computation failed: {e}")
             return 0.0, 0.0
 
-    def compute_jacobian(
-        self, func: Callable[[Vector], Vector], x: Vector
-    ) -> Matrix:
+    def compute_jacobian(self, func: Callable[[Vector], Vector], x: Vector) -> Matrix:
         """
         Compute Jacobian matrix using automatic differentiation
 
@@ -613,9 +597,7 @@ class MathLibV3:
                 # Extract derivative column
                 for j in range(m):
                     jacobian[j, i] = (
-                        dual_output[j].eps
-                        if hasattr(dual_output[j], "eps")
-                        else 0.0
+                        dual_output[j].eps if hasattr(dual_output[j], "eps") else 0.0
                     )
 
             return jacobian
@@ -742,9 +724,7 @@ def main() -> None:
     print(f"CVaR (95%): {cvar_result}")
 
     logger.info("MathLibV3 main function executed successfully")
-    print(
-        "MathLibV3 with automatic differentiation test completed successfully"
-    )
+    print("MathLibV3 with automatic differentiation test completed successfully")
 
 
 if __name__ == "__main__":

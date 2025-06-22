@@ -1,0 +1,638 @@
+[1m.\aleph_core\entropy_analyzer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\paradox_visualizer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\pattern_matcher.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\smart_money_analyzer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\strategy_replayer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\strategy_replayer_upgraded.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\tesseract.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_core\unitizer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\aleph_unitizer_lib.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m4[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m10[36m:[m1[36m:[m [1m[31mS404[m Consider possible security implications associated with the subprocess module.
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m12[36m:[m1[36m:[m [1m[31mF401[m 'pathlib.Path' imported but unused
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m13[36m:[m1[36m:[m [1m[31mF401[m 'typing.Tuple' imported but unused
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m18[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m19[36m:[m1[36m:[m [1m[31mD107[m Missing docstring in __init__
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m19[36m:[m23[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m26[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m30[36m:[m1[36m:[m [1m[31mS607[m Starting a process with a partial executable path
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m30[36m:[m1[36m:[m [1m[31mS603[m subprocess call - check for execution of untrusted input.
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m36[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m39[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m42[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m46[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m56[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m68[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m70[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m75[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m81[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m83[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m90[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m97[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m104[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m111[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m115[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m121[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m123[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m130[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m137[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m144[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m149[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m151[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m155[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m161[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m163[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m179[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m180[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m182[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m187[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m189[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m193[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m199[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m201[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m208[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m215[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m222[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m227[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m229[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m233[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m237[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m240[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m245[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m247[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m256[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m260[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m262[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m266[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m269[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m277[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m279[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m284[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m289[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m293[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m297[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m300[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m304[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m308[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m310[36m:[m15[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m323[36m:[m11[36m:[m [1m[31mW291[m trailing whitespace
+[1m.\analyze_and_fix_e999_errors.py[m[36m:[m323[36m:[m12[36m:[m [1m[31mW292[m no newline at end of file
+[1m.\analyze_top_files.py[m[36m:[m17[36m:[m54[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 84)
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m11[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import os' should be before 'from datetime import datetime'
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m13[36m:[m1[36m:[m [1m[31mS404[m Consider possible security implications associated with the subprocess module.
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m30[36m:[m1[36m:[m [1m[31mF811[m redefinition of unused 'WindowsCliCompatibilityHandler' from line 18
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m224[36m:[m1[36m:[m [1m[31mS603[m subprocess call - check for execution of untrusted input.
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m446[36m:[m1[36m:[m [1m[31mS603[m subprocess call - check for execution of untrusted input.
+[1m.\apply_comprehensive_architecture_integration.py[m[36m:[m521[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\apply_enhanced_cli_compatibility.py[m[36m:[m473[36m:[m2[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 552)
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m34[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m34[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m35[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\apply_windows_cli_compatibility.py[m[36m:[m251[36m:[m24[36m:[m [1m[31mB007[m Loop control variable 'success' not used within the loop body. If this is intended, start the name with an underscore.
+[1m.\blank_line_fixer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\components\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\components\live_data_streamer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\comprehensive_core_integration_test.py[m[36m:[m12[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 14)
+[1m.\comprehensive_stub_fixer.py[m[36m:[m10[36m:[m1[36m:[m [1m[31mF401[m 'pathlib.Path' imported but unused
+[1m.\comprehensive_stub_fixer.py[m[36m:[m15[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m16[36m:[m1[36m:[m [1m[31mD107[m Missing docstring in __init__
+[1m.\comprehensive_stub_fixer.py[m[36m:[m16[36m:[m23[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\comprehensive_stub_fixer.py[m[36m:[m23[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m67[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m70[36m:[m9[36m:[m [1m[31mF841[m local variable 'original_content' is assigned to but never used
+[1m.\comprehensive_stub_fixer.py[m[36m:[m72[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m77[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m79[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m85[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m88[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m91[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m95[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m99[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m101[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m106[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m113[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m122[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m127[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m130[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m134[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m138[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m141[36m:[m48[36m:[m [1m[31mW291[m trailing whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m144[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m148[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m152[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m154[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m159[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m209[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\comprehensive_stub_fixer.py[m[36m:[m219[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\comprehensive_stub_fixer.py[m[36m:[m259[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m262[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m268[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m270[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m282[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m287[36m:[m80[36m:[m [1m[31mE501[m line too long (102 > 79 characters)
+[1m.\comprehensive_stub_fixer.py[m[36m:[m298[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m306[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m310[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m312[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m323[36m:[m11[36m:[m [1m[31mW291[m trailing whitespace
+[1m.\comprehensive_stub_fixer.py[m[36m:[m323[36m:[m12[36m:[m [1m[31mW292[m no newline at end of file
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m13[36m:[m1[36m:[m [1m[31mF401[m 'sys' imported but unused
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m14[36m:[m1[36m:[m [1m[31mF401[m 'pathlib.Path' imported but unused
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m19[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m20[36m:[m1[36m:[m [1m[31mD107[m Missing docstring in __init__
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m20[36m:[m23[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m26[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m34[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m41[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m43[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m63[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m65[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m74[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m81[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m88[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m90[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m99[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m106[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m113[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m115[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m121[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m123[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m129[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m134[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m136[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m140[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m144[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m147[36m:[m80[36m:[m [1m[31mE501[m line too long (108 > 79 characters)
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m148[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m153[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m157[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m162[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m165[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m167[36m:[m15[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m180[36m:[m11[36m:[m [1m[31mW291[m trailing whitespace
+[1m.\comprehensive_syntax_cleanup.py[m[36m:[m180[36m:[m12[36m:[m [1m[31mW292[m no newline at end of file
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m13[36m:[m1[36m:[m [1m[31mF401[m 'pathlib.Path' imported but unused
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m24[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m50[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m53[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m65[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m72[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m84[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m91[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m98[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m107[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m109[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m115[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m121[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m123[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m132[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m136[36m:[m80[36m:[m [1m[31mE501[m line too long (104 > 79 characters)
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m137[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m143[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m151[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m153[36m:[m1[36m:[m [1m[31mS404[m Consider possible security implications associated with the subprocess module.
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m154[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m156[36m:[m1[36m:[m [1m[31mS607[m Starting a process with a partial executable path
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m156[36m:[m1[36m:[m [1m[31mS603[m subprocess call - check for execution of untrusted input.
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m161[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m165[36m:[m80[36m:[m [1m[31mE501[m line too long (96 > 79 characters)
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m170[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m179[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m182[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m184[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m187[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m192[36m:[m11[36m:[m [1m[31mW291[m trailing whitespace
+[1m.\comprehensive_syntax_fixer.py[m[36m:[m192[36m:[m12[36m:[m [1m[31mW292[m no newline at end of file
+[1m.\config\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\config_utils.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\cooldown_config.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\io_utils.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\mathematical_framework_config.py[m[36m:[m32[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import json' should be before 'from dataclasses import field'
+[1m.\config\mathematical_framework_config.py[m[36m:[m308[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\config\mathematical_framework_config.py[m[36m:[m348[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\config\matrix_response_schema.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\risk_config.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\schemas\__init__.py[m[36m:[m42[36m:[m67[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 53)
+[1m.\config\schemas\quantization.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\config\schwabot_config.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mD211[m No blank lines allowed before class docstring
+[1m.\config\schwabot_config.py[m[36m:[m61[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\core\__init__.py[m[36m:[m24[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .conditional_glyph_feedback_loop import ConditionalGlyphFeedback' should be before 'from .conditional_glyph_feedback_loop import compute_news_flow_gradient'
+[1m.\core\__init__.py[m[36m:[m37[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .entry_exit_vector_analyzer import EntryExitVectorAnalyzer' should be before 'from .entry_exit_vector_analyzer import compute_routing_elasticity'
+[1m.\core\__init__.py[m[36m:[m59[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .ghost_phase_integrator import GhostPhasePacket' should be before 'from .ghost_phase_integrator import compute_ghost_phase_packet'
+[1m.\core\__init__.py[m[36m:[m61[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .ghost_pipeline import GhostPipeline' should be before 'from .ghost_pipeline import ghost_validator_pipeline'
+[1m.\core\__init__.py[m[36m:[m63[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .ghost_profit_tracker import ProfitTracker' should be before 'from .ghost_profit_tracker import profit_summary'
+[1m.\core\__init__.py[m[36m:[m66[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .ghost_router import GhostRouter' should be before 'from .ghost_router import ghost_router'
+[1m.\core\__init__.py[m[36m:[m84[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .glyph_vector_executor import GlyphInstruction' should be before 'from .glyph_vector_executor import execute_glyph_vectors'
+[1m.\core\__init__.py[m[36m:[m105[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .phantom_memory import GhostEvent' should be before 'from .phantom_memory import compute_memory_recall'
+[1m.\core\__init__.py[m[36m:[m108[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .phantom_price_vector_synchronizer import PhantomPriceSynchronizer' should be before 'from .phantom_price_vector_synchronizer import compute_phantom_velocity'
+[1m.\core\__init__.py[m[36m:[m111[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .phantom_profit_tracker import ProfitTracker' should be before 'from .phantom_profit_tracker import profit_summary'
+[1m.\core\__init__.py[m[36m:[m115[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .profit_cycle_allocator import ProfitCycleAllocator' should be before 'from .profit_cycle_allocator import allocate_profit_cycle'
+[1m.\core\__init__.py[m[36m:[m118[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .profit_echo_velocity_driver import ProfitEchoVelocityDriver' should be before 'from .profit_echo_velocity_driver import drive_profit_echo'
+[1m.\core\__init__.py[m[36m:[m123[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .strategy_mapper import StrategyMapper' should be before 'from .strategy_mapper import map_strategy'
+[1m.\core\__init__.py[m[36m:[m147[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from .zbe_position_tracker import ZBEPositionTracker' should be before 'from .zbe_position_tracker import track_position_state'
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m29[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from datetime import datetime'
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m34[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from core.type_defs import Entropy' should be before 'import numpy' and in a different group.
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m60[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m75[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m91[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m110[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m128[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m198[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m206[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m227[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m232[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m286[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m302[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m355[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m366[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\advanced_drift_shell_integration.py[m[36m:[m397[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from dataclasses import dataclass'
+[1m.\core\advanced_mathematical_core.py[m[36m:[m36[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from core.constants import *' should be before 'import numpy' and in a different group.
+[1m.\core\advanced_mathematical_core.py[m[36m:[m36[36m:[m1[36m:[m [1m[31mF403[m 'from core.constants import *' used; unable to detect undefined names
+[1m.\core\advanced_mathematical_core.py[m[36m:[m37[36m:[m1[36m:[m [1m[31mF401[m 'core.type_defs.EntropyMap' imported but unused
+[1m.\core\advanced_mathematical_core.py[m[36m:[m91[36m:[m59[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m93[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m105[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m116[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m130[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m131[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m142[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m143[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m159[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m179[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m185[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m197[36m:[m6[36m:[m [1m[31mN803[m argument name 'A' should be lowercase
+[1m.\core\advanced_mathematical_core.py[m[36m:[m197[36m:[m17[36m:[m [1m[31mN803[m argument name 'B' should be lowercase
+[1m.\core\advanced_mathematical_core.py[m[36m:[m197[36m:[m45[36m:[m [1m[31mF405[m 'MEMORY_CHUNK_SIZE' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m199[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m215[36m:[m50[36m:[m [1m[31mF405[m 'MATRIX_CONDITION_LIMIT' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m217[36m:[m1[36m:[m [1m[31mD200[m One-line docstring should fit on one line with quotes
+[1m.\core\advanced_mathematical_core.py[m[36m:[m217[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m244[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m256[36m:[m55[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m256[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m262[36m:[m28[36m:[m [1m[31mF405[m 'THERMAL_CONDUCTIVITY_BTC' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m274[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m283[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m285[36m:[m28[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m296[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m309[36m:[m48[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m330[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m339[36m:[m38[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m346[36m:[m18[36m:[m [1m[31mF405[m 'KELLY_SAFETY_FACTOR' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m371[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m384[36m:[m40[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m405[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m417[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m423[36m:[m24[36m:[m [1m[31mF405[m 'QUANTUM_ENTROPY_SCALE' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m423[36m:[m62[36m:[m [1m[31mF405[m 'REDUCED_PLANCK' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m426[36m:[m19[36m:[m [1m[31mF405[m 'QUANTUM_ENTROPY_SCALE' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m429[36m:[m53[36m:[m [1m[31mF405[m 'THERMAL_CONDUCTIVITY_BTC' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m450[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m463[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m477[36m:[m45[36m:[m [1m[31mF405[m 'FERRIS_PRIMARY_CYCLE' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m479[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m491[36m:[m18[36m:[m [1m[31mF405[m 'FERRIS_HARMONIC_RATIOS' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m528[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m548[36m:[m48[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m552[36m:[m64[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m566[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m578[36m:[m72[36m:[m [1m[31mF405[m 'EPSILON_FLOAT64' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m578[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\advanced_mathematical_core.py[m[36m:[m599[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_mathematical_core.py[m[36m:[m617[36m:[m34[36m:[m [1m[31mF405[m 'PATTERN_SIMILARITY_THRESHOLD' may be undefined, or defined from star imports: core.constants
+[1m.\core\advanced_mathematical_core.py[m[36m:[m642[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\advanced_test_harness.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\altitude_adjustment_math.py[m[36m:[m5[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\altitude_adjustment_math.py[m[36m:[m19[36m:[m1[36m:[m [1m[31mF401[m 'time' imported but unused
+[1m.\core\altitude_adjustment_math.py[m[36m:[m22[36m:[m1[36m:[m [1m[31mF401[m 'typing.Tuple' imported but unused
+[1m.\core\altitude_adjustment_math.py[m[36m:[m65[36m:[m23[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\core\altitude_adjustment_math.py[m[36m:[m467[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\altitude_adjustment_math.py[m[36m:[m497[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m18[36m:[m1[36m:[m [1m[31mF401[m 'decimal.Decimal' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m20[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from enum import Enum'
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m22[36m:[m1[36m:[m [1m[31mF401[m 'typing.Any' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m22[36m:[m1[36m:[m [1m[31mF401[m 'typing.Union' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m23[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import warnings' should be before 'from typing import Any, Dict, List, Optional, Tuple, Union'
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m23[36m:[m1[36m:[m [1m[31mF401[m 'warnings' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m26[36m:[m1[36m:[m [1m[31mI201[m Missing newline between import groups. 'from scipy import stats' is identified as Third Party and 'import numpy' is identified as Third Party.
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m26[36m:[m1[36m:[m [1m[31mF401[m 'scipy.stats' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m27[36m:[m1[36m:[m [1m[31mF401[m 'scipy.stats.jarque_bera' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m27[36m:[m1[36m:[m [1m[31mF401[m 'scipy.stats.normaltest' imported but unused
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m115[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m122[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m126[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m142[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m160[36m:[m80[36m:[m [1m[31mE501[m line too long (111 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m182[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m191[36m:[m80[36m:[m [1m[31mE501[m line too long (101 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m195[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m199[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m210[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m215[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m222[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m240[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m272[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m274[36m:[m80[36m:[m [1m[31mE501[m line too long (127 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m282[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m283[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m285[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m292[36m:[m80[36m:[m [1m[31mE501[m line too long (160 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m313[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m326[36m:[m80[36m:[m [1m[31mE501[m line too long (112 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m343[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m346[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m349[36m:[m80[36m:[m [1m[31mE501[m line too long (112 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m357[36m:[m13[36m:[m [1m[31mF402[m import 'field' from line 17 shadowed by loop variable
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m387[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m403[36m:[m80[36m:[m [1m[31mE501[m line too long (106 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m416[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m418[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m437[36m:[m80[36m:[m [1m[31mE501[m line too long (93 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m453[36m:[m13[36m:[m [1m[31mB007[m Loop control variable 'i' not used within the loop body. If this is intended, start the name with an underscore.
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m479[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m490[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m497[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m501[36m:[m80[36m:[m [1m[31mE501[m line too long (124 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m514[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m517[36m:[m80[36m:[m [1m[31mE501[m line too long (89 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m531[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m546[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m549[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m556[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m569[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m588[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m590[36m:[m80[36m:[m [1m[31mE501[m line too long (99 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m636[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\anomaly_filter_comprehensive.py[m[36m:[m655[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\antipole\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\antipole\tesseract_bridge.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\antipole\vector.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\antipole\zbe_controller.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\api_endpoints.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\auto_scaler.py[m[36m:[m22[36m:[m1[36m:[m [1m[31mF401[m 'typing.Optional' imported but unused
+[1m.\core\auto_scaler.py[m[36m:[m81[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m93[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m111[36m:[m7[36m:[m [1m[31mANN003[m Missing type annotation for **scaling_params
+[1m.\core\auto_scaler.py[m[36m:[m138[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m206[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m261[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m283[36m:[m6[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\core\auto_scaler.py[m[36m:[m370[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m388[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m423[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m440[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m455[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m562[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\auto_scaler.py[m[36m:[m575[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\auto_scaler.py[m[36m:[m579[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\bare_except_handling_fixes.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_entropy_allocator.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_log_controller.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_swap_logic.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_swap_overlay_router.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_swapper.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\basket_tensor_feedback.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\behavior_pattern_tracker.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\best_practices_enforcer.py[m[36m:[m32[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from datetime import datetime'
+[1m.\core\best_practices_enforcer.py[m[36m:[m34[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import re' should be before 'from pathlib import Path'
+[1m.\core\best_practices_enforcer.py[m[36m:[m79[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m95[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m131[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m142[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m162[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m170[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m172[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m174[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m187[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m240[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m241[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\best_practices_enforcer.py[m[36m:[m251[36m:[m80[36m:[m [1m[31mE501[m line too long (89 > 79 characters)
+[1m.\core\bit_operations.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\bit_sequencer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\bitcoin_mining_analyzer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\bitmap_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\block_wave_transform.py[m[36m:[m68[36m:[m6[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 84)
+[1m.\core\braid_fractal.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\braid_pattern_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\btc_data_processor.py[m[36m:[m167[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m171[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m211[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m262[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m366[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m379[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m390[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m411[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m412[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_data_processor.py[m[36m:[m450[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m4[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m35[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'from core.unified_signal_metrics import BTCInvestmentSignals, TradingSignalMetrics, collect_unified_signals' should be before 'import numpy' and in a different group.
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m152[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m195[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m219[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m261[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m281[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m287[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m292[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m299[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m305[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m315[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m320[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m326[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m336[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m348[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m352[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m354[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m362[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m375[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m387[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m396[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m430[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m503[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m520[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m528[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m532[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m604[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m606[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\btc_investment_ratio_controller.py[m[36m:[m613[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\btc_processor_controller.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\btc_processor_ui.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\btc_vector_aggregator.py[m[36m:[m131[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\bus_core.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\bus_events.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\ccxt_execution_manager.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\ccxt_profit_vectorizer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\checksum_verifier.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\cluster_mapper.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\coldbase_bridge.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\collapse_confidence.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\collapse_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\config.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m45[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import json' should be before 'from enum import Enum'
+[1m.\core\config.py[m[36m:[m66[36m:[m1[36m:[m [1m[31mD101[m Missing docstring in public class
+[1m.\core\config.py[m[36m:[m284[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m285[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\core\config.py[m[36m:[m287[36m:[m1[36m:[m [1m[31mW293[m blank line contains whitespace
+[1m.\core\config.py[m[36m:[m307[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m320[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m328[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m355[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m374[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m396[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m417[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m461[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m515[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m557[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m567[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m609[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m619[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m627[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m655[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m662[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m684[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m774[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m796[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m831[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m847[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m857[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\config.py[m[36m:[m873[36m:[m15[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\config\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\defaults.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\logging_config.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\manager.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\tesseract\config_loader.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\unifier.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config\validator.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\config_utils.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\constants.py[m[36m:[m18[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import platform' should be before 'from pathlib import Path'
+[1m.\core\constants.py[m[36m:[m103[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m35[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from decimal import getcontext'
+[1m.\core\constraints.py[m[36m:[m36[36m:[m1[36m:[m [1m[31mI101[m Imported names are in the wrong order. Should be Any, Dict, List, Optional, TYPE_CHECKING, Tuple, Union
+[1m.\core\constraints.py[m[36m:[m86[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m87[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m136[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m158[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m159[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m250[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m325[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m372[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m398[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m469[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m560[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m610[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m625[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m632[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m642[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m658[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\constraints.py[m[36m:[m662[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\cooldown_manager.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\critical_error_handler.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\cursor_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\cursor_math_integration.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\cyclic_core.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\dashboard_integration.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\data\data_provider.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\data\provider.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\data_provider.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\deterministic_value_engine.py[m[36m:[m23[36m:[m1[36m:[m [1m[31mF401[m 'decimal.Decimal' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m25[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import logging' should be before 'from enum import Enum'
+[1m.\core\deterministic_value_engine.py[m[36m:[m27[36m:[m1[36m:[m [1m[31mI101[m Imported names are in the wrong order. Should be Any, Callable, Dict, List, Optional, Tuple, Union
+[1m.\core\deterministic_value_engine.py[m[36m:[m27[36m:[m1[36m:[m [1m[31mF401[m 'typing.Union' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m27[36m:[m1[36m:[m [1m[31mF401[m 'typing.Callable' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m28[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import warnings' should be before 'from typing import Any, Dict, List, Optional, Tuple, Union, Callable'
+[1m.\core\deterministic_value_engine.py[m[36m:[m28[36m:[m1[36m:[m [1m[31mF401[m 'warnings' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mI201[m Missing newline between import groups. 'from scipy.optimize import minimize' is identified as Third Party and 'import numpy' is identified as Third Party.
+[1m.\core\deterministic_value_engine.py[m[36m:[m31[36m:[m1[36m:[m [1m[31mF401[m 'scipy.optimize.minimize' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m32[36m:[m1[36m:[m [1m[31mF401[m 'scipy.stats.entropy' imported but unused
+[1m.\core\deterministic_value_engine.py[m[36m:[m134[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m144[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m156[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m197[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m200[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m203[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m234[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m259[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m269[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m270[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m273[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m278[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m287[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m291[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m307[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m308[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m311[36m:[m9[36m:[m [1m[31mF841[m local variable 'market_conditions_score' is assigned to but never used
+[1m.\core\deterministic_value_engine.py[m[36m:[m316[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m340[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m367[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m367[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m388[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m396[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m397[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m397[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\deterministic_value_engine.py[m[36m:[m400[36m:[m10[36m:[m [1m[31mN806[m variable 'T_entropy' in function should be lowercase
+[1m.\core\deterministic_value_engine.py[m[36m:[m406[36m:[m10[36m:[m [1m[31mN806[m variable 'T_delta_theta_term' in function should be lowercase
+[1m.\core\deterministic_value_engine.py[m[36m:[m422[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m436[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m436[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\deterministic_value_engine.py[m[36m:[m451[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m455[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m460[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m467[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m469[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m491[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m491[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m506[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m511[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m523[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m545[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m547[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m547[36m:[m80[36m:[m [1m[31mE501[m line too long (86 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m567[36m:[m80[36m:[m [1m[31mE501[m line too long (82 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m577[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m579[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m625[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m653[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m668[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m670[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m687[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m689[36m:[m80[36m:[m [1m[31mE501[m line too long (83 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m692[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m700[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m721[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m723[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m729[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m731[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m760[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m784[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m785[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m787[36m:[m80[36m:[m [1m[31mE501[m line too long (84 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m822[36m:[m80[36m:[m [1m[31mE501[m line too long (81 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m910[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\deterministic_value_engine.py[m[36m:[m911[36m:[m1[36m:[m [1m[31mD202[m No blank lines allowed after function docstring
+[1m.\core\deterministic_value_engine.py[m[36m:[m959[36m:[m11[36m:[m [1m[31mF541[m f-string is missing placeholders
+[1m.\core\deterministic_value_engine.py[m[36m:[m969[36m:[m80[36m:[m [1m[31mE501[m line too long (88 > 79 characters)
+[1m.\core\dormant_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\drift_exit_detector.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\drift_phase_monitor.py[m[36m:[m213[36m:[m80[36m:[m [1m[31mE501[m line too long (87 > 79 characters)
+[1m.\core\drift_phase_monitor.py[m[36m:[m230[36m:[m51[36m:[m [1m[31mANN204[m Missing return type annotation for special method
+[1m.\core\drift_phase_monitor.py[m[36m:[m243[36m:[m80[36m:[m [1m[31mE501[m line too long (85 > 79 characters)
+[1m.\core\drift_shell_engine.py[m[36m:[m303[36m:[m29[36m:[m [1m[31mE999[m SyntaxError: invalid decimal literal
+[1m.\core\dual_state_tracker.py[m[36m:[m126[36m:[m6[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 127)
+[1m.\core\echo_snapshot.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\edge_vector_field.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_btc_integration_bridge.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_fractal_core.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_gpu_hash_processor.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_hooks.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_tesseract_processor.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_thermal_aware_btc_processor.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_thermal_hash_processor.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m19[36m:[m1[36m:[m [1m[31mI100[m Import statements are in the wrong order. 'import io' should be before 'from functools import wraps'
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m29[36m:[m1[36m:[m [1m[31mD205[m 1 blank line required between summary line and description
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m29[36m:[m1[36m:[m [1m[31mD400[m First line should end with a period
+[1m.\core\enhanced_windows_cli_compatibility.py[m[36m:[m31[36m:[m80[36m:[m [1m[31mE501[m line too long (80 > 79 characters)

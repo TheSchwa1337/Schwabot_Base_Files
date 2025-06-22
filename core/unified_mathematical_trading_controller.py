@@ -116,14 +116,10 @@ class MathematicalConstraints:
         value = self.safe_decimal(x) if not isinstance(x, Decimal) else x
 
         min_bound = (
-            Decimal(str(min_val))
-            if min_val is not None
-            else self.min_thermal_bound
+            Decimal(str(min_val)) if min_val is not None else self.min_thermal_bound
         )
         max_bound = (
-            Decimal(str(max_val))
-            if max_val is not None
-            else self.max_thermal_bound
+            Decimal(str(max_val)) if max_val is not None else self.max_thermal_bound
         )
 
         return max(min(value, max_bound), min_bound)
@@ -182,9 +178,7 @@ class GhostSwapDetector:
     ) -> bool:
         """Detect phantom swap triggers based on delta patterns."""
         # Phantom trigger: rapid price movement with low volume
-        rapid_price = delta_t < Decimal("0.5") and abs(delta_price) > Decimal(
-            "50"
-        )
+        rapid_price = delta_t < Decimal("0.5") and abs(delta_price) > Decimal("50")
         low_volume = delta_volume < Decimal("0.1")
 
         return rapid_price and low_volume
@@ -283,9 +277,7 @@ class FerrisWheelCycleEngine:
 
         # Calculate thermal drift
         thermal_drift = (
-            total_profit / base_thermal
-            if base_thermal != 0
-            else Decimal("0.0")
+            total_profit / base_thermal if base_thermal != 0 else Decimal("0.0")
         )
 
         return {
@@ -451,21 +443,15 @@ class UnifiedMathematicalTradingController:
         thermal_analysis = {}
 
         for cycle_name, cycle_data in self.ferris_engine.cycles.items():
-            signature = self.ferris_engine.get_cycle_thermal_signature(
-                cycle_name
-            )
+            signature = self.ferris_engine.get_cycle_thermal_signature(cycle_name)
 
             thermal_analysis[cycle_name] = {
-                "thermal_stability": float(
-                    abs(signature.get("thermal_drift", 0))
-                ),
+                "thermal_stability": float(abs(signature.get("thermal_drift", 0))),
                 "profit_thermal_ratio": (
                     float(signature.get("total_profit", 0))
                     / float(signature.get("current_thermal", 1))
                 ),
-                "stabilizer_impact": float(
-                    signature.get("stabilizer_delta", 0)
-                ),
+                "stabilizer_impact": float(signature.get("stabilizer_delta", 0)),
                 "vector_count": len(cycle_data["vectors"]),
                 "thermal_efficiency": (
                     float(signature.get("total_profit", 0))
@@ -564,9 +550,7 @@ def main() -> None:
         allocation = controller.get_optimal_allocation(10000.0, 0.15)
         print(f"💰 Optimal allocation status: {allocation['status']}")
         if allocation["status"] == "success":
-            print(
-                f"📈 Total allocated: ${allocation['allocated_capital']:.2f}"
-            )
+            print(f"📈 Total allocated: ${allocation['allocated_capital']:.2f}")
 
         # System status
         status = controller.get_system_status()
@@ -575,9 +559,7 @@ def main() -> None:
         print(f"   Cycles: {status['active_cycles']}")
         print(f"   Ghost signals: {status['ghost_signals']}")
         print(f"   Total profit: ${status['total_profit']:.2f}")
-        print(
-            f"   Tracked profit total: ${status['tracked_profit_total']:.2f}"
-        )
+        print(f"   Tracked profit total: ${status['tracked_profit_total']:.2f}")
         print(f"   Avg efficiency: {status['average_efficiency']:.3f}")
 
         print("🎉 Unified mathematical trading controller demo completed!")

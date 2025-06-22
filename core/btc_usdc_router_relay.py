@@ -2,7 +2,7 @@
 """btc_usdc_router_relay – BTC/USDC routing with ghost conditional triggers.
 
 Implements the ghost conditional trigger logic:
-    Θᴳ(t) = Σ θₖ·ζₖ(t) · δ(t − τₖ)
+    Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ)
 
 This module handles routing between BTC and USDC flows with conditional
 trigger detection for the ghost protocol.
@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class BTCUSDCRouterRelay:
-    """BTC/USDC router with ghost conditional triggers."""."""
+    """BTC/USDC router with ghost conditional triggers."""
 
     trigger_threshold: float = 0.5
     delta_tolerance: float = 0.1
@@ -36,7 +36,7 @@ class BTCUSDCRouterRelay:
         timestamps: Sequence[float],
         trigger_times: Sequence[float],
     ) -> float:
-        """Compute Θᴳ(t) = Σ θₖ·ζₖ(t) · δ(t − τₖ).
+        """Compute Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ).
 
         Parameters
         ----------
@@ -61,7 +61,7 @@ class BTCUSDCRouterRelay:
 
         theta_g_total = 0.0
 
-        # Sum over all k: θₖ·ζₖ(t) · δ(t − τₖ)
+        # Sum over all k: θₖ * ζₖ(t) * δ(t − τₖ)
         for k, (theta_k, tau_k) in enumerate(zip(theta_array, triggers)):
             # Find zeta value at trigger time (interpolate if needed)
             if len(zeta_array) == len(times):
@@ -175,7 +175,7 @@ def compute_ghost_triggers(
     trigger_times: Sequence[float],
     delta_tolerance: float = 0.1,
 ) -> float:  # noqa: D401
-    """Compute ghost conditional triggers Θᴳ(t)."""."""
+    """Compute ghost conditional triggers Θᴳ(t)."""
     relay = BTCUSDCRouterRelay(delta_tolerance=delta_tolerance)
     return relay.compute_theta_g(
         theta_values, zeta_series, timestamps, trigger_times
@@ -188,7 +188,7 @@ def route_btc_usdc_flow(
     ghost_trigger_strength: float,
     threshold: float = 0.5,
 ) -> tuple[float, float]:  # noqa: D401
-    """Route BTC/USDC flows using ghost trigger strength."""."""
+    """Route BTC/USDC flows using ghost trigger strength."""
     relay = BTCUSDCRouterRelay(trigger_threshold=threshold)
     return relay.route_flow_decision(
         btc_flow, usdc_flow, ghost_trigger_strength

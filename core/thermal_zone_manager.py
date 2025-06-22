@@ -146,9 +146,7 @@ class ThermalThresholdController:
         avg_performance = sum(recent_performance) / len(recent_performance)
 
         # Calculate thermal stability
-        temp_variance = zone.performance_metrics.get(
-            "temperature_variance", 0.0
-        )
+        temp_variance = zone.performance_metrics.get("temperature_variance", 0.0)
         stability_factor = 1.0 / (1.0 + temp_variance)
 
         # Adaptive adjustment
@@ -181,8 +179,7 @@ class ThermalThresholdController:
         # Check for rapid temperature changes
         recent_temps = temperature_history[-3:]
         temp_deltas = [
-            recent_temps[i + 1] - recent_temps[i]
-            for i in range(len(recent_temps) - 1)
+            recent_temps[i + 1] - recent_temps[i] for i in range(len(recent_temps) - 1)
         ]
 
         max_delta = max(abs(d) for d in temp_deltas)
@@ -198,9 +195,7 @@ class ThermalThresholdController:
             if (temp_deltas[0] > 0 and temp_deltas[1] < 0) or (
                 temp_deltas[0] < 0 and temp_deltas[1] > 0
             ):
-                if abs(temp_deltas[0]) > zone.thermal_threshold * Decimal(
-                    "0.3"
-                ):
+                if abs(temp_deltas[0]) > zone.thermal_threshold * Decimal("0.3"):
                     anomalies.append("temperature_oscillation")
 
         return anomalies
@@ -229,9 +224,7 @@ class ThermalPerformanceAnalyzer:
         adjusted_efficiency = base_efficiency / (1.0 + thermal_penalty)
 
         # Temperature stability bonus
-        temp_variance = zone.performance_metrics.get(
-            "temperature_variance", 1.0
-        )
+        temp_variance = zone.performance_metrics.get("temperature_variance", 1.0)
         stability_bonus = 1.0 / (1.0 + temp_variance)
 
         final_efficiency = adjusted_efficiency * stability_bonus
@@ -251,17 +244,14 @@ class ThermalPerformanceAnalyzer:
 
         # Calculate temperature slope (trend)
         if len(temperatures) >= 2:
-            time_deltas = [
-                times[i + 1] - times[i] for i in range(len(times) - 1)
-            ]
+            time_deltas = [times[i + 1] - times[i] for i in range(len(times) - 1)]
             temp_deltas = [
                 temperatures[i + 1] - temperatures[i]
                 for i in range(len(temperatures) - 1)
             ]
 
             avg_slope = sum(
-                td / max(td_time, 1e-6)
-                for td, td_time in zip(temp_deltas, time_deltas)
+                td / max(td_time, 1e-6) for td, td_time in zip(temp_deltas, time_deltas)
             ) / len(temp_deltas)
         else:
             avg_slope = 0.0
@@ -279,9 +269,7 @@ class ThermalPerformanceAnalyzer:
 
         # Performance impact analysis
         performance_impacts = [s.performance_impact for s in snapshots]
-        avg_performance_impact = sum(performance_impacts) / len(
-            performance_impacts
-        )
+        avg_performance_impact = sum(performance_impacts) / len(performance_impacts)
 
         return {
             "status": "analyzed",
@@ -327,14 +315,10 @@ class ThermalPerformanceAnalyzer:
             recommendations.append("Implement thermal stabilization measures")
 
         if efficiency < self.efficiency_threshold:
-            recommendations.append(
-                "Optimize thermal management for better efficiency"
-            )
+            recommendations.append("Optimize thermal management for better efficiency")
 
         if not recommendations:
-            recommendations.append(
-                "Thermal zone operating within optimal parameters"
-            )
+            recommendations.append("Thermal zone operating within optimal parameters")
 
         return recommendations
 
@@ -433,9 +417,9 @@ class ThermalZoneManager:
             recent_temps = [float(s.temperature) for s in zone_history[-5:]]
             recent_temps.append(new_temperature)
             temp_mean = sum(recent_temps) / len(recent_temps)
-            temp_variance = sum(
-                (t - temp_mean) ** 2 for t in recent_temps
-            ) / len(recent_temps)
+            temp_variance = sum((t - temp_mean) ** 2 for t in recent_temps) / len(
+                recent_temps
+            )
             zone.performance_metrics["temperature_variance"] = temp_variance
             stability_score = 1.0 / (1.0 + temp_variance)
         else:
@@ -521,9 +505,7 @@ class ThermalZoneManager:
                 alerts.append(alert)
 
         # Zone instability alert
-        temp_variance = zone.performance_metrics.get(
-            "temperature_variance", 0.0
-        )
+        temp_variance = zone.performance_metrics.get("temperature_variance", 0.0)
         if temp_variance > 1.0:
             alert = self._create_alert(
                 zone_id,
@@ -641,9 +623,7 @@ class ThermalZoneManager:
 
             # Critical alerts
             critical_alerts = sum(
-                1
-                for a in self.alerts
-                if a.severity == "critical" and not a.resolved
+                1 for a in self.alerts if a.severity == "critical" and not a.resolved
             )
         else:
             avg_temperature = 0.0
@@ -661,9 +641,7 @@ class ThermalZoneManager:
             },
             "alert_summary": {
                 "total_alerts": len(self.alerts),
-                "unresolved_alerts": sum(
-                    1 for a in self.alerts if not a.resolved
-                ),
+                "unresolved_alerts": sum(1 for a in self.alerts if not a.resolved),
                 "critical_alerts": critical_alerts,
             },
             "zones": [
@@ -671,9 +649,7 @@ class ThermalZoneManager:
                     "zone_id": zid,
                     "zone_name": zone.zone_name,
                     "current_temperature": float(zone.current_temperature),
-                    "efficiency": zone.performance_metrics.get(
-                        "efficiency_score", 0.0
-                    ),
+                    "efficiency": zone.performance_metrics.get("efficiency_score", 0.0),
                     "active": zone.active,
                 }
                 for zid, zone in self.zones.items()
@@ -689,12 +665,8 @@ def main() -> None:
         print(f"✅ ThermalZoneManager v{manager.version} initialized")
 
         # Create test thermal zones
-        btc_zone = manager.create_thermal_zone(
-            "BTC_Trading", 1.0, 2.5, "trading"
-        )
-        eth_zone = manager.create_thermal_zone(
-            "ETH_Trading", 0.8, 2.0, "trading"
-        )
+        btc_zone = manager.create_thermal_zone("BTC_Trading", 1.0, 2.5, "trading")
+        eth_zone = manager.create_thermal_zone("ETH_Trading", 0.8, 2.0, "trading")
         math_zone = manager.create_thermal_zone(
             "Mathematical_Core", 0.5, 1.5, "computation"
         )
@@ -733,9 +705,7 @@ def main() -> None:
         if btc_status["status"] == "success":
             thermal_status = btc_status["thermal_status"]
             print(f"\n🎯 BTC Zone Status:")
-            print(
-                f"   Current temp: {thermal_status['current_temperature']:.3f}"
-            )
+            print(f"   Current temp: {thermal_status['current_temperature']:.3f}")
             print(f"   Threshold: {thermal_status['thermal_threshold']:.3f}")
             print(f"   Recent alerts: {len(btc_status['recent_alerts'])}")
 
@@ -745,12 +715,8 @@ def main() -> None:
         print(f"\n📈 System Overview:")
         print(f"   Total zones: {system_status['total_zones']}")
         print(f"   Hot zones: {system_status['hot_zones']}")
-        print(
-            f"   System efficiency: {system_status['system_efficiency']:.3f}"
-        )
-        print(
-            f"   Avg temperature: {system_status['average_temperature']:.3f}"
-        )
+        print(f"   System efficiency: {system_status['system_efficiency']:.3f}")
+        print(f"   Avg temperature: {system_status['average_temperature']:.3f}")
 
         print("🎉 Thermal zone manager demo completed!")
 
