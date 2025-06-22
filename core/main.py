@@ -538,11 +538,21 @@ class SchwabotEngine:
 
 def main() -> None:
     """Main entry point for Schwabot."""
-    parser = argparse.ArgumentParser(description="Schwabot - Advanced Algorithmic Trading System")
-    parser.add_argument('--live', action='store_true', help='Enable live trading mode')
-    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
-    parser.add_argument('--validate-only', action='store_true', help='Run validation only')
-    parser.add_argument('--status', action='store_true', help='Show system status')
+    parser = argparse.ArgumentParser(
+        description="Schwabot - Advanced Algorithmic Trading System"
+    )
+    parser.add_argument(
+        '--live', action='store_true', help='Enable live trading mode'
+    )
+    parser.add_argument(
+        '--debug', action='store_true', help='Enable debug mode'
+    )
+    parser.add_argument(
+        '--validate-only', action='store_true', help='Run validation only'
+    )
+    parser.add_argument(
+        '--status', action='store_true', help='Show system status'
+    )
     
     args = parser.parse_args()
     
@@ -584,7 +594,9 @@ def main() -> None:
         print("📊 Schwabot System Status:")
         print(f"Initialized: {status['initialized']}")
         print(f"Live Mode: {status['live_mode']}")
-        print(f"Components Ready: {sum(status['components_ready'].values())}/{len(status['components_ready'])}")
+        components_ready_count = sum(status['components_ready'].values())
+        total_components = len(status['components_ready'])
+        print(f"Components Ready: {components_ready_count}/{total_components}")
         print(f"Error Count: {status['error_count']}")
         
         if args.live:

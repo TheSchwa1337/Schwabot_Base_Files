@@ -481,10 +481,7 @@ class IntegrationOrchestrator:
         """Initialize a specific component"""
         try:
             with self.component_lock:
-                if component_name not in self.components:
-                    self.safe_log(
-                        "error", f"Component not found: {component_name}"
-                    )
+                if not self._validate_component_exists(component_name):
                     return False
 
                 component = self.components[component_name]
@@ -494,59 +491,82 @@ class IntegrationOrchestrator:
                 config = self.config_manager.get_config()
 
                 # Initialize based on component type
-                if component_name == "mathlib_v1":
-                    component.instance = self._initialize_mathlib_v1(config)
-                elif component_name == "mathlib_v2":
-                    component.instance = self._initialize_mathlib_v2(config)
-                elif component_name == "mathlib_v3":
-                    component.instance = self._initialize_mathlib_v3(config)
-                elif component_name == "gan_filter":
-                    component.instance = self._initialize_gan_filter(config)
-                elif component_name == "btc_integration":
-                    component.instance = self._initialize_btc_integration(
-                        config
-                    )
-                elif component_name == "strategy_logic":
-                    component.instance = self._initialize_strategy_logic(
-                        config
-                    )
-                elif component_name == "risk_monitor":
-                    component.instance = self._initialize_risk_monitor(config)
-                elif component_name == "tick_processor":
-                    component.instance = self._initialize_tick_processor(
-                        config
-                    )
-                elif component_name == "rittle_gemm":
-                    component.instance = self._initialize_rittle_gemm(config)
-                elif component_name == "math_optimization_bridge":
-                    component.instance = (
-                        self._initialize_math_optimization_bridge(config)
-                    )
+                success = self._create_component_instance(
+                    component_name, component, config
+                )
 
-                if component.instance is not None:
-                    component.status = ComponentStatus.RUNNING
-                    self.safe_log(
-                        "info",
-                        f"Component {component_name} initialized successfully",
-                    )
-                    return True
-                else:
-                    component.status = ComponentStatus.ERROR
-                    component.error_count += 1
-                    self.safe_log(
-                        "error",
-                        f"Component {component_name} initialization failed",
-                    )
-                    return False
+                return self._finalize_component_initialization(
+                    component_name, component, success
+                )
 
         except Exception as e:
-            self.safe_log(
-                "error", f"Error initializing component {component_name}: {e}"
+            return self._handle_component_initialization_error(
+                component_name, e
             )
-            if component_name in self.components:
-                self.components[component_name].status = ComponentStatus.ERROR
-                self.components[component_name].error_count += 1
+
+    def _validate_component_exists(self, component_name: str) -> bool:
+        """Validate that the component exists in the registry."""
+        if component_name not in self.components:
+            self.safe_log("error", f"Component not found: {component_name}")
             return False
+        return True
+
+    def _create_component_instance(
+        self, component_name: str, component: ComponentInfo, config: Any
+    ) -> bool:
+        """Create the component instance based on component type."""
+        component_creators = {
+            "mathlib_v1": self._initialize_mathlib_v1,
+            "mathlib_v2": self._initialize_mathlib_v2,
+            "mathlib_v3": self._initialize_mathlib_v3,
+            "gan_filter": self._initialize_gan_filter,
+            "btc_integration": self._initialize_btc_integration,
+            "strategy_logic": self._initialize_strategy_logic,
+            "risk_monitor": self._initialize_risk_monitor,
+            "tick_processor": self._initialize_tick_processor,
+            "rittle_gemm": self._initialize_rittle_gemm,
+            "math_optimization_bridge": (
+                self._initialize_math_optimization_bridge
+            ),
+        }
+
+        creator_func = component_creators.get(component_name)
+        if creator_func:
+            component.instance = creator_func(config)
+            return component.instance is not None
+
+        self.safe_log("warning", f"Unknown component type: {component_name}")
+        return False
+
+    def _finalize_component_initialization(
+        self, component_name: str, component: ComponentInfo, success: bool
+    ) -> bool:
+        """Finalize component initialization and update status."""
+        if success:
+            component.status = ComponentStatus.RUNNING
+            self.safe_log(
+                "info", f"Component {component_name} initialized successfully"
+            )
+            return True
+        else:
+            component.status = ComponentStatus.ERROR
+            component.error_count += 1
+            self.safe_log(
+                "error", f"Component {component_name} initialization failed"
+            )
+            return False
+
+    def _handle_component_initialization_error(
+        self, component_name: str, error: Exception
+    ) -> bool:
+        """Handle errors during component initialization."""
+        self.safe_log(
+            "error", f"Error initializing component {component_name}: {error}"
+        )
+        if component_name in self.components:
+            self.components[component_name].status = ComponentStatus.ERROR
+            self.components[component_name].error_count += 1
+        return False
 
     def _initialize_mathlib_v1(self, config: Any) -> Optional[Any]:
         """Initialize MathLib V1"""

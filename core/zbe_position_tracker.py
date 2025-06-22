@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""zbe_position_tracker – Zalgo-position glyph evolution tracker.
+"""Zero-Based Evolution position tracker.
 
 Implements the Zalgo-position glyph evolution logic:
-    Ψₙ = Σ ∂Zᵢ/∂t · Gᵢ(x)
+    Psi_n = Sum dZ_i/dt * G_i(x)
 
 This module tracks position evolution using ZBE (Zero-Based Evolution)
 calculations for ghost protocol position management.
@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ZBEPositionTracker:
-    """Zero-Based Evolution position tracker."""."""
+    """Zero-Based Evolution position tracker."""
 
     dt: float = 1.0
     evolution_rate: float = 0.1
@@ -35,16 +35,16 @@ class ZBEPositionTracker:
         g_functions: Sequence[Callable[[float], float]],
         x_positions: Sequence[float],
     ) -> np.ndarray:
-        """Compute Ψₙ = Σ ∂Zᵢ/∂t · Gᵢ(x).
+        """Compute Psi_n = Sum dZ_i/dt * G_i(x).
 
         Parameters
         ----------
         z_series
-            Zalgo values Zᵢ time series.
+            Zalgo values Z_i time series.
         g_functions
-            Glyph functions Gᵢ(x).
+            Glyph functions G_i(x).
         x_positions
-            Position values x to evaluate Gᵢ at.
+            Position values x to evaluate G_i at.
         """
         if len(z_series) != len(g_functions):
             raise ValueError("z_series and g_functions must have same length")
@@ -52,7 +52,7 @@ class ZBEPositionTracker:
         z_array = np.asarray(z_series, dtype=float)
         x_array = np.asarray(x_positions, dtype=float)
 
-        # Compute time derivatives ∂Zᵢ/∂t using finite differences
+        # Compute time derivatives dZ_i/dt using finite differences
         if len(z_array) < 2:
             dz_dt = np.array([0.0])
         else:
@@ -61,7 +61,7 @@ class ZBEPositionTracker:
         # Initialize result array
         psi_n = np.zeros_like(x_array, dtype=float)
 
-        # Sum over all i: ∂Zᵢ/∂t · Gᵢ(x)
+        # Sum over all i: dZ_i/dt * G_i(x)
         for i, (dz_i, g_func) in enumerate(zip(dz_dt, g_functions)):
             for j, x_pos in enumerate(x_array):
                 g_i_x = g_func(x_pos)
@@ -91,7 +91,7 @@ class ZBEPositionTracker:
         ):
             raise ValueError("all arrays must have same length")
 
-        # Apply evolution: state + evolution_rate * Ψₙ
+        # Apply evolution: state + evolution_rate * Psi_n
         evolution_term = zalgo_derivatives * glyph_weights
         evolved_state = current_state + self.evolution_rate * evolution_term
 
@@ -167,8 +167,8 @@ def compute_zalgo_evolution(
     z_series: Sequence[float],
     glyph_weights: Sequence[float],
     dt: float = 1.0,
-) -> np.ndarray:  # noqa: D401
-    """Compute basic Zalgo evolution without position dependence."""."""
+) -> np.ndarray:
+    """Compute basic Zalgo evolution without position dependence."""
     z_array = np.asarray(z_series, dtype=float)
     weights = np.asarray(glyph_weights, dtype=float)
 
@@ -192,8 +192,8 @@ def track_position_state(
     zalgo_series: Sequence[float],
     glyph_weights: Sequence[float],
     evolution_rate: float = 0.1,
-) -> np.ndarray:  # noqa: D401
-    """Stateless position state tracking."""."""
+) -> np.ndarray:
+    """Stateless position state tracking."""
     state = np.asarray(initial_state, dtype=float)
     evolution = compute_zalgo_evolution(zalgo_series, glyph_weights)
 

@@ -11,7 +11,7 @@ from typing import Deque
 
 
 class RateLimiter:
-    """Rate limiter for API requests."""."""
+    """Rate limiter for API requests."""
 
     def __init__(self, max_requests: int, time_window: float = 60.0) -> None:
         """Initialize rate limiter.
@@ -40,10 +40,10 @@ class RateLimiter:
         return len(self.requests) < self.max_requests
 
     def record_request(self) -> None:
-        """Record that a request was made."""."""
+        """Record that a request was made."""
         self.requests.append(time.time())
 
     def wait_if_needed(self) -> None:
-        """Wait if necessary to respect rate limits."""."""
+        """Wait if necessary to respect rate limits."""
         while not self.can_make_request():
             time.sleep(0.1)  # Small delay to avoid busy waiting
