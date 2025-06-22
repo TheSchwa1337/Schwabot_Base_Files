@@ -15,15 +15,13 @@ Mathematical Foundation:
 import logging
 import sys
 import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 import argparse
 import signal
 import asyncio
 
-from core.error_handler import safe_execute
-from core.import_resolver import safe_import
 from core.best_practices_enforcer import BestPracticesEnforcer
 from core.optimization_engine import get_optimization_engine
 from core.state_validation_router import create_state_validation_router
@@ -245,7 +243,7 @@ class SchwabotEngine:
                 return False
             
             # Test entry exit vector
-            entry_signal = self.entry_exit_vector.calculate_entry_trigger(test_data)
+            _ = self.entry_exit_vector.calculate_entry_trigger(test_data)
             # Entry signal can be None (no entry condition)
             
             # Test state validation
@@ -276,20 +274,28 @@ class SchwabotEngine:
             start_time = time.time()
             
             # Simulate full pipeline execution
-            test_data = {'price': 50000, 'volume': 1000, 'timestamp': time.time()}
+            test_data = {
+                'price': 50000,
+                'volume': 1000,
+                'timestamp': time.time()
+            }
             
             # Execute pipeline
-            portfolio_shift = self.portfolio_router.calculate_portfolio_shift({'volatility': 0.1})
+            portfolio_shift = self.portfolio_router.calculate_portfolio_shift(
+                {'volatility': 0.1})
             tick_phase = self.tick_interpreter.process_tick_data(test_data)
-            entry_signal = self.entry_exit_vector.calculate_entry_trigger(test_data)
-            state_valid = self.state_validator.validate_state_consistency({}, {}, {})
+            _ = self.entry_exit_vector.calculate_entry_trigger(test_data)
+            state_valid = self.state_validator.validate_state_consistency(
+                {}, {}, {})
             
             end_time = time.time()
             latency = (end_time - start_time) * 1000  # Convert to milliseconds
             
             # Check if latency is acceptable (<50ms target)
             if latency > 50:
-                logger.warning(f"Performance baseline exceeded: {latency:.2f}ms (target: <50ms)")
+                msg = (f"Performance baseline exceeded: {latency:.2f}ms "
+                       "(target: <50ms)")
+                logger.warning(msg)
                 # Don't fail for performance warnings in debug mode
                 if not self.debug_mode:
                     return False
@@ -309,7 +315,7 @@ class SchwabotEngine:
             # Check critical files are importable
             critical_modules = [
                 'core.hash_matrix_resolver',
-                'core.profit_routing_engine', 
+                'core.profit_routing_engine',
                 'core.entry_exit_vector',
                 'core.altitude_adjustment_math',
                 'core.quantum_btc_intelligence_core'
@@ -319,13 +325,15 @@ class SchwabotEngine:
                 try:
                     __import__(module_name)
                 except ImportError as e:
-                    logger.error(f"Critical module {module_name} not importable: {e}")
+                    logger.error(
+                        f"Critical module {module_name} not importable: {e}")
                     return False
             
             # Check optimization engine
             opt_stats = self.optimization_engine.get_optimization_statistics()
             if 'error' in opt_stats:
-                logger.error(f"Optimization engine check failed: {opt_stats['error']}")
+                logger.error(
+                    f"Optimization engine check failed: {opt_stats['error']}")
                 return False
             
             logger.info("✅ Startup checks passed")
@@ -380,7 +388,8 @@ class SchwabotEngine:
                 
                 # Use fallback logic if available
                 if self.fallback_router:
-                    fallback_result = self.fallback_router.route_fallback('trading_loop', e)
+                    fallback_result = self.fallback_router.route_fallback(
+                        'trading_loop', e)
                     if fallback_result:
                         logger.info("Fallback logic executed successfully")
     
@@ -392,21 +401,26 @@ class SchwabotEngine:
             
             if market_data:
                 # Process through pipeline
-                tick_phase = self.tick_interpreter.process_tick_data(market_data)
+                tick_phase = self.tick_interpreter.process_tick_data(
+                    market_data)
                 
                 if tick_phase:
                     # Calculate entry/exit signals
-                    entry_signal = self.entry_exit_vector.calculate_entry_trigger(market_data)
+                    entry_signal = (
+                        self.entry_exit_vector.calculate_entry_trigger(
+                            market_data))
                     
                     # Update portfolio if needed
                     if entry_signal and entry_signal.confidence > 0.8:
-                        portfolio_shift = self.portfolio_router.calculate_portfolio_shift({
-                            'volatility': market_data.get('volatility', 0.1),
-                            'risk_tolerance': 0.5
-                        })
+                        portfolio_shift = (
+                            self.portfolio_router.calculate_portfolio_shift({
+                                'volatility': market_data.get('volatility', 0.1),
+                                'risk_tolerance': 0.5
+                            }))
                         
                         if portfolio_shift:
-                            logger.info(f"Portfolio shift calculated: {portfolio_shift}")
+                            logger.info(
+                                f"Portfolio shift calculated: {portfolio_shift}")
                 
         except Exception as e:
             logger.error(f"Market data processing error: {e}")
@@ -446,22 +460,23 @@ class SchwabotEngine:
     
     def _signal_handler(self, signum: int, frame: Any) -> None:
         """Handle shutdown signals."""
-        logger.info(f"Received signal {signum}, initiating shutdown...")
+        logger.info(f"Received signal {signum}, shutting down...")
         self.running = False
     
     def _shutdown(self) -> None:
-        """Graceful shutdown of the system."""
+        """Shutdown system gracefully."""
         try:
-            logger.info("🛑 Shutting down Schwabot system...")
+            logger.info("🔄 Shutting down Schwabot system...")
             
-            # Clear caches
-            if self.optimization_engine:
-                self.optimization_engine.clear_cache()
+            # Stop trading
+            self.status.live_mode = False
             
-            # Log final statistics
-            if self.start_time:
-                uptime = datetime.now() - self.start_time
-                logger.info(f"System uptime: {uptime}")
+            # Shutdown components
+            if self.btc_processor:
+                self.btc_processor.shutdown()
+            
+            if self.quantum_core:
+                self.quantum_core.shutdown()
             
             logger.info("✅ Schwabot system shutdown complete")
             
@@ -470,19 +485,16 @@ class SchwabotEngine:
     
     def get_system_status(self) -> Dict[str, Any]:
         """Get current system status."""
-        try:
-            return {
-                'initialized': self.status.initialized,
-                'live_mode': self.status.live_mode,
-                'components_ready': self.status.components_ready,
-                'error_count': self.status.error_count,
-                'uptime_seconds': (datetime.now() - self.start_time).total_seconds() if self.start_time else 0,
-                'performance_metrics': self.status.performance_metrics,
-                'last_health_check': self.status.last_health_check.isoformat() if self.status.last_health_check else None
-            }
-        except Exception as e:
-            logger.error(f"Error getting system status: {e}")
-            return {'error': str(e)}
+        return {
+            'initialized': self.status.initialized,
+            'live_mode': self.status.live_mode,
+            'components_ready': self.status.components_ready,
+            'error_count': self.status.error_count,
+            'last_health_check': self.status.last_health_check,
+            'performance_metrics': self.status.performance_metrics,
+            'uptime': (datetime.now() - self.start_time).total_seconds()
+            if self.start_time else 0
+        }
 
 
 def main() -> None:

@@ -33,9 +33,12 @@ class ImportResolver:
         """Register default fallback factories for common modules."""
         self._fallback_registry.update(
             {
-                "quantum_visualizer": self._create_quantum_visualizer_fallback,
-                "future_corridor_engine": self._create_corridor_engine_fallback,
-                "windows_cli_compatibility": self._create_cli_compatibility_fallback,
+                "quantum_visualizer": (
+                    self._create_quantum_visualizer_fallback),
+                "future_corridor_engine": (
+                    self._create_corridor_engine_fallback),
+                "windows_cli_compatibility": (
+                    self._create_cli_compatibility_fallback),
                 "ncco_core": self._create_ncco_core_fallback,
                 "schwabot": self._create_schwabot_fallback,
                 "ccxt": self._create_ccxt_fallback,
@@ -61,7 +64,7 @@ class ImportResolver:
         Returns:
             Dictionary mapping class names to imported objects or fallbacks
         """
-        cache_key = f"{module_name}:" f"{','.join(class_names)}"
+        cache_key = f"{module_name}:{','.join(class_names)}"
 
         if cache_key in self._import_cache:
             return self._import_cache[cache_key]
@@ -77,11 +80,14 @@ class ImportResolver:
                 if hasattr(module, class_name):
                     result[class_name] = getattr(module, class_name)
                 else:
-                    logger.warning(f"Class {class_name} not found in " f"{module_name}")
-                    result[class_name] = self._create_generic_fallback(class_name)
+                    logger.warning(
+                        f"Class {class_name} not found in {module_name}")
+                    result[class_name] = self._create_generic_fallback(
+                        class_name)
 
         except ImportError as e:
-            logger.info(f"Module {module_name} not available, " f"using fallbacks: {e}")
+            logger.info(
+                f"Module {module_name} not available, using fallbacks: {e}")
 
             # Use custom fallback factory if provided
             if fallback_factory:
@@ -95,7 +101,8 @@ class ImportResolver:
                         result[class_name] = fallback_factory(class_name)
                 else:
                     for class_name in class_names:
-                        result[class_name] = self._create_generic_fallback(class_name)
+                        result[class_name] = self._create_generic_fallback(
+                            class_name)
 
         self._import_cache[cache_key] = result
         return result
@@ -187,8 +194,10 @@ class ImportResolver:
     def _create_talib_fallback(self, class_name: str) -> Mock:
         """Create fallback for TA-Lib technical analysis."""
         mock = Mock(name=class_name)
-        mock.SMA = lambda *args, **kwargs: [0.0] * len(args[0]) if args else []
-        mock.RSI = lambda *args, **kwargs: ([50.0] * len(args[0]) if args else [])
+        mock.SMA = lambda *args, **kwargs: (
+            [0.0] * len(args[0]) if args else [])
+        mock.RSI = lambda *args, **kwargs: (
+            [50.0] * len(args[0]) if args else [])
         return mock
 
     def _create_psutil_fallback(self, class_name: str) -> Mock:
@@ -198,7 +207,8 @@ class ImportResolver:
         mock.virtual_memory = lambda: Mock(percent=50.0)
         return mock
 
-    def register_fallback(self, module_name: str, fallback_factory: Callable) -> None:
+    def register_fallback(self, module_name: str,
+                         fallback_factory: Callable) -> None:
         """Register a custom fallback factory for a module."""
         self._fallback_registry[module_name] = fallback_factory
 

@@ -54,7 +54,6 @@ except ImportError:
     # Fallback CLI handler
     class CLIHandler:
         @staticmethod
-        """TODO: document CLIHandler."""
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """TODO: document safe_emoji_print."""
             emoji_mapping = {

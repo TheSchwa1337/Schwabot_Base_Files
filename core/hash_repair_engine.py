@@ -458,8 +458,10 @@ class HashRepairEngine:
             self.hash_patterns[hash_value[:8]].append(pattern)
             
             # Maintain pattern count
-            if len(self.hash_patterns[hash_value[:8]]) > self.max_patterns_per_hash:
-                self.hash_patterns[hash_value[:8]] = self.hash_patterns[hash_value[:8]][-self.max_patterns_per_hash:]
+            max_patterns = self.max_patterns_per_hash
+            if len(self.hash_patterns[hash_value[:8]]) > max_patterns:
+                patterns = self.hash_patterns[hash_value[:8]]
+                self.hash_patterns[hash_value[:8]] = patterns[-max_patterns:]
                 
         except Exception as e:
             logger.error(f"Error storing hash pattern: {e}")
@@ -471,7 +473,8 @@ class HashRepairEngine:
             
             # Maintain history size
             if len(self.repair_history) > self.max_history_size:
-                self.repair_history = self.repair_history[-self.max_history_size:]
+                history = self.repair_history[-self.max_history_size:]
+                self.repair_history = history
                 
         except Exception as e:
             logger.error(f"Error storing repair result: {e}")
@@ -501,6 +504,9 @@ class HashRepairEngine:
             avg_similarity = np.mean(similarity_scores) if similarity_scores else 0.0
             avg_repair_time = np.mean(repair_times) if repair_times else 0.0
             
+            pattern_count = sum(len(patterns) for patterns in self.hash_patterns.values())
+            last_repair = self.repair_history[-1].timestamp if self.repair_history else None
+            
             return {
                 'total_repairs': total_repairs,
                 'success_rate': round(success_rate, 4),
@@ -508,8 +514,8 @@ class HashRepairEngine:
                 'average_confidence': round(avg_confidence, 3),
                 'average_similarity': round(avg_similarity, 3),
                 'average_repair_time': round(avg_repair_time, 3),
-                'pattern_count': sum(len(patterns) for patterns in self.hash_patterns.values()),
-                'last_repair': self.repair_history[-1].timestamp if self.repair_history else None
+                'pattern_count': pattern_count,
+                'last_repair': last_repair
             }
             
         except Exception as e:
@@ -523,8 +529,8 @@ def create_hash_repair_engine() -> HashRepairEngine:
     return HashRepairEngine()
 
 
-def repair_hash_state(engine: HashRepairEngine, 
-                     failed_hash: str, 
+def repair_hash_state(engine: HashRepairEngine,
+                     failed_hash: str,
                      historical_hashes: List[str]) -> str:
     """Repair hash state using the given engine."""
     return engine.repair_hash_state(failed_hash, historical_hashes) 

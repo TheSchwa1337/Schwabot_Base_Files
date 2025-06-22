@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""magic_number_optimization_engine.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""Magic number optimization engine — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package
 remains importable.  Replace with a clean implementation ASAP.
@@ -9,6 +9,7 @@ remains importable.  Replace with a clean implementation ASAP.
 def main() -> None:
     """Stub main function."""
     pass
+
 
 if __name__ == "__main__":
     main()
