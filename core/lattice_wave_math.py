@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Spectral lattice generator for quantised wave analysis.
 
-The purpose of :func:`wave_lattice_generator` is to project an input signal onto
-an FFT basis, quantise the spectrum into a *lattice grid* and return both the
-quantised magnitude matrix and the frequency bins.  Down-stream GAN or pattern
-matching modules can then perform discrete neighbour look-ups instead of costly
-continuous interpolation.
+The purpose of :func:`wave_lattice_generator` is to project an input signal
+onto an FFT basis, quantise the spectrum into a *lattice grid* and return
+both the quantised magnitude matrix and the frequency bins.  Down-stream
+GAN or pattern matching modules can then perform discrete neighbour
+look-ups instead of costly continuous interpolation.
 
 Current implementation
 ----------------------

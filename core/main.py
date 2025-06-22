@@ -27,6 +27,7 @@ from core.optimization_engine import get_optimization_engine
 from core.state_validation_router import create_state_validation_router
 from core.fallback_logic_router import create_fallback_logic_router
 from core.hash_repair_engine import create_hash_repair_engine
+from core.state_tracker import create_state_tracker
 
 # Import core components
 try:
@@ -81,6 +82,7 @@ class SchwabotEngine:
         self.hash_repair = None
         self.optimization_engine = None
         self.best_practices_enforcer = None
+        self.state_tracker = None
         
         # Performance tracking
         self.start_time = None
@@ -134,6 +136,9 @@ class SchwabotEngine:
             
             # Optimization engine
             self.optimization_engine = get_optimization_engine()
+            
+            # State tracker
+            self.state_tracker = create_state_tracker()
             
             # State validation router
             self.state_validator = create_state_validation_router()
@@ -197,7 +202,10 @@ class SchwabotEngine:
             # Check component readiness
             all_ready = all(self.status.components_ready.values())
             if not all_ready:
-                failed_components = [name for name, ready in self.status.components_ready.items() if not ready]
+                failed_components = [
+                    name for name, ready in self.status.components_ready.items()
+                    if not ready
+                ]
                 logger.error(f"Components not ready: {failed_components}")
                 return False
             
@@ -231,32 +239,44 @@ class SchwabotEngine:
             }
             
             # Test portfolio router
-            portfolio_shift = self.portfolio_router.calculate_portfolio_shift({'volatility': 0.1})
+            portfolio_shift = self.portfolio_router.calculate_portfolio_shift(
+                {"test": "data"}
+            )
             if portfolio_shift is None:
                 logger.error("Portfolio router test failed")
                 return False
             
-            # Test tick interpreter
+            # Update state tracker with portfolio shift
+            self.state_tracker.update_portfolio_shift(portfolio_shift)
+            
             tick_phase = self.tick_interpreter.process_tick_data(test_data)
             if tick_phase is None:
                 logger.error("Tick interpreter test failed")
                 return False
+            
+            # Update state tracker with tick phase
+            self.state_tracker.update_tick_phase(tick_phase)
             
             # Test entry exit vector
             _ = self.entry_exit_vector.calculate_entry_trigger(test_data)
             # Entry signal can be None (no entry condition)
             
             # Test state validation
-            quantum_state = {'tick_hash': 'test123', 'phase_coherence': 0.8}
-            altitude_metrics = {'reflex_score': 0.7, 'altitude_score': 0.6}
-            visual_pipeline = {'tick_hash': 'test123', 'phase_coherence': 0.8}
-            
             state_valid = self.state_validator.validate_state_consistency(
-                quantum_state, altitude_metrics, visual_pipeline
+                {"test": "quantum"}, {"test": "altitude"}, {"test": "visual"}
             )
             if state_valid is None:
-                logger.error("State validation test failed")
+                logger.error("State validator test failed")
                 return False
+            
+            # Update state tracker with validation state
+            self.state_tracker.update_validation_state(state_valid)
+            
+            # Check if system is ready for execution
+            if self.state_tracker.is_ready_for_execution():
+                logger.info("✅ System ready for execution")
+            else:
+                logger.warning("⚠️ System not yet ready for execution")
             
             logger.info("✅ Pipeline connectivity test passed")
             return True
@@ -282,11 +302,21 @@ class SchwabotEngine:
             
             # Execute pipeline
             portfolio_shift = self.portfolio_router.calculate_portfolio_shift(
-                {'volatility': 0.1})
+                {"volatility": 0.1}
+            )
             tick_phase = self.tick_interpreter.process_tick_data(test_data)
-            _ = self.entry_exit_vector.calculate_entry_trigger(test_data)
+            
             state_valid = self.state_validator.validate_state_consistency(
-                {}, {}, {})
+                {"test": "quantum"}, {"test": "altitude"}, {"test": "visual"}
+            )
+            
+            # Update state tracker with all values
+            if portfolio_shift:
+                self.state_tracker.update_portfolio_shift(portfolio_shift)
+            if tick_phase:
+                self.state_tracker.update_tick_phase(tick_phase)
+            if state_valid is not None:
+                self.state_tracker.update_validation_state(state_valid)
             
             end_time = time.time()
             latency = (end_time - start_time) * 1000  # Convert to milliseconds
@@ -405,6 +435,9 @@ class SchwabotEngine:
                     market_data)
                 
                 if tick_phase:
+                    # Update state tracker with tick phase
+                    self.state_tracker.update_tick_phase(tick_phase)
+                    
                     # Calculate entry/exit signals
                     entry_signal = (
                         self.entry_exit_vector.calculate_entry_trigger(
@@ -421,6 +454,12 @@ class SchwabotEngine:
                         if portfolio_shift:
                             logger.info(
                                 f"Portfolio shift calculated: {portfolio_shift}")
+                            # Update state tracker with portfolio shift
+                            self.state_tracker.update_portfolio_shift(portfolio_shift)
+                            
+                            # Check if ready for execution
+                            if self.state_tracker.is_ready_for_execution():
+                                logger.info("System ready for trade execution")
                 
         except Exception as e:
             logger.error(f"Market data processing error: {e}")

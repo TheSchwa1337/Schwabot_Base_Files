@@ -426,7 +426,8 @@ class IntegrationOrchestrator:
 
             self.safe_print(f"🎉 Integration orchestrator started")
             self.safe_print(
-                f"   Successfully initialized: {success_count}/{len(self.components)} components"
+                f"   Successfully initialized: "
+                f"{success_count}/{len(self.components)} components"
             )
 
             # Update metrics

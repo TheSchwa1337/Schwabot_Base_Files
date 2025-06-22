@@ -779,16 +779,25 @@ class PortfolioSubstitutionMatrix:
 
         # Rebalance reason rationale
         reason_explanations = {
-            RebalanceReason.PHASE_SWITCH: "Portfolio rebalance triggered by phase mode switch",
-            RebalanceReason.ANOMALY_DETECTED: "Defensive rebalancing due to detected market anomalies",
-            RebalanceReason.PROFIT_TAKING: "Rebalancing to secure profits and reduce risk",
-            RebalanceReason.RISK_MANAGEMENT: "Risk-driven rebalancing to maintain portfolio health",
-            RebalanceReason.MARKET_REGIME_CHANGE: "Rebalancing in response to market regime change",
-            RebalanceReason.PERIODIC_REBALANCE: "Scheduled periodic portfolio rebalancing",
+            RebalanceReason.PHASE_SWITCH:
+                "Portfolio rebalance triggered by phase mode switch",
+            RebalanceReason.ANOMALY_DETECTED:
+                "Defensive rebalancing due to detected market anomalies",
+            RebalanceReason.PROFIT_TAKING:
+                "Rebalancing to secure profits and reduce risk",
+            RebalanceReason.RISK_MANAGEMENT:
+                "Risk-driven rebalancing to maintain portfolio health",
+            RebalanceReason.MARKET_REGIME_CHANGE:
+                "Rebalancing in response to market regime change",
+            RebalanceReason.PERIODIC_REBALANCE:
+                "Scheduled periodic portfolio rebalancing",
         }
 
         rationale.append(
-            reason_explanations.get(rebalance_reason, "Portfolio rebalancing")
+            reason_explanations.get(
+                rebalance_reason,
+                "Portfolio rebalancing"
+            )
         )
 
         # Allocation rationale
@@ -797,7 +806,7 @@ class PortfolioSubstitutionMatrix:
             for asset, amount in target_allocation.items():
                 weight = amount / total_value
                 rationale.append(
-                    f"{asset.value}: {weight:.1%} allocation (${amount:,.0f})"
+                    f"{asset.value}: {weight:.1%} allocation (${{amount:,.0f}})"
                 )
 
         # Risk rationale
@@ -984,7 +993,8 @@ def execute_portfolio_substitution(
     # Convert result to serializable format
     return {
         "target_allocation": {
-            asset.value: amount for asset, amount in result.target_allocation.items()
+            asset.value: amount
+            for asset, amount in result.target_allocation.items()
         },
         "trade_orders": result.trade_orders,
         "rebalance_reason": result.rebalance_reason.value,

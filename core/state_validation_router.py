@@ -418,7 +418,10 @@ class StateValidationRouter:
                 'success_rate': round(success_rate, 4),
                 'average_confidence': round(avg_confidence, 4),
                 'component_success_rates': component_success_rates,
-                'last_validation': self.validation_history[-1].timestamp if self.validation_history else None
+                'last_validation': (
+                    self.validation_history[-1].timestamp
+                    if self.validation_history else None
+                )
             }
             
         except Exception as e:
@@ -451,9 +454,11 @@ def create_state_validation_router() -> StateValidationRouter:
     return StateValidationRouter()
 
 
-def validate_system_state(router: StateValidationRouter, 
+def validate_system_state(router: StateValidationRouter,
                          quantum_state: Dict[str, Any],
                          altitude_metrics: Dict[str, Any],
                          visual_pipeline: Dict[str, Any]) -> bool:
     """Validate system state using the given router."""
-    return router.validate_state_consistency(quantum_state, altitude_metrics, visual_pipeline) 
+    return router.validate_state_consistency(
+        quantum_state, altitude_metrics, visual_pipeline
+    ) 

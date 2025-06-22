@@ -601,7 +601,7 @@ def main() -> None:
     print(f"Execution Priority: {result.execution_priority}")
     print(f"Reasoning: {result.reasoning}")
 
-    print(f"\nKey Signal Breakdown:")
+    print("\nKey Signal Breakdown:")
     breakdown = result.signal_breakdown
     print(f"  Execution Confidence: {breakdown.get('execution_confidence', 0):.3f}")
     print(f"  Entry Score: {breakdown.get('entry_score', 0):.3f}")
@@ -610,7 +610,7 @@ def main() -> None:
     print(f"  Price Pressure: {breakdown.get('price_pressure', 0):.3f}")
 
     # Test multiple scenarios
-    print(f"\n" + "=" * 50)
+    print("\n" + "=" * 50)
     print("Testing Multiple Scenarios:")
 
     scenarios = [

@@ -15,11 +15,11 @@ Windows CLI compatible with comprehensive error handling.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import logging
 import time
-from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 
 import numpy as np
 
@@ -67,7 +67,7 @@ class SwitchSignal:
 class StrategyEntropySwitcher:
     """Dynamic strategy switching engine based on entropy and performance."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize strategy entropy switcher."""
         self.current_strategy = TradingStrategy.BALANCED_TRADING
         self.strategy_history: List[StrategyMetrics] = []
@@ -559,18 +559,18 @@ def main() -> None:
         # Execute switch if recommended
         if switch_signal.should_switch:
             switched = switcher.execute_strategy_switch(switch_signal)
-            print(f"  → Switch Executed: {switched}")
+            print("  → Switch Executed: {switched}")
         
         time.sleep(0.1)  # Small delay for realistic timing
     
     # Strategy info
-    print(f"\nCurrent Strategy Info:")
+    print("\nCurrent Strategy Info:")
     strategy_info = switcher.get_current_strategy_info()
     for key, value in strategy_info.items():
         print(f"  {key}: {value}")
     
     # Switcher summary
-    print(f"\nSwitcher Summary:")
+    print("\nSwitcher Summary:")
     summary = switcher.get_switcher_summary()
     for key, value in summary.items():
         print(f"  {key}: {value}")

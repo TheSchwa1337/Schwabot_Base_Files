@@ -19,7 +19,7 @@ Windows CLI compatible with proper error handling and logging.
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional, Tuple
+from typing import Dict, Tuple
 
 import numpy as np
 
@@ -559,7 +559,7 @@ def main() -> None:
         print(f"  Risk %: {details['risk_percentage']:.2f}%")
 
     # Test auto scaler class
-    print(f"\nAuto Scaler Class Test:")
+    print("\nAuto Scaler Class Test:")
     scaler = AutoScaler()
 
     # Simulate some trades
@@ -576,7 +576,7 @@ def main() -> None:
 
     # Get performance summary
     summary = scaler.get_performance_summary()
-    print(f"\nPerformance Summary:")
+    print("\nPerformance Summary:")
     print(f"  Total trades: {summary.get('total_trades', 0)}")
     print(f"  Mean return: {summary.get('mean_return', 0):.4f}")
     print(f"  Sharpe ratio: {summary.get('sharpe_ratio', 0):.2f}")

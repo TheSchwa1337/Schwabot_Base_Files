@@ -33,8 +33,22 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from core.constants import *
-from core.type_defs import EntropyMap
+# Explicitly import only the constants used from core.constants
+from core.constants import (
+    FERRIS_HARMONIC_RATIOS,
+    PATTERN_SIMILARITY_THRESHOLD,
+    KELLY_SAFETY_FACTOR,
+)
+
+# Define missing constants here (TODO: move to core.constants if needed)
+EPSILON_FLOAT64 = 1e-8  # TODO: Move to core.constants
+MEMORY_CHUNK_SIZE = 128  # TODO: Move to core.constants
+MATRIX_CONDITION_LIMIT = 1e12  # TODO: Move to core.constants
+THERMAL_CONDUCTIVITY_BTC = 0.024  # TODO: Move to core.constants
+QUANTUM_ENTROPY_SCALE = 1.0  # TODO: Move to core.constants
+REDUCED_PLANCK = 1.0545718176461565e-34  # TODO: Move to core.constants
+FERRIS_PRIMARY_CYCLE = 16  # TODO: Move to core.constants
+
 from core.type_defs import Matrix
 from core.type_defs import QuantumState
 from core.type_defs import Temperature

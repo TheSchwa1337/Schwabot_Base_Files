@@ -15,19 +15,12 @@ Key Protections:
 """
 
 from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
 from enum import Enum
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-import warnings
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-from scipy import stats
-from scipy.stats import jarque_bera, normaltest
-
-# Set high precision for financial calculations
-getcontext().prec = 28
 
 logger = logging.getLogger(__name__)
 
@@ -354,15 +347,15 @@ class DataFeedValidator:
 
         # Check for missing critical data
         required_fields = ["prices", "volumes"]
-        for field in required_fields:
-            if not getattr(state, field):
+        for field_name in required_fields:
+            if not getattr(state, field_name):
                 anomalies.append(
                     AnomalySignal(
                         anomaly_type=AnomalyType.DATA_FEED_CORRUPTION,
                         severity="critical",
                         confidence=1.0,
                         detected_at=current_time,
-                        description=f"Missing critical data field: {field}",
+                        description=f"Missing critical data field: {field_name}",
                         affected_components=["data_feed"],
                         recommended_action="EMERGENCY_DATA_RECOVERY",
                     )

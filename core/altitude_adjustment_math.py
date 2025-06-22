@@ -16,10 +16,9 @@ Windows CLI compatible with comprehensive error handling.
 from __future__ import annotations
 
 import logging
-import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -494,7 +493,7 @@ def main() -> None:
         print(f"  → Strategy: {metrics.recommended_strategy}")
 
     # Test velocity-altitude paradox
-    print(f"\n" + "=" * 35)
+    print("\n" + "=" * 35)
     print("Velocity-Altitude Paradox Test:")
 
     paradox_state = engine.calculate_velocity_altitude_paradox(
