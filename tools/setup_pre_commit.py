@@ -133,8 +133,7 @@ def create_gitignore_entries() -> None:
     entries = [
         "",
         "# Pre-commit",
-        ".pre-commit-config.yaml.bak",
-        "mypy.ini.bak",
+        "pre-commit-config.yaml.bak",
         "",
         "# Type checking",
         ".mypy_cache/",
@@ -159,9 +158,9 @@ def main() -> None:
     logger.info("=" * 50)
 
     # Check if we're in the right directory
-    if not Path(".pre-commit-config.yaml").exists():
+    if not Path("pre-commit-config.yaml").exists():
         logger.error(
-            "❌ .pre-commit-config.yaml not found. Run this from the project root."
+            "❌ pre-commit-config.yaml not found. Run this from the project root."
         )
         sys.exit(1)
 

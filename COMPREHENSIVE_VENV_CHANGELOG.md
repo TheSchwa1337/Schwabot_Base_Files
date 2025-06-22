@@ -120,7 +120,7 @@ docker>=6.1.0
 
 ## 2. CRITICAL CONFIGURATION FILES & SETTINGS
 
-### Pre-Commit Configuration (`.pre-commit-config.yaml`)
+### Pre-Commit Configuration (`pre-commit-config.yaml`)
 ```yaml
 # Schwabot Pre-Commit Configuration
 # Enforces Flake8 compliance, type checking, and code quality standards
@@ -731,7 +731,7 @@ tests/hooks/metrics.py
    mypy core/ --config-file=mypy.ini
    
    # Verify CI/CD configuration
-   python -c "import yaml; yaml.safe_load(open('.pre-commit-config.yaml')); print('Pre-commit config valid')"
+   python -c "import yaml; yaml.safe_load(open('pre-commit-config.yaml')); print('Pre-commit config valid')"
    ```
 
 ---
@@ -808,7 +808,7 @@ tests/hooks/metrics.py
 - Do NOT remove or modify these path modifications during restoration
 
 ### ⚠️ CRITICAL: Configuration File Dependencies
-- `.pre-commit-config.yaml` and `mypy.ini` are essential for compliance
+- `pre-commit-config.yaml` and `mypy.ini` are essential for compliance
 - These files contain specific version requirements and settings
 - Do NOT modify these files without understanding their impact
 

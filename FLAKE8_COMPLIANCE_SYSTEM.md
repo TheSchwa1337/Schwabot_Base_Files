@@ -6,7 +6,7 @@ This document describes the comprehensive Flake8 compliance system built for Sch
 
 ## What We Built
 
-### 1. **Pre-Commit Configuration** (`.pre-commit-config.yaml`)
+### 1. **Pre-Commit Configuration** (`pre-commit-config.yaml`)
 
 A complete pre-commit setup that enforces:
 

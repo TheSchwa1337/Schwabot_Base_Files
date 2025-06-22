@@ -14,7 +14,7 @@ pip install pre-commit pytest coverage
 
 ### Pre-Commit Configuration
 
-Create `.pre-commit-config.yaml`:
+Create `pre-commit-config.yaml`:
 
 ```yaml
 repos:
@@ -416,31 +416,3 @@ Mathematical Foundation:
 Windows CLI compatible with comprehensive error handling.
 """
 ```
-
-### Version Control Standards
-
-```bash
-# Commit message format
-git commit -m "feat: add quantum state calculation to BTC intelligence core
-
-- Implement |ψ⟩ = α|0⟩ + β|1⟩ superposition calculation
-- Add coherence and entanglement strength metrics
-- Include drift correction with negative feedback
-- All functions pass Flake8 compliance
-- Mathematical integrity verified with unit tests
-
-Resolves: #123"
-```
-
----
-
-**Remember**: In Schwabot, code quality isn't optional—it's essential for reliable trading decisions and mathematical integrity. Every formatting rule exists to prevent runtime failures that could impact trading performance.
-
-## 🔗 Quick Reference
-
-- **Format**: `black core/ --line-length=88`
-- **Lint**: `flake8 core/ --max-line-length=88 --select=E,W,F,C,B`
-- **Sort**: `isort core/ --profile black`
-- **Type Check**: `mypy core/`
-- **Validate**: `python runtime/validator.py`
-- **Test**: `python -m pytest tests/ -v` 
