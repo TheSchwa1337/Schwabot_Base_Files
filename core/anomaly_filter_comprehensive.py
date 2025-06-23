@@ -14,10 +14,10 @@ Key Protections:
 - Portfolio state anomalies (margin calls, liquidity crunches)
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
 import logging
 import time
+from dataclasses import dataclass, field
+from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np

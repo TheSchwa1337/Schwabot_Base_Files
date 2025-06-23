@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
-"""Utility modules for Schwabot BTC integration.
+"""
+Core Utils Package.
 
-This package contains utility classes and helper functions used
-across the trading system.
+This package contains utility modules for Schwabot core functionality.
 """
 
-from .cli_handler import CLIHandler
-from .rate_limiter import RateLimiter
+from .windows_cli_compatibility import (
+    WindowsCliCompatibilityHandler,
+    safe_print,
+    safe_format_error,
+    log_safe,
+    cli_handler,
+)
 
 __all__ = [
-    "RateLimiter",
-    "CLIHandler",
+    "WindowsCliCompatibilityHandler",
+    "safe_print", 
+    "safe_format_error",
+    "log_safe",
+    "cli_handler",
 ]

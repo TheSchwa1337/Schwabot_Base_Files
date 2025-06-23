@@ -1,0 +1,86 @@
+# System Execution Mode Configuration
+# This file controls the execution mode of Schwabot UROS v1.0
+
+# Execution Mode Options:
+# - shadow: Log everything but execute nothing (safe testing)
+# - paper: Execute trades in paper trading mode (simulated funds)
+# - live: Execute real trades with actual funds (production)
+
+execution_mode: shadow  # ["shadow", "paper", "live"]
+
+# Mode-specific configurations
+modes:
+  shadow:
+    description: "Shadow mode - logs all decisions without execution"
+    trade_execution: false
+    order_placement: false
+    position_tracking: true
+    risk_management: true
+    logging_level: "DEBUG"
+    performance_tracking: true
+    
+  paper:
+    description: "Paper trading mode - simulated execution"
+    trade_execution: true
+    order_placement: true
+    position_tracking: true
+    risk_management: true
+    logging_level: "INFO"
+    performance_tracking: true
+    paper_balance: 100000.0  # USD
+    paper_commission: 0.001  # 0.1% commission
+    
+  live:
+    description: "Live trading mode - real execution"
+    trade_execution: true
+    order_placement: true
+    position_tracking: true
+    risk_management: true
+    logging_level: "WARNING"
+    performance_tracking: true
+    max_position_size: 0.1  # 10% of portfolio
+    stop_loss_threshold: 0.05  # 5% stop loss
+    emergency_stop: true
+
+# Global safety settings
+safety:
+  max_daily_trades: 50
+  max_daily_loss: 0.05  # 5% daily loss limit
+  cooldown_period: 300  # 5 minutes between trades
+  emergency_stop_loss: 0.15  # 15% emergency stop
+  
+# Logging configuration
+logging:
+  command_log: "data/command_execution_log.json"
+  trade_log: "data/trade_execution_log.json"
+  performance_log: "data/performance_metrics.json"
+  fault_log: "data/fault_bus_log.json"
+  
+# Performance tracking
+performance:
+  track_alpha_scores: true
+  track_drift_penalties: true
+  track_agent_trust: true
+  track_command_density: true
+  track_matrix_performance: true
+  
+# Risk management
+risk:
+  position_sizing: "kelly"  # ["fixed", "kelly", "martingale"]
+  max_leverage: 1.0
+  correlation_threshold: 0.7
+  volatility_threshold: 0.5
+  
+# Agent orchestration
+agents:
+  enable_trust_updates: true
+  enable_density_monitoring: true
+  max_concurrent_agents: 3
+  agent_timeout: 30.0  # seconds
+  
+# Matrix management
+matrices:
+  enable_signature_tracking: true
+  enable_emergent_pattern_detection: true
+  matrix_rotation_interval: 64  # ticks
+  max_matrix_age: 1000  # ticks 

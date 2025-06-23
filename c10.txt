@@ -1,7 +1,0 @@
-﻿core\glyph\recursive_glyph_mapper.py:428:19: C405 Unnecessary list literal - rewrite as a set literal.
-core\glyph\recursive_glyph_mapper.py:773:32: C401 Unnecessary generator - rewrite as a set comprehension.
-core\profit_router.py:166:20: C420 Unnecessary dict comprehension - rewrite using dict.fromkeys().
-core\profit_router.py:209:16: C420 Unnecessary dict comprehension - rewrite using dict.fromkeys().
-core\profit_router.py:383:27: C420 Unnecessary dict comprehension - rewrite using dict.fromkeys().
-core\profit_router.py:398:31: C420 Unnecessary dict comprehension - rewrite using dict.fromkeys().
-core\schwabot_integration_orchestrator.py:356:25: C420 Unnecessary dict comprehension - rewrite using dict.fromkeys().

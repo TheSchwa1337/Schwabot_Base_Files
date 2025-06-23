@@ -47,7 +47,7 @@ from .fault_bus import GPUFaultResolver
 from .fault_bus import ProfitFaultResolver
 from .fault_bus import RecursiveLoopResolver
 from .fault_bus import ThermalFaultResolver
-from .filters import DataFilter
+from .filters import KalmanFilter
 from .ghost_conditionals import ghost_route_activation
 from .ghost_memory import GhostMemory
 from .ghost_memory import last_profitable_hash
@@ -176,7 +176,7 @@ __all__ = [
     "FallbackFaultResolver",
     # Utilities
     "ErrorHandler",
-    "DataFilter",
+    "KalmanFilter",
     "ImportResolver",
     # Type definitions
     "QuantumState",

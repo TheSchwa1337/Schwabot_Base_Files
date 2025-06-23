@@ -1,59 +1,40 @@
 #!/usr/bin/env python3
-"""Advanced Mathematical Core - Schwabot Unified Framework.
+"""
+advanced_mathematical_core.py - Advanced Mathematical Core for Schwabot.
 
-======================================================
-
-
-
-Implements the complete mathematical foundation for Schwabot trading system:
-
-- Quantum-thermal coupling for drift analysis
-
-- Ferris wheel temporal cycle logic
-
-- Kelly-Sharpe optimization for risk management
-
-- Void-well fractal index for volume analysis
-
-- Advanced signal processing with wavelet transforms
-
-- Recursive time-lock synchronization
-
-
-
-Based on SP 1.27-AE framework and comprehensive Nexus mathematical integration.
-
+Provides sophisticated mathematical operations, quantum calculations,
+fractal analysis, and thermal dynamics for the Schwabot trading system.
 """
 
-from __future__ import annotations
-
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+from scipy import linalg
+from scipy.special import gamma, loggamma
 
-# Explicitly import only the constants used from core.constants
+# Import constants from core.constants
 from core.constants import (
+    EPSILON_FLOAT64,
     FERRIS_HARMONIC_RATIOS,
-    PATTERN_SIMILARITY_THRESHOLD,
+    FERRIS_PRIMARY_CYCLE,
     KELLY_SAFETY_FACTOR,
+    MATRIX_CONDITION_LIMIT,
+    MEMORY_CHUNK_SIZE,
+    PATTERN_SIMILARITY_THRESHOLD,
+    QUANTUM_ENTROPY_SCALE,
+    REDUCED_PLANCK,
+    THERMAL_CONDUCTIVITY_BTC,
 )
 
-# Define missing constants here (TODO: move to core.constants if needed)
-EPSILON_FLOAT64 = 1e-8  # TODO: Move to core.constants
-MEMORY_CHUNK_SIZE = 128  # TODO: Move to core.constants
-MATRIX_CONDITION_LIMIT = 1e12  # TODO: Move to core.constants
-THERMAL_CONDUCTIVITY_BTC = 0.024  # TODO: Move to core.constants
-QUANTUM_ENTROPY_SCALE = 1.0  # TODO: Move to core.constants
-REDUCED_PLANCK = 1.0545718176461565e-34  # TODO: Move to core.constants
-FERRIS_PRIMARY_CYCLE = 16  # TODO: Move to core.constants
-
-from core.type_defs import Matrix
-from core.type_defs import QuantumState
-from core.type_defs import Temperature
-from core.type_defs import Tensor
-from core.type_defs import Vector
+from core.type_defs import (
+    Matrix,
+    QuantumState,
+    Temperature,
+    Tensor,
+    Vector,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -104,9 +85,7 @@ class VoidWellMetrics:
 def safe_delta_calculation(
     price_now: float, price_prev: float, epsilon: float = EPSILON_FLOAT64
 ) -> float:
-    """
-
-    Enhanced delta calculation with numerical stability
+    """Enhanced delta calculation with numerical stability.
 
     Implements: δ = (P_now - P_prev) / max(P_prev, ε)
     """
@@ -116,9 +95,7 @@ def safe_delta_calculation(
 def normalized_delta_tanh(
     price_now: float, price_prev: float, scaling_factor: float = 1.0
 ) -> float:
-    """
-
-    Normalized delta bounded between -1 and 1 using tanh
+    """Normalized delta bounded between -1 and 1 using tanh.
 
     Implements: tanh(scaling_factor * δ)
     """
@@ -127,9 +104,7 @@ def normalized_delta_tanh(
 
 
 def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
-    """
-
-    Improved slope angle calculation using atan2 for better quadrant handling
+    """Improved slope angle calculation using atan2 for better quadrant handling.
 
     Implements: θ = arctan2(gain_vector, tick_duration)
     """
@@ -142,9 +117,7 @@ def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
 
 
 def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float:
-    """
-
-    Numerically stable Shannon entropy calculation
+    """Numerically stable Shannon entropy calculation.
 
     Implements: H = -Σ p_i * log₂(p_i + ε)
     """
@@ -154,8 +127,7 @@ def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float
 
 
 def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
-    """
-    Kullback-Leibler divergence with numerical stability
+    """Kullback-Leibler divergence with numerical stability.
 
     Implements: KL(P||Q) = Σ p_i * log(p_i / q_i)
     """
@@ -170,8 +142,7 @@ def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
 
 
 def entropy_gradient_field(entropy_map: Matrix) -> Matrix:
-    """
-    Calculate entropy gradient field for drift analysis
+    """Calculate entropy gradient field for drift analysis.
 
     Implements: del H = [dH/dx, dH/dy]
     """
@@ -190,8 +161,7 @@ def stable_activation_matrix(
     lambda_reg: float = 0.01,
     clip_range: Tuple[float, float] = (-10, 10),
 ) -> Vector:
-    """
-    Regularized matrix activation with gradient clipping
+    """Regularized matrix activation with gradient clipping.
 
     Implements: tanh(clip(input @ (W + λI)))
     """
@@ -208,19 +178,18 @@ def stable_activation_matrix(
 
 
 def optimized_einsum_chunked(
-    A: Tensor, B: Tensor, chunk_size: int = MEMORY_CHUNK_SIZE
+    a: Tensor, b: Tensor, chunk_size: int = MEMORY_CHUNK_SIZE
 ) -> Tensor:
-    """
-    Memory-efficient einsum operation with chunking
+    """Memory-efficient einsum operation with chunking.
 
     Implements: C_ijl = Σ_k A_ijk * B_ikl (chunked)
     """
-    result_shape = (A.shape[0], A.shape[1], B.shape[2])
+    result_shape = (a.shape[0], a.shape[1], b.shape[2])
     result = np.zeros(result_shape)
 
-    for i in range(0, A.shape[0], chunk_size):
-        end = min(i + chunk_size, A.shape[0])
-        result[i:end] = np.einsum("ijk,ikl->ijl", A[i:end], B[i:end])
+    for i in range(0, a.shape[0], chunk_size):
+        end = min(i + chunk_size, a.shape[0])
+        result[i:end] = np.einsum("ijk,ikl->ijl", a[i:end], b[i:end])
 
     return result
 
@@ -228,9 +197,7 @@ def optimized_einsum_chunked(
 def robust_matrix_inverse(
     matrix: Matrix, condition_threshold: float = MATRIX_CONDITION_LIMIT
 ) -> Matrix:
-    """
-    Robust matrix inversion with condition number checking
-    """
+    """Robust matrix inversion with condition number checking."""
     condition_num = np.linalg.cond(matrix)
 
     if condition_num > condition_threshold:
@@ -255,10 +222,9 @@ def enhanced_thermal_dynamics(
     volatility: float,
     momentum: float = 0.9,
 ) -> Dict[str, float]:
-    """
-    Enhanced thermal model with momentum and adaptive scaling
+    """Enhanced thermal model with momentum and adaptive scaling.
 
-    Implements multi-factor thermal pressure with temperature decay
+    Implements multi-factor thermal pressure with temperature decay.
     """
     # Exponential moving average for smoothing
     ema_volume = momentum * avg_volume + (1 - momentum) * volume_current
@@ -285,8 +251,7 @@ def enhanced_thermal_dynamics(
 
 
 def adaptive_gaussian_kernel(time_delta: Vector, volatility: float) -> Vector:
-    """
-    Adaptive Gaussian kernel with volatility-based bandwidth
+    """Adaptive Gaussian kernel with volatility-based bandwidth.
 
     Implements: K(t) = exp(-0.5*(t/σ)²) / (σ√(2π))
     """
@@ -307,8 +272,7 @@ def adaptive_gaussian_kernel(time_delta: Vector, volatility: float) -> Vector:
 def risk_adjusted_profit_rate(
     exit_price: float, entry_price: float, time_held: float, volatility: float
 ) -> Dict[str, float]:
-    """
-    Risk-adjusted profit rate with Sharpe ratio calculation
+    """Risk-adjusted profit rate with Sharpe ratio calculation.
 
     Implements: Sharpe = (annualized_return - risk_free) / volatility
     """
@@ -341,8 +305,7 @@ def kelly_criterion_allocation(
     loss_prob: float,
     leverage_limit: float = 2.0,
 ) -> Dict[str, float]:
-    """
-    Kelly criterion for optimal position sizing
+    """Kelly criterion for optimal position sizing.
 
     Implements: f* = (p*b - q) / b where p=win_prob, q=loss_prob, b=odds
     """
@@ -382,8 +345,7 @@ def kelly_criterion_allocation(
 def quantum_signal_normalization(
     psi_vector: Vector, phase_vector: Optional[Vector] = None
 ) -> Dict[str, Any]:
-    """
-    Quantum state normalization with phase and entropy calculation
+    """Quantum state normalization with phase and entropy calculation.
 
     Implements: |ψ⟩ = ψ / ||ψ||, P = |ψ|², S = -Σ P_i log₂(P_i)
     """
@@ -416,8 +378,7 @@ def quantum_signal_normalization(
 
 
 def quantum_fidelity(state1: QuantumState, state2: QuantumState) -> float:
-    """
-    Quantum fidelity measure between two states
+    """Quantum fidelity measure between two states.
 
     Implements: F = |⟨ψ₁|ψ₂⟩|²
     """
@@ -428,10 +389,9 @@ def quantum_fidelity(state1: QuantumState, state2: QuantumState) -> float:
 def quantum_thermal_coupling(
     quantum_state: QuantumState, temperature: Temperature
 ) -> QuantumThermalState:
-    """
-    Couple quantum and thermal systems for hybrid analysis
+    """Couple quantum and thermal systems for hybrid analysis.
 
-    Implements thermal decoherence and energy scaling
+    Implements thermal decoherence and energy scaling.
     """
     # Thermal decoherence rate (proportional to temperature)
     decoherence_rate = QUANTUM_ENTROPY_SCALE * temperature / REDUCED_PLANCK
@@ -461,10 +421,9 @@ def quantum_thermal_coupling(
 
 
 def higuchi_fractal_dimension(time_series: Vector, k_max: int = 10) -> float:
-    """
-    Higuchi method for fractal dimension estimation
+    """Higuchi method for fractal dimension estimation.
 
-    Estimates the fractal dimension of a time series
+    Estimates the fractal dimension of a time series.
     """
     n = len(time_series)
     lk = []
@@ -490,10 +449,9 @@ def higuchi_fractal_dimension(time_series: Vector, k_max: int = 10) -> float:
 def ferris_wheel_harmonic_analysis(
     time_series: Vector, base_period: int = FERRIS_PRIMARY_CYCLE
 ) -> FerrisWheelState:
-    """
-    Ferris wheel harmonic analysis with multiple time scales
+    """Ferris wheel harmonic analysis with multiple time scales.
 
-    Implements multi-scale harmonic decomposition
+    Implements multi-scale harmonic decomposition.
     """
     n = len(time_series)
     t = np.arange(n)
@@ -527,7 +485,7 @@ def ferris_wheel_harmonic_analysis(
         harmonic_phases=harmonic_phases,
         angular_velocity=angular_velocity,
         phase_coherence=phase_coherence,
-        synchronization_level=1.0 - sync_level,  # Higher = better sync
+        synchronization_level=sync_level,
     )
 
 
@@ -539,8 +497,7 @@ def ferris_wheel_harmonic_analysis(
 def void_well_fractal_index(
     volume_vector: Vector, price_variance_field: Vector
 ) -> VoidWellMetrics:
-    """
-    Void-Well Fractal Index calculation for volume-price divergence analysis
+    """Void-Well Fractal Index calculation for volume-price divergence analysis.
 
     Implements: VFI = ||del x (V x dP)|| / |V|
     """
@@ -577,10 +534,9 @@ def void_well_fractal_index(
 def api_entropy_reflection_penalty(
     confidence: float, api_errors: int, sync_time_constant: float = 10.0
 ) -> Dict[str, float]:
-    """
-    API Entropy Reflection Penalty calculation
+    """API Entropy Reflection Penalty calculation.
 
-    Implements exponential penalty based on API failures
+    Implements exponential penalty based on API failures.
     """
     # Exponential penalty factor
     penalty_factor = np.exp(-api_errors / sync_time_constant)
@@ -610,10 +566,9 @@ def recursive_time_lock_synchronization(
     long_cycles: int,
     sync_period: int = 256,
 ) -> Dict[str, Any]:
-    """
-    Recursive Time-Lock Synchronization across multiple time scales
+    """Recursive Time-Lock Synchronization across multiple time scales.
 
-    Implements phase alignment and coherence measurement
+    Implements phase alignment and coherence measurement.
     """
     # Phase calculations for each time scale
     short_phase = (short_cycles % sync_period) / sync_period * 2 * np.pi
@@ -653,10 +608,9 @@ def recursive_time_lock_synchronization(
 def latency_adaptive_matrix_rebinding(
     latency_profile: Vector, threshold: float = 0.1
 ) -> Dict[str, Any]:
-    """
-    Latency-Adaptive Matrix Rebinding for dynamic performance optimization
+    """Latency-Adaptive Matrix Rebinding for dynamic performance optimization.
 
-    Implements dynamic matrix selection based on latency patterns
+    Implements dynamic matrix selection based on latency patterns.
     """
     # Latency drift analysis
     latency_drift = np.gradient(latency_profile)

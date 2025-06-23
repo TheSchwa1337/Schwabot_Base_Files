@@ -42,6 +42,27 @@ from core.multi_bit_btc_processor import MultiBitBTCProcessor
 from core.riddle_gemm import RiddleGEMMEngine
 from core.temporal_execution_correction_layer import TemporalExecutionCorrectionLayer
 
+# Import centralized CLI handler
+try:
+    from core.utils.windows_cli_compatibility import (
+        WindowsCliCompatibilityHandler,
+        safe_print,
+        safe_format_error,
+        log_safe,
+        cli_handler,
+    )
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    # Fallback for testing when package import fails
+    def safe_print(message: str, use_emoji: bool = True) -> str:
+        return message
+    def safe_format_error(error: Exception, context: str = "") -> str:
+        return f"Error: {str(error)} | Context: {context}"
+    def log_safe(logger, level: str, message: str) -> None:
+        getattr(logger, level.lower())(message)
+    cli_handler = None
+
 DEFAULT_WEIGHT_MATRIX_VALUE = 0.9
 MAX_QUEUE_SIZE = 50.0
 NORMALIZATION_FACTOR = 1.0
@@ -97,95 +118,90 @@ try:
     from core.type_defs import *  # noqa: F403, F401
 except ImportError:
     # Fallback type definitions if core module not available
-    pass
-
-# =====================================
-# WINDOWS CLI COMPATIBILITY HANDLER
-# =====================================
-
-
-class WindowsCliCompatibilityHandler:
-    """
-
-    Handles Windows CLI compatibility issues including emoji rendering
-    and ASIC implementation for plain text output explanations
-
-    Addresses the CLI error issues mentioned in the comprehensive testing:
-    - Emoji characters causing encoding errors on Windows
-    - Need for ASIC plain text output
-    - Cross-platform compatibility for error messages
-    """
-
-    @staticmethod
-    def is_windows_cli() -> bool:
-        """Detect if running in Windows CLI environment."""
-        return platform.system() == "Windows" and (
-            "cmd" in os.environ.get("COMSPEC", "").lower()
-            or "powershell" in os.environ.get("PSModulePath", "").lower()
-        )
-
-    @staticmethod
-    def safe_print(message: str, use_emoji: bool = True) -> str:
-        """
-
-        Print message safely with Windows CLI compatibility
-        Implements ASIC plain text output for Windows environments
-
-        ASIC Implementation: Application-Specific Integrated Circuit approach
-        provides specialized text rendering for Windows CLI environments
-        """
-        if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
-            # ASIC plain text markers for Windows CLI compatibility
-            emoji_to_asic_mapping = {
-                "✅": "[SUCCESS]",  # Success indicator
-                "❌": "[ERROR]",  # Error indicator
-                "🔧": "[PROCESSING]",  # Processing indicator
-                "🚀": "[LAUNCH]",  # Launch/start indicator
-                "🎉": "[COMPLETE]",  # Completion indicator
-                "💥": "[CRITICAL]",  # Critical alert
-                "⚡": "[FAST]",  # Fast execution
-                "🔍": "[SEARCH]",  # Search/analysis
-                "📊": "[DATA]",  # Data processing
-                "🧪": "[TEST]",  # Testing indicator
-                "🛠️": "[TOOLS]",  # Tools/utilities
-                "⚖️": "[BALANCE]",  # Balance/measurement
-                "🔄": "[CYCLE]",  # Cycle/loop
-                "🎯": "[TARGET]",  # Target/goal
-                "📈": "[PROFIT]",  # Profit indicator
-                "🔥": "[HOT]",  # High activity
-                "❄️": "[COOL]",  # Cool/low activity
-                "⭐": "[STAR]",  # Important/featured
-            }
-
-            safe_message = message
-            for emoji, asic_replacement in emoji_to_asic_mapping.items():
-                safe_message = safe_message.replace(emoji, asic_replacement)
-
-            return safe_message
-
-        return message
-
-    @staticmethod
-    def log_safe(logger: Any, level: str, message: str) -> None:
-        """Log message safely with Windows CLI compatibility."""
-        safe_message = WindowsCliCompatibilityHandler.safe_print(message)
-        try:
-            getattr(logger, level.lower())(safe_message)
-        except UnicodeEncodeError:
-            # Emergency ASCII fallback for Windows CLI
-            ascii_message = safe_message.encode("ascii", errors="replace").decode(
-                "ascii"
-            )
-            getattr(logger, level.lower())(ascii_message)
-
-    @staticmethod
-    def safe_format_error(error: Exception, context: str = "") -> str:
-        """Format error messages safely for Windows CLI."""
-        error_message = f"Error: {str(error)}"
-        if context:
-            error_message += f" | Context: {context}"
-
-        return WindowsCliCompatibilityHandler.safe_print(error_message)
+    from typing import Any, Dict, List, Optional, Union
+    import numpy as np
+    from dataclasses import dataclass
+    from datetime import datetime
+    from enum import Enum
+    
+    # Fallback enums and classes
+    class BitLevel(Enum):
+        FOUR_BIT = 4
+        EIGHT_BIT = 8
+        SIXTEEN_BIT = 16
+        FORTY_TWO_BIT = 42
+    
+    class MatrixPhase(Enum):
+        INITIALIZATION = "INIT"
+        ACCUMULATION = "ACCUM"
+        RESONANCE = "RESON"
+        DISPERSION = "DISP"
+        CONVERGENCE = "CONV"
+        FORTY_TWO_PHASE = "42P"
+    
+    @dataclass
+    class MatrixController:
+        bit_level: BitLevel
+        phase: MatrixPhase
+        hash_signature: str
+        timestamp: datetime = datetime.now()
+        confidence_score: float = 0.0
+        fallback_triggered: bool = False
+        state_vector: np.ndarray = np.zeros(10)
+    
+    @dataclass
+    class IdentityState:
+        tick: int
+        strategy_state: Dict[str, Any]
+        ai_feedback: Optional[Dict[str, Any]] = None
+        hash_signature: str = ""
+        timestamp: datetime = datetime.now()
+    
+    @dataclass
+    class IdentityTrace:
+        identity_states: List[IdentityState] = None
+        trace_hash: str = ""
+        
+        def __post_init__(self):
+            if self.identity_states is None:
+                self.identity_states = []
+    
+    @dataclass
+    class GhostLogicState:
+        is_active: bool = False
+        fallback_triggered: bool = False
+        shadow_mode: bool = False
+        confidence_threshold: float = 0.7
+        last_trigger_time: Optional[datetime] = None
+    
+    @dataclass
+    class AIFeedback:
+        model_name: str
+        confidence_score: float
+        recommendation: str
+        matrix_adjustments: Dict[str, float] = None
+        timestamp: datetime = datetime.now()
+        feedback_hash: str = ""
+        
+        def __post_init__(self):
+            if self.matrix_adjustments is None:
+                self.matrix_adjustments = {}
+    
+    @dataclass
+    class AIConsensus:
+        feedbacks: List[AIFeedback] = None
+        consensus_score: float = 0.0
+        final_recommendation: str = ""
+        
+        def __post_init__(self):
+            if self.feedbacks is None:
+                self.feedbacks = []
+    
+    # Type aliases
+    MatrixControllerType = MatrixController
+    StateVector = np.ndarray
+    HashSignature = str
+    ConfidenceScore = float
 
 
 class FaultType(Enum):
@@ -604,6 +620,27 @@ class FaultBus:
         self.temporal_corrector = TemporalExecutionCorrectionLayer()
         self._initialize_strategies()
 
+        # ✨ NEW: Matrix Controllers for different bit levels
+        self.matrix_controllers: Dict[BitLevel, MatrixControllerType] = {}
+        self._initialize_matrix_controllers()
+
+        # ✨ NEW: Identity tracking system
+        try:
+            from .type_defs import IdentityTrace, IdentityState
+            self.identity_trace = IdentityTrace()
+            self.current_identity_state: Optional[IdentityState] = None
+        except ImportError:
+            # Use fallback definitions
+            self.identity_trace = IdentityTrace()
+            self.current_identity_state: Optional[IdentityState] = None
+
+        # ✨ NEW: Ghost logic and fallback systems
+        self.ghost_state = GhostLogicState()
+        self.fallback_systems: Dict[str, Any] = {}
+
+        # ✨ NEW: AI consensus system
+        self.ai_consensus = AIConsensus()
+
         # ✨ NEW: Future Corridor Engine Integration
         self.corridor_engine = FutureCorridorEngine(
             profit_amplitude=NORMALIZATION_FACTOR,
@@ -638,10 +675,10 @@ class FaultBus:
         # Register fault resolvers from registry
         self.resolvers.update(fault_resolver_registry)
 
-        logging.info("🧠 FaultBus initialized with Future Corridor Engine integration")
+        logging.info("[BRAIN] FaultBus initialized with Future Corridor Engine integration")
 
         # Windows CLI compatibility handler
-        self.cli_handler = WindowsCliCompatibilityHandler()
+        self.cli_handler = cli_handler if CLI_HANDLER_AVAILABLE else None
 
     def _initialize_strategies(self) -> None:
         """Initialize the RiddleGEMM engine with some default strategies."""
@@ -656,6 +693,148 @@ class FaultBus:
             content_hash = hashlib.sha256(name.encode()).hexdigest()
             self.riddle_engine.register_strategy(name, vector.tolist(), content_hash)
         logging.info(f"Initialized RiddleGEMM with {len(default_strategies)} strategies.")
+
+    def _initialize_matrix_controllers(self) -> None:
+        """Initialize matrix controllers for all bit levels."""
+        try:
+            # Try to import from type_defs first
+            from .type_defs import BitLevel, MatrixPhase, MatrixController
+            
+            # Initialize 4-bit controller for basic operations
+            self.matrix_controllers[BitLevel.FOUR_BIT] = MatrixController(
+                bit_level=BitLevel.FOUR_BIT,
+                phase=MatrixPhase.INITIALIZATION,
+                hash_signature=hashlib.sha256("4bit_init".encode()).hexdigest()[:16]
+            )
+            
+            # Initialize 8-bit controller for intermediate operations
+            self.matrix_controllers[BitLevel.EIGHT_BIT] = MatrixController(
+                bit_level=BitLevel.EIGHT_BIT,
+                phase=MatrixPhase.ACCUMULATION,
+                hash_signature=hashlib.sha256("8bit_accum".encode()).hexdigest()[:16]
+            )
+            
+            # Initialize 16-bit controller for advanced operations
+            self.matrix_controllers[BitLevel.SIXTEEN_BIT] = MatrixController(
+                bit_level=BitLevel.SIXTEEN_BIT,
+                phase=MatrixPhase.RESONANCE,
+                hash_signature=hashlib.sha256("16bit_reson".encode()).hexdigest()[:16]
+            )
+            
+            # Initialize 42-bit controller for quantum operations
+            self.matrix_controllers[BitLevel.FORTY_TWO_BIT] = MatrixController(
+                bit_level=BitLevel.FORTY_TWO_BIT,
+                phase=MatrixPhase.FORTY_TWO_PHASE,
+                hash_signature=hashlib.sha256("42bit_quantum".encode()).hexdigest()[:16]
+            )
+            
+            logging.info(f"Initialized {len(self.matrix_controllers)} matrix controllers.")
+            
+        except ImportError:
+            logging.warning("type_defs import failed, using fallback definitions")
+            self._create_fallback_controllers()
+        except Exception as e:
+            logging.error(f"Failed to initialize matrix controllers: {e}")
+            # Fallback: create basic controllers without advanced features
+            self._create_fallback_controllers()
+
+    def _create_fallback_controllers(self) -> None:
+        """Create fallback matrix controllers if initialization fails."""
+        logging.warning("Creating fallback matrix controllers...")
+        
+        # Simple fallback controllers using the fallback definitions
+        try:
+            # Use the fallback BitLevel and MatrixController definitions from this file
+            from .type_defs import BitLevel, MatrixPhase, MatrixController
+            
+            for bit_level in [BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT, BitLevel.SIXTEEN_BIT]:
+                try:
+                    self.matrix_controllers[bit_level] = MatrixController(
+                        bit_level=bit_level,
+                        phase=MatrixPhase.INITIALIZATION,
+                        hash_signature=hashlib.sha256(f"fallback_{bit_level.value}".encode()).hexdigest()[:16]
+                    )
+                except Exception as e:
+                    logging.error(f"Failed to create fallback controller for {bit_level}: {e}")
+        except ImportError:
+            # If type_defs import fails, use the fallback definitions in this file
+            logging.warning("Using fallback definitions from fault_bus.py")
+            
+            # Define fallback enums locally
+            class FallbackBitLevel(Enum):
+                FOUR_BIT = 4
+                EIGHT_BIT = 8
+                SIXTEEN_BIT = 16
+                FORTY_TWO_BIT = 42
+            
+            class FallbackMatrixPhase(Enum):
+                INITIALIZATION = "INIT"
+                ACCUMULATION = "ACCUM"
+                RESONANCE = "RESON"
+                DISPERSION = "DISP"
+                CONVERGENCE = "CONV"
+                FORTY_TWO_PHASE = "42P"
+            
+            @dataclass
+            class FallbackMatrixController:
+                bit_level: FallbackBitLevel
+                phase: FallbackMatrixPhase
+                hash_signature: str
+                timestamp: datetime = datetime.now()
+                confidence_score: float = 0.0
+                fallback_triggered: bool = False
+                state_vector: np.ndarray = np.zeros(10)
+                
+                def update_state(self, new_state: np.ndarray) -> None:
+                    """Update state vector."""
+                    if new_state.size == self.state_vector.size:
+                        self.state_vector = new_state
+            
+            for bit_level in [FallbackBitLevel.FOUR_BIT, FallbackBitLevel.EIGHT_BIT, FallbackBitLevel.SIXTEEN_BIT]:
+                try:
+                    self.matrix_controllers[bit_level] = FallbackMatrixController(
+                        bit_level=bit_level,
+                        phase=FallbackMatrixPhase.INITIALIZATION,
+                        hash_signature=hashlib.sha256(f"fallback_{bit_level.value}".encode()).hexdigest()[:16]
+                    )
+                except Exception as e:
+                    logging.error(f"Failed to create fallback controller for {bit_level}: {e}")
+
+    def _update_identity_state(self, event: FaultBusEvent) -> None:
+        """Update identity tracking state."""
+        try:
+            strategy_state = {
+                "event_type": event.type.value,
+                "severity": event.severity,
+                "module": event.module,
+                "tick": event.tick,
+                "profit_context": event.profit_context,
+                "matrix_controllers": {level.value: controller.phase.value 
+                                     for level, controller in self.matrix_controllers.items()}
+            }
+
+            # Create identity state
+            self.current_identity_state = IdentityState(
+                tick=event.tick,
+                strategy_state=strategy_state,
+                ai_feedback=self.ai_consensus.final_recommendation if self.ai_consensus.final_recommendation else None
+            )
+
+            # Add to trace
+            self.identity_trace.add_state(self.current_identity_state)
+            
+            # Save trace to log
+            self._save_identity_trace("fault_bus_identity")
+
+        except Exception as e:
+            logging.error(f"Failed to update identity state: {e}")
+
+    def _save_identity_trace(self, log_name: str = "identity_trace") -> None:
+        """Save identity trace to log."""
+        try:
+            logging.info(f"{log_name}: {self.identity_trace.trace_hash} - {len(self.identity_trace.identity_states)} states")
+        except Exception as e:
+            logging.error(f"Failed to save identity trace: {e}")
 
     def register_resolver(self, fault_type: str, resolver: FaultResolver) -> None:
         """Register a resolver for a specific fault type."""
@@ -853,10 +1032,13 @@ class FaultBus:
                 event = self.queue.pop(0)
                 if event.severity >= severity_threshold:
 
-                    # 🧠 Gather integrated intelligence from all core engines
+                    # Gather integrated intelligence from all core engines
                     self._update_contextual_engines(event)
 
-                    # 🧠 Create corridor state from event context
+                    # Update identity tracking
+                    self._update_identity_state(event)
+
+                    # Create corridor state from event context
                     current_price = (
                         event.metadata.get("price", MAX_PROFIT_THRESHOLD)
                         if event.metadata
@@ -909,7 +1091,7 @@ class FaultBus:
                             self.current_market_data["volatility_series"][-30:]
                         )
 
-                    # 🔬 Run Recursive Intent Loop (RIL) for complete navigation decision
+                    # Run Recursive Intent Loop (RIL) for complete navigation decision
                     ril_result = self.corridor_engine.recursive_intent_loop(
                         t=event.tick * DEFAULT_INTERVAL,  # Convert tick to time
                         market_hash=corridor_state.hash_signature,
@@ -928,7 +1110,7 @@ class FaultBus:
                     self.cli_handler.log_safe(
                         logging,
                         "info",
-                        f"🎯 Enhanced Dispatch: {event.type.value}",
+                        f"[TARGET] Enhanced Dispatch: {event.type.value}",
                     )
                     self.cli_handler.log_safe(
                         logging,
@@ -983,7 +1165,7 @@ class FaultBus:
 
             # Enhanced completion logging
             self.cli_handler.log_safe(
-                logging, "debug", "✅ Enhanced dispatch completed successfully"
+                logging, "debug", "[SUCCESS] Enhanced dispatch completed successfully"
             )
 
         except Exception as e:
@@ -1020,7 +1202,7 @@ class FaultBus:
         self.current_market_data["best_strategy"] = best_strategy
         self.current_market_data["best_strategy_score"] = best_score
         
-        logging.info("🧠 Contextual engines updated.")
+        logging.info("[BRAIN] Contextual engines updated.")
         logging.info(f"   DLT Acceleration: {dlt_analysis.get('current_acceleration', 0):.4f}")
         logging.info(f"   Multi-Bit Confidence: {self.current_market_data['multi_bit_confidence']:.4f}")
         logging.info(f"   Riddle Strategy: {best_strategy} (Score: {best_score:.4f})")
@@ -1090,7 +1272,7 @@ class FaultBus:
             try:
                 # Apply corridor-based adjustments
                 if ril_result["activation_mode"] == "FULL_ACTIVATION":
-                    logging.info(f"🚀 FULL_ACTIVATION mode for {event.type.value}")
+                    logging.info(f"[LAUNCH] FULL_ACTIVATION mode for {event.type.value}")
 
                 resolver.handle_fault(event.type.value, event.severity, event.metadata)
                 execution_time = time.time() - start_time
@@ -1099,9 +1281,7 @@ class FaultBus:
                 self._update_corridor_feedback(ril_result, execution_time, True)
 
                 logging.debug(
-                    f"✅ Enhanced SYNC completed: {
-                        event.type.value} in {
-                        execution_time:.3f}s"
+                    f"[SUCCESS] Enhanced SYNC completed: {event.type.value} in {execution_time:.3f}s"
                 )
                 self._trigger_event_handlers(event)
 
@@ -1109,17 +1289,13 @@ class FaultBus:
                 execution_time = time.time() - start_time
                 self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
-                    f"❌ Enhanced SYNC failed: {
-                        event.type.value} after {
-                        execution_time:.3f}s - {e}"
+                    f"[ERROR] Enhanced SYNC failed: {event.type.value} after {execution_time:.3f}s - {e}"
                 )
 
             self.cli_handler.log_safe(
                 logging,
                 "debug",
-                f"✅ Enhanced SYNC completed: {
-                    event.type.value} in {
-                    execution_time:.3f}s",
+                f"[SUCCESS] Enhanced SYNC completed: {event.type.value} in {execution_time:.3f}s",
             )
 
         except Exception as e:
@@ -1159,17 +1335,13 @@ class FaultBus:
                 execution_time = time.time() - start_time
                 self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
-                    f"❌ Enhanced ASYNC failed: {
-                        event.type.value} after {
-                        execution_time:.3f}s - {e}"
+                    f"[ERROR] Enhanced ASYNC failed: {event.type.value} after {execution_time:.3f}s - {e}"
                 )
 
             self.cli_handler.log_safe(
                 logging,
                 "debug",
-                f"✅ Enhanced ASYNC completed: {
-                    event.type.value} in {
-                    execution_time:.3f}s",
+                f"[SUCCESS] Enhanced ASYNC completed: {event.type.value} in {execution_time:.3f}s",
             )
 
         except Exception as e:
@@ -1187,7 +1359,7 @@ class FaultBus:
             resolver = self._get_resolver_for_event(event)
 
             try:
-                logging.info(f"🔥 GPU_ASYNC dispatch for {event.type.value}")
+                logging.info(f"[HOT] GPU_ASYNC dispatch for {event.type.value}")
                 logging.info(f"   ECMP Direction: {ril_result['ecmp_direction']}")
                 logging.info(f"   Target Price: ${ril_result['next_target_price']:.2f}")
 
@@ -1209,22 +1381,18 @@ class FaultBus:
                 execution_time = time.time() - start_time
                 self._update_corridor_feedback(ril_result, execution_time, False)
                 logging.error(
-                    f"❌ GPU ASYNC failed: {
-                        event.type.value} after {
-                        execution_time:.3f}s - {e}"
+                    f"[ERROR] GPU ASYNC failed: {event.type.value} after {execution_time:.3f}s - {e}"
                 )
 
             self.cli_handler.log_safe(
                 logging,
                 "info",
-                f"🔥 GPU_ASYNC dispatch for {event.type.value}",
+                f"[HOT] GPU_ASYNC dispatch for {event.type.value}",
             )
             self.cli_handler.log_safe(
                 logging,
                 "debug",
-                f"✅ GPU ASYNC completed: {
-                    event.type.value} in {
-                    execution_time:.3f}s",
+                f"[SUCCESS] GPU ASYNC completed: {event.type.value} in {execution_time:.3f}s",
             )
 
         except Exception as e:
@@ -1445,7 +1613,7 @@ if __name__ == "__main__":
     @fault_bus.register_handler("thermal_high")
     def handle_thermal_high(event: FaultBusEvent) -> Any:
         """TODO: document handle_thermal_high."""
-        print(f"🔥 Event handled: {event}")
+        print(f"[HOT] Event handled: {event}")
 
     # Simulate profit updates with potential loops
     profit_deltas = [

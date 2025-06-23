@@ -45,3 +45,12 @@ def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
     except Exception:
         # Fallback to identity matrix
         return np.eye(n_components)
+
+
+class LanternMemory:
+    def __init__(self):
+        # Placeholder logic
+        self.state = {}
+    
+    def load(self):
+        return True

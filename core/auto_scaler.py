@@ -108,7 +108,7 @@ def calculate_position_size(
     projected_profit: float,
     account_balance: float,
     max_risk_per_trade: float = MAX_POSITION_RISK,
-    **scaling_params,
+    **scaling_params: float,
 ) -> Tuple[float, Dict[str, float]]:
     """Calculate actual position size with risk management.
 
@@ -280,7 +280,7 @@ class AutoScaler:
         profit_weight: float = DEFAULT_PROFIT_WEIGHT,
         max_scale: float = DEFAULT_MAX_SCALE,
         adaptive_optimization: bool = True,
-    ):
+    ) -> None:
         """Initialize auto scaler.
 
         Parameters

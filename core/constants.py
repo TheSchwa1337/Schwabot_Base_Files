@@ -64,6 +64,14 @@ TEMPORAL_COMPRESSION_FACTOR = 0.8  # Time compression factor
 SVD_TOLERANCE = 1e-12  # Singular value decomposition tolerance
 EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 
+# Additional constants from advanced_mathematical_core.py
+EPSILON_FLOAT64 = 1e-8  # Floating point epsilon for numerical stability
+MEMORY_CHUNK_SIZE = 128  # Memory chunk size for matrix operations
+MATRIX_CONDITION_LIMIT = 1e12  # Matrix conditioning limit
+THERMAL_CONDUCTIVITY_BTC = 0.85  # Thermal conductivity for BTC
+QUANTUM_ENTROPY_SCALE = 1.054571817e-34  # Reduced Planck constant
+REDUCED_PLANCK = 1.054571817e-34  # Reduced Planck constant
+FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 
 # Windows CLI compatibility handler
 class WindowsCliCompatibilityHandler:

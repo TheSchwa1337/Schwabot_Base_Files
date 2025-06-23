@@ -1,0 +1,75 @@
+[1m.\analyze_top_files.py[m[36m:[m17[36m:[m54[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 84)
+[1m.\apply_enhanced_cli_compatibility.py[m[36m:[m473[36m:[m2[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 552)
+[1m.\config\schemas\__init__.py[m[36m:[m42[36m:[m67[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 53)
+[1m.\core\temporal_execution_correction_layer.py[m[36m:[m88[36m:[m34[36m:[m [1m[31mF821[m undefined name 'List'
+        self.correction_history: List[CorrectionResult] = []
+                                 ^
+[1m.\count_real_errors.py[m[36m:[m15[36m:[m44[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 47)
+[1m.\demo_complete_practical_system.py[m[36m:[m40[36m:[m67[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 48)
+[1m.\examples\btc_processor_control_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\ccxt_trading_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\enhanced_hooks_usage.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\enhanced_system_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\gan_tick_example.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\gpu_flash_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\hash_recollection_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\integrated_system_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\lantern_news_integration_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\mathlib_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\news_profit_advanced_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\quantum_btc_intelligence_demo.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\examples\tesseract_visualization_example.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\fix_core_flake8.py[m[36m:[m15[36m:[m72[36m:[m [1m[31mE999[m SyntaxError: invalid syntax
+[1m.\fix_flake8_comprehensive.py[m[36m:[m21[36m:[m17[36m:[m [1m[31mE999[m SyntaxError: unterminated string literal (detected at line 21)
+[1m.\mathlib\persistent_homology.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\mathlib\quantum_strategy.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\ncco_core\__init__.py[m[36m:[m47[36m:[m67[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 65)
+[1m.\ncco_core\ncco_scorer.py[m[36m:[m1[36m:[m31[36m:[m [1m[31mE999[m SyntaxError: invalid syntax
+"""TODO: document module."""."""
+# =====================================
+# Added missing imports
+import os
+import platform
+from typing import Any
+
+# WINDOWS CLI COMPATIBILITY HANDLER
+
+
+class WindowsCliCompatibilityHandler:
+    """Windows CLI compatibility for emoji and Unicode handling."""."""
+                              ^
+[1m.\quick_test.py[m[36m:[m150[36m:[m27[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 188)
+[1m.\schwabot\ai_oracles\fitness_oracle.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\ai_oracles\profit_oracle.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\ai_oracles\reigime_oracle.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\core\config\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\core\config\defaults.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\core\drem_controller.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\gui\controls.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\gui\monitors.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\gui\ring_analysis.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\gui\visualizer.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\init\omni_shell\lotus_mesh_diagram.py[m[36m:[m44[36m:[m67[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 94)
+[1m.\schwabot\init\omni_shell\lotus_omni_mesh.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\init\omni_shell\lotus_tick_hash_feed.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\init\omni_shell\main_event_loop.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\init\omni_shell\mesh_to_shell_sync.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\mathlib\line_render_engine.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\mathlib\matrix_fault_resolver.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\meta\resonance_loop_controller.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\scaling\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\scaling\hash_dispatcher.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\scaling\monitor_portals.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\scaling\throttle_manager.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\schwafit\latent_fingerprint.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\schwafit\plugins\__init__.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\scripts\run_hash_cycles.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\startup\init_ports.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\tests\test_aleph_unitizer_functionality.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\tests\test_scalar_laws_functionality.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\utils\oracle_guard.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\utils\oracle_logger.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\visual\start_visual_system.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+[1m.\schwabot\visual\websocket_bridge.py[m[36m:[m10[36m:[m32[36m:[m [1m[31mE999[m SyntaxError: unterminated triple-quoted string literal (detected at line 12)
+57    E999 SyntaxError: unterminated triple-quoted string literal (detected at line 84)
+1     F821 undefined name 'List'

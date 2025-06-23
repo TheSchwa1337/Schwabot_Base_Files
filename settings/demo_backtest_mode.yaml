@@ -1,0 +1,224 @@
+# Schwabot Demo Backtest Mode Configuration
+# Extended integration with settings controller, vector validator, and matrix allocator
+
+demo_params:
+  enabled: true
+  simulation_duration: 7200  # 2 hours in seconds
+  tick_interval: 3.75
+  initial_balance: 10000.0
+  max_positions: 5
+  risk_per_trade: 0.02
+  stop_loss_pct: 0.05
+  take_profit_pct: 0.15
+  slippage: 0.001
+  commission: 0.001
+  data_source: "simulated"
+  validation_mode: true
+
+# Integration with Settings Controller
+settings_integration:
+  auto_optimize: true
+  learning_enabled: true
+  parameter_adaptation: true
+  failure_learning_rate: 0.1
+  success_reinforcement_rate: 0.05
+  optimization_frequency: 100  # Optimize every 100 ticks
+
+# Integration with Vector Validator
+vector_validation:
+  enabled: true
+  validation_threshold: 0.6
+  auto_reject_bad_vectors: true
+  validation_timeout: 5.0  # seconds
+  batch_validation: true
+  validation_history_size: 1000
+
+# Integration with Matrix Allocator
+matrix_allocation:
+  enabled: true
+  auto_rebalance: true
+  rebalance_frequency: 50  # Rebalance every 50 ticks
+  optimization_strategy: "risk_parity"  # Options: risk_parity, max_sharpe, equal_weight, performance_weighted
+  risk_budget: 0.2
+  return_target: 0.1
+  max_basket_size: 16
+
+# Demo Backtesting Scenarios
+backtest_scenarios:
+  conservative:
+    name: "Conservative Strategy"
+    risk_per_trade: 0.01
+    stop_loss_pct: 0.03
+    take_profit_pct: 0.08
+    max_positions: 3
+    optimization_strategy: "risk_parity"
+    
+  moderate:
+    name: "Moderate Strategy"
+    risk_per_trade: 0.02
+    stop_loss_pct: 0.05
+    take_profit_pct: 0.15
+    max_positions: 5
+    optimization_strategy: "max_sharpe"
+    
+  aggressive:
+    name: "Aggressive Strategy"
+    risk_per_trade: 0.03
+    stop_loss_pct: 0.08
+    take_profit_pct: 0.25
+    max_positions: 8
+    optimization_strategy: "performance_weighted"
+
+# Reinforcement Learning Configuration
+reinforcement_learning:
+  enabled: true
+  learning_rate: 0.01
+  exploration_rate: 0.1
+  memory_size: 10000
+  batch_size: 32
+  update_frequency: 100
+  convergence_threshold: 0.001
+  max_iterations: 1000
+  adaptive_learning: true
+  
+  # Learning from failures
+  failure_penalty_weight: 0.5
+  failure_learning_enabled: true
+  failure_analysis_depth: 10
+  
+  # Learning from successes
+  success_reward_weight: 1.0
+  success_learning_enabled: true
+  success_reinforcement_enabled: true
+
+# Performance Monitoring
+performance_monitoring:
+  enabled: true
+  metrics_tracking: true
+  real_time_analysis: true
+  performance_window: 1000
+  alert_thresholds:
+    max_drawdown: 0.15
+    min_sharpe_ratio: 0.5
+    max_volatility: 0.3
+    min_success_rate: 0.6
+
+# Data Management
+data_management:
+  historical_data_size: 10000
+  real_time_data_buffer: 1000
+  data_validation: true
+  data_cleanup_frequency: 3600  # 1 hour
+  backup_frequency: 86400  # 24 hours
+
+# Reporting and Analytics
+reporting:
+  enabled: true
+  report_frequency: 3600  # 1 hour
+  detailed_reports: true
+  performance_charts: true
+  risk_metrics: true
+  allocation_analysis: true
+  
+  # Export formats
+  export_formats:
+    - "json"
+    - "csv"
+    - "html"
+    - "pdf"
+
+# Integration Testing
+integration_testing:
+  enabled: true
+  test_frequency: 1800  # 30 minutes
+  component_tests:
+    settings_controller: true
+    vector_validator: true
+    matrix_allocator: true
+    demo_system: true
+  
+  # Test scenarios
+  test_scenarios:
+    - "parameter_optimization"
+    - "vector_validation"
+    - "matrix_allocation"
+    - "risk_management"
+    - "performance_analysis"
+
+# Emergency Procedures
+emergency_procedures:
+  enabled: true
+  max_loss_threshold: 0.2  # 20% max loss
+  max_drawdown_threshold: 0.15  # 15% max drawdown
+  emergency_stop_enabled: true
+  auto_recovery_enabled: true
+  recovery_strategy: "conservative"
+
+# Advanced Features
+advanced_features:
+  # Multi-timeframe analysis
+  multi_timeframe: true
+  timeframes: ["1m", "5m", "15m", "1h", "4h", "1d"]
+  
+  # Machine learning integration
+  ml_integration: true
+  ml_models:
+    - "price_prediction"
+    - "risk_assessment"
+    - "allocation_optimization"
+  
+  # AI consensus
+  ai_consensus: true
+  consensus_threshold: 0.7
+  ai_models_count: 3
+  
+  # Quantum simulation
+  quantum_simulation: false  # Experimental
+  quantum_bits: 8
+  quantum_circuits: 4
+
+# Configuration Validation
+validation:
+  enabled: true
+  validate_on_startup: true
+  validate_parameters: true
+  validate_integrations: true
+  auto_correct: true
+  validation_timeout: 30  # seconds
+
+# Logging and Debugging
+logging:
+  level: "INFO"
+  file_logging: true
+  console_logging: true
+  log_rotation: true
+  max_log_size: "100MB"
+  log_retention: 30  # days
+  
+  # Debug modes
+  debug_modes:
+    settings_controller: false
+    vector_validator: false
+    matrix_allocator: false
+    demo_system: false
+    performance_monitoring: false
+
+# System Health Monitoring
+system_health:
+  enabled: true
+  health_check_frequency: 300  # 5 minutes
+  component_health_tracking: true
+  resource_monitoring: true
+  performance_alerting: true
+  
+  # Health thresholds
+  health_thresholds:
+    cpu_usage: 0.8
+    memory_usage: 0.8
+    disk_usage: 0.9
+    response_time: 5.0  # seconds
+
+# Last updated timestamp
+last_updated: "2024-01-01T00:00:00Z"
+version: "2.0.0"
+description: "Extended demo backtest mode configuration with full integration support" 
