@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """
 Temporal Execution Correction Layer - Schwabot UROS v1.0
-=======================================================
+======================================================
 
-Implements temporal correction and synchronization for trading execution.
-Critical for ensuring precise timing and correcting execution delays.
+Handles drift correction in misaligned trade timing or faulty backtests.
+Features:
+- Drift Deviation Estimation: Δt = t_ideal - t_executed
+- Kalman Filter-like Correction: x_t = x_{t-1} + K_t(z_t - x_{t-1})
+- Execution timing optimization and synchronization
+- Integration with fault_bus.py and backtest_runner.py
 """
 
 import numpy as np
-import logging
-import time
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+import logging
+import time
 from enum import Enum
-
-from core.type_defs import BitLevel, MatrixPhase, MatrixControllerType
 
 logger = logging.getLogger(__name__)
 
@@ -23,515 +25,555 @@ logger = logging.getLogger(__name__)
 class CorrectionType(Enum):
     """Types of temporal corrections."""
     DRIFT_CORRECTION = "drift_correction"
-    LATENCY_COMPENSATION = "latency_compensation"
-    SYNCHRONIZATION = "synchronization"
     TIMING_OPTIMIZATION = "timing_optimization"
-    PHASE_ALIGNMENT = "phase_alignment"
+    SYNCHRONIZATION = "synchronization"
+    LATENCY_COMPENSATION = "latency_compensation"
 
 
 @dataclass
-class TemporalEvent:
-    """Represents a temporal event for correction."""
+class ExecutionEvent:
+    """Represents an execution event with timing information."""
     event_id: str
-    event_type: str
-    expected_timestamp: datetime
+    ideal_timestamp: datetime
     actual_timestamp: datetime
-    drift_amount: float  # milliseconds
-    correction_applied: bool = False
-    correction_amount: float = 0.0
+    execution_delay: float
+    correction_applied: float
+    event_type: str
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class CorrectionAction:
-    """Represents a temporal correction action."""
-    action_id: str
-    correction_type: CorrectionType
-    original_timing: datetime
-    corrected_timing: datetime
-    correction_amount: float  # milliseconds
-    success: bool = False
-    timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class SynchronizationPoint:
-    """Represents a synchronization point."""
-    sync_id: str
-    system_id: str
-    reference_timestamp: datetime
-    local_timestamp: datetime
-    offset: float  # milliseconds
+class DriftMeasurement:
+    """Represents a drift measurement."""
+    measurement_id: str
+    timestamp: datetime
+    drift_value: float
     confidence: float
-    timestamp: datetime = field(default_factory=datetime.now)
+    correction_factor: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class KalmanState:
+    """Represents the state of the Kalman filter."""
+    timestamp: datetime
+    position: float
+    velocity: float
+    acceleration: float
+    covariance_matrix: np.ndarray
+    process_noise: float
+    measurement_noise: float
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class TemporalExecutionCorrectionLayer:
     """
-    Implements temporal correction and synchronization for trading execution.
-    Ensures precise timing and corrects execution delays in real-time.
+    Implements temporal execution correction using Kalman filtering and drift analysis.
+    Handles timing optimization and synchronization for trading operations.
     """
     
     def __init__(self):
         """Initialize the temporal execution correction layer."""
-        self.temporal_events: List[TemporalEvent] = []
-        self.correction_actions: List[CorrectionAction] = []
-        self.sync_points: Dict[str, SynchronizationPoint] = {}
-        self.correction_history: List[Dict[str, Any]] = []
+        self.execution_events: List[ExecutionEvent] = []
+        self.drift_measurements: List[DriftMeasurement] = []
+        self.kalman_states: List[KalmanState] = []
         
         # Correction parameters
-        self.max_drift_threshold = 100.0  # milliseconds
-        self.correction_enabled = True
-        self.sync_interval = 1.0  # seconds
-        self.latency_compensation = True
-        self.adaptive_correction = True
+        self.max_events = 1000
+        self.drift_threshold = 0.001  # 1ms threshold
+        self.correction_window = 100
+        self.kalman_memory_size = 50
+        
+        # Kalman filter parameters
+        self.process_noise = 0.01
+        self.measurement_noise = 0.1
+        self.initial_covariance = np.array([[1.0, 0.0, 0.0],
+                                           [0.0, 1.0, 0.0],
+                                           [0.0, 0.0, 1.0]])
         
         # Performance tracking
         self.total_corrections = 0
-        self.successful_corrections = 0
         self.average_drift = 0.0
-        self.max_drift_observed = 0.0
+        self.correction_efficiency = 0.0
+        self.synchronization_accuracy = 0.0
         
-        # System timing
-        self.system_start_time = datetime.now()
-        self.last_sync_time = datetime.now()
-        self.time_offset = 0.0  # milliseconds
+        # Timing optimization
+        self.optimal_execution_window = 0.005  # 5ms optimal window
+        self.latency_compensation = 0.002  # 2ms compensation
         
         logger.info("Temporal Execution Correction Layer initialized")
     
-    def register_temporal_event(
+    def record_execution_event(
         self,
+        event_id: str,
+        ideal_timestamp: datetime,
+        actual_timestamp: datetime,
         event_type: str,
-        expected_timestamp: datetime,
-        actual_timestamp: Optional[datetime] = None,
         metadata: Optional[Dict[str, Any]] = None
-    ) -> TemporalEvent:
-        """Register a temporal event for correction."""
-        if actual_timestamp is None:
-            actual_timestamp = datetime.now()
+    ) -> ExecutionEvent:
+        """Record an execution event for temporal analysis."""
+        # Calculate execution delay
+        execution_delay = (actual_timestamp - ideal_timestamp).total_seconds()
         
-        # Calculate drift
-        drift_amount = (actual_timestamp - expected_timestamp).total_seconds() * 1000.0
+        # Apply Kalman filter correction
+        correction_factor = self._apply_kalman_correction(execution_delay)
+        corrected_delay = execution_delay - correction_factor
         
-        event = TemporalEvent(
-            event_id=f"event_{int(time.time() * 1000)}",
-            event_type=event_type,
-            expected_timestamp=expected_timestamp,
+        # Create execution event
+        event = ExecutionEvent(
+            event_id=event_id,
+            ideal_timestamp=ideal_timestamp,
             actual_timestamp=actual_timestamp,
-            drift_amount=drift_amount,
+            execution_delay=execution_delay,
+            correction_applied=correction_factor,
+            event_type=event_type,
             metadata=metadata or {}
         )
         
-        self.temporal_events.append(event)
+        self.execution_events.append(event)
         
-        # Update drift statistics
-        self._update_drift_statistics(drift_amount)
+        # Maintain event history size
+        if len(self.execution_events) > self.max_events:
+            self.execution_events = self.execution_events[-self.max_events:]
         
-        # Apply correction if needed
-        if self.correction_enabled and abs(drift_amount) > self.max_drift_threshold:
-            self._apply_temporal_correction(event)
+        # Update drift measurement
+        self._update_drift_measurement(execution_delay, correction_factor)
         
-        logger.debug(f"Registered temporal event: {event_type} (drift: {drift_amount:.2f}ms)")
+        # Update performance metrics
+        self._update_performance_metrics()
+        
+        logger.debug(f"Recorded execution event: {event_id} (delay: {execution_delay:.6f}s)")
         return event
     
-    def _update_drift_statistics(self, drift_amount: float) -> None:
-        """Update drift statistics."""
-        self.max_drift_observed = max(self.max_drift_observed, abs(drift_amount))
+    def _apply_kalman_correction(self, measurement: float) -> float:
+        """Apply Kalman filter correction to timing measurement."""
+        current_time = datetime.now()
         
-        # Update average drift (exponential moving average)
-        alpha = 0.1
-        self.average_drift = alpha * abs(drift_amount) + (1 - alpha) * self.average_drift
-    
-    def _apply_temporal_correction(self, event: TemporalEvent) -> bool:
-        """Apply temporal correction to an event."""
-        try:
-            # Determine correction type
-            if abs(event.drift_amount) > 500.0:  # Large drift
-                correction_type = CorrectionType.DRIFT_CORRECTION
-            elif abs(event.drift_amount) > 100.0:  # Medium drift
-                correction_type = CorrectionType.LATENCY_COMPENSATION
-            else:  # Small drift
-                correction_type = CorrectionType.TIMING_OPTIMIZATION
-            
-            # Calculate correction amount
-            correction_amount = -event.drift_amount  # Compensate for drift
-            
-            # Apply adaptive correction if enabled
-            if self.adaptive_correction:
-                correction_amount *= self._calculate_adaptive_factor(event.drift_amount)
-            
-            # Create correction action
-            action = CorrectionAction(
-                action_id=f"correction_{int(time.time() * 1000)}",
-                correction_type=correction_type,
-                original_timing=event.actual_timestamp,
-                corrected_timing=event.actual_timestamp + timedelta(milliseconds=correction_amount),
-                correction_amount=correction_amount
+        # Initialize Kalman state if empty
+        if not self.kalman_states:
+            initial_state = KalmanState(
+                timestamp=current_time,
+                position=measurement,
+                velocity=0.0,
+                acceleration=0.0,
+                covariance_matrix=self.initial_covariance.copy(),
+                process_noise=self.process_noise,
+                measurement_noise=self.measurement_noise
             )
-            
-            # Execute correction
-            success = self._execute_correction(action)
-            action.success = success
-            
-            if success:
-                event.correction_applied = True
-                event.correction_amount = correction_amount
-                self.successful_corrections += 1
-                logger.info(f"Applied temporal correction: {correction_amount:.2f}ms")
-            else:
-                logger.warning(f"Failed to apply temporal correction: {correction_amount:.2f}ms")
-            
-            self.correction_actions.append(action)
-            self.total_corrections += 1
-            
-            return success
+            self.kalman_states.append(initial_state)
+            return 0.0
         
-        except Exception as e:
-            logger.error(f"Temporal correction error: {e}")
-            return False
-    
-    def _calculate_adaptive_factor(self, drift_amount: float) -> float:
-        """Calculate adaptive correction factor."""
-        # Adaptive factor based on drift magnitude and history
-        base_factor = 1.0
+        # Get previous state
+        prev_state = self.kalman_states[-1]
         
-        # Reduce factor for large drifts to avoid over-correction
-        if abs(drift_amount) > 1000.0:
-            base_factor *= 0.5
-        elif abs(drift_amount) > 500.0:
-            base_factor *= 0.8
+        # Time step
+        dt = (current_time - prev_state.timestamp).total_seconds()
+        if dt <= 0:
+            dt = 0.001  # Minimum time step
         
-        # Adjust based on correction success rate
-        success_rate = self.successful_corrections / max(1, self.total_corrections)
-        base_factor *= success_rate
+        # Prediction step
+        predicted_position = prev_state.position + prev_state.velocity * dt + 0.5 * prev_state.acceleration * dt**2
+        predicted_velocity = prev_state.velocity + prev_state.acceleration * dt
+        predicted_acceleration = prev_state.acceleration
         
-        return np.clip(base_factor, 0.1, 2.0)
-    
-    def _execute_correction(self, action: CorrectionAction) -> bool:
-        """Execute the temporal correction."""
-        try:
-            # Simulate correction execution
-            # In a real implementation, this would adjust system timing
-            time.sleep(0.001)  # Simulate processing time
-            
-            # Update system time offset
-            self.time_offset += action.correction_amount
-            
-            # Record correction in history
-            self.correction_history.append({
-                "timestamp": action.timestamp,
-                "correction_type": action.correction_type.value,
-                "correction_amount": action.correction_amount,
-                "success": action.success
-            })
-            
-            # Keep history size manageable
-            if len(self.correction_history) > 1000:
-                self.correction_history = self.correction_history[-500:]
-            
-            return True
+        # State transition matrix
+        F = np.array([[1, dt, 0.5*dt**2],
+                     [0, 1, dt],
+                     [0, 0, 1]])
         
-        except Exception as e:
-            logger.error(f"Correction execution failed: {e}")
-            return False
-    
-    def synchronize_system(
-        self,
-        system_id: str,
-        reference_timestamp: datetime,
-        local_timestamp: Optional[datetime] = None
-    ) -> SynchronizationPoint:
-        """Synchronize system timing with reference."""
-        if local_timestamp is None:
-            local_timestamp = datetime.now()
+        # Process noise matrix
+        Q = np.array([[0.25*dt**4, 0.5*dt**3, 0.5*dt**2],
+                     [0.5*dt**3, dt**2, dt],
+                     [0.5*dt**2, dt, 1]]) * self.process_noise
         
-        # Calculate offset
-        offset = (local_timestamp - reference_timestamp).total_seconds() * 1000.0
+        # Predict covariance
+        predicted_covariance = F @ prev_state.covariance_matrix @ F.T + Q
         
-        # Calculate confidence based on offset magnitude
-        confidence = max(0.0, 1.0 - abs(offset) / 1000.0)  # Higher offset = lower confidence
+        # Measurement matrix (we only measure position)
+        H = np.array([[1, 0, 0]])
         
-        sync_point = SynchronizationPoint(
-            sync_id=f"sync_{int(time.time() * 1000)}",
-            system_id=system_id,
-            reference_timestamp=reference_timestamp,
-            local_timestamp=local_timestamp,
-            offset=offset,
-            confidence=confidence
+        # Kalman gain
+        S = H @ predicted_covariance @ H.T + self.measurement_noise
+        K = predicted_covariance @ H.T @ np.linalg.inv(S)
+        
+        # Update step
+        innovation = measurement - predicted_position
+        state_vector = np.array([predicted_position, predicted_velocity, predicted_acceleration])
+        updated_state_vector = state_vector + K.flatten() * innovation
+        
+        # Update covariance
+        I = np.eye(3)
+        updated_covariance = (I - K @ H) @ predicted_covariance
+        
+        # Create new Kalman state
+        new_state = KalmanState(
+            timestamp=current_time,
+            position=updated_state_vector[0],
+            velocity=updated_state_vector[1],
+            acceleration=updated_state_vector[2],
+            covariance_matrix=updated_covariance,
+            process_noise=self.process_noise,
+            measurement_noise=self.measurement_noise
         )
         
-        self.sync_points[system_id] = sync_point
-        self.last_sync_time = datetime.now()
+        self.kalman_states.append(new_state)
         
-        # Apply synchronization correction if needed
-        if abs(offset) > self.max_drift_threshold:
-            self._apply_synchronization_correction(sync_point)
+        # Maintain Kalman state history
+        if len(self.kalman_states) > self.kalman_memory_size:
+            self.kalman_states = self.kalman_states[-self.kalman_memory_size:]
         
-        logger.info(f"Synchronized system {system_id}: offset {offset:.2f}ms (confidence: {confidence:.3f})")
-        return sync_point
+        # Return correction factor
+        correction_factor = innovation * K[0, 0]
+        return float(correction_factor)
     
-    def _apply_synchronization_correction(self, sync_point: SynchronizationPoint) -> bool:
-        """Apply synchronization correction."""
-        try:
-            # Create synchronization correction action
-            action = CorrectionAction(
-                action_id=f"sync_correction_{int(time.time() * 1000)}",
-                correction_type=CorrectionType.SYNCHRONIZATION,
-                original_timing=sync_point.local_timestamp,
-                corrected_timing=sync_point.reference_timestamp,
-                correction_amount=-sync_point.offset
-            )
-            
-            # Execute correction
-            success = self._execute_correction(action)
-            action.success = success
-            
-            self.correction_actions.append(action)
-            
-            return success
+    def _update_drift_measurement(self, execution_delay: float, correction_factor: float) -> None:
+        """Update drift measurement based on execution delay."""
+        # Calculate drift value
+        drift_value = execution_delay - correction_factor
         
-        except Exception as e:
-            logger.error(f"Synchronization correction failed: {e}")
-            return False
+        # Calculate confidence based on recent measurements
+        recent_delays = [event.execution_delay for event in self.execution_events[-10:]]
+        if len(recent_delays) > 1:
+            confidence = 1.0 / (1.0 + np.std(recent_delays))
+        else:
+            confidence = 0.5
+        
+        # Create drift measurement
+        measurement = DriftMeasurement(
+            measurement_id=f"drift_{int(time.time() * 1000)}",
+            timestamp=datetime.now(),
+            drift_value=drift_value,
+            confidence=confidence,
+            correction_factor=correction_factor
+        )
+        
+        self.drift_measurements.append(measurement)
+        
+        # Maintain measurement history
+        if len(self.drift_measurements) > self.correction_window:
+            self.drift_measurements = self.drift_measurements[-self.correction_window:]
     
-    def optimize_execution_timing(
-        self,
-        target_latency: float = 10.0,  # milliseconds
-        max_jitter: float = 5.0  # milliseconds
-    ) -> Dict[str, Any]:
-        """Optimize execution timing for target latency."""
-        if not self.temporal_events:
-            return {"status": "no_events", "message": "No temporal events available"}
+    def _update_performance_metrics(self) -> None:
+        """Update performance metrics based on recent events."""
+        if not self.execution_events:
+            return
         
-        # Analyze recent events
-        recent_events = self.temporal_events[-100:]  # Last 100 events
-        latencies = [abs(event.drift_amount) for event in recent_events]
+        # Calculate average drift
+        recent_drifts = [m.drift_value for m in self.drift_measurements[-50:]]
+        self.average_drift = float(np.mean(recent_drifts)) if recent_drifts else 0.0
         
-        if not latencies:
-            return {"status": "no_latency_data", "message": "No latency data available"}
+        # Calculate correction efficiency
+        total_corrections = sum(abs(event.correction_applied) for event in self.execution_events[-100:])
+        total_delays = sum(abs(event.execution_delay) for event in self.execution_events[-100:])
         
-        current_latency = np.mean(latencies)
-        current_jitter = np.std(latencies)
+        if total_delays > 0:
+            self.correction_efficiency = float(total_corrections / total_delays)
+        else:
+            self.correction_efficiency = 0.0
         
-        # Calculate optimization parameters
-        latency_reduction = max(0.0, current_latency - target_latency)
-        jitter_reduction = max(0.0, current_jitter - max_jitter)
+        # Calculate synchronization accuracy
+        recent_events = self.execution_events[-50:]
+        if recent_events:
+            delays = [abs(event.execution_delay) for event in recent_events]
+            self.synchronization_accuracy = 1.0 - min(1.0, np.mean(delays) / 0.01)  # Normalize to 10ms
+    
+    def estimate_drift_deviation(self, window_size: int = 50) -> Dict[str, float]:
+        """Estimate drift deviation using recent measurements."""
+        if len(self.drift_measurements) < window_size:
+            window_size = len(self.drift_measurements)
         
-        # Determine optimization strategy
-        optimization_strategy = "none"
-        if latency_reduction > 0 and jitter_reduction > 0:
-            optimization_strategy = "latency_and_jitter"
-        elif latency_reduction > 0:
-            optimization_strategy = "latency_only"
-        elif jitter_reduction > 0:
-            optimization_strategy = "jitter_only"
+        if window_size == 0:
+            return {
+                "drift_mean": 0.0,
+                "drift_std": 0.0,
+                "drift_trend": 0.0,
+                "confidence": 0.0
+            }
         
-        # Apply optimization if needed
-        optimization_applied = False
-        if optimization_strategy != "none":
-            optimization_applied = self._apply_timing_optimization(
-                latency_reduction, jitter_reduction, optimization_strategy
-            )
+        recent_measurements = self.drift_measurements[-window_size:]
+        drift_values = [m.drift_value for m in recent_measurements]
+        confidences = [m.confidence for m in recent_measurements]
+        
+        # Calculate weighted statistics
+        weights = np.array(confidences)
+        weights = weights / np.sum(weights) if np.sum(weights) > 0 else np.ones_like(weights) / len(weights)
+        
+        drift_mean = float(np.average(drift_values, weights=weights))
+        drift_std = float(np.sqrt(np.average((np.array(drift_values) - drift_mean)**2, weights=weights)))
+        
+        # Calculate drift trend (linear regression)
+        if len(drift_values) > 1:
+            x = np.arange(len(drift_values))
+            trend_coeffs = np.polyfit(x, drift_values, 1)
+            drift_trend = float(trend_coeffs[0])
+        else:
+            drift_trend = 0.0
+        
+        # Overall confidence
+        overall_confidence = float(np.mean(confidences))
         
         return {
-            "status": "optimized" if optimization_applied else "no_optimization_needed",
-            "current_latency": current_latency,
-            "target_latency": target_latency,
-            "current_jitter": current_jitter,
-            "max_jitter": max_jitter,
-            "latency_reduction": latency_reduction,
-            "jitter_reduction": jitter_reduction,
-            "optimization_strategy": optimization_strategy,
-            "optimization_applied": optimization_applied
+            "drift_mean": drift_mean,
+            "drift_std": drift_std,
+            "drift_trend": drift_trend,
+            "confidence": overall_confidence
         }
     
-    def _apply_timing_optimization(
-        self,
-        latency_reduction: float,
-        jitter_reduction: float,
-        strategy: str
-    ) -> bool:
-        """Apply timing optimization."""
-        try:
-            # Create timing optimization action
-            correction_amount = -(latency_reduction + jitter_reduction) / 2.0
-            
-            action = CorrectionAction(
-                action_id=f"timing_opt_{int(time.time() * 1000)}",
-                correction_type=CorrectionType.TIMING_OPTIMIZATION,
-                original_timing=datetime.now(),
-                corrected_timing=datetime.now() + timedelta(milliseconds=correction_amount),
-                correction_amount=correction_amount
-            )
-            
-            # Execute optimization
-            success = self._execute_correction(action)
-            action.success = success
-            
-            self.correction_actions.append(action)
-            
-            if success:
-                logger.info(f"Applied timing optimization: {strategy} (reduction: {correction_amount:.2f}ms)")
-            
-            return success
+    def optimize_execution_timing(self, target_latency: float = 0.005) -> Dict[str, Any]:
+        """Optimize execution timing based on historical data."""
+        if not self.execution_events:
+            return {
+                "optimal_window": self.optimal_execution_window,
+                "latency_compensation": self.latency_compensation,
+                "confidence": 0.0
+            }
         
-        except Exception as e:
-            logger.error(f"Timing optimization failed: {e}")
-            return False
+        # Analyze recent execution delays
+        recent_events = self.execution_events[-100:]
+        delays = [event.execution_delay for event in recent_events]
+        
+        if not delays:
+            return {
+                "optimal_window": self.optimal_execution_window,
+                "latency_compensation": self.latency_compensation,
+                "confidence": 0.0
+            }
+        
+        # Calculate optimal execution window
+        delay_percentiles = np.percentile(delays, [25, 50, 75])
+        optimal_window = float(delay_percentiles[1])  # Median delay
+        
+        # Calculate latency compensation
+        mean_delay = float(np.mean(delays))
+        latency_compensation = max(0.0, mean_delay - target_latency)
+        
+        # Calculate confidence based on delay consistency
+        delay_std = float(np.std(delays))
+        confidence = max(0.0, 1.0 - delay_std / target_latency)
+        
+        # Update internal parameters
+        self.optimal_execution_window = optimal_window
+        self.latency_compensation = latency_compensation
+        
+        return {
+            "optimal_window": optimal_window,
+            "latency_compensation": latency_compensation,
+            "confidence": confidence,
+            "mean_delay": mean_delay,
+            "delay_std": delay_std
+        }
     
-    def get_temporal_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive temporal statistics."""
-        total_events = len(self.temporal_events)
-        total_corrections = len(self.correction_actions)
-        successful_corrections = sum(1 for action in self.correction_actions if action.success)
+    def apply_temporal_correction(
+        self, ideal_timestamp: datetime, correction_type: CorrectionType
+    ) -> datetime:
+        """Apply temporal correction to an ideal timestamp."""
+        if not self.kalman_states:
+            return ideal_timestamp
         
-        # Correction type distribution
-        correction_types = {}
-        for action in self.correction_actions:
-            correction_type = action.correction_type.value
-            correction_types[correction_type] = correction_types.get(correction_type, 0) + 1
+        current_state = self.kalman_states[-1]
         
-        # Drift statistics
-        if self.temporal_events:
-            recent_drifts = [event.drift_amount for event in self.temporal_events[-50:]]
-            avg_drift = np.mean(recent_drifts)
-            std_drift = np.std(recent_drifts)
+        if correction_type == CorrectionType.DRIFT_CORRECTION:
+            # Apply drift correction
+            correction_seconds = current_state.position
+            corrected_timestamp = ideal_timestamp + timedelta(seconds=correction_seconds)
+        
+        elif correction_type == CorrectionType.TIMING_OPTIMIZATION:
+            # Apply timing optimization
+            correction_seconds = self.optimal_execution_window
+            corrected_timestamp = ideal_timestamp + timedelta(seconds=correction_seconds)
+        
+        elif correction_type == CorrectionType.SYNCHRONIZATION:
+            # Apply synchronization correction
+            correction_seconds = current_state.velocity * 0.001  # Predict 1ms ahead
+            corrected_timestamp = ideal_timestamp + timedelta(seconds=correction_seconds)
+        
+        elif correction_type == CorrectionType.LATENCY_COMPENSATION:
+            # Apply latency compensation
+            correction_seconds = self.latency_compensation
+            corrected_timestamp = ideal_timestamp + timedelta(seconds=correction_seconds)
+        
         else:
-            avg_drift = 0.0
-            std_drift = 0.0
+            corrected_timestamp = ideal_timestamp
         
-        # Synchronization statistics
-        sync_count = len(self.sync_points)
-        avg_sync_confidence = 0.0
-        if self.sync_points:
-            avg_sync_confidence = sum(point.confidence for point in self.sync_points.values()) / len(self.sync_points)
+        return corrected_timestamp
+    
+    def detect_timing_anomalies(self, threshold: float = 0.01) -> List[Dict[str, Any]]:
+        """Detect timing anomalies in execution events."""
+        anomalies = []
+        
+        if len(self.execution_events) < 2:
+            return anomalies
+        
+        # Calculate moving average and standard deviation
+        delays = [event.execution_delay for event in self.execution_events]
+        
+        for i in range(10, len(delays)):  # Start from 10th event
+            recent_delays = delays[i-10:i]
+            mean_delay = np.mean(recent_delays)
+            std_delay = np.std(recent_delays)
+            
+            current_delay = delays[i]
+            z_score = abs(current_delay - mean_delay) / (std_delay + 1e-10)
+            
+            if z_score > 2.0 and abs(current_delay) > threshold:
+                event = self.execution_events[i]
+                anomalies.append({
+                    "event_id": event.event_id,
+                    "timestamp": event.actual_timestamp,
+                    "delay": current_delay,
+                    "z_score": float(z_score),
+                    "anomaly_type": "timing_anomaly",
+                    "metadata": {
+                        "mean_delay": float(mean_delay),
+                        "std_delay": float(std_delay),
+                        "threshold": threshold
+                    }
+                })
+        
+        return anomalies
+    
+    def get_correction_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive correction statistics."""
+        total_events = len(self.execution_events)
+        total_measurements = len(self.drift_measurements)
+        total_kalman_states = len(self.kalman_states)
+        
+        # Calculate average metrics
+        if total_events > 0:
+            avg_delay = float(np.mean([event.execution_delay for event in self.execution_events]))
+            avg_correction = float(np.mean([abs(event.correction_applied) for event in self.execution_events]))
+        else:
+            avg_delay = 0.0
+            avg_correction = 0.0
+        
+        # Get drift statistics
+        drift_stats = self.estimate_drift_deviation()
+        
+        # Get timing optimization results
+        timing_optimization = self.optimize_execution_timing()
         
         return {
             "total_events": total_events,
-            "total_corrections": total_corrections,
-            "successful_corrections": successful_corrections,
-            "correction_success_rate": successful_corrections / max(1, total_corrections),
-            "correction_type_distribution": correction_types,
-            "average_drift": self.average_drift,
-            "max_drift_observed": self.max_drift_observed,
-            "recent_average_drift": avg_drift,
-            "recent_drift_std": std_drift,
-            "synchronization_count": sync_count,
-            "average_sync_confidence": avg_sync_confidence,
-            "system_time_offset": self.time_offset,
-            "correction_enabled": self.correction_enabled,
-            "adaptive_correction": self.adaptive_correction
+            "total_measurements": total_measurements,
+            "total_kalman_states": total_kalman_states,
+            "average_delay": avg_delay,
+            "average_correction": avg_correction,
+            "correction_efficiency": self.correction_efficiency,
+            "synchronization_accuracy": self.synchronization_accuracy,
+            "drift_statistics": drift_stats,
+            "timing_optimization": timing_optimization,
+            "optimal_execution_window": self.optimal_execution_window,
+            "latency_compensation": self.latency_compensation
         }
-    
-    def get_correction_recommendations(self) -> List[str]:
-        """Get correction recommendations based on analysis."""
-        recommendations = []
-        stats = self.get_temporal_statistics()
-        
-        # Check correction success rate
-        if stats["correction_success_rate"] < 0.8:
-            recommendations.append("Low correction success rate. Review correction algorithms.")
-        
-        # Check drift magnitude
-        if stats["max_drift_observed"] > 1000.0:
-            recommendations.append("Large drift observed. Consider system clock synchronization.")
-        
-        # Check average drift
-        if stats["average_drift"] > 100.0:
-            recommendations.append("High average drift. Optimize timing algorithms.")
-        
-        # Check synchronization confidence
-        if stats["average_sync_confidence"] < 0.7:
-            recommendations.append("Low synchronization confidence. Improve reference timing.")
-        
-        # Check correction frequency
-        if stats["total_corrections"] > stats["total_events"] * 0.5:
-            recommendations.append("High correction frequency. Review drift thresholds.")
-        
-        return recommendations
     
     def get_trading_signals(self) -> List[Dict[str, Any]]:
         """Generate trading signals based on temporal analysis."""
         signals = []
-        stats = self.get_temporal_statistics()
         
-        # High precision timing signal
-        if stats["average_drift"] < 10.0 and stats["correction_success_rate"] > 0.95:
-            signal = {
-                "type": "high_precision_timing",
-                "average_drift": stats["average_drift"],
-                "correction_success_rate": stats["correction_success_rate"],
-                "confidence": min(1.0, 1.0 - stats["average_drift"] / 100.0),
-                "strength": stats["correction_success_rate"],
-                "timestamp": datetime.now(),
-                "metadata": {"system_time_offset": stats["system_time_offset"]}
-            }
-            signals.append(signal)
+        if not self.execution_events:
+            return signals
         
-        # Timing instability signal
-        if stats["recent_drift_std"] > 50.0:
-            signal = {
-                "type": "timing_instability",
-                "drift_std": stats["recent_drift_std"],
-                "confidence": min(1.0, stats["recent_drift_std"] / 100.0),
-                "strength": min(1.0, stats["recent_drift_std"] / 200.0),
+        # High synchronization accuracy signal
+        if self.synchronization_accuracy > 0.9:
+            signals.append({
+                "type": "high_synchronization_accuracy",
+                "accuracy": self.synchronization_accuracy,
                 "timestamp": datetime.now(),
-                "metadata": {"max_drift_observed": stats["max_drift_observed"]}
-            }
-            signals.append(signal)
+                "metadata": {
+                    "total_events": len(self.execution_events),
+                    "correction_efficiency": self.correction_efficiency
+                }
+            })
         
-        # Synchronization quality signal
-        if stats["average_sync_confidence"] > 0.9:
-            signal = {
-                "type": "high_sync_quality",
-                "sync_confidence": stats["average_sync_confidence"],
-                "confidence": stats["average_sync_confidence"],
-                "strength": stats["average_sync_confidence"],
+        # Drift anomaly signal
+        drift_stats = self.estimate_drift_deviation()
+        if abs(drift_stats["drift_trend"]) > 0.001:  # Significant drift trend
+            signals.append({
+                "type": "drift_trend_detected",
+                "drift_trend": drift_stats["drift_trend"],
+                "confidence": drift_stats["confidence"],
                 "timestamp": datetime.now(),
-                "metadata": {"synchronization_count": stats["synchronization_count"]}
-            }
-            signals.append(signal)
+                "metadata": {
+                    "drift_mean": drift_stats["drift_mean"],
+                    "drift_std": drift_stats["drift_std"]
+                }
+            })
+        
+        # Timing optimization signal
+        timing_opt = self.optimize_execution_timing()
+        if timing_opt["confidence"] > 0.8:
+            signals.append({
+                "type": "timing_optimization_ready",
+                "optimal_window": timing_opt["optimal_window"],
+                "confidence": timing_opt["confidence"],
+                "timestamp": datetime.now(),
+                "metadata": {
+                    "latency_compensation": timing_opt["latency_compensation"],
+                    "mean_delay": timing_opt["mean_delay"]
+                }
+            })
+        
+        # Anomaly detection signals
+        anomalies = self.detect_timing_anomalies()
+        for anomaly in anomalies[:5]:  # Limit to 5 most recent anomalies
+            signals.append({
+                "type": "timing_anomaly",
+                "event_id": anomaly["event_id"],
+                "z_score": anomaly["z_score"],
+                "timestamp": anomaly["timestamp"],
+                "metadata": {
+                    "delay": anomaly["delay"],
+                    "anomaly_type": anomaly["anomaly_type"]
+                }
+            })
         
         return signals
 
 
 def main() -> None:
     """Main function for testing the temporal execution correction layer."""
+    logging.basicConfig(level=logging.INFO)
+    
     # Initialize correction layer
     correction_layer = TemporalExecutionCorrectionLayer()
     
-    # Register some temporal events
+    # Simulate execution events with varying delays
     base_time = datetime.now()
     
-    for i in range(10):
-        # Simulate events with varying drift
-        drift = np.random.normal(0, 50)  # Random drift
-        expected_time = base_time + timedelta(seconds=i)
-        actual_time = expected_time + timedelta(milliseconds=drift)
+    for i in range(50):
+        # Simulate ideal and actual timestamps
+        ideal_time = base_time + timedelta(seconds=i * 0.1)
         
-        correction_layer.register_temporal_event(
-            f"test_event_{i}",
-            expected_time,
-            actual_time
+        # Add random delay (some with drift)
+        delay = np.random.normal(0.005, 0.002)  # 5ms mean, 2ms std
+        if i > 25:  # Add drift after 25 events
+            delay += 0.001 * (i - 25)  # Increasing drift
+        
+        actual_time = ideal_time + timedelta(seconds=delay)
+        
+        # Record execution event
+        event = correction_layer.record_execution_event(
+            event_id=f"event_{i}",
+            ideal_timestamp=ideal_time,
+            actual_timestamp=actual_time,
+            event_type="trade_execution"
         )
     
-    # Synchronize with reference system
-    reference_time = datetime.now()
-    sync_point = correction_layer.synchronize_system("test_system", reference_time)
-    
-    # Optimize execution timing
-    optimization_result = correction_layer.optimize_execution_timing()
-    print(f"Timing optimization: {optimization_result}")
-    
     # Get statistics
-    stats = correction_layer.get_temporal_statistics()
-    print(f"Temporal statistics: {stats}")
+    stats = correction_layer.get_correction_statistics()
+    print(f"Correction statistics: {stats}")
     
-    # Get recommendations
-    recommendations = correction_layer.get_correction_recommendations()
-    print(f"Correction recommendations: {recommendations}")
+    # Estimate drift deviation
+    drift_stats = correction_layer.estimate_drift_deviation()
+    print(f"Drift deviation: {drift_stats}")
+    
+    # Optimize timing
+    timing_opt = correction_layer.optimize_execution_timing()
+    print(f"Timing optimization: {timing_opt}")
+    
+    # Detect anomalies
+    anomalies = correction_layer.detect_timing_anomalies()
+    print(f"Detected {len(anomalies)} timing anomalies")
     
     # Get trading signals
     signals = correction_layer.get_trading_signals()

@@ -116,6 +116,11 @@ except ImportError:
 # Import core type definitions
 try:
     from core.type_defs import *  # noqa: F403, F401
+    # Import successful, but ensure we have fallback definitions available
+    from core.type_defs import (
+        BitLevel, MatrixPhase, MatrixController, IdentityState, 
+        IdentityTrace, GhostLogicState, AIFeedback, AIConsensus
+    )
 except ImportError:
     # Fallback type definitions if core module not available
     from typing import Any, Dict, List, Optional, Union
@@ -196,12 +201,12 @@ except ImportError:
         def __post_init__(self):
             if self.feedbacks is None:
                 self.feedbacks = []
-    
-    # Type aliases
-    MatrixControllerType = MatrixController
-    StateVector = np.ndarray
-    HashSignature = str
-    ConfidenceScore = float
+
+# Type aliases
+MatrixControllerType = MatrixController
+StateVector = np.ndarray
+HashSignature = str
+ConfidenceScore = float
 
 
 class FaultType(Enum):
@@ -614,9 +619,7 @@ class FaultBus:
         # ✨ NEW: Integrated Intelligence Engines
         self.dlt_engine = DLTWaveformEngine(history_size=100)
         self.riddle_engine = RiddleGEMMEngine(vector_size=STATE_VECTOR_SIZE)
-        self.multi_bit_engine = MultiBitBTCProcessor(
-            timeframes={"1m": 60, "5m": 300, "15m": 900}
-        )
+        self.multi_bit_engine = MultiBitBTCProcessor()
         self.temporal_corrector = TemporalExecutionCorrectionLayer()
         self._initialize_strategies()
 

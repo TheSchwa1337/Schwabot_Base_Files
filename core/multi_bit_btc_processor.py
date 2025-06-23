@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
 Multi-bit BTC Processor - Schwabot UROS v1.0
-============================================
+===========================================
 
-Implements multi-bit processing for Bitcoin data analysis and trading decisions.
-Critical for handling different precision levels in BTC price and volume analysis.
+Implements multi-bit depth quantized modeling of BTC price behavior using:
+- Bitplane decomposition (image-style encoding of price deltas)
+- Bitwise matrix weighting: B_i(t) = BTC_t >> i mod 2
+- Gray code sequencing for smooth logic state transitions
+- Recursive hash or memory toggles depending on market conditions
+- Integration with matrix controllers and profit vector routing
 """
 
 import numpy as np
@@ -22,12 +26,14 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class BTCDataPoint:
-    """Represents a Bitcoin data point."""
+    """Represents a Bitcoin data point with bit-level analysis."""
     timestamp: datetime
     price: float
     volume: float
     bit_level: BitLevel
     hash_signature: str
+    bitplane_encoding: np.ndarray
+    gray_code_state: int
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -41,6 +47,8 @@ class BitLevelAnalysis:
     correlation_matrix: np.ndarray
     processing_time: float
     confidence_score: float
+    bitplane_entropy: float
+    gray_code_transitions: int
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -87,6 +95,11 @@ class MultiBitBTCProcessor:
             bit_level: 0 for bit_level in BitLevel
         }
         
+        # Gray code state tracking
+        self.gray_code_states: Dict[BitLevel, int] = {
+            bit_level: 0 for bit_level in BitLevel
+        }
+        
         logger.info("Multi-bit BTC Processor initialized")
     
     def process_btc_data(
@@ -96,13 +109,23 @@ class MultiBitBTCProcessor:
         bit_level: BitLevel,
         metadata: Optional[Dict[str, Any]] = None
     ) -> BTCDataPoint:
-        """Process BTC data at specified bit level."""
+        """Process BTC data at specified bit level with bitplane decomposition."""
         start_time = time.time()
         
         try:
             # Generate hash signature
             hash_input = f"{price}_{volume}_{bit_level.value}_{int(time.time())}"
             hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
+            
+            # Bitplane decomposition: B_i(t) = BTC_t >> i mod 2
+            price_int = int(price * 100)  # Convert to integer for bitwise operations
+            bitplane_encoding = np.array([
+                (price_int >> i) & 1 for i in range(bit_level.value)
+            ], dtype=np.uint8)
+            
+            # Gray code sequencing for smooth logic state transitions
+            gray_code_state = self._compute_gray_code(price_int, bit_level)
+            self.gray_code_states[bit_level] = gray_code_state
             
             # Create data point
             data_point = BTCDataPoint(
@@ -111,6 +134,8 @@ class MultiBitBTCProcessor:
                 volume=volume,
                 bit_level=bit_level,
                 hash_signature=hash_signature,
+                bitplane_encoding=bitplane_encoding,
+                gray_code_state=gray_code_state,
                 metadata=metadata or {}
             )
             
@@ -137,8 +162,17 @@ class MultiBitBTCProcessor:
             logger.error(f"Error processing BTC data at {bit_level.value}-bit: {e}")
             raise
     
-    def analyze_bit_level(self, bit_level: BitLevel) -> BitLevelAnalysis:
-        """Analyze data for a specific bit level."""
+    def _compute_gray_code(self, value: int, bit_level: BitLevel) -> int:
+        """Compute Gray code for smooth logic state transitions."""
+        # Convert to binary and apply Gray code transformation
+        binary = format(value % (2 ** bit_level.value), f'0{bit_level.value}b')
+        gray = binary[0]
+        for i in range(1, len(binary)):
+            gray += str(int(binary[i]) ^ int(binary[i-1]))
+        return int(gray, 2)
+    
+    def analyze_bit_level(self, bit_level: BitLevel) -> Optional[BitLevelAnalysis]:
+        """Analyze data for a specific bit level with bitplane analysis."""
         if not self.btc_data[bit_level]:
             logger.warning(f"No data available for {bit_level.value}-bit analysis")
             return None
@@ -175,12 +209,18 @@ class MultiBitBTCProcessor:
         # Calculate correlation matrix
         correlation_matrix = np.corrcoef([prices, volumes])
         
+        # Calculate bitplane entropy
+        bitplane_entropy = self._calculate_bitplane_entropy(data_points, bit_level)
+        
+        # Count Gray code transitions
+        gray_code_transitions = self._count_gray_code_transitions(data_points)
+        
         # Calculate processing time
         processing_time = time.time() - start_time
         
         # Calculate confidence score
         confidence_score = self._calculate_confidence_score(
-            price_stats, volume_stats, len(data_points)
+            price_stats, volume_stats, len(data_points), bitplane_entropy
         )
         
         # Create analysis object
@@ -191,7 +231,9 @@ class MultiBitBTCProcessor:
             volume_stats=volume_stats,
             correlation_matrix=correlation_matrix,
             processing_time=processing_time,
-            confidence_score=confidence_score
+            confidence_score=confidence_score,
+            bitplane_entropy=bitplane_entropy,
+            gray_code_transitions=gray_code_transitions
         )
         
         self.bit_level_analyses[bit_level] = analysis
@@ -200,42 +242,89 @@ class MultiBitBTCProcessor:
         return analysis
     
     def _calculate_skewness(self, data: np.ndarray) -> float:
-        """Calculate skewness of data."""
+        """Calculate skewness of the data."""
+        if len(data) < 3:
+            return 0.0
         mean = np.mean(data)
         std = np.std(data)
         if std == 0:
             return 0.0
-        return np.mean(((data - mean) / std) ** 3)
+        skewness = np.mean(((data - mean) / std) ** 3)
+        return float(skewness)
     
     def _calculate_kurtosis(self, data: np.ndarray) -> float:
-        """Calculate kurtosis of data."""
+        """Calculate kurtosis of the data."""
+        if len(data) < 4:
+            return 0.0
         mean = np.mean(data)
         std = np.std(data)
         if std == 0:
             return 0.0
-        return np.mean(((data - mean) / std) ** 4) - 3
+        kurtosis = np.mean(((data - mean) / std) ** 4) - 3
+        return float(kurtosis)
+    
+    def _calculate_bitplane_entropy(self, data_points: List[BTCDataPoint], bit_level: BitLevel) -> float:
+        """Calculate entropy of bitplane encodings."""
+        if not data_points:
+            return 0.0
+        
+        # Collect all bitplane encodings
+        bitplanes = np.array([dp.bitplane_encoding for dp in data_points])
+        
+        # Calculate entropy for each bit position
+        entropies = []
+        for i in range(bit_level.value):
+            bit_values = bitplanes[:, i]
+            unique, counts = np.unique(bit_values, return_counts=True)
+            probabilities = counts / len(bit_values)
+            entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
+            entropies.append(entropy)
+        
+        return float(np.mean(entropies))
+    
+    def _count_gray_code_transitions(self, data_points: List[BTCDataPoint]) -> int:
+        """Count the number of Gray code state transitions."""
+        if len(data_points) < 2:
+            return 0
+        
+        transitions = 0
+        for i in range(1, len(data_points)):
+            if data_points[i].gray_code_state != data_points[i-1].gray_code_state:
+                transitions += 1
+        
+        return transitions
     
     def _calculate_confidence_score(
         self,
         price_stats: Dict[str, float],
         volume_stats: Dict[str, float],
-        data_count: int
+        data_count: int,
+        bitplane_entropy: float
     ) -> float:
-        """Calculate confidence score for analysis."""
+        """Calculate confidence score based on data quality and bitplane entropy."""
         # Base confidence on data count
-        count_confidence = min(1.0, data_count / 1000.0)
+        count_confidence = min(data_count / 100.0, 1.0)
         
         # Price stability confidence
-        price_cv = price_stats["std"] / price_stats["mean"] if price_stats["mean"] != 0 else 0
+        price_cv = price_stats["std"] / (price_stats["mean"] + 1e-8)
         price_confidence = max(0.0, 1.0 - price_cv)
         
         # Volume stability confidence
-        volume_cv = volume_stats["std"] / volume_stats["mean"] if volume_stats["mean"] != 0 else 0
+        volume_cv = volume_stats["std"] / (volume_stats["mean"] + 1e-8)
         volume_confidence = max(0.0, 1.0 - volume_cv)
         
-        # Combined confidence
-        confidence = (count_confidence + price_confidence + volume_confidence) / 3.0
-        return min(1.0, confidence)
+        # Bitplane entropy confidence (higher entropy = more information)
+        entropy_confidence = min(bitplane_entropy, 1.0)
+        
+        # Weighted average
+        confidence = (
+            0.3 * count_confidence +
+            0.3 * price_confidence +
+            0.2 * volume_confidence +
+            0.2 * entropy_confidence
+        )
+        
+        return float(confidence)
     
     def analyze_cross_bit_correlations(self) -> List[CrossBitCorrelation]:
         """Analyze correlations between different bit levels."""
@@ -248,13 +337,7 @@ class MultiBitBTCProcessor:
                 if correlation:
                     correlations.append(correlation)
         
-        self.cross_bit_correlations.extend(correlations)
-        
-        # Keep only recent correlations
-        if len(self.cross_bit_correlations) > 100:
-            self.cross_bit_correlations = self.cross_bit_correlations[-50:]
-        
-        logger.info(f"Calculated {len(correlations)} cross-bit correlations")
+        self.cross_bit_correlations = correlations
         return correlations
     
     def _calculate_cross_bit_correlation(
@@ -264,41 +347,42 @@ class MultiBitBTCProcessor:
         if not self.btc_data[source_level] or not self.btc_data[target_level]:
             return None
         
-        # Get recent data points
-        source_data = self.btc_data[source_level][-100:]
+        # Get recent data points from both levels
+        source_data = self.btc_data[source_level][-100:]  # Last 100 points
         target_data = self.btc_data[target_level][-100:]
         
-        # Align timestamps (simplified)
-        min_length = min(len(source_data), len(target_data))
-        source_prices = [dp.price for dp in source_data[-min_length:]]
-        target_prices = [dp.price for dp in target_data[-min_length:]]
-        
-        if len(source_prices) < 10:  # Need minimum data points
+        # Align data by timestamp (simplified)
+        min_len = min(len(source_data), len(target_data))
+        if min_len < 10:
             return None
+        
+        source_prices = np.array([dp.price for dp in source_data[-min_len:]])
+        target_prices = np.array([dp.price for dp in target_data[-min_len:]])
         
         # Calculate correlation
         correlation_matrix = np.corrcoef(source_prices, target_prices)
         correlation_value = correlation_matrix[0, 1]
         
-        # Calculate significance (simplified)
-        significance = 1.0 - abs(correlation_value)
+        if np.isnan(correlation_value):
+            return None
         
-        correlation = CrossBitCorrelation(
+        # Calculate significance (simplified)
+        significance = min(abs(correlation_value), 1.0)
+        
+        return CrossBitCorrelation(
             source_bit_level=source_level,
             target_bit_level=target_level,
-            correlation_value=correlation_value,
-            significance=significance
+            correlation_value=float(correlation_value),
+            significance=float(significance)
         )
-        
-        return correlation
     
     def optimize_bit_level_selection(self, target_accuracy: float = 0.95) -> BitLevel:
-        """Optimize bit level selection based on performance and accuracy."""
-        if not self.optimization_enabled:
-            return BitLevel.SIXTEEN_BIT  # Default
+        """Optimize bit level selection based on performance metrics."""
+        if not self.bit_level_analyses:
+            return BitLevel.EIGHT_BIT  # Default
         
-        # Calculate performance metrics for each bit level
-        performance_scores = {}
+        best_level = BitLevel.EIGHT_BIT
+        best_score = 0.0
         
         for bit_level in BitLevel:
             if bit_level not in self.bit_level_analyses:
@@ -306,70 +390,51 @@ class MultiBitBTCProcessor:
             
             analysis = self.bit_level_analyses[bit_level]
             
-            # Performance score based on multiple factors
+            # Calculate optimization score
             confidence_score = analysis.confidence_score
-            processing_efficiency = 1.0 / (analysis.processing_time + 1e-6)
-            error_rate = 1.0 / (self.error_counts[bit_level] + 1)
+            entropy_score = min(analysis.bitplane_entropy, 1.0)
+            transition_score = min(analysis.gray_code_transitions / 100.0, 1.0)
             
-            # Weighted performance score
-            performance_score = (
+            # Weighted score
+            score = (
                 0.4 * confidence_score +
-                0.3 * processing_efficiency +
-                0.3 * error_rate
+                0.3 * entropy_score +
+                0.3 * transition_score
             )
             
-            performance_scores[bit_level] = performance_score
+            if score > best_score:
+                best_score = score
+                best_level = bit_level
         
-        if not performance_scores:
-            return BitLevel.SIXTEEN_BIT  # Default
-        
-        # Select best performing bit level
-        best_level = max(performance_scores, key=performance_scores.get)
-        
-        logger.info(f"Optimized bit level selection: {best_level.value}-bit")
+        logger.info(f"Selected optimal bit level: {best_level.value}-bit (score: {best_score:.3f})")
         return best_level
     
     def get_btc_statistics(self) -> Dict[str, Any]:
         """Get comprehensive BTC processing statistics."""
         total_data_points = sum(len(data) for data in self.btc_data.values())
+        total_errors = sum(self.error_counts.values())
         
-        # Data distribution by bit level
-        data_distribution = {}
-        for bit_level, data in self.btc_data.items():
-            data_distribution[bit_level.value] = len(data)
-        
-        # Processing performance
+        # Calculate average processing times
         avg_processing_times = {}
-        for bit_level, times in self.processing_times.items():
-            if times:
-                avg_processing_times[bit_level.value] = sum(times) / len(times)
+        for bit_level in BitLevel:
+            times = self.processing_times[bit_level]
+            avg_processing_times[f"{bit_level.value}_bit"] = float(np.mean(times)) if times else 0.0
+        
+        # Calculate bitplane entropy statistics
+        entropy_stats = {}
+        for bit_level in BitLevel:
+            if bit_level in self.bit_level_analyses:
+                entropy_stats[f"{bit_level.value}_bit"] = self.bit_level_analyses[bit_level].bitplane_entropy
             else:
-                avg_processing_times[bit_level.value] = 0.0
-        
-        # Error rates
-        error_rates = {}
-        for bit_level, error_count in self.error_counts.items():
-            total_processed = len(self.processing_times[bit_level])
-            error_rates[bit_level.value] = error_count / max(1, total_processed)
-        
-        # Analysis confidence scores
-        confidence_scores = {}
-        for bit_level, analysis in self.bit_level_analyses.items():
-            confidence_scores[bit_level.value] = analysis.confidence_score
-        
-        # Cross-bit correlations
-        strong_correlations = [
-            corr for corr in self.cross_bit_correlations
-            if abs(corr.correlation_value) >= self.correlation_threshold
-        ]
+                entropy_stats[f"{bit_level.value}_bit"] = 0.0
         
         return {
             "total_data_points": total_data_points,
-            "data_distribution": data_distribution,
+            "total_errors": total_errors,
+            "error_rate": total_errors / (total_data_points + 1e-8),
             "average_processing_times": avg_processing_times,
-            "error_rates": error_rates,
-            "confidence_scores": confidence_scores,
-            "strong_correlations_count": len(strong_correlations),
+            "bitplane_entropy_stats": entropy_stats,
+            "cross_bit_correlations": len(self.cross_bit_correlations),
             "optimization_enabled": self.optimization_enabled
         }
     
@@ -377,83 +442,62 @@ class MultiBitBTCProcessor:
         """Generate trading signals based on multi-bit analysis."""
         signals = []
         
-        # Generate signals from bit level analyses
-        for bit_level, analysis in self.bit_level_analyses.items():
-            if analysis.confidence_score >= self.confidence_threshold:
-                # Price trend signal
-                price_trend = self._calculate_price_trend(analysis.price_stats)
-                if abs(price_trend) > 0.1:  # Significant trend
-                    signal = {
-                        "type": "price_trend",
-                        "bit_level": bit_level.value,
-                        "trend": price_trend,
-                        "confidence": analysis.confidence_score,
-                        "strength": min(1.0, abs(price_trend)),
-                        "timestamp": datetime.now(),
-                        "metadata": {
-                            "price_stats": analysis.price_stats,
-                            "volume_stats": analysis.volume_stats
-                        }
-                    }
-                    signals.append(signal)
-                
-                # Volume anomaly signal
-                volume_anomaly = self._detect_volume_anomaly(analysis.volume_stats)
-                if volume_anomaly:
-                    signal = {
-                        "type": "volume_anomaly",
-                        "bit_level": bit_level.value,
-                        "anomaly_type": volume_anomaly,
-                        "confidence": analysis.confidence_score,
-                        "strength": 0.8,
-                        "timestamp": datetime.now(),
-                        "metadata": {
-                            "volume_stats": analysis.volume_stats
-                        }
-                    }
-                    signals.append(signal)
+        if not self.bit_level_analyses:
+            return signals
         
-        # Generate signals from cross-bit correlations
-        for correlation in self.cross_bit_correlations:
-            if abs(correlation.correlation_value) >= self.correlation_threshold:
-                signal = {
-                    "type": "cross_bit_correlation",
-                    "source_bit_level": correlation.source_bit_level.value,
-                    "target_bit_level": correlation.target_bit_level.value,
-                    "correlation_value": correlation.correlation_value,
-                    "significance": correlation.significance,
-                    "confidence": abs(correlation.correlation_value),
-                    "strength": abs(correlation.correlation_value),
-                    "timestamp": correlation.timestamp,
-                    "metadata": correlation.metadata
-                }
-                signals.append(signal)
+        # Get optimal bit level
+        optimal_level = self.optimize_bit_level_selection()
+        
+        if optimal_level in self.bit_level_analyses:
+            analysis = self.bit_level_analyses[optimal_level]
+            
+            # High confidence signal
+            if analysis.confidence_score > 0.8:
+                signals.append({
+                    "type": "high_confidence_analysis",
+                    "bit_level": optimal_level.value,
+                    "confidence": analysis.confidence_score,
+                    "timestamp": datetime.now(),
+                    "metadata": {
+                        "bitplane_entropy": analysis.bitplane_entropy,
+                        "gray_code_transitions": analysis.gray_code_transitions
+                    }
+                })
+            
+            # High entropy signal (more information)
+            if analysis.bitplane_entropy > 0.7:
+                signals.append({
+                    "type": "high_entropy_pattern",
+                    "bit_level": optimal_level.value,
+                    "entropy": analysis.bitplane_entropy,
+                    "timestamp": datetime.now(),
+                    "metadata": {
+                        "confidence_score": analysis.confidence_score,
+                        "data_points": len(analysis.data_points)
+                    }
+                })
+            
+            # Cross-bit correlation signals
+            for correlation in self.cross_bit_correlations:
+                if correlation.correlation_value > 0.8:
+                    signals.append({
+                        "type": "strong_cross_bit_correlation",
+                        "source_level": correlation.source_bit_level.value,
+                        "target_level": correlation.target_bit_level.value,
+                        "correlation": correlation.correlation_value,
+                        "timestamp": datetime.now(),
+                        "metadata": {
+                            "significance": correlation.significance
+                        }
+                    })
         
         return signals
-    
-    def _calculate_price_trend(self, price_stats: Dict[str, float]) -> float:
-        """Calculate price trend from statistics."""
-        # Use skewness as trend indicator
-        skewness = price_stats.get("skewness", 0.0)
-        return np.tanh(skewness)  # Normalize to [-1, 1]
-    
-    def _detect_volume_anomaly(self, volume_stats: Dict[str, float]) -> Optional[str]:
-        """Detect volume anomalies."""
-        # Check for high kurtosis (fat tails)
-        kurtosis = volume_stats.get("kurtosis", 0.0)
-        if kurtosis > 3.0:
-            return "high_kurtosis"
-        
-        # Check for high skewness
-        skewness = volume_stats.get("skewness", 0.0)
-        if abs(skewness) > 2.0:
-            return "high_skewness"
-        
-        return None
 
 
 def main() -> None:
     """Main function for testing the multi-bit BTC processor."""
+    logging.basicConfig(level=logging.INFO)
+    
     # Initialize processor
     processor = MultiBitBTCProcessor()
     
@@ -463,8 +507,7 @@ def main() -> None:
     base_volume = 1000.0
     
     # Process data at different bit levels
-    for i in range(100):
-        # Simulate price movement
+    for i in range(50):
         price_change = np.random.normal(0, 100)
         volume_change = np.random.normal(0, 100)
         
@@ -483,7 +526,7 @@ def main() -> None:
     
     # Analyze cross-bit correlations
     correlations = processor.analyze_cross_bit_correlations()
-    print(f"Found {len(correlations)} cross-bit correlations")
+    print(f"Cross-bit correlations: {len(correlations)}")
     
     # Get statistics
     stats = processor.get_btc_statistics()
