@@ -15,9 +15,9 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: Run flake8
-        run: flake8 core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py tests/
+        run: flake8 core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py tests/
       - name: Run mypy
-        run: mypy core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py
+        run: mypy core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py
       - name: Run black (check only)
         run: black --check .
       - name: Run isort (check only)
@@ -26,17 +26,17 @@ jobs:
 # =====================================
 
 # - name: Run pylint (Enhanced linting)
-#   run: pylint core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py --disable=C0114,C0116
+#   run: pylint core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py --disable=C0114,C0116
 
 # - name: Security scan with bandit (CRITICAL for trading systems)
-#   run: bandit -r core/ dlt_waveform_engine.py multi_bit_btc_processor.py profit_routing_engine.py temporal_execution_correction_layer.py post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py fix_critical_issues.py
+#   run: bandit -r core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py
 
 # - name: Check dependencies for vulnerabilities
 #   run: safety check
 
 # - name: Run tests with coverage
 #   run: |
-#     pytest tests/ --cov=core --cov=dlt_waveform_engine --cov=multi_bit_btc_processor --cov=profit_routing_engine --cov-report=xml --cov-report=html
+#     pytest tests/ --cov=core --cov=core.dlt_waveform_engine --cov=core.multi_bit_btc_processor --cov=core.profit_routing_engine --cov-report=xml --cov-report=html
 
 # - name: Upload coverage to Codecov
 #   uses: codecov/codecov-action@v3

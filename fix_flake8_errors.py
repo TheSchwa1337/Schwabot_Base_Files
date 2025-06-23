@@ -22,12 +22,6 @@ class Flake8ErrorFixer:
     def __init__(self):
         """Initialize the fixer."""
         self.files_to_check = [
-            "dlt_waveform_engine.py",
-            "multi_bit_btc_processor.py", 
-            "profit_routing_engine.py",
-            "temporal_execution_correction_layer.py",
-            "post_failure_recovery_intelligence_loop.py",
-            "fix_critical_issues.py",
             "apply_windows_cli_compatibility.py"
         ]
         
@@ -57,7 +51,8 @@ class Flake8ErrorFixer:
             "multi_bit_btc_processor.py", 
             "profit_routing_engine.py",
             "temporal_execution_correction_layer.py",
-            "post_failure_recovery_intelligence_loop.py"
+            "post_failure_recovery_intelligence_loop.py",
+            "fix_critical_issues.py"
         ]
     
     def check_file_existence(self):
@@ -161,7 +156,8 @@ class Flake8ErrorFixer:
             "apply_windows_cli_compatibility.py",
             "apply_comprehensive_architecture_integration.py",
             ".flake8",
-            "pyproject.toml"
+            "pyproject.toml",
+            ".github/workflows/ci.yml"
         ]
         
         fixed_references = []
@@ -181,12 +177,23 @@ class Flake8ErrorFixer:
                         ('"profit_routing_engine.py"', '"core/profit_routing_engine.py"'),
                         ('"temporal_execution_correction_layer.py"', '"core/temporal_execution_correction_layer.py"'),
                         ('"post_failure_recovery_intelligence_loop.py"', '"core/post_failure_recovery_intelligence_loop.py"'),
+                        ('"fix_critical_issues.py"', ''),  # Remove this file reference
+                        ('dlt_waveform_engine.py', 'core/dlt_waveform_engine.py'),
+                        ('multi_bit_btc_processor.py', 'core/multi_bit_btc_processor.py'),
+                        ('profit_routing_engine.py', 'core/profit_routing_engine.py'),
+                        ('temporal_execution_correction_layer.py', 'core/temporal_execution_correction_layer.py'),
+                        ('post_failure_recovery_intelligence_loop.py', 'core/post_failure_recovery_intelligence_loop.py'),
+                        ('fix_critical_issues.py', ''),  # Remove this file reference
                     ]
                     
                     for old_ref, new_ref in replacements:
                         if old_ref in content:
-                            content = content.replace(old_ref, new_ref)
-                            fixed_references.append(f"{config_file}: {old_ref} → {new_ref}")
+                            if new_ref:  # Only replace if new_ref is not empty
+                                content = content.replace(old_ref, new_ref)
+                                fixed_references.append(f"{config_file}: {old_ref} → {new_ref}")
+                            else:  # Remove the reference entirely
+                                content = content.replace(old_ref, '')
+                                fixed_references.append(f"{config_file}: removed {old_ref}")
                     
                     if content != original_content:
                         with open(config_file, 'w', encoding='utf-8') as f:
@@ -238,21 +245,19 @@ class Flake8ErrorFixer:
         print("\nCorrect flake8 command:")
         print("=" * 30)
         
+        # Get existing directories and files
         existing_dirs = [d for d in self.directories_to_check if os.path.exists(d)]
         existing_files = [f for f in self.files_to_check if os.path.exists(f)]
         existing_core_files = [f for f in self.core_files if os.path.exists(f)]
         
-        cmd = ["python", "-m", "flake8"] + existing_dirs + existing_files + existing_core_files
-        
-        print("Use this command instead:")
-        print(" ".join(cmd))
-        
+        cmd = "flake8 " + " ".join(existing_dirs + existing_files + existing_core_files)
+        print(cmd)
         return cmd
     
     def run(self):
         """Run the complete fix process."""
-        print("Flake8 E902 Error Fixer")
-        print("=" * 50)
+        print("🔧 Flake8 E902 Error Fixer")
+        print("=" * 40)
         
         # Step 1: Check file existence
         missing_files, existing_files = self.check_file_existence()
@@ -264,44 +269,50 @@ class Flake8ErrorFixer:
         missing_dirs, existing_dirs = self.check_directories()
         
         # Step 4: Remove stub files
-        removed_files = self.remove_stub_files(missing_files)
+        removed_files = self.remove_stub_files(missing_files + self.problematic_files)
         
         # Step 5: Fix file references
         fixed_references = self.fix_file_references()
         
-        # Step 6: Generate correct command
+        # Step 6: Generate correct flake8 command
         correct_cmd = self.generate_correct_flake8_command()
         
         # Step 7: Run flake8 with correct paths
-        exit_code = self.run_correct_flake8()
+        flake8_exit_code = self.run_correct_flake8()
         
         # Summary
         print("\n" + "=" * 50)
-        print("SUMMARY")
+        print("📊 SUMMARY")
         print("=" * 50)
-        print(f"Missing files: {len(missing_files)}")
-        print(f"Existing files: {len(existing_files)}")
-        print(f"Missing core files: {len(missing_core_files)}")
-        print(f"Existing core files: {len(existing_core_files)}")
-        print(f"Missing directories: {len(missing_dirs)}")
-        print(f"Existing directories: {len(existing_dirs)}")
-        print(f"Removed stub files: {len(removed_files)}")
-        print(f"Fixed references: {len(fixed_references)}")
-        print(f"Flake8 exit code: {exit_code}")
+        print(f"✅ Existing files: {len(existing_files)}")
+        print(f"❌ Missing files: {len(missing_files)}")
+        print(f"✅ Existing core files: {len(existing_core_files)}")
+        print(f"❌ Missing core files: {len(missing_core_files)}")
+        print(f"✅ Existing directories: {len(existing_dirs)}")
+        print(f"❌ Missing directories: {len(missing_dirs)}")
+        print(f"🗑️ Removed stub files: {len(removed_files)}")
+        print(f"🔧 Fixed references: {len(fixed_references)}")
+        print(f"🔍 Flake8 exit code: {flake8_exit_code}")
         
-        if exit_code == 0:
-            print("\n✅ Flake8 errors fixed successfully!")
+        if flake8_exit_code == 0:
+            print("\n🎉 SUCCESS: Flake8 passed with no errors!")
         else:
-            print(f"\n❌ Flake8 still has issues (exit code: {exit_code})")
+            print("\n⚠️ WARNING: Flake8 found some issues. Check the output above.")
         
-        return exit_code
+        return flake8_exit_code == 0
 
 
 def main():
     """Main function."""
     fixer = Flake8ErrorFixer()
-    exit_code = fixer.run()
-    sys.exit(exit_code)
+    success = fixer.run()
+    
+    if success:
+        print("\n✅ All E902 errors have been resolved!")
+        sys.exit(0)
+    else:
+        print("\n❌ Some issues remain. Please review the output above.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
