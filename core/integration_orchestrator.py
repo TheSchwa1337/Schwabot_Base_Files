@@ -543,30 +543,30 @@ class IntegrationOrchestrator:
     ) -> bool:
         """Finalize component initialization and update status."""
         if success:
-                    component.status = ComponentStatus.RUNNING
-                    self.safe_log(
+            component.status = ComponentStatus.RUNNING
+            self.safe_log(
                 "info", f"Component {component_name} initialized successfully"
-                    )
-                    return True
-                else:
-                    component.status = ComponentStatus.ERROR
-                    component.error_count += 1
-                    self.safe_log(
+            )
+            return True
+        else:
+            component.status = ComponentStatus.ERROR
+            component.error_count += 1
+            self.safe_log(
                 "error", f"Component {component_name} initialization failed"
-                    )
-                    return False
+            )
+            return False
 
     def _handle_component_initialization_error(
         self, component_name: str, error: Exception
     ) -> bool:
         """Handle errors during component initialization."""
-            self.safe_log(
+        self.safe_log(
             "error", f"Error initializing component {component_name}: {error}"
-            )
-            if component_name in self.components:
-                self.components[component_name].status = ComponentStatus.ERROR
-                self.components[component_name].error_count += 1
-            return False
+        )
+        if component_name in self.components:
+            self.components[component_name].status = ComponentStatus.ERROR
+            self.components[component_name].error_count += 1
+        return False
 
     def _initialize_mathlib_v1(self, config: Any) -> Optional[Any]:
         """Initialize MathLib V1"""
