@@ -1,67 +1,72 @@
 # SCHWABOT HYBRID ZPE-REACTIVE SYSTEM REQUIREMENTS
 # ================================================
+# Comprehensive requirements file based on actual codebase analysis
+# Last updated: 2024
 
-# Core Python dependencies
+# Core Scientific Computing (Heavily Used)
 numpy>=1.21.0
 scipy>=1.7.0
 pandas>=1.3.0
 matplotlib>=3.4.0
 
-# Mathematical and scientific computing
+# Machine Learning and Statistics
 scikit-learn>=1.0.0
 statsmodels>=0.13.0
 sympy>=1.9.0
 
-# Async and concurrency
+# Async and Concurrency (Critical for System)
 asyncio-mqtt>=0.11.0
 aiohttp>=3.8.0
 websockets>=10.0
 
-# Data processing and analysis
+# System Monitoring and Performance
 psutil>=5.8.0
 python-dateutil>=2.8.0
 pytz>=2021.1
 
-# Logging and monitoring
+# Logging and Output
 structlog>=21.1.0
 colorama>=0.4.4
 
-# Testing and development
+# Testing Framework
 pytest>=6.2.0
 pytest-asyncio>=0.15.0
 pytest-cov>=2.12.0
 
-# Code quality and linting
+# Code Quality and Development Tools
 flake8>=4.0.0
 black>=21.7b0
 isort>=5.9.0
 mypy>=0.910
 
-# Type checking and validation
+# Data Validation and Type Checking
 pydantic>=1.8.0
 typing-extensions>=3.10.0
 
-# JSON and data serialization
+# High-Performance JSON Processing
 ujson>=4.0.0
 orjson>=3.6.0
 
-# Cryptography and hashing
+# Cryptography and Security
 cryptography>=3.4.0
-hashlib-compat>=1.0.0
 
-# Memory and performance optimization
+# Memory and Performance Optimization
 memory-profiler>=0.60.0
 line-profiler>=3.3.0
 
-# Optional: GPU acceleration (if available)
-# cupy-cuda11x>=9.0.0  # Uncomment if CUDA is available
-# torch>=1.9.0  # Uncomment if PyTorch is needed
+# Web Framework (for API Gateway)
+fastapi>=0.68.0
+uvicorn>=0.15.0
 
-# Optional: Advanced mathematical libraries
-# numba>=0.56.0  # JIT compilation for performance
-# cython>=0.29.0  # C extensions for speed
+# Configuration and Data Formats
+pyyaml>=5.4.0
+toml>=0.10.0
 
-# Development and debugging
+# HTTP Client (for API calls)
+requests>=2.26.0
+urllib3>=1.26.0
+
+# Development and Debugging
 ipython>=7.25.0
 jupyter>=1.0.0
 notebook>=6.4.0
@@ -70,47 +75,50 @@ notebook>=6.4.0
 sphinx>=4.0.0
 sphinx-rtd-theme>=0.5.0
 
-# Security and vulnerability scanning
+# Security and Vulnerability Scanning
 bandit>=1.7.0
 safety>=2.3.0
 
-# Environment management
+# Environment Management
 python-dotenv>=0.19.0
 configparser>=5.0.0
 
-# File and path handling
+# File and Path Handling
 pathlib2>=2.3.0
 watchdog>=2.1.0
 
-# Network and API handling
-requests>=2.26.0
-urllib3>=1.26.0
+# Optional: GPU Acceleration (Uncomment if needed)
+# cupy-cuda11x>=9.0.0  # For CUDA acceleration
+# torch>=1.9.0  # For PyTorch ML models
 
-# Database and persistence (if needed)
+# Optional: Advanced Mathematical Libraries (Uncomment if needed)
+# numba>=0.56.0  # JIT compilation for performance
+# cython>=0.29.0  # C extensions for speed
+
+# Optional: Database and Persistence (Uncomment if needed)
 # sqlalchemy>=1.4.0
 # redis>=3.5.0
 
-# Time series analysis
+# Optional: Time Series Analysis (Uncomment if needed)
 # arch>=4.19.0  # For GARCH models
 # pykalman>=0.9.0  # For Kalman filtering
 
-# Signal processing
-# scipy.signal  # Included with scipy
+# Optional: Signal Processing (Uncomment if needed)
 # librosa>=0.8.0  # For audio-like signal processing
 
-# Machine learning (if needed)
+# Optional: Machine Learning (Uncomment if needed)
 # tensorflow>=2.6.0
 # keras>=2.6.0
 
-# Visualization (if needed)
+# Optional: Visualization (Uncomment if needed)
 # plotly>=5.0.0
 # seaborn>=0.11.0
 # bokeh>=2.3.0
 
-# Performance monitoring
+# Optional: Performance Monitoring (Uncomment if needed)
 # prometheus-client>=0.11.0
 # grafana-api>=1.0.0
 
-# Error tracking and monitoring
+# Optional: Error Tracking and Monitoring (Uncomment if needed)
 # sentry-sdk>=1.3.0
 # rollbar>=0.16.0 
