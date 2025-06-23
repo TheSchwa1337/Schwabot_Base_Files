@@ -1,0 +1,2 @@
+﻿core\drift_phase_monitor.py: "flake8-docstrings[D]" failed during execution due to MemoryError()
+Run flake8 with greater verbosity to see more details

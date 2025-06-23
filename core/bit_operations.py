@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""bit_operations.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""Bit operations module - temporary stub.
 
-The original file failed to parse; a stub was generated so the package
-remains importable.  Replace with a clean implementation ASAP.
+This placeholder exists so that imports resolve while the real
+bit_operations module is under development. Replace this file with
+an actual implementation as soon as possible.
 """
 
 
 def main() -> None:
     """Stub main function."""
+    pass
+
+
 if __name__ == "__main__":
     main()

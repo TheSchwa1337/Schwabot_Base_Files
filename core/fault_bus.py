@@ -87,7 +87,7 @@ except ImportError:
 
 # Import core type definitions
 try:
-    from core.type_defs import *
+    from core.type_defs import *  # noqa: F403, F401
 except ImportError:
     # Fallback type definitions if core module not available
     pass
@@ -573,7 +573,7 @@ class FaultBus:
             "severity": 0.3,  # Event severity
             "urgency": 0.25,  # Fault type urgency
             "system_load": -0.2,  # Negative: high load favors async
-            "resolver_cost": -DEFAULT_INTERVAL5,  # Negative: high cost favors async
+            "resolver_cost": -DEFAULT_INTERVAL,  # Negative: high cost favors async
             "profit_opportunity": 0.2,  # Profit potential
         }
 
@@ -894,8 +894,7 @@ class FaultBus:
                     self.cli_handler.log_safe(
                         logging,
                         "info",
-                        f"   Path: {selected_path} (confidence: {
-                            dispatch_confidence:.3f})",
+                        f"   Path: {selected_path} (confidence: {dispatch_confidence:.3f})",
                     )
                     self.cli_handler.log_safe(
                         logging,
@@ -915,8 +914,7 @@ class FaultBus:
                     self.cli_handler.log_safe(
                         logging,
                         "info",
-                        f"   Resonance: {
-                            ril_result['resonance_strength']:.3f}",
+                        f"   Resonance: {ril_result['resonance_strength']:.3f}",
                     )
 
                     # Route to appropriate execution path based on corridor
@@ -1143,8 +1141,6 @@ class FaultBus:
         self, ril_result: Dict, execution_time: float, success: bool
     ) -> None:
         """Update corridor engine with execution feedback for learning"""
-        NORMALIZATION_FACTOR if success else -0.5
-
         # Update thermal state based on execution
         if execution_time > NORMALIZATION_FACTOR:  # Slow execution
             self.current_market_data["thermal_state"] += DEFAULT_INTERVAL
@@ -1160,8 +1156,9 @@ class FaultBus:
                 self.current_market_data["ghost_signal"] + DEFAULT_INTERVAL,
             )
         else:
+            # Restore original -0.5 penalty for more aggressive fault dampening
             self.current_market_data["ghost_signal"] = max(
-                0.0, self.current_market_data["ghost_signal"] - 0.2
+                0.0, self.current_market_data["ghost_signal"] - 0.5
             )
 
     def update_market_signals(

@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
-"""entry_exit_vector_analyzer – routing elasticity analysis for entry/exit.
+"""Entry/exit vector analyzer with routing elasticity.
 
-Implements the routing elasticity logic:
-    Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t
-
-This module analyzes entry and exit vectors using routing elasticity
-calculations for optimal timing decisions.
+This module implements Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t routing elasticity
+for entry/exit signal analysis in Schwabot's mathematical trading framework.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Callable, Sequence
+from typing import Callable, Sequence, Tuple
 
 import numpy as np
 
-__all__: list[str] = [
+__all__ = [
     "EntryExitVectorAnalyzer",
     "compute_routing_elasticity",
     "analyze_entry_exit_vectors",
 ]
 
 
-@dataclass(slots=True)
 class EntryExitVectorAnalyzer:
     """Entry/exit vector analyzer with routing elasticity."""
 
@@ -37,24 +32,33 @@ class EntryExitVectorAnalyzer:
         price_series: Sequence[float],
         timestamps: Sequence[float],
     ) -> float:
-        """Compute Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t.
+        """Compute routing elasticity Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t.
 
         Parameters
         ----------
         r_function
             Routing function Rᵢ(x, y).
-        x_positions, y_positions
-            Position coordinates for routing function.
+        x_positions
+            X-coordinate positions.
+        y_positions
+            Y-coordinate positions.
         price_series
-            Price time series P(t).
+            Price time series.
         timestamps
-            Time points t.
+            Time stamps.
+
+        Returns
+        -------
+        float
+            Routing elasticity value Λᴿ(t).
         """
         if len(x_positions) != len(y_positions):
-            raise ValueError(
-                "x_positions and y_positions must have same length"
-            )
+            raise ValueError("x_positions and y_positions must have same length")
 
+        if len(price_series) != len(timestamps):
+            raise ValueError("price_series and timestamps must have same length")
+
+        # Convert to numpy arrays
         x_array = np.asarray(x_positions, dtype=float)
         y_array = np.asarray(y_positions, dtype=float)
         prices = np.asarray(price_series, dtype=float)
@@ -165,7 +169,7 @@ class EntryExitVectorAnalyzer:
         entry_vectors: Sequence[Sequence[float]],
         exit_vectors: Sequence[Sequence[float]],
         elasticity_matrix: np.ndarray,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Compute combined entry/exit vector flows.
 
         Parameters
@@ -218,7 +222,7 @@ class EntryExitVectorAnalyzer:
 
 def compute_routing_elasticity(
     r_function: Callable[[float, float], float],
-    positions: Sequence[tuple[float, float]],
+    positions: Sequence[Tuple[float, float]],
     price_series: Sequence[float],
     dt: float = 1.0,
 ) -> float:
@@ -239,7 +243,7 @@ def analyze_entry_exit_vectors(
     exit_data: Sequence[float],
     elasticity_values: Sequence[float],
     threshold: float = 0.3,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """Analyze entry/exit vectors with elasticity threshold."""
     analyzer = EntryExitVectorAnalyzer(elasticity_threshold=threshold)
 

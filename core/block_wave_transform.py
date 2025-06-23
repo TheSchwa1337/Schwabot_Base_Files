@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Block-wise wave transform utilities.
 
-This module provides a minimal, *working* implementation of
-``define_block_wave_transform`` – a helper that will be used by Schwabot's
+This module provides a minimal, working implementation of
+define_block_wave_transform – a helper that will be used by Schwabot's
 signal-compression and GAN-preprocessing stack.
 
-The routine currently supports a **block-wise DCT-II** (via ``scipy.fftpack`` if
+The routine currently supports a block-wise DCT-II (via scipy.fftpack if
 available, else falls back to NumPy's FFT) and returns the transformed signal
-along with per-block Shannon entropy.  The advanced lattice / entropy gates can
+along with per-block Shannon entropy. The advanced lattice / entropy gates can
 be layered on top later, but this is more than enough to satisfy imports and
-pass Flake 8.
+pass Flake8.
 """
 
 from __future__ import annotations
@@ -57,13 +57,13 @@ def define_block_wave_transform(
     signal
         1-D NumPy array containing the raw waveform.
     block_size
-        Number of samples per block.  Must evenly divide ``signal.size``.
+        Number of samples per block. Must evenly divide signal.size.
 
     Returns
     -------
     Tuple[np.ndarray, np.ndarray]
-        ``(transformed, entropy)`` where *transformed* is the concatenated DCT
-        coefficients and *entropy* is a vector of Shannon entropies for each
+        (transformed, entropy) where transformed is the concatenated DCT
+        coefficients and entropy is a vector of Shannon entropies for each
         block.
     """
     if signal.ndim != 1:
