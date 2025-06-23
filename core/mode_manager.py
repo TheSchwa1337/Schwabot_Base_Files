@@ -149,34 +149,18 @@ class ModeManager:
         }
 
     def get_current_mode(self: Self) -> OperationalMode:
-        """Get the current operational mode.""".
-        
+        """Return the current operational mode."""
+
         return self.current_mode
-        
-        
-        
-            def get_current_configuration(self: Self) -> ModeConfiguration:
-        
-        """Get the configuration for the current mode."""
-        
+
+    def get_current_configuration(self: Self) -> ModeConfiguration:
+        """Return the configuration for the current mode."""
+
         return self.mode_configurations[self.current_mode]
-        
-        
-        
-            def is_feature_enabled(self: Self, feature: str) -> bool:
-        
-        """
-        
-        
-        """
-        Check if a specific feature is enabled in the current mode.
-        
-        Args:
-            feature: Feature name to check
-        
-        Returns:
-            Boolean indicating if feature is enabled
-        """
+
+    def is_feature_enabled(self: Self, feature: str) -> bool:
+        """Check if a specific *feature* is enabled in the current mode."""
+
         config = self.get_current_configuration()
 
         feature_map = {

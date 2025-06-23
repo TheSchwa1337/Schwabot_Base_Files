@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ProfitEchoVelocityDriver:
-    """Profit echo velocity driver with volatility burst memory."""."""
+    """Profit echo velocity driver with volatility burst memory."""
 
     n_exponent: float = 2.0
     epsilon: float = 0.1

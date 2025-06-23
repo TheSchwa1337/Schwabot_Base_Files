@@ -32,7 +32,7 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
-    """Vectorised logistic function 1 / (1 + exp(-k·x))."""."""
+    """Vectorised logistic function 1 / (1 + exp(-k·x))."""
     return 1.0 / (1.0 + np.exp(-k * x))
 
 

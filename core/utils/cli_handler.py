@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class CLIHandler:
-    """CLI compatibility handler for Windows systems."""."""
+    """CLI compatibility handler for Windows systems."""
 
     @staticmethod
     def safe_emoji_print(message: str, force_ascii: bool = False) -> str:

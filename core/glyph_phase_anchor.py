@@ -21,7 +21,7 @@ _DEFAULT_WHEEL: Final = 16
 def phase_anchor_index(
     glyph_hash: str, *, wheel_size: int = _DEFAULT_WHEEL
 ) -> int:
-    """Return deterministic phase index in ``[0, wheel_size)`` for *glyph_hash*."""."""
+    """Return deterministic phase index in ``[0, wheel_size)`` for *glyph_hash*."""
     if len(glyph_hash) != 64:
         raise ValueError("glyph_hash must be 64-char SHA-256 hex")
     first32 = glyph_hash[:8]

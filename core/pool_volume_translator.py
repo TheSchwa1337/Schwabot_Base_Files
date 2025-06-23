@@ -26,7 +26,7 @@ _EPS: Final = 1e-9
 
 
 def _relative_volatility(volumes: np.ndarray) -> float:
-    """TODO: document _relative_volatility."""."""
+    """TODO: document _relative_volatility."""
     if volumes.size == 0:
         return 0.0
     mu = float(np.mean(volumes))

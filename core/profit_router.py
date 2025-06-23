@@ -163,7 +163,7 @@ def route_profit(
     try:
         if profit_amount <= 0:
             logger.warning(f"Invalid profit amount: {profit_amount}")
-            return {asset: 0.0 for asset in ASSETS}
+            return dict.fromkeys(ASSETS, 0.0)
 
         # Use base matrix if none provided
         if allocation_matrix is None:
@@ -206,7 +206,7 @@ def route_profit(
 
     except Exception as e:
         logger.error(f"Error routing profit: {e}")
-        return {asset: 0.0 for asset in ASSETS}
+        return dict.fromkeys(ASSETS, 0.0)
 
 
 def analyze_allocation_efficiency(
@@ -380,7 +380,7 @@ class ProfitRouter:
         recent_allocations = self.allocation_history[-10:]  # Last 10 allocations
 
         # Calculate average allocations
-        avg_allocations = {asset: 0.0 for asset in ASSETS}
+        avg_allocations = dict.fromkeys(ASSETS, 0.0)
         total_profit = 0.0
 
         for record in recent_allocations:
@@ -395,7 +395,7 @@ class ProfitRouter:
                 for asset, amount in avg_allocations.items()
             }
         else:
-            avg_percentages = {asset: 0.0 for asset in ASSETS}
+            avg_percentages = dict.fromkeys(ASSETS, 0.0)
 
         return {
             "recent_count": len(recent_allocations),

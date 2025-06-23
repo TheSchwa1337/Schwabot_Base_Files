@@ -735,7 +735,6 @@ def validate_vector(
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        """TODO: document decorator."""
         def wrapper(vector: Any, *args, **kwargs) -> Any:
             """TODO: document wrapper."""
             result = _global_validator.validate_vector(
@@ -776,7 +775,6 @@ def validate_matrix(
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        """TODO: document decorator."""
         def wrapper(matrix: Any, *args, **kwargs) -> Any:
             """TODO: document wrapper."""
             result = _global_validator.validate_matrix(
@@ -813,7 +811,6 @@ def validate_entropy(window_size: int = 100):
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        """TODO: document decorator."""
         def wrapper(signal: Vector, *args, **kwargs) -> Any:
             """TODO: document wrapper."""
             result = _global_validator.validate_entropy(signal, window_size)
@@ -843,7 +840,6 @@ def validate_performance(max_time: Optional[float] = None):
 
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        """TODO: document decorator."""
         def wrapper(*args, **kwargs) -> Any:
             """TODO: document wrapper."""
             max_time or _global_validator.max_execution_time

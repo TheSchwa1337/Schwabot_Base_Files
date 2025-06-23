@@ -166,8 +166,12 @@ class HashRepairEngine:
             for hist_hash in historical_hashes:
                 similarity = self._calculate_hash_similarity(
                     failed_hash, hist_hash)
-                if (similarity > best_similarity and
-                    similarity >= self.min_similarity_threshold):
+                if all(
+                    (
+                        similarity > best_similarity,
+                        similarity >= self.min_similarity_threshold,
+                    )
+                ):
                     best_similarity = similarity
                     best_hash = hist_hash
 
@@ -198,8 +202,7 @@ class HashRepairEngine:
                     failed_hash, hist_hash)
                 if similarity >= self.min_similarity_threshold:
                     # Score based on frequency and similarity
-                    score = (frequency * self.frequency_weight +
-                            similarity * self.levenshtein_weight)
+                    score = frequency * self.frequency_weight + similarity * self.levenshtein_weight
 
                     if score > best_score:
                         best_score = score
@@ -436,10 +439,12 @@ class HashRepairEngine:
             temporal_confidence = 0.5  # Default value
 
             # Weighted combination
-            confidence = (
-                similarity_score * self.levenshtein_weight +
-                frequency_confidence * self.frequency_weight +
-                temporal_confidence * self.temporal_weight
+            confidence = sum(
+                [
+                    similarity_score * self.levenshtein_weight,
+                    frequency_confidence * self.frequency_weight,
+                    temporal_confidence * self.temporal_weight,
+                ]
             )
 
             return max(0.0, min(1.0, confidence))

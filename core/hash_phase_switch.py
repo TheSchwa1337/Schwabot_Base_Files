@@ -10,7 +10,7 @@ Current implementation
 ----------------------
 • One public function :func:`phase_hash_gate`.
 • SHA-256 hashing – cryptographically strong yet std-lib only.
-• Fully typed, ≤ 79-char lines, Flake8-clean.
+• Fully typed, <= 79-char lines, Flake8-clean.
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ _BASE_CYCLE_FALLBACK: Final = 42  # Schwabot universal harmonic constant
 
 
 def _hash_int(value: int, salt: str = "") -> int:
-    """Return 256-bit hash of *value*||*salt* as an integer."""."""
+    """Return 256-bit hash of *value*||*salt* as an integer."""
     data = f"{value}{salt}".encode()
     digest = hashlib.sha256(data).digest()
     return int.from_bytes(digest, byteorder="big", signed=False)

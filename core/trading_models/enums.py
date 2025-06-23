@@ -9,7 +9,7 @@ from enum import Enum
 
 
 class ExchangeType(Enum):
-    """Exchange type enumeration."""."""
+    """Exchange type enumeration."""
 
     COINBASE = "coinbase"
     BINANCE = "binance"
@@ -20,7 +20,7 @@ class ExchangeType(Enum):
 
 
 class OrderType(Enum):
-    """Order type enumeration."""."""
+    """Order type enumeration."""
 
     MARKET = "market"
     LIMIT = "limit"
@@ -32,14 +32,14 @@ class OrderType(Enum):
 
 
 class OrderSide(Enum):
-    """Order side enumeration."""."""
+    """Order side enumeration."""
 
     BUY = "buy"
     SELL = "sell"
 
 
 class OrderStatus(Enum):
-    """Order status enumeration."""."""
+    """Order status enumeration."""
 
     PENDING = "pending"
     OPEN = "open"
@@ -51,7 +51,7 @@ class OrderStatus(Enum):
 
 
 class DataType(Enum):
-    """Data type enumeration."""."""
+    """Data type enumeration."""
 
     TICKER = "ticker"
     ORDER_BOOK = "order_book"

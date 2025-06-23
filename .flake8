@@ -4,7 +4,7 @@
 extend-ignore = 
     D401,ANN101,ANN201,
     # Temporarily ignore style issues during architectural fixes
-    W293,W291,W292,
+    W293,W291,W292,W503,W504,W391,
     # Allow some complexity during refactoring
     C901,
     # Allow f-string issues during transition

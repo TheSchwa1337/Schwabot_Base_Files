@@ -353,7 +353,7 @@ class SchwabotIntegrationOrchestrator:
         """Topological sort of components by dependencies."""
         try:
             # Kahn's algorithm
-            in_degree = {name: 0 for name in self.components}
+            in_degree = dict.fromkeys(self.components, 0)
             graph = {name: [] for name in self.components}
 
             # Build graph and calculate in-degrees

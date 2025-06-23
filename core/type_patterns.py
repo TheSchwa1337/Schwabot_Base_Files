@@ -1,4 +1,4 @@
-"""TODO: document module."""."""
+"""Type-inference name patterns for TypeEnforcer helper."""
 
 # core/type_patterns.py
 # SCHWABOT_DYNAMIC_EXPANSION_START

@@ -41,7 +41,7 @@ _BASE_CYCLE: Final = 42  # phase_hash_gate default
 
 
 class GhostPipeline:
-    """Runtime container that evaluates ghost-mode pre-conditions."""."""
+    """Runtime container that evaluates ghost-mode pre-conditions."""
 
     entropy_threshold: float
     temp_threshold: float
@@ -54,7 +54,7 @@ class GhostPipeline:
         temp_threshold: float = _TEMP_THRESHOLD,
         base_cycle: int = _BASE_CYCLE,
     ) -> None:  # noqa: D401
-        """TODO: document __init__."""."""
+        """TODO: document __init__."""
         self.entropy_threshold = entropy_threshold
         self.temp_threshold = temp_threshold
         self.base_cycle = base_cycle
@@ -71,7 +71,7 @@ class GhostPipeline:
         *,
         salt: str = "",
     ) -> Tuple[bool, dict[str, bool]]:
-        """Return overall validity flag and individual component map."""."""
+        """Return overall validity flag and individual component map."""
         entropy_ok = sync_flux_compensator(entropy, self.entropy_threshold)
         temp_ok = thermal_delta_switch(
             temp_current, temp_previous, threshold=self.temp_threshold

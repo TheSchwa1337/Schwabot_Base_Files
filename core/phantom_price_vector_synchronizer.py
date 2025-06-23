@@ -24,7 +24,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class PhantomPriceSynchronizer:
-    """Phantom price vector synchronizer with velocity adjustment."""."""
+    """Phantom price vector synchronizer with velocity adjustment."""
 
     alpha: float = 1.0
     beta: float = 0.5
@@ -115,8 +115,8 @@ class PhantomPriceSynchronizer:
 def compute_phantom_velocity(
     price_series: Sequence[float],
     dt: float = 1.0,
-) -> np.ndarray:  # noqa: D401
-    """Compute phantom velocity from price series using gradient."""."""
+) -> np.ndarray:
+    """Compute phantom velocity from price series using gradient."""
     prices = np.asarray(price_series, dtype=float)
     if len(prices) < 2:
         return np.array([0.0])
@@ -128,7 +128,7 @@ def synchronize_price_vectors(
     timestamps: Sequence[float],
     alpha: float = 1.0,
     beta: float = 0.5,
-) -> np.ndarray:  # noqa: D401
-    """Stateless wrapper for price vector synchronization."""."""
+) -> np.ndarray:
+    """Stateless wrapper for price vector synchronization."""
     synchronizer = PhantomPriceSynchronizer(alpha=alpha, beta=beta)
     return synchronizer.synchronize_vectors(vectors, timestamps)

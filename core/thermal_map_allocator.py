@@ -17,33 +17,34 @@ from __future__ import annotations
 
 from datetime import datetime
 import logging
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from core.type_defs import *
-from core.type_defs import Callable
-from core.type_defs import core.type_defs
-from core.type_defs import EntropyMap
-from core.type_defs import from
-from core.type_defs import GrayscaleValue
-from core.type_defs import HeatCapacity
-from core.type_defs import HeatMap
-from core.type_defs import Image
-from core.type_defs import import
-from core.type_defs import Matrix
-from core.type_defs import Optional
-from core.type_defs import Pixel
-from core.type_defs import Pressure
-from core.type_defs import Temperature
-from core.type_defs import ThermalConductivity
-from core.type_defs import ThermalField
-from core.type_defs import ThermalGradient
-from core.type_defs import ThermalState
-from core.type_defs import Tuple
-from core.type_defs import typing
-from core.type_defs import Union
-from core.type_defs import Vector
+# NOTE: core.type_defs is under construction; import only the symbols that
+# currently exist or fall back to basic typing.FallbackType aliases.
+try:
+    from core.type_defs import (
+        Temperature,
+        Pressure,
+        ThermalConductivity,
+        HeatCapacity,
+        EntropyMap,
+        Vector,
+        Matrix,
+        Image,
+        ThermalState,
+    )
+except ImportError:  # pragma: no cover – fallback stubs
+    Temperature = float  # type: ignore
+    Pressure = float  # type: ignore
+    ThermalConductivity = float  # type: ignore
+    HeatCapacity = float  # type: ignore
+    EntropyMap = np.ndarray  # type: ignore
+    Vector = np.ndarray  # type: ignore
+    Matrix = np.ndarray  # type: ignore
+    Image = np.ndarray  # type: ignore
+    ThermalState = Dict[str, Any]  # type: ignore
 
 # Configure logging
 logger = logging.getLogger(__name__)

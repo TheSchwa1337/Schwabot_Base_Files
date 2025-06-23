@@ -18,7 +18,7 @@ from .base_api import ExchangeAPI
 
 
 class CoinbaseAPI(ExchangeAPI):
-    """Coinbase Pro/Advanced Trade API implementation."""."""
+    """Coinbase Pro/Advanced Trade API implementation."""
 
     def __init__(self, config: ExchangeConfig) -> None:
         """Initialize Coinbase API.

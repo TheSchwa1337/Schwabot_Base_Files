@@ -19,7 +19,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ProfitCycleAllocator:
-    """No-op profit cycle allocator stub."""."""
+    """No-op profit cycle allocator stub."""
 
     allocation_strategy: str = "noop"
 
@@ -54,5 +54,5 @@ class ProfitCycleAllocator:
 def allocate_profit_cycle(
     execution_packet: Dict[str, Any], cycles: Sequence[str] | None = None
 ) -> Dict[str, Any]:  # noqa: D401
-    """Stateless wrapper around :py:meth:`ProfitCycleAllocator.allocate`."""."""
+    """Stateless wrapper around :py:meth:`ProfitCycleAllocator.allocate`."""
     return ProfitCycleAllocator().allocate(execution_packet, cycles)

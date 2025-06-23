@@ -24,14 +24,14 @@ _THRESHOLD: Final = 0.5  # drift score ≥ threshold ⇒ relink
 
 
 def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
-    """TODO: document _hamming_dist."""."""
+    """TODO: document _hamming_dist."""
     if len(a) != len(b):
         raise ValueError("hash strings must share length")
     return sum(ch1 != ch2 for ch1, ch2 in zip(a, b)) * 4  # hex→bits (×4)
 
 
 def _softmax2(x: float, y: float) -> float:
-    """TODO: document _softmax2."""."""
+    """TODO: document _softmax2."""
     ex = math.exp(x)
     ey = math.exp(y)
     return max(ex, ey) / (ex + ey)
@@ -42,7 +42,7 @@ def drift_score(
     curr_hash: str,
     price_delta_pct: float,
 ) -> float:
-    """Return softmax-based drift score in [0,1]."""."""
+    """Return softmax-based drift score in [0,1]."""
     hamming = _hamming_dist(prev_hash, curr_hash)
     h_norm = hamming * _HAMMING_SCALE  #
     p_norm = abs(price_delta_pct) / _PRICE_SCALE
@@ -52,5 +52,5 @@ def drift_score(
 def relink_required(
     score: float, threshold: float = _THRESHOLD
 ) -> bool:  # noqa: D401
-    """TODO: document relink_required."""."""
+    """TODO: document relink_required."""
     return score >= threshold

@@ -136,7 +136,7 @@ class SimplifiedBTCIntegration:
         return safe_log(logger, level, message, context)
 
     def _initialize_exchanges(self) -> None:
-        """Initialize exchange connections."""."""
+        """Initialize exchange connections."""
         try:
             # Add default exchanges based on configuration
             default_exchange = self.config.get("default_exchange", "coinbase")
@@ -341,7 +341,7 @@ class SimplifiedBTCIntegration:
         raise ValueError("No active exchange available")
 
     def _update_performance_metrics(self) -> None:
-        """Update performance metrics."""."""
+        """Update performance metrics."""
         if not self.config.get("enable_performance_tracking", True):
             return
 
@@ -388,7 +388,7 @@ class SimplifiedBTCIntegration:
         return self.performance_metrics
 
     def _start_monitoring(self) -> None:
-        """Start monitoring thread."""."""
+        """Start monitoring thread."""
         if self.monitoring_active:
             return
 
@@ -400,7 +400,7 @@ class SimplifiedBTCIntegration:
         self.safe_log("info", "Started monitoring thread")
 
     def _monitoring_loop(self) -> None:
-        """Monitor background tasks."""."""
+        """Monitor background tasks."""
         while self.monitoring_active:
             try:
                 # Update performance metrics
@@ -416,7 +416,7 @@ class SimplifiedBTCIntegration:
 
 
 def main() -> None:
-    """Run main function for testing."""."""
+    """Run main function for testing."""
     # Create integration instance
     integration = SimplifiedBTCIntegration()
 

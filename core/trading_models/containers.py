@@ -19,7 +19,7 @@ from .enums import OrderType
 
 @dataclass
 class ExchangeConfig:
-    """Exchange configuration container."""."""
+    """Exchange configuration container."""
 
     exchange_type: ExchangeType
     api_key: str
@@ -35,7 +35,7 @@ class ExchangeConfig:
 
 @dataclass
 class OrderRequest:
-    """Order request container."""."""
+    """Order request container."""
 
     symbol: str
     side: OrderSide
@@ -50,7 +50,7 @@ class OrderRequest:
 
 @dataclass
 class OrderResponse:
-    """Order response container."""."""
+    """Order response container."""
 
     order_id: str
     client_order_id: Optional[str]
@@ -70,7 +70,7 @@ class OrderResponse:
 
 @dataclass
 class MarketData:
-    """Market data container."""."""
+    """Market data container."""
 
     symbol: str
     data_type: DataType
@@ -81,7 +81,7 @@ class MarketData:
 
 @dataclass
 class Balance:
-    """Balance container."""."""
+    """Balance container."""
 
     currency: str
     available: float
@@ -92,7 +92,7 @@ class Balance:
 
 @dataclass
 class PerformanceMetrics:
-    """Performance metrics for BTC integration."""."""
+    """Performance metrics for BTC integration."""
 
     total_orders: int
     successful_orders: int

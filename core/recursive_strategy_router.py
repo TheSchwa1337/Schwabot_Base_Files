@@ -19,7 +19,7 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class RecursiveStrategyRouter:
-    """No-op recursive router stub."""."""
+    """No-op recursive router stub."""
 
     max_depth: int = 1
 
@@ -35,5 +35,5 @@ class RecursiveStrategyRouter:
 
 
 def route_strategy(packet: Dict[str, Any]) -> Dict[str, Any]:  # noqa: D401
-    """Stateless wrapper for :py:meth:`RecursiveStrategyRouter.route`."""."""
+    """Stateless wrapper for :py:meth:`RecursiveStrategyRouter.route`."""
     return RecursiveStrategyRouter().route(packet)

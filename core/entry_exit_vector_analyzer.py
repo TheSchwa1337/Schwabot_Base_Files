@@ -221,8 +221,8 @@ def compute_routing_elasticity(
     positions: Sequence[tuple[float, float]],
     price_series: Sequence[float],
     dt: float = 1.0,
-) -> float:  # noqa: D401
-    """Compute routing elasticity Λᴿ(t) for given positions and prices."""."""
+) -> float:
+    """Compute routing elasticity Λᴿ(t) for given positions and prices."""
     analyzer = EntryExitVectorAnalyzer(dt=dt)
 
     x_pos = [pos[0] for pos in positions]
@@ -239,8 +239,8 @@ def analyze_entry_exit_vectors(
     exit_data: Sequence[float],
     elasticity_values: Sequence[float],
     threshold: float = 0.3,
-) -> tuple[np.ndarray, np.ndarray]:  # noqa: D401
-    """Analyze entry/exit vectors with elasticity threshold."""."""
+) -> tuple[np.ndarray, np.ndarray]:
+    """Analyze entry/exit vectors with elasticity threshold."""
     analyzer = EntryExitVectorAnalyzer(elasticity_threshold=threshold)
 
     # Use entry data as both price and volume gradients (simplified)

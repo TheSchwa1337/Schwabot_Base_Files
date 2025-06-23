@@ -126,13 +126,9 @@ class PhaseDriftHarmonizer:
         coherence = self.compute_phase_coherence(phase_tensor.flatten())
         
         return coherence < threshold
-        
-        
-        
-        
-        
-        class TensorMemoryFeedback:
-        """
+
+
+class TensorMemoryFeedback:
     """Implements recursive tensor function with memory retention."""
 
     def __init__(self, max_history: int = 100) -> None:

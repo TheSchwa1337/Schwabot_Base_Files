@@ -425,7 +425,7 @@ class RecursiveGlyphMapper:
 
         # Simple pathfinding using breadth-first search
         queue = [(start_glyph.glyph_id, [start_glyph.glyph_id])]
-        visited = set([start_glyph.glyph_id])
+        visited = {start_glyph.glyph_id}
 
         while queue:
             current_id, path = queue.pop(0)
@@ -770,7 +770,7 @@ class RecursiveGlyphMapper:
 
         # Factors contributing to AI readiness
         complexity_factor = min(1.0, len(pattern_glyphs) / 20.0)
-        diversity_factor = len(set(g.glyph_type for g in pattern_glyphs)) / len(
+        diversity_factor = len({g.glyph_type for g in pattern_glyphs}) / len(
             GlyphType
         )
         connectivity_factor = sum(len(g.connected_glyphs) for g in pattern_glyphs) / (

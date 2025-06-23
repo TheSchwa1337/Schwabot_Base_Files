@@ -19,7 +19,7 @@ _K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: float) -> float:  # noqa: D401
-    """TODO: document _sigmoid."""."""
+    """TODO: document _sigmoid."""
     return 1.0 / (1.0 + math.exp(-_K * x))
 
 

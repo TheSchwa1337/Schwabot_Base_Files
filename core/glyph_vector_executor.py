@@ -24,7 +24,7 @@ __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 
 @dataclass(slots=True)
 class GlyphInstruction:
-    """Executable instruction derived from glyph vector processing."""."""
+    """Executable instruction derived from glyph vector processing."""
 
     action: str  # "buy", "sell", "hold", "wait"
     volume: float
