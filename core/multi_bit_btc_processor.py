@@ -1,702 +1,498 @@
 #!/usr/bin/env python3
 """
-Schwabot Multi-Bit BTC Processor
-================================
+Multi-bit BTC Processor - Schwabot UROS v1.0
+============================================
 
-Multi-timeframe Bitcoin processor with advanced bit-level analysis.
-Provides comprehensive BTC data processing across different timeframes and bit depths.
+Implements multi-bit processing for Bitcoin data analysis and trading decisions.
+Critical for handling different precision levels in BTC price and volume analysis.
 """
 
+import numpy as np
 import logging
 import time
-import numpy as np
-import json
-import yaml
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple, Any
+from dataclasses import dataclass, field
+from datetime import datetime
 import hashlib
-from pathlib import Path
-import threading
-from collections import deque
-from enum import Enum
 
-from core.utils.math_utils import (
-    wavelet_decompose,
-    calculate_temporal_confidence_merge,
-)
+from core.type_defs import BitLevel, MatrixPhase, MatrixControllerType
 
 logger = logging.getLogger(__name__)
 
 
-class BitLevel(Enum):
-    """Bit level enumeration"""
-    FOUR_BIT = 4
-    EIGHT_BIT = 8
-    SIXTEEN_BIT = 16
-    THIRTY_TWO_BIT = 32
-    FORTY_TWO_BIT = 42
-
-
-class Timeframe(Enum):
-    """Timeframe enumeration"""
-    ONE_MINUTE = "1m"
-    FIVE_MINUTES = "5m"
-    FIFTEEN_MINUTES = "15m"
-    ONE_HOUR = "1h"
-    FOUR_HOURS = "4h"
-    ONE_DAY = "1d"
-
-
 @dataclass
 class BTCDataPoint:
-    """BTC data point structure"""
+    """Represents a Bitcoin data point."""
     timestamp: datetime
     price: float
     volume: float
-    high: float
-    low: float
-    open_price: float
-    close_price: float
     bit_level: BitLevel
-    timeframe: Timeframe
     hash_signature: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class BitAnalysis:
-    """Bit-level analysis result"""
-    analysis_id: str
-    timestamp: datetime
+class BitLevelAnalysis:
+    """Represents analysis results for a specific bit level."""
     bit_level: BitLevel
-    timeframe: Timeframe
-    price_bits: List[int]
-    volume_bits: List[int]
-    bit_patterns: Dict[str, Any]
-    entropy_score: float
+    data_points: List[BTCDataPoint]
+    price_stats: Dict[str, float]
+    volume_stats: Dict[str, float]
+    correlation_matrix: np.ndarray
+    processing_time: float
     confidence_score: float
-    prediction_vector: List[float]
-    metadata: Dict[str, Any]
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-def evaluate_btc_vector(bits_a: int, bits_b: int) -> int:
-    """
-    Perform XOR-based fusion for signal precision from dual bit streams.
-    
-    Args:
-        bits_a: First bit stream value
-        bits_b: Second bit stream value
-        
-    Returns:
-        Fused binary vector indicating trade signal tier
-    """
-    try:
-        # XOR fusion with amplification
-        base_result = bits_a ^ bits_b
-        
-        # Apply golden ratio amplification for enhanced precision
-        amplified = int(base_result * 1.618) & 0xFF
-        
-        return amplified
-        
-    except Exception as e:
-        logger.error(f"Error in BTC vector evaluation: {e}")
-        return 0
-
-
-def entropy_weighted_result(signal: int, entropy_factor: float) -> float:
-    """
-    Adjusts signal strength by volatility entropy, suppressing noise.
-    
-    Args:
-        signal: Raw signal value
-        entropy_factor: Entropy weighting factor (0.0 to 1.0)
-        
-    Returns:
-        Entropy-weighted signal strength
-    """
-    try:
-        # Clamp entropy factor to valid range
-        clamped_entropy = max(0.0, min(1.0, entropy_factor))
-        
-        # Apply entropy weighting with decay
-        weighted_result = signal * clamped_entropy * 0.95
-        
-        return weighted_result
-        
-    except Exception as e:
-        logger.error(f"Error in entropy weighting: {e}")
-        return 0.0
-
-
-def process_bit_logic_stream(bit_array: List[int]) -> List[int]:
-    """
-    Applies recursive XOR-diff logic to infer BTC breakout/momentum points.
-    
-    Args:
-        bit_array: Array of bit values representing price/volume data
-        
-    Returns:
-        Processed bit array with XOR differences
-    """
-    try:
-        if len(bit_array) < 2:
-            return bit_array
-        
-        result = []
-        for i in range(1, len(bit_array)):
-            # XOR difference with previous value
-            xor_diff = bit_array[i] ^ bit_array[i - 1]
-            result.append(xor_diff)
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error processing bit logic stream: {e}")
-        return []
-
-
-def calculate_flip_rate(bit_array: List[int]) -> float:
-    """Calculate the flip rate to detect signal noise."""
-    try:
-        if len(bit_array) <= 1:
-            return 0.0
-        
-        flips = sum(1 for i in range(len(bit_array) - 1) 
-                   if bit_array[i] != bit_array[i + 1])
-        
-        return flips / (len(bit_array) - 1)
-        
-    except Exception as e:
-        logger.error(f"Error calculating flip rate: {e}")
-        return 0.0
-
-
-def process_tick_data(tick_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """
-    Process incoming tick data through multi-bit analysis.
-    
-    Args:
-        tick_data: Dictionary containing price, volume, timestamp data
-        
-    Returns:
-        Processed signal data or None if processing failed
-    """
-    try:
-        # Extract and convert to bit representation
-        price = tick_data.get('price', 0)
-        volume = tick_data.get('volume', 0)
-        
-        # Convert to 8-bit representations
-        price_bits = int(abs(price) % 256)
-        volume_bits = int(abs(volume) % 256)
-        
-        # Process through bit logic
-        fused_signal = evaluate_btc_vector(price_bits, volume_bits)
-        
-        # Create bit array from recent data
-        bit_array = [price_bits, volume_bits, fused_signal]
-        processed_bits = process_bit_logic_stream(bit_array)
-        
-        # Calculate entropy weighting
-        entropy_factor = calculate_flip_rate(processed_bits) if processed_bits else 0.0
-        weighted_result = entropy_weighted_result(fused_signal, entropy_factor)
-        
-        return {
-            'processed_bits': processed_bits,
-            'fused_signal': fused_signal,
-            'weighted_result': weighted_result,
-            'entropy_factor': entropy_factor,
-            'timestamp': time.time()
-        }
-        
-    except Exception as e:
-        logger.error(f"Error processing tick data: {e}")
-        return None
+@dataclass
+class CrossBitCorrelation:
+    """Represents correlation between different bit levels."""
+    source_bit_level: BitLevel
+    target_bit_level: BitLevel
+    correlation_value: float
+    significance: float
+    timestamp: datetime = field(default_factory=datetime.now)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class MultiBitBTCProcessor:
-    """Multi-bit BTC processor with advanced analysis capabilities"""
+    """
+    Implements multi-bit processing for Bitcoin data analysis.
+    Handles different precision levels and optimizes processing based on bit levels.
+    """
     
-    def __init__(self, timeframes: Dict[str, int] = None, bit_levels: List[BitLevel] = None):
-        # Default timeframes (seconds)
-        self.timeframes = timeframes or {
-            "1m": 60,
-            "5m": 300,
-            "15m": 900,
-            "1h": 3600,
-            "4h": 14400,
-            "1d": 86400
+    def __init__(self):
+        """Initialize the multi-bit BTC processor."""
+        self.btc_data: Dict[BitLevel, List[BTCDataPoint]] = {
+            BitLevel.FOUR_BIT: [],
+            BitLevel.EIGHT_BIT: [],
+            BitLevel.SIXTEEN_BIT: [],
+            BitLevel.FORTY_TWO_BIT: []
+        }
+        self.bit_level_analyses: Dict[BitLevel, BitLevelAnalysis] = {}
+        self.cross_bit_correlations: List[CrossBitCorrelation] = []
+        self.processing_history: List[Dict[str, Any]] = []
+        
+        # Processing parameters
+        self.max_data_points_per_level = 10000
+        self.correlation_threshold = 0.7
+        self.confidence_threshold = 0.8
+        self.optimization_enabled = True
+        
+        # Performance tracking
+        self.processing_times: Dict[BitLevel, List[float]] = {
+            bit_level: [] for bit_level in BitLevel
+        }
+        self.error_counts: Dict[BitLevel, int] = {
+            bit_level: 0 for bit_level in BitLevel
         }
         
-        # Default bit levels
-        self.bit_levels = bit_levels or [
-            BitLevel.FOUR_BIT,
-            BitLevel.EIGHT_BIT,
-            BitLevel.SIXTEEN_BIT,
-            BitLevel.THIRTY_TWO_BIT,
-            BitLevel.FORTY_TWO_BIT
-        ]
-        
-        # Data storage per timeframe and bit level
-        self.data_storage: Dict[str, Dict[BitLevel, deque]] = {}
-        self.analyses: Dict[str, BitAnalysis] = {}
-        
-        # Initialize data storage
-        for timeframe in self.timeframes.keys():
-            self.data_storage[timeframe] = {}
-            for bit_level in self.bit_levels:
-                self.data_storage[timeframe][bit_level] = deque(maxlen=1000)
-        
-        # Real-time processing state
-        self.current_state = {
-            "last_update": datetime.now(),
-            "active_timeframes": set(),
-            "active_bit_levels": set(),
-            "processing_latency": 0.0,
-            "data_quality_score": 1.0
-        }
-        
-        # Threading
-        self.lock = threading.RLock()
-        self.running = False
-        self.processing_thread = None
-        
-        # Initialize directories
-        self._initialize_directories()
-        
-        # Load existing data
-        self._load_btc_data()
-        
-        # Start background processing
-        self.start_background_processing()
+        logger.info("Multi-bit BTC Processor initialized")
     
-    def _initialize_directories(self):
-        """Initialize BTC processing directories"""
-        btc_dirs = [
-            "core/btc_data/",
-            "core/btc_analyses/",
-            "core/btc_patterns/",
-            "core/btc_predictions/"
-        ]
+    def process_btc_data(
+        self,
+        price: float,
+        volume: float,
+        bit_level: BitLevel,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> BTCDataPoint:
+        """Process BTC data at specified bit level."""
+        start_time = time.time()
         
-        for dir_path in btc_dirs:
-            Path(dir_path).mkdir(parents=True, exist_ok=True)
-    
-    def _load_btc_data(self):
-        """Load existing BTC data from files"""
         try:
-            # Load analyses
-            analyses_file = Path("core/btc_analyses/analyses.json")
-            if analyses_file.exists():
-                with open(analyses_file, 'r') as f:
-                    analyses_data = json.load(f)
-                    for analysis_id, data in analyses_data.items():
-                        data["timestamp"] = datetime.fromisoformat(data["timestamp"])
-                        data["bit_level"] = BitLevel(data["bit_level"])
-                        data["timeframe"] = Timeframe(data["timeframe"])
-                        self.analyses[analysis_id] = BitAnalysis(**data)
-                        
-        except Exception as e:
-            print(f"Warning: Could not load BTC data: {e}")
-    
-    def _save_btc_data(self):
-        """Save BTC data to files"""
-        try:
-            # Save analyses
-            analyses_data = {
-                analysis_id: asdict(analysis) 
-                for analysis_id, analysis in self.analyses.items()
-            }
-            with open("core/btc_analyses/analyses.json", 'w') as f:
-                json.dump(analyses_data, f, indent=2, default=str)
-                
-        except Exception as e:
-            print(f"Error saving BTC data: {e}")
-    
-    def add_data_point(self, price: float, volume: float = None, high: float = None, 
-                      low: float = None, open_price: float = None, close_price: float = None,
-                      timestamp: datetime = None):
-        """Add a new BTC data point"""
-        
-        if timestamp is None:
-            timestamp = datetime.now()
-        
-        if volume is None:
-            volume = 1000.0 + np.random.normal(0, 200)
-        if high is None:
-            high = price * (1 + np.random.uniform(0, 0.02))
-        if low is None:
-            low = price * (1 - np.random.uniform(0, 0.02))
-        if open_price is None:
-            open_price = price * (1 + np.random.uniform(-0.01, 0.01))
-        if close_price is None:
-            close_price = price
-        
-        with self.lock:
-            # Add data point for each timeframe and bit level
-            for timeframe_str, timeframe_seconds in self.timeframes.items():
-                timeframe = Timeframe(timeframe_str)
-                
-                for bit_level in self.bit_levels:
-                    # Create data point
-                    data_point = BTCDataPoint(
-                        timestamp=timestamp,
-                        price=price,
-                        volume=volume,
-                        high=high,
-                        low=low,
-                        open_price=open_price,
-                        close_price=close_price,
-                        bit_level=bit_level,
-                        timeframe=timeframe,
-                        hash_signature=hashlib.sha256(f"{price}_{volume}_{timestamp}".encode()).hexdigest()[:16]
-                    )
-                    
-                    # Store in appropriate timeframe and bit level
-                    self.data_storage[timeframe_str][bit_level].append(data_point)
+            # Generate hash signature
+            hash_input = f"{price}_{volume}_{bit_level.value}_{int(time.time())}"
+            hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
             
-            # Update current state
-            self.current_state["last_update"] = timestamp
-            self.current_state["active_timeframes"] = set(self.timeframes.keys())
-            self.current_state["active_bit_levels"] = {level.value for level in self.bit_levels}
+            # Create data point
+            data_point = BTCDataPoint(
+                timestamp=datetime.now(),
+                price=price,
+                volume=volume,
+                bit_level=bit_level,
+                hash_signature=hash_signature,
+                metadata=metadata or {}
+            )
+            
+            # Add to data storage
+            self.btc_data[bit_level].append(data_point)
+            
+            # Maintain data size limits
+            if len(self.btc_data[bit_level]) > self.max_data_points_per_level:
+                self.btc_data[bit_level] = self.btc_data[bit_level][-self.max_data_points_per_level:]
+            
+            # Update processing time
+            processing_time = time.time() - start_time
+            self.processing_times[bit_level].append(processing_time)
+            
+            # Keep only recent processing times
+            if len(self.processing_times[bit_level]) > 1000:
+                self.processing_times[bit_level] = self.processing_times[bit_level][-500:]
+            
+            logger.debug(f"Processed BTC data at {bit_level.value}-bit level")
+            return data_point
+        
+        except Exception as e:
+            self.error_counts[bit_level] += 1
+            logger.error(f"Error processing BTC data at {bit_level.value}-bit: {e}")
+            raise
     
-    def _convert_to_bits(self, value: float, bit_level: BitLevel) -> List[int]:
-        """Convert a value to binary representation at specified bit level"""
+    def analyze_bit_level(self, bit_level: BitLevel) -> BitLevelAnalysis:
+        """Analyze data for a specific bit level."""
+        if not self.btc_data[bit_level]:
+            logger.warning(f"No data available for {bit_level.value}-bit analysis")
+            return None
         
-        # Normalize value to [0, 1] range (assuming price range 0-100000)
-        normalized = np.clip(value / 100000.0, 0.0, 1.0)
+        start_time = time.time()
+        data_points = self.btc_data[bit_level]
         
-        # Convert to integer representation
-        max_value = (1 << bit_level.value) - 1
-        integer_value = int(normalized * max_value)
+        # Extract price and volume data
+        prices = np.array([dp.price for dp in data_points])
+        volumes = np.array([dp.volume for dp in data_points])
         
-        # Convert to binary list
-        binary = format(integer_value, f'0{bit_level.value}b')
-        return [int(bit) for bit in binary]
-    
-    def _analyze_bit_patterns(self, bit_sequence: List[int]) -> Dict[str, Any]:
-        """Analyze patterns in bit sequences"""
-        
-        patterns = {
-            "ones_count": sum(bit_sequence),
-            "zeros_count": len(bit_sequence) - sum(bit_sequence),
-            "ones_ratio": sum(bit_sequence) / len(bit_sequence),
-            "alternations": sum(1 for i in range(1, len(bit_sequence)) if bit_sequence[i] != bit_sequence[i-1]),
-            "runs": self._count_runs(bit_sequence),
-            "entropy": self._calculate_entropy(bit_sequence)
+        # Calculate price statistics
+        price_stats = {
+            "mean": float(np.mean(prices)),
+            "std": float(np.std(prices)),
+            "min": float(np.min(prices)),
+            "max": float(np.max(prices)),
+            "median": float(np.median(prices)),
+            "skewness": float(self._calculate_skewness(prices)),
+            "kurtosis": float(self._calculate_kurtosis(prices))
         }
         
-        return patterns
-    
-    def _count_runs(self, bit_sequence: List[int]) -> Dict[str, int]:
-        """Count runs of consecutive bits"""
+        # Calculate volume statistics
+        volume_stats = {
+            "mean": float(np.mean(volumes)),
+            "std": float(np.std(volumes)),
+            "min": float(np.min(volumes)),
+            "max": float(np.max(volumes)),
+            "median": float(np.median(volumes)),
+            "skewness": float(self._calculate_skewness(volumes)),
+            "kurtosis": float(self._calculate_kurtosis(volumes))
+        }
         
-        runs = {"ones": 0, "zeros": 0}
-        current_run = 1
-        current_bit = bit_sequence[0]
+        # Calculate correlation matrix
+        correlation_matrix = np.corrcoef([prices, volumes])
         
-        for bit in bit_sequence[1:]:
-            if bit == current_bit:
-                current_run += 1
-            else:
-                if current_bit == 1:
-                    runs["ones"] = max(runs["ones"], current_run)
-                else:
-                    runs["zeros"] = max(runs["zeros"], current_run)
-                current_run = 1
-                current_bit = bit
-        
-        # Handle last run
-        if current_bit == 1:
-            runs["ones"] = max(runs["ones"], current_run)
-        else:
-            runs["zeros"] = max(runs["zeros"], current_run)
-        
-        return runs
-    
-    def _calculate_entropy(self, bit_sequence: List[int]) -> float:
-        """Calculate entropy of bit sequence"""
-        
-        if not bit_sequence:
-            return 0.0
-        
-        ones_count = sum(bit_sequence)
-        zeros_count = len(bit_sequence) - ones_count
-        
-        total = len(bit_sequence)
-        p1 = ones_count / total
-        p0 = zeros_count / total
-        
-        entropy = 0.0
-        if p1 > 0:
-            entropy -= p1 * np.log2(p1)
-        if p0 > 0:
-            entropy -= p0 * np.log2(p0)
-        
-        return entropy
-    
-    def process_timeframe(self, timeframe: str, bit_level: BitLevel) -> Optional[BitAnalysis]:
-        """Process data for a specific timeframe and bit level"""
-        
-        if timeframe not in self.data_storage or bit_level not in self.data_storage[timeframe]:
-            return None
-        
-        data_points = list(self.data_storage[timeframe][bit_level])
-        if len(data_points) < 10:
-            return None
-        
-        # Get latest data point
-        latest_point = data_points[-1]
-        
-        # Convert price and volume to bits
-        price_bits = self._convert_to_bits(latest_point.price, bit_level)
-        volume_bits = self._convert_to_bits(latest_point.volume, bit_level)
-        
-        # Analyze bit patterns
-        price_patterns = self._analyze_bit_patterns(price_bits)
-        volume_patterns = self._analyze_bit_patterns(volume_bits)
-        
-        # Calculate entropy score
-        entropy_score = (price_patterns["entropy"] + volume_patterns["entropy"]) / 2.0
+        # Calculate processing time
+        processing_time = time.time() - start_time
         
         # Calculate confidence score
-        confidence_score = self._calculate_confidence_score(data_points, price_patterns, volume_patterns)
-        
-        # Generate prediction vector
-        prediction_vector = self._generate_prediction_vector(data_points, price_bits, volume_bits)
-        
-        # Create analysis result
-        analysis_id = f"analysis_{timeframe}_{bit_level.value}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        analysis = BitAnalysis(
-            analysis_id=analysis_id,
-            timestamp=datetime.now(),
-            bit_level=bit_level,
-            timeframe=Timeframe(timeframe),
-            price_bits=price_bits,
-            volume_bits=volume_bits,
-            bit_patterns={
-                "price": price_patterns,
-                "volume": volume_patterns
-            },
-            entropy_score=entropy_score,
-            confidence_score=confidence_score,
-            prediction_vector=prediction_vector,
-            metadata={
-                "data_points_count": len(data_points),
-                "timeframe_seconds": self.timeframes[timeframe],
-                "bit_level_value": bit_level.value
-            }
+        confidence_score = self._calculate_confidence_score(
+            price_stats, volume_stats, len(data_points)
         )
         
-        # Store analysis
-        self.analyses[analysis_id] = analysis
+        # Create analysis object
+        analysis = BitLevelAnalysis(
+            bit_level=bit_level,
+            data_points=data_points.copy(),
+            price_stats=price_stats,
+            volume_stats=volume_stats,
+            correlation_matrix=correlation_matrix,
+            processing_time=processing_time,
+            confidence_score=confidence_score
+        )
         
+        self.bit_level_analyses[bit_level] = analysis
+        
+        logger.info(f"Completed {bit_level.value}-bit analysis: {len(data_points)} points")
         return analysis
     
-    def _calculate_confidence_score(self, data_points: List[BTCDataPoint], 
-                                  price_patterns: Dict[str, Any], 
-                                  volume_patterns: Dict[str, Any]) -> float:
-        """Calculate confidence score for analysis"""
-        
-        confidence = 0.5  # Base confidence
-        
-        # Data quality factor
-        if len(data_points) >= 50:
-            confidence += 0.2
-        
-        # Pattern stability factor
-        price_entropy = price_patterns["entropy"]
-        volume_entropy = volume_patterns["entropy"]
-        
-        if 0.5 <= price_entropy <= 1.0 and 0.5 <= volume_entropy <= 1.0:
-            confidence += 0.2
-        
-        # Volume consistency factor
-        if volume_patterns["ones_ratio"] > 0.3 and volume_patterns["ones_ratio"] < 0.7:
-            confidence += 0.1
-        
-        return min(confidence, 1.0)
+    def _calculate_skewness(self, data: np.ndarray) -> float:
+        """Calculate skewness of data."""
+        mean = np.mean(data)
+        std = np.std(data)
+        if std == 0:
+            return 0.0
+        return np.mean(((data - mean) / std) ** 3)
     
-    def _generate_prediction_vector(self, data_points: List[BTCDataPoint], 
-                                  price_bits: List[int], volume_bits: List[int]) -> List[float]:
-        """Generate prediction vector based on bit analysis"""
-        
-        # Simple prediction based on bit patterns
-        prediction_vector = []
-        
-        # Price trend prediction
-        ones_ratio = sum(price_bits) / len(price_bits)
-        if ones_ratio > 0.6:
-            prediction_vector.append(0.8)  # Bullish
-        elif ones_ratio < 0.4:
-            prediction_vector.append(0.2)  # Bearish
-        else:
-            prediction_vector.append(0.5)  # Neutral
-        
-        # Volume prediction
-        volume_ones_ratio = sum(volume_bits) / len(volume_bits)
-        prediction_vector.append(volume_ones_ratio)
-        
-        # Volatility prediction
-        if len(data_points) >= 2:
-            prices = [dp.price for dp in data_points[-10:]]
-            volatility = np.std(prices) / np.mean(prices)
-            prediction_vector.append(min(volatility * 10, 1.0))
-        else:
-            prediction_vector.append(0.5)
-        
-        # Momentum prediction
-        if len(data_points) >= 5:
-            recent_prices = [dp.price for dp in data_points[-5:]]
-            momentum = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
-            prediction_vector.append(max(0, min(1, (momentum + 0.1) * 5)))
-        else:
-            prediction_vector.append(0.5)
-        
-        return prediction_vector
+    def _calculate_kurtosis(self, data: np.ndarray) -> float:
+        """Calculate kurtosis of data."""
+        mean = np.mean(data)
+        std = np.std(data)
+        if std == 0:
+            return 0.0
+        return np.mean(((data - mean) / std) ** 4) - 3
     
-    def process_all_timeframes(self) -> Dict[str, Any]:
-        """Process all timeframes and bit levels"""
+    def _calculate_confidence_score(
+        self,
+        price_stats: Dict[str, float],
+        volume_stats: Dict[str, float],
+        data_count: int
+    ) -> float:
+        """Calculate confidence score for analysis."""
+        # Base confidence on data count
+        count_confidence = min(1.0, data_count / 1000.0)
         
-        results = {}
+        # Price stability confidence
+        price_cv = price_stats["std"] / price_stats["mean"] if price_stats["mean"] != 0 else 0
+        price_confidence = max(0.0, 1.0 - price_cv)
         
-        for timeframe in self.timeframes.keys():
-            results[timeframe] = {}
+        # Volume stability confidence
+        volume_cv = volume_stats["std"] / volume_stats["mean"] if volume_stats["mean"] != 0 else 0
+        volume_confidence = max(0.0, 1.0 - volume_cv)
+        
+        # Combined confidence
+        confidence = (count_confidence + price_confidence + volume_confidence) / 3.0
+        return min(1.0, confidence)
+    
+    def analyze_cross_bit_correlations(self) -> List[CrossBitCorrelation]:
+        """Analyze correlations between different bit levels."""
+        correlations = []
+        bit_levels = list(BitLevel)
+        
+        for i, source_level in enumerate(bit_levels):
+            for target_level in bit_levels[i+1:]:
+                correlation = self._calculate_cross_bit_correlation(source_level, target_level)
+                if correlation:
+                    correlations.append(correlation)
+        
+        self.cross_bit_correlations.extend(correlations)
+        
+        # Keep only recent correlations
+        if len(self.cross_bit_correlations) > 100:
+            self.cross_bit_correlations = self.cross_bit_correlations[-50:]
+        
+        logger.info(f"Calculated {len(correlations)} cross-bit correlations")
+        return correlations
+    
+    def _calculate_cross_bit_correlation(
+        self, source_level: BitLevel, target_level: BitLevel
+    ) -> Optional[CrossBitCorrelation]:
+        """Calculate correlation between two bit levels."""
+        if not self.btc_data[source_level] or not self.btc_data[target_level]:
+            return None
+        
+        # Get recent data points
+        source_data = self.btc_data[source_level][-100:]
+        target_data = self.btc_data[target_level][-100:]
+        
+        # Align timestamps (simplified)
+        min_length = min(len(source_data), len(target_data))
+        source_prices = [dp.price for dp in source_data[-min_length:]]
+        target_prices = [dp.price for dp in target_data[-min_length:]]
+        
+        if len(source_prices) < 10:  # Need minimum data points
+            return None
+        
+        # Calculate correlation
+        correlation_matrix = np.corrcoef(source_prices, target_prices)
+        correlation_value = correlation_matrix[0, 1]
+        
+        # Calculate significance (simplified)
+        significance = 1.0 - abs(correlation_value)
+        
+        correlation = CrossBitCorrelation(
+            source_bit_level=source_level,
+            target_bit_level=target_level,
+            correlation_value=correlation_value,
+            significance=significance
+        )
+        
+        return correlation
+    
+    def optimize_bit_level_selection(self, target_accuracy: float = 0.95) -> BitLevel:
+        """Optimize bit level selection based on performance and accuracy."""
+        if not self.optimization_enabled:
+            return BitLevel.SIXTEEN_BIT  # Default
+        
+        # Calculate performance metrics for each bit level
+        performance_scores = {}
+        
+        for bit_level in BitLevel:
+            if bit_level not in self.bit_level_analyses:
+                continue
             
-            for bit_level in self.bit_levels:
-                analysis = self.process_timeframe(timeframe, bit_level)
-                if analysis:
-                    results[timeframe][bit_level.value] = {
-                        "entropy_score": analysis.entropy_score,
-                        "confidence_score": analysis.confidence_score,
-                        "prediction_vector": analysis.prediction_vector,
-                        "bit_patterns": analysis.bit_patterns
-                    }
+            analysis = self.bit_level_analyses[bit_level]
+            
+            # Performance score based on multiple factors
+            confidence_score = analysis.confidence_score
+            processing_efficiency = 1.0 / (analysis.processing_time + 1e-6)
+            error_rate = 1.0 / (self.error_counts[bit_level] + 1)
+            
+            # Weighted performance score
+            performance_score = (
+                0.4 * confidence_score +
+                0.3 * processing_efficiency +
+                0.3 * error_rate
+            )
+            
+            performance_scores[bit_level] = performance_score
         
-        # Calculate merged confidence score
-        all_confidences = []
-        for timeframe_data in results.values():
-            for bit_data in timeframe_data.values():
-                all_confidences.append(bit_data["confidence_score"])
+        if not performance_scores:
+            return BitLevel.SIXTEEN_BIT  # Default
         
-        merged_confidence_score = np.mean(all_confidences) if all_confidences else 0.0
+        # Select best performing bit level
+        best_level = max(performance_scores, key=performance_scores.get)
         
-        # Save data
-        self._save_btc_data()
-        
-        return {
-            "timeframe_results": results,
-            "merged_confidence_score": merged_confidence_score,
-            "timestamp": datetime.now().isoformat(),
-            "active_timeframes": list(self.timeframes.keys()),
-            "active_bit_levels": [level.value for level in self.bit_levels]
-        }
+        logger.info(f"Optimized bit level selection: {best_level.value}-bit")
+        return best_level
     
     def get_btc_statistics(self) -> Dict[str, Any]:
-        """Get BTC processing statistics"""
+        """Get comprehensive BTC processing statistics."""
+        total_data_points = sum(len(data) for data in self.btc_data.values())
         
-        total_data_points = 0
-        for timeframe_data in self.data_storage.values():
-            for bit_data in timeframe_data.values():
-                total_data_points += len(bit_data)
+        # Data distribution by bit level
+        data_distribution = {}
+        for bit_level, data in self.btc_data.items():
+            data_distribution[bit_level.value] = len(data)
+        
+        # Processing performance
+        avg_processing_times = {}
+        for bit_level, times in self.processing_times.items():
+            if times:
+                avg_processing_times[bit_level.value] = sum(times) / len(times)
+            else:
+                avg_processing_times[bit_level.value] = 0.0
+        
+        # Error rates
+        error_rates = {}
+        for bit_level, error_count in self.error_counts.items():
+            total_processed = len(self.processing_times[bit_level])
+            error_rates[bit_level.value] = error_count / max(1, total_processed)
+        
+        # Analysis confidence scores
+        confidence_scores = {}
+        for bit_level, analysis in self.bit_level_analyses.items():
+            confidence_scores[bit_level.value] = analysis.confidence_score
+        
+        # Cross-bit correlations
+        strong_correlations = [
+            corr for corr in self.cross_bit_correlations
+            if abs(corr.correlation_value) >= self.correlation_threshold
+        ]
         
         return {
-            "total_analyses": len(self.analyses),
             "total_data_points": total_data_points,
-            "current_state": self.current_state,
-            "timeframes": list(self.timeframes.keys()),
-            "bit_levels": [level.value for level in self.bit_levels],
-            "data_storage_sizes": {
-                timeframe: {
-                    bit_level.value: len(data) 
-                    for bit_level, data in timeframe_data.items()
-                }
-                for timeframe, timeframe_data in self.data_storage.items()
-            }
+            "data_distribution": data_distribution,
+            "average_processing_times": avg_processing_times,
+            "error_rates": error_rates,
+            "confidence_scores": confidence_scores,
+            "strong_correlations_count": len(strong_correlations),
+            "optimization_enabled": self.optimization_enabled
         }
     
-    def start_background_processing(self):
-        """Start background processing thread"""
+    def get_trading_signals(self) -> List[Dict[str, Any]]:
+        """Generate trading signals based on multi-bit analysis."""
+        signals = []
         
-        if self.running:
-            return
-        
-        self.running = True
-        self.processing_thread = threading.Thread(target=self._background_processing_loop)
-        self.processing_thread.daemon = True
-        self.processing_thread.start()
-    
-    def stop_background_processing(self):
-        """Stop background processing thread"""
-        
-        self.running = False
-        if self.processing_thread:
-            self.processing_thread.join()
-    
-    def _background_processing_loop(self):
-        """Background processing loop"""
-        
-        while self.running:
-            try:
-                # Process all timeframes periodically
-                self.process_all_timeframes()
+        # Generate signals from bit level analyses
+        for bit_level, analysis in self.bit_level_analyses.items():
+            if analysis.confidence_score >= self.confidence_threshold:
+                # Price trend signal
+                price_trend = self._calculate_price_trend(analysis.price_stats)
+                if abs(price_trend) > 0.1:  # Significant trend
+                    signal = {
+                        "type": "price_trend",
+                        "bit_level": bit_level.value,
+                        "trend": price_trend,
+                        "confidence": analysis.confidence_score,
+                        "strength": min(1.0, abs(price_trend)),
+                        "timestamp": datetime.now(),
+                        "metadata": {
+                            "price_stats": analysis.price_stats,
+                            "volume_stats": analysis.volume_stats
+                        }
+                    }
+                    signals.append(signal)
                 
-                # Sleep for processing interval
-                time.sleep(30)  # Process every 30 seconds
-                
-            except Exception as e:
-                print(f"Error in background processing: {e}")
-                time.sleep(10)
-
-
-def get_multi_bit_btc_processor() -> MultiBitBTCProcessor:
-    """Get singleton instance of multi-bit BTC processor"""
-    if not hasattr(get_multi_bit_btc_processor, '_instance'):
-        get_multi_bit_btc_processor._instance = MultiBitBTCProcessor()
-    return get_multi_bit_btc_processor._instance
+                # Volume anomaly signal
+                volume_anomaly = self._detect_volume_anomaly(analysis.volume_stats)
+                if volume_anomaly:
+                    signal = {
+                        "type": "volume_anomaly",
+                        "bit_level": bit_level.value,
+                        "anomaly_type": volume_anomaly,
+                        "confidence": analysis.confidence_score,
+                        "strength": 0.8,
+                        "timestamp": datetime.now(),
+                        "metadata": {
+                            "volume_stats": analysis.volume_stats
+                        }
+                    }
+                    signals.append(signal)
+        
+        # Generate signals from cross-bit correlations
+        for correlation in self.cross_bit_correlations:
+            if abs(correlation.correlation_value) >= self.correlation_threshold:
+                signal = {
+                    "type": "cross_bit_correlation",
+                    "source_bit_level": correlation.source_bit_level.value,
+                    "target_bit_level": correlation.target_bit_level.value,
+                    "correlation_value": correlation.correlation_value,
+                    "significance": correlation.significance,
+                    "confidence": abs(correlation.correlation_value),
+                    "strength": abs(correlation.correlation_value),
+                    "timestamp": correlation.timestamp,
+                    "metadata": correlation.metadata
+                }
+                signals.append(signal)
+        
+        return signals
+    
+    def _calculate_price_trend(self, price_stats: Dict[str, float]) -> float:
+        """Calculate price trend from statistics."""
+        # Use skewness as trend indicator
+        skewness = price_stats.get("skewness", 0.0)
+        return np.tanh(skewness)  # Normalize to [-1, 1]
+    
+    def _detect_volume_anomaly(self, volume_stats: Dict[str, float]) -> Optional[str]:
+        """Detect volume anomalies."""
+        # Check for high kurtosis (fat tails)
+        kurtosis = volume_stats.get("kurtosis", 0.0)
+        if kurtosis > 3.0:
+            return "high_kurtosis"
+        
+        # Check for high skewness
+        skewness = volume_stats.get("skewness", 0.0)
+        if abs(skewness) > 2.0:
+            return "high_skewness"
+        
+        return None
 
 
 def main() -> None:
-    """Test the multi-bit BTC processor."""
-    try:
-        print("🔬 Multi-Bit BTC Processor Test")
-        print("=" * 40)
+    """Main function for testing the multi-bit BTC processor."""
+    # Initialize processor
+    processor = MultiBitBTCProcessor()
+    
+    # Generate sample BTC data
+    np.random.seed(42)
+    base_price = 50000.0
+    base_volume = 1000.0
+    
+    # Process data at different bit levels
+    for i in range(100):
+        # Simulate price movement
+        price_change = np.random.normal(0, 100)
+        volume_change = np.random.normal(0, 100)
         
-        # Test bit vector evaluation
-        print("\n🧮 Testing XOR Vector Fusion:")
-        result = evaluate_btc_vector(0b11010110, 0b10110011)
-        print(f"XOR Result: {result} (binary: {bin(result)})")
+        price = base_price + price_change
+        volume = base_volume + volume_change
         
-        # Test entropy weighting
-        print("\n📊 Testing Entropy Weighting:")
-        weighted = entropy_weighted_result(result, 0.75)
-        print(f"Weighted Result: {weighted:.4f}")
-        
-        # Test bit stream processing
-        print("\n🌊 Testing Bit Stream Processing:")
-        test_stream = [0b10110, 0b11001, 0b01110, 0b10101, 0b00111]
-        processed = process_bit_logic_stream(test_stream)
-        print(f"Processed Stream: {[bin(x) for x in processed]}")
-        
-        # Test tick data processing
-        print("\n📈 Testing Tick Data Processing:")
-        tick_data = {
-            'price': 50000.75,
-            'volume': 1250.5,
-            'timestamp': time.time()
-        }
-        
-        result = process_tick_data(tick_data)
-        if result:
-            print(f"Fused Signal: {result['fused_signal']}")
-            print(f"Entropy Factor: {result['entropy_factor']:.4f}")
-        
-        print("\n✅ Multi-bit processor test completed")
-        
-    except Exception as e:
-        print(f"❌ Test failed: {e}")
+        # Process at different bit levels
+        for bit_level in BitLevel:
+            processor.process_btc_data(price, volume, bit_level)
+    
+    # Analyze each bit level
+    for bit_level in BitLevel:
+        analysis = processor.analyze_bit_level(bit_level)
+        if analysis:
+            print(f"{bit_level.value}-bit analysis: {analysis.confidence_score:.3f} confidence")
+    
+    # Analyze cross-bit correlations
+    correlations = processor.analyze_cross_bit_correlations()
+    print(f"Found {len(correlations)} cross-bit correlations")
+    
+    # Get statistics
+    stats = processor.get_btc_statistics()
+    print(f"BTC statistics: {stats}")
+    
+    # Get trading signals
+    signals = processor.get_trading_signals()
+    print(f"Generated {len(signals)} trading signals")
 
 
 if __name__ == "__main__":
-    main()
+    main() 

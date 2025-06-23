@@ -1,477 +1,542 @@
 #!/usr/bin/env python3
 """
-temporal_execution_correction_layer.py - Timing Correction & Sync Layer.
+Temporal Execution Correction Layer - Schwabot UROS v1.0
+=======================================================
 
-Corrects execution mismatches due to delay, bad tick synchronization, or signal
-distortion. Functions as a fail-safe timing realigner between logic triggers
-and market execution, ensuring trades happen at the intended moment.
+Implements temporal correction and synchronization for trading execution.
+Critical for ensuring precise timing and correcting execution delays.
 """
 
-import time
-import logging
-import hashlib
-from typing import Dict, Any, Optional, List
 import numpy as np
-import json
-import yaml
-from dataclasses import dataclass, asdict
+import logging
+import time
+from typing import Dict, List, Optional, Tuple, Any
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from pathlib import Path
-import threading
-from collections import deque
 from enum import Enum
 
-from core.utils.math_utils import (
-    calculate_execution_lag,
-    apply_lag_compensation_curve,
-)
+from core.type_defs import BitLevel, MatrixPhase, MatrixControllerType
 
 logger = logging.getLogger(__name__)
 
 
 class CorrectionType(Enum):
-    """Temporal correction type enumeration"""
+    """Types of temporal corrections."""
     DRIFT_CORRECTION = "drift_correction"
-    DELAY_COMPENSATION = "delay_compensation"
+    LATENCY_COMPENSATION = "latency_compensation"
     SYNCHRONIZATION = "synchronization"
+    TIMING_OPTIMIZATION = "timing_optimization"
     PHASE_ALIGNMENT = "phase_alignment"
-    FREQUENCY_CORRECTION = "frequency_correction"
 
 
 @dataclass
 class TemporalEvent:
-    """Temporal event structure"""
+    """Represents a temporal event for correction."""
     event_id: str
-    timestamp: datetime
     event_type: str
-    component: str
-    expected_time: datetime
-    actual_time: datetime
-    drift: float
-    correction_applied: bool
-    metadata: Dict[str, Any]
+    expected_timestamp: datetime
+    actual_timestamp: datetime
+    drift_amount: float  # milliseconds
+    correction_applied: bool = False
+    correction_amount: float = 0.0
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class CorrectionResult:
-    """Temporal correction result"""
-    correction_id: str
-    timestamp: datetime
+class CorrectionAction:
+    """Represents a temporal correction action."""
+    action_id: str
     correction_type: CorrectionType
-    component: str
-    original_timing: Dict[str, Any]
-    corrected_timing: Dict[str, Any]
-    drift_corrected: float
-    confidence_score: float
-    metadata: Dict[str, Any]
+    original_timing: datetime
+    corrected_timing: datetime
+    correction_amount: float  # milliseconds
+    success: bool = False
+    timestamp: datetime = field(default_factory=datetime.now)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class SynchronizationPoint:
+    """Represents a synchronization point."""
+    sync_id: str
+    system_id: str
+    reference_timestamp: datetime
+    local_timestamp: datetime
+    offset: float  # milliseconds
+    confidence: float
+    timestamp: datetime = field(default_factory=datetime.now)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class TemporalExecutionCorrectionLayer:
     """
-    Provides methods to correct for timing discrepancies in trade execution.
+    Implements temporal correction and synchronization for trading execution.
+    Ensures precise timing and corrects execution delays in real-time.
     """
-
-    def __init__(self, correction_window: int = 100, max_drift_threshold: float = 0.1):
-        """
-        Initialize the Temporal Execution Correction Layer.
-
-        Args:
-            correction_window: The size of the correction window.
-            max_drift_threshold: The maximum tolerable drift in seconds before
-                                 a major correction is applied.
-        """
-        self.correction_window = correction_window
-        self.max_drift_threshold = max_drift_threshold
+    
+    def __init__(self):
+        """Initialize the temporal execution correction layer."""
+        self.temporal_events: List[TemporalEvent] = []
+        self.correction_actions: List[CorrectionAction] = []
+        self.sync_points: Dict[str, SynchronizationPoint] = {}
+        self.correction_history: List[Dict[str, Any]] = []
         
-        # Temporal state tracking
-        self.temporal_events: deque = deque(maxlen=correction_window)
-        self.correction_history: List[CorrectionResult] = []
+        # Correction parameters
+        self.max_drift_threshold = 100.0  # milliseconds
+        self.correction_enabled = True
+        self.sync_interval = 1.0  # seconds
+        self.latency_compensation = True
+        self.adaptive_correction = True
         
-        # Component timing tracking
-        self.component_timing: Dict[str, Dict[str, Any]] = {}
+        # Performance tracking
+        self.total_corrections = 0
+        self.successful_corrections = 0
+        self.average_drift = 0.0
+        self.max_drift_observed = 0.0
         
-        # Global temporal state
-        self.global_temporal_state = {
-            "reference_time": datetime.now(),
-            "system_drift": 0.0,
-            "average_delay": 0.0,
-            "correction_count": 0,
-            "last_correction": None,
-            "synchronization_status": "stable"
-        }
+        # System timing
+        self.system_start_time = datetime.now()
+        self.last_sync_time = datetime.now()
+        self.time_offset = 0.0  # milliseconds
         
-        # Threading
-        self.lock = threading.RLock()
-        self.running = False
-        self.correction_thread = None
-        
-        # Initialize directories
-        self._initialize_directories()
-        
-        # Load existing data
-        self._load_temporal_data()
-        
-        # Start background correction
-        self.start_background_correction()
-
-    def _initialize_directories(self):
-        """Initialize temporal correction directories"""
-        temporal_dirs = [
-            "core/temporal_events/",
-            "core/temporal_corrections/",
-            "core/temporal_analysis/",
-            "core/temporal_reports/"
-        ]
-        
-        for dir_path in temporal_dirs:
-            Path(dir_path).mkdir(parents=True, exist_ok=True)
-
-    def _load_temporal_data(self):
-        """Load existing temporal data from files"""
-        try:
-            # Load correction history
-            corrections_file = Path("core/temporal_corrections/corrections.json")
-            if corrections_file.exists():
-                with open(corrections_file, 'r') as f:
-                    corrections_data = json.load(f)
-                    for correction_id, data in corrections_data.items():
-                        data["timestamp"] = datetime.fromisoformat(data["timestamp"])
-                        data["correction_type"] = CorrectionType(data["correction_type"])
-                        self.correction_history.append(CorrectionResult(**data))
-                        
-        except Exception as e:
-            print(f"Warning: Could not load temporal data: {e}")
-
-    def _save_temporal_data(self):
-        """Save temporal data to files"""
-        try:
-            # Save correction history
-            corrections_data = {
-                correction.correction_id: asdict(correction) 
-                for correction in self.correction_history
-            }
-            with open("core/temporal_corrections/corrections.json", 'w') as f:
-                json.dump(corrections_data, f, indent=2, default=str)
-                
-        except Exception as e:
-            print(f"Error saving temporal data: {e}")
-
-    def register_temporal_event(self, event_type: str, component: str, 
-                              expected_time: datetime = None, actual_time: datetime = None,
-                              metadata: Dict[str, Any] = None) -> TemporalEvent:
-        """Register a temporal event for correction analysis"""
-        
-        if expected_time is None:
-            expected_time = datetime.now()
-        if actual_time is None:
-            actual_time = datetime.now()
-        if metadata is None:
-            metadata = {}
+        logger.info("Temporal Execution Correction Layer initialized")
+    
+    def register_temporal_event(
+        self,
+        event_type: str,
+        expected_timestamp: datetime,
+        actual_timestamp: Optional[datetime] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> TemporalEvent:
+        """Register a temporal event for correction."""
+        if actual_timestamp is None:
+            actual_timestamp = datetime.now()
         
         # Calculate drift
-        drift = (actual_time - expected_time).total_seconds()
+        drift_amount = (actual_timestamp - expected_timestamp).total_seconds() * 1000.0
         
-        # Create temporal event
-        event_id = f"event_{component}_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(event_type) % 1000}"
         event = TemporalEvent(
-            event_id=event_id,
-            timestamp=datetime.now(),
+            event_id=f"event_{int(time.time() * 1000)}",
             event_type=event_type,
-            component=component,
-            expected_time=expected_time,
-            actual_time=actual_time,
-            drift=drift,
-            correction_applied=False,
-            metadata=metadata
+            expected_timestamp=expected_timestamp,
+            actual_timestamp=actual_timestamp,
+            drift_amount=drift_amount,
+            metadata=metadata or {}
         )
         
-        with self.lock:
-            self.temporal_events.append(event)
-            
-            # Update component timing
-            if component not in self.component_timing:
-                self.component_timing[component] = {
-                    "total_events": 0,
-                    "total_drift": 0.0,
-                    "average_drift": 0.0,
-                    "last_event": None,
-                    "correction_count": 0
-                }
-            
-            comp_timing = self.component_timing[component]
-            comp_timing["total_events"] += 1
-            comp_timing["total_drift"] += drift
-            comp_timing["average_drift"] = comp_timing["total_drift"] / comp_timing["total_events"]
-            comp_timing["last_event"] = datetime.now()
+        self.temporal_events.append(event)
         
+        # Update drift statistics
+        self._update_drift_statistics(drift_amount)
+        
+        # Apply correction if needed
+        if self.correction_enabled and abs(drift_amount) > self.max_drift_threshold:
+            self._apply_temporal_correction(event)
+        
+        logger.debug(f"Registered temporal event: {event_type} (drift: {drift_amount:.2f}ms)")
         return event
-
-    def calculate_temporal_drift(self, component: str = None) -> Dict[str, float]:
-        """Calculate temporal drift for system or specific component"""
+    
+    def _update_drift_statistics(self, drift_amount: float) -> None:
+        """Update drift statistics."""
+        self.max_drift_observed = max(self.max_drift_observed, abs(drift_amount))
         
-        with self.lock:
-            if component:
-                # Component-specific drift
-                if component in self.component_timing:
-                    comp_timing = self.component_timing[component]
-                    return {
-                        "component": component,
-                        "average_drift": comp_timing["average_drift"],
-                        "total_drift": comp_timing["total_drift"],
-                        "event_count": comp_timing["total_events"]
-                    }
-                else:
-                    return {"error": f"Component {component} not found"}
-            else:
-                # System-wide drift
-                if not self.temporal_events:
-                    return {"error": "No temporal events available"}
-                
-                all_drifts = [event.drift for event in self.temporal_events]
-                return {
-                    "system_average_drift": np.mean(all_drifts),
-                    "system_std_drift": np.std(all_drifts),
-                    "system_max_drift": max(all_drifts),
-                    "system_min_drift": min(all_drifts),
-                    "total_events": len(self.temporal_events)
-                }
-
-    def apply_temporal_correction(self, component: str, correction_type: CorrectionType,
-                                correction_data: Dict[str, Any] = None) -> CorrectionResult:
-        """Apply temporal correction to a component"""
-        
-        if correction_data is None:
-            correction_data = {}
-        
-        with self.lock:
-            # Get current timing for component
-            if component not in self.component_timing:
-                return None
+        # Update average drift (exponential moving average)
+        alpha = 0.1
+        self.average_drift = alpha * abs(drift_amount) + (1 - alpha) * self.average_drift
+    
+    def _apply_temporal_correction(self, event: TemporalEvent) -> bool:
+        """Apply temporal correction to an event."""
+        try:
+            # Determine correction type
+            if abs(event.drift_amount) > 500.0:  # Large drift
+                correction_type = CorrectionType.DRIFT_CORRECTION
+            elif abs(event.drift_amount) > 100.0:  # Medium drift
+                correction_type = CorrectionType.LATENCY_COMPENSATION
+            else:  # Small drift
+                correction_type = CorrectionType.TIMING_OPTIMIZATION
             
-            original_timing = self.component_timing[component].copy()
+            # Calculate correction amount
+            correction_amount = -event.drift_amount  # Compensate for drift
             
-            # Apply correction based on type
-            corrected_timing = original_timing.copy()
-            drift_corrected = 0.0
+            # Apply adaptive correction if enabled
+            if self.adaptive_correction:
+                correction_amount *= self._calculate_adaptive_factor(event.drift_amount)
             
-            if correction_type == CorrectionType.DRIFT_CORRECTION:
-                # Correct for accumulated drift
-                drift_corrected = -original_timing["average_drift"]
-                corrected_timing["total_drift"] = 0.0
-                corrected_timing["average_drift"] = 0.0
-                
-            elif correction_type == CorrectionType.DELAY_COMPENSATION:
-                # Compensate for execution delays
-                delay = correction_data.get("delay", 0.0)
-                drift_corrected = -delay
-                corrected_timing["average_drift"] -= delay
-                
-            elif correction_type == CorrectionType.SYNCHRONIZATION:
-                # Synchronize with reference time
-                reference_time = self.global_temporal_state["reference_time"]
-                current_time = datetime.now()
-                sync_drift = (current_time - reference_time).total_seconds()
-                drift_corrected = -sync_drift
-                corrected_timing["average_drift"] -= sync_drift
-            
-            # Update component timing
-            self.component_timing[component].update(corrected_timing)
-            self.component_timing[component]["correction_count"] += 1
-            
-            # Create correction result
-            correction_id = f"correction_{component}_{correction_type.value}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            correction = CorrectionResult(
-                correction_id=correction_id,
-                timestamp=datetime.now(),
+            # Create correction action
+            action = CorrectionAction(
+                action_id=f"correction_{int(time.time() * 1000)}",
                 correction_type=correction_type,
-                component=component,
-                original_timing=original_timing,
-                corrected_timing=corrected_timing,
-                drift_corrected=drift_corrected,
-                confidence_score=self._calculate_correction_confidence(component, correction_type),
-                metadata=correction_data
+                original_timing=event.actual_timestamp,
+                corrected_timing=event.actual_timestamp + timedelta(milliseconds=correction_amount),
+                correction_amount=correction_amount
             )
             
-            # Store correction
-            self.correction_history.append(correction)
+            # Execute correction
+            success = self._execute_correction(action)
+            action.success = success
             
-            # Update global state
-            self.global_temporal_state["correction_count"] += 1
-            self.global_temporal_state["last_correction"] = datetime.now()
-            self.global_temporal_state["system_drift"] += drift_corrected
+            if success:
+                event.correction_applied = True
+                event.correction_amount = correction_amount
+                self.successful_corrections += 1
+                logger.info(f"Applied temporal correction: {correction_amount:.2f}ms")
+            else:
+                logger.warning(f"Failed to apply temporal correction: {correction_amount:.2f}ms")
             
-            return correction
-
-    def _calculate_correction_confidence(self, component: str, correction_type: CorrectionType) -> float:
-        """Calculate confidence score for a correction"""
-        
-        confidence = 0.5  # Base confidence
-        
-        # Component history factor
-        if component in self.component_timing:
-            comp_timing = self.component_timing[component]
-            if comp_timing["total_events"] > 10:
-                confidence += 0.2
+            self.correction_actions.append(action)
+            self.total_corrections += 1
             
-            # Drift stability factor
-            if abs(comp_timing["average_drift"]) < self.max_drift_threshold:
-                confidence += 0.2
-            
-            # Correction history factor
-            if comp_timing["correction_count"] < 5:
-                confidence += 0.1
+            return success
         
-        # Correction type factor
-        if correction_type == CorrectionType.SYNCHRONIZATION:
-            confidence += 0.1
-        elif correction_type == CorrectionType.DRIFT_CORRECTION:
-            confidence += 0.05
-        
-        return min(confidence, 1.0)
-
-    def get_temporal_analysis(self) -> Dict[str, Any]:
-        """Get comprehensive temporal analysis"""
-        
-        with self.lock:
-            analysis = {
-                "timestamp": datetime.now().isoformat(),
-                "global_state": self.global_temporal_state,
-                "component_analysis": {},
-                "correction_summary": {
-                    "total_corrections": len(self.correction_history),
-                    "correction_types": {},
-                    "recent_corrections": []
-                },
-                "drift_analysis": self.calculate_temporal_drift()
-            }
-            
-            # Component analysis
-            for component, timing in self.component_timing.items():
-                analysis["component_analysis"][component] = {
-                    "total_events": timing["total_events"],
-                    "average_drift": timing["average_drift"],
-                    "correction_count": timing["correction_count"],
-                    "last_event": timing["last_event"].isoformat() if timing["last_event"] else None
-                }
-            
-            # Correction type summary
-            for correction in self.correction_history:
-                corr_type = correction.correction_type.value
-                if corr_type not in analysis["correction_summary"]["correction_types"]:
-                    analysis["correction_summary"]["correction_types"][corr_type] = 0
-                analysis["correction_summary"]["correction_types"][corr_type] += 1
-            
-            # Recent corrections
-            recent_corrections = sorted(self.correction_history, key=lambda x: x.timestamp, reverse=True)[:10]
-            analysis["correction_summary"]["recent_corrections"] = [
-                {
-                    "correction_id": corr.correction_id,
-                    "timestamp": corr.timestamp.isoformat(),
-                    "component": corr.component,
-                    "correction_type": corr.correction_type.value,
-                    "drift_corrected": corr.drift_corrected,
-                    "confidence_score": corr.confidence_score
-                }
-                for corr in recent_corrections
-            ]
-            
-            return analysis
-
-    def start_background_correction(self):
-        """Start background correction thread"""
-        
-        if self.running:
-            return
-        
-        self.running = True
-        self.correction_thread = threading.Thread(target=self._background_correction_loop)
-        self.correction_thread.daemon = True
-        self.correction_thread.start()
-
-    def stop_background_correction(self):
-        """Stop background correction thread"""
-        
-        self.running = False
-        if self.correction_thread:
-            self.correction_thread.join()
-
-    def _background_correction_loop(self):
-        """Background correction loop"""
-        
-        while self.running:
-            try:
-                # Check for components that need correction
-                with self.lock:
-                    for component, timing in self.component_timing.items():
-                        # Apply drift correction if needed
-                        if abs(timing["average_drift"]) > self.max_drift_threshold:
-                            self.apply_temporal_correction(
-                                component, 
-                                CorrectionType.DRIFT_CORRECTION,
-                                {"threshold_exceeded": True}
-                            )
-                
-                # Save data periodically
-                self._save_temporal_data()
-                
-                # Sleep for correction interval
-                time.sleep(60)  # Check every minute
-                
-            except Exception as e:
-                print(f"Error in background correction: {e}")
-                time.sleep(10)
-
-    def get_temporal_statistics(self) -> Dict[str, Any]:
-        """Get temporal correction statistics"""
-        
-        with self.lock:
-            return {
-                "total_events": len(self.temporal_events),
-                "total_corrections": len(self.correction_history),
-                "active_components": len(self.component_timing),
-                "global_temporal_state": self.global_temporal_state,
-                "component_timing": self.component_timing,
-                "correction_window": self.correction_window,
-                "max_drift_threshold": self.max_drift_threshold
-            }
-
-
-def get_temporal_execution_correction_layer() -> TemporalExecutionCorrectionLayer:
-    """Get singleton instance of temporal execution correction layer"""
-    if not hasattr(get_temporal_execution_correction_layer, '_instance'):
-        get_temporal_execution_correction_layer._instance = TemporalExecutionCorrectionLayer()
-    return get_temporal_execution_correction_layer._instance
-
-
-# Example usage
-if __name__ == "__main__":
-    # Create temporal execution correction layer
-    temporal_layer = get_temporal_execution_correction_layer()
+        except Exception as e:
+            logger.error(f"Temporal correction error: {e}")
+            return False
     
-    # Simulate some temporal events
-    for i in range(10):
-        # Simulate expected vs actual timing
-        expected_time = datetime.now()
-        time.sleep(0.1)  # Simulate processing delay
-        actual_time = datetime.now()
+    def _calculate_adaptive_factor(self, drift_amount: float) -> float:
+        """Calculate adaptive correction factor."""
+        # Adaptive factor based on drift magnitude and history
+        base_factor = 1.0
         
-        # Register temporal event
-        event = temporal_layer.register_temporal_event(
-            event_type="processing",
-            component=f"component_{i % 3}",
-            expected_time=expected_time,
-            actual_time=actual_time,
-            metadata={"iteration": i}
+        # Reduce factor for large drifts to avoid over-correction
+        if abs(drift_amount) > 1000.0:
+            base_factor *= 0.5
+        elif abs(drift_amount) > 500.0:
+            base_factor *= 0.8
+        
+        # Adjust based on correction success rate
+        success_rate = self.successful_corrections / max(1, self.total_corrections)
+        base_factor *= success_rate
+        
+        return np.clip(base_factor, 0.1, 2.0)
+    
+    def _execute_correction(self, action: CorrectionAction) -> bool:
+        """Execute the temporal correction."""
+        try:
+            # Simulate correction execution
+            # In a real implementation, this would adjust system timing
+            time.sleep(0.001)  # Simulate processing time
+            
+            # Update system time offset
+            self.time_offset += action.correction_amount
+            
+            # Record correction in history
+            self.correction_history.append({
+                "timestamp": action.timestamp,
+                "correction_type": action.correction_type.value,
+                "correction_amount": action.correction_amount,
+                "success": action.success
+            })
+            
+            # Keep history size manageable
+            if len(self.correction_history) > 1000:
+                self.correction_history = self.correction_history[-500:]
+            
+            return True
+        
+        except Exception as e:
+            logger.error(f"Correction execution failed: {e}")
+            return False
+    
+    def synchronize_system(
+        self,
+        system_id: str,
+        reference_timestamp: datetime,
+        local_timestamp: Optional[datetime] = None
+    ) -> SynchronizationPoint:
+        """Synchronize system timing with reference."""
+        if local_timestamp is None:
+            local_timestamp = datetime.now()
+        
+        # Calculate offset
+        offset = (local_timestamp - reference_timestamp).total_seconds() * 1000.0
+        
+        # Calculate confidence based on offset magnitude
+        confidence = max(0.0, 1.0 - abs(offset) / 1000.0)  # Higher offset = lower confidence
+        
+        sync_point = SynchronizationPoint(
+            sync_id=f"sync_{int(time.time() * 1000)}",
+            system_id=system_id,
+            reference_timestamp=reference_timestamp,
+            local_timestamp=local_timestamp,
+            offset=offset,
+            confidence=confidence
         )
         
-        print(f"Registered event: {event.event_id}, Drift: {event.drift:.3f}s")
+        self.sync_points[system_id] = sync_point
+        self.last_sync_time = datetime.now()
+        
+        # Apply synchronization correction if needed
+        if abs(offset) > self.max_drift_threshold:
+            self._apply_synchronization_correction(sync_point)
+        
+        logger.info(f"Synchronized system {system_id}: offset {offset:.2f}ms (confidence: {confidence:.3f})")
+        return sync_point
     
-    # Get temporal analysis
-    analysis = temporal_layer.get_temporal_analysis()
-    print("\nTemporal Analysis:")
-    print(json.dumps(analysis, indent=2, default=str))
+    def _apply_synchronization_correction(self, sync_point: SynchronizationPoint) -> bool:
+        """Apply synchronization correction."""
+        try:
+            # Create synchronization correction action
+            action = CorrectionAction(
+                action_id=f"sync_correction_{int(time.time() * 1000)}",
+                correction_type=CorrectionType.SYNCHRONIZATION,
+                original_timing=sync_point.local_timestamp,
+                corrected_timing=sync_point.reference_timestamp,
+                correction_amount=-sync_point.offset
+            )
+            
+            # Execute correction
+            success = self._execute_correction(action)
+            action.success = success
+            
+            self.correction_actions.append(action)
+            
+            return success
+        
+        except Exception as e:
+            logger.error(f"Synchronization correction failed: {e}")
+            return False
+    
+    def optimize_execution_timing(
+        self,
+        target_latency: float = 10.0,  # milliseconds
+        max_jitter: float = 5.0  # milliseconds
+    ) -> Dict[str, Any]:
+        """Optimize execution timing for target latency."""
+        if not self.temporal_events:
+            return {"status": "no_events", "message": "No temporal events available"}
+        
+        # Analyze recent events
+        recent_events = self.temporal_events[-100:]  # Last 100 events
+        latencies = [abs(event.drift_amount) for event in recent_events]
+        
+        if not latencies:
+            return {"status": "no_latency_data", "message": "No latency data available"}
+        
+        current_latency = np.mean(latencies)
+        current_jitter = np.std(latencies)
+        
+        # Calculate optimization parameters
+        latency_reduction = max(0.0, current_latency - target_latency)
+        jitter_reduction = max(0.0, current_jitter - max_jitter)
+        
+        # Determine optimization strategy
+        optimization_strategy = "none"
+        if latency_reduction > 0 and jitter_reduction > 0:
+            optimization_strategy = "latency_and_jitter"
+        elif latency_reduction > 0:
+            optimization_strategy = "latency_only"
+        elif jitter_reduction > 0:
+            optimization_strategy = "jitter_only"
+        
+        # Apply optimization if needed
+        optimization_applied = False
+        if optimization_strategy != "none":
+            optimization_applied = self._apply_timing_optimization(
+                latency_reduction, jitter_reduction, optimization_strategy
+            )
+        
+        return {
+            "status": "optimized" if optimization_applied else "no_optimization_needed",
+            "current_latency": current_latency,
+            "target_latency": target_latency,
+            "current_jitter": current_jitter,
+            "max_jitter": max_jitter,
+            "latency_reduction": latency_reduction,
+            "jitter_reduction": jitter_reduction,
+            "optimization_strategy": optimization_strategy,
+            "optimization_applied": optimization_applied
+        }
+    
+    def _apply_timing_optimization(
+        self,
+        latency_reduction: float,
+        jitter_reduction: float,
+        strategy: str
+    ) -> bool:
+        """Apply timing optimization."""
+        try:
+            # Create timing optimization action
+            correction_amount = -(latency_reduction + jitter_reduction) / 2.0
+            
+            action = CorrectionAction(
+                action_id=f"timing_opt_{int(time.time() * 1000)}",
+                correction_type=CorrectionType.TIMING_OPTIMIZATION,
+                original_timing=datetime.now(),
+                corrected_timing=datetime.now() + timedelta(milliseconds=correction_amount),
+                correction_amount=correction_amount
+            )
+            
+            # Execute optimization
+            success = self._execute_correction(action)
+            action.success = success
+            
+            self.correction_actions.append(action)
+            
+            if success:
+                logger.info(f"Applied timing optimization: {strategy} (reduction: {correction_amount:.2f}ms)")
+            
+            return success
+        
+        except Exception as e:
+            logger.error(f"Timing optimization failed: {e}")
+            return False
+    
+    def get_temporal_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive temporal statistics."""
+        total_events = len(self.temporal_events)
+        total_corrections = len(self.correction_actions)
+        successful_corrections = sum(1 for action in self.correction_actions if action.success)
+        
+        # Correction type distribution
+        correction_types = {}
+        for action in self.correction_actions:
+            correction_type = action.correction_type.value
+            correction_types[correction_type] = correction_types.get(correction_type, 0) + 1
+        
+        # Drift statistics
+        if self.temporal_events:
+            recent_drifts = [event.drift_amount for event in self.temporal_events[-50:]]
+            avg_drift = np.mean(recent_drifts)
+            std_drift = np.std(recent_drifts)
+        else:
+            avg_drift = 0.0
+            std_drift = 0.0
+        
+        # Synchronization statistics
+        sync_count = len(self.sync_points)
+        avg_sync_confidence = 0.0
+        if self.sync_points:
+            avg_sync_confidence = sum(point.confidence for point in self.sync_points.values()) / len(self.sync_points)
+        
+        return {
+            "total_events": total_events,
+            "total_corrections": total_corrections,
+            "successful_corrections": successful_corrections,
+            "correction_success_rate": successful_corrections / max(1, total_corrections),
+            "correction_type_distribution": correction_types,
+            "average_drift": self.average_drift,
+            "max_drift_observed": self.max_drift_observed,
+            "recent_average_drift": avg_drift,
+            "recent_drift_std": std_drift,
+            "synchronization_count": sync_count,
+            "average_sync_confidence": avg_sync_confidence,
+            "system_time_offset": self.time_offset,
+            "correction_enabled": self.correction_enabled,
+            "adaptive_correction": self.adaptive_correction
+        }
+    
+    def get_correction_recommendations(self) -> List[str]:
+        """Get correction recommendations based on analysis."""
+        recommendations = []
+        stats = self.get_temporal_statistics()
+        
+        # Check correction success rate
+        if stats["correction_success_rate"] < 0.8:
+            recommendations.append("Low correction success rate. Review correction algorithms.")
+        
+        # Check drift magnitude
+        if stats["max_drift_observed"] > 1000.0:
+            recommendations.append("Large drift observed. Consider system clock synchronization.")
+        
+        # Check average drift
+        if stats["average_drift"] > 100.0:
+            recommendations.append("High average drift. Optimize timing algorithms.")
+        
+        # Check synchronization confidence
+        if stats["average_sync_confidence"] < 0.7:
+            recommendations.append("Low synchronization confidence. Improve reference timing.")
+        
+        # Check correction frequency
+        if stats["total_corrections"] > stats["total_events"] * 0.5:
+            recommendations.append("High correction frequency. Review drift thresholds.")
+        
+        return recommendations
+    
+    def get_trading_signals(self) -> List[Dict[str, Any]]:
+        """Generate trading signals based on temporal analysis."""
+        signals = []
+        stats = self.get_temporal_statistics()
+        
+        # High precision timing signal
+        if stats["average_drift"] < 10.0 and stats["correction_success_rate"] > 0.95:
+            signal = {
+                "type": "high_precision_timing",
+                "average_drift": stats["average_drift"],
+                "correction_success_rate": stats["correction_success_rate"],
+                "confidence": min(1.0, 1.0 - stats["average_drift"] / 100.0),
+                "strength": stats["correction_success_rate"],
+                "timestamp": datetime.now(),
+                "metadata": {"system_time_offset": stats["system_time_offset"]}
+            }
+            signals.append(signal)
+        
+        # Timing instability signal
+        if stats["recent_drift_std"] > 50.0:
+            signal = {
+                "type": "timing_instability",
+                "drift_std": stats["recent_drift_std"],
+                "confidence": min(1.0, stats["recent_drift_std"] / 100.0),
+                "strength": min(1.0, stats["recent_drift_std"] / 200.0),
+                "timestamp": datetime.now(),
+                "metadata": {"max_drift_observed": stats["max_drift_observed"]}
+            }
+            signals.append(signal)
+        
+        # Synchronization quality signal
+        if stats["average_sync_confidence"] > 0.9:
+            signal = {
+                "type": "high_sync_quality",
+                "sync_confidence": stats["average_sync_confidence"],
+                "confidence": stats["average_sync_confidence"],
+                "strength": stats["average_sync_confidence"],
+                "timestamp": datetime.now(),
+                "metadata": {"synchronization_count": stats["synchronization_count"]}
+            }
+            signals.append(signal)
+        
+        return signals
+
+
+def main() -> None:
+    """Main function for testing the temporal execution correction layer."""
+    # Initialize correction layer
+    correction_layer = TemporalExecutionCorrectionLayer()
+    
+    # Register some temporal events
+    base_time = datetime.now()
+    
+    for i in range(10):
+        # Simulate events with varying drift
+        drift = np.random.normal(0, 50)  # Random drift
+        expected_time = base_time + timedelta(seconds=i)
+        actual_time = expected_time + timedelta(milliseconds=drift)
+        
+        correction_layer.register_temporal_event(
+            f"test_event_{i}",
+            expected_time,
+            actual_time
+        )
+    
+    # Synchronize with reference system
+    reference_time = datetime.now()
+    sync_point = correction_layer.synchronize_system("test_system", reference_time)
+    
+    # Optimize execution timing
+    optimization_result = correction_layer.optimize_execution_timing()
+    print(f"Timing optimization: {optimization_result}")
     
     # Get statistics
-    stats = temporal_layer.get_temporal_statistics()
-    print("\nTemporal Statistics:")
-    print(json.dumps(stats, indent=2, default=str)) 
+    stats = correction_layer.get_temporal_statistics()
+    print(f"Temporal statistics: {stats}")
+    
+    # Get recommendations
+    recommendations = correction_layer.get_correction_recommendations()
+    print(f"Correction recommendations: {recommendations}")
+    
+    # Get trading signals
+    signals = correction_layer.get_trading_signals()
+    print(f"Generated {len(signals)} trading signals")
+
+
+if __name__ == "__main__":
+    main() 
