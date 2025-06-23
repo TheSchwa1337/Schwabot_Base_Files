@@ -1,147 +1,122 @@
 #!/usr/bin/env python3
 """
-Temporal Execution Correction Layer
-===================================
+temporal_execution_correction_layer.py - Timing Correction & Sync Layer.
 
-Advanced timing correction and phase alignment system for synchronized execution
-across asynchronous trading components. This module handles tick drift compensation,
-temporal memory rewind, and execution window optimization.
+Corrects execution mismatches due to delay, bad tick synchronization, or signal
+distortion. Functions as a fail-safe timing realigner between logic triggers
+and market execution, ensuring trades happen at the intended moment.
 """
 
-import json
-import logging
 import time
-import math
-from typing import Dict, List, Optional, Any
+import logging
+import hashlib
+from typing import Dict, Any, Optional
+
+from core.utils.math_utils import (
+    calculate_execution_lag,
+    apply_lag_compensation_curve,
+)
 
 logger = logging.getLogger(__name__)
 
 
-def correct_tick_phase(current_tick: int, drift: float) -> int:
-    """Shift current tick to align with expected tick phase."""
-    try:
-        drift_tolerance = 0.15
-        
-        if abs(drift) <= drift_tolerance:
-            return current_tick
-        
-        corrected_tick = current_tick + int(drift)
-        corrected_tick = max(0, corrected_tick)
-        
-        return corrected_tick
-        
-    except Exception as e:
-        logger.error(f"Error correcting tick phase: {e}")
-        return current_tick
-
-
-def compute_phase_drift(target_time: float, actual_time: float) -> float:
-    """Calculate temporal drift between expected vs actual execution."""
-    try:
-        drift = actual_time - target_time
-        base_latency = 0.001  # 1ms base latency
-        compensated_drift = drift - base_latency
-        
-        return compensated_drift
-        
-    except Exception as e:
-        logger.error(f"Error computing phase drift: {e}")
-        return 0.0
-
-
-def apply_correction(weight: float, error_margin: float) -> float:
-    """Returns a correction factor scaled by Gaussian decay."""
-    try:
-        correction_sigma = 0.1
-        gaussian_factor = math.exp(-(error_margin ** 2) / (2 * correction_sigma ** 2))
-        correction_factor = weight * gaussian_factor
-        correction_factor = max(-1.0, min(1.0, correction_factor))
-        
-        return correction_factor
-        
-    except Exception as e:
-        logger.error(f"Error applying correction: {e}")
-        return 0.0
-
-
 class TemporalExecutionCorrectionLayer:
-    """Temporal execution correction system for tick phase alignment."""
-    
-    def __init__(self) -> None:
-        """Initialize the temporal correction layer."""
-        self.correction_count = 0
-        self.drift_history: List[float] = []
-        self.drift_tolerance = 0.15
+    """
+    Provides methods to correct for timing discrepancies in trade execution.
+    """
+
+    def __init__(self, lag_sensitivity: float = 0.05, max_allowed_lag: float = 2.0):
+        """
+        Initialize the Temporal Execution Correction Layer.
+
+        Args:
+            lag_sensitivity: The sensitivity factor for lag compensation.
+            max_allowed_lag: The maximum tolerable execution lag in seconds before
+                             a major fault is reported.
+        """
+        self.lag_sensitivity = lag_sensitivity
+        self.max_allowed_lag = max_allowed_lag
         
-        logger.info("Temporal execution correction layer initialized")
-    
-    def process_tick_correction(self, tick_id: int, expected_time: float) -> int:
-        """Process tick correction with drift compensation."""
-        try:
-            current_time = time.time()
-            drift = compute_phase_drift(expected_time, current_time)
-            corrected_tick = correct_tick_phase(tick_id, drift)
+        self.trusted_tick_memory: Dict[str, float] = {}
+        self.max_memory_size = 1000
+
+        logger.info("Temporal Execution Correction Layer initialized.")
+
+    def generate_trusted_tick(self, timestamp: float) -> str:
+        """
+        Generate a SHA-256 hash for a given timestamp to use as a trusted tick.
+        """
+        tick_hash = hashlib.sha256(str(timestamp).encode()).hexdigest()
+        
+        # Store the trusted tick hash with its timestamp
+        self.trusted_tick_memory[tick_hash] = timestamp
+        
+        # Prune memory if it gets too large
+        if len(self.trusted_tick_memory) > self.max_memory_size:
+            # Remove the oldest entry
+            oldest_key = next(iter(self.trusted_tick_memory))
+            del self.trusted_tick_memory[oldest_key]
             
-            self.drift_history.append(drift)
-            if len(self.drift_history) > 1000:
-                self.drift_history = self.drift_history[-1000:]
-            
-            if corrected_tick != tick_id:
-                self.correction_count += 1
-            
-            return corrected_tick
-            
-        except Exception as e:
-            logger.error(f"Error processing tick correction: {e}")
-            return tick_id
-    
-    def get_correction_statistics(self) -> Dict[str, Any]:
-        """Get temporal correction system statistics."""
-        try:
-            avg_drift = sum(self.drift_history) / len(self.drift_history) if self.drift_history else 0.0
-            
+        return tick_hash
+
+    def validate_tick_sync(self, tick_hash: str) -> bool:
+        """
+        Validate if a given tick hash is present in the trusted tick memory.
+        This prevents cycle-warping and processing of stale signals.
+        """
+        is_synced = tick_hash in self.trusted_tick_memory
+        if not is_synced:
+            logger.warning(f"Tick sync validation failed for hash: {tick_hash[:10]}...")
+        return is_synced
+
+    def correct_execution_price(
+        self, ideal_trigger_time: float, actual_execution_time: float, original_price: float
+    ) -> Dict[str, Any]:
+        """
+        Corrects an execution price based on calculated lag.
+
+        Args:
+            ideal_trigger_time: The timestamp when the trade should have triggered.
+            actual_execution_time: The timestamp when the trade actually executed.
+            original_price: The price at the time of execution.
+
+        Returns:
+            A dictionary containing the corrected price, lag, and status.
+        """
+        # Calculate lag using the utility
+        lag = calculate_execution_lag(ideal_trigger_time, actual_execution_time)
+
+        if lag > self.max_allowed_lag:
+            # --- HOOKS INTO OTHER MODULES (Example) ---
+            # Hooks into fault_bus.py to report a major timing fault
+            # self.report_fault("PERSISTENT_TIMING_FAILURE", lag)
+            logger.critical(f"Execution lag of {lag:.4f}s exceeds maximum of {self.max_allowed_lag}s!")
             return {
-                'total_corrections': self.correction_count,
-                'average_drift': avg_drift,
-                'drift_history_size': len(self.drift_history),
-                'drift_tolerance': self.drift_tolerance
+                "status": "lag_exceeded_threshold",
+                "execution_lag": lag,
+                "adjusted_price": original_price, # No adjustment on critical failure
             }
-        except Exception as e:
-            logger.error(f"Error getting correction statistics: {e}")
-            return {'error': str(e)}
 
+        # Apply compensation curve using the utility
+        adjusted_price = apply_lag_compensation_curve(
+            original_price, lag, self.lag_sensitivity
+        )
 
-def main() -> None:
-    """Test the temporal execution correction layer."""
-    try:
-        print("⏰ Temporal Execution Correction Layer Test")
-        
-        correction_layer = TemporalExecutionCorrectionLayer()
-        
-        # Test tick phase correction
-        corrected_tick = correct_tick_phase(1000, 0.25)
-        print(f"Original tick: 1000, Corrected tick: {corrected_tick}")
-        
-        # Test phase drift computation
-        target_time = time.time() + 1.0
-        actual_time = time.time() + 1.1
-        drift = compute_phase_drift(target_time, actual_time)
-        print(f"Phase drift: {drift:.6f} seconds")
-        
-        # Test correction application
-        correction_factor = apply_correction(0.8, 0.1)
-        print(f"Correction factor: {correction_factor:.6f}")
-        
-        # Show statistics
-        stats = correction_layer.get_correction_statistics()
-        for key, value in stats.items():
-            print(f"  {key}: {value}")
-        
-        print("✅ Temporal correction layer test completed")
-        
-    except Exception as e:
-        print(f"❌ Test failed: {e}")
+        logger.info(
+            f"Execution lag of {lag:.4f}s detected. "
+            f"Price adjusted from {original_price} to {adjusted_price}."
+        )
 
+        # --- HOOKS INTO OTHER MODULES (Example) ---
+        # Hooks into entry_exit_vector_analyzer.py for final validation
+        # self.send_for_final_validation(adjusted_price)
+        #
+        # Hooks into post_failure_recovery_intelligence_loop.py for failover
+        # self.log_correction_event_for_learning(lag, adjusted_price)
 
-if __name__ == "__main__":
-    main() 
+        return {
+            "status": "correction_applied",
+            "execution_lag": lag,
+            "original_price": original_price,
+            "adjusted_price": adjusted_price,
+        } 

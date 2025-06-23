@@ -17,7 +17,13 @@ Mathematical Foundation:
 
 import logging
 import time
+import numpy as np
 from typing import Dict, List, Optional, Any
+
+from core.utils.math_utils import (
+    wavelet_decompose,
+    calculate_temporal_confidence_merge,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -159,33 +165,106 @@ def process_tick_data(tick_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
 
 class MultiBitBTCProcessor:
-    """Multi-bit Bitcoin processing engine for enhanced signal precision."""
-    
-    def __init__(self) -> None:
-        """Initialize the multi-bit processor."""
-        self.processed_count = 0
-        self.error_count = 0
+    """
+    Analyzes BTC price data at multiple temporal resolutions to synthesize signals.
+    """
+
+    def __init__(self, timeframes: Dict[str, int], decomposition_level: int = 3):
+        """
+        Initialize the Multi-Bit BTC Processor.
+
+        Args:
+            timeframes: A dictionary mapping timeframe names (e.g., "1m") to the
+                        number of data points they represent.
+            decomposition_level: The level for wavelet decomposition.
+        """
+        if not timeframes:
+            raise ValueError("Timeframes dictionary cannot be empty.")
+            
+        self.timeframes = timeframes
+        self.decomposition_level = decomposition_level
         
-    def process(self, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Process data through multi-bit analysis."""
-        try:
-            result = process_tick_data(data)
-            if result:
-                self.processed_count += 1
-            else:
-                self.error_count += 1
-            return result
-        except Exception as e:
-            self.error_count += 1
-            logger.error(f"Processor error: {e}")
-            return None
-    
-    def get_stats(self) -> Dict[str, int]:
-        """Get processor statistics."""
-        return {
-            'processed_count': self.processed_count,
-            'error_count': self.error_count
+        # Data buffers for each timeframe
+        self.data_buffers: Dict[str, List[float]] = {tf: [] for tf in timeframes}
+        
+        # Weights for merging confidence scores from each timeframe
+        self.confidence_weights: Dict[str, float] = {tf: 1.0 for tf in timeframes}
+
+        logger.info(f"MultiBitBTCProcessor initialized for timeframes: {list(timeframes.keys())}")
+
+    def add_data_point(self, price: float) -> None:
+        """Add a new price data point to all timeframe buffers."""
+        for tf, max_len in self.timeframes.items():
+            self.data_buffers[tf].append(price)
+            
+            # Maintain the buffer size for each timeframe
+            if len(self.data_buffers[tf]) > max_len:
+                self.data_buffers[tf].pop(0)
+
+    def set_confidence_weights(self, weights: Dict[str, float]) -> None:
+        """Set the weights used for merging timeframe scores."""
+        for tf, weight in weights.items():
+            if tf in self.confidence_weights:
+                self.confidence_weights[tf] = weight
+        logger.info(f"Updated confidence weights to: {self.confidence_weights}")
+
+    def process_all_timeframes(self) -> Dict[str, Any]:
+        """
+        Process the data for all timeframes to generate a synthesized signal.
+
+        Returns:
+            A dictionary containing the analysis from each timeframe and a final
+            merged confidence score.
+        """
+        timeframe_analyses = {}
+        all_scores = []
+        all_weights = []
+        
+        for tf_name, tf_data in self.data_buffers.items():
+            if len(tf_data) < 2**self.decomposition_level:
+                logger.debug(f"Skipping timeframe '{tf_name}': insufficient data.")
+                continue
+
+            # Perform wavelet decomposition using the utility
+            decomposed_signals = wavelet_decompose(
+                np.array(tf_data), level=self.decomposition_level
+            )
+            
+            # In a real scenario, each signal component would be analyzed.
+            # Here, we simulate a "score" based on the energy of the detail coefficients.
+            detail_energy = np.sum(np.square(decomposed_signals[1])) if len(decomposed_signals) > 1 else 0.0
+            
+            # Normalize score
+            score = np.tanh(detail_energy / 1e6) # Normalize with tanh
+            
+            analysis = {
+                "timeframe": tf_name,
+                "data_points": len(tf_data),
+                "decomposed_levels": len(decomposed_signals),
+                "signal_score": score,
+            }
+            timeframe_analyses[tf_name] = analysis
+            
+            all_scores.append(score)
+            all_weights.append(self.confidence_weights[tf_name])
+
+        # Merge the scores from all timeframes using the utility
+        merged_confidence = calculate_temporal_confidence_merge(all_scores, all_weights)
+
+        final_result = {
+            "merged_confidence_score": merged_confidence,
+            "individual_timeframe_analysis": timeframe_analyses,
         }
+
+        # --- HOOKS INTO OTHER MODULES (Example) ---
+        # if merged_confidence > 0.75:
+        #     # Hooks into profit_routing_engine.py
+        #     self.send_profit_signal(merged_confidence)
+        #
+        # # Hooks into entry_exit_vector_analyzer.py
+        # self.validate_with_entry_exit_vectors(final_result)
+        
+        return final_result
 
 
 def main() -> None:

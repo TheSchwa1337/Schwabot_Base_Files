@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 Unified Schwabot Integration Dashboard - Real-Time Crypto</title>
+    <title>🌟 Schwabot Real-Time Crypto Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -180,32 +180,7 @@
             color: #888;
         }
 
-        /* Specific Panel Types */
-        .optimization-monitor {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.05));
-        }
-
-        .hash-visualization {
-            background: linear-gradient(135deg, rgba(255, 100, 255, 0.1), rgba(200, 0, 200, 0.05));
-        }
-
-        .gpu-monitor {
-            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1), rgba(255, 140, 0, 0.05));
-        }
-
-        .path-visualizer {
-            background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(0, 150, 255, 0.05));
-        }
-
-        .trading-monitor {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
-        }
-
-        .thermal-visualization {
-            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 0, 0, 0.05));
-        }
-
-        /* ✨ NEW: Crypto-specific panels */
+        /* Crypto-specific panels */
         .crypto-price-panel {
             background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 200, 100, 0.08));
             border-color: #00ff88;
@@ -322,32 +297,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        /* Loading animations */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(0, 255, 136, 0.3);
-            border-radius: 50%;
-            border-top-color: #00ff88;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Error states */
-        .error-state {
-            background: rgba(255, 68, 68, 0.1);
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
-        .error-state .data-value {
-            color: #ff4444;
-        }
     </style>
 </head>
 <body>
@@ -384,36 +333,6 @@
                 <input type="checkbox" id="toggle-fault-bus" checked>
                 <label for="toggle-fault-bus">Fault Bus Monitor</label>
             </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-optimization" checked>
-                <label for="toggle-optimization">Optimization Monitor</label>
-            </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-hash-viz" checked>
-                <label for="toggle-hash-viz">Hash Visualization</label>
-            </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-gpu-monitor" checked>
-                <label for="toggle-gpu-monitor">GPU Monitor</label>
-            </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-path-viz" checked>
-                <label for="toggle-path-viz">Path Visualizer</label>
-            </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-trading-monitor" checked>
-                <label for="toggle-trading-monitor">Trading Monitor</label>
-            </div>
-            
-            <div class="panel-toggle">
-                <input type="checkbox" id="toggle-thermal" checked>
-                <label for="toggle-thermal">Thermal Visualization</label>
-            </div>
 
             <div class="system-info">
                 <h4>🖥️ System Status</h4>
@@ -443,7 +362,7 @@
         <!-- Main Dashboard -->
         <main class="main-dashboard">
             <div class="panels-grid">
-                <!-- ✨ NEW: Real-Time Crypto Price Panel -->
+                <!-- Real-Time Crypto Price Panel -->
                 <div class="panel crypto-price-panel" id="panel-crypto-prices">
                     <div class="panel-header">
                         <h3 class="panel-title">💰 Real-Time Crypto Prices</h3>
@@ -474,7 +393,7 @@
                     </div>
                 </div>
 
-                <!-- ✨ NEW: Volume Analysis Panel -->
+                <!-- Volume Analysis Panel -->
                 <div class="panel crypto-volume-panel" id="panel-crypto-volumes">
                     <div class="panel-header">
                         <h3 class="panel-title">📈 Volume Analysis</h3>
@@ -505,7 +424,7 @@
                     </div>
                 </div>
 
-                <!-- ✨ NEW: Entry/Exit Signals Panel -->
+                <!-- Entry/Exit Signals Panel -->
                 <div class="panel entry-exit-signals" id="panel-entry-exit">
                     <div class="panel-header">
                         <h3 class="panel-title">🎯 Entry/Exit Signals</h3>
@@ -546,7 +465,7 @@
                     </div>
                 </div>
 
-                <!-- ✨ NEW: Fault Bus Monitor Panel -->
+                <!-- Fault Bus Monitor Panel -->
                 <div class="panel fault-bus-monitor" id="panel-fault-bus">
                     <div class="panel-header">
                         <h3 class="panel-title">🧠 Fault Bus Monitor</h3>
@@ -580,55 +499,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Existing panels (keeping structure) -->
-                <div class="panel optimization-monitor" id="panel-optimization">
-                    <div class="panel-header">
-                        <h3 class="panel-title">⚡ Optimization Monitor</h3>
-                        <span class="panel-status" id="optimization-status">Active</span>
-                    </div>
-                    <div id="optimization-content"></div>
-                </div>
-
-                <div class="panel hash-visualization" id="panel-hash-viz">
-                    <div class="panel-header">
-                        <h3 class="panel-title">🔗 Hash Visualization</h3>
-                        <span class="panel-status" id="hash-viz-status">Active</span>
-                    </div>
-                    <div id="hash-viz-content"></div>
-                </div>
-
-                <div class="panel gpu-monitor" id="panel-gpu-monitor">
-                    <div class="panel-header">
-                        <h3 class="panel-title">🔥 GPU Monitor</h3>
-                        <span class="panel-status" id="gpu-monitor-status">Active</span>
-                    </div>
-                    <div id="gpu-monitor-content"></div>
-                </div>
-
-                <div class="panel path-visualizer" id="panel-path-viz">
-                    <div class="panel-header">
-                        <h3 class="panel-title">🛤️ Path Visualizer</h3>
-                        <span class="panel-status" id="path-viz-status">Active</span>
-                    </div>
-                    <div id="path-viz-content"></div>
-                </div>
-
-                <div class="panel trading-monitor" id="panel-trading-monitor">
-                    <div class="panel-header">
-                        <h3 class="panel-title">📊 Trading Monitor</h3>
-                        <span class="panel-status" id="trading-monitor-status">Active</span>
-                    </div>
-                    <div id="trading-monitor-content"></div>
-                </div>
-
-                <div class="panel thermal-visualization" id="panel-thermal">
-                    <div class="panel-header">
-                        <h3 class="panel-title">🌡️ Thermal Visualization</h3>
-                        <span class="panel-status" id="thermal-status">Active</span>
-                    </div>
-                    <div id="thermal-content"></div>
-                </div>
             </div>
         </main>
     </div>
@@ -637,7 +507,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
-        class UnifiedDashboard {
+        class EnhancedCryptoDashboard {
             constructor() {
                 this.ws = null;
                 this.reconnectAttempts = 0;
@@ -656,8 +526,7 @@
             }
 
             async init() {
-                console.log('🌟 Initializing Enhanced Schwabot Dashboard...');
-                this.setupWebSocket();
+                console.log('🌟 Initializing Enhanced Schwabot Crypto Dashboard...');
                 this.setupPanelToggles();
                 this.setupCharts();
                 this.startDataUpdates();
@@ -755,11 +624,7 @@
             }
 
             setupPanelToggles() {
-                const toggles = [
-                    'crypto-prices', 'crypto-volumes', 'entry-exit', 'fault-bus',
-                    'optimization', 'hash-viz', 'gpu-monitor', 'path-viz', 
-                    'trading-monitor', 'thermal'
-                ];
+                const toggles = ['crypto-prices', 'crypto-volumes', 'entry-exit', 'fault-bus'];
 
                 toggles.forEach(panelId => {
                     const checkbox = document.getElementById(`toggle-${panelId}`);
@@ -1064,8 +929,8 @@
 
         // Initialize dashboard when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🌟 Initializing Enhanced Schwabot Dashboard...');
-            new UnifiedDashboard();
+            console.log('🌟 Initializing Enhanced Schwabot Crypto Dashboard...');
+            new EnhancedCryptoDashboard();
         });
     </script>
 </body>

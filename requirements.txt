@@ -1,121 +1,160 @@
-# Schwabot v1.0 - Complete Trading System Requirements
-# ====================================================
+# Core dependencies for Unified Schwabot Integration System
+# ========================================================
 
-# Core Framework
-numpy>=1.24.0
-pandas>=2.0.0
-scipy>=1.10.0
+# Web framework and API
+Flask==2.3.3
+Flask-CORS==4.0.0
+Werkzeug==2.3.7
 
-# Mathematical & Scientific Computing
-scikit-learn>=1.3.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-sympy>=1.12.0
+# WebSocket support
+websockets==11.0.3
 
-# Web Framework & API
-flask>=2.3.0
-flask-cors>=4.0.0
-flask-socketio>=5.3.0
-websockets>=11.0.0
-requests>=2.31.0
+# Cryptocurrency exchange APIs
+ccxt==4.1.13
 
-# Crypto Trading APIs
-ccxt>=4.0.0
-python-binance>=1.0.17
-coinbase>=2.1.0
+# AI model integrations
+openai==1.3.7
+anthropic==0.7.8
+google-generativeai==0.3.2
 
-# Data Processing & Storage
-sqlalchemy>=2.0.0
-redis>=4.6.0
-celery>=5.3.0
+# Data processing and analysis
+numpy==1.24.3
+pandas==2.0.3
+scipy==1.11.1
 
-# Configuration & Serialization
-pyyaml>=6.0
-python-dotenv>=1.0.0
-configparser>=6.0.0
-jsonschema>=4.21.0
+# Async support
+aiohttp==3.8.6
+asyncio-mqtt==0.16.1
 
-# UI & Visualization
-dearpygui>=1.10.0
-plotly>=5.15.0
-dash>=2.13.0
-streamlit>=1.25.0
+# HTTP requests
+requests==2.31.0
+httpx==0.25.2
 
-# Async & Concurrency
-asyncio>=3.4.3
-aiohttp>=3.8.0
-asyncpg>=0.28.0
+# Data serialization
+pydantic==2.5.0
+marshmallow==3.20.1
 
-# System Monitoring
-psutil>=5.9.0
-GPUtil>=1.4.0
-py-cpuinfo>=9.0.0
+# Logging and monitoring
+structlog==23.2.0
+prometheus-client==0.19.0
 
-# GPU Acceleration (Required by the codebase)
-torch>=2.0.0
-cupy-cuda12x>=12.0.0  # For CUDA 12.x, adjust version based on your CUDA version
+# Configuration management
+python-dotenv==1.0.0
+PyYAML==6.0.1
 
-# Logging & Debugging
-loguru>=0.7.0
-rich>=13.5.0
-colorama>=0.4.6
+# Database support (optional)
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Caching
+redis==5.0.1
+cachetools==5.3.2
+
+# Security
+cryptography==41.0.7
+bcrypt==4.1.2
 
 # Testing
-pytest>=7.4.0
-pytest-asyncio>=0.21.0
-pytest-mock>=3.11.0
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-mock==3.12.0
 
-# Security & Encryption
-cryptography>=41.0.0
-python-jose>=3.3.0
-passlib>=1.7.4
+# Development tools
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
 
-# Technical Analysis (for trading algorithms)
-# NOTE: TA-Lib requires system dependencies to be installed first
-# See TALIB_INSTALLATION.md for detailed installation instructions
-# TA-Lib>=0.4.28
+# Documentation
+Sphinx==7.2.6
+sphinx-rtd-theme==1.3.0
 
-# Development Tools (Optional)
-black>=23.7.0
-flake8>=6.0.0
-mypy>=1.5.0
-pre-commit>=3.3.0
+# Optional: Advanced analytics
+scikit-learn==1.3.2
+matplotlib==3.8.2
+seaborn==0.13.0
 
-# Production Deployment (Optional)
-gunicorn>=21.2.0
-supervisor>=4.2.0
-docker>=6.1.0
+# Optional: Time series analysis
+ta==0.10.2
+statsmodels==0.14.0
 
-# Linting and type checking tools for CI
-flake8
-mypy
-black
-isort
+# Optional: Machine learning
+torch==2.1.1
+tensorflow==2.15.0
 
-# =====================================
-# FUTURE ENHANCEMENTS - ADD WHEN NEEDED
-# =====================================
+# Optional: Visualization
+plotly==5.17.0
+dash==2.14.2
 
-# Enhanced Linting & Code Quality
-# pylint>=2.17.0          # More comprehensive linting than flake8
-# bandit>=1.7.0           # Security vulnerability scanning (CRITICAL for trading)
-# safety>=2.3.0           # Dependency vulnerability checking
-# pre-commit>=3.3.0       # Git hooks for pre-commit checks
+# Optional: Message queuing
+celery==5.3.4
+kombu==5.3.4
 
-# Type Checking Enhancements
-# types-requests>=2.31.0  # Type stubs for requests library
-# types-PyYAML>=6.0.0     # Type stubs for YAML
-# types-psutil>=5.9.0     # Type stubs for psutil
+# Optional: Monitoring and metrics
+grafana-api==1.0.3
+influxdb-client==1.38.0
 
-# Testing & Coverage
-# pytest-cov>=4.1.0       # Coverage reporting
-# pytest-mock>=3.11.0     # Mocking for tests
-# pytest-xdist>=3.3.0     # Parallel test execution
+# Optional: Cloud deployment
+kubernetes==28.1.0
+docker==6.1.3
 
-# Performance & Profiling (Critical for high-frequency trading)
-# memory-profiler>=0.61.0 # Memory usage profiling
-# line-profiler>=4.1.0    # Line-by-line profiling
+# Optional: Performance profiling
+memory-profiler==0.61.0
+line-profiler==4.1.2
 
-# Code Documentation
-# sphinx>=7.0.0           # Documentation generation
-# sphinx-rtd-theme>=1.3.0 # ReadTheDocs theme 
+# Optional: Jupyter notebooks
+jupyter==1.0.0
+ipykernel==6.27.1
+
+# Optional: API documentation
+flask-restx==1.3.0
+apispec==6.3.0
+
+# Optional: Rate limiting
+flask-limiter==3.5.0
+
+# Optional: Authentication
+flask-jwt-extended==4.5.3
+passlib==1.7.4
+
+# Optional: Background tasks
+APScheduler==3.10.4
+
+# Optional: File handling
+python-multipart==0.0.6
+
+# Optional: Date/time handling
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Optional: Network utilities
+netifaces==0.11.0
+psutil==5.9.6
+
+# Optional: Compression
+gzip==1.0.0
+lz4==4.3.2
+
+# Optional: Environment management
+virtualenv==20.25.0
+pip-tools==7.3.0
+
+# Development dependencies (install with pip install -r requirements.txt[dev])
+[dev]
+pre-commit==3.6.0
+bandit==1.7.5
+safety==2.3.5
+coverage==7.3.2
+pytest-cov==4.1.0
+pytest-xdist==3.5.0
+
+# Production dependencies (install with pip install -r requirements.txt[prod])
+[prod]
+gunicorn==21.2.0
+uvicorn==0.24.0
+supervisor==4.2.5
+
+# Testing dependencies (install with pip install -r requirements.txt[test])
+[test]
+pytest-benchmark==4.0.0
+pytest-html==4.1.1
+pytest-json-report==1.5.0 

@@ -36,11 +36,18 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import numpy as np
 import psutil
 
+# Import Core Engines for Integrated Intelligence
+from core.dlt_waveform_engine import DLTWaveformEngine
+from core.multi_bit_btc_processor import MultiBitBTCProcessor
+from core.riddle_gemm import RiddleGEMMEngine
+from core.temporal_execution_correction_layer import TemporalExecutionCorrectionLayer
+
 DEFAULT_WEIGHT_MATRIX_VALUE = 0.9
 MAX_QUEUE_SIZE = 50.0
 NORMALIZATION_FACTOR = 1.0
 DEFAULT_INTERVAL = 0.1
 MAX_PROFIT_THRESHOLD = 100.0
+STATE_VECTOR_SIZE = 10  # Standardized vector size for RiddleGEMM
 
 
 # Import the Future Corridor Engine
@@ -555,6 +562,7 @@ class FaultBus:
     - Profit opportunity context
     - Resolver execution requirements
     - BTC price hashing complexity
+    - ✨ Integrated intelligence from DLT, Riddle, and Multi-Bit engines.
     Enhanced with Windows CLI compatibility for cross-platform reliability.
     """
 
@@ -587,6 +595,15 @@ class FaultBus:
         self.correlation_matrix = ProfitCorrelationMatrix()
         self.profit_history: deque = deque(maxlen=1000)
 
+        # ✨ NEW: Integrated Intelligence Engines
+        self.dlt_engine = DLTWaveformEngine(history_size=100)
+        self.riddle_engine = RiddleGEMMEngine(vector_size=STATE_VECTOR_SIZE)
+        self.multi_bit_engine = MultiBitBTCProcessor(
+            timeframes={"1m": 60, "5m": 300, "15m": 900}
+        )
+        self.temporal_corrector = TemporalExecutionCorrectionLayer()
+        self._initialize_strategies()
+
         # ✨ NEW: Future Corridor Engine Integration
         self.corridor_engine = FutureCorridorEngine(
             profit_amplitude=NORMALIZATION_FACTOR,
@@ -601,6 +618,11 @@ class FaultBus:
             "jumbo_signal": 0.0,
             "ghost_signal": 0.0,
             "thermal_state": 0.0,
+            # Placeholders for integrated intelligence
+            "dlt_analysis": {},
+            "multi_bit_confidence": 0.0,
+            "best_strategy": None,
+            "best_strategy_score": 0.0,
         }
 
         # Create log directory if it doesn't exist
@@ -620,6 +642,20 @@ class FaultBus:
 
         # Windows CLI compatibility handler
         self.cli_handler = WindowsCliCompatibilityHandler()
+
+    def _initialize_strategies(self) -> None:
+        """Initialize the RiddleGEMM engine with some default strategies."""
+        # This would typically be loaded from a config file or database
+        default_strategies = {
+            "aggressive_momentum": np.array([0.8, 0.2, 0.5, 0.9, 0.9, 0.7, 0.8, 0.1, 0.3, 0.6]),
+            "cautious_reversal": np.array([0.3, 0.8, 0.6, 0.2, 0.2, 0.4, 0.3, 0.9, 0.7, 0.4]),
+            "balanced_growth": np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]),
+        }
+        for name, vector in default_strategies.items():
+            # Using a simple hash of the name for this example
+            content_hash = hashlib.sha256(name.encode()).hexdigest()
+            self.riddle_engine.register_strategy(name, vector.tolist(), content_hash)
+        logging.info(f"Initialized RiddleGEMM with {len(default_strategies)} strategies.")
 
     def register_resolver(self, fault_type: str, resolver: FaultResolver) -> None:
         """Register a resolver for a specific fault type."""
@@ -817,6 +853,9 @@ class FaultBus:
                 event = self.queue.pop(0)
                 if event.severity >= severity_threshold:
 
+                    # 🧠 Gather integrated intelligence from all core engines
+                    self._update_contextual_engines(event)
+
                     # 🧠 Create corridor state from event context
                     current_price = (
                         event.metadata.get("price", MAX_PROFIT_THRESHOLD)
@@ -950,6 +989,63 @@ class FaultBus:
         except Exception as e:
             error_message = self.cli_handler.safe_format_error(e, "dispatch")
             self.cli_handler.log_safe(logging, "error", error_message)
+
+    def _update_contextual_engines(self, event: FaultBusEvent) -> None:
+        """
+        Update all integrated intelligence engines and populate the market data context.
+        This is the core of the "piping" logic to connect the engines.
+        """
+        price = event.metadata.get("price", 1.0) if event.metadata else 1.0
+        volume = event.metadata.get("volume", 1.0) if event.metadata else 1.0
+        volatility = event.metadata.get("volatility", 0.0) if event.metadata else 0.0
+        timestamp = time.time()
+
+        # 1. Update DLT Waveform Engine
+        self.dlt_engine.update_tick_data(price, timestamp)
+        dlt_analysis = self.dlt_engine.analyze_current_waveform()
+        self.current_market_data["dlt_analysis"] = dlt_analysis
+
+        # 2. Update Multi-Bit BTC Processor
+        self.multi_bit_engine.add_data_point(price)
+        multi_bit_analysis = self.multi_bit_engine.process_all_timeframes()
+        self.current_market_data["multi_bit_confidence"] = multi_bit_analysis.get(
+            "merged_confidence_score", 0.0
+        )
+
+        # 3. Construct state vector for Riddle GEMM Engine
+        state_vector = self._construct_state_vector(event, dlt_analysis)
+        
+        # 4. Update Riddle GEMM Engine
+        best_strategy, best_score = self.riddle_engine.find_best_strategy(state_vector.tolist())
+        self.current_market_data["best_strategy"] = best_strategy
+        self.current_market_data["best_strategy_score"] = best_score
+        
+        logging.info("🧠 Contextual engines updated.")
+        logging.info(f"   DLT Acceleration: {dlt_analysis.get('current_acceleration', 0):.4f}")
+        logging.info(f"   Multi-Bit Confidence: {self.current_market_data['multi_bit_confidence']:.4f}")
+        logging.info(f"   Riddle Strategy: {best_strategy} (Score: {best_score:.4f})")
+
+    def _construct_state_vector(
+        self, event: FaultBusEvent, dlt_analysis: Dict[str, Any]
+    ) -> np.ndarray:
+        """Construct the standardized state vector for the Riddle engine."""
+        vector = np.zeros(STATE_VECTOR_SIZE)
+        
+        # Normalize and fill vector components
+        vector[0] = np.clip((event.metadata.get("price", 0) if event.metadata else 0) / 70000, 0, 1) # Normalize price against a high value
+        vector[1] = np.clip((event.metadata.get("volume", 0) if event.metadata else 0) / 10000, 0, 1) # Normalize volume
+        vector[2] = np.clip((event.metadata.get("volatility", 0) if event.metadata else 0), 0, 1)
+        vector[3] = np.clip(dlt_analysis.get("current_velocity", 0) / 100, -1, 1) # Normalize velocity
+        vector[4] = np.clip(dlt_analysis.get("smoothed_acceleration", 0) / 10, -1, 1) # Normalize acceleration
+        vector[5] = np.clip((event.profit_context or 0) / MAX_PROFIT_THRESHOLD, -1, 1)
+        vector[6] = event.severity
+        vector[7] = self.current_market_data.get("jumbo_signal", 0.0)
+        vector[8] = self.current_market_data.get("ghost_signal", 0.0)
+        vector[9] = self.current_market_data.get("thermal_state", 0.0)
+
+        # Rescale from [0,1] or [-1,1] to a common [0,1] for the engine
+        vector = (vector + 1) / 2
+        return np.clip(vector, 0, 1)
 
     def _estimate_execution_time(self, event: FaultBusEvent) -> float:
         """Estimate execution time for the event based on type and metadata"""
