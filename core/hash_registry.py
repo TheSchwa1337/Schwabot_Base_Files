@@ -53,6 +53,14 @@ except ImportError:
     GPT_LAYER_AVAILABLE = False
     safe_print("⚠️ GPT command layer not available")
 
+# Import ZPE Mathematical Framework
+try:
+    from core.zpe_core import ZPECore
+    ZPE_MODULES_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"ZPE modules not available: {e}")
+    ZPE_MODULES_AVAILABLE = False
+
 
 class HashType(Enum):
     """Enumeration of hash types."""
@@ -191,7 +199,7 @@ class HashRegistry:
     """
     
     def __init__(self, registry_file: str = "data/hash_registry.json"):
-        """Initialize the hash registry."""
+        """Initialize the hash registry with ZPE mathematical framework integration."""
         self.registry_file = registry_file
         self.logger = logging.getLogger("hash_registry")
         self.logger.setLevel(logging.INFO)
@@ -212,6 +220,13 @@ class HashRegistry:
         self.max_entries = 10000
         self.cleanup_interval = 3600  # 1 hour
         self.last_cleanup = time.time()
+        
+        # ✨ NEW: ZPE Mathematical Framework Integration
+        self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
+        if ZPE_MODULES_AVAILABLE:
+            safe_print("🔄 Hash Registry initialized with ZPE integration")
+        else:
+            safe_print("⚠️ Hash Registry initialized without ZPE integration")
         
         # Load existing registry
         self._load_registry()
@@ -328,6 +343,39 @@ class HashRegistry:
             
             # Calculate recursive depth
             recursive_depth = self._calculate_recursive_depth(parent_hash_id)
+            
+            # ✨ NEW: ZPE Mathematical Framework Integration
+            zpe_data = {}
+            if self.zpe_core:
+                try:
+                    # Update recursive cycle depth with hash registration
+                    tick_interval = 1.0  # Default tick interval
+                    price_trigger = confidence_score  # Use confidence as trigger
+                    zpe_recursion_depth = self.zpe_core.update_recursive_cycle_depth(tick_interval, price_trigger)
+                    
+                    # Get thermal efficiency from ZPE core
+                    thermal_efficiency = 0.0
+                    if self.zpe_core.thermal_history:
+                        thermal_efficiency = self.zpe_core.thermal_history[-1]['efficiency']
+                    
+                    # Store ZPE data
+                    zpe_data = {
+                        'zpe_recursion_depth': zpe_recursion_depth,
+                        'zpe_thermal_efficiency': thermal_efficiency,
+                        'zpe_timestamp': datetime.now().isoformat(),
+                        'zpe_agent_consensus': self.zpe_core.agent_consensus.copy()
+                    }
+                    
+                    # Update context with ZPE data
+                    if context is None:
+                        context = {}
+                    context.update(zpe_data)
+                    
+                    safe_print(f"[ZPE] Hash registration - Recursion Depth: {zpe_recursion_depth}, Thermal Efficiency: {thermal_efficiency:.6f}")
+                    
+                except Exception as e:
+                    safe_print(f"⚠️ ZPE hash registration failed: {safe_format_error(e, 'zpe_hash_registration')}")
+                    zpe_data = {'zpe_error': str(e)}
             
             # Create hash entry
             entry = HashEntry(

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Strategy Mapper - UROS v1.0 Integration.
+"""Strategy Mapper - UROS v1.0 Integration with ZPE Mathematical Framework.
 
 This module maps strategies using the new UROS v1.0 components:
 - AI Command Sequencer for command tracking
 - Memory Key Allocator for memory management
 - Execution Validator for cost simulation
 - Prophet Connector for alpha score calculation
+- ZPE Mathematical Framework for rotational profit alignment
 """
 
 from __future__ import annotations
@@ -39,6 +40,14 @@ except ImportError as e:
     logging.warning(f"UROS v1.0 modules not available: {e}")
     UROS_MODULES_AVAILABLE = False
 
+# Import ZPE Mathematical Framework
+try:
+    from core.zpe_core import ZPECore
+    ZPE_MODULES_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"ZPE modules not available: {e}")
+    ZPE_MODULES_AVAILABLE = False
+
 # Import centralized CLI handler
 try:
     from core.utils.windows_cli_compatibility import (
@@ -59,7 +68,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class StrategyMappingResult:
-    """Result of strategy mapping operation."""
+    """Result of strategy mapping operation with ZPE integration."""
     success: bool
     mapped_strategy: Dict[str, Any]
     alpha_score: float = 0.0
@@ -68,11 +77,16 @@ class StrategyMappingResult:
     validation_score: float = 0.0
     recommendations: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+    # ZPE Integration Fields
+    zpe_work: float = 0.0
+    zpe_alignment: Optional[Dict[str, Any]] = None
+    zpe_spin_score: float = 0.0
+    zpe_should_spin: bool = False
 
 
 @dataclass
 class StrategyMapper:
-    """Enhanced strategy mapper with UROS v1.0 integration."""
+    """Enhanced strategy mapper with UROS v1.0 and ZPE integration."""
 
     def __init__(self):
         """Initialize the strategy mapper."""
@@ -81,12 +95,16 @@ class StrategyMapper:
         self.execution_validator = ExecutionValidator() if UROS_MODULES_AVAILABLE else None
         self.prophet_connector = ProphetConnector() if UROS_MODULES_AVAILABLE else None
         
+        # ZPE Integration
+        self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
+        
         # Performance tracking
         self.total_mappings = 0
         self.successful_mappings = 0
         self.average_alpha_score = 0.0
+        self.zpe_spin_count = 0
         
-        safe_print("🗺️ Strategy Mapper initialized with UROS v1.0 integration")
+        safe_print("🗺️ Strategy Mapper initialized with UROS v1.0 and ZPE integration")
 
     async def map_strategy_enhanced(
         self, 
@@ -96,7 +114,7 @@ class StrategyMapper:
         market_data: Optional[Dict[str, Any]] = None
     ) -> StrategyMappingResult:
         """
-        Enhanced strategy mapping with full UROS v1.0 integration.
+        Enhanced strategy mapping with full UROS v1.0 and ZPE integration.
         
         Args:
             execution_packet: Strategy execution packet
@@ -105,7 +123,7 @@ class StrategyMapper:
             market_data: Optional market data for analysis
             
         Returns:
-            StrategyMappingResult with full mapping data
+            StrategyMappingResult with full mapping data and ZPE calculations
         """
         try:
             start_time = time.time()
@@ -149,6 +167,46 @@ class StrategyMapper:
             
             # Execute strategy mapping (original logic)
             mapped_strategy = self._map_strategy_core(execution_packet)
+            
+            # ZPE Integration - Apply ZPE mathematical framework
+            zpe_work = 0.0
+            zpe_alignment = None
+            zpe_spin_score = 0.0
+            zpe_should_spin = False
+            
+            if self.zpe_core and market_data:
+                try:
+                    # Extract strategy vectors for multi-asset alignment
+                    strategy_vectors = self._extract_strategy_vectors(execution_packet)
+                    weights = self._extract_strategy_weights(execution_packet)
+                    
+                    # Apply ZPE multi-vector alignment
+                    zpe_alignment = self.zpe_core.calculate_multi_vector_alignment(strategy_vectors, weights)
+                    
+                    # Calculate ZPE work
+                    trend_strength = market_data.get('trend_strength', 0.0)
+                    entry_exit_range = market_data.get('entry_exit_range', 0.0)
+                    zpe_work = self.zpe_core.calculate_zpe_work(trend_strength, entry_exit_range)
+                    
+                    # Spin the ZPE profit wheel
+                    zpe_result = self.zpe_core.spin_profit_wheel(market_data)
+                    zpe_spin_score = zpe_result.get('spin_score', 0.0)
+                    zpe_should_spin = zpe_result.get('should_spin', False)
+                    
+                    # Update mapped strategy with ZPE data
+                    mapped_strategy['zpe_work'] = zpe_work
+                    mapped_strategy['zpe_alignment'] = zpe_alignment
+                    mapped_strategy['zpe_spin_score'] = zpe_spin_score
+                    mapped_strategy['zpe_should_spin'] = zpe_should_spin
+                    
+                    if zpe_should_spin:
+                        self.zpe_spin_count += 1
+                        safe_print(f"🔄 ZPE Spin Decision: SPIN (score: {zpe_spin_score:.6f})")
+                    else:
+                        safe_print(f"⏸️ ZPE Spin Decision: HOLD (score: {zpe_spin_score:.6f})")
+                        
+                except Exception as e:
+                    safe_print(f"⚠️ ZPE integration failed: {safe_format_error(e, 'zpe_integration')}")
             
             # Calculate alpha score if Prophet curve available
             alpha_score = 0.0
@@ -198,7 +256,11 @@ class StrategyMapper:
                         command_id=command.command_id,
                         execution_cost=execution_cost,
                         drift_validation=drift_validation,
-                        profit_delta=execution_packet.get('actual_profit', 0.0)
+                        zpe_data={
+                            'zpe_work': zpe_work,
+                            'zpe_spin_score': zpe_spin_score,
+                            'zpe_should_spin': zpe_should_spin
+                        }
                     )
                     
                     validation_score = execution_validation.overall_score
@@ -234,7 +296,7 @@ class StrategyMapper:
             self.successful_mappings += 1
             self._update_average_alpha(alpha_score)
             
-            safe_print(f"🗺️ Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}")
+            safe_print(f"🗺️ Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}, ZPE Work: {zpe_work:.6f}")
             
             return StrategyMappingResult(
                 success=True,
@@ -244,10 +306,15 @@ class StrategyMapper:
                 execution_cost=execution_cost.total_cost if execution_cost else 0.0,
                 validation_score=validation_score,
                 recommendations=recommendations,
+                zpe_work=zpe_work,
+                zpe_alignment=zpe_alignment,
+                zpe_spin_score=zpe_spin_score,
+                zpe_should_spin=zpe_should_spin,
                 metadata={
                     'sequence_id': sequence.sequence_id if sequence else None,
                     'execution_time': time.time() - start_time,
-                    'agent_type': agent_type.value
+                    'agent_type': agent_type.value,
+                    'zpe_integration': ZPE_MODULES_AVAILABLE
                 }
             )
             
@@ -260,6 +327,44 @@ class StrategyMapper:
                 mapped_strategy=execution_packet,
                 metadata={'error': error_msg}
             )
+
+    def _extract_strategy_vectors(self, execution_packet: Dict[str, Any]) -> Dict[str, Dict]:
+        """Extract strategy vectors for ZPE multi-vector alignment."""
+        vectors = {}
+        
+        # Extract asset-specific vectors from execution packet
+        for asset in ['BTC', 'ETH', 'XRP', 'USDC']:
+            asset_data = execution_packet.get(asset.lower(), {})
+            vectors[asset] = {
+                'magnitude': asset_data.get('volume', 0.0),
+                'resonance': asset_data.get('confidence', 0.0)
+            }
+        
+        # If no asset-specific data, create default vectors
+        if not any(v['magnitude'] > 0 for v in vectors.values()):
+            vectors = {
+                'BTC': {'magnitude': 0.5, 'resonance': 0.5},
+                'ETH': {'magnitude': 0.3, 'resonance': 0.3},
+                'XRP': {'magnitude': 0.2, 'resonance': 0.2},
+                'USDC': {'magnitude': 0.1, 'resonance': 0.1}
+            }
+        
+        return vectors
+
+    def _extract_strategy_weights(self, execution_packet: Dict[str, Any]) -> Dict[str, float]:
+        """Extract strategy weights for ZPE multi-vector alignment."""
+        weights = execution_packet.get('asset_weights', {})
+        
+        # If no weights provided, use equal distribution
+        if not weights:
+            weights = {
+                'BTC': 0.4,
+                'ETH': 0.3,
+                'XRP': 0.2,
+                'USDC': 0.1
+            }
+        
+        return weights
 
     def _create_ai_command(self, execution_packet: Dict[str, Any], agent_type: AIAgentType) -> AICommand:
         """Create AI command from execution packet."""
@@ -282,7 +387,7 @@ class StrategyMapper:
         
         # Add mapping metadata
         mapped_packet['mapped_at'] = datetime.now().isoformat()
-        mapped_packet['mapper_version'] = 'uros_v1.0'
+        mapped_packet['mapper_version'] = 'uros_v1.0_zpe'
         
         return mapped_packet
 
@@ -322,31 +427,34 @@ class StrategyMapper:
             )
 
     def get_performance_metrics(self) -> Dict[str, Any]:
-        """Get performance metrics."""
+        """Get performance metrics including ZPE statistics."""
         return {
             'total_mappings': self.total_mappings,
             'successful_mappings': self.successful_mappings,
             'success_rate': self.successful_mappings / max(self.total_mappings, 1),
             'average_alpha_score': self.average_alpha_score,
-            'uros_modules_available': UROS_MODULES_AVAILABLE
+            'uros_modules_available': UROS_MODULES_AVAILABLE,
+            'zpe_modules_available': ZPE_MODULES_AVAILABLE,
+            'zpe_spin_count': self.zpe_spin_count,
+            'zpe_spin_rate': self.zpe_spin_count / max(self.total_mappings, 1)
         }
 
 
-# Functional helper for backward compatibility
+# Legacy function for backward compatibility
 def map_strategy(execution_packet: Dict[str, Any]) -> Dict[str, Any]:
-    """Convenience wrapper for backward compatibility."""
+    """Legacy strategy mapping function."""
     mapper = StrategyMapper()
     return mapper._map_strategy_core(execution_packet)
 
 
-# Enhanced functional helper
+# Enhanced function for external use
 async def map_strategy_enhanced(
     execution_packet: Dict[str, Any],
     agent_type: AIAgentType = AIAgentType.SCHWABOT,
     prophet_curve_id: Optional[str] = None,
     market_data: Optional[Dict[str, Any]] = None
 ) -> StrategyMappingResult:
-    """Enhanced strategy mapping with UROS v1.0 integration."""
+    """Enhanced strategy mapping with ZPE integration."""
     mapper = StrategyMapper()
     return await mapper.map_strategy_enhanced(
         execution_packet, agent_type, prophet_curve_id, market_data

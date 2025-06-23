@@ -100,7 +100,7 @@ class WindowsCliCompatibilityHandler:
 
 # Files that have already been fixed
 FIXED_FILES = {
-    "dlt_waveform_engine.py",
+    "core/dlt_waveform_engine.py",
     "core/ccxt_execution_manager.py",
     "core/fault_bus.py",
     "core/multi_bit_btc_processor.py",

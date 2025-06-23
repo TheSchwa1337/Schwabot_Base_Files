@@ -17,7 +17,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from core.fractal_core import create_fractal_system
 from core.matrix_fault_resolver import create_lattice_system
-from profit_routing_engine import create_profit_routing_system
+from core.profit_routing_engine import create_profit_routing_system
 from core.glyph.recursive_glyph_mapper import create_glyph_mapping_system
 
 logging.basicConfig(level=logging.INFO)
@@ -206,7 +206,7 @@ sys.path.append(str(Path(__file__).parent))
 try:
     from core.fractal_core import create_fractal_system
     from core.matrix_fault_resolver import create_lattice_system
-    from profit_routing_engine import create_profit_routing_system
+    from core.profit_routing_engine import create_profit_routing_system
     from core.glyph.recursive_glyph_mapper import create_glyph_mapping_system
     
     def test_mathematical_integration():
@@ -271,7 +271,7 @@ except Exception as e:
             result = subprocess.run([
                 "flake8", 
                 "core/",
-                "profit_routing_engine.py",
+                "core/profit_routing_engine.py",
                 "--count",
                 "--statistics",
                 "--exclude=tools,tests,__pycache__,.git"

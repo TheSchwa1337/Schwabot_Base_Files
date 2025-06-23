@@ -42,6 +42,14 @@ from core.multi_bit_btc_processor import MultiBitBTCProcessor
 from core.riddle_gemm import RiddleGEMMEngine
 from core.temporal_execution_correction_layer import TemporalExecutionCorrectionLayer
 
+# Import ZPE Mathematical Framework
+try:
+    from core.zpe_core import ZPECore
+    ZPE_MODULES_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"ZPE modules not available: {e}")
+    ZPE_MODULES_AVAILABLE = False
+
 # Import centralized CLI handler
 try:
     from core.utils.windows_cli_compatibility import (
@@ -621,6 +629,14 @@ class FaultBus:
         self.riddle_engine = RiddleGEMMEngine(vector_size=STATE_VECTOR_SIZE)
         self.multi_bit_engine = MultiBitBTCProcessor()
         self.temporal_corrector = TemporalExecutionCorrectionLayer()
+        
+        # ✨ NEW: ZPE Mathematical Framework Integration
+        self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
+        if ZPE_MODULES_AVAILABLE:
+            logging.info("[ZPE] ZPE Mathematical Framework integrated with FaultBus")
+        else:
+            logging.warning("[ZPE] ZPE Mathematical Framework not available")
+        
         self._initialize_strategies()
 
         # ✨ NEW: Matrix Controllers for different bit levels
@@ -1179,6 +1195,7 @@ class FaultBus:
         """
         Update all integrated intelligence engines and populate the market data context.
         This is the core of the "piping" logic to connect the engines.
+        Enhanced with ZPE mathematical framework integration.
         """
         price = event.metadata.get("price", 1.0) if event.metadata else 1.0
         volume = event.metadata.get("volume", 1.0) if event.metadata else 1.0
@@ -1197,10 +1214,42 @@ class FaultBus:
             "merged_confidence_score", 0.0
         )
 
-        # 3. Construct state vector for Riddle GEMM Engine
+        # 3. ✨ NEW: ZPE Mathematical Framework Integration
+        if self.zpe_core:
+            try:
+                # Update recursive cycle depth
+                tick_interval = 1.0  # Default tick interval
+                price_trigger = price  # Use current price as trigger
+                recursion_depth = self.zpe_core.update_recursive_cycle_depth(tick_interval, price_trigger)
+                
+                # Calculate temporal fault correction
+                expected_phase = 0.0  # Expected phase from matrix logic
+                actual_phase = event.severity  # Actual phase from event severity
+                fault_correction = self.zpe_core.calculate_temporal_fault_correction(expected_phase, actual_phase)
+                
+                # Update agent consensus
+                agent_name = "FaultBus"
+                confidence = 1.0 - event.severity  # Higher severity = lower confidence
+                consensus = self.zpe_core.update_agent_consensus(agent_name, confidence)
+                
+                # Store ZPE calculations in market data
+                self.current_market_data["zpe_recursion_depth"] = recursion_depth
+                self.current_market_data["zpe_fault_correction"] = fault_correction
+                self.current_market_data["zpe_consensus"] = consensus
+                self.current_market_data["zpe_agent_consensus"] = self.zpe_core.agent_consensus.copy()
+                
+                logging.info(f"[ZPE] Recursion Depth: {recursion_depth}, Fault Correction: {fault_correction:.6f}, Consensus: {consensus:.6f}")
+                
+            except Exception as e:
+                logging.warning(f"[ZPE] ZPE calculations failed: {e}")
+                self.current_market_data["zpe_recursion_depth"] = 0
+                self.current_market_data["zpe_fault_correction"] = 0.0
+                self.current_market_data["zpe_consensus"] = 0.0
+
+        # 4. Construct state vector for Riddle GEMM Engine
         state_vector = self._construct_state_vector(event, dlt_analysis)
         
-        # 4. Update Riddle GEMM Engine
+        # 5. Update Riddle GEMM Engine
         best_strategy, best_score = self.riddle_engine.find_best_strategy(state_vector.tolist())
         self.current_market_data["best_strategy"] = best_strategy
         self.current_market_data["best_strategy_score"] = best_score
@@ -1209,6 +1258,8 @@ class FaultBus:
         logging.info(f"   DLT Acceleration: {dlt_analysis.get('current_acceleration', 0):.4f}")
         logging.info(f"   Multi-Bit Confidence: {self.current_market_data['multi_bit_confidence']:.4f}")
         logging.info(f"   Riddle Strategy: {best_strategy} (Score: {best_score:.4f})")
+        if self.zpe_core:
+            logging.info(f"   ZPE Consensus: {self.current_market_data.get('zpe_consensus', 0.0):.4f}")
 
     def _construct_state_vector(
         self, event: FaultBusEvent, dlt_analysis: Dict[str, Any]

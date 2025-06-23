@@ -91,7 +91,7 @@ class ComprehensiveArchitectureIntegrator:
         # Files that should follow specific naming patterns
         self.target_files = {
             "core_files": [
-                "dlt_waveform_engine.py",
+                "core/dlt_waveform_engine.py",
                 "mathlib_v2.py",
                 "schwabot_unified_system.py",
             ],
@@ -293,7 +293,7 @@ class ComprehensiveArchitectureIntegrator:
 
         # Target files that need CLI compatibility
         priority_files = [
-            "dlt_waveform_engine.py",
+            "core/dlt_waveform_engine.py",
             "mathlib_v2.py",
             "schwabot_unified_system.py",
             "test_alif_aleph_system_integration.py",
@@ -499,7 +499,7 @@ class WindowsCliCompatibilityHandler:
         key_files = [
             "test_alif_aleph_system_integration.py",
             "test_alif_aleph_system_diagnostic.py",
-            "dlt_waveform_engine.py",
+            "core/dlt_waveform_engine.py",
         ]
 
         all_valid = True
