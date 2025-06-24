@@ -136,10 +136,12 @@ class EventMatrixIntegrationBridge:
         
         logger.info("🌉 Event-Matrix Integration Bridge initialized")
     
-    def process_event_with_matrix_impact(self,
-                                       event_data: Dict[str, Any],
-                                       matrix_controller: Optional[Dict[str, Any]] = None,
-                                       ferris_wheel_position: Optional[int] = None) -> EventMatrixResult:
+    def process_event_with_matrix_impact(
+            self,
+            event_data: Dict[str, Any],
+            matrix_controller: Optional[Dict[str, Any]] = None,
+            ferris_wheel_position: Optional[int] = None
+    ) -> EventMatrixResult:
         """Process event and update matrix controller state.
         
         Args:
@@ -221,8 +223,10 @@ class EventMatrixIntegrationBridge:
             if len(self.processing_history) > self.config.get('max_history_size', 1000):
                 self.processing_history = self.processing_history[-self.config.get('max_history_size', 1000):]
             
-            logger.debug(f"Event {event_impact.event_id} processed successfully "
-                        f"(confidence impact: {confidence_impact:.3f})")
+            logger.debug(
+                f"Event {event_impact.event_id} processed successfully "
+                f"(confidence impact: {confidence_impact:.3f})"
+            )
             
             return result
             
@@ -268,10 +272,12 @@ class EventMatrixIntegrationBridge:
             }.get(event_impact.source, 0.7)
             
             # Calculate total impact
-            total_impact = (priority_impact * 0.4 + 
-                           sentiment_impact * 0.3 + 
-                           relevance_impact * 0.2 + 
-                           time_decay * 0.1) * source_reliability
+            total_impact = (
+                priority_impact * 0.4 +
+                sentiment_impact * 0.3 +
+                relevance_impact * 0.2 +
+                time_decay * 0.1
+            ) * source_reliability
             
             return max(0.0, min(1.0, total_impact))
             
@@ -283,9 +289,11 @@ class EventMatrixIntegrationBridge:
         """Update Ferris wheel position based on event."""
         try:
             # Calculate event significance
-            significance = (event_impact.priority / 10.0 + 
-                          abs(event_impact.sentiment_score) + 
-                          event_impact.relevance_score) / 3.0
+            significance = (
+                event_impact.priority / 10.0 +
+                abs(event_impact.sentiment_score) +
+                event_impact.relevance_score
+            ) / 3.0
             
             # Determine position change based on significance
             if significance > 0.8:  # High significance
@@ -324,8 +332,10 @@ class EventMatrixIntegrationBridge:
                         return False
                 
                 # Check Ferris wheel consistency
-                ferris_changed = (event_result.ferris_wheel_position_before != 
-                                event_result.ferris_wheel_position_after)
+                ferris_changed = (
+                    event_result.ferris_wheel_position_before !=
+                    event_result.ferris_wheel_position_after
+                )
                 
                 # For very high-impact events, Ferris wheel should change
                 if event_result.confidence_impact > 0.8:
@@ -350,8 +360,10 @@ class EventMatrixIntegrationBridge:
             'total_confidence_impact': self.metrics.total_confidence_impact,
             'matrix_state_changes': self.metrics.matrix_state_changes,
             'ferris_wheel_updates': self.metrics.ferris_wheel_updates,
-            'success_rate': (self.metrics.successful_events / 
-                           max(self.metrics.total_events_processed, 1)),
+            'success_rate': (
+                self.metrics.successful_events /
+                max(self.metrics.total_events_processed, 1)
+            ),
             'current_matrix_state': self.current_matrix_state,
             'current_ferris_wheel_position': self.current_ferris_wheel_position,
             'history_size': len(self.processing_history)
@@ -399,9 +411,9 @@ class EventMatrixIntegrationBridge:
                 return False
             
             # Check source requirements
-            if (self.event_filters['required_sources'] and 
-                event_impact.source not in self.event_filters['required_sources']):
-                return False
+            if self.event_filters['required_sources']:
+                if event_impact.source not in self.event_filters['required_sources']:
+                    return False
             
             # Check excluded tags
             for tag in event_impact.tags:
@@ -414,8 +426,11 @@ class EventMatrixIntegrationBridge:
             logger.error(f"Error validating event: {e}")
             return False
     
-    def _calculate_event_confidence_impact(self, event_impact: EventImpact,
-                                          matrix_state: Dict[str, Any]) -> float:
+    def _calculate_event_confidence_impact(
+            self,
+            event_impact: EventImpact,
+            matrix_state: Dict[str, Any]
+    ) -> float:
         """Calculate event confidence impact."""
         try:
             # Use confidence matrix if available
@@ -433,9 +448,12 @@ class EventMatrixIntegrationBridge:
             logger.error(f"Error calculating event confidence impact: {e}")
             return 0.0
     
-    def _update_matrix_controller_with_event(self, matrix_state: Dict[str, Any],
-                                            event_impact: EventImpact,
-                                            confidence_impact: float) -> Dict[str, Any]:
+    def _update_matrix_controller_with_event(
+            self,
+            matrix_state: Dict[str, Any],
+            event_impact: EventImpact,
+            confidence_impact: float
+    ) -> Dict[str, Any]:
         """Update matrix controller state based on event."""
         try:
             updated_state = matrix_state.copy()
@@ -476,8 +494,11 @@ class EventMatrixIntegrationBridge:
             logger.error(f"Error updating matrix controller with event: {e}")
             return matrix_state
     
-    def _update_ferris_wheel_with_event(self, current_position: int,
-                                       event_impact: EventImpact) -> int:
+    def _update_ferris_wheel_with_event(
+            self,
+            current_position: int,
+            event_impact: EventImpact
+    ) -> int:
         """Update Ferris wheel position based on event."""
         return self.update_ferris_wheel_with_event(current_position, event_impact)
     
@@ -527,9 +548,11 @@ class EventMatrixIntegrationBridge:
 event_matrix_bridge = EventMatrixIntegrationBridge()
 
 
-def process_event_with_matrix_impact(event_data: Dict[str, Any],
-                                    matrix_controller: Optional[Dict[str, Any]] = None,
-                                    ferris_wheel_position: Optional[int] = None) -> EventMatrixResult:
+def process_event_with_matrix_impact(
+        event_data: Dict[str, Any],
+        matrix_controller: Optional[Dict[str, Any]] = None,
+        ferris_wheel_position: Optional[int] = None
+) -> EventMatrixResult:
     """Global function to process event with matrix impact."""
     return event_matrix_bridge.process_event_with_matrix_impact(
         event_data, matrix_controller, ferris_wheel_position
