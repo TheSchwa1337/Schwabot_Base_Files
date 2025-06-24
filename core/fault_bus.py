@@ -127,15 +127,13 @@ try:
     # Import successful, but ensure we have fallback definitions available
     from core.type_defs import (
         BitLevel, MatrixPhase, MatrixController, IdentityState, 
-        IdentityTrace, GhostLogicState, AIFeedback, AIConsensus
+        IdentityTrace, GhostLogicState, AIFeedback, AIConsensus,
+        FaultEvent, FaultLog, RecoveryStrategy,
     )
 except ImportError:
     # Fallback type definitions if core module not available
-    from typing import Any, Dict, List, Optional, Union
-    import numpy as np
-    from dataclasses import dataclass
-    from datetime import datetime
-    from enum import Enum
+    # Note: These imports are already available from the top of the file
+    # so we don't need to redefine them here
     
     # Fallback enums and classes
     class BitLevel(Enum):
@@ -209,6 +207,33 @@ except ImportError:
         def __post_init__(self):
             if self.feedbacks is None:
                 self.feedbacks = []
+    
+    # Fallback type definitions for fault handling
+    @dataclass
+    class FaultEvent:
+        fault_type: str
+        module: str
+        error_message: str
+        severity: float
+        timestamp: datetime = datetime.now()
+        context: Optional[Dict[str, Any]] = None
+        ai_feedback: Optional[Dict[str, Any]] = None
+    
+    @dataclass
+    class FaultLog:
+        fault_event: FaultEvent
+        recovery_strategy: str
+        success: bool
+        execution_time: float
+        timestamp: datetime = datetime.now()
+    
+    class RecoveryStrategy(Enum):
+        RESTART = "restart"
+        ISOLATE = "isolate"
+        INTELLIGENT_FALLBACK = "intelligent_fallback"
+        DEGRADE = "degrade"
+        ADAPTIVE_RECOVERY = "adaptive_recovery"
+        IMMEDIATE_RETRY = "immediate_retry"
 
 # Type aliases
 MatrixControllerType = MatrixController
@@ -557,7 +582,7 @@ class GPUFaultResolver(FaultResolver):
         if fault_type == FaultType.GPU_OVERLOAD.value:
             logging.warning(f"GPU overload: {severity}")
         elif fault_type == FaultType.GPU_DRIVER_CRASH.value:
-            logging.error(f"GPU driver crash detected!")
+            logging.error("GPU driver crash detected!")
 
 
 class FallbackFaultResolver(FaultResolver):
@@ -840,8 +865,10 @@ class FaultBus:
                 "module": event.module,
                 "tick": event.tick,
                 "profit_context": event.profit_context,
-                "matrix_controllers": {level.value: controller.phase.value 
-                                     for level, controller in self.matrix_controllers.items()}
+                "matrix_controllers": {
+                    level.value: controller.phase.value 
+                    for level, controller in self.matrix_controllers.items()
+                }
             }
 
             # Create identity state
@@ -1210,8 +1237,8 @@ class FaultBus:
         Enhanced with ZPE mathematical framework integration.
         """
         price = event.metadata.get("price", 1.0) if event.metadata else 1.0
-        volume = event.metadata.get("volume", 1.0) if event.metadata else 1.0
-        volatility = event.metadata.get("volatility", 0.0) if event.metadata else 0.0
+        # Note: volume and volatility are extracted but not used in this method
+        # They are used in the _construct_state_vector method instead
         timestamp = time.time()
 
         # 1. Update DLT Waveform Engine
@@ -1280,11 +1307,11 @@ class FaultBus:
         vector = np.zeros(STATE_VECTOR_SIZE)
         
         # Normalize and fill vector components
-        vector[0] = np.clip((event.metadata.get("price", 0) if event.metadata else 0) / 70000, 0, 1) # Normalize price against a high value
-        vector[1] = np.clip((event.metadata.get("volume", 0) if event.metadata else 0) / 10000, 0, 1) # Normalize volume
+        vector[0] = np.clip((event.metadata.get("price", 0) if event.metadata else 0) / 70000, 0, 1)  # Normalize price against a high value
+        vector[1] = np.clip((event.metadata.get("volume", 0) if event.metadata else 0) / 10000, 0, 1)  # Normalize volume
         vector[2] = np.clip((event.metadata.get("volatility", 0) if event.metadata else 0), 0, 1)
-        vector[3] = np.clip(dlt_analysis.get("current_velocity", 0) / 100, -1, 1) # Normalize velocity
-        vector[4] = np.clip(dlt_analysis.get("smoothed_acceleration", 0) / 10, -1, 1) # Normalize acceleration
+        vector[3] = np.clip(dlt_analysis.get("current_velocity", 0) / 100, -1, 1)  # Normalize velocity
+        vector[4] = np.clip(dlt_analysis.get("smoothed_acceleration", 0) / 10, -1, 1)  # Normalize acceleration
         vector[5] = np.clip((event.profit_context or 0) / MAX_PROFIT_THRESHOLD, -1, 1)
         vector[6] = event.severity
         vector[7] = self.current_market_data.get("jumbo_signal", 0.0)
