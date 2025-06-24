@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schwabot - Law of Sustainment Trading Platform</title>
+    <style>
+        /* Modern Design System inspired by your visual requirements */
+        :root {
+            --primary-bg: #0a0a0b;
+            --secondary-bg: #1a1a1f;
+            --panel-bg: rgba(25, 25, 35, 0.9);
+            --border-color: #333;
+            --accent-green: #00ff88;
+            --accent-blue: #0088ff;
+            --accent-orange: #ff8800;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #666;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff4444;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f15 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header - Simple and Clean */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Layout - Panel System */
+        .main-container {
+            margin-top: 60px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            grid-template-rows: auto 1fr auto;
+            gap: 20px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Panel Base Styling */
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* BTC Processor Panel - Primary Focus */
+        .btc-processor {
+            grid-column: 1;
+            grid-row: 1 / 3;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-toggle:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Modern Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #333;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-green);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Resource Meters */
+        .resource-meters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .meter {
+            text-align: center;
+        }
+
+        .meter-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .meter-fill.cpu { background: var(--accent-blue); }
+        .meter-fill.memory { background: var(--accent-orange); }
+        .meter-fill.gpu { background: var(--accent-green); }
+
+        .meter-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Quick Controls Panel - Always Accessible */
+        .quick-controls {
+            grid-column: 1;
+            grid-row: 3;
+            height: 120px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-btn.primary {
+            background: var(--accent-green);
+            color: var(--primary-bg);
+        }
+
+        .control-btn.secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .control-btn.danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* System Monitor Panel */
+        .system-monitor {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .health-score {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .health-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-green) 0deg, var(--accent-green) 270deg, #333 270deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+
+        .health-circle::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--panel-bg);
+            position: absolute;
+        }
+
+        .health-value {
+            font-size: 18px;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        /* Trading Panel */
+        .trading-panel {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .trading-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Mode Selector */
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--accent-green);
+            color: var(--primary-bg);
+            border-color: var(--accent-green);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+            }
+
+            .btc-processor {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .quick-controls {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .system-monitor {
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .trading-panel {
+                grid-column: 1;
+                grid-row: 4;
+            }
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-green);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Slider Controls */
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tab System for Custom Panels */
+        .tab-container {
+            display: none; /* Hidden by default, shown when custom panels are installed */
+            grid-column: 1 / -1;
+            grid-row: 4;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent-green);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">Schwabot v1.0</div>
+        <div class="status-indicator">
+            <span id="connection-status">Connected</span>
+            <div class="status-dot"></div>
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="development">DEV</button>
+                <button class="mode-btn" data-mode="testing">TEST</button>
+                <button class="mode-btn" data-mode="live_trading">LIVE</button>
+                <button class="mode-btn" data-mode="emergency">EMERGENCY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- BTC Processor Panel - Primary Focus -->
+        <div class="panel btc-processor">
+            <div class="panel-header">
+                <h2 class="panel-title">BTC Processor Control</h2>
+                <span id="btc-status" class="status-badge">Active</span>
+            </div>
+            
+            <!-- Feature Toggles -->
+            <div class="feature-grid">
+                <div class="feature-toggle">
+                    <span class="feature-label">Hash Generation</span>
+                    <div class="toggle-switch active" data-feature="btc_hash_generation"></div>
+                </div>
+                <div class="feature-toggle">
+                    <span class="feature-label">Mining Analysis</span>
+                    <div class="toggle-switch active" data-feature="btc_mining_analysis"></div>
+                </div>
+                <div class="feature-toggle">
+                    <span class="feature-label">Memory Management</span>
+                    <div class="toggle-switch active" data-feature="btc_memory_management"></div>
+                </div>
+                <div class="feature-toggle">
+                    <span class="feature-label">Load Balancing</span>
+                    <div class="toggle-switch active" data-feature="btc_load_balancing"></div>
+                </div>
+                <div class="feature-toggle">
+                    <span class="feature-label">Backlog Processing</span>
+                    <div class="toggle-switch" data-feature="btc_backlog_processing"></div>
+                </div>
+            </div>
+
+            <!-- Resource Sliders -->
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Memory Limit</span>
+                    <span id="memory-value">10.0 GB</span>
+                </div>
+                <input type="range" class="slider" id="memory-slider" min="1" max="50" value="10" step="0.5">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>CPU Limit</span>
+                    <span id="cpu-value">80%</span>
+                </div>
+                <input type="range" class="slider" id="cpu-slider" min="10" max="100" value="80" step="5">
+            </div>
+
+            <!-- Resource Meters -->
+            <div class="resource-meters">
+                <div class="meter">
+                    <div class="meter-label">CPU Usage</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill cpu" style="width: 45%"></div>
+                    </div>
+                    <div class="meter-value">45%</div>
+                </div>
+                <div class="meter">
+                    <div class="meter-label">Memory</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill memory" style="width: 62%"></div>
+                    </div>
+                    <div class="meter-value">6.2 GB</div>
+                </div>
+                <div class="meter">
+                    <div class="meter-label">GPU</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill gpu" style="width: 38%"></div>
+                    </div>
+                    <div class="meter-value">38%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Controls Panel -->
+        <div class="panel quick-controls">
+            <div class="panel-header">
+                <h2 class="panel-title">Quick Controls</h2>
+            </div>
+            <div class="control-buttons">
+                <button class="control-btn primary" id="start-analysis">Start Analysis</button>
+                <button class="control-btn secondary" id="pause-processing">Pause Processing</button>
+                <button class="control-btn secondary" id="optimize-memory">Optimize Memory</button>
+                <button class="control-btn danger" id="emergency-stop">Emergency Stop</button>
+            </div>
+        </div>
+
+        <!-- System Monitor Panel -->
+        <div class="panel system-monitor">
+            <div class="panel-header">
+                <h2 class="panel-title">System Health</h2>
+            </div>
+            <div class="health-score">
+                <div class="health-circle">
+                    <div class="health-value">92%</div>
+                </div>
+                <div>System Health</div>
+            </div>
+            <div class="resource-meters">
+                <div class="meter">
+                    <div class="meter-label">Thermal</div>
+                    <div class="meter-bar">
+                        <div class="meter-fill cpu" style="width: 35%"></div>
+                    </div>
+                    <div class="meter-value">35°C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Panel -->
+        <div class="panel trading-panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Trading Status</h2>
+                <div class="toggle-switch" data-feature="live_trading"></div>
+            </div>
+            <div class="trading-metrics">
+                <div class="metric">
+                    <div class="metric-value">$2,847.50</div>
+                    <div class="metric-label">Daily P&L</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">73.2%</div>
+                    <div class="metric-label">Win Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">156</div>
+                    <div class="metric-label">Total Trades</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Active Positions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Panel Container (Hidden by default) -->
+        <div class="panel tab-container" id="custom-panels">
+            <div class="tab-header" id="tab-header"></div>
+            <div id="tab-content-container"></div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Modern UI Controller for Schwabot
+        class SchwabotUI {
+            constructor() {
+                this.websocket = null;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
+                this.customPanels = new Map();
+                
+                this.init();
+            }
+
+            init() {
+                this.connectWebSocket();
+                this.setupEventListeners();
+                this.startPeriodicUpdates();
+            }
+
+            connectWebSocket() {
+                try {
+                    this.websocket = new WebSocket('ws://localhost:8080');
+                    
+                    this.websocket.onopen = () => {
+                        console.log('Connected to Schwabot Visual Controller');
+                        this.reconnectAttempts = 0;
+                        this.updateConnectionStatus('Connected', true);
+                    };
+                    
+                    this.websocket.onmessage = (event) => {
+                        this.handleWebSocketMessage(JSON.parse(event.data));
+                    };
+                    
+                    this.websocket.onclose = () => {
+                        console.log('WebSocket connection closed');
+                        this.updateConnectionStatus('Disconnected', false);
+                        this.attemptReconnect();
+                    };
+                    
+                    this.websocket.onerror = (error) => {
+                        console.error('WebSocket error:', error);
+                        this.showNotification('Connection error', 'error');
+                    };
+                } catch (error) {
+                    console.error('Failed to create WebSocket connection:', error);
+                    this.updateConnectionStatus('Failed to connect', false);
+                }
+            }
+
+            attemptReconnect() {
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    setTimeout(() => {
+                        console.log(`Reconnection attempt ${this.reconnectAttempts}`);
+                        this.connectWebSocket();
+                    }, 2000 * this.reconnectAttempts);
+                }
+            }
+
+            setupEventListeners() {
+                // Toggle switches
+                document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                    toggle.addEventListener('click', (e) => {
+                        const feature = e.target.dataset.feature;
+                        const isActive = e.target.classList.contains('active');
+                        this.handleToggleChange(feature, !isActive);
+                    });
+                });
+
+                // Sliders
+                document.querySelectorAll('.slider').forEach(slider => {
+                    slider.addEventListener('input', (e) => {
+                        this.handleSliderChange(e.target.id, e.target.value);
+                    });
+                });
+
+                // Mode buttons
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.handleModeChange(e.target.dataset.mode);
+                    });
+                });
+
+                // Control buttons
+                document.getElementById('start-analysis').addEventListener('click', () => {
+                    this.sendCommand('start_analysis');
+                });
+
+                document.getElementById('pause-processing').addEventListener('click', () => {
+                    this.sendCommand('pause_processing');
+                });
+
+                document.getElementById('optimize-memory').addEventListener('click', () => {
+                    this.sendCommand('optimize_memory');
+                });
+
+                document.getElementById('emergency-stop').addEventListener('click', () => {
+                    this.handleEmergencyStop();
+                });
+            }
+
+            handleToggleChange(feature, enabled) {
+                const toggle = document.querySelector(`[data-feature="${feature}"]`);
+                
+                if (enabled) {
+                    toggle.classList.add('active');
+                } else {
+                    toggle.classList.remove('active');
+                }
+
+                this.sendWebSocketMessage({
+                    type: 'toggle_control',
+                    data: {
+                        control_id: feature,
+                        enabled: enabled
+                    }
+                });
+
+                this.showNotification(`${feature.replace('_', ' ')} ${enabled ? 'enabled' : 'disabled'}`, 'success');
+            }
+
+            handleSliderChange(sliderId, value) {
+                const valueDisplay = document.getElementById(sliderId.replace('slider', 'value'));
+                
+                if (sliderId === 'memory-slider') {
+                    valueDisplay.textContent = `${value} GB`;
+                } else if (sliderId === 'cpu-slider') {
+                    valueDisplay.textContent = `${value}%`;
+                }
+
+                this.sendWebSocketMessage({
+                    type: 'slider_control',
+                    data: {
+                        control_id: sliderId.replace('-slider', '_limit'),
+                        value: parseFloat(value)
+                    }
+                });
+            }
+
+            handleModeChange(mode) {
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+
+                this.sendWebSocketMessage({
+                    type: 'mode_change',
+                    data: { mode: mode }
+                });
+
+                this.showNotification(`Switched to ${mode.replace('_', ' ')} mode`, 'success');
+            }
+
+            handleEmergencyStop() {
+                if (confirm('Are you sure you want to trigger emergency stop? This will halt all operations.')) {
+                    this.sendWebSocketMessage({
+                        type: 'emergency_stop',
+                        data: {}
+                    });
+                    this.showNotification('Emergency stop triggered', 'warning');
+                }
+            }
+
+            handleWebSocketMessage(message) {
+                switch (message.type) {
+                    case 'initial_state':
+                        this.updateUIFromState(message.data);
+                        break;
+                    case 'periodic_update':
+                        this.updatePeriodicData(message.data);
+                        break;
+                    case 'control_update':
+                        this.handleControlUpdate(message);
+                        break;
+                    case 'mode_change':
+                        this.updateMode(message.new_mode);
+                        break;
+                    case 'panel_installed':
+                        this.installCustomPanel(message.panel_id, message.panel_config);
+                        break;
+                    case 'confirmation_required':
+                        this.showConfirmation(message.data);
+                        break;
+                    case 'error':
+                        this.showNotification(message.message, 'error');
+                        break;
+                }
+            }
+
+            updatePeriodicData(data) {
+                // Update BTC processor metrics
+                if (data.panel_data && data.panel_data.btc_processor) {
+                    const btcData = data.panel_data.btc_processor;
+                    this.updateResourceMeters(btcData.resource_usage);
+                }
+
+                // Update system health
+                if (data.panel_data && data.panel_data.system_monitor) {
+                    const systemData = data.panel_data.system_monitor;
+                    this.updateSystemHealth(systemData.metrics);
+                }
+
+                // Update trading metrics
+                if (data.panel_data && data.panel_data.trading_overview) {
+                    const tradingData = data.panel_data.trading_overview;
+                    this.updateTradingMetrics(tradingData.metrics);
+                }
+            }
+
+            updateResourceMeters(usage) {
+                if (usage.cpu !== undefined) {
+                    this.updateMeter('cpu', usage.cpu);
+                }
+                if (usage.memory !== undefined) {
+                    this.updateMeter('memory', (usage.memory / 16) * 100); // Assuming 16GB max
+                }
+                if (usage.gpu !== undefined) {
+                    this.updateMeter('gpu', usage.gpu);
+                }
+            }
+
+            updateMeter(type, percentage) {
+                const meter = document.querySelector(`.meter-fill.${type}`);
+                const value = document.querySelector(`.meter:has(.${type}) .meter-value`);
+                
+                if (meter) {
+                    meter.style.width = `${percentage}%`;
+                }
+                
+                if (value) {
+                    if (type === 'memory') {
+                        value.textContent = `${(percentage * 16 / 100).toFixed(1)} GB`;
+                    } else {
+                        value.textContent = `${Math.round(percentage)}%`;
+                    }
+                }
+            }
+
+            installCustomPanel(panelId, config) {
+                const tabContainer = document.getElementById('custom-panels');
+                const tabHeader = document.getElementById('tab-header');
+                const contentContainer = document.getElementById('tab-content-container');
+
+                // Show tab container
+                tabContainer.style.display = 'block';
+
+                // Create tab button
+                const tabBtn = document.createElement('button');
+                tabBtn.className = 'tab-btn';
+                tabBtn.textContent = config.title;
+                tabBtn.dataset.panel = panelId;
+                tabBtn.addEventListener('click', () => this.switchTab(panelId));
+                tabHeader.appendChild(tabBtn);
+
+                // Create tab content
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                tabContent.id = `tab-${panelId}`;
+                tabContent.innerHTML = `<p>Custom panel: ${config.title}</p>`;
+                contentContainer.appendChild(tabContent);
+
+                this.customPanels.set(panelId, config);
+                this.showNotification(`Custom panel "${config.title}" installed`, 'success');
+            }
+
+            switchTab(panelId) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-panel="${panelId}"]`).classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`tab-${panelId}`).classList.add('active');
+            }
+
+            sendWebSocketMessage(message) {
+                if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
+                    this.websocket.send(JSON.stringify(message));
+                } else {
+                    this.showNotification('Not connected to server', 'error');
+                }
+            }
+
+            sendCommand(command) {
+                this.sendWebSocketMessage({
+                    type: 'command',
+                    data: { command: command }
+                });
+            }
+
+            updateConnectionStatus(status, connected) {
+                const statusElement = document.getElementById('connection-status');
+                const statusDot = document.querySelector('.status-dot');
+                
+                statusElement.textContent = status;
+                
+                if (connected) {
+                    statusDot.style.background = 'var(--success)';
+                } else {
+                    statusDot.style.background = 'var(--danger)';
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type} show`;
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            startPeriodicUpdates() {
+                // Simulate some live data updates for demo
+                setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        const cpuUsage = 30 + Math.random() * 40;
+                        const memoryUsage = 40 + Math.random() * 30;
+                        const gpuUsage = 20 + Math.random() * 50;
+                        
+                        this.updateMeter('cpu', cpuUsage);
+                        this.updateMeter('memory', memoryUsage);
+                        this.updateMeter('gpu', gpuUsage);
+                    }
+                }, 2000);
+            }
+        }
+
+        // Initialize the UI when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.schwabotUI = new SchwabotUI();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,144 @@
+"""
+Configuration Schema
+=================
+
+Defines the structure and default values for all Schwabot configurations.
+This schema is used to validate and generate default configurations.
+"""
+
+# Phase region definitions
+phases:
+  STABLE:
+    profit_trend_range: [0.001, inf]
+    stability_range: [0.7, 1.0]
+    memory_coherence_range: [0.8, 1.0]
+    paradox_pressure_range: [0.0, 2.0]
+    entropy_rate_range: [0.0, 0.3]
+    thermal_state_range: [0.0, 0.6]
+    bit_depth_range: [16, 81]
+    trust_score_range: [0.7, 1.0]
+    
+  SMART_MONEY:
+    profit_trend_range: [0.002, inf]
+    stability_range: [0.5, 0.9]
+    memory_coherence_range: [0.6, 0.9]
+    paradox_pressure_range: [1.0, 3.0]
+    entropy_rate_range: [0.2, 0.5]
+    thermal_state_range: [0.3, 0.8]
+    bit_depth_range: [32, 64]
+    trust_score_range: [0.5, 0.9]
+    
+  UNSTABLE:
+    profit_trend_range: [-inf, 0.0]
+    stability_range: [0.0, 0.5]
+    memory_coherence_range: [0.0, 0.6]
+    paradox_pressure_range: [2.0, 5.0]
+    entropy_rate_range: [0.4, 1.0]
+    thermal_state_range: [0.6, 1.0]
+    bit_depth_range: [8, 32]
+    trust_score_range: [0.0, 0.5]
+    
+  OVERLOADED:
+    profit_trend_range: [-inf, -0.001]
+    stability_range: [0.0, 0.3]
+    memory_coherence_range: [0.0, 0.4]
+    paradox_pressure_range: [3.0, inf]
+    entropy_rate_range: [0.6, 1.0]
+    thermal_state_range: [0.8, 1.0]
+    bit_depth_range: [4, 16]
+    trust_score_range: [0.0, 0.3]
+
+# Backtest configuration
+backtest_defaults:
+  strategy: "baseline_strategy"
+  window_days: 5
+  metrics:
+    - profit_trend
+    - stability
+    - memory_coherence
+    - entropy_rate
+    - thermal_state
+    - trust_score
+  validation:
+    min_trades: 100
+    max_drawdown: 0.2
+    sharpe_threshold: 1.5
+
+# System paths
+paths:
+  historical_data: "data/btc.parquet"
+  logs: "logs/trade.log"
+  output_metrics: "results/final_metrics.json"
+  sha_map: "data/sha_key_basket_map.json"
+  state: "state/phase_state.json"
+  transitions: "logs/phase_transitions.json"
+
+# Strategy profiles
+strategy_profiles:
+  baseline_strategy:
+    expected_profit: 0.02
+    volatility_tolerance: 0.1
+    fallback_enabled: true
+    fallback_strategy: "conservative_hold"
+    parameters:
+      bit_depth: 64
+      trust_threshold: 0.7
+      phase_urgency_threshold: 0.5
+      
+  conservative_hold:
+    expected_profit: 0.01
+    volatility_tolerance: 0.05
+    fallback_enabled: false
+    parameters:
+      bit_depth: 32
+      trust_threshold: 0.9
+      phase_urgency_threshold: 0.3
+      
+  aggressive_trade:
+    expected_profit: 0.04
+    volatility_tolerance: 0.2
+    fallback_enabled: true
+    fallback_strategy: "baseline_strategy"
+    parameters:
+      bit_depth: 128
+      trust_threshold: 0.5
+      phase_urgency_threshold: 0.7
+
+# Swap control parameters
+swap_control:
+  urgency_thresholds:
+    high: 0.7
+    medium: 0.4
+    low: 0.2
+  actions:
+    UNSTABLE:
+      high: "liquidate"
+      medium: "reduce_position"
+      low: "monitor"
+    OVERLOADED:
+      high: "emergency_exit"
+      medium: "liquidate"
+      low: "reduce_position"
+    SMART_MONEY:
+      high: "scale_up"
+      medium: "maintain"
+      low: "monitor"
+    STABLE:
+      high: "maintain"
+      medium: "maintain"
+      low: "monitor"
+
+# Metrics computation
+metrics:
+  window_sizes:
+    short: 100
+    medium: 500
+    long: 1000
+  update_interval_ms: 1000
+  gpu_acceleration: true
+  drift_detection:
+    window_size: 1000
+    threshold: 0.7
+  entropy:
+    bins: 50
+    min_probability: 1e-10 

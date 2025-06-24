@@ -1,0 +1,80 @@
+quantum:
+  coherence:
+    window_size: 5
+    correction_strength: 0.3
+    stabilization_factor: 0.7
+    decay_rate: 0.02
+    entanglement_bias: 0.4
+    quantum_tunneling_threshold: 0.15
+    superposition_states: 8
+    decoherence_time: 0.5
+
+  cellular:
+    homeostasis_window: 5
+    regulation_strength: 0.2
+    balance_factor: 0.8
+    decay_rate: 0.02
+    shock_buffer: 3
+    adaptation_rate: 0.1
+    mutation_probability: 0.05
+    crossover_rate: 0.7
+
+  synchronization:
+    phase_locking_threshold: 0.85
+    frequency_matching_window: 10
+    amplitude_coupling: 0.6
+    phase_correction_rate: 0.3
+    stability_margin: 0.2
+
+  optimization:
+    learning_rate: 0.01
+    momentum: 0.9
+    weight_decay: 0.0001
+    gradient_clip: 1.0
+    batch_size: 32
+    epochs: 100
+    early_stopping_patience: 10
+
+  risk_management:
+    var_confidence_level: 0.95
+    cvar_alpha: 0.05
+    max_drawdown_threshold: 0.15
+    position_size_limit: 0.1
+    stop_loss_threshold: 0.02
+    take_profit_threshold: 0.05
+    trailing_stop_activation: 0.03
+    trailing_stop_distance: 0.01
+
+  pattern_recognition:
+    min_pattern_length: 5
+    max_pattern_length: 100
+    similarity_threshold: 0.8
+    pattern_memory_size: 1000
+    pattern_decay_rate: 0.1
+    pattern_confidence_threshold: 0.7
+    pattern_validation_window: 20
+
+  entropy_control:
+    target_entropy: 0.5
+    entropy_threshold: 0.3
+    entropy_window: 50
+    entropy_correction_strength: 0.2
+    entropy_stabilization_factor: 0.8
+    entropy_adaptation_rate: 0.1
+
+  whale_detection:
+    min_transaction_size: 500000
+    volume_spike_threshold: 3.0
+    whale_impact_window: 30
+    whale_activity_decay: 0.1
+    whale_pattern_memory: 100
+    whale_alert_threshold: 0.8
+
+  performance_metrics:
+    profit_target: 0.02
+    risk_reward_ratio: 2.0
+    sharpe_ratio_target: 1.5
+    sortino_ratio_target: 2.0
+    max_correlation_threshold: 0.7
+    min_win_rate: 0.55
+    max_drawdown_period: 30 

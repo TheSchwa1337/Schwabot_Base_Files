@@ -1,0 +1,104 @@
+[flake8]
+# Flake8 configuration for Schwabot UROS v1.0
+# Version: 0.5.1
+
+# Line length and complexity settings
+max-line-length = 100
+max-complexity = 15
+
+# Ignore specific error codes
+ignore = 
+    E501
+    E402
+    F401
+    W503
+    W504
+    E731
+    E225
+    E226
+    E231
+    E241
+    E302
+    E301
+    E303
+    E722
+
+# Exclude directories and files
+exclude = 
+    .git
+    __pycache__
+    .venv
+    venv
+    env
+    .env
+    .mypy_cache
+    .pytest_cache
+    build
+    dist
+    *.egg-info
+    .coverage
+    htmlcov
+    .tox
+    .eggs
+    .mypy_cache
+    .pytest_cache
+    .flake8_cache
+
+# Per-file-ignores
+# Ignore specific errors in specific files
+per-file-ignores = 
+    # Test files - relaxed standards
+    tests/*:E501,E302,E303
+    # Configuration files - relaxed standards  
+    *.ini:E501
+    *.cfg:E501
+    *.conf:E501
+    # Generated files
+    */__init__.py:F401
+    # Core mathematical modules - strict standards
+    core/bit_phase_engine.py:E501
+    core/tensor_router.py:E501
+    core/phase_entropy_matcher.py:E501
+    core/matrix_mapper.py:E501
+    core/profit_cycle_allocator.py:E501
+    core/gpu_offload_manager.py:E501
+    core/dlt_waveform_engine.py:E501
+
+# Statistics
+statistics = True
+count = True
+
+# Output format
+format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+
+# Show source code
+show-source = True
+
+# Show statistics
+show-pep8 = False
+
+# Aggressive mode
+aggressive = False
+
+# Builtins
+builtins = _
+
+# Docstring convention
+docstring-convention = google
+
+# Import order style
+import-order-style = google
+
+# Maximum doc length
+max-doc-length = 100
+
+# Select errors and warnings
+select = E,W,F,C90
+
+# Extend ignore for mathematical code
+extend-ignore = 
+    E203
+    E266
+    W291
+    W293
+    W391

@@ -1,0 +1,142 @@
+risk_management:
+  position_sizing:
+    kelly_criterion:
+      enabled: true
+      max_fraction: 0.2
+      min_fraction: 0.01
+      win_rate_window: 100
+      profit_factor_window: 50
+      position_size_cap: 0.1
+
+    dynamic_sizing:
+      volatility_adjustment: true
+      volatility_window: 30
+      max_position_size: 0.2
+      min_position_size: 0.01
+      size_reduction_factor: 0.5
+      size_increase_factor: 1.2
+
+  stop_loss:
+    fixed:
+      enabled: true
+      percentage: 0.02
+      max_loss_per_trade: 0.01
+      trailing_stop: true
+      trailing_distance: 0.01
+
+    dynamic:
+      enabled: true
+      atr_multiplier: 2.0
+      volatility_multiplier: 1.5
+      min_stop_distance: 0.01
+      max_stop_distance: 0.05
+      stop_adjustment_rate: 0.1
+
+  take_profit:
+    fixed:
+      enabled: true
+      percentage: 0.05
+      min_profit_target: 0.02
+      trailing_take_profit: true
+      trailing_distance: 0.01
+
+    dynamic:
+      enabled: true
+      risk_reward_ratio: 2.0
+      volatility_multiplier: 1.5
+      min_profit_distance: 0.02
+      max_profit_distance: 0.1
+      profit_adjustment_rate: 0.1
+
+  risk_metrics:
+    var:
+      confidence_level: 0.95
+      window_size: 100
+      max_var: 0.02
+      var_breach_action: "reduce_position"
+
+    cvar:
+      alpha: 0.05
+      window_size: 100
+      max_cvar: 0.03
+      cvar_breach_action: "close_position"
+
+    drawdown:
+      max_drawdown: 0.15
+      drawdown_window: 30
+      recovery_threshold: 0.1
+      drawdown_breach_action: "pause_trading"
+
+  portfolio_risk:
+    correlation:
+      max_correlation: 0.7
+      correlation_window: 50
+      correlation_breach_action: "reduce_exposure"
+
+    diversification:
+      max_sector_exposure: 0.3
+      max_single_position: 0.1
+      min_positions: 3
+      max_positions: 10
+
+    rebalancing:
+      enabled: true
+      rebalance_threshold: 0.1
+      rebalance_frequency: 24
+      rebalance_method: "equal_weight"
+
+  market_risk:
+    volatility:
+      max_volatility: 0.5
+      volatility_window: 30
+      volatility_breach_action: "reduce_exposure"
+
+    liquidity:
+      min_liquidity: 1000000
+      liquidity_window: 20
+      liquidity_breach_action: "close_position"
+
+    market_impact:
+      max_impact: 0.01
+      impact_window: 10
+      impact_breach_action: "reduce_order_size"
+
+  risk_limits:
+    daily:
+      max_loss: 0.05
+      max_drawdown: 0.1
+      max_trades: 50
+      max_volume: 1000000
+
+    weekly:
+      max_loss: 0.1
+      max_drawdown: 0.15
+      max_trades: 200
+      max_volume: 5000000
+
+    monthly:
+      max_loss: 0.15
+      max_drawdown: 0.2
+      max_trades: 800
+      max_volume: 20000000
+
+  risk_alerts:
+    enabled: true
+    alert_levels:
+      warning:
+        var_breach: 0.8
+        drawdown_breach: 0.7
+        correlation_breach: 0.8
+        volatility_breach: 0.8
+
+      critical:
+        var_breach: 0.9
+        drawdown_breach: 0.85
+        correlation_breach: 0.9
+        volatility_breach: 0.9
+
+    notification:
+      email: true
+      slack: true
+      telegram: true
+      webhook: true 

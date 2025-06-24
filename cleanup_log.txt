@@ -1,0 +1,273 @@
+2025-06-24 18:24:13,783 - INFO - ============================================================
+2025-06-24 18:24:13,784 - INFO - Creating backup of critical files...
+2025-06-24 18:24:13,787 - INFO - Backed up: validate_components.py
+2025-06-24 18:24:13,789 - INFO - Backed up: mypy.ini
+2025-06-24 18:24:13,791 - INFO - Backed up: core/phantom_lag_model.py
+2025-06-24 18:24:13,792 - INFO - Backed up: core/gpu_offload_manager.py
+2025-06-24 18:24:13,794 - INFO - Backed up: core/tensor_router.py
+2025-06-24 18:24:13,796 - INFO - Backed up: .flake8
+2025-06-24 18:24:13,798 - INFO - Backed up: MATHEMATICAL_INTEGRATION_SUMMARY.md
+2025-06-24 18:24:13,802 - INFO - Backed up: core/meta_layer_ghost_bridge.py
+2025-06-24 18:24:13,804 - INFO - Backed up: run_schwabot.py
+2025-06-24 18:24:13,805 - INFO - Backed up: core/bit_phase_engine.py
+2025-06-24 18:24:13,806 - INFO - Backed up: SCHWABOT_MATHEMATICAL_INTEGRATION.md
+2025-06-24 18:24:13,809 - INFO - Backed up: core/phase_entropy_matcher.py
+2025-06-24 18:24:13,811 - INFO - Backed up: core/hash_registry_manager.py
+2025-06-24 18:24:13,812 - INFO - Backed up: core/dlt_waveform_engine.py
+2025-06-24 18:24:13,814 - INFO - Backed up: config/schwabot_config.yaml
+2025-06-24 18:24:13,816 - INFO - Backed up: core/voltage_lane_mapper.py
+2025-06-24 18:24:13,817 - INFO - Backed up: core/matrix_mapper.py
+2025-06-24 18:24:13,819 - INFO - Backed up: README_MATHEMATICAL_INTEGRATION.md
+2025-06-24 18:24:13,823 - INFO - Backed up: core/fallback_logic_router.py
+2025-06-24 18:24:13,824 - INFO - Backed up: core/tensor_harness_matrix.py
+2025-06-24 18:24:13,825 - INFO - Backed up: system_validation.py
+2025-06-24 18:24:13,827 - INFO - Backed up: README.md
+2025-06-24 18:24:13,830 - INFO - Backed up: core/profit_cycle_allocator.py
+2025-06-24 18:24:14,539 - INFO - Backed up core directory
+2025-06-24 18:24:14,539 - INFO - Backup completed successfully
+2025-06-24 18:24:14,541 - INFO - Starting file cleanup...
+2025-06-24 18:24:14,544 - INFO - Deleted: fix_whitespace_debug.py
+2025-06-24 18:24:14,545 - INFO - Deleted: fix_stub_docstring_pattern.py
+2025-06-24 18:24:14,546 - INFO - Deleted: fix_remaining_syntax_errors.py
+2025-06-24 18:24:14,548 - INFO - Deleted: fix_mypy_issues.py
+2025-06-24 18:24:14,550 - INFO - Deleted: fix_block_1_stub_patterns.py
+2025-06-24 18:24:14,551 - INFO - Deleted: fix_all_flake8.py
+2025-06-24 18:24:14,552 - WARNING - Mathematical pattern detected in fix_event_matrix.py
+2025-06-24 18:24:14,553 - WARNING - Preserving file with mathematical content: fix_event_matrix.py
+2025-06-24 18:24:14,554 - WARNING - Mathematical pattern detected in fix_indentation.py
+2025-06-24 18:24:14,554 - WARNING - Preserving file with mathematical content: fix_indentation.py
+2025-06-24 18:24:14,557 - INFO - Deleted: fix_flake8_errors.py
+2025-06-24 18:24:14,559 - INFO - Deleted: direct_flake8_fix.py
+2025-06-24 18:24:14,562 - INFO - Deleted: simple_flake8_fix.py
+2025-06-24 18:24:14,564 - INFO - Deleted: run_flake8_correctly.py
+2025-06-24 18:24:14,565 - WARNING - Mathematical content detected in simple_test.py: tensor score
+2025-06-24 18:24:14,566 - WARNING - Preserving file with mathematical content: simple_test.py
+2025-06-24 18:24:14,567 - WARNING - Mathematical content detected in test_import_fix.py: dlt waveform
+2025-06-24 18:24:14,570 - WARNING - Preserving file with mathematical content: test_import_fix.py
+2025-06-24 18:24:14,571 - WARNING - Mathematical content detected in test_mathematical_integration.py: mathematical component
+2025-06-24 18:24:14,572 - WARNING - Preserving file with mathematical content: test_mathematical_integration.py
+2025-06-24 18:24:14,573 - WARNING - Mathematical content detected in test_hash_registry_integration.py: mathematical foundation
+2025-06-24 18:24:14,574 - WARNING - Preserving file with mathematical content: test_hash_registry_integration.py
+2025-06-24 18:24:14,578 - WARNING - Mathematical content detected in test_complete_integration.py: tensor score
+2025-06-24 18:24:14,578 - WARNING - Preserving file with mathematical content: test_complete_integration.py
+2025-06-24 18:24:14,582 - WARNING - Mathematical content detected in test_mathematical_pipeline.py: hash registry
+2025-06-24 18:24:14,582 - WARNING - Preserving file with mathematical content: test_mathematical_pipeline.py
+2025-06-24 18:24:14,583 - WARNING - Mathematical content detected in test_complete_mathematical_integration.py: hash registry
+2025-06-24 18:24:14,584 - WARNING - Preserving file with mathematical content: test_complete_mathematical_integration.py
+2025-06-24 18:24:14,585 - WARNING - Mathematical content detected in test_dlt_matrix_profit_integration.py: hash registry
+2025-06-24 18:24:14,586 - WARNING - Preserving file with mathematical content: test_dlt_matrix_profit_integration.py
+2025-06-24 18:24:14,587 - WARNING - Mathematical pattern detected in test_sustainment_quick_functionality.py
+2025-06-24 18:24:14,588 - WARNING - Preserving file with mathematical content: test_sustainment_quick_functionality.py
+2025-06-24 18:24:14,590 - WARNING - Mathematical pattern detected in test_time_lattice_fork_functionality.py
+2025-06-24 18:24:14,592 - WARNING - Preserving file with mathematical content: test_time_lattice_fork_functionality.py
+2025-06-24 18:24:14,594 - INFO - Deleted: test_thermal_integration.py
+2025-06-24 18:24:14,595 - WARNING - Mathematical pattern detected in simple_thermal_test.py
+2025-06-24 18:24:14,595 - WARNING - Preserving file with mathematical content: simple_thermal_test.py
+2025-06-24 18:24:14,597 - WARNING - Mathematical pattern detected in test_complete_system_integration.py
+2025-06-24 18:24:14,598 - WARNING - Preserving file with mathematical content: test_complete_system_integration.py
+2025-06-24 18:24:14,600 - INFO - Deleted: test_exchange_plumbing_and_persistent_state_integration.py
+2025-06-24 18:24:14,602 - WARNING - Mathematical content detected in test_ops_observability_integration.py: algorithm
+2025-06-24 18:24:14,602 - WARNING - Preserving file with mathematical content: test_ops_observability_integration.py
+2025-06-24 18:24:14,605 - INFO - Deleted: test_risk_and_capital_controls.py
+2025-06-24 18:24:14,609 - INFO - Deleted: test_secure_api_and_risk_integration.py
+2025-06-24 18:24:14,610 - WARNING - Mathematical content detected in test_vecu_ferris_integration.py: hash registry
+2025-06-24 18:24:14,610 - WARNING - Preserving file with mathematical content: test_vecu_ferris_integration.py
+2025-06-24 18:24:14,612 - WARNING - Mathematical content detected in comprehensive_integration_test.py: hash registry
+2025-06-24 18:24:14,612 - WARNING - Preserving file with mathematical content: comprehensive_integration_test.py
+2025-06-24 18:24:14,614 - INFO - Deleted: simple_zpe_test.py
+2025-06-24 18:24:14,616 - WARNING - Mathematical pattern detected in test_zpe.py
+2025-06-24 18:24:14,616 - WARNING - Preserving file with mathematical content: test_zpe.py
+2025-06-24 18:24:14,618 - INFO - Deleted: final_consistency_verification.py
+2025-06-24 18:24:14,619 - INFO - Deleted: quick_consistency_check.py
+2025-06-24 18:24:14,621 - INFO - Deleted: codebase_consistency_monitor.py
+2025-06-24 18:24:14,623 - WARNING - Mathematical content detected in FINAL_SYSTEM_SUMMARY.md: mathematical foundation
+2025-06-24 18:24:14,624 - WARNING - Preserving file with mathematical content: FINAL_SYSTEM_SUMMARY.md
+2025-06-24 18:24:14,625 - WARNING - Mathematical content detected in FINAL_COMPLETE_INTEGRATION_STATUS.md: mathematical foundation
+2025-06-24 18:24:14,626 - WARNING - Preserving file with mathematical content: FINAL_COMPLETE_INTEGRATION_STATUS.md
+2025-06-24 18:24:14,627 - WARNING - Mathematical content detected in FINAL_MATHEMATICAL_INTEGRITY_CONFIRMATION.md: mathematical foundation
+2025-06-24 18:24:14,628 - WARNING - Preserving file with mathematical content: FINAL_MATHEMATICAL_INTEGRITY_CONFIRMATION.md
+2025-06-24 18:24:14,629 - WARNING - Mathematical content detected in SCHWABOT_INTEGRATION_COMPLETION_SUMMARY.md: mathematical foundation
+2025-06-24 18:24:14,630 - WARNING - Preserving file with mathematical content: SCHWABOT_INTEGRATION_COMPLETION_SUMMARY.md
+2025-06-24 18:24:14,632 - WARNING - Mathematical content detected in MATHEMATICAL_INTEGRATION_ANALYSIS.md: wave entropy
+2025-06-24 18:24:14,632 - WARNING - Preserving file with mathematical content: MATHEMATICAL_INTEGRATION_ANALYSIS.md
+2025-06-24 18:24:14,634 - WARNING - Mathematical content detected in FILE_AUDIT_ANALYSIS.md: algorithm
+2025-06-24 18:24:14,634 - WARNING - Preserving file with mathematical content: FILE_AUDIT_ANALYSIS.md
+2025-06-24 18:24:14,635 - WARNING - Mathematical content detected in TODO_TO_DONE_COMPLETION_REPORT.md: algorithm
+2025-06-24 18:24:14,635 - WARNING - Preserving file with mathematical content: TODO_TO_DONE_COMPLETION_REPORT.md
+2025-06-24 18:24:14,636 - WARNING - Mathematical content detected in FINAL_IMPLEMENTATION_CONFIRMATION.md: hash registry
+2025-06-24 18:24:14,637 - WARNING - Preserving file with mathematical content: FINAL_IMPLEMENTATION_CONFIRMATION.md
+2025-06-24 18:24:14,643 - WARNING - Mathematical content detected in SCHWABOT_COMPLETE_IMPLEMENTATION_SUMMARY.md: mathematical foundation
+2025-06-24 18:24:14,643 - WARNING - Preserving file with mathematical content: SCHWABOT_COMPLETE_IMPLEMENTATION_SUMMARY.md
+2025-06-24 18:24:14,647 - WARNING - Mathematical content detected in SCHWABOT_MATHEMATICAL_PIPELINE_SUMMARY.md: tensor score
+2025-06-24 18:24:14,647 - WARNING - Preserving file with mathematical content: SCHWABOT_MATHEMATICAL_PIPELINE_SUMMARY.md
+2025-06-24 18:24:14,649 - WARNING - Mathematical content detected in CRITICAL_MATH_MODULES_COMPLETE.md: tensor score
+2025-06-24 18:24:14,649 - WARNING - Preserving file with mathematical content: CRITICAL_MATH_MODULES_COMPLETE.md
+2025-06-24 18:24:14,652 - INFO - Deleted: IMPLEMENTATION_PROGRESS.md
+2025-06-24 18:24:14,653 - WARNING - Mathematical content detected in IMPLEMENTATION_PLAN.md: algorithm
+2025-06-24 18:24:14,657 - WARNING - Preserving file with mathematical content: IMPLEMENTATION_PLAN.md
+2025-06-24 18:24:14,659 - INFO - Deleted: PIPELINE_DESYNC_FIX_COMPLETE.md
+2025-06-24 18:24:14,661 - INFO - Deleted: COMPLETE_SYSTEM_INTEGRATION_SUMMARY.md
+2025-06-24 18:24:14,663 - INFO - Deleted: EXCHANGE_PLUMBING_AND_PERSISTENT_STATE_COMPLETE.md
+2025-06-24 18:24:14,665 - WARNING - Mathematical content detected in OPS_OBSERVABILITY_COMPLETE.md: algorithm
+2025-06-24 18:24:14,665 - WARNING - Preserving file with mathematical content: OPS_OBSERVABILITY_COMPLETE.md
+2025-06-24 18:24:14,667 - WARNING - Mathematical content detected in RISK_AND_CAPITAL_CONTROLS_COMPLETE.md: algorithm
+2025-06-24 18:24:14,668 - WARNING - Preserving file with mathematical content: RISK_AND_CAPITAL_CONTROLS_COMPLETE.md
+2025-06-24 18:24:14,671 - INFO - Deleted: SECURE_API_AND_RISK_MANAGEMENT_COMPLETE.md
+2025-06-24 18:24:14,673 - INFO - Deleted: FINAL_SECURE_API_AND_RISK_MANAGEMENT_SUMMARY.md
+2025-06-24 18:24:14,675 - WARNING - Mathematical content detected in FINAL_VECU_FERRIS_RDE_INTEGRATION_SUMMARY.md: hash registry
+2025-06-24 18:24:14,675 - WARNING - Preserving file with mathematical content: FINAL_VECU_FERRIS_RDE_INTEGRATION_SUMMARY.md
+2025-06-24 18:24:14,678 - WARNING - Mathematical content detected in FINAL_MATHEMATICAL_FRAMEWORK_AND_LIVE_BACKTESTING.md: algorithm
+2025-06-24 18:24:14,678 - WARNING - Preserving file with mathematical content: FINAL_MATHEMATICAL_FRAMEWORK_AND_LIVE_BACKTESTING.md
+2025-06-24 18:24:14,679 - WARNING - Mathematical content detected in FINAL_COMPREHENSIVE_VERIFICATION.md: hash registry
+2025-06-24 18:24:14,679 - WARNING - Preserving file with mathematical content: FINAL_COMPREHENSIVE_VERIFICATION.md
+2025-06-24 18:24:14,680 - WARNING - Mathematical content detected in FINAL_HYBRID_ZPE_REACTIVE_SUMMARY.md: hash registry
+2025-06-24 18:24:14,681 - WARNING - Preserving file with mathematical content: FINAL_HYBRID_ZPE_REACTIVE_SUMMARY.md
+2025-06-24 18:24:14,683 - WARNING - Mathematical content detected in ZPE_INTEGRATION_COMPLETE_SUMMARY.md: mathematical component
+2025-06-24 18:24:14,683 - WARNING - Preserving file with mathematical content: ZPE_INTEGRATION_COMPLETE_SUMMARY.md
+2025-06-24 18:24:14,684 - WARNING - Mathematical content detected in FINAL_ZPE_IMPLEMENTATION_SUMMARY.md: mathematical component
+2025-06-24 18:24:14,688 - WARNING - Preserving file with mathematical content: FINAL_ZPE_IMPLEMENTATION_SUMMARY.md
+2025-06-24 18:24:14,692 - WARNING - Mathematical content detected in SCHWABOT_ZPE_MATHEMATICAL_FRAMEWORK.md: mathematical component
+2025-06-24 18:24:14,693 - WARNING - Preserving file with mathematical content: SCHWABOT_ZPE_MATHEMATICAL_FRAMEWORK.md
+2025-06-24 18:24:14,695 - INFO - Deleted: FINAL_FLAKE8_FIX_SUMMARY.md
+2025-06-24 18:24:14,696 - INFO - Deleted: CONSISTENCY_VERIFICATION_SUMMARY.md
+2025-06-24 18:24:14,698 - INFO - Deleted: cleanup_stubs_and_optimize.py
+2025-06-24 18:24:14,700 - INFO - Deleted: apply_comprehensive_architecture_integration.py
+2025-06-24 18:24:14,702 - WARNING - Mathematical content detected in final_system_verification.py: hash registry
+2025-06-24 18:24:14,703 - WARNING - Preserving file with mathematical content: final_system_verification.py
+2025-06-24 18:24:14,707 - WARNING - Mathematical content detected in validate_schwabot_system.py: dlt waveform
+2025-06-24 18:24:14,710 - WARNING - Preserving file with mathematical content: validate_schwabot_system.py
+2025-06-24 18:24:14,711 - INFO - Deleted: tools\simple_lint_check.py
+2025-06-24 18:24:14,714 - INFO - Deleted: tools\robust_lint_handler.py
+2025-06-24 18:24:14,716 - INFO - Deleted: tools\final_validation_check.py
+2025-06-24 18:24:14,717 - INFO - Deleted: tools\validate_cli_injection_points.py
+2025-06-24 18:24:14,720 - INFO - Deleted: tools\cli_echo_integration_test.py
+2025-06-24 18:24:14,721 - INFO - Deleted: tools\simple_cli_test.py
+2025-06-24 18:24:14,723 - INFO - Deleted: tools\test_cli_fault_compatibility.py
+2025-06-24 18:24:14,726 - INFO - Deleted: tools\comprehensive_cli_fault_unification.py
+2025-06-24 18:24:14,727 - INFO - Deleted: tools\setup_pre_commit.py
+2025-06-24 18:24:14,729 - WARNING - Mathematical content detected in tools\comprehensive_ci_fixer.py: dlt waveform
+2025-06-24 18:24:14,729 - WARNING - Preserving file with mathematical content: tools\comprehensive_ci_fixer.py
+2025-06-24 18:24:14,731 - INFO - Deleted: tools\fix_stub_files.py
+2025-06-24 18:24:14,732 - INFO - Deleted: tools\auto_whitespace_cleanup.py
+2025-06-24 18:24:14,733 - INFO - Deleted: tools\syntax_docstring_fixer.py
+2025-06-24 18:24:14,736 - INFO - Deleted: tools\comprehensive_flake8_fixer.py
+2025-06-24 18:24:14,738 - INFO - Deleted: tools\flake8_progress.py
+2025-06-24 18:24:14,739 - INFO - Deleted: tools\fix_e999_files.py
+2025-06-24 18:24:14,740 - WARNING - Mathematical pattern detected in tools\fix_stub_syntax.py
+2025-06-24 18:24:14,740 - WARNING - Preserving file with mathematical content: tools\fix_stub_syntax.py
+2025-06-24 18:24:14,743 - INFO - Deleted: tools\flake8_tracker.py
+2025-06-24 18:24:14,746 - INFO - Deleted: tools\final_mathematical_framework_fixer.py
+2025-06-24 18:24:14,748 - INFO - Deleted: tools\fix_docstrings.py
+2025-06-24 18:24:14,752 - INFO - Deleted: tools\resolve_parse_errors.py
+2025-06-24 18:24:14,753 - WARNING - Mathematical pattern detected in tools\fix_remaining_critical.py
+2025-06-24 18:24:14,753 - WARNING - Preserving file with mathematical content: tools\fix_remaining_critical.py
+2025-06-24 18:24:14,758 - INFO - Deleted: tools\final_compliance_fixer.py
+2025-06-24 18:24:14,759 - INFO - Deleted: tools\establish_fault_tolerant_standards.py
+2025-06-24 18:24:14,761 - INFO - Deleted: tools\critical_syntax_fixer.py
+2025-06-24 18:24:14,763 - INFO - Deleted: tools\comprehensive_compliance_monitor.py
+2025-06-24 18:24:14,765 - INFO - Deleted: tools\complete_flake8_fix.py
+2025-06-24 18:24:14,767 - INFO - Deleted: tools\cleanup_obsolete_files.py
+2025-06-24 18:24:14,768 - WARNING - Mathematical pattern detected in tools\add_missing_docstrings.py
+2025-06-24 18:24:14,769 - WARNING - Preserving file with mathematical content: tools\add_missing_docstrings.py
+2025-06-24 18:24:14,769 - INFO - File cleanup completed: 98/98 files deleted
+2025-06-24 18:24:14,770 - INFO - Cleaning up empty directories...
+2025-06-24 18:24:14,896 - INFO - Removed empty directory: .git\objects\info
+2025-06-24 18:24:14,897 - INFO - Removed empty directory: .git\objects\pack
+2025-06-24 18:24:14,900 - INFO - Removed empty directory: .git\refs\tags
+2025-06-24 18:24:15,568 - INFO - Removed empty directory: cleanup_backup\core\core\math
+2025-06-24 18:24:15,571 - INFO - Removed empty directory: cleanup_backup\core\logs\faults
+2025-06-24 18:24:15,578 - INFO - Removed empty directory: cleanup_backup\core\btc_data
+2025-06-24 18:24:15,579 - INFO - Removed empty directory: cleanup_backup\core\btc_patterns
+2025-06-24 18:24:15,580 - INFO - Removed empty directory: cleanup_backup\core\btc_predictions
+2025-06-24 18:24:15,582 - INFO - Removed empty directory: cleanup_backup\core\core
+2025-06-24 18:24:15,585 - INFO - Removed empty directory: cleanup_backup\core\logs
+2025-06-24 18:24:15,591 - INFO - Removed empty directory: cleanup_backup\core\temporal_analysis
+2025-06-24 18:24:15,593 - INFO - Removed empty directory: cleanup_backup\core\temporal_events
+2025-06-24 18:24:15,594 - INFO - Removed empty directory: cleanup_backup\core\temporal_reports
+2025-06-24 18:24:15,595 - INFO - Removed empty directory: cleanup_backup\core\waveform_analyses
+2025-06-24 18:24:15,596 - INFO - Removed empty directory: cleanup_backup\core\waveform_data
+2025-06-24 18:24:15,597 - INFO - Removed empty directory: cleanup_backup\core\waveform_patterns
+2025-06-24 18:24:15,598 - INFO - Removed empty directory: cleanup_backup\core\waveform_predictions
+2025-06-24 18:24:15,666 - INFO - Removed empty directory: core\core\math
+2025-06-24 18:24:15,672 - INFO - Removed empty directory: core\logs\faults
+2025-06-24 18:24:15,679 - INFO - Removed empty directory: core\btc_data
+2025-06-24 18:24:15,682 - INFO - Removed empty directory: core\btc_patterns
+2025-06-24 18:24:15,683 - INFO - Removed empty directory: core\btc_predictions
+2025-06-24 18:24:15,685 - INFO - Removed empty directory: core\core
+2025-06-24 18:24:15,688 - INFO - Removed empty directory: core\logs
+2025-06-24 18:24:15,691 - INFO - Removed empty directory: core\temporal_analysis
+2025-06-24 18:24:15,693 - INFO - Removed empty directory: core\temporal_events
+2025-06-24 18:24:15,693 - INFO - Removed empty directory: core\temporal_reports
+2025-06-24 18:24:15,696 - INFO - Removed empty directory: core\waveform_analyses
+2025-06-24 18:24:15,697 - INFO - Removed empty directory: core\waveform_data
+2025-06-24 18:24:15,701 - INFO - Removed empty directory: core\waveform_patterns
+2025-06-24 18:24:15,703 - INFO - Removed empty directory: core\waveform_predictions
+2025-06-24 18:24:15,706 - INFO - Removed empty directory: data\historical
+2025-06-24 18:24:15,707 - INFO - Removed empty directory: data\matrix_logs
+2025-06-24 18:24:15,715 - INFO - Removed empty directory: logs\faults
+2025-06-24 18:24:15,723 - INFO - Removed empty directory: logs\spectrum
+2025-06-24 18:24:15,802 - INFO - Removed empty directory: schwabot\.git\objects\info
+2025-06-24 18:24:15,803 - INFO - Removed empty directory: schwabot\.git\objects\pack
+2025-06-24 18:24:15,805 - INFO - Removed empty directory: schwabot\.git\refs\tags
+2025-06-24 18:24:15,821 - INFO - Removed empty directory: state\tensors
+2025-06-24 18:24:15,829 - INFO - Removed empty directory: test_diagnostic_logs\quarantine
+2025-06-24 18:24:15,830 - INFO - Removed empty directory: test_diagnostic_logs\recovered
+2025-06-24 18:24:15,831 - INFO - Removed empty directory: test_integration_logs\quarantine
+2025-06-24 18:24:15,832 - INFO - Removed empty directory: test_integration_logs\recovered
+2025-06-24 18:24:15,835 - INFO - Removed empty directory: test_recovery_logs\quarantine
+2025-06-24 18:24:15,836 - INFO - Removed empty directory: test_recovery_logs\recovered
+2025-06-24 18:24:15,843 - INFO - Removed empty directory: data
+2025-06-24 18:24:15,847 - INFO - Removed empty directory: math
+2025-06-24 18:24:15,849 - INFO - Removed empty directory: scripts
+2025-06-24 18:24:15,850 - INFO - Removed empty directory: state
+2025-06-24 18:24:15,852 - INFO - Removed empty directory: test_data
+2025-06-24 18:24:15,853 - INFO - Removed empty directory: test_diagnostic_logs
+2025-06-24 18:24:15,853 - INFO - Removed empty directory: test_integration_logs
+2025-06-24 18:24:15,854 - INFO - Removed empty directory: test_recovery_logs
+2025-06-24 18:24:15,858 - INFO - ============================================================
+2025-06-24 18:24:15,866 - INFO - ============================================================
+2025-06-24 18:24:15,918 - INFO -   - fix_event_matrix.py
+2025-06-24 18:24:15,918 - INFO -   - fix_indentation.py
+2025-06-24 18:24:15,918 - INFO -   - simple_test.py
+2025-06-24 18:24:15,919 - INFO -   - test_import_fix.py
+2025-06-24 18:24:15,919 - INFO -   - test_mathematical_integration.py
+2025-06-24 18:24:15,920 - INFO -   - test_hash_registry_integration.py
+2025-06-24 18:24:15,920 - INFO -   - test_complete_integration.py
+2025-06-24 18:24:15,921 - INFO -   - test_mathematical_pipeline.py
+2025-06-24 18:24:15,929 - INFO -   - test_complete_mathematical_integration.py
+2025-06-24 18:24:15,929 - INFO -   - test_dlt_matrix_profit_integration.py
+2025-06-24 18:24:15,930 - INFO -   - test_sustainment_quick_functionality.py
+2025-06-24 18:24:15,930 - INFO -   - test_time_lattice_fork_functionality.py
+2025-06-24 18:24:15,931 - INFO -   - simple_thermal_test.py
+2025-06-24 18:24:15,931 - INFO -   - test_complete_system_integration.py
+2025-06-24 18:24:15,932 - INFO -   - test_ops_observability_integration.py
+2025-06-24 18:24:15,932 - INFO -   - test_vecu_ferris_integration.py
+2025-06-24 18:24:15,933 - INFO -   - comprehensive_integration_test.py
+2025-06-24 18:24:15,933 - INFO -   - test_zpe.py
+2025-06-24 18:24:15,933 - INFO -   - FINAL_SYSTEM_SUMMARY.md
+2025-06-24 18:24:15,934 - INFO -   - FINAL_COMPLETE_INTEGRATION_STATUS.md
+2025-06-24 18:24:15,934 - INFO -   - FINAL_MATHEMATICAL_INTEGRITY_CONFIRMATION.md
+2025-06-24 18:24:15,935 - INFO -   - SCHWABOT_INTEGRATION_COMPLETION_SUMMARY.md
+2025-06-24 18:24:15,936 - INFO -   - MATHEMATICAL_INTEGRATION_ANALYSIS.md
+2025-06-24 18:24:15,936 - INFO -   - FILE_AUDIT_ANALYSIS.md
+2025-06-24 18:24:15,939 - INFO -   - TODO_TO_DONE_COMPLETION_REPORT.md
+2025-06-24 18:24:15,941 - INFO -   - FINAL_IMPLEMENTATION_CONFIRMATION.md
+2025-06-24 18:24:15,942 - INFO -   - SCHWABOT_COMPLETE_IMPLEMENTATION_SUMMARY.md
+2025-06-24 18:24:15,943 - INFO -   - SCHWABOT_MATHEMATICAL_PIPELINE_SUMMARY.md
+2025-06-24 18:24:15,944 - INFO -   - CRITICAL_MATH_MODULES_COMPLETE.md
+2025-06-24 18:24:15,944 - INFO -   - IMPLEMENTATION_PLAN.md
+2025-06-24 18:24:15,945 - INFO -   - OPS_OBSERVABILITY_COMPLETE.md
+2025-06-24 18:24:15,945 - INFO -   - RISK_AND_CAPITAL_CONTROLS_COMPLETE.md
+2025-06-24 18:24:15,946 - INFO -   - FINAL_VECU_FERRIS_RDE_INTEGRATION_SUMMARY.md
+2025-06-24 18:24:15,946 - INFO -   - FINAL_MATHEMATICAL_FRAMEWORK_AND_LIVE_BACKTESTING.md
+2025-06-24 18:24:15,947 - INFO -   - FINAL_COMPREHENSIVE_VERIFICATION.md
+2025-06-24 18:24:15,947 - INFO -   - FINAL_HYBRID_ZPE_REACTIVE_SUMMARY.md
+2025-06-24 18:24:15,947 - INFO -   - ZPE_INTEGRATION_COMPLETE_SUMMARY.md
+2025-06-24 18:24:15,948 - INFO -   - FINAL_ZPE_IMPLEMENTATION_SUMMARY.md
+2025-06-24 18:24:15,949 - INFO -   - SCHWABOT_ZPE_MATHEMATICAL_FRAMEWORK.md
+2025-06-24 18:24:15,949 - INFO -   - final_system_verification.py
+2025-06-24 18:24:15,950 - INFO -   - validate_schwabot_system.py
+2025-06-24 18:24:15,953 - INFO -   - tools\comprehensive_ci_fixer.py
+2025-06-24 18:24:15,956 - INFO -   - tools\fix_stub_syntax.py
+2025-06-24 18:24:15,958 - INFO -   - tools\fix_remaining_critical.py
+2025-06-24 18:24:15,958 - INFO -   - tools\add_missing_docstrings.py
