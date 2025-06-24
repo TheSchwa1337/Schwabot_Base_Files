@@ -63,12 +63,12 @@ class ProfitRoutingEngine:
     Handles dynamic rebalancing and strategy optimization.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the profit routing engine."""
         self.routes: Dict[str, ProfitRoute] = {}
         self.strategy_performances: Dict[str, StrategyPerformance] = {}
         self.profit_history: List[Dict[str, float]] = []
-        self.transition_matrix: Optional[np.ndarray] = None
+        self.transition_matrix: Optional[np.ndarray[Any, Any]] = None
         
         # Routing parameters
         self.max_routes = 50
@@ -327,7 +327,7 @@ class ProfitRoutingEngine:
     
     def _calculate_entropy_matrix(
         self, profit_deltas: Dict[str, float]
-    ) -> np.ndarray:
+    ) -> np.ndarray[Any, Any]:
         """Calculate weighted strategy entropy matrix."""
         n_assets = len(self.supported_assets)
         entropy_matrix = np.zeros((n_assets, n_assets))
@@ -349,8 +349,8 @@ class ProfitRoutingEngine:
         
         return entropy_matrix
     
-    def _calculate_eigenvector_centrality(self, matrix: np.ndarray) -> np.ndarray:
-        """Calculate eigenvector centrality of the entropy matrix."""
+    def _calculate_eigenvector_centrality(self, matrix: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]:
+        """Calculate eigenvector centrality of the matrix."""
         try:
             # Ensure matrix is symmetric
             symmetric_matrix = (matrix + matrix.T) / 2
@@ -412,7 +412,7 @@ class ProfitRoutingEngine:
         self.transition_matrix = transition_matrix
     
     def _combine_centrality_and_transitions(
-        self, centrality_weights: np.ndarray
+        self, centrality_weights: np.ndarray[Any, Any]
     ) -> Dict[str, float]:
         """Combine eigenvector centrality with Markov transition probabilities."""
         if self.transition_matrix is None:

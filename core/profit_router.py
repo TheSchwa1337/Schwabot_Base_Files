@@ -57,11 +57,11 @@ PHASE_MAPPING = {4: 0, 8: 1, 42: 2}
 
 
 def create_randomized_matrix(
-    base_matrix: np.ndarray,
+    base_matrix: np.ndarray[Any, Any],
     substitution_seed: int,
     volatility_adjustment: float = 0.1,
     correlation_factor: float = 0.05,
-) -> Tuple[np.ndarray, Dict[str, Any]]:
+) -> Tuple[np.ndarray[Any, Any], Dict[str, Any]]:
     """Create randomized allocation matrix with asset substitutions.
 
     Parameters
@@ -139,7 +139,7 @@ def create_randomized_matrix(
 def route_profit(
     profit_amount: float,
     phase_bit_depth: int,
-    allocation_matrix: Optional[np.ndarray] = None,
+    allocation_matrix: Optional[np.ndarray[Any, Any]] = None,
     min_allocation: float = 0.01,
 ) -> Dict[str, float]:
     """Route profit to assets based on phase and allocation matrix.
@@ -411,7 +411,7 @@ class ProfitRouter:
         logger.info("Reset allocation history")
 
 
-def validate_allocation_matrix(matrix: np.ndarray) -> bool:
+def validate_allocation_matrix(matrix: np.ndarray[Any, Any]) -> bool:
     """Validate allocation matrix format and constraints.
 
     Parameters

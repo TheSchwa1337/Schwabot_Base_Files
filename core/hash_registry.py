@@ -101,13 +101,13 @@ class HashEntry:
     result: Optional[Dict[str, Any]] = None
     error_message: Optional[str] = None
     parent_hash_id: Optional[str] = None
-    child_hash_ids: List[str] = None
-    validation_data: Dict[str, Any] = None
+    child_hash_ids: Optional[List[str]] = None
+    validation_data: Optional[Dict[str, Any]] = None
     memory_signature: str = ""
     recursive_depth: int = 0
     confidence_score: float = 0.0
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization processing."""
         if self.child_hash_ids is None:
             self.child_hash_ids = []
@@ -181,9 +181,9 @@ class HashPattern:
     success_rate: float
     average_execution_time: float
     confidence_score: float
-    metadata: Dict[str, Any] = None
+    metadata: Optional[Dict[str, Any]] = None
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization processing."""
         if self.metadata is None:
             self.metadata = {}
@@ -316,7 +316,7 @@ class HashRegistry:
         agent_type: str,
         domain: str,
         payload: Dict[str, Any],
-        context: Dict[str, Any] = None,
+        context: Optional[Dict[str, Any]] = None,
         command_id: Optional[str] = None,
         parent_hash_id: Optional[str] = None,
         confidence_score: float = 0.0,
@@ -800,11 +800,16 @@ class HashRegistry:
             return {}
     
     async def start_cleanup_task(self) -> None:
-        """Start periodic cleanup task."""
-        async def cleanup_loop():
+        """Start the cleanup task."""
+        async def cleanup_loop() -> None:
+            """Cleanup loop for old entries."""
             while True:
-                await self.cleanup_old_entries()
-                await asyncio.sleep(self.cleanup_interval)
+                try:
+                    await self.cleanup_old_entries()
+                    await asyncio.sleep(self.cleanup_interval)
+                except Exception as e:
+                    safe_print(f"⚠️ Cleanup task error: {safe_format_error(e, 'cleanup_task')}")
+                    await asyncio.sleep(60)  # Wait 1 minute before retrying
         
         self.cleanup_task = asyncio.create_task(cleanup_loop())
         safe_print("🧹 Cleanup task started")
@@ -830,7 +835,7 @@ async def register_hash_entry(
     agent_type: str,
     domain: str,
     payload: Dict[str, Any],
-    context: Dict[str, Any] = None,
+    context: Optional[Dict[str, Any]] = None,
     command_id: Optional[str] = None,
     parent_hash_id: Optional[str] = None,
     confidence_score: float = 0.0,

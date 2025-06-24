@@ -88,7 +88,7 @@ class StrategyMappingResult:
 class StrategyMapper:
     """Enhanced strategy mapper with UROS v1.0 and ZPE integration."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the strategy mapper."""
         self.sequencer = AICommandSequencer() if UROS_MODULES_AVAILABLE else None
         self.memory_allocator = MemoryKeyAllocator() if UROS_MODULES_AVAILABLE else None

@@ -19,9 +19,12 @@ class ExecPacket:
     priority: int = 0
     metadata: Optional[Dict[str, Any]] = None
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Post-initialization processing."""
         if self.metadata is None:
             self.metadata = {}
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
 
 
 def create_exec_packet(command_data: Dict[str, Any], priority: int = 0) -> ExecPacket:

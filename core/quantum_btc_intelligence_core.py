@@ -19,7 +19,7 @@ import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 import numpy as np
 
@@ -67,7 +67,7 @@ class ReflexScoreComponents:
 class QuantumBTCIntelligenceCore:
     """Quantum-inspired BTC intelligence with hash health and reflex scoring."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize quantum BTC intelligence core."""
         self.quantum_history: List[QuantumVector] = []
         self.hash_history: List[HashHealthMetrics] = []
@@ -436,8 +436,16 @@ class QuantumBTCIntelligenceCore:
             unified_score=0.5,
         )
     
-    def get_intelligence_summary(self) -> Dict:
-        """Get quantum intelligence core summary."""
+    def _calculate_quantum_entanglement(
+        self,
+        vectors: List[np.ndarray[Any, Any]],
+        entanglement_type: str = "linear"
+    ) -> float:
+        """Calculate quantum entanglement between vectors."""
+        # ... existing code ...
+
+    def get_intelligence_summary(self) -> Dict[str, Any]:
+        """Get intelligence summary."""
         return {
             "quantum_history_size": len(self.quantum_history),
             "hash_history_size": len(self.hash_history),

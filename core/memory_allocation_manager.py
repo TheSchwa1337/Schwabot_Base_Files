@@ -124,7 +124,7 @@ class MemoryUsage:
 class ReflectiveAllocator:
     """Reflective allocator for intelligent memory management."""
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize reflective allocator."""
         self.config = config or {}
         self.btc_hashing_interval = 3.75 * 60  # 3.75 minutes in seconds
@@ -256,7 +256,7 @@ class ReflectiveAllocator:
 class MemoryAllocationManager:
     """Comprehensive memory allocation management system."""
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize memory allocation manager."""
         self.config = config or {}
         self.reflective_allocator = ReflectiveAllocator(config)

@@ -1,65 +1,104 @@
 [flake8]
-# CI-friendly configuration - focus on critical issues first
-# Extended ignore for gradual improvement
-extend-ignore = 
-    D401,ANN101,ANN201,
-    # Temporarily ignore style issues during architectural fixes
-    W293,W291,W292,W503,W504,W391,
-    # Allow some complexity during refactoring
-    C901,
-    # Allow f-string issues during transition
-    F541,
-    # Allow some import order issues
-    I100,I101,I201,I202,
-    # Allow some docstring issues during development
-    D100,D101,D103,D107,D200,D202,D205,D209,D211,D212,D300,D301,D402,D412,D415,D417
+# Flake8 configuration for Schwabot UROS v1.0
+# Version: 0.5.1
 
-# Slightly more lenient line length
+# Line length and complexity settings
 max-line-length = 100
-# More lenient complexity during refactoring
-max-complexity = 20
+max-complexity = 15
 
-# Schwabot-specific exclusions
+# Ignore specific error codes
+ignore = 
+    E501
+    E402
+    F401
+    W503
+    W504
+    E731
+    E225
+    E226
+    E231
+    E241
+    E302
+    E301
+    E303
+    E722
+
+# Exclude directories and files
 exclude = 
-    .git,
-    __pycache__,
-    .venv,
-    venv,
-    env,
-    site-packages,
-    node_modules,
-    *.egg-info,
-    .pytest_cache,
-    .mypy_cache,
-    tests/deprecated/,
-    sandbox/,
-    build/,
-    dist/,
-    tools/
+    .git
+    __pycache__
+    .venv
+    venv
+    env
+    .env
+    .mypy_cache
+    .pytest_cache
+    build
+    dist
+    *.egg-info
+    .coverage
+    htmlcov
+    .tox
+    .eggs
+    .mypy_cache
+    .pytest_cache
+    .flake8_cache
 
-# Per-file exclusions for generated files
-per-file-ignores =
-    __init__.py:F401,F403
-    tests/*:E722,W291,W293,F401,F841
-    setup.py:E722,F401
-    docs/*:E722,W291,W293,F401
-    tools/*:E501,W291,W293,F401,F841,C901,S404,S603,S607
-    *stub*.py:E999,F401,F841
-    core/integration_orchestrator.py:C901
-    core/main.py:C901
+# Per-file-ignores
+# Ignore specific errors in specific files
+per-file-ignores = 
+    # Test files - relaxed standards
+    tests/*:E501,E302,E303
+    # Configuration files - relaxed standards  
+    *.ini:E501
+    *.cfg:E501
+    *.conf:E501
+    # Generated files
+    */__init__.py:F401
+    # Core mathematical modules - strict standards
+    core/bit_phase_engine.py:E501
+    core/tensor_router.py:E501
+    core/phase_entropy_matcher.py:E501
+    core/matrix_mapper.py:E501
+    core/profit_cycle_allocator.py:E501
+    core/gpu_offload_manager.py:E501
+    core/dlt_waveform_engine.py:E501
 
-# Focus on critical errors first
-select = 
-    E9,
-    F63,
-    F7,
-    F82
+# Statistics
+statistics = True
+count = True
 
-# Docstring settings
+# Output format
+format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+
+# Show source code
+show-source = True
+
+# Show statistics
+show-pep8 = False
+
+# Aggressive mode
+aggressive = False
+
+# Builtins
+builtins = _
+
+# Docstring convention
 docstring-convention = google
 
-# Import order
+# Import order style
 import-order-style = google
 
-# Naming conventions - mathematical formulas need single letters
-good-names = i,j,k,n,x,y,z,a,b,c,d,e,f,g,h,l,m,o,p,q,r,s,t,u,v,w,A,B,C,D,T
+# Maximum doc length
+max-doc-length = 100
+
+# Select errors and warnings
+select = E,W,F,C90
+
+# Extend ignore for mathematical code
+extend-ignore = 
+    E203
+    E266
+    W291
+    W293
+    W391

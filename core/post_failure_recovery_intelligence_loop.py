@@ -91,7 +91,7 @@ class PostFailureRecoveryIntelligenceLoop:
     Handles system resilience and recovery optimization.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the post-failure recovery intelligence loop."""
         self.failure_events: List[FailureEvent] = []
         self.recovery_attempts: List[RecoveryAttempt] = []

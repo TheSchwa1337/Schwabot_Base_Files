@@ -160,7 +160,7 @@ class HeatMapData:
 class PrecisionManager:
     """High-precision mathematical operations manager."""
     
-    def __init__(self, config: Optional[PrecisionConfig] = None):
+    def __init__(self, config: Optional[PrecisionConfig] = None) -> None:
         """Initialize precision manager."""
         self.config = config or PrecisionConfig(
             mode=PrecisionMode.DECIMAL,
@@ -340,7 +340,7 @@ class PrecisionManager:
 class PerformanceOptimizer:
     """Performance optimization with Numba/Cython support."""
     
-    def __init__(self, config: Optional[PerformanceConfig] = None):
+    def __init__(self, config: Optional[PerformanceConfig] = None) -> None:
         """Initialize performance optimizer."""
         self.config = config or PerformanceConfig(
             optimization_level=OptimizationLevel.ADVANCED,
@@ -666,7 +666,7 @@ class PrecisionPerformanceManager:
     """
     
     def __init__(self, precision_config: Optional[PrecisionConfig] = None,
-                 performance_config: Optional[PerformanceConfig] = None):
+                 performance_config: Optional[PerformanceConfig] = None) -> None:
         """Initialize precision and performance manager."""
         self.precision_manager = PrecisionManager(precision_config)
         self.performance_optimizer = PerformanceOptimizer(performance_config)

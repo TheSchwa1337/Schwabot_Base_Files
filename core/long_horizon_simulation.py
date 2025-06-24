@@ -156,7 +156,7 @@ class ChaosEvent:
 class MonteCarloSimulator:
     """Monte Carlo simulation engine."""
     
-    def __init__(self, config: SimulationConfig):
+    def __init__(self, config: SimulationConfig) -> None:
         """Initialize Monte Carlo simulator."""
         self.config = config
         self.results: List[SimulationResult] = []
@@ -514,7 +514,7 @@ class MonteCarloSimulator:
 class MarketDataGenerator:
     """Market data generator for simulations."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize market data generator."""
         safe_print("📊 Market Data Generator initialized")
     
@@ -584,7 +584,7 @@ class MarketDataGenerator:
 class ChaosMonkey:
     """Chaos monkey for testing system resilience."""
     
-    def __init__(self, config: SimulationConfig):
+    def __init__(self, config: SimulationConfig) -> None:
         """Initialize chaos monkey."""
         self.config = config
         self.events: List[ChaosEvent] = []
@@ -717,7 +717,7 @@ class LongHorizonSimulation:
     - Advanced scenario modeling and stress testing
     """
     
-    def __init__(self, config: Optional[SimulationConfig] = None):
+    def __init__(self, config: Optional[SimulationConfig] = None) -> None:
         """Initialize long-horizon simulation."""
         self.config = config or SimulationConfig(
             simulation_type=SimulationType.MONTE_CARLO,

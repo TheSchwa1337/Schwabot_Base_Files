@@ -14,7 +14,7 @@ where
 
 from __future__ import annotations
 
-from typing import Final
+from typing import Final, Any
 
 import numpy as np
 
@@ -25,7 +25,7 @@ _CLIP_MAX: Final = 1.0
 _EPS: Final = 1e-9
 
 
-def _relative_volatility(volumes: np.ndarray) -> float:
+def _relative_volatility(volumes: np.ndarray[Any, Any]) -> float:
     """TODO: document _relative_volatility."""
     if volumes.size == 0:
         return 0.0
@@ -38,7 +38,7 @@ def _relative_volatility(volumes: np.ndarray) -> float:
 
 def translate_news_to_pool_vector(
     sentiment: float,
-    pool_volumes: np.ndarray,
+    pool_volumes: np.ndarray[Any, Any],
 ) -> float:
     """Return influence score in range [-1, 1].
 

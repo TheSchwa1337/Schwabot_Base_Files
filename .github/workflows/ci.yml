@@ -17,7 +17,7 @@ jobs:
       - name: Run flake8
         run: flake8 core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py tests/
       - name: Run mypy
-        run: mypy core/ core/dlt_waveform_engine.py core/multi_bit_btc_processor.py core/profit_routing_engine.py core/temporal_execution_correction_layer.py core/post_failure_recovery_intelligence_loop.py apply_windows_cli_compatibility.py
+        run: mypy core/ apply_windows_cli_compatibility.py
       - name: Run black (check only)
         run: black --check .
       - name: Run isort (check only)

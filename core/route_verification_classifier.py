@@ -33,7 +33,7 @@ Based on SxN-Math specifications and hybrid allocator-classifier architecture.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from decimal import getcontext
@@ -105,11 +105,27 @@ class ClassificationResult:
             self.timestamp = datetime.now()
 
 
-class RouteFeatureExtractor:
-    """Extracts features from route vectors for classification."""
+@dataclass
+class RouteVerificationResult:
+    """Route verification result."""
+    route_id: str
+    verification_status: str
+    confidence_score: float
+    risk_score: float
+    timestamp: Optional[datetime] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    def __post_init__(self) -> None:
+        """Post-initialization processing."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
 
-    def __init__(self):
-        """TODO: document __init__."""
+
+class RouteFeatureExtractor:
+    """Route feature extractor."""
+
+    def __init__(self) -> None:
+        """Initialize route feature extractor."""
         self.feature_weights = {
             "efficiency_ratio": 0.25,
             "profit_magnitude": 0.20,
@@ -217,13 +233,10 @@ class RouteFeatureExtractor:
 
 
 class RouteClassifier:
-    """
+    """Route classifier."""
 
-    AI-powered route classifier using pattern recognition and probabilistic analysis
-    """
-
-    def __init__(self):
-        """TODO: document __init__."""
+    def __init__(self) -> None:
+        """Initialize route classifier."""
         self.feature_extractor = RouteFeatureExtractor()
         self.classification_history: List[ClassificationResult] = []
         self.route_memory: Dict[str, List[RouteVector]] = {}
@@ -535,13 +548,10 @@ class RouteClassifier:
 
 
 class IntegratedRouteManager:
-    """
+    """Integrated route manager."""
 
-    Integrated manager that combines allocator and classifier decisions
-    """
-
-    def __init__(self):
-        """TODO: document __init__."""
+    def __init__(self) -> None:
+        """Initialize integrated route manager."""
         self.classifier = RouteClassifier()
         self.approved_routes: Dict[str, RouteVector] = {}
         self.rejected_routes: Dict[str, Tuple[RouteVector, ClassificationResult]] = {}

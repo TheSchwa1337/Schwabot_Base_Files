@@ -73,7 +73,7 @@ class ReconciliationResult:
 class ProfitVectorReconciler:
     """Reconciles profit vectors between waveform and allocator."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the profit vector reconciler."""
         self.reconciliation_history = []
         self.max_history = 1000

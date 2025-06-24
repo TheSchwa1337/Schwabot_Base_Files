@@ -115,7 +115,7 @@ class SettingsController:
         self.matrix_path_weights = {}
         self._initialize_matrix_weights()
     
-    def _load_settings(self):
+    def _load_settings(self) -> None:
         """Load settings from configuration files"""
         try:
             # Load main settings
@@ -143,7 +143,7 @@ class SettingsController:
             print(f"Warning: Could not load settings: {e}")
             self._create_default_settings()
     
-    def _create_default_settings(self):
+    def _create_default_settings(self) -> None:
         """Create default settings files"""
         # Main settings
         main_settings = {
@@ -170,7 +170,7 @@ class SettingsController:
         with open(self.config_path / "demo_backtest_mode.yaml", 'w') as f:
             yaml.dump(demo_settings, f, default_flow_style=False)
     
-    def _apply_main_settings(self, config_data: Dict):
+    def _apply_main_settings(self, config_data: Dict[str, Any]) -> None:
         """Apply main configuration settings"""
         if "matrix_mode" in config_data:
             self.matrix_settings.matrix_id = config_data["matrix_mode"]
@@ -184,7 +184,7 @@ class SettingsController:
         if "api_echo_sync" in config_data:
             self.vector_settings.api_echo_sync = config_data["api_echo_sync"]
     
-    def _apply_matrix_settings(self, matrix_data: Dict):
+    def _apply_matrix_settings(self, matrix_data: Dict[str, Any]) -> None:
         """Apply matrix-specific settings"""
         for matrix_id, settings in matrix_data.items():
             if matrix_id == self.matrix_settings.matrix_id:
@@ -192,7 +192,7 @@ class SettingsController:
                     if hasattr(self.matrix_settings, key):
                         setattr(self.matrix_settings, key, value)
     
-    def _apply_demo_settings(self, demo_data: Dict):
+    def _apply_demo_settings(self, demo_data: Dict[str, Any]) -> None:
         """Apply demo/test settings"""
         if "reinforce_bad_vectors" in demo_data:
             self.reinforcement_settings.reinforce_bad_vectors = demo_data["reinforce_bad_vectors"]
@@ -203,7 +203,7 @@ class SettingsController:
         if "entropy_trigger_threshold" in demo_data:
             self.reinforcement_settings.entropy_trigger_threshold = demo_data["entropy_trigger_threshold"]
     
-    def _load_known_bad_vectors(self) -> List[Dict]:
+    def _load_known_bad_vectors(self) -> List[Dict[str, Any]]:
         """Load known bad vectors map"""
         bad_vectors_path = self.config_path / "known_bad_vector_map.json"
         
@@ -239,7 +239,7 @@ class SettingsController:
         
         return default_bad_vectors
     
-    def _initialize_matrix_weights(self):
+    def _initialize_matrix_weights(self) -> None:
         """Initialize matrix path weights for reinforcement learning"""
         matrix_ids = ["SFS8-A5", "SFS16-B3", "SFS42-C7", "SFSS-D1", "SFSSS-E9"]
         
@@ -332,28 +332,28 @@ class SettingsController:
         return False
     
     def add_bad_vector(self, vector_hash: str, tick_id: int, failure_type: str, 
-                      matrix_id: str, confidence: float = 0.8):
+                      timestamp: Optional[datetime] = None) -> None:
         """Add a new bad vector to the reinforcement memory"""
         bad_vector = {
             "hash": vector_hash,
             "tick_id": tick_id,
             "failure_type": failure_type,
-            "matrix_id": matrix_id,
-            "timestamp": datetime.now().isoformat(),
-            "confidence": confidence
+            "matrix_id": self.matrix_settings.matrix_id,
+            "timestamp": timestamp or datetime.now().isoformat(),
+            "confidence": 0.8
         }
         
         self.known_bad_vectors.append(bad_vector)
         self._save_known_bad_vectors()
     
-    def _save_known_bad_vectors(self):
+    def _save_known_bad_vectors(self) -> None:
         """Save known bad vectors to file"""
         bad_vectors_path = self.config_path / "known_bad_vector_map.json"
         
         with open(bad_vectors_path, 'w') as f:
             json.dump(self.known_bad_vectors, f, indent=2)
     
-    def update_matrix_weights(self, matrix_id: str, success: bool):
+    def update_matrix_weights(self, matrix_id: str, success: bool) -> None:
         """Update matrix path weights based on success/failure"""
         if matrix_id not in self.matrix_path_weights:
             self.matrix_path_weights[matrix_id] = 1.0
@@ -387,7 +387,7 @@ class SettingsController:
         """Check if experimental mode is enabled"""
         return self.fault_settings.experimental_mode
     
-    def save_settings(self):
+    def save_settings(self) -> None:
         """Save current settings to configuration files"""
         try:
             # Save main settings

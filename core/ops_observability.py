@@ -150,7 +150,7 @@ class Alert:
 class PrometheusMetrics:
     """Prometheus metrics collection."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Prometheus metrics."""
         # Trading metrics
         self.trades_total = Counter('schwabot_trades_total', 'Total number of trades', ['asset', 'side', 'status'])
@@ -203,7 +203,7 @@ class PrometheusMetrics:
 class StructuredLogger:
     """Structured logging with ELK/Loki integration."""
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize structured logger."""
         self.config = config
         self.log_queue = queue.Queue()
@@ -234,13 +234,13 @@ class StructuredLogger:
         # Start log worker
         self.start_log_worker()
     
-    def start_log_worker(self):
+    def start_log_worker(self) -> None:
         """Start log worker thread."""
         self.running = True
         self.log_worker = threading.Thread(target=self._log_worker, daemon=True)
         self.log_worker.start()
     
-    def _log_worker(self):
+    def _log_worker(self) -> None:
         """Log worker thread."""
         while self.running:
             try:
@@ -251,7 +251,7 @@ class StructuredLogger:
             except Exception as e:
                 print(f"Log worker error: {e}")
     
-    def _send_log(self, log_entry: LogEntry):
+    def _send_log(self, log_entry: LogEntry) -> None:
         """Send log to ELK/Loki."""
         try:
             # Format log entry for ELK/Loki
@@ -287,17 +287,17 @@ class StructuredLogger:
         except Exception as e:
             print(f"Log sending error: {e}")
     
-    def _send_to_elk(self, log_data: Dict[str, Any]):
+    def _send_to_elk(self, log_data: Dict[str, Any]) -> None:
         """Send log to ELK stack."""
         # Implementation for ELK stack
         pass
     
-    def _send_to_loki(self, log_data: Dict[str, Any]):
+    def _send_to_loki(self, log_data: Dict[str, Any]) -> None:
         """Send log to Loki."""
         # Implementation for Loki
         pass
     
-    def log(self, level: LogLevel, message: str, component: str, **kwargs):
+    def log(self, level: LogLevel, message: str, component: str, **kwargs) -> None:
         """Log a message."""
         log_entry = LogEntry(
             timestamp=datetime.now(),
@@ -318,7 +318,7 @@ class StructuredLogger:
 class HealthMonitor:
     """Health monitoring system."""
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize health monitor."""
         self.config = config
         self.health_checks: Dict[str, Callable] = {}
@@ -330,7 +330,7 @@ class HealthMonitor:
         # Register default health checks
         self._register_default_health_checks()
     
-    def _register_default_health_checks(self):
+    def _register_default_health_checks(self) -> None:
         """Register default health checks."""
         self.register_health_check("system", self._check_system_health)
         self.register_health_check("memory", self._check_memory_health)
@@ -350,7 +350,7 @@ class HealthMonitor:
         """Register a health check function."""
         self.health_checks[name] = check_func
     
-    def start_monitoring(self):
+    def start_monitoring(self) -> None:
         """Start health monitoring."""
         self.running = True
         self.monitoring_thread = threading.Thread(target=self._monitoring_worker, daemon=True)
@@ -528,7 +528,7 @@ class HealthMonitor:
 class AlertManager:
     """Alert management system."""
     
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize alert manager."""
         self.config = config
         self.alerts: List[Alert] = []
@@ -538,7 +538,7 @@ class AlertManager:
         # Register alert handlers
         self._register_alert_handlers()
     
-    def _register_alert_handlers(self):
+    def _register_alert_handlers(self) -> None:
         """Register alert handlers."""
         if self.slack_webhook_url:
             self.register_alert_handler("slack", self._send_slack_alert)
@@ -665,7 +665,7 @@ class OpsObservability:
     - Integration with all Schwabot core systems
     """
     
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize Ops and Observability system."""
         self.config = config or {}
         
@@ -684,7 +684,7 @@ class OpsObservability:
         
         safe_print("🔍 Ops and Observability initialized")
     
-    def _start_services(self):
+    def _start_services(self) -> None:
         """Start observability services."""
         # Start Prometheus metrics server
         metrics_port = self.config.get('prometheus_port', 8000)
@@ -706,7 +706,7 @@ class OpsObservability:
         duration: Optional[float] = None,
         success: Optional[bool] = None,
         **kwargs
-    ):
+    ) -> None:
         """Log an operation with metrics."""
         try:
             # Update metrics
@@ -742,7 +742,7 @@ class OpsObservability:
         pnl: float,
         latency: float,
         success: bool
-    ):
+    ) -> None:
         """Record trade metrics."""
         try:
             # Update trade metrics
@@ -772,7 +772,7 @@ class OpsObservability:
         status_code: int,
         latency: float,
         error_type: Optional[str] = None
-    ):
+    ) -> None:
         """Record API request metrics."""
         try:
             # Update API metrics
@@ -804,7 +804,7 @@ class OpsObservability:
         violation_type: str,
         component: str,
         details: Dict[str, Any]
-    ):
+    ) -> None:
         """Record risk violation."""
         try:
             # Update risk metrics
@@ -837,7 +837,7 @@ class OpsObservability:
         duration: float,
         success: bool,
         **kwargs
-    ):
+    ) -> None:
         """Record mathematical operation."""
         try:
             # Update math metrics
@@ -858,7 +858,7 @@ class OpsObservability:
         except Exception as e:
             safe_print(f"❌ Math operation recording failed: {safe_format_error(e, 'math_recording')}")
     
-    def update_system_metrics(self):
+    def update_system_metrics(self) -> None:
         """Update system metrics."""
         try:
             # Memory metrics
@@ -882,7 +882,7 @@ class OpsObservability:
         except Exception as e:
             safe_print(f"❌ System metrics update failed: {safe_format_error(e, 'system_metrics')}")
     
-    def _update_core_system_metrics(self):
+    def _update_core_system_metrics(self) -> None:
         """Update core system metrics."""
         try:
             # Capital controls metrics
@@ -984,27 +984,27 @@ def log_operation(
     duration: Optional[float] = None,
     success: Optional[bool] = None,
     **kwargs
-):
+) -> None:
     """Log an operation."""
     ops_observability.log_operation(operation, component, level, duration, success, **kwargs)
 
 
-def record_trade(asset: str, side: str, pnl: float, latency: float, success: bool):
+def record_trade(asset: str, side: str, pnl: float, latency: float, success: bool) -> None:
     """Record trade metrics."""
     ops_observability.record_trade(asset, side, pnl, latency, success)
 
 
-def record_api_request(api_type: str, endpoint: str, status_code: int, latency: float, error_type: Optional[str] = None):
+def record_api_request(api_type: str, endpoint: str, status_code: int, latency: float, error_type: Optional[str] = None) -> None:
     """Record API request metrics."""
     ops_observability.record_api_request(api_type, endpoint, status_code, latency, error_type)
 
 
-def record_risk_violation(violation_type: str, component: str, details: Dict[str, Any]):
+def record_risk_violation(violation_type: str, component: str, details: Dict[str, Any]) -> None:
     """Record risk violation."""
     ops_observability.record_risk_violation(violation_type, component, details)
 
 
-def record_math_operation(operation_type: str, duration: float, success: bool, **kwargs):
+def record_math_operation(operation_type: str, duration: float, success: bool, **kwargs) -> None:
     """Record mathematical operation."""
     ops_observability.record_math_operation(operation_type, duration, success, **kwargs)
 

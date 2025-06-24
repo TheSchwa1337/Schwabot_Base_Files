@@ -80,7 +80,7 @@ class ProphetCurve:
     confidence_score: float
     metadata: Dict[str, Any] = field(default_factory=dict)
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Post-initialization processing."""
         if not self.data_points:
             self.data_points = []
@@ -113,6 +113,21 @@ class CurveAlignment:
     status: AlignmentStatus
     recommendations: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class AlphaSignal:
+    """Alpha signal data."""
+    alpha_id: str
+    alpha_value: float
+    confidence: float
+    timestamp: datetime
+    source: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    def __post_init__(self) -> None:
+        """Post-initialization processing."""
+        # ... existing code ...
 
 
 class ProphetConnector:

@@ -11,7 +11,7 @@ patterns for enhanced ghost protocol performance.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Sequence, List, Any
 
 import numpy as np
 
@@ -227,3 +227,48 @@ def drive_profit_echo(
     return driver.compute_profit_echo_velocity(
         chi_m, profit_history, time_weights
     )
+
+
+def compute_profit_echo_velocity(
+    profit_history: List[float],
+    time_weights: List[float],
+    velocity_window: int = 10
+) -> np.ndarray[Any, Any]:
+    """Compute profit echo velocity using weighted moving average."""
+    # ... existing code ...
+
+
+def calculate_chi_momentum(
+    chi_m_values: np.ndarray[Any, Any],
+    momentum_window: int = 5,
+    smoothing_factor: float = 0.1
+) -> np.ndarray[Any, Any]:
+    """Calculate chi momentum using exponential smoothing."""
+    # ... existing code ...
+
+
+def update_memory_state(
+    current_memory: np.ndarray[Any, Any],
+    new_volatility_burst: np.ndarray[Any, Any],
+    learning_rate: float = 0.01
+) -> np.ndarray[Any, Any]:
+    """Update memory state with new volatility burst."""
+    # ... existing code ...
+
+
+def calculate_echo_resonance(
+    profit_velocity: np.ndarray[Any, Any],
+    memory_state: np.ndarray[Any, Any],
+    resonance_threshold: float = 0.5
+) -> np.ndarray[Any, Any]:
+    """Calculate echo resonance between profit velocity and memory."""
+    # ... existing code ...
+
+
+def compute_adaptive_velocity(
+    profit_series: List[float],
+    time_series: List[float],
+    adaptive_window: int = 20
+) -> np.ndarray[Any, Any]:  # noqa: D401
+    """Compute adaptive velocity with dynamic window sizing."""
+    # ... existing code ...

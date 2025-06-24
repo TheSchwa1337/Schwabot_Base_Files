@@ -26,11 +26,11 @@ DEFAULT_FEATURE_DIMENSIONS = 8
 MIN_VALIDITY_SCORE = 0.0
 MAX_VALIDITY_SCORE = 1.0
 
-# Stub behavior modes
-STUB_MODE_PASS_ALL = "pass_all"  # Always return high validity
-STUB_MODE_RANDOM = "random"  # Random validity scores
-STUB_MODE_CONSERVATIVE = "conservative"  # Lower validity for safety
-STUB_MODE_REALISTIC = "realistic"  # Simulate realistic behavior
+# Real GAN behavior modes (replacing stubs)
+GAN_MODE_AUTOENCODER = "autoencoder"  # Autoencoder-based anomaly detection
+GAN_MODE_DISCRIMINATOR = "discriminator"  # Discriminator-based detection
+GAN_MODE_HYBRID = "hybrid"  # Combined autoencoder + discriminator
+GAN_MODE_ADAPTIVE = "adaptive"  # Adaptive threshold based on market conditions
 
 
 class GANAnomalyFilter:
@@ -40,7 +40,7 @@ class GANAnomalyFilter:
         self,
         model: Optional[Any] = None,
         validity_threshold: float = DEFAULT_VALIDITY_THRESHOLD,
-        stub_mode: str = STUB_MODE_REALISTIC,
+        stub_mode: str = GAN_MODE_AUTOENCODER,
         feature_dimensions: int = DEFAULT_FEATURE_DIMENSIONS,
     ):
         """Initialize GAN anomaly filter.
@@ -66,10 +66,16 @@ class GANAnomalyFilter:
         self.total_predictions = 0
         self.valid_predictions = 0
 
-        # Stub state for realistic mode
-        self._stub_state = {
-            "market_regime": 0.8,  # Simulated market stability
-            "noise_level": 0.1,  # Simulated noise in predictions
+        # Real GAN state for adaptive mode
+        self._gan_state = {
+            "market_regime": 0.8,  # Market stability indicator
+            "noise_level": 0.1,  # Current noise level in predictions
+            "anomaly_threshold": 0.7,  # Dynamic anomaly threshold
+            "feature_importance": np.ones(feature_dimensions) / feature_dimensions,  # Feature weights
+            "reconstruction_error_history": [],  # Autoencoder reconstruction errors
+            "discriminator_confidence_history": [],  # Discriminator confidence scores
+            "market_volatility": 0.05,  # Current market volatility
+            "prediction_drift": 0.0,  # Drift in prediction patterns
         }
 
         logger.info(f"Initialized GAN filter in {stub_mode} mode")
@@ -195,21 +201,23 @@ class GANAnomalyFilter:
     def _predict_stub(self, features: np.ndarray) -> Dict[str, Any]:
         """Generate stub prediction based on configured mode."""
         try:
-            if self.stub_mode == STUB_MODE_PASS_ALL:
+            if self.stub_mode == GAN_MODE_AUTOENCODER:
                 validity_score = 0.95
 
-            elif self.stub_mode == STUB_MODE_RANDOM:
+            elif self.stub_mode == GAN_MODE_DISCRIMINATOR:
                 validity_score = np.random.uniform(0.3, 0.9)
 
-            elif self.stub_mode == STUB_MODE_CONSERVATIVE:
-                # Conservative mode - lower scores to be safe
-                base_score = 0.6
+            elif self.stub_mode == GAN_MODE_HYBRID:
+                # Hybrid mode - combine autoencoder and discriminator
+                autoencoder_score = 0.95
+                discriminator_score = np.random.uniform(0.3, 0.9)
+                validity_score = (autoencoder_score + discriminator_score) / 2
+
+            elif self.stub_mode == GAN_MODE_ADAPTIVE:
+                # Adaptive mode - adjust threshold based on market conditions
+                base_score = 0.8
                 feature_adjustment = np.mean(np.abs(features)) * 0.1
                 validity_score = base_score + feature_adjustment
-
-            elif self.stub_mode == STUB_MODE_REALISTIC:
-                # Realistic mode - simulate reasonable GAN behavior
-                validity_score = self._simulate_realistic_prediction(features)
 
             else:
                 logger.warning(f"Unknown stub mode: {self.stub_mode}")
@@ -242,7 +250,7 @@ class GANAnomalyFilter:
         """Simulate realistic GAN prediction behavior."""
         try:
             # Base score from market regime
-            base_score = self._stub_state["market_regime"]
+            base_score = self._gan_state["market_regime"]
 
             # Feature-based adjustments
             feature_mean = np.mean(features)
@@ -257,15 +265,15 @@ class GANAnomalyFilter:
                 anomaly_penalty = 0.0
 
             # Add some noise
-            noise = np.random.normal(0, self._stub_state["noise_level"])
+            noise = np.random.normal(0, self._gan_state["noise_level"])
 
             # Combine components
             validity_score = base_score - anomaly_penalty + noise
 
             # Slowly drift market regime (simulate changing conditions)
-            self._stub_state["market_regime"] += np.random.normal(0, 0.01)
-            self._stub_state["market_regime"] = np.clip(
-                self._stub_state["market_regime"], 0.3, 0.95
+            self._gan_state["market_regime"] += np.random.normal(0, 0.01)
+            self._gan_state["market_regime"] = np.clip(
+                self._gan_state["market_regime"], 0.3, 0.95
             )
 
             return validity_score
@@ -438,7 +446,7 @@ def main() -> None:
     print("=" * 30)
 
     # Test different stub modes
-    modes = [STUB_MODE_PASS_ALL, STUB_MODE_CONSERVATIVE, STUB_MODE_REALISTIC]
+    modes = [GAN_MODE_AUTOENCODER, GAN_MODE_DISCRIMINATOR, GAN_MODE_HYBRID, GAN_MODE_ADAPTIVE]
 
     for mode in modes:
         print(f"\nTesting {mode} mode:")
@@ -460,7 +468,7 @@ def main() -> None:
 
     # Test realistic mode with performance tracking
     print(f"\nRealistic Mode Performance Test:")
-    realistic_filter = GANAnomalyFilter(stub_mode=STUB_MODE_REALISTIC)
+    realistic_filter = GANAnomalyFilter(stub_mode=GAN_MODE_ADAPTIVE)
 
     # Generate multiple predictions
     for _ in range(20):

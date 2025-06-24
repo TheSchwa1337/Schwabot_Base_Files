@@ -80,7 +80,7 @@ class SubstitutionParameters:
 
     # Market conditions
     volatility_levels: Dict[AssetType, float] = field(default_factory=dict)
-    correlation_matrix: np.ndarray = field(default_factory=lambda: np.eye(4))
+    correlation_matrix: np.ndarray[Any, Any] = field(default_factory=lambda: np.eye(4))
     liquidity_scores: Dict[AssetType, float] = field(default_factory=dict)
 
     # Risk parameters
@@ -402,7 +402,7 @@ class PortfolioSubstitutionMatrix:
         strategy: SubstitutionStrategy,
         parameters: SubstitutionParameters,
         anomaly_context: Optional[Dict[str, Any]],
-    ) -> np.ndarray:
+    ) -> np.ndarray[Any, Any]:
         """Get substitution weights based on phase, strategy, and context."""
 
         # Get base matrix
@@ -429,8 +429,8 @@ class PortfolioSubstitutionMatrix:
         return weights / np.sum(weights)
 
     def _apply_risk_adjustments(
-        self, weights: np.ndarray, parameters: SubstitutionParameters
-    ) -> np.ndarray:
+        self, weights: np.ndarray[Any, Any], parameters: SubstitutionParameters
+    ) -> np.ndarray[Any, Any]:
         """Apply risk-based adjustments to substitution weights."""
 
         adjusted_weights = weights.copy()
@@ -470,8 +470,8 @@ class PortfolioSubstitutionMatrix:
         return adjusted_weights / np.sum(adjusted_weights)
 
     def _apply_market_regime_adjustments(
-        self, weights: np.ndarray, anomaly_context: Dict[str, Any]
-    ) -> np.ndarray:
+        self, weights: np.ndarray[Any, Any], anomaly_context: Dict[str, Any]
+    ) -> np.ndarray[Any, Any]:
         """Apply market regime specific adjustments."""
 
         adjusted_weights = weights.copy()
@@ -503,8 +503,8 @@ class PortfolioSubstitutionMatrix:
         return adjusted_weights
 
     def _apply_correlation_adjustments(
-        self, weights: np.ndarray, parameters: SubstitutionParameters
-    ) -> np.ndarray:
+        self, weights: np.ndarray[Any, Any], parameters: SubstitutionParameters
+    ) -> np.ndarray[Any, Any]:
         """Apply correlation-based adjustments to reduce concentration risk."""
 
         if parameters.correlation_matrix.shape != (4, 4):
@@ -528,7 +528,7 @@ class PortfolioSubstitutionMatrix:
         return adjusted_weights / np.sum(adjusted_weights)
 
     def _calculate_target_allocation(
-        self, weights: np.ndarray, parameters: SubstitutionParameters
+        self, weights: np.ndarray[Any, Any], parameters: SubstitutionParameters
     ) -> Dict[AssetType, float]:
         """Calculate target allocation in dollar amounts."""
 

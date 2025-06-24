@@ -267,16 +267,16 @@ class ComplianceDatabase:
             safe_print(f"❌ Database initialization failed: {safe_format_error(e, 'db_init')}")
     
     @contextmanager
-    def get_cursor(self):
+    def get_cursor(self) -> Any:
         """Get database cursor with context management."""
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
         try:
             yield cursor
             conn.commit()
-        except Exception as e:
+        except Exception:
             conn.rollback()
-            raise e
+            raise
         finally:
             cursor.close()
             conn.close()

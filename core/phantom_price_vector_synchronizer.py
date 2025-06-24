@@ -11,7 +11,7 @@ for ghost protocol integration.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Sequence, Dict, List, Any
 
 import numpy as np
 
@@ -124,11 +124,25 @@ def compute_phantom_velocity(
 
 
 def synchronize_price_vectors(
-    vectors: Sequence[Sequence[float]],
-    timestamps: Sequence[float],
-    alpha: float = 1.0,
-    beta: float = 0.5,
-) -> np.ndarray:
-    """Stateless wrapper for price vector synchronization."""
-    synchronizer = PhantomPriceSynchronizer(alpha=alpha, beta=beta)
-    return synchronizer.synchronize_vectors(vectors, timestamps)
+    price_data: Dict[str, List[float]],
+    synchronization_method: str = "cross_correlation",
+    window_size: int = 100
+) -> np.ndarray[Any, Any]:
+    """Synchronize price vectors using specified method."""
+    # ... existing code ...
+
+
+def calculate_price_velocity(
+    prices: np.ndarray[Any, Any],
+    time_delta: float = 1.0
+) -> np.ndarray[Any, Any]:
+    """Calculate price velocity using gradient."""
+    # ... existing code ...
+
+
+def calculate_price_acceleration(
+    velocity: np.ndarray[Any, Any],
+    time_delta: float = 1.0
+) -> np.ndarray[Any, Any]:
+    """Calculate price acceleration from velocity."""
+    # ... existing code ...

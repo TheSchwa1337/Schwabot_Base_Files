@@ -438,17 +438,28 @@ class DatabaseManager:
             safe_print(f"❌ Table creation failed: {safe_format_error(e, 'table_create')}")
     
     @contextmanager
-    def get_cursor(self):
+    def get_cursor(self) -> Any:
         """Get database cursor with context management."""
-        cursor = self.connection.cursor()
-        try:
-            yield cursor
-            self.connection.commit()
-        except Exception as e:
-            self.connection.rollback()
-            raise e
-        finally:
-            cursor.close()
+        if self.storage_type == StorageType.SQLITE:
+            cursor = self.connection.cursor()
+            try:
+                yield cursor
+                self.connection.commit()
+            except Exception:
+                self.connection.rollback()
+                raise
+            finally:
+                cursor.close()
+        elif self.storage_type in [StorageType.POSTGRESQL, StorageType.TIMESCALEDB]:
+            cursor = self.connection.cursor()
+            try:
+                yield cursor
+                self.connection.commit()
+            except Exception:
+                self.connection.rollback()
+                raise
+            finally:
+                cursor.close()
     
     def store_memory_entry(self, entry: MemoryEntry) -> bool:
         """Store memory entry."""
