@@ -15,6 +15,8 @@ import re
 import shutil
 import sys
 from typing import Any, Dict, List, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 
 # Setup logging
 logging.basicConfig(
@@ -34,7 +36,7 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
-    print("Warning: Enhanced CLI compatibility handler not available")
+    safe_print("Warning: Enhanced CLI compatibility handler not available")
 
 
 class CliCompatibilityApplicator:
@@ -102,7 +104,7 @@ except ImportError:
             r'🚀🎯✅❌⚠️🔍📊🎉🔄⚡🧪🛠️⚖️🔧📈🔥❄️⭐🚨🎡🌀🔮🌌'
             r'🧬⚛️🔬⚗️🧮📐🔢💻🖥️📱🌐🔒🔓🔑🛡️💰💎🎰🏦💳💹🔀🔁↩️💥💡🎪🎭🎨🏗️🗂️📦]'
             r'[^"\']*)["\']',
-            r'safe_print(r"\1"',
+            r'safe_safe_print(r"\1"',
         ),
         (
             r'logger\.(info|warning|error|debug|critical)\s*\(\s*["\']('
@@ -117,7 +119,7 @@ except ImportError:
             r'🚀🎯✅❌⚠️🔍📊🎉🔄⚡🧪🛠️⚖️🔧📈🔥❄️⭐🚨🎡🌀🔮🌌'
             r'🧬⚛️🔬⚗️🧮📐🔢💻🖥️📱🌐🔒🔓🔑🛡️💰💎🎰🏦💳💹🔀🔁↩️💥💡🎪🎭🎨🏗️🗂️📦]'
             r'[^"\']*)["\']',
-            r'EnhancedWindowsCliCompatibilityHandler.safe_emoji_print(f"\1")',
+            r'EnhancedWindowsCliCompatibilityHandler.safe_emoji_safe_print(f"\1")',
         ),
     ]
 
@@ -307,14 +309,14 @@ except ImportError:
 
     def create_mathematical_validator_with_cli_safety(self) -> str:
         """Create an enhanced mathematical validator with bulletproof CLI safety."""
-        validator_content = (
-            '''#!/usr/bin/env python3
+        validator_content = '''#!/usr/bin/env python3
+"""
 CLI-Safe Mathematical Integration Validator - Schwabot Framework
 ==============================================================
 
 Bulletproof mathematical integration validator with enhanced Windows CLI
 compatibility and robust emoji handling.
-'''
+"""
 
 import os
 import sys
@@ -324,7 +326,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 # Enhanced Windows CLI compatibility
 try:
     from core.enhanced_windows_cli_compatibility import cli_safe
-    from core.enhanced_windows_cli_compatibility import \
+    from core.enhanced_windows_cli_compatibility import \\
         EnhancedWindowsCliCompatibilityHandler
     from core.enhanced_windows_cli_compatibility import get_safe_reporter
     from core.enhanced_windows_cli_compatibility import safe_log
@@ -354,7 +356,7 @@ except ImportError:
 import logging
 from typing import Any, Dict
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logging.basicConfig(
     level=logging.INFO,
@@ -400,7 +402,7 @@ def test_mathlib_progression() -> bool:
         result_v1 = mathlib_v1.calculate('mean', test_data)
         mathlib_v2 = MathLibV2()
         result_v2 = mathlib_v2.advanced_calculate(
-            'entropy', np.abs(test_data) + 1e-10
+            'entropy', unified_math.abs(test_data) + 1e-10
         )
         mathlib_v3 = MathLibV3()
         result_v3 = mathlib_v3.ai_calculate('profit_optimization', test_data)
@@ -491,13 +493,13 @@ def main():
             "systems"
         )
     else:
-        print("[LAUNCH] Enhanced CLI Compatibility Application Starting...")
-        print(
+        safe_print("[LAUNCH] Enhanced CLI Compatibility Application Starting...")
+        safe_print(
             "   Applying bulletproof Windows CLI handling to mathematical "
             "systems"
         )
 
-    print("=" * 70)
+    safe_print("=" * 70)
 
     # Initialize applicator
     applicator = CliCompatibilityApplicator()
@@ -509,42 +511,42 @@ def main():
     cli_validator = applicator.create_mathematical_validator_with_cli_safety()
 
     # Report results
-    print("\n" + "=" * 70)
+    safe_print("\n" + "=" * 70)
     if CLI_HANDLER_AVAILABLE:
         safe_print("🎉 CLI Compatibility Application Complete!")
     else:
-        print("[COMPLETE] CLI Compatibility Application Complete!")
-    print("=" * 70)
+        safe_print("[COMPLETE] CLI Compatibility Application Complete!")
+    safe_print("=" * 70)
 
-    print(f"📊 Processing Results:")
-    print(
+    safe_print(f"📊 Processing Results:")
+    safe_print(
         f"   Files Processed: {results['success_count']}/"
         f"{results['total_files']}"
     )
-    print(f"   Success Rate: {results['success_rate']:.1f}%")
-    print(f"   Errors: {results['error_count']}")
+    safe_print(f"   Success Rate: {results['success_rate']:.1f}%")
+    safe_print(f"   Errors: {results['error_count']}")
 
     if results["errors"]:
-        print("\n❌ Errors encountered:")
+        safe_print("\n❌ Errors encountered:")
         for error in results["errors"]:
-            print(f"   {error['file']}: {error['error']}")
+            safe_print(f"   {error['file']}: {error['error']}")
 
-    print(f"\n✅ Created CLI-safe validator: {cli_validator}")
+    safe_print(f"\n✅ Created CLI-safe validator: {cli_validator}")
 
     if results["success_rate"] >= 90:
-        print(
+        safe_print(
             "\n🎉 EXCELLENT! All mathematical systems now have bulletproof "
             "CLI compatibility!"
         )
-        print(
+        safe_print(
             "   Your validation systems will work flawlessly across all "
             "Windows environments."
         )
     else:
-        print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
-        print("   Check the error log for specific issues.")
+        safe_print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
+        safe_print("   Check the error log for specific issues.")
 
-    print("=" * 70)
+    safe_print("=" * 70)
     return results
 
 

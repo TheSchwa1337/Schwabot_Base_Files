@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Comprehensive System Validation for Schwabot
@@ -495,7 +497,7 @@ class SystemValidator:
             ghost_price_info = meta_bridge.get_ghost_price("BTC/USD")
             
             if ghost_price_info:
-                delta_price = abs(ghost_price_info['price'] - 50000.0)
+                delta_price = unified_math.abs(ghost_price_info['price'] - 50000.0)
                 lag_penalty = phantom_model.calculate_phantom_lag_penalty(delta_price, 0.3, 70000.0)
                 
                 total_checks += 1
@@ -999,22 +1001,22 @@ class SystemValidator:
     
     def print_summary(self):
         """Print validation summary."""
-        print("\n" + "="*60)
-        print("🧠 SCHWABOT SYSTEM VALIDATION SUMMARY")
-        print("="*60)
+        safe_print("\n" + "="*60)
+        safe_print("🧠 SCHWABOT SYSTEM VALIDATION SUMMARY")
+        safe_print("="*60)
         
-        print(f"Overall Status: {self.results['overall_status'].upper()}")
-        print(f"Total Checks: {self.results['total_checks']}")
-        print(f"Passed: {self.results['passed_checks']}")
-        print(f"Failed: {self.results['failed_checks']}")
-        print(f"Warnings: {self.results['warnings']}")
+        safe_print(f"Overall Status: {self.results['overall_status'].upper()}")
+        safe_print(f"Total Checks: {self.results['total_checks']}")
+        safe_print(f"Passed: {self.results['passed_checks']}")
+        safe_print(f"Failed: {self.results['failed_checks']}")
+        safe_print(f"Warnings: {self.results['warnings']}")
         
         if self.results['total_checks'] > 0:
             success_rate = self.results['passed_checks'] / self.results['total_checks'] * 100
-            print(f"Success Rate: {success_rate:.1f}%")
+            safe_print(f"Success Rate: {success_rate:.1f}%")
         
-        print("\nDetailed Results:")
-        print("-" * 40)
+        safe_print("\nDetailed Results:")
+        safe_print("-" * 40)
         
         for suite_name, suite_result in self.results['checks'].items():
             status = suite_result.get('status', 'unknown')
@@ -1022,19 +1024,19 @@ class SystemValidator:
             passed = suite_result.get('passed_checks', 0)
             
             status_icon = "✅" if status == 'passed' else "⚠️" if status == 'warning' else "❌"
-            print(f"{status_icon} {suite_name}: {passed}/{total} passed")
+            safe_print(f"{status_icon} {suite_name}: {passed}/{total} passed")
             
             # Show failed checks
             checks = suite_result.get('checks', [])
             failed_checks = [check for check in checks if check.get('status') == 'failed']
             for check in failed_checks[:3]:  # Show first 3 failures
-                print(f"   ❌ {check['name']}: {check.get('details', 'Unknown error')}")
+                safe_print(f"   ❌ {check['name']}: {check.get('details', 'Unknown error')}")
 
 
 def main():
     """Main validation function."""
-    print("🧠 Schwabot Comprehensive System Validation")
-    print("=" * 50)
+    safe_print("🧠 Schwabot Comprehensive System Validation")
+    safe_print("=" * 50)
     
     validator = SystemValidator()
     results = validator.run_all_validations()
@@ -1047,13 +1049,13 @@ def main():
     
     # Return exit code
     if results['overall_status'] in ['excellent', 'good']:
-        print("\n✅ System validation completed successfully!")
+        safe_print("\n✅ System validation completed successfully!")
         return 0
     elif results['overall_status'] == 'acceptable':
-        print("\n⚠️ System validation completed with warnings")
+        safe_print("\n⚠️ System validation completed with warnings")
         return 1
     else:
-        print("\n❌ System validation failed")
+        safe_print("\n❌ System validation failed")
         return 1
 
 

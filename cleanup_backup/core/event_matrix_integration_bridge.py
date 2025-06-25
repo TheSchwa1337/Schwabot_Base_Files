@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Event-Matrix Integration Bridge - Schwabot Framework.
 
@@ -27,7 +28,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
@@ -250,14 +251,14 @@ class EventMatrixIntegrationBridge:
             priority_impact = event_impact.priority / 10.0
             
             # Sentiment impact
-            sentiment_impact = abs(event_impact.sentiment_score) * 0.3
+            sentiment_impact = unified_math.abs(event_impact.sentiment_score) * 0.3
             
             # Relevance impact
             relevance_impact = event_impact.relevance_score * 0.2
             
             # Time decay factor
             time_diff = time.time() - event_impact.timestamp
-            time_decay = np.exp(-time_diff / 3600)  # 1-hour decay
+            time_decay = unified_math.exp(-time_diff / 3600)  # 1-hour decay
             
             # Source reliability factor
             source_reliability = {
@@ -273,7 +274,7 @@ class EventMatrixIntegrationBridge:
                            relevance_impact * 0.2 + 
                            time_decay * 0.1) * source_reliability
             
-            return max(0.0, min(1.0, total_impact))
+            return unified_math.max(0.0, unified_math.min(1.0, total_impact))
             
         except Exception as e:
             logger.error(f"Error calculating event confidence impact: {e}")
@@ -284,7 +285,7 @@ class EventMatrixIntegrationBridge:
         try:
             # Calculate event significance
             significance = (event_impact.priority / 10.0 + 
-                          abs(event_impact.sentiment_score) + 
+                          unified_math.abs(event_impact.sentiment_score) + 
                           event_impact.relevance_score) / 3.0
             
             # Determine position change based on significance
@@ -351,7 +352,7 @@ class EventMatrixIntegrationBridge:
             'matrix_state_changes': self.metrics.matrix_state_changes,
             'ferris_wheel_updates': self.metrics.ferris_wheel_updates,
             'success_rate': (self.metrics.successful_events / 
-                           max(self.metrics.total_events_processed, 1)),
+                           unified_math.max(self.metrics.total_events_processed, 1)),
             'current_matrix_state': self.current_matrix_state,
             'current_ferris_wheel_position': self.current_ferris_wheel_position,
             'history_size': len(self.processing_history)
@@ -443,7 +444,7 @@ class EventMatrixIntegrationBridge:
             # Update confidence score
             current_confidence = matrix_state.get('confidence_score', 0.5)
             new_confidence = current_confidence * 0.7 + confidence_impact * 0.3
-            updated_state['confidence_score'] = max(0.0, min(1.0, new_confidence))
+            updated_state['confidence_score'] = unified_math.max(0.0, unified_math.min(1.0, new_confidence))
             
             # Update phase based on event impact
             if confidence_impact > 0.8:

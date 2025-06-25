@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """Base exchange API implementation.
 
@@ -64,7 +77,7 @@ class ExchangeAPI(ABC):
 
         return session
 
-    def safe_print(
+    def safe_safe_print(
         self: "ExchangeAPI", message: str, force_ascii: Optional[bool] = None
     ) -> None:
         """Safe print with CLI compatibility.

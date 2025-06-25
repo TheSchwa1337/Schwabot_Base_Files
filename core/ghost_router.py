@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost router – conditional trade core.
 
@@ -17,14 +20,13 @@ Only NumPy + std-lib are required, keeping the stub dependency-free beyond
 what Schwabot already ships.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
-import math
+from core.unified_math_system import unified_math
 import time
 from typing import Final, Literal, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["GhostRouter", "ghost_router"]
 
@@ -44,7 +46,7 @@ def _cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
     """TODO: document _cosine_similarity."""
     if v1.shape != v2.shape:
         raise ValueError("vectors must share shape for cosine similarity")
-    dot = float(np.dot(v1, v2))
+    dot = float(unified_math.unified_math.dot_product(v1, v2))
     norm = float(np.linalg.norm(v1) * np.linalg.norm(v2))
     return 0.0 if norm == 0 else dot / norm
 
@@ -72,7 +74,7 @@ def _pool_stability_check(vol_series: np.ndarray) -> bool:
     """TODO: document _pool_stability_check."""
     if vol_series.size == 0:
         return False
-    return float(np.std(vol_series) / np.mean(vol_series)) < _POOL_STAB_EPS
+    return float(unified_math.unified_math.std(vol_series) / unified_math.unified_math.mean(vol_series)) < _POOL_STAB_EPS
 
 
 def _lantern_match(vec: np.ndarray, reference: np.ndarray) -> bool:
@@ -93,7 +95,7 @@ def _ai_consensus(
 
 def _reentry_tolerance(opportunity_ts: float, now_ts: float) -> bool:
     """TODO: document _reentry_tolerance."""
-    decay = math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
+    decay = unified_math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
     return decay >= _DECAY_THRESHOLD
 
 
@@ -227,17 +229,17 @@ def compute_ghost_route(
     (placeholder) and hash-tag τₜ.
     """
     import hashlib
-    import math
+    from core.unified_math_system import unified_math
 
     delta_H = H_t - H_prev
     # (1) Φ_t
-    phi_t = 1.0 / (1.0 + math.exp(-(beta1 * E_t - beta2 * abs(delta_H) + beta3 * D_t)))
+    phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
 
     # (3) execution velocity
-    v_exec = math.sqrt(P_res / (rho_t * phi_t + epsilon))
+    v_exec = unified_math.unified_math.sqrt(P_res / (rho_t * phi_t + epsilon))
 
     # (4) volume throttle
-    V_adj = base_vol * math.exp(-kappa * S_t)
+    V_adj = base_vol * unified_math.exp(-kappa * S_t)
 
     # (5)(6) route weights
     w_btc = psi * (1.0 - phi_t) * v_exec
@@ -254,7 +256,7 @@ def compute_ghost_route(
         route = "mid_mode"
 
     # (8) final executable size
-    Q_exec = max(0.0, min(V_adj * (w_btc + w_usdc), Q_max))
+    Q_exec = unified_math.max(0.0, unified_math.min(V_adj * (w_btc + w_usdc), Q_max))
 
     # (9) hash-tag
     if timestamp is None:

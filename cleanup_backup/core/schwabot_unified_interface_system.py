@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Unified Dual-Interface System
 ======================================
@@ -37,7 +39,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import core Schwabot components
 from .fault_bus import FaultBus
@@ -239,7 +241,7 @@ class SchwabotUnifiedInterface:
                 time.sleep(1)  # Update every second
                 
             except Exception as e:
-                print(f"Monitoring error: {e}")
+                safe_print(f"Monitoring error: {e}")
                 time.sleep(5)
     
     def _calculate_system_health(self) -> float:
@@ -550,7 +552,7 @@ class UnifiedInterface:
     def _create_mathematical_parameters_tab(self):
         """Create mathematical parameters configuration tab"""
         math_frame = ttk.Frame(self.notebook)
-        self.notebook.add(math_frame, text="🔢 Mathematical Parameters")
+        self.notebook.unified_math.add(math_frame, text="🔢 Mathematical Parameters")
         
         # Parameter controls
         params_frame = ttk.LabelFrame(math_frame, text="Core Mathematical Parameters")
@@ -586,7 +588,7 @@ class UnifiedInterface:
     def _create_performance_optimization_tab(self):
         """Create performance optimization configuration tab"""
         perf_frame = ttk.Frame(self.notebook)
-        self.notebook.add(perf_frame, text="⚡ Performance Optimization")
+        self.notebook.unified_math.add(perf_frame, text="⚡ Performance Optimization")
         
         # Optimization settings
         opt_frame = ttk.LabelFrame(perf_frame, text="Performance Settings")
@@ -621,7 +623,7 @@ class UnifiedInterface:
     def _create_system_configuration_tab(self):
         """Create system configuration tab"""
         config_frame = ttk.Frame(self.notebook)
-        self.notebook.add(config_frame, text="🔧 System Configuration")
+        self.notebook.unified_math.add(config_frame, text="🔧 System Configuration")
         
         # Configuration options
         config_options_frame = ttk.LabelFrame(config_frame, text="System Settings")
@@ -654,7 +656,7 @@ class UnifiedInterface:
     def _create_backlog_analysis_tab(self):
         """Create backlog analysis tab"""
         backlog_frame = ttk.Frame(self.notebook)
-        self.notebook.add(backlog_frame, text="📋 Backlog Analysis")
+        self.notebook.unified_math.add(backlog_frame, text="📋 Backlog Analysis")
         
         # Backlog insights
         insights_frame = ttk.LabelFrame(backlog_frame, text="Backlog Insights")
@@ -687,7 +689,7 @@ class UnifiedInterface:
     def _create_risk_management_tab(self):
         """Create risk management tab"""
         risk_frame = ttk.Frame(self.notebook)
-        self.notebook.add(risk_frame, text="⚠️ Risk Management")
+        self.notebook.unified_math.add(risk_frame, text="⚠️ Risk Management")
         
         # Risk parameters
         risk_params_frame = ttk.LabelFrame(risk_frame, text="Risk Parameters")
@@ -722,7 +724,7 @@ class UnifiedInterface:
     def _create_vector_validation_tab(self):
         """Create vector validation tab"""
         vector_frame = ttk.Frame(self.notebook)
-        self.notebook.add(vector_frame, text="🔍 Vector Validation")
+        self.notebook.unified_math.add(vector_frame, text="🔍 Vector Validation")
         
         # Vector validation controls
         vector_controls_frame = ttk.LabelFrame(vector_frame, text="Vector Validation Settings")
@@ -783,7 +785,7 @@ class UnifiedInterface:
     def _create_matrix_allocation_tab(self):
         """Create matrix allocation tab"""
         matrix_frame = ttk.Frame(self.notebook)
-        self.notebook.add(matrix_frame, text="🧮 Matrix Allocation")
+        self.notebook.unified_math.add(matrix_frame, text="🧮 Matrix Allocation")
         
         # Matrix allocation controls
         allocation_controls_frame = ttk.LabelFrame(matrix_frame, text="Matrix Allocation Settings")
@@ -925,7 +927,7 @@ def main():
         interface = SchwabotUnifiedInterface()
         interface.run()
     except Exception as e:
-        print(f"Failed to start Schwabot Unified Interface: {e}")
+        safe_print(f"Failed to start Schwabot Unified Interface: {e}")
         messagebox.showerror("Startup Error", f"Failed to start interface: {e}")
 
 

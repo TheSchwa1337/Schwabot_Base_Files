@@ -1,0 +1,1269 @@
+============================================================
+FUTURE ANNOTATIONS PLACEMENT FIX REPORT
+============================================================
+Generated: 2025-06-25T17:22:34.004452
+Root Directory: .
+
+Files Scanned: 1574
+Files with Issues: 251
+Files Fixed: 251
+
+FILES WITH ISSUES:
+  - enhanced_fitness_oracle.py
+  - fix_future_annotations_placement.py
+  - mathlib.py
+  - schwabot_integration.py
+  - schwabot_unified_math.py
+  - system_integration_test.py
+  - test_mathematical_trading_system_integration.py
+  - cleanup_backup\profit_cycle_allocator.py
+  - cleanup_backup\core\advanced_drift_shell_integration.py
+  - cleanup_backup\core\altitude_adjustment_math.py
+  - cleanup_backup\core\auto_scaler.py
+  - cleanup_backup\core\block_wave_transform.py
+  - cleanup_backup\core\btc_data_processor.py
+  - cleanup_backup\core\btc_investment_ratio_controller.py
+  - cleanup_backup\core\btc_usdc_router_relay.py
+  - cleanup_backup\core\btc_vector_aggregator.py
+  - cleanup_backup\core\capital_controls.py
+  - cleanup_backup\core\conditional_glyph_feedback_loop.py
+  - cleanup_backup\core\demo_memory_core.py
+  - cleanup_backup\core\drift_compensator.py
+  - cleanup_backup\core\drift_phase_monitor.py
+  - cleanup_backup\core\dual_state_tracker.py
+  - cleanup_backup\core\enhanced_risk_manager.py
+  - cleanup_backup\core\entropy_flattener.py
+  - cleanup_backup\core\entropy_validator.py
+  - cleanup_backup\core\entry_exit_vector_analyzer.py
+  - cleanup_backup\core\entry_gate.py
+  - cleanup_backup\core\environment_manager.py
+  - cleanup_backup\core\exchange_plumbing.py
+  - cleanup_backup\core\ferris_rde_core.py
+  - cleanup_backup\core\filters.py
+  - cleanup_backup\core\flux_compensator.py
+  - cleanup_backup\core\gan_anomaly_filter.py
+  - cleanup_backup\core\gan_filter.py
+  - cleanup_backup\core\ghost_conditionals.py
+  - cleanup_backup\core\ghost_memory.py
+  - cleanup_backup\core\ghost_memory_router.py
+  - cleanup_backup\core\ghost_news_glyph_map.py
+  - cleanup_backup\core\ghost_news_vectorizer.py
+  - cleanup_backup\core\ghost_phase_integrator.py
+  - cleanup_backup\core\ghost_pipeline.py
+  - cleanup_backup\core\ghost_profit_tracker.py
+  - cleanup_backup\core\ghost_router.py
+  - cleanup_backup\core\ghost_strategy_integrator.py
+  - cleanup_backup\core\ghost_strategy_matrix.py
+  - cleanup_backup\core\ghost_swap_vector.py
+  - cleanup_backup\core\ghost_trigger.py
+  - cleanup_backup\core\glyph_hysteresis.py
+  - cleanup_backup\core\glyph_math_core.py
+  - cleanup_backup\core\glyph_phase_anchor.py
+  - cleanup_backup\core\glyph_vector_executor.py
+  - cleanup_backup\core\hash_phase_switch.py
+  - cleanup_backup\core\hash_tick_synchronizer.py
+  - cleanup_backup\core\integration_orchestrator.py
+  - cleanup_backup\core\lantern_trigger_validator.py
+  - cleanup_backup\core\lantern_vector_memory.py
+  - cleanup_backup\core\lattice_wave_math.py
+  - cleanup_backup\core\long_horizon_simulation.py
+  - cleanup_backup\core\mathematical_optimization_bridge.py
+  - cleanup_backup\core\mathlib_v2.py
+  - cleanup_backup\core\mathlib_v3.py
+  - cleanup_backup\core\memory_allocation_manager.py
+  - cleanup_backup\core\memory_drift_corrector.py
+  - cleanup_backup\core\mode_manager.py
+  - cleanup_backup\core\news_quant_field.py
+  - cleanup_backup\core\news_sentiment_interpreter.py
+  - cleanup_backup\core\ops_observability.py
+  - cleanup_backup\core\oscillator_fallback.py
+  - cleanup_backup\core\persistent_state_manager.py
+  - cleanup_backup\core\phantom_entry_logic.py
+  - cleanup_backup\core\phantom_exit_logic.py
+  - cleanup_backup\core\phantom_memory.py
+  - cleanup_backup\core\phantom_price_vector_synchronizer.py
+  - cleanup_backup\core\phantom_profit_tracker.py
+  - cleanup_backup\core\pool_volume_translator.py
+  - cleanup_backup\core\precision_performance.py
+  - cleanup_backup\core\profit_cycle_allocator.py
+  - cleanup_backup\core\profit_echo_velocity_driver.py
+  - cleanup_backup\core\profit_feedback_loop.py
+  - cleanup_backup\core\profit_router.py
+  - cleanup_backup\core\quantum_btc_intelligence_core.py
+  - cleanup_backup\core\quantum_drift_shell_engine.py
+  - cleanup_backup\core\recursive_strategy_router.py
+  - cleanup_backup\core\regulatory_compliance.py
+  - cleanup_backup\core\resonance_gate_logic.py
+  - cleanup_backup\core\risk_guard.py
+  - cleanup_backup\core\risk_manager.py
+  - cleanup_backup\core\risk_monitor.py
+  - cleanup_backup\core\rittle_gemm.py
+  - cleanup_backup\core\route_verification_classifier.py
+  - cleanup_backup\core\schwabot_integration_orchestrator.py
+  - cleanup_backup\core\secure_api_manager.py
+  - cleanup_backup\core\spectral_transform.py
+  - cleanup_backup\core\strategy_entropy_switcher.py
+  - cleanup_backup\core\strategy_loader.py
+  - cleanup_backup\core\strategy_logic.py
+  - cleanup_backup\core\strategy_mapper.py
+  - cleanup_backup\core\system_monitor.py
+  - cleanup_backup\core\thermal_boundary_manager.py
+  - cleanup_backup\core\thermal_map_allocator.py
+  - cleanup_backup\core\thermal_shift.py
+  - cleanup_backup\core\thermal_zone_manager.py
+  - cleanup_backup\core\tick_hash_processor.py
+  - cleanup_backup\core\tick_processor.py
+  - cleanup_backup\core\tick_resonance_engine.py
+  - cleanup_backup\core\todo_validation_fixes.py
+  - cleanup_backup\core\trajectory_sphere.py
+  - cleanup_backup\core\triplet_matcher.py
+  - cleanup_backup\core\type_defs.py
+  - cleanup_backup\core\typing_schemas.py
+  - cleanup_backup\core\unified_api_coordinator.py
+  - cleanup_backup\core\unified_mathematical_trading_controller.py
+  - cleanup_backup\core\unified_mathematics_config.py
+  - cleanup_backup\core\unified_signal_metrics.py
+  - cleanup_backup\core\usdc_position_manager.py
+  - cleanup_backup\core\vault_balance_regulator.py
+  - cleanup_backup\core\vector_state_mapper.py
+  - cleanup_backup\core\vecu_core.py
+  - cleanup_backup\core\zbe_position_tracker.py
+  - cleanup_backup\core\zpe_core_matrix.py
+  - cleanup_backup\core\zpe_hybrid_mode_selector.py
+  - cleanup_backup\core\__init__.py
+  - cleanup_backup\critical_math_20250624_222404\core\entropy_validator.py
+  - cleanup_backup\critical_math_20250624_222404\core\profit_cycle_allocator.py
+  - cleanup_backup\critical_math_20250624_222404\mathlib\__init__.py
+  - cleanup_backup\critical_math_20250624_222415\core\entropy_validator.py
+  - cleanup_backup\critical_math_20250624_222415\core\profit_cycle_allocator.py
+  - cleanup_backup\critical_math_20250624_222415\mathlib\__init__.py
+  - cleanup_backup\critical_math_20250624_222447\core\entropy_validator.py
+  - cleanup_backup\critical_math_20250624_222447\core\profit_cycle_allocator.py
+  - cleanup_backup\critical_math_20250624_222447\mathlib\__init__.py
+  - config\mathematical_framework_config.py
+  - core\advanced_drift_shell_integration.py
+  - core\altitude_adjustment_math.py
+  - core\block_wave_transform.py
+  - core\btc_data_processor.py
+  - core\btc_investment_ratio_controller.py
+  - core\btc_usdc_router_relay.py
+  - core\btc_vector_aggregator.py
+  - core\capital_controls.py
+  - core\demo_memory_core.py
+  - core\drift_compensator.py
+  - core\drift_phase_monitor.py
+  - core\dual_state_tracker.py
+  - core\entropy_flattener.py
+  - core\entropy_validator.py
+  - core\entry_exit_vector_analyzer.py
+  - core\entry_gate.py
+  - core\environment_manager.py
+  - core\exchange_plumbing.py
+  - core\ferris_rde_core.py
+  - core\filters.py
+  - core\flux_compensator.py
+  - core\gan_anomaly_filter.py
+  - core\gan_filter.py
+  - core\ghost_conditionals.py
+  - core\ghost_memory.py
+  - core\ghost_memory_router.py
+  - core\ghost_news_glyph_map.py
+  - core\ghost_news_vectorizer.py
+  - core\ghost_phase_integrator.py
+  - core\ghost_pipeline.py
+  - core\ghost_profit_tracker.py
+  - core\ghost_router.py
+  - core\ghost_strategy_integrator.py
+  - core\ghost_strategy_matrix.py
+  - core\ghost_swap_vector.py
+  - core\ghost_trigger.py
+  - core\glyph_hysteresis.py
+  - core\glyph_math_core.py
+  - core\glyph_phase_anchor.py
+  - core\glyph_vector_executor.py
+  - core\hash_phase_switch.py
+  - core\hash_tick_synchronizer.py
+  - core\lantern_trigger_validator.py
+  - core\lantern_vector_memory.py
+  - core\lattice_wave_math.py
+  - core\long_horizon_simulation.py
+  - core\mathematical_optimization_bridge.py
+  - core\mathlib_v2.py
+  - core\mathlib_v3.py
+  - core\memory_allocation_manager.py
+  - core\memory_drift_corrector.py
+  - core\mode_manager.py
+  - core\news_quant_field.py
+  - core\news_sentiment_interpreter.py
+  - core\ops_observability.py
+  - core\oscillator_fallback.py
+  - core\persistent_state_manager.py
+  - core\phantom_entry_logic.py
+  - core\phantom_exit_logic.py
+  - core\phantom_memory.py
+  - core\phantom_price_vector_synchronizer.py
+  - core\phantom_profit_tracker.py
+  - core\pool_volume_translator.py
+  - core\precision_performance.py
+  - core\profit_cycle_allocator.py
+  - core\profit_echo_velocity_driver.py
+  - core\profit_feedback_loop.py
+  - core\profit_router.py
+  - core\quantum_btc_intelligence_core.py
+  - core\quantum_drift_shell_engine.py
+  - core\recursive_strategy_router.py
+  - core\regulatory_compliance.py
+  - core\resonance_gate_logic.py
+  - core\risk_guard.py
+  - core\risk_manager.py
+  - core\risk_monitor.py
+  - core\rittle_gemm.py
+  - core\route_verification_classifier.py
+  - core\schwabot_integration_orchestrator.py
+  - core\secure_api_manager.py
+  - core\spectral_transform.py
+  - core\strategy_entropy_switcher.py
+  - core\strategy_logic.py
+  - core\strategy_mapper.py
+  - core\systematic_binding_fixer.py
+  - core\system_monitor.py
+  - core\thermal_boundary_manager.py
+  - core\thermal_map_allocator.py
+  - core\thermal_shift.py
+  - core\thermal_zone_manager.py
+  - core\tick_hash_processor.py
+  - core\tick_processor.py
+  - core\tick_resonance_engine.py
+  - core\todo_validation_fixes.py
+  - core\trajectory_sphere.py
+  - core\triplet_matcher.py
+  - core\type_binding_system.py
+  - core\typing_schemas.py
+  - core\unified_api_coordinator.py
+  - core\unified_mathematical_trading_controller.py
+  - core\unified_mathematics_config.py
+  - core\usdc_position_manager.py
+  - core\vault_balance_regulator.py
+  - core\vector_state_mapper.py
+  - core\vecu_core.py
+  - core\zbe_position_tracker.py
+  - core\zpe_core_matrix.py
+  - core\zpe_hybrid_mode_selector.py
+  - core\__init__.py
+  - core\config\api_config.py
+  - core\math\tensor_algebra\entropy_engine.py
+  - core\math\tensor_algebra\profit_engine.py
+  - core\math\tensor_algebra\tensor_engine.py
+  - core\math\tensor_algebra\unified_tensor_algebra.py
+  - core\memory_stack\memory_key_allocator.py
+  - core\utils\math_utils.py
+  - mathlib\__init__.py
+  - runtime\validator.py
+  - utils\logging_setup.py
+
+FIX LOG:
+  - enhanced_fitness_oracle.py
+    Backup: enhanced_fitness_oracle.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.189066
+
+  - fix_future_annotations_placement.py
+    Backup: fix_future_annotations_placement.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.191065
+
+  - mathlib.py
+    Backup: mathlib.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.192064
+
+  - schwabot_integration.py
+    Backup: schwabot_integration.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.194063
+
+  - schwabot_unified_math.py
+    Backup: schwabot_unified_math.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.196061
+
+  - system_integration_test.py
+    Backup: system_integration_test.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.198063
+
+  - test_mathematical_trading_system_integration.py
+    Backup: test_mathematical_trading_system_integration.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.201060
+
+  - cleanup_backup\profit_cycle_allocator.py
+    Backup: cleanup_backup\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.203058
+
+  - cleanup_backup\core\advanced_drift_shell_integration.py
+    Backup: cleanup_backup\core\advanced_drift_shell_integration.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.205060
+
+  - cleanup_backup\core\altitude_adjustment_math.py
+    Backup: cleanup_backup\core\altitude_adjustment_math.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.207056
+
+  - cleanup_backup\core\auto_scaler.py
+    Backup: cleanup_backup\core\auto_scaler.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.209054
+
+  - cleanup_backup\core\block_wave_transform.py
+    Backup: cleanup_backup\core\block_wave_transform.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.211056
+
+  - cleanup_backup\core\btc_data_processor.py
+    Backup: cleanup_backup\core\btc_data_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.213052
+
+  - cleanup_backup\core\btc_investment_ratio_controller.py
+    Backup: cleanup_backup\core\btc_investment_ratio_controller.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.215052
+
+  - cleanup_backup\core\btc_usdc_router_relay.py
+    Backup: cleanup_backup\core\btc_usdc_router_relay.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.217051
+
+  - cleanup_backup\core\btc_vector_aggregator.py
+    Backup: cleanup_backup\core\btc_vector_aggregator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.218050
+
+  - cleanup_backup\core\capital_controls.py
+    Backup: cleanup_backup\core\capital_controls.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.221049
+
+  - cleanup_backup\core\conditional_glyph_feedback_loop.py
+    Backup: cleanup_backup\core\conditional_glyph_feedback_loop.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.223047
+
+  - cleanup_backup\core\demo_memory_core.py
+    Backup: cleanup_backup\core\demo_memory_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.225048
+
+  - cleanup_backup\core\drift_compensator.py
+    Backup: cleanup_backup\core\drift_compensator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.227045
+
+  - cleanup_backup\core\drift_phase_monitor.py
+    Backup: cleanup_backup\core\drift_phase_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.229044
+
+  - cleanup_backup\core\dual_state_tracker.py
+    Backup: cleanup_backup\core\dual_state_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.231043
+
+  - cleanup_backup\core\enhanced_risk_manager.py
+    Backup: cleanup_backup\core\enhanced_risk_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.233042
+
+  - cleanup_backup\core\entropy_flattener.py
+    Backup: cleanup_backup\core\entropy_flattener.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.235041
+
+  - cleanup_backup\core\entropy_validator.py
+    Backup: cleanup_backup\core\entropy_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.239039
+
+  - cleanup_backup\core\entry_exit_vector_analyzer.py
+    Backup: cleanup_backup\core\entry_exit_vector_analyzer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.241037
+
+  - cleanup_backup\core\entry_gate.py
+    Backup: cleanup_backup\core\entry_gate.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.243037
+
+  - cleanup_backup\core\environment_manager.py
+    Backup: cleanup_backup\core\environment_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.245035
+
+  - cleanup_backup\core\exchange_plumbing.py
+    Backup: cleanup_backup\core\exchange_plumbing.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.247034
+
+  - cleanup_backup\core\ferris_rde_core.py
+    Backup: cleanup_backup\core\ferris_rde_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.250031
+
+  - cleanup_backup\core\filters.py
+    Backup: cleanup_backup\core\filters.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.252033
+
+  - cleanup_backup\core\flux_compensator.py
+    Backup: cleanup_backup\core\flux_compensator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.254031
+
+  - cleanup_backup\core\gan_anomaly_filter.py
+    Backup: cleanup_backup\core\gan_anomaly_filter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.255029
+
+  - cleanup_backup\core\gan_filter.py
+    Backup: cleanup_backup\core\gan_filter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.258027
+
+  - cleanup_backup\core\ghost_conditionals.py
+    Backup: cleanup_backup\core\ghost_conditionals.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.259026
+
+  - cleanup_backup\core\ghost_memory.py
+    Backup: cleanup_backup\core\ghost_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.261025
+
+  - cleanup_backup\core\ghost_memory_router.py
+    Backup: cleanup_backup\core\ghost_memory_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.263024
+
+  - cleanup_backup\core\ghost_news_glyph_map.py
+    Backup: cleanup_backup\core\ghost_news_glyph_map.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.265023
+
+  - cleanup_backup\core\ghost_news_vectorizer.py
+    Backup: cleanup_backup\core\ghost_news_vectorizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.267022
+
+  - cleanup_backup\core\ghost_phase_integrator.py
+    Backup: cleanup_backup\core\ghost_phase_integrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.268021
+
+  - cleanup_backup\core\ghost_pipeline.py
+    Backup: cleanup_backup\core\ghost_pipeline.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.270021
+
+  - cleanup_backup\core\ghost_profit_tracker.py
+    Backup: cleanup_backup\core\ghost_profit_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.272019
+
+  - cleanup_backup\core\ghost_router.py
+    Backup: cleanup_backup\core\ghost_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.273020
+
+  - cleanup_backup\core\ghost_strategy_integrator.py
+    Backup: cleanup_backup\core\ghost_strategy_integrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.275018
+
+  - cleanup_backup\core\ghost_strategy_matrix.py
+    Backup: cleanup_backup\core\ghost_strategy_matrix.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.277018
+
+  - cleanup_backup\core\ghost_swap_vector.py
+    Backup: cleanup_backup\core\ghost_swap_vector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.280016
+
+  - cleanup_backup\core\ghost_trigger.py
+    Backup: cleanup_backup\core\ghost_trigger.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.281015
+
+  - cleanup_backup\core\glyph_hysteresis.py
+    Backup: cleanup_backup\core\glyph_hysteresis.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.283014
+
+  - cleanup_backup\core\glyph_math_core.py
+    Backup: cleanup_backup\core\glyph_math_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.284013
+
+  - cleanup_backup\core\glyph_phase_anchor.py
+    Backup: cleanup_backup\core\glyph_phase_anchor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.285012
+
+  - cleanup_backup\core\glyph_vector_executor.py
+    Backup: cleanup_backup\core\glyph_vector_executor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.287011
+
+  - cleanup_backup\core\hash_phase_switch.py
+    Backup: cleanup_backup\core\hash_phase_switch.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.288011
+
+  - cleanup_backup\core\hash_tick_synchronizer.py
+    Backup: cleanup_backup\core\hash_tick_synchronizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.290010
+
+  - cleanup_backup\core\integration_orchestrator.py
+    Backup: cleanup_backup\core\integration_orchestrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.292009
+
+  - cleanup_backup\core\lantern_trigger_validator.py
+    Backup: cleanup_backup\core\lantern_trigger_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.294007
+
+  - cleanup_backup\core\lantern_vector_memory.py
+    Backup: cleanup_backup\core\lantern_vector_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.295006
+
+  - cleanup_backup\core\lattice_wave_math.py
+    Backup: cleanup_backup\core\lattice_wave_math.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.297005
+
+  - cleanup_backup\core\long_horizon_simulation.py
+    Backup: cleanup_backup\core\long_horizon_simulation.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.299003
+
+  - cleanup_backup\core\mathematical_optimization_bridge.py
+    Backup: cleanup_backup\core\mathematical_optimization_bridge.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.301002
+
+  - cleanup_backup\core\mathlib_v2.py
+    Backup: cleanup_backup\core\mathlib_v2.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.303002
+
+  - cleanup_backup\core\mathlib_v3.py
+    Backup: cleanup_backup\core\mathlib_v3.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.305001
+
+  - cleanup_backup\core\memory_allocation_manager.py
+    Backup: cleanup_backup\core\memory_allocation_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.307999
+
+  - cleanup_backup\core\memory_drift_corrector.py
+    Backup: cleanup_backup\core\memory_drift_corrector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.308998
+
+  - cleanup_backup\core\mode_manager.py
+    Backup: cleanup_backup\core\mode_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.310997
+
+  - cleanup_backup\core\news_quant_field.py
+    Backup: cleanup_backup\core\news_quant_field.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.312997
+
+  - cleanup_backup\core\news_sentiment_interpreter.py
+    Backup: cleanup_backup\core\news_sentiment_interpreter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.313997
+
+  - cleanup_backup\core\ops_observability.py
+    Backup: cleanup_backup\core\ops_observability.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.317844
+
+  - cleanup_backup\core\oscillator_fallback.py
+    Backup: cleanup_backup\core\oscillator_fallback.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.319843
+
+  - cleanup_backup\core\persistent_state_manager.py
+    Backup: cleanup_backup\core\persistent_state_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.321842
+
+  - cleanup_backup\core\phantom_entry_logic.py
+    Backup: cleanup_backup\core\phantom_entry_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.322754
+
+  - cleanup_backup\core\phantom_exit_logic.py
+    Backup: cleanup_backup\core\phantom_exit_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.324756
+
+  - cleanup_backup\core\phantom_memory.py
+    Backup: cleanup_backup\core\phantom_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.326756
+
+  - cleanup_backup\core\phantom_price_vector_synchronizer.py
+    Backup: cleanup_backup\core\phantom_price_vector_synchronizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.327755
+
+  - cleanup_backup\core\phantom_profit_tracker.py
+    Backup: cleanup_backup\core\phantom_profit_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.329753
+
+  - cleanup_backup\core\pool_volume_translator.py
+    Backup: cleanup_backup\core\pool_volume_translator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.331752
+
+  - cleanup_backup\core\precision_performance.py
+    Backup: cleanup_backup\core\precision_performance.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.333751
+
+  - cleanup_backup\core\profit_cycle_allocator.py
+    Backup: cleanup_backup\core\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.336750
+
+  - cleanup_backup\core\profit_echo_velocity_driver.py
+    Backup: cleanup_backup\core\profit_echo_velocity_driver.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.338749
+
+  - cleanup_backup\core\profit_feedback_loop.py
+    Backup: cleanup_backup\core\profit_feedback_loop.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.339748
+
+  - cleanup_backup\core\profit_router.py
+    Backup: cleanup_backup\core\profit_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.340747
+
+  - cleanup_backup\core\quantum_btc_intelligence_core.py
+    Backup: cleanup_backup\core\quantum_btc_intelligence_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.342747
+
+  - cleanup_backup\core\quantum_drift_shell_engine.py
+    Backup: cleanup_backup\core\quantum_drift_shell_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.344745
+
+  - cleanup_backup\core\recursive_strategy_router.py
+    Backup: cleanup_backup\core\recursive_strategy_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.345745
+
+  - cleanup_backup\core\regulatory_compliance.py
+    Backup: cleanup_backup\core\regulatory_compliance.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.347744
+
+  - cleanup_backup\core\resonance_gate_logic.py
+    Backup: cleanup_backup\core\resonance_gate_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.349742
+
+  - cleanup_backup\core\risk_guard.py
+    Backup: cleanup_backup\core\risk_guard.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.350742
+
+  - cleanup_backup\core\risk_manager.py
+    Backup: cleanup_backup\core\risk_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.352741
+
+  - cleanup_backup\core\risk_monitor.py
+    Backup: cleanup_backup\core\risk_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.354740
+
+  - cleanup_backup\core\rittle_gemm.py
+    Backup: cleanup_backup\core\rittle_gemm.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.357738
+
+  - cleanup_backup\core\route_verification_classifier.py
+    Backup: cleanup_backup\core\route_verification_classifier.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.360139
+
+  - cleanup_backup\core\schwabot_integration_orchestrator.py
+    Backup: cleanup_backup\core\schwabot_integration_orchestrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.361138
+
+  - cleanup_backup\core\secure_api_manager.py
+    Backup: cleanup_backup\core\secure_api_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.363137
+
+  - cleanup_backup\core\spectral_transform.py
+    Backup: cleanup_backup\core\spectral_transform.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.364136
+
+  - cleanup_backup\core\strategy_entropy_switcher.py
+    Backup: cleanup_backup\core\strategy_entropy_switcher.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.366135
+
+  - cleanup_backup\core\strategy_loader.py
+    Backup: cleanup_backup\core\strategy_loader.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.368134
+
+  - cleanup_backup\core\strategy_logic.py
+    Backup: cleanup_backup\core\strategy_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.369133
+
+  - cleanup_backup\core\strategy_mapper.py
+    Backup: cleanup_backup\core\strategy_mapper.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.371133
+
+  - cleanup_backup\core\system_monitor.py
+    Backup: cleanup_backup\core\system_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.373132
+
+  - cleanup_backup\core\thermal_boundary_manager.py
+    Backup: cleanup_backup\core\thermal_boundary_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.375130
+
+  - cleanup_backup\core\thermal_map_allocator.py
+    Backup: cleanup_backup\core\thermal_map_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.377130
+
+  - cleanup_backup\core\thermal_shift.py
+    Backup: cleanup_backup\core\thermal_shift.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.379129
+
+  - cleanup_backup\core\thermal_zone_manager.py
+    Backup: cleanup_backup\core\thermal_zone_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.381127
+
+  - cleanup_backup\core\tick_hash_processor.py
+    Backup: cleanup_backup\core\tick_hash_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.383125
+
+  - cleanup_backup\core\tick_processor.py
+    Backup: cleanup_backup\core\tick_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.385125
+
+  - cleanup_backup\core\tick_resonance_engine.py
+    Backup: cleanup_backup\core\tick_resonance_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.387124
+
+  - cleanup_backup\core\todo_validation_fixes.py
+    Backup: cleanup_backup\core\todo_validation_fixes.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.389123
+
+  - cleanup_backup\core\trajectory_sphere.py
+    Backup: cleanup_backup\core\trajectory_sphere.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.391122
+
+  - cleanup_backup\core\triplet_matcher.py
+    Backup: cleanup_backup\core\triplet_matcher.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.393120
+
+  - cleanup_backup\core\type_defs.py
+    Backup: cleanup_backup\core\type_defs.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.395119
+
+  - cleanup_backup\core\typing_schemas.py
+    Backup: cleanup_backup\core\typing_schemas.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.397119
+
+  - cleanup_backup\core\unified_api_coordinator.py
+    Backup: cleanup_backup\core\unified_api_coordinator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.399117
+
+  - cleanup_backup\core\unified_mathematical_trading_controller.py
+    Backup: cleanup_backup\core\unified_mathematical_trading_controller.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.401116
+
+  - cleanup_backup\core\unified_mathematics_config.py
+    Backup: cleanup_backup\core\unified_mathematics_config.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.403115
+
+  - cleanup_backup\core\unified_signal_metrics.py
+    Backup: cleanup_backup\core\unified_signal_metrics.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.404114
+
+  - cleanup_backup\core\usdc_position_manager.py
+    Backup: cleanup_backup\core\usdc_position_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.406113
+
+  - cleanup_backup\core\vault_balance_regulator.py
+    Backup: cleanup_backup\core\vault_balance_regulator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.408113
+
+  - cleanup_backup\core\vector_state_mapper.py
+    Backup: cleanup_backup\core\vector_state_mapper.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.411111
+
+  - cleanup_backup\core\vecu_core.py
+    Backup: cleanup_backup\core\vecu_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.414110
+
+  - cleanup_backup\core\zbe_position_tracker.py
+    Backup: cleanup_backup\core\zbe_position_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.427101
+
+  - cleanup_backup\core\zpe_core_matrix.py
+    Backup: cleanup_backup\core\zpe_core_matrix.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.428101
+
+  - cleanup_backup\core\zpe_hybrid_mode_selector.py
+    Backup: cleanup_backup\core\zpe_hybrid_mode_selector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.431100
+
+  - cleanup_backup\core\__init__.py
+    Backup: cleanup_backup\core\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.432099
+
+  - cleanup_backup\critical_math_20250624_222404\core\entropy_validator.py
+    Backup: cleanup_backup\critical_math_20250624_222404\core\entropy_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.434098
+
+  - cleanup_backup\critical_math_20250624_222404\core\profit_cycle_allocator.py
+    Backup: cleanup_backup\critical_math_20250624_222404\core\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.437096
+
+  - cleanup_backup\critical_math_20250624_222404\mathlib\__init__.py
+    Backup: cleanup_backup\critical_math_20250624_222404\mathlib\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.439095
+
+  - cleanup_backup\critical_math_20250624_222415\core\entropy_validator.py
+    Backup: cleanup_backup\critical_math_20250624_222415\core\entropy_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.441093
+
+  - cleanup_backup\critical_math_20250624_222415\core\profit_cycle_allocator.py
+    Backup: cleanup_backup\critical_math_20250624_222415\core\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.443092
+
+  - cleanup_backup\critical_math_20250624_222415\mathlib\__init__.py
+    Backup: cleanup_backup\critical_math_20250624_222415\mathlib\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.444092
+
+  - cleanup_backup\critical_math_20250624_222447\core\entropy_validator.py
+    Backup: cleanup_backup\critical_math_20250624_222447\core\entropy_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.446091
+
+  - cleanup_backup\critical_math_20250624_222447\core\profit_cycle_allocator.py
+    Backup: cleanup_backup\critical_math_20250624_222447\core\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.449089
+
+  - cleanup_backup\critical_math_20250624_222447\mathlib\__init__.py
+    Backup: cleanup_backup\critical_math_20250624_222447\mathlib\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.451090
+
+  - config\mathematical_framework_config.py
+    Backup: config\mathematical_framework_config.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.453087
+
+  - core\advanced_drift_shell_integration.py
+    Backup: core\advanced_drift_shell_integration.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.454086
+
+  - core\altitude_adjustment_math.py
+    Backup: core\altitude_adjustment_math.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.456085
+
+  - core\block_wave_transform.py
+    Backup: core\block_wave_transform.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.458083
+
+  - core\btc_data_processor.py
+    Backup: core\btc_data_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.459083
+
+  - core\btc_investment_ratio_controller.py
+    Backup: core\btc_investment_ratio_controller.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.461081
+
+  - core\btc_usdc_router_relay.py
+    Backup: core\btc_usdc_router_relay.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.463081
+
+  - core\btc_vector_aggregator.py
+    Backup: core\btc_vector_aggregator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.464081
+
+  - core\capital_controls.py
+    Backup: core\capital_controls.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.467079
+
+  - core\demo_memory_core.py
+    Backup: core\demo_memory_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.469077
+
+  - core\drift_compensator.py
+    Backup: core\drift_compensator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.470076
+
+  - core\drift_phase_monitor.py
+    Backup: core\drift_phase_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.472075
+
+  - core\dual_state_tracker.py
+    Backup: core\dual_state_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.474074
+
+  - core\entropy_flattener.py
+    Backup: core\entropy_flattener.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.475074
+
+  - core\entropy_validator.py
+    Backup: core\entropy_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.477075
+
+  - core\entry_exit_vector_analyzer.py
+    Backup: core\entry_exit_vector_analyzer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.479072
+
+  - core\entry_gate.py
+    Backup: core\entry_gate.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.480071
+
+  - core\environment_manager.py
+    Backup: core\environment_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.482070
+
+  - core\exchange_plumbing.py
+    Backup: core\exchange_plumbing.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.484069
+
+  - core\ferris_rde_core.py
+    Backup: core\ferris_rde_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.487068
+
+  - core\filters.py
+    Backup: core\filters.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.489067
+
+  - core\flux_compensator.py
+    Backup: core\flux_compensator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.491065
+
+  - core\gan_anomaly_filter.py
+    Backup: core\gan_anomaly_filter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.493064
+
+  - core\gan_filter.py
+    Backup: core\gan_filter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.495063
+
+  - core\ghost_conditionals.py
+    Backup: core\ghost_conditionals.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.497062
+
+  - core\ghost_memory.py
+    Backup: core\ghost_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.498062
+
+  - core\ghost_memory_router.py
+    Backup: core\ghost_memory_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.500059
+
+  - core\ghost_news_glyph_map.py
+    Backup: core\ghost_news_glyph_map.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.502059
+
+  - core\ghost_news_vectorizer.py
+    Backup: core\ghost_news_vectorizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.503060
+
+  - core\ghost_phase_integrator.py
+    Backup: core\ghost_phase_integrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.505057
+
+  - core\ghost_pipeline.py
+    Backup: core\ghost_pipeline.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.507056
+
+  - core\ghost_profit_tracker.py
+    Backup: core\ghost_profit_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.509054
+
+  - core\ghost_router.py
+    Backup: core\ghost_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.510055
+
+  - core\ghost_strategy_integrator.py
+    Backup: core\ghost_strategy_integrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.512053
+
+  - core\ghost_strategy_matrix.py
+    Backup: core\ghost_strategy_matrix.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.513052
+
+  - core\ghost_swap_vector.py
+    Backup: core\ghost_swap_vector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.515051
+
+  - core\ghost_trigger.py
+    Backup: core\ghost_trigger.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.517051
+
+  - core\glyph_hysteresis.py
+    Backup: core\glyph_hysteresis.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.519050
+
+  - core\glyph_math_core.py
+    Backup: core\glyph_math_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.520048
+
+  - core\glyph_phase_anchor.py
+    Backup: core\glyph_phase_anchor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.522048
+
+  - core\glyph_vector_executor.py
+    Backup: core\glyph_vector_executor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.523048
+
+  - core\hash_phase_switch.py
+    Backup: core\hash_phase_switch.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.525045
+
+  - core\hash_tick_synchronizer.py
+    Backup: core\hash_tick_synchronizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.526045
+
+  - core\lantern_trigger_validator.py
+    Backup: core\lantern_trigger_validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.528044
+
+  - core\lantern_vector_memory.py
+    Backup: core\lantern_vector_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.530043
+
+  - core\lattice_wave_math.py
+    Backup: core\lattice_wave_math.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.532042
+
+  - core\long_horizon_simulation.py
+    Backup: core\long_horizon_simulation.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.534040
+
+  - core\mathematical_optimization_bridge.py
+    Backup: core\mathematical_optimization_bridge.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.536039
+
+  - core\mathlib_v2.py
+    Backup: core\mathlib_v2.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.538038
+
+  - core\mathlib_v3.py
+    Backup: core\mathlib_v3.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.540037
+
+  - core\memory_allocation_manager.py
+    Backup: core\memory_allocation_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.541036
+
+  - core\memory_drift_corrector.py
+    Backup: core\memory_drift_corrector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.543036
+
+  - core\mode_manager.py
+    Backup: core\mode_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.545034
+
+  - core\news_quant_field.py
+    Backup: core\news_quant_field.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.547033
+
+  - core\news_sentiment_interpreter.py
+    Backup: core\news_sentiment_interpreter.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.548034
+
+  - core\ops_observability.py
+    Backup: core\ops_observability.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.550032
+
+  - core\oscillator_fallback.py
+    Backup: core\oscillator_fallback.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.551031
+
+  - core\persistent_state_manager.py
+    Backup: core\persistent_state_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.553029
+
+  - core\phantom_entry_logic.py
+    Backup: core\phantom_entry_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.555029
+
+  - core\phantom_exit_logic.py
+    Backup: core\phantom_exit_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.557031
+
+  - core\phantom_memory.py
+    Backup: core\phantom_memory.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.559027
+
+  - core\phantom_price_vector_synchronizer.py
+    Backup: core\phantom_price_vector_synchronizer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.560026
+
+  - core\phantom_profit_tracker.py
+    Backup: core\phantom_profit_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.562026
+
+  - core\pool_volume_translator.py
+    Backup: core\pool_volume_translator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.563025
+
+  - core\precision_performance.py
+    Backup: core\precision_performance.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.565024
+
+  - core\profit_cycle_allocator.py
+    Backup: core\profit_cycle_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.567023
+
+  - core\profit_echo_velocity_driver.py
+    Backup: core\profit_echo_velocity_driver.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.569021
+
+  - core\profit_feedback_loop.py
+    Backup: core\profit_feedback_loop.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.571022
+
+  - core\profit_router.py
+    Backup: core\profit_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.573018
+
+  - core\quantum_btc_intelligence_core.py
+    Backup: core\quantum_btc_intelligence_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.575019
+
+  - core\quantum_drift_shell_engine.py
+    Backup: core\quantum_drift_shell_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.577016
+
+  - core\recursive_strategy_router.py
+    Backup: core\recursive_strategy_router.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.579015
+
+  - core\regulatory_compliance.py
+    Backup: core\regulatory_compliance.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.582014
+
+  - core\resonance_gate_logic.py
+    Backup: core\resonance_gate_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.584014
+
+  - core\risk_guard.py
+    Backup: core\risk_guard.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.586011
+
+  - core\risk_manager.py
+    Backup: core\risk_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.588011
+
+  - core\risk_monitor.py
+    Backup: core\risk_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.590010
+
+  - core\rittle_gemm.py
+    Backup: core\rittle_gemm.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.593008
+
+  - core\route_verification_classifier.py
+    Backup: core\route_verification_classifier.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.595006
+
+  - core\schwabot_integration_orchestrator.py
+    Backup: core\schwabot_integration_orchestrator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.598005
+
+  - core\secure_api_manager.py
+    Backup: core\secure_api_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.600004
+
+  - core\spectral_transform.py
+    Backup: core\spectral_transform.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.603003
+
+  - core\strategy_entropy_switcher.py
+    Backup: core\strategy_entropy_switcher.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.604001
+
+  - core\strategy_logic.py
+    Backup: core\strategy_logic.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.606000
+
+  - core\strategy_mapper.py
+    Backup: core\strategy_mapper.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.607999
+
+  - core\systematic_binding_fixer.py
+    Backup: core\systematic_binding_fixer.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.609998
+
+  - core\system_monitor.py
+    Backup: core\system_monitor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.611997
+
+  - core\thermal_boundary_manager.py
+    Backup: core\thermal_boundary_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.613996
+
+  - core\thermal_map_allocator.py
+    Backup: core\thermal_map_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.615994
+
+  - core\thermal_shift.py
+    Backup: core\thermal_shift.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.617994
+
+  - core\thermal_zone_manager.py
+    Backup: core\thermal_zone_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.618993
+
+  - core\tick_hash_processor.py
+    Backup: core\tick_hash_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.620993
+
+  - core\tick_processor.py
+    Backup: core\tick_processor.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.622990
+
+  - core\tick_resonance_engine.py
+    Backup: core\tick_resonance_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.624989
+
+  - core\todo_validation_fixes.py
+    Backup: core\todo_validation_fixes.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.626988
+
+  - core\trajectory_sphere.py
+    Backup: core\trajectory_sphere.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.628987
+
+  - core\triplet_matcher.py
+    Backup: core\triplet_matcher.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.630985
+
+  - core\type_binding_system.py
+    Backup: core\type_binding_system.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.631985
+
+  - core\typing_schemas.py
+    Backup: core\typing_schemas.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.632985
+
+  - core\unified_api_coordinator.py
+    Backup: core\unified_api_coordinator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.634984
+
+  - core\unified_mathematical_trading_controller.py
+    Backup: core\unified_mathematical_trading_controller.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.637983
+
+  - core\unified_mathematics_config.py
+    Backup: core\unified_mathematics_config.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.639981
+
+  - core\usdc_position_manager.py
+    Backup: core\usdc_position_manager.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.640981
+
+  - core\vault_balance_regulator.py
+    Backup: core\vault_balance_regulator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.642979
+
+  - core\vector_state_mapper.py
+    Backup: core\vector_state_mapper.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.644978
+
+  - core\vecu_core.py
+    Backup: core\vecu_core.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.646977
+
+  - core\zbe_position_tracker.py
+    Backup: core\zbe_position_tracker.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.648976
+
+  - core\zpe_core_matrix.py
+    Backup: core\zpe_core_matrix.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.650976
+
+  - core\zpe_hybrid_mode_selector.py
+    Backup: core\zpe_hybrid_mode_selector.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.652974
+
+  - core\__init__.py
+    Backup: core\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.654972
+
+  - core\config\api_config.py
+    Backup: core\config\api_config.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.656971
+
+  - core\math\tensor_algebra\entropy_engine.py
+    Backup: core\math\tensor_algebra\entropy_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.658971
+
+  - core\math\tensor_algebra\profit_engine.py
+    Backup: core\math\tensor_algebra\profit_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.659971
+
+  - core\math\tensor_algebra\tensor_engine.py
+    Backup: core\math\tensor_algebra\tensor_engine.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.661968
+
+  - core\math\tensor_algebra\unified_tensor_algebra.py
+    Backup: core\math\tensor_algebra\unified_tensor_algebra.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.663968
+
+  - core\memory_stack\memory_key_allocator.py
+    Backup: core\memory_stack\memory_key_allocator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.665966
+
+  - core\utils\math_utils.py
+    Backup: core\utils\math_utils.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.667965
+
+  - mathlib\__init__.py
+    Backup: mathlib\__init__.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.668964
+
+  - runtime\validator.py
+    Backup: runtime\validator.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.670963
+
+  - utils\logging_setup.py
+    Backup: utils\logging_setup.py.backup_20250625_172229
+    Time: 2025-06-25T17:22:29.671962
+
+============================================================

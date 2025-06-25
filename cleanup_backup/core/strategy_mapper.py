@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Strategy Mapper - UROS v1.0 Integration with ZPE Mathematical Framework.
 
@@ -9,7 +13,6 @@ This module maps strategies using the new UROS v1.0 components:
 - ZPE Mathematical Framework for rotational profit alignment
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -104,7 +107,7 @@ class StrategyMapper:
         self.average_alpha_score = 0.0
         self.zpe_spin_count = 0
         
-        safe_print("🗺️ Strategy Mapper initialized with UROS v1.0 and ZPE integration")
+        safe_safe_print("🗺️ Strategy Mapper initialized with UROS v1.0 and ZPE integration")
 
     async def map_strategy_enhanced(
         self, 
@@ -201,12 +204,12 @@ class StrategyMapper:
                     
                     if zpe_should_spin:
                         self.zpe_spin_count += 1
-                        safe_print(f"🔄 ZPE Spin Decision: SPIN (score: {zpe_spin_score:.6f})")
+                        safe_safe_print(f"🔄 ZPE Spin Decision: SPIN (score: {zpe_spin_score:.6f})")
                     else:
-                        safe_print(f"⏸️ ZPE Spin Decision: HOLD (score: {zpe_spin_score:.6f})")
+                        safe_safe_print(f"⏸️ ZPE Spin Decision: HOLD (score: {zpe_spin_score:.6f})")
                         
                 except Exception as e:
-                    safe_print(f"⚠️ ZPE integration failed: {safe_format_error(e, 'zpe_integration')}")
+                    safe_safe_print(f"⚠️ ZPE integration failed: {safe_format_error(e, 'zpe_integration')}")
             
             # Calculate alpha score if Prophet curve available
             alpha_score = 0.0
@@ -232,7 +235,7 @@ class StrategyMapper:
                             memory_key_obj.profit_delta = actual_profit
                             
                 except Exception as e:
-                    safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
+                    safe_safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
             
             # Validate execution
             validation_score = 0.0
@@ -267,7 +270,7 @@ class StrategyMapper:
                     recommendations = execution_validation.recommendations
                     
                 except Exception as e:
-                    safe_print(f"⚠️ Execution validation failed: {safe_format_error(e, 'execution_validation')}")
+                    safe_safe_print(f"⚠️ Execution validation failed: {safe_format_error(e, 'execution_validation')}")
             
             # Update command sequence result
             if sequence and self.sequencer:
@@ -289,14 +292,14 @@ class StrategyMapper:
                     )
                     
                 except Exception as e:
-                    safe_print(f"⚠️ Command sequence update failed: {safe_format_error(e, 'sequence_update')}")
+                    safe_safe_print(f"⚠️ Command sequence update failed: {safe_format_error(e, 'sequence_update')}")
             
             # Update performance metrics
             self.total_mappings += 1
             self.successful_mappings += 1
             self._update_average_alpha(alpha_score)
             
-            safe_print(f"🗺️ Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}, ZPE Work: {zpe_work:.6f}")
+            safe_safe_print(f"🗺️ Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}, ZPE Work: {zpe_work:.6f}")
             
             return StrategyMappingResult(
                 success=True,
@@ -320,7 +323,7 @@ class StrategyMapper:
             
         except Exception as e:
             error_msg = safe_format_error(e, "strategy_mapping")
-            safe_print(f"❌ Strategy mapping failed: {error_msg}")
+            safe_safe_print(f"❌ Strategy mapping failed: {error_msg}")
             
             return StrategyMappingResult(
                 success=False,
@@ -406,7 +409,7 @@ class StrategyMapper:
             
             # Add complexity for packet size
             packet_size = len(str(execution_packet))
-            size_complexity = min(0.5, packet_size / 10000)  # Cap at 0.5
+            size_complexity = unified_math.min(0.5, packet_size / 10000)  # Cap at 0.5
             
             return base_complexity + size_complexity
             
@@ -431,12 +434,12 @@ class StrategyMapper:
         return {
             'total_mappings': self.total_mappings,
             'successful_mappings': self.successful_mappings,
-            'success_rate': self.successful_mappings / max(self.total_mappings, 1),
+            'success_rate': self.successful_mappings / unified_math.max(self.total_mappings, 1),
             'average_alpha_score': self.average_alpha_score,
             'uros_modules_available': UROS_MODULES_AVAILABLE,
             'zpe_modules_available': ZPE_MODULES_AVAILABLE,
             'zpe_spin_count': self.zpe_spin_count,
-            'zpe_spin_rate': self.zpe_spin_count / max(self.total_mappings, 1)
+            'zpe_spin_rate': self.zpe_spin_count / unified_math.max(self.total_mappings, 1)
         }
 
 

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Test suite for the refactored Profit Routing Engine and Math Utilities.
 
@@ -6,7 +7,7 @@ and edge case management.
 """
 
 import unittest
-import numpy as np
+from core.unified_math_system import unified_math
 from decimal import Decimal
 from typing import List, Tuple
 

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 DLT Waveform Engine - Schwabot UROS v1.0
@@ -12,8 +14,8 @@ Features:
 - GPU offload support and ZPE thermal logic integration
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 import time
 from scipy.signal import get_window
@@ -151,7 +153,7 @@ class DLTWaveformEngine:
 
     def dlt_waveform(self, t: float, decay: float = 0.006) -> float:
         """Generate DLT waveform with decay factor."""
-        return math.sin(2 * math.pi * t) * math.exp(-decay * t)
+        return unified_math.unified_math.sin(2 * math.pi * t) * unified_math.exp(-decay * t)
 
     def generate_wave_sequence(self, length: int = 16, decay: float = 0.006) -> List[float]:
         """Generate wave sequence for analysis."""
@@ -164,7 +166,7 @@ class DLTWaveformEngine:
     def wave_entropy(self, seq: List[float]) -> float:
         """Calculate wave entropy using FFT power spectrum."""
         fft = np.fft.fft(seq)
-        power = np.abs(fft) ** 2
+        power = unified_math.unified_math.abs(fft) ** 2
         normalized = power / np.sum(power)
         return -np.sum(normalized * np.log2(normalized + 1e-9))
 
@@ -273,7 +275,7 @@ class DLTWaveformEngine:
         volatility = market_data.get('volatility', 0.5)
         for i in range(total_elements):
             # Use sine wave with volatility modulation
-            value = math.sin(2 * math.pi * i / total_elements) * (1 + volatility)
+            value = unified_math.unified_math.sin(2 * math.pi * i / total_elements) * (1 + volatility)
             sequence.append(value)
             
         return sequence
@@ -285,7 +287,7 @@ class DLTWaveformEngine:
         
         # Modulation factor based on volatility and volume
         modulation = (volatility * 0.7 + volume * 0.3) / 2.0
-        return max(0.1, min(1.0, modulation))
+        return unified_math.max(0.1, unified_math.min(1.0, modulation))
 
     def _calculate_basket_resonance(self, asset_weights: Dict[str, float], sequence_vector: List[float]) -> float:
         """Calculate basket resonance score."""
@@ -293,11 +295,11 @@ class DLTWaveformEngine:
             return 0.0
             
         # Calculate resonance based on sequence variance and asset weight distribution
-        sequence_variance = np.var(sequence_vector)
-        weight_variance = np.var(list(asset_weights.values()))
+        sequence_variance = unified_math.unified_math.var(sequence_vector)
+        weight_variance = unified_math.unified_math.var(list(asset_weights.values()))
         
         resonance = (sequence_variance + weight_variance) / 2.0
-        return min(1.0, resonance)
+        return unified_math.min(1.0, resonance)
 
     def _generate_basket_hash(self, basket_id: str, bit_phase: BitPhase, asset_weights: Dict[str, float]) -> str:
         """Generate SHA-256 hash for basket."""
@@ -338,12 +340,12 @@ class DLTWaveformEngine:
             # Perform FFT
             fft_result = np.fft.fft(x_windowed)
             frequencies = np.fft.fftfreq(len(x), 1/sample_rate)
-            magnitudes = np.abs(fft_result)
+            magnitudes = unified_math.unified_math.abs(fft_result)
             
             # Determine bit phase if not provided
             if bit_phase is None:
                 entropy = self.wave_entropy(x.tolist())
-                complexity = np.std(x) / np.mean(np.abs(x))
+                complexity = unified_math.unified_math.std(x) / unified_math.unified_math.mean(unified_math.unified_math.abs(x))
                 bit_phase = self._determine_optimal_bit_phase(entropy, complexity)
             
             # Calculate tensor score
@@ -371,7 +373,7 @@ class DLTWaveformEngine:
                 matrix_basket_id=matrix_basket_id,
                 metadata={
                     'entropy': self.wave_entropy(x.tolist()),
-                    'complexity': np.std(x) / np.mean(np.abs(x)),
+                    'complexity': unified_math.unified_math.std(x) / unified_math.unified_math.mean(unified_math.unified_math.abs(x)),
                     'sample_rate': sample_rate
                 }
             )
@@ -418,7 +420,7 @@ class DLTWaveformEngine:
             components = normalized
         
         # Calculate tensor score as weighted sum
-        weights = np.exp(-np.arange(len(components)) / len(components))
+        weights = unified_math.exp(-np.arange(len(components)) / len(components))
         tensor_score = np.sum(components * weights)
         
         return float(tensor_score)
@@ -434,7 +436,7 @@ class DLTWaveformEngine:
         elif bit_phase == BitPhase.EIGHT_BIT:
             basis_states = 256
         else:  # FORTY_TWO_BIT
-            basis_states = min(1024, len(normalized))
+            basis_states = unified_math.min(1024, len(normalized))
         
         amplitudes = normalized[:basis_states]
         
@@ -520,8 +522,8 @@ class DLTWaveformEngine:
         
         return {
             'total_analyses': len(self.waveform_history),
-            'average_tensor_score': np.mean(tensor_scores),
-            'tensor_score_std': np.std(tensor_scores),
+            'average_tensor_score': unified_math.unified_math.mean(tensor_scores),
+            'tensor_score_std': unified_math.unified_math.std(tensor_scores),
             'bit_phase_distribution': {
                 '4bit': bit_phases.count(4),
                 '8bit': bit_phases.count(8),
@@ -562,7 +564,7 @@ class DLTWaveformEngine:
                 'tensor_score': analysis.tensor_score,
                 'bit_phase': analysis.bit_phase.value,
                 'matrix_basket_id': analysis.matrix_basket_id,
-                'confidence': min(1.0, abs(analysis.tensor_score)),
+                'confidence': unified_math.min(1.0, unified_math.abs(analysis.tensor_score)),
                 'timestamp': analysis.timestamp
             }
             signals.append(signal)
@@ -595,7 +597,7 @@ class DLTWaveformEngine:
     def _calculate_fractal_resonance(self, magnitudes: np.ndarray) -> float:
         """Calculate fractal resonance score."""
         # Use FFT power spectrum for fractal analysis
-        fft_power = np.abs(np.fft.fft(magnitudes)) ** 2
+        fft_power = unified_math.unified_math.abs(np.fft.fft(magnitudes)) ** 2
         
         # Calculate fractal dimension using box-counting approximation
         # This is a simplified version - in practice, you'd use more sophisticated methods
@@ -607,19 +609,19 @@ class DLTWaveformEngine:
                 # Count non-zero boxes at this scale
                 boxes = np.array_split(fft_power, scale)
                 count = sum(1 for box in boxes if np.sum(box) > 0)
-                log_counts.append(np.log(count + 1))
+                log_counts.append(unified_math.unified_math.log(count + 1))
         
         if len(log_counts) >= 2:
             # Calculate slope as fractal dimension approximation
-            fractal_dim = (log_counts[-1] - log_counts[0]) / (np.log(scales[-1]) - np.log(scales[0]))
-            return min(1.0, fractal_dim / 2.0)  # Normalize to [0, 1]
+            fractal_dim = (log_counts[-1] - log_counts[0]) / (unified_math.unified_math.log(scales[-1]) - unified_math.unified_math.log(scales[0]))
+            return unified_math.min(1.0, fractal_dim / 2.0)  # Normalize to [0, 1]
         
         return 0.5  # Default value
 
     def _calculate_zpe_thermal_metrics(self, analysis: WaveformAnalysis) -> Dict[str, Any]:
         """Calculate ZPE thermal metrics."""
         # Calculate thermal efficiency based on tensor score and quantum state
-        thermal_efficiency = abs(analysis.tensor_score) * 0.8
+        thermal_efficiency = unified_math.abs(analysis.tensor_score) * 0.8
         
         # Calculate thermal noise based on quantum state purity
         if analysis.quantum_state:
@@ -728,25 +730,25 @@ if __name__ == "__main__":
     
     # Create matrix basket
     basket = engine.create_matrix_basket(market_data)
-    print(f"Created matrix basket: {basket.basket_id}")
+    safe_print(f"Created matrix basket: {basket.basket_id}")
     
     # Generate test signal
     fs = 1000
     t = np.linspace(0, 1, fs)
-    x = np.sin(2 * np.pi * 50 * t) + 0.5 * np.sin(2 * np.pi * 120 * t)
+    x = np.unified_math.sin(2 * np.pi * 50 * t) + 0.5 * np.unified_math.sin(2 * np.pi * 120 * t)
     
     # Process waveform
     result = engine.process_waveform_data("test_signal", x, fs)
-    print("Processed test signal:", result)
+    safe_print("Processed test signal:", result)
     
     # Get statistics
     stats = engine.get_waveform_statistics()
-    print("Waveform stats:", stats)
+    safe_print("Waveform stats:", stats)
     
     # Get basket status
     basket_status = engine.get_matrix_basket_status()
-    print("Basket status:", basket_status)
+    safe_print("Basket status:", basket_status)
     
     # Generate signals
     signals = engine.get_trading_signals()
-    print("Trading signals:", signals) 
+    safe_print("Trading signals:", signals) 

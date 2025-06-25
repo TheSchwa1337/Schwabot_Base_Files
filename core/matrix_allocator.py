@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 """
 Schwabot Matrix Allocator
 =========================
@@ -14,7 +28,7 @@ This component:
 """
 
 import json
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -190,16 +204,16 @@ class MatrixAllocator:
         score += matrix_weight * 0.3
         
         # Thermal compatibility
-        thermal_compatibility = 1.0 - abs(current_tick.thermal_load - 0.5)
+        thermal_compatibility = 1.0 - unified_math.abs(current_tick.thermal_load - 0.5)
         score += thermal_compatibility * 0.1
         
         # Entropy compatibility
-        entropy_compatibility = 1.0 - abs(current_tick.entropy_level - 0.5)
+        entropy_compatibility = 1.0 - unified_math.abs(current_tick.entropy_level - 0.5)
         score += entropy_compatibility * 0.1
         
         # Bit level compatibility
         target_bit_level = vector_data.get("target_bit_level", 16)
-        bit_compatibility = 1.0 - abs(matrix_info["bit_level"] - target_bit_level) / 64.0
+        bit_compatibility = 1.0 - unified_math.abs(matrix_info["bit_level"] - target_bit_level) / 64.0
         score += bit_compatibility * 0.1
         
         # Matrix performance history
@@ -225,7 +239,7 @@ class MatrixAllocator:
         current_tick = self.tick_map[self.current_tick_id]
         
         # Update thermal load
-        current_tick.thermal_load = min(1.0, current_tick.thermal_load + 0.1)
+        current_tick.thermal_load = unified_math.min(1.0, current_tick.thermal_load + 0.1)
         
         # Update entropy level
         current_tick.entropy_level = allocation.entropy_level
@@ -235,7 +249,7 @@ class MatrixAllocator:
             current_tick.active_matrices.append(allocation.matrix_id)
         
         # Update memory usage
-        current_tick.memory_usage = min(1.0, current_tick.memory_usage + 0.05)
+        current_tick.memory_usage = unified_math.min(1.0, current_tick.memory_usage + 0.05)
         
         # Update bit level and phase position
         current_tick.bit_level = allocation.bit_level
@@ -392,9 +406,9 @@ class MatrixAllocator:
             self.registered_matrices = data.get("registered_matrices", self.registered_matrices)
             
         except FileNotFoundError:
-            print(f"Allocation data file {filepath} not found. Starting with empty data.")
+            safe_print(f"Allocation data file {filepath} not found. Starting with empty data.")
         except Exception as e:
-            print(f"Error loading allocation data: {e}")
+            safe_print(f"Error loading allocation data: {e}")
     
     def get_optimal_routing_path(self, vector_data: Dict[str, Any]) -> str:
         """Get optimal routing path for a vector"""
@@ -427,7 +441,7 @@ if __name__ == "__main__":
     # Test the matrix allocator
     allocator = MatrixAllocator()
     
-    print("=== Schwabot Matrix Allocator Test ===")
+    safe_print("=== Schwabot Matrix Allocator Test ===")
     
     # Test vector data
     test_vector_data = {
@@ -450,27 +464,27 @@ if __name__ == "__main__":
     # Allocate vector
     allocation = allocator.allocate_vector(test_vector_data)
     
-    print(f"Vector ID: {test_vector_data['vector_id']}")
-    print(f"Allocated to Matrix: {allocation.matrix_id}")
-    print(f"Allocation Confidence: {allocation.allocation_confidence:.3f}")
-    print(f"Execution Mode: {allocation.execution_mode}")
-    print(f"Routing Path: {allocation.routing_path}")
-    print(f"Bit Level: {allocation.bit_level}")
-    print(f"Phase Count: {allocation.phase_count}")
+    safe_print(f"Vector ID: {test_vector_data['vector_id']}")
+    safe_print(f"Allocated to Matrix: {allocation.matrix_id}")
+    safe_print(f"Allocation Confidence: {allocation.allocation_confidence:.3f}")
+    safe_print(f"Execution Mode: {allocation.execution_mode}")
+    safe_print(f"Routing Path: {allocation.routing_path}")
+    safe_print(f"Bit Level: {allocation.bit_level}")
+    safe_print(f"Phase Count: {allocation.phase_count}")
     
     # Get summaries
     tick_summary = allocator.get_tick_map_summary()
     allocation_summary = allocator.get_allocation_summary()
     
-    print(f"\nTick Map Summary:")
-    print(f"Current Tick: {tick_summary['current_tick_id']}")
-    print(f"Thermal Load: {tick_summary['thermal_load']:.3f}")
-    print(f"Entropy Level: {tick_summary['entropy_level']:.3f}")
-    print(f"Active Matrices: {tick_summary['active_matrices']}")
+    safe_print(f"\nTick Map Summary:")
+    safe_print(f"Current Tick: {tick_summary['current_tick_id']}")
+    safe_print(f"Thermal Load: {tick_summary['thermal_load']:.3f}")
+    safe_print(f"Entropy Level: {tick_summary['entropy_level']:.3f}")
+    safe_print(f"Active Matrices: {tick_summary['active_matrices']}")
     
-    print(f"\nAllocation Summary:")
-    print(f"Total Allocations: {allocation_summary['total_allocations']}")
-    print(f"Execution Modes: {allocation_summary['execution_modes']}")
-    print(f"Average Confidence: {allocation_summary['average_confidence']:.3f}")
+    safe_print(f"\nAllocation Summary:")
+    safe_print(f"Total Allocations: {allocation_summary['total_allocations']}")
+    safe_print(f"Execution Modes: {allocation_summary['execution_modes']}")
+    safe_print(f"Average Confidence: {allocation_summary['average_confidence']:.3f}")
     
-    print("Matrix allocator test completed!") 
+    safe_print("Matrix allocator test completed!") 

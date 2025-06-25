@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ops and Observability - Comprehensive Monitoring and Logging System.
 
@@ -10,7 +26,6 @@ This module provides enterprise-grade observability including:
 - Unified mathematics and trading metrics
 """
 
-from __future__ import annotations
 
 import asyncio
 import json
@@ -249,7 +264,7 @@ class StructuredLogger:
             except queue.Empty:
                 continue
             except Exception as e:
-                print(f"Log worker error: {e}")
+                safe_print(f"Log worker error: {e}")
     
     def _send_log(self, log_entry: LogEntry) -> None:
         """Send log to ELK/Loki."""
@@ -285,7 +300,7 @@ class StructuredLogger:
             )
             
         except Exception as e:
-            print(f"Log sending error: {e}")
+            safe_print(f"Log sending error: {e}")
     
     def _send_to_elk(self, log_data: Dict[str, Any]) -> None:
         """Send log to ELK stack."""
@@ -297,7 +312,7 @@ class StructuredLogger:
         # Implementation for Loki
         pass
     
-    def log(self, level: LogLevel, message: str, component: str, **kwargs) -> None:
+    def unified_math.log(self, level: LogLevel, message: str, component: str, **kwargs) -> None:
         """Log a message."""
         log_entry = LogEntry(
             timestamp=datetime.now(),
@@ -388,7 +403,7 @@ class HealthMonitor:
                 time.sleep(self.monitoring_interval)
                 
             except Exception as e:
-                print(f"Health monitoring error: {e}")
+                safe_print(f"Health monitoring error: {e}")
                 time.sleep(self.monitoring_interval)
     
     def _check_system_health(self) -> Dict[str, Any]:
@@ -573,7 +588,7 @@ class AlertManager:
             try:
                 handler(alert)
             except Exception as e:
-                print(f"Alert handler {handler_name} failed: {e}")
+                safe_print(f"Alert handler {handler_name} failed: {e}")
         
         return alert
     
@@ -634,10 +649,10 @@ class AlertManager:
                     headers={'Content-Type': 'application/json'}
                 ) as response:
                     if response.status != 200:
-                        print(f"Slack alert failed: {response.status}")
+                        safe_print(f"Slack alert failed: {response.status}")
         
         except Exception as e:
-            print(f"Slack alert error: {e}")
+            safe_print(f"Slack alert error: {e}")
     
     def get_active_alerts(self) -> List[Alert]:
         """Get active (unacknowledged) alerts."""
@@ -682,7 +697,7 @@ class OpsObservability:
         self.start_time = time.time()
         self.total_operations = 0
         
-        safe_print("🔍 Ops and Observability initialized")
+        safe_safe_print("🔍 Ops and Observability initialized")
     
     def _start_services(self) -> None:
         """Start observability services."""
@@ -690,13 +705,13 @@ class OpsObservability:
         metrics_port = self.config.get('prometheus_port', 8000)
         try:
             start_http_server(metrics_port)
-            safe_print(f"✅ Prometheus metrics server started on port {metrics_port}")
+            safe_safe_print(f"✅ Prometheus metrics server started on port {metrics_port}")
         except Exception as e:
-            safe_print(f"❌ Prometheus server failed: {safe_format_error(e, 'prometheus_start')}")
+            safe_safe_print(f"❌ Prometheus server failed: {safe_format_error(e, 'prometheus_start')}")
         
         # Start health monitoring
         self.health_monitor.start_monitoring()
-        safe_print("✅ Health monitoring started")
+        safe_safe_print("✅ Health monitoring started")
     
     def log_operation(
         self,
@@ -733,7 +748,7 @@ class OpsObservability:
             self.total_operations += 1
             
         except Exception as e:
-            safe_print(f"❌ Operation logging failed: {safe_format_error(e, 'operation_logging')}")
+            safe_safe_print(f"❌ Operation logging failed: {safe_format_error(e, 'operation_logging')}")
     
     def record_trade(
         self,
@@ -763,7 +778,7 @@ class OpsObservability:
             )
             
         except Exception as e:
-            safe_print(f"❌ Trade recording failed: {safe_format_error(e, 'trade_recording')}")
+            safe_safe_print(f"❌ Trade recording failed: {safe_format_error(e, 'trade_recording')}")
     
     def record_api_request(
         self,
@@ -797,7 +812,7 @@ class OpsObservability:
             )
             
         except Exception as e:
-            safe_print(f"❌ API recording failed: {safe_format_error(e, 'api_recording')}")
+            safe_safe_print(f"❌ API recording failed: {safe_format_error(e, 'api_recording')}")
     
     def record_risk_violation(
         self,
@@ -829,7 +844,7 @@ class OpsObservability:
             )
             
         except Exception as e:
-            safe_print(f"❌ Risk violation recording failed: {safe_format_error(e, 'risk_violation_recording')}")
+            safe_safe_print(f"❌ Risk violation recording failed: {safe_format_error(e, 'risk_violation_recording')}")
     
     def record_math_operation(
         self,
@@ -856,7 +871,7 @@ class OpsObservability:
             )
             
         except Exception as e:
-            safe_print(f"❌ Math operation recording failed: {safe_format_error(e, 'math_recording')}")
+            safe_safe_print(f"❌ Math operation recording failed: {safe_format_error(e, 'math_recording')}")
     
     def update_system_metrics(self) -> None:
         """Update system metrics."""
@@ -880,7 +895,7 @@ class OpsObservability:
                 self._update_core_system_metrics()
             
         except Exception as e:
-            safe_print(f"❌ System metrics update failed: {safe_format_error(e, 'system_metrics')}")
+            safe_safe_print(f"❌ System metrics update failed: {safe_format_error(e, 'system_metrics')}")
     
     def _update_core_system_metrics(self) -> None:
         """Update core system metrics."""
@@ -910,7 +925,7 @@ class OpsObservability:
             # API metrics are updated in record_api_request
             
         except Exception as e:
-            safe_print(f"❌ Core system metrics update failed: {safe_format_error(e, 'core_metrics')}")
+            safe_safe_print(f"❌ Core system metrics update failed: {safe_format_error(e, 'core_metrics')}")
     
     def get_health_endpoint(self) -> Dict[str, Any]:
         """Get health endpoint data."""
@@ -936,7 +951,7 @@ class OpsObservability:
             }
             
         except Exception as e:
-            safe_print(f"❌ Health endpoint failed: {safe_format_error(e, 'health_endpoint')}")
+            safe_safe_print(f"❌ Health endpoint failed: {safe_format_error(e, 'health_endpoint')}")
             return {
                 'status': 'error',
                 'timestamp': datetime.now().isoformat(),
@@ -948,7 +963,7 @@ class OpsObservability:
         try:
             return generate_latest()
         except Exception as e:
-            safe_print(f"❌ Metrics endpoint failed: {safe_format_error(e, 'metrics_endpoint')}")
+            safe_safe_print(f"❌ Metrics endpoint failed: {safe_format_error(e, 'metrics_endpoint')}")
             return ""
     
     def get_observability_summary(self) -> Dict[str, Any]:
@@ -1027,7 +1042,7 @@ def get_observability_summary() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test Ops and Observability
-    print("🔍 Testing Ops and Observability...")
+    safe_print("🔍 Testing Ops and Observability...")
     
     ops = get_ops_observability()
     
@@ -1067,8 +1082,8 @@ if __name__ == "__main__":
     
     # Get health endpoint
     health = get_health_endpoint()
-    print(f"✅ Health status: {health['status']}")
+    safe_print(f"✅ Health status: {health['status']}")
     
     # Get observability summary
     summary = get_observability_summary()
-    print(f"✅ Observability summary: {summary}") 
+    safe_print(f"✅ Observability summary: {summary}") 

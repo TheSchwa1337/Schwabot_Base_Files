@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Phase-resonance gate logic.
 
@@ -19,7 +21,6 @@ mask ``0x3ffffffffff`` (2^42-1) limits the counter and avoids Python int → flo
 precision loss when we later pass the phase index into NumPy code.
 """
 
-from __future__ import annotations
 
 __all__ = ["phase_resonance_gate"]
 

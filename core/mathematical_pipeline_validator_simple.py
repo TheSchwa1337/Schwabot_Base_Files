@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Simplified Mathematical Pipeline Validator - Schwabot UROS v1.0
@@ -19,7 +33,7 @@ This is a production-ready validation step for Schwabot UROS v1.0.
 import asyncio
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -273,7 +287,7 @@ class SimplifiedMathematicalPipelineValidator:
                 error_count += 1
                 recommendations.append("MatrixController state_vector not properly initialized")
             
-            confidence_score = max(0.0, 1.0 - (error_count * 0.2))
+            confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.2))
             validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
             
         except Exception as e:
@@ -348,7 +362,7 @@ class SimplifiedMathematicalPipelineValidator:
                         error_count += 1
                         recommendations.append(f"Phase transition failed for {bit_level.value}-bit")
             
-            confidence_score = max(0.0, 1.0 - (error_count * 0.2))
+            confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.2))
             validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
             
         except Exception as e:
@@ -639,7 +653,7 @@ class SimplifiedMathematicalPipelineValidator:
                 error_count += 1
                 recommendations.append("Time operations failed")
             
-            confidence_score = max(0.0, 1.0 - (error_count * 0.25))
+            confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.25))
             validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 1 else "FAIL"
             
         except Exception as e:
@@ -708,7 +722,7 @@ class SimplifiedMathematicalPipelineValidator:
                 error_count += len(self.critical_issues)
                 recommendations.extend(self.critical_issues)
             
-            confidence_score = max(0.0, avg_confidence - (error_count * 0.1))
+            confidence_score = unified_math.max(0.0, avg_confidence - (error_count * 0.1))
             validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
             
         except Exception as e:
@@ -789,29 +803,29 @@ if __name__ == "__main__":
     async def main():
         report = await run_simplified_mathematical_pipeline_validation()
         
-        print(f"\n{'='*60}")
-        print(f"SIMPLIFIED MATHEMATICAL PIPELINE VALIDATION REPORT")
-        print(f"{'='*60}")
-        print(f"Timestamp: {report.timestamp}")
-        print(f"Overall Status: {report.overall_status}")
-        print(f"Production Readiness Score: {report.production_readiness_score:.3f}")
-        print(f"Average Confidence: {report.average_confidence:.3f}")
-        print(f"Total Execution Time: {report.total_execution_time:.2f}ms")
-        print(f"\nComponent Results:")
-        print(f"  Passed: {report.passed_components}")
-        print(f"  Failed: {report.failed_components}")
-        print(f"  Warnings: {report.warning_components}")
+        safe_print(f"\n{'='*60}")
+        safe_print(f"SIMPLIFIED MATHEMATICAL PIPELINE VALIDATION REPORT")
+        safe_print(f"{'='*60}")
+        safe_print(f"Timestamp: {report.timestamp}")
+        safe_print(f"Overall Status: {report.overall_status}")
+        safe_print(f"Production Readiness Score: {report.production_readiness_score:.3f}")
+        safe_print(f"Average Confidence: {report.average_confidence:.3f}")
+        safe_print(f"Total Execution Time: {report.total_execution_time:.2f}ms")
+        safe_print(f"\nComponent Results:")
+        safe_print(f"  Passed: {report.passed_components}")
+        safe_print(f"  Failed: {report.failed_components}")
+        safe_print(f"  Warnings: {report.warning_components}")
         
         if report.critical_issues:
-            print(f"\nCritical Issues:")
+            safe_print(f"\nCritical Issues:")
             for issue in report.critical_issues:
-                print(f"  ERROR: {issue}")
+                safe_print(f"  ERROR: {issue}")
         
         if report.optimization_recommendations:
-            print(f"\nOptimization Recommendations:")
+            safe_print(f"\nOptimization Recommendations:")
             for rec in report.optimization_recommendations:
-                print(f"  WARNING: {rec}")
+                safe_print(f"  WARNING: {rec}")
         
-        print(f"\n{'='*60}")
+        safe_print(f"\n{'='*60}")
     
     asyncio.run(main()) 

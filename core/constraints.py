@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Constraints System - Schwabot Framework.
 
@@ -35,7 +49,7 @@ from decimal import getcontext
 import logging
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -215,7 +229,7 @@ class TradingConstraints:
 
         # Check total weight
         total_weight = sum(asset_weights.values())
-        if abs(total_weight - 1.0) > 0.01:  # 1% tolerance
+        if unified_math.abs(total_weight - 1.0) > 0.01:  # 1% tolerance
             violations.append(
                 ConstraintViolation(
                     constraint_name="portfolio_weight_sum",
@@ -630,7 +644,7 @@ class ConstraintValidator:
         severity_weights = {"warning": 0.1, "error": 0.5, "critical": 1.0}
 
         total_score = sum(severity_weights.get(v.severity, 0.5) for v in violations)
-        normalized_score = min(total_score / len(violations), 1.0)
+        normalized_score = unified_math.min(total_score / len(violations), 1.0)
 
         return normalized_score
 
@@ -679,7 +693,7 @@ def main() -> None:
     """Demo of constraint validation system."""
     try:
         validator = ConstraintValidator()
-        print(f"✅ ConstraintValidator v{validator.version} initialized")
+        safe_print(f"[OK] ConstraintValidator v{validator.version} initialized")
 
         # Test trading operation validation
         trading_params = {
@@ -692,15 +706,15 @@ def main() -> None:
         }
 
         trading_result = validator.validate_trading_operation(trading_params)
-        print(
-            f"📊 Trading validation: "
-            f"{'✅ PASS' if trading_result.valid else '❌ FAIL'}"
+        safe_print(
+            f"[TRADING] Trading validation: "
+            f"{'PASS' if trading_result.valid else 'FAIL'}"
         )
-        print(f"   Risk score: {trading_result.risk_score:.3f}")
-        print(f"   Violations: {len(trading_result.violations)}")
+        safe_print(f"   Risk score: {trading_result.risk_score:.3f}")
+        safe_print(f"   Violations: {len(trading_result.violations)}")
 
         # Test mathematical operation validation
-        import numpy as np
+        from core.unified_math_system import unified_math
 
         test_matrix = np.random.randn(5, 5)
 
@@ -712,22 +726,25 @@ def main() -> None:
         }
 
         math_result = validator.validate_mathematical_operation(math_params)
-        print(
-            f"🧮 Mathematical validation: "
-            f"{'✅ PASS' if math_result.valid else '❌ FAIL'}"
+        safe_print(
+            f"[MATH] Mathematical validation: "
+            f"{'PASS' if math_result.valid else 'FAIL'}"
         )
-        print(f"   Risk score: {math_result.risk_score:.3f}")
-        print(f"   Violations: {len(math_result.violations)}")
+        safe_print(f"   Risk score: {math_result.risk_score:.3f}")
+        safe_print(f"   Violations: {len(math_result.violations)}")
 
         # Display constraint summary
         summary = validator.get_constraint_summary()
-        print(f"📋 Constraint summary available with {len(summary)} categories")
+        safe_print(f"[SUMMARY] Constraint summary available with {len(summary)} categories")
 
-        print("🎉 Constraint validation demo completed successfully!")
+        safe_print("[SUCCESS] Constraint validation demo completed successfully!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"[ERROR] Demo failed: {e}")
 
 
 if __name__ == "__main__":
     main()
+
+# Backward compatibility alias
+Constraints = ConstraintValidator

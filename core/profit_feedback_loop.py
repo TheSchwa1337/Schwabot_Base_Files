@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit feedback loop – reinforcement signal δ_profit_t.
 
@@ -7,11 +10,10 @@ where ζ_i is trade-phase weighting, τ_i trade duration (seconds) and PnL_i the
 profit/loss of trade *i*.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["profit_feedback_delta"]
 
@@ -30,4 +32,4 @@ def profit_feedback_delta(
     arr_zeta = np.asarray(zeta_trades, dtype=float)
     arr_tau = np.asarray(durations, dtype=float)
     arr_pnl = np.asarray(pnl, dtype=float)
-    return float(np.dot(arr_zeta * arr_tau, arr_pnl))
+    return float(unified_math.unified_math.dot_product(arr_zeta * arr_tau, arr_pnl))

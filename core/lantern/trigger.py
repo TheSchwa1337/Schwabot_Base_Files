@@ -1,8 +1,9 @@
 """Lantern trigger for spike detection."""
 
 from __future__ import annotations
-import math
+from core.unified_math_system import unified_math
 import time
+from core.unified_math_system import unified_math
 
 
 def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:
@@ -21,4 +22,4 @@ def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:
     if dt <= 0:
         return 0.0
 
-    return (dp / dt) * math.exp(-time.time() / tau0)
+    return (dp / dt) * unified_math.exp(-time.time() / tau0)

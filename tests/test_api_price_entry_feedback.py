@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """API Price Entry Feedback Test - Schwabot Framework.
 
@@ -20,7 +22,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -280,7 +282,7 @@ class APIPriceEntryFeedbackTest:
                     results['success'] = False
                 
                 # Validate confidence level
-                confidence_diff = abs(consensus_result['confidence'] - test_case.expected_confidence)
+                confidence_diff = unified_math.abs(consensus_result['confidence'] - test_case.expected_confidence)
                 if confidence_diff > 0.2:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Confidence mismatch. Expected: {test_case.expected_confidence}, Got: {consensus_result['confidence']}"
                     results['errors'].append(error_msg)
@@ -566,9 +568,9 @@ class APIPriceEntryFeedbackTest:
             btc_prices = prices['BTC']
             if isinstance(btc_prices, dict):
                 price_values = list(btc_prices.values())
-                price_variance = np.var(price_values)
+                price_variance = unified_math.unified_math.var(price_values)
                 consensus_reached = price_variance < 10000.0  # Low variance = consensus
-                confidence = max(0.5, 1.0 - (price_variance / 10000.0))
+                confidence = unified_math.max(0.5, 1.0 - (price_variance / 10000.0))
             else:
                 consensus_reached = test_case.expected_consensus
                 confidence = test_case.expected_confidence
@@ -581,13 +583,13 @@ class APIPriceEntryFeedbackTest:
         if isinstance(prices, dict) and 'BTC' in prices:
             btc_prices = prices['BTC']
             if isinstance(btc_prices, dict):
-                min_price = min(btc_prices.values())
-                max_price = max(btc_prices.values())
+                min_price = unified_math.min(btc_prices.values())
+                max_price = unified_math.max(btc_prices.values())
                 if max_price - min_price > 100.0:  # Significant price difference
                     arbitrage_opportunities.append({
                         'asset': 'BTC',
-                        'buy_exchange': min(btc_prices, key=btc_prices.get),
-                        'sell_exchange': max(btc_prices, key=btc_prices.get),
+                        'buy_exchange': unified_math.min(btc_prices, key=btc_prices.get),
+                        'sell_exchange': unified_math.max(btc_prices, key=btc_prices.get),
                         'potential_profit': max_price - min_price
                     })
         
@@ -600,14 +602,14 @@ class APIPriceEntryFeedbackTest:
     def _detect_price_discrepancy(self, prices: Dict[str, float], threshold: float) -> Dict[str, Any]:
         """Detect price discrepancy across exchanges."""
         price_values = list(prices.values())
-        mean_price = np.mean(price_values)
+        mean_price = unified_math.unified_math.mean(price_values)
         
         # Calculate maximum discrepancy
         max_discrepancy = 0.0
         affected_exchanges = []
         
         for exchange, price in prices.items():
-            discrepancy = abs(price - mean_price) / mean_price
+            discrepancy = unified_math.abs(price - mean_price) / mean_price
             if discrepancy > max_discrepancy:
                 max_discrepancy = discrepancy
             
@@ -631,8 +633,8 @@ class APIPriceEntryFeedbackTest:
             btc_volume = volumes['BTC']
             if isinstance(btc_volume, dict):
                 volume_values = list(btc_volume.values())
-                volume_variance = np.var(volume_values)
-                reliability = max(0.5, 1.0 - (volume_variance / 1000000.0))
+                volume_variance = unified_math.unified_math.var(volume_values)
+                reliability = unified_math.max(0.5, 1.0 - (volume_variance / 1000000.0))
             else:
                 reliability = 0.8
         else:
@@ -643,8 +645,8 @@ class APIPriceEntryFeedbackTest:
         if isinstance(volumes, dict) and 'BTC' in volumes:
             btc_volume = volumes['BTC']
             if isinstance(btc_volume, dict):
-                avg_volume = np.mean(list(btc_volume.values()))
-                max_volume = max(btc_volume.values())
+                avg_volume = unified_math.unified_math.mean(list(btc_volume.values()))
+                max_volume = unified_math.max(btc_volume.values())
                 spike_detected = max_volume > avg_volume * 1.5  # 50% increase
         
         # Determine volume trend
@@ -759,18 +761,18 @@ if __name__ == "__main__":
     result = test_api_price_entry_feedback()
     
     # Print results
-    print("\n" + "="*60)
-    print("🔌 API PRICE ENTRY FEEDBACK TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🔌 API PRICE ENTRY FEEDBACK TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Phantom memory – decay-corrected ghost state recall.
 
@@ -9,10 +12,9 @@ weighting to preserve the most relevant historical triggers while allowing
 older signals to fade naturally.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
-import math
+from core.unified_math_system import unified_math
 import time
 from typing import Sequence
 
@@ -65,7 +67,7 @@ class PhantomMemory:
         recall_sum = 0.0
         for event in self._events:
             dt = current_time - event.timestamp
-            decay_weight = math.exp(-self._decay_lambda * dt)
+            decay_weight = unified_math.exp(-self._decay_lambda * dt)
             recall_sum += event.zeta * event.xi_ghost * decay_weight
 
         return recall_sum
@@ -126,7 +128,7 @@ def compute_memory_recall(
     recall_sum = 0.0
     for event in events:
         dt = current_time - event.timestamp
-        decay_weight = math.exp(-decay_lambda * dt)
+        decay_weight = unified_math.exp(-decay_lambda * dt)
         recall_sum += event.zeta * event.xi_ghost * decay_weight
 
     return recall_sum

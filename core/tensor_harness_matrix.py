@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tensor Harness Matrix - Schwabot UROS v1.0
@@ -28,7 +42,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import threading
 import queue
 
@@ -243,7 +257,7 @@ class TensorHarnessMatrix:
             # Calculate drift
             if len(phase_history) > 0:
                 previous_phase = phase_history[-1]
-                drift_magnitude = abs(current_phase - previous_phase) / previous_phase if previous_phase != 0 else 0.0
+                drift_magnitude = unified_math.abs(current_phase - previous_phase) / previous_phase if previous_phase != 0 else 0.0
             else:
                 previous_phase = current_phase
                 drift_magnitude = 0.0
@@ -254,10 +268,10 @@ class TensorHarnessMatrix:
                 compensation_factor = 0.0
             elif drift_magnitude <= self.drift_threshold_critical:
                 drift_status = DriftStatus.DRIFTING
-                compensation_factor = min(self.drift_correction_factor, self.max_compensation)
+                compensation_factor = unified_math.min(self.drift_correction_factor, self.max_compensation)
             else:
                 drift_status = DriftStatus.CRITICAL
-                compensation_factor = min(self.drift_correction_factor * 2, self.max_compensation)
+                compensation_factor = unified_math.min(self.drift_correction_factor * 2, self.max_compensation)
             
             # Create measurement
             measurement = PhaseDriftMeasurement(
@@ -390,7 +404,7 @@ class TensorHarnessMatrix:
             profit_score = self._calculate_profit_score(request, tensor_score, drift_measurement)
             
             # Calculate drift stability
-            drift_stability = 1.0 - min(drift_measurement.drift_magnitude, 1.0)
+            drift_stability = 1.0 - unified_math.min(drift_measurement.drift_magnitude, 1.0)
             
             # Create tensor route
             route = TensorRoute(
@@ -500,7 +514,7 @@ class TensorHarnessMatrix:
             # Calculate tensor score
             tensor_score = base_score * (1.0 - drift_penalty) * voltage_efficiency * mode_multiplier
             
-            return max(0.0, min(1.0, tensor_score))  # Clamp to [0, 1]
+            return unified_math.max(0.0, unified_math.min(1.0, tensor_score))  # Clamp to [0, 1]
             
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
@@ -538,13 +552,13 @@ class TensorHarnessMatrix:
                 # Calculate average profit sensor value
                 profit_values = list(request.profit_sensor_data.values())
                 if profit_values:
-                    profit_sensor_score = np.mean(profit_values)
+                    profit_sensor_score = unified_math.unified_math.mean(profit_values)
             
             # Voltage efficiency component (simplified)
             voltage_efficiency = 1.0 - (drift_measurement.drift_magnitude * 0.5)
             
             # Drift stability component
-            drift_stability = 1.0 - min(drift_measurement.drift_magnitude, 1.0)
+            drift_stability = 1.0 - unified_math.min(drift_measurement.drift_magnitude, 1.0)
             
             # Calculate weighted profit score
             profit_score = (
@@ -553,7 +567,7 @@ class TensorHarnessMatrix:
                 drift_weight * drift_stability
             ) * tensor_score
             
-            return max(0.0, min(1.0, profit_score))  # Clamp to [0, 1]
+            return unified_math.max(0.0, unified_math.min(1.0, profit_score))  # Clamp to [0, 1]
             
         except Exception as e:
             logger.error(f"Error calculating profit score: {e}")
@@ -626,8 +640,8 @@ class TensorHarnessMatrix:
                 "failed_routes": len([r for r in self.harness_results if not r.success]),
                 "total_drift_measurements": len(self.drift_measurements),
                 "total_tensor_routes": len(self.tensor_routes),
-                "average_processing_time": np.mean([r.processing_time for r in self.harness_results]) if self.harness_results else 0.0,
-                "average_profit_score": np.mean(self.profit_scores) if self.profit_scores else 0.0,
+                "average_processing_time": unified_math.mean([r.processing_time for r in self.harness_results]) if self.harness_results else 0.0,
+                "average_profit_score": unified_math.unified_math.mean(self.profit_scores) if self.profit_scores else 0.0,
                 "drift_statistics": {
                     "stable": len([m for m in self.drift_measurements if m.drift_status == DriftStatus.STABLE]),
                     "drifting": len([m for m in self.drift_measurements if m.drift_status == DriftStatus.DRIFTING]),
@@ -721,7 +735,7 @@ def main():
                 mode=TensorMode.DEMO,
                 profit_sensor_data=profit_sensor_data
             )
-            print(f"Tensor harness request: {request_id} for {prefix}")
+            safe_print(f"Tensor harness request: {request_id} for {prefix}")
         
         # Wait for processing completion
         time.sleep(2)
@@ -730,14 +744,14 @@ def main():
         for prefix in test_prefixes:
             routes = harness.get_routes_by_hash_prefix(prefix)
             for route in routes:
-                print(f"Route: {route.tensor_path} (profit_score: {route.profit_score:.3f})")
+                safe_print(f"Route: {route.tensor_path} (profit_score: {route.profit_score:.3f})")
         
         # Export data
         harness.export_harness_data()
         
         # Print statistics
         stats = harness.get_harness_statistics()
-        print(f"Tensor harness statistics: {stats}")
+        safe_print(f"Tensor harness statistics: {stats}")
         
     except Exception as e:
         logger.error(f"Error in main: {e}")

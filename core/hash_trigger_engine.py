@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Hash Trigger Engine - Core Hash-Based Trigger and Decision System
@@ -20,7 +34,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import json
 
@@ -149,7 +163,7 @@ class HashTriggerEngine:
             # Combine factors
             confidence = (data_completeness * 0.4 + type_factor * 0.3 + quality_factor * 0.3)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Trigger confidence calculation error: {e}")
@@ -348,7 +362,7 @@ class HashTriggerEngine:
             for key, expected_value in pattern_data.items():
                 if key in evaluation_data:
                     actual_value = evaluation_data[key]
-                    if abs(actual_value - expected_value) < 0.1:  # 10% tolerance
+                    if unified_math.abs(actual_value - expected_value) < 0.1:  # 10% tolerance
                         matches += 1
                     total_fields += 1
             
@@ -395,11 +409,11 @@ class HashTriggerEngine:
                 
                 if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
                     # Numeric similarity
-                    max_val = max(abs(val1), abs(val2))
+                    max_val = unified_math.max(unified_math.abs(val1), unified_math.abs(val2))
                     if max_val == 0:
                         similarity = 1.0
                     else:
-                        similarity = 1.0 - abs(val1 - val2) / max_val
+                        similarity = 1.0 - unified_math.abs(val1 - val2) / max_val
                     similarities.append(similarity)
                 elif val1 == val2:
                     # Exact match for non-numeric
@@ -427,7 +441,7 @@ class HashTriggerEngine:
             
             confidence = (base_confidence * 0.5 + data_quality * 0.3 + consistency_factor * 0.2)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Evaluation confidence calculation error: {e}")
@@ -491,7 +505,7 @@ def main() -> None:
     }
     
     trigger_id = engine.create_trigger(test_trigger_data, "entry")
-    print(f"Trigger created: {trigger_id}")
+    safe_print(f"Trigger created: {trigger_id}")
     
     # Test trigger evaluation
     evaluation_data = {
@@ -501,12 +515,12 @@ def main() -> None:
     }
     
     result = engine.evaluate_trigger(trigger_id, evaluation_data)
-    print(f"Trigger evaluation: {result.triggered}")
-    print(f"Confidence: {result.confidence_score:.3f}")
+    safe_print(f"Trigger evaluation: {result.triggered}")
+    safe_print(f"Confidence: {result.confidence_score:.3f}")
     
     # Get statistics
     stats = engine.get_trigger_statistics()
-    print(f"Trigger statistics: {stats}")
+    safe_print(f"Trigger statistics: {stats}")
 
 
 if __name__ == "__main__":

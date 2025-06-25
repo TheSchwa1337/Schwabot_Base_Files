@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 """
 core/utils/math_utils.py
 
@@ -5,7 +6,7 @@ Shared mathematical/statistical utility functions for Schwabot engines.
 Centralizes reusable logic for profit routing, analytics, and other modules.
 """
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 from typing import Any, Dict, Tuple, List, Optional
 from decimal import Decimal, getcontext
@@ -30,7 +31,7 @@ def calculate_correlation(x: np.ndarray, y: np.ndarray) -> float:
     """Calculate Pearson correlation coefficient between two arrays."""
     if len(x) != len(y) or len(x) < 2:
         return 0.0
-    return float(np.corrcoef(x, y)[0, 1])
+    return float(unified_math.unified_math.correlation(x, y)[0, 1])
 
 
 def moving_average(data: np.ndarray, window: int = 5) -> np.ndarray:
@@ -56,8 +57,8 @@ def calculate_true_range(high: Vector, low: Vector, close: Vector) -> Vector:
     prev_close = np.roll(close, 1)
     prev_close[0] = close[0]
     tr1 = high - low
-    tr2 = np.abs(high - prev_close)
-    tr3 = np.abs(low - prev_close)
+    tr2 = unified_math.unified_math.abs(high - prev_close)
+    tr3 = unified_math.unified_math.abs(low - prev_close)
     return np.maximum(tr1, np.maximum(tr2, tr3))
 
 
@@ -65,9 +66,9 @@ def calculate_atr(high: Vector, low: Vector, close: Vector, period: int = 14) ->
     """Calculate Average True Range (ATR)."""
     true_range = calculate_true_range(high, low, close)
     if len(true_range) < period:
-        return np.full_like(true_range, np.mean(true_range))
+        return np.full_like(true_range, unified_math.unified_math.mean(true_range))
     atr = np.zeros_like(true_range)
-    atr[:period] = np.mean(true_range[:period])
+    atr[:period] = unified_math.unified_math.mean(true_range[:period])
     alpha = 1.0 / period
     for i in range(period, len(true_range)):
         atr[i] = alpha * true_range[i] + (1 - alpha) * atr[i - 1]
@@ -83,8 +84,8 @@ def calculate_rsi(prices: Vector, period: int = 14) -> Vector:
     losses = np.where(deltas < 0, -deltas, 0)
     rsi = np.zeros(len(prices))
     rsi[:period] = 50.0
-    avg_gain = np.mean(gains[:period])
-    avg_loss = np.mean(losses[:period])
+    avg_gain = unified_math.unified_math.mean(gains[:period])
+    avg_loss = unified_math.unified_math.mean(losses[:period])
     alpha = 1.0 / period
     for i in range(period, len(prices) - 1):
         avg_gain = alpha * gains[i] + (1 - alpha) * avg_gain
@@ -103,8 +104,8 @@ def calculate_williams_r(high: Vector, low: Vector, close: Vector, period: int =
         return np.zeros_like(high)
     williams_r = np.zeros_like(high)
     for i in range(period - 1, len(high)):
-        highest_high = np.max(high[i - period + 1 : i + 1])
-        lowest_low = np.min(low[i - period + 1 : i + 1])
+        highest_high = unified_math.unified_math.max(high[i - period + 1 : i + 1])
+        lowest_low = unified_math.unified_math.min(low[i - period + 1 : i + 1])
         if highest_high - lowest_low == 0:
             williams_r[i] = -50.0
         else:
@@ -125,8 +126,8 @@ def calculate_stochastic(
         }
     k_percent = np.zeros_like(high)
     for i in range(k_period - 1, len(high)):
-        highest_high = np.max(high[i - k_period + 1 : i + 1])
-        lowest_low = np.min(low[i - k_period + 1 : i + 1])
+        highest_high = unified_math.unified_math.max(high[i - k_period + 1 : i + 1])
+        lowest_low = unified_math.unified_math.min(low[i - k_period + 1 : i + 1])
         if highest_high - lowest_low == 0:
             k_percent[i] = 50.0
         else:
@@ -135,7 +136,7 @@ def calculate_stochastic(
             )
     d_percent = np.zeros_like(k_percent)
     for i in range(d_period - 1, len(k_percent)):
-        d_percent[i] = np.mean(k_percent[i - d_period + 1 : i + 1])
+        d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1 : i + 1])
     return {"k_percent": k_percent, "d_percent": d_percent}
 
 
@@ -145,10 +146,10 @@ def calculate_gradient(data: np.ndarray) -> np.ndarray:
     """Calculate gradient of a 2D or 3D array using finite differences."""
     if data.ndim == 2:
         grad_y, grad_x = np.gradient(data)
-        return np.sqrt(grad_x**2 + grad_y**2)
+        return unified_math.unified_math.sqrt(grad_x**2 + grad_y**2)
     elif data.ndim == 3:
         grad_z, grad_y, grad_x = np.gradient(data)
-        return np.sqrt(grad_x**2 + grad_y**2 + grad_z**2)
+        return unified_math.unified_math.sqrt(grad_x**2 + grad_y**2 + grad_z**2)
     else:
         raise ValueError("Gradient calculation only supported for 2D or 3D arrays")
 
@@ -187,7 +188,7 @@ def calculate_distance_score(pos_a: Tuple[float, ...], pos_b: Tuple[float, ...])
     """Calculate Euclidean distance between two positions."""
     if len(pos_a) != len(pos_b):
         raise ValueError("Positions must have the same dimensionality")
-    return np.sqrt(sum((a - b) ** 2 for a, b in zip(pos_a, pos_b)))
+    return unified_math.unified_math.sqrt(sum((a - b) ** 2 for a, b in zip(pos_a, pos_b)))
 
 
 def calculate_recursive_multiplier(
@@ -212,14 +213,14 @@ def calculate_allocation_efficiency(
     if not volume_deltas:
         return 0.0
     
-    total_volume = sum(abs(delta) for _, delta in volume_deltas)
+    total_volume = sum(unified_math.abs(delta) for _, delta in volume_deltas)
     if total_volume == 0:
         return 0.0
     
     # Calculate distribution uniformity
-    volumes = [abs(delta) for _, delta in volume_deltas]
-    mean_volume = np.mean(volumes)
-    variance = np.var(volumes)
+    volumes = [unified_math.abs(delta) for _, delta in volume_deltas]
+    mean_volume = unified_math.unified_math.mean(volumes)
+    variance = unified_math.unified_math.var(volumes)
     
     # Efficiency is inversely proportional to variance (more uniform = higher efficiency)
     efficiency = 1.0 / (1.0 + variance / (mean_volume ** 2 + 1e-10))
@@ -230,8 +231,8 @@ def calculate_allocation_efficiency(
         for volume_id, delta in volume_deltas:
             if volume_id in target_distribution:
                 target_ratio = target_distribution[volume_id]
-                actual_ratio = abs(delta) / total_volume
-                alignment_score += 1.0 - abs(target_ratio - actual_ratio)
+                actual_ratio = unified_math.abs(delta) / total_volume
+                alignment_score += 1.0 - unified_math.abs(target_ratio - actual_ratio)
         alignment_score /= len(volume_deltas)
         efficiency = (efficiency + alignment_score) / 2.0
     
@@ -256,17 +257,17 @@ def calculate_recursive_growth_factor(
     growth_rates = []
     for i in range(1, len(recent_profits)):
         if recent_profits[i-1] != 0:
-            rate = (recent_profits[i] - recent_profits[i-1]) / abs(recent_profits[i-1])
+            rate = (recent_profits[i] - recent_profits[i-1]) / unified_math.abs(recent_profits[i-1])
             growth_rates.append(rate)
     
     if not growth_rates:
         return 1.0
     
     # Calculate average growth rate
-    avg_growth = np.mean(growth_rates)
+    avg_growth = unified_math.unified_math.mean(growth_rates)
     
     # Apply sigmoid transformation to get growth factor
-    growth_factor = 1.0 / (1.0 + np.exp(-avg_growth / growth_threshold))
+    growth_factor = 1.0 / (1.0 + unified_math.exp(-avg_growth / growth_threshold))
     
     return np.clip(growth_factor, 0.5, 2.0)
 
@@ -292,12 +293,12 @@ def apply_allocation_strategy(
     
     elif strategy.upper() == "LOGARITHMIC":
         base = parameters.get("base", 10.0)
-        return Decimal(str(np.log(base_float + 1) / np.log(base)))
+        return Decimal(str(unified_math.unified_math.log(base_float + 1) / unified_math.unified_math.log(base)))
     
     elif strategy.upper() == "SIGMOID":
         steepness = parameters.get("steepness", 1.0)
         midpoint = parameters.get("midpoint", 0.0)
-        return Decimal(str(1.0 / (1.0 + np.exp(-steepness * (base_float - midpoint)))))
+        return Decimal(str(1.0 / (1.0 + unified_math.exp(-steepness * (base_float - midpoint)))))
     
     elif strategy.upper() == "FRACTAL":
         # Fractal scaling based on self-similarity
@@ -387,8 +388,8 @@ def waveform_pattern_match(
         return False, 0.0
     
     # Normalize for scale-invariance
-    live_norm = (live_wave - np.mean(live_wave)) / (np.std(live_wave) + 1e-10)
-    ref_norm = (reference_wave - np.mean(reference_wave)) / (np.std(reference_wave) + 1e-10)
+    live_norm = (live_wave - unified_math.unified_math.mean(live_wave)) / (unified_math.unified_math.std(live_wave) + 1e-10)
+    ref_norm = (reference_wave - unified_math.unified_math.mean(reference_wave)) / (unified_math.unified_math.std(reference_wave) + 1e-10)
     
     # Pad shorter waveform to match length
     if len(live_norm) < len(ref_norm):
@@ -421,7 +422,7 @@ def calculate_hash_distance(hash1_hex: str, hash2_hex: str, method: str = 'hammi
         elif method.lower() == 'cosine':
             vec1 = np.array([int(b) for b in bin1])
             vec2 = np.array([int(b) for b in bin2])
-            dot_product = np.dot(vec1, vec2)
+            dot_product = unified_math.unified_math.dot_product(vec1, vec2)
             norm1 = np.linalg.norm(vec1)
             norm2 = np.linalg.norm(vec2)
             
@@ -443,9 +444,9 @@ def calculate_weighted_confidence(strategy_vector: Vector, state_vector: Vector)
     if len(strategy_vector) != len(state_vector):
         raise ValueError("Strategy and state vectors must have the same length.")
         
-    dot_product = np.dot(strategy_vector, state_vector)
+    dot_product = unified_math.unified_math.dot_product(strategy_vector, state_vector)
     # Sigmoid function to scale output between 0 and 1
-    confidence = 1 / (1 + np.exp(-dot_product))
+    confidence = 1 / (1 + unified_math.exp(-dot_product))
     return float(confidence)
 
 
@@ -477,7 +478,7 @@ def calculate_temporal_confidence_merge(scores: List[float], weights: List[float
     if len(scores) != len(weights) or not scores:
         return 0.0
         
-    weighted_sum = np.dot(scores, weights)
+    weighted_sum = unified_math.unified_math.dot_product(scores, weights)
     total_weight = np.sum(weights)
     
     if total_weight == 0:

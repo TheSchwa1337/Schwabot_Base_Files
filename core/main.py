@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """Main Entry Point - Schwabot System Initialization and Management.
 
@@ -39,8 +52,8 @@ try:
     from core.profit_routing_engine import ProfitRoutingEngine
     from core.altitude_adjustment_math import AltitudeAdjustmentMath
 except ImportError as e:
-    print(f"❌ Critical import error: {e}")
-    print("Please run the automated syntax fixer to resolve import issues.")
+    safe_print(f"❌ Critical import error: {e}")
+    safe_print("Please run the automated syntax fixer to resolve import issues.")
     sys.exit(1)
 
 logger = logging.getLogger(__name__)
@@ -573,10 +586,10 @@ def main() -> None:
         
         if args.status:
             # Show status only
-            print("📊 Schwabot System Status:")
-            print("Initialized: False")
-            print("Live Mode: False")
-            print("Components: Not loaded")
+            safe_print("📊 Schwabot System Status:")
+            safe_print("Initialized: False")
+            safe_print("Live Mode: False")
+            safe_print("Components: Not loaded")
             return
         
         # Initialize system
@@ -586,32 +599,32 @@ def main() -> None:
         
         if args.validate_only:
             # Validation only mode
-            print("✅ System validation completed successfully")
+            safe_print("✅ System validation completed successfully")
             return
         
         # Show system status
         status = engine.get_system_status()
-        print("📊 Schwabot System Status:")
-        print(f"Initialized: {status['initialized']}")
-        print(f"Live Mode: {status['live_mode']}")
+        safe_print("📊 Schwabot System Status:")
+        safe_print(f"Initialized: {status['initialized']}")
+        safe_print(f"Live Mode: {status['live_mode']}")
         components_ready_count = sum(status['components_ready'].values())
         total_components = len(status['components_ready'])
-        print(f"Components Ready: {components_ready_count}/{total_components}")
-        print(f"Error Count: {status['error_count']}")
+        safe_print(f"Components Ready: {components_ready_count}/{total_components}")
+        safe_print(f"Error Count: {status['error_count']}")
         
         if args.live:
             # Start live trading
             engine.start_live_trading()
         else:
             # Interactive mode
-            print("\n🎯 Schwabot ready for interactive mode")
-            print("Press Ctrl+C to exit")
+            safe_print("\n🎯 Schwabot ready for interactive mode")
+            safe_print("Press Ctrl+C to exit")
             
             try:
                 while True:
                     time.sleep(1)
             except KeyboardInterrupt:
-                print("\n🛑 Shutting down...")
+                safe_print("\n🛑 Shutting down...")
                 engine._shutdown()
     
     except Exception as e:

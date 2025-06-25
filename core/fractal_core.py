@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fractal Core - Grayscale Collapse and Recursive Hash Structures.
 
@@ -8,8 +9,8 @@ Implements the core mathematical framework for:
 """
 
 import hashlib
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 from decimal import Decimal, getcontext
@@ -18,7 +19,7 @@ from decimal import Decimal, getcontext
 getcontext().prec = 28
 
 # Golden ratio constant
-PHI = (1 + math.sqrt(5)) / 2
+PHI = (1 + unified_math.unified_math.sqrt(5)) / 2
 
 
 @dataclass
@@ -97,7 +98,7 @@ class FractalCore:
         for state in self.active_states.values():
             # Calculate sigmoid weight
             omega_t = self.omega_base * (target_time - state.timestamp)
-            sigmoid_denominator = 1 + math.exp(-omega_t)
+            sigmoid_denominator = 1 + unified_math.exp(-omega_t)
 
             # Apply sigmoid-weighted summation
             weighted_contribution = state.weight / sigmoid_denominator
@@ -109,7 +110,7 @@ class FractalCore:
                 total_weight += state.weight
 
         # Calculate confidence based on state convergence
-        confidence_score = min(1.0, total_weight / len(self.active_states))
+        confidence_score = unified_math.min(1.0, total_weight / len(self.active_states))
 
         result = GrayscaleCollapseResult(
             collapsed_value=collapsed_value,
@@ -215,15 +216,15 @@ class FractalCore:
         omega_factor = self.omega_base * time_delta
 
         # Sigmoid-based probability calculation
-        probability = 1 / (1 + math.exp(-omega_factor))
+        probability = 1 / (1 + unified_math.exp(-omega_factor))
 
         # Apply fractal weighting
         fractal_weight = self.calculate_fractal_command_weight(state.recursive_depth)
 
         # Normalize by fractal weight (higher depth = lower collapse probability)
-        normalized_probability = probability / (1 + math.log(fractal_weight))
+        normalized_probability = probability / (1 + unified_math.unified_math.log(fractal_weight))
 
-        return min(1.0, max(0.0, normalized_probability))
+        return unified_math.min(1.0, unified_math.max(0.0, normalized_probability))
 
     def _calculate_hash_collapse_probability(
         self, hash_value: str, fractal_weight: float
@@ -234,9 +235,9 @@ class FractalCore:
         base_probability = (hash_int % 1000000) / 1000000.0
 
         # Adjust by fractal weight
-        adjusted_probability = base_probability / (1 + math.log(fractal_weight))
+        adjusted_probability = base_probability / (1 + unified_math.unified_math.log(fractal_weight))
 
-        return min(1.0, max(0.0, adjusted_probability))
+        return unified_math.min(1.0, unified_math.max(0.0, adjusted_probability))
 
 
 class FractalCommandDispatcher:
@@ -290,7 +291,7 @@ class FractalCommandDispatcher:
         if recent_commands:
             # Calculate success rate (placeholder logic)
             success_rate = len(recent_commands) / 10.0
-            self.trust_scores[command_id] = min(1.0, success_rate)
+            self.trust_scores[command_id] = unified_math.min(1.0, success_rate)
 
         return self.trust_scores[command_id]
 

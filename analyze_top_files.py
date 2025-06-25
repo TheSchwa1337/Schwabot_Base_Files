@@ -2,6 +2,7 @@
 """Analyze top 5 files with most E501 errors."""."""
 
 from collections import defaultdict
+from utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 def is_stub_file(filepath):
@@ -45,35 +46,35 @@ def analyze_errors():
         reverse=True,
     )[:5]
 
-    print("📊 E501 Error Analysis")
-    print("=" * 50)
-    print(
+    safe_print("📊 E501 Error Analysis")
+    safe_print("=" * 50)
+    safe_print(
         "Total unique files with errors: "
         f"{len(file_errors)}"
     )
-    print(
+    safe_print(
         "Real code files: "
         f"{len(set(real_files))}"
     )
-    print(
+    safe_print(
         "Stub files: "
         f"{len(set(stub_files))}"
     )
 
-    print(f"\n🏆 TOP 5 FILES WITH MOST E501 ERRORS:")
-    print("-" * 50)
+    safe_print(f"\n🏆 TOP 5 FILES WITH MOST E501 ERRORS:")
+    safe_print("-" * 50)
     for i, (filepath, count) in enumerate(top_5, 1):
-        print(f"{i}. {filepath}: {count} errors")
+        safe_print(f"{i}. {filepath}: {count} errors")
 
-    print(f"\n📋 TOTAL ERRORS BY CATEGORY:")
+    safe_print(f"\n📋 TOTAL ERRORS BY CATEGORY:")
     real_error_count = sum(file_errors[f] for f in set(real_files))
     stub_error_count = sum(file_errors[f] for f in set(stub_files))
 
-    print(
+    safe_print(
         "   Real code errors: "
         f"{real_error_count}"
     )
-    print(
+    safe_print(
         "   Stub file errors: "
         f"{stub_error_count}"
     )

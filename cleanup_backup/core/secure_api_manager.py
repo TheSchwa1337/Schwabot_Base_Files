@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Secure API Manager - Linux-based secure storage for Schwabot APIs.
 
@@ -10,7 +14,6 @@ This module provides secure API management for:
 Uses Linux-based secure storage with encrypted secrets management.
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -144,7 +147,7 @@ class SecureAPIManager:
         self.failed_requests = 0
         self.average_response_time = 0.0
         
-        safe_print("🔐 Secure API Manager initialized")
+        safe_safe_print("🔐 Secure API Manager initialized")
     
     def _get_encryption_key(self) -> bytes:
         """Get encryption key from secure Linux storage."""
@@ -162,15 +165,15 @@ class SecureAPIManager:
                     with open(key_path, 'rb') as f:
                         key = f.read()
                     if len(key) >= 32:
-                        safe_print(f"✅ Encryption key loaded from {key_path}")
+                        safe_safe_print(f"✅ Encryption key loaded from {key_path}")
                         return key[:32]  # Use first 32 bytes
             
             # Fallback: generate temporary key (not secure for production)
-            safe_print("⚠️ No secure key found, generating temporary key")
+            safe_safe_print("⚠️ No secure key found, generating temporary key")
             return hashlib.sha256(b"temporary_key_for_development").digest()[:32]
             
         except Exception as e:
-            safe_print(f"❌ Failed to get encryption key: {safe_format_error(e, 'encryption_key')}")
+            safe_safe_print(f"❌ Failed to get encryption key: {safe_format_error(e, 'encryption_key')}")
             return hashlib.sha256(b"fallback_key").digest()[:32]
     
     def _get_secure_storage_path(self) -> Path:
@@ -187,17 +190,17 @@ class SecureAPIManager:
             for path in secure_paths:
                 if path.exists() or path.parent.exists():
                     path.mkdir(parents=True, exist_ok=True)
-                    safe_print(f"✅ Secure storage path: {path}")
+                    safe_safe_print(f"✅ Secure storage path: {path}")
                     return path
             
             # Fallback to local directory
             fallback_path = Path(".schwabot_credentials")
             fallback_path.mkdir(exist_ok=True)
-            safe_print(f"⚠️ Using fallback storage path: {fallback_path}")
+            safe_safe_print(f"⚠️ Using fallback storage path: {fallback_path}")
             return fallback_path
             
         except Exception as e:
-            safe_print(f"❌ Failed to get secure storage path: {safe_format_error(e, 'storage_path')}")
+            safe_safe_print(f"❌ Failed to get secure storage path: {safe_format_error(e, 'storage_path')}")
             return Path(".schwabot_credentials")
     
     def encrypt_data(self, data: str) -> str:
@@ -216,10 +219,10 @@ class SecureAPIManager:
             
         except ImportError:
             # Fallback: simple XOR encryption (not secure, just for development)
-            safe_print("⚠️ cryptography not available, using fallback encryption")
+            safe_safe_print("⚠️ cryptography not available, using fallback encryption")
             return self._simple_encrypt(data)
         except Exception as e:
-            safe_print(f"❌ Encryption failed: {safe_format_error(e, 'encrypt_data')}")
+            safe_safe_print(f"❌ Encryption failed: {safe_format_error(e, 'encrypt_data')}")
             return data
     
     def decrypt_data(self, encrypted_data: str) -> str:
@@ -241,7 +244,7 @@ class SecureAPIManager:
             # Fallback: simple XOR decryption
             return self._simple_decrypt(encrypted_data)
         except Exception as e:
-            safe_print(f"❌ Decryption failed: {safe_format_error(e, 'decrypt_data')}")
+            safe_safe_print(f"❌ Decryption failed: {safe_format_error(e, 'decrypt_data')}")
             return encrypted_data
     
     def _simple_encrypt(self, data: str) -> str:
@@ -310,11 +313,11 @@ class SecureAPIManager:
             except Exception:
                 pass  # Windows doesn't support chmod
             
-            safe_print(f"✅ Credentials stored securely for {api_type.value}")
+            safe_safe_print(f"✅ Credentials stored securely for {api_type.value}")
             return True
             
         except Exception as e:
-            safe_print(f"❌ Failed to store credentials: {safe_format_error(e, 'store_credentials')}")
+            safe_safe_print(f"❌ Failed to store credentials: {safe_format_error(e, 'store_credentials')}")
             return False
     
     def load_credentials(self, api_type: APIType) -> Optional[APICredentials]:
@@ -328,7 +331,7 @@ class SecureAPIManager:
             credentials_file = self.secure_storage_path / f"{api_type.value}_credentials.json"
             
             if not credentials_file.exists():
-                safe_print(f"⚠️ No credentials found for {api_type.value}")
+                safe_safe_print(f"⚠️ No credentials found for {api_type.value}")
                 return None
             
             with open(credentials_file, 'r') as f:
@@ -349,11 +352,11 @@ class SecureAPIManager:
             # Store in memory
             self.credentials[api_type] = credentials
             
-            safe_print(f"✅ Credentials loaded for {api_type.value}")
+            safe_safe_print(f"✅ Credentials loaded for {api_type.value}")
             return credentials
             
         except Exception as e:
-            safe_print(f"❌ Failed to load credentials: {safe_format_error(e, 'load_credentials')}")
+            safe_safe_print(f"❌ Failed to load credentials: {safe_format_error(e, 'load_credentials')}")
             return None
     
     def get_decrypted_credentials(self, api_type: APIType) -> Optional[Dict[str, str]]:
@@ -374,11 +377,11 @@ class SecureAPIManager:
             credentials.access_count += 1
             credentials.last_accessed = datetime.now()
             
-            safe_print(f"✅ Decrypted credentials for {api_type.value}")
+            safe_safe_print(f"✅ Decrypted credentials for {api_type.value}")
             return decrypted_credentials
             
         except Exception as e:
-            safe_print(f"❌ Failed to get decrypted credentials: {safe_format_error(e, 'decrypt_credentials')}")
+            safe_safe_print(f"❌ Failed to get decrypted credentials: {safe_format_error(e, 'decrypt_credentials')}")
             return None
     
     async def make_api_request(
@@ -404,7 +407,7 @@ class SecureAPIManager:
             # Get credentials
             credentials = self.get_decrypted_credentials(api_type)
             if not credentials:
-                safe_print(f"❌ No credentials available for {api_type.value}")
+                safe_safe_print(f"❌ No credentials available for {api_type.value}")
                 return None
             
             # Prepare request
@@ -438,7 +441,7 @@ class SecureAPIManager:
                         await asyncio.sleep(self.retry_delay * (2 ** attempt))
                         
                 except Exception as e:
-                    safe_print(f"⚠️ Request attempt {attempt + 1} failed: {safe_format_error(e, 'api_request')}")
+                    safe_safe_print(f"⚠️ Request attempt {attempt + 1} failed: {safe_format_error(e, 'api_request')}")
                     if attempt < self.max_retries - 1:
                         await asyncio.sleep(self.retry_delay * (2 ** attempt))
             
@@ -459,16 +462,16 @@ class SecureAPIManager:
                 # Update average response time
                 self._update_average_response_time(response_time)
                 
-                safe_print(f"✅ API request completed: {api_type.value} - {response.status_code}")
+                safe_safe_print(f"✅ API request completed: {api_type.value} - {response.status_code}")
                 return response
             else:
                 self.total_requests += 1
                 self.failed_requests += 1
-                safe_print(f"❌ API request failed after {self.max_retries} attempts")
+                safe_safe_print(f"❌ API request failed after {self.max_retries} attempts")
                 return None
                 
         except Exception as e:
-            safe_print(f"❌ API request failed: {safe_format_error(e, 'make_api_request')}")
+            safe_safe_print(f"❌ API request failed: {safe_format_error(e, 'make_api_request')}")
             return None
     
     def _check_rate_limit(self, api_type: APIType) -> bool:
@@ -497,7 +500,7 @@ class SecureAPIManager:
             return True
             
         except Exception as e:
-            safe_print(f"⚠️ Rate limit check failed: {safe_format_error(e, 'rate_limit')}")
+            safe_safe_print(f"⚠️ Rate limit check failed: {safe_format_error(e, 'rate_limit')}")
             return True
     
     def _prepare_headers(
@@ -542,7 +545,7 @@ class SecureAPIManager:
             return headers
             
         except Exception as e:
-            safe_print(f"⚠️ Header preparation failed: {safe_format_error(e, 'prepare_headers')}")
+            safe_safe_print(f"⚠️ Header preparation failed: {safe_format_error(e, 'prepare_headers')}")
             return base_headers
     
     async def _execute_request(self, api_type: APIType, request: APIRequest) -> Optional[APIResponse]:
@@ -565,7 +568,7 @@ class SecureAPIManager:
                 async with session.post(request.endpoint, json=request.params, headers=request.headers) as response:
                     data = await response.json()
             else:
-                safe_print(f"❌ Unsupported method: {request.method}")
+                safe_safe_print(f"❌ Unsupported method: {request.method}")
                 return None
             
             # Create response object
@@ -581,7 +584,7 @@ class SecureAPIManager:
             return api_response
             
         except Exception as e:
-            safe_print(f"❌ Request execution failed: {safe_format_error(e, 'execute_request')}")
+            safe_safe_print(f"❌ Request execution failed: {safe_format_error(e, 'execute_request')}")
             return None
     
     def _generate_request_id(self) -> str:
@@ -614,7 +617,7 @@ class SecureAPIManager:
             return signature
             
         except Exception as e:
-            safe_print(f"❌ NiceHash signature generation failed: {safe_format_error(e, 'nicehash_signature')}")
+            safe_safe_print(f"❌ NiceHash signature generation failed: {safe_format_error(e, 'nicehash_signature')}")
             return ""
     
     def _update_average_response_time(self, response_time: float) -> None:
@@ -634,7 +637,7 @@ class SecureAPIManager:
             'total_requests': self.total_requests,
             'successful_requests': self.successful_requests,
             'failed_requests': self.failed_requests,
-            'success_rate': self.successful_requests / max(self.total_requests, 1),
+            'success_rate': self.successful_requests / unified_math.max(self.total_requests, 1),
             'average_response_time': self.average_response_time,
             'stored_credentials': list(self.credentials.keys()),
             'secure_storage_path': str(self.secure_storage_path),
@@ -645,7 +648,7 @@ class SecureAPIManager:
         """Clear request and response history."""
         self.request_history.clear()
         self.response_history.clear()
-        safe_print("🗑️ API history cleared")
+        safe_safe_print("🗑️ API history cleared")
     
     async def close_connections(self) -> None:
         """Close all API connections."""
@@ -653,9 +656,9 @@ class SecureAPIManager:
             for session in self.connection_pool.values():
                 await session.close()
             self.connection_pool.clear()
-            safe_print("🔌 API connections closed")
+            safe_safe_print("🔌 API connections closed")
         except Exception as e:
-            safe_print(f"⚠️ Failed to close connections: {safe_format_error(e, 'close_connections')}")
+            safe_safe_print(f"⚠️ Failed to close connections: {safe_format_error(e, 'close_connections')}")
 
 
 # Global secure API manager instance
@@ -703,7 +706,7 @@ def get_api_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test secure API manager
-    print("🧪 Testing Secure API Manager...")
+    safe_print("🧪 Testing Secure API Manager...")
     
     # Test credential storage
     success = store_api_credentials(
@@ -711,18 +714,18 @@ if __name__ == "__main__":
         api_key="test_api_key_12345",
         security_level=SecurityLevel.LOW
     )
-    print(f"✅ Credential storage: {success}")
+    safe_print(f"✅ Credential storage: {success}")
     
     # Test credential loading
     credentials = load_api_credentials(APIType.COINMARKETCAP)
     if credentials:
-        print(f"✅ Credential loading: {credentials.api_type.value}")
+        safe_print(f"✅ Credential loading: {credentials.api_type.value}")
     
     # Test decryption
     decrypted = secure_api_manager.get_decrypted_credentials(APIType.COINMARKETCAP)
     if decrypted:
-        print(f"✅ Credential decryption: {decrypted['api_key']}")
+        safe_print(f"✅ Credential decryption: {decrypted['api_key']}")
     
     # Get statistics
     stats = get_api_stats()
-    print(f"✅ API Statistics: {stats}") 
+    safe_print(f"✅ API Statistics: {stats}") 

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Enhanced System Test Suite - Validate All Strategic Enhancements.
 
@@ -14,7 +16,7 @@ import time
 import logging
 from typing import Dict, List, Any
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Configure logging
 logging.basicConfig(
@@ -41,7 +43,7 @@ def test_optimization_engine() -> Dict[str, Any]:
         @memoize
         def expensive_calculation(x: float, y: float) -> float:
             time.sleep(0.01)  # Simulate expensive operation
-            return x * y + np.sin(x) * np.cos(y)
+            return x * y + np.unified_math.sin(x) * np.unified_math.cos(y)
         
         # First call (cache miss)
         start_time = time.time()
@@ -63,7 +65,7 @@ def test_optimization_engine() -> Dict[str, Any]:
         compressed_data, compression_ratio = compress_data(test_data)
         
         # Test temporal smoothing
-        noisy_signal = np.random.random(100) + 0.1 * np.sin(np.linspace(0, 4*np.pi, 100))
+        noisy_signal = np.random.random(100) + 0.1 * np.unified_math.sin(np.linspace(0, 4*np.pi, 100))
         smoothed_signal = temporal_smoothing(noisy_signal, window_size=5)
         
         # Test hash optimization
@@ -77,7 +79,7 @@ def test_optimization_engine() -> Dict[str, Any]:
         hash_optimization = optimize_hash_operations(hash_value, historical_hashes)
         
         # Test FFT preprocessing
-        signal = np.random.random(256) + 0.1 * np.sin(np.linspace(0, 8*np.pi, 256))
+        signal = np.random.random(256) + 0.1 * np.unified_math.sin(np.linspace(0, 8*np.pi, 256))
         fft_data = fft_preprocess_signal(signal)
         
         # Get statistics
@@ -87,7 +89,7 @@ def test_optimization_engine() -> Dict[str, Any]:
             'success': True,
             'memoization_working': second_call_time < first_call_time * 0.1,
             'compression_ratio': compression_ratio,
-            'smoothing_effective': np.std(smoothed_signal) < np.std(noisy_signal),
+            'smoothing_effective': unified_math.unified_math.std(smoothed_signal) < unified_math.unified_math.std(noisy_signal),
             'hash_optimization': hash_optimization.get('optimized', False),
             'fft_preprocessing': 'error' not in fft_data,
             'cache_hit_rate': stats.get('hit_rate', 0.0),
@@ -240,8 +242,8 @@ def test_performance_baseline() -> Dict[str, Any]:
             end_time = time.time()
             latencies.append((end_time - start_time) * 1000)
         
-        avg_latency = np.mean(latencies)
-        std_latency = np.std(latencies)
+        avg_latency = unified_math.unified_math.mean(latencies)
+        std_latency = unified_math.unified_math.std(latencies)
         
         return {
             'success': True,
@@ -463,60 +465,60 @@ def run_all_tests() -> Dict[str, Any]:
 
 def print_detailed_results(results: Dict[str, Any]) -> None:
     """Print detailed test results."""
-    print("\n" + "="*80)
-    print("📋 DETAILED TEST RESULTS")
-    print("="*80)
+    safe_print("\n" + "="*80)
+    safe_print("📋 DETAILED TEST RESULTS")
+    safe_print("="*80)
     
     for test_name, result in results['tests'].items():
-        print(f"\n🧪 {test_name.upper().replace('_', ' ')}")
-        print("-" * 50)
+        safe_print(f"\n🧪 {test_name.upper().replace('_', ' ')}")
+        safe_print("-" * 50)
         
         if result.get('success', False):
-            print("✅ Test PASSED")
+            safe_print("✅ Test PASSED")
             
             # Print specific metrics for each test
             if test_name == 'optimization_engine':
-                print(f"  Cache Hit Rate: {result.get('cache_hit_rate', 0):.1%}")
-                print(f"  Average Response Time: {result.get('average_response_time_ms', 0):.2f}ms")
-                print(f"  Compression Ratio: {result.get('compression_ratio', 0):.1%}")
-                print(f"  Memory Usage: {result.get('memory_usage_mb', 0):.1f}MB")
+                safe_print(f"  Cache Hit Rate: {result.get('cache_hit_rate', 0):.1%}")
+                safe_print(f"  Average Response Time: {result.get('average_response_time_ms', 0):.2f}ms")
+                safe_print(f"  Compression Ratio: {result.get('compression_ratio', 0):.1%}")
+                safe_print(f"  Memory Usage: {result.get('memory_usage_mb', 0):.1f}MB")
             
             elif test_name == 'system_initialization':
-                print(f"  Initialization Time: {result.get('initialization_time_seconds', 0):.2f}s")
-                print(f"  Components Ready: {sum(result.get('components_ready', {}).values())}/{len(result.get('components_ready', {}))}")
-                print(f"  Error Count: {result.get('error_count', 0)}")
+                safe_print(f"  Initialization Time: {result.get('initialization_time_seconds', 0):.2f}s")
+                safe_print(f"  Components Ready: {sum(result.get('components_ready', {}).values())}/{len(result.get('components_ready', {}))}")
+                safe_print(f"  Error Count: {result.get('error_count', 0)}")
             
             elif test_name == 'performance_baseline':
-                print(f"  Average Latency: {result.get('average_latency_ms', 0):.2f}ms")
-                print(f"  Latency Acceptable: {'✅' if result.get('latency_acceptable', False) else '❌'}")
-                print(f"  Latency Stable: {'✅' if result.get('latency_stable', False) else '❌'}")
+                safe_print(f"  Average Latency: {result.get('average_latency_ms', 0):.2f}ms")
+                safe_print(f"  Latency Acceptable: {'✅' if result.get('latency_acceptable', False) else '❌'}")
+                safe_print(f"  Latency Stable: {'✅' if result.get('latency_stable', False) else '❌'}")
             
             elif test_name == 'code_quality':
-                print(f"  Flake8 Working: {'✅' if result.get('flake8_working', False) else '❌'}")
-                print(f"  Black Working: {'✅' if result.get('black_working', False) else '❌'}")
-                print(f"  Isort Working: {'✅' if result.get('isort_working', False) else '❌'}")
+                safe_print(f"  Flake8 Working: {'✅' if result.get('flake8_working', False) else '❌'}")
+                safe_print(f"  Black Working: {'✅' if result.get('black_working', False) else '❌'}")
+                safe_print(f"  Isort Working: {'✅' if result.get('isort_working', False) else '❌'}")
             
             elif test_name == 'integration_connectivity':
-                print(f"  All Modules Importable: {'✅' if result.get('all_modules_importable', False) else '❌'}")
-                print(f"  All Components Creatable: {'✅' if result.get('all_components_creatable', False) else '❌'}")
+                safe_print(f"  All Modules Importable: {'✅' if result.get('all_modules_importable', False) else '❌'}")
+                safe_print(f"  All Components Creatable: {'✅' if result.get('all_components_creatable', False) else '❌'}")
         
         else:
-            print("❌ Test FAILED")
-            print(f"  Error: {result.get('error', 'Unknown error')}")
+            safe_print("❌ Test FAILED")
+            safe_print(f"  Error: {result.get('error', 'Unknown error')}")
     
-    print(f"\n" + "="*80)
-    print("📊 OVERALL SUMMARY")
-    print("="*80)
+    safe_print(f"\n" + "="*80)
+    safe_print("📊 OVERALL SUMMARY")
+    safe_print("="*80)
     summary = results['summary']
-    print(f"Total Tests: {summary['total_tests']}")
-    print(f"Successful: {summary['successful_tests']}")
-    print(f"Success Rate: {summary['success_rate']:.1%}")
-    print(f"All Tests Passed: {'✅' if summary['all_tests_passed'] else '❌'}")
+    safe_print(f"Total Tests: {summary['total_tests']}")
+    safe_print(f"Successful: {summary['successful_tests']}")
+    safe_print(f"Success Rate: {summary['success_rate']:.1%}")
+    safe_print(f"All Tests Passed: {'✅' if summary['all_tests_passed'] else '❌'}")
     
     if summary['all_tests_passed']:
-        print("\n🎉 CONGRATULATIONS! All tests passed. Schwabot is ready for production!")
+        safe_print("\n🎉 CONGRATULATIONS! All tests passed. Schwabot is ready for production!")
     else:
-        print(f"\n⚠️  {summary['total_tests'] - summary['successful_tests']} test(s) failed. Please review and fix issues.")
+        safe_print(f"\n⚠️  {summary['total_tests'] - summary['successful_tests']} test(s) failed. Please review and fix issues.")
 
 
 if __name__ == "__main__":
@@ -534,8 +536,8 @@ if __name__ == "__main__":
             sys.exit(1)
             
     except KeyboardInterrupt:
-        print("\n🛑 Test suite interrupted by user")
+        safe_print("\n🛑 Test suite interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ Test suite crashed: {e}")
+        safe_print(f"\n❌ Test suite crashed: {e}")
         sys.exit(1) 

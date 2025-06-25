@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 """
 Schwabot Settings Controller
 ============================
@@ -20,7 +34,7 @@ import os
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 from pathlib import Path
 
 
@@ -140,7 +154,7 @@ class SettingsController:
                     self._apply_demo_settings(demo_data)
                     
         except Exception as e:
-            print(f"Warning: Could not load settings: {e}")
+            safe_print(f"Warning: Could not load settings: {e}")
             self._create_default_settings()
     
     def _create_default_settings(self) -> None:
@@ -212,7 +226,7 @@ class SettingsController:
                 with open(bad_vectors_path, 'r') as f:
                     return json.load(f)
             except Exception as e:
-                print(f"Warning: Could not load bad vectors map: {e}")
+                safe_print(f"Warning: Could not load bad vectors map: {e}")
         
         # Create default bad vectors map
         default_bad_vectors = [
@@ -367,7 +381,7 @@ class SettingsController:
         self.matrix_path_weights[matrix_id] *= self.reinforcement_settings.memory_decay
         
         # Ensure weights stay within reasonable bounds
-        self.matrix_path_weights[matrix_id] = max(0.1, min(2.0, self.matrix_path_weights[matrix_id]))
+        self.matrix_path_weights[matrix_id] = unified_math.max(0.1, unified_math.min(2.0, self.matrix_path_weights[matrix_id]))
     
     def get_matrix_weight(self, matrix_id: str) -> float:
         """Get current weight for a matrix"""
@@ -432,10 +446,10 @@ class SettingsController:
             with open(self.config_path / "demo_backtest_mode.yaml", 'w') as f:
                 yaml.dump(demo_settings, f, default_flow_style=False)
             
-            print("Settings saved successfully!")
+            safe_print("Settings saved successfully!")
             
         except Exception as e:
-            print(f"Error saving settings: {e}")
+            safe_print(f"Error saving settings: {e}")
     
     def get_all_settings(self) -> Dict[str, Any]:
         """Get all current settings as a dictionary"""
@@ -463,21 +477,21 @@ if __name__ == "__main__":
     # Test the settings controller
     controller = SettingsController()
     
-    print("=== Schwabot Settings Controller Test ===")
-    print(f"Matrix ID: {controller.matrix_settings.matrix_id}")
-    print(f"Entry Logic: {controller.vector_settings.entry_logic}")
-    print(f"Allocator Mode: {controller.allocator_settings.allocator_mode}")
-    print(f"Reinforcement Enabled: {controller.reinforcement_settings.enable_backlog_reinforcement}")
-    print(f"Known Bad Vectors: {len(controller.known_bad_vectors)}")
-    print(f"Matrix Weights: {controller.matrix_path_weights}")
+    safe_print("=== Schwabot Settings Controller Test ===")
+    safe_print(f"Matrix ID: {controller.matrix_settings.matrix_id}")
+    safe_print(f"Entry Logic: {controller.vector_settings.entry_logic}")
+    safe_print(f"Allocator Mode: {controller.allocator_settings.allocator_mode}")
+    safe_print(f"Reinforcement Enabled: {controller.reinforcement_settings.enable_backlog_reinforcement}")
+    safe_print(f"Known Bad Vectors: {len(controller.known_bad_vectors)}")
+    safe_print(f"Matrix Weights: {controller.matrix_path_weights}")
     
     # Test bad vector detection
     test_hash = "cafe23b4a1f8e9d2c5b7a3f6e9d2c5b7a3f6e9d2c5b7a3f6e9d2c5b7a3f6e9d2"
     is_bad = controller.is_bad_vector(test_hash, "SFS8-A5")
-    print(f"Test hash is bad vector: {is_bad}")
+    safe_print(f"Test hash is bad vector: {is_bad}")
     
     # Test matrix weight update
     controller.update_matrix_weights("SFS8-A5", True)
-    print(f"Updated weight for SFS8-A5: {controller.get_matrix_weight('SFS8-A5')}")
+    safe_print(f"Updated weight for SFS8-A5: {controller.get_matrix_weight('SFS8-A5')}")
     
-    print("Settings controller test completed!") 
+    safe_print("Settings controller test completed!") 

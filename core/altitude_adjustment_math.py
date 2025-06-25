@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Altitude Adjustment Math - Market Altitude & STAM Zone Management.
 
@@ -5,7 +21,7 @@ This module implements mathematical models for market altitude, density, and
 stratified zones with velocity-altitude paradox calculations and correction vectors.
 
 Mathematical Foundation:
-- Market altitude = 1 - min(volume_density, 1.0)
+- Market altitude = 1 - unified_math.min(volume_density, 1.0)
 - STAM zones: Stratified Atmospheric Market zones
 - Velocity-altitude paradox: v_correction = altitude * volatility_factor
 - Autonomic reflex scoring: R_auto = Σ(drift_i * pressure_i)
@@ -13,14 +29,13 @@ Mathematical Foundation:
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +108,7 @@ class AltitudeAdjustmentEngine:
         """Calculate market altitude from density and volatility.
 
         Mathematical Formula:
-        altitude = 1 - min(volume_density, 1.0) + volatility_adjustment
+        altitude = 1 - unified_math.min(volume_density, 1.0) + volatility_adjustment
 
         Parameters
         ----------
@@ -111,10 +126,10 @@ class AltitudeAdjustmentEngine:
         """
         try:
             # Base altitude from volume density (inverse relationship)
-            base_altitude = 1.0 - min(volume_density, 1.0)
+            base_altitude = 1.0 - unified_math.min(volume_density, 1.0)
 
             # Volatility adjustment (higher volatility = higher altitude)
-            volatility_factor = min(volatility * 0.3, 0.3)
+            volatility_factor = unified_math.min(volatility * 0.3, 0.3)
 
             # Liquidity adjustment (lower liquidity = higher altitude)
             liquidity_factor = (1.0 - liquidity_depth) * 0.2
@@ -123,7 +138,7 @@ class AltitudeAdjustmentEngine:
             altitude = base_altitude + volatility_factor + liquidity_factor
 
             # Ensure bounds [0, 1]
-            altitude = max(0.0, min(1.0, altitude))
+            altitude = unified_math.max(0.0, unified_math.min(1.0, altitude))
 
             # Update history
             self.altitude_history.append(altitude)
@@ -235,7 +250,7 @@ class AltitudeAdjustmentEngine:
                 return 0.5
 
             # Ensure equal length arrays
-            min_length = min(len(drift_signals), len(pressure_signals))
+            min_length = unified_math.min(len(drift_signals), len(pressure_signals))
             drift_array = np.array(drift_signals[:min_length])
             pressure_array = np.array(pressure_signals[:min_length])
 
@@ -249,7 +264,7 @@ class AltitudeAdjustmentEngine:
             reflex_score = reflex_sum * entropy_modifier / len(drift_array)
 
             # Normalize to [0, 1] range
-            normalized_score = max(0.0, min(1.0, (reflex_score + 1.0) / 2.0))
+            normalized_score = unified_math.max(0.0, unified_math.min(1.0, (reflex_score + 1.0) / 2.0))
 
             return normalized_score
 
@@ -266,7 +281,7 @@ class AltitudeAdjustmentEngine:
         """
         try:
             # Exponential pressure decay with altitude
-            pressure_gradient = np.exp(-altitude * 5) * (1.0 - altitude)
+            pressure_gradient = unified_math.exp(-altitude * 5) * (1.0 - altitude)
 
             # Update pressure history
             self.pressure_history.append(pressure_gradient)
@@ -287,7 +302,7 @@ class AltitudeAdjustmentEngine:
 
             # Calculate altitude variance over recent history
             recent_altitudes = np.array(self.altitude_history[-10:])
-            altitude_variance = np.var(recent_altitudes)
+            altitude_variance = unified_math.unified_math.var(recent_altitudes)
 
             # Zone-specific stability factors
             zone_stability_factors = {
@@ -300,11 +315,11 @@ class AltitudeAdjustmentEngine:
             base_stability = zone_stability_factors.get(stam_zone, 0.5)
 
             # Adjust for variance (lower variance = higher stability)
-            variance_factor = max(0.1, 1.0 - altitude_variance * 10)
+            variance_factor = unified_math.max(0.1, 1.0 - altitude_variance * 10)
 
             stability_index = base_stability * variance_factor
 
-            return max(0.0, min(1.0, stability_index))
+            return unified_math.max(0.0, unified_math.min(1.0, stability_index))
 
         except Exception as e:
             logger.error(f"Error calculating stability index: {e}")
@@ -450,8 +465,8 @@ class AltitudeAdjustmentEngine:
 
 def main() -> None:
     """Demo function for testing altitude adjustment math."""
-    print("Altitude Adjustment Math Demo")
-    print("=" * 35)
+    safe_print("Altitude Adjustment Math Demo")
+    safe_print("=" * 35)
 
     engine = AltitudeAdjustmentEngine()
 
@@ -464,10 +479,10 @@ def main() -> None:
     ]
 
     for name, vol_density, volatility, liquidity, velocity, pressure in scenarios:
-        print(f"\n{name}:")
-        print(f"  Volume Density: {vol_density:.1f}")
-        print(f"  Volatility: {volatility:.1f}")
-        print(f"  Liquidity: {liquidity:.1f}")
+        safe_print(f"\n{name}:")
+        safe_print(f"  Volume Density: {vol_density:.1f}")
+        safe_print(f"  Volatility: {volatility:.1f}")
+        safe_print(f"  Liquidity: {liquidity:.1f}")
 
         # Mock drift and pressure signals
         drift_signals = [0.1, 0.2, -0.1, 0.3, 0.0]
@@ -484,31 +499,35 @@ def main() -> None:
             entropy_level=0.7,
         )
 
-        print(f"  → Altitude: {metrics.altitude:.3f}")
-        print(f"  → STAM Zone: {metrics.stam_zone.value}")
-        print(f"  → Velocity Correction: {metrics.velocity_correction:.3f}")
-        print(f"  → Pressure Gradient: {metrics.pressure_gradient:.3f}")
-        print(f"  → Autonomic Reflex: {metrics.autonomic_reflex:.3f}")
-        print(f"  → Stability Index: {metrics.stability_index:.3f}")
-        print(f"  → Strategy: {metrics.recommended_strategy}")
+        safe_print(f"  → Altitude: {metrics.altitude:.3f}")
+        safe_print(f"  → STAM Zone: {metrics.stam_zone.value}")
+        safe_print(f"  → Velocity Correction: {metrics.velocity_correction:.3f}")
+        safe_print(f"  → Pressure Gradient: {metrics.pressure_gradient:.3f}")
+        safe_print(f"  → Autonomic Reflex: {metrics.autonomic_reflex:.3f}")
+        safe_print(f"  → Stability Index: {metrics.stability_index:.3f}")
+        safe_print(f"  → Strategy: {metrics.recommended_strategy}")
 
     # Test velocity-altitude paradox
-    print("\n" + "=" * 35)
-    print("Velocity-Altitude Paradox Test:")
+    safe_print("\n" + "=" * 35)
+    safe_print("Velocity-Altitude Paradox Test:")
 
     paradox_state = engine.calculate_velocity_altitude_paradox(
         velocity=1.5, altitude=0.7, market_pressure=0.6
     )
 
-    print(f"  Velocity: {paradox_state.velocity:.2f}")
-    print(f"  Altitude: {paradox_state.altitude:.2f}")
-    print(f"  Paradox Factor: {paradox_state.paradox_factor:.3f}")
-    print(f"  Correction Vector: {paradox_state.correction_vector:.3f}")
-    print(f"  Energy Dissipation: {paradox_state.energy_dissipation:.3f}")
+    safe_print(f"  Velocity: {paradox_state.velocity:.2f}")
+    safe_print(f"  Altitude: {paradox_state.altitude:.2f}")
+    safe_print(f"  Paradox Factor: {paradox_state.paradox_factor:.3f}")
+    safe_print(f"  Correction Vector: {paradox_state.correction_vector:.3f}")
+    safe_print(f"  Energy Dissipation: {paradox_state.energy_dissipation:.3f}")
 
     # Engine summary
     summary = engine.get_altitude_summary()
-    print(f"\nEngine Summary: {summary}")
+    safe_print(f"\nEngine Summary: {summary}")
+
+
+# Alias for compatibility with imports
+AltitudeAdjustmentMath = AltitudeAdjustmentEngine
 
 
 if __name__ == "__main__":

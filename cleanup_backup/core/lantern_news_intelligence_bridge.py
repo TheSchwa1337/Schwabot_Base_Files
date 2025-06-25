@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Lantern News Intelligence Bridge - News Sentiment and Market Impact Analysis for Schwabot
@@ -20,8 +22,8 @@ Core Functionality:
 import logging
 import json
 import re
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import os
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
@@ -362,7 +364,7 @@ class LanternNewsIntelligenceBridge:
         
         # Calculate confidence score
         total_sentiment_words = positive_count + negative_count + neutral_count
-        confidence_score = min(1.0, total_sentiment_words / 10.0)  # Normalize to 0-1
+        confidence_score = unified_math.min(1.0, total_sentiment_words / 10.0)  # Normalize to 0-1
         
         # Extract keywords by sentiment
         positive_keywords = [kw for kw in self.sentiment_keywords[SentimentType.POSITIVE] 
@@ -424,7 +426,7 @@ class LanternNewsIntelligenceBridge:
                               category: NewsCategory, entities: List[str]) -> ImpactLevel:
         """Determine the impact level of a news item."""
         # Base impact from sentiment
-        base_impact = abs(sentiment_analysis.sentiment_score) * sentiment_analysis.confidence_score
+        base_impact = unified_math.abs(sentiment_analysis.sentiment_score) * sentiment_analysis.confidence_score
         
         # Category multiplier
         category_multipliers = {
@@ -463,7 +465,7 @@ class LanternNewsIntelligenceBridge:
     def _predict_volatility_impact(self, sentiment_score: float, confidence_score: float) -> float:
         """Predict volatility impact using mathematical models."""
         # Volatility increases with sentiment extremity and confidence
-        sentiment_extremity = abs(sentiment_score)
+        sentiment_extremity = unified_math.abs(sentiment_score)
         volatility_impact = sentiment_extremity * confidence_score * 0.1
         
         return volatility_impact
@@ -506,8 +508,8 @@ class LanternNewsIntelligenceBridge:
             "symbol": symbol,
             "time_period_hours": hours,
             "total_news_items": len(recent_sentiments),
-            "average_sentiment": np.mean(sentiment_scores),
-            "sentiment_volatility": np.std(sentiment_scores),
+            "average_sentiment": unified_math.unified_math.mean(sentiment_scores),
+            "sentiment_volatility": unified_math.unified_math.std(sentiment_scores),
             "sentiment_trend": self._calculate_sentiment_trend(sentiment_scores),
             "recent_sentiments": recent_sentiments[-10:],  # Last 10 items
             "mathematical_indicators": self._calculate_mathematical_indicators(symbol, sentiment_scores)
@@ -541,8 +543,8 @@ class LanternNewsIntelligenceBridge:
         indicators = {
             "exponential_moving_average": self._calculate_ema(scores_array, 0.3),
             "sentiment_momentum": self._calculate_momentum(scores_array),
-            "sentiment_volatility": np.std(scores_array),
-            "sentiment_range": np.max(scores_array) - np.min(scores_array),
+            "sentiment_volatility": unified_math.unified_math.std(scores_array),
+            "sentiment_range": unified_math.unified_math.max(scores_array) - unified_math.unified_math.min(scores_array),
             "sentiment_skewness": self._calculate_skewness(scores_array),
             "sentiment_kurtosis": self._calculate_kurtosis(scores_array)
         }
@@ -569,22 +571,22 @@ class LanternNewsIntelligenceBridge:
 
     def _calculate_skewness(self, data: np.ndarray) -> float:
         """Calculate skewness of sentiment distribution."""
-        mean = np.mean(data)
-        std = np.std(data)
+        mean = unified_math.unified_math.mean(data)
+        std = unified_math.unified_math.std(data)
         if std == 0:
             return 0.0
         
-        skewness = np.mean(((data - mean) / std) ** 3)
+        skewness = unified_math.mean(((data - mean) / std) ** 3)
         return skewness
 
     def _calculate_kurtosis(self, data: np.ndarray) -> float:
         """Calculate kurtosis of sentiment distribution."""
-        mean = np.mean(data)
-        std = np.std(data)
+        mean = unified_math.unified_math.mean(data)
+        std = unified_math.unified_math.std(data)
         if std == 0:
             return 0.0
         
-        kurtosis = np.mean(((data - mean) / std) ** 4) - 3
+        kurtosis = unified_math.mean(((data - mean) / std) ** 4) - 3
         return kurtosis
 
     def predict_market_impact(self, symbol: str, news_items: List[NewsItem]) -> MarketImpactPrediction:
@@ -612,11 +614,11 @@ class LanternNewsIntelligenceBridge:
         base_price_change = weighted_sentiment * 0.03  # 3% max change
         
         # Adjust for impact levels
-        impact_multiplier = np.mean([self._impact_level_multiplier(level) for level in impact_levels])
+        impact_multiplier = unified_math.mean([self._impact_level_multiplier(level) for level in impact_levels])
         predicted_price_change = base_price_change * impact_multiplier
         
         # Predict volatility change
-        sentiment_volatility = np.std(sentiment_scores)
+        sentiment_volatility = unified_math.unified_math.std(sentiment_scores)
         predicted_volatility_change = sentiment_volatility * 0.1
         
         # Calculate confidence interval
@@ -627,10 +629,10 @@ class LanternNewsIntelligenceBridge:
         
         # Impact factors
         impact_factors = {
-            "sentiment_strength": abs(weighted_sentiment),
+            "sentiment_strength": unified_math.abs(weighted_sentiment),
             "sentiment_consistency": 1.0 - sentiment_volatility,
             "news_volume": len(news_items),
-            "average_confidence": np.mean(confidence_scores)
+            "average_confidence": unified_math.unified_math.mean(confidence_scores)
         }
         
         # Mathematical indicators
@@ -670,7 +672,7 @@ class LanternNewsIntelligenceBridge:
         first_diff = np.diff(data)
         second_diff = np.diff(first_diff)
         
-        return np.mean(second_diff)
+        return unified_math.unified_math.mean(second_diff)
 
     def _calculate_impact_concentration(self, impact_levels: List[str]) -> float:
         """Calculate concentration of high-impact news."""
@@ -731,18 +733,18 @@ def main() -> None:
     
     for news in test_news:
         news_id = bridge.add_news_item(**news)
-        print(f"Added news item: {news_id}")
+        safe_print(f"Added news item: {news_id}")
     
     # Wait for processing
     time.sleep(2)
     
     # Get sentiment analysis
     sentiment = bridge.get_sentiment_analysis("BTC", hours=24)
-    print(f"BTC Sentiment Analysis: {sentiment}")
+    safe_print(f"BTC Sentiment Analysis: {sentiment}")
     
     # Get statistics
     stats = bridge.get_news_statistics()
-    print(f"News Statistics: {stats}")
+    safe_print(f"News Statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

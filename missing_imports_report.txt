@@ -1,0 +1,704 @@
+================================================================================
+MISSING IMPORTS ANALYSIS REPORT
+================================================================================
+
+Total files analyzed: 1558
+Files with missing imports: 92
+Total missing imports: 73
+
+MISSING FILES:
+----------------------------------------
+  - config.enhanced_fitness_config.EnhancedFitnessOracle
+  - config.enhanced_fitness_config.UnifiedFitnessScore
+  - core.enhanced_phase_risk_manager.EnhancedPhaseRiskManager
+  - core.ferris_wheel_engine.FerrisWheelEngine
+  - core.get_ui_bridge_integration_manager
+  - core.glyph.recursive_glyph_mapper.create_glyph_mapping_system
+  - core.initialize_core_system
+  - core.math.tensor_algebra.UnifiedTensorAlgebra
+  - core.math.tensor_algebra.bit_phase_tensor
+  - core.math.tensor_algebra.calculate_entropy
+  - core.math.tensor_algebra.entropy_engine
+  - core.math.tensor_algebra.generate_hash_vector
+  - core.math.tensor_algebra.hash_engine
+  - core.math.tensor_algebra.profit_derivative
+  - core.math.tensor_algebra.profit_engine
+  - core.math.tensor_algebra.should_execute_trade
+  - core.math.tensor_algebra.tensor_contraction
+  - core.math.tensor_algebra.tensor_engine
+  - core.memory_stack.ai_command_sequencer.AICommandSequencer
+  - core.memory_stack.ai_command_sequencer.sequence_ai_command
+  - core.memory_stack.ai_command_sequencer.update_command_sequence_result
+  - core.memory_stack.execution_validator.ExecutionValidator
+  - core.memory_stack.execution_validator.simulate_execution_cost
+  - core.memory_stack.execution_validator.validate_drift
+  - core.memory_stack.execution_validator.validate_execution
+  - core.memory_stack.memory_key_allocator.KeyType
+  - core.memory_stack.memory_key_allocator.MemoryKeyAllocator
+  - core.memory_stack.memory_key_allocator.allocate_memory_key
+  - core.memory_stack.memory_key_allocator.create_memory_link
+  - core.memory_stack.memory_key_allocator.find_similar_memory_keys
+  - core.phantom.entry_logic.entry_score
+  - core.phase_engine.PhaseEngine
+  - core.pipeline_integration_manager.PipelineIntegrationManager
+  - core.utils.math_utils.apply_allocation_strategy
+  - core.utils.math_utils.apply_lag_compensation_curve
+  - core.utils.math_utils.calculate_allocation_efficiency
+  - core.utils.math_utils.calculate_atr
+  - core.utils.math_utils.calculate_centroid
+  - core.utils.math_utils.calculate_correlation
+  - core.utils.math_utils.calculate_distance_score
+  - core.utils.math_utils.calculate_entropy
+  - core.utils.math_utils.calculate_execution_lag
+  - core.utils.math_utils.calculate_gradient
+  - core.utils.math_utils.calculate_hash_distance
+  - core.utils.math_utils.calculate_recursive_growth_factor
+  - core.utils.math_utils.calculate_recursive_multiplier
+  - core.utils.math_utils.calculate_rsi
+  - core.utils.math_utils.calculate_stochastic
+  - core.utils.math_utils.calculate_temporal_confidence_merge
+  - core.utils.math_utils.calculate_tick_acceleration
+  - core.utils.math_utils.calculate_true_range
+  - core.utils.math_utils.calculate_weighted_confidence
+  - core.utils.math_utils.calculate_williams_r
+  - core.utils.math_utils.create_spatial_grid
+  - core.utils.math_utils.exponential_smoothing
+  - core.utils.math_utils.moving_average
+  - core.utils.math_utils.safe_decimal_operation
+  - core.utils.math_utils.validate_spatial_dimensions
+  - core.utils.math_utils.waveform_pattern_match
+  - core.utils.math_utils.wavelet_decompose
+  - core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  - core.utils.windows_cli_compatibility.cli_handler
+  - core.utils.windows_cli_compatibility.log_safe
+  - core.utils.windows_cli_compatibility.safe_format_error
+  - core.utils.windows_cli_compatibility.safe_print
+  - utils.cli_handler.CLIHandler
+  - utils.cli_handler.safe_log
+  - utils.math_utils.calculate_hash_distance
+  - utils.math_utils.calculate_weighted_confidence
+  - utils.rate_limiter.RateLimiter
+  - utils.windows_cli_compatibility.log_safe
+  - utils.windows_cli_compatibility.safe_format_error
+  - utils.windows_cli_compatibility.safe_print
+
+FILES WITH MISSING IMPORTS:
+----------------------------------------
+
+schwabot_unified_system.py:
+  Line 44: from config.enhanced_fitness_config.EnhancedFitnessOracle
+  Line 44: from config.enhanced_fitness_config.UnifiedFitnessScore
+
+test_comprehensive_integration.py:
+  Line 31: from core.enhanced_phase_risk_manager.EnhancedPhaseRiskManager
+  Line 32: from core.pipeline_integration_manager.PipelineIntegrationManager
+
+test_hash_registry_integration.py:
+  Line 36: from core.math.tensor_algebra.UnifiedTensorAlgebra
+
+test_medium_risk_phase2.py:
+  Line 160: from core.phase_engine.PhaseEngine
+
+test_real_integration.py:
+  Line 46: from core.get_ui_bridge_integration_manager
+  Line 110: from core.get_ui_bridge_integration_manager
+  Line 144: from core.get_ui_bridge_integration_manager
+  Line 230: from core.get_ui_bridge_integration_manager
+  Line 191: from core.initialize_core_system
+  Line 208: from core.get_ui_bridge_integration_manager
+
+cleanup_backup\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\api_gateway.py:
+  Line 47: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+  Line 47: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\capital_controls.py:
+  Line 46: from core.utils.windows_cli_compatibility.safe_print
+  Line 46: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 46: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\demo_memory_core.py:
+  Line 33: from core.utils.windows_cli_compatibility.safe_print
+  Line 33: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 33: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\enhanced_risk_manager.py:
+  Line 55: from core.utils.windows_cli_compatibility.safe_print
+  Line 55: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 55: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\environment_manager.py:
+  Line 53: from core.utils.windows_cli_compatibility.safe_print
+  Line 53: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 53: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\exchange_plumbing.py:
+  Line 68: from core.utils.windows_cli_compatibility.safe_print
+  Line 68: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 68: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\fault_bus.py:
+  Line 57: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 57: from core.utils.windows_cli_compatibility.safe_print
+  Line 57: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 57: from core.utils.windows_cli_compatibility.log_safe
+  Line 57: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\ferris_rde_core.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\gpt_command_layer.py:
+  Line 26: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 26: from core.utils.windows_cli_compatibility.safe_print
+  Line 26: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 26: from core.utils.windows_cli_compatibility.log_safe
+  Line 26: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\gpt_command_layer_simple.py:
+  Line 23: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 23: from core.utils.windows_cli_compatibility.safe_print
+  Line 23: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 23: from core.utils.windows_cli_compatibility.log_safe
+  Line 23: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\hash_registry.py:
+  Line 25: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 25: from core.utils.windows_cli_compatibility.log_safe
+  Line 25: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\lantern_vector_memory.py:
+  Line 29: from core.utils.windows_cli_compatibility.safe_print
+  Line 29: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 29: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\long_horizon_simulation.py:
+  Line 55: from core.utils.windows_cli_compatibility.safe_print
+  Line 55: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 55: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\memory_allocation_manager.py:
+  Line 45: from core.utils.windows_cli_compatibility.safe_print
+  Line 45: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 45: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\persistent_state_manager.py:
+  Line 61: from core.utils.windows_cli_compatibility.safe_print
+  Line 61: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 61: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\precision_performance.py:
+  Line 71: from core.utils.windows_cli_compatibility.safe_print
+  Line 71: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 71: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\prophet_connector.py:
+  Line 31: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 31: from core.utils.windows_cli_compatibility.safe_print
+  Line 31: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 31: from core.utils.windows_cli_compatibility.log_safe
+  Line 31: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\regulatory_compliance.py:
+  Line 46: from core.utils.windows_cli_compatibility.safe_print
+  Line 46: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 46: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\riddle_gemm.py:
+  Line 16: from core.utils.math_utils.calculate_hash_distance
+  Line 16: from core.utils.math_utils.calculate_weighted_confidence
+
+cleanup_backup\core\risk_guard.py:
+  Line 44: from core.utils.windows_cli_compatibility.safe_print
+  Line 44: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 44: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\secure_api_manager.py:
+  Line 41: from core.utils.windows_cli_compatibility.safe_print
+  Line 41: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 41: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\simplified_btc_integration.py:
+  Line 30: from utils.cli_handler.CLIHandler
+  Line 31: from utils.cli_handler.safe_log
+
+cleanup_backup\core\strategy_mapper.py:
+  Line 25: from core.memory_stack.ai_command_sequencer.AICommandSequencer
+  Line 25: from core.memory_stack.ai_command_sequencer.sequence_ai_command
+  Line 25: from core.memory_stack.ai_command_sequencer.update_command_sequence_result
+  Line 28: from core.memory_stack.memory_key_allocator.MemoryKeyAllocator
+  Line 28: from core.memory_stack.memory_key_allocator.allocate_memory_key
+  Line 28: from core.memory_stack.memory_key_allocator.KeyType
+  Line 31: from core.memory_stack.execution_validator.ExecutionValidator
+  Line 31: from core.memory_stack.execution_validator.simulate_execution_cost
+  Line 31: from core.memory_stack.execution_validator.validate_execution
+  Line 55: from core.utils.windows_cli_compatibility.safe_print
+  Line 55: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 55: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\trajectory_sphere.py:
+  Line 33: from core.utils.windows_cli_compatibility.safe_print
+  Line 33: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 33: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\unified_mathematics_config.py:
+  Line 24: from core.utils.windows_cli_compatibility.safe_print
+  Line 24: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 24: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\unified_signal_metrics.py:
+  Line 376: from core.phantom.entry_logic.entry_score
+
+cleanup_backup\core\vecu_core.py:
+  Line 36: from core.utils.windows_cli_compatibility.safe_print
+  Line 36: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 36: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\zpe_hybrid_mode_selector.py:
+  Line 31: from core.utils.windows_cli_compatibility.safe_print
+  Line 31: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 31: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\__init__.py:
+  Line 65: from utils.windows_cli_compatibility.safe_print
+  Line 65: from utils.windows_cli_compatibility.safe_format_error
+  Line 65: from utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\core\exchange_apis\base_api.py:
+  Line 25: from utils.cli_handler.CLIHandler
+  Line 26: from utils.cli_handler.safe_log
+
+cleanup_backup\core\exchange_apis\coinbase_api.py:
+  Line 16: from utils.rate_limiter.RateLimiter
+
+cleanup_backup\core\memory_stack\ai_command_sequencer.py:
+  Line 32: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 32: from core.utils.windows_cli_compatibility.safe_print
+  Line 32: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 32: from core.utils.windows_cli_compatibility.log_safe
+  Line 32: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\memory_stack\command_density_analyzer.py:
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+
+cleanup_backup\core\memory_stack\execution_validator.py:
+  Line 29: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 29: from core.utils.windows_cli_compatibility.safe_print
+  Line 29: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 29: from core.utils.windows_cli_compatibility.log_safe
+  Line 29: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\memory_stack\memory_hash_rotator.py:
+  Line 22: from core.utils.windows_cli_compatibility.safe_print
+  Line 22: from core.utils.windows_cli_compatibility.safe_format_error
+
+cleanup_backup\core\memory_stack\memory_key_allocator.py:
+  Line 30: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 30: from core.utils.windows_cli_compatibility.safe_print
+  Line 30: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 30: from core.utils.windows_cli_compatibility.log_safe
+  Line 30: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\core\memory_stack\trust_feedback_updater.py:
+  Line 23: from core.utils.windows_cli_compatibility.safe_print
+  Line 23: from core.utils.windows_cli_compatibility.safe_format_error
+
+cleanup_backup\critical_math_20250624_222404\core\hash_registry.py:
+  Line 25: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 25: from core.utils.windows_cli_compatibility.log_safe
+  Line 25: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\critical_math_20250624_222404\core\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\critical_math_20250624_222415\core\hash_registry.py:
+  Line 25: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 25: from core.utils.windows_cli_compatibility.log_safe
+  Line 25: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\critical_math_20250624_222415\core\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+cleanup_backup\critical_math_20250624_222447\core\hash_registry.py:
+  Line 25: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 25: from core.utils.windows_cli_compatibility.log_safe
+  Line 25: from core.utils.windows_cli_compatibility.cli_handler
+
+cleanup_backup\critical_math_20250624_222447\core\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+core\api_gateway.py:
+  Line 57: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 57: from core.utils.windows_cli_compatibility.safe_print
+  Line 57: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 57: from core.utils.windows_cli_compatibility.log_safe
+  Line 57: from core.utils.windows_cli_compatibility.cli_handler
+
+core\capital_controls.py:
+  Line 46: from core.utils.windows_cli_compatibility.safe_print
+  Line 46: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 46: from core.utils.windows_cli_compatibility.log_safe
+
+core\demo_memory_core.py:
+  Line 33: from core.utils.windows_cli_compatibility.safe_print
+  Line 33: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 33: from core.utils.windows_cli_compatibility.log_safe
+
+core\environment_manager.py:
+  Line 53: from core.utils.windows_cli_compatibility.safe_print
+  Line 53: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 53: from core.utils.windows_cli_compatibility.log_safe
+
+core\exchange_plumbing.py:
+  Line 68: from core.utils.windows_cli_compatibility.safe_print
+  Line 68: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 68: from core.utils.windows_cli_compatibility.log_safe
+
+core\ferris_rde_core.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+core\gpt_command_layer.py:
+  Line 26: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 26: from core.utils.windows_cli_compatibility.safe_print
+  Line 26: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 26: from core.utils.windows_cli_compatibility.log_safe
+  Line 26: from core.utils.windows_cli_compatibility.cli_handler
+
+core\gpt_command_layer_simple.py:
+  Line 23: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 23: from core.utils.windows_cli_compatibility.safe_print
+  Line 23: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 23: from core.utils.windows_cli_compatibility.log_safe
+  Line 23: from core.utils.windows_cli_compatibility.cli_handler
+
+core\hash_registry.py:
+  Line 25: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 25: from core.utils.windows_cli_compatibility.log_safe
+  Line 25: from core.utils.windows_cli_compatibility.cli_handler
+
+core\lantern_vector_memory.py:
+  Line 29: from core.utils.windows_cli_compatibility.safe_print
+  Line 29: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 29: from core.utils.windows_cli_compatibility.log_safe
+
+core\long_horizon_simulation.py:
+  Line 55: from core.utils.windows_cli_compatibility.safe_print
+  Line 55: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 55: from core.utils.windows_cli_compatibility.log_safe
+
+core\mathematical_validation_suite.py:
+  Line 19: from core.math.tensor_algebra.tensor_engine
+  Line 19: from core.math.tensor_algebra.profit_engine
+  Line 19: from core.math.tensor_algebra.entropy_engine
+  Line 19: from core.math.tensor_algebra.hash_engine
+  Line 19: from core.math.tensor_algebra.tensor_contraction
+  Line 19: from core.math.tensor_algebra.bit_phase_tensor
+  Line 19: from core.math.tensor_algebra.profit_derivative
+  Line 19: from core.math.tensor_algebra.calculate_entropy
+  Line 19: from core.math.tensor_algebra.generate_hash_vector
+  Line 19: from core.math.tensor_algebra.should_execute_trade
+
+core\memory_allocation_manager.py:
+  Line 45: from core.utils.windows_cli_compatibility.safe_print
+  Line 45: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 45: from core.utils.windows_cli_compatibility.log_safe
+
+core\persistent_state_manager.py:
+  Line 61: from core.utils.windows_cli_compatibility.safe_print
+  Line 61: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 61: from core.utils.windows_cli_compatibility.log_safe
+
+core\precision_performance.py:
+  Line 71: from core.utils.windows_cli_compatibility.safe_print
+  Line 71: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 71: from core.utils.windows_cli_compatibility.log_safe
+
+core\profit_cycle_allocator.py:
+  Line 47: from core.utils.windows_cli_compatibility.safe_print
+  Line 47: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 47: from core.utils.windows_cli_compatibility.log_safe
+
+core\prophet_connector.py:
+  Line 31: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 31: from core.utils.windows_cli_compatibility.safe_print
+  Line 31: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 31: from core.utils.windows_cli_compatibility.log_safe
+  Line 31: from core.utils.windows_cli_compatibility.cli_handler
+
+core\regulatory_compliance.py:
+  Line 46: from core.utils.windows_cli_compatibility.safe_print
+  Line 46: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 46: from core.utils.windows_cli_compatibility.log_safe
+
+core\riddle_gemm.py:
+  Line 16: from utils.math_utils.calculate_hash_distance
+  Line 16: from utils.math_utils.calculate_weighted_confidence
+
+core\risk_guard.py:
+  Line 44: from core.utils.windows_cli_compatibility.safe_print
+  Line 44: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 44: from core.utils.windows_cli_compatibility.log_safe
+
+core\secure_api_manager.py:
+  Line 41: from core.utils.windows_cli_compatibility.safe_print
+  Line 41: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 41: from core.utils.windows_cli_compatibility.log_safe
+
+core\simplified_btc_integration.py:
+  Line 30: from utils.cli_handler.CLIHandler
+  Line 31: from utils.cli_handler.safe_log
+
+core\strategy_mapper.py:
+  Line 25: from core.memory_stack.ai_command_sequencer.AICommandSequencer
+  Line 25: from core.memory_stack.ai_command_sequencer.sequence_ai_command
+  Line 25: from core.memory_stack.ai_command_sequencer.update_command_sequence_result
+  Line 28: from core.memory_stack.memory_key_allocator.MemoryKeyAllocator
+  Line 28: from core.memory_stack.memory_key_allocator.allocate_memory_key
+  Line 28: from core.memory_stack.memory_key_allocator.KeyType
+  Line 31: from core.memory_stack.execution_validator.ExecutionValidator
+  Line 31: from core.memory_stack.execution_validator.simulate_execution_cost
+  Line 31: from core.memory_stack.execution_validator.validate_execution
+  Line 55: from core.utils.windows_cli_compatibility.safe_print
+  Line 55: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 55: from core.utils.windows_cli_compatibility.log_safe
+
+core\trajectory_sphere.py:
+  Line 33: from core.utils.windows_cli_compatibility.safe_print
+  Line 33: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 33: from core.utils.windows_cli_compatibility.log_safe
+
+core\unified_mathematics_config.py:
+  Line 24: from core.utils.windows_cli_compatibility.safe_print
+  Line 24: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 24: from core.utils.windows_cli_compatibility.log_safe
+
+core\vecu_core.py:
+  Line 36: from core.utils.windows_cli_compatibility.safe_print
+  Line 36: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 36: from core.utils.windows_cli_compatibility.log_safe
+
+core\zpe_hybrid_mode_selector.py:
+  Line 31: from core.utils.windows_cli_compatibility.safe_print
+  Line 31: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 31: from core.utils.windows_cli_compatibility.log_safe
+
+core\__init__.py:
+  Line 84: from utils.windows_cli_compatibility.safe_print
+  Line 84: from utils.windows_cli_compatibility.safe_format_error
+  Line 84: from utils.windows_cli_compatibility.log_safe
+
+core\exchange_apis\base_api.py:
+  Line 25: from utils.cli_handler.CLIHandler
+  Line 26: from utils.cli_handler.safe_log
+
+core\exchange_apis\coinbase_api.py:
+  Line 16: from utils.rate_limiter.RateLimiter
+
+core\memory_stack\ai_command_sequencer.py:
+  Line 32: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 32: from core.utils.windows_cli_compatibility.safe_print
+  Line 32: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 32: from core.utils.windows_cli_compatibility.log_safe
+  Line 32: from core.utils.windows_cli_compatibility.cli_handler
+
+core\memory_stack\command_density_analyzer.py:
+  Line 25: from core.utils.windows_cli_compatibility.safe_print
+  Line 25: from core.utils.windows_cli_compatibility.safe_format_error
+
+core\memory_stack\execution_validator.py:
+  Line 29: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 29: from core.utils.windows_cli_compatibility.safe_print
+  Line 29: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 29: from core.utils.windows_cli_compatibility.log_safe
+  Line 29: from core.utils.windows_cli_compatibility.cli_handler
+
+core\memory_stack\memory_hash_rotator.py:
+  Line 22: from core.utils.windows_cli_compatibility.safe_print
+  Line 22: from core.utils.windows_cli_compatibility.safe_format_error
+
+core\memory_stack\memory_key_allocator.py:
+  Line 30: from core.utils.windows_cli_compatibility.WindowsCliCompatibilityHandler
+  Line 30: from core.utils.windows_cli_compatibility.safe_print
+  Line 30: from core.utils.windows_cli_compatibility.safe_format_error
+  Line 30: from core.utils.windows_cli_compatibility.log_safe
+  Line 30: from core.utils.windows_cli_compatibility.cli_handler
+
+core\memory_stack\trust_feedback_updater.py:
+  Line 23: from core.utils.windows_cli_compatibility.safe_print
+  Line 23: from core.utils.windows_cli_compatibility.safe_format_error
+
+tests\test_core_engines.py:
+  Line 15: from core.utils.math_utils.calculate_tick_acceleration
+  Line 15: from core.utils.math_utils.waveform_pattern_match
+  Line 15: from core.utils.math_utils.calculate_hash_distance
+  Line 15: from core.utils.math_utils.calculate_weighted_confidence
+  Line 15: from core.utils.math_utils.wavelet_decompose
+  Line 15: from core.utils.math_utils.calculate_temporal_confidence_merge
+  Line 15: from core.utils.math_utils.calculate_execution_lag
+  Line 15: from core.utils.math_utils.apply_lag_compensation_curve
+
+tests\test_profit_routing_engine.py:
+  Line 15: from core.utils.math_utils.calculate_entropy
+  Line 15: from core.utils.math_utils.calculate_correlation
+  Line 15: from core.utils.math_utils.moving_average
+  Line 15: from core.utils.math_utils.exponential_smoothing
+  Line 15: from core.utils.math_utils.calculate_true_range
+  Line 15: from core.utils.math_utils.calculate_atr
+  Line 15: from core.utils.math_utils.calculate_rsi
+  Line 15: from core.utils.math_utils.calculate_williams_r
+  Line 15: from core.utils.math_utils.calculate_stochastic
+  Line 15: from core.utils.math_utils.calculate_gradient
+  Line 15: from core.utils.math_utils.calculate_centroid
+  Line 15: from core.utils.math_utils.calculate_distance_score
+  Line 15: from core.utils.math_utils.calculate_recursive_multiplier
+  Line 15: from core.utils.math_utils.calculate_allocation_efficiency
+  Line 15: from core.utils.math_utils.calculate_recursive_growth_factor
+  Line 15: from core.utils.math_utils.apply_allocation_strategy
+  Line 15: from core.utils.math_utils.safe_decimal_operation
+  Line 15: from core.utils.math_utils.validate_spatial_dimensions
+  Line 15: from core.utils.math_utils.create_spatial_grid
+
+tests\test_profit_vector_calibration.py:
+  Line 31: from core.ferris_wheel_engine.FerrisWheelEngine
+
+tools\comprehensive_mathematical_integration.py:
+  Line 22: from core.glyph.recursive_glyph_mapper.create_glyph_mapping_system
+
+tools\consciousness_fusion_test.py:
+  Line 31: from core.utils.windows_cli_compatibility.safe_print
+  Line 31: from core.utils.windows_cli_compatibility.safe_format_error
+
+tools\uros_v1_integration_test.py:
+  Line 46: from core.memory_stack.ai_command_sequencer.AICommandSequencer
+  Line 46: from core.memory_stack.ai_command_sequencer.sequence_ai_command
+  Line 46: from core.memory_stack.ai_command_sequencer.update_command_sequence_result
+  Line 49: from core.memory_stack.memory_key_allocator.MemoryKeyAllocator
+  Line 49: from core.memory_stack.memory_key_allocator.allocate_memory_key
+  Line 49: from core.memory_stack.memory_key_allocator.create_memory_link
+  Line 49: from core.memory_stack.memory_key_allocator.KeyType
+  Line 49: from core.memory_stack.memory_key_allocator.find_similar_memory_keys
+  Line 53: from core.memory_stack.execution_validator.ExecutionValidator
+  Line 53: from core.memory_stack.execution_validator.simulate_execution_cost
+  Line 53: from core.memory_stack.execution_validator.validate_drift
+  Line 53: from core.memory_stack.execution_validator.validate_execution
+  Line 60: from core.utils.windows_cli_compatibility.safe_print
+  Line 60: from core.utils.windows_cli_compatibility.safe_format_error
+
+RECOMMENDATIONS:
+----------------------------------------
+1. Create the following missing files:
+   - config.enhanced_fitness_config.EnhancedFitnessOracle.py
+   - config.enhanced_fitness_config.UnifiedFitnessScore.py
+   - core/enhanced_phase_risk_manager.EnhancedPhaseRiskManager.py
+   - core/ferris_wheel_engine.FerrisWheelEngine.py
+   - core/get_ui_bridge_integration_manager.py
+   - core/glyph.recursive_glyph_mapper.create_glyph_mapping_system.py
+   - core/initialize_core_system.py
+   - core/math.tensor_algebra.UnifiedTensorAlgebra.py
+   - core/math.tensor_algebra.bit_phase_tensor.py
+   - core/math.tensor_algebra.calculate_entropy.py
+   - core/math.tensor_algebra.entropy_engine.py
+   - core/math.tensor_algebra.generate_hash_vector.py
+   - core/math.tensor_algebra.hash_engine.py
+   - core/math.tensor_algebra.profit_derivative.py
+   - core/math.tensor_algebra.profit_engine.py
+   - core/math.tensor_algebra.should_execute_trade.py
+   - core/math.tensor_algebra.tensor_contraction.py
+   - core/math.tensor_algebra.tensor_engine.py
+   - core/memory_stack.ai_command_sequencer.AICommandSequencer.py
+   - core/memory_stack.ai_command_sequencer.sequence_ai_command.py
+   - core/memory_stack.ai_command_sequencer.update_command_sequence_result.py
+   - core/memory_stack.execution_validator.ExecutionValidator.py
+   - core/memory_stack.execution_validator.simulate_execution_cost.py
+   - core/memory_stack.execution_validator.validate_drift.py
+   - core/memory_stack.execution_validator.validate_execution.py
+   - core/memory_stack.memory_key_allocator.KeyType.py
+   - core/memory_stack.memory_key_allocator.MemoryKeyAllocator.py
+   - core/memory_stack.memory_key_allocator.allocate_memory_key.py
+   - core/memory_stack.memory_key_allocator.create_memory_link.py
+   - core/memory_stack.memory_key_allocator.find_similar_memory_keys.py
+   - core/phantom.entry_logic.entry_score.py
+   - core/phase_engine.PhaseEngine.py
+   - core/pipeline_integration_manager.PipelineIntegrationManager.py
+   - core/utils.math_utils.apply_allocation_strategy.py
+   - core/utils.math_utils.apply_lag_compensation_curve.py
+   - core/utils.math_utils.calculate_allocation_efficiency.py
+   - core/utils.math_utils.calculate_atr.py
+   - core/utils.math_utils.calculate_centroid.py
+   - core/utils.math_utils.calculate_correlation.py
+   - core/utils.math_utils.calculate_distance_score.py
+   - core/utils.math_utils.calculate_entropy.py
+   - core/utils.math_utils.calculate_execution_lag.py
+   - core/utils.math_utils.calculate_gradient.py
+   - core/utils.math_utils.calculate_hash_distance.py
+   - core/utils.math_utils.calculate_recursive_growth_factor.py
+   - core/utils.math_utils.calculate_recursive_multiplier.py
+   - core/utils.math_utils.calculate_rsi.py
+   - core/utils.math_utils.calculate_stochastic.py
+   - core/utils.math_utils.calculate_temporal_confidence_merge.py
+   - core/utils.math_utils.calculate_tick_acceleration.py
+   - core/utils.math_utils.calculate_true_range.py
+   - core/utils.math_utils.calculate_weighted_confidence.py
+   - core/utils.math_utils.calculate_williams_r.py
+   - core/utils.math_utils.create_spatial_grid.py
+   - core/utils.math_utils.exponential_smoothing.py
+   - core/utils.math_utils.moving_average.py
+   - core/utils.math_utils.safe_decimal_operation.py
+   - core/utils.math_utils.validate_spatial_dimensions.py
+   - core/utils.math_utils.waveform_pattern_match.py
+   - core/utils.math_utils.wavelet_decompose.py
+   - core/utils.windows_cli_compatibility.WindowsCliCompatibilityHandler.py
+   - core/utils.windows_cli_compatibility.cli_handler.py
+   - core/utils.windows_cli_compatibility.log_safe.py
+   - core/utils.windows_cli_compatibility.safe_format_error.py
+   - core/utils.windows_cli_compatibility.safe_print.py
+   - utils/cli_handler.CLIHandler.py
+   - utils/cli_handler.safe_log.py
+   - utils/math_calculate_hash_distance.py
+   - utils/math_calculate_weighted_confidence.py
+   - utils/rate_limiter.RateLimiter.py
+   - utils/windows_cli_compatibility.log_safe.py
+   - utils/windows_cli_compatibility.safe_format_error.py
+   - utils/windows_cli_compatibility.safe_print.py
+
+2. Check import consistency:
+   - Ensure relative imports use '.' prefix
+   - Ensure absolute imports reference correct paths
+   - Remove unused imports
+
+3. Fix import order:
+   - Standard library imports first
+   - Third-party imports second
+   - Local imports last

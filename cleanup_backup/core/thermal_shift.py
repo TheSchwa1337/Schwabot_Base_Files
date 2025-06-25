@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Thermal delta switch – minimal thermal drift detector.
 
@@ -16,7 +19,6 @@ Current implementation
 Future versions may include adaptive hysteresis or GPU-calibrated drift maps.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -67,7 +69,7 @@ class ThermalShift:
         else:
             self._ema = self.alpha * temp + (1.0 - self.alpha) * self._ema
 
-        delta = abs(temp - self._ema)
+        delta = unified_math.abs(temp - self._ema)
         is_stable = delta < self.threshold
         return is_stable, delta
 
@@ -94,5 +96,5 @@ def thermal_delta_switch(
     threshold
         Allowed delta before declaring instability.  Defaults to 2.5 °C.
     """
-    delta = abs(current - previous)
+    delta = unified_math.abs(current - previous)
     return delta < threshold

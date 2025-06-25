@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 
@@ -19,7 +23,7 @@ Key Features:
 Mathematical Foundations:
 - Generator: G(z) = σ(W₂ · ReLU(W₁z + b₁) + b₂)
 - Discriminator: D(x) = σ(W₄ · LeakyReLU(W₃x + b₃) + b₄)
-- BCE Loss: L_D = -[log D(x) + log(1 - D(G(z)))]
+- BCE Loss: L_D = -[log D(x) + unified_math.log(1 - D(G(z)))]
 - Wasserstein Loss: L_D = D(x) - D(G(z))
 - Gradient Penalty: L_GP = λ·(||∇_x̂ D(x̂)||₂ - 1)²
 - Entropy Calibration: ΔH = H(x) - H(G(z))
@@ -34,17 +38,16 @@ Integration Points:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
 import logging
-import math
+from core.unified_math_system import unified_math
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 # PyTorch imports with fallback handling
@@ -449,7 +452,7 @@ class EntropyGAN:
 
             # Create histogram
             hist, _ = np.histogram(signal_np, bins=50, density=True)
-            hist = hist + 1e-10  # Add small epsilon to avoid log(0)
+            hist = hist + 1e-10  # Add small epsilon to avoid unified_math.log(0)
 
             # Normalize to get probabilities
             prob = hist / np.sum(hist)
@@ -611,7 +614,7 @@ class EntropyGAN:
             if self.config.entropy_weight > 0:
                 real_entropy = self.compute_entropy(real_data)
                 fake_entropy = self.compute_entropy(fake_data)
-                entropy_loss = abs(real_entropy - fake_entropy)
+                entropy_loss = unified_math.abs(real_entropy - fake_entropy)
                 g_loss += self.config.entropy_weight * entropy_loss
                 metrics.entropy_difference = entropy_loss
 
@@ -653,11 +656,11 @@ class EntropyGAN:
                 epochs = epochs or self.config.epochs
                 batch_size = batch_size or self.config.batch_size
 
-                self.safe_print(f"🚀 Starting Entropy GAN training")
-                self.safe_print(f"   Mode: {self.config.mode.value}")
-                self.safe_print(f"   Epochs: {epochs}")
-                self.safe_print(f"   Batch size: {batch_size}")
-                self.safe_print(f"   Device: {self.device}")
+                self.safe_safe_print(f"🚀 Starting Entropy GAN training")
+                self.safe_safe_print(f"   Mode: {self.config.mode.value}")
+                self.safe_safe_print(f"   Epochs: {epochs}")
+                self.safe_safe_print(f"   Batch size: {batch_size}")
+                self.safe_safe_print(f"   Device: {self.device}")
 
                 training_start_time = time.time()
                 metrics_history = []
@@ -682,7 +685,7 @@ class EntropyGAN:
 
                         # Progress reporting
                         if epoch % 100 == 0:
-                            self.safe_print(
+                            self.safe_safe_print(
                                 f"📊 Epoch {epoch}: "
                                 f"D_loss={metrics.discriminator_loss:.4f}, "
                                 f"G_loss={metrics.generator_loss:.4f}, "
@@ -701,7 +704,7 @@ class EntropyGAN:
                 self.is_training = False
                 total_time = time.time() - training_start_time
 
-                self.safe_print(
+                self.safe_safe_print(
                     f"🎉 Training completed in {total_time:.2f} seconds"
                 )
                 return metrics_history
@@ -923,7 +926,7 @@ def create_entropy_signal_provider(
             for _ in range(batch_size):
                 freq = torch.rand(1) * 5 + 1  # Random frequency 1-6
                 phase = torch.rand(1) * 2 * math.pi  # Random phase
-                signal = torch.sin(freq * t + phase)
+                signal = torch.unified_math.sin(freq * t + phase)
 
                 # Add noise
                 noise = torch.randn_like(signal) * noise_level
@@ -949,13 +952,13 @@ def main() -> None:
     """
     try:
         if not TORCH_AVAILABLE:
-            print(
+            safe_print(
                 "❌ PyTorch not available - cannot run Entropy GAN Filter test"
             )
             return
 
-        print("🚀 Entropy GAN Filter Test")
-        print("=" * 50)
+        safe_print("🚀 Entropy GAN Filter Test")
+        safe_print("=" * 50)
 
         # Configuration
         gan_config = GANConfig(
@@ -971,24 +974,24 @@ def main() -> None:
 
         filter_config = FilterConfig(threshold=0.5, mode=FilterMode.THRESHOLD)
 
-        print(f"📊 Configuration:")
-        print(f"   Signal dimension: {gan_config.signal_dim}")
-        print(f"   Batch size: {gan_config.batch_size}")
-        print(f"   Training epochs: {gan_config.epochs}")
-        print(f"   GAN mode: {gan_config.mode.value}")
+        safe_print(f"📊 Configuration:")
+        safe_print(f"   Signal dimension: {gan_config.signal_dim}")
+        safe_print(f"   Batch size: {gan_config.batch_size}")
+        safe_print(f"   Training epochs: {gan_config.epochs}")
+        safe_print(f"   GAN mode: {gan_config.mode.value}")
 
         # Initialize GAN
-        print("\n🔧 Initializing Entropy GAN...")
+        safe_print("\n🔧 Initializing Entropy GAN...")
         entropy_gan = EntropyGAN(gan_config)
 
         # Create signal provider
-        print("📡 Creating signal provider...")
+        safe_print("📡 Creating signal provider...")
         signal_provider = create_entropy_signal_provider(
             gan_config.signal_dim, 0.1
         )
 
         # Train GAN
-        print("\n🎓 Training Entropy GAN...")
+        safe_print("\n🎓 Training Entropy GAN...")
         training_metrics = entropy_gan.train_entropy_gan(
             real_data_fn=signal_provider,
             epochs=gan_config.epochs,
@@ -997,40 +1000,40 @@ def main() -> None:
 
         if training_metrics:
             final_metrics = training_metrics[-1]
-            print(f"✅ Training completed:")
-            print(f"   Final G loss: {final_metrics.generator_loss:.4f}")
-            print(f"   Final D loss: {final_metrics.discriminator_loss:.4f}")
-            print(f"   Real accuracy: {final_metrics.real_accuracy:.3f}")
-            print(f"   Fake accuracy: {final_metrics.fake_accuracy:.3f}")
+            safe_print(f"✅ Training completed:")
+            safe_print(f"   Final G loss: {final_metrics.generator_loss:.4f}")
+            safe_print(f"   Final D loss: {final_metrics.discriminator_loss:.4f}")
+            safe_print(f"   Real accuracy: {final_metrics.real_accuracy:.3f}")
+            safe_print(f"   Fake accuracy: {final_metrics.fake_accuracy:.3f}")
 
         # Test filtering
-        print("\n🔍 Testing GAN filtering...")
+        safe_print("\n🔍 Testing GAN filtering...")
         gan_filter = GanFilter(entropy_gan.discriminator, filter_config)
 
         # Generate test signals
         test_signals = signal_provider(100)
-        print(f"   Generated {test_signals.size(0)} test signals")
+        safe_print(f"   Generated {test_signals.size(0)} test signals")
 
         # Apply filtering
         filtered_signals = gan_filter.gan_filter(test_signals)
-        print(f"   Filtered to {filtered_signals.size(0)} valid signals")
+        safe_print(f"   Filtered to {filtered_signals.size(0)} valid signals")
 
         # Get filter statistics
         stats = gan_filter.get_filter_stats()
-        print(f"   Filter statistics:")
-        print(f"     Pass rate: {stats.get('pass_rate', 0):.2%}")
-        print(f"     Signals passed: {stats.get('signals_passed', 0)}")
-        print(f"     Signals filtered: {stats.get('signals_filtered', 0)}")
+        safe_print(f"   Filter statistics:")
+        safe_print(f"     Pass rate: {stats.get('pass_rate', 0):.2%}")
+        safe_print(f"     Signals passed: {stats.get('signals_passed', 0)}")
+        safe_print(f"     Signals filtered: {stats.get('signals_filtered', 0)}")
 
         # Test batch filtering
-        print("\n📦 Testing batch filtering...")
+        safe_print("\n📦 Testing batch filtering...")
         batch_filtered = gan_filter.batch_filter(signal_provider, 50)
-        print(f"   Batch filtered to {batch_filtered.size(0)} signals")
+        safe_print(f"   Batch filtered to {batch_filtered.size(0)} signals")
 
-        print("\n🎉 Entropy GAN Filter test completed successfully!")
+        safe_print("\n🎉 Entropy GAN Filter test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Entropy GAN Filter test failed: {e}")
+        safe_print(f"❌ Entropy GAN Filter test failed: {e}")
         import traceback
 
         traceback.print_exc()

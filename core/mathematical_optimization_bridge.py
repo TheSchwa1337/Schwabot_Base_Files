@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Optimization Bridge - Multi-Vector Enhancement Layer.
 
@@ -37,7 +53,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
@@ -47,7 +62,7 @@ import logging
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 from scipy import linalg
 from scipy import optimize
@@ -367,8 +382,8 @@ class MathematicalOptimizationBridge:
         """Robust matrix multiplication for ill-conditioned matrices."""
         try:
             # Use SVD-based approach for numerical stability
-            U_A, S_A, Vt_A = linalg.svd(A, full_matrices=False)
-            U_B, S_B, Vt_B = linalg.svd(B, full_matrices=False)
+            U_A, S_A, Vt_A = linalg.unified_math.svd(A, full_matrices=False)
+            U_B, S_B, Vt_B = linalg.unified_math.svd(B, full_matrices=False)
 
             # Truncate small singular values
             threshold = 1e-12
@@ -730,8 +745,8 @@ class MathematicalOptimizationBridge:
         """Ensure numerical stability of matrix operations."""
         try:
             # Add small regularization if needed
-            eigenvals = np.linalg.eigvals(matrix)
-            if np.min(np.real(eigenvals)) < 1e-12:
+            eigenvals = unified_math.unified_math.eigenvalues(matrix)
+            if unified_math.unified_math.min(np.real(eigenvals)) < 1e-12:
                 matrix += 1e-12 * np.eye(matrix.shape[0])
             return matrix
         except Exception as e:
@@ -830,8 +845,8 @@ class MathematicalOptimizationBridge:
 def main() -> None:
     """Run the mathematical optimization bridge test harness."""
     try:
-        print("🔬 Mathematical Optimization Bridge Test")
-        print("=" * 50)
+        safe_print("🔬 Mathematical Optimization Bridge Test")
+        safe_print("=" * 50)
 
         # Initialize bridge
         bridge = MathematicalOptimizationBridge()
@@ -840,41 +855,41 @@ def main() -> None:
         A = np.random.rand(50, 50)
         B = np.random.rand(50, 50)
 
-        print(f"Matrix A shape: {A.shape}")
-        print(f"Matrix B shape: {B.shape}")
+        safe_print(f"Matrix A shape: {A.shape}")
+        safe_print(f"Matrix B shape: {B.shape}")
 
         # Test enhanced matrix multiplication
-        print("\nTesting enhanced matrix multiplication...")
+        safe_print("\nTesting enhanced matrix multiplication...")
         result = bridge.enhanced_matrix_multiply(
             A, B, OptimizationMode.GEMM_ACCELERATED
         )
         if result.convergence:
-            print(
+            safe_print(
                 f"✅ GEMM accelerated multiply completed in "
                 f"{result.execution_time:.6f}s"
             )
-            print(f"   Result shape: {result.result.shape}")
+            safe_print(f"   Result shape: {result.result.shape}")
         else:
-            print(f"❌ GEMM multiply failed: {result.error}")
+            safe_print(f"❌ GEMM multiply failed: {result.error}")
 
         # Test enhanced eigenvalue decomposition
-        print("\nTesting enhanced eigenvalue decomposition...")
+        safe_print("\nTesting enhanced eigenvalue decomposition...")
         eigen_result = bridge.enhanced_eigenvalue_decomposition(
             A, OptimizationMode.ADAPTIVE
         )
         if eigen_result.convergence:
             eigenvalues, eigenvectors = eigen_result.result
-            print(
+            safe_print(
                 f"✅ Eigenvalue decomposition completed in "
                 f"{eigen_result.execution_time:.6f}s"
             )
-            print(f"   Eigenvalues shape: {eigenvalues.shape}")
-            print(f"   Eigenvectors shape: {eigenvectors.shape}")
+            safe_print(f"   Eigenvalues shape: {eigenvalues.shape}")
+            safe_print(f"   Eigenvectors shape: {eigenvectors.shape}")
         else:
-            print(f"❌ Eigenvalue decomposition failed: {eigen_result.error}")
+            safe_print(f"❌ Eigenvalue decomposition failed: {eigen_result.error}")
 
         # Test multi-vector optimization
-        print("\nTesting multi-vector optimization...")
+        safe_print("\nTesting multi-vector optimization...")
         vectors = [np.random.rand(10), np.random.rand(10)]
         objective = lambda x: np.sum(x**2)  # Simple quadratic objective
 
@@ -882,27 +897,27 @@ def main() -> None:
             vectors, objective, mode=OptimizationMode.HYBRID
         )
         if opt_result.convergence:
-            print(
+            safe_print(
                 f"✅ Multi-vector optimization completed in "
                 f"{opt_result.execution_time:.6f}s"
             )
-            print(f"   Iterations: {opt_result.iterations}")
+            safe_print(f"   Iterations: {opt_result.iterations}")
         else:
-            print(f"❌ Multi-vector optimization failed: {opt_result.error}")
+            safe_print(f"❌ Multi-vector optimization failed: {opt_result.error}")
 
         # Get performance summary
         summary = bridge.get_performance_summary()
-        print(f"\n✅ Performance Summary:")
-        print(f"   Total operations: {summary['total_operations']}")
-        print(
+        safe_print(f"\n✅ Performance Summary:")
+        safe_print(f"   Total operations: {summary['total_operations']}")
+        safe_print(
             f"   Average execution time: " f"{summary['average_execution_time']:.6f}s"
         )
-        print(f"   Cache size: {summary['cache_size']}")
+        safe_print(f"   Cache size: {summary['cache_size']}")
 
-        print("\n🎉 Mathematical optimization bridge test completed successfully!")
+        safe_print("\n🎉 Mathematical optimization bridge test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Mathematical optimization bridge test failed: {e}")
+        safe_print(f"❌ Mathematical optimization bridge test failed: {e}")
         import traceback
 
         traceback.print_exc()

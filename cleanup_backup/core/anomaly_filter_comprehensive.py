@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Comprehensive Anomaly Filter System for Schwabot.
 
@@ -20,7 +22,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -254,15 +256,15 @@ class MarketRegimeDetector:
                 returns = np.diff(prices) / prices[:-1]
 
                 # Detect volatility regime shift
-                recent_vol = np.std(returns[-10:])  # Last 10 periods
-                historical_vol = np.std(returns[:-10])  # Earlier periods
+                recent_vol = unified_math.unified_math.std(returns[-10:])  # Last 10 periods
+                historical_vol = unified_math.unified_math.std(returns[:-10])  # Earlier periods
 
                 if recent_vol > historical_vol * 3:  # 3x volatility increase
                     anomalies.append(
                         AnomalySignal(
                             anomaly_type=AnomalyType.VOLATILITY_EXPLOSION,
                             severity="high",
-                            confidence=min(recent_vol / historical_vol / 3, 1.0),
+                            confidence=unified_math.min(recent_vol / historical_vol / 3, 1.0),
                             detected_at=time.time(),
                             description=f"Volatility explosion detected in {symbol}: {recent_vol:.4f} vs {historical_vol:.4f}",
                             affected_components=[symbol],
@@ -272,15 +274,15 @@ class MarketRegimeDetector:
 
                 # Detect trend regime shift using rolling correlation
                 if len(returns) >= 40:
-                    early_trend = np.corrcoef(np.arange(20), returns[:20])[0, 1]
-                    recent_trend = np.corrcoef(np.arange(20), returns[-20:])[0, 1]
+                    early_trend = unified_math.unified_math.correlation(np.arange(20), returns[:20])[0, 1]
+                    recent_trend = unified_math.unified_math.correlation(np.arange(20), returns[-20:])[0, 1]
 
-                    if abs(early_trend - recent_trend) > 0.8:  # Strong trend change
+                    if unified_math.abs(early_trend - recent_trend) > 0.8:  # Strong trend change
                         anomalies.append(
                             AnomalySignal(
                                 anomaly_type=AnomalyType.MARKET_REGIME_SHIFT,
                                 severity="medium",
-                                confidence=abs(early_trend - recent_trend) / 2,
+                                confidence=unified_math.abs(early_trend - recent_trend) / 2,
                                 detected_at=time.time(),
                                 description=f"Market regime shift detected in {symbol}: trend correlation changed from {early_trend:.3f} to {recent_trend:.3f}",
                                 affected_components=[symbol],
@@ -328,7 +330,7 @@ class DataFeedValidator:
                 if symbol in self.last_valid_state.prices:
                     last_price = self.last_valid_state.prices[symbol]
                     if last_price > 0:
-                        price_change = abs(price - last_price) / last_price
+                        price_change = unified_math.abs(price - last_price) / last_price
 
                         if price_change > self.price_jump_threshold:
                             anomalies.append(
@@ -406,7 +408,7 @@ class MathematicalSafetyProtector:
                     AnomalySignal(
                         anomaly_type=AnomalyType.MATHEMATICAL_SINGULARITY,
                         severity="medium",
-                        confidence=min(entropy / self.entropy_explosion_threshold, 1.0),
+                        confidence=unified_math.min(entropy / self.entropy_explosion_threshold, 1.0),
                         detected_at=current_time,
                         description=f"Entropy explosion in {component}: {entropy:.2f}",
                         affected_components=[component],
@@ -477,7 +479,7 @@ class ExecutionAnomalyMonitor:
         # Check execution latency spikes
         if state.execution_latencies:
             recent_latency = (
-                np.mean(state.execution_latencies[-10:]) * 1000
+                unified_math.unified_math.mean(state.execution_latencies[-10:]) * 1000
             )  # Convert to ms
 
             if recent_latency > self.normal_latency_ms * self.latency_spike_threshold:
@@ -519,7 +521,7 @@ class ExecutionAnomalyMonitor:
                 AnomalySignal(
                     anomaly_type=AnomalyType.EXECUTION_TIMING,
                     severity="medium",
-                    confidence=min(state.pending_orders / 50, 1.0),
+                    confidence=unified_math.min(state.pending_orders / 50, 1.0),
                     detected_at=current_time,
                     description=f"Excessive pending orders: {state.pending_orders}",
                     affected_components=["order_management"],
@@ -546,7 +548,7 @@ class PortfolioStateGuardian:
 
         # Check margin health
         if state.available_margin > 0:
-            total_portfolio_value = sum(abs(pos) for pos in state.positions.values())
+            total_portfolio_value = sum(unified_math.abs(pos) for pos in state.positions.values())
 
             if total_portfolio_value > 0:
                 margin_ratio = state.available_margin / total_portfolio_value
@@ -567,11 +569,11 @@ class PortfolioStateGuardian:
 
         # Check position concentration
         if state.positions:
-            total_exposure = sum(abs(pos) for pos in state.positions.values())
+            total_exposure = sum(unified_math.abs(pos) for pos in state.positions.values())
 
             if total_exposure > 0:
                 for symbol, position in state.positions.items():
-                    concentration = abs(position) / total_exposure
+                    concentration = unified_math.abs(position) / total_exposure
 
                     if concentration > self.concentration_limit:
                         anomalies.append(
@@ -588,8 +590,8 @@ class PortfolioStateGuardian:
 
         # Check unrealized P&L drawdown
         if state.unrealized_pnl < 0:
-            drawdown_pct = abs(state.unrealized_pnl) / max(
-                sum(abs(pos) for pos in state.positions.values()), 1
+            drawdown_pct = unified_math.abs(state.unrealized_pnl) / max(
+                sum(unified_math.abs(pos) for pos in state.positions.values()), 1
             )
 
             if drawdown_pct > self.drawdown_alert_threshold:
@@ -649,6 +651,6 @@ if __name__ == "__main__":
         test_state
     )
 
-    print(f"✅ Safe to execute: {safe_to_execute}")
-    print(f"🔍 Anomalies detected: {len(detected_anomalies)}")
-    print(f"📋 Recommended actions: {len(recommended_actions)}")
+    safe_print(f"✅ Safe to execute: {safe_to_execute}")
+    safe_print(f"🔍 Anomalies detected: {len(detected_anomalies)}")
+    safe_print(f"📋 Recommended actions: {len(recommended_actions)}")

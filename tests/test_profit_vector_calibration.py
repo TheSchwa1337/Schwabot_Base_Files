@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit Vector Calibration Test - Schwabot Framework.
 
@@ -18,7 +20,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from decimal import Decimal, getcontext
 from typing import Dict, Any, List
 from dataclasses import dataclass
@@ -153,14 +155,14 @@ class ProfitVectorCalibrationTest:
                 
                 # Validate profit calculation
                 profit_tolerance = 0.01  # 1 cent tolerance
-                if abs(calculated_profit - expected_profit) > profit_tolerance:
+                if unified_math.abs(calculated_profit - expected_profit) > profit_tolerance:
                     error_msg = f"Test case {i} ({test_case.description}): Profit mismatch. Expected: {expected_profit:.2f}, Got: {calculated_profit:.2f}"
                     results['errors'].append(error_msg)
                     results['success'] = False
                 
                 # Validate efficiency calculation
                 efficiency_tolerance = 0.01
-                if abs(calculated_efficiency - expected_efficiency) > efficiency_tolerance:
+                if unified_math.abs(calculated_efficiency - expected_efficiency) > efficiency_tolerance:
                     error_msg = f"Test case {i} ({test_case.description}): Efficiency mismatch. Expected: {expected_efficiency:.2f}, Got: {calculated_efficiency:.2f}"
                     results['errors'].append(error_msg)
                     results['success'] = False
@@ -172,8 +174,8 @@ class ProfitVectorCalibrationTest:
                     'calculated_profit': calculated_profit,
                     'expected_efficiency': expected_efficiency,
                     'calculated_efficiency': calculated_efficiency,
-                    'profit_accuracy': abs(calculated_profit - expected_profit) <= profit_tolerance,
-                    'efficiency_accuracy': abs(calculated_efficiency - expected_efficiency) <= efficiency_tolerance
+                    'profit_accuracy': unified_math.abs(calculated_profit - expected_profit) <= profit_tolerance,
+                    'efficiency_accuracy': unified_math.abs(calculated_efficiency - expected_efficiency) <= efficiency_tolerance
                 }
                 
             except Exception as e:
@@ -238,7 +240,7 @@ class ProfitVectorCalibrationTest:
             
             # Validate profit tracking
             profit_tolerance = 0.01
-            if abs(profit_increase - expected_total_profit) > profit_tolerance:
+            if unified_math.abs(profit_increase - expected_total_profit) > profit_tolerance:
                 error_msg = f"Profit tracking mismatch. Expected increase: {expected_total_profit:.2f}, Actual increase: {profit_increase:.2f}"
                 results['errors'].append(error_msg)
                 results['success'] = False
@@ -248,7 +250,7 @@ class ProfitVectorCalibrationTest:
                 'final_profit': final_profit,
                 'expected_increase': expected_total_profit,
                 'actual_increase': profit_increase,
-                'tracking_accuracy': abs(profit_increase - expected_total_profit) <= profit_tolerance
+                'tracking_accuracy': unified_math.abs(profit_increase - expected_total_profit) <= profit_tolerance
             }
             
         except Exception as e:
@@ -462,18 +464,18 @@ if __name__ == "__main__":
     result = test_profit_vector_calibration()
     
     # Print results
-    print("\n" + "="*60)
-    print("💰 PROFIT VECTOR CALIBRATION TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("💰 PROFIT VECTOR CALIBRATION TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

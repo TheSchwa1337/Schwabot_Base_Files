@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 riddle_gemm.py - Recursive Interlocking Dimensional Logic & GEMM Engine.
@@ -7,7 +8,7 @@ vector comparison logic, strategy scoring, and logic sequence modulation using
 General Matrix-to-Matrix (GEMM) style operations.
 """
 
-import numpy as np
+from core.unified_math_system import unified_math
 import logging
 from typing import Dict, List, Any, Tuple, Optional, Union
 import time
@@ -171,7 +172,7 @@ class RiddleGEMMEngine:
         
         # Apply GEMM-style transformation
         weight_matrix = self.weight_matrices.get(matrix_name, self.weight_matrices["default"])
-        transformed_state = np.dot(weight_matrix, state_vector_np)
+        transformed_state = unified_math.unified_math.dot_product(weight_matrix, state_vector_np)
 
         # ✨ NEW: Update matrix controllers with transformed state
         self._update_matrix_controllers(transformed_state)
@@ -205,7 +206,7 @@ class RiddleGEMMEngine:
             # Update 42-bit controller (pad to 42 elements)
             if BitLevel.FORTY_TWO_BIT in self.matrix_controllers:
                 forty_two_state = np.zeros(42)
-                forty_two_state[:min(transformed_state.size, 42)] = transformed_state[:42]
+                forty_two_state[:unified_math.min(transformed_state.size, 42)] = transformed_state[:42]
                 self.matrix_controllers[BitLevel.FORTY_TWO_BIT].update_state(forty_two_state)
 
         except Exception as e:
@@ -228,7 +229,7 @@ class RiddleGEMMEngine:
         if not scores:
             return None, 0.0
 
-        best_strategy = max(scores, key=scores.get)
+        best_strategy = unified_math.max(scores, key=scores.get)
         best_score = scores[best_strategy]
         
         # ✨ NEW: Check for fallback triggers
@@ -277,7 +278,7 @@ class RiddleGEMMEngine:
         try:
             # Use the most conservative strategy as fallback
             if self.strategy_vectors:
-                fallback_strategy = min(self.strategy_vectors.keys())
+                fallback_strategy = unified_math.min(self.strategy_vectors.keys())
                 fallback_score = 0.3  # Conservative fallback score
                 logger.info(f"Executing fallback strategy: '{fallback_strategy}'")
                 return fallback_strategy, fallback_score

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Core Loop Manager - Unified Component Orchestration.
 
@@ -440,7 +441,7 @@ class CoreLoopManager:
             # Extract allocator data
             allocator_magnitude = context.profit_allocation.get('btc_allocation', 0.5)
             allocator_direction = 'buy' if allocator_magnitude > 0.5 else 'sell'
-            allocator_confidence = abs(allocator_magnitude - 0.5) * 2  # Convert to 0-1 scale
+            allocator_confidence = unified_math.abs(allocator_magnitude - 0.5) * 2  # Convert to 0-1 scale
             
             # Register vectors with reconciler
             self.profit_vector_reconciler.register_waveform_vector(

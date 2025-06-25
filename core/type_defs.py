@@ -1,3 +1,6 @@
+from __future__ import annotations
+import numpy as np
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Schwabot Mathematical Type Definitions.
 
@@ -25,15 +28,12 @@ Based on systematic elimination of 257+ flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from datetime import datetime
 import logging
 from typing import Any, Callable, Dict, List, NewType, Protocol, Tuple, Union, Optional, NamedTuple, TypeVar, Generic
 from enum import Enum
 
-import numpy as np
 from numpy.typing import NDArray
 import hashlib
 
@@ -66,20 +66,27 @@ ComplexTensor = NDArray[np.complex128]  # 3D+ complex array
 # TRADING AND MARKET TYPES
 # =============================================================================
 
-# Price and volume types
+# Basic trading types
 Price = NewType("Price", float)
 Volume = NewType("Volume", float)
 Quantity = NewType("Quantity", float)
 Amount = NewType("Amount", float)
 
+# Advanced trading types
+Confidence = NewType("Confidence", float)  # Confidence score (0.0 to 10.0)
+ProfitRatio = NewType("ProfitRatio", float)  # Profit ratio (0.0 to 1.0)
+GhostSignalStrength = NewType("GhostSignalStrength", float)  # Ghost signal strength (0.0 to 1.0)
+EntropyLevel = NewType("EntropyLevel", float)  # Entropy level (0.0 to 1.0)
+VolumeRatio = NewType("VolumeRatio", float)  # Volume ratio (current/average)
+
 # Time series types
-PriceSeries = NDArray[np.float64]  # 1D array of prices
-VolumeSeries = NDArray[np.float64]  # 1D array of volumes
-TimestampSeries = NDArray[np.datetime64]  # 1D array of timestamps
+PriceSeries = NDArray[np.float64]
+VolumeSeries = NDArray[np.float64]
+TimestampSeries = NDArray[np.datetime64]
 
 # Market data structures
-MarketData = Dict[str, Union[PriceSeries, VolumeSeries, TimestampSeries]]
-TickerData = Dict[str, Union[Price, Volume, datetime]]
+MarketData = Dict[str, Union[Price, Volume, datetime]]
+TickerData = Dict[str, Union[Price, Volume, Quantity, datetime]]
 
 # =============================================================================
 # THERMAL SYSTEM TYPES
@@ -204,6 +211,9 @@ EntryPathway = List[str]  # Entry pathway description
 MemoryEcho = NDArray[np.float64]  # Memory echo array
 StrategyConfirmation = Dict[str, bool]  # Strategy confirmation flags
 QuantumHash = str  # Quantum hash string
+StrategyId = str  # Strategy identifier
+TimeSlot = float  # Time slot for scheduling
+EntropyMap = NDArray[np.float64]  # Entropy mapping array
 
 # =============================================================================
 # ANALYSIS AND RESULT TYPES
@@ -392,6 +402,9 @@ __all__ = [
     "MemoryEcho",
     "StrategyConfirmation",
     "QuantumHash",
+    "StrategyId",
+    "TimeSlot",
+    "EntropyMap",
     # Analysis and result types
     "AnalysisResult",
     "PredictionResult",
@@ -698,7 +711,7 @@ class AIConsensus:
             self.consensus_score = total_confidence / len(self.feedbacks)
             
             # Select highest confidence recommendation
-            best_feedback = max(self.feedbacks, key=lambda f: f.confidence_score)
+            best_feedback = unified_math.max(self.feedbacks, key=lambda f: f.confidence_score)
             self.final_recommendation = best_feedback.recommendation
 
 

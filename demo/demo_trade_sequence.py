@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Trade Sequence Module
 ===================================
@@ -8,7 +10,7 @@ Provides comprehensive trade simulation with realistic market conditions.
 
 import json
 import yaml
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -138,7 +140,7 @@ class DemoTradeSequence:
                 self.backtest_config = {}
                 
         except Exception as e:
-            print(f"Warning: Could not load trade configuration: {e}")
+            safe_print(f"Warning: Could not load trade configuration: {e}")
             self.matrix_config = {}
             self.backtest_config = {}
     
@@ -186,7 +188,7 @@ class DemoTradeSequence:
             self._update_performance_metrics()
             
         except Exception as e:
-            print(f"Warning: Could not load trade data: {e}")
+            safe_print(f"Warning: Could not load trade data: {e}")
     
     def _save_trade_data(self):
         """Save trade data to files"""
@@ -210,7 +212,7 @@ class DemoTradeSequence:
                 json.dump(positions_data, f, indent=2, default=str)
                 
         except Exception as e:
-            print(f"Error saving trade data: {e}")
+            safe_print(f"Error saving trade data: {e}")
     
     def generate_market_data(self, num_ticks: int = 100) -> List[Dict[str, Any]]:
         """Generate realistic market data for simulation"""
@@ -223,7 +225,7 @@ class DemoTradeSequence:
             
             # Simulate volume with some correlation to price movement
             base_volume = 1000.0
-            volume_multiplier = 1.0 + abs(price_change) * 10
+            volume_multiplier = 1.0 + unified_math.abs(price_change) * 10
             volume = base_volume * volume_multiplier * np.random.uniform(0.8, 1.2)
             
             # Store data
@@ -455,7 +457,7 @@ class DemoTradeSequence:
         
         # Calculate profit/loss metrics
         total_profit = sum(p.unrealized_pnl for p in self.closed_positions if p.unrealized_pnl > 0)
-        total_loss = abs(sum(p.unrealized_pnl for p in self.closed_positions if p.unrealized_pnl < 0))
+        total_loss = unified_math.abs(sum(p.unrealized_pnl for p in self.closed_positions if p.unrealized_pnl < 0))
         
         self.performance_metrics["total_profit"] = total_profit
         self.performance_metrics["total_loss"] = total_loss
@@ -465,8 +467,8 @@ class DemoTradeSequence:
         profitable_trades = [p.unrealized_pnl for p in self.closed_positions if p.unrealized_pnl > 0]
         losing_trades = [p.unrealized_pnl for p in self.closed_positions if p.unrealized_pnl < 0]
         
-        self.performance_metrics["average_profit"] = np.mean(profitable_trades) if profitable_trades else 0.0
-        self.performance_metrics["average_loss"] = np.mean(losing_trades) if losing_trades else 0.0
+        self.performance_metrics["average_profit"] = unified_math.unified_math.mean(profitable_trades) if profitable_trades else 0.0
+        self.performance_metrics["average_loss"] = unified_math.unified_math.mean(losing_trades) if losing_trades else 0.0
         
         # Calculate drawdown
         cumulative_pnl = []
@@ -476,21 +478,21 @@ class DemoTradeSequence:
             cumulative_pnl.append(running_total)
         
         if cumulative_pnl:
-            peak = max(cumulative_pnl)
-            max_drawdown = min(0, min(cumulative_pnl) - peak)
-            self.performance_metrics["max_drawdown"] = abs(max_drawdown)
+            peak = unified_math.max(cumulative_pnl)
+            max_drawdown = unified_math.min(0, unified_math.min(cumulative_pnl) - peak)
+            self.performance_metrics["max_drawdown"] = unified_math.abs(max_drawdown)
             
             # Calculate Sharpe ratio (simplified)
             returns = [p.unrealized_pnl for p in self.closed_positions]
             if returns:
-                avg_return = np.mean(returns)
-                std_return = np.std(returns)
+                avg_return = unified_math.unified_math.mean(returns)
+                std_return = unified_math.unified_math.std(returns)
                 self.performance_metrics["sharpe_ratio"] = avg_return / std_return if std_return > 0 else 0.0
     
     def run_trade_sequence(self, num_trades: int = 10, strategy: str = "moderate") -> Dict[str, Any]:
         """Run a complete trade sequence simulation"""
         
-        print(f"🚀 Starting trade sequence: {num_trades} trades with {strategy} strategy")
+        safe_print(f"🚀 Starting trade sequence: {num_trades} trades with {strategy} strategy")
         
         # Generate market data
         market_data = self.generate_market_data(num_trades * 10)  # More data than trades
@@ -522,7 +524,7 @@ class DemoTradeSequence:
                     positions_opened += 1
                     trades_executed += 1
                     
-                    print(f"✅ Opened position {position.position_id} at ${entry_execution.price:.2f}")
+                    safe_print(f"✅ Opened position {position.position_id} at ${entry_execution.price:.2f}")
             
             # Update existing positions
             for position_id in list(self.active_positions.keys()):
@@ -534,13 +536,13 @@ class DemoTradeSequence:
                     exit_execution = self.close_position(position_id, market_tick["price"], exit_reason)
                     
                     pnl = exit_execution.price - position.entry_price
-                    print(f"🔚 Closed position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
+                    safe_print(f"🔚 Closed position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
         
         # Close any remaining positions
         for position_id in list(self.active_positions.keys()):
             exit_execution = self.close_position(position_id, market_data[-1]["price"], "end_of_simulation")
             pnl = exit_execution.price - self.active_positions[position_id].entry_price
-            print(f"🔚 Closed remaining position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
+            safe_print(f"🔚 Closed remaining position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
         
         # Save trade data
         self._save_trade_data()
@@ -548,9 +550,9 @@ class DemoTradeSequence:
         # Generate report
         report = self.generate_trade_report()
         
-        print(f"📊 Trade sequence completed: {trades_executed} trades, {positions_opened} positions opened")
-        print(f"💰 Total profit: ${self.performance_metrics['total_profit']:.2f}")
-        print(f"📈 Win rate: {self.performance_metrics['win_rate']:.2%}")
+        safe_print(f"📊 Trade sequence completed: {trades_executed} trades, {positions_opened} positions opened")
+        safe_print(f"💰 Total profit: ${self.performance_metrics['total_profit']:.2f}")
+        safe_print(f"📈 Win rate: {self.performance_metrics['win_rate']:.2%}")
         
         return report
     
@@ -586,7 +588,7 @@ class DemoTradeSequence:
             if position.unrealized_pnl > 0:
                 strategy_performance[strategy]["profit"] += position.unrealized_pnl
             else:
-                strategy_performance[strategy]["loss"] += abs(position.unrealized_pnl)
+                strategy_performance[strategy]["loss"] += unified_math.abs(position.unrealized_pnl)
         
         report["strategy_performance"] = strategy_performance
         
@@ -601,7 +603,7 @@ class DemoTradeSequence:
             if position.unrealized_pnl > 0:
                 overlay_performance[overlay]["profit"] += position.unrealized_pnl
             else:
-                overlay_performance[overlay]["loss"] += abs(position.unrealized_pnl)
+                overlay_performance[overlay]["loss"] += unified_math.abs(position.unrealized_pnl)
         
         report["overlay_performance"] = overlay_performance
         
@@ -624,5 +626,5 @@ if __name__ == "__main__":
     report = trade_sequence.run_trade_sequence(num_trades=5, strategy="moderate")
     
     # Print report
-    print("\n📊 Trade Report:")
+    safe_print("\n📊 Trade Report:")
     print(json.dumps(report, indent=2, default=str)) 

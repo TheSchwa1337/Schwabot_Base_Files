@@ -1,0 +1,258 @@
+{
+  "hash_00": {
+    "bit_depth": 4,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 0,
+    "priority": 0.1,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_01": {
+    "bit_depth": 8,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 1,
+    "priority": 0.2,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_02": {
+    "bit_depth": 42,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 2,
+    "priority": 0.3,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_03": {
+    "bit_depth": 4,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 3,
+    "priority": 0.4,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_04": {
+    "bit_depth": 8,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 4,
+    "priority": 0.5,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_05": {
+    "bit_depth": 42,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 5,
+    "priority": 0.6,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_06": {
+    "bit_depth": 4,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 6,
+    "priority": 0.7,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_07": {
+    "bit_depth": 8,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 7,
+    "priority": 0.8,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_08": {
+    "bit_depth": 42,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 8,
+    "priority": 0.9,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_09": {
+    "bit_depth": 4,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 9,
+    "priority": 1.0,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_10": {
+    "bit_depth": 8,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 10,
+    "priority": 1.1,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_11": {
+    "bit_depth": 42,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 11,
+    "priority": 1.2,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_12": {
+    "bit_depth": 4,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 12,
+    "priority": 1.3,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_13": {
+    "bit_depth": 8,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 13,
+    "priority": 1.4,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_14": {
+    "bit_depth": 42,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 14,
+    "priority": 1.5,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_15": {
+    "bit_depth": 4,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 15,
+    "priority": 1.6,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_16": {
+    "bit_depth": 8,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 16,
+    "priority": 1.7,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_17": {
+    "bit_depth": 42,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 17,
+    "priority": 1.8,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_18": {
+    "bit_depth": 4,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 18,
+    "priority": 1.9,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_19": {
+    "bit_depth": 8,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 19,
+    "priority": 2.0,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_20": {
+    "bit_depth": 42,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 20,
+    "priority": 2.1,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_21": {
+    "bit_depth": 4,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 21,
+    "priority": 2.2,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_22": {
+    "bit_depth": 8,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 22,
+    "priority": 2.3,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_23": {
+    "bit_depth": 42,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 23,
+    "priority": 2.4,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_24": {
+    "bit_depth": 4,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 24,
+    "priority": 2.5,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_25": {
+    "bit_depth": 8,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 25,
+    "priority": 2.6,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_26": {
+    "bit_depth": 42,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 26,
+    "priority": 2.7,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_27": {
+    "bit_depth": 4,
+    "tensor_route": "route_2",
+    "matrix_basket_id": 27,
+    "priority": 2.8,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_28": {
+    "bit_depth": 8,
+    "tensor_route": "route_3",
+    "matrix_basket_id": 28,
+    "priority": 2.9,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_29": {
+    "bit_depth": 42,
+    "tensor_route": "route_4",
+    "matrix_basket_id": 29,
+    "priority": 3.0,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_30": {
+    "bit_depth": 4,
+    "tensor_route": "route_0",
+    "matrix_basket_id": 30,
+    "priority": 3.1,
+    "enabled": true,
+    "metadata": {}
+  },
+  "hash_31": {
+    "bit_depth": 8,
+    "tensor_route": "route_1",
+    "matrix_basket_id": 31,
+    "priority": 3.2,
+    "enabled": true,
+    "metadata": {}
+  }
+}

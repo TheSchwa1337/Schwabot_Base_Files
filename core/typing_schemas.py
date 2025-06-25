@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 Schwabot Typing Schemas - Centralized Type Definitions
@@ -15,7 +17,6 @@ This ensures type safety across the entire codebase and prevents
 inconsistent data structures that could lead to runtime errors.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -27,6 +28,15 @@ from typing import (
 import hashlib
 import numpy as np
 from numpy.typing import NDArray
+
+# Fallback math functions to avoid circular imports
+def _safe_math_max(a: float, b: float) -> float:
+    """Safe max function to avoid circular imports."""
+    return max(a, b)
+
+def _safe_math_min(a: float, b: float) -> float:
+    """Safe min function to avoid circular imports."""
+    return min(a, b)
 
 # =============================================================================
 # FAULT HANDLING SCHEMAS
@@ -110,10 +120,10 @@ class AIStrategyResponse:
             self.strategy_hash = self._generate_hash()
         
         # Ensure confidence is bounded
-        self.confidence_score = max(0.0, min(1.0, self.confidence_score))
+        self.confidence_score = _safe_math_max(0.0, _safe_math_min(1.0, self.confidence_score))
         
         # Ensure layer depth is positive
-        self.layer_depth = max(1, self.layer_depth)
+        self.layer_depth = _safe_math_max(1, self.layer_depth)
 
     def _generate_hash(self) -> str:
         """Generate hash signature for the strategy."""
@@ -144,17 +154,17 @@ class MathematicalOperation:
 @dataclass
 class VectorOperation(MathematicalOperation):
     """Vector-specific mathematical operation."""
-    input_vector: NDArray[np.float64]
-    output_vector: Optional[NDArray[np.float64]] = None
     vector_dimensions: Tuple[int, ...] = field(default_factory=tuple)
+    input_vector: Optional[NDArray[np.float64]] = None
+    output_vector: Optional[NDArray[np.float64]] = None
 
 
 @dataclass
 class MatrixOperation(MathematicalOperation):
     """Matrix-specific mathematical operation."""
-    input_matrix: NDArray[np.float64]
-    output_matrix: Optional[NDArray[np.float64]] = None
     matrix_shape: Tuple[int, int] = field(default_factory=tuple)
+    input_matrix: Optional[NDArray[np.float64]] = None
+    output_matrix: Optional[NDArray[np.float64]] = None
 
 
 # =============================================================================
@@ -222,13 +232,13 @@ class PerformanceMetrics:
     execution_time: float
     memory_usage: float
     cpu_usage: float
-    gpu_usage: Optional[float] = None
     throughput: float
     latency: float
     error_rate: float
     success_rate: float
     profit_per_tick: float
     risk_score: float
+    gpu_usage: Optional[float] = None
 
 
 # =============================================================================
@@ -318,7 +328,7 @@ def create_fault_log(
         error_code=error_code,
         module=module,
         recovery_suggestion=recovery_suggestion,
-        severity=max(0.0, min(1.0, severity)),
+        severity=_safe_math_max(0.0, _safe_math_min(1.0, severity)),
         context=context or {},
         ai_feedback=ai_feedback
     )

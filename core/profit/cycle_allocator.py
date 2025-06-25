@@ -1,7 +1,8 @@
 """Profit cycle allocator for basket distribution."""
 
 from __future__ import annotations
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 
 def allocate(phi: float, alphas: list[float]) -> np.ndarray:

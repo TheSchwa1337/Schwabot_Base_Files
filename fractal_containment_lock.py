@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fractal Containment Lock - Multi-Dimensional Profit Mapping.
 
@@ -8,8 +9,8 @@ Implements the core mathematical framework for:
 - Fractal containment for profit isolation and security
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Union, Callable
@@ -481,7 +482,7 @@ class FractalContainmentLock:
         # Calculate distances to all profit points
         distances = []
         for profit_point in profit_points:
-            dist = math.sqrt(
+            dist = unified_math.sqrt(
                 (x - profit_point.x)**2 + 
                 (y - profit_point.y)**2 + 
                 (z - profit_point.z)**2
@@ -545,7 +546,7 @@ class FractalContainmentLock:
         
         current_index = level_hierarchy.index(current_level)
         child_level = (
-            level_hierarchy[min(current_index + 1, len(level_hierarchy) - 1)]
+            level_hierarchy[unified_math.min(current_index + 1, len(level_hierarchy) - 1)]
         )
         
         child_bag = self.create_profit_bag(

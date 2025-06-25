@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""
+from __future__ import annotations
 
+"""
 Schwabot Integration Orchestrator
 =================================
 
@@ -29,8 +30,6 @@ Integrated Components:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
@@ -39,6 +38,30 @@ import logging
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional
+
+# Import safe print for CLI compatibility
+try:
+    # Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+except ImportError:
+    # Fallback for when utils is not available
+    def safe_print(*args, **kwargs): print(*args, **kwargs)
+    def info(*args, **kwargs): print(*args, **kwargs)
+    def warn(*args, **kwargs): print(*args, **kwargs)
+    def error(*args, **kwargs): print(*args, **kwargs)
+    def success(*args, **kwargs): print(*args, **kwargs)
+    def debug(*args, **kwargs): print(*args, **kwargs)
 
 # Import Windows CLI compatibility handler
 try:
@@ -391,21 +414,21 @@ class IntegrationOrchestrator:
                 )
                 return True
 
-            self.safe_print("🚀 Starting Schwabot Integration Orchestrator")
+            self.safe_safe_print("🚀 Starting Schwabot Integration Orchestrator")
             self.start_time = datetime.now()
 
             # Get configuration
             config = self.config_manager.get_config()
             self.mode = IntegrationMode(config.system.environment.value)
 
-            self.safe_print(f"⚙️ Mode: {self.mode.value}")
-            self.safe_print(
+            self.safe_safe_print(f"⚙️ Mode: {self.mode.value}")
+            self.safe_safe_print(
                 f"🔧 Components to initialize: {len(self.components)}"
             )
 
             # Initialize components in dependency order
             initialization_order = self._get_initialization_order()
-            self.safe_print(
+            self.safe_safe_print(
                 f"📋 Initialization order: {', '.join(initialization_order)}"
             )
 
@@ -413,9 +436,9 @@ class IntegrationOrchestrator:
             for component_name in initialization_order:
                 if self._initialize_component(component_name):
                     success_count += 1
-                    self.safe_print(f"✅ {component_name} initialized")
+                    self.safe_safe_print(f"✅ {component_name} initialized")
                 else:
-                    self.safe_print(
+                    self.safe_safe_print(
                         f"❌ {component_name} failed to initialize"
                     )
 
@@ -424,8 +447,8 @@ class IntegrationOrchestrator:
 
             self.is_running = True
 
-            self.safe_print(f"🎉 Integration orchestrator started")
-            self.safe_print(
+            self.safe_safe_print(f"🎉 Integration orchestrator started")
+            self.safe_safe_print(
                 f"   Successfully initialized: "
                 f"{success_count}/{len(self.components)} components"
             )
@@ -438,7 +461,7 @@ class IntegrationOrchestrator:
         except Exception as e:
             error_msg = f"Error starting integration orchestrator: {e}"
             self.safe_log("error", error_msg)
-            self.safe_print(f"❌ {error_msg}")
+            self.safe_safe_print(f"❌ {error_msg}")
             return False
 
     def _get_initialization_order(self) -> List[str]:
@@ -929,7 +952,7 @@ class IntegrationOrchestrator:
             if not self.is_running:
                 return True
 
-            self.safe_print("🛑 Shutting down Integration Orchestrator")
+            self.safe_safe_print("🛑 Shutting down Integration Orchestrator")
 
             self.is_running = False
 
@@ -942,7 +965,7 @@ class IntegrationOrchestrator:
                 for component in self.components.values():
                     component.status = ComponentStatus.SHUTDOWN
 
-            self.safe_print("✅ Integration Orchestrator shutdown complete")
+            self.safe_safe_print("✅ Integration Orchestrator shutdown complete")
             return True
 
         except Exception as e:
@@ -1062,82 +1085,82 @@ def main() -> None:
     centralized configuration management.
     """
     try:
-        print("🚀 Integration Orchestrator Test")
-        print("=" * 50)
+        safe_print("🚀 Integration Orchestrator Test")
+        safe_print("=" * 50)
 
         # Initialize orchestrator
-        print("🔧 Initializing Integration Orchestrator...")
+        safe_print("🔧 Initializing Integration Orchestrator...")
         orchestrator = get_integration_orchestrator()
 
         # Start integration
-        print("\n🎯 Starting system integration...")
+        safe_print("\n🎯 Starting system integration...")
         success = orchestrator.start_integration()
 
         if success:
-            print("✅ Integration started successfully")
+            safe_print("✅ Integration started successfully")
 
             # Get system status
-            print("\n📊 System Status:")
+            safe_print("\n📊 System Status:")
             status = orchestrator.get_system_status()
 
-            print(f"   Mode: {status['orchestrator']['mode']}")
-            print(f"   Running: {status['orchestrator']['running']}")
-            print(
+            safe_print(f"   Mode: {status['orchestrator']['mode']}")
+            safe_print(f"   Running: {status['orchestrator']['running']}")
+            safe_print(
                 f"   Components: {status['metrics']['running_components']}/{status['metrics']['total_components']}"
             )
 
             # Show component details
-            print("\n🔍 Component Status:")
+            safe_print("\n🔍 Component Status:")
             for name, info in status["components"].items():
                 status_emoji = (
                     "✅"
                     if info["status"] == "running"
                     else "❌" if info["status"] == "error" else "⏳"
                 )
-                print(f"   {status_emoji} {name}: {info['status']}")
+                safe_print(f"   {status_emoji} {name}: {info['status']}")
 
             # Test component access
-            print("\n🧪 Testing Component Access:")
+            safe_print("\n🧪 Testing Component Access:")
             mathlib_v1 = orchestrator.get_component("mathlib_v1")
             if mathlib_v1:
-                print("   ✅ MathLib V1 accessible")
+                safe_print("   ✅ MathLib V1 accessible")
             else:
-                print("   ❌ MathLib V1 not accessible")
+                safe_print("   ❌ MathLib V1 not accessible")
 
             gan_filter = orchestrator.get_component("gan_filter")
             if gan_filter:
-                print("   ✅ GAN Filter accessible")
+                safe_print("   ✅ GAN Filter accessible")
             else:
-                print(
+                safe_print(
                     "   ⚠️ GAN Filter not accessible (may be disabled or PyTorch unavailable)"
                 )
 
             # Test configuration integration
-            print("\n⚙️ Testing Configuration Integration:")
+            safe_print("\n⚙️ Testing Configuration Integration:")
             config_manager = orchestrator.config_manager
             config = config_manager.get_config()
-            print(f"   GAN enabled: {config.advanced.gan_enabled}")
-            print(f"   GAN batch size: {config.advanced.gan_batch_size}")
+            safe_print(f"   GAN enabled: {config.advanced.gan_enabled}")
+            safe_print(f"   GAN batch size: {config.advanced.gan_batch_size}")
 
             # Simulate configuration change
-            print("\n🔄 Testing Configuration Hot-Reload:")
+            safe_print("\n🔄 Testing Configuration Hot-Reload:")
             config_manager.update_config("advanced", "gan_batch_size", 128)
             updated_config = config_manager.get_config()
-            print(
+            safe_print(
                 f"   Updated GAN batch size: {updated_config.advanced.gan_batch_size}"
             )
 
-            print("\n🎉 Integration Orchestrator test completed successfully!")
+            safe_print("\n🎉 Integration Orchestrator test completed successfully!")
 
             # Shutdown
-            print("\n🛑 Shutting down...")
+            safe_print("\n🛑 Shutting down...")
             orchestrator.shutdown()
 
         else:
-            print("❌ Integration failed to start")
+            safe_print("❌ Integration failed to start")
 
     except Exception as e:
-        print(f"❌ Integration Orchestrator test failed: {e}")
+        safe_print(f"❌ Integration Orchestrator test failed: {e}")
         import traceback
 
         traceback.print_exc()

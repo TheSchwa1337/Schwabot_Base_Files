@@ -1,8 +1,9 @@
 """Phantom exit logic for profit-target based signals."""
 
 from __future__ import annotations
-import math
+from core.unified_math_system import unified_math
 import time
+from core.unified_math_system import unified_math
 
 
 def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> float:
@@ -20,7 +21,7 @@ def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> f
         Exit weight (0→hold, 1→full close)
     """
     # Exponential decay factor
-    kappa = math.exp(-time.time() / half_life_sec)
+    kappa = unified_math.exp(-time.time() / half_life_sec)
 
     # Sign based on profit vs target, scaled by decay
     return math.copysign(kappa, p_profit - p_target)

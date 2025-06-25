@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Basket Phase Map - Trading Phase and Market Condition Mapping for Schwabot
@@ -215,16 +216,16 @@ def main() -> None:
     
     # Get current configuration
     config = phase_map.get_current_config()
-    print(f"Current config: {config.allocation if config else 'None'}")
+    safe_print(f"Current config: {config.allocation if config else 'None'}")
     
     # Predict next phase
     market_data = {"volume_increase": True, "price_momentum": "positive"}
     predictions = phase_map.predict_next_phase(market_data)
-    print(f"Next phase predictions: {predictions}")
+    safe_print(f"Next phase predictions: {predictions}")
     
     # Get statistics
     stats = phase_map.get_phase_statistics()
-    print(f"Phase statistics: {stats}")
+    safe_print(f"Phase statistics: {stats}")
 
 if __name__ == "__main__":
     main()

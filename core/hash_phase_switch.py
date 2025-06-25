@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Phase-hash switch helper.
 
@@ -13,7 +15,6 @@ Current implementation
 • Fully typed, <= 79-char lines, Flake8-clean.
 """
 
-from __future__ import annotations
 
 import hashlib
 from typing import Final

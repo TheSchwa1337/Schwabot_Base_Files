@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost Phase Integrator – trust-weighted phase correction logic.
 
@@ -9,13 +12,12 @@ remaining free of heavy external dependencies.  The public helper
 :func:`compute_ghost_phase_packet` is the single entry-point.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
-import math
+from core.unified_math_system import unified_math
 from typing import Final, Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["GhostPhasePacket", "compute_ghost_phase_packet"]
 
@@ -40,14 +42,14 @@ def _levenshtein(a: str, b: str) -> int:  # noqa: D401
             ins = prev_row[j] + 1
             del_ = curr_row[j - 1] + 1
             sub = prev_row[j - 1] + (ch_a != ch_b)
-            curr_row.append(min(ins, del_, sub))
+            curr_row.append(unified_math.min(ins, del_, sub))
         prev_row = curr_row
     return prev_row[-1]
 
 
 def _clip(x: float, lo: float, hi: float) -> float:  # noqa: D401
     """TODO: document _clip."""
-    return max(lo, min(hi, x))
+    return unified_math.max(lo, unified_math.min(hi, x))
 
 
 def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
@@ -121,7 +123,7 @@ def compute_ghost_phase_packet(
         lev_dist: Final = 64
     else:
         lev_dist = _levenshtein(H_t, H_echo[-1])
-    gamma_hash = math.exp(-lev_dist / 64.0)
+    gamma_hash = unified_math.exp(-lev_dist / 64.0)
 
     # --------------------------------------------------
     # (2) Γ_news – sentiment-weighted news activation
@@ -146,7 +148,7 @@ def compute_ghost_phase_packet(
     # --------------------------------------------------
     # (6) C_t – trust-weighted adjustment coefficient
     # --------------------------------------------------
-    C_t = (1.0 - drift_t * (1.0 - mu_echo)) * math.exp(-(delta_corr**2))
+    C_t = (1.0 - drift_t * (1.0 - mu_echo)) * unified_math.exp(-(delta_corr**2))
 
     # --------------------------------------------------
     # (7) Θ_drift – drift entropy modulator
@@ -156,8 +158,8 @@ def compute_ghost_phase_packet(
     else:
         int_series = np.fromiter((_hash_to_int(h) for h in H_echo), dtype=float)
         diff_series = np.diff(int_series)
-        spectrum = np.abs(np.fft.fft(diff_series))
-        theta_drift = math.log(1.0 + float(np.linalg.norm(spectrum))) / epsilon
+        spectrum = unified_math.unified_math.abs(np.fft.fft(diff_series))
+        theta_drift = unified_math.unified_math.log(1.0 + float(np.linalg.norm(spectrum))) / epsilon
 
     # --------------------------------------------------
     # (8) m_slope – execution slope

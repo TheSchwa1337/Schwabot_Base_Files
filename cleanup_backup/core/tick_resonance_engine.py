@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Resonance Engine - Harmony Score Calculator.
 
@@ -16,13 +20,12 @@ Where:
 Windows CLI compatible with ASCII fallback for special characters.
 """
 
-from __future__ import annotations
 
 import logging
-import math
+from core.unified_math_system import unified_math
 from typing import List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -68,16 +71,16 @@ def compute_harmony_vector(
         recent_deltas = tick_deltas[-window_size:]
 
         # Calculate absolute deviations from target
-        deviations = np.abs(recent_deltas - target_phase)
+        deviations = unified_math.unified_math.abs(recent_deltas - target_phase)
 
         # Compute mean squared deviation
-        mean_sq_deviation = np.mean(deviations**2)
+        mean_sq_deviation = unified_math.unified_math.mean(deviations**2)
 
         # Convert to harmony score using exponential decay
-        harmony = float(np.exp(-mean_sq_deviation))
+        harmony = float(unified_math.exp(-mean_sq_deviation))
 
         # Ensure valid range
-        return max(0.0, min(1.0, harmony))
+        return unified_math.max(0.0, unified_math.min(1.0, harmony))
 
     except Exception as e:
         logger.warning(f"Error computing harmony vector: {e}")
@@ -126,9 +129,9 @@ def analyze_tick_pattern(
         # Calculate diagnostic metrics
         if len(tick_deltas) >= MIN_TICKS_REQUIRED:
             recent_deltas = tick_deltas[-HARMONY_WINDOW_SIZE:]
-            mean_delta = float(np.mean(recent_deltas))
-            std_delta = float(np.std(recent_deltas))
-            deviation_from_target = abs(mean_delta - target)
+            mean_delta = float(unified_math.unified_math.mean(recent_deltas))
+            std_delta = float(unified_math.unified_math.std(recent_deltas))
+            deviation_from_target = unified_math.abs(mean_delta - target)
         else:
             mean_delta = 0.0
             std_delta = 0.0
@@ -206,7 +209,7 @@ def get_optimal_phase(tick_deltas: np.ndarray) -> Tuple[int, float]:
             return 8, 0.0  # Default fallback
 
         # Find phase with highest harmony
-        optimal_phase = max(harmonies.items(), key=lambda x: x[1])
+        optimal_phase = unified_math.max(harmonies.items(), key=lambda x: x[1])
         return optimal_phase[0], optimal_phase[1]
 
     except Exception as e:
@@ -335,11 +338,11 @@ def main() -> None:
     random_deltas = np.random.uniform(0.05, 0.3, num_ticks)
     harmony_random = compute_harmony_vector(random_deltas, target_delta)
 
-    print("Tick Resonance Engine Demo")
-    print("=" * 30)
-    print(f"Perfect pattern harmony: {harmony_perfect:.3f}")
-    print(f"Noisy pattern harmony:   {harmony_noisy:.3f}")
-    print(f"Random pattern harmony:  {harmony_random:.3f}")
+    safe_print("Tick Resonance Engine Demo")
+    safe_print("=" * 30)
+    safe_print(f"Perfect pattern harmony: {harmony_perfect:.3f}")
+    safe_print(f"Noisy pattern harmony:   {harmony_noisy:.3f}")
+    safe_print(f"Random pattern harmony:  {harmony_random:.3f}")
     print()
 
     # Test engine class
@@ -354,9 +357,9 @@ def main() -> None:
     current_harmony = engine.get_current_harmony()
     diagnostics = engine.get_diagnostics()
 
-    print(f"Engine current harmony: {current_harmony:.3f}")
-    print(f"Mean delta: {diagnostics.get('mean_delta', 0):.3f}s")
-    print(f"Target delta: {diagnostics.get('target_timing', 0):.3f}s")
+    safe_print(f"Engine current harmony: {current_harmony:.3f}")
+    safe_print(f"Mean delta: {diagnostics.get('mean_delta', 0):.3f}s")
+    safe_print(f"Target delta: {diagnostics.get('target_timing', 0):.3f}s")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 try:
     from sklearn.decomposition import PCA
@@ -36,7 +37,7 @@ def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
 
         # Handle edge cases
         if X.shape[0] < n_components:
-            n_components = min(n_components, X.shape[0])
+            n_components = unified_math.min(n_components, X.shape[0])
 
         # Compute PCA
         pca = PCA(n_components=n_components).fit(X)

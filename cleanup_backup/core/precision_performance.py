@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Precision and Performance Optimization - High-Performance Math and Profiling.
 
@@ -8,7 +12,6 @@ This module provides comprehensive precision and performance optimization includ
 - Integration with all Schwabot core systems and mathematical frameworks
 """
 
-from __future__ import annotations
 
 import asyncio
 import json
@@ -28,7 +31,7 @@ import os
 import hashlib
 from pathlib import Path
 from decimal import Decimal, getcontext, ROUND_HALF_UP, ROUND_DOWN, ROUND_UP
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 from collections import defaultdict, deque
 import functools
@@ -177,7 +180,7 @@ class PrecisionManager:
         self.precision_errors = 0
         self.overflow_errors = 0
         
-        safe_print("🎯 Precision Manager initialized")
+        safe_safe_print("🎯 Precision Manager initialized")
     
     def to_decimal(self, value: Union[float, str, int, Decimal]) -> Decimal:
         """Convert value to Decimal with precision control."""
@@ -194,20 +197,20 @@ class PrecisionManager:
             decimal_value = Decimal(value_str)
             
             # Check for overflow/underflow
-            if self.config.enable_overflow_check and abs(decimal_value) > Decimal('1e100'):
+            if self.config.enable_overflow_check and unified_math.abs(decimal_value) > Decimal('1e100'):
                 self.overflow_errors += 1
-                safe_print(f"⚠️ Overflow detected: {value}")
+                safe_safe_print(f"⚠️ Overflow detected: {value}")
             
-            if self.config.enable_underflow_check and abs(decimal_value) < Decimal('1e-100'):
+            if self.config.enable_underflow_check and unified_math.abs(decimal_value) < Decimal('1e-100'):
                 self.overflow_errors += 1
-                safe_print(f"⚠️ Underflow detected: {value}")
+                safe_safe_print(f"⚠️ Underflow detected: {value}")
             
             self.total_operations += 1
             return decimal_value
             
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ Precision conversion failed: {safe_format_error(e, 'to_decimal')}")
+            safe_safe_print(f"❌ Precision conversion failed: {safe_format_error(e, 'to_decimal')}")
             return Decimal('0')
     
     def to_float64(self, value: Union[float, str, int, Decimal]) -> np.float64:
@@ -221,18 +224,18 @@ class PrecisionManager:
             # Check for NaN/Inf
             if self.config.enable_nan_check and np.isnan(float64_value):
                 self.precision_errors += 1
-                safe_print(f"⚠️ NaN detected: {value}")
+                safe_safe_print(f"⚠️ NaN detected: {value}")
             
             if self.config.enable_inf_check and np.isinf(float64_value):
                 self.overflow_errors += 1
-                safe_print(f"⚠️ Infinity detected: {value}")
+                safe_safe_print(f"⚠️ Infinity detected: {value}")
             
             self.total_operations += 1
             return float64_value
             
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ Float64 conversion failed: {safe_format_error(e, 'to_float64')}")
+            safe_safe_print(f"❌ Float64 conversion failed: {safe_format_error(e, 'to_float64')}")
             return np.float64(0.0)
     
     def calculate_pnl(self, entry_price: Union[float, Decimal], 
@@ -273,7 +276,7 @@ class PrecisionManager:
                 
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ PnL calculation failed: {safe_format_error(e, 'pnl_calc')}")
+            safe_safe_print(f"❌ PnL calculation failed: {safe_format_error(e, 'pnl_calc')}")
             return Decimal('0')
     
     def _calculate_pnl_mixed(self, entry_price: Union[float, Decimal], 
@@ -301,7 +304,7 @@ class PrecisionManager:
             
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ Mixed PnL calculation failed: {safe_format_error(e, 'pnl_mixed')}")
+            safe_safe_print(f"❌ Mixed PnL calculation failed: {safe_format_error(e, 'pnl_mixed')}")
             return Decimal('0')
     
     def round_decimal(self, value: Decimal, places: int = 8) -> Decimal:
@@ -311,7 +314,7 @@ class PrecisionManager:
             return value.quantize(Decimal(f'0.{"0" * places}'), rounding=rounding_mode)
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ Decimal rounding failed: {safe_format_error(e, 'round_decimal')}")
+            safe_safe_print(f"❌ Decimal rounding failed: {safe_format_error(e, 'round_decimal')}")
             return value
     
     def round_float64(self, value: np.float64, places: int = 8) -> np.float64:
@@ -321,7 +324,7 @@ class PrecisionManager:
             return np.round(value * factor) / factor
         except Exception as e:
             self.precision_errors += 1
-            safe_print(f"❌ Float64 rounding failed: {safe_format_error(e, 'round_float64')}")
+            safe_safe_print(f"❌ Float64 rounding failed: {safe_format_error(e, 'round_float64')}")
             return value
     
     def get_precision_stats(self) -> Dict[str, Any]:
@@ -330,7 +333,7 @@ class PrecisionManager:
             'total_operations': self.total_operations,
             'precision_errors': self.precision_errors,
             'overflow_errors': self.overflow_errors,
-            'error_rate': self.precision_errors / max(self.total_operations, 1),
+            'error_rate': self.precision_errors / unified_math.max(self.total_operations, 1),
             'mode': self.config.mode.value,
             'decimal_precision': self.config.decimal_precision,
             'rounding_mode': self.config.rounding_mode.value
@@ -356,7 +359,7 @@ class PerformanceOptimizer:
         self.profile_dir = Path(self.config.profile_output_dir)
         self.profile_dir.mkdir(parents=True, exist_ok=True)
         
-        safe_print("⚡ Performance Optimizer initialized")
+        safe_safe_print("⚡ Performance Optimizer initialized")
     
     def optimize_function(self, func: Callable, optimization_type: str = "auto") -> Callable:
         """Optimize function with Numba or Cython."""
@@ -372,7 +375,7 @@ class PerformanceOptimizer:
                 return func
                 
         except Exception as e:
-            safe_print(f"❌ Function optimization failed: {safe_format_error(e, 'optimize_func')}")
+            safe_safe_print(f"❌ Function optimization failed: {safe_format_error(e, 'optimize_func')}")
             return func
     
     def _optimize_with_numba(self, func: Callable) -> Callable:
@@ -381,13 +384,13 @@ class PerformanceOptimizer:
             if NUMBA_AVAILABLE:
                 # Use njit for maximum performance
                 optimized_func = njit(func)
-                safe_print(f"✅ Function optimized with Numba: {func.__name__}")
+                safe_safe_print(f"✅ Function optimized with Numba: {func.__name__}")
                 return optimized_func
             else:
-                safe_print("⚠️ Numba not available")
+                safe_safe_print("⚠️ Numba not available")
                 return func
         except Exception as e:
-            safe_print(f"❌ Numba optimization failed: {safe_format_error(e, 'numba_opt')}")
+            safe_safe_print(f"❌ Numba optimization failed: {safe_format_error(e, 'numba_opt')}")
             return func
     
     def _optimize_with_cython(self, func: Callable) -> Callable:
@@ -396,13 +399,13 @@ class PerformanceOptimizer:
             if CYTHON_AVAILABLE:
                 # For now, return the original function
                 # Cython optimization would require separate .pyx files
-                safe_print(f"⚠️ Cython optimization requires separate .pyx files: {func.__name__}")
+                safe_safe_print(f"⚠️ Cython optimization requires separate .pyx files: {func.__name__}")
                 return func
             else:
-                safe_print("⚠️ Cython not available")
+                safe_safe_print("⚠️ Cython not available")
                 return func
         except Exception as e:
-            safe_print(f"❌ Cython optimization failed: {safe_format_error(e, 'cython_opt')}")
+            safe_safe_print(f"❌ Cython optimization failed: {safe_format_error(e, 'cython_opt')}")
             return func
     
     def profile_function(self, func: Callable, *args, **kwargs) -> ProfilingResult:
@@ -448,11 +451,11 @@ class PerformanceOptimizer:
             with open(profile_file, 'w') as f:
                 f.write(s.getvalue())
             
-            safe_print(f"✅ Function profiled: {func.__name__} ({total_time:.6f}s)")
+            safe_safe_print(f"✅ Function profiled: {func.__name__} ({total_time:.6f}s)")
             return profiling_result
             
         except Exception as e:
-            safe_print(f"❌ Function profiling failed: {safe_format_error(e, 'profile_func')}")
+            safe_safe_print(f"❌ Function profiling failed: {safe_format_error(e, 'profile_func')}")
             return ProfilingResult(func.__name__, 0.0, 0, 0.0, 0.0, 0.0)
     
     def line_profile_function(self, func: Callable, *args, **kwargs) -> Dict[int, float]:
@@ -482,11 +485,11 @@ class PerformanceOptimizer:
             with open(profile_file, 'w') as f:
                 lp.print_stats(stream=f)
             
-            safe_print(f"✅ Line profiling completed: {func.__name__}")
+            safe_safe_print(f"✅ Line profiling completed: {func.__name__}")
             return line_times
             
         except Exception as e:
-            safe_print(f"❌ Line profiling failed: {safe_format_error(e, 'line_profile')}")
+            safe_safe_print(f"❌ Line profiling failed: {safe_format_error(e, 'line_profile')}")
             return {}
     
     def memory_profile_function(self, func: Callable, *args, **kwargs) -> Optional[float]:
@@ -504,11 +507,11 @@ class PerformanceOptimizer:
             # Get memory usage (this is simplified)
             memory_usage = 0.0  # Would need more complex tracking
             
-            safe_print(f"✅ Memory profiling completed: {func.__name__}")
+            safe_safe_print(f"✅ Memory profiling completed: {func.__name__}")
             return memory_usage
             
         except Exception as e:
-            safe_print(f"❌ Memory profiling failed: {safe_format_error(e, 'memory_profile')}")
+            safe_safe_print(f"❌ Memory profiling failed: {safe_format_error(e, 'memory_profile')}")
             return None
     
     def generate_heat_map(self, function_name: str) -> List[HeatMapData]:
@@ -541,11 +544,11 @@ class PerformanceOptimizer:
             with open(heat_map_file, 'w') as f:
                 json.dump([asdict(data) for data in heat_map_data], f, indent=2, default=str)
             
-            safe_print(f"✅ Heat map generated: {function_name}")
+            safe_safe_print(f"✅ Heat map generated: {function_name}")
             return heat_map_data
             
         except Exception as e:
-            safe_print(f"❌ Heat map generation failed: {safe_format_error(e, 'heat_map')}")
+            safe_safe_print(f"❌ Heat map generation failed: {safe_format_error(e, 'heat_map')}")
             return []
     
     def get_hot_paths(self, function_name: str, threshold: float = 0.1) -> List[str]:
@@ -569,7 +572,7 @@ class PerformanceOptimizer:
             return hot_paths
             
         except Exception as e:
-            safe_print(f"❌ Hot paths analysis failed: {safe_format_error(e, 'hot_paths')}")
+            safe_safe_print(f"❌ Hot paths analysis failed: {safe_format_error(e, 'hot_paths')}")
             return []
     
     def get_performance_stats(self) -> Dict[str, Any]:
@@ -583,7 +586,7 @@ class PerformanceOptimizer:
                 'total_functions_profiled': total_functions,
                 'total_execution_time': total_time,
                 'total_function_calls': total_calls,
-                'average_time_per_call': total_time / max(total_calls, 1),
+                'average_time_per_call': total_time / unified_math.max(total_calls, 1),
                 'optimization_level': self.config.optimization_level.value,
                 'numba_enabled': self.config.enable_numba and NUMBA_AVAILABLE,
                 'cython_enabled': self.config.enable_cython and CYTHON_AVAILABLE,
@@ -592,7 +595,7 @@ class PerformanceOptimizer:
             }
             
         except Exception as e:
-            safe_print(f"❌ Performance stats failed: {safe_format_error(e, 'perf_stats')}")
+            safe_safe_print(f"❌ Performance stats failed: {safe_format_error(e, 'perf_stats')}")
             return {}
 
 
@@ -605,7 +608,7 @@ if NUMBA_AVAILABLE:
         result = np.zeros_like(btc_prices)
         for i in prange(len(btc_prices)):
             for j in range(len(frequencies)):
-                result[i] += btc_prices[i] * np.sin(2 * np.pi * frequencies[j] * i)
+                result[i] += btc_prices[i] * np.unified_math.sin(2 * np.pi * frequencies[j] * i)
         return result
     
     @njit
@@ -634,7 +637,7 @@ else:
         result = np.zeros_like(btc_prices)
         for i in range(len(btc_prices)):
             for j in range(len(frequencies)):
-                result[i] += btc_prices[i] * np.sin(2 * np.pi * frequencies[j] * i)
+                result[i] += btc_prices[i] * np.unified_math.sin(2 * np.pi * frequencies[j] * i)
         return result
     
     def vecu_timing_synchronization(timing_phases: npt.NDArray[np.float64],
@@ -674,7 +677,7 @@ class PrecisionPerformanceManager:
         # Integration with core systems
         self._integrate_with_core_systems()
         
-        safe_print("🎯 Precision and Performance Manager initialized")
+        safe_safe_print("🎯 Precision and Performance Manager initialized")
     
     def _integrate_with_core_systems(self) -> None:
         """Integrate with core Schwabot systems."""
@@ -686,9 +689,9 @@ class PrecisionPerformanceManager:
                 # Optimize core mathematical functions
                 self._optimize_core_functions()
                 
-                safe_print("✅ Core systems integration completed")
+                safe_safe_print("✅ Core systems integration completed")
         except Exception as e:
-            safe_print(f"⚠️ Core systems integration failed: {safe_format_error(e, 'core_integration')}")
+            safe_safe_print(f"⚠️ Core systems integration failed: {safe_format_error(e, 'core_integration')}")
     
     def _optimize_core_functions(self) -> None:
         """Optimize core mathematical functions."""
@@ -711,10 +714,10 @@ class PrecisionPerformanceManager:
                 ferris_wheel_calculation, "numba"
             )
             
-            safe_print("✅ Core functions optimized")
+            safe_safe_print("✅ Core functions optimized")
             
         except Exception as e:
-            safe_print(f"⚠️ Core functions optimization failed: {safe_format_error(e, 'core_optimization')}")
+            safe_safe_print(f"⚠️ Core functions optimization failed: {safe_format_error(e, 'core_optimization')}")
     
     def calculate_high_precision_pnl(self, entry_price: Union[float, Decimal], 
                                    exit_price: Union[float, Decimal], 
@@ -748,7 +751,7 @@ class PrecisionPerformanceManager:
             }
             
         except Exception as e:
-            safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
+            safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
             return {}
 
 
@@ -795,7 +798,7 @@ def get_precision_performance_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test precision and performance manager
-    print("🧪 Testing Precision and Performance Manager...")
+    safe_print("🧪 Testing Precision and Performance Manager...")
     
     # Test high precision PnL calculation
     entry_price = Decimal("50000.123456789")
@@ -804,14 +807,14 @@ if __name__ == "__main__":
     fees = Decimal("0.0001")
     
     pnl = calculate_high_precision_pnl(entry_price, exit_price, quantity, fees)
-    print(f"✅ High precision PnL: {pnl}")
+    safe_print(f"✅ High precision PnL: {pnl}")
     
     # Test optimized mathematical functions
     btc_prices = np.array([50000.0, 51000.0, 52000.0], dtype=np.float64)
     frequencies = np.array([0.1, 0.2, 0.3], dtype=np.float64)
     
     zpe_result = zpe_resonance_calculation(btc_prices, frequencies)
-    print(f"✅ ZPE resonance calculation: {zpe_result}")
+    safe_print(f"✅ ZPE resonance calculation: {zpe_result}")
     
     # Test profiling
     def test_function():
@@ -819,10 +822,10 @@ if __name__ == "__main__":
         return "test"
     
     profiling_result = profile_function(test_function)
-    print(f"✅ Function profiled: {profiling_result.function_name}")
+    safe_print(f"✅ Function profiled: {profiling_result.function_name}")
     
     # Get status
     status = get_precision_performance_status()
-    print(f"✅ System status: {status}")
+    safe_print(f"✅ System status: {status}")
     
-    print("✅ Precision and Performance Manager test completed") 
+    safe_print("✅ Precision and Performance Manager test completed") 

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 AI Integration Bridge for Schwabot
@@ -193,11 +207,13 @@ class AIIntegrationBridge:
         except Exception as e:
             logger.error(f"❌ Failed to initialize {model_name}: {e}")
     
-    def create_decision_request(self, 
-                              market_state: Dict[str, Any],
-                              entropy_value: float,
-                              bit_positions: Dict[int, Dict[str, Any]],
-                              decision_context: Dict[str, Any]) -> AIDecisionRequest:
+    def create_decision_request(
+        self, 
+        market_state: Dict[str, Any],
+        entropy_value: float,
+        bit_positions: Dict[int, Dict[str, Any]],
+        decision_context: Dict[str, Any]
+    ) -> AIDecisionRequest:
         """
         Create a decision request for AI analysis.
         
@@ -436,10 +452,13 @@ Respond in JSON format:
             raise
     
     async def _query_claude(self, prompt: str, model_name: str) -> AIDecisionResponse:
-        """Query Claude model."""
+        """Query the Claude model."""
         try:
+            client = self.model_clients.get(model_name)
+            if not client:
+                raise ValueError(f"{model_name} client not initialized")
+            
             config = self.ai_models[model_name]
-            client = self.model_clients[model_name]
             
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
@@ -460,8 +479,8 @@ Respond in JSON format:
             return parsed_response
             
         except Exception as e:
-            logger.error(f"❌ Claude query error: {e}")
-            raise
+            logger.error(f"❌ Error querying {model_name}: {e}")
+            return self._parse_ai_response(f"ERROR: {e}", model_name)
     
     async def _query_gemini(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query Gemini model."""
@@ -549,7 +568,7 @@ Respond in JSON format:
                 total_confidence += response.confidence_score
             
             # Find most common action
-            consensus_action = max(action_counts.items(), key=lambda x: x[1])[0]
+            consensus_action = unified_math.max(action_counts.items(), key=lambda x: x[1])[0]
             
             # Calculate agreement level
             total_responses = len(responses)
@@ -563,7 +582,7 @@ Respond in JSON format:
             risk_counts = defaultdict(int)
             for risk in risk_levels:
                 risk_counts[risk] += 1
-            consensus_risk = max(risk_counts.items(), key=lambda x: x[1])[0]
+            consensus_risk = unified_math.max(risk_counts.items(), key=lambda x: x[1])[0]
             
             # Create final recommendation
             if agreement_level >= 0.8:
@@ -741,6 +760,40 @@ def create_ai_bridge(entropy_api_layer=None):
     return bridge
 
 
+async def test_ai_bridge():
+    """Test the AI integration bridge."""
+    bridge = create_ai_bridge()
+    
+    # Configure models (replace with your actual API keys)
+    configs = {
+        'gpt': AIModelConfig(model_name='gpt', api_key='YOUR_GPT_API_KEY', model_id='gpt-4-turbo'),
+        'claude': AIModelConfig(model_name='claude', api_key='YOUR_CLAUDE_API_KEY', model_id='claude-2.1'),
+        'gemini': AIModelConfig(model_name='gemini', api_key='YOUR_GEMINI_API_KEY', model_id='gemini-pro')
+    }
+    bridge.configure_ai_models(configs)
+    
+    # Create a sample request
+    market_state = {'price': 60000, 'volume': 1000}
+    entropy = 0.8
+    bits = {i: {'value': i, 'weight': 1.0} for i in range(16)}
+    context = {'last_trade': 'buy', 'pnl': 100}
+    
+    request = bridge.create_decision_request(market_state, entropy, bits, context)
+    
+    if request:
+        safe_print(f"🚀 Created request: {request.request_id}")
+        
+        # Start the bridge
+        await bridge.start()
+        
+        # Request AI analysis
+        responses = await bridge.request_ai_analysis(request)
+        safe_print(f"💬 Received {len(responses)} responses")
+        
+        # Stop the bridge
+        bridge.stop()
+        
+
 if __name__ == "__main__":
     # Example usage
     logging.basicConfig(level=logging.INFO)
@@ -755,4 +808,10 @@ if __name__ == "__main__":
     try:
         asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
-        bridge.stop() 
+        bridge.stop()
+
+    # Run the test
+    try:
+        asyncio.run(test_ai_bridge())
+    except KeyboardInterrupt:
+        safe_print("🛑 Test stopped by user") 

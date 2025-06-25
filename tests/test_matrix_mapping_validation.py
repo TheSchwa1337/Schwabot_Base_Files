@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Matrix Mapping Validation Test - Schwabot Framework.
 
@@ -19,7 +21,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -605,18 +607,18 @@ if __name__ == "__main__":
     result = test_matrix_mapping_validation()
     
     # Print results
-    print("\n" + "="*60)
-    print("🧮 MATRIX MAPPING VALIDATION TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🧮 MATRIX MAPPING VALIDATION TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

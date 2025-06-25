@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Core Loop Manager - Unified Component Orchestration.
 
@@ -18,12 +19,12 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from core.state_tracker import StateTracker
-from core.profit_bridge_orchestrator import ProfitBridgeOrchestrator
-from core.component_registry import ComponentRegistry, ComponentConfig
-from core.tick_cycle_validator import create_tick_cycle_validator
-from core.profit_vector_reconciler import create_profit_vector_reconciler
-from core.error_sanitizer import ErrorSanitizer, SanitizationLevel
+from state_tracker import StateTracker
+from profit_bridge_orchestrator import ProfitBridgeOrchestrator
+from component_registry import ComponentRegistry, ComponentConfig
+from tick_cycle_validator import create_tick_cycle_validator
+from profit_vector_reconciler import create_profit_vector_reconciler
+from error_sanitizer import ErrorSanitizer, SanitizationLevel
 
 logger = logging.getLogger(__name__)
 
@@ -113,8 +114,8 @@ class CoreLoopManager:
     
     def _setup_component_registry(self) -> None:
         """Setup the component registry with all required components."""
-        from core.state_tracker import StateTracker
-        from core.profit_bridge_orchestrator import ProfitBridgeOrchestrator
+        from state_tracker import StateTracker
+        from profit_bridge_orchestrator import ProfitBridgeOrchestrator
         
         # Register core components
         self.component_registry.register_component(
@@ -138,7 +139,7 @@ class CoreLoopManager:
         
         # Try to register additional components if available
         try:
-            from core.portfolio_router import create_portfolio_router
+            from portfolio_router import create_portfolio_router
             self.component_registry.register_component(
                 'portfolio_router',
                 ComponentConfig(lambda: create_portfolio_router())
@@ -147,7 +148,7 @@ class CoreLoopManager:
             logger.warning("Portfolio router not available")
         
         try:
-            from core.tick_hash_interpreter import create_tick_hash_interpreter
+            from tick_hash_interpreter import create_tick_hash_interpreter
             self.component_registry.register_component(
                 'tick_interpreter',
                 ComponentConfig(lambda: create_tick_hash_interpreter())
@@ -156,7 +157,7 @@ class CoreLoopManager:
             logger.warning("Tick interpreter not available")
         
         try:
-            from core.state_validation_router import create_state_validation_router
+            from state_validation_router import create_state_validation_router
             self.component_registry.register_component(
                 'state_validator',
                 ComponentConfig(lambda: create_state_validation_router())
@@ -440,7 +441,7 @@ class CoreLoopManager:
             # Extract allocator data
             allocator_magnitude = context.profit_allocation.get('btc_allocation', 0.5)
             allocator_direction = 'buy' if allocator_magnitude > 0.5 else 'sell'
-            allocator_confidence = abs(allocator_magnitude - 0.5) * 2  # Convert to 0-1 scale
+            allocator_confidence = unified_math.abs(allocator_magnitude - 0.5) * 2  # Convert to 0-1 scale
             
             # Register vectors with reconciler
             self.profit_vector_reconciler.register_waveform_vector(

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Logic Flow Module
 ===============================
@@ -8,7 +10,7 @@ Provides comprehensive logic flow management with integration to all demo compon
 
 import json
 import yaml
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -128,7 +130,7 @@ class DemoLogicFlow:
                 self.backtest_config = {}
                 
         except Exception as e:
-            print(f"Warning: Could not load logic configuration: {e}")
+            safe_print(f"Warning: Could not load logic configuration: {e}")
             self.matrix_config = {}
             self.backtest_config = {}
     
@@ -158,7 +160,7 @@ class DemoLogicFlow:
             self._update_flow_performance()
             
         except Exception as e:
-            print(f"Warning: Could not load flow data: {e}")
+            safe_print(f"Warning: Could not load flow data: {e}")
     
     def _save_flow_data(self):
         """Save flow data to files"""
@@ -169,7 +171,7 @@ class DemoLogicFlow:
                 json.dump(flows_data, f, indent=2, default=str)
                 
         except Exception as e:
-            print(f"Error saving flow data: {e}")
+            safe_print(f"Error saving flow data: {e}")
     
     def create_logic_flow(self, flow_type: str, metadata: Dict[str, Any] = None) -> LogicFlow:
         """Create a new logic flow based on type"""
@@ -221,7 +223,7 @@ class DemoLogicFlow:
     async def execute_logic_flow(self, flow: LogicFlow, input_data: Dict[str, Any] = None) -> Dict[str, Any]:
         """Execute a complete logic flow"""
         
-        print(f"🚀 Starting logic flow: {flow.flow_id} ({flow.flow_type})")
+        safe_print(f"🚀 Starting logic flow: {flow.flow_id} ({flow.flow_type})")
         
         flow.status = FlowStatus.IN_PROGRESS
         current_data = input_data or {}
@@ -230,7 +232,7 @@ class DemoLogicFlow:
             for i, step in enumerate(flow.steps):
                 flow.current_step_index = i
                 
-                print(f"  📋 Executing step {i+1}/{len(flow.steps)}: {step.value}")
+                safe_print(f"  📋 Executing step {i+1}/{len(flow.steps)}: {step.value}")
                 
                 # Execute step
                 step_result = await self._execute_flow_step(step, current_data, flow)
@@ -243,7 +245,7 @@ class DemoLogicFlow:
                 if step_result.status == FlowStatus.FAILED:
                     flow.status = FlowStatus.FAILED
                     flow.end_time = datetime.now()
-                    print(f"  ❌ Flow failed at step {step.value}: {step_result.error_message}")
+                    safe_print(f"  ❌ Flow failed at step {step.value}: {step_result.error_message}")
                     break
                 
                 # Add delay between steps for realistic simulation
@@ -253,12 +255,12 @@ class DemoLogicFlow:
             if flow.status != FlowStatus.FAILED:
                 flow.status = FlowStatus.COMPLETED
                 flow.end_time = datetime.now()
-                print(f"  ✅ Flow completed successfully")
+                safe_print(f"  ✅ Flow completed successfully")
             
         except Exception as e:
             flow.status = FlowStatus.FAILED
             flow.end_time = datetime.now()
-            print(f"  ❌ Flow execution error: {e}")
+            safe_print(f"  ❌ Flow execution error: {e}")
         
         # Move to completed flows
         self.completed_flows.append(flow)
@@ -347,17 +349,17 @@ class DemoLogicFlow:
                 "current_price": prices[-1],
                 "price_trend": "bullish" if prices[-1] > prices[0] else "bearish",
                 "volume_trend": "increasing" if volumes[-1] > volumes[0] else "decreasing",
-                "volatility": np.std(prices) / np.mean(prices),
+                "volatility": unified_math.unified_math.std(prices) / unified_math.unified_math.mean(prices),
                 "price_momentum": (prices[-1] - prices[0]) / prices[0]
             },
             "technical_indicators": {
                 "rsi": np.random.uniform(30, 70),
                 "macd_signal": "bullish" if np.random.random() > 0.5 else "bearish",
                 "volume_spike": np.random.uniform(1.0, 3.0),
-                "support_level": min(prices) * 0.98,
-                "resistance_level": max(prices) * 1.02
+                "support_level": unified_math.min(prices) * 0.98,
+                "resistance_level": unified_math.max(prices) * 1.02
             },
-            "market_conditions": "trending" if abs(prices[-1] - prices[0]) / prices[0] > 0.01 else "sideways"
+            "market_conditions": "trending" if unified_math.abs(prices[-1] - prices[0]) / prices[0] > 0.01 else "sideways"
         }
         
         return {"market_analysis": analysis_result}
@@ -552,7 +554,7 @@ class DemoLogicFlow:
                 })
             
             # Stop loss overlay
-            if result["unrealized_pnl"] < 0 and abs(result["unrealized_pnl"]) / (position.entry_price * position.position_size) > 0.05:
+            if result["unrealized_pnl"] < 0 and unified_math.abs(result["unrealized_pnl"]) / (position.entry_price * position.position_size) > 0.05:
                 exit_overlays.append({
                     "type": "stop_loss",
                     "confidence": 1.0,
@@ -675,7 +677,7 @@ class DemoLogicFlow:
         completed_flows = [f for f in self.completed_flows if f.end_time]
         if completed_flows:
             flow_times = [(f.end_time - f.start_time).total_seconds() for f in completed_flows]
-            self.flow_performance["average_flow_time"] = np.mean(flow_times)
+            self.flow_performance["average_flow_time"] = unified_math.unified_math.mean(flow_times)
         
         # Calculate step performance
         step_performance = {}
@@ -702,12 +704,12 @@ class DemoLogicFlow:
     async def run_complete_demo_cycle(self, num_cycles: int = 3) -> Dict[str, Any]:
         """Run a complete demo cycle with entry, exit, and reinforcement learning flows"""
         
-        print(f"🚀 Starting complete demo cycle: {num_cycles} cycles")
+        safe_print(f"🚀 Starting complete demo cycle: {num_cycles} cycles")
         
         cycle_results = []
         
         for cycle in range(num_cycles):
-            print(f"\n📋 Cycle {cycle + 1}/{num_cycles}")
+            safe_print(f"\n📋 Cycle {cycle + 1}/{num_cycles}")
             
             # Entry flow
             entry_flow = self.create_logic_flow("entry", {"cycle": cycle})
@@ -734,9 +736,9 @@ class DemoLogicFlow:
         # Generate comprehensive report
         report = self.generate_flow_report(cycle_results)
         
-        print(f"\n📊 Demo cycle completed: {num_cycles} cycles")
-        print(f"📈 Success rate: {self.flow_performance['successful_flows'] / self.flow_performance['total_flows']:.2%}")
-        print(f"⏱️ Average flow time: {self.flow_performance['average_flow_time']:.2f}s")
+        safe_print(f"\n📊 Demo cycle completed: {num_cycles} cycles")
+        safe_print(f"📈 Success rate: {self.flow_performance['successful_flows'] / self.flow_performance['total_flows']:.2%}")
+        safe_print(f"⏱️ Average flow time: {self.flow_performance['average_flow_time']:.2f}s")
         
         return report
     
@@ -797,5 +799,5 @@ if __name__ == "__main__":
     
     # Print report
     report = logic_flow.generate_flow_report()
-    print("\n📊 Flow Report:")
+    safe_print("\n📊 Flow Report:")
     print(json.dumps(report, indent=2, default=str)) 

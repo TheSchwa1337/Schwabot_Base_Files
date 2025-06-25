@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Simple Component Validation Script
@@ -12,53 +13,53 @@ import traceback
 
 def test_imports():
     """Test importing the mathematical components."""
-    print("Testing component imports...")
+    safe_print("Testing component imports...")
     
     try:
         from core.phantom_lag_model import PhantomLagModel
-        print("✅ Phantom Lag Model imported successfully")
+        safe_print("✅ Phantom Lag Model imported successfully")
         
         # Test basic instantiation
         model = PhantomLagModel()
-        print("✅ Phantom Lag Model instantiated successfully")
+        safe_print("✅ Phantom Lag Model instantiated successfully")
         
         # Test basic calculation
         penalty = model.calculate_phantom_lag_penalty(1000.0, 0.3, 70000.0)
-        print(f"✅ Phantom Lag penalty calculation: {penalty:.6f}")
+        safe_print(f"✅ Phantom Lag penalty calculation: {penalty:.6f}")
         
     except Exception as e:
-        print(f"❌ Phantom Lag Model import failed: {e}")
+        safe_print(f"❌ Phantom Lag Model import failed: {e}")
         traceback.print_exc()
         return False
     
     try:
         from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-        print("✅ Meta-Layer Ghost Bridge imported successfully")
+        safe_print("✅ Meta-Layer Ghost Bridge imported successfully")
         
         # Test basic instantiation
         bridge = MetaLayerGhostBridge()
-        print("✅ Meta-Layer Ghost Bridge instantiated successfully")
+        safe_print("✅ Meta-Layer Ghost Bridge instantiated successfully")
         
         # Test basic functionality
         import time
         ghost_price = bridge.update_exchange_data("test", "BTC/USD", 50000.0, 1000.0, time.time())
-        print(f"✅ Ghost price calculation: {ghost_price:.2f}")
+        safe_print(f"✅ Ghost price calculation: {ghost_price:.2f}")
         
     except Exception as e:
-        print(f"❌ Meta-Layer Ghost Bridge import failed: {e}")
+        safe_print(f"❌ Meta-Layer Ghost Bridge import failed: {e}")
         traceback.print_exc()
         return False
     
     try:
         from core.fallback_logic_router import FallbackLogicRouter
-        print("✅ Fallback Logic Router imported successfully")
+        safe_print("✅ Fallback Logic Router imported successfully")
         
         # Test basic instantiation
         router = FallbackLogicRouter()
-        print("✅ Fallback Logic Router instantiated successfully")
+        safe_print("✅ Fallback Logic Router instantiated successfully")
         
     except Exception as e:
-        print(f"❌ Fallback Logic Router import failed: {e}")
+        safe_print(f"❌ Fallback Logic Router import failed: {e}")
         traceback.print_exc()
         return False
     
@@ -66,7 +67,7 @@ def test_imports():
 
 def test_basic_functionality():
     """Test basic functionality of the components."""
-    print("\nTesting basic functionality...")
+    safe_print("\nTesting basic functionality...")
     
     try:
         from core.phantom_lag_model import PhantomLagModel
@@ -84,7 +85,7 @@ def test_basic_functionality():
         
         for delta_price, entropy, max_price in scenarios:
             penalty = model.calculate_phantom_lag_penalty(delta_price, entropy, max_price)
-            print(f"  Delta: ${delta_price}, Entropy: {entropy}, Penalty: {penalty:.6f}")
+            safe_print(f"  Delta: ${delta_price}, Entropy: {entropy}, Penalty: {penalty:.6f}")
         
         # Test Meta-Layer Ghost Bridge
         bridge = MetaLayerGhostBridge()
@@ -101,23 +102,23 @@ def test_basic_functionality():
         
         for exchange, price, volume in exchanges:
             ghost_price = bridge.update_exchange_data(exchange, "BTC/USD", price, volume, current_time)
-            print(f"  {exchange}: ${price} -> Ghost: ${ghost_price:.2f}")
+            safe_print(f"  {exchange}: ${price} -> Ghost: ${ghost_price:.2f}")
         
         # Test meta vector
         meta_vector = bridge.get_meta_vector("BTC/USD")
-        print(f"  Meta vector: {meta_vector:.6f}")
+        safe_print(f"  Meta vector: {meta_vector:.6f}")
         
         return True
         
     except Exception as e:
-        print(f"❌ Basic functionality test failed: {e}")
+        safe_print(f"❌ Basic functionality test failed: {e}")
         traceback.print_exc()
         return False
 
 def main():
     """Main validation function."""
-    print("🧠 Schwabot Mathematical Components Validation")
-    print("=" * 50)
+    safe_print("🧠 Schwabot Mathematical Components Validation")
+    safe_print("=" * 50)
     
     # Test imports
     imports_ok = test_imports()
@@ -127,13 +128,13 @@ def main():
         functionality_ok = test_basic_functionality()
         
         if functionality_ok:
-            print("\n✅ All components validated successfully!")
+            safe_print("\n✅ All components validated successfully!")
             return 0
         else:
-            print("\n❌ Basic functionality tests failed")
+            safe_print("\n❌ Basic functionality tests failed")
             return 1
     else:
-        print("\n❌ Import tests failed")
+        safe_print("\n❌ Import tests failed")
         return 1
 
 if __name__ == "__main__":

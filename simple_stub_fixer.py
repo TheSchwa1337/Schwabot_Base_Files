@@ -1,5 +1,6 @@
 import os
 import re
+from utils.safe_print import safe_print, info, warn, error, success, debug
 
 def fix_stub_pattern(file_path):
     """Fix the malformed stub docstring pattern."""
@@ -18,7 +19,7 @@ def fix_stub_pattern(file_path):
             return True
         return False
     except Exception as e:
-        print(f"Error with {file_path}: {e}")
+        safe_print(f"Error with {file_path}: {e}")
         return False
 
 def find_and_fix():
@@ -38,15 +39,15 @@ def find_and_fix():
                     
                     if '"""Stub main function."""."""' in content:
                         if fix_stub_pattern(file_path):
-                            print(f"Fixed: {file_path}")
+                            safe_print(f"Fixed: {file_path}")
                             fixed += 1
                             
                 except Exception as e:
-                    print(f"Error reading {file_path}: {e}")
+                    safe_print(f"Error reading {file_path}: {e}")
     
     return fixed
 
 if __name__ == "__main__":
-    print("Fixing stub docstring pattern...")
+    safe_print("Fixing stub docstring pattern...")
     count = find_and_fix()
-    print(f"Fixed {count} files") 
+    safe_print(f"Fixed {count} files") 

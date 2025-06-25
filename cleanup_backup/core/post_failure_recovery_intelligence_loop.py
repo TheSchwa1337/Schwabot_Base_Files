@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Post-Failure Recovery Intelligence Loop - Schwabot UROS v1.0
@@ -12,7 +14,7 @@ Features:
 - Intelligent loop optimization for system resilience
 """
 
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -268,7 +270,7 @@ class PostFailureRecoveryIntelligenceLoop:
             return None
         
         # Select best matching pattern
-        best_pattern, best_score = max(matching_patterns, key=lambda x: x[1])
+        best_pattern, best_score = unified_math.max(matching_patterns, key=lambda x: x[1])
         
         # Return strategy based on pattern success rate
         if best_pattern.recovery_success_rate > 0.8:
@@ -281,15 +283,15 @@ class PostFailureRecoveryIntelligenceLoop:
     def _calculate_pattern_match_score(self, pattern: FailurePattern, failure_event: FailureEvent) -> float:
         """Calculate how well a failure event matches a pattern."""
         # Base score from pattern frequency
-        frequency_score = min(pattern.frequency / 10.0, 1.0)
+        frequency_score = unified_math.min(pattern.frequency / 10.0, 1.0)
         
         # Severity similarity
-        severity_diff = abs(pattern.average_severity - failure_event.severity)
-        severity_score = max(0.0, 1.0 - severity_diff)
+        severity_diff = unified_math.abs(pattern.average_severity - failure_event.severity)
+        severity_score = unified_math.max(0.0, 1.0 - severity_diff)
         
         # Recency score (more recent patterns get higher weight)
         time_diff = (datetime.now() - pattern.last_occurrence).total_seconds()
-        recency_score = max(0.0, 1.0 - time_diff / 3600.0)  # Decay over 1 hour
+        recency_score = unified_math.max(0.0, 1.0 - time_diff / 3600.0)  # Decay over 1 hour
         
         # Weighted combination
         match_score = (
@@ -341,7 +343,7 @@ class PostFailureRecoveryIntelligenceLoop:
     def _execute_gradual_recovery(self, failure_event: FailureEvent) -> bool:
         """Execute gradual recovery strategy."""
         # Simulate gradual recovery with multiple steps
-        steps = max(1, int(failure_event.severity * 5))
+        steps = unified_math.max(1, int(failure_event.severity * 5))
         
         for step in range(steps):
             time.sleep(0.01)  # Gradual delay
@@ -434,7 +436,7 @@ class PostFailureRecoveryIntelligenceLoop:
         if recent_attempts:
             recovery_times = [a.recovery_time for a in recent_attempts if a.recovery_time > 0]
             if recovery_times:
-                self.average_recovery_time = float(np.mean(recovery_times))
+                self.average_recovery_time = float(unified_math.unified_math.mean(recovery_times))
         
         # Calculate system resilience score
         self.system_resilience_score = self._calculate_resilience_score()
@@ -448,10 +450,10 @@ class PostFailureRecoveryIntelligenceLoop:
         base_resilience = self.recovery_success_rate
         
         # Time-based resilience (faster recovery = higher resilience)
-        time_resilience = max(0.0, 1.0 - self.average_recovery_time / 10.0)
+        time_resilience = unified_math.max(0.0, 1.0 - self.average_recovery_time / 10.0)
         
         # Pattern recognition resilience
-        pattern_resilience = min(1.0, len(self.failure_patterns) / 10.0)
+        pattern_resilience = unified_math.min(1.0, len(self.failure_patterns) / 10.0)
         
         # Weighted combination
         resilience_score = (
@@ -493,7 +495,7 @@ class PostFailureRecoveryIntelligenceLoop:
                               if f.failure_type in sequence]
             
             if recent_failures:
-                avg_severity = np.mean([f.severity for f in recent_failures])
+                avg_severity = unified_math.mean([f.severity for f in recent_failures])
                 pattern_groups[pattern_key]["severities"].append(avg_severity)
                 
                 success_rate = sum(1 for f in recent_failures if f.recovery_successful) / len(recent_failures)
@@ -501,7 +503,7 @@ class PostFailureRecoveryIntelligenceLoop:
                 
                 pattern_groups[pattern_key]["last_occurrence"] = max(
                     pattern_groups[pattern_key]["last_occurrence"],
-                    max(f.timestamp for f in recent_failures)
+                    unified_math.max(f.timestamp for f in recent_failures)
                 )
         
         # Create failure patterns
@@ -513,8 +515,8 @@ class PostFailureRecoveryIntelligenceLoop:
                     pattern_type=pattern_key,
                     failure_sequence=group["sequence"],
                     frequency=group["count"],
-                    average_severity=float(np.mean(group["severities"])) if group["severities"] else 0.0,
-                    recovery_success_rate=float(np.mean(group["success_rates"])) if group["success_rates"] else 0.0,
+                    average_severity=float(unified_math.unified_math.mean(group["severities"])) if group["severities"] else 0.0,
+                    recovery_success_rate=float(unified_math.unified_math.mean(group["success_rates"])) if group["success_rates"] else 0.0,
                     last_occurrence=group["last_occurrence"]
                 )
                 patterns.append(pattern)
@@ -542,7 +544,7 @@ class PostFailureRecoveryIntelligenceLoop:
         pattern_boost = 0.0
         for pattern in self.failure_patterns:
             if failure_type in pattern.failure_sequence:
-                pattern_boost = max(pattern_boost, pattern.recovery_success_rate * 0.2)
+                pattern_boost = unified_math.max(pattern_boost, pattern.recovery_success_rate * 0.2)
         
         final_success_rate = adjusted_success_rate + pattern_boost
         
@@ -564,7 +566,7 @@ class PostFailureRecoveryIntelligenceLoop:
             strategy_attempts = [a for a in self.recovery_attempts if a.strategy == strategy]
             if strategy_attempts:
                 success_rate = sum(1 for a in strategy_attempts if a.success) / len(strategy_attempts)
-                avg_time = np.mean([a.recovery_time for a in strategy_attempts])
+                avg_time = unified_math.mean([a.recovery_time for a in strategy_attempts])
                 strategy_performance[strategy.value] = {
                     "success_rate": float(success_rate),
                     "average_time": float(avg_time),
@@ -578,7 +580,7 @@ class PostFailureRecoveryIntelligenceLoop:
             if type_failures:
                 failure_distribution[failure_type.value] = {
                     "count": len(type_failures),
-                    "average_severity": float(np.mean([f.severity for f in type_failures])),
+                    "average_severity": float(unified_math.mean([f.severity for f in type_failures])),
                     "recovery_rate": sum(1 for f in type_failures if f.recovery_successful) / len(type_failures)
                 }
         
@@ -686,23 +688,23 @@ def main() -> None:
             severity=severity,
             error_message=error_msg
         )
-        print(f"Recorded {failure_type.value} failure (severity: {severity:.2f})")
+        safe_print(f"Recorded {failure_type.value} failure (severity: {severity:.2f})")
     
     # Analyze patterns
     patterns = recovery_loop.analyze_failure_patterns()
-    print(f"Identified {len(patterns)} failure patterns")
+    safe_print(f"Identified {len(patterns)} failure patterns")
     
     # Get statistics
     stats = recovery_loop.get_recovery_statistics()
-    print(f"Recovery statistics: {stats}")
+    safe_print(f"Recovery statistics: {stats}")
     
     # Predict recovery success
     prediction = recovery_loop.predict_recovery_success(FailureType.MATRIX_FAILURE, 0.6)
-    print(f"Recovery prediction: {prediction}")
+    safe_print(f"Recovery prediction: {prediction}")
     
     # Get trading signals
     signals = recovery_loop.get_trading_signals()
-    print(f"Generated {len(signals)} trading signals")
+    safe_print(f"Generated {len(signals)} trading signals")
 
 
 if __name__ == "__main__":

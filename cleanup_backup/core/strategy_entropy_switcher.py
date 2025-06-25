@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Strategy Entropy Switcher - Dynamic Strategy Selection Engine.
 
@@ -13,7 +17,6 @@ Mathematical Foundation:
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
@@ -21,7 +24,7 @@ import time
 from enum import Enum
 from typing import Dict, List
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -166,9 +169,9 @@ class StrategyEntropySwitcher:
         """
         try:
             entropy_diff = good_entropy - bad_entropy
-            confidence = 1.0 / (1.0 + np.exp(-k * entropy_diff))
+            confidence = 1.0 / (1.0 + unified_math.exp(-k * entropy_diff))
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating strategy confidence: {e}")
@@ -201,12 +204,12 @@ class StrategyEntropySwitcher:
             performance_component = np.tanh(performance_delta)
             
             # Sigmoid component for volume
-            volume_sigmoid = 1.0 / (1.0 + np.exp(-volume_delta))
+            volume_sigmoid = 1.0 / (1.0 + unified_math.exp(-volume_delta))
             volume_component = 1.0 - volume_sigmoid
             
             resistance = performance_component * volume_component
             
-            return max(0.0, min(1.0, resistance))
+            return unified_math.max(0.0, unified_math.min(1.0, resistance))
             
         except Exception as e:
             logger.error(f"Error calculating state change resistance: {e}")
@@ -256,9 +259,9 @@ class StrategyEntropySwitcher:
                 weighted_perf = perf * (1.0 + entropy_factor)
                 fitness_components.append(weighted_perf)
             
-            fitness_score = np.mean(fitness_components)
+            fitness_score = unified_math.unified_math.mean(fitness_components)
             
-            return max(0.0, min(1.0, fitness_score))
+            return unified_math.max(0.0, unified_math.min(1.0, fitness_score))
             
         except Exception as e:
             logger.error(f"Error calculating strategy fitness: {e}")
@@ -329,17 +332,17 @@ class StrategyEntropySwitcher:
                 )
                 
                 fitness_diff = target_fitness - current_fitness
-                switch_confidence = max(0.0, min(1.0, fitness_diff * 2.0))
+                switch_confidence = unified_math.max(0.0, unified_math.min(1.0, fitness_diff * 2.0))
                 
                 # Apply resistance penalty
                 switch_confidence *= (1.0 - self.current_resistance)
                 
                 should_switch = (
                     switch_confidence > self.confidence_threshold and
-                    abs(entropy_gradient) > self.switch_threshold
+                    unified_math.abs(entropy_gradient) > self.switch_threshold
                 )
                 
-                switch_urgency = min(1.0, abs(entropy_gradient) * switch_confidence)
+                switch_urgency = unified_math.min(1.0, unified_math.abs(entropy_gradient) * switch_confidence)
                 
             else:
                 should_switch = False
@@ -457,13 +460,13 @@ class StrategyEntropySwitcher:
                 
                 # Adjust for entropy compatibility
                 entropy_weight = self.strategy_entropy_weights.get(strategy, 0.5)
-                entropy_compatibility = 1.0 - abs(entropy_weight - entropy_level)
+                entropy_compatibility = 1.0 - unified_math.abs(entropy_weight - entropy_level)
                 
                 combined_score = fitness * 0.7 + entropy_compatibility * 0.3
                 strategy_scores[strategy] = combined_score
             
             # Return strategy with highest score
-            best_strategy = max(strategy_scores.items(), key=lambda x: x[1])[0]
+            best_strategy = unified_math.max(strategy_scores.items(), key=lambda x: x[1])[0]
             
             return best_strategy
             
@@ -505,12 +508,12 @@ class StrategyEntropySwitcher:
             "strategy_history_size": len(self.strategy_history),
             "total_switches": len([s for s in self.switch_history if s.should_switch]),
             "average_strategy_duration": (
-                np.mean([s.active_duration for s in self.strategy_history])
+                unified_math.mean([s.active_duration for s in self.strategy_history])
                 if self.strategy_history else 0.0
             ),
             "best_performing_strategy": max(
                 self.performance_history.items(),
-                key=lambda x: np.mean(x[1]) if x[1] else 0.0
+                key=lambda x: unified_math.unified_math.mean(x[1]) if x[1] else 0.0
             )[0].value if any(self.performance_history.values()) else "none",
             "current_resistance": self.current_resistance,
             "entropy_window": self.entropy_window,
@@ -519,8 +522,8 @@ class StrategyEntropySwitcher:
 
 def main() -> None:
     """Demo function for testing strategy entropy switcher."""
-    print("Strategy Entropy Switcher Demo")
-    print("=" * 35)
+    safe_print("Strategy Entropy Switcher Demo")
+    safe_print("=" * 35)
     
     switcher = StrategyEntropySwitcher()
     
@@ -534,10 +537,10 @@ def main() -> None:
         (0.8, 0.2, 0.8),  # High entropy, poor performance
     ]
     
-    print("Simulating strategy switching:")
+    safe_print("Simulating strategy switching:")
     for i, (entropy, performance, volume_delta) in enumerate(test_scenarios):
-        print(f"\nScenario {i+1}:")
-        print(f"  Entropy: {entropy:.1f}, Performance: {performance:.1f}, Volume Δ: {volume_delta:.1f}")
+        safe_print(f"\nScenario {i+1}:")
+        safe_print(f"  Entropy: {entropy:.1f}, Performance: {performance:.1f}, Volume Δ: {volume_delta:.1f}")
         
         # Update performance
         switcher.update_performance(performance)
@@ -549,31 +552,31 @@ def main() -> None:
             volume_delta=volume_delta
         )
         
-        print(f"  Current Strategy: {switcher.current_strategy.value}")
-        print(f"  Should Switch: {switch_signal.should_switch}")
-        print(f"  Target Strategy: {switch_signal.target_strategy.value}")
-        print(f"  Switch Confidence: {switch_signal.switch_confidence:.3f}")
-        print(f"  Entropy Gradient: {switch_signal.entropy_gradient:.3f}")
-        print(f"  Switch Urgency: {switch_signal.switch_urgency:.3f}")
+        safe_print(f"  Current Strategy: {switcher.current_strategy.value}")
+        safe_print(f"  Should Switch: {switch_signal.should_switch}")
+        safe_print(f"  Target Strategy: {switch_signal.target_strategy.value}")
+        safe_print(f"  Switch Confidence: {switch_signal.switch_confidence:.3f}")
+        safe_print(f"  Entropy Gradient: {switch_signal.entropy_gradient:.3f}")
+        safe_print(f"  Switch Urgency: {switch_signal.switch_urgency:.3f}")
         
         # Execute switch if recommended
         if switch_signal.should_switch:
             switched = switcher.execute_strategy_switch(switch_signal)
-            print("  → Switch Executed: {switched}")
+            safe_print("  → Switch Executed: {switched}")
         
         time.sleep(0.1)  # Small delay for realistic timing
     
     # Strategy info
-    print("\nCurrent Strategy Info:")
+    safe_print("\nCurrent Strategy Info:")
     strategy_info = switcher.get_current_strategy_info()
     for key, value in strategy_info.items():
-        print(f"  {key}: {value}")
+        safe_print(f"  {key}: {value}")
     
     # Switcher summary
-    print("\nSwitcher Summary:")
+    safe_print("\nSwitcher Summary:")
     summary = switcher.get_switcher_summary()
     for key, value in summary.items():
-        print(f"  {key}: {value}")
+        safe_print(f"  {key}: {value}")
 
 
 if __name__ == "__main__":

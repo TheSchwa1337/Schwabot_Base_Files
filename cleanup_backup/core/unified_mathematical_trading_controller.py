@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Mathematical Trading Controller - Schwabot Framework.
 
@@ -53,14 +57,13 @@ Key Features:
 
 """
 
-from __future__ import annotations
 
 from decimal import Decimal
 from decimal import getcontext
 import logging
 from typing import Any, Dict, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 from .ghost_profit_tracker import profit_summary
@@ -122,7 +125,7 @@ class MathematicalConstraints:
             Decimal(str(max_val)) if max_val is not None else self.max_thermal_bound
         )
 
-        return max(min(value, max_bound), min_bound)
+        return unified_math.max(unified_math.min(value, max_bound), min_bound)
 
     def safe_decimal(self: MathematicalConstraints, x: float | str) -> Decimal:
         """Safely convert to Decimal."""
@@ -178,7 +181,7 @@ class GhostSwapDetector:
     ) -> bool:
         """Detect phantom swap triggers based on delta patterns."""
         # Phantom trigger: rapid price movement with low volume
-        rapid_price = delta_t < Decimal("0.5") and abs(delta_price) > Decimal("50")
+        rapid_price = delta_t < Decimal("0.5") and unified_math.abs(delta_price) > Decimal("50")
         low_volume = delta_volume < Decimal("0.1")
 
         return rapid_price and low_volume
@@ -251,7 +254,7 @@ class FerrisWheelCycleEngine:
 
         # Calculate stabilizer based on profit variance
         profits = [v.profit for v in cycle["vectors"]]
-        profit_variance = Decimal(str(np.var([float(p) for p in profits])))
+        profit_variance = Decimal(str(unified_math.var([float(p) for p in profits])))
 
         # Stabilizer reduces excessive variance
         stabilizer_strength = Decimal("0.1")
@@ -418,7 +421,7 @@ class UnifiedMathematicalTradingController:
 
                 # Apply risk constraints
                 max_allocation = capital * Decimal(str(risk_tolerance))
-                final_allocation = min(allocated_amount, max_allocation)
+                final_allocation = unified_math.min(allocated_amount, max_allocation)
 
                 allocations[f"{vector.asset}_{i}"] = {
                     "amount": float(final_allocation),
@@ -446,7 +449,7 @@ class UnifiedMathematicalTradingController:
             signature = self.ferris_engine.get_cycle_thermal_signature(cycle_name)
 
             thermal_analysis[cycle_name] = {
-                "thermal_stability": float(abs(signature.get("thermal_drift", 0))),
+                "thermal_stability": float(unified_math.abs(signature.get("thermal_drift", 0))),
                 "profit_thermal_ratio": (
                     float(signature.get("total_profit", 0))
                     / float(signature.get("current_thermal", 1))
@@ -500,7 +503,7 @@ def main() -> None:
     """Demo of unified mathematical trading controller."""
     try:
         controller = UnifiedMathematicalTradingController()
-        print(
+        safe_print(
             "✅ UnifiedMathematicalTradingController v{} initialized".format(
                 controller.version
             )
@@ -540,7 +543,7 @@ def main() -> None:
         # Process signals
         for signal in demo_signals:
             result = controller.process_trade_signal(signal)
-            print(
+            safe_print(
                 f"📊 Processed {signal['asset']} signal: "
                 f"Profit ${result.get('profit', 0):.2f}, "
                 f"Efficiency {result.get('efficiency', 0):.3f}"
@@ -548,24 +551,24 @@ def main() -> None:
 
         # Get optimal allocation
         allocation = controller.get_optimal_allocation(10000.0, 0.15)
-        print(f"💰 Optimal allocation status: {allocation['status']}")
+        safe_print(f"💰 Optimal allocation status: {allocation['status']}")
         if allocation["status"] == "success":
-            print(f"📈 Total allocated: ${allocation['allocated_capital']:.2f}")
+            safe_print(f"📈 Total allocated: ${allocation['allocated_capital']:.2f}")
 
         # System status
         status = controller.get_system_status()
-        print("🎯 System Status:")
-        print(f"   Vectors: {status['total_vectors']}")
-        print(f"   Cycles: {status['active_cycles']}")
-        print(f"   Ghost signals: {status['ghost_signals']}")
-        print(f"   Total profit: ${status['total_profit']:.2f}")
-        print(f"   Tracked profit total: ${status['tracked_profit_total']:.2f}")
-        print(f"   Avg efficiency: {status['average_efficiency']:.3f}")
+        safe_print("🎯 System Status:")
+        safe_print(f"   Vectors: {status['total_vectors']}")
+        safe_print(f"   Cycles: {status['active_cycles']}")
+        safe_print(f"   Ghost signals: {status['ghost_signals']}")
+        safe_print(f"   Total profit: ${status['total_profit']:.2f}")
+        safe_print(f"   Tracked profit total: ${status['tracked_profit_total']:.2f}")
+        safe_print(f"   Avg efficiency: {status['average_efficiency']:.3f}")
 
-        print("🎉 Unified mathematical trading controller demo completed!")
+        safe_print("🎉 Unified mathematical trading controller demo completed!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

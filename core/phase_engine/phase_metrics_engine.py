@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Metrics Engine - Trading Phase Performance Analytics for Schwabot
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -258,23 +272,23 @@ class PhaseMetricsEngine:
             if performance_values:
                 performance_metrics.update({
                     "total_return": np.sum(performance_values),
-                    "average_return": np.mean(performance_values),
-                    "return_volatility": np.std(performance_values),
+                    "average_return": unified_math.unified_math.mean(performance_values),
+                    "return_volatility": unified_math.unified_math.std(performance_values),
                     "sharpe_ratio": self._calculate_sharpe_ratio(performance_values),
                     "max_drawdown": self._calculate_max_drawdown(performance_values)
                 })
             
             if risk_values:
                 performance_metrics.update({
-                    "average_risk": np.mean(risk_values),
-                    "risk_volatility": np.std(risk_values),
-                    "max_risk": np.max(risk_values)
+                    "average_risk": unified_math.unified_math.mean(risk_values),
+                    "risk_volatility": unified_math.unified_math.std(risk_values),
+                    "max_risk": unified_math.unified_math.max(risk_values)
                 })
             
             if efficiency_values:
                 performance_metrics.update({
-                    "average_efficiency": np.mean(efficiency_values),
-                    "efficiency_consistency": 1.0 - np.std(efficiency_values)
+                    "average_efficiency": unified_math.unified_math.mean(efficiency_values),
+                    "efficiency_consistency": 1.0 - unified_math.unified_math.std(efficiency_values)
                 })
             
             return performance_metrics
@@ -292,10 +306,10 @@ class PhaseMetricsEngine:
             returns_array = np.array(returns)
             excess_returns = returns_array - risk_free_rate / 252  # Daily risk-free rate
             
-            if np.std(excess_returns) == 0:
+            if unified_math.unified_math.std(excess_returns) == 0:
                 return 0.0
             
-            sharpe_ratio = np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(252)
+            sharpe_ratio = unified_math.unified_math.mean(excess_returns) / unified_math.unified_math.std(excess_returns) * unified_math.unified_math.sqrt(252)
             return float(sharpe_ratio)
         except Exception:
             return 0.0
@@ -309,7 +323,7 @@ class PhaseMetricsEngine:
             cumulative_returns = np.cumprod(1 + np.array(returns))
             running_max = np.maximum.accumulate(cumulative_returns)
             drawdown = (cumulative_returns - running_max) / running_max
-            max_drawdown = np.min(drawdown)
+            max_drawdown = unified_math.unified_math.min(drawdown)
             return float(max_drawdown)
         except Exception:
             return 0.0
@@ -381,7 +395,7 @@ class PhaseMetricsEngine:
                 return 0.0
             
             gross_profit = sum(m.value for m in performance_metrics if m.value > 0)
-            gross_loss = abs(sum(m.value for m in performance_metrics if m.value < 0))
+            gross_loss = unified_math.abs(sum(m.value for m in performance_metrics if m.value < 0))
             
             return gross_profit / gross_loss if gross_loss > 0 else float('inf')
             
@@ -400,7 +414,7 @@ class PhaseMetricsEngine:
             
             # Check max drawdown
             max_drawdown = performance_metrics.get("max_drawdown", 0.0)
-            if abs(max_drawdown) > 0.05:
+            if unified_math.abs(max_drawdown) > 0.05:
                 recommendations.append("Implement stricter risk management to reduce maximum drawdown")
             
             # Check efficiency
@@ -439,7 +453,7 @@ class PhaseMetricsEngine:
                 if metrics_queue:
                     recent_values = [m["value"] for m in list(metrics_queue)[-10:]]  # Last 10 values
                     if recent_values:
-                        avg_value = np.mean(recent_values)
+                        avg_value = unified_math.unified_math.mean(recent_values)
                         if avg_value > threshold:
                             logger.warning(f"Alert: {metric_type.value} exceeds threshold {threshold}: {avg_value}")
         except Exception as e:
@@ -493,14 +507,14 @@ def main() -> None:
     report = engine.generate_performance_report(phase_id, start_time, end_time)
     
     if report:
-        print(f"Performance Report: {report.report_id}")
-        print(f"Total Return: {report.total_return:.4f}")
-        print(f"Sharpe Ratio: {report.sharpe_ratio:.4f}")
-        print(f"Recommendations: {report.recommendations}")
+        safe_print(f"Performance Report: {report.report_id}")
+        safe_print(f"Total Return: {report.total_return:.4f}")
+        safe_print(f"Sharpe Ratio: {report.sharpe_ratio:.4f}")
+        safe_print(f"Recommendations: {report.recommendations}")
     
     # Get statistics
     stats = engine.get_metrics_statistics()
-    print(f"Metrics Statistics: {stats}")
+    safe_print(f"Metrics Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

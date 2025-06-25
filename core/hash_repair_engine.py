@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Hash Repair Engine - Restore Matrix State When Hash Comparisons Fail.
 
@@ -16,7 +17,7 @@ import logging
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 from collections import defaultdict
 
@@ -308,7 +309,7 @@ class HashRepairEngine:
             # Convert to similarity score (0-1)
             similarity = 1.0 - (distance / max_distance)
 
-            return max(0.0, min(1.0, similarity))
+            return unified_math.max(0.0, unified_math.min(1.0, similarity))
 
         except Exception as e:
             logger.error(f"Error calculating hash similarity: {e}")
@@ -330,14 +331,14 @@ class HashRepairEngine:
                     insertions = previous_row[j + 1] + 1
                     deletions = current_row[j] + 1
                     substitutions = previous_row[j] + (c1 != c2)
-                    current_row.append(min(insertions, deletions, substitutions))
+                    current_row.append(unified_math.min(insertions, deletions, substitutions))
                 previous_row = current_row
 
             return previous_row[-1]
 
         except Exception as e:
             logger.error(f"Error calculating Levenshtein distance: {e}")
-            return max(len(s1), len(s2))
+            return unified_math.max(len(s1), len(s2))
 
     def _interpolate_hashes(self, hash1: str, hash2: str,
                            weight1: float, weight2: float) -> str:
@@ -447,7 +448,7 @@ class HashRepairEngine:
                 ]
             )
 
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
 
         except Exception as e:
             logger.error(f"Error calculating repair confidence: {e}")
@@ -515,11 +516,11 @@ class HashRepairEngine:
                 r.similarity_score for r in self.repair_history]
             repair_times = [r.repair_time for r in self.repair_history]
 
-            avg_confidence = (np.mean(confidence_scores)
+            avg_confidence = (unified_math.unified_math.mean(confidence_scores)
                              if confidence_scores else 0.0)
-            avg_similarity = (np.mean(similarity_scores)
+            avg_similarity = (unified_math.unified_math.mean(similarity_scores)
                              if similarity_scores else 0.0)
-            avg_repair_time = (np.mean(repair_times)
+            avg_repair_time = (unified_math.unified_math.mean(repair_times)
                               if repair_times else 0.0)
 
             pattern_count = sum(

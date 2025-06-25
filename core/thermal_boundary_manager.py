@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Thermal Boundary Manager - Schwabot Hardware-Aware Thermal Control
@@ -17,7 +33,6 @@ Key Features:
 Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 """
 
-from __future__ import annotations
 
 import asyncio
 import glob
@@ -32,7 +47,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import existing thermal components
 try:
@@ -632,13 +647,13 @@ class ThermalBoundaryManager:
         if boundary.state == ThermalState.COOL:
             return max_threads
         elif boundary.state == ThermalState.NORMAL:
-            return max(1, int(max_threads * 0.9))
+            return unified_math.max(1, int(max_threads * 0.9))
         elif boundary.state == ThermalState.WARM:
-            return max(1, int(max_threads * 0.7))
+            return unified_math.max(1, int(max_threads * 0.7))
         elif boundary.state == ThermalState.HOT:
-            return max(1, int(max_threads * 0.5))
+            return unified_math.max(1, int(max_threads * 0.5))
         elif boundary.state == ThermalState.CRITICAL:
-            return max(1, int(max_threads * 0.3))
+            return unified_math.max(1, int(max_threads * 0.3))
         else:  # EMERGENCY
             return 1
     
@@ -668,14 +683,14 @@ class ThermalBoundaryManager:
             },
             "gpu_optimization": {
                 "enable_gpu_processing": self.hardware_profile.gpu_available,
-                "memory_pool_size_mb": min(2048, self.hardware_profile.gpu_memory_mb),
+                "memory_pool_size_mb": unified_math.min(2048, self.hardware_profile.gpu_memory_mb),
                 "batch_size_multiplier": 1.0
             }
         }
         
         # Adjust for low-end hardware
         if self.hardware_profile.low_end_hardware:
-            optimizations["cpu_optimization"]["max_workers"] = max(1, self.hardware_profile.cpu_cores // 2)
+            optimizations["cpu_optimization"]["max_workers"] = unified_math.max(1, self.hardware_profile.cpu_cores // 2)
             optimizations["memory_optimization"]["large_object_threshold_mb"] = 5
             optimizations["gpu_optimization"]["batch_size_multiplier"] = 0.5
         
@@ -714,7 +729,7 @@ class ThermalBoundaryManager:
             recent_temps = [entry["cpu_temperature"] for entry in self.thermal_history[-3:]]
             temp_deltas = [recent_temps[i+1] - recent_temps[i] for i in range(len(recent_temps)-1)]
             
-            max_delta = max(abs(d) for d in temp_deltas)
+            max_delta = unified_math.max(unified_math.abs(d) for d in temp_deltas)
             if max_delta > 10:  # More than 10°C change
                 logger.warning(f"Rapid temperature change detected: {max_delta}°C")
                 await self._trigger_thermal_alert("rapid_temperature_change", max_delta)
@@ -722,7 +737,7 @@ class ThermalBoundaryManager:
             # Check for sustained high temperature
             if all(temp > 80 for temp in recent_temps):
                 logger.warning("Sustained high temperature detected")
-                await self._trigger_thermal_alert("sustained_high_temperature", max(recent_temps))
+                await self._trigger_thermal_alert("sustained_high_temperature", unified_math.max(recent_temps))
                 
         except Exception as e:
             logger.error(f"Thermal anomaly check failed: {e}")
@@ -807,19 +822,19 @@ async def main() -> None:
         
         # Get initial thermal state
         thermal_state = await manager.get_thermal_state()
-        print(f"Initial thermal state: {thermal_state}")
+        safe_print(f"Initial thermal state: {thermal_state}")
         
         # Get resource allocation
         allocation = await manager.update_resource_allocation()
-        print(f"Resource allocation: {allocation}")
+        safe_print(f"Resource allocation: {allocation}")
         
         # Get processing recommendations
         recommendations = manager.get_processing_recommendations()
-        print(f"Processing recommendations: {recommendations}")
+        safe_print(f"Processing recommendations: {recommendations}")
         
         # Get system status
         status = manager.get_system_status()
-        print(f"System status: {status}")
+        safe_print(f"System status: {status}")
         
     except Exception as e:
         logger.error(f"Thermal boundary manager test failed: {e}")

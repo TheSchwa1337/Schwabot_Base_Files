@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Backlog-Test Loop Validator - Schwabot Framework.
 
@@ -19,7 +21,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -295,7 +297,7 @@ class BacklogTestLoopValidator:
                         confidence_scores.append(confidence_result.unified_confidence)
                     else:
                         # Fallback confidence calculation
-                        win_rate = current_backlog_state.get('winning_trades', 0) / max(current_backlog_state.get('total_trades', 1), 1)
+                        win_rate = current_backlog_state.get('winning_trades', 0) / unified_math.max(current_backlog_state.get('total_trades', 1), 1)
                         confidence_scores.append(win_rate)
                     
                     # Calculate backlog metric
@@ -308,7 +310,7 @@ class BacklogTestLoopValidator:
                 
                 # Calculate correlation
                 if len(confidence_scores) > 1 and len(backlog_metrics) > 1:
-                    correlation = np.corrcoef(confidence_scores, backlog_metrics)[0, 1]
+                    correlation = unified_math.unified_math.correlation(confidence_scores, backlog_metrics)[0, 1]
                     if np.isnan(correlation):
                         correlation = 0.0
                 else:
@@ -493,7 +495,7 @@ class BacklogTestLoopValidator:
             test_success = np.random.random() > 0.1  # 90% success rate
             
             # Calculate test confidence based on backlog
-            win_rate = backlog_state.get('winning_trades', 0) / max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
             test_confidence = win_rate * 0.8 + np.random.random() * 0.2
             
             return {
@@ -522,8 +524,8 @@ class BacklogTestLoopValidator:
             base_result = self._simulate_test_cycle(backlog_state, cycle)
             
             # Add Ferris wheel influence
-            ferris_influence = np.sin(2 * np.pi * ferris_wheel_position / 8) * 0.1
-            base_result['confidence'] = max(0.0, min(1.0, base_result['confidence'] + ferris_influence))
+            ferris_influence = np.unified_math.sin(2 * np.pi * ferris_wheel_position / 8) * 0.1
+            base_result['confidence'] = unified_math.max(0.0, unified_math.min(1.0, base_result['confidence'] + ferris_influence))
             base_result['ferris_wheel_position'] = ferris_wheel_position
             base_result['ferris_influence'] = ferris_influence
             
@@ -570,7 +572,7 @@ class BacklogTestLoopValidator:
             updated_state = matrix_state.copy()
             
             # Update confidence score based on backlog performance
-            win_rate = backlog_state.get('winning_trades', 0) / max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
             updated_state['confidence_score'] = win_rate * 0.8 + matrix_state.get('confidence_score', 0.5) * 0.2
             
             # Update phase based on performance
@@ -596,8 +598,8 @@ class BacklogTestLoopValidator:
     def _calculate_backlog_metric(self, backlog_state: Dict[str, Any]) -> float:
         """Calculate a single metric from backlog state."""
         try:
-            win_rate = backlog_state.get('winning_trades', 0) / max(backlog_state.get('total_trades', 1), 1)
-            profit_factor = min(backlog_state.get('avg_profit', 0.0) / 1000.0, 1.0)
+            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
+            profit_factor = unified_math.min(backlog_state.get('avg_profit', 0.0) / 1000.0, 1.0)
             recent_performance = backlog_state.get('recent_performance', 0.5)
             
             return (win_rate * 0.4 + profit_factor * 0.3 + recent_performance * 0.3)
@@ -646,7 +648,7 @@ class BacklogTestLoopValidator:
             
             # Check that Ferris influence is present
             ferris_influences = [r.get('ferris_influence', 0) for r in sync_results]
-            if not any(abs(influence) > 0.01 for influence in ferris_influences):
+            if not any(unified_math.abs(influence) > 0.01 for influence in ferris_influences):
                 return False
             
             return True
@@ -660,11 +662,11 @@ class BacklogTestLoopValidator:
         """Validate matrix controller integration."""
         try:
             # Check that matrix state is consistent with backlog
-            win_rate = backlog_state.get('winning_trades', 0) / max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
             matrix_confidence = matrix_state.get('confidence_score', 0.0)
             
             # Confidence should be reasonably correlated with win rate
-            confidence_diff = abs(matrix_confidence - win_rate)
+            confidence_diff = unified_math.abs(matrix_confidence - win_rate)
             if confidence_diff > 0.3:  # Allow 30% tolerance
                 return False
             
@@ -776,18 +778,18 @@ if __name__ == "__main__":
     result = test_backlog_test_loop_validator()
     
     # Print results
-    print("\n" + "="*60)
-    print("🔄 BACKLOG-TEST LOOP VALIDATOR RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🔄 BACKLOG-TEST LOOP VALIDATOR RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

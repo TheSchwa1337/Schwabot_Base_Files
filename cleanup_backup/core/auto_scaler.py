@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Auto Scaler - Dynamic Position Size Calculator.
 
@@ -9,19 +13,18 @@ Mathematical Foundation:
 scale_factor = base_scale * (1 + confidence_multiplier + profit_multiplier)
 
 Where:
-- confidence_multiplier = max(0, (Ξ - threshold) * confidence_weight)
+- confidence_multiplier = unified_math.max(0, (Ξ - threshold) * confidence_weight)
 - profit_multiplier = projected_profit * profit_weight
 - Result is clamped to [min_scale, max_scale] range
 
 Windows CLI compatible with proper error handling and logging.
 """
 
-from __future__ import annotations
 
 import logging
 from typing import Dict, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +86,7 @@ def scale_position(
             return base_scale
 
         # Calculate confidence multiplier
-        confidence_excess = max(0.0, confidence - confidence_threshold)
+        confidence_excess = unified_math.max(0.0, confidence - confidence_threshold)
         confidence_multiplier = confidence_excess * confidence_weight
 
         # Calculate profit multiplier
@@ -93,7 +96,7 @@ def scale_position(
         scale_factor = base_scale * (1.0 + confidence_multiplier + profit_multiplier)
 
         # Apply bounds
-        scale_factor = max(min_scale, min(max_scale, scale_factor))
+        scale_factor = unified_math.max(min_scale, unified_math.min(max_scale, scale_factor))
 
         return scale_factor
 
@@ -142,10 +145,10 @@ def calculate_position_size(
 
         # Apply risk management constraints
         max_position = account_balance * max_risk_per_trade
-        risk_limited_position = min(scaled_position, max_position)
+        risk_limited_position = unified_math.min(scaled_position, max_position)
 
         # Apply minimum position constraint
-        final_position = max(MIN_POSITION_SIZE, risk_limited_position)
+        final_position = unified_math.max(MIN_POSITION_SIZE, risk_limited_position)
 
         # Calculate details
         details = {
@@ -219,8 +222,8 @@ def optimize_scaling_parameters(
 
         # Calculate current performance metrics
         returns_array = np.array(returns)
-        mean_return = np.mean(returns_array)
-        std_return = np.std(returns_array)
+        mean_return = unified_math.unified_math.mean(returns_array)
+        std_return = unified_math.unified_math.std(returns_array)
 
         # Calculate Sharpe ratio
         sharpe_ratio = mean_return / std_return if std_return > 0 else 0
@@ -229,7 +232,7 @@ def optimize_scaling_parameters(
         cumulative_returns = np.cumprod(1 + returns_array)
         running_max = np.maximum.accumulate(cumulative_returns)
         drawdowns = (cumulative_returns - running_max) / running_max
-        max_dd = abs(np.min(drawdowns))
+        max_dd = unified_math.abs(unified_math.unified_math.min(drawdowns))
 
         # Adjust parameters based on performance
         optimized_params = {
@@ -378,7 +381,7 @@ class AutoScaler:
             Actual return achieved by the trade
         """
         try:
-            if abs(trade_index) <= len(self.trade_history):
+            if unified_math.abs(trade_index) <= len(self.trade_history):
                 self.trade_history[trade_index]["return"] = actual_return
 
                 # Check if it's time to optimize parameters
@@ -440,12 +443,12 @@ class AutoScaler:
             scale_factors = [trade["scale_factor"] for trade in trades_with_returns]
 
             # Calculate metrics
-            mean_return = np.mean(returns)
-            std_return = np.std(returns)
+            mean_return = unified_math.unified_math.mean(returns)
+            std_return = unified_math.unified_math.std(returns)
             sharpe_ratio = mean_return / std_return if std_return > 0 else 0
 
             # Calculate scaling effectiveness
-            mean_scale = np.mean(scale_factors)
+            mean_scale = unified_math.unified_math.mean(scale_factors)
             high_confidence_trades = [
                 trade
                 for trade in trades_with_returns
@@ -454,7 +457,7 @@ class AutoScaler:
 
             high_conf_returns = [trade["return"] for trade in high_confidence_trades]
             high_conf_mean_return = (
-                np.mean(high_conf_returns) if high_conf_returns else 0
+                unified_math.unified_math.mean(high_conf_returns) if high_conf_returns else 0
             )
 
             return {
@@ -532,8 +535,8 @@ def validate_scaling_inputs(
 
 def main() -> None:
     """Demo function for testing auto scaler."""
-    print("Auto Scaler Demo")
-    print("=" * 30)
+    safe_print("Auto Scaler Demo")
+    safe_print("=" * 30)
 
     # Test basic scaling
     test_cases = [
@@ -552,14 +555,14 @@ def main() -> None:
             base_pos, confidence, profit, account_bal
         )
 
-        print(f"\n{description}:")
-        print(f"  Confidence: {confidence:.2f}, Profit: {profit:.3f}")
-        print(f"  Scale factor: {scale_factor:.2f}")
-        print(f"  Position size: ${position_size:.2f}")
-        print(f"  Risk %: {details['risk_percentage']:.2f}%")
+        safe_print(f"\n{description}:")
+        safe_print(f"  Confidence: {confidence:.2f}, Profit: {profit:.3f}")
+        safe_print(f"  Scale factor: {scale_factor:.2f}")
+        safe_print(f"  Position size: ${position_size:.2f}")
+        safe_print(f"  Risk %: {details['risk_percentage']:.2f}%")
 
     # Test auto scaler class
-    print("\nAuto Scaler Class Test:")
+    safe_print("\nAuto Scaler Class Test:")
     scaler = AutoScaler()
 
     # Simulate some trades
@@ -572,14 +575,14 @@ def main() -> None:
         actual_return = prof * np.random.uniform(0.5, 1.5)  # Random outcome
         scaler.update_trade_result(-1, actual_return)
 
-        print(f"  Trade {i+1}: Size=${pos:.2f}, Scale={details['scale_factor']:.2f}")
+        safe_print(f"  Trade {i+1}: Size=${pos:.2f}, Scale={details['scale_factor']:.2f}")
 
     # Get performance summary
     summary = scaler.get_performance_summary()
-    print("\nPerformance Summary:")
-    print(f"  Total trades: {summary.get('total_trades', 0)}")
-    print(f"  Mean return: {summary.get('mean_return', 0):.4f}")
-    print(f"  Sharpe ratio: {summary.get('sharpe_ratio', 0):.2f}")
+    safe_print("\nPerformance Summary:")
+    safe_print(f"  Total trades: {summary.get('total_trades', 0)}")
+    safe_print(f"  Mean return: {summary.get('mean_return', 0):.4f}")
+    safe_print(f"  Sharpe ratio: {summary.get('sharpe_ratio', 0):.2f}")
 
 
 if __name__ == "__main__":

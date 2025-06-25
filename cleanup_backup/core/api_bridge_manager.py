@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 API Bridge Manager - Multi-Source Crypto API Integration for Schwabot
@@ -30,7 +32,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 import threading
 from collections import defaultdict, deque
-import numpy as np
+from core.unified_math_system import unified_math
 from decimal import Decimal, InvalidOperation
 
 logger = logging.getLogger(__name__)
@@ -595,16 +597,16 @@ def main() -> None:
     # Test getting crypto data
     btc_data = bridge.get_crypto_data("BTC")
     if btc_data:
-        print(f"BTC Data: {btc_data}")
+        safe_print(f"BTC Data: {btc_data}")
     
     # Test getting multiple symbols
     symbols = ["BTC", "ETH", "ADA"]
     multi_data = bridge.get_multiple_crypto_data(symbols)
-    print(f"Multiple symbols data: {len(multi_data)} items")
+    safe_print(f"Multiple symbols data: {len(multi_data)} items")
     
     # Get statistics
     stats = bridge.get_api_statistics()
-    print(f"API Statistics: {stats}")
+    safe_print(f"API Statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

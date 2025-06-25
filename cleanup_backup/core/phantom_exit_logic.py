@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Phantom exit logic – compute exit score Pₓ.
 
@@ -8,9 +11,8 @@ Approximates the improper integral:
 Numerically we evaluate a discrete array *phi_exit* and divide by profit delta.
 """
 
-from __future__ import annotations
 
-import math
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["phantom_exit_score"]
 
@@ -29,4 +31,4 @@ def phantom_exit_score(
     where ε_halt is *halt_bias*.
     """
     val = lambda_trust + profit_delta * zeta_derivative - halt_bias
-    return 1.0 / (1.0 + math.exp(-val))
+    return 1.0 / (1.0 + unified_math.exp(-val))

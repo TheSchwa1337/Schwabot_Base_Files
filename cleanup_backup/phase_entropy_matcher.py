@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Entropy Matcher - Schwabot UROS v1.0
@@ -8,11 +10,11 @@ Connects bit patterns with entropy for optimal trade routing decisions.
 """
 
 import logging
-import math
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -169,7 +171,7 @@ class PhaseEntropyMatcher:
             )
             
             # Normalize to [0, 1] range
-            return max(0.0, min(1.0, priority_score))
+            return unified_math.max(0.0, unified_math.min(1.0, priority_score))
             
         except Exception as e:
             logger.error(f"Error calculating priority score: {e}")
@@ -180,10 +182,10 @@ class PhaseEntropyMatcher:
         try:
             # Normalize entropy to [0, 1] range
             # Assume maximum useful entropy is around 8.0
-            normalized_entropy = min(entropy / 8.0, 1.0)
+            normalized_entropy = unified_math.min(entropy / 8.0, 1.0)
             
             # Apply sigmoid-like transformation for better distribution
-            score = 1.0 / (1.0 + math.exp(-3.0 * (normalized_entropy - 0.5)))
+            score = 1.0 / (1.0 + unified_math.exp(-3.0 * (normalized_entropy - 0.5)))
             
             return score
             
@@ -199,14 +201,14 @@ class PhaseEntropyMatcher:
             
             # Calculate various complexity metrics
             bit_sum = sum(bit_pattern)
-            bit_variance = np.var(bit_pattern) if len(bit_pattern) > 1 else 0.0
+            bit_variance = unified_math.unified_math.var(bit_pattern) if len(bit_pattern) > 1 else 0.0
             bit_transitions = sum(1 for i in range(1, len(bit_pattern)) 
                                 if bit_pattern[i] != bit_pattern[i-1])
             
             # Normalize metrics
             normalized_sum = bit_sum / (len(bit_pattern) * 2)  # Assume max value is 2
-            normalized_variance = min(bit_variance / 0.25, 1.0)  # Normalize variance
-            normalized_transitions = bit_transitions / max(len(bit_pattern) - 1, 1)
+            normalized_variance = unified_math.min(bit_variance / 0.25, 1.0)  # Normalize variance
+            normalized_transitions = bit_transitions / unified_math.max(len(bit_pattern) - 1, 1)
             
             # Combine metrics
             complexity_score = (normalized_sum + normalized_variance + normalized_transitions) / 3.0
@@ -235,11 +237,11 @@ class PhaseEntropyMatcher:
             
             # Calculate stability as average autocorrelation (excluding lag 0)
             if len(normalized_autocorr) > 1:
-                stability = np.mean(normalized_autocorr[1:])
+                stability = unified_math.unified_math.mean(normalized_autocorr[1:])
             else:
                 stability = 1.0
             
-            return max(0.0, min(1.0, stability))
+            return unified_math.max(0.0, unified_math.min(1.0, stability))
             
         except Exception as e:
             logger.error(f"Error calculating pattern stability score: {e}")
@@ -272,7 +274,7 @@ class PhaseEntropyMatcher:
             complexity_factor = 1.0 + (complexity - 0.5) * 0.2
             base_affinity *= complexity_factor
             
-            return max(0.0, min(1.0, base_affinity))
+            return unified_math.max(0.0, unified_math.min(1.0, base_affinity))
             
         except Exception as e:
             logger.error(f"Error calculating basket affinity score: {e}")
@@ -309,13 +311,13 @@ class PhaseEntropyMatcher:
                 return 1.0
             
             # Calculate coefficient of variation
-            mean_value = np.mean(bit_pattern)
-            std_value = np.std(bit_pattern)
+            mean_value = unified_math.unified_math.mean(bit_pattern)
+            std_value = unified_math.unified_math.std(bit_pattern)
             
             if mean_value == 0:
                 return 1.0 if std_value == 0 else 0.0
             
-            cv = std_value / abs(mean_value)
+            cv = std_value / unified_math.abs(mean_value)
             
             # Convert to stability score (lower CV = higher stability)
             stability = 1.0 / (1.0 + cv)
@@ -363,10 +365,10 @@ class PhaseEntropyMatcher:
             
             # Calculate basic statistics
             analysis['statistics'] = {
-                'mean': np.mean(entropy_sequence),
-                'std': np.std(entropy_sequence),
-                'min': np.min(entropy_sequence),
-                'max': np.max(entropy_sequence),
+                'mean': unified_math.unified_math.mean(entropy_sequence),
+                'std': unified_math.unified_math.std(entropy_sequence),
+                'min': unified_math.unified_math.min(entropy_sequence),
+                'max': unified_math.unified_math.max(entropy_sequence),
                 'median': np.median(entropy_sequence)
             }
             
@@ -392,13 +394,13 @@ class PhaseEntropyMatcher:
             
             # Check for trends
             diffs = np.diff(entropy_sequence)
-            trend = np.mean(diffs)
+            trend = unified_math.unified_math.mean(diffs)
             
-            if abs(trend) > np.std(diffs) * 1.5:
+            if unified_math.abs(trend) > unified_math.unified_math.std(diffs) * 1.5:
                 patterns.append({
                     'type': 'trend',
                     'direction': 'increasing' if trend > 0 else 'decreasing',
-                    'strength': abs(trend) / np.std(diffs)
+                    'strength': unified_math.abs(trend) / unified_math.unified_math.std(diffs)
                 })
             
             # Check for entropy clustering
@@ -410,7 +412,7 @@ class PhaseEntropyMatcher:
                 })
             
             # Check for entropy stability
-            entropy_std = np.std(entropy_sequence)
+            entropy_std = unified_math.unified_math.std(entropy_sequence)
             if entropy_std < 0.5:
                 patterns.append({
                     'type': 'entropy_stability',
@@ -421,7 +423,7 @@ class PhaseEntropyMatcher:
             
             return {
                 'patterns': patterns,
-                'confidence': min(confidence, 1.0)
+                'confidence': unified_math.min(confidence, 1.0)
             }
             
         except Exception as e:
@@ -495,7 +497,7 @@ class PhaseEntropyMatcher:
 
 def main():
     """Test function for Phase Entropy Matcher."""
-    print("🧮 Testing Phase Entropy Matcher...")
+    safe_print("🧮 Testing Phase Entropy Matcher...")
     
     matcher = PhaseEntropyMatcher()
     
@@ -504,7 +506,7 @@ def main():
     entropy = 2.0
     
     phase_weight = matcher.phase_weight_matrix(bit_pattern, entropy)
-    print(f"Phase weight: {phase_weight}")
+    safe_print(f"Phase weight: {phase_weight}")
     
     # Test phase-entropy matching
     basket_id = "basket_0071"
@@ -515,13 +517,13 @@ def main():
     }
     
     match = matcher.match_phase_entropy(bit_pattern, entropy, basket_id, market_conditions)
-    print(f"Priority score: {match.priority_score:.4f}")
-    print(f"Basket ID: {match.basket_id}")
+    safe_print(f"Priority score: {match.priority_score:.4f}")
+    safe_print(f"Basket ID: {match.basket_id}")
     
     # Test entropy pattern analysis
     entropy_sequence = [2.1, 3.5, 4.2, 5.8, 4.1, 3.9, 6.2, 5.1]
     analysis = matcher.analyze_entropy_patterns(entropy_sequence)
-    print(f"\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
+    safe_print(f"\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
     
     return 0
 

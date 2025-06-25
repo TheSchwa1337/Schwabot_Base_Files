@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Schwabot Unified Mathematics Framework.
 
@@ -29,7 +33,6 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
 
 from datetime import datetime
 from functools import lru_cache
@@ -38,7 +41,7 @@ import hashlib
 import logging
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 from core.type_defs import AnalysisResult
 from core.type_defs import Entropy
@@ -111,7 +114,7 @@ class RecursionGuard:
 
     def check_convergence(self, current: float, previous: float) -> bool:
         """Check if values have converged."""
-        return abs(current - previous) < self.threshold
+        return unified_math.abs(current - previous) < self.threshold
 
 
 class MathematicalValidator:
@@ -152,8 +155,8 @@ class MathematicalValidator:
             return False
 
         # Normalise check ‖ψ‖ = 1
-        norm = float(np.sqrt(np.sum(np.abs(state) ** 2)))
-        return abs(norm - 1.0) < 1e-6
+        norm = float(unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(state) ** 2)))
+        return unified_math.abs(norm - 1.0) < 1e-6
 
 class RecursiveIdentityFunction:
     """Implements Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ)) framework."""
@@ -205,13 +208,13 @@ class RecursiveIdentityFunction:
         self, x: float, delta_t: float, transform_input: float
     ) -> float:
         """Base transformation function."""
-        return x * np.exp(-delta_t) * (1 + transform_input)
+        return x * unified_math.exp(-delta_t) * (1 + transform_input)
 
     def _recursive_transform(
         self, previous_state: float, delta_t: float, transform_input: float
     ) -> float:
         """Recursive transformation function."""
-        return previous_state * np.cos(delta_t) + transform_input * np.sin(
+        return previous_state * np.unified_math.cos(delta_t) + transform_input * np.sin(
             delta_t
         )
 
@@ -256,10 +259,10 @@ class EntropyStabilizedFeedback:
         time_derivative = state_derivative * time_delta
 
         # Total change rate
-        change_rate = abs(state_derivative) + abs(time_derivative)
+        change_rate = unified_math.abs(state_derivative) + unified_math.abs(time_derivative)
 
         # Apply threshold limiting
-        stabilized_rate = min(change_rate, self.threshold)
+        stabilized_rate = unified_math.min(change_rate, self.threshold)
 
         # Update state history
         self.previous_states.append(current_state)
@@ -298,7 +301,7 @@ class InformationDensityMap:
         grid_y = int(y * self.dimensions[1]) % self.dimensions[1]
 
         # Apply time decay
-        decay_factor = np.exp(-time * 0.1)
+        decay_factor = unified_math.exp(-time * 0.1)
         self.density_map[grid_y, grid_x] += value * decay_factor
 
     def compute_integral(
@@ -411,8 +414,8 @@ class UnifiedMathematicsFramework:
             Unified drift field value
         """
         # Base drift field
-        decay = np.exp(-time) * np.sin(x * y)
-        stability = (np.cos(z) * np.sqrt(1 + abs(x))) / (1 + 0.1 * abs(y))
+        decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         base_field = decay * stability
 
         # Apply golden ratio scaling
@@ -433,7 +436,7 @@ class UnifiedMathematicsFramework:
         Returns:
             Unified allocated drift value
         """
-        return (self.psi_infinity * np.sin(layer_index * entropy_gradient)) / (
+        return (self.psi_infinity * np.unified_math.sin(layer_index * entropy_gradient)) / (
             1 + layer_index * layer_index
         )
 
@@ -451,7 +454,7 @@ class UnifiedMathematicsFramework:
         """
         if isinstance(data, Vector):
             # Vector entropy
-            probabilities = np.abs(data) ** 2
+            probabilities = unified_math.unified_math.abs(data) ** 2
             probabilities = probabilities[probabilities > 0]
             if len(probabilities) == 0:
                 return Entropy(0.0)
@@ -459,7 +462,7 @@ class UnifiedMathematicsFramework:
 
         elif isinstance(data, Matrix):
             # Matrix entropy (singular values)
-            u, s, vh = np.linalg.svd(data)
+            u, s, vh = unified_math.unified_math.svd(data)
             singular_values = s / np.sum(s)  # Normalize
             singular_values = singular_values[singular_values > 0]
             if len(singular_values) == 0:
@@ -469,7 +472,7 @@ class UnifiedMathematicsFramework:
         elif isinstance(data, Tensor):
             # Tensor entropy (flatten and compute)
             flattened = data.flatten()
-            probabilities = np.abs(flattened) ** 2
+            probabilities = unified_math.unified_math.abs(flattened) ** 2
             probabilities = probabilities[probabilities > 0]
             if len(probabilities) == 0:
                 return Entropy(0.0)
@@ -554,22 +557,22 @@ class UnifiedMathematicsFramework:
         if isinstance(data, Vector):
             # Vector complexity: based on non-zero elements and variance
             non_zero = np.count_nonzero(data)
-            variance = np.var(data)
-            complexity = (non_zero / len(data)) * np.log(1 + variance)
+            variance = unified_math.unified_math.var(data)
+            complexity = (non_zero / len(data)) * unified_math.unified_math.log(1 + variance)
 
         elif isinstance(data, Matrix):
             # Matrix complexity: based on rank and condition number
             rank = np.linalg.matrix_rank(data)
             condition = np.linalg.cond(data)
-            complexity = (rank / min(data.shape)) * np.log(1 + condition)
+            complexity = (rank / unified_math.min(data.shape)) * unified_math.unified_math.log(1 + condition)
 
         elif isinstance(data, Tensor):
             # Tensor complexity: based on singular values
             data.flatten()
-            u, s, vh = np.linalg.svd(data.reshape(-1, data.shape[-1]))
+            u, s, vh = unified_math.unified_math.svd(data.reshape(-1, data.shape[-1]))
             singular_values = s / np.sum(s)
             complexity = -np.sum(
-                singular_values * np.log(singular_values + 1e-10)
+                singular_values * unified_math.unified_math.log(singular_values + 1e-10)
             )
 
         else:
@@ -806,7 +809,7 @@ class FerrisWheelVisualizer:
                 x=t / 100,
                 n=5,
                 delta_t=t / 1000,
-                transform_input=np.sin(t / 10),
+                transform_input=np.unified_math.sin(t / 10),
             )
             recursive_states.append(state)
 
@@ -825,7 +828,7 @@ class FerrisWheelVisualizer:
         drift_fields = []
         for t in time_points:
             drift = self.framework.compute_unified_drift_field(
-                x=t / 100, y=np.sin(t / 10), z=np.cos(t / 10), time=t / 1000
+                x=t / 100, y=np.unified_math.sin(t / 10), z=np.unified_math.cos(t / 10), time=t / 1000
             )
             drift_fields.append(drift)
 
@@ -867,33 +870,33 @@ def main() -> None:
     drift_field = framework.compute_unified_drift_field(
         x=1.0, y=2.0, z=0.5, time=1.0
     )
-    print(f"Unified drift field: {drift_field}")
+    safe_print(f"Unified drift field: {drift_field}")
 
     # Test unified ring drift
     ring_drift = framework.allocate_unified_ring_drift(
         layer_index=3, entropy_gradient=0.1
     )
-    print(f"Unified ring drift: {ring_drift}")
+    safe_print(f"Unified ring drift: {ring_drift}")
 
     # Test unified entropy
     test_vector = np.array([0.5, 0.5, 0.0, 0.0])
     entropy = framework.compute_unified_entropy(test_vector)
-    print(f"Unified entropy: {entropy}")
+    safe_print(f"Unified entropy: {entropy}")
 
     # Test unified hash
     unified_hash = framework.generate_unified_hash(test_vector, time_slot=1.5)
-    print(f"Unified hash: {unified_hash}")
+    safe_print(f"Unified hash: {unified_hash}")
 
     # Test mathematical complexity
     test_matrix = np.random.rand(4, 4)
     complexity = framework.compute_mathematical_complexity(test_matrix)
-    print(f"Mathematical complexity: {complexity}")
+    safe_print(f"Mathematical complexity: {complexity}")
 
     # Test validation
     is_valid_scalar = validator.validate_scalar(3.14)
     is_valid_vector = validator.validate_vector(test_vector)
     is_valid_matrix = validator.validate_matrix(test_matrix)
-    print(
+    safe_print(
         f"Validation - Scalar: {is_valid_scalar}, Vector: {is_valid_vector}, Matrix: {is_valid_matrix}"
     )
 
@@ -906,25 +909,25 @@ def main() -> None:
     }
 
     analysis_result = framework.integrate_all_systems(input_data)
-    print(f"Analysis result keys: {list(analysis_result.keys())}")
+    safe_print(f"Analysis result keys: {list(analysis_result.keys())}")
 
     # Test system status
     status = framework.get_system_status()
-    print(f"System status: {status}")
+    safe_print(f"System status: {status}")
 
     # Test BTC256SH-A pipeline
     btc_pipeline = BTC256SHAPipeline(framework)
     pipeline_result = btc_pipeline.process_price_data(
         price=50000.0, timestamp=1640995200.0
     )
-    print(f"BTC Pipeline result: {pipeline_result}")
+    safe_print(f"BTC Pipeline result: {pipeline_result}")
 
     # Test Ferris Wheel visualizer
     ferris_visualizer = FerrisWheelVisualizer(framework)
     viz_data = ferris_visualizer.create_visualization_data(
         recursive_data={"test": "data"}, time_range=(0, 50)
     )
-    print(f"Ferris Wheel visualization data keys: {list(viz_data.keys())}")
+    safe_print(f"Ferris Wheel visualization data keys: {list(viz_data.keys())}")
 
 
 if __name__ == "__main__":

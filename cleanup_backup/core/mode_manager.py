@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Mode Manager - Schwabot Mathematical Framework.
 
@@ -21,7 +24,6 @@ Operational Modes:
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
@@ -423,38 +425,38 @@ def main() -> None:
     """Demo of mode management system."""
     try:
         mode_manager = ModeManager()
-        print(f"✅ ModeManager v{mode_manager.version} initialized")
-        print(f"🔧 Current mode: {mode_manager.get_current_mode().value}")
+        safe_print(f"✅ ModeManager v{mode_manager.version} initialized")
+        safe_print(f"🔧 Current mode: {mode_manager.get_current_mode().value}")
 
         # Test mode transition
         success = mode_manager.request_mode_transition(
             OperationalMode.OPTIMIZATION_MODE, "testing"
         )
-        print(
+        safe_print(
             f"📈 Transition to optimization mode: {'✅' if success else '❌'}"
         )
 
         # Test feature check
         ai_enabled = mode_manager.is_feature_enabled("ai_features")
-        print(f"🤖 AI features enabled: {'✅' if ai_enabled else '❌'}")
+        safe_print(f"🤖 AI features enabled: {'✅' if ai_enabled else '❌'}")
 
         # Test operation validation
         test_params = {"position_size": 0.8, "leverage": 1.2}
         validation = mode_manager.validate_mode_constraints(
             "trade_execution", test_params
         )
-        print(
+        safe_print(
             f"⚖️  Operation allowed: {'✅' if validation['allowed'] else '❌'}"
         )
 
         # Get statistics
         stats = mode_manager.get_mode_statistics()
-        print(f"📊 Total transitions: {stats['total_transitions']}")
+        safe_print(f"📊 Total transitions: {stats['total_transitions']}")
 
-        print("🎉 Mode management demo completed!")
+        safe_print("🎉 Mode management demo completed!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

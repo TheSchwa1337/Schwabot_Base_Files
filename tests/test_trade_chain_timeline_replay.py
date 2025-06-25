@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Trade Chain Timeline Replay Test - Schwabot Framework.
 
@@ -20,7 +22,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -615,12 +617,12 @@ class TradeChainTimelineReplayTest:
         
         # Boost for recent events
         age_hours = (time.time() - event.timestamp) / 3600
-        recency_boost = max(0.0, 1.0 - age_hours / 24.0)  # 24-hour decay
+        recency_boost = unified_math.max(0.0, 1.0 - age_hours / 24.0)  # 24-hour decay
         
         # Boost for high-volume events
-        volume_boost = min(0.2, event.volume / 10000.0)
+        volume_boost = unified_math.min(0.2, event.volume / 10000.0)
         
-        return min(1.0, strength + recency_boost + volume_boost)
+        return unified_math.min(1.0, strength + recency_boost + volume_boost)
     
     def _calculate_memory_anchor_quality(self, anchors: List[Dict[str, Any]]) -> float:
         """Calculate overall memory anchor quality."""
@@ -632,7 +634,7 @@ class TradeChainTimelineReplayTest:
         
         # Consider diversity of events
         unique_actions = len(set(anchor['action'] for anchor in anchors))
-        diversity_score = min(1.0, unique_actions / 3.0)  # Normalize to 3 actions
+        diversity_score = unified_math.min(1.0, unique_actions / 3.0)  # Normalize to 3 actions
         
         return (avg_strength + diversity_score) / 2.0
     
@@ -644,7 +646,7 @@ class TradeChainTimelineReplayTest:
         context = {
             'valid': True,
             'total_events': len(anchors),
-            'avg_confidence': np.mean([anchor['confidence'] for anchor in anchors]),
+            'avg_confidence': unified_math.mean([anchor['confidence'] for anchor in anchors]),
             'action_distribution': {},
             'recent_events': [],
             'high_confidence_events': []
@@ -709,8 +711,8 @@ class TradeChainTimelineReplayTest:
         # Calculate loop instability based on confidence variance
         confidences = [event.confidence for event in events]
         if confidences:
-            confidence_variance = np.var(confidences)
-            loop_instability = min(1.0, confidence_variance)
+            confidence_variance = unified_math.unified_math.var(confidences)
+            loop_instability = unified_math.min(1.0, confidence_variance)
         
         # Simulate echo cycles
         echo_cycles = len(events) // 2  # Rough estimate
@@ -742,7 +744,7 @@ class TradeChainTimelineReplayTest:
                     feedback['confidence'] 
                     for feedback in event.ai_feedback.values()
                 ]
-                avg_ai_confidence = np.mean(ai_confidences)
+                avg_ai_confidence = unified_math.unified_math.mean(ai_confidences)
                 feedback_scores.append(avg_ai_confidence)
                 
                 # Check for consensus
@@ -753,13 +755,13 @@ class TradeChainTimelineReplayTest:
                 if len(set(recommendations)) == 1:  # All AIs agree
                     consensus_count += 1
         
-        feedback_quality = np.mean(feedback_scores) if feedback_scores else 0.0
+        feedback_quality = unified_math.unified_math.mean(feedback_scores) if feedback_scores else 0.0
         ai_consensus = consensus_count > len(events) * 0.6  # 60% consensus threshold
         
         # Calculate decision consistency
         actions = [event.action for event in events]
         action_changes = sum(1 for i in range(1, len(actions)) if actions[i] != actions[i-1])
-        decision_consistency = 1.0 - (action_changes / max(1, len(actions) - 1))
+        decision_consistency = 1.0 - (action_changes / unified_math.max(1, len(actions) - 1))
         
         return {
             'feedback_quality': feedback_quality,
@@ -829,13 +831,13 @@ class TradeChainTimelineReplayTest:
                     wins += 1
         
         # Calculate metrics
-        win_rate = wins / max(1, total_trades - 1)
-        avg_confidence = np.mean([event.confidence for event in events])
+        win_rate = wins / unified_math.max(1, total_trades - 1)
+        avg_confidence = unified_math.mean([event.confidence for event in events])
         
         # Calculate trade frequency (trades per hour)
         if len(events) >= 2:
             time_span = (events[-1].timestamp - events[0].timestamp) / 3600  # hours
-            trade_frequency = total_trades / max(1, time_span)
+            trade_frequency = total_trades / unified_math.max(1, time_span)
         else:
             trade_frequency = 0.0
         
@@ -921,18 +923,18 @@ if __name__ == "__main__":
     result = test_trade_chain_timeline_replay()
     
     # Print results
-    print("\n" + "="*60)
-    print("🔄 TRADE CHAIN TIMELINE REPLAY TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🔄 TRADE CHAIN TIMELINE REPLAY TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

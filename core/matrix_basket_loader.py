@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Matrix Basket Loader - Schwabot UROS v1.0
@@ -358,7 +372,7 @@ class MatrixBasketLoader:
                     reduction_per_asset = total_adjustment / len(other_assets)
                     
                     for other_asset in other_assets:
-                        base_weights[other_asset] = max(0.01, base_weights[other_asset] - reduction_per_asset)
+                        base_weights[other_asset] = unified_math.max(0.01, base_weights[other_asset] - reduction_per_asset)
             
             # Normalize weights
             total_weight = sum(base_weights.values())
@@ -383,7 +397,7 @@ class MatrixBasketLoader:
             
             # Generate sequence vector
             sequence_vector = []
-            for i in range(min(total_elements, 64)):  # Limit to 64 elements
+            for i in range(unified_math.min(total_elements, 64)):  # Limit to 64 elements
                 byte_value = hash_bytes[i % len(hash_bytes)]
                 normalized_value = byte_value / 255.0
                 sequence_vector.append(normalized_value)
@@ -415,7 +429,7 @@ class MatrixBasketLoader:
                              sequence_coherence * 0.4 + 
                              priority_influence * 0.3)
             
-            return min(1.0, max(0.0, resonance_score))
+            return unified_math.min(1.0, unified_math.max(0.0, resonance_score))
             
         except Exception as e:
             logger.error(f"Error calculating resonance score: {e}")
@@ -639,7 +653,7 @@ class MatrixBasketLoader:
                 "load_statistics": {
                     "total_loads": sum(self.load_stats.values()),
                     "average_load_time": avg_load_time,
-                    "most_loaded_hash": max(self.load_stats.items(), key=lambda x: x[1])[0] if self.load_stats else None
+                    "most_loaded_hash": unified_math.max(self.load_stats.items(), key=lambda x: x[1])[0] if self.load_stats else None
                 },
                 "trigger_statistics": {
                     "total_triggers": len(self.basket_load_history),
@@ -688,48 +702,48 @@ class MatrixBasketLoader:
 
 def main():
     """Main function for matrix basket loader testing."""
-    print("📦 Matrix Basket Loader - Schwabot UROS v1.0")
-    print("=" * 50)
+    safe_print("📦 Matrix Basket Loader - Schwabot UROS v1.0")
+    safe_print("=" * 50)
     
     # Initialize loader
     loader = MatrixBasketLoader()
     
     # Test loading by bit depth
-    print("\n🔍 Testing bit depth loading...")
+    safe_print("\n🔍 Testing bit depth loading...")
     results_4bit = loader.load_baskets_by_bit_depth(4)
     results_8bit = loader.load_baskets_by_bit_depth(8)
     results_42bit = loader.load_baskets_by_bit_depth(42)
     
-    print(f"4-bit baskets loaded: {len(results_4bit)}")
-    print(f"8-bit baskets loaded: {len(results_8bit)}")
-    print(f"42-bit baskets loaded: {len(results_42bit)}")
+    safe_print(f"4-bit baskets loaded: {len(results_4bit)}")
+    safe_print(f"8-bit baskets loaded: {len(results_8bit)}")
+    safe_print(f"42-bit baskets loaded: {len(results_42bit)}")
     
     # Test loading by route
-    print("\n🛣️ Testing route loading...")
+    safe_print("\n🛣️ Testing route loading...")
     results_route_0 = loader.load_baskets_by_route("route_0")
-    print(f"Route 0 baskets loaded: {len(results_route_0)}")
+    safe_print(f"Route 0 baskets loaded: {len(results_route_0)}")
     
     # Test priority range loading
-    print("\n⚖️ Testing priority range loading...")
+    safe_print("\n⚖️ Testing priority range loading...")
     results_high_priority = loader.load_baskets_by_priority_range(2.0, 3.2)
-    print(f"High priority baskets loaded: {len(results_high_priority)}")
+    safe_print(f"High priority baskets loaded: {len(results_high_priority)}")
     
     # Test individual basket loading
-    print("\n🎯 Testing individual basket loading...")
+    safe_print("\n🎯 Testing individual basket loading...")
     result = loader.load_basket_from_registry("hash_10")
     if result.success:
-        print(f"Successfully loaded basket: {result.basket_id}")
-        print(f"Bit depth: {result.basket.bit_phase.value}")
-        print(f"Resonance score: {result.basket.resonance_score:.4f}")
+        safe_print(f"Successfully loaded basket: {result.basket_id}")
+        safe_print(f"Bit depth: {result.basket.bit_phase.value}")
+        safe_print(f"Resonance score: {result.basket.resonance_score:.4f}")
     
     # Get statistics
     stats = loader.get_loader_statistics()
-    print(f"\n📊 Loader statistics: {stats}")
+    safe_print(f"\n📊 Loader statistics: {stats}")
     
     # Export summary
     loader.export_loader_summary()
     
-    print("\n✅ Matrix Basket Loader test completed")
+    safe_print("\n✅ Matrix Basket Loader test completed")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Spectral lattice generator for quantised wave analysis.
 
@@ -17,11 +20,10 @@ This is intentionally lightweight.  Later extensions can add wavelet tiling or
 non-uniform lattices.
 """
 
-from __future__ import annotations
 
 from typing import Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__ = ["wave_lattice_generator"]
 
@@ -31,8 +33,8 @@ def _logspace_levels(magnitudes: np.ndarray, levels: int) -> np.ndarray:
     mag_nonzero = magnitudes[magnitudes > 0]
     if mag_nonzero.size == 0:
         return np.zeros(levels + 1)
-    mag_min = float(np.min(mag_nonzero))
-    mag_max = float(np.max(magnitudes))
+    mag_min = float(unified_math.unified_math.min(mag_nonzero))
+    mag_max = float(unified_math.unified_math.max(magnitudes))
     return np.logspace(np.log10(mag_min), np.log10(mag_max), num=levels + 1)
 
 
@@ -68,7 +70,7 @@ def wave_lattice_generator(
     freqs = np.fft.rfftfreq(
         signal.size, d=1.0
     )  # assume unit sampling interval
-    magnitudes = np.abs(spectrum)
+    magnitudes = unified_math.unified_math.abs(spectrum)
 
     # Build lattice grid: levels × n_bins boolean/int matrix.
     thresholds = _logspace_levels(magnitudes, levels)

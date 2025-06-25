@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Public Schwabot integration facade.
 
@@ -13,7 +15,6 @@ we just import it and re-export under the traditional name expected by older
 call-sites.
 """
 
-from __future__ import annotations
 
 from core.schwabot_integration_orchestrator import (
     SchwabotIntegrationOrchestrator as SchwabotOrchestrator,

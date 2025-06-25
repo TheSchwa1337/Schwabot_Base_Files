@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fallback Trade Controller Test - Schwabot Framework.
 
@@ -18,7 +20,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -262,7 +264,7 @@ class FallbackTradeControllerTest:
                     results['success'] = False
                 
                 # Validate functionality level
-                functionality_diff = abs(activation_result['functionality_level'] - test_case.expected_functionality_level)
+                functionality_diff = unified_math.abs(activation_result['functionality_level'] - test_case.expected_functionality_level)
                 if functionality_diff > 0.2:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Functionality level mismatch. Expected: {test_case.expected_functionality_level}, Got: {activation_result['functionality_level']}"
                     results['errors'].append(error_msg)
@@ -495,7 +497,7 @@ class FallbackTradeControllerTest:
             results['details'] = {
                 'total_scenarios': len(emergency_scenarios),
                 'emergency_activations': activated_count,
-                'average_response_time': np.mean([r['response_time'] for r in emergency_results]),
+                'average_response_time': unified_math.mean([r['response_time'] for r in emergency_results]),
                 'all_responses_within_timeout': len(results['errors']) == 0,
                 'emergency_system_functional': True
             }
@@ -526,7 +528,7 @@ class FallbackTradeControllerTest:
         }
         
         total_severity = sum(severity_weights.get(comp, 0.1) for comp in failed_components)
-        failure_severity = min(total_severity, 1.0)
+        failure_severity = unified_math.min(total_severity, 1.0)
         
         return {
             'failures_detected': len(failed_components) > 0,
@@ -698,18 +700,18 @@ if __name__ == "__main__":
     result = test_fallback_trade_controller()
     
     # Print results
-    print("\n" + "="*60)
-    print("🛡️ FALLBACK TRADE CONTROLLER TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🛡️ FALLBACK TRADE CONTROLLER TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

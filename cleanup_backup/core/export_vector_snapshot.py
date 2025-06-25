@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Vector State Export Engine - Schwabot UROS v1.0
@@ -21,7 +23,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import os
 import glob
@@ -753,7 +755,7 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.DLT_WAVEFORM, dlt_data, ExportFormat.JSON, compress=False
     )
-    print(f"✅ DLT Waveform exported to: {export_path}")
+    safe_print(f"✅ DLT Waveform exported to: {export_path}")
     
     # Test tensor scoring export
     tensor_data = {
@@ -767,7 +769,7 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.TENSOR_SCORING, tensor_data, ExportFormat.JSON, compress=True
     )
-    print(f"✅ Tensor Scoring exported to: {export_path}")
+    safe_print(f"✅ Tensor Scoring exported to: {export_path}")
     
     # Test complete state export
     complete_data = {
@@ -779,11 +781,11 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.COMPLETE_STATE, complete_data, ExportFormat.PICKLE, compress=False
     )
-    print(f"✅ Complete State exported to: {export_path}")
+    safe_print(f"✅ Complete State exported to: {export_path}")
     
     # Get export history
     history = exporter.get_export_history()
-    print(f"📊 Export History: {len(history)} exports")
+    safe_print(f"📊 Export History: {len(history)} exports")
     
     for export in history[-3:]:  # Last 3 exports
-        print(f"  - {export['type']}: {export['file_path']} ({export['file_size']} bytes)") 
+        safe_print(f"  - {export['type']}: {export['file_path']} ({export['file_size']} bytes)") 

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Simple Test Script - Schwabot UROS v1.0
@@ -13,48 +15,48 @@ from datetime import datetime
 
 def test_imports():
     """Test if all required modules can be imported."""
-    print("🔍 Testing imports...")
+    safe_print("🔍 Testing imports...")
     
     try:
-        import numpy as np
-        print("✅ NumPy imported successfully")
+        from core.unified_math_system import unified_math
+        safe_print("✅ NumPy imported successfully")
     except ImportError as e:
-        print(f"❌ NumPy import failed: {e}")
+        safe_print(f"❌ NumPy import failed: {e}")
         return False
     
     try:
         import yaml
-        print("✅ PyYAML imported successfully")
+        safe_print("✅ PyYAML imported successfully")
     except ImportError as e:
-        print(f"❌ PyYAML import failed: {e}")
+        safe_print(f"❌ PyYAML import failed: {e}")
         return False
     
     try:
         from core.dlt_waveform_engine import DLTWaveformEngine
-        print("✅ DLT Waveform Engine imported successfully")
+        safe_print("✅ DLT Waveform Engine imported successfully")
     except ImportError as e:
-        print(f"❌ DLT Waveform Engine import failed: {e}")
+        safe_print(f"❌ DLT Waveform Engine import failed: {e}")
         return False
     
     try:
         from core.matrix_mapper import MatrixMapper
-        print("✅ Matrix Mapper imported successfully")
+        safe_print("✅ Matrix Mapper imported successfully")
     except ImportError as e:
-        print(f"❌ Matrix Mapper import failed: {e}")
+        safe_print(f"❌ Matrix Mapper import failed: {e}")
         return False
     
     try:
         from core.profit_cycle_allocator import ProfitCycleAllocator
-        print("✅ Profit Cycle Allocator imported successfully")
+        safe_print("✅ Profit Cycle Allocator imported successfully")
     except ImportError as e:
-        print(f"❌ Profit Cycle Allocator import failed: {e}")
+        safe_print(f"❌ Profit Cycle Allocator import failed: {e}")
         return False
     
     return True
 
 def test_basic_functions():
     """Test basic mathematical functions."""
-    print("\n🧮 Testing basic mathematical functions...")
+    safe_print("\n🧮 Testing basic mathematical functions...")
     
     try:
         from core.dlt_waveform_engine import DLTWaveformEngine
@@ -62,25 +64,25 @@ def test_basic_functions():
         # Test DLT waveform function
         dlt_engine = DLTWaveformEngine()
         waveform_result = dlt_engine.dlt_waveform(1.0, 0.006)
-        print(f"✅ DLT waveform function: {waveform_result}")
+        safe_print(f"✅ DLT waveform function: {waveform_result}")
         
         # Test wave entropy function
         entropy_result = dlt_engine.wave_entropy([1.0, 0.0, 1.0, 0.0])
-        print(f"✅ Wave entropy function: {entropy_result}")
+        safe_print(f"✅ Wave entropy function: {entropy_result}")
         
         # Test tensor score function
         tensor_result = dlt_engine.tensor_score(100.0, 110.0, 8)
-        print(f"✅ Tensor score function: {tensor_result}")
+        safe_print(f"✅ Tensor score function: {tensor_result}")
         
         return True
         
     except Exception as e:
-        print(f"❌ Basic functions test failed: {e}")
+        safe_print(f"❌ Basic functions test failed: {e}")
         return False
 
 def test_matrix_mapper():
     """Test matrix mapper functions."""
-    print("\n🔗 Testing matrix mapper functions...")
+    safe_print("\n🔗 Testing matrix mapper functions...")
     
     try:
         from core.matrix_mapper import MatrixMapper
@@ -90,21 +92,21 @@ def test_matrix_mapper():
         # Test hash decoding
         test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
         basket_id = matrix_mapper.decode_hash_to_basket(test_hash, 100, 45000.0)
-        print(f"✅ Hash decoding: {basket_id}")
+        safe_print(f"✅ Hash decoding: {basket_id}")
         
         # Test tensor score calculation
         tensor_score = matrix_mapper.calculate_tensor_score(44000.0, 45000.0, 8)
-        print(f"✅ Matrix tensor score: {tensor_score}")
+        safe_print(f"✅ Matrix tensor score: {tensor_score}")
         
         return True
         
     except Exception as e:
-        print(f"❌ Matrix mapper test failed: {e}")
+        safe_print(f"❌ Matrix mapper test failed: {e}")
         return False
 
 def test_profit_allocator():
     """Test profit cycle allocator."""
-    print("\n💰 Testing profit cycle allocator...")
+    safe_print("\n💰 Testing profit cycle allocator...")
     
     try:
         from core.profit_cycle_allocator import ProfitCycleAllocator
@@ -132,19 +134,19 @@ def test_profit_allocator():
             market_data=market_data
         )
         
-        print(f"✅ Profit allocation: success={allocation_result.success}")
-        print(f"✅ Tensor score: {allocation_result.tensor_score}")
-        print(f"✅ Bit phase: {allocation_result.bit_phase}")
+        safe_print(f"✅ Profit allocation: success={allocation_result.success}")
+        safe_print(f"✅ Tensor score: {allocation_result.tensor_score}")
+        safe_print(f"✅ Bit phase: {allocation_result.bit_phase}")
         
         return True
         
     except Exception as e:
-        print(f"❌ Profit allocator test failed: {e}")
+        safe_print(f"❌ Profit allocator test failed: {e}")
         return False
 
 def test_integration():
     """Test basic integration between components."""
-    print("\n🔄 Testing basic integration...")
+    safe_print("\n🔄 Testing basic integration...")
     
     try:
         from core.dlt_waveform_engine import DLTWaveformEngine
@@ -160,13 +162,13 @@ def test_integration():
         matrix_mapper.set_dlt_waveform_engine(dlt_engine)
         matrix_mapper.set_profit_cycle_allocator(profit_allocator)
         
-        print("✅ Component integration setup successful")
+        safe_print("✅ Component integration setup successful")
         
         # Test basic workflow
         # 1. Generate waveform data
-        import numpy as np
+        from core.unified_math_system import unified_math
         t = np.linspace(0, 10, 1000)
-        waveform_data = np.sin(2 * np.pi * 0.1 * t) + 0.3 * np.sin(2 * np.pi * 0.5 * t)
+        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t)
         
         # 2. Process waveform
         waveform_result = dlt_engine.process_waveform_data(
@@ -176,28 +178,28 @@ def test_integration():
         )
         
         if waveform_result.get('success'):
-            print("✅ Waveform processing successful")
+            safe_print("✅ Waveform processing successful")
             
             # 3. Test matrix integration
             integration_result = matrix_mapper.integrate_with_dlt_waveform(waveform_result)
             if integration_result.get('success'):
-                print("✅ Matrix integration successful")
+                safe_print("✅ Matrix integration successful")
             else:
-                print("⚠️ Matrix integration had issues")
+                safe_print("⚠️ Matrix integration had issues")
         else:
-            print("❌ Waveform processing failed")
+            safe_print("❌ Waveform processing failed")
         
         return True
         
     except Exception as e:
-        print(f"❌ Integration test failed: {e}")
+        safe_print(f"❌ Integration test failed: {e}")
         return False
 
 def main():
     """Main test function."""
-    print("🚀 SCHWABOT UROS v1.0 - SIMPLE INTEGRATION TEST")
-    print("="*60)
-    print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    safe_print("🚀 SCHWABOT UROS v1.0 - SIMPLE INTEGRATION TEST")
+    safe_print("="*60)
+    safe_print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Run tests
     tests = [
@@ -213,39 +215,39 @@ def main():
     successful_tests = 0
     
     for test_name, test_func in tests:
-        print(f"\n{'='*20} {test_name} {'='*20}")
+        safe_print(f"\n{'='*20} {test_name} {'='*20}")
         try:
             success = test_func()
             results[test_name] = {'success': success, 'error': None}
             if success:
                 successful_tests += 1
-                print(f"✅ {test_name}: PASS")
+                safe_print(f"✅ {test_name}: PASS")
             else:
-                print(f"❌ {test_name}: FAIL")
+                safe_print(f"❌ {test_name}: FAIL")
         except Exception as e:
             results[test_name] = {'success': False, 'error': str(e)}
-            print(f"❌ {test_name}: FAIL - {e}")
+            safe_print(f"❌ {test_name}: FAIL - {e}")
     
     # Generate summary
     success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
     
-    print(f"\n{'='*60}")
-    print("📊 TEST SUMMARY")
-    print(f"{'='*60}")
-    print(f"Total Tests: {total_tests}")
-    print(f"Successful: {successful_tests}")
-    print(f"Failed: {total_tests - successful_tests}")
-    print(f"Success Rate: {success_rate:.2%}")
+    safe_print(f"\n{'='*60}")
+    safe_print("📊 TEST SUMMARY")
+    safe_print(f"{'='*60}")
+    safe_print(f"Total Tests: {total_tests}")
+    safe_print(f"Successful: {successful_tests}")
+    safe_print(f"Failed: {total_tests - successful_tests}")
+    safe_print(f"Success Rate: {success_rate:.2%}")
     
     if success_rate >= 0.8:
         overall_status = "PASS"
-        print(f"Overall Status: {overall_status} 🎉")
+        safe_print(f"Overall Status: {overall_status} 🎉")
     elif success_rate >= 0.6:
         overall_status = "WARN"
-        print(f"Overall Status: {overall_status} ⚠️")
+        safe_print(f"Overall Status: {overall_status} ⚠️")
     else:
         overall_status = "FAIL"
-        print(f"Overall Status: {overall_status} ❌")
+        safe_print(f"Overall Status: {overall_status} ❌")
     
     # Export results
     try:
@@ -262,20 +264,20 @@ def main():
         with open("simple_test_results.json", 'w') as f:
             json.dump(report, f, indent=2, default=str)
         
-        print(f"\n✅ Results exported to simple_test_results.json")
+        safe_print(f"\n✅ Results exported to simple_test_results.json")
         
     except Exception as e:
-        print(f"\n❌ Error exporting results: {e}")
+        safe_print(f"\n❌ Error exporting results: {e}")
     
     # Return exit code
     if overall_status == "PASS":
-        print("\n🎉 All tests passed! System is working correctly.")
+        safe_print("\n🎉 All tests passed! System is working correctly.")
         return 0
     elif overall_status == "WARN":
-        print("\n⚠️ Some tests had issues. Review results.")
+        safe_print("\n⚠️ Some tests had issues. Review results.")
         return 1
     else:
-        print("\n❌ Multiple tests failed. System needs attention.")
+        safe_print("\n❌ Multiple tests failed. System needs attention.")
         return 2
 
 if __name__ == "__main__":

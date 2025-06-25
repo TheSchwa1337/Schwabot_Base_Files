@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fractal Command Dispatcher - Golden Ratio Trust-Based Strategy Execution.
 
@@ -7,7 +8,7 @@ Implements the core mathematical framework for:
 - Historical match analysis for command prioritization
 """
 
-import math
+from core.unified_math_system import unified_math
 import time
 import hashlib
 from dataclasses import dataclass, field
@@ -20,7 +21,7 @@ import logging
 getcontext().prec = 28
 
 # Golden ratio constant
-PHI = (1 + math.sqrt(5)) / 2
+PHI = (1 + unified_math.unified_math.sqrt(5)) / 2
 
 logger = logging.getLogger(__name__)
 
@@ -330,7 +331,7 @@ class FractalCommandDispatcher:
             
             # Historical match bonus
             historical_matches = self._count_historical_matches(command_id, strategy_id)
-            match_bonus = min(0.5, historical_matches * 0.1)
+            match_bonus = unified_math.min(0.5, historical_matches * 0.1)
             
             # Combined selection score
             selection_score = (
@@ -368,14 +369,14 @@ class FractalCommandDispatcher:
         
         # Time decay (trust degrades over time if not used)
         time_since_last = time.time() - profile.last_execution
-        time_decay = math.exp(-time_since_last / 86400) * 0.1  # Daily decay
+        time_decay = unified_math.exp(-time_since_last / 86400) * 0.1  # Daily decay
         
         # Historical pattern matching bonus
-        pattern_bonus = min(0.2, len(profile.historical_pattern_matches) * 0.02)
+        pattern_bonus = unified_math.min(0.2, len(profile.historical_pattern_matches) * 0.02)
         
         final_trust = base_trust + performance_adjustment - time_decay + pattern_bonus
         
-        return max(0.0, min(1.0, final_trust))
+        return unified_math.max(0.0, unified_math.min(1.0, final_trust))
     
     def _execute_command_with_weighting(
         self, 
@@ -475,14 +476,14 @@ class FractalCommandDispatcher:
         base_confidence = trust_score
         
         # Fractal weight influence (normalized)
-        weight_factor = min(1.0, fractal_weight / 10.0)
+        weight_factor = unified_math.min(1.0, fractal_weight / 10.0)
         
         # Success bonus/penalty
         success_factor = 1.2 if execution_success else 0.8
         
         confidence = base_confidence * weight_factor * success_factor
         
-        return max(0.0, min(1.0, confidence))
+        return unified_math.max(0.0, unified_math.min(1.0, confidence))
     
     def _calculate_trust_evolution(self, strategy_id: str) -> List[float]:
         """Calculate trust evolution over recent executions."""
@@ -498,7 +499,7 @@ class FractalCommandDispatcher:
                 sum(1 for c in strategy_commands[:i+1] if c.success) / (i + 1)
             )
             trust_at_point = 0.5 + (partial_success_rate - 0.5) * 0.4
-            trust_evolution.append(max(0.0, min(1.0, trust_at_point)))
+            trust_evolution.append(unified_math.max(0.0, unified_math.min(1.0, trust_at_point)))
         
         return trust_evolution
     
@@ -513,13 +514,13 @@ class FractalCommandDispatcher:
         
         # Higher success rate = deeper fractal depth
         if success_rate > 0.8:
-            optimal_depth = min(self.max_fractal_depth, profile.fractal_depth + 2)
+            optimal_depth = unified_math.min(self.max_fractal_depth, profile.fractal_depth + 2)
         elif success_rate > 0.6:
-            optimal_depth = min(self.max_fractal_depth, profile.fractal_depth + 1)
+            optimal_depth = unified_math.min(self.max_fractal_depth, profile.fractal_depth + 1)
         elif success_rate < 0.4:
-            optimal_depth = max(1, profile.fractal_depth - 1)
+            optimal_depth = unified_math.max(1, profile.fractal_depth - 1)
         elif success_rate < 0.2:
-            optimal_depth = max(1, profile.fractal_depth - 2)
+            optimal_depth = unified_math.max(1, profile.fractal_depth - 2)
         else:
             optimal_depth = profile.fractal_depth
         

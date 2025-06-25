@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Legacy Backlog Hydrator Test - Schwabot Framework.
 
@@ -18,7 +20,7 @@ import unittest
 import logging
 import time
 import json
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -264,7 +266,7 @@ class LegacyBacklogHydratorTest:
             # Validate profit/loss calculations
             for i, trade in enumerate(all_trades):
                 calculated_pl = (trade.exit_price - trade.entry_price) * trade.volume
-                if abs(calculated_pl - trade.profit_loss) > 0.01:  # Allow small rounding differences
+                if unified_math.abs(calculated_pl - trade.profit_loss) > 0.01:  # Allow small rounding differences
                     error_msg = f"Trade {i}: Profit/loss calculation mismatch. Expected: {calculated_pl}, Got: {trade.profit_loss}"
                     results['errors'].append(error_msg)
                     results['success'] = False
@@ -336,10 +338,10 @@ class LegacyBacklogHydratorTest:
                 if loss_trades:
                     loss_analysis = {
                         'total_loss_amount': sum(trade.profit_loss for trade in loss_trades),
-                        'average_loss_per_trade': np.mean([trade.profit_loss for trade in loss_trades]),
+                        'average_loss_per_trade': unified_math.mean([trade.profit_loss for trade in loss_trades]),
                         'loss_trade_assets': list(set(trade.asset for trade in loss_trades)),
                         'loss_trade_strategies': list(set(trade.strategy for trade in loss_trades)),
-                        'loss_trade_volatility': np.mean([trade.market_conditions.get('volatility', 0.0) for trade in loss_trades])
+                        'loss_trade_volatility': unified_math.mean([trade.market_conditions.get('volatility', 0.0) for trade in loss_trades])
                     }
                 
                 # Store test case results
@@ -383,8 +385,8 @@ class LegacyBacklogHydratorTest:
                 # Simulate backtest data reconstruction
                 reconstructed_data = {
                     'trades': test_case.historical_trades,
-                    'start_time': min(trade.entry_time for trade in test_case.historical_trades),
-                    'end_time': max(trade.exit_time for trade in test_case.historical_trades),
+                    'start_time': unified_math.min(trade.entry_time for trade in test_case.historical_trades),
+                    'end_time': unified_math.max(trade.exit_time for trade in test_case.historical_trades),
                     'total_trades': len(test_case.historical_trades),
                     'total_profit_loss': sum(trade.profit_loss for trade in test_case.historical_trades),
                     'win_rate': len([t for t in test_case.historical_trades if t.profit_loss > 0]) / len(test_case.historical_trades),
@@ -485,8 +487,8 @@ class LegacyBacklogHydratorTest:
             patterns['volatility_impact'] = {
                 'high_volatility_trades': len(high_vol_trades),
                 'low_volatility_trades': len(low_vol_trades),
-                'high_vol_avg_pl': np.mean([t.profit_loss for t in high_vol_trades]) if high_vol_trades else 0.0,
-                'low_vol_avg_pl': np.mean([t.profit_loss for t in low_vol_trades]) if low_vol_trades else 0.0
+                'high_vol_avg_pl': unified_math.mean([t.profit_loss for t in high_vol_trades]) if high_vol_trades else 0.0,
+                'low_vol_avg_pl': unified_math.mean([t.profit_loss for t in low_vol_trades]) if low_vol_trades else 0.0
             }
             
             # Validate pattern recognition
@@ -594,18 +596,18 @@ if __name__ == "__main__":
     result = test_legacy_backlog_hydrator()
     
     # Print results
-    print("\n" + "="*60)
-    print("📚 LEGACY BACKLOG HYDRATOR TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("📚 LEGACY BACKLOG HYDRATOR TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Long-Horizon Simulation - Multi-Day Monte-Carlo and Chaos Testing.
 
@@ -8,7 +24,6 @@ This module provides comprehensive long-horizon simulation including:
 - Advanced scenario modeling and stress testing
 """
 
-from __future__ import annotations
 
 import asyncio
 import json
@@ -25,7 +40,7 @@ import queue
 import os
 import hashlib
 from pathlib import Path
-import numpy as np
+from core.unified_math_system import unified_math
 from decimal import Decimal
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -169,7 +184,7 @@ class MonteCarloSimulator:
         self.total_simulations = 0
         self.successful_simulations = 0
         
-        safe_print("🎲 Monte Carlo Simulator initialized")
+        safe_safe_print("🎲 Monte Carlo Simulator initialized")
     
     def generate_scenario(self, scenario_id: str) -> ScenarioParameters:
         """Generate a random scenario."""
@@ -222,7 +237,7 @@ class MonteCarloSimulator:
             )
             
         except Exception as e:
-            safe_print(f"❌ Scenario generation failed: {safe_format_error(e, 'scenario_gen')}")
+            safe_safe_print(f"❌ Scenario generation failed: {safe_format_error(e, 'scenario_gen')}")
             raise
     
     async def run_simulation(self, scenario: ScenarioParameters) -> SimulationResult:
@@ -309,12 +324,12 @@ class MonteCarloSimulator:
             self.total_simulations += 1
             self.successful_simulations += 1
             
-            safe_print(f"✅ Simulation completed: {scenario.scenario_id} (PnL: {total_pnl:.2f})")
+            safe_safe_print(f"✅ Simulation completed: {scenario.scenario_id} (PnL: {total_pnl:.2f})")
             return result
             
         except Exception as e:
             self.total_simulations += 1
-            safe_print(f"❌ Simulation failed: {safe_format_error(e, 'simulation_run')}")
+            safe_safe_print(f"❌ Simulation failed: {safe_format_error(e, 'simulation_run')}")
             raise
     
     def _trigger_failure(self, failure_type: FailureType) -> Dict[str, Any]:
@@ -348,7 +363,7 @@ class MonteCarloSimulator:
             }
             
         except Exception as e:
-            safe_print(f"❌ Failure trigger failed: {safe_format_error(e, 'failure_trigger')}")
+            safe_safe_print(f"❌ Failure trigger failed: {safe_format_error(e, 'failure_trigger')}")
             return {}
     
     def _determine_execution_mode(self, failure_event: Dict[str, Any]) -> ExecutionMode:
@@ -367,7 +382,7 @@ class MonteCarloSimulator:
                 return ExecutionMode.NORMAL
                 
         except Exception as e:
-            safe_print(f"⚠️ Execution mode determination failed: {safe_format_error(e, 'exec_mode')}")
+            safe_safe_print(f"⚠️ Execution mode determination failed: {safe_format_error(e, 'exec_mode')}")
             return ExecutionMode.NORMAL
     
     async def _simulate_trading(self, market_point: Dict[str, Any], 
@@ -400,7 +415,7 @@ class MonteCarloSimulator:
                 return None
                 
         except Exception as e:
-            safe_print(f"❌ Trading simulation failed: {safe_format_error(e, 'trading_sim')}")
+            safe_safe_print(f"❌ Trading simulation failed: {safe_format_error(e, 'trading_sim')}")
             return None
     
     def _execute_normal_trade(self, market_point: Dict[str, Any], 
@@ -444,7 +459,7 @@ class MonteCarloSimulator:
             }
             
         except Exception as e:
-            safe_print(f"❌ Normal trade execution failed: {safe_format_error(e, 'normal_trade')}")
+            safe_safe_print(f"❌ Normal trade execution failed: {safe_format_error(e, 'normal_trade')}")
             return {'side': 'hold', 'pnl': 0.0, 'timestamp': market_point['timestamp']}
     
     def _execute_emergency_trade(self, market_point: Dict[str, Any], 
@@ -464,7 +479,7 @@ class MonteCarloSimulator:
             }
             
         except Exception as e:
-            safe_print(f"❌ Emergency trade execution failed: {safe_format_error(e, 'emergency_trade')}")
+            safe_safe_print(f"❌ Emergency trade execution failed: {safe_format_error(e, 'emergency_trade')}")
             return {'side': 'hold', 'pnl': 0.0, 'timestamp': market_point['timestamp']}
     
     def _calculate_performance_metrics(self, pnl_history: List[float]) -> Dict[str, Any]:
@@ -482,14 +497,14 @@ class MonteCarloSimulator:
             
             # Calculate metrics
             total_return = np.sum(pnl_array)
-            volatility = np.std(pnl_array) if len(pnl_array) > 1 else 0.0
-            sharpe_ratio = (np.mean(pnl_array) / volatility) if volatility > 0 else 0.0
+            volatility = unified_math.unified_math.std(pnl_array) if len(pnl_array) > 1 else 0.0
+            sharpe_ratio = (unified_math.unified_math.mean(pnl_array) / volatility) if volatility > 0 else 0.0
             
             # Calculate max drawdown
             cumulative = np.cumsum(pnl_array)
             running_max = np.maximum.accumulate(cumulative)
             drawdown = cumulative - running_max
-            max_drawdown = np.min(drawdown) if len(drawdown) > 0 else 0.0
+            max_drawdown = unified_math.unified_math.min(drawdown) if len(drawdown) > 0 else 0.0
             
             return {
                 'sharpe_ratio': float(sharpe_ratio),
@@ -497,12 +512,12 @@ class MonteCarloSimulator:
                 'volatility': float(volatility),
                 'total_return': float(total_return),
                 'win_rate': float(np.sum(pnl_array > 0) / len(pnl_array)),
-                'avg_win': float(np.mean(pnl_array[pnl_array > 0])) if np.any(pnl_array > 0) else 0.0,
-                'avg_loss': float(np.mean(pnl_array[pnl_array < 0])) if np.any(pnl_array < 0) else 0.0
+                'avg_win': float(unified_math.unified_math.mean(pnl_array[pnl_array > 0])) if np.any(pnl_array > 0) else 0.0,
+                'avg_loss': float(unified_math.unified_math.mean(pnl_array[pnl_array < 0])) if np.any(pnl_array < 0) else 0.0
             }
             
         except Exception as e:
-            safe_print(f"❌ Performance metrics calculation failed: {safe_format_error(e, 'perf_metrics')}")
+            safe_safe_print(f"❌ Performance metrics calculation failed: {safe_format_error(e, 'perf_metrics')}")
             return {
                 'sharpe_ratio': 0.0,
                 'max_drawdown': 0.0,
@@ -516,7 +531,7 @@ class MarketDataGenerator:
     
     def __init__(self) -> None:
         """Initialize market data generator."""
-        safe_print("📊 Market Data Generator initialized")
+        safe_safe_print("📊 Market Data Generator initialized")
     
     def generate_market_data(self, scenario: ScenarioParameters, 
                            duration_days: int) -> List[Dict[str, Any]]:
@@ -540,19 +555,19 @@ class MarketDataGenerator:
                 current_price += price_change
                 
                 # Keep price within range
-                current_price = max(scenario.btc_price_range[0], 
-                                  min(scenario.btc_price_range[1], current_price))
+                current_price = unified_math.max(scenario.btc_price_range[0], 
+                                  unified_math.min(scenario.btc_price_range[1], current_price))
                 
                 # Update volatility (mean reversion)
                 volatility_change = np.random.normal(0, 0.01)
                 current_volatility += volatility_change
-                current_volatility = max(scenario.volatility_range[0],
-                                       min(scenario.volatility_range[1], current_volatility))
+                current_volatility = unified_math.max(scenario.volatility_range[0],
+                                       unified_math.min(scenario.volatility_range[1], current_volatility))
                 
                 # Generate volume
                 base_volume = random.uniform(*scenario.volume_range)
                 volume_noise = np.random.normal(1, 0.3)
-                current_volume = max(0, base_volume * volume_noise)
+                current_volume = unified_math.max(0, base_volume * volume_noise)
                 
                 # Market conditions influence
                 if scenario.market_conditions['trend'] == 'bullish':
@@ -573,11 +588,11 @@ class MarketDataGenerator:
                 
                 market_data.append(market_point)
             
-            safe_print(f"✅ Generated {len(market_data)} market data points")
+            safe_safe_print(f"✅ Generated {len(market_data)} market data points")
             return market_data
             
         except Exception as e:
-            safe_print(f"❌ Market data generation failed: {safe_format_error(e, 'market_data_gen')}")
+            safe_safe_print(f"❌ Market data generation failed: {safe_format_error(e, 'market_data_gen')}")
             return []
 
 
@@ -590,13 +605,13 @@ class ChaosMonkey:
         self.events: List[ChaosEvent] = []
         self.is_active = False
         
-        safe_print("🐒 Chaos Monkey initialized")
+        safe_safe_print("🐒 Chaos Monkey initialized")
     
     def start_chaos(self) -> None:
         """Start chaos monkey testing."""
         try:
             self.is_active = True
-            safe_print("🐒 Chaos Monkey activated - system may experience failures")
+            safe_safe_print("🐒 Chaos Monkey activated - system may experience failures")
             
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
@@ -609,13 +624,13 @@ class ChaosMonkey:
                 )
                 
         except Exception as e:
-            safe_print(f"❌ Chaos monkey start failed: {safe_format_error(e, 'chaos_start')}")
+            safe_safe_print(f"❌ Chaos monkey start failed: {safe_format_error(e, 'chaos_start')}")
     
     def stop_chaos(self) -> None:
         """Stop chaos monkey testing."""
         try:
             self.is_active = False
-            safe_print("🐒 Chaos Monkey deactivated - system returning to normal")
+            safe_safe_print("🐒 Chaos Monkey deactivated - system returning to normal")
             
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
@@ -628,7 +643,7 @@ class ChaosMonkey:
                 )
                 
         except Exception as e:
-            safe_print(f"❌ Chaos monkey stop failed: {safe_format_error(e, 'chaos_stop')}")
+            safe_safe_print(f"❌ Chaos monkey stop failed: {safe_format_error(e, 'chaos_stop')}")
     
     def trigger_random_failure(self) -> Optional[ChaosEvent]:
         """Trigger a random failure event."""
@@ -657,11 +672,11 @@ class ChaosMonkey:
             
             self.events.append(event)
             
-            safe_print(f"🐒 Chaos event triggered: {failure_type.value} (severity: {event.severity:.2f})")
+            safe_safe_print(f"🐒 Chaos event triggered: {failure_type.value} (severity: {event.severity:.2f})")
             return event
             
         except Exception as e:
-            safe_print(f"❌ Random failure trigger failed: {safe_format_error(e, 'random_failure')}")
+            safe_safe_print(f"❌ Random failure trigger failed: {safe_format_error(e, 'random_failure')}")
             return None
     
     def _get_affected_components(self, failure_type: FailureType) -> List[str]:
@@ -702,7 +717,7 @@ class ChaosMonkey:
             return base_impact
             
         except Exception as e:
-            safe_print(f"⚠️ Impact metrics calculation failed: {safe_format_error(e, 'impact_metrics')}")
+            safe_safe_print(f"⚠️ Impact metrics calculation failed: {safe_format_error(e, 'impact_metrics')}")
             return {}
 
 
@@ -738,12 +753,12 @@ class LongHorizonSimulation:
         self.total_runs = 0
         self.successful_runs = 0
         
-        safe_print("🔮 Long-Horizon Simulation initialized")
+        safe_safe_print("🔮 Long-Horizon Simulation initialized")
     
     async def run_monte_carlo_simulation(self) -> List[SimulationResult]:
         """Run Monte Carlo simulation."""
         try:
-            safe_print(f"🎲 Starting Monte Carlo simulation: {self.config.num_scenarios} scenarios")
+            safe_safe_print(f"🎲 Starting Monte Carlo simulation: {self.config.num_scenarios} scenarios")
             
             results = []
             
@@ -759,7 +774,7 @@ class LongHorizonSimulation:
                 
                 # Progress update
                 if (i + 1) % 10 == 0:
-                    safe_print(f"🎲 Progress: {i+1}/{self.config.num_scenarios} scenarios completed")
+                    safe_safe_print(f"🎲 Progress: {i+1}/{self.config.num_scenarios} scenarios completed")
             
             self.total_runs += self.config.num_scenarios
             self.successful_runs += len(results)
@@ -770,17 +785,17 @@ class LongHorizonSimulation:
             # Generate summary
             self._generate_simulation_summary(results)
             
-            safe_print(f"✅ Monte Carlo simulation completed: {len(results)} scenarios")
+            safe_safe_print(f"✅ Monte Carlo simulation completed: {len(results)} scenarios")
             return results
             
         except Exception as e:
-            safe_print(f"❌ Monte Carlo simulation failed: {safe_format_error(e, 'monte_carlo')}")
+            safe_safe_print(f"❌ Monte Carlo simulation failed: {safe_format_error(e, 'monte_carlo')}")
             return []
     
     async def run_chaos_monkey_test(self, duration_hours: int = 24) -> List[ChaosEvent]:
         """Run chaos monkey test."""
         try:
-            safe_print(f"🐒 Starting Chaos Monkey test: {duration_hours} hours")
+            safe_safe_print(f"🐒 Starting Chaos Monkey test: {duration_hours} hours")
             
             # Start chaos monkey
             self.chaos_monkey.start_chaos()
@@ -804,11 +819,11 @@ class LongHorizonSimulation:
             # Save events
             self._save_chaos_events(events)
             
-            safe_print(f"✅ Chaos Monkey test completed: {len(events)} events")
+            safe_safe_print(f"✅ Chaos Monkey test completed: {len(events)} events")
             return events
             
         except Exception as e:
-            safe_print(f"❌ Chaos Monkey test failed: {safe_format_error(e, 'chaos_monkey')}")
+            safe_safe_print(f"❌ Chaos Monkey test failed: {safe_format_error(e, 'chaos_monkey')}")
             return []
     
     def _save_simulation_results(self, results: List[SimulationResult]) -> None:
@@ -829,10 +844,10 @@ class LongHorizonSimulation:
             with open(filepath, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
             
-            safe_print(f"✅ Simulation results saved: {filepath}")
+            safe_safe_print(f"✅ Simulation results saved: {filepath}")
             
         except Exception as e:
-            safe_print(f"❌ Results save failed: {safe_format_error(e, 'results_save')}")
+            safe_safe_print(f"❌ Results save failed: {safe_format_error(e, 'results_save')}")
     
     def _save_chaos_events(self, events: List[ChaosEvent]) -> None:
         """Save chaos events to file."""
@@ -851,10 +866,10 @@ class LongHorizonSimulation:
             with open(filepath, 'w') as f:
                 json.dump(events_data, f, indent=2, default=str)
             
-            safe_print(f"✅ Chaos events saved: {filepath}")
+            safe_safe_print(f"✅ Chaos events saved: {filepath}")
             
         except Exception as e:
-            safe_print(f"❌ Events save failed: {safe_format_error(e, 'events_save')}")
+            safe_safe_print(f"❌ Events save failed: {safe_format_error(e, 'events_save')}")
     
     def _generate_simulation_summary(self, results: List[SimulationResult]) -> None:
         """Generate simulation summary."""
@@ -875,7 +890,7 @@ class LongHorizonSimulation:
             # Failure analysis
             total_failures = sum(r.failure_count for r in results)
             total_recoveries = sum(r.recovery_count for r in results)
-            recovery_rate = total_recoveries / max(total_failures, 1)
+            recovery_rate = total_recoveries / unified_math.max(total_failures, 1)
             
             summary = {
                 'simulation_type': self.config.simulation_type.value,
@@ -891,8 +906,8 @@ class LongHorizonSimulation:
                     'total_recoveries': total_recoveries,
                     'recovery_rate': recovery_rate
                 },
-                'best_scenario': max(results, key=lambda r: r.total_pnl).scenario_id,
-                'worst_scenario': min(results, key=lambda r: r.total_pnl).scenario_id,
+                'best_scenario': unified_math.max(results, key=lambda r: r.total_pnl).scenario_id,
+                'worst_scenario': unified_math.min(results, key=lambda r: r.total_pnl).scenario_id,
                 'generated_at': datetime.now().isoformat()
             }
             
@@ -904,17 +919,17 @@ class LongHorizonSimulation:
             with open(filepath, 'w') as f:
                 json.dump(summary, f, indent=2, default=str)
             
-            safe_print(f"✅ Simulation summary generated: {filepath}")
+            safe_safe_print(f"✅ Simulation summary generated: {filepath}")
             
             # Print summary
-            safe_print(f"📊 Simulation Summary:")
-            safe_print(f"   Total PnL: ${total_pnl:,.2f}")
-            safe_print(f"   Average PnL: ${avg_pnl:,.2f}")
-            safe_print(f"   Success Rate: {success_rate:.1%}")
-            safe_print(f"   Recovery Rate: {recovery_rate:.1%}")
+            safe_safe_print(f"📊 Simulation Summary:")
+            safe_safe_print(f"   Total PnL: ${total_pnl:,.2f}")
+            safe_safe_print(f"   Average PnL: ${avg_pnl:,.2f}")
+            safe_safe_print(f"   Success Rate: {success_rate:.1%}")
+            safe_safe_print(f"   Recovery Rate: {recovery_rate:.1%}")
             
         except Exception as e:
-            safe_print(f"❌ Summary generation failed: {safe_format_error(e, 'summary_gen')}")
+            safe_safe_print(f"❌ Summary generation failed: {safe_format_error(e, 'summary_gen')}")
     
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
@@ -927,14 +942,14 @@ class LongHorizonSimulation:
                 'chaos_monkey_active': self.chaos_monkey.is_active,
                 'total_runs': self.total_runs,
                 'successful_runs': self.successful_runs,
-                'success_rate': self.successful_runs / max(self.total_runs, 1),
+                'success_rate': self.successful_runs / unified_math.max(self.total_runs, 1),
                 'monte_carlo_results': len(self.monte_carlo.results),
                 'chaos_events': len(self.chaos_monkey.events),
                 'output_dir': str(self.output_dir)
             }
             
         except Exception as e:
-            safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
+            safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
             return {}
 
 
@@ -979,18 +994,18 @@ def get_simulation_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test long-horizon simulation
-    print("🧪 Testing Long-Horizon Simulation...")
+    safe_print("🧪 Testing Long-Horizon Simulation...")
     
     # Test Monte Carlo simulation (small scale)
     async def test_monte_carlo():
         results = await run_monte_carlo_simulation(num_scenarios=5, duration_days=1)
-        print(f"✅ Monte Carlo simulation: {len(results)} scenarios completed")
+        safe_print(f"✅ Monte Carlo simulation: {len(results)} scenarios completed")
         return results
     
     # Test chaos monkey (short duration)
     async def test_chaos_monkey():
         events = await run_chaos_monkey_test(duration_hours=1)
-        print(f"✅ Chaos monkey test: {len(events)} events triggered")
+        safe_print(f"✅ Chaos monkey test: {len(events)} events triggered")
         return events
     
     # Run tests
@@ -1000,9 +1015,9 @@ if __name__ == "__main__":
         
         # Get status
         status = get_simulation_status()
-        print(f"✅ Simulation status: {status}")
+        safe_print(f"✅ Simulation status: {status}")
     
     # Run async tests
     asyncio.run(main())
     
-    print("✅ Long-Horizon Simulation test completed") 
+    safe_print("✅ Long-Horizon Simulation test completed") 

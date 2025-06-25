@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Schwabot Demo System Launcher
@@ -40,83 +41,83 @@ class DemoSystemLauncher:
     
     def run_backtest(self, scenario: str = "moderate", duration: int = None) -> None:
         """Run a complete backtest"""
-        print(f"🚀 Starting backtest with scenario: {scenario}")
-        print(f"⏱️  Duration: {duration or 'default'} seconds")
-        print("-" * 50)
+        safe_print(f"🚀 Starting backtest with scenario: {scenario}")
+        safe_print(f"⏱️  Duration: {duration or 'default'} seconds")
+        safe_print("-" * 50)
         
         start_time = time.time()
         result = self.demo_system.run_backtest(scenario, duration)
         end_time = time.time()
         
-        print(f"✅ Backtest completed in {end_time - start_time:.2f} seconds")
-        print("-" * 50)
+        safe_print(f"✅ Backtest completed in {end_time - start_time:.2f} seconds")
+        safe_print("-" * 50)
         
         # Display results
         self._display_backtest_results(result)
     
     def _display_backtest_results(self, result) -> None:
         """Display backtest results"""
-        print("📊 BACKTEST RESULTS")
-        print("=" * 50)
-        print(f"Session ID: {result.session_id}")
-        print(f"Success: {'✅ YES' if result.success else '❌ NO'}")
-        print(f"Duration: {result.duration:.2f} seconds")
-        print(f"Final Balance: ${result.final_balance:.2f}")
-        print(f"Total Return: {result.total_return:.2%}")
-        print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
-        print(f"Max Drawdown: {result.max_drawdown:.2%}")
+        safe_print("📊 BACKTEST RESULTS")
+        safe_print("=" * 50)
+        safe_print(f"Session ID: {result.session_id}")
+        safe_print(f"Success: {'✅ YES' if result.success else '❌ NO'}")
+        safe_print(f"Duration: {result.duration:.2f} seconds")
+        safe_print(f"Final Balance: ${result.final_balance:.2f}")
+        safe_print(f"Total Return: {result.total_return:.2%}")
+        safe_print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
+        safe_print(f"Max Drawdown: {result.max_drawdown:.2%}")
         print()
-        print("📈 TRADE STATISTICS")
-        print("-" * 30)
-        print(f"Total Trades: {result.total_trades}")
-        print(f"Winning Trades: {result.winning_trades}")
-        print(f"Losing Trades: {result.losing_trades}")
-        print(f"Win Rate: {result.performance_metrics.get('win_rate', 0):.2%}")
-        print(f"Avg Trade Profit: ${result.performance_metrics.get('avg_trade_profit', 0):.2f}")
-        print(f"Max Consecutive Losses: {result.performance_metrics.get('max_consecutive_losses', 0)}")
+        safe_print("📈 TRADE STATISTICS")
+        safe_print("-" * 30)
+        safe_print(f"Total Trades: {result.total_trades}")
+        safe_print(f"Winning Trades: {result.winning_trades}")
+        safe_print(f"Losing Trades: {result.losing_trades}")
+        safe_print(f"Win Rate: {result.performance_metrics.get('win_rate', 0):.2%}")
+        safe_print(f"Avg Trade Profit: ${result.performance_metrics.get('avg_trade_profit', 0):.2f}")
+        safe_print(f"Max Consecutive Losses: {result.performance_metrics.get('max_consecutive_losses', 0)}")
         print()
         
         if result.recommendations:
-            print("💡 RECOMMENDATIONS")
-            print("-" * 20)
+            safe_print("💡 RECOMMENDATIONS")
+            safe_print("-" * 20)
             for i, rec in enumerate(result.recommendations, 1):
-                print(f"{i}. {rec}")
+                safe_print(f"{i}. {rec}")
             print()
     
     def test_vector_validation(self, vector_data: Dict[str, Any]) -> None:
         """Test vector validation"""
-        print("🔍 Testing Vector Validation")
-        print("-" * 30)
+        safe_print("🔍 Testing Vector Validation")
+        safe_print("-" * 30)
         
         result = self.vector_validator.validate_vector(vector_data, "test")
         
-        print(f"Valid: {'✅ YES' if result.is_valid else '❌ NO'}")
-        print(f"Confidence Score: {result.confidence_score:.3f}")
-        print(f"Validation Duration: {result.validation_duration:.3f}s")
+        safe_print(f"Valid: {'✅ YES' if result.is_valid else '❌ NO'}")
+        safe_print(f"Confidence Score: {result.confidence_score:.3f}")
+        safe_print(f"Validation Duration: {result.validation_duration:.3f}s")
         print()
         
         if result.validation_errors:
-            print("❌ VALIDATION ERRORS")
+            safe_print("❌ VALIDATION ERRORS")
             for error in result.validation_errors:
-                print(f"  • {error}")
+                safe_print(f"  • {error}")
             print()
         
         if result.warnings:
-            print("⚠️  WARNINGS")
+            safe_print("⚠️  WARNINGS")
             for warning in result.warnings:
-                print(f"  • {warning}")
+                safe_print(f"  • {warning}")
             print()
         
         if result.recommendations:
-            print("💡 RECOMMENDATIONS")
+            safe_print("💡 RECOMMENDATIONS")
             for rec in result.recommendations:
-                print(f"  • {rec}")
+                safe_print(f"  • {rec}")
             print()
     
     def test_matrix_allocation(self, basket_id: str = "test_basket") -> None:
         """Test matrix allocation"""
-        print("📊 Testing Matrix Allocation")
-        print("-" * 30)
+        safe_print("📊 Testing Matrix Allocation")
+        safe_print("-" * 30)
         
         # Create test basket
         self.matrix_allocator.create_matrix_basket(basket_id, 10000.0, 0.2, 0.1)
@@ -157,120 +158,120 @@ class DemoSystemLauncher:
         
         # Test optimization
         for strategy in self.optimization_strategies:
-            print(f"Testing {strategy} optimization...")
+            safe_print(f"Testing {strategy} optimization...")
             result = self.matrix_allocator.optimize_allocation(basket_id, strategy)
             
             if result.success:
-                print(f"  ✅ Success - Risk: {result.risk_score:.3f}, Return: {result.expected_return:.3f}, Diversification: {result.diversification_score:.3f}")
+                safe_print(f"  ✅ Success - Risk: {result.risk_score:.3f}, Return: {result.expected_return:.3f}, Diversification: {result.diversification_score:.3f}")
             else:
-                print(f"  ❌ Failed - {result.recommendations[0] if result.recommendations else 'Unknown error'}")
+                safe_print(f"  ❌ Failed - {result.recommendations[0] if result.recommendations else 'Unknown error'}")
         
         print()
     
     def show_system_status(self) -> None:
         """Show system status"""
-        print("🔧 SYSTEM STATUS")
-        print("=" * 50)
+        safe_print("🔧 SYSTEM STATUS")
+        safe_print("=" * 50)
         
         # Settings Controller Status
-        print("📋 SETTINGS CONTROLLER")
-        print("-" * 25)
+        safe_print("📋 SETTINGS CONTROLLER")
+        safe_print("-" * 25)
         settings_stats = self.settings_controller.get_performance_metrics()
-        print(f"Total Tests: {settings_stats['total_tests']}")
-        print(f"Success Rate: {settings_stats['overall_success_rate']:.2%}")
-        print(f"Recent Failures (24h): {settings_stats['recent_failures_24h']}")
-        print(f"Recent Successes (24h): {settings_stats['recent_successes_24h']}")
-        print(f"Known Bad Vectors: {settings_stats['known_bad_vectors']}")
+        safe_print(f"Total Tests: {settings_stats['total_tests']}")
+        safe_print(f"Success Rate: {settings_stats['overall_success_rate']:.2%}")
+        safe_print(f"Recent Failures (24h): {settings_stats['recent_failures_24h']}")
+        safe_print(f"Recent Successes (24h): {settings_stats['recent_successes_24h']}")
+        safe_print(f"Known Bad Vectors: {settings_stats['known_bad_vectors']}")
         print()
         
         # Vector Validator Status
-        print("🔍 VECTOR VALIDATOR")
-        print("-" * 20)
+        safe_print("🔍 VECTOR VALIDATOR")
+        safe_print("-" * 20)
         validator_stats = self.vector_validator.get_validation_statistics()
-        print(f"Total Validations: {validator_stats['total_validations']}")
-        print(f"Success Rate: {validator_stats['success_rate']:.2%}")
-        print(f"Average Confidence: {validator_stats['average_confidence']:.3f}")
+        safe_print(f"Total Validations: {validator_stats['total_validations']}")
+        safe_print(f"Success Rate: {validator_stats['success_rate']:.2%}")
+        safe_print(f"Average Confidence: {validator_stats['average_confidence']:.3f}")
         print()
         
         # Matrix Allocator Status
-        print("📊 MATRIX ALLOCATOR")
-        print("-" * 22)
+        safe_print("📊 MATRIX ALLOCATOR")
+        safe_print("-" * 22)
         allocator_stats = self.matrix_allocator.get_allocation_statistics()
-        print(f"Total Allocations: {allocator_stats['total_allocations']}")
-        print(f"Success Rate: {allocator_stats['success_rate']:.2%}")
-        print(f"Average Risk Score: {allocator_stats['average_risk_score']:.3f}")
-        print(f"Average Expected Return: {allocator_stats['average_expected_return']:.3f}")
+        safe_print(f"Total Allocations: {allocator_stats['total_allocations']}")
+        safe_print(f"Success Rate: {allocator_stats['success_rate']:.2%}")
+        safe_print(f"Average Risk Score: {allocator_stats['average_risk_score']:.3f}")
+        safe_print(f"Average Expected Return: {allocator_stats['average_expected_return']:.3f}")
         print()
         
         # Demo System Status
-        print("🎮 DEMO SYSTEM")
-        print("-" * 15)
+        safe_print("🎮 DEMO SYSTEM")
+        safe_print("-" * 15)
         demo_stats = self.demo_system.get_demo_statistics()
-        print(f"Total Sessions: {demo_stats['total_sessions']}")
-        print(f"Success Rate: {demo_stats['success_rate']:.2%}")
-        print(f"Average Return: {demo_stats['average_return']:.2%}")
-        print(f"Average Sharpe: {demo_stats['average_sharpe']:.3f}")
-        print(f"Active Sessions: {demo_stats['active_sessions']}")
+        safe_print(f"Total Sessions: {demo_stats['total_sessions']}")
+        safe_print(f"Success Rate: {demo_stats['success_rate']:.2%}")
+        safe_print(f"Average Return: {demo_stats['average_return']:.2%}")
+        safe_print(f"Average Sharpe: {demo_stats['average_sharpe']:.3f}")
+        safe_print(f"Active Sessions: {demo_stats['active_sessions']}")
         print()
     
     def show_configuration(self) -> None:
         """Show current configuration"""
-        print("⚙️  CURRENT CONFIGURATION")
-        print("=" * 50)
+        safe_print("⚙️  CURRENT CONFIGURATION")
+        safe_print("=" * 50)
         
         # Mathematical Flow Parameters
-        print("🧮 MATHEMATICAL FLOW PARAMETERS")
-        print("-" * 35)
+        safe_print("🧮 MATHEMATICAL FLOW PARAMETERS")
+        safe_print("-" * 35)
         math_params = self.settings_controller.math_params
-        print(f"Entropy Threshold: {math_params.entropy_threshold}")
-        print(f"Fractal Dimension: {math_params.fractal_dimension}")
-        print(f"Quantum Drift Factor: {math_params.quantum_drift_factor}")
-        print(f"Vector Confidence Min: {math_params.vector_confidence_min}")
-        print(f"Matrix Basket Size: {math_params.matrix_basket_size}")
-        print(f"Tick Sync Interval: {math_params.tick_sync_interval}")
-        print(f"Volume Delta Threshold: {math_params.volume_delta_threshold}")
-        print(f"Hash Confidence Decay: {math_params.hash_confidence_decay}")
-        print(f"Ghost Strategy Weight: {math_params.ghost_strategy_weight}")
-        print(f"Backlog Retention Cycles: {math_params.backlog_retention_cycles}")
+        safe_print(f"Entropy Threshold: {math_params.entropy_threshold}")
+        safe_print(f"Fractal Dimension: {math_params.fractal_dimension}")
+        safe_print(f"Quantum Drift Factor: {math_params.quantum_drift_factor}")
+        safe_print(f"Vector Confidence Min: {math_params.vector_confidence_min}")
+        safe_print(f"Matrix Basket Size: {math_params.matrix_basket_size}")
+        safe_print(f"Tick Sync Interval: {math_params.tick_sync_interval}")
+        safe_print(f"Volume Delta Threshold: {math_params.volume_delta_threshold}")
+        safe_print(f"Hash Confidence Decay: {math_params.hash_confidence_decay}")
+        safe_print(f"Ghost Strategy Weight: {math_params.ghost_strategy_weight}")
+        safe_print(f"Backlog Retention Cycles: {math_params.backlog_retention_cycles}")
         print()
         
         # Reinforcement Learning Parameters
-        print("🤖 REINFORCEMENT LEARNING PARAMETERS")
-        print("-" * 40)
+        safe_print("🤖 REINFORCEMENT LEARNING PARAMETERS")
+        safe_print("-" * 40)
         rl_params = self.settings_controller.rl_params
-        print(f"Learning Rate: {rl_params.learning_rate}")
-        print(f"Failure Penalty Weight: {rl_params.failure_penalty_weight}")
-        print(f"Success Reward Weight: {rl_params.success_reward_weight}")
-        print(f"Exploration Rate: {rl_params.exploration_rate}")
-        print(f"Memory Size: {rl_params.memory_size}")
-        print(f"Batch Size: {rl_params.batch_size}")
-        print(f"Update Frequency: {rl_params.update_frequency}")
-        print(f"Convergence Threshold: {rl_params.convergence_threshold}")
-        print(f"Max Iterations: {rl_params.max_iterations}")
-        print(f"Adaptive Learning: {rl_params.adaptive_learning}")
+        safe_print(f"Learning Rate: {rl_params.learning_rate}")
+        safe_print(f"Failure Penalty Weight: {rl_params.failure_penalty_weight}")
+        safe_print(f"Success Reward Weight: {rl_params.success_reward_weight}")
+        safe_print(f"Exploration Rate: {rl_params.exploration_rate}")
+        safe_print(f"Memory Size: {rl_params.memory_size}")
+        safe_print(f"Batch Size: {rl_params.batch_size}")
+        safe_print(f"Update Frequency: {rl_params.update_frequency}")
+        safe_print(f"Convergence Threshold: {rl_params.convergence_threshold}")
+        safe_print(f"Max Iterations: {rl_params.max_iterations}")
+        safe_print(f"Adaptive Learning: {rl_params.adaptive_learning}")
         print()
         
         # Demo Backtest Parameters
-        print("🎮 DEMO BACKTEST PARAMETERS")
-        print("-" * 30)
+        safe_print("🎮 DEMO BACKTEST PARAMETERS")
+        safe_print("-" * 30)
         demo_params = self.settings_controller.demo_params
-        print(f"Enabled: {demo_params.enabled}")
-        print(f"Simulation Duration: {demo_params.simulation_duration}s")
-        print(f"Tick Interval: {demo_params.tick_interval}s")
-        print(f"Initial Balance: ${demo_params.initial_balance}")
-        print(f"Max Positions: {demo_params.max_positions}")
-        print(f"Risk Per Trade: {demo_params.risk_per_trade:.2%}")
-        print(f"Stop Loss %: {demo_params.stop_loss_pct:.2%}")
-        print(f"Take Profit %: {demo_params.take_profit_pct:.2%}")
-        print(f"Slippage: {demo_params.slippage:.3f}")
-        print(f"Commission: {demo_params.commission:.3f}")
-        print(f"Data Source: {demo_params.data_source}")
-        print(f"Validation Mode: {demo_params.validation_mode}")
+        safe_print(f"Enabled: {demo_params.enabled}")
+        safe_print(f"Simulation Duration: {demo_params.simulation_duration}s")
+        safe_print(f"Tick Interval: {demo_params.tick_interval}s")
+        safe_print(f"Initial Balance: ${demo_params.initial_balance}")
+        safe_print(f"Max Positions: {demo_params.max_positions}")
+        safe_print(f"Risk Per Trade: {demo_params.risk_per_trade:.2%}")
+        safe_print(f"Stop Loss %: {demo_params.stop_loss_pct:.2%}")
+        safe_print(f"Take Profit %: {demo_params.take_profit_pct:.2%}")
+        safe_print(f"Slippage: {demo_params.slippage:.3f}")
+        safe_print(f"Commission: {demo_params.commission:.3f}")
+        safe_print(f"Data Source: {demo_params.data_source}")
+        safe_print(f"Validation Mode: {demo_params.validation_mode}")
         print()
     
     def update_parameter(self, param_type: str, param_name: str, value: Any) -> None:
         """Update a parameter"""
-        print(f"🔧 Updating {param_type} parameter: {param_name} = {value}")
+        safe_print(f"🔧 Updating {param_type} parameter: {param_name} = {value}")
         
         try:
             if param_type == "mathematical_flow":
@@ -280,17 +281,17 @@ class DemoSystemLauncher:
             elif param_type == "demo_backtest":
                 self.settings_controller.update_demo_backtest(**{param_name: value})
             else:
-                print(f"❌ Unknown parameter type: {param_type}")
+                safe_print(f"❌ Unknown parameter type: {param_type}")
                 return
             
-            print(f"✅ Successfully updated {param_name}")
+            safe_print(f"✅ Successfully updated {param_name}")
             
         except Exception as e:
-            print(f"❌ Error updating parameter: {e}")
+            safe_print(f"❌ Error updating parameter: {e}")
     
     def export_data(self, export_type: str, filepath: str) -> None:
         """Export system data"""
-        print(f"📤 Exporting {export_type} data to {filepath}")
+        safe_print(f"📤 Exporting {export_type} data to {filepath}")
         
         try:
             if export_type == "settings":
@@ -302,21 +303,21 @@ class DemoSystemLauncher:
             elif export_type == "demo":
                 self.demo_system.export_demo_data(filepath)
             else:
-                print(f"❌ Unknown export type: {export_type}")
+                safe_print(f"❌ Unknown export type: {export_type}")
                 return
             
-            print(f"✅ Successfully exported {export_type} data")
+            safe_print(f"✅ Successfully exported {export_type} data")
             
         except Exception as e:
-            print(f"❌ Error exporting data: {e}")
+            safe_print(f"❌ Error exporting data: {e}")
     
     def run_quick_test(self) -> None:
         """Run a quick comprehensive test"""
-        print("⚡ Running Quick Comprehensive Test")
-        print("=" * 50)
+        safe_print("⚡ Running Quick Comprehensive Test")
+        safe_print("=" * 50)
         
         # Test vector validation
-        print("1. Testing Vector Validation...")
+        safe_print("1. Testing Vector Validation...")
         test_vector = {
             'components': [1.0, 2.0, 3.0, 4.0, 5.0],
             'type': 'test_vector'
@@ -324,46 +325,46 @@ class DemoSystemLauncher:
         self.test_vector_validation(test_vector)
         
         # Test matrix allocation
-        print("2. Testing Matrix Allocation...")
+        safe_print("2. Testing Matrix Allocation...")
         self.test_matrix_allocation("quick_test_basket")
         
         # Run quick backtest
-        print("3. Running Quick Backtest...")
+        safe_print("3. Running Quick Backtest...")
         self.run_backtest("moderate", duration=60)  # 1 minute
         
-        print("✅ Quick test completed!")
+        safe_print("✅ Quick test completed!")
     
     def show_help(self) -> None:
         """Show help information"""
-        print("🎮 SCHWABOT DEMO SYSTEM LAUNCHER")
-        print("=" * 50)
+        safe_print("🎮 SCHWABOT DEMO SYSTEM LAUNCHER")
+        safe_print("=" * 50)
         print()
-        print("Available Commands:")
+        safe_print("Available Commands:")
         print()
-        print("  backtest [scenario] [duration]  - Run a backtest")
-        print("    scenarios: conservative, moderate, aggressive")
-        print("    duration: seconds (optional)")
+        safe_print("  backtest [scenario] [duration]  - Run a backtest")
+        safe_print("    scenarios: conservative, moderate, aggressive")
+        safe_print("    duration: seconds (optional)")
         print()
-        print("  test-vector                     - Test vector validation")
-        print("  test-allocation                 - Test matrix allocation")
-        print("  quick-test                      - Run quick comprehensive test")
+        safe_print("  test-vector                     - Test vector validation")
+        safe_print("  test-allocation                 - Test matrix allocation")
+        safe_print("  quick-test                      - Run quick comprehensive test")
         print()
-        print("  status                          - Show system status")
-        print("  config                          - Show current configuration")
+        safe_print("  status                          - Show system status")
+        safe_print("  config                          - Show current configuration")
         print()
-        print("  update <type> <param> <value>   - Update parameter")
-        print("    types: mathematical_flow, reinforcement_learning, demo_backtest")
+        safe_print("  update <type> <param> <value>   - Update parameter")
+        safe_print("    types: mathematical_flow, reinforcement_learning, demo_backtest")
         print()
-        print("  export <type> <filepath>        - Export data")
-        print("    types: settings, validation, allocation, demo")
+        safe_print("  export <type> <filepath>        - Export data")
+        safe_print("    types: settings, validation, allocation, demo")
         print()
-        print("  help                            - Show this help")
+        safe_print("  help                            - Show this help")
         print()
-        print("Examples:")
-        print("  python launch_demo_system.py backtest moderate 300")
-        print("  python launch_demo_system.py update mathematical_flow entropy_threshold 0.8")
-        print("  python launch_demo_system.py export demo demo_data.json")
-        print("  python launch_demo_system.py quick-test")
+        safe_print("Examples:")
+        safe_print("  python launch_demo_system.py backtest moderate 300")
+        safe_print("  python launch_demo_system.py update mathematical_flow entropy_threshold 0.8")
+        safe_print("  python launch_demo_system.py export demo demo_data.json")
+        safe_print("  python launch_demo_system.py quick-test")
 
 
 def main():
@@ -420,7 +421,7 @@ def main():
                 
                 launcher.update_parameter(param_type, param_name, value)
             else:
-                print("❌ Usage: update <type> <param> <value>")
+                safe_print("❌ Usage: update <type> <param> <value>")
                 
         elif args.command == "export":
             if len(args.args) >= 2:
@@ -428,19 +429,19 @@ def main():
                 filepath = args.args[1]
                 launcher.export_data(export_type, filepath)
             else:
-                print("❌ Usage: export <type> <filepath>")
+                safe_print("❌ Usage: export <type> <filepath>")
                 
         elif args.command == "help":
             launcher.show_help()
             
         else:
-            print(f"❌ Unknown command: {args.command}")
+            safe_print(f"❌ Unknown command: {args.command}")
             launcher.show_help()
             
     except KeyboardInterrupt:
-        print("\n🛑 Operation cancelled by user")
+        safe_print("\n🛑 Operation cancelled by user")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        safe_print(f"❌ Error: {e}")
         sys.exit(1)
 
 

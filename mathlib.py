@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library V1 - Core Mathematical Framework.
 
@@ -13,13 +17,12 @@ for trading system calculations, statistical analysis, and numerical operations.
 
 """
 
-from __future__ import annotations
 
 from decimal import getcontext
 import logging
 from typing import Any, Dict, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -86,17 +89,17 @@ class MathLib:
                 "status": "error",
             }
 
-    def mean(self: Self, data: Vector) -> float:
+    def unified_math.mean(self: Self, data: Vector) -> float:
         """Calculate arithmetic mean."""
-        return float(np.mean(data))
+        return float(unified_math.unified_math.mean(data))
 
     def standard_deviation(self: Self, data: Vector, ddof: int = 1) -> float:
         """Calculate standard deviation."""
-        return float(np.std(data, ddof=ddof))
+        return float(unified_math.unified_math.std(data, ddof=ddof))
 
     def variance(self: Self, data: Vector, ddof: int = 1) -> float:
         """Calculate variance."""
-        return float(np.var(data, ddof=ddof))
+        return float(unified_math.unified_math.var(data, ddof=ddof))
 
     def median(self: Self, data: Vector) -> float:
         """Calculate median value."""
@@ -113,7 +116,7 @@ class MathLib:
     def volatility(self: Self, prices: Vector, window: int = 20) -> float:
         """Calculate volatility."""
         returns = self.calculate_returns(prices)
-        return float(np.std(returns[-window:], ddof=1))
+        return float(unified_math.unified_math.std(returns[-window:], ddof=1))
 
     def calculate_returns(self: Self, prices: Vector) -> Vector:
         """Calculate returns from price series."""
@@ -122,12 +125,12 @@ class MathLib:
 
 def main() -> None:
     """Test function."""
-    import numpy as np
+    from core.unified_math_system import unified_math
 
     mathlib = MathLib()
     test_data = np.array([1, 2, 3, 4, 5])
     result = mathlib.calculate("mean", test_data)
-    print(f"Test result: {result}")
+    safe_print(f"Test result: {result}")
 
 
 if __name__ == "__main__":

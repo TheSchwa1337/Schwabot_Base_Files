@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Fix common flake8 issues in core directory.
 
@@ -101,7 +102,7 @@ def process_file(file_path: Path) -> bool:
 
         return False
     except Exception as e:
-        print(f"Error processing {file_path}: {e}")
+        safe_print(f"Error processing {file_path}: {e}")
         return False
 
 
@@ -110,7 +111,7 @@ def main():
     core_dir = Path("core")
 
     if not core_dir.exists():
-        print("Core directory not found!")
+        safe_print("Core directory not found!")
         return
 
     files_processed = 0
@@ -120,10 +121,10 @@ def main():
         files_processed += 1
         if process_file(py_file):
             files_modified += 1
-            print(f"Modified: {py_file}")
+            safe_print(f"Modified: {py_file}")
 
-    print(f"\nProcessed {files_processed} files")
-    print(f"Modified {files_modified} files")
+    safe_print(f"\nProcessed {files_processed} files")
+    safe_print(f"Modified {files_modified} files")
 
 
 if __name__ == "__main__":

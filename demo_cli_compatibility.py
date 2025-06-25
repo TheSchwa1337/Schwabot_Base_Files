@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """CLI Compatibility Demo - Bulletproof Windows Handling.
 
@@ -100,14 +101,14 @@ def demonstrate_cli_compatibility():
     safe_print_with_fallback("\n🧪 MATHEMATICAL VALIDATION CLI SAFETY:")
 
     try:
-        import numpy as np
+        from core.unified_math_system import unified_math
 
         safe_print_with_fallback("✅ NumPy imported successfully")
 
         # Test mathematical operations with CLI safety
         data = np.random.normal(0, 1, 100)
-        mean_val = np.mean(data)
-        std_val = np.std(data)
+        mean_val = unified_math.unified_math.mean(data)
+        std_val = unified_math.unified_math.std(data)
 
         safe_print_with_fallback(f"📊 Data mean: {mean_val:.4f}")
         safe_print_with_fallback(f"📊 Data std: {std_val:.4f}")

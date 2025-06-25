@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Lantern Vector Memory with ZPE Mathematical Framework Integration.
 
@@ -6,9 +22,8 @@ The ZPE framework provides elastic resonance calculations for enhanced
 memory pattern recognition and signal processing.
 """
 
-from __future__ import annotations
 
-import numpy as np
+from core.unified_math_system import unified_math
 import logging
 from typing import Dict, List, Optional, Any
 from datetime import datetime
@@ -109,7 +124,7 @@ def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
 
         # Handle edge cases
         if X.shape[0] < n_components:
-            n_components = min(n_components, X.shape[0])
+            n_components = unified_math.min(n_components, X.shape[0])
 
         # Compute PCA
         pca = PCA(n_components=n_components).fit(X)
@@ -130,9 +145,9 @@ class LanternMemory:
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
         
         if ZPE_MODULES_AVAILABLE:
-            safe_print("🔄 Lantern Memory initialized with ZPE integration")
+            safe_safe_print("🔄 Lantern Memory initialized with ZPE integration")
         else:
-            safe_print("⚠️ Lantern Memory initialized without ZPE integration")
+            safe_safe_print("⚠️ Lantern Memory initialized without ZPE integration")
     
     def load(self) -> bool:
         """Load memory state."""
@@ -186,7 +201,7 @@ class LanternMemory:
                     })
                     
                 except Exception as e:
-                    safe_print(f"⚠️ ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
+                    safe_safe_print(f"⚠️ ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
                     entry.metadata['zpe_integration'] = False
                     entry.metadata['zpe_error'] = str(e)
             
@@ -200,7 +215,7 @@ class LanternMemory:
             return entry
             
         except Exception as e:
-            safe_print(f"❌ Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
+            safe_safe_print(f"❌ Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
             return None
     
     def get_memory_analysis(self, n_components: int = 4) -> LanternMemoryResult:
@@ -240,7 +255,7 @@ class LanternMemory:
             )
             
         except Exception as e:
-            safe_print(f"❌ Memory analysis failed: {safe_format_error(e, 'memory_analysis')}")
+            safe_safe_print(f"❌ Memory analysis failed: {safe_format_error(e, 'memory_analysis')}")
             return LanternMemoryResult(
                 success=False,
                 memory_entries=self.memory_entries,
@@ -272,8 +287,8 @@ class LanternMemory:
                 'average_signal_strength': sum(signal_strengths) / len(signal_strengths),
                 'average_lantern_signal': sum(lantern_signals) / len(lantern_signals),
                 'average_resonance': sum(resonances) / len(resonances),
-                'max_signal_strength': max(signal_strengths) if signal_strengths else 0.0,
-                'min_signal_strength': min(signal_strengths) if signal_strengths else 0.0
+                'max_signal_strength': unified_math.max(signal_strengths) if signal_strengths else 0.0,
+                'min_signal_strength': unified_math.min(signal_strengths) if signal_strengths else 0.0
             }
             
         except Exception as e:
@@ -285,7 +300,7 @@ class LanternMemory:
     def clear_memory(self) -> None:
         """Clear all memory entries."""
         self.memory_entries.clear()
-        safe_print("🗑️ Lantern Memory cleared")
+        safe_safe_print("🗑️ Lantern Memory cleared")
     
     def get_recent_entries(self, count: int = 10) -> List[LanternMemoryEntry]:
         """Get recent memory entries."""

@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Risk Monitor - Real-time Risk Management System.
 
@@ -35,7 +51,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
@@ -46,7 +61,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -383,7 +398,7 @@ class RiskMonitor:
 
             # Get historical returns
             returns = []
-            for i in range(1, min(len(self.portfolio_history), self.var_window)):
+            for i in range(1, unified_math.min(len(self.portfolio_history), self.var_window)):
                 prev = self.portfolio_history[-(i + 1)]
                 curr = self.portfolio_history[-i]
                 if prev.total_value > 0:
@@ -401,9 +416,9 @@ class RiskMonitor:
             var_95 = np.percentile(returns, 5)  # 5th percentile for 95% VaR
 
             # Calculate CVaR (expected loss beyond VaR)
-            cvar_95 = np.mean(returns[returns <= var_95])
+            cvar_95 = unified_math.unified_math.mean(returns[returns <= var_95])
 
-            return abs(var_95), abs(cvar_95)
+            return unified_math.abs(var_95), unified_math.abs(cvar_95)
 
         except Exception as e:
             logger.error(f"VaR/CVaR calculation failed: {e}")
@@ -416,8 +431,8 @@ class RiskMonitor:
                 return 0.0, 0.0
 
             # Find peak value
-            peak_value = max(h.total_value for h in self.portfolio_history)
-            peak_value = max(peak_value, current_value)
+            peak_value = unified_math.max(h.total_value for h in self.portfolio_history)
+            peak_value = unified_math.max(peak_value, current_value)
 
             # Calculate current drawdown
             current_drawdown = (
@@ -429,7 +444,7 @@ class RiskMonitor:
             for history in self.portfolio_history:
                 if history.total_value > 0:
                     drawdown = (peak_value - history.total_value) / peak_value
-                    max_drawdown = max(max_drawdown, drawdown)
+                    max_drawdown = unified_math.max(max_drawdown, drawdown)
 
             return max_drawdown, current_drawdown
 
@@ -454,7 +469,7 @@ class RiskMonitor:
             if not returns:
                 return 0.0
 
-            return np.std(returns)
+            return unified_math.unified_math.std(returns)
 
         except Exception as e:
             logger.error(f"Volatility calculation failed: {e}")
@@ -486,7 +501,7 @@ class RiskMonitor:
 
             # Simplified correlation calculation
             # In a real implementation, this would use actual correlation data
-            position_sizes = [abs(pos.get("size", 0)) for pos in positions.values()]
+            position_sizes = [unified_math.abs(pos.get("size", 0)) for pos in positions.values()]
             total_size = sum(position_sizes)
 
             if total_size <= 0:
@@ -500,7 +515,7 @@ class RiskMonitor:
             correlation_exposure = 1.0 - (1.0 / len(positions))  # Base diversification
             correlation_exposure += concentration * 0.5  # Concentration penalty
 
-            return min(correlation_exposure, 1.0)
+            return unified_math.min(correlation_exposure, 1.0)
 
         except Exception as e:
             logger.error(f"Correlation exposure calculation failed: {e}")
@@ -512,13 +527,13 @@ class RiskMonitor:
             if not positions:
                 return 0.0
 
-            total_value = sum(abs(pos.get("value", 0)) for pos in positions.values())
+            total_value = sum(unified_math.abs(pos.get("value", 0)) for pos in positions.values())
             if total_value <= 0:
                 return 0.0
 
             # Calculate Herfindahl index
             weights = [
-                abs(pos.get("value", 0)) / total_value for pos in positions.values()
+                unified_math.abs(pos.get("value", 0)) / total_value for pos in positions.values()
             ]
             concentration = sum(w * w for w in weights)
 
@@ -535,14 +550,14 @@ class RiskMonitor:
                 return 0.0
 
             # Calculate weighted thermal risk
-            total_value = sum(abs(pos.get("value", 0)) for pos in positions.values())
+            total_value = sum(unified_math.abs(pos.get("value", 0)) for pos in positions.values())
             if total_value <= 0:
                 return 0.0
 
             thermal_risks = []
             for pos in positions.values():
                 thermal_index = pos.get("thermal_index", 1.0)
-                position_value = abs(pos.get("value", 0))
+                position_value = unified_math.abs(pos.get("value", 0))
                 weight = position_value / total_value
                 thermal_risks.append(thermal_index * weight)
 
@@ -564,16 +579,16 @@ class RiskMonitor:
         """Calculate overall risk score (0-1, where 1 is highest risk)."""
         try:
             # Normalize each risk component
-            var_score = min(var_95 / self.var_threshold, 1.0)
-            cvar_score = min(cvar_95 / self.cvar_threshold, 1.0)
-            drawdown_score = min(max_drawdown / self.max_drawdown_threshold, 1.0)
+            var_score = unified_math.min(var_95 / self.var_threshold, 1.0)
+            cvar_score = unified_math.min(cvar_95 / self.cvar_threshold, 1.0)
+            drawdown_score = unified_math.min(max_drawdown / self.max_drawdown_threshold, 1.0)
             correlation_score = min(
                 correlation_exposure / self.correlation_threshold, 1.0
             )
             concentration_score = min(
                 concentration_risk / self.concentration_threshold, 1.0
             )
-            thermal_score = min(thermal_risk / self.thermal_risk_threshold, 1.0)
+            thermal_score = unified_math.min(thermal_risk / self.thermal_risk_threshold, 1.0)
 
             # Weighted average (VaR and CVaR get higher weights)
             weights = [0.25, 0.25, 0.20, 0.15, 0.10, 0.05]  # Sum to 1.0
@@ -588,7 +603,7 @@ class RiskMonitor:
 
             overall_score = sum(w * s for w, s in zip(weights, scores))
 
-            return min(overall_score, 1.0)
+            return unified_math.min(overall_score, 1.0)
 
         except Exception as e:
             logger.error(f"Overall risk score calculation failed: {e}")
@@ -613,7 +628,7 @@ class RiskMonitor:
             )
 
             # Risk metrics (simplified)
-            var_contribution = abs(position_value) * 0.02  # 2% VaR contribution
+            var_contribution = unified_math.abs(position_value) * 0.02  # 2% VaR contribution
             correlation_risk = position_data.get("correlation_risk", 0.0)
             liquidity_risk = position_data.get("liquidity_risk", 0.0)
             thermal_risk = position_data.get("thermal_risk", 1.0)
@@ -935,8 +950,8 @@ class RiskMonitor:
 def main() -> None:
     """Main function for testing risk monitor."""
     try:
-        print("🔍 Risk Monitor Test")
-        print("=" * 40)
+        safe_print("🔍 Risk Monitor Test")
+        safe_print("=" * 40)
 
         # Initialize risk monitor
         config = {
@@ -975,27 +990,27 @@ def main() -> None:
 
         # Get risk status
         status = risk_monitor.get_current_risk_status()
-        print(f"✅ Risk Monitor initialized: {status['status']}")
-        print(f"✅ Portfolio value: ${status['portfolio_value']:,.2f}")
-        print(
+        safe_print(f"✅ Risk Monitor initialized: {status['status']}")
+        safe_print(f"✅ Portfolio value: ${status['portfolio_value']:,.2f}")
+        safe_print(
             f"✅ Overall risk score: {status['risk_metrics']['overall_risk_score']:.3f}"
         )
 
         # Start monitoring
         risk_monitor.start_monitoring()
-        print("✅ Risk monitoring started")
+        safe_print("✅ Risk monitoring started")
 
         # Simulate some time
         time.sleep(0.5)
 
         # Stop monitoring
         risk_monitor.stop_monitoring()
-        print("✅ Risk monitoring stopped")
+        safe_print("✅ Risk monitoring stopped")
 
-        print("\n🎉 Risk Monitor test completed successfully!")
+        safe_print("\n🎉 Risk Monitor test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Risk Monitor test failed: {e}")
+        safe_print(f"❌ Risk Monitor test failed: {e}")
         import traceback
 
         traceback.print_exc()

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Complete System Integration Validator - Schwabot UROS v1.0
@@ -13,7 +27,7 @@ Mathematical Pipeline:
 import json
 import time
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -106,7 +120,7 @@ class CompleteSystemIntegrationValidator:
             success = (
                 bit_result is not None and
                 bit_engine_result is not None and
-                abs(bit_result.cycle_score - bit_engine_result.get('cycle_score', 0)) < 1.0
+                unified_math.abs(bit_result.cycle_score - bit_engine_result.get('cycle_score', 0)) < 1.0
             )
             
             test_results.append(SystemIntegrationTestResult(
@@ -258,7 +272,7 @@ class CompleteSystemIntegrationValidator:
             bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcdef")
             success = (
                 bit_result is not None and
-                abs(self.tensor_algebra.alpha_weight - 0.3) < 1e-6
+                unified_math.abs(self.tensor_algebra.alpha_weight - 0.3) < 1e-6
             )
             
             test_results.append(SystemIntegrationTestResult(
@@ -510,7 +524,7 @@ class CompleteSystemIntegrationValidator:
             x = np.linspace(-5, 5, 50)
             y = np.linspace(-5, 5, 50)
             X, Y = np.meshgrid(x, y)
-            Z = np.sin(np.sqrt(X**2 + Y**2))
+            Z = np.unified_math.sin(unified_math.unified_math.sqrt(X**2 + Y**2))
             
             viz_3d_data = {
                 'x': X.tolist(),
@@ -703,8 +717,8 @@ class CompleteSystemIntegrationValidator:
 
     def run_complete_system_validation(self) -> Dict[str, Any]:
         """Run complete system integration validation."""
-        print("🧮 Running Complete System Integration Validation...")
-        print("=" * 60)
+        safe_print("🧮 Running Complete System Integration Validation...")
+        safe_print("=" * 60)
         
         # Run all system validations
         validations = [
@@ -727,18 +741,18 @@ class CompleteSystemIntegrationValidator:
         overall_success = all(v.all_tests_passed for v in validations)
         
         # Print results
-        print(f"\n📊 Complete System Integration Results:")
-        print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
-        print(f"  Total Tests: {total_tests}")
-        print(f"  Passed: {total_passed}")
-        print(f"  Failed: {total_failed}")
-        print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
-        print(f"  Total Execution Time: {total_time:.2f}s")
+        safe_print(f"\n📊 Complete System Integration Results:")
+        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"  Total Tests: {total_tests}")
+        safe_print(f"  Passed: {total_passed}")
+        safe_print(f"  Failed: {total_failed}")
+        safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
+        safe_print(f"  Total Execution Time: {total_time:.2f}s")
         
-        print(f"\n📋 System Integration Results:")
+        safe_print(f"\n📋 System Integration Results:")
         for validation in validations:
             status = "✅ PASSED" if validation.all_tests_passed else "❌ FAILED"
-            print(f"  {validation.validation_name}: {status} ({validation.passed_tests}/{validation.total_tests})")
+            safe_print(f"  {validation.validation_name}: {status} ({validation.passed_tests}/{validation.total_tests})")
         
         # Return comprehensive results
         return {
@@ -788,8 +802,8 @@ class CompleteSystemIntegrationValidator:
 
 def main():
     """Main function for complete system integration validation."""
-    print("🧮 Complete System Integration Validator - Schwabot UROS v1.0")
-    print("=" * 60)
+    safe_print("🧮 Complete System Integration Validator - Schwabot UROS v1.0")
+    safe_print("=" * 60)
     
     # Initialize validator
     validator = CompleteSystemIntegrationValidator()

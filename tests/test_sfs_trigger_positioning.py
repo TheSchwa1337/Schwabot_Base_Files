@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """SFS Trigger Positioning Test - Schwabot Framework.
 
@@ -18,7 +20,7 @@ Key Validations:
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -169,7 +171,7 @@ class SFSTriggerPositioningTest:
                     results['success'] = False
                 
                 # Validate confidence proximity to expected
-                confidence_diff = abs(activation_result['confidence'] - test_case.expected_confidence)
+                confidence_diff = unified_math.abs(activation_result['confidence'] - test_case.expected_confidence)
                 if confidence_diff > 0.3:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Confidence too far from expected. Expected: {test_case.expected_confidence}, Got: {activation_result['confidence']}"
                     results['errors'].append(error_msg)
@@ -377,7 +379,7 @@ class SFSTriggerPositioningTest:
             results['details'] = {
                 'total_signals': len(stack_results),
                 'processed_signals': processed_count,
-                'average_priority': np.mean(priorities) if priorities else 0.0,
+                'average_priority': unified_math.unified_math.mean(priorities) if priorities else 0.0,
                 'priority_distribution': {p: priorities.count(p) for p in set(priorities)},
                 'stack_processing_successful': len(results['errors']) == 0
             }
@@ -439,7 +441,7 @@ class SFSTriggerPositioningTest:
             
             # Check coherence distribution
             coherence_scores = [result['coherence_score'] for result in pattern_results]
-            avg_coherence = np.mean(coherence_scores) if coherence_scores else 0.0
+            avg_coherence = unified_math.unified_math.mean(coherence_scores) if coherence_scores else 0.0
             
             results['details'] = {
                 'total_patterns_analyzed': len(pattern_results),
@@ -469,10 +471,10 @@ class SFSTriggerPositioningTest:
         conditions = test_case.market_conditions
         
         # Calculate activation based on conditions
-        entropy_factor = min(conditions['entropy_level'] / 8.0, 1.0)
-        volatility_factor = min(conditions['volatility'] / 0.3, 1.0)
-        volume_factor = min(conditions['volume'] / 2000.0, 1.0)
-        momentum_factor = abs(conditions['price_momentum'])
+        entropy_factor = unified_math.min(conditions['entropy_level'] / 8.0, 1.0)
+        volatility_factor = unified_math.min(conditions['volatility'] / 0.3, 1.0)
+        volume_factor = unified_math.min(conditions['volume'] / 2000.0, 1.0)
+        momentum_factor = unified_math.abs(conditions['price_momentum'])
         coherence_factor = conditions['fractal_coherence']
         
         # Determine activation based on matrix mode and trigger type
@@ -497,7 +499,7 @@ class SFSTriggerPositioningTest:
         activated = activation_score >= activation_threshold
         
         # Calculate confidence
-        confidence = min(activation_score * 1.2, 1.0) if activated else activation_score * 0.5
+        confidence = unified_math.min(activation_score * 1.2, 1.0) if activated else activation_score * 0.5
         
         return {
             'activated': activated,
@@ -542,15 +544,15 @@ class SFSTriggerPositioningTest:
         
         # Evaluate individual conditions
         condition_scores = {
-            'entropy_condition': min(conditions['entropy_level'] / 8.0, 1.0),
-            'volatility_condition': min(conditions['volatility'] / 0.3, 1.0),
-            'volume_condition': min(conditions['volume'] / 2000.0, 1.0),
-            'momentum_condition': abs(conditions['price_momentum']),
+            'entropy_condition': unified_math.min(conditions['entropy_level'] / 8.0, 1.0),
+            'volatility_condition': unified_math.min(conditions['volatility'] / 0.3, 1.0),
+            'volume_condition': unified_math.min(conditions['volume'] / 2000.0, 1.0),
+            'momentum_condition': unified_math.abs(conditions['price_momentum']),
             'coherence_condition': conditions['fractal_coherence']
         }
         
         # Calculate overall score
-        overall_score = np.mean(list(condition_scores.values()))
+        overall_score = unified_math.unified_math.mean(list(condition_scores.values()))
         
         # Determine if conditions are met
         conditions_met = overall_score >= 0.5
@@ -583,7 +585,7 @@ class SFSTriggerPositioningTest:
         }
         
         adjusted_priority = int(base_priority * mode_multiplier.get(test_case.matrix_mode, 1.0))
-        adjusted_priority = max(1, min(10, adjusted_priority))
+        adjusted_priority = unified_math.max(1, unified_math.min(10, adjusted_priority))
         
         return {
             'processed': True,
@@ -686,18 +688,18 @@ if __name__ == "__main__":
     result = test_sfs_trigger_positioning()
     
     # Print results
-    print("\n" + "="*60)
-    print("🎯 SFS TRIGGER POSITIONING TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("🎯 SFS TRIGGER POSITIONING TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
     if 'test_components' in result:
-        print("\nComponent Results:")
+        safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
-            print(f"  {component}: {status}")
+            safe_print(f"  {component}: {status}")
     
-    print("="*60) 
+    safe_print("="*60) 

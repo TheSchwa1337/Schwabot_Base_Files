@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Hash Interpreter - Entropy Pressure and Tick Drift Analysis.
 
@@ -7,7 +8,7 @@ optimal trading decisions.
 
 Mathematical Foundation:
 - Hash Drift: h'(t) = ∂χ/∂t
-- Phase Shift: ∆P = sin(tφ) - σ
+- Phase Shift: ∆P = unified_math.sin(tφ) - σ
 - Entropy decay analysis and echo trigger vector scoring
 - Strategy trigger vector generation from tick data
 """
@@ -16,8 +17,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 
 from core.error_handler import safe_execute
@@ -34,7 +35,7 @@ class TickPhase:
     tick_hash: str
     phase_coherence: float  # 0.0 to 1.0
     hash_drift: float  # h'(t) = ∂χ/∂t
-    phase_shift: float  # ∆P = sin(tφ) - σ
+    phase_shift: float  # ∆P = unified_math.sin(tφ) - σ
     entropy_pressure: float
     echo_score: float
     timestamp: datetime = field(default_factory=datetime.now)
@@ -107,7 +108,7 @@ class TickHashInterpreter:
             # Calculate hash drift: h'(t) = ∂χ/∂t
             hash_drift = self._calculate_hash_drift(tick_hash)
             
-            # Calculate phase shift: ∆P = sin(tφ) - σ
+            # Calculate phase shift: ∆P = unified_math.sin(tφ) - σ
             phase_shift = self._calculate_phase_shift(tick_data)
             
             # Calculate phase coherence
@@ -188,16 +189,16 @@ class TickHashInterpreter:
             # Fit exponential decay: E(t) = E₀ * e^(-λt)
             try:
                 # Use log-linear fit for decay rate
-                log_entropy = np.log(entropy_array + 1e-10)  # Add small constant to avoid log(0)
+                log_entropy = unified_math.unified_math.log(entropy_array + 1e-10)  # Add small constant to avoid unified_math.log(0)
                 decay_rate = -np.polyfit(time_points, log_entropy, 1)[0]
             except:
                 decay_rate = 0.0
             
             # Calculate half-life: t₁/₂ = ln(2) / λ
-            half_life = math.log(2) / max(decay_rate, 1e-10)
+            half_life = unified_math.unified_math.log(2) / unified_math.max(decay_rate, 1e-10)
             
             # Calculate stability score based on entropy variance
-            entropy_variance = np.var(entropy_array)
+            entropy_variance = unified_math.unified_math.var(entropy_array)
             stability_score = 1.0 / (1.0 + entropy_variance)
             
             return EntropyDecay(
@@ -238,16 +239,16 @@ class TickHashInterpreter:
             recent_phases = self.phase_history[-10:]
             
             # Calculate average echo score
-            avg_echo_score = np.mean([phase.echo_score for phase in recent_phases])
+            avg_echo_score = unified_math.mean([phase.echo_score for phase in recent_phases])
             
             # Calculate average hash drift
-            avg_hash_drift = np.mean([phase.hash_drift for phase in recent_phases])
+            avg_hash_drift = unified_math.mean([phase.hash_drift for phase in recent_phases])
             
             # Calculate average entropy pressure
-            avg_entropy_pressure = np.mean([phase.entropy_pressure for phase in recent_phases])
+            avg_entropy_pressure = unified_math.mean([phase.entropy_pressure for phase in recent_phases])
             
             # Calculate vector magnitude
-            vector_magnitude = math.sqrt(
+            vector_magnitude = unified_math.sqrt(
                 avg_hash_drift**2 + avg_entropy_pressure**2 + avg_echo_score**2
             )
             
@@ -257,7 +258,7 @@ class TickHashInterpreter:
             )
             
             # Calculate confidence based on echo score and phase coherence
-            avg_phase_coherence = np.mean([phase.phase_coherence for phase in recent_phases])
+            avg_phase_coherence = unified_math.mean([phase.phase_coherence for phase in recent_phases])
             confidence = (avg_echo_score + avg_phase_coherence) / 2.0
             
             # Set thresholds
@@ -354,7 +355,7 @@ class TickHashInterpreter:
             # Calculate basic entropy measure
             if price > 0 and volume > 0:
                 # Use price-volume ratio as entropy proxy
-                entropy = abs(math.log(price / volume))
+                entropy = unified_math.abs(unified_math.unified_math.log(price / volume))
             else:
                 entropy = 0.0
             
@@ -389,14 +390,14 @@ class TickHashInterpreter:
                 
                 if prev_nums:
                     # Calculate drift as difference in hash characteristics
-                    current_avg = np.mean(hash_nums)
-                    prev_avg = np.mean(prev_nums)
+                    current_avg = unified_math.unified_math.mean(hash_nums)
+                    prev_avg = unified_math.unified_math.mean(prev_nums)
                     drift = (current_avg - prev_avg) / 16.0
                 else:
                     drift = 0.0
             else:
                 # First tick, use hash characteristics as drift
-                drift = np.mean(hash_nums) / 16.0
+                drift = unified_math.unified_math.mean(hash_nums) / 16.0
             
             return drift
             
@@ -405,7 +406,7 @@ class TickHashInterpreter:
             return 0.0
     
     def _calculate_phase_shift(self, tick_data: Dict[str, Any]) -> float:
-        """Calculate phase shift: ∆P = sin(tφ) - σ."""
+        """Calculate phase shift: ∆P = unified_math.sin(tφ) - σ."""
         try:
             # Extract time and volatility components
             timestamp = tick_data.get('timestamp', datetime.now().timestamp())
@@ -418,12 +419,12 @@ class TickHashInterpreter:
             # Calculate volatility σ
             if len(self.tick_history) >= 2:
                 prev_price = self.tick_history[-1].get('price', price)
-                volatility = abs(price - prev_price) / max(prev_price, 1.0)
+                volatility = unified_math.abs(price - prev_price) / unified_math.max(prev_price, 1.0)
             else:
                 volatility = 0.01  # Default volatility
             
-            # Calculate phase shift: ∆P = sin(tφ) - σ
-            phase_shift = math.sin(time_factor) - volatility
+            # Calculate phase shift: ∆P = unified_math.sin(tφ) - σ
+            phase_shift = unified_math.unified_math.sin(time_factor) - volatility
             
             return phase_shift
             
@@ -436,18 +437,18 @@ class TickHashInterpreter:
         """Calculate phase coherence from drift and shift components."""
         try:
             # Normalize components to [0, 1] range
-            drift_norm = abs(hash_drift)
-            shift_norm = abs(phase_shift)
+            drift_norm = unified_math.abs(hash_drift)
+            shift_norm = unified_math.abs(phase_shift)
             entropy_norm = entropy_pressure / 10.0  # Normalize entropy
             
             # Calculate coherence as inverse of component variance
             components = [drift_norm, shift_norm, entropy_norm]
-            variance = np.var(components)
+            variance = unified_math.unified_math.var(components)
             
             # Coherence is high when variance is low
             coherence = 1.0 / (1.0 + variance)
             
-            return min(1.0, coherence)
+            return unified_math.min(1.0, coherence)
             
         except Exception as e:
             logger.error(f"Error calculating phase coherence: {e}")
@@ -467,10 +468,10 @@ class TickHashInterpreter:
                 
                 for recent_hash in recent_hashes:
                     recent_patterns = self._extract_hash_patterns(recent_hash)
-                    similarity = len(set(hash_patterns) & set(recent_patterns)) / max(len(hash_patterns), 1)
+                    similarity = len(set(hash_patterns) & set(recent_patterns)) / unified_math.max(len(hash_patterns), 1)
                     similarities.append(similarity)
                 
-                pattern_similarity = np.mean(similarities)
+                pattern_similarity = unified_math.unified_math.mean(similarities)
             
             # Calculate entropy stability
             entropy_stability = 1.0 / (1.0 + entropy_pressure)
@@ -478,7 +479,7 @@ class TickHashInterpreter:
             # Combined echo score
             echo_score = (pattern_similarity + entropy_stability) / 2.0
             
-            return min(1.0, echo_score)
+            return unified_math.min(1.0, echo_score)
             
         except Exception as e:
             logger.error(f"Error calculating echo score: {e}")
@@ -510,15 +511,15 @@ class TickHashInterpreter:
         """Determine trigger type based on vector components."""
         try:
             # Strong signals
-            if echo_score > 0.9 and abs(hash_drift) > 0.1:
+            if echo_score > 0.9 and unified_math.abs(hash_drift) > 0.1:
                 return 'strong_buy' if hash_drift > 0 else 'strong_sell'
             
             # Moderate signals
-            elif echo_score > 0.7 and abs(hash_drift) > 0.05:
+            elif echo_score > 0.7 and unified_math.abs(hash_drift) > 0.05:
                 return 'buy' if hash_drift > 0 else 'sell'
             
             # Weak signals
-            elif echo_score > 0.5 and abs(hash_drift) > 0.02:
+            elif echo_score > 0.5 and unified_math.abs(hash_drift) > 0.02:
                 return 'buy' if hash_drift > 0 else 'sell'
             
             else:
@@ -546,7 +547,7 @@ class TickHashInterpreter:
             # Combined confidence
             confidence = (base_confidence + stability_factor + volatility_factor) / 3.0
             
-            return min(1.0, confidence)
+            return unified_math.min(1.0, confidence)
             
         except Exception as e:
             logger.error(f"Error calculating strategy confidence: {e}")
@@ -556,12 +557,12 @@ class TickHashInterpreter:
         """Update performance metrics."""
         try:
             if self.phase_history:
-                self.phase_coherence_avg = np.mean([
+                self.phase_coherence_avg = unified_math.mean([
                     phase.phase_coherence for phase in self.phase_history[-100:]
                 ])
             
             if self.entropy_history:
-                entropy_variance = np.var(self.entropy_history[-100:])
+                entropy_variance = unified_math.unified_math.var(self.entropy_history[-100:])
                 self.entropy_stability_avg = 1.0 / (1.0 + entropy_variance)
                 
         except Exception as e:

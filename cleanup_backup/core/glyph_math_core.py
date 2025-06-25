@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Glyph math core – determinant-based glyph processing and tensor operations.
 
@@ -11,11 +14,10 @@ This module provides the mathematical foundation for glyph-based signal
 processing and tensor field computations.
 """
 
-from __future__ import annotations
 
 from typing import Callable, Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "glyph_determinant",
@@ -64,7 +66,7 @@ def glyph_determinant(
     # Hessian determinant
     hessian_det = f_xx * f_yy - f_xy * f_xy
 
-    return abs(hessian_det)
+    return unified_math.abs(hessian_det)
 
 
 def glyph_matrix(
@@ -86,7 +88,7 @@ def glyph_matrix(
     g_array = np.asarray(glyph_values, dtype=float)
     w_array = np.asarray(weights, dtype=float)
 
-    return float(np.dot(g_array, w_array))
+    return float(unified_math.unified_math.dot_product(g_array, w_array))
 
 
 def glyph_psi(m_glyph: float, g_glyph: float) -> float:  # noqa: D401
@@ -100,7 +102,7 @@ def glyph_psi(m_glyph: float, g_glyph: float) -> float:  # noqa: D401
         Glyph determinant value G_glyph.
     """
     # Sigmoid function σ(x) = 1/(1 + e^(-x))
-    sigmoid = 1.0 / (1.0 + np.exp(-m_glyph))
+    sigmoid = 1.0 / (1.0 + unified_math.exp(-m_glyph))
 
     # Hyperbolic tangent
     tanh_g = np.tanh(g_glyph)

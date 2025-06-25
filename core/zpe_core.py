@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Schwabot ZPE Core - The Saw Blade of Profit
@@ -19,8 +33,8 @@ Key Mathematical Functions:
 10. Profit Loop Reinjection
 """
 
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 import logging
@@ -86,11 +100,11 @@ class ZPECore:
     
     def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
         """
-        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · sin(ωt + φ) dt
+        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
         """
         dt = 0.001
         t_values = np.arange(0, time_window, dt)
-        integral_sum = sum(price_derivative * math.sin(frequency * t + phase_offset) * dt for t in t_values)
+        integral_sum = sum(price_derivative * unified_math.unified_math.sin(frequency * t + phase_offset) * dt for t in t_values)
         logger.debug(f"Elastic Resonance: {integral_sum:.6f}")
         return integral_sum
     
@@ -114,7 +128,7 @@ class ZPECore:
         Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
         """
         # Simple complexity calculation based on price trigger variance
-        complexity = min(16.0, 1.0 + abs(price_trigger) * 10.0)
+        complexity = unified_math.min(16.0, 1.0 + unified_math.abs(price_trigger) * 10.0)
         self.recursion_depth = int(complexity)
         logger.debug(f"Recursive Cycle Depth: {self.recursion_depth}")
         return self.recursion_depth
@@ -147,8 +161,8 @@ class ZPECore:
         """
         News / Lantern API Signal Mapping: Lₜ = g(nₜ, ΔSₜ)
         """
-        normalized_density = max(0.0, min(1.0, news_density))
-        normalized_sentiment = max(-1.0, min(1.0, sentiment_delta))
+        normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
+        normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))
         lantern_signal = normalized_density * (1.0 + normalized_sentiment)
         logger.debug(f"Lantern Signal: {lantern_signal:.6f}")
         return lantern_signal
@@ -157,7 +171,7 @@ class ZPECore:
         """
         Profit Loop Reinjection: Π(t) = Π₀ + Σ(ΔΠᵢ · αᵢ)
         """
-        reinjection_coefficient = min(1.0, max(0.0, market_heat))
+        reinjection_coefficient = unified_math.min(1.0, unified_math.max(0.0, market_heat))
         reinjected_profit = profit_delta * reinjection_coefficient
         logger.debug(f"Profit Reinjection: {reinjected_profit:.6f}")
         return reinjected_profit
@@ -205,8 +219,8 @@ class ZPECore:
 
 def main():
     """Test the ZPE Core."""
-    print("🧠 Testing Schwabot ZPE Core")
-    print("=" * 40)
+    safe_print("🧠 Testing Schwabot ZPE Core")
+    safe_print("=" * 40)
     
     engine = ZPECore()
     
@@ -222,15 +236,15 @@ def main():
     
     result = engine.spin_profit_wheel(market_data)
     
-    print(f"ZPE Work: {result['zpe_work']:.6f}")
-    print(f"Rotational Torque: {result['rotational_torque']:.6f}")
-    print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
-    print(f"Lantern Signal: {result['lantern_signal']:.6f}")
-    print(f"Spin Score: {result['spin_score']:.6f}")
-    print(f"Should Spin: {result['should_spin']}")
-    print(f"Recursion Depth: {result['recursion_depth']}")
+    safe_print(f"ZPE Work: {result['zpe_work']:.6f}")
+    safe_print(f"Rotational Torque: {result['rotational_torque']:.6f}")
+    safe_print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
+    safe_print(f"Lantern Signal: {result['lantern_signal']:.6f}")
+    safe_print(f"Spin Score: {result['spin_score']:.6f}")
+    safe_print(f"Should Spin: {result['should_spin']}")
+    safe_print(f"Recursion Depth: {result['recursion_depth']}")
     
-    print("\n🎉 ZPE Core test complete!")
+    safe_print("\n🎉 ZPE Core test complete!")
 
 
 if __name__ == "__main__":

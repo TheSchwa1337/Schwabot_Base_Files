@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Integration Test - Schwabot UROS v1.0
@@ -25,7 +27,7 @@ import asyncio
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -45,7 +47,7 @@ try:
     CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     CORE_COMPONENTS_AVAILABLE = False
-    print(f"Warning: Some core components not available: {e}")
+    safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
@@ -757,8 +759,8 @@ class IntegrationTest:
                 
                 execution_times.append(time.time() - test_start)
             
-            avg_execution_time = np.mean(execution_times)
-            max_execution_time = np.max(execution_times)
+            avg_execution_time = unified_math.unified_math.mean(execution_times)
+            max_execution_time = unified_math.unified_math.max(execution_times)
             
             # Test memory usage (simulated)
             memory_usage = 256  # MB (simulated)
@@ -845,14 +847,14 @@ class IntegrationTest:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
             
-            print(f"✅ Integration test results exported to {output_path}")
+            safe_print(f"✅ Integration test results exported to {output_path}")
             
         except Exception as e:
-            print(f"❌ Error exporting integration test results: {e}")
+            safe_print(f"❌ Error exporting integration test results: {e}")
 
 if __name__ == "__main__":
     # Run integration test
-    print("🚀 Starting Schwabot Integration Test...")
+    safe_print("🚀 Starting Schwabot Integration Test...")
     
     integration_test = IntegrationTest()
     
@@ -861,29 +863,29 @@ if __name__ == "__main__":
         result = integration_test.run_full_integration_test()
         
         if result:
-            print(f"\n📊 INTEGRATION TEST RESULTS")
-            print(f"Overall Status: {result.overall_status.upper()}")
-            print(f"Total Tests: {result.total_tests}")
-            print(f"Passed: {result.passed_tests}")
-            print(f"Failed: {result.failed_tests}")
-            print(f"Errors: {result.error_tests}")
-            print(f"Success Rate: {(result.passed_tests / result.total_tests * 100):.1f}%")
-            print(f"Total Execution Time: {result.total_execution_time:.2f} seconds")
+            safe_print(f"\n📊 INTEGRATION TEST RESULTS")
+            safe_print(f"Overall Status: {result.overall_status.upper()}")
+            safe_print(f"Total Tests: {result.total_tests}")
+            safe_print(f"Passed: {result.passed_tests}")
+            safe_print(f"Failed: {result.failed_tests}")
+            safe_print(f"Errors: {result.error_tests}")
+            safe_print(f"Success Rate: {(result.passed_tests / result.total_tests * 100):.1f}%")
+            safe_print(f"Total Execution Time: {result.total_execution_time:.2f} seconds")
             
             # Export results
             integration_test.export_test_results(result)
             
             # Exit with appropriate code
             exit_code = 0 if result.overall_status == "passed" else 1
-            print(f"\n🏁 Integration test completed with exit code: {exit_code}")
+            safe_print(f"\n🏁 Integration test completed with exit code: {exit_code}")
             
         else:
-            print("❌ Integration test failed to complete")
+            safe_print("❌ Integration test failed to complete")
             exit(1)
             
     except KeyboardInterrupt:
-        print("\n⏹️ Integration test interrupted by user")
+        safe_print("\n⏹️ Integration test interrupted by user")
         exit(1)
     except Exception as e:
-        print(f"❌ Integration test error: {e}")
+        safe_print(f"❌ Integration test error: {e}")
         exit(1) 

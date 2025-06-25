@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Backtest Runner
 ============================
@@ -15,7 +29,7 @@ This system:
 
 import json
 import yaml
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -124,7 +138,7 @@ class DemoBacktestRunner:
             self._update_performance_metrics()
             
         except Exception as e:
-            print(f"Warning: Could not load backtest data: {e}")
+            safe_print(f"Warning: Could not load backtest data: {e}")
     
     def _update_performance_metrics(self):
         """Update performance metrics from backtest results"""
@@ -143,8 +157,8 @@ class DemoBacktestRunner:
         
         # Find best and worst backtests
         if self.backtest_results:
-            best_backtest = max(self.backtest_results, key=lambda x: x.success_rate)
-            worst_backtest = min(self.backtest_results, key=lambda x: x.success_rate)
+            best_backtest = unified_math.max(self.backtest_results, key=lambda x: x.success_rate)
+            worst_backtest = unified_math.min(self.backtest_results, key=lambda x: x.success_rate)
             
             self.performance_metrics["best_backtest"] = best_backtest.backtest_id
             self.performance_metrics["worst_backtest"] = worst_backtest.backtest_id
@@ -191,10 +205,10 @@ class DemoBacktestRunner:
     
     def run_backtest(self, config: BacktestConfig) -> BacktestResult:
         """Run a comprehensive backtest based on configuration"""
-        print(f"🚀 Starting backtest: {config.backtest_id}")
-        print(f"Strategies: {config.strategy_types}")
-        print(f"Market Conditions: {config.market_conditions}")
-        print(f"Trades per strategy: {config.num_trades_per_strategy}")
+        safe_print(f"🚀 Starting backtest: {config.backtest_id}")
+        safe_print(f"Strategies: {config.strategy_types}")
+        safe_print(f"Market Conditions: {config.market_conditions}")
+        safe_print(f"Trades per strategy: {config.num_trades_per_strategy}")
         
         start_time = time.time()
         
@@ -217,7 +231,7 @@ class DemoBacktestRunner:
             strategy_performance[strategy_type] = {}
             
             for market_condition in config.market_conditions:
-                print(f"Testing {strategy_type} in {market_condition} market...")
+                safe_print(f"Testing {strategy_type} in {market_condition} market...")
                 
                 # Create strategy config
                 strategy_config = {
@@ -323,10 +337,10 @@ class DemoBacktestRunner:
         if config.save_detailed_results:
             self._save_backtest_results()
         
-        print(f"✅ Backtest completed!")
-        print(f"Success Rate: {success_rate:.2%}")
-        print(f"Total Profit: {total_profit:.2f}")
-        print(f"Execution Time: {result.execution_time:.2f}s")
+        safe_print(f"✅ Backtest completed!")
+        safe_print(f"Success Rate: {success_rate:.2%}")
+        safe_print(f"Total Profit: {total_profit:.2f}")
+        safe_print(f"Execution Time: {result.execution_time:.2f}s")
         
         return result
     
@@ -339,7 +353,7 @@ class DemoBacktestRunner:
         running_max = np.maximum.accumulate(cumulative)
         drawdown = cumulative - running_max
         
-        return abs(min(drawdown)) if len(drawdown) > 0 else 0.0
+        return unified_math.abs(unified_math.min(drawdown)) if len(drawdown) > 0 else 0.0
     
     def _calculate_sharpe_ratio(self, profits: List[float]) -> float:
         """Calculate Sharpe ratio from profit series"""
@@ -347,8 +361,8 @@ class DemoBacktestRunner:
             return 0.0
         
         returns = np.array(profits)
-        mean_return = np.mean(returns)
-        std_return = np.std(returns)
+        mean_return = unified_math.unified_math.mean(returns)
+        std_return = unified_math.unified_math.std(returns)
         
         if std_return == 0:
             return 0.0
@@ -360,7 +374,7 @@ class DemoBacktestRunner:
     
     def run_comprehensive_backtest(self, num_trades_per_strategy: int = 50) -> Dict[str, Any]:
         """Run comprehensive backtest across all strategies and market conditions"""
-        print("🚀 Starting comprehensive backtest...")
+        safe_print("🚀 Starting comprehensive backtest...")
         
         # Create comprehensive config
         config = self.create_backtest_config(
@@ -402,8 +416,8 @@ class DemoBacktestRunner:
         # Strategy analysis
         strategy_performance = {}
         for strategy_type, market_results in result.strategy_performance.items():
-            avg_success_rate = np.mean([r["success_rate"] for r in market_results.values()])
-            avg_profit = np.mean([r["total_profit"] for r in market_results.values()])
+            avg_success_rate = unified_math.mean([r["success_rate"] for r in market_results.values()])
+            avg_profit = unified_math.mean([r["total_profit"] for r in market_results.values()])
             strategy_performance[strategy_type] = {
                 "avg_success_rate": avg_success_rate,
                 "avg_profit": avg_profit,
@@ -430,15 +444,15 @@ class DemoBacktestRunner:
         recommendations = []
         
         # Best strategy recommendation
-        best_strategy = max(strategy_performance.items(), key=lambda x: x[1]["avg_success_rate"])
+        best_strategy = unified_math.max(strategy_performance.items(), key=lambda x: x[1]["avg_success_rate"])
         recommendations.append(f"Best performing strategy: {best_strategy[0]} (Success rate: {best_strategy[1]['avg_success_rate']:.2%})")
         
         # Best matrix recommendation
-        best_matrix = max(result.matrix_performance.items(), key=lambda x: x[1]["success_rate"])
+        best_matrix = unified_math.max(result.matrix_performance.items(), key=lambda x: x[1]["success_rate"])
         recommendations.append(f"Best performing matrix: {best_matrix[0]} (Success rate: {best_matrix[1]['success_rate']:.2%})")
         
         # Best market condition recommendation
-        best_market = max(result.market_condition_performance.items(), key=lambda x: x[1]["success_rate"])
+        best_market = unified_math.max(result.market_condition_performance.items(), key=lambda x: x[1]["success_rate"])
         recommendations.append(f"Best market condition: {best_market[0]} (Success rate: {best_market[1]['success_rate']:.2%})")
         
         # Risk management recommendations
@@ -518,7 +532,7 @@ class DemoBacktestRunner:
         with open(filepath, 'w') as f:
             f.write(report)
         
-        print(f"📊 Backtest report saved to {filepath}")
+        safe_print(f"📊 Backtest report saved to {filepath}")
         
         return filepath
     
@@ -536,10 +550,10 @@ class DemoBacktestRunner:
             with open(results_file, 'w') as f:
                 json.dump(data, f, indent=2, default=str)
             
-            print("💾 Backtest results saved successfully")
+            safe_print("💾 Backtest results saved successfully")
             
         except Exception as e:
-            print(f"Error saving backtest results: {e}")
+            safe_print(f"Error saving backtest results: {e}")
     
     def get_backtest_summary(self) -> Dict[str, Any]:
         """Get comprehensive backtest summary"""
@@ -574,7 +588,7 @@ class DemoBacktestRunner:
         # Calculate average performance for each strategy
         avg_performance = {}
         for strategy_type, rates in strategy_performance.items():
-            avg_performance[strategy_type] = np.mean(rates)
+            avg_performance[strategy_type] = unified_math.unified_math.mean(rates)
         
         # Return top 3 strategies
         sorted_strategies = sorted(avg_performance.items(), key=lambda x: x[1], reverse=True)
@@ -594,7 +608,7 @@ class DemoBacktestRunner:
         # Calculate average performance for each matrix
         avg_performance = {}
         for matrix_id, rates in matrix_performance.items():
-            avg_performance[matrix_id] = np.mean(rates)
+            avg_performance[matrix_id] = unified_math.unified_math.mean(rates)
         
         # Return top 3 matrices
         sorted_matrices = sorted(avg_performance.items(), key=lambda x: x[1], reverse=True)
@@ -614,7 +628,7 @@ if __name__ == "__main__":
     # Test the demo backtest runner
     runner = DemoBacktestRunner()
     
-    print("=== Schwabot Demo Backtest Runner Test ===")
+    safe_print("=== Schwabot Demo Backtest Runner Test ===")
     
     # Create backtest config
     config = runner.create_backtest_config(
@@ -626,18 +640,18 @@ if __name__ == "__main__":
     # Run backtest
     result = runner.run_backtest(config)
     
-    print(f"Backtest ID: {result.backtest_id}")
-    print(f"Success Rate: {result.success_rate:.2%}")
-    print(f"Total Profit: {result.total_profit:.2f}")
-    print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
+    safe_print(f"Backtest ID: {result.backtest_id}")
+    safe_print(f"Success Rate: {result.success_rate:.2%}")
+    safe_print(f"Total Profit: {result.total_profit:.2f}")
+    safe_print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
     
     # Generate report
     report_path = runner.generate_backtest_report(result)
-    print(f"Report generated: {report_path}")
+    safe_print(f"Report generated: {report_path}")
     
     # Get summary
     summary = runner.get_backtest_summary()
-    print(f"Best Strategies: {summary['best_performing_strategies']}")
-    print(f"Best Matrices: {summary['best_performing_matrices']}")
+    safe_print(f"Best Strategies: {summary['best_performing_strategies']}")
+    safe_print(f"Best Matrices: {summary['best_performing_matrices']}")
     
-    print("Demo backtest runner test completed!") 
+    safe_print("Demo backtest runner test completed!") 

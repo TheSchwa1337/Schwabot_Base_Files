@@ -1,7 +1,8 @@
 """News→sentiment vectoriser for ghost routing."""
 
 from __future__ import annotations
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 try:
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -41,14 +42,14 @@ def sentiment_lambda(corpus: list[str]) -> float:
     try:
         # Vectorize corpus and get mean vector
         tfidf_matrix = _VEC.fit_transform(corpus)
-        vec = tfidf_matrix.mean(axis=0).A1
+        vec = tfidf_matrix.unified_math.mean(axis=0).A1
 
         # Ensure weight matrix matches feature size
         if len(vec) != len(_W):
             _W = np.random.randn(len(vec)) * 0.03
 
         # Compute sentiment via tanh activation
-        return float(np.tanh(np.dot(_W, vec)))
+        return float(np.tanh(unified_math.unified_math.dot_product(_W, vec)))
 
     except Exception:
         # Fallback for edge cases

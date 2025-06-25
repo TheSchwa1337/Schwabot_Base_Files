@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Integration System
 ===============================
@@ -15,7 +29,7 @@ This system:
 
 import json
 import yaml
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -109,7 +123,7 @@ class DemoIntegrationSystem:
                 with open(demo_config_path, 'r') as f:
                     return yaml.safe_load(f)
         except Exception as e:
-            print(f"Warning: Could not load demo config: {e}")
+            safe_print(f"Warning: Could not load demo config: {e}")
         
         # Default demo configuration
         return {
@@ -159,7 +173,7 @@ class DemoIntegrationSystem:
             self._update_demo_performance()
             
         except Exception as e:
-            print(f"Warning: Could not load demo data: {e}")
+            safe_print(f"Warning: Could not load demo data: {e}")
     
     def _update_demo_performance(self):
         """Update demo performance metrics"""
@@ -170,7 +184,7 @@ class DemoIntegrationSystem:
         self.demo_performance["successful_trades"] = len([t for t in self.demo_trades if t.success])
         self.demo_performance["failed_trades"] = len([t for t in self.demo_trades if not t.success])
         self.demo_performance["total_profit"] = sum(t.profit_loss for t in self.demo_trades)
-        self.demo_performance["average_confidence"] = np.mean([t.confidence for t in self.demo_trades])
+        self.demo_performance["average_confidence"] = unified_math.mean([t.confidence for t in self.demo_trades])
         
         # Update matrix performance
         matrix_perf = {}
@@ -192,15 +206,15 @@ class DemoIntegrationSystem:
         
         if mode == "backtest":
             self.is_backtest_mode = True
-            print("🔄 Starting Demo Backtest Mode")
+            safe_print("🔄 Starting Demo Backtest Mode")
         elif mode == "simulation":
             self.is_simulation_mode = True
-            print("🎮 Starting Demo Simulation Mode")
+            safe_print("🎮 Starting Demo Simulation Mode")
         elif mode == "reinforcement":
             self.is_reinforcement_mode = True
-            print("🧠 Starting Demo Reinforcement Learning Mode")
+            safe_print("🧠 Starting Demo Reinforcement Learning Mode")
         else:
-            print("🎯 Starting Demo Mode")
+            safe_print("🎯 Starting Demo Mode")
         
         # Update settings controller for demo mode
         self.settings_controller.fault_settings.experimental_mode = True
@@ -220,7 +234,7 @@ class DemoIntegrationSystem:
         # Reset settings controller
         self.settings_controller.fault_settings.experimental_mode = False
         
-        print("✅ Demo mode stopped. Results saved.")
+        safe_print("✅ Demo mode stopped. Results saved.")
         
         return True
     
@@ -313,7 +327,7 @@ class DemoIntegrationSystem:
         
         # Add some randomness for realistic simulation
         success_prob += np.random.normal(0, 0.1)
-        success_prob = max(0.0, min(1.0, success_prob))
+        success_prob = unified_math.max(0.0, unified_math.min(1.0, success_prob))
         
         # Determine success
         success = np.random.random() < success_prob
@@ -382,7 +396,7 @@ class DemoIntegrationSystem:
     def run_backtest(self, strategy_config: Dict[str, Any], 
                     num_trades: int = 100) -> Dict[str, Any]:
         """Run a comprehensive backtest"""
-        print(f"🔄 Starting backtest with {num_trades} trades...")
+        safe_print(f"🔄 Starting backtest with {num_trades} trades...")
         
         # Start backtest mode
         self.start_demo_mode("backtest")
@@ -399,7 +413,7 @@ class DemoIntegrationSystem:
             
             # Progress update
             if (i + 1) % 10 == 0:
-                print(f"Progress: {i + 1}/{num_trades} trades completed")
+                safe_print(f"Progress: {i + 1}/{num_trades} trades completed")
         
         # Stop demo mode
         self.stop_demo_mode()
@@ -407,7 +421,7 @@ class DemoIntegrationSystem:
         # Analyze results
         analysis = self._analyze_backtest_results(backtest_results)
         
-        print(f"✅ Backtest completed. Success rate: {analysis['success_rate']:.2%}")
+        safe_print(f"✅ Backtest completed. Success rate: {analysis['success_rate']:.2%}")
         
         return analysis
     
@@ -455,7 +469,7 @@ class DemoIntegrationSystem:
         
         total_profit = sum(r.profit_loss for r in results)
         avg_profit = total_profit / total_trades
-        avg_confidence = np.mean([r.confidence_score for r in results])
+        avg_confidence = unified_math.mean([r.confidence_score for r in results])
         
         # Matrix performance analysis
         matrix_performance = {}
@@ -523,10 +537,10 @@ class DemoIntegrationSystem:
             with open(summary_file, 'w') as f:
                 json.dump(self.get_demo_summary(), f, indent=2, default=str)
             
-            print("💾 Demo data saved successfully")
+            safe_print("💾 Demo data saved successfully")
             
         except Exception as e:
-            print(f"Error saving demo data: {e}")
+            safe_print(f"Error saving demo data: {e}")
 
 
 # Global demo integration system instance
@@ -542,7 +556,7 @@ if __name__ == "__main__":
     # Test the demo integration system
     demo_system = DemoIntegrationSystem()
     
-    print("=== Schwabot Demo Integration System Test ===")
+    safe_print("=== Schwabot Demo Integration System Test ===")
     
     # Test demo mode
     demo_system.start_demo_mode("backtest")
@@ -565,11 +579,11 @@ if __name__ == "__main__":
     
     result = demo_system.execute_demo_trade(test_trade_data)
     
-    print(f"Demo Trade ID: {result.trade_id}")
-    print(f"Success: {result.success}")
-    print(f"Profit/Loss: {result.profit_loss:.2f}")
-    print(f"Confidence: {result.confidence_score:.3f}")
-    print(f"Execution Time: {result.execution_time:.3f}s")
+    safe_print(f"Demo Trade ID: {result.trade_id}")
+    safe_print(f"Success: {result.success}")
+    safe_print(f"Profit/Loss: {result.profit_loss:.2f}")
+    safe_print(f"Confidence: {result.confidence_score:.3f}")
+    safe_print(f"Execution Time: {result.execution_time:.3f}s")
     
     # Test backtest
     strategy_config = {
@@ -581,18 +595,18 @@ if __name__ == "__main__":
     
     backtest_analysis = demo_system.run_backtest(strategy_config, num_trades=10)
     
-    print(f"\nBacktest Results:")
-    print(f"Success Rate: {backtest_analysis['success_rate']:.2%}")
-    print(f"Total Profit: {backtest_analysis['total_profit']:.2f}")
-    print(f"Average Profit: {backtest_analysis['average_profit']:.2f}")
+    safe_print(f"\nBacktest Results:")
+    safe_print(f"Success Rate: {backtest_analysis['success_rate']:.2%}")
+    safe_print(f"Total Profit: {backtest_analysis['total_profit']:.2f}")
+    safe_print(f"Average Profit: {backtest_analysis['average_profit']:.2f}")
     
     # Get demo summary
     summary = demo_system.get_demo_summary()
-    print(f"\nDemo Summary:")
-    print(f"Total Demo Trades: {summary['total_demo_trades']}")
-    print(f"Demo Performance: {summary['demo_performance']}")
+    safe_print(f"\nDemo Summary:")
+    safe_print(f"Total Demo Trades: {summary['total_demo_trades']}")
+    safe_print(f"Demo Performance: {summary['demo_performance']}")
     
     # Stop demo mode
     demo_system.stop_demo_mode()
     
-    print("Demo integration system test completed!") 
+    safe_print("Demo integration system test completed!") 

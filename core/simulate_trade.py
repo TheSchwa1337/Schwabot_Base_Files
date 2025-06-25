@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Trade Simulation Engine - Schwabot UROS v1.0
@@ -21,7 +35,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 
 logger = logging.getLogger(__name__)
@@ -77,7 +91,7 @@ class TradeSimulator:
     Mathematical Foundation:
     - Trade Impact: impact = quantity * price * direction
     - Portfolio Value: total = cash + Σ(positions * current_prices)
-    - Risk Metrics: volatility = std(returns), sharpe = mean(returns) / std(returns)
+    - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Strategy Scoring: score = tensor_score * bit_phase * market_conditions
     """
     
@@ -451,8 +465,8 @@ class TradeSimulator:
                 
                 if returns:
                     returns_array = np.array(returns)
-                    volatility = np.std(returns_array)
-                    sharpe_ratio = np.mean(returns_array) / (volatility + 1e-9)
+                    volatility = unified_math.unified_math.std(returns_array)
+                    sharpe_ratio = unified_math.unified_math.mean(returns_array) / (volatility + 1e-9)
                     
                     self.portfolio_state.risk_metrics.update({
                         'volatility': volatility,
@@ -546,15 +560,15 @@ if __name__ == "__main__":
     }
     
     trade_result = simulator.simulate_trade(strategy_bucket, "DEMO")
-    print(f"Trade Result: {trade_result.trade_id}")
-    print(f"Status: {trade_result.status.value}")
-    print(f"Portfolio Impact: {trade_result.portfolio_impact}")
+    safe_print(f"Trade Result: {trade_result.trade_id}")
+    safe_print(f"Status: {trade_result.status.value}")
+    safe_print(f"Portfolio Impact: {trade_result.portfolio_impact}")
     
     # Get portfolio state
     portfolio = simulator.get_portfolio_state()
-    print(f"Portfolio Value: {portfolio.total_value:.2f}")
-    print(f"Cash: {portfolio.cash:.2f}")
-    print(f"Unrealized P&L: {portfolio.unrealized_pnl:.2f}")
+    safe_print(f"Portfolio Value: {portfolio.total_value:.2f}")
+    safe_print(f"Cash: {portfolio.cash:.2f}")
+    safe_print(f"Unrealized P&L: {portfolio.unrealized_pnl:.2f}")
     
     # Export snapshot
     simulator.export_portfolio_snapshot() 

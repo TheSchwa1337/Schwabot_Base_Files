@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Bus Events - Core Event Bus System for Schwabot
@@ -92,9 +93,9 @@ if __name__ == "__main__":
     bus = EventBus()
 
     def print_trade(event: TradeEvent):
-        print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
+        safe_print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
 
     bus.subscribe("trade", print_trade)
     trade_event = TradeEvent(event_type="trade", trade_id="T123", symbol="BTCUSD", price=45000.0, volume=1.5, side="buy")
     bus.dispatch(trade_event)
-    print("Event history:", bus.get_event_history("trade"))
+    safe_print("Event history:", bus.get_event_history("trade"))

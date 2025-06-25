@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Portfolio Router - Randomized Matrix Allocation and Dynamic Portfolio Substitutions.
 
@@ -16,8 +17,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import random
 
 from core.error_handler import safe_execute
@@ -173,7 +174,7 @@ class PortfolioRouter:
                     
                     # Calculate priority score based on multiple factors
                     volatility_score = 1.0 / (1.0 + profile.volatility)
-                    correlation_score = 1.0 - abs(profile.correlation)
+                    correlation_score = 1.0 - unified_math.abs(profile.correlation)
                     weight_score = profile.weight
                     
                     # Timeband-specific adjustments
@@ -228,7 +229,7 @@ class PortfolioRouter:
             drift_vector = self._calculate_drift_vector(current_weights, optimal_weights)
             
             # Determine if rebalancing is needed
-            total_drift = math.sqrt(sum(d**2 for d in drift_vector.values()))
+            total_drift = unified_math.unified_math.sqrt(sum(d**2 for d in drift_vector.values()))
             rebalance_needed = total_drift > self.rebalance_threshold
             
             # Generate shift recommendations
@@ -320,13 +321,13 @@ class PortfolioRouter:
             
             # Calculate activity level based on shift frequency and magnitude
             if recent_shifts:
-                frequency_score = min(len(recent_shifts) / 10.0, 1.0)
-                magnitude_score = np.mean([abs(shift.shift_amount) for shift in recent_shifts])
+                frequency_score = unified_math.min(len(recent_shifts) / 10.0, 1.0)
+                magnitude_score = unified_math.mean([unified_math.abs(shift.shift_amount) for shift in recent_shifts])
                 activity_level = (frequency_score + magnitude_score) / 2.0
             else:
                 activity_level = 0.0
             
-            return min(1.0, activity_level)
+            return unified_math.min(1.0, activity_level)
             
         except Exception as e:
             logger.error(f"Error calculating activity level for {asset}: {e}")
@@ -395,7 +396,7 @@ class PortfolioRouter:
                     volatility = self.asset_matrix[asset].volatility
                     # Reduce weight for high volatility assets if risk tolerance is low
                     risk_factor = 1.0 - (volatility * (1.0 - risk_tolerance))
-                    risk_adjusted_weights[asset] = weight * max(0.1, risk_factor)
+                    risk_adjusted_weights[asset] = weight * unified_math.max(0.1, risk_factor)
             
             # Normalize final weights
             total_weight = sum(risk_adjusted_weights.values())
@@ -435,15 +436,15 @@ class PortfolioRouter:
             shifts = []
             
             for asset, drift in drift_vector.items():
-                if abs(drift) > self.rebalance_threshold:
+                if unified_math.abs(drift) > self.rebalance_threshold:
                     current_weight = self.asset_matrix.get(asset, AssetProfile(asset, 0.0, 0.0, 0.2, 0.5)).weight
                     target_weight = optimal_weights.get(asset, current_weight)
                     
                     # Calculate confidence based on drift magnitude
-                    confidence = min(abs(drift) * 2.0, 1.0)
+                    confidence = unified_math.min(unified_math.abs(drift) * 2.0, 1.0)
                     
                     # Determine priority based on drift magnitude
-                    priority = int(10 * (1.0 - abs(drift)))  # Higher drift = lower priority number
+                    priority = int(10 * (1.0 - unified_math.abs(drift)))  # Higher drift = lower priority number
                     
                     shift = PortfolioShift(
                         asset=asset,
@@ -452,7 +453,7 @@ class PortfolioRouter:
                         shift_amount=drift,
                         confidence=confidence,
                         priority=priority,
-                        metadata={'drift_magnitude': abs(drift)}
+                        metadata={'drift_magnitude': unified_math.abs(drift)}
                     )
                     
                     shifts.append(shift)
@@ -522,7 +523,7 @@ class PortfolioRouter:
             # Check trigger condition: ∆USDC = p(t+1) - σ_{∆}
             usdc_change = future_usdc_weight - volatility_threshold
             
-            triggered = abs(usdc_change) > self.rebalance_threshold
+            triggered = unified_math.abs(usdc_change) > self.rebalance_threshold
             
             return {
                 'triggered': triggered,
@@ -569,7 +570,7 @@ class PortfolioRouter:
                 portfolio_volatility = weighted_volatility / total_weight
             
             # Calculate average correlation
-            avg_correlation = np.mean([
+            avg_correlation = unified_math.mean([
                 profile.correlation for profile in self.asset_matrix.values()
             ])
             

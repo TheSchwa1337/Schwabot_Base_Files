@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Simplified BTC Integration - Bitcoin Trading Integration Layer.
 
@@ -424,15 +425,15 @@ def main() -> None:
     try:
         # Get ticker data
         ticker = integration.get_ticker("BTC-USD")
-        print(f"BTC Price: {ticker.data.get('price', 'N/A')}")
+        safe_print(f"BTC Price: {ticker.data.get('price', 'N/A')}")
 
         # Get balances
         balances = integration.get_balances()
         for balance in balances:
-            print(f"{balance.currency}: {balance.available}")
+            safe_print(f"{balance.currency}: {balance.available}")
 
     except Exception as e:
-        print(f"Error: {e}")
+        safe_print(f"Error: {e}")
 
 
 if __name__ == "__main__":

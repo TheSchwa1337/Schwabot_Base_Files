@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Mathematical Integration Validator - Schwabot UROS v1.0
@@ -14,7 +28,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 
 # Import core components
@@ -26,7 +40,7 @@ try:
     CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     CORE_COMPONENTS_AVAILABLE = False
-    print(f"Warning: Some core components not available: {e}")
+    safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +132,7 @@ class MathematicalIntegrationValidator:
             # Test with t=0
             result_0 = self.dlt_engine.dlt_waveform(0.0, 0.006)
             expected_0 = 0.0
-            success_0 = abs(result_0 - expected_0) < 1e-10
+            success_0 = unified_math.abs(result_0 - expected_0) < 1e-10
             
             results.append(MathematicalTestResult(
                 function_name="dlt_waveform",
@@ -225,7 +239,7 @@ class MathematicalIntegrationValidator:
             phase = 8
             tensor_score = self.dlt_engine.tensor_score(entry_price, current_price, phase)
             expected = 0.88
-            success = abs(tensor_score - expected) < 0.01
+            success = unified_math.abs(tensor_score - expected) < 0.01
             
             results.append(MathematicalTestResult(
                 function_name="tensor_score",
@@ -390,7 +404,7 @@ class MathematicalIntegrationValidator:
             if self.dlt_engine and self.matrix_mapper:
                 # Create waveform data
                 t = np.linspace(0, 10, 1000)
-                waveform_data = np.sin(2 * np.pi * 0.1 * t) + 0.3 * np.sin(2 * np.pi * 0.5 * t)
+                waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t)
                 
                 # Process waveform
                 waveform_result = self.dlt_engine.process_waveform_data(
@@ -514,26 +528,26 @@ class MathematicalIntegrationValidator:
 
     def run_comprehensive_validation(self) -> Dict[str, Any]:
         """Run comprehensive mathematical validation across all modules."""
-        print("🧪 Starting Comprehensive Mathematical Validation...")
+        safe_print("🧪 Starting Comprehensive Mathematical Validation...")
         
         start_time = time.time()
         all_results = []
         
         # Test individual module functions
-        print("\n📊 Testing DLT Waveform Engine Functions...")
+        safe_print("\n📊 Testing DLT Waveform Engine Functions...")
         dlt_results = self.test_dlt_waveform_functions()
         all_results.extend(dlt_results)
         
-        print("\n📊 Testing Matrix Mapper Functions...")
+        safe_print("\n📊 Testing Matrix Mapper Functions...")
         matrix_results = self.test_matrix_mapper_functions()
         all_results.extend(matrix_results)
         
-        print("\n📊 Testing Profit Cycle Allocator Functions...")
+        safe_print("\n📊 Testing Profit Cycle Allocator Functions...")
         profit_results = self.test_profit_cycle_allocator_functions()
         all_results.extend(profit_results)
         
         # Test cross-module integration
-        print("\n🔄 Testing Cross-Module Integration...")
+        safe_print("\n🔄 Testing Cross-Module Integration...")
         integration_result = self.test_cross_module_integration()
         self.integration_results.append(integration_result)
         
@@ -544,7 +558,7 @@ class MathematicalIntegrationValidator:
         success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
         
         # Calculate average execution time
-        avg_execution_time = np.mean([r.execution_time_ms for r in all_results]) if all_results else 0.0
+        avg_execution_time = unified_math.mean([r.execution_time_ms for r in all_results]) if all_results else 0.0
         
         # Generate summary
         summary = {
@@ -560,13 +574,13 @@ class MathematicalIntegrationValidator:
         }
         
         # Print results
-        print(f"\n📈 VALIDATION SUMMARY")
-        print(f"Total Tests: {total_tests}")
-        print(f"Successful: {successful_tests}")
-        print(f"Failed: {failed_tests}")
-        print(f"Success Rate: {success_rate:.2%}")
-        print(f"Average Execution Time: {avg_execution_time:.2f}ms")
-        print(f"Overall Status: {summary['overall_status']}")
+        safe_print(f"\n📈 VALIDATION SUMMARY")
+        safe_print(f"Total Tests: {total_tests}")
+        safe_print(f"Successful: {successful_tests}")
+        safe_print(f"Failed: {failed_tests}")
+        safe_print(f"Success Rate: {success_rate:.2%}")
+        safe_print(f"Average Execution Time: {avg_execution_time:.2f}ms")
+        safe_print(f"Overall Status: {summary['overall_status']}")
         
         # Store results
         self.test_results = all_results
@@ -608,10 +622,10 @@ class MathematicalIntegrationValidator:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
             
-            print(f"✅ Results exported to {output_path}")
+            safe_print(f"✅ Results exported to {output_path}")
             
         except Exception as e:
-            print(f"❌ Error exporting results: {e}")
+            safe_print(f"❌ Error exporting results: {e}")
 
 def main():
     """Main function to run mathematical validation."""

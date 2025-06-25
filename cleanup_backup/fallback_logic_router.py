@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fallback Logic Router - Graceful Degradation for Primary Logic Failures.
 
@@ -17,8 +18,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 from core.error_handler import safe_execute
 from core.import_resolver import safe_import
@@ -422,8 +423,8 @@ class FallbackLogicRouter:
             
             # Basic calculation: L(Δp, 𝓔) = e^(-𝓔) × (Δp / P_max)
             max_price_ref = 70000.0
-            normalized_delta = max(0.0, delta_price / max_price_ref)
-            entropy_decay = np.exp(-entropy)
+            normalized_delta = unified_math.max(0.0, delta_price / max_price_ref)
+            entropy_decay = unified_math.exp(-entropy)
             lag_penalty = entropy_decay * normalized_delta
             
             return {
@@ -710,7 +711,7 @@ class FallbackLogicRouter:
                 if indicator in result:
                     quality_score *= 0.8  # Reduce quality for fallback indicators
             
-            return max(0.1, quality_score)
+            return unified_math.max(0.1, quality_score)
             
         except Exception as e:
             logger.error(f"Error assessing data quality: {e}")
@@ -737,11 +738,11 @@ class FallbackLogicRouter:
             # Update health based on success/failure
             if success:
                 # Gradual recovery
-                self.component_health[module] = min(1.0, 
+                self.component_health[module] = unified_math.min(1.0, 
                     self.component_health[module] + 0.1)
             else:
                 # Gradual degradation
-                self.component_health[module] = max(0.0, 
+                self.component_health[module] = unified_math.max(0.0, 
                     self.component_health[module] - self.health_decay_rate)
                 
         except Exception as e:
@@ -765,11 +766,11 @@ class FallbackLogicRouter:
             
             # Average recovery time
             recovery_times = [r.recovery_time for r in self.fallback_history]
-            avg_recovery_time = np.mean(recovery_times) if recovery_times else 0.0
+            avg_recovery_time = unified_math.unified_math.mean(recovery_times) if recovery_times else 0.0
             
             # Average data quality
             data_qualities = [r.data_quality for r in self.fallback_history]
-            avg_data_quality = np.mean(data_qualities) if data_qualities else 0.0
+            avg_data_quality = unified_math.unified_math.mean(data_qualities) if data_qualities else 0.0
             
             return {
                 'total_fallbacks': total_fallbacks,

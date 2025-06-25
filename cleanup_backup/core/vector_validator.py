@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Vector Validator
 =========================
@@ -18,7 +20,7 @@ It then adjusts:
 """
 
 import json
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -189,7 +191,7 @@ class VectorValidator:
         confidence += volume_adjustment
         
         # Ensure confidence is within bounds
-        confidence = max(0.0, min(1.0, confidence))
+        confidence = unified_math.max(0.0, unified_math.min(1.0, confidence))
         
         return confidence
     
@@ -240,7 +242,7 @@ class VectorValidator:
         adjusted_confidence *= vector.reinforcement_weight
         
         # Ensure confidence is within bounds
-        adjusted_confidence = max(0.0, min(1.0, adjusted_confidence))
+        adjusted_confidence = unified_math.max(0.0, unified_math.min(1.0, adjusted_confidence))
         
         return adjusted_confidence
     
@@ -390,7 +392,7 @@ class VectorValidator:
             'total_vectors': len(self.vector_history),
             'successful_vectors': len(self.successful_vectors),
             'failed_vectors': len(self.failed_vectors),
-            'overall_success_rate': len(self.successful_vectors) / max(len(self.vector_history), 1),
+            'overall_success_rate': len(self.successful_vectors) / unified_math.max(len(self.vector_history), 1),
             'matrix_weights': self.settings_controller.matrix_path_weights,
             'known_bad_vectors': len(self.settings_controller.known_bad_vectors)
         }
@@ -444,9 +446,9 @@ class VectorValidator:
             self.failed_vectors = [v for v in self.vector_history if not v.success]
             
         except FileNotFoundError:
-            print(f"Learning data file {filepath} not found. Starting with empty data.")
+            safe_print(f"Learning data file {filepath} not found. Starting with empty data.")
         except Exception as e:
-            print(f"Error loading learning data: {e}")
+            safe_print(f"Error loading learning data: {e}")
 
 
 # Global vector validator instance
@@ -462,7 +464,7 @@ if __name__ == "__main__":
     # Test the vector validator
     validator = VectorValidator()
     
-    print("=== Schwabot Vector Validator Test ===")
+    safe_print("=== Schwabot Vector Validator Test ===")
     
     # Test vector data
     test_vector_data = {
@@ -484,18 +486,18 @@ if __name__ == "__main__":
     # Validate vector
     result = validator.validate_vector(test_vector_data)
     
-    print(f"Vector ID: {test_vector_data['vector_id']}")
-    print(f"Valid: {result.is_valid}")
-    print(f"Confidence: {result.confidence_score:.3f}")
-    print(f"Adjusted Weight: {result.adjusted_weight:.3f}")
-    print(f"Recommended Action: {result.recommended_action}")
-    print(f"Reinforcement Notes: {result.reinforcement_notes}")
+    safe_print(f"Vector ID: {test_vector_data['vector_id']}")
+    safe_print(f"Valid: {result.is_valid}")
+    safe_print(f"Confidence: {result.confidence_score:.3f}")
+    safe_print(f"Adjusted Weight: {result.adjusted_weight:.3f}")
+    safe_print(f"Recommended Action: {result.recommended_action}")
+    safe_print(f"Reinforcement Notes: {result.reinforcement_notes}")
     
     # Get performance summary
     summary = validator.get_performance_summary()
-    print(f"\nPerformance Summary:")
-    print(f"Total Vectors: {summary['total_vectors']}")
-    print(f"Success Rate: {summary['overall_success_rate']:.2%}")
-    print(f"Matrix Weights: {summary['matrix_weights']}")
+    safe_print(f"\nPerformance Summary:")
+    safe_print(f"Total Vectors: {summary['total_vectors']}")
+    safe_print(f"Success Rate: {summary['overall_success_rate']:.2%}")
+    safe_print(f"Matrix Weights: {summary['matrix_weights']}")
     
-    print("Vector validator test completed!") 
+    safe_print("Vector validator test completed!") 

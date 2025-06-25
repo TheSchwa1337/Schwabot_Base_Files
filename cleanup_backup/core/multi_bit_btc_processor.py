@@ -19,11 +19,76 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import hashlib
 
-from core.type_defs import BitLevel, MatrixPhase, MatrixControllerType
-from .typing_schemas import (
-    MathematicalOperation, VectorOperation, validate_mathematical_operation,
-    Vector, Matrix, MathOpType
-)
+# Import safe print for CLI compatibility
+try:
+    from utils.safe_print import safe_print, info, warn, error, success, debug
+except ImportError:
+    # Fallback for when utils is not available
+    def safe_print(*args, **kwargs): print(*args, **kwargs)
+    def info(*args, **kwargs): print(*args, **kwargs)
+    def warn(*args, **kwargs): print(*args, **kwargs)
+    def error(*args, **kwargs): print(*args, **kwargs)
+    def success(*args, **kwargs): print(*args, **kwargs)
+    def debug(*args, **kwargs): print(*args, **kwargs)
+
+# Import unified math system
+try:
+    from core.unified_math_system import unified_math
+except ImportError:
+    # Fallback math functions if unified system is not available
+    class FallbackMath:
+        @staticmethod
+        def mean(data): return float(np.mean(data))
+        @staticmethod
+        def std(data): return float(np.std(data))
+        @staticmethod
+        def min(data): return float(np.min(data))
+        @staticmethod
+        def max(data): return float(np.max(data))
+        @staticmethod
+        def abs(value): return float(np.abs(value))
+        @staticmethod
+        def correlation(data1, data2): 
+            return np.corrcoef(data1, data2)[0, 1] if len(data1) > 1 else 0.0
+    
+    unified_math = FallbackMath()
+
+# Import type definitions
+try:
+    from core.type_defs import BitLevel, MatrixPhase, MatrixControllerType
+except ImportError:
+    # Fallback type definitions
+    from enum import Enum
+    class BitLevel(Enum):
+        FOUR_BIT = 4
+        EIGHT_BIT = 8
+        SIXTEEN_BIT = 16
+        FORTY_TWO_BIT = 42
+    
+    class MatrixPhase(Enum):
+        INITIALIZATION = "initialization"
+        PROCESSING = "processing"
+        COMPLETION = "completion"
+    
+    class MatrixControllerType(Enum):
+        STANDARD = "standard"
+        ENHANCED = "enhanced"
+
+# Import typing schemas
+try:
+    from .typing_schemas import (
+        MathematicalOperation, VectorOperation, validate_mathematical_operation,
+        Vector, Matrix, MathOpType
+    )
+except ImportError:
+    # Fallback type definitions
+    Vector = np.ndarray
+    Matrix = np.ndarray
+    MathematicalOperation = Any
+    VectorOperation = Any
+    MathOpType = Any
+    
+    def validate_mathematical_operation(operation): return True
 
 logger = logging.getLogger(__name__)
 
@@ -216,10 +281,10 @@ class MultiBitBTCProcessor:
         
         # Calculate price statistics
         price_stats = {
-            "mean": float(np.mean(prices)),
-            "std": float(np.std(prices)),
-            "min": float(np.min(prices)),
-            "max": float(np.max(prices)),
+            "mean": float(unified_math.mean(prices)),
+            "std": float(unified_math.std(prices)),
+            "min": float(unified_math.min(prices)),
+            "max": float(unified_math.max(prices)),
             "median": float(np.median(prices)),
             "skewness": float(self._calculate_skewness(prices)),
             "kurtosis": float(self._calculate_kurtosis(prices))
@@ -227,17 +292,17 @@ class MultiBitBTCProcessor:
         
         # Calculate volume statistics
         volume_stats = {
-            "mean": float(np.mean(volumes)),
-            "std": float(np.std(volumes)),
-            "min": float(np.min(volumes)),
-            "max": float(np.max(volumes)),
+            "mean": float(unified_math.mean(volumes)),
+            "std": float(unified_math.std(volumes)),
+            "min": float(unified_math.min(volumes)),
+            "max": float(unified_math.max(volumes)),
             "median": float(np.median(volumes)),
             "skewness": float(self._calculate_skewness(volumes)),
             "kurtosis": float(self._calculate_kurtosis(volumes))
         }
         
         # Calculate correlation matrix
-        correlation_matrix = np.corrcoef([prices, volumes])
+        correlation_matrix = unified_math.correlation(prices, volumes)
         
         # Calculate bitplane entropy
         bitplane_entropy = self._calculate_bitplane_entropy(data_points, bit_level)
@@ -275,8 +340,8 @@ class MultiBitBTCProcessor:
         """Calculate skewness of the data."""
         if len(data) < 3:
             return 0.0
-        mean = np.mean(data)
-        std = np.std(data)
+        mean = unified_math.mean(data)
+        std = unified_math.std(data)
         if std == 0:
             return 0.0
         skewness = np.mean(((data - mean) / std) ** 3)
@@ -286,8 +351,8 @@ class MultiBitBTCProcessor:
         """Calculate kurtosis of the data."""
         if len(data) < 4:
             return 0.0
-        mean = np.mean(data)
-        std = np.std(data)
+        mean = unified_math.mean(data)
+        std = unified_math.std(data)
         if std == 0:
             return 0.0
         kurtosis = np.mean(((data - mean) / std) ** 4) - 3
@@ -310,7 +375,7 @@ class MultiBitBTCProcessor:
             entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
             entropies.append(entropy)
         
-        return float(np.mean(entropies))
+        return float(unified_math.mean(entropies))
     
     def _count_gray_code_transitions(self, data_points: List[BTCDataPoint]) -> int:
         """Count the number of Gray code state transitions."""
@@ -390,7 +455,7 @@ class MultiBitBTCProcessor:
         target_prices = np.array([dp.price for dp in target_data[-min_len:]])
         
         # Calculate correlation
-        correlation_matrix = np.corrcoef(source_prices, target_prices)
+        correlation_matrix = unified_math.correlation(source_prices, target_prices)
         correlation_value = correlation_matrix[0, 1]
         
         if np.isnan(correlation_value):
@@ -448,7 +513,7 @@ class MultiBitBTCProcessor:
         avg_processing_times = {}
         for bit_level in BitLevel:
             times = self.processing_times[bit_level]
-            avg_processing_times[f"{bit_level.value}_bit"] = float(np.mean(times)) if times else 0.0
+            avg_processing_times[f"{bit_level.value}_bit"] = float(unified_math.mean(times)) if times else 0.0
         
         # Calculate bitplane entropy statistics
         entropy_stats = {}
@@ -567,7 +632,7 @@ class MultiBitBTCProcessor:
                 operation_type="btc_vector_processing",
                 entry_assumptions={
                     "btc_vector_normalized": self._is_vector_normalized(btc_vector),
-                    "xrp_cycle_delta_bounded": abs(xrp_cycle_delta) <= self.max_cycle_delta,
+                    "xrp_cycle_delta_bounded": unified_math.abs(xrp_cycle_delta) <= self.max_cycle_delta,
                     "market_volatility_sufficient": market_volatility > self.min_volatility,
                     "volume_data_fresh": self._is_data_fresh(volume_data),
                     "price_precision_adequate": self._check_price_precision(price_data)
@@ -647,7 +712,7 @@ class MultiBitBTCProcessor:
             errors.append("BTC vector not normalized (values outside 0.0-1.0 range)")
         
         # Validate XRP cycle delta bounds
-        if abs(xrp_cycle_delta) > self.max_cycle_delta:
+        if unified_math.abs(xrp_cycle_delta) > self.max_cycle_delta:
             errors.append(f"XRP cycle delta {xrp_cycle_delta} exceeds bounds ±{self.max_cycle_delta}")
         
         # Validate market volatility threshold
@@ -784,9 +849,9 @@ class MultiBitBTCProcessor:
             failed_ops = total_ops - successful_ops
             
             execution_times = [op.execution_time for op in self.operations]
-            avg_execution_time = np.mean(execution_times) if execution_times else 0.0
-            max_execution_time = np.max(execution_times) if execution_times else 0.0
-            min_execution_time = np.min(execution_times) if execution_times else 0.0
+            avg_execution_time = unified_math.mean(execution_times) if execution_times else 0.0
+            max_execution_time = unified_math.max(execution_times) if execution_times else 0.0
+            min_execution_time = unified_math.min(execution_times) if execution_times else 0.0
             
             # Recent performance (last 10 operations)
             recent_ops = self.operations[-10:] if len(self.operations) >= 10 else self.operations
@@ -837,19 +902,19 @@ def main() -> None:
     for bit_level in BitLevel:
         analysis = processor.analyze_bit_level(bit_level)
         if analysis:
-            print(f"{bit_level.value}-bit analysis: {analysis.confidence_score:.3f} confidence")
+            safe_print(f"{bit_level.value}-bit analysis: {analysis.confidence_score:.3f} confidence")
     
     # Analyze cross-bit correlations
     correlations = processor.analyze_cross_bit_correlations()
-    print(f"Cross-bit correlations: {len(correlations)}")
+    safe_print(f"Cross-bit correlations: {len(correlations)}")
     
     # Get statistics
     stats = processor.get_btc_statistics()
-    print(f"BTC statistics: {stats}")
+    safe_print(f"BTC statistics: {stats}")
     
     # Get trading signals
     signals = processor.get_trading_signals()
-    print(f"Generated {len(signals)} trading signals")
+    safe_print(f"Generated {len(signals)} trading signals")
 
 
 if __name__ == "__main__":

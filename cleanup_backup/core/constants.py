@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Constants - Core System Constants and Configuration.
 
@@ -18,7 +19,7 @@ from pathlib import Path
 import platform
 from typing import Any
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
@@ -117,7 +118,7 @@ MAX_RETRY_ATTEMPTS = 3  # Maximum retry attempts
 DEFAULT_BATCH_SIZE = 1000  # Default batch processing size
 
 # Composite constants for advanced calculations
-KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / np.sqrt(2)
+KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / unified_math.unified_math.sqrt(2)
 FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 
 # Performance optimization constants

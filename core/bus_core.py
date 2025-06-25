@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Bus Core - Central Communication and Routing Layer for Schwabot
@@ -82,8 +95,8 @@ class BusCore:
 if __name__ == "__main__":
     bus = BusCore()
     def print_message(msg: BusMessage):
-        print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
+        safe_print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
     bus.register_route("trade", print_message)
     msg = BusMessage(message_type="trade", source="engine", destination="logger", payload={"trade_id": "T123", "amount": 1.5})
     bus.send(msg)
-    print("Message history:", bus.get_message_history("trade"))
+    safe_print("Message history:", bus.get_message_history("trade"))

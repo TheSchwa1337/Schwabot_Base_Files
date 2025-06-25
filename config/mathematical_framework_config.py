@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Mathematical Framework Configuration.
 
@@ -25,7 +28,6 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -513,27 +515,27 @@ def main() -> None:
 
     # Validate configuration
     is_valid = config.validate_config()
-    print(f"Configuration valid: {is_valid}")
+    safe_print(f"Configuration valid: {is_valid}")
 
     # Get configuration summary
     summary = config.get_summary()
-    print("Configuration Summary:")
+    safe_print("Configuration Summary:")
     for component, settings in summary.items():
-        print(f"  {component}:")
+        safe_print(f"  {component}:")
         for key, value in settings.items():
-            print(f"    {key}: {value}")
+            safe_print(f"    {key}: {value}")
 
     # Save configuration
     config.save_config()
 
     # Load configuration
     loaded_config = load_config_from_file(config.config_file_path)
-    print(f"Loaded configuration valid: {loaded_config.validate_config()}")
+    safe_print(f"Loaded configuration valid: {loaded_config.validate_config()}")
 
     # Test component configuration update
     success = config.update_component_config("recursion", {"max_depth": 100})
-    print(f"Updated recursion config: {success}")
-    print(f"New max_depth: {config.recursion.max_depth}")
+    safe_print(f"Updated recursion config: {success}")
+    safe_print(f"New max_depth: {config.recursion.max_depth}")
 
 
 if __name__ == "__main__":

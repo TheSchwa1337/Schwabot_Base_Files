@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Memory Agent Ghost Meta Layer Engine - Advanced Memory and Learning System for Schwabot
@@ -26,7 +28,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 import sqlite3
 import os
@@ -442,7 +444,7 @@ class MemoryAgentGhostMetaEngine:
             p2_norm = pattern2 / (np.linalg.norm(pattern2) + 1e-8)
             
             # Calculate cosine similarity
-            similarity = np.dot(p1_norm, p2_norm)
+            similarity = unified_math.unified_math.dot_product(p1_norm, p2_norm)
             return float(similarity)
             
         except Exception as e:
@@ -489,8 +491,8 @@ class MemoryAgentGhostMetaEngine:
         """Calculate mathematical signature for a pattern."""
         try:
             signature = {
-                "mean": float(np.mean(pattern_data)),
-                "std": float(np.std(pattern_data)),
+                "mean": float(unified_math.unified_math.mean(pattern_data)),
+                "std": float(unified_math.unified_math.std(pattern_data)),
                 "skewness": float(self._calculate_skewness(pattern_data)),
                 "kurtosis": float(self._calculate_kurtosis(pattern_data)),
                 "entropy": float(self._calculate_entropy(pattern_data)),
@@ -505,11 +507,11 @@ class MemoryAgentGhostMetaEngine:
     def _calculate_skewness(self, data: np.ndarray) -> float:
         """Calculate skewness of data."""
         try:
-            mean = np.mean(data)
-            std = np.std(data)
+            mean = unified_math.unified_math.mean(data)
+            std = unified_math.unified_math.std(data)
             if std == 0:
                 return 0.0
-            skewness = np.mean(((data - mean) / std) ** 3)
+            skewness = unified_math.mean(((data - mean) / std) ** 3)
             return float(skewness)
         except Exception:
             return 0.0
@@ -517,11 +519,11 @@ class MemoryAgentGhostMetaEngine:
     def _calculate_kurtosis(self, data: np.ndarray) -> float:
         """Calculate kurtosis of data."""
         try:
-            mean = np.mean(data)
-            std = np.std(data)
+            mean = unified_math.unified_math.mean(data)
+            std = unified_math.unified_math.std(data)
             if std == 0:
                 return 0.0
-            kurtosis = np.mean(((data - mean) / std) ** 4) - 3
+            kurtosis = unified_math.mean(((data - mean) / std) ** 4) - 3
             return float(kurtosis)
         except Exception:
             return 0.0
@@ -530,7 +532,7 @@ class MemoryAgentGhostMetaEngine:
         """Calculate entropy of data."""
         try:
             # Discretize data for entropy calculation
-            hist, _ = np.histogram(data, bins=min(50, len(data)))
+            hist, _ = np.histogram(data, bins=unified_math.min(50, len(data)))
             hist = hist[hist > 0]  # Remove zero bins
             if len(hist) == 0:
                 return 0.0
@@ -548,7 +550,7 @@ class MemoryAgentGhostMetaEngine:
                 return 1.0
             
             # Normalize data to [0, 1]
-            data_norm = (data - np.min(data)) / (np.max(data) - np.min(data) + 1e-8)
+            data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data) + 1e-8)
             
             # Count boxes at different scales
             scales = np.logspace(-2, 0, 10)
@@ -566,8 +568,8 @@ class MemoryAgentGhostMetaEngine:
             
             # Calculate fractal dimension
             if len(counts) > 1:
-                log_scales = np.log(scales)
-                log_counts = np.log(counts)
+                log_scales = unified_math.unified_math.log(scales)
+                log_counts = unified_math.unified_math.log(counts)
                 slope = np.polyfit(log_scales, log_counts, 1)[0]
                 return float(-slope)
             else:
@@ -684,7 +686,7 @@ class MemoryAgentGhostMetaEngine:
             
             for key_id, memory_entry in self.memory_store.items():
                 age_hours = (current_time - memory_entry.key.creation_time).total_seconds() / 3600
-                access_frequency = memory_entry.key.access_count / max(age_hours, 1)
+                access_frequency = memory_entry.key.access_count / unified_math.max(age_hours, 1)
                 
                 # Remove if old and rarely accessed
                 if (age_hours > 24 and access_frequency < 0.1 and 
@@ -855,20 +857,20 @@ def main() -> None:
     # Test memory storage and retrieval
     test_data = {"price": 50000, "timestamp": datetime.now(), "source": "BTC"}
     key_id = engine.store_memory("btc_price_001", test_data, MemoryType.SHORT_TERM, MemoryPriority.HIGH)
-    print(f"Stored memory with key: {key_id}")
+    safe_print(f"Stored memory with key: {key_id}")
     
     # Test pattern learning
     pattern_data = np.random.rand(10, 10)
     pattern_id = engine.learn_pattern(pattern_data, "price_pattern", 0.9)
-    print(f"Learned pattern with ID: {pattern_id}")
+    safe_print(f"Learned pattern with ID: {pattern_id}")
     
     # Test memory retrieval
     retrieved_data = engine.retrieve_memory("btc_price_001")
-    print(f"Retrieved data: {retrieved_data}")
+    safe_print(f"Retrieved data: {retrieved_data}")
     
     # Get statistics
     stats = engine.get_memory_statistics()
-    print(f"Memory Statistics: {stats}")
+    safe_print(f"Memory Statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

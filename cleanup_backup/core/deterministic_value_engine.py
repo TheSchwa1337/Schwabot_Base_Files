@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Deterministic Value Engine for Schwabot Trading System.
 
@@ -27,7 +29,7 @@ import time
 from typing import Any, Dict, List, Optional, Tuple, Union, Callable
 import warnings
 
-import numpy as np
+from core.unified_math_system import unified_math
 from scipy.optimize import minimize
 from scipy.stats import entropy
 
@@ -272,15 +274,15 @@ class DeterministicValueEngine:
         # Time-based factors
         time_since_last_trade = market_state.timestamp - market_state.last_trade_time
         optimal_trade_interval = 3600.0  # 1 hour base interval
-        time_factor = min(time_since_last_trade / optimal_trade_interval, 1.0)
+        time_factor = unified_math.min(time_since_last_trade / optimal_trade_interval, 1.0)
 
         # Market rhythm alignment
         market_cycle_phase = (market_state.timestamp % 86400) / 86400  # Daily cycle
-        rhythm_alignment = np.cos(2 * np.pi * market_cycle_phase) * 0.5 + 0.5
+        rhythm_alignment = np.unified_math.cos(2 * np.pi * market_cycle_phase) * 0.5 + 0.5
 
         # Volatility timing
         avg_volatility = (
-            np.mean(list(market_state.volatility.values()))
+            unified_math.unified_math.mean(list(market_state.volatility.values()))
             if market_state.volatility
             else 0.5
         )
@@ -288,7 +290,7 @@ class DeterministicValueEngine:
 
         # Momentum alignment
         momentum_values = list(market_state.momentum.values())
-        momentum_coherence = 1.0 - np.std(momentum_values) if momentum_values else 0.5
+        momentum_coherence = 1.0 - unified_math.unified_math.std(momentum_values) if momentum_values else 0.5
 
         # Phase coherence timing
         coherence_timing = market_state.phase_coherence
@@ -312,18 +314,18 @@ class DeterministicValueEngine:
 
         # 1. Liquidity condition
         volumes = list(market_state.volumes.values())
-        avg_volume = np.mean(volumes) if volumes else 0
-        liquidity_score = min(avg_volume / 1000000, 1.0)  # Normalize to 1M volume
+        avg_volume = unified_math.unified_math.mean(volumes) if volumes else 0
+        liquidity_score = unified_math.min(avg_volume / 1000000, 1.0)  # Normalize to 1M volume
 
         # 2. Spread condition
         spreads = list(market_state.spreads.values())
-        avg_spread = np.mean(spreads) if spreads else 0.01
-        spread_score = max(0, 1.0 - avg_spread * 100)  # Penalize high spreads
+        avg_spread = unified_math.unified_math.mean(spreads) if spreads else 0.01
+        spread_score = unified_math.max(0, 1.0 - avg_spread * 100)  # Penalize high spreads
 
         # 3. Volatility condition
         volatilities = list(market_state.volatility.values())
-        avg_volatility = np.mean(volatilities) if volatilities else 0.02
-        volatility_score = np.exp(
+        avg_volatility = unified_math.unified_math.mean(volatilities) if volatilities else 0.02
+        volatility_score = unified_math.exp(
             -((avg_volatility - 0.02) ** 2) / 0.001
         )  # Optimal around 2%
 
@@ -334,15 +336,15 @@ class DeterministicValueEngine:
         portfolio_health = 1.0
         if market_state.available_capital > 0:
             utilization = (
-                sum(abs(pos) for pos in market_state.positions.values())
+                sum(unified_math.abs(pos) for pos in market_state.positions.values())
                 / market_state.available_capital
             )
-            portfolio_health = max(0, 1.0 - utilization) if utilization < 1 else 0
+            portfolio_health = unified_math.max(0, 1.0 - utilization) if utilization < 1 else 0
 
         # 6. Risk tolerance condition
         risk_score = 1.0
         if market_state.unrealized_pnl < 0:
-            drawdown = abs(market_state.unrealized_pnl) / max(
+            drawdown = unified_math.abs(market_state.unrealized_pnl) / max(
                 market_state.available_capital, 1
             )
             risk_score = max(
@@ -398,7 +400,7 @@ class DeterministicValueEngine:
 
         # T·Δθ - Triplet entropy * braid angle drift
         T_entropy = (
-            np.mean(list(market_state.entropy_levels.values()))
+            unified_math.unified_math.mean(list(market_state.entropy_levels.values()))
             if market_state.entropy_levels
             else 3.0
         )
@@ -408,7 +410,7 @@ class DeterministicValueEngine:
         # ε·σ_f - Coherence * standard deviation of fractal loops
         epsilon = market_state.phase_coherence
         sigma_f = (
-            np.std(list(market_state.price_deltas.values()))
+            unified_math.unified_math.std(list(market_state.price_deltas.values()))
             if market_state.price_deltas
             else 0.02
         )
@@ -419,9 +421,9 @@ class DeterministicValueEngine:
             (time.time() - market_state.last_trade_time) / 3600, 1.0
         )  # Hours
         profit_factor = max(
-            market_state.unrealized_pnl / max(market_state.available_capital, 1), -1.0
+            market_state.unrealized_pnl / unified_math.max(market_state.available_capital, 1), -1.0
         )
-        tau_p = np.tanh(profit_factor) * np.exp(-time_factor)
+        tau_p = np.tanh(profit_factor) * unified_math.exp(-time_factor)
 
         # Weighted combination
         xi = (
@@ -443,12 +445,12 @@ class DeterministicValueEngine:
 
         # L - Liquidity score
         volumes = list(market_state.volumes.values())
-        liquidity = min(np.mean(volumes) / 1000000, 1.0) if volumes else 0.5
+        liquidity = unified_math.min(unified_math.unified_math.mean(volumes) / 1000000, 1.0) if volumes else 0.5
 
         # P̂ - Projected profit
         price_changes = list(market_state.price_deltas.values())
         projected_profit = (
-            np.mean([abs(pc) for pc in price_changes]) if price_changes else 0.01
+            unified_math.mean([unified_math.abs(pc) for pc in price_changes]) if price_changes else 0.01
         )
 
         # Composite entry score
@@ -461,10 +463,10 @@ class DeterministicValueEngine:
 
         # Calculate system complexity
         entropy_values = list(market_state.entropy_levels.values())
-        avg_entropy = np.mean(entropy_values) if entropy_values else 3.0
+        avg_entropy = unified_math.unified_math.mean(entropy_values) if entropy_values else 3.0
 
         price_volatilities = list(market_state.volatility.values())
-        avg_volatility = np.mean(price_volatilities) if price_volatilities else 0.02
+        avg_volatility = unified_math.unified_math.mean(price_volatilities) if price_volatilities else 0.02
 
         complexity_score = (avg_entropy / 8.0) + (avg_volatility / 0.1)  # Normalized
 
@@ -550,14 +552,14 @@ class DeterministicValueEngine:
         base_size = 0.1  # 10% base allocation
 
         # Confidence multiplier
-        confidence_multiplier = min(execution_confidence * 2, 3.0)  # Up to 3x
+        confidence_multiplier = unified_math.min(execution_confidence * 2, 3.0)  # Up to 3x
 
         # Entry score multiplier
         entry_multiplier = entry_score * 2  # Up to 2x
 
         # Risk adjustment based on volatility
         volatilities = list(market_state.volatility.values())
-        avg_volatility = np.mean(volatilities) if volatilities else 0.02
+        avg_volatility = unified_math.unified_math.mean(volatilities) if volatilities else 0.02
         risk_adjustment = 1.0 / (
             1.0 + avg_volatility * 10
         )  # Reduce size with volatility
@@ -569,7 +571,7 @@ class DeterministicValueEngine:
 
         # Apply maximum position limit (50% of capital)
         max_position = 0.5
-        position_size = min(position_size, max_position)
+        position_size = unified_math.min(position_size, max_position)
 
         return position_size
 
@@ -585,15 +587,15 @@ class DeterministicValueEngine:
         if not prices or not volatilities:
             return None, None
 
-        avg_price = np.mean(prices)
-        avg_volatility = np.mean(volatilities)
+        avg_price = unified_math.unified_math.mean(prices)
+        avg_volatility = unified_math.unified_math.mean(volatilities)
 
         # Strategy-dependent risk parameters
         risk_multiplier = 1.0
         reward_multiplier = 2.0
 
         # Adjust based on dominant strategy
-        max_strategy = max(strategy_weights.items(), key=lambda x: x[1])
+        max_strategy = unified_math.max(strategy_weights.items(), key=lambda x: x[1])
         dominant_strategy = max_strategy[0]
 
         if dominant_strategy == StrategyType.MOMENTUM:
@@ -659,7 +661,7 @@ class DeterministicValueEngine:
         # Adjust for market conditions
         momentum_values = list(market_state.momentum.values())
         if momentum_values:
-            momentum_adjustment = np.tanh(np.mean(momentum_values)) * 0.2 + 1.0
+            momentum_adjustment = np.tanh(unified_math.unified_math.mean(momentum_values)) * 0.2 + 1.0
             expected_return *= momentum_adjustment
 
         return expected_return
@@ -671,26 +673,26 @@ class DeterministicValueEngine:
 
         # Volatility-based risk
         volatilities = list(market_state.volatility.values())
-        avg_volatility = np.mean(volatilities) if volatilities else 0.02
+        avg_volatility = unified_math.unified_math.mean(volatilities) if volatilities else 0.02
         volatility_risk = avg_volatility * 2  # Scale volatility
 
         # Concentration risk
         allocation_values = list(asset_allocation.values())
         concentration_risk = (
-            max(allocation_values) - 0.25
+            unified_math.max(allocation_values) - 0.25
         )  # Penalty above 25% concentration
-        concentration_risk = max(concentration_risk, 0)
+        concentration_risk = unified_math.max(concentration_risk, 0)
 
         # Correlation risk (simplified)
         correlation_values = list(market_state.correlations.values())
         avg_correlation = (
-            np.mean([abs(c) for c in correlation_values]) if correlation_values else 0.5
+            unified_math.mean([unified_math.abs(c) for c in correlation_values]) if correlation_values else 0.5
         )
         correlation_risk = avg_correlation * 0.5  # High correlation increases risk
 
         # Total risk adjustment
         total_risk = volatility_risk + concentration_risk * 2 + correlation_risk
-        risk_adjustment = np.exp(-total_risk)  # Exponential penalty
+        risk_adjustment = unified_math.exp(-total_risk)  # Exponential penalty
 
         return np.clip(risk_adjustment, 0.1, 1.0)
 
@@ -746,7 +748,7 @@ class DeterministicValueEngine:
         # Volatility evidence
         volatilities = list(market_state.volatility.values())
         if volatilities:
-            avg_vol = np.mean(volatilities)
+            avg_vol = unified_math.unified_math.mean(volatilities)
             if avg_vol > 0.05:
                 evidence.append(f"Elevated volatility: {avg_vol:.3f}")
             elif avg_vol < 0.01:
@@ -812,12 +814,12 @@ class DeterministicValueEngine:
         if not momentum_values:
             return 0.5
 
-        avg_momentum = np.mean(momentum_values)
-        momentum_consistency = 1.0 - np.std(momentum_values) / (
-            np.mean(np.abs(momentum_values)) + 1e-8
+        avg_momentum = unified_math.unified_math.mean(momentum_values)
+        momentum_consistency = 1.0 - unified_math.unified_math.std(momentum_values) / (
+            unified_math.unified_math.mean(unified_math.unified_math.abs(momentum_values)) + 1e-8
         )
 
-        return (np.tanh(abs(avg_momentum) * 5) + momentum_consistency) / 2
+        return (np.tanh(unified_math.abs(avg_momentum) * 5) + momentum_consistency) / 2
 
     def _score_mean_reversion_strategy(self, market_state: MarketState) -> float:
         """Score mean reversion strategy."""
@@ -826,12 +828,12 @@ class DeterministicValueEngine:
             return 0.5
 
         # Look for overextension
-        avg_delta = np.mean(price_deltas)
+        avg_delta = unified_math.unified_math.mean(price_deltas)
         volatilities = list(market_state.volatility.values())
-        avg_volatility = np.mean(volatilities) if volatilities else 0.02
+        avg_volatility = unified_math.unified_math.mean(volatilities) if volatilities else 0.02
 
-        overextension = abs(avg_delta) / (avg_volatility + 1e-8)
-        return min(overextension / 2, 1.0)
+        overextension = unified_math.abs(avg_delta) / (avg_volatility + 1e-8)
+        return unified_math.min(overextension / 2, 1.0)
 
     def _score_breakout_strategy(self, market_state: MarketState) -> float:
         """Score breakout strategy."""
@@ -842,10 +844,10 @@ class DeterministicValueEngine:
             return 0.5
 
         # Breakout = low volatility + high volume
-        avg_volatility = np.mean(volatilities)
-        avg_volume = np.mean(volumes)
+        avg_volatility = unified_math.unified_math.mean(volatilities)
+        avg_volume = unified_math.unified_math.mean(volumes)
 
-        low_vol_score = np.exp(-avg_volatility * 50)  # Favor low volatility
+        low_vol_score = unified_math.exp(-avg_volatility * 50)  # Favor low volatility
         high_vol_score = np.tanh(avg_volume / 1000000)  # Favor high volume
 
         return (low_vol_score + high_vol_score) / 2
@@ -857,8 +859,8 @@ class DeterministicValueEngine:
             return 0.3
 
         # Arbitrage favors wide spreads
-        avg_spread = np.mean(spreads)
-        return min(avg_spread * 100, 1.0)  # Scale spread to 0-1
+        avg_spread = unified_math.unified_math.mean(spreads)
+        return unified_math.min(avg_spread * 100, 1.0)  # Scale spread to 0-1
 
     def _score_hedging_strategy(self, market_state: MarketState) -> float:
         """Score hedging strategy."""
@@ -867,7 +869,7 @@ class DeterministicValueEngine:
             return 0.5
 
         # Hedging is valuable when correlations are unstable
-        correlation_stability = 1.0 - np.std(correlation_values)
+        correlation_stability = 1.0 - unified_math.unified_math.std(correlation_values)
         return 1.0 - correlation_stability
 
     def _score_vault_strategy(self, market_state: MarketState) -> float:
@@ -880,25 +882,25 @@ class DeterministicValueEngine:
         # High volatility increases uncertainty
         volatilities = list(market_state.volatility.values())
         if volatilities:
-            avg_volatility = np.mean(volatilities)
-            uncertainty += min(avg_volatility * 10, 0.5)
+            avg_volatility = unified_math.unified_math.mean(volatilities)
+            uncertainty += unified_math.min(avg_volatility * 10, 0.5)
 
         # Low liquidity increases uncertainty
         volumes = list(market_state.volumes.values())
         if volumes:
-            avg_volume = np.mean(volumes)
+            avg_volume = unified_math.unified_math.mean(volumes)
             if avg_volume < 500000:  # Low volume threshold
                 uncertainty += 0.3
 
         # Negative P&L increases vault appeal
         if market_state.unrealized_pnl < 0:
             uncertainty += min(
-                abs(market_state.unrealized_pnl)
-                / max(market_state.available_capital, 1),
+                unified_math.abs(market_state.unrealized_pnl)
+                / unified_math.max(market_state.available_capital, 1),
                 0.4,
             )
 
-        return min(uncertainty, 1.0)
+        return unified_math.min(uncertainty, 1.0)
 
 
 # Factory functions
@@ -956,15 +958,15 @@ if __name__ == "__main__":
 
     decision = calculate_trading_decision(sample_market_data)
 
-    print(f"🎯 Deterministic Decision:")
-    print(f"   Timing Score: {decision.timing_score:.3f}")
-    print(f"   Conditional Score: {decision.conditional_score:.3f}")
-    print(f"   Execution Confidence: {decision.execution_confidence:.3f}")
-    print(f"   Entry Score: {decision.entry_score:.3f}")
-    print(f"   Phase Mode: {decision.phase_mode.value}-bit")
-    print(f"   Position Size: {decision.position_size:.3f}")
-    print(f"   Expected Return: {decision.expected_return:.3f}")
-    print(f"   Asset Allocation: {decision.asset_allocation}")
-    print(
-        f"   Top Strategy: {max(decision.strategy_weights.items(), key=lambda x: x[1])}"
+    safe_print(f"🎯 Deterministic Decision:")
+    safe_print(f"   Timing Score: {decision.timing_score:.3f}")
+    safe_print(f"   Conditional Score: {decision.conditional_score:.3f}")
+    safe_print(f"   Execution Confidence: {decision.execution_confidence:.3f}")
+    safe_print(f"   Entry Score: {decision.entry_score:.3f}")
+    safe_print(f"   Phase Mode: {decision.phase_mode.value}-bit")
+    safe_print(f"   Position Size: {decision.position_size:.3f}")
+    safe_print(f"   Expected Return: {decision.expected_return:.3f}")
+    safe_print(f"   Asset Allocation: {decision.asset_allocation}")
+    safe_print(
+        f"   Top Strategy: {unified_math.max(decision.strategy_weights.items(), key=lambda x: x[1])}"
     )

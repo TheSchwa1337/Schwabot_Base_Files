@@ -1,7 +1,8 @@
 """Ghost condition-gate for routing decisions."""
 
 from __future__ import annotations
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 
 def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
@@ -19,5 +20,5 @@ def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
     """
     z: float = psi * xi_sent * phi_drift
     # Steep logistic centered at 0.5
-    sigma = 1 / (1 + np.exp(-12 * (z - 0.5)))
+    sigma = 1 / (1 + unified_math.exp(-12 * (z - 0.5)))
     return bool(sigma >= 0.5)

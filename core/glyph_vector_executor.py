@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Glyph vector executor – executes strategic moves from glyph instructions.
 
@@ -8,12 +11,11 @@ This module takes weighted glyph vectors and converts them into executable
 trade instructions that can be consumed by the routing layer.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 
@@ -93,9 +95,9 @@ def execute_glyph_vectors(
     # Determine action
     signals = [buy_signal, sell_signal, hold_signal, wait_signal]
     actions = ["buy", "sell", "hold", "wait"]
-    max_idx = int(np.argmax(np.abs(signals)))
+    max_idx = int(np.argmax(unified_math.unified_math.abs(signals)))
     max_signal = signals[max_idx]
-    confidence = float(np.abs(max_signal))
+    confidence = float(unified_math.unified_math.abs(max_signal))
 
     if confidence < action_threshold:
         action = "hold"

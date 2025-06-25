@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Asset Substitution Matrix - Schwabot UROS v1.0
@@ -17,7 +19,7 @@ Features:
 
 import json
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -341,7 +343,7 @@ class AssetSubstitutionMatrix:
                 (1 / substitute_profile.risk_multiplier)
             )
             
-            return min(confidence, 1.0)
+            return unified_math.min(confidence, 1.0)
             
         except Exception as e:
             logger.error(f"Error calculating substitution confidence: {e}")
@@ -458,7 +460,7 @@ class AssetSubstitutionMatrix:
 
 def main():
     """Test function for Asset Substitution Matrix."""
-    print("🔄 Testing Asset Substitution Matrix...")
+    safe_print("🔄 Testing Asset Substitution Matrix...")
     
     # Initialize matrix
     matrix = AssetSubstitutionMatrix()
@@ -466,24 +468,24 @@ def main():
     # Test asset substitutions
     test_assets = ["BTC", "XRP", "ETH", "SOL"]
     
-    print("\n📊 Testing Asset Substitutions:")
+    safe_print("\n📊 Testing Asset Substitutions:")
     for asset in test_assets:
         substitute = matrix.get_substitute_asset(asset, SubstitutionTrigger.VOLATILITY_EXCEEDED)
-        print(f"  {asset} -> {substitute}")
+        safe_print(f"  {asset} -> {substitute}")
     
     # Test portfolio rebalancing
-    print("\n💰 Testing Portfolio Rebalancing:")
+    safe_print("\n💰 Testing Portfolio Rebalancing:")
     live_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=False)
     demo_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=True)
     
-    print(f"  Live Mode: {live_allocation}")
-    print(f"  Demo Mode: {demo_allocation}")
+    safe_print(f"  Live Mode: {live_allocation}")
+    safe_print(f"  Demo Mode: {demo_allocation}")
     
     # Get statistics
     stats = matrix.get_substitution_statistics()
-    print(f"\n📈 Substitution Statistics:")
-    print(f"  Total Substitutions: {stats['total_substitutions']}")
-    print(f"  Current Substitutions: {stats['current_substitutions']}")
+    safe_print(f"\n📈 Substitution Statistics:")
+    safe_print(f"  Total Substitutions: {stats['total_substitutions']}")
+    safe_print(f"  Current Substitutions: {stats['current_substitutions']}")
     
     # Export history
     matrix.export_substitution_history()

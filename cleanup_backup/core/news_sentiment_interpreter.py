@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """News sentiment interpreter – converts news into activation signals.
 
@@ -9,11 +12,10 @@ sentiment signals that can influence ghost router decisions and strategy
 matrix updates.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["interpret_news_sentiment", "weight_sentiment_events"]
 
@@ -66,5 +68,5 @@ def weight_sentiment_events(
     Returns weighted sentiment suitable for inclusion in λ_news calculation.
     """
     importance_weight = base_weight * event_importance
-    decayed_sentiment = raw_sentiment * (decay_factor ** abs(raw_sentiment))
+    decayed_sentiment = raw_sentiment * (decay_factor ** unified_math.abs(raw_sentiment))
     return decayed_sentiment * importance_weight

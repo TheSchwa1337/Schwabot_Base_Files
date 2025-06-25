@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Comprehensive Syntax Error Fixer for Schwabot Codebase.
 
@@ -116,13 +117,13 @@ def fix_file_syntax(file_path: str) -> bool:
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"Fixed syntax errors in {file_path}")
+            safe_print(f"Fixed syntax errors in {file_path}")
             return True
         
         return False
         
     except Exception as e:
-        print(f"Error processing {file_path}: {e}")
+        safe_print(f"Error processing {file_path}: {e}")
         return False
 
 
@@ -141,13 +142,13 @@ def find_and_fix_all_files():
                 if fix_file_syntax(file_path):
                     fixed_count += 1
     
-    print(f"Fixed syntax errors in {fixed_count} files")
+    safe_print(f"Fixed syntax errors in {fixed_count} files")
     return fixed_count
 
 
 def verify_fixes():
     """Verify that the fixes worked."""
-    print("\nVerifying fixes...")
+    safe_print("\nVerifying fixes...")
     
     # Run a quick Flake8 check to see remaining errors
     import subprocess
@@ -160,32 +161,32 @@ def verify_fixes():
         )
         
         if result.returncode == 0:
-            print("✅ No E999 syntax errors found!")
+            safe_print("✅ No E999 syntax errors found!")
         else:
             error_count = len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
-            print(f"⚠️  Still found {error_count} E999 syntax errors")
-            print("First few errors:")
+            safe_print(f"⚠️  Still found {error_count} E999 syntax errors")
+            safe_print("First few errors:")
             for line in result.stdout.strip().split('\n')[:5]:
-                print(f"  {line}")
+                safe_print(f"  {line}")
             
     except Exception as e:
-        print(f"Could not run Flake8 verification: {e}")
+        safe_print(f"Could not run Flake8 verification: {e}")
 
 
 def main():
     """Main function to fix all syntax errors."""
-    print("Comprehensive Syntax Error Fixer for Schwabot Codebase")
-    print("=" * 60)
+    safe_print("Comprehensive Syntax Error Fixer for Schwabot Codebase")
+    safe_print("=" * 60)
     
     # Fix all files
     fixed_count = find_and_fix_all_files()
     
-    print(f"\nFixed {fixed_count} files with syntax errors")
+    safe_print(f"\nFixed {fixed_count} files with syntax errors")
     
     # Verify the fixes
     verify_fixes()
     
-    print("\nComprehensive syntax fixing completed!")
+    safe_print("\nComprehensive syntax fixing completed!")
 
 
 if __name__ == "__main__":

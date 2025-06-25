@@ -1,877 +1,566 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Enhanced Risk Manager - Advanced Risk Analytics and Stress Testing.
-
-This module provides sophisticated risk management including:
-- Real-time risk analytics and monitoring
-- Stress testing and scenario analysis
-- VaR (Value at Risk) and CVaR calculations
-- Risk factor decomposition and attribution
-- Dynamic risk limits and adaptive controls
-- Integration with Risk Guard and Capital Controls
 """
+Enhanced Risk Manager - DLT Pattern-Based Risk Analytics
+========================================================
 
-from __future__ import annotations
+A sophisticated risk management system built on Schwabot's mathematical
+foundation using Delta-Lock Transform (DLT) mechanics, Forever Fractal
+pattern analysis, and Observer-aware temporal drift corrections.
+
+Core Risk Philosophy:
+- Risk is measured by pattern degradation, not traditional volatility
+- Confidence decay follows Greyscale calculations from MathLibV4
+- Temporal drift risk tracks Observer-aware correction stability
+- Risk thresholds based on DLT hash confirmation strength
+"""
 
 import asyncio
 import logging
-import math
-import time
-import numpy as np
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime, timedelta
 from enum import Enum
-import json
-from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
-# Import unified mathematics
-try:
-    from core.unified_mathematics_config import get_unified_math
-    unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    UNIFIED_MATH_AVAILABLE = False
+from core.unified_math_system import unified_math
 
-# Import risk guard for integration
-try:
-    from core.risk_guard import get_risk_guard, is_trading_allowed, check_circuit_breaker
-    risk_guard = get_risk_guard()
-    RISK_GUARD_AVAILABLE = True
-except ImportError:
-    RISK_GUARD_AVAILABLE = False
-
-# Import capital controls for integration
-try:
-    from core.capital_controls import get_capital_controls, check_portfolio_limits
-    capital_controls = get_capital_controls()
-    CAPITAL_CONTROLS_AVAILABLE = True
-except ImportError:
-    CAPITAL_CONTROLS_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
-    from core.utils.windows_cli_compatibility import (
-        safe_print, safe_format_error, log_safe
-    )
-    CLI_HANDLER_AVAILABLE = True
-except ImportError:
-    CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
-        return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
-        return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
-        getattr(logger, level.lower())(message)
+from .fault_bus import FaultBus
+from .mathlib_v4 import MathLibV4, DLTPattern
+from .profit_navigation_engine import TradeProposal
 
 logger = logging.getLogger(__name__)
 
 
-class RiskMetricType(Enum):
-    """Types of risk metrics."""
-    VAR = "var"                        # Value at Risk
-    CVAR = "cvar"                      # Conditional Value at Risk
-    VOLATILITY = "volatility"          # Portfolio volatility
-    BETA = "beta"                      # Market beta
-    SHARPE_RATIO = "sharpe_ratio"      # Sharpe ratio
-    MAX_DRAWDOWN = "max_drawdown"      # Maximum drawdown
-    CORRELATION = "correlation"        # Correlation risk
-    CONCENTRATION = "concentration"    # Concentration risk
+# --- DLT Risk Enums and Data Structures ---
+
+class DLTRiskLevel(Enum):
+    """Risk levels based on pattern confidence degradation."""
+    MINIMAL = "minimal"          # > 0.9 confidence
+    LOW = "low"                  # 0.7 - 0.9 confidence
+    MODERATE = "moderate"        # 0.5 - 0.7 confidence
+    HIGH = "high"                # 0.3 - 0.5 confidence
+    CRITICAL = "critical"        # < 0.3 confidence
 
 
-class StressTestScenario(Enum):
-    """Stress test scenarios."""
-    MARKET_CRASH = "market_crash"      # 20% market decline
-    VOLATILITY_SPIKE = "volatility_spike"  # 3x volatility increase
-    CORRELATION_BREAKDOWN = "correlation_breakdown"  # Correlation breakdown
-    LIQUIDITY_CRISIS = "liquidity_crisis"  # Liquidity crisis
-    INTEREST_RATE_SHOCK = "interest_rate_shock"  # Interest rate shock
-    CUSTOM_SCENARIO = "custom_scenario"  # Custom scenario
-
-
-@dataclass
-class RiskMetrics:
-    """Comprehensive risk metrics."""
-    var_95: float = 0.0                # 95% VaR
-    var_99: float = 0.0                # 99% VaR
-    cvar_95: float = 0.0               # 95% CVaR
-    cvar_99: float = 0.0               # 99% CVaR
-    volatility: float = 0.0            # Portfolio volatility
-    beta: float = 0.0                  # Market beta
-    sharpe_ratio: float = 0.0          # Sharpe ratio
-    max_drawdown: float = 0.0          # Maximum drawdown
-    correlation_risk: float = 0.0      # Correlation risk
-    concentration_risk: float = 0.0    # Concentration risk
-    timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+class PatternRiskType(Enum):
+    """Types of pattern-based risks in the DLT system."""
+    CONFIDENCE_DECAY = "confidence_decay"
+    TEMPORAL_DRIFT = "temporal_drift"
+    TRIPLET_INSTABILITY = "triplet_instability"
+    FRACTAL_DEGRADATION = "fractal_degradation"
+    OBSERVER_DESYNC = "observer_desync"
 
 
 @dataclass
-class StressTestResult:
-    """Result of stress test."""
-    scenario: StressTestScenario
-    portfolio_loss: float
-    var_impact: float
-    volatility_impact: float
-    correlation_impact: float
-    worst_case_loss: float
-    recovery_time_estimate: float
-    risk_level: str
-    timestamp: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+class DLTRiskMetrics:
+    """Comprehensive DLT-based risk assessment."""
+    overall_risk_level: DLTRiskLevel
+    pattern_confidence: float
+    temporal_drift_velocity: float
+    triplet_stability_score: float
+    fractal_coherence: float
+    observer_sync_factor: float
+    risk_timestamp: datetime = field(default_factory=datetime.now)
+    active_warnings: List[str] = field(default_factory=list)
 
 
 @dataclass
-class RiskFactor:
-    """Risk factor analysis."""
-    factor_name: str
-    factor_value: float
-    risk_contribution: float
-    sensitivity: float
-    timestamp: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class RiskAlert:
-    """Risk alert data."""
-    alert_type: str
-    severity: str
+class PatternRiskAlert:
+    """Alert for specific pattern-based risk events."""
+    risk_type: PatternRiskType
+    pattern_hash: str
+    risk_severity: float  # 0.0 - 1.0
     description: str
-    threshold: float
-    current_value: float
-    timestamp: datetime
-    triggered_by: str
-    action_required: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    timestamp: datetime = field(default_factory=datetime.now)
+    recommended_action: str = ""
 
+
+@dataclass
+class TemporalRiskSnapshot:
+    """Snapshot of temporal drift risk over time."""
+    base_timestamp: datetime
+    drift_velocity: float
+    correction_stability: float
+    observer_coherence: float
+    risk_projection: float  # Projected risk in next time window
+
+
+# --- DLT Risk Calculator ---
+
+class DLTRiskCalculator:
+    """
+    Pure mathematical functions for DLT-based risk calculations.
+    Uses the Schwabot mathematical framework for risk assessment.
+    """
+
+    def __init__(self):
+        self.math_lib = MathLibV4()
+
+    def calculate_confidence_decay_risk(
+        self, 
+        current_confidence: float, 
+        historical_confidences: List[float],
+        decay_window: int = 10
+    ) -> float:
+        """
+        Calculates risk based on pattern confidence decay over time.
+        Uses exponential decay model to predict confidence degradation.
+        
+        Risk_decay = 1 - e^(-λt) where λ = decay_rate
+        """
+        if len(historical_confidences) < 2:
+            return 0.0
+
+        # Calculate decay rate from recent confidence history
+        recent_confidences = historical_confidences[-decay_window:]
+        
+        if len(recent_confidences) < 2:
+            return 0.0
+
+        # Calculate exponential decay rate
+        time_deltas = np.arange(len(recent_confidences))
+        
+        # Fit exponential decay: conf = conf0 * e^(-λt)
+        if recent_confidences[0] > 0:
+            log_ratios = unified_math.unified_math.log(np.array(recent_confidences) / recent_confidences[0])
+            # Avoid division by zero and handle negative logs
+            valid_indices = np.isfinite(log_ratios) & (time_deltas > 0)
+            
+            if np.sum(valid_indices) > 1:
+                decay_rate = -np.polyfit(
+                    time_deltas[valid_indices], 
+                    log_ratios[valid_indices], 
+                    1
+                )[0]
+            else:
+                decay_rate = 0.0
+        else:
+            decay_rate = 1.0  # Maximum decay if confidence hit zero
+
+        # Risk increases with decay rate
+        decay_risk = unified_math.min(1.0, decay_rate * 2.0)  # Scale to [0,1]
+        
+        return float(decay_risk)
+
+    def calculate_temporal_drift_risk(
+        self,
+        drift_velocity: float, 
+        stability_threshold: float = 0.1
+    ) -> float:
+        """
+        Calculates risk from temporal drift velocity.
+        High drift indicates Observer-aware corrections are struggling.
+        
+        Risk_drift = tanh(|v_drift| / threshold)
+        """
+        normalized_drift = unified_math.abs(drift_velocity) / stability_threshold
+        drift_risk = np.tanh(normalized_drift)
+        
+        return float(drift_risk)
+
+    def calculate_triplet_stability_risk(
+        self,
+        recent_deltas: np.ndarray, 
+        stability_window: int = 9  # 3 triplets
+    ) -> float:
+        """
+        Assesses risk from Triplet Lock instability.
+        Monitors how well recent deltas maintain triplet lock patterns.
+        """
+        if len(recent_deltas) < stability_window:
+            return 0.5  # Moderate risk if insufficient data
+
+        stability_scores = []
+        
+        # Check each triplet in the window
+        for i in range(0, len(recent_deltas) - 2, 3):
+            triplet = recent_deltas[i:i+3]
+            if len(triplet) == 3:
+                is_stable = self.math_lib.confirm_triplet_lock(triplet, tolerance=0.15)
+                stability_scores.append(1.0 if is_stable else 0.0)
+
+        if not stability_scores:
+            return 0.5
+
+        # Risk is inverse of stability
+        avg_stability = unified_math.unified_math.mean(stability_scores)
+        instability_risk = 1.0 - avg_stability
+        
+        return float(instability_risk)
+
+    def calculate_fractal_coherence_risk(
+        self,
+        pattern_hashes: List[str], 
+        coherence_window: int = 5
+    ) -> float:
+        """
+        Measures risk from Forever Fractal pattern incoherence.
+        High risk when recent patterns show no similarity to established patterns.
+        """
+        if len(pattern_hashes) < 2:
+                return 0.0
+            
+        recent_hashes = pattern_hashes[-coherence_window:]
+        
+        # Calculate hash similarity (simplified - real implementation would use
+        # proper hash distance metrics like Hamming distance)
+        coherence_scores = []
+        
+        for i in range(1, len(recent_hashes)):
+            hash1, hash2 = recent_hashes[i-1], recent_hashes[i]
+            
+            # Simple character-level similarity
+            common_chars = sum(1 for a, b in zip(hash1, hash2) if a == b)
+            similarity = common_chars / len(hash1)
+            coherence_scores.append(similarity)
+
+        if not coherence_scores:
+            return 0.0
+    
+        avg_coherence = unified_math.unified_math.mean(coherence_scores)
+        incoherence_risk = 1.0 - avg_coherence
+        
+        return float(incoherence_risk)
+
+    def calculate_observer_sync_risk(
+        self,
+        correction_history: List[float],
+        sync_threshold: float = 0.05
+    ) -> float:
+        """
+        Calculates risk from Observer desynchronization.
+        High corrections indicate the Observer is struggling to maintain sync.
+        """
+        if len(correction_history) < 2:
+            return 0.0
+    
+        # Calculate variance in corrections
+        correction_variance = unified_math.unified_math.var(correction_history)
+        
+        # Risk increases with correction instability
+        sync_risk = unified_math.min(1.0, correction_variance / sync_threshold)
+        
+        return float(sync_risk)
+
+
+# --- Enhanced DLT Risk Manager ---
 
 class EnhancedRiskManager:
     """
-    Enhanced Risk Manager - Advanced risk analytics and stress testing.
-    
-    Provides sophisticated risk management including:
-    - Real-time risk analytics and monitoring
-    - Stress testing and scenario analysis
-    - VaR (Value at Risk) and CVaR calculations
-    - Risk factor decomposition and attribution
-    - Dynamic risk limits and adaptive controls
+    Orchestrates DLT-based risk management using pattern analysis,
+    confidence decay monitoring, and temporal drift assessment.
     """
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize enhanced risk manager."""
-        self.config = config or {}
+
+    def __init__(
+        self,
+        fault_bus: Optional[FaultBus] = None,
+        confidence_threshold: float = 0.3,
+        drift_threshold: float = 0.1,
+        max_acceptable_risk: float = 0.85
+    ):
+        self.bus = fault_bus
+        self.confidence_threshold = confidence_threshold
+        self.drift_threshold = drift_threshold
+        self.max_acceptable_risk = max_acceptable_risk
         
-        # Risk configuration
-        self.var_confidence_levels = [0.95, 0.99]
-        self.stress_test_scenarios = list(StressTestScenario)
-        self.risk_alert_thresholds = {
-            'var_95': 0.02,      # 2% VaR threshold
-            'var_99': 0.05,      # 5% VaR threshold
-            'volatility': 0.25,  # 25% volatility threshold
-            'drawdown': 0.15,    # 15% drawdown threshold
-            'correlation': 0.8,  # 80% correlation threshold
-            'concentration': 0.2  # 20% concentration threshold
+        self.calculator = DLTRiskCalculator()
+        
+        # Risk monitoring state
+        self.pattern_confidence_history: Dict[str, List[float]] = {}
+        self.temporal_drift_history: List[float] = []
+        self.observer_correction_history: List[float] = []
+        self.active_pattern_hashes: List[str] = []
+        self.recent_deltas: List[float] = []
+        
+        # Risk thresholds for different risk levels
+        self.risk_thresholds = {
+            DLTRiskLevel.MINIMAL: 0.1,
+            DLTRiskLevel.LOW: 0.3,
+            DLTRiskLevel.MODERATE: 0.5,
+            DLTRiskLevel.HIGH: 0.7,
+            DLTRiskLevel.CRITICAL: 0.9
         }
         
-        # Risk metrics storage
-        self.risk_metrics_history: List[RiskMetrics] = []
-        self.stress_test_results: List[StressTestResult] = []
-        self.risk_factors: List[RiskFactor] = []
-        self.risk_alerts: List[RiskAlert] = []
-        
-        # Performance tracking
-        self.total_risk_checks = 0
-        self.risk_violations = 0
-        self.stress_tests_run = 0
-        
-        # Real-time monitoring
-        self.monitoring_active = True
-        self.alert_thresholds_breached = 0
-        
-        safe_print("🎯 Enhanced Risk Manager initialized")
-    
-    def calculate_risk_metrics(
-        self,
-        portfolio_data: Dict[str, Any],
-        market_data: Dict[str, Any],
-        historical_data: Optional[List[Dict[str, Any]]] = None
-    ) -> RiskMetrics:
+        logger.info(
+            f"DLT Enhanced Risk Manager initialized. "
+            f"Confidence threshold: {confidence_threshold}, "
+            f"Drift threshold: {drift_threshold}"
+        )
+
+    def start_listening(self):
+        """Subscribe to relevant events on the FaultBus."""
+        if self.bus:
+            self.bus.subscribe("trade_proposal_ready", self.assess_trade_proposal)
+            self.bus.subscribe("dlt_pattern_confirmed", self.update_pattern_risk)
+            self.bus.subscribe("temporal_drift_update", self.update_drift_risk)
+            self.bus.subscribe("observer_correction", self.update_observer_risk)
+            logger.info("DLT Risk Manager listening for events.")
+        else:
+            logger.warning("No FaultBus provided. Operating in standalone mode.")
+
+    async def assess_trade_proposal(self, proposal: TradeProposal):
         """
-        Calculate comprehensive risk metrics.
-        
-        This calculates:
-        - VaR and CVaR at multiple confidence levels
-        - Portfolio volatility and beta
-        - Sharpe ratio and maximum drawdown
-        - Correlation and concentration risk
+        Assess trade proposal using DLT risk metrics instead of traditional finance.
         """
-        try:
-            # Extract portfolio information
-            positions = portfolio_data.get('positions', {})
-            total_value = portfolio_data.get('total_value', 0.0)
-            total_pnl = portfolio_data.get('total_pnl', 0.0)
-            
-            if total_value == 0:
-                return RiskMetrics()
-            
-            # Calculate VaR and CVaR
-            var_95, cvar_95 = self._calculate_var_cvar(positions, market_data, 0.95)
-            var_99, cvar_99 = self._calculate_var_cvar(positions, market_data, 0.99)
-            
-            # Calculate volatility
-            volatility = self._calculate_portfolio_volatility(positions, market_data)
-            
-            # Calculate beta
-            beta = self._calculate_portfolio_beta(positions, market_data)
-            
-            # Calculate Sharpe ratio
-            sharpe_ratio = self._calculate_sharpe_ratio(total_pnl, volatility)
-            
-            # Calculate maximum drawdown
-            max_drawdown = self._calculate_max_drawdown(historical_data)
-            
-            # Calculate correlation risk
-            correlation_risk = self._calculate_correlation_risk(positions, market_data)
-            
-            # Calculate concentration risk
-            concentration_risk = self._calculate_concentration_risk(positions, total_value)
-            
-            # Create risk metrics
-            risk_metrics = RiskMetrics(
-                var_95=var_95,
-                var_99=var_99,
-                cvar_95=cvar_95,
-                cvar_99=cvar_99,
-                volatility=volatility,
-                beta=beta,
-                sharpe_ratio=sharpe_ratio,
-                max_drawdown=max_drawdown,
-                correlation_risk=correlation_risk,
-                concentration_risk=concentration_risk,
-                timestamp=datetime.now(),
-                metadata={
-                    'total_value': total_value,
-                    'total_pnl': total_pnl,
-                    'num_positions': len(positions)
-                }
+        logger.info(
+            f"DLT Risk Assessment for {proposal.symbol} "
+            f"(Pattern: {proposal.pattern_hash[:8]}...)"
+        )
+
+        # Get current DLT risk metrics
+        risk_metrics = self.get_current_risk_assessment()
+        
+        # Decision logic based on DLT risk framework
+        is_approved = True
+        rejection_reason = ""
+
+        # Check pattern confidence
+        if proposal.confidence < self.confidence_threshold:
+            is_approved = False
+            rejection_reason = f"Pattern confidence {proposal.confidence:.3f} below threshold {self.confidence_threshold}"
+
+        # Check overall risk level
+        elif risk_metrics.overall_risk_level in [DLTRiskLevel.HIGH, DLTRiskLevel.CRITICAL]:
+            is_approved = False
+            rejection_reason = f"System risk level: {risk_metrics.overall_risk_level.value}"
+
+        # Check temporal drift
+        elif risk_metrics.temporal_drift_velocity > self.drift_threshold:
+            is_approved = False
+            rejection_reason = f"Temporal drift velocity {risk_metrics.temporal_drift_velocity:.3f} exceeds threshold"
+
+        # Check pattern-specific risks
+        elif proposal.pattern_hash in self.pattern_confidence_history:
+            pattern_decay_risk = self.calculator.calculate_confidence_decay_risk(
+                proposal.confidence,
+                self.pattern_confidence_history[proposal.pattern_hash]
             )
-            
-            # Store in history
-            self.risk_metrics_history.append(risk_metrics)
-            
-            # Keep only recent history
-            if len(self.risk_metrics_history) > 1000:
-                self.risk_metrics_history = self.risk_metrics_history[-1000:]
-            
-            safe_print(f"✅ Risk metrics calculated: VaR(95%) = {var_95:.2%}")
-            return risk_metrics
-            
-        except Exception as e:
-            safe_print(f"❌ Risk metrics calculation failed: {safe_format_error(e, 'risk_metrics')}")
-            return RiskMetrics()
-    
-    def _calculate_var_cvar(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any],
-        confidence_level: float
-    ) -> Tuple[float, float]:
-        """Calculate VaR and CVaR."""
-        try:
-            # Simplified VaR calculation using parametric method
-            # In practice, you'd use historical simulation or Monte Carlo
-            
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            if total_value == 0:
-                return 0.0, 0.0
-            
-            # Calculate portfolio volatility
-            portfolio_vol = self._calculate_portfolio_volatility(positions, market_data)
-            
-            # Parametric VaR: VaR = z * σ * √t
-            # For daily VaR, t = 1
-            z_score = self._get_z_score(confidence_level)
-            var = z_score * portfolio_vol * total_value
-            
-            # CVaR (Expected Shortfall) = E[X|X>VaR]
-            # Simplified: CVaR ≈ VaR * 1.25 for normal distribution
-            cvar = var * 1.25
-            
-            return var, cvar
-            
-        except Exception as e:
-            safe_print(f"❌ VaR/CVaR calculation failed: {safe_format_error(e, 'var_cvar')}")
-            return 0.0, 0.0
-    
-    def _get_z_score(self, confidence_level: float) -> float:
-        """Get z-score for confidence level."""
-        z_scores = {
-            0.90: 1.282,
-            0.95: 1.645,
-            0.99: 2.326,
-            0.995: 2.576
-        }
-        return z_scores.get(confidence_level, 1.645)
-    
-    def _calculate_portfolio_volatility(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Calculate portfolio volatility."""
-        try:
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            if total_value == 0:
-                return 0.0
-            
-            # Weighted average volatility
-            weighted_vol = 0.0
-            for asset, pos in positions.items():
-                weight = pos.get('value', 0) / total_value
-                volatility = market_data.get(asset, {}).get('volatility', 0.0)
-                weighted_vol += weight * volatility
-            
-            return weighted_vol
-            
-        except Exception as e:
-            safe_print(f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
-            return 0.0
-    
-    def _calculate_portfolio_beta(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Calculate portfolio beta."""
-        try:
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            if total_value == 0:
-                return 0.0
-            
-            # Weighted average beta
-            weighted_beta = 0.0
-            for asset, pos in positions.items():
-                weight = pos.get('value', 0) / total_value
-                beta = market_data.get(asset, {}).get('beta', 1.0)
-                weighted_beta += weight * beta
-            
-            return weighted_beta
-            
-        except Exception as e:
-            safe_print(f"❌ Portfolio beta calculation failed: {safe_format_error(e, 'portfolio_beta')}")
-            return 1.0
-    
-    def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
-        """Calculate Sharpe ratio."""
-        try:
-            if volatility == 0:
-                return 0.0
-            
-            # Assume risk-free rate of 0 for simplicity
-            sharpe_ratio = total_pnl / volatility
-            
-            return sharpe_ratio
-            
-        except Exception as e:
-            safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
-            return 0.0
-    
-    def _calculate_max_drawdown(self, historical_data: Optional[List[Dict[str, Any]]]) -> float:
-        """Calculate maximum drawdown."""
-        try:
-            if not historical_data:
-                return 0.0
-            
-            # Extract portfolio values
-            values = [data.get('total_value', 0) for data in historical_data]
-            
-            if not values:
-                return 0.0
-            
-            # Calculate running maximum and drawdown
-            peak = values[0]
-            max_drawdown = 0.0
-            
-            for value in values:
-                if value > peak:
-                    peak = value
-                drawdown = (peak - value) / peak
-                max_drawdown = max(max_drawdown, drawdown)
-            
-            return max_drawdown
-            
-        except Exception as e:
-            safe_print(f"❌ Max drawdown calculation failed: {safe_format_error(e, 'max_drawdown')}")
-            return 0.0
-    
-    def _calculate_correlation_risk(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Calculate correlation risk."""
-        try:
-            if len(positions) < 2:
-                return 0.0
-            
-            # Calculate average correlation between positions
-            correlations = []
-            assets = list(positions.keys())
-            
-            for i in range(len(assets)):
-                for j in range(i + 1, len(assets)):
-                    asset1, asset2 = assets[i], assets[j]
-                    # Simplified correlation (in practice, use historical data)
-                    correlation = 0.5  # Default moderate correlation
-                    correlations.append(correlation)
-            
-            if correlations:
-                avg_correlation = sum(correlations) / len(correlations)
-                return avg_correlation
-            else:
-                return 0.0
-            
-        except Exception as e:
-            safe_print(f"❌ Correlation risk calculation failed: {safe_format_error(e, 'correlation_risk')}")
-            return 0.0
-    
-    def _calculate_concentration_risk(
-        self,
-        positions: Dict[str, Any],
-        total_value: float
-    ) -> float:
-        """Calculate concentration risk using Herfindahl index."""
-        try:
-            if total_value == 0:
-                return 0.0
-            
-            # Calculate Herfindahl-Hirschman Index (HHI)
-            hhi = 0.0
-            for pos in positions.values():
-                weight = pos.get('value', 0) / total_value
-                hhi += weight ** 2
-            
-            return hhi
-            
-        except Exception as e:
-            safe_print(f"❌ Concentration risk calculation failed: {safe_format_error(e, 'concentration_risk')}")
-            return 0.0
-    
-    def run_stress_test(
-        self,
-        portfolio_data: Dict[str, Any],
-        market_data: Dict[str, Any],
-        scenario: StressTestScenario,
-        custom_shocks: Optional[Dict[str, float]] = None
-    ) -> StressTestResult:
-        """
-        Run stress test on portfolio.
-        
-        This simulates various stress scenarios:
-        - Market crash
-        - Volatility spike
-        - Correlation breakdown
-        - Liquidity crisis
-        - Interest rate shock
-        """
-        try:
-            positions = portfolio_data.get('positions', {})
-            total_value = portfolio_data.get('total_value', 0.0)
-            
-            if total_value == 0:
-                return StressTestResult(
-                    scenario=scenario,
-                    portfolio_loss=0.0,
-                    var_impact=0.0,
-                    volatility_impact=0.0,
-                    correlation_impact=0.0,
-                    worst_case_loss=0.0,
-                    recovery_time_estimate=0.0,
-                    risk_level="low",
-                    timestamp=datetime.now()
+            if pattern_decay_risk > self.max_acceptable_risk:
+                is_approved = False
+                rejection_reason = f"Pattern showing confidence decay risk: {pattern_decay_risk:.3f}"
+
+        if is_approved:
+            logger.warning(
+                f"DLT Trade Proposal ACCEPTED for {proposal.symbol}. "
+                f"Risk Level: {risk_metrics.overall_risk_level.value}, "
+                f"Pattern Confidence: {proposal.confidence:.3f}"
+            )
+            if self.bus:
+                await self.bus.publish(
+                    "trade_proposal_accepted",
+                    proposal=proposal,
+                    risk_assessment=risk_metrics
                 )
-            
-            # Apply scenario-specific shocks
-            if scenario == StressTestScenario.MARKET_CRASH:
-                portfolio_loss = self._apply_market_crash_shock(positions, market_data)
-            elif scenario == StressTestScenario.VOLATILITY_SPIKE:
-                portfolio_loss = self._apply_volatility_spike_shock(positions, market_data)
-            elif scenario == StressTestScenario.CORRELATION_BREAKDOWN:
-                portfolio_loss = self._apply_correlation_breakdown_shock(positions, market_data)
-            elif scenario == StressTestScenario.LIQUIDITY_CRISIS:
-                portfolio_loss = self._apply_liquidity_crisis_shock(positions, market_data)
-            elif scenario == StressTestScenario.INTEREST_RATE_SHOCK:
-                portfolio_loss = self._apply_interest_rate_shock(positions, market_data)
-            elif scenario == StressTestScenario.CUSTOM_SCENARIO:
-                portfolio_loss = self._apply_custom_shock(positions, market_data, custom_shocks)
-            else:
-                portfolio_loss = 0.0
-            
-            # Calculate impacts
-            var_impact = portfolio_loss * 0.1  # Simplified
-            volatility_impact = portfolio_loss * 0.05  # Simplified
-            correlation_impact = portfolio_loss * 0.03  # Simplified
-            
-            # Estimate worst case loss
-            worst_case_loss = portfolio_loss * 1.5  # 50% additional stress
-            
-            # Estimate recovery time (simplified)
-            recovery_time_estimate = self._estimate_recovery_time(portfolio_loss, total_value)
-            
-            # Determine risk level
-            risk_level = self._determine_risk_level(portfolio_loss, total_value)
-            
-            # Create stress test result
-            result = StressTestResult(
-                scenario=scenario,
-                portfolio_loss=portfolio_loss,
-                var_impact=var_impact,
-                volatility_impact=volatility_impact,
-                correlation_impact=correlation_impact,
-                worst_case_loss=worst_case_loss,
-                recovery_time_estimate=recovery_time_estimate,
-                risk_level=risk_level,
-                timestamp=datetime.now(),
-                metadata={
-                    'total_value': total_value,
-                    'loss_percentage': portfolio_loss / total_value if total_value > 0 else 0.0
-                }
+        else:
+            logger.error(
+                f"DLT Trade Proposal REJECTED for {proposal.symbol}. "
+                f"Reason: {rejection_reason}"
             )
+            if self.bus:
+                await self.bus.publish(
+                    "trade_proposal_rejected",
+                    proposal=proposal,
+                    reason=rejection_reason,
+                    risk_assessment=risk_metrics
+                )
+
+    async def update_pattern_risk(self, pattern_hash: str, confidence: float):
+        """Update risk tracking for a specific DLT pattern."""
+        if pattern_hash not in self.pattern_confidence_history:
+            self.pattern_confidence_history[pattern_hash] = []
+        
+        self.pattern_confidence_history[pattern_hash].append(confidence)
+        
+        # Keep only recent history (last 50 observations)
+        if len(self.pattern_confidence_history[pattern_hash]) > 50:
+            self.pattern_confidence_history[pattern_hash] = \
+                self.pattern_confidence_history[pattern_hash][-50:]
+
+        # Add to active patterns if not already present
+        if pattern_hash not in self.active_pattern_hashes:
+            self.active_pattern_hashes.append(pattern_hash)
             
-            # Store result
-            self.stress_test_results.append(result)
-            self.stress_tests_run += 1
-            
-            safe_print(f"✅ Stress test completed: {scenario.value} - Loss = ${portfolio_loss:,.2f}")
-            return result
-            
-        except Exception as e:
-            safe_print(f"❌ Stress test failed: {safe_format_error(e, 'stress_test')}")
-            return StressTestResult(
-                scenario=scenario,
-                portfolio_loss=0.0,
-                var_impact=0.0,
-                volatility_impact=0.0,
-                correlation_impact=0.0,
-                worst_case_loss=0.0,
-                recovery_time_estimate=0.0,
-                risk_level="unknown",
-                timestamp=datetime.now()
-            )
-    
-    def _apply_market_crash_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Apply market crash shock (-20% across all assets)."""
-        try:
-            total_loss = 0.0
-            crash_shock = -0.20  # 20% decline
-            
-            for asset, pos in positions.items():
-                position_value = pos.get('value', 0)
-                beta = market_data.get(asset, {}).get('beta', 1.0)
-                # Higher beta = higher loss
-                asset_loss = position_value * crash_shock * beta
-                total_loss += asset_loss
-            
-            return abs(total_loss)
-            
-        except Exception as e:
-            safe_print(f"❌ Market crash shock failed: {safe_format_error(e, 'market_crash_shock')}")
-            return 0.0
-    
-    def _apply_volatility_spike_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Apply volatility spike shock (3x volatility increase)."""
-        try:
-            total_loss = 0.0
-            volatility_multiplier = 3.0
-            
-            for asset, pos in positions.items():
-                position_value = pos.get('value', 0)
-                base_volatility = market_data.get(asset, {}).get('volatility', 0.0)
-                # Higher volatility = higher potential loss
-                volatility_loss = position_value * base_volatility * (volatility_multiplier - 1)
-                total_loss += volatility_loss
-            
-            return total_loss
-            
-        except Exception as e:
-            safe_print(f"❌ Volatility spike shock failed: {safe_format_error(e, 'volatility_spike_shock')}")
-            return 0.0
-    
-    def _apply_correlation_breakdown_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Apply correlation breakdown shock."""
-        try:
-            # Correlation breakdown increases portfolio risk
-            # Simplified: assume 10% additional loss due to correlation breakdown
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            correlation_loss = total_value * 0.10
-            
-            return correlation_loss
-            
-        except Exception as e:
-            safe_print(f"❌ Correlation breakdown shock failed: {safe_format_error(e, 'correlation_breakdown_shock')}")
-            return 0.0
-    
-    def _apply_liquidity_crisis_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Apply liquidity crisis shock."""
-        try:
-            # Liquidity crisis increases bid-ask spreads
-            # Simplified: assume 5% additional loss due to liquidity issues
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            liquidity_loss = total_value * 0.05
-            
-            return liquidity_loss
-            
-        except Exception as e:
-            safe_print(f"❌ Liquidity crisis shock failed: {safe_format_error(e, 'liquidity_crisis_shock')}")
-            return 0.0
-    
-    def _apply_interest_rate_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any]
-    ) -> float:
-        """Apply interest rate shock."""
-        try:
-            # Interest rate shock affects different assets differently
-            # Simplified: assume 3% loss across portfolio
-            total_value = sum(pos.get('value', 0) for pos in positions.values())
-            interest_rate_loss = total_value * 0.03
-            
-            return interest_rate_loss
-            
-        except Exception as e:
-            safe_print(f"❌ Interest rate shock failed: {safe_format_error(e, 'interest_rate_shock')}")
-            return 0.0
-    
-    def _apply_custom_shock(
-        self,
-        positions: Dict[str, Any],
-        market_data: Dict[str, Any],
-        custom_shocks: Optional[Dict[str, float]]
-    ) -> float:
-        """Apply custom shock scenario."""
-        try:
-            if not custom_shocks:
-                return 0.0
-            
-            total_loss = 0.0
-            for asset, shock in custom_shocks.items():
-                if asset in positions:
-                    position_value = positions[asset].get('value', 0)
-                    asset_loss = position_value * shock
-                    total_loss += asset_loss
-            
-            return abs(total_loss)
-            
-        except Exception as e:
-            safe_print(f"❌ Custom shock failed: {safe_format_error(e, 'custom_shock')}")
-            return 0.0
-    
-    def _estimate_recovery_time(self, portfolio_loss: float, total_value: float) -> float:
-        """Estimate recovery time in days."""
-        try:
-            if total_value == 0:
-                return 0.0
-            
-            loss_percentage = portfolio_loss / total_value
-            
-            # Simplified recovery time estimation
-            if loss_percentage < 0.05:
-                return 5.0  # 5 days
-            elif loss_percentage < 0.10:
-                return 15.0  # 15 days
-            elif loss_percentage < 0.20:
-                return 30.0  # 30 days
-            else:
-                return 60.0  # 60 days
-            
-        except Exception as e:
-            safe_print(f"❌ Recovery time estimation failed: {safe_format_error(e, 'recovery_time')}")
-            return 30.0
-    
-    def _determine_risk_level(self, portfolio_loss: float, total_value: float) -> str:
-        """Determine risk level based on loss."""
-        try:
-            if total_value == 0:
-                return "low"
-            
-            loss_percentage = portfolio_loss / total_value
-            
-            if loss_percentage < 0.05:
-                return "low"
-            elif loss_percentage < 0.10:
-                return "medium"
-            elif loss_percentage < 0.20:
-                return "high"
-            else:
-                return "critical"
-            
-        except Exception as e:
-            safe_print(f"❌ Risk level determination failed: {safe_format_error(e, 'risk_level')}")
-            return "unknown"
-    
-    def check_risk_alerts(self, risk_metrics: RiskMetrics) -> List[RiskAlert]:
-        """Check for risk alerts based on current metrics."""
-        try:
-            alerts = []
-            
-            # Check VaR alerts
-            if risk_metrics.var_95 > self.risk_alert_thresholds['var_95']:
-                alerts.append(RiskAlert(
-                    alert_type="var_95_breach",
-                    severity="high",
-                    description=f"VaR(95%) exceeded threshold",
-                    threshold=self.risk_alert_thresholds['var_95'],
-                    current_value=risk_metrics.var_95,
-                    timestamp=datetime.now(),
-                    triggered_by="risk_monitoring",
-                    action_required="Reduce portfolio risk"
-                ))
-            
-            # Check volatility alerts
-            if risk_metrics.volatility > self.risk_alert_thresholds['volatility']:
-                alerts.append(RiskAlert(
-                    alert_type="volatility_breach",
-                    severity="medium",
-                    description=f"Portfolio volatility exceeded threshold",
-                    threshold=self.risk_alert_thresholds['volatility'],
-                    current_value=risk_metrics.volatility,
-                    timestamp=datetime.now(),
-                    triggered_by="risk_monitoring",
-                    action_required="Consider reducing position sizes"
-                ))
-            
-            # Check drawdown alerts
-            if risk_metrics.max_drawdown > self.risk_alert_thresholds['drawdown']:
-                alerts.append(RiskAlert(
-                    alert_type="drawdown_breach",
-                    severity="high",
-                    description=f"Maximum drawdown exceeded threshold",
-                    threshold=self.risk_alert_thresholds['drawdown'],
-                    current_value=risk_metrics.max_drawdown,
-                    timestamp=datetime.now(),
-                    triggered_by="risk_monitoring",
-                    action_required="Consider stopping trading"
-                ))
-            
-            # Store alerts
-            self.risk_alerts.extend(alerts)
-            self.alert_thresholds_breached += len(alerts)
-            
-            # Keep only recent alerts
-            if len(self.risk_alerts) > 1000:
-                self.risk_alerts = self.risk_alerts[-1000:]
-            
-            return alerts
-            
-        except Exception as e:
-            safe_print(f"❌ Risk alerts check failed: {safe_format_error(e, 'risk_alerts')}")
-            return []
-    
-    def get_risk_summary(self) -> Dict[str, Any]:
-        """Get comprehensive risk summary."""
+        # Keep only recent active patterns
+        if len(self.active_pattern_hashes) > 20:
+            self.active_pattern_hashes = self.active_pattern_hashes[-20:]
+
+        logger.debug(f"Updated pattern risk for {pattern_hash[:8]}... confidence: {confidence:.3f}")
+
+    async def update_drift_risk(self, drift_velocity: float):
+        """Update temporal drift risk monitoring."""
+        self.temporal_drift_history.append(drift_velocity)
+        
+        # Keep only recent history
+        if len(self.temporal_drift_history) > 100:
+            self.temporal_drift_history = self.temporal_drift_history[-100:]
+
+        logger.debug(f"Updated temporal drift: {drift_velocity:.6f}")
+
+    async def update_observer_risk(self, correction_magnitude: float):
+        """Update Observer synchronization risk."""
+        self.observer_correction_history.append(correction_magnitude)
+        
+        # Keep only recent history
+        if len(self.observer_correction_history) > 100:
+            self.observer_correction_history = self.observer_correction_history[-100:]
+
+        logger.debug(f"Updated observer correction: {correction_magnitude:.6f}")
+
+    def get_current_risk_assessment(self) -> DLTRiskMetrics:
+        """
+        Performs comprehensive DLT risk assessment using current system state.
+        """
+        # Calculate individual risk components
+        confidence_risks = []
+        for pattern_hash, confidences in self.pattern_confidence_history.items():
+            if confidences:
+                decay_risk = self.calculator.calculate_confidence_decay_risk(
+                    confidences[-1], confidences
+                )
+                confidence_risks.append(decay_risk)
+
+        avg_confidence_risk = unified_math.unified_math.mean(confidence_risks) if confidence_risks else 0.0
+
+        # Temporal drift risk
+        current_drift = self.temporal_drift_history[-1] if self.temporal_drift_history else 0.0
+        drift_risk = self.calculator.calculate_temporal_drift_risk(current_drift, self.drift_threshold)
+
+        # Triplet stability (using recent deltas)
+        triplet_risk = self.calculator.calculate_triplet_stability_risk(
+            np.array(self.recent_deltas[-27:])  # Last 9 triplets
+        ) if len(self.recent_deltas) >= 9 else 0.0
+
+        # Fractal coherence
+        fractal_risk = self.calculator.calculate_fractal_coherence_risk(
+            self.active_pattern_hashes
+        )
+
+        # Observer sync risk
+        observer_risk = self.calculator.calculate_observer_sync_risk(
+            self.observer_correction_history
+        )
+
+        # Combine risks using weighted average
+        weights = [0.3, 0.25, 0.2, 0.15, 0.1]  # Prioritize confidence and drift
+        risks = [avg_confidence_risk, drift_risk, triplet_risk, fractal_risk, observer_risk]
+        
+        overall_risk = np.average(risks, weights=weights)
+
+        # Determine risk level
+        risk_level = DLTRiskLevel.MINIMAL
+        for level, threshold in sorted(self.risk_thresholds.items(), 
+                                     key=lambda x: x[1], reverse=True):
+            if overall_risk >= threshold:
+                risk_level = level
+                break
+
+        # Generate warnings
+        warnings = []
+        if avg_confidence_risk > 0.7:
+            warnings.append("High pattern confidence decay detected")
+        if drift_risk > 0.6:
+            warnings.append("Temporal drift exceeding stability limits")
+        if triplet_risk > 0.5:
+            warnings.append("Triplet lock instability observed")
+        if fractal_risk > 0.6:
+            warnings.append("Forever Fractal coherence degrading")
+        if observer_risk > 0.5:
+            warnings.append("Observer synchronization issues")
+
+        return DLTRiskMetrics(
+            overall_risk_level=risk_level,
+            pattern_confidence=1.0 - avg_confidence_risk,
+            temporal_drift_velocity=current_drift,
+            triplet_stability_score=1.0 - triplet_risk,
+            fractal_coherence=1.0 - fractal_risk,
+            observer_sync_factor=1.0 - observer_risk,
+            active_warnings=warnings
+        )
+
+    def generate_risk_report(self) -> Dict:
+        """Generate comprehensive DLT risk report."""
+        risk_metrics = self.get_current_risk_assessment()
+        
         return {
-            'total_risk_checks': self.total_risk_checks,
-            'risk_violations': self.risk_violations,
-            'stress_tests_run': self.stress_tests_run,
-            'alert_thresholds_breached': self.alert_thresholds_breached,
-            'monitoring_active': self.monitoring_active,
-            'latest_metrics': self.risk_metrics_history[-1] if self.risk_metrics_history else None,
-            'latest_stress_test': self.stress_test_results[-1] if self.stress_test_results else None,
-            'active_alerts': len([alert for alert in self.risk_alerts if alert.severity in ['high', 'critical']])
+            "timestamp": datetime.now().isoformat(),
+            "overall_risk_level": risk_metrics.overall_risk_level.value,
+            "risk_scores": {
+                "pattern_confidence": risk_metrics.pattern_confidence,
+                "temporal_drift_velocity": risk_metrics.temporal_drift_velocity,
+                "triplet_stability": risk_metrics.triplet_stability_score,
+                "fractal_coherence": risk_metrics.fractal_coherence,
+                "observer_sync": risk_metrics.observer_sync_factor
+            },
+            "active_warnings": risk_metrics.active_warnings,
+            "monitoring_state": {
+                "tracked_patterns": len(self.pattern_confidence_history),
+                "drift_history_length": len(self.temporal_drift_history),
+                "observer_corrections": len(self.observer_correction_history),
+                "active_pattern_hashes": len(self.active_pattern_hashes)
+            },
+            "thresholds": {
+                "confidence_threshold": self.confidence_threshold,
+                "drift_threshold": self.drift_threshold,
+                "max_acceptable_risk": self.max_acceptable_risk
+            }
         }
 
 
-# Global enhanced risk manager instance
-enhanced_risk_manager = EnhancedRiskManager()
+# --- Demonstration ---
 
-
-# Convenience functions for external access
-def get_enhanced_risk_manager() -> EnhancedRiskManager:
-    """Get global enhanced risk manager instance."""
-    return enhanced_risk_manager
-
-
-def calculate_risk_metrics(
-    portfolio_data: Dict[str, Any],
-    market_data: Dict[str, Any],
-    historical_data: Optional[List[Dict[str, Any]]] = None
-) -> RiskMetrics:
-    """Calculate comprehensive risk metrics."""
-    return enhanced_risk_manager.calculate_risk_metrics(portfolio_data, market_data, historical_data)
-
-
-def run_stress_test(
-    portfolio_data: Dict[str, Any],
-    market_data: Dict[str, Any],
-    scenario: StressTestScenario,
-    custom_shocks: Optional[Dict[str, float]] = None
-) -> StressTestResult:
-    """Run stress test on portfolio."""
-    return enhanced_risk_manager.run_stress_test(portfolio_data, market_data, scenario, custom_shocks)
-
-
-def check_risk_alerts(risk_metrics: RiskMetrics) -> List[RiskAlert]:
-    """Check for risk alerts."""
-    return enhanced_risk_manager.check_risk_alerts(risk_metrics)
-
-
-def get_risk_summary() -> Dict[str, Any]:
-    """Get risk summary."""
-    return enhanced_risk_manager.get_risk_summary()
-
-
-# Example usage
-if __name__ == "__main__":
-    # Test enhanced risk manager
-    print("🎯 Testing Enhanced Risk Manager...")
+async def main():
+    """Demonstrate DLT Risk Manager functionality."""
+    logging.basicConfig(level=logging.INFO)
     
-    manager = get_enhanced_risk_manager()
+    safe_print("=== DLT Enhanced Risk Manager Demo ===")
     
-    # Test risk metrics calculation
-    portfolio_data = {
-        'positions': {
-            'BTC': {'value': 5000.0, 'unrealized_pnl': 250.0},
-            'ETH': {'value': 3000.0, 'unrealized_pnl': -100.0}
-        },
-        'total_value': 8000.0,
-        'total_pnl': 150.0
-    }
-    
-    market_data = {
-        'BTC': {'volatility': 0.03, 'beta': 1.2},
-        'ETH': {'volatility': 0.04, 'beta': 1.0}
-    }
-    
-    risk_metrics = calculate_risk_metrics(portfolio_data, market_data)
-    print(f"✅ Risk metrics: VaR(95%) = {risk_metrics.var_95:.2%}")
-    
-    # Test stress test
-    stress_result = run_stress_test(
-        portfolio_data, market_data, StressTestScenario.MARKET_CRASH
+    # Initialize system
+    bus = FaultBus()
+    risk_manager = EnhancedRiskManager(
+        fault_bus=bus,
+        confidence_threshold=0.4,
+        drift_threshold=0.08
     )
-    print(f"✅ Stress test: Loss = ${stress_result.portfolio_loss:,.2f}")
+    risk_manager.start_listening()
+
+    # Simulate some DLT pattern updates
+    patterns = ["abc123def", "xyz789uvw", "lmn456pqr"]
     
-    # Test risk alerts
-    alerts = check_risk_alerts(risk_metrics)
-    print(f"✅ Risk alerts: {len(alerts)} alerts")
-    
-    # Get summary
-    summary = get_risk_summary()
-    print(f"✅ Risk Summary: {summary}") 
+    for i, pattern in enumerate(patterns):
+        confidence = 0.9 - (i * 0.1)  # Declining confidence
+        await risk_manager.update_pattern_risk(pattern, confidence)
+        await risk_manager.update_drift_risk(0.02 + (i * 0.03))  # Increasing drift
+
+    # Get risk assessment
+    assessment = risk_manager.get_current_risk_assessment()
+    safe_print(f"\nRisk Level: {assessment.overall_risk_level.value}")
+    safe_print(f"Pattern Confidence: {assessment.pattern_confidence:.3f}")
+    safe_print(f"Temporal Drift: {assessment.temporal_drift_velocity:.6f}")
+    safe_print(f"Active Warnings: {len(assessment.active_warnings)}")
+
+    # Generate full report
+    report = risk_manager.generate_risk_report()
+    safe_print(f"\nFull Risk Report:")
+    for key, value in report["risk_scores"].items():
+        safe_print(f"  {key}: {value:.3f}")
+
+    # Test trade proposal assessment
+    proposal = TradeProposal("BTC", "BUY", 50000, 0.35, "abc123def")
+    await bus.publish("trade_proposal_ready", proposal=proposal)
+
+
+if __name__ == "__main__":
+    asyncio.run(main()) 

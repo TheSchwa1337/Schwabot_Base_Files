@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library V2 - Enhanced Mathematical Functions.
 
@@ -15,14 +31,26 @@ Integrates with: mathlib.py (V1), mathlib_v3.py, advanced_mathematical_core.py
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
-from typing import Any, Dict, TYPE_CHECKING
+from typing import Any, Dict, TYPE_CHECKING, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
+
+# Import CLI handler for safe output
+try:
+    from core.type_binding_system import cli_handler
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    # Fallback for CLI safety
+    def safe_print(msg: str) -> None:
+        try:
+            print(msg)
+        except UnicodeEncodeError:
+            print(msg.encode('ascii', errors='replace').decode('ascii'))
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -50,7 +78,10 @@ class CoreMathLibV2:
         """Initialize the enhanced mathematical library."""
         self.version = "2.0.0"
         self.initialized = True
-        logger.info(f"CoreMathLibV2 v{self.version} initialized")
+        if CLI_HANDLER_AVAILABLE:
+            cli_handler.log_safe(logger, "info", f"CoreMathLibV2 v{self.version} initialized")
+        else:
+            logger.info(f"CoreMathLibV2 v{self.version} initialized")
 
     def calculate_vwap(self: Self, prices: Vector, volumes: Vector) -> Vector:
         """Calculate Volume Weighted Average Price."""
@@ -61,7 +92,7 @@ class CoreMathLibV2:
         cumulative_pv = np.cumsum(prices * volumes)
 
         # Avoid division by zero
-        vwap = np.divide(
+        vwap = unified_math.divide(
             cumulative_pv,
             cumulative_volume,
             out=np.zeros_like(cumulative_pv),
@@ -82,8 +113,8 @@ class CoreMathLibV2:
 
         # True Range components
         tr1 = high - low
-        tr2 = np.abs(high - prev_close)
-        tr3 = np.abs(low - prev_close)
+        tr2 = unified_math.unified_math.abs(high - prev_close)
+        tr3 = unified_math.unified_math.abs(low - prev_close)
 
         # Maximum of the three
         true_range = np.maximum(tr1, np.maximum(tr2, tr3))
@@ -96,11 +127,11 @@ class CoreMathLibV2:
         true_range = self.calculate_true_range(high, low, close)
 
         if len(true_range) < period:
-            return np.full_like(true_range, np.mean(true_range))
+            return np.full_like(true_range, unified_math.unified_math.mean(true_range))
 
         # Calculate ATR using exponential moving average
         atr = np.zeros_like(true_range)
-        atr[:period] = np.mean(true_range[:period])  # Initial ATR
+        atr[:period] = unified_math.unified_math.mean(true_range[:period])  # Initial ATR
 
         # Smoothing factor
         alpha = 1.0 / period
@@ -123,8 +154,8 @@ class CoreMathLibV2:
         rsi[:period] = 50.0  # Neutral RSI for initial values
 
         # Calculate initial average gain and loss
-        avg_gain = np.mean(gains[:period])
-        avg_loss = np.mean(losses[:period])
+        avg_gain = unified_math.unified_math.mean(gains[:period])
+        avg_loss = unified_math.unified_math.mean(losses[:period])
 
         # Smoothing factor
         alpha = 1.0 / period
@@ -151,8 +182,8 @@ class CoreMathLibV2:
         williams_r = np.zeros_like(high)
 
         for i in range(period - 1, len(high)):
-            highest_high = np.max(high[i - period + 1 : i + 1])
-            lowest_low = np.min(low[i - period + 1 : i + 1])
+            highest_high = unified_math.unified_math.max(high[i - period + 1 : i + 1])
+            lowest_low = unified_math.unified_math.min(low[i - period + 1 : i + 1])
 
             if highest_high - lowest_low == 0:
                 williams_r[i] = -50.0
@@ -183,8 +214,8 @@ class CoreMathLibV2:
         k_percent = np.zeros_like(high)
 
         for i in range(k_period - 1, len(high)):
-            highest_high = np.max(high[i - k_period + 1 : i + 1])
-            lowest_low = np.min(low[i - k_period + 1 : i + 1])
+            highest_high = unified_math.unified_math.max(high[i - k_period + 1 : i + 1])
+            lowest_low = unified_math.unified_math.min(low[i - k_period + 1 : i + 1])
 
             if highest_high - lowest_low == 0:
                 k_percent[i] = 50.0
@@ -196,7 +227,7 @@ class CoreMathLibV2:
         # Calculate %D as moving average of %K
         d_percent = np.zeros_like(k_percent)
         for i in range(d_period - 1, len(k_percent)):
-            d_percent[i] = np.mean(k_percent[i - d_period + 1 : i + 1])
+            d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1 : i + 1])
 
         return {"k_percent": k_percent, "d_percent": d_percent}
 
@@ -214,8 +245,8 @@ class CoreMathLibV2:
 
         for i in range(period - 1, len(typical_price)):
             tp_period = typical_price[i - period + 1 : i + 1]
-            sma_tp = np.mean(tp_period)
-            mean_deviation = np.mean(np.abs(tp_period - sma_tp))
+            sma_tp = unified_math.unified_math.mean(tp_period)
+            mean_deviation = unified_math.unified_math.mean(unified_math.unified_math.abs(tp_period - sma_tp))
 
             if mean_deviation == 0:
                 cci[i] = 0
@@ -232,8 +263,8 @@ class CoreMathLibV2:
             return {"error": "Empty data"}
 
         # Basic statistics
-        mean_val = np.mean(data)
-        std_val = np.std(data, ddof=1)
+        mean_val = unified_math.unified_math.mean(data)
+        std_val = unified_math.unified_math.std(data, ddof=1)
 
         # Skewness and Kurtosis
         n = len(data)
@@ -268,8 +299,8 @@ class CoreMathLibV2:
             "skewness": float(skewness),
             "kurtosis": float(kurtosis),
             "jarque_bera": float(jb_statistic),
-            "min": float(np.min(data)),
-            "max": float(np.max(data)),
+            "min": float(unified_math.unified_math.min(data)),
+            "max": float(unified_math.unified_math.max(data)),
             "median": float(np.median(data)),
             "iqr": float(np.percentile(data, 75) - np.percentile(data, 25)),
         }
@@ -287,7 +318,7 @@ class CoreMathLibV2:
         # Normalize to probabilities
         hist = hist / np.sum(hist)
 
-        # Remove zeros to avoid log(0)
+        # Remove zeros to avoid unified_math.log(0)
         hist = hist[hist > 0]
 
         # Shannon entropy
@@ -318,7 +349,7 @@ class CoreMathLibV2:
         recent_data = data[-period:]
 
         # Simple Moving Average
-        sma = np.mean(recent_data)
+        sma = unified_math.unified_math.mean(recent_data)
 
         # Exponential Moving Average
         alpha = 2.0 / (period + 1)
@@ -398,7 +429,7 @@ def process_waveform(
         elif analysis_type == "spectral":
             # Basic spectral analysis (simplified)
             fft_result = np.fft.fft(signal)
-            power_spectrum = np.abs(fft_result) ** 2
+            power_spectrum = unified_math.unified_math.abs(fft_result) ** 2
             dominant_freq_idx = np.argmax(
                 power_spectrum[: len(power_spectrum) // 2]
             )
@@ -425,7 +456,7 @@ def main() -> None:
     """Demo of CoreMathLibV2 capabilities."""
     try:
         mathlib = CoreMathLibV2()
-        print(f"✅ CoreMathLibV2 v{mathlib.version} initialized")
+        safe_print(f"✅ CoreMathLibV2 v{mathlib.version} initialized")
 
         # Demo data
         prices = np.array([100, 102, 98, 105, 103, 107, 104, 108, 106, 110])
@@ -435,20 +466,20 @@ def main() -> None:
 
         # Test VWAP
         vwap = mathlib.calculate_vwap(prices, volumes)
-        print(f"📊 VWAP: {vwap[-1]:.2f}")
+        safe_print(f"📊 VWAP: {vwap[-1]:.2f}")
 
         # Test RSI
         rsi = mathlib.calculate_rsi(prices)
-        print(f"📈 RSI: {rsi[-1]:.2f}")
+        safe_print(f"📈 RSI: {rsi[-1]:.2f}")
 
         # Test statistical analysis
         stats = mathlib.advanced_statistical_analysis(prices)
-        print(f"📊 Mean: {stats['mean']:.2f}, Std: {stats['std']:.2f}")
+        safe_print(f"📊 Mean: {stats['mean']:.2f}, Std: {stats['std']:.2f}")
 
-        print("🎉 CoreMathLibV2 demo completed!")
+        safe_print("🎉 CoreMathLibV2 demo completed!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

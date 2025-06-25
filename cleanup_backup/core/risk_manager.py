@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Risk Manager - Advanced Risk Management System.
 
@@ -35,7 +39,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import getcontext
@@ -44,7 +47,7 @@ import logging
 import time
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -266,7 +269,7 @@ class RiskManager:
             allocated_risk = 0.0
 
             for asset, position in positions.items():
-                position_value = abs(position.get("value", 0))
+                position_value = unified_math.abs(position.get("value", 0))
                 position_weight = position_value / total_value
 
                 # Base position risk
@@ -282,7 +285,7 @@ class RiskManager:
 
                 allocated_risk += thermal_risk
 
-            return min(allocated_risk, 1.0)
+            return unified_math.min(allocated_risk, 1.0)
 
         except Exception as e:
             logger.error(f"Failed to calculate allocated risk: {e}")
@@ -298,7 +301,7 @@ class RiskManager:
             # In a real implementation, this would use actual correlation data
             position_weights = []
             for position in positions.values():
-                weight = abs(position.get("value", 0))
+                weight = unified_math.abs(position.get("value", 0))
                 position_weights.append(weight)
 
             total_weight = sum(position_weights)
@@ -313,7 +316,7 @@ class RiskManager:
             # Higher concentration = higher correlation = higher risk adjustment
             correlation_adj = 1.0 + (concentration - 1.0 / len(positions)) * 2.0
 
-            return max(0.5, min(correlation_adj, 2.0))
+            return unified_math.max(0.5, unified_math.min(correlation_adj, 2.0))
 
         except Exception as e:
             logger.error(f"Failed to calculate correlation adjustment: {e}")
@@ -344,12 +347,12 @@ class RiskManager:
             if not returns:
                 return 1.0
 
-            volatility = np.std(returns)
+            volatility = unified_math.unified_math.std(returns)
 
             # Calculate volatility adjustment
             volatility_adj = 1.0 + (volatility - 0.2) * 0.5
 
-            return max(0.5, min(volatility_adj, 2.0))
+            return unified_math.max(0.5, unified_math.min(volatility_adj, 2.0))
 
         except Exception as e:
             logger.error(f"Failed to calculate volatility adjustment: {e}")
@@ -362,14 +365,14 @@ class RiskManager:
                 return 1.0
 
             # Calculate weighted thermal risk
-            total_value = sum(abs(pos.get("value", 0)) for pos in positions.values())
+            total_value = sum(unified_math.abs(pos.get("value", 0)) for pos in positions.values())
             if total_value <= 0:
                 return 1.0
 
             thermal_risks = []
             for pos in positions.values():
                 thermal_index = pos.get("thermal_index", 1.0)
-                position_value = abs(pos.get("value", 0))
+                position_value = unified_math.abs(pos.get("value", 0))
                 weight = position_value / total_value
                 thermal_risks.append(thermal_index * weight)
 
@@ -378,7 +381,7 @@ class RiskManager:
             # Calculate thermal adjustment
             thermal_adj = 1.0 + (thermal_risk - 0.8) * 0.5
 
-            return max(0.5, min(thermal_adj, 2.0))
+            return unified_math.max(0.5, unified_math.min(thermal_adj, 2.0))
 
         except Exception as e:
             logger.error(f"Failed to calculate thermal adjustment: {e}")
@@ -404,8 +407,8 @@ class RiskManager:
 def main() -> None:
     """Main function for testing risk manager."""
     try:
-        print("🔍 Risk Manager Test")
-        print("=" * 40)
+        safe_print("🔍 Risk Manager Test")
+        safe_print("=" * 40)
 
         # Initialize risk manager
         config = {
@@ -454,12 +457,12 @@ def main() -> None:
 
         # Update risk budget
         risk_budget = risk_manager.update_risk_budget(portfolio_data)
-        print(f"✅ Risk budget updated: {risk_budget}")
+        safe_print(f"✅ Risk budget updated: {risk_budget}")
 
-        print("\n🎉 Risk Manager test completed successfully!")
+        safe_print("\n🎉 Risk Manager test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Risk Manager test failed: {e}")
+        safe_print(f"❌ Risk Manager test failed: {e}")
         import traceback
 
         traceback.print_exc()

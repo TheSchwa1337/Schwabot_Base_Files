@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Settings Controller
 Manages mathematical flow parameters and reinforcement learning from backtest failures
@@ -9,7 +11,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from pathlib import Path
-import numpy as np
+from core.unified_math_system import unified_math
 from datetime import datetime, timedelta
 import threading
 import time
@@ -232,17 +234,17 @@ class SettingsController:
         if 'entropy' in failure_reason.lower():
             # Reduce entropy threshold
             new_threshold = self.math_params.entropy_threshold * (1 - self.rl_params.failure_penalty_weight * 0.1)
-            self.math_params.entropy_threshold = max(0.1, new_threshold)
+            self.math_params.entropy_threshold = unified_math.max(0.1, new_threshold)
         
         elif 'confidence' in failure_reason.lower():
             # Increase confidence requirements
             new_confidence = self.math_params.vector_confidence_min * (1 + self.rl_params.failure_penalty_weight * 0.1)
-            self.math_params.vector_confidence_min = min(0.95, new_confidence)
+            self.math_params.vector_confidence_min = unified_math.min(0.95, new_confidence)
         
         elif 'volume' in failure_reason.lower():
             # Adjust volume delta threshold
             new_threshold = self.math_params.volume_delta_threshold * (1 + self.rl_params.failure_penalty_weight * 0.1)
-            self.math_params.volume_delta_threshold = min(0.5, new_threshold)
+            self.math_params.volume_delta_threshold = unified_math.min(0.5, new_threshold)
         
         # Adaptive learning rate adjustment
         if self.rl_params.adaptive_learning:
@@ -258,12 +260,12 @@ class SettingsController:
             if 'entropy' in strategy_used.lower():
                 # Slightly increase entropy threshold
                 new_threshold = self.math_params.entropy_threshold * (1 + self.rl_params.success_reward_weight * 0.05)
-                self.math_params.entropy_threshold = min(0.95, new_threshold)
+                self.math_params.entropy_threshold = unified_math.min(0.95, new_threshold)
             
             elif 'confidence' in strategy_used.lower():
                 # Slightly decrease confidence requirements
                 new_confidence = self.math_params.vector_confidence_min * (1 - self.rl_params.success_reward_weight * 0.05)
-                self.math_params.vector_confidence_min = max(0.3, new_confidence)
+                self.math_params.vector_confidence_min = unified_math.max(0.3, new_confidence)
     
     def get_optimized_parameters(self) -> Dict[str, Any]:
         """Get current optimized parameters"""
@@ -275,7 +277,7 @@ class SettingsController:
                 'statistics': {
                     'total_failures': len(self.failure_history),
                     'total_successes': len(self.success_history),
-                    'success_rate': len(self.success_history) / max(1, len(self.failure_history) + len(self.success_history)),
+                    'success_rate': len(self.success_history) / unified_math.max(1, len(self.failure_history) + len(self.success_history)),
                     'last_update': self.last_update.isoformat(),
                     'update_count': self.update_count
                 }
@@ -353,10 +355,10 @@ class SettingsController:
         # Adjust exploration rate based on performance
         if success_rate < 0.3:
             # Increase exploration for poor performance
-            self.rl_params.exploration_rate = min(0.5, self.rl_params.exploration_rate * 1.1)
+            self.rl_params.exploration_rate = unified_math.min(0.5, self.rl_params.exploration_rate * 1.1)
         elif success_rate > 0.7:
             # Decrease exploration for good performance
-            self.rl_params.exploration_rate = max(0.05, self.rl_params.exploration_rate * 0.9)
+            self.rl_params.exploration_rate = unified_math.max(0.05, self.rl_params.exploration_rate * 0.9)
         
         # Adjust learning rate based on convergence
         if self.update_count > self.rl_params.max_iterations:
@@ -368,7 +370,7 @@ class SettingsController:
         """Get comprehensive performance metrics"""
         with self.lock:
             total_tests = len(self.failure_history) + len(self.success_history)
-            success_rate = len(self.success_history) / max(1, total_tests)
+            success_rate = len(self.success_history) / unified_math.max(1, total_tests)
             
             recent_failures = [f for f in self.failure_history 
                              if datetime.fromisoformat(f['timestamp']) > datetime.now() - timedelta(hours=24)]
@@ -463,9 +465,9 @@ if __name__ == "__main__":
     })
     
     # Print current configuration
-    print("Current Configuration:")
+    safe_print("Current Configuration:")
     print(json.dumps(controller.get_optimized_parameters(), indent=2))
     
     # Print performance metrics
-    print("\nPerformance Metrics:")
+    safe_print("\nPerformance Metrics:")
     print(json.dumps(controller.get_performance_metrics(), indent=2)) 

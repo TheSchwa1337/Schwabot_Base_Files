@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Quantum Drift Shell Engine - Schwabot Quantum Operations.
 
@@ -23,14 +39,13 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
 
 from datetime import datetime
 import hashlib
 import logging
 from typing import Callable, Dict, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 from core.type_defs import DriftCoefficient
 from core.type_defs import EnergyLevel
@@ -106,7 +121,7 @@ class PhaseDriftHarmonizer:
             return 1.0
 
         phase_diff = np.diff(phase_array)
-        coherence = np.mean(np.cos(phase_diff))
+        coherence = unified_math.unified_math.mean(np.unified_math.cos(phase_diff))
         return float(coherence)
 
     def detect_phase_interference(
@@ -197,7 +212,7 @@ class TensorMemoryFeedback:
         for i, entry in enumerate(
             reversed(self.history_stack[-recursion_depth:])
         ):
-            weight = np.exp(-i * 0.1)  # Exponential decay
+            weight = unified_math.exp(-i * 0.1)  # Exponential decay
             feedback_tensor += (
                 weight * entry["tensor"] * entry["entropy_delta"]
             )
@@ -215,7 +230,7 @@ class TensorMemoryFeedback:
         if not self.history_stack:
             return {"entries": 0, "avg_entropy": 0.0, "oldest_entry": None}
 
-        avg_entropy = np.mean(
+        avg_entropy = unified_math.mean(
             [entry["entropy_delta"] for entry in self.history_stack]
         )
         oldest_entry = (
@@ -269,7 +284,7 @@ class QuantumDriftShellEngine:
         """
         # Create normalized quantum state
         state = np.random.randn(dimensions) + 1j * np.random.randn(dimensions)
-        normalization = np.sqrt(np.sum(np.abs(state) ** 2))
+        normalization = unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(state) ** 2))
         normalized_state = (
             state / normalization if normalization > 0 else state
         )
@@ -308,7 +323,7 @@ class QuantumDriftShellEngine:
         try:
             transformed_state = operator(quantum_state)
             # Ensure normalization
-            norm = np.sqrt(np.sum(np.abs(transformed_state) ** 2))
+            norm = unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(transformed_state) ** 2))
             if norm > 0:
                 transformed_state = transformed_state / norm
             return QuantumState(transformed_state)
@@ -330,10 +345,10 @@ class QuantumDriftShellEngine:
             Wave function value
         """
         # Simple wave function: ψ(x) = Σ_n c_n φ_n(x)
-        # where φ_n(x) = exp(i * n * x) / sqrt(2π)
+        # where φ_n(x) = unified_math.exp(i * n * x) / unified_math.sqrt(2π)
         wave_value = 0j
         for n, coefficient in enumerate(quantum_state):
-            basis_function = np.exp(1j * n * x) / np.sqrt(2 * np.pi)
+            basis_function = unified_math.unified_math.exp(1j * n * x) / unified_math.unified_math.sqrt(2 * np.pi)
             wave_value += coefficient * basis_function
 
         return complex(wave_value)
@@ -419,14 +434,14 @@ class QuantumDriftShellEngine:
         density_matrix = np.outer(quantum_state, np.conj(quantum_state))
 
         # Compute eigenvalues
-        eigenvalues = np.linalg.eigvals(density_matrix)
+        eigenvalues = unified_math.unified_math.eigenvalues(density_matrix)
         eigenvalues = np.real(eigenvalues)  # Ensure real values
 
-        # Compute entropy: S = -Σ λ_i log(λ_i)
+        # Compute entropy: S = -Σ λ_i unified_math.log(λ_i)
         entropy = 0.0
         for eigenvalue in eigenvalues:
             if eigenvalue > 0:
-                entropy -= eigenvalue * np.log(eigenvalue)
+                entropy -= eigenvalue * unified_math.unified_math.log(eigenvalue)
 
         return Entropy(entropy)
 
@@ -440,17 +455,17 @@ def main() -> None:
 
     # Test quantum state creation
     quantum_state = quantum_engine.create_quantum_state(dimensions=4)
-    print(f"Quantum state shape: {quantum_state.shape}")
+    safe_print(f"Quantum state shape: {quantum_state.shape}")
 
     # Test energy level computation
     energy_level = quantum_engine.compute_energy_level(quantum_state)
-    print(f"Energy level: {energy_level}")
+    safe_print(f"Energy level: {energy_level}")
 
     # Test wave function computation
     wave_value = quantum_engine.compute_wave_function(
         x=1.0, quantum_state=quantum_state
     )
-    print(f"Wave function value: {wave_value}")
+    safe_print(f"Wave function value: {wave_value}")
 
     # Test quantum hash creation
     hash_result = quantum_engine.create_quantum_hash(
@@ -458,16 +473,16 @@ def main() -> None:
         time_slot=TimeSlot(1.5),
         strategy_id=StrategyId("quantum_strategy_001"),
     )
-    print(f"Quantum hash: {hash_result}")
+    safe_print(f"Quantum hash: {hash_result}")
 
     # Test quantum entropy computation
     entropy = quantum_engine.compute_quantum_entropy(quantum_state)
-    print(f"Quantum entropy: {entropy}")
+    safe_print(f"Quantum entropy: {entropy}")
 
     # Test phase harmonization
     phase_tensor = Tensor(np.random.randn(10, 10))
     harmonized_tensor = quantum_engine.harmonize_quantum_phases(phase_tensor)
-    print(f"Harmonized tensor shape: {harmonized_tensor.shape}")
+    safe_print(f"Harmonized tensor shape: {harmonized_tensor.shape}")
 
 
 if __name__ == "__main__":

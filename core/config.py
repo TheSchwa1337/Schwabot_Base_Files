@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 
@@ -455,7 +468,7 @@ class ConfigManager:
         except Exception as e:
             error_msg = f"Error loading configuration: {e}"
             self.safe_log("error", error_msg)
-            self.safe_print(f"⚠️ {error_msg}")
+            self.safe_safe_print(f"⚠️ {error_msg}")
 
     def _update_config_from_dict(self, config_data: Dict[str, Any]) -> None:
         """Update configuration from dictionary"""
@@ -861,66 +874,66 @@ def main() -> None:
     CLI-safe output and comprehensive error handling.
     """
     try:
-        print("🚀 Schwabot Configuration Management Test")
-        print("=" * 50)
+        safe_print("🚀 Schwabot Configuration Management Test")
+        safe_print("=" * 50)
 
         # Initialize configuration manager
-        print("⚙️ Initializing configuration manager...")
+        safe_print("⚙️ Initializing configuration manager...")
         config_manager = get_config_manager()
 
         # Get current configuration
         config = config_manager.get_config()
-        print(f"✅ Configuration loaded:")
-        print(f"   Environment: {config.system.environment.value}")
-        print(f"   Version: {config.version}")
-        print(f"   Debug mode: {config.system.debug}")
-        print(f"   Default exchange: {config.trading.default_exchange}")
+        safe_print(f"✅ Configuration loaded:")
+        safe_print(f"   Environment: {config.system.environment.value}")
+        safe_print(f"   Version: {config.version}")
+        safe_print(f"   Debug mode: {config.system.debug}")
+        safe_print(f"   Default exchange: {config.trading.default_exchange}")
 
         # Validate configuration
-        print("\n🔍 Validating configuration...")
+        safe_print("\n🔍 Validating configuration...")
         validation = config_manager.validate_configuration()
-        print(f"   Status: {validation['status']}")
+        safe_print(f"   Status: {validation['status']}")
 
         if validation["errors"]:
-            print(f"   Errors: {len(validation['errors'])}")
+            safe_print(f"   Errors: {len(validation['errors'])}")
             for error in validation["errors"]:
-                print(f"     - {error}")
+                safe_print(f"     - {error}")
 
         if validation["warnings"]:
-            print(f"   Warnings: {len(validation['warnings'])}")
+            safe_print(f"   Warnings: {len(validation['warnings'])}")
             for warning in validation["warnings"]:
-                print(f"     - {warning}")
+                safe_print(f"     - {warning}")
 
         # Test configuration update
-        print("\n🔧 Testing configuration update...")
+        safe_print("\n🔧 Testing configuration update...")
         success = config_manager.update_config("system", "log_level", "DEBUG")
         if success:
-            print("✅ Configuration updated successfully")
+            safe_print("✅ Configuration updated successfully")
             updated_config = config_manager.get_config()
-            print(f"   New log level: {updated_config.system.log_level}")
+            safe_print(f"   New log level: {updated_config.system.log_level}")
         else:
-            print("❌ Configuration update failed")
+            safe_print("❌ Configuration update failed")
 
         # Test configuration export
-        print("\n📤 Testing configuration export...")
+        safe_print("\n📤 Testing configuration export...")
         yaml_export = config_manager.export_config("yaml")
         if yaml_export:
-            print(f"✅ Configuration exported ({len(yaml_export)} characters)")
+            safe_print(f"✅ Configuration exported ({len(yaml_export)} characters)")
         else:
-            print("❌ Configuration export failed")
+            safe_print("❌ Configuration export failed")
 
         # Test configuration save
-        print("\n💾 Testing configuration save...")
+        safe_print("\n💾 Testing configuration save...")
         save_success = config_manager.save_configuration()
         if save_success:
-            print("✅ Configuration saved successfully")
+            safe_print("✅ Configuration saved successfully")
         else:
-            print("❌ Configuration save failed")
+            safe_print("❌ Configuration save failed")
 
-        print("\n🎉 Configuration management test completed successfully!")
+        safe_print("\n🎉 Configuration management test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Configuration management test failed: {e}")
+        safe_print(f"❌ Configuration management test failed: {e}")
         import traceback
 
         traceback.print_exc()

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """phantom_price_vector_synchronizer – phantom velocity adjustment and sync.
 
@@ -8,12 +11,11 @@ This module synchronizes phantom price vectors across market data streams
 for ghost protocol integration.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Sequence, Dict, List, Any
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "PhantomPriceSynchronizer",
@@ -99,7 +101,7 @@ class PhantomPriceSynchronizer:
             return np.array([])
 
         # Find minimum length for synchronization
-        min_length = min(len(pv) for pv in phantom_velocities)
+        min_length = unified_math.min(len(pv) for pv in phantom_velocities)
 
         synchronized = np.zeros(min_length, dtype=float)
         for i, pv in enumerate(phantom_velocities):

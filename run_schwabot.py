@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Schwabot Main Entry Point
@@ -35,8 +36,8 @@ try:
     from ui.schwabot_dashboard import app, socketio
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
-    print(f"Error importing Schwabot components: {e}")
-    print("Please ensure all dependencies are installed: pip install -r requirements.txt")
+    safe_print(f"Error importing Schwabot components: {e}")
+    safe_print("Please ensure all dependencies are installed: pip install -r requirements.txt")
     IMPORTS_SUCCESSFUL = False
 
 # Global variables for graceful shutdown
@@ -183,15 +184,15 @@ def print_system_info():
         settings = components['settings_manager']
         config_summary = settings.get_configuration_summary()
         
-        print("\n📊 System Configuration:")
-        print(f"   Environment: {config_summary.get('environment', 'unknown')}")
-        print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
-        print(f"   Log Level: {config_summary.get('log_level', 'INFO')}")
-        print(f"   Enabled Exchanges: {', '.join(config_summary.get('enabled_exchanges', []))}")
-        print(f"   Supported Symbols: {', '.join(config_summary.get('supported_symbols', [])[:3])}...")
-        print(f"   UI Enabled: {config_summary.get('ui_enabled', False)}")
-        print(f"   API Enabled: {config_summary.get('api_enabled', False)}")
-        print(f"   Real-time Enabled: {config_summary.get('real_time_enabled', False)}")
+        safe_print("\n📊 System Configuration:")
+        safe_print(f"   Environment: {config_summary.get('environment', 'unknown')}")
+        safe_print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
+        safe_print(f"   Log Level: {config_summary.get('log_level', 'INFO')}")
+        safe_print(f"   Enabled Exchanges: {', '.join(config_summary.get('enabled_exchanges', []))}")
+        safe_print(f"   Supported Symbols: {', '.join(config_summary.get('supported_symbols', [])[:3])}...")
+        safe_print(f"   UI Enabled: {config_summary.get('ui_enabled', False)}")
+        safe_print(f"   API Enabled: {config_summary.get('api_enabled', False)}")
+        safe_print(f"   Real-time Enabled: {config_summary.get('real_time_enabled', False)}")
 
 def main():
     """Main entry point for Schwabot."""
@@ -234,10 +235,10 @@ def main():
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
         
-        print(f"\n✅ Schwabot starting on http://{host}:{port}")
-        print("📊 Access the dashboard in your web browser")
-        print("🔧 Use Ctrl+C to stop the server gracefully")
-        print("\n🚀 System Status: RUNNING")
+        safe_print(f"\n✅ Schwabot starting on http://{host}:{port}")
+        safe_print("📊 Access the dashboard in your web browser")
+        safe_print("🔧 Use Ctrl+C to stop the server gracefully")
+        safe_print("\n🚀 System Status: RUNNING")
         
         # Start the Flask app
         socketio.run(
@@ -268,7 +269,7 @@ def main():
                 logger.error(f"Error cleaning up {name}: {e}")
         
         logger.info("Schwabot shutdown complete")
-        print("\n⏹️ Schwabot stopped gracefully")
+        safe_print("\n⏹️ Schwabot stopped gracefully")
     
     return 0
 

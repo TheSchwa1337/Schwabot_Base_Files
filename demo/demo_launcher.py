@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Launcher
 ======================
@@ -9,7 +11,7 @@ Provides a unified interface for running the complete Schwabot demo system.
 import asyncio
 import json
 import yaml
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -132,7 +134,7 @@ class SchwabotDemoLauncher:
             self._update_demo_performance()
             
         except Exception as e:
-            print(f"Warning: Could not load demo data: {e}")
+            safe_print(f"Warning: Could not load demo data: {e}")
     
     def _save_demo_data(self):
         """Save demo data to files"""
@@ -143,7 +145,7 @@ class SchwabotDemoLauncher:
                 json.dump(results_data, f, indent=2, default=str)
                 
         except Exception as e:
-            print(f"Error saving demo data: {e}")
+            safe_print(f"Error saving demo data: {e}")
     
     def _update_demo_performance(self):
         """Update demo performance metrics"""
@@ -158,12 +160,12 @@ class SchwabotDemoLauncher:
         
         # Calculate average success rate
         success_rates = [r.success_rate for r in self.demo_results]
-        self.demo_performance["average_success_rate"] = np.mean(success_rates)
+        self.demo_performance["average_success_rate"] = unified_math.unified_math.mean(success_rates)
         
         # Find best and worst demos
         if self.demo_results:
-            best_demo = max(self.demo_results, key=lambda x: x.success_rate)
-            worst_demo = min(self.demo_results, key=lambda x: x.success_rate)
+            best_demo = unified_math.max(self.demo_results, key=lambda x: x.success_rate)
+            worst_demo = unified_math.min(self.demo_results, key=lambda x: x.success_rate)
             
             self.demo_performance["best_demo"] = best_demo.demo_id
             self.demo_performance["worst_demo"] = worst_demo.demo_id
@@ -224,50 +226,50 @@ class SchwabotDemoLauncher:
     async def run_comprehensive_demo(self, config: DemoConfiguration) -> DemoResult:
         """Run a comprehensive demo with all components"""
         
-        print(f"🚀 Starting comprehensive demo: {config.demo_id}")
-        print(f"Components: {config.components}")
-        print(f"Duration: {config.duration} seconds")
-        print(f"Trades: {config.num_trades}")
-        print(f"Strategies: {config.strategies}")
+        safe_print(f"🚀 Starting comprehensive demo: {config.demo_id}")
+        safe_print(f"Components: {config.components}")
+        safe_print(f"Duration: {config.duration} seconds")
+        safe_print(f"Trades: {config.num_trades}")
+        safe_print(f"Strategies: {config.strategies}")
         
         start_time = time.time()
         component_results = {}
         
         try:
             # 1. Initialize all components
-            print("\n📋 Initializing components...")
+            safe_print("\n📋 Initializing components...")
             await self._initialize_components(config.components)
             
             # 2. Run backtest scenarios
-            print("\n📊 Running backtest scenarios...")
+            safe_print("\n📊 Running backtest scenarios...")
             if "backtest_runner" in config.components:
                 backtest_result = await self._run_backtest_scenarios(config)
                 component_results["backtest_runner"] = backtest_result
             
             # 3. Run trade sequences
-            print("\n💰 Running trade sequences...")
+            safe_print("\n💰 Running trade sequences...")
             if "trade_sequence" in config.components:
                 trade_result = await self._run_trade_sequences(config)
                 component_results["trade_sequence"] = trade_result
             
             # 4. Run logic flows
-            print("\n🔄 Running logic flows...")
+            safe_print("\n🔄 Running logic flows...")
             if "logic_flow" in config.components:
                 logic_result = await self._run_logic_flows(config)
                 component_results["logic_flow"] = logic_result
             
             # 5. Run integration system
-            print("\n🔗 Running integration system...")
+            safe_print("\n🔗 Running integration system...")
             if "integration_system" in config.components:
                 integration_result = await self._run_integration_system(config)
                 component_results["integration_system"] = integration_result
             
             # 6. Collect performance metrics
-            print("\n📈 Collecting performance metrics...")
+            safe_print("\n📈 Collecting performance metrics...")
             performance_metrics = await self._collect_performance_metrics(config)
             
             # 7. Generate recommendations
-            print("\n💡 Generating recommendations...")
+            safe_print("\n💡 Generating recommendations...")
             recommendations = self._generate_recommendations(component_results, performance_metrics)
             
             # Calculate demo results
@@ -301,16 +303,16 @@ class SchwabotDemoLauncher:
             # Save data
             self._save_demo_data()
             
-            print(f"\n✅ Demo completed successfully!")
-            print(f"Duration: {result.duration:.2f} seconds")
-            print(f"Total trades: {total_trades}")
-            print(f"Success rate: {success_rate:.2%}")
-            print(f"Total profit: ${total_profit:.2f}")
+            safe_print(f"\n✅ Demo completed successfully!")
+            safe_print(f"Duration: {result.duration:.2f} seconds")
+            safe_print(f"Total trades: {total_trades}")
+            safe_print(f"Success rate: {success_rate:.2%}")
+            safe_print(f"Total profit: ${total_profit:.2f}")
             
             return result
             
         except Exception as e:
-            print(f"\n❌ Demo failed: {e}")
+            safe_print(f"\n❌ Demo failed: {e}")
             
             # Create failed result
             result = DemoResult(
@@ -338,7 +340,7 @@ class SchwabotDemoLauncher:
         """Initialize specified components"""
         
         for component in components:
-            print(f"  Initializing {component}...")
+            safe_print(f"  Initializing {component}...")
             
             # Simulate component initialization
             await asyncio.sleep(0.1)
@@ -384,7 +386,7 @@ class SchwabotDemoLauncher:
         total_profit = 0.0
         
         for strategy in config.strategies:
-            print(f"    Running trade sequence for {strategy} strategy...")
+            safe_print(f"    Running trade sequence for {strategy} strategy...")
             
             # Run trade sequence
             result = self.trade_sequence.run_trade_sequence(
@@ -408,7 +410,7 @@ class SchwabotDemoLauncher:
         
         # Run complete demo cycle
         result = await self.logic_flow.run_complete_demo_cycle(
-            num_cycles=min(3, config.num_trades // 10)
+            num_cycles=unified_math.min(3, config.num_trades // 10)
         )
         
         return {
@@ -563,20 +565,20 @@ def main():
     )
     
     # Run demo
-    print("🚀 Starting Schwabot Demo Launcher")
-    print("=" * 50)
+    safe_print("🚀 Starting Schwabot Demo Launcher")
+    safe_print("=" * 50)
     
     result = asyncio.run(launcher.run_comprehensive_demo(config))
     
     # Print summary
-    print("\n" + "=" * 50)
-    print("📊 Demo Summary")
-    print("=" * 50)
+    safe_print("\n" + "=" * 50)
+    safe_print("📊 Demo Summary")
+    safe_print("=" * 50)
     
     summary = launcher.get_demo_summary()
     print(json.dumps(summary, indent=2, default=str))
     
-    print("\n✅ Demo launcher completed!")
+    safe_print("\n✅ Demo launcher completed!")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Count real vs stub E501 errors."""."""
 
@@ -31,17 +32,17 @@ def count_errors():
                 else:
                     real_errors.append(line)
 
-    print(f"📊 E501 Error Analysis:")
-    print(f"   Total errors: {len(real_errors) + len(stub_errors)}")
-    print(f"   Real code errors: {len(real_errors)}")
-    print(f"   Stub file errors: {len(stub_errors)}")
+    safe_print(f"📊 E501 Error Analysis:")
+    safe_print(f"   Total errors: {len(real_errors) + len(stub_errors)}")
+    safe_print(f"   Real code errors: {len(real_errors)}")
+    safe_print(f"   Stub file errors: {len(stub_errors)}")
 
     if real_errors:
-        print(f"\n🔍 First 10 real code errors:")
+        safe_print(f"\n🔍 First 10 real code errors:")
         for error in real_errors[:10]:
-            print(f"   {error}")
+            safe_print(f"   {error}")
         if len(real_errors) > 10:
-            print(f"   ... and {len(real_errors) - 10} more")
+            safe_print(f"   ... and {len(real_errors) - 10} more")
 
 if __name__ == "__main__":
     count_errors()

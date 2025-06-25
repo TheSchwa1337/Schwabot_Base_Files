@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Mathematical Integration Test Suite for Schwabot
@@ -18,7 +20,7 @@ Tests cover:
 import sys
 import time
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List
 from datetime import datetime
 
@@ -36,7 +38,7 @@ try:
     from core.fallback_logic_router import FallbackLogicRouter
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
-    logger.error(f"Failed to import mathematical components: {e}")
+    logger.error(f"Failed to from core.unified_math_system import unified_mathematical components: {e}")
     IMPORTS_SUCCESSFUL = False
 
 
@@ -119,10 +121,10 @@ class MathematicalIntegrationTester:
                 delta_price, entropy, max_price_ref
             )
             
-            expected_penalty = np.exp(-entropy) * (delta_price / max_price_ref)
+            expected_penalty = unified_math.exp(-entropy) * (delta_price / max_price_ref)
             tolerance = 1e-6
             
-            test_passed = abs(penalty - expected_penalty) < tolerance
+            test_passed = unified_math.abs(penalty - expected_penalty) < tolerance
             tests.append({
                 "name": "Basic lag penalty calculation",
                 "passed": test_passed,
@@ -217,7 +219,7 @@ class MathematicalIntegrationTester:
                 exchange, symbol, price, volume, timestamp
             )
             
-            test_passed = ghost_price > 0.0 and abs(ghost_price - price) < 100.0
+            test_passed = ghost_price > 0.0 and unified_math.abs(ghost_price - price) < 100.0
             
             tests.append({
                 "name": "Exchange data update and ghost price",
@@ -431,7 +433,7 @@ class MathematicalIntegrationTester:
             # Calculate phantom lag penalty using ghost price
             if ghost_price_info:
                 ghost_price = ghost_price_info['price']
-                delta_price = abs(ghost_price - 50000.0)  # Deviation from reference
+                delta_price = unified_math.abs(ghost_price - 50000.0)  # Deviation from reference
                 entropy = 0.3
                 
                 lag_penalty = self.phantom_lag_model.calculate_phantom_lag_penalty(
@@ -582,12 +584,12 @@ class MathematicalIntegrationTester:
 
 def main():
     """Main test execution function."""
-    print("🧠 Schwabot Mathematical Integration Test Suite")
-    print("=" * 50)
+    safe_print("🧠 Schwabot Mathematical Integration Test Suite")
+    safe_print("=" * 50)
     
     if not IMPORTS_SUCCESSFUL:
-        print("❌ Failed to import required components")
-        print("Please ensure all mathematical components are available")
+        safe_print("❌ Failed to import required components")
+        safe_print("Please ensure all mathematical components are available")
         return 1
     
     # Run tests
@@ -595,14 +597,14 @@ def main():
     results = tester.run_all_tests()
     
     # Display results
-    print(f"\n📊 Test Results Summary:")
-    print(f"Total Tests: {results['total_tests']}")
-    print(f"Passed Tests: {results['passed_tests']}")
-    print(f"Success Rate: {results['success_rate']:.2%}")
-    print(f"Execution Time: {results['execution_time']:.2f} seconds")
+    safe_print(f"\n📊 Test Results Summary:")
+    safe_print(f"Total Tests: {results['total_tests']}")
+    safe_print(f"Passed Tests: {results['passed_tests']}")
+    safe_print(f"Success Rate: {results['success_rate']:.2%}")
+    safe_print(f"Execution Time: {results['execution_time']:.2f} seconds")
     
     # Display detailed results
-    print(f"\n📋 Detailed Results:")
+    safe_print(f"\n📋 Detailed Results:")
     for suite_name, suite_results in results['test_suites'].items():
         if isinstance(suite_results, dict) and 'tests' in suite_results:
             passed = suite_results['passed']
@@ -610,22 +612,22 @@ def main():
             success_rate = passed / total if total > 0 else 0.0
             
             status = "✅" if success_rate >= 0.8 else "⚠️" if success_rate >= 0.5 else "❌"
-            print(f"{status} {suite_name}: {passed}/{total} ({success_rate:.1%})")
+            safe_print(f"{status} {suite_name}: {passed}/{total} ({success_rate:.1%})")
             
             # Show failed tests
             failed_tests = [test for test in suite_results['tests'] if not test.get('passed', False)]
             for test in failed_tests[:3]:  # Show first 3 failures
-                print(f"   ❌ {test['name']}: {test.get('error', 'Unknown error')}")
+                safe_print(f"   ❌ {test['name']}: {test.get('error', 'Unknown error')}")
     
     # Return exit code
     if results['success_rate'] >= 0.8:
-        print(f"\n✅ All tests completed successfully!")
+        safe_print(f"\n✅ All tests completed successfully!")
         return 0
     elif results['success_rate'] >= 0.5:
-        print(f"\n⚠️ Tests completed with warnings")
+        safe_print(f"\n⚠️ Tests completed with warnings")
         return 1
     else:
-        print(f"\n❌ Tests failed")
+        safe_print(f"\n❌ Tests failed")
         return 1
 
 

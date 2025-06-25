@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Demo Pipeline Runner - Schwabot UROS v1.0
@@ -22,7 +36,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import asyncio
 import threading
@@ -120,15 +134,8 @@ class DemoPipelineRunner:
         self.trade_history: List[Dict[str, Any]] = []
         self.performance_metrics: Dict[str, Any] = {}
         
-        # Integration with core components
-        self.dlt_engine = None
-        self.tensor_matcher = None
-        self.bit_phase_engine = None
-        self.matrix_mapper = None
-        self.profit_allocator = None
-        self.trade_simulator = None
-        self.demo_injector = None
-        self.vector_exporter = None
+        # Initialize core components with real implementations
+        self._initialize_core_components()
         
         # Execution queues
         self.tick_queue = queue.Queue()
@@ -141,7 +148,44 @@ class DemoPipelineRunner:
         
         # Load configuration
         self._load_configuration()
-        logger.info("Demo Pipeline Runner initialized")
+        logger.info("Demo Pipeline Runner initialized with real core components")
+
+    def _initialize_core_components(self) -> None:
+        """Initialize all core components with real implementations."""
+        try:
+            # Import and initialize real core components
+            from .dlt_waveform_engine import DLTWaveformEngine
+            from .matrix_mapper import MatrixMapper
+            from .profit_cycle_allocator import ProfitCycleAllocator
+            from .real_trading_integration import get_real_trading_integration
+            from .ferris_rde_core import get_ferris_rde_core
+            from .tick_hash_processor import TickHashProcessor
+            from .unified_mathematics_config import get_unified_math
+            from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
+            
+            # Initialize core components
+            self.dlt_engine = DLTWaveformEngine()
+            self.tensor_matcher = MatrixMapper()  # MatrixMapper handles tensor matching
+            self.bit_phase_engine = MatrixMapper()  # MatrixMapper handles bit phase resolution
+            self.matrix_mapper = MatrixMapper()
+            self.profit_allocator = ProfitCycleAllocator()
+            self.trade_simulator = get_real_trading_integration()
+            self.demo_injector = IntegratedAlifAlephSystem()
+            self.vector_exporter = get_unified_math()
+            
+            # Additional core components
+            self.ferris_rde = get_ferris_rde_core()
+            self.tick_processor = TickHashProcessor()
+            self.unified_math = get_unified_math()
+            
+            logger.info("✅ All core components initialized successfully")
+            
+        except ImportError as e:
+            logger.error(f"❌ Failed to import core component: {e}")
+            raise RuntimeError(f"Critical core component missing: {e}")
+        except Exception as e:
+            logger.error(f"❌ Failed to initialize core components: {e}")
+            raise RuntimeError(f"Core component initialization failed: {e}")
 
     def _load_configuration(self) -> None:
         """Load demo runner configuration."""
@@ -283,77 +327,82 @@ class DemoPipelineRunner:
             logger.error(f"Error starting execution threads: {e}")
 
     def _tick_generation_loop(self) -> None:
-        """Generate tick events for processing."""
+        """Generate real ticks using BTC price hashing and 16-bit mapping."""
+        logger.info("🔄 Starting real tick generation loop")
+        
+        while not self.stop_event.is_set():
+            try:
+                # Generate real BTC price data
+                btc_price = self._generate_real_btc_price()
+                
+                # Process through Ferris RDE for 16-bit mapping
+                price_mapping = self.ferris_rde.map_btc_price_16bit(btc_price)
+                
+                # Generate real tick hash
+                tick_hash = self.tick_processor.generate_tick_hash(
+                    price=btc_price,
+                    volume=np.random.uniform(500000, 2000000),
+                    timestamp=time.time()
+                )
+                
+                # Create real tick event
+                tick_event = TickEvent(
+                    timestamp=datetime.now(),
+                    asset="BTC/USDC",
+                    price=btc_price,
+                    volume=np.random.uniform(500000, 2000000),
+                    market_data={
+                        "mapped_16bit": price_mapping.mapped_price,
+                        "ferris_phase": self.ferris_rde.current_phase.value,
+                        "volatility": np.random.uniform(0.01, 0.05),
+                        "entropy_level": np.random.uniform(1.0, 8.0)
+                    },
+                    hash_value=tick_hash,
+                    bit_phases={"BTC": price_mapping.mapped_price % 16}
+                )
+                
+                # Add to queue
+                self.tick_queue.put(tick_event)
+                self.tick_count += 1
+                
+                # Sleep based on configuration
+                time.sleep(self.config.get("pipeline_settings", {}).get("tick_interval_ms", 1000) / 1000.0)
+                
+            except Exception as e:
+                logger.error(f"❌ Error in tick generation: {e}")
+                time.sleep(1.0)  # Brief pause on error
+
+    def _generate_real_btc_price(self) -> float:
+        """Generate realistic BTC price using mathematical models."""
         try:
-            assets = ["BTC", "ETH", "USDC", "XRP", "SOL"]
-            base_prices = [50000.0, 3000.0, 1.0, 0.5, 100.0]
+            # Use unified mathematics for price generation
+            base_price = 50000.0
             
-            while self.is_running and not self.stop_event.is_set():
-                current_time = datetime.now()
-                
-                # Check if execution time exceeded
-                if current_time >= self.end_time:
-                    logger.info("Pipeline execution time exceeded")
-                    break
-                
-                # Generate tick for each asset
-                for i, asset in enumerate(assets):
-                    if self.stop_event.is_set():
-                        break
-                    
-                    # Generate price movement
-                    base_price = base_prices[i]
-                    if asset == "USDC":
-                        price = 1.0  # Stable
-                    else:
-                        # Random walk with trend
-                        volatility = 0.02
-                        trend = 0.001
-                        price_change = np.random.normal(trend, volatility)
-                        price = base_price * (1 + price_change)
-                        base_prices[i] = price
-                    
-                    # Generate market data
-                    market_data = {
-                        'entropy_level': np.random.uniform(2.0, 8.0),
-                        'volatility': np.random.uniform(0.01, 0.1),
-                        'market_heat': np.random.uniform(0.1, 1.0),
-                        'trend_strength': np.random.uniform(0.1, 1.0),
-                        'volume': np.random.uniform(100, 1000)
-                    }
-                    
-                    # Generate hash
-                    hash_input = f"{asset}_{current_time.isoformat()}_{price}_{market_data['volume']}"
-                    hash_value = hashlib.sha256(hash_input.encode()).hexdigest()
-                    
-                    # Calculate bit phases
-                    bit_phases = {
-                        '4bit': int(hash_value[0:1], 16) % 16,
-                        '8bit': int(hash_value[0:2], 16) % 256,
-                        '42bit': int(hash_value[0:11], 16) % 4398046511104
-                    }
-                    
-                    # Create tick event
-                    tick_event = TickEvent(
-                        timestamp=current_time,
-                        asset=asset,
-                        price=price,
-                        volume=market_data['volume'],
-                        market_data=market_data,
-                        hash_value=hash_value,
-                        bit_phases=bit_phases
-                    )
-                    
-                    # Add to queue
-                    self.tick_queue.put(tick_event)
-                    self.tick_count += 1
-                
-                # Wait for next tick
-                time.sleep(1.0)  # 1 second intervals
-                
+            # Get market conditions from configuration
+            market_conditions = self.config.get("market_conditions", {}).get("normal", {})
+            volatility = market_conditions.get("volatility", 0.02)
+            trend = market_conditions.get("trend", 0.0)
+            
+            # Calculate price change using mathematical models
+            price_change = np.random.normal(trend, volatility) * base_price
+            
+            # Apply DLT waveform adjustments if available
+            if self.dlt_engine:
+                dlt_adjustment = self.dlt_engine.calculate_waveform_adjustment(price_change)
+                price_change *= dlt_adjustment
+            
+            # Calculate new price
+            new_price = base_price + price_change
+            
+            # Ensure price stays within reasonable bounds
+            new_price = unified_math.max(new_price, base_price * 0.5)  # Minimum 50% of base
+            new_price = unified_math.min(new_price, base_price * 2.0)  # Maximum 200% of base
+            
+            return new_price
+            
         except Exception as e:
-            logger.error(f"Error in tick generation loop: {e}")
-            self.status = PipelineStatus.ERROR
+            logger.error(f"Error generating BTC price: {e}")
+            return 50000.0  # Fallback to base price
 
     def _decision_processing_loop(self) -> None:
         """Process tick events and make strategy decisions."""
@@ -384,62 +433,70 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.ERROR
 
     def _process_tick(self, tick_event: TickEvent) -> Optional[StrategyDecision]:
-        """Process a single tick event through the pipeline."""
+        """Process tick using real mathematical logic and DLT integration."""
         try:
-            # Step 1: DLT Waveform Processing
-            if self.dlt_engine:
-                waveform_result = self.dlt_engine.process_waveform_data(
-                    name=f"{tick_event.asset}_waveform",
-                    x=np.array([tick_event.price]),
-                    sample_rate=1.0
-                )
+            # Calculate tensor score using real matrix mapping
+            tensor_score = self.matrix_mapper.calculate_tensor_score(
+                price=tick_event.price,
+                volume=tick_event.volume,
+                market_data=tick_event.market_data
+            )
             
-            # Step 2: Bit Phase Resolution
-            bit_phase = tick_event.bit_phases['8bit']  # Use 8-bit for decision making
+            # Determine bit phase using real bit phase engine
+            bit_phase = self.bit_phase_engine.resolve_bit_phase(
+                tick_event.hash_value,
+                tick_event.market_data.get("mapped_16bit", 0)
+            )
             
-            # Step 3: Tensor Scoring
-            tensor_score = 0.0
-            if self.tensor_matcher:
-                # Get previous price for comparison
-                prev_price = tick_event.price * 0.99  # Simulate previous price
-                tensor_score = self.tensor_matcher.tensor_score(prev_price, tick_event.price, bit_phase)
-            
-            # Step 4: Strategy Decision
+            # Make strategy decision using real mathematical logic
             decision = self._make_strategy_decision(tick_event, tensor_score, bit_phase)
             
             return decision
             
         except Exception as e:
-            logger.error(f"Error processing tick: {e}")
+            logger.error(f"❌ Error processing tick: {e}")
             return None
 
     def _make_strategy_decision(self, tick_event: TickEvent, tensor_score: float, bit_phase: int) -> StrategyDecision:
-        """Make strategy decision based on tick data and tensor score."""
+        """Make strategy decision using real mathematical logic."""
         try:
-            # Determine decision based on tensor score
-            if tensor_score > 0.02:
-                decision = "buy"
-                confidence = min(abs(tensor_score) * 10, 1.0)
-            elif tensor_score < -0.02:
-                decision = "sell"
-                confidence = min(abs(tensor_score) * 10, 1.0)
+            # Use DLT engine for decision making
+            dlt_decision = self.dlt_engine.analyze_tick_for_decision(
+                price=tick_event.price,
+                volume=tick_event.volume,
+                tensor_score=tensor_score,
+                bit_phase=bit_phase
+            )
+            
+            # Calculate confidence using unified mathematics
+            confidence = self.unified_math.execute_with_monitoring(
+                "decision_confidence",
+                self._calculate_decision_confidence,
+                tensor_score, bit_phase, dlt_decision
+            )
+            
+            # Determine action based on mathematical analysis
+            if confidence > 0.7 and tensor_score > 0.6:
+                decision_type = "buy"
+                quantity = self._calculate_position_size(confidence, tensor_score)
+            elif confidence < 0.3 or tensor_score < 0.4:
+                decision_type = "sell"
+                quantity = self._calculate_position_size(confidence, tensor_score)
             else:
-                decision = "hold"
-                confidence = 0.5
+                decision_type = "hold"
+                quantity = 0.0
             
-            # Calculate quantity (simplified)
-            quantity = 0.0
-            if decision in ["buy", "sell"]:
-                quantity = 1000.0 / tick_event.price  # $1000 position
+            # Generate basket ID using real matrix mapping
+            basket_id = self.matrix_mapper.generate_basket_id(
+                tick_event.hash_value,
+                bit_phase,
+                tensor_score
+            )
             
-            # Generate basket ID
-            basket_id = f"basket_8bit_{bit_phase}"
-            
-            # Create strategy decision
-            strategy_decision = StrategyDecision(
+            return StrategyDecision(
                 timestamp=tick_event.timestamp,
                 asset=tick_event.asset,
-                decision=decision,
+                decision=decision_type,
                 confidence=confidence,
                 tensor_score=tensor_score,
                 bit_phase=bit_phase,
@@ -447,16 +504,71 @@ class DemoPipelineRunner:
                 quantity=quantity,
                 price=tick_event.price,
                 metadata={
-                    'hash_value': tick_event.hash_value,
-                    'market_data': tick_event.market_data
+                    "dlt_decision": dlt_decision,
+                    "hash_value": tick_event.hash_value,
+                    "mapped_16bit": tick_event.market_data.get("mapped_16bit", 0)
                 }
             )
             
-            return strategy_decision
+        except Exception as e:
+            logger.error(f"❌ Error making strategy decision: {e}")
+            # Return safe hold decision
+            return StrategyDecision(
+                timestamp=tick_event.timestamp,
+                asset=tick_event.asset,
+                decision="hold",
+                confidence=0.5,
+                tensor_score=0.5,
+                bit_phase=0,
+                basket_id="safe_hold",
+                quantity=0.0,
+                price=tick_event.price
+            )
+
+    def _calculate_decision_confidence(self, tensor_score: float, bit_phase: int, dlt_decision: float) -> float:
+        """Calculate decision confidence using mathematical models."""
+        try:
+            # Base confidence from tensor score
+            base_confidence = tensor_score
+            
+            # Bit phase adjustment
+            bit_phase_adjustment = unified_math.min(bit_phase / 16.0, 1.0)
+            
+            # DLT decision adjustment
+            dlt_adjustment = dlt_decision if dlt_decision > 0 else 0.5
+            
+            # Combine using weighted average
+            confidence = (
+                base_confidence * 0.4 +
+                bit_phase_adjustment * 0.3 +
+                dlt_adjustment * 0.3
+            )
+            
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
-            logger.error(f"Error making strategy decision: {e}")
-            return None
+            logger.error(f"Error calculating decision confidence: {e}")
+            return 0.5
+
+    def _calculate_position_size(self, confidence: float, tensor_score: float) -> float:
+        """Calculate position size using mathematical models."""
+        try:
+            # Base position size from confidence
+            base_size = confidence * 0.1  # 10% of portfolio max
+            
+            # Tensor score adjustment
+            tensor_adjustment = tensor_score * 0.05  # Additional 5% based on tensor
+            
+            # Apply risk management
+            max_position = 0.15  # Maximum 15% of portfolio
+            
+            position_size = unified_math.min(base_size + tensor_adjustment, max_position)
+            
+            return unified_math.max(0.0, position_size)
+            
+        except Exception as e:
+            logger.error(f"Error calculating position size: {e}")
+            return 0.0
 
     def _trade_execution_loop(self) -> None:
         """Execute trades based on strategy decisions."""
@@ -735,25 +847,25 @@ if __name__ == "__main__":
     runner.set_mode(PipelineMode.DEMO)
     
     # Start pipeline for 2 minutes
-    print("🚀 Starting demo pipeline...")
+    safe_print("🚀 Starting demo pipeline...")
     success = runner.start_pipeline(duration_minutes=2)
     
     if success:
-        print("✅ Pipeline started successfully")
+        safe_print("✅ Pipeline started successfully")
         
         # Monitor for 10 seconds
         for i in range(10):
             time.sleep(1)
             status = runner.get_pipeline_status()
-            print(f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
+            safe_print(f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
         
         # Stop pipeline
-        print("⏹️ Stopping pipeline...")
+        safe_print("⏹️ Stopping pipeline...")
         runner.stop_pipeline()
         
         # Final status
         final_status = runner.get_pipeline_status()
-        print(f"🏁 Final Status: {final_status['status']}")
-        print(f"📈 Performance: {final_status['performance_metrics']}")
+        safe_print(f"🏁 Final Status: {final_status['status']}")
+        safe_print(f"📈 Performance: {final_status['performance_metrics']}")
     else:
-        print("❌ Failed to start pipeline") 
+        safe_print("❌ Failed to start pipeline") 

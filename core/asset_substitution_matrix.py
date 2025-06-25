@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Asset Substitution Matrix - Schwabot UROS v1.0
@@ -17,7 +31,7 @@ Features:
 
 import json
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -341,7 +355,7 @@ class AssetSubstitutionMatrix:
                 (1 / substitute_profile.risk_multiplier)
             )
             
-            return min(confidence, 1.0)
+            return unified_math.min(confidence, 1.0)
             
         except Exception as e:
             logger.error(f"Error calculating substitution confidence: {e}")
@@ -458,35 +472,27 @@ class AssetSubstitutionMatrix:
 
 def main():
     """Test function for Asset Substitution Matrix."""
-    print("🔄 Testing Asset Substitution Matrix...")
+    safe_print("🔄 Testing Asset Substitution Matrix...")
     
     # Initialize matrix
-    matrix = AssetSubstitutionMatrix()
+    substitution_matrix = AssetSubstitutionMatrix(config_path="./config/asset_substitution_config.json")
     
-    # Test asset substitutions
-    test_assets = ["BTC", "XRP", "ETH", "SOL"]
+    # Get a substitute for BTC
+    substitute = substitution_matrix.get_substitute_asset("BTC")
+    safe_print(f"🔄 Substitute for BTC: {substitute}")
     
-    print("\n📊 Testing Asset Substitutions:")
-    for asset in test_assets:
-        substitute = matrix.get_substitute_asset(asset, SubstitutionTrigger.VOLATILITY_EXCEEDED)
-        print(f"  {asset} -> {substitute}")
-    
-    # Test portfolio rebalancing
-    print("\n💰 Testing Portfolio Rebalancing:")
-    live_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=False)
-    demo_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=True)
-    
-    print(f"  Live Mode: {live_allocation}")
-    print(f"  Demo Mode: {demo_allocation}")
+    # Rebalance a sample portfolio
+    rebalanced_portfolio = substitution_matrix.rebalance_portfolio(1000.0, demo_mode=True)
+    safe_print(f"💼 Rebalanced Portfolio: {rebalanced_portfolio}")
     
     # Get statistics
-    stats = matrix.get_substitution_statistics()
-    print(f"\n📈 Substitution Statistics:")
-    print(f"  Total Substitutions: {stats['total_substitutions']}")
-    print(f"  Current Substitutions: {stats['current_substitutions']}")
-    
+    stats = substitution_matrix.get_substitution_statistics()
+    safe_print(f"\n📈 Substitution Statistics:")
+    safe_print(f"  Total Substitutions: {stats.get('total_substitutions', 'N/A')}")
+    safe_print(f"  Current Substitutions: {stats.get('current_substitutions', 'N/A')}")
+        
     # Export history
-    matrix.export_substitution_history()
+    substitution_matrix.export_substitution_history()
     
     return 0
 

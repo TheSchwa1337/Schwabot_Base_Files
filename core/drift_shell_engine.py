@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Drift Shell Engine - Core drift field computation and ring allocation.
@@ -9,7 +23,7 @@ trading system, implementing radial partitioning and time-based quantum hashing.
 import hashlib
 import logging
 from typing import Any, Callable, List, Optional, Tuple, Union
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Type aliases for better code clarity
 DriftField = Callable[[float, float, float], float]
@@ -133,9 +147,9 @@ class DriftShellEngine:
 
         def drift_field(x: float, y: float, t: float) -> DriftVelocity:
             """Drift field function for the allocated ring zone."""
-            distance = np.sqrt(x**2 + y**2)
-            radial_factor = np.exp(-abs(distance - ring_radius) / ring_radius)
-            time_factor = np.exp(-t / self.cycle_duration)
+            distance = unified_math.unified_math.sqrt(x**2 + y**2)
+            radial_factor = unified_math.exp(-unified_math.abs(distance - ring_radius) / ring_radius)
+            time_factor = unified_math.exp(-t / self.cycle_duration)
             return DriftVelocity(
                 drift_coefficient * radial_factor * time_factor
             )
@@ -164,8 +178,8 @@ class DriftShellEngine:
         if base_price <= 0:
             raise ValueError("Base price must be positive")
 
-        momentum_factor = np.log2(1 + abs(price_delta) / base_price)
-        time_factor = np.exp(
+        momentum_factor = np.log2(1 + unified_math.abs(price_delta) / base_price)
+        time_factor = unified_math.exp(
             -time / self.cycle_duration
         )  # 3.75 min Ferris cycle
         return time_factor * momentum_factor
@@ -228,8 +242,8 @@ class DriftShellEngine:
         Returns:
             Drift field value
         """
-        decay = np.exp(-time) * np.sin(x * y)
-        stability = (np.cos(z) * np.sqrt(1 + abs(x))) / (1 + 0.1 * abs(y))
+        decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         return decay * stability
 
     def allocate_ring_drift(
@@ -238,7 +252,7 @@ class DriftShellEngine:
         """
         Allocate ring drift across concentric tensor rings.
 
-        Uses Ψ∞ constant for allocation: Ψ∞ * sin(layer_index * entropy_gradient) / (1 + layer_index²)
+        Uses Ψ∞ constant for allocation: Ψ∞ * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index²)
 
         Args:
             layer_index: Index of the layer
@@ -247,7 +261,7 @@ class DriftShellEngine:
         Returns:
             Allocated drift value
         """
-        return (self.psi_infinity * np.sin(layer_index * entropy_gradient)) / (
+        return (self.psi_infinity * np.unified_math.sin(layer_index * entropy_gradient)) / (
             1 + layer_index * layer_index
         )
 
@@ -265,7 +279,7 @@ class DriftShellEngine:
             Coupled value
         """
         weight_factor = 1 / (1 + node_depth)
-        return weight_factor * np.log(1 + drift_signal)
+        return weight_factor * unified_math.unified_math.log(1 + drift_signal)
 
 
 class SubsurfaceGrayscaleMapper:
@@ -388,19 +402,19 @@ def main() -> None:
     
     # Test drift field computation
     drift_value = drift_field(10.0, 20.0, 1.0)
-    print(f"Drift field value: {drift_value}")
+    safe_print(f"Drift field value: {drift_value}")
     
     # Test ring depth calculation
     ring_depth = engine.get_ring_depth(
         time=1.0, price_delta=5.0, base_price=100.0
     )
-    print(f"Ring depth: {ring_depth}")
+    safe_print(f"Ring depth: {ring_depth}")
     
     # Test quantum hash creation
     quantum_hash = engine.create_hash(
         price_state="100.50", time_slot=1.5, strategy_id="strategy_1"
     )
-    print(f"Quantum hash: {quantum_hash}")
+    safe_print(f"Quantum hash: {quantum_hash}")
 
 
 if __name__ == "__main__":

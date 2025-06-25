@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Demo Ledger State Injector - Schwabot UROS v1.0
@@ -21,7 +35,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import os
 import glob
@@ -85,7 +99,7 @@ class DemoLedgerInjector:
     
     Mathematical Foundation:
     - Portfolio Evolution: P(t+1) = P(t) + Σ(trades * price_changes)
-    - Risk Metrics: volatility = std(returns), sharpe = mean(returns) / std(returns)
+    - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Performance Tracking: total_return = (final_value - initial_value) / initial_value
     - Scenario Generation: scenario_params = f(market_conditions, risk_profile)
     """
@@ -662,8 +676,8 @@ class DemoLedgerInjector:
             returns_array = np.array(returns)
             
             # Calculate metrics
-            volatility = np.std(returns_array)
-            sharpe_ratio = np.mean(returns_array) / (volatility + 1e-9)
+            volatility = unified_math.unified_math.std(returns_array)
+            sharpe_ratio = unified_math.unified_math.mean(returns_array) / (volatility + 1e-9)
             
             # Calculate win rate
             winning_trades = sum(1 for r in returns if r > 0)
@@ -673,12 +687,12 @@ class DemoLedgerInjector:
             cumulative_returns = np.cumprod(1 + returns_array)
             running_max = np.maximum.accumulate(cumulative_returns)
             drawdown = (cumulative_returns - running_max) / running_max
-            max_drawdown = np.min(drawdown)
+            max_drawdown = unified_math.unified_math.min(drawdown)
             
             return {
                 'volatility': volatility,
                 'sharpe_ratio': sharpe_ratio,
-                'max_drawdown': abs(max_drawdown),
+                'max_drawdown': unified_math.abs(max_drawdown),
                 'win_rate': win_rate
             }
             
@@ -701,7 +715,7 @@ class DemoLedgerInjector:
             
             # Calculate average tensor score
             tensor_scores = [trade['tensor_score'] for trade in trade_history]
-            avg_tensor_score = np.mean(tensor_scores) if tensor_scores else 0.0
+            avg_tensor_score = unified_math.unified_math.mean(tensor_scores) if tensor_scores else 0.0
             
             return {
                 'total_return': total_return,
@@ -813,17 +827,17 @@ if __name__ == "__main__":
     scenarios = ["conservative", "balanced", "aggressive"]
     
     for scenario in scenarios:
-        print(f"\n🧪 Testing {scenario} scenario...")
+        safe_print(f"\n🧪 Testing {scenario} scenario...")
         success = injector.inject_demo_state(scenario)
-        print(f"✅ {scenario} scenario: {'SUCCESS' if success else 'FAILED'}")
+        safe_print(f"✅ {scenario} scenario: {'SUCCESS' if success else 'FAILED'}")
     
     # Get available scenarios
     available = injector.get_available_scenarios()
-    print(f"\n📋 Available scenarios: {available}")
+    safe_print(f"\n📋 Available scenarios: {available}")
     
     # Load demo state
     demo_state = injector.load_demo_state("balanced")
     if demo_state:
-        print(f"📊 Loaded demo state: {demo_state.scenario.value}")
-        print(f"   Total return: {demo_state.performance_metrics.get('total_return', 0):.2%}")
-        print(f"   Total trades: {demo_state.performance_metrics.get('total_trades', 0)}") 
+        safe_print(f"📊 Loaded demo state: {demo_state.scenario.value}")
+        safe_print(f"   Total return: {demo_state.performance_metrics.get('total_return', 0):.2%}")
+        safe_print(f"   Total trades: {demo_state.performance_metrics.get('total_trades', 0)}") 

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Integration System
 Comprehensive demo mode management with full integration support
@@ -12,7 +14,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 # Import our components
@@ -222,7 +224,7 @@ class DemoIntegrationSystem:
             # Calculate Sharpe ratio (simplified)
             returns = [t.get('profit', 0) / self.demo_config.initial_balance for t in session['trades']]
             if returns:
-                sharpe_ratio = np.mean(returns) / (np.std(returns) + 1e-10) * np.sqrt(252)
+                sharpe_ratio = unified_math.unified_math.mean(returns) / (unified_math.unified_math.std(returns) + 1e-10) * unified_math.unified_math.sqrt(252)
             else:
                 sharpe_ratio = 0.0
         else:
@@ -252,9 +254,9 @@ class DemoIntegrationSystem:
             total_return=total_return,
             performance_metrics={
                 'win_rate': win_rate,
-                'avg_trade_profit': np.mean([t.get('profit', 0) for t in session['trades']]) if session['trades'] else 0.0,
+                'avg_trade_profit': unified_math.mean([t.get('profit', 0) for t in session['trades']]) if session['trades'] else 0.0,
                 'max_consecutive_losses': self._calculate_max_consecutive_losses(session['trades']),
-                'avg_trade_duration': np.mean([t.get('duration', 0) for t in session['trades']]) if session['trades'] else 0.0
+                'avg_trade_duration': unified_math.mean([t.get('duration', 0) for t in session['trades']]) if session['trades'] else 0.0
             },
             recommendations=recommendations,
             timestamp=datetime.now().isoformat()
@@ -272,7 +274,7 @@ class DemoIntegrationSystem:
             if balance > peak:
                 peak = balance
             dd = (peak - balance) / peak
-            max_dd = max(max_dd, dd)
+            max_dd = unified_math.max(max_dd, dd)
         
         return max_dd
     
@@ -284,7 +286,7 @@ class DemoIntegrationSystem:
         for trade in trades:
             if trade.get('profit', 0) < 0:
                 current_consecutive += 1
-                max_consecutive = max(max_consecutive, current_consecutive)
+                max_consecutive = unified_math.max(max_consecutive, current_consecutive)
             else:
                 current_consecutive = 0
         
@@ -517,7 +519,7 @@ class DemoIntegrationSystem:
                 profit = (entry_price - exit_price) * size
             
             # Apply slippage and commission
-            profit -= abs(profit) * (self.demo_config.slippage + self.demo_config.commission)
+            profit -= unified_math.abs(profit) * (self.demo_config.slippage + self.demo_config.commission)
             
             return {
                 'action': decision['action'],
@@ -583,8 +585,8 @@ class DemoIntegrationSystem:
             # Calculate averages from recent sessions
             recent_results = [s['result'] for s in self.session_history[-100:]]
             if recent_results:
-                avg_return = np.mean([r['total_return'] for r in recent_results])
-                avg_sharpe = np.mean([r['sharpe_ratio'] for r in recent_results])
+                avg_return = unified_math.mean([r['total_return'] for r in recent_results])
+                avg_sharpe = unified_math.mean([r['sharpe_ratio'] for r in recent_results])
             else:
                 avg_return = avg_sharpe = 0.0
             
@@ -681,11 +683,11 @@ if __name__ == "__main__":
     demo_system = DemoIntegrationSystem()
     
     # Run a test backtest
-    print("Running test backtest...")
+    safe_print("Running test backtest...")
     result = demo_system.run_backtest("moderate", duration=300)  # 5 minutes
     
-    print("Backtest Result:")
+    safe_print("Backtest Result:")
     print(json.dumps(asdict(result), indent=2))
     
-    print("\nDemo Statistics:")
+    safe_print("\nDemo Statistics:")
     print(json.dumps(demo_system.get_demo_statistics(), indent=2)) 

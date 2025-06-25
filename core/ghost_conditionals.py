@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost-conditional helpers.
 
@@ -8,9 +11,8 @@ probability.  Down-stream the router can compare this value against a policy
 threshold.
 """
 
-from __future__ import annotations
 
-import math
+from core.unified_math_system import unified_math
 from typing import Final
 
 __all__: list[str] = ["ghost_route_activation"]
@@ -20,7 +22,7 @@ _K: Final = 1.0  # logistic steepness
 
 def _sigmoid(x: float) -> float:  # noqa: D401
     """TODO: document _sigmoid."""
-    return 1.0 / (1.0 + math.exp(-_K * x))
+    return 1.0 / (1.0 + unified_math.exp(-_K * x))
 
 
 def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:

@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 
@@ -30,7 +34,6 @@ Integration Points:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
@@ -305,7 +308,7 @@ class StrategyValidator:
 
         except Exception as e:
             error_msg = f"Error in strategy validation: {e}"
-            self.cli_handler.safe_print(f"❌ {error_msg}")
+            self.cli_handler.safe_safe_print(f"❌ {error_msg}")
             return {
                 "syntax_valid": False,
                 "dependencies_valid": False,
@@ -590,7 +593,7 @@ class StrategyLoader:
 
             # Check if strategy is already loaded
             if strategy_path in self.loaded_strategies:
-                self.safe_print(f"⚠️ Strategy {strategy_path} already loaded")
+                self.safe_safe_print(f"⚠️ Strategy {strategy_path} already loaded")
                 return LoaderResult(
                     success=True,
                     strategy_instance=self.loaded_strategies[strategy_path],
@@ -746,7 +749,7 @@ class StrategyLoader:
         try:
             # This would integrate with your database system
             # For now, return a placeholder implementation
-            self.safe_print(
+            self.safe_safe_print(
                 f"🔄 Loading strategy {strategy_id} from database..."
             )
 
@@ -777,7 +780,7 @@ class StrategyLoader:
         try:
             # This would integrate with your API system
             # For now, return a placeholder implementation
-            self.safe_print(f"🔄 Loading strategy from API: {api_endpoint}")
+            self.safe_safe_print(f"🔄 Loading strategy from API: {api_endpoint}")
 
             return LoaderResult(
                 success=False, error_message="API loading not yet implemented"
@@ -804,7 +807,7 @@ class StrategyLoader:
         try:
             # This would integrate with your plugin system
             # For now, return a placeholder implementation
-            self.safe_print(f"🔄 Loading strategy plugin: {plugin_name}")
+            self.safe_safe_print(f"🔄 Loading strategy plugin: {plugin_name}")
 
             return LoaderResult(
                 success=False,
@@ -965,7 +968,7 @@ class StrategyLoader:
 
             # Add safe mathematical libraries
             try:
-                import numpy as np
+                from core.unified_math_system import unified_math
 
                 namespace["np"] = np
             except ImportError:
@@ -1044,7 +1047,7 @@ class StrategyLoader:
         """
         try:
             if strategy_name not in self.loaded_strategies:
-                self.safe_print(f"⚠️ Strategy {strategy_name} not loaded")
+                self.safe_safe_print(f"⚠️ Strategy {strategy_name} not loaded")
                 return False
 
             # Get strategy instance
@@ -1052,7 +1055,7 @@ class StrategyLoader:
 
             # Stop strategy if running
             if strategy_instance.status == StrategyStatus.ACTIVE:
-                self.safe_print(f"🔄 Stopping strategy {strategy_name}...")
+                self.safe_safe_print(f"🔄 Stopping strategy {strategy_name}...")
                 # This would integrate with your strategy execution system
 
             # Remove from loaded strategies
@@ -1063,7 +1066,7 @@ class StrategyLoader:
                 if strategy_name in self.strategy_cache:
                     del self.strategy_cache[strategy_name]
 
-            self.safe_print(
+            self.safe_safe_print(
                 f"✅ Strategy {strategy_name} unloaded successfully"
             )
             self.safe_log("info", f"Strategy {strategy_name} unloaded")
@@ -1100,7 +1103,7 @@ class StrategyLoader:
 
             # Reload strategy (this would need the original path)
             # For now, return success
-            self.safe_print(f"🚀 Strategy {strategy_name} reloaded")
+            self.safe_safe_print(f"🚀 Strategy {strategy_name} reloaded")
 
             return LoaderResult(
                 success=True, strategy_instance=current_strategy
@@ -1254,28 +1257,28 @@ def main() -> None:
         loader = StrategyLoader()
 
         # Use CLI-safe print for all output
-        loader.safe_print("🚀 Strategy Loader Test")
-        loader.safe_print("=" * 50)
+        loader.safe_safe_print("🚀 Strategy Loader Test")
+        loader.safe_safe_print("=" * 50)
 
         # Test strategy loading
-        loader.safe_print("\n📊 Testing strategy loading...")
+        loader.safe_safe_print("\n📊 Testing strategy loading...")
 
         # Create a simple test strategy
         test_strategy_code = """
 # config: name=TestStrategy, version=1.0.0, description=Test strategy, author=System
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 class TestStrategy:
     def __init__(self):
         self.name = "TestStrategy"
 
     def execute(self, data):
-        return np.mean(data)
+        return unified_math.unified_math.mean(data)
 """
 
         # Test loading from string (simulated file)
-        loader.safe_print("  Testing strategy validation...")
+        loader.safe_safe_print("  Testing strategy validation...")
 
         # Create temporary file for testing
         import tempfile
@@ -1291,27 +1294,27 @@ class TestStrategy:
             result = loader.load_strategy(temp_file)
 
             if result.success:
-                loader.safe_print(f"    ✅ Strategy loaded successfully")
-                loader.safe_print(f"    📊 Load time: {result.load_time:.6f}s")
-                loader.safe_print(
+                loader.safe_safe_print(f"    ✅ Strategy loaded successfully")
+                loader.safe_safe_print(f"    📊 Load time: {result.load_time:.6f}s")
+                loader.safe_safe_print(
                     f"    📊 Strategy name: {result.strategy_instance.config.name}"
                 )
             else:
-                loader.safe_print(
+                loader.safe_safe_print(
                     f"    ❌ Strategy loading failed: {result.error_message}"
                 )
 
             # Test performance summary
             summary = loader.get_performance_summary()
-            loader.safe_print(f"\n📊 Performance Summary:")
-            loader.safe_print(f"   Total loads: {summary['total_loads']}")
-            loader.safe_print(
+            loader.safe_safe_print(f"\n📊 Performance Summary:")
+            loader.safe_safe_print(f"   Total loads: {summary['total_loads']}")
+            loader.safe_safe_print(
                 f"   Success rate: {summary['success_rate']:.2%}"
             )
-            loader.safe_print(
+            loader.safe_safe_print(
                 f"   Average load time: {summary['average_load_time']:.6f}s"
             )
-            loader.safe_print(
+            loader.safe_safe_print(
                 f"   Loaded strategies: {summary['loaded_strategies_count']}"
             )
 
@@ -1321,12 +1324,12 @@ class TestStrategy:
 
             os.unlink(temp_file)
 
-        loader.safe_print("\n🎉 Strategy Loader test completed successfully!")
+        loader.safe_safe_print("\n🎉 Strategy Loader test completed successfully!")
 
     except Exception as e:
         # Use CLI-safe error reporting
         loader = StrategyLoader()  # Create instance for safe printing
-        loader.safe_print(f"❌ Strategy Loader test failed: {e}")
+        loader.safe_safe_print(f"❌ Strategy Loader test failed: {e}")
         import traceback
 
         traceback.print_exc()

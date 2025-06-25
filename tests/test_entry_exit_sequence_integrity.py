@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry/Exit Sequence Integrity Test - Schwabot Framework.
 
@@ -8,7 +10,7 @@ mechanisms work correctly based on predetermined market conditions.
 import unittest
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
@@ -209,12 +211,12 @@ if __name__ == "__main__":
     result = test_entry_exit_sequence_integrity()
     
     # Print results
-    print("\n" + "="*60)
-    print("⏱️ ENTRY/EXIT SEQUENCE INTEGRITY TEST RESULTS")
-    print("="*60)
+    safe_print("\n" + "="*60)
+    safe_print("⏱️ ENTRY/EXIT SEQUENCE INTEGRITY TEST RESULTS")
+    safe_print("="*60)
     
-    print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
-    print(f"Execution Time: {result['execution_time']:.3f}s")
-    print(f"Total Errors: {result['total_errors']}")
+    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Execution Time: {result['execution_time']:.3f}s")
+    safe_print(f"Total Errors: {result['total_errors']}")
     
-    print("="*60) 
+    safe_print("="*60) 

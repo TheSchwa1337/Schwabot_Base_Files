@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Hash Registry Manager - Schwabot UROS v1.0
@@ -320,7 +322,7 @@ class HashRegistryManager:
                 return None
             
             # Return highest priority candidate
-            return max(candidates, key=lambda x: x.priority)
+            return unified_math.max(candidates, key=lambda x: x.priority)
             
         except Exception as e:
             logger.error(f"Error finding best matching hash: {e}")
@@ -393,7 +395,7 @@ class HashRegistryManager:
             
             # Usage statistics
             total_usage = sum(self.usage_stats.values())
-            most_used = max(self.usage_stats.items(), key=lambda x: x[1]) if self.usage_stats else (None, 0)
+            most_used = unified_math.max(self.usage_stats.items(), key=lambda x: x[1]) if self.usage_stats else (None, 0)
             
             return {
                 "total_entries": total_entries,
@@ -403,8 +405,8 @@ class HashRegistryManager:
                 "route_distribution": route_dist,
                 "priority_statistics": {
                     "average": avg_priority,
-                    "min": min(priorities) if priorities else 0,
-                    "max": max(priorities) if priorities else 0
+                    "min": unified_math.min(priorities) if priorities else 0,
+                    "max": unified_math.max(priorities) if priorities else 0
                 },
                 "usage_statistics": {
                     "total_usage": total_usage,
@@ -472,8 +474,8 @@ class HashRegistryManager:
                     "bit_depths": list(set(entry.bit_depth for entry in self.hash_entries.values())),
                     "tensor_routes": list(set(entry.tensor_route for entry in self.hash_entries.values())),
                     "priority_range": {
-                        "min": min(entry.priority for entry in self.hash_entries.values()),
-                        "max": max(entry.priority for entry in self.hash_entries.values())
+                        "min": unified_math.min(entry.priority for entry in self.hash_entries.values()),
+                        "max": unified_math.max(entry.priority for entry in self.hash_entries.values())
                     }
                 },
                 "entries": {
@@ -501,42 +503,42 @@ class HashRegistryManager:
 
 def main():
     """Main function for hash registry manager testing."""
-    print("🗄️ Hash Registry Manager - Schwabot UROS v1.0")
-    print("=" * 50)
+    safe_print("🗄️ Hash Registry Manager - Schwabot UROS v1.0")
+    safe_print("=" * 50)
     
     # Initialize manager
     manager = HashRegistryManager()
     
     # Test basic functionality
-    print(f"Total entries: {len(manager.hash_entries)}")
-    print(f"Enabled entries: {len(manager.get_enabled_entries())}")
+    safe_print(f"Total entries: {len(manager.hash_entries)}")
+    safe_print(f"Enabled entries: {len(manager.get_enabled_entries())}")
     
     # Test bit depth queries
     entries_4bit = manager.get_entries_by_bit_depth(4)
     entries_8bit = manager.get_entries_by_bit_depth(8)
     entries_42bit = manager.get_entries_by_bit_depth(42)
     
-    print(f"4-bit entries: {len(entries_4bit)}")
-    print(f"8-bit entries: {len(entries_8bit)}")
-    print(f"42-bit entries: {len(entries_42bit)}")
+    safe_print(f"4-bit entries: {len(entries_4bit)}")
+    safe_print(f"8-bit entries: {len(entries_8bit)}")
+    safe_print(f"42-bit entries: {len(entries_42bit)}")
     
     # Test route queries
     entries_route_0 = manager.get_entries_by_route("route_0")
-    print(f"Route 0 entries: {len(entries_route_0)}")
+    safe_print(f"Route 0 entries: {len(entries_route_0)}")
     
     # Test hash resolution
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     basket_id = manager.resolve_hash_to_basket(test_hash)
-    print(f"Resolved basket ID: {basket_id}")
+    safe_print(f"Resolved basket ID: {basket_id}")
     
     # Get statistics
     stats = manager.get_registry_statistics()
-    print(f"Registry statistics: {stats}")
+    safe_print(f"Registry statistics: {stats}")
     
     # Export summary
     manager.export_registry_summary()
     
-    print("✅ Hash Registry Manager test completed")
+    safe_print("✅ Hash Registry Manager test completed")
 
 
 if __name__ == "__main__":

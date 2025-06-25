@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Vault Balance Regulator - Asset Allocation & Risk Management.
 
@@ -13,7 +17,6 @@ Mathematical Foundation:
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 import logging
 import time
@@ -21,7 +24,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +179,7 @@ class VaultBalanceRegulator:
                 )
                 
                 # Calculate rebalance urgency
-                vault.rebalance_urgency = min(1.0, vault.imbalance_delta / self.imbalance_threshold)
+                vault.rebalance_urgency = unified_math.min(1.0, vault.imbalance_delta / self.imbalance_threshold)
                 
         except Exception as e:
             logger.error(f"Error recalculating allocations: {e}")
@@ -204,7 +207,7 @@ class VaultBalanceRegulator:
                 return 1.0 if target > 0 else 0.0
             
             ratio = target / actual
-            imbalance_delta = abs(ratio - 1.0)
+            imbalance_delta = unified_math.abs(ratio - 1.0)
             
             return imbalance_delta
             
@@ -242,7 +245,7 @@ class VaultBalanceRegulator:
             
             # Calculate mean of recent balances
             recent_balances = balance_history[-20:]  # Last 20 measurements
-            mean_balance = np.mean(recent_balances)
+            mean_balance = unified_math.unified_math.mean(recent_balances)
             
             # Calculate mean reversion trigger
             trigger = self.mean_reversion_lambda * (current_balance - mean_balance)
@@ -270,8 +273,8 @@ class VaultBalanceRegulator:
             Threshold ping value
         """
         try:
-            # ReLU function: max(0, x)
-            ping_value = max(0.0, imbalance_delta - self.ping_threshold_delta)
+            # ReLU function: unified_math.max(0, x)
+            ping_value = unified_math.max(0.0, imbalance_delta - self.ping_threshold_delta)
             
             return ping_value
             
@@ -332,7 +335,7 @@ class VaultBalanceRegulator:
                 # Normal rebalance
                 elif imbalance_delta > self.imbalance_threshold:
                     should_rebalance = True
-                    confidence = min(0.8, imbalance_delta * 2)
+                    confidence = unified_math.min(0.8, imbalance_delta * 2)
                     reason = "Standard rebalance - allocation drift"
                     
                     # Determine buy/sell action
@@ -350,18 +353,18 @@ class VaultBalanceRegulator:
                         amount = vault.balance - target_balance
                 
                 # Mean reversion trigger
-                elif abs(mean_reversion) > 0.1:
+                elif unified_math.abs(mean_reversion) > 0.1:
                     should_rebalance = True
-                    confidence = min(0.6, abs(mean_reversion) * 5)
-                    urgency = min(0.7, abs(mean_reversion) * 3)
+                    confidence = unified_math.min(0.6, unified_math.abs(mean_reversion) * 5)
+                    urgency = unified_math.min(0.7, unified_math.abs(mean_reversion) * 3)
                     reason = "Mean reversion trigger"
                     
                     if mean_reversion > 0:
                         action = RebalanceAction.SELL
-                        amount = abs(mean_reversion) * vault.balance * 0.1
+                        amount = unified_math.abs(mean_reversion) * vault.balance * 0.1
                     else:
                         action = RebalanceAction.BUY
-                        amount = abs(mean_reversion) * vault.balance * 0.1
+                        amount = unified_math.abs(mean_reversion) * vault.balance * 0.1
                 
                 # Apply profit and volatility adjustments
                 if should_rebalance:
@@ -452,9 +455,9 @@ class VaultBalanceRegulator:
                 allocations = [a for a in allocations if a > 0]  # Remove zero allocations
                 
                 if allocations:
-                    entropy = -sum(a * np.log(a) for a in allocations)
+                    entropy = -sum(a * unified_math.unified_math.log(a) for a in allocations)
                     # Normalize by max possible entropy
-                    max_entropy = np.log(len(allocations))
+                    max_entropy = unified_math.unified_math.log(len(allocations))
                     balance_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
                 else:
                     balance_entropy = 0.0
@@ -462,8 +465,8 @@ class VaultBalanceRegulator:
                 balance_entropy = 0.0
             
             # Calculate risk level (based on imbalances)
-            max_imbalance = max(vault.imbalance_delta for vault in self.vault_balances.values())
-            risk_level = min(1.0, max_imbalance / self.emergency_threshold)
+            max_imbalance = unified_math.max(vault.imbalance_delta for vault in self.vault_balances.values())
+            risk_level = unified_math.min(1.0, max_imbalance / self.emergency_threshold)
             
             # Calculate stability score (inverse of risk)
             stability_score = 1.0 - risk_level
@@ -477,7 +480,7 @@ class VaultBalanceRegulator:
             
             # Last rebalance time
             last_rebalance_time = (
-                max(vault.last_rebalance_time for vault in self.vault_balances.values())
+                unified_math.max(vault.last_rebalance_time for vault in self.vault_balances.values())
                 if any(vault.last_rebalance_time > 0 for vault in self.vault_balances.values())
                 else 0.0
             )
@@ -511,7 +514,7 @@ class VaultBalanceRegulator:
         try:
             # Validate allocations sum to 1.0
             total_allocation = sum(new_targets.values())
-            if abs(total_allocation - 1.0) > 0.01:
+            if unified_math.abs(total_allocation - 1.0) > 0.01:
                 logger.error(f"Target allocations must sum to 1.0, got {total_allocation}")
                 return False
             
@@ -574,8 +577,8 @@ class VaultBalanceRegulator:
 
 def main() -> None:
     """Demo function for testing vault balance regulator."""
-    print("Vault Balance Regulator Demo")
-    print("=" * 35)
+    safe_print("Vault Balance Regulator Demo")
+    safe_print("=" * 35)
     
     regulator = VaultBalanceRegulator()
     
@@ -587,40 +590,40 @@ def main() -> None:
         Asset.ETH: 5000.0,    # $5k ETH (should be 5% = $3k)
     }
     
-    print("Setting initial balances:")
+    safe_print("Setting initial balances:")
     for asset, balance in test_balances.items():
         regulator.update_balance(asset, balance)
         vault = regulator.vault_balances[asset]
-        print(f"  {asset.value}: ${balance:,.0f} (Target: {vault.target_allocation:.1%}, Actual: {vault.actual_allocation:.1%})")
+        safe_print(f"  {asset.value}: ${balance:,.0f} (Target: {vault.target_allocation:.1%}, Actual: {vault.actual_allocation:.1%})")
     
     # Generate rebalance signals
-    print(f"\nGenerating rebalance signals:")
+    safe_print(f"\nGenerating rebalance signals:")
     signals = regulator.generate_rebalance_signals(profit_factor=1.2, volatility_sigma=0.15)
     
     for signal in signals:
-        print(f"  {signal.asset.value}: {signal.action.value}")
-        print(f"    Amount: ${signal.amount:,.2f}")
-        print(f"    Confidence: {signal.confidence:.3f}")
-        print(f"    Urgency: {signal.urgency:.3f}")
-        print(f"    Reason: {signal.reason}")
-        print(f"    Threshold Triggered: {signal.threshold_triggered}")
+        safe_print(f"  {signal.asset.value}: {signal.action.value}")
+        safe_print(f"    Amount: ${signal.amount:,.2f}")
+        safe_print(f"    Confidence: {signal.confidence:.3f}")
+        safe_print(f"    Urgency: {signal.urgency:.3f}")
+        safe_print(f"    Reason: {signal.reason}")
+        safe_print(f"    Threshold Triggered: {signal.threshold_triggered}")
         
         # Execute rebalance
         executed = regulator.execute_rebalance(signal)
-        print(f"    Executed: {executed}")
+        safe_print(f"    Executed: {executed}")
         print()
     
     # Calculate vault state
-    print("Vault State:")
+    safe_print("Vault State:")
     vault_state = regulator.calculate_vault_state()
-    print(f"  Total Value: ${vault_state.total_value_usd:,.0f}")
-    print(f"  Balance Entropy: {vault_state.balance_entropy:.3f}")
-    print(f"  Risk Level: {vault_state.risk_level:.3f}")
-    print(f"  Stability Score: {vault_state.stability_score:.3f}")
-    print(f"  Rebalance Frequency: {vault_state.rebalance_frequency:.1f}/hour")
+    safe_print(f"  Total Value: ${vault_state.total_value_usd:,.0f}")
+    safe_print(f"  Balance Entropy: {vault_state.balance_entropy:.3f}")
+    safe_print(f"  Risk Level: {vault_state.risk_level:.3f}")
+    safe_print(f"  Stability Score: {vault_state.stability_score:.3f}")
+    safe_print(f"  Rebalance Frequency: {vault_state.rebalance_frequency:.1f}/hour")
     
     # Test target allocation update
-    print(f"\nTesting target allocation update:")
+    safe_print(f"\nTesting target allocation update:")
     new_targets = {
         Asset.BTC: 0.7,     # Increase BTC to 70%
         Asset.USDC: 0.2,    # Decrease USDC to 20%
@@ -629,18 +632,18 @@ def main() -> None:
     }
     
     updated = regulator.update_target_allocations(new_targets)
-    print(f"  Target update successful: {updated}")
+    safe_print(f"  Target update successful: {updated}")
     
     # Regulator summary
-    print(f"\nRegulator Summary:")
+    safe_print(f"\nRegulator Summary:")
     summary = regulator.get_regulator_summary()
     for key, value in summary.items():
         if isinstance(value, dict):
-            print(f"  {key}:")
+            safe_print(f"  {key}:")
             for subkey, subvalue in value.items():
-                print(f"    {subkey}: {subvalue}")
+                safe_print(f"    {subkey}: {subvalue}")
         else:
-            print(f"  {key}: {value}")
+            safe_print(f"  {key}: {value}")
 
 
 if __name__ == "__main__":

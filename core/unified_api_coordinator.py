@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified API Coordinator - External Integration Hub.
 
@@ -37,7 +53,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 import asyncio
 from collections import defaultdict
@@ -601,8 +616,8 @@ class UnifiedAPICoordinator:
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get performance metrics."""
         try:
-            avg_latency = self.total_latency / max(self.total_requests, 1)
-            success_rate = self.successful_requests / max(self.total_requests, 1)
+            avg_latency = self.total_latency / unified_math.max(self.total_requests, 1)
+            success_rate = self.successful_requests / unified_math.max(self.total_requests, 1)
 
             return {
                 "version": self.version,
@@ -652,44 +667,44 @@ class UnifiedAPICoordinator:
 async def main() -> None:
     """Main function for testing API coordinator."""
     try:
-        print("🌐 Unified API Coordinator Test")
-        print("=" * 40)
+        safe_print("🌐 Unified API Coordinator Test")
+        safe_print("=" * 40)
 
         # Initialize API coordinator
         coordinator = UnifiedAPICoordinator()
         await coordinator.start()
 
         # Test ticker request
-        print("Testing Coinbase ticker...")
+        safe_print("Testing Coinbase ticker...")
         ticker = await coordinator.get_ticker("coinbase", "BTC-USD")
         if ticker:
-            print(f"✅ BTC-USD Price: ${ticker.get('price', 'N/A')}")
+            safe_print(f"✅ BTC-USD Price: ${ticker.get('price', 'N/A')}")
         else:
-            print("❌ Failed to get ticker")
+            safe_print("❌ Failed to get ticker")
 
         # Test order book
-        print("Testing order book...")
+        safe_print("Testing order book...")
         order_book = await coordinator.get_order_book("coinbase", "BTC-USD")
         if order_book:
-            print(
+            safe_print(
                 f"✅ Order book retrieved: {len(order_book.get('bids', []))} bids, "
                 f"{len(order_book.get('asks', []))} asks"
             )
         else:
-            print("❌ Failed to get order book")
+            safe_print("❌ Failed to get order book")
 
         # Get performance metrics
         metrics = coordinator.get_performance_metrics()
-        print(
+        safe_print(
             f"✅ Performance: {metrics['successful_requests']} successful, "
             f"{metrics['failed_requests']} failed"
         )
 
         await coordinator.stop()
-        print("\n🎉 API coordinator test completed successfully!")
+        safe_print("\n🎉 API coordinator test completed successfully!")
 
     except Exception as e:
-        print(f"❌ API coordinator test failed: {e}")
+        safe_print(f"❌ API coordinator test failed: {e}")
         import traceback
 
         traceback.print_exc()

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Centralised logging configuration for Schwabot.
 
@@ -11,7 +13,6 @@ Usage
 >>> logger = configure_logging(__name__, level="DEBUG")
 >>> logger.info("Message")
 """
-from __future__ import annotations
 
 import logging
 from typing import Any

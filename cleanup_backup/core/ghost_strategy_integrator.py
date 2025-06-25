@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost Strategy Integrator – Unified pipeline integration for Schwabot.
 
@@ -12,14 +15,13 @@ All modules are hard-linked and follow the standard data flow from core vectors
 profit_cycle_allocator, and matrix_fault_resolver.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
 import time
 from typing import Any, Dict, List, Optional, Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 from .btc_vector_aggregator import btc_eta
 from .btc_vector_aggregator import btc_vector

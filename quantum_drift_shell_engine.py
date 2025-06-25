@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Quantum Drift Shell Engine - Thermal Drift Shell Implementation.
 
@@ -7,8 +8,8 @@ Implements the core mathematical framework for:
 - Thermal gradient analysis for market drift detection
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Union
@@ -92,8 +93,8 @@ class QuantumDriftShellEngine:
                     heat_flux = np.random.normal(0, 0.1, 3)
                     
                     # Position-dependent material properties
-                    density = self.base_density * (1 + 0.1 * np.sin(x * 0.1))
-                    specific_heat = self.base_specific_heat * (1 + 0.1 * np.cos(y * 0.1))
+                    density = self.base_density * (1 + 0.1 * np.unified_math.sin(x * 0.1))
+                    specific_heat = self.base_specific_heat * (1 + 0.1 * np.unified_math.cos(y * 0.1))
                     
                     thermal_state = ThermalState(
                         temperature=initial_temp,
@@ -240,7 +241,7 @@ class QuantumDriftShellEngine:
         x, y, z = position
         
         # Base temperature from position
-        base_temp = 1.0 + 0.1 * math.sin(x * 0.1) * math.cos(y * 0.1)
+        base_temp = 1.0 + 0.1 * unified_math.unified_math.sin(x * 0.1) * unified_math.unified_math.cos(y * 0.1)
         
         # Market data influence
         if market_data:
@@ -300,7 +301,7 @@ class QuantumDriftShellEngine:
             variance_multiplier = 2.0
         elif drift_mode == DriftMode.ADAPTIVE:
             # Adaptive variance based on current temperature
-            temp_factor = abs(thermal_state.temperature - 1.0)
+            temp_factor = unified_math.abs(thermal_state.temperature - 1.0)
             variance_multiplier = 1.0 + temp_factor
         else:  # FALLBACK
             variance_multiplier = 0.1
@@ -338,7 +339,7 @@ class QuantumDriftShellEngine:
                 self.temperature_field[x, y, z-1]
             ) / 2.0
         
-        return math.sqrt(grad_x**2 + grad_y**2 + grad_z**2)
+        return unified_math.unified_math.sqrt(grad_x**2 + grad_y**2 + grad_z**2)
     
     def _calculate_stability_score(
         self, 
@@ -347,12 +348,12 @@ class QuantumDriftShellEngine:
     ) -> float:
         """Calculate stability score based on temperature change and gradient."""
         # Lower temperature change and gradient = higher stability
-        change_factor = 1.0 / (1.0 + abs(temperature_change))
+        change_factor = 1.0 / (1.0 + unified_math.abs(temperature_change))
         gradient_factor = 1.0 / (1.0 + gradient_magnitude)
         
         stability_score = (change_factor + gradient_factor) / 2.0
         
-        return min(1.0, max(0.0, stability_score))
+        return unified_math.min(1.0, unified_math.max(0.0, stability_score))
     
     def _check_fallback_conditions(
         self, 
@@ -416,14 +417,14 @@ class QuantumDriftShellEngine:
         base_confidence = stability_score
         
         # Reduce confidence for high gradients
-        gradient_penalty = min(0.5, gradient_magnitude * 0.1)
+        gradient_penalty = unified_math.min(0.5, gradient_magnitude * 0.1)
         
         # Reduce confidence if fallback triggered
         fallback_penalty = 0.3 if fallback_triggered else 0.0
         
         confidence = base_confidence - gradient_penalty - fallback_penalty
         
-        return max(0.0, min(1.0, confidence))
+        return unified_math.max(0.0, unified_math.min(1.0, confidence))
     
     def _apply_stability_regulation(
         self, 

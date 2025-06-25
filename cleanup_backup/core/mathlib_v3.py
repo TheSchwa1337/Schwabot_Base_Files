@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library V3 - AI-Infused Multi-Dimensional Profit Lattice with Automatic Differentiation.
 
@@ -27,15 +31,14 @@ Based on SxN-Math specifications and Windows-compatible architecture.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import getcontext
 import logging
-import math
+from core.unified_math_system import unified_math
 from typing import Any, Callable, Dict, Tuple, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 # Set high precision for financial calculations
@@ -136,30 +139,30 @@ class Dual:
         else:
             return Dual(-self.val, -self.eps)
 
-    def sin(self) -> Dual:
-        """Sine: sin(a + b*ε) = sin(a) + cos(a)*b*ε."""
-        return Dual(math.sin(self.val), math.cos(self.val) * self.eps)
+    def unified_math.sin(self) -> Dual:
+        """Sine: unified_math.sin(a + b*ε) = unified_math.sin(a) + unified_math.cos(a)*b*ε."""
+        return Dual(unified_math.unified_math.sin(self.val), unified_math.unified_math.cos(self.val) * self.eps)
 
-    def cos(self) -> Dual:
-        """Cosine: cos(a + b*ε) = cos(a) - sin(a)*b*ε."""
-        return Dual(math.cos(self.val), -math.sin(self.val) * self.eps)
+    def unified_math.cos(self) -> Dual:
+        """Cosine: unified_math.cos(a + b*ε) = unified_math.cos(a) - unified_math.sin(a)*b*ε."""
+        return Dual(unified_math.unified_math.cos(self.val), -unified_math.unified_math.sin(self.val) * self.eps)
 
-    def exp(self) -> Dual:
-        """Exponential: exp(a + b*ε) = exp(a) + exp(a)*b*ε."""
-        exp_val = math.exp(self.val)
+    def unified_math.exp(self) -> Dual:
+        """Exponential: unified_math.exp(a + b*ε) = unified_math.exp(a) + unified_math.exp(a)*b*ε."""
+        exp_val = unified_math.unified_math.exp(self.val)
         return Dual(exp_val, exp_val * self.eps)
 
-    def log(self) -> Dual:
-        """Natural logarithm: log(a + b*ε) = log(a) + (b/a)*ε."""
+    def unified_math.log(self) -> Dual:
+        """Natural logarithm: unified_math.log(a + b*ε) = unified_math.log(a) + (b/a)*ε."""
         if self.val <= 0:
             raise ValueError("Cannot take log of non-positive number")
-        return Dual(math.log(self.val), self.eps / self.val)
+        return Dual(unified_math.unified_math.log(self.val), self.eps / self.val)
 
-    def sqrt(self) -> Dual:
-        """Square root: sqrt(a + b*ε) = sqrt(a) + (b/(2*sqrt(a)))*ε."""
+    def unified_math.sqrt(self) -> Dual:
+        """Square root: unified_math.sqrt(a + b*ε) = unified_math.sqrt(a) + (b/(2*unified_math.sqrt(a)))*ε."""
         if self.val < 0:
             raise ValueError("Cannot take sqrt of negative number")
-        sqrt_val = math.sqrt(self.val)
+        sqrt_val = unified_math.unified_math.sqrt(self.val)
         return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
     def tanh(self) -> Dual:
@@ -227,7 +230,7 @@ class MathLibV3:
         Kelly criterion with automatic risk adjustment
 
         Formula: f* = μ / σ² (optimal)
-        Risk-adjusted: f = min(f* * risk_tolerance, max_allocation)
+        Risk-adjusted: f = unified_math.min(f* * risk_tolerance, max_allocation)
 
         Args:
             mu: Expected return
@@ -249,11 +252,11 @@ class MathLibV3:
             kelly_optimal = mu / sigma_squared
 
             # Risk-adjusted allocation
-            kelly_adjusted = min(kelly_optimal * risk_tolerance, 1.0)
-            kelly_adjusted = max(kelly_adjusted, 0.0)  # No negative allocations
+            kelly_adjusted = unified_math.min(kelly_optimal * risk_tolerance, 1.0)
+            kelly_adjusted = unified_math.max(kelly_adjusted, 0.0)  # No negative allocations
 
             # Sharpe ratio approximation
-            sharpe_ratio = mu / math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
+            sharpe_ratio = mu / unified_math.unified_math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
 
             # Expected utility (Kelly criterion maximizes log utility)
             expected_utility = mu * kelly_adjusted - 0.5 * sigma_squared * (
@@ -304,7 +307,7 @@ class MathLibV3:
 
             # Calculate CVaR (mean of returns below VaR)
             tail_returns = sorted_returns[sorted_returns <= var_value]
-            cvar = np.mean(tail_returns) if len(tail_returns) > 0 else var_value
+            cvar = unified_math.unified_math.mean(tail_returns) if len(tail_returns) > 0 else var_value
 
             return float(cvar)
 
@@ -334,8 +337,8 @@ class MathLibV3:
             returns = np.diff(market_data) / (market_data[:-1] + 1e-10)
 
             # Basic statistics
-            mean_return = np.mean(returns)
-            volatility = np.std(returns)
+            mean_return = unified_math.unified_math.mean(returns)
+            volatility = unified_math.unified_math.std(returns)
 
             # Multi-dimensional optimization
             optimal_allocation = min(
@@ -353,7 +356,7 @@ class MathLibV3:
             cumulative = np.cumprod(1 + returns)
             running_max = np.maximum.accumulate(cumulative)
             drawdowns = (cumulative - running_max) / running_max
-            max_drawdown = np.min(drawdowns)
+            max_drawdown = unified_math.unified_math.min(drawdowns)
 
             # CVaR calculation
             cvar_95 = self.cvar_calculation(returns, 0.95)
@@ -390,14 +393,14 @@ class MathLibV3:
             portfolio_variance = (
                 portfolio_weights.T @ covariance_matrix @ portfolio_weights
             )
-            portfolio_volatility = math.sqrt(portfolio_variance)
+            portfolio_volatility = unified_math.unified_math.sqrt(portfolio_variance)
 
             # Risk concentration (Herfindahl index)
             concentration = np.sum(portfolio_weights**2)
 
             # Diversification ratio
             weighted_volatilities = np.sum(
-                portfolio_weights * np.sqrt(np.diag(covariance_matrix))
+                portfolio_weights * unified_math.unified_math.sqrt(np.diag(covariance_matrix))
             )
             diversification_ratio = (
                 weighted_volatilities / portfolio_volatility
@@ -436,14 +439,14 @@ class MathLibV3:
 
             # Volatility clustering (GARCH-like behavior)
             squared_returns = trends**2
-            volatility_autocorr = np.corrcoef(
+            volatility_autocorr = unified_math.correlation(
                 squared_returns[:-1], squared_returns[1:]
             )[0, 1]
 
             # Detect cycles using autocorrelation
             if len(time_series) > 20:
                 autocorr = np.correlate(time_series, time_series, mode="full")
-                autocorr_max = np.max(autocorr)
+                autocorr_max = unified_math.unified_math.max(autocorr)
                 autocorr_normalized = (
                     autocorr / autocorr_max if autocorr_max > 0 else autocorr
                 )
@@ -451,7 +454,7 @@ class MathLibV3:
                 # Find peaks in autocorrelation (potential cycles)
                 half_len = len(autocorr_normalized) // 2
                 cycle_strength = (
-                    np.max(autocorr_normalized[half_len + 1 :])
+                    unified_math.unified_math.max(autocorr_normalized[half_len + 1 :])
                     if half_len + 1 < len(autocorr_normalized)
                     else 0
                 )
@@ -462,7 +465,7 @@ class MathLibV3:
             y_lag = time_series[:-1]
             y_diff = np.diff(time_series)
 
-            if len(y_lag) > 0 and np.var(y_lag) > 0:
+            if len(y_lag) > 0 and unified_math.unified_math.var(y_lag) > 0:
                 # Simple regression: Δy_t = α + β*y_{t-1} + ε_t
                 X = np.column_stack([np.ones(len(y_lag)), y_lag])
                 coeffs = np.linalg.lstsq(X, y_diff, rcond=None)[0]
@@ -475,8 +478,8 @@ class MathLibV3:
                 "volatility_clustering": volatility_autocorr,
                 "cycle_strength": cycle_strength,
                 "mean_reversion_coefficient": mean_reversion_coeff,
-                "pattern_complexity": np.std(time_series)
-                / (np.mean(np.abs(time_series)) + 1e-10),
+                "pattern_complexity": unified_math.unified_math.std(time_series)
+                / (unified_math.unified_math.mean(unified_math.unified_math.abs(time_series)) + 1e-10),
             }
 
         except Exception as e:
@@ -518,7 +521,7 @@ class MathLibV3:
             trend_forecast = np.polyval(trend_coeffs, future_x)
 
             # Prediction confidence based on historical volatility
-            volatility = np.std(np.diff(historical_data))
+            volatility = unified_math.unified_math.std(np.diff(historical_data))
             confidence_intervals = {
                 "lower_95": trend_forecast - 1.96 * volatility,
                 "upper_95": trend_forecast + 1.96 * volatility,
@@ -703,28 +706,28 @@ def main() -> None:
     lib_v3 = MathLibV3()
 
     # Test Kelly criterion
-    print("Testing Kelly criterion...")
+    safe_print("Testing Kelly criterion...")
     kelly_result = lib_v3.kelly_criterion_risk_adjusted(0.1, 0.04, 0.25)
-    print(f"Kelly result: {kelly_result}")
+    safe_print(f"Kelly result: {kelly_result}")
 
     # Test dual numbers
-    print("\nTesting dual number automatic differentiation...")
+    safe_print("\nTesting dual number automatic differentiation...")
 
     def test_function(x: Dual) -> Dual:
         """Evaluate f(x) = x² + 2x + 1 as a Dual-friendly demo."""
         return x * x + 2 * x + 1  # f(x) = x² + 2x + 1, f'(x) = 2x + 2
 
     val, grad_val = lib_v3.compute_dual_gradient(test_function, 3.0)
-    print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")
+    safe_print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")
 
     # Test CVaR
-    print("\nTesting CVaR...")
+    safe_print("\nTesting CVaR...")
     test_returns = np.random.normal(0.05, 0.2, 1000)  # Simulate returns
     cvar_result = lib_v3.cvar_calculation(test_returns, 0.95)
-    print(f"CVaR (95%): {cvar_result}")
+    safe_print(f"CVaR (95%): {cvar_result}")
 
     logger.info("MathLibV3 main function executed successfully")
-    print("MathLibV3 with automatic differentiation test completed successfully")
+    safe_print("MathLibV3 with automatic differentiation test completed successfully")
 
 
 if __name__ == "__main__":

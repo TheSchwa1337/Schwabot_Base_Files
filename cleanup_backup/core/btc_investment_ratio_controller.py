@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """BTC Investment Ratio Controller - Logical Sequencing for BTC Trading.
 
@@ -22,7 +26,6 @@ Logical Sequencing:
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 import logging
 import time
@@ -30,7 +33,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 from core.unified_signal_metrics import (
     BTCInvestmentSignals,
@@ -269,7 +272,7 @@ class BTCInvestmentRatioController:
             + btc_signals.price_pressure * 0.10  # Price pressure
         )
 
-        return max(0.0, min(1.0, strength))
+        return unified_math.max(0.0, unified_math.min(1.0, strength))
 
     def _determine_investment_decision(
         self,
@@ -345,7 +348,7 @@ class BTCInvestmentRatioController:
 
         # Apply bounds
         allocation = max(
-            self.min_btc_allocation, min(self.max_btc_allocation, base_allocation)
+            self.min_btc_allocation, unified_math.min(self.max_btc_allocation, base_allocation)
         )
 
         # Adjust based on risk factors
@@ -359,7 +362,7 @@ class BTCInvestmentRatioController:
             allocation *= 0.7  # Reduce if network is weak
 
         # Final bounds check
-        return max(self.min_btc_allocation, min(self.max_btc_allocation, allocation))
+        return unified_math.max(self.min_btc_allocation, unified_math.min(self.max_btc_allocation, allocation))
 
     def _calculate_position_multiplier(
         self,
@@ -385,7 +388,7 @@ class BTCInvestmentRatioController:
             logger.warning(f"Error calculating position multiplier: {e}")
             # Fallback calculation
             multiplier = 1.0 + (execution_confidence - 1.0) * 0.5 + btc_strength * 0.3
-            return max(0.1, min(3.0, multiplier))
+            return unified_math.max(0.1, unified_math.min(3.0, multiplier))
 
     def _assess_risk_level(
         self,
@@ -399,7 +402,7 @@ class BTCInvestmentRatioController:
         volatility_risk = core_signals.loop_volatility
         liquidity_risk = 1.0 - core_signals.liquidity_score
         network_risk = 1.0 - btc_signals.network_strength
-        confidence_risk = max(0, 1.0 - execution_confidence)
+        confidence_risk = unified_math.max(0, 1.0 - execution_confidence)
 
         # Combined risk score
         risk_score = (
@@ -516,8 +519,8 @@ class BTCInvestmentRatioController:
             decision = result.decision.value
             decision_counts[decision] = decision_counts.get(decision, 0) + 1
 
-        avg_confidence = np.mean([r.confidence for r in recent_decisions])
-        avg_btc_allocation = np.mean([r.btc_allocation_ratio for r in recent_decisions])
+        avg_confidence = unified_math.mean([r.confidence for r in recent_decisions])
+        avg_btc_allocation = unified_math.mean([r.btc_allocation_ratio for r in recent_decisions])
 
         return {
             "total_decisions": len(recent_decisions),
@@ -536,8 +539,8 @@ class BTCInvestmentRatioController:
 
 def main() -> None:
     """Demo function for testing BTC investment ratio controller."""
-    print("BTC Investment Ratio Controller Demo")
-    print("=" * 50)
+    safe_print("BTC Investment Ratio Controller Demo")
+    safe_print("=" * 50)
 
     controller = BTCInvestmentRatioController()
 
@@ -593,25 +596,25 @@ def main() -> None:
         network_data=mock_network_data,
     )
 
-    print(f"Investment Decision: {result.decision.value}")
-    print(f"Confidence: {result.confidence:.3f}")
-    print(f"BTC Allocation: {result.btc_allocation_ratio:.1%}")
-    print(f"Position Multiplier: {result.position_size_multiplier:.2f}x")
-    print(f"Risk Level: {result.risk_level.value}")
-    print(f"Execution Priority: {result.execution_priority}")
-    print(f"Reasoning: {result.reasoning}")
+    safe_print(f"Investment Decision: {result.decision.value}")
+    safe_print(f"Confidence: {result.confidence:.3f}")
+    safe_print(f"BTC Allocation: {result.btc_allocation_ratio:.1%}")
+    safe_print(f"Position Multiplier: {result.position_size_multiplier:.2f}x")
+    safe_print(f"Risk Level: {result.risk_level.value}")
+    safe_print(f"Execution Priority: {result.execution_priority}")
+    safe_print(f"Reasoning: {result.reasoning}")
 
-    print("\nKey Signal Breakdown:")
+    safe_print("\nKey Signal Breakdown:")
     breakdown = result.signal_breakdown
-    print(f"  Execution Confidence: {breakdown.get('execution_confidence', 0):.3f}")
-    print(f"  Entry Score: {breakdown.get('entry_score', 0):.3f}")
-    print(f"  BTC Xi: {breakdown.get('xi_btc', 0):.3f}")
-    print(f"  Network Strength: {breakdown.get('network_strength', 0):.3f}")
-    print(f"  Price Pressure: {breakdown.get('price_pressure', 0):.3f}")
+    safe_print(f"  Execution Confidence: {breakdown.get('execution_confidence', 0):.3f}")
+    safe_print(f"  Entry Score: {breakdown.get('entry_score', 0):.3f}")
+    safe_print(f"  BTC Xi: {breakdown.get('xi_btc', 0):.3f}")
+    safe_print(f"  Network Strength: {breakdown.get('network_strength', 0):.3f}")
+    safe_print(f"  Price Pressure: {breakdown.get('price_pressure', 0):.3f}")
 
     # Test multiple scenarios
-    print("\n" + "=" * 50)
-    print("Testing Multiple Scenarios:")
+    safe_print("\n" + "=" * 50)
+    safe_print("Testing Multiple Scenarios:")
 
     scenarios = [
         ("Bull Market", {"triplet_entropy": 0.95, "coherence_score": 0.88}),
@@ -633,14 +636,14 @@ def main() -> None:
             network_data=mock_network_data,
         )
 
-        print(f"\n{scenario_name}:")
-        print(f"  Decision: {result.decision.value}")
-        print(f"  BTC Allocation: {result.btc_allocation_ratio:.1%}")
-        print(f"  Risk: {result.risk_level.value}")
+        safe_print(f"\n{scenario_name}:")
+        safe_print(f"  Decision: {result.decision.value}")
+        safe_print(f"  BTC Allocation: {result.btc_allocation_ratio:.1%}")
+        safe_print(f"  Risk: {result.risk_level.value}")
 
     # Performance summary
     summary = controller.get_performance_summary()
-    print(f"\nPerformance Summary: {summary}")
+    safe_print(f"\nPerformance Summary: {summary}")
 
 
 if __name__ == "__main__":

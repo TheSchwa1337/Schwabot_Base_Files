@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Fractal Injection - Core Fractal Integration Pipeline Component
@@ -20,7 +22,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +112,8 @@ class FractalInjector:
     def _process_mandelbrot_pattern(self, pattern_data: np.ndarray) -> np.ndarray:
         """Process Mandelbrot fractal pattern."""
         # Apply Mandelbrot-specific processing
-        processed = np.abs(pattern_data)
-        return processed / np.max(processed) if np.max(processed) > 0 else processed
+        processed = unified_math.unified_math.abs(pattern_data)
+        return processed / unified_math.unified_math.max(processed) if unified_math.unified_math.max(processed) > 0 else processed
     
     def _process_julia_pattern(self, pattern_data: np.ndarray) -> np.ndarray:
         """Process Julia fractal pattern."""
@@ -154,7 +156,7 @@ class FractalInjector:
             cycles = []
             pattern_length = len(pattern)
             
-            for cycle_length in range(1, min(pattern_length // 2, 100)):
+            for cycle_length in range(1, unified_math.min(pattern_length // 2, 100)):
                 is_cycle = True
                 for i in range(cycle_length, pattern_length):
                     if pattern[i] != pattern[i % cycle_length]:
@@ -187,21 +189,21 @@ class FractalInjector:
                 return {"decision": "insufficient_data", "confidence": 0.0}
             
             # Calculate correlation between input and fractal pattern
-            correlation = np.corrcoef(input_data.flatten(), pattern.flatten())[0, 1]
+            correlation = unified_math.unified_math.correlation(input_data.flatten(), pattern.flatten())[0, 1]
             
             # Make decision based on correlation
             if correlation > 0.7:
                 decision = "strong_buy"
-                confidence = min(abs(correlation), 1.0)
+                confidence = unified_math.min(unified_math.abs(correlation), 1.0)
             elif correlation > 0.3:
                 decision = "buy"
-                confidence = min(abs(correlation), 1.0)
+                confidence = unified_math.min(unified_math.abs(correlation), 1.0)
             elif correlation < -0.7:
                 decision = "strong_sell"
-                confidence = min(abs(correlation), 1.0)
+                confidence = unified_math.min(unified_math.abs(correlation), 1.0)
             elif correlation < -0.3:
                 decision = "sell"
-                confidence = min(abs(correlation), 1.0)
+                confidence = unified_math.min(unified_math.abs(correlation), 1.0)
             else:
                 decision = "hold"
                 confidence = 0.5
@@ -239,11 +241,11 @@ def main() -> None:
     # Test fractal injection
     test_pattern = np.random.rand(100, 100)
     result = injector.inject_fractal_pattern(test_pattern, "mandelbrot")
-    print(f"Fractal injection result: {result.success}")
+    safe_print(f"Fractal injection result: {result.success}")
     
     # Get statistics
     stats = injector.get_injection_statistics()
-    print(f"Injection statistics: {stats}")
+    safe_print(f"Injection statistics: {stats}")
 
 
 if __name__ == "__main__":

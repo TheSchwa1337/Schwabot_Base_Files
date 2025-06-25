@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Main Orchestrator - Central Coordination and System Management for Schwabot
@@ -523,7 +537,7 @@ class MainOrchestrator:
                 else:
                     log_level = logging.DEBUG
                 
-                logger.log(log_level, f"[{event.component}] {event.message}")
+                logger.unified_math.log(log_level, f"[{event.component}] {event.message}")
                 
                 # Handle critical events
                 if priority <= Priority.CRITICAL.value:
@@ -666,7 +680,7 @@ def main() -> None:
     
     # Get system status
     status = orchestrator.get_system_status()
-    print(f"System status: {json.dumps(status, indent=2, default=str)}")
+    safe_print(f"System status: {json.dumps(status, indent=2, default=str)}")
     
     # Shutdown
     orchestrator.shutdown()

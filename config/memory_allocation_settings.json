@@ -1,0 +1,17 @@
+{
+  "btc_hashing_enabled": true,
+  "btc_hashing_interval_minutes": 3.75,
+  "auto_cleanup_enabled": true,
+  "compression_enabled": true,
+  "encryption_enabled": true,
+  "memory_limits": {
+    "short_term_mb": 100,
+    "mid_term_mb": 500,
+    "long_term_mb": 1000
+  },
+  "retention_policies": {
+    "short_term_days": 1,
+    "mid_term_days": 7,
+    "long_term_days": 30
+  }
+}

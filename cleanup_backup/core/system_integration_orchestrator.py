@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 System Integration Orchestrator - Schwabot UROS v1.0
@@ -28,7 +30,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import threading
 import queue
 
@@ -437,7 +439,7 @@ class SystemIntegrationOrchestrator:
             latency = np.random.exponential(0.0001)  # Average 0.1ms
             
             # Calculate safety score
-            safety_score = 1.0 - min(latency / self.config["integration_parameters"]["max_latency"], 1.0)
+            safety_score = 1.0 - unified_math.min(latency / self.config["integration_parameters"]["max_latency"], 1.0)
             
             handoff = SystemHandoff(
                 handoff_id=f"hash_registry_{int(time.time() * 1000)}",
@@ -646,7 +648,7 @@ class SystemIntegrationOrchestrator:
             if tensor_harness_handoffs:
                 return tensor_harness_handoffs[0].safety_score
             else:
-                return np.mean([h.safety_score for h in handoffs])
+                return unified_math.mean([h.safety_score for h in handoffs])
             
         except Exception as e:
             logger.error(f"Error calculating profit score: {e}")
@@ -660,8 +662,8 @@ class SystemIntegrationOrchestrator:
             
             # Calculate stability based on latency and success rate
             success_rate = len([h for h in handoffs if h.success]) / len(handoffs)
-            avg_latency = np.mean([h.latency for h in handoffs])
-            latency_score = 1.0 - min(avg_latency / self.config["integration_parameters"]["max_latency"], 1.0)
+            avg_latency = unified_math.mean([h.latency for h in handoffs])
+            latency_score = 1.0 - unified_math.min(avg_latency / self.config["integration_parameters"]["max_latency"], 1.0)
             
             return success_rate * latency_score
             
@@ -705,8 +707,8 @@ class SystemIntegrationOrchestrator:
                 "successful_integrations": len([r for r in self.system_results if r.success]),
                 "failed_integrations": len([r for r in self.system_results if not r.success]),
                 "total_handoffs": len(self.system_handoffs),
-                "average_integration_score": np.mean(self.integration_scores) if self.integration_scores else 0.0,
-                "average_profit_score": np.mean(self.profit_scores) if self.profit_scores else 0.0,
+                "average_integration_score": unified_math.unified_math.mean(self.integration_scores) if self.integration_scores else 0.0,
+                "average_profit_score": unified_math.unified_math.mean(self.profit_scores) if self.profit_scores else 0.0,
                 "component_statuses": {
                     name: {
                         "status": status.status.value,
@@ -791,7 +793,7 @@ def main():
                 mode=SystemMode.DEMO,
                 priority=2.0
             )
-            print(f"System integration request: {request_id} for {prefix}")
+            safe_print(f"System integration request: {request_id} for {prefix}")
         
         # Wait for processing completion
         time.sleep(3)
@@ -801,7 +803,7 @@ def main():
             # Find result by hash prefix (simplified)
             for result in orchestrator.system_results:
                 if result.success:
-                    print(f"Integration: {result.integration_score:.3f}, Profit: {result.profit_score:.3f}")
+                    safe_print(f"Integration: {result.integration_score:.3f}, Profit: {result.profit_score:.3f}")
                     break
         
         # Export data
@@ -809,7 +811,7 @@ def main():
         
         # Print statistics
         stats = orchestrator.get_system_statistics()
-        print(f"System statistics: {stats}")
+        safe_print(f"System statistics: {stats}")
         
     except Exception as e:
         logger.error(f"Error in main: {e}")

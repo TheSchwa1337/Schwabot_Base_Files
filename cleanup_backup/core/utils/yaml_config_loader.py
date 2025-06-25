@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 YAML Configuration Loader for Schwabot.
@@ -485,9 +486,9 @@ if __name__ == "__main__":
     unified_settings = load_unified_settings()
     demo_config = load_demo_config()
     
-    print("Unified Settings loaded:", bool(unified_settings))
-    print("Demo Config loaded:", bool(demo_config))
+    safe_print("Unified Settings loaded:", bool(unified_settings))
+    safe_print("Demo Config loaded:", bool(demo_config))
     
     # Test validation
     is_valid = validate_settings()
-    print("All configurations valid:", is_valid) 
+    safe_print("All configurations valid:", is_valid) 

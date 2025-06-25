@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Best Practices Enforcer - Centralized Code Quality Management.
 
@@ -120,7 +121,7 @@ class BestPracticesEnforcer:
                     replacement=(
                         r"from core.windows_cli_compatibility import "
                         r"safe_print\n"
-                        r'safe_print("\1")'
+                        r'safe_safe_print("\1")'
                     ),
                     severity="MEDIUM",
                     category="windows_cli",

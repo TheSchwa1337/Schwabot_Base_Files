@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Execution Validator - Cost Simulation and Drift Validation System.
@@ -20,7 +22,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import centralized CLI handler
 try:
@@ -182,7 +184,7 @@ class ExecutionValidator:
         # Load existing validations
         self._load_validations()
         
-        safe_print("✅ Execution Validator initialized - Cost simulation active")
+        safe_safe_print("✅ Execution Validator initialized - Cost simulation active")
     
     def _load_validations(self) -> None:
         """Load existing validations from file."""
@@ -240,11 +242,11 @@ class ExecutionValidator:
                     )
                     self.execution_validations[execution_validation.validation_id] = execution_validation
                 
-                safe_print(f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
+                safe_safe_print(f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
                 
         except Exception as e:
             error_msg = safe_format_error(e, "load_validations")
-            safe_print(f"⚠️ Failed to load validations: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to load validations: {error_msg}")
     
     def _save_validations(self) -> None:
         """Save validations to file."""
@@ -289,7 +291,7 @@ class ExecutionValidator:
                 
         except Exception as e:
             error_msg = safe_format_error(e, "save_validations")
-            safe_print(f"⚠️ Failed to save validations: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to save validations: {error_msg}")
     
     def simulate_execution_cost(
         self,
@@ -334,7 +336,7 @@ class ExecutionValidator:
             total_cost = base_cost + complexity_cost + market_impact_cost + network_cost + computational_cost
             
             # Calculate cost efficiency (placeholder - would be profit/cost ratio)
-            cost_efficiency = 1.0 / max(total_cost, 1.0)
+            cost_efficiency = 1.0 / unified_math.max(total_cost, 1.0)
             
             # Generate cost ID
             cost_id = f"COST_{command_id}_{int(time.time())}"
@@ -361,12 +363,12 @@ class ExecutionValidator:
             # Store execution cost
             self.execution_costs[cost_id] = execution_cost
             
-            safe_print(f"💰 Execution cost simulated: {total_cost:.2f} for {command_id}")
+            safe_safe_print(f"💰 Execution cost simulated: {total_cost:.2f} for {command_id}")
             return execution_cost
             
         except Exception as e:
             error_msg = safe_format_error(e, "simulate_execution_cost")
-            safe_print(f"❌ Execution cost simulation failed: {error_msg}")
+            safe_safe_print(f"❌ Execution cost simulation failed: {error_msg}")
             
             # Return safe fallback cost
             return ExecutionCost(
@@ -413,7 +415,7 @@ class ExecutionValidator:
             drift_level = self._determine_drift_level(drift_magnitude)
             
             # Calculate drift factor (normalized)
-            drift_factor = min(1.0, drift_magnitude / 3600)  # Normalize to 1 hour
+            drift_factor = unified_math.min(1.0, drift_magnitude / 3600)  # Normalize to 1 hour
             
             # Calculate validation score
             validation_score = self._calculate_drift_validation_score(
@@ -446,12 +448,12 @@ class ExecutionValidator:
             # Store drift validation
             self.drift_validations[validation_id] = drift_validation
             
-            safe_print(f"⏱️ Drift validation: {drift_magnitude:.2f}s ({drift_level.value})")
+            safe_safe_print(f"⏱️ Drift validation: {drift_magnitude:.2f}s ({drift_level.value})")
             return drift_validation
             
         except Exception as e:
             error_msg = safe_format_error(e, "validate_drift")
-            safe_print(f"❌ Drift validation failed: {error_msg}")
+            safe_safe_print(f"❌ Drift validation failed: {error_msg}")
             
             # Return safe fallback validation
             return DriftValidation(
@@ -492,7 +494,7 @@ class ExecutionValidator:
             # Calculate overall score
             cost_score = execution_cost.cost_efficiency
             drift_score = drift_validation.validation_score
-            profit_score = min(1.0, max(0.0, profit_delta / 100.0))  # Normalize profit
+            profit_score = unified_math.min(1.0, unified_math.max(0.0, profit_delta / 100.0))  # Normalize profit
             
             # Weighted combination
             overall_score = (
@@ -547,12 +549,12 @@ class ExecutionValidator:
             # Save to file
             self._save_validations()
             
-            safe_print(f"✅ Execution validation: {validation_status.value} (Score: {overall_score:.3f})")
+            safe_safe_print(f"✅ Execution validation: {validation_status.value} (Score: {overall_score:.3f})")
             return execution_validation
             
         except Exception as e:
             error_msg = safe_format_error(e, "validate_execution")
-            safe_print(f"❌ Execution validation failed: {error_msg}")
+            safe_safe_print(f"❌ Execution validation failed: {error_msg}")
             
             # Return safe fallback validation
             return ExecutionValidation(
@@ -583,7 +585,7 @@ class ExecutionValidator:
         drift_penalty = drift_factor * 0.5
         
         # Final score
-        validation_score = max(0.0, min(1.0, base_score - drift_penalty))
+        validation_score = unified_math.max(0.0, unified_math.min(1.0, base_score - drift_penalty))
         
         return validation_score
     
@@ -711,7 +713,7 @@ class ExecutionValidator:
             'approved_validations': self.approved_validations,
             'rejected_validations': self.rejected_validations,
             'average_validation_score': self.average_validation_score,
-            'approval_rate': self.approved_validations / max(self.total_validations, 1),
+            'approval_rate': self.approved_validations / unified_math.max(self.total_validations, 1),
             'execution_costs': len(self.execution_costs),
             'drift_validations': len(self.drift_validations),
             'execution_validations': len(self.execution_validations)
@@ -740,10 +742,10 @@ class ExecutionValidator:
             for validation_id in old_validations:
                 del self.execution_validations[validation_id]
             
-            safe_print(f"🧹 Cleaned up {len(old_costs)} old costs, {len(old_drifts)} old drifts, {len(old_validations)} old validations")
+            safe_safe_print(f"🧹 Cleaned up {len(old_costs)} old costs, {len(old_drifts)} old drifts, {len(old_validations)} old validations")
             
         except Exception as e:
-            safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
+            safe_safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
 
 
 # Global instance for easy access
@@ -786,7 +788,7 @@ def validate_execution(
 # Example usage
 if __name__ == "__main__":
     # Test execution validator functionality
-    safe_print("✅ Testing Execution Validator...")
+    safe_safe_print("✅ Testing Execution Validator...")
     
     # Simulate execution cost
     test_payload = {"strategy": "test", "parameters": {"test": True}}
@@ -823,4 +825,4 @@ if __name__ == "__main__":
     # Get performance metrics
     metrics = execution_validator.get_performance_metrics()
     
-    safe_print(f"✅ Test completed - Status: {execution_validation.validation_status.value}, Metrics: {metrics}") 
+    safe_safe_print(f"✅ Test completed - Status: {execution_validation.validation_status.value}, Metrics: {metrics}") 

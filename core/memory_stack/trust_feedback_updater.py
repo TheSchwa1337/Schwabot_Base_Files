@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Trust Feedback Updater - Agent Reliability Tracking.
@@ -11,7 +25,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
-import numpy as np
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 
 # Import core modules
@@ -67,13 +81,13 @@ class TrustFeedbackUpdater:
         self.trust_update_interval = 64  # Update every 64 ticks
         self.performance_window = 100  # Track last 100 commands per agent
         
+        # Load configuration first
+        self.config = self._load_configuration()
+        
         # Initialize agent performance tracking
         self._initialize_agent_performance()
         
-        # Load configuration
-        self.config = self._load_configuration()
-        
-        safe_print("🧠 Trust Feedback Updater initialized")
+        safe_safe_print("🧠 Trust Feedback Updater initialized")
     
     def _initialize_agent_performance(self) -> None:
         """Initialize performance tracking for all agents."""
@@ -91,7 +105,7 @@ class TrustFeedbackUpdater:
                 with open(self.config_path, 'r') as f:
                     return yaml.safe_load(f)
         except Exception as e:
-            safe_print(f"⚠️ Configuration load failed: {safe_format_error(e, 'config_load')}")
+            safe_safe_print(f"⚠️ Configuration load failed: {safe_format_error(e, 'config_load')}")
         
         # Default configuration
         return {
@@ -123,7 +137,7 @@ class TrustFeedbackUpdater:
             if current_tick % self.trust_update_interval != 0:
                 return {agent: perf.trust_score for agent, perf in self.agent_performance.items()}
             
-            safe_print(f"🔄 Updating trust scores at tick {current_tick}")
+            safe_safe_print(f"🔄 Updating trust scores at tick {current_tick}")
             
             # Load recent feedback data
             feedback_data = self._load_feedback_data()
@@ -140,7 +154,7 @@ class TrustFeedbackUpdater:
                 performance.last_updated = datetime.now()
                 updated_scores[agent_type] = new_score
                 
-                safe_print(f"   {agent_type.value}: {new_score:.3f} (was {performance.trust_score:.3f})")
+                safe_safe_print(f"   {agent_type.value}: {new_score:.3f} (was {performance.trust_score:.3f})")
             
             # Save updated configuration
             self._save_updated_config(updated_scores)
@@ -149,7 +163,7 @@ class TrustFeedbackUpdater:
             
         except Exception as e:
             error_msg = safe_format_error(e, "update_trust_scores")
-            safe_print(f"❌ Trust score update failed: {error_msg}")
+            safe_safe_print(f"❌ Trust score update failed: {error_msg}")
             return {agent: perf.trust_score for agent, perf in self.agent_performance.items()}
     
     def _load_feedback_data(self) -> List[Dict]:
@@ -159,7 +173,7 @@ class TrustFeedbackUpdater:
                 with open(self.feedback_log_path, 'r') as f:
                     return json.load(f)
         except Exception as e:
-            safe_print(f"⚠️ Feedback data load failed: {safe_format_error(e, 'feedback_load')}")
+            safe_safe_print(f"⚠️ Feedback data load failed: {safe_format_error(e, 'feedback_load')}")
         
         return []
     
@@ -189,14 +203,14 @@ class TrustFeedbackUpdater:
                 entry.get("alpha_score", 0.0) for entry in recent_feedback
                 if entry.get("alpha_score") is not None
             ]
-            average_alpha = np.mean(alpha_scores) if alpha_scores else 0.0
+            average_alpha = unified_math.unified_math.mean(alpha_scores) if alpha_scores else 0.0
             
             # Calculate average drift penalties
             drift_penalties = [
                 entry.get("drift_penalty", 0.0) for entry in recent_feedback
                 if entry.get("drift_penalty") is not None
             ]
-            average_drift = np.mean(drift_penalties) if drift_penalties else 0.0
+            average_drift = unified_math.unified_math.mean(drift_penalties) if drift_penalties else 0.0
             
             # Update performance metrics
             performance.total_commands = total_commands
@@ -212,10 +226,10 @@ class TrustFeedbackUpdater:
             if len(performance.recent_performance) > self.performance_window:
                 performance.recent_performance = performance.recent_performance[-self.performance_window:]
             
-            safe_print(f"   {agent_type.value}: {successful_commands}/{total_commands} success, α={average_alpha:.3f}, drift={average_drift:.3f}")
+            safe_safe_print(f"   {agent_type.value}: {successful_commands}/{total_commands} success, α={average_alpha:.3f}, drift={average_drift:.3f}")
             
         except Exception as e:
-            safe_print(f"⚠️ Performance analysis failed for {agent_type.value}: {safe_format_error(e, 'performance_analysis')}")
+            safe_safe_print(f"⚠️ Performance analysis failed for {agent_type.value}: {safe_format_error(e, 'performance_analysis')}")
     
     def _calculate_trust_score(self, performance: AgentPerformance) -> float:
         """Calculate new trust score based on performance metrics."""
@@ -255,7 +269,7 @@ class TrustFeedbackUpdater:
             return final_score
             
         except Exception as e:
-            safe_print(f"⚠️ Trust score calculation failed: {safe_format_error(e, 'trust_calculation')}")
+            safe_safe_print(f"⚠️ Trust score calculation failed: {safe_format_error(e, 'trust_calculation')}")
             return performance.trust_score
     
     def _save_updated_config(self, updated_scores: Dict[AIAgentType, float]) -> None:
@@ -276,10 +290,10 @@ class TrustFeedbackUpdater:
             with open(self.config_path, 'w') as f:
                 yaml.dump(config, f, default_flow_style=False)
             
-            safe_print(f"💾 Updated trust scores saved to {self.config_path}")
+            safe_safe_print(f"💾 Updated trust scores saved to {self.config_path}")
             
         except Exception as e:
-            safe_print(f"⚠️ Configuration save failed: {safe_format_error(e, 'config_save')}")
+            safe_safe_print(f"⚠️ Configuration save failed: {safe_format_error(e, 'config_save')}")
     
     def get_agent_trust_score(self, agent_type: AIAgentType) -> float:
         """Get current trust score for an agent."""
@@ -332,7 +346,7 @@ class TrustFeedbackUpdater:
                 json.dump(feedback_data, f, indent=2)
             
         except Exception as e:
-            safe_print(f"⚠️ Feedback logging failed: {safe_format_error(e, 'feedback_logging')}")
+            safe_safe_print(f"⚠️ Feedback logging failed: {safe_format_error(e, 'feedback_logging')}")
 
 
 # Global instance for easy access
@@ -362,7 +376,7 @@ def log_command_feedback(
 if __name__ == "__main__":
     async def test_trust_updater():
         """Test trust feedback updater."""
-        safe_print("🧠 Testing Trust Feedback Updater...")
+        safe_safe_print("🧠 Testing Trust Feedback Updater...")
         
         # Create some test feedback
         test_agents = [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]
@@ -384,9 +398,9 @@ if __name__ == "__main__":
         # Get performance summary
         summary = trust_updater.get_performance_summary()
         
-        safe_print("✅ Trust Feedback Updater test completed")
-        safe_print(f"Updated scores: {updated_scores}")
-        safe_print(f"Performance summary: {summary}")
+        safe_safe_print("✅ Trust Feedback Updater test completed")
+        safe_safe_print(f"Updated scores: {updated_scores}")
+        safe_safe_print(f"Performance summary: {summary}")
     
     # Run test
     import asyncio

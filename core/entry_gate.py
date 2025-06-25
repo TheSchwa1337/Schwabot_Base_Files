@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry Gate - Mathematical Execution Confidence Evaluator.
 
@@ -17,12 +33,11 @@ Mathematical Foundation:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
 
 import logging
 from typing import Any, Dict, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +86,7 @@ def execution_confidence(
         )
 
         # Ensure reasonable bounds
-        return max(0.0, min(3.0, confidence))
+        return unified_math.max(0.0, unified_math.min(3.0, confidence))
 
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing execution confidence: {e}")
@@ -110,7 +125,7 @@ def entry_score(
         score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
         # Ensure valid range
-        return max(0.0, min(1.0, score))
+        return unified_math.max(0.0, unified_math.min(1.0, score))
 
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing entry score: {e}")
@@ -249,8 +264,8 @@ def main() -> None:
     es = entry_score(0.88, 0.12, 0.75, 0.03)
     result = evaluate(xi, es)
 
-    print(f"Test 1 - Ξ: {xi:.3f}, 𝓔ₛ: {es:.3f}")
-    print(f"Decision: {result['action']} - {result['reason']}")
+    safe_print(f"Test 1 - Ξ: {xi:.3f}, 𝓔ₛ: {es:.3f}")
+    safe_print(f"Decision: {result['action']} - {result['reason']}")
     print()
 
     # Test case 2: Moderate confidence scenario
@@ -258,8 +273,8 @@ def main() -> None:
     es2 = entry_score(0.82, 0.08, 0.85, 0.025)
     result2 = evaluate(xi2, es2)
 
-    print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
-    print(f"Decision: {result2['action']} - {result2['reason']}")
+    safe_print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
+    safe_print(f"Decision: {result2['action']} - {result2['reason']}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Universal Schwabot Client - Schwabot UROS v1.0
@@ -24,7 +38,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import psutil
 
 logger = logging.getLogger(__name__)
@@ -382,7 +396,7 @@ class UniversalSchwabotClient:
             
             # Calculate profit contribution based on processing complexity
             complexity_score = len(tensor_data) * len(tensor_data[0]) if tensor_data else 0
-            profit_contribution = min(complexity_score * 0.001, 1.0) * self.profit_allocation
+            profit_contribution = unified_math.min(complexity_score * 0.001, 1.0) * self.profit_allocation
             
             return {
                 "profit_contributed": profit_contribution,
@@ -436,14 +450,14 @@ class UniversalSchwabotClient:
                 return {"profit_contributed": 0.0, "error": "No entropy data"}
             
             # Calculate entropy metrics
-            entropy_mean = np.mean(entropy_data)
-            entropy_std = np.std(entropy_data)
+            entropy_mean = unified_math.unified_math.mean(entropy_data)
+            entropy_std = unified_math.unified_math.std(entropy_data)
             entropy_entropy = -np.sum(np.histogram(entropy_data, bins=10)[0] / len(entropy_data) * 
                                     np.log2(np.histogram(entropy_data, bins=10)[0] / len(entropy_data) + 1e-10))
             
             # Calculate profit contribution based on entropy complexity
             complexity_score = entropy_entropy / 10.0  # Normalize
-            profit_contribution = min(complexity_score, 1.0) * self.profit_allocation
+            profit_contribution = unified_math.min(complexity_score, 1.0) * self.profit_allocation
             
             return {
                 "profit_contributed": profit_contribution,
@@ -465,19 +479,19 @@ class UniversalSchwabotClient:
             
             # Calculate price momentum
             price_changes = np.diff(price_data)
-            price_momentum = np.mean(price_changes)
+            price_momentum = unified_math.unified_math.mean(price_changes)
             
             # Calculate volume momentum
             volume_changes = np.diff(volume_data)
-            volume_momentum = np.mean(volume_changes)
+            volume_momentum = unified_math.unified_math.mean(volume_changes)
             
             # Calculate volatility-adjusted profit score
             volatility_factor = 1.0 / (1.0 + volatility)
-            momentum_score = abs(price_momentum) * abs(volume_momentum)
+            momentum_score = unified_math.abs(price_momentum) * unified_math.abs(volume_momentum)
             
             profit_score = momentum_score * volatility_factor
             
-            return min(profit_score, 1.0)  # Clamp to [0, 1]
+            return unified_math.min(profit_score, 1.0)  # Clamp to [0, 1]
             
         except Exception as e:
             logger.error(f"Error calculating profit score: {e}")
@@ -543,7 +557,7 @@ class UniversalSchwabotClient:
                     for task in recent_tasks
                     if task.completed_at
                 ]
-                avg_response_time = np.mean(response_times) if response_times else 0.0
+                avg_response_time = unified_math.unified_math.mean(response_times) if response_times else 0.0
             else:
                 avg_response_time = 0.0
             
@@ -640,22 +654,22 @@ def main():
         
         # Start client
         if client.start():
-            print("Universal Schwabot Client started successfully!")
-            print(f"Device ID: {client.device_id}")
-            print(f"Node ID: {client.node_id}")
-            print(f"Profit Allocation: {client.profit_allocation:.1%}")
+            safe_print("Universal Schwabot Client started successfully!")
+            safe_print(f"Device ID: {client.device_id}")
+            safe_print(f"Node ID: {client.node_id}")
+            safe_print(f"Profit Allocation: {client.profit_allocation:.1%}")
             
             # Keep running
             try:
                 while True:
                     time.sleep(10)
                     status = client.get_client_status()
-                    print(f"Status: {status['client_status']}, CPU: {status['performance']['cpu_usage']:.1f}%")
+                    safe_print(f"Status: {status['client_status']}, CPU: {status['performance']['cpu_usage']:.1f}%")
             except KeyboardInterrupt:
-                print("\nShutting down...")
+                safe_print("\nShutting down...")
                 client.stop()
         else:
-            print("Failed to start Universal Schwabot Client")
+            safe_print("Failed to start Universal Schwabot Client")
             
     except Exception as e:
         logger.error(f"Error in main: {e}")

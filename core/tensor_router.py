@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tensor Router - Schwabot UROS v1.0
@@ -8,11 +22,11 @@ Provides mathematical functions for tensor-profit routing via profit vector calc
 """
 
 import logging
-import math
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -211,7 +225,7 @@ class TensorRouter:
             confidence = base_confidence.get(route_type, 0.5)
             
             # Adjust based on tensor score magnitude
-            score_magnitude = abs(tensor_score)
+            score_magnitude = unified_math.abs(tensor_score)
             if score_magnitude > 1.0:
                 confidence *= 1.2
             elif score_magnitude < 0.1:
@@ -223,7 +237,7 @@ class TensorRouter:
                 confidence *= 0.9  # Reduce confidence in high volatility
             
             # Ensure confidence is within bounds
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating route confidence: {e}")
@@ -243,9 +257,9 @@ class TensorRouter:
                 if tensor_score > 0:
                     adjusted_weight = weight * (1.0 + tensor_score * 0.5)
                 else:
-                    adjusted_weight = weight * (1.0 - abs(tensor_score) * 0.3)
+                    adjusted_weight = weight * (1.0 - unified_math.abs(tensor_score) * 0.3)
                 
-                adjusted_weights[asset] = max(0.0, adjusted_weight)
+                adjusted_weights[asset] = unified_math.max(0.0, adjusted_weight)
             
             # Normalize weights
             total_weight = sum(adjusted_weights.values())
@@ -283,10 +297,10 @@ class TensorRouter:
             
             # Calculate basic statistics
             analysis['statistics'] = {
-                'mean': np.mean(tensor_sequence),
-                'std': np.std(tensor_sequence),
-                'min': np.min(tensor_sequence),
-                'max': np.max(tensor_sequence),
+                'mean': unified_math.unified_math.mean(tensor_sequence),
+                'std': unified_math.unified_math.std(tensor_sequence),
+                'min': unified_math.unified_math.min(tensor_sequence),
+                'max': unified_math.unified_math.max(tensor_sequence),
                 'median': np.median(tensor_sequence)
             }
             
@@ -312,39 +326,39 @@ class TensorRouter:
             
             # Check for trends
             diffs = np.diff(tensor_sequence)
-            trend = np.mean(diffs)
+            trend = unified_math.unified_math.mean(diffs)
             
-            if abs(trend) > np.std(diffs) * 1.5:
+            if unified_math.abs(trend) > unified_math.unified_math.std(diffs) * 1.5:
                 patterns.append({
                     'type': 'trend',
                     'direction': 'increasing' if trend > 0 else 'decreasing',
-                    'strength': abs(trend) / np.std(diffs)
+                    'strength': unified_math.abs(trend) / unified_math.unified_math.std(diffs)
                 })
             
             # Check for mean reversion
-            mean_score = np.mean(tensor_sequence)
-            deviations = [abs(score - mean_score) for score in tensor_sequence]
-            avg_deviation = np.mean(deviations)
+            mean_score = unified_math.unified_math.mean(tensor_sequence)
+            deviations = [unified_math.abs(score - mean_score) for score in tensor_sequence]
+            avg_deviation = unified_math.unified_math.mean(deviations)
             
-            if avg_deviation < np.std(tensor_sequence) * 0.5:
+            if avg_deviation < unified_math.unified_math.std(tensor_sequence) * 0.5:
                 patterns.append({
                     'type': 'mean_reversion',
-                    'strength': 1.0 - (avg_deviation / np.std(tensor_sequence))
+                    'strength': 1.0 - (avg_deviation / unified_math.unified_math.std(tensor_sequence))
                 })
             
             # Check for volatility clustering
-            volatility = np.std(tensor_sequence)
+            volatility = unified_math.unified_math.std(tensor_sequence)
             if volatility > 0.5:
                 patterns.append({
                     'type': 'high_volatility',
-                    'strength': min(volatility / 1.0, 1.0)
+                    'strength': unified_math.min(volatility / 1.0, 1.0)
                 })
             
             confidence = len(patterns) / 3.0  # Simple confidence metric
             
             return {
                 'patterns': patterns,
-                'confidence': min(confidence, 1.0)
+                'confidence': unified_math.min(confidence, 1.0)
             }
             
         except Exception as e:
@@ -471,7 +485,7 @@ class TensorRouter:
 
 def main():
     """Test function for Tensor Router."""
-    print("🧮 Testing Tensor Router...")
+    safe_print("🧮 Testing Tensor Router...")
     
     router = TensorRouter()
     
@@ -481,7 +495,7 @@ def main():
     phase = 8
     
     tensor_score = router.tensor_score(entry_price, current_price, phase)
-    print(f"Tensor score: {tensor_score}")
+    safe_print(f"Tensor score: {tensor_score}")
     
     # Test trade routing
     market_conditions = {
@@ -491,14 +505,14 @@ def main():
     }
     
     route = router.route_trade(entry_price, current_price, phase, market_conditions)
-    print(f"Route type: {route.route_type}")
-    print(f"Confidence: {route.confidence:.2f}")
-    print(f"Profit vector: {route.profit_vector}")
+    safe_print(f"Route type: {route.route_type}")
+    safe_print(f"Confidence: {route.confidence:.2f}")
+    safe_print(f"Profit vector: {route.profit_vector}")
     
     # Test pattern analysis
     tensor_sequence = [0.1, 0.2, 0.15, 0.3, 0.25, 0.4, 0.35, 0.5]
     analysis = router.analyze_tensor_patterns(tensor_sequence)
-    print(f"\nPattern analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
+    safe_print(f"\nPattern analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
     
     return 0
 

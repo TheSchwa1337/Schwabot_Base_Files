@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost strategy matrix utilities.
 
@@ -15,11 +18,10 @@ Public API
 5. update_strategy_matrix          – echo-band & volatility adaptation.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "build_strategy_matrix",
@@ -100,8 +102,8 @@ def reward_matrix(
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
     """TODO: document _softmax."""
-    x_shift = x - np.max(x)
-    e_x = np.exp(x_shift)
+    x_shift = x - unified_math.unified_math.max(x)
+    e_x = unified_math.unified_math.exp(x_shift)
     return e_x / np.sum(e_x)
 
 
@@ -149,7 +151,7 @@ def update_strategy_matrix(
         raise ValueError("M_prev, R, E must share shape")
 
     # Echo-band reinforcement
-    alpha = 1.0 / (1.0 + np.exp(-E))  # logistic scaling α(E_i)
+    alpha = 1.0 / (1.0 + unified_math.exp(-E))  # logistic scaling α(E_i)
     delta_M = alpha * (R - gamma * M_prev)
     M_new = M_prev + delta_M
 

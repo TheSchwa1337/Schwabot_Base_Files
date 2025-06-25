@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Event Impact Mapper - External Event Processing for Schwabot.
 
@@ -23,7 +24,7 @@ import json
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -412,7 +413,7 @@ class EventImpactMapper:
         """Calculate sentiment score from event data."""
         # Use provided sentiment score if available
         if 'sentiment_score' in event_data:
-            return max(-1.0, min(1.0, event_data['sentiment_score']))
+            return max(-1.0, unified_math.min(1.0, event_data['sentiment_score']))
         
         # Calculate from text content if available
         if 'headline' in event_data or 'content' in event_data:
@@ -442,7 +443,7 @@ class EventImpactMapper:
         if age_hours < 1.0:
             relevance_score += 0.1
         
-        return min(1.0, relevance_score)
+        return unified_math.min(1.0, relevance_score)
     
     def _calculate_event_priority(self, event_data: Dict[str, Any], 
                                 sentiment_score: float, relevance_score: float) -> int:
@@ -450,7 +451,7 @@ class EventImpactMapper:
         priority = 5  # Base priority
         
         # Adjust based on sentiment magnitude
-        sentiment_magnitude = abs(sentiment_score)
+        sentiment_magnitude = unified_math.abs(sentiment_score)
         if sentiment_magnitude > 0.8:
             priority += 2
         elif sentiment_magnitude > 0.5:
@@ -469,7 +470,7 @@ class EventImpactMapper:
         elif event_type in ['news_sentiment', 'market_event']:
             priority += 1
         
-        return max(1, min(10, priority))
+        return unified_math.max(1, unified_math.min(10, priority))
     
     def _generate_influence_vector(self, event_data: Dict[str, Any], 
                                  sentiment_score: float, relevance_score: float) -> List[float]:
@@ -519,8 +520,8 @@ class EventImpactMapper:
         hours_diff = time_diff / 3600
         
         # Exponential decay
-        weight = np.exp(-hours_diff / 24.0)  # 24-hour half-life
-        return max(0.0, min(1.0, weight))
+        weight = unified_math.exp(-hours_diff / 24.0)  # 24-hour half-life
+        return unified_math.max(0.0, unified_math.min(1.0, weight))
     
     def _analyze_text_sentiment(self, text: str) -> float:
         """Analyze sentiment from text content."""
@@ -537,7 +538,7 @@ class EventImpactMapper:
             return 0.0
         
         sentiment = (positive_count - negative_count) / (positive_count + negative_count)
-        return max(-1.0, min(1.0, sentiment))
+        return max(-1.0, unified_math.min(1.0, sentiment))
     
     def _classify_sentiment(self, sentiment_score: float) -> str:
         """Classify sentiment score into label."""
@@ -567,14 +568,14 @@ class EventImpactMapper:
             volatility_sentiment * 0.2
         )
         
-        return max(-1.0, min(1.0, combined_sentiment))
+        return max(-1.0, unified_math.min(1.0, combined_sentiment))
     
     def _classify_market_conditions(self, price_change: float, volume_change: float, 
                                   volatility: float) -> str:
         """Classify market conditions."""
-        if abs(price_change) > 5.0 and abs(volume_change) > 20.0:
+        if unified_math.abs(price_change) > 5.0 and unified_math.abs(volume_change) > 20.0:
             return 'high_volatility'
-        elif abs(price_change) > 2.0:
+        elif unified_math.abs(price_change) > 2.0:
             return 'moderate_movement'
         elif volatility > 0.05:
             return 'elevated_volatility'

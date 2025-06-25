@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Hash Confidence Evaluator - SHA256-based Hash Resonance Models.
 
@@ -29,7 +30,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 import hashlib
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -215,9 +216,9 @@ class HashConfidenceEvaluator:
             if hash_value in self.hash_resonance_map:
                 resonance = self.hash_resonance_map[hash_value]
                 if success:
-                    resonance.resonance_strength = min(1.0, resonance.resonance_strength + 0.1)
+                    resonance.resonance_strength = unified_math.min(1.0, resonance.resonance_strength + 0.1)
                 else:
-                    resonance.resonance_strength = max(0.0, resonance.resonance_strength - 0.1)
+                    resonance.resonance_strength = unified_math.max(0.0, resonance.resonance_strength - 0.1)
                 
                 # Update confidence level
                 resonance.confidence_level = self._calculate_confidence_level(resonance.resonance_strength)
@@ -252,12 +253,12 @@ class HashConfidenceEvaluator:
             
             return {
                 'total_resonances': len(self.hash_resonance_map),
-                'average_resonance_strength': np.mean(resonance_strengths),
+                'average_resonance_strength': unified_math.unified_math.mean(resonance_strengths),
                 'confidence_distribution': confidence_distribution,
                 'trigger_distribution': trigger_distribution,
                 'total_hashes_processed': self.total_hashes_processed,
                 'total_triggers_generated': self.total_triggers_generated,
-                'average_confidence': np.mean(self.hash_confidence_scores) if self.hash_confidence_scores else 0.0
+                'average_confidence': unified_math.unified_math.mean(self.hash_confidence_scores) if self.hash_confidence_scores else 0.0
             }
             
         except Exception as e:
@@ -318,7 +319,7 @@ class HashConfidenceEvaluator:
                 existing_resonance = self.hash_resonance_map[tick_hash]
                 
                 # Update resonance strength based on frequency
-                existing_resonance.resonance_strength = min(1.0, existing_resonance.resonance_strength + 0.05)
+                existing_resonance.resonance_strength = unified_math.min(1.0, existing_resonance.resonance_strength + 0.05)
                 existing_resonance.timestamp = tick_event.timestamp
                 
                 return existing_resonance
@@ -355,7 +356,7 @@ class HashConfidenceEvaluator:
             hash_entropy = self._calculate_hash_entropy(tick_hash)
             
             # Volume impact
-            volume_factor = min(tick_event.volume / 1000000.0, 1.0)  # Normalize to 1M
+            volume_factor = unified_math.min(tick_event.volume / 1000000.0, 1.0)  # Normalize to 1M
             
             # Price volatility factor
             price_volatility = self._calculate_price_volatility(tick_event)
@@ -371,7 +372,7 @@ class HashConfidenceEvaluator:
                 order_book_depth * 0.2
             )
             
-            return max(0.0, min(1.0, resonance_strength))
+            return unified_math.max(0.0, unified_math.min(1.0, resonance_strength))
             
         except Exception as e:
             logger.error(f"Error calculating initial resonance strength: {e}")
@@ -412,17 +413,17 @@ class HashConfidenceEvaluator:
             recent_prices.append(tick_event.price)
             
             # Calculate price changes
-            price_changes = [abs(recent_prices[i] - recent_prices[i-1]) / recent_prices[i-1] 
+            price_changes = [unified_math.abs(recent_prices[i] - recent_prices[i-1]) / recent_prices[i-1] 
                            for i in range(1, len(recent_prices))]
             
             if not price_changes:
                 return 0.5
             
             # Volatility as standard deviation of price changes
-            volatility = np.std(price_changes)
+            volatility = unified_math.unified_math.std(price_changes)
             
             # Normalize to [0, 1] range
-            return min(1.0, volatility * 100)  # Scale by 100 for reasonable range
+            return unified_math.min(1.0, volatility * 100)  # Scale by 100 for reasonable range
             
         except Exception as e:
             logger.error(f"Error calculating price volatility: {e}")
@@ -443,7 +444,7 @@ class HashConfidenceEvaluator:
             total_volume = bid_volume + ask_volume
             
             # Normalize to [0, 1] range
-            depth_factor = min(1.0, total_volume / 1000000.0)  # Normalize to 1M
+            depth_factor = unified_math.min(1.0, total_volume / 1000000.0)  # Normalize to 1M
             
             return depth_factor
             
@@ -500,7 +501,7 @@ class HashConfidenceEvaluator:
             
             # Adjust for hash frequency
             hash_frequency = self._calculate_hash_frequency(resonance.hash_value)
-            frequency_factor = min(1.0, hash_frequency / 10.0)  # Normalize to 10 occurrences
+            frequency_factor = unified_math.min(1.0, hash_frequency / 10.0)  # Normalize to 10 occurrences
             
             # Adjust for order book consistency
             order_book_consistency = self._calculate_order_book_consistency(tick_event.order_book_snapshot)
@@ -512,7 +513,7 @@ class HashConfidenceEvaluator:
                 order_book_consistency * 0.2
             )
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating confidence: {e}")
@@ -553,7 +554,7 @@ class HashConfidenceEvaluator:
             spread = (best_ask - best_bid) / best_bid
             
             # Consistency based on spread (lower spread = higher consistency)
-            consistency = max(0.0, 1.0 - spread * 100)  # Scale spread
+            consistency = unified_math.max(0.0, 1.0 - spread * 100)  # Scale spread
             
             return consistency
             
@@ -649,7 +650,7 @@ class HashConfidenceEvaluator:
             
             # Calculate average volume from recent history
             recent_volumes = [tick.volume for tick in list(self.tick_history)[-5:]]
-            avg_volume = np.mean(recent_volumes)
+            avg_volume = unified_math.unified_math.mean(recent_volumes)
             
             # Check if current volume is significantly higher
             volume_spike = tick_event.volume > avg_volume * 2.0  # 2x average

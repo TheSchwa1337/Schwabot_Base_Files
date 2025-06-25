@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Oscillator fallback – damped harmonic pulse generator.
 
@@ -10,7 +13,7 @@ Mathematics
 ~~~~~~~~~~
 Damped harmonic oscillator (underdamped case):
 
-    x(t) = A · e^(−γ t) · cos(2π f t + φ)
+    x(t) = A · e^(−γ t) · unified_math.cos(2π f t + φ)
 
 where 0 < γ < ∞ is the damping coefficient.
 
@@ -18,9 +21,8 @@ The implementation is intentionally minimal – no dynamic state, no numerical
 integrator – just the closed-form expression that guarantees ‖x(t)‖ ≤ A.
 """
 
-from __future__ import annotations
 
-import math
+from core.unified_math_system import unified_math
 from typing import Final
 
 __all__ = ["fallback_oscillator"]
@@ -58,6 +60,6 @@ def fallback_oscillator(
     """
     if damping < 0:
         raise ValueError("damping must be non-negative")
-    envelope = math.exp(-damping * t)
+    envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
-    return amplitude * envelope * math.cos(angle)
+    return amplitude * envelope * unified_math.unified_math.cos(angle)

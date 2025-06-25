@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Error Sanitizer - Comprehensive Exception Sanitization and Recovery.
 
@@ -88,7 +89,7 @@ class ErrorSanitizer:
         
         # Register handlers for numpy/pandas errors if available
         try:
-            import numpy as np
+            from core.unified_math_system import unified_math
             self.error_handler.register_handler(np.linalg.LinAlgError, self._handle_linalg_error)
         except ImportError:
             pass
@@ -332,7 +333,7 @@ class ErrorSanitizer:
             'recovery_successes': recovery_successes,
             'recovery_rate': recovery_successes / recovery_attempts if recovery_attempts > 0 else 0.0,
             'error_types': error_types,
-            'most_common_error': max(error_types.items(), key=lambda x: x[1])[0] if error_types else None
+            'most_common_error': unified_math.max(error_types.items(), key=lambda x: x[1])[0] if error_types else None
         }
     
     def get_recent_errors(self, hours: int = 1) -> List[SanitizedError]:

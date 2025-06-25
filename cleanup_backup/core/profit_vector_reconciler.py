@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit Vector Reconciler - Waveform vs Allocator Delta Analysis.
 
@@ -14,7 +15,7 @@ Architecture:
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -224,18 +225,18 @@ class ProfitVectorReconciler:
                                allocator: ProfitVector) -> VectorDelta:
         """Calculate delta between two vectors."""
         # Magnitude delta (relative)
-        magnitude_delta = abs(waveform.magnitude - allocator.magnitude)
+        magnitude_delta = unified_math.abs(waveform.magnitude - allocator.magnitude)
         if allocator.magnitude != 0:
-            magnitude_delta = magnitude_delta / abs(allocator.magnitude)
+            magnitude_delta = magnitude_delta / unified_math.abs(allocator.magnitude)
         
         # Direction match
         direction_match = waveform.direction == allocator.direction
         
         # Confidence delta
-        confidence_delta = abs(waveform.confidence - allocator.confidence)
+        confidence_delta = unified_math.abs(waveform.confidence - allocator.confidence)
         
         # Time delta
-        time_delta = abs(waveform.timestamp - allocator.timestamp)
+        time_delta = unified_math.abs(waveform.timestamp - allocator.timestamp)
         
         # Calculate significance (weighted combination)
         significance = (
@@ -281,10 +282,10 @@ class ProfitVectorReconciler:
         
         # Deduct for time sync issues
         if delta.time_delta > 1.0:
-            score -= min(0.2, delta.time_delta * 0.1)
+            score -= unified_math.min(0.2, delta.time_delta * 0.1)
         
         # Ensure score is between 0 and 1
-        return max(0.0, min(1.0, score))
+        return unified_math.max(0.0, unified_math.min(1.0, score))
     
     def _analyze_reconciliation(self, result: ReconciliationResult) -> None:
         """Analyze reconciliation result and add issues/recommendations."""

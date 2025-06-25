@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Data Integration Layer for Schwabot
@@ -237,7 +239,7 @@ class DataIntegrationLayer:
         # Calculate volatility
         prices = [data.price for data in self.market_data.values()]
         if len(prices) > 1:
-            volatility = (max(prices) - min(prices)) / (sum(prices) / len(prices))
+            volatility = (unified_math.max(prices) - unified_math.min(prices)) / (sum(prices) / len(prices))
         else:
             volatility = 0.0
         
@@ -337,7 +339,7 @@ class DataIntegrationLayer:
             
             if len(prices) > 1:
                 # Calculate price volatility
-                price_changes = [abs(prices[i] - prices[i-1]) / prices[i-1] 
+                price_changes = [unified_math.abs(prices[i] - prices[i-1]) / prices[i-1] 
                                for i in range(1, len(prices))]
                 volatility_data[symbol] = sum(price_changes) / len(price_changes)
             else:
@@ -400,7 +402,7 @@ class DataWebSocketServer:
             import websockets
             
             async def handler(websocket, path):
-                self.clients.add(websocket)
+                self.clients.unified_math.add(websocket)
                 try:
                     async for message in websocket:
                         # Handle client messages if needed
@@ -448,7 +450,7 @@ async def main():
     
     # Print current data
     current_data = data_layer.get_current_data()
-    print("📊 Current Market Data:")
+    safe_print("📊 Current Market Data:")
     print(json.dumps(current_data, indent=2))
     
     # Export data

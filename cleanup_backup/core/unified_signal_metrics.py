@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Signal Metrics - BTC Investment Ratio Signal Consolidation.
 
@@ -19,14 +23,13 @@ Mathematical Foundation:
 Windows CLI compatible with proper error handling.
 """
 
-from __future__ import annotations
 
 import logging
 import time
 from dataclasses import dataclass
 from typing import Dict, List, NamedTuple, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -291,7 +294,7 @@ class SignalCollector:
 
             total_depth = bid_depth + ask_depth
             # Normalize to [0, 1] range (assuming 100 BTC is excellent liquidity)
-            return min(total_depth / 100.0, 1.0)
+            return unified_math.min(total_depth / 100.0, 1.0)
 
         except Exception as e:
             logger.warning(f"Error calculating liquidity score: {e}")
@@ -312,13 +315,13 @@ class SignalCollector:
             # Historical volatility proxy
             recent_prices = market_data.get("recent_prices", [bid_price])
             if len(recent_prices) > 1:
-                volatility = np.std(recent_prices) / np.mean(recent_prices)
+                volatility = unified_math.unified_math.std(recent_prices) / unified_math.unified_math.mean(recent_prices)
             else:
                 volatility = 0.01
 
             # Project profit as function of spread and volatility
             projected_profit = (spread * 0.5) + (volatility * 0.1)
-            return min(projected_profit, 1.0)
+            return unified_math.min(projected_profit, 1.0)
 
         except Exception as e:
             logger.warning(f"Error calculating projected profit: {e}")
@@ -378,7 +381,7 @@ class SignalCollector:
 
             pressure = entry_score(dp_norm, sigma_vol)
             # Normalize to [0, 1] range
-            return max(0.0, min(1.0, (pressure + 1.0) / 2.0))
+            return unified_math.max(0.0, unified_math.min(1.0, (pressure + 1.0) / 2.0))
 
         except Exception as e:
             logger.warning(f"Error calculating price pressure: {e}")
@@ -421,7 +424,7 @@ class SignalCollector:
             normalized_hash = hash_rate / 1e18  # Normalize to reasonable range
             normalized_price = price / 100000  # Normalize to reasonable range
 
-            correlation = min(normalized_hash * normalized_price, 1.0)
+            correlation = unified_math.min(normalized_hash * normalized_price, 1.0)
             return correlation
 
         except Exception as e:
@@ -442,9 +445,9 @@ class SignalCollector:
             # Higher difficulty and hash rate = stronger network
             # Lower mempool congestion = better network
             strength_score = (
-                min(difficulty / 1e12, 1.0) * 0.4  # Difficulty component
-                + min(hash_rate / 1e18, 1.0) * 0.4  # Hash rate component
-                + max(0, 1.0 - mempool_size / 100000) * 0.2  # Mempool component
+                unified_math.min(difficulty / 1e12, 1.0) * 0.4  # Difficulty component
+                + unified_math.min(hash_rate / 1e18, 1.0) * 0.4  # Hash rate component
+                + unified_math.max(0, 1.0 - mempool_size / 100000) * 0.2  # Mempool component
             )
 
             return strength_score
@@ -470,10 +473,10 @@ class SignalCollector:
 
         return {
             "signal_count": len(recent_signals),
-            "avg_coherence": np.mean([s.coherence for s in recent_signals]),
-            "avg_harmony": np.mean([s.harmony for s in recent_signals]),
-            "avg_liquidity": np.mean([s.liquidity_score for s in recent_signals]),
-            "avg_projected_profit": np.mean(
+            "avg_coherence": unified_math.mean([s.coherence for s in recent_signals]),
+            "avg_harmony": unified_math.mean([s.harmony for s in recent_signals]),
+            "avg_liquidity": unified_math.mean([s.liquidity_score for s in recent_signals]),
+            "avg_projected_profit": unified_math.mean(
                 [s.projected_profit for s in recent_signals]
             ),
             "latest_timestamp": recent_signals[-1].timestamp,
@@ -513,8 +516,8 @@ def collect_unified_signals(
 
 def main() -> None:
     """Demo function for testing unified signal metrics."""
-    print("Unified Signal Metrics Demo")
-    print("=" * 40)
+    safe_print("Unified Signal Metrics Demo")
+    safe_print("=" * 40)
 
     # Mock data for testing
     mock_cursor_state = {
@@ -560,23 +563,23 @@ def main() -> None:
         mock_btc_data,
     )
 
-    print("Core Trading Signals:")
-    print(f"  Triplet Entropy: {core_signals.triplet_entropy:.3f}")
-    print(f"  Theta Drift: {core_signals.theta_drift:.3f}")
-    print(f"  Coherence: {core_signals.coherence:.3f}")
-    print(f"  Harmony: {core_signals.harmony:.3f}")
-    print(f"  Liquidity Score: {core_signals.liquidity_score:.3f}")
-    print(f"  Projected Profit: {core_signals.projected_profit:.3f}")
+    safe_print("Core Trading Signals:")
+    safe_print(f"  Triplet Entropy: {core_signals.triplet_entropy:.3f}")
+    safe_print(f"  Theta Drift: {core_signals.theta_drift:.3f}")
+    safe_print(f"  Coherence: {core_signals.coherence:.3f}")
+    safe_print(f"  Harmony: {core_signals.harmony:.3f}")
+    safe_print(f"  Liquidity Score: {core_signals.liquidity_score:.3f}")
+    safe_print(f"  Projected Profit: {core_signals.projected_profit:.3f}")
 
-    print(f"\nBTC Investment Signals:")
-    print(f"  V_BTC: {btc_signals.v_btc:.3f}")
-    print(f"  Eta_BTC: {btc_signals.eta_btc:.3f}")
-    print(f"  Xi_BTC: {btc_signals.xi_btc:.3f}")
-    print(f"  Price Pressure: {btc_signals.price_pressure:.3f}")
+    safe_print(f"\nBTC Investment Signals:")
+    safe_print(f"  V_BTC: {btc_signals.v_btc:.3f}")
+    safe_print(f"  Eta_BTC: {btc_signals.eta_btc:.3f}")
+    safe_print(f"  Xi_BTC: {btc_signals.xi_btc:.3f}")
+    safe_print(f"  Price Pressure: {btc_signals.price_pressure:.3f}")
 
     # Get summary
     summary = signal_collector.get_signal_summary()
-    print(f"\nSignal Summary: {summary}")
+    safe_print(f"\nSignal Summary: {summary}")
 
 
 if __name__ == "__main__":

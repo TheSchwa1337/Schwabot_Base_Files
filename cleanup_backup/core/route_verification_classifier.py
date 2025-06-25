@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Route Verification Classifier - Schwabot Mathematical Framework.
 
@@ -31,7 +35,6 @@ Based on SxN-Math specifications and hybrid allocator-classifier architecture.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -41,7 +44,7 @@ from enum import Enum
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 # Set high precision for financial calculations
@@ -153,7 +156,7 @@ class RouteFeatureExtractor:
 
             # Price movement magnitude
             price_change = float(
-                abs(route.exit_price - route.entry_price) / route.entry_price
+                unified_math.abs(route.exit_price - route.entry_price) / route.entry_price
             )
 
             # Thermal efficiency (inverse of thermal cost)
@@ -163,7 +166,7 @@ class RouteFeatureExtractor:
             risk_adjusted_return = profit_per_unit / (route.volatility + 1e-6)
 
             # Volume quality indicator
-            volume_quality = min(1.0, float(route.volume) / 10.0)  # Normalize volume
+            volume_quality = unified_math.min(1.0, float(route.volume) / 10.0)  # Normalize volume
 
             # Trend alignment score
             trend_score = route.trend_strength * np.sign(profit_per_unit)
@@ -202,7 +205,7 @@ class RouteFeatureExtractor:
         """
         try:
             # Volatility component
-            vol_risk = min(1.0, route.volatility / 0.5)  # Normalize to 50% volatility
+            vol_risk = unified_math.min(1.0, route.volatility / 0.5)  # Normalize to 50% volatility
 
             # Thermal cost component
             thermal_risk = min(
@@ -210,7 +213,7 @@ class RouteFeatureExtractor:
             )  # Normalize to thermal=5
 
             # Liquidity risk (inverse of liquidity depth)
-            liquidity_risk = max(0.0, 1.0 - route.liquidity_depth)
+            liquidity_risk = unified_math.max(0.0, 1.0 - route.liquidity_depth)
 
             # Concentration risk (for large single trades)
             volume_risk = min(
@@ -339,10 +342,10 @@ class RouteClassifier:
         """Compute classification scores for each route type."""
         try:
             # Simple linear classifier (would be replaced with trained ML model)
-            base_score = np.dot(features, self.learned_weights)
+            base_score = unified_math.unified_math.dot_product(features, self.learned_weights)
 
             # Normalize to probability-like scores
-            base_prob = 1.0 / (1.0 + np.exp(-base_score))  # Sigmoid
+            base_prob = 1.0 / (1.0 + unified_math.exp(-base_score))  # Sigmoid
 
             scores = {}
 
@@ -355,13 +358,13 @@ class RouteClassifier:
                 optimal_score *= 1.2
             if route.volatility < self.classification_thresholds["volatility_limit"]:
                 optimal_score *= 1.1
-            scores["optimal"] = min(1.0, optimal_score)
+            scores["optimal"] = unified_math.min(1.0, optimal_score)
 
             # VOLATILE: High volatility, unpredictable patterns
             volatile_score = route.volatility * 2.0
             if route.trend_strength < 0.3:  # Weak trend = more volatile
                 volatile_score *= 1.3
-            scores["volatile"] = min(1.0, volatile_score)
+            scores["volatile"] = unified_math.min(1.0, volatile_score)
 
             # DECAYING: Decreasing efficiency over time
             decay_score = 0.5  # Default
@@ -383,7 +386,7 @@ class RouteClassifier:
                 trap_score += 0.2
             if route.liquidity_depth < 0.3:  # Low liquidity
                 trap_score += 0.1
-            scores["trap"] = min(1.0, trap_score)
+            scores["trap"] = unified_math.min(1.0, trap_score)
 
             # Normalize scores to sum to 1
             total_score = sum(scores.values())
@@ -625,7 +628,7 @@ class IntegratedRouteManager:
 
 def main() -> None:
     """Test and demonstration function."""
-    print("Testing Route Verification Classifier...")
+    safe_print("Testing Route Verification Classifier...")
 
     # Create test route
     test_route = RouteVector(
@@ -649,18 +652,18 @@ def main() -> None:
     manager = IntegratedRouteManager()
     approved, result = manager.validate_route(test_route)
 
-    print(f"Route validation result:")
-    print(f"  Approved: {approved}")
-    print(f"  Classification: {result.classification.value}")
-    print(f"  Confidence: {result.confidence:.3f}")
-    print(f"  Risk Score: {result.risk_score:.3f}")
-    print(f"  Reason: {result.reason}")
+    safe_print(f"Route validation result:")
+    safe_print(f"  Approved: {approved}")
+    safe_print(f"  Classification: {result.classification.value}")
+    safe_print(f"  Confidence: {result.confidence:.3f}")
+    safe_print(f"  Risk Score: {result.risk_score:.3f}")
+    safe_print(f"  Reason: {result.reason}")
 
     # Get summary
     summary = manager.get_route_summary()
-    print(f"\nRoute Manager Summary: {summary}")
+    safe_print(f"\nRoute Manager Summary: {summary}")
 
-    print("Route Verification Classifier test completed successfully")
+    safe_print("Route Verification Classifier test completed successfully")
 
 
 if __name__ == "__main__":

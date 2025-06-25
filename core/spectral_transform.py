@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Spectral Transform Engine - Schwabot Mathematical Framework.
 
@@ -29,13 +45,12 @@ Based on SxN-Math specifications and Windows-compatible architecture.
 
 """
 
-from __future__ import annotations
 
 from decimal import getcontext
 import logging
 from typing import Any, Dict, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 import pywt
 from scipy import signal
@@ -111,7 +126,7 @@ class SpectralTransform:
                 time_series,
                 fs=self.sample_rate,
                 window="hann",
-                nperseg=min(len(time_series) // 4, 256),
+                nperseg=unified_math.min(len(time_series) // 4, 256),
                 overlap=None,
             )
 
@@ -170,7 +185,7 @@ class SpectralTransform:
         try:
             # Compute power spectrum
             fft_coeffs, _ = self.fft_transform(time_series)
-            power_spectrum = np.abs(fft_coeffs) ** 2
+            power_spectrum = unified_math.unified_math.abs(fft_coeffs) ** 2
 
             # Only use positive frequencies (real signals are symmetric)
             half_len = len(power_spectrum) // 2
@@ -188,7 +203,7 @@ class SpectralTransform:
                 entropy_val = -np.sum(probabilities * np.log2(probabilities))
             else:
                 entropy_val = -np.sum(
-                    probabilities * np.log(probabilities) / np.log(base)
+                    probabilities * unified_math.unified_math.log(probabilities) / unified_math.unified_math.log(base)
                 )
 
             return float(entropy_val)
@@ -324,12 +339,12 @@ class DLTWaveformEngine:
             # Frequency domain analysis
             freqs, psd = self.spectral.power_spectral_density(signal)
             if len(psd) > 1:
-                analysis["peak_frequency_power"] = float(np.max(psd))
-                analysis["frequency_spread"] = float(np.std(freqs[psd > np.mean(psd)]))
+                analysis["peak_frequency_power"] = float(unified_math.unified_math.max(psd))
+                analysis["frequency_spread"] = float(unified_math.unified_math.std(freqs[psd > unified_math.unified_math.mean(psd)]))
 
             # Waveform complexity measure
             cwt_coeffs, scales = self.spectral.continuous_wavelet_transform(signal)
-            analysis["waveform_complexity"] = float(np.std(np.abs(cwt_coeffs)))
+            analysis["waveform_complexity"] = float(unified_math.unified_math.std(unified_math.unified_math.abs(cwt_coeffs)))
 
             # Cache results if ID provided
             if signal_id:
@@ -387,7 +402,7 @@ def main() -> None:
     """Test and demonstration function."""
     # Generate test signal
     t = np.linspace(0, 1, 1000)
-    test_signal = np.sin(2 * np.pi * 10 * t) + 0.5 * np.sin(2 * np.pi * 25 * t)
+    test_signal = np.unified_math.sin(2 * np.pi * 10 * t) + 0.5 * np.unified_math.sin(2 * np.pi * 25 * t)
     test_signal += 0.1 * np.random.randn(len(t))
 
     # Test spectral analysis
@@ -395,7 +410,7 @@ def main() -> None:
     results = engine.analyze_waveform(test_signal, "test_signal")
 
     logger.info(f"Test completed: {results}")
-    print("SpectralTransform module test completed successfully")
+    safe_print("SpectralTransform module test completed successfully")
 
 
 if __name__ == "__main__":

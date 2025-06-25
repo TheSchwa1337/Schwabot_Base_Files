@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """ZPE Hybrid Mode Selector - Dynamic Mode Selection System.
 
@@ -6,10 +10,9 @@ and reactive tasking based on market conditions, volatility, timeframes, and
 other factors. Implements the "both/and" approach for maximum flexibility.
 """
 
-from __future__ import annotations
 
 import logging
-import math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
@@ -145,7 +148,7 @@ class ZPEHybridModeSelector:
             mode: [] for mode in TradingMode
         }
         
-        safe_print("🔄 ZPE Hybrid Mode Selector initialized")
+        safe_safe_print("🔄 ZPE Hybrid Mode Selector initialized")
     
     def select_mode(
         self,
@@ -200,14 +203,14 @@ class ZPEHybridModeSelector:
                 }
             )
             
-            safe_print(f"🎯 Mode Selected: {selected_mode.value} (confidence: {confidence:.3f})")
-            safe_print(f"   Market Condition: {market_condition.value}")
-            safe_print(f"   Reasoning: {', '.join(reasoning[:2])}")
+            safe_safe_print(f"🎯 Mode Selected: {selected_mode.value} (confidence: {confidence:.3f})")
+            safe_safe_print(f"   Market Condition: {market_condition.value}")
+            safe_safe_print(f"   Reasoning: {', '.join(reasoning[:2])}")
             
             return result
             
         except Exception as e:
-            safe_print(f"❌ Mode selection failed: {safe_format_error(e, 'mode_selection')}")
+            safe_safe_print(f"❌ Mode selection failed: {safe_format_error(e, 'mode_selection')}")
             # Emergency fallback
             return ModeSelectionResult(
                 selected_mode=TradingMode.EMERGENCY_FALLBACK,
@@ -224,7 +227,7 @@ class ZPEHybridModeSelector:
             price_change = market_data.get('price_change_24h', 0.0)
             
             # Check for crisis conditions
-            if volatility > 0.9 or abs(price_change) > 0.2:
+            if volatility > 0.9 or unified_math.abs(price_change) > 0.2:
                 return MarketCondition.CRISIS
             
             # Check for bull run
@@ -247,7 +250,7 @@ class ZPEHybridModeSelector:
             return MarketCondition.SIDEWAYS
             
         except Exception as e:
-            safe_print(f"⚠️ Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
+            safe_safe_print(f"⚠️ Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
             return MarketCondition.SIDEWAYS
     
     def _calculate_selection_criteria(
@@ -283,7 +286,7 @@ class ZPEHybridModeSelector:
             )
             
         except Exception as e:
-            safe_print(f"⚠️ Criteria calculation failed: {safe_format_error(e, 'criteria_calculation')}")
+            safe_safe_print(f"⚠️ Criteria calculation failed: {safe_format_error(e, 'criteria_calculation')}")
             return ModeSelectionCriteria(
                 market_condition=MarketCondition.SIDEWAYS,
                 volatility_score=0.5,
@@ -316,7 +319,7 @@ class ZPEHybridModeSelector:
                 self.phase_switch_counter += 1
                 
         except Exception as e:
-            safe_print(f"⚠️ Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
+            safe_safe_print(f"⚠️ Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
     
     def _select_mode_by_criteria(
         self,
@@ -358,7 +361,7 @@ class ZPEHybridModeSelector:
                 reasoning.append("Phase 42 active - boosting ZPE")
             
             # Select best mode
-            best_mode = max(mode_scores, key=mode_scores.get)
+            best_mode = unified_math.max(mode_scores, key=mode_scores.get)
             best_score = mode_scores[best_mode]
             
             # Apply confidence thresholds
@@ -378,7 +381,7 @@ class ZPEHybridModeSelector:
             return best_mode, best_score, reasoning
             
         except Exception as e:
-            safe_print(f"⚠️ Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
+            safe_safe_print(f"⚠️ Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
             return TradingMode.EMERGENCY_FALLBACK, 1.0, ["Emergency fallback due to selection error"]
     
     def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
@@ -413,7 +416,7 @@ class ZPEHybridModeSelector:
         if criteria.profit_performance > 0.1:
             score += 0.1
         
-        return min(1.0, score)
+        return unified_math.min(1.0, score)
     
     def _calculate_reactive_score(self, criteria: ModeSelectionCriteria) -> float:
         """Calculate reactive mode score."""
@@ -430,7 +433,7 @@ class ZPEHybridModeSelector:
         # Trend strength scoring (reactive prefers weak trends)
         if criteria.trend_strength < -0.3:
             score += 0.2
-        elif abs(criteria.trend_strength) < 0.2:
+        elif unified_math.abs(criteria.trend_strength) < 0.2:
             score += 0.1
         
         # Volatility scoring (reactive handles high volatility well)
@@ -447,7 +450,7 @@ class ZPEHybridModeSelector:
         if criteria.profit_performance < -0.1:
             score += 0.2
         
-        return min(1.0, score)
+        return unified_math.min(1.0, score)
     
     def _calculate_hybrid_score(self, criteria: ModeSelectionCriteria) -> float:
         """Calculate hybrid mode score."""
@@ -470,7 +473,7 @@ class ZPEHybridModeSelector:
         if criteria.zpe_availability and criteria.reactive_availability:
             score += 0.1
         
-        return min(1.0, score)
+        return unified_math.min(1.0, score)
     
     def _calculate_mode_weights(
         self,
@@ -527,7 +530,7 @@ class ZPEHybridModeSelector:
                     asset.volatility = asset_data.get('volatility', asset.volatility)
                     
         except Exception as e:
-            safe_print(f"⚠️ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
+            safe_safe_print(f"⚠️ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
     
     def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
         """Get portfolio assets that can be retroactively tasked."""
@@ -563,7 +566,7 @@ class ZPEHybridModeSelector:
                 self.mode_performance_history[mode] = self.mode_performance_history[mode][-100:]
                 
         except Exception as e:
-            safe_print(f"⚠️ Performance recording failed: {safe_format_error(e, 'performance_recording')}")
+            safe_safe_print(f"⚠️ Performance recording failed: {safe_format_error(e, 'performance_recording')}")
     
     def get_mode_statistics(self) -> Dict[str, Any]:
         """Get mode selection statistics."""
@@ -589,7 +592,7 @@ class ZPEHybridModeSelector:
             return stats
             
         except Exception as e:
-            safe_print(f"⚠️ Statistics calculation failed: {safe_format_error(e, 'statistics')}")
+            safe_safe_print(f"⚠️ Statistics calculation failed: {safe_format_error(e, 'statistics')}")
             return {}
 
 
@@ -633,7 +636,7 @@ if __name__ == "__main__":
     }
     
     result = select_trading_mode(test_market_data, timeframe="daily")
-    print(f"Selected Mode: {result.selected_mode.value}")
-    print(f"Confidence: {result.confidence_score:.3f}")
-    print(f"Market Condition: {result.market_condition.value}")
-    print(f"Reasoning: {result.reasoning}") 
+    safe_print(f"Selected Mode: {result.selected_mode.value}")
+    safe_print(f"Confidence: {result.confidence_score:.3f}")
+    safe_print(f"Market Condition: {result.market_condition.value}")
+    safe_print(f"Reasoning: {result.reasoning}") 

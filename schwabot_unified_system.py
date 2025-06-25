@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Schwabot Unified System.
 
@@ -29,7 +31,7 @@ import os
 import platform
 from typing import Any, Dict, List, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 try:
     # Prefer the real package
@@ -243,7 +245,7 @@ class SimplifiedFerrisWheelScheduler:
         reasoning_parts = []
         if fitness_score.dominant_factors:
             top_factor = max(
-                fitness_score.dominant_factors.items(), key=lambda x: abs(x[1])
+                fitness_score.dominant_factors.items(), key=lambda x: unified_math.abs(x[1])
             )
             reasoning_parts.append(
                 f"Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})"
@@ -292,7 +294,7 @@ class SimplifiedFerrisWheelScheduler:
         elif decision.action in ["SELL", "STRONG_SELL"]:
             # Reduce or exit position
             current_position = self.active_positions.get(decision.symbol, 0.0)
-            reduction = min(decision.position_size, current_position)
+            reduction = unified_math.min(decision.position_size, current_position)
             new_position = current_position - reduction
 
             if new_position <= 0:
@@ -532,10 +534,10 @@ async def demo_unified_system() -> Any:
         # Export comprehensive report
         system.export_comprehensive_report()
 
-        print("\n" + "=" * 60)
-        print("DEMO COMPLETED SUCCESSFULLY")
-        print("=" * 60)
-        print("Check the exported report for detailed analysis")
+        safe_print("\n" + "=" * 60)
+        safe_print("DEMO COMPLETED SUCCESSFULLY")
+        safe_print("=" * 60)
+        safe_print("Check the exported report for detailed analysis")
 
     except KeyboardInterrupt:
         logger.info("Demo interrupted by user")

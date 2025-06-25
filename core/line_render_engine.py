@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Line Render Engine - Trading Chart and Technical Indicator Visualization for Schwabot
@@ -22,7 +36,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import math
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -164,7 +178,7 @@ class LineRenderEngine:
         multiplier = 2.0 / (period + 1)
         
         # First EMA is SMA
-        first_values = [data[i].value for i in range(min(period, len(data)))]
+        first_values = [data[i].value for i in range(unified_math.min(period, len(data)))]
         ema = sum(first_values) / len(first_values)
         ema_data.append(DataPoint(timestamp=data[0].timestamp, value=ema))
         
@@ -187,7 +201,7 @@ class LineRenderEngine:
         # Calculate initial gains and losses
         for i in range(1, len(data)):
             change = data[i].value - data[i-1].value
-            gains.append(max(change, 0))
+            gains.append(unified_math.max(change, 0))
             losses.append(max(-change, 0))
         
         # Calculate initial average gain and loss
@@ -233,7 +247,7 @@ class LineRenderEngine:
         
         # Calculate MACD line
         macd_data = []
-        min_length = min(len(fast_ema), len(slow_ema))
+        min_length = unified_math.min(len(fast_ema), len(slow_ema))
         
         for i in range(min_length):
             macd_value = fast_ema[i].value - slow_ema[i].value
@@ -254,7 +268,7 @@ class LineRenderEngine:
             values = [data[j].value for j in range(i - period + 1, i + 1)]
             sma = sum(values) / period
             variance = sum((x - sma) ** 2 for x in values) / period
-            std_dev = math.sqrt(variance)
+            std_dev = unified_math.unified_math.sqrt(variance)
             
             upper_band = sma + (2 * std_dev)
             lower_band = sma - (2 * std_dev)
@@ -403,8 +417,8 @@ def main() -> None:
     
     # Render chart
     render_result = engine.render_chart("price_chart")
-    print(f"Chart rendered with {len(render_result.get('data_series', {}))} data series")
-    print(f"Chart info: {engine.get_chart_info('price_chart')}")
+    safe_print(f"Chart rendered with {len(render_result.get('data_series', {}))} data series")
+    safe_print(f"Chart info: {engine.get_chart_info('price_chart')}")
 
 if __name__ == "__main__":
     main() 

@@ -1,21 +1,23 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """USDC position manager – exponential decay and position optimization.
 
 Implements the formulas:
     P_usdc(t) = Σ_holdings·e^(−r·Δt)
     T_usdc = α_entry·δ_buy − β_exit·δ_sell
-    σ_usdc(t) = ∇P_usdc(t) · log(1 + T_usdc)
+    σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc)
     Ψ_usdc = argmax_t(σ_usdc(t) > θ_usdc)
 
 This module manages USDC positions with time-decay modeling and optimal
 timing detection for entry/exit decisions.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "usdc_position",
@@ -53,7 +55,7 @@ def usdc_position(
     dt_arr = np.asarray(time_deltas, dtype=float)
 
     # Exponential decay: e^(−r·Δt)
-    decay_factors = np.exp(-rate_arr * dt_arr)
+    decay_factors = unified_math.exp(-rate_arr * dt_arr)
 
     # Sum of decayed holdings
     decayed_holdings = hold_arr * decay_factors
@@ -90,7 +92,7 @@ def usdc_sigma(
     position_gradient: Sequence[float],
     t_usdc: float,
 ) -> np.ndarray:  # noqa: D401
-    """Return σ_usdc(t) = ∇P_usdc(t) · log(1 + T_usdc).
+    """Return σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc).
 
     Parameters
     ----------
@@ -101,11 +103,11 @@ def usdc_sigma(
     """
     grad_arr = np.asarray(position_gradient, dtype=float)
 
-    # Compute log(1 + T_usdc), handling negative values safely
+    # Compute unified_math.log(1 + T_usdc), handling negative values safely
     if t_usdc <= -1:
-        log_term = np.log(1e-10)  # Avoid log(0) or log(negative)
+        log_term = unified_math.unified_math.log(1e-10)  # Avoid unified_math.log(0) or unified_math.log(negative)
     else:
-        log_term = np.log(1 + t_usdc)
+        log_term = unified_math.unified_math.log(1 + t_usdc)
 
     sigma_usdc = grad_arr * log_term
 

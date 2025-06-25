@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Echo Snapshot - System State Capture and Replay for Schwabot
@@ -453,15 +454,15 @@ def main() -> None:
     
     # List snapshots
     all_snapshots = echo_snapshot.list_snapshots()
-    print(f"Total snapshots: {len(all_snapshots)}")
+    safe_print(f"Total snapshots: {len(all_snapshots)}")
     
     # Replay a snapshot
     replay_result = echo_snapshot.replay_snapshot(system_snapshot_id)
-    print(f"Replay result: {replay_result}")
+    safe_print(f"Replay result: {replay_result}")
     
     # Get statistics
     stats = echo_snapshot.get_storage_statistics()
-    print(f"Storage statistics: {stats}")
+    safe_print(f"Storage statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

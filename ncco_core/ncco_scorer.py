@@ -4,6 +4,7 @@
 import os
 import platform
 from typing import Any
+from core.unified_math_system import unified_math
 
 # WINDOWS CLI COMPATIBILITY HANDLER
 
@@ -51,6 +52,6 @@ class WindowsCliCompatibilityHandler:
 def score_nccos(nccos: Any) -> None:
     """TODO: document score_nccos."""
     for ncco in nccos:
-        # Example scoring logic: score = abs(price_delta) * bit_mode
-        ncco.score = abs(ncco.price_delta) * ncco.bit_mode
+        # Example scoring logic: score = unified_math.abs(price_delta) * bit_mode
+        ncco.score = unified_math.abs(ncco.price_delta) * ncco.bit_mode
         return nccos

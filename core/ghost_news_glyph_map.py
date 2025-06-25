@@ -1,13 +1,15 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Map news sentiment vector to glyph weight.
 
 Ξ_b = ζ(news) · μ_g(glyph)
 """
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["news_to_glyph_weight"]
 
@@ -18,4 +20,4 @@ def news_to_glyph_weight(
     """Return dot-product weight between news vector and glyph mean vector."""
     if len(news_vec) != len(glyph_mu):
         raise ValueError("vector length mismatch")
-    return float(np.dot(news_vec, glyph_mu))
+    return float(unified_math.unified_math.dot_product(news_vec, glyph_mu))

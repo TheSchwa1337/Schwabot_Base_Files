@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry Exit Vector - Profit Corridor Navigation Logic.
 
@@ -16,8 +17,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 from core.error_handler import safe_execute
 from core.import_resolver import safe_import
@@ -106,7 +107,7 @@ class EntryExitVector:
             entropy_change = self._calculate_entropy_change(signal_entropy)
             
             # Prevent division by zero
-            if abs(entropy_change) < 1e-10:
+            if unified_math.abs(entropy_change) < 1e-10:
                 entropy_change = 1e-10
             
             # Calculate entry vector: ∆V(t) = ∆tick / ∆entropy
@@ -131,7 +132,7 @@ class EntryExitVector:
                 metadata={
                     'tick_velocity': tick_velocity,
                     'entropy_change': entropy_change,
-                    'signal_strength': abs(entry_vector)
+                    'signal_strength': unified_math.abs(entry_vector)
                 }
             )
             
@@ -194,7 +195,7 @@ class EntryExitVector:
                     'beta_k': beta_k,
                     'psi_delta': psi_delta,
                     'delta_beta_v': delta_beta_v,
-                    'signal_strength': abs(exit_vector)
+                    'signal_strength': unified_math.abs(exit_vector)
                 }
             )
             
@@ -341,7 +342,7 @@ class EntryExitVector:
                 return 0.0
             
             # Calculate velocity as weighted average
-            velocity = np.mean(hash_nums) / 16.0
+            velocity = unified_math.unified_math.mean(hash_nums) / 16.0
             return velocity
             
         except Exception as e:
@@ -380,7 +381,7 @@ class EntryExitVector:
             # Calculate basic entropy measure
             if price > 0 and volume > 0:
                 # Use price-volume ratio as entropy proxy
-                entropy = abs(np.log(price / volume))
+                entropy = unified_math.abs(unified_math.unified_math.log(price / volume))
             else:
                 entropy = 0.0
             
@@ -403,7 +404,7 @@ class EntryExitVector:
         """Calculate confidence for entry signal."""
         try:
             # Base confidence on signal strength
-            signal_strength = abs(entry_vector)
+            signal_strength = unified_math.abs(entry_vector)
             
             # Adjust for entropy stability
             entropy_factor = 1.0 / (1.0 + signal_entropy)
@@ -412,7 +413,7 @@ class EntryExitVector:
             confidence = signal_strength * entropy_factor
             
             # Ensure confidence is in [0, 1] range
-            confidence = max(0.0, min(1.0, confidence))
+            confidence = unified_math.max(0.0, unified_math.min(1.0, confidence))
             
             return confidence
             
@@ -434,7 +435,7 @@ class EntryExitVector:
             confidence = (volume_stability + drift_consistency) / 2.0
             
             # Ensure confidence is in [0, 1] range
-            confidence = max(0.0, min(1.0, confidence))
+            confidence = unified_math.max(0.0, unified_math.min(1.0, confidence))
             
             return confidence
             
@@ -465,9 +466,9 @@ class EntryExitVector:
             if confidence < self.exit_threshold:
                 return 'hold'
             
-            if abs(exit_vector) > 0.2:
+            if unified_math.abs(exit_vector) > 0.2:
                 return 'exit'
-            elif abs(exit_vector) > 0.1:
+            elif unified_math.abs(exit_vector) > 0.1:
                 return 'partial'
             else:
                 return 'hold'
@@ -483,7 +484,7 @@ class EntryExitVector:
             price = market_data.get('price', 0.0)
             
             # Calculate volume surface components
-            beta_k = volume / max(price, 1.0)  # Volume-price ratio
+            beta_k = volume / unified_math.max(price, 1.0)  # Volume-price ratio
             stability = 0.5  # Default stability
             
             return {
@@ -505,7 +506,7 @@ class EntryExitVector:
             entry_price = position_data.get('entry_price', current_price)
             
             # Calculate drift components
-            psi_delta = (current_price - entry_price) / max(entry_price, 1.0)
+            psi_delta = (current_price - entry_price) / unified_math.max(entry_price, 1.0)
             delta_beta_v = position_data.get('volume_drift', 0.0)
             consistency = 0.5  # Default consistency
             
@@ -569,12 +570,12 @@ class EntryExitVector:
             
             # Adjust for position size
             position_size = position_data.get('size', 0.0)
-            size_factor = min(position_size / 1000.0, 1.0)  # Normalize to [0, 1]
+            size_factor = unified_math.min(position_size / 1000.0, 1.0)  # Normalize to [0, 1]
             
             # Combine factors
             confidence = (stability_factor + size_factor) / 2.0
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating navigation confidence: {e}")
@@ -587,7 +588,7 @@ class EntryExitVector:
             signal_entropy = self._calculate_signal_entropy(market_data)
             
             # Normalize to reasonable range
-            pressure = min(signal_entropy / 10.0, 1.0)
+            pressure = unified_math.min(signal_entropy / 10.0, 1.0)
             
             return pressure
             

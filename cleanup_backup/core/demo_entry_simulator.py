@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Demo Entry Simulator
 ============================
@@ -14,7 +16,7 @@ This system:
 """
 
 import json
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -98,7 +100,7 @@ class DemoEntrySimulator:
     def simulate_entry(self, strategy_type: str, market_condition: str = "sideways",
                       num_simulations: int = 100) -> EntryAnalysis:
         """Simulate trade entries with specified strategy and market conditions"""
-        print(f"🎯 Starting entry simulation: {strategy_type} in {market_condition} market")
+        safe_print(f"🎯 Starting entry simulation: {strategy_type} in {market_condition} market")
         
         # Get strategy function
         strategy_func = self.entry_strategies.get(strategy_type)
@@ -147,7 +149,7 @@ class DemoEntrySimulator:
             
             # Progress update
             if (i + 1) % 20 == 0:
-                print(f"Progress: {i + 1}/{num_simulations} simulations completed")
+                safe_print(f"Progress: {i + 1}/{num_simulations} simulations completed")
         
         # Analyze results
         analysis = self._analyze_entry_simulations(simulations, strategy_type, market_condition)
@@ -156,7 +158,7 @@ class DemoEntrySimulator:
         self.entry_simulations.extend(simulations)
         self.entry_analysis[f"{strategy_type}_{market_condition}"] = analysis
         
-        print(f"✅ Entry simulation completed. Success rate: {analysis.success_rate:.2%}")
+        safe_print(f"✅ Entry simulation completed. Success rate: {analysis.success_rate:.2%}")
         
         return analysis
     
@@ -171,8 +173,8 @@ class DemoEntrySimulator:
         entry_price = base_price * (1 + price_change)
         
         # Generate ghost signal strength (higher in trending markets)
-        ghost_signal = np.random.uniform(0.3, 0.9) + abs(trend) * 0.2
-        ghost_signal = min(1.0, ghost_signal)
+        ghost_signal = np.random.uniform(0.3, 0.9) + unified_math.abs(trend) * 0.2
+        ghost_signal = unified_math.min(1.0, ghost_signal)
         
         return {
             "trade_id": f"ghost_entry_{simulation_index + 1}",
@@ -257,7 +259,7 @@ class DemoEntrySimulator:
         base_price = 50000.0
         
         # Generate price with fractal-like movement
-        fractal_factor = np.sin(simulation_index * 0.1) * 0.01
+        fractal_factor = np.unified_math.sin(simulation_index * 0.1) * 0.01
         entry_price = base_price * (1 + fractal_factor + np.random.normal(0, 0.005))
         
         return {
@@ -267,7 +269,7 @@ class DemoEntrySimulator:
             "exit_price": entry_price * (1 + np.random.normal(0.001, 0.002)),
             "entry_time": datetime.now().isoformat(),
             "exit_time": datetime.now().isoformat(),
-            "confidence": 0.6 + abs(fractal_factor) * 10,
+            "confidence": 0.6 + unified_math.abs(fractal_factor) * 10,
             "strategy_type": "fractal_pattern",
             "volume_data": {
                 "current": np.random.uniform(600000, 1400000) * market_conditions["volume"],
@@ -323,7 +325,7 @@ class DemoEntrySimulator:
             "exit_price": entry_price * (1 + np.random.normal(0.001, 0.002)),
             "entry_time": datetime.now().isoformat(),
             "exit_time": datetime.now().isoformat(),
-            "confidence": 0.5 + abs(tick_delta) * 10,
+            "confidence": 0.5 + unified_math.abs(tick_delta) * 10,
             "strategy_type": "tick_delta",
             "volume_data": {
                 "current": np.random.uniform(500000, 1500000) * market_conditions["volume"],
@@ -344,7 +346,7 @@ class DemoEntrySimulator:
         
         # Use matrix with highest weight
         matrix_weights = self.settings_controller.matrix_path_weights
-        best_matrix = max(matrix_weights.items(), key=lambda x: x[1])[0]
+        best_matrix = unified_math.max(matrix_weights.items(), key=lambda x: x[1])[0]
         
         return {
             "trade_id": f"matrix_entry_{simulation_index + 1}",
@@ -379,7 +381,7 @@ class DemoEntrySimulator:
         
         # Calculate combined confidence
         confidence = (ghost_signal * 0.4 + 
-                     min(volume_ratio / 2, 0.3) + 
+                     unified_math.min(volume_ratio / 2, 0.3) + 
                      (0.5 - entropy) * 0.3)
         
         return {
@@ -425,7 +427,7 @@ class DemoEntrySimulator:
         # Calculate final probability
         success_prob = base_prob + allocation_adjustment + market_adjustment + volume_adjustment
         
-        return max(0.0, min(1.0, success_prob))
+        return unified_math.max(0.0, unified_math.min(1.0, success_prob))
     
     def _generate_simulation_notes(self, entry_data: Dict[str, Any],
                                  validation_result: Any,
@@ -476,15 +478,15 @@ class DemoEntrySimulator:
         success_rate = successful_entries / total_entries
         
         # Calculate averages
-        avg_confidence = np.mean([s.confidence for s in simulations])
-        avg_ghost_signal = np.mean([s.ghost_signal_strength for s in simulations])
-        avg_entropy = np.mean([s.entropy_level for s in simulations])
+        avg_confidence = unified_math.mean([s.confidence for s in simulations])
+        avg_ghost_signal = unified_math.mean([s.ghost_signal_strength for s in simulations])
+        avg_entropy = unified_math.mean([s.entropy_level for s in simulations])
         
         # Strategy performance
         strategy_performance = {
             "success_rate": success_rate,
             "avg_confidence": avg_confidence,
-            "avg_success_probability": np.mean([s.success_probability for s in simulations])
+            "avg_success_probability": unified_math.mean([s.success_probability for s in simulations])
         }
         
         # Matrix performance
@@ -504,9 +506,9 @@ class DemoEntrySimulator:
         
         # Market condition analysis
         market_condition_analysis = {
-            "trend_impact": np.mean([s.market_conditions["trend"] for s in simulations]),
-            "volatility_impact": np.mean([s.market_conditions["volatility"] for s in simulations]),
-            "volume_impact": np.mean([s.market_conditions["volume"] for s in simulations])
+            "trend_impact": unified_math.mean([s.market_conditions["trend"] for s in simulations]),
+            "volatility_impact": unified_math.mean([s.market_conditions["volatility"] for s in simulations]),
+            "volume_impact": unified_math.mean([s.market_conditions["volume"] for s in simulations])
         }
         
         return EntryAnalysis(
@@ -524,7 +526,7 @@ class DemoEntrySimulator:
     
     def run_comprehensive_entry_test(self, num_simulations: int = 50) -> Dict[str, Any]:
         """Run comprehensive entry testing across all strategies and market conditions"""
-        print("🚀 Starting comprehensive entry testing...")
+        safe_print("🚀 Starting comprehensive entry testing...")
         
         results = {}
         
@@ -537,7 +539,7 @@ class DemoEntrySimulator:
                     analysis = self.simulate_entry(strategy_type, market_condition, num_simulations)
                     strategy_results[market_condition] = analysis
                 except Exception as e:
-                    print(f"Error testing {strategy_type} in {market_condition}: {e}")
+                    safe_print(f"Error testing {strategy_type} in {market_condition}: {e}")
                     continue
             
             results[strategy_type] = strategy_results
@@ -545,7 +547,7 @@ class DemoEntrySimulator:
         # Generate comprehensive summary
         summary = self._generate_comprehensive_summary(results)
         
-        print("✅ Comprehensive entry testing completed!")
+        safe_print("✅ Comprehensive entry testing completed!")
         
         return summary
     
@@ -568,16 +570,16 @@ class DemoEntrySimulator:
         
         if all_success_rates:
             summary["overall_performance"] = {
-                "average_success_rate": np.mean(all_success_rates),
-                "best_success_rate": max(all_success_rates),
-                "worst_success_rate": min(all_success_rates),
-                "success_rate_std": np.std(all_success_rates)
+                "average_success_rate": unified_math.unified_math.mean(all_success_rates),
+                "best_success_rate": unified_math.max(all_success_rates),
+                "worst_success_rate": unified_math.min(all_success_rates),
+                "success_rate_std": unified_math.unified_math.std(all_success_rates)
             }
         
         # Find best strategies
         strategy_performance = {}
         for strategy_type, strategy_results in results.items():
-            avg_success_rate = np.mean([analysis.success_rate for analysis in strategy_results.values()])
+            avg_success_rate = unified_math.mean([analysis.success_rate for analysis in strategy_results.values()])
             strategy_performance[strategy_type] = avg_success_rate
         
         # Sort strategies by performance
@@ -594,8 +596,8 @@ class DemoEntrySimulator:
             
             if market_success_rates:
                 market_performance[market_condition] = {
-                    "average_success_rate": np.mean(market_success_rates),
-                    "best_strategy": max(strategy_performance.items(), key=lambda x: x[1])[0]
+                    "average_success_rate": unified_math.unified_math.mean(market_success_rates),
+                    "best_strategy": unified_math.max(strategy_performance.items(), key=lambda x: x[1])[0]
                 }
         
         summary["market_condition_analysis"] = market_performance
@@ -616,10 +618,10 @@ class DemoEntrySimulator:
             with open(filepath, 'w') as f:
                 json.dump(data, f, indent=2, default=str)
             
-            print(f"💾 Entry analysis saved to {filepath}")
+            safe_print(f"💾 Entry analysis saved to {filepath}")
             
         except Exception as e:
-            print(f"Error saving entry analysis: {e}")
+            safe_print(f"Error saving entry analysis: {e}")
 
 
 # Global demo entry simulator instance
@@ -635,24 +637,24 @@ if __name__ == "__main__":
     # Test the demo entry simulator
     simulator = DemoEntrySimulator()
     
-    print("=== Schwabot Demo Entry Simulator Test ===")
+    safe_print("=== Schwabot Demo Entry Simulator Test ===")
     
     # Test individual strategy
     analysis = simulator.simulate_entry("ghost_signal", "bull_market", num_simulations=20)
     
-    print(f"Strategy: {analysis.simulation_id}")
-    print(f"Success Rate: {analysis.success_rate:.2%}")
-    print(f"Average Confidence: {analysis.average_confidence:.3f}")
-    print(f"Matrix Performance: {analysis.matrix_performance}")
+    safe_print(f"Strategy: {analysis.simulation_id}")
+    safe_print(f"Success Rate: {analysis.success_rate:.2%}")
+    safe_print(f"Average Confidence: {analysis.average_confidence:.3f}")
+    safe_print(f"Matrix Performance: {analysis.matrix_performance}")
     
     # Test comprehensive analysis
     comprehensive_results = simulator.run_comprehensive_entry_test(num_simulations=10)
     
-    print(f"\nComprehensive Results:")
-    print(f"Best Strategies: {comprehensive_results['best_strategies']}")
-    print(f"Overall Performance: {comprehensive_results['overall_performance']}")
+    safe_print(f"\nComprehensive Results:")
+    safe_print(f"Best Strategies: {comprehensive_results['best_strategies']}")
+    safe_print(f"Overall Performance: {comprehensive_results['overall_performance']}")
     
     # Save analysis
     simulator.save_entry_analysis()
     
-    print("Demo entry simulator test completed!") 
+    safe_print("Demo entry simulator test completed!") 

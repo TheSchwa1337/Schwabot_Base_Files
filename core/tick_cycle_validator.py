@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Cycle Validator - Temporal Execution Correction Layer.
 
@@ -172,7 +173,7 @@ class TickCycleValidator:
             tick_interval = current_time - self.last_tick_time
             expected_interval = self.expected_tick_interval
             
-            if abs(tick_interval - expected_interval) > self.phase_transition_tolerance:
+            if unified_math.abs(tick_interval - expected_interval) > self.phase_transition_tolerance:
                 validation.issues.append(
                     f"Tick interval deviation: {tick_interval:.3f}s "
                     f"(expected: {expected_interval:.3f}s)"
@@ -306,13 +307,13 @@ class TickCycleValidator:
         correction.execution_delay = len(validation.issues) * 0.1  # 100ms per issue
         
         # Calculate overall correction factor
-        correction.correction_factor = max(0.1, 1.0 - abs(correction.phase_drift) * 0.1)
+        correction.correction_factor = unified_math.max(0.1, 1.0 - unified_math.abs(correction.phase_drift) * 0.1)
         
         # Store correction value
         validation.temporal_correction = correction.correction_factor
         
         # Track corrections
-        if abs(correction.phase_drift) > 0.1 or abs(correction.timing_offset) > 0.1:
+        if unified_math.abs(correction.phase_drift) > 0.1 or unified_math.abs(correction.timing_offset) > 0.1:
             self.stats['temporal_corrections'] += 1
     
     def _get_expected_phase_duration(self, tick_phase: Optional[str]) -> float:
@@ -348,7 +349,7 @@ class TickCycleValidator:
         score *= validation.temporal_correction
         
         # Ensure score is between 0 and 1
-        validation.validation_score = max(0.0, min(1.0, score))
+        validation.validation_score = unified_math.max(0.0, unified_math.min(1.0, score))
     
     def _store_validation(self, validation: TickValidation) -> None:
         """Store validation result in history."""

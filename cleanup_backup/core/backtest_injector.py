@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Backtest Injector - Schwabot UROS v1.0
@@ -20,7 +22,7 @@ import json
 import time
 import logging
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -258,7 +260,7 @@ class BacktestInjector:
             
             # Add seasonal effects
             day_of_year = date.timetuple().tm_yday
-            seasonal_factor = 1 + 0.1 * np.sin(2 * np.pi * day_of_year / 365)
+            seasonal_factor = 1 + 0.1 * np.unified_math.sin(2 * np.pi * day_of_year / 365)
             
             return base_price * trend_factor * volatility * seasonal_factor
             
@@ -347,7 +349,7 @@ class BacktestInjector:
                 if p > 0:
                     entropy -= p * np.log2(p)
             
-            return min(entropy, 1.0)
+            return unified_math.min(entropy, 1.0)
             
         except Exception as e:
             logger.error(f"Error calculating waveform entropy: {e}")
@@ -412,7 +414,7 @@ class BacktestInjector:
             
             rebalance_score = weighted_profit * (1 + entropy_bonus)
             
-            return max(rebalance_score, 0.0)
+            return unified_math.max(rebalance_score, 0.0)
             
         except Exception as e:
             logger.error(f"Error calculating rebalance score: {e}")
@@ -492,8 +494,8 @@ class BacktestInjector:
                     last_point = current_cycle[-1]
                     
                     # Break cycle if significant change in conditions
-                    price_change = abs(data_point.price - last_point.price) / last_point.price
-                    entropy_change = abs(data_point.waveform_entropy - last_point.waveform_entropy)
+                    price_change = unified_math.abs(data_point.price - last_point.price) / last_point.price
+                    entropy_change = unified_math.abs(data_point.waveform_entropy - last_point.waveform_entropy)
                     
                     if price_change > 0.1 or entropy_change > 0.3:  # 10% price change or 30% entropy change
                         if len(current_cycle) >= 5:  # Minimum cycle length
@@ -534,10 +536,10 @@ class BacktestInjector:
             max_drawdown = self._calculate_max_drawdown(prices)
             
             # Volatility
-            volatility = np.std(prices) / np.mean(prices) if np.mean(prices) > 0 else 0
+            volatility = unified_math.unified_math.std(prices) / unified_math.unified_math.mean(prices) if unified_math.unified_math.mean(prices) > 0 else 0
             
             # Average entropy
-            entropy_score = np.mean(entropies)
+            entropy_score = unified_math.unified_math.mean(entropies)
             
             # Rebalance count
             rebalance_count = sum(1 for d in cycle_data if d.rebalance_score > 0.7)
@@ -557,9 +559,9 @@ class BacktestInjector:
                 entropy_score=entropy_score,
                 rebalance_count=rebalance_count,
                 metadata={
-                    "avg_volume": np.mean(volumes),
-                    "price_range": max(prices) - min(prices),
-                    "entropy_range": max(entropies) - min(entropies)
+                    "avg_volume": unified_math.unified_math.mean(volumes),
+                    "price_range": unified_math.max(prices) - unified_math.min(prices),
+                    "entropy_range": unified_math.max(entropies) - unified_math.min(entropies)
                 }
             )
             
@@ -582,7 +584,7 @@ class BacktestInjector:
                 if price > peak:
                     peak = price
                 drawdown = (peak - price) / peak if peak > 0 else 0
-                max_drawdown = max(max_drawdown, drawdown)
+                max_drawdown = unified_math.max(max_drawdown, drawdown)
             
             return max_drawdown
             
@@ -597,8 +599,8 @@ class BacktestInjector:
                 return CycleType.SIDEWAYS
             
             # Calculate average metrics
-            avg_entropy = np.mean([d.waveform_entropy for d in cycle_data])
-            avg_rebalance = np.mean([d.rebalance_score for d in cycle_data])
+            avg_entropy = unified_math.mean([d.waveform_entropy for d in cycle_data])
+            avg_rebalance = unified_math.mean([d.rebalance_score for d in cycle_data])
             
             # Determine cycle type based on metrics
             if avg_entropy > 0.8:
@@ -628,10 +630,10 @@ class BacktestInjector:
                 "total_cycles": len(self.cycle_analyses),
                 "successful_cycles": self.successful_cycles,
                 "success_rate": self.successful_cycles / len(self.cycle_analyses) if self.cycle_analyses else 0,
-                "average_return": np.mean(returns),
-                "max_drawdown": max(drawdowns) if drawdowns else 0,
-                "volatility": np.std(returns),
-                "sharpe_ratio": np.mean(returns) / np.std(returns) if np.std(returns) > 0 else 0,
+                "average_return": unified_math.unified_math.mean(returns),
+                "max_drawdown": unified_math.max(drawdowns) if drawdowns else 0,
+                "volatility": unified_math.unified_math.std(returns),
+                "sharpe_ratio": unified_math.unified_math.mean(returns) / unified_math.unified_math.std(returns) if unified_math.unified_math.std(returns) > 0 else 0,
                 "cycle_types": {
                     cycle_type.value: len([c for c in self.cycle_analyses if c.cycle_type == cycle_type])
                     for cycle_type in CycleType
@@ -676,7 +678,7 @@ class BacktestInjector:
 
 def main():
     """Test function for Backtest Injector."""
-    print("🔄 Testing Backtest Injector...")
+    safe_print("🔄 Testing Backtest Injector...")
     
     # Initialize injector
     injector = BacktestInjector()
@@ -685,36 +687,36 @@ def main():
     start_date = datetime(2023, 1, 1)
     end_date = datetime(2023, 12, 31)
     
-    print("📊 Injecting historical data...")
+    safe_print("📊 Injecting historical data...")
     historical_data = injector.inject_historical_data(start_date, end_date)
     
-    print(f"✅ Injected {len(historical_data)} data points")
+    safe_print(f"✅ Injected {len(historical_data)} data points")
     
     # Analyze trading cycles
-    print("\n📈 Analyzing trading cycles...")
+    safe_print("\n📈 Analyzing trading cycles...")
     cycles = injector.analyze_trading_cycles()
     
-    print(f"✅ Analyzed {len(cycles)} trading cycles")
+    safe_print(f"✅ Analyzed {len(cycles)} trading cycles")
     
     # Print sample cycle
     if cycles:
         sample_cycle = cycles[0]
-        print(f"\n📊 Sample Cycle:")
-        print(f"  ID: {sample_cycle.cycle_id}")
-        print(f"  Type: {sample_cycle.cycle_type.value}")
-        print(f"  Duration: {sample_cycle.duration_days} days")
-        print(f"  Return: {sample_cycle.total_return:.2%}")
-        print(f"  Max Drawdown: {sample_cycle.max_drawdown:.2%}")
-        print(f"  Volatility: {sample_cycle.volatility:.2%}")
+        safe_print(f"\n📊 Sample Cycle:")
+        safe_print(f"  ID: {sample_cycle.cycle_id}")
+        safe_print(f"  Type: {sample_cycle.cycle_type.value}")
+        safe_print(f"  Duration: {sample_cycle.duration_days} days")
+        safe_print(f"  Return: {sample_cycle.total_return:.2%}")
+        safe_print(f"  Max Drawdown: {sample_cycle.max_drawdown:.2%}")
+        safe_print(f"  Volatility: {sample_cycle.volatility:.2%}")
     
     # Get statistics
     stats = injector.get_backtest_statistics()
-    print(f"\n📊 Backtest Statistics:")
-    print(f"  Total Cycles: {stats.get('total_cycles', 0)}")
-    print(f"  Success Rate: {stats.get('success_rate', 0):.2%}")
-    print(f"  Average Return: {stats.get('average_return', 0):.2%}")
-    print(f"  Max Drawdown: {stats.get('max_drawdown', 0):.2%}")
-    print(f"  Sharpe Ratio: {stats.get('sharpe_ratio', 0):.2f}")
+    safe_print(f"\n📊 Backtest Statistics:")
+    safe_print(f"  Total Cycles: {stats.get('total_cycles', 0)}")
+    safe_print(f"  Success Rate: {stats.get('success_rate', 0):.2%}")
+    safe_print(f"  Average Return: {stats.get('average_return', 0):.2%}")
+    safe_print(f"  Max Drawdown: {stats.get('max_drawdown', 0):.2%}")
+    safe_print(f"  Sharpe Ratio: {stats.get('sharpe_ratio', 0):.2f}")
     
     # Export results
     injector.export_backtest_results()

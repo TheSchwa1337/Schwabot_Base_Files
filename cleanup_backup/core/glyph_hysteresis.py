@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Glyph hysteresis field – prevent flip-flopping on glyph activation.
 
@@ -9,7 +11,6 @@ Implements a simple Schmitt-trigger style hysteresis on glyph *strength*:
 with activation_threshold > decay_threshold.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 

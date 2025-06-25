@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Logger - Trading Phase Event Logging and Tracking for Schwabot
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -283,10 +297,10 @@ class PhaseLogger:
                 performance_data = self.performance_tracker[phase_id]
                 if performance_data:
                     performance_metrics = {
-                        "average_performance": np.mean(performance_data),
-                        "performance_volatility": np.std(performance_data),
-                        "max_performance": np.max(performance_data),
-                        "min_performance": np.min(performance_data)
+                        "average_performance": unified_math.unified_math.mean(performance_data),
+                        "performance_volatility": unified_math.unified_math.std(performance_data),
+                        "max_performance": unified_math.unified_math.max(performance_data),
+                        "min_performance": unified_math.unified_math.min(performance_data)
                     }
             
             summary = LogSummary(
@@ -400,14 +414,14 @@ def main() -> None:
     summary = phase_logger.generate_log_summary(phase_id, start_time, end_time)
     
     if summary:
-        print(f"Log Summary: {summary.summary_id}")
-        print(f"Total Events: {summary.total_events}")
-        print(f"Error Count: {summary.error_count}")
-        print(f"Event Distribution: {summary.event_distribution}")
+        safe_print(f"Log Summary: {summary.summary_id}")
+        safe_print(f"Total Events: {summary.total_events}")
+        safe_print(f"Error Count: {summary.error_count}")
+        safe_print(f"Event Distribution: {summary.event_distribution}")
     
     # Get statistics
     stats = phase_logger.get_logger_statistics()
-    print(f"Logger Statistics: {stats}")
+    safe_print(f"Logger Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

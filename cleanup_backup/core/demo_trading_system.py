@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Demo Trading System - Schwabot UROS v1.0
@@ -13,7 +15,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -29,7 +31,7 @@ try:
     CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     CORE_COMPONENTS_AVAILABLE = False
-    print(f"Warning: Some core components not available: {e}")
+    safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +128,7 @@ class DemoMarketSimulator:
             
             # Update price
             new_price = current_price + total_change
-            self.current_prices[symbol] = max(new_price, current_price * 0.5)  # Prevent negative prices
+            self.current_prices[symbol] = unified_math.max(new_price, current_price * 0.5)  # Prevent negative prices
             
             # Update trend direction occasionally
             if np.random.random() < 0.01:  # 1% chance to change trend
@@ -135,7 +137,7 @@ class DemoMarketSimulator:
             # Generate volume
             base_volume = 1000.0
             volume_variation = np.random.normal(1.0, 0.3)
-            volume = base_volume * volume_variation * (1 + abs(price_change) / current_price)
+            volume = base_volume * volume_variation * (1 + unified_math.abs(price_change) / current_price)
             
             # Update market state
             self.market_heat = np.clip(self.market_heat + np.random.normal(0, 0.01), 0.0, 1.0)
@@ -150,7 +152,7 @@ class DemoMarketSimulator:
                 volatility=volatility,
                 entropy_level=self.entropy_level,
                 complexity=self.complexity,
-                trend_strength=abs(trend),
+                trend_strength=unified_math.abs(trend),
                 market_heat=self.market_heat
             )
             
@@ -272,7 +274,7 @@ class DemoTradingSystem:
                 
                 # Sleep for tick interval
                 elapsed = time.time() - start_time
-                sleep_time = max(0, self.tick_interval - elapsed)
+                sleep_time = unified_math.max(0, self.tick_interval - elapsed)
                 if sleep_time > 0:
                     time.sleep(sleep_time)
                     
@@ -315,7 +317,7 @@ class DemoTradingSystem:
         
         for i in range(100):
             # Generate price with some trend and noise
-            trend = np.sin(i * 0.1) * 0.01
+            trend = np.unified_math.sin(i * 0.1) * 0.01
             noise = np.random.normal(0, 0.005)
             price = base_price * (1 + trend + noise)
             history.append(price)
@@ -375,7 +377,7 @@ class DemoTradingSystem:
             base_size = self.current_capital * 0.01  # 1% of capital
             
             # Adjust based on tensor score
-            tensor_factor = abs(tensor_score)
+            tensor_factor = unified_math.abs(tensor_score)
             
             # Adjust based on bit phase
             if bit_phase == 4:
@@ -390,7 +392,7 @@ class DemoTradingSystem:
             
             # Apply risk management
             max_position = self.current_capital * 0.1  # Max 10% of capital
-            position_size = min(position_size, max_position)
+            position_size = unified_math.min(position_size, max_position)
             
             return position_size
             
@@ -543,10 +545,10 @@ class DemoTradingSystem:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
             
-            print(f"✅ Demo results exported to {output_path}")
+            safe_print(f"✅ Demo results exported to {output_path}")
             
         except Exception as e:
-            print(f"❌ Error exporting demo results: {e}")
+            safe_print(f"❌ Error exporting demo results: {e}")
 
 def create_demo_strategy(strategy_id: str, name: str, symbols: List[str], 
                         initial_capital: float) -> DemoStrategy:
@@ -564,7 +566,7 @@ def create_demo_strategy(strategy_id: str, name: str, symbols: List[str],
 
 def main():
     """Main function to run demo trading system."""
-    print("🚀 Starting Demo Trading System...")
+    safe_print("🚀 Starting Demo Trading System...")
     
     # Create demo trading system
     demo_system = DemoTradingSystem(initial_capital=100000.0)
@@ -591,7 +593,7 @@ def main():
     
     try:
         # Run for 60 seconds
-        print("📈 Demo trading running for 60 seconds...")
+        safe_print("📈 Demo trading running for 60 seconds...")
         time.sleep(60)
         
         # Stop trading
@@ -599,23 +601,23 @@ def main():
         
         # Get results
         portfolio = demo_system.get_portfolio_status()
-        print(f"\n📊 DEMO TRADING RESULTS")
-        print(f"Initial Capital: ${demo_system.initial_capital:,.2f}")
-        print(f"Final Portfolio Value: ${portfolio.total_value:,.2f}")
-        print(f"Total Profit: ${portfolio.total_profit:,.2f}")
-        print(f"Total Trades: {portfolio.total_trades}")
-        print(f"Win Rate: {portfolio.win_rate:.2%}")
+        safe_print(f"\n📊 DEMO TRADING RESULTS")
+        safe_print(f"Initial Capital: ${demo_system.initial_capital:,.2f}")
+        safe_print(f"Final Portfolio Value: ${portfolio.total_value:,.2f}")
+        safe_print(f"Total Profit: ${portfolio.total_profit:,.2f}")
+        safe_print(f"Total Trades: {portfolio.total_trades}")
+        safe_print(f"Win Rate: {portfolio.win_rate:.2%}")
         
         # Run mathematical validation
-        print("\n🧪 Running Mathematical Validation...")
+        safe_print("\n🧪 Running Mathematical Validation...")
         validation_results = demo_system.run_mathematical_validation()
-        print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
+        safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
         
         # Export results
         demo_system.export_demo_results()
         
     except KeyboardInterrupt:
-        print("\n⏹️ Demo trading stopped by user")
+        safe_print("\n⏹️ Demo trading stopped by user")
         demo_system.stop_trading()
     
     return 0

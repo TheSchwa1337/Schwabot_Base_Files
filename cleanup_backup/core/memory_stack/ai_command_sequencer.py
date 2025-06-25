@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 AI Command Sequencer - Recursive Memory Tracking System.
@@ -23,7 +25,7 @@ from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import centralized CLI handler
 try:
@@ -53,7 +55,7 @@ try:
     GPT_LAYER_AVAILABLE = True
 except ImportError:
     GPT_LAYER_AVAILABLE = False
-    safe_print("⚠️ Core modules not available")
+    safe_safe_print("⚠️ Core modules not available")
 
 logger = logging.getLogger(__name__)
 
@@ -167,7 +169,7 @@ class AICommandSequencer:
         # Load existing log
         self._load_command_log()
         
-        safe_print("🧠 AI Command Sequencer initialized - Memory tracking active")
+        safe_safe_print("🧠 AI Command Sequencer initialized - Memory tracking active")
     
     def _initialize_agent_performance(self) -> None:
         """Initialize performance tracking for all AI agents."""
@@ -206,11 +208,11 @@ class AICommandSequencer:
                     self.command_sequences[sequence.sequence_id] = sequence
                     self.sequence_history.append(sequence)
                 
-                safe_print(f"📊 Loaded {len(self.command_sequences)} command sequences")
+                safe_safe_print(f"📊 Loaded {len(self.command_sequences)} command sequences")
                 
         except Exception as e:
             error_msg = safe_format_error(e, "load_command_log")
-            safe_print(f"⚠️ Failed to load command log: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to load command log: {error_msg}")
     
     def _save_command_log(self) -> None:
         """Save command log to file."""
@@ -240,7 +242,7 @@ class AICommandSequencer:
                 
         except Exception as e:
             error_msg = safe_format_error(e, "save_command_log")
-            safe_print(f"⚠️ Failed to save command log: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to save command log: {error_msg}")
     
     async def sequence_command(
         self,
@@ -321,7 +323,7 @@ class AICommandSequencer:
                         confidence_score=command.recursive_depth
                     )
                 except Exception as e:
-                    safe_print(f"⚠️ Hash registry registration failed: {safe_format_error(e, 'hash_registry')}")
+                    safe_safe_print(f"⚠️ Hash registry registration failed: {safe_format_error(e, 'hash_registry')}")
             
             # Calculate execution time
             execution_time = time.time() - start_time
@@ -335,12 +337,12 @@ class AICommandSequencer:
             # Save to log
             self._save_command_log()
             
-            safe_print(f"🧠 Command sequenced: {sequence_id} from {command.agent_type.value}")
+            safe_safe_print(f"🧠 Command sequenced: {sequence_id} from {command.agent_type.value}")
             return sequence
             
         except Exception as e:
             error_msg = safe_format_error(e, "sequence_command")
-            safe_print(f"❌ Command sequencing failed: {error_msg}")
+            safe_safe_print(f"❌ Command sequencing failed: {error_msg}")
             
             # Return safe fallback sequence
             return CommandSequence(
@@ -380,7 +382,7 @@ class AICommandSequencer:
         try:
             sequence = self.command_sequences.get(sequence_id)
             if not sequence:
-                safe_print(f"⚠️ Sequence not found: {sequence_id}")
+                safe_safe_print(f"⚠️ Sequence not found: {sequence_id}")
                 return False
             
             # Update status
@@ -421,7 +423,7 @@ class AICommandSequencer:
                         sequence.prophet_alignment = alignment.alignment_score
                         
                 except Exception as e:
-                    safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
+                    safe_safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
             
             # Update hash registry status
             if GPT_LAYER_AVAILABLE:
@@ -434,7 +436,7 @@ class AICommandSequencer:
                         execution_time=response.execution_time
                     )
                 except Exception as e:
-                    safe_print(f"⚠️ Hash registry update failed: {safe_format_error(e, 'hash_update')}")
+                    safe_safe_print(f"⚠️ Hash registry update failed: {safe_format_error(e, 'hash_update')}")
             
             # Update agent performance
             self._update_agent_performance_with_result(sequence, response, profit_delta)
@@ -442,12 +444,12 @@ class AICommandSequencer:
             # Save to log
             self._save_command_log()
             
-            safe_print(f"✅ Command result updated: {sequence_id} - {'Success' if response.success else 'Failed'}")
+            safe_safe_print(f"✅ Command result updated: {sequence_id} - {'Success' if response.success else 'Failed'}")
             return True
             
         except Exception as e:
             error_msg = safe_format_error(e, "update_command_result")
-            safe_print(f"❌ Command result update failed: {error_msg}")
+            safe_safe_print(f"❌ Command result update failed: {error_msg}")
             return False
     
     def _generate_sequence_id(self, command: AICommand, tick: int) -> str:
@@ -471,10 +473,10 @@ class AICommandSequencer:
             # For now, use a simple heuristic based on command complexity
             complexity_factor = len(command.payload) * 0.1
             base_drift = np.random.normal(0, 0.5)  # Simulated drift
-            return max(0.0, abs(base_drift + complexity_factor))
+            return unified_math.max(0.0, unified_math.abs(base_drift + complexity_factor))
             
         except Exception as e:
-            safe_print(f"⚠️ Drift calculation failed: {safe_format_error(e, 'drift_calculation')}")
+            safe_safe_print(f"⚠️ Drift calculation failed: {safe_format_error(e, 'drift_calculation')}")
             return 0.0
     
     def _determine_drift_severity(self, drift_magnitude: float) -> DriftSeverity:
@@ -542,7 +544,7 @@ class AICommandSequencer:
                 lambda_factor * performance.trust_score +
                 (1 - lambda_factor) * (sequence.alpha_score * alpha_factor)
             )
-            performance.trust_score = max(0.0, min(1.0, performance.trust_score))
+            performance.trust_score = unified_math.max(0.0, unified_math.min(1.0, performance.trust_score))
     
     def get_agent_performance(self, agent_type: str) -> Optional[AgentPerformance]:
         """Get performance metrics for a specific agent."""
@@ -570,8 +572,8 @@ class AICommandSequencer:
         return {
             'total_sequences': len(self.sequence_history),
             'total_drift_detected': self.total_drift_detected,
-            'average_drift': np.mean(drift_magnitudes),
-            'max_drift': np.max(drift_magnitudes),
+            'average_drift': unified_math.unified_math.mean(drift_magnitudes),
+            'max_drift': unified_math.unified_math.max(drift_magnitudes),
             'drift_distribution': {
                 severity.value: len([seq for seq in self.sequence_history if seq.drift_severity == severity])
                 for severity in DriftSeverity
@@ -587,7 +589,7 @@ class AICommandSequencer:
             'agent_performance': {
                 agent: {
                     'total_commands': perf.total_commands,
-                    'success_rate': perf.successful_commands / max(perf.total_commands, 1),
+                    'success_rate': perf.successful_commands / unified_math.max(perf.total_commands, 1),
                     'average_alpha_score': perf.average_alpha_score,
                     'trust_score': perf.trust_score
                 }
@@ -607,7 +609,7 @@ class AICommandSequencer:
                 seq.sequence_id: seq for seq in self.sequence_history
             }
             
-            safe_print(f"🧹 Cleaned up old data - {max_sequences} sequences retained")
+            safe_safe_print(f"🧹 Cleaned up old data - {max_sequences} sequences retained")
 
 
 # Global instance for easy access
@@ -642,7 +644,7 @@ async def update_command_sequence_result(
 if __name__ == "__main__":
     async def test_command_sequencer():
         """Test command sequencer functionality."""
-        safe_print("🧠 Testing AI Command Sequencer...")
+        safe_safe_print("🧠 Testing AI Command Sequencer...")
         
         # Create test command
         test_command = AICommand(
@@ -682,7 +684,7 @@ if __name__ == "__main__":
         # Get performance metrics
         metrics = ai_command_sequencer.get_performance_metrics()
         
-        safe_print(f"✅ Test completed - Success: {success}, Metrics: {metrics}")
+        safe_safe_print(f"✅ Test completed - Success: {success}, Metrics: {metrics}")
     
     # Run test
     asyncio.run(test_command_sequencer()) 

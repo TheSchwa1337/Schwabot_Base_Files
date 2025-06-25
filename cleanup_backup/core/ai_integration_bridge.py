@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 AI Integration Bridge for Schwabot
@@ -549,7 +550,7 @@ Respond in JSON format:
                 total_confidence += response.confidence_score
             
             # Find most common action
-            consensus_action = max(action_counts.items(), key=lambda x: x[1])[0]
+            consensus_action = unified_math.max(action_counts.items(), key=lambda x: x[1])[0]
             
             # Calculate agreement level
             total_responses = len(responses)
@@ -563,7 +564,7 @@ Respond in JSON format:
             risk_counts = defaultdict(int)
             for risk in risk_levels:
                 risk_counts[risk] += 1
-            consensus_risk = max(risk_counts.items(), key=lambda x: x[1])[0]
+            consensus_risk = unified_math.max(risk_counts.items(), key=lambda x: x[1])[0]
             
             # Create final recommendation
             if agreement_level >= 0.8:

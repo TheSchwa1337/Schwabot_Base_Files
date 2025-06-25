@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tick Feed Harness - Schwabot UROS v1.0
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from random import uniform, choice
 
 logger = logging.getLogger(__name__)
@@ -341,7 +355,7 @@ class TickFeedHarness:
             
             # Calculate profit zones
             profit = price_change * volume * strategy.risk_multiplier
-            entropy_gate = np.log(volume + 1) * (1 / (strategy.entropy_threshold + 1e-3))
+            entropy_gate = unified_math.unified_math.log(volume + 1) * (1 / (strategy.entropy_threshold + 1e-3))
             
             profit_zone = {
                 "short": profit if bit_4 % 3 == 0 else 0,
@@ -490,36 +504,36 @@ class TickFeedHarness:
 
 def main():
     """Test function for Tick Feed Harness."""
-    print("🔄 Testing Tick Feed Harness...")
+    safe_print("🔄 Testing Tick Feed Harness...")
     
     # Initialize harness in demo mode
     harness = TickFeedHarness(mode=FeedMode.DEMO)
     
     # Simulate ticks
-    print("📊 Simulating 32 ticks...")
+    safe_print("📊 Simulating 32 ticks...")
     ticks = harness.simulate_ticks(32)
     
-    print(f"✅ Generated {len(ticks)} ticks")
+    safe_print(f"✅ Generated {len(ticks)} ticks")
     
     # Print sample tick
     if ticks:
         sample_tick = ticks[0]
-        print(f"\n📈 Sample Tick:")
-        print(f"  Asset: {sample_tick.asset}")
-        print(f"  Price: ${sample_tick.price:.2f}")
-        print(f"  Volume: {sample_tick.volume:.0f}")
-        print(f"  Strategy: {sample_tick.strategy_id}")
-        print(f"  Tensor Score: {sample_tick.tensor_score:.4f}")
-        print(f"  Rebalance Score: {sample_tick.rebalance_score:.4f}")
-        print(f"  Bit Phases: 4bit={sample_tick.bit_phase_4}, 8bit={sample_tick.bit_phase_8}, 42bit={sample_tick.bit_phase_42}")
+        safe_print(f"\n📈 Sample Tick:")
+        safe_print(f"  Asset: {sample_tick.asset}")
+        safe_print(f"  Price: ${sample_tick.price:.2f}")
+        safe_print(f"  Volume: {sample_tick.volume:.0f}")
+        safe_print(f"  Strategy: {sample_tick.strategy_id}")
+        safe_print(f"  Tensor Score: {sample_tick.tensor_score:.4f}")
+        safe_print(f"  Rebalance Score: {sample_tick.rebalance_score:.4f}")
+        safe_print(f"  Bit Phases: 4bit={sample_tick.bit_phase_4}, 8bit={sample_tick.bit_phase_8}, 42bit={sample_tick.bit_phase_42}")
     
     # Get statistics
     stats = harness.get_feed_statistics()
-    print(f"\n📊 Feed Statistics:")
-    print(f"  Total Ticks: {stats['total_ticks']}")
-    print(f"  Rebalance Triggers: {stats['rebalance_triggers']}")
-    print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")
-    print(f"  Strategy Count: {stats['strategy_count']}")
+    safe_print(f"\n📊 Feed Statistics:")
+    safe_print(f"  Total Ticks: {stats['total_ticks']}")
+    safe_print(f"  Rebalance Triggers: {stats['rebalance_triggers']}")
+    safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")
+    safe_print(f"  Strategy Count: {stats['strategy_count']}")
     
     # Export history
     harness.export_feed_history()

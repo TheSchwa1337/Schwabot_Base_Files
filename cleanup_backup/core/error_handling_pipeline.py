@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Error Handling Pipeline - Mathematical Error Recovery and Validation for Schwabot
@@ -18,8 +20,8 @@ Core Functionality:
 """
 
 import logging
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import time
 from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 from dataclasses import dataclass, field
@@ -329,7 +331,7 @@ class ErrorHandlingPipeline:
             # Check precision if specified
             if context.precision_requirements:
                 if isinstance(result, (float, np.floating)):
-                    if abs(result) < context.precision_requirements:
+                    if unified_math.abs(result) < context.precision_requirements:
                         return RecoveryResult(
                             success=False,
                             corrected_value=None,
@@ -506,7 +508,7 @@ class ErrorHandlingPipeline:
         clamped_args = []
         for arg in args:
             if isinstance(arg, (int, float, np.number)):
-                clamped_arg = max(min_val, min(max_val, arg))
+                clamped_arg = unified_math.max(min_val, unified_math.min(max_val, arg))
                 clamped_args.append(clamped_arg)
             else:
                 clamped_args.append(arg)
@@ -516,7 +518,7 @@ class ErrorHandlingPipeline:
             
             # Also clamp the result
             if isinstance(result, (int, float, np.number)):
-                result = max(min_val, min(max_val, result))
+                result = unified_math.max(min_val, unified_math.min(max_val, result))
             
             return RecoveryResult(
                 success=True,
@@ -668,7 +670,7 @@ def main() -> None:
     
     # Test division by zero
     result = pipeline.safe_mathematical_operation(risky_division, 10, 0, context=context)
-    print(f"Division by zero result: {result}")
+    safe_print(f"Division by zero result: {result}")
     
     # Test bounds violation
     def overflow_operation(x):
@@ -682,11 +684,11 @@ def main() -> None:
     )
     
     result = pipeline.safe_mathematical_operation(overflow_operation, 2, context=context)
-    print(f"Overflow operation result: {result}")
+    safe_print(f"Overflow operation result: {result}")
     
     # Get statistics
     stats = pipeline.get_error_statistics()
-    print(f"Error statistics: {stats}")
+    safe_print(f"Error statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Flux compensator – entropy drift corrector.
 
@@ -15,14 +18,13 @@ Implemented now
 Advanced Jacobian/KF tuning can be layered later.
 """
 
-from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Deque, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__ = ["FluxCompensator", "sync_flux_compensator"]
 
@@ -69,7 +71,7 @@ class FluxCompensator:
         """TODO: document _smooth."""
         if self.window is not None and self.window > 1:
             self._sma_buf.append(value)
-            smoothed = float(np.mean(self._sma_buf))
+            smoothed = float(unified_math.unified_math.mean(self._sma_buf))
             return smoothed
         # EMA path
         if self._ema is None:

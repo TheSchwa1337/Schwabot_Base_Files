@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Drift compensator – positional drift correction vector.
 
@@ -10,9 +13,8 @@ valid.  Returns a vector that can be added to the next trade signal to adjust
 for lag-induced error.
 """
 
-from __future__ import annotations
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["compute_drift_vector"]
 

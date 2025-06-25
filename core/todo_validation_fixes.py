@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 
@@ -18,7 +34,6 @@ Key Features:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -38,7 +53,7 @@ from typing import (
     Union,
 )
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 import yaml
 
@@ -271,10 +286,10 @@ class RuntimeValidator:
                 message="Vector validation passed",
                 details={
                     "length": len(vector),
-                    "min_value": float(np.min(vector)),
-                    "max_value": float(np.max(vector)),
-                    "mean_value": float(np.mean(vector)),
-                    "std_value": float(np.std(vector)),
+                    "min_value": float(unified_math.unified_math.min(vector)),
+                    "max_value": float(unified_math.unified_math.max(vector)),
+                    "mean_value": float(unified_math.unified_math.mean(vector)),
+                    "std_value": float(unified_math.unified_math.std(vector)),
                 },
                 execution_time=time.time() - start_time,
             )
@@ -413,7 +428,7 @@ class RuntimeValidator:
             # Positive definite validation
             if check_positive_definite:
                 try:
-                    eigenvals = np.linalg.eigvals(matrix)
+                    eigenvals = unified_math.unified_math.eigenvalues(matrix)
                     if np.any(eigenvals <= 0):
                         return ValidationResult(
                             valid=False,
@@ -446,9 +461,9 @@ class RuntimeValidator:
                 message="Matrix validation passed",
                 details={
                     "shape": matrix.shape,
-                    "min_value": float(np.min(matrix)),
-                    "max_value": float(np.max(matrix)),
-                    "mean_value": float(np.mean(matrix)),
+                    "min_value": float(unified_math.unified_math.min(matrix)),
+                    "max_value": float(unified_math.unified_math.max(matrix)),
+                    "mean_value": float(unified_math.unified_math.mean(matrix)),
                     "condition_number": (
                         float(np.linalg.cond(matrix))
                         if matrix.size > 0
@@ -498,7 +513,7 @@ class RuntimeValidator:
                     return 0.0
 
                 # Discretize data into bins
-                hist, _ = np.histogram(data, bins=min(20, len(data) // 5))
+                hist, _ = np.histogram(data, bins=unified_math.min(20, len(data) // 5))
                 hist = hist[hist > 0]  # Remove zero bins
 
                 if len(hist) == 0:
@@ -528,13 +543,13 @@ class RuntimeValidator:
                     level=ValidationLevel.WARNING,
                     message=(
                         f"Signal contains low entropy regions (min: "
-                        f"{np.min(entropies):.3f})"
+                        f"{unified_math.unified_math.min(entropies):.3f})"
                     ),
                     details={
-                        "min_entropy": float(np.min(entropies)),
-                        "max_entropy": float(np.max(entropies)),
-                        "mean_entropy": float(np.mean(entropies)),
-                        "entropy_std": float(np.std(entropies)),
+                        "min_entropy": float(unified_math.unified_math.min(entropies)),
+                        "max_entropy": float(unified_math.unified_math.max(entropies)),
+                        "mean_entropy": float(unified_math.unified_math.mean(entropies)),
+                        "entropy_std": float(unified_math.unified_math.std(entropies)),
                     },
                     execution_time=time.time() - start_time,
                 )
@@ -546,13 +561,13 @@ class RuntimeValidator:
                     level=ValidationLevel.WARNING,
                     message=(
                         f"Signal contains high entropy regions (max: "
-                        f"{np.max(entropies):.3f})"
+                        f"{unified_math.unified_math.max(entropies):.3f})"
                     ),
                     details={
-                        "min_entropy": float(np.min(entropies)),
-                        "max_entropy": float(np.max(entropies)),
-                        "mean_entropy": float(np.mean(entropies)),
-                        "entropy_std": float(np.std(entropies)),
+                        "min_entropy": float(unified_math.unified_math.min(entropies)),
+                        "max_entropy": float(unified_math.unified_math.max(entropies)),
+                        "mean_entropy": float(unified_math.unified_math.mean(entropies)),
+                        "entropy_std": float(unified_math.unified_math.std(entropies)),
                     },
                     execution_time=time.time() - start_time,
                 )
@@ -563,10 +578,10 @@ class RuntimeValidator:
                 level=ValidationLevel.WARNING,
                 message="Entropy validation passed",
                 details={
-                    "min_entropy": float(np.min(entropies)),
-                    "max_entropy": float(np.max(entropies)),
-                    "mean_entropy": float(np.mean(entropies)),
-                    "entropy_std": float(np.std(entropies)),
+                    "min_entropy": float(unified_math.unified_math.min(entropies)),
+                    "max_entropy": float(unified_math.unified_math.max(entropies)),
+                    "mean_entropy": float(unified_math.unified_math.mean(entropies)),
+                    "entropy_std": float(unified_math.unified_math.std(entropies)),
                     "window_size": window_size,
                 },
                 execution_time=time.time() - start_time,
@@ -870,32 +885,32 @@ def get_validation_metrics() -> ValidationMetrics:
 def main() -> None:
     """Main function for testing validation system."""
     try:
-        print(" Runtime Validation System Test")
-        print("=" * 40)
+        safe_print(" Runtime Validation System Test")
+        safe_print("=" * 40)
 
         # Initialize validator
         validator = RuntimeValidator()
 
         # Test vector validation
-        print("1. Testing vector validation...")
+        safe_print("1. Testing vector validation...")
         test_vector = [1.0, 2.0, 3.0, 4.0, 5.0]
         result = validator.validate_vector(test_vector, expected_length=5)
-        print(f"   ✅ Vector validation: {result.valid} - {result.message}")
+        safe_print(f"   ✅ Vector validation: {result.valid} - {result.message}")
 
         # Test matrix validation
-        print("2. Testing matrix validation...")
+        safe_print("2. Testing matrix validation...")
         test_matrix = [[1.0, 2.0], [3.0, 4.0]]
         result = validator.validate_matrix(test_matrix, expected_shape=(2, 2))
-        print(f"   ✅ Matrix validation: {result.valid} - {result.message}")
+        safe_print(f"   ✅ Matrix validation: {result.valid} - {result.message}")
 
         # Test entropy validation
-        print("3. Testing entropy validation...")
+        safe_print("3. Testing entropy validation...")
         test_signal = np.random.randn(200)  # Random signal
         result = validator.validate_entropy(test_signal, window_size=50)
-        print(f"   ✅ Entropy validation: {result.valid} - {result.message}")
+        safe_print(f"   ✅ Entropy validation: {result.valid} - {result.message}")
 
         # Test decorator usage
-        print("4. Testing decorator usage...")
+        safe_print("4. Testing decorator usage...")
 
         @validate_vector(expected_length=3)
         def test_function(vector):
@@ -904,17 +919,17 @@ def main() -> None:
 
         try:
             result = test_function([1, 2, 3])
-            print(f"   ✅ Decorator test: {result}")
+            safe_print(f"   ✅ Decorator test: {result}")
         except ValidationError as e:
-            print(
+            safe_print(
                 "   ❌ Decorator test failed: "
                 f"{e}"
             )
 
-        print("\n Runtime validation system test completed successfully!")
+        safe_print("\n Runtime validation system test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Runtime validation system test failed: {e}")
+        safe_print(f"❌ Runtime validation system test failed: {e}")
         import traceback
 
         traceback.print_exc()

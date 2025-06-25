@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 DLT Matrix Profit Integration Test - Schwabot UROS v1.0
@@ -8,7 +10,7 @@ Comprehensive integration test for the complete trading system pipeline.
 
 import json
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from datetime import datetime
 from typing import Dict, Any
 import logging
@@ -23,15 +25,15 @@ try:
     from core.profit_cycle_allocator import ProfitCycleAllocator, allocate_profit_cycle
     from core.zpe_core import ZPECore
     CORE_COMPONENTS_AVAILABLE = True
-    print("✅ All core components imported successfully")
+    safe_print("✅ All core components imported successfully")
 except ImportError as e:
     CORE_COMPONENTS_AVAILABLE = False
-    print(f"❌ Some core components not available: {e}")
+    safe_print(f"❌ Some core components not available: {e}")
 
 
 def test_component_initialization():
     """Test initialization of all components."""
-    print("\n🧪 Testing Component Initialization...")
+    safe_print("\n🧪 Testing Component Initialization...")
     
     results = {}
     
@@ -39,33 +41,33 @@ def test_component_initialization():
         # Test DLT Waveform Engine
         dlt_engine = DLTWaveformEngine()
         results['dlt_engine'] = {'status': 'success', 'gpu_available': dlt_engine.gpu_available}
-        print(f"✅ DLT Waveform Engine: GPU={dlt_engine.gpu_available}")
+        safe_print(f"✅ DLT Waveform Engine: GPU={dlt_engine.gpu_available}")
 
         # Test Matrix Mapper
         matrix_mapper = MatrixMapper()
         results['matrix_mapper'] = {'status': 'success', 'hash_registry_size': len(matrix_mapper.hash_registry)}
-        print(f"✅ Matrix Mapper: Hash Registry={len(matrix_mapper.hash_registry)}")
+        safe_print(f"✅ Matrix Mapper: Hash Registry={len(matrix_mapper.hash_registry)}")
 
         # Test Profit Cycle Allocator
         profit_allocator = ProfitCycleAllocator()
         results['profit_allocator'] = {'status': 'success', 'strategy': profit_allocator.allocation_strategy}
-        print(f"✅ Profit Cycle Allocator: Strategy={profit_allocator.allocation_strategy}")
+        safe_print(f"✅ Profit Cycle Allocator: Strategy={profit_allocator.allocation_strategy}")
 
         # Test ZPE Core
         zpe_core = ZPECore()
         results['zpe_core'] = {'status': 'success', 'recursion_depth': zpe_core.recursion_depth}
-        print(f"✅ ZPE Core: Recursion Depth={zpe_core.recursion_depth}")
+        safe_print(f"✅ ZPE Core: Recursion Depth={zpe_core.recursion_depth}")
 
     except Exception as e:
         results['error'] = str(e)
-        print(f"❌ Component initialization failed: {e}")
+        safe_print(f"❌ Component initialization failed: {e}")
     
     return results
 
 
 def test_dlt_waveform_processing():
     """Test DLT waveform processing with quantum integration."""
-    print("\n🌊 Testing DLT Waveform Processing...")
+    safe_print("\n🌊 Testing DLT Waveform Processing...")
     
     results = {}
     
@@ -74,7 +76,7 @@ def test_dlt_waveform_processing():
         
         # Generate test waveform data
         t = np.linspace(0, 10, 1000)
-        waveform_data = np.sin(2 * np.pi * 0.1 * t) + 0.3 * np.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
+        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
         
         # Test waveform processing
         waveform_result = dlt_engine.process_waveform_data(
@@ -87,7 +89,7 @@ def test_dlt_waveform_processing():
             'success': waveform_result.get('success', False),
             'tensor_score': waveform_result.get('tensor_score', 0.0)
         }
-        print(f"✅ Waveform Processing: Success={waveform_result.get('success', False)}")
+        safe_print(f"✅ Waveform Processing: Success={waveform_result.get('success', False)}")
 
         # Test matrix basket creation
         market_data = {
@@ -100,18 +102,18 @@ def test_dlt_waveform_processing():
             'bit_phase': basket.bit_phase.value,
             'resonance_score': basket.resonance_score
         }
-        print(f"✅ Matrix Basket: ID={basket.basket_id}, Phase={basket.bit_phase.value}")
+        safe_print(f"✅ Matrix Basket: ID={basket.basket_id}, Phase={basket.bit_phase.value}")
 
     except Exception as e:
         results['error'] = str(e)
-        print(f"❌ DLT waveform processing failed: {e}")
+        safe_print(f"❌ DLT waveform processing failed: {e}")
     
     return results
 
 
 def test_matrix_mapper_functionality():
     """Test matrix mapper functionality with hash-basket matching."""
-    print("\n🔗 Testing Matrix Mapper Functionality...")
+    safe_print("\n🔗 Testing Matrix Mapper Functionality...")
     
     results = {}
     
@@ -122,7 +124,7 @@ def test_matrix_mapper_functionality():
         test_hash = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
         basket_id = matrix_mapper.decode_hash_to_basket(test_hash, 100, 50000.0)
         results['hash_decoding'] = {'basket_id': basket_id, 'status': 'success'}
-        print(f"✅ Hash Decoding: Basket ID={basket_id}")
+        safe_print(f"✅ Hash Decoding: Basket ID={basket_id}")
 
         # Test profit allocation
         market_data = {
@@ -134,18 +136,18 @@ def test_matrix_mapper_functionality():
             'basket_id': allocation.basket_id if allocation else None,
             'tensor_score': allocation.tensor_score if allocation else 0.0
         }
-        print(f"✅ Profit Allocation: ID={allocation.allocation_id if allocation else 'None'}")
+        safe_print(f"✅ Profit Allocation: ID={allocation.allocation_id if allocation else 'None'}")
 
     except Exception as e:
         results['error'] = str(e)
-        print(f"❌ Matrix mapper functionality failed: {e}")
+        safe_print(f"❌ Matrix mapper functionality failed: {e}")
     
     return results
 
 
 def test_profit_cycle_allocation():
     """Test profit cycle allocation with tensor scoring."""
-    print("\n💰 Testing Profit Cycle Allocation...")
+    safe_print("\n💰 Testing Profit Cycle Allocation...")
     
     results = {}
     
@@ -178,18 +180,18 @@ def test_profit_cycle_allocation():
             'bit_phase': allocation_result.bit_phase,
             'zpe_efficiency': allocation_result.zpe_efficiency
         }
-        print(f"✅ Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
+        safe_print(f"✅ Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
 
     except Exception as e:
         results['error'] = str(e)
-        print(f"❌ Profit cycle allocation failed: {e}")
+        safe_print(f"❌ Profit cycle allocation failed: {e}")
     
     return results
 
 
 def test_complete_pipeline_integration():
     """Test complete pipeline integration from waveform to profit allocation."""
-    print("\n🔄 Testing Complete Pipeline Integration...")
+    safe_print("\n🔄 Testing Complete Pipeline Integration...")
     
     results = {}
     
@@ -197,7 +199,7 @@ def test_complete_pipeline_integration():
         # Step 1: Process waveform data
         dlt_engine = DLTWaveformEngine()
         t = np.linspace(0, 10, 1000)
-        waveform_data = np.sin(2 * np.pi * 0.1 * t) + 0.3 * np.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
+        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
         
         waveform_result = dlt_engine.process_waveform_data(
             name="pipeline_waveform",
@@ -209,7 +211,7 @@ def test_complete_pipeline_integration():
             'success': waveform_result.get('success', False),
             'tensor_score': waveform_result.get('tensor_score', 0.0)
         }
-        print(f"✅ Step 1 - Waveform Processing: Tensor Score={waveform_result.get('tensor_score', 0.0):.4f}")
+        safe_print(f"✅ Step 1 - Waveform Processing: Tensor Score={waveform_result.get('tensor_score', 0.0):.4f}")
 
         # Step 2: Create matrix basket
         market_data = {
@@ -222,7 +224,7 @@ def test_complete_pipeline_integration():
             'basket_id': basket.basket_id,
             'resonance_score': basket.resonance_score
         }
-        print(f"✅ Step 2 - Matrix Basket: ID={basket.basket_id}, Resonance={basket.resonance_score:.4f}")
+        safe_print(f"✅ Step 2 - Matrix Basket: ID={basket.basket_id}, Resonance={basket.resonance_score:.4f}")
 
         # Step 3: Allocate profit
         execution_packet = {
@@ -243,7 +245,7 @@ def test_complete_pipeline_integration():
             'tensor_score': allocation_result.tensor_score,
             'bit_phase': allocation_result.bit_phase
         }
-        print(f"✅ Step 3 - Profit Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
+        safe_print(f"✅ Step 3 - Profit Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
 
         # Verify pipeline success
         pipeline_success = (
@@ -256,22 +258,22 @@ def test_complete_pipeline_integration():
             'success': pipeline_success,
             'all_steps_completed': True
         }
-        print(f"✅ Pipeline Integration: Success={pipeline_success}")
+        safe_print(f"✅ Pipeline Integration: Success={pipeline_success}")
 
     except Exception as e:
         results['error'] = str(e)
-        print(f"❌ Complete pipeline integration failed: {e}")
+        safe_print(f"❌ Complete pipeline integration failed: {e}")
     
     return results
 
 
 def main():
     """Main function to run the integration tests."""
-    print("DLT Matrix Profit Integration Test - Schwabot UROS v1.0")
-    print("=" * 60)
+    safe_print("DLT Matrix Profit Integration Test - Schwabot UROS v1.0")
+    safe_print("=" * 60)
     
     if not CORE_COMPONENTS_AVAILABLE:
-        print("❌ Core components not available - skipping tests")
+        safe_print("❌ Core components not available - skipping tests")
         return 1
     
     # Run tests
@@ -288,39 +290,39 @@ def main():
     
     for test_name, test_func in test_functions:
         try:
-            print(f"\n{'='*20} {test_name.upper()} {'='*20}")
+            safe_print(f"\n{'='*20} {test_name.upper()} {'='*20}")
             result = test_func()
             all_results[test_name] = result
             
             if 'error' not in result:
                 successful_tests += 1
-                print(f"✅ {test_name} completed successfully")
+                safe_print(f"✅ {test_name} completed successfully")
             else:
-                print(f"❌ {test_name} failed: {result['error']}")
+                safe_print(f"❌ {test_name} failed: {result['error']}")
                 
         except Exception as e:
-            print(f"❌ {test_name} failed with exception: {e}")
+            safe_print(f"❌ {test_name} failed with exception: {e}")
             all_results[test_name] = {'error': str(e)}
     
     # Summary
     total_tests = len(test_functions)
     success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
     
-    print("\n" + "=" * 60)
-    print("📊 INTEGRATION TEST SUMMARY")
-    print("=" * 60)
-    print(f"Total Tests: {total_tests}")
-    print(f"Successful: {successful_tests}")
-    print(f"Success Rate: {success_rate:.2%}")
-    print(f"Overall Status: {'PASS' if success_rate >= 0.8 else 'FAIL'}")
+    safe_print("\n" + "=" * 60)
+    safe_print("📊 INTEGRATION TEST SUMMARY")
+    safe_print("=" * 60)
+    safe_print(f"Total Tests: {total_tests}")
+    safe_print(f"Successful: {successful_tests}")
+    safe_print(f"Success Rate: {success_rate:.2%}")
+    safe_print(f"Overall Status: {'PASS' if success_rate >= 0.8 else 'FAIL'}")
     
     # Save results
     try:
         with open("dlt_matrix_profit_integration_results.json", 'w') as f:
             json.dump(all_results, f, indent=2, default=str)
-        print("✅ Test results saved to dlt_matrix_profit_integration_results.json")
+        safe_print("✅ Test results saved to dlt_matrix_profit_integration_results.json")
     except Exception as e:
-        print(f"❌ Failed to save test results: {e}")
+        safe_print(f"❌ Failed to save test results: {e}")
     
     return 0 if success_rate >= 0.8 else 1
 

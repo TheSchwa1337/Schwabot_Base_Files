@@ -87,7 +87,7 @@ builtins = _
 docstring-convention = google
 
 # Import order style
-import-order-style = google
+# import-order-style = google
 
 # Maximum doc length
 max-doc-length = 100

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Volume Tick Router - Dynamic Volume Pressure Logic.
 
@@ -28,7 +29,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -228,13 +229,13 @@ class VolumeTickRouter:
                 'total_volume_events': self.total_volume_events,
                 'total_price_events': self.total_price_events,
                 'total_matches': self.total_matches,
-                'average_volume': np.mean(recent_volumes) if recent_volumes else 0.0,
-                'volume_volatility': np.std(recent_volumes) if recent_volumes else 0.0,
-                'average_price': np.mean(recent_prices) if recent_prices else 0.0,
-                'price_volatility': np.std(recent_prices) if recent_prices else 0.0,
+                'average_volume': unified_math.unified_math.mean(recent_volumes) if recent_volumes else 0.0,
+                'volume_volatility': unified_math.unified_math.std(recent_volumes) if recent_volumes else 0.0,
+                'average_price': unified_math.unified_math.mean(recent_prices) if recent_prices else 0.0,
+                'price_volatility': unified_math.unified_math.std(recent_prices) if recent_prices else 0.0,
                 'volume_shift_distribution': shift_type_counts,
-                'average_match_confidence': np.mean(match_confidences) if match_confidences else 0.0,
-                'average_correlation': np.mean(correlation_scores) if correlation_scores else 0.0,
+                'average_match_confidence': unified_math.unified_math.mean(match_confidences) if match_confidences else 0.0,
+                'average_correlation': unified_math.unified_math.mean(correlation_scores) if correlation_scores else 0.0,
                 'volume_sensitivity': self.volume_sensitivity,
                 'ai_feedback_weight': self.ai_feedback_weight,
                 'volume_spike_threshold': self.volume_spike_threshold,
@@ -263,7 +264,7 @@ class VolumeTickRouter:
             change_percentage = (volume_change / previous_volume) * 100
             
             # Determine if significant shift occurred
-            if abs(change_percentage) < 10:  # Less than 10% change
+            if unified_math.abs(change_percentage) < 10:  # Less than 10% change
                 return None
             
             # Determine pressure type
@@ -310,7 +311,7 @@ class VolumeTickRouter:
             change_percentage = (price_change / previous_price) * 100
             
             # Determine if significant delta occurred
-            if abs(change_percentage) < self.price_delta_threshold * 100:
+            if unified_math.abs(change_percentage) < self.price_delta_threshold * 100:
                 return None
             
             # Check if API triggered (simplified logic)
@@ -358,7 +359,7 @@ class VolumeTickRouter:
             confidence_score = hash_volume_component + ai_component
             
             # Normalize to [0, 1] range
-            confidence_score = max(0.0, min(1.0, confidence_score))
+            confidence_score = unified_math.max(0.0, unified_math.min(1.0, confidence_score))
             
             # Determine confidence level
             confidence_level = self._determine_confidence_level(confidence_score)
@@ -396,13 +397,13 @@ class VolumeTickRouter:
                 return self.volume_sensitivity
             
             # Calculate coefficient of variation
-            mean_volume = np.mean(recent_volumes)
-            std_volume = np.std(recent_volumes)
+            mean_volume = unified_math.unified_math.mean(recent_volumes)
+            std_volume = unified_math.unified_math.std(recent_volumes)
             
             if mean_volume > 0:
                 cv = std_volume / mean_volume
                 # Higher volatility = higher sensitivity
-                sensitivity = min(1.0, self.volume_sensitivity * (1.0 + cv))
+                sensitivity = unified_math.min(1.0, self.volume_sensitivity * (1.0 + cv))
             else:
                 sensitivity = self.volume_sensitivity
             
@@ -427,8 +428,8 @@ class VolumeTickRouter:
             similarity = self._calculate_hash_similarity(volume_hash, price_hash)
             
             # Time proximity factor
-            time_diff = abs(volume_shift.timestamp - price_delta.timestamp)
-            time_factor = max(0.0, 1.0 - time_diff / 60.0)  # Decay over 60 seconds
+            time_diff = unified_math.abs(volume_shift.timestamp - price_delta.timestamp)
+            time_factor = unified_math.max(0.0, 1.0 - time_diff / 60.0)  # Decay over 60 seconds
             
             # Combined intersection score
             intersection = similarity * time_factor
@@ -473,15 +474,15 @@ class VolumeTickRouter:
                 return 0.5
             
             # Calculate volume momentum
-            volume_momentum = (current_volume - recent_volumes[0]) / max(recent_volumes[0], 1.0)
+            volume_momentum = (current_volume - recent_volumes[0]) / unified_math.max(recent_volumes[0], 1.0)
             
             # Adjust for volume shift if present
             if volume_shift:
-                shift_factor = abs(volume_shift.change_percentage) / 100.0
+                shift_factor = unified_math.abs(volume_shift.change_percentage) / 100.0
                 volume_momentum *= (1.0 + shift_factor)
             
             # Normalize to [0, 1] range
-            pressure = max(0.0, min(1.0, (volume_momentum + 1.0) / 2.0))
+            pressure = unified_math.max(0.0, unified_math.min(1.0, (volume_momentum + 1.0) / 2.0))
             
             return pressure
             
@@ -505,7 +506,7 @@ class VolumeTickRouter:
             # Combined AI feedback factor
             ai_factor = (confidence + volume_signal + price_signal) / 3.0
             
-            return max(0.0, min(1.0, ai_factor))
+            return unified_math.max(0.0, unified_math.min(1.0, ai_factor))
             
         except Exception as e:
             logger.error(f"Error calculating AI feedback: {e}")
@@ -516,21 +517,21 @@ class VolumeTickRouter:
         """Match volume shift with price delta."""
         try:
             # Calculate time correlation
-            time_diff = abs(volume_shift.timestamp - price_delta.timestamp)
-            time_correlation = max(0.0, 1.0 - time_diff / 30.0)  # 30-second window
+            time_diff = unified_math.abs(volume_shift.timestamp - price_delta.timestamp)
+            time_correlation = unified_math.max(0.0, 1.0 - time_diff / 30.0)  # 30-second window
             
             # Calculate magnitude correlation
-            volume_magnitude = abs(volume_shift.change_percentage)
-            price_magnitude = abs(price_delta.change_percentage)
+            volume_magnitude = unified_math.abs(volume_shift.change_percentage)
+            price_magnitude = unified_math.abs(price_delta.change_percentage)
             
             # Normalize magnitudes
             max_volume_magnitude = 100.0  # 100% volume change
             max_price_magnitude = 10.0    # 10% price change
             
-            normalized_volume = min(volume_magnitude / max_volume_magnitude, 1.0)
-            normalized_price = min(price_magnitude / max_price_magnitude, 1.0)
+            normalized_volume = unified_math.min(volume_magnitude / max_volume_magnitude, 1.0)
+            normalized_price = unified_math.min(price_magnitude / max_price_magnitude, 1.0)
             
-            magnitude_correlation = 1.0 - abs(normalized_volume - normalized_price)
+            magnitude_correlation = 1.0 - unified_math.abs(normalized_volume - normalized_price)
             
             # Calculate overall match confidence
             match_confidence = (time_correlation + magnitude_correlation) / 2.0
@@ -570,8 +571,8 @@ class VolumeTickRouter:
             direction_correlation = 1.0 if volume_direction == price_direction else 0.0
             
             # Magnitude correlation
-            volume_magnitude = abs(volume_shift.change_percentage)
-            price_magnitude = abs(price_delta.change_percentage)
+            volume_magnitude = unified_math.abs(volume_shift.change_percentage)
+            price_magnitude = unified_math.abs(price_delta.change_percentage)
             
             # Normalize and compare
             max_volume = 100.0
@@ -580,12 +581,12 @@ class VolumeTickRouter:
             normalized_volume = volume_magnitude / max_volume
             normalized_price = price_magnitude / max_price
             
-            magnitude_correlation = 1.0 - abs(normalized_volume - normalized_price)
+            magnitude_correlation = 1.0 - unified_math.abs(normalized_volume - normalized_price)
             
             # Combined correlation score
             correlation_score = (direction_correlation + magnitude_correlation) / 2.0
             
-            return max(0.0, min(1.0, correlation_score))
+            return unified_math.max(0.0, unified_math.min(1.0, correlation_score))
             
         except Exception as e:
             logger.error(f"Error calculating correlation score: {e}")
@@ -594,7 +595,7 @@ class VolumeTickRouter:
     def _determine_pressure_type(self, change_percentage: float) -> VolumePressureType:
         """Determine volume pressure type based on change percentage."""
         try:
-            abs_change = abs(change_percentage)
+            abs_change = unified_math.abs(change_percentage)
             
             if abs_change < 20:
                 return VolumePressureType.NORMAL

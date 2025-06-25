@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Matrix Mapper - Schwabot UROS v1.0
@@ -20,7 +22,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -422,7 +424,7 @@ class MatrixMapper:
                     sequence.append(value)
                 else:
                     # Use sine wave for remaining elements
-                    value = np.sin(2 * np.pi * i / total_elements)
+                    value = np.unified_math.sin(2 * np.pi * i / total_elements)
                     sequence.append(value)
             
             return sequence
@@ -441,10 +443,10 @@ class MatrixMapper:
             base_mod = sum(int(mod_bytes[i:i+2], 16) for i in range(0, len(mod_bytes), 2)) / (len(mod_bytes) * 255.0)
             
             # Adjust based on price volatility (simplified)
-            price_factor = min(1.0, abs(price - 50000) / 50000)  # Assuming BTC price around 50k
+            price_factor = unified_math.min(1.0, unified_math.abs(price - 50000) / 50000)  # Assuming BTC price around 50k
             
             modulation = (base_mod * 0.7 + price_factor * 0.3)
-            return max(0.1, min(1.0, modulation))
+            return unified_math.max(0.1, unified_math.min(1.0, modulation))
             
         except Exception as e:
             logger.warning(f"Error calculating modulation factor: {e}")
@@ -455,14 +457,14 @@ class MatrixMapper:
         try:
             # Calculate weight variance
             weight_values = list(asset_weights.values())
-            weight_variance = np.var(weight_values) if len(weight_values) > 1 else 0.0
+            weight_variance = unified_math.unified_math.var(weight_values) if len(weight_values) > 1 else 0.0
             
             # Calculate sequence variance
-            sequence_variance = np.var(sequence_vector) if sequence_vector else 0.0
+            sequence_variance = unified_math.unified_math.var(sequence_vector) if sequence_vector else 0.0
             
             # Combine variances for resonance score
             resonance = (weight_variance + sequence_variance) / 2.0
-            return min(1.0, resonance)
+            return unified_math.min(1.0, resonance)
             
         except Exception as e:
             logger.warning(f"Error calculating resonance score: {e}")
@@ -533,7 +535,7 @@ class MatrixMapper:
             tensor_score = delta * (phase + 1)
             
             # Normalize to reasonable range
-            tensor_score = max(-1.0, min(1.0, tensor_score))
+            tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
             
             return round(tensor_score, 4)
             
@@ -601,11 +603,11 @@ class MatrixMapper:
             base_score = basket.resonance_score * basket.modulation_factor
             
             # Adjust based on profit amount
-            profit_factor = min(1.0, abs(profit_amount) / 1000.0)  # Normalize to 1000 USD
+            profit_factor = unified_math.min(1.0, unified_math.abs(profit_amount) / 1000.0)  # Normalize to 1000 USD
             
             # Combine factors
             tensor_score = base_score * (1.0 + profit_factor)
-            return min(1.0, tensor_score)
+            return unified_math.min(1.0, tensor_score)
             
         except Exception as e:
             logger.error(f"Error calculating basket tensor score: {e}")
@@ -728,7 +730,7 @@ class MatrixMapper:
                     score = basket.resonance_score * basket.modulation_factor
                     
                     # Adjust for profit amount compatibility
-                    profit_factor = min(1.0, abs(profit_amount) / 1000.0)
+                    profit_factor = unified_math.min(1.0, unified_math.abs(profit_amount) / 1000.0)
                     score *= (1.0 + profit_factor)
                     
                     if score > best_score:
@@ -903,23 +905,23 @@ if __name__ == "__main__":
     # Test hash decoding
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     basket_id = mapper.decode_hash_to_basket(test_hash, 100, 45000.0)
-    print(f"Decoded basket ID: {basket_id}")
+    safe_print(f"Decoded basket ID: {basket_id}")
     
     # Test bit phase resolution
     phase_4bit = mapper.resolve_bit_phase(test_hash, "4bit")
     phase_8bit = mapper.resolve_bit_phase(test_hash, "8bit")
     phase_42bit = mapper.resolve_bit_phase(test_hash, "42bit")
-    print(f"Bit phases - 4bit: {phase_4bit}, 8bit: {phase_8bit}, 42bit: {phase_42bit}")
+    safe_print(f"Bit phases - 4bit: {phase_4bit}, 8bit: {phase_8bit}, 42bit: {phase_42bit}")
     
     # Test tensor score calculation
     tensor_score = mapper.calculate_tensor_score(44000.0, 45000.0, phase_8bit)
-    print(f"Tensor score: {tensor_score}")
+    safe_print(f"Tensor score: {tensor_score}")
     
     # Test tensor route creation
     if basket_id:
         route = mapper.create_tensor_route(basket_id, 1000.0, BitPhase.EIGHT_BIT)
-        print(f"Created tensor route: {route.route_id if route else None}")
+        safe_print(f"Created tensor route: {route.route_id if route else None}")
     
     # Get status
     status = mapper.get_hash_registry_status()
-    print(f"Hash registry status: {status}") 
+    safe_print(f"Hash registry status: {status}") 

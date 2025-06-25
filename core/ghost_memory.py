@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost memory – lightweight hash store for profitable trade snapshots.
 
@@ -14,7 +17,6 @@ Design goals
 3. **Pure-Python + std-lib only** – no heavy DB, avoids extra deps.
 """
 
-from __future__ import annotations
 
 from collections import deque
 from typing import Deque, Final, List
@@ -40,7 +42,7 @@ class GhostMemory:
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def add(self, hash_hex: str) -> None:
+    def unified_math.add(self, hash_hex: str) -> None:
         """Append *hash_hex* to the buffer.
 
         Parameters
@@ -70,7 +72,7 @@ _memory = GhostMemory()
 
 def store_ghost_hash(hash_hex: str) -> None:  # noqa: D401
     """Add *hash_hex* to global ghost memory ring-buffer."""
-    _memory.add(hash_hex)
+    _memory.unified_math.add(hash_hex)
 
 
 def last_profitable_hash() -> str | None:  # noqa: D401

@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Thermal Map Allocator - Schwabot Subsurface Grayscale Mapping
@@ -13,13 +17,12 @@ This provides the mathematical framework for:
 Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 """
 
-from __future__ import annotations
 
 from datetime import datetime
 import logging
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 # NOTE: core.type_defs is under construction; import only the symbols that
 # currently exist or fall back to basic typing.FallbackType aliases.
@@ -124,7 +127,7 @@ class ThermalMapAllocator:
 
         # Simple 2D heat diffusion solution
         r_squared = x**2 + y**2
-        temp_value = initial_temp * np.exp(-r_squared / (4 * diffusion_coeff * t))
+        temp_value = initial_temp * unified_math.exp(-r_squared / (4 * diffusion_coeff * t))
         return Temperature(temp_value)
 
     def compute_thermal_gradient(self, temp_field: Callable[[float, float, float], Temperature],
@@ -177,12 +180,12 @@ class ThermalMapAllocator:
 
                 temp = temp_field(x, y, time)
                 # Convert temperature to entropy-like measure
-                entropy_value = np.log(temp + 1)  # Avoid log(0)
+                entropy_value = unified_math.unified_math.log(temp + 1)  # Avoid unified_math.log(0)
                 entropy_map[i, j] = entropy_value
 
         # Normalize
-        if np.max(entropy_map) > 0:
-            entropy_map = entropy_map / np.max(entropy_map)
+        if unified_math.unified_math.max(entropy_map) > 0:
+            entropy_map = entropy_map / unified_math.unified_math.max(entropy_map)
 
         return EntropyMap(entropy_map)
 
@@ -284,12 +287,12 @@ class SubsurfaceGrayscaleMapper:
             # Create Gaussian-like heat distribution
             x, y = np.meshgrid(np.arange(width), np.arange(height))
             sigma = 20.0
-            heat_contribution = np.exp(-((x - x_center)**2 + (y - y_center)**2) / (2 * sigma**2))
+            heat_contribution = unified_math.exp(-((x - x_center)**2 + (y - y_center)**2) / (2 * sigma**2))
             heatmap += heat_contribution
 
         # Normalize and apply sigmoid
-        heatmap = heatmap / np.max(heatmap) if np.max(heatmap) > 0 else heatmap
-        grayscale_map = 1 / (1 + np.exp(-heatmap))
+        heatmap = heatmap / unified_math.unified_math.max(heatmap) if unified_math.unified_math.max(heatmap) > 0 else heatmap
+        grayscale_map = 1 / (1 + unified_math.exp(-heatmap))
 
         return EntropyMap(grayscale_map)
 
@@ -313,8 +316,8 @@ class SubsurfaceGrayscaleMapper:
         if threshold is None:
             threshold = self.threshold
 
-        mean_val = np.mean(grayscale_map)
-        std_val = np.std(grayscale_map)
+        mean_val = unified_math.unified_math.mean(grayscale_map)
+        std_val = unified_math.unified_math.std(grayscale_map)
         threshold_val = mean_val + threshold * std_val
 
         return Matrix((grayscale_map > threshold_val).astype(float))
@@ -344,43 +347,43 @@ def main() -> None:
     pressure = thermal_allocator.calculate_thermal_pressure(
         temp=300.0, volume=1.0, particles=1000
     )
-    print(f"Thermal pressure: {pressure} Pa")
+    safe_print(f"Thermal pressure: {pressure} Pa")
 
     # Test thermal field computation
     def temp_field(x: float, y: float, t: float) -> Temperature:
         return thermal_allocator.compute_thermal_field(x, y, t)
 
     temp = temp_field(x=1.0, y=2.0, t=1.0)
-    print(f"Temperature at (1, 2, 1): {temp} K")
+    safe_print(f"Temperature at (1, 2, 1): {temp} K")
 
     # Test thermal gradient
     gradient = thermal_allocator.compute_thermal_gradient(temp_field, x=1.0, y=2.0, t=1.0)
-    print(f"Thermal gradient: {gradient}")
+    safe_print(f"Thermal gradient: {gradient}")
 
     # Test entropy map generation
     entropy_map = thermal_allocator.generate_thermal_entropy_map(
         temp_field, dimensions=(32, 32), time=1.0
     )
-    print(f"Entropy map shape: {entropy_map.shape}")
+    safe_print(f"Entropy map shape: {entropy_map.shape}")
 
     # Test grayscale mapping
     hash_patterns = ["a1b2c3d4", "e5f6g7h8", "i9j0k1l2"]
     grayscale_map = grayscale_mapper.generate_entropy_map(hash_patterns)
     activation_matrix = grayscale_mapper.activate_zone(grayscale_map)
-    print(f"Grayscale map shape: {grayscale_map.shape}")
-    print(f"Activation matrix shape: {activation_matrix.shape}")
+    safe_print(f"Grayscale map shape: {grayscale_map.shape}")
+    safe_print(f"Activation matrix shape: {activation_matrix.shape}")
 
     # Test integration
     integrated_map = thermal_allocator.integrate_with_grayscale(
         entropy_map, grayscale_map
     )
-    print(f"Integrated map shape: {integrated_map.shape}")
+    safe_print(f"Integrated map shape: {integrated_map.shape}")
 
     # Test thermal state creation
     thermal_state = thermal_allocator.create_thermal_state(
         temp=300.0, pressure=101325.0
     )
-    print(f"Thermal state: {thermal_state}")
+    safe_print(f"Thermal state: {thermal_state}")
 
 
 if __name__ == "__main__":

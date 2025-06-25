@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Schwabot Typing Schemas - Centralized Type Definitions
@@ -15,7 +18,6 @@ This ensures type safety across the entire codebase and prevents
 inconsistent data structures that could lead to runtime errors.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -25,7 +27,7 @@ from typing import (
     TypedDict, Protocol, TypeVar, Generic
 )
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 from numpy.typing import NDArray
 
 # =============================================================================
@@ -110,10 +112,10 @@ class AIStrategyResponse:
             self.strategy_hash = self._generate_hash()
         
         # Ensure confidence is bounded
-        self.confidence_score = max(0.0, min(1.0, self.confidence_score))
+        self.confidence_score = unified_math.max(0.0, unified_math.min(1.0, self.confidence_score))
         
         # Ensure layer depth is positive
-        self.layer_depth = max(1, self.layer_depth)
+        self.layer_depth = unified_math.max(1, self.layer_depth)
 
     def _generate_hash(self) -> str:
         """Generate hash signature for the strategy."""
@@ -318,7 +320,7 @@ def create_fault_log(
         error_code=error_code,
         module=module,
         recovery_suggestion=recovery_suggestion,
-        severity=max(0.0, min(1.0, severity)),
+        severity=unified_math.max(0.0, unified_math.min(1.0, severity)),
         context=context or {},
         ai_feedback=ai_feedback
     )

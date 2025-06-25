@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Echo Snapshot - System State Capture and Replay for Schwabot
@@ -453,15 +466,15 @@ def main() -> None:
     
     # List snapshots
     all_snapshots = echo_snapshot.list_snapshots()
-    print(f"Total snapshots: {len(all_snapshots)}")
+    safe_print(f"Total snapshots: {len(all_snapshots)}")
     
     # Replay a snapshot
     replay_result = echo_snapshot.replay_snapshot(system_snapshot_id)
-    print(f"Replay result: {replay_result}")
+    safe_print(f"Replay result: {replay_result}")
     
     # Get statistics
     stats = echo_snapshot.get_storage_statistics()
-    print(f"Storage statistics: {stats}")
+    safe_print(f"Storage statistics: {stats}")
 
 if __name__ == "__main__":
     main() 

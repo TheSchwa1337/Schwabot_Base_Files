@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Drift Phase Monitor - Phase Drift Penalty Calculator.
 
@@ -17,7 +21,6 @@ Where:
 Windows CLI compatible with ASCII fallback for mathematical symbols.
 """
 
-from __future__ import annotations
 
 import logging
 import time
@@ -75,9 +78,9 @@ def compute_phase_drift(
 
         # Normalize to [0, 1] range
         # Peak penalty at 0.5 (middle of cycle), minimum at 0 and 1
-        normalized_drift = 2.0 * abs(drift_fraction - 0.5)
+        normalized_drift = 2.0 * unified_math.abs(drift_fraction - 0.5)
 
-        return max(0.0, min(MAX_DRIFT_PENALTY, normalized_drift))
+        return unified_math.max(0.0, unified_math.min(MAX_DRIFT_PENALTY, normalized_drift))
 
     except Exception as e:
         logger.error(f"Error computing phase drift: {e}")
@@ -216,7 +219,7 @@ def get_optimal_phase_timing(
             return 8, MAX_DRIFT_PENALTY  # Default fallback
 
         # Find phase with lowest drift penalty
-        optimal_phase = min(drift_penalties.items(), key=lambda x: x[1])
+        optimal_phase = unified_math.min(drift_penalties.items(), key=lambda x: x[1])
         return optimal_phase[0], optimal_phase[1]
 
     except Exception as e:
@@ -379,11 +382,11 @@ def main() -> None:
     start_full = current_time - 1.0  # Full 1-second cycle
     drift_full = compute_phase_drift(start_full, current_time, 1.0)
 
-    print("Drift Phase Monitor Demo")
-    print("=" * 30)
-    print(f"Perfect timing drift:  {drift_perfect:.3f}")
-    print(f"Half cycle drift:      {drift_half:.3f}")
-    print(f"Full cycle drift:      {drift_full:.3f}")
+    safe_print("Drift Phase Monitor Demo")
+    safe_print("=" * 30)
+    safe_print(f"Perfect timing drift:  {drift_perfect:.3f}")
+    safe_print(f"Half cycle drift:      {drift_half:.3f}")
+    safe_print(f"Full cycle drift:      {drift_full:.3f}")
     print()
 
     # Test monitor class
@@ -396,13 +399,13 @@ def main() -> None:
     current_drift = monitor.get_current_drift(8)
     diagnostics = monitor.get_diagnostics()
 
-    print(f"Monitor current drift: {current_drift:.3f}")
-    print(f"Cycle position: {diagnostics.get('cycle_position', 0):.3f}")
-    print(f"Cycles completed: {diagnostics.get('cycles_completed', 0):.3f}")
+    safe_print(f"Monitor current drift: {current_drift:.3f}")
+    safe_print(f"Cycle position: {diagnostics.get('cycle_position', 0):.3f}")
+    safe_print(f"Cycles completed: {diagnostics.get('cycles_completed', 0):.3f}")
 
     # Test multi-phase analysis
     multi_drift = compute_multi_phase_drift(current_time - 0.1, current_time)
-    print(f"\nMulti-phase drift: {multi_drift}")
+    safe_print(f"\nMulti-phase drift: {multi_drift}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Init Package - System Initialization and Startup for Schwabot
@@ -23,7 +25,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -203,13 +205,13 @@ class SystemInitializer:
                 if component_id in visited:
                     return
                 
-                temp_visited.add(component_id)
+                temp_visited.unified_math.add(component_id)
                 
                 for dependency in self.dependency_graph.get(component_id, []):
                     visit(dependency)
                 
                 temp_visited.remove(component_id)
-                visited.add(component_id)
+                visited.unified_math.add(component_id)
                 sequence.append(component_id)
             
             # Visit all components
@@ -450,8 +452,8 @@ class SystemInitializer:
                 duration = (result.end_time - result.start_time).total_seconds()
                 init_times.append(duration)
         
-        avg_init_time = np.mean(init_times) if init_times else 0.0
-        max_init_time = np.max(init_times) if init_times else 0.0
+        avg_init_time = unified_math.unified_math.mean(init_times) if init_times else 0.0
+        max_init_time = unified_math.unified_math.max(init_times) if init_times else 0.0
         
         return {
             "init_status": self.init_status.value,
@@ -470,16 +472,16 @@ def main() -> None:
     
     # Initialize system
     success = initializer.initialize_system()
-    print(f"System initialization: {'SUCCESS' if success else 'FAILED'}")
+    safe_print(f"System initialization: {'SUCCESS' if success else 'FAILED'}")
     
     # Get statistics
     stats = initializer.get_init_statistics()
-    print(f"Initialization Statistics: {stats}")
+    safe_print(f"Initialization Statistics: {stats}")
     
     # Get component statuses
     component_statuses = initializer.get_all_component_statuses()
     for component_id, status in component_statuses.items():
-        print(f"Component {component_id}: {'SUCCESS' if status.success else 'FAILED'}")
+        safe_print(f"Component {component_id}: {'SUCCESS' if status.success else 'FAILED'}")
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Advanced Test Harness - Matrix Math and Tensor Testing for Schwabot
@@ -25,7 +39,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 import os
 import gc
@@ -126,9 +140,9 @@ class AdvancedTestHarness:
         try:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
-                    config = json.load(f)
+                    _ = json.load(f)  # Load but don't store since we don't use it
                 
-                logger.info(f"Loaded test harness configuration")
+                logger.info("Loaded test harness configuration")
             else:
                 self._create_default_configuration()
                 
@@ -207,14 +221,14 @@ class AdvancedTestHarness:
         """Calculate mathematical properties of a tensor."""
         try:
             properties = {
-                "mean": float(np.mean(tensor)),
-                "std": float(np.std(tensor)),
-                "min": float(np.min(tensor)),
-                "max": float(np.max(tensor)),
+                "mean": float(unified_math.unified_math.mean(tensor)),
+                "std": float(unified_math.unified_math.std(tensor)),
+                "min": float(unified_math.unified_math.min(tensor)),
+                "max": float(unified_math.unified_math.max(tensor)),
                 "rank": int(np.linalg.matrix_rank(tensor.reshape(-1, tensor.shape[-1]))),
                 "condition_number": float(np.linalg.cond(tensor.reshape(-1, tensor.shape[-1]))),
                 "frobenius_norm": float(np.linalg.norm(tensor, 'fro')),
-                "spectral_radius": float(np.max(np.abs(np.linalg.eigvals(tensor.reshape(-1, tensor.shape[-1])))))
+                "spectral_radius": float(unified_math.unified_math.max(unified_math.unified_math.abs(unified_math.unified_math.eigenvalues(tensor.reshape(-1, tensor.shape[-1])))))
             }
             return properties
             
@@ -356,13 +370,13 @@ class AdvancedTestHarness:
         """Calculate properties of a matrix."""
         try:
             properties = {
-                "determinant": float(np.linalg.det(matrix)),
+                "determinant": float(unified_math.unified_math.determinant(matrix)),
                 "trace": float(np.trace(matrix)),
                 "rank": int(np.linalg.matrix_rank(matrix)),
                 "condition_number": float(np.linalg.cond(matrix)),
-                "eigenvalues": np.linalg.eigvals(matrix).tolist(),
+                "eigenvalues": unified_math.unified_math.eigenvalues(matrix).tolist(),
                 "is_symmetric": bool(np.allclose(matrix, matrix.T)),
-                "is_positive_definite": bool(np.all(np.linalg.eigvals(matrix) > 0))
+                "is_positive_definite": bool(np.all(unified_math.unified_math.eigenvalues(matrix) > 0))
             }
             return properties
         except Exception as e:
@@ -404,7 +418,7 @@ class AdvancedTestHarness:
             properties = {
                 "hurst_exponent": self._calculate_hurst_exponent(signal),
                 "fractal_dimension": self._calculate_fractal_dimension(signal),
-                "spectral_density": float(np.mean(np.abs(np.fft.fft(signal))**2)),
+                "spectral_density": float(unified_math.unified_math.mean(unified_math.unified_math.abs(np.fft.fft(signal))**2)),
                 "autocorrelation": float(self._calculate_autocorrelation(signal))
             }
             return properties
@@ -420,12 +434,12 @@ class AdvancedTestHarness:
             t2_flat = tensor2.flatten()
             
             # Pad or truncate to same length
-            min_len = min(len(t1_flat), len(t2_flat))
+            min_len = unified_math.min(len(t1_flat), len(t2_flat))
             t1_flat = t1_flat[:min_len]
             t2_flat = t2_flat[:min_len]
             
             # Calculate correlation
-            correlation = np.corrcoef(t1_flat, t2_flat)[0, 1]
+            correlation = unified_math.unified_math.correlation(t1_flat, t2_flat)[0, 1]
             return float(correlation) if not np.isnan(correlation) else 0.0
         except Exception:
             return 0.0
@@ -437,11 +451,11 @@ class AdvancedTestHarness:
                 return 0.5
             
             # Simplified Hurst exponent calculation
-            lags = range(2, min(20, len(data)//2))
-            tau = [np.sqrt(np.std(np.subtract(data[lag:], data[:-lag]))) for lag in lags]
+            lags = range(2, unified_math.min(20, len(data)//2))
+            tau = [unified_math.unified_math.sqrt(unified_math.unified_math.std(unified_math.unified_math.subtract(data[lag:], data[:-lag]))) for lag in lags]
             
             if len(tau) > 1:
-                reg = np.polyfit(np.log(lags), np.log(tau), 1)
+                reg = np.polyfit(unified_math.unified_math.log(lags), unified_math.unified_math.log(tau), 1)
                 return float(reg[0])
             else:
                 return 0.5
@@ -454,7 +468,7 @@ class AdvancedTestHarness:
             if len(data) < 10:
                 return 1.0
             
-            data_norm = (data - np.min(data)) / (np.max(data) - np.min(data) + 1e-8)
+            data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data) + 1e-8)
             scales = np.logspace(-2, 0, 10)
             counts = []
             
@@ -469,8 +483,8 @@ class AdvancedTestHarness:
                 counts.append(count)
             
             if len(counts) > 1:
-                log_scales = np.log(scales)
-                log_counts = np.log(counts)
+                log_scales = unified_math.unified_math.log(scales)
+                log_counts = unified_math.unified_math.log(counts)
                 slope = np.polyfit(log_scales, log_counts, 1)[0]
                 return float(-slope)
             else:
@@ -485,7 +499,7 @@ class AdvancedTestHarness:
                 return 0.0
             
             # Calculate autocorrelation at lag 1
-            autocorr = np.corrcoef(data[:-1], data[1:])[0, 1]
+            autocorr = unified_math.unified_math.correlation(data[:-1], data[1:])[0, 1]
             return float(autocorr) if not np.isnan(autocorr) else 0.0
         except Exception:
             return 0.0
@@ -684,11 +698,11 @@ def main() -> None:
     
     # Run all tests
     results = harness.run_all_tests()
-    print(f"Test execution completed. Results: {len(results)} tests")
+    safe_print(f"Test execution completed. Results: {len(results)} tests")
     
     # Get statistics
     stats = harness.get_test_statistics()
-    print(f"Test Statistics: {stats}")
+    safe_print(f"Test Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Engine - Trading Phase Management System for Schwabot
@@ -23,7 +25,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -297,7 +299,7 @@ class PhaseEngine:
         avg_duration_stats = {}
         for phase_type, durations in avg_durations.items():
             if durations:
-                avg_duration_stats[phase_type] = np.mean(durations)
+                avg_duration_stats[phase_type] = unified_math.unified_math.mean(durations)
         
         return {
             "total_phases": total_phases,
@@ -334,14 +336,14 @@ def main() -> None:
     
     # Start a test phase
     phase_id = engine.start_phase(PhaseType.ACCUMULATION, 0.8)
-    print(f"Started phase: {phase_id}")
+    safe_print(f"Started phase: {phase_id}")
     
     # Update confidence
     engine.update_phase_confidence(phase_id, 0.9)
     
     # Get statistics
     stats = engine.get_phase_statistics()
-    print(f"Phase Statistics: {stats}")
+    safe_print(f"Phase Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

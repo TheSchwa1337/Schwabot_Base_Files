@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 GPU Offload Manager - Schwabot UROS v1.0
@@ -15,7 +29,7 @@ import time
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -345,7 +359,7 @@ class GPUOffloadManager:
                 fft_gpu = cp.fft.fft(seq_gpu)
                 
                 # Calculate power spectrum
-                power_gpu = cp.abs(fft_gpu) ** 2
+                power_gpu = cp.unified_math.abs(fft_gpu) ** 2
                 
                 # Normalize
                 total_power = cp.sum(power_gpu)
@@ -355,7 +369,7 @@ class GPUOffloadManager:
                     normalized_gpu = cp.zeros_like(power_gpu)
                 
                 # Calculate entropy
-                # Add small epsilon to avoid log(0)
+                # Add small epsilon to avoid unified_math.log(0)
                 epsilon = 1e-9
                 entropy_gpu = -cp.sum(normalized_gpu * cp.log2(normalized_gpu + epsilon))
                 
@@ -388,7 +402,7 @@ class GPUOffloadManager:
                 fft = np.fft.fft(seq)
                 
                 # Calculate power spectrum
-                power = np.abs(fft) ** 2
+                power = unified_math.unified_math.abs(fft) ** 2
                 
                 # Normalize
                 total_power = np.sum(power)
@@ -491,11 +505,11 @@ class GPUOffloadManager:
             for matrix in matrices:
                 # Perform operation
                 if operation == "multiply":
-                    result = np.dot(matrix, matrix)
+                    result = unified_math.unified_math.dot_product(matrix, matrix)
                 elif operation == "inverse":
-                    result = np.linalg.inv(matrix)
+                    result = unified_math.unified_math.inverse(matrix)
                 elif operation == "eigenvalues":
-                    result = np.linalg.eigvals(matrix)
+                    result = unified_math.unified_math.eigenvalues(matrix)
                 elif operation == "transpose":
                     result = np.transpose(matrix)
                 else:
@@ -579,7 +593,7 @@ class GPUOffloadManager:
             total_gpu_memory = sum(op.gpu_memory_used for op in self.operation_history)
             
             # Calculate GPU utilization (simplified)
-            gpu_utilization = min(1.0, total_execution_time / (total_operations * 100))  # Assume 100ms is full utilization
+            gpu_utilization = unified_math.min(1.0, total_execution_time / (total_operations * 100))  # Assume 100ms is full utilization
             
             performance = GPUPerformance(
                 total_operations=total_operations,
@@ -658,34 +672,34 @@ class GPUOffloadManager:
 
 def main():
     """Test function for GPU Offload Manager."""
-    print("🧮 Testing GPU Offload Manager...")
+    safe_print("🧮 Testing GPU Offload Manager...")
     
     manager = GPUOffloadManager()
     
     # Test bit phase resolution
     hash_strings = ["a1b2c3d4e5f6", "7890abcdef12", "345678901234"] * 100
     phases = manager.resolve_bit_phase_gpu(hash_strings, "8bit")
-    print(f"Resolved {len(phases)} bit phases")
+    safe_print(f"Resolved {len(phases)} bit phases")
     
     # Test tensor score calculation
     entry_prices = [100.0] * 300
     current_prices = [110.0] * 300
     phases = [8] * 300
     tensor_scores = manager.tensor_score_gpu(entry_prices, current_prices, phases)
-    print(f"Calculated {len(tensor_scores)} tensor scores")
+    safe_print(f"Calculated {len(tensor_scores)} tensor scores")
     
     # Test wave entropy calculation
     sequences = [[1.0, 0.0, 1.0, 0.0]] * 300
     entropies = manager.wave_entropy_gpu(sequences)
-    print(f"Calculated {len(entropies)} entropy values")
+    safe_print(f"Calculated {len(entropies)} entropy values")
     
     # Get performance metrics
     performance = manager.get_performance_metrics()
-    print(f"\nGPU Performance:")
-    print(f"Total operations: {performance.total_operations}")
-    print(f"Successful operations: {performance.successful_operations}")
-    print(f"Average execution time: {performance.average_execution_time_ms:.2f}ms")
-    print(f"GPU utilization: {performance.gpu_utilization:.2%}")
+    safe_print(f"\nGPU Performance:")
+    safe_print(f"Total operations: {performance.total_operations}")
+    safe_print(f"Successful operations: {performance.successful_operations}")
+    safe_print(f"Average execution time: {performance.average_execution_time_ms:.2f}ms")
+    safe_print(f"GPU utilization: {performance.gpu_utilization:.2%}")
     
     return 0
 

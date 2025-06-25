@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """System Monitor - Real-time System Health and Performance Monitoring.
 
@@ -35,7 +38,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from collections import defaultdict
 from collections import deque
@@ -48,7 +50,7 @@ import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 import psutil
 

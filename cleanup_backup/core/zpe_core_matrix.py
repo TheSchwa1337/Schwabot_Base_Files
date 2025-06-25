@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """ZPE core matrix – zero-point energy field calculations and wave mechanics.
 
 Implements the formulas:
     Φ_zpe(x, t) = ∇·Ψ_zpe(x, t) + λ_zpe·(∂Ψ/∂t)
-    Ψ_zpe(t) = Σ_i^n A_i·sin(ω_i·t + φ_i)
+    Ψ_zpe(t) = Σ_i^n A_i·unified_math.sin(ω_i·t + φ_i)
     Ξ_zpe = ∫_Ω Φ_zpe(x, t) dx
     G_zpe = e^(−β·|∇Φ_zpe|²) · tanh(Φ_zpe/Ξ_zpe)
 
@@ -11,12 +14,11 @@ This module provides quantum-inspired field calculations for enhanced
 market state analysis and phase transition detection.
 """
 
-from __future__ import annotations
 
-import math
+from core.unified_math_system import unified_math
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["zpe_psi", "zpe_phi", "zpe_xi", "zpe_g"]
 
@@ -31,7 +33,7 @@ def zpe_psi(
     phases: Sequence[float],
     t: float,
 ) -> float:  # noqa: D401
-    """Return Ψ_zpe(t) = Σ_i^n A_i·sin(ω_i·t + φ_i).
+    """Return Ψ_zpe(t) = Σ_i^n A_i·unified_math.sin(ω_i·t + φ_i).
 
     Parameters
     ----------
@@ -52,7 +54,7 @@ def zpe_psi(
     p_arr = np.asarray(phases, dtype=float)
 
     # Compute sum of sinusoidal modes
-    sine_terms = a_arr * np.sin(w_arr * t + p_arr)
+    sine_terms = a_arr * np.unified_math.sin(w_arr * t + p_arr)
 
     return float(np.sum(sine_terms))
 
@@ -127,10 +129,10 @@ def zpe_g(
         Small constant to prevent division by zero.
     """
     # Exponential term: e^(−β·|∇Φ_zpe|²)
-    exp_term = math.exp(-beta * (grad_phi_magnitude**2))
+    exp_term = unified_math.exp(-beta * (grad_phi_magnitude**2))
 
     # Tanh term: tanh(Φ_zpe/Ξ_zpe)
-    if abs(xi_zpe) < epsilon:
+    if unified_math.abs(xi_zpe) < epsilon:
         tanh_term = math.tanh(phi_zpe / epsilon)
     else:
         tanh_term = math.tanh(phi_zpe / xi_zpe)

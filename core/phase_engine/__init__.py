@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Engine - Trading Phase Management System for Schwabot
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -297,7 +311,7 @@ class PhaseEngine:
         avg_duration_stats = {}
         for phase_type, durations in avg_durations.items():
             if durations:
-                avg_duration_stats[phase_type] = np.mean(durations)
+                avg_duration_stats[phase_type] = unified_math.unified_math.mean(durations)
         
         return {
             "total_phases": total_phases,
@@ -334,14 +348,14 @@ def main() -> None:
     
     # Start a test phase
     phase_id = engine.start_phase(PhaseType.ACCUMULATION, 0.8)
-    print(f"Started phase: {phase_id}")
+    safe_print(f"Started phase: {phase_id}")
     
     # Update confidence
     engine.update_phase_confidence(phase_id, 0.9)
     
     # Get statistics
     stats = engine.get_phase_statistics()
-    print(f"Phase Statistics: {stats}")
+    safe_print(f"Phase Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Recursive Glyph Mapper - Symbolic Logic for AI Strategy Interpretation.
 
@@ -8,8 +9,8 @@ Implements the core mathematical framework for:
 - Strategy flow interpretation through symbolic mathematics
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Union, Set
@@ -176,7 +177,7 @@ class RecursiveGlyphMapper:
         eigenvalues = []
         resonance_sum = complex(0, 0)
 
-        for k in range(min(omega_bound, len(path_glyphs))):
+        for k in range(unified_math.min(omega_bound, len(path_glyphs))):
             glyph_id = path_glyphs[k]
             glyph = self._find_glyph_by_id(glyph_id)
 
@@ -373,17 +374,17 @@ class RecursiveGlyphMapper:
     ) -> float:
         """Calculate base resonance coefficient for a glyph."""
         # Position-based component
-        position_factor = math.sin(i * 0.1) * math.cos(j * 0.1)
+        position_factor = unified_math.unified_math.sin(i * 0.1) * unified_math.unified_math.cos(j * 0.1)
 
         # Symbolic value component
-        magnitude = abs(symbolic_value)
+        magnitude = unified_math.abs(symbolic_value)
         phase = np.angle(symbolic_value)
-        symbolic_factor = magnitude * math.cos(phase)
+        symbolic_factor = magnitude * unified_math.unified_math.cos(phase)
 
         # Combine factors
         resonance = position_factor + symbolic_factor
 
-        return max(0.1, min(2.0, resonance))  # Bound between 0.1 and 2.0
+        return unified_math.max(0.1, unified_math.min(2.0, resonance))  # Bound between 0.1 and 2.0
 
     def _find_adjacent_glyphs(self, i: int, j: int) -> Set[str]:
         """Find adjacent glyph IDs for a position."""
@@ -398,7 +399,7 @@ class RecursiveGlyphMapper:
 
                 ni, nj = i + di, j + dj
                 if 0 <= ni < rows and 0 <= nj < cols:
-                    adjacent.add(f"glyph_{ni}_{nj}")
+                    adjacent.unified_math.add(f"glyph_{ni}_{nj}")
 
         return adjacent
 
@@ -409,7 +410,7 @@ class RecursiveGlyphMapper:
             existing_connections = set()
             for connected_id in glyph.connected_glyphs:
                 if self._find_glyph_by_id(connected_id):
-                    existing_connections.add(connected_id)
+                    existing_connections.unified_math.add(connected_id)
 
             glyph.connected_glyphs = existing_connections
 
@@ -439,7 +440,7 @@ class RecursiveGlyphMapper:
 
             for connected_id in current_glyph.connected_glyphs:
                 if connected_id not in visited:
-                    visited.add(connected_id)
+                    visited.unified_math.add(connected_id)
                     new_path = path + [connected_id]
                     queue.append((connected_id, new_path))
 
@@ -461,21 +462,21 @@ class RecursiveGlyphMapper:
 
         # Apply resonance mode modifications
         if resonance_mode == ResonanceMode.HARMONIC:
-            mode_factor = math.cos(k * math.pi / 4) + 1j * math.sin(k * math.pi / 4)
+            mode_factor = unified_math.unified_math.cos(k * math.pi / 4) + 1j * unified_math.unified_math.sin(k * math.pi / 4)
         elif resonance_mode == ResonanceMode.CHAOTIC:
             mode_factor = complex(
-                math.sin(k * 1.618) * math.cos(k * 2.718),
-                math.cos(k * 1.618) * math.sin(k * 2.718),
+                unified_math.unified_math.sin(k * 1.618) * unified_math.unified_math.cos(k * 2.718),
+                unified_math.unified_math.cos(k * 1.618) * unified_math.unified_math.sin(k * 2.718),
             )
         elif resonance_mode == ResonanceMode.FRACTAL:
-            phi = (1 + math.sqrt(5)) / 2
+            phi = (1 + unified_math.unified_math.sqrt(5)) / 2
             mode_factor = complex(
-                math.pow(phi, k % 5) * math.cos(k), math.pow(phi, k % 3) * math.sin(k)
+                math.pow(phi, k % 5) * unified_math.unified_math.cos(k), math.pow(phi, k % 3) * unified_math.unified_math.sin(k)
             )
         elif resonance_mode == ResonanceMode.QUANTUM:
             mode_factor = complex(
-                math.exp(-k * 0.1) * math.cos(k * glyph.eigenvalue),
-                math.exp(-k * 0.1) * math.sin(k * glyph.eigenvalue),
+                unified_math.exp(-k * 0.1) * unified_math.unified_math.cos(k * glyph.eigenvalue),
+                unified_math.exp(-k * 0.1) * unified_math.unified_math.sin(k * glyph.eigenvalue),
             )
         else:  # CLASSICAL
             mode_factor = complex(1.0, 0.0)
@@ -490,12 +491,12 @@ class RecursiveGlyphMapper:
             return 0.0
 
         # Eigenvalue stability
-        eigenvalue_variance = np.var(eigenvalues)
+        eigenvalue_variance = unified_math.unified_math.var(eigenvalues)
         eigenvalue_stability = 1.0 / (1.0 + eigenvalue_variance)
 
         # Resonance magnitude stability
-        resonance_magnitude = abs(resonance_sum)
-        resonance_stability = min(1.0, resonance_magnitude / len(eigenvalues))
+        resonance_magnitude = unified_math.abs(resonance_sum)
+        resonance_stability = unified_math.min(1.0, resonance_magnitude / len(eigenvalues))
 
         # Combined convergence factor
         convergence_factor = (eigenvalue_stability + resonance_stability) / 2.0
@@ -509,7 +510,7 @@ class RecursiveGlyphMapper:
         resonance_mode: ResonanceMode,
     ) -> str:
         """Generate symbolic interpretation of eigenpath resonance."""
-        magnitude = abs(resonance_sum)
+        magnitude = unified_math.abs(resonance_sum)
         phase = np.angle(resonance_sum)
 
         # Magnitude interpretation
@@ -523,16 +524,16 @@ class RecursiveGlyphMapper:
             magnitude_desc = "MINIMAL"
 
         # Phase interpretation
-        if abs(phase) < math.pi / 4:
+        if unified_math.abs(phase) < math.pi / 4:
             phase_desc = "ALIGNED"
-        elif abs(phase) < 3 * math.pi / 4:
+        elif unified_math.abs(phase) < 3 * math.pi / 4:
             phase_desc = "ORTHOGONAL"
         else:
             phase_desc = "OPPOSED"
 
         # Eigenvalue interpretation
         if eigenvalues:
-            avg_eigenvalue = np.mean(eigenvalues)
+            avg_eigenvalue = unified_math.unified_math.mean(eigenvalues)
             if avg_eigenvalue > 1.5:
                 eigen_desc = "AMPLIFYING"
             elif avg_eigenvalue > 0.8:
@@ -555,11 +556,11 @@ class RecursiveGlyphMapper:
         distance_factor = 1.0 / (1.0 + distance)
 
         # Eigenvalue compatibility
-        eigenvalue_diff = abs(source_glyph.eigenvalue - target_glyph.eigenvalue)
+        eigenvalue_diff = unified_math.abs(source_glyph.eigenvalue - target_glyph.eigenvalue)
         eigenvalue_factor = 1.0 / (1.0 + eigenvalue_diff)
 
         # Symbolic value compatibility
-        symbolic_diff = abs(source_glyph.symbolic_value - target_glyph.symbolic_value)
+        symbolic_diff = unified_math.abs(source_glyph.symbolic_value - target_glyph.symbolic_value)
         symbolic_factor = 1.0 / (1.0 + symbolic_diff)
 
         # Flow parameters influence
@@ -570,21 +571,21 @@ class RecursiveGlyphMapper:
             distance_factor * eigenvalue_factor * symbolic_factor * parameter_factor
         )
 
-        return min(1.0, flow_strength)
+        return unified_math.min(1.0, flow_strength)
 
     def _calculate_symbolic_transformation(
         self, source_value: complex, target_value: complex
     ) -> complex:
         """Calculate symbolic transformation between glyph values."""
-        if abs(source_value) < 1e-10:
+        if unified_math.abs(source_value) < 1e-10:
             return target_value
 
         # Complex division for transformation
         transformation = target_value / source_value
 
         # Normalize to unit circle if magnitude is too large
-        if abs(transformation) > 10.0:
-            transformation = transformation / abs(transformation)
+        if unified_math.abs(transformation) > 10.0:
+            transformation = transformation / unified_math.abs(transformation)
 
         return transformation
 
@@ -598,9 +599,9 @@ class RecursiveGlyphMapper:
         )
 
         # Transformation complexity
-        transformation_magnitude = abs(symbolic_transformation)
-        transformation_phase = abs(np.angle(symbolic_transformation))
-        transformation_score = min(1.0, transformation_magnitude) * (
+        transformation_magnitude = unified_math.abs(symbolic_transformation)
+        transformation_phase = unified_math.abs(np.angle(symbolic_transformation))
+        transformation_score = unified_math.min(1.0, transformation_magnitude) * (
             1.0 - transformation_phase / math.pi
         )
 
@@ -612,7 +613,7 @@ class RecursiveGlyphMapper:
         # Combined AI interpretation score
         ai_score = (type_compatibility + transformation_score + weight_score) / 3.0
 
-        return min(1.0, ai_score)
+        return unified_math.min(1.0, ai_score)
 
     def _calculate_recursive_depth(
         self, source_glyph: Glyph, target_glyph: Glyph
@@ -622,9 +623,9 @@ class RecursiveGlyphMapper:
         source_connections = len(source_glyph.connected_glyphs)
         target_connections = len(target_glyph.connected_glyphs)
 
-        depth = max(1, (source_connections + target_connections) // 4)
+        depth = unified_math.max(1, (source_connections + target_connections) // 4)
 
-        return min(10, depth)  # Cap at 10
+        return unified_math.min(10, depth)  # Cap at 10
 
     def _analyze_symbolic_layer(self, pattern_glyphs: List[Glyph]) -> Dict[str, Any]:
         """Analyze symbolic layer of pattern glyphs."""
@@ -633,17 +634,17 @@ class RecursiveGlyphMapper:
 
         # Calculate symbolic statistics
         symbolic_values = [glyph.symbolic_value for glyph in pattern_glyphs]
-        magnitudes = [abs(val) for val in symbolic_values]
+        magnitudes = [unified_math.abs(val) for val in symbolic_values]
         phases = [np.angle(val) for val in symbolic_values]
 
         analysis = {
-            "mean_magnitude": np.mean(magnitudes),
-            "std_magnitude": np.std(magnitudes),
-            "mean_phase": np.mean(phases),
-            "std_phase": np.std(phases),
+            "mean_magnitude": unified_math.unified_math.mean(magnitudes),
+            "std_magnitude": unified_math.unified_math.std(magnitudes),
+            "mean_phase": unified_math.unified_math.mean(phases),
+            "std_phase": unified_math.unified_math.std(phases),
             "dominant_quadrant": self._find_dominant_quadrant(symbolic_values),
-            "complexity_score": np.std(magnitudes) + np.std(phases),
-            "confidence": min(1.0, len(pattern_glyphs) / 10.0),
+            "complexity_score": unified_math.unified_math.std(magnitudes) + unified_math.unified_math.std(phases),
+            "confidence": unified_math.min(1.0, len(pattern_glyphs) / 10.0),
         }
 
         return analysis
@@ -658,15 +659,15 @@ class RecursiveGlyphMapper:
             return {"confidence": 0.0, "analysis": "NO_EIGENVALUES"}
 
         # Simple clustering analysis
-        eigenvalue_range = max(eigenvalues) - min(eigenvalues)
-        eigenvalue_variance = np.var(eigenvalues)
+        eigenvalue_range = unified_math.max(eigenvalues) - unified_math.min(eigenvalues)
+        eigenvalue_variance = unified_math.unified_math.var(eigenvalues)
 
         analysis = {
             "eigenvalue_range": eigenvalue_range,
             "eigenvalue_variance": eigenvalue_variance,
-            "mean_eigenvalue": np.mean(eigenvalues),
+            "mean_eigenvalue": unified_math.unified_math.mean(eigenvalues),
             "clustering_score": 1.0 / (1.0 + eigenvalue_variance),
-            "confidence": min(1.0, len(eigenvalues) / 20.0),
+            "confidence": unified_math.min(1.0, len(eigenvalues) / 20.0),
         }
 
         return analysis
@@ -681,12 +682,12 @@ class RecursiveGlyphMapper:
             return {"confidence": 0.0, "analysis": "NO_RESONANCE"}
 
         analysis = {
-            "mean_resonance": np.mean(resonance_coeffs),
-            "resonance_variance": np.var(resonance_coeffs),
-            "resonance_range": max(resonance_coeffs) - min(resonance_coeffs),
-            "pattern_strength": np.mean(resonance_coeffs)
-            / (1.0 + np.var(resonance_coeffs)),
-            "confidence": min(1.0, len(resonance_coeffs) / 15.0),
+            "mean_resonance": unified_math.unified_math.mean(resonance_coeffs),
+            "resonance_variance": unified_math.unified_math.var(resonance_coeffs),
+            "resonance_range": unified_math.max(resonance_coeffs) - unified_math.min(resonance_coeffs),
+            "pattern_strength": unified_math.unified_math.mean(resonance_coeffs)
+            / (1.0 + unified_math.unified_math.var(resonance_coeffs)),
+            "confidence": unified_math.min(1.0, len(resonance_coeffs) / 15.0),
         }
 
         return analysis
@@ -706,7 +707,7 @@ class RecursiveGlyphMapper:
             "highly_connected_glyphs": sum(
                 1 for g in pattern_glyphs if len(g.connected_glyphs) > 5
             ),
-            "confidence": min(1.0, total_connections / (len(pattern_glyphs) * 4)),
+            "confidence": unified_math.min(1.0, total_connections / (len(pattern_glyphs) * 4)),
         }
 
         return analysis
@@ -720,12 +721,12 @@ class RecursiveGlyphMapper:
 
         analysis = {
             "strategy_diversity": len(set(strategy_types)),
-            "dominant_strategy": max(set(strategy_types), key=strategy_types.count),
-            "mean_strategy_weight": np.mean(strategy_weights),
-            "strategy_weight_variance": np.var(strategy_weights),
+            "dominant_strategy": unified_math.max(set(strategy_types), key=strategy_types.count),
+            "mean_strategy_weight": unified_math.unified_math.mean(strategy_weights),
+            "strategy_weight_variance": unified_math.unified_math.var(strategy_weights),
             "interpretation_depth": interpretation_depth,
             "ai_readiness_score": self._calculate_ai_readiness_score(pattern_glyphs),
-            "confidence": min(1.0, len(pattern_glyphs) / 25.0),
+            "confidence": unified_math.min(1.0, len(pattern_glyphs) / 25.0),
         }
 
         return analysis
@@ -761,7 +762,7 @@ class RecursiveGlyphMapper:
             else:
                 quadrant_counts["Q4"] += 1
 
-        return max(quadrant_counts, key=quadrant_counts.get)
+        return unified_math.max(quadrant_counts, key=quadrant_counts.get)
 
     def _calculate_ai_readiness_score(self, pattern_glyphs: List[Glyph]) -> float:
         """Calculate AI readiness score for pattern glyphs."""
@@ -769,7 +770,7 @@ class RecursiveGlyphMapper:
             return 0.0
 
         # Factors contributing to AI readiness
-        complexity_factor = min(1.0, len(pattern_glyphs) / 20.0)
+        complexity_factor = unified_math.min(1.0, len(pattern_glyphs) / 20.0)
         diversity_factor = len({g.glyph_type for g in pattern_glyphs}) / len(
             GlyphType
         )
@@ -813,7 +814,7 @@ class RecursiveGlyphMapper:
         random_glyph.eigenvalue += adjustment
 
         # Keep eigenvalue in reasonable bounds
-        random_glyph.eigenvalue = max(0.1, min(2.0, random_glyph.eigenvalue))
+        random_glyph.eigenvalue = unified_math.max(0.1, unified_math.min(2.0, random_glyph.eigenvalue))
 
     def _create_new_connection(self) -> bool:
         """Create a new connection between glyphs."""
@@ -827,8 +828,8 @@ class RecursiveGlyphMapper:
 
         # Add mutual connection if not already connected
         if glyph2.glyph_id not in glyph1.connected_glyphs:
-            glyph1.connected_glyphs.add(glyph2.glyph_id)
-            glyph2.connected_glyphs.add(glyph1.glyph_id)
+            glyph1.connected_glyphs.unified_math.add(glyph2.glyph_id)
+            glyph2.connected_glyphs.unified_math.add(glyph1.glyph_id)
             return True
 
         return False
@@ -848,7 +849,7 @@ class RecursiveGlyphMapper:
                 neighbor_resonances.append(neighbor.resonance_coefficient)
 
         if neighbor_resonances:
-            optimal_resonance = np.mean(neighbor_resonances)
+            optimal_resonance = unified_math.unified_math.mean(neighbor_resonances)
 
             # Move towards optimal resonance
             adjustment = (optimal_resonance - random_glyph.resonance_coefficient) * 0.1
@@ -878,10 +879,10 @@ class RecursiveGlyphMapper:
         random_glyph.strategy_weight *= enhancement_factor
 
         # Keep values in reasonable bounds
-        if abs(random_glyph.symbolic_value) > 10.0:
-            random_glyph.symbolic_value /= abs(random_glyph.symbolic_value)
+        if unified_math.abs(random_glyph.symbolic_value) > 10.0:
+            random_glyph.symbolic_value /= unified_math.abs(random_glyph.symbolic_value)
 
-        random_glyph.strategy_weight = min(5.0, random_glyph.strategy_weight)
+        random_glyph.strategy_weight = unified_math.min(5.0, random_glyph.strategy_weight)
 
 
 # Convenience functions

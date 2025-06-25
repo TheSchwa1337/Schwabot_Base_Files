@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 GPU Flash Engine - Quantum-Coherent Flash Orchestrator
@@ -20,8 +22,8 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 
 logger = logging.getLogger(__name__)
@@ -238,13 +240,13 @@ class GPUFlasherEngine:
             base_energy = self.binding_energy_default
             
             # Price factor
-            price_factor = min(price / 50000.0, 1.0)  # Normalize price
+            price_factor = unified_math.min(price / 50000.0, 1.0)  # Normalize price
             
             # Volume factor
-            volume_factor = min(volume / 1000.0, 1.0)  # Normalize volume
+            volume_factor = unified_math.min(volume / 1000.0, 1.0)  # Normalize volume
             
             # Volatility factor (inverse relationship)
-            volatility_factor = 1.0 - min(volatility, 1.0)
+            volatility_factor = 1.0 - unified_math.min(volatility, 1.0)
             
             # Context multiplier
             context_multiplier = self.context_multipliers.get(context, 1.0)
@@ -252,7 +254,7 @@ class GPUFlasherEngine:
             # Calculate binding energy
             binding_energy = base_energy * (1 + price_factor + volume_factor + volatility_factor) * context_multiplier
             
-            return max(0.0, binding_energy)
+            return unified_math.max(0.0, binding_energy)
             
         except Exception as e:
             logger.error(f"Binding energy calculation error: {e}")
@@ -283,10 +285,10 @@ class GPUFlasherEngine:
         """Calculate entropy value based on market conditions."""
         try:
             # Price entropy
-            price_entropy = abs(price - 45000.0) / 45000.0  # Distance from reference price
+            price_entropy = unified_math.abs(price - 45000.0) / 45000.0  # Distance from reference price
             
             # Volume entropy
-            volume_entropy = abs(volume - 1000.0) / 1000.0  # Distance from reference volume
+            volume_entropy = unified_math.abs(volume - 1000.0) / 1000.0  # Distance from reference volume
             
             # Volatility entropy
             volatility_entropy = volatility
@@ -294,7 +296,7 @@ class GPUFlasherEngine:
             # Combine entropy measures
             total_entropy = (price_entropy * 0.4 + volume_entropy * 0.3 + volatility_entropy * 0.3)
             
-            return max(0.0, min(1.0, total_entropy))
+            return unified_math.max(0.0, unified_math.min(1.0, total_entropy))
             
         except Exception as e:
             logger.error(f"Entropy value calculation error: {e}")
@@ -304,10 +306,10 @@ class GPUFlasherEngine:
         """Calculate coherence score."""
         try:
             # Binding energy coherence
-            energy_coherence = min(binding_energy / 10.0, 1.0)
+            energy_coherence = unified_math.min(binding_energy / 10.0, 1.0)
             
             # Phase coherence (based on phase stability)
-            phase_coherence = 1.0 - abs(math.sin(phase_angle)) * 0.5
+            phase_coherence = 1.0 - unified_math.abs(unified_math.unified_math.sin(phase_angle)) * 0.5
             
             # Entropy coherence (inverse relationship)
             entropy_coherence = 1.0 - entropy_value
@@ -315,7 +317,7 @@ class GPUFlasherEngine:
             # Combine coherence measures
             coherence_score = (energy_coherence * 0.4 + phase_coherence * 0.3 + entropy_coherence * 0.3)
             
-            return max(0.0, min(1.0, coherence_score))
+            return unified_math.max(0.0, unified_math.min(1.0, coherence_score))
             
         except Exception as e:
             logger.error(f"Coherence score calculation error: {e}")
@@ -374,13 +376,13 @@ class GPUFlasherEngine:
                 return None
             
             # Calculate phase variance
-            phase_variance = np.var(self.phase_memory[-10:])
+            phase_variance = unified_math.unified_math.var(self.phase_memory[-10:])
             
             # Calculate coherence level
-            coherence_level = np.mean(self.coherence_history[-10:]) if self.coherence_history else 0.0
+            coherence_level = unified_math.unified_math.mean(self.coherence_history[-10:]) if self.coherence_history else 0.0
             
             # Calculate resonance strength
-            resonance_strength = 1.0 - min(phase_variance, 1.0)
+            resonance_strength = 1.0 - unified_math.min(phase_variance, 1.0)
             
             # Check if resonance conditions are met
             if (phase_variance < self.phase_resonance["variance_threshold"] and 
@@ -419,8 +421,8 @@ class GPUFlasherEngine:
             
             # Calculate entropy statistics
             recent_entropy = self.entropy_cascade_memory[-10:]
-            entropy_mean = np.mean(recent_entropy)
-            entropy_std = np.std(recent_entropy)
+            entropy_mean = unified_math.unified_math.mean(recent_entropy)
+            entropy_std = unified_math.unified_math.std(recent_entropy)
             
             # Calculate z-score
             if entropy_std > 0:
@@ -437,7 +439,7 @@ class GPUFlasherEngine:
                 cascade_depth = 1  # Stable
             
             # Calculate stability score
-            stability_score = 1.0 - min(abs(z_score) / 3.0, 1.0)
+            stability_score = 1.0 - unified_math.min(unified_math.abs(z_score) / 3.0, 1.0)
             
             cascade_id = f"cascade_{int(time.time())}"
             
@@ -513,24 +515,24 @@ def main() -> None:
     }
     
     result = engine.process_flash(market_data, "normal")
-    print(f"Flash processing result: {result.success}")
-    print(f"Binding energy: {result.binding_energy:.3f}")
-    print(f"Coherence score: {result.coherence_score:.3f}")
-    print(f"Risk level: {result.risk_level}")
+    safe_print(f"Flash processing result: {result.success}")
+    safe_print(f"Binding energy: {result.binding_energy:.3f}")
+    safe_print(f"Coherence score: {result.coherence_score:.3f}")
+    safe_print(f"Risk level: {result.risk_level}")
     
     # Test phase resonance analysis
     resonance = engine.analyze_phase_resonance()
     if resonance:
-        print(f"Phase resonance detected: {resonance.resonance_strength:.3f}")
+        safe_print(f"Phase resonance detected: {resonance.resonance_strength:.3f}")
     
     # Test entropy cascade analysis
     cascade = engine.analyze_entropy_cascade()
     if cascade:
-        print(f"Entropy cascade: depth {cascade.cascade_depth}, stability {cascade.stability_score:.3f}")
+        safe_print(f"Entropy cascade: depth {cascade.cascade_depth}, stability {cascade.stability_score:.3f}")
     
     # Get statistics
     stats = engine.get_flash_statistics()
-    print(f"Flash statistics: {stats}")
+    safe_print(f"Flash statistics: {stats}")
 
 
 if __name__ == "__main__":

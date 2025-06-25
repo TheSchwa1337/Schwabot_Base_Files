@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 BTC Processor Functionality Tests
@@ -17,7 +19,7 @@ Test Coverage:
 """
 
 import unittest
-import numpy as np
+from core.unified_math_system import unified_math
 import time
 import json
 import os
@@ -37,7 +39,7 @@ try:
     from schwabot.mathlib.sfsss_tensor import SFSSTensor
     from schwabot.mathlib.ufs_tensor import UFSTensor
 except ImportError as e:
-    print(f"Warning: Could not import required modules: {e}")
+    safe_print(f"Warning: Could not import required modules: {e}")
     # Create mock classes for testing
     class MockProcessor:
         def __init__(self):
@@ -328,7 +330,7 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
 def run_performance_benchmark():
     """Run comprehensive performance benchmark."""
-    print("🚀 Running BTC Processor Performance Benchmark...")
+    safe_print("🚀 Running BTC Processor Performance Benchmark...")
     
     # Create test instance
     processor = MultiBitBTCProcessor()
@@ -338,7 +340,7 @@ def run_performance_benchmark():
     results = {}
     
     for size in test_sizes:
-        print(f"Testing with {size} data points...")
+        safe_print(f"Testing with {size} data points...")
         
         # Generate test data
         test_data = [np.random.normal(50000, 1000) for _ in range(size)]
@@ -351,7 +353,7 @@ def run_performance_benchmark():
             result = processor.process_large_dataset(test_data)
             success = True
         except Exception as e:
-            print(f"Error processing {size} data points: {e}")
+            safe_print(f"Error processing {size} data points: {e}")
             success = False
         
         end_time = time.time()
@@ -368,32 +370,32 @@ def run_performance_benchmark():
         }
     
     # Print results
-    print("\n📊 Performance Benchmark Results:")
-    print("=" * 60)
-    print(f"{'Size':<10} {'Time (s)':<12} {'Memory (MB)':<15} {'Throughput':<15}")
-    print("-" * 60)
+    safe_print("\n📊 Performance Benchmark Results:")
+    safe_print("=" * 60)
+    safe_print(f"{'Size':<10} {'Time (s)':<12} {'Memory (MB)':<15} {'Throughput':<15}")
+    safe_print("-" * 60)
     
     for size, result in results.items():
-        print(f"{size:<10} {result['processing_time']:<12.3f} "
+        safe_print(f"{size:<10} {result['processing_time']:<12.3f} "
               f"{result['memory_usage']:<15.1f} {result['throughput']:<15.0f}")
     
     return results
 
 def main():
     """Main test execution function."""
-    print("🧪 BTC Processor Functionality Tests")
-    print("=" * 50)
+    safe_print("🧪 BTC Processor Functionality Tests")
+    safe_print("=" * 50)
     
     # Run unit tests
-    print("\n1. Running Unit Tests...")
+    safe_print("\n1. Running Unit Tests...")
     unittest.main(argv=[''], exit=False, verbosity=2)
     
     # Run performance benchmark
-    print("\n2. Running Performance Benchmark...")
+    safe_print("\n2. Running Performance Benchmark...")
     benchmark_results = run_performance_benchmark()
     
     # Generate test report
-    print("\n3. Generating Test Report...")
+    safe_print("\n3. Generating Test Report...")
     report = {
         "test_timestamp": datetime.now().isoformat(),
         "benchmark_results": benchmark_results,
@@ -412,11 +414,11 @@ def main():
     try:
         with open(report_path, 'w') as f:
             json.dump(report, f, indent=2)
-        print(f"✅ Test report saved to {report_path}")
+        safe_print(f"✅ Test report saved to {report_path}")
     except Exception as e:
-        print(f"⚠️  Could not save test report: {e}")
+        safe_print(f"⚠️  Could not save test report: {e}")
     
-    print("\n🎉 BTC Processor functionality tests completed!")
+    safe_print("\n🎉 BTC Processor functionality tests completed!")
 
 if __name__ == "__main__":
     main() 

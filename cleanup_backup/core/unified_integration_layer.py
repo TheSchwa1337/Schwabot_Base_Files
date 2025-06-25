@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Integration Layer for Schwabot Trading System.
 
@@ -26,7 +28,7 @@ import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import our core components
 from .best_practices_enforcer import BestPracticesEnforcer, EnforcementResult
@@ -354,7 +356,7 @@ class UnifiedTradingSystem:
             return False
 
         # Check strategy weight concentration
-        max_strategy_weight = max(decision.strategy_weights.values())
+        max_strategy_weight = unified_math.max(decision.strategy_weights.values())
         if max_strategy_weight > 0.8:  # No single strategy > 80%
             logger.warning(
                 f"⚠️ Strategy concentration too high: {max_strategy_weight:.1%}"
@@ -457,7 +459,7 @@ class UnifiedTradingSystem:
             "total_trades": self.unified_state.total_trades,
             "success_rate": (
                 self.unified_state.successful_trades
-                / max(self.unified_state.total_trades, 1)
+                / unified_math.max(self.unified_state.total_trades, 1)
             ),
             "total_pnl": self.unified_state.total_pnl,
             "max_drawdown": self.unified_state.max_drawdown,
@@ -655,8 +657,8 @@ def create_unified_trading_system() -> UnifiedTradingSystem:
 def demonstrate_complete_system() -> None:
     """Demonstrate the complete unified system in action."""
 
-    print("🚀 Schwabot Unified Trading System Demonstration")
-    print("=" * 60)
+    safe_print("🚀 Schwabot Unified Trading System Demonstration")
+    safe_print("=" * 60)
 
     # Create system
     system = create_unified_trading_system()
@@ -719,43 +721,43 @@ def demonstrate_complete_system() -> None:
 
     # Process each scenario
     for i, scenario in enumerate(scenarios, 1):
-        print(f"\n📊 Scenario {i}: {scenario['name']}")
-        print("-" * 40)
+        safe_print(f"\n📊 Scenario {i}: {scenario['name']}")
+        safe_print("-" * 40)
 
         # Process the market tick
         result = system.process_market_tick(scenario["data"])
 
         # Display results
-        print(f"✅ Safe to Trade: {result['safe_to_trade']}")
-        print(f"🎯 System Health: {result['system_health']}")
-        print(f"🔍 Anomalies Detected: {len(result['anomalies_detected'])}")
+        safe_print(f"✅ Safe to Trade: {result['safe_to_trade']}")
+        safe_print(f"🎯 System Health: {result['system_health']}")
+        safe_print(f"🔍 Anomalies Detected: {len(result['anomalies_detected'])}")
 
         if result["anomalies_detected"]:
             for anomaly in result["anomalies_detected"][:3]:  # Show first 3
-                print(f"   - {anomaly}")
+                safe_print(f"   - {anomaly}")
 
-        print(f"🛠️ Actions Taken: {len(result['actions_taken'])}")
+        safe_print(f"🛠️ Actions Taken: {len(result['actions_taken'])}")
         if result["actions_taken"]:
             for action in result["actions_taken"][:3]:  # Show first 3
-                print(f"   - {action}")
+                safe_print(f"   - {action}")
 
         if result["decision"] and result["safe_to_trade"]:
             decision = result["decision"]
-            print(f"🎯 Decision Summary:")
-            print(f"   - Execution Confidence: {decision['execution_confidence']:.3f}")
-            print(f"   - Entry Score: {decision['entry_score']:.3f}")
-            print(f"   - Phase Mode: {decision['phase_mode']}-bit")
-            print(f"   - Position Size: {decision['position_size']:.3f}")
-            print(f"   - Expected Return: {decision['expected_return']:.3f}")
+            safe_print(f"🎯 Decision Summary:")
+            safe_print(f"   - Execution Confidence: {decision['execution_confidence']:.3f}")
+            safe_print(f"   - Entry Score: {decision['entry_score']:.3f}")
+            safe_print(f"   - Phase Mode: {decision['phase_mode']}-bit")
+            safe_print(f"   - Position Size: {decision['position_size']:.3f}")
+            safe_print(f"   - Expected Return: {decision['expected_return']:.3f}")
 
             # Show asset allocation
             allocation = decision["asset_allocation"]
-            print(
+            safe_print(
                 f"   - Asset Allocation: USDC:{allocation['USDC']:.1%} "
                 f"XRP:{allocation['XRP']:.1%} BTC:{allocation['BTC']:.1%} ETH:{allocation['ETH']:.1%}"
             )
 
-        print(f"⚡ Performance: {result['performance_metrics']}")
+        safe_print(f"⚡ Performance: {result['performance_metrics']}")
 
 
 if __name__ == "__main__":

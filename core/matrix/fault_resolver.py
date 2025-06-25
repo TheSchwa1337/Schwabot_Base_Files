@@ -1,7 +1,8 @@
 """Matrix fault resolver for rank consistency checking."""
 
 from __future__ import annotations
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 
 def check_rank(matrix: np.ndarray, eps: int = 0) -> None:
@@ -20,6 +21,6 @@ def check_rank(matrix: np.ndarray, eps: int = 0) -> None:
     r1 = np.linalg.matrix_rank(matrix)
     r2 = np.linalg.matrix_rank(matrix @ matrix.T)
 
-    drift = abs(r1 - r2)
+    drift = unified_math.abs(r1 - r2)
     if drift > eps:
         raise ValueError(f"Rank drift {r1}->{r2} = {drift} > {eps}")

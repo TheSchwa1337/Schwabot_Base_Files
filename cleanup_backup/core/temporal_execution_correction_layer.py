@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Temporal Execution Correction Layer - Schwabot UROS v1.0
@@ -11,7 +13,7 @@ Features:
 - Integration with fault_bus.py and backtest_runner.py
 """
 
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -194,7 +196,7 @@ class TemporalExecutionCorrectionLayer:
         
         # Kalman gain
         S = H @ predicted_covariance @ H.T + self.measurement_noise
-        K = predicted_covariance @ H.T @ np.linalg.inv(S)
+        K = predicted_covariance @ H.T @ unified_math.unified_math.inverse(S)
         
         # Update step
         innovation = measurement - predicted_position
@@ -234,7 +236,7 @@ class TemporalExecutionCorrectionLayer:
         # Calculate confidence based on recent measurements
         recent_delays = [event.execution_delay for event in self.execution_events[-10:]]
         if len(recent_delays) > 1:
-            confidence = 1.0 / (1.0 + np.std(recent_delays))
+            confidence = 1.0 / (1.0 + unified_math.unified_math.std(recent_delays))
         else:
             confidence = 0.5
         
@@ -260,11 +262,11 @@ class TemporalExecutionCorrectionLayer:
         
         # Calculate average drift
         recent_drifts = [m.drift_value for m in self.drift_measurements[-50:]]
-        self.average_drift = float(np.mean(recent_drifts)) if recent_drifts else 0.0
+        self.average_drift = float(unified_math.unified_math.mean(recent_drifts)) if recent_drifts else 0.0
         
         # Calculate correction efficiency
-        total_corrections = sum(abs(event.correction_applied) for event in self.execution_events[-100:])
-        total_delays = sum(abs(event.execution_delay) for event in self.execution_events[-100:])
+        total_corrections = sum(unified_math.abs(event.correction_applied) for event in self.execution_events[-100:])
+        total_delays = sum(unified_math.abs(event.execution_delay) for event in self.execution_events[-100:])
         
         if total_delays > 0:
             self.correction_efficiency = float(total_corrections / total_delays)
@@ -274,8 +276,8 @@ class TemporalExecutionCorrectionLayer:
         # Calculate synchronization accuracy
         recent_events = self.execution_events[-50:]
         if recent_events:
-            delays = [abs(event.execution_delay) for event in recent_events]
-            self.synchronization_accuracy = 1.0 - min(1.0, np.mean(delays) / 0.01)  # Normalize to 10ms
+            delays = [unified_math.abs(event.execution_delay) for event in recent_events]
+            self.synchronization_accuracy = 1.0 - unified_math.min(1.0, unified_math.unified_math.mean(delays) / 0.01)  # Normalize to 10ms
     
     def estimate_drift_deviation(self, window_size: int = 50) -> Dict[str, float]:
         """Estimate drift deviation using recent measurements."""
@@ -299,7 +301,7 @@ class TemporalExecutionCorrectionLayer:
         weights = weights / np.sum(weights) if np.sum(weights) > 0 else np.ones_like(weights) / len(weights)
         
         drift_mean = float(np.average(drift_values, weights=weights))
-        drift_std = float(np.sqrt(np.average((np.array(drift_values) - drift_mean)**2, weights=weights)))
+        drift_std = float(unified_math.unified_math.sqrt(np.average((np.array(drift_values) - drift_mean)**2, weights=weights)))
         
         # Calculate drift trend (linear regression)
         if len(drift_values) > 1:
@@ -310,7 +312,7 @@ class TemporalExecutionCorrectionLayer:
             drift_trend = 0.0
         
         # Overall confidence
-        overall_confidence = float(np.mean(confidences))
+        overall_confidence = float(unified_math.unified_math.mean(confidences))
         
         return {
             "drift_mean": drift_mean,
@@ -344,12 +346,12 @@ class TemporalExecutionCorrectionLayer:
         optimal_window = float(delay_percentiles[1])  # Median delay
         
         # Calculate latency compensation
-        mean_delay = float(np.mean(delays))
-        latency_compensation = max(0.0, mean_delay - target_latency)
+        mean_delay = float(unified_math.unified_math.mean(delays))
+        latency_compensation = unified_math.max(0.0, mean_delay - target_latency)
         
         # Calculate confidence based on delay consistency
-        delay_std = float(np.std(delays))
-        confidence = max(0.0, 1.0 - delay_std / target_latency)
+        delay_std = float(unified_math.unified_math.std(delays))
+        confidence = unified_math.max(0.0, 1.0 - delay_std / target_latency)
         
         # Update internal parameters
         self.optimal_execution_window = optimal_window
@@ -409,13 +411,13 @@ class TemporalExecutionCorrectionLayer:
         
         for i in range(10, len(delays)):  # Start from 10th event
             recent_delays = delays[i-10:i]
-            mean_delay = np.mean(recent_delays)
-            std_delay = np.std(recent_delays)
+            mean_delay = unified_math.unified_math.mean(recent_delays)
+            std_delay = unified_math.unified_math.std(recent_delays)
             
             current_delay = delays[i]
-            z_score = abs(current_delay - mean_delay) / (std_delay + 1e-10)
+            z_score = unified_math.abs(current_delay - mean_delay) / (std_delay + 1e-10)
             
-            if z_score > 2.0 and abs(current_delay) > threshold:
+            if z_score > 2.0 and unified_math.abs(current_delay) > threshold:
                 event = self.execution_events[i]
                 anomalies.append({
                     "event_id": event.event_id,
@@ -440,8 +442,8 @@ class TemporalExecutionCorrectionLayer:
         
         # Calculate average metrics
         if total_events > 0:
-            avg_delay = float(np.mean([event.execution_delay for event in self.execution_events]))
-            avg_correction = float(np.mean([abs(event.correction_applied) for event in self.execution_events]))
+            avg_delay = float(unified_math.mean([event.execution_delay for event in self.execution_events]))
+            avg_correction = float(unified_math.mean([unified_math.abs(event.correction_applied) for event in self.execution_events]))
         else:
             avg_delay = 0.0
             avg_correction = 0.0
@@ -487,7 +489,7 @@ class TemporalExecutionCorrectionLayer:
         
         # Drift anomaly signal
         drift_stats = self.estimate_drift_deviation()
-        if abs(drift_stats["drift_trend"]) > 0.001:  # Significant drift trend
+        if unified_math.abs(drift_stats["drift_trend"]) > 0.001:  # Significant drift trend
             signals.append({
                 "type": "drift_trend_detected",
                 "drift_trend": drift_stats["drift_trend"],
@@ -561,23 +563,23 @@ def main() -> None:
     
     # Get statistics
     stats = correction_layer.get_correction_statistics()
-    print(f"Correction statistics: {stats}")
+    safe_print(f"Correction statistics: {stats}")
     
     # Estimate drift deviation
     drift_stats = correction_layer.estimate_drift_deviation()
-    print(f"Drift deviation: {drift_stats}")
+    safe_print(f"Drift deviation: {drift_stats}")
     
     # Optimize timing
     timing_opt = correction_layer.optimize_execution_timing()
-    print(f"Timing optimization: {timing_opt}")
+    safe_print(f"Timing optimization: {timing_opt}")
     
     # Detect anomalies
     anomalies = correction_layer.detect_timing_anomalies()
-    print(f"Detected {len(anomalies)} timing anomalies")
+    safe_print(f"Detected {len(anomalies)} timing anomalies")
     
     # Get trading signals
     signals = correction_layer.get_trading_signals()
-    print(f"Generated {len(signals)} trading signals")
+    safe_print(f"Generated {len(signals)} trading signals")
 
 
 if __name__ == "__main__":

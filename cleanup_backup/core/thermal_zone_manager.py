@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Thermal Zone Manager - Schwabot Mathematical Framework.
 
@@ -49,7 +53,6 @@ Key Features:
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
@@ -58,7 +61,7 @@ import logging
 import time
 from typing import Any, Dict, List, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -165,7 +168,7 @@ class ThermalThresholdController:
         )
 
         # Apply bounds
-        return max(self.min_threshold, min(self.max_threshold, new_threshold))
+        return unified_math.max(self.min_threshold, unified_math.min(self.max_threshold, new_threshold))
 
     def detect_thermal_anomalies(
         self, zone: ThermalZone, temperature_history: List[Decimal]
@@ -182,7 +185,7 @@ class ThermalThresholdController:
             recent_temps[i + 1] - recent_temps[i] for i in range(len(recent_temps) - 1)
         ]
 
-        max_delta = max(abs(d) for d in temp_deltas)
+        max_delta = unified_math.max(unified_math.abs(d) for d in temp_deltas)
         if max_delta > zone.thermal_threshold * Decimal("0.5"):
             anomalies.append("rapid_temperature_change")
 
@@ -195,7 +198,7 @@ class ThermalThresholdController:
             if (temp_deltas[0] > 0 and temp_deltas[1] < 0) or (
                 temp_deltas[0] < 0 and temp_deltas[1] > 0
             ):
-                if abs(temp_deltas[0]) > zone.thermal_threshold * Decimal("0.3"):
+                if unified_math.abs(temp_deltas[0]) > zone.thermal_threshold * Decimal("0.3"):
                     anomalies.append("temperature_oscillation")
 
         return anomalies
@@ -229,7 +232,7 @@ class ThermalPerformanceAnalyzer:
 
         final_efficiency = adjusted_efficiency * stability_bonus
 
-        return min(1.0, max(0.0, final_efficiency))
+        return unified_math.min(1.0, unified_math.max(0.0, final_efficiency))
 
     def analyze_thermal_patterns(
         self, snapshots: List[ThermalSnapshot]
@@ -251,7 +254,7 @@ class ThermalPerformanceAnalyzer:
             ]
 
             avg_slope = sum(
-                td / max(td_time, 1e-6) for td, td_time in zip(temp_deltas, time_deltas)
+                td / unified_math.max(td_time, 1e-6) for td, td_time in zip(temp_deltas, time_deltas)
             ) / len(temp_deltas)
         else:
             avg_slope = 0.0
@@ -494,7 +497,7 @@ class ThermalZoneManager:
         # Rapid change alert
         zone_history = self.thermal_history[zone_id]
         if len(zone_history) >= 2:
-            recent_drift = abs(zone_history[-1].thermal_drift)
+            recent_drift = unified_math.abs(zone_history[-1].thermal_drift)
             if recent_drift > zone.thermal_threshold * Decimal("0.5"):
                 alert = self._create_alert(
                     zone_id,
@@ -662,7 +665,7 @@ def main() -> None:
     """Demo of thermal zone manager system."""
     try:
         manager = ThermalZoneManager()
-        print(f"✅ ThermalZoneManager v{manager.version} initialized")
+        safe_print(f"✅ ThermalZoneManager v{manager.version} initialized")
 
         # Create test thermal zones
         btc_zone = manager.create_thermal_zone("BTC_Trading", 1.0, 2.5, "trading")
@@ -671,31 +674,31 @@ def main() -> None:
             "Mathematical_Core", 0.5, 1.5, "computation"
         )
 
-        print(f"🌡️  Created thermal zones:")
-        print(f"   BTC Zone: {btc_zone}")
-        print(f"   ETH Zone: {eth_zone}")
-        print(f"   Math Zone: {math_zone}")
+        safe_print(f"🌡️  Created thermal zones:")
+        safe_print(f"   BTC Zone: {btc_zone}")
+        safe_print(f"   ETH Zone: {eth_zone}")
+        safe_print(f"   Math Zone: {math_zone}")
 
         # Simulate thermal updates
-        print(f"\n📊 Simulating thermal updates:")
+        safe_print(f"\n📊 Simulating thermal updates:")
 
         # Normal operation
         result1 = manager.update_zone_temperature(btc_zone, 1.2, 0.5, 0.3)
-        print(
+        safe_print(
             f"   BTC update 1: Temp {result1['new_temperature']:.2f}, "
             f"Efficiency {result1['efficiency']:.3f}"
         )
 
         # Rising temperature
         result2 = manager.update_zone_temperature(btc_zone, 2.8, 0.8, 0.6)
-        print(
+        safe_print(
             f"   BTC update 2: Temp {result2['new_temperature']:.2f}, "
             f"Alerts {result2['alerts_generated']}"
         )
 
         # ETH zone update
         result3 = manager.update_zone_temperature(eth_zone, 1.5, 0.4, 0.2)
-        print(
+        safe_print(
             f"   ETH update: Temp {result3['new_temperature']:.2f}, "
             f"Efficiency {result3['efficiency']:.3f}"
         )
@@ -704,24 +707,24 @@ def main() -> None:
         btc_status = manager.get_zone_status(btc_zone)
         if btc_status["status"] == "success":
             thermal_status = btc_status["thermal_status"]
-            print(f"\n🎯 BTC Zone Status:")
-            print(f"   Current temp: {thermal_status['current_temperature']:.3f}")
-            print(f"   Threshold: {thermal_status['thermal_threshold']:.3f}")
-            print(f"   Recent alerts: {len(btc_status['recent_alerts'])}")
+            safe_print(f"\n🎯 BTC Zone Status:")
+            safe_print(f"   Current temp: {thermal_status['current_temperature']:.3f}")
+            safe_print(f"   Threshold: {thermal_status['thermal_threshold']:.3f}")
+            safe_print(f"   Recent alerts: {len(btc_status['recent_alerts'])}")
 
         # System overview
         overview = manager.get_system_overview()
         system_status = overview["system_status"]
-        print(f"\n📈 System Overview:")
-        print(f"   Total zones: {system_status['total_zones']}")
-        print(f"   Hot zones: {system_status['hot_zones']}")
-        print(f"   System efficiency: {system_status['system_efficiency']:.3f}")
-        print(f"   Avg temperature: {system_status['average_temperature']:.3f}")
+        safe_print(f"\n📈 System Overview:")
+        safe_print(f"   Total zones: {system_status['total_zones']}")
+        safe_print(f"   Hot zones: {system_status['hot_zones']}")
+        safe_print(f"   System efficiency: {system_status['system_efficiency']:.3f}")
+        safe_print(f"   Avg temperature: {system_status['average_temperature']:.3f}")
 
-        print("🎉 Thermal zone manager demo completed!")
+        safe_print("🎉 Thermal zone manager demo completed!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

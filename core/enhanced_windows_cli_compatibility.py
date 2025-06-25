@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Enhanced Windows CLI Compatibility Handler.
 
@@ -195,7 +209,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         """Test if emoji are supported in current environment."""
         try:
             test_emoji = "🚀"
-            print(test_emoji, end="", flush=True)
+            safe_print(test_emoji, end="", flush=True)
             return True
         except Exception:
             return False
@@ -205,7 +219,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         """Test if Unicode is supported."""
         try:
             test_unicode = "αβγδε"
-            print(test_unicode, end="", flush=True)
+            safe_print(test_unicode, end="", flush=True)
             return True
         except Exception:
             return False
@@ -352,7 +366,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         except Exception as e:
             # Fallback to print if logging fails
             try:
-                print(f"[{level.upper()}] {message}")
+                safe_print(f"[{level.upper()}] {message}")
                 return True
             except Exception:
                 return False
@@ -426,7 +440,7 @@ class EnhancedWindowsCliCompatibilityHandler:
             if total == 0:
                 percentage = 0
             else:
-                percentage = min(100, int((current / total) * 100))
+                percentage = unified_math.min(100, int((current / total) * 100))
 
             bar_length = 20
             filled_length = int(bar_length * current // total)
@@ -558,7 +572,7 @@ def cli_safe(func: Callable) -> Callable:
 
         @cli_safe
         def my_function():
-            print("🚀 This will work everywhere!")
+            safe_print("🚀 This will work everywhere!")
     """
     return EnhancedWindowsCliCompatibilityHandler.create_safe_function_wrapper(func)
 
@@ -592,17 +606,17 @@ def get_cli_info() -> Dict[str, Any]:
 # Example usage and testing
 def main():
     """Test the enhanced Windows CLI compatibility handler."""
-    safe_print("🎯 Enhanced Windows CLI Compatibility Handler Test")
-    safe_print("=" * 60)
+    safe_safe_print("🎯 Enhanced Windows CLI Compatibility Handler Test")
+    safe_safe_print("=" * 60)
 
     # Test environment detection
     env_info = get_cli_info()
-    safe_print("📊 Environment Detection Results:")
+    safe_safe_print("📊 Environment Detection Results:")
     for key, value in env_info.items():
-        safe_print(f"   {key}: {value}")
+        safe_safe_print(f"   {key}: {value}")
 
     # Test emoji handling
-    safe_print("\n🔍 Testing Emoji Handling:")
+    safe_safe_print("\n🔍 Testing Emoji Handling:")
     test_messages = [
         "✅ Success message",
         "❌ Error message",
@@ -612,39 +626,39 @@ def main():
     ]
 
     for msg in test_messages:
-        safe_print(f"   {msg}")
+        safe_safe_print(f"   {msg}")
 
     # Test progress indicator
-    safe_print("\n🔄 Testing Progress Indicators:")
+    safe_safe_print("\n🔄 Testing Progress Indicators:")
     for i in range(0, 101, 25):
         progress = EnhancedWindowsCliCompatibilityHandler.safe_progress_indicator(
             i, 100, "Progress:", "complete"
         )
-        safe_print(f"   {progress}")
+        safe_safe_print(f"   {progress}")
 
     # Test validation reporter
-    safe_print("\n🧪 Testing Validation Reporter:")
+    safe_safe_print("\n🧪 Testing Validation Reporter:")
     reporter = get_safe_reporter()
-    safe_print(
+    safe_safe_print(
         reporter("Core Math Integration", True, "All tests passed", {"speed": 125.5})
     )
-    safe_print(reporter("Unicode Support", False, "Encoding issues detected"))
+    safe_safe_print(reporter("Unicode Support", False, "Encoding issues detected"))
 
     # Run compatibility test
-    safe_print("\n🎯 Running Compatibility Test:")
+    safe_safe_print("\n🎯 Running Compatibility Test:")
     compat_results = EnhancedWindowsCliCompatibilityHandler.test_cli_compatibility()
     for test, result in compat_results.items():
         if test != "environment":
             status = "✅ PASS" if result else "❌ FAIL"
-            safe_print(f"   {test}: {status}")
+            safe_safe_print(f"   {test}: {status}")
 
-    safe_print("\n🎉 CLI Compatibility Test Complete!")
+    safe_safe_print("\n🎉 CLI Compatibility Test Complete!")
     overall_status = (
         "✅ COMPATIBLE"
         if compat_results["overall_compatibility"]
         else "⚠️ PARTIAL COMPATIBILITY"
     )
-    safe_print(f"Overall Status: {overall_status}")
+    safe_safe_print(f"Overall Status: {overall_status}")
 
 
 if __name__ == "__main__":

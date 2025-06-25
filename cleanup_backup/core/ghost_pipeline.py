@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Ghost pipeline – stealth-mode validator & orchestrator.
 
@@ -21,7 +23,6 @@ surface is stable and future-proof: each component can be swapped for a more
 sophisticated version without changing the public signature.
 """
 
-from __future__ import annotations
 
 from typing import Final, Tuple
 

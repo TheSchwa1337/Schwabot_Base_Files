@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Optimization Engine - Performance Enhancements for Schwabot Components.
 
@@ -16,8 +17,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any, Callable, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 import zlib
 import pickle
@@ -153,7 +154,7 @@ class OptimizationEngine:
                 return signal
             
             # Gaussian smoothing kernel
-            kernel = np.exp(-0.5 * ((np.arange(window_size) - window_size // 2) / (window_size // 4)) ** 2)
+            kernel = unified_math.exp(-0.5 * ((np.arange(window_size) - window_size // 2) / (window_size // 4)) ** 2)
             kernel = kernel / np.sum(kernel)
             
             # Apply convolution with edge handling
@@ -208,7 +209,7 @@ class OptimizationEngine:
             fft_result = np.fft.fft(signal)
             
             # Extract dominant frequencies
-            magnitude_spectrum = np.abs(fft_result)
+            magnitude_spectrum = unified_math.unified_math.abs(fft_result)
             dominant_freq_idx = np.argmax(magnitude_spectrum[1:len(magnitude_spectrum)//2]) + 1
             dominant_freq = dominant_freq_idx / len(signal)
             
@@ -314,7 +315,7 @@ class OptimizationEngine:
                 self.response_times = self.response_times[-self.max_response_history:]
             
             # Update average
-            self.metrics.average_response_time = np.mean(self.response_times)
+            self.metrics.average_response_time = unified_math.unified_math.mean(self.response_times)
             
         except Exception as e:
             logger.error(f"Error tracking response time: {e}")

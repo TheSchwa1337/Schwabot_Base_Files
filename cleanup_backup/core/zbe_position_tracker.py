@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Zero-Based Evolution position tracker.
 
@@ -8,12 +11,11 @@ This module tracks position evolution using ZBE (Zero-Based Evolution)
 calculations for ghost protocol position management.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Callable, Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "ZBEPositionTracker",
@@ -126,7 +128,7 @@ class ZBEPositionTracker:
             # Extract current Zalgo values
             zalgo_current = np.array(
                 [
-                    series[min(step, len(series) - 1)]
+                    series[unified_math.min(step, len(series) - 1)]
                     for series in zalgo_time_series
                 ]
             )
@@ -135,7 +137,7 @@ class ZBEPositionTracker:
             if step > 0:
                 zalgo_prev = np.array(
                     [
-                        series[min(step - 1, len(series) - 1)]
+                        series[unified_math.min(step - 1, len(series) - 1)]
                         for series in zalgo_time_series
                     ]
                 )
@@ -183,7 +185,7 @@ def compute_zalgo_evolution(
         return dz_dt * weights
     else:
         # Handle length mismatch by using mean derivative
-        mean_derivative = np.mean(dz_dt)
+        mean_derivative = unified_math.unified_math.mean(dz_dt)
         return mean_derivative * weights
 
 

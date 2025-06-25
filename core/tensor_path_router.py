@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tensor Path Router - Schwabot UROS v1.0
@@ -28,7 +42,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import threading
 import queue
 
@@ -394,7 +408,7 @@ class TensorPathRouter:
             self.tensor_path_routes[route.route_id] = route
             
             # Update basket availability
-            self.basket_availability[mapping.basket_id] = max(0.0, 
+            self.basket_availability[mapping.basket_id] = unified_math.max(0.0, 
                 self.basket_availability[mapping.basket_id] - 0.1)
             
             # Success result
@@ -565,7 +579,7 @@ class TensorPathRouter:
                 "total_requests": len(self.routing_requests),
                 "successful_routes": len([r for r in self.routing_results if r.success]),
                 "failed_routes": len([r for r in self.routing_results if not r.success]),
-                "average_routing_time": np.mean([r.routing_time for r in self.routing_results]) if self.routing_results else 0.0,
+                "average_routing_time": unified_math.mean([r.routing_time for r in self.routing_results]) if self.routing_results else 0.0,
                 "basket_availability": self.basket_availability.copy(),
                 "asset_distribution": {},
                 "strategy_distribution": {}
@@ -658,7 +672,7 @@ def main():
         
         for prefix in test_prefixes:
             request_id = router.route_hash_prefix(prefix, bit_depth=8, priority=2.0)
-            print(f"Routing request: {request_id} for {prefix}")
+            safe_print(f"Routing request: {request_id} for {prefix}")
         
         # Wait for routing completion
         time.sleep(2)
@@ -667,14 +681,14 @@ def main():
         for prefix in test_prefixes:
             routes = router.get_routes_by_hash_prefix(prefix)
             for route in routes:
-                print(f"Route: {route.tensor_path} (score: {route.routing_score:.3f})")
+                safe_print(f"Route: {route.tensor_path} (score: {route.routing_score:.3f})")
         
         # Export data
         router.export_routing_data()
         
         # Print statistics
         stats = router.get_routing_statistics()
-        print(f"Routing statistics: {stats}")
+        safe_print(f"Routing statistics: {stats}")
         
     except Exception as e:
         logger.error(f"Error in main: {e}")

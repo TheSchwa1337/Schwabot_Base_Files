@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """Best Practices Enforcer - Centralized Code Quality Management.
 
@@ -120,7 +133,7 @@ class BestPracticesEnforcer:
                     replacement=(
                         r"from core.windows_cli_compatibility import "
                         r"safe_print\n"
-                        r'safe_print("\1")'
+                        r'safe_safe_print("\1")'
                     ),
                     severity="MEDIUM",
                     category="windows_cli",

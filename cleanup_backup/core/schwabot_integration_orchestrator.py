@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Schwabot Integration Orchestrator - Central System Coordinator.
 
@@ -37,7 +40,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from collections import defaultdict
 from collections import deque
@@ -620,7 +622,7 @@ class SchwabotIntegrationOrchestrator:
                     if component_info.status == ComponentStatus.RUNNING:
                         healthy_components += 1
 
-            health_ratio = healthy_components / max(total_components, 1)
+            health_ratio = healthy_components / unified_math.max(total_components, 1)
 
             if health_ratio < 0.8:
                 self.system_status = ComponentStatus.DEGRADED

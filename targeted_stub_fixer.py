@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Targeted Stub Fixer - Fix Malformed Stub Docstrings.
 
@@ -27,7 +28,7 @@ def fix_malformed_stub(file_path: str) -> bool:
                 '"""Stub main function."""."""',
                 '"""Stub main function."""\n    pass\n'
             )
-            print(f"✅ Fixed: {file_path}")
+            safe_print(f"✅ Fixed: {file_path}")
             return True
         
         # Fix other variations of malformed patterns
@@ -40,20 +41,20 @@ def fix_malformed_stub(file_path: str) -> bool:
         for pattern, replacement in patterns_to_fix:
             if re.search(pattern, content):
                 content = re.sub(pattern, replacement, content)
-                print(f"✅ Fixed pattern in: {file_path}")
+                safe_print(f"✅ Fixed pattern in: {file_path}")
                 return True
         
         return False
         
     except Exception as e:
-        print(f"❌ Error processing {file_path}: {e}")
+        safe_print(f"❌ Error processing {file_path}: {e}")
         return False
 
 
 def find_and_fix_stub_files():
     """Find and fix all files with malformed stub patterns."""
-    print("Targeted Stub Fixer")
-    print("=" * 50)
+    safe_print("Targeted Stub Fixer")
+    safe_print("=" * 50)
     
     # Files we know have the malformed pattern
     known_files = [
@@ -164,10 +165,10 @@ def find_and_fix_stub_files():
             if fix_malformed_stub(file_path):
                 fixed_count += 1
     
-    print(f"\nSummary:")
-    print(f"  Files processed: {processed_count}")
-    print(f"  Files fixed: {fixed_count}")
-    print("\nTargeted stub fixing completed!")
+    safe_print(f"\nSummary:")
+    safe_print(f"  Files processed: {processed_count}")
+    safe_print(f"  Files fixed: {fixed_count}")
+    safe_print("\nTargeted stub fixing completed!")
 
 
 if __name__ == "__main__":

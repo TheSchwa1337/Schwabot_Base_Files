@@ -1,14 +1,16 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Vectorise news with weighting matrix.
 
 V_n = ∇·(Θ · φ(news))
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["vectorize_news"]
 

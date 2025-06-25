@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Schwabot ZPE Rotational Engine
@@ -12,8 +14,8 @@ This implements the saw blade theory of recursive profit allocation:
 - From 50% engagement to 90%+ phase-locked strategy resonance
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -152,7 +154,7 @@ class ZPERotationalEngine:
     
     def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
         """
-        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · sin(ωt + φ) dt
+        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
         
         Where:
         - P'(t): Derivative of price motion (volatility)
@@ -165,7 +167,7 @@ class ZPERotationalEngine:
         
         integral_sum = 0.0
         for t in t_values:
-            resonance_term = price_derivative * math.sin(frequency * t + phase_offset)
+            resonance_term = price_derivative * unified_math.unified_math.sin(frequency * t + phase_offset)
             integral_sum += resonance_term * dt
         
         resonance = integral_sum
@@ -238,7 +240,7 @@ class ZPERotationalEngine:
         
         # Calculate new recursion depth based on pattern complexity
         pattern_complexity = self._calculate_pattern_complexity()
-        self.recursion_depth = min(pattern_complexity, self.max_recursion_depth)
+        self.recursion_depth = unified_math.min(pattern_complexity, self.max_recursion_depth)
         
         logger.debug(f"Recursive Cycle Depth: {self.recursion_depth} (complexity: {pattern_complexity:.2f})")
         return self.recursion_depth
@@ -297,8 +299,8 @@ class ZPERotationalEngine:
         - ΔSₜ: Sentiment delta from baseline
         """
         # Normalize inputs
-        normalized_density = max(0.0, min(1.0, news_density))
-        normalized_sentiment = max(-1.0, min(1.0, sentiment_delta))
+        normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
+        normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))
         
         # Calculate lantern signal strength
         lantern_signal = normalized_density * (1.0 + normalized_sentiment)
@@ -389,22 +391,22 @@ class ZPERotationalEngine:
         
         # Calculate variance in price triggers
         triggers = [frame['price_trigger'] for frame in self.memory_frames[-10:]]
-        variance = np.var(triggers) if len(triggers) > 1 else 0.0
+        variance = unified_math.unified_math.var(triggers) if len(triggers) > 1 else 0.0
         
         # Map variance to complexity (0-16)
-        complexity = min(16.0, 1.0 + variance * 10.0)
+        complexity = unified_math.min(16.0, 1.0 + variance * 10.0)
         return complexity
     
     def _calculate_reinjection_coefficient(self, market_heat: float) -> float:
         """Calculate reinjection coefficient based on market heat."""
         # Higher market heat = higher reinjection
-        return min(1.0, max(0.0, market_heat))
+        return unified_math.min(1.0, unified_math.max(0.0, market_heat))
 
 
 def main():
     """Test the ZPE Rotational Engine."""
-    print("🧠 Testing Schwabot ZPE Rotational Engine")
-    print("=" * 50)
+    safe_print("🧠 Testing Schwabot ZPE Rotational Engine")
+    safe_print("=" * 50)
     
     # Initialize engine
     engine = ZPERotationalEngine()
@@ -423,15 +425,15 @@ def main():
     # Spin the wheel
     result = engine.spin_profit_wheel(market_data)
     
-    print(f"ZPE Work: {result['zpe_work']:.6f}")
-    print(f"Rotational Torque: {result['rotational_torque']:.6f}")
-    print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
-    print(f"Lantern Signal: {result['lantern_signal']:.6f}")
-    print(f"Angular Velocity: {result['angular_velocity']:.6f}")
-    print(f"Should Spin: {result['should_spin']}")
-    print(f"Recursion Depth: {result['recursion_depth']}")
+    safe_print(f"ZPE Work: {result['zpe_work']:.6f}")
+    safe_print(f"Rotational Torque: {result['rotational_torque']:.6f}")
+    safe_print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
+    safe_print(f"Lantern Signal: {result['lantern_signal']:.6f}")
+    safe_print(f"Angular Velocity: {result['angular_velocity']:.6f}")
+    safe_print(f"Should Spin: {result['should_spin']}")
+    safe_print(f"Recursion Depth: {result['recursion_depth']}")
     
-    print("\n🎉 ZPE Rotational Engine test complete!")
+    safe_print("\n🎉 ZPE Rotational Engine test complete!")
 
 
 if __name__ == "__main__":

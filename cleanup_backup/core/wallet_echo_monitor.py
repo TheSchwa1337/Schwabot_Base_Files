@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Wallet Echo Monitor - Schwabot UROS v1.0
@@ -651,19 +652,19 @@ class WalletEchoMonitor:
 
 def main():
     """Test function for Wallet Echo Monitor."""
-    print("🔄 Testing Wallet Echo Monitor...")
+    safe_print("🔄 Testing Wallet Echo Monitor...")
     
     # Initialize monitor
     monitor = WalletEchoMonitor()
     
     # Add some test wallet addresses
-    print("📊 Adding test wallet addresses...")
+    safe_print("📊 Adding test wallet addresses...")
     monitor.add_wallet_address("test_btc_address", WalletType.BTC, "Test BTC Wallet")
     monitor.add_wallet_address("test_usdc_address", WalletType.USDC, "Test USDC Wallet")
     monitor.add_wallet_address("test_xrp_address", WalletType.XRP, "Test XRP Wallet")
     
     # Simulate monitoring (run for a short time)
-    print("🔍 Simulating wallet monitoring...")
+    safe_print("🔍 Simulating wallet monitoring...")
     
     async def test_monitoring():
         # Start monitoring
@@ -686,18 +687,18 @@ def main():
     
     # Get statistics
     stats = monitor.get_wallet_statistics()
-    print(f"\n📊 Wallet Statistics:")
-    print(f"  Active Wallets: {stats.get('active_wallets', 0)}")
-    print(f"  Total Balance USD: ${stats.get('total_balance_usd', 0):,.2f}")
-    print(f"  Total Transactions: {stats.get('total_transactions', 0)}")
-    print(f"  Recent Transactions (24h): {stats.get('recent_transactions_24h', 0)}")
-    print(f"  Average Transaction Size: {stats.get('average_transaction_size', 0):.2f}")
+    safe_print(f"\n📊 Wallet Statistics:")
+    safe_print(f"  Active Wallets: {stats.get('active_wallets', 0)}")
+    safe_print(f"  Total Balance USD: ${stats.get('total_balance_usd', 0):,.2f}")
+    safe_print(f"  Total Transactions: {stats.get('total_transactions', 0)}")
+    safe_print(f"  Recent Transactions (24h): {stats.get('recent_transactions_24h', 0)}")
+    safe_print(f"  Average Transaction Size: {stats.get('average_transaction_size', 0):.2f}")
     
     # Get wallet balances
     balances = monitor.get_wallet_balances()
-    print(f"\n💰 Wallet Balances:")
+    safe_print(f"\n💰 Wallet Balances:")
     for addr, balance in balances.items():
-        print(f"  {balance.wallet_type.value}: {balance.balance:.4f} (${balance.usd_value:,.2f})")
+        safe_print(f"  {balance.wallet_type.value}: {balance.balance:.4f} (${balance.usd_value:,.2f})")
     
     # Export data
     monitor.export_wallet_data()

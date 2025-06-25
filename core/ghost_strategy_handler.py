@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost Strategy Handler - Stealth Entry and Non-Standard Positioning.
 
@@ -17,7 +18,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -316,9 +317,9 @@ class GhostStrategyHandler:
                 'total_ghost_entries': self.total_ghost_entries,
                 'total_ghost_executions': self.total_ghost_executions,
                 'stealth_success_rate': self.stealth_success_rate,
-                'average_stealth_level': np.mean(stealth_levels) if stealth_levels else 0.0,
-                'average_stealth_score': np.mean(stealth_scores) if stealth_scores else 0.0,
-                'execution_success_rate': np.mean(execution_successes) if execution_successes else 0.0,
+                'average_stealth_level': unified_math.unified_math.mean(stealth_levels) if stealth_levels else 0.0,
+                'average_stealth_score': unified_math.unified_math.mean(stealth_scores) if stealth_scores else 0.0,
+                'execution_success_rate': unified_math.unified_math.mean(execution_successes) if execution_successes else 0.0,
                 'ghost_patterns_detected': len(self.ghost_patterns),
                 'active_ghost_positions': len(self.ghost_positions),
                 'entry_type_distribution': entry_type_counts,
@@ -420,7 +421,7 @@ class GhostStrategyHandler:
             strong_signals = (
                 buy_signal > 0.8 or
                 sell_signal > 0.8 or
-                abs(momentum) > 0.7 or
+                unified_math.abs(momentum) > 0.7 or
                 volume_signal > 0.8
             )
             
@@ -472,7 +473,7 @@ class GhostStrategyHandler:
             elif pattern.pattern_type == 'invisible_movement':
                 confidence *= self._calculate_invisible_movement(market_data)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating pattern confidence: {e}")
@@ -483,18 +484,18 @@ class GhostStrategyHandler:
         try:
             if indicator == 'low_volume':
                 volume = market_data.get('volume', 0.0)
-                return max(0.0, 1.0 - (volume / 1000000.0))  # Lower volume = higher stealth
+                return unified_math.max(0.0, 1.0 - (volume / 1000000.0))  # Lower volume = higher stealth
             
             elif indicator == 'price_stability':
-                price_change = abs(market_data.get('price_change', 0.0))
-                return max(0.0, 1.0 - price_change * 100)  # Lower change = higher stability
+                price_change = unified_math.abs(market_data.get('price_change', 0.0))
+                return unified_math.max(0.0, 1.0 - price_change * 100)  # Lower change = higher stability
             
             elif indicator == 'order_book_imbalance':
                 bids = market_data.get('bid_volume', 0.0)
                 asks = market_data.get('ask_volume', 0.0)
                 total = bids + asks
                 if total > 0:
-                    imbalance = abs(bids - asks) / total
+                    imbalance = unified_math.abs(bids - asks) / total
                     return imbalance  # Higher imbalance = higher stealth
                 return 0.5
             
@@ -524,8 +525,8 @@ class GhostStrategyHandler:
             expected_volume = market_data.get('expected_volume', 1000000.0)
             
             if expected_volume > 0:
-                discrepancy = abs(volume - expected_volume) / expected_volume
-                return min(1.0, discrepancy)
+                discrepancy = unified_math.abs(volume - expected_volume) / expected_volume
+                return unified_math.min(1.0, discrepancy)
             
             return 0.5
             
@@ -567,7 +568,7 @@ class GhostStrategyHandler:
         """Calculate invisible movement factor."""
         try:
             volume = market_data.get('volume', 0.0)
-            price_change = abs(market_data.get('price_change', 0.0))
+            price_change = unified_math.abs(market_data.get('price_change', 0.0))
             
             # Invisible movement: significant price change with low volume
             if volume < 10000 and price_change > 0.01:
@@ -613,10 +614,10 @@ class GhostStrategyHandler:
             price_volatility = market_data.get('price_volatility', 0.0)
             
             # Volume stealth (lower volume = higher stealth)
-            volume_stealth = max(0.0, 1.0 - (volume / 1000000.0))
+            volume_stealth = unified_math.max(0.0, 1.0 - (volume / 1000000.0))
             
             # Volatility stealth (lower volatility = higher stealth)
-            volatility_stealth = max(0.0, 1.0 - price_volatility)
+            volatility_stealth = unified_math.max(0.0, 1.0 - price_volatility)
             
             # Conventional signal stealth (weaker signals = higher stealth)
             signal_strength = max(
@@ -628,7 +629,7 @@ class GhostStrategyHandler:
             # Combined stealth level
             stealth_level = (volume_stealth + volatility_stealth + signal_stealth) / 3.0
             
-            return max(0.0, min(1.0, stealth_level))
+            return unified_math.max(0.0, unified_math.min(1.0, stealth_level))
             
         except Exception as e:
             logger.error(f"Error calculating stealth level: {e}")
@@ -798,11 +799,11 @@ class GhostStrategyHandler:
             if success:
                 # Successful execution maintains or improves stealth
                 stealth_boost = random.uniform(0.0, 0.1)
-                return min(1.0, base_stealth + stealth_boost)
+                return unified_math.min(1.0, base_stealth + stealth_boost)
             else:
                 # Failed execution reduces stealth
                 stealth_penalty = random.uniform(0.1, 0.3)
-                return max(0.0, base_stealth - stealth_penalty)
+                return unified_math.max(0.0, base_stealth - stealth_penalty)
                 
         except Exception as e:
             logger.error(f"Error calculating execution stealth score: {e}")
@@ -817,16 +818,16 @@ class GhostStrategyHandler:
             
             # Volume risk (higher volume = higher risk)
             volume = market_data.get('volume', 0.0)
-            volume_risk = min(1.0, volume / 1000000.0)
+            volume_risk = unified_math.min(1.0, volume / 1000000.0)
             
             # Market volatility risk (higher volatility = higher risk)
             volatility = market_data.get('price_volatility', 0.0)
-            volatility_risk = min(1.0, volatility)
+            volatility_risk = unified_math.min(1.0, volatility)
             
             # Combined detection risk
             detection_risk = (base_risk + volume_risk + volatility_risk) / 3.0
             
-            return max(0.0, min(1.0, detection_risk))
+            return unified_math.max(0.0, unified_math.min(1.0, detection_risk))
             
         except Exception as e:
             logger.error(f"Error calculating detection risk: {e}")
@@ -863,7 +864,7 @@ class GhostStrategyHandler:
         try:
             price_change = (market_data.get('price', 0.0) - position.entry_price) / position.entry_price
             
-            if abs(price_change) < 0.001:
+            if unified_math.abs(price_change) < 0.001:
                 return GhostPositionState.HIDDEN
             elif price_change > 0.01:
                 return GhostPositionState.CONVERGING
@@ -893,7 +894,7 @@ class GhostStrategyHandler:
         try:
             # Adjust dispersion based on market conditions
             volatility = market_data.get('price_volatility', 0.0)
-            return min(1.0, position.dispersion_factor * (1.0 + volatility))
+            return unified_math.min(1.0, position.dispersion_factor * (1.0 + volatility))
             
         except Exception as e:
             logger.error(f"Error calculating dispersion factor: {e}")
@@ -904,11 +905,11 @@ class GhostStrategyHandler:
         """Calculate current stealth level for position."""
         try:
             # Stealth decreases over time
-            time_factor = max(0.5, 1.0 - (time.time() - position.metadata.get('entry_time', time.time())) / 3600)
+            time_factor = unified_math.max(0.5, 1.0 - (time.time() - position.metadata.get('entry_time', time.time())) / 3600)
             
             # Adjust for market conditions
             volume = market_data.get('volume', 0.0)
-            volume_factor = max(0.5, 1.0 - (volume / 1000000.0))
+            volume_factor = unified_math.max(0.5, 1.0 - (volume / 1000000.0))
             
             return position.stealth_level * time_factor * volume_factor
             

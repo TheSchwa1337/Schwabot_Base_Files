@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Glyph phase anchor – map glyph hash to Ferris wheel tick phase.
 
@@ -9,7 +11,6 @@ smaller sub-rings (default 16) for glyph anchoring.  The mapping is deterministi
 Only the first 32 bits of the glyph hash are used so the operation is cheap.
 """
 
-from __future__ import annotations
 
 from typing import Final
 

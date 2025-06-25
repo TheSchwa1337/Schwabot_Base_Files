@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Hash Validator - Core Hash Validation Pipeline Component
@@ -165,11 +166,11 @@ def main() -> None:
     test_hash = hashlib.sha256(test_data.encode()).hexdigest()
     
     result = validator.validate_hash_signature(test_data, test_hash)
-    print(f"Hash validation result: {result.is_valid}")
+    safe_print(f"Hash validation result: {result.is_valid}")
     
     # Get statistics
     stats = validator.get_validation_statistics()
-    print(f"Validation statistics: {stats}")
+    safe_print(f"Validation statistics: {stats}")
 
 
 if __name__ == "__main__":

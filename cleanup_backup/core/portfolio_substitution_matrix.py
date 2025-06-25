@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Portfolio Substitution Matrix for Schwabot Trading System.
 
@@ -23,7 +25,7 @@ import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 import warnings
 
-import numpy as np
+from core.unified_math_system import unified_math
 from scipy.optimize import minimize
 from scipy.stats import entropy
 
@@ -411,7 +413,7 @@ class PortfolioSubstitutionMatrix:
         # Select variant based on anomaly score or random selection
         if anomaly_context and "severity_score" in anomaly_context:
             severity_score = anomaly_context["severity_score"]
-            variant_idx = min(int(severity_score * 4), 3)
+            variant_idx = unified_math.min(int(severity_score * 4), 3)
         else:
             # Use portfolio performance to select variant
             variant_idx = self._select_performance_based_variant(parameters)
@@ -445,7 +447,7 @@ class PortfolioSubstitutionMatrix:
             )
 
             # Reduce allocation to high volatility assets
-            vol_penalty = np.exp(-vol_scores * 10)  # Exponential penalty for high vol
+            vol_penalty = unified_math.exp(-vol_scores * 10)  # Exponential penalty for high vol
             adjusted_weights *= vol_penalty
 
         # Liquidity adjustment
@@ -514,13 +516,13 @@ class PortfolioSubstitutionMatrix:
         corr_matrix = parameters.correlation_matrix
 
         # Calculate correlation-weighted risk
-        portfolio_variance = np.dot(weights, np.dot(corr_matrix, weights))
+        portfolio_variance = unified_math.unified_math.dot_product(weights, unified_math.unified_math.dot_product(corr_matrix, weights))
 
         # If portfolio is too correlated, diversify
         if portfolio_variance > self.risk_limits["max_correlation_exposure"]:
             # Reduce weights of highly correlated assets
             for i in range(len(weights)):
-                avg_correlation = np.mean(np.abs(corr_matrix[i, :]))
+                avg_correlation = unified_math.unified_math.mean(unified_math.unified_math.abs(corr_matrix[i, :]))
                 if avg_correlation > 0.7:  # High correlation threshold
                     adjusted_weights[i] *= 0.8  # Reduce by 20%
 
@@ -557,25 +559,25 @@ class PortfolioSubstitutionMatrix:
             trade_amount = target_amount - current_amount
 
             # Only create orders above minimum trade size
-            if abs(trade_amount) > parameters.min_trade_size:
+            if unified_math.abs(trade_amount) > parameters.min_trade_size:
 
                 # Determine trade action
                 action = "buy" if trade_amount > 0 else "sell"
 
                 # Calculate priority based on urgency and amount
                 priority = self._calculate_trade_priority(
-                    asset, abs(trade_amount), parameters
+                    asset, unified_math.abs(trade_amount), parameters
                 )
 
                 # Estimate execution parameters
                 estimated_slippage = self._estimate_slippage(
-                    asset, abs(trade_amount), parameters
+                    asset, unified_math.abs(trade_amount), parameters
                 )
 
                 trade_order = {
                     "asset": asset.value,
                     "action": action,
-                    "amount": abs(trade_amount),
+                    "amount": unified_math.abs(trade_amount),
                     "priority": priority,
                     "estimated_slippage": estimated_slippage,
                     "max_slippage": parameters.max_slippage,
@@ -596,7 +598,7 @@ class PortfolioSubstitutionMatrix:
         """Calculate trade priority based on asset and amount."""
 
         # Base priority on trade amount relative to portfolio
-        amount_priority = min(amount / parameters.total_portfolio_value, 0.5) * 2
+        amount_priority = unified_math.min(amount / parameters.total_portfolio_value, 0.5) * 2
 
         # Liquidity priority
         liquidity_score = parameters.liquidity_scores.get(asset, 0.5)
@@ -607,7 +609,7 @@ class PortfolioSubstitutionMatrix:
 
         # Volatility priority (higher vol = higher priority to execute quickly)
         volatility = parameters.volatility_levels.get(asset, 0.02)
-        volatility_priority = min(volatility * 20, 1.0)
+        volatility_priority = unified_math.min(volatility * 20, 1.0)
 
         # Combine priorities
         total_priority = (
@@ -633,7 +635,7 @@ class PortfolioSubstitutionMatrix:
 
         estimated_slippage = amount_impact + liquidity_impact
 
-        return min(estimated_slippage, parameters.max_slippage)
+        return unified_math.min(estimated_slippage, parameters.max_slippage)
 
     def _estimate_total_slippage(
         self, trade_orders: List[Dict[str, Any]], parameters: SubstitutionParameters
@@ -663,7 +665,7 @@ class PortfolioSubstitutionMatrix:
         )  # Higher urgency = faster
 
         # Adjust based on number of trades (parallel execution)
-        parallel_factor = min(len(trade_orders) / 4, 1.0)  # Up to 4 parallel trades
+        parallel_factor = unified_math.min(len(trade_orders) / 4, 1.0)  # Up to 4 parallel trades
 
         total_time = (len(trade_orders) * base_time_per_trade * urgency_multiplier) / (
             1 + parallel_factor
@@ -722,10 +724,10 @@ class PortfolioSubstitutionMatrix:
         )
 
         # Portfolio volatility (simplified)
-        portfolio_vol = np.sqrt(np.dot(weights**2, volatilities**2))
+        portfolio_vol = unified_math.unified_math.sqrt(unified_math.unified_math.dot_product(weights**2, volatilities**2))
 
         # Risk adjustment based on volatility
-        risk_adjustment = np.exp(-portfolio_vol * 5)  # Exponential penalty for high vol
+        risk_adjustment = unified_math.exp(-portfolio_vol * 5)  # Exponential penalty for high vol
 
         return np.clip(risk_adjustment, 0.1, 1.0)
 
@@ -741,7 +743,7 @@ class PortfolioSubstitutionMatrix:
 
         # Adjust based on data quality
         if parameters.liquidity_scores:
-            avg_liquidity = np.mean(list(parameters.liquidity_scores.values()))
+            avg_liquidity = unified_math.unified_math.mean(list(parameters.liquidity_scores.values()))
             confidence *= 0.5 + avg_liquidity * 0.5
 
         # Adjust based on anomaly context
@@ -837,7 +839,7 @@ class PortfolioSubstitutionMatrix:
         diversification_score = 1.0 - herfindahl_index
 
         # Concentration risk (max single asset weight)
-        max_concentration = np.max(weights)
+        max_concentration = unified_math.unified_math.max(weights)
 
         # Volatility metrics
         volatilities = np.array(
@@ -847,7 +849,7 @@ class PortfolioSubstitutionMatrix:
             ]
         )
 
-        weighted_volatility = np.dot(weights, volatilities)
+        weighted_volatility = unified_math.unified_math.dot_product(weights, volatilities)
 
         return {
             "diversification_score": diversification_score,
@@ -871,7 +873,7 @@ class PortfolioSubstitutionMatrix:
             return 0
 
         # Calculate average return
-        avg_return = np.mean([result.expected_return for result in recent_results])
+        avg_return = unified_math.mean([result.expected_return for result in recent_results])
 
         # Select variant based on performance
         if avg_return > 0.2:  # High performance
@@ -900,11 +902,11 @@ class PortfolioSubstitutionMatrix:
             ]
 
             self.performance_metrics = {
-                "average_return": np.mean(recent_returns),
-                "return_volatility": np.std(recent_returns),
-                "average_confidence": np.mean(recent_confidence),
-                "sharpe_ratio": np.mean(recent_returns)
-                / (np.std(recent_returns) + 1e-6),
+                "average_return": unified_math.unified_math.mean(recent_returns),
+                "return_volatility": unified_math.unified_math.std(recent_returns),
+                "average_confidence": unified_math.unified_math.mean(recent_confidence),
+                "sharpe_ratio": unified_math.unified_math.mean(recent_returns)
+                / (unified_math.unified_math.std(recent_returns) + 1e-6),
                 "total_substitutions": len(self.substitution_history),
             }
 
@@ -1027,10 +1029,10 @@ if __name__ == "__main__":
         },
     )
 
-    print(f"📊 Portfolio Substitution Result:")
-    print(f"   Strategy: {result['strategy_used']}")
-    print(f"   Confidence: {result['confidence_score']:.3f}")
-    print(f"   Expected Return: {result['expected_return']:.3f}")
-    print(f"   Target Allocation: {result['target_allocation']}")
-    print(f"   Trade Orders: {len(result['trade_orders'])}")
-    print(f"   Total Trade Value: ${result['total_trade_value']:,.0f}")
+    safe_print(f"📊 Portfolio Substitution Result:")
+    safe_print(f"   Strategy: {result['strategy_used']}")
+    safe_print(f"   Confidence: {result['confidence_score']:.3f}")
+    safe_print(f"   Expected Return: {result['expected_return']:.3f}")
+    safe_print(f"   Target Allocation: {result['target_allocation']}")
+    safe_print(f"   Trade Orders: {len(result['trade_orders'])}")
+    safe_print(f"   Total Trade Value: ${result['total_trade_value']:,.0f}")

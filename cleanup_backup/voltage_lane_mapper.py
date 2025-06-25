@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Voltage Lane Mapper - Schwabot UROS v1.0
@@ -28,7 +30,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import threading
 import queue
 
@@ -239,7 +241,7 @@ class VoltageLaneMapper:
             calculated_voltage = self.base_voltage * (2 ** (bit_depth / 8))
             
             # Apply safety constraints
-            calculated_voltage = max(self.min_voltage, min(self.max_voltage, calculated_voltage))
+            calculated_voltage = unified_math.max(self.min_voltage, unified_math.min(self.max_voltage, calculated_voltage))
             
             # Determine voltage level
             if calculated_voltage <= 1.2:
@@ -304,7 +306,7 @@ class VoltageLaneMapper:
                     load_factor = current_load / capacity
                     
                     # Score based on load, voltage compatibility, and priority
-                    voltage_compatibility = 1.0 - abs(voltage - (min_voltage + max_voltage) / 2) / max_voltage
+                    voltage_compatibility = 1.0 - unified_math.abs(voltage - (min_voltage + max_voltage) / 2) / max_voltage
                     assignment_score = (1.0 - load_factor) * voltage_compatibility * priority
                     
                     suitable_channels.append({
@@ -319,7 +321,7 @@ class VoltageLaneMapper:
                 raise ValueError(f"No suitable channels found for voltage {voltage}V")
             
             # Select best channel
-            best_channel = max(suitable_channels, key=lambda x: x["assignment_score"])
+            best_channel = unified_math.max(suitable_channels, key=lambda x: x["assignment_score"])
             
             # Create channel assignment
             assignment = ChannelAssignment(
@@ -441,7 +443,7 @@ class VoltageLaneMapper:
             # Calculate voltage delta
             source_voltage = self.channels[request.source_channel].get("current_voltage", 1.0)
             target_voltage = self.channels[request.target_channel].get("current_voltage", 1.0)
-            voltage_delta = abs(source_voltage - target_voltage)
+            voltage_delta = unified_math.abs(source_voltage - target_voltage)
             
             # Simulate hand-off latency
             handoff_latency = np.random.exponential(0.0005)  # Average 0.5ms
@@ -473,7 +475,7 @@ class VoltageLaneMapper:
             
             # Execute hand-off
             # Update channel loads
-            self.channels[request.source_channel]["current_load"] = max(0.0, 
+            self.channels[request.source_channel]["current_load"] = unified_math.max(0.0, 
                 self.channels[request.source_channel]["current_load"] - 0.1)
             self.channels[request.target_channel]["current_load"] = min(
                 self.channels[request.target_channel]["capacity"],
@@ -542,8 +544,8 @@ class VoltageLaneMapper:
                 "total_handoffs": len(self.handoff_results),
                 "successful_handoffs": len([r for r in self.handoff_results if r.status == HandoffStatus.SUCCESS]),
                 "failed_handoffs": len([r for r in self.handoff_results if r.status == HandoffStatus.FAILED]),
-                "average_voltage": np.mean([m.calculated_voltage for m in self.voltage_mappings]) if self.voltage_mappings else 0.0,
-                "average_latency": np.mean([r.latency for r in self.handoff_results if r.status == HandoffStatus.SUCCESS]) if self.handoff_results else 0.0
+                "average_voltage": unified_math.mean([m.calculated_voltage for m in self.voltage_mappings]) if self.voltage_mappings else 0.0,
+                "average_latency": unified_math.mean([r.latency for r in self.handoff_results if r.status == HandoffStatus.SUCCESS]) if self.handoff_results else 0.0
             }
             
             for channel_id, config in self.channels.items():
@@ -624,16 +626,16 @@ def main():
         # Test voltage calculations
         for bit_depth in [4, 8, 42]:
             voltage_mapping = mapper.calculate_voltage_for_bit_depth(bit_depth)
-            print(f"Bit depth {bit_depth}: {voltage_mapping.calculated_voltage:.3f}V ({voltage_mapping.voltage_level.value})")
+            safe_print(f"Bit depth {bit_depth}: {voltage_mapping.calculated_voltage:.3f}V ({voltage_mapping.voltage_level.value})")
         
         # Test channel assignment
         voltage_mapping = mapper.calculate_voltage_for_bit_depth(8)
         assignment = mapper.assign_channel_for_voltage(voltage_mapping, priority=2.0)
-        print(f"Channel assignment: {assignment.channel_id} (score: {assignment.assignment_score:.3f})")
+        safe_print(f"Channel assignment: {assignment.channel_id} (score: {assignment.assignment_score:.3f})")
         
         # Test hand-off
         request_id = mapper.request_handoff("cpu", "gpu", 42, priority=1.5)
-        print(f"Hand-off request: {request_id}")
+        safe_print(f"Hand-off request: {request_id}")
         
         # Wait for hand-off completion
         time.sleep(2)
@@ -641,14 +643,14 @@ def main():
         # Check hand-off status
         result = mapper.get_handoff_status(request_id)
         if result:
-            print(f"Hand-off status: {result.status.value}")
+            safe_print(f"Hand-off status: {result.status.value}")
         
         # Export data
         mapper.export_mapping_data()
         
         # Print statistics
         stats = mapper.get_channel_statistics()
-        print(f"Channel statistics: {stats}")
+        safe_print(f"Channel statistics: {stats}")
         
     except Exception as e:
         logger.error(f"Error in main: {e}")

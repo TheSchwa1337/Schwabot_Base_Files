@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Matrix Allocator
 Manages matrix basket allocation and provides real-time optimization
@@ -6,14 +8,14 @@ Manages matrix basket allocation and provides real-time optimization
 import json
 import yaml
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from datetime import datetime, timedelta
 import threading
 import time
-import math
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 # Configure logging
@@ -275,7 +277,7 @@ class MatrixAllocator:
         for matrix in matrices:
             if matrix.volatility > 0:
                 sharpe_ratio = (matrix.expected_return - 0.02) / matrix.volatility  # Assuming 2% risk-free rate
-                matrix.performance_score = max(0.0, sharpe_ratio)
+                matrix.performance_score = unified_math.max(0.0, sharpe_ratio)
             else:
                 matrix.performance_score = 0.0
         
@@ -344,9 +346,9 @@ class MatrixAllocator:
                     correlation_matrix[i, j] = matrix_i.correlation_factor
         
         # Calculate portfolio variance
-        portfolio_variance = np.dot(weights.T, np.dot(correlation_matrix * np.outer(volatilities, volatilities), weights))
+        portfolio_variance = unified_math.unified_math.dot_product(weights.T, unified_math.unified_math.dot_product(correlation_matrix * np.outer(volatilities, volatilities), weights))
         
-        return np.sqrt(portfolio_variance)
+        return unified_math.unified_math.sqrt(portfolio_variance)
     
     def _calculate_expected_return(self, matrices: List[MatrixAllocation]) -> float:
         """Calculate expected portfolio return"""
@@ -368,7 +370,7 @@ class MatrixAllocator:
         max_hhi = 1.0  # Maximum HHI for equal weights
         diversification_score = 1.0 - (hhi / max_hhi)
         
-        return max(0.0, min(1.0, diversification_score))
+        return unified_math.max(0.0, unified_math.min(1.0, diversification_score))
     
     def _generate_allocation_recommendations(self, matrices: List[MatrixAllocation], 
                                            risk_score: float, expected_return: float, 
@@ -395,7 +397,7 @@ class MatrixAllocator:
             recommendations.append("High diversification - consider consolidating positions")
         
         # Concentration recommendations
-        max_allocation = max(m.allocation_percentage for m in matrices) if matrices else 0.0
+        max_allocation = unified_math.max(m.allocation_percentage for m in matrices) if matrices else 0.0
         if max_allocation > 0.4:
             recommendations.append("High concentration in single matrix - consider rebalancing")
         
@@ -455,9 +457,9 @@ class MatrixAllocator:
             
             # Calculate averages from recent allocations
             if self.performance_window:
-                avg_risk = np.mean([p['risk_score'] for p in self.performance_window])
-                avg_return = np.mean([p['expected_return'] for p in self.performance_window])
-                avg_diversification = np.mean([p['diversification_score'] for p in self.performance_window])
+                avg_risk = unified_math.mean([p['risk_score'] for p in self.performance_window])
+                avg_return = unified_math.mean([p['expected_return'] for p in self.performance_window])
+                avg_diversification = unified_math.mean([p['diversification_score'] for p in self.performance_window])
             else:
                 avg_risk = avg_return = avg_diversification = 0.0
             
@@ -625,11 +627,11 @@ if __name__ == "__main__":
     # Test optimization
     result = allocator.optimize_allocation("test_basket", "risk_parity")
     
-    print("Allocation Result:")
+    safe_print("Allocation Result:")
     print(json.dumps(asdict(result), indent=2))
     
-    print("\nBasket Performance:")
-    print(json.dumps(allocator.get_basket_performance("test_basket"), indent=2))
+    safe_print("\nBasket Performance:")
+    safe_print(json.dumps(allocator.get_basket_performance("test_basket"), indent=2))
     
-    print("\nAllocation Statistics:")
+    safe_print("\nAllocation Statistics:")
     print(json.dumps(allocator.get_allocation_statistics(), indent=2)) 

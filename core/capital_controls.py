@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Capital Controls - Advanced Position Sizing and Portfolio Risk Management.
 
@@ -10,11 +26,10 @@ This module provides sophisticated capital controls including:
 - Integration with Risk Guard for comprehensive safety
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
-import math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -176,7 +191,7 @@ class CapitalControls:
         self.capital_events: List[CapitalEvent] = []
         self.rebalancing_events: List[Dict[str, Any]] = []
         
-        safe_print("💰 Capital Controls initialized")
+        safe_safe_print("💰 Capital Controls initialized")
     
     def set_capital_config(self, config: CapitalConfig) -> None:
         """Set capital configuration."""
@@ -185,7 +200,7 @@ class CapitalControls:
         self.reserved_capital = config.total_capital * config.emergency_capital_reserve
         self.peak_capital = config.total_capital
         
-        safe_print(f"✅ Capital config updated: Total = ${config.total_capital:,.2f}")
+        safe_safe_print(f"✅ Capital config updated: Total = ${config.total_capital:,.2f}")
     
     def calculate_position_size(
         self,
@@ -240,7 +255,7 @@ class CapitalControls:
             # Apply limits
             position_size = max(
                 self.capital_config.min_position_size,
-                min(position_size, self.capital_config.max_position_size)
+                unified_math.min(position_size, self.capital_config.max_position_size)
             )
             
             position_value = available_capital * position_size
@@ -263,11 +278,11 @@ class CapitalControls:
                 }
             )
             
-            safe_print(f"✅ Position size calculated for {asset}: {position_size:.2%}")
+            safe_safe_print(f"✅ Position size calculated for {asset}: {position_size:.2%}")
             return result
             
         except Exception as e:
-            safe_print(f"❌ Position sizing failed: {safe_format_error(e, 'position_sizing')}")
+            safe_safe_print(f"❌ Position sizing failed: {safe_format_error(e, 'position_sizing')}")
             return PositionSizingResult(
                 asset=asset,
                 suggested_size=0.0,
@@ -305,7 +320,7 @@ class CapitalControls:
             return adjusted_size
             
         except Exception as e:
-            safe_print(f"❌ Volatility adjustment failed: {safe_format_error(e, 'volatility_adjustment')}")
+            safe_safe_print(f"❌ Volatility adjustment failed: {safe_format_error(e, 'volatility_adjustment')}")
             return self.capital_config.min_position_size
     
     def _calculate_kelly_size(
@@ -322,12 +337,12 @@ class CapitalControls:
             
             # Estimate win probability from expected return and volatility
             win_prob = 0.5 + (expected_return / (2 * volatility)) if volatility > 0 else 0.5
-            win_prob = max(0.1, min(0.9, win_prob))  # Clamp between 10% and 90%
+            win_prob = unified_math.max(0.1, unified_math.min(0.9, win_prob))  # Clamp between 10% and 90%
             
             loss_prob = 1.0 - win_prob
             
             # Estimate odds (simplified)
-            odds = abs(expected_return) if expected_return != 0 else 1.0
+            odds = unified_math.abs(expected_return) if expected_return != 0 else 1.0
             
             # Kelly fraction
             kelly_fraction = (odds * win_prob - loss_prob) / odds if odds > 0 else 0.0
@@ -335,10 +350,10 @@ class CapitalControls:
             # Apply Kelly fraction and confidence
             kelly_size = kelly_fraction * self.capital_config.kelly_fraction * confidence
             
-            return max(0.0, kelly_size)
+            return unified_math.max(0.0, kelly_size)
             
         except Exception as e:
-            safe_print(f"❌ Kelly calculation failed: {safe_format_error(e, 'kelly_calculation')}")
+            safe_safe_print(f"❌ Kelly calculation failed: {safe_format_error(e, 'kelly_calculation')}")
             return self.capital_config.min_position_size
     
     def _calculate_risk_parity_size(
@@ -357,10 +372,10 @@ class CapitalControls:
             else:
                 risk_parity_size = self.capital_config.max_position_size
             
-            return min(risk_parity_size, self.capital_config.max_position_size)
+            return unified_math.min(risk_parity_size, self.capital_config.max_position_size)
             
         except Exception as e:
-            safe_print(f"❌ Risk parity calculation failed: {safe_format_error(e, 'risk_parity')}")
+            safe_safe_print(f"❌ Risk parity calculation failed: {safe_format_error(e, 'risk_parity')}")
             return self.capital_config.min_position_size
     
     def _calculate_drawdown_size(
@@ -372,7 +387,7 @@ class CapitalControls:
         try:
             # Reduce position size as drawdown increases
             drawdown_factor = 1.0 - (self.current_drawdown / self.capital_config.max_drawdown)
-            drawdown_factor = max(0.1, drawdown_factor)  # Minimum 10%
+            drawdown_factor = unified_math.max(0.1, drawdown_factor)  # Minimum 10%
             
             base_size = self.capital_config.max_position_size
             drawdown_adjusted_size = base_size * drawdown_factor
@@ -380,7 +395,7 @@ class CapitalControls:
             return drawdown_adjusted_size
             
         except Exception as e:
-            safe_print(f"❌ Drawdown calculation failed: {safe_format_error(e, 'drawdown_calculation')}")
+            safe_safe_print(f"❌ Drawdown calculation failed: {safe_format_error(e, 'drawdown_calculation')}")
             return self.capital_config.min_position_size
     
     def _calculate_risk_contribution(
@@ -397,7 +412,7 @@ class CapitalControls:
             return risk_contribution
             
         except Exception as e:
-            safe_print(f"❌ Risk contribution calculation failed: {safe_format_error(e, 'risk_contribution')}")
+            safe_safe_print(f"❌ Risk contribution calculation failed: {safe_format_error(e, 'risk_contribution')}")
             return 0.0
     
     def update_portfolio_state(
@@ -482,11 +497,11 @@ class CapitalControls:
             if len(self.portfolio_history) > 1000:
                 self.portfolio_history = self.portfolio_history[-1000:]
             
-            safe_print(f"✅ Portfolio updated: Value = ${total_value:,.2f}, PnL = ${total_pnl:,.2f}")
+            safe_safe_print(f"✅ Portfolio updated: Value = ${total_value:,.2f}, PnL = ${total_pnl:,.2f}")
             return portfolio_state
             
         except Exception as e:
-            safe_print(f"❌ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
+            safe_safe_print(f"❌ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
             return PortfolioState(
                 total_value=0.0,
                 total_pnl=0.0,
@@ -524,7 +539,7 @@ class CapitalControls:
             return weighted_volatility
             
         except Exception as e:
-            safe_print(f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
+            safe_safe_print(f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
             return 0.0
     
     def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
@@ -539,7 +554,7 @@ class CapitalControls:
             return sharpe_ratio
             
         except Exception as e:
-            safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
+            safe_safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
             return 0.0
     
     def _calculate_correlations(
@@ -566,7 +581,7 @@ class CapitalControls:
             return correlation_matrix
             
         except Exception as e:
-            safe_print(f"❌ Correlation calculation failed: {safe_format_error(e, 'correlation')}")
+            safe_safe_print(f"❌ Correlation calculation failed: {safe_format_error(e, 'correlation')}")
             return {}
     
     def check_portfolio_limits(self, portfolio_state: PortfolioState) -> bool:
@@ -623,7 +638,7 @@ class CapitalControls:
             return True
             
         except Exception as e:
-            safe_print(f"❌ Portfolio limits check failed: {safe_format_error(e, 'portfolio_limits')}")
+            safe_safe_print(f"❌ Portfolio limits check failed: {safe_format_error(e, 'portfolio_limits')}")
             return False
     
     def suggest_rebalancing(self, portfolio_state: PortfolioState) -> Dict[str, Any]:
@@ -648,13 +663,13 @@ class CapitalControls:
             deviations = []
             for asset, weight in portfolio_state.position_weights.items():
                 target_weight = 1.0 / len(portfolio_state.position_weights) if portfolio_state.position_weights else 0.0
-                deviation = abs(weight - target_weight)
+                deviation = unified_math.abs(weight - target_weight)
                 if deviation > self.capital_config.rebalance_threshold:
                     deviations.append((asset, deviation, weight, target_weight))
             
             if deviations:
                 rebalancing_suggestions['rebalancing_needed'] = True
-                rebalancing_suggestions['urgency'] = 'medium' if max(d[1] for d in deviations) > 0.1 else 'low'
+                rebalancing_suggestions['urgency'] = 'medium' if unified_math.max(d[1] for d in deviations) > 0.1 else 'low'
                 rebalancing_suggestions['reason'] = f"Position deviations detected: {len(deviations)} positions"
                 
                 for asset, deviation, current_weight, target_weight in deviations:
@@ -692,7 +707,7 @@ class CapitalControls:
             return rebalancing_suggestions
             
         except Exception as e:
-            safe_print(f"❌ Rebalancing suggestion failed: {safe_format_error(e, 'rebalancing_suggestion')}")
+            safe_safe_print(f"❌ Rebalancing suggestion failed: {safe_format_error(e, 'rebalancing_suggestion')}")
             return {
                 'rebalancing_needed': False,
                 'urgency': 'low',
@@ -712,7 +727,7 @@ class CapitalControls:
             'portfolio_volatility': self.portfolio_volatility,
             'total_positions': len(self.positions),
             'total_trades': self.total_trades,
-            'win_rate': self.winning_trades / max(self.total_trades, 1),
+            'win_rate': self.winning_trades / unified_math.max(self.total_trades, 1),
             'average_win': self.average_win,
             'average_loss': self.average_loss,
             'largest_win': self.largest_win,
@@ -745,10 +760,10 @@ class CapitalControls:
             if len(self.capital_events) > 1000:
                 self.capital_events = self.capital_events[-1000:]
             
-            safe_print(f"💰 Capital event: {event_type} - {description}")
+            safe_safe_print(f"💰 Capital event: {event_type} - {description}")
             
         except Exception as e:
-            safe_print(f"❌ Capital event recording failed: {safe_format_error(e, 'record_capital_event')}")
+            safe_safe_print(f"❌ Capital event recording failed: {safe_format_error(e, 'record_capital_event')}")
 
 
 # Global capital controls instance
@@ -801,7 +816,7 @@ def get_capital_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test capital controls
-    print("💰 Testing Capital Controls...")
+    safe_print("💰 Testing Capital Controls...")
     
     controls = get_capital_controls()
     
@@ -814,7 +829,7 @@ if __name__ == "__main__":
         confidence=0.7,
         method=PositionSizingMethod.VOLATILITY_ADJUSTED
     )
-    print(f"✅ Position sizing: {result.suggested_size:.2%}")
+    safe_print(f"✅ Position sizing: {result.suggested_size:.2%}")
     
     # Test portfolio state
     positions = {
@@ -827,16 +842,16 @@ if __name__ == "__main__":
     }
     
     portfolio_state = update_portfolio_state(positions, market_data)
-    print(f"✅ Portfolio value: ${portfolio_state.total_value:,.2f}")
+    safe_print(f"✅ Portfolio value: ${portfolio_state.total_value:,.2f}")
     
     # Test portfolio limits
     limits_ok = check_portfolio_limits(portfolio_state)
-    print(f"✅ Portfolio limits: {limits_ok}")
+    safe_print(f"✅ Portfolio limits: {limits_ok}")
     
     # Test rebalancing suggestions
     rebalancing = suggest_rebalancing(portfolio_state)
-    print(f"✅ Rebalancing needed: {rebalancing['rebalancing_needed']}")
+    safe_print(f"✅ Rebalancing needed: {rebalancing['rebalancing_needed']}")
     
     # Get status
     status = get_capital_status()
-    print(f"✅ Capital Status: {status}") 
+    safe_print(f"✅ Capital Status: {status}") 

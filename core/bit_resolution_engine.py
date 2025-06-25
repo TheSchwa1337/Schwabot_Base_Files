@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Bit Resolution Engine - Schwabot UROS v1.0
@@ -21,7 +35,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -102,8 +116,8 @@ class BitResolutionEngine:
     def _load_configuration(self) -> None:
         """Load bit resolution configuration."""
         try:
-            # Default configuration
-            config = {
+            # Default configuration is now part of the class state
+            self.config = {
                 "bit_phases": {
                     "4bit": {"max_value": 16, "strategy_type": "conservative"},
                     "8bit": {"max_value": 256, "strategy_type": "balanced"},
@@ -233,8 +247,11 @@ class BitResolutionEngine:
             logger.error(f"Error determining bit phase type: {e}")
             return BitPhase.EIGHT_BIT
 
-    def calculate_tensor_score(self, entry_price: float, current_price: float, phase: int, 
-                             market_data: Dict[str, Any]) -> float:
+    def calculate_tensor_score(self, 
+                               entry_price: float, 
+                               current_price: float, 
+                               phase: int, 
+                               market_data: Dict[str, Any]) -> float:
         """
         Calculate tensor score for trade priority.
         
@@ -285,13 +302,13 @@ class BitResolutionEngine:
             )
             
             # Normalize to reasonable range
-            tensor_score = max(-1.0, min(1.0, tensor_score))
+            tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
             
             return round(tensor_score, 4)
             
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
-            return 0.0
+            return 0.5
 
     def hash_to_strategy(self, hash_value: str, market_data: Dict[str, Any]) -> StrategyMapping:
         """
@@ -369,12 +386,15 @@ class BitResolutionEngine:
             
         except Exception as e:
             logger.error(f"Error mapping hash to basket: {e}")
-            return f"basket_fallback_{int(time.time())}"
+            return "default_basket_0"
 
-    def process_hash_resolution(self, hash_value: str, market_data: Dict[str, Any], 
-                              entry_price: float = None, current_price: float = None) -> BitResolutionResult:
+    def process_hash_resolution(self, 
+                                hash_value: str, 
+                                market_data: Dict[str, Any], 
+                                entry_price: float = None, 
+                                current_price: float = None) -> BitResolutionResult:
         """
-        Process complete hash resolution with strategy mapping and tensor scoring.
+        Process full hash resolution from hash to strategy and basket.
         
         Parameters:
         -----------
@@ -492,8 +512,8 @@ class BitResolutionEngine:
                 'total_resolutions': total_resolutions,
                 'bit_phase_distribution': bit_phase_counts,
                 'strategy_distribution': strategy_counts,
-                'average_tensor_score': np.mean(tensor_scores) if tensor_scores else 0.0,
-                'tensor_score_std': np.std(tensor_scores) if tensor_scores else 0.0,
+                'average_tensor_score': unified_math.unified_math.mean(tensor_scores) if tensor_scores else 0.0,
+                'tensor_score_std': unified_math.unified_math.std(tensor_scores) if tensor_scores else 0.0,
                 'cache_size': len(self.hash_cache)
             }
             
@@ -514,10 +534,14 @@ if __name__ == "__main__":
     }
     
     result = engine.process_hash_resolution(test_hash, market_data, 45000.0, 46000.0)
-    print(f"Bit Resolution Result: {result.bit_phase.value}-bit, phase={result.phase_value}")
-    print(f"Strategy: {result.strategy_type.value}, Tensor Score: {result.tensor_score:.4f}")
-    print(f"Basket ID: {result.basket_id}")
+    safe_print(f"Bit Resolution Result: {result.bit_phase.value}-bit, phase={result.phase_value}")
+    safe_print(f"Strategy: {result.strategy_type.value}, Tensor Score: {result.tensor_score:.4f}")
+    safe_print(f"Basket ID: {result.basket_id}")
     
     # Get statistics
     stats = engine.get_resolution_statistics()
-    print(f"Resolution Statistics: {stats}") 
+    safe_print(f"Resolution Statistics: {stats}")
+
+
+if __name__ == "__main__":
+    main() 

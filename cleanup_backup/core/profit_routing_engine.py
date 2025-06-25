@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Profit Routing Engine - Schwabot UROS v1.0
@@ -6,13 +8,13 @@ Profit Routing Engine - Schwabot UROS v1.0
 Central logic handler for profit destination allocation among BTC, USDC, ETH, XRP.
 Features:
 - Profit Delta Vector: P = (P_BTC, P_USDC, P_XRP, ...)
-- Weighted Strategy Entropy Matrix: M_ij = log(P_i / P_j + ε)
+- Weighted Strategy Entropy Matrix: M_ij = unified_math.log(P_i / P_j + ε)
 - Dynamic Rebalancing Logic using eigenvector centrality
 - Markov transition probabilities for zone rotation
 - Integration with strategy_mapper.py and profit_cycle_allocator.py
 """
 
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -132,7 +134,7 @@ class ProfitRoutingEngine:
         # Maintain route limit
         if len(self.routes) > self.max_routes:
             # Remove oldest route
-            oldest_route_id = min(self.routes.keys(), key=lambda k: self.routes[k].timestamp)
+            oldest_route_id = unified_math.min(self.routes.keys(), key=lambda k: self.routes[k].timestamp)
             del self.routes[oldest_route_id]
         
         logger.info(f"Created profit route: {route_name} ({strategy.value})")
@@ -274,7 +276,7 @@ class ProfitRoutingEngine:
             for route in self.routes.values()
         ]
         
-        return float(np.mean(efficiencies))
+        return float(unified_math.unified_math.mean(efficiencies))
     
     def optimize_routing_allocation(self) -> Dict[str, float]:
         """Optimize routing allocation using eigenvector centrality and Markov chains."""
@@ -340,12 +342,12 @@ class ProfitRoutingEngine:
                     p_i = profit_deltas.get(asset_i, 0.0)
                     p_j = profit_deltas.get(asset_j, 0.0)
                     
-                    # M_ij = log(P_i / P_j + ε)
+                    # M_ij = unified_math.log(P_i / P_j + ε)
                     epsilon = 1e-10
-                    if abs(p_j) < epsilon:
+                    if unified_math.abs(p_j) < epsilon:
                         entropy_matrix[i, j] = 0.0
                     else:
-                        entropy_matrix[i, j] = np.log(abs(p_i / p_j) + epsilon)
+                        entropy_matrix[i, j] = unified_math.unified_math.log(unified_math.abs(p_i / p_j) + epsilon)
         
         return entropy_matrix
     
@@ -363,7 +365,7 @@ class ProfitRoutingEngine:
             centrality_vector = eigenvectors[:, max_eigenvalue_idx]
             
             # Normalize to positive values
-            centrality_vector = np.abs(centrality_vector)
+            centrality_vector = unified_math.unified_math.abs(centrality_vector)
             centrality_vector = centrality_vector / np.sum(centrality_vector)
             
             return centrality_vector
@@ -389,8 +391,8 @@ class ProfitRoutingEngine:
             next_allocation = self.profit_history[i + 1].get("allocation", {})
             
             # Find dominant assets (highest allocation)
-            current_dominant = max(current_allocation.items(), key=lambda x: x[1])[0] if current_allocation else None
-            next_dominant = max(next_allocation.items(), key=lambda x: x[1])[0] if next_allocation else None
+            current_dominant = unified_math.max(current_allocation.items(), key=lambda x: x[1])[0] if current_allocation else None
+            next_dominant = unified_math.max(next_allocation.items(), key=lambda x: x[1])[0] if next_allocation else None
             
             if current_dominant and next_dominant:
                 try:
@@ -429,11 +431,11 @@ class ProfitRoutingEngine:
         for i in range(n_assets):
             # Weighted combination: 70% centrality, 30% transition probability
             centrality_component = 0.7 * centrality_weights[i]
-            transition_component = 0.3 * np.mean(self.transition_matrix[:, i])
+            transition_component = 0.3 * unified_math.unified_math.mean(self.transition_matrix[:, i])
             combined_weights[i] = centrality_component + transition_component
         
         # Normalize
-        combined_weights = np.abs(combined_weights)
+        combined_weights = unified_math.unified_math.abs(combined_weights)
         combined_weights = combined_weights / np.sum(combined_weights)
         
         # Convert to dictionary
@@ -450,12 +452,12 @@ class ProfitRoutingEngine:
                            if route.performance_metrics["total_profit"] > 0)
         
         # Calculate average performance metrics
-        avg_efficiency = np.mean([
+        avg_efficiency = unified_math.mean([
             route.performance_metrics["routing_efficiency"]
             for route in self.routes.values()
         ]) if self.routes else 0.0
         
-        avg_profit = np.mean([
+        avg_profit = unified_math.mean([
             route.performance_metrics["total_profit"]
             for route in self.routes.values()
         ]) if self.routes else 0.0
@@ -479,7 +481,7 @@ class ProfitRoutingEngine:
             return recommendations
         
         # Find best performing route
-        best_route = max(self.routes.values(), 
+        best_route = unified_math.max(self.routes.values(), 
                         key=lambda r: r.performance_metrics["total_profit"])
         
         recommendations.append({
@@ -501,7 +503,7 @@ class ProfitRoutingEngine:
         
         # Strategy performance recommendations
         if self.strategy_performances:
-            best_strategy = max(self.strategy_performances.values(),
+            best_strategy = unified_math.max(self.strategy_performances.values(),
                               key=lambda s: s.sharpe_ratio)
             
             recommendations.append({
@@ -585,19 +587,19 @@ def main() -> None:
     
     # Optimize allocations
     optimal_allocations = engine.optimize_routing_allocation()
-    print(f"Optimal allocations: {optimal_allocations}")
+    safe_print(f"Optimal allocations: {optimal_allocations}")
     
     # Get statistics
     stats = engine.get_routing_statistics()
-    print(f"Routing statistics: {stats}")
+    safe_print(f"Routing statistics: {stats}")
     
     # Get recommendations
     recommendations = engine.get_routing_recommendations()
-    print(f"Routing recommendations: {len(recommendations)}")
+    safe_print(f"Routing recommendations: {len(recommendations)}")
     
     # Get trading signals
     signals = engine.get_trading_signals()
-    print(f"Generated {len(signals)} trading signals")
+    safe_print(f"Generated {len(signals)} trading signals")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """News quantization field – weighted news processing and spectral analysis.
 
@@ -11,11 +14,10 @@ This module processes financial news streams into quantized fields with
 gradient analysis and frequency domain representations.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "quantize_news",
@@ -116,7 +118,7 @@ def news_psi(
     grad_mag_sq = spatial_grad**2 + temporal_grad**2
 
     # Gaussian weighting: exp(−|∇Q|² / σ²)
-    psi_news = np.exp(-grad_mag_sq / (sigma**2))
+    psi_news = unified_math.exp(-grad_mag_sq / (sigma**2))
 
     return psi_news
 

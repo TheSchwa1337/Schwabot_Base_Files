@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Enhanced Thermal Hash Processor - Core Thermal-Aware Hash Processing System
@@ -20,7 +22,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import json
 import psutil
@@ -164,13 +166,13 @@ class EnhancedThermalHashProcessor:
         """Calculate thermal pressure score."""
         try:
             # Normalize temperatures
-            gpu_pressure = min(gpu_temp / 100.0, 1.0)
-            cpu_pressure = min(cpu_temp / 100.0, 1.0)
+            gpu_pressure = unified_math.min(gpu_temp / 100.0, 1.0)
+            cpu_pressure = unified_math.min(cpu_temp / 100.0, 1.0)
             
             # Weighted thermal pressure
             thermal_pressure = (gpu_pressure * 0.5 + cpu_pressure * 0.3 + memory_usage * 0.2)
             
-            return min(1.0, thermal_pressure)
+            return unified_math.min(1.0, thermal_pressure)
             
         except Exception as e:
             logger.error(f"Thermal pressure calculation error: {e}")
@@ -240,7 +242,7 @@ class EnhancedThermalHashProcessor:
     def _determine_performance_mode(self, thermal_metrics: ThermalMetrics) -> str:
         """Determine optimal performance mode based on thermal conditions."""
         try:
-            max_temp = max(thermal_metrics.gpu_temperature, thermal_metrics.cpu_temperature)
+            max_temp = unified_math.max(thermal_metrics.gpu_temperature, thermal_metrics.cpu_temperature)
             
             if max_temp >= self.thermal_thresholds["emergency"]:
                 return "critical_protection"
@@ -311,7 +313,7 @@ class EnhancedThermalHashProcessor:
             
             total_impact = (base_impact + gpu_impact) * thermal_multiplier
             
-            return min(1.0, total_impact)
+            return unified_math.min(1.0, total_impact)
             
         except Exception as e:
             logger.error(f"Thermal impact calculation error: {e}")
@@ -331,7 +333,7 @@ class EnhancedThermalHashProcessor:
             
             confidence = (thermal_stability * 0.4 + efficiency * 0.4 + resource_availability * 0.2)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Processing confidence calculation error: {e}")
@@ -378,14 +380,14 @@ def main() -> None:
     # Test hash processing
     test_data = "test_data_for_thermal_processing"
     result = processor.process_hash(test_data, "sha256")
-    print(f"Hash processing result: {result.success}")
-    print(f"Hash value: {result.hash_value[:16]}...")
-    print(f"Performance mode: {result.performance_mode}")
-    print(f"Thermal impact: {result.thermal_impact:.3f}")
+    safe_print(f"Hash processing result: {result.success}")
+    safe_print(f"Hash value: {result.hash_value[:16]}...")
+    safe_print(f"Performance mode: {result.performance_mode}")
+    safe_print(f"Thermal impact: {result.thermal_impact:.3f}")
     
     # Get statistics
     stats = processor.get_processor_statistics()
-    print(f"Processor statistics: {stats}")
+    safe_print(f"Processor statistics: {stats}")
 
 
 if __name__ == "__main__":

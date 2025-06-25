@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Trajectory Sphere - Live Backtesting and Self-Validation Engine.
 
@@ -6,17 +22,16 @@ using historical ledger data and real-time market feeds to validate and
 improve its own logic through self-referential testing.
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
-import math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import unified mathematics
 try:
@@ -135,12 +150,12 @@ class TrajectorySphere:
         self.successful_simulations = 0
         self.average_profit_delta = 0.0
         
-        safe_print("🌌 Trajectory Sphere initialized")
+        safe_safe_print("🌌 Trajectory Sphere initialized")
     
     def set_execution_mode(self, mode: ExecutionMode) -> None:
         """Set execution mode."""
         self.execution_mode = mode
-        safe_print(f"🔄 Execution mode set to: {mode.value}")
+        safe_safe_print(f"🔄 Execution mode set to: {mode.value}")
     
     def internal_tick_reconstructor(
         self,
@@ -159,7 +174,7 @@ class TrajectorySphere:
             phase = (tick_id % self.tick_phase_window) / float(self.tick_phase_window)
             
             # Apply sine-based compression modulation (like ECU timing)
-            compression_factor = math.sin(2 * math.pi * phase)
+            compression_factor = unified_math.unified_math.sin(2 * math.pi * phase)
             
             # Calculate entropy field (like engine temperature affecting combustion)
             entropy_field = self._calculate_entropy_field(tick_id, market_vector)
@@ -196,31 +211,31 @@ class TrajectorySphere:
             return reconstruction
             
         except Exception as e:
-            safe_print(f"❌ Tick reconstruction failed: {safe_format_error(e, 'tick_reconstruction')}")
+            safe_safe_print(f"❌ Tick reconstruction failed: {safe_format_error(e, 'tick_reconstruction')}")
             return self._create_fallback_reconstruction(tick_id, timestamp, market_vector)
     
     def _calculate_entropy_field(self, tick_id: int, market_vector: MarketVector) -> float:
         """Calculate entropy field (like engine temperature affecting combustion)."""
         try:
             # Use price volatility as entropy source
-            price_volatility = abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
+            price_volatility = unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
             
             # Apply exponential decay (like heat dissipation)
-            entropy = price_volatility * math.exp(-tick_id / 1000.0)
+            entropy = price_volatility * unified_math.exp(-tick_id / 1000.0)
             
             # Normalize to 0-1 range
-            return min(1.0, max(0.0, entropy))
+            return unified_math.min(1.0, unified_math.max(0.0, entropy))
             
         except Exception as e:
-            safe_print(f"⚠️ Entropy calculation failed: {safe_format_error(e, 'entropy_calculation')}")
+            safe_safe_print(f"⚠️ Entropy calculation failed: {safe_format_error(e, 'entropy_calculation')}")
             return 0.5
     
     def _calculate_zpe_resonance(self, phase: float, entropy_field: float) -> float:
         """Calculate ZPE resonance (like harmonic engine resonance)."""
         try:
             # Calculate resonance based on phase and entropy alignment
-            phase_resonance = math.cos(2 * math.pi * phase)
-            entropy_resonance = math.exp(-abs(entropy_field - 0.5))
+            phase_resonance = unified_math.unified_math.cos(2 * math.pi * phase)
+            entropy_resonance = unified_math.exp(-unified_math.abs(entropy_field - 0.5))
             
             # Combine resonances
             zpe_resonance = (phase_resonance + entropy_resonance) / 2.0
@@ -228,7 +243,7 @@ class TrajectorySphere:
             return zpe_resonance
             
         except Exception as e:
-            safe_print(f"⚠️ ZPE resonance calculation failed: {safe_format_error(e, 'zpe_resonance')}")
+            safe_safe_print(f"⚠️ ZPE resonance calculation failed: {safe_format_error(e, 'zpe_resonance')}")
             return 0.0
     
     def _calculate_base_profit(self, market_vector: MarketVector) -> float:
@@ -238,14 +253,14 @@ class TrajectorySphere:
             total_volume = (market_vector.volume_btc + market_vector.volume_eth + 
                           market_vector.volume_xrp + market_vector.volume_usdc)
             
-            price_movement = abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
+            price_movement = unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
             
             base_profit = total_volume * price_movement * 0.001  # Small multiplier
             
             return base_profit
             
         except Exception as e:
-            safe_print(f"⚠️ Base profit calculation failed: {safe_format_error(e, 'base_profit')}")
+            safe_safe_print(f"⚠️ Base profit calculation failed: {safe_format_error(e, 'base_profit')}")
             return 0.0
     
     def _calculate_execution_confidence(
@@ -257,21 +272,21 @@ class TrajectorySphere:
         """Calculate execution confidence based on phase alignment."""
         try:
             # Phase alignment (like spark timing)
-            phase_alignment = 1.0 - abs(phase - 0.5) * 2.0
+            phase_alignment = 1.0 - unified_math.abs(phase - 0.5) * 2.0
             
             # Entropy stability (like engine temperature stability)
-            entropy_stability = 1.0 - abs(entropy_field - 0.5) * 2.0
+            entropy_stability = 1.0 - unified_math.abs(entropy_field - 0.5) * 2.0
             
             # ZPE resonance strength
-            resonance_strength = abs(zpe_resonance)
+            resonance_strength = unified_math.abs(zpe_resonance)
             
             # Combine factors
             confidence = (phase_alignment + entropy_stability + resonance_strength) / 3.0
             
-            return min(1.0, max(0.0, confidence))
+            return unified_math.min(1.0, unified_math.max(0.0, confidence))
             
         except Exception as e:
-            safe_print(f"⚠️ Execution confidence calculation failed: {safe_format_error(e, 'execution_confidence')}")
+            safe_safe_print(f"⚠️ Execution confidence calculation failed: {safe_format_error(e, 'execution_confidence')}")
             return 0.5
     
     def _create_fallback_reconstruction(
@@ -359,12 +374,12 @@ class TrajectorySphere:
             # Increment tick ID
             self.current_tick_id += 1
             
-            safe_print(f"✅ Tick simulation completed: Profit Delta = {profit_delta:.6f}")
+            safe_safe_print(f"✅ Tick simulation completed: Profit Delta = {profit_delta:.6f}")
             
             return result
             
         except Exception as e:
-            safe_print(f"❌ Tick simulation failed: {safe_format_error(e, 'tick_simulation')}")
+            safe_safe_print(f"❌ Tick simulation failed: {safe_format_error(e, 'tick_simulation')}")
             return SimulationResult(
                 success=False,
                 simulated_profit=0.0,
@@ -416,7 +431,7 @@ class TrajectorySphere:
                 return reconstruction.profit_potential * reconstruction.execution_confidence
                 
         except Exception as e:
-            safe_print(f"⚠️ Strategy execution simulation failed: {safe_format_error(e, 'strategy_simulation')}")
+            safe_safe_print(f"⚠️ Strategy execution simulation failed: {safe_format_error(e, 'strategy_simulation')}")
             return reconstruction.profit_potential * 0.5
     
     async def _get_profit_projection(
@@ -435,30 +450,30 @@ class TrajectorySphere:
                 return reconstruction.profit_potential * 0.8
                 
         except Exception as e:
-            safe_print(f"⚠️ Profit projection failed: {safe_format_error(e, 'profit_projection')}")
+            safe_safe_print(f"⚠️ Profit projection failed: {safe_format_error(e, 'profit_projection')}")
             return reconstruction.profit_potential * 0.8
     
     def _calculate_phase_alignment(self, reconstruction: TickReconstruction) -> float:
         """Calculate phase alignment score."""
         try:
             # Phase alignment based on compression and resonance
-            phase_score = 1.0 - abs(reconstruction.phase_compression)
-            resonance_score = abs(reconstruction.zpe_resonance)
+            phase_score = 1.0 - unified_math.abs(reconstruction.phase_compression)
+            resonance_score = unified_math.abs(reconstruction.zpe_resonance)
             
             return (phase_score + resonance_score) / 2.0
             
         except Exception as e:
-            safe_print(f"⚠️ Phase alignment calculation failed: {safe_format_error(e, 'phase_alignment')}")
+            safe_safe_print(f"⚠️ Phase alignment calculation failed: {safe_format_error(e, 'phase_alignment')}")
             return 0.5
     
     def _calculate_entropy_correlation(self, reconstruction: TickReconstruction) -> float:
         """Calculate entropy correlation score."""
         try:
             # Entropy correlation based on field stability
-            return 1.0 - abs(reconstruction.entropy_field - 0.5) * 2.0
+            return 1.0 - unified_math.abs(reconstruction.entropy_field - 0.5) * 2.0
             
         except Exception as e:
-            safe_print(f"⚠️ Entropy correlation calculation failed: {safe_format_error(e, 'entropy_correlation')}")
+            safe_safe_print(f"⚠️ Entropy correlation calculation failed: {safe_format_error(e, 'entropy_correlation')}")
             return 0.5
     
     def _update_simulation_statistics(self, result: SimulationResult) -> None:
@@ -487,7 +502,7 @@ class TrajectorySphere:
         return {
             'total_simulations': self.total_simulations,
             'successful_simulations': self.successful_simulations,
-            'success_rate': self.successful_simulations / max(self.total_simulations, 1),
+            'success_rate': self.successful_simulations / unified_math.max(self.total_simulations, 1),
             'average_profit_delta': self.average_profit_delta,
             'current_tick_id': self.current_tick_id,
             'execution_mode': self.execution_mode.value,
@@ -500,7 +515,7 @@ class TrajectorySphere:
         self.phase_memory.clear()
         self.entropy_memory.clear()
         self.simulation_history.clear()
-        safe_print("🗑️ Trajectory Sphere memory cleared")
+        safe_safe_print("🗑️ Trajectory Sphere memory cleared")
 
 
 # Global trajectory sphere instance
@@ -526,7 +541,7 @@ def get_simulation_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test trajectory sphere
-    print("🧪 Testing Trajectory Sphere...")
+    safe_print("🧪 Testing Trajectory Sphere...")
     
     # Test market data
     test_market_data = {
@@ -542,12 +557,12 @@ if __name__ == "__main__":
     
     # Run simulation
     result = simulate_tick(test_market_data)
-    print(f"✅ Simulation Result: {result.success}")
-    print(f"   Simulated Profit: {result.simulated_profit:.6f}")
-    print(f"   Projected Profit: {result.projected_profit:.6f}")
-    print(f"   Profit Delta: {result.profit_delta:.6f}")
-    print(f"   Phase Alignment: {result.phase_alignment:.6f}")
+    safe_print(f"✅ Simulation Result: {result.success}")
+    safe_print(f"   Simulated Profit: {result.simulated_profit:.6f}")
+    safe_print(f"   Projected Profit: {result.projected_profit:.6f}")
+    safe_print(f"   Profit Delta: {result.profit_delta:.6f}")
+    safe_print(f"   Phase Alignment: {result.phase_alignment:.6f}")
     
     # Get statistics
     stats = get_simulation_stats()
-    print(f"✅ Statistics: {stats}") 
+    safe_print(f"✅ Statistics: {stats}") 

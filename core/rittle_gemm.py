@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 
@@ -39,7 +55,6 @@ Performance Optimizations:
 Windows CLI compatible with flake8 compliance.
 """
 
-from __future__ import annotations
 
 from collections import defaultdict
 from collections import deque
@@ -51,7 +66,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 from scipy import linalg
 from scipy.linalg import blas
@@ -769,9 +784,9 @@ class RittleGEMM:
                 for j in range(0, n, block_size):
                     for l in range(0, k, block_size):
                         # Define block boundaries
-                        i_end = min(i + block_size, m)
-                        j_end = min(j + block_size, n)
-                        l_end = min(l + block_size, k)
+                        i_end = unified_math.min(i + block_size, m)
+                        j_end = unified_math.min(j + block_size, n)
+                        l_end = unified_math.min(l + block_size, k)
 
                         # Multiply blocks
                         result[i:i_end, j:j_end] += (
@@ -927,12 +942,12 @@ class RittleGEMM:
                 U, S, Vt = lapack.dgesvd(A, full_matrices=full_matrices)
             else:
                 # Use scipy's SVD
-                U, S, Vt = linalg.svd(A, full_matrices=full_matrices)
+                U, S, Vt = linalg.unified_math.svd(A, full_matrices=full_matrices)
 
             # Calculate performance metrics
             execution_time = time.time() - start_time
             flops = (
-                4 * A.shape[0] * A.shape[1] * min(A.shape)
+                4 * A.shape[0] * A.shape[1] * unified_math.min(A.shape)
             )  # Approximate FLOP count for SVD
             memory_used = U.nbytes + S.nbytes + Vt.nbytes
 
@@ -1170,7 +1185,7 @@ class RittleGEMM:
             for i in range(A.shape[0]):
                 for j in range(A.shape[1]):
                     if A[i, j] != 0:
-                        bandwidth = max(bandwidth, abs(i - j))
+                        bandwidth = unified_math.max(bandwidth, unified_math.abs(i - j))
             return bandwidth
         except Exception as e:
             error_msg = f"Error calculating bandwidth: {e}"
@@ -1338,14 +1353,14 @@ def main() -> None:
         rittle = RittleGEMM()
 
         # Use CLI-safe print for all output
-        rittle.safe_print("🚀 Rittle GEMM Performance Test")
-        rittle.safe_print("=" * 50)
+        rittle.safe_safe_print("🚀 Rittle GEMM Performance Test")
+        rittle.safe_safe_print("=" * 50)
 
         # Test matrices of various sizes
         test_sizes = [50, 100, 200, 500]
 
         for size in test_sizes:
-            rittle.safe_print(f"\n📊 Testing {size}x{size} matrices...")
+            rittle.safe_safe_print(f"\n📊 Testing {size}x{size} matrices...")
 
             # Create test matrices
             A = np.random.rand(size, size)
@@ -1359,65 +1374,65 @@ def main() -> None:
             ]
 
             for level in optimization_levels:
-                rittle.safe_print(f"  Testing {level.value} optimization...")
+                rittle.safe_safe_print(f"  Testing {level.value} optimization...")
 
                 # Test matrix multiplication
                 result = rittle.gemm(A, B, optimization_level=level)
                 if result.success:
-                    rittle.safe_print(
+                    rittle.safe_safe_print(
                         f"    ✅ GEMM completed in {result.execution_time:.6f}s"
                     )
-                    rittle.safe_print(f"    📈 FLOPs: {result.flops:,}")
-                    rittle.safe_print(
+                    rittle.safe_safe_print(f"    📈 FLOPs: {result.flops:,}")
+                    rittle.safe_safe_print(
                         f"    💾 Memory: {result.memory_used:,} bytes"
                     )
                 else:
-                    rittle.safe_print(
+                    rittle.safe_safe_print(
                         f"    ❌ GEMM failed: {result.error_message}"
                     )
 
             # Test matrix decomposition
-            rittle.safe_print(f"  Testing matrix decomposition...")
+            rittle.safe_safe_print(f"  Testing matrix decomposition...")
             try:
                 P, L, U = rittle.lu_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_print(f"    ✅ LU decomposition completed")
+                rittle.safe_safe_print(f"    ✅ LU decomposition completed")
             except Exception as e:
-                rittle.safe_print(f"    ❌ LU decomposition failed: {e}")
+                rittle.safe_safe_print(f"    ❌ LU decomposition failed: {e}")
 
             # Test eigenvalue decomposition
-            rittle.safe_print(f"  Testing eigenvalue decomposition...")
+            rittle.safe_safe_print(f"  Testing eigenvalue decomposition...")
             try:
                 eigenvalues, eigenvectors = rittle.eigenvalue_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_print(f"    ✅ Eigenvalue decomposition completed")
+                rittle.safe_safe_print(f"    ✅ Eigenvalue decomposition completed")
             except Exception as e:
-                rittle.safe_print(
+                rittle.safe_safe_print(
                     f"    ❌ Eigenvalue decomposition failed: {e}"
                 )
 
         # Get performance summary
         summary = rittle.get_performance_summary()
-        rittle.safe_print(f"\n📊 Performance Summary:")
-        rittle.safe_print(f"   Total operations: {summary.total_operations}")
-        rittle.safe_print(f"   Total FLOPs: {summary.total_flops:,}")
-        rittle.safe_print(
+        rittle.safe_safe_print(f"\n📊 Performance Summary:")
+        rittle.safe_safe_print(f"   Total operations: {summary.total_operations}")
+        rittle.safe_safe_print(f"   Total FLOPs: {summary.total_flops:,}")
+        rittle.safe_safe_print(
             f"   Average execution time: {summary.average_execution_time:.6f}s"
         )
-        rittle.safe_print(
+        rittle.safe_safe_print(
             f"   Peak memory usage: {summary.peak_memory_usage:,} bytes"
         )
-        rittle.safe_print(f"   Cache hit rate: {summary.cache_hit_rate:.2%}")
-        rittle.safe_print(f"   Throughput: {summary.throughput:.2f} ops/sec")
+        rittle.safe_safe_print(f"   Cache hit rate: {summary.cache_hit_rate:.2%}")
+        rittle.safe_safe_print(f"   Throughput: {summary.throughput:.2f} ops/sec")
 
-        rittle.safe_print("\n🎉 Rittle GEMM test completed successfully!")
+        rittle.safe_safe_print("\n🎉 Rittle GEMM test completed successfully!")
 
     except Exception as e:
         # Use CLI-safe error reporting
         rittle = RittleGEMM()  # Create instance for safe printing
-        rittle.safe_print(f"❌ Rittle GEMM test failed: {e}")
+        rittle.safe_safe_print(f"❌ Rittle GEMM test failed: {e}")
         import traceback
 
         traceback.print_exc()

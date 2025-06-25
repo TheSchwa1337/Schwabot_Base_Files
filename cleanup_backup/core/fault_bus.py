@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fault Bus.
 
@@ -33,7 +35,7 @@ import time
 # Named constants to replace magic numbers
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 import psutil
 
 # Import Core Engines for Integrated Intelligence
@@ -132,7 +134,7 @@ try:
 except ImportError:
     # Fallback type definitions if core module not available
     from typing import Any, Dict, List, Optional, Union
-    import numpy as np
+    from core.unified_math_system import unified_math
     from dataclasses import dataclass
     from datetime import datetime
     from enum import Enum
@@ -341,13 +343,13 @@ class ProfitAnomalyDetector:
 
         # Calculate z-score for current profit
         profits = list(self.profit_history)
-        mean_profit = np.mean(profits)
-        std_profit = np.std(profits)
+        mean_profit = unified_math.unified_math.mean(profits)
+        std_profit = unified_math.unified_math.std(profits)
 
         if std_profit == 0:
             return False, 0.0
 
-        z_score = abs(profit_delta - mean_profit) / std_profit
+        z_score = unified_math.abs(profit_delta - mean_profit) / std_profit
 
         # Anomaly if z-score > 2.5 (statistically significant)
         if z_score > 2.5:
@@ -357,7 +359,7 @@ class ProfitAnomalyDetector:
 
             # Check for clustering (JuMBO-like behavior)
             recent_anomalies = [
-                p for p in profits[-10:] if abs(p - mean_profit) / std_profit > 2.0
+                p for p in profits[-10:] if unified_math.abs(p - mean_profit) / std_profit > 2.0
             ]
             if len(recent_anomalies) >= 3:
                 # Multiple anomalies = potential profit tier
@@ -402,18 +404,18 @@ class ProfitCorrelationMatrix:
 
         # Exponential moving average for correlation strength
         if corr.occurrence_count == 1:
-            corr.correlation_strength = abs(profit_delta)
+            corr.correlation_strength = unified_math.abs(profit_delta)
         else:
             corr.correlation_strength = (
                 self.decay_factor * corr.correlation_strength
-                + (1 - self.decay_factor) * abs(profit_delta)
+                + (1 - self.decay_factor) * unified_math.abs(profit_delta)
             )
 
         # Update other metrics
         corr.profit_delta = profit_delta
         corr.temporal_offset = temporal_offset
         corr.occurrence_count += 1
-        corr.confidence = min(corr.occurrence_count / 10.0, NORMALIZATION_FACTOR)
+        corr.confidence = unified_math.min(corr.occurrence_count / 10.0, NORMALIZATION_FACTOR)
         corr.last_seen = datetime.now()
 
         # Store in temporal buffer for analysis
@@ -1014,7 +1016,7 @@ class FaultBus:
         if event.profit_context is not None:
             # Higher absolute profit changes favor async for complex analysis
             profit_opportunity_score = min(
-                abs(event.profit_context) / MAX_PROFIT_THRESHOLD,
+                unified_math.abs(event.profit_context) / MAX_PROFIT_THRESHOLD,
                 NORMALIZATION_FACTOR,
             )
         elif event.type in [
@@ -1035,7 +1037,7 @@ class FaultBus:
 
         # Normalize to [0, 1] range
         final_score = (final_score + NORMALIZATION_FACTOR) / 2.0
-        final_score = max(0.0, min(NORMALIZATION_FACTOR, final_score))
+        final_score = unified_math.max(0.0, unified_math.min(NORMALIZATION_FACTOR, final_score))
 
         # Determine selected path
         selected_path = "async" if final_score >= self.async_threshold else "sync"
@@ -1304,7 +1306,7 @@ class FaultBus:
         complexity_factor = NORMALIZATION_FACTOR
         if event.metadata:
             complexity_factor += len(event.metadata) * DEFAULT_INTERVAL
-        if event.profit_context and abs(event.profit_context) > 50:
+        if event.profit_context and unified_math.abs(event.profit_context) > 50:
             complexity_factor += 0.3  # High profit events are more complex
 
         return base_time * complexity_factor
@@ -1566,7 +1568,7 @@ class FaultBus:
 
     def tune_async_threshold(self, new_threshold: float) -> None:
         """Dynamically tune the async threshold based on performance"""
-        self.async_threshold = max(0.0, min(NORMALIZATION_FACTOR, new_threshold))
+        self.async_threshold = unified_math.max(0.0, unified_math.min(NORMALIZATION_FACTOR, new_threshold))
         logging.info(f"Async threshold tuned to: {self.async_threshold:.3f}")
 
     def get_profit_correlations(self) -> List[ProfitFaultCorrelation]:
@@ -1689,7 +1691,7 @@ class FaultBus:
                 fault_id=fault_id,
                 fault_type=fault_type,
                 module=module,
-                severity=max(0.0, min(1.0, severity)),
+                severity=unified_math.max(0.0, unified_math.min(1.0, severity)),
                 timestamp=datetime.now(),
                 error_message=error_message,
                 recovery_suggestion=recovery_suggestion,
@@ -1922,7 +1924,7 @@ class FaultBus:
         try:
             total_faults = len(self.fault_events)
             resolved_faults = sum(1 for f in self.fault_events if f.resolved)
-            avg_resolution_time = np.mean(self.fault_resolution_times) if self.fault_resolution_times else 0.0
+            avg_resolution_time = unified_math.unified_math.mean(self.fault_resolution_times) if self.fault_resolution_times else 0.0
             
             return {
                 "total_faults": total_faults,
@@ -1961,7 +1963,7 @@ if __name__ == "__main__":
     @fault_bus.register_handler("thermal_high")
     def handle_thermal_high(event: FaultBusEvent) -> Any:
         """TODO: document handle_thermal_high."""
-        print(f"[HOT] Event handled: {event}")
+        safe_print(f"[HOT] Event handled: {event}")
 
     # Simulate profit updates with potential loops
     profit_deltas = [
@@ -1993,11 +1995,11 @@ if __name__ == "__main__":
     asyncio.run(fault_bus.dispatch(severity_threshold=0.5))
 
     # Export logs and correlations
-    print("=== Memory Log ===")
+    safe_print("=== Memory Log ===")
     print(fault_bus.export_memory_log())
-    print("\n=== Path Statistics ===")
+    safe_print("\n=== Path Statistics ===")
     print(json.dumps(fault_bus.get_path_statistics(), indent=2))
-    print("\n=== Correlation Matrix ===")
+    safe_print("\n=== Correlation Matrix ===")
     print(fault_bus.export_correlation_matrix())
 
 # FUTURE ENHANCEMENT NOTES

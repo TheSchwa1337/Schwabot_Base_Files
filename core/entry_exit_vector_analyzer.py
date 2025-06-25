@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry/exit vector analyzer with routing elasticity.
 
@@ -5,11 +8,10 @@ This module implements Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t routing elasticity
 for entry/exit signal analysis in Schwabot's mathematical trading framework.
 """
 
-from __future__ import annotations
 
 from typing import Callable, Sequence, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__ = [
     "EntryExitVectorAnalyzer",
@@ -150,7 +152,7 @@ class EntryExitVectorAnalyzer:
         # Ensure entry_signals matches length
         if len(entry_signals) != len(targets):
             # Broadcast or truncate to match
-            min_len = min(len(entry_signals), len(targets))
+            min_len = unified_math.min(len(entry_signals), len(targets))
             entry_signals = entry_signals[:min_len]
             targets = targets[:min_len]
             risks = risks[:min_len]
@@ -158,7 +160,7 @@ class EntryExitVectorAnalyzer:
         # Exit signal: inverse relationship with entry strength
         # Strong entry → delayed exit, weak entry → quick exit
         exit_urgency = risks / (entry_signals + 0.1)  # avoid division by zero
-        exit_opportunity = targets * np.exp(-entry_signals)
+        exit_opportunity = targets * unified_math.exp(-entry_signals)
 
         exit_signals = exit_urgency + exit_opportunity
 
@@ -190,12 +192,12 @@ class EntryExitVectorAnalyzer:
 
         # Find common length
         min_entry_len = (
-            min(len(arr) for arr in entry_arrays) if entry_arrays else 0
+            unified_math.min(len(arr) for arr in entry_arrays) if entry_arrays else 0
         )
         min_exit_len = (
-            min(len(arr) for arr in exit_arrays) if exit_arrays else 0
+            unified_math.min(len(arr) for arr in exit_arrays) if exit_arrays else 0
         )
-        common_len = min(min_entry_len, min_exit_len)
+        common_len = unified_math.min(min_entry_len, min_exit_len)
 
         if common_len == 0:
             return np.array([]), np.array([])
@@ -210,7 +212,7 @@ class EntryExitVectorAnalyzer:
             transformed_exit = elasticity_matrix @ exit_matrix
         else:
             # Fallback: apply mean elasticity
-            mean_elasticity = np.mean(elasticity_matrix)
+            mean_elasticity = unified_math.unified_math.mean(elasticity_matrix)
             transformed_entry = mean_elasticity * entry_matrix
             transformed_exit = mean_elasticity * exit_matrix
 

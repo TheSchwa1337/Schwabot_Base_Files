@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Comprehensive System Integration Test - Schwabot Mathematical Framework.
 
@@ -33,7 +37,6 @@ Goal: 100% working integration with zero conflicts.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import getcontext
@@ -103,11 +106,11 @@ class SystemIntegrationTester:
                 self.results.append(result)
 
                 if result.success:
-                    print(
+                    safe_print(
                         f"✅ {result.test_name}: PASSED ({result.execution_time:.3f}s)"
                     )
                 else:
-                    print(
+                    safe_print(
                         f"❌ {result.test_name}: FAILED - {result.error_message}"
                     )
 
@@ -119,7 +122,7 @@ class SystemIntegrationTester:
                     error_message=f"Test execution error: {str(e)}",
                 )
                 self.results.append(error_result)
-                print(f"🚨 {test_method.__name__}: CRITICAL ERROR - {str(e)}")
+                safe_print(f"🚨 {test_method.__name__}: CRITICAL ERROR - {str(e)}")
 
         return self.generate_final_report()
 
@@ -154,7 +157,7 @@ class SystemIntegrationTester:
                 "mathlib_v3_version": math_v3.version,
                 "dual_test_result": f"f(2)={result.val}, f'(2)={result.eps}",
                 "profit_vector_total": profit_vector.total_profit(),
-                "basic_ops_test": add(5, 3) == 8,
+                "basic_ops_test": unified_math.add(5, 3) == 8,
             }
 
             return IntegrationTestResult(
@@ -233,7 +236,7 @@ class SystemIntegrationTester:
         start_time = time.time()
 
         try:
-            import numpy as np
+            from core.unified_math_system import unified_math
 
             from mathlib import cvar
             from mathlib import Dual
@@ -511,7 +514,7 @@ class SystemIntegrationTester:
         start_time = time.time()
 
         try:
-            import numpy as np
+            from core.unified_math_system import unified_math
 
             from core.constraints import ConstraintValidator
 
@@ -587,7 +590,7 @@ class SystemIntegrationTester:
         start_time = time.time()
 
         try:
-            import numpy as np
+            from core.unified_math_system import unified_math
 
             from mathlib import Dual
             from mathlib import MathLibV3
@@ -753,7 +756,7 @@ class SystemIntegrationTester:
 
             # Test division by zero handling
             try:
-                result = divide(10, 0)
+                result = unified_math.divide(10, 0)
                 error_tests["division_by_zero"] = (
                     False  # Should have raised exception
                 )
@@ -905,43 +908,43 @@ class SystemIntegrationTester:
 
 def main() -> None:
     """Run comprehensive system integration test."""
-    print("🔬 Starting Comprehensive System Integration Test")
-    print("=" * 60)
+    safe_print("🔬 Starting Comprehensive System Integration Test")
+    safe_print("=" * 60)
 
     tester = SystemIntegrationTester()
     report = tester.run_all_tests()
 
-    print("\n" + "=" * 60)
-    print("📊 INTEGRATION TEST SUMMARY")
-    print("=" * 60)
+    safe_print("\n" + "=" * 60)
+    safe_print("📊 INTEGRATION TEST SUMMARY")
+    safe_print("=" * 60)
 
     summary = report["integration_summary"]
-    print(f"Total Tests: {summary['total_tests']}")
-    print(f"Successful: {summary['successful_tests']}")
-    print(f"Failed: {summary['failed_tests']}")
-    print(f"Success Rate: {summary['success_rate']:.1%}")
-    print(f"Overall Status: {summary['overall_status']}")
-    print(f"Execution Time: {summary['total_execution_time']:.2f}s")
+    safe_print(f"Total Tests: {summary['total_tests']}")
+    safe_print(f"Successful: {summary['successful_tests']}")
+    safe_print(f"Failed: {summary['failed_tests']}")
+    safe_print(f"Success Rate: {summary['success_rate']:.1%}")
+    safe_print(f"Overall Status: {summary['overall_status']}")
+    safe_print(f"Execution Time: {summary['total_execution_time']:.2f}s")
 
     if summary["overall_status"] == "PASS":
-        print("\n🎉 INTEGRATION TEST PASSED!")
+        safe_print("\n🎉 INTEGRATION TEST PASSED!")
     else:
-        print("\n⚠️ INTEGRATION ISSUES DETECTED")
+        safe_print("\n⚠️ INTEGRATION ISSUES DETECTED")
 
-    print("\n📋 RECOMMENDATIONS:")
+    safe_print("\n📋 RECOMMENDATIONS:")
     for i, rec in enumerate(report["recommendations"], 1):
-        print(f"  {i}. {rec}")
+        safe_print(f"  {i}. {rec}")
 
-    print("\n🚀 NEXT STEPS:")
+    safe_print("\n🚀 NEXT STEPS:")
     for i, step in enumerate(report["next_steps"], 1):
-        print(f"  {i}. {step}")
+        safe_print(f"  {i}. {step}")
 
     # Save detailed report
     report_file = f"integration_test_report_{int(time.time())}.json"
     with open(report_file, "w") as f:
         json.dump(report, f, indent=2)
 
-    print(f"\n📄 Detailed report saved to: {report_file}")
+    safe_print(f"\n📄 Detailed report saved to: {report_file}")
 
     return report
 

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entropy-based signal validator.
 
@@ -18,11 +21,10 @@ statistical tests (Jensen-Shannon divergence, permutation entropy) can be added
 later under the marked TODO sections.
 """
 
-from __future__ import annotations
 
 from typing import Tuple, Dict, Any
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 try:
     from scipy.signal import welch  # type: ignore
@@ -31,7 +33,7 @@ except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
     def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
         """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
         if nperseg is None:
-            nperseg = min(256, x.size)
+            nperseg = unified_math.min(256, x.size)
         window = np.hanning(nperseg)
         num_segments = x.size // nperseg
         if num_segments == 0:
@@ -41,7 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
             seg = x[i * nperseg : (i + 1) * nperseg]
             seg = seg * window
             spec = np.fft.rfft(seg)
-            psd_acc += (np.abs(spec) ** 2) / (np.sum(window**2) * fs)
+            psd_acc += (unified_math.unified_math.abs(spec) ** 2) / (np.sum(window**2) * fs)
         psd = psd_acc / num_segments
         freqs = np.fft.rfftfreq(nperseg, 1.0 / fs)
         return freqs, psd
@@ -54,7 +56,7 @@ def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
     """Compute spectral entropy (base-2) of a 1-D real signal."""
     freqs, psd = welch(signal, fs=fs)
     psd_norm = psd / np.sum(psd)
-    psd_norm = psd_norm[psd_norm > 0]  # avoid log(0)
+    psd_norm = psd_norm[psd_norm > 0]  # avoid unified_math.log(0)
     return float(-np.sum(psd_norm * np.log2(psd_norm)))
 
 
@@ -245,9 +247,9 @@ class AdaptiveEntropyValidator:
             permutation_entropy = _permutation_entropy(signal)
             # Adaptive threshold for permutation entropy
             if self.permutation_entropy_history:
-                mean_perm = np.mean(self.permutation_entropy_history)
-                std_perm = np.std(self.permutation_entropy_history)
-                perm_min = max(0.0, mean_perm - 2 * std_perm)
+                mean_perm = unified_math.unified_math.mean(self.permutation_entropy_history)
+                std_perm = unified_math.unified_math.std(self.permutation_entropy_history)
+                perm_min = unified_math.max(0.0, mean_perm - 2 * std_perm)
                 perm_max = mean_perm + 2 * std_perm
                 permutation_valid = perm_min <= permutation_entropy <= perm_max
             else:
@@ -284,9 +286,9 @@ class AdaptiveEntropyValidator:
             "js_divergence": js_divergence,
             "js_valid": js_valid,
             "adaptive_thresholds": {
-                "spectral_mean": np.mean(self.entropy_history) if self.entropy_history else 0.0,
-                "spectral_std": np.std(self.entropy_history) if self.entropy_history else 0.0,
-                "permutation_mean": np.mean(self.permutation_entropy_history) if self.permutation_entropy_history else 0.0,
-                "permutation_std": np.std(self.permutation_entropy_history) if self.permutation_entropy_history else 0.0,
+                "spectral_mean": unified_math.unified_math.mean(self.entropy_history) if self.entropy_history else 0.0,
+                "spectral_std": unified_math.unified_math.std(self.entropy_history) if self.entropy_history else 0.0,
+                "permutation_mean": unified_math.unified_math.mean(self.permutation_entropy_history) if self.permutation_entropy_history else 0.0,
+                "permutation_std": unified_math.unified_math.std(self.permutation_entropy_history) if self.permutation_entropy_history else 0.0,
             }
         }

@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Comprehensive Syntax Cleanup for Schwabot Codebase.
 
@@ -135,12 +136,12 @@ class SyntaxCleaner:
             return False
             
         except Exception as e:
-            print(f"Error processing {file_path}: {e}")
+            safe_print(f"Error processing {file_path}: {e}")
             return False
     
     def process_all_files(self) -> None:
         """Process all Python files in the codebase."""
-        print("Processing all Python files...")
+        safe_print("Processing all Python files...")
         
         for root, dirs, files in os.walk('.'):
             # Skip certain directories
@@ -153,21 +154,21 @@ class SyntaxCleaner:
                     
                     if self.fix_file(file_path):
                         self.fix_stats['errors_fixed'] += 1
-                        print(f"✅ Fixed: {file_path}")
+                        safe_print(f"✅ Fixed: {file_path}")
     
     def run_cleanup(self) -> None:
         """Run the complete cleanup process."""
-        print("Comprehensive Syntax Cleanup for Schwabot Codebase")
-        print("=" * 60)
+        safe_print("Comprehensive Syntax Cleanup for Schwabot Codebase")
+        safe_print("=" * 60)
         
         # Process all files
         self.process_all_files()
         
         # Summary
-        print(f"\nSummary:")
-        print(f"  Files processed: {self.fix_stats['files_processed']}")
-        print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
-        print("\nCleanup completed!")
+        safe_print(f"\nSummary:")
+        safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
+        safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
+        safe_print("\nCleanup completed!")
 
 
 def main():

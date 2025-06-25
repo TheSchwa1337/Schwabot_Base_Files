@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phantom Lag Model - Opportunity Cost Quantification for Schwabot
@@ -21,7 +22,7 @@ implies Schwabot missed a major opportunity it should adapt for.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -116,10 +117,10 @@ class PhantomLagModel:
                 max_price_ref = 70000.0  # Default BTC price reference
             
             # Normalize delta price
-            normalized_delta = max(0.0, delta_price / max_price_ref)
+            normalized_delta = unified_math.max(0.0, delta_price / max_price_ref)
             
             # Calculate exponential decay based on entropy
-            entropy_decay = np.exp(-entropy)
+            entropy_decay = unified_math.exp(-entropy)
             
             # Calculate lag penalty
             lag_penalty = entropy_decay * normalized_delta
@@ -255,10 +256,10 @@ class PhantomLagModel:
                 }
             
             # Calculate average lag penalty
-            avg_penalty = np.mean([event.lag_penalty for event in recent_events])
+            avg_penalty = unified_math.mean([event.lag_penalty for event in recent_events])
             
             # Calculate adaptation confidence
-            adaptation_confidence = min(avg_penalty * 2.0, 1.0)
+            adaptation_confidence = unified_math.min(avg_penalty * 2.0, 1.0)
             
             # Generate recommendations
             recommendations = self._generate_adaptation_recommendations(
@@ -291,7 +292,7 @@ class PhantomLagModel:
         if not self.price_history:
             return 70000.0  # Default BTC price
         
-        return max(self.price_history)
+        return unified_math.max(self.price_history)
     
     def _calculate_confidence_impact(self, lag_penalty: float, entropy: float) -> float:
         """Calculate impact on confidence from lag penalty."""
@@ -313,7 +314,7 @@ class PhantomLagModel:
         }
         
         multiplier = type_multipliers.get(event_type, 1.0)
-        return min(base_score * multiplier, 1.0)
+        return unified_math.min(base_score * multiplier, 1.0)
     
     def _store_lag_event(self, event: PhantomLagEvent) -> None:
         """Store a phantom lag event."""
@@ -373,7 +374,7 @@ class PhantomLagModel:
             return recommendations
         
         # Analyze event patterns
-        avg_penalty = np.mean([event.lag_penalty for event in events])
+        avg_penalty = unified_math.mean([event.lag_penalty for event in events])
         event_types = [event.event_type for event in events]
         
         if avg_penalty > 0.7:

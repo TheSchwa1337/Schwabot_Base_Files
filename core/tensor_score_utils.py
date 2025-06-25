@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tensor Score Utilities - Schwabot UROS v1.0
@@ -22,7 +36,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -188,7 +202,7 @@ class TensorScoreUtils:
             )
             
             # Normalize to reasonable range
-            tensor_score = max(-1.0, min(1.0, tensor_score))
+            tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
             
             return round(tensor_score, 4)
             
@@ -222,7 +236,7 @@ class TensorScoreUtils:
             
             # Calculate FFT
             fft = np.fft.fft(seq_array)
-            power = np.abs(fft) ** 2
+            power = unified_math.unified_math.abs(fft) ** 2
             
             # Normalize power spectrum
             total_power = np.sum(power)
@@ -231,7 +245,7 @@ class TensorScoreUtils:
             
             normalized = power / total_power
             
-            # Calculate entropy (avoid log(0))
+            # Calculate entropy (avoid unified_math.log(0))
             entropy = -np.sum(normalized * np.log2(normalized + 1e-9))
             
             return round(entropy, 4)
@@ -348,7 +362,7 @@ class TensorScoreUtils:
             vector_components = []
             for i in range(vector_size):
                 # Create component based on phase and position
-                component = np.sin(2 * np.pi * phase_value / total_ticks + i * np.pi / 2)
+                component = np.unified_math.sin(2 * np.pi * phase_value / total_ticks + i * np.pi / 2)
                 vector_components.append(round(component, 4))
             
             # Create phase vector
@@ -423,13 +437,13 @@ class TensorScoreUtils:
         """
         try:
             # Calculate fractal correlation
-            fractal_corr = np.corrcoef(fractal_signals.flatten(), signal_patterns.flatten())[0, 1]
+            fractal_corr = unified_math.unified_math.correlation(fractal_signals.flatten(), signal_patterns.flatten())[0, 1]
             
             # Calculate signal strength
-            signal_strength = np.mean(np.abs(fractal_signals))
+            signal_strength = unified_math.unified_math.mean(unified_math.unified_math.abs(fractal_signals))
             
             # Calculate pattern complexity
-            pattern_complexity = np.std(signal_patterns)
+            pattern_complexity = unified_math.unified_math.std(signal_patterns)
             
             # Combine into SFSSS tensor score
             sfsss_score = (fractal_corr * 0.4 + signal_strength * 0.3 + pattern_complexity * 0.3)
@@ -458,13 +472,13 @@ class TensorScoreUtils:
         """
         try:
             # Calculate pattern coherence
-            pattern_coherence = np.mean(np.abs(unified_patterns))
+            pattern_coherence = unified_math.unified_math.mean(unified_math.unified_math.abs(unified_patterns))
             
             # Calculate memory retention
-            memory_retention = np.std(fractal_memory)
+            memory_retention = unified_math.unified_math.std(fractal_memory)
             
             # Calculate unified correlation
-            unified_corr = np.corrcoef(unified_patterns.flatten(), fractal_memory.flatten())[0, 1]
+            unified_corr = unified_math.unified_math.correlation(unified_patterns.flatten(), fractal_memory.flatten())[0, 1]
             
             # Combine into UFS tensor score
             ufs_score = (pattern_coherence * 0.4 + memory_retention * 0.3 + unified_corr * 0.3)
@@ -494,13 +508,13 @@ class TensorScoreUtils:
                 return 0.5
             
             # Calculate returns
-            returns = np.diff(np.log(data))
+            returns = np.diff(unified_math.unified_math.log(data))
             
             # Calculate cumulative sum
             cumsum = np.cumsum(returns)
             
             # Calculate range and standard deviation for different lags
-            lags = range(2, min(20, len(returns) // 2))
+            lags = range(2, unified_math.min(20, len(returns) // 2))
             tau = []
             lagvec = []
             
@@ -509,20 +523,20 @@ class TensorScoreUtils:
                 rs_values = []
                 for i in range(0, len(returns) - lag, lag):
                     segment = cumsum[i:i + lag]
-                    R = np.max(segment) - np.min(segment)
-                    S = np.std(returns[i:i + lag])
+                    R = unified_math.unified_math.max(segment) - unified_math.unified_math.min(segment)
+                    S = unified_math.unified_math.std(returns[i:i + lag])
                     if S > 0:
                         rs_values.append(R / S)
                 
                 if rs_values:
-                    tau.append(np.mean(rs_values))
+                    tau.append(unified_math.unified_math.mean(rs_values))
                     lagvec.append(lag)
             
             if len(tau) < 2:
                 return 0.5
             
             # Calculate Hurst exponent
-            m = np.polyfit(np.log(lagvec), np.log(tau), 1)
+            m = np.polyfit(unified_math.unified_math.log(lagvec), unified_math.unified_math.log(tau), 1)
             hurst = m[0]
             
             return round(hurst, 4)
@@ -550,7 +564,7 @@ class TensorScoreUtils:
                 return 1.0
             
             # Normalize data
-            data_norm = (data - np.min(data)) / (np.max(data) - np.min(data))
+            data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data))
             
             # Box counting for different scales
             scales = np.logspace(-3, 0, 20)
@@ -583,7 +597,7 @@ class TensorScoreUtils:
             if len(counts) < 2:
                 return 1.0
             
-            m = np.polyfit(np.log(scales[:len(counts)]), np.log(counts), 1)
+            m = np.polyfit(unified_math.unified_math.log(scales[:len(counts)]), unified_math.unified_math.log(counts), 1)
             fractal_dim = -m[0]
             
             return round(fractal_dim, 4)
@@ -620,8 +634,8 @@ class TensorScoreUtils:
             
             return {
                 'total_scores': len(self.score_history),
-                'average_score': np.mean(scores) if scores else 0.0,
-                'score_std': np.std(scores) if scores else 0.0,
+                'average_score': unified_math.unified_math.mean(scores) if scores else 0.0,
+                'score_std': unified_math.unified_math.std(scores) if scores else 0.0,
                 'tensor_type_distribution': {t: tensor_types.count(t) for t in set(tensor_types)},
                 'bit_phase_distribution': {p: bit_phases.count(p) for p in set(bit_phases)},
                 'rebalance_count': len(self.rebalance_history),
@@ -644,21 +658,21 @@ if __name__ == "__main__":
     }
     
     tensor_score = utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
-    print(f"Tensor Score: {tensor_score}")
+    safe_print(f"Tensor Score: {tensor_score}")
     
     # Test wave entropy
     sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
     entropy = utils.calculate_wave_entropy(sequence)
-    print(f"Wave Entropy: {entropy}")
+    safe_print(f"Wave Entropy: {entropy}")
     
     # Test profit rebalancing
     rebalance = utils.rebalance_profit(1000.0, 0.25, 5.5)
-    print(f"Profit Rebalance: {rebalance.allocations}")
+    safe_print(f"Profit Rebalance: {rebalance.allocations}")
     
     # Test phase vector
     phase_vector = utils.create_phase_vector(42, 16, 4)
-    print(f"Phase Vector: {phase_vector.vector_components}")
+    safe_print(f"Phase Vector: {phase_vector.vector_components}")
     
     # Get statistics
     stats = utils.get_tensor_statistics()
-    print(f"Tensor Statistics: {stats}") 
+    safe_print(f"Tensor Statistics: {stats}") 

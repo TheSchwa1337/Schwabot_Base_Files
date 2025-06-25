@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Triplet Matcher - Schwabot Mathematical Framework.
 
@@ -45,7 +61,6 @@ Key Features:
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
@@ -53,7 +68,7 @@ from decimal import getcontext
 import logging
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -108,13 +123,13 @@ class MathematicalSequenceDetector:
 
         # Check if all differences are approximately equal
         first_diff = differences[0]
-        is_ap = all(abs(d - first_diff) < self.epsilon for d in differences)
+        is_ap = all(unified_math.abs(d - first_diff) < self.epsilon for d in differences)
 
         return {
             "is_ap": is_ap,
             "common_difference": float(first_diff) if is_ap else None,
             "deviation": (
-                float(max(abs(d - first_diff) for d in differences))
+                float(unified_math.max(unified_math.abs(d - first_diff) for d in differences))
                 if differences
                 else 0.0
             ),
@@ -129,13 +144,13 @@ class MathematicalSequenceDetector:
 
         # Check if all ratios are approximately equal
         first_ratio = ratios[0]
-        is_gp = all(abs(r - first_ratio) < self.epsilon for r in ratios)
+        is_gp = all(unified_math.abs(r - first_ratio) < self.epsilon for r in ratios)
 
         return {
             "is_gp": is_gp,
             "common_ratio": float(first_ratio) if is_gp else None,
             "deviation": (
-                float(max(abs(r - first_ratio) for r in ratios)) if ratios else 0.0
+                float(unified_math.max(unified_math.abs(r - first_ratio) for r in ratios)) if ratios else 0.0
             ),
         }
 
@@ -150,24 +165,24 @@ class MathematicalSequenceDetector:
 
         for i in range(2, len(values)):
             expected = values[i - 2] + values[i - 1]
-            deviation = abs(values[i] - expected)
+            deviation = unified_math.abs(values[i] - expected)
             deviations.append(float(deviation))
 
-            if deviation > self.epsilon * abs(expected):
+            if deviation > self.epsilon * unified_math.abs(expected):
                 fibonacci_like = False
 
         # Calculate ratio approximation to golden ratio
         golden_ratio = Decimal("1.618033988749895")
         if len(values) >= 4:
             recent_ratio = values[-1] / values[-2] if values[-2] != 0 else Decimal("0")
-            ratio_to_golden = float(abs(recent_ratio - golden_ratio))
+            ratio_to_golden = float(unified_math.abs(recent_ratio - golden_ratio))
         else:
             ratio_to_golden = None
 
         return {
             "is_fibonacci_like": fibonacci_like,
             "ratio_to_golden": ratio_to_golden,
-            "max_deviation": max(deviations) if deviations else 0.0,
+            "max_deviation": unified_math.max(deviations) if deviations else 0.0,
             "avg_deviation": (sum(deviations) / len(deviations) if deviations else 0.0),
         }
 
@@ -186,7 +201,7 @@ class ThermalSignatureAnalyzer:
             return Decimal("0.0")
 
         # Weighted sum with exponential decay
-        weights = [Decimal(str(np.exp(-0.1 * i))) for i in range(len(thermal_values))]
+        weights = [Decimal(str(unified_math.exp(-0.1 * i))) for i in range(len(thermal_values))]
         weighted_sum = sum(Decimal(str(v)) * w for v, w in zip(thermal_values, weights))
         weight_sum = sum(weights)
 
@@ -197,14 +212,14 @@ class ThermalSignatureAnalyzer:
         if sig1 == 0 and sig2 == 0:
             return 1.0
 
-        max_sig = max(abs(sig1), abs(sig2))
+        max_sig = unified_math.max(unified_math.abs(sig1), unified_math.abs(sig2))
         if max_sig == 0:
             return 1.0
 
-        difference = abs(sig1 - sig2)
+        difference = unified_math.abs(sig1 - sig2)
         similarity = 1.0 - float(difference / max_sig)
 
-        return max(0.0, similarity)
+        return unified_math.max(0.0, similarity)
 
     def analyze_thermal_triplet(
         self, t1: float, t2: float, t3: float
@@ -223,7 +238,7 @@ class ThermalSignatureAnalyzer:
         stability = float(Decimal("1") / (Decimal("1") + variance))
 
         # Pattern classification
-        if abs(momentum_change) < Decimal("0.01"):
+        if unified_math.abs(momentum_change) < Decimal("0.01"):
             pattern_type = "linear"
         elif momentum_change > Decimal("0.05"):
             pattern_type = "accelerating"
@@ -306,13 +321,13 @@ class VectorTripletMatcher:
         deviation_metrics = {}
         if best_match:
             deviations = [
-                abs(test_decimals[i] - best_match.values[i]) for i in range(3)
+                unified_math.abs(test_decimals[i] - best_match.values[i]) for i in range(3)
             ]
             deviation_metrics = {
-                "max_deviation": float(max(deviations)),
+                "max_deviation": float(unified_math.max(deviations)),
                 "avg_deviation": float(sum(deviations) / 3),
                 "relative_deviation": float(
-                    max(deviations) / max(abs(v) for v in best_match.values)
+                    unified_math.max(deviations) / unified_math.max(unified_math.abs(v) for v in best_match.values)
                 ),
             }
 
@@ -332,8 +347,8 @@ class VectorTripletMatcher:
             return 0.0
 
         # Normalize values for comparison
-        max_val1 = max(abs(v) for v in values1)
-        max_val2 = max(abs(v) for v in values2)
+        max_val1 = unified_math.max(unified_math.abs(v) for v in values1)
+        max_val2 = unified_math.max(unified_math.abs(v) for v in values2)
 
         if max_val1 == 0 or max_val2 == 0:
             return 1.0 if max_val1 == max_val2 else 0.0
@@ -443,7 +458,7 @@ class VectorTripletMatcher:
             pattern_counts[thermal_type] = pattern_counts.get(thermal_type, 0) + 1
 
         return (
-            max(pattern_counts.items(), key=lambda x: x[1])[0]
+            unified_math.max(pattern_counts.items(), key=lambda x: x[1])[0]
             if pattern_counts
             else "unknown"
         )
@@ -559,7 +574,7 @@ def main() -> None:
     """Demo of triplet matcher system."""
     try:
         matcher = TripletMatcher()
-        print(f"✅ TripletMatcher v{matcher.version} initialized")
+        safe_print(f"✅ TripletMatcher v{matcher.version} initialized")
 
         # Test triplets
         test_triplets = [
@@ -570,7 +585,7 @@ def main() -> None:
             (42.5, 39.8, 37.1),  # Custom pattern
         ]
 
-        print(f"🔍 Testing {len(test_triplets)} triplet patterns:")
+        safe_print(f"🔍 Testing {len(test_triplets)} triplet patterns:")
 
         for i, triplet in enumerate(test_triplets):
             result = matcher.match_triplet(triplet)
@@ -579,32 +594,32 @@ def main() -> None:
                 match_info = result["pattern_match"]
                 thermal_info = result["thermal_analysis"]
 
-                print(f"   Triplet {i + 1}: {triplet}")
-                print(f"      Match: {'✅' if match_info['found_match'] else '❌'}")
+                safe_print(f"   Triplet {i + 1}: {triplet}")
+                safe_print(f"      Match: {'✅' if match_info['found_match'] else '❌'}")
                 if match_info["found_match"]:
-                    print(f"      Pattern: {match_info['pattern_type']}")
-                    print(f"      Similarity: {match_info['similarity_score']:.3f}")
-                print(
+                    safe_print(f"      Pattern: {match_info['pattern_type']}")
+                    safe_print(f"      Similarity: {match_info['similarity_score']:.3f}")
+                safe_print(
                     f"      Thermal: {thermal_info['pattern_type']} "
                     f"(stability: {thermal_info['stability_score']:.3f})"
                 )
 
         # Test sequence analysis
-        print(f"\n📊 Sequence Analysis:")
+        safe_print(f"\n📊 Sequence Analysis:")
         test_sequence = [100.0, 105.0, 110.0, 115.0, 120.0, 125.0]
         sequence_result = matcher.analyze_sequence(test_sequence)
 
         if "summary" in sequence_result:
             summary = sequence_result["summary"]
-            print(f"   Total triplets analyzed: {sequence_result['total_triplets']}")
-            print(f"   Pattern matches: {summary['pattern_matches']}")
-            print(f"   Dominant pattern: {summary['dominant_pattern_type']}")
-            print(f"   Avg similarity: {summary['average_similarity_score']:.3f}")
+            safe_print(f"   Total triplets analyzed: {sequence_result['total_triplets']}")
+            safe_print(f"   Pattern matches: {summary['pattern_matches']}")
+            safe_print(f"   Dominant pattern: {summary['dominant_pattern_type']}")
+            safe_print(f"   Avg similarity: {summary['average_similarity_score']:.3f}")
 
-        print("🎉 Triplet matcher demo completed!")
+        safe_print("🎉 Triplet matcher demo completed!")
 
     except Exception as e:
-        print(f"❌ Demo failed: {e}")
+        safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

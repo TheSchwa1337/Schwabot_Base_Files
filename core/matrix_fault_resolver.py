@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Matrix Fault Resolver - Lattice Integration and Quantum Correlation.
 
@@ -7,8 +8,8 @@ Implements the core mathematical framework for:
 - Multi-dimensional fault resolution using lattice structures
 """
 
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Union
@@ -136,7 +137,7 @@ class MatrixFaultResolver:
             phase=combined_phase,
             entanglement_score=entanglement_score,
             node_id=f"{state_a.node_id}⊗{state_b.node_id}",
-            timestamp=max(state_a.timestamp, state_b.timestamp),
+            timestamp=unified_math.max(state_a.timestamp, state_b.timestamp),
         )
 
         return product_state
@@ -167,7 +168,7 @@ class MatrixFaultResolver:
             fault_indicators["connectivity_fault"] = len(connectivity_issues)
 
         # Check echo resonance anomalies
-        echo_anomaly = abs(node.echo_resonance - self._expected_echo_resonance(node))
+        echo_anomaly = unified_math.abs(node.echo_resonance - self._expected_echo_resonance(node))
         if echo_anomaly > fault_threshold:
             fault_indicators["echo_fault"] = echo_anomaly
 
@@ -298,7 +299,7 @@ class MatrixFaultResolver:
             )
 
             # Calculate eigenvalues for entropy
-            eigenvalues = np.real(np.linalg.eigvals(reduced_density))
+            eigenvalues = np.real(unified_math.unified_math.eigenvalues(reduced_density))
             eigenvalues = eigenvalues[
                 eigenvalues > 1e-10
             ]  # Remove near-zero eigenvalues
@@ -310,11 +311,11 @@ class MatrixFaultResolver:
             entropy = -np.sum(eigenvalues * np.log2(eigenvalues + 1e-10))
 
             # Normalize to [0, 1] range
-            max_entropy = math.log2(min(dim_a, dim_b))
-            return min(1.0, entropy / max_entropy) if max_entropy > 0 else 0.0
+            max_entropy = math.log2(unified_math.min(dim_a, dim_b))
+            return unified_math.min(1.0, entropy / max_entropy) if max_entropy > 0 else 0.0
         except Exception:
             # Fallback to simple measure
-            return np.abs(np.vdot(state_a.state_vector, state_b.state_vector))
+            return unified_math.unified_math.abs(np.vdot(state_a.state_vector, state_b.state_vector))
 
     def _calculate_coherence_loss(self, quantum_state: QuantumState) -> float:
         """Calculate coherence loss in quantum state."""
@@ -322,7 +323,7 @@ class MatrixFaultResolver:
         density_matrix = np.outer(
             quantum_state.state_vector, np.conj(quantum_state.state_vector)
         )
-        purity = np.real(np.trace(np.dot(density_matrix, density_matrix)))
+        purity = np.real(np.trace(unified_math.unified_math.dot_product(density_matrix, density_matrix)))
 
         # Coherence loss is 1 - purity
         return 1.0 - purity
@@ -342,7 +343,7 @@ class MatrixFaultResolver:
                 actual_entanglement = self._calculate_pairwise_entanglement(
                     node.quantum_state, connected_node.quantum_state
                 )
-                degradation = max(0, expected_entanglement - actual_entanglement)
+                degradation = unified_math.max(0, expected_entanglement - actual_entanglement)
                 total_degradation += degradation
                 connection_count += 1
 
@@ -376,7 +377,7 @@ class MatrixFaultResolver:
         self, fault_indicators: Dict[str, float]
     ) -> FaultSeverity:
         """Determine fault severity based on indicators."""
-        max_indicator = max(fault_indicators.values())
+        max_indicator = unified_math.max(fault_indicators.values())
 
         if max_indicator > 0.8:
             return FaultSeverity.CRITICAL
@@ -398,7 +399,7 @@ class MatrixFaultResolver:
 
         # Apply unitary correction to restore coherence
         correction_unitary = self._generate_correction_unitary(node.quantum_state)
-        corrected_vector = np.dot(correction_unitary, node.quantum_state.state_vector)
+        corrected_vector = unified_math.unified_math.dot_product(correction_unitary, node.quantum_state.state_vector)
 
         corrected_state = QuantumState(
             state_vector=corrected_vector,
@@ -480,15 +481,15 @@ class MatrixFaultResolver:
         base_probability = 0.7
 
         # Adjust based on fault severity
-        max_fault_indicator = max(fault_indicators.values())
+        max_fault_indicator = unified_math.max(fault_indicators.values())
         severity_penalty = max_fault_indicator * 0.3
 
         # Adjust based on number of strategies applied
-        strategy_bonus = min(0.2, len(resolution_strategies) * 0.05)
+        strategy_bonus = unified_math.min(0.2, len(resolution_strategies) * 0.05)
 
         success_probability = base_probability - severity_penalty + strategy_bonus
 
-        return max(0.0, min(1.0, success_probability))
+        return unified_math.max(0.0, unified_math.min(1.0, success_probability))
 
     def _calculate_lattice_stability(self) -> float:
         """Calculate overall lattice stability."""
@@ -517,7 +518,7 @@ class MatrixFaultResolver:
         for node in self.lattice_nodes.values():
             # Calculate node entropy
             state_vector = node.quantum_state.state_vector
-            probabilities = np.abs(state_vector) ** 2
+            probabilities = unified_math.unified_math.abs(state_vector) ** 2
             probabilities = probabilities[probabilities > 1e-10]
 
             if len(probabilities) > 0:
@@ -531,7 +532,7 @@ class MatrixFaultResolver:
     ) -> float:
         """Calculate entanglement between two quantum states."""
         # Simplified entanglement measure
-        overlap = np.abs(np.vdot(state_a.state_vector, state_b.state_vector))
+        overlap = unified_math.unified_math.abs(np.vdot(state_a.state_vector, state_b.state_vector))
         return 1.0 - overlap  # Higher entanglement = lower overlap
 
     def _generate_correction_unitary(self, quantum_state: QuantumState) -> np.ndarray:

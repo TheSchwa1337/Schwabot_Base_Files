@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 ZPE Integration Layer
@@ -262,8 +275,8 @@ class ZPEIntegration:
 
 def main():
     """Test the ZPE Integration Layer."""
-    print("🧠 Testing Schwabot ZPE Integration Layer")
-    print("=" * 50)
+    safe_print("🧠 Testing Schwabot ZPE Integration Layer")
+    safe_print("=" * 50)
     
     integration = ZPEIntegration()
     
@@ -295,11 +308,11 @@ def main():
     # Spin the complete system
     result = integration.spin_complete_system(market_data)
     
-    print(f"ZPE Core Spin Score: {result['zpe_core']['spin_score']:.6f}")
-    print(f"System Should Spin: {result['system_spin_decision']['should_spin']}")
-    print(f"Integration Status: {result['system_spin_decision']['integration_status']}")
+    safe_print(f"ZPE Core Spin Score: {result['zpe_core']['spin_score']:.6f}")
+    safe_print(f"System Should Spin: {result['system_spin_decision']['should_spin']}")
+    safe_print(f"Integration Status: {result['system_spin_decision']['integration_status']}")
     
-    print("\n🎉 ZPE Integration Layer test complete!")
+    safe_print("\n🎉 ZPE Integration Layer test complete!")
 
 
 if __name__ == "__main__":

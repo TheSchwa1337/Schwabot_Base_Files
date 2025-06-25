@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Hash Recollection - Core Hash Pattern Memory and Recollection System
@@ -20,7 +22,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import json
 from collections import defaultdict
@@ -149,7 +151,7 @@ class HashRecollection:
             # Combine factors
             confidence = (data_completeness * 0.4 + type_factor * 0.3 + quality_factor * 0.3)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Pattern confidence calculation error: {e}")
@@ -255,7 +257,7 @@ class HashRecollection:
             max_distance = len(hash1_bin)
             similarity = 1.0 - (hamming_distance / max_distance)
             
-            return max(0.0, min(1.0, similarity))
+            return unified_math.max(0.0, unified_math.min(1.0, similarity))
             
         except Exception as e:
             logger.error(f"Similarity calculation error: {e}")
@@ -357,7 +359,7 @@ def main() -> None:
     }
     
     pattern_id = recollection.store_pattern(test_pattern_data, "price_movement")
-    print(f"Pattern stored: {pattern_id}")
+    safe_print(f"Pattern stored: {pattern_id}")
     
     # Test pattern recollection
     query_data = {
@@ -368,12 +370,12 @@ def main() -> None:
     }
     
     result = recollection.recollect_pattern(query_data)
-    print(f"Recollection result: {result.pattern_match}")
-    print(f"Similarity score: {result.similarity_score:.3f}")
+    safe_print(f"Recollection result: {result.pattern_match}")
+    safe_print(f"Similarity score: {result.similarity_score:.3f}")
     
     # Get statistics
     stats = recollection.get_recollection_statistics()
-    print(f"Recollection statistics: {stats}")
+    safe_print(f"Recollection statistics: {stats}")
 
 
 if __name__ == "__main__":

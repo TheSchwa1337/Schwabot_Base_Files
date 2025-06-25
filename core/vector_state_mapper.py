@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Vector-state mapper – align news glyph vectors with live BTC state space.
 
@@ -17,11 +20,10 @@ Current implementation (lightweight, no ML deps):
    maximal similarity.  This keeps downstream gating trivial.
 """
 
-from __future__ import annotations
 
 from typing import Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["map_glyph_to_state"]
 

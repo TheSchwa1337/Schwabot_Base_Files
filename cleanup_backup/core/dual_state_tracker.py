@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Dual-state tracker utility.
 
@@ -24,7 +26,6 @@ This file is intentionally small so that it passes Flake8 and gives a clean
 API surface. Advanced Jacobian / nested-dual logic can be added later.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Tuple

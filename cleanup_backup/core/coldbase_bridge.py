@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Coldbase Bridge - Cold Storage and Data Management Bridge for Schwabot
@@ -591,15 +592,15 @@ def main() -> None:
         {"description": "Test market data", "source": "demo"}
     )
     
-    print(f"Data stored with chunk ID: {chunk_id}")
+    safe_print(f"Data stored with chunk ID: {chunk_id}")
     
     # Retrieve the data
     retrieved_data = bridge.retrieve_data(chunk_id, StorageType.COLD)
-    print(f"Retrieved data: {retrieved_data}")
+    safe_print(f"Retrieved data: {retrieved_data}")
     
     # Get statistics
     stats = bridge.get_storage_statistics()
-    print(f"Storage statistics: {json.dumps(stats, indent=2, default=str)}")
+    safe_print(f"Storage statistics: {json.dumps(stats, indent=2, default=str)}")
 
 if __name__ == "__main__":
     main() 

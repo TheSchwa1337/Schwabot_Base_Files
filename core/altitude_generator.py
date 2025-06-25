@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Altitude Generator - Core Market Altitude Generation System
@@ -20,8 +34,8 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -139,13 +153,13 @@ class AltitudeGenerator:
         """Calculate base altitude from fundamental metrics."""
         try:
             # Volume component (higher volume = lower altitude)
-            volume_component = 1.0 - min(volume / 1000.0, 1.0)
+            volume_component = 1.0 - unified_math.min(volume / 1000.0, 1.0)
             
             # Price change component (higher change = higher altitude)
-            price_component = min(abs(price_change) / 0.1, 1.0)
+            price_component = unified_math.min(unified_math.abs(price_change) / 0.1, 1.0)
             
             # Volatility component (higher volatility = higher altitude)
-            volatility_component = min(volatility / 0.5, 1.0)
+            volatility_component = unified_math.min(volatility / 0.5, 1.0)
             
             # Combine components with weights
             base_altitude = (
@@ -154,7 +168,7 @@ class AltitudeGenerator:
                 volatility_component * 0.3
             )
             
-            return max(0.0, min(1.0, base_altitude))
+            return unified_math.max(0.0, unified_math.min(1.0, base_altitude))
             
         except Exception as e:
             logger.error(f"Base altitude calculation error: {e}")
@@ -176,7 +190,7 @@ class AltitudeGenerator:
             # Apply adjustments
             adjusted_altitude = base_altitude + liquidity_adjustment + pressure_adjustment + volatility_adjustment
             
-            return max(0.0, min(1.0, adjusted_altitude))
+            return unified_math.max(0.0, unified_math.min(1.0, adjusted_altitude))
             
         except Exception as e:
             logger.error(f"Altitude adjustment error: {e}")
@@ -197,13 +211,13 @@ class AltitudeGenerator:
             completeness = sum(1 for field in required_fields if field in market_data) / len(required_fields)
             
             # Check data quality (simple heuristics)
-            volume_quality = min(market_data.get('volume', 0) / 100.0, 1.0)
-            volatility_quality = min(market_data.get('volatility', 0) / 0.5, 1.0)
+            volume_quality = unified_math.min(market_data.get('volume', 0) / 100.0, 1.0)
+            volatility_quality = unified_math.min(market_data.get('volatility', 0) / 0.5, 1.0)
             
             # Combine quality metrics
             confidence = (completeness * 0.4 + volume_quality * 0.3 + volatility_quality * 0.3)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Confidence calculation error: {e}")
@@ -223,7 +237,7 @@ class AltitudeGenerator:
     
     def _calculate_volume_factor(self, volume: float) -> float:
         """Calculate volume adjustment factor."""
-        return (1.0 - min(volume / 1000.0, 1.0)) * 0.1
+        return (1.0 - unified_math.min(volume / 1000.0, 1.0)) * 0.1
     
     def get_altitude_trend(self, window_size: int = 10) -> str:
         """Get altitude trend direction."""
@@ -259,7 +273,7 @@ class AltitudeGenerator:
             
             # Calculate volatility factor from recent history
             recent_altitudes = np.array(self.altitude_history[-10:])
-            volatility_factor = np.std(recent_altitudes) if len(recent_altitudes) > 1 else 0.0
+            volatility_factor = unified_math.unified_math.std(recent_altitudes) if len(recent_altitudes) > 1 else 0.0
             
             return AltitudeMetrics(
                 base_altitude=current_altitude,
@@ -331,13 +345,13 @@ def main() -> None:
     }
     
     result = generator.generate_altitude(test_market_data)
-    print(f"Altitude generation result: {result.success}")
-    print(f"Altitude value: {result.altitude_value:.3f}")
-    print(f"Altitude zone: {result.altitude_zone}")
+    safe_print(f"Altitude generation result: {result.success}")
+    safe_print(f"Altitude value: {result.altitude_value:.3f}")
+    safe_print(f"Altitude zone: {result.altitude_zone}")
     
     # Get statistics
     stats = generator.get_generator_statistics()
-    print(f"Generator statistics: {stats}")
+    safe_print(f"Generator statistics: {stats}")
 
 
 if __name__ == "__main__":

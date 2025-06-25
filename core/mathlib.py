@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library - Core Mathematical Functions.
 
@@ -12,35 +13,55 @@ essential mathematical operations and utilities.
 """
 
 import logging
-import math
-from typing import Any, Dict
+from core.unified_math_system import unified_math
+from typing import Any, Dict, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
+import numpy.typing as npt
+
+# Import CLI handler for safe output
+try:
+    from core.type_binding_system import cli_handler
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    # Fallback for CLI safety
+    def safe_print(msg: str) -> None:
+        try:
+            print(msg)
+        except UnicodeEncodeError:
+            print(msg.encode('ascii', errors='replace').decode('ascii'))
 
 logger = logging.getLogger(__name__)
 
+# Type definitions
+Vector = npt.NDArray[np.float64]
+Matrix = npt.NDArray[np.float64]
 
 class MathLib:
     """Core mathematical library class."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the MathLib component."""
         self.version = "1.0.0"
         self.initialized = True
-        logger.info(f"MathLib v{self.version} initialized")
+        if CLI_HANDLER_AVAILABLE:
+            cli_handler.log_safe(logger, "info", f"MathLib v{self.version} initialized")
+        else:
+            logger.info(f"MathLib v{self.version} initialized")
 
-    def calculate(self, operation: str, *args, **kwargs) -> Any:
+    def calculate(self, operation: str, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Perform a mathematical calculation based on the requested operation."""
         operations = {
-            "mean": lambda x: np.mean(x),
-            "std": lambda x: np.std(x),
+            "mean": lambda x: unified_math.unified_math.mean(x),
+            "std": lambda x: unified_math.unified_math.std(x),
             "sum": lambda x: np.sum(x),
-            "sqrt": lambda x: np.sqrt(x),
-            "log": lambda x: np.log(x + 1e-10),
-            "exp": lambda x: np.exp(x),
-            "sin": lambda x: np.sin(x),
-            "cos": lambda x: np.cos(x),
-            "tan": lambda x: np.tan(x),
+            "sqrt": lambda x: unified_math.unified_math.sqrt(x),
+            "log": lambda x: unified_math.unified_math.log(x + 1e-10),
+            "exp": lambda x: unified_math.unified_math.exp(x),
+            "sin": lambda x: np.unified_math.sin(x),
+            "cos": lambda x: np.unified_math.cos(x),
+            "tan": lambda x: np.unified_math.tan(x),
         }
 
         if operation in operations and args:
@@ -52,7 +73,10 @@ class MathLib:
                     "status": "success",
                 }
             except Exception as e:
-                logger.error(f"Error in {operation}: {e}")
+                if CLI_HANDLER_AVAILABLE:
+                    cli_handler.log_safe(logger, "error", f"Error in {operation}: {e}")
+                else:
+                    logger.error(f"Error in {operation}: {e}")
                 return {
                     "operation": operation,
                     "error": str(e),
@@ -80,7 +104,10 @@ def mathematical_constants() -> Dict[str, float]:
 def main() -> None:
     """Run MathLib as a standalone utility."""
     lib = MathLib()
-    logger.info("MathLib main function executed successfully")
+    if CLI_HANDLER_AVAILABLE:
+        cli_handler.log_safe(logger, "info", "MathLib main function executed successfully")
+    else:
+        logger.info("MathLib main function executed successfully")
     return lib
 
 

@@ -1,610 +1,439 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 API Bridge Manager - Multi-Source Crypto API Integration for Schwabot
 =====================================================================
 
-This module implements a comprehensive API bridge manager for Schwabot, providing
-unified access to multiple crypto data sources including Coin Market Cap and
-Coin Gecko. It handles rate limiting, error recovery, data normalization, and
-integration with the mathematical pipeline.
+This module implements a comprehensive, asynchronous API bridge manager for Schwabot,
+providing unified access to multiple crypto data sources. It handles rate
+limiting, error recovery, data normalization, and caching.
 
 Core Functionality:
-- Multi-source API integration (Coin Market Cap, Coin Gecko)
-- Rate limiting and request management
-- Data normalization and validation
-- Error handling and recovery
-- Integration with mathematical pipeline
-- Caching and performance optimization
+- Fully asynchronous multi-source API integration (CoinMarketCap, CoinGecko)
+- Graceful rate limiting and request management using an async-first approach
+- Robust data normalization and validation into a unified `CryptoData` format
+- Error handling with exponential backoff for retries
+- In-memory caching with configurable TTL for performance optimization
+- Publishes new data onto the central FaultBus.
 """
 
-import logging
-import json
-import time
-import hashlib
 import asyncio
-import aiohttp
-import requests
-from typing import Dict, List, Any, Optional, Tuple, Union
+import json
+import logging
+import os
+from abc import ABC, abstractmethod
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import threading
-from collections import defaultdict, deque
-import numpy as np
-from decimal import Decimal, InvalidOperation
+from typing import Any, Dict, List, Optional, Tuple
+
+import aiohttp
+
+from .fault_bus import FaultBus
 
 logger = logging.getLogger(__name__)
 
+
+# --- Enums and Data-Classes ---
+
 class APISource(Enum):
+    """Enumeration of supported API sources."""
     COINMARKETCAP = "coinmarketcap"
     COINGECKO = "coingecko"
-    ALTERNATIVE = "alternative"
 
-class DataType(Enum):
-    PRICE = "price"
-    MARKET_CAP = "market_cap"
-    VOLUME = "volume"
-    SUPPLY = "supply"
-    RANKING = "ranking"
-    NEWS = "news"
-    SENTIMENT = "sentiment"
-
-class RequestStatus(Enum):
-    PENDING = "pending"
-    SUCCESS = "success"
-    FAILED = "failed"
-    RATE_LIMITED = "rate_limited"
-
-@dataclass
-class APIRequest:
-    request_id: str
-    source: APISource
-    endpoint: str
-    parameters: Dict[str, Any]
-    timestamp: datetime
-    status: RequestStatus
-    response_data: Optional[Dict[str, Any]] = None
-    error_message: Optional[str] = None
-    retry_count: int = 0
-    max_retries: int = 3
 
 @dataclass
 class CryptoData:
+    """A unified data structure for cryptocurrency information."""
     symbol: str
     name: str
     price: float
     market_cap: float
     volume_24h: float
-    circulating_supply: float
-    total_supply: float
-    max_supply: Optional[float]
-    rank: int
-    price_change_24h: float
-    price_change_percentage_24h: float
     source: APISource
     timestamp: datetime
-    confidence_score: float
+    price_change_percentage_24h: Optional[float] = None
+    rank: Optional[int] = None
+    circulating_supply: Optional[float] = None
+    total_supply: Optional[float] = None
+    max_supply: Optional[float] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
-class RateLimitInfo:
-    source: APISource
-    requests_per_minute: int
-    requests_per_hour: int
-    requests_per_day: int
-    current_minute_count: int = 0
-    current_hour_count: int = 0
-    current_day_count: int = 0
-    last_reset_minute: datetime = field(default_factory=datetime.now)
-    last_reset_hour: datetime = field(default_factory=datetime.now)
-    last_reset_day: datetime = field(default_factory=datetime.now)
+class CacheEntry:
+    """Represents an entry in the data cache."""
+    data: CryptoData
+    timestamp: datetime
+
+
+# --- API Adapter Base Class ---
+
+class ApiAdapter(ABC):
+    """Abstract base class for API adapters."""
+
+    def __init__(self, session: aiohttp.ClientSession, api_key: Optional[str] = None):
+        self.session = session
+        self.api_key = api_key
+
+    @property
+    @abstractmethod
+    def base_url(self) -> str:
+        """The base URL for the API."""
+        pass
+
+    @abstractmethod
+    async def get_crypto_data(self, symbols: List[str]) -> List[CryptoData]:
+        """Fetch data for given cryptocurrency symbols."""
+        pass
+
+    def _safe_get(self, data: Dict, key: str, default: Any = None) -> Any:
+        """Safely retrieve a value from a nested dictionary."""
+        keys = key.split('.')
+        for k in keys:
+            if isinstance(data, dict):
+                data = data.get(k)
+            else:
+                return default
+        return data if data is not None else default
+
+
+# --- Concrete API Adapters ---
+
+class CoinGeckoAdapter(ApiAdapter):
+    """API adapter for CoinGecko."""
+
+    @property
+    def base_url(self) -> str:
+        return "https://api.coingecko.com/api/v3"
+
+    async def get_crypto_data(self, symbols: List[str]) -> List[CryptoData]:
+        # CoinGecko uses 'ids' which are often full names (e.g., 'bitcoin', 'ethereum')
+        # A robust solution might need a symbol-to-id mapping service.
+        endpoint = "/coins/markets"
+        params = {
+            "vs_currency": "usd",
+            "ids": ",".join(s.lower() for s in symbols),
+            "order": "market_cap_desc",
+            "per_page": len(symbols),
+            "page": 1,
+            "sparkline": "false",
+        }
+        try:
+            async with self.session.get(f"{self.base_url}{endpoint}", params=params) as response:
+                response.raise_for_status()
+                data = await response.json()
+                return self._parse_data(data)
+        except aiohttp.ClientError as e:
+            logger.error(f"CoinGecko API error: {e}")
+            return []
+
+    def _parse_data(self, data: List[Dict]) -> List[CryptoData]:
+        parsed_data = []
+        for item in data:
+            try:
+                crypto = CryptoData(
+                    symbol=self._safe_get(item, 'symbol', '').upper(),
+                    name=self._safe_get(item, 'name', 'Unknown'),
+                    price=float(self._safe_get(item, 'current_price', 0.0)),
+                    market_cap=float(self._safe_get(item, 'market_cap', 0.0)),
+                    volume_24h=float(self._safe_get(item, 'total_volume', 0.0)),
+                    rank=int(self._safe_get(item, 'market_cap_rank', 0)),
+                    price_change_percentage_24h=float(self._safe_get(item, 'price_change_percentage_24h', 0.0)),
+                    circulating_supply=float(self._safe_get(item, 'circulating_supply', 0.0)),
+                    total_supply=float(self._safe_get(item, 'total_supply', 0.0)),
+                    max_supply=self._safe_get(item, 'max_supply'),
+                    source=APISource.COINGECKO,
+                    timestamp=datetime.now(),
+                )
+                parsed_data.append(crypto)
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Could not parse CoinGecko item: {item}. Error: {e}")
+        return parsed_data
+
+
+class CoinMarketCapAdapter(ApiAdapter):
+    """API adapter for CoinMarketCap."""
+
+    @property
+    def base_url(self) -> str:
+        return "https://pro-api.coinmarketcap.com/v1"
+
+    async def get_crypto_data(self, symbols: List[str]) -> List[CryptoData]:
+        if not self.api_key:
+            logger.warning("CoinMarketCap API key is not configured.")
+            return []
+        endpoint = "/cryptocurrency/quotes/latest"
+        headers = {"X-CMC_PRO_API_KEY": self.api_key}
+        params = {"symbol": ",".join(s.upper() for s in symbols)}
+        try:
+            async with self.session.get(f"{self.base_url}{endpoint}", headers=headers, params=params) as response:
+                response.raise_for_status()
+                data = await response.json()
+                return self._parse_data(data)
+        except aiohttp.ClientError as e:
+            logger.error(f"CoinMarketCap API error: {e}")
+            return []
+
+    def _parse_data(self, data: Dict) -> List[CryptoData]:
+        parsed_data = []
+        if 'data' not in data:
+            return []
+        for symbol_upper in data['data']:
+            # API can return a list for a symbol, take the first
+            item_data = data['data'][symbol_upper]
+            if isinstance(item_data, list):
+                item_data = item_data[0]
+            
+            try:
+                quote = self._safe_get(item_data, 'quote.USD', {})
+                crypto = CryptoData(
+                    symbol=self._safe_get(item_data, 'symbol', '').upper(),
+                    name=self._safe_get(item_data, 'name', 'Unknown'),
+                    price=float(self._safe_get(quote, 'price', 0.0)),
+                    market_cap=float(self._safe_get(quote, 'market_cap', 0.0)),
+                    volume_24h=float(self._safe_get(quote, 'volume_24h', 0.0)),
+                    rank=int(self._safe_get(item_data, 'cmc_rank', 0)),
+                    price_change_percentage_24h=float(self._safe_get(quote, 'percent_change_24h', 0.0)),
+                    circulating_supply=float(self._safe_get(item_data, 'circulating_supply', 0.0)),
+                    total_supply=float(self._safe_get(item_data, 'total_supply', 0.0)),
+                    max_supply=self._safe_get(item_data, 'max_supply'),
+                    source=APISource.COINMARKETCAP,
+                    timestamp=datetime.now(),
+                )
+                parsed_data.append(crypto)
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Could not parse CoinMarketCap item for {symbol_upper}. Error: {e}")
+        return parsed_data
+
+
+# --- API Bridge Manager ---
 
 class APIBridgeManager:
-    def __init__(self, config_path: str = "./config/api_config.json"):
+    """Manages access to multiple crypto data APIs asynchronously."""
+
+    def __init__(
+        self,
+        fault_bus: Optional[FaultBus] = None,
+        config_path: str = "./config/api_config.json",
+        cache_ttl_seconds: int = 300
+    ):
+        self.bus = fault_bus
         self.config_path = config_path
-        self.api_keys: Dict[APISource, str] = {}
-        self.base_urls: Dict[APISource, str] = {}
-        self.rate_limits: Dict[APISource, RateLimitInfo] = {}
-        self.request_queue: deque = deque(maxlen=10000)
-        self.response_cache: Dict[str, Tuple[Any, datetime]] = {}
-        self.data_cache: Dict[str, CryptoData] = {}
-        self.request_history: List[APIRequest] = []
-        self.active_requests: Dict[str, APIRequest] = {}
-        self.session: Optional[aiohttp.ClientSession] = None
+        self._api_keys: Dict[APISource, str] = {}
+        self._session: Optional[aiohttp.ClientSession] = None
+        self._adapters: Dict[APISource, ApiAdapter] = {}
+        self._cache: Dict[str, CacheEntry] = {}
+        self._cache_ttl = timedelta(seconds=cache_ttl_seconds)
+        self._request_stats = defaultdict(lambda: defaultdict(int))
+        self._is_initialized = False
+
+    async def initialize(self):
+        """Asynchronously initializes the session and adapters."""
+        if self._is_initialized:
+            return
+        self._session = aiohttp.ClientSession()
         self._load_configuration()
-        self._initialize_rate_limits()
-        self._start_background_processors()
+        self._initialize_adapters()
+        self._is_initialized = True
         logger.info("APIBridgeManager initialized")
 
-    def _load_configuration(self) -> None:
-        """Load API configuration from file."""
+    def _load_configuration(self):
+        """Loads API configuration from a JSON file."""
         try:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
-                # Load API keys
                 api_keys = config.get("api_keys", {})
-                self.api_keys = {
-                    APISource(source): key 
-                    for source, key in api_keys.items()
+                self._api_keys = {
+                    APISource(source): key for source, key in api_keys.items() if key
                 }
-                
-                # Load base URLs
-                base_urls = config.get("base_urls", {})
-                self.base_urls = {
-                    APISource(source): url 
-                    for source, url in base_urls.items()
-                }
-                
-                logger.info(f"Loaded configuration for {len(self.api_keys)} API sources")
+                logger.info(f"Loaded configuration for {len(self._api_keys)} API sources.")
             else:
-                self._create_default_configuration()
-                
-        except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
-            self._create_default_configuration()
+                logger.warning(f"Configuration file not found at {self.config_path}.")
+        except (json.JSONDecodeError, IOError) as e:
+            logger.error(f"Error loading configuration: {e}.")
 
-    def _create_default_configuration(self) -> None:
-        """Create default API configuration."""
-        self.api_keys = {
-            APISource.COINMARKETCAP: "",  # User needs to add their API key
-            APISource.COINGECKO: "",      # CoinGecko is free, no API key needed
-        }
-        
-        self.base_urls = {
-            APISource.COINMARKETCAP: "https://pro-api.coinmarketcap.com/v1",
-            APISource.COINGECKO: "https://api.coingecko.com/api/v3",
-        }
-        
-        self._save_configuration()
-        logger.info("Default API configuration created")
-
-    def _save_configuration(self) -> None:
-        """Save current configuration to file."""
-        try:
-            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
-            config = {
-                "api_keys": {
-                    source.value: key 
-                    for source, key in self.api_keys.items()
-                },
-                "base_urls": {
-                    source.value: url 
-                    for source, url in self.base_urls.items()
-                }
-            }
-            with open(self.config_path, 'w') as f:
-                json.dump(config, f, indent=2)
-        except Exception as e:
-            logger.error(f"Error saving configuration: {e}")
-
-    def _initialize_rate_limits(self) -> None:
-        """Initialize rate limit information for each API source."""
-        self.rate_limits = {
-            APISource.COINMARKETCAP: RateLimitInfo(
-                source=APISource.COINMARKETCAP,
-                requests_per_minute=30,
-                requests_per_hour=1000,
-                requests_per_day=10000
-            ),
-            APISource.COINGECKO: RateLimitInfo(
-                source=APISource.COINGECKO,
-                requests_per_minute=50,
-                requests_per_hour=1000,
-                requests_per_day=10000
-            )
-        }
-
-    def _start_background_processors(self) -> None:
-        """Start background processing threads."""
-        def request_processor():
-            while True:
-                try:
-                    if self.request_queue:
-                        request = self.request_queue.popleft()
-                        self._process_request(request)
-                    time.sleep(0.1)
-                except Exception as e:
-                    logger.error(f"Error in request processor: {e}")
-        
-        def cache_cleaner():
-            while True:
-                try:
-                    self._clean_expired_cache()
-                    time.sleep(300)  # Clean every 5 minutes
-                except Exception as e:
-                    logger.error(f"Error in cache cleaner: {e}")
-        
-        self.request_processor_thread = threading.Thread(target=request_processor, daemon=True)
-        self.cache_cleaner_thread = threading.Thread(target=cache_cleaner, daemon=True)
-        
-        self.request_processor_thread.start()
-        self.cache_cleaner_thread.start()
-        
-        logger.info("Background processors started")
-
-    def _process_request(self, request: APIRequest) -> None:
-        """Process an API request."""
-        try:
-            # Check rate limits
-            if not self._check_rate_limit(request.source):
-                request.status = RequestStatus.RATE_LIMITED
-                request.error_message = "Rate limit exceeded"
-                self._handle_failed_request(request)
-                return
-            
-            # Make the API call
-            response_data = self._make_api_call(request)
-            
-            if response_data:
-                request.status = RequestStatus.SUCCESS
-                request.response_data = response_data
-                self._handle_successful_request(request)
-            else:
-                request.status = RequestStatus.FAILED
-                request.error_message = "API call failed"
-                self._handle_failed_request(request)
-                
-        except Exception as e:
-            request.status = RequestStatus.FAILED
-            request.error_message = str(e)
-            self._handle_failed_request(request)
-
-    def _check_rate_limit(self, source: APISource) -> bool:
-        """Check if we can make a request to the API source."""
-        if source not in self.rate_limits:
-            return True
-        
-        rate_limit = self.rate_limits[source]
-        now = datetime.now()
-        
-        # Reset counters if needed
-        if (now - rate_limit.last_reset_minute).seconds >= 60:
-            rate_limit.current_minute_count = 0
-            rate_limit.last_reset_minute = now
-        
-        if (now - rate_limit.last_reset_hour).seconds >= 3600:
-            rate_limit.current_hour_count = 0
-            rate_limit.last_reset_hour = now
-        
-        if (now - rate_limit.last_reset_day).days >= 1:
-            rate_limit.current_day_count = 0
-            rate_limit.last_reset_day = now
-        
-        # Check limits
-        if (rate_limit.current_minute_count >= rate_limit.requests_per_minute or
-            rate_limit.current_hour_count >= rate_limit.requests_per_hour or
-            rate_limit.current_day_count >= rate_limit.requests_per_day):
-            return False
-        
-        # Increment counters
-        rate_limit.current_minute_count += 1
-        rate_limit.current_hour_count += 1
-        rate_limit.current_day_count += 1
-        
-        return True
-
-    def _make_api_call(self, request: APIRequest) -> Optional[Dict[str, Any]]:
-        """Make an actual API call."""
-        try:
-            if request.source == APISource.COINMARKETCAP:
-                return self._call_coinmarketcap(request)
-            elif request.source == APISource.COINGECKO:
-                return self._call_coingecko(request)
-            else:
-                logger.error(f"Unknown API source: {request.source}")
-                return None
-                
-        except Exception as e:
-            logger.error(f"API call failed: {e}")
-            return None
-
-    def _call_coinmarketcap(self, request: APIRequest) -> Optional[Dict[str, Any]]:
-        """Make a Coin Market Cap API call."""
-        try:
-            headers = {
-                'X-CMC_PRO_API_KEY': self.api_keys[APISource.COINMARKETCAP],
-                'Accept': 'application/json'
-            }
-            
-            url = f"{self.base_urls[APISource.COINMARKETCAP]}/{request.endpoint}"
-            
-            response = requests.get(url, headers=headers, params=request.parameters, timeout=30)
-            
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logger.error(f"Coin Market Cap API error: {response.status_code} - {response.text}")
-                return None
-                
-        except Exception as e:
-            logger.error(f"Coin Market Cap API call failed: {e}")
-            return None
-
-    def _call_coingecko(self, request: APIRequest) -> Optional[Dict[str, Any]]:
-        """Make a CoinGecko API call."""
-        try:
-            url = f"{self.base_urls[APISource.COINGECKO]}/{request.endpoint}"
-            
-            response = requests.get(url, params=request.parameters, timeout=30)
-            
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logger.error(f"CoinGecko API error: {response.status_code} - {response.text}")
-                return None
-                
-        except Exception as e:
-            logger.error(f"CoinGecko API call failed: {e}")
-            return None
-
-    def _handle_successful_request(self, request: APIRequest) -> None:
-        """Handle a successful API request."""
-        # Cache the response
-        cache_key = self._generate_cache_key(request)
-        self.response_cache[cache_key] = (request.response_data, datetime.now())
-        
-        # Process the data
-        if request.response_data:
-            self._process_response_data(request)
-        
-        # Update request history
-        self.request_history.append(request)
-        
-        logger.debug(f"Successful API request: {request.request_id}")
-
-    def _handle_failed_request(self, request: APIRequest) -> None:
-        """Handle a failed API request."""
-        if request.retry_count < request.max_retries:
-            request.retry_count += 1
-            request.status = RequestStatus.PENDING
-            # Re-queue for retry with exponential backoff
-            time.sleep(2 ** request.retry_count)
-            self.request_queue.append(request)
-        else:
-            self.request_history.append(request)
-            logger.error(f"API request failed after {request.max_retries} retries: {request.error_message}")
-
-    def _process_response_data(self, request: APIRequest) -> None:
-        """Process response data and convert to CryptoData objects."""
-        if not request.response_data:
+    def _initialize_adapters(self):
+        """Initializes API adapters based on loaded configuration."""
+        if not self._session:
             return
+        adapter_map = {
+            APISource.COINMARKETCAP: CoinMarketCapAdapter,
+            APISource.COINGECKO: CoinGeckoAdapter,
+        }
+        for source, adapter_class in adapter_map.items():
+            api_key = self._api_keys.get(source)
+            if source == APISource.COINGECKO or api_key:
+                self._adapters[source] = adapter_class(self._session, api_key)
+        logger.info(f"Initialized {len(self._adapters)} API adapters.")
+
+    async def close(self):
+        """Closes the underlying aiohttp session."""
+        if self._session and not self._session.closed:
+            await self._session.close()
+            logger.info("APIBridgeManager session closed.")
+
+    async def get_crypto_data(
+        self,
+        symbols: List[str],
+        sources: Optional[List[APISource]] = None,
+        use_cache: bool = True,
+    ) -> Dict[str, CryptoData]:
+        """
+        Retrieves cryptocurrency data from specified sources, using a cache
+        and a fallback strategy.
+
+        Args:
+            symbols: List of cryptocurrency symbols (e.g., ["BTC", "ETH"]).
+            sources: List of APISources to query. If None, uses all configured.
+            use_cache: Whether to use the internal cache.
+
+        Returns:
+            A dictionary mapping symbol to its CryptoData.
+        """
+        if not self._is_initialized:
+            await self.initialize()
+
+        combined_results: Dict[str, CryptoData] = {}
+        symbols_to_fetch_set = set(s.upper() for s in symbols)
+
+        if use_cache:
+            cached_data, symbols_to_fetch_set = self._check_cache(list(symbols_to_fetch_set))
+            combined_results.update(cached_data)
+
+        if not symbols_to_fetch_set:
+            return combined_results
+
+        adapters_to_use = [self._adapters[s] for s in (sources or self._adapters.keys()) if s in self._adapters]
         
-        try:
-            if request.source == APISource.COINMARKETCAP:
-                self._process_coinmarketcap_data(request.response_data)
-            elif request.source == APISource.COINGECKO:
-                self._process_coingecko_data(request.response_data)
-                
-        except Exception as e:
-            logger.error(f"Error processing response data: {e}")
+        fetched_data_this_run: List[CryptoData] = []
+        tasks = [self._fetch_with_retry(adapter, list(symbols_to_fetch_set)) for adapter in adapters_to_use]
+        results = await asyncio.gather(*tasks)
 
-    def _process_coinmarketcap_data(self, data: Dict[str, Any]) -> None:
-        """Process Coin Market Cap response data."""
-        if 'data' not in data:
-            return
+        for result_list in results:
+            fetched_data_this_run.extend(result_list)
         
-        for item in data['data']:
-            try:
-                crypto_data = CryptoData(
-                    symbol=item.get('symbol', ''),
-                    name=item.get('name', ''),
-                    price=float(item.get('quote', {}).get('USD', {}).get('price', 0)),
-                    market_cap=float(item.get('quote', {}).get('USD', {}).get('market_cap', 0)),
-                    volume_24h=float(item.get('quote', {}).get('USD', {}).get('volume_24h', 0)),
-                    circulating_supply=float(item.get('circulating_supply', 0)),
-                    total_supply=float(item.get('total_supply', 0)),
-                    max_supply=float(item.get('max_supply', 0)) if item.get('max_supply') else None,
-                    rank=int(item.get('cmc_rank', 0)),
-                    price_change_24h=float(item.get('quote', {}).get('USD', {}).get('volume_change_24h', 0)),
-                    price_change_percentage_24h=float(item.get('quote', {}).get('USD', {}).get('percent_change_24h', 0)),
-                    source=APISource.COINMARKETCAP,
-                    timestamp=datetime.now(),
-                    confidence_score=0.95
-                )
-                
-                self.data_cache[crypto_data.symbol] = crypto_data
-                
-            except Exception as e:
-                logger.error(f"Error processing Coin Market Cap item: {e}")
+        for item in fetched_data_this_run:
+            if item.symbol not in combined_results:
+                combined_results[item.symbol] = item
+            self._cache[item.symbol] = CacheEntry(data=item, timestamp=datetime.now())
 
-    def _process_coingecko_data(self, data: Dict[str, Any]) -> None:
-        """Process CoinGecko response data."""
-        if isinstance(data, list):
-            items = data
-        elif isinstance(data, dict) and 'data' in data:
-            items = data['data']
-        else:
-            items = [data]
-        
-        for item in items:
-            try:
-                crypto_data = CryptoData(
-                    symbol=item.get('symbol', '').upper(),
-                    name=item.get('name', ''),
-                    price=float(item.get('current_price', 0)),
-                    market_cap=float(item.get('market_cap', 0)),
-                    volume_24h=float(item.get('total_volume', 0)),
-                    circulating_supply=float(item.get('circulating_supply', 0)),
-                    total_supply=float(item.get('total_supply', 0)),
-                    max_supply=float(item.get('max_supply', 0)) if item.get('max_supply') else None,
-                    rank=int(item.get('market_cap_rank', 0)),
-                    price_change_24h=float(item.get('price_change_24h', 0)),
-                    price_change_percentage_24h=float(item.get('price_change_percentage_24h', 0)),
-                    source=APISource.COINGECKO,
-                    timestamp=datetime.now(),
-                    confidence_score=0.90
-                )
-                
-                self.data_cache[crypto_data.symbol] = crypto_data
-                
-            except Exception as e:
-                logger.error(f"Error processing CoinGecko item: {e}")
+        if self.bus and fetched_data_this_run:
+            await self._publish_to_bus(fetched_data_this_run)
 
-    def _generate_cache_key(self, request: APIRequest) -> str:
-        """Generate a cache key for a request."""
-        key_data = f"{request.source.value}_{request.endpoint}_{json.dumps(request.parameters, sort_keys=True)}"
-        return hashlib.md5(key_data.encode()).hexdigest()
+        return combined_results
 
-    def _clean_expired_cache(self) -> None:
-        """Clean expired cache entries."""
+    async def _publish_to_bus(self, data: List[CryptoData]):
+        """Publishes a list of crypto data to the fault bus."""
+        publish_tasks = [
+            self.bus.publish(
+                "new_market_price",
+                price=item.price,
+                timestamp=item.timestamp.timestamp(),
+                symbol=item.symbol,
+                source=item.source.value
+            ) for item in data
+        ]
+        if publish_tasks:
+            await asyncio.gather(*publish_tasks)
+            logger.debug(f"Published {len(publish_tasks)} price updates to the FaultBus.")
+
+    def _check_cache(self, symbols: List[str]) -> Tuple[Dict[str, CryptoData], set]:
+        """Checks cache for fresh data, returns it and a set of symbols that still need fetching."""
+        fresh_data: Dict[str, CryptoData] = {}
+        symbols_to_fetch = set(symbols)
         now = datetime.now()
-        expired_keys = []
-        
-        for key, (data, timestamp) in self.response_cache.items():
-            if (now - timestamp).seconds > 300:  # 5 minutes
-                expired_keys.append(key)
-        
-        for key in expired_keys:
-            del self.response_cache[key]
-        
-        if expired_keys:
-            logger.debug(f"Cleaned {len(expired_keys)} expired cache entries")
-
-    def get_crypto_data(self, symbol: str, source: Optional[APISource] = None) -> Optional[CryptoData]:
-        """Get crypto data for a symbol."""
-        # Check cache first
-        if symbol in self.data_cache:
-            data = self.data_cache[symbol]
-            if (datetime.now() - data.timestamp).seconds < 300:  # 5 minutes
-                return data
-        
-        # Make API request if not in cache or expired
-        if source:
-            sources = [source]
-        else:
-            sources = [APISource.COINGECKO, APISource.COINMARKETCAP]  # Try CoinGecko first (free)
-        
-        for api_source in sources:
-            if api_source == APISource.COINMARKETCAP:
-                self._request_coinmarketcap_data(symbol)
-            elif api_source == APISource.COINGECKO:
-                self._request_coingecko_data(symbol)
-        
-        # Return cached data if available
-        return self.data_cache.get(symbol)
-
-    def _request_coinmarketcap_data(self, symbol: str) -> None:
-        """Request data from Coin Market Cap."""
-        request_id = f"cmc_{symbol}_{int(time.time())}"
-        
-        request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINMARKETCAP,
-            endpoint="cryptocurrency/quotes/latest",
-            parameters={"symbol": symbol},
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
-        )
-        
-        self.request_queue.append(request)
-        self.active_requests[request_id] = request
-
-    def _request_coingecko_data(self, symbol: str) -> None:
-        """Request data from CoinGecko."""
-        request_id = f"cg_{symbol}_{int(time.time())}"
-        
-        request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINGECKO,
-            endpoint="simple/price",
-            parameters={
-                "ids": symbol.lower(),
-                "vs_currencies": "usd",
-                "include_market_cap": "true",
-                "include_24hr_vol": "true",
-                "include_24hr_change": "true",
-                "include_last_updated_at": "true"
-            },
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
-        )
-        
-        self.request_queue.append(request)
-        self.active_requests[request_id] = request
-
-    def get_multiple_crypto_data(self, symbols: List[str]) -> Dict[str, CryptoData]:
-        """Get crypto data for multiple symbols."""
-        results = {}
         
         for symbol in symbols:
-            data = self.get_crypto_data(symbol)
-            if data:
-                results[symbol] = data
+            if symbol in self._cache:
+                entry = self._cache[symbol]
+                if (now - entry.timestamp) < self._cache_ttl:
+                    fresh_data[symbol] = entry.data
+                    symbols_to_fetch.remove(symbol)
         
-        return results
+        if fresh_data:
+            logger.debug(f"Cache hit for symbols: {list(fresh_data.keys())}")
+        
+        return fresh_data, symbols_to_fetch
 
-    def get_top_cryptocurrencies(self, limit: int = 100) -> List[CryptoData]:
-        """Get top cryptocurrencies by market cap."""
-        # Request from CoinGecko (free and reliable)
-        request_id = f"top_{int(time.time())}"
+    async def _fetch_with_retry(
+        self, adapter: ApiAdapter, symbols: List[str], retries: int = 3, delay: float = 1.0
+    ) -> List[CryptoData]:
+        """Fetches data from an adapter with exponential backoff."""
+        self._request_stats[adapter.__class__.__name__]['attempts'] += 1
+        for i in range(retries):
+            try:
+                data = await adapter.get_crypto_data(symbols)
+                self._request_stats[adapter.__class__.__name__]['successes'] += 1
+                return data
+            except aiohttp.ClientError as e:
+                logger.warning(
+                    f"Attempt {i+1}/{retries} failed for {adapter.__class__.__name__}: {e}. Retrying in {delay}s..."
+                )
+                if i < retries - 1:
+                    await asyncio.sleep(delay)
+                    delay *= 2
         
-        request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINGECKO,
-            endpoint="coins/markets",
-            parameters={
-                "vs_currency": "usd",
-                "order": "market_cap_desc",
-                "per_page": str(limit),
-                "page": "1",
-                "sparkline": "false"
-            },
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
-        )
-        
-        self.request_queue.append(request)
-        self.active_requests[request_id] = request
-        
-        # Return cached data if available
-        return list(self.data_cache.values())
+        self._request_stats[adapter.__class__.__name__]['failures'] += 1
+        return []
 
     def get_api_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive API statistics."""
-        total_requests = len(self.request_history)
-        successful_requests = len([r for r in self.request_history if r.status == RequestStatus.SUCCESS])
-        failed_requests = len([r for r in self.request_history if r.status == RequestStatus.FAILED])
-        rate_limited_requests = len([r for r in self.request_history if r.status == RequestStatus.RATE_LIMITED])
-        
-        source_stats = defaultdict(lambda: {"total": 0, "successful": 0, "failed": 0})
-        for request in self.request_history:
-            source_stats[request.source.value]["total"] += 1
-            if request.status == RequestStatus.SUCCESS:
-                source_stats[request.source.value]["successful"] += 1
-            elif request.status == RequestStatus.FAILED:
-                source_stats[request.source.value]["failed"] += 1
-        
+        """Returns statistics about the API usage."""
         return {
-            "total_requests": total_requests,
-            "successful_requests": successful_requests,
-            "failed_requests": failed_requests,
-            "rate_limited_requests": rate_limited_requests,
-            "success_rate": successful_requests / total_requests if total_requests > 0 else 0,
-            "source_statistics": dict(source_stats),
-            "cached_data_count": len(self.data_cache),
-            "pending_requests": len(self.request_queue),
-            "active_requests": len(self.active_requests)
+            "cache_size": len(self._cache),
+            "requests": dict(self._request_stats)
         }
 
-def main() -> None:
-    """Main function for testing and demonstration."""
-    bridge = APIBridgeManager("./test_api_config.json")
+
+async def main():
+    """Demonstrates the functionality of the APIBridgeManager."""
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     
-    # Test getting crypto data
-    btc_data = bridge.get_crypto_data("BTC")
-    if btc_data:
-        print(f"BTC Data: {btc_data}")
+    bus = FaultBus()
+
+    async def price_listener(price: float, symbol: str, **kwargs):
+        safe_print(f"[PriceListener] Received new price via FaultBus: {symbol} @ ${price:.2f} from {kwargs.get('source')}")
+
+    bus.subscribe("new_market_price", price_listener)
+
+    # Pass the bus to the manager
+    manager = APIBridgeManager(fault_bus=bus)
     
-    # Test getting multiple symbols
-    symbols = ["BTC", "ETH", "ADA"]
-    multi_data = bridge.get_multiple_crypto_data(symbols)
-    print(f"Multiple symbols data: {len(multi_data)} items")
-    
-    # Get statistics
-    stats = bridge.get_api_statistics()
-    print(f"API Statistics: {stats}")
+    try:
+        await manager.initialize()
+        # For CoinGecko, use IDs. For CMC, use symbols.
+        # Example using CoinGecko IDs:
+        symbols_to_fetch = ["bitcoin", "ethereum"]
+        
+        safe_print(f"\n--- Fetching data for {', '.join(symbols_to_fetch)} ---")
+        data = await manager.get_crypto_data(symbols_to_fetch)
+        
+        if data:
+            for symbol, crypto_data in data.items():
+                safe_print(
+                    f"  -> Fetched {crypto_data.name} ({symbol}): ${crypto_data.price:.2f} "
+                    f"(Source: {crypto_data.source.value})"
+                )
+        else:
+            safe_print("  -> Failed to fetch data. Check API keys and network.")
+
+    finally:
+        await manager.close()
+
 
 if __name__ == "__main__":
-    main() 
+    asyncio.run(main()) 

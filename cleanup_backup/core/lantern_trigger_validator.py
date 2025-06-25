@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """lantern_trigger_validator – Real validation implementation.
 
@@ -5,11 +9,10 @@ Validates spike/dip signals against historical Ferris Wheel & Lantern timing.
 Implements real validation using historical data patterns and statistical analysis.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
-import numpy as np
+from core.unified_math_system import unified_math
 from datetime import datetime, timedelta
 import json
 import os
@@ -50,7 +53,7 @@ class LanternTriggerValidator:
                 # Generate default historical patterns
                 return self._generate_default_patterns()
         except Exception as e:
-            print(f"Warning: Could not load historical patterns: {e}")
+            safe_print(f"Warning: Could not load historical patterns: {e}")
             return self._generate_default_patterns()
 
     def _generate_default_patterns(self) -> Dict[str, Any]:
@@ -127,7 +130,7 @@ class LanternTriggerValidator:
             return confidence >= self.validation_threshold
             
         except Exception as e:
-            print(f"Error in trigger validation: {e}")
+            safe_print(f"Error in trigger validation: {e}")
             return False  # Fail safe - reject if validation fails
 
     def _calculate_validation_confidence(
@@ -168,7 +171,7 @@ class LanternTriggerValidator:
             return np.clip(total_confidence, 0.0, 1.0)
             
         except Exception as e:
-            print(f"Error calculating confidence: {e}")
+            safe_print(f"Error calculating confidence: {e}")
             return 0.5  # Default confidence
 
     def _validate_timing(self, timestamp: datetime) -> float:
@@ -189,7 +192,7 @@ class LanternTriggerValidator:
                 return 0.3  # Lower confidence for off-cycle triggers
                 
         except Exception as e:
-            print(f"Error in timing validation: {e}")
+            safe_print(f"Error in timing validation: {e}")
             return 0.5
 
     def _validate_magnitude(self, trigger_type: str, price_change: float) -> float:
@@ -199,13 +202,13 @@ class LanternTriggerValidator:
             
             if trigger_type == 'spike':
                 threshold = patterns['spike_threshold']
-                if abs(price_change) >= threshold:
+                if unified_math.abs(price_change) >= threshold:
                     return 0.9
                 else:
                     return 0.3
             elif trigger_type == 'dip':
-                threshold = abs(patterns['dip_threshold'])
-                if abs(price_change) >= threshold:
+                threshold = unified_math.abs(patterns['dip_threshold'])
+                if unified_math.abs(price_change) >= threshold:
                     return 0.9
                 else:
                     return 0.3
@@ -213,29 +216,29 @@ class LanternTriggerValidator:
                 return 0.5  # Unknown trigger type
                 
         except Exception as e:
-            print(f"Error in magnitude validation: {e}")
+            safe_print(f"Error in magnitude validation: {e}")
             return 0.5
 
     def _validate_volume(self, volume: float) -> float:
         """Validate trading volume."""
         try:
             # Normalize volume to 0-1 range (assuming typical volume range)
-            normalized_volume = min(volume / 1000000, 1.0)  # Assume 1M is max volume
+            normalized_volume = unified_math.min(volume / 1000000, 1.0)  # Assume 1M is max volume
             return normalized_volume
             
         except Exception as e:
-            print(f"Error in volume validation: {e}")
+            safe_print(f"Error in volume validation: {e}")
             return 0.5
 
     def _validate_volatility(self, volatility: float) -> float:
         """Validate market volatility."""
         try:
             # Higher volatility can indicate more reliable signals
-            normalized_volatility = min(volatility / 0.1, 1.0)  # Assume 10% is max volatility
+            normalized_volatility = unified_math.min(volatility / 0.1, 1.0)  # Assume 10% is max volatility
             return normalized_volatility
             
         except Exception as e:
-            print(f"Error in volatility validation: {e}")
+            safe_print(f"Error in volatility validation: {e}")
             return 0.5
 
     def _get_market_regime_adjustment(self, trigger_type: str, price_change: float) -> float:
@@ -246,7 +249,7 @@ class LanternTriggerValidator:
                 return 1.0  # Default adjustment
             
             recent_changes = [t['price_change'] for t in self.recent_triggers[-10:]]
-            avg_change = np.mean(recent_changes)
+            avg_change = unified_math.unified_math.mean(recent_changes)
             
             if avg_change > 0.02:  # Bull market
                 regime = 'bull_market'
@@ -265,7 +268,7 @@ class LanternTriggerValidator:
                 return 0.5
                 
         except Exception as e:
-            print(f"Error in market regime adjustment: {e}")
+            safe_print(f"Error in market regime adjustment: {e}")
             return 1.0
 
     def _update_validation_stats(self, confidence: float) -> None:
@@ -283,7 +286,7 @@ class LanternTriggerValidator:
             self.validation_stats['average_confidence'] = (current_avg * (total - 1) + confidence) / total
             
         except Exception as e:
-            print(f"Error updating validation stats: {e}")
+            safe_print(f"Error updating validation stats: {e}")
 
     def get_validation_stats(self) -> Dict[str, Any]:
         """Get validation statistics."""
@@ -296,7 +299,7 @@ class LanternTriggerValidator:
             with open(self.historical_data_path, 'w') as f:
                 json.dump(self.historical_patterns, f, indent=2, default=str)
         except Exception as e:
-            print(f"Error saving historical patterns: {e}")
+            safe_print(f"Error saving historical patterns: {e}")
 
 
 def validate_lantern_trigger(

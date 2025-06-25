@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 """
 Schwabot Vector Validator
 Validates mathematical vectors and provides real-time validation feedback
@@ -7,14 +9,14 @@ import json
 import yaml
 import logging
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from datetime import datetime, timedelta
 import threading
 import time
-import math
+from core.unified_math_system import unified_math
 from collections import defaultdict
 
 # Configure logging
@@ -218,19 +220,19 @@ class VectorValidator:
             # Calculate entropy score
             if len(vector) > 1:
                 # Shannon entropy of normalized vector
-                normalized = np.abs(vector) / (np.sum(np.abs(vector)) + 1e-10)
+                normalized = unified_math.unified_math.abs(vector) / (np.sum(unified_math.unified_math.abs(vector)) + 1e-10)
                 entropy_score = -np.sum(normalized * np.log2(normalized + 1e-10))
-                entropy_score = min(1.0, entropy_score / np.log2(len(vector)))
+                entropy_score = unified_math.min(1.0, entropy_score / np.log2(len(vector)))
             else:
                 entropy_score = 0.0
             
             # Calculate fractal dimension (approximation)
             if len(vector) > 2:
                 # Box-counting dimension approximation
-                ranges = np.max(vector) - np.min(vector)
+                ranges = unified_math.unified_math.max(vector) - unified_math.unified_math.min(vector)
                 if ranges > 0:
-                    fractal_dimension = 1.0 + np.log(len(vector)) / np.log(ranges + 1e-10)
-                    fractal_dimension = max(1.0, min(2.0, fractal_dimension))
+                    fractal_dimension = 1.0 + unified_math.unified_math.log(len(vector)) / unified_math.unified_math.log(ranges + 1e-10)
+                    fractal_dimension = unified_math.max(1.0, unified_math.min(2.0, fractal_dimension))
                 else:
                     fractal_dimension = 1.0
             else:
@@ -240,8 +242,8 @@ class VectorValidator:
             if len(vector) > 1:
                 phases = np.angle(vector + 1j * np.random.rand(len(vector)) * 0.1)
                 phase_diff = np.diff(phases)
-                quantum_coherence = 1.0 - np.std(phase_diff) / (2 * np.pi)
-                quantum_coherence = max(0.0, min(1.0, quantum_coherence))
+                quantum_coherence = 1.0 - unified_math.unified_math.std(phase_diff) / (2 * np.pi)
+                quantum_coherence = unified_math.max(0.0, unified_math.min(1.0, quantum_coherence))
             else:
                 quantum_coherence = 1.0
             
@@ -250,8 +252,8 @@ class VectorValidator:
             
             # Calculate angular momentum (cross product approximation)
             if len(vector) >= 3:
-                angular_momentum = np.abs(np.cross(vector[:3], vector[1:4]))[0]
-                angular_momentum = min(1.0, angular_momentum / (vector_magnitude + 1e-10))
+                angular_momentum = unified_math.unified_math.abs(np.cross(vector[:3], vector[1:4]))[0]
+                angular_momentum = unified_math.min(1.0, angular_momentum / (vector_magnitude + 1e-10))
             else:
                 angular_momentum = 0.0
             
@@ -259,21 +261,21 @@ class VectorValidator:
             if len(vector) > 1:
                 real_parts = np.real(vector)
                 imag_parts = np.imag(vector) if np.iscomplexobj(vector) else np.zeros_like(vector)
-                phase_alignment = np.abs(np.sum(real_parts) + 1j * np.sum(imag_parts)) / (np.sum(np.abs(vector)) + 1e-10)
+                phase_alignment = unified_math.unified_math.abs(np.sum(real_parts) + 1j * np.sum(imag_parts)) / (np.sum(unified_math.unified_math.abs(vector)) + 1e-10)
             else:
                 phase_alignment = 1.0
             
             # Calculate stability index
             if len(vector) > 1:
-                stability_index = 1.0 - np.std(vector) / (np.mean(np.abs(vector)) + 1e-10)
-                stability_index = max(0.0, min(1.0, stability_index))
+                stability_index = 1.0 - unified_math.unified_math.std(vector) / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e-10)
+                stability_index = unified_math.max(0.0, unified_math.min(1.0, stability_index))
             else:
                 stability_index = 1.0
             
             # Calculate convergence rate
             if len(vector) > 2:
-                convergence_rate = np.abs(np.diff(vector, n=2)).mean() / (np.mean(np.abs(vector)) + 1e-10)
-                convergence_rate = max(0.0, min(1.0, convergence_rate))
+                convergence_rate = unified_math.unified_math.abs(np.diff(vector, n=2)).mean() / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e-10)
+                convergence_rate = unified_math.max(0.0, unified_math.min(1.0, convergence_rate))
             else:
                 convergence_rate = 0.0
             
@@ -344,13 +346,13 @@ class VectorValidator:
         # Base score from metrics
         base_score = (
             metrics.entropy_score * 0.2 +
-            min(1.0, metrics.fractal_dimension / 2.0) * 0.15 +
+            unified_math.min(1.0, metrics.fractal_dimension / 2.0) * 0.15 +
             metrics.quantum_coherence * 0.15 +
-            min(1.0, metrics.vector_magnitude / 5.0) * 0.1 +
+            unified_math.min(1.0, metrics.vector_magnitude / 5.0) * 0.1 +
             metrics.angular_momentum * 0.1 +
             metrics.phase_alignment * 0.15 +
             metrics.stability_index * 0.1 +
-            min(1.0, metrics.convergence_rate * 10) * 0.05
+            unified_math.min(1.0, metrics.convergence_rate * 10) * 0.05
         )
         
         # Penalties for errors and warnings
@@ -358,7 +360,7 @@ class VectorValidator:
         warning_penalty = len(warnings) * 0.05
         
         # Final score
-        confidence_score = max(0.0, min(1.0, base_score - error_penalty - warning_penalty))
+        confidence_score = unified_math.max(0.0, unified_math.min(1.0, base_score - error_penalty - warning_penalty))
         
         return confidence_score
     
@@ -400,7 +402,7 @@ class VectorValidator:
             
             # Calculate average confidence from recent validations
             recent_results = [v['result']['confidence_score'] for v in self.validation_history[-100:]]
-            average_confidence = np.mean(recent_results) if recent_results else 0.0
+            average_confidence = unified_math.unified_math.mean(recent_results) if recent_results else 0.0
             
             return {
                 'total_validations': self.total_validations,
@@ -428,7 +430,7 @@ class VectorValidator:
             
             # Calculate average validation time
             validation_times = [v['result']['validation_duration'] for v in recent_validations]
-            average_validation_time = np.mean(validation_times)
+            average_validation_time = unified_math.unified_math.mean(validation_times)
             
             # Calculate error and warning distributions
             error_distribution = defaultdict(int)
@@ -533,11 +535,11 @@ if __name__ == "__main__":
     
     result = validator.validate_vector(test_vector, "test_context")
     
-    print("Validation Result:")
+    safe_print("Validation Result:")
     print(json.dumps(asdict(result), indent=2))
     
-    print("\nValidation Statistics:")
+    safe_print("\nValidation Statistics:")
     print(json.dumps(validator.get_validation_statistics(), indent=2))
     
-    print("\nPerformance Metrics:")
+    safe_print("\nPerformance Metrics:")
     print(json.dumps(validator.get_performance_metrics(), indent=2)) 

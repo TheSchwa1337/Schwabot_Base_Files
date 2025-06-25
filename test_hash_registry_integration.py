@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Hash Registry Integration Test - Schwabot UROS v1.0
@@ -66,8 +68,8 @@ class HashRegistryIntegrationTester:
 
     def run_complete_integration_test(self) -> Dict[str, Any]:
         """Run complete integration test suite."""
-        print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
-        print("=" * 60)
+        safe_print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
+        safe_print("=" * 60)
         
         test_suites = [
             ("Hash Registry Structure", self.test_hash_registry_structure),
@@ -85,18 +87,18 @@ class HashRegistryIntegrationTester:
         ]
         
         for test_name, test_func in test_suites:
-            print(f"\n🔍 Running {test_name}...")
+            safe_print(f"\n🔍 Running {test_name}...")
             try:
                 result = test_func()
                 self.test_results[test_name] = result
                 status = "✅ PASSED" if result.get('success', False) else "❌ FAILED"
-                print(f"  {test_name}: {status}")
+                safe_print(f"  {test_name}: {status}")
                 if not result.get('success', False):
-                    print(f"    Error: {result.get('error', 'Unknown error')}")
+                    safe_print(f"    Error: {result.get('error', 'Unknown error')}")
             except Exception as e:
                 self.test_results[test_name] = {'success': False, 'error': str(e)}
-                print(f"  {test_name}: ❌ FAILED")
-                print(f"    Exception: {e}")
+                safe_print(f"  {test_name}: ❌ FAILED")
+                safe_print(f"    Exception: {e}")
         
         # Calculate overall results
         total_tests = len(test_suites)
@@ -105,13 +107,13 @@ class HashRegistryIntegrationTester:
         
         overall_success = failed_tests == 0
         
-        print(f"\n📊 Integration Test Results:")
-        print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
-        print(f"  Total Tests: {total_tests}")
-        print(f"  Passed: {passed_tests}")
-        print(f"  Failed: {failed_tests}")
-        print(f"  Success Rate: {(passed_tests/total_tests)*100:.1f}%")
-        print(f"  Total Execution Time: {time.time() - self.start_time:.2f}s")
+        safe_print(f"\n📊 Integration Test Results:")
+        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"  Total Tests: {total_tests}")
+        safe_print(f"  Passed: {passed_tests}")
+        safe_print(f"  Failed: {failed_tests}")
+        safe_print(f"  Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+        safe_print(f"  Total Execution Time: {time.time() - self.start_time:.2f}s")
         
         return {
             "overall_success": overall_success,
@@ -154,7 +156,7 @@ class HashRegistryIntegrationTester:
         try:
             bit_depths = set()
             for entry in self.hash_registry_manager.hash_entries.values():
-                bit_depths.add(entry.bit_depth)
+                bit_depths.unified_math.add(entry.bit_depth)
             
             expected_depths = {4, 8, 42}
             if bit_depths != expected_depths:
@@ -203,7 +205,7 @@ class HashRegistryIntegrationTester:
         try:
             basket_ids = set()
             for entry in self.hash_registry_manager.hash_entries.values():
-                basket_ids.add(entry.matrix_basket_id)
+                basket_ids.unified_math.add(entry.matrix_basket_id)
             
             # Check all basket IDs from 0 to 31
             expected_basket_ids = set(range(32))
@@ -224,7 +226,7 @@ class HashRegistryIntegrationTester:
         try:
             routes = set()
             for entry in self.hash_registry_manager.hash_entries.values():
-                routes.add(entry.tensor_route)
+                routes.unified_math.add(entry.tensor_route)
             
             expected_routes = {f'route_{i}' for i in range(5)}
             if routes != expected_routes:
@@ -257,8 +259,8 @@ class HashRegistryIntegrationTester:
                 priorities.append(entry.priority)
             
             # Check priority range
-            min_priority = min(priorities)
-            max_priority = max(priorities)
+            min_priority = unified_math.min(priorities)
+            max_priority = unified_math.max(priorities)
             
             if min_priority < 0.1 or max_priority > 3.2:
                 return {'success': False, 'error': f'Priority out of range: min={min_priority}, max={max_priority}'}
@@ -421,7 +423,7 @@ class HashRegistryIntegrationTester:
                 return {'success': False, 'error': f'Invalid 42-bit phase: {bit_result.phi_42}'}
             
             # Test tensor contraction
-            import numpy as np
+            from core.unified_math_system import unified_math
             matrix_a = np.random.random((4, 4))
             matrix_b = np.random.random((4, 4))
             tensor_result = self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
@@ -530,8 +532,8 @@ class HashRegistryIntegrationTester:
 
 def main():
     """Main function for hash registry integration testing."""
-    print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
-    print("=" * 60)
+    safe_print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
+    safe_print("=" * 60)
     
     # Initialize tester
     tester = HashRegistryIntegrationTester()
@@ -543,13 +545,13 @@ def main():
     tester.export_test_results()
     
     # Print detailed results
-    print(f"\n📋 Detailed Test Results:")
+    safe_print(f"\n📋 Detailed Test Results:")
     for test_name, result in results['test_results'].items():
         status = "✅ PASSED" if result.get('success', False) else "❌ FAILED"
-        print(f"  {test_name}: {status}")
+        safe_print(f"  {test_name}: {status}")
         if result.get('metadata'):
             for key, value in result['metadata'].items():
-                print(f"    {key}: {value}")
+                safe_print(f"    {key}: {value}")
     
     # Return exit code
     return 0 if results['overall_success'] else 1

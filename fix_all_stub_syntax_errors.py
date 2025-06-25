@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Fix all stub file syntax errors in the Schwabot codebase.
 
@@ -50,13 +51,13 @@ def fix_stub_file_syntax(file_path: str) -> bool:
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"Fixed syntax errors in {file_path}")
+            safe_print(f"Fixed syntax errors in {file_path}")
             return True
         
         return False
         
     except Exception as e:
-        print(f"Error processing {file_path}: {e}")
+        safe_print(f"Error processing {file_path}: {e}")
         return False
 
 
@@ -81,13 +82,13 @@ def find_and_fix_all_stub_files():
             if fix_stub_file_syntax(file):
                 fixed_count += 1
     
-    print(f"Fixed syntax errors in {fixed_count} files")
+    safe_print(f"Fixed syntax errors in {fixed_count} files")
     return fixed_count
 
 
 def verify_fixes():
     """Verify that the fixes worked by checking for remaining syntax errors."""
-    print("\nVerifying fixes...")
+    safe_print("\nVerifying fixes...")
     
     # Check for remaining malformed patterns
     remaining_errors = []
@@ -113,28 +114,28 @@ def verify_fixes():
                     remaining_errors.append(f"{file_path}: Error reading file - {e}")
     
     if remaining_errors:
-        print(f"Found {len(remaining_errors)} remaining issues:")
+        safe_print(f"Found {len(remaining_errors)} remaining issues:")
         for error in remaining_errors[:10]:  # Show first 10
-            print(f"  {error}")
+            safe_print(f"  {error}")
         if len(remaining_errors) > 10:
-            print(f"  ... and {len(remaining_errors) - 10} more")
+            safe_print(f"  ... and {len(remaining_errors) - 10} more")
     else:
-        print("✅ All syntax errors appear to be fixed!")
+        safe_print("✅ All syntax errors appear to be fixed!")
 
 
 def main():
     """Main function to fix all stub syntax errors."""
-    print("Fixing all stub file syntax errors in Schwabot codebase...")
+    safe_print("Fixing all stub file syntax errors in Schwabot codebase...")
     
     # Fix all stub files
     fixed_count = find_and_fix_all_stub_files()
     
-    print(f"\nFixed {fixed_count} files with syntax errors")
+    safe_print(f"\nFixed {fixed_count} files with syntax errors")
     
     # Verify the fixes
     verify_fixes()
     
-    print("\nStub syntax error fixing completed!")
+    safe_print("\nStub syntax error fixing completed!")
 
 
 if __name__ == "__main__":

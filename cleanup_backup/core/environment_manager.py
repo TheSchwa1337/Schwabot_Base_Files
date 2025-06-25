@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Environment Manager - Canary Environments and Configuration Management.
 
@@ -8,7 +10,6 @@ This module provides comprehensive environment management including:
 - Integration with all Schwabot core systems and mathematical frameworks
 """
 
-from __future__ import annotations
 
 import asyncio
 import json

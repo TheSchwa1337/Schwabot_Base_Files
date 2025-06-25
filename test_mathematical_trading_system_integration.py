@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Trading System Integration Tests - Schwabot Framework.
 
@@ -43,7 +47,6 @@ Based on SxN-Math specifications and Windows-compatible architecture.
 
 """
 
-from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
@@ -57,7 +60,7 @@ import time
 from typing import Any, Dict, List, Tuple
 import unittest
 
-import numpy as np
+from core.unified_math_system import unified_math
 import yaml
 
 # Set high precision for financial calculations
@@ -249,9 +252,9 @@ class FerrisWheelTimingValidator:
         normalized_position = cycle_position % (2 * np.pi)
         normalized_expected = expected_phase % (2 * np.pi)
 
-        difference = abs(normalized_position - normalized_expected)
+        difference = unified_math.abs(normalized_position - normalized_expected)
         # Handle wraparound
-        difference = min(difference, 2 * np.pi - difference)
+        difference = unified_math.min(difference, 2 * np.pi - difference)
 
         return difference <= self.timing_tolerance
 
@@ -271,12 +274,12 @@ class FerrisWheelTimingValidator:
         # Check harmonic alignment
         fft_values = np.fft.fft(trigger_values)
         dominant_freq_idx = (
-            np.argmax(np.abs(fft_values[1 : len(fft_values) // 2])) + 1
+            np.argmax(unified_math.unified_math.abs(fft_values[1 : len(fft_values) // 2])) + 1
         )
         dominant_period = len(trigger_values) / dominant_freq_idx
 
         harmonic_aligned = any(
-            abs(dominant_period - h) < 1.0 for h in self.harmonic_ratios
+            unified_math.abs(dominant_period - h) < 1.0 for h in self.harmonic_ratios
         )
 
         validation_result = {
@@ -284,8 +287,8 @@ class FerrisWheelTimingValidator:
             "threshold_ratio": threshold_ratio,
             "dominant_period": dominant_period,
             "harmonic_aligned": harmonic_aligned,
-            "trigger_strength": np.mean(trigger_values),
-            "sequence_stability": 1.0 - np.std(trigger_values),
+            "trigger_strength": unified_math.unified_math.mean(trigger_values),
+            "sequence_stability": 1.0 - unified_math.unified_math.std(trigger_values),
         }
 
         is_valid = (
@@ -514,10 +517,10 @@ class MathematicalPathwayValidator:
             results["UFS"] = {
                 "imported": True,
                 "kalman_final_position": measurements[-1],
-                "kalman_convergence": abs(measurements[-1] - 9.0)
+                "kalman_convergence": unified_math.abs(measurements[-1] - 9.0)
                 < 1.0,  # Should converge to ~9
                 "ema_final_value": ema_values[-1],
-                "ema_stability": np.std(ema_values[-3:]) < 1.0,
+                "ema_stability": unified_math.unified_math.std(ema_values[-3:]) < 1.0,
                 "status": "success",
             }
         except Exception as e:
@@ -548,7 +551,7 @@ class MathematicalPathwayValidator:
             # price spike with low volume in small time delta
             is_phantom = (
                 tick_delta < Decimal("0.5")
-                and abs(price_delta) > Decimal("50")
+                and unified_math.abs(price_delta) > Decimal("50")
                 and volume_delta < Decimal("0.1")
             )
 
@@ -1039,17 +1042,17 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
             json.dump(report, f, indent=2, default=str)
 
         # Print summary
-        print("\n" + "=" * 80)
-        print("🧮 MATHEMATICAL TRADING SYSTEM INTEGRATION TEST SUMMARY")
-        print("=" * 80)
+        safe_print("\n" + "=" * 80)
+        safe_print("🧮 MATHEMATICAL TRADING SYSTEM INTEGRATION TEST SUMMARY")
+        safe_print("=" * 80)
 
         for category, results in cls.test_results.items():
             status = "✅ PASSED" if isinstance(results, dict) else "❌ FAILED"
-            print(f"{status} {category}")
+            safe_print(f"{status} {category}")
 
-        print("\n💎 All mathematical pathways validated successfully!")
-        print("🚀 System ready for production integration!")
-        print("=" * 80)
+        safe_print("\n💎 All mathematical pathways validated successfully!")
+        safe_print("🚀 System ready for production integration!")
+        safe_print("=" * 80)
 
 
 def main():

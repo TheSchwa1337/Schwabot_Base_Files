@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 NCCO Manager - Core Neural Circuit Control Object Management System
@@ -20,7 +22,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import json
 
@@ -136,7 +138,7 @@ class NCCOManager:
             nested_depth = self._calculate_nested_depth(input_data)
             
             complexity = (data_size * 0.1 + key_count * 0.2 + nested_depth * 0.3) / 100
-            return min(complexity, 1.0)
+            return unified_math.min(complexity, 1.0)
             
         except Exception as e:
             logger.error(f"Complexity calculation error: {e}")
@@ -150,10 +152,10 @@ class NCCOManager:
         max_depth = current_depth
         if isinstance(obj, dict):
             for value in obj.values():
-                max_depth = max(max_depth, self._calculate_nested_depth(value, current_depth + 1))
+                max_depth = unified_math.max(max_depth, self._calculate_nested_depth(value, current_depth + 1))
         elif isinstance(obj, list):
             for item in obj:
-                max_depth = max(max_depth, self._calculate_nested_depth(item, current_depth + 1))
+                max_depth = unified_math.max(max_depth, self._calculate_nested_depth(item, current_depth + 1))
         
         return max_depth
     
@@ -202,7 +204,7 @@ class NCCOManager:
             data_freshness = 0.9  # Placeholder for freshness check
             
             performance_score = (data_completeness + data_consistency + data_freshness) / 3
-            return min(performance_score, 1.0)
+            return unified_math.min(performance_score, 1.0)
             
         except Exception as e:
             logger.error(f"Performance score calculation error: {e}")
@@ -332,16 +334,16 @@ def main() -> None:
     # Test NCCO generation
     test_data = {"market_data": "test", "parameters": {"param1": 1.0}}
     result = manager.generate_ncco(test_data, "test_type")
-    print(f"NCCO generation result: {result.success}")
+    safe_print(f"NCCO generation result: {result.success}")
     
     # Test NCCO activation
     if result.success:
         activation_success = manager.activate_ncco(result.ncco_id, {"test": "data"})
-        print(f"NCCO activation result: {activation_success}")
+        safe_print(f"NCCO activation result: {activation_success}")
     
     # Get statistics
     stats = manager.get_manager_statistics()
-    print(f"Manager statistics: {stats}")
+    safe_print(f"Manager statistics: {stats}")
 
 
 if __name__ == "__main__":

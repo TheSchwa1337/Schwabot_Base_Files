@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """recursive_strategy_router – placeholder router stub.
 
@@ -6,7 +8,6 @@ implementation is a no-op that keeps the import graph intact while real
 logic is under construction.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Dict

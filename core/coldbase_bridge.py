@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Coldbase Bridge - Cold Storage and Data Management Bridge for Schwabot
@@ -591,15 +604,15 @@ def main() -> None:
         {"description": "Test market data", "source": "demo"}
     )
     
-    print(f"Data stored with chunk ID: {chunk_id}")
+    safe_print(f"Data stored with chunk ID: {chunk_id}")
     
     # Retrieve the data
     retrieved_data = bridge.retrieve_data(chunk_id, StorageType.COLD)
-    print(f"Retrieved data: {retrieved_data}")
+    safe_print(f"Retrieved data: {retrieved_data}")
     
     # Get statistics
     stats = bridge.get_storage_statistics()
-    print(f"Storage statistics: {json.dumps(stats, indent=2, default=str)}")
+    safe_print(f"Storage statistics: {json.dumps(stats, indent=2, default=str)}")
 
 if __name__ == "__main__":
     main() 

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Map - Trading Phase Transition and Mapping System for Schwabot
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -372,7 +386,7 @@ class PhaseMap:
         all_probabilities = []
         for transitions in self.transition_matrix.values():
             all_probabilities.extend(transitions.values())
-        avg_transition_probability = np.mean(all_probabilities) if all_probabilities else 0.0
+        avg_transition_probability = unified_math.unified_math.mean(all_probabilities) if all_probabilities else 0.0
         
         return {
             "active_phases": active_phases,
@@ -394,15 +408,15 @@ def main() -> None:
     
     # Record a transition
     transition_id = phase_map.record_transition("phase_001", "phase_002", TransitionType.NATURAL, 0.7)
-    print(f"Recorded transition: {transition_id}")
+    safe_print(f"Recorded transition: {transition_id}")
     
     # Predict next phase
     predictions = phase_map.predict_next_phase("phase_002")
-    print(f"Next phase predictions: {predictions}")
+    safe_print(f"Next phase predictions: {predictions}")
     
     # Get statistics
     stats = phase_map.get_phase_map_statistics()
-    print(f"Phase Map Statistics: {stats}")
+    safe_print(f"Phase Map Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

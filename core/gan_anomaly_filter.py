@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """GAN Anomaly Filter - Machine Learning Anomaly Detection.
 
@@ -11,12 +27,11 @@ trading decisions in the entropy-weighted entry score pipeline.
 Windows CLI compatible with proper fallback handling.
 """
 
-from __future__ import annotations
 
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -216,7 +231,7 @@ class GANAnomalyFilter:
             elif self.stub_mode == GAN_MODE_ADAPTIVE:
                 # Adaptive mode - adjust threshold based on market conditions
                 base_score = 0.8
-                feature_adjustment = np.mean(np.abs(features)) * 0.1
+                feature_adjustment = unified_math.unified_math.mean(unified_math.unified_math.abs(features)) * 0.1
                 validity_score = base_score + feature_adjustment
 
             else:
@@ -253,13 +268,13 @@ class GANAnomalyFilter:
             base_score = self._gan_state["market_regime"]
 
             # Feature-based adjustments
-            feature_mean = np.mean(features)
-            feature_std = np.std(features)
+            feature_mean = unified_math.unified_math.mean(features)
+            feature_std = unified_math.unified_math.std(features)
 
             # Penalize extreme values (potential anomalies)
-            if feature_std > 2.0 or abs(feature_mean) > 3.0:
+            if feature_std > 2.0 or unified_math.abs(feature_mean) > 3.0:
                 anomaly_penalty = 0.3
-            elif feature_std > 1.0 or abs(feature_mean) > 1.5:
+            elif feature_std > 1.0 or unified_math.abs(feature_mean) > 1.5:
                 anomaly_penalty = 0.1
             else:
                 anomaly_penalty = 0.0
@@ -350,7 +365,7 @@ class GANAnomalyFilter:
 
             # Average validity scores
             recent_scores = [p["validity_score"] for p in recent_predictions]
-            avg_validity_score = np.mean(recent_scores) if recent_scores else 0
+            avg_validity_score = unified_math.unified_math.mean(recent_scores) if recent_scores else 0
 
             return {
                 "total_predictions": self.total_predictions,
@@ -442,14 +457,14 @@ def create_feature_vector(
 
 def main() -> None:
     """Demo function for testing GAN anomaly filter."""
-    print("GAN Anomaly Filter Demo")
-    print("=" * 30)
+    safe_print("GAN Anomaly Filter Demo")
+    safe_print("=" * 30)
 
     # Test different stub modes
     modes = [GAN_MODE_AUTOENCODER, GAN_MODE_DISCRIMINATOR, GAN_MODE_HYBRID, GAN_MODE_ADAPTIVE]
 
     for mode in modes:
-        print(f"\nTesting {mode} mode:")
+        safe_print(f"\nTesting {mode} mode:")
         filter_instance = GANAnomalyFilter(stub_mode=mode)
 
         # Create test feature vectors
@@ -461,13 +476,13 @@ def main() -> None:
 
         for i, features in enumerate(test_features):
             result = filter_instance.predict(features)
-            print(
+            safe_print(
                 f"  Test {i+1}: Score={result['validity_score']:.3f}, "
                 f"Valid={result['is_valid']}"
             )
 
     # Test realistic mode with performance tracking
-    print(f"\nRealistic Mode Performance Test:")
+    safe_print(f"\nRealistic Mode Performance Test:")
     realistic_filter = GANAnomalyFilter(stub_mode=GAN_MODE_ADAPTIVE)
 
     # Generate multiple predictions
@@ -477,15 +492,15 @@ def main() -> None:
         realistic_filter.predict(features)
 
     stats = realistic_filter.get_performance_stats()
-    print(f"  Total predictions: {stats['total_predictions']}")
-    print(f"  Valid rate: {stats['overall_valid_rate']:.2f}")
-    print(f"  Average score: {stats['average_validity_score']:.3f}")
+    safe_print(f"  Total predictions: {stats['total_predictions']}")
+    safe_print(f"  Valid rate: {stats['overall_valid_rate']:.2f}")
+    safe_print(f"  Average score: {stats['average_validity_score']:.3f}")
 
     # Test feature vector creation
-    print(f"\nFeature Vector Test:")
+    safe_print(f"\nFeature Vector Test:")
     feature_vec = create_feature_vector(1.2, 0.1, 0.9, 0.2, 0.8, 0.1, 0.9, 0.03)
-    print(f"  Feature vector: {feature_vec}")
-    print(f"  Vector length: {len(feature_vec)}")
+    safe_print(f"  Feature vector: {feature_vec}")
+    safe_print(f"  Vector length: {len(feature_vec)}")
 
 
 if __name__ == "__main__":

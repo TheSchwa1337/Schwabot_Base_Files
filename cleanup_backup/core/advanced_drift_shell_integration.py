@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Advanced Drift Shell Integration - Schwabot Unified Mathematics Framework.
 
@@ -23,13 +27,12 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
 
 from datetime import datetime
 import logging
 from typing import Dict, List, Optional, Union
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 from core.type_defs import Entropy
 from core.type_defs import QuantumState
@@ -84,8 +87,8 @@ class GrayscaleDriftTensorCore:
         Returns:
             Drift field value
         """
-        decay = np.exp(-time) * np.sin(x * y)
-        stability = (np.cos(z) * np.sqrt(1 + abs(x))) / (1 + 0.1 * abs(y))
+        decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         return decay * stability
 
     def allocate_ring_drift(self, layer_index: int, entropy_gradient: float) -> float:
@@ -94,7 +97,7 @@ class GrayscaleDriftTensorCore:
         Allocate ring drift across concentric tensor rings.
 
         Uses Ψ∞ constant for allocation:
-        Ψ∞ * sin(layer_index * entropy_gradient) / (1 + layer_index²)
+        Ψ∞ * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index²)
 
         Args:
             layer_index: Index of the layer
@@ -103,7 +106,7 @@ class GrayscaleDriftTensorCore:
         Returns:
             Allocated drift value
         """
-        return (self.psi_infinity * np.sin(layer_index * entropy_gradient)) / (
+        return (self.psi_infinity * np.unified_math.sin(layer_index * entropy_gradient)) / (
             1 + layer_index * layer_index
         )
 
@@ -119,7 +122,7 @@ class GrayscaleDriftTensorCore:
             Coupled value
         """
         weight_factor = 1 / (1 + node_depth)
-        return weight_factor * np.log(1 + drift_signal)
+        return weight_factor * unified_math.unified_math.log(1 + drift_signal)
 
 
 class AdvancedTensorMemoryFeedback:
@@ -197,7 +200,7 @@ class AdvancedTensorMemoryFeedback:
 
         for i, entry in enumerate(reversed(self.history_stack[-recursion_depth:])):
             # Base weight with exponential decay
-            weight = np.exp(-i * self.decay_rate)
+            weight = unified_math.exp(-i * self.decay_rate)
 
             # Apply metadata weighting if requested
             if use_metadata and "weight" in entry["metadata"]:
@@ -224,7 +227,7 @@ class AdvancedTensorMemoryFeedback:
                 "total_memory_mb": 0.0,
             }
 
-        avg_entropy = np.mean([entry["entropy_delta"] for entry in self.history_stack])
+        avg_entropy = unified_math.mean([entry["entropy_delta"] for entry in self.history_stack])
         oldest_entry = self.history_stack[0]["timestamp"]
         newest_entry = self.history_stack[-1]["timestamp"]
 
@@ -457,20 +460,20 @@ def main() -> None:
         metadata=metadata,
     )
 
-    print("Integration Results:")
+    safe_print("Integration Results:")
     for key, value in results.items():
         if isinstance(value, (np.ndarray, Tensor)):
-            print(f"{key}: shape {value.shape}")
+            safe_print(f"{key}: shape {value.shape}")
         else:
-            print(f"{key}: {value}")
+            safe_print(f"{key}: {value}")
 
     # Test system statistics
     stats = integration.get_system_statistics()
-    print(f"\nSystem Statistics: {stats}")
+    safe_print(f"\nSystem Statistics: {stats}")
 
     # Test cleanup
     removed_count = integration.cleanup_old_data(max_age_hours=1.0)
-    print(f"Removed {removed_count} old entries")
+    safe_print(f"Removed {removed_count} old entries")
 
 
 if __name__ == "__main__":

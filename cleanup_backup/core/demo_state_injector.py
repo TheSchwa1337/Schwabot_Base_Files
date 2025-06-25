@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Demo State Injector - Schwabot UROS v1.0
@@ -22,7 +24,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -38,7 +40,7 @@ try:
     CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     CORE_COMPONENTS_AVAILABLE = False
-    print(f"Warning: Some core components not available: {e}")
+    safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
@@ -333,7 +335,7 @@ class DemoStateInjector:
                     base_price = base_prices[symbol]
                     
                     # Generate price with trend and noise
-                    trend = np.sin(i * 0.01) * 0.02
+                    trend = np.unified_math.sin(i * 0.01) * 0.02
                     noise = np.random.normal(0, 0.005)
                     price = base_price * (1 + trend + noise)
                     
@@ -706,44 +708,44 @@ class DemoStateInjector:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
             
-            print(f"✅ Demo test results exported to {output_path}")
+            safe_print(f"✅ Demo test results exported to {output_path}")
             
         except Exception as e:
-            print(f"❌ Error exporting test results: {e}")
+            safe_print(f"❌ Error exporting test results: {e}")
 
 if __name__ == "__main__":
     # Test demo state injector
     injector = DemoStateInjector()
     
     # Test conservative strategy
-    print("🧪 Testing Conservative Strategy...")
+    safe_print("🧪 Testing Conservative Strategy...")
     injector.start_state_injection("conservative_test")
     
     try:
         # Run for 60 seconds
-        print("📈 Demo state injection running for 60 seconds...")
+        safe_print("📈 Demo state injection running for 60 seconds...")
         time.sleep(60)
         
         # Stop injection
         injector.stop_state_injection()
         
         # Run mathematical validation
-        print("\n🧪 Running Mathematical Validation...")
+        safe_print("\n🧪 Running Mathematical Validation...")
         validation_results = injector.run_mathematical_validation()
-        print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
+        safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
         
         # Get test results
         test_results = injector.get_test_results()
-        print(f"\n📊 TEST RESULTS")
-        print(f"Portfolio Snapshots: {test_results.get('portfolio_history_count', 0)}")
-        print(f"Rebalance Events: {test_results.get('rebalance_history_count', 0)}")
-        print(f"Validation Tests: {test_results.get('validation_results_count', 0)}")
+        safe_print(f"\n📊 TEST RESULTS")
+        safe_print(f"Portfolio Snapshots: {test_results.get('portfolio_history_count', 0)}")
+        safe_print(f"Rebalance Events: {test_results.get('rebalance_history_count', 0)}")
+        safe_print(f"Validation Tests: {test_results.get('validation_results_count', 0)}")
         
         # Export results
         injector.export_test_results()
         
     except KeyboardInterrupt:
-        print("\n⏹️ Demo state injection stopped by user")
+        safe_print("\n⏹️ Demo state injection stopped by user")
         injector.stop_state_injection()
     
-    print("✅ Demo state injector test completed") 
+    safe_print("✅ Demo state injector test completed") 

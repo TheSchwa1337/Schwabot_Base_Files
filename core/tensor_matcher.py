@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Tensor Matcher - Schwabot UROS v1.0
@@ -22,7 +36,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -178,7 +192,7 @@ class TensorMatcher:
             phase_weight = (bit_score * entropy) / (len(bit_pattern) + epsilon)
             
             # Normalize to reasonable range
-            phase_weight = max(0.01, min(10.0, phase_weight))
+            phase_weight = unified_math.max(0.01, unified_math.min(10.0, phase_weight))
             
             # Create phase weight matrix result
             result = PhaseWeightMatrix(
@@ -233,7 +247,7 @@ class TensorMatcher:
             tensor_score = delta * (phase + 1)
             
             # Normalize to reasonable range
-            tensor_score = max(-1.0, min(1.0, tensor_score))
+            tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
             
             # Round to 4 decimal places
             result = round(tensor_score, 4)
@@ -413,13 +427,13 @@ class TensorMatcher:
         """Calculate confidence score for tensor match."""
         try:
             # Base confidence on phase weight stability
-            weight_confidence = min(phase_weight / 5.0, 1.0)
+            weight_confidence = unified_math.min(phase_weight / 5.0, 1.0)
             
             # Tensor score confidence (absolute value)
-            tensor_confidence = min(abs(tensor_score), 1.0)
+            tensor_confidence = unified_math.min(unified_math.abs(tensor_score), 1.0)
             
             # Entropy confidence (normalized)
-            entropy_confidence = min(entropy / 8.0, 1.0)
+            entropy_confidence = unified_math.min(entropy / 8.0, 1.0)
             
             # Weighted combination
             confidence = (weight_confidence * 0.4 + tensor_confidence * 0.3 + entropy_confidence * 0.3)
@@ -466,10 +480,10 @@ class TensorMatcher:
                 'total_matches': total_matches,
                 'strategy_distribution': strategy_counts,
                 'bit_phase_distribution': bit_phase_counts,
-                'average_tensor_score': np.mean(tensor_scores) if tensor_scores else 0.0,
-                'tensor_score_std': np.std(tensor_scores) if tensor_scores else 0.0,
-                'average_phase_weight': np.mean(phase_weights) if phase_weights else 0.0,
-                'phase_weight_std': np.std(phase_weights) if phase_weights else 0.0
+                'average_tensor_score': unified_math.unified_math.mean(tensor_scores) if tensor_scores else 0.0,
+                'tensor_score_std': unified_math.unified_math.std(tensor_scores) if tensor_scores else 0.0,
+                'average_phase_weight': unified_math.unified_math.mean(phase_weights) if phase_weights else 0.0,
+                'phase_weight_std': unified_math.unified_math.std(phase_weights) if phase_weights else 0.0
             }
             
         except Exception as e:
@@ -524,11 +538,11 @@ if __name__ == "__main__":
     bit_pattern = [1, 0, 1, 1, 0, 1, 0, 1]
     entropy = 4.5
     phase_weight = matcher.phase_weight_matrix(bit_pattern, entropy)
-    print(f"Phase Weight: {phase_weight:.4f}")
+    safe_print(f"Phase Weight: {phase_weight:.4f}")
     
     # Test tensor score
     tensor_score = matcher.tensor_score(45000.0, 46000.0, 8)
-    print(f"Tensor Score: {tensor_score}")
+    safe_print(f"Tensor Score: {tensor_score}")
     
     # Test complete tensor matching
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
@@ -540,13 +554,13 @@ if __name__ == "__main__":
     
     result = matcher.match_tensor(test_hash, 45000.0, 46000.0, market_data)
     if result:
-        print(f"Tensor Match Result:")
-        print(f"  Phase: {result.phase_value}")
-        print(f"  Strategy: {result.strategy_type.value}")
-        print(f"  Tensor Score: {result.tensor_score:.4f}")
-        print(f"  Basket ID: {result.basket_id}")
-        print(f"  Confidence: {result.confidence:.4f}")
+        safe_print(f"Tensor Match Result:")
+        safe_print(f"  Phase: {result.phase_value}")
+        safe_print(f"  Strategy: {result.strategy_type.value}")
+        safe_print(f"  Tensor Score: {result.tensor_score:.4f}")
+        safe_print(f"  Basket ID: {result.basket_id}")
+        safe_print(f"  Confidence: {result.confidence:.4f}")
     
     # Get statistics
     stats = matcher.get_match_statistics()
-    print(f"Match Statistics: {stats}") 
+    safe_print(f"Match Statistics: {stats}") 

@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Flask Network Coordinator - Schwabot UROS v1.0
@@ -23,7 +25,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from flask import Flask, request, jsonify, render_template_string
 from flask_cors import CORS
 import queue
@@ -397,7 +399,7 @@ class FlaskNetworkCoordinator:
                 return None
             
             # Sort by priority and assign to device
-            best_task = max(available_tasks, key=lambda t: t.priority)
+            best_task = unified_math.max(available_tasks, key=lambda t: t.priority)
             best_task.device_id = device_id
             best_task.status = "assigned"
             
@@ -430,7 +432,7 @@ class FlaskNetworkCoordinator:
                     for task in self.completed_tasks[-100:]  # Last 100 tasks
                     if task.completed_at
                 ]
-                avg_response_time = np.mean(response_times) if response_times else 0.0
+                avg_response_time = unified_math.unified_math.mean(response_times) if response_times else 0.0
             else:
                 avg_response_time = 0.0
             
@@ -632,7 +634,7 @@ def main():
         coordinator.start()
         
     except KeyboardInterrupt:
-        print("\nShutting down...")
+        safe_print("\nShutting down...")
         coordinator.stop()
     except Exception as e:
         logger.error(f"Error in main: {e}")

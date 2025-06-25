@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entropy flattener – smooths strategy response during uncertain conditions.
 
@@ -8,11 +11,10 @@ This module detects when strategy signals are experiencing high second-derivativ
 volatility and applies entropy-based smoothing to prevent erratic switching.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "entropy_flatten",
@@ -45,8 +47,8 @@ def compute_second_derivative(
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
     """Numerically stable softmax implementation."""
-    x_shifted = x - np.max(x)
-    exp_x = np.exp(x_shifted)
+    x_shifted = x - unified_math.unified_math.max(x)
+    exp_x = unified_math.unified_math.exp(x_shifted)
     return exp_x / np.sum(exp_x)
 
 
@@ -75,12 +77,12 @@ def entropy_flatten(
         return 0.0
 
     # Compute flattening term: -|∂²S/∂t²| / σ_price
-    abs_second_deriv = np.abs(second_deriv)
-    flatten_term = -abs_second_deriv / max(price_sigma, epsilon)
+    abs_second_deriv = unified_math.unified_math.abs(second_deriv)
+    flatten_term = -abs_second_deriv / unified_math.max(price_sigma, epsilon)
 
     # Apply softmax and return the mean as single coefficient
     smoothed = _softmax(flatten_term)
-    return float(np.mean(smoothed))
+    return float(unified_math.unified_math.mean(smoothed))
 
 
 def adaptive_smooth(

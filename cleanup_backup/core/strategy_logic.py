@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Strategy Logic - Core Trading Strategy Implementation.
 
@@ -29,7 +33,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -39,7 +42,7 @@ import logging
 import time
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -317,8 +320,8 @@ class StrategyLogic:
             prices = np.array(prices[-strategy_config.lookback_period :])
 
             # Calculate z-score
-            mean_price = np.mean(prices)
-            std_price = np.std(prices)
+            mean_price = unified_math.unified_math.mean(prices)
+            std_price = unified_math.unified_math.std(prices)
 
             if std_price == 0:
                 return signals
@@ -334,11 +337,11 @@ class StrategyLogic:
             if z_score > z_threshold:
                 # Price is high, expect reversion down
                 signal_type = SignalType.SELL
-                confidence = min(abs(z_score) / z_threshold * strength, 1.0)
+                confidence = unified_math.min(unified_math.abs(z_score) / z_threshold * strength, 1.0)
             elif z_score < -z_threshold:
                 # Price is low, expect reversion up
                 signal_type = SignalType.BUY
-                confidence = min(abs(z_score) / z_threshold * strength, 1.0)
+                confidence = unified_math.min(unified_math.abs(z_score) / z_threshold * strength, 1.0)
             else:
                 return signals
 
@@ -386,14 +389,14 @@ class StrategyLogic:
             prices = np.array(prices[-strategy_config.lookback_period :])
 
             # Calculate momentum indicators
-            short_period = min(20, len(prices) // 4)
-            long_period = min(50, len(prices) // 2)
+            short_period = unified_math.min(20, len(prices) // 4)
+            long_period = unified_math.min(50, len(prices) // 2)
 
             if len(prices) < long_period:
                 return signals
 
-            short_ma = np.mean(prices[-short_period:])
-            long_ma = np.mean(prices[-long_period:])
+            short_ma = unified_math.unified_math.mean(prices[-short_period:])
+            long_ma = unified_math.unified_math.mean(prices[-long_period:])
 
             # Calculate momentum
             momentum = (short_ma - long_ma) / long_ma
@@ -406,11 +409,11 @@ class StrategyLogic:
             if momentum > threshold:
                 # Upward momentum
                 signal_type = SignalType.BUY
-                confidence = min(abs(momentum) / threshold * strength, 1.0)
+                confidence = unified_math.min(unified_math.abs(momentum) / threshold * strength, 1.0)
             elif momentum < -threshold:
                 # Downward momentum
                 signal_type = SignalType.SELL
-                confidence = min(abs(momentum) / threshold * strength, 1.0)
+                confidence = unified_math.min(unified_math.abs(momentum) / threshold * strength, 1.0)
             else:
                 return signals
 
@@ -550,7 +553,7 @@ class StrategyLogic:
                 )
 
             if performance.losing_trades > 0:
-                performance.profit_factor = abs(performance.total_pnl) / abs(
+                performance.profit_factor = unified_math.abs(performance.total_pnl) / abs(
                     sum(
                         t.get("pnl", 0.0)
                         for t in self.signal_history
@@ -615,8 +618,8 @@ class StrategyLogic:
 def main() -> None:
     """Main function for testing strategy logic."""
     try:
-        print("🎯 Strategy Logic Test")
-        print("=" * 40)
+        safe_print("🎯 Strategy Logic Test")
+        safe_print("=" * 40)
 
         # Initialize strategy logic
         strategy_logic = StrategyLogic()
@@ -630,23 +633,23 @@ def main() -> None:
 
         # Process market data
         signals = strategy_logic.process_market_data(market_data)
-        print(f"✅ Generated {len(signals)} signals")
+        safe_print(f"✅ Generated {len(signals)} signals")
 
         # Display signals
         for i, signal in enumerate(signals):
-            print(
+            safe_print(
                 f"   Signal {i + 1}: {signal.signal_type.value} {signal.asset} "
                 f"@ {signal.price:.2f} (confidence: {signal.confidence:.2f})"
             )
 
         # Get system status
         status = strategy_logic.get_system_status()
-        print(f"✅ System status: {status['enabled_strategies']} strategies enabled")
+        safe_print(f"✅ System status: {status['enabled_strategies']} strategies enabled")
 
-        print("\n🎉 Strategy logic test completed successfully!")
+        safe_print("\n🎉 Strategy logic test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Strategy logic test failed: {e}")
+        safe_print(f"❌ Strategy logic test failed: {e}")
         import traceback
 
         traceback.print_exc()

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library - Core Mathematical Functions.
 
@@ -12,10 +13,10 @@ essential mathematical operations and utilities.
 """
 
 import logging
-import math
+from core.unified_math_system import unified_math
 from typing import Any, Dict
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -32,15 +33,15 @@ class MathLib:
     def calculate(self, operation: str, *args, **kwargs) -> Any:
         """Perform a mathematical calculation based on the requested operation."""
         operations = {
-            "mean": lambda x: np.mean(x),
-            "std": lambda x: np.std(x),
+            "mean": lambda x: unified_math.unified_math.mean(x),
+            "std": lambda x: unified_math.unified_math.std(x),
             "sum": lambda x: np.sum(x),
-            "sqrt": lambda x: np.sqrt(x),
-            "log": lambda x: np.log(x + 1e-10),
-            "exp": lambda x: np.exp(x),
-            "sin": lambda x: np.sin(x),
-            "cos": lambda x: np.cos(x),
-            "tan": lambda x: np.tan(x),
+            "sqrt": lambda x: unified_math.unified_math.sqrt(x),
+            "log": lambda x: unified_math.unified_math.log(x + 1e-10),
+            "exp": lambda x: unified_math.unified_math.exp(x),
+            "sin": lambda x: np.unified_math.sin(x),
+            "cos": lambda x: np.unified_math.cos(x),
+            "tan": lambda x: np.unified_math.tan(x),
         }
 
         if operation in operations and args:

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Future Corridor Engine - Advanced Future State Prediction and Navigation
@@ -20,8 +34,8 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 
 logger = logging.getLogger(__name__)
@@ -142,8 +156,12 @@ class FutureCorridorEngine:
         except Exception as e:
             logger.error(f"Corridor memory update error: {e}")
     
-    def analyze_corridor(self, current_price: float, current_volume: float, 
-                        current_volatility: float) -> CorridorAnalysisResult:
+    def analyze_corridor(
+        self,
+        current_price: float,
+        current_volume: float,
+        current_volatility: float
+    ) -> CorridorAnalysisResult:
         """Analyze future corridor based on current market state."""
         try:
             # Generate corridor ID
@@ -231,7 +249,7 @@ class FutureCorridorEngine:
                 price_momentum = 0.0
             
             # Volume impact
-            volume_factor = min(volume / 1000.0, 1.0)  # Normalize volume
+            volume_factor = unified_math.min(volume / 1000.0, 1.0)  # Normalize volume
             
             # Volatility impact
             volatility_factor = volatility * 0.1  # Small volatility adjustment
@@ -240,7 +258,7 @@ class FutureCorridorEngine:
             price_change = price_momentum * (1 + volume_factor + volatility_factor)
             predicted_price = current_price + price_change
             
-            return max(0.0, predicted_price)
+            return unified_math.max(0.0, predicted_price)
             
         except Exception as e:
             logger.error(f"Future price prediction error: {e}")
@@ -250,24 +268,26 @@ class FutureCorridorEngine:
         """Calculate confidence score for prediction."""
         try:
             # Data quality factors
-            price_quality = min(price / 50000.0, 1.0)  # Normalize price
-            volume_quality = min(volume / 1000.0, 1.0)  # Normalize volume
-            volatility_quality = 1.0 - min(volatility, 1.0)  # Lower volatility = higher quality
+            price_quality = unified_math.min(price / 50000.0, 1.0)  # Normalize price
+            volume_quality = unified_math.min(volume / 1000.0, 1.0)  # Normalize volume
+            volatility_quality = 1.0 - unified_math.min(volatility, 1.0)  # Lower volatility = higher quality
             
             # Memory consistency
             memory_consistency = 0.8  # Placeholder
             if len(self.corridor_memory) >= 5:
                 recent_volatilities = [entry['volatility'] for entry in self.corridor_memory[-5:]]
-                volatility_std = np.std(recent_volatilities)
-                memory_consistency = max(0.0, 1.0 - volatility_std)
+                volatility_std = unified_math.unified_math.std(recent_volatilities)
+                memory_consistency = unified_math.max(0.0, 1.0 - volatility_std)
             
             # Combine factors
-            confidence = (price_quality * 0.3 + 
-                         volume_quality * 0.3 + 
-                         volatility_quality * 0.2 + 
-                         memory_consistency * 0.2)
+            confidence = (
+                price_quality * 0.3 +
+                volume_quality * 0.3 +
+                volatility_quality * 0.2 +
+                memory_consistency * 0.2
+            )
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Prediction confidence calculation error: {e}")
@@ -277,31 +297,38 @@ class FutureCorridorEngine:
         """Assess risk level based on market conditions."""
         try:
             # Volatility risk
-            volatility_risk = min(volatility, 1.0)
+            volatility_risk = unified_math.min(volatility, 1.0)
             
             # Volume risk (low volume = higher risk)
-            volume_risk = 1.0 - min(volume / 1000.0, 1.0)
+            volume_risk = 1.0 - unified_math.min(volume / 1000.0, 1.0)
             
             # Market stress risk (placeholder)
             market_stress_risk = 0.3
             
             # Combine risk factors
-            total_risk = (volatility_risk * 0.5 + 
-                         volume_risk * 0.3 + 
-                         market_stress_risk * 0.2)
+            total_risk = (
+                volatility_risk * 0.5 +
+                volume_risk * 0.3 +
+                market_stress_risk * 0.2
+            )
             
-            return max(0.0, min(1.0, total_risk))
+            return unified_math.max(0.0, unified_math.min(1.0, total_risk))
             
         except Exception as e:
             logger.error(f"Risk assessment error: {e}")
             return 0.5
     
-    def _determine_execution_path(self, confidence: float, risk: float, 
-                                predicted_price: float, current_price: float) -> str:
+    def _determine_execution_path(
+        self,
+        confidence: float,
+        risk: float,
+        predicted_price: float,
+        current_price: float
+    ) -> str:
         """Determine optimal execution path."""
         try:
             # Calculate price change percentage
-            price_change_pct = abs(predicted_price - current_price) / current_price if current_price > 0 else 0.0
+            price_change_pct = unified_math.abs(predicted_price - current_price) / current_price if current_price > 0 else 0.0
             
             # High confidence, low risk, significant price change = aggressive
             if confidence > 0.8 and risk < 0.3 and price_change_pct > 0.05:
@@ -323,9 +350,16 @@ class FutureCorridorEngine:
             logger.error(f"Execution path determination error: {e}")
             return "conservative"
     
-    def recursive_intent_loop(self, t: float, market_hash: str, corridor_state: CorridorState,
-                            profit_context: float, execution_time: float, entropy: float,
-                            market_data: Dict[str, Any]) -> Dict[str, Any]:
+    def recursive_intent_loop(
+        self,
+        t: float,
+        market_hash: str,
+        corridor_state: CorridorState,
+        profit_context: float,
+        execution_time: float,
+        entropy: float,
+        market_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute recursive intent loop for corridor navigation."""
         try:
             # Calculate dispatch confidence
@@ -369,29 +403,36 @@ class FutureCorridorEngine:
                 "timestamp": datetime.now().isoformat()
             }
     
-    def _calculate_dispatch_confidence(self, corridor_state: CorridorState, profit_context: float,
-                                     execution_time: float, entropy: float) -> float:
+    def _calculate_dispatch_confidence(
+        self,
+        corridor_state: CorridorState,
+        profit_context: float,
+        execution_time: float,
+        entropy: float
+    ) -> float:
         """Calculate dispatch confidence for execution path."""
         try:
             # Corridor state confidence
             state_confidence = 0.8  # Placeholder
             
             # Profit context confidence
-            profit_confidence = min(profit_context / 100.0, 1.0)
+            profit_confidence = unified_math.min(profit_context / 100.0, 1.0)
             
             # Execution time confidence (faster = higher confidence)
-            time_confidence = max(0.0, 1.0 - execution_time)
+            time_confidence = unified_math.max(0.0, 1.0 - execution_time)
             
             # Entropy confidence (lower entropy = higher confidence)
-            entropy_confidence = 1.0 - min(entropy, 1.0)
+            entropy_confidence = 1.0 - unified_math.min(entropy, 1.0)
             
             # Combine factors
-            dispatch_confidence = (state_confidence * 0.3 + 
-                                 profit_confidence * 0.3 + 
-                                 time_confidence * 0.2 + 
-                                 entropy_confidence * 0.2)
+            dispatch_confidence = (
+                state_confidence * 0.3 +
+                profit_confidence * 0.3 +
+                time_confidence * 0.2 +
+                entropy_confidence * 0.2
+            )
             
-            return max(0.0, min(1.0, dispatch_confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, dispatch_confidence))
             
         except Exception as e:
             logger.error(f"Dispatch confidence calculation error: {e}")
@@ -458,10 +499,10 @@ class FutureCorridorEngine:
                 if i < len(self.corridor_memory):
                     actual_price = self.corridor_memory[i]['price']
                     predicted_price = self.analysis_history[i-1].predicted_price
-                    error = abs(actual_price - predicted_price) / actual_price if actual_price > 0 else 0.0
+                    error = unified_math.abs(actual_price - predicted_price) / actual_price if actual_price > 0 else 0.0
                     errors.append(error)
             
-            avg_prediction_error = np.mean(errors) if errors else 0.0
+            avg_prediction_error = unified_math.unified_math.mean(errors) if errors else 0.0
         
         # Path distribution
         path_distribution = {}
@@ -492,10 +533,10 @@ def main() -> None:
     current_volatility = 0.3
     
     result = engine.analyze_corridor(current_price, current_volume, current_volatility)
-    print(f"Corridor analysis result: {result.success}")
-    print(f"Predicted price: {result.predicted_price:.2f}")
-    print(f"Confidence: {result.confidence_score:.3f}")
-    print(f"Recommended path: {result.recommended_path}")
+    safe_print(f"Corridor analysis result: {result.success}")
+    safe_print(f"Predicted price: {result.predicted_price:.2f}")
+    safe_print(f"Confidence: {result.confidence_score:.3f}")
+    safe_print(f"Recommended path: {result.recommended_path}")
     
     # Test recursive intent loop
     corridor_state = result.metadata.get('corridor_state', None)
@@ -509,11 +550,11 @@ def main() -> None:
             entropy=0.2,
             market_data={'jumbo_signal': 0.6, 'ghost_signal': 0.4, 'thermal_state': 0.3}
         )
-        print(f"RIL result: {ril_result['dispatch_path']}")
+        safe_print(f"RIL result: {ril_result['dispatch_path']}")
     
     # Get statistics
     stats = engine.get_corridor_statistics()
-    print(f"Corridor statistics: {stats}")
+    safe_print(f"Corridor statistics: {stats}")
 
 
 if __name__ == "__main__":

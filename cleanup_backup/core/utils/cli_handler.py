@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """CLI compatibility handler for Windows systems.
 
@@ -119,5 +120,5 @@ def safe_log(
         return True
     except Exception:
         # Fallback to basic print if logging fails
-        print(f"[{level.upper()}] {message}")
+        safe_print(f"[{level.upper()}] {message}")
         return False

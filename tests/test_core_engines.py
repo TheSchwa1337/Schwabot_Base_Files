@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Test suite for the core mathematical and engine utilities.
@@ -7,7 +8,7 @@ Validates the correctness and robustness of the new functions added to
 """
 
 import unittest
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import List, Dict
 
 # Import the modules to test
@@ -36,8 +37,8 @@ class TestCoreMathAndEngines(unittest.TestCase):
         self.velocities = np.array([10, 12, 15, 14, 18])
         self.times = np.array([1, 2, 3, 4, 5])
         self.delta_times = np.diff(self.times, prepend=self.times[0])
-        self.wave1 = np.sin(np.linspace(0, 2 * np.pi, 100))
-        self.wave2 = np.sin(np.linspace(0, 2 * np.pi, 100) + 0.1)
+        self.wave1 = np.unified_math.sin(np.linspace(0, 2 * np.pi, 100))
+        self.wave2 = np.unified_math.sin(np.linspace(0, 2 * np.pi, 100) + 0.1)
         self.hash1 = "a" * 64
         self.hash2 = "a" * 63 + "b"
         self.vector1 = np.random.rand(10)

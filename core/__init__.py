@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 Schwabot Core Module - Central Integration Hub
@@ -15,7 +17,6 @@ Key Features:
 - Performance optimization
 """
 
-from __future__ import annotations
 
 import logging
 from datetime import datetime
@@ -40,6 +41,9 @@ from .typing_schemas import (
 from .multi_bit_btc_processor import MultiBitBTCProcessor
 from .profit_routing_engine import ProfitRoutingEngine
 from .hash_registry import HashRegistry, HashEntry, HashType, HashStatus
+from .hash_registry_manager import HashRegistryManager
+from .hash_registry_storage import HashRegistryStorage
+from .hash_registry_core import HashRegistryCore
 from .strategy_loader import StrategyLoader, StrategyConfig, LoaderResult
 from .ops_observability import OpsObservability, MetricData, MetricType
 from .regulatory_compliance import RegulatoryCompliance, ComplianceReport, ComplianceType
@@ -52,6 +56,12 @@ from .memory_allocation_manager import MemoryAllocationManager
 from .precision_performance import PrecisionPerformanceManager
 from .long_horizon_simulation import LongHorizonSimulation
 from .thermal_boundary_manager import ThermalBoundaryManager
+from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine
+
+# Medium Risk Phase II components
+from .test_medium_risk_phase_ii import MediumRiskPhaseIITester
+from .enhanced_phase_risk_manager import EnhancedPhaseRiskManager
+from .pipeline_integration_manager import PipelineIntegrationManager
 
 # Type definitions
 from .type_defs import (
@@ -60,6 +70,16 @@ from .type_defs import (
     Temperature, Pressure, ThermalConductivity, HeatCapacity,
     WarpFactor, LightSpeed, Distance, Time
 )
+
+# Unified mathematical system (imported after basic components to avoid circular imports)
+try:
+    from .unified_math_system import UnifiedMathSystem, unified_math, MathResult, MathOperation
+except ImportError:
+    # Fallback if unified math system is not available
+    UnifiedMathSystem = None
+    unified_math = None
+    MathResult = None
+    MathOperation = None
 
 # Utility functions
 from .utils.windows_cli_compatibility import (
@@ -75,7 +95,7 @@ from .mathematical_pipeline_validator_simple import SimplifiedMathematicalPipeli
 
 # AI and strategy components
 from .gpt_command_layer import GPTCommandLayer
-from .gpt_command_layer_simple import SimpleGPTCommandLayer
+from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer
 from .strategy_mapper import StrategyMapper
 
 # Memory and execution components
@@ -87,12 +107,11 @@ from .enhanced_risk_manager import EnhancedRiskManager
 from .capital_controls import CapitalControls
 
 # Performance and optimization
-from .precision_performance import PrecisionPerformanceManager
 from .auto_scaler import AutoScaler
 
 # Thermal and hardware management
 from .thermal_boundary_manager import ThermalBoundaryManager
-from .gpu_flash_engine import GPUFlashEngine
+from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine
 
 # Advanced mathematical frameworks
 from .zpe_core import ZPECore
@@ -118,8 +137,12 @@ from .hash_trigger_engine import HashTriggerEngine
 from .entropy_engine import EntropyEngine
 from .altitude_generator import AltitudeGenerator
 
+# Hash trigger mapping system
+from .hash_trigger_mapper import HashTriggerMapper, HashTriggerMapping
+from .ghost_strategy_integration import GhostStrategyIntegrator, EnhancedStrategyDecision
+
 # API and integration
-from .api_gateway import APIGateway
+from .api_gateway import SchwabotAPIGateway as APIGateway
 from .api_bridge_manager import APIBridgeManager
 from .coldbase_bridge import ColdbaseBridge
 from .prophet_connector import ProphetConnector
@@ -194,7 +217,6 @@ from .temporal_execution_correction_layer import TemporalExecutionCorrectionLaye
 
 # Profit and strategy management
 from .profit_cycle_allocator import ProfitCycleAllocator
-from .strategy_loader import StrategyLoader
 
 # Memory and vector operations
 from .lantern_vector_memory import LanternVectorMemory
@@ -202,8 +224,30 @@ from .lantern_vector_memory import LanternVectorMemory
 # Unified mathematics
 from .unified_mathematics_config import UnifiedMathematicsConfig
 
-# Constants
-from .constants import *
+# UI Bridge components (Low-risk phase)
+from .ui_state_bridge import UIStateBridge, get_ui_state_bridge
+from .visual_integration_bridge import VisualIntegrationBridge, get_visual_integration_bridge
+from .ui_integration_bridge import UIIntegrationBridge, get_ui_integration_bridge
+from .ui_bridge_integration_manager import UIBridgeIntegrationManager, get_ui_bridge_integration_manager
+
+# Type binding system
+from .type_binding_system import TypeBindingValidator, WindowsCliCompatibilityHandler, cli_handler
+
+# Constants - import specific constants instead of wildcard
+from .constants import (
+    PSI_INFINITY, FIBONACCI_SCALING, INVERSE_PSI, CONFIG_DIR, DATA_DIR, LOG_DIR,
+    KELLY_SAFETY_FACTOR, SHARPE_TARGET, MAX_POSITION_SIZE, MIN_POSITION_SIZE,
+    SAMPLE_RATE, NYQUIST_FREQUENCY, BUTTERWORTH_ORDER, FRACTAL_DIMENSION_LIMIT,
+    PATTERN_SIMILARITY_THRESHOLD, RECURSIVE_DEPTH_LIMIT, THERMAL_DECAY_RATE,
+    ENTROPY_THRESHOLD, VOID_WELL_DEPTH, LATENCY_THRESHOLD_MS, MAX_ERROR_STACK_SIZE,
+    ERROR_DECAY_FACTOR, FERRIS_HARMONIC_RATIOS, TEMPORAL_COMPRESSION_FACTOR,
+    SVD_TOLERANCE, EIGENVALUE_THRESHOLD, EPSILON_FLOAT64, MEMORY_CHUNK_SIZE,
+    MATRIX_CONDITION_LIMIT, THERMAL_CONDUCTIVITY_BTC, QUANTUM_ENTROPY_SCALE,
+    REDUCED_PLANCK, FERRIS_PRIMARY_CYCLE, DEFAULT_TIMEOUT, MAX_RETRY_ATTEMPTS,
+    DEFAULT_BATCH_SIZE, KELLY_SHARPE_COMPOSITE, FRACTAL_THERMAL_RATIO,
+    VECTORIZATION_THRESHOLD, PARALLEL_PROCESSING_THRESHOLD,
+    WindowsCliCompatibilityHandler
+)
 
 # =============================================================================
 # SYSTEM INITIALIZATION AND HEALTH MONITORING
@@ -239,12 +283,16 @@ def initialize_core_system() -> Dict[str, Any]:
             ("memory_allocation_manager", "Memory management"),
             ("precision_performance", "Performance optimization"),
             ("long_horizon_simulation", "Long-term simulation"),
-            ("thermal_boundary_manager", "Thermal management")
+            ("thermal_boundary_manager", "Thermal management"),
+            # Add UI bridge modules
+            ("ui_state_bridge", "UI State Bridge"),
+            ("visual_integration_bridge", "Visual Integration Bridge"),
+            ("ui_integration_bridge", "UI Integration Bridge"),
+            ("ui_bridge_integration_manager", "UI Bridge Integration Manager")
         ]
         
         for module_name, description in core_modules:
             try:
-                # Test module import
                 module_result = {
                     "name": module_name,
                     "description": description,
@@ -265,11 +313,12 @@ def initialize_core_system() -> Dict[str, Any]:
         
         # Initialize core components
         core_components = [
-            ("fault_bus", "FaultBus", "Central fault handling"),
-            ("typing_schemas", "typing_schemas", "Type definitions"),
-            ("mathematical_pipeline_validator", "MathematicalPipelineValidator", "Mathematical validation"),
-            ("strategy_mapper", "StrategyMapper", "Strategy mapping"),
-            ("ops_observability", "OpsObservability", "System observability")
+            ("unified_mathematical_trading_controller", "UnifiedMathematicalTradingController", "Unified mathematical trading controller"),
+            ("ghost_profit_tracker", "ProfitTracker", "Ghost profit tracking system"),
+            ("state_tracker", "StateTracker", "System state tracking"),
+            ("dual_state_tracker", "DualStateTracker", "Dual state tracking system"),
+            ("core_loop_manager", "CoreLoopManager", "Core loop management"),
+            ("ui_bridge_integration_manager", "UIBridgeIntegrationManager", "UI Bridge Integration Manager")
         ]
         
         for component_name, class_name, description in core_components:
@@ -455,6 +504,9 @@ __all__ = [
     # Advanced engines
     "FutureCorridorEngine", "EnhancedFractalCore", "HashTriggerEngine", "EntropyEngine", "AltitudeGenerator",
     
+    # Hash trigger mapping system
+    "HashTriggerMapper", "HashTriggerMapping", "GhostStrategyIntegrator", "EnhancedStrategyDecision",
+    
     # API and integration
     "APIGateway", "APIBridgeManager", "ColdbaseBridge", "ProphetConnector",
     
@@ -511,6 +563,12 @@ __all__ = [
     
     # Unified mathematics
     "UnifiedMathematicsConfig",
+    
+    # UI Bridge components (Low-risk phase)
+    "UIStateBridge", "VisualIntegrationBridge", "UIIntegrationBridge", "UIBridgeIntegrationManager",
+    
+    # Type binding system
+    "TypeBindingValidator", "WindowsCliCompatibilityHandler", "cli_handler",
     
     # Utility functions
     "safe_print", "safe_format_error", "log_safe",

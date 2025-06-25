@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Comprehensive Mathematical Integration - Complete Flake8 Error Resolution.
 
@@ -211,35 +212,35 @@ try:
     
     def test_mathematical_integration():
         """Test integration of all mathematical systems."""
-        print("🧮 Testing mathematical systems integration...")
+        safe_print("🧮 Testing mathematical systems integration...")
         
         # Test fractal system
         fractal_core, fractal_dispatcher = create_fractal_system(omega_base=1.0)
-        print("✅ Fractal system: OK")
+        safe_print("✅ Fractal system: OK")
         
         # Test matrix fault resolver
         lattice_system = create_lattice_system(dimensions=(5, 5, 5))
-        print("✅ Matrix fault resolver: OK")
+        safe_print("✅ Matrix fault resolver: OK")
         
         # Test profit routing
         profit_engine = create_profit_routing_system(dimensions=(8, 8, 8))
-        print("✅ Profit routing engine: OK")
+        safe_print("✅ Profit routing engine: OK")
         
         # Test glyph mapper
         glyph_mapper = create_glyph_mapping_system(dimensions=(20, 20))
-        print("✅ Recursive glyph mapper: OK")
+        safe_print("✅ Recursive glyph mapper: OK")
         
-        print("🎉 All mathematical systems integrated successfully!")
+        safe_print("🎉 All mathematical systems integrated successfully!")
         return True
 
     if __name__ == "__main__":
         test_mathematical_integration()
 
 except ImportError as e:
-    print(f"❌ Import error: {e}")
+    safe_print(f"❌ Import error: {e}")
     sys.exit(1)
 except Exception as e:
-    print(f"❌ Integration error: {e}")
+    safe_print(f"❌ Integration error: {e}")
     sys.exit(1)
 '''
         
@@ -341,7 +342,7 @@ def main() -> None:
     """Main function for testing."""
     system = {file_path.stem.replace('_', ' ').title().replace(' ', '')}()
     result = system.process("test_data")
-    print(f"Result: {{result}}")
+    safe_print(f"Result: {{result}}")
 
 
 if __name__ == "__main__":
@@ -434,25 +435,25 @@ if __name__ == "__main__":
 
 def main() -> None:
     """Main function to run comprehensive integration."""
-    print("🚀 Starting Comprehensive Mathematical Integration")
-    print("=" * 60)
+    safe_print("🚀 Starting Comprehensive Mathematical Integration")
+    safe_print("=" * 60)
     
     integrator = ComprehensiveMathematicalIntegrator()
     results = integrator.integrate_all_systems()
     
-    print("\n📊 Integration Results:")
-    print("=" * 60)
-    print(f"Systems Integrated: {results['systems_integrated']}")
-    print(f"Final Flake8 Errors: {results['final_flake8_errors']}")
-    print(f"Integration Success: {results['integration_success']}")
-    print(f"Systems: {', '.join(results['systems'])}")
+    safe_print("\n📊 Integration Results:")
+    safe_print("=" * 60)
+    safe_print(f"Systems Integrated: {results['systems_integrated']}")
+    safe_print(f"Final Flake8 Errors: {results['final_flake8_errors']}")
+    safe_print(f"Integration Success: {results['integration_success']}")
+    safe_print(f"Systems: {', '.join(results['systems'])}")
     
     if results['integration_success']:
-        print("\n🎉 COMPREHENSIVE INTEGRATION SUCCESSFUL!")
-        print("All mathematical systems are now integrated and Flake8 compliant.")
+        safe_print("\n🎉 COMPREHENSIVE INTEGRATION SUCCESSFUL!")
+        safe_print("All mathematical systems are now integrated and Flake8 compliant.")
     else:
-        print(f"\n⚠️ Integration completed with {results['final_flake8_errors']} remaining errors.")
-        print("Manual review may be needed for remaining issues.")
+        safe_print(f"\n⚠️ Integration completed with {results['final_flake8_errors']} remaining errors.")
+        safe_print("Manual review may be needed for remaining issues.")
 
 
 if __name__ == "__main__":

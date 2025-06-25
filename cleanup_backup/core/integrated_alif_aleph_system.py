@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Integrated Alif-Aleph System - Hybrid AI/ML Orchestration for Schwabot
@@ -104,7 +105,7 @@ if __name__ == "__main__":
     # Example: create a state and register a hook
     state = system.create_state({"ai": "context"}, {"ml": "context"})
     def print_state(s: AlifAlephState):
-        print(f"State: {s.state_id}, status: {s.status}")
+        safe_print(f"State: {s.state_id}, status: {s.status}")
     system.register_hook("print", print_state)
     system.run_hooks(state.state_id)
-    print("System statistics:", system.get_system_statistics())
+    safe_print("System statistics:", system.get_system_statistics())

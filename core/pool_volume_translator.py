@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Pool-volume translator – link news sentiment to USDC pool behaviour.
 
@@ -12,11 +15,10 @@ where
 • σ_pool / μ_pool is the *relative volatility* of recent USDC volume.
 """
 
-from __future__ import annotations
 
 from typing import Final, Any
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["translate_news_to_pool_vector"]
 
@@ -29,10 +31,10 @@ def _relative_volatility(volumes: np.ndarray[Any, Any]) -> float:
     """TODO: document _relative_volatility."""
     if volumes.size == 0:
         return 0.0
-    mu = float(np.mean(volumes))
+    mu = float(unified_math.unified_math.mean(volumes))
     if mu < _EPS:
         return 0.0
-    sigma = float(np.std(volumes))
+    sigma = float(unified_math.unified_math.std(volumes))
     return sigma / mu
 
 
@@ -44,7 +46,7 @@ def translate_news_to_pool_vector(
 
     Positive score ⇒ bullish (risk-on), negative ⇒ bearish (risk-off).
     """
-    sentiment_clipped = max(min(sentiment, _CLIP_MAX), _CLIP_MIN)
+    sentiment_clipped = unified_math.max(unified_math.min(sentiment, _CLIP_MAX), _CLIP_MIN)
     rel_vol = _relative_volatility(pool_volumes)
     raw = sentiment_clipped * rel_vol
-    return max(min(raw, _CLIP_MAX), _CLIP_MIN)
+    return unified_math.max(unified_math.min(raw, _CLIP_MAX), _CLIP_MIN)

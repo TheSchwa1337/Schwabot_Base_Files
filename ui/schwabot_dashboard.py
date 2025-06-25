@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Schwabot Web Dashboard - Comprehensive Trading System Interface
@@ -43,7 +44,7 @@ try:
     from core.system_integration_orchestrator import SystemIntegrationOrchestrator
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
-    print(f"Warning: Some core components not available: {e}")
+    safe_print(f"Warning: Some core components not available: {e}")
     IMPORTS_SUCCESSFUL = False
 
 # Configure logging
@@ -728,11 +729,11 @@ fetch('/api/performance')
 
 def main():
     """Main function to run the dashboard."""
-    print("🧠 Starting Schwabot Web Dashboard...")
+    safe_print("🧠 Starting Schwabot Web Dashboard...")
     
     # Initialize components
     if not initialize_components():
-        print("❌ Failed to initialize components")
+        safe_print("❌ Failed to initialize components")
         return 1
     
     # Create templates
@@ -755,17 +756,17 @@ def main():
         host = '0.0.0.0'
         port = 8080
     
-    print(f"✅ Dashboard starting on http://{host}:{port}")
-    print("📊 Access the dashboard in your web browser")
-    print("🔧 Use Ctrl+C to stop the server")
+    safe_print(f"✅ Dashboard starting on http://{host}:{port}")
+    safe_print("📊 Access the dashboard in your web browser")
+    safe_print("🔧 Use Ctrl+C to stop the server")
     
     try:
         # Run the Flask app
         socketio.run(app, host=host, port=port, debug=False)
     except KeyboardInterrupt:
-        print("\n⏹️ Dashboard stopped by user")
+        safe_print("\n⏹️ Dashboard stopped by user")
     except Exception as e:
-        print(f"❌ Error running dashboard: {e}")
+        safe_print(f"❌ Error running dashboard: {e}")
         return 1
     
     return 0

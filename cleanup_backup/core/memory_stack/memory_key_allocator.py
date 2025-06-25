@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Memory Key Allocator - Symbolic Memory Management System.
@@ -21,7 +23,7 @@ from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import centralized CLI handler
 try:
@@ -157,7 +159,7 @@ class MemoryKeyAllocator:
         # Load existing memory
         self._load_memory_keys()
         
-        safe_print("🔑 Memory Key Allocator initialized - Symbolic memory active")
+        safe_safe_print("🔑 Memory Key Allocator initialized - Symbolic memory active")
     
     def _load_memory_keys(self) -> None:
         """Load existing memory keys from file."""
@@ -215,11 +217,11 @@ class MemoryKeyAllocator:
                     )
                     self.memory_clusters[memory_cluster.cluster_id] = memory_cluster
                 
-                safe_print(f"🔑 Loaded {len(self.memory_keys)} memory keys, {len(self.memory_links)} links, {len(self.memory_clusters)} clusters")
+                safe_safe_print(f"🔑 Loaded {len(self.memory_keys)} memory keys, {len(self.memory_links)} links, {len(self.memory_clusters)} clusters")
                 
         except Exception as e:
             error_msg = safe_format_error(e, "load_memory_keys")
-            safe_print(f"⚠️ Failed to load memory keys: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to load memory keys: {error_msg}")
     
     def _save_memory_keys(self) -> None:
         """Save memory keys to file."""
@@ -262,7 +264,7 @@ class MemoryKeyAllocator:
                 
         except Exception as e:
             error_msg = safe_format_error(e, "save_memory_keys")
-            safe_print(f"⚠️ Failed to save memory keys: {error_msg}")
+            safe_safe_print(f"⚠️ Failed to save memory keys: {error_msg}")
     
     def allocate_memory_key(
         self,
@@ -336,12 +338,12 @@ class MemoryKeyAllocator:
             # Save to file
             self._save_memory_keys()
             
-            safe_print(f"🔑 Memory key allocated: {key_id} ({key_type.value})")
+            safe_safe_print(f"🔑 Memory key allocated: {key_id} ({key_type.value})")
             return memory_key
             
         except Exception as e:
             error_msg = safe_format_error(e, "allocate_memory_key")
-            safe_print(f"❌ Memory key allocation failed: {error_msg}")
+            safe_safe_print(f"❌ Memory key allocation failed: {error_msg}")
             
             # Return safe fallback key
             return MemoryKey(
@@ -381,7 +383,7 @@ class MemoryKeyAllocator:
         try:
             # Validate keys exist
             if source_key not in self.memory_keys or target_key not in self.memory_keys:
-                safe_print(f"⚠️ Invalid memory keys for link: {source_key} -> {target_key}")
+                safe_safe_print(f"⚠️ Invalid memory keys for link: {source_key} -> {target_key}")
                 return None
             
             # Generate link ID
@@ -413,12 +415,12 @@ class MemoryKeyAllocator:
             # Save to file
             self._save_memory_keys()
             
-            safe_print(f"🔗 Memory link created: {link_id} ({strength.value})")
+            safe_safe_print(f"🔗 Memory link created: {link_id} ({strength.value})")
             return memory_link
             
         except Exception as e:
             error_msg = safe_format_error(e, "create_memory_link")
-            safe_print(f"❌ Memory link creation failed: {error_msg}")
+            safe_safe_print(f"❌ Memory link creation failed: {error_msg}")
             return None
     
     def find_similar_keys(
@@ -463,7 +465,7 @@ class MemoryKeyAllocator:
             
         except Exception as e:
             error_msg = safe_format_error(e, "find_similar_keys")
-            safe_print(f"❌ Similar key search failed: {error_msg}")
+            safe_safe_print(f"❌ Similar key search failed: {error_msg}")
             return []
     
     def get_memory_cluster(self, key_id: str) -> Optional[MemoryCluster]:
@@ -518,12 +520,12 @@ class MemoryKeyAllocator:
             agent_similarity = 1.0 if key1.agent_type == key2.agent_type else 0.0
             
             # Alpha score similarity (normalized)
-            alpha_diff = abs(key1.alpha_score - key2.alpha_score)
-            alpha_similarity = max(0.0, 1.0 - alpha_diff)
+            alpha_diff = unified_math.abs(key1.alpha_score - key2.alpha_score)
+            alpha_similarity = unified_math.max(0.0, 1.0 - alpha_diff)
             
             # Tick proximity (closer ticks = higher similarity)
-            tick_diff = abs(key1.tick - key2.tick)
-            tick_similarity = max(0.0, 1.0 - (tick_diff / 1000))  # Normalize to 1000 ticks
+            tick_diff = unified_math.abs(key1.tick - key2.tick)
+            tick_similarity = unified_math.max(0.0, 1.0 - (tick_diff / 1000))  # Normalize to 1000 ticks
             
             # Weighted combination
             similarity = (
@@ -537,7 +539,7 @@ class MemoryKeyAllocator:
             return similarity
             
         except Exception as e:
-            safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity')}")
+            safe_safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity')}")
             return 0.0
     
     def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
@@ -553,7 +555,7 @@ class MemoryKeyAllocator:
             return similarity
             
         except Exception as e:
-            safe_print(f"⚠️ Hash similarity calculation failed: {safe_format_error(e, 'hash_similarity')}")
+            safe_safe_print(f"⚠️ Hash similarity calculation failed: {safe_format_error(e, 'hash_similarity')}")
             return 0.0
     
     def _determine_link_strength(self, alpha_correlation: float, confidence: float) -> LinkStrength:
@@ -576,12 +578,12 @@ class MemoryKeyAllocator:
             target_time = self.memory_keys[target_key].timestamp
             
             time_diff = abs((source_time - target_time).total_seconds())
-            decay_factor = np.exp(-time_diff / (24 * 3600))  # Decay over 24 hours
+            decay_factor = unified_math.exp(-time_diff / (24 * 3600))  # Decay over 24 hours
             
-            return max(0.1, decay_factor)  # Minimum decay of 0.1
+            return unified_math.max(0.1, decay_factor)  # Minimum decay of 0.1
             
         except Exception as e:
-            safe_print(f"⚠️ Time decay calculation failed: {safe_format_error(e, 'time_decay')}")
+            safe_safe_print(f"⚠️ Time decay calculation failed: {safe_format_error(e, 'time_decay')}")
             return 1.0
     
     def _attempt_clustering(self, new_key: MemoryKey) -> None:
@@ -607,7 +609,7 @@ class MemoryKeyAllocator:
                 # Add to existing cluster
                 best_cluster.memory_keys.append(new_key.key_id)
                 best_cluster.last_updated = datetime.now()
-                safe_print(f"🔗 Added key {new_key.key_id} to cluster {best_cluster.cluster_id}")
+                safe_safe_print(f"🔗 Added key {new_key.key_id} to cluster {best_cluster.cluster_id}")
             else:
                 # Create new cluster
                 cluster_id = f"CLUSTER_{new_key.agent_type}_{new_key.domain}_{int(time.time())}"
@@ -620,10 +622,10 @@ class MemoryKeyAllocator:
                 )
                 self.memory_clusters[cluster_id] = new_cluster
                 self.total_clusters_formed += 1
-                safe_print(f"🔗 Created new cluster {cluster_id} for key {new_key.key_id}")
+                safe_safe_print(f"🔗 Created new cluster {cluster_id} for key {new_key.key_id}")
                 
         except Exception as e:
-            safe_print(f"⚠️ Clustering failed: {safe_format_error(e, 'clustering')}")
+            safe_safe_print(f"⚠️ Clustering failed: {safe_format_error(e, 'clustering')}")
     
     def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
         """Get memory key by ID."""
@@ -678,10 +680,10 @@ class MemoryKeyAllocator:
             for cluster_id in empty_clusters:
                 del self.memory_clusters[cluster_id]
             
-            safe_print(f"🧹 Cleaned up {len(old_keys)} old keys, {len(old_links)} old links, {len(empty_clusters)} empty clusters")
+            safe_safe_print(f"🧹 Cleaned up {len(old_keys)} old keys, {len(old_links)} old links, {len(empty_clusters)} empty clusters")
             
         except Exception as e:
-            safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
+            safe_safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
 
 
 # Global instance for easy access
@@ -735,7 +737,7 @@ def find_similar_memory_keys(
 # Example usage
 if __name__ == "__main__":
     # Test memory key allocator functionality
-    safe_print("🔑 Testing Memory Key Allocator...")
+    safe_safe_print("🔑 Testing Memory Key Allocator...")
     
     # Allocate test memory keys
     key1 = allocate_memory_key(
@@ -773,4 +775,4 @@ if __name__ == "__main__":
     # Get performance metrics
     metrics = memory_key_allocator.get_performance_metrics()
     
-    safe_print(f"✅ Test completed - Keys: {len(similar_keys)} similar, Metrics: {metrics}") 
+    safe_safe_print(f"✅ Test completed - Keys: {len(similar_keys)} similar, Metrics: {metrics}") 

@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit Router - Randomized Portfolio Substitution Matrix.
 
@@ -14,13 +18,12 @@ based on volume, liquidity, correlation, and volatility metrics.
 Windows CLI compatible with ASCII representation for mathematical symbols.
 """
 
-from __future__ import annotations
 
 import logging
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -200,7 +203,7 @@ def route_profit(
 
         # Ensure non-negative allocations
         for asset in ASSETS:
-            allocations[asset] = max(0.0, allocations[asset])
+            allocations[asset] = unified_math.max(0.0, allocations[asset])
 
         return allocations
 
@@ -263,7 +266,7 @@ def analyze_allocation_efficiency(
             "liquidity_score": liquidity_score,
             "diversification_score": diversification_score,
             "stability_score": stability_score,
-            "dominant_asset": max(percentages.items(), key=lambda x: x[1])[0],
+            "dominant_asset": unified_math.max(percentages.items(), key=lambda x: x[1])[0],
         }
 
         # Add market condition adjustments if provided
@@ -451,27 +454,27 @@ def validate_allocation_matrix(matrix: np.ndarray[Any, Any]) -> bool:
 def main() -> None:
     """Demo function for testing profit router."""
     # Test basic routing
-    print("Profit Router Demo")
-    print("=" * 30)
+    safe_print("Profit Router Demo")
+    safe_print("=" * 30)
 
     # Test different phases
     test_profit = 1000.0
 
     for phase in [4, 8, 42]:
         allocations = route_profit(test_profit, phase)
-        print(f"\nPhase {phase}-bit allocation:")
+        safe_print(f"\nPhase {phase}-bit allocation:")
         for asset, amount in allocations.items():
             percentage = (amount / test_profit) * 100
-            print(f"  {asset}: ${amount:.2f} ({percentage:.1f}%)")
+            safe_print(f"  {asset}: ${amount:.2f} ({percentage:.1f}%)")
 
     # Test randomized matrix
-    print(f"\nRandomized Matrix Test:")
+    safe_print(f"\nRandomized Matrix Test:")
     randomized_matrix, metadata = create_randomized_matrix(
         BASE_ALLOCATION_MATRIX, substitution_seed=12345
     )
 
-    print(f"Substitutions: {metadata.get('substitutions', {})}")
-    print(f"Matrix sums: {metadata.get('matrix_sum_check', [])}")
+    safe_print(f"Substitutions: {metadata.get('substitutions', {})}")
+    safe_print(f"Matrix sums: {metadata.get('matrix_sum_check', [])}")
 
     # Test router class
     router = ProfitRouter(randomization_enabled=True)
@@ -481,15 +484,15 @@ def main() -> None:
     for i, phase in enumerate([4, 8, 42, 8, 4]):
         profit = 500.0 + i * 100
         allocations = router.route(profit, phase)
-        print(
+        safe_print(
             f"\nRouter allocation {i+1} (phase {phase}): ${sum(allocations.values()):.2f}"
         )
 
     # Get summary
     summary = router.get_allocation_summary()
-    print(f"\nRouter Summary:")
-    print(f"Total routed: ${summary['total_profit_routed']:.2f}")
-    print(f"Average percentages: {summary['average_percentages']}")
+    safe_print(f"\nRouter Summary:")
+    safe_print(f"Total routed: ${summary['total_profit_routed']:.2f}")
+    safe_print(f"Average percentages: {summary['average_percentages']}")
 
 
 if __name__ == "__main__":

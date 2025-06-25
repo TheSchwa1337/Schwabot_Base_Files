@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Phase Loader - Trading Phase Configuration and Data Loading for Schwabot
@@ -23,7 +25,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -430,12 +432,12 @@ def main() -> None:
     # Load configuration
     configuration = loader.load_phase_configuration(test_config_path)
     if configuration:
-        print(f"Loaded configuration: {configuration.config_id}")
-        print(f"Phase type: {configuration.phase_type}")
+        safe_print(f"Loaded configuration: {configuration.config_id}")
+        safe_print(f"Phase type: {configuration.phase_type}")
     
     # Get statistics
     stats = loader.get_loader_statistics()
-    print(f"Loader Statistics: {stats}")
+    safe_print(f"Loader Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

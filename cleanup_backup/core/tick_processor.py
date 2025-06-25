@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Processor - Real-time Market Data Processing Engine.
 
@@ -35,7 +39,6 @@ Windows CLI compatible with flake8 compliance.
 
 """
 
-from __future__ import annotations
 
 from collections import defaultdict
 from collections import deque
@@ -48,7 +51,7 @@ import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -399,7 +402,7 @@ class TickProcessor:
         """Check if tick is out of sequence."""
         # Check if tick timestamp is reasonable
         current_time = time.time()
-        time_diff = abs(current_time - tick.timestamp)
+        time_diff = unified_math.abs(current_time - tick.timestamp)
 
         # Allow for some clock skew (5 seconds)
         return time_diff > 5.0
@@ -415,7 +418,7 @@ class TickProcessor:
                 return True
 
             last_tick = previous_ticks[-1]
-            price_change = abs(tick.price - last_tick.price) / last_tick.price
+            price_change = unified_math.abs(tick.price - last_tick.price) / last_tick.price
 
             max_change = self.price_filters["max_price_change"]
             if price_change > max_change:
@@ -443,7 +446,7 @@ class TickProcessor:
             if len(recent_ticks) < 10:
                 return True
 
-            avg_volume = np.mean([t.volume for t in recent_ticks if t.volume > 0])
+            avg_volume = unified_math.mean([t.volume for t in recent_ticks if t.volume > 0])
             if avg_volume <= 0:
                 return True
 
@@ -560,8 +563,8 @@ class TickProcessor:
             else:
                 # Update existing aggregate
                 aggregate = self.aggregated_data[symbol][interval][-1]
-                aggregate.high_price = max(aggregate.high_price, tick.price)
-                aggregate.low_price = min(aggregate.low_price, tick.price)
+                aggregate.high_price = unified_math.max(aggregate.high_price, tick.price)
+                aggregate.low_price = unified_math.min(aggregate.low_price, tick.price)
                 aggregate.close_price = tick.price
                 aggregate.total_volume += tick.volume
                 aggregate.trade_count += 1
@@ -614,10 +617,10 @@ class TickProcessor:
         """Get performance metrics."""
         try:
             avg_latency = (
-                np.mean(self.processing_latency) if self.processing_latency else 0.0
+                unified_math.unified_math.mean(self.processing_latency) if self.processing_latency else 0.0
             )
             max_latency = (
-                np.max(self.processing_latency) if self.processing_latency else 0.0
+                unified_math.unified_math.max(self.processing_latency) if self.processing_latency else 0.0
             )
 
             return {
@@ -625,7 +628,7 @@ class TickProcessor:
                 "total_ticks_processed": self.total_ticks_processed,
                 "total_ticks_rejected": self.total_ticks_rejected,
                 "processing_rate": self.total_ticks_processed
-                / max(time.time() - self.last_processing_time, 1.0),
+                / unified_math.max(time.time() - self.last_processing_time, 1.0),
                 "average_latency": avg_latency,
                 "max_latency": max_latency,
                 "queue_size": len(self.tick_queue),
@@ -677,8 +680,8 @@ class TickProcessor:
 def main() -> None:
     """Main function for testing tick processor."""
     try:
-        print("📊 Tick Processor Test")
-        print("=" * 40)
+        safe_print("📊 Tick Processor Test")
+        safe_print("=" * 40)
 
         # Initialize tick processor
         processor = TickProcessor()
@@ -711,21 +714,21 @@ def main() -> None:
         for tick_data in test_ticks:
             tick = processor.process_tick(tick_data)
             if tick:
-                print(f"✅ Processed tick: {tick.symbol} @ {tick.price:.2f}")
+                safe_print(f"✅ Processed tick: {tick.symbol} @ {tick.price:.2f}")
             else:
-                print(f"❌ Rejected tick: {tick_data['symbol']}")
+                safe_print(f"❌ Rejected tick: {tick_data['symbol']}")
 
         # Get performance metrics
         metrics = processor.get_performance_metrics()
-        print(
+        safe_print(
             f"✅ Performance: {metrics['total_ticks_processed']} processed, "
             f"{metrics['total_ticks_rejected']} rejected"
         )
 
-        print("\n🎉 Tick processor test completed successfully!")
+        safe_print("\n🎉 Tick processor test completed successfully!")
 
     except Exception as e:
-        print(f"❌ Tick processor test failed: {e}")
+        safe_print(f"❌ Tick processor test failed: {e}")
         import traceback
 
         traceback.print_exc()

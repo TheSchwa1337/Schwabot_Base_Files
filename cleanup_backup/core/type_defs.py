@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Schwabot Mathematical Type Definitions.
 
@@ -25,7 +28,6 @@ Based on systematic elimination of 257+ flake8 issues and SP 1.27-AE framework.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -33,7 +35,7 @@ import logging
 from typing import Any, Callable, Dict, List, NewType, Protocol, Tuple, Union, Optional, NamedTuple, TypeVar, Generic
 from enum import Enum
 
-import numpy as np
+from core.unified_math_system import unified_math
 from numpy.typing import NDArray
 import hashlib
 
@@ -698,7 +700,7 @@ class AIConsensus:
             self.consensus_score = total_confidence / len(self.feedbacks)
             
             # Select highest confidence recommendation
-            best_feedback = max(self.feedbacks, key=lambda f: f.confidence_score)
+            best_feedback = unified_math.max(self.feedbacks, key=lambda f: f.confidence_score)
             self.final_recommendation = best_feedback.recommendation
 
 

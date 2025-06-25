@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Hardware Self-Identifier - Schwabot UROS v1.0
@@ -25,7 +39,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -252,9 +266,9 @@ class HardwareSelfIdentifier:
         """Determine hardware tier based on specifications."""
         try:
             # Calculate composite score
-            cpu_score = min(cpu_cores / 8.0, 1.0)  # Normalize to 8 cores
-            freq_score = min(cpu_freq / 3000.0, 1.0)  # Normalize to 3GHz
-            ram_score = min(ram_total / (8 * 1024**3), 1.0)  # Normalize to 8GB
+            cpu_score = unified_math.min(cpu_cores / 8.0, 1.0)  # Normalize to 8 cores
+            freq_score = unified_math.min(cpu_freq / 3000.0, 1.0)  # Normalize to 3GHz
+            ram_score = unified_math.min(ram_total / (8 * 1024**3), 1.0)  # Normalize to 8GB
             gpu_score = min((gpu_memory or 0) / (4 * 1024), 1.0)  # Normalize to 4GB
             
             composite_score = (cpu_score + freq_score + ram_score + gpu_score) / 4
@@ -296,8 +310,8 @@ class HardwareSelfIdentifier:
         """Calculate CPU performance score."""
         try:
             # Normalize cores and frequency
-            core_score = min(cpu_cores / 16.0, 1.0)  # Normalize to 16 cores
-            freq_score = min(cpu_frequency / 4000.0, 1.0)  # Normalize to 4GHz
+            core_score = unified_math.min(cpu_cores / 16.0, 1.0)  # Normalize to 16 cores
+            freq_score = unified_math.min(cpu_frequency / 4000.0, 1.0)  # Normalize to 4GHz
             
             # Weighted average
             return (core_score * 0.6) + (freq_score * 0.4)
@@ -313,7 +327,7 @@ class HardwareSelfIdentifier:
                 return 0.0
             
             # Base score from memory
-            memory_score = min(gpu_memory / (8 * 1024), 1.0)  # Normalize to 8GB
+            memory_score = unified_math.min(gpu_memory / (8 * 1024), 1.0)  # Normalize to 8GB
             
             # Adjust for known GPU models
             if gpu_name:
@@ -323,7 +337,7 @@ class HardwareSelfIdentifier:
                 elif "quadro" in gpu_name_lower or "tesla" in gpu_name_lower:
                     memory_score *= 1.5  # Boost for workstation GPUs
             
-            return min(memory_score, 1.0)
+            return unified_math.min(memory_score, 1.0)
             
         except Exception as e:
             logger.error(f"Error calculating GPU score: {e}")
@@ -333,7 +347,7 @@ class HardwareSelfIdentifier:
         """Calculate memory performance score."""
         try:
             # Base score from total RAM
-            total_score = min(ram_total / (32 * 1024**3), 1.0)  # Normalize to 32GB
+            total_score = unified_math.min(ram_total / (32 * 1024**3), 1.0)  # Normalize to 32GB
             
             # Availability factor
             availability_factor = ram_available / ram_total if ram_total > 0 else 0.0
@@ -348,7 +362,7 @@ class HardwareSelfIdentifier:
         """Calculate maximum concurrent trades based on overall score."""
         try:
             # Scale from 1 to 100 trades
-            return max(1, int(overall_score * 100))
+            return unified_math.max(1, int(overall_score * 100))
             
         except Exception as e:
             logger.error(f"Error calculating max trades: {e}")
@@ -566,14 +580,14 @@ class HardwareSelfIdentifier:
                 return {}
             
             # Calculate averages
-            cpu_usage_avg = np.mean([s["cpu_usage"] for s in self.performance_history])
-            memory_usage_avg = np.mean([s["memory_usage"] for s in self.performance_history])
-            disk_usage_avg = np.mean([s["disk_usage"] for s in self.performance_history])
+            cpu_usage_avg = unified_math.mean([s["cpu_usage"] for s in self.performance_history])
+            memory_usage_avg = unified_math.mean([s["memory_usage"] for s in self.performance_history])
+            disk_usage_avg = unified_math.mean([s["disk_usage"] for s in self.performance_history])
             
             # Get recent trends
             recent_snapshots = self.performance_history[-10:]  # Last 10 snapshots
-            cpu_trend = np.mean([s["cpu_usage"] for s in recent_snapshots])
-            memory_trend = np.mean([s["memory_usage"] for s in recent_snapshots])
+            cpu_trend = unified_math.mean([s["cpu_usage"] for s in recent_snapshots])
+            memory_trend = unified_math.mean([s["memory_usage"] for s in recent_snapshots])
             
             return {
                 "hardware_profile": {
@@ -657,24 +671,24 @@ def main():
         
         # Detect hardware capabilities
         profile = identifier.detect_hardware_capabilities()
-        print(f"Hardware Profile:")
-        print(f"  Device: {profile.device_name}")
-        print(f"  Tier: {profile.hardware_tier.value}")
-        print(f"  Capability: {profile.compute_capability.value}")
-        print(f"  CPU: {profile.cpu_cores} cores @ {profile.cpu_frequency:.0f}MHz")
-        print(f"  RAM: {profile.ram_total / (1024**3):.1f}GB")
-        print(f"  GPU: {profile.gpu_name or 'None'}")
-        print(f"  Overall Score: {profile.overall_score:.3f}")
-        print(f"  Max Trades: {profile.max_concurrent_trades}")
-        print(f"  Profit Rate: {profile.profit_calculation_rate:.1f}/sec")
+        safe_print(f"Hardware Profile:")
+        safe_print(f"  Device: {profile.device_name}")
+        safe_print(f"  Tier: {profile.hardware_tier.value}")
+        safe_print(f"  Capability: {profile.compute_capability.value}")
+        safe_print(f"  CPU: {profile.cpu_cores} cores @ {profile.cpu_frequency:.0f}MHz")
+        safe_print(f"  RAM: {profile.ram_total / (1024**3):.1f}GB")
+        safe_print(f"  GPU: {profile.gpu_name or 'None'}")
+        safe_print(f"  Overall Score: {profile.overall_score:.3f}")
+        safe_print(f"  Max Trades: {profile.max_concurrent_trades}")
+        safe_print(f"  Profit Rate: {profile.profit_calculation_rate:.1f}/sec")
         
         # Register with network
         registration = identifier.register_with_network()
-        print(f"\nNetwork Registration:")
-        print(f"  Success: {registration.success}")
-        print(f"  Node ID: {registration.assigned_node_id}")
-        print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
-        print(f"  Sync Interval: {registration.sync_interval}s")
+        safe_print(f"\nNetwork Registration:")
+        safe_print(f"  Success: {registration.success}")
+        safe_print(f"  Node ID: {registration.assigned_node_id}")
+        safe_print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
+        safe_print(f"  Sync Interval: {registration.sync_interval}s")
         
         # Start performance monitoring
         identifier.start_performance_monitoring()
@@ -684,10 +698,10 @@ def main():
         
         # Get performance summary
         summary = identifier.get_performance_summary()
-        print(f"\nPerformance Summary:")
-        print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
-        print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
-        print(f"  Adjustments: {summary.get('capability_adjustments', 0)}")
+        safe_print(f"\nPerformance Summary:")
+        safe_print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
+        safe_print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
+        safe_print(f"  Adjustments: {summary.get('capability_adjustments', 0)}")
         
         # Export data
         identifier.export_hardware_data()

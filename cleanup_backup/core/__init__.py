@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 Schwabot Core Module - Central Integration Hub
@@ -15,7 +17,6 @@ Key Features:
 - Performance optimization
 """
 
-from __future__ import annotations
 
 import logging
 from datetime import datetime

@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Entropy-Driven API Layer for Schwabot
@@ -200,10 +201,10 @@ class EntropyAPILayer:
             fault_count = data.get('active_faults', 0)
             
             # Normalize components
-            normalized_volatility = min(price_volatility, 1.0)
-            normalized_volume = min(abs(volume_change), 1.0)
-            normalized_hash = min(hash_variance, 1.0)
-            normalized_faults = min(fault_count / 10.0, 1.0)  # Max 10 faults
+            normalized_volatility = unified_math.min(price_volatility, 1.0)
+            normalized_volume = unified_math.min(unified_math.abs(volume_change), 1.0)
+            normalized_hash = unified_math.min(hash_variance, 1.0)
+            normalized_faults = unified_math.min(fault_count / 10.0, 1.0)  # Max 10 faults
             
             # Calculate weighted entropy
             entropy = (
@@ -213,7 +214,7 @@ class EntropyAPILayer:
                 normalized_faults * 0.2
             )
             
-            return min(max(entropy, 0.0), 1.0)
+            return unified_math.min(unified_math.max(entropy, 0.0), 1.0)
             
         except Exception as e:
             logger.error(f"❌ Error calculating entropy: {e}")
@@ -453,7 +454,7 @@ class EntropyAPILayer:
         """Adjust entropy threshold."""
         try:
             old_threshold = self.entropy_threshold
-            self.entropy_threshold = max(0.0, min(1.0, new_threshold))
+            self.entropy_threshold = unified_math.max(0.0, unified_math.min(1.0, new_threshold))
             
             return {
                 'status': 'success',

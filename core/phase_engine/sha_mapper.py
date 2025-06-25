@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 SHA Mapper - Cryptographic Hash Mapping and Pattern Recognition for Schwabot
@@ -24,7 +38,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -240,8 +254,8 @@ class SHAMapper:
             hash_array = np.array(list(hash_bytes))
             
             # Calculate pattern characteristics
-            mean_val = np.mean(hash_array)
-            std_val = np.std(hash_array)
+            mean_val = unified_math.unified_math.mean(hash_array)
+            std_val = unified_math.unified_math.std(hash_array)
             entropy = self._calculate_entropy(hash_array)
             
             # Pattern classification based on characteristics
@@ -268,7 +282,7 @@ class SHAMapper:
         """Calculate entropy of data."""
         try:
             # Discretize data for entropy calculation
-            hist, _ = np.histogram(data, bins=min(50, len(data)))
+            hist, _ = np.histogram(data, bins=unified_math.min(50, len(data)))
             hist = hist[hist > 0]  # Remove zero bins
             if len(hist) == 0:
                 return 0.0
@@ -289,13 +303,13 @@ class SHAMapper:
             
             # Pattern frequency bonus
             frequency = self.pattern_frequency.get(pattern_type, 0)
-            frequency_bonus = min(0.3, frequency / 100.0)
+            frequency_bonus = unified_math.min(0.3, frequency / 100.0)
             
             # Hash complexity bonus
-            complexity_bonus = min(0.2, len(set(hash_value)) / 16.0)
+            complexity_bonus = unified_math.min(0.2, len(set(hash_value)) / 16.0)
             
             total_confidence = base_confidence + frequency_bonus + complexity_bonus
-            return min(1.0, total_confidence)
+            return unified_math.min(1.0, total_confidence)
             
         except Exception:
             return 0.5
@@ -342,15 +356,15 @@ def main() -> None:
     # Test hash generation
     test_data = "BTC_price_50000_volume_1000000"
     hash_value = mapper.generate_hash(test_data, HashType.SHA256)
-    print(f"Generated hash: {hash_value}")
+    safe_print(f"Generated hash: {hash_value}")
     
     # Test pattern mapping
     pattern = mapper.map_hash_to_pattern(hash_value, test_data)
-    print(f"Mapped pattern: {pattern}")
+    safe_print(f"Mapped pattern: {pattern}")
     
     # Get statistics
     stats = mapper.get_hash_statistics()
-    print(f"SHA Mapper Statistics: {stats}")
+    safe_print(f"SHA Mapper Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

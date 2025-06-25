@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 File Integrity Checker - Core File System Integrity Pipeline Component
@@ -279,11 +280,11 @@ def main() -> None:
     # Test file integrity check
     test_file = __file__  # Check this file
     result = checker.check_file_integrity(test_file)
-    print(f"File integrity check result: {result.is_valid}")
+    safe_print(f"File integrity check result: {result.is_valid}")
     
     # Get statistics
     stats = checker.get_integrity_statistics()
-    print(f"Integrity statistics: {stats}")
+    safe_print(f"Integrity statistics: {stats}")
 
 
 if __name__ == "__main__":

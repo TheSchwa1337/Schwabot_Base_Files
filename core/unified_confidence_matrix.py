@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Confidence Matrix - Central Hub for Schwabot Confidence Calculations.
 
@@ -25,7 +26,7 @@ import time
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import core components
 try:
@@ -248,10 +249,10 @@ class UnifiedConfidenceMatrix:
             recent_performance = backlog_state.get('recent_performance', 0.5)
             
             # Calculate win rate
-            win_rate = winning_trades / max(total_trades, 1)
+            win_rate = winning_trades / unified_math.max(total_trades, 1)
             
             # Calculate profit factor
-            profit_factor = min(avg_profit / 1000.0, 1.0)  # Normalize to [0, 1]
+            profit_factor = unified_math.min(avg_profit / 1000.0, 1.0)  # Normalize to [0, 1]
             
             # Combine factors
             confidence = (win_rate * 0.4 + profit_factor * 0.3 + recent_performance * 0.3)
@@ -260,7 +261,7 @@ class UnifiedConfidenceMatrix:
             cache_key = f"{total_trades}_{winning_trades}_{avg_profit:.2f}"
             self.backlog_confidence_cache[cache_key] = confidence
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating backlog confidence: {e}")
@@ -275,20 +276,20 @@ class UnifiedConfidenceMatrix:
             # Calculate confidence based on position
             # Higher confidence at optimal positions (0, 2, 4, 6)
             optimal_positions = [0, 2, 4, 6]
-            distance_to_optimal = min(abs(ferris_wheel_position % 8 - pos) for pos in optimal_positions)
+            distance_to_optimal = unified_math.min(unified_math.abs(ferris_wheel_position % 8 - pos) for pos in optimal_positions)
             
             # Confidence decreases with distance from optimal positions
             position_confidence = 1.0 - (distance_to_optimal / 4.0)
             
             # Add cycle momentum factor
-            cycle_momentum = np.sin(2 * np.pi * normalized_position) * 0.2
+            cycle_momentum = np.unified_math.sin(2 * np.pi * normalized_position) * 0.2
             
             confidence = position_confidence + cycle_momentum
             
             # Cache result
             self.ferris_wheel_confidence_map[ferris_wheel_position] = confidence
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating Ferris wheel confidence: {e}")
@@ -304,11 +305,11 @@ class UnifiedConfidenceMatrix:
             
             # Calculate agreement level
             confidences = [chatgpt_confidence, claude_confidence, gemini_confidence]
-            agreement_variance = np.var(confidences)
+            agreement_variance = unified_math.unified_math.var(confidences)
             agreement_factor = 1.0 / (1.0 + agreement_variance)
             
             # Calculate average confidence
-            avg_confidence = np.mean(confidences)
+            avg_confidence = unified_math.unified_math.mean(confidences)
             
             # Combine agreement and confidence
             consensus_confidence = avg_confidence * agreement_factor
@@ -317,7 +318,7 @@ class UnifiedConfidenceMatrix:
             cache_key = f"{chatgpt_confidence:.3f}_{claude_confidence:.3f}_{gemini_confidence:.3f}"
             self.ai_consensus_confidence_weights[cache_key] = consensus_confidence
             
-            return max(0.0, min(1.0, consensus_confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, consensus_confidence))
             
         except Exception as e:
             logger.error(f"Error calculating AI consensus confidence: {e}")
@@ -366,7 +367,7 @@ class UnifiedConfidenceMatrix:
             cache_key = f"{bit_level}_{phase}_{confidence_score:.3f}"
             self.matrix_controller_confidence_states[cache_key] = confidence
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating matrix controller confidence: {e}")
@@ -379,14 +380,14 @@ class UnifiedConfidenceMatrix:
             priority_confidence = event_impact.priority / 10.0
             
             # Sentiment confidence
-            sentiment_confidence = abs(event_impact.sentiment_score)
+            sentiment_confidence = unified_math.abs(event_impact.sentiment_score)
             
             # Relevance confidence
             relevance_confidence = event_impact.relevance_score
             
             # Time decay factor
             time_diff = time.time() - event_impact.timestamp
-            time_decay = np.exp(-time_diff / 3600)  # 1-hour decay
+            time_decay = unified_math.exp(-time_diff / 3600)  # 1-hour decay
             
             # Combine factors
             confidence = (priority_confidence * 0.4 + 
@@ -398,7 +399,7 @@ class UnifiedConfidenceMatrix:
             cache_key = event_impact.event_id
             self.event_impact_confidence_cache[cache_key] = confidence
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Error calculating event impact confidence: {e}")
@@ -428,7 +429,7 @@ class UnifiedConfidenceMatrix:
             return 0.0
         
         reliabilities = [component.reliability for component in components.values()]
-        return np.mean(reliabilities)
+        return unified_math.unified_math.mean(reliabilities)
     
     def _calculate_backlog_reliability(self, backlog_state: Dict[str, Any]) -> float:
         """Calculate reliability of backlog data."""
@@ -439,14 +440,14 @@ class UnifiedConfidenceMatrix:
             sample_size = backlog_state.get('total_trades', 0)
             
             # Sample size factor
-            sample_factor = min(sample_size / 100.0, 1.0)
+            sample_factor = unified_math.min(sample_size / 100.0, 1.0)
             
             # Combine factors
             reliability = (data_freshness * 0.4 + 
                           data_completeness * 0.3 + 
                           sample_factor * 0.3)
             
-            return max(0.0, min(1.0, reliability))
+            return unified_math.max(0.0, unified_math.min(1.0, reliability))
             
         except Exception as e:
             logger.error(f"Error calculating backlog reliability: {e}")
@@ -480,12 +481,12 @@ class UnifiedConfidenceMatrix:
             # Agreement factor
             confidences = [ai_consensus.get(model, {}).get('confidence', 0.5) 
                           for model in models if model in ai_consensus]
-            agreement_variance = np.var(confidences) if confidences else 1.0
+            agreement_variance = unified_math.unified_math.var(confidences) if confidences else 1.0
             agreement_factor = 1.0 / (1.0 + agreement_variance)
             
             reliability = (availability_factor * 0.6 + agreement_factor * 0.4)
             
-            return max(0.0, min(1.0, reliability))
+            return unified_math.max(0.0, unified_math.min(1.0, reliability))
             
         except Exception as e:
             logger.error(f"Error calculating AI reliability: {e}")
@@ -509,7 +510,7 @@ class UnifiedConfidenceMatrix:
             
             reliability = base_reliability * phase_stability - fallback_penalty
             
-            return max(0.0, min(1.0, reliability))
+            return unified_math.max(0.0, unified_math.min(1.0, reliability))
             
         except Exception as e:
             logger.error(f"Error calculating matrix reliability: {e}")
@@ -531,11 +532,11 @@ class UnifiedConfidenceMatrix:
             
             # Time decay
             time_diff = time.time() - event_impact.timestamp
-            time_factor = np.exp(-time_diff / 7200)  # 2-hour decay
+            time_factor = unified_math.exp(-time_diff / 7200)  # 2-hour decay
             
             reliability = base_reliability * source_reliability * time_factor
             
-            return max(0.0, min(1.0, reliability))
+            return unified_math.max(0.0, unified_math.min(1.0, reliability))
             
         except Exception as e:
             logger.error(f"Error calculating event reliability: {e}")

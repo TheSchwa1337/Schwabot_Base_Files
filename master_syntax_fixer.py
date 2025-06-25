@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Master Syntax Fixer - Comprehensive E999 Error Resolution.
 
@@ -165,12 +166,12 @@ class MasterSyntaxFixer:
             return False
             
         except Exception as e:
-            print(f"Error processing {file_path}: {e}")
+            safe_print(f"Error processing {file_path}: {e}")
             return False
     
     def process_all_files(self) -> None:
         """Process all Python files in the codebase."""
-        print("Processing all Python files...")
+        safe_print("Processing all Python files...")
         
         for root, dirs, files in os.walk('.'):
             # Skip certain directories
@@ -183,24 +184,24 @@ class MasterSyntaxFixer:
                     
                     if self.fix_file(file_path):
                         self.fix_stats['errors_fixed'] += 1
-                        print(f"✅ Fixed: {file_path}")
+                        safe_print(f"✅ Fixed: {file_path}")
     
     def run_comprehensive_fix(self) -> None:
         """Run the complete fix process."""
-        print("Master Syntax Fixer - Comprehensive E999 Error Resolution")
-        print("=" * 70)
+        safe_print("Master Syntax Fixer - Comprehensive E999 Error Resolution")
+        safe_print("=" * 70)
         
         # Process all files
         self.process_all_files()
         
         # Summary
-        print(f"\nSummary:")
-        print(f"  Files processed: {self.fix_stats['files_processed']}")
-        print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
-        print(f"  Unicode fixes: {self.fix_stats['unicode_fixes']}")
-        print(f"  Docstring fixes: {self.fix_stats['docstring_fixes']}")
-        print(f"  Syntax fixes: {self.fix_stats['syntax_fixes']}")
-        print("\nComprehensive syntax fixing completed!")
+        safe_print(f"\nSummary:")
+        safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
+        safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
+        safe_print(f"  Unicode fixes: {self.fix_stats['unicode_fixes']}")
+        safe_print(f"  Docstring fixes: {self.fix_stats['docstring_fixes']}")
+        safe_print(f"  Syntax fixes: {self.fix_stats['syntax_fixes']}")
+        safe_print("\nComprehensive syntax fixing completed!")
 
 
 def main():

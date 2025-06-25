@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """State Validation Router - End-to-End State Sanity Checks for System Integrity.
 
@@ -16,8 +17,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime
-import math
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 from core.error_handler import safe_execute
 from core.import_resolver import safe_import
@@ -199,11 +200,11 @@ class StateValidationRouter:
                 return False
             
             # Check if coherence values are reasonably close
-            coherence_std = np.std(coherence_values)
+            coherence_std = unified_math.unified_math.std(coherence_values)
             coherence_stable = coherence_std < 0.1  # Less than 10% variation
             
             # Check if overall coherence meets threshold
-            avg_coherence = np.mean(coherence_values)
+            avg_coherence = unified_math.unified_math.mean(coherence_values)
             coherence_threshold_met = avg_coherence >= self.validation_thresholds['phase_coherence']
             
             return coherence_stable and coherence_threshold_met
@@ -306,7 +307,7 @@ class StateValidationRouter:
             altitude_phase = system_state.altitude_metrics.get('phase_alignment', 0.0)
             
             # Phase alignment should be reasonably close
-            phase_diff = abs(quantum_phase - altitude_phase)
+            phase_diff = unified_math.abs(quantum_phase - altitude_phase)
             phase_aligned = phase_diff < math.pi / 4  # Within 45 degrees
             
             return phase_aligned
@@ -330,7 +331,7 @@ class StateValidationRouter:
                 return False
             
             # Check if timestamps are reasonably close (within 5 seconds)
-            timestamp_std = np.std(timestamps)
+            timestamp_std = unified_math.unified_math.std(timestamps)
             timestamps_synced = timestamp_std < 5.0
             
             # Check data types and structure
@@ -401,7 +402,7 @@ class StateValidationRouter:
             
             # Calculate average confidence scores
             confidence_scores = [r.confidence_score for r in self.validation_history]
-            avg_confidence = np.mean(confidence_scores)
+            avg_confidence = unified_math.unified_math.mean(confidence_scores)
             
             # Component success rates
             component_success_rates = {}

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """profit_echo_velocity_driver – volatility burst memory for profit echo.
 
@@ -8,12 +11,11 @@ This module drives profit echo calculations using volatility burst memory
 patterns for enhanced ghost protocol performance.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Sequence, List, Any
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "ProfitEchoVelocityDriver",
@@ -51,16 +53,16 @@ class ProfitEchoVelocityDriver:
         xi = np.asarray(xi_values, dtype=float)
 
         # Ensure arrays have same length
-        min_len = min(len(delta_v), len(xi))
+        min_len = unified_math.min(len(delta_v), len(xi))
         delta_v = delta_v[:min_len]
         xi = xi[:min_len]
 
         # Compute |ΔV|ⁿ
-        abs_delta_v_n = np.power(np.abs(delta_v), self.n_exponent)
+        abs_delta_v_n = unified_math.unified_math.power(unified_math.unified_math.abs(delta_v), self.n_exponent)
 
         # Compute σ(Ξ*ε) - sigmoid of xi * epsilon
         xi_epsilon = xi * epsilon_scaling
-        sigma_xi_eps = 1.0 / (1.0 + np.exp(-xi_epsilon))
+        sigma_xi_eps = 1.0 / (1.0 + unified_math.exp(-xi_epsilon))
 
         # Compute χₘ(t, v) = |ΔV|ⁿ * σ(Ξ*ε)
         chi_m = abs_delta_v_n * sigma_xi_eps
@@ -88,7 +90,7 @@ class ProfitEchoVelocityDriver:
         weights = np.asarray(time_weights, dtype=float)
 
         # Ensure lengths match
-        min_len = min(len(chi_m_values), len(profits), len(weights))
+        min_len = unified_math.min(len(chi_m_values), len(profits), len(weights))
         chi_m_trimmed = chi_m_values[:min_len]
         profits_trimmed = profits[:min_len]
         weights_trimmed = weights[:min_len]
@@ -118,7 +120,7 @@ class ProfitEchoVelocityDriver:
         """
         if len(current_memory) != len(new_volatility_burst):
             # Handle size mismatch by broadcasting
-            min_len = min(len(current_memory), len(new_volatility_burst))
+            min_len = unified_math.min(len(current_memory), len(new_volatility_burst))
             current_memory = current_memory[:min_len]
             new_volatility_burst = new_volatility_burst[:min_len]
 
@@ -167,7 +169,7 @@ class ProfitEchoVelocityDriver:
                 )
 
             # Get xi value for current step
-            xi_current = xi_time_series[min(step, len(xi_time_series) - 1)]
+            xi_current = xi_time_series[unified_math.min(step, len(xi_time_series) - 1)]
 
             # Compute volatility burst memory
             chi_m = self.compute_chi_m(
@@ -175,7 +177,7 @@ class ProfitEchoVelocityDriver:
             )
 
             # Create time weights (exponential decay)
-            time_weights = np.exp(-np.arange(len(profit_history)) * 0.1)
+            time_weights = unified_math.exp(-np.arange(len(profit_history)) * 0.1)
 
             # Compute echo velocity
             echo_velocity = self.compute_profit_echo_velocity(

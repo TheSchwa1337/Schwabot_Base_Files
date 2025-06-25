@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Hash tick synchronizer – SHA256-based tick matching and timing sync.
 
@@ -11,10 +14,9 @@ This module provides hash-based synchronization between market ticks and
 internal ghost state transitions for temporal alignment.
 """
 
-from __future__ import annotations
 
 import hashlib
-import math
+from core.unified_math_system import unified_math
 from typing import Dict
 
 __all__: list[str] = [
@@ -112,7 +114,7 @@ def sync_probability(
     if sigma <= 0:
         return 1.0 if tick_t1 == tick_t2 else 0.0
 
-    delta_tau = abs(tick_t1 - tick_t2)
-    gaussian_weight = math.exp(-(delta_tau**2) / (sigma**2))
+    delta_tau = unified_math.abs(tick_t1 - tick_t2)
+    gaussian_weight = unified_math.exp(-(delta_tau**2) / (sigma**2))
 
     return gaussian_weight

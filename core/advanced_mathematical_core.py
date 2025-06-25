@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 advanced_mathematical_core.py - Advanced Mathematical Core for Schwabot.
@@ -10,7 +11,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 from scipy import linalg
 from scipy.special import gamma, loggamma
 
@@ -87,9 +88,9 @@ def safe_delta_calculation(
 ) -> float:
     """Enhanced delta calculation with numerical stability.
 
-    Implements: δ = (P_now - P_prev) / max(P_prev, ε)
+    Implements: δ = (P_now - P_prev) / unified_math.max(P_prev, ε)
     """
-    return (price_now - price_prev) / max(abs(price_prev), epsilon)
+    return (price_now - price_prev) / unified_math.max(unified_math.abs(price_prev), epsilon)
 
 
 def normalized_delta_tanh(
@@ -129,7 +130,7 @@ def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float
 def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
     """Kullback-Leibler divergence with numerical stability.
 
-    Implements: KL(P||Q) = Σ p_i * log(p_i / q_i)
+    Implements: KL(P||Q) = Σ p_i * unified_math.log(p_i / q_i)
     """
     p = np.clip(p, epsilon, 1.0)
     q = np.clip(q, epsilon, 1.0)
@@ -138,7 +139,7 @@ def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
     p = p / np.sum(p)
     q = q / np.sum(q)
 
-    return np.sum(p * np.log(p / q))
+    return np.sum(p * unified_math.unified_math.log(p / q))
 
 
 def entropy_gradient_field(entropy_map: Matrix) -> Matrix:
@@ -188,7 +189,7 @@ def optimized_einsum_chunked(
     result = np.zeros(result_shape)
 
     for i in range(0, a.shape[0], chunk_size):
-        end = min(i + chunk_size, a.shape[0])
+        end = unified_math.min(i + chunk_size, a.shape[0])
         result[i:end] = np.einsum("ijk,ikl->ijl", a[i:end], b[i:end])
 
     return result
@@ -208,7 +209,7 @@ def robust_matrix_inverse(
         )
         return np.linalg.pinv(matrix)
     else:
-        return np.linalg.inv(matrix)
+        return unified_math.unified_math.inverse(matrix)
 
 
 # =====================================
@@ -236,7 +237,7 @@ def enhanced_thermal_dynamics(
     pressure = np.tanh(volume_current / (ema_volume + EPSILON_FLOAT64)) * vol_scale
 
     # Temperature decay factor
-    temp_decay = np.exp(-volatility / 10)
+    temp_decay = unified_math.exp(-volatility / 10)
 
     # Thermal conductivity calculation
     thermal_conductivity = THERMAL_CONDUCTIVITY_BTC * (1 + volatility / 100)
@@ -256,10 +257,10 @@ def adaptive_gaussian_kernel(time_delta: Vector, volatility: float) -> Vector:
     Implements: K(t) = exp(-0.5*(t/σ)²) / (σ√(2π))
     """
     # Dynamic sigma based on market conditions
-    sigma = np.sqrt(1 + volatility) * 0.5
+    sigma = unified_math.unified_math.sqrt(1 + volatility) * 0.5
 
     # Normalized Gaussian with bounds checking
-    kernel = np.exp(-0.5 * (time_delta / sigma) ** 2) / (sigma * np.sqrt(2 * np.pi))
+    kernel = unified_math.exp(-0.5 * (time_delta / sigma) ** 2) / (sigma * unified_math.unified_math.sqrt(2 * np.pi))
 
     return np.clip(kernel, EPSILON_FLOAT64, 1.0)
 
@@ -281,13 +282,13 @@ def risk_adjusted_profit_rate(
 
     # Annualized return
     periods_per_year = 365 * 24 * 60  # Minutes in a year
-    annualized_return = raw_return * (periods_per_year / max(time_held, 1))
+    annualized_return = raw_return * (periods_per_year / unified_math.max(time_held, 1))
 
     # Sharpe ratio approximation (assuming zero risk-free rate)
     sharpe = annualized_return / (volatility + EPSILON_FLOAT64)
 
     # Risk-adjusted return
-    risk_penalty = np.exp(-volatility)
+    risk_penalty = unified_math.exp(-volatility)
     risk_adjusted = raw_return * risk_penalty
 
     return {
@@ -309,8 +310,8 @@ def kelly_criterion_allocation(
 
     Implements: f* = (p*b - q) / b where p=win_prob, q=loss_prob, b=odds
     """
-    expected_roi = np.mean(roi_vector)
-    roi_std = np.std(roi_vector)
+    expected_roi = unified_math.unified_math.mean(roi_vector)
+    roi_std = unified_math.unified_math.std(roi_vector)
 
     # Calculate odds (expected return / risk)
     odds = expected_roi / (roi_std + EPSILON_FLOAT64)
@@ -323,9 +324,9 @@ def kelly_criterion_allocation(
     safe_kelly = KELLY_SAFETY_FACTOR * kelly_fraction
 
     # Additional metrics
-    kelly_growth_rate = win_prob * np.log(
+    kelly_growth_rate = win_prob * unified_math.log(
         1 + odds * kelly_fraction
-    ) + loss_prob * np.log(1 - kelly_fraction)
+    ) + loss_prob * unified_math.unified_math.log(1 - kelly_fraction)
 
     return {
         "kelly_fraction": kelly_fraction,
@@ -351,16 +352,16 @@ def quantum_signal_normalization(
     """
     # Complex amplitudes if phase provided
     if phase_vector is not None:
-        psi_complex = psi_vector * np.exp(1j * phase_vector)
+        psi_complex = psi_vector * unified_math.unified_math.exp(1j * phase_vector)
     else:
         psi_complex = psi_vector.astype(complex)
 
     # Proper quantum normalization
-    norm = np.sqrt(np.sum(np.abs(psi_complex) ** 2))
+    norm = unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(psi_complex) ** 2))
     normalized = psi_complex / (norm + EPSILON_FLOAT64)
 
     # Calculate probability distribution
-    probabilities = np.abs(normalized) ** 2
+    probabilities = unified_math.unified_math.abs(normalized) ** 2
 
     # Von Neumann entropy
     von_neumann_entropy = shannon_entropy_stable(probabilities)
@@ -383,7 +384,7 @@ def quantum_fidelity(state1: QuantumState, state2: QuantumState) -> float:
     Implements: F = |⟨ψ₁|ψ₂⟩|²
     """
     overlap = np.vdot(state1, state2)
-    return np.abs(overlap) ** 2
+    return unified_math.unified_math.abs(overlap) ** 2
 
 
 def quantum_thermal_coupling(
@@ -400,10 +401,10 @@ def quantum_thermal_coupling(
     thermal_ent = QUANTUM_ENTROPY_SCALE * temperature
 
     # Coupling strength (decreases with temperature)
-    coupling_strength = np.exp(-temperature / (10 * THERMAL_CONDUCTIVITY_BTC))
+    coupling_strength = unified_math.exp(-temperature / (10 * THERMAL_CONDUCTIVITY_BTC))
 
     # Apply thermal decoherence to quantum state
-    decoherence_factor = np.exp(-decoherence_rate)
+    decoherence_factor = unified_math.exp(-decoherence_rate)
     decohered_state = quantum_state * decoherence_factor
 
     return QuantumThermalState(
@@ -433,13 +434,13 @@ def higuchi_fractal_dimension(time_series: Vector, k_max: int = 10) -> float:
         for m in range(k):
             ll = 0
             for i in range(1, int((n - m) / k)):
-                ll += abs(time_series[m + i * k] - time_series[m + (i - 1) * k])
+                ll += unified_math.abs(time_series[m + i * k] - time_series[m + (i - 1) * k])
             ll = ll * (n - 1) / (k * int((n - m) / k) * k)
             lm.append(ll)
-        lk.append(np.log(np.mean(lm)))
+        lk.append(unified_math.unified_math.log(unified_math.unified_math.mean(lm)))
 
     # Linear regression to estimate dimension
-    x = np.log(np.arange(1, k_max + 1))
+    x = unified_math.unified_math.log(np.arange(1, k_max + 1))
     coefficients = np.polyfit(x, lk, 1)
     fractal_dimension = -coefficients[0]
 
@@ -465,20 +466,20 @@ def ferris_wheel_harmonic_analysis(
         phase = 2 * np.pi * t / period
 
         # Calculate phase coherence
-        complex_signal = np.exp(1j * phase)
-        coherence = np.abs(np.mean(complex_signal))
+        complex_signal = unified_math.unified_math.exp(1j * phase)
+        coherence = unified_math.unified_math.abs(unified_math.unified_math.mean(complex_signal))
 
-        harmonic_phases.append(np.mean(phase) % (2 * np.pi))
+        harmonic_phases.append(unified_math.unified_math.mean(phase) % (2 * np.pi))
         coherence_values.append(coherence)
 
     # Overall phase coherence
-    phase_coherence = np.mean(coherence_values)
+    phase_coherence = unified_math.unified_math.mean(coherence_values)
 
     # Angular velocity (rate of phase change)
     angular_velocity = 2 * np.pi / base_period
 
     # Synchronization level
-    sync_level = np.std(coherence_values)  # Lower std = better sync
+    sync_level = unified_math.unified_math.std(coherence_values)  # Lower std = better sync
 
     return FerrisWheelState(
         cycle_position=harmonic_phases[0],
@@ -505,7 +506,7 @@ def void_well_fractal_index(
     grad_volume = np.gradient(volume_vector)
 
     # Ensure same length for cross product
-    min_len = min(len(grad_volume), len(price_variance_field))
+    min_len = unified_math.min(len(grad_volume), len(price_variance_field))
     grad_volume = grad_volume[:min_len]
     price_variance_field = price_variance_field[:min_len]
 
@@ -513,14 +514,14 @@ def void_well_fractal_index(
     curl_field = grad_volume * price_variance_field
 
     # VFI calculation
-    curl_magnitude = np.sum(np.abs(curl_field))
-    volume_magnitude = np.sum(np.abs(volume_vector))
+    curl_magnitude = np.sum(unified_math.unified_math.abs(curl_field))
+    volume_magnitude = np.sum(unified_math.unified_math.abs(volume_vector))
 
     vfi = curl_magnitude / (volume_magnitude + EPSILON_FLOAT64)
 
     # Additional metrics
-    volume_divergence = np.sum(np.abs(grad_volume))
-    entropy_grad = shannon_entropy_stable(np.abs(curl_field) + EPSILON_FLOAT64)
+    volume_divergence = np.sum(unified_math.unified_math.abs(grad_volume))
+    entropy_grad = shannon_entropy_stable(unified_math.unified_math.abs(curl_field) + EPSILON_FLOAT64)
 
     return VoidWellMetrics(
         fractal_index=vfi,
@@ -539,7 +540,7 @@ def api_entropy_reflection_penalty(
     Implements exponential penalty based on API failures.
     """
     # Exponential penalty factor
-    penalty_factor = np.exp(-api_errors / sync_time_constant)
+    penalty_factor = unified_math.exp(-api_errors / sync_time_constant)
 
     # Penalized confidence
     penalized_confidence = confidence * penalty_factor
@@ -577,20 +578,20 @@ def recursive_time_lock_synchronization(
 
     # Phase vectors
     phase_vector = np.array([short_phase, mid_phase, long_phase])
-    complex_phases = np.exp(1j * phase_vector)
+    complex_phases = unified_math.unified_math.exp(1j * phase_vector)
 
     # Phase coherence measure
-    coherence = np.abs(np.mean(complex_phases))
+    coherence = unified_math.unified_math.abs(unified_math.unified_math.mean(complex_phases))
 
     # Synchronization trigger (high coherence threshold)
     sync_triggered = coherence > PATTERN_SIMILARITY_THRESHOLD
 
     # Phase variance (lower = better synchronization)
-    phase_variance = np.var(phase_vector)
+    phase_variance = unified_math.unified_math.var(phase_vector)
 
     # Cycle ratios
-    short_mid_ratio = short_cycles / max(mid_cycles, 1)
-    mid_long_ratio = mid_cycles / max(long_cycles, 1)
+    short_mid_ratio = short_cycles / unified_math.max(mid_cycles, 1)
+    mid_long_ratio = mid_cycles / unified_math.max(long_cycles, 1)
 
     return {
         "coherence": coherence,
@@ -608,44 +609,116 @@ def recursive_time_lock_synchronization(
 def latency_adaptive_matrix_rebinding(
     latency_profile: Vector, threshold: float = 0.1
 ) -> Dict[str, Any]:
-    """Latency-Adaptive Matrix Rebinding for dynamic performance optimization.
+    """Adaptive matrix rebinding based on latency profile."""
+    try:
+        # Calculate latency statistics
+        mean_latency = unified_math.unified_math.mean(latency_profile)
+        std_latency = unified_math.unified_math.std(latency_profile)
+        max_latency = unified_math.unified_math.max(latency_profile)
+        
+        # Determine rebinding strategy
+        if max_latency > threshold:
+            rebinding_strategy = "aggressive"
+            rebinding_factor = 2.0
+        elif std_latency > threshold / 2:
+            rebinding_strategy = "moderate"
+            rebinding_factor = 1.5
+        else:
+            rebinding_strategy = "conservative"
+            rebinding_factor = 1.0
+        
+        return {
+            "rebinding_strategy": rebinding_strategy,
+            "rebinding_factor": rebinding_factor,
+            "mean_latency": mean_latency,
+            "std_latency": std_latency,
+            "max_latency": max_latency,
+            "threshold": threshold
+        }
+        
+    except Exception as e:
+        logger.error(f"Latency adaptive matrix rebinding failed: {e}")
+        return {
+            "rebinding_strategy": "fallback",
+            "rebinding_factor": 1.0,
+            "error": str(e)
+        }
 
-    Implements dynamic matrix selection based on latency patterns.
-    """
-    # Latency drift analysis
-    latency_drift = np.gradient(latency_profile)
-    max_drift = np.max(np.abs(latency_drift))
 
-    # Dynamic matrix selection
-    if max_drift > threshold:
-        matrix_id = "low_latency"
-        scaling_factor = 1.0 / (1.0 + np.mean(latency_profile))
-        optimization_mode = "speed"
-    else:
-        matrix_id = "high_precision"
-        scaling_factor = 1.0
-        optimization_mode = "accuracy"
-
-    # Latency statistics
-    latency_stats = {
-        "mean": np.mean(latency_profile),
-        "std": np.std(latency_profile),
-        "max": np.max(latency_profile),
-        "min": np.min(latency_profile),
-        "p95": np.percentile(latency_profile, 95),
-        "p99": np.percentile(latency_profile, 99),
-    }
-
-    # Adaptive threshold
-    adaptive_threshold = threshold * (1 + latency_stats["std"])
-
-    return {
-        "matrix_id": matrix_id,
-        "scaling_factor": scaling_factor,
-        "optimization_mode": optimization_mode,
-        "max_drift": max_drift,
-        "threshold_exceeded": max_drift > threshold,
-        "adaptive_threshold": adaptive_threshold,
-        "latency_stats": latency_stats,
-        "rebinding_confidence": 1.0 - min(max_drift / threshold, 1.0),
-    }
+class AdvancedMathematicalCore:
+    """Advanced mathematical core for Schwabot trading system."""
+    
+    def __init__(self):
+        """Initialize the advanced mathematical core."""
+        self.logger = logging.getLogger(__name__)
+        self.precision = np.float64
+        self.epsilon = EPSILON_FLOAT64
+        
+    def calculate_delta(self, price_now: float, price_prev: float) -> float:
+        """Calculate price delta with numerical stability."""
+        return safe_delta_calculation(price_now, price_prev, self.epsilon)
+    
+    def calculate_entropy(self, prob_vector: Vector) -> float:
+        """Calculate Shannon entropy."""
+        return shannon_entropy_stable(prob_vector)
+    
+    def calculate_fractal_dimension(self, time_series: Vector) -> float:
+        """Calculate Higuchi fractal dimension."""
+        return higuchi_fractal_dimension(time_series)
+    
+    def calculate_quantum_fidelity(self, state1: QuantumState, state2: QuantumState) -> float:
+        """Calculate quantum fidelity between two states."""
+        return quantum_fidelity(state1, state2)
+    
+    def calculate_thermal_dynamics(self, volume_current: float, avg_volume: float, 
+                                 volatility: float) -> Dict[str, float]:
+        """Calculate enhanced thermal dynamics."""
+        return enhanced_thermal_dynamics(volume_current, avg_volume, volatility)
+    
+    def calculate_kelly_criterion(self, roi_vector: Vector, win_prob: float, 
+                                loss_prob: float) -> Dict[str, float]:
+        """Calculate Kelly criterion allocation."""
+        return kelly_criterion_allocation(roi_vector, win_prob, loss_prob)
+    
+    def calculate_ferris_wheel_state(self, time_series: Vector) -> FerrisWheelState:
+        """Calculate Ferris wheel harmonic analysis."""
+        return ferris_wheel_harmonic_analysis(time_series)
+    
+    def calculate_void_well_metrics(self, volume_vector: Vector, 
+                                  price_variance_field: Vector) -> VoidWellMetrics:
+        """Calculate void-well fractal metrics."""
+        return void_well_fractal_index(volume_vector, price_variance_field)
+    
+    def matrix_activation(self, input_array: Vector, weight_matrix: Matrix) -> Vector:
+        """Perform stable matrix activation."""
+        return stable_activation_matrix(input_array, weight_matrix)
+    
+    def matrix_inverse(self, matrix: Matrix) -> Matrix:
+        """Perform robust matrix inversion."""
+        return robust_matrix_inverse(matrix)
+    
+    def tensor_contraction(self, a: Tensor, b: Tensor) -> Tensor:
+        """Perform memory-efficient tensor contraction."""
+        return optimized_einsum_chunked(a, b)
+    
+    def quantum_normalization(self, psi_vector: Vector) -> Dict[str, Any]:
+        """Perform quantum signal normalization."""
+        return quantum_signal_normalization(psi_vector)
+    
+    def quantum_thermal_coupling(self, quantum_state: QuantumState, 
+                               temperature: Temperature) -> QuantumThermalState:
+        """Calculate quantum-thermal coupling."""
+        return quantum_thermal_coupling(quantum_state, temperature)
+    
+    def api_entropy_penalty(self, confidence: float, api_errors: int) -> Dict[str, float]:
+        """Calculate API entropy reflection penalty."""
+        return api_entropy_reflection_penalty(confidence, api_errors)
+    
+    def time_lock_synchronization(self, short_cycles: int, mid_cycles: int, 
+                                long_cycles: int) -> Dict[str, Any]:
+        """Calculate recursive time lock synchronization."""
+        return recursive_time_lock_synchronization(short_cycles, mid_cycles, long_cycles)
+    
+    def latency_rebinding(self, latency_profile: Vector) -> Dict[str, Any]:
+        """Calculate latency adaptive matrix rebinding."""
+        return latency_adaptive_matrix_rebinding(latency_profile)

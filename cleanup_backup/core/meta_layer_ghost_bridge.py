@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Meta-Layer Ghost Bridge - Recursive Hash Echo Memory Management for Schwabot
@@ -22,7 +23,7 @@ and informs profit_handoff.py to route future trades recursively.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -146,10 +147,10 @@ class MetaLayerGhostBridge:
             
             # Calculate time-decay factor
             age_seconds = current_time - timestamp
-            decay_factor = np.exp(-self.decay_lambda * age_seconds)
+            decay_factor = unified_math.exp(-self.decay_lambda * age_seconds)
             
             # Calculate latency penalty
-            latency_penalty = max(0, 1 - (latency_ms / 1000))  # Reduce weight for high latency
+            latency_penalty = unified_math.max(0, 1 - (latency_ms / 1000))  # Reduce weight for high latency
             
             # Update reliability score based on data freshness and consistency
             self._update_reliability_score(exchange, symbol, price, latency_ms)
@@ -256,7 +257,7 @@ class MetaLayerGhostBridge:
             for entry in self.echo_entries:
                 # Calculate decay factor
                 age = t_now - entry.timestamp
-                decay_factor = np.exp(-self.decay_lambda * age)
+                decay_factor = unified_math.exp(-self.decay_lambda * age)
                 
                 # Calculate weight
                 weight = decay_factor * entry.weight
@@ -397,7 +398,7 @@ class MetaLayerGhostBridge:
             for exchange, data in exchange_data.items():
                 # Composite weight combining multiple factors
                 reliability = self.reliability_scores[exchange]
-                volume_factor = np.log(1 + data['volume']) / 10  # Logarithmic volume scaling
+                volume_factor = unified_math.unified_math.log(1 + data['volume']) / 10  # Logarithmic volume scaling
                 
                 composite_weight = (
                     data['weight'] * 
@@ -418,7 +419,7 @@ class MetaLayerGhostBridge:
             
             self.ghost_prices[symbol]['ghost_meta'] = {
                 'price': ghost_price,
-                'confidence': min(total_weight, 1.0),
+                'confidence': unified_math.min(total_weight, 1.0),
                 'contributing_exchanges': len(exchange_data),
                 'timestamp': time.time()
             }
@@ -443,7 +444,7 @@ class MetaLayerGhostBridge:
                     continue
                     
                 # Calculate deviation from ghost price
-                price_deviation = abs(data['price'] - ghost_price) / ghost_price
+                price_deviation = unified_math.abs(data['price'] - ghost_price) / ghost_price
                 
                 if price_deviation > self.sync_threshold:
                     # Determine if this is a buying or selling opportunity
@@ -500,12 +501,12 @@ class MetaLayerGhostBridge:
                             symbol=symbol,
                             buy_exchange=event['exchange'] if event['opportunity_type'] == 'buy' else other_exchange,
                             sell_exchange=other_exchange if event['opportunity_type'] == 'buy' else event['exchange'],
-                            buy_price=min(event['exchange_price'], other_data['price']),
-                            sell_price=max(event['exchange_price'], other_data['price']),
+                            buy_price=unified_math.min(event['exchange_price'], other_data['price']),
+                            sell_price=unified_math.max(event['exchange_price'], other_data['price']),
                             expected_profit_pct=net_profit_pct * 100,
-                            confidence=min(event['confidence'], other_data['weight']),
+                            confidence=unified_math.min(event['confidence'], other_data['weight']),
                             ghost_price=ghost_price,
-                            estimated_duration=max(event['estimated_correction_time'], 30),  # Min 30 seconds
+                            estimated_duration=unified_math.max(event['estimated_correction_time'], 30),  # Min 30 seconds
                             timestamp=time.time()
                         )
                         
@@ -528,7 +529,7 @@ class MetaLayerGhostBridge:
             base_weight = self.reliability_scores[exchange]
             
             # Volume weight (logarithmic scaling)
-            volume_weight = np.log(1 + volume) / 10
+            volume_weight = unified_math.unified_math.log(1 + volume) / 10
             
             # Combine factors
             composite_weight = base_weight * volume_weight * decay_factor * latency_penalty
@@ -543,7 +544,7 @@ class MetaLayerGhostBridge:
         """Update exchange reliability score based on data quality."""
         try:
             # Simple reliability scoring based on latency
-            latency_score = max(0, 1 - (latency_ms / 1000))
+            latency_score = unified_math.max(0, 1 - (latency_ms / 1000))
             
             # Update with exponential moving average
             current_score = self.reliability_scores[exchange]
@@ -561,11 +562,11 @@ class MetaLayerGhostBridge:
             # Simple estimation based on deviation magnitude
             # Larger deviations typically correct faster
             base_correction_time = 60.0  # 1 minute base
-            deviation_factor = min(price_deviation * 100, 10.0)  # Cap at 10x
+            deviation_factor = unified_math.min(price_deviation * 100, 10.0)  # Cap at 10x
             
             estimated_time = base_correction_time / (1 + deviation_factor)
             
-            return max(10.0, min(estimated_time, 300.0))  # Between 10s and 5min
+            return unified_math.max(10.0, unified_math.min(estimated_time, 300.0))  # Between 10s and 5min
             
         except Exception as e:
             logger.error(f"Error estimating correction time: {e}")

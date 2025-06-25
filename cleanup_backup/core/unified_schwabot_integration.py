@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Unified Schwabot Integration System
@@ -339,7 +340,7 @@ class UnifiedSchwabotIntegration:
             if self.entropy_api:
                 # Increase entropy threshold to reduce sensitivity
                 current_threshold = self.entropy_api.entropy_threshold
-                new_threshold = min(current_threshold + 0.1, 1.0)
+                new_threshold = unified_math.min(current_threshold + 0.1, 1.0)
                 
                 result = self.entropy_api._adjust_entropy_threshold(new_threshold)
                 logger.info(f"🔄 Adjusted entropy threshold: {result}")

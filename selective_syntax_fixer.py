@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Selective Syntax Fixer - Target Critical Files First.
 
@@ -201,24 +202,24 @@ class SelectiveSyntaxFixer:
             return False
             
         except Exception as e:
-            print(f"Error processing {file_path}: {e}")
+            safe_print(f"Error processing {file_path}: {e}")
             return False
     
     def fix_priority_files(self) -> None:
         """Fix priority files first."""
-        print("Fixing priority files...")
-        print("=" * 50)
+        safe_print("Fixing priority files...")
+        safe_print("=" * 50)
         
         for file_path in self.priority_files:
             if self.fix_file(file_path):
                 self.fix_stats['errors_fixed'] += 1
-                print(f"✅ Fixed: {file_path}")
+                safe_print(f"✅ Fixed: {file_path}")
             self.fix_stats['files_processed'] += 1
     
     def find_and_fix_stub_files(self) -> None:
         """Find and fix all stub files with the common pattern."""
-        print("\nFinding and fixing stub files...")
-        print("=" * 50)
+        safe_print("\nFinding and fixing stub files...")
+        safe_print("=" * 50)
         
         stub_pattern = '"""Stub main function."""."""'
         fixed_count = 0
@@ -236,18 +237,18 @@ class SelectiveSyntaxFixer:
                         
                         if stub_pattern in content:
                             if self.fix_file(file_path):
-                                print(f"✅ Fixed stub: {file_path}")
+                                safe_print(f"✅ Fixed stub: {file_path}")
                                 fixed_count += 1
                                 
                     except Exception as e:
-                        print(f"Error reading {file_path}: {e}")
+                        safe_print(f"Error reading {file_path}: {e}")
         
-        print(f"Fixed {fixed_count} stub files")
+        safe_print(f"Fixed {fixed_count} stub files")
     
     def run_selective_fix(self) -> None:
         """Run the selective fix process."""
-        print("Selective Syntax Fixer - Critical Files First")
-        print("=" * 60)
+        safe_print("Selective Syntax Fixer - Critical Files First")
+        safe_print("=" * 60)
         
         # Step 1: Fix priority files
         self.fix_priority_files()
@@ -256,13 +257,13 @@ class SelectiveSyntaxFixer:
         self.find_and_fix_stub_files()
         
         # Summary
-        print(f"\nSummary:")
-        print(f"  Files processed: {self.fix_stats['files_processed']}")
-        print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
-        print(f"  Unicode fixes: {self.fix_stats['unicode_fixes']}")
-        print(f"  Docstring fixes: {self.fix_stats['docstring_fixes']}")
-        print(f"  Syntax fixes: {self.fix_stats['syntax_fixes']}")
-        print("\nSelective syntax fixing completed!")
+        safe_print(f"\nSummary:")
+        safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
+        safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
+        safe_print(f"  Unicode fixes: {self.fix_stats['unicode_fixes']}")
+        safe_print(f"  Docstring fixes: {self.fix_stats['docstring_fixes']}")
+        safe_print(f"  Syntax fixes: {self.fix_stats['syntax_fixes']}")
+        safe_print("\nSelective syntax fixing completed!")
 
 
 def main():

@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Bit Phase Engine - Schwabot UROS v1.0
@@ -12,7 +26,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -213,10 +227,10 @@ class BitPhaseEngine:
                 mode_phases = [result[mode] for result in phase_results]
                 
                 analysis['phase_statistics'][mode] = {
-                    'mean': np.mean(mode_phases),
-                    'std': np.std(mode_phases),
-                    'min': np.min(mode_phases),
-                    'max': np.max(mode_phases),
+                    'mean': unified_math.unified_math.mean(mode_phases),
+                    'std': unified_math.unified_math.std(mode_phases),
+                    'min': unified_math.unified_math.min(mode_phases),
+                    'max': unified_math.unified_math.max(mode_phases),
                     'median': np.median(mode_phases)
                 }
                 
@@ -242,13 +256,13 @@ class BitPhaseEngine:
             
             # Check for trends
             diffs = np.diff(phases)
-            trend = np.mean(diffs)
+            trend = unified_math.unified_math.mean(diffs)
             
-            if abs(trend) > np.std(diffs) * 2:
+            if unified_math.abs(trend) > unified_math.unified_math.std(diffs) * 2:
                 patterns.append({
                     'type': 'trend',
                     'direction': 'increasing' if trend > 0 else 'decreasing',
-                    'strength': abs(trend) / np.std(diffs)
+                    'strength': unified_math.abs(trend) / unified_math.unified_math.std(diffs)
                 })
             
             # Check for cycles
@@ -266,14 +280,14 @@ class BitPhaseEngine:
                     patterns.append({
                         'type': 'cycle',
                         'periods': peaks[:3],  # Top 3 periods
-                        'strength': max(autocorr[peaks]) / autocorr[0]
+                        'strength': unified_math.max(autocorr[peaks]) / autocorr[0]
                     })
             
             confidence = len(patterns) / 2.0  # Simple confidence metric
             
             return {
                 'patterns': patterns,
-                'confidence': min(confidence, 1.0)
+                'confidence': unified_math.min(confidence, 1.0)
             }
             
         except Exception as e:
@@ -287,7 +301,7 @@ class BitPhaseEngine:
                 return 0.0
             
             # Create histogram
-            hist, _ = np.histogram(phases, bins=min(20, len(set(phases))))
+            hist, _ = np.histogram(phases, bins=unified_math.min(20, len(set(phases))))
             
             # Normalize
             hist = hist / np.sum(hist)
@@ -342,7 +356,7 @@ class BitPhaseEngine:
 
 def main():
     """Test function for Bit Phase Engine."""
-    print("🧮 Testing Bit Phase Engine...")
+    safe_print("🧮 Testing Bit Phase Engine...")
     
     engine = BitPhaseEngine()
     
@@ -350,11 +364,11 @@ def main():
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     
     # Test different modes
-    print(f"\nTesting hash: {test_hash[:16]}...")
+    safe_print(f"\nTesting hash: {test_hash[:16]}...")
     
     for mode in engine.supported_modes:
         phase = engine.resolve_bit_phase(test_hash, mode)
-        print(f"{mode}: {phase}")
+        safe_print(f"{mode}: {phase}")
     
     # Test optimal phase selection
     market_conditions = {
@@ -364,12 +378,12 @@ def main():
     }
     
     optimal_phase, optimal_mode = engine.get_optimal_phase(test_hash, market_conditions)
-    print(f"\nOptimal phase: {optimal_phase} (mode: {optimal_mode})")
+    safe_print(f"\nOptimal phase: {optimal_phase} (mode: {optimal_mode})")
     
     # Test pattern analysis
     hash_sequence = [test_hash] * 10  # Simple test
     analysis = engine.analyze_phase_patterns(hash_sequence)
-    print(f"\nPattern analysis: {len(analysis.get('phase_statistics', {}))} modes analyzed")
+    safe_print(f"\nPattern analysis: {len(analysis.get('phase_statistics', {}))} modes analyzed")
     
     return 0
 

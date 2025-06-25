@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 
 @dataclass
@@ -22,7 +23,7 @@ def build_packet(
 
     Implements equations (1)-(10) from design note §3.2:
     - Γ_hash = |h_now - h_prev| / 2^256
-    - μ_echo = mean(last 8 echo values)
+    - μ_echo = unified_math.mean(last 8 echo values)
     - ζ_final = μ * Γ (combined coefficient)
     - Θ_drift = drift * (1 - ζ) (drift compensation)
 
@@ -45,11 +46,11 @@ def build_packet(
     h_now, h_prev = hash_seq[-1], hash_seq[-2]
 
     # Γ_hash: normalized hash difference
-    gamma = abs(h_now - h_prev) / (2**256)
+    gamma = unified_math.abs(h_now - h_prev) / (2**256)
 
     # μ_echo: mean of last 8 echo values
     recent_echoes = echo_seq[-8:] if len(echo_seq) >= 8 else echo_seq
-    mu = float(np.mean(recent_echoes))
+    mu = float(unified_math.unified_math.mean(recent_echoes))
 
     # ζ_final: combined coefficient
     zeta = mu * gamma

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """phantom_profit_tracker – thin wrapper around ghost_profit_tracker.
 
@@ -6,7 +8,6 @@ delegate to :pymod:`core.ghost_profit_tracker` so there is a single source of
 truth.
 """
 
-from __future__ import annotations
 
 from .ghost_profit_tracker import profit_summary as _profit_summary
 from .ghost_profit_tracker import (

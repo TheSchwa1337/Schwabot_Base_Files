@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost swap vector – trade simulation projection.
 
@@ -16,11 +19,10 @@ or fancy broadcasting.  All arrays must have the same shape so we avoid silent
 numpy broadcasting errors.
 """
 
-from __future__ import annotations
 
 from typing import Final
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["ghost_swap_vector"]
 
@@ -33,7 +35,7 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
     """Vectorised logistic function 1 / (1 + exp(-k·x))."""
-    return 1.0 / (1.0 + np.exp(-k * x))
+    return 1.0 / (1.0 + unified_math.exp(-k * x))
 
 
 def ghost_swap_vector(

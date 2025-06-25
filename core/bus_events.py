@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Bus Events - Core Event Bus System for Schwabot
@@ -92,9 +105,9 @@ if __name__ == "__main__":
     bus = EventBus()
 
     def print_trade(event: TradeEvent):
-        print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
+        safe_print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
 
     bus.subscribe("trade", print_trade)
     trade_event = TradeEvent(event_type="trade", trade_id="T123", symbol="BTCUSD", price=45000.0, volume=1.5, side="buy")
     bus.dispatch(trade_event)
-    print("Event history:", bus.get_event_history("trade"))
+    safe_print("Event history:", bus.get_event_history("trade"))

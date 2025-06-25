@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
 Bus Core - Central Communication and Routing Layer for Schwabot
@@ -82,8 +83,8 @@ class BusCore:
 if __name__ == "__main__":
     bus = BusCore()
     def print_message(msg: BusMessage):
-        print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
+        safe_print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
     bus.register_route("trade", print_message)
     msg = BusMessage(message_type="trade", source="engine", destination="logger", payload={"trade_id": "T123", "amount": 1.5})
     bus.send(msg)
-    print("Message history:", bus.get_message_history("trade"))
+    safe_print("Message history:", bus.get_message_history("trade"))

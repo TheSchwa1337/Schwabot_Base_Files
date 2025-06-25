@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Phantom entry logic – compute entry probability Pₑ.
 
@@ -8,12 +11,11 @@ Formula implemented:
 The summation is a dot-product between *zeta* and *tau* vectors (same length).
 """
 
-from __future__ import annotations
 
-import math
+from core.unified_math_system import unified_math
 from typing import Sequence, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = ["phantom_entry_probability"]
 
@@ -43,12 +45,12 @@ def phantom_entry_probability(
         raise ValueError("alpha_vec and phi_vec must share shape")
 
     # Core activation term
-    activation = math.tanh(float(np.dot(alpha, phi)))
-    base_prob = activation * math.exp(-lambda_entry * t)
+    activation = math.tanh(float(unified_math.unified_math.dot_product(alpha, phi)))
+    base_prob = activation * unified_math.exp(-lambda_entry * t)
 
     # Validation gates
     in_band = price_now <= profit_band[0] or price_now >= profit_band[1]
     if zeta_final <= 0.0 or mu_echo < mu_threshold or not in_band:
         return 0.0
 
-    return max(0.0, min(1.0, base_prob))
+    return unified_math.max(0.0, unified_math.min(1.0, base_prob))

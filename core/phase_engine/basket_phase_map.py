@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Basket Phase Map - Trading Phase and Market Condition Mapping for Schwabot
@@ -215,16 +228,16 @@ def main() -> None:
     
     # Get current configuration
     config = phase_map.get_current_config()
-    print(f"Current config: {config.allocation if config else 'None'}")
+    safe_print(f"Current config: {config.allocation if config else 'None'}")
     
     # Predict next phase
     market_data = {"volume_increase": True, "price_momentum": "positive"}
     predictions = phase_map.predict_next_phase(market_data)
-    print(f"Next phase predictions: {predictions}")
+    safe_print(f"Next phase predictions: {predictions}")
     
     # Get statistics
     stats = phase_map.get_phase_statistics()
-    print(f"Phase statistics: {stats}")
+    safe_print(f"Phase statistics: {stats}")
 
 if __name__ == "__main__":
     main()

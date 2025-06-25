@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Mathematical Integration Validator - Schwabot UROS v1.0
@@ -14,7 +28,7 @@ Mathematical Pipeline:
 import json
 import time
 import logging
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -62,7 +76,7 @@ class MathematicalIntegrationValidator:
     1. Bit Phase Resolution (φ₄, φ₈, φ₄₂)
     2. Matrix Basket Tensor Algebra (Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ)
     3. Profit Routing Differential Calculus (dP/dt)
-    4. Entropy Compensation and Drift Dynamics (E(t) = log(V + 1) / (1 + δ))
+    4. Entropy Compensation and Drift Dynamics (E(t) = unified_math.log(V + 1) / (1 + δ))
     5. Hash Memory Vector Encoding (H(t) = SHA256(P_t || ΔP || φ_t))
     """
     
@@ -119,7 +133,7 @@ class MathematicalIntegrationValidator:
             success = (
                 bit_engine_result is not None and
                 tensor_result is not None and
-                abs(bit_result.cycle_score - tensor_result.tensor_score) < 10.0
+                unified_math.abs(bit_result.cycle_score - tensor_result.tensor_score) < 10.0
             )
             
             test_results.append(IntegrationTestResult(
@@ -316,7 +330,7 @@ class MathematicalIntegrationValidator:
             expected_rate = (P_t - P_t_minus_1) / delta_t
             
             calc_result = self.tensor_algebra.calculate_profit_routing(P_t, P_t_minus_1, delta_t)
-            success = abs(calc_result.profit_rate - expected_rate) < 1e-6
+            success = unified_math.abs(calc_result.profit_rate - expected_rate) < 1e-6
             
             test_results.append(IntegrationTestResult(
                 test_name="Differential Calculus Validation",
@@ -379,13 +393,13 @@ class MathematicalIntegrationValidator:
             
             # Test 2: Entropy gate formula validation
             test_start = time.time()
-            # Test E(t) = log(V + 1) / (1 + δ)
+            # Test E(t) = unified_math.log(V + 1) / (1 + δ)
             V = 1000.0
             delta = 0.1
-            expected_gate = np.log(V + 1) / (1 + delta)
+            expected_gate = unified_math.unified_math.log(V + 1) / (1 + delta)
             
             calc_result = self.tensor_algebra.calculate_entropy_compensation(V, delta)
-            success = abs(calc_result.entropy_gate - expected_gate) < 1e-6
+            success = unified_math.abs(calc_result.entropy_gate - expected_gate) < 1e-6
             
             test_results.append(IntegrationTestResult(
                 test_name="Entropy Gate Formula Validation",
@@ -650,7 +664,7 @@ class MathematicalIntegrationValidator:
 
     def run_complete_validation(self) -> Dict[str, Any]:
         """Run complete mathematical validation."""
-        print("🧮 Running Complete Mathematical Integration Validation...")
+        safe_print("🧮 Running Complete Mathematical Integration Validation...")
         
         # Run all pipeline validations
         pipelines = [
@@ -674,18 +688,18 @@ class MathematicalIntegrationValidator:
         overall_success = all(p.all_tests_passed for p in pipelines)
         
         # Print results
-        print(f"\n📊 Validation Results:")
-        print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
-        print(f"  Total Tests: {total_tests}")
-        print(f"  Passed: {total_passed}")
-        print(f"  Failed: {total_failed}")
-        print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
-        print(f"  Total Execution Time: {total_time:.2f}s")
+        safe_print(f"\n📊 Validation Results:")
+        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"  Total Tests: {total_tests}")
+        safe_print(f"  Passed: {total_passed}")
+        safe_print(f"  Failed: {total_failed}")
+        safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
+        safe_print(f"  Total Execution Time: {total_time:.2f}s")
         
-        print(f"\n📋 Pipeline Results:")
+        safe_print(f"\n📋 Pipeline Results:")
         for pipeline in pipelines:
             status = "✅ PASSED" if pipeline.all_tests_passed else "❌ FAILED"
-            print(f"  {pipeline.pipeline_name}: {status} ({pipeline.passed_tests}/{pipeline.total_tests})")
+            safe_print(f"  {pipeline.pipeline_name}: {status} ({pipeline.passed_tests}/{pipeline.total_tests})")
         
         # Return comprehensive results
         return {
@@ -734,8 +748,8 @@ class MathematicalIntegrationValidator:
 
 def main():
     """Main function for mathematical integration validation."""
-    print("🧮 Mathematical Integration Validator - Schwabot UROS v1.0")
-    print("=" * 60)
+    safe_print("🧮 Mathematical Integration Validator - Schwabot UROS v1.0")
+    safe_print("=" * 60)
     
     # Initialize validator
     validator = MathematicalIntegrationValidator()

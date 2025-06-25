@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Test Registry - Central Test Management for Schwabot.
 
@@ -684,25 +685,25 @@ def validate_tests() -> Dict[str, Any]:
 
 def print_test_results(results: Dict[str, Any]) -> None:
     """Print test results in a formatted way."""
-    print("\n" + "="*80)
-    print("🧪 SCHWABOT TEST REGISTRY RESULTS")
-    print("="*80)
+    safe_print("\n" + "="*80)
+    safe_print("🧪 SCHWABOT TEST REGISTRY RESULTS")
+    safe_print("="*80)
     
-    print(f"Test Mode: {results.get('mode', 'unknown')}")
-    print(f"Overall Success: {'✅ PASS' if results.get('success', False) else '❌ FAIL'}")
-    print(f"Execution Time: {results.get('execution_time', 0.0):.3f}s")
-    print(f"Total Errors: {results.get('total_errors', 0)}")
-    print(f"Tests Run: {results.get('tests_run', 0)}")
-    print(f"Tests Passed: {results.get('tests_passed', 0)}")
-    print(f"Tests Failed: {results.get('tests_failed', 0)}")
+    safe_print(f"Test Mode: {results.get('mode', 'unknown')}")
+    safe_print(f"Overall Success: {'✅ PASS' if results.get('success', False) else '❌ FAIL'}")
+    safe_print(f"Execution Time: {results.get('execution_time', 0.0):.3f}s")
+    safe_print(f"Total Errors: {results.get('total_errors', 0)}")
+    safe_print(f"Tests Run: {results.get('tests_run', 0)}")
+    safe_print(f"Tests Passed: {results.get('tests_passed', 0)}")
+    safe_print(f"Tests Failed: {results.get('tests_failed', 0)}")
     
     if 'results' in results:
-        print("\nIndividual Test Results:")
+        safe_print("\nIndividual Test Results:")
         for test_name, test_result in results['results'].items():
             status = "✅ PASS" if test_result.success else "❌ FAIL"
-            print(f"  {test_name}: {status} ({test_result.execution_time:.3f}s, {test_result.total_errors} errors)")
+            safe_print(f"  {test_name}: {status} ({test_result.execution_time:.3f}s, {test_result.total_errors} errors)")
     
-    print("="*80)
+    safe_print("="*80)
 
 
 if __name__ == "__main__":
@@ -727,41 +728,41 @@ if __name__ == "__main__":
             print_test_results(results)
         elif command == 'list':
             tests = list_tests()
-            print("\nAvailable Tests:")
+            safe_print("\nAvailable Tests:")
             for test_name, test_info in tests['tests'].items():
                 critical = "🔴" if test_info['critical'] else "🟢"
-                print(f"  {critical} {test_name}: {test_info['description']}")
+                safe_print(f"  {critical} {test_name}: {test_info['description']}")
         elif command == 'stats':
             stats = get_test_stats()
-            print(f"\nTest Statistics:")
-            print(f"  Total Tests: {stats['total_tests']}")
-            print(f"  Critical Tests: {stats['critical_tests']}")
-            print(f"  Categories: {stats['test_categories']}")
+            safe_print(f"\nTest Statistics:")
+            safe_print(f"  Total Tests: {stats['total_tests']}")
+            safe_print(f"  Critical Tests: {stats['critical_tests']}")
+            safe_print(f"  Categories: {stats['test_categories']}")
         elif command == 'validate':
             validation = validate_tests()
-            print(f"\nTest Validation: {'✅ PASS' if validation['success'] else '❌ FAIL'}")
+            safe_print(f"\nTest Validation: {'✅ PASS' if validation['success'] else '❌ FAIL'}")
             if validation['errors']:
-                print("Errors:")
+                safe_print("Errors:")
                 for error in validation['errors']:
-                    print(f"  ❌ {error}")
+                    safe_print(f"  ❌ {error}")
             if validation['warnings']:
-                print("Warnings:")
+                safe_print("Warnings:")
                 for warning in validation['warnings']:
-                    print(f"  ⚠️ {warning}")
+                    safe_print(f"  ⚠️ {warning}")
         elif command in ['profit_vector_calibration', 'matrix_mapping_validation', 
                         'entry_exit_sequence_integrity', 'legacy_backlog_hydrator',
                         'sfs_trigger_positioning', 'fallback_trade_controller',
                         'tick_hold_logic', 'api_price_entry_feedback', 'trade_chain_timeline_replay']:
             result = run_specific_test(command)
-            print(f"\nTest Result for {command}:")
-            print(f"  Success: {'✅ PASS' if result.success else '❌ FAIL'}")
-            print(f"  Execution Time: {result.execution_time:.3f}s")
-            print(f"  Errors: {result.total_errors}")
+            safe_print(f"\nTest Result for {command}:")
+            safe_print(f"  Success: {'✅ PASS' if result.success else '❌ FAIL'}")
+            safe_print(f"  Execution Time: {result.execution_time:.3f}s")
+            safe_print(f"  Errors: {result.total_errors}")
             if result.error_message:
-                print(f"  Error: {result.error_message}")
+                safe_print(f"  Error: {result.error_message}")
         else:
-            print(f"Unknown command: {command}")
-            print("Available commands: all, quick, backtest, list, stats, validate, or specific test name")
+            safe_print(f"Unknown command: {command}")
+            safe_print("Available commands: all, quick, backtest, list, stats, validate, or specific test name")
     else:
         # Default: run comprehensive test
         results = run_all_tests()

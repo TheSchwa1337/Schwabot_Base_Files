@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Enhanced Fitness Oracle – minimal functional implementation.
 
@@ -17,7 +21,6 @@ full fractal/machine-learning analysis you may add later.  It provides:
 Replace / extend the heuristic logic with your production-grade models when
 ready; the public surface should remain stable.
 """
-from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
@@ -27,7 +30,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 # ---------------------------------------------------------------------------
 # Logging setup – honour parent log-level but stay silent by default
@@ -120,9 +123,9 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         snapshot = {
             "timestamp": market_data.get("timestamp", datetime.utcnow()),
             "mean_price": float(price_series.mean()) if price_series.size else None,
-            "price_std": float(price_series.std(ddof=1)) if price_series.size else None,
+            "price_std": float(price_series.unified_math.std(ddof=1)) if price_series.size else None,
             "mean_volume": float(volume_series.mean()) if volume_series.size else None,
-            "volume_std": float(volume_series.std(ddof=1)) if volume_series.size else None,
+            "volume_std": float(volume_series.unified_math.std(ddof=1)) if volume_series.size else None,
             "last_price": market_data.get("price"),
             "last_volume": market_data.get("volume"),
         }
@@ -157,7 +160,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
             z_score = 0.0
 
         overall_fitness = float(np.tanh(z_score))  # Map to (-1, 1)
-        confidence = float(abs(overall_fitness))
+        confidence = float(unified_math.abs(overall_fitness))
 
         # Map fitness to discrete action
         if overall_fitness > 0.7:
@@ -171,7 +174,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         else:
             action = "HOLD"
 
-        position_size = max(0.0, confidence) * 1.0  # Placeholder sizing logic
+        position_size = unified_math.max(0.0, confidence) * 1.0  # Placeholder sizing logic
 
         fitness = UnifiedFitnessScore(
             timestamp=datetime.utcnow(),
@@ -214,7 +217,7 @@ def _demo() -> None:  # pragma: no cover – manual smoke-test
 
     snapshot = asyncio.run(oracle.capture_market_snapshot(dummy_market))
     fitness = oracle.calculate_unified_fitness(snapshot)
-    print("UnifiedFitnessScore →", fitness)
+    safe_print("UnifiedFitnessScore →", fitness)
 
 
 if __name__ == "__main__":  # pragma: no cover

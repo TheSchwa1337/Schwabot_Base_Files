@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """BTC vector aggregator – volume-weighted price analysis and FFT filtering.
 
@@ -11,11 +14,10 @@ This module aggregates BTC price movements with volume weighting and applies
 spectral filtering for enhanced signal quality.
 """
 
-from __future__ import annotations
 
 from typing import Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "btc_vector",
@@ -128,7 +130,7 @@ def btc_spectral_aggregate(
     freqs = np.fft.fftfreq(n)
 
     # Create Gaussian filter centered at peak_frequency
-    filter_mask = np.exp(-((freqs - peak_frequency) ** 2) / (2 * filter_width**2))
+    filter_mask = unified_math.exp(-((freqs - peak_frequency) ** 2) / (2 * filter_width**2))
 
     # Apply filter
     filtered_fft = xi_fft * filter_mask

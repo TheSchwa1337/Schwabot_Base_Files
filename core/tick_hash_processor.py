@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Hash Processor - Hash-Based Tick Analysis & Pattern Detection.
 
@@ -5,7 +21,7 @@ This module processes tick-based hash signatures for pattern recognition,
 frequency analysis, and entropy-based anomaly detection in real-time trading.
 
 Mathematical Foundation:
-- Tick variance entropy: E_tick = -Σ(p_i * log(p_i))
+- Tick variance entropy: E_tick = -Σ(p_i * unified_math.log(p_i))
 - Levenshtein drift correction: δ_hash = L(h_1, h_2) * e^(-γt)
 - Recursive trigger gate: ψ_tick = Θ(Δ_volume) * χ(η_momentum)
 - Hash frequency analysis: f_hash = FFT(hash_sequence)
@@ -13,7 +29,6 @@ Mathematical Foundation:
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 import hashlib
 import logging
@@ -22,7 +37,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +143,7 @@ class TickHashProcessor:
         """Calculate tick variance entropy from hash sequence.
         
         Mathematical Formula:
-        E_tick = -Σ(p_i * log(p_i))
+        E_tick = -Σ(p_i * unified_math.log(p_i))
         
         Parameters
         ----------
@@ -166,7 +181,7 @@ class TickHashProcessor:
             # Normalize to [0, 1] range (max entropy for hex is log2(16) = 4)
             normalized_entropy = entropy / 4.0
             
-            return max(0.0, min(1.0, normalized_entropy))
+            return unified_math.max(0.0, unified_math.min(1.0, normalized_entropy))
             
         except Exception as e:
             logger.error(f"Error calculating tick variance entropy: {e}")
@@ -227,10 +242,10 @@ class TickHashProcessor:
             levenshtein_distance = matrix[len1][len2]
             
             # Apply time decay
-            drift_correction = levenshtein_distance * np.exp(-self.drift_decay_rate * time_delta)
+            drift_correction = levenshtein_distance * unified_math.exp(-self.drift_decay_rate * time_delta)
             
             # Normalize to reasonable range
-            max_distance = max(len1, len2)
+            max_distance = unified_math.max(len1, len2)
             if max_distance > 0:
                 drift_correction = drift_correction / max_distance
             
@@ -267,7 +282,7 @@ class TickHashProcessor:
             theta_volume = 1.0 if volume_delta > self.volume_threshold else 0.0
             
             # Chi function for momentum (sigmoid-like)
-            chi_momentum = 1.0 / (1.0 + np.exp(-5 * (momentum_eta - self.momentum_threshold)))
+            chi_momentum = 1.0 / (1.0 + unified_math.exp(-5 * (momentum_eta - self.momentum_threshold)))
             
             # Gate trigger logic
             gate_value = theta_volume * chi_momentum
@@ -344,7 +359,7 @@ class TickHashProcessor:
             recurring_sequences = []
             pattern_scores = []
             
-            for length in range(self.min_pattern_length, min(self.max_pattern_length, len(recent_hashes))):
+            for length in range(self.min_pattern_length, unified_math.min(self.max_pattern_length, len(recent_hashes))):
                 for start in range(len(recent_hashes) - length + 1):
                     pattern = ''.join(recent_hashes[start:start + length])
                     
@@ -362,7 +377,7 @@ class TickHashProcessor:
             
             # Calculate overall pattern strength
             if pattern_scores:
-                overall_pattern_strength = max(pattern_scores)
+                overall_pattern_strength = unified_math.max(pattern_scores)
             else:
                 overall_pattern_strength = 0.0
             
@@ -484,8 +499,8 @@ class TickHashProcessor:
         return {
             "hash_history_size": len(self.hash_history),
             "unique_hashes": len(self.frequency_map),
-            "most_frequent_hash": max(self.frequency_map.items(), key=lambda x: x[1])[0] if self.frequency_map else None,
-            "max_frequency": max(self.frequency_map.values()) if self.frequency_map else 0,
+            "most_frequent_hash": unified_math.max(self.frequency_map.items(), key=lambda x: x[1])[0] if self.frequency_map else None,
+            "max_frequency": unified_math.max(self.frequency_map.values()) if self.frequency_map else 0,
             "entropy_window": self.entropy_window,
             "pattern_cache_size": len(self.pattern_cache),
         }
@@ -493,8 +508,8 @@ class TickHashProcessor:
 
 def main() -> None:
     """Demo function for testing tick hash processor."""
-    print("Tick Hash Processor Demo")
-    print("=" * 30)
+    safe_print("Tick Hash Processor Demo")
+    safe_print("=" * 30)
     
     processor = TickHashProcessor()
     
@@ -508,40 +523,40 @@ def main() -> None:
         (50200, 3.2, time.time() + 5),
     ]
     
-    print("Generating tick hashes:")
+    safe_print("Generating tick hashes:")
     for price, volume, timestamp in test_data:
         tick_hash = processor.generate_tick_hash(price, volume, timestamp)
-        print(f"  Price: ${price:,.0f}, Volume: {volume:.1f} -> Hash: {tick_hash}")
+        safe_print(f"  Price: ${price:,.0f}, Volume: {volume:.1f} -> Hash: {tick_hash}")
     
     # Analyze latest hash
     if processor.hash_history:
         latest_hash = processor.hash_history[-1]['hash']
         
-        print(f"\nAnalyzing hash: {latest_hash}")
+        safe_print(f"\nAnalyzing hash: {latest_hash}")
         metrics = processor.analyze_tick_hash(
             latest_hash,
             volume_delta=0.3,
             momentum_eta=0.6
         )
         
-        print(f"  Frequency Score: {metrics.frequency_score:.3f}")
-        print(f"  Pattern Score: {metrics.pattern_score:.3f}")
-        print(f"  Entropy Level: {metrics.entropy_level:.3f}")
-        print(f"  Drift Correction: {metrics.drift_correction:.3f}")
-        print(f"  Trigger Gate: {metrics.trigger_gate_status}")
-        print(f"  Confidence Level: {metrics.confidence_level:.3f}")
+        safe_print(f"  Frequency Score: {metrics.frequency_score:.3f}")
+        safe_print(f"  Pattern Score: {metrics.pattern_score:.3f}")
+        safe_print(f"  Entropy Level: {metrics.entropy_level:.3f}")
+        safe_print(f"  Drift Correction: {metrics.drift_correction:.3f}")
+        safe_print(f"  Trigger Gate: {metrics.trigger_gate_status}")
+        safe_print(f"  Confidence Level: {metrics.confidence_level:.3f}")
     
     # Pattern detection
-    print(f"\nPattern Detection:")
+    safe_print(f"\nPattern Detection:")
     pattern_analysis = processor.detect_hash_patterns()
-    print(f"  Pattern Strength: {pattern_analysis.pattern_strength:.3f}")
-    print(f"  Recurring Sequences: {len(pattern_analysis.recurring_sequences)}")
-    print(f"  Anomaly Score: {pattern_analysis.anomaly_score:.3f}")
-    print(f"  Stability Index: {pattern_analysis.stability_index:.3f}")
+    safe_print(f"  Pattern Strength: {pattern_analysis.pattern_strength:.3f}")
+    safe_print(f"  Recurring Sequences: {len(pattern_analysis.recurring_sequences)}")
+    safe_print(f"  Anomaly Score: {pattern_analysis.anomaly_score:.3f}")
+    safe_print(f"  Stability Index: {pattern_analysis.stability_index:.3f}")
     
     # Processor summary
     summary = processor.get_processor_summary()
-    print(f"\nProcessor Summary: {summary}")
+    safe_print(f"\nProcessor Summary: {summary}")
 
 
 if __name__ == "__main__":

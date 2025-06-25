@@ -1,16 +1,24 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
-AI Command Sequencer - Recursive Memory Tracking System.
+AI Command Sequencer - Ghost Hash Resonance Driver
+==================================================
 
-This module logs, tags, timestamps, and sequences all AI-originating commands
-for Schwabot's recursive execution system. It provides the foundation for
-memory-based learning and command validation.
-
-Mathematical Foundation:
-- Command Hash: H = SHA256(agent + domain + payload + timestamp)
-- Memory Key: MK = f(agent, hash, tick, α, matrix_id)
-- Drift Vector: Δt_drift = T_executed - T_expected
-- Recursive Trust: R_n = λ·R_{n-1} + (1-λ)·α_n
+Drives sequence of trade commands based on ghost hash resonance.
+Provides intelligent command sequencing for the Schwabot trading system.
 """
 
 import asyncio
@@ -23,7 +31,7 @@ from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 
 # Import centralized CLI handler
 try:
@@ -53,7 +61,7 @@ try:
     GPT_LAYER_AVAILABLE = True
 except ImportError:
     GPT_LAYER_AVAILABLE = False
-    safe_print("⚠️ Core modules not available")
+    safe_safe_print("⚠️ Core modules not available")
 
 logger = logging.getLogger(__name__)
 
@@ -79,610 +87,547 @@ class DriftSeverity(Enum):
 
 @dataclass
 class CommandSequence:
-    """Command sequence tracking structure."""
+    """Represents a sequence of AI commands."""
     sequence_id: str
-    command_id: str
-    agent_type: str
-    domain: str
-    hash_signature: str
-    memory_key: str
-    tick: int
+    commands: List[str]
+    hash_input: str
+    confidence_score: float
     timestamp: datetime
-    status: CommandStatus
-    drift_magnitude: float = 0.0
-    drift_severity: DriftSeverity = DriftSeverity.NONE
-    alpha_score: float = 0.0
-    prophet_alignment: float = 0.0
-    execution_time: float = 0.0
-    profit_delta: float = 0.0
-    matrix_id: Optional[str] = None
-    lantern_triggered: bool = False
-    fault_detected: bool = False
+    execution_status: str = "pending"
+    results: List[Dict[str, Any]] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def __post_init__(self):
-        """Post-initialization processing."""
-        if not self.metadata:
-            self.metadata = {}
 
 
 @dataclass
-class AgentPerformance:
-    """Agent performance tracking."""
-    agent_type: str
-    total_commands: int = 0
-    successful_commands: int = 0
-    failed_commands: int = 0
-    average_alpha_score: float = 0.0
-    average_execution_time: float = 0.0
-    trust_score: float = 0.7
-    last_command_time: Optional[datetime] = None
-    performance_history: List[Dict[str, Any]] = field(default_factory=list)
-    
-    def __post_init__(self):
-        """Post-initialization processing."""
-        if not self.performance_history:
-            self.performance_history = []
+class HashResonance:
+    """Represents hash resonance data."""
+    hash_value: str
+    resonance_strength: float
+    frequency: float
+    phase: float
+    timestamp: datetime
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class AICommandSequencer:
     """
-    AI Command Sequencer - Recursive Memory Tracking System.
+    AI Command Sequencer for Ghost Hash Resonance.
     
-    This class manages the logging, sequencing, and memory tracking of all
-    AI-originating commands in Schwabot's recursive execution system.
+    This sequencer analyzes hash inputs and generates intelligent command
+    sequences based on ghost resonance patterns and historical performance.
     """
     
-    def __init__(self, log_file: str = "memory_stack/command_feedback_log.json"):
+    def __init__(self):
         """Initialize the AI command sequencer."""
-        self.log_file = log_file
-        self.logger = logging.getLogger("ai_command_sequencer")
-        self.logger.setLevel(logging.INFO)
-        
-        # Command tracking
-        self.command_sequences: Dict[str, CommandSequence] = {}
-        self.agent_performance: Dict[str, AgentPerformance] = {}
-        self.sequence_history: List[CommandSequence] = []
-        
-        # Configuration parameters
-        self.max_history_size = 10000
-        self.drift_thresholds = {
-            DriftSeverity.NONE: 0.0,
-            DriftSeverity.MINOR: 1.0,
-            DriftSeverity.MODERATE: 3.0,
-            DriftSeverity.MAJOR: 5.0,
-            DriftSeverity.CRITICAL: 10.0
+        self.sequences: List[CommandSequence] = []
+        self.hash_resonances: List[HashResonance] = []
+        self.command_templates: Dict[str, List[str]] = {
+            "entry": ["analyze_market", "calculate_risk", "execute_entry"],
+            "exit": ["monitor_position", "calculate_profit", "execute_exit"],
+            "adjust": ["reassess_market", "recalculate_risk", "adjust_position"],
+            "hold": ["monitor_market", "update_analysis", "maintain_position"]
         }
-        self.trust_decay_factor = 0.95
-        self.alpha_weight = 0.3
+        
+        # Resonance parameters
+        self.resonance_threshold = 0.7
+        self.sequence_length_range = (3, 8)
+        self.confidence_decay = 0.95
         
         # Performance tracking
-        self.total_commands_processed = 0
-        self.total_drift_detected = 0
-        self.average_sequence_time = 0.0
+        self.sequence_success_rate = 0.0
+        self.total_sequences = 0
+        self.successful_sequences = 0
         
-        # Initialize agent performance tracking
-        self._initialize_agent_performance()
+        # CLI compatibility
+        self.cli_handler = WindowsCliCompatibilityHandler()
         
-        # Load existing log
-        self._load_command_log()
-        
-        safe_print("🧠 AI Command Sequencer initialized - Memory tracking active")
+        logger.info("AI Command Sequencer initialized")
     
-    def _initialize_agent_performance(self) -> None:
-        """Initialize performance tracking for all AI agents."""
-        for agent_type in ["gpt", "claude", "r1", "gemini", "schwabot"]:
-            self.agent_performance[agent_type] = AgentPerformance(agent_type=agent_type)
-    
-    def _load_command_log(self) -> None:
-        """Load existing command log from file."""
-        try:
-            if os.path.exists(self.log_file):
-                with open(self.log_file, 'r') as f:
-                    log_data = json.load(f)
-                
-                for entry in log_data.get('sequences', []):
-                    sequence = CommandSequence(
-                        sequence_id=entry['sequence_id'],
-                        command_id=entry['command_id'],
-                        agent_type=entry['agent_type'],
-                        domain=entry['domain'],
-                        hash_signature=entry['hash_signature'],
-                        memory_key=entry['memory_key'],
-                        tick=entry['tick'],
-                        timestamp=datetime.fromisoformat(entry['timestamp']),
-                        status=CommandStatus(entry['status']),
-                        drift_magnitude=entry.get('drift_magnitude', 0.0),
-                        drift_severity=DriftSeverity(entry.get('drift_severity', 'none')),
-                        alpha_score=entry.get('alpha_score', 0.0),
-                        prophet_alignment=entry.get('prophet_alignment', 0.0),
-                        execution_time=entry.get('execution_time', 0.0),
-                        profit_delta=entry.get('profit_delta', 0.0),
-                        matrix_id=entry.get('matrix_id'),
-                        lantern_triggered=entry.get('lantern_triggered', False),
-                        fault_detected=entry.get('fault_detected', False),
-                        metadata=entry.get('metadata', {})
-                    )
-                    self.command_sequences[sequence.sequence_id] = sequence
-                    self.sequence_history.append(sequence)
-                
-                safe_print(f"📊 Loaded {len(self.command_sequences)} command sequences")
-                
-        except Exception as e:
-            error_msg = safe_format_error(e, "load_command_log")
-            safe_print(f"⚠️ Failed to load command log: {error_msg}")
-    
-    def _save_command_log(self) -> None:
-        """Save command log to file."""
-        try:
-            os.makedirs(os.path.dirname(self.log_file), exist_ok=True)
-            
-            log_data = {
-                'sequences': [],
-                'last_updated': datetime.now().isoformat(),
-                'total_sequences': len(self.command_sequences),
-                'performance_metrics': {
-                    'total_commands_processed': self.total_commands_processed,
-                    'total_drift_detected': self.total_drift_detected,
-                    'average_sequence_time': self.average_sequence_time
-                }
-            }
-            
-            for sequence in self.sequence_history[-1000:]:  # Keep last 1000 sequences
-                sequence_data = asdict(sequence)
-                sequence_data['timestamp'] = sequence.timestamp.isoformat()
-                sequence_data['status'] = sequence.status.value
-                sequence_data['drift_severity'] = sequence.drift_severity.value
-                log_data['sequences'].append(sequence_data)
-            
-            with open(self.log_file, 'w') as f:
-                json.dump(log_data, f, indent=2)
-                
-        except Exception as e:
-            error_msg = safe_format_error(e, "save_command_log")
-            safe_print(f"⚠️ Failed to save command log: {error_msg}")
-    
-    async def sequence_command(
-        self,
-        command: AICommand,
-        tick: int,
-        prophet_curve_id: Optional[str] = None,
-        market_data: Optional[Dict[str, Any]] = None
-    ) -> CommandSequence:
+    def run(self, hash_input: str) -> List[str]:
         """
-        Sequence an AI command with full tracking and validation.
+        Run command sequence generation based on hash input.
         
         Args:
-            command: AI command to sequence
-            tick: Current tick number
-            prophet_curve_id: Optional Prophet curve ID for alignment
-            market_data: Optional market data for analysis
+            hash_input: Input hash string
             
         Returns:
-            CommandSequence object with full tracking data
+            List of commands to execute
         """
         try:
             start_time = time.time()
             
-            # Generate sequence ID
-            sequence_id = self._generate_sequence_id(command, tick)
+            # Analyze hash resonance
+            resonance = self._analyze_hash_resonance(hash_input)
             
-            # Generate memory key
-            memory_key = self._generate_memory_key(command, tick)
+            # Generate command sequence
+            commands = self._generate_command_sequence(hash_input, resonance)
             
-            # Calculate drift magnitude
-            drift_magnitude = self._calculate_drift_magnitude(command, tick)
-            drift_severity = self._determine_drift_severity(drift_magnitude)
+            # Validate sequence
+            if not self._validate_command_sequence(commands):
+                logger.warning("Generated sequence failed validation")
+                commands = self._generate_fallback_sequence(hash_input)
             
-            # Initialize alpha score
-            alpha_score = 0.0
-            prophet_alignment = 0.0
-            
-            # Create command sequence
+            # Create sequence record
             sequence = CommandSequence(
-                sequence_id=sequence_id,
-                command_id=command.command_id,
-                agent_type=command.agent_type.value,
-                domain=command.domain.value,
-                hash_signature=command.hash_signature,
-                memory_key=memory_key,
-                tick=tick,
-                timestamp=datetime.now(),
-                status=CommandStatus.RECEIVED,
-                drift_magnitude=drift_magnitude,
-                drift_severity=drift_severity,
-                alpha_score=alpha_score,
-                prophet_alignment=prophet_alignment,
-                metadata={
-                    'payload': command.payload,
-                    'context': command.context,
-                    'recursive_depth': command.recursive_depth,
-                    'parent_command_id': command.parent_command_id
-                }
+                sequence_id=self._generate_sequence_id(hash_input),
+                commands=commands,
+                hash_input=hash_input,
+                confidence_score=resonance.resonance_strength,
+                timestamp=datetime.now()
             )
             
-            # Store sequence
-            self.command_sequences[sequence_id] = sequence
-            self.sequence_history.append(sequence)
+            self.sequences.append(sequence)
             
-            # Update agent performance
-            self._update_agent_performance(command.agent_type.value, sequence)
-            
-            # Register in hash registry if available
-            if GPT_LAYER_AVAILABLE:
-                try:
-                    await register_hash_entry(
-                        hash_type="command",
-                        agent_type=command.agent_type.value,
-                        domain=command.domain.value,
-                        payload=command.payload,
-                        context=command.context,
-                        command_id=command.command_id,
-                        confidence_score=command.recursive_depth
-                    )
-                except Exception as e:
-                    safe_print(f"⚠️ Hash registry registration failed: {safe_format_error(e, 'hash_registry')}")
-            
-            # Calculate execution time
             execution_time = time.time() - start_time
-            sequence.execution_time = execution_time
+            logger.info(f"Generated sequence in {execution_time:.3f}s with confidence {resonance.resonance_strength:.3f}")
             
-            # Update performance metrics
-            self.total_commands_processed += 1
-            if drift_magnitude > 0:
-                self.total_drift_detected += 1
-            
-            # Save to log
-            self._save_command_log()
-            
-            safe_print(f"🧠 Command sequenced: {sequence_id} from {command.agent_type.value}")
-            return sequence
+            return commands
             
         except Exception as e:
-            error_msg = safe_format_error(e, "sequence_command")
-            safe_print(f"❌ Command sequencing failed: {error_msg}")
-            
-            # Return safe fallback sequence
-            return CommandSequence(
-                sequence_id=f"fallback_{int(time.time())}",
-                command_id=command.command_id,
-                agent_type=command.agent_type.value,
-                domain=command.domain.value,
-                hash_signature=command.hash_signature,
-                memory_key="fallback",
-                tick=tick,
-                timestamp=datetime.now(),
-                status=CommandStatus.FAILED,
-                metadata={'error': error_msg}
-            )
+            error_msg = safe_format_error(e, "AICommandSequencer.run")
+            logger.error(error_msg)
+            return self._generate_fallback_sequence(hash_input)
     
-    async def update_command_result(
-        self,
-        sequence_id: str,
-        response: CommandResponse,
-        profit_delta: float = 0.0,
-        prophet_curve_id: Optional[str] = None,
-        market_data: Optional[Dict[str, Any]] = None
-    ) -> bool:
+    def _analyze_hash_resonance(self, hash_input: str) -> HashResonance:
         """
-        Update command sequence with execution results.
+        Analyze hash resonance patterns.
         
         Args:
-            sequence_id: ID of the command sequence
-            response: Command execution response
-            profit_delta: Actual profit achieved
-            prophet_curve_id: Prophet curve ID for alpha calculation
-            market_data: Market data for analysis
+            hash_input: Input hash string
             
         Returns:
-            True if update successful
+            HashResonance object
         """
         try:
-            sequence = self.command_sequences.get(sequence_id)
+            # Convert hash to numeric values
+            hash_bytes = bytes.fromhex(hash_input[:16])
+            hash_array = np.frombuffer(hash_bytes, dtype=np.uint8)
+            
+            # Calculate resonance strength (entropy-based)
+            resonance_strength = self._calculate_resonance_strength(hash_array)
+            
+            # Calculate frequency (FFT-based)
+            frequency = self._calculate_resonance_frequency(hash_array)
+            
+            # Calculate phase
+            phase = self._calculate_resonance_phase(hash_array)
+            
+            resonance = HashResonance(
+                hash_value=hash_input,
+                resonance_strength=resonance_strength,
+                frequency=frequency,
+                phase=phase,
+                timestamp=datetime.now()
+            )
+            
+            self.hash_resonances.append(resonance)
+            return resonance
+            
+        except Exception as e:
+            logger.error(f"Hash resonance analysis failed: {e}")
+            return HashResonance(
+                hash_value=hash_input,
+                resonance_strength=0.5,
+                frequency=1.0,
+                phase=0.0,
+                timestamp=datetime.now()
+            )
+    
+    def _calculate_resonance_strength(self, hash_array: NDArray) -> float:
+        """Calculate resonance strength from hash array."""
+        try:
+            # Use entropy as resonance strength
+            unique_values = np.unique(hash_array)
+            if len(unique_values) == 1:
+                return 0.0
+            
+            # Calculate normalized entropy
+            entropy = -np.sum(np.bincount(hash_array) / len(hash_array) * 
+                            np.log2(np.bincount(hash_array) / len(hash_array) + 1e-10))
+            max_entropy = np.log2(len(unique_values))
+            
+            return float(entropy / max_entropy) if max_entropy > 0 else 0.0
+        except Exception:
+            return 0.5
+    
+    def _calculate_resonance_frequency(self, hash_array: NDArray) -> float:
+        """Calculate resonance frequency from hash array."""
+        try:
+            # Use FFT to find dominant frequency
+            fft_result = np.fft.fft(hash_array)
+            frequencies = np.abs(fft_result)
+            
+            # Find dominant frequency
+            dominant_freq_idx = np.argmax(frequencies[1:]) + 1
+            dominant_freq = dominant_freq_idx / len(hash_array)
+            
+            return float(dominant_freq)
+        except Exception:
+            return 1.0
+    
+    def _calculate_resonance_phase(self, hash_array: NDArray) -> float:
+        """Calculate resonance phase from hash array."""
+        try:
+            # Use circular statistics for phase
+            angles = 2 * np.pi * hash_array / 256
+            mean_angle = np.arctan2(np.mean(np.sin(angles)), np.mean(np.cos(angles)))
+            
+            # Normalize to [0, 2π]
+            phase = (mean_angle + 2 * np.pi) % (2 * np.pi)
+            return float(phase / (2 * np.pi))
+        except Exception:
+            return 0.0
+    
+    def _generate_command_sequence(self, hash_input: str, resonance: HashResonance) -> List[str]:
+        """
+        Generate command sequence based on hash resonance.
+        
+        Args:
+            hash_input: Input hash string
+            resonance: Hash resonance data
+            
+        Returns:
+            List of commands
+        """
+        try:
+            commands = []
+            
+            # Determine sequence type based on resonance
+            if resonance.resonance_strength > self.resonance_threshold:
+                # High resonance - aggressive sequence
+                sequence_type = "entry" if resonance.frequency > 0.5 else "adjust"
+            else:
+                # Low resonance - conservative sequence
+                sequence_type = "hold" if resonance.frequency < 0.3 else "exit"
+            
+            # Get base template
+            base_commands = self.command_templates.get(sequence_type, ["monitor_market"])
+            
+            # Customize sequence based on resonance parameters
+            commands.extend(self._customize_commands(base_commands, resonance))
+            
+            # Add resonance-specific commands
+            commands.extend(self._add_resonance_commands(resonance))
+            
+            # Limit sequence length
+            max_length = self.sequence_length_range[1]
+            if len(commands) > max_length:
+                commands = commands[:max_length]
+            
+            return commands
+            
+        except Exception as e:
+            logger.error(f"Command sequence generation failed: {e}")
+            return ["monitor_market", "log_status", "wait"]
+    
+    def _customize_commands(self, base_commands: List[str], resonance: HashResonance) -> List[str]:
+        """Customize base commands based on resonance."""
+        try:
+            customized = []
+            
+            for command in base_commands:
+                if resonance.resonance_strength > 0.8:
+                    # High confidence - add aggressive modifiers
+                    customized.append(f"{command}_aggressive")
+                elif resonance.resonance_strength < 0.3:
+                    # Low confidence - add conservative modifiers
+                    customized.append(f"{command}_conservative")
+                else:
+                    # Medium confidence - standard command
+                    customized.append(command)
+            
+            return customized
+        except Exception:
+            return base_commands
+    
+    def _add_resonance_commands(self, resonance: HashResonance) -> List[str]:
+        """Add resonance-specific commands."""
+        try:
+            commands = []
+            
+            # Add frequency-based commands
+            if resonance.frequency > 0.7:
+                commands.append("high_frequency_monitor")
+            elif resonance.frequency < 0.3:
+                commands.append("low_frequency_monitor")
+            
+            # Add phase-based commands
+            if resonance.phase > 0.7:
+                commands.append("late_phase_adjust")
+            elif resonance.phase < 0.3:
+                commands.append("early_phase_prepare")
+            
+            return commands
+        except Exception:
+            return []
+    
+    def _validate_command_sequence(self, sequence: List[str]) -> bool:
+        """
+        Validate generated command sequence.
+        
+        Args:
+            sequence: Command sequence to validate
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        try:
             if not sequence:
-                safe_print(f"⚠️ Sequence not found: {sequence_id}")
                 return False
             
-            # Update status
-            if response.success:
-                sequence.status = CommandStatus.COMPLETED
-            else:
-                sequence.status = CommandStatus.FAILED
+            # Check for required commands
+            required_commands = ["monitor", "analyze", "execute"]
+            has_required = any(any(req in cmd.lower() for req in required_commands) 
+                             for cmd in sequence)
             
-            # Update execution time
-            sequence.execution_time = response.execution_time
-            sequence.profit_delta = profit_delta
+            if not has_required:
+                return False
             
-            # Calculate alpha score if Prophet curve available
-            if prophet_curve_id and GPT_LAYER_AVAILABLE:
-                try:
-                    # Get expected profit from command context
-                    expected_profit = sequence.metadata.get('payload', {}).get('target_profit', 0.0)
-                    
-                    # Calculate alpha score
-                    alpha_score = compute_alpha_score(
-                        p_actual=profit_delta,
-                        p_expected=expected_profit,
-                        delta_t=sequence.execution_time,
-                        curve_id=prophet_curve_id
-                    )
-                    
-                    sequence.alpha_score = alpha_score.alpha_value
-                    
-                    # Analyze curve alignment if market data available
-                    if market_data:
-                        alignment = analyze_curve_alignment(
-                            curve_id=prophet_curve_id,
-                            current_price=market_data.get('price', 0.0),
-                            current_volume=market_data.get('volume', 0.0),
-                            current_time=datetime.now(),
-                            market_data=market_data
-                        )
-                        sequence.prophet_alignment = alignment.alignment_score
-                        
-                except Exception as e:
-                    safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
+            # Check for conflicting commands
+            conflicting_pairs = [
+                ("execute_entry", "execute_exit"),
+                ("aggressive", "conservative"),
+                ("high_frequency", "low_frequency")
+            ]
             
-            # Update hash registry status
-            if GPT_LAYER_AVAILABLE:
-                try:
-                    await update_hash_status(
-                        hash_id=sequence.hash_signature,
-                        status="completed" if response.success else "failed",
-                        result=response.result,
-                        error_message=response.error_message,
-                        execution_time=response.execution_time
-                    )
-                except Exception as e:
-                    safe_print(f"⚠️ Hash registry update failed: {safe_format_error(e, 'hash_update')}")
+            for cmd1, cmd2 in conflicting_pairs:
+                if any(cmd1 in cmd for cmd in sequence) and any(cmd2 in cmd for cmd in sequence):
+                    return False
             
-            # Update agent performance
-            self._update_agent_performance_with_result(sequence, response, profit_delta)
+            return True
             
-            # Save to log
-            self._save_command_log()
+        except Exception:
+            return False
+    
+    def _generate_fallback_sequence(self, hash_input: str) -> List[str]:
+        """Generate fallback sequence when main generation fails."""
+        try:
+            return ["monitor_market", "log_status", "wait", "retry_analysis"]
+        except Exception:
+            return ["monitor_market"]
+    
+    def _generate_sequence_id(self, hash_input: str) -> str:
+        """Generate unique sequence ID."""
+        try:
+            timestamp = datetime.now().isoformat()
+            hash_suffix = hash_input[:8]
+            return f"seq_{timestamp}_{hash_suffix}"
+        except Exception:
+            return f"seq_{int(time.time())}"
+    
+    def update_command_sequence_result(self, sequence_id: str, result: Dict[str, Any]) -> bool:
+        """
+        Update command sequence with execution result.
+        
+        Args:
+            sequence_id: Sequence ID to update
+            result: Execution result data
             
-            safe_print(f"✅ Command result updated: {sequence_id} - {'Success' if response.success else 'Failed'}")
+        Returns:
+            True if updated successfully
+        """
+        try:
+            # Find sequence
+            sequence = next((s for s in self.sequences if s.sequence_id == sequence_id), None)
+            if not sequence:
+                logger.warning(f"Sequence {sequence_id} not found")
+                return False
+            
+            # Update sequence
+            sequence.results.append(result)
+            sequence.execution_status = result.get("status", "unknown")
+            
+            # Update performance metrics
+            self.total_sequences += 1
+            if result.get("success", False):
+                self.successful_sequences += 1
+            
+            self.sequence_success_rate = self.successful_sequences / self.total_sequences
+            
+            logger.info(f"Updated sequence {sequence_id} with result: {result.get('status', 'unknown')}")
             return True
             
         except Exception as e:
-            error_msg = safe_format_error(e, "update_command_result")
-            safe_print(f"❌ Command result update failed: {error_msg}")
+            logger.error(f"Failed to update sequence result: {e}")
             return False
     
-    def _generate_sequence_id(self, command: AICommand, tick: int) -> str:
-        """Generate unique sequence ID."""
-        timestamp = int(time.time() * 1000000)
-        agent_code = command.agent_type.value.upper()
-        return f"SEQ_{agent_code}_{tick}_{timestamp}_{hash(command.payload)}"
-    
-    def _generate_memory_key(self, command: AICommand, tick: int) -> str:
-        """Generate memory key for command."""
-        # Format: AgentType + Domain + Tick + Hash
-        agent_code = command.agent_type.value.upper()
-        domain_code = command.domain.value.upper()
-        hash_suffix = command.hash_signature[:8]
-        return f"{agent_code}{domain_code}_{tick}_{hash_suffix}"
-    
-    def _calculate_drift_magnitude(self, command: AICommand, tick: int) -> float:
-        """Calculate drift magnitude from expected timing."""
+    def get_sequence_statistics(self) -> Dict[str, Any]:
+        """Get sequence execution statistics."""
         try:
-            # This would typically compare against expected tick timing
-            # For now, use a simple heuristic based on command complexity
-            complexity_factor = len(command.payload) * 0.1
-            base_drift = np.random.normal(0, 0.5)  # Simulated drift
-            return max(0.0, abs(base_drift + complexity_factor))
+            return {
+                "total_sequences": self.total_sequences,
+                "successful_sequences": self.successful_sequences,
+                "success_rate": self.sequence_success_rate,
+                "average_confidence": np.mean([s.confidence_score for s in self.sequences]) if self.sequences else 0.0,
+                "resonance_count": len(self.hash_resonances)
+            }
+        except Exception:
+            return {
+                "total_sequences": 0,
+                "successful_sequences": 0,
+                "success_rate": 0.0,
+                "average_confidence": 0.0,
+                "resonance_count": 0
+            }
+
+
+# Convenience functions
+def sequence_ai_command(hash_input: str) -> List[str]:
+    """Convenience function to sequence AI commands."""
+    sequencer = AICommandSequencer()
+    return sequencer.run(hash_input)
+
+
+def update_command_sequence_result(sequence_id: str, result: Dict[str, Any]) -> bool:
+    """Convenience function to update command sequence result."""
+    sequencer = AICommandSequencer()
+    return sequencer.update_command_sequence_result(sequence_id, result)
+
+
+if __name__ == "__main__":
+    # Test the AI command sequencer
+    import sys
+    import os
+    
+    # Add parent directory to path for imports
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+    
+    # Import safe print for Windows compatibility
+    try:
+        from core.utils.windows_cli_compatibility import safe_print
+    except ImportError:
+        try:
+            from utils.windows_cli_compatibility import safe_print
+        except ImportError:
+            def safe_print(message):
+                print(message)
+    
+    def main():
+        """Main function to test AI command sequencer and ensure proper initialization."""
+        try:
+            safe_print("🤖 Testing AI Command Sequencer")
+            safe_print("=" * 40)
+            
+            test_hashes = [
+                "a1b2c3d4e5f6789012345678901234567890abcdef",
+                "deadbeef1234567890abcdef1234567890abcdef12",
+                "f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0",
+            ]
+            
+            sequencer = AICommandSequencer()
+            safe_print(f"✅ Sequencer initialized with {len(sequencer.base_commands)} base commands")
+            
+            # Test hash resonance analysis
+            safe_print("\n🔍 Testing Hash Resonance Analysis:")
+            for i, hash_input in enumerate(test_hashes):
+                safe_print(f"\n📊 Testing hash {i+1}: {hash_input[:16]}...")
+                
+                # Test resonance analysis
+                resonance = sequencer._analyze_hash_resonance(hash_input)
+                safe_print(f"✅ Resonance Strength: {resonance.resonance_strength:.4f}")
+                safe_print(f"✅ Frequency: {resonance.frequency:.4f}")
+                safe_print(f"✅ Phase: {resonance.phase:.4f}")
+                
+                # Test command generation
+                commands = sequencer.run(hash_input)
+                safe_print(f"✅ Generated Commands: {commands}")
+                safe_print(f"✅ Command Count: {len(commands)}")
+                
+                # Test command validation
+                is_valid = sequencer._validate_command_sequence(commands)
+                safe_print(f"✅ Sequence Valid: {is_valid}")
+                
+                # Simulate result
+                result = {
+                    "status": "completed", 
+                    "success": True, 
+                    "execution_time": 0.1,
+                    "commands_executed": len(commands)
+                }
+                
+                # Update sequence result
+                if sequencer.sequences:
+                    update_success = sequencer.update_command_sequence_result(
+                        sequencer.sequences[-1].sequence_id, result
+                    )
+                    safe_print(f"✅ Result Update: {update_success}")
+            
+            # Test advanced features
+            safe_print("\n🔬 Testing Advanced Features:")
+            
+            # Test command customization
+            test_resonance = HashResonance(
+                hash_value="test_hash",
+                resonance_strength=0.8,
+                frequency=0.6,
+                phase=0.4,
+                timestamp=datetime.now()
+            )
+            
+            base_commands = ["monitor", "analyze", "execute"]
+            customized = sequencer._customize_commands(base_commands, test_resonance)
+            safe_print(f"✅ Customized Commands: {customized}")
+            
+            # Test resonance commands
+            resonance_commands = sequencer._add_resonance_commands(test_resonance)
+            safe_print(f"✅ Resonance Commands: {resonance_commands}")
+            
+            # Test fallback sequence
+            fallback = sequencer._generate_fallback_sequence("test_hash")
+            safe_print(f"✅ Fallback Sequence: {fallback}")
+            
+            # Test sequence ID generation
+            sequence_id = sequencer._generate_sequence_id("test_hash")
+            safe_print(f"✅ Sequence ID: {sequence_id}")
+            
+            # Test statistics
+            safe_print("\n📊 Testing Statistics:")
+            stats = sequencer.get_sequence_statistics()
+            safe_print(f"✅ Total Sequences: {stats['total_sequences']}")
+            safe_print(f"✅ Successful Sequences: {stats['successful_sequences']}")
+            safe_print(f"✅ Success Rate: {stats['success_rate']:.4f}")
+            safe_print(f"✅ Average Confidence: {stats['average_confidence']:.4f}")
+            safe_print(f"✅ Resonance Count: {stats['resonance_count']}")
+            
+            # Test convenience functions
+            safe_print("\n🎯 Testing Convenience Functions:")
+            
+            # Test sequence_ai_command
+            test_hash = "convenience_test_hash_1234567890abcdef"
+            convenience_commands = sequence_ai_command(test_hash)
+            safe_print(f"✅ Convenience Commands: {convenience_commands}")
+            
+            # Test update_command_sequence_result
+            test_result = {"status": "test", "success": True}
+            update_success = update_command_sequence_result("test_sequence_id", test_result)
+            safe_print(f"✅ Convenience Update: {update_success}")
+            
+            # Test error handling
+            safe_print("\n⚠️ Testing Error Handling:")
+            
+            # Test with empty hash
+            try:
+                empty_commands = sequencer.run("")
+                safe_print(f"✅ Empty Hash Handling: {len(empty_commands)} commands")
+            except Exception as e:
+                safe_print(f"⚠️ Empty hash error: {e}")
+            
+            # Test with invalid hash
+            try:
+                invalid_commands = sequencer.run("invalid_hash")
+                safe_print(f"✅ Invalid Hash Handling: {len(invalid_commands)} commands")
+            except Exception as e:
+                safe_print(f"⚠️ Invalid hash error: {e}")
+            
+            safe_print("\n🎉 AI Command Sequencer tests completed successfully!")
+            return True
             
         except Exception as e:
-            safe_print(f"⚠️ Drift calculation failed: {safe_format_error(e, 'drift_calculation')}")
-            return 0.0
+            safe_print(f"❌ AI Command Sequencer test failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
     
-    def _determine_drift_severity(self, drift_magnitude: float) -> DriftSeverity:
-        """Determine drift severity based on magnitude."""
-        for severity, threshold in sorted(self.drift_thresholds.items(), key=lambda x: x[1], reverse=True):
-            if drift_magnitude >= threshold:
-                return severity
-        return DriftSeverity.NONE
-    
-    def _update_agent_performance(self, agent_type: str, sequence: CommandSequence) -> None:
-        """Update agent performance tracking."""
-        if agent_type not in self.agent_performance:
-            self.agent_performance[agent_type] = AgentPerformance(agent_type=agent_type)
-        
-        performance = self.agent_performance[agent_type]
-        performance.total_commands += 1
-        performance.last_command_time = sequence.timestamp
-        
-        # Update performance history
-        performance.performance_history.append({
-            'timestamp': sequence.timestamp.isoformat(),
-            'sequence_id': sequence.sequence_id,
-            'drift_magnitude': sequence.drift_magnitude,
-            'status': sequence.status.value
-        })
-        
-        # Keep history manageable
-        if len(performance.performance_history) > 100:
-            performance.performance_history = performance.performance_history[-50:]
-    
-    def _update_agent_performance_with_result(self, sequence: CommandSequence, 
-                                            response: CommandResponse, profit_delta: float) -> None:
-        """Update agent performance with execution results."""
-        agent_type = sequence.agent_type
-        if agent_type not in self.agent_performance:
-            return
-        
-        performance = self.agent_performance[agent_type]
-        
-        if response.success:
-            performance.successful_commands += 1
-        else:
-            performance.failed_commands += 1
-        
-        # Update average alpha score
-        if sequence.alpha_score != 0:
-            current_avg = performance.average_alpha_score
-            total_commands = performance.total_commands
-            performance.average_alpha_score = (
-                (current_avg * (total_commands - 1) + sequence.alpha_score) / total_commands
-            )
-        
-        # Update average execution time
-        current_avg_time = performance.average_execution_time
-        total_commands = performance.total_commands
-        performance.average_execution_time = (
-            (current_avg_time * (total_commands - 1) + sequence.execution_time) / total_commands
-        )
-        
-        # Update trust score using recursive trust formula
-        if sequence.alpha_score != 0:
-            lambda_factor = self.trust_decay_factor
-            alpha_factor = self.alpha_weight
-            performance.trust_score = (
-                lambda_factor * performance.trust_score +
-                (1 - lambda_factor) * (sequence.alpha_score * alpha_factor)
-            )
-            performance.trust_score = max(0.0, min(1.0, performance.trust_score))
-    
-    def get_agent_performance(self, agent_type: str) -> Optional[AgentPerformance]:
-        """Get performance metrics for a specific agent."""
-        return self.agent_performance.get(agent_type)
-    
-    def get_recent_sequences(self, limit: int = 100) -> List[CommandSequence]:
-        """Get recent command sequences."""
-        return self.sequence_history[-limit:] if self.sequence_history else []
-    
-    def get_sequences_by_agent(self, agent_type: str) -> List[CommandSequence]:
-        """Get all sequences for a specific agent."""
-        return [seq for seq in self.sequence_history if seq.agent_type == agent_type]
-    
-    def get_sequences_by_status(self, status: CommandStatus) -> List[CommandSequence]:
-        """Get all sequences with a specific status."""
-        return [seq for seq in self.sequence_history if seq.status == status]
-    
-    def get_drift_analysis(self) -> Dict[str, Any]:
-        """Get drift analysis statistics."""
-        if not self.sequence_history:
-            return {}
-        
-        drift_magnitudes = [seq.drift_magnitude for seq in self.sequence_history]
-        
-        return {
-            'total_sequences': len(self.sequence_history),
-            'total_drift_detected': self.total_drift_detected,
-            'average_drift': np.mean(drift_magnitudes),
-            'max_drift': np.max(drift_magnitudes),
-            'drift_distribution': {
-                severity.value: len([seq for seq in self.sequence_history if seq.drift_severity == severity])
-                for severity in DriftSeverity
-            }
-        }
-    
-    def get_performance_metrics(self) -> Dict[str, Any]:
-        """Get overall performance metrics."""
-        return {
-            'total_commands_processed': self.total_commands_processed,
-            'total_drift_detected': self.total_drift_detected,
-            'average_sequence_time': self.average_sequence_time,
-            'agent_performance': {
-                agent: {
-                    'total_commands': perf.total_commands,
-                    'success_rate': perf.successful_commands / max(perf.total_commands, 1),
-                    'average_alpha_score': perf.average_alpha_score,
-                    'trust_score': perf.trust_score
-                }
-                for agent, perf in self.agent_performance.items()
-            },
-            'recent_sequences': len(self.get_recent_sequences(10))
-        }
-    
-    def cleanup_old_data(self, max_sequences: int = 5000) -> None:
-        """Clean up old sequence data."""
-        if len(self.sequence_history) > max_sequences:
-            # Keep most recent sequences
-            self.sequence_history = self.sequence_history[-max_sequences:]
-            
-            # Update command_sequences dict
-            self.command_sequences = {
-                seq.sequence_id: seq for seq in self.sequence_history
-            }
-            
-            safe_print(f"🧹 Cleaned up old data - {max_sequences} sequences retained")
-
-
-# Global instance for easy access
-ai_command_sequencer = AICommandSequencer()
-
-
-# Convenience functions for external access
-async def sequence_ai_command(
-    command: AICommand,
-    tick: int,
-    prophet_curve_id: Optional[str] = None,
-    market_data: Optional[Dict[str, Any]] = None
-) -> CommandSequence:
-    """Sequence an AI command using global sequencer."""
-    return await ai_command_sequencer.sequence_command(command, tick, prophet_curve_id, market_data)
-
-
-async def update_command_sequence_result(
-    sequence_id: str,
-    response: CommandResponse,
-    profit_delta: float = 0.0,
-    prophet_curve_id: Optional[str] = None,
-    market_data: Optional[Dict[str, Any]] = None
-) -> bool:
-    """Update command sequence result using global sequencer."""
-    return await ai_command_sequencer.update_command_result(
-        sequence_id, response, profit_delta, prophet_curve_id, market_data
-    )
-
-
-# Example usage
-if __name__ == "__main__":
-    async def test_command_sequencer():
-        """Test command sequencer functionality."""
-        safe_print("🧠 Testing AI Command Sequencer...")
-        
-        # Create test command
-        test_command = AICommand(
-            command_id="test_cmd_001",
-            agent_type=AIAgentType.GPT,
-            domain=CommandDomain.STRATEGY,
-            priority=CommandPriority.MEDIUM,
-            hash_signature="test_hash_123",
-            timestamp=datetime.now(),
-            payload={
-                "strategy_name": "test_strategy",
-                "parameters": {"test": True},
-                "target_profit": 100.0
-            },
-            context={"test": True}
-        )
-        
-        # Sequence command
-        sequence = await sequence_ai_command(test_command, tick=1000)
-        
-        # Create test response
-        test_response = CommandResponse(
-            command_id=test_command.command_id,
-            success=True,
-            result={"profit": 50.0},
-            execution_time=1.5,
-            timestamp=datetime.now()
-        )
-        
-        # Update result
-        success = await update_command_sequence_result(
-            sequence.sequence_id,
-            test_response,
-            profit_delta=50.0
-        )
-        
-        # Get performance metrics
-        metrics = ai_command_sequencer.get_performance_metrics()
-        
-        safe_print(f"✅ Test completed - Success: {success}, Metrics: {metrics}")
-    
-    # Run test
-    asyncio.run(test_command_sequencer()) 
+    # Run main function
+    success = main()
+    sys.exit(0 if success else 1) 

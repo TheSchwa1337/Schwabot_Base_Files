@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Comprehensive Stub Fixer - Eliminate All 241 Stub Docstring Errors.
 
@@ -94,21 +95,21 @@ class ComprehensiveStubFixer:
                     f.write(fixed_content)
                 
                 self.fix_stats['patterns_fixed'] += patterns_fixed
-                print(f"✅ Fixed {patterns_fixed} patterns in: {file_path}")
+                safe_print(f"✅ Fixed {patterns_fixed} patterns in: {file_path}")
                 return True
             
             return False
             
         except Exception as e:
             self.fix_stats['errors_encountered'] += 1
-            print(f"❌ Error processing {file_path}: {e}")
+            safe_print(f"❌ Error processing {file_path}: {e}")
             return False
     
     def find_and_fix_all_stub_files(self) -> None:
         """Find and fix ALL files with malformed stub patterns."""
-        print("Comprehensive Stub Fixer - Phase 1")
-        print("=" * 50)
-        print("Target: Eliminate all 241 stub docstring errors")
+        safe_print("Comprehensive Stub Fixer - Phase 1")
+        safe_print("=" * 50)
+        safe_print("Target: Eliminate all 241 stub docstring errors")
         print()
         
         # Get all Python files recursively
@@ -125,7 +126,7 @@ class ComprehensiveStubFixer:
                     file_path = os.path.join(root, file)
                     python_files.append(file_path)
         
-        print(f"Found {len(python_files)} Python files to check")
+        safe_print(f"Found {len(python_files)} Python files to check")
         print()
         
         # Process each file
@@ -148,14 +149,14 @@ class ComprehensiveStubFixer:
                         
             except Exception as e:
                 self.fix_stats['errors_encountered'] += 1
-                print(f"❌ Error reading {file_path}: {e}")
+                safe_print(f"❌ Error reading {file_path}: {e}")
         
         self.print_summary()
     
     def fix_known_files_list(self) -> None:
         """Fix the specific list of files we know have the pattern."""
-        print("Comprehensive Stub Fixer - Known Files")
-        print("=" * 50)
+        safe_print("Comprehensive Stub Fixer - Known Files")
+        safe_print("=" * 50)
         
         # Files we know have the malformed pattern (from our search)
         known_files = [
@@ -257,7 +258,7 @@ class ComprehensiveStubFixer:
             'standalone_multi_bit_demo.py',
         ]
         
-        print(f"Processing {len(known_files)} known files...")
+        safe_print(f"Processing {len(known_files)} known files...")
         print()
         
         for file_path in known_files:
@@ -271,42 +272,42 @@ class ComprehensiveStubFixer:
     def print_summary(self) -> None:
         """Print comprehensive summary of fixes."""
         print()
-        print("=" * 50)
-        print("COMPREHENSIVE STUB FIX SUMMARY")
-        print("=" * 50)
-        print(f"Files processed: {self.fix_stats['files_processed']}")
-        print(f"Files fixed: {self.fix_stats['files_fixed']}")
-        print(f"Patterns fixed: {self.fix_stats['patterns_fixed']}")
-        print(f"Errors encountered: {self.fix_stats['errors_encountered']}")
+        safe_print("=" * 50)
+        safe_print("COMPREHENSIVE STUB FIX SUMMARY")
+        safe_print("=" * 50)
+        safe_print(f"Files processed: {self.fix_stats['files_processed']}")
+        safe_print(f"Files fixed: {self.fix_stats['files_fixed']}")
+        safe_print(f"Patterns fixed: {self.fix_stats['patterns_fixed']}")
+        safe_print(f"Errors encountered: {self.fix_stats['errors_encountered']}")
         print()
         
         if self.fix_stats['files_fixed'] > 0:
-            print("🎉 Phase 1 Progress:")
-            print(f"   ✅ Fixed {self.fix_stats['files_fixed']} files")
-            print(f"   ✅ Fixed {self.fix_stats['patterns_fixed']} patterns")
-            print(f"   📊 Estimated E999 errors eliminated: {self.fix_stats['files_fixed'] * 1.2:.0f}")
+            safe_print("🎉 Phase 1 Progress:")
+            safe_print(f"   ✅ Fixed {self.fix_stats['files_fixed']} files")
+            safe_print(f"   ✅ Fixed {self.fix_stats['patterns_fixed']} patterns")
+            safe_print(f"   📊 Estimated E999 errors eliminated: {self.fix_stats['files_fixed'] * 1.2:.0f}")
             print()
-            print("Next steps:")
-            print("1. Run: flake8 . --select=E9 --max-line-length=79")
-            print("2. Check remaining E999 errors")
-            print("3. Proceed to Phase 2 (Unicode characters)")
+            safe_print("Next steps:")
+            safe_print("1. Run: flake8 . --select=E9 --max-line-length=79")
+            safe_print("2. Check remaining E999 errors")
+            safe_print("3. Proceed to Phase 2 (Unicode characters)")
         else:
-            print("⚠️  No files were fixed. This could mean:")
-            print("   - Files were already fixed")
-            print("   - Different patterns need to be addressed")
-            print("   - Need to run comprehensive search")
+            safe_print("⚠️  No files were fixed. This could mean:")
+            safe_print("   - Files were already fixed")
+            safe_print("   - Different patterns need to be addressed")
+            safe_print("   - Need to run comprehensive search")
         
         print()
-        print("Comprehensive stub fixing completed!")
+        safe_print("Comprehensive stub fixing completed!")
 
 
 def main():
     """Main function."""
     fixer = ComprehensiveStubFixer()
     
-    print("Choose approach:")
-    print("1. Fix all Python files (comprehensive)")
-    print("2. Fix known files only (targeted)")
+    safe_print("Choose approach:")
+    safe_print("1. Fix all Python files (comprehensive)")
+    safe_print("2. Fix known files only (targeted)")
     
     choice = input("Enter choice (1 or 2): ").strip()
     
@@ -315,7 +316,7 @@ def main():
     elif choice == "2":
         fixer.fix_known_files_list()
     else:
-        print("Invalid choice. Running comprehensive fix...")
+        safe_print("Invalid choice. Running comprehensive fix...")
         fixer.find_and_fix_all_stub_files()
 
 

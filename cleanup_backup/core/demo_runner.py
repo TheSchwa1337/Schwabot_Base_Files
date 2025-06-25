@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Demo Pipeline Runner - Schwabot UROS v1.0
@@ -22,7 +24,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import asyncio
 import threading
@@ -419,10 +421,10 @@ class DemoPipelineRunner:
             # Determine decision based on tensor score
             if tensor_score > 0.02:
                 decision = "buy"
-                confidence = min(abs(tensor_score) * 10, 1.0)
+                confidence = unified_math.min(unified_math.abs(tensor_score) * 10, 1.0)
             elif tensor_score < -0.02:
                 decision = "sell"
-                confidence = min(abs(tensor_score) * 10, 1.0)
+                confidence = unified_math.min(unified_math.abs(tensor_score) * 10, 1.0)
             else:
                 decision = "hold"
                 confidence = 0.5
@@ -735,25 +737,25 @@ if __name__ == "__main__":
     runner.set_mode(PipelineMode.DEMO)
     
     # Start pipeline for 2 minutes
-    print("🚀 Starting demo pipeline...")
+    safe_print("🚀 Starting demo pipeline...")
     success = runner.start_pipeline(duration_minutes=2)
     
     if success:
-        print("✅ Pipeline started successfully")
+        safe_print("✅ Pipeline started successfully")
         
         # Monitor for 10 seconds
         for i in range(10):
             time.sleep(1)
             status = runner.get_pipeline_status()
-            print(f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
+            safe_print(f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
         
         # Stop pipeline
-        print("⏹️ Stopping pipeline...")
+        safe_print("⏹️ Stopping pipeline...")
         runner.stop_pipeline()
         
         # Final status
         final_status = runner.get_pipeline_status()
-        print(f"🏁 Final Status: {final_status['status']}")
-        print(f"📈 Performance: {final_status['performance_metrics']}")
+        safe_print(f"🏁 Final Status: {final_status['status']}")
+        safe_print(f"📈 Performance: {final_status['performance_metrics']}")
     else:
-        print("❌ Failed to start pipeline") 
+        safe_print("❌ Failed to start pipeline") 

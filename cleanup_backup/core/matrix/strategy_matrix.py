@@ -1,7 +1,8 @@
 """Strategy matrix for adaptive vector projection."""
 
 from __future__ import annotations
-import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 
 def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:

@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """Simplified BTC Integration - Bitcoin Trading Integration Layer.
 
@@ -424,15 +437,15 @@ def main() -> None:
     try:
         # Get ticker data
         ticker = integration.get_ticker("BTC-USD")
-        print(f"BTC Price: {ticker.data.get('price', 'N/A')}")
+        safe_print(f"BTC Price: {ticker.data.get('price', 'N/A')}")
 
         # Get balances
         balances = integration.get_balances()
         for balance in balances:
-            print(f"{balance.currency}: {balance.available}")
+            safe_print(f"{balance.currency}: {balance.available}")
 
     except Exception as e:
-        print(f"Error: {e}")
+        safe_print(f"Error: {e}")
 
 
 if __name__ == "__main__":

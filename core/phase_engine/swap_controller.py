@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Swap Controller - Trading Position Swap Management for Schwabot
@@ -23,7 +37,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-import numpy as np
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
@@ -362,9 +376,9 @@ class SwapController:
         success_rate = successful_swaps / total_swaps if total_swaps > 0 else 0.0
         
         # Calculate average metrics
-        avg_execution_time = np.mean(self.performance_metrics["execution_times"]) if self.performance_metrics["execution_times"] else 0.0
-        avg_slippage = np.mean(self.performance_metrics["slippage"]) if self.performance_metrics["slippage"] else 0.0
-        avg_fees = np.mean(self.performance_metrics["fees"]) if self.performance_metrics["fees"] else 0.0
+        avg_execution_time = unified_math.unified_math.mean(self.performance_metrics["execution_times"]) if self.performance_metrics["execution_times"] else 0.0
+        avg_slippage = unified_math.unified_math.mean(self.performance_metrics["slippage"]) if self.performance_metrics["slippage"] else 0.0
+        avg_fees = unified_math.unified_math.mean(self.performance_metrics["fees"]) if self.performance_metrics["fees"] else 0.0
         
         return {
             "total_swaps": total_swaps,
@@ -393,14 +407,14 @@ def main() -> None:
         priority=1
     )
     
-    print(f"Requested swap: {swap_id}")
+    safe_print(f"Requested swap: {swap_id}")
     
     # Wait for execution
     time.sleep(2)
     
     # Get statistics
     stats = controller.get_swap_statistics()
-    print(f"Swap Statistics: {stats}")
+    safe_print(f"Swap Statistics: {stats}")
 
 if __name__ == "__main__":
     main()

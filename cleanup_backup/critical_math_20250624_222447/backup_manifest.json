@@ -1,0 +1,25 @@
+{
+  "timestamp": "20250624_222447",
+  "backed_up_files": [
+    "core/phantom_lag_model.py",
+    "core/meta_layer_ghost_bridge.py",
+    "core/fallback_logic_router.py",
+    "core/profit_routing_engine.py",
+    "core/hash_registry.py",
+    "core/hash_registry_manager.py",
+    "core/entropy_validator.py",
+    "core/tensor_matcher.py",
+    "core/tensor_score_utils.py",
+    "core/matrix_mapper.py",
+    "core/bit_resolution_engine.py",
+    "core/dlt_waveform_engine.py",
+    "core/profit_cycle_allocator.py",
+    "core/bit_phase_engine.py",
+    "core/math/",
+    "mathlib/",
+    "COMPLETE_MATHEMATICAL_INTEGRATION_PLAN.md",
+    "MATHEMATICAL_INTEGRATION_SUMMARY.md",
+    "MATHEMATICAL_IMPLEMENTATION_CLEANUP_PLAN.md"
+  ],
+  "backup_path": "cleanup_backup\\critical_math_20250624_222447"
+}

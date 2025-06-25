@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Time-Series Filters - Schwabot Mathematical Framework.
 
@@ -27,14 +43,13 @@ Based on SxN-Math specifications for robust trading signal processing.
 
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import getcontext
 import logging
 from typing import Callable, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 import numpy.typing as npt
 from scipy.stats import multivariate_normal
 
@@ -104,7 +119,7 @@ class KalmanFilter:
         self.obs_dim = H.shape[0]
 
         # Identity matrix for updates
-        self.I = np.eye(self.state_dim)
+        self.identity_matrix = np.eye(self.state_dim)
 
         # Numerical stability
         self.epsilon = 1e-12
@@ -172,13 +187,13 @@ class KalmanFilter:
             S = self._ensure_positive_definite(S)
 
             # Kalman gain
-            K = self.state.P @ self.H.T @ np.linalg.inv(S)
+            K = self.state.P @ self.H.T @ unified_math.unified_math.inverse(S)
 
             # State update
             self.state.x = self.state.x + K @ y
 
             # Covariance update (Joseph form for numerical stability)
-            I_KH = self.I - K @ self.H
+            I_KH = self.identity_matrix - K @ self.H
             self.state.P = I_KH @ self.state.P @ I_KH.T + K @ self.R @ K.T
 
             # Calculate likelihood
@@ -195,8 +210,8 @@ class KalmanFilter:
         """Ensure matrix is positive definite for numerical stability."""
         try:
             # Add small diagonal term if needed
-            eigenvals = np.linalg.eigvals(matrix)
-            if np.min(eigenvals) < self.epsilon:
+            eigenvals = unified_math.unified_math.eigenvalues(matrix)
+            if unified_math.unified_math.min(eigenvals) < self.epsilon:
                 matrix += self.epsilon * np.eye(matrix.shape[0])
             return matrix
         except Exception:
@@ -316,7 +331,7 @@ class ParticleFilter:
 
                 # Calculate likelihood (assuming Gaussian measurement noise)
                 residual = measurement - predicted_obs
-                likelihood = np.exp(
+                likelihood = unified_math.exp(
                     -0.5 * np.sum(residual**2) / measurement_noise_std**2
                 )
 
@@ -465,10 +480,10 @@ class TimeAwareEMA:
 
             # Calculate time delta
             dt = timestamp - self.last_time if self.last_time is not None else 1.0
-            dt = max(dt, 1e-6)  # Prevent division by zero
+            dt = unified_math.max(dt, 1e-6)  # Prevent division by zero
 
             # Time-adjusted smoothing factor
-            alpha_eff = 1.0 - np.exp(-self.alpha * dt)
+            alpha_eff = 1.0 - unified_math.exp(-self.alpha * dt)
             alpha_eff = np.clip(alpha_eff, 0.0, 1.0)
 
             # Update EMA
@@ -538,7 +553,7 @@ class AdaptiveFilter:
     def _select_filter(self) -> None:
         """Select filter based on current volatility."""
         if len(self.volatility_window) >= 10:
-            volatility = np.std(self.volatility_window)
+            volatility = unified_math.unified_math.std(self.volatility_window)
 
             if volatility > self.volatility_threshold:
                 self.current_filter = "ema_slow"  # Smooth more in high volatility
@@ -555,7 +570,7 @@ def warm_ema(alpha: float) -> TimeAwareEMA:
 def main() -> None:
     """Test and demonstration function."""
     # Test Kalman Filter
-    print("Testing Kalman Filter...")
+    safe_print("Testing Kalman Filter...")
     F = np.array([[1, 1], [0, 1]])  # Position-velocity model
     H = np.array([[1, 0]])  # Observe position only
     Q = np.array([[0.1, 0], [0, 0.1]])  # Process noise
@@ -572,18 +587,18 @@ def main() -> None:
         measurement = np.array([i + np.random.normal(0, 0.5)])
         kf.update(measurement, float(i))
 
-    print(f"Final Kalman state: {kf.state.x}")
+    safe_print(f"Final Kalman state: {kf.state.x}")
 
     # Test EMA
-    print("\nTesting Time-Aware EMA...")
+    safe_print("\nTesting Time-Aware EMA...")
     ema = TimeAwareEMA(alpha=0.3)
 
     for i in range(10):
-        value = np.sin(i * 0.5) + np.random.normal(0, 0.1)
+        value = np.unified_math.sin(i * 0.5) + np.random.normal(0, 0.1)
         filtered = ema.update(value, float(i))
-        print(f"Time {i}: Raw={value:.3f}, Filtered={filtered:.3f}")
+        safe_print(f"Time {i}: Raw={value:.3f}, Filtered={filtered:.3f}")
 
-    print("Filters module test completed successfully")
+    safe_print("Filters module test completed successfully")
 
 
 if __name__ == "__main__":

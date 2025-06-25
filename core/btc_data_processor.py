@@ -1,3 +1,19 @@
+from __future__ import annotations
+
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """BTC Data Processor - Live Market Data Integration.
 
@@ -5,21 +21,20 @@ This module processes live BTC data, integrates volume, tick, and hash logic
 for execution velocity calculations from live market volume and signal entropy.
 
 Mathematical Foundation:
-- Volume density triggers: ρ_market = 1 - min(vol_density, 1.0)
-- Tick entropy analysis: H_tick = -Σ(p_i * log(p_i))
+- Volume density triggers: ρ_market = 1 - unified_math.min(vol_density, 1.0)
+- Tick entropy analysis: H_tick = -Σ(p_i * unified_math.log(p_i))
 - Execution pressure derivation: P_exec = √(profit_residual / ρ_market)
 
 Windows CLI compatible with comprehensive error handling.
 """
 
-from __future__ import annotations
 
 import logging
 import time
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +170,7 @@ class BTCDataProcessor:
             # Calculate volume clustering chi score
             recent_volumes = np.array(self.volume_history[-20:])
             median_vol = np.median(recent_volumes)
-            stdev_vol = np.std(recent_volumes)
+            stdev_vol = unified_math.unified_math.std(recent_volumes)
 
             epsilon = 1e-6
             chi_v = (current_volume - median_vol) / (stdev_vol + epsilon)
@@ -164,11 +179,11 @@ class BTCDataProcessor:
             wall_detected = chi_v > self.chi_threshold
             spoof_probability = 0.0
 
-            if wall_detected and abs(price_change) < self.spoof_price_threshold:
-                spoof_probability = min(chi_v / 10.0, 0.95)
+            if wall_detected and unified_math.abs(price_change) < self.spoof_price_threshold:
+                spoof_probability = unified_math.min(chi_v / 10.0, 0.95)
 
             # Calculate density score
-            density_score = min(current_volume / (median_vol + epsilon), 2.0) / 2.0
+            density_score = unified_math.min(current_volume / (median_vol + epsilon), 2.0) / 2.0
 
             return VolumeAnalysis(
                 density_score=density_score,
@@ -208,15 +223,15 @@ class BTCDataProcessor:
         """
         try:
             epsilon = 1e-6
-            density_factor = max(market_density, 0.1)  # Prevent division by near-zero
+            density_factor = unified_math.max(market_density, 0.1)  # Prevent division by near-zero
 
-            base_velocity = np.sqrt(target_profit / (density_factor + epsilon))
+            base_velocity = unified_math.unified_math.sqrt(target_profit / (density_factor + epsilon))
             pressure_modifier = 1.0 + (current_pressure - 0.5) * 0.5
 
             execution_velocity = base_velocity * pressure_modifier
 
             # Normalize to reasonable range [0.1, 3.0]
-            return max(0.1, min(3.0, execution_velocity))
+            return unified_math.max(0.1, unified_math.min(3.0, execution_velocity))
 
         except Exception as e:
             logger.warning(f"Error calculating execution velocity: {e}")
@@ -251,7 +266,7 @@ class BTCDataProcessor:
             )
 
             # Trigger delay if differential exceeds threshold
-            should_delay = abs(v_diff) > 0.3
+            should_delay = unified_math.abs(v_diff) > 0.3
 
             return v_diff, should_delay
 
@@ -280,25 +295,25 @@ class BTCDataProcessor:
     def _calculate_volume_density(self, current_volume: float) -> float:
         """Calculate volume density score.
 
-        Formula: ρ_market = 1 - min(vol_density, 1.0)
+        Formula: ρ_market = 1 - unified_math.min(vol_density, 1.0)
         """
         if len(self.volume_history) < 5:
             return 0.5
 
         try:
             recent_volumes = self.volume_history[-10:]
-            avg_volume = np.mean(recent_volumes)
+            avg_volume = unified_math.unified_math.mean(recent_volumes)
 
             if avg_volume == 0:
                 return 0.5
 
             density_ratio = current_volume / avg_volume
-            normalized_density = min(density_ratio / 2.0, 1.0)
+            normalized_density = unified_math.min(density_ratio / 2.0, 1.0)
 
             # Market density is inverse of volume density
             market_density = 1.0 - normalized_density
 
-            return max(0.0, min(1.0, market_density))
+            return unified_math.max(0.0, unified_math.min(1.0, market_density))
 
         except Exception as e:
             logger.warning(f"Error calculating volume density: {e}")
@@ -307,7 +322,7 @@ class BTCDataProcessor:
     def _calculate_tick_entropy(self) -> float:
         """Calculate tick entropy score.
 
-        Formula: H_tick = -Σ(p_i * log(p_i))
+        Formula: H_tick = -Σ(p_i * unified_math.log(p_i))
         """
         if len(self.price_history) < self.entropy_window:
             return 0.5
@@ -328,13 +343,13 @@ class BTCDataProcessor:
             probabilities = hist + epsilon
             probabilities = probabilities / np.sum(probabilities)
 
-            entropy = -np.sum(probabilities * np.log(probabilities))
+            entropy = -np.sum(probabilities * unified_math.unified_math.log(probabilities))
 
             # Normalize to [0, 1] range
-            max_entropy = np.log(bins)
+            max_entropy = unified_math.unified_math.log(bins)
             normalized_entropy = entropy / max_entropy
 
-            return max(0.0, min(1.0, normalized_entropy))
+            return unified_math.max(0.0, unified_math.min(1.0, normalized_entropy))
 
         except Exception as e:
             logger.warning(f"Error calculating tick entropy: {e}")
@@ -352,12 +367,12 @@ class BTCDataProcessor:
         try:
             # Use entropy as proxy for profit residual
             profit_residual = entropy_score
-            rho_market = max(volume_density, 0.1)  # Prevent division by zero
+            rho_market = unified_math.max(volume_density, 0.1)  # Prevent division by zero
 
-            execution_pressure = np.sqrt(profit_residual / rho_market)
+            execution_pressure = unified_math.unified_math.sqrt(profit_residual / rho_market)
 
             # Normalize to [0, 1] range
-            return max(0.0, min(1.0, execution_pressure))
+            return unified_math.max(0.0, unified_math.min(1.0, execution_pressure))
 
         except Exception as e:
             logger.warning(f"Error calculating execution pressure: {e}")
@@ -376,12 +391,12 @@ class BTCDataProcessor:
                 return 0.5
 
             # Simple correlation based on hash rate and difficulty alignment
-            normalized_hash = min(hash_rate / 5e17, 1.0)  # Normalize to ~500 EH/s
-            normalized_diff = min(difficulty / 7e13, 1.0)  # Normalize to ~70T
+            normalized_hash = unified_math.min(hash_rate / 5e17, 1.0)  # Normalize to ~500 EH/s
+            normalized_diff = unified_math.min(difficulty / 7e13, 1.0)  # Normalize to ~70T
 
             correlation = (normalized_hash + normalized_diff) / 2.0
 
-            return max(0.0, min(1.0, correlation))
+            return unified_math.max(0.0, unified_math.min(1.0, correlation))
 
         except Exception as e:
             logger.warning(f"Error calculating hash correlation: {e}")
@@ -415,8 +430,8 @@ class BTCDataProcessor:
 
 def main() -> None:
     """Demo function for testing BTC data processor."""
-    print("BTC Data Processor Demo")
-    print("=" * 30)
+    safe_print("BTC Data Processor Demo")
+    safe_print("=" * 30)
 
     processor = BTCDataProcessor()
 
@@ -439,35 +454,35 @@ def main() -> None:
             network_data={'hash_rate': 4.5e17, 'difficulty': 6.2e13},
         )
 
-        print(f"Price: ${price:,.0f}")
-        print(f"  Volume Density: {metrics.volume_density:.3f}")
-        print(f"  Entropy Score: {metrics.entropy_score:.3f}")
-        print(f"  Execution Pressure: {metrics.execution_pressure:.3f}")
-        print(f"  Hash Correlation: {metrics.hash_correlation:.3f}")
+        safe_print(f"Price: ${price:,.0f}")
+        safe_print(f"  Volume Density: {metrics.volume_density:.3f}")
+        safe_print(f"  Entropy Score: {metrics.entropy_score:.3f}")
+        safe_print(f"  Execution Pressure: {metrics.execution_pressure:.3f}")
+        safe_print(f"  Hash Correlation: {metrics.hash_correlation:.3f}")
 
         # Test volume analysis
         price_change = 0.002 if price > 50000 else -0.002
         vol_analysis = processor.analyze_volume_clustering(volume, price_change)
 
-        print(f"  Volume Chi: {vol_analysis.clustering_chi:.2f}")
-        print(f"  Wall Detected: {vol_analysis.wall_detection}")
-        print(f"  Spoof Probability: {vol_analysis.spoof_probability:.3f}")
+        safe_print(f"  Volume Chi: {vol_analysis.clustering_chi:.2f}")
+        safe_print(f"  Wall Detected: {vol_analysis.wall_detection}")
+        safe_print(f"  Spoof Probability: {vol_analysis.spoof_probability:.3f}")
         print()
 
     # Test execution velocity
     velocity = processor.calculate_execution_velocity(
         target_profit=100.0, current_pressure=0.7, market_density=0.6
     )
-    print(f"Execution Velocity: {velocity:.3f}")
+    safe_print(f"Execution Velocity: {velocity:.3f}")
 
     # Test velocity differential
     v_diff, should_delay = processor.detect_velocity_differential(1.5, 1.0)
-    print(f"Velocity Differential: {v_diff:.3f}")
-    print(f"Should Delay: {should_delay}")
+    safe_print(f"Velocity Differential: {v_diff:.3f}")
+    safe_print(f"Should Delay: {should_delay}")
 
     # Processing summary
     summary = processor.get_processing_summary()
-    print(f"\nProcessing Summary: {summary}")
+    safe_print(f"\nProcessing Summary: {summary}")
 
 
 if __name__ == "__main__":

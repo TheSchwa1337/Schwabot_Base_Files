@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Ghost Architecture BTC Profit Handoff - Core Ghost Pattern Profit Management
@@ -21,7 +23,7 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import json
 
@@ -135,9 +137,9 @@ class GhostArchitectureBTCProfitHandoff:
         """Calculate confidence score for ghost pattern."""
         try:
             # Data quality factors
-            price_quality = min(btc_data.get('price', 0) / 50000.0, 1.0)  # Normalize BTC price
-            volume_quality = min(btc_data.get('volume', 0) / 1000.0, 1.0)  # Normalize volume
-            volatility_quality = min(btc_data.get('volatility', 0) / 0.5, 1.0)  # Normalize volatility
+            price_quality = unified_math.min(btc_data.get('price', 0) / 50000.0, 1.0)  # Normalize BTC price
+            volume_quality = unified_math.min(btc_data.get('volume', 0) / 1000.0, 1.0)  # Normalize volume
+            volatility_quality = unified_math.min(btc_data.get('volatility', 0) / 0.5, 1.0)  # Normalize volatility
             
             # Pattern consistency (placeholder)
             consistency_factor = 0.8
@@ -148,7 +150,7 @@ class GhostArchitectureBTCProfitHandoff:
                          volatility_quality * 0.2 + 
                          consistency_factor * 0.2)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Pattern confidence calculation error: {e}")
@@ -163,10 +165,10 @@ class GhostArchitectureBTCProfitHandoff:
             volatility = btc_data.get('volatility', 0.0)
             
             # Volume-based profit potential
-            volume_factor = min(volume / 1000.0, 1.0)
+            volume_factor = unified_math.min(volume / 1000.0, 1.0)
             
             # Volatility-based profit potential (higher volatility = higher potential)
-            volatility_factor = min(volatility / 0.5, 1.0)
+            volatility_factor = unified_math.min(volatility / 0.5, 1.0)
             
             # Price momentum factor (placeholder)
             momentum_factor = 0.6
@@ -176,7 +178,7 @@ class GhostArchitectureBTCProfitHandoff:
                                volatility_factor * 0.3 + 
                                momentum_factor * 0.3)
             
-            return max(0.0, min(1.0, profit_potential))
+            return unified_math.max(0.0, unified_math.min(1.0, profit_potential))
             
         except Exception as e:
             logger.error(f"Profit potential calculation error: {e}")
@@ -276,7 +278,7 @@ class GhostArchitectureBTCProfitHandoff:
                 profit_transferred=profit_amount,
                 source_pattern=source_pattern_id,
                 target_pattern=target_pattern_id,
-                confidence_score=min(source_pattern.confidence_score, target_pattern.confidence_score),
+                confidence_score=unified_math.min(source_pattern.confidence_score, target_pattern.confidence_score),
                 metadata={
                     'handoff_fee': profit_amount * 0.05,
                     'source_remaining_profit': source_pattern.profit_potential,
@@ -384,13 +386,13 @@ def main() -> None:
     
     pattern = handoff_system.detect_ghost_pattern(test_btc_data)
     if pattern:
-        print(f"Ghost pattern detected: {pattern.pattern_id}")
-        print(f"Confidence: {pattern.confidence_score:.3f}")
-        print(f"Profit potential: {pattern.profit_potential:.3f}")
+        safe_print(f"Ghost pattern detected: {pattern.pattern_id}")
+        safe_print(f"Confidence: {pattern.confidence_score:.3f}")
+        safe_print(f"Profit potential: {pattern.profit_potential:.3f}")
     
     # Get statistics
     stats = handoff_system.get_system_statistics()
-    print(f"System statistics: {stats}")
+    safe_print(f"System statistics: {stats}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """ghost_memory_router – placeholder stub.
 
@@ -6,7 +8,6 @@ minimal implementation just provides in-memory storage so modules that rely
 on it do not fail import-time.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field

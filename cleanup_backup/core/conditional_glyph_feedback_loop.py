@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """conditional_glyph_feedback_loop – news flow scalar feedback implementation.
 
@@ -8,12 +11,11 @@ This module handles conditional glyph feedback loops for news integration
 into the ghost trading system.
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Callable, Sequence
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 __all__: list[str] = [
     "ConditionalGlyphFeedback",
@@ -122,7 +124,7 @@ class ConditionalGlyphFeedback:
             )
 
         # Apply feedback only where condition is met
-        condition_mask = np.abs(feedback_gradients) > condition_threshold
+        condition_mask = unified_math.unified_math.abs(feedback_gradients) > condition_threshold
 
         updated_state = glyph_state.copy()
         updated_state[condition_mask] += feedback_gradients[condition_mask]

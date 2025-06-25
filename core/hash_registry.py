@@ -1,3 +1,16 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Hash Registry - AI Consciousness Memory System.
@@ -51,7 +64,7 @@ try:
     GPT_LAYER_AVAILABLE = True
 except ImportError:
     GPT_LAYER_AVAILABLE = False
-    safe_print("⚠️ GPT command layer not available")
+    safe_safe_print("⚠️ GPT command layer not available")
 
 # Import ZPE Mathematical Framework
 try:
@@ -224,9 +237,9 @@ class HashRegistry:
         # ✨ NEW: ZPE Mathematical Framework Integration
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
         if ZPE_MODULES_AVAILABLE:
-            safe_print("🔄 Hash Registry initialized with ZPE integration")
+            safe_safe_print("🔄 Hash Registry initialized with ZPE integration")
         else:
-            safe_print("⚠️ Hash Registry initialized without ZPE integration")
+            safe_safe_print("⚠️ Hash Registry initialized without ZPE integration")
         
         # Load existing registry
         self._load_registry()
@@ -234,7 +247,7 @@ class HashRegistry:
         # Start cleanup task
         self.cleanup_task = None
         
-        safe_print("🧠 Hash Registry initialized - Consciousness memory active")
+        safe_safe_print("🧠 Hash Registry initialized - Consciousness memory active")
     
     def _load_registry(self) -> None:
         """Load hash registry from file."""
@@ -254,12 +267,12 @@ class HashRegistry:
                     pattern = HashPattern(**pattern_data)
                     self.hash_patterns[pattern.pattern_id] = pattern
                 
-                safe_print(f"📚 Loaded {len(self.hash_entries)} hash entries and {len(self.hash_patterns)} patterns")
+                safe_safe_print(f"📚 Loaded {len(self.hash_entries)} hash entries and {len(self.hash_patterns)} patterns")
             else:
-                safe_print("📚 No existing registry found - starting fresh")
+                safe_safe_print("📚 No existing registry found - starting fresh")
                 
         except Exception as e:
-            safe_print(f"⚠️ Registry load failed: {safe_format_error(e, 'registry_load')}")
+            safe_safe_print(f"⚠️ Registry load failed: {safe_format_error(e, 'registry_load')}")
     
     def _save_registry(self) -> None:
         """Save hash registry to file."""
@@ -283,7 +296,7 @@ class HashRegistry:
                 json.dump(data, f, indent=2, default=str)
                 
         except Exception as e:
-            safe_print(f"⚠️ Registry save failed: {safe_format_error(e, 'registry_save')}")
+            safe_safe_print(f"⚠️ Registry save failed: {safe_format_error(e, 'registry_save')}")
     
     def _index_entry(self, entry: HashEntry) -> None:
         """Index hash entry for quick lookup."""
@@ -371,10 +384,10 @@ class HashRegistry:
                         context = {}
                     context.update(zpe_data)
                     
-                    safe_print(f"[ZPE] Hash registration - Recursion Depth: {zpe_recursion_depth}, Thermal Efficiency: {thermal_efficiency:.6f}")
+                    safe_safe_print(f"[ZPE] Hash registration - Recursion Depth: {zpe_recursion_depth}, Thermal Efficiency: {thermal_efficiency:.6f}")
                     
                 except Exception as e:
-                    safe_print(f"⚠️ ZPE hash registration failed: {safe_format_error(e, 'zpe_hash_registration')}")
+                    safe_safe_print(f"⚠️ ZPE hash registration failed: {safe_format_error(e, 'zpe_hash_registration')}")
                     zpe_data = {'zpe_error': str(e)}
             
             # Create hash entry
@@ -407,12 +420,12 @@ class HashRegistry:
             # Save registry
             self._save_registry()
             
-            safe_print(f"🧠 Hash registered: {hash_id} ({hash_type.value})")
+            safe_safe_print(f"🧠 Hash registered: {hash_id} ({hash_type.value})")
             return hash_id
             
         except Exception as e:
             error_msg = safe_format_error(e, "register_hash")
-            safe_print(f"❌ Hash registration failed: {error_msg}")
+            safe_safe_print(f"❌ Hash registration failed: {error_msg}")
             raise
     
     def _generate_hash_id(
@@ -467,7 +480,7 @@ class HashRegistry:
         try:
             entry = self.hash_entries.get(hash_id)
             if not entry:
-                safe_print(f"⚠️ Hash not found: {hash_id}")
+                safe_safe_print(f"⚠️ Hash not found: {hash_id}")
                 return False
             
             # Remove from old status index
@@ -485,12 +498,12 @@ class HashRegistry:
             # Save registry
             self._save_registry()
             
-            safe_print(f"🧠 Hash status updated: {hash_id} -> {status.value}")
+            safe_safe_print(f"🧠 Hash status updated: {hash_id} -> {status.value}")
             return True
             
         except Exception as e:
             error_msg = safe_format_error(e, "update_hash_status")
-            safe_print(f"❌ Hash status update failed: {error_msg}")
+            safe_safe_print(f"❌ Hash status update failed: {error_msg}")
             return False
     
     async def get_hash_entry(self, hash_id: str) -> Optional[HashEntry]:
@@ -591,7 +604,7 @@ class HashRegistry:
                             pattern.confidence_score = self._calculate_sequence_confidence(sequence)
             
         except Exception as e:
-            safe_print(f"⚠️ Pattern detection failed: {safe_format_error(e, 'pattern_detection')}")
+            safe_safe_print(f"⚠️ Pattern detection failed: {safe_format_error(e, 'pattern_detection')}")
     
     def _is_pattern_sequence(self, sequence: List[HashEntry], all_hashes: List[HashEntry]) -> bool:
         """Check if a sequence appears as a pattern."""
@@ -688,7 +701,7 @@ class HashRegistry:
             return is_valid
             
         except Exception as e:
-            safe_print(f"❌ Hash validation failed: {safe_format_error(e, 'hash_validation')}")
+            safe_safe_print(f"❌ Hash validation failed: {safe_format_error(e, 'hash_validation')}")
             return False
     
     def _apply_validation_rules(self, entry: HashEntry) -> bool:
@@ -774,10 +787,10 @@ class HashRegistry:
             self.last_cleanup = current_time
             self._save_registry()
             
-            safe_print(f"🧹 Cleaned up {len(old_entries)} old hash entries")
+            safe_safe_print(f"🧹 Cleaned up {len(old_entries)} old hash entries")
             
         except Exception as e:
-            safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
+            safe_safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
     
     async def get_registry_stats(self) -> Dict[str, Any]:
         """Get registry statistics."""
@@ -796,7 +809,7 @@ class HashRegistry:
             return stats
             
         except Exception as e:
-            safe_print(f"❌ Stats calculation failed: {safe_format_error(e, 'stats')}")
+            safe_safe_print(f"❌ Stats calculation failed: {safe_format_error(e, 'stats')}")
             return {}
     
     async def start_cleanup_task(self) -> None:
@@ -808,11 +821,11 @@ class HashRegistry:
                     await self.cleanup_old_entries()
                     await asyncio.sleep(self.cleanup_interval)
                 except Exception as e:
-                    safe_print(f"⚠️ Cleanup task error: {safe_format_error(e, 'cleanup_task')}")
+                    safe_safe_print(f"⚠️ Cleanup task error: {safe_format_error(e, 'cleanup_task')}")
                     await asyncio.sleep(60)  # Wait 1 minute before retrying
         
         self.cleanup_task = asyncio.create_task(cleanup_loop())
-        safe_print("🧹 Cleanup task started")
+        safe_safe_print("🧹 Cleanup task started")
     
     async def stop_cleanup_task(self) -> None:
         """Stop cleanup task."""
@@ -822,7 +835,7 @@ class HashRegistry:
                 await self.cleanup_task
             except asyncio.CancelledError:
                 pass
-            safe_print("🧹 Cleanup task stopped")
+            safe_safe_print("🧹 Cleanup task stopped")
 
 
 # Global hash registry instance
@@ -886,7 +899,7 @@ async def get_registry_stats() -> Dict[str, Any]:
 if __name__ == "__main__":
     async def test_hash_registry():
         """Test hash registry functionality."""
-        safe_print("🧠 Testing hash registry...")
+        safe_safe_print("🧠 Testing hash registry...")
         
         # Register test hashes
         hash_id1 = await register_hash_entry(
@@ -914,7 +927,7 @@ if __name__ == "__main__":
         
         # Get stats
         stats = await get_registry_stats()
-        safe_print(f"📊 Registry stats: {stats}")
+        safe_safe_print(f"📊 Registry stats: {stats}")
         
         # Start cleanup task
         await hash_registry.start_cleanup_task()

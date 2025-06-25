@@ -1,3 +1,4 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Comprehensive E999 Syntax Error Analyzer and Fixer.
 
@@ -41,7 +42,7 @@ class E999ErrorAnalyzer:
             return [error for error in errors if error.strip()]
             
         except Exception as e:
-            print(f"Error running Flake8: {e}")
+            safe_print(f"Error running Flake8: {e}")
             return []
     
     def categorize_errors(self, errors: List[str]) -> Dict[str, List[str]]:
@@ -110,7 +111,7 @@ class E999ErrorAnalyzer:
             return False
             
         except Exception as e:
-            print(f"Error fixing unterminated strings in {file_path}: {e}")
+            safe_print(f"Error fixing unterminated strings in {file_path}: {e}")
             return False
     
     def fix_malformed_docstrings(self, file_path: str) -> bool:
@@ -150,7 +151,7 @@ class E999ErrorAnalyzer:
             return False
             
         except Exception as e:
-            print(f"Error fixing malformed docstrings in {file_path}: {e}")
+            safe_print(f"Error fixing malformed docstrings in {file_path}: {e}")
             return False
     
     def fix_unicode_characters(self, file_path: str) -> bool:
@@ -188,7 +189,7 @@ class E999ErrorAnalyzer:
             return False
             
         except Exception as e:
-            print(f"Error fixing Unicode characters in {file_path}: {e}")
+            safe_print(f"Error fixing Unicode characters in {file_path}: {e}")
             return False
     
     def fix_invalid_syntax(self, file_path: str) -> bool:
@@ -228,15 +229,15 @@ class E999ErrorAnalyzer:
             return False
             
         except Exception as e:
-            print(f"Error fixing invalid syntax in {file_path}: {e}")
+            safe_print(f"Error fixing invalid syntax in {file_path}: {e}")
             return False
     
     def apply_fixes(self, categories: Dict[str, List[str]]) -> None:
         """Apply fixes to all categorized errors."""
-        print("Applying fixes...")
+        safe_print("Applying fixes...")
         
         for category, errors in categories.items():
-            print(f"\nFixing {category} ({len(errors)} errors):")
+            safe_print(f"\nFixing {category} ({len(errors)} errors):")
             
             for error in errors:
                 file_path = self.extract_file_path(error)
@@ -256,61 +257,61 @@ class E999ErrorAnalyzer:
                 
                 if fixed:
                     self.fix_stats['errors_fixed'] += 1
-                    print(f"  ✅ Fixed: {file_path}")
+                    safe_print(f"  ✅ Fixed: {file_path}")
                 
                 self.fix_stats['files_processed'] += 1
     
     def verify_fixes(self) -> int:
         """Verify that fixes worked by running Flake8 again."""
-        print("\nVerifying fixes...")
+        safe_print("\nVerifying fixes...")
         
         remaining_errors = self.run_flake8_analysis()
         remaining_count = len(remaining_errors)
         
         if remaining_count == 0:
-            print("✅ All E999 syntax errors have been fixed!")
+            safe_print("✅ All E999 syntax errors have been fixed!")
         else:
-            print(f"⚠️  Still found {remaining_count} E999 syntax errors")
-            print("First few remaining errors:")
+            safe_print(f"⚠️  Still found {remaining_count} E999 syntax errors")
+            safe_print("First few remaining errors:")
             for error in remaining_errors[:5]:
-                print(f"  {error}")
+                safe_print(f"  {error}")
         
         return remaining_count
     
     def run_comprehensive_fix(self) -> None:
         """Run the complete analysis and fix process."""
-        print("E999 Syntax Error Analyzer and Fixer")
-        print("=" * 50)
+        safe_print("E999 Syntax Error Analyzer and Fixer")
+        safe_print("=" * 50)
         
         # Step 1: Analyze current errors
-        print("Step 1: Analyzing current E999 errors...")
+        safe_print("Step 1: Analyzing current E999 errors...")
         errors = self.run_flake8_analysis()
-        print(f"Found {len(errors)} E999 syntax errors")
+        safe_print(f"Found {len(errors)} E999 syntax errors")
         
         if not errors:
-            print("✅ No E999 errors found!")
+            safe_print("✅ No E999 errors found!")
             return
         
         # Step 2: Categorize errors
-        print("\nStep 2: Categorizing errors...")
+        safe_print("\nStep 2: Categorizing errors...")
         categories = self.categorize_errors(errors)
         
         for category, error_list in categories.items():
-            print(f"  {category}: {len(error_list)} errors")
+            safe_print(f"  {category}: {len(error_list)} errors")
         
         # Step 3: Apply fixes
-        print("\nStep 3: Applying fixes...")
+        safe_print("\nStep 3: Applying fixes...")
         self.apply_fixes(categories)
         
         # Step 4: Verify fixes
-        print("\nStep 4: Verifying fixes...")
+        safe_print("\nStep 4: Verifying fixes...")
         remaining_count = self.verify_fixes()
         
         # Summary
-        print(f"\nSummary:")
-        print(f"  Files processed: {self.fix_stats['files_processed']}")
-        print(f"  Errors fixed: {self.fix_stats['errors_fixed']}")
-        print(f"  Remaining errors: {remaining_count}")
+        safe_print(f"\nSummary:")
+        safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
+        safe_print(f"  Errors fixed: {self.fix_stats['errors_fixed']}")
+        safe_print(f"  Remaining errors: {remaining_count}")
 
 
 def main():

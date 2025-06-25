@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Block-wise wave transform utilities.
 
@@ -12,11 +15,10 @@ be layered on top later, but this is more than enough to satisfy imports and
 pass Flake8.
 """
 
-from __future__ import annotations
 
 from typing import Tuple
 
-import numpy as np
+from core.unified_math_system import unified_math
 
 try:
     # SciPy gives us a proper DCT-II.

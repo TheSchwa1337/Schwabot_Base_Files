@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Backlog Router - Full Tick-Linked Backlog Logic.
 
@@ -27,7 +28,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 
 import logging
 import time
-import numpy as np
+from core.unified_math_system import unified_math
 from typing import Dict, Any, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
@@ -207,9 +208,9 @@ class TickBacklogRouter:
             return {
                 'total_ticks_processed': self.total_ticks_processed,
                 'total_profit_calculations': self.total_profit_calculations,
-                'average_profit': np.mean(profits) if profits else 0.0,
-                'profit_std': np.std(profits) if profits else 0.0,
-                'average_sync_score': np.mean(sync_scores) if sync_scores else 0.0,
+                'average_profit': unified_math.unified_math.mean(profits) if profits else 0.0,
+                'profit_std': unified_math.unified_math.std(profits) if profits else 0.0,
+                'average_sync_score': unified_math.unified_math.mean(sync_scores) if sync_scores else 0.0,
                 'api_sync_failures': self.api_sync_failures,
                 'memory_persistence_factor': self.memory_persistence_factor,
                 'backlog_state': self._determine_overall_state().value,
@@ -370,13 +371,13 @@ class TickBacklogRouter:
                 return 0.0
             
             # Normalize price and volume
-            normalized_price = min(price / 100000.0, 1.0)  # Normalize to 100k
-            normalized_volume = min(volume / 1000000.0, 1.0)  # Normalize to 1M
+            normalized_price = unified_math.min(price / 100000.0, 1.0)  # Normalize to 100k
+            normalized_volume = unified_math.min(volume / 1000000.0, 1.0)  # Normalize to 1M
             
             # Calculate profit factor
             profit_factor = (normalized_price * 0.6 + normalized_volume * 0.4)
             
-            return max(0.0, min(1.0, profit_factor))
+            return unified_math.max(0.0, unified_math.min(1.0, profit_factor))
             
         except Exception as e:
             logger.error(f"Error calculating profit factor: {e}")
@@ -405,7 +406,7 @@ class TickBacklogRouter:
                 return 0.0
             
             # Return average acceleration
-            return np.mean(accelerations)
+            return unified_math.unified_math.mean(accelerations)
             
         except Exception as e:
             logger.error(f"Error calculating tick acceleration: {e}")
@@ -501,7 +502,7 @@ class TickBacklogRouter:
             
             # Allow 1% tolerance
             tolerance = 0.01
-            price_match = abs(entry_price - api_price) / max(entry_price, 1.0) < tolerance
+            price_match = unified_math.abs(entry_price - api_price) / unified_math.max(entry_price, 1.0) < tolerance
             
             return price_match
             

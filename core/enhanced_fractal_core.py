@@ -1,3 +1,17 @@
+# Import safe print for Windows compatibility
+try:
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    try:
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message): print(message)
+        def info(message): print(f"[INFO] {message}")
+        def warn(message): print(f"[WARN] {message}")
+        def error(message): print(f"[ERROR] {message}")
+        def success(message): print(f"[SUCCESS] {message}")
+        def debug(message): print(f"[DEBUG] {message}")
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Enhanced Fractal Core - Advanced Fractal Mathematics and Pattern Recognition
@@ -20,8 +34,8 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 import hashlib
 
 logger = logging.getLogger(__name__)
@@ -163,14 +177,14 @@ class EnhancedFractalCore:
                 return 0.0
             
             # Convert to binary (threshold-based)
-            threshold = np.mean(data)
+            threshold = unified_math.unified_math.mean(data)
             binary_data = (data > threshold).astype(int)
             
             # Box-counting algorithm
             sizes = []
             counts = []
             
-            for size in range(1, min(binary_data.shape) // 2):
+            for size in range(1, unified_math.min(binary_data.shape) // 2):
                 if size == 0:
                     continue
                 
@@ -189,14 +203,14 @@ class EnhancedFractalCore:
                 return 1.0
             
             # Calculate dimension using linear regression
-            log_sizes = np.log(sizes)
-            log_counts = np.log(counts)
+            log_sizes = unified_math.unified_math.log(sizes)
+            log_counts = unified_math.unified_math.log(counts)
             
             # Linear regression
             coeffs = np.polyfit(log_sizes, log_counts, 1)
             dimension = -coeffs[0]  # Negative slope is the dimension
             
-            return max(0.0, min(self.fractal_parameters["dimension_limit"], dimension))
+            return unified_math.max(0.0, unified_math.min(self.fractal_parameters["dimension_limit"], dimension))
             
         except Exception as e:
             logger.error(f"Fractal dimension calculation error: {e}")
@@ -212,7 +226,7 @@ class EnhancedFractalCore:
             similarities = []
             
             for scale in [2, 4, 8]:
-                if scale >= min(data.shape):
+                if scale >= unified_math.min(data.shape):
                     continue
                 
                 # Downsample data
@@ -225,19 +239,19 @@ class EnhancedFractalCore:
                     flat_downsampled = downsampled.flatten()
                     
                     # Ensure same length
-                    min_size = min(len(flat_original), len(flat_downsampled))
+                    min_size = unified_math.min(len(flat_original), len(flat_downsampled))
                     flat_original = flat_original[:min_size]
                     flat_downsampled = flat_downsampled[:min_size]
                     
                     if min_size > 1:
-                        correlation = np.corrcoef(flat_original, flat_downsampled)[0, 1]
+                        correlation = unified_math.unified_math.correlation(flat_original, flat_downsampled)[0, 1]
                         if not np.isnan(correlation):
-                            similarities.append(abs(correlation))
+                            similarities.append(unified_math.abs(correlation))
             
             if not similarities:
                 return 0.0
             
-            return np.mean(similarities)
+            return unified_math.unified_math.mean(similarities)
             
         except Exception as e:
             logger.error(f"Self-similarity calculation error: {e}")
@@ -250,11 +264,11 @@ class EnhancedFractalCore:
                 return 0.0
             
             # Variance-based complexity
-            variance = np.var(data)
-            variance_complexity = min(variance / 100.0, 1.0)
+            variance = unified_math.unified_math.var(data)
+            variance_complexity = unified_math.min(variance / 100.0, 1.0)
             
             # Entropy-based complexity
-            hist, _ = np.histogram(data, bins=min(50, data.size // 10))
+            hist, _ = np.histogram(data, bins=unified_math.min(50, data.size // 10))
             hist = hist[hist > 0]
             if len(hist) > 1:
                 probabilities = hist / np.sum(hist)
@@ -268,8 +282,8 @@ class EnhancedFractalCore:
             if data.ndim >= 2:
                 grad_x = np.gradient(data, axis=0)
                 grad_y = np.gradient(data, axis=1)
-                gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
-                gradient_complexity = np.mean(gradient_magnitude) / 10.0
+                gradient_magnitude = unified_math.unified_math.sqrt(grad_x**2 + grad_y**2)
+                gradient_complexity = unified_math.unified_math.mean(gradient_magnitude) / 10.0
             else:
                 gradient_complexity = 0.0
             
@@ -278,7 +292,7 @@ class EnhancedFractalCore:
                          entropy_complexity * 0.4 + 
                          gradient_complexity * 0.2)
             
-            return max(0.0, min(1.0, complexity))
+            return unified_math.max(0.0, unified_math.min(1.0, complexity))
             
         except Exception as e:
             logger.error(f"Complexity score calculation error: {e}")
@@ -289,20 +303,20 @@ class EnhancedFractalCore:
         try:
             # Dimension confidence (closer to expected range = higher confidence)
             expected_dimension = 1.5  # Typical for financial data
-            dimension_confidence = 1.0 - abs(fractal_dimension - expected_dimension) / expected_dimension
+            dimension_confidence = 1.0 - unified_math.abs(fractal_dimension - expected_dimension) / expected_dimension
             
             # Self-similarity confidence
             similarity_confidence = self_similarity
             
             # Complexity confidence (moderate complexity = higher confidence)
-            complexity_confidence = 1.0 - abs(complexity_score - 0.5) * 2  # Peak at 0.5
+            complexity_confidence = 1.0 - unified_math.abs(complexity_score - 0.5) * 2  # Peak at 0.5
             
             # Combine confidences
             confidence = (dimension_confidence * 0.4 + 
                          similarity_confidence * 0.3 + 
                          complexity_confidence * 0.3)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Confidence level calculation error: {e}")
@@ -321,7 +335,7 @@ class EnhancedFractalCore:
             
             for i in range(max_iter):
                 Z = Z**2 + C
-                mask = (np.abs(Z) <= 2) & (fractal == 0)
+                mask = (unified_math.unified_math.abs(Z) <= 2) & (fractal == 0)
                 fractal[mask] = i
             
             return fractal.astype(float)
@@ -342,7 +356,7 @@ class EnhancedFractalCore:
             
             for i in range(max_iter):
                 Z = Z**2 + c
-                mask = (np.abs(Z) <= 2) & (fractal == 0)
+                mask = (unified_math.unified_math.abs(Z) <= 2) & (fractal == 0)
                 fractal[mask] = i
             
             return fractal.astype(float)
@@ -410,18 +424,18 @@ def main() -> None:
     
     # Test fractal generation
     mandelbrot_data = fractal_core.generate_mandelbrot_fractal(50, 50)
-    print(f"Mandelbrot fractal generated: {mandelbrot_data.shape}")
+    safe_print(f"Mandelbrot fractal generated: {mandelbrot_data.shape}")
     
     # Test fractal analysis
     result = fractal_core.analyze_fractal(mandelbrot_data, "mandelbrot")
-    print(f"Fractal analysis result: {result.success}")
-    print(f"Fractal dimension: {result.fractal_dimension:.3f}")
-    print(f"Self-similarity: {result.self_similarity:.3f}")
-    print(f"Complexity score: {result.complexity_score:.3f}")
+    safe_print(f"Fractal analysis result: {result.success}")
+    safe_print(f"Fractal dimension: {result.fractal_dimension:.3f}")
+    safe_print(f"Self-similarity: {result.self_similarity:.3f}")
+    safe_print(f"Complexity score: {result.complexity_score:.3f}")
     
     # Get statistics
     stats = fractal_core.get_fractal_statistics()
-    print(f"Fractal statistics: {stats}")
+    safe_print(f"Fractal statistics: {stats}")
 
 
 if __name__ == "__main__":

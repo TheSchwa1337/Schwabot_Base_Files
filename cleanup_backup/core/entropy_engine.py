@@ -1,3 +1,5 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Entropy Engine - Core Market Entropy Analysis System
@@ -20,8 +22,8 @@ import time
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass
 from datetime import datetime
-import numpy as np
-import math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from scipy import stats
 
 logger = logging.getLogger(__name__)
@@ -114,7 +116,7 @@ class EntropyEngine:
                 pattern_detected=pattern_detected,
                 metadata={
                     'data_length': len(prices),
-                    'price_range': (min(prices), max(prices)),
+                    'price_range': (unified_math.min(prices), unified_math.max(prices)),
                     'calculation_count': self.calculation_count
                 }
             )
@@ -149,7 +151,7 @@ class EntropyEngine:
             price_changes = np.diff(prices)
             
             # Create histogram of price changes
-            hist, bin_edges = np.histogram(price_changes, bins=min(20, len(price_changes)//2))
+            hist, bin_edges = np.histogram(price_changes, bins=unified_math.min(20, len(price_changes)//2))
             
             # Remove zero bins
             hist = hist[hist > 0]
@@ -167,7 +169,7 @@ class EntropyEngine:
             max_entropy = np.log2(len(probabilities))
             normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
             
-            return min(1.0, normalized_entropy)
+            return unified_math.min(1.0, normalized_entropy)
             
         except Exception as e:
             logger.error(f"Shannon entropy calculation error: {e}")
@@ -184,10 +186,10 @@ class EntropyEngine:
             volume_changes = np.diff(volumes)
             
             # Weight price changes by volume
-            weighted_changes = price_changes * np.abs(volume_changes)
+            weighted_changes = price_changes * unified_math.unified_math.abs(volume_changes)
             
             # Create histogram
-            hist, _ = np.histogram(weighted_changes, bins=min(15, len(weighted_changes)//2))
+            hist, _ = np.histogram(weighted_changes, bins=unified_math.min(15, len(weighted_changes)//2))
             hist = hist[hist > 0]
             
             if len(hist) == 0:
@@ -203,7 +205,7 @@ class EntropyEngine:
             max_entropy = np.log2(len(probabilities))
             normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
             
-            return min(1.0, normalized_entropy)
+            return unified_math.min(1.0, normalized_entropy)
             
         except Exception as e:
             logger.error(f"Relative entropy calculation error: {e}")
@@ -259,7 +261,7 @@ class EntropyEngine:
             max_entropy = np.log2(3)  # 3 possible states
             normalized_entropy = total_entropy / max_entropy if max_entropy > 0 else 0.0
             
-            return min(1.0, normalized_entropy)
+            return unified_math.min(1.0, normalized_entropy)
             
         except Exception as e:
             logger.error(f"Conditional entropy calculation error: {e}")
@@ -279,10 +281,10 @@ class EntropyEngine:
             slope = np.polyfit(x, recent_entropy, 1)[0]
             
             # Variance pattern
-            variance = np.var(recent_entropy)
+            variance = unified_math.unified_math.var(recent_entropy)
             
             # Pattern detection criteria
-            trend_pattern = abs(slope) > 0.05
+            trend_pattern = unified_math.abs(slope) > 0.05
             variance_pattern = variance > 0.1
             
             return trend_pattern or variance_pattern
@@ -295,21 +297,21 @@ class EntropyEngine:
         """Calculate confidence score for entropy calculation."""
         try:
             # Data quality factors
-            data_length_factor = min(len(prices) / 100.0, 1.0)
-            price_range_factor = min((max(prices) - min(prices)) / 1000.0, 1.0)
+            data_length_factor = unified_math.min(len(prices) / 100.0, 1.0)
+            price_range_factor = min((unified_math.max(prices) - unified_math.min(prices)) / 1000.0, 1.0)
             
             # Volume consistency
             volume_consistency = 0.8  # Placeholder
             if volumes and len(volumes) > 1:
-                volume_std = np.std(volumes)
-                volume_consistency = max(0.0, 1.0 - volume_std / np.mean(volumes))
+                volume_std = unified_math.unified_math.std(volumes)
+                volume_consistency = unified_math.max(0.0, 1.0 - volume_std / unified_math.unified_math.mean(volumes))
             
             # Combine factors
             confidence = (data_length_factor * 0.4 + 
                          price_range_factor * 0.3 + 
                          volume_consistency * 0.3)
             
-            return max(0.0, min(1.0, confidence))
+            return unified_math.max(0.0, unified_math.min(1.0, confidence))
             
         except Exception as e:
             logger.error(f"Entropy confidence calculation error: {e}")
@@ -349,7 +351,7 @@ class EntropyEngine:
             
             # Calculate volatility factor
             recent_entropy = np.array(self.entropy_history[-10:])
-            volatility_factor = np.std(recent_entropy) if len(recent_entropy) > 1 else 0.0
+            volatility_factor = unified_math.unified_math.std(recent_entropy) if len(recent_entropy) > 1 else 0.0
             
             return EntropyMetrics(
                 shannon_entropy=current_entropy,
@@ -411,13 +413,13 @@ def main() -> None:
     }
     
     result = engine.calculate_entropy(test_market_data, "shannon")
-    print(f"Entropy calculation result: {result.success}")
-    print(f"Entropy value: {result.entropy_value:.3f}")
-    print(f"Pattern detected: {result.pattern_detected}")
+    safe_print(f"Entropy calculation result: {result.success}")
+    safe_print(f"Entropy value: {result.entropy_value:.3f}")
+    safe_print(f"Pattern detected: {result.pattern_detected}")
     
     # Get statistics
     stats = engine.get_engine_statistics()
-    print(f"Engine statistics: {stats}")
+    safe_print(f"Engine statistics: {stats}")
 
 
 if __name__ == "__main__":
