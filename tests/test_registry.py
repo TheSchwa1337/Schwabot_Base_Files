@@ -74,7 +74,7 @@ class TestResult:
 
 class TestRegistry:
     """Central test registry for Schwabot framework."""
-    
+
     def __init__(self):
         """Initialize the test registry."""
         self.test_modules = {
@@ -169,7 +169,7 @@ class TestRegistry:
                 'critical': True
             }
         }
-        
+
         # Define test suites for different execution modes
         self.test_suites = {
             TestMode.QUICK: [
@@ -192,16 +192,16 @@ class TestRegistry:
             ],
             TestMode.COMPREHENSIVE: list(self.test_modules.keys())
         }
-        
+
         logger.info("🧪 Test Registry initialized with all critical test components")
-    
+
     def _test_hash_confidence_evaluator(self) -> Dict[str, Any]:
         """Test hash confidence evaluator functionality."""
         try:
             from core.hash_confidence_evaluator import HashConfidenceEvaluator
-            
+
             evaluator = HashConfidenceEvaluator()
-            
+
             # Test data
             test_tick_data = {
                 'timestamp': time.time(),
@@ -212,10 +212,10 @@ class TestRegistry:
                     'asks': [[50001.0, 150.0], [50002.0, 250.0]]
                 }
             }
-            
+
             # Process tick event
             trigger = evaluator.process_tick_event(test_tick_data)
-            
+
             # Validate results
             success = (
                 trigger is not None and
@@ -223,10 +223,10 @@ class TestRegistry:
                 hasattr(trigger, 'confidence') and
                 0.0 <= trigger.confidence <= 1.0
             )
-            
+
             # Get analytics
             analytics = evaluator.get_hash_resonance_analytics()
-            
+
             return {
                 'success': success,
                 'total_errors': 0 if success else 1,
@@ -237,7 +237,7 @@ class TestRegistry:
                     'analytics': analytics
                 }
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -245,14 +245,14 @@ class TestRegistry:
                 'details': {'error': str(e)},
                 'error': str(e)
             }
-    
+
     def _test_tick_backlog_router(self) -> Dict[str, Any]:
         """Test tick backlog router functionality."""
         try:
             from core.tick_backlog_router import TickBacklogRouter
-            
+
             router = TickBacklogRouter()
-            
+
             # Test data
             test_tick_data = {
                 'timestamp': time.time(),
@@ -263,10 +263,10 @@ class TestRegistry:
                     'asks': [[50001.0, 150.0], [50002.0, 250.0]]
                 }
             }
-            
+
             # Process tick data
             profit = router.process_tick_data(test_tick_data)
-            
+
             # Validate results
             success = (
                 profit is not None and
@@ -274,10 +274,10 @@ class TestRegistry:
                 hasattr(profit, 'state') and
                 hasattr(profit, 'api_sync_score')
             )
-            
+
             # Get analytics
             analytics = router.get_backlog_analytics()
-            
+
             return {
                 'success': success,
                 'total_errors': 0 if success else 1,
@@ -288,7 +288,7 @@ class TestRegistry:
                     'analytics': analytics
                 }
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -296,20 +296,20 @@ class TestRegistry:
                 'details': {'error': str(e)},
                 'error': str(e)
             }
-    
+
     def _test_volume_tick_router(self) -> Dict[str, Any]:
         """Test volume tick router functionality."""
         try:
             from core.volume_tick_router import VolumeTickRouter
-            
+
             router = VolumeTickRouter()
-            
+
             # Test data
             volume_data = {
                 'volume': 1000000.0,
                 'timestamp': time.time()
             }
-            
+
             price_data = {
                 'price': 50000.0,
                 'volume': 1000000.0,
@@ -319,10 +319,10 @@ class TestRegistry:
                 'ask_volume': 600000.0,
                 'price_change': 0.001
             }
-            
+
             # Process volume event
             confidence = router.process_volume_event(volume_data, price_data)
-            
+
             # Validate results
             success = (
                 confidence is not None and
@@ -330,10 +330,10 @@ class TestRegistry:
                 hasattr(confidence, 'volume_sensitivity') and
                 0.0 <= confidence.confidence_score <= 1.0
             )
-            
+
             # Get analytics
             analytics = router.get_volume_analytics()
-            
+
             return {
                 'success': success,
                 'total_errors': 0 if success else 1,
@@ -344,7 +344,7 @@ class TestRegistry:
                     'analytics': analytics
                 }
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -352,14 +352,14 @@ class TestRegistry:
                 'details': {'error': str(e)},
                 'error': str(e)
             }
-    
+
     def _test_ghost_strategy_handler(self) -> Dict[str, Any]:
         """Test ghost strategy handler functionality."""
         try:
             from core.ghost_strategy_handler import GhostStrategyHandler
-            
+
             handler = GhostStrategyHandler()
-            
+
             # Test data
             market_data = {
                 'price': 50000.0,
@@ -370,17 +370,17 @@ class TestRegistry:
                 'ask_volume': 600000.0,
                 'price_change': 0.001
             }
-            
+
             conventional_signals = {
                 'buy_signal': 0.3,
                 'sell_signal': 0.2,
                 'momentum': 0.1,
                 'volume_signal': 0.4
             }
-            
+
             # Detect ghost entry
             ghost_entry = handler.detect_ghost_entry(market_data, conventional_signals)
-            
+
             # Validate results (ghost entry may or may not be detected)
             success = True
             if ghost_entry:
@@ -389,10 +389,10 @@ class TestRegistry:
                     hasattr(ghost_entry, 'entry_type') and
                     0.0 <= ghost_entry.stealth_level <= 1.0
                 )
-            
+
             # Get analytics
             analytics = handler.get_ghost_analytics()
-            
+
             return {
                 'success': success,
                 'total_errors': 0 if success else 1,
@@ -403,7 +403,7 @@ class TestRegistry:
                     'analytics': analytics
                 }
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -411,23 +411,23 @@ class TestRegistry:
                 'details': {'error': str(e)},
                 'error': str(e)
             }
-    
+
     def _test_fractal_sync(self) -> Dict[str, Any]:
         """Test fractal sync functionality."""
         try:
             import unittest
-            
+
             # Create test suite
             loader = unittest.TestLoader()
             suite = loader.loadTestsFromTestCase(TestFractalSync)
-            
+
             # Run tests
             runner = unittest.TextTestRunner(verbosity=0)
             result = runner.run(suite)
-            
+
             success = result.wasSuccessful()
             total_errors = len(result.errors) + len(result.failures)
-            
+
             return {
                 'success': success,
                 'total_errors': total_errors,
@@ -438,7 +438,7 @@ class TestRegistry:
                     'skipped': len(result.skipped) if hasattr(result, 'skipped') else 0
                 }
             }
-            
+
         except Exception as e:
             return {
                 'success': False,
@@ -446,11 +446,11 @@ class TestRegistry:
                 'details': {'error': str(e)},
                 'error': str(e)
             }
-    
+
     def run_individual_test(self, test_name: str) -> TestResult:
         """Run an individual test by name."""
         logger.info(f"🧪 Running individual test: {test_name}")
-        
+
         if test_name not in self.test_modules:
             error_msg = f"Test '{test_name}' not found in registry"
             logger.error(error_msg)
@@ -462,13 +462,13 @@ class TestRegistry:
                 details={'error': error_msg},
                 error_message=error_msg
             )
-        
+
         try:
             start_time = time.time()
             test_function = self.test_modules[test_name]['function']
             result = test_function()
             execution_time = time.time() - start_time
-            
+
             return TestResult(
                 test_name=test_name,
                 success=result.get('success', False),
@@ -477,7 +477,7 @@ class TestRegistry:
                 details=result.get('details', {}),
                 error_message=result.get('error')
             )
-            
+
         except Exception as e:
             error_msg = f"Failed to run test '{test_name}': {str(e)}"
             logger.error(error_msg)
@@ -489,11 +489,11 @@ class TestRegistry:
                 details={'error': error_msg},
                 error_message=error_msg
             )
-    
+
     def run_test_suite(self, mode: TestMode) -> Dict[str, Any]:
         """Run a test suite based on execution mode."""
         logger.info(f"🧪 Running test suite: {mode.value}")
-        
+
         if mode not in self.test_suites:
             error_msg = f"Test mode '{mode.value}' not supported"
             logger.error(error_msg)
@@ -503,22 +503,22 @@ class TestRegistry:
                 'error': error_msg,
                 'results': {}
             }
-        
+
         test_names = self.test_suites[mode]
         results = {}
         total_start_time = time.time()
-        
+
         for test_name in test_names:
             logger.info(f"🧪 Running test: {test_name}")
             result = self.run_individual_test(test_name)
             results[test_name] = result
-        
+
         total_execution_time = time.time() - total_start_time
-        
+
         # Calculate overall success
         all_passed = all(result.success for result in results.values())
         total_errors = sum(result.total_errors for result in results.values())
-        
+
         suite_result = {
             'success': all_passed,
             'mode': mode.value,
@@ -529,57 +529,57 @@ class TestRegistry:
             'tests_failed': sum(1 for result in results.values() if not result.success),
             'results': results
         }
-        
+
         if all_passed:
             logger.info(f"✅ Test suite '{mode.value}' passed in {total_execution_time:.3f}s")
         else:
             logger.error(f"❌ Test suite '{mode.value}' failed with {total_errors} errors")
-        
+
         return suite_result
-    
+
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive test suite."""
         return self.run_test_suite(TestMode.COMPREHENSIVE)
-    
+
     def run_quick_test(self) -> Dict[str, Any]:
         """Run quick test suite."""
         return self.run_test_suite(TestMode.QUICK)
-    
+
     def run_backtest_test(self) -> Dict[str, Any]:
         """Run backtest-focused test suite."""
         return self.run_test_suite(TestMode.BACKTEST)
-    
+
     def list_available_tests(self) -> Dict[str, Any]:
         """List all available tests and their details."""
         test_list = {}
-        
+
         for test_name, test_info in self.test_modules.items():
             test_list[test_name] = {
                 'description': test_info['description'],
                 'category': test_info['category'],
                 'critical': test_info['critical']
             }
-        
+
         return {
             'total_tests': len(test_list),
             'critical_tests': sum(1 for info in test_list.values() if info['critical']),
             'tests': test_list
         }
-    
+
     def get_test_statistics(self) -> Dict[str, Any]:
         """Get test statistics and coverage information."""
         categories = {}
         critical_count = 0
-        
+
         for test_info in self.test_modules.values():
             category = test_info['category']
             if category not in categories:
                 categories[category] = 0
             categories[category] += 1
-            
+
             if test_info['critical']:
                 critical_count += 1
-        
+
         return {
             'total_tests': len(self.test_modules),
             'critical_tests': critical_count,
@@ -589,18 +589,18 @@ class TestRegistry:
                 mode.value: len(tests) for mode, tests in self.test_suites.items()
             }
         }
-    
+
     def validate_test_integrity(self) -> Dict[str, Any]:
         """Validate test integrity and dependencies."""
         logger.info("🔍 Validating test integrity")
-        
+
         validation_result = {
             'success': True,
             'errors': [],
             'warnings': [],
             'details': {}
         }
-        
+
         # Check if all test modules are importable
         for test_name, test_info in self.test_modules.items():
             try:
@@ -609,18 +609,18 @@ class TestRegistry:
                     error_msg = f"Test '{test_name}' function is not callable"
                     validation_result['errors'].append(error_msg)
                     validation_result['success'] = False
-                
+
                 # Check if test has required attributes
                 test_function = test_info['function']
                 if not hasattr(test_function, '__name__'):
                     warning_msg = f"Test '{test_name}' has no name attribute"
                     validation_result['warnings'].append(warning_msg)
-                
+
             except Exception as e:
                 error_msg = f"Failed to validate test '{test_name}': {str(e)}"
                 validation_result['errors'].append(error_msg)
                 validation_result['success'] = False
-        
+
         # Check test suite integrity
         for mode, test_names in self.test_suites.items():
             for test_name in test_names:
@@ -628,19 +628,19 @@ class TestRegistry:
                     error_msg = f"Test suite '{mode.value}' references non-existent test: {test_name}"
                     validation_result['errors'].append(error_msg)
                     validation_result['success'] = False
-        
+
         validation_result['details'] = {
             'tests_validated': len(self.test_modules),
             'test_suites_validated': len(self.test_suites),
             'total_errors': len(validation_result['errors']),
             'total_warnings': len(validation_result['warnings'])
         }
-        
+
         if validation_result['success']:
             logger.info("✅ Test integrity validation passed")
         else:
             logger.error(f"❌ Test integrity validation failed: {len(validation_result['errors'])} errors")
-        
+
         return validation_result
 
 
@@ -688,7 +688,7 @@ def print_test_results(results: Dict[str, Any]) -> None:
     safe_print("\n" + "="*80)
     safe_print("🧪 SCHWABOT TEST REGISTRY RESULTS")
     safe_print("="*80)
-    
+
     safe_print(f"Test Mode: {results.get('mode', 'unknown')}")
     safe_print(f"Overall Success: {'✅ PASS' if results.get('success', False) else '❌ FAIL'}")
     safe_print(f"Execution Time: {results.get('execution_time', 0.0):.3f}s")
@@ -696,13 +696,13 @@ def print_test_results(results: Dict[str, Any]) -> None:
     safe_print(f"Tests Run: {results.get('tests_run', 0)}")
     safe_print(f"Tests Passed: {results.get('tests_passed', 0)}")
     safe_print(f"Tests Failed: {results.get('tests_failed', 0)}")
-    
+
     if 'results' in results:
         safe_print("\nIndividual Test Results:")
         for test_name, test_result in results['results'].items():
             status = "✅ PASS" if test_result.success else "❌ FAIL"
             safe_print(f"  {test_name}: {status} ({test_result.execution_time:.3f}s, {test_result.total_errors} errors)")
-    
+
     safe_print("="*80)
 
 
@@ -712,11 +712,11 @@ if __name__ == "__main__":
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-    
+
     # Parse command line arguments
     if len(sys.argv) > 1:
         command = sys.argv[1].lower()
-        
+
         if command == 'all':
             results = run_all_tests()
             print_test_results(results)
@@ -749,7 +749,7 @@ if __name__ == "__main__":
                 safe_print("Warnings:")
                 for warning in validation['warnings']:
                     safe_print(f"  ⚠️ {warning}")
-        elif command in ['profit_vector_calibration', 'matrix_mapping_validation', 
+        elif command in ['profit_vector_calibration', 'matrix_mapping_validation',
                         'entry_exit_sequence_integrity', 'legacy_backlog_hydrator',
                         'sfs_trigger_positioning', 'fallback_trade_controller',
                         'tick_hold_logic', 'api_price_entry_feedback', 'trade_chain_timeline_replay']:
@@ -766,4 +766,4 @@ if __name__ == "__main__":
     else:
         # Default: run comprehensive test
         results = run_all_tests()
-        print_test_results(results) 
+        print_test_results(results)

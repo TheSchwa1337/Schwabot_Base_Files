@@ -57,7 +57,7 @@ def main():
     """Test all critical imports."""
     safe_print("Testing Critical Module Imports")
     safe_print("=" * 50)
-    
+
     # Test the modules we just created
     tests = [
         ("profit_bridge_orchestrator", "ProfitBridgeOrchestrator"),
@@ -66,17 +66,17 @@ def main():
         ("unified_signal_metrics", "BTCInvestmentSignals"),
         ("unified_signal_metrics", "collect_unified_signals"),
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for module, class_name in tests:
         if test_import(module, class_name):
             passed += 1
-    
+
     safe_print("=" * 50)
     safe_print(f"Results: {passed}/{total} imports successful")
-    
+
     if passed == total:
         safe_print("All critical modules imported successfully!")
         return True
@@ -86,4 +86,4 @@ def main():
 
 if __name__ == "__main__":
     success = main()
-    sys.exit(0 if success else 1) 
+    sys.exit(0 if success else 1)

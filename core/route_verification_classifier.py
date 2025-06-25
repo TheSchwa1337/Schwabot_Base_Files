@@ -129,7 +129,7 @@ class RouteVerificationResult:
     risk_score: float
     timestamp: Optional[datetime] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __post_init__(self) -> None:
         """Post-initialization processing."""
         if self.timestamp is None:

@@ -23,4 +23,4 @@ class ModelPredictor:
 
     def load(self, filename):
         # Implement the logic to load the model
-        pass 
+        pass

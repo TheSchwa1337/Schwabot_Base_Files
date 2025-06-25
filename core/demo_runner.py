@@ -103,7 +103,7 @@ class PipelineResult:
 class DemoPipelineRunner:
     """
     Demo pipeline runner for complete Schwabot execution.
-    
+
     Mathematical Foundation:
     - Tick Processing: T(t) = f(price, volume, market_data)
     - Hash Generation: H(t) = hash(tick_data + timestamp)
@@ -111,15 +111,15 @@ class DemoPipelineRunner:
     - Strategy Decision: S(t) = f(tensor_score, bit_phase, market_conditions)
     - Portfolio Update: P(t+1) = P(t) + Σ(trades * impacts)
     """
-    
+
     def __init__(self, config_path: str = "./config/demo_runner_config.json"):
         self.config_path = config_path
-        
+
         # Pipeline state
         self.mode: PipelineMode = PipelineMode.DEMO
         self.status: PipelineStatus = PipelineStatus.IDLE
         self.is_running: bool = False
-        
+
         # Execution tracking
         self.execution_id: str = ""
         self.start_time: datetime = None
@@ -127,25 +127,25 @@ class DemoPipelineRunner:
         self.tick_count: int = 0
         self.decision_count: int = 0
         self.trade_count: int = 0
-        
+
         # Data storage
         self.tick_history: List[TickEvent] = []
         self.decision_history: List[StrategyDecision] = []
         self.trade_history: List[Dict[str, Any]] = []
         self.performance_metrics: Dict[str, Any] = {}
-        
+
         # Initialize core components with real implementations
         self._initialize_core_components()
-        
+
         # Execution queues
         self.tick_queue = queue.Queue()
         self.decision_queue = queue.Queue()
         self.trade_queue = queue.Queue()
-        
+
         # Threading
         self.executor = ThreadPoolExecutor(max_workers=4)
         self.stop_event = threading.Event()
-        
+
         # Load configuration
         self._load_configuration()
         logger.info("Demo Pipeline Runner initialized with real core components")
@@ -162,7 +162,7 @@ class DemoPipelineRunner:
             from .tick_hash_processor import TickHashProcessor
             from .unified_mathematics_config import get_unified_math
             from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
-            
+
             # Initialize core components
             self.dlt_engine = DLTWaveformEngine()
             self.tensor_matcher = MatrixMapper()  # MatrixMapper handles tensor matching
@@ -172,14 +172,14 @@ class DemoPipelineRunner:
             self.trade_simulator = get_real_trading_integration()
             self.demo_injector = IntegratedAlifAlephSystem()
             self.vector_exporter = get_unified_math()
-            
+
             # Additional core components
             self.ferris_rde = get_ferris_rde_core()
             self.tick_processor = TickHashProcessor()
             self.unified_math = get_unified_math()
-            
+
             logger.info("✅ All core components initialized successfully")
-            
+
         except ImportError as e:
             logger.error(f"❌ Failed to import core component: {e}")
             raise RuntimeError(f"Critical core component missing: {e}")
@@ -211,9 +211,9 @@ class DemoPipelineRunner:
                     "aggressive": {"risk_tolerance": 0.5, "position_size": 0.4}
                 }
             }
-            
+
             logger.info("Demo runner configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -225,12 +225,12 @@ class DemoPipelineRunner:
     def start_pipeline(self, duration_minutes: int = 60) -> bool:
         """
         Start the demo pipeline execution.
-        
+
         Parameters:
         -----------
         duration_minutes : int
             Duration to run the pipeline in minutes
-            
+
         Returns:
         --------
         bool
@@ -240,7 +240,7 @@ class DemoPipelineRunner:
             if self.is_running:
                 logger.warning("Pipeline is already running")
                 return False
-            
+
             # Initialize execution
             self.execution_id = f"pipeline_{int(time.time())}"
             self.start_time = datetime.now()
@@ -248,23 +248,23 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.RUNNING
             self.is_running = True
             self.stop_event.clear()
-            
+
             # Reset counters
             self.tick_count = 0
             self.decision_count = 0
             self.trade_count = 0
-            
+
             # Clear history
             self.tick_history.clear()
             self.decision_history.clear()
             self.trade_history.clear()
-            
+
             # Start execution threads
             self._start_execution_threads()
-            
+
             logger.info(f"Pipeline started: {self.execution_id} (duration: {duration_minutes} minutes)")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error starting pipeline: {e}")
             self.status = PipelineStatus.ERROR
@@ -273,7 +273,7 @@ class DemoPipelineRunner:
     def stop_pipeline(self) -> bool:
         """
         Stop the demo pipeline execution.
-        
+
         Returns:
         --------
         bool
@@ -283,25 +283,25 @@ class DemoPipelineRunner:
             if not self.is_running:
                 logger.warning("Pipeline is not running")
                 return False
-            
+
             # Signal stop
             self.stop_event.set()
             self.is_running = False
             self.status = PipelineStatus.STOPPED
             self.end_time = datetime.now()
-            
+
             # Wait for threads to finish
             self.executor.shutdown(wait=True)
-            
+
             # Calculate final metrics
             self._calculate_final_metrics()
-            
+
             # Export results
             self._export_pipeline_results()
-            
+
             logger.info(f"Pipeline stopped: {self.execution_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error stopping pipeline: {e}")
             return False
@@ -311,40 +311,40 @@ class DemoPipelineRunner:
         try:
             # Start tick generation thread
             self.executor.submit(self._tick_generation_loop)
-            
+
             # Start decision processing thread
             self.executor.submit(self._decision_processing_loop)
-            
+
             # Start trade execution thread
             self.executor.submit(self._trade_execution_loop)
-            
+
             # Start monitoring thread
             self.executor.submit(self._monitoring_loop)
-            
+
             logger.info("Pipeline execution threads started")
-            
+
         except Exception as e:
             logger.error(f"Error starting execution threads: {e}")
 
     def _tick_generation_loop(self) -> None:
         """Generate real ticks using BTC price hashing and 16-bit mapping."""
         logger.info("🔄 Starting real tick generation loop")
-        
+
         while not self.stop_event.is_set():
             try:
                 # Generate real BTC price data
                 btc_price = self._generate_real_btc_price()
-                
+
                 # Process through Ferris RDE for 16-bit mapping
                 price_mapping = self.ferris_rde.map_btc_price_16bit(btc_price)
-                
+
                 # Generate real tick hash
                 tick_hash = self.tick_processor.generate_tick_hash(
                     price=btc_price,
                     volume=np.random.uniform(500000, 2000000),
                     timestamp=time.time()
                 )
-                
+
                 # Create real tick event
                 tick_event = TickEvent(
                     timestamp=datetime.now(),
@@ -360,14 +360,14 @@ class DemoPipelineRunner:
                     hash_value=tick_hash,
                     bit_phases={"BTC": price_mapping.mapped_price % 16}
                 )
-                
+
                 # Add to queue
                 self.tick_queue.put(tick_event)
                 self.tick_count += 1
-                
+
                 # Sleep based on configuration
                 time.sleep(self.config.get("pipeline_settings", {}).get("tick_interval_ms", 1000) / 1000.0)
-                
+
             except Exception as e:
                 logger.error(f"❌ Error in tick generation: {e}")
                 time.sleep(1.0)  # Brief pause on error
@@ -377,29 +377,29 @@ class DemoPipelineRunner:
         try:
             # Use unified mathematics for price generation
             base_price = 50000.0
-            
+
             # Get market conditions from configuration
             market_conditions = self.config.get("market_conditions", {}).get("normal", {})
             volatility = market_conditions.get("volatility", 0.02)
             trend = market_conditions.get("trend", 0.0)
-            
+
             # Calculate price change using mathematical models
             price_change = np.random.normal(trend, volatility) * base_price
-            
+
             # Apply DLT waveform adjustments if available
             if self.dlt_engine:
                 dlt_adjustment = self.dlt_engine.calculate_waveform_adjustment(price_change)
                 price_change *= dlt_adjustment
-            
+
             # Calculate new price
             new_price = base_price + price_change
-            
+
             # Ensure price stays within reasonable bounds
             new_price = unified_math.max(new_price, base_price * 0.5)  # Minimum 50% of base
             new_price = unified_math.min(new_price, base_price * 2.0)  # Maximum 200% of base
-            
+
             return new_price
-            
+
         except Exception as e:
             logger.error(f"Error generating BTC price: {e}")
             return 50000.0  # Fallback to base price
@@ -411,23 +411,23 @@ class DemoPipelineRunner:
                 try:
                     # Get tick from queue (non-blocking)
                     tick_event = self.tick_queue.get(timeout=1.0)
-                    
+
                     # Process tick through pipeline
                     decision = self._process_tick(tick_event)
-                    
+
                     if decision:
                         # Add to decision queue
                         self.decision_queue.put(decision)
                         self.decision_count += 1
-                    
+
                     # Store tick in history
                     self.tick_history.append(tick_event)
-                    
+
                 except queue.Empty:
                     continue
                 except Exception as e:
                     logger.error(f"Error processing tick: {e}")
-                    
+
         except Exception as e:
             logger.error(f"Error in decision processing loop: {e}")
             self.status = PipelineStatus.ERROR
@@ -441,18 +441,18 @@ class DemoPipelineRunner:
                 volume=tick_event.volume,
                 market_data=tick_event.market_data
             )
-            
+
             # Determine bit phase using real bit phase engine
             bit_phase = self.bit_phase_engine.resolve_bit_phase(
                 tick_event.hash_value,
                 tick_event.market_data.get("mapped_16bit", 0)
             )
-            
+
             # Make strategy decision using real mathematical logic
             decision = self._make_strategy_decision(tick_event, tensor_score, bit_phase)
-            
+
             return decision
-            
+
         except Exception as e:
             logger.error(f"❌ Error processing tick: {e}")
             return None
@@ -467,14 +467,14 @@ class DemoPipelineRunner:
                 tensor_score=tensor_score,
                 bit_phase=bit_phase
             )
-            
+
             # Calculate confidence using unified mathematics
             confidence = self.unified_math.execute_with_monitoring(
                 "decision_confidence",
                 self._calculate_decision_confidence,
                 tensor_score, bit_phase, dlt_decision
             )
-            
+
             # Determine action based on mathematical analysis
             if confidence > 0.7 and tensor_score > 0.6:
                 decision_type = "buy"
@@ -485,14 +485,14 @@ class DemoPipelineRunner:
             else:
                 decision_type = "hold"
                 quantity = 0.0
-            
+
             # Generate basket ID using real matrix mapping
             basket_id = self.matrix_mapper.generate_basket_id(
                 tick_event.hash_value,
                 bit_phase,
                 tensor_score
             )
-            
+
             return StrategyDecision(
                 timestamp=tick_event.timestamp,
                 asset=tick_event.asset,
@@ -509,7 +509,7 @@ class DemoPipelineRunner:
                     "mapped_16bit": tick_event.market_data.get("mapped_16bit", 0)
                 }
             )
-            
+
         except Exception as e:
             logger.error(f"❌ Error making strategy decision: {e}")
             # Return safe hold decision
@@ -530,22 +530,22 @@ class DemoPipelineRunner:
         try:
             # Base confidence from tensor score
             base_confidence = tensor_score
-            
+
             # Bit phase adjustment
             bit_phase_adjustment = unified_math.min(bit_phase / 16.0, 1.0)
-            
+
             # DLT decision adjustment
             dlt_adjustment = dlt_decision if dlt_decision > 0 else 0.5
-            
+
             # Combine using weighted average
             confidence = (
                 base_confidence * 0.4 +
                 bit_phase_adjustment * 0.3 +
                 dlt_adjustment * 0.3
             )
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, confidence))
-            
+
         except Exception as e:
             logger.error(f"Error calculating decision confidence: {e}")
             return 0.5
@@ -555,17 +555,17 @@ class DemoPipelineRunner:
         try:
             # Base position size from confidence
             base_size = confidence * 0.1  # 10% of portfolio max
-            
+
             # Tensor score adjustment
             tensor_adjustment = tensor_score * 0.05  # Additional 5% based on tensor
-            
+
             # Apply risk management
             max_position = 0.15  # Maximum 15% of portfolio
-            
+
             position_size = unified_math.min(base_size + tensor_adjustment, max_position)
-            
+
             return unified_math.max(0.0, position_size)
-            
+
         except Exception as e:
             logger.error(f"Error calculating position size: {e}")
             return 0.0
@@ -577,24 +577,24 @@ class DemoPipelineRunner:
                 try:
                     # Get decision from queue (non-blocking)
                     decision = self.decision_queue.get(timeout=1.0)
-                    
+
                     # Execute trade
                     if decision.decision in ["buy", "sell"]:
                         trade_result = self._execute_trade(decision)
-                        
+
                         if trade_result:
                             # Add to trade queue
                             self.trade_queue.put(trade_result)
                             self.trade_count += 1
-                    
+
                     # Store decision in history
                     self.decision_history.append(decision)
-                    
+
                 except queue.Empty:
                     continue
                 except Exception as e:
                     logger.error(f"Error executing trade: {e}")
-                    
+
         except Exception as e:
             logger.error(f"Error in trade execution loop: {e}")
             self.status = PipelineStatus.ERROR
@@ -613,10 +613,10 @@ class DemoPipelineRunner:
                     'current_price': decision.price,
                     'market_data': decision.metadata.get('market_data', {})
                 }
-                
+
                 # Simulate trade
                 trade_result = self.trade_simulator.simulate_trade(strategy_bucket, self.mode.value.upper())
-                
+
                 if trade_result and trade_result.status.value == "executed":
                     return {
                         'timestamp': decision.timestamp,
@@ -629,9 +629,9 @@ class DemoPipelineRunner:
                         'basket_id': decision.basket_id,
                         'execution_id': trade_result.trade_id
                     }
-            
+
             return None
-            
+
         except Exception as e:
             logger.error(f"Error executing trade: {e}")
             return None
@@ -640,26 +640,26 @@ class DemoPipelineRunner:
         """Monitor pipeline execution and performance."""
         try:
             last_save_time = datetime.now()
-            
+
             while self.is_running and not self.stop_event.is_set():
                 current_time = datetime.now()
-                
+
                 # Check if execution time exceeded
                 if current_time >= self.end_time:
                     logger.info("Pipeline execution time exceeded")
                     break
-                
+
                 # Auto-save every 5 minutes
                 if (current_time - last_save_time).total_seconds() > 300:  # 5 minutes
                     self._save_pipeline_state()
                     last_save_time = current_time
-                
+
                 # Update performance metrics
                 self._update_performance_metrics()
-                
+
                 # Wait before next check
                 time.sleep(10.0)  # Check every 10 seconds
-                
+
         except Exception as e:
             logger.error(f"Error in monitoring loop: {e}")
             self.status = PipelineStatus.ERROR
@@ -669,7 +669,7 @@ class DemoPipelineRunner:
         try:
             current_time = datetime.now()
             execution_time = (current_time - self.start_time).total_seconds() if self.start_time else 0
-            
+
             self.performance_metrics = {
                 'execution_time_seconds': execution_time,
                 'tick_count': self.tick_count,
@@ -681,7 +681,7 @@ class DemoPipelineRunner:
                 'decision_rate': self.decision_count / self.tick_count if self.tick_count > 0 else 0,
                 'trade_rate': self.trade_count / self.decision_count if self.decision_count > 0 else 0
             }
-            
+
         except Exception as e:
             logger.error(f"Error updating performance metrics: {e}")
 
@@ -690,9 +690,9 @@ class DemoPipelineRunner:
         try:
             if not self.start_time or not self.end_time:
                 return
-            
+
             total_time = (self.end_time - self.start_time).total_seconds()
-            
+
             # Calculate final metrics
             final_metrics = {
                 'total_execution_time_seconds': total_time,
@@ -707,9 +707,9 @@ class DemoPipelineRunner:
                 'pipeline_status': self.status.value,
                 'execution_mode': self.mode.value
             }
-            
+
             self.performance_metrics.update(final_metrics)
-            
+
         except Exception as e:
             logger.error(f"Error calculating final metrics: {e}")
 
@@ -726,14 +726,14 @@ class DemoPipelineRunner:
                 'trade_count': self.trade_count,
                 'performance_metrics': self.performance_metrics
             }
-            
+
             # Save to file
             filename = f"pipeline_state_{self.execution_id}.json"
             with open(filename, 'w') as f:
                 json.dump(state_data, f, indent=2, default=str)
-            
+
             logger.info(f"Pipeline state saved: {filename}")
-            
+
         except Exception as e:
             logger.error(f"Error saving pipeline state: {e}")
 
@@ -757,7 +757,7 @@ class DemoPipelineRunner:
                     'trade_history_count': len(self.trade_history)
                 }
             )
-            
+
             # Export using vector exporter
             if self.vector_exporter:
                 export_data = {
@@ -771,16 +771,16 @@ class DemoPipelineRunner:
                     'performance_metrics': result.performance_metrics,
                     'metadata': result.metadata
                 }
-                
+
                 self.vector_exporter.export_vector_snapshot(
                     snapshot_type=self.vector_exporter.SnapshotType.COMPLETE_STATE,
                     data=export_data,
                     export_format=self.vector_exporter.ExportFormat.JSON,
                     compress=True
                 )
-            
+
             logger.info(f"Pipeline results exported for execution: {self.execution_id}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting pipeline results: {e}")
 
@@ -842,30 +842,30 @@ class DemoPipelineRunner:
 if __name__ == "__main__":
     # Test demo pipeline runner
     runner = DemoPipelineRunner()
-    
+
     # Set to demo mode
     runner.set_mode(PipelineMode.DEMO)
-    
+
     # Start pipeline for 2 minutes
     safe_print("🚀 Starting demo pipeline...")
     success = runner.start_pipeline(duration_minutes=2)
-    
+
     if success:
         safe_print("✅ Pipeline started successfully")
-        
+
         # Monitor for 10 seconds
         for i in range(10):
             time.sleep(1)
             status = runner.get_pipeline_status()
             safe_print(f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
-        
+
         # Stop pipeline
         safe_print("⏹️ Stopping pipeline...")
         runner.stop_pipeline()
-        
+
         # Final status
         final_status = runner.get_pipeline_status()
         safe_print(f"🏁 Final Status: {final_status['status']}")
         safe_print(f"📈 Performance: {final_status['performance_metrics']}")
     else:
-        safe_print("❌ Failed to start pipeline") 
+        safe_print("❌ Failed to start pipeline")

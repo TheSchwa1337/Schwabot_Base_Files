@@ -49,7 +49,7 @@ TEST_CATEGORIES = {
 # Test status tracking
 class TestStatus:
     """Track test execution status and results."""
-    
+
     def __init__(self):
         self.total_tests = 0
         self.passed_tests = 0
@@ -69,7 +69,7 @@ def initialize_test_framework() -> Dict[str, Any]:
     """Initialize the test framework with all components."""
     try:
         test_status.start_time = datetime.now()
-        
+
         initialization_result = {
             "framework_version": __test_framework_version__,
             "test_version": __version__,
@@ -78,7 +78,7 @@ def initialize_test_framework() -> Dict[str, Any]:
             "categories": TEST_CATEGORIES.copy(),
             "status": "initializing"
         }
-        
+
         # Validate test environment
         environment_checks = [
             ("python_version", lambda: f"{sys.version_info.major}.{sys.version_info.minor}"),
@@ -87,7 +87,7 @@ def initialize_test_framework() -> Dict[str, Any]:
             ("type_checking", lambda: TEST_CONFIG["type_enforcement"]),
             ("coverage_tools", lambda: "coverage" in sys.modules or TEST_CONFIG["coverage_reporting"]),
         ]
-        
+
         initialization_result["environment"] = {}
         for name, check in environment_checks:
             try:
@@ -101,13 +101,13 @@ def initialize_test_framework() -> Dict[str, Any]:
                     "status": "unavailable",
                     "error": str(e)
                 }
-        
+
         # Check if all required components are available
         available_checks = sum(
             1 for env in initialization_result["environment"].values()
             if env["status"] == "available"
         )
-        
+
         if available_checks == len(environment_checks):
             initialization_result["status"] = "ready"
         else:
@@ -115,10 +115,10 @@ def initialize_test_framework() -> Dict[str, Any]:
             initialization_result["warnings"] = [
                 f"Missing components: {', '.join([name for name, env in initialization_result['environment'].items() if env['status'] == 'unavailable'])}"
             ]
-        
+
         logging.info(f"Test framework initialization: {initialization_result['status']}")
         return initialization_result
-        
+
     except Exception as e:
         logging.error(f"Test framework initialization failed: {e}")
         return {
@@ -134,10 +134,10 @@ def run_test_suite(test_categories: Optional[List[str]] = None) -> Dict[str, Any
     try:
         if test_categories is None:
             test_categories = list(TEST_CATEGORIES.keys())
-        
+
         test_status.start_time = datetime.now()
         logging.info(f"Starting test suite execution for categories: {test_categories}")
-        
+
         suite_result = {
             "suite_id": f"suite_{int(test_status.start_time.timestamp())}",
             "categories": test_categories,
@@ -145,24 +145,24 @@ def run_test_suite(test_categories: Optional[List[str]] = None) -> Dict[str, Any
             "results": {},
             "summary": {}
         }
-        
+
         # Run tests for each category
         for category in test_categories:
             if category in TEST_CATEGORIES:
                 category_result = run_category_tests(category)
                 suite_result["results"][category] = category_result
-                
+
                 # Update global test status
                 test_status.total_tests += category_result.get("total_tests", 0)
                 test_status.passed_tests += category_result.get("passed_tests", 0)
                 test_status.failed_tests += category_result.get("failed_tests", 0)
                 test_status.skipped_tests += category_result.get("skipped_tests", 0)
-        
+
         # Generate summary
         test_status.end_time = datetime.now()
         suite_result["end_time"] = test_status.end_time.isoformat()
         suite_result["duration"] = (test_status.end_time - test_status.start_time).total_seconds()
-        
+
         suite_result["summary"] = {
             "total_tests": test_status.total_tests,
             "passed_tests": test_status.passed_tests,
@@ -171,13 +171,13 @@ def run_test_suite(test_categories: Optional[List[str]] = None) -> Dict[str, Any
             "success_rate": test_status.passed_tests / test_status.total_tests if test_status.total_tests > 0 else 0.0,
             "duration": suite_result["duration"]
         }
-        
+
         # Check if suite passed
         suite_result["status"] = "passed" if test_status.failed_tests == 0 else "failed"
-        
+
         logging.info(f"Test suite completed: {suite_result['status']} ({test_status.passed_tests}/{test_status.total_tests} passed)")
         return suite_result
-        
+
     except Exception as e:
         logging.error(f"Test suite execution failed: {e}")
         return {
@@ -191,7 +191,7 @@ def run_category_tests(category: str) -> Dict[str, Any]:
     """Run tests for a specific category."""
     try:
         logging.info(f"Running {category} tests...")
-        
+
         category_result = {
             "category": category,
             "description": TEST_CATEGORIES.get(category, "Unknown category"),
@@ -203,7 +203,7 @@ def run_category_tests(category: str) -> Dict[str, Any]:
             "performance_metrics": {},
             "coverage_metrics": {}
         }
-        
+
         # Simulate test execution for each category
         if category == "unit":
             category_result.update(run_unit_tests())
@@ -228,10 +228,10 @@ def run_category_tests(category: str) -> Dict[str, Any]:
                 "status": "skipped",
                 "reason": f"Unknown test category: {category}"
             })
-        
+
         logging.info(f"{category} tests completed: {category_result['passed_tests']}/{category_result['total_tests']} passed")
         return category_result
-        
+
     except Exception as e:
         logging.error(f"Category {category} test execution failed: {e}")
         return {
@@ -371,7 +371,7 @@ def generate_test_report() -> Dict[str, Any]:
     try:
         if test_status.end_time is None:
             test_status.end_time = datetime.now()
-        
+
         report = {
             "report_id": f"report_{int(test_status.end_time.timestamp())}",
             "framework_version": __test_framework_version__,
@@ -390,20 +390,20 @@ def generate_test_report() -> Dict[str, Any]:
             "fault_injection_summary": test_status.fault_injection_results,
             "recommendations": []
         }
-        
+
         # Generate recommendations
         if report["test_summary"]["success_rate"] < TEST_CONFIG["coverage_threshold"]:
             report["recommendations"].append("Test success rate below threshold - review failing tests")
-        
+
         if report["test_summary"]["failed_tests"] > 0:
             report["recommendations"].append("Failed tests detected - investigate and fix issues")
-        
+
         if report["test_summary"]["duration"] > TEST_CONFIG["max_test_duration"]:
             report["recommendations"].append("Test duration exceeded limit - optimize test performance")
-        
+
         logging.info(f"Test report generated: {report['test_summary']['success_rate']:.1%} success rate")
         return report
-        
+
     except Exception as e:
         logging.error(f"Test report generation failed: {e}")
         return {

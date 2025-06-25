@@ -72,14 +72,14 @@ class ScalingResult:
 class AutoScaler:
     """
     Dynamic position size calculator with DLT waveform integration.
-    
+
     Mathematical Foundation:
     - Uses DLT waveform confidence scores for scaling
     - Applies profit vector projections for position sizing
     - Integrates with MathLib v4 for mathematical operations
     - Provides risk-adjusted position scaling
     """
-    
+
     def __init__(
         self,
         confidence_weight: float = DEFAULT_CONFIDENCE_WEIGHT,
@@ -92,17 +92,17 @@ class AutoScaler:
         self.profit_weight = profit_weight
         self.max_scale = max_scale
         self.adaptive_optimization = adaptive_optimization
-        
+
         # Mathematical integration
         self.mathlib = MathLibV4()
-        
+
         # Performance tracking
         self.scaling_history: List[ScalingResult] = []
         self.total_scalings = 0
         self.average_scale_factor = 1.0
-        
+
         logger.info("Auto Scaler initialized with DLT integration")
-    
+
     def scale_position(
         self,
         confidence: Confidence,
@@ -114,7 +114,7 @@ class AutoScaler:
     ) -> float:
         """
         Calculate position scale factor based on confidence and profit.
-        
+
         Mathematical Process:
         1. Apply DLT confidence adjustments
         2. Calculate profit multiplier using DLT projections
@@ -128,30 +128,30 @@ class AutoScaler:
                     f"Invalid inputs: confidence={confidence}, profit={projected_profit}"
                 )
                 return base_scale
-            
+
             # Apply DLT confidence adjustments
             dlt_adjusted_confidence = self.mathlib.apply_dlt_confidence_adjustment(confidence)
-            
+
             # Calculate confidence multiplier
             confidence_excess = unified_math.max(0.0, dlt_adjusted_confidence - confidence_threshold)
             confidence_multiplier = confidence_excess * self.confidence_weight
-            
+
             # Calculate profit multiplier using DLT projections
             dlt_profit_projection = self.mathlib.apply_dlt_profit_projection(projected_profit)
             profit_multiplier = dlt_profit_projection * self.profit_weight
-            
+
             # Combine multipliers with mathematical weighting
             scale_factor = base_scale * (1.0 + confidence_multiplier + profit_multiplier)
-            
+
             # Apply bounds
             scale_factor = unified_math.max(min_scale, unified_math.min(max_scale, scale_factor))
-            
+
             return scale_factor
-            
+
         except Exception as e:
             logger.error(f"Error calculating position scale: {e}")
             return base_scale
-    
+
     def calculate_position_size(
         self,
         base_position: Amount,
@@ -163,7 +163,7 @@ class AutoScaler:
     ) -> Tuple[Amount, ScalingResult]:
         """
         Calculate actual position size with risk management and DLT integration.
-        
+
         Mathematical Process:
         1. Calculate DLT-adjusted scale factor
         2. Apply risk management constraints
@@ -173,22 +173,22 @@ class AutoScaler:
         try:
             # Calculate scale factor with DLT integration
             scale_factor = self.scale_position(confidence, projected_profit, **scaling_params)
-            
+
             # Calculate scaled position
             scaled_position = float(base_position) * scale_factor
-            
+
             # Apply risk management constraints
             max_position = account_balance * max_risk_per_trade
             risk_limited_position = unified_math.min(scaled_position, max_position)
-            
+
             # Apply minimum position constraint
             final_position = unified_math.max(MIN_POSITION_SIZE, risk_limited_position)
-            
+
             # Calculate multipliers for result
             confidence_excess = unified_math.max(0.0, confidence - scaling_params.get('confidence_threshold', DEFAULT_CONFIDENCE_THRESHOLD))
             confidence_multiplier = confidence_excess * self.confidence_weight
             profit_multiplier = projected_profit * self.profit_weight
-            
+
             # Create scaling result
             result = ScalingResult(
                 scale_factor=scale_factor,
@@ -199,12 +199,12 @@ class AutoScaler:
                 scaling_applied=scale_factor != DEFAULT_BASE_SCALE,
                 risk_limited=scaled_position > max_position,
             )
-            
+
             # Update performance metrics
             self._update_performance_metrics(result)
-            
+
             return Amount(final_position), result
-            
+
         except Exception as e:
             logger.error(f"Error calculating position size: {e}")
             return base_position, ScalingResult(
@@ -216,25 +216,25 @@ class AutoScaler:
                 scaling_applied=False,
                 risk_limited=False,
             )
-    
+
     def _update_performance_metrics(self, result: ScalingResult) -> None:
         """Update performance metrics with scaling result."""
         self.scaling_history.append(result)
         self.total_scalings += 1
-        
+
         # Update average scale factor
         self.average_scale_factor = (
-            (self.average_scale_factor * (self.total_scalings - 1) + result.scale_factor) 
+            (self.average_scale_factor * (self.total_scalings - 1) + result.scale_factor)
             / self.total_scalings
         )
-    
+
     def get_performance_summary(self) -> Dict[str, float]:
         """Get performance summary of scaling operations."""
         if not self.scaling_history:
             return {"error": "No scaling history available"}
-        
+
         recent_scalings = self.scaling_history[-10:]  # Last 10 scalings
-        
+
         return {
             "total_scalings": self.total_scalings,
             "average_scale_factor": self.average_scale_factor,
@@ -245,7 +245,7 @@ class AutoScaler:
             "scaling_applied_rate": unified_math.mean([s.scaling_applied for s in recent_scalings]),
             "risk_limited_rate": unified_math.mean([s.risk_limited for s in recent_scalings])
         }
-    
+
     def reset_history(self) -> None:
         """Reset scaling history."""
         self.scaling_history.clear()
@@ -266,24 +266,24 @@ def validate_scaling_inputs(
         if not (0.0 <= confidence <= 10.0):
             logger.warning(f"Confidence out of bounds: {confidence}")
             return False
-        
+
         # Check profit bounds
         if not (0.0 <= projected_profit <= 1.0):
             logger.warning(f"Projected profit out of bounds: {projected_profit}")
             return False
-        
+
         # Check position bounds
         if base_position <= 0:
             logger.warning(f"Invalid base position: {base_position}")
             return False
-        
+
         # Check account balance
         if account_balance <= 0:
             logger.warning(f"Invalid account balance: {account_balance}")
             return False
-        
+
         return True
-        
+
     except Exception as e:
         logger.error(f"Error validating scaling inputs: {e}")
         return False
@@ -292,34 +292,34 @@ def validate_scaling_inputs(
 def main() -> None:
     """Main function for testing the auto scaler."""
     logging.basicConfig(level=logging.INFO)
-    
+
     # Create auto scaler
     scaler = AutoScaler()
-    
+
     # Test scaling calculations
     test_cases = [
         (0.8, 0.05, "Low confidence, low profit"),
         (1.5, 0.15, "High confidence, moderate profit"),
         (2.0, 0.25, "Very high confidence, high profit"),
     ]
-    
+
     base_position = Amount(1000.0)
     account_balance = 50000.0
-    
+
     safe_print("🧮 Testing Auto Scaler with DLT Integration")
     safe_print("=" * 50)
-    
+
     for confidence, profit, description in test_cases:
         # Validate inputs
         if not validate_scaling_inputs(confidence, profit, base_position, account_balance):
             safe_print(f"❌ Invalid inputs for: {description}")
             continue
-        
+
         # Calculate position size
         final_position, result = scaler.calculate_position_size(
             base_position, confidence, profit, account_balance
         )
-        
+
         safe_print(f"📊 {description}:")
         safe_print(f"   Confidence: {confidence:.2f}, Profit: {profit:.3f}")
         safe_print(f"   Scale Factor: {result.scale_factor:.3f}")
@@ -327,7 +327,7 @@ def main() -> None:
         safe_print(f"   Risk Percentage: {result.risk_percentage:.2f}%")
         safe_print(f"   Scaling Applied: {result.scaling_applied}")
         print()
-    
+
     # Get performance summary
     summary = scaler.get_performance_summary()
     safe_print("📈 Performance Summary:")
@@ -337,4 +337,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

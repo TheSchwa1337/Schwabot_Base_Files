@@ -170,45 +170,45 @@ class ChaosEvent:
 
 class MonteCarloSimulator:
     """Monte Carlo simulation engine."""
-    
+
     def __init__(self, config: SimulationConfig) -> None:
         """Initialize Monte Carlo simulator."""
         self.config = config
         self.results: List[SimulationResult] = []
         self.current_scenario: Optional[ScenarioParameters] = None
-        
+
         # Market data generation
         self.market_generator = MarketDataGenerator()
-        
+
         # Performance tracking
         self.total_simulations = 0
         self.successful_simulations = 0
-        
+
         safe_safe_print("🎲 Monte Carlo Simulator initialized")
-    
+
     def generate_scenario(self, scenario_id: str) -> ScenarioParameters:
         """Generate a random scenario."""
         try:
             # Generate random parameters
             btc_price_base = random.uniform(40000, 60000)
             btc_price_range = (btc_price_base * 0.8, btc_price_base * 1.2)
-            
+
             volatility_base = random.uniform(0.02, 0.08)
             volatility_range = (volatility_base * 0.5, volatility_base * 2.0)
-            
+
             volume_base = random.uniform(1000, 10000)
             volume_range = (volume_base * 0.3, volume_base * 3.0)
-            
+
             # Generate failure scenarios
             failure_scenarios = []
             if random.random() < self.config.failure_probability:
                 failure_scenarios = random.sample(list(FailureType), random.randint(1, 3))
-            
+
             # Generate execution modes
             execution_modes = [ExecutionMode.NORMAL]
             if self.config.enable_graceful_degradation:
                 execution_modes.extend(random.sample(list(ExecutionMode)[1:], random.randint(1, 2)))
-            
+
             # Market conditions
             market_conditions = {
                 'trend': random.choice(['bullish', 'bearish', 'sideways']),
@@ -216,7 +216,7 @@ class MonteCarloSimulator:
                 'regime': random.choice(['low_vol', 'normal', 'high_vol', 'crisis']),
                 'liquidity': random.uniform(0.3, 1.0)
             }
-            
+
             # Risk parameters
             risk_parameters = {
                 'var_confidence': random.uniform(0.95, 0.99),
@@ -224,7 +224,7 @@ class MonteCarloSimulator:
                 'stop_loss': random.uniform(0.02, 0.10),
                 'take_profit': random.uniform(0.05, 0.20)
             }
-            
+
             return ScenarioParameters(
                 scenario_id=scenario_id,
                 btc_price_range=btc_price_range,
@@ -235,17 +235,17 @@ class MonteCarloSimulator:
                 market_conditions=market_conditions,
                 risk_parameters=risk_parameters
             )
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Scenario generation failed: {safe_format_error(e, 'scenario_gen')}")
             raise
-    
+
     async def run_simulation(self, scenario: ScenarioParameters) -> SimulationResult:
         """Run a single simulation."""
         try:
             simulation_id = str(uuid.uuid4())
             start_time = datetime.now()
-            
+
             # Initialize simulation state
             current_mode = ExecutionMode.NORMAL
             failure_count = 0
@@ -253,54 +253,54 @@ class MonteCarloSimulator:
             mode_changes = 0
             failure_log = []
             market_data = []
-            
+
             # Generate market data
             market_data = self.market_generator.generate_market_data(
                 scenario, self.config.duration_days
             )
-            
+
             # Run simulation loop
             total_trades = 0
             total_pnl = 0.0
             pnl_history = []
-            
+
             for i, market_point in enumerate(market_data):
                 # Check for failures
                 if scenario.failure_scenarios and random.random() < 0.01:  # 1% chance per iteration
                     failure_event = self._trigger_failure(scenario.failure_scenarios[0])
                     failure_log.append(failure_event)
                     failure_count += 1
-                    
+
                     # Change execution mode
                     if self.config.enable_graceful_degradation:
                         current_mode = self._determine_execution_mode(failure_event)
                         mode_changes += 1
-                
+
                 # Simulate trading based on current mode
                 trade_result = await self._simulate_trading(
                     market_point, current_mode, scenario
                 )
-                
+
                 if trade_result:
                     total_trades += 1
                     total_pnl += trade_result['pnl']
                     pnl_history.append(trade_result['pnl'])
-                
+
                 # Recovery check
                 if current_mode != ExecutionMode.NORMAL and random.random() < 0.1:
                     current_mode = ExecutionMode.NORMAL
                     recovery_count += 1
                     mode_changes += 1
-                
+
                 # Add small delay for realism
                 await asyncio.sleep(0.001)
-            
+
             end_time = datetime.now()
             duration_minutes = (end_time - start_time).total_seconds() / 60
-            
+
             # Calculate performance metrics
             performance_metrics = self._calculate_performance_metrics(pnl_history)
-            
+
             # Create result
             result = SimulationResult(
                 simulation_id=simulation_id,
@@ -319,25 +319,25 @@ class MonteCarloSimulator:
                 failure_log=failure_log,
                 market_data=market_data
             )
-            
+
             self.results.append(result)
             self.total_simulations += 1
             self.successful_simulations += 1
-            
+
             safe_safe_print(f"✅ Simulation completed: {scenario.scenario_id} (PnL: {total_pnl:.2f})")
             return result
-            
+
         except Exception as e:
             self.total_simulations += 1
             safe_safe_print(f"❌ Simulation failed: {safe_format_error(e, 'simulation_run')}")
             raise
-    
+
     def _trigger_failure(self, failure_type: FailureType) -> Dict[str, Any]:
         """Trigger a failure event."""
         try:
             severity = random.uniform(0.3, 1.0)
             duration = random.randint(5, self.config.recovery_time_minutes)
-            
+
             affected_components = []
             if failure_type == FailureType.NETWORK_OUTAGE:
                 affected_components = ['exchange_api', 'websocket', 'data_feed']
@@ -353,7 +353,7 @@ class MonteCarloSimulator:
                 affected_components = ['logging', 'data_storage']
             elif failure_type == FailureType.RANDOM_CRASH:
                 affected_components = ['random_component']
-            
+
             return {
                 'failure_type': failure_type.value,
                 'severity': severity,
@@ -361,17 +361,17 @@ class MonteCarloSimulator:
                 'affected_components': affected_components,
                 'timestamp': datetime.now().isoformat()
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Failure trigger failed: {safe_format_error(e, 'failure_trigger')}")
             return {}
-    
+
     def _determine_execution_mode(self, failure_event: Dict[str, Any]) -> ExecutionMode:
         """Determine execution mode based on failure."""
         try:
             severity = failure_event.get('severity', 0.5)
             failure_type = failure_event.get('failure_type', '')
-            
+
             if severity > 0.8 or failure_type in ['random_crash', 'database_failure']:
                 return ExecutionMode.EMERGENCY
             elif severity > 0.6 or failure_type in ['network_outage', 'api_failure']:
@@ -380,12 +380,12 @@ class MonteCarloSimulator:
                 return ExecutionMode.RECOVERY
             else:
                 return ExecutionMode.NORMAL
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Execution mode determination failed: {safe_format_error(e, 'exec_mode')}")
             return ExecutionMode.NORMAL
-    
-    async def _simulate_trading(self, market_point: Dict[str, Any], 
+
+    async def _simulate_trading(self, market_point: Dict[str, Any],
                               execution_mode: ExecutionMode,
                               scenario: ScenarioParameters) -> Optional[Dict[str, Any]]:
         """Simulate trading based on market point and execution mode."""
@@ -413,12 +413,12 @@ class MonteCarloSimulator:
                 if random.random() < 0.8:  # 80% chance
                     return self._execute_normal_trade(market_point, scenario)
                 return None
-                
+
         except Exception as e:
             safe_safe_print(f"❌ Trading simulation failed: {safe_format_error(e, 'trading_sim')}")
             return None
-    
-    def _execute_normal_trade(self, market_point: Dict[str, Any], 
+
+    def _execute_normal_trade(self, market_point: Dict[str, Any],
                             scenario: ScenarioParameters) -> Dict[str, Any]:
         """Execute a normal trade."""
         try:
@@ -427,15 +427,15 @@ class MonteCarloSimulator:
                 zpe_core = get_zpe_core()
                 vecu_core = get_vecu_core()
                 ferris_rde = get_ferris_rde()
-                
+
                 # Get signals from core systems
                 zpe_signal = zpe_core.calculate_resonance(market_point['btc_price'])
                 vecu_signal = vecu_core.calculate_timing_phase(market_point['timestamp'])
                 ferris_signal = ferris_rde.calculate_wheel_position(market_point['volume'])
-                
+
                 # Combine signals
                 combined_signal = (zpe_signal + vecu_signal + ferris_signal) / 3
-                
+
                 # Determine trade direction
                 if combined_signal > 0.6:
                     side = 'buy'
@@ -450,26 +450,26 @@ class MonteCarloSimulator:
                 # Fallback to random trading
                 side = random.choice(['buy', 'sell', 'hold'])
                 pnl = random.uniform(-0.005, 0.005) * market_point['btc_price']
-            
+
             return {
                 'side': side,
                 'pnl': pnl,
                 'timestamp': market_point['timestamp'],
                 'btc_price': market_point['btc_price']
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Normal trade execution failed: {safe_format_error(e, 'normal_trade')}")
             return {'side': 'hold', 'pnl': 0.0, 'timestamp': market_point['timestamp']}
-    
-    def _execute_emergency_trade(self, market_point: Dict[str, Any], 
+
+    def _execute_emergency_trade(self, market_point: Dict[str, Any],
                                scenario: ScenarioParameters) -> Dict[str, Any]:
         """Execute an emergency trade."""
         try:
             # Emergency trades are usually defensive
             side = 'sell' if random.random() < 0.7 else 'hold'
             pnl = random.uniform(-0.02, 0.005) * market_point['btc_price']  # Usually negative
-            
+
             return {
                 'side': side,
                 'pnl': pnl,
@@ -477,11 +477,11 @@ class MonteCarloSimulator:
                 'btc_price': market_point['btc_price'],
                 'emergency': True
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Emergency trade execution failed: {safe_format_error(e, 'emergency_trade')}")
             return {'side': 'hold', 'pnl': 0.0, 'timestamp': market_point['timestamp']}
-    
+
     def _calculate_performance_metrics(self, pnl_history: List[float]) -> Dict[str, Any]:
         """Calculate performance metrics from PnL history."""
         try:
@@ -492,20 +492,20 @@ class MonteCarloSimulator:
                     'volatility': 0.0,
                     'total_return': 0.0
                 }
-            
+
             pnl_array = np.array(pnl_history)
-            
+
             # Calculate metrics
             total_return = np.sum(pnl_array)
             volatility = unified_math.unified_math.std(pnl_array) if len(pnl_array) > 1 else 0.0
             sharpe_ratio = (unified_math.unified_math.mean(pnl_array) / volatility) if volatility > 0 else 0.0
-            
+
             # Calculate max drawdown
             cumulative = np.cumsum(pnl_array)
             running_max = np.maximum.accumulate(cumulative)
             drawdown = cumulative - running_max
             max_drawdown = unified_math.unified_math.min(drawdown) if len(drawdown) > 0 else 0.0
-            
+
             return {
                 'sharpe_ratio': float(sharpe_ratio),
                 'max_drawdown': float(max_drawdown),
@@ -515,7 +515,7 @@ class MonteCarloSimulator:
                 'avg_win': float(unified_math.unified_math.mean(pnl_array[pnl_array > 0])) if np.any(pnl_array > 0) else 0.0,
                 'avg_loss': float(unified_math.unified_math.mean(pnl_array[pnl_array < 0])) if np.any(pnl_array < 0) else 0.0
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Performance metrics calculation failed: {safe_format_error(e, 'perf_metrics')}")
             return {
@@ -528,56 +528,56 @@ class MonteCarloSimulator:
 
 class MarketDataGenerator:
     """Market data generator for simulations."""
-    
+
     def __init__(self) -> None:
         """Initialize market data generator."""
         safe_safe_print("📊 Market Data Generator initialized")
-    
-    def generate_market_data(self, scenario: ScenarioParameters, 
+
+    def generate_market_data(self, scenario: ScenarioParameters,
                            duration_days: int) -> List[Dict[str, Any]]:
         """Generate market data for simulation."""
         try:
             market_data = []
             start_time = datetime.now()
-            
+
             # Generate data points (one per minute for duration)
             total_minutes = duration_days * 24 * 60
-            
+
             # Initialize price
             current_price = random.uniform(*scenario.btc_price_range)
             current_volatility = random.uniform(*scenario.volatility_range)
-            
+
             for minute in range(total_minutes):
                 timestamp = start_time + timedelta(minutes=minute)
-                
+
                 # Update price with random walk
                 price_change = np.random.normal(0, current_volatility * current_price / 100)
                 current_price += price_change
-                
+
                 # Keep price within range
-                current_price = unified_math.max(scenario.btc_price_range[0], 
+                current_price = unified_math.max(scenario.btc_price_range[0],
                                   unified_math.min(scenario.btc_price_range[1], current_price))
-                
+
                 # Update volatility (mean reversion)
                 volatility_change = np.random.normal(0, 0.01)
                 current_volatility += volatility_change
                 current_volatility = unified_math.max(scenario.volatility_range[0],
                                        unified_math.min(scenario.volatility_range[1], current_volatility))
-                
+
                 # Generate volume
                 base_volume = random.uniform(*scenario.volume_range)
                 volume_noise = np.random.normal(1, 0.3)
                 current_volume = unified_math.max(0, base_volume * volume_noise)
-                
+
                 # Market conditions influence
                 if scenario.market_conditions['trend'] == 'bullish':
                     current_price *= 1.0001  # Slight upward bias
                 elif scenario.market_conditions['trend'] == 'bearish':
                     current_price *= 0.9999  # Slight downward bias
-                
+
                 if scenario.market_conditions['regime'] == 'crisis':
                     current_volatility *= 1.5  # Higher volatility
-                
+
                 market_point = {
                     'timestamp': timestamp,
                     'btc_price': current_price,
@@ -585,12 +585,12 @@ class MarketDataGenerator:
                     'volatility': current_volatility,
                     'market_conditions': scenario.market_conditions.copy()
                 }
-                
+
                 market_data.append(market_point)
-            
+
             safe_safe_print(f"✅ Generated {len(market_data)} market data points")
             return market_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Market data generation failed: {safe_format_error(e, 'market_data_gen')}")
             return []
@@ -598,21 +598,21 @@ class MarketDataGenerator:
 
 class ChaosMonkey:
     """Chaos monkey for testing system resilience."""
-    
+
     def __init__(self, config: SimulationConfig) -> None:
         """Initialize chaos monkey."""
         self.config = config
         self.events: List[ChaosEvent] = []
         self.is_active = False
-        
+
         safe_safe_print("🐒 Chaos Monkey initialized")
-    
+
     def start_chaos(self) -> None:
         """Start chaos monkey testing."""
         try:
             self.is_active = True
             safe_safe_print("🐒 Chaos Monkey activated - system may experience failures")
-            
+
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
                 log_operation(
@@ -622,16 +622,16 @@ class ChaosMonkey:
                     success=True,
                     failure_probability=self.config.failure_probability
                 )
-                
+
         except Exception as e:
             safe_safe_print(f"❌ Chaos monkey start failed: {safe_format_error(e, 'chaos_start')}")
-    
+
     def stop_chaos(self) -> None:
         """Stop chaos monkey testing."""
         try:
             self.is_active = False
             safe_safe_print("🐒 Chaos Monkey deactivated - system returning to normal")
-            
+
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
                 log_operation(
@@ -641,23 +641,23 @@ class ChaosMonkey:
                     success=True,
                     total_events=len(self.events)
                 )
-                
+
         except Exception as e:
             safe_safe_print(f"❌ Chaos monkey stop failed: {safe_format_error(e, 'chaos_stop')}")
-    
+
     def trigger_random_failure(self) -> Optional[ChaosEvent]:
         """Trigger a random failure event."""
         try:
             if not self.is_active:
                 return None
-            
+
             # Random failure probability
             if random.random() > self.config.failure_probability:
                 return None
-            
+
             # Select random failure type
             failure_type = random.choice(list(FailureType))
-            
+
             # Generate event
             event = ChaosEvent(
                 event_id=str(uuid.uuid4()),
@@ -669,16 +669,16 @@ class ChaosMonkey:
                 recovery_successful=random.random() < 0.8,  # 80% recovery success
                 impact_metrics=self._calculate_impact_metrics(failure_type)
             )
-            
+
             self.events.append(event)
-            
+
             safe_safe_print(f"🐒 Chaos event triggered: {failure_type.value} (severity: {event.severity:.2f})")
             return event
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Random failure trigger failed: {safe_format_error(e, 'random_failure')}")
             return None
-    
+
     def _get_affected_components(self, failure_type: FailureType) -> List[str]:
         """Get components affected by failure type."""
         component_map = {
@@ -690,9 +690,9 @@ class ChaosMonkey:
             FailureType.DISK_FULL: ['logging', 'data_storage', 'profiles'],
             FailureType.RANDOM_CRASH: ['random_component', 'unknown']
         }
-        
+
         return component_map.get(failure_type, ['unknown'])
-    
+
     def _calculate_impact_metrics(self, failure_type: FailureType) -> Dict[str, Any]:
         """Calculate impact metrics for failure."""
         try:
@@ -702,7 +702,7 @@ class ChaosMonkey:
                 'throughput_decrease': random.uniform(0.1, 0.8),
                 'memory_usage_increase': random.uniform(0.05, 0.5)
             }
-            
+
             # Adjust based on failure type
             if failure_type == FailureType.NETWORK_OUTAGE:
                 base_impact['latency_increase'] *= 5
@@ -713,9 +713,9 @@ class ChaosMonkey:
             elif failure_type == FailureType.MEMORY_LEAK:
                 base_impact['memory_usage_increase'] *= 3
                 base_impact['latency_increase'] *= 2
-            
+
             return base_impact
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Impact metrics calculation failed: {safe_format_error(e, 'impact_metrics')}")
             return {}
@@ -724,14 +724,14 @@ class ChaosMonkey:
 class LongHorizonSimulation:
     """
     Long-Horizon Simulation - Comprehensive simulation system.
-    
+
     Provides enterprise-grade long-horizon simulation including:
     - Multi-day Monte-Carlo scenarios with random network outages / API anomalies
     - Chaos-monkey tests that flip execution modes mid-run
     - Integration with all Schwabot mathematical frameworks and core logic
     - Advanced scenario modeling and stress testing
     """
-    
+
     def __init__(self, config: Optional[SimulationConfig] = None) -> None:
         """Initialize long-horizon simulation."""
         self.config = config or SimulationConfig(
@@ -740,99 +740,99 @@ class LongHorizonSimulation:
             num_scenarios=100,
             failure_probability=0.1
         )
-        
+
         # Initialize components
         self.monte_carlo = MonteCarloSimulator(self.config)
         self.chaos_monkey = ChaosMonkey(self.config)
-        
+
         # Create output directory
         self.output_dir = Path(self.config.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Performance tracking
         self.total_runs = 0
         self.successful_runs = 0
-        
+
         safe_safe_print("🔮 Long-Horizon Simulation initialized")
-    
+
     async def run_monte_carlo_simulation(self) -> List[SimulationResult]:
         """Run Monte Carlo simulation."""
         try:
             safe_safe_print(f"🎲 Starting Monte Carlo simulation: {self.config.num_scenarios} scenarios")
-            
+
             results = []
-            
+
             for i in range(self.config.num_scenarios):
                 scenario_id = f"scenario_{i+1:04d}"
-                
+
                 # Generate scenario
                 scenario = self.monte_carlo.generate_scenario(scenario_id)
-                
+
                 # Run simulation
                 result = await self.monte_carlo.run_simulation(scenario)
                 results.append(result)
-                
+
                 # Progress update
                 if (i + 1) % 10 == 0:
                     safe_safe_print(f"🎲 Progress: {i+1}/{self.config.num_scenarios} scenarios completed")
-            
+
             self.total_runs += self.config.num_scenarios
             self.successful_runs += len(results)
-            
+
             # Save results
             self._save_simulation_results(results)
-            
+
             # Generate summary
             self._generate_simulation_summary(results)
-            
+
             safe_safe_print(f"✅ Monte Carlo simulation completed: {len(results)} scenarios")
             return results
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Monte Carlo simulation failed: {safe_format_error(e, 'monte_carlo')}")
             return []
-    
+
     async def run_chaos_monkey_test(self, duration_hours: int = 24) -> List[ChaosEvent]:
         """Run chaos monkey test."""
         try:
             safe_safe_print(f"🐒 Starting Chaos Monkey test: {duration_hours} hours")
-            
+
             # Start chaos monkey
             self.chaos_monkey.start_chaos()
-            
+
             events = []
             start_time = datetime.now()
             end_time = start_time + timedelta(hours=duration_hours)
-            
+
             while datetime.now() < end_time:
                 # Trigger random failure
                 event = self.chaos_monkey.trigger_random_failure()
                 if event:
                     events.append(event)
-                
+
                 # Wait between events
                 await asyncio.sleep(random.uniform(30, 300))  # 30 seconds to 5 minutes
-            
+
             # Stop chaos monkey
             self.chaos_monkey.stop_chaos()
-            
+
             # Save events
             self._save_chaos_events(events)
-            
+
             safe_safe_print(f"✅ Chaos Monkey test completed: {len(events)} events")
             return events
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Chaos Monkey test failed: {safe_format_error(e, 'chaos_monkey')}")
             return []
-    
+
     def _save_simulation_results(self, results: List[SimulationResult]) -> None:
         """Save simulation results to file."""
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"monte_carlo_results_{timestamp}.json"
             filepath = self.output_dir / filename
-            
+
             # Convert results to JSON-serializable format
             results_data = []
             for result in results:
@@ -840,58 +840,58 @@ class LongHorizonSimulation:
                 result_dict['start_time'] = result.start_time.isoformat()
                 result_dict['end_time'] = result.end_time.isoformat()
                 results_data.append(result_dict)
-            
+
             with open(filepath, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
-            
+
             safe_safe_print(f"✅ Simulation results saved: {filepath}")
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Results save failed: {safe_format_error(e, 'results_save')}")
-    
+
     def _save_chaos_events(self, events: List[ChaosEvent]) -> None:
         """Save chaos events to file."""
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"chaos_events_{timestamp}.json"
             filepath = self.output_dir / filename
-            
+
             # Convert events to JSON-serializable format
             events_data = []
             for event in events:
                 event_dict = asdict(event)
                 event_dict['timestamp'] = event.timestamp.isoformat()
                 events_data.append(event_dict)
-            
+
             with open(filepath, 'w') as f:
                 json.dump(events_data, f, indent=2, default=str)
-            
+
             safe_safe_print(f"✅ Chaos events saved: {filepath}")
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Events save failed: {safe_format_error(e, 'events_save')}")
-    
+
     def _generate_simulation_summary(self, results: List[SimulationResult]) -> None:
         """Generate simulation summary."""
         try:
             if not results:
                 return
-            
+
             # Calculate aggregate metrics
             total_pnl = sum(r.total_pnl for r in results)
             avg_pnl = total_pnl / len(results)
             avg_sharpe = sum(r.sharpe_ratio for r in results) / len(results)
             avg_drawdown = sum(r.max_drawdown for r in results) / len(results)
-            
+
             # Success rate
             profitable_scenarios = len([r for r in results if r.total_pnl > 0])
             success_rate = profitable_scenarios / len(results)
-            
+
             # Failure analysis
             total_failures = sum(r.failure_count for r in results)
             total_recoveries = sum(r.recovery_count for r in results)
             recovery_rate = total_recoveries / unified_math.max(total_failures, 1)
-            
+
             summary = {
                 'simulation_type': self.config.simulation_type.value,
                 'total_scenarios': len(results),
@@ -910,27 +910,27 @@ class LongHorizonSimulation:
                 'worst_scenario': unified_math.min(results, key=lambda r: r.total_pnl).scenario_id,
                 'generated_at': datetime.now().isoformat()
             }
-            
+
             # Save summary
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"simulation_summary_{timestamp}.json"
             filepath = self.output_dir / filename
-            
+
             with open(filepath, 'w') as f:
                 json.dump(summary, f, indent=2, default=str)
-            
+
             safe_safe_print(f"✅ Simulation summary generated: {filepath}")
-            
+
             # Print summary
             safe_safe_print(f"📊 Simulation Summary:")
             safe_safe_print(f"   Total PnL: ${total_pnl:,.2f}")
             safe_safe_print(f"   Average PnL: ${avg_pnl:,.2f}")
             safe_safe_print(f"   Success Rate: {success_rate:.1%}")
             safe_safe_print(f"   Recovery Rate: {recovery_rate:.1%}")
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Summary generation failed: {safe_format_error(e, 'summary_gen')}")
-    
+
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
         try:
@@ -947,7 +947,7 @@ class LongHorizonSimulation:
                 'chaos_events': len(self.chaos_monkey.events),
                 'output_dir': str(self.output_dir)
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
             return {}
@@ -970,7 +970,7 @@ async def run_monte_carlo_simulation(num_scenarios: int = 100, duration_days: in
         duration_days=duration_days,
         num_scenarios=num_scenarios
     )
-    
+
     simulation = LongHorizonSimulation(config)
     return await simulation.run_monte_carlo_simulation()
 
@@ -981,7 +981,7 @@ async def run_chaos_monkey_test(duration_hours: int = 24) -> List[ChaosEvent]:
         simulation_type=SimulationType.CHAOS_MONKEY,
         enable_chaos_monkey=True
     )
-    
+
     simulation = LongHorizonSimulation(config)
     return await simulation.run_chaos_monkey_test(duration_hours)
 
@@ -995,29 +995,29 @@ def get_simulation_status() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Test long-horizon simulation
     safe_print("🧪 Testing Long-Horizon Simulation...")
-    
+
     # Test Monte Carlo simulation (small scale)
     async def test_monte_carlo():
         results = await run_monte_carlo_simulation(num_scenarios=5, duration_days=1)
         safe_print(f"✅ Monte Carlo simulation: {len(results)} scenarios completed")
         return results
-    
+
     # Test chaos monkey (short duration)
     async def test_chaos_monkey():
         events = await run_chaos_monkey_test(duration_hours=1)
         safe_print(f"✅ Chaos monkey test: {len(events)} events triggered")
         return events
-    
+
     # Run tests
     async def main():
         await test_monte_carlo()
         await test_chaos_monkey()
-        
+
         # Get status
         status = get_simulation_status()
         safe_print(f"✅ Simulation status: {status}")
-    
+
     # Run async tests
     asyncio.run(main())
-    
-    safe_print("✅ Long-Horizon Simulation test completed") 
+
+    safe_print("✅ Long-Horizon Simulation test completed")

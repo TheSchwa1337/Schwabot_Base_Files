@@ -30,19 +30,19 @@ logger = logging.getLogger(__name__)
 
 class YAMLConfigLoader:
     """Centralized YAML configuration loader with fallback mechanisms."""
-    
+
     def __init__(self, config_dir: str = "config"):
         """Initialize the YAML config loader."""
         self.config_dir = Path(config_dir)
         self.cache: Dict[str, Dict[str, Any]] = {}
         self.fallback_configs: Dict[str, Dict[str, Any]] = {}
-        
+
         # Initialize fallback configurations
         self._initialize_fallback_configs()
-    
+
     def _initialize_fallback_configs(self) -> None:
         """Initialize fallback configurations for critical YAML files."""
-        
+
         # Fallback for unified_settings.yaml
         self.fallback_configs["unified_settings.yaml"] = {
             "core_system": {
@@ -137,7 +137,7 @@ class YAMLConfigLoader:
                 "metrics_collection": True
             }
         }
-        
+
         # Fallback for demo_config.yaml
         self.fallback_configs["demo_config.yaml"] = {
             "demo_system": {
@@ -214,43 +214,43 @@ class YAMLConfigLoader:
                 "settings_file": "config/unified_settings.yaml"
             }
         }
-    
+
     def load_config(self, config_name: str, use_cache: bool = True) -> Dict[str, Any]:
         """
         Load a YAML configuration file with fallback support.
-        
+
         Args:
             config_name: Name of the configuration file (e.g., "unified_settings.yaml")
             use_cache: Whether to use cached configuration
-            
+
         Returns:
             Configuration dictionary
         """
         if use_cache and config_name in self.cache:
             logger.debug(f"Using cached configuration for {config_name}")
             return self.cache[config_name]
-        
+
         config_path = self.config_dir / config_name
-        
+
         try:
             if config_path.exists():
                 with open(config_path, 'r', encoding='utf-8') as f:
                     config = yaml.safe_load(f)
                     logger.info(f"Successfully loaded configuration from {config_path}")
-                    
+
                     if use_cache:
                         self.cache[config_name] = config
-                    
+
                     return config
             else:
                 logger.warning(f"Configuration file {config_path} not found, using fallback")
                 return self._get_fallback_config(config_name)
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration {config_name}: {e}")
             logger.info(f"Using fallback configuration for {config_name}")
             return self._get_fallback_config(config_name)
-    
+
     def _get_fallback_config(self, config_name: str) -> Dict[str, Any]:
         """Get fallback configuration for a given config name."""
         if config_name in self.fallback_configs:
@@ -259,15 +259,15 @@ class YAMLConfigLoader:
         else:
             logger.warning(f"No fallback configuration available for {config_name}")
             return {}
-    
+
     def load_unified_settings(self) -> Dict[str, Any]:
         """Load unified settings configuration."""
         return self.load_config("unified_settings.yaml")
-    
+
     def load_demo_config(self) -> Dict[str, Any]:
         """Load demo configuration."""
         return self.load_config("demo_config.yaml")
-    
+
     def load_component_config(self, component_name: str) -> Dict[str, Any]:
         """Load configuration for a specific component."""
         config_files = {
@@ -280,18 +280,18 @@ class YAMLConfigLoader:
             "matrix_fault_resolver": "matrix_fault_resolver_config.yaml",
             "fractal_core_engine": "fractal_core_config.yaml"
         }
-        
+
         config_file = config_files.get(component_name, f"{component_name}_config.yaml")
         return self.load_config(config_file)
-    
+
     def validate_config(self, config: Dict[str, Any], config_name: str) -> bool:
         """
         Validate configuration structure and required fields.
-        
+
         Args:
             config: Configuration dictionary to validate
             config_name: Name of the configuration for logging
-            
+
         Returns:
             True if configuration is valid, False otherwise
         """
@@ -300,7 +300,7 @@ class YAMLConfigLoader:
             if not config:
                 logger.error(f"Configuration {config_name} is empty")
                 return False
-            
+
             # Check for required top-level keys based on config type
             if config_name == "unified_settings.yaml":
                 required_keys = ["core_system", "demo_system", "validation"]
@@ -309,116 +309,116 @@ class YAMLConfigLoader:
             else:
                 # For other configs, just check if they have some content
                 required_keys = []
-            
+
             for key in required_keys:
                 if key not in config:
                     logger.error(f"Required key '{key}' missing in {config_name}")
                     return False
-            
+
             logger.info(f"Configuration {config_name} validation passed")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error validating configuration {config_name}: {e}")
             return False
-    
+
     def get_config_value(self, config: Dict[str, Any], key_path: str, default: Any = None) -> Any:
         """
         Get a configuration value using dot notation path.
-        
+
         Args:
             config: Configuration dictionary
             key_path: Dot-separated path to the value (e.g., "core_system.allocator_mode")
             default: Default value if key not found
-            
+
         Returns:
             Configuration value or default
         """
         try:
             keys = key_path.split('.')
             value = config
-            
+
             for key in keys:
                 if isinstance(value, dict) and key in value:
                     value = value[key]
                 else:
                     logger.debug(f"Key path '{key_path}' not found, using default: {default}")
                     return default
-            
+
             return value
-            
+
         except Exception as e:
             logger.error(f"Error accessing config value '{key_path}': {e}")
             return default
-    
+
     def set_config_value(self, config: Dict[str, Any], key_path: str, value: Any) -> bool:
         """
         Set a configuration value using dot notation path.
-        
+
         Args:
             config: Configuration dictionary to modify
             key_path: Dot-separated path to the value
             value: Value to set
-            
+
         Returns:
             True if successful, False otherwise
         """
         try:
             keys = key_path.split('.')
             current = config
-            
+
             # Navigate to the parent of the target key
             for key in keys[:-1]:
                 if key not in current:
                     current[key] = {}
                 current = current[key]
-            
+
             # Set the value
             current[keys[-1]] = value
             return True
-            
+
         except Exception as e:
             logger.error(f"Error setting config value '{key_path}': {e}")
             return False
-    
+
     def save_config(self, config: Dict[str, Any], config_name: str) -> bool:
         """
         Save configuration to YAML file.
-        
+
         Args:
             config: Configuration dictionary to save
             config_name: Name of the configuration file
-            
+
         Returns:
             True if successful, False otherwise
         """
         try:
             config_path = self.config_dir / config_name
-            
+
             # Ensure config directory exists
             self.config_dir.mkdir(parents=True, exist_ok=True)
-            
+
             with open(config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(config, f, default_flow_style=False, indent=2)
-            
+
             logger.info(f"Configuration saved to {config_path}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error saving configuration {config_name}: {e}")
             return False
-    
+
     def reload_config(self, config_name: str) -> Dict[str, Any]:
         """Reload configuration from file, bypassing cache."""
         if config_name in self.cache:
             del self.cache[config_name]
-        
+
         return self.load_config(config_name, use_cache=True)
-    
+
     def get_all_configs(self) -> Dict[str, Dict[str, Any]]:
         """Get all available configurations."""
         configs = {}
-        
+
         # Load all known configuration files
         known_configs = [
             "unified_settings.yaml",
@@ -432,20 +432,20 @@ class YAMLConfigLoader:
             "matrix_fault_resolver_config.yaml",
             "fractal_core_config.yaml"
         ]
-        
+
         for config_name in known_configs:
             configs[config_name] = self.load_config(config_name)
-        
+
         return configs
-    
+
     def validate_all_configs(self) -> Dict[str, bool]:
         """Validate all available configurations."""
         configs = self.get_all_configs()
         validation_results = {}
-        
+
         for config_name, config in configs.items():
             validation_results[config_name] = self.validate_config(config, config_name)
-        
+
         return validation_results
 
 
@@ -476,9 +476,9 @@ def set_config_value(config: Dict[str, Any], key_path: str, value: Any) -> bool:
 def validate_settings() -> bool:
     """Validate all settings and configurations."""
     validation_results = config_loader.validate_all_configs()
-    
+
     all_valid = all(validation_results.values())
-    
+
     if all_valid:
         logger.info("All configurations validated successfully")
     else:
@@ -486,21 +486,21 @@ def validate_settings() -> bool:
         for config_name, is_valid in validation_results.items():
             if not is_valid:
                 logger.error(f"  - {config_name}: FAILED")
-    
+
     return all_valid
 
 
 if __name__ == "__main__":
     # Test the configuration loader
     logging.basicConfig(level=logging.INFO)
-    
+
     # Test loading configurations
     unified_settings = load_unified_settings()
     demo_config = load_demo_config()
-    
+
     safe_print("Unified Settings loaded:", bool(unified_settings))
     safe_print("Demo Config loaded:", bool(demo_config))
-    
+
     # Test validation
     is_valid = validate_settings()
-    safe_print("All configurations valid:", is_valid) 
+    safe_print("All configurations valid:", is_valid)

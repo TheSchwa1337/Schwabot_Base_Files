@@ -207,8 +207,9 @@ class ImportResolver:
         mock.virtual_memory = lambda: Mock(percent=50.0)
         return mock
 
-    def register_fallback(self, module_name: str,
-                         fallback_factory: Callable) -> None:
+    def register_fallback(
+        self, module_name: str, fallback_factory: Callable
+    ) -> None:
         """Register a custom fallback factory for a module."""
         self._fallback_registry[module_name] = fallback_factory
 

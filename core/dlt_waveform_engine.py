@@ -82,24 +82,24 @@ class AssetBasket:
 
 class DLTWaveformEngine:
     """DLT Waveform Engine - Wrapper for MarketSignalProcessor for compatibility."""
-    
+
     def __init__(self, history_size: int = 1000, gpu_enabled: bool = False):
         """Initialize DLT Waveform Engine."""
         self.processor = MarketSignalProcessor(history_size, gpu_enabled)
         logger.info("DLTWaveformEngine initialized (wrapping MarketSignalProcessor)")
-    
+
     def process_signal(self, *args, **kwargs):
         """Process signal using the underlying MarketSignalProcessor."""
         return self.processor.process_signal(*args, **kwargs)
-    
+
     def find_similar_patterns(self, *args, **kwargs):
         """Find similar patterns using the underlying MarketSignalProcessor."""
         return self.processor.find_similar_patterns(*args, **kwargs)
-    
+
     def create_asset_basket(self, *args, **kwargs):
         """Create asset basket using the underlying MarketSignalProcessor."""
         return self.processor.create_asset_basket(*args, **kwargs)
-    
+
     def get_trading_signals(self, *args, **kwargs):
         """Get trading signals using the underlying MarketSignalProcessor."""
         return self.processor.get_trading_signals(*args, **kwargs)
@@ -108,7 +108,7 @@ class DLTWaveformEngine:
 class MarketSignalProcessor:
     """
     Analyzes market data streams using FFT to detect patterns and generate signals.
-    
+
     Mathematical Foundation:
     - FFT: Computes the Discrete Fourier Transform of a signal, revealing its
       frequency components.
@@ -237,14 +237,14 @@ class MarketSignalProcessor:
         for old_analysis in self.analysis_history:
             if old_analysis.hash_signature == new_analysis.hash_signature:
                 continue  # Skip self
-            
+
             old_hash_set = set(old_analysis.hash_signature)
-            
+
             intersection = len(new_hash_set.intersection(old_hash_set))
             union = len(new_hash_set.union(old_hash_set))
-            
+
             jaccard_similarity = intersection / union if union > 0 else 0
-            
+
             if jaccard_similarity >= similarity_threshold:
                 similar_analyses.append(old_analysis)
 
@@ -308,7 +308,7 @@ class MarketSignalProcessor:
                 "reason": f"{len(similar)} similar past patterns found.",
             }
             signals.append(signal)
-        
+
         # Signal based on high frequency energy
         high_freq_threshold = (unified_math.unified_math.max(latest_analysis.frequencies)) * 0.75
         high_freq_magnitudes = latest_analysis.magnitudes[
@@ -327,7 +327,7 @@ class MarketSignalProcessor:
                     "reason": "High energy in upper frequency bands suggests instability.",
                 }
             )
-        
+
         return signals
 
 
@@ -394,4 +394,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

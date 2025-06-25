@@ -78,16 +78,16 @@ class ErrorHandler:
         **kwargs,
     ) -> Any:
         """
-        
+
         Safely execute a function with comprehensive error handling.
-        
+
         Args:
             func: Function to execute
             error_context: Context information for error handling
             default_return: Value to return if function fails
             reraise: Whether to re-raise the exception after handling
             *args, **kwargs: Arguments to pass to the function
-        
+
         Returns:
             Function result or default_return if error occurs
         """

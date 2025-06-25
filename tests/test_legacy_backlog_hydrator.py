@@ -56,12 +56,12 @@ class BacklogTestCase:
 
 class LegacyBacklogHydratorTest:
     """Comprehensive legacy backlog hydration testing."""
-    
+
     def __init__(self):
         """Initialize the legacy backlog hydrator test."""
         # Create test historical trades
         base_time = datetime.now() - timedelta(days=30)
-        
+
         self.test_cases = [
             BacklogTestCase(
                 test_name="mixed_trade_history",
@@ -163,31 +163,31 @@ class LegacyBacklogHydratorTest:
                 description="Large trade history for comprehensive testing"
             )
         ]
-        
+
         logger.info("📚 Legacy Backlog Hydrator Test initialized")
-    
+
     def test_historical_trade_loading(self) -> Dict[str, Any]:
         """Test historical trade data loading and parsing."""
         logger.info("📥 Testing historical trade data loading")
-        
+
         results = {
             'test_name': 'historical_trade_loading',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Simulate loading historical trades
                 loaded_trades = test_case.historical_trades
-                
+
                 # Validate trade count
                 if len(loaded_trades) != test_case.expected_hydrated_count:
                     error_msg = f"Test case {i} ({test_case.description}): Trade count mismatch. Expected: {test_case.expected_hydrated_count}, Got: {len(loaded_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate trade properties
                 for j, trade in enumerate(loaded_trades):
                     # Validate required fields
@@ -197,25 +197,25 @@ class LegacyBacklogHydratorTest:
                             error_msg = f"Test case {i}, Trade {j}: Missing required field '{field}'"
                             results['errors'].append(error_msg)
                             results['success'] = False
-                    
+
                     # Validate price relationships
                     if trade.entry_price <= 0 or trade.exit_price <= 0:
                         error_msg = f"Test case {i}, Trade {j}: Invalid prices. Entry: {trade.entry_price}, Exit: {trade.exit_price}"
                         results['errors'].append(error_msg)
                         results['success'] = False
-                    
+
                     # Validate volume
                     if trade.volume <= 0:
                         error_msg = f"Test case {i}, Trade {j}: Invalid volume: {trade.volume}"
                         results['errors'].append(error_msg)
                         results['success'] = False
-                    
+
                     # Validate time sequence
                     if trade.entry_time >= trade.exit_time:
                         error_msg = f"Test case {i}, Trade {j}: Invalid time sequence. Entry: {trade.entry_time}, Exit: {trade.exit_time}"
                         results['errors'].append(error_msg)
                         results['success'] = False
-                
+
                 # Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -224,45 +224,45 @@ class LegacyBacklogHydratorTest:
                     'trades_valid': len(loaded_trades) == test_case.expected_hydrated_count,
                     'all_trades_parsed': len(results['errors']) == 0
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Historical trade data loading test passed")
         else:
             logger.error(f"❌ Historical trade data loading test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_trade_backlog_integrity(self) -> Dict[str, Any]:
         """Test trade backlog integrity and consistency."""
         logger.info("🔍 Testing trade backlog integrity")
-        
+
         results = {
             'test_name': 'trade_backlog_integrity',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         try:
             # Test backlog integrity across all test cases
             all_trades = []
             for test_case in self.test_cases:
                 all_trades.extend(test_case.historical_trades)
-            
+
             # Validate trade ID uniqueness
             trade_ids = [trade.trade_id for trade in all_trades]
             unique_ids = set(trade_ids)
-            
+
             if len(unique_ids) != len(trade_ids):
                 error_msg = "Duplicate trade IDs detected in backlog"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             # Validate profit/loss calculations
             for i, trade in enumerate(all_trades):
                 calculated_pl = (trade.exit_price - trade.entry_price) * trade.volume
@@ -270,7 +270,7 @@ class LegacyBacklogHydratorTest:
                     error_msg = f"Trade {i}: Profit/loss calculation mismatch. Expected: {calculated_pl}, Got: {trade.profit_loss}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-            
+
             # Validate chronological order
             sorted_trades = sorted(all_trades, key=lambda t: t.entry_time)
             for i in range(1, len(sorted_trades)):
@@ -278,12 +278,12 @@ class LegacyBacklogHydratorTest:
                     error_msg = f"Trade sequence {i}: Chronological order violation"
                     results['errors'].append(error_msg)
                     results['success'] = False
-            
+
             # Validate asset distribution
             asset_counts = {}
             for trade in all_trades:
                 asset_counts[trade.asset] = asset_counts.get(trade.asset, 0) + 1
-            
+
             results['details'] = {
                 'total_trades': len(all_trades),
                 'unique_trade_ids': len(unique_ids),
@@ -292,47 +292,47 @@ class LegacyBacklogHydratorTest:
                 'asset_distribution': asset_counts,
                 'backlog_integrity_score': 1.0 if len(results['errors']) == 0 else 0.0
             }
-            
+
         except Exception as e:
             results['errors'].append(f"Trade backlog integrity test failed: {str(e)}")
             results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Trade backlog integrity test passed")
         else:
             logger.error(f"❌ Trade backlog integrity test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_loss_trade_identification(self) -> Dict[str, Any]:
         """Test loss trade identification and reanalysis."""
         logger.info("📉 Testing loss trade identification")
-        
+
         results = {
             'test_name': 'loss_trade_identification',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Identify loss trades
                 loss_trades = [trade for trade in test_case.historical_trades if trade.profit_loss < 0]
                 profit_trades = [trade for trade in test_case.historical_trades if trade.profit_loss >= 0]
-                
+
                 # Validate loss trade count
                 if len(loss_trades) != test_case.expected_loss_trades:
                     error_msg = f"Test case {i} ({test_case.description}): Loss trade count mismatch. Expected: {test_case.expected_loss_trades}, Got: {len(loss_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate profit trade count
                 if len(profit_trades) != test_case.expected_profit_trades:
                     error_msg = f"Test case {i} ({test_case.description}): Profit trade count mismatch. Expected: {test_case.expected_profit_trades}, Got: {len(profit_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Analyze loss trade patterns
                 loss_analysis = {}
                 if loss_trades:
@@ -343,7 +343,7 @@ class LegacyBacklogHydratorTest:
                         'loss_trade_strategies': list(set(trade.strategy for trade in loss_trades)),
                         'loss_trade_volatility': unified_math.mean([trade.market_conditions.get('volatility', 0.0) for trade in loss_trades])
                     }
-                
+
                 # Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -355,30 +355,30 @@ class LegacyBacklogHydratorTest:
                     'profit_identification_correct': len(profit_trades) == test_case.expected_profit_trades,
                     'loss_analysis': loss_analysis
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Loss trade identification test passed")
         else:
             logger.error(f"❌ Loss trade identification test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_backtest_data_reconstruction(self) -> Dict[str, Any]:
         """Test backtest data reconstruction."""
         logger.info("🔄 Testing backtest data reconstruction")
-        
+
         results = {
             'test_name': 'backtest_data_reconstruction',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         try:
             # Test backtest data reconstruction for each test case
             for i, test_case in enumerate(self.test_cases):
@@ -393,23 +393,23 @@ class LegacyBacklogHydratorTest:
                     'assets_traded': list(set(trade.asset for trade in test_case.historical_trades)),
                     'strategies_used': list(set(trade.strategy for trade in test_case.historical_trades))
                 }
-                
+
                 # Validate reconstructed data
                 if reconstructed_data['total_trades'] != test_case.expected_hydrated_count:
                     error_msg = f"Test case {i}: Reconstructed trade count mismatch"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 if reconstructed_data['start_time'] >= reconstructed_data['end_time']:
                     error_msg = f"Test case {i}: Invalid time range in reconstructed data"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 if not (0.0 <= reconstructed_data['win_rate'] <= 1.0):
                     error_msg = f"Test case {i}: Invalid win rate in reconstructed data"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Store reconstruction results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -421,35 +421,35 @@ class LegacyBacklogHydratorTest:
                     'strategies_used': len(reconstructed_data['strategies_used']),
                     'reconstruction_successful': len(results['errors']) == 0
                 }
-            
+
         except Exception as e:
             results['errors'].append(f"Backtest data reconstruction test failed: {str(e)}")
             results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Backtest data reconstruction test passed")
         else:
             logger.error(f"❌ Backtest data reconstruction test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_historical_pattern_recognition(self) -> Dict[str, Any]:
         """Test historical pattern recognition."""
         logger.info("🔍 Testing historical pattern recognition")
-        
+
         results = {
             'test_name': 'historical_pattern_recognition',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         try:
             # Analyze patterns across all test cases
             all_trades = []
             for test_case in self.test_cases:
                 all_trades.extend(test_case.historical_trades)
-            
+
             # Pattern analysis
             patterns = {
                 'asset_performance': {},
@@ -457,21 +457,21 @@ class LegacyBacklogHydratorTest:
                 'time_based_patterns': {},
                 'volatility_impact': {}
             }
-            
+
             # Asset performance patterns
             for trade in all_trades:
                 if trade.asset not in patterns['asset_performance']:
                     patterns['asset_performance'][trade.asset] = {'trades': [], 'total_pl': 0.0}
                 patterns['asset_performance'][trade.asset]['trades'].append(trade)
                 patterns['asset_performance'][trade.asset]['total_pl'] += trade.profit_loss
-            
+
             # Strategy performance patterns
             for trade in all_trades:
                 if trade.strategy not in patterns['strategy_performance']:
                     patterns['strategy_performance'][trade.strategy] = {'trades': [], 'total_pl': 0.0}
                 patterns['strategy_performance'][trade.strategy]['trades'].append(trade)
                 patterns['strategy_performance'][trade.strategy]['total_pl'] += trade.profit_loss
-            
+
             # Time-based patterns (hour of day)
             for trade in all_trades:
                 hour = trade.entry_time.hour
@@ -479,29 +479,29 @@ class LegacyBacklogHydratorTest:
                     patterns['time_based_patterns'][hour] = {'trades': [], 'total_pl': 0.0}
                 patterns['time_based_patterns'][hour]['trades'].append(trade)
                 patterns['time_based_patterns'][hour]['total_pl'] += trade.profit_loss
-            
+
             # Volatility impact patterns
             high_vol_trades = [t for t in all_trades if t.market_conditions.get('volatility', 0.0) > 0.15]
             low_vol_trades = [t for t in all_trades if t.market_conditions.get('volatility', 0.0) <= 0.15]
-            
+
             patterns['volatility_impact'] = {
                 'high_volatility_trades': len(high_vol_trades),
                 'low_volatility_trades': len(low_vol_trades),
                 'high_vol_avg_pl': unified_math.mean([t.profit_loss for t in high_vol_trades]) if high_vol_trades else 0.0,
                 'low_vol_avg_pl': unified_math.mean([t.profit_loss for t in low_vol_trades]) if low_vol_trades else 0.0
             }
-            
+
             # Validate pattern recognition
             if not patterns['asset_performance']:
                 error_msg = "No asset performance patterns detected"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             if not patterns['strategy_performance']:
                 error_msg = "No strategy performance patterns detected"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             results['details'] = {
                 'total_trades_analyzed': len(all_trades),
                 'assets_analyzed': len(patterns['asset_performance']),
@@ -511,24 +511,24 @@ class LegacyBacklogHydratorTest:
                 'pattern_recognition_successful': len(results['errors']) == 0,
                 'patterns': patterns
             }
-            
+
         except Exception as e:
             results['errors'].append(f"Historical pattern recognition test failed: {str(e)}")
             results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Historical pattern recognition test passed")
         else:
             logger.error(f"❌ Historical pattern recognition test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive legacy backlog hydration test."""
         logger.info("🚀 Running comprehensive legacy backlog hydration test")
-        
+
         start_time = time.time()
-        
+
         # Run all test components
         test_results = {
             'historical_trade_loading': self.test_historical_trade_loading(),
@@ -537,15 +537,15 @@ class LegacyBacklogHydratorTest:
             'backtest_data_reconstruction': self.test_backtest_data_reconstruction(),
             'historical_pattern_recognition': self.test_historical_pattern_recognition()
         }
-        
+
         # Determine overall success
         all_passed = all(result['success'] for result in test_results.values())
-        
+
         # Calculate total errors
         total_errors = sum(len(result.get('errors', [])) for result in test_results.values())
-        
+
         execution_time = time.time() - start_time
-        
+
         comprehensive_result = {
             'success': all_passed,
             'test_name': 'legacy_backlog_hydrator',
@@ -560,12 +560,12 @@ class LegacyBacklogHydratorTest:
                 'pattern_recognition_passed': test_results['historical_pattern_recognition']['success']
             }
         }
-        
+
         if all_passed:
             logger.info(f"✅ Comprehensive legacy backlog hydration test passed in {execution_time:.3f}s")
         else:
             logger.error(f"❌ Comprehensive legacy backlog hydration test failed with {total_errors} errors")
-        
+
         return comprehensive_result
 
 
@@ -591,23 +591,23 @@ if __name__ == "__main__":
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-    
+
     # Run test
     result = test_legacy_backlog_hydrator()
-    
+
     # Print results
     safe_print("\n" + "="*60)
     safe_print("📚 LEGACY BACKLOG HYDRATOR TEST RESULTS")
     safe_print("="*60)
-    
+
     safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
-    
+
     if 'test_components' in result:
         safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
             safe_print(f"  {component}: {status}")
-    
-    safe_print("="*60) 
+
+    safe_print("="*60)

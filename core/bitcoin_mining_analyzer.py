@@ -58,7 +58,7 @@ class MiningAnalysis:
 
 class BitcoinMiningAnalyzer:
     """Mathematical Bitcoin mining analysis for trading decisions."""
-    
+
     def __init__(self):
         self.target_block_time = 600  # 10 minutes
         self.max_difficulty_adjustment = 4.0  # Maximum difficulty change factor
@@ -66,18 +66,18 @@ class BitcoinMiningAnalyzer:
         self.max_history_size = 1000
         logger.info("BitcoinMiningAnalyzer initialized")
 
-    def analyze_mining_metrics(self, metrics: MiningMetrics, 
+    def analyze_mining_metrics(self, metrics: MiningMetrics,
                              price_data: Optional[Dict] = None) -> MiningAnalysis:
         """
         Analyze Bitcoin mining metrics for trading insights.
-        
+
         Parameters:
         -----------
         metrics : MiningMetrics
             Current mining metrics
         price_data : Dict, optional
             Price data for correlation analysis
-            
+
         Returns:
         --------
         MiningAnalysis
@@ -86,7 +86,7 @@ class BitcoinMiningAnalyzer:
         try:
             # Store metrics in history
             self._update_history(metrics)
-            
+
             # Calculate various analysis components
             profitability = self._calculate_profitability(metrics, price_data)
             network_health = self._assess_network_health(metrics)
@@ -94,12 +94,12 @@ class BitcoinMiningAnalyzer:
             hash_correlation = self._calculate_hash_price_correlation(price_data)
             efficiency = self._calculate_mining_efficiency(metrics)
             risk = self._assess_mining_risk(metrics)
-            
+
             # Generate recommendations
             recommendations = self._generate_recommendations(
                 profitability, network_health, difficulty_trend, risk
             )
-            
+
             return MiningAnalysis(
                 profitability_score=profitability,
                 network_health=network_health,
@@ -109,42 +109,42 @@ class BitcoinMiningAnalyzer:
                 risk_assessment=risk,
                 recommendations=recommendations
             )
-            
+
         except Exception as e:
             logger.error(f"Error analyzing mining metrics: {e}")
             return self._create_default_analysis()
 
-    def _calculate_profitability(self, metrics: MiningMetrics, 
+    def _calculate_profitability(self, metrics: MiningMetrics,
                                 price_data: Optional[Dict]) -> float:
         """
         Calculate mining profitability score.
-        
+
         Mathematical Formula:
         P = (block_reward * hash_rate * price) / (difficulty * energy_cost)
         """
         try:
             if not price_data or 'price' not in price_data:
                 return 0.5  # Neutral if no price data
-            
+
             btc_price = price_data['price']
-            
+
             # Basic profitability calculation
             daily_blocks = 86400 / metrics.block_time  # Blocks per day
             daily_revenue = daily_blocks * metrics.block_reward * btc_price
-            
+
             # Energy cost (simplified)
             daily_energy_cost = metrics.hash_rate * 1e12 * metrics.energy_cost * 24
-            
+
             if daily_energy_cost <= 0:
                 return 0.5
-            
+
             profitability_ratio = daily_revenue / daily_energy_cost
-            
+
             # Normalize to [0, 1] range
             normalized_profitability = unified_math.min(1.0, profitability_ratio / 10.0)
-            
+
             return unified_math.max(0.0, normalized_profitability)
-            
+
         except Exception as e:
             logger.error(f"Error calculating profitability: {e}")
             return 0.5
@@ -152,7 +152,7 @@ class BitcoinMiningAnalyzer:
     def _assess_network_health(self, metrics: MiningMetrics) -> float:
         """
         Assess overall network health.
-        
+
         Factors:
         - Block time deviation from target
         - Mempool size
@@ -161,30 +161,30 @@ class BitcoinMiningAnalyzer:
         try:
             # Block time health (closer to 600s is better)
             block_time_health = 1.0 - unified_math.min(1.0, unified_math.abs(metrics.block_time - self.target_block_time) / self.target_block_time)
-            
+
             # Mempool health (smaller is better, normalized)
             mempool_health = unified_math.max(0.0, 1.0 - (metrics.mempool_size / 100000))  # Normalize to 100k tx
-            
+
             # Hash rate health (assume stable if recent data available)
             hash_rate_health = 0.8  # Default assumption
-            
+
             if len(self.mining_history) >= 2:
                 recent_hash_rates = [m.hash_rate for m in self.mining_history[-5:]]
                 hash_rate_std = unified_math.unified_math.std(recent_hash_rates)
                 hash_rate_mean = unified_math.unified_math.mean(recent_hash_rates)
-                
+
                 if hash_rate_mean > 0:
                     hash_rate_health = unified_math.max(0.0, 1.0 - (hash_rate_std / hash_rate_mean))
-            
+
             # Weighted combination
             network_health = (
                 block_time_health * 0.4 +
                 mempool_health * 0.3 +
                 hash_rate_health * 0.3
             )
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, network_health))
-            
+
         except Exception as e:
             logger.error(f"Error assessing network health: {e}")
             return 0.5
@@ -194,20 +194,20 @@ class BitcoinMiningAnalyzer:
         try:
             if len(self.mining_history) < 3:
                 return 0.0  # Neutral if insufficient data
-            
+
             # Get recent difficulties
             recent_difficulties = [m.difficulty for m in self.mining_history[-10:]]
-            
+
             if len(recent_difficulties) < 2:
                 return 0.0
-            
+
             # Calculate trend
             x = np.arange(len(recent_difficulties))
             y = np.array(recent_difficulties)
-            
+
             # Linear regression
             slope = np.polyfit(x, y, 1)[0]
-            
+
             # Normalize trend to [-1, 1]
             avg_difficulty = unified_math.unified_math.mean(recent_difficulties)
             if avg_difficulty > 0:
@@ -215,7 +215,7 @@ class BitcoinMiningAnalyzer:
                 return max(-1.0, unified_math.min(1.0, normalized_trend * 100))  # Scale factor
             else:
                 return 0.0
-                
+
         except Exception as e:
             logger.error(f"Error analyzing difficulty trend: {e}")
             return 0.0
@@ -225,25 +225,25 @@ class BitcoinMiningAnalyzer:
         try:
             if not price_data or 'price_history' not in price_data:
                 return 0.0
-            
+
             price_history = price_data['price_history']
-            
+
             if len(self.mining_history) < 5 or len(price_history) < 5:
                 return 0.0
-            
+
             # Align data lengths
             min_length = unified_math.min(len(self.mining_history), len(price_history))
             hash_rates = [m.hash_rate for m in self.mining_history[-min_length:]]
             prices = price_history[-min_length:]
-            
+
             if len(hash_rates) < 2:
                 return 0.0
-            
+
             # Calculate correlation
             correlation = unified_math.unified_math.correlation(hash_rates, prices)[0, 1]
-            
+
             return float(correlation) if not np.isnan(correlation) else 0.0
-            
+
         except Exception as e:
             logger.error(f"Error calculating hash-price correlation: {e}")
             return 0.0
@@ -253,22 +253,22 @@ class BitcoinMiningAnalyzer:
         try:
             # Efficiency factors
             block_time_efficiency = 1.0 - unified_math.min(1.0, unified_math.abs(metrics.block_time - self.target_block_time) / self.target_block_time)
-            
+
             # Hash rate utilization (assume optimal if within reasonable range)
             hash_rate_efficiency = 0.9  # Default assumption
-            
+
             # Difficulty efficiency (lower difficulty relative to hash rate is better)
             difficulty_efficiency = unified_math.max(0.0, 1.0 - (metrics.difficulty / (metrics.hash_rate * 1e12)))
-            
+
             # Combined efficiency
             efficiency = (
                 block_time_efficiency * 0.5 +
                 hash_rate_efficiency * 0.3 +
                 difficulty_efficiency * 0.2
             )
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, efficiency))
-            
+
         except Exception as e:
             logger.error(f"Error calculating mining efficiency: {e}")
             return 0.5
@@ -277,7 +277,7 @@ class BitcoinMiningAnalyzer:
         """Assess mining-related risks."""
         try:
             risk_factors = []
-            
+
             # Block time risk
             if metrics.block_time > self.target_block_time * 1.5:
                 risk_factors.append(0.3)
@@ -285,13 +285,13 @@ class BitcoinMiningAnalyzer:
                 risk_factors.append(0.2)
             else:
                 risk_factors.append(0.0)
-            
+
             # Mempool risk
             if metrics.mempool_size > 50000:
                 risk_factors.append(0.2)
             else:
                 risk_factors.append(0.0)
-            
+
             # Hash rate volatility risk
             if len(self.mining_history) >= 3:
                 recent_hash_rates = [m.hash_rate for m in self.mining_history[-3:]]
@@ -302,7 +302,7 @@ class BitcoinMiningAnalyzer:
                     risk_factors.append(0.0)
             else:
                 risk_factors.append(0.1)  # Default risk
-            
+
             # Difficulty adjustment risk
             if len(self.mining_history) >= 2:
                 difficulty_change = unified_math.abs(metrics.difficulty - self.mining_history[-2].difficulty) / self.mining_history[-2].difficulty
@@ -312,11 +312,11 @@ class BitcoinMiningAnalyzer:
                     risk_factors.append(0.0)
             else:
                 risk_factors.append(0.1)
-            
+
             # Calculate total risk
             total_risk = sum(risk_factors)
             return unified_math.min(1.0, total_risk)
-            
+
         except Exception as e:
             logger.error(f"Error assessing mining risk: {e}")
             return 0.5
@@ -325,37 +325,37 @@ class BitcoinMiningAnalyzer:
                                  difficulty_trend: float, risk: float) -> List[str]:
         """Generate trading recommendations based on mining analysis."""
         recommendations = []
-        
+
         # Profitability-based recommendations
         if profitability > 0.7:
             recommendations.append("High mining profitability suggests bullish pressure")
         elif profitability < 0.3:
             recommendations.append("Low mining profitability may indicate bearish pressure")
-        
+
         # Network health recommendations
         if network_health > 0.8:
             recommendations.append("Strong network health supports price stability")
         elif network_health < 0.4:
             recommendations.append("Poor network health may lead to price volatility")
-        
+
         # Difficulty trend recommendations
         if difficulty_trend > 0.3:
             recommendations.append("Increasing difficulty suggests growing mining competition")
         elif difficulty_trend < -0.3:
             recommendations.append("Decreasing difficulty may indicate mining capitulation")
-        
+
         # Risk-based recommendations
         if risk > 0.6:
             recommendations.append("High mining risk - consider defensive positioning")
         elif risk < 0.2:
             recommendations.append("Low mining risk - favorable for aggressive strategies")
-        
+
         return recommendations
 
     def _update_history(self, metrics: MiningMetrics) -> None:
         """Update mining history."""
         self.mining_history.append(metrics)
-        
+
         # Trim history to prevent memory growth
         if len(self.mining_history) > self.max_history_size:
             self.mining_history = self.mining_history[-self.max_history_size//2:]
@@ -377,9 +377,9 @@ class BitcoinMiningAnalyzer:
         try:
             if not self.mining_history:
                 return {"error": "No mining history available"}
-            
+
             recent_metrics = self.mining_history[-50:]  # Last 50 entries
-            
+
             return {
                 "total_entries": len(self.mining_history),
                 "avg_hash_rate": unified_math.mean([m.hash_rate for m in recent_metrics]),
@@ -394,7 +394,7 @@ class BitcoinMiningAnalyzer:
                     "mempool_size": recent_metrics[-1].mempool_size
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting mining statistics: {e}")
             return {"error": str(e)}
@@ -402,9 +402,9 @@ class BitcoinMiningAnalyzer:
 def main() -> None:
     """Test function for BitcoinMiningAnalyzer."""
     safe_print("🧮 Testing Bitcoin Mining Analyzer...")
-    
+
     analyzer = BitcoinMiningAnalyzer()
-    
+
     # Test with sample mining metrics
     test_metrics = MiningMetrics(
         hash_rate=450.0,  # 450 EH/s
@@ -414,32 +414,32 @@ def main() -> None:
         block_reward=6.25,
         energy_cost=0.05  # $0.05 per TH/s
     )
-    
+
     # Mock price data
     price_data = {
         "price": 52000.0,
         "price_history": [50000, 51000, 52000, 51500, 53000]
     }
-    
+
     # Analyze mining metrics
     analysis = analyzer.analyze_mining_metrics(test_metrics, price_data)
-    
+
     safe_print(f"Profitability Score: {analysis.profitability_score:.3f}")
     safe_print(f"Network Health: {analysis.network_health:.3f}")
     safe_print(f"Difficulty Trend: {analysis.difficulty_trend:.3f}")
     safe_print(f"Hash Rate Correlation: {analysis.hash_rate_correlation:.3f}")
     safe_print(f"Mining Efficiency: {analysis.mining_efficiency:.3f}")
     safe_print(f"Risk Assessment: {analysis.risk_assessment:.3f}")
-    
+
     safe_print(f"\nRecommendations:")
     for rec in analysis.recommendations:
         safe_print(f"  - {rec}")
-    
+
     # Get statistics
     stats = analyzer.get_mining_statistics()
     safe_print(f"\nMining Statistics: {stats}")
-    
+
     return 0
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

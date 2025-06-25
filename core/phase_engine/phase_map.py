@@ -109,11 +109,11 @@ class PhaseMap:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 logger.info(f"Loaded phase map configuration")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -127,7 +127,7 @@ class PhaseMap:
             "max_phase_history": 1000,
             "transition_monitoring_enabled": True
         }
-        
+
         try:
             os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
@@ -139,7 +139,7 @@ class PhaseMap:
         """Initialize the phase map with default structure."""
         # Initialize transition matrix with default probabilities
         default_phases = ["accumulation", "distribution", "trending", "sideways", "breakout", "breakdown"]
-        
+
         for phase_a in default_phases:
             for phase_b in default_phases:
                 if phase_a != phase_b:
@@ -177,7 +177,7 @@ class PhaseMap:
             if phase_id in self.phase_nodes:
                 logger.warning(f"Phase node {phase_id} already exists")
                 return False
-            
+
             phase_node = PhaseNode(
                 phase_id=phase_id,
                 phase_type=phase_type,
@@ -188,11 +188,11 @@ class PhaseMap:
                 confidence_score=confidence_score,
                 metadata=metadata or {}
             )
-            
+
             self.phase_nodes[phase_id] = phase_node
             logger.info(f"Added phase node: {phase_id} ({phase_type})")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error adding phase node: {e}")
             return False
@@ -203,20 +203,20 @@ class PhaseMap:
             if phase_id not in self.phase_nodes:
                 logger.warning(f"Phase node {phase_id} not found")
                 return False
-            
+
             phase_node = self.phase_nodes[phase_id]
             old_state = phase_node.state
             phase_node.state = new_state
-            
+
             if new_state == PhaseState.COMPLETED:
                 phase_node.end_time = datetime.now()
                 # Move to history
                 self.phase_history.append(phase_node)
                 del self.phase_nodes[phase_id]
-            
+
             logger.info(f"Updated phase {phase_id} state: {old_state.value} -> {new_state.value}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error updating phase state: {e}")
             return False
@@ -227,14 +227,14 @@ class PhaseMap:
         """Record a phase transition."""
         try:
             transition_id = f"transition_{from_phase_id}_{to_phase_id}_{int(time.time())}"
-            
+
             # Calculate transition duration
             duration_seconds = 0.0
             if from_phase_id in self.phase_nodes:
                 from_phase = self.phase_nodes[from_phase_id]
                 if from_phase.end_time:
                     duration_seconds = (from_phase.end_time - from_phase.start_time).total_seconds()
-            
+
             transition = PhaseTransition(
                 transition_id=transition_id,
                 from_phase_id=from_phase_id,
@@ -246,15 +246,15 @@ class PhaseMap:
                 success=True,
                 metadata={"transition_type": transition_type.value}
             )
-            
+
             self.phase_transitions[transition_id] = transition
-            
+
             # Update transition matrix
             self._update_transition_matrix(from_phase_id, to_phase_id, probability)
-            
+
             logger.info(f"Recorded transition: {from_phase_id} -> {to_phase_id}")
             return transition_id
-            
+
         except Exception as e:
             logger.error(f"Error recording transition: {e}")
             return ""
@@ -266,13 +266,13 @@ class PhaseMap:
             from_phase_type = self.phase_nodes.get(from_phase_id, None)
             if from_phase_type:
                 from_type = from_phase_type.phase_type
-                
+
                 # Update transition probability with exponential moving average
                 current_prob = self.transition_matrix[from_type][to_phase_id]
                 alpha = 0.1  # Learning rate
                 new_prob = alpha * probability + (1 - alpha) * current_prob
                 self.transition_matrix[from_type][to_phase_id] = new_prob
-                
+
         except Exception as e:
             logger.error(f"Error updating transition matrix: {e}")
 
@@ -281,19 +281,19 @@ class PhaseMap:
         try:
             if current_phase_id not in self.phase_nodes:
                 return []
-            
+
             current_phase = self.phase_nodes[current_phase_id]
             current_type = current_phase.phase_type
-            
+
             # Get transition probabilities for current phase type
             transitions = self.transition_matrix[current_type]
-            
+
             # Sort by probability
             sorted_transitions = sorted(transitions.items(), key=lambda x: x[1], reverse=True)
-            
+
             # Return top 3 predictions
             return sorted_transitions[:3]
-            
+
         except Exception as e:
             logger.error(f"Error predicting next phase: {e}")
             return []
@@ -303,7 +303,7 @@ class PhaseMap:
         """Add a relationship between two phases."""
         try:
             relationship_id = f"relationship_{phase_a_id}_{phase_b_id}_{int(time.time())}"
-            
+
             relationship = PhaseRelationship(
                 relationship_id=relationship_id,
                 phase_a_id=phase_a_id,
@@ -314,11 +314,11 @@ class PhaseMap:
                 timestamp=datetime.now(),
                 metadata={"relationship_type": relationship_type}
             )
-            
+
             self.phase_relationships[relationship_id] = relationship
             logger.info(f"Added phase relationship: {phase_a_id} <-> {phase_b_id}")
             return relationship_id
-            
+
         except Exception as e:
             logger.error(f"Error adding phase relationship: {e}")
             return ""
@@ -339,7 +339,7 @@ class PhaseMap:
         """Check for potential phase transitions."""
         try:
             current_time = datetime.now()
-            
+
             for phase_id, phase_node in list(self.phase_nodes.items()):
                 if phase_node.state == PhaseState.ACTIVE:
                     # Check if phase duration exceeded
@@ -347,7 +347,7 @@ class PhaseMap:
                     if phase_duration > phase_node.duration_minutes:
                         logger.info(f"Phase {phase_id} duration exceeded, marking for transition")
                         self.update_phase_state(phase_id, PhaseState.TRANSITIONING)
-                        
+
         except Exception as e:
             logger.error(f"Error checking phase transitions: {e}")
 
@@ -377,17 +377,17 @@ class PhaseMap:
         total_transitions = len(self.phase_transitions)
         total_relationships = len(self.phase_relationships)
         historical_phases = len(self.phase_history)
-        
+
         # Calculate transition success rate
         successful_transitions = sum(1 for t in self.phase_transitions.values() if t.success)
         transition_success_rate = successful_transitions / total_transitions if total_transitions > 0 else 0.0
-        
+
         # Calculate average transition probability
         all_probabilities = []
         for transitions in self.transition_matrix.values():
             all_probabilities.extend(transitions.values())
         avg_transition_probability = unified_math.unified_math.mean(all_probabilities) if all_probabilities else 0.0
-        
+
         return {
             "active_phases": active_phases,
             "total_transitions": total_transitions,
@@ -401,19 +401,19 @@ class PhaseMap:
 def main() -> None:
     """Main function for testing and demonstration."""
     phase_map = PhaseMap("./test_phase_map_config.json")
-    
+
     # Add some test phases
     phase_map.add_phase_node("phase_001", "accumulation", 60, 0.8)
     phase_map.add_phase_node("phase_002", "trending", 120, 0.9)
-    
+
     # Record a transition
     transition_id = phase_map.record_transition("phase_001", "phase_002", TransitionType.NATURAL, 0.7)
     safe_print(f"Recorded transition: {transition_id}")
-    
+
     # Predict next phase
     predictions = phase_map.predict_next_phase("phase_002")
     safe_print(f"Next phase predictions: {predictions}")
-    
+
     # Get statistics
     stats = phase_map.get_phase_map_statistics()
     safe_print(f"Phase Map Statistics: {stats}")

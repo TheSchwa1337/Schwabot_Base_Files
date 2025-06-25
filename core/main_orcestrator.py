@@ -105,7 +105,7 @@ class HealthCheck:
 
 class MainOrchestrator:
     """Main orchestrator for the Schwabot system."""
-    
+
     def __init__(self, config_path: str = "./config/orchestrator_config.json"):
         """Initialize the main orchestrator."""
         self.config_path = config_path
@@ -130,11 +130,11 @@ class MainOrchestrator:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 self.heartbeat_interval = config.get("heartbeat_interval", 30)
                 self.health_check_interval = config.get("health_check_interval", 60)
                 self.max_event_history = config.get("max_event_history", 1000)
-                
+
                 # Load component configurations
                 for comp_config in config.get("components", []):
                     component_info = ComponentInfo(
@@ -145,11 +145,11 @@ class MainOrchestrator:
                         dependencies=comp_config.get("dependencies", [])
                     )
                     self.components[component_info.name] = component_info
-                
+
                 logger.info(f"Loaded configuration for {len(self.components)} components")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -194,7 +194,7 @@ class MainOrchestrator:
                 "dependencies": ["analytics_engine", "portfolio_manager"]
             }
         ]
-        
+
         for comp_config in default_components:
             component_info = ComponentInfo(
                 name=comp_config["name"],
@@ -204,7 +204,7 @@ class MainOrchestrator:
                 dependencies=comp_config["dependencies"]
             )
             self.components[component_info.name] = component_info
-        
+
         self._save_configuration()
         logger.info("Default configuration created")
 
@@ -228,7 +228,7 @@ class MainOrchestrator:
         def signal_handler(signum: int, frame: Any) -> None:
             logger.info(f"Received signal {signum}, initiating shutdown")
             self.shutdown()
-        
+
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
@@ -242,7 +242,7 @@ class MainOrchestrator:
                     time.sleep(self.heartbeat_interval)
                 except Exception as e:
                     logger.error(f"Error in heartbeat worker: {e}")
-        
+
         # Health check worker
         def health_check_worker() -> None:
             while self.system_state != SystemState.SHUTTING_DOWN:
@@ -251,7 +251,7 @@ class MainOrchestrator:
                     time.sleep(self.health_check_interval)
                 except Exception as e:
                     logger.error(f"Error in health check worker: {e}")
-        
+
         # Event processor worker
         def event_processor_worker() -> None:
             while self.system_state != SystemState.SHUTTING_DOWN:
@@ -260,25 +260,25 @@ class MainOrchestrator:
                     time.sleep(1)  # Process events every second
                 except Exception as e:
                     logger.error(f"Error in event processor worker: {e}")
-        
+
         self.heartbeat_thread = threading.Thread(target=heartbeat_worker, daemon=True)
         self.health_check_thread = threading.Thread(target=health_check_worker, daemon=True)
         self.event_processor_thread = threading.Thread(target=event_processor_worker, daemon=True)
-        
+
         self.heartbeat_thread.start()
         self.health_check_thread.start()
         self.event_processor_thread.start()
-        
+
         logger.info("Background workers started")
 
-    def register_component(self, name: str, component_type: str, 
+    def register_component(self, name: str, component_type: str,
                           priority: Priority = Priority.NORMAL,
                           dependencies: Optional[List[str]] = None) -> None:
         """Register a new component with the orchestrator."""
         if name in self.components:
             logger.warning(f"Component {name} already registered")
             return
-        
+
         component_info = ComponentInfo(
             name=name,
             component_type=component_type,
@@ -286,7 +286,7 @@ class MainOrchestrator:
             priority=priority,
             dependencies=dependencies or []
         )
-        
+
         self.components[name] = component_info
         logger.info(f"Component registered: {name} ({component_type})")
 
@@ -295,24 +295,24 @@ class MainOrchestrator:
         if name not in self.components:
             logger.error(f"Component {name} not registered")
             return False
-        
+
         component_info = self.components[name]
-        
+
         # Check dependencies
         for dep in component_info.dependencies:
             if dep not in self.component_instances:
                 logger.error(f"Component {name} depends on {dep} which is not started")
                 return False
-        
+
         try:
             # Store component instance
             self.component_instances[name] = component_instance
-            
+
             # Update component status
             component_info.status = ComponentStatus.RUNNING
             component_info.start_time = datetime.now()
             component_info.last_heartbeat = datetime.now()
-            
+
             # Log component start
             self._log_event(
                 f"component_started",
@@ -320,21 +320,21 @@ class MainOrchestrator:
                 f"Component {name} started successfully",
                 Priority.NORMAL
             )
-            
+
             logger.info(f"Component started: {name}")
             return True
-            
+
         except Exception as e:
             component_info.status = ComponentStatus.ERROR
             component_info.error_count += 1
-            
+
             self._log_event(
                 f"component_start_failed",
                 name,
                 f"Failed to start component {name}: {e}",
                 Priority.HIGH
             )
-            
+
             logger.error(f"Failed to start component {name}: {e}")
             return False
 
@@ -343,18 +343,18 @@ class MainOrchestrator:
         if name not in self.components:
             logger.error(f"Component {name} not found")
             return False
-        
+
         component_info = self.components[name]
-        
+
         try:
             # Update component status
             component_info.status = ComponentStatus.SHUTDOWN
             component_info.last_heartbeat = datetime.now()
-            
+
             # Remove component instance
             if name in self.component_instances:
                 del self.component_instances[name]
-            
+
             # Log component stop
             self._log_event(
                 f"component_stopped",
@@ -362,10 +362,10 @@ class MainOrchestrator:
                 f"Component {name} stopped",
                 Priority.NORMAL
             )
-            
+
             logger.info(f"Component stopped: {name}")
             return True
-            
+
         except Exception as e:
             self._log_event(
                 f"component_stop_failed",
@@ -373,7 +373,7 @@ class MainOrchestrator:
                 f"Failed to stop component {name}: {e}",
                 Priority.HIGH
             )
-            
+
             logger.error(f"Failed to stop component {name}: {e}")
             return False
 
@@ -396,23 +396,23 @@ class MainOrchestrator:
         """Process component heartbeats and detect failures."""
         current_time = datetime.now()
         timeout_threshold = timedelta(seconds=self.heartbeat_interval * 2)
-        
+
         for name, component_info in self.components.items():
             if component_info.status == ComponentStatus.RUNNING:
-                if (component_info.last_heartbeat and 
+                if (component_info.last_heartbeat and
                     current_time - component_info.last_heartbeat > timeout_threshold):
-                    
+
                     # Component heartbeat timeout
                     component_info.status = ComponentStatus.ERROR
                     component_info.error_count += 1
-                    
+
                     self._log_event(
                         f"component_heartbeat_timeout",
                         name,
                         f"Component {name} heartbeat timeout",
                         Priority.HIGH
                     )
-                    
+
                     logger.warning(f"Component {name} heartbeat timeout")
 
     def _perform_health_checks(self) -> None:
@@ -420,15 +420,15 @@ class MainOrchestrator:
         for name, component_info in self.components.items():
             try:
                 start_time = time.time()
-                
+
                 # Basic health check
                 is_healthy = self._check_component_health(name)
                 response_time = (time.time() - start_time) * 1000  # Convert to ms
-                
+
                 # Get system metrics
                 memory_usage = self._get_memory_usage()
                 cpu_usage = self._get_cpu_usage()
-                
+
                 health_check = HealthCheck(
                     component=name,
                     timestamp=datetime.now(),
@@ -438,21 +438,21 @@ class MainOrchestrator:
                     cpu_usage_percent=cpu_usage,
                     error_count=component_info.error_count
                 )
-                
+
                 self.health_checks[name] = health_check
-                
+
                 # Update component status if needed
                 if not is_healthy and component_info.status == ComponentStatus.RUNNING:
                     component_info.status = ComponentStatus.ERROR
                     component_info.error_count += 1
-                    
+
                     self._log_event(
                         f"component_health_check_failed",
                         name,
                         f"Health check failed for component {name}",
                         Priority.HIGH
                     )
-                
+
             except Exception as e:
                 logger.error(f"Error performing health check for {name}: {e}")
 
@@ -463,19 +463,19 @@ class MainOrchestrator:
         component_info = self.components.get(name)
         if not component_info:
             return False
-        
+
         # Check if component is running and has recent heartbeat
         if component_info.status != ComponentStatus.RUNNING:
             return False
-        
+
         if not component_info.last_heartbeat:
             return False
-        
+
         # Check if heartbeat is recent
         time_since_heartbeat = datetime.now() - component_info.last_heartbeat
         if time_since_heartbeat > timedelta(seconds=self.heartbeat_interval * 2):
             return False
-        
+
         return True
 
     def _get_memory_usage(self) -> float:
@@ -495,11 +495,11 @@ class MainOrchestrator:
         except ImportError:
             return 0.0
 
-    def _log_event(self, event_type: str, component: str, message: str, 
+    def _log_event(self, event_type: str, component: str, message: str,
                   priority: Priority, data: Optional[Dict[str, Any]] = None) -> None:
         """Log a system event."""
         event_id = f"event_{int(datetime.now().timestamp())}_{hash(message) % 10000}"
-        
+
         event = SystemEvent(
             event_id=event_id,
             event_type=event_type,
@@ -509,13 +509,13 @@ class MainOrchestrator:
             priority=priority,
             data=data or {}
         )
-        
+
         # Add to event queue
         self.event_queue.put((priority.value, event))
-        
+
         # Add to history
         self.event_history.append(event)
-        
+
         # Trim history if too long
         if len(self.event_history) > self.max_event_history:
             self.event_history = self.event_history[-self.max_event_history:]
@@ -525,7 +525,7 @@ class MainOrchestrator:
         try:
             while not self.event_queue.empty():
                 priority, event = self.event_queue.get_nowait()
-                
+
                 # Log the event
                 log_level = logging.INFO
                 if priority <= Priority.CRITICAL.value:
@@ -536,15 +536,15 @@ class MainOrchestrator:
                     log_level = logging.INFO
                 else:
                     log_level = logging.DEBUG
-                
+
                 logger.unified_math.log(log_level, f"[{event.component}] {event.message}")
-                
+
                 # Handle critical events
                 if priority <= Priority.CRITICAL.value:
                     self._handle_critical_event(event)
-                
+
                 self.event_queue.task_done()
-                
+
         except queue.Empty:
             pass
         except Exception as e:
@@ -562,14 +562,14 @@ class MainOrchestrator:
     def _attempt_component_restart(self, component_name: str) -> None:
         """Attempt to restart a failed component."""
         logger.info(f"Attempting to restart component: {component_name}")
-        
+
         # This is a simplified restart mechanism
         # In a real system, you would implement proper restart logic
         component_info = self.components.get(component_name)
         if component_info:
             component_info.status = ComponentStatus.INITIALIZING
             component_info.error_count += 1
-            
+
             self._log_event(
                 f"component_restart_attempted",
                 component_name,
@@ -589,7 +589,7 @@ class MainOrchestrator:
                 "last_heartbeat": component_info.last_heartbeat.isoformat() if component_info.last_heartbeat else None,
                 "error_count": component_info.error_count
             }
-        
+
         health_summary = {}
         for name, health_check in self.health_checks.items():
             health_summary[name] = {
@@ -599,7 +599,7 @@ class MainOrchestrator:
                 "cpu_usage_percent": health_check.cpu_usage_percent,
                 "error_count": health_check.error_count
             }
-        
+
         return {
             "system_state": self.system_state.value,
             "total_components": len(self.components),
@@ -619,21 +619,21 @@ class MainOrchestrator:
         """Shutdown the orchestrator and all components."""
         logger.info("Initiating system shutdown")
         self.system_state = SystemState.SHUTTING_DOWN
-        
+
         # Call shutdown handlers
         for handler in self.shutdown_handlers:
             try:
                 handler()
             except Exception as e:
                 logger.error(f"Error in shutdown handler: {e}")
-        
+
         # Stop all components
         for name in list(self.components.keys()):
             self.stop_component(name)
-        
+
         # Wait for background workers to finish
         time.sleep(2)
-        
+
         logger.info("System shutdown completed")
         sys.exit(0)
 
@@ -641,49 +641,49 @@ class MainOrchestrator:
         """Start the orchestrator system."""
         logger.info("Starting MainOrchestrator system")
         self.system_state = SystemState.RUNNING
-        
+
         # Initialize all components
         for name, component_info in self.components.items():
             if not component_info.dependencies:  # Start components with no dependencies first
                 component_info.status = ComponentStatus.INITIALIZING
-        
+
         logger.info("MainOrchestrator system started")
 
 def main() -> None:
     """Main function for testing and demonstration."""
     orchestrator = MainOrchestrator("./test_orchestrator_config.json")
-    
+
     # Start the system
     orchestrator.start_system()
-    
+
     # Register and start some test components
     orchestrator.register_component("test_engine", "test", Priority.NORMAL)
-    
+
     # Simulate component instance
     class TestComponent:
         """Test component for demonstration."""
-        
+
         def __init__(self, name: str) -> None:
             self.name = name
-        
+
         def heartbeat(self) -> None:
             """Send heartbeat."""
             pass
-    
+
     test_component = TestComponent("test_engine")
     orchestrator.start_component("test_engine", test_component)
-    
+
     # Simulate some heartbeats
     for _ in range(5):
         test_component.heartbeat()
         time.sleep(1)
-    
+
     # Get system status
     status = orchestrator.get_system_status()
     safe_print(f"System status: {json.dumps(status, indent=2, default=str)}")
-    
+
     # Shutdown
     orchestrator.shutdown()
 
 if __name__ == "__main__":
-    main() 
+    main()

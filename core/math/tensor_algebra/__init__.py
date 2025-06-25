@@ -3,7 +3,7 @@
 Tensor Algebra Module - Mathematical Foundation for AI Vector Operations
 =======================================================================
 
-This module provides the mathematical foundation for multi-layer AI vector 
+This module provides the mathematical foundation for multi-layer AI vector
 comparison and symbolic memory operations in the Schwabot trading system.
 
 Core Components:
@@ -64,7 +64,7 @@ from .entropy_engine import (
 __all__ = [
     # Unified Tensor Algebra
     'tensor_dot',
-    'tensor_project', 
+    'tensor_project',
     'tensor_entropy_gradient',
     'tensor_normalize',
     'tensor_correlation',
@@ -74,7 +74,7 @@ __all__ = [
     'tensor_fft',
     'tensor_inverse_fft',
     'UnifiedTensorAlgebra',
-    
+
     # Tensor Engine
     'TensorEngine',
     'create_tensor_space',
@@ -83,7 +83,7 @@ __all__ = [
     'tensor_pattern_matching',
     'tensor_clustering',
     'tensor_dimensionality_reduction',
-    
+
     # Profit Engine
     'compute_profit_surface',
     'optimize_long_hold_positions',
@@ -91,7 +91,7 @@ __all__ = [
     'estimate_profit_curves',
     'analyze_profit_distribution',
     'ProfitEngine',
-    
+
     # Entropy Engine
     'entropy_filter',
     'calculate_dynamic_entropy',
@@ -104,4 +104,4 @@ __all__ = [
 # Version information
 __version__ = "1.0.0"
 __author__ = "Schwabot Development Team"
-__description__ = "Tensor Algebra Module for Advanced AI Vector Operations" 
+__description__ = "Tensor Algebra Module for Advanced AI Vector Operations"

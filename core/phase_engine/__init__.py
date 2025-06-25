@@ -100,7 +100,7 @@ class PhaseEngine:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 # Load phase configurations
                 for phase_config in config.get("phase_configs", []):
                     phase_type = PhaseType(phase_config["phase_type"])
@@ -112,17 +112,17 @@ class PhaseEngine:
                         strategy_mappings=phase_config["strategy_mappings"],
                         risk_parameters=phase_config["risk_parameters"]
                     )
-                
+
                 # Load phase transitions
                 self.phase_transitions = {
                     PhaseType(phase): [PhaseType(t) for t in transitions]
                     for phase, transitions in config.get("phase_transitions", {}).items()
                 }
-                
+
                 logger.info(f"Loaded configuration for {len(self.phase_configs)} phase types")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -156,7 +156,7 @@ class PhaseEngine:
                 risk_parameters={"max_position_size": 0.15, "stop_loss": 0.08}
             )
         }
-        
+
         # Default phase transitions
         self.phase_transitions = {
             PhaseType.ACCUMULATION: [PhaseType.TRENDING, PhaseType.SIDEWAYS],
@@ -166,7 +166,7 @@ class PhaseEngine:
             PhaseType.BREAKOUT: [PhaseType.TRENDING, PhaseType.DISTRIBUTION],
             PhaseType.BREAKDOWN: [PhaseType.ACCUMULATION, PhaseType.CONSOLIDATION]
         }
-        
+
         self._save_configuration()
         logger.info("Default phase engine configuration created")
 
@@ -201,7 +201,7 @@ class PhaseEngine:
         # Start background phase monitoring
         self.monitoring_thread = threading.Thread(target=self._phase_monitor, daemon=True)
         self.monitoring_thread.start()
-        
+
         logger.info("Phase monitoring system started")
 
     def _phase_monitor(self) -> None:
@@ -219,9 +219,9 @@ class PhaseEngine:
         try:
             if phase_type not in self.phase_configs:
                 raise ValueError(f"Unknown phase type: {phase_type}")
-            
+
             phase_id = f"{phase_type.value}_{int(time.time())}"
-            
+
             phase_state = PhaseState(
                 phase_id=phase_id,
                 phase_type=phase_type,
@@ -234,12 +234,12 @@ class PhaseEngine:
                 performance_metrics={},
                 metadata={"initial_confidence": initial_confidence}
             )
-            
+
             self.active_phases[phase_id] = phase_state
-            
+
             logger.info(f"Started phase: {phase_id} ({phase_type.value})")
             return phase_id
-            
+
         except Exception as e:
             logger.error(f"Error starting phase: {e}")
             return ""
@@ -250,19 +250,19 @@ class PhaseEngine:
             if phase_id not in self.active_phases:
                 logger.warning(f"Phase {phase_id} not found")
                 return False
-            
+
             phase_state = self.active_phases[phase_id]
             phase_state.status = PhaseStatus.COMPLETED
             phase_state.end_time = datetime.now()
             phase_state.metadata["end_reason"] = reason
-            
+
             # Move to history
             self.phase_history.append(phase_state)
             del self.active_phases[phase_id]
-            
+
             logger.info(f"Ended phase: {phase_id} - {reason}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error ending phase: {e}")
             return False
@@ -272,17 +272,17 @@ class PhaseEngine:
         try:
             if phase_id not in self.active_phases:
                 return False
-            
+
             phase_state = self.active_phases[phase_id]
             phase_state.confidence_score = confidence_score
-            
+
             # Check if confidence is too low
             config = self.phase_configs[phase_state.phase_type]
             if confidence_score < config.min_confidence:
                 logger.warning(f"Phase {phase_id} confidence too low: {confidence_score}")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error updating phase confidence: {e}")
             return False
@@ -296,23 +296,23 @@ class PhaseEngine:
         total_phases = len(self.phase_history) + len(self.active_phases)
         phase_type_counts = defaultdict(int)
         avg_durations = defaultdict(list)
-        
+
         # Count by type
         for phase in self.phase_history:
             phase_type_counts[phase.phase_type.value] += 1
             if phase.end_time:
                 duration = (phase.end_time - phase.start_time).total_seconds() / 60
                 avg_durations[phase.phase_type.value].append(duration)
-        
+
         for phase in self.active_phases.values():
             phase_type_counts[phase.phase_type.value] += 1
-        
+
         # Calculate average durations
         avg_duration_stats = {}
         for phase_type, durations in avg_durations.items():
             if durations:
                 avg_duration_stats[phase_type] = unified_math.unified_math.mean(durations)
-        
+
         return {
             "total_phases": total_phases,
             "active_phases": len(self.active_phases),
@@ -325,10 +325,10 @@ class PhaseEngine:
     def _check_phase_transitions(self) -> None:
         """Check if any phases need to transition."""
         current_time = datetime.now()
-        
+
         for phase_id, phase_state in list(self.active_phases.items()):
             config = self.phase_configs[phase_state.phase_type]
-            
+
             # Check if phase duration exceeded
             phase_duration = (current_time - phase_state.start_time).total_seconds() / 60
             if phase_duration > config.duration_minutes:
@@ -345,14 +345,14 @@ class PhaseEngine:
 def main() -> None:
     """Main function for testing and demonstration."""
     engine = PhaseEngine("./test_phase_engine_config.json")
-    
+
     # Start a test phase
     phase_id = engine.start_phase(PhaseType.ACCUMULATION, 0.8)
     safe_print(f"Started phase: {phase_id}")
-    
+
     # Update confidence
     engine.update_phase_confidence(phase_id, 0.9)
-    
+
     # Get statistics
     stats = engine.get_phase_statistics()
     safe_print(f"Phase Statistics: {stats}")

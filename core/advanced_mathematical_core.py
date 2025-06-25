@@ -615,7 +615,7 @@ def latency_adaptive_matrix_rebinding(
         mean_latency = unified_math.unified_math.mean(latency_profile)
         std_latency = unified_math.unified_math.std(latency_profile)
         max_latency = unified_math.unified_math.max(latency_profile)
-        
+
         # Determine rebinding strategy
         if max_latency > threshold:
             rebinding_strategy = "aggressive"
@@ -626,7 +626,7 @@ def latency_adaptive_matrix_rebinding(
         else:
             rebinding_strategy = "conservative"
             rebinding_factor = 1.0
-        
+
         return {
             "rebinding_strategy": rebinding_strategy,
             "rebinding_factor": rebinding_factor,
@@ -635,7 +635,7 @@ def latency_adaptive_matrix_rebinding(
             "max_latency": max_latency,
             "threshold": threshold
         }
-        
+
     except Exception as e:
         logger.error(f"Latency adaptive matrix rebinding failed: {e}")
         return {
@@ -647,78 +647,78 @@ def latency_adaptive_matrix_rebinding(
 
 class AdvancedMathematicalCore:
     """Advanced mathematical core for Schwabot trading system."""
-    
+
     def __init__(self):
         """Initialize the advanced mathematical core."""
         self.logger = logging.getLogger(__name__)
         self.precision = np.float64
         self.epsilon = EPSILON_FLOAT64
-        
+
     def calculate_delta(self, price_now: float, price_prev: float) -> float:
         """Calculate price delta with numerical stability."""
         return safe_delta_calculation(price_now, price_prev, self.epsilon)
-    
+
     def calculate_entropy(self, prob_vector: Vector) -> float:
         """Calculate Shannon entropy."""
         return shannon_entropy_stable(prob_vector)
-    
+
     def calculate_fractal_dimension(self, time_series: Vector) -> float:
         """Calculate Higuchi fractal dimension."""
         return higuchi_fractal_dimension(time_series)
-    
+
     def calculate_quantum_fidelity(self, state1: QuantumState, state2: QuantumState) -> float:
         """Calculate quantum fidelity between two states."""
         return quantum_fidelity(state1, state2)
-    
-    def calculate_thermal_dynamics(self, volume_current: float, avg_volume: float, 
+
+    def calculate_thermal_dynamics(self, volume_current: float, avg_volume: float,
                                  volatility: float) -> Dict[str, float]:
         """Calculate enhanced thermal dynamics."""
         return enhanced_thermal_dynamics(volume_current, avg_volume, volatility)
-    
-    def calculate_kelly_criterion(self, roi_vector: Vector, win_prob: float, 
+
+    def calculate_kelly_criterion(self, roi_vector: Vector, win_prob: float,
                                 loss_prob: float) -> Dict[str, float]:
         """Calculate Kelly criterion allocation."""
         return kelly_criterion_allocation(roi_vector, win_prob, loss_prob)
-    
+
     def calculate_ferris_wheel_state(self, time_series: Vector) -> FerrisWheelState:
         """Calculate Ferris wheel harmonic analysis."""
         return ferris_wheel_harmonic_analysis(time_series)
-    
-    def calculate_void_well_metrics(self, volume_vector: Vector, 
+
+    def calculate_void_well_metrics(self, volume_vector: Vector,
                                   price_variance_field: Vector) -> VoidWellMetrics:
         """Calculate void-well fractal metrics."""
         return void_well_fractal_index(volume_vector, price_variance_field)
-    
+
     def matrix_activation(self, input_array: Vector, weight_matrix: Matrix) -> Vector:
         """Perform stable matrix activation."""
         return stable_activation_matrix(input_array, weight_matrix)
-    
+
     def matrix_inverse(self, matrix: Matrix) -> Matrix:
         """Perform robust matrix inversion."""
         return robust_matrix_inverse(matrix)
-    
+
     def tensor_contraction(self, a: Tensor, b: Tensor) -> Tensor:
         """Perform memory-efficient tensor contraction."""
         return optimized_einsum_chunked(a, b)
-    
+
     def quantum_normalization(self, psi_vector: Vector) -> Dict[str, Any]:
         """Perform quantum signal normalization."""
         return quantum_signal_normalization(psi_vector)
-    
-    def quantum_thermal_coupling(self, quantum_state: QuantumState, 
+
+    def quantum_thermal_coupling(self, quantum_state: QuantumState,
                                temperature: Temperature) -> QuantumThermalState:
         """Calculate quantum-thermal coupling."""
         return quantum_thermal_coupling(quantum_state, temperature)
-    
+
     def api_entropy_penalty(self, confidence: float, api_errors: int) -> Dict[str, float]:
         """Calculate API entropy reflection penalty."""
         return api_entropy_reflection_penalty(confidence, api_errors)
-    
-    def time_lock_synchronization(self, short_cycles: int, mid_cycles: int, 
+
+    def time_lock_synchronization(self, short_cycles: int, mid_cycles: int,
                                 long_cycles: int) -> Dict[str, Any]:
         """Calculate recursive time lock synchronization."""
         return recursive_time_lock_synchronization(short_cycles, mid_cycles, long_cycles)
-    
+
     def latency_rebinding(self, latency_profile: Vector) -> Dict[str, Any]:
         """Calculate latency adaptive matrix rebinding."""
         return latency_adaptive_matrix_rebinding(latency_profile)

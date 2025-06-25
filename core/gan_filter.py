@@ -210,12 +210,12 @@ class TrainingMetrics:
 
 class EntropyGenerator(nn.Module if TORCH_AVAILABLE else object):
     """
-    
+
     Entropy Generator Neural Network
-    
+
     Generates synthetic entropy signals from random noise using the mathematical
     framework: G(z) = σ(W₂ · ReLU(W₁z + b₁) + b₂)
-    
+
     Architecture:
     - Input: Random noise vector z ∈ ℝⁿ
     - Hidden: ReLU activation with configurable dimensions

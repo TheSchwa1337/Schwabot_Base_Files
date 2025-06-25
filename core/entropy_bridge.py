@@ -38,7 +38,7 @@ from core.unified_math_system import unified_math
 from scipy.stats import entropy as scipy_entropy
 
 from .type_defs import (
-    BitLevel, MatrixPhase, MatrixController, Vector, Matrix, 
+    BitLevel, MatrixPhase, MatrixController, Vector, Matrix,
     Entropy, EntropyMap, EntropyTrace
 )
 from .mathlib_v4 import MathLibV4
@@ -57,7 +57,7 @@ class EntropyMeasurement:
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
     hash_signature: str = ""
-    
+
     def __post_init__(self) -> None:
         """Generate entropy measurement hash signature."""
         entropy_string = f"{self.measurement_id}_{self.system_name}_{self.entropy_value}_{self.entropy_type}_{self.timestamp.isoformat()}"
@@ -74,7 +74,7 @@ class EntropyBridge:
     confidence_score: float
     timestamp: datetime = field(default_factory=datetime.now)
     hash_signature: str = ""
-    
+
     def __post_init__(self) -> None:
         """Generate bridge hash signature."""
         bridge_string = f"{self.bridge_id}_{self.source_system}_{self.target_system}_{hash(tuple(self.bridge_matrix.flatten()))}_{self.timestamp.isoformat()}"
@@ -84,7 +84,7 @@ class EntropyBridge:
 class EntropyBridgeSystem:
     """
     Manages entropy bridging between different mathematical systems.
-    
+
     Mathematical Foundation:
     - Delta-Lock Transform (DLT): Applies mathematical patterns to entropy calculations
     - Cross-system mapping: Bridges entropy between different mathematical frameworks
@@ -92,32 +92,32 @@ class EntropyBridgeSystem:
     - Observer-aware tracking: Monitors entropy patterns and adjusts calculations
     - Multi-dimensional entropy: Handles various entropy types and dimensions
     """
-    
+
     def __init__(self, mathlib: Optional[MathLibV4] = None):
         """Initialize the entropy bridge system."""
         self.mathlib = mathlib or MathLibV4()
-        
+
         # Entropy tracking
         self.entropy_measurements: Dict[str, List[EntropyMeasurement]] = {}
         self.entropy_bridges: Dict[str, EntropyBridge] = {}
-        
+
         # Mathematical state
         self.entropy_matrix: Matrix = np.zeros((8, 8))  # 8-bit entropy matrix
         self.entropy_trace: EntropyTrace = np.zeros(100)  # Entropy trace over time
         self.bridge_confidence_matrix: Matrix = np.eye(8)  # Bridge confidence matrix
-        
+
         # Performance metrics
         self.total_measurements = 0
         self.total_bridges = 0
         self.average_entropy = 0.0
         self.average_confidence = 0.0
-        
+
         logger.info("Entropy Bridge System initialized")
-    
+
     def calculate_shannon_entropy(self, data: Vector) -> Entropy:
         """
         Calculate Shannon entropy for a data vector.
-        
+
         Mathematical Process:
         1. Normalize data to create probability distribution
         2. Apply DLT patterns for entropy calculation
@@ -127,26 +127,26 @@ class EntropyBridgeSystem:
         try:
             # Normalize data to create probability distribution
             normalized_data = data / (np.sum(data) + 1e-10)
-            
+
             # Apply DLT patterns
             dlt_data = self.mathlib.apply_dlt_patterns_to_vector(normalized_data)
-            
+
             # Calculate Shannon entropy
             entropy_value = scipy_entropy(dlt_data, base=2)
-            
+
             # Apply observer-aware adjustments
             adjusted_entropy = self.mathlib.apply_observer_aware_adjustments_to_scalar(entropy_value)
-            
+
             return Entropy(adjusted_entropy)
-            
+
         except Exception as e:
             logger.error(f"Failed to calculate Shannon entropy: {e}")
             return Entropy(0.0)
-    
+
     def calculate_renyi_entropy(self, data: Vector, alpha: float = 2.0) -> Entropy:
         """
         Calculate Rényi entropy for a data vector.
-        
+
         Mathematical Process:
         1. Normalize data to create probability distribution
         2. Apply DLT patterns for entropy calculation
@@ -156,10 +156,10 @@ class EntropyBridgeSystem:
         try:
             # Normalize data to create probability distribution
             normalized_data = data / (np.sum(data) + 1e-10)
-            
+
             # Apply DLT patterns
             dlt_data = self.mathlib.apply_dlt_patterns_to_vector(normalized_data)
-            
+
             # Calculate Rényi entropy
             if alpha == 1:
                 # Rényi entropy converges to Shannon entropy as α → 1
@@ -171,20 +171,20 @@ class EntropyBridgeSystem:
                     entropy_value = (1 / (1 - alpha)) * np.log2(sum_p_alpha)
                 else:
                     entropy_value = 0.0
-            
+
             # Apply observer-aware adjustments
             adjusted_entropy = self.mathlib.apply_observer_aware_adjustments_to_scalar(entropy_value)
-            
+
             return Entropy(adjusted_entropy)
-            
+
         except Exception as e:
             logger.error(f"Failed to calculate Rényi entropy: {e}")
             return Entropy(0.0)
-    
+
     def calculate_dlt_entropy(self, data: Vector, bit_level: BitLevel) -> Entropy:
         """
         Calculate Delta-Lock Transform (DLT) entropy.
-        
+
         Mathematical Process:
         1. Apply DLT transformation to data
         2. Calculate entropy using DLT-specific patterns
@@ -194,19 +194,19 @@ class EntropyBridgeSystem:
         try:
             # Apply DLT transformation
             dlt_transformed = self.mathlib.apply_dlt_transformation(data, bit_level)
-            
+
             # Calculate DLT-specific entropy
             dlt_entropy = self._calculate_dlt_specific_entropy(dlt_transformed, bit_level)
-            
+
             # Apply bit-level adjustments
             adjusted_entropy = self._apply_bit_level_entropy_adjustments(dlt_entropy, bit_level)
-            
+
             return Entropy(adjusted_entropy)
-            
+
         except Exception as e:
             logger.error(f"Failed to calculate DLT entropy: {e}")
             return Entropy(0.0)
-    
+
     def _calculate_dlt_specific_entropy(self, dlt_data: Vector, bit_level: BitLevel) -> float:
         """Calculate DLT-specific entropy."""
         # DLT entropy calculation based on bit level
@@ -225,7 +225,7 @@ class EntropyBridgeSystem:
         else:
             # Default DLT entropy
             return np.sum(unified_math.unified_math.abs(dlt_data)) * 0.1
-    
+
     def _apply_bit_level_entropy_adjustments(self, entropy: float, bit_level: BitLevel) -> float:
         """Apply bit-level specific adjustments to entropy."""
         # Bit-level specific adjustments
@@ -235,10 +235,10 @@ class EntropyBridgeSystem:
             BitLevel.SIXTEEN_BIT: 1.5,
             BitLevel.FORTY_TWO_BIT: 2.0
         }
-        
+
         adjustment_factor = adjustments.get(bit_level, 1.0)
         return entropy * adjustment_factor
-    
+
     def create_entropy_measurement(
         self,
         system_name: str,
@@ -248,7 +248,7 @@ class EntropyBridgeSystem:
     ) -> EntropyMeasurement:
         """
         Create an entropy measurement for a system.
-        
+
         Args:
             system_name: Name of the system being measured
             data: Data vector for entropy calculation
@@ -267,10 +267,10 @@ class EntropyBridgeSystem:
                 entropy_value = self.calculate_dlt_entropy(data, bit_level)
             else:
                 raise ValueError(f"Unsupported entropy type: {entropy_type}")
-            
+
             # Calculate confidence score
             confidence_score = self._calculate_entropy_confidence(data, entropy_value)
-            
+
             # Create measurement
             measurement_id = f"entropy_{system_name}_{int(time.time())}"
             measurement = EntropyMeasurement(
@@ -281,20 +281,20 @@ class EntropyBridgeSystem:
                 confidence_score=confidence_score,
                 metadata=kwargs
             )
-            
+
             # Store in history
             if system_name not in self.entropy_measurements:
                 self.entropy_measurements[system_name] = []
             self.entropy_measurements[system_name].append(measurement)
-            
+
             # Update trace
             self._update_entropy_trace(entropy_value)
-            
+
             self.total_measurements += 1
-            
+
             logger.debug(f"Created entropy measurement for {system_name}: {entropy_value}")
             return measurement
-            
+
         except Exception as e:
             logger.error(f"Failed to create entropy measurement for {system_name}: {e}")
             # Return default measurement
@@ -306,7 +306,7 @@ class EntropyBridgeSystem:
                 confidence_score=0.0,
                 metadata=kwargs
             )
-    
+
     def create_entropy_bridge(
         self,
         source_system: str,
@@ -316,7 +316,7 @@ class EntropyBridgeSystem:
     ) -> EntropyBridge:
         """
         Create an entropy bridge between two systems.
-        
+
         Mathematical Process:
         1. Calculate entropy for both systems
         2. Create transformation matrix
@@ -327,18 +327,18 @@ class EntropyBridgeSystem:
             # Calculate entropy for both systems
             source_entropy = self.calculate_shannon_entropy(source_data)
             target_entropy = self.calculate_shannon_entropy(target_data)
-            
+
             # Create transformation matrix
             bridge_matrix = self._create_transformation_matrix(source_data, target_data)
-            
+
             # Apply DLT patterns
             dlt_bridge_matrix = self.mathlib.apply_dlt_patterns_to_matrix(bridge_matrix)
-            
+
             # Calculate bridge confidence
             confidence_score = self._calculate_bridge_confidence(
                 source_entropy, target_entropy, dlt_bridge_matrix
             )
-            
+
             # Create bridge
             bridge_id = f"bridge_{source_system}_{target_system}_{int(time.time())}"
             bridge = EntropyBridge(
@@ -348,14 +348,14 @@ class EntropyBridgeSystem:
                 bridge_matrix=dlt_bridge_matrix,
                 confidence_score=confidence_score
             )
-            
+
             # Store bridge
             self.entropy_bridges[bridge_id] = bridge
             self.total_bridges += 1
-            
+
             logger.info(f"Created entropy bridge {bridge_id}: confidence={confidence_score:.4f}")
             return bridge
-            
+
         except Exception as e:
             logger.error(f"Failed to create entropy bridge: {e}")
             # Return default bridge
@@ -366,86 +366,86 @@ class EntropyBridgeSystem:
                 bridge_matrix=np.eye(8),
                 confidence_score=0.0
             )
-    
+
     def _create_transformation_matrix(self, source_data: Vector, target_data: Vector) -> Matrix:
         """Create transformation matrix between source and target data."""
         # Ensure data has same length
         min_length = unified_math.min(len(source_data), len(target_data))
         source_normalized = source_data[:min_length] / (np.sum(source_data[:min_length]) + 1e-10)
         target_normalized = target_data[:min_length] / (np.sum(target_data[:min_length]) + 1e-10)
-        
+
         # Create transformation matrix (simplified approach)
         # In practice, this would be more sophisticated
         transformation_matrix = np.outer(source_normalized, target_normalized)
-        
+
         # Normalize matrix
         matrix_norm = np.linalg.norm(transformation_matrix)
         if matrix_norm > 0:
             transformation_matrix = transformation_matrix / matrix_norm
-        
+
         return transformation_matrix
-    
+
     def _calculate_entropy_confidence(self, data: Vector, entropy_value: Entropy) -> float:
         """Calculate confidence score for entropy measurement."""
         # Base confidence on data quality
         data_quality = 1.0 - unified_math.unified_math.std(data) / (unified_math.unified_math.mean(data) + 1e-10)
         data_quality = np.clip(data_quality, 0.0, 1.0)
-        
+
         # Entropy stability confidence
         entropy_stability = 1.0 - unified_math.abs(float(entropy_value) - 1.0)  # Entropy of 1.0 is most stable
         entropy_stability = np.clip(entropy_stability, 0.0, 1.0)
-        
+
         # Combine confidence factors
         confidence = (data_quality + entropy_stability) / 2.0
-        
+
         return np.clip(confidence, 0.0, 1.0)
-    
+
     def _calculate_bridge_confidence(
-        self, 
-        source_entropy: Entropy, 
-        target_entropy: Entropy, 
+        self,
+        source_entropy: Entropy,
+        target_entropy: Entropy,
         bridge_matrix: Matrix
     ) -> float:
         """Calculate confidence score for entropy bridge."""
         # Entropy similarity confidence
         entropy_similarity = 1.0 - unified_math.abs(float(source_entropy) - float(target_entropy))
         entropy_similarity = np.clip(entropy_similarity, 0.0, 1.0)
-        
+
         # Matrix quality confidence
         matrix_quality = 1.0 - unified_math.unified_math.std(bridge_matrix)
         matrix_quality = np.clip(matrix_quality, 0.0, 1.0)
-        
+
         # Bridge stability confidence
         bridge_stability = np.trace(bridge_matrix) / bridge_matrix.shape[0]
         bridge_stability = np.clip(bridge_stability, 0.0, 1.0)
-        
+
         # Combine confidence factors
         confidence = (entropy_similarity + matrix_quality + bridge_stability) / 3.0
-        
+
         return np.clip(confidence, 0.0, 1.0)
-    
+
     def _update_entropy_trace(self, entropy_value: Entropy) -> None:
         """Update entropy trace with new measurement."""
         # Shift trace and add new value
         self.entropy_trace = np.roll(self.entropy_trace, -1)
         self.entropy_trace[-1] = float(entropy_value)
-        
+
         # Update average entropy
         self.average_entropy = unified_math.unified_math.mean(self.entropy_trace)
-    
+
     def get_entropy_analysis(self, system_name: str) -> Dict[str, Any]:
         """Get entropy analysis for a system."""
         if system_name not in self.entropy_measurements:
             return {"error": f"No entropy measurements found for {system_name}"}
-        
+
         measurements = self.entropy_measurements[system_name]
         if not measurements:
             return {"error": f"No entropy measurements found for {system_name}"}
-        
+
         # Calculate statistics
         all_entropies = [float(m.entropy_value) for m in measurements]
         all_confidences = [m.confidence_score for m in measurements]
-        
+
         return {
             "system_name": system_name,
             "total_measurements": len(measurements),
@@ -458,15 +458,15 @@ class EntropyBridgeSystem:
             "latest_entropy": all_entropies[-1],
             "latest_confidence": all_confidences[-1]
         }
-    
+
     def get_bridge_analysis(self) -> Dict[str, Any]:
         """Get entropy bridge analysis."""
         if not self.entropy_bridges:
             return {"error": "No entropy bridges available"}
-        
+
         # Calculate bridge statistics
         all_confidences = [bridge.confidence_score for bridge in self.entropy_bridges.values()]
-        
+
         return {
             "total_bridges": self.total_bridges,
             "active_bridges": len(self.entropy_bridges),
@@ -475,7 +475,7 @@ class EntropyBridgeSystem:
             "min_confidence": unified_math.unified_math.min(all_confidences),
             "bridge_volatility": unified_math.unified_math.std(all_confidences)
         }
-    
+
     def get_mathematical_state(self) -> Dict[str, Any]:
         """Get current mathematical state."""
         return {
@@ -491,46 +491,46 @@ class EntropyBridgeSystem:
 def main() -> None:
     """Main function for testing the entropy bridge system."""
     logging.basicConfig(level=logging.INFO)
-    
+
     # Create entropy bridge system
     bridge_system = EntropyBridgeSystem()
-    
+
     # Example data
     source_data = np.random.rand(100)
     target_data = np.random.rand(100)
-    
+
     # Create entropy measurements
     shannon_measurement = bridge_system.create_entropy_measurement(
         "system_a", source_data, "shannon"
     )
     safe_print(f"✅ Shannon entropy measurement: {shannon_measurement.entropy_value}")
-    
+
     renyi_measurement = bridge_system.create_entropy_measurement(
         "system_a", source_data, "renyi", alpha=2.0
     )
     safe_print(f"✅ Rényi entropy measurement: {renyi_measurement.entropy_value}")
-    
+
     dlt_measurement = bridge_system.create_entropy_measurement(
         "system_b", target_data, "dlt", bit_level=BitLevel.EIGHT_BIT
     )
     safe_print(f"✅ DLT entropy measurement: {dlt_measurement.entropy_value}")
-    
+
     # Create entropy bridge
     bridge = bridge_system.create_entropy_bridge(
         "system_a", "system_b", source_data, target_data
     )
     safe_print(f"✅ Entropy bridge created: confidence={bridge.confidence_score:.4f}")
-    
+
     # Get analysis
     analysis_a = bridge_system.get_entropy_analysis("system_a")
     safe_print(f"📊 System A analysis: {analysis_a}")
-    
+
     analysis_b = bridge_system.get_entropy_analysis("system_b")
     safe_print(f"📊 System B analysis: {analysis_b}")
-    
+
     bridge_analysis = bridge_system.get_bridge_analysis()
     safe_print(f"🌉 Bridge analysis: {bridge_analysis}")
-    
+
     # Get mathematical state
     math_state = bridge_system.get_mathematical_state()
     safe_print(f"🔬 Mathematical state: {math_state}")

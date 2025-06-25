@@ -98,14 +98,14 @@ class PhaseLoader:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 # Load validation rules
                 self.validation_rules = config.get("validation_rules", {})
-                
+
                 logger.info(f"Loaded phase loader configuration")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -128,7 +128,7 @@ class PhaseLoader:
                 }
             }
         }
-        
+
         try:
             os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
@@ -161,22 +161,22 @@ class PhaseLoader:
         """Load a phase configuration from file."""
         try:
             self.loader_status = LoaderStatus.LOADING
-            
+
             if not os.path.exists(config_file_path):
                 logger.error(f"Configuration file not found: {config_file_path}")
                 self.loader_status = LoaderStatus.ERROR
                 return None
-            
+
             # Load configuration file
             with open(config_file_path, 'r') as f:
                 config_data = json.load(f)
-            
+
             # Validate configuration
             if not self._validate_configuration(config_data):
                 logger.error(f"Configuration validation failed: {config_file_path}")
                 self.loader_status = LoaderStatus.ERROR
                 return None
-            
+
             # Create configuration object
             config_id = f"config_{int(time.time())}"
             configuration = PhaseConfiguration(
@@ -190,14 +190,14 @@ class PhaseLoader:
                 updated_at=datetime.now(),
                 is_active=True
             )
-            
+
             # Store configuration
             self.loaded_configurations[config_id] = configuration
-            
+
             self.loader_status = LoaderStatus.READY
             logger.info(f"Loaded phase configuration: {config_id}")
             return configuration
-            
+
         except Exception as e:
             logger.error(f"Error loading phase configuration: {e}")
             self.loader_status = LoaderStatus.ERROR
@@ -207,17 +207,17 @@ class PhaseLoader:
         """Validate a configuration against validation rules."""
         try:
             self.loader_status = LoaderStatus.VALIDATING
-            
+
             validation_rules = self.validation_rules.get("phase_configuration", {})
             required_fields = validation_rules.get("required_fields", [])
             parameter_types = validation_rules.get("parameter_types", {})
-            
+
             # Check required fields
             for field in required_fields:
                 if field not in config_data:
                     logger.error(f"Missing required field: {field}")
                     return False
-            
+
             # Check parameter types
             parameters = config_data.get("parameters", {})
             for param_name, expected_type in parameter_types.items():
@@ -226,9 +226,9 @@ class PhaseLoader:
                     if not self._check_type(param_value, expected_type):
                         logger.error(f"Invalid type for parameter {param_name}: expected {expected_type}")
                         return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error validating configuration: {e}")
             return False
@@ -260,16 +260,16 @@ class PhaseLoader:
             if not os.path.exists(data_file_path):
                 logger.error(f"Data file not found: {data_file_path}")
                 return None
-            
+
             # Load data based on format
             data_content = self._load_data_by_format(data_file_path, data_format)
             if data_content is None:
                 return None
-            
+
             # Calculate file size and checksum
             file_size = os.path.getsize(data_file_path)
             checksum = self._calculate_checksum(data_file_path)
-            
+
             # Create loaded data object
             data_id = f"data_{phase_id}_{int(time.time())}"
             loaded_data = LoadedPhaseData(
@@ -282,16 +282,16 @@ class PhaseLoader:
                 loaded_at=datetime.now(),
                 metadata={"file_path": data_file_path}
             )
-            
+
             # Store loaded data
             self.loaded_data[data_id] = loaded_data
-            
+
             # Cache data for quick access
             self.data_cache[phase_id] = data_content
-            
+
             logger.info(f"Loaded phase data: {data_id}")
             return loaded_data
-            
+
         except Exception as e:
             logger.error(f"Error loading phase data: {e}")
             return None
@@ -312,7 +312,7 @@ class PhaseLoader:
             else:
                 logger.error(f"Unsupported data format: {data_format}")
                 return None
-                
+
         except Exception as e:
             logger.error(f"Error loading data by format: {e}")
             return None
@@ -352,19 +352,19 @@ class PhaseLoader:
             if config_id not in self.loaded_configurations:
                 logger.warning(f"Configuration {config_id} not found")
                 return False
-            
+
             configuration = self.loaded_configurations[config_id]
-            
+
             # Update fields
             for key, value in updates.items():
                 if hasattr(configuration, key):
                     setattr(configuration, key, value)
-            
+
             configuration.updated_at = datetime.now()
-            
+
             logger.info(f"Updated configuration: {config_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error updating configuration: {e}")
             return False
@@ -374,14 +374,14 @@ class PhaseLoader:
         try:
             if config_id not in self.loaded_configurations:
                 return False
-            
+
             configuration = self.loaded_configurations[config_id]
             configuration.is_active = False
             configuration.updated_at = datetime.now()
-            
+
             logger.info(f"Deactivated configuration: {config_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error deactivating configuration: {e}")
             return False
@@ -406,10 +406,10 @@ class PhaseLoader:
         active_configurations = len(self.get_active_configurations())
         total_data_files = len(self.loaded_data)
         cache_size = len(self.data_cache)
-        
+
         # Calculate data sizes
         total_data_size = sum(data.size_bytes for data in self.loaded_data.values())
-        
+
         return {
             "loader_status": self.loader_status.value,
             "total_configurations": total_configurations,
@@ -423,7 +423,7 @@ class PhaseLoader:
 def main() -> None:
     """Main function for testing and demonstration."""
     loader = PhaseLoader("./test_phase_loader_config.json")
-    
+
     # Create a test configuration
     test_config = {
         "phase_type": "accumulation",
@@ -435,18 +435,18 @@ def main() -> None:
         "constraints": {"max_position_size": 0.1},
         "version": "1.0"
     }
-    
+
     # Save test configuration to file
     test_config_path = "./test_phase_config.json"
     with open(test_config_path, 'w') as f:
         json.dump(test_config, f, indent=2)
-    
+
     # Load configuration
     configuration = loader.load_phase_configuration(test_config_path)
     if configuration:
         safe_print(f"Loaded configuration: {configuration.config_id}")
         safe_print(f"Phase type: {configuration.phase_type}")
-    
+
     # Get statistics
     stats = loader.get_loader_statistics()
     safe_print(f"Loader Statistics: {stats}")

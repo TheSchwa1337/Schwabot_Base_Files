@@ -55,13 +55,13 @@ class TestCoreMathAndEngines(unittest.TestCase):
         is_match, confidence = waveform_pattern_match(self.wave1, self.wave2, threshold=0.9)
         self.assertTrue(is_match)
         self.assertGreater(confidence, 0.9)
-        
+
         is_match_fail, _ = waveform_pattern_match(self.wave1, np.random.rand(100), threshold=0.9)
         self.assertFalse(is_match_fail)
 
     def test_calculate_hash_distance(self):
         """Test hash distance calculations."""
-        # Hamming distance should be 2 because 'a' (1010) and 'b' (1011) differ by 1 bit, 
+        # Hamming distance should be 2 because 'a' (1010) and 'b' (1011) differ by 1 bit,
         # but hex conversion and padding might affect this simple view.
         # Let's test properties instead of exact value.
         hamming_dist = calculate_hash_distance(self.hash1, self.hash2, method='hamming')
@@ -139,4 +139,4 @@ class TestCoreMathAndEngines(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2) 
+    unittest.main(verbosity=2)

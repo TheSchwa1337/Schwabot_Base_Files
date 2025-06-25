@@ -177,7 +177,7 @@ Level = int
 @dataclass
 class TypeValidationError:
     """Container for type validation error information."""
-    
+
     field_name: str
     expected_type: str
     actual_type: str
@@ -190,7 +190,7 @@ class TypeValidationError:
 @dataclass
 class ValidationResult:
     """Result of type validation."""
-    
+
     valid: bool
     errors: List[TypeValidationError]
     warnings: List[str]
@@ -203,17 +203,17 @@ class ValidationResult:
 
 class TypeBindingValidator:
     """Main type binding validation system."""
-    
+
     def __init__(self) -> None:
         """Initialize type binding validator."""
         self.version = "1.0.0"
         self.type_patterns = self._build_type_patterns()
         logger.info(f"TypeBindingValidator v{self.version} initialized")
-    
+
     def _build_type_patterns(self) -> Dict[str, str]:
         """Build comprehensive type patterns."""
         patterns = {}
-        
+
         # Float patterns
         float_patterns = {
             "price": "float", "volume": "float", "quantity": "float",
@@ -225,7 +225,7 @@ class TypeBindingValidator:
             "pnl": "float", "roi": "float", "risk": "float",
             "exposure": "float", "leverage": "float"
         }
-        
+
         # List patterns
         list_patterns = {
             "waveform": "List[float]", "oscillator": "List[float]",
@@ -233,7 +233,7 @@ class TypeBindingValidator:
             "keys": "List[str]", "names": "List[str]", "symbols": "List[str]",
             "tickers": "List[str]"
         }
-        
+
         # Dict patterns
         dict_patterns = {
             "indicator": "Dict[str, float]", "signal": "Dict[str, Any]",
@@ -247,7 +247,7 @@ class TypeBindingValidator:
             "config": "Dict[str, Any]", "params": "Dict[str, Any]",
             "kwargs": "Dict[str, Any]"
         }
-        
+
         # String patterns
         str_patterns = {
             "period": "str", "name": "str", "id": "str", "type": "str",
@@ -255,14 +255,14 @@ class TypeBindingValidator:
             "path": "str", "url": "str", "symbol": "str", "ticker": "str",
             "currency": "str", "format": "str"
         }
-        
+
         # Boolean patterns
         bool_patterns = {
             "enabled": "bool", "active": "bool", "valid": "bool",
             "success": "bool", "ready": "bool", "available": "bool",
             "visible": "bool", "debug": "bool", "verbose": "bool"
         }
-        
+
         # Integer patterns
         int_patterns = {
             "duration": "int", "count": "int", "index": "int",
@@ -270,7 +270,7 @@ class TypeBindingValidator:
             "value": "int", "number": "int", "tick": "int", "step": "int",
             "level": "int"
         }
-        
+
         # Merge all patterns
         patterns.update(float_patterns)
         patterns.update(list_patterns)
@@ -278,22 +278,22 @@ class TypeBindingValidator:
         patterns.update(str_patterns)
         patterns.update(bool_patterns)
         patterns.update(int_patterns)
-        
+
         return patterns
-    
+
     def validate_type_binding(
-        self, 
-        field_name: str, 
-        value: Any, 
+        self,
+        field_name: str,
+        value: Any,
         expected_type: str
     ) -> Optional[TypeValidationError]:
         """Validate a type binding."""
         import time
         start_time = time.time()
-        
+
         # Get actual type
         actual_type = type(value).__name__
-        
+
         # Check if types match
         if not self._types_compatible(actual_type, expected_type):
             return TypeValidationError(
@@ -305,53 +305,53 @@ class TypeBindingValidator:
                 severity="error",
                 remediation_suggestion=f"Ensure {field_name} is of type {expected_type}"
             )
-        
+
         return None
-    
+
     def _types_compatible(self, actual: str, expected: str) -> bool:
         """Check if types are compatible."""
         # Basic type compatibility
         if actual == expected:
             return True
-        
+
         # Handle Union types
         if "Union" in expected or "|" in expected:
             return True  # Let mypy handle Union validation
-        
+
         # Handle common conversions
         if expected == "float" and actual in ["int", "float"]:
             return True
-        
+
         if expected == "int" and actual == "int":
             return True
-        
+
         if expected == "str" and actual == "str":
             return True
-        
+
         if expected == "bool" and actual == "bool":
             return True
-        
+
         return False
-    
+
     def validate_module_types(self, module_data: Dict[str, Any]) -> ValidationResult:
         """Validate all types in a module."""
         import time
         start_time = time.time()
-        
+
         errors = []
         warnings = []
-        
+
         for field_name, value in module_data.items():
             # Get expected type from patterns
             expected_type = self.type_patterns.get(field_name, "Any")
-            
+
             if expected_type != "Any":
                 error = self.validate_type_binding(field_name, value, expected_type)
                 if error:
                     errors.append(error)
-        
+
         execution_time = time.time() - start_time
-        
+
         return ValidationResult(
             valid=len(errors) == 0,
             errors=errors,
@@ -366,7 +366,7 @@ class TypeBindingValidator:
 
 class WindowsCliCompatibilityHandler:
     """Handles Windows CLI compatibility for cross-platform operation."""
-    
+
     @staticmethod
     def is_windows_cli() -> bool:
         """Check if running in Windows CLI environment."""
@@ -376,7 +376,7 @@ class WindowsCliCompatibilityHandler:
             "cmd" in os.environ.get("COMSPEC", "").lower()
             or "powershell" in os.environ.get("PSModulePath", "").lower()
         )
-    
+
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
         """Safely print messages with optional emoji support."""
@@ -384,14 +384,14 @@ class WindowsCliCompatibilityHandler:
             import re
             message = re.sub(r"[^\w\s\-_.,!?]", "", message)
         return message
-    
+
     @staticmethod
     def log_safe(logger: Any, level: str, message: str) -> None:
         """Safely log messages with CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         if hasattr(logger, level.lower()):
             getattr(logger, level.lower())(safe_message)
-    
+
     @staticmethod
     def safe_format_error(error: Exception, context: str = "") -> str:
         """Safely format error messages for CLI compatibility."""
@@ -408,10 +408,10 @@ class WindowsCliCompatibilityHandler:
 @dataclass
 class MathematicalTypeValidator:
     """Mathematical type validation following constraints.py pattern."""
-    
+
     def validate_numeric_bounds(
-        self, 
-        value: Union[float, Decimal], 
+        self,
+        value: Union[float, Decimal],
         min_val: Optional[float] = None,
         max_val: Optional[float] = None
     ) -> Optional[TypeValidationError]:
@@ -426,7 +426,7 @@ class MathematicalTypeValidator:
                 severity="error",
                 remediation_suggestion=f"Ensure value is >= {min_val}"
             )
-        
+
         if max_val is not None and value > max_val:
             return TypeValidationError(
                 field_name="numeric_value",
@@ -437,13 +437,13 @@ class MathematicalTypeValidator:
                 severity="error",
                 remediation_suggestion=f"Ensure value is <= {max_val}"
             )
-        
+
         return None
-    
+
     def validate_matrix_properties(self, matrix: Matrix) -> List[TypeValidationError]:
         """Validate matrix properties."""
         errors = []
-        
+
         # Check for NaN values
         if np.any(np.isnan(matrix)):
             errors.append(TypeValidationError(
@@ -455,7 +455,7 @@ class MathematicalTypeValidator:
                 severity="critical",
                 remediation_suggestion="Remove or replace NaN values"
             ))
-        
+
         # Check for infinite values
         if np.any(np.isinf(matrix)):
             errors.append(TypeValidationError(
@@ -467,7 +467,7 @@ class MathematicalTypeValidator:
                 severity="critical",
                 remediation_suggestion="Check for overflow or division by zero"
             ))
-        
+
         return errors
 
 
@@ -493,7 +493,7 @@ def main() -> None:
     """Demo of type binding system."""
     try:
         safe_print(f"[OK] TypeBindingValidator v{type_validator.version} initialized")
-        
+
         # Test type validation
         test_data = {
             "price": 100.0,
@@ -502,20 +502,20 @@ def main() -> None:
             "enabled": True,
             "count": 42
         }
-        
+
         result = type_validator.validate_module_types(test_data)
         safe_print(f"[VALIDATION] Type validation: {'PASS' if result.valid else 'FAIL'}")
         safe_print(f"   Errors: {len(result.errors)}")
         safe_print(f"   Warnings: {len(result.warnings)}")
-        
+
         # Test mathematical validation
         test_matrix = np.random.randn(3, 3)
         math_errors = math_validator.validate_matrix_properties(test_matrix)
         safe_print(f"[MATH] Mathematical validation: {'PASS' if len(math_errors) == 0 else 'FAIL'}")
         safe_print(f"   Math errors: {len(math_errors)}")
-        
+
         safe_print("[SUCCESS] Type binding system demo completed successfully!")
-        
+
     except Exception as e:
         safe_print(f"[ERROR] Demo failed: {e}")
 
@@ -531,4 +531,4 @@ if __name__ == "__main__":
 # Backward compatibility aliases
 TypeValidator = TypeBindingValidator
 MathValidator = MathematicalTypeValidator
-CliHandler = WindowsCliCompatibilityHandler 
+CliHandler = WindowsCliCompatibilityHandler

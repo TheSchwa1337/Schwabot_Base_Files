@@ -112,7 +112,7 @@ class MathLibV4:
             return False
 
         d1, d2, d3 = delta_sequence[-3:]
-        
+
         # Check if the deltas are close to each other relative to their magnitude
         mean_delta = (d1 + d2 + d3) / 3
         if mean_delta == 0: # Handle zero-delta case
@@ -136,7 +136,7 @@ class MathLibV4:
         """
         # We use a quantized representation to ensure stability against minor noise
         quantized = np.round(delta_sequence, decimals=4)
-        
+
         hasher = hashlib.sha256()
         hasher.update(quantized.tobytes())
         return hasher.hexdigest()
@@ -157,13 +157,13 @@ class MathLibV4:
 
         # The sigmoid function's steepness can be controlled
         k = 10  # Steepness factor
-        
+
         # The core confidence based on similarity
         base_confidence = 1 / (1 + unified_math.exp(-k * (similarity_score - 0.5)))
-        
+
         # Apply a penalty for high drift velocity
         drift_penalty = 1 / (1 + unified_math.abs(drift_velocity))
-        
+
         return base_confidence * drift_penalty
 
     @staticmethod
@@ -180,7 +180,7 @@ class MathLibV4:
         """
         if historical_volatility == 0:
             return 1.0
-        
+
         return current_volatility / historical_volatility
 
 
@@ -229,4 +229,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

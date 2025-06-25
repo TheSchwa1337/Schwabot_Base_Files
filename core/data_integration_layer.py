@@ -91,10 +91,10 @@ class DataIntegrationLayer:
         self.market_history: List[MarketState] = []
         self.max_history_size = 1000
         self.is_running = False
-        
+
         # Initialize exchanges
         self._initialize_exchanges()
-        
+
         logger.info(f"Data Integration Layer initialized with {len(self.tracked_symbols)} symbols")
 
     def _initialize_exchanges(self) -> None:
@@ -102,7 +102,7 @@ class DataIntegrationLayer:
         if CCXT_AVAILABLE:
             # Initialize major exchanges
             exchanges_to_try = ['binance', 'coinbase', 'kraken']
-            
+
             for exchange_name in exchanges_to_try:
                 try:
                     exchange_class = getattr(ccxt, exchange_name)
@@ -110,15 +110,15 @@ class DataIntegrationLayer:
                         'enableRateLimit': True,
                         'timeout': 30000,
                     })
-                    
+
                     # Test connection
                     exchange.load_markets()
                     self.exchanges[exchange_name] = exchange
                     logger.info(f"✅ Connected to {exchange_name}")
-                    
+
                 except Exception as e:
                     logger.warning(f"❌ Failed to connect to {exchange_name}: {e}")
-        
+
         if not self.exchanges:
             logger.warning("⚠️ No exchanges available. Using mock data.")
 
@@ -127,15 +127,15 @@ class DataIntegrationLayer:
         if self.is_running:
             logger.warning("Data feed already running")
             return
-            
+
         self.is_running = True
         logger.info("🚀 Starting data integration feed...")
-        
+
         try:
             while self.is_running:
                 await self._update_market_data()
                 await asyncio.sleep(self.update_interval)
-                
+
         except Exception as e:
             logger.error(f"❌ Data feed error: {e}")
             self.is_running = False
@@ -149,31 +149,31 @@ class DataIntegrationLayer:
         """Update market data from all sources."""
         try:
             new_data = {}
-            
+
             # Fetch data from exchanges
             if self.exchanges:
                 for symbol in self.tracked_symbols:
                     data_point = await self._fetch_from_exchanges(symbol)
                     if data_point:
                         new_data[symbol] = data_point
-            
+
             # Fallback to mock data if no exchanges available
             if not new_data:
                 new_data = self._generate_mock_data()
-            
+
             # Update market data
             self.market_data.update(new_data)
-            
+
             # Calculate market state
             market_state = self._calculate_market_state()
             self.market_history.append(market_state)
-            
+
             # Trim history
             if len(self.market_history) > self.max_history_size:
                 self.market_history = self.market_history[-self.max_history_size:]
-            
+
             logger.debug(f"📊 Updated market data for {len(new_data)} symbols")
-            
+
         except Exception as e:
             logger.error(f"❌ Error updating market data: {e}")
 
@@ -185,7 +185,7 @@ class DataIntegrationLayer:
                 ticker = await asyncio.get_event_loop().run_in_executor(
                     None, exchange.fetch_ticker, symbol
                 )
-                
+
                 if ticker and ticker.get('last'):
                     return CryptoDataPoint(
                         symbol=symbol,
@@ -199,11 +199,11 @@ class DataIntegrationLayer:
                         high_24h=float(ticker.get('high', 0)),
                         low_24h=float(ticker.get('low', 0))
                     )
-                    
+
             except Exception as e:
                 logger.debug(f"Failed to fetch {symbol} from {exchange_name}: {e}")
                 continue
-        
+
         return None
 
     def _generate_mock_data(self) -> Dict[str, CryptoDataPoint]:
@@ -214,14 +214,14 @@ class DataIntegrationLayer:
             'ETH/USDT': 3000,
             'XRP/USDT': 0.5
         }
-        
+
         for symbol in self.tracked_symbols:
             base_price = base_prices.get(symbol, 100)
-            
+
             # Add some realistic variation
             price_variation = (time.time() % 100) / 100  # Cyclic variation
             price = base_price + (price_variation - 0.5) * base_price * 0.1
-            
+
             mock_data[symbol] = CryptoDataPoint(
                 symbol=symbol,
                 price=price,
@@ -234,7 +234,7 @@ class DataIntegrationLayer:
                 high_24h=price * 1.05,
                 low_24h=price * 0.95
             )
-        
+
         return mock_data
 
     def _calculate_market_state(self) -> MarketState:
@@ -247,25 +247,25 @@ class DataIntegrationLayer:
                 market_sentiment='neutral',
                 volume_trend='stable'
             )
-        
+
         # Calculate volatility
         prices = [data.price for data in self.market_data.values()]
         if len(prices) > 1:
             volatility = (unified_math.max(prices) - unified_math.min(prices)) / (sum(prices) / len(prices))
         else:
             volatility = 0.0
-        
+
         # Calculate sentiment based on 24h changes
         changes = [data.change_24h for data in self.market_data.values()]
         avg_change = sum(changes) / len(changes) if changes else 0
-        
+
         if avg_change > 2:
             sentiment = 'bullish'
         elif avg_change < -2:
             sentiment = 'bearish'
         else:
             sentiment = 'neutral'
-        
+
         # Calculate volume trend
         volumes = [data.volume for data in self.market_data.values()]
         if len(self.market_history) > 1:
@@ -283,7 +283,7 @@ class DataIntegrationLayer:
                 volume_trend = 'stable'
         else:
             volume_trend = 'stable'
-        
+
         return MarketState(
             timestamp=datetime.now(),
             assets=self.market_data.copy(),
@@ -296,17 +296,17 @@ class DataIntegrationLayer:
         """Get current market data in a format suitable for the FaultBus."""
         if not self.market_data:
             return {}
-        
+
         # Convert to FaultBus-compatible format
         fault_bus_data = {
             'timestamp': datetime.now().isoformat(),
             'assets': {}
         }
-        
+
         for symbol, data in self.market_data.items():
             # Extract asset name (e.g., 'BTC/USDT' -> 'BTC')
             asset_name = symbol.split('/')[0]
-            
+
             fault_bus_data['assets'][asset_name] = {
                 'price': data.price,
                 'volume': data.volume,
@@ -317,7 +317,7 @@ class DataIntegrationLayer:
                 'low_24h': data.low_24h,
                 'exchange': data.exchange
             }
-        
+
         # Add market state information
         if self.market_history:
             latest_state = self.market_history[-1]
@@ -326,7 +326,7 @@ class DataIntegrationLayer:
                 'sentiment': latest_state.market_sentiment,
                 'volume_trend': latest_state.volume_trend
             }
-        
+
         return fault_bus_data
 
     def get_asset_data(self, symbol: str) -> Optional[CryptoDataPoint]:
@@ -341,22 +341,22 @@ class DataIntegrationLayer:
         """Get volatility analysis for all tracked assets."""
         if not self.market_history or len(self.market_history) < 2:
             return {}
-        
+
         volatility_data = {}
         for symbol in self.tracked_symbols:
             prices = []
             for state in self.market_history[-20:]:  # Last 20 data points
                 if symbol in state.assets:
                     prices.append(state.assets[symbol].price)
-            
+
             if len(prices) > 1:
                 # Calculate price volatility
-                price_changes = [unified_math.abs(prices[i] - prices[i-1]) / prices[i-1] 
+                price_changes = [unified_math.abs(prices[i] - prices[i-1]) / prices[i-1]
                                for i in range(1, len(prices))]
                 volatility_data[symbol] = sum(price_changes) / len(price_changes)
             else:
                 volatility_data[symbol] = 0.0
-        
+
         return volatility_data
 
     def export_data(self, filename: str) -> None:
@@ -367,7 +367,7 @@ class DataIntegrationLayer:
                 'market_data': {},
                 'market_history': []
             }
-            
+
             # Export current market data
             for symbol, data in self.market_data.items():
                 export_data['market_data'][symbol] = {
@@ -377,7 +377,7 @@ class DataIntegrationLayer:
                     'timestamp': data.timestamp.isoformat(),
                     'exchange': data.exchange
                 }
-            
+
             # Export recent market history
             for state in self.market_history[-10:]:
                 history_entry = {
@@ -387,12 +387,12 @@ class DataIntegrationLayer:
                     'volume_trend': state.volume_trend
                 }
                 export_data['market_history'].append(history_entry)
-            
+
             with open(filename, 'w') as f:
                 json.dump(export_data, f, indent=2)
-            
+
             logger.info(f"📁 Market data exported to {filename}")
-            
+
         except Exception as e:
             logger.error(f"❌ Error exporting data: {e}")
 
@@ -400,19 +400,19 @@ class DataIntegrationLayer:
 # WebSocket server for real-time data broadcasting
 class DataWebSocketServer:
     """WebSocket server for broadcasting real-time market data."""
-    
+
     def __init__(self, data_layer: DataIntegrationLayer, host: str = 'localhost', port: int = 8765):
         self.data_layer = data_layer
         self.host = host
         self.port = port
         self.clients = set()
         self.server = None
-        
+
     async def start_server(self):
         """Start the WebSocket server."""
         try:
             import websockets
-            
+
             async def handler(websocket, path):
                 self.clients.unified_math.add(websocket)
                 try:
@@ -421,20 +421,20 @@ class DataWebSocketServer:
                         pass
                 finally:
                     self.clients.remove(websocket)
-            
+
             self.server = await websockets.serve(handler, self.host, self.port)
             logger.info(f"🌐 WebSocket server started on ws://{self.host}:{self.port}")
-            
+
         except ImportError:
             logger.warning("WebSockets not available. Install with: pip install websockets")
         except Exception as e:
             logger.error(f"❌ Failed to start WebSocket server: {e}")
-    
+
     async def broadcast_data(self, data: Dict[str, Any]):
         """Broadcast data to all connected clients."""
         if not self.clients:
             return
-            
+
         try:
             import websockets
             message = json.dumps(data)
@@ -450,28 +450,28 @@ class DataWebSocketServer:
 async def main():
     """Test the data integration layer."""
     logging.basicConfig(level=logging.INFO)
-    
+
     # Initialize data layer
     data_layer = DataIntegrationLayer(update_interval=30.0)  # 30 seconds for testing
-    
+
     # Start data feed
     data_task = asyncio.create_task(data_layer.start_data_feed())
-    
+
     # Wait for some data to accumulate
     await asyncio.sleep(60)
-    
+
     # Print current data
     current_data = data_layer.get_current_data()
     safe_print("📊 Current Market Data:")
     print(json.dumps(current_data, indent=2))
-    
+
     # Export data
     data_layer.export_data('market_data_export.json')
-    
+
     # Stop data feed
     await data_layer.stop_data_feed()
     data_task.cancel()
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

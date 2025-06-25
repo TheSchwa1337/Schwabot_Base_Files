@@ -59,7 +59,7 @@ class FallbackTestCase:
 
 class FallbackTradeControllerTest:
     """Comprehensive fallback trade controller testing."""
-    
+
     def __init__(self):
         """Initialize the fallback trade controller test."""
         self.test_cases = [
@@ -108,20 +108,20 @@ class FallbackTradeControllerTest:
                 description="Cascading failure with minimal functionality"
             )
         ]
-        
+
         logger.info("🛡️ Fallback Trade Controller Test initialized")
-    
+
     def test_fallback_system_initialization(self) -> Dict[str, Any]:
         """Test fallback system initialization and state management."""
         logger.info("🔧 Testing fallback system initialization")
-        
+
         results = {
             'test_name': 'fallback_system_initialization',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         try:
             # Simulate fallback system initialization
             fallback_system = {
@@ -133,35 +133,35 @@ class FallbackTradeControllerTest:
                 'last_recovery_time': time.time(),
                 'emergency_stop_active': False
             }
-            
+
             # Validate fallback system properties
             required_fields = [
                 'active', 'current_mode', 'functionality_level', 'failed_components',
                 'recovery_attempts', 'last_recovery_time', 'emergency_stop_active'
             ]
-            
+
             for field in required_fields:
                 if field not in fallback_system:
                     error_msg = f"Missing required field: {field}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-            
+
             # Validate initial state
             if not fallback_system['active']:
                 error_msg = "Fallback system not active after initialization"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             if fallback_system['current_mode'] != FallbackMode.NORMAL.value:
                 error_msg = f"Initial mode should be normal, got: {fallback_system['current_mode']}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             if fallback_system['functionality_level'] != 1.0:
                 error_msg = f"Initial functionality should be 1.0, got: {fallback_system['functionality_level']}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             results['details'] = {
                 'fallback_system_initialized': True,
                 'initial_mode': fallback_system['current_mode'],
@@ -169,55 +169,55 @@ class FallbackTradeControllerTest:
                 'all_fields_present': len(results['errors']) == 0,
                 'initial_state_valid': len(results['errors']) == 0
             }
-            
+
         except Exception as e:
             results['errors'].append(f"Fallback system initialization test failed: {str(e)}")
             results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Fallback system initialization test passed")
         else:
             logger.error(f"❌ Fallback system initialization test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_primary_system_failure_detection(self) -> Dict[str, Any]:
         """Test primary system failure detection."""
         logger.info("🔍 Testing primary system failure detection")
-        
+
         results = {
             'test_name': 'primary_system_failure_detection',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Simulate failure detection
                 failure_result = self._simulate_failure_detection(test_case)
-                
+
                 # Validate failure detection
                 if not isinstance(failure_result['failures_detected'], bool):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid failure detection result"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate failed components count
                 expected_failed_count = len(test_case.failed_components)
                 actual_failed_count = len(failure_result['failed_components'])
-                
+
                 if actual_failed_count != expected_failed_count:
                     error_msg = f"Test case {i} ({test_case.description}): Failed component count mismatch. Expected: {expected_failed_count}, Got: {actual_failed_count}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate failure severity
                 if not (0.0 <= failure_result['failure_severity'] <= 1.0):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid failure severity. Expected [0.0, 1.0], Got: {failure_result['failure_severity']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Store failure detection results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -228,54 +228,54 @@ class FallbackTradeControllerTest:
                     'failure_severity': failure_result['failure_severity'],
                     'detection_accurate': actual_failed_count == expected_failed_count
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Primary system failure detection test passed")
         else:
             logger.error(f"❌ Primary system failure detection test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_fallback_mode_activation(self) -> Dict[str, Any]:
         """Test fallback mode activation and deactivation."""
         logger.info("🔄 Testing fallback mode activation")
-        
+
         results = {
             'test_name': 'fallback_mode_activation',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Simulate fallback mode activation
                 activation_result = self._simulate_fallback_activation(test_case)
-                
+
                 # Validate mode activation
                 if activation_result['activated_mode'] != test_case.expected_fallback_mode.value:
                     error_msg = f"Test case {i} ({test_case.description}): Mode mismatch. Expected: {test_case.expected_fallback_mode.value}, Got: {activation_result['activated_mode']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate functionality level
                 functionality_diff = unified_math.abs(activation_result['functionality_level'] - test_case.expected_functionality_level)
                 if functionality_diff > 0.2:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Functionality level mismatch. Expected: {test_case.expected_functionality_level}, Got: {activation_result['functionality_level']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate activation time
                 if activation_result['activation_time'] <= 0:
                     error_msg = f"Test case {i} ({test_case.description}): Invalid activation time"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Store activation results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -287,60 +287,60 @@ class FallbackTradeControllerTest:
                     'mode_correct': activation_result['activated_mode'] == test_case.expected_fallback_mode.value,
                     'functionality_acceptable': functionality_diff <= 0.2
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Fallback mode activation test passed")
         else:
             logger.error(f"❌ Fallback mode activation test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_reduced_functionality_validation(self) -> Dict[str, Any]:
         """Test reduced functionality validation."""
         logger.info("⚡ Testing reduced functionality validation")
-        
+
         results = {
             'test_name': 'reduced_functionality_validation',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Simulate reduced functionality
                 functionality_result = self._simulate_reduced_functionality(test_case)
-                
+
                 # Validate functionality level
                 if not (0.0 <= functionality_result['functionality_level'] <= 1.0):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid functionality level. Expected [0.0, 1.0], Got: {functionality_result['functionality_level']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate available features
                 if not isinstance(functionality_result['available_features'], list):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid available features type"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate disabled features
                 if not isinstance(functionality_result['disabled_features'], list):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid disabled features type"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate feature consistency
                 total_features = len(functionality_result['available_features']) + len(functionality_result['disabled_features'])
                 if total_features == 0:
                     error_msg = f"Test case {i} ({test_case.description}): No features defined"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Store functionality results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -351,59 +351,59 @@ class FallbackTradeControllerTest:
                     'functionality_valid': 0.0 <= functionality_result['functionality_level'] <= 1.0,
                     'features_consistent': total_features > 0
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Reduced functionality validation test passed")
         else:
             logger.error(f"❌ Reduced functionality validation test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_system_recovery_procedures(self) -> Dict[str, Any]:
         """Test system recovery procedures."""
         logger.info("🔄 Testing system recovery procedures")
-        
+
         results = {
             'test_name': 'system_recovery_procedures',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         for i, test_case in enumerate(self.test_cases):
             try:
                 # Simulate system recovery
                 recovery_result = self._simulate_system_recovery(test_case)
-                
+
                 # Validate recovery attempt
                 if not isinstance(recovery_result['recovery_attempted'], bool):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid recovery attempt result"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate recovery success
                 if not isinstance(recovery_result['recovery_successful'], bool):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid recovery success result"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate recovery time
                 if recovery_result['recovery_time'] < 0:
                     error_msg = f"Test case {i} ({test_case.description}): Invalid recovery time"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate timeout compliance
                 if recovery_result['recovery_time'] > test_case.recovery_timeout and test_case.recovery_timeout > 0:
                     error_msg = f"Test case {i} ({test_case.description}): Recovery exceeded timeout. Expected <= {test_case.recovery_timeout}, Got: {recovery_result['recovery_time']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Store recovery results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
@@ -414,30 +414,30 @@ class FallbackTradeControllerTest:
                     'components_recovered': recovery_result['components_recovered'],
                     'recovery_within_timeout': recovery_result['recovery_time'] <= test_case.recovery_timeout or test_case.recovery_timeout == 0
                 }
-                
+
             except Exception as e:
                 error_msg = f"Test case {i} ({test_case.description}): Exception - {str(e)}"
                 results['errors'].append(error_msg)
                 results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ System recovery procedures test passed")
         else:
             logger.error(f"❌ System recovery procedures test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def test_emergency_stop_mechanisms(self) -> Dict[str, Any]:
         """Test emergency stop mechanisms."""
         logger.info("🛑 Testing emergency stop mechanisms")
-        
+
         results = {
             'test_name': 'emergency_stop_mechanisms',
             'success': True,
             'details': {},
             'errors': []
         }
-        
+
         try:
             # Test emergency stop scenarios
             emergency_scenarios = [
@@ -460,40 +460,40 @@ class FallbackTradeControllerTest:
                     'response_time_threshold': 0.5
                 }
             ]
-            
+
             emergency_results = []
-            
+
             for i, scenario in enumerate(emergency_scenarios):
                 # Simulate emergency stop
                 stop_result = self._simulate_emergency_stop(scenario)
-                
+
                 # Validate emergency stop
                 if not isinstance(stop_result['emergency_activated'], bool):
                     error_msg = f"Scenario {i}: Invalid emergency activation result"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate response time
                 if stop_result['response_time'] < 0:
                     error_msg = f"Scenario {i}: Invalid response time"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 # Validate timeout compliance
                 if stop_result['response_time'] > scenario['response_time_threshold']:
                     error_msg = f"Scenario {i}: Emergency response too slow. Expected <= {scenario['response_time_threshold']}, Got: {stop_result['response_time']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
-                
+
                 emergency_results.append(stop_result)
-            
+
             # Validate overall emergency system
             activated_count = sum(1 for result in emergency_results if result['emergency_activated'])
             if activated_count == 0:
                 error_msg = "No emergency stops were activated"
                 results['errors'].append(error_msg)
                 results['success'] = False
-            
+
             results['details'] = {
                 'total_scenarios': len(emergency_scenarios),
                 'emergency_activations': activated_count,
@@ -501,22 +501,22 @@ class FallbackTradeControllerTest:
                 'all_responses_within_timeout': len(results['errors']) == 0,
                 'emergency_system_functional': True
             }
-            
+
         except Exception as e:
             results['errors'].append(f"Emergency stop mechanisms test failed: {str(e)}")
             results['success'] = False
-        
+
         if results['success']:
             logger.info("✅ Emergency stop mechanisms test passed")
         else:
             logger.error(f"❌ Emergency stop mechanisms test failed: {len(results['errors'])} errors")
-        
+
         return results
-    
+
     def _simulate_failure_detection(self, test_case: FallbackTestCase) -> Dict[str, Any]:
         """Simulate failure detection logic."""
         failed_components = test_case.failed_components
-        
+
         # Calculate failure severity based on failed components
         severity_weights = {
             SystemComponent.FAULT_BUS: 0.4,
@@ -526,20 +526,20 @@ class FallbackTradeControllerTest:
             SystemComponent.AI_BRIDGE: 0.05,
             SystemComponent.ENTROPY_API: 0.05
         }
-        
+
         total_severity = sum(severity_weights.get(comp, 0.1) for comp in failed_components)
         failure_severity = unified_math.min(total_severity, 1.0)
-        
+
         return {
             'failures_detected': len(failed_components) > 0,
             'failed_components': failed_components,
             'failure_severity': failure_severity
         }
-    
+
     def _simulate_fallback_activation(self, test_case: FallbackTestCase) -> Dict[str, Any]:
         """Simulate fallback mode activation."""
         failed_count = len(test_case.failed_components)
-        
+
         # Determine mode based on failure severity
         if failed_count == 0:
             mode = FallbackMode.NORMAL
@@ -553,20 +553,20 @@ class FallbackTradeControllerTest:
         else:
             mode = FallbackMode.REDUCED
             functionality = 0.6
-        
+
         return {
             'activated_mode': mode.value,
             'functionality_level': functionality,
             'activation_time': time.time()
         }
-    
+
     def _simulate_reduced_functionality(self, test_case: FallbackTestCase) -> Dict[str, Any]:
         """Simulate reduced functionality."""
         failed_count = len(test_case.failed_components)
-        
+
         # Define available and disabled features based on failures
         all_features = ['trading', 'analysis', 'ai_consensus', 'real_time_data', 'backtesting']
-        
+
         if failed_count == 0:
             available_features = all_features
             disabled_features = []
@@ -583,54 +583,54 @@ class FallbackTradeControllerTest:
             available_features = all_features[:-2]  # Disable AI and backtesting
             disabled_features = ['ai_consensus', 'backtesting']
             functionality_level = 0.6
-        
+
         return {
             'functionality_level': functionality_level,
             'available_features': available_features,
             'disabled_features': disabled_features
         }
-    
+
     def _simulate_system_recovery(self, test_case: FallbackTestCase) -> Dict[str, Any]:
         """Simulate system recovery."""
         failed_count = len(test_case.failed_components)
-        
+
         # Simulate recovery attempt
         recovery_attempted = failed_count > 0
         recovery_successful = failed_count <= 1  # Recovery more likely with fewer failures
         recovery_time = test_case.recovery_timeout * 0.8 if recovery_successful else test_case.recovery_timeout * 1.2
-        
+
         # Determine recovered components
         if recovery_successful:
             components_recovered = [comp.value for comp in test_case.failed_components]
         else:
             components_recovered = []
-        
+
         return {
             'recovery_attempted': recovery_attempted,
             'recovery_successful': recovery_successful,
             'recovery_time': recovery_time,
             'components_recovered': components_recovered
         }
-    
+
     def _simulate_emergency_stop(self, scenario: Dict[str, Any]) -> Dict[str, Any]:
         """Simulate emergency stop."""
         # Simulate emergency stop activation
         emergency_activated = True
         response_time = scenario['response_time_threshold'] * 0.7  # Simulate response within threshold
-        
+
         return {
             'emergency_activated': emergency_activated,
             'response_time': response_time,
             'scenario': scenario['scenario'],
             'trigger_condition': scenario['trigger_condition']
         }
-    
+
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive fallback trade controller test."""
         logger.info("🚀 Running comprehensive fallback trade controller test")
-        
+
         start_time = time.time()
-        
+
         # Run all test components
         test_results = {
             'fallback_initialization': self.test_fallback_system_initialization(),
@@ -640,15 +640,15 @@ class FallbackTradeControllerTest:
             'system_recovery': self.test_system_recovery_procedures(),
             'emergency_stop': self.test_emergency_stop_mechanisms()
         }
-        
+
         # Determine overall success
         all_passed = all(result['success'] for result in test_results.values())
-        
+
         # Calculate total errors
         total_errors = sum(len(result.get('errors', [])) for result in test_results.values())
-        
+
         execution_time = time.time() - start_time
-        
+
         comprehensive_result = {
             'success': all_passed,
             'test_name': 'fallback_trade_controller',
@@ -664,12 +664,12 @@ class FallbackTradeControllerTest:
                 'emergency_stop_passed': test_results['emergency_stop']['success']
             }
         }
-        
+
         if all_passed:
             logger.info(f"✅ Comprehensive fallback trade controller test passed in {execution_time:.3f}s")
         else:
             logger.error(f"❌ Comprehensive fallback trade controller test failed with {total_errors} errors")
-        
+
         return comprehensive_result
 
 
@@ -695,23 +695,23 @@ if __name__ == "__main__":
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-    
+
     # Run test
     result = test_fallback_trade_controller()
-    
+
     # Print results
     safe_print("\n" + "="*60)
     safe_print("🛡️ FALLBACK TRADE CONTROLLER TEST RESULTS")
     safe_print("="*60)
-    
+
     safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
-    
+
     if 'test_components' in result:
         safe_print("\nComponent Results:")
         for component, component_result in result['test_components'].items():
             status = "✅ PASS" if component_result['success'] else "❌ FAIL"
             safe_print(f"  {component}: {status}")
-    
-    safe_print("="*60) 
+
+    safe_print("="*60)

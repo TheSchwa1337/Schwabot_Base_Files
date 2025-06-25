@@ -192,4 +192,4 @@ if __name__ == '__main__':
 
         await manager.stop_all()
 
-    asyncio.run(main()) 
+    asyncio.run(main())

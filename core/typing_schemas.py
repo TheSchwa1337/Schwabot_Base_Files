@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import (
-    Any, Dict, List, Optional, Tuple, Union, Literal, 
+    Any, Dict, List, Optional, Tuple, Union, Literal,
     TypedDict, Protocol, TypeVar, Generic
 )
 import hashlib
@@ -118,10 +118,10 @@ class AIStrategyResponse:
         """Validate and enhance the response."""
         if not self.strategy_hash:
             self.strategy_hash = self._generate_hash()
-        
+
         # Ensure confidence is bounded
         self.confidence_score = _safe_math_max(0.0, _safe_math_min(1.0, self.confidence_score))
-        
+
         # Ensure layer depth is positive
         self.layer_depth = _safe_math_max(1, self.layer_depth)
 
@@ -337,22 +337,22 @@ def create_fault_log(
 def validate_mathematical_operation(operation: MathematicalOperation) -> bool:
     """Validate mathematical operation structure."""
     required_fields = [
-        "operation_id", "operation_type", "entry_assumptions", 
+        "operation_id", "operation_type", "entry_assumptions",
         "output_guarantees", "timestamp", "execution_time", "success"
     ]
-    
+
     for field in required_fields:
         if not hasattr(operation, field):
             return False
-    
+
     # Validate confidence interval
     if operation.confidence_interval[0] < 0.0 or operation.confidence_interval[1] > 1.0:
         return False
-    
+
     # Validate execution time is positive
     if operation.execution_time < 0.0:
         return False
-    
+
     return True
 
 
@@ -395,25 +395,25 @@ PerformanceMetricsType = Union[PerformanceMetrics, Dict[str, Any]]
 __all__ = [
     # Fault handling
     "FaultLog", "FaultEvent", "RecoveryStrategy", "FaultHandler",
-    
+
     # AI strategy
     "StrategyHash", "AIStrategyResponse", "AIStrategyParser", "parse_ai_response",
-    
+
     # Mathematical operations
-    "MathematicalOperation", "VectorOperation", "MatrixOperation", 
+    "MathematicalOperation", "VectorOperation", "MatrixOperation",
     "MathematicalValidator", "validate_mathematical_operation",
-    
+
     # Trading
     "TradingDecision", "TradingSignal",
-    
+
     # System state
     "SystemState", "PerformanceMetrics",
-    
+
     # Utilities
     "create_fault_log",
-    
+
     # Type aliases
     "Vector", "Matrix", "Tensor", "FaultHandlerType", "RecoveryStrategyType",
     "AIResponseType", "StrategyHashType", "MathOpType", "TradingSignalType",
     "TradingDecisionType", "SystemStateType", "PerformanceMetricsType"
-] 
+]

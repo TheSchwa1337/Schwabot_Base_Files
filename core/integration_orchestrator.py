@@ -171,9 +171,9 @@ class IntegrationMetrics:
 
 class IntegrationOrchestrator:
     """
-    
+
     Comprehensive integration orchestrator for Schwabot system
-    
+
     This class manages the integration of all system components with the
     centralized configuration system, providing unified control and monitoring.
     """

@@ -90,37 +90,37 @@ class StrategyMapping:
 class TickFeedHarness:
     """
     Unified tick feed harness for live/demo processing.
-    
+
     Mathematical Foundation:
     - Bit Phase Resolution: bit_4 = strategy_id & 0b1111, bit_8 = strategy_id & 0b11111111, bit_42 = strategy_id & 0x3FFFFFFFFFF
     - Tensor Scoring: T = (delta²) * entropy * multiplier
     - Profit Zone Allocation: P = {short: profit if bit_4 % 3 == 0, mid: profit * 0.65 if bit_8 % 5 == 0, long: profit * 1.1 if bit_42 % 7 == 0}
     - Rebalance Scoring: R = (P_short + P_mid + P_long) / (1 + entropy_gate)
     """
-    
+
     def __init__(self, mode: FeedMode = FeedMode.DEMO, config_path: str = "./config/tick_feed_config.json"):
         self.mode = mode
         self.config_path = config_path
-        
+
         # Hash registry and strategy mappings
         self.hash_registry: Dict[str, StrategyMapping] = {}
         self.strategy_mappings: Dict[str, StrategyMapping] = {}
-        
+
         # Feed state
         self.feed_history: List[TickData] = []
         self.current_prices: Dict[str, float] = {}
         self.last_tick_time: Optional[datetime] = None
-        
+
         # Performance tracking
         self.total_ticks = 0
         self.rebalance_triggers = 0
         self.average_tensor_score = 0.0
-        
+
         # Load configuration and hash registry
         self._load_configuration()
         self._load_hash_registry()
         self._initialize_strategies()
-        
+
         logger.info(f"Tick Feed Harness initialized in {mode.value} mode")
 
     def _load_configuration(self) -> None:
@@ -147,10 +147,10 @@ class TickFeedHarness:
                 "tick_interval": 1.0,  # seconds
                 "max_history": 1000
             }
-            
+
             self.config = config
             logger.info("Tick feed configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -164,12 +164,12 @@ class TickFeedHarness:
                 {"hash_segment": f"cc5d{i:02x}", "tensor_path": f"SOL_to_BTC_mid_{i}", "bit_depth": 4, "entry_rule": "volume>1000", "exit_rule": "volume<500"},
                 {"hash_segment": f"dd6c{i:02x}", "tensor_path": f"ETH_to_XRP_quantum_{i}", "bit_depth": 42, "entry_rule": "entropy>0.8", "exit_rule": "entropy<0.3"}
             ]
-            
+
             for i in range(8):  # 8 strategies per template = 32 total
                 for strategy in strategies:
                     hash_segment = strategy["hash_segment"].format(i=i)
                     strategy_id = f"strategy_{len(self.strategy_mappings):03d}"
-                    
+
                     self.strategy_mappings[strategy_id] = StrategyMapping(
                         strategy_id=strategy_id,
                         tensor_path=strategy["tensor_path"].format(i=i),
@@ -186,9 +186,9 @@ class TickFeedHarness:
                             "SOL": round(uniform(0.05, 0.2), 2)
                         }
                     )
-            
+
             logger.info(f"Loaded {len(self.strategy_mappings)} strategy mappings")
-            
+
         except Exception as e:
             logger.error(f"Error loading hash registry: {e}")
 
@@ -198,23 +198,23 @@ class TickFeedHarness:
             # Initialize current prices for demo mode
             if self.mode == FeedMode.DEMO:
                 self.current_prices = self.config["demo_prices"].copy()
-            
+
             logger.info("Strategy mappings initialized")
-            
+
         except Exception as e:
             logger.error(f"Error initializing strategies: {e}")
 
     def get_price_feed(self, asset: str, demo: bool = False) -> float:
         """
         Get price feed for asset.
-        
+
         Parameters:
         -----------
         asset : str
             Asset symbol
         demo : bool
             Whether to use demo mode
-            
+
         Returns:
         --------
         float
@@ -225,7 +225,7 @@ class TickFeedHarness:
                 return self._fetch_demo_price(asset)
             else:
                 return self._fetch_live_ccxt_price(asset)
-                
+
         except Exception as e:
             logger.error(f"Error getting price feed for {asset}: {e}")
             return self.config["demo_prices"].get(asset, 1.0)
@@ -235,17 +235,17 @@ class TickFeedHarness:
         try:
             base_price = self.current_prices.get(asset, 1.0)
             volatility_range = self.config["volatility_ranges"].get(asset, (0.001, 0.05))
-            
+
             # Simulate price movement
             volatility = uniform(*volatility_range)
             price_change = uniform(-volatility, volatility)
             new_price = base_price * (1 + price_change)
-            
+
             # Update current price
             self.current_prices[asset] = new_price
-            
+
             return new_price
-            
+
         except Exception as e:
             logger.error(f"Error fetching demo price for {asset}: {e}")
             return self.config["demo_prices"].get(asset, 1.0)
@@ -256,7 +256,7 @@ class TickFeedHarness:
             # TODO: Implement actual CCXT integration
             # For now, return demo price
             return self._fetch_demo_price(asset)
-            
+
         except Exception as e:
             logger.error(f"Error fetching live price for {asset}: {e}")
             return self._fetch_demo_price(asset)
@@ -264,12 +264,12 @@ class TickFeedHarness:
     def simulate_ticks(self, num_ticks: int = 32) -> List[TickData]:
         """
         Simulate tick data for demo mode.
-        
+
         Parameters:
         -----------
         num_ticks : int
             Number of ticks to simulate
-            
+
         Returns:
         --------
         List[TickData]
@@ -278,17 +278,17 @@ class TickFeedHarness:
         try:
             ticks = []
             assets = self.config["assets"]
-            
+
             for i in range(num_ticks):
                 # Generate tick data
                 asset = choice(assets)
                 price = self.get_price_feed(asset, demo=True)
                 volume = uniform(100, 10000)
-                
+
                 # Generate hash signature
                 hash_input = f"{asset}_{price}_{volume}_{time.time()}"
                 hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()
-                
+
                 # Assign strategy
                 enriched_tick = self.assign_strategy_to_tick(
                     timestamp=datetime.now(),
@@ -298,23 +298,23 @@ class TickFeedHarness:
                     hash_signature=hash_signature,
                     demo_mode=True
                 )
-                
+
                 ticks.append(enriched_tick)
-                
+
                 # Small delay between ticks
                 time.sleep(0.1)
-            
+
             return ticks
-            
+
         except Exception as e:
             logger.error(f"Error simulating ticks: {e}")
             return []
 
-    def assign_strategy_to_tick(self, timestamp: datetime, asset: str, price: float, 
+    def assign_strategy_to_tick(self, timestamp: datetime, asset: str, price: float,
                                volume: float, hash_signature: str, demo_mode: bool = False) -> TickData:
         """
         Assign strategy to tick data.
-        
+
         Parameters:
         -----------
         timestamp : datetime
@@ -329,7 +329,7 @@ class TickFeedHarness:
             Hash signature
         demo_mode : bool
             Whether in demo mode
-            
+
         Returns:
         --------
         TickData
@@ -339,33 +339,33 @@ class TickFeedHarness:
             # Generate strategy ID from hash
             strategy_id = f"strategy_{int(hash_signature[:8], 16) % len(self.strategy_mappings):03d}"
             strategy = self.strategy_mappings.get(strategy_id, list(self.strategy_mappings.values())[0])
-            
+
             # Calculate bit phases
             strategy_hash = int(hash_signature[:16], 16)
             bit_4 = strategy_hash & 0b1111
             bit_8 = strategy_hash & 0b11111111
             bit_42 = strategy_hash & 0x3FFFFFFFFFF
-            
+
             # Calculate price change
             previous_price = self.current_prices.get(asset, price)
             price_change = (price - previous_price) / previous_price if previous_price > 0 else 0
-            
+
             # Calculate tensor score
             tensor_score = self._calculate_tensor_score(price_change, volume, strategy.risk_multiplier)
-            
+
             # Calculate profit zones
             profit = price_change * volume * strategy.risk_multiplier
             entropy_gate = unified_math.unified_math.log(volume + 1) * (1 / (strategy.entropy_threshold + 1e-3))
-            
+
             profit_zone = {
                 "short": profit if bit_4 % 3 == 0 else 0,
                 "mid": profit * 0.65 if bit_8 % 5 == 0 else 0,
                 "long": profit * 1.1 if bit_42 % 7 == 0 else 0
             }
-            
+
             # Calculate rebalance score
             rebalance_score = (profit_zone["short"] + profit_zone["mid"] + profit_zone["long"]) / (1 + entropy_gate)
-            
+
             # Create tick data
             tick_data = TickData(
                 timestamp=timestamp,
@@ -388,25 +388,25 @@ class TickFeedHarness:
                     "asset_bias": strategy.asset_bias
                 }
             )
-            
+
             # Update state
             self.current_prices[asset] = price
             self.feed_history.append(tick_data)
             self.total_ticks += 1
-            
+
             # Check for rebalance trigger
             if rebalance_score > self.config["rebalance_threshold"]:
                 self.rebalance_triggers += 1
-            
+
             # Update average tensor score
             self.average_tensor_score = (self.average_tensor_score * (self.total_ticks - 1) + tensor_score) / self.total_ticks
-            
+
             # Limit history size
             if len(self.feed_history) > self.config["max_history"]:
                 self.feed_history = self.feed_history[-self.config["max_history"]:]
-            
+
             return tick_data
-            
+
         except Exception as e:
             logger.error(f"Error assigning strategy to tick: {e}")
             return TickData(
@@ -428,10 +428,10 @@ class TickFeedHarness:
     def _calculate_tensor_score(self, delta: float, entropy: float, bit_depth: int) -> float:
         """
         Calculate tensor profit score.
-        
+
         Mathematical Formula:
         T = (delta²) * entropy * multiplier
-        
+
         Parameters:
         -----------
         delta : float
@@ -440,7 +440,7 @@ class TickFeedHarness:
             Volume-based entropy
         bit_depth : int
             Bit depth for multiplier
-            
+
         Returns:
         --------
         float
@@ -449,7 +449,7 @@ class TickFeedHarness:
         try:
             multiplier = {4: 0.5, 8: 1.0, 42: 3.0}.get(bit_depth, 1.0)
             return (delta ** 2) * entropy * multiplier
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
             return 0.0
@@ -466,7 +466,7 @@ class TickFeedHarness:
                 "strategy_count": len(self.strategy_mappings),
                 "history_size": len(self.feed_history)
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting feed statistics: {e}")
             return {}
@@ -495,9 +495,9 @@ class TickFeedHarness:
                         "metadata": tick.metadata
                     }
                     f.write(json.dumps(tick_dict) + '\n')
-            
+
             logger.info(f"Feed history exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting feed history: {e}")
 
@@ -505,16 +505,16 @@ class TickFeedHarness:
 def main():
     """Test function for Tick Feed Harness."""
     safe_print("🔄 Testing Tick Feed Harness...")
-    
+
     # Initialize harness in demo mode
     harness = TickFeedHarness(mode=FeedMode.DEMO)
-    
+
     # Simulate ticks
     safe_print("📊 Simulating 32 ticks...")
     ticks = harness.simulate_ticks(32)
-    
+
     safe_print(f"✅ Generated {len(ticks)} ticks")
-    
+
     # Print sample tick
     if ticks:
         sample_tick = ticks[0]
@@ -526,7 +526,7 @@ def main():
         safe_print(f"  Tensor Score: {sample_tick.tensor_score:.4f}")
         safe_print(f"  Rebalance Score: {sample_tick.rebalance_score:.4f}")
         safe_print(f"  Bit Phases: 4bit={sample_tick.bit_phase_4}, 8bit={sample_tick.bit_phase_8}, 42bit={sample_tick.bit_phase_42}")
-    
+
     # Get statistics
     stats = harness.get_feed_statistics()
     safe_print(f"\n📊 Feed Statistics:")
@@ -534,12 +534,12 @@ def main():
     safe_print(f"  Rebalance Triggers: {stats['rebalance_triggers']}")
     safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")
     safe_print(f"  Strategy Count: {stats['strategy_count']}")
-    
+
     # Export history
     harness.export_feed_history()
-    
+
     return 0
 
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

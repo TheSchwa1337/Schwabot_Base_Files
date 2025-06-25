@@ -141,11 +141,11 @@ class AdvancedTestHarness:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     _ = json.load(f)  # Load but don't store since we don't use it
-                
+
                 logger.info("Loaded test harness configuration")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -162,7 +162,7 @@ class AdvancedTestHarness:
                 "ufs": {"unified_patterns": [200, 200, 15], "fractal_memory": [100, 100, 8]}
             }
         }
-        
+
         try:
             os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
@@ -180,7 +180,7 @@ class AdvancedTestHarness:
                 "fractal_coefficients": np.random.rand(25, 25, 5),
                 "signal_momentum": np.random.rand(10, 10, 3)
             }
-            
+
             # Initialize UFS tensors
             self.ufs_tensors = {
                 "unified_patterns": np.random.rand(200, 200, 15),
@@ -188,7 +188,7 @@ class AdvancedTestHarness:
                 "pattern_correlations": np.random.rand(75, 75, 12),
                 "memory_signatures": np.random.rand(30, 30, 6)
             }
-            
+
             # Create tensor test data
             for tensor_name, tensor_data in self.sfsss_tensors.items():
                 tensor_id = f"sfsss_{tensor_name}"
@@ -200,7 +200,7 @@ class AdvancedTestHarness:
                     mathematical_properties=self._calculate_tensor_properties(tensor_data),
                     metadata={"source": "sfsss", "category": tensor_name}
                 )
-            
+
             for tensor_name, tensor_data in self.ufs_tensors.items():
                 tensor_id = f"ufs_{tensor_name}"
                 self.tensor_test_data[tensor_id] = TensorTestData(
@@ -211,9 +211,9 @@ class AdvancedTestHarness:
                     mathematical_properties=self._calculate_tensor_properties(tensor_data),
                     metadata={"source": "ufs", "category": tensor_name}
                 )
-            
+
             logger.info("Mathematical tensors initialized for testing")
-            
+
         except Exception as e:
             logger.error(f"Error initializing mathematical tensors: {e}")
 
@@ -231,7 +231,7 @@ class AdvancedTestHarness:
                 "spectral_radius": float(unified_math.unified_math.max(unified_math.unified_math.abs(unified_math.unified_math.eigenvalues(tensor.reshape(-1, tensor.shape[-1])))))
             }
             return properties
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor properties: {e}")
             return {}
@@ -251,21 +251,21 @@ class AdvancedTestHarness:
         try:
             # Matrix operation tests
             self._generate_matrix_tests()
-            
+
             # Tensor operation tests
             self._generate_tensor_tests()
-            
+
             # Integration tests
             self._generate_integration_tests()
-            
+
             # Performance tests
             self._generate_performance_tests()
-            
+
             # Mathematical pipeline tests
             self._generate_mathematical_pipeline_tests()
-            
+
             logger.info(f"Generated {len(self.test_cases)} test cases")
-            
+
         except Exception as e:
             logger.error(f"Error generating test cases: {e}")
 
@@ -279,7 +279,7 @@ class AdvancedTestHarness:
             "diagonal_6x6": np.diag(np.random.rand(6)),
             "sparse_10x10": np.random.rand(10, 10) * (np.random.rand(10, 10) > 0.7)
         }
-        
+
         for matrix_name, matrix_data in test_matrices.items():
             matrix_id = f"matrix_{matrix_name}"
             self.matrix_test_data[matrix_id] = MatrixTestData(
@@ -289,7 +289,7 @@ class AdvancedTestHarness:
                 dimensions=matrix_data.shape,
                 properties=self._calculate_matrix_properties(matrix_data)
             )
-        
+
         # Matrix addition tests
         for i, (id1, matrix1) in enumerate(self.matrix_test_data.items()):
             for j, (id2, matrix2) in enumerate(self.matrix_test_data.items()):
@@ -398,14 +398,14 @@ class AdvancedTestHarness:
         """Test integration between SFSSS and UFS systems."""
         try:
             integration_results = {}
-            
+
             # Test tensor interactions
             for sfsss_name, sfsss_tensor in self.sfsss_tensors.items():
                 for ufs_name, ufs_tensor in self.ufs_tensors.items():
                     # Calculate interaction metric
                     interaction = self._calculate_tensor_interaction(sfsss_tensor, ufs_tensor)
                     integration_results[f"{sfsss_name}_{ufs_name}_interaction"] = interaction
-            
+
             return integration_results
         except Exception as e:
             logger.error(f"Error in SFSSS-UFS integration: {e}")
@@ -432,12 +432,12 @@ class AdvancedTestHarness:
             # Reshape tensors to same dimensions for comparison
             t1_flat = tensor1.flatten()
             t2_flat = tensor2.flatten()
-            
+
             # Pad or truncate to same length
             min_len = unified_math.min(len(t1_flat), len(t2_flat))
             t1_flat = t1_flat[:min_len]
             t2_flat = t2_flat[:min_len]
-            
+
             # Calculate correlation
             correlation = unified_math.unified_math.correlation(t1_flat, t2_flat)[0, 1]
             return float(correlation) if not np.isnan(correlation) else 0.0
@@ -449,11 +449,11 @@ class AdvancedTestHarness:
         try:
             if len(data) < 10:
                 return 0.5
-            
+
             # Simplified Hurst exponent calculation
             lags = range(2, unified_math.min(20, len(data)//2))
             tau = [unified_math.unified_math.sqrt(unified_math.unified_math.std(unified_math.unified_math.subtract(data[lag:], data[:-lag]))) for lag in lags]
-            
+
             if len(tau) > 1:
                 reg = np.polyfit(unified_math.unified_math.log(lags), unified_math.unified_math.log(tau), 1)
                 return float(reg[0])
@@ -467,11 +467,11 @@ class AdvancedTestHarness:
         try:
             if len(data) < 10:
                 return 1.0
-            
+
             data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data) + 1e-8)
             scales = np.logspace(-2, 0, 10)
             counts = []
-            
+
             for scale in scales:
                 boxes = int(1 / scale)
                 count = 0
@@ -481,7 +481,7 @@ class AdvancedTestHarness:
                     if np.any(data_norm[start:end] > 0):
                         count += 1
                 counts.append(count)
-            
+
             if len(counts) > 1:
                 log_scales = unified_math.unified_math.log(scales)
                 log_counts = unified_math.unified_math.log(counts)
@@ -497,7 +497,7 @@ class AdvancedTestHarness:
         try:
             if len(data) < 2:
                 return 0.0
-            
+
             # Calculate autocorrelation at lag 1
             autocorr = unified_math.unified_math.correlation(data[:-1], data[1:])[0, 1]
             return float(autocorr) if not np.isnan(autocorr) else 0.0
@@ -510,7 +510,7 @@ class AdvancedTestHarness:
         try:
             # Execute the test
             actual_output = self._execute_test_case(test_case)
-            
+
             # Validate output
             if test_case.expected_output is not None:
                 if isinstance(actual_output, np.ndarray) and isinstance(test_case.expected_output, np.ndarray):
@@ -519,12 +519,12 @@ class AdvancedTestHarness:
                     is_valid = actual_output == test_case.expected_output
             else:
                 is_valid = actual_output is not None
-            
+
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
-            
+
             status = TestStatus.PASSED if is_valid else TestStatus.FAILED
-            
+
             return TestResult(
                 test_id=test_case.test_id,
                 test_name=test_case.test_name,
@@ -534,11 +534,11 @@ class AdvancedTestHarness:
                 end_time=end_time,
                 actual_output=actual_output
             )
-            
+
         except Exception as e:
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
-            
+
             return TestResult(
                 test_id=test_case.test_id,
                 test_name=test_case.test_name,
@@ -559,17 +559,17 @@ class AdvancedTestHarness:
         try:
             # Execute the test with performance monitoring
             actual_output = self._execute_test_case(test_case)
-            
+
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
-            
+
             # Record performance metrics
             performance_metrics = {
                 "execution_time": execution_time,
                 "memory_usage": self._get_memory_usage(),
                 "cpu_usage": self._get_cpu_usage()
             }
-            
+
             return TestResult(
                 test_id=test_case.test_id,
                 test_name=test_case.test_name,
@@ -580,11 +580,11 @@ class AdvancedTestHarness:
                 actual_output=actual_output,
                 performance_metrics=performance_metrics
             )
-            
+
         except Exception as e:
             end_time = datetime.now()
             execution_time = (end_time - start_time).total_seconds()
-            
+
             return TestResult(
                 test_id=test_case.test_id,
                 test_name=test_case.test_name,
@@ -616,7 +616,7 @@ class AdvancedTestHarness:
                 return self._fractal_signal_processing(test_case.input_data["signal_data"])
             else:
                 return None
-                
+
         except Exception as e:
             logger.error(f"Error executing test case {test_case.test_id}: {e}")
             raise
@@ -641,46 +641,46 @@ class AdvancedTestHarness:
     def run_all_tests(self) -> Dict[str, TestResult]:
         """Run all test cases."""
         results = {}
-        
+
         for test_id, test_case in self.test_cases.items():
             logger.info(f"Running test: {test_case.test_name}")
-            
+
             runner = self.test_runners.get(test_case.test_type, self._run_unit_test)
             result = runner(test_case)
             results[test_id] = result
-            
+
             logger.info(f"Test {test_id} completed with status: {result.status.value}")
-        
+
         return results
 
     def run_test_suite(self, test_type: TestType) -> Dict[str, TestResult]:
         """Run a specific test suite."""
         results = {}
-        
+
         for test_id, test_case in self.test_cases.items():
             if test_case.test_type == test_type:
                 logger.info(f"Running {test_type.value} test: {test_case.test_name}")
-                
+
                 runner = self.test_runners.get(test_type, self._run_unit_test)
                 result = runner(test_case)
                 results[test_id] = result
-        
+
         return results
 
     def get_test_statistics(self) -> Dict[str, Any]:
         """Get comprehensive test statistics."""
         total_tests = len(self.test_cases)
         total_results = len(self.test_results)
-        
+
         status_counts = defaultdict(int)
         type_counts = defaultdict(int)
-        
+
         for test_case in self.test_cases.values():
             type_counts[test_case.test_type.value] += 1
-        
+
         for result in self.test_results.values():
             status_counts[result.status.value] += 1
-        
+
         return {
             "total_test_cases": total_tests,
             "total_test_results": total_results,
@@ -695,11 +695,11 @@ class AdvancedTestHarness:
 def main() -> None:
     """Main function for testing and demonstration."""
     harness = AdvancedTestHarness("./test_harness_config.json")
-    
+
     # Run all tests
     results = harness.run_all_tests()
     safe_print(f"Test execution completed. Results: {len(results)} tests")
-    
+
     # Get statistics
     stats = harness.get_test_statistics()
     safe_print(f"Test Statistics: {stats}")

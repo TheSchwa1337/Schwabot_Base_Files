@@ -23,12 +23,12 @@ logger = logging.getLogger(__name__)
 
 class AnomalyFilterComprehensive:
     """Comprehensive anomaly detection and filtering system."""
-    
+
     def __init__(self):
         """Initialize the comprehensive anomaly filter."""
         self.detection_count = 0
         logger.info("AnomalyFilterComprehensive initialized")
-    
+
     def detect_anomalies(self, price, volume, volatility):
         """Detect anomalies using multiple methods."""
         self.detection_count += 1
@@ -38,7 +38,7 @@ class AnomalyFilterComprehensive:
             "anomaly_score": 0.0,
             "detection_method": "safe_fallback"
         }
-    
+
     def get_anomaly_summary(self):
         """Get summary of anomaly detection performance."""
         return {
@@ -57,4 +57,4 @@ if __name__ == "__main__":
 with open('anomaly_filter_comprehensive.py', 'w', encoding='utf-8') as f:
     f.write(content)
 
-safe_print("anomaly_filter_comprehensive.py created successfully!") 
+safe_print("anomaly_filter_comprehensive.py created successfully!")

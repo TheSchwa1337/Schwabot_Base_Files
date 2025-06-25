@@ -107,7 +107,7 @@ class APIServer:
 
     def _setup_routes(self):
         """Configures the API endpoints."""
-        
+
         @self.app.route("/api/status", methods=['GET'])
         def get_status():
             return jsonify(self.oracle.get_current_state())
@@ -127,13 +127,13 @@ async def main_async_part(bus: FaultBus):
     """Initializes and runs the async components of Schwabot."""
     logger.info("Async components starting. Publishing dummy data in 5s...")
     await asyncio.sleep(5)
-    
+
     await bus.publish("new_market_price", price=50000.1, timestamp=time.time(), symbol="BTC")
     await bus.publish("dlt_hash_confirmed", pattern_hash="abcde12345", timestamp=time.time())
-    
+
     proposal = TradeProposal("BTC", "BUY", 50000.1, 0.88, "abcde12345")
     await bus.publish("trade_proposal_ready", proposal=proposal)
-    
+
     logger.info("Dummy data published.")
 
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     import time
 
     logging.basicConfig(level=logging.INFO)
-    
+
     logger.warning("This script is a conceptual demonstration.")
     logger.warning("Running Flask in a separate process and managing async components requires a robust orchestrator.")
 
@@ -157,14 +157,14 @@ if __name__ == '__main__':
     oracle.start_listening()
 
     api_process = multiprocessing.Process(
-        target=run_api_server_process, 
+        target=run_api_server_process,
         args=(oracle, "0.0.0.0", 5000)
     )
     api_process.start()
-    
+
     logger.info(f"API Server process started with PID: {api_process.pid}.")
     logger.info("Starting async event loop for core logic in the main process...")
-    
+
     try:
         asyncio.run(main_async_part(bus))
         logger.info("Main async tasks complete. Server will remain up. Press Ctrl+C to exit.")
@@ -175,4 +175,4 @@ if __name__ == '__main__':
     finally:
         api_process.terminate()
         api_process.join()
-        logger.info("API Server process terminated.") 
+        logger.info("API Server process terminated.")

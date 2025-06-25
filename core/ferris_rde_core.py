@@ -140,52 +140,52 @@ class TradeWallData:
 class FerrisRDECore:
     """
     Ferris RDE Core - Recursive Dynamic Engine for Schwabot.
-    
+
     Implements the cyclical system measuring on the Ferris wheel,
     with 16-bit price mapping, hash sequencing, and VECU integration.
     """
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize Ferris RDE core."""
         self.config = config or {}
-        
+
         # Ferris wheel parameters
         self.wheel_radius = 1.0
         self.angular_velocity = 0.1  # radians per second
         self.current_angle = 0.0
         self.current_phase = FerrisPhase.VALLEY
-        
+
         # 16-bit price mapping parameters
         self.price_mapping_mode = PriceMappingMode.LOGARITHMIC
         self.btc_price_min = 10000.0
         self.btc_price_max = 100000.0
         self.trigger_threshold = 0.7
-        
+
         # Hash sequencing parameters
         self.hash_sequence_length = 16
         self.sequence_history: List[str] = []
-        
+
         # Matrix basket parameters
         self.basket_dimensions = [4, 4, 4]  # 3D tensor
         self.asset_list = ['BTC', 'ETH', 'XRP', 'USDC']
-        
+
         # Performance tracking
         self.total_cycles = 0
         self.successful_triggers = 0
         self.average_resonance = 0.0
-        
+
         # Memory for cyclical operation
         self.wheel_history: List[FerrisWheelData] = []
         self.price_history: List[PriceMappingData] = []
         self.basket_history: List[MatrixBasketData] = []
         self.wall_history: List[TradeWallData] = []
-        
+
         safe_safe_print("🎡 Ferris RDE Core initialized")
-    
+
     def update_ferris_wheel(self, delta_time: float = 0.1) -> FerrisWheelData:
         """
         Update Ferris wheel position and phase.
-        
+
         This implements the cyclical system measurement on the Ferris wheel,
         providing continuous rotation and phase tracking.
         """
@@ -193,10 +193,10 @@ class FerrisRDECore:
             # Update angular position
             self.current_angle += self.angular_velocity * delta_time
             self.current_angle = self.current_angle % (2 * math.pi)
-            
+
             # Calculate height (0-1 normalized)
             height = (unified_math.unified_math.sin(self.current_angle) + 1.0) / 2.0
-            
+
             # Determine phase based on angle
             angle_degrees = math.degrees(self.current_angle)
             if 0 <= angle_degrees < 90:
@@ -207,11 +207,11 @@ class FerrisRDECore:
                 phase = FerrisPhase.DESCENT
             else:
                 phase = FerrisPhase.VALLEY
-            
+
             # Calculate velocity and momentum
             velocity = self.angular_velocity
             momentum = velocity * self.wheel_radius * height
-            
+
             # Create wheel data
             wheel_data = FerrisWheelData(
                 phase=phase,
@@ -221,34 +221,34 @@ class FerrisRDECore:
                 momentum=momentum,
                 timestamp=datetime.now()
             )
-            
+
             # Update current phase
             self.current_phase = phase
-            
+
             # Store in history
             self.wheel_history.append(wheel_data)
             if len(self.wheel_history) > 1000:
                 self.wheel_history = self.wheel_history[-1000:]
-            
+
             safe_safe_print(f"✅ Ferris wheel: Phase = {phase.value}, Height = {height:.3f}")
-            
+
             return wheel_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Ferris wheel update failed: {safe_format_error(e, 'ferris_wheel_update')}")
             return self._create_fallback_wheel_data()
-    
+
     def map_btc_price_16bit(self, btc_price: float) -> PriceMappingData:
         """
         Map BTC price to 16-bit integer using hash sequencing.
-        
+
         This implements the 16-bit price mapping system that triggers
         internalized states and vectorized sequencing.
         """
         try:
             # Clamp price to valid range
             clamped_price = unified_math.max(self.btc_price_min, unified_math.min(self.btc_price_max, btc_price))
-            
+
             # Map price to 16-bit integer based on mode
             if self.price_mapping_mode == PriceMappingMode.LINEAR:
                 mapped_price = int(
@@ -266,14 +266,14 @@ class FerrisRDECore:
             else:  # HARMONIC
                 harmonic_price = unified_math.unified_math.sin(clamped_price / self.btc_price_max * math.pi)
                 mapped_price = int(((harmonic_price + 1.0) / 2.0) * 65535)
-            
+
             # Generate hash sequence
             hash_sequence = self._generate_hash_sequence(btc_price, mapped_price)
-            
+
             # Check trigger threshold
             trigger_value = mapped_price / 65535.0
             is_triggered = trigger_value >= self.trigger_threshold
-            
+
             # Create price mapping data
             price_data = PriceMappingData(
                 btc_price=btc_price,
@@ -284,51 +284,51 @@ class FerrisRDECore:
                 is_triggered=is_triggered,
                 timestamp=datetime.now()
             )
-            
+
             # Store in history
             self.price_history.append(price_data)
             if len(self.price_history) > 1000:
                 self.price_history = self.price_history[-1000:]
-            
+
             # Update sequence history
             self.sequence_history.append(hash_sequence)
             if len(self.sequence_history) > 100:
                 self.sequence_history = self.sequence_history[-100:]
-            
+
             safe_safe_print(f"✅ Price mapping: {btc_price:.2f} → {mapped_price} (16-bit), Triggered = {is_triggered}")
-            
+
             return price_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Price mapping failed: {safe_format_error(e, 'price_mapping')}")
             return self._create_fallback_price_data(btc_price)
-    
+
     def create_matrix_basket(self, market_data: Dict[str, Any]) -> MatrixBasketData:
         """
         Create matrix basket with tensor sequencing.
-        
+
         This implements the matrix basket and tensor sequencing system
         for multi-asset coordination and modulation.
         """
         try:
             # Generate basket ID
             basket_id = f"basket_{int(time.time())}_{len(self.basket_history)}"
-            
+
             # Calculate asset weights based on market data
             asset_weights = {}
             total_volume = 0.0
-            
+
             for asset in self.asset_list:
                 volume_key = f"volume_{asset.lower()}"
                 volume = market_data.get(volume_key, 1000.0)
                 asset_weights[asset] = volume
                 total_volume += volume
-            
+
             # Normalize weights
             if total_volume > 0:
                 for asset in asset_weights:
                     asset_weights[asset] /= total_volume
-            
+
             # Create sequence vector based on tensor dimensions
             sequence_vector = []
             for i in range(self.basket_dimensions[0]):
@@ -338,13 +338,13 @@ class FerrisRDECore:
                         sequence_value = (i + j + k) / sum(self.basket_dimensions)
                         sequence_value *= market_data.get('volatility', 0.5)
                         sequence_vector.append(sequence_value)
-            
+
             # Calculate modulation factor
             modulation_factor = self._calculate_modulation_factor(market_data)
-            
+
             # Calculate resonance score
             resonance_score = self._calculate_basket_resonance(asset_weights, sequence_vector)
-            
+
             # Create basket data
             basket_data = MatrixBasketData(
                 basket_id=basket_id,
@@ -355,20 +355,20 @@ class FerrisRDECore:
                 resonance_score=resonance_score,
                 timestamp=datetime.now()
             )
-            
+
             # Store in history
             self.basket_history.append(basket_data)
             if len(self.basket_history) > 1000:
                 self.basket_history = self.basket_history[-1000:]
-            
+
             safe_safe_print(f"✅ Matrix basket: {basket_id}, Resonance = {resonance_score:.3f}")
-            
+
             return basket_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Matrix basket creation failed: {safe_format_error(e, 'matrix_basket')}")
             return self._create_fallback_basket_data()
-    
+
     def formulate_trade_walls(
         self,
         market_data: Dict[str, Any],
@@ -376,7 +376,7 @@ class FerrisRDECore:
     ) -> Tuple[TradeWallData, TradeWallData]:
         """
         Formulate buy and sell walls with mathematical variants.
-        
+
         This implements the buy/sell wall formulation system with
         mathematical variants and live backtesting.
         """
@@ -384,37 +384,37 @@ class FerrisRDECore:
             # Calculate base price levels
             btc_price = market_data.get('btc_price', 50000.0)
             volatility = market_data.get('volatility', 0.5)
-            
+
             # Generate price levels (5 levels each)
             buy_levels = []
             sell_levels = []
-            
+
             for i in range(5):
                 # Buy levels (below current price)
                 buy_price = btc_price * (1.0 - (i + 1) * 0.01 * volatility)
                 buy_levels.append(buy_price)
-                
+
                 # Sell levels (above current price)
                 sell_price = btc_price * (1.0 + (i + 1) * 0.01 * volatility)
                 sell_levels.append(sell_price)
-            
+
             # Calculate volume levels based on basket weights
             base_volume = market_data.get('volume_btc', 1000.0)
             buy_volumes = [base_volume * (1.0 - i * 0.1) for i in range(5)]
             sell_volumes = [base_volume * (1.0 + i * 0.1) for i in range(5)]
-            
+
             # Calculate mathematical variants
             buy_variants = self._calculate_wall_variants(buy_levels, buy_volumes, 'buy')
             sell_variants = self._calculate_wall_variants(sell_levels, sell_volumes, 'sell')
-            
+
             # Calculate confidence scores
             buy_confidence = self._calculate_wall_confidence(buy_levels, buy_volumes, basket_data)
             sell_confidence = self._calculate_wall_confidence(sell_levels, sell_volumes, basket_data)
-            
+
             # Perform live backtesting
             buy_backtest = self._backtest_wall(buy_levels, buy_volumes, 'buy', market_data)
             sell_backtest = self._backtest_wall(sell_levels, sell_volumes, 'sell', market_data)
-            
+
             # Create wall data
             buy_wall = TradeWallData(
                 wall_type="buy",
@@ -425,7 +425,7 @@ class FerrisRDECore:
                 backtest_result=buy_backtest,
                 timestamp=datetime.now()
             )
-            
+
             sell_wall = TradeWallData(
                 wall_type="sell",
                 price_levels=sell_levels,
@@ -435,20 +435,20 @@ class FerrisRDECore:
                 backtest_result=sell_backtest,
                 timestamp=datetime.now()
             )
-            
+
             # Store in history
             self.wall_history.extend([buy_wall, sell_wall])
             if len(self.wall_history) > 1000:
                 self.wall_history = self.wall_history[-1000:]
-            
+
             safe_safe_print(f"✅ Trade walls: Buy confidence = {buy_confidence:.3f}, Sell confidence = {sell_confidence:.3f}")
-            
+
             return buy_wall, sell_wall
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Trade wall formulation failed: {safe_format_error(e, 'trade_walls')}")
             return self._create_fallback_wall_data("buy"), self._create_fallback_wall_data("sell")
-    
+
     def integrate_with_vecu(
         self,
         wheel_data: FerrisWheelData,
@@ -457,7 +457,7 @@ class FerrisRDECore:
     ) -> Dict[str, Any]:
         """
         Integrate Ferris RDE with VECU for complete cyclical operation.
-        
+
         This connects the Ferris wheel cyclical system with the VECU
         timing and injection systems for unified operation.
         """
@@ -465,33 +465,33 @@ class FerrisRDECore:
             if not VECU_AVAILABLE:
                 safe_safe_print("⚠️ VECU not available for integration")
                 return {}
-            
+
             # Calculate RPM equivalent from Ferris wheel
             rpm_equivalent = wheel_data.velocity * 60 / (2 * math.pi)
-            
+
             # Calculate entropy level from price mapping
             entropy_level = price_data.mapped_price / 65535.0
-            
+
             # Get VECU timing synchronization
             timing_data = vecu_core.vecu_timing_sync(
                 tick_id=int(time.time()),
                 rpm_equivalent=rpm_equivalent,
                 entropy_level=entropy_level
             )
-            
+
             # Calculate profit potential from basket resonance
             profit_potential = basket_data.resonance_score * 100.0
-            
+
             # Calculate market volatility from price data
             market_volatility = unified_math.abs(price_data.btc_price - 50000.0) / 50000.0
-            
+
             # Get PWM profit injection
             injection_data = vecu_core.pwm_profit_injection(
                 current_phase=wheel_data.height,
                 profit_potential=profit_potential,
                 market_volatility=market_volatility
             )
-            
+
             # Create integration result
             integration_result = {
                 'wheel_phase': wheel_data.phase.value,
@@ -502,55 +502,55 @@ class FerrisRDECore:
                 'pwm_voltage': injection_data.profit_voltage,
                 'integration_timestamp': datetime.now().isoformat()
             }
-            
+
             safe_safe_print(f"✅ VECU integration: Amplification = {timing_data.profit_amplification:.6f}")
-            
+
             return integration_result
-            
+
         except Exception as e:
             safe_safe_print(f"❌ VECU integration failed: {safe_format_error(e, 'vecu_integration')}")
             return {}
-    
+
     def _generate_hash_sequence(self, btc_price: float, mapped_price: int) -> str:
         """Generate hash sequence for price mapping."""
         try:
             import hashlib
-            
+
             # Create hash data
             hash_data = f"{btc_price}_{mapped_price}_{int(time.time())}"
-            
+
             # Generate hash
             hash_object = hashlib.sha256(hash_data.encode())
             hash_hex = hash_object.hexdigest()
-            
+
             # Return first 16 characters
             return hash_hex[:self.hash_sequence_length]
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Hash sequence generation failed: {safe_format_error(e, 'hash_sequence')}")
             return "fallback_hash_seq"
-    
+
     def _calculate_modulation_factor(self, market_data: Dict[str, Any]) -> float:
         """Calculate modulation factor for matrix basket."""
         try:
             volatility = market_data.get('volatility', 0.5)
             trend_strength = market_data.get('trend_strength', 0.0)
-            
+
             # Base modulation
             base_modulation = 0.5 + (volatility * 0.3)
-            
+
             # Trend modulation
             trend_modulation = unified_math.abs(trend_strength) * 0.2
-            
+
             # Combined modulation factor
             modulation_factor = base_modulation + trend_modulation
-            
+
             return unified_math.min(1.0, unified_math.max(0.0, modulation_factor))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Modulation factor calculation failed: {safe_format_error(e, 'modulation_factor')}")
             return 0.5
-    
+
     def _calculate_basket_resonance(
         self,
         asset_weights: Dict[str, float],
@@ -560,22 +560,22 @@ class FerrisRDECore:
         try:
             # Weight-based resonance
             weight_resonance = sum(asset_weights.values()) / len(asset_weights)
-            
+
             # Sequence-based resonance
             if sequence_vector:
                 sequence_resonance = sum(sequence_vector) / len(sequence_vector)
             else:
                 sequence_resonance = 0.5
-            
+
             # Combined resonance
             resonance_score = (weight_resonance + sequence_resonance) / 2.0
-            
+
             return unified_math.min(1.0, unified_math.max(0.0, resonance_score))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Basket resonance calculation failed: {safe_format_error(e, 'basket_resonance')}")
             return 0.5
-    
+
     def _calculate_wall_variants(
         self,
         price_levels: List[float],
@@ -585,35 +585,35 @@ class FerrisRDECore:
         """Calculate mathematical variants for trade walls."""
         try:
             variants = {}
-            
+
             # Price gradient
             if len(price_levels) > 1:
                 price_gradient = (price_levels[-1] - price_levels[0]) / len(price_levels)
                 variants['price_gradient'] = price_gradient
-            
+
             # Volume distribution
             if volume_levels:
                 volume_mean = sum(volume_levels) / len(volume_levels)
                 volume_std = unified_math.unified_math.sqrt(sum((v - volume_mean) ** 2 for v in volume_levels) / len(volume_levels))
                 variants['volume_mean'] = volume_mean
                 variants['volume_std'] = volume_std
-            
+
             # Wall strength
             total_volume = sum(volume_levels)
             variants['wall_strength'] = total_volume
-            
+
             # Type-specific variants
             if wall_type == "buy":
                 variants['support_level'] = unified_math.min(price_levels)
             else:
                 variants['resistance_level'] = unified_math.max(price_levels)
-            
+
             return variants
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Wall variants calculation failed: {safe_format_error(e, 'wall_variants')}")
             return {}
-    
+
     def _calculate_wall_confidence(
         self,
         price_levels: List[float],
@@ -625,26 +625,26 @@ class FerrisRDECore:
             # Volume confidence
             total_volume = sum(volume_levels)
             volume_confidence = unified_math.min(1.0, total_volume / 10000.0)
-            
+
             # Price spread confidence
             if len(price_levels) > 1:
                 price_spread = (unified_math.max(price_levels) - unified_math.min(price_levels)) / unified_math.min(price_levels)
                 spread_confidence = unified_math.max(0.0, 1.0 - price_spread)
             else:
                 spread_confidence = 0.5
-            
+
             # Basket resonance confidence
             resonance_confidence = basket_data.resonance_score
-            
+
             # Combined confidence
             confidence = (volume_confidence + spread_confidence + resonance_confidence) / 3.0
-            
+
             return unified_math.min(1.0, unified_math.max(0.0, confidence))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Wall confidence calculation failed: {safe_format_error(e, 'wall_confidence')}")
             return 0.5
-    
+
     def _backtest_wall(
         self,
         price_levels: List[float],
@@ -657,7 +657,7 @@ class FerrisRDECore:
             # Simulate wall performance
             btc_price = market_data.get('btc_price', 50000.0)
             volatility = market_data.get('volatility', 0.5)
-            
+
             # Calculate expected fill rate
             if wall_type == "buy":
                 # Buy wall: higher prices = better fill rate
@@ -665,17 +665,17 @@ class FerrisRDECore:
             else:
                 # Sell wall: lower prices = better fill rate
                 price_advantage = (unified_math.max(price_levels) - btc_price) / btc_price
-            
+
             # Adjust fill rate based on volatility
             fill_rate = unified_math.min(1.0, unified_math.max(0.0, price_advantage * 2.0 * (1.0 - volatility)))
-            
+
             # Calculate expected profit
             total_volume = sum(volume_levels)
             expected_profit = total_volume * fill_rate * 0.001  # 0.1% profit per trade
-            
+
             # Calculate risk score
             risk_score = 1.0 - fill_rate
-            
+
             backtest_result = {
                 'fill_rate': fill_rate,
                 'expected_profit': expected_profit,
@@ -684,13 +684,13 @@ class FerrisRDECore:
                 'price_levels_count': len(price_levels),
                 'backtest_timestamp': datetime.now().isoformat()
             }
-            
+
             return backtest_result
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Wall backtesting failed: {safe_format_error(e, 'wall_backtest')}")
             return {'error': str(e)}
-    
+
     def _create_fallback_wheel_data(self) -> FerrisWheelData:
         """Create fallback wheel data."""
         return FerrisWheelData(
@@ -701,7 +701,7 @@ class FerrisRDECore:
             momentum=0.0,
             timestamp=datetime.now()
         )
-    
+
     def _create_fallback_price_data(self, btc_price: float) -> PriceMappingData:
         """Create fallback price data."""
         return PriceMappingData(
@@ -713,7 +713,7 @@ class FerrisRDECore:
             is_triggered=False,
             timestamp=datetime.now()
         )
-    
+
     def _create_fallback_basket_data(self) -> MatrixBasketData:
         """Create fallback basket data."""
         return MatrixBasketData(
@@ -725,7 +725,7 @@ class FerrisRDECore:
             resonance_score=0.5,
             timestamp=datetime.now()
         )
-    
+
     def _create_fallback_wall_data(self, wall_type: str) -> TradeWallData:
         """Create fallback wall data."""
         return TradeWallData(
@@ -737,7 +737,7 @@ class FerrisRDECore:
             backtest_result={'error': 'fallback'},
             timestamp=datetime.now()
         )
-    
+
     def get_ferris_statistics(self) -> Dict[str, Any]:
         """Get Ferris RDE statistics."""
         return {
@@ -752,7 +752,7 @@ class FerrisRDECore:
             'wall_history_size': len(self.wall_history),
             'vecu_available': VECU_AVAILABLE
         }
-    
+
     def clear_history(self) -> None:
         """Clear Ferris RDE history."""
         self.wheel_history.clear()
@@ -807,7 +807,7 @@ def get_ferris_stats() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Test Ferris RDE core
     safe_print("🧪 Testing Ferris RDE Core...")
-    
+
     # Test market data
     test_market_data = {
         'btc_price': 50000.0,
@@ -818,28 +818,28 @@ if __name__ == "__main__":
         'volatility': 0.3,
         'trend_strength': 0.2
     }
-    
+
     # Update Ferris wheel
     wheel_data = update_ferris_wheel()
     safe_print(f"✅ Ferris wheel: Phase = {wheel_data.phase.value}, Height = {wheel_data.height:.3f}")
-    
+
     # Map BTC price
     price_data = map_btc_price_16bit(test_market_data['btc_price'])
     safe_print(f"✅ Price mapping: {price_data.btc_price:.2f} → {price_data.mapped_price} (16-bit)")
-    
+
     # Create matrix basket
     basket_data = create_matrix_basket(test_market_data)
     safe_print(f"✅ Matrix basket: {basket_data.basket_id}, Resonance = {basket_data.resonance_score:.3f}")
-    
+
     # Formulate trade walls
     buy_wall, sell_wall = formulate_trade_walls(test_market_data, basket_data)
     safe_print(f"✅ Trade walls: Buy confidence = {buy_wall.confidence_score:.3f}, Sell confidence = {sell_wall.confidence_score:.3f}")
-    
+
     # Integrate with VECU
     integration_result = integrate_with_vecu(wheel_data, price_data, basket_data)
     if integration_result:
         safe_print(f"✅ VECU integration: Amplification = {integration_result.get('vecu_amplification', 0.0):.6f}")
-    
+
     # Get statistics
     stats = get_ferris_stats()
-    safe_print(f"✅ Ferris RDE Statistics: {stats}") 
+    safe_print(f"✅ Ferris RDE Statistics: {stats}")

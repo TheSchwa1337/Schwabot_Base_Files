@@ -66,43 +66,43 @@ class HardwareProfile:
     device_name: str
     hardware_tier: HardwareTier
     compute_capability: ComputeCapability
-    
+
     # CPU specifications
     cpu_cores: int
     cpu_frequency: float
     cpu_architecture: str
     cpu_cache: int
-    
+
     # Memory specifications
     ram_total: int
     ram_available: int
     ram_speed: Optional[float]
-    
+
     # GPU specifications (if available)
     gpu_name: Optional[str]
     gpu_memory: Optional[int]
     gpu_cores: Optional[int]
-    
+
     # Storage specifications
     storage_total: int
     storage_available: int
     storage_type: str
-    
+
     # Network specifications
     network_speed: Optional[float]
     network_latency: Optional[float]
-    
+
     # Performance scores
     cpu_score: float
     gpu_score: float
     memory_score: float
     overall_score: float
-    
+
     # Profit allocation capabilities
     max_concurrent_trades: int
     profit_calculation_rate: float
     tensor_processing_capacity: float
-    
+
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -122,25 +122,25 @@ class NetworkRegistration:
 class HardwareSelfIdentifier:
     """
     Hardware Self-Identifier for Schwabot UROS v1.0.
-    
+
     Automatically detects hardware capabilities and registers with the Schwabot network
     to enable universal deployment across any hardware configuration.
     """
-    
+
     def __init__(self, schwabot_server_url: str = "http://localhost:5000"):
         self.server_url = schwabot_server_url
         self.device_id = self._generate_device_id()
         self.hardware_profile: Optional[HardwareProfile] = None
         self.network_registration: Optional[NetworkRegistration] = None
-        
+
         # Performance monitoring
         self.performance_history: List[Dict[str, Any]] = []
         self.capability_adjustments: List[Dict[str, Any]] = []
-        
+
         # Threading for continuous monitoring
         self.monitoring_thread = None
         self.monitoring_running = False
-        
+
         logger.info("Hardware Self-Identifier initialized")
 
     def _generate_device_id(self) -> str:
@@ -150,13 +150,13 @@ class HardwareSelfIdentifier:
             cpu_info = platform.processor()
             machine_id = platform.machine()
             node_name = platform.node()
-            
+
             # Create unique hash
             device_string = f"{cpu_info}_{machine_id}_{node_name}"
             device_hash = hashlib.sha256(device_string.encode()).hexdigest()[:16]
-            
+
             return f"device_{device_hash}"
-            
+
         except Exception as e:
             logger.error(f"Error generating device ID: {e}")
             return f"device_{int(time.time())}"
@@ -164,7 +164,7 @@ class HardwareSelfIdentifier:
     def detect_hardware_capabilities(self) -> HardwareProfile:
         """
         Detect hardware capabilities and create profile.
-        
+
         Returns:
         --------
         HardwareProfile
@@ -176,21 +176,21 @@ class HardwareSelfIdentifier:
             cpu_freq = psutil.cpu_freq()
             cpu_frequency = cpu_freq.current if cpu_freq else 0.0
             cpu_architecture = platform.machine()
-            
+
             # Memory detection
             memory = psutil.virtual_memory()
             ram_total = memory.total
             ram_available = memory.available
-            
+
             # GPU detection (basic)
             gpu_name = None
             gpu_memory = None
             gpu_cores = None
-            
+
             try:
                 # Try to detect NVIDIA GPU
                 import subprocess
-                result = subprocess.run(['nvidia-smi', '--query-gpu=name,memory.total', '--format=csv,noheader,nounits'], 
+                result = subprocess.run(['nvidia-smi', '--query-gpu=name,memory.total', '--format=csv,noheader,nounits'],
                                       capture_output=True, text=True)
                 if result.returncode == 0:
                     gpu_info = result.stdout.strip().split(',')
@@ -199,29 +199,29 @@ class HardwareSelfIdentifier:
                         gpu_memory = int(gpu_info[1].strip()) * 1024  # Convert to MB
             except:
                 pass
-            
+
             # Storage detection
             disk = psutil.disk_usage('/')
             storage_total = disk.total
             storage_available = disk.free
-            
+
             # Determine hardware tier
             hardware_tier = self._determine_hardware_tier(cpu_cores, cpu_frequency, ram_total, gpu_memory)
-            
+
             # Determine compute capability
             compute_capability = self._determine_compute_capability(cpu_cores, gpu_memory)
-            
+
             # Calculate performance scores
             cpu_score = self._calculate_cpu_score(cpu_cores, cpu_frequency)
             gpu_score = self._calculate_gpu_score(gpu_memory, gpu_name)
             memory_score = self._calculate_memory_score(ram_total, ram_available)
             overall_score = (cpu_score + gpu_score + memory_score) / 3
-            
+
             # Calculate profit allocation capabilities
             max_concurrent_trades = self._calculate_max_trades(overall_score)
             profit_calculation_rate = self._calculate_profit_rate(overall_score)
             tensor_processing_capacity = self._calculate_tensor_capacity(overall_score)
-            
+
             # Create hardware profile
             profile = HardwareProfile(
                 device_id=self.device_id,
@@ -252,12 +252,12 @@ class HardwareSelfIdentifier:
                 tensor_processing_capacity=tensor_processing_capacity,
                 timestamp=datetime.now()
             )
-            
+
             self.hardware_profile = profile
             logger.info(f"Hardware profile created: {hardware_tier.value} tier, {compute_capability.value}")
-            
+
             return profile
-            
+
         except Exception as e:
             logger.error(f"Error detecting hardware capabilities: {e}")
             raise
@@ -270,9 +270,9 @@ class HardwareSelfIdentifier:
             freq_score = unified_math.min(cpu_freq / 3000.0, 1.0)  # Normalize to 3GHz
             ram_score = unified_math.min(ram_total / (8 * 1024**3), 1.0)  # Normalize to 8GB
             gpu_score = min((gpu_memory or 0) / (4 * 1024), 1.0)  # Normalize to 4GB
-            
+
             composite_score = (cpu_score + freq_score + ram_score + gpu_score) / 4
-            
+
             if composite_score < 0.2:
                 return HardwareTier.MINIMAL
             elif composite_score < 0.4:
@@ -283,7 +283,7 @@ class HardwareSelfIdentifier:
                 return HardwareTier.PERFORMANCE
             else:
                 return HardwareTier.ENTERPRISE
-                
+
         except Exception as e:
             logger.error(f"Error determining hardware tier: {e}")
             return HardwareTier.BASIC
@@ -301,7 +301,7 @@ class HardwareSelfIdentifier:
                 return ComputeCapability.HYBRID
             else:
                 return ComputeCapability.GPU_ENTERPRISE
-                
+
         except Exception as e:
             logger.error(f"Error determining compute capability: {e}")
             return ComputeCapability.CPU_ONLY
@@ -312,10 +312,10 @@ class HardwareSelfIdentifier:
             # Normalize cores and frequency
             core_score = unified_math.min(cpu_cores / 16.0, 1.0)  # Normalize to 16 cores
             freq_score = unified_math.min(cpu_frequency / 4000.0, 1.0)  # Normalize to 4GHz
-            
+
             # Weighted average
             return (core_score * 0.6) + (freq_score * 0.4)
-            
+
         except Exception as e:
             logger.error(f"Error calculating CPU score: {e}")
             return 0.5
@@ -325,10 +325,10 @@ class HardwareSelfIdentifier:
         try:
             if gpu_memory is None:
                 return 0.0
-            
+
             # Base score from memory
             memory_score = unified_math.min(gpu_memory / (8 * 1024), 1.0)  # Normalize to 8GB
-            
+
             # Adjust for known GPU models
             if gpu_name:
                 gpu_name_lower = gpu_name.lower()
@@ -336,9 +336,9 @@ class HardwareSelfIdentifier:
                     memory_score *= 1.2  # Boost for gaming GPUs
                 elif "quadro" in gpu_name_lower or "tesla" in gpu_name_lower:
                     memory_score *= 1.5  # Boost for workstation GPUs
-            
+
             return unified_math.min(memory_score, 1.0)
-            
+
         except Exception as e:
             logger.error(f"Error calculating GPU score: {e}")
             return 0.0
@@ -348,12 +348,12 @@ class HardwareSelfIdentifier:
         try:
             # Base score from total RAM
             total_score = unified_math.min(ram_total / (32 * 1024**3), 1.0)  # Normalize to 32GB
-            
+
             # Availability factor
             availability_factor = ram_available / ram_total if ram_total > 0 else 0.0
-            
+
             return total_score * availability_factor
-            
+
         except Exception as e:
             logger.error(f"Error calculating memory score: {e}")
             return 0.5
@@ -363,7 +363,7 @@ class HardwareSelfIdentifier:
         try:
             # Scale from 1 to 100 trades
             return unified_math.max(1, int(overall_score * 100))
-            
+
         except Exception as e:
             logger.error(f"Error calculating max trades: {e}")
             return 10
@@ -373,7 +373,7 @@ class HardwareSelfIdentifier:
         try:
             # Scale from 0.1 to 10.0 calculations per second
             return 0.1 + (overall_score * 9.9)
-            
+
         except Exception as e:
             logger.error(f"Error calculating profit rate: {e}")
             return 1.0
@@ -383,7 +383,7 @@ class HardwareSelfIdentifier:
         try:
             # Scale from 0.1 to 5.0 tensor operations per second
             return 0.1 + (overall_score * 4.9)
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor capacity: {e}")
             return 1.0
@@ -391,12 +391,12 @@ class HardwareSelfIdentifier:
     def register_with_network(self, schwabot_api_key: str = None) -> NetworkRegistration:
         """
         Register device with Schwabot network.
-        
+
         Parameters:
         -----------
         schwabot_api_key : str, optional
             API key for network registration
-            
+
         Returns:
         --------
         NetworkRegistration
@@ -406,7 +406,7 @@ class HardwareSelfIdentifier:
             # Ensure hardware profile exists
             if not self.hardware_profile:
                 self.detect_hardware_capabilities()
-            
+
             # Create registration payload
             registration_data = {
                 "device_id": self.device_id,
@@ -420,17 +420,17 @@ class HardwareSelfIdentifier:
                 },
                 "timestamp": datetime.now().isoformat()
             }
-            
+
             # Simulate network registration (replace with actual API call)
             registration_id = f"reg_{int(time.time() * 1000)}"
             assigned_node_id = f"node_{self.device_id}"
-            
+
             # Calculate profit allocation based on hardware tier
             profit_allocation = self._calculate_profit_allocation(self.hardware_profile.hardware_tier)
-            
+
             # Calculate sync interval based on hardware capability
             sync_interval = self._calculate_sync_interval(self.hardware_profile.compute_capability)
-            
+
             # Create registration result
             registration = NetworkRegistration(
                 registration_id=registration_id,
@@ -441,12 +441,12 @@ class HardwareSelfIdentifier:
                 sync_interval=sync_interval,
                 timestamp=datetime.now()
             )
-            
+
             self.network_registration = registration
             logger.info(f"Device registered with network: {assigned_node_id}")
-            
+
             return registration
-            
+
         except Exception as e:
             logger.error(f"Error registering with network: {e}")
             return NetworkRegistration(
@@ -470,7 +470,7 @@ class HardwareSelfIdentifier:
                 HardwareTier.ENTERPRISE: 1.0
             }
             return allocation_map.get(hardware_tier, 0.25)
-            
+
         except Exception as e:
             logger.error(f"Error calculating profit allocation: {e}")
             return 0.25
@@ -486,7 +486,7 @@ class HardwareSelfIdentifier:
                 ComputeCapability.HYBRID: 10.0         # 10 seconds
             }
             return interval_map.get(compute_capability, 30.0)
-            
+
         except Exception as e:
             logger.error(f"Error calculating sync interval: {e}")
             return 30.0
@@ -498,7 +498,7 @@ class HardwareSelfIdentifier:
             self.monitoring_thread = threading.Thread(target=self._monitor_performance, daemon=True)
             self.monitoring_thread.start()
             logger.info("Performance monitoring started")
-            
+
         except Exception as e:
             logger.error(f"Error starting performance monitoring: {e}")
 
@@ -510,7 +510,7 @@ class HardwareSelfIdentifier:
                 cpu_percent = psutil.cpu_percent(interval=1)
                 memory = psutil.virtual_memory()
                 disk = psutil.disk_usage('/')
-                
+
                 # Create performance snapshot
                 snapshot = {
                     "timestamp": datetime.now(),
@@ -519,19 +519,19 @@ class HardwareSelfIdentifier:
                     "disk_usage": (disk.used / disk.total) * 100,
                     "available_memory": memory.available
                 }
-                
+
                 self.performance_history.append(snapshot)
-                
+
                 # Keep only last 1000 snapshots
                 if len(self.performance_history) > 1000:
                     self.performance_history.pop(0)
-                
+
                 # Check for capability adjustments
                 self._check_capability_adjustments(snapshot)
-                
+
                 # Sleep for monitoring interval
                 time.sleep(30)  # Monitor every 30 seconds
-                
+
             except Exception as e:
                 logger.error(f"Error in performance monitoring: {e}")
                 time.sleep(60)  # Wait longer on error
@@ -550,7 +550,7 @@ class HardwareSelfIdentifier:
                 }
                 self.capability_adjustments.append(adjustment)
                 logger.warning("High resource usage detected - throttling capabilities")
-            
+
             # Check for low resource usage (can increase capabilities)
             elif snapshot["cpu_usage"] < 30 and snapshot["memory_usage"] < 50:
                 adjustment = {
@@ -562,14 +562,14 @@ class HardwareSelfIdentifier:
                 }
                 self.capability_adjustments.append(adjustment)
                 logger.info("Low resource usage detected - boosting capabilities")
-                
+
         except Exception as e:
             logger.error(f"Error checking capability adjustments: {e}")
 
     def get_performance_summary(self) -> Dict[str, Any]:
         """
         Get performance summary.
-        
+
         Returns:
         --------
         Dict[str, Any]
@@ -578,17 +578,17 @@ class HardwareSelfIdentifier:
         try:
             if not self.performance_history:
                 return {}
-            
+
             # Calculate averages
             cpu_usage_avg = unified_math.mean([s["cpu_usage"] for s in self.performance_history])
             memory_usage_avg = unified_math.mean([s["memory_usage"] for s in self.performance_history])
             disk_usage_avg = unified_math.mean([s["disk_usage"] for s in self.performance_history])
-            
+
             # Get recent trends
             recent_snapshots = self.performance_history[-10:]  # Last 10 snapshots
             cpu_trend = unified_math.mean([s["cpu_usage"] for s in recent_snapshots])
             memory_trend = unified_math.mean([s["memory_usage"] for s in recent_snapshots])
-            
+
             return {
                 "hardware_profile": {
                     "device_id": self.device_id,
@@ -612,7 +612,7 @@ class HardwareSelfIdentifier:
                 "capability_adjustments": len(self.capability_adjustments),
                 "monitoring_active": self.monitoring_running
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting performance summary: {e}")
             return {}
@@ -620,7 +620,7 @@ class HardwareSelfIdentifier:
     def export_hardware_data(self, output_path: str = "hardware_profile.json") -> None:
         """
         Export hardware profile and performance data.
-        
+
         Parameters:
         -----------
         output_path : str
@@ -654,12 +654,12 @@ class HardwareSelfIdentifier:
                 } if self.network_registration else None,
                 "performance_summary": self.get_performance_summary()
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(data, f, indent=2)
-            
+
             logger.info(f"Hardware data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting hardware data: {e}")
 
@@ -668,7 +668,7 @@ def main():
     try:
         # Initialize hardware self-identifier
         identifier = HardwareSelfIdentifier()
-        
+
         # Detect hardware capabilities
         profile = identifier.detect_hardware_capabilities()
         safe_print(f"Hardware Profile:")
@@ -681,7 +681,7 @@ def main():
         safe_print(f"  Overall Score: {profile.overall_score:.3f}")
         safe_print(f"  Max Trades: {profile.max_concurrent_trades}")
         safe_print(f"  Profit Rate: {profile.profit_calculation_rate:.1f}/sec")
-        
+
         # Register with network
         registration = identifier.register_with_network()
         safe_print(f"\nNetwork Registration:")
@@ -689,25 +689,25 @@ def main():
         safe_print(f"  Node ID: {registration.assigned_node_id}")
         safe_print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
         safe_print(f"  Sync Interval: {registration.sync_interval}s")
-        
+
         # Start performance monitoring
         identifier.start_performance_monitoring()
-        
+
         # Wait for some monitoring data
         time.sleep(60)
-        
+
         # Get performance summary
         summary = identifier.get_performance_summary()
         safe_print(f"\nPerformance Summary:")
         safe_print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
         safe_print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
         safe_print(f"  Adjustments: {summary.get('capability_adjustments', 0)}")
-        
+
         # Export data
         identifier.export_hardware_data()
-        
+
     except Exception as e:
         logger.error(f"Error in main: {e}")
 
 if __name__ == "__main__":
-    main() 
+    main()

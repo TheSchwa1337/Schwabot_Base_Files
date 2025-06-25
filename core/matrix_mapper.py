@@ -107,7 +107,7 @@ class ProfitAllocation:
 class MatrixMapper:
     """
     Matrix Mapper for basket ID registry and hash phase decoders.
-    
+
     Mathematical Foundation:
     - Hash Decoding: basket_id = int(hash[4:8], 16) % 1024
     - Bit Resolution: phase = int(hash[0:n], 16) % 2^n where n = bit_depth
@@ -115,16 +115,16 @@ class MatrixMapper:
     - Basket Matching: similarity = Σᵢ |h₁ᵢ - h₂ᵢ| / len(hash)
     - Profit Routing: P = Σᵢ wᵢ * Tᵢ * Rᵢ where R is resonance score
     """
-    
+
     def __init__(self, config_path: str = "./config/matrix_mapper_config.json"):
         self.config_path = config_path
-        
+
         # Hash registry
         self.hash_registry: Dict[str, HashBasketMapping] = {}
         self.basket_registry: Dict[str, MatrixBasket] = {}
         self.tensor_routes: Dict[str, TensorRoute] = {}
         self.profit_allocations: Dict[str, ProfitAllocation] = {}
-        
+
         # Bit phase controllers
         self.bit_phase_controllers: Dict[BitPhase, Dict[str, Any]] = {
             BitPhase.FOUR_BIT: {
@@ -146,15 +146,15 @@ class MatrixMapper:
                 "tensor_dimensions": [8, 8, 8]
             }
         }
-        
+
         # Performance tracking
         self.performance_history: List[Dict[str, Any]] = []
         self.hash_echo_triggers: List[Dict[str, Any]] = []
-        
+
         # Integration with other components
         self.dlt_waveform_engine = None
         self.profit_cycle_allocator = None
-        
+
         # Load configuration
         self._load_configuration()
         logger.info("Matrix Mapper initialized with hash registry integration")
@@ -185,9 +185,9 @@ class MatrixMapper:
                     "resonance_threshold": 0.5
                 }
             }
-            
+
             logger.info("Matrix mapper configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -204,13 +204,13 @@ class MatrixMapper:
     def match_basket_from_hash(self, hash_str: str) -> int:
         """
         Match basket from hash string.
-        
+
         Mathematical Formula:
         basket_id = int(hash_str[4:8], 16) % 1024
-        
+
         Args:
             hash_str: Hash string to decode
-            
+
         Returns:
             int: Basket ID
         """
@@ -218,16 +218,16 @@ class MatrixMapper:
             if len(hash_str) < 8:
                 logger.warning(f"Hash string too short: {len(hash_str)}")
                 return 0
-            
+
             # Extract 4 characters starting from position 4 (indices 4-7)
             hash_segment = hash_str[4:8]
-            
+
             # Convert to integer and apply modulo
             basket_id = int(hash_segment, 16) % 1024
-            
+
             logger.debug(f"Matched basket ID: {basket_id} from hash segment: {hash_segment}")
             return basket_id
-            
+
         except Exception as e:
             logger.error(f"Error matching basket from hash: {e}")
             return 0
@@ -235,10 +235,10 @@ class MatrixMapper:
     def decode_hash_to_basket(self, hash_value: str, tick: int, price: float) -> Optional[str]:
         """
         Decode SHA-256 hash to matrix basket ID.
-        
+
         Mathematical Formula:
         basket_id = int(hash[4:8], 16) % 1024
-        
+
         Parameters:
         -----------
         hash_value : str
@@ -247,7 +247,7 @@ class MatrixMapper:
             Current tick number
         price : float
             Current price
-            
+
         Returns:
         --------
         Optional[str]
@@ -257,20 +257,20 @@ class MatrixMapper:
             if len(hash_value) < 8:
                 logger.warning(f"Hash too short: {hash_value}")
                 return None
-            
+
             # Extract basket ID from hash using SHA-256 decoding
             basket_id_hex = hash_value[4:8]
             basket_id = int(basket_id_hex, 16) % 1024
-            
+
             # Check if basket exists in registry
             basket_key = f"basket_{basket_id}"
             if basket_key in self.basket_registry:
                 logger.debug(f"Hash {hash_value[:8]}... decoded to basket {basket_key}")
                 return basket_key
-            
+
             # Create new basket if not exists
             return self._create_basket_from_hash(hash_value, basket_id, tick, price)
-            
+
         except Exception as e:
             logger.error(f"Error decoding hash to basket: {e}")
             return None
@@ -279,28 +279,28 @@ class MatrixMapper:
         """Create new basket from hash value."""
         try:
             basket_key = f"basket_{basket_id}"
-            
+
             # Determine bit phase from hash
             bit_phase = self._determine_bit_phase_from_hash(hash_value)
-            
+
             # Determine basket type from hash
             basket_type = self._determine_basket_type_from_hash(hash_value)
-            
+
             # Calculate asset weights from hash
             asset_weights = self._calculate_asset_weights_from_hash(hash_value)
-            
+
             # Get tensor dimensions for bit phase
             tensor_dimensions = self.bit_phase_controllers[bit_phase]["tensor_dimensions"]
-            
+
             # Generate sequence vector
             sequence_vector = self._generate_sequence_vector(tensor_dimensions, hash_value)
-            
+
             # Calculate modulation factor
             modulation_factor = self._calculate_modulation_factor(hash_value, price)
-            
+
             # Calculate resonance score
             resonance_score = self._calculate_resonance_score(asset_weights, sequence_vector)
-            
+
             # Create basket
             basket = MatrixBasket(
                 basket_id=basket_key,
@@ -320,10 +320,10 @@ class MatrixMapper:
                     'total_profit': 0.0
                 }
             )
-            
+
             # Store basket
             self.basket_registry[basket_key] = basket
-            
+
             # Create hash mapping
             hash_mapping = HashBasketMapping(
                 hash_id=f"hash_{len(self.hash_registry)}",
@@ -335,13 +335,13 @@ class MatrixMapper:
                 resonance_score=resonance_score,
                 timestamp=datetime.now()
             )
-            
+
             # Store hash mapping
             self.hash_registry[hash_value] = hash_mapping
-            
+
             logger.info(f"Created basket {basket_key} from hash {hash_value[:8]}...")
             return basket_key
-            
+
         except Exception as e:
             logger.error(f"Error creating basket from hash: {e}")
             return None
@@ -351,14 +351,14 @@ class MatrixMapper:
         try:
             # Use first byte to determine bit phase
             first_byte = int(hash_value[0:2], 16)
-            
+
             if first_byte < 85:  # 0-84
                 return BitPhase.FOUR_BIT
             elif first_byte < 170:  # 85-169
                 return BitPhase.EIGHT_BIT
             else:  # 170-255
                 return BitPhase.FORTY_TWO_BIT
-                
+
         except Exception as e:
             logger.warning(f"Error determining bit phase from hash: {e}")
             return BitPhase.EIGHT_BIT
@@ -368,7 +368,7 @@ class MatrixMapper:
         try:
             # Use second byte to determine basket type
             second_byte = int(hash_value[2:4], 16)
-            
+
             if second_byte < 51:  # 0-50
                 return BasketType.CONSERVATIVE
             elif second_byte < 102:  # 51-101
@@ -379,7 +379,7 @@ class MatrixMapper:
                 return BasketType.QUANTUM
             else:  # 204-255
                 return BasketType.FRACTAL
-                
+
         except Exception as e:
             logger.warning(f"Error determining basket type from hash: {e}")
             return BasketType.BALANCED
@@ -389,13 +389,13 @@ class MatrixMapper:
         try:
             # Use bytes 8-16 for asset weights
             weight_bytes = hash_value[8:16]
-            
+
             # Define assets
             assets = ['BTC', 'ETH', 'ADA', 'DOT', 'SOL', 'MATIC', 'LINK', 'UNI']
-            
+
             weights = {}
             total_weight = 0.0
-            
+
             for i, asset in enumerate(assets):
                 if i * 2 < len(weight_bytes):
                     # Extract weight from hash bytes
@@ -403,7 +403,7 @@ class MatrixMapper:
                     weight = weight_byte / 255.0  # Normalize to [0, 1]
                     weights[asset] = weight
                     total_weight += weight
-            
+
             # Normalize weights
             if total_weight > 0:
                 for asset in weights:
@@ -412,9 +412,9 @@ class MatrixMapper:
                 # Equal weights if no valid weights found
                 for asset in assets:
                     weights[asset] = 1.0 / len(assets)
-            
+
             return weights
-            
+
         except Exception as e:
             logger.warning(f"Error calculating asset weights from hash: {e}")
             return {'BTC': 1.0}
@@ -424,10 +424,10 @@ class MatrixMapper:
         try:
             total_elements = np.prod(tensor_dimensions)
             sequence = []
-            
+
             # Use bytes 16-32 for sequence generation
             sequence_bytes = hash_value[16:32]
-            
+
             for i in range(total_elements):
                 if i * 2 < len(sequence_bytes):
                     # Extract value from hash bytes
@@ -438,9 +438,9 @@ class MatrixMapper:
                     # Use sine wave for remaining elements
                     value = np.unified_math.sin(2 * np.pi * i / total_elements)
                     sequence.append(value)
-            
+
             return sequence
-            
+
         except Exception as e:
             logger.warning(f"Error generating sequence vector: {e}")
             return [0.5] * np.prod(tensor_dimensions)
@@ -450,16 +450,16 @@ class MatrixMapper:
         try:
             # Use bytes 32-40 for modulation
             mod_bytes = hash_value[32:40]
-            
+
             # Calculate base modulation from hash
             base_mod = sum(int(mod_bytes[i:i+2], 16) for i in range(0, len(mod_bytes), 2)) / (len(mod_bytes) * 255.0)
-            
+
             # Adjust based on price volatility (simplified)
             price_factor = unified_math.min(1.0, unified_math.abs(price - 50000) / 50000)  # Assuming BTC price around 50k
-            
+
             modulation = (base_mod * 0.7 + price_factor * 0.3)
             return unified_math.max(0.1, unified_math.min(1.0, modulation))
-            
+
         except Exception as e:
             logger.warning(f"Error calculating modulation factor: {e}")
             return 0.5
@@ -470,14 +470,14 @@ class MatrixMapper:
             # Calculate weight variance
             weight_values = list(asset_weights.values())
             weight_variance = unified_math.unified_math.var(weight_values) if len(weight_values) > 1 else 0.0
-            
+
             # Calculate sequence variance
             sequence_variance = unified_math.unified_math.var(sequence_vector) if sequence_vector else 0.0
-            
+
             # Combine variances for resonance score
             resonance = (weight_variance + sequence_variance) / 2.0
             return unified_math.min(1.0, resonance)
-            
+
         except Exception as e:
             logger.warning(f"Error calculating resonance score: {e}")
             return 0.5
@@ -485,14 +485,14 @@ class MatrixMapper:
     def resolve_bit_phase(self, hash_str: str, mode: str = "16bit") -> int:
         """
         Resolve bit phase from hash string with SHA-256 decoding.
-        
+
         Parameters:
         -----------
         hash_str : str
             Hash string to decode
         mode : str
             Bit resolution mode ("4bit", "8bit", "16bit", "42bit")
-            
+
         Returns:
         --------
         int
@@ -510,7 +510,7 @@ class MatrixMapper:
             else:
                 logger.warning(f"Unknown bit phase mode: {mode}")
                 return 0
-                
+
         except (ValueError, IndexError) as e:
             logger.warning(f"Error resolving bit phase: {e}")
             return 0
@@ -518,10 +518,10 @@ class MatrixMapper:
     def calculate_tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
         """
         Calculate tensor score for profit allocation.
-        
+
         Mathematical Formula:
         T = (current_price - entry_price) / entry_price * (phase + 1)
-        
+
         Parameters:
         -----------
         entry_price : float
@@ -530,7 +530,7 @@ class MatrixMapper:
             Current market price
         phase : int
             Bit phase value
-            
+
         Returns:
         --------
         float
@@ -539,18 +539,18 @@ class MatrixMapper:
         try:
             if entry_price <= 0:
                 return 0.0
-            
+
             # Calculate price delta
             delta = (current_price - entry_price) / entry_price
-            
+
             # Apply phase modulation
             tensor_score = delta * (phase + 1)
-            
+
             # Normalize to reasonable range
             tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
-            
+
             return round(tensor_score, 4)
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
             return 0.0
@@ -558,7 +558,7 @@ class MatrixMapper:
     def create_tensor_route(self, basket_id: str, profit_amount: float, bit_phase: BitPhase) -> TensorRoute:
         """
         Create tensor route for profit allocation.
-        
+
         Parameters:
         -----------
         basket_id : str
@@ -567,7 +567,7 @@ class MatrixMapper:
             Profit amount to allocate
         bit_phase : BitPhase
             Bit resolution phase
-            
+
         Returns:
         --------
         TensorRoute
@@ -577,13 +577,13 @@ class MatrixMapper:
             basket = self.basket_registry.get(basket_id)
             if not basket:
                 raise ValueError(f"Basket {basket_id} not found")
-            
+
             # Calculate tensor score
             tensor_score = self._calculate_basket_tensor_score(basket, profit_amount)
-            
+
             # Calculate allocation weights
             allocation_weights = self._calculate_allocation_weights(basket, profit_amount, bit_phase)
-            
+
             # Create route
             route_id = f"route_{int(time.time())}_{len(self.tensor_routes)}"
             route = TensorRoute(
@@ -594,16 +594,16 @@ class MatrixMapper:
                 bit_phase=bit_phase,
                 timestamp=datetime.now()
             )
-            
+
             # Store route
             self.tensor_routes[route_id] = route
-            
+
             # Update basket performance
             self._update_basket_performance(basket_id, tensor_score, profit_amount)
-            
+
             logger.info(f"Created tensor route {route_id} for basket {basket_id}")
             return route
-            
+
         except Exception as e:
             logger.error(f"Error creating tensor route: {e}")
             return None
@@ -613,14 +613,14 @@ class MatrixMapper:
         try:
             # Base tensor score from basket properties
             base_score = basket.resonance_score * basket.modulation_factor
-            
+
             # Adjust based on profit amount
             profit_factor = unified_math.min(1.0, unified_math.abs(profit_amount) / 1000.0)  # Normalize to 1000 USD
-            
+
             # Combine factors
             tensor_score = base_score * (1.0 + profit_factor)
             return unified_math.min(1.0, tensor_score)
-            
+
         except Exception as e:
             logger.error(f"Error calculating basket tensor score: {e}")
             return 0.0
@@ -630,7 +630,7 @@ class MatrixMapper:
         try:
             # Start with basket asset weights
             allocation_weights = basket.asset_weights.copy()
-            
+
             # Adjust based on bit phase
             if bit_phase == BitPhase.FOUR_BIT:
                 # Conservative allocation
@@ -640,15 +640,15 @@ class MatrixMapper:
                 # Aggressive allocation
                 for asset in allocation_weights:
                     allocation_weights[asset] *= 1.2
-            
+
             # Normalize weights
             total_weight = sum(allocation_weights.values())
             if total_weight > 0:
                 for asset in allocation_weights:
                     allocation_weights[asset] /= total_weight
-            
+
             return allocation_weights
-            
+
         except Exception as e:
             logger.error(f"Error calculating allocation weights: {e}")
             return {'BTC': 1.0}
@@ -662,24 +662,24 @@ class MatrixMapper:
                 metrics['total_trades'] = metrics.get('total_trades', 0) + 1
                 metrics['total_profit'] = metrics.get('total_profit', 0.0) + profit_amount
                 metrics['avg_tensor_score'] = (
-                    (metrics.get('avg_tensor_score', 0.0) * (metrics['total_trades'] - 1) + tensor_score) 
+                    (metrics.get('avg_tensor_score', 0.0) * (metrics['total_trades'] - 1) + tensor_score)
                     / metrics['total_trades']
                 )
-                
+
         except Exception as e:
             logger.error(f"Error updating basket performance: {e}")
 
     def allocate_profit(self, profit_amount: float, market_data: Dict[str, Any]) -> ProfitAllocation:
         """
         Allocate profit using matrix basket and tensor scoring.
-        
+
         Parameters:
         -----------
         profit_amount : float
             Profit amount to allocate
         market_data : Dict[str, Any]
             Market data for allocation decisions
-            
+
         Returns:
         --------
         ProfitAllocation
@@ -689,25 +689,25 @@ class MatrixMapper:
             # Determine optimal bit phase
             entropy_level = market_data.get('entropy_level', 4.0)
             complexity = market_data.get('complexity', 0.5)
-            
+
             if entropy_level < 2.0 and complexity < 0.3:
                 bit_phase = BitPhase.FOUR_BIT
             elif entropy_level < 6.0 and complexity < 1.0:
                 bit_phase = BitPhase.EIGHT_BIT
             else:
                 bit_phase = BitPhase.FORTY_TWO_BIT
-            
+
             # Find best basket for allocation
             best_basket_id = self._find_best_basket_for_allocation(bit_phase, profit_amount)
-            
+
             if not best_basket_id:
                 # Create new basket if none suitable
                 hash_value = self._generate_market_hash(market_data)
                 best_basket_id = self._create_basket_from_hash(hash_value, len(self.basket_registry), 0, market_data.get('price', 50000))
-            
+
             # Create tensor route
             route = self.create_tensor_route(best_basket_id, profit_amount, bit_phase)
-            
+
             # Create allocation
             allocation_id = f"allocation_{int(time.time())}_{len(self.profit_allocations)}"
             allocation = ProfitAllocation(
@@ -719,13 +719,13 @@ class MatrixMapper:
                 allocation_weights=route.allocation_weights if route else {'BTC': 1.0},
                 timestamp=datetime.now()
             )
-            
+
             # Store allocation
             self.profit_allocations[allocation_id] = allocation
-            
+
             logger.info(f"Allocated profit {profit_amount:.2f} to basket {best_basket_id}")
             return allocation
-            
+
         except Exception as e:
             logger.error(f"Error allocating profit: {e}")
             return None
@@ -735,22 +735,22 @@ class MatrixMapper:
         try:
             best_basket_id = None
             best_score = -1.0
-            
+
             for basket_id, basket in self.basket_registry.items():
                 if basket.bit_phase == bit_phase:
                     # Calculate allocation score
                     score = basket.resonance_score * basket.modulation_factor
-                    
+
                     # Adjust for profit amount compatibility
                     profit_factor = unified_math.min(1.0, unified_math.abs(profit_amount) / 1000.0)
                     score *= (1.0 + profit_factor)
-                    
+
                     if score > best_score:
                         best_score = score
                         best_basket_id = basket_id
-            
+
             return best_basket_id
-            
+
         except Exception as e:
             logger.error(f"Error finding best basket: {e}")
             return None
@@ -761,7 +761,7 @@ class MatrixMapper:
             # Create hash content from market data
             content = json.dumps(market_data, sort_keys=True)
             return hashlib.sha256(content.encode()).hexdigest()
-            
+
         except Exception as e:
             logger.error(f"Error generating market hash: {e}")
             return hashlib.sha256(str(time.time()).encode()).hexdigest()
@@ -772,7 +772,7 @@ class MatrixMapper:
             basket = self.basket_registry.get(basket_id)
             if not basket:
                 return {'error': f'Basket {basket_id} not found'}
-            
+
             metrics = basket.performance_metrics.copy()
             metrics.update({
                 'basket_type': basket.basket_type.value,
@@ -781,9 +781,9 @@ class MatrixMapper:
                 'modulation_factor': basket.modulation_factor,
                 'asset_count': len(basket.asset_weights)
             })
-            
+
             return metrics
-            
+
         except Exception as e:
             logger.error(f"Error getting basket performance: {e}")
             return {'error': str(e)}
@@ -795,12 +795,12 @@ class MatrixMapper:
             total_baskets = len(self.basket_registry)
             total_routes = len(self.tensor_routes)
             total_allocations = len(self.profit_allocations)
-            
+
             # Bit phase distribution
             bit_phase_dist = {phase.value: 0 for phase in BitPhase}
             for basket in self.basket_registry.values():
                 bit_phase_dist[basket.bit_phase.value] += 1
-            
+
             return {
                 'total_hashes': total_hashes,
                 'total_baskets': total_baskets,
@@ -809,7 +809,7 @@ class MatrixMapper:
                 'bit_phase_distribution': bit_phase_dist,
                 'registry_health': 'healthy' if total_hashes > 0 else 'empty'
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting hash registry status: {e}")
             return {'error': str(e)}
@@ -819,16 +819,16 @@ class MatrixMapper:
         try:
             best_match = None
             best_similarity = 0.0
-            
+
             for basket_id, basket in self.basket_registry.items():
                 if basket.bit_phase == bit_phase:
                     similarity = self._calculate_hash_similarity(hash_value, basket.hash_signature)
                     if similarity > best_similarity and similarity > 0.7:  # 70% similarity threshold
                         best_similarity = similarity
                         best_match = basket_id
-            
+
             return best_match
-            
+
         except Exception as e:
             logger.error(f"Error finding matching basket: {e}")
             return None
@@ -838,13 +838,13 @@ class MatrixMapper:
         try:
             if len(hash1) != len(hash2):
                 return 0.0
-            
+
             # Calculate Hamming distance
             distance = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
             similarity = 1.0 - (distance / len(hash1))
-            
+
             return similarity
-            
+
         except Exception as e:
             logger.error(f"Error calculating hash similarity: {e}")
             return 0.0
@@ -854,30 +854,30 @@ class MatrixMapper:
         try:
             if not self.dlt_waveform_engine:
                 return {'error': 'DLT waveform engine not integrated'}
-            
+
             # Extract waveform data
             hash_signature = waveform_analysis.get('hash_signature', '')
             bit_phase_value = waveform_analysis.get('bit_phase', 8)
             tensor_score = waveform_analysis.get('tensor_score', 0.0)
-            
+
             # Convert to BitPhase enum
             bit_phase = BitPhase(bit_phase_value)
-            
+
             # Find or create matching basket
             basket_id = self.find_matching_basket(hash_signature, bit_phase)
             if not basket_id:
                 basket_id = self._create_basket_from_hash(hash_signature, len(self.basket_registry), 0, 50000)
-            
+
             # Create tensor route
             route = self.create_tensor_route(basket_id, tensor_score * 1000, bit_phase)
-            
+
             return {
                 'success': True,
                 'basket_id': basket_id,
                 'route_id': route.route_id if route else None,
                 'tensor_score': tensor_score
             }
-            
+
         except Exception as e:
             logger.error(f"Error integrating with DLT waveform: {e}")
             return {'error': str(e)}
@@ -887,14 +887,14 @@ class MatrixMapper:
         try:
             if not self.profit_cycle_allocator:
                 return {'error': 'Profit cycle allocator not integrated'}
-            
+
             # Extract profit cycle data
             profit_amount = profit_cycle_data.get('profit_amount', 0.0)
             market_data = profit_cycle_data.get('market_data', {})
-            
+
             # Allocate profit
             allocation = self.allocate_profit(profit_amount, market_data)
-            
+
             if allocation:
                 return {
                     'success': True,
@@ -905,7 +905,7 @@ class MatrixMapper:
                 }
             else:
                 return {'error': 'Failed to allocate profit'}
-                
+
         except Exception as e:
             logger.error(f"Error integrating with profit cycle: {e}")
             return {'error': str(e)}
@@ -913,27 +913,27 @@ class MatrixMapper:
 if __name__ == "__main__":
     # Test matrix mapper
     mapper = MatrixMapper()
-    
+
     # Test hash decoding
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     basket_id = mapper.decode_hash_to_basket(test_hash, 100, 45000.0)
     safe_print(f"Decoded basket ID: {basket_id}")
-    
+
     # Test bit phase resolution
     phase_4bit = mapper.resolve_bit_phase(test_hash, "4bit")
     phase_8bit = mapper.resolve_bit_phase(test_hash, "8bit")
     phase_42bit = mapper.resolve_bit_phase(test_hash, "42bit")
     safe_print(f"Bit phases - 4bit: {phase_4bit}, 8bit: {phase_8bit}, 42bit: {phase_42bit}")
-    
+
     # Test tensor score calculation
     tensor_score = mapper.calculate_tensor_score(44000.0, 45000.0, phase_8bit)
     safe_print(f"Tensor score: {tensor_score}")
-    
+
     # Test tensor route creation
     if basket_id:
         route = mapper.create_tensor_route(basket_id, 1000.0, BitPhase.EIGHT_BIT)
         safe_print(f"Created tensor route: {route.route_id if route else None}")
-    
+
     # Get status
     status = mapper.get_hash_registry_status()
-    safe_print(f"Hash registry status: {status}") 
+    safe_print(f"Hash registry status: {status}")

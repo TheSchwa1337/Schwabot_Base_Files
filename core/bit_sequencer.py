@@ -47,17 +47,17 @@ class BitSequence:
 
 class BitSequencer:
     """Mathematical bit sequencing for hash and signal processing."""
-    
+
     def __init__(self):
         self.max_sequence_length = 1024
         self.default_seed = int(time.time())
         logger.info("BitSequencer initialized")
 
-    def generate_sequence(self, hash_value: str, length: int = 64, 
+    def generate_sequence(self, hash_value: str, length: int = 64,
                          seed: Optional[int] = None) -> BitSequence:
         """
         Generate bit sequence from hash value.
-        
+
         Parameters:
         -----------
         hash_value : str
@@ -66,7 +66,7 @@ class BitSequencer:
             Length of sequence to generate
         seed : int, optional
             Seed for randomization
-            
+
         Returns:
         --------
         BitSequence
@@ -75,10 +75,10 @@ class BitSequencer:
         try:
             if seed is None:
                 seed = self.default_seed
-            
+
             # Convert hash to integer
             hash_int = int(hash_value, 16)
-            
+
             # Generate sequence using hash and seed
             sequence = []
             for i in range(length):
@@ -87,14 +87,14 @@ class BitSequencer:
                 mixed = rotated ^ seed
                 bit = mixed & 1
                 sequence.append(bit)
-                
+
                 # Update hash for next iteration
                 hash_int = self._update_hash(hash_int, bit)
-            
+
             # Calculate sequence properties
             entropy = self._calculate_entropy(sequence)
             pattern_score = self._detect_patterns(sequence)
-            
+
             return BitSequence(
                 sequence=sequence,
                 length=length,
@@ -107,7 +107,7 @@ class BitSequencer:
                     'hash_length': len(hash_value)
                 }
             )
-            
+
         except Exception as e:
             logger.error(f"Error generating sequence: {e}")
             return self._create_empty_sequence(length)
@@ -133,28 +133,28 @@ class BitSequencer:
         try:
             if not sequence:
                 return 0.0
-            
+
             # Count 0s and 1s
             zeros = sequence.count(0)
             ones = sequence.count(1)
             total = len(sequence)
-            
+
             if total == 0:
                 return 0.0
-            
+
             # Calculate probabilities
             p0 = zeros / total
             p1 = ones / total
-            
+
             # Shannon entropy
             entropy = 0.0
             if p0 > 0:
                 entropy -= p0 * np.log2(p0)
             if p1 > 0:
                 entropy -= p1 * np.log2(p1)
-            
+
             return entropy
-            
+
         except Exception as e:
             logger.error(f"Error calculating entropy: {e}")
             return 0.5
@@ -164,33 +164,33 @@ class BitSequencer:
         try:
             if len(sequence) < 4:
                 return 0.0
-            
+
             # Look for repeating patterns
             patterns = []
-            
+
             # Check for 2-bit patterns
             for i in range(len(sequence) - 1):
                 pattern = (sequence[i] << 1) | sequence[i + 1]
                 patterns.append(pattern)
-            
+
             # Count pattern frequencies
             pattern_counts = {}
             for pattern in patterns:
                 pattern_counts[pattern] = pattern_counts.get(pattern, 0) + 1
-            
+
             # Calculate pattern score
             total_patterns = len(patterns)
             if total_patterns == 0:
                 return 0.0
-            
+
             # Normalized pattern diversity
             unique_patterns = len(pattern_counts)
             max_patterns = unified_math.min(4, total_patterns)  # Max 4 possible 2-bit patterns
-            
+
             pattern_score = unique_patterns / max_patterns
-            
+
             return pattern_score
-            
+
         except Exception as e:
             logger.error(f"Error detecting patterns: {e}")
             return 0.0
@@ -198,12 +198,12 @@ class BitSequencer:
     def analyze_sequence(self, sequence: BitSequence) -> Dict[str, Any]:
         """
         Analyze bit sequence for various properties.
-        
+
         Parameters:
         -----------
         sequence : BitSequence
             Bit sequence to analyze
-            
+
         Returns:
         --------
         Dict[str, Any]
@@ -222,9 +222,9 @@ class BitSequencer:
                 'autocorrelation': self._calculate_autocorrelation(sequence.sequence),
                 'complexity_score': self._calculate_complexity(sequence.sequence)
             }
-            
+
             return analysis
-            
+
         except Exception as e:
             logger.error(f"Error analyzing sequence: {e}")
             return {}
@@ -234,11 +234,11 @@ class BitSequencer:
         try:
             if not sequence:
                 return {}
-            
+
             runs = []
             current_run = 1
             current_bit = sequence[0]
-            
+
             for i in range(1, len(sequence)):
                 if sequence[i] == current_bit:
                     current_run += 1
@@ -246,13 +246,13 @@ class BitSequencer:
                     runs.append((current_bit, current_run))
                     current_run = 1
                     current_bit = sequence[i]
-            
+
             # Add final run
             runs.append((current_bit, current_run))
-            
+
             # Calculate run statistics
             run_lengths = [run[1] for run in runs]
-            
+
             return {
                 'total_runs': len(runs),
                 'avg_run_length': unified_math.unified_math.mean(run_lengths) if run_lengths else 0.0,
@@ -262,7 +262,7 @@ class BitSequencer:
                     'ones': [run[1] for run in runs if run[0] == 1]
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error analyzing runs: {e}")
             return {}
@@ -272,22 +272,22 @@ class BitSequencer:
         try:
             if len(sequence) < 2:
                 return 0.0
-            
+
             # Convert to numpy array
             seq_array = np.array(sequence, dtype=float)
-            
+
             # Calculate autocorrelation
             autocorr = np.correlate(seq_array, seq_array, mode='full')
-            
+
             # Normalize
             autocorr = autocorr[len(autocorr)//2:] / autocorr[len(autocorr)//2]
-            
+
             # Return average autocorrelation (excluding lag 0)
             if len(autocorr) > 1:
                 return float(unified_math.unified_math.mean(autocorr[1:]))
             else:
                 return 0.0
-                
+
         except Exception as e:
             logger.error(f"Error calculating autocorrelation: {e}")
             return 0.0
@@ -297,23 +297,23 @@ class BitSequencer:
         try:
             if not sequence:
                 return 0.0
-            
+
             # Lempel-Ziv complexity approximation
             complexity = 1
             substrings = set()
-            
+
             for i in range(len(sequence)):
                 for j in range(i + 1, len(sequence) + 1):
                     substring = tuple(sequence[i:j])
                     if substring not in substrings:
                         substrings.unified_math.add(substring)
                         complexity += 1
-            
+
             # Normalize by sequence length
             normalized_complexity = complexity / len(sequence)
-            
+
             return unified_math.min(1.0, normalized_complexity)
-            
+
         except Exception as e:
             logger.error(f"Error calculating complexity: {e}")
             return 0.5
@@ -321,14 +321,14 @@ class BitSequencer:
     def compare_sequences(self, seq1: BitSequence, seq2: BitSequence) -> Dict[str, float]:
         """
         Compare two bit sequences.
-        
+
         Parameters:
         -----------
         seq1 : BitSequence
             First sequence
         seq2 : BitSequence
             Second sequence
-            
+
         Returns:
         --------
         Dict[str, float]
@@ -339,17 +339,17 @@ class BitSequencer:
             min_length = unified_math.min(len(seq1.sequence), len(seq2.sequence))
             s1 = seq1.sequence[:min_length]
             s2 = seq2.sequence[:min_length]
-            
+
             # Calculate comparison metrics
             hamming_distance = sum(a != b for a, b in zip(s1, s2))
             hamming_similarity = 1.0 - (hamming_distance / min_length)
-            
+
             # Correlation
             correlation = self._calculate_correlation(s1, s2)
-            
+
             # Entropy difference
             entropy_diff = unified_math.abs(seq1.entropy - seq2.entropy)
-            
+
             return {
                 'hamming_distance': hamming_distance,
                 'hamming_similarity': hamming_similarity,
@@ -357,7 +357,7 @@ class BitSequencer:
                 'entropy_difference': entropy_diff,
                 'overall_similarity': (hamming_similarity + correlation) / 2.0
             }
-            
+
         except Exception as e:
             logger.error(f"Error comparing sequences: {e}")
             return {}
@@ -367,21 +367,21 @@ class BitSequencer:
         try:
             if len(seq1) != len(seq2) or len(seq1) == 0:
                 return 0.0
-            
+
             # Convert to numpy arrays
             s1 = np.array(seq1, dtype=float)
             s2 = np.array(seq2, dtype=float)
-            
+
             # Calculate correlation
             correlation = unified_math.unified_math.correlation(s1, s2)[0, 1]
-            
+
             return float(correlation) if not np.isnan(correlation) else 0.0
-            
+
         except Exception as e:
             logger.error(f"Error calculating correlation: {e}")
             return 0.0
 
-    def generate_multiple_sequences(self, hash_values: List[str], 
+    def generate_multiple_sequences(self, hash_values: List[str],
                                   length: int = 64) -> List[BitSequence]:
         """Generate multiple sequences from hash values."""
         try:
@@ -409,40 +409,40 @@ class BitSequencer:
 def main() -> None:
     """Test function for BitSequencer."""
     safe_print("🧮 Testing Bit Sequencer...")
-    
+
     sequencer = BitSequencer()
-    
+
     # Test sequence generation
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     sequence = sequencer.generate_sequence(test_hash, length=64)
-    
+
     safe_print(f"Generated sequence length: {sequence.length}")
     safe_print(f"Entropy: {sequence.entropy:.3f}")
     safe_print(f"Pattern score: {sequence.pattern_score:.3f}")
     safe_print(f"First 20 bits: {sequence.sequence[:20]}")
-    
+
     # Test sequence analysis
     analysis = sequencer.analyze_sequence(sequence)
     safe_print(f"\nSequence Analysis:")
     safe_print(f"  Bit distribution: {analysis.get('bit_distribution', {})}")
     safe_print(f"  Complexity score: {analysis.get('complexity_score', 0):.3f}")
     safe_print(f"  Autocorrelation: {analysis.get('autocorrelation', 0):.3f}")
-    
+
     # Test multiple sequences
     test_hashes = [
         "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890",
         "f1e2d3c4b5a67890fedcba1234567890fedcba1234567890fedcba1234567890",
         "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
     ]
-    
+
     sequences = sequencer.generate_multiple_sequences(test_hashes, length=32)
     safe_print(f"\nGenerated {len(sequences)} sequences")
-    
+
     # Compare sequences
     if len(sequences) >= 2:
         comparison = sequencer.compare_sequences(sequences[0], sequences[1])
         safe_print(f"Sequence comparison: {comparison}")
-    
+
     return 0
 
 if __name__ == "__main__":

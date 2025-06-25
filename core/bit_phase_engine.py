@@ -42,13 +42,13 @@ class BitPhaseResult:
 class BitPhaseEngine:
     """
     Engine for resolving bit phases from hash strings.
-    
+
     Supports three bit resolution modes:
     - 4-bit Conservative: Low complexity, high stability
-    - 8-bit Balanced: Medium complexity, balanced approach  
+    - 8-bit Balanced: Medium complexity, balanced approach
     - 42-bit Quantum: High complexity, maximum precision
     """
-    
+
     def __init__(self):
         self.supported_modes = ["4bit", "8bit", "42bit"]
         self.phase_limits = {
@@ -57,17 +57,17 @@ class BitPhaseEngine:
             "42bit": 4398046511104  # 2^42
         }
         self.phase_history: List[BitPhaseResult] = []
-        
+
         logger.info("Bit Phase Engine initialized")
 
     def resolve_bit_phase(self, hash_str: str, mode: str = "16bit") -> int:
         """
         Resolve bit phase from hash string.
-        
+
         Args:
             hash_str: Hash string to decode
             mode: Bit resolution mode ("4bit", "8bit", "42bit")
-            
+
         Returns:
             int: Resolved bit phase value
         """
@@ -75,11 +75,11 @@ class BitPhaseEngine:
             # Normalize mode
             if mode == "16bit":
                 mode = "8bit"  # Default to 8-bit for 16bit mode
-            
+
             if mode not in self.supported_modes:
                 logger.warning(f"Unsupported mode {mode}, defaulting to 8bit")
                 mode = "8bit"
-            
+
             # Extract phase based on mode
             if mode == "4bit":
                 phase_value = int(hash_str[0:1], 16) % 16
@@ -89,7 +89,7 @@ class BitPhaseEngine:
                 phase_value = int(hash_str[0:11], 16) % 4398046511104
             else:
                 phase_value = 0
-            
+
             # Create result
             result = BitPhaseResult(
                 phase_value=phase_value,
@@ -97,13 +97,13 @@ class BitPhaseEngine:
                 hash_input=hash_str,
                 confidence=self._calculate_confidence(hash_str, mode)
             )
-            
+
             # Store in history
             self.phase_history.append(result)
-            
+
             logger.debug(f"Resolved bit phase: {phase_value} (mode: {mode})")
             return phase_value
-            
+
         except Exception as e:
             logger.error(f"Error resolving bit phase: {e}")
             return 0
@@ -118,9 +118,9 @@ class BitPhaseEngine:
                 "8bit": 0.90,
                 "42bit": 0.85
             }
-            
+
             base_confidence = mode_confidence.get(mode, 0.8)
-            
+
             # Adjust based on hash length
             if hash_length >= 64:  # SHA-256
                 length_factor = 1.0
@@ -128,9 +128,9 @@ class BitPhaseEngine:
                 length_factor = 0.9
             else:
                 length_factor = 0.7
-            
+
             return base_confidence * length_factor
-            
+
         except Exception as e:
             logger.error(f"Error calculating confidence: {e}")
             return 0.5
@@ -138,10 +138,10 @@ class BitPhaseEngine:
     def resolve_multiple_phases(self, hash_str: str) -> Dict[str, int]:
         """
         Resolve bit phases for all supported modes.
-        
+
         Args:
             hash_str: Hash string to decode
-            
+
         Returns:
             Dict[str, int]: Phase values for each mode
         """
@@ -149,9 +149,9 @@ class BitPhaseEngine:
             results = {}
             for mode in self.supported_modes:
                 results[mode] = self.resolve_bit_phase(hash_str, mode)
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Error resolving multiple phases: {e}")
             return {mode: 0 for mode in self.supported_modes}
@@ -159,11 +159,11 @@ class BitPhaseEngine:
     def get_optimal_phase(self, hash_str: str, market_conditions: Dict[str, Any]) -> Tuple[int, str]:
         """
         Get optimal bit phase based on market conditions.
-        
+
         Args:
             hash_str: Hash string to decode
             market_conditions: Market condition parameters
-            
+
         Returns:
             Tuple[int, str]: Optimal phase value and mode
         """
@@ -172,10 +172,10 @@ class BitPhaseEngine:
             volatility = market_conditions.get('volatility', 0.1)
             entropy_level = market_conditions.get('entropy_level', 4.0)
             complexity = market_conditions.get('complexity', 0.5)
-            
+
             # Calculate composite score
             composite_score = (entropy_level * 0.4 + complexity * 0.3 + volatility * 100 * 0.3)
-            
+
             # Determine optimal mode based on composite score
             if composite_score < 2.0:
                 optimal_mode = "4bit"  # Conservative
@@ -183,13 +183,13 @@ class BitPhaseEngine:
                 optimal_mode = "8bit"  # Balanced
             else:
                 optimal_mode = "42bit"  # Aggressive
-            
+
             # Resolve phase
             phase_value = self.resolve_bit_phase(hash_str, optimal_mode)
-            
+
             logger.info(f"Optimal phase: {phase_value} (mode: {optimal_mode}, score: {composite_score:.2f})")
             return phase_value, optimal_mode
-            
+
         except Exception as e:
             logger.error(f"Error getting optimal phase: {e}")
             return 0, "8bit"
@@ -197,23 +197,23 @@ class BitPhaseEngine:
     def analyze_phase_patterns(self, hash_sequence: List[str]) -> Dict[str, Any]:
         """
         Analyze bit phase patterns across a sequence of hashes.
-        
+
         Args:
             hash_sequence: List of hash strings
-            
+
         Returns:
             Dict[str, Any]: Pattern analysis results
         """
         try:
             if not hash_sequence:
                 return {}
-            
+
             # Resolve phases for all hashes
             phase_results = []
             for hash_str in hash_sequence:
                 phases = self.resolve_multiple_phases(hash_str)
                 phase_results.append(phases)
-            
+
             # Calculate statistics
             analysis = {
                 'total_hashes': len(hash_sequence),
@@ -221,11 +221,11 @@ class BitPhaseEngine:
                 'pattern_detection': {},
                 'entropy_analysis': {}
             }
-            
+
             # Analyze each mode
             for mode in self.supported_modes:
                 mode_phases = [result[mode] for result in phase_results]
-                
+
                 analysis['phase_statistics'][mode] = {
                     'mean': unified_math.unified_math.mean(mode_phases),
                     'std': unified_math.unified_math.std(mode_phases),
@@ -233,15 +233,15 @@ class BitPhaseEngine:
                     'max': unified_math.unified_math.max(mode_phases),
                     'median': np.median(mode_phases)
                 }
-                
+
                 # Detect patterns
                 analysis['pattern_detection'][mode] = self._detect_patterns(mode_phases)
-                
+
                 # Calculate entropy
                 analysis['entropy_analysis'][mode] = self._calculate_phase_entropy(mode_phases)
-            
+
             return analysis
-            
+
         except Exception as e:
             logger.error(f"Error analyzing phase patterns: {e}")
             return {}
@@ -251,45 +251,45 @@ class BitPhaseEngine:
         try:
             if len(phases) < 2:
                 return {'patterns': [], 'confidence': 0.0}
-            
+
             patterns = []
-            
+
             # Check for trends
             diffs = np.diff(phases)
             trend = unified_math.unified_math.mean(diffs)
-            
+
             if unified_math.abs(trend) > unified_math.unified_math.std(diffs) * 2:
                 patterns.append({
                     'type': 'trend',
                     'direction': 'increasing' if trend > 0 else 'decreasing',
                     'strength': unified_math.abs(trend) / unified_math.unified_math.std(diffs)
                 })
-            
+
             # Check for cycles
             if len(phases) >= 4:
                 autocorr = np.correlate(phases, phases, mode='full')
                 autocorr = autocorr[len(autocorr)//2:]
-                
+
                 # Find peaks in autocorrelation
                 peaks = []
                 for i in range(1, len(autocorr)-1):
                     if autocorr[i] > autocorr[i-1] and autocorr[i] > autocorr[i+1]:
                         peaks.append(i)
-                
+
                 if peaks:
                     patterns.append({
                         'type': 'cycle',
                         'periods': peaks[:3],  # Top 3 periods
                         'strength': unified_math.max(autocorr[peaks]) / autocorr[0]
                     })
-            
+
             confidence = len(patterns) / 2.0  # Simple confidence metric
-            
+
             return {
                 'patterns': patterns,
                 'confidence': unified_math.min(confidence, 1.0)
             }
-            
+
         except Exception as e:
             logger.error(f"Error detecting patterns: {e}")
             return {'patterns': [], 'confidence': 0.0}
@@ -299,18 +299,18 @@ class BitPhaseEngine:
         try:
             if not phases:
                 return 0.0
-            
+
             # Create histogram
             hist, _ = np.histogram(phases, bins=unified_math.min(20, len(set(phases))))
-            
+
             # Normalize
             hist = hist / np.sum(hist)
-            
+
             # Calculate entropy
             entropy = -np.sum(hist * np.log2(hist + 1e-9))
-            
+
             return entropy
-            
+
         except Exception as e:
             logger.error(f"Error calculating phase entropy: {e}")
             return 0.0
@@ -328,7 +328,7 @@ class BitPhaseEngine:
         """Export phase resolution data to JSON."""
         try:
             import json
-            
+
             export_data = {
                 'timestamp': datetime.now().isoformat(),
                 'total_resolutions': len(self.phase_history),
@@ -345,47 +345,47 @@ class BitPhaseEngine:
                     for result in self.phase_history[-50:]  # Last 50 results
                 ]
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(export_data, f, indent=2, default=str)
-            
+
             logger.info(f"Phase data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting phase data: {e}")
 
 def main():
     """Test function for Bit Phase Engine."""
     safe_print("🧮 Testing Bit Phase Engine...")
-    
+
     engine = BitPhaseEngine()
-    
+
     # Test hash
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
-    
+
     # Test different modes
     safe_print(f"\nTesting hash: {test_hash[:16]}...")
-    
+
     for mode in engine.supported_modes:
         phase = engine.resolve_bit_phase(test_hash, mode)
         safe_print(f"{mode}: {phase}")
-    
+
     # Test optimal phase selection
     market_conditions = {
         'volatility': 0.15,
         'entropy_level': 5.2,
         'complexity': 0.7
     }
-    
+
     optimal_phase, optimal_mode = engine.get_optimal_phase(test_hash, market_conditions)
     safe_print(f"\nOptimal phase: {optimal_phase} (mode: {optimal_mode})")
-    
+
     # Test pattern analysis
     hash_sequence = [test_hash] * 10  # Simple test
     analysis = engine.analyze_phase_patterns(hash_sequence)
     safe_print(f"\nPattern analysis: {len(analysis.get('phase_statistics', {}))} modes analyzed")
-    
+
     return 0
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

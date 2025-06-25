@@ -108,21 +108,21 @@ class DormantEngineConfig:
 class DormantEngine:
     """
     Dormant engine for managing low-power states and resource optimization.
-    
+
     Provides intelligent power management with mathematical optimization
     for energy efficiency during inactive periods.
     """
-    
+
     def __init__(self, config: Optional[DormantEngineConfig] = None):
         """Initialize dormant engine."""
         self.config = config or DormantEngineConfig()
-        
+
         # Core state management
         self.current_state = PowerState.ACTIVE
         self.dormant_states: Dict[str, DormantState] = {}
         self.wake_events: List[WakeEvent] = []
         self.state_transitions: List[Dict[str, Any]] = []
-        
+
         # Power monitoring
         self.power_metrics = PowerMetrics(
             current_power=100.0,  # Normal operation
@@ -130,25 +130,25 @@ class DormantEngine:
             energy_consumed=0.0,
             efficiency_score=1.0
         )
-        
+
         # Activity tracking
         self.last_activity = datetime.now()
         self.activity_level = 1.0  # 0.0 to 1.0
         self.inactivity_timer = 0.0
-        
+
         # Threading
         self.is_running = False
         self.monitor_thread: Optional[threading.Thread] = None
-        
+
         # Callbacks
         self.state_change_callbacks: List[Callable[[PowerState, PowerState], None]] = []
         self.wake_callbacks: List[Callable[[WakeEvent], None]] = []
-        
+
         # Initialize default states
         self._initialize_default_states()
-        
+
         logger.info("Dormant Engine initialized")
-    
+
     def _initialize_default_states(self) -> None:
         """Initialize default dormant states."""
         default_states = [
@@ -174,78 +174,78 @@ class DormantEngine:
                 resource_limit=0.05  # 5% of normal usage
             )
         ]
-        
+
         for state in default_states:
             self.add_dormant_state(state)
-    
+
     def add_dormant_state(self, state: DormantState) -> bool:
         """Add a new dormant state."""
         if state.state_id in self.dormant_states:
             logger.warning(f"State {state.state_id} already exists. Overwriting.")
-        
+
         self.dormant_states[state.state_id] = state
         logger.info(f"Dormant state added: {state.state_id} ({state.power_state.value})")
         return True
-    
+
     def remove_dormant_state(self, state_id: str) -> bool:
         """Remove a dormant state."""
         if state_id not in self.dormant_states:
             logger.warning(f"State {state_id} not found.")
             return False
-        
+
         del self.dormant_states[state_id]
         logger.info(f"Dormant state removed: {state_id}")
         return True
-    
+
     def start_dormant_engine(self) -> bool:
         """Start dormant engine monitoring."""
         self.is_running = True
-        
+
         # Start monitor thread
         self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self.monitor_thread.start()
-        
+
         logger.info("Dormant Engine started")
         return True
-    
+
     def stop_dormant_engine(self) -> bool:
         """Stop dormant engine monitoring."""
         self.is_running = False
-        
+
         if self.monitor_thread and self.monitor_thread.is_alive():
             self.monitor_thread.join(timeout=5.0)
-        
+
         logger.info("Dormant Engine stopped")
         return True
-    
+
     def _monitor_loop(self) -> None:
         """Main monitoring loop."""
         while self.is_running:
             try:
                 # Update activity level
                 self._update_activity_level()
-                
+
                 # Check for state transitions
                 self._check_state_transitions()
-                
+
                 # Update power metrics
                 self._update_power_metrics()
-                
+
                 # Check wake conditions
                 self._check_wake_conditions()
-                
+
                 # Sleep for monitoring interval
                 time.sleep(self.config.wake_check_interval)
-                
+
             except Exception as e:
                 logger.error(f"Dormant engine monitoring error: {e}")
                 time.sleep(10.0)
-    
+
     def _update_activity_level(self) -> None:
         """Update system activity level."""
         current_time = datetime.now()
         time_since_activity = (current_time - self.last_activity).total_seconds()
-        
+
         # Calculate activity level based on time since last activity
         if time_since_activity < 60:  # Less than 1 minute
             self.activity_level = 1.0
@@ -255,20 +255,20 @@ class DormantEngine:
             self.activity_level = 0.4
         else:  # More than 15 minutes
             self.activity_level = 0.1
-        
+
         self.inactivity_timer = time_since_activity
-    
+
     def _check_state_transitions(self) -> None:
         """Check for power state transitions."""
         if not self.config.auto_dormant:
             return
-        
+
         # Determine target state based on activity
         target_state = self._determine_target_state()
-        
+
         if target_state != self.current_state:
             self._transition_to_state(target_state)
-    
+
     def _determine_target_state(self) -> PowerState:
         """Determine target power state based on activity level."""
         if self.activity_level > 0.7:
@@ -279,23 +279,23 @@ class DormantEngine:
             return PowerState.DORMANT
         else:
             return PowerState.HIBERNATE
-    
+
     def _transition_to_state(self, new_state: PowerState) -> bool:
         """Transition to a new power state."""
         old_state = self.current_state
         transition_time = datetime.now()
-        
+
         # Validate transition
         if not self._is_valid_transition(old_state, new_state):
             logger.warning(f"Invalid state transition: {old_state.value} -> {new_state.value}")
             return False
-        
+
         # Execute transition
         success = self._execute_state_transition(new_state)
-        
+
         if success:
             self.current_state = new_state
-            
+
             # Record transition
             transition_record = {
                 "timestamp": transition_time.isoformat(),
@@ -305,18 +305,18 @@ class DormantEngine:
                 "inactivity_timer": self.inactivity_timer
             }
             self.state_transitions.append(transition_record)
-            
+
             # Notify callbacks
             for callback in self.state_change_callbacks:
                 try:
                     callback(old_state, new_state)
                 except Exception as e:
                     logger.error(f"State change callback error: {e}")
-            
+
             logger.info(f"State transition: {old_state.value} -> {new_state.value}")
-        
+
         return success
-    
+
     def _is_valid_transition(self, old_state: PowerState, new_state: PowerState) -> bool:
         """Check if state transition is valid."""
         # Define valid transitions
@@ -327,33 +327,33 @@ class DormantEngine:
             PowerState.HIBERNATE: [PowerState.ACTIVE, PowerState.IDLE, PowerState.DORMANT],
             PowerState.SHUTDOWN: [PowerState.ACTIVE]  # Only from shutdown
         }
-        
+
         return new_state in valid_transitions.get(old_state, [])
-    
+
     def _execute_state_transition(self, new_state: PowerState) -> bool:
         """Execute the actual state transition."""
         try:
             # Calculate power consumption for new state
             power_consumption = self._calculate_power_consumption(new_state)
-            
+
             # Update power metrics
             self.power_metrics.current_power = power_consumption
-            
+
             # Apply resource limits
             resource_limit = self._get_resource_limit(new_state)
             self._apply_resource_limits(resource_limit)
-            
+
             logger.info(f"Transitioned to {new_state.value} (Power: {power_consumption:.1f}W)")
             return True
-            
+
         except Exception as e:
             logger.error(f"State transition failed: {e}")
             return False
-    
+
     def _calculate_power_consumption(self, state: PowerState) -> float:
         """Calculate power consumption for a given state."""
         base_power = 100.0  # Base power consumption in Watts
-        
+
         power_multipliers = {
             PowerState.ACTIVE: 1.0,
             PowerState.IDLE: 0.5,
@@ -361,9 +361,9 @@ class DormantEngine:
             PowerState.HIBERNATE: 0.05,
             PowerState.SHUTDOWN: 0.0
         }
-        
+
         return base_power * power_multipliers.get(state, 1.0)
-    
+
     def _get_resource_limit(self, state: PowerState) -> float:
         """Get resource limit for a given state."""
         resource_limits = {
@@ -373,35 +373,35 @@ class DormantEngine:
             PowerState.HIBERNATE: 0.05,
             PowerState.SHUTDOWN: 0.0
         }
-        
+
         return resource_limits.get(state, 1.0)
-    
+
     def _apply_resource_limits(self, resource_limit: float) -> None:
         """Apply resource limits to system components."""
         # This would integrate with actual system resource management
         # For now, just log the resource limit
         logger.info(f"Applied resource limit: {resource_limit:.1%}")
-    
+
     def _update_power_metrics(self) -> None:
         """Update power consumption metrics."""
         current_time = datetime.now()
         time_delta = (current_time - self.power_metrics.timestamp).total_seconds() / 3600.0  # hours
-        
+
         # Update energy consumption
         energy_increment = self.power_metrics.current_power * time_delta
         self.power_metrics.energy_consumed += energy_increment
-        
+
         # Update average power
         if time_delta > 0:
             self.power_metrics.average_power = (
                 (self.power_metrics.average_power + self.power_metrics.current_power) / 2.0
             )
-        
+
         # Calculate efficiency score
         self.power_metrics.efficiency_score = self._calculate_efficiency_score()
-        
+
         self.power_metrics.timestamp = current_time
-    
+
     def _calculate_efficiency_score(self) -> float:
         """Calculate energy efficiency score."""
         # Base efficiency on power consumption relative to activity
@@ -409,68 +409,68 @@ class DormantEngine:
             efficiency = unified_math.min(1.0, self.activity_level / (self.power_metrics.current_power / 100.0))
         else:
             efficiency = 1.0 if self.power_metrics.current_power < 10.0 else 0.5
-        
+
         return unified_math.max(0.0, unified_math.min(1.0, efficiency))
-    
+
     def _check_wake_conditions(self) -> None:
         """Check for wake-up conditions."""
         if self.current_state == PowerState.ACTIVE:
             return  # Already active
-        
+
         # Check each wake condition
         for condition in WakeCondition:
             if self._should_wake_up(condition):
                 self._wake_up(condition)
                 break
-    
+
     def _should_wake_up(self, condition: WakeCondition) -> bool:
         """Check if system should wake up based on condition."""
         if condition == WakeCondition.SCHEDULED:
             # Check if scheduled wake time has arrived
             return self._is_scheduled_wake_time()
-        
+
         elif condition == WakeCondition.MARKET_OPEN:
             # Check if market is opening
             return self._is_market_opening()
-        
+
         elif condition == WakeCondition.SIGNAL_DETECTED:
             # Check for trading signals
             return self._has_trading_signals()
-        
+
         elif condition == WakeCondition.EMERGENCY:
             # Check for emergency conditions
             return self._has_emergency_condition()
-        
+
         return False
-    
+
     def _is_scheduled_wake_time(self) -> bool:
         """Check if it's time for scheduled wake-up."""
         # This would integrate with scheduling system
         return False  # Placeholder
-    
+
     def _is_market_opening(self) -> bool:
         """Check if market is opening."""
         # This would integrate with market data
         return False  # Placeholder
-    
+
     def _has_trading_signals(self) -> bool:
         """Check for trading signals."""
         # This would integrate with signal detection
         return False  # Placeholder
-    
+
     def _has_emergency_condition(self) -> bool:
         """Check for emergency conditions."""
         # This would integrate with monitoring systems
         return False  # Placeholder
-    
+
     def _wake_up(self, condition: WakeCondition) -> bool:
         """Wake up the system."""
         start_time = time.time()
-        
+
         try:
             # Transition to active state
             success = self._transition_to_state(PowerState.ACTIVE)
-            
+
             if success:
                 # Record wake event
                 wake_event = WakeEvent(
@@ -481,39 +481,39 @@ class DormantEngine:
                     recovery_time=time.time() - start_time,
                     success=True
                 )
-                
+
                 self.wake_events.append(wake_event)
-                
+
                 # Notify wake callbacks
                 for callback in self.wake_callbacks:
                     try:
                         callback(wake_event)
                     except Exception as e:
                         logger.error(f"Wake callback error: {e}")
-                
+
                 logger.info(f"System woke up due to {condition.value}")
-            
+
             return success
-            
+
         except Exception as e:
             logger.error(f"Wake-up failed: {e}")
             return False
-    
+
     def record_activity(self) -> None:
         """Record system activity."""
         self.last_activity = datetime.now()
         self.activity_level = 1.0
-    
+
     def add_state_change_callback(self, callback: Callable[[PowerState, PowerState], None]) -> None:
         """Add callback for state changes."""
         if callback not in self.state_change_callbacks:
             self.state_change_callbacks.append(callback)
-    
+
     def add_wake_callback(self, callback: Callable[[WakeEvent], None]) -> None:
         """Add callback for wake events."""
         if callback not in self.wake_callbacks:
             self.wake_callbacks.append(callback)
-    
+
     def get_engine_status(self) -> Dict[str, Any]:
         """Get dormant engine status."""
         return {
@@ -525,7 +525,7 @@ class DormantEngine:
             "total_transitions": len(self.state_transitions),
             "is_running": self.is_running
         }
-    
+
     def get_power_report(self) -> Dict[str, Any]:
         """Get comprehensive power consumption report."""
         return {
@@ -554,46 +554,46 @@ def get_dormant_engine() -> DormantEngine:
 def main() -> None:
     """Main function for testing dormant engine."""
     logging.basicConfig(level=logging.INFO)
-    
+
     safe_print("🧪 Testing Dormant Engine")
     safe_print("=" * 30)
-    
+
     # Create dormant engine
     engine = DormantEngine()
-    
+
     # Add callbacks
     def state_change_callback(old_state: PowerState, new_state: PowerState):
         safe_print(f"🔄 State change: {old_state.value} -> {new_state.value}")
-    
+
     def wake_callback(wake_event: WakeEvent):
         safe_print(f"⏰ Wake event: {wake_event.condition.value}")
-    
+
     engine.add_state_change_callback(state_change_callback)
     engine.add_wake_callback(wake_callback)
-    
+
     # Start engine
     engine.start_dormant_engine()
-    
+
     # Simulate activity
     safe_print("📊 Recording activity...")
     engine.record_activity()
-    
+
     # Let it run for a few seconds
     time.sleep(3)
-    
+
     # Get status
     status = engine.get_engine_status()
     safe_print(f"✅ Current state: {status['current_state']}")
     safe_print(f"📈 Activity level: {status['activity_level']:.2f}")
     safe_print(f"⚡ Current power: {status['power_metrics']['current_power']:.1f}W")
-    
+
     # Get power report
     power_report = engine.get_power_report()
     safe_print(f"🔋 Efficiency score: {power_report['efficiency_score']:.2f}")
-    
+
     # Stop engine
     engine.stop_dormant_engine()
-    
+
     safe_print("Dormant engine test completed!")
 
 

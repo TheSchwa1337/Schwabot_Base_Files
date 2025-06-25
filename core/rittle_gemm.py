@@ -246,9 +246,9 @@ class PerformanceMetrics:
 
 class RittleGEMM:
     """
-    
+
     High-performance matrix operations library with optimization strategies
-    
+
     This class provides optimized matrix operations for mathematical
     trading applications, with support for various matrix types and
     optimization levels. Includes robust Windows CLI compatibility

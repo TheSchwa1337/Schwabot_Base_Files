@@ -119,48 +119,48 @@ class TensorHarnessResult:
 class TensorHarnessMatrix:
     """
     Tensor Harness Matrix for Schwabot UROS v1.0.
-    
+
     Mathematical Foundation:
     - Phase Drift: Δφ = |φ_current - φ_previous| / φ_previous
     - Drift Compensation: φ_compensated = φ_current * (1 + drift_correction_factor)
     - Tensor Routing: T_route = f(hash_prefix, bit_depth, voltage_level, profit_sensor)
     - Profit Score: profit_score = (tensor_score * voltage_efficiency * drift_stability)
     """
-    
-    def __init__(self, tick_feed_harness=None, voltage_lane_mapper=None, tensor_path_router=None, 
+
+    def __init__(self, tick_feed_harness=None, voltage_lane_mapper=None, tensor_path_router=None,
                  config_path: str = "./config/tensor_harness_config.json"):
         self.config_path = config_path
-        
+
         # Core components
         self.tick_feed_harness = tick_feed_harness
         self.voltage_lane_mapper = voltage_lane_mapper
         self.tensor_path_router = tensor_path_router
-        
+
         # Drift configuration
         self.drift_threshold_stable = 0.01    # 1% drift threshold for stable
         self.drift_threshold_critical = 0.05  # 5% drift threshold for critical
         self.drift_correction_factor = 0.1    # 10% correction factor
         self.max_compensation = 0.5           # Maximum 50% compensation
-        
+
         # Phase tracking
         self.phase_history: Dict[str, List[float]] = {}
         self.drift_measurements: List[PhaseDriftMeasurement] = []
         self.tensor_routes: Dict[str, TensorRoute] = {}
-        
+
         # Performance tracking
         self.harness_requests: List[TensorHarnessRequest] = []
         self.harness_results: List[TensorHarnessResult] = []
         self.profit_scores: List[float] = []
-        
+
         # Threading for async operations
         self.harness_queue = queue.Queue()
         self.harness_thread = None
         self.harness_running = False
-        
+
         # Load configuration
         self._load_configuration()
         self._start_harness_processor()
-        
+
         logger.info("Tensor Harness Matrix initialized")
 
     def _load_configuration(self) -> None:
@@ -187,17 +187,17 @@ class TensorHarnessMatrix:
                     "tensor_path_enabled": True
                 }
             }
-            
+
             self.config = config
-            
+
             # Update parameters from config
             self.drift_threshold_stable = config["drift_parameters"]["stable_threshold"]
             self.drift_threshold_critical = config["drift_parameters"]["critical_threshold"]
             self.drift_correction_factor = config["drift_parameters"]["correction_factor"]
             self.max_compensation = config["drift_parameters"]["max_compensation"]
-            
+
             logger.info("Tensor harness configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -208,7 +208,7 @@ class TensorHarnessMatrix:
             self.harness_thread = threading.Thread(target=self._process_harness, daemon=True)
             self.harness_thread.start()
             logger.info("Tensor harness processor started")
-            
+
         except Exception as e:
             logger.error(f"Error starting tensor harness processor: {e}")
 
@@ -218,11 +218,11 @@ class TensorHarnessMatrix:
             try:
                 # Get harness request from queue with timeout
                 request = self.harness_queue.get(timeout=1.0)
-                
+
                 if request:
                     result = self._execute_tensor_harness(request)
                     self.harness_results.append(result)
-                    
+
             except queue.Empty:
                 continue
             except Exception as e:
@@ -231,10 +231,10 @@ class TensorHarnessMatrix:
     def measure_phase_drift(self, hash_prefix: str, bit_depth: int, current_phase: float) -> PhaseDriftMeasurement:
         """
         Measure phase drift for hash prefix.
-        
+
         Mathematical Formula:
         Δφ = |φ_current - φ_previous| / φ_previous
-        
+
         Parameters:
         -----------
         hash_prefix : str
@@ -243,7 +243,7 @@ class TensorHarnessMatrix:
             Bit depth
         current_phase : float
             Current phase value
-            
+
         Returns:
         --------
         PhaseDriftMeasurement
@@ -253,7 +253,7 @@ class TensorHarnessMatrix:
             # Get phase history
             phase_key = f"{hash_prefix}_{bit_depth}"
             phase_history = self.phase_history.get(phase_key, [])
-            
+
             # Calculate drift
             if len(phase_history) > 0:
                 previous_phase = phase_history[-1]
@@ -261,7 +261,7 @@ class TensorHarnessMatrix:
             else:
                 previous_phase = current_phase
                 drift_magnitude = 0.0
-            
+
             # Determine drift status
             if drift_magnitude <= self.drift_threshold_stable:
                 drift_status = DriftStatus.STABLE
@@ -272,7 +272,7 @@ class TensorHarnessMatrix:
             else:
                 drift_status = DriftStatus.CRITICAL
                 compensation_factor = unified_math.min(self.drift_correction_factor * 2, self.max_compensation)
-            
+
             # Create measurement
             measurement = PhaseDriftMeasurement(
                 measurement_id=f"drift_{int(time.time() * 1000)}",
@@ -285,28 +285,28 @@ class TensorHarnessMatrix:
                 compensation_factor=compensation_factor,
                 timestamp=datetime.now()
             )
-            
+
             # Update phase history
             phase_history.append(current_phase)
             if len(phase_history) > 100:  # Keep last 100 measurements
                 phase_history.pop(0)
             self.phase_history[phase_key] = phase_history
-            
+
             self.drift_measurements.append(measurement)
             logger.debug(f"Phase drift measurement: {drift_magnitude:.6f} ({drift_status.value})")
-            
+
             return measurement
-            
+
         except Exception as e:
             logger.error(f"Error measuring phase drift: {e}")
             raise
 
-    def route_tensor_with_drift_compensation(self, hash_prefix: str, bit_depth: int, 
+    def route_tensor_with_drift_compensation(self, hash_prefix: str, bit_depth: int,
                                            mode: TensorMode = TensorMode.DEMO,
                                            profit_sensor_data: Dict[str, float] = None) -> str:
         """
         Route tensor with drift compensation.
-        
+
         Parameters:
         -----------
         hash_prefix : str
@@ -317,7 +317,7 @@ class TensorHarnessMatrix:
             Tensor operation mode
         profit_sensor_data : Dict[str, float]
             Profit sensor data
-            
+
         Returns:
         --------
         str
@@ -335,16 +335,16 @@ class TensorHarnessMatrix:
                 timestamp=datetime.now(),
                 timeout=self.config["tensor_parameters"]["default_timeout"]
             )
-            
+
             self.harness_requests.append(request)
-            
+
             # Queue for processing
             self.harness_queue.put(request)
-            
+
             logger.info(f"Tensor harness request {request_id} queued for {hash_prefix}")
-            
+
             return request_id
-            
+
         except Exception as e:
             logger.error(f"Error requesting tensor routing: {e}")
             raise
@@ -352,12 +352,12 @@ class TensorHarnessMatrix:
     def _execute_tensor_harness(self, request: TensorHarnessRequest) -> TensorHarnessResult:
         """
         Execute tensor harness operation.
-        
+
         Parameters:
         -----------
         request : TensorHarnessRequest
             Tensor harness request
-            
+
         Returns:
         --------
         TensorHarnessResult
@@ -365,11 +365,11 @@ class TensorHarnessMatrix:
         """
         try:
             start_time = time.time()
-            
+
             # Measure phase drift
             current_phase = self._calculate_current_phase(request.hash_prefix, request.bit_depth)
             drift_measurement = self.measure_phase_drift(request.hash_prefix, request.bit_depth, current_phase)
-            
+
             # Get voltage mapping
             voltage_mapping = None
             if self.voltage_lane_mapper:
@@ -377,35 +377,35 @@ class TensorHarnessMatrix:
                     voltage_mapping = self.voltage_lane_mapper.calculate_voltage_for_bit_depth(request.bit_depth)
                 except Exception as e:
                     logger.warning(f"Voltage mapping failed: {e}")
-            
+
             # Get tensor path route
             tensor_route = None
             if self.tensor_path_router:
                 try:
                     routing_request_id = self.tensor_path_router.route_hash_prefix(
-                        request.hash_prefix, 
-                        request.bit_depth, 
+                        request.hash_prefix,
+                        request.bit_depth,
                         priority=1.0
                     )
-                    
+
                     # Wait for routing completion
                     time.sleep(0.1)
                     routing_result = self.tensor_path_router.get_routing_status(routing_request_id)
-                    
+
                     if routing_result and routing_result.success and routing_result.route:
                         tensor_route = routing_result.route
                 except Exception as e:
                     logger.warning(f"Tensor path routing failed: {e}")
-            
+
             # Calculate tensor score
             tensor_score = self._calculate_tensor_score(request, drift_measurement, voltage_mapping)
-            
+
             # Calculate profit score
             profit_score = self._calculate_profit_score(request, tensor_score, drift_measurement)
-            
+
             # Calculate drift stability
             drift_stability = 1.0 - unified_math.min(drift_measurement.drift_magnitude, 1.0)
-            
+
             # Create tensor route
             route = TensorRoute(
                 route_id=f"tensor_route_{int(time.time() * 1000)}",
@@ -420,11 +420,11 @@ class TensorHarnessMatrix:
                 drift_stability=drift_stability,
                 timestamp=datetime.now()
             )
-            
+
             # Store route
             self.tensor_routes[route.route_id] = route
             self.profit_scores.append(profit_score)
-            
+
             # Success result
             result = TensorHarnessResult(
                 request_id=request.request_id,
@@ -433,11 +433,11 @@ class TensorHarnessMatrix:
                 drift_measurement=drift_measurement,
                 processing_time=time.time() - start_time
             )
-            
+
             logger.info(f"Tensor harness {request.request_id} successful: profit_score={profit_score:.3f}")
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Error executing tensor harness {request.request_id}: {e}")
             return TensorHarnessResult(
@@ -449,14 +449,14 @@ class TensorHarnessMatrix:
     def _calculate_current_phase(self, hash_prefix: str, bit_depth: int) -> float:
         """
         Calculate current phase for hash prefix and bit depth.
-        
+
         Parameters:
         -----------
         hash_prefix : str
             Hash prefix
         bit_depth : int
             Bit depth
-            
+
         Returns:
         --------
         float
@@ -467,17 +467,17 @@ class TensorHarnessMatrix:
             hash_value = int(hash_prefix.replace("hash_", ""))
             phase = (hash_value * bit_depth) % 360  # Phase in degrees
             return phase / 360.0  # Normalize to [0, 1]
-            
+
         except Exception as e:
             logger.error(f"Error calculating current phase: {e}")
             return 0.0
 
-    def _calculate_tensor_score(self, request: TensorHarnessRequest, 
+    def _calculate_tensor_score(self, request: TensorHarnessRequest,
                                drift_measurement: PhaseDriftMeasurement,
                                voltage_mapping) -> float:
         """
         Calculate tensor score based on request and drift measurement.
-        
+
         Parameters:
         -----------
         request : TensorHarnessRequest
@@ -486,7 +486,7 @@ class TensorHarnessMatrix:
             Phase drift measurement
         voltage_mapping
             Voltage mapping result
-            
+
         Returns:
         --------
         float
@@ -495,37 +495,37 @@ class TensorHarnessMatrix:
         try:
             # Base score from bit depth
             base_score = request.bit_depth / 42.0  # Normalize to [0, 1]
-            
+
             # Drift penalty
             drift_penalty = drift_measurement.drift_magnitude
-            
+
             # Voltage efficiency
             voltage_efficiency = 1.0
             if voltage_mapping:
                 voltage_efficiency = voltage_mapping.safety_margin
-            
+
             # Mode multiplier
             mode_multiplier = 1.0
             if request.mode == TensorMode.LIVE:
                 mode_multiplier = 1.2
             elif request.mode == TensorMode.DEMO:
                 mode_multiplier = 0.8
-            
+
             # Calculate tensor score
             tensor_score = base_score * (1.0 - drift_penalty) * voltage_efficiency * mode_multiplier
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, tensor_score))  # Clamp to [0, 1]
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
             return 0.5
 
-    def _calculate_profit_score(self, request: TensorHarnessRequest, 
+    def _calculate_profit_score(self, request: TensorHarnessRequest,
                                tensor_score: float,
                                drift_measurement: PhaseDriftMeasurement) -> float:
         """
         Calculate profit score based on tensor score and profit sensor data.
-        
+
         Parameters:
         -----------
         request : TensorHarnessRequest
@@ -534,7 +534,7 @@ class TensorHarnessMatrix:
             Tensor score
         drift_measurement : PhaseDriftMeasurement
             Phase drift measurement
-            
+
         Returns:
         --------
         float
@@ -545,7 +545,7 @@ class TensorHarnessMatrix:
             profit_weight = self.config["tensor_parameters"]["profit_weight"]
             voltage_weight = self.config["tensor_parameters"]["voltage_weight"]
             drift_weight = self.config["tensor_parameters"]["drift_weight"]
-            
+
             # Profit sensor component
             profit_sensor_score = 0.5  # Default
             if request.profit_sensor_data:
@@ -553,22 +553,22 @@ class TensorHarnessMatrix:
                 profit_values = list(request.profit_sensor_data.values())
                 if profit_values:
                     profit_sensor_score = unified_math.unified_math.mean(profit_values)
-            
+
             # Voltage efficiency component (simplified)
             voltage_efficiency = 1.0 - (drift_measurement.drift_magnitude * 0.5)
-            
+
             # Drift stability component
             drift_stability = 1.0 - unified_math.min(drift_measurement.drift_magnitude, 1.0)
-            
+
             # Calculate weighted profit score
             profit_score = (
                 profit_weight * profit_sensor_score +
                 voltage_weight * voltage_efficiency +
                 drift_weight * drift_stability
             ) * tensor_score
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, profit_score))  # Clamp to [0, 1]
-            
+
         except Exception as e:
             logger.error(f"Error calculating profit score: {e}")
             return 0.5
@@ -576,12 +576,12 @@ class TensorHarnessMatrix:
     def get_harness_status(self, request_id: str) -> Optional[TensorHarnessResult]:
         """
         Get tensor harness status by request ID.
-        
+
         Parameters:
         -----------
         request_id : str
             Tensor harness request ID
-            
+
         Returns:
         --------
         Optional[TensorHarnessResult]
@@ -595,12 +595,12 @@ class TensorHarnessMatrix:
     def get_tensor_route(self, route_id: str) -> Optional[TensorRoute]:
         """
         Get tensor route by route ID.
-        
+
         Parameters:
         -----------
         route_id : str
             Route ID
-            
+
         Returns:
         --------
         Optional[TensorRoute]
@@ -611,12 +611,12 @@ class TensorHarnessMatrix:
     def get_routes_by_hash_prefix(self, hash_prefix: str) -> List[TensorRoute]:
         """
         Get all tensor routes for a hash prefix.
-        
+
         Parameters:
         -----------
         hash_prefix : str
             Hash prefix
-            
+
         Returns:
         --------
         List[TensorRoute]
@@ -627,7 +627,7 @@ class TensorHarnessMatrix:
     def get_harness_statistics(self) -> Dict[str, Any]:
         """
         Get tensor harness statistics.
-        
+
         Returns:
         --------
         Dict[str, Any]
@@ -649,9 +649,9 @@ class TensorHarnessMatrix:
                     "compensated": len([m for m in self.drift_measurements if m.drift_status == DriftStatus.COMPENSATED])
                 }
             }
-            
+
             return stats
-            
+
         except Exception as e:
             logger.error(f"Error getting harness statistics: {e}")
             return {}
@@ -659,7 +659,7 @@ class TensorHarnessMatrix:
     def export_harness_data(self, output_path: str = "tensor_harness_data.json") -> None:
         """
         Export tensor harness data.
-        
+
         Parameters:
         -----------
         output_path : str
@@ -709,12 +709,12 @@ class TensorHarnessMatrix:
                 ],
                 "statistics": self.get_harness_statistics()
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(data, f, indent=2)
-            
+
             logger.info(f"Tensor harness data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting harness data: {e}")
 
@@ -723,38 +723,38 @@ def main():
     try:
         # Initialize tensor harness matrix
         harness = TensorHarnessMatrix()
-        
+
         # Test tensor routing with drift compensation
         test_prefixes = ["hash_00", "hash_15", "hash_31"]
         profit_sensor_data = {"profit_rate": 0.75, "volatility": 0.25, "volume": 0.8}
-        
+
         for prefix in test_prefixes:
             request_id = harness.route_tensor_with_drift_compensation(
-                prefix, 
-                bit_depth=8, 
+                prefix,
+                bit_depth=8,
                 mode=TensorMode.DEMO,
                 profit_sensor_data=profit_sensor_data
             )
             safe_print(f"Tensor harness request: {request_id} for {prefix}")
-        
+
         # Wait for processing completion
         time.sleep(2)
-        
+
         # Check harness results
         for prefix in test_prefixes:
             routes = harness.get_routes_by_hash_prefix(prefix)
             for route in routes:
                 safe_print(f"Route: {route.tensor_path} (profit_score: {route.profit_score:.3f})")
-        
+
         # Export data
         harness.export_harness_data()
-        
+
         # Print statistics
         stats = harness.get_harness_statistics()
         safe_print(f"Tensor harness statistics: {stats}")
-        
+
     except Exception as e:
         logger.error(f"Error in main: {e}")
 
 if __name__ == "__main__":
-    main() 
+    main()

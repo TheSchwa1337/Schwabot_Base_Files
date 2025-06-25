@@ -58,7 +58,7 @@ class PatternMatch:
 
 class BraidPatternEngine:
     """Mathematical braid pattern recognition and analysis."""
-    
+
     def __init__(self):
         self.known_patterns: Dict[str, BraidPattern] = {}
         self.pattern_history: List[PatternMatch] = []
@@ -66,11 +66,11 @@ class BraidPatternEngine:
         self.similarity_threshold = 0.7
         logger.info("BraidPatternEngine initialized")
 
-    def register_pattern(self, pattern_id: str, generators: List[int], 
+    def register_pattern(self, pattern_id: str, generators: List[int],
                         crossings: List[int], pattern_type: str = "custom") -> BraidPattern:
         """
         Register a known braid pattern.
-        
+
         Parameters:
         -----------
         pattern_id : str
@@ -81,7 +81,7 @@ class BraidPatternEngine:
             Crossing signs
         pattern_type : str
             Type of pattern
-            
+
         Returns:
         --------
         BraidPattern
@@ -91,7 +91,7 @@ class BraidPatternEngine:
             # Calculate pattern properties
             confidence = self._calculate_pattern_confidence(generators, crossings)
             signal_strength = self._calculate_signal_strength(generators, crossings)
-            
+
             pattern = BraidPattern(
                 pattern_id=pattern_id,
                 generators=generators,
@@ -101,96 +101,96 @@ class BraidPatternEngine:
                 signal_strength=signal_strength,
                 metadata={'registered_time': time.time()}
             )
-            
+
             self.known_patterns[pattern_id] = pattern
             logger.info(f"Registered pattern: {pattern_id}")
-            
+
             return pattern
-            
+
         except Exception as e:
             logger.error(f"Error registering pattern: {e}")
             return self._create_empty_pattern()
 
-    def _calculate_pattern_confidence(self, generators: List[int], 
+    def _calculate_pattern_confidence(self, generators: List[int],
                                      crossings: List[int]) -> float:
         """
         Calculate pattern confidence based on complexity and consistency.
-        
+
         Mathematical Formula:
         C = (1 - unified_math.std(generators)) * (1 - unified_math.std(crossings)) * complexity_factor
         """
         try:
             if not generators or not crossings:
                 return 0.0
-            
+
             # Generator consistency
             gen_std = unified_math.unified_math.std(generators) if len(generators) > 1 else 0.0
             gen_confidence = unified_math.max(0.0, 1.0 - gen_std / unified_math.max(generators))
-            
+
             # Crossing consistency
             cross_std = unified_math.unified_math.std(crossings) if len(crossings) > 1 else 0.0
             cross_confidence = unified_math.max(0.0, 1.0 - cross_std / 2.0)  # Normalize to [-1, 1]
-            
+
             # Complexity factor (more complex patterns get higher confidence)
             complexity = len(set(generators)) / len(generators)
-            
+
             # Combined confidence
-            confidence = (gen_confidence * 0.4 + 
-                         cross_confidence * 0.3 + 
+            confidence = (gen_confidence * 0.4 +
+                         cross_confidence * 0.3 +
                          complexity * 0.3)
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, confidence))
-            
+
         except Exception as e:
             logger.error(f"Error calculating pattern confidence: {e}")
             return 0.5
 
-    def _calculate_signal_strength(self, generators: List[int], 
+    def _calculate_signal_strength(self, generators: List[int],
                                   crossings: List[int]) -> float:
         """
         Calculate trading signal strength of pattern.
-        
+
         Mathematical Formula:
         SS = α * pattern_confidence + β * market_correlation
         """
         try:
             if not generators or not crossings:
                 return 0.0
-            
+
             # Pattern complexity
             complexity = len(set(generators)) / len(generators)
-            
+
             # Crossing balance
             positive_crossings = sum(1 for c in crossings if c > 0)
             negative_crossings = sum(1 for c in crossings if c < 0)
             balance = unified_math.abs(positive_crossings - negative_crossings) / len(crossings)
-            
+
             # Generator diversity
             diversity = len(set(generators)) / unified_math.max(generators)
-            
+
             # Combined signal strength
-            signal_strength = (complexity * 0.4 + 
-                             balance * 0.3 + 
+            signal_strength = (complexity * 0.4 +
+                             balance * 0.3 +
                              diversity * 0.3)
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, signal_strength))
-            
+
         except Exception as e:
             logger.error(f"Error calculating signal strength: {e}")
             return 0.5
 
-    def match_patterns(self, target_generators: List[int], 
+    def match_patterns(self, target_generators: List[int],
                       target_crossings: List[int]) -> List[PatternMatch]:
         """
         Match target braid against known patterns.
-        
+
         Parameters:
         -----------
         target_generators : List[int]
             Target generator sequence
         target_crossings : List[int]
             Target crossing sequence
-            
+
         Returns:
         --------
         List[PatternMatch]
@@ -198,18 +198,18 @@ class BraidPatternEngine:
         """
         try:
             matches = []
-            
+
             for pattern_id, pattern in self.known_patterns.items():
                 # Calculate similarity
                 similarity = self._calculate_pattern_similarity(
                     target_generators, target_crossings,
                     pattern.generators, pattern.crossings
                 )
-                
+
                 if similarity >= self.similarity_threshold:
                     # Determine trading signal
                     trading_signal = self._determine_trading_signal(pattern, similarity)
-                    
+
                     match = PatternMatch(
                         pattern=pattern,
                         similarity=similarity,
@@ -218,15 +218,15 @@ class BraidPatternEngine:
                         trading_signal=trading_signal,
                         metadata={'match_time': time.time()}
                     )
-                    
+
                     matches.append(match)
                     self.pattern_history.append(match)
-            
+
             # Sort by confidence
             matches.sort(key=lambda x: x.confidence, reverse=True)
-            
+
             return matches
-            
+
         except Exception as e:
             logger.error(f"Error matching patterns: {e}")
             return []
@@ -235,7 +235,7 @@ class BraidPatternEngine:
                                      gen2: List[int], cross2: List[int]) -> float:
         """
         Calculate similarity between two braid patterns.
-        
+
         Mathematical Formula:
         S = 1 - d(P₁, P₂) / unified_math.max(d(P₁), d(P₂))
         """
@@ -244,34 +244,34 @@ class BraidPatternEngine:
             min_length = unified_math.min(len(gen1), len(gen2))
             if min_length == 0:
                 return 0.0
-            
+
             # Truncate to minimum length
             gen1_norm = gen1[:min_length]
             gen2_norm = gen2[:min_length]
             cross1_norm = cross1[:min_length]
             cross2_norm = cross2[:min_length]
-            
+
             # Calculate generator distance
             gen_distance = sum(unified_math.abs(g1 - g2) for g1, g2 in zip(gen1_norm, gen2_norm))
             gen_distance = gen_distance / (min_length * unified_math.max(unified_math.max(gen1_norm), unified_math.max(gen2_norm)))
-            
+
             # Calculate crossing distance
             cross_distance = sum(unified_math.abs(c1 - c2) for c1, c2 in zip(cross1_norm, cross2_norm))
             cross_distance = cross_distance / (min_length * 2.0)  # Normalize to [-1, 1]
-            
+
             # Combined distance
             total_distance = (gen_distance * 0.7 + cross_distance * 0.3)
-            
+
             # Convert to similarity
             similarity = unified_math.max(0.0, 1.0 - total_distance)
-            
+
             return similarity
-            
+
         except Exception as e:
             logger.error(f"Error calculating pattern similarity: {e}")
             return 0.0
 
-    def _determine_trading_signal(self, pattern: BraidPattern, 
+    def _determine_trading_signal(self, pattern: BraidPattern,
                                  similarity: float) -> str:
         """Determine trading signal based on pattern."""
         try:
@@ -292,7 +292,7 @@ class BraidPatternEngine:
                     return 'hold'
             else:
                 return 'hold'
-                
+
         except Exception as e:
             logger.error(f"Error determining trading signal: {e}")
             return 'hold'
@@ -300,12 +300,12 @@ class BraidPatternEngine:
     def analyze_pattern_evolution(self, pattern_sequence: List[BraidPattern]) -> Dict[str, Any]:
         """
         Analyze evolution of patterns over time.
-        
+
         Parameters:
         -----------
         pattern_sequence : List[BraidPattern]
             Sequence of patterns over time
-            
+
         Returns:
         --------
         Dict[str, Any]
@@ -314,26 +314,26 @@ class BraidPatternEngine:
         try:
             if len(pattern_sequence) < 2:
                 return {}
-            
+
             # Calculate evolution metrics
             confidence_evolution = []
             signal_strength_evolution = []
-            
+
             for i in range(1, len(pattern_sequence)):
                 conf_change = pattern_sequence[i].confidence - pattern_sequence[i-1].confidence
                 signal_change = pattern_sequence[i].signal_strength - pattern_sequence[i-1].signal_strength
-                
+
                 confidence_evolution.append(conf_change)
                 signal_strength_evolution.append(signal_change)
-            
+
             # Calculate trends
             conf_trend = unified_math.unified_math.mean(confidence_evolution)
             signal_trend = unified_math.unified_math.mean(signal_strength_evolution)
-            
+
             # Calculate stability
             conf_stability = 1.0 - unified_math.unified_math.std(confidence_evolution)
             signal_stability = 1.0 - unified_math.unified_math.std(signal_strength_evolution)
-            
+
             return {
                 'confidence_trend': conf_trend,
                 'signal_strength_trend': signal_trend,
@@ -342,7 +342,7 @@ class BraidPatternEngine:
                 'overall_stability': (conf_stability + signal_stability) / 2.0,
                 'evolution_direction': 'improving' if conf_trend > 0 and signal_trend > 0 else 'declining'
             }
-            
+
         except Exception as e:
             logger.error(f"Error analyzing pattern evolution: {e}")
             return {}
@@ -350,12 +350,12 @@ class BraidPatternEngine:
     def generate_trading_signals(self, market_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Generate trading signals based on pattern analysis.
-        
+
         Parameters:
         -----------
         market_data : Dict[str, Any]
             Market data for signal generation
-            
+
         Returns:
         --------
         List[Dict[str, Any]]
@@ -363,21 +363,21 @@ class BraidPatternEngine:
         """
         try:
             signals = []
-            
+
             # Analyze recent pattern matches
             recent_matches = self.pattern_history[-20:]  # Last 20 matches
-            
+
             if not recent_matches:
                 return signals
-            
+
             # Calculate signal metrics
             buy_signals = [m for m in recent_matches if 'buy' in m.trading_signal.lower()]
             sell_signals = [m for m in recent_matches if 'sell' in m.trading_signal.lower()]
-            
+
             # Signal strength calculation
             buy_strength = unified_math.mean([m.confidence for m in buy_signals]) if buy_signals else 0.0
             sell_strength = unified_math.mean([m.confidence for m in sell_signals]) if sell_signals else 0.0
-            
+
             # Generate signals
             if buy_strength > 0.6 and buy_strength > sell_strength:
                 signals.append({
@@ -387,7 +387,7 @@ class BraidPatternEngine:
                     'reason': f'Strong buy pattern detected ({len(buy_signals)} matches)',
                     'timestamp': time.time()
                 })
-            
+
             if sell_strength > 0.6 and sell_strength > buy_strength:
                 signals.append({
                     'type': 'sell',
@@ -396,9 +396,9 @@ class BraidPatternEngine:
                     'reason': f'Strong sell pattern detected ({len(sell_signals)} matches)',
                     'timestamp': time.time()
                 })
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error(f"Error generating trading signals: {e}")
             return []
@@ -420,9 +420,9 @@ class BraidPatternEngine:
         try:
             if not self.pattern_history:
                 return {"error": "No pattern history available"}
-            
+
             recent_matches = self.pattern_history[-50:]  # Last 50 matches
-            
+
             return {
                 "total_matches": len(self.pattern_history),
                 "avg_similarity": unified_math.mean([m.similarity for m in recent_matches]),
@@ -441,7 +441,7 @@ class BraidPatternEngine:
                     "confidence": recent_matches[-1].confidence if recent_matches else 0.0
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting pattern statistics: {e}")
             return {"error": str(e)}
@@ -449,9 +449,9 @@ class BraidPatternEngine:
 def main() -> None:
     """Test function for BraidPatternEngine."""
     safe_print("🧮 Testing Braid Pattern Engine...")
-    
+
     engine = BraidPatternEngine()
-    
+
     # Register some test patterns
     bullish_pattern = engine.register_pattern(
         "bullish_trend",
@@ -459,41 +459,41 @@ def main() -> None:
         crossings=[1, 1, -1, 1, 1, -1, 1, 1],
         pattern_type="bullish"
     )
-    
+
     bearish_pattern = engine.register_pattern(
         "bearish_trend",
         generators=[3, 2, 3, 1, 2, 3, 2, 1],
         crossings=[-1, -1, 1, -1, -1, 1, -1, -1],
         pattern_type="bearish"
     )
-    
+
     safe_print(f"Registered patterns: {len(engine.known_patterns)}")
-    
+
     # Test pattern matching
     target_generators = [1, 2, 1, 3, 2, 1, 2, 3]
     target_crossings = [1, 1, -1, 1, 1, -1, 1, 1]
-    
+
     matches = engine.match_patterns(target_generators, target_crossings)
     safe_print(f"\nPattern matches found: {len(matches)}")
-    
+
     for match in matches:
         safe_print(f"  - {match.pattern.pattern_id}: similarity={match.similarity:.3f}, "
               f"confidence={match.confidence:.3f}, signal={match.trading_signal}")
-    
+
     # Test trading signal generation
     market_data = {'price': 50000, 'volume': 1000}
     signals = engine.generate_trading_signals(market_data)
     safe_print(f"\nTrading signals generated: {len(signals)}")
-    
+
     for signal in signals:
         safe_print(f"  - {signal['type'].upper()}: strength={signal['strength']:.3f}, "
               f"confidence={signal['confidence']:.3f}")
         safe_print(f"    Reason: {signal['reason']}")
-    
+
     # Get statistics
     stats = engine.get_pattern_statistics()
     safe_print(f"\nPattern Statistics: {stats}")
-    
+
     return 0
 
 if __name__ == "__main__":

@@ -384,14 +384,14 @@ def process_waveform(
     signal: Vector, sample_rate: float = 1.0, analysis_type: str = "basic"
 ) -> Dict[str, Any]:
     """
-    
+
     Process waveform data with various analysis types.
-    
+
     Args:
         signal: Input signal data
         sample_rate: Sampling rate of the signal
         analysis_type: Type of analysis ("basic", "advanced", "spectral")
-    
+
     Returns:
         Dictionary with analysis results
     """

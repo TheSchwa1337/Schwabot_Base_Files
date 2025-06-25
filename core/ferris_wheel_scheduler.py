@@ -96,40 +96,40 @@ class SchedulerConfig:
 class FerrisWheelScheduler:
     """
     Ferris wheel-based task scheduler for Schwabot.
-    
+
     Provides cyclical task scheduling based on Ferris wheel phases,
     integrating with the Ferris RDE core for synchronized operations.
     """
-    
+
     def __init__(self, config: Optional[SchedulerConfig] = None):
         """Initialize Ferris wheel scheduler."""
         self.config = config or SchedulerConfig()
-        
+
         # Core components
         self.ferris_rde = None
         if FERRIS_RDE_AVAILABLE:
             self.ferris_rde = get_ferris_rde_core()
-        
+
         # Task management
         self.scheduled_tasks: Dict[str, ScheduledTask] = {}
         self.task_queue: List[ScheduledTask] = []
         self.completed_tasks: List[ScheduledTask] = []
         self.failed_tasks: List[ScheduledTask] = []
-        
+
         # Scheduler state
         self.current_phase = FerrisPhase.VALLEY if FERRIS_RDE_AVAILABLE else None
         self.current_angle = 0.0
         self.is_running = False
         self.start_time = datetime.now()
-        
+
         # Performance tracking
         self.total_tasks_scheduled = 0
         self.total_tasks_completed = 0
         self.total_tasks_failed = 0
         self.average_execution_time = 0.0
-        
+
         logger.info("Ferris Wheel Scheduler initialized")
-    
+
     def schedule_task(
         self,
         task_name: str,
@@ -142,7 +142,7 @@ class FerrisWheelScheduler:
         """Schedule a task for execution."""
         try:
             task_id = f"task_{int(time.time() * 1000)}_{len(self.scheduled_tasks)}"
-            
+
             task = ScheduledTask(
                 task_id=task_id,
                 task_name=task_name,
@@ -152,41 +152,41 @@ class FerrisWheelScheduler:
                 scheduled_time=scheduled_time,
                 metadata=metadata or {}
             )
-            
+
             self.scheduled_tasks[task_id] = task
             self.task_queue.append(task)
-            
+
             # Sort queue by priority
             self.task_queue.sort(key=lambda t: t.priority.value)
-            
+
             self.total_tasks_scheduled += 1
             logger.info(f"Scheduled task: {task_name} (ID: {task_id})")
-            
+
             return task_id
-            
+
         except Exception as e:
             logger.error(f"Failed to schedule task {task_name}: {e}")
             return ""
-    
+
     def cancel_task(self, task_id: str) -> bool:
         """Cancel a scheduled task."""
         try:
             if task_id in self.scheduled_tasks:
                 task = self.scheduled_tasks[task_id]
                 task.status = TaskStatus.CANCELLED
-                
+
                 # Remove from queue
                 self.task_queue = [t for t in self.task_queue if t.task_id != task_id]
-                
+
                 logger.info(f"Cancelled task: {task.task_name} (ID: {task_id})")
                 return True
-            
+
             return False
-            
+
         except Exception as e:
             logger.error(f"Failed to cancel task {task_id}: {e}")
             return False
-    
+
     def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
         """Get status of a specific task."""
         try:
@@ -203,13 +203,13 @@ class FerrisWheelScheduler:
                     "error_message": task.error_message,
                     "execution_time": task.execution_time
                 }
-            
+
             return None
-            
+
         except Exception as e:
             logger.error(f"Failed to get task status: {e}")
             return None
-    
+
     def update_ferris_wheel(self) -> Optional[FerrisWheelData]:
         """Update Ferris wheel state."""
         try:
@@ -217,7 +217,7 @@ class FerrisWheelScheduler:
                 # Fallback wheel update
                 self.current_angle += self.config.angular_velocity * self.config.update_interval
                 self.current_angle = self.current_angle % (2 * math.pi)
-                
+
                 # Determine phase based on angle
                 angle_degrees = math.degrees(self.current_angle)
                 if 0 <= angle_degrees < 90:
@@ -228,7 +228,7 @@ class FerrisWheelScheduler:
                     self.current_phase = FerrisPhase.DESCENT
                 else:
                     self.current_phase = FerrisPhase.VALLEY
-                
+
                 return None
             else:
                 # Use Ferris RDE core
@@ -236,50 +236,50 @@ class FerrisWheelScheduler:
                 self.current_phase = wheel_data.phase
                 self.current_angle = wheel_data.angle
                 return wheel_data
-                
+
         except Exception as e:
             logger.error(f"Failed to update Ferris wheel: {e}")
             return None
-    
+
     def execute_eligible_tasks(self) -> List[Dict[str, Any]]:
         """Execute tasks that are eligible for the current phase."""
         try:
             executed_tasks = []
-            
+
             # Get current time
             current_time = datetime.now()
-            
+
             # Find eligible tasks
             eligible_tasks = []
             for task in self.task_queue[:self.config.max_tasks_per_cycle]:
                 # Check if task is ready for execution
                 if self._is_task_eligible(task, current_time):
                     eligible_tasks.append(task)
-            
+
             # Execute eligible tasks
             for task in eligible_tasks:
                 try:
                     # Update status
                     task.status = TaskStatus.EXECUTING
-                    
+
                     # Execute task
                     start_time = time.time()
                     result = task.task_function()
                     execution_time = time.time() - start_time
-                    
+
                     # Update task
                     task.status = TaskStatus.COMPLETED
                     task.result = result
                     task.execution_time = execution_time
-                    
+
                     # Move to completed list
                     self.completed_tasks.append(task)
                     self.task_queue.remove(task)
-                    
+
                     # Update statistics
                     self.total_tasks_completed += 1
                     self._update_average_execution_time(execution_time)
-                    
+
                     executed_tasks.append({
                         "task_id": task.task_id,
                         "task_name": task.task_name,
@@ -287,37 +287,37 @@ class FerrisWheelScheduler:
                         "execution_time": execution_time,
                         "result": result
                     })
-                    
+
                     logger.info(f"Executed task: {task.task_name} in {execution_time:.3f}s")
-                    
+
                 except Exception as e:
                     # Mark task as failed
                     task.status = TaskStatus.FAILED
                     task.error_message = str(e)
                     task.execution_time = time.time() - start_time
-                    
+
                     # Move to failed list
                     self.failed_tasks.append(task)
                     self.task_queue.remove(task)
-                    
+
                     # Update statistics
                     self.total_tasks_failed += 1
-                    
+
                     executed_tasks.append({
                         "task_id": task.task_id,
                         "task_name": task.task_name,
                         "status": "failed",
                         "error_message": str(e)
                     })
-                    
+
                     logger.error(f"Task failed: {task.task_name} - {e}")
-            
+
             return executed_tasks
-            
+
         except Exception as e:
             logger.error(f"Failed to execute tasks: {e}")
             return []
-    
+
     def _is_task_eligible(self, task: ScheduledTask, current_time: datetime) -> bool:
         """Check if a task is eligible for execution."""
         try:
@@ -326,64 +326,64 @@ class FerrisWheelScheduler:
                 task.phase_requirement and
                 task.phase_requirement != self.current_phase):
                 return False
-            
+
             # Check scheduled time
             if task.scheduled_time and current_time < task.scheduled_time:
                 return False
-            
+
             # Check status
             if task.status != TaskStatus.PENDING:
                 return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error checking task eligibility: {e}")
             return False
-    
+
     def _update_average_execution_time(self, execution_time: float) -> None:
         """Update average execution time."""
         completed_count = self.total_tasks_completed
         current_avg = self.average_execution_time
-        
+
         if completed_count == 1:
             self.average_execution_time = execution_time
         else:
             self.average_execution_time = (
                 (current_avg * (completed_count - 1) + execution_time) / completed_count
             )
-    
+
     def cleanup_old_tasks(self, max_age_hours: float = 24.0) -> int:
         """Clean up old completed and failed tasks."""
         try:
             cutoff_time = datetime.now() - timedelta(hours=max_age_hours)
             cleaned_count = 0
-            
+
             # Clean completed tasks
             self.completed_tasks = [
                 task for task in self.completed_tasks
                 if task.scheduled_time and task.scheduled_time > cutoff_time
             ]
-            
+
             # Clean failed tasks
             self.failed_tasks = [
                 task for task in self.failed_tasks
                 if task.scheduled_time and task.scheduled_time > cutoff_time
             ]
-            
+
             cleaned_count = len(self.completed_tasks) + len(self.failed_tasks)
-            
+
             logger.info(f"Cleaned up {cleaned_count} old tasks")
             return cleaned_count
-            
+
         except Exception as e:
             logger.error(f"Failed to cleanup old tasks: {e}")
             return 0
-    
+
     def get_scheduler_stats(self) -> Dict[str, Any]:
         """Get scheduler statistics."""
         uptime = (datetime.now() - self.start_time).total_seconds()
-        
+
         return {
             "uptime_seconds": uptime,
             "current_phase": self.current_phase.value if self.current_phase else None,
@@ -398,12 +398,12 @@ class FerrisWheelScheduler:
             ),
             "ferris_rde_available": FERRIS_RDE_AVAILABLE
         }
-    
+
     def start(self) -> None:
         """Start the scheduler."""
         self.is_running = True
         logger.info("Ferris Wheel Scheduler started")
-    
+
     def stop(self) -> None:
         """Stop the scheduler."""
         self.is_running = False
@@ -422,55 +422,55 @@ def get_ferris_wheel_scheduler() -> FerrisWheelScheduler:
 def main() -> None:
     """Main function for testing Ferris wheel scheduler."""
     logging.basicConfig(level=logging.INFO)
-    
+
     safe_print("🧪 Testing Ferris Wheel Scheduler")
     safe_print("=" * 35)
-    
+
     # Create scheduler
     scheduler = FerrisWheelScheduler()
-    
+
     # Define test tasks
     def test_task_1():
         time.sleep(0.1)
         return "Task 1 completed"
-    
+
     def test_task_2():
         time.sleep(0.05)
         return "Task 2 completed"
-    
+
     # Schedule tasks
     task_id_1 = scheduler.schedule_task("Test Task 1", test_task_1, TaskPriority.HIGH)
     task_id_2 = scheduler.schedule_task("Test Task 2", test_task_2, TaskPriority.NORMAL)
-    
+
     safe_print(f"✅ Scheduled tasks: {task_id_1}, {task_id_2}")
-    
+
     # Start scheduler
     scheduler.start()
-    
+
     # Update wheel and execute tasks
     for i in range(5):
         wheel_data = scheduler.update_ferris_wheel()
         if wheel_data:
             safe_print(f"🔄 Wheel phase: {wheel_data.phase.value}")
-        
+
         executed = scheduler.execute_eligible_tasks()
-        
+
         if executed:
             for task in executed:
                 safe_print(f"✅ {task['task_name']}: {task['status']}")
-        
+
         time.sleep(0.1)
-    
+
     # Get statistics
     stats = scheduler.get_scheduler_stats()
     safe_print(f"📊 Scheduler stats: {stats['total_tasks_completed']} completed")
     safe_print(f"📈 Success rate: {stats['success_rate']:.1%}")
-    
+
     # Stop scheduler
     scheduler.stop()
-    
+
     safe_print("Ferris wheel scheduler test completed!")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

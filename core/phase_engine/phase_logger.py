@@ -101,11 +101,11 @@ class PhaseLogger:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 logger.info(f"Loaded phase logger configuration")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -120,7 +120,7 @@ class PhaseLogger:
             "correlation_tracking_enabled": True,
             "log_levels": ["info", "warning", "error", "critical"]
         }
-        
+
         try:
             os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
@@ -161,7 +161,7 @@ class PhaseLogger:
         """Log a phase event."""
         try:
             log_id = f"log_{phase_id}_{event_type.value}_{int(time.time())}"
-            
+
             log_entry = PhaseLogEntry(
                 log_id=log_id,
                 phase_id=phase_id,
@@ -173,25 +173,25 @@ class PhaseLogger:
                 correlation_id=correlation_id,
                 metadata={"source": "phase_logger"}
             )
-            
+
             # Store log entry
             self.log_entries[log_id] = log_entry
-            
+
             # Track correlations
             if correlation_id:
                 self.event_correlations[correlation_id].append(log_id)
-            
+
             # Track performance metrics
             if event_type == EventType.PERFORMANCE_UPDATE and data:
                 self._track_performance(phase_id, data)
-            
+
             # Track errors
             if log_level in [LogLevel.ERROR, LogLevel.CRITICAL]:
                 self._track_error(phase_id, message)
-            
+
             logger.info(f"Logged event: {log_id} - {message}")
             return log_id
-            
+
         except Exception as e:
             logger.error(f"Error logging event: {e}")
             return ""
@@ -201,11 +201,11 @@ class PhaseLogger:
         try:
             if "performance_score" in data:
                 self.performance_tracker[phase_id].append(data["performance_score"])
-                
+
                 # Keep only recent performance data
                 if len(self.performance_tracker[phase_id]) > 100:
                     self.performance_tracker[phase_id] = self.performance_tracker[phase_id][-100:]
-                    
+
         except Exception as e:
             logger.error(f"Error tracking performance: {e}")
 
@@ -213,11 +213,11 @@ class PhaseLogger:
         """Track errors for a phase."""
         try:
             self.error_tracker[phase_id].append(error_message)
-            
+
             # Keep only recent errors
             if len(self.error_tracker[phase_id]) > 50:
                 self.error_tracker[phase_id] = self.error_tracker[phase_id][-50:]
-                
+
         except Exception as e:
             logger.error(f"Error tracking error: {e}")
 
@@ -228,29 +228,29 @@ class PhaseLogger:
         """Get logs for a specific phase with optional filtering."""
         try:
             logs = []
-            
+
             for log_entry in self.log_entries.values():
                 if log_entry.phase_id == phase_id:
                     # Filter by event type
                     if event_type and log_entry.event_type != event_type:
                         continue
-                    
+
                     # Filter by time range
                     if start_time and log_entry.timestamp < start_time:
                         continue
                     if end_time and log_entry.timestamp > end_time:
                         continue
-                    
+
                     # Filter by log level
                     if log_level and log_entry.log_level != log_level:
                         continue
-                    
+
                     logs.append(log_entry)
-            
+
             # Sort by timestamp
             logs.sort(key=lambda x: x.timestamp)
             return logs
-            
+
         except Exception as e:
             logger.error(f"Error getting phase logs: {e}")
             return []
@@ -260,15 +260,15 @@ class PhaseLogger:
         try:
             correlated_log_ids = self.event_correlations.get(correlation_id, [])
             correlated_events = []
-            
+
             for log_id in correlated_log_ids:
                 if log_id in self.log_entries:
                     correlated_events.append(self.log_entries[log_id])
-            
+
             # Sort by timestamp
             correlated_events.sort(key=lambda x: x.timestamp)
             return correlated_events
-            
+
         except Exception as e:
             logger.error(f"Error getting correlated events: {e}")
             return []
@@ -278,19 +278,19 @@ class PhaseLogger:
         """Generate a comprehensive log summary for a phase."""
         try:
             summary_id = f"summary_{phase_id}_{int(start_time.timestamp())}"
-            
+
             # Get logs for the time period
             logs = self.get_phase_logs(phase_id, start_time=start_time, end_time=end_time)
-            
+
             # Calculate event distribution
             event_distribution = defaultdict(int)
             error_count = 0
-            
+
             for log_entry in logs:
                 event_distribution[log_entry.event_type.value] += 1
                 if log_entry.log_level in [LogLevel.ERROR, LogLevel.CRITICAL]:
                     error_count += 1
-            
+
             # Calculate performance metrics
             performance_metrics = {}
             if phase_id in self.performance_tracker:
@@ -302,7 +302,7 @@ class PhaseLogger:
                         "max_performance": unified_math.unified_math.max(performance_data),
                         "min_performance": unified_math.unified_math.min(performance_data)
                     }
-            
+
             summary = LogSummary(
                 summary_id=summary_id,
                 phase_id=phase_id,
@@ -314,13 +314,13 @@ class PhaseLogger:
                 error_count=error_count,
                 metadata={"generated_at": datetime.now().isoformat()}
             )
-            
+
             # Store summary
             self.log_summaries[summary_id] = summary
-            
+
             logger.info(f"Generated log summary: {summary_id}")
             return summary
-            
+
         except Exception as e:
             logger.error(f"Error generating log summary: {e}")
             return None
@@ -349,18 +349,18 @@ class PhaseLogger:
             # Remove logs older than retention period
             retention_days = 30
             cutoff_time = datetime.now() - timedelta(days=retention_days)
-            
+
             logs_to_remove = []
             for log_id, log_entry in self.log_entries.items():
                 if log_entry.timestamp < cutoff_time:
                     logs_to_remove.append(log_id)
-            
+
             for log_id in logs_to_remove:
                 del self.log_entries[log_id]
-            
+
             if logs_to_remove:
                 logger.info(f"Cleaned up {len(logs_to_remove)} old log entries")
-                
+
         except Exception as e:
             logger.error(f"Error cleaning up old logs: {e}")
 
@@ -368,24 +368,24 @@ class PhaseLogger:
         """Get comprehensive logger statistics."""
         total_logs = len(self.log_entries)
         total_summaries = len(self.log_summaries)
-        
+
         # Calculate event distribution
         event_distribution = defaultdict(int)
         log_level_distribution = defaultdict(int)
-        
+
         for log_entry in self.log_entries.values():
             event_distribution[log_entry.event_type.value] += 1
             log_level_distribution[log_entry.log_level.value] += 1
-        
+
         # Calculate error rate
-        error_logs = sum(1 for log_entry in self.log_entries.values() 
+        error_logs = sum(1 for log_entry in self.log_entries.values()
                         if log_entry.log_level in [LogLevel.ERROR, LogLevel.CRITICAL])
         error_rate = error_logs / total_logs if total_logs > 0 else 0.0
-        
+
         # Calculate performance tracking stats
         phases_with_performance = len(self.performance_tracker)
         total_performance_entries = sum(len(data) for data in self.performance_tracker.values())
-        
+
         return {
             "total_log_entries": total_logs,
             "total_summaries": total_summaries,
@@ -400,25 +400,25 @@ class PhaseLogger:
 def main() -> None:
     """Main function for testing and demonstration."""
     phase_logger = PhaseLogger("./test_phase_logger_config.json")
-    
+
     # Log some test events
     phase_id = "test_phase_001"
     phase_logger.log_event(phase_id, EventType.PHASE_START, "Phase started successfully")
-    phase_logger.log_event(phase_id, EventType.PERFORMANCE_UPDATE, "Performance updated", 
+    phase_logger.log_event(phase_id, EventType.PERFORMANCE_UPDATE, "Performance updated",
                           data={"performance_score": 0.85})
     phase_logger.log_event(phase_id, EventType.PHASE_END, "Phase completed")
-    
+
     # Generate summary
     start_time = datetime.now() - timedelta(hours=1)
     end_time = datetime.now()
     summary = phase_logger.generate_log_summary(phase_id, start_time, end_time)
-    
+
     if summary:
         safe_print(f"Log Summary: {summary.summary_id}")
         safe_print(f"Total Events: {summary.total_events}")
         safe_print(f"Error Count: {summary.error_count}")
         safe_print(f"Event Distribution: {summary.event_distribution}")
-    
+
     # Get statistics
     stats = phase_logger.get_logger_statistics()
     safe_print(f"Logger Statistics: {stats}")

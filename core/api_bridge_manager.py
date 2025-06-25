@@ -197,7 +197,7 @@ class CoinMarketCapAdapter(ApiAdapter):
             item_data = data['data'][symbol_upper]
             if isinstance(item_data, list):
                 item_data = item_data[0]
-            
+
             try:
                 quote = self._safe_get(item_data, 'quote.USD', {})
                 crypto = CryptoData(
@@ -319,14 +319,14 @@ class APIBridgeManager:
             return combined_results
 
         adapters_to_use = [self._adapters[s] for s in (sources or self._adapters.keys()) if s in self._adapters]
-        
+
         fetched_data_this_run: List[CryptoData] = []
         tasks = [self._fetch_with_retry(adapter, list(symbols_to_fetch_set)) for adapter in adapters_to_use]
         results = await asyncio.gather(*tasks)
 
         for result_list in results:
             fetched_data_this_run.extend(result_list)
-        
+
         for item in fetched_data_this_run:
             if item.symbol not in combined_results:
                 combined_results[item.symbol] = item
@@ -357,17 +357,17 @@ class APIBridgeManager:
         fresh_data: Dict[str, CryptoData] = {}
         symbols_to_fetch = set(symbols)
         now = datetime.now()
-        
+
         for symbol in symbols:
             if symbol in self._cache:
                 entry = self._cache[symbol]
                 if (now - entry.timestamp) < self._cache_ttl:
                     fresh_data[symbol] = entry.data
                     symbols_to_fetch.remove(symbol)
-        
+
         if fresh_data:
             logger.debug(f"Cache hit for symbols: {list(fresh_data.keys())}")
-        
+
         return fresh_data, symbols_to_fetch
 
     async def _fetch_with_retry(
@@ -387,7 +387,7 @@ class APIBridgeManager:
                 if i < retries - 1:
                     await asyncio.sleep(delay)
                     delay *= 2
-        
+
         self._request_stats[adapter.__class__.__name__]['failures'] += 1
         return []
 
@@ -402,7 +402,7 @@ class APIBridgeManager:
 async def main():
     """Demonstrates the functionality of the APIBridgeManager."""
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    
+
     bus = FaultBus()
 
     async def price_listener(price: float, symbol: str, **kwargs):
@@ -412,16 +412,16 @@ async def main():
 
     # Pass the bus to the manager
     manager = APIBridgeManager(fault_bus=bus)
-    
+
     try:
         await manager.initialize()
         # For CoinGecko, use IDs. For CMC, use symbols.
         # Example using CoinGecko IDs:
         symbols_to_fetch = ["bitcoin", "ethereum"]
-        
+
         safe_print(f"\n--- Fetching data for {', '.join(symbols_to_fetch)} ---")
         data = await manager.get_crypto_data(symbols_to_fetch)
-        
+
         if data:
             for symbol, crypto_data in data.items():
                 safe_print(
@@ -436,4 +436,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

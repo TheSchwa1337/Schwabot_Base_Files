@@ -17,8 +17,8 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """ZPE Hybrid Mode Selector - Dynamic Mode Selection System.
 
-This module provides intelligent mode selection between ZPE (recursive velocity) 
-and reactive tasking based on market conditions, volatility, timeframes, and 
+This module provides intelligent mode selection between ZPE (recursive velocity)
+and reactive tasking based on market conditions, volatility, timeframes, and
 other factors. Implements the "both/and" approach for maximum flexibility.
 """
 
@@ -114,7 +114,7 @@ class PortfolioAsset:
 class ZPEHybridModeSelector:
     """
     Hybrid Mode Selector for dynamic ZPE/Reactive mode selection.
-    
+
     Implements intelligent mode selection based on:
     - Market conditions (bull/bear/sideways)
     - Volatility levels
@@ -123,45 +123,45 @@ class ZPEHybridModeSelector:
     - Portfolio asset characteristics
     - 488 and 42-bit phase logic
     """
-    
+
     def __init__(self):
         """Initialize the hybrid mode selector."""
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
-        
+
         # Mode selection thresholds
         self.zpe_threshold = 0.7      # High confidence needed for ZPE
         self.reactive_threshold = 0.6  # Lower threshold for reactive
         self.hybrid_threshold = 0.4    # Medium threshold for hybrid
-        
+
         # Market condition thresholds
         self.bull_run_threshold = 0.6
         self.bear_market_threshold = -0.4
         self.high_volatility_threshold = 0.7
         self.low_volatility_threshold = 0.3
-        
+
         # Timeframe weights
         self.timeframe_weights = {
             "hourly": {"zpe": 0.3, "reactive": 0.7},    # Reactive preferred for speed
             "daily": {"zpe": 0.6, "reactive": 0.4},     # Balanced approach
             "weekly": {"zpe": 0.8, "reactive": 0.2}     # ZPE preferred for analysis
         }
-        
+
         # 488 and 42-bit phase logic
         self.phase_488_active = False
         self.phase_42_active = False
         self.phase_switch_counter = 0
-        
+
         # Portfolio tracking
         self.portfolio_assets: Dict[str, PortfolioAsset] = {}
         self.retroactive_task_history: List[Dict] = []
-        
+
         # Performance tracking
         self.mode_performance_history: Dict[TradingMode, List[float]] = {
             mode: [] for mode in TradingMode
         }
-        
+
         safe_safe_print("🔄 ZPE Hybrid Mode Selector initialized")
-    
+
     def select_mode(
         self,
         market_data: Dict[str, Any],
@@ -170,35 +170,35 @@ class ZPEHybridModeSelector:
     ) -> ModeSelectionResult:
         """
         Select the optimal trading mode based on current conditions.
-        
+
         Args:
             market_data: Current market data
             portfolio_data: Current portfolio data
             timeframe: Trading timeframe
-            
+
         Returns:
             ModeSelectionResult with selected mode and reasoning
         """
         try:
             # Analyze market conditions
             market_condition = self._analyze_market_condition(market_data)
-            
+
             # Calculate mode selection criteria
             criteria = self._calculate_selection_criteria(market_data, market_condition, timeframe)
-            
+
             # Apply 488 and 42-bit phase logic
             self._update_phase_logic(market_data)
-            
+
             # Select mode based on criteria
             selected_mode, confidence, reasoning = self._select_mode_by_criteria(criteria)
-            
+
             # Calculate mode weights for hybrid scenarios
             mode_weights = self._calculate_mode_weights(criteria, selected_mode)
-            
+
             # Update portfolio for retroactive tasking
             if portfolio_data:
                 self._update_portfolio_assets(portfolio_data)
-            
+
             # Create result
             result = ModeSelectionResult(
                 selected_mode=selected_mode,
@@ -214,13 +214,13 @@ class ZPEHybridModeSelector:
                     'trend_strength': criteria.trend_strength
                 }
             )
-            
+
             safe_safe_print(f"🎯 Mode Selected: {selected_mode.value} (confidence: {confidence:.3f})")
             safe_safe_print(f"   Market Condition: {market_condition.value}")
             safe_safe_print(f"   Reasoning: {', '.join(reasoning[:2])}")
-            
+
             return result
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Mode selection failed: {safe_format_error(e, 'mode_selection')}")
             # Emergency fallback
@@ -230,41 +230,41 @@ class ZPEHybridModeSelector:
                 reasoning=["Emergency fallback due to selection error"],
                 market_condition=MarketCondition.CRISIS
             )
-    
+
     def _analyze_market_condition(self, market_data: Dict[str, Any]) -> MarketCondition:
         """Analyze current market condition."""
         try:
             trend_strength = market_data.get('trend_strength', 0.0)
             volatility = market_data.get('volatility', 0.5)
             price_change = market_data.get('price_change_24h', 0.0)
-            
+
             # Check for crisis conditions
             if volatility > 0.9 or unified_math.abs(price_change) > 0.2:
                 return MarketCondition.CRISIS
-            
+
             # Check for bull run
             if trend_strength > self.bull_run_threshold and price_change > 0.05:
                 return MarketCondition.BULL_RUN
-            
+
             # Check for bear market
             if trend_strength < self.bear_market_threshold and price_change < -0.05:
                 return MarketCondition.BEAR_MARKET
-            
+
             # Check for high volatility
             if volatility > self.high_volatility_threshold:
                 return MarketCondition.HIGH_VOLATILITY
-            
+
             # Check for low volatility
             if volatility < self.low_volatility_threshold:
                 return MarketCondition.LOW_VOLATILITY
-            
+
             # Default to sideways
             return MarketCondition.SIDEWAYS
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
             return MarketCondition.SIDEWAYS
-    
+
     def _calculate_selection_criteria(
         self,
         market_data: Dict[str, Any],
@@ -276,16 +276,16 @@ class ZPEHybridModeSelector:
             volatility_score = market_data.get('volatility', 0.5)
             trend_strength = market_data.get('trend_strength', 0.0)
             profit_performance = market_data.get('profit_performance', 0.0)
-            
+
             # Check ZPE availability
             zpe_available = ZPE_MODULES_AVAILABLE and self.zpe_core is not None
-            
+
             # Check reactive availability (always available as fallback)
             reactive_available = True
-            
+
             # Check for emergency conditions
             emergency_triggered = market_condition == MarketCondition.CRISIS
-            
+
             return ModeSelectionCriteria(
                 market_condition=market_condition,
                 volatility_score=volatility_score,
@@ -296,7 +296,7 @@ class ZPEHybridModeSelector:
                 reactive_availability=reactive_available,
                 emergency_triggered=emergency_triggered
             )
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Criteria calculation failed: {safe_format_error(e, 'criteria_calculation')}")
             return ModeSelectionCriteria(
@@ -306,13 +306,13 @@ class ZPEHybridModeSelector:
                 timeframe=timeframe,
                 profit_performance=0.0
             )
-    
+
     def _update_phase_logic(self, market_data: Dict[str, Any]) -> None:
         """Update 488 and 42-bit phase logic."""
         try:
             # Simple phase switching logic based on market conditions
             current_time = time.time()
-            
+
             # Phase 488: High-frequency, high-volatility conditions
             if market_data.get('volatility', 0.0) > 0.7:
                 self.phase_488_active = True
@@ -325,14 +325,14 @@ class ZPEHybridModeSelector:
                 # Mixed phase
                 self.phase_488_active = False
                 self.phase_42_active = False
-            
+
             # Update phase switch counter
             if self.phase_488_active or self.phase_42_active:
                 self.phase_switch_counter += 1
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
-    
+
     def _select_mode_by_criteria(
         self,
         criteria: ModeSelectionCriteria
@@ -340,66 +340,66 @@ class ZPEHybridModeSelector:
         """Select mode based on criteria."""
         reasoning = []
         mode_scores = {}
-        
+
         try:
             # Emergency fallback check
             if criteria.emergency_triggered:
                 reasoning.append("Emergency conditions detected")
                 return TradingMode.EMERGENCY_FALLBACK, 1.0, reasoning
-            
+
             # Calculate base scores for each mode
             mode_scores[TradingMode.ZPE_RECURSIVE] = self._calculate_zpe_score(criteria)
             mode_scores[TradingMode.REACTIVE_TASKING] = self._calculate_reactive_score(criteria)
             mode_scores[TradingMode.HYBRID_BLEND] = self._calculate_hybrid_score(criteria)
-            
+
             # Apply availability constraints
             if not criteria.zpe_availability:
                 mode_scores[TradingMode.ZPE_RECURSIVE] = 0.0
                 mode_scores[TradingMode.HYBRID_BLEND] *= 0.5
                 reasoning.append("ZPE modules unavailable")
-            
+
             if not criteria.reactive_availability:
                 mode_scores[TradingMode.REACTIVE_TASKING] = 0.0
                 mode_scores[TradingMode.HYBRID_BLEND] *= 0.5
                 reasoning.append("Reactive modules unavailable")
-            
+
             # Apply phase logic adjustments
             if self.phase_488_active:
                 mode_scores[TradingMode.REACTIVE_TASKING] *= 1.2  # Boost reactive in 488
                 reasoning.append("Phase 488 active - boosting reactive")
-            
+
             if self.phase_42_active:
                 mode_scores[TradingMode.ZPE_RECURSIVE] *= 1.2  # Boost ZPE in 42
                 reasoning.append("Phase 42 active - boosting ZPE")
-            
+
             # Select best mode
             best_mode = unified_math.max(mode_scores, key=mode_scores.get)
             best_score = mode_scores[best_mode]
-            
+
             # Apply confidence thresholds
             if best_mode == TradingMode.ZPE_RECURSIVE and best_score < self.zpe_threshold:
                 reasoning.append(f"ZPE score {best_score:.3f} below threshold {self.zpe_threshold}")
                 best_mode = TradingMode.HYBRID_BLEND
                 best_score = mode_scores[TradingMode.HYBRID_BLEND]
-            
+
             if best_mode == TradingMode.REACTIVE_TASKING and best_score < self.reactive_threshold:
                 reasoning.append(f"Reactive score {best_score:.3f} below threshold {self.reactive_threshold}")
                 best_mode = TradingMode.HYBRID_BLEND
                 best_score = mode_scores[TradingMode.HYBRID_BLEND]
-            
+
             # Add reasoning
             reasoning.append(f"Selected {best_mode.value} with score {best_score:.3f}")
-            
+
             return best_mode, best_score, reasoning
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
             return TradingMode.EMERGENCY_FALLBACK, 1.0, ["Emergency fallback due to selection error"]
-    
+
     def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
         """Calculate ZPE mode score."""
         score = 0.0
-        
+
         # Market condition scoring
         if criteria.market_condition == MarketCondition.BULL_RUN:
             score += 0.4
@@ -407,33 +407,33 @@ class ZPEHybridModeSelector:
             score += 0.3
         elif criteria.market_condition == MarketCondition.SIDEWAYS:
             score += 0.2
-        
+
         # Trend strength scoring
         if criteria.trend_strength > 0.5:
             score += 0.2
         elif criteria.trend_strength > 0.0:
             score += 0.1
-        
+
         # Volatility scoring (ZPE prefers lower volatility)
         if criteria.volatility_score < 0.3:
             score += 0.2
         elif criteria.volatility_score < 0.5:
             score += 0.1
-        
+
         # Timeframe scoring
         timeframe_weights = self.timeframe_weights.get(criteria.timeframe, {"zpe": 0.5, "reactive": 0.5})
         score += timeframe_weights["zpe"] * 0.2
-        
+
         # Profit performance scoring
         if criteria.profit_performance > 0.1:
             score += 0.1
-        
+
         return unified_math.min(1.0, score)
-    
+
     def _calculate_reactive_score(self, criteria: ModeSelectionCriteria) -> float:
         """Calculate reactive mode score."""
         score = 0.0
-        
+
         # Market condition scoring
         if criteria.market_condition == MarketCondition.BEAR_MARKET:
             score += 0.4
@@ -441,52 +441,52 @@ class ZPEHybridModeSelector:
             score += 0.3
         elif criteria.market_condition == MarketCondition.CRISIS:
             score += 0.5
-        
+
         # Trend strength scoring (reactive prefers weak trends)
         if criteria.trend_strength < -0.3:
             score += 0.2
         elif unified_math.abs(criteria.trend_strength) < 0.2:
             score += 0.1
-        
+
         # Volatility scoring (reactive handles high volatility well)
         if criteria.volatility_score > 0.7:
             score += 0.3
         elif criteria.volatility_score > 0.5:
             score += 0.2
-        
+
         # Timeframe scoring
         timeframe_weights = self.timeframe_weights.get(criteria.timeframe, {"zpe": 0.5, "reactive": 0.5})
         score += timeframe_weights["reactive"] * 0.2
-        
+
         # Profit performance scoring (reactive for poor performance)
         if criteria.profit_performance < -0.1:
             score += 0.2
-        
+
         return unified_math.min(1.0, score)
-    
+
     def _calculate_hybrid_score(self, criteria: ModeSelectionCriteria) -> float:
         """Calculate hybrid mode score."""
         # Hybrid is good for mixed conditions
         score = 0.3  # Base score
-        
+
         # Mixed market conditions
         if criteria.market_condition == MarketCondition.SIDEWAYS:
             score += 0.2
-        
+
         # Moderate volatility
         if 0.3 <= criteria.volatility_score <= 0.7:
             score += 0.2
-        
+
         # Mixed trend strength
         if -0.3 <= criteria.trend_strength <= 0.3:
             score += 0.2
-        
+
         # Both modes available
         if criteria.zpe_availability and criteria.reactive_availability:
             score += 0.1
-        
+
         return unified_math.min(1.0, score)
-    
+
     def _calculate_mode_weights(
         self,
         criteria: ModeSelectionCriteria,
@@ -499,12 +499,12 @@ class ZPEHybridModeSelector:
             TradingMode.HYBRID_BLEND: 0.0,
             TradingMode.EMERGENCY_FALLBACK: 0.0
         }
-        
+
         if selected_mode == TradingMode.HYBRID_BLEND:
             # Calculate hybrid weights based on conditions
             zpe_weight = self._calculate_zpe_score(criteria)
             reactive_weight = self._calculate_reactive_score(criteria)
-            
+
             # Normalize weights
             total_weight = zpe_weight + reactive_weight
             if total_weight > 0:
@@ -515,14 +515,14 @@ class ZPEHybridModeSelector:
                 weights[TradingMode.REACTIVE_TASKING] = 0.5
         else:
             weights[selected_mode] = 1.0
-        
+
         return weights
-    
+
     def _update_portfolio_assets(self, portfolio_data: Dict[str, Any]) -> None:
         """Update portfolio assets for retroactive tasking."""
         try:
             assets = portfolio_data.get('assets', {})
-            
+
             for symbol, asset_data in assets.items():
                 if symbol not in self.portfolio_assets:
                     self.portfolio_assets[symbol] = PortfolioAsset(
@@ -540,14 +540,14 @@ class ZPEHybridModeSelector:
                     asset.allocation_percentage = asset_data.get('allocation', asset.allocation_percentage)
                     asset.profit_performance = asset_data.get('performance', asset.profit_performance)
                     asset.volatility = asset_data.get('volatility', asset.volatility)
-                    
+
         except Exception as e:
             safe_safe_print(f"⚠️ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
-    
+
     def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
         """Get portfolio assets that can be retroactively tasked."""
         candidates = []
-        
+
         for asset in self.portfolio_assets.values():
             if asset.can_retroactive_task:
                 # Check if asset meets retroactive tasking criteria
@@ -555,11 +555,11 @@ class ZPEHybridModeSelector:
                     asset.volatility > 0.7 or           # High volatility
                     asset.allocation_percentage > 0.2):  # High allocation
                     candidates.append(asset)
-        
+
         # Sort by priority (poor performance first)
         candidates.sort(key=lambda x: x.profit_performance)
         return candidates
-    
+
     def record_mode_performance(
         self,
         mode: TradingMode,
@@ -570,16 +570,16 @@ class ZPEHybridModeSelector:
         try:
             if mode not in self.mode_performance_history:
                 self.mode_performance_history[mode] = []
-            
+
             self.mode_performance_history[mode].append(performance)
-            
+
             # Keep only recent performance (last 100)
             if len(self.mode_performance_history[mode]) > 100:
                 self.mode_performance_history[mode] = self.mode_performance_history[mode][-100:]
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Performance recording failed: {safe_format_error(e, 'performance_recording')}")
-    
+
     def get_mode_statistics(self) -> Dict[str, Any]:
         """Get mode selection statistics."""
         try:
@@ -592,7 +592,7 @@ class ZPEHybridModeSelector:
                 'portfolio_assets': len(self.portfolio_assets),
                 'retroactive_candidates': len(self.get_retroactive_tasking_candidates())
             }
-            
+
             for mode, performance_list in self.mode_performance_history.items():
                 if performance_list:
                     stats['mode_performance'][mode.value] = {
@@ -600,9 +600,9 @@ class ZPEHybridModeSelector:
                         'average': sum(performance_list) / len(performance_list),
                         'recent': performance_list[-10:] if len(performance_list) >= 10 else performance_list
                     }
-            
+
             return stats
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Statistics calculation failed: {safe_format_error(e, 'statistics')}")
             return {}
@@ -646,9 +646,9 @@ if __name__ == "__main__":
         'price_change_24h': 0.08,
         'profit_performance': 0.15
     }
-    
+
     result = select_trading_mode(test_market_data, timeframe="daily")
     safe_print(f"Selected Mode: {result.selected_mode.value}")
     safe_print(f"Confidence: {result.confidence_score:.3f}")
     safe_print(f"Market Condition: {result.market_condition.value}")
-    safe_print(f"Reasoning: {result.reasoning}") 
+    safe_print(f"Reasoning: {result.reasoning}")

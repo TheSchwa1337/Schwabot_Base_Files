@@ -136,42 +136,42 @@ class UIMetrics:
 
 class UIIntegrationBridge:
     """UI Integration Bridge for component management and event handling."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the UI Integration Bridge."""
         self.config = config or self._default_config()
         self.version = "1.0.0"
-        
+
         # Component storage
         self.components: Dict[str, UIComponent] = {}
         self.component_hierarchy: Dict[str, List[str]] = defaultdict(list)
-        
+
         # Event handling
         self.events: List[UIEvent] = []
         self.event_subscriptions: Dict[str, EventSubscription] = {}
         self.event_callbacks: Dict[EventType, List[Callable]] = defaultdict(list)
         self.component_callbacks: Dict[str, List[Callable]] = defaultdict(list)
-        
+
         # Performance tracking
         self.metrics = UIMetrics()
-        
+
         # Event processing
         self.event_queue: deque = deque(maxlen=1000)
         self.event_processing_thread: Optional[threading.Thread] = None
         self.event_processing_active = False
-        
+
         # Initialize default components
         self._initialize_default_components()
-        
+
         # Start event processing if enabled
         if self.config.get("enable_event_processing", True):
             self._start_event_processing()
-        
+
         if CLI_HANDLER_AVAILABLE:
             cli_handler.log_safe(logger, "info", f"UI Integration Bridge v{self.version} initialized")
         else:
             logger.info(f"UI Integration Bridge v{self.version} initialized")
-    
+
     def _default_config(self) -> Dict[str, Any]:
         """Get default configuration."""
         return {
@@ -183,7 +183,7 @@ class UIIntegrationBridge:
             "component_auto_refresh": True,
             "refresh_interval_seconds": 5.0
         }
-    
+
     def _initialize_default_components(self) -> None:
         """Initialize default UI components."""
         default_components = [
@@ -219,7 +219,7 @@ class UIIntegrationBridge:
                 metadata={"description": "Status panel component"}
             )
         ]
-        
+
         for component in default_components:
             self.components[component.component_id] = component
             if component.parent_id:
@@ -227,7 +227,7 @@ class UIIntegrationBridge:
             self.metrics.total_components += 1
             if component.status == ComponentStatus.ACTIVE:
                 self.metrics.active_components += 1
-    
+
     def register_component(self, component_id: str, component_type: ComponentType,
                           parent_id: Optional[str] = None,
                           properties: Optional[Dict[str, Any]] = None,
@@ -240,7 +240,7 @@ class UIIntegrationBridge:
                 else:
                     logger.warning(f"Component {component_id} already registered")
                 return False
-            
+
             component = UIComponent(
                 component_id=component_id,
                 component_type=component_type,
@@ -249,114 +249,114 @@ class UIIntegrationBridge:
                 properties=properties or {},
                 metadata=metadata or {}
             )
-            
+
             self.components[component_id] = component
-            
+
             if parent_id:
                 self.component_hierarchy[parent_id].append(component_id)
                 if parent_id in self.components:
                     self.components[parent_id].children.append(component_id)
-            
+
             self.metrics.total_components += 1
             self.metrics.active_components += 1
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Registered component: {component_id}")
             else:
                 logger.info(f"Registered component: {component_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error registering component {component_id}: {e}")
             else:
                 logger.error(f"Error registering component {component_id}: {e}")
             return False
-    
+
     def unregister_component(self, component_id: str) -> bool:
         """Unregister a UI component."""
         try:
             if component_id not in self.components:
                 return False
-            
+
             component = self.components[component_id]
-            
+
             # Remove from parent
             if component.parent_id and component.parent_id in self.components:
                 parent = self.components[component.parent_id]
                 if component_id in parent.children:
                     parent.children.remove(component_id)
-            
+
             # Remove children
             for child_id in component.children:
                 if child_id in self.components:
                     del self.components[child_id]
                     self.metrics.total_components -= 1
-            
+
             # Remove from hierarchy
             if component_id in self.component_hierarchy:
                 del self.component_hierarchy[component_id]
-            
+
             # Remove component
             del self.components[component_id]
             self.metrics.total_components -= 1
             if component.status == ComponentStatus.ACTIVE:
                 self.metrics.active_components -= 1
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Unregistered component: {component_id}")
             else:
                 logger.info(f"Unregistered component: {component_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error unregistering component {component_id}: {e}")
             else:
                 logger.error(f"Error unregistering component {component_id}: {e}")
             return False
-    
+
     def get_component(self, component_id: str) -> Optional[UIComponent]:
         """Get a component by ID."""
         return self.components.get(component_id)
-    
+
     def get_components_by_type(self, component_type: ComponentType) -> List[UIComponent]:
         """Get all components of a specific type."""
         return [comp for comp in self.components.values() if comp.component_type == component_type]
-    
+
     def get_child_components(self, parent_id: str) -> List[UIComponent]:
         """Get all child components of a parent."""
         child_ids = self.component_hierarchy.get(parent_id, [])
         return [self.components[cid] for cid in child_ids if cid in self.components]
-    
-    def update_component_properties(self, component_id: str, 
+
+    def update_component_properties(self, component_id: str,
                                   properties: Dict[str, Any]) -> bool:
         """Update component properties."""
         try:
             if component_id not in self.components:
                 return False
-            
+
             component = self.components[component_id]
             component.properties.update(properties)
             component.timestamp = datetime.now()
             component.version += 1
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Updated component properties: {component_id}")
             else:
                 logger.info(f"Updated component properties: {component_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error updating component properties {component_id}: {e}")
             else:
                 logger.error(f"Error updating component properties {component_id}: {e}")
             return False
-    
+
     def emit_event(self, event_type: EventType, component_id: str,
                   data: Optional[Dict[str, Any]] = None,
                   target: Optional[str] = None) -> bool:
@@ -369,26 +369,26 @@ class UIIntegrationBridge:
                 data=data or {},
                 target=target
             )
-            
+
             self.events.append(event)
             self.event_queue.append(event)
             self.metrics.total_events += 1
-            
+
             if self.config.get("event_logging", True):
                 if CLI_HANDLER_AVAILABLE:
                     cli_handler.log_safe(logger, "info", f"Emitted event: {event_type.value} from {component_id}")
                 else:
                     logger.info(f"Emitted event: {event_type.value} from {component_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error emitting event: {e}")
             else:
                 logger.error(f"Error emitting event: {e}")
             return False
-    
+
     def subscribe_to_events(self, subscriber_id: str,
                            event_types: List[EventType],
                            component_ids: List[str],
@@ -401,82 +401,82 @@ class UIIntegrationBridge:
                 component_ids=set(component_ids),
                 callback=callback
             )
-            
+
             self.event_subscriptions[subscriber_id] = subscription
-            
+
             # Register callbacks
             for event_type in event_types:
                 self.event_callbacks[event_type].append(callback)
-            
+
             for component_id in component_ids:
                 self.component_callbacks[component_id].append(callback)
-            
+
             self.metrics.total_subscriptions += 1
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Event subscription created: {subscriber_id}")
             else:
                 logger.info(f"Event subscription created: {subscriber_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error creating event subscription: {e}")
             else:
                 logger.error(f"Error creating event subscription: {e}")
             return False
-    
+
     def unsubscribe_from_events(self, subscriber_id: str) -> bool:
         """Unsubscribe from UI events."""
         try:
             if subscriber_id not in self.event_subscriptions:
                 return False
-            
+
             subscription = self.event_subscriptions[subscriber_id]
-            
+
             # Remove callbacks
             for event_type in subscription.event_types:
                 if event_type in self.event_callbacks:
                     if subscription.callback in self.event_callbacks[event_type]:
                         self.event_callbacks[event_type].remove(subscription.callback)
-            
+
             for component_id in subscription.component_ids:
                 if component_id in self.component_callbacks:
                     if subscription.callback in self.component_callbacks[component_id]:
                         self.component_callbacks[component_id].remove(subscription.callback)
-            
+
             del self.event_subscriptions[subscriber_id]
             self.metrics.total_subscriptions -= 1
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Event subscription removed: {subscriber_id}")
             else:
                 logger.info(f"Event subscription removed: {subscriber_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error removing event subscription: {e}")
             else:
                 logger.error(f"Error removing event subscription: {e}")
             return False
-    
+
     def _start_event_processing(self) -> None:
         """Start the event processing thread."""
         if self.event_processing_active:
             return
-        
+
         self.event_processing_active = True
         self.event_processing_thread = threading.Thread(target=self._event_processing_loop, daemon=True)
         self.event_processing_thread.start()
-        
+
         if CLI_HANDLER_AVAILABLE:
             cli_handler.log_safe(logger, "info", "Event processing started")
         else:
             logger.info("Event processing started")
-    
+
     def _event_processing_loop(self) -> None:
         """Event processing loop."""
         while self.event_processing_active:
@@ -489,11 +489,11 @@ class UIIntegrationBridge:
                 else:
                     logger.error(f"Error in event processing loop: {e}")
                 time.sleep(1.0)  # Longer delay on error
-    
+
     def _process_events(self) -> None:
         """Process pending events."""
         start_time = time.time()
-        
+
         while self.event_queue:
             try:
                 event = self.event_queue.popleft()
@@ -506,10 +506,10 @@ class UIIntegrationBridge:
                     cli_handler.log_safe(logger, "error", f"Error processing event: {e}")
                 else:
                     logger.error(f"Error processing event: {e}")
-        
+
         self.metrics.event_processing_time_ms = (time.time() - start_time) * 1000
         self.metrics.last_update = datetime.now()
-    
+
     def _handle_event(self, event: UIEvent) -> None:
         """Handle a single event."""
         # Notify event type subscribers
@@ -523,7 +523,7 @@ class UIIntegrationBridge:
                         cli_handler.log_safe(logger, "error", f"Error in event callback: {e}")
                     else:
                         logger.error(f"Error in event callback: {e}")
-        
+
         # Notify component subscribers
         if event.component_id in self.component_callbacks:
             for callback in self.component_callbacks[event.component_id]:
@@ -535,43 +535,43 @@ class UIIntegrationBridge:
                         cli_handler.log_safe(logger, "error", f"Error in component callback: {e}")
                     else:
                         logger.error(f"Error in component callback: {e}")
-    
+
     def refresh_component(self, component_id: str) -> bool:
         """Refresh a component."""
         try:
             if component_id not in self.components:
                 return False
-            
+
             component = self.components[component_id]
             component.status = ComponentStatus.UPDATING
             component.timestamp = datetime.now()
-            
+
             # Emit refresh event
             self.emit_event(EventType.REFRESH, component_id)
-            
+
             # Simulate refresh completion
             component.status = ComponentStatus.ACTIVE
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Refreshed component: {component_id}")
             else:
                 logger.info(f"Refreshed component: {component_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error refreshing component {component_id}: {e}")
             else:
                 logger.error(f"Error refreshing component {component_id}: {e}")
             return False
-    
+
     def get_component_tree(self, root_id: str) -> Dict[str, Any]:
         """Get component hierarchy tree."""
         try:
             if root_id not in self.components:
                 return {}
-            
+
             def build_tree(component_id: str) -> Dict[str, Any]:
                 component = self.components[component_id]
                 tree = {
@@ -581,22 +581,22 @@ class UIIntegrationBridge:
                     "properties": component.properties,
                     "children": []
                 }
-                
+
                 for child_id in component.children:
                     if child_id in self.components:
                         tree["children"].append(build_tree(child_id))
-                
+
                 return tree
-            
+
             return build_tree(root_id)
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error building component tree: {e}")
             else:
                 logger.error(f"Error building component tree: {e}")
             return {}
-    
+
     def get_bridge_status(self) -> Dict[str, Any]:
         """Get bridge status and metrics."""
         return {
@@ -611,7 +611,7 @@ class UIIntegrationBridge:
             "event_processing_active": self.event_processing_active,
             "config": self.config
         }
-    
+
     def export_component_data(self) -> Dict[str, Any]:
         """Export component data for persistence."""
         return {
@@ -620,14 +620,14 @@ class UIIntegrationBridge:
             "metrics": asdict(self.metrics),
             "export_timestamp": datetime.now().isoformat()
         }
-    
+
     def import_component_data(self, data: Dict[str, Any]) -> bool:
         """Import component data from persistence."""
         try:
             # Clear existing components
             self.components.clear()
             self.component_hierarchy.clear()
-            
+
             # Import components
             for component_id, component_data in data.get("components", {}).items():
                 component = UIComponent(
@@ -642,20 +642,20 @@ class UIIntegrationBridge:
                     version=component_data.get("version", 1)
                 )
                 self.components[component_id] = component
-            
+
             # Import hierarchy
             self.component_hierarchy.update(data.get("component_hierarchy", {}))
-            
+
             # Update metrics
             self.metrics = UIMetrics(**data.get("metrics", {}))
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", "Component data imported successfully")
             else:
                 logger.info("Component data imported successfully")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error importing component data: {e}")
@@ -681,24 +681,24 @@ def main() -> None:
     try:
         bridge = get_ui_integration_bridge()
         safe_print(f"✅ UI Integration Bridge v{bridge.version} initialized")
-        
+
         # Register a test component
-        bridge.register_component("test_panel", ComponentType.PANEL, 
+        bridge.register_component("test_panel", ComponentType.PANEL,
                                 properties={"title": "Test Panel"})
-        
+
         # Emit a test event
         bridge.emit_event(EventType.CLICK, "test_panel", {"button": "test"})
-        
+
         # Get bridge status
         status = bridge.get_bridge_status()
         safe_print(f"📊 Bridge Status: {status['total_components']} components, {status['total_events']} events")
-        
+
         # Get component tree
         tree = bridge.get_component_tree("main_dashboard")
         safe_print(f"🌳 Component tree: {len(tree.get('children', []))} children")
-        
+
         safe_print("🎉 UI Integration Bridge demo completed successfully!")
-        
+
     except Exception as e:
         safe_print(f"❌ Demo failed: {e}")
 

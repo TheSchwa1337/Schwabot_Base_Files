@@ -113,7 +113,7 @@ class EchoSnapshot:
         metadata_dir = os.path.join(self.storage_path, "metadata")
         if not os.path.exists(metadata_dir):
             return
-        
+
         for filename in os.listdir(metadata_dir):
             if filename.endswith(".json"):
                 try:
@@ -124,7 +124,7 @@ class EchoSnapshot:
                 except Exception as e:
                     logger.error(f"Error loading snapshot metadata {filename}: {e}")
 
-    def _generate_snapshot_id(self, snapshot_type: SnapshotType, 
+    def _generate_snapshot_id(self, snapshot_type: SnapshotType,
                             description: str) -> str:
         """Generate a unique snapshot ID."""
         timestamp = datetime.now().isoformat()
@@ -146,13 +146,13 @@ class EchoSnapshot:
         data_bytes = gzip.decompress(compressed_data)
         return pickle.loads(data_bytes)
 
-    def create_system_snapshot(self, components: Dict[str, Any], 
+    def create_system_snapshot(self, components: Dict[str, Any],
                              configurations: Dict[str, Any],
                              description: str = "",
                              tags: Optional[List[str]] = None) -> str:
         """Create a system state snapshot."""
         snapshot_id = self._generate_snapshot_id(SnapshotType.SYSTEM_STATE, description)
-        
+
         # Create system state
         system_state = SystemState(
             timestamp=datetime.now(),
@@ -163,7 +163,7 @@ class EchoSnapshot:
             error_logs=self._get_error_logs(),
             performance_metrics=self._get_performance_metrics()
         )
-        
+
         # Create metadata
         metadata = SnapshotMetadata(
             snapshot_id=snapshot_id,
@@ -172,7 +172,7 @@ class EchoSnapshot:
             description=description,
             tags=tags or []
         )
-        
+
         # Store snapshot
         self._store_snapshot(snapshot_id, system_state, metadata)
         logger.info(f"System snapshot created: {snapshot_id}")
@@ -184,7 +184,7 @@ class EchoSnapshot:
                              tags: Optional[List[str]] = None) -> str:
         """Create a market condition snapshot."""
         snapshot_id = self._generate_snapshot_id(SnapshotType.MARKET_CONDITION, description)
-        
+
         # Create market condition
         market_condition = MarketCondition(
             timestamp=datetime.now(),
@@ -195,7 +195,7 @@ class EchoSnapshot:
             technical_indicators=self._calculate_technical_indicators(symbols),
             news_events=self._get_news_events()
         )
-        
+
         # Create metadata
         metadata = SnapshotMetadata(
             snapshot_id=snapshot_id,
@@ -204,32 +204,32 @@ class EchoSnapshot:
             description=description,
             tags=tags or []
         )
-        
+
         # Store snapshot
         self._store_snapshot(snapshot_id, market_condition, metadata)
         logger.info(f"Market snapshot created: {snapshot_id}")
         return snapshot_id
 
-    def _store_snapshot(self, snapshot_id: str, data: Any, 
+    def _store_snapshot(self, snapshot_id: str, data: Any,
                        metadata: SnapshotMetadata) -> None:
         """Store snapshot data and metadata."""
         # Compress and store data
         compressed_data = self._compress_data(data)
         data_path = os.path.join(self.storage_path, "data", f"{snapshot_id}.gz")
-        
+
         with open(data_path, 'wb') as f:
             f.write(compressed_data)
-        
+
         # Calculate metadata
         metadata.checksum = self._calculate_checksum(data)
         metadata.size_bytes = len(compressed_data)
         metadata.compression_ratio = len(compressed_data) / len(pickle.dumps(data))
-        
+
         # Store metadata
         metadata_path = os.path.join(self.storage_path, "metadata", f"{snapshot_id}.json")
         with open(metadata_path, 'w') as f:
             json.dump(asdict(metadata), f, indent=2, default=str)
-        
+
         # Update in-memory storage
         self.snapshots[snapshot_id] = metadata
         self.active_snapshots[snapshot_id] = data
@@ -238,47 +238,47 @@ class EchoSnapshot:
         """Load a snapshot from storage."""
         if snapshot_id in self.active_snapshots:
             return self.active_snapshots[snapshot_id]
-        
+
         if snapshot_id not in self.snapshots:
             logger.error(f"Snapshot not found: {snapshot_id}")
             return None
-        
+
         try:
             data_path = os.path.join(self.storage_path, "data", f"{snapshot_id}.gz")
             with open(data_path, 'rb') as f:
                 compressed_data = f.read()
-            
+
             data = self._decompress_data(compressed_data)
-            
+
             # Verify checksum
             calculated_checksum = self._calculate_checksum(data)
             if calculated_checksum != self.snapshots[snapshot_id].checksum:
                 logger.error(f"Checksum mismatch for snapshot: {snapshot_id}")
                 return None
-            
+
             self.active_snapshots[snapshot_id] = data
             logger.debug(f"Snapshot loaded: {snapshot_id}")
             return data
-            
+
         except Exception as e:
             logger.error(f"Error loading snapshot {snapshot_id}: {e}")
             return None
 
-    def replay_snapshot(self, snapshot_id: str, 
+    def replay_snapshot(self, snapshot_id: str,
                        replay_config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Replay a snapshot with optional configuration."""
         snapshot_data = self.load_snapshot(snapshot_id)
         if not snapshot_data:
             return {"success": False, "error": "Snapshot not found"}
-        
+
         replay_config = replay_config or {}
         replay_id = f"replay_{snapshot_id}_{int(datetime.now().timestamp())}"
-        
+
         try:
             # Mark snapshot as replaying
             if snapshot_id in self.snapshots:
                 self.snapshots[snapshot_id].status = SnapshotStatus.REPLAYING
-            
+
             # Perform replay based on snapshot type
             if isinstance(snapshot_data, SystemState):
                 result = self._replay_system_state(snapshot_data, replay_config)
@@ -286,7 +286,7 @@ class EchoSnapshot:
                 result = self._replay_market_condition(snapshot_data, replay_config)
             else:
                 result = {"success": False, "error": "Unknown snapshot type"}
-            
+
             # Record replay history
             replay_record = {
                 "replay_id": replay_id,
@@ -296,15 +296,15 @@ class EchoSnapshot:
                 "result": result
             }
             self.replay_history.append(replay_record)
-            
+
             logger.info(f"Snapshot replayed: {snapshot_id}")
             return result
-            
+
         except Exception as e:
             logger.error(f"Error replaying snapshot {snapshot_id}: {e}")
             return {"success": False, "error": str(e)}
 
-    def _replay_system_state(self, system_state: SystemState, 
+    def _replay_system_state(self, system_state: SystemState,
                            config: Dict[str, Any]) -> Dict[str, Any]:
         """Replay a system state snapshot."""
         # This would typically involve restoring system components
@@ -317,7 +317,7 @@ class EchoSnapshot:
             "timestamp": system_state.timestamp.isoformat()
         }
 
-    def _replay_market_condition(self, market_condition: MarketCondition, 
+    def _replay_market_condition(self, market_condition: MarketCondition,
                                config: Dict[str, Any]) -> Dict[str, Any]:
         """Replay a market condition snapshot."""
         # This would typically involve restoring market data
@@ -330,17 +330,17 @@ class EchoSnapshot:
             "timestamp": market_condition.timestamp.isoformat()
         }
 
-    def list_snapshots(self, snapshot_type: Optional[SnapshotType] = None, 
+    def list_snapshots(self, snapshot_type: Optional[SnapshotType] = None,
                       tags: Optional[List[str]] = None) -> List[SnapshotMetadata]:
         """List available snapshots with optional filtering."""
         snapshots = list(self.snapshots.values())
-        
+
         if snapshot_type:
             snapshots = [s for s in snapshots if s.snapshot_type == snapshot_type]
-        
+
         if tags:
             snapshots = [s for s in snapshots if any(tag in s.tags for tag in tags)]
-        
+
         return sorted(snapshots, key=lambda x: x.timestamp, reverse=True)
 
     def delete_snapshot(self, snapshot_id: str) -> bool:
@@ -348,27 +348,27 @@ class EchoSnapshot:
         if snapshot_id not in self.snapshots:
             logger.error(f"Snapshot not found for deletion: {snapshot_id}")
             return False
-        
+
         try:
             # Remove data file
             data_path = os.path.join(self.storage_path, "data", f"{snapshot_id}.gz")
             if os.path.exists(data_path):
                 os.remove(data_path)
-            
+
             # Remove metadata file
             metadata_path = os.path.join(self.storage_path, "metadata", f"{snapshot_id}.json")
             if os.path.exists(metadata_path):
                 os.remove(metadata_path)
-            
+
             # Remove from memory
             if snapshot_id in self.active_snapshots:
                 del self.active_snapshots[snapshot_id]
-            
+
             del self.snapshots[snapshot_id]
-            
+
             logger.info(f"Snapshot deleted: {snapshot_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error deleting snapshot {snapshot_id}: {e}")
             return False
@@ -378,11 +378,11 @@ class EchoSnapshot:
         total_snapshots = len(self.snapshots)
         total_size = sum(s.size_bytes for s in self.snapshots.values())
         avg_compression = sum(s.compression_ratio for s in self.snapshots.values()) / total_snapshots if total_snapshots > 0 else 0
-        
+
         type_counts = {}
         for snapshot in self.snapshots.values():
             type_counts[snapshot.snapshot_type.value] = type_counts.get(snapshot.snapshot_type.value, 0) + 1
-        
+
         return {
             "total_snapshots": total_snapshots,
             "total_size_bytes": total_size,
@@ -449,32 +449,32 @@ class EchoSnapshot:
 def main() -> None:
     """Main function for testing and demonstration."""
     echo_snapshot = EchoSnapshot("./test_snapshots")
-    
+
     # Create a system snapshot
     components = {"engine": "running", "database": "connected"}
     configurations = {"risk_level": 0.5, "max_position_size": 1000}
     system_snapshot_id = echo_snapshot.create_system_snapshot(
         components, configurations, "Test system state", ["test", "demo"]
     )
-    
+
     # Create a market snapshot
     symbols = {"BTC": {"price": 50000, "volume": 1000000}}
     market_sentiment = {"BTC": 0.7, "ETH": 0.6}
     market_snapshot_id = echo_snapshot.create_market_snapshot(
         symbols, market_sentiment, "Test market condition", ["test", "market"]
     )
-    
+
     # List snapshots
     all_snapshots = echo_snapshot.list_snapshots()
     safe_print(f"Total snapshots: {len(all_snapshots)}")
-    
+
     # Replay a snapshot
     replay_result = echo_snapshot.replay_snapshot(system_snapshot_id)
     safe_print(f"Replay result: {replay_result}")
-    
+
     # Get statistics
     stats = echo_snapshot.get_storage_statistics()
     safe_print(f"Storage statistics: {stats}")
 
 if __name__ == "__main__":
-    main() 
+    main()

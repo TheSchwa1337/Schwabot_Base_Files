@@ -128,20 +128,20 @@ class ColdbaseBridge:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config_data = json.load(f)
-                
+
                 for storage_config in config_data.get("storage_configs", []):
                     storage_type = StorageType(storage_config["storage_type"])
                     config = StorageConfig(**storage_config)
                     self.storage_configs[storage_type] = config
-                    
+
                     # Initialize encryption key if needed
                     if config.encryption_enabled and config.encryption_key:
                         self._initialize_encryption_key(storage_type, config.encryption_key)
-                
+
                 logger.info(f"Loaded {len(self.storage_configs)} storage configurations")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -182,7 +182,7 @@ class ColdbaseBridge:
                 encryption_enabled=True
             )
         }
-        
+
         self.storage_configs = default_configs
         self._save_configuration()
         logger.info("Default configuration created")
@@ -207,7 +207,7 @@ class ColdbaseBridge:
                 os.makedirs(os.path.join(config.base_path, "data"), exist_ok=True)
                 os.makedirs(os.path.join(config.base_path, "metadata"), exist_ok=True)
                 os.makedirs(os.path.join(config.base_path, "index"), exist_ok=True)
-                
+
                 # Initialize storage statistics
                 self.storage_stats[storage_type] = {
                     "total_files": 0,
@@ -215,7 +215,7 @@ class ColdbaseBridge:
                     "last_cleanup": datetime.now(),
                     "access_count": 0
                 }
-                
+
                 logger.debug(f"Storage initialized: {storage_type.value}")
             except Exception as e:
                 logger.error(f"Error initializing storage {storage_type.value}: {e}")
@@ -246,15 +246,15 @@ class ColdbaseBridge:
                     priority, job = self.transfer_queue.get(timeout=1)
                     if job is None:  # Shutdown signal
                         break
-                    
+
                     self._process_transfer_job(job)
                     self.transfer_queue.task_done()
-                    
+
                 except queue.Empty:
                     continue
                 except Exception as e:
                     logger.error(f"Error in transfer worker: {e}")
-        
+
         self.transfer_worker = threading.Thread(target=transfer_worker, daemon=True)
         self.transfer_worker.start()
         logger.info("Transfer worker started")
@@ -265,40 +265,40 @@ class ColdbaseBridge:
             job.status = TransferStatus.IN_PROGRESS
             job.started_at = datetime.now()
             self.active_transfers[job.job_id] = job
-            
+
             logger.info(f"Processing transfer job: {job.job_id}")
-            
+
             # Read source data
             source_data = self._read_data(job.source_path)
             if source_data is None:
                 raise Exception("Failed to read source data")
-            
+
             # Process data (compress, encrypt)
             processed_data = self._process_data_for_storage(
-                source_data, 
+                source_data,
                 self.storage_configs[job.storage_type]
             )
-            
+
             # Write to destination
             success = self._write_data(job.destination_path, processed_data)
             if not success:
                 raise Exception("Failed to write destination data")
-            
+
             # Update job status
             job.status = TransferStatus.COMPLETED
             job.completed_at = datetime.now()
-            
+
             # Update storage statistics
             self._update_storage_stats(job.storage_type, len(processed_data))
-            
+
             logger.info(f"Transfer job completed: {job.job_id}")
-            
+
         except Exception as e:
             job.status = TransferStatus.FAILED
             job.error_message = str(e)
             job.completed_at = datetime.now()
             logger.error(f"Transfer job failed {job.job_id}: {e}")
-        
+
         finally:
             # Move to history and remove from active
             self.transfer_history.append(job)
@@ -328,16 +328,16 @@ class ColdbaseBridge:
     def _process_data_for_storage(self, data: bytes, config: StorageConfig) -> bytes:
         """Process data for storage (compress, encrypt)."""
         processed_data = data
-        
+
         # Compress if enabled
         if config.compression_enabled:
             processed_data = gzip.compress(processed_data)
-        
+
         # Encrypt if enabled
         if config.encryption_enabled and config.storage_type.value in self.encryption_keys:
             fernet = self.encryption_keys[config.storage_type.value]
             processed_data = fernet.encrypt(processed_data)
-        
+
         return processed_data
 
     def _update_storage_stats(self, storage_type: StorageType, size_bytes: int) -> None:
@@ -352,7 +352,7 @@ class ColdbaseBridge:
                      priority: int = 5) -> str:
         """Schedule a data transfer job."""
         job_id = f"transfer_{int(datetime.now().timestamp())}_{hash(source_path) % 10000}"
-        
+
         job = TransferJob(
             job_id=job_id,
             source_path=source_path,
@@ -363,10 +363,10 @@ class ColdbaseBridge:
             status=TransferStatus.PENDING,
             created_at=datetime.now()
         )
-        
+
         # Add to transfer queue (lower priority number = higher priority)
         self.transfer_queue.put((priority, job))
-        
+
         logger.info(f"Transfer job scheduled: {job_id}")
         return job_id
 
@@ -375,12 +375,12 @@ class ColdbaseBridge:
         # Check active transfers
         if job_id in self.active_transfers:
             return self.active_transfers[job_id]
-        
+
         # Check history
         for job in self.transfer_history:
             if job.job_id == job_id:
                 return job
-        
+
         return None
 
     def cancel_transfer(self, job_id: str) -> bool:
@@ -393,21 +393,21 @@ class ColdbaseBridge:
                 job.status = TransferStatus.CANCELLED
                 job.completed_at = datetime.now()
                 return True
-        
+
         return False
 
-    def store_data(self, data: Any, storage_type: StorageType, 
+    def store_data(self, data: Any, storage_type: StorageType,
                   data_category: DataCategory, filename: str,
                   metadata: Optional[Dict[str, Any]] = None) -> str:
         """Store data directly to cold storage."""
         try:
             # Serialize data
             data_bytes = pickle.dumps(data)
-            
+
             # Create chunk
             chunk_id = f"chunk_{int(datetime.now().timestamp())}_{hash(filename) % 10000}"
             checksum = hashlib.sha256(data_bytes).hexdigest()
-            
+
             chunk = DataChunk(
                 chunk_id=chunk_id,
                 data=data_bytes,
@@ -418,11 +418,11 @@ class ColdbaseBridge:
                 timestamp=datetime.now(),
                 metadata=metadata or {}
             )
-            
+
             # Process for storage
             config = self.storage_configs[storage_type]
             processed_data = self._process_data_for_storage(data_bytes, config)
-            
+
             # Determine file path
             file_path = os.path.join(
                 config.base_path,
@@ -430,12 +430,12 @@ class ColdbaseBridge:
                 data_category.value,
                 filename
             )
-            
+
             # Write data
             success = self._write_data(file_path, processed_data)
             if not success:
                 raise Exception("Failed to write data")
-            
+
             # Store metadata
             metadata_path = os.path.join(
                 config.base_path,
@@ -444,13 +444,13 @@ class ColdbaseBridge:
             )
             with open(metadata_path, 'w') as f:
                 json.dump(asdict(chunk), f, indent=2, default=str)
-            
+
             # Update statistics
             self._update_storage_stats(storage_type, len(processed_data))
-            
+
             logger.info(f"Data stored: {chunk_id} in {storage_type.value}")
             return chunk_id
-            
+
         except Exception as e:
             logger.error(f"Error storing data: {e}")
             raise
@@ -464,50 +464,50 @@ class ColdbaseBridge:
                 "metadata",
                 f"{chunk_id}.json"
             )
-            
+
             with open(metadata_path, 'r') as f:
                 chunk_data = json.load(f)
                 chunk = DataChunk(**chunk_data)
-            
+
             # Find data file
             data_category = chunk.metadata.get("data_category", "unknown")
             filename = chunk.metadata.get("filename", f"{chunk_id}.data")
-            
+
             data_path = os.path.join(
                 self.storage_configs[storage_type].base_path,
                 "data",
                 data_category,
                 filename
             )
-            
+
             # Read and process data
             with open(data_path, 'rb') as f:
                 processed_data = f.read()
-            
+
             # Decrypt and decompress
             config = self.storage_configs[storage_type]
-            
+
             if config.encryption_enabled and config.storage_type.value in self.encryption_keys:
                 fernet = self.encryption_keys[config.storage_type.value]
                 processed_data = fernet.decrypt(processed_data)
-            
+
             if config.compression_enabled:
                 processed_data = gzip.decompress(processed_data)
-            
+
             # Verify checksum
             calculated_checksum = hashlib.sha256(processed_data).hexdigest()
             if calculated_checksum != chunk.checksum:
                 raise Exception("Checksum verification failed")
-            
+
             # Deserialize data
             data = pickle.loads(processed_data)
-            
+
             # Update access statistics
             self.storage_stats[storage_type]["access_count"] += 1
-            
+
             logger.debug(f"Data retrieved: {chunk_id}")
             return data
-            
+
         except Exception as e:
             logger.error(f"Error retrieving data {chunk_id}: {e}")
             return None
@@ -517,22 +517,22 @@ class ColdbaseBridge:
         config = self.storage_configs[storage_type]
         cutoff_date = datetime.now() - timedelta(days=config.retention_days)
         cleaned_count = 0
-        
+
         try:
             metadata_dir = os.path.join(config.base_path, "metadata")
             for filename in os.listdir(metadata_dir):
                 if not filename.endswith(".json"):
                     continue
-                
+
                 metadata_path = os.path.join(metadata_dir, filename)
                 with open(metadata_path, 'r') as f:
                     chunk_data = json.load(f)
                     chunk = DataChunk(**chunk_data)
-                
+
                 if chunk.timestamp < cutoff_date:
                     # Remove metadata and data files
                     os.remove(metadata_path)
-                    
+
                     data_category = chunk.metadata.get("data_category", "unknown")
                     data_filename = chunk.metadata.get("filename", f"{chunk.chunk_id}.data")
                     data_path = os.path.join(
@@ -541,18 +541,18 @@ class ColdbaseBridge:
                         data_category,
                         data_filename
                     )
-                    
+
                     if os.path.exists(data_path):
                         os.remove(data_path)
-                    
+
                     cleaned_count += 1
-            
+
             # Update statistics
             self.storage_stats[storage_type]["last_cleanup"] = datetime.now()
-            
+
             logger.info(f"Cleaned up {cleaned_count} old files from {storage_type.value}")
             return cleaned_count
-            
+
         except Exception as e:
             logger.error(f"Error during cleanup for {storage_type.value}: {e}")
             return 0
@@ -568,7 +568,7 @@ class ColdbaseBridge:
                 "failed_transfers": len([j for j in self.transfer_history if j.status == TransferStatus.FAILED])
             }
         }
-        
+
         for storage_type, config in self.storage_configs.items():
             storage_stat = self.storage_stats.get(storage_type, {})
             stats["storage_configs"][storage_type.value] = {
@@ -582,20 +582,20 @@ class ColdbaseBridge:
                 "access_count": storage_stat.get("access_count", 0),
                 "last_cleanup": storage_stat.get("last_cleanup", datetime.now()).isoformat()
             }
-        
+
         return stats
 
 def main() -> None:
     """Main function for testing and demonstration."""
     bridge = ColdbaseBridge("./test_coldbase_config.json")
-    
+
     # Store some test data
     test_data = {
         "timestamp": datetime.now(),
         "market_data": {"BTC": 50000, "ETH": 3000},
         "trade_volume": 1000000
     }
-    
+
     chunk_id = bridge.store_data(
         test_data,
         StorageType.COLD,
@@ -603,16 +603,16 @@ def main() -> None:
         "test_market_data.json",
         {"description": "Test market data", "source": "demo"}
     )
-    
+
     safe_print(f"Data stored with chunk ID: {chunk_id}")
-    
+
     # Retrieve the data
     retrieved_data = bridge.retrieve_data(chunk_id, StorageType.COLD)
     safe_print(f"Retrieved data: {retrieved_data}")
-    
+
     # Get statistics
     stats = bridge.get_storage_statistics()
     safe_print(f"Storage statistics: {json.dumps(stats, indent=2, default=str)}")
 
 if __name__ == "__main__":
-    main() 
+    main()

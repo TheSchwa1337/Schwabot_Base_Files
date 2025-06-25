@@ -31,17 +31,17 @@ logger = logging.getLogger(__name__)
 
 class WindowsCliCompatibilityHandler:
     """Centralized handler for Windows CLI compatibility."""
-    
+
     def __init__(self):
         """Initialize the Windows CLI compatibility handler."""
         self.is_windows = platform.system().lower() == "windows"
         self.encoding = 'utf-8' if not self.is_windows else 'cp1252'
         self.shell = True if self.is_windows else False
-        
+
         # Windows-specific configurations
         if self.is_windows:
             self._setup_windows_environment()
-    
+
     def _setup_windows_environment(self) -> None:
         """Setup Windows-specific environment configurations."""
         try:
@@ -52,7 +52,7 @@ class WindowsCliCompatibilityHandler:
                 sys.stderr.reconfigure(encoding=self.encoding)
         except Exception as e:
             logger.warning(f"Failed to configure Windows console encoding: {e}")
-    
+
     def safe_print(self, message: str, use_emoji: bool = True) -> str:
         """Safely print messages with Windows compatibility."""
         try:
@@ -72,7 +72,7 @@ class WindowsCliCompatibilityHandler:
         except Exception as e:
             logger.error(f"Print error: {e}")
             return str(message)
-    
+
     def safe_format_error(self, error: Exception, context: str = "") -> str:
         """Safely format error messages for Windows compatibility."""
         try:
@@ -80,28 +80,28 @@ class WindowsCliCompatibilityHandler:
             if self.is_windows:
                 # Ensure error message is Windows-compatible
                 error_msg = error_msg.encode('ascii', errors='ignore').decode('ascii')
-            
+
             if context:
                 return f"Error: {error_msg} | Context: {context}"
             else:
                 return f"Error: {error_msg}"
         except Exception as e:
             return f"Error formatting failed: {e}"
-    
+
     def log_safe(self, logger_instance, level: str, message: str) -> None:
         """Safely log messages with Windows compatibility."""
         try:
             if self.is_windows:
                 # Ensure log message is Windows-compatible
                 message = message.encode('ascii', errors='ignore').decode('ascii')
-            
+
             log_method = getattr(logger_instance, level.lower(), logger_instance.info)
             log_method(message)
         except Exception as e:
             # Fallback logging
             logger.error(f"Log error: {e}")
             safe_print(f"[{level.upper()}] {message}")
-    
+
     def _remove_emojis(self, text: str) -> str:
         """Remove emoji characters from text for Windows compatibility."""
         try:
@@ -121,23 +121,23 @@ class WindowsCliCompatibilityHandler:
             return emoji_pattern.sub(r'', text)
         except Exception:
             return text
-    
+
     def safe_path(self, path: Union[str, Path]) -> Path:
         """Convert path to Windows-compatible Path object."""
         try:
             if isinstance(path, str):
                 path = Path(path)
-            
+
             # Handle Windows path issues
             if self.is_windows:
                 # Normalize path separators
                 path = Path(str(path).replace('/', '\\'))
-            
+
             return path
         except Exception as e:
             logger.error(f"Path conversion error: {e}")
             return Path(str(path))
-    
+
     def safe_subprocess_run(self, command: List[str], **kwargs) -> subprocess.CompletedProcess:
         """Safely run subprocess commands with Windows compatibility."""
         try:
@@ -146,7 +146,7 @@ class WindowsCliCompatibilityHandler:
                 kwargs.setdefault('shell', True)
                 kwargs.setdefault('encoding', self.encoding)
                 kwargs.setdefault('errors', 'ignore')
-            
+
             return subprocess.run(command, **kwargs)
         except Exception as e:
             logger.error(f"Subprocess error: {e}")
@@ -157,12 +157,12 @@ class WindowsCliCompatibilityHandler:
                 stdout=b"",
                 stderr=str(e).encode()
             )
-    
+
     def safe_file_operations(self, file_path: Union[str, Path], operation: str, **kwargs) -> Any:
         """Safely perform file operations with Windows compatibility."""
         try:
             path = self.safe_path(file_path)
-            
+
             if operation == "read":
                 with open(path, 'r', encoding=self.encoding, errors='ignore') as f:
                     return f.read()
@@ -178,7 +178,7 @@ class WindowsCliCompatibilityHandler:
                 return True
             else:
                 raise ValueError(f"Unknown operation: {operation}")
-                
+
         except Exception as e:
             logger.error(f"File operation error ({operation}): {e}")
             return None
@@ -205,7 +205,7 @@ def safe_print(message: str, use_emoji: bool = True) -> str:
                 "]+", flags=re.UNICODE
             )
             message = emoji_pattern.sub(r'', message)
-        
+
         print(message, flush=True)
         return message
     except UnicodeEncodeError:
@@ -255,18 +255,18 @@ if __name__ == "__main__":
         "🔬 Analysis: μ = 0.5, σ = 0.1",
         "⚖️ Balance: φ = 1.618033988749895",
     ]
-    
+
     safe_print("Testing Windows CLI Compatibility Handler")
     safe_print("=" * 50)
-    
+
     for message in test_messages:
         safe_message = safe_print(message)
         safe_print(f"Original: {message}")
         safe_print(f"Safe:     {safe_message}")
         safe_print("-" * 30)
-    
+
     # Test environment detection
     env_info = cli_handler.get_environment_info()
     safe_print("\nEnvironment Information:")
     for key, value in env_info.items():
-        safe_print(f"  {key}: {value}") 
+        safe_print(f"  {key}: {value}")

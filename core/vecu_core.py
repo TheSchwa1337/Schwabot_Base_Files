@@ -118,56 +118,56 @@ class VECUFeedbackData:
 class VECUCore:
     """
     VECU Core - Vectorized Electronic Control Unit for Schwabot.
-    
+
     Implements the ECU analog for profit timing and compression,
     integrating with Ferris RDE for cyclical system operation.
     """
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize VECU core."""
         self.config = config or {}
         self.mode = VECUMode.IDLE
         self.pwm_mode = PWMMode.MODULATED
-        
+
         # Timing parameters (16-bit normalized)
         self.tick_phase_window = 16
         self.phase_resolution = 65536  # 16-bit precision
         self.entropy_threshold = 0.5
         self.resonance_threshold = 0.7
-        
+
         # PWM parameters
         self.duty_cycle_base = 0.6
         self.duty_cycle_modulation = 0.4
         self.injection_window = 0.04
         self.profit_voltage_base = 1.0
-        
+
         # Feedback parameters
         self.error_decay_rate = 0.95
         self.correction_momentum = 0.1
         self.phase_adjustment_limit = 0.1
-        
+
         # Performance tracking
         self.total_cycles = 0
         self.successful_injections = 0
         self.average_efficiency = 0.0
-        
+
         # Memory for feedback loops
         self.timing_history: List[VECUTimingData] = []
         self.injection_history: List[PWMInjectionData] = []
         self.feedback_history: List[VECUFeedbackData] = []
-        
+
         safe_safe_print("⚡ VECU Core initialized")
-    
+
     def set_mode(self, mode: VECUMode) -> None:
         """Set VECU operation mode."""
         self.mode = mode
         safe_safe_print(f"🔄 VECU mode set to: {mode.value}")
-    
+
     def set_pwm_mode(self, pwm_mode: PWMMode) -> None:
         """Set PWM modulation mode."""
         self.pwm_mode = pwm_mode
         safe_safe_print(f"🔄 PWM mode set to: {pwm_mode.value}")
-    
+
     def vecu_timing_sync(
         self,
         tick_id: int,
@@ -176,31 +176,31 @@ class VECUCore:
     ) -> VECUTimingData:
         """
         VECU profit timing synchronization.
-        
+
         This is the core function that implements the ECU analog,
         providing phase-corrected profit amplification.
         """
         try:
             # Calculate tick phase (16-bit normalized)
             tick_phase = (tick_id % self.tick_phase_window) / float(self.tick_phase_window)
-            
+
             # Generate compression wave (like ECU timing)
             compression_wave = unified_math.unified_math.sin(2 * math.pi * tick_phase)
-            
+
             # Entropy-adjusted resonance (like engine temperature)
             entropy_modulation = unified_math.exp(-unified_math.abs(entropy_level - self.entropy_threshold))
-            
+
             # RPM equivalent timing offset (like crank phase)
             timing_offset = unified_math.unified_math.cos(rpm_equivalent * tick_phase * math.pi)
-            
+
             # Calculate profit amplification index
             profit_amplification = compression_wave * entropy_modulation * timing_offset
-            
+
             # Calculate resonance score
             resonance_score = self._calculate_resonance_score(
                 tick_phase, entropy_level, rpm_equivalent
             )
-            
+
             # Create timing data
             timing_data = VECUTimingData(
                 tick_id=tick_id,
@@ -212,20 +212,20 @@ class VECUCore:
                 resonance_score=resonance_score,
                 timestamp=datetime.now()
             )
-            
+
             # Store in history
             self.timing_history.append(timing_data)
             if len(self.timing_history) > 1000:
                 self.timing_history = self.timing_history[-1000:]
-            
+
             safe_safe_print(f"✅ VECU timing sync: Amplification = {profit_amplification:.6f}")
-            
+
             return timing_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ VECU timing sync failed: {safe_format_error(e, 'vecu_timing_sync')}")
             return self._create_fallback_timing_data(tick_id, rpm_equivalent, entropy_level)
-    
+
     def pwm_profit_injection(
         self,
         current_phase: float,
@@ -234,33 +234,33 @@ class VECUCore:
     ) -> PWMInjectionData:
         """
         PWM-inspired profit burst modulation.
-        
+
         This implements the spark injection analog for profit delivery,
         using pulse-width modulation for optimal timing.
         """
         try:
             # Calculate duty cycle based on phase and market conditions
-            duty_cycle = (self.duty_cycle_base + 
+            duty_cycle = (self.duty_cycle_base +
                          self.duty_cycle_modulation * unified_math.unified_math.sin(current_phase * math.pi))
-            
+
             # Adjust duty cycle based on market volatility
             volatility_modulation = 1.0 - (market_volatility * 0.3)
             duty_cycle *= volatility_modulation
-            
+
             # Determine burst amplitude
             burst_amplitude = 1.0 if (current_phase % self.injection_window) < (self.injection_window * duty_cycle) else 0.0
-            
+
             # Calculate injection window
             injection_window = self.injection_window * duty_cycle
-            
+
             # Calculate profit voltage (like spark voltage)
             profit_voltage = self.profit_voltage_base * profit_potential * burst_amplitude
-            
+
             # Calculate modulation factor
             modulation_factor = self._calculate_modulation_factor(
                 current_phase, duty_cycle, market_volatility
             )
-            
+
             # Create injection data
             injection_data = PWMInjectionData(
                 current_phase=current_phase,
@@ -270,20 +270,20 @@ class VECUCore:
                 profit_voltage=profit_voltage,
                 modulation_factor=modulation_factor
             )
-            
+
             # Store in history
             self.injection_history.append(injection_data)
             if len(self.injection_history) > 1000:
                 self.injection_history = self.injection_history[-1000:]
-            
+
             safe_safe_print(f"✅ PWM injection: Voltage = {profit_voltage:.6f}, Duty = {duty_cycle:.3f}")
-            
+
             return injection_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ PWM injection failed: {safe_format_error(e, 'pwm_injection')}")
             return self._create_fallback_injection_data(current_phase, profit_potential, market_volatility)
-    
+
     def vecu_feedback_loop(
         self,
         predicted_profit: float,
@@ -293,30 +293,30 @@ class VECUCore:
     ) -> VECUFeedbackData:
         """
         VECU error correction feedback loop.
-        
+
         This implements the ECU feedback analog, adjusting future
         strategy based on trade execution results.
         """
         try:
             # Calculate error delta
             error_delta = actual_profit - predicted_profit
-            
+
             # Calculate correction vector (like spark advance/retard)
             correction_vector = math.tanh(error_delta) * unified_math.unified_math.cos(previous_phase * math.pi)
-            
+
             # Calculate phase adjustment
             phase_adjustment = correction_vector * self.correction_momentum
-            phase_adjustment = max(-self.phase_adjustment_limit, 
+            phase_adjustment = max(-self.phase_adjustment_limit,
                                  unified_math.min(self.phase_adjustment_limit, phase_adjustment))
-            
+
             # Calculate resonance correction
             resonance_correction = self._calculate_resonance_correction(
                 error_delta, timing_data.resonance_score
             )
-            
+
             # Calculate next phase offset
             next_phase_offset = previous_phase + phase_adjustment + resonance_correction
-            
+
             # Create feedback data
             feedback_data = VECUFeedbackData(
                 predicted_profit=predicted_profit,
@@ -327,23 +327,23 @@ class VECUCore:
                 resonance_correction=resonance_correction,
                 next_phase_offset=next_phase_offset
             )
-            
+
             # Store in history
             self.feedback_history.append(feedback_data)
             if len(self.feedback_history) > 1000:
                 self.feedback_history = self.feedback_history[-1000:]
-            
+
             # Update performance statistics
             self._update_performance_statistics(feedback_data)
-            
+
             safe_safe_print(f"✅ VECU feedback: Error = {error_delta:.6f}, Correction = {correction_vector:.6f}")
-            
+
             return feedback_data
-            
+
         except Exception as e:
             safe_safe_print(f"❌ VECU feedback failed: {safe_format_error(e, 'vecu_feedback')}")
             return self._create_fallback_feedback_data(predicted_profit, actual_profit, previous_phase)
-    
+
     def _calculate_resonance_score(
         self,
         tick_phase: float,
@@ -354,22 +354,22 @@ class VECUCore:
         try:
             # Phase resonance
             phase_resonance = unified_math.unified_math.cos(2 * math.pi * tick_phase)
-            
+
             # Entropy resonance
             entropy_resonance = unified_math.exp(-unified_math.abs(entropy_level - self.entropy_threshold))
-            
+
             # RPM resonance
             rpm_resonance = unified_math.unified_math.sin(rpm_equivalent * math.pi)
-            
+
             # Combined resonance score
             resonance_score = (phase_resonance + entropy_resonance + rpm_resonance) / 3.0
-            
+
             return unified_math.min(1.0, unified_math.max(0.0, resonance_score))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Resonance calculation failed: {safe_format_error(e, 'resonance_calculation')}")
             return 0.5
-    
+
     def _calculate_modulation_factor(
         self,
         current_phase: float,
@@ -380,22 +380,22 @@ class VECUCore:
         try:
             # Base modulation
             base_modulation = unified_math.unified_math.sin(current_phase * math.pi)
-            
+
             # Duty cycle modulation
             duty_modulation = duty_cycle * 0.5
-            
+
             # Volatility modulation
             volatility_modulation = 1.0 - (market_volatility * 0.2)
-            
+
             # Combined modulation factor
             modulation_factor = (base_modulation + duty_modulation) * volatility_modulation
-            
+
             return unified_math.min(1.0, unified_math.max(0.0, modulation_factor))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Modulation calculation failed: {safe_format_error(e, 'modulation_calculation')}")
             return 0.5
-    
+
     def _calculate_resonance_correction(
         self,
         error_delta: float,
@@ -405,27 +405,27 @@ class VECUCore:
         try:
             # Error-based correction
             error_correction = math.tanh(error_delta) * 0.1
-            
+
             # Resonance-based correction
             resonance_correction = (resonance_score - 0.5) * 0.05
-            
+
             # Combined correction
             total_correction = error_correction + resonance_correction
-            
+
             return max(-0.1, unified_math.min(0.1, total_correction))
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Resonance correction failed: {safe_format_error(e, 'resonance_correction')}")
             return 0.0
-    
+
     def _update_performance_statistics(self, feedback_data: VECUFeedbackData) -> None:
         """Update VECU performance statistics."""
         self.total_cycles += 1
-        
+
         # Track successful injections
         if unified_math.abs(feedback_data.error_delta) < 0.1:  # Within 10% error margin
             self.successful_injections += 1
-        
+
         # Update average efficiency
         if self.total_cycles > 0:
             current_efficiency = self.successful_injections / self.total_cycles
@@ -433,7 +433,7 @@ class VECUCore:
                 (self.average_efficiency * (self.total_cycles - 1) + current_efficiency) /
                 self.total_cycles
             )
-    
+
     def _create_fallback_timing_data(
         self,
         tick_id: int,
@@ -451,7 +451,7 @@ class VECUCore:
             resonance_score=0.5,
             timestamp=datetime.now()
         )
-    
+
     def _create_fallback_injection_data(
         self,
         current_phase: float,
@@ -467,7 +467,7 @@ class VECUCore:
             profit_voltage=profit_potential * 0.5,
             modulation_factor=0.5
         )
-    
+
     def _create_fallback_feedback_data(
         self,
         predicted_profit: float,
@@ -484,7 +484,7 @@ class VECUCore:
             resonance_correction=0.0,
             next_phase_offset=previous_phase
         )
-    
+
     def get_vecu_statistics(self) -> Dict[str, Any]:
         """Get VECU performance statistics."""
         return {
@@ -497,7 +497,7 @@ class VECUCore:
             'injection_history_size': len(self.injection_history),
             'feedback_history_size': len(self.feedback_history)
         }
-    
+
     def clear_history(self) -> None:
         """Clear VECU history."""
         self.timing_history.clear()
@@ -540,7 +540,7 @@ def get_vecu_stats() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Test VECU core
     safe_print("🧪 Testing VECU Core...")
-    
+
     # Test timing synchronization
     timing_data = vecu_timing_sync(
         tick_id=1,
@@ -548,7 +548,7 @@ if __name__ == "__main__":
         entropy_level=0.6
     )
     safe_print(f"✅ Timing Sync: Amplification = {timing_data.profit_amplification:.6f}")
-    
+
     # Test PWM injection
     injection_data = pwm_profit_injection(
         current_phase=0.5,
@@ -556,7 +556,7 @@ if __name__ == "__main__":
         market_volatility=0.3
     )
     safe_print(f"✅ PWM Injection: Voltage = {injection_data.profit_voltage:.6f}")
-    
+
     # Test feedback loop
     feedback_data = vecu_feedback_loop(
         predicted_profit=50.0,
@@ -565,7 +565,7 @@ if __name__ == "__main__":
         timing_data=timing_data
     )
     safe_print(f"✅ Feedback Loop: Error = {feedback_data.error_delta:.6f}")
-    
+
     # Get statistics
     stats = get_vecu_stats()
-    safe_print(f"✅ VECU Statistics: {stats}") 
+    safe_print(f"✅ VECU Statistics: {stats}")

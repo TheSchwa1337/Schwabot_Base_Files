@@ -14,7 +14,7 @@ except ImportError:
 #!/usr/bin/env python3
 """UI Bridge Integration Manager - Connects UI Bridges with Trading System.
 
-This module integrates the three low-risk UI bridges (UI State, Visual Integration, 
+This module integrates the three low-risk UI bridges (UI State, Visual Integration,
 UI Integration) with the existing trading system components to ensure proper
 functionality and real-time updates.
 
@@ -78,44 +78,44 @@ class IntegrationMetrics:
 
 class UIBridgeIntegrationManager:
     """Manages integration between UI bridges and trading system components."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the UI Bridge Integration Manager."""
         if not BRIDGES_AVAILABLE:
             raise RuntimeError("UI bridges are not available")
-        
+
         self.config = config or self._default_config()
         self.version = "1.0.0"
-        
+
         # Initialize bridges
         self.ui_state_bridge = get_ui_state_bridge()
         self.visual_bridge = get_visual_integration_bridge()
         self.ui_integration_bridge = get_ui_integration_bridge()
-        
+
         # Integration status
         self.integration_status = IntegrationStatus.DISCONNECTED
         self.metrics = IntegrationMetrics()
-        
+
         # Data sources and callbacks
         self.data_sources: Dict[str, Callable] = {}
         self.update_callbacks: Dict[str, List[Callable]] = {}
-        
+
         # Integration thread
         self.integration_thread: Optional[threading.Thread] = None
         self.integration_active = False
-        
+
         # Register default data sources
         self._register_default_data_sources()
-        
+
         # Start integration if enabled
         if self.config.get("enable_auto_integration", True):
             self._start_integration()
-        
+
         if CLI_HANDLER_AVAILABLE:
             cli_handler.log_safe(logger, "info", f"UI Bridge Integration Manager v{self.version} initialized")
         else:
             logger.info(f"UI Bridge Integration Manager v{self.version} initialized")
-    
+
     def _default_config(self) -> Dict[str, Any]:
         """Get default configuration."""
         return {
@@ -128,21 +128,21 @@ class UIBridgeIntegrationManager:
             "retry_delay_seconds": 1.0,
             "error_recovery_enabled": True
         }
-    
+
     def _register_default_data_sources(self) -> None:
         """Register default data sources for integration."""
         # Profit tracking data source
         self.register_data_source("profit_tracker", self._get_profit_data)
-        
+
         # System status data source
         self.register_data_source("system_status", self._get_system_status)
-        
+
         # Performance metrics data source
         self.register_data_source("performance_metrics", self._get_performance_metrics)
-        
+
         # Trading state data source
         self.register_data_source("trading_state", self._get_trading_state)
-    
+
     def _get_profit_data(self) -> Dict[str, Any]:
         """Get profit tracking data from the system."""
         try:
@@ -150,7 +150,7 @@ class UIBridgeIntegrationManager:
             try:
                 from core.ghost_profit_tracker import profit_summary
                 total, mean, variance = profit_summary()
-                
+
                 return {
                     "total_profit": total,
                     "mean_profit": mean,
@@ -168,14 +168,14 @@ class UIBridgeIntegrationManager:
                     "data_type": "profit",
                     "note": "mock_data"
                 }
-                
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error getting profit data: {e}")
             else:
                 logger.error(f"Error getting profit data: {e}")
             return {"error": str(e)}
-    
+
     def _get_system_status(self) -> Dict[str, Any]:
         """Get system status data."""
         try:
@@ -202,14 +202,14 @@ class UIBridgeIntegrationManager:
                     "data_type": "system_status",
                     "note": "mock_data"
                 }
-                
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error getting system status: {e}")
             else:
                 logger.error(f"Error getting system status: {e}")
             return {"error": str(e)}
-    
+
     def _get_performance_metrics(self) -> Dict[str, Any]:
         """Get performance metrics data."""
         try:
@@ -227,7 +227,7 @@ class UIBridgeIntegrationManager:
             else:
                 logger.error(f"Error getting performance metrics: {e}")
             return {"error": str(e)}
-    
+
     def _get_trading_state(self) -> Dict[str, Any]:
         """Get trading state data."""
         try:
@@ -245,87 +245,87 @@ class UIBridgeIntegrationManager:
             else:
                 logger.error(f"Error getting trading state: {e}")
             return {"error": str(e)}
-    
+
     def register_data_source(self, source_id: str, data_func: Callable[[], Dict[str, Any]]) -> bool:
         """Register a data source function."""
         try:
             self.data_sources[source_id] = data_func
-            
+
             # Register with visual bridge
             self.visual_bridge.register_data_source(source_id, data_func)
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Registered data source: {source_id}")
             else:
                 logger.info(f"Registered data source: {source_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error registering data source {source_id}: {e}")
             else:
                 logger.error(f"Error registering data source {source_id}: {e}")
             return False
-    
+
     def register_update_callback(self, callback_id: str, callback: Callable[[Dict[str, Any]], None]) -> bool:
         """Register an update callback."""
         try:
             if callback_id not in self.update_callbacks:
                 self.update_callbacks[callback_id] = []
-            
+
             self.update_callbacks[callback_id].append(callback)
-            
+
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "info", f"Registered update callback: {callback_id}")
             else:
                 logger.info(f"Registered update callback: {callback_id}")
-            
+
             return True
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error registering update callback {callback_id}: {e}")
             else:
                 logger.error(f"Error registering update callback {callback_id}: {e}")
             return False
-    
+
     def _start_integration(self) -> None:
         """Start the integration thread."""
         if self.integration_active:
             return
-        
+
         self.integration_active = True
         self.integration_status = IntegrationStatus.CONNECTING
         self.integration_thread = threading.Thread(target=self._integration_loop, daemon=True)
         self.integration_thread.start()
-        
+
         if CLI_HANDLER_AVAILABLE:
             cli_handler.log_safe(logger, "info", "UI Bridge integration started")
         else:
             logger.info("UI Bridge integration started")
-    
+
     def _integration_loop(self) -> None:
         """Main integration loop."""
         retry_count = 0
-        
+
         while self.integration_active:
             try:
                 self._perform_integration_update()
                 self.integration_status = IntegrationStatus.CONNECTED
                 retry_count = 0  # Reset retry count on success
-                
+
                 time.sleep(self.config.get("integration_interval_seconds", 2.0))
-                
+
             except Exception as e:
                 self.metrics.error_count += 1
                 self.integration_status = IntegrationStatus.ERROR
-                
+
                 if CLI_HANDLER_AVAILABLE:
                     cli_handler.log_safe(logger, "error", f"Error in integration loop: {e}")
                 else:
                     logger.error(f"Error in integration loop: {e}")
-                
+
                 retry_count += 1
                 if retry_count >= self.config.get("max_retry_attempts", 3):
                     if CLI_HANDLER_AVAILABLE:
@@ -333,41 +333,41 @@ class UIBridgeIntegrationManager:
                     else:
                         logger.error("Max retry attempts reached, stopping integration")
                     break
-                
+
                 time.sleep(self.config.get("retry_delay_seconds", 1.0))
-    
+
     def _perform_integration_update(self) -> None:
         """Perform integration update."""
         start_time = time.time()
         self.metrics.total_updates += 1
-        
+
         try:
             # Update UI state with system data
             self._update_ui_state()
-            
+
             # Update visualizations with latest data
             self._update_visualizations()
-            
+
             # Update UI components with system events
             self._update_ui_components()
-            
+
             # Notify callbacks
             self._notify_callbacks()
-            
+
             self.metrics.successful_updates += 1
-            
+
         except Exception as e:
             self.metrics.failed_updates += 1
             raise e
-        
+
         finally:
             update_time = (time.time() - start_time) * 1000
             self.metrics.average_update_time_ms = (
-                (self.metrics.average_update_time_ms * (self.metrics.total_updates - 1) + update_time) 
+                (self.metrics.average_update_time_ms * (self.metrics.total_updates - 1) + update_time)
                 / self.metrics.total_updates
             )
             self.metrics.last_update = datetime.now()
-    
+
     def _update_ui_state(self) -> None:
         """Update UI state with system data."""
         try:
@@ -382,7 +382,7 @@ class UIBridgeIntegrationManager:
                     "current_phase": trading_data.get("current_phase", "idle")
                 }
             )
-            
+
             # Update mathematical engine state
             system_data = self._get_system_status()
             self.ui_state_bridge.update_state(
@@ -396,7 +396,7 @@ class UIBridgeIntegrationManager:
                     }
                 }
             )
-            
+
             # Update system health state
             performance_data = self._get_performance_metrics()
             self.ui_state_bridge.update_state(
@@ -411,13 +411,13 @@ class UIBridgeIntegrationManager:
                     }
                 }
             )
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error updating UI state: {e}")
             else:
                 logger.error(f"Error updating UI state: {e}")
-    
+
     def _update_visualizations(self) -> None:
         """Update visualizations with latest data."""
         try:
@@ -427,9 +427,9 @@ class UIBridgeIntegrationManager:
                 # Generate sample profit chart data (in real implementation, this would come from actual trading)
                 timestamps = [datetime.now() - timedelta(hours=i) for i in range(10, 0, -1)]
                 profits = [profit_data.get("total_profit", 0.0) + i * 10 for i in range(10)]
-                
+
                 self.visual_bridge.update_chart_data("default_profit_chart", timestamps, profits)
-            
+
             # Update performance chart
             performance_data = self._get_performance_metrics()
             if "error" not in performance_data:
@@ -439,15 +439,15 @@ class UIBridgeIntegrationManager:
                     performance_data.get("memory_usage", 0.0),
                     float(performance_data.get("active_threads", 0))
                 ]
-                
+
                 self.visual_bridge.update_chart_data("default_performance_chart", labels, values)
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error updating visualizations: {e}")
             else:
                 logger.error(f"Error updating visualizations: {e}")
-    
+
     def _update_ui_components(self) -> None:
         """Update UI components with system events."""
         try:
@@ -462,7 +462,7 @@ class UIBridgeIntegrationManager:
                     "active_cycles": system_data.get("active_cycles", 0)
                 }
             )
-            
+
             # Emit trading table update event
             trading_data = self._get_trading_state()
             self.ui_integration_bridge.emit_event(
@@ -474,13 +474,13 @@ class UIBridgeIntegrationManager:
                     "trading_active": trading_data.get("trading_active", False)
                 }
             )
-            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error updating UI components: {e}")
             else:
                 logger.error(f"Error updating UI components: {e}")
-    
+
     def _notify_callbacks(self) -> None:
         """Notify registered callbacks of updates."""
         try:
@@ -496,13 +496,13 @@ class UIBridgeIntegrationManager:
                             cli_handler.log_safe(logger, "error", f"Error in callback {callback_id}: {e}")
                         else:
                             logger.error(f"Error in callback {callback_id}: {e}")
-                            
+
         except Exception as e:
             if CLI_HANDLER_AVAILABLE:
                 cli_handler.log_safe(logger, "error", f"Error notifying callbacks: {e}")
             else:
                 logger.error(f"Error notifying callbacks: {e}")
-    
+
     def get_integration_status(self) -> Dict[str, Any]:
         """Get integration status and metrics."""
         return {
@@ -519,7 +519,7 @@ class UIBridgeIntegrationManager:
             "update_callbacks": list(self.update_callbacks.keys()),
             "config": self.config
         }
-    
+
     def get_bridge_statuses(self) -> Dict[str, Any]:
         """Get status of all bridges."""
         return {
@@ -527,12 +527,12 @@ class UIBridgeIntegrationManager:
             "visual_bridge": self.visual_bridge.get_bridge_status(),
             "ui_integration_bridge": self.ui_integration_bridge.get_bridge_status()
         }
-    
+
     def stop_integration(self) -> None:
         """Stop the integration process."""
         self.integration_active = False
         self.integration_status = IntegrationStatus.DISCONNECTED
-        
+
         if CLI_HANDLER_AVAILABLE:
             cli_handler.log_safe(logger, "info", "UI Bridge integration stopped")
         else:
@@ -557,35 +557,35 @@ def main() -> None:
         if not BRIDGES_AVAILABLE:
             safe_print("❌ UI bridges are not available")
             return
-        
+
         manager = get_ui_bridge_integration_manager()
         safe_print(f"✅ UI Bridge Integration Manager v{manager.version} initialized")
-        
+
         # Get integration status
         status = manager.get_integration_status()
         safe_print(f"📊 Integration Status: {status['integration_status']}")
         safe_print(f"📈 Updates: {status['successful_updates']}/{status['total_updates']} successful")
-        
+
         # Get bridge statuses
         bridge_statuses = manager.get_bridge_statuses()
         safe_print(f"🌉 Bridge Status:")
         safe_print(f"  UI State: {bridge_statuses['ui_state_bridge']['total_states']} states")
         safe_print(f"  Visual: {bridge_statuses['visual_bridge']['total_charts']} charts")
         safe_print(f"  UI Integration: {bridge_statuses['ui_integration_bridge']['total_components']} components")
-        
+
         # Wait for some integration updates
         safe_print("⏳ Waiting for integration updates...")
         time.sleep(5)
-        
+
         # Get updated status
         updated_status = manager.get_integration_status()
         safe_print(f"📊 Updated Status: {updated_status['successful_updates']} successful updates")
-        
+
         safe_print("🎉 UI Bridge Integration Manager demo completed successfully!")
-        
+
     except Exception as e:
         safe_print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -85,17 +85,17 @@ class CrossBitCorrelation:
 class MultiBitBTCProcessor:
     """
     Enhanced Multi-Bit BTC Processor with Explicit Mathematical Documentation.
-    
+
     This processor handles BTC vector state analysis with explicit entry assumptions
     and output guarantees for robust mathematical trading operations.
-    
+
     Entry Assumptions:
     - BTC vector state must be normalized (0.0 to 1.0 range)
     - XRP cycle delta must be within ±0.5 range
     - Market volatility must be > 0.1 for signal generation
     - Volume data must be recent (< 5 minutes old)
     - Price data must have sufficient precision (4 decimal places)
-    
+
     Output Guarantees:
     - Expected USDC profit delta: ±5% of input position size
     - Signal confidence: 0.0 to 1.0 with 0.8+ for high-confidence signals
@@ -103,7 +103,7 @@ class MultiBitBTCProcessor:
     - Memory usage: < 50MB per processing cycle
     - Error rate: < 0.1% for valid inputs
     """
-    
+
     def __init__(self):
         """Initialize the enhanced BTC processor."""
         self.btc_data: Dict[BitLevel, List[BTCDataPoint]] = {
@@ -112,34 +112,34 @@ class MultiBitBTCProcessor:
         self.bit_level_analyses: Dict[BitLevel, BitLevelAnalysis] = {}
         self.cross_bit_correlations: List[CrossBitCorrelation] = []
         self.processing_history: List[Dict[str, Any]] = []
-        
+
         # Processing parameters
         self.max_data_points_per_level = 10000
         self.correlation_threshold = 0.7
         self.confidence_threshold = 0.8
         self.optimization_enabled = True
-        
+
         # Performance tracking
         self.processing_times: Dict[BitLevel, List[float]] = {
             level: [] for level in BitLevel
         }
         self.error_counts: Dict[BitLevel, int] = {level: 0 for level in BitLevel}
-        
+
         # Gray code state tracking
         self.gray_code_states: Dict[BitLevel, int] = {level: 0 for level in BitLevel}
-        
+
         # Mathematical operation tracking
         self.operations: List[MathematicalOperation] = []
         self.operation_metrics: Dict[str, Any] = {}
-        
+
         # Validation thresholds
         self.min_volatility = 0.1
         self.max_cycle_delta = 0.5
         self.max_data_age = 300  # 5 minutes in seconds
         self.min_price_precision = 4
-        
+
         logger.info("Multi-bit BTC Processor initialized")
-    
+
     def process_btc_data(
         self,
         price: float,
@@ -149,22 +149,22 @@ class MultiBitBTCProcessor:
     ) -> BTCDataPoint:
         """Process BTC data at specified bit level with bitplane decomposition."""
         start_time = time.time()
-        
+
         try:
             # Generate hash signature
             hash_input = f"{price}_{volume}_{bit_level.value}_{int(time.time())}"
             hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
-            
+
             # Bitplane decomposition: B_i(t) = BTC_t >> i mod 2
             price_int = int(price * 100)
             bitplane_encoding = np.array(
                 [(price_int >> i) & 1 for i in range(bit_level.value)], dtype=np.uint8
             )
-            
+
             # Gray code sequencing for smooth logic state transitions
             gray_code_state = self._compute_gray_code(price_int, bit_level)
             self.gray_code_states[bit_level] = gray_code_state
-            
+
             data_point = BTCDataPoint(
                 timestamp=datetime.now(),
                 price=price,
@@ -175,35 +175,35 @@ class MultiBitBTCProcessor:
                 gray_code_state=gray_code_state,
                 metadata=metadata or {},
             )
-            
+
             self.btc_data[bit_level].append(data_point)
             if len(self.btc_data[bit_level]) > self.max_data_points_per_level:
                 self.btc_data[bit_level].pop(0)
-            
+
             processing_time = time.time() - start_time
             self.processing_times[bit_level].append(processing_time)
             if len(self.processing_times[bit_level]) > 1000:
                 self.processing_times[bit_level].pop(0)
-            
+
             logger.debug(f"Processed BTC data at {bit_level.value}-bit level")
             return data_point
-        
+
         except Exception as e:
             self.error_counts[bit_level] += 1
             logger.error(f"Error processing BTC data at {bit_level.value}-bit: {e}")
             raise
-    
+
     def analyze_bit_level(self, bit_level: BitLevel) -> Optional[BitLevelAnalysis]:
         """Analyze data for a specific bit level with bitplane analysis."""
         if not self.btc_data[bit_level]:
             logger.warning(f"No data available for {bit_level.value}-bit analysis")
             return None
-        
+
         start_time = time.time()
         data_points = self.btc_data[bit_level]
         prices = np.array([dp.price for dp in data_points])
         volumes = np.array([dp.volume for dp in data_points])
-        
+
         price_stats = {
             "mean": float(unified_math.unified_math.mean(prices)),
             "std": float(unified_math.unified_math.std(prices)),
@@ -222,7 +222,7 @@ class MultiBitBTCProcessor:
             "skewness": self._calculate_skewness(volumes),
             "kurtosis": self._calculate_kurtosis(volumes),
         }
-        
+
         correlation_matrix = unified_math.correlation([prices, volumes])
         bitplane_entropy = self._calculate_bitplane_entropy(data_points, bit_level)
         gray_code_transitions = self._count_gray_code_transitions(data_points)
@@ -230,7 +230,7 @@ class MultiBitBTCProcessor:
         confidence_score = self._calculate_confidence_score(
             price_stats, volume_stats, len(data_points), bitplane_entropy
         )
-        
+
         analysis = BitLevelAnalysis(
             bit_level=bit_level,
             data_points=data_points.copy(),
@@ -245,7 +245,7 @@ class MultiBitBTCProcessor:
         self.bit_level_analyses[bit_level] = analysis
         logger.info(f"Completed {bit_level.value}-bit analysis: {len(data_points)} points")
         return analysis
-    
+
     def process_btc_vector(
         self,
         btc_vector: Vector,
@@ -324,7 +324,7 @@ class MultiBitBTCProcessor:
                 "timestamp": datetime.now(),
             })
         return signals
-    
+
     def _calculate_skewness(self, data: np.ndarray) -> float:
         """Calculate skewness of the data."""
         if len(data) < 3:
@@ -334,7 +334,7 @@ class MultiBitBTCProcessor:
         if std == 0:
             return 0.0
         return float(unified_math.mean(((data - mean) / std) ** 3))
-    
+
     def _calculate_kurtosis(self, data: np.ndarray) -> float:
         """Calculate kurtosis of the data."""
         if len(data) < 4:
@@ -344,7 +344,7 @@ class MultiBitBTCProcessor:
         if std == 0:
             return 0.0
         return float(unified_math.mean(((data - mean) / std) ** 4) - 3)
-    
+
     def _calculate_bitplane_entropy(
         self, data_points: List[BTCDataPoint], bit_level: BitLevel
     ) -> float:
@@ -359,7 +359,7 @@ class MultiBitBTCProcessor:
             entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
             entropies.append(entropy)
         return float(unified_math.unified_math.mean(entropies))
-    
+
     def _count_gray_code_transitions(self, data_points: List[BTCDataPoint]) -> int:
         """Count the number of Gray code state transitions."""
         if len(data_points) < 2:
@@ -369,7 +369,7 @@ class MultiBitBTCProcessor:
             for i in range(1, len(data_points))
             if data_points[i].gray_code_state != data_points[i - 1].gray_code_state
         )
-    
+
     def _calculate_confidence_score(
         self,
         price_stats: Dict[str, float],
@@ -391,7 +391,7 @@ class MultiBitBTCProcessor:
             + 0.2 * entropy_confidence
         )
         return float(confidence)
-    
+
     def _compute_gray_code(self, value: int, bit_level: BitLevel) -> int:
         """Compute Gray code for smooth logic state transitions."""
         binary = format(value % (2 ** bit_level.value), f"0{bit_level.value}b")
@@ -479,10 +479,10 @@ class MultiBitBTCProcessor:
         """Optimize bit level selection based on performance metrics."""
         if not self.bit_level_analyses:
             return BitLevel.EIGHT_BIT
-        
+
         best_level = BitLevel.EIGHT_BIT
         best_score = -1.0
-        
+
         for level, analysis in self.bit_level_analyses.items():
             score = (
                 0.5 * analysis.confidence_score + 0.5 * analysis.bitplane_entropy
@@ -490,7 +490,7 @@ class MultiBitBTCProcessor:
             if score > best_score:
                 best_score = score
                 best_level = level
-                
+
         return best_level
 
 
@@ -523,4 +523,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

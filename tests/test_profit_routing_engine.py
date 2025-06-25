@@ -299,7 +299,7 @@ class TestProfitRoutingEngine(unittest.TestCase):
     def test_calculate_volumetric_profit_invalid_price(self):
         """Test volumetric profit calculation with invalid price."""
         volume_deltas = [("vol_profit_node_0_0_0", 100.0)]
-        
+
         result = self.engine.calculate_volumetric_profit(
             volume_deltas=volume_deltas,
             price_tick=-1000.0,  # Invalid negative price
@@ -346,7 +346,7 @@ class TestProfitRoutingEngine(unittest.TestCase):
     def test_measure_2d_profit_density(self):
         """Test 2D profit density measurement."""
         density_map = self.engine.measure_2d_profit_density(z_level=0)
-        
+
         self.assertIsInstance(density_map, np.ndarray)
         self.assertEqual(density_map.shape, (5, 5))
 
@@ -363,7 +363,7 @@ class TestProfitRoutingEngine(unittest.TestCase):
     def test_measure_3d_profit_volume(self):
         """Test 3D profit volume measurement."""
         volume_data = self.engine.measure_3d_profit_volume()
-        
+
         self.assertIsInstance(volume_data, dict)
         self.assertIn("total_volume", volume_data)
         self.assertIn("max_density", volume_data)
@@ -373,7 +373,7 @@ class TestProfitRoutingEngine(unittest.TestCase):
     def test_get_performance_metrics(self):
         """Test performance metrics retrieval."""
         metrics = self.engine.get_performance_metrics()
-        
+
         self.assertIsInstance(metrics, dict)
         self.assertIn("operation_count", metrics)
         self.assertIn("error_count", metrics)
@@ -394,7 +394,7 @@ class TestProfitRoutingIntegration(unittest.TestCase):
     def test_create_profit_routing_system(self):
         """Test complete profit routing system creation."""
         engine = create_profit_routing_system(dimensions=(3, 3, 3))
-        
+
         self.assertIsInstance(engine, ProfitRoutingEngine)
         self.assertEqual(len(engine.profit_nodes), 27)  # 3x3x3
 
@@ -406,20 +406,20 @@ class TestProfitRoutingIntegration(unittest.TestCase):
             simulation_steps=5,
             base_profit_per_step=100.0
         )
-        
+
         self.assertIsInstance(results, list)
         self.assertEqual(len(results), 5)
-        
+
         for result in results:
             self.assertIsInstance(result, ProfitAllocationResult)
 
     def test_error_handling_and_recovery(self):
         """Test error handling and recovery mechanisms."""
         engine = create_profit_routing_system(dimensions=(2, 2, 2))
-        
+
         # Test with various error conditions
         initial_metrics = engine.get_performance_metrics()
-        
+
         # Perform operations that might cause errors
         for i in range(10):
             try:
@@ -441,9 +441,9 @@ class TestProfitRoutingIntegration(unittest.TestCase):
                     )
             except Exception:
                 pass  # Errors should be handled internally
-        
+
         final_metrics = engine.get_performance_metrics()
-        
+
         # Engine should still be functional
         self.assertGreater(final_metrics["operation_count"], 0)
         self.assertGreaterEqual(final_metrics["error_count"], 0)
@@ -451,4 +451,4 @@ class TestProfitRoutingIntegration(unittest.TestCase):
 
 if __name__ == "__main__":
     # Run the tests
-    unittest.main(verbosity=2) 
+    unittest.main(verbosity=2)

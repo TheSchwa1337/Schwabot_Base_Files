@@ -213,4 +213,3 @@ class StrategyManager:
         # Implement the logic to get strategy active sharpe ratio
         pass
 
- 

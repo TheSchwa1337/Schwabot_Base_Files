@@ -91,7 +91,7 @@ class FaultBus:
         """
         if not asyncio.iscoroutinefunction(callback):
             raise TypeError("Callback must be a coroutine function (async def).")
-        
+
         self._listeners[topic].unified_math.add(callback)
         logger.debug(f"Listener {callback.__name__} subscribed to topic '{topic}'.")
 
@@ -106,7 +106,7 @@ class FaultBus:
         """
         if not asyncio.iscoroutinefunction(callback):
             raise TypeError("Callback must be a coroutine function (async def).")
-        
+
         self._hash_listeners[pattern_hash].unified_math.add(callback)
         logger.debug(f"Listener {callback.__name__} subscribed to hash '{pattern_hash[:10]}...'.")
 
@@ -203,12 +203,12 @@ async def main():
 
     # --- Publish events ---
     safe_print("--- Publishing events ---")
-    
+
     # Publish a general event
     await bus.publish(
         "portfolio_metrics_updated", var_95=0.025, volatility=0.18
     )
-    
+
     # Publish a hash confirmation that has listeners
     await bus.publish_hash_confirmation(
         PROFITABLE_PATTERN_HASH,
@@ -221,7 +221,7 @@ async def main():
 
     safe_print("\n--- Unsubscribing and re-publishing ---")
     bus.unsubscribe_from_hash(PROFITABLE_PATTERN_HASH, another_trade_listener)
-    
+
     await bus.publish_hash_confirmation(
         PROFITABLE_PATTERN_HASH,
         confidence=0.99,

@@ -462,7 +462,7 @@ class MatrixController:
     timestamp: datetime = field(default_factory=datetime.now)
     confidence_score: float = 0.0
     fallback_triggered: bool = False
-    
+
     def __post_init__(self) -> None:
         """Generate hash signature if not provided."""
         if not self.hash_signature:
@@ -476,7 +476,7 @@ class FourBitController(MatrixController):
     bit_level: BitLevel = field(default=BitLevel.FOUR_BIT, init=False)
     state_vector: np.ndarray = field(default_factory=lambda: np.zeros(4))
     overflow_count: int = 0
-    
+
     def __init__(self, hash_signature: str = "", **kwargs):
         """Initialize 4-bit controller with proper hash signature."""
         phase = kwargs.pop('phase', MatrixPhase.INITIALIZATION)
@@ -486,17 +486,17 @@ class FourBitController(MatrixController):
             hash_signature=hash_signature,
             **kwargs
         )
-    
+
     def update_state(self, new_state: np.ndarray) -> None:
         """Update 4-bit state vector with overflow protection."""
         if new_state.size != 4:
             raise ValueError("4-bit controller requires exactly 4 elements")
-        
+
         # Check for overflow
         if np.any(new_state > 15):  # 2^4 - 1
             self.overflow_count += 1
             new_state = np.clip(new_state, 0, 15)
-        
+
         self.state_vector = new_state
 
 
@@ -506,7 +506,7 @@ class EightBitController(MatrixController):
     bit_level: BitLevel = field(default=BitLevel.EIGHT_BIT, init=False)
     state_vector: np.ndarray = field(default_factory=lambda: np.zeros(8))
     resonance_factor: float = 1.0
-    
+
     def __init__(self, hash_signature: str = "", **kwargs):
         """Initialize 8-bit controller with proper hash signature."""
         phase = kwargs.pop('phase', MatrixPhase.INITIALIZATION)
@@ -516,12 +516,12 @@ class EightBitController(MatrixController):
             hash_signature=hash_signature,
             **kwargs
         )
-    
+
     def update_state(self, new_state: np.ndarray) -> None:
         """Update 8-bit state vector with resonance modulation."""
         if new_state.size != 8:
             raise ValueError("8-bit controller requires exactly 8 elements")
-        
+
         # Apply resonance factor
         modulated_state = new_state * self.resonance_factor
         self.state_vector = np.clip(modulated_state, 0, 255)  # 2^8 - 1
@@ -533,7 +533,7 @@ class SixteenBitController(MatrixController):
     bit_level: BitLevel = field(default=BitLevel.SIXTEEN_BIT, init=False)
     state_vector: np.ndarray = field(default_factory=lambda: np.zeros(16))
     ghost_shadow_active: bool = False
-    
+
     def __init__(self, hash_signature: str = "", **kwargs):
         """Initialize 16-bit controller with proper hash signature."""
         phase = kwargs.pop('phase', MatrixPhase.INITIALIZATION)
@@ -543,17 +543,17 @@ class SixteenBitController(MatrixController):
             hash_signature=hash_signature,
             **kwargs
         )
-    
+
     def update_state(self, new_state: np.ndarray) -> None:
         """Update 16-bit state vector with ghost shadow support."""
         if new_state.size != 16:
             raise ValueError("16-bit controller requires exactly 16 elements")
-        
+
         # Apply ghost shadow if active
         if self.ghost_shadow_active:
             shadow_factor = 0.8
             new_state = new_state * shadow_factor
-        
+
         self.state_vector = np.clip(new_state, 0, 65535)  # 2^16 - 1
 
 
@@ -563,7 +563,7 @@ class FortyTwoBitController(MatrixController):
     bit_level: BitLevel = field(default=BitLevel.FORTY_TWO_BIT, init=False)
     state_vector: np.ndarray = field(default_factory=lambda: np.zeros(42))
     quantum_entanglement: Dict[str, float] = field(default_factory=dict)
-    
+
     def __init__(self, hash_signature: str = "", **kwargs):
         """Initialize 42-bit controller with proper hash signature."""
         phase = kwargs.pop('phase', MatrixPhase.INITIALIZATION)
@@ -573,17 +573,17 @@ class FortyTwoBitController(MatrixController):
             hash_signature=hash_signature,
             **kwargs
         )
-    
+
     def update_state(self, new_state: np.ndarray) -> None:
         """Update 42-bit state vector with quantum entanglement."""
         if new_state.size != 42:
             raise ValueError("42-bit controller requires exactly 42 elements")
-        
+
         # Apply quantum entanglement effects
         for key, factor in self.quantum_entanglement.items():
             if key in ["resonance", "dispersion", "convergence"]:
                 new_state = new_state * factor
-        
+
         self.state_vector = np.clip(new_state, 0, 2**42 - 1)
 
 
@@ -599,7 +599,7 @@ class IdentityState:
     ai_feedback: Optional[Dict[str, Any]] = None
     hash_signature: str = ""
     timestamp: datetime = field(default_factory=datetime.now)
-    
+
     def __post_init__(self) -> None:
         """Generate identity hash signature."""
         state_string = f"{self.tick}_{hash(frozenset(self.strategy_state.items()))}"
@@ -613,17 +613,17 @@ class IdentityTrace:
     """Complete identity trace for AI context."""
     identity_states: List[IdentityState] = field(default_factory=list)
     trace_hash: str = ""
-    
+
     def add_state(self, state: IdentityState) -> None:
         """Add new identity state to trace."""
         self.identity_states.append(state)
         self._update_trace_hash()
-    
+
     def _update_trace_hash(self) -> None:
         """Update trace hash based on all states."""
         if not self.identity_states:
             return
-        
+
         trace_string = "_".join([state.hash_signature for state in self.identity_states])
         self.trace_hash = hashlib.sha256(trace_string.encode()).hexdigest()[:16]
 
@@ -640,7 +640,7 @@ class GhostLogicState:
     shadow_mode: bool = False
     confidence_threshold: float = 0.7
     last_trigger_time: Optional[datetime] = None
-    
+
     def should_trigger_fallback(self, current_confidence: float) -> bool:
         """Determine if fallback should be triggered."""
         if current_confidence < self.confidence_threshold:
@@ -656,7 +656,7 @@ class FallbackSystem:
     primary_logic: Callable
     fallback_logic: Callable
     ghost_state: 'GhostLogicState' = field(default_factory=lambda: GhostLogicState())
-    
+
     def execute(self, *args, **kwargs) -> Any:
         """Execute with fallback protection."""
         try:
@@ -681,7 +681,7 @@ class AIFeedback:
     matrix_adjustments: Dict[str, float] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
     feedback_hash: str = ""
-    
+
     def __post_init__(self) -> None:
         """Generate feedback hash."""
         feedback_string = f"{self.model_name}_{self.confidence_score}_{self.recommendation}"
@@ -694,22 +694,22 @@ class AIConsensus:
     feedbacks: List[AIFeedback] = field(default_factory=list)
     consensus_score: float = 0.0
     final_recommendation: str = ""
-    
+
     def add_feedback(self, feedback: AIFeedback) -> None:
         """Add AI feedback to consensus."""
         self.feedbacks.append(feedback)
         self._calculate_consensus()
-    
+
     def _calculate_consensus(self) -> None:
         """Calculate consensus from all feedbacks."""
         if not self.feedbacks:
             return
-        
+
         # Calculate weighted consensus
         total_confidence = sum(f.confidence_score for f in self.feedbacks)
         if total_confidence > 0:
             self.consensus_score = total_confidence / len(self.feedbacks)
-            
+
             # Select highest confidence recommendation
             best_feedback = unified_math.max(self.feedbacks, key=lambda f: f.confidence_score)
             self.final_recommendation = best_feedback.recommendation
@@ -728,11 +728,11 @@ class CrossBasketTrigger:
     phase: MatrixPhase
     activation_threshold: float = 0.8
     is_active: bool = False
-    
+
     def should_activate(self, current_phase: MatrixPhase, confidence: float) -> bool:
         """Determine if cross-basket trigger should activate."""
         return (
-            current_phase == self.phase and 
+            current_phase == self.phase and
             confidence >= self.activation_threshold
         )
 
@@ -743,9 +743,9 @@ class CrossBasketTrigger:
 
 # Matrix controller type union
 MatrixControllerType = Union[
-    FourBitController, 
-    EightBitController, 
-    SixteenBitController, 
+    FourBitController,
+    EightBitController,
+    SixteenBitController,
     FortyTwoBitController
 ]
 
@@ -771,12 +771,12 @@ class MatrixControllerProtocol(Protocol):
     def update_state(self, new_state: np.ndarray) -> None:
         """Update controller state."""
         ...
-    
+
     @property
     def bit_level(self) -> BitLevel:
         """Get bit level."""
         ...
-    
+
     @property
     def phase(self) -> MatrixPhase:
         """Get current phase."""
@@ -788,7 +788,7 @@ class IdentityTrackerProtocol(Protocol):
     def add_state(self, state: IdentityState) -> None:
         """Add identity state."""
         ...
-    
+
     def get_trace_hash(self) -> str:
         """Get current trace hash."""
         ...
@@ -799,7 +799,7 @@ class IdentityTrackerProtocol(Protocol):
 # =====================================
 
 def create_matrix_controller(
-    bit_level: BitLevel, 
+    bit_level: BitLevel,
     phase: MatrixPhase = MatrixPhase.INITIALIZATION
 ) -> MatrixControllerType:
     """Factory function to create matrix controllers."""
@@ -809,20 +809,20 @@ def create_matrix_controller(
         BitLevel.SIXTEEN_BIT: SixteenBitController,
         BitLevel.FORTY_TWO_BIT: FortyTwoBitController,
     }
-    
+
     controller_class = controllers.get(bit_level)
     if not controller_class:
         raise ValueError(f"Unsupported bit level: {bit_level}")
-    
+
     # Generate hash signature
     hash_signature = hashlib.sha256(f"{bit_level.value}_{phase.value}".encode()).hexdigest()[:16]
-    
+
     return controller_class(hash_signature=hash_signature, phase=phase)
 
 
 def hash_state(
-    tick_data: Dict[str, Any], 
-    strategy_state: Dict[str, Any], 
+    tick_data: Dict[str, Any],
+    strategy_state: Dict[str, Any],
     ai_feedback: Optional[Dict[str, Any]] = None
 ) -> str:
     """Generate state hash for identity tracking."""

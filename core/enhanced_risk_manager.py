@@ -110,15 +110,15 @@ class DLTRiskCalculator:
         self.math_lib = MathLibV4()
 
     def calculate_confidence_decay_risk(
-        self, 
-        current_confidence: float, 
+        self,
+        current_confidence: float,
         historical_confidences: List[float],
         decay_window: int = 10
     ) -> float:
         """
         Calculates risk based on pattern confidence decay over time.
         Uses exponential decay model to predict confidence degradation.
-        
+
         Risk_decay = 1 - e^(-λt) where λ = decay_rate
         """
         if len(historical_confidences) < 2:
@@ -126,23 +126,23 @@ class DLTRiskCalculator:
 
         # Calculate decay rate from recent confidence history
         recent_confidences = historical_confidences[-decay_window:]
-        
+
         if len(recent_confidences) < 2:
             return 0.0
 
         # Calculate exponential decay rate
         time_deltas = np.arange(len(recent_confidences))
-        
+
         # Fit exponential decay: conf = conf0 * e^(-λt)
         if recent_confidences[0] > 0:
             log_ratios = unified_math.unified_math.log(np.array(recent_confidences) / recent_confidences[0])
             # Avoid division by zero and handle negative logs
             valid_indices = np.isfinite(log_ratios) & (time_deltas > 0)
-            
+
             if np.sum(valid_indices) > 1:
                 decay_rate = -np.polyfit(
-                    time_deltas[valid_indices], 
-                    log_ratios[valid_indices], 
+                    time_deltas[valid_indices],
+                    log_ratios[valid_indices],
                     1
                 )[0]
             else:
@@ -152,28 +152,28 @@ class DLTRiskCalculator:
 
         # Risk increases with decay rate
         decay_risk = unified_math.min(1.0, decay_rate * 2.0)  # Scale to [0,1]
-        
+
         return float(decay_risk)
 
     def calculate_temporal_drift_risk(
         self,
-        drift_velocity: float, 
+        drift_velocity: float,
         stability_threshold: float = 0.1
     ) -> float:
         """
         Calculates risk from temporal drift velocity.
         High drift indicates Observer-aware corrections are struggling.
-        
+
         Risk_drift = tanh(|v_drift| / threshold)
         """
         normalized_drift = unified_math.abs(drift_velocity) / stability_threshold
         drift_risk = np.tanh(normalized_drift)
-        
+
         return float(drift_risk)
 
     def calculate_triplet_stability_risk(
         self,
-        recent_deltas: np.ndarray, 
+        recent_deltas: np.ndarray,
         stability_window: int = 9  # 3 triplets
     ) -> float:
         """
@@ -184,7 +184,7 @@ class DLTRiskCalculator:
             return 0.5  # Moderate risk if insufficient data
 
         stability_scores = []
-        
+
         # Check each triplet in the window
         for i in range(0, len(recent_deltas) - 2, 3):
             triplet = recent_deltas[i:i+3]
@@ -198,12 +198,12 @@ class DLTRiskCalculator:
         # Risk is inverse of stability
         avg_stability = unified_math.unified_math.mean(stability_scores)
         instability_risk = 1.0 - avg_stability
-        
+
         return float(instability_risk)
 
     def calculate_fractal_coherence_risk(
         self,
-        pattern_hashes: List[str], 
+        pattern_hashes: List[str],
         coherence_window: int = 5
     ) -> float:
         """
@@ -212,16 +212,16 @@ class DLTRiskCalculator:
         """
         if len(pattern_hashes) < 2:
                 return 0.0
-            
+
         recent_hashes = pattern_hashes[-coherence_window:]
-        
+
         # Calculate hash similarity (simplified - real implementation would use
         # proper hash distance metrics like Hamming distance)
         coherence_scores = []
-        
+
         for i in range(1, len(recent_hashes)):
             hash1, hash2 = recent_hashes[i-1], recent_hashes[i]
-            
+
             # Simple character-level similarity
             common_chars = sum(1 for a, b in zip(hash1, hash2) if a == b)
             similarity = common_chars / len(hash1)
@@ -229,10 +229,10 @@ class DLTRiskCalculator:
 
         if not coherence_scores:
             return 0.0
-    
+
         avg_coherence = unified_math.unified_math.mean(coherence_scores)
         incoherence_risk = 1.0 - avg_coherence
-        
+
         return float(incoherence_risk)
 
     def calculate_observer_sync_risk(
@@ -246,13 +246,13 @@ class DLTRiskCalculator:
         """
         if len(correction_history) < 2:
             return 0.0
-    
+
         # Calculate variance in corrections
         correction_variance = unified_math.unified_math.var(correction_history)
-        
+
         # Risk increases with correction instability
         sync_risk = unified_math.min(1.0, correction_variance / sync_threshold)
-        
+
         return float(sync_risk)
 
 
@@ -275,16 +275,16 @@ class EnhancedRiskManager:
         self.confidence_threshold = confidence_threshold
         self.drift_threshold = drift_threshold
         self.max_acceptable_risk = max_acceptable_risk
-        
+
         self.calculator = DLTRiskCalculator()
-        
+
         # Risk monitoring state
         self.pattern_confidence_history: Dict[str, List[float]] = {}
         self.temporal_drift_history: List[float] = []
         self.observer_correction_history: List[float] = []
         self.active_pattern_hashes: List[str] = []
         self.recent_deltas: List[float] = []
-        
+
         # Risk thresholds for different risk levels
         self.risk_thresholds = {
             DLTRiskLevel.MINIMAL: 0.1,
@@ -293,7 +293,7 @@ class EnhancedRiskManager:
             DLTRiskLevel.HIGH: 0.7,
             DLTRiskLevel.CRITICAL: 0.9
         }
-        
+
         logger.info(
             f"DLT Enhanced Risk Manager initialized. "
             f"Confidence threshold: {confidence_threshold}, "
@@ -322,7 +322,7 @@ class EnhancedRiskManager:
 
         # Get current DLT risk metrics
         risk_metrics = self.get_current_risk_assessment()
-        
+
         # Decision logic based on DLT risk framework
         is_approved = True
         rejection_reason = ""
@@ -381,9 +381,9 @@ class EnhancedRiskManager:
         """Update risk tracking for a specific DLT pattern."""
         if pattern_hash not in self.pattern_confidence_history:
             self.pattern_confidence_history[pattern_hash] = []
-        
+
         self.pattern_confidence_history[pattern_hash].append(confidence)
-        
+
         # Keep only recent history (last 50 observations)
         if len(self.pattern_confidence_history[pattern_hash]) > 50:
             self.pattern_confidence_history[pattern_hash] = \
@@ -392,7 +392,7 @@ class EnhancedRiskManager:
         # Add to active patterns if not already present
         if pattern_hash not in self.active_pattern_hashes:
             self.active_pattern_hashes.append(pattern_hash)
-            
+
         # Keep only recent active patterns
         if len(self.active_pattern_hashes) > 20:
             self.active_pattern_hashes = self.active_pattern_hashes[-20:]
@@ -402,7 +402,7 @@ class EnhancedRiskManager:
     async def update_drift_risk(self, drift_velocity: float):
         """Update temporal drift risk monitoring."""
         self.temporal_drift_history.append(drift_velocity)
-        
+
         # Keep only recent history
         if len(self.temporal_drift_history) > 100:
             self.temporal_drift_history = self.temporal_drift_history[-100:]
@@ -412,7 +412,7 @@ class EnhancedRiskManager:
     async def update_observer_risk(self, correction_magnitude: float):
         """Update Observer synchronization risk."""
         self.observer_correction_history.append(correction_magnitude)
-        
+
         # Keep only recent history
         if len(self.observer_correction_history) > 100:
             self.observer_correction_history = self.observer_correction_history[-100:]
@@ -456,12 +456,12 @@ class EnhancedRiskManager:
         # Combine risks using weighted average
         weights = [0.3, 0.25, 0.2, 0.15, 0.1]  # Prioritize confidence and drift
         risks = [avg_confidence_risk, drift_risk, triplet_risk, fractal_risk, observer_risk]
-        
+
         overall_risk = np.average(risks, weights=weights)
 
         # Determine risk level
         risk_level = DLTRiskLevel.MINIMAL
-        for level, threshold in sorted(self.risk_thresholds.items(), 
+        for level, threshold in sorted(self.risk_thresholds.items(),
                                      key=lambda x: x[1], reverse=True):
             if overall_risk >= threshold:
                 risk_level = level
@@ -493,7 +493,7 @@ class EnhancedRiskManager:
     def generate_risk_report(self) -> Dict:
         """Generate comprehensive DLT risk report."""
         risk_metrics = self.get_current_risk_assessment()
-        
+
         return {
             "timestamp": datetime.now().isoformat(),
             "overall_risk_level": risk_metrics.overall_risk_level.value,
@@ -524,9 +524,9 @@ class EnhancedRiskManager:
 async def main():
     """Demonstrate DLT Risk Manager functionality."""
     logging.basicConfig(level=logging.INFO)
-    
+
     safe_print("=== DLT Enhanced Risk Manager Demo ===")
-    
+
     # Initialize system
     bus = FaultBus()
     risk_manager = EnhancedRiskManager(
@@ -538,7 +538,7 @@ async def main():
 
     # Simulate some DLT pattern updates
     patterns = ["abc123def", "xyz789uvw", "lmn456pqr"]
-    
+
     for i, pattern in enumerate(patterns):
         confidence = 0.9 - (i * 0.1)  # Declining confidence
         await risk_manager.update_pattern_risk(pattern, confidence)
@@ -563,4 +563,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

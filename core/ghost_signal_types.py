@@ -20,14 +20,14 @@ class GhostSignal:
     volatility: float
     confidence: float
     timestamp: float
-    
+
     def __post_init__(self):
         """Validate and normalize signal data."""
         self.price = float(self.price)
         self.volatility = float(self.volatility)
         self.confidence = float(self.confidence)
         self.timestamp = float(self.timestamp)
-        
+
         # Ensure confidence is bounded
         self.confidence = max(0.0, min(1.0, self.confidence))
         # Ensure volatility is non-negative
@@ -42,41 +42,41 @@ GhostArray = NDArray[np.float64]  # shape: (N, 4) → price, vol, conf, time
 class BTCVector:
     """BTC processor vector with ghost array integration."""
     ghost_array: GhostArray
-    
+
     def __post_init__(self):
         """Validate ghost array shape and extract components."""
         if self.ghost_array.shape[1] != 4:
             raise ValueError("GhostArray must have shape (N, 4)")
-        
+
         self.prices = self.ghost_array[:, 0]
         self.volatilities = self.ghost_array[:, 1]
         self.confidences = self.ghost_array[:, 2]
         self.timestamps = self.ghost_array[:, 3]
-    
+
     @property
     def volatility_window(self) -> float:
         """Extract rolling volatility over last 5 entries."""
         if len(self.prices) < 5:
             return 0.0
         return float(np.std(self.prices[-5:]))
-    
+
     @property
     def momentum(self) -> float:
         """Calculate price momentum from differences."""
         if len(self.prices) < 2:
             return 0.0
         return float(np.mean(np.diff(self.prices)))
-    
+
     @property
     def mean_price(self) -> float:
         """Calculate mean price across ghost array."""
         return float(np.mean(self.prices))
-    
+
     @property
     def mean_confidence(self) -> float:
         """Calculate mean confidence across ghost array."""
         return float(np.mean(self.confidences))
-    
+
     def to_signal(self) -> Dict[str, float]:
         """Convert to unified signal format."""
         return {
@@ -98,7 +98,7 @@ class GhostStrategyResult:
     momentum_threshold: float
     execution_ready: bool
     signal_data: Dict[str, float]
-    
+
     def __post_init__(self):
         """Validate result data."""
         self.confidence = float(self.confidence)
@@ -111,7 +111,7 @@ def build_ghost_array(signals: List[GhostSignal]) -> GhostArray:
     """Convert list of ghost signals to numpy array."""
     if not signals:
         return np.zeros((0, 4), dtype=np.float64)
-    
+
     array_data = [
         [s.price, s.volatility, s.confidence, s.timestamp]
         for s in signals
@@ -123,7 +123,7 @@ def extract_volatility_window(ghost_array: GhostArray, window_size: int = 5) -> 
     """Extract rolling volatility from ghost array."""
     if ghost_array.shape[0] < window_size:
         return 0.0
-    
+
     prices = ghost_array[:, 0]  # BTC/USDC prices
     return float(np.std(prices[-window_size:]))
 
@@ -132,19 +132,19 @@ def validate_ghost_array(ghost_array: GhostArray) -> bool:
     """Validate ghost array structure and data."""
     if ghost_array.ndim != 2 or ghost_array.shape[1] != 4:
         return False
-    
+
     # Check for valid numeric data
     if not np.all(np.isfinite(ghost_array)):
         return False
-    
+
     # Check for reasonable price ranges (BTC typically 10k-100k)
     prices = ghost_array[:, 0]
     if np.any(prices < 1000) or np.any(prices > 1000000):
         return False
-    
+
     # Check for reasonable confidence ranges
     confidences = ghost_array[:, 2]
     if np.any(confidences < 0) or np.any(confidences > 1):
         return False
-    
-    return True 
+
+    return True

@@ -180,7 +180,7 @@ class ErrorHandlingPipeline:
         """Setup handlers for mathematical errors."""
         # Override numpy error handling
         np.seterr(divide='call', over='call', under='call', invalid='call')
-        
+
         # Register custom error handlers
         np.seterr(divide=self._handle_division_error)
         np.seterr(over=self._handle_overflow_error)
@@ -236,7 +236,7 @@ class ErrorHandlingPipeline:
                               error_message: str) -> None:
         """Log a mathematical error."""
         error_id = f"math_error_{int(datetime.now().timestamp())}_{hash(error_message) % 10000}"
-        
+
         error = MathematicalError(
             error_id=error_id,
             error_type=error_type,
@@ -248,10 +248,10 @@ class ErrorHandlingPipeline:
             error_message=error_message,
             stack_trace=traceback.format_exc()
         )
-        
+
         self.error_history.append(error)
         self._update_error_statistics(error)
-        
+
         logger.warning(f"Mathematical error detected: {error_type.value} in {component}.{operation}")
 
     def _update_error_statistics(self, error: MathematicalError) -> None:
@@ -259,13 +259,13 @@ class ErrorHandlingPipeline:
         # Update component error stats
         if error.component not in self.component_error_stats:
             self.component_error_stats[error.component] = {}
-        
+
         if error.error_type.value not in self.component_error_stats[error.component]:
             self.component_error_stats[error.component][error.error_type.value] = 0
-        
+
         self.component_error_stats[error.component][error.error_type.value] += 1
 
-    def safe_mathematical_operation(self, operation: Callable, *args, 
+    def safe_mathematical_operation(self, operation: Callable, *args,
                                   context: Optional[ErrorContext] = None,
                                   **kwargs) -> RecoveryResult:
         """Safely execute a mathematical operation with error handling."""
@@ -275,27 +275,27 @@ class ErrorHandlingPipeline:
                 operation="unknown",
                 input_data={"args": args, "kwargs": kwargs}
             )
-        
+
         try:
             # Execute the operation
             result = operation(*args, **kwargs)
-            
+
             # Validate result
             validation_result = self._validate_result(result, context)
             if not validation_result.success:
                 return self._attempt_recovery(operation, args, kwargs, context, validation_result.error_message)
-            
+
             return RecoveryResult(
                 success=True,
                 corrected_value=result,
                 recovery_strategy_used=None,
                 confidence_score=1.0
             )
-            
+
         except Exception as e:
             error_type = self._classify_error(e)
             error_message = f"Operation failed: {str(e)}"
-            
+
             return self._attempt_recovery(operation, args, kwargs, context, error_message, error_type)
 
     def _classify_error(self, exception: Exception) -> ErrorType:
@@ -326,7 +326,7 @@ class ErrorHandlingPipeline:
                         confidence_score=0.0,
                         error_message="Result is NaN or infinity"
                     )
-            
+
             # Check bounds if specified
             if context.expected_bounds:
                 min_val, max_val = context.expected_bounds
@@ -339,7 +339,7 @@ class ErrorHandlingPipeline:
                             confidence_score=0.0,
                             error_message=f"Result {result} outside bounds [{min_val}, {max_val}]"
                         )
-            
+
             # Check precision if specified
             if context.precision_requirements:
                 if isinstance(result, (float, np.floating)):
@@ -351,14 +351,14 @@ class ErrorHandlingPipeline:
                             confidence_score=0.0,
                             error_message=f"Result {result} below precision threshold {context.precision_requirements}"
                         )
-            
+
             return RecoveryResult(
                 success=True,
                 corrected_value=result,
                 recovery_strategy_used=None,
                 confidence_score=1.0
             )
-            
+
         except Exception as e:
             return RecoveryResult(
                 success=False,
@@ -374,23 +374,23 @@ class ErrorHandlingPipeline:
         """Attempt to recover from an error using various strategies."""
         if error_type is None:
             error_type = ErrorType.SYSTEM_ERROR
-        
+
         strategies = self.recovery_strategies.get(error_type, [])
-        
+
         for strategy in strategies:
             try:
                 recovery_result = self._apply_recovery_strategy(
                     strategy, operation, args, kwargs, context, error_message
                 )
-                
+
                 if recovery_result.success:
                     self._update_recovery_success_rate(strategy, True)
                     return recovery_result
-                
+
             except Exception as e:
                 logger.error(f"Recovery strategy {strategy.value} failed: {e}")
                 self._update_recovery_success_rate(strategy, False)
-        
+
         # All recovery strategies failed
         return RecoveryResult(
             success=False,
@@ -428,7 +428,7 @@ class ErrorHandlingPipeline:
         """Retry the operation with exponential backoff."""
         max_retries = context.max_retries
         retry_count = context.retry_count
-        
+
         if retry_count >= max_retries:
             return RecoveryResult(
                 success=False,
@@ -437,11 +437,11 @@ class ErrorHandlingPipeline:
                 confidence_score=0.0,
                 error_message="Max retries exceeded"
             )
-        
+
         # Exponential backoff
         delay = 2 ** retry_count
         time.sleep(delay)
-        
+
         try:
             result = operation(*args, **kwargs)
             return RecoveryResult(
@@ -463,7 +463,7 @@ class ErrorHandlingPipeline:
             fallback_value = (min_val + max_val) / 2
         else:
             fallback_value = 0.0
-        
+
         return RecoveryResult(
             success=True,
             corrected_value=fallback_value,
@@ -481,9 +481,9 @@ class ErrorHandlingPipeline:
                 # Simple approximation: use a small perturbation
                 perturbed_args = list(args)
                 perturbed_args[0] = args[0] + 1e-10
-                
+
                 result = operation(*perturbed_args, **kwargs)
-                
+
                 return RecoveryResult(
                     success=True,
                     corrected_value=result,
@@ -493,7 +493,7 @@ class ErrorHandlingPipeline:
                 )
         except Exception:
             pass
-        
+
         return RecoveryResult(
             success=False,
             corrected_value=None,
@@ -513,9 +513,9 @@ class ErrorHandlingPipeline:
                 confidence_score=0.0,
                 error_message="No bounds specified for clamping"
             )
-        
+
         min_val, max_val = context.expected_bounds
-        
+
         # Clamp input arguments
         clamped_args = []
         for arg in args:
@@ -524,14 +524,14 @@ class ErrorHandlingPipeline:
                 clamped_args.append(clamped_arg)
             else:
                 clamped_args.append(arg)
-        
+
         try:
             result = operation(*clamped_args, **kwargs)
-            
+
             # Also clamp the result
             if isinstance(result, (int, float, np.number)):
                 result = unified_math.max(min_val, unified_math.min(max_val, result))
-            
+
             return RecoveryResult(
                 success=True,
                 corrected_value=result,
@@ -559,14 +559,14 @@ class ErrorHandlingPipeline:
                     decimal_args.append(Decimal(str(arg)))
                 else:
                     decimal_args.append(arg)
-            
+
             # Execute with higher precision
             result = operation(*decimal_args, **kwargs)
-            
+
             # Convert back to float
             if isinstance(result, Decimal):
                 result = float(result)
-            
+
             return RecoveryResult(
                 success=True,
                 corrected_value=result,
@@ -612,7 +612,7 @@ class ErrorHandlingPipeline:
                                 context: ErrorContext) -> RecoveryResult:
         """Emergency stop - halt operation."""
         logger.critical(f"Emergency stop triggered in {context.component}.{context.operation}")
-        
+
         return RecoveryResult(
             success=False,
             corrected_value=None,
@@ -625,9 +625,9 @@ class ErrorHandlingPipeline:
         """Update recovery success rate statistics."""
         if strategy not in self.recovery_success_rates:
             self.recovery_success_rates[strategy] = []
-        
+
         self.recovery_success_rates[strategy].append(success)
-        
+
         # Keep only recent results
         if len(self.recovery_success_rates[strategy]) > 100:
             self.recovery_success_rates[strategy] = self.recovery_success_rates[strategy][-100:]
@@ -637,20 +637,20 @@ class ErrorHandlingPipeline:
         total_errors = len(self.error_history)
         error_type_counts = {}
         severity_counts = {}
-        
+
         for error in self.error_history:
             # Count by error type
             error_type_counts[error.error_type.value] = error_type_counts.get(error.error_type.value, 0) + 1
-            
+
             # Count by severity
             severity_counts[error.severity.value] = severity_counts.get(error.severity.value, 0) + 1
-        
+
         # Calculate recovery success rates
         recovery_rates = {}
         for strategy, results in self.recovery_success_rates.items():
             if results:
                 recovery_rates[strategy.value] = sum(results) / len(results)
-        
+
         return {
             "total_errors": total_errors,
             "error_type_distribution": error_type_counts,
@@ -668,39 +668,39 @@ class ErrorHandlingPipeline:
 def main() -> None:
     """Main function for testing and demonstration."""
     pipeline = ErrorHandlingPipeline()
-    
+
     # Test safe mathematical operations
     def risky_division(a, b):
         return a / b
-    
+
     context = ErrorContext(
         component="test",
         operation="division",
         input_data={"a": 10, "b": 0},
         expected_bounds=(-100, 100)
     )
-    
+
     # Test division by zero
     result = pipeline.safe_mathematical_operation(risky_division, 10, 0, context=context)
     safe_print(f"Division by zero result: {result}")
-    
+
     # Test bounds violation
     def overflow_operation(x):
         return x ** 1000
-    
+
     context = ErrorContext(
         component="test",
         operation="power",
         input_data={"x": 2},
         expected_bounds=(-1e6, 1e6)
     )
-    
+
     result = pipeline.safe_mathematical_operation(overflow_operation, 2, context=context)
     safe_print(f"Overflow operation result: {result}")
-    
+
     # Get statistics
     stats = pipeline.get_error_statistics()
     safe_print(f"Error statistics: {stats}")
 
 if __name__ == "__main__":
-    main() 
+    main()

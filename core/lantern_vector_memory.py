@@ -71,7 +71,7 @@ class LanternMemoryEntry:
     zpe_resonance: float = 0.0
     zpe_signal_strength: float = 0.0
     metadata: Dict[str, Any] = None
-    
+
     def __post_init__(self):
         if self.metadata is None:
             self.metadata = {}
@@ -88,7 +88,7 @@ class LanternMemoryResult:
     zpe_resonances: List[float] = None
     average_signal_strength: float = 0.0
     metadata: Dict[str, Any] = None
-    
+
     def __post_init__(self):
         if self.zpe_signals is None:
             self.zpe_signals = []
@@ -137,22 +137,22 @@ def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
 
 class LanternMemory:
     """Enhanced Lantern Memory with ZPE mathematical framework integration."""
-    
+
     def __init__(self):
         """Initialize Lantern Memory with ZPE integration."""
         self.state = {}
         self.memory_entries: List[LanternMemoryEntry] = []
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
-        
+
         if ZPE_MODULES_AVAILABLE:
             safe_safe_print("🔄 Lantern Memory initialized with ZPE integration")
         else:
             safe_safe_print("⚠️ Lantern Memory initialized without ZPE integration")
-    
+
     def load(self) -> bool:
         """Load memory state."""
         return True
-    
+
     def add_memory_entry(
         self,
         vector: List[float],
@@ -172,7 +172,7 @@ class LanternMemory:
                 price_derivative=price_derivative,
                 metadata=metadata or {}
             )
-            
+
             # Apply ZPE calculations if available
             if self.zpe_core:
                 try:
@@ -180,7 +180,7 @@ class LanternMemory:
                     entry.zpe_lantern_signal = self.zpe_core.map_news_lantern_signals(
                         news_density, sentiment_delta
                     )
-                    
+
                     # Calculate elastic resonance
                     frequency = 1.0  # Default frequency
                     phase_offset = 0.0  # Default phase offset
@@ -188,10 +188,10 @@ class LanternMemory:
                     entry.zpe_resonance = self.zpe_core.calculate_elastic_resonance(
                         price_derivative, frequency, phase_offset, time_window
                     )
-                    
+
                     # Calculate signal strength
                     entry.zpe_signal_strength = (entry.zpe_lantern_signal + entry.zpe_resonance) / 2.0
-                    
+
                     # Update metadata with ZPE info
                     entry.metadata.update({
                         'zpe_integration': True,
@@ -199,25 +199,25 @@ class LanternMemory:
                         'zpe_resonance': entry.zpe_resonance,
                         'zpe_signal_strength': entry.zpe_signal_strength
                     })
-                    
+
                 except Exception as e:
                     safe_safe_print(f"⚠️ ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
                     entry.metadata['zpe_integration'] = False
                     entry.metadata['zpe_error'] = str(e)
-            
+
             # Add to memory
             self.memory_entries.append(entry)
-            
+
             # Keep only recent entries (last 1000)
             if len(self.memory_entries) > 1000:
                 self.memory_entries = self.memory_entries[-1000:]
-            
+
             return entry
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
             return None
-    
+
     def get_memory_analysis(self, n_components: int = 4) -> LanternMemoryResult:
         """Get comprehensive memory analysis with ZPE integration."""
         try:
@@ -227,19 +227,19 @@ class LanternMemory:
                     memory_entries=[],
                     metadata={'error': 'No memory entries available'}
                 )
-            
+
             # Extract vectors for PCA
             vectors = [entry.vector for entry in self.memory_entries]
             pca_components = rolling_pca(vectors, n_components)
-            
+
             # Extract ZPE signals
             zpe_signals = [entry.zpe_lantern_signal for entry in self.memory_entries]
             zpe_resonances = [entry.zpe_resonance for entry in self.memory_entries]
             signal_strengths = [entry.zpe_signal_strength for entry in self.memory_entries]
-            
+
             # Calculate average signal strength
             average_signal_strength = sum(signal_strengths) / len(signal_strengths) if signal_strengths else 0.0
-            
+
             return LanternMemoryResult(
                 success=True,
                 memory_entries=self.memory_entries,
@@ -253,7 +253,7 @@ class LanternMemory:
                     'analysis_timestamp': datetime.now().isoformat()
                 }
             )
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Memory analysis failed: {safe_format_error(e, 'memory_analysis')}")
             return LanternMemoryResult(
@@ -261,26 +261,26 @@ class LanternMemory:
                 memory_entries=self.memory_entries,
                 metadata={'error': str(e)}
             )
-    
+
     def get_zpe_metrics(self) -> Dict[str, Any]:
         """Get ZPE performance metrics for lantern memory."""
         if not self.zpe_core:
             return {'zpe_available': False}
-        
+
         try:
             recent_entries = self.memory_entries[-100:] if self.memory_entries else []
-            
+
             if not recent_entries:
                 return {
                     'zpe_available': True,
                     'entries_count': 0,
                     'average_signal_strength': 0.0
                 }
-            
+
             signal_strengths = [entry.zpe_signal_strength for entry in recent_entries]
             lantern_signals = [entry.zpe_lantern_signal for entry in recent_entries]
             resonances = [entry.zpe_resonance for entry in recent_entries]
-            
+
             return {
                 'zpe_available': True,
                 'entries_count': len(recent_entries),
@@ -290,26 +290,26 @@ class LanternMemory:
                 'max_signal_strength': unified_math.max(signal_strengths) if signal_strengths else 0.0,
                 'min_signal_strength': unified_math.min(signal_strengths) if signal_strengths else 0.0
             }
-            
+
         except Exception as e:
             return {
                 'zpe_available': True,
                 'error': str(e)
             }
-    
+
     def clear_memory(self) -> None:
         """Clear all memory entries."""
         self.memory_entries.clear()
         safe_safe_print("🗑️ Lantern Memory cleared")
-    
+
     def get_recent_entries(self, count: int = 10) -> List[LanternMemoryEntry]:
         """Get recent memory entries."""
         return self.memory_entries[-count:] if self.memory_entries else []
-    
+
     def search_by_signal_strength(self, min_strength: float = 0.0) -> List[LanternMemoryEntry]:
         """Search memory entries by minimum signal strength."""
         return [
-            entry for entry in self.memory_entries 
+            entry for entry in self.memory_entries
             if entry.zpe_signal_strength >= min_strength
         ]
 

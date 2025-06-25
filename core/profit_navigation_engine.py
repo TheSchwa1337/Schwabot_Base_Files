@@ -147,7 +147,7 @@ class ProfitNavigationEngine:
                 triggering_hash=pattern_hash,
                 metadata={"timestamp": timestamp, **kwargs}
             )
-            
+
             logger.warning(
                 f"CONFIDENCE THRESHOLD MET. Publishing trade proposal: "
                 f"{proposal.direction.value} @ ${proposal.entry_price:.2f}"
@@ -169,7 +169,7 @@ async def main():
     # 2. Load the engine's knowledge base with some "Forever Fractals"
     PROFITABLE_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515f"
     UNPROFITABLE_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    
+
     engine.load_fractal_registry([
         KnownFractal(
             pattern_hash=PROFITABLE_HASH,
@@ -191,7 +191,7 @@ async def main():
 
     # 4. Simulate the Observer finding and publishing hash confirmations
     safe_print("--- Simulating DLT Hash Confirmations ---")
-    
+
     # First, publish a hash that is known and should trigger a trade
     safe_print("\n[Observer] Publishing a known, profitable hash...")
     await bus.publish(
@@ -214,4 +214,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

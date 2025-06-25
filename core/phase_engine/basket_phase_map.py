@@ -93,7 +93,7 @@ class BasketPhaseMap:
     def _create_default_config(self, phase: TradingPhase, condition: MarketCondition) -> BasketConfiguration:
         """Create a default basket configuration for a phase/condition combination."""
         base_allocation = {"BTC": 0.4, "ETH": 0.3, "ADA": 0.2, "DOT": 0.1}
-        
+
         # Adjust allocation based on phase
         if phase == TradingPhase.ACCUMULATION:
             base_allocation = {"BTC": 0.5, "ETH": 0.3, "ADA": 0.15, "DOT": 0.05}
@@ -103,14 +103,14 @@ class BasketPhaseMap:
             base_allocation = {"BTC": 0.3, "ETH": 0.4, "ADA": 0.2, "DOT": 0.1}
         elif phase == TradingPhase.MARKDOWN:
             base_allocation = {"BTC": 0.6, "ETH": 0.2, "ADA": 0.15, "DOT": 0.05}
-        
+
         # Adjust risk based on condition
         risk_level = 0.5
         if condition == MarketCondition.VOLATILE:
             risk_level = 0.3
         elif condition == MarketCondition.TRENDING:
             risk_level = 0.7
-        
+
         return BasketConfiguration(
             phase=phase,
             condition=condition,
@@ -126,7 +126,7 @@ class BasketPhaseMap:
         if self.current_phase != phase:
             self.phase_history.append((phase, datetime.now()))
             logger.info(f"Phase transition: {self.current_phase} -> {phase}")
-        
+
         self.current_phase = phase
         self.current_condition = condition
         logger.debug(f"Current state set: {phase.value} / {condition.value}")
@@ -137,7 +137,7 @@ class BasketPhaseMap:
             return self.basket_configs.get((self.current_phase, self.current_condition))
         return None
 
-    def update_config(self, phase: TradingPhase, condition: MarketCondition, 
+    def update_config(self, phase: TradingPhase, condition: MarketCondition,
                      allocation: Optional[Dict[str, float]] = None,
                      risk_level: Optional[float] = None,
                      max_position_size: Optional[float] = None,
@@ -148,7 +148,7 @@ class BasketPhaseMap:
         if not config:
             config = self._create_default_config(phase, condition)
             self.basket_configs[(phase, condition)] = config
-        
+
         if allocation:
             config.allocation = allocation
         if risk_level is not None:
@@ -159,10 +159,10 @@ class BasketPhaseMap:
             config.stop_loss = stop_loss
         if take_profit is not None:
             config.take_profit = take_profit
-        
+
         logger.info(f"Configuration updated for {phase.value}/{condition.value}")
 
-    def add_phase_transition(self, from_phase: TradingPhase, to_phase: TradingPhase, 
+    def add_phase_transition(self, from_phase: TradingPhase, to_phase: TradingPhase,
                            conditions: Dict[str, Any], probability: float) -> None:
         """Add a phase transition rule."""
         transition = PhaseTransition(
@@ -178,14 +178,14 @@ class BasketPhaseMap:
         """Predict the next phase based on current market data."""
         if not self.current_phase:
             return []
-        
+
         predictions = []
         for transition in self.phase_transitions:
             if transition.from_phase == self.current_phase:
                 # Simple condition matching - could be enhanced with ML
                 if self._check_conditions(transition.conditions, market_data):
                     predictions.append((transition.to_phase, transition.probability))
-        
+
         return sorted(predictions, key=lambda x: x[1], reverse=True)
 
     def _check_conditions(self, conditions: Dict[str, Any], market_data: Dict[str, Any]) -> bool:
@@ -202,7 +202,7 @@ class BasketPhaseMap:
         phase_counts = {}
         for phase, _ in self.phase_history:
             phase_counts[phase.value] = phase_counts.get(phase.value, 0) + 1
-        
+
         return {
             "total_phase_changes": len(self.phase_history),
             "phase_distribution": phase_counts,
@@ -214,10 +214,10 @@ class BasketPhaseMap:
 def main() -> None:
     """Main function for testing and demonstration."""
     phase_map = BasketPhaseMap()
-    
+
     # Set initial state
     phase_map.set_current_state(TradingPhase.ACCUMULATION, MarketCondition.BULLISH)
-    
+
     # Add a transition rule
     phase_map.add_phase_transition(
         TradingPhase.ACCUMULATION,
@@ -225,16 +225,16 @@ def main() -> None:
         {"volume_increase": True, "price_momentum": "positive"},
         0.8
     )
-    
+
     # Get current configuration
     config = phase_map.get_current_config()
     safe_print(f"Current config: {config.allocation if config else 'None'}")
-    
+
     # Predict next phase
     market_data = {"volume_increase": True, "price_momentum": "positive"}
     predictions = phase_map.predict_next_phase(market_data)
     safe_print(f"Next phase predictions: {predictions}")
-    
+
     # Get statistics
     stats = phase_map.get_phase_statistics()
     safe_print(f"Phase statistics: {stats}")

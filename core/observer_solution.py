@@ -69,7 +69,7 @@ class ObserverSolution:
 
         # Use a deque for an efficient rolling window of price data
         self.price_window: Deque[float] = deque(maxlen=self.window_size)
-        
+
         # Keep track of hashes we've recently published to avoid spam
         self.recent_hashes: Deque[str] = deque(maxlen=20)
 
@@ -93,17 +93,17 @@ class ObserverSolution:
             timestamp: The timestamp associated with the price.
         """
         self.price_window.append(price)
-        
+
         # We need enough data to form at least one delta sequence
         if len(self.price_window) < 4: # 4 prices = 3 deltas
             return
-            
+
         # Convert window to numpy array for our math library
         prices_np = np.array(self.price_window)
-        
+
         # 1. Calculate the deltas
         deltas = self.math.calculate_deltas(prices_np)
-        
+
         # 2. Check for a Triplet Lock
         is_locked = self.math.confirm_triplet_lock(
             deltas, tolerance=self.triplet_lock_tolerance
@@ -117,7 +117,7 @@ class ObserverSolution:
             # Avoid publishing the same hash repeatedly
             if pattern_hash in self.recent_hashes:
                 return
-            
+
             self.recent_hashes.append(pattern_hash)
 
             # 4. Publish the confirmed hash to the bus
@@ -159,7 +159,7 @@ async def main():
 
     # 3. Simulate a live market data feed publishing to the bus
     safe_print("--- Simulating Market Data Feed ---")
-    
+
     # This sequence is designed to create a Triplet Lock
     market_prices = [
         100, 102, 101, 105, 108, 110, # Some noise
@@ -176,4 +176,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())
