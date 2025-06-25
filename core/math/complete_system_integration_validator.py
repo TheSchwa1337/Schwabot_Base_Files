@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -27,7 +34,7 @@ Mathematical Pipeline:
 import json
 import time
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -113,7 +120,7 @@ class CompleteSystemIntegrationValidator:
         try:
             # Test 1: Bit Phase Algebra Integration
             test_start = time.time()
-            strategy_id = "0x123456789abcdef"
+            strategy_id = "0x123456789abcde"
             bit_result = self.tensor_algebra.resolve_bit_phases(strategy_id)
             bit_engine_result = self.bit_resolution_engine.resolve_bit_phase(strategy_id, "auto")
 
@@ -269,7 +276,7 @@ class CompleteSystemIntegrationValidator:
             self.tensor_algebra.gamma_weight = math_params["gamma_weight"]
 
             # Test parameter application
-            bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcdef")
+            bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcde")
             success = (
                 bit_result is not None and
                 unified_math.abs(self.tensor_algebra.alpha_weight - 0.3) < 1e-6
@@ -297,7 +304,7 @@ class CompleteSystemIntegrationValidator:
                 'drift_magnitude': 0.1
             }
 
-            unified_result = self.tensor_algebra.perform_unified_operation("0x123456789abcdef", market_data)
+            unified_result = self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
             success = (
                 unified_result is not None and
                 'bit_phases' in unified_result and
@@ -425,7 +432,7 @@ class CompleteSystemIntegrationValidator:
             # Test 3: Mathematical Pipeline Integration
             test_start = time.time()
             # Test complete mathematical pipeline
-            strategy_id = "0x123456789abcdef"
+            strategy_id = "0x123456789abcde"
             market_data = {
                 'current_profit': 1000.0,
                 'previous_profit': 950.0,
@@ -570,7 +577,7 @@ class CompleteSystemIntegrationValidator:
                     'drift_magnitude': 0.1 + i * 0.01
                 }
 
-                result = self.tensor_algebra.perform_unified_operation("0x123456789abcdef", market_data)
+                result = self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
                 real_time_data.append(result)
 
             success = (
@@ -620,7 +627,7 @@ class CompleteSystemIntegrationValidator:
             # Test 1: Unified Mathematics Framework Integration
             test_start = time.time()
             # Test mathematical consistency across components
-            strategy_ids = ["0x123456789abcdef", "0xfedcba9876543210", "0xabcdef1234567890"]
+            strategy_ids = ["0x123456789abcde", "0xfedcba9876543210", "0xabcdef1234567890"]
             results = []
 
             for strategy_id in strategy_ids:
@@ -741,7 +748,7 @@ class CompleteSystemIntegrationValidator:
         overall_success = all(v.all_tests_passed for v in validations)
 
         # Print results
-        safe_print(f"\n📊 Complete System Integration Results:")
+        safe_print("\n📊 Complete System Integration Results:")
         safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {total_passed}")
@@ -749,7 +756,7 @@ class CompleteSystemIntegrationValidator:
         safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
         safe_print(f"  Total Execution Time: {total_time:.2f}s")
 
-        safe_print(f"\n📋 System Integration Results:")
+        safe_print("\n📋 System Integration Results:")
         for validation in validations:
             status = "✅ PASSED" if validation.all_tests_passed else "❌ FAILED"
             safe_print(f"  {validation.validation_name}: {status} ({validation.passed_tests}/{validation.total_tests})")

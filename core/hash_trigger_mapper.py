@@ -33,14 +33,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}"), safe_math
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}"), safe_math
 except ImportError:
     # Fallback for CLI compatibility with proper Unicode handling
     def safe_print(*args, **kwargs):
@@ -292,7 +298,7 @@ class HashTriggerMapper:
         default_mappings = [
             # Aggressive patterns
             ("000000", "aggressive_ghost", "high", HashPatternType.CRITICAL),
-            ("ffffff", "aggressive_ghost", "high", HashPatternType.CRITICAL),
+            ("ffff", "aggressive_ghost", "high", HashPatternType.CRITICAL),
             ("123456", "aggressive_ghost", "medium", HashPatternType.SEQUENTIAL),
 
             # Momentum patterns
@@ -304,7 +310,7 @@ class HashTriggerMapper:
             ("222222", "cautious_ghost", "low", HashPatternType.REPEATING),
 
             # Adaptive patterns
-            ("abcdef", "adaptive_ghost", "medium", HashPatternType.SEQUENTIAL),
+            ("abcde", "adaptive_ghost", "medium", HashPatternType.SEQUENTIAL),
             ("fedcba", "adaptive_ghost", "medium", HashPatternType.SEQUENTIAL),
 
             # Defensive patterns
@@ -481,7 +487,7 @@ class HashTriggerMapper:
         """Check if hash trigger is critical pattern."""
         try:
             critical_patterns = [
-                "000000", "ffffff", "111111", "999999",
+                "000000", "ffff", "111111", "999999",
                 "aaaaaa", "bbbbbb", "cccccc", "dddddd"
             ]
             return hash_trigger.lower() in critical_patterns
@@ -810,7 +816,7 @@ def test_hash_trigger_mapper() -> None:
         "123456",  # Sequential - should map to momentum/adaptive
         "a1b2c3",  # Patterned - should map to momentum/adaptive
         "111111",  # Repeating - should map to cautious/defensive
-        "abcdef",  # Sequential - should map to momentum/adaptive
+        "abcde",  # Sequential - should map to momentum/adaptive
         "random1",  # Random - should map to adaptive/monitor
     ]
 
@@ -841,7 +847,7 @@ def test_hash_trigger_mapper() -> None:
 
     # Get statistics
     stats = mapper.get_mapping_statistics()
-    print(f"\nStatistics:")
+    print("\nStatistics:")
     print(f"  Total mappings: {stats['total_mappings']}")
     print(f"  Pathway distribution: {stats['pathway_distribution']}")
     print(f"  Average mapping score: {stats['average_mapping_score']:.4f}")

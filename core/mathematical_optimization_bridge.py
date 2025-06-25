@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Optimization Bridge - Multi-Vector Enhancement Layer.
@@ -62,7 +68,7 @@ import logging
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 from scipy import linalg
 from scipy import optimize
@@ -357,10 +363,10 @@ class MathematicalOptimizationBridge:
         try:
             # Analyze matrix properties
             A_condition = (
-                np.linalg.cond(A) if A.shape[0] == A.shape[1] else float("inf")
+                np.linalg.cond(A) if A.shape[0] == A.shape[1] else float("in")
             )
             B_condition = (
-                np.linalg.cond(B) if B.shape[0] == B.shape[1] else float("inf")
+                np.linalg.cond(B) if B.shape[0] == B.shape[1] else float("in")
             )
 
             # Choose strategy based on condition numbers
@@ -696,7 +702,7 @@ class MathematicalOptimizationBridge:
             ]
 
             best_result = None
-            best_value = float("inf")
+            best_value = float("in")
 
             for strategy in strategies:
                 try:
@@ -865,7 +871,7 @@ def main() -> None:
         )
         if result.convergence:
             safe_print(
-                f"✅ GEMM accelerated multiply completed in "
+                "✅ GEMM accelerated multiply completed in "
                 f"{result.execution_time:.6f}s"
             )
             safe_print(f"   Result shape: {result.result.shape}")
@@ -880,7 +886,7 @@ def main() -> None:
         if eigen_result.convergence:
             eigenvalues, eigenvectors = eigen_result.result
             safe_print(
-                f"✅ Eigenvalue decomposition completed in "
+                "✅ Eigenvalue decomposition completed in "
                 f"{eigen_result.execution_time:.6f}s"
             )
             safe_print(f"   Eigenvalues shape: {eigenvalues.shape}")
@@ -898,7 +904,7 @@ def main() -> None:
         )
         if opt_result.convergence:
             safe_print(
-                f"✅ Multi-vector optimization completed in "
+                "✅ Multi-vector optimization completed in "
                 f"{opt_result.execution_time:.6f}s"
             )
             safe_print(f"   Iterations: {opt_result.iterations}")
@@ -907,7 +913,7 @@ def main() -> None:
 
         # Get performance summary
         summary = bridge.get_performance_summary()
-        safe_print(f"\n✅ Performance Summary:")
+        safe_print("\n✅ Performance Summary:")
         safe_print(f"   Total operations: {summary['total_operations']}")
         safe_print(
             f"   Average execution time: " f"{summary['average_execution_time']:.6f}s"

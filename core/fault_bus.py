@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -184,13 +190,13 @@ async def main():
     # Define some example listeners
     async def risk_manager_listener(var_95: float, volatility: float, **_):
         safe_print(
-            f"[RiskManager] Received portfolio update: "
+            "[RiskManager] Received portfolio update: "
             f"VaR={var_95:.2%}, Volatility={volatility:.2%}"
         )
 
     async def trading_executor_listener(pattern_hash: str, **_):
         safe_print(f"[Executor] Received confirmed profitable hash: {pattern_hash[:10]}... "
-              f"Preparing to execute trade.")
+              "Preparing to execute trade.")
 
     async def another_trade_listener(pattern_hash: str, **_):
         safe_print(f"[Executor2] Also saw hash {pattern_hash[:10]}... Logging for confirmation.")

@@ -9,7 +9,7 @@ from core.unified_math_system import unified_math
 
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["news_to_glyph_weight"]
 

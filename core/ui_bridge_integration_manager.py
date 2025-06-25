@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """UI Bridge Integration Manager - Connects UI Bridges with Trading System.
 
@@ -568,7 +574,7 @@ def main() -> None:
 
         # Get bridge statuses
         bridge_statuses = manager.get_bridge_statuses()
-        safe_print(f"🌉 Bridge Status:")
+        safe_print("🌉 Bridge Status:")
         safe_print(f"  UI State: {bridge_statuses['ui_state_bridge']['total_states']} states")
         safe_print(f"  Visual: {bridge_statuses['visual_bridge']['total_charts']} charts")
         safe_print(f"  UI Integration: {bridge_statuses['ui_integration_bridge']['total_components']} components")

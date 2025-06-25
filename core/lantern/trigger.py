@@ -3,7 +3,7 @@
 from __future__ import annotations
 from core.unified_math_system import unified_math
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 
 def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:

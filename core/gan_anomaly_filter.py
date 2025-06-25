@@ -1,18 +1,25 @@
 from __future__ import annotations
+import numpy as np
 
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """GAN Anomaly Filter - Machine Learning Anomaly Detection.
@@ -31,7 +38,7 @@ Windows CLI compatible with proper fallback handling.
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -482,7 +489,7 @@ def main() -> None:
             )
 
     # Test realistic mode with performance tracking
-    safe_print(f"\nRealistic Mode Performance Test:")
+    safe_print("\nRealistic Mode Performance Test:")
     realistic_filter = GANAnomalyFilter(stub_mode=GAN_MODE_ADAPTIVE)
 
     # Generate multiple predictions
@@ -497,7 +504,7 @@ def main() -> None:
     safe_print(f"  Average score: {stats['average_validity_score']:.3f}")
 
     # Test feature vector creation
-    safe_print(f"\nFeature Vector Test:")
+    safe_print("\nFeature Vector Test:")
     feature_vec = create_feature_vector(1.2, 0.1, 0.9, 0.2, 0.8, 0.1, 0.9, 0.03)
     safe_print(f"  Feature vector: {feature_vec}")
     safe_print(f"  Vector length: {len(feature_vec)}")

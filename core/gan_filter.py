@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -54,12 +60,12 @@ Windows CLI compatible with flake8 compliance.
 from dataclasses import dataclass
 from enum import Enum
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING, Union
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 # PyTorch imports with fallback handling
@@ -668,7 +674,7 @@ class EntropyGAN:
                 epochs = epochs or self.config.epochs
                 batch_size = batch_size or self.config.batch_size
 
-                self.safe_safe_print(f"🚀 Starting Entropy GAN training")
+                self.safe_safe_print("🚀 Starting Entropy GAN training")
                 self.safe_safe_print(f"   Mode: {self.config.mode.value}")
                 self.safe_safe_print(f"   Epochs: {epochs}")
                 self.safe_safe_print(f"   Batch size: {batch_size}")
@@ -986,7 +992,7 @@ def main() -> None:
 
         filter_config = FilterConfig(threshold=0.5, mode=FilterMode.THRESHOLD)
 
-        safe_print(f"📊 Configuration:")
+        safe_print("📊 Configuration:")
         safe_print(f"   Signal dimension: {gan_config.signal_dim}")
         safe_print(f"   Batch size: {gan_config.batch_size}")
         safe_print(f"   Training epochs: {gan_config.epochs}")
@@ -1012,7 +1018,7 @@ def main() -> None:
 
         if training_metrics:
             final_metrics = training_metrics[-1]
-            safe_print(f"✅ Training completed:")
+            safe_print("✅ Training completed:")
             safe_print(f"   Final G loss: {final_metrics.generator_loss:.4f}")
             safe_print(f"   Final D loss: {final_metrics.discriminator_loss:.4f}")
             safe_print(f"   Real accuracy: {final_metrics.real_accuracy:.3f}")
@@ -1032,7 +1038,7 @@ def main() -> None:
 
         # Get filter statistics
         stats = gan_filter.get_filter_stats()
-        safe_print(f"   Filter statistics:")
+        safe_print("   Filter statistics:")
         safe_print(f"     Pass rate: {stats.get('pass_rate', 0):.2%}")
         safe_print(f"     Signals passed: {stats.get('signals_passed', 0)}")
         safe_print(f"     Signals filtered: {stats.get('signals_filtered', 0)}")

@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Braid Fractal - Mathematical Braid Fractal Generation for Schwabot.
@@ -27,10 +34,10 @@ Mathematical Foundation:
 """
 
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass, field
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +472,7 @@ def main() -> None:
 
     # Test braid state generation
     state = fractal.generate_braid_state(length=20, complexity=0.7)
-    safe_print(f"Generated braid state:")
+    safe_print("Generated braid state:")
     safe_print(f"  Length: {len(state.generators)}")
     safe_print(f"  Complexity: {state.complexity:.3f}")
     safe_print(f"  Entropy: {state.entropy:.3f}")
@@ -473,21 +480,21 @@ def main() -> None:
 
     # Test fractal braid generation
     fractal_braid = fractal.generate_fractal_braid(iterations=5, base_complexity=0.6)
-    safe_print(f"\nGenerated fractal braid:")
+    safe_print("\nGenerated fractal braid:")
     safe_print(f"  Dimension: {fractal_braid.dimension:.3f}")
     safe_print(f"  Pattern score: {fractal_braid.pattern_score:.3f}")
     safe_print(f"  Number of states: {len(fractal_braid.states)}")
 
     # Test pattern analysis
     analysis = fractal.analyze_braid_patterns(fractal_braid)
-    safe_print(f"\nPattern Analysis:")
+    safe_print("\nPattern Analysis:")
     safe_print(f"  Complexity mean: {analysis.get('complexity_distribution', {}).get('mean', 0):.3f}")
     safe_print(f"  Entropy mean: {analysis.get('entropy_distribution', {}).get('mean', 0):.3f}")
     safe_print(f"  Pattern stability: {analysis.get('pattern_evolution', {}).get('stability', 0):.3f}")
 
     # Test trading pattern detection
     trading_patterns = fractal.detect_trading_patterns(fractal_braid)
-    safe_print(f"\nTrading Patterns:")
+    safe_print("\nTrading Patterns:")
     for pattern in trading_patterns:
         safe_print(f"  - {pattern['type']}: {pattern['description']} (confidence: {pattern['confidence']:.3f})")
 

@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Unified Confidence Matrix - Central Hub for Schwabot Confidence Calculations.
 
@@ -26,7 +27,7 @@ import time
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import core components
 try:
@@ -35,8 +36,8 @@ try:
 except ImportError:
     # Fallback type definitions
     from typing import Any as MatrixController
-    from enum import Enum as BitLevel
-    from enum import Enum as MatrixPhase
+#     from enum import Enum as BitLevel  # F811: duplicate import
+#     from enum import Enum as MatrixPhase  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 

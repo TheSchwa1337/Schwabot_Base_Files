@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """BTC Investment Ratio Controller - Logical Sequencing for BTC Trading.
@@ -45,7 +51,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 from core.unified_signal_metrics import (
     BTCInvestmentSignals,
@@ -310,13 +316,13 @@ class BTCInvestmentRatioController:
 
         elif high_confidence and high_entry and (strong_btc or strong_network):
             return InvestmentDecision.BUY, (
-                f"Strong core signals with good BTC metrics: "
+                "Strong core signals with good BTC metrics: "
                 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
             )
 
         elif (high_confidence or high_entry) and btc_strength > 0.5:
             return InvestmentDecision.HOLD, (
-                f"Mixed signals suggest holding: "
+                "Mixed signals suggest holding: "
                 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
             )
 
@@ -326,18 +332,18 @@ class BTCInvestmentRatioController:
         ):
             if btc_strength < 0.3:
                 return InvestmentDecision.STRONG_SELL, (
-                    f"Weak signals across all metrics: "
+                    "Weak signals across all metrics: "
                     f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
                 )
             else:
                 return InvestmentDecision.SELL, (
-                    f"Low confidence/entry but BTC showing some strength: "
+                    "Low confidence/entry but BTC showing some strength: "
                     f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
                 )
 
         else:
             return InvestmentDecision.NO_ACTION, (
-                f"Insufficient signal strength for clear decision: "
+                "Insufficient signal strength for clear decision: "
                 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
             )
 

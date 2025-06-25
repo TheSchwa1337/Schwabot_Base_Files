@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Trade Executor - Final Trade Execution Layer
@@ -115,7 +121,7 @@ async def main():
     # Dummy listener for the final trade confirmation
     async def audit_logger(trade: ExecutedTrade):
         safe_print(
-            f"\n[AUDIT LOG] Confirmed trade execution:\n"
+            "\n[AUDIT LOG] Confirmed trade execution:\n"
             f"  -> Symbol: {trade.proposal.symbol}\n"
             f"  -> Direction: {trade.proposal.direction.value}\n"
             f"  -> Executed Price: ${trade.execution_price:.2f}"

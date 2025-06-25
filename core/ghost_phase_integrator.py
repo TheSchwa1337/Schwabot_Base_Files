@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Ghost Phase Integrator – trust-weighted phase correction logic.
 
@@ -14,10 +15,10 @@ remaining free of heavy external dependencies.  The public helper
 
 
 from dataclasses import dataclass
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Final, Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["GhostPhasePacket", "compute_ghost_phase_packet"]
 

@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Profit Navigation Engine - DLT-Based Decision Making Core
@@ -149,7 +155,7 @@ class ProfitNavigationEngine:
             )
 
             logger.warning(
-                f"CONFIDENCE THRESHOLD MET. Publishing trade proposal: "
+                "CONFIDENCE THRESHOLD MET. Publishing trade proposal: "
                 f"{proposal.direction.value} @ ${proposal.entry_price:.2f}"
             )
             await self.bus.publish("trade_proposal_ready", proposal=proposal)
@@ -167,7 +173,7 @@ async def main():
     engine = ProfitNavigationEngine(bus, math_lib)
 
     # 2. Load the engine's knowledge base with some "Forever Fractals"
-    PROFITABLE_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515f"
+    PROFITABLE_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515"
     UNPROFITABLE_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
     engine.load_fractal_registry([
@@ -183,7 +189,7 @@ async def main():
     # 3. Create a listener to simulate a trade execution system
     async def trade_executor_listener(proposal: TradeProposal):
         safe_print(
-            f"\n[EXECUTOR] Received trade proposal! Executing now:\n"
+            "\n[EXECUTOR] Received trade proposal! Executing now:\n"
             f"  -> {proposal}"
         )
 

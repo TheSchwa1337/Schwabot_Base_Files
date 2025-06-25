@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+import numpy as np
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 
 def check_rank(matrix: np.ndarray, eps: int = 0) -> None:

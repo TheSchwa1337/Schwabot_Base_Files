@@ -33,7 +33,7 @@ from .unified_tensor_algebra import (
     UnifiedTensorAlgebra
 )
 
-from .tensor_engine import (
+# from .tensor_engine import (  # F811: duplicate import
     TensorEngine,
     create_tensor_space,
     analyze_tensor_patterns,
@@ -43,7 +43,7 @@ from .tensor_engine import (
     tensor_dimensionality_reduction
 )
 
-from .profit_engine import (
+# from .profit_engine import (  # F811: duplicate import
     compute_profit_surface,
     optimize_long_hold_positions,
     calculate_profit_gradient,
@@ -52,7 +52,7 @@ from .profit_engine import (
     ProfitEngine
 )
 
-from .entropy_engine import (
+# from .entropy_engine import (  # F811: duplicate import
     entropy_filter,
     calculate_dynamic_entropy,
     entropy_wave_detection,

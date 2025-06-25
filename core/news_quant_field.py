@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """News quantization field – weighted news processing and spectral analysis.
 
@@ -17,7 +18,7 @@ gradient analysis and frequency domain representations.
 
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
     "quantize_news",

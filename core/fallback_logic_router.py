@@ -18,8 +18,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 from core.error_handler import safe_execute
 from core.import_resolver import safe_import
@@ -287,7 +287,7 @@ class FallbackLogicRouter:
         try:
             delta_price = context.get('delta_price', 0.0)
             entropy = context.get('entropy', 0.5)
-            max_price_ref = context.get('max_price_ref', 70000.0)
+            max_price_ref = context.get('max_price_re', 70000.0)
 
             return self.phantom_lag_model.calculate_phantom_lag_penalty(
                 delta_price, entropy, max_price_ref
@@ -316,7 +316,7 @@ class FallbackLogicRouter:
             # Perform full phantom lag analysis
             delta_price = context.get('delta_price', 0.0) if context else 0.0
             entropy = context.get('entropy', 0.5) if context else 0.5
-            max_price_ref = context.get('max_price_ref', 70000.0) if context else 70000.0
+            max_price_ref = context.get('max_price_re', 70000.0) if context else 70000.0
 
             penalty = self.phantom_lag_model.calculate_phantom_lag_penalty(
                 delta_price, entropy, max_price_ref
@@ -345,7 +345,7 @@ class FallbackLogicRouter:
         try:
             # Simple lag penalty calculation
             delta_price = context.get('delta_price', 0.0) if context else 0.0
-            max_price_ref = context.get('max_price_ref', 70000.0) if context else 70000.0
+            max_price_ref = context.get('max_price_re', 70000.0) if context else 70000.0
 
             # Basic penalty calculation
             penalty = unified_math.min(unified_math.abs(delta_price) / max_price_ref, 1.0) if max_price_ref > 0 else 0.0

@@ -64,7 +64,7 @@ from .enhanced_phase_risk_manager import EnhancedPhaseRiskManager
 from .pipeline_integration_manager import PipelineIntegrationManager
 
 # Type definitions
-from .type_defs import (
+# from .type_defs import (  # F811: duplicate import
     BitLevel, MatrixPhase, MatrixController, MatrixControllerType,
     Vector, Matrix, Tensor, Price, Volume, Quantity, Amount,
     Temperature, Pressure, ThermalConductivity, HeatCapacity,
@@ -82,7 +82,7 @@ except ImportError:
     MathOperation = None
 
 # Utility functions
-from .utils.windows_cli_compatibility import (
+# from .utils.windows_cli_compatibility import (  # F811: duplicate import
     safe_print, safe_format_error, log_safe
 )
 
@@ -95,7 +95,7 @@ from .mathematical_pipeline_validator_simple import SimplifiedMathematicalPipeli
 
 # AI and strategy components
 from .gpt_command_layer import GPTCommandLayer
-from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer
+# from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer  # F811: duplicate import
 from .strategy_mapper import StrategyMapper
 
 # Memory and execution components
@@ -110,8 +110,8 @@ from .capital_controls import CapitalControls
 from .auto_scaler import AutoScaler
 
 # Thermal and hardware management
-from .thermal_boundary_manager import ThermalBoundaryManager
-from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine
+# from .thermal_boundary_manager import ThermalBoundaryManager  # F811: duplicate import
+# from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine  # F811: duplicate import
 
 # Advanced mathematical frameworks
 from .zpe_core import ZPECore
@@ -234,7 +234,7 @@ from .ui_bridge_integration_manager import UIBridgeIntegrationManager, get_ui_br
 from .type_binding_system import TypeBindingValidator, WindowsCliCompatibilityHandler, cli_handler
 
 # Constants - import specific constants instead of wildcard
-from .constants import (
+# from .constants import (  # F811: duplicate import
     PSI_INFINITY, FIBONACCI_SCALING, INVERSE_PSI, CONFIG_DIR, DATA_DIR, LOG_DIR,
     KELLY_SAFETY_FACTOR, SHARPE_TARGET, MAX_POSITION_SIZE, MIN_POSITION_SIZE,
     SAMPLE_RATE, NYQUIST_FREQUENCY, BUTTERWORTH_ORDER, FRACTAL_DIMENSION_LIMIT,
@@ -532,7 +532,7 @@ __all__ = [
     "IntegratedAlifAlephSystem", "MemoryAgentGhostMetaEngine", "LanternNewsIntelligenceBridge", "AdvancedTestHarness",
 
     # Ghost and advanced logic
-    "GhostArchitectureBTCProfitHandoff", "GhostStrategyHandler", "compute_ghost_route",
+    "GhostArchitectureBTCProfitHando", "GhostStrategyHandler", "compute_ghost_route",
 
     # Volume and tick management
     "VolumeTickRouter", "TickBacklogRouter", "TickCycleValidator",

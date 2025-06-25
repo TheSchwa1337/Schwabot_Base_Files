@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 """
 Schwabot Demo Backtest Runner
@@ -29,7 +36,7 @@ This system:
 
 import json
 import yaml
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -337,7 +344,7 @@ class DemoBacktestRunner:
         if config.save_detailed_results:
             self._save_backtest_results()
 
-        safe_print(f"✅ Backtest completed!")
+        safe_print("✅ Backtest completed!")
         safe_print(f"Success Rate: {success_rate:.2%}")
         safe_print(f"Total Profit: {total_profit:.2f}")
         safe_print(f"Execution Time: {result.execution_time:.2f}s")
@@ -478,7 +485,7 @@ class DemoBacktestRunner:
         analysis = self._generate_comprehensive_analysis(result)
 
         # Create markdown report
-        report = f"""# Schwabot Backtest Report
+        report = """# Schwabot Backtest Report
 
 ## Backtest Summary
 - **Backtest ID**: {result.backtest_id}

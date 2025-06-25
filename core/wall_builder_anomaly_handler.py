@@ -777,7 +777,7 @@ if __name__ == "__main__":
         exchange="binance",
     )
 
-    print(f"🏗️ Wall Builder Response:")
+    print("🏗️ Wall Builder Response:")
     print(f"   Action: {buy_wall_response['recommended_action']}")
     print(f"   Confidence: {buy_wall_response['confidence_score']:.3f}")
     print(f"   Processing Time: {buy_wall_response['processing_time']:.4f}s")

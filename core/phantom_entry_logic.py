@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Phantom entry logic – compute entry probability Pₑ.
 
@@ -12,10 +13,10 @@ The summation is a dot-product between *zeta* and *tau* vectors (same length).
 """
 
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Sequence, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["phantom_entry_probability"]
 

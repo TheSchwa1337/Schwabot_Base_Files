@@ -12,7 +12,7 @@ Numerically we evaluate a discrete array *phi_exit* and divide by profit delta.
 """
 
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["phantom_exit_score"]
 

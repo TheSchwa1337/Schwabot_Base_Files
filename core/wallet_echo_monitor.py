@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Wallet Echo Monitor - Schwabot UROS v1.0
@@ -699,7 +705,7 @@ def main():
 
     # Get statistics
     stats = monitor.get_wallet_statistics()
-    safe_print(f"\n📊 Wallet Statistics:")
+    safe_print("\n📊 Wallet Statistics:")
     safe_print(f"  Active Wallets: {stats.get('active_wallets', 0)}")
     safe_print(f"  Total Balance USD: ${stats.get('total_balance_usd', 0):,.2f}")
     safe_print(f"  Total Transactions: {stats.get('total_transactions', 0)}")
@@ -708,7 +714,7 @@ def main():
 
     # Get wallet balances
     balances = monitor.get_wallet_balances()
-    safe_print(f"\n💰 Wallet Balances:")
+    safe_print("\n💰 Wallet Balances:")
     for addr, balance in balances.items():
         safe_print(f"  {balance.wallet_type.value}: {balance.balance:.4f} (${balance.usd_value:,.2f})")
 

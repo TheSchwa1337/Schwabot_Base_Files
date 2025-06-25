@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -31,7 +38,7 @@ from typing import Dict, List, Optional, Tuple, Any, Union
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 import hashlib
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import centralized CLI handler
 try:
@@ -497,7 +504,7 @@ if __name__ == "__main__":
         from core.utils.windows_cli_compatibility import safe_print
     except ImportError:
         try:
-            from utils.windows_cli_compatibility import safe_print
+#             from utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
             def safe_print(message):
                 print(message)
@@ -509,7 +516,7 @@ if __name__ == "__main__":
             safe_print("=" * 40)
 
             test_hashes = [
-                "a1b2c3d4e5f6789012345678901234567890abcdef",
+                "a1b2c3d4e5f6789012345678901234567890abcde",
                 "deadbeef1234567890abcdef1234567890abcdef12",
                 "f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0",
             ]
@@ -593,7 +600,7 @@ if __name__ == "__main__":
             safe_print("\n🎯 Testing Convenience Functions:")
 
             # Test sequence_ai_command
-            test_hash = "convenience_test_hash_1234567890abcdef"
+            test_hash = "convenience_test_hash_1234567890abcde"
             convenience_commands = sequence_ai_command(test_hash)
             safe_print(f"✅ Convenience Commands: {convenience_commands}")
 

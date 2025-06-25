@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """
 advanced_mathematical_core.py - Advanced Mathematical Core for Schwabot.
@@ -11,7 +12,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from scipy import linalg
 from scipy.special import gamma, loggamma
 
@@ -29,7 +30,7 @@ from core.constants import (
     THERMAL_CONDUCTIVITY_BTC,
 )
 
-from core.type_defs import (
+# from core.type_defs import (  # F811: duplicate import
     Matrix,
     QuantumState,
     Temperature,

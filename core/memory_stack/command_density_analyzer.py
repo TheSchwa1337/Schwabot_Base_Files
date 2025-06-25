@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -27,14 +34,14 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Set
 from dataclasses import dataclass
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from collections import defaultdict
 
 # Import core modules
 try:
     from core.gpt_command_layer_simple import AIAgentType, CommandDomain
     from core.fault_bus import FaultBus, FaultType, FaultBusEvent
-    from core.utils.windows_cli_compatibility import safe_print, safe_format_error
+#     from core.utils.windows_cli_compatibility import safe_print, safe_format_error  # F811: duplicate import
     CORE_AVAILABLE = True
 except ImportError:
     CORE_AVAILABLE = False

@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Type Binding System - Centralized Type Definitions and Validation.
@@ -52,7 +58,7 @@ from typing import (
     Callable, Protocol, runtime_checkable
 )
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -460,8 +466,8 @@ class MathematicalTypeValidator:
         if np.any(np.isinf(matrix)):
             errors.append(TypeValidationError(
                 field_name="matrix",
-                expected_type="Matrix without inf",
-                actual_type="Matrix with inf",
+                expected_type="Matrix without in",
+                actual_type="Matrix with in",
                 value=matrix,
                 message="Matrix contains infinite values",
                 severity="critical",

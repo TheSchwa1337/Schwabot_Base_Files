@@ -421,7 +421,7 @@ if __name__ == "__main__":
         from ...utils.windows_cli_compatibility import safe_print
     except ImportError:
         try:
-            from core.utils.windows_cli_compatibility import safe_print
+#             from core.utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
             def safe_print(message):
                 print(message)
@@ -470,14 +470,14 @@ if __name__ == "__main__":
             safe_print("\n📊 Testing Profit Distribution Analysis:")
             if len(profit_curves['horizon_1']) > 0:
                 distribution = analyze_profit_distribution(profit_curves['horizon_1'])
-                safe_print(f"✅ Distribution Statistics:")
+                safe_print("✅ Distribution Statistics:")
                 for key, value in distribution.items():
                     safe_print(f"   {key}: {value:.4f}")
 
             # Test portfolio allocation optimization
             safe_print("\n🎯 Testing Portfolio Allocation:")
             allocations = profit_engine.optimize_portfolio_allocation(profit_curves, risk_tolerance=0.5)
-            safe_print(f"✅ Portfolio Allocations:")
+            safe_print("✅ Portfolio Allocations:")
             for horizon, allocation in allocations.items():
                 safe_print(f"   {horizon}: {allocation:.4f}")
 

@@ -467,7 +467,7 @@ if __name__ == "__main__":
         from core.utils.windows_cli_compatibility import safe_print
     except ImportError:
         try:
-            from utils.windows_cli_compatibility import safe_print
+#             from utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
             def safe_print(message):
                 print(message)
@@ -551,7 +551,7 @@ if __name__ == "__main__":
             # Test API client base functionality
             safe_print("\n🔌 Testing API Client Base Functionality:")
             api_client = APIClient(config, secret_manager)
-            safe_print(f"✅ API Client initialized")
+            safe_print("✅ API Client initialized")
             safe_print(f"✅ Session created: {api_client.session is not None}")
             safe_print(f"✅ Cache enabled: {config.enable_caching}")
 

@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 """
 Schwabot Demo Integration System
@@ -29,7 +36,7 @@ This system:
 
 import json
 import yaml
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -595,14 +602,14 @@ if __name__ == "__main__":
 
     backtest_analysis = demo_system.run_backtest(strategy_config, num_trades=10)
 
-    safe_print(f"\nBacktest Results:")
+    safe_print("\nBacktest Results:")
     safe_print(f"Success Rate: {backtest_analysis['success_rate']:.2%}")
     safe_print(f"Total Profit: {backtest_analysis['total_profit']:.2f}")
     safe_print(f"Average Profit: {backtest_analysis['average_profit']:.2f}")
 
     # Get demo summary
     summary = demo_system.get_demo_summary()
-    safe_print(f"\nDemo Summary:")
+    safe_print("\nDemo Summary:")
     safe_print(f"Total Demo Trades: {summary['total_demo_trades']}")
     safe_print(f"Demo Performance: {summary['demo_performance']}")
 

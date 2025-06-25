@@ -37,7 +37,7 @@ def test_hardware_self_identifier():
         # Detect hardware capabilities
         profile = identifier.detect_hardware_capabilities()
 
-        print(f"✓ Hardware Profile Created:")
+        print("✓ Hardware Profile Created:")
         print(f"  Device: {profile.device_name}")
         print(f"  Device ID: {profile.device_id}")
         print(f"  Hardware Tier: {profile.hardware_tier.value}")
@@ -53,7 +53,7 @@ def test_hardware_self_identifier():
         # Register with network (simulated)
         registration = identifier.register_with_network()
 
-        print(f"\n✓ Network Registration:")
+        print("\n✓ Network Registration:")
         print(f"  Success: {registration.success}")
         print(f"  Node ID: {registration.assigned_node_id}")
         print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
@@ -68,7 +68,7 @@ def test_hardware_self_identifier():
         # Get performance summary
         summary = identifier.get_performance_summary()
 
-        print(f"\n✓ Performance Summary:")
+        print("\n✓ Performance Summary:")
         print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
         print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
         print(f"  Capability Adjustments: {summary.get('capability_adjustments', 0)}")
@@ -76,7 +76,7 @@ def test_hardware_self_identifier():
 
         # Export hardware data
         identifier.export_hardware_data("test_hardware_profile.json")
-        print(f"\n✓ Hardware data exported to test_hardware_profile.json")
+        print("\n✓ Hardware data exported to test_hardware_profile.json")
 
         return True
 
@@ -121,7 +121,7 @@ def test_flask_network_coordinator():
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Device Registration Successful:")
+            print("✓ Device Registration Successful:")
             print(f"  Device ID: {result['device_id']}")
             print(f"  Node ID: {result['node_id']}")
             print(f"  Profit Allocation: {result['profit_allocation']:.1%}")
@@ -144,7 +144,7 @@ def test_flask_network_coordinator():
         response = requests.post("http://127.0.0.1:5001/api/heartbeat", json=heartbeat_data)
 
         if response.status_code == 200:
-            print(f"✓ Heartbeat Successful")
+            print("✓ Heartbeat Successful")
         else:
             print(f"✗ Heartbeat failed: {response.status_code}")
 
@@ -163,7 +163,7 @@ def test_flask_network_coordinator():
 
         if response.status_code == 200:
             result = response.json()
-            print(f"✓ Task Creation Successful:")
+            print("✓ Task Creation Successful:")
             print(f"  Task ID: {result['task_id']}")
         else:
             print(f"✗ Task creation failed: {response.status_code}")
@@ -173,7 +173,7 @@ def test_flask_network_coordinator():
 
         if response.status_code == 200:
             status = response.json()
-            print(f"✓ Network Status Retrieved:")
+            print("✓ Network Status Retrieved:")
             print(f"  Network Status: {status['network_status']}")
             print(f"  Total Devices: {status['statistics']['total_devices']}")
             print(f"  Active Devices: {status['statistics']['active_devices']}")
@@ -205,7 +205,7 @@ def test_universal_schwabot_client():
 
         # Start client
         if client.start():
-            print(f"✓ Universal Schwabot Client Started Successfully:")
+            print("✓ Universal Schwabot Client Started Successfully:")
             print(f"  Device ID: {client.device_id}")
             print(f"  Node ID: {client.node_id}")
             print(f"  Profit Allocation: {client.profit_allocation:.1%}")
@@ -218,7 +218,7 @@ def test_universal_schwabot_client():
             # Get client status
             status = client.get_client_status()
 
-            print(f"\n✓ Client Status Retrieved:")
+            print("\n✓ Client Status Retrieved:")
             print(f"  Status: {status['client_status']}")
             print(f"  Mode: {status['mode']}")
             print(f"  CPU Usage: {status['performance']['cpu_usage']:.1f}%")
@@ -234,11 +234,11 @@ def test_universal_schwabot_client():
 
             # Stop client
             client.stop()
-            print(f"\n✓ Client stopped successfully")
+            print("\n✓ Client stopped successfully")
 
             return True
         else:
-            print(f"✗ Failed to start Universal Schwabot Client")
+            print("✗ Failed to start Universal Schwabot Client")
             return False
 
     except Exception as e:
@@ -404,7 +404,7 @@ def test_distributed_profit_calculation():
 
         if response.status_code == 200:
             status = response.json()
-            print(f"\n✓ Final Network Status:")
+            print("\n✓ Final Network Status:")
             print(f"  Total Devices: {status['statistics']['total_devices']}")
             print(f"  Active Devices: {status['statistics']['active_devices']}")
             print(f"  Total Profit Contributed: ${status['statistics']['total_profit_contributed']:.2f}")
@@ -412,7 +412,7 @@ def test_distributed_profit_calculation():
             print(f"  Average Response Time: {status['statistics']['average_response_time']:.3f}s")
 
             # Show individual device contributions
-            print(f"\nDevice Contributions:")
+            print("\nDevice Contributions:")
             for device_id, device_info in status['devices'].items():
                 print(f"  {device_info['device_name']}: ${device_info['total_profit_contributed']:.2f} ({device_info['total_calculations']} calculations)")
 
@@ -463,7 +463,7 @@ def test_hardware_scaling_demonstration():
         print(f"Average Profit per Calculation: ${total_profit/total_calculations:.6f}")
 
         # Demonstrate the "million dollar laptop" concept
-        print(f"\n💡 Million Dollar Laptop Analysis:")
+        print("\n💡 Million Dollar Laptop Analysis:")
         print("-" * 40)
 
         # High-end gaming laptop running 24/7
@@ -473,7 +473,7 @@ def test_hardware_scaling_demonstration():
         # Time to reach $1M
         years_to_million = 1000000 / gaming_laptop_yearly
 
-        print(f"High-end Gaming Laptop:")
+        print("High-end Gaming Laptop:")
         print(f"  Monthly Profit: ${gaming_laptop_monthly:.2f}")
         print(f"  Yearly Profit: ${gaming_laptop_yearly:.2f}")
         print(f"  Years to $1M: {years_to_million:.1f} years")
@@ -483,7 +483,7 @@ def test_hardware_scaling_demonstration():
         network_yearly = network_monthly * 12
         network_years_to_million = 1000000 / network_yearly
 
-        print(f"\nNetwork of 5 Devices:")
+        print("\nNetwork of 5 Devices:")
         print(f"  Monthly Profit: ${network_monthly:.2f}")
         print(f"  Yearly Profit: ${network_yearly:.2f}")
         print(f"  Years to $1M: {network_years_to_million:.1f} years")

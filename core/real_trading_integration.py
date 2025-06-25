@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -33,7 +39,7 @@ Based on Schwabot's mathematical framework and real trading requirements.
 """
 
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import hashlib
 import time
 from typing import Dict, List, Any, Optional, Tuple, Union
@@ -64,7 +70,7 @@ class TradingPhase(Enum):
     PROFIT_TIER_NAVIGATION = "profit_tier"
     TRADE_EXECUTION = "execution"
     STATE_VALIDATION = "validation"
-    ALEPH_ALIF_INTEGRATION = "aleph_alif"
+    ALEPH_ALIF_INTEGRATION = "aleph_ali"
 
 
 @dataclass
@@ -724,7 +730,7 @@ def main() -> None:
 
     # Get system statistics
     stats = trading.get_system_statistics()
-    safe_print(f"\n📊 System Statistics:")
+    safe_print("\n📊 System Statistics:")
     safe_print(f"   Uptime: {stats['system_uptime']}")
     safe_print(f"   Ticks Processed: {stats['total_ticks_processed']}")
     safe_print(f"   Trades Executed: {stats['total_trades_executed']}")

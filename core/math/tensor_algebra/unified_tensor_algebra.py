@@ -250,7 +250,7 @@ class UnifiedTensorAlgebra:
 
         except Exception as e:
             logger.error(f"Tensor distance calculation failed: {e}")
-            return float('inf')
+            return float('in')
 
     def tensor_similarity(self, a: NDArray, b: NDArray, method: str = 'cosine') -> float:
         """
@@ -601,7 +601,7 @@ if __name__ == "__main__":
         from ...utils.windows_cli_compatibility import safe_print
     except ImportError:
         try:
-            from core.utils.windows_cli_compatibility import safe_print
+#             from core.utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
             def safe_print(message):
                 print(message)

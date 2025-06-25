@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ops and Observability - Comprehensive Monitoring and Logging System.
@@ -71,7 +77,7 @@ except ImportError:
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+#     from core.utils.windows_cli_compatibility import (  # F811: duplicate import
         safe_print, safe_format_error, log_safe
     )
     CLI_HANDLER_AVAILABLE = True
@@ -600,7 +606,7 @@ class AlertManager:
         try:
             # Create Slack message
             color_map = {
-                AlertSeverity.INFO: "#36a64f",
+                AlertSeverity.INFO: "#36a64",
                 AlertSeverity.WARNING: "#ffa500",
                 AlertSeverity.ERROR: "#ff0000",
                 AlertSeverity.CRITICAL: "#8b0000"
@@ -608,7 +614,7 @@ class AlertManager:
 
             slack_message = {
                 "attachments": [{
-                    "color": color_map.get(alert.severity, "#36a64f"),
+                    "color": color_map.get(alert.severity, "#36a64"),
                     "title": alert.title,
                     "text": alert.message,
                     "fields": [

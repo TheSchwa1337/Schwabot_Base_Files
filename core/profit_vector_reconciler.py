@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Profit Vector Reconciler - Waveform vs Allocator Delta Analysis.
 
@@ -15,7 +16,7 @@ Architecture:
 
 import logging
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -296,7 +297,7 @@ class ProfitVectorReconciler:
         # Check magnitude delta
         if delta.magnitude_delta > self.magnitude_tolerance:
             result.issues.append(
-                f"Magnitude delta exceeds tolerance: "
+                "Magnitude delta exceeds tolerance: "
                 f"{delta.magnitude_delta:.1%} > {self.magnitude_tolerance:.1%}"
             )
             result.recommendations.append("Review waveform-allocator calibration")
@@ -312,7 +313,7 @@ class ProfitVectorReconciler:
         # Check confidence delta
         if delta.confidence_delta > self.confidence_tolerance:
             result.issues.append(
-                f"Confidence delta exceeds tolerance: "
+                "Confidence delta exceeds tolerance: "
                 f"{delta.confidence_delta:.1%} > {self.confidence_tolerance:.1%}"
             )
             result.recommendations.append("Review confidence calculation methods")

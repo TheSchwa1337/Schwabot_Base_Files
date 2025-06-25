@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Error Sanitizer - Comprehensive Exception Sanitization and Recovery.
 
@@ -89,7 +90,7 @@ class ErrorSanitizer:
 
         # Register handlers for numpy/pandas errors if available
         try:
-            from core.unified_math_system import unified_math
+#             from core.unified_math_system import unified_math  # F811: duplicate import
             self.error_handler.register_handler(np.linalg.LinAlgError, self._handle_linalg_error)
         except ImportError:
             pass
@@ -198,7 +199,7 @@ class ErrorSanitizer:
 
         # Format for mathematical context
         if any(math_term in error_msg.lower() for math_term in
-               ['division', 'overflow', 'underflow', 'nan', 'inf']):
+               ['division', 'overflow', 'underflow', 'nan', 'in']):
             return f"[MATH ERROR] {error_type} in {func_name}: {sanitized_msg}"
 
         return f"[SANITIZED ERROR] {error_type} in {func_name}: {sanitized_msg}"
@@ -226,7 +227,7 @@ class ErrorSanitizer:
         """Mathematical-specific error recovery."""
         if isinstance(exception, ZeroDivisionError):
             # Return infinity or a large number for division by zero
-            return float('inf')
+            return float('in')
 
         elif isinstance(exception, OverflowError):
             # Return maximum float value
@@ -265,7 +266,7 @@ class ErrorSanitizer:
         """Handle zero division errors specifically."""
         logger.warning(
             f"Zero division in {context.module_name}.{context.function_name}: "
-            f"Mathematical operation attempted division by zero"
+            "Mathematical operation attempted division by zero"
         )
         context.severity = ErrorSeverity.MEDIUM
 
@@ -273,7 +274,7 @@ class ErrorSanitizer:
         """Handle overflow errors specifically."""
         logger.warning(
             f"Overflow in {context.module_name}.{context.function_name}: "
-            f"Mathematical computation exceeded limits"
+            "Mathematical computation exceeded limits"
         )
         context.severity = ErrorSeverity.HIGH
 
@@ -281,7 +282,7 @@ class ErrorSanitizer:
         """Handle floating point errors specifically."""
         logger.warning(
             f"Floating point error in {context.module_name}.{context.function_name}: "
-            f"Numerical precision issue detected"
+            "Numerical precision issue detected"
         )
         context.severity = ErrorSeverity.MEDIUM
 
@@ -289,7 +290,7 @@ class ErrorSanitizer:
         """Handle linear algebra errors specifically."""
         logger.warning(
             f"Linear algebra error in {context.module_name}.{context.function_name}: "
-            f"Matrix operation failed"
+            "Matrix operation failed"
         )
         context.severity = ErrorSeverity.HIGH
 

@@ -16,7 +16,7 @@ internal ghost state transitions for temporal alignment.
 
 
 import hashlib
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict
 
 __all__: list[str] = [

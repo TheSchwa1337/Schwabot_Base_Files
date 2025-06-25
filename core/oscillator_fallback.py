@@ -22,7 +22,7 @@ integrator – just the closed-form expression that guarantees ‖x(t)‖ ≤ A.
 """
 
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Final
 
 __all__ = ["fallback_oscillator"]

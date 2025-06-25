@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Integration Layer for Schwabot Trading System.
@@ -40,7 +46,7 @@ import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import our core components
 from .best_practices_enforcer import BestPracticesEnforcer, EnforcementResult
@@ -50,7 +56,7 @@ from .anomaly_filter_comprehensive import (
     AnomalySignal,
     validate_system_safety,
 )
-from .deterministic_value_engine import (
+# from .deterministic_value_engine import (  # F811: duplicate import
     DeterministicValueEngine,
     MarketState,
     DeterministicDecision,
@@ -755,7 +761,7 @@ def demonstrate_complete_system() -> None:
 
         if result["decision"] and result["safe_to_trade"]:
             decision = result["decision"]
-            safe_print(f"🎯 Decision Summary:")
+            safe_print("🎯 Decision Summary:")
             safe_print(f"   - Execution Confidence: {decision['execution_confidence']:.3f}")
             safe_print(f"   - Entry Score: {decision['entry_score']:.3f}")
             safe_print(f"   - Phase Mode: {decision['phase_mode']}-bit")

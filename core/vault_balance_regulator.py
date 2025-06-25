@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Vault Balance Regulator - Asset Allocation & Risk Management.
@@ -36,7 +42,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -609,7 +615,7 @@ def main() -> None:
         safe_print(f"  {asset.value}: ${balance:,.0f} (Target: {vault.target_allocation:.1%}, Actual: {vault.actual_allocation:.1%})")
 
     # Generate rebalance signals
-    safe_print(f"\nGenerating rebalance signals:")
+    safe_print("\nGenerating rebalance signals:")
     signals = regulator.generate_rebalance_signals(profit_factor=1.2, volatility_sigma=0.15)
 
     for signal in signals:
@@ -635,7 +641,7 @@ def main() -> None:
     safe_print(f"  Rebalance Frequency: {vault_state.rebalance_frequency:.1f}/hour")
 
     # Test target allocation update
-    safe_print(f"\nTesting target allocation update:")
+    safe_print("\nTesting target allocation update:")
     new_targets = {
         Asset.BTC: 0.7,     # Increase BTC to 70%
         Asset.USDC: 0.2,    # Decrease USDC to 20%
@@ -647,7 +653,7 @@ def main() -> None:
     safe_print(f"  Target update successful: {updated}")
 
     # Regulator summary
-    safe_print(f"\nRegulator Summary:")
+    safe_print("\nRegulator Summary:")
     summary = regulator.get_regulator_summary()
     for key, value in summary.items():
         if isinstance(value, dict):

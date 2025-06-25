@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -31,7 +37,7 @@ Based on Schwabot's mathematical framework and DLT waveform integration.
 """
 
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import json
 from typing import Dict, List, Any, Optional, Tuple, Callable
 from dataclasses import dataclass, asdict, field
@@ -668,21 +674,21 @@ def main() -> None:
     result = engine.evolve_population(target_fitness=0.75)
 
     # Display results
-    safe_print(f"\n✅ Evolution completed!")
+    safe_print("\n✅ Evolution completed!")
     safe_print(f"📈 Generations completed: {result.generations_completed}")
     safe_print(f"🏆 Best fitness achieved: {result.best_strategy.fitness_score:.4f}")
     safe_print(f"📊 Fitness improvement: {result.fitness_improvement:.4f}")
     safe_print(f"🔬 DLT integration success: {result.dlt_integration_success}")
     safe_print(f"🎯 Convergence achieved: {result.convergence_achieved}")
 
-    safe_print(f"\n🏆 Best Strategy:")
+    safe_print("\n🏆 Best Strategy:")
     safe_print(f"   Type: {result.best_strategy.strategy_type}")
     safe_print(f"   DLT Score: {result.best_strategy.dlt_integration_score:.4f}")
     safe_print(f"   Parameters: {result.best_strategy.parameters}")
 
     # Get summary
     summary = engine.get_evolution_summary()
-    safe_print(f"\n📊 Evolution Summary:")
+    safe_print("\n📊 Evolution Summary:")
     safe_print(f"   Total generations: {summary['total_generations']}")
     safe_print(f"   Final DLT integration: {summary['dlt_integration_level']:.4f}")
     safe_print(f"   Population diversity: {summary['population_diversity']:.4f}")

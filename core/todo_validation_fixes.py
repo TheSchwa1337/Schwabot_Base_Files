@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -53,7 +59,7 @@ from typing import (
     Union,
 )
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 import yaml
 
@@ -199,7 +205,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.TYPE,
                     level=ValidationLevel.ERROR,
                     message=(
-                        f"Vector must be list, tuple, or numpy array, "
+                        "Vector must be list, tuple, or numpy array, "
                         f"got {type(vector)}"
                     ),
                     execution_time=time.time() - start_time,
@@ -261,7 +267,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.BOUNDS,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Vector contains values below minimum "
+                        "Vector contains values below minimum "
                         f"{min_value}"
                     ),
                     execution_time=time.time() - start_time,
@@ -273,7 +279,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.BOUNDS,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Vector contains values above maximum "
+                        "Vector contains values above maximum "
                         f"{max_value}"
                     ),
                     execution_time=time.time() - start_time,
@@ -323,7 +329,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.TYPE,
                     level=ValidationLevel.ERROR,
                     message=(
-                        f"Matrix must be list, tuple, or numpy array, "
+                        "Matrix must be list, tuple, or numpy array, "
                         f"got {type(matrix)}"
                     ),
                     execution_time=time.time() - start_time,
@@ -397,7 +403,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.BOUNDS,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Matrix contains values below minimum "
+                        "Matrix contains values below minimum "
                         f"{min_value}"
                     ),
                     execution_time=time.time() - start_time,
@@ -409,7 +415,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.BOUNDS,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Matrix contains values above maximum "
+                        "Matrix contains values above maximum "
                         f"{max_value}"
                     ),
                     execution_time=time.time() - start_time,
@@ -542,7 +548,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.ENTROPY,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Signal contains low entropy regions (min: "
+                        "Signal contains low entropy regions (min: "
                         f"{unified_math.unified_math.min(entropies):.3f})"
                     ),
                     details={
@@ -560,7 +566,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.ENTROPY,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Signal contains high entropy regions (max: "
+                        "Signal contains high entropy regions (max: "
                         f"{unified_math.unified_math.max(entropies):.3f})"
                     ),
                     details={
@@ -694,7 +700,7 @@ class RuntimeValidator:
                     validation_type=ValidationType.PERFORMANCE,
                     level=ValidationLevel.WARNING,
                     message=(
-                        f"Function execution time "
+                        "Function execution time "
                         f"{func_time:.3f}s exceeds limit "
                         f"{self.max_execution_time}s"
                     ),

@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """
 riddle_gemm.py - Recursive Interlocking Dimensional Logic & GEMM Engine.
@@ -8,7 +9,7 @@ vector comparison logic, strategy scoring, and logic sequence modulation using
 General Matrix-to-Matrix (GEMM) style operations.
 """
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import logging
 from typing import Dict, List, Any, Tuple, Optional, Union
 import time
@@ -19,7 +20,7 @@ from utils.math_utils import (
 )
 
 # Import comprehensive typing system
-from type_defs import (
+# from type_defs import (  # F811: duplicate import
     MatrixControllerType, StateVector, HashSignature, ConfidenceScore,
     FourBitController, EightBitController, SixteenBitController, FortyTwoBitController,
     BitLevel, MatrixPhase, IdentityState, IdentityTrace, GhostLogicState,

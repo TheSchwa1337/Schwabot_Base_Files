@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -27,7 +34,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -746,7 +753,7 @@ def main():
 
         # Get results
         portfolio = demo_system.get_portfolio_status()
-        safe_print(f"\n📊 DEMO TRADING RESULTS")
+        safe_print("\n📊 DEMO TRADING RESULTS")
         safe_print(f"Initial Capital: ${demo_system.initial_capital:,.2f}")
         safe_print(f"Final Portfolio Value: ${portfolio.total_value:,.2f}")
         safe_print(f"Total Profit: ${portfolio.total_profit:,.2f}")

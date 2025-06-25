@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -36,7 +43,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import hashlib
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -859,7 +866,7 @@ if __name__ == "__main__":
 
         # Get test results
         test_results = injector.get_test_results()
-        safe_print(f"\n📊 TEST RESULTS")
+        safe_print("\n📊 TEST RESULTS")
         safe_print(f"Portfolio Snapshots: {test_results.get('portfolio_history_count', 0)}")
         safe_print(f"Rebalance Events: {test_results.get('rebalance_history_count', 0)}")
         safe_print(f"Validation Tests: {test_results.get('validation_results_count', 0)}")

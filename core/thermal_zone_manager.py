@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Thermal Zone Manager - Schwabot Mathematical Framework.
@@ -73,7 +79,7 @@ import logging
 import time
 from typing import Any, Dict, List, TYPE_CHECKING
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -686,13 +692,13 @@ def main() -> None:
             "Mathematical_Core", 0.5, 1.5, "computation"
         )
 
-        safe_print(f"🌡️  Created thermal zones:")
+        safe_print("🌡️  Created thermal zones:")
         safe_print(f"   BTC Zone: {btc_zone}")
         safe_print(f"   ETH Zone: {eth_zone}")
         safe_print(f"   Math Zone: {math_zone}")
 
         # Simulate thermal updates
-        safe_print(f"\n📊 Simulating thermal updates:")
+        safe_print("\n📊 Simulating thermal updates:")
 
         # Normal operation
         result1 = manager.update_zone_temperature(btc_zone, 1.2, 0.5, 0.3)
@@ -719,7 +725,7 @@ def main() -> None:
         btc_status = manager.get_zone_status(btc_zone)
         if btc_status["status"] == "success":
             thermal_status = btc_status["thermal_status"]
-            safe_print(f"\n🎯 BTC Zone Status:")
+            safe_print("\n🎯 BTC Zone Status:")
             safe_print(f"   Current temp: {thermal_status['current_temperature']:.3f}")
             safe_print(f"   Threshold: {thermal_status['thermal_threshold']:.3f}")
             safe_print(f"   Recent alerts: {len(btc_status['recent_alerts'])}")
@@ -727,7 +733,7 @@ def main() -> None:
         # System overview
         overview = manager.get_system_overview()
         system_status = overview["system_status"]
-        safe_print(f"\n📈 System Overview:")
+        safe_print("\n📈 System Overview:")
         safe_print(f"   Total zones: {system_status['total_zones']}")
         safe_print(f"   Hot zones: {system_status['hot_zones']}")
         safe_print(f"   System efficiency: {system_status['system_efficiency']:.3f}")

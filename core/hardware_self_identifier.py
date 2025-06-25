@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -39,7 +45,7 @@ from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -671,7 +677,7 @@ def main():
 
         # Detect hardware capabilities
         profile = identifier.detect_hardware_capabilities()
-        safe_print(f"Hardware Profile:")
+        safe_print("Hardware Profile:")
         safe_print(f"  Device: {profile.device_name}")
         safe_print(f"  Tier: {profile.hardware_tier.value}")
         safe_print(f"  Capability: {profile.compute_capability.value}")
@@ -684,7 +690,7 @@ def main():
 
         # Register with network
         registration = identifier.register_with_network()
-        safe_print(f"\nNetwork Registration:")
+        safe_print("\nNetwork Registration:")
         safe_print(f"  Success: {registration.success}")
         safe_print(f"  Node ID: {registration.assigned_node_id}")
         safe_print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
@@ -698,7 +704,7 @@ def main():
 
         # Get performance summary
         summary = identifier.get_performance_summary()
-        safe_print(f"\nPerformance Summary:")
+        safe_print("\nPerformance Summary:")
         safe_print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
         safe_print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
         safe_print(f"  Adjustments: {summary.get('capability_adjustments', 0)}")

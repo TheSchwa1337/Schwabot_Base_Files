@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Ghost profit tracker – recursive Π(t) accumulator.
 
@@ -15,7 +16,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import List, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["ProfitTracker", "register_profit", "profit_summary"]
 

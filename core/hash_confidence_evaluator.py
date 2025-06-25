@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Hash Confidence Evaluator - SHA256-based Hash Resonance Models.
 
@@ -30,7 +31,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 import hashlib
 import logging
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, Any, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum

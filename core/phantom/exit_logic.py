@@ -3,7 +3,7 @@
 from __future__ import annotations
 from core.unified_math_system import unified_math
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 
 def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> float:

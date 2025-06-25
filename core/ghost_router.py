@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Ghost router – conditional trade core.
 
@@ -22,11 +23,11 @@ what Schwabot already ships.
 
 
 from dataclasses import dataclass
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import time
 from typing import Final, Literal, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["GhostRouter", "ghost_router"]
 
@@ -229,7 +230,7 @@ def compute_ghost_route(
     (placeholder) and hash-tag τₜ.
     """
     import hashlib
-    from core.unified_math_system import unified_math
+#     from core.unified_math_system import unified_math  # F811: duplicate import
 
     delta_H = H_t - H_prev
     # (1) Φ_t

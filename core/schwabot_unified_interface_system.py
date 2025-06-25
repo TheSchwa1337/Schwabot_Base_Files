@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 """
 Schwabot Unified Dual-Interface System
@@ -51,7 +58,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import core Schwabot components
 from fault_bus import FaultBus
@@ -115,7 +122,7 @@ class SchwabotUnifiedInterface:
         self.root.configure(bg='#1a1a1a')
         self.root.option_add('*TFrame*background', '#1a1a1a')
         self.root.option_add('*TLabel*background', '#1a1a1a')
-        self.root.option_add('*TLabel*foreground', '#ffffff')
+        self.root.option_add('*TLabel*foreground', '#ffff')
 
         # Main container
         main_container = ttk.Frame(self.root)

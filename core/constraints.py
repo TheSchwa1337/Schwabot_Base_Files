@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Constraints System - Schwabot Framework.
@@ -49,7 +55,7 @@ from decimal import getcontext
 import logging
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -190,7 +196,7 @@ class TradingConstraints:
                     current_value=len(asset_weights),
                     expected_range=(
                         self.min_diversification_count,
-                        float("inf"),
+                        float("in"),
                     ),
                     severity="warning",
                     message=(
@@ -239,7 +245,7 @@ class TradingConstraints:
                     severity="error",
                     message=(
                         f"Portfolio weights sum to {total_weight:.3f}, "
-                        f"should be 1.0"
+                        "should be 1.0"
                     ),
                     remediation_suggestion=(
                         "Normalize portfolio weights to sum to 1.0"
@@ -348,7 +354,7 @@ class MathematicalConstraints:
                         current_value=0.0,
                         expected_range=(
                             self.min_matrix_condition_number,
-                            float("inf"),
+                            float("in"),
                         ),
                         severity="error",
                         message="Matrix is singular and cannot be inverted",
@@ -399,10 +405,10 @@ class MathematicalConstraints:
                     severity="warning",
                     message=(
                         f"Tolerance {tolerance:.2e} may be too strict for "
-                        f"numerical precision"
+                        "numerical precision"
                     ),
                     remediation_suggestion=(
-                        f"Consider using tolerance >= "
+                        "Consider using tolerance >= "
                         f"{self.numerical_tolerance:.2e}"
                     ),
                 )
@@ -419,7 +425,7 @@ class MathematicalConstraints:
                     severity="critical",
                     message=(
                         f"Gradient norm {gradient_norm:.2e} indicates "
-                        f"potential explosion"
+                        "potential explosion"
                     ),
                     remediation_suggestion=(
                         "Use gradient clipping or reduce learning rate"
@@ -492,7 +498,7 @@ class RiskConstraints:
                     constraint_name="sharpe_ratio",
                     violation_type="performance_below_threshold",
                     current_value=sharpe_ratio,
-                    expected_range=(self.min_sharpe_ratio, float("inf")),
+                    expected_range=(self.min_sharpe_ratio, float("in")),
                     severity="warning",
                     message=(
                         f"Sharpe ratio {sharpe_ratio:.2f} below minimum "
@@ -707,14 +713,14 @@ def main() -> None:
 
         trading_result = validator.validate_trading_operation(trading_params)
         safe_print(
-            f"[TRADING] Trading validation: "
+            "[TRADING] Trading validation: "
             f"{'PASS' if trading_result.valid else 'FAIL'}"
         )
         safe_print(f"   Risk score: {trading_result.risk_score:.3f}")
         safe_print(f"   Violations: {len(trading_result.violations)}")
 
         # Test mathematical operation validation
-        from core.unified_math_system import unified_math
+#         from core.unified_math_system import unified_math  # F811: duplicate import
 
         test_matrix = np.random.randn(5, 5)
 
@@ -727,7 +733,7 @@ def main() -> None:
 
         math_result = validator.validate_mathematical_operation(math_params)
         safe_print(
-            f"[MATH] Mathematical validation: "
+            "[MATH] Mathematical validation: "
             f"{'PASS' if math_result.valid else 'FAIL'}"
         )
         safe_print(f"   Risk score: {math_result.risk_score:.3f}")

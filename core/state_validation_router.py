@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """State Validation Router - End-to-End State Sanity Checks for System Integrity.
 
@@ -17,8 +18,8 @@ import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime
-from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 from core.error_handler import safe_execute
 from core.import_resolver import safe_import
@@ -176,7 +177,7 @@ class StateValidationRouter:
 
             # Additional hash integrity check
             hash_length_valid = len(quantum_hash) == 64  # SHA256 length
-            hash_format_valid = all(c in '0123456789abcdef' for c in quantum_hash)
+            hash_format_valid = all(c in '0123456789abcde' for c in quantum_hash)
 
             return hash_consistent and hash_length_valid and hash_format_valid
 

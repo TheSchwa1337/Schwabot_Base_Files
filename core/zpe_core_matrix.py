@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """ZPE core matrix – zero-point energy field calculations and wave mechanics.
 
@@ -15,10 +16,10 @@ market state analysis and phase transition detection.
 """
 
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["zpe_psi", "zpe_phi", "zpe_xi", "zpe_g"]
 

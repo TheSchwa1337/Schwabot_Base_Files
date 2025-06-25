@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Portfolio Substitution Matrix for Schwabot Trading System.
@@ -37,7 +44,7 @@ import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 import warnings
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from scipy.optimize import minimize
 from scipy.stats import entropy
 
@@ -1041,7 +1048,7 @@ if __name__ == "__main__":
         },
     )
 
-    safe_print(f"📊 Portfolio Substitution Result:")
+    safe_print("📊 Portfolio Substitution Result:")
     safe_print(f"   Strategy: {result['strategy_used']}")
     safe_print(f"   Confidence: {result['confidence_score']:.3f}")
     safe_print(f"   Expected Return: {result['expected_return']:.3f}")

@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library V3 - AI-Infused Multi-Dimensional Profit Lattice with Automatic Differentiation.
@@ -47,10 +53,10 @@ Based on SxN-Math specifications and Windows-compatible architecture.
 from dataclasses import dataclass
 from decimal import getcontext
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Any, Callable, Dict, Tuple, Union
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 # Import CLI handler for safe output
@@ -743,7 +749,7 @@ def main() -> None:
 
     def test_function(x: Dual) -> Dual:
         """Evaluate f(x) = x² + 2x + 1 as a Dual-friendly demo."""
-        return x * x + 2 * x + 1  # f(x) = x² + 2x + 1, f'(x) = 2x + 2
+        return x * x + 2 * x + 1  # f(x) = x² + 2x + 1, '(x) = 2x + 2
 
     val, grad_val = lib_v3.compute_dual_gradient(test_function, 3.0)
     safe_print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")

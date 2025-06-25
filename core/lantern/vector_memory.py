@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+import numpy as np
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
     from sklearn.decomposition import PCA

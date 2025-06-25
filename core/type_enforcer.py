@@ -100,7 +100,7 @@ class TypeEnforcer:
 
         # Fix parameter annotations
         for arg in node.args.args:
-            if arg.arg != "self" and arg.annotation is None:
+            if arg.arg != "sel" and arg.annotation is None:
                 param_line = self._find_parameter_line(
                     lines, line_idx, arg.arg
                 )
@@ -129,7 +129,7 @@ class TypeEnforcer:
     ) -> str:
         """Fix function signature with proper type annotations."""
         # Add missing parameter type annotations
-        if "self" in line and "self:" not in line:
+        if "sel" in line and "self:" not in line:
             line = line.replace("(self)", "(self: Any)")
             line = line.replace("(self,", "(self: Any,")
 

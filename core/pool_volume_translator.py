@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Pool-volume translator – link news sentiment to USDC pool behaviour.
 
@@ -18,7 +19,7 @@ where
 
 from typing import Final, Any
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["translate_news_to_pool_vector"]
 

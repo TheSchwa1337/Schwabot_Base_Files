@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """
 Phantom Lag Model - Opportunity Cost Quantification for Schwabot
@@ -22,7 +23,7 @@ implies Schwabot missed a major opportunity it should adapt for.
 
 import logging
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta

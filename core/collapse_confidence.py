@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Collapse Confidence - Market Collapse Detection and Analysis.
@@ -35,7 +42,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime, timedelta
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from scipy import stats
 from scipy.signal import find_peaks
 
@@ -614,7 +621,7 @@ def main() -> None:
 
     # Perform analysis
     analysis = analyzer.analyze_collapse_confidence()
-    safe_print(f"✅ Collapse analysis completed:")
+    safe_print("✅ Collapse analysis completed:")
     safe_print(f"   Current confidence: {analysis.current_confidence:.3f}")
     safe_print(f"   Confidence trend: {analysis.confidence_trend:.3f}")
     safe_print(f"   Collapse risk: {analysis.collapse_risk:.3f}")

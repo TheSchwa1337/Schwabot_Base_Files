@@ -1,18 +1,25 @@
 from __future__ import annotations
+import numpy as np
 
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit Router - Randomized Portfolio Substitution Matrix.
@@ -35,7 +42,7 @@ import logging
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -480,7 +487,7 @@ def main() -> None:
             safe_print(f"  {asset}: ${amount:.2f} ({percentage:.1f}%)")
 
     # Test randomized matrix
-    safe_print(f"\nRandomized Matrix Test:")
+    safe_print("\nRandomized Matrix Test:")
     randomized_matrix, metadata = create_randomized_matrix(
         BASE_ALLOCATION_MATRIX, substitution_seed=12345
     )
@@ -502,7 +509,7 @@ def main() -> None:
 
     # Get summary
     summary = router.get_allocation_summary()
-    safe_print(f"\nRouter Summary:")
+    safe_print("\nRouter Summary:")
     safe_print(f"Total routed: ${summary['total_profit_routed']:.2f}")
     safe_print(f"Average percentages: {summary['average_percentages']}")
 

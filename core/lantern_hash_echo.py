@@ -6,7 +6,7 @@ from __future__ import annotations
 import hashlib
 from core.unified_math_system import unified_math
 from typing import Final
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["lantern_hash_echo"]
 

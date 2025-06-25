@@ -46,22 +46,34 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 except ImportError:
     # Fallback for when utils is not available
-    def safe_print(*args, **kwargs): print(*args, **kwargs)
-    def info(*args, **kwargs): print(*args, **kwargs)
-    def warn(*args, **kwargs): print(*args, **kwargs)
-    def error(*args, **kwargs): print(*args, **kwargs)
-    def success(*args, **kwargs): print(*args, **kwargs)
-    def debug(*args, **kwargs): print(*args, **kwargs)
+def safe_print(*args, **kwargs):
+    print(*args, **kwargs)
+def info(*args, **kwargs):
+    print(*args, **kwargs)
+def warn(*args, **kwargs):
+    print(*args, **kwargs)
+def error(*args, **kwargs):
+    print(*args, **kwargs)
+def success(*args, **kwargs):
+    print(*args, **kwargs)
+def debug(*args, **kwargs):
+    print(*args, **kwargs)
 
 # Import Windows CLI compatibility handler
 try:
@@ -447,9 +459,9 @@ class IntegrationOrchestrator:
 
             self.is_running = True
 
-            self.safe_safe_print(f"🎉 Integration orchestrator started")
+            self.safe_safe_print("🎉 Integration orchestrator started")
             self.safe_safe_print(
-                f"   Successfully initialized: "
+                "   Successfully initialized: "
                 f"{success_count}/{len(self.components)} components"
             )
 
@@ -654,7 +666,7 @@ class IntegrationOrchestrator:
     def _initialize_btc_integration(self, config: Any) -> Optional[Any]:
         """Initialize BTC integration"""
         try:
-            from core.simplified_btc_integration import \
+#             from core.simplified_btc_integration import \  # F811: duplicate import
                 SimplifiedBTCIntegration
 
             return SimplifiedBTCIntegration()
@@ -707,7 +719,7 @@ class IntegrationOrchestrator:
     ) -> Optional[Any]:
         """Initialize mathematical optimization bridge"""
         try:
-            from core.mathematical_optimization_bridge import \
+#             from core.mathematical_optimization_bridge import \  # F811: duplicate import
                 MathematicalOptimizationBridge
 
             return MathematicalOptimizationBridge()

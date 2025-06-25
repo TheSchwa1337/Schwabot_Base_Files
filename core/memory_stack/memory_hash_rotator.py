@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Memory Hash Rotator - Epoch-Based Memory Management.
@@ -31,7 +37,7 @@ import time
 # Import core modules
 try:
     from core.gpt_command_layer_simple import AIAgentType, CommandDomain
-    from core.utils.windows_cli_compatibility import safe_print, safe_format_error
+#     from core.utils.windows_cli_compatibility import safe_print, safe_format_error  # F811: duplicate import
     CORE_AVAILABLE = True
 except ImportError:
     CORE_AVAILABLE = False

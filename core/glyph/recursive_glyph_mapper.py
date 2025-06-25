@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Recursive Glyph Mapper - Symbolic Logic for AI Strategy Interpretation.
 
@@ -9,8 +10,8 @@ Implements the core mathematical framework for:
 - Strategy flow interpretation through symbolic mathematics
 """
 
-from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Union, Set

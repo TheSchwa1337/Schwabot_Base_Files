@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Entropy flattener – smooths strategy response during uncertain conditions.
 
@@ -14,7 +15,7 @@ volatility and applies entropy-based smoothing to prevent erratic switching.
 
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
     "entropy_flatten",

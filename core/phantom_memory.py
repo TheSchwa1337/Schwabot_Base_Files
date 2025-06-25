@@ -14,7 +14,7 @@ older signals to fade naturally.
 
 
 from dataclasses import dataclass
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import time
 from typing import Sequence
 

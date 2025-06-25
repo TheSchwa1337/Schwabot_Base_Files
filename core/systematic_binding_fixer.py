@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Systematic Binding Fixer - Apply Type Binding Patterns to All A-Z Files.
@@ -62,7 +68,7 @@ except ImportError:
     # Fallback for when running from parent directory
     import sys
     sys.path.append('.')
-    from core.type_binding_system import (
+#     from core.type_binding_system import (  # F811: duplicate import
         type_validator, math_validator, cli_handler,
         TypeValidationError, ValidationResult
     )
@@ -97,8 +103,8 @@ class SystematicBindingFixer:
                 (r"def __init__\(self\):", r"def __init__(self) -> None:"),
             ],
             "cli_compatibility": [
-                (r'print\(f"([^"]*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡][^"]*)"\)',
-                 r'safe_print(f"[INFO] \1")'),
+                (r'print\("([^"]*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡][^"]*)"\)',
+                 r'safe_print("[INFO] \1")'),
             ]
         }
 
@@ -106,7 +112,7 @@ class SystematicBindingFixer:
         """Get all core files from A to Z."""
         files = []
         for file_path in self.core_dir.glob("*.py"):
-            if file_path.name.startswith(("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")):
+            if file_path.name.startswith(("a", "b", "c", "d", "e", "", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")):
                 files.append(file_path)
         return sorted(files)
 
@@ -274,7 +280,7 @@ class SystematicBindingFixer:
                     "patterns_applied": {}
                 }
 
-        logger.info(f"Systematic binding fix completed:")
+        logger.info("Systematic binding fix completed:")
         logger.info(f"  Total files: {results['total_files']}")
         logger.info(f"  Fixed files: {results['fixed_files']}")
         logger.info(f"  Error files: {results['error_files']}")

@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Triplet Matcher - Schwabot Mathematical Framework.
@@ -68,7 +74,7 @@ from decimal import getcontext
 import logging
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 
 if TYPE_CHECKING:
@@ -605,7 +611,7 @@ def main() -> None:
                 )
 
         # Test sequence analysis
-        safe_print(f"\n📊 Sequence Analysis:")
+        safe_print("\n📊 Sequence Analysis:")
         test_sequence = [100.0, 105.0, 110.0, 115.0, 120.0, 125.0]
         sequence_result = matcher.analyze_sequence(test_sequence)
 

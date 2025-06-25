@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Cluster Mapper - Mathematical Clustering for Market Data Analysis.
@@ -35,7 +42,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, SpectralClustering
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score, calinski_harabasz_score
@@ -542,7 +549,7 @@ def main() -> None:
 
     # Test clustering
     result = mapper.cluster_market_data(data_points, 'kmeans', n_clusters=3)
-    safe_print(f"✅ Clustering completed:")
+    safe_print("✅ Clustering completed:")
     safe_print(f"   Algorithm: {result.algorithm}")
     safe_print(f"   Clusters found: {len(result.clusters)}")
     safe_print(f"   Processing time: {result.processing_time:.4f}s")
@@ -554,7 +561,7 @@ def main() -> None:
     volatility_data = [np.random.uniform(0.01, 0.1) for _ in range(50)]
 
     pattern_result = mapper.analyze_trading_patterns(price_data, volume_data, volatility_data)
-    safe_print(f"✅ Pattern analysis completed:")
+    safe_print("✅ Pattern analysis completed:")
     safe_print(f"   Patterns found: {len(pattern_result.clusters)}")
 
     # Get statistics

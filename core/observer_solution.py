@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -33,7 +40,7 @@ import logging
 from collections import deque
 from typing import Deque
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 from .fault_bus import FaultBus
 from .mathlib_v4 import MathLibV4
@@ -147,14 +154,14 @@ async def main():
     # 2. Create a listener to react to the observer's findings
     async def trading_logic_listener(pattern_hash: str, timestamp: float, **kwargs):
         safe_print(
-            f"\n[TRADING LOGIC] Reacting to confirmed hash! \n"
+            "\n[TRADING LOGIC] Reacting to confirmed hash! \n"
             f"  -> Hash: {pattern_hash[:10]}...\n"
             f"  -> Timestamp: {timestamp}\n"
             f"  -> Details: {kwargs}"
         )
 
     # Subscribe the trading logic to a specific hash we expect to see
-    EXPECTED_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515f"
+    EXPECTED_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515"
     bus.subscribe_to_hash(EXPECTED_HASH, trading_logic_listener)
 
     # 3. Simulate a live market data feed publishing to the bus

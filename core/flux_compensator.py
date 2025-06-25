@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Deque, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__ = ["FluxCompensator", "sync_flux_compensator"]
 

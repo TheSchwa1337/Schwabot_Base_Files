@@ -17,11 +17,16 @@ try:
     from utils.safe_print import safe_print, safe_math, info, warn, error
 except ImportError:
     # Fallback for when utils is not available
-    def safe_print(*args, **kwargs): print(*args, **kwargs)
-    def safe_math(*args, **kwargs): print(*args, **kwargs)
-    def info(*args, **kwargs): print(*args, **kwargs)
-    def warn(*args, **kwargs): print(*args, **kwargs)
-    def error(*args, **kwargs): print(*args, **kwargs)
+def safe_print(*args, **kwargs):
+    print(*args, **kwargs)
+def safe_math(*args, **kwargs):
+    print(*args, **kwargs)
+def info(*args, **kwargs):
+    print(*args, **kwargs)
+def warn(*args, **kwargs):
+    print(*args, **kwargs)
+def error(*args, **kwargs):
+    print(*args, **kwargs)
 
 class MathOperation(Enum):
     """Enumeration of mathematical operations."""

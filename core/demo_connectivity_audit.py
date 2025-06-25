@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 #!/usr/bin/env python3
 """
 Demo Connectivity Audit - Schwabot Demo Suite Analysis
@@ -390,7 +396,7 @@ class DemoConnectivityAudit:
         safe_print("🔍 SCHWABOT DEMO CONNECTIVITY AUDIT SUMMARY")
         safe_print("="*60)
 
-        safe_print(f"\n📊 OVERALL STATISTICS:")
+        safe_print("\n📊 OVERALL STATISTICS:")
         safe_print(f"   Total Demo Modules: {self.analysis.total_modules}")
         safe_print(f"   With Real Integration: {self.analysis.modules_with_real_integration}")
         safe_print(f"   With Example Code: {self.analysis.modules_with_example_code}")
@@ -415,7 +421,7 @@ class DemoConnectivityAudit:
         if len(self.analysis.integration_gaps) > 5:
             safe_print(f"   ... and {len(self.analysis.integration_gaps) - 5} more")
 
-        safe_print(f"\n💡 KEY RECOMMENDATIONS:")
+        safe_print("\n💡 KEY RECOMMENDATIONS:")
         for rec in self.analysis.recommendations[:5]:  # Show first 5
             safe_print(f"   • {rec}")
         if len(self.analysis.recommendations) > 5:
@@ -450,12 +456,12 @@ def main() -> None:
     safe_print(f"\n📄 Detailed report saved to: {report_file}")
 
     # Provide next steps
-    safe_print(f"\n🎯 NEXT STEPS:")
+    safe_print("\n🎯 NEXT STEPS:")
     safe_print(f"   1. Review high priority refactors ({len(analysis.high_priority_refactors)} modules)")
     safe_print(f"   2. Address integration gaps ({len(analysis.integration_gaps)} issues)")
     safe_print(f"   3. Implement recommendations ({len(analysis.recommendations)} items)")
-    safe_print(f"   4. Test demo-to-live transitions")
-    safe_print(f"   5. Validate mathematical viability")
+    safe_print("   4. Test demo-to-live transitions")
+    safe_print("   5. Validate mathematical viability")
 
 
 if __name__ == "__main__":

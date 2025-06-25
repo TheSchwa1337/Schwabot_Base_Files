@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """BTC vector aggregator – volume-weighted price analysis and FFT filtering.
 
@@ -17,7 +18,7 @@ spectral filtering for enhanced signal quality.
 
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
     "btc_vector",

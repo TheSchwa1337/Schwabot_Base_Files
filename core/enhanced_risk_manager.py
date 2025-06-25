@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -35,7 +42,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 from .fault_bus import FaultBus
 from .mathlib_v4 import MathLibV4, DLTPattern
@@ -295,7 +302,7 @@ class EnhancedRiskManager:
         }
 
         logger.info(
-            f"DLT Enhanced Risk Manager initialized. "
+            "DLT Enhanced Risk Manager initialized. "
             f"Confidence threshold: {confidence_threshold}, "
             f"Drift threshold: {drift_threshold}"
         )
@@ -537,7 +544,7 @@ async def main():
     risk_manager.start_listening()
 
     # Simulate some DLT pattern updates
-    patterns = ["abc123def", "xyz789uvw", "lmn456pqr"]
+    patterns = ["abc123de", "xyz789uvw", "lmn456pqr"]
 
     for i, pattern in enumerate(patterns):
         confidence = 0.9 - (i * 0.1)  # Declining confidence
@@ -553,12 +560,12 @@ async def main():
 
     # Generate full report
     report = risk_manager.generate_risk_report()
-    safe_print(f"\nFull Risk Report:")
+    safe_print("\nFull Risk Report:")
     for key, value in report["risk_scores"].items():
         safe_print(f"  {key}: {value:.3f}")
 
     # Test trade proposal assessment
-    proposal = TradeProposal("BTC", "BUY", 50000, 0.35, "abc123def")
+    proposal = TradeProposal("BTC", "BUY", 50000, 0.35, "abc123de")
     await bus.publish("trade_proposal_ready", proposal=proposal)
 
 

@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Conditional Glyph Feedback Loop - Pattern Recognition and Conditional Logic.
@@ -35,7 +42,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 from datetime import datetime
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -856,7 +863,7 @@ def main() -> None:
 
     # Perform analysis
     analysis = system.analyze_glyph_patterns()
-    safe_print(f"📊 Analysis results:")
+    safe_print("📊 Analysis results:")
     safe_print(f"   Confidence score: {analysis.confidence_score:.3f}")
     safe_print(f"   Recommendation: {analysis.recommendation}")
     safe_print(f"   Active rules: {len(analysis.active_rules)}")

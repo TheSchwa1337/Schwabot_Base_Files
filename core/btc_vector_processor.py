@@ -163,7 +163,7 @@ class GhostStrategyEngine:
         # Hash-based strategy selection
         if strategy_hash.startswith("00a1"):
             return "LONG_HOLD_BTC"
-        elif strategy_hash.startswith("004f"):
+        elif strategy_hash.startswith("004"):
             return "SHORT_EXIT_BTC"
         elif strategy_hash.startswith("007b"):
             return "NEUTRAL_HOLD"

@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -37,7 +43,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from random import uniform, choice
 
 logger = logging.getLogger(__name__)
@@ -518,7 +524,7 @@ def main():
     # Print sample tick
     if ticks:
         sample_tick = ticks[0]
-        safe_print(f"\n📈 Sample Tick:")
+        safe_print("\n📈 Sample Tick:")
         safe_print(f"  Asset: {sample_tick.asset}")
         safe_print(f"  Price: ${sample_tick.price:.2f}")
         safe_print(f"  Volume: {sample_tick.volume:.0f}")
@@ -529,7 +535,7 @@ def main():
 
     # Get statistics
     stats = harness.get_feed_statistics()
-    safe_print(f"\n📊 Feed Statistics:")
+    safe_print("\n📊 Feed Statistics:")
     safe_print(f"  Total Ticks: {stats['total_ticks']}")
     safe_print(f"  Rebalance Triggers: {stats['rebalance_triggers']}")
     safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")

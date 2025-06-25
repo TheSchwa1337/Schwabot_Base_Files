@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from core.unified_math_system import unified_math
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 
 def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:

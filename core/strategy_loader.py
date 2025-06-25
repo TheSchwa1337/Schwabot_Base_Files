@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -979,7 +985,7 @@ class StrategyLoader:
 
             # Add safe mathematical libraries
             try:
-                from core.unified_math_system import unified_math
+#                 from core.unified_math_system import unified_math  # F811: duplicate import
 
                 namespace["np"] = np
             except ImportError:
@@ -1278,7 +1284,7 @@ def main() -> None:
         test_strategy_code = """
 # config: name=TestStrategy, version=1.0.0, description=Test strategy, author=System
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 class TestStrategy:
     def __init__(self):
@@ -1305,7 +1311,7 @@ class TestStrategy:
             result = loader.load_strategy(temp_file)
 
             if result.success:
-                loader.safe_safe_print(f"    ✅ Strategy loaded successfully")
+                loader.safe_safe_print("    ✅ Strategy loaded successfully")
                 loader.safe_safe_print(f"    📊 Load time: {result.load_time:.6f}s")
                 loader.safe_safe_print(
                     f"    📊 Strategy name: {result.strategy_instance.config.name}"
@@ -1317,7 +1323,7 @@ class TestStrategy:
 
             # Test performance summary
             summary = loader.get_performance_summary()
-            loader.safe_safe_print(f"\n📊 Performance Summary:")
+            loader.safe_safe_print("\n📊 Performance Summary:")
             loader.safe_safe_print(f"   Total loads: {summary['total_loads']}")
             loader.safe_safe_print(
                 f"   Success rate: {summary['success_rate']:.2%}"

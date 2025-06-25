@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 """
 Schwabot Matrix Allocator
@@ -28,7 +34,7 @@ This component:
 """
 
 import json
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -476,13 +482,13 @@ if __name__ == "__main__":
     tick_summary = allocator.get_tick_map_summary()
     allocation_summary = allocator.get_allocation_summary()
 
-    safe_print(f"\nTick Map Summary:")
+    safe_print("\nTick Map Summary:")
     safe_print(f"Current Tick: {tick_summary['current_tick_id']}")
     safe_print(f"Thermal Load: {tick_summary['thermal_load']:.3f}")
     safe_print(f"Entropy Level: {tick_summary['entropy_level']:.3f}")
     safe_print(f"Active Matrices: {tick_summary['active_matrices']}")
 
-    safe_print(f"\nAllocation Summary:")
+    safe_print("\nAllocation Summary:")
     safe_print(f"Total Allocations: {allocation_summary['total_allocations']}")
     safe_print(f"Execution Modes: {allocation_summary['execution_modes']}")
     safe_print(f"Average Confidence: {allocation_summary['average_confidence']:.3f}")

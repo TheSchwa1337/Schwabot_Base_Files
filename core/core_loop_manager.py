@@ -114,8 +114,8 @@ class CoreLoopManager:
 
     def _setup_component_registry(self) -> None:
         """Setup the component registry with all required components."""
-        from state_tracker import StateTracker
-        from profit_bridge_orchestrator import ProfitBridgeOrchestrator
+#         from state_tracker import StateTracker  # F811: duplicate import
+#         from profit_bridge_orchestrator import ProfitBridgeOrchestrator  # F811: duplicate import
 
         # Register core components
         self.component_registry.register_component(

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """phantom_price_vector_synchronizer – phantom velocity adjustment and sync.
 
@@ -15,7 +16,7 @@ for ghost protocol integration.
 from dataclasses import dataclass
 from typing import Sequence, Dict, List, Any
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
     "PhantomPriceSynchronizer",

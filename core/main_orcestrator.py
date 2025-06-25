@@ -3,14 +3,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -315,7 +321,7 @@ class MainOrchestrator:
 
             # Log component start
             self._log_event(
-                f"component_started",
+                "component_started",
                 name,
                 f"Component {name} started successfully",
                 Priority.NORMAL
@@ -329,7 +335,7 @@ class MainOrchestrator:
             component_info.error_count += 1
 
             self._log_event(
-                f"component_start_failed",
+                "component_start_failed",
                 name,
                 f"Failed to start component {name}: {e}",
                 Priority.HIGH
@@ -357,7 +363,7 @@ class MainOrchestrator:
 
             # Log component stop
             self._log_event(
-                f"component_stopped",
+                "component_stopped",
                 name,
                 f"Component {name} stopped",
                 Priority.NORMAL
@@ -368,7 +374,7 @@ class MainOrchestrator:
 
         except Exception as e:
             self._log_event(
-                f"component_stop_failed",
+                "component_stop_failed",
                 name,
                 f"Failed to stop component {name}: {e}",
                 Priority.HIGH
@@ -407,7 +413,7 @@ class MainOrchestrator:
                     component_info.error_count += 1
 
                     self._log_event(
-                        f"component_heartbeat_timeout",
+                        "component_heartbeat_timeout",
                         name,
                         f"Component {name} heartbeat timeout",
                         Priority.HIGH
@@ -447,7 +453,7 @@ class MainOrchestrator:
                     component_info.error_count += 1
 
                     self._log_event(
-                        f"component_health_check_failed",
+                        "component_health_check_failed",
                         name,
                         f"Health check failed for component {name}",
                         Priority.HIGH
@@ -571,7 +577,7 @@ class MainOrchestrator:
             component_info.error_count += 1
 
             self._log_event(
-                f"component_restart_attempted",
+                "component_restart_attempted",
                 component_name,
                 f"Restart attempted for component {component_name}",
                 Priority.HIGH

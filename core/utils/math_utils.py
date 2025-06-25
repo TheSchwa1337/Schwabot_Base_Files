@@ -1117,7 +1117,7 @@ def main():
             from .windows_cli_compatibility import safe_print
         except ImportError:
             try:
-                from core.utils.windows_cli_compatibility import safe_print
+#                 from core.utils.windows_cli_compatibility import safe_print  # F811: duplicate import
             except ImportError:
                 def safe_print(message):
                     print(message)
@@ -1153,7 +1153,7 @@ def main():
         safe_print(f"✅ Phase probability pathway: {pathway.shape}")
 
         # Test hash distance
-        hash1 = "a1b2c3d4e5f6789012345678901234567890abcdef"
+        hash1 = "a1b2c3d4e5f6789012345678901234567890abcde"
         hash2 = "deadbeef1234567890abcdef1234567890abcdef12"
         hash_dist = calculate_hash_distance(hash1, hash2)
         safe_print(f"✅ Hash distance: {hash_dist:.4f}")

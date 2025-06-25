@@ -28,7 +28,7 @@ Flake8 compliant with comprehensive type hints and error handling.
 
 import logging
 import time
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
@@ -43,9 +43,9 @@ except ImportError as e:
     logging.warning(f"Some imports failed: {e}")
     # Fallback type definitions
     from typing import Any as EventImpact
-    from typing import Any as MatrixController
-    from enum import Enum as BitLevel
-    from enum import Enum as MatrixPhase
+#     from typing import Any as MatrixController  # F811: duplicate import
+#     from enum import Enum as BitLevel  # F811: duplicate import
+#     from enum import Enum as MatrixPhase  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 

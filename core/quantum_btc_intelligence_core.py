@@ -1,18 +1,25 @@
 from __future__ import annotations
+import numpy as np
 
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Quantum BTC Intelligence Core - Unified Reflex & Hash Management.
@@ -36,7 +43,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Any
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -502,7 +509,7 @@ def main() -> None:
     safe_print(f"  State Type: {state_type.value}")
 
     # Test hash health calculation
-    safe_print(f"\nTesting Hash Health Calculation:")
+    safe_print("\nTesting Hash Health Calculation:")
     hash_metrics = core.calculate_hash_health_score(
         current_hash_rate=4.5e17,
         current_difficulty=6.8e13,
@@ -516,7 +523,7 @@ def main() -> None:
     safe_print(f"  Mining Pressure: {hash_metrics.mining_pressure:.3f}")
 
     # Test unified reflex score
-    safe_print(f"\nTesting Unified Reflex Score:")
+    safe_print("\nTesting Unified Reflex Score:")
     tick_deltas = [0.1, 0.15, 0.08, 0.12, 0.09]
     entropy_surges = [0.6, 0.8, 0.5, 0.7, 0.6]
 
@@ -534,7 +541,7 @@ def main() -> None:
     safe_print(f"  Unified Score: {reflex_components.unified_score:.3f}")
 
     # Test drift correction
-    safe_print(f"\nTesting Drift Correction:")
+    safe_print("\nTesting Drift Correction:")
     drift_correction = core.apply_drift_correction(
         current_drift=0.3,
         correction_strength=1.2
@@ -542,7 +549,7 @@ def main() -> None:
     safe_print(f"  Drift Correction: {drift_correction:.3f}")
 
     # Test multivector stability
-    safe_print(f"\nTesting Multivector Stability:")
+    safe_print("\nTesting Multivector Stability:")
     test_vectors = [
         np.array([1, 2, 3, 4, 5]),
         np.array([1.1, 2.1, 2.9, 4.1, 4.9]),

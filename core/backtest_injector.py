@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -34,7 +41,7 @@ import json
 import time
 import logging
 import hashlib
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -715,7 +722,7 @@ def main():
     # Print sample cycle
     if cycles:
         sample_cycle = cycles[0]
-        safe_print(f"\n📊 Sample Cycle:")
+        safe_print("\n📊 Sample Cycle:")
         safe_print(f"  ID: {sample_cycle.cycle_id}")
         safe_print(f"  Type: {sample_cycle.cycle_type.value}")
         safe_print(f"  Duration: {sample_cycle.duration_days} days")
@@ -725,7 +732,7 @@ def main():
 
     # Get statistics
     stats = injector.get_backtest_statistics()
-    safe_print(f"\n📊 Backtest Statistics:")
+    safe_print("\n📊 Backtest Statistics:")
     for key, value in stats.items():
         safe_print(f"  - {key.replace('_', ' ').title()}: {value}")
 

@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Bitcoin Mining Analyzer - Mathematical Mining Analysis for Schwabot.
@@ -30,7 +37,7 @@ import logging
 import time
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -431,7 +438,7 @@ def main() -> None:
     safe_print(f"Mining Efficiency: {analysis.mining_efficiency:.3f}")
     safe_print(f"Risk Assessment: {analysis.risk_assessment:.3f}")
 
-    safe_print(f"\nRecommendations:")
+    safe_print("\nRecommendations:")
     for rec in analysis.recommendations:
         safe_print(f"  - {rec}")
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """btc_usdc_router_relay – BTC/USDC routing with ghost conditional triggers.
 
@@ -15,7 +16,7 @@ trigger detection for the ghost protocol.
 from dataclasses import dataclass
 from typing import Sequence
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
     "BTCUSDCRouterRelay",

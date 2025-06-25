@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Strategy Mapper - UROS v1.0 Integration with ZPE Mathematical Framework.
@@ -38,16 +44,16 @@ try:
     from core.memory_stack.ai_command_sequencer import (
         AICommandSequencer, sequence_ai_command, update_command_sequence_result
     )
-    from core.memory_stack.memory_key_allocator import (
+#     from core.memory_stack.memory_key_allocator import (  # F811: duplicate import
         MemoryKeyAllocator, allocate_memory_key, KeyType
     )
-    from core.memory_stack.execution_validator import (
+#     from core.memory_stack.execution_validator import (  # F811: duplicate import
         ExecutionValidator, simulate_execution_cost, validate_execution
     )
-    from core.prophet_connector import (
+#     from core.prophet_connector import (  # F811: duplicate import
         ProphetConnector, compute_alpha_score, analyze_curve_alignment
     )
-    from core.gpt_command_layer import (
+#     from core.gpt_command_layer import (  # F811: duplicate import
         AIAgentType, CommandDomain, CommandPriority, AICommand, CommandResponse
     )
     UROS_MODULES_AVAILABLE = True
@@ -65,7 +71,7 @@ except ImportError as e:
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+#     from core.utils.windows_cli_compatibility import (  # F811: duplicate import
         safe_print, safe_format_error, log_safe
     )
     CLI_HANDLER_AVAILABLE = True

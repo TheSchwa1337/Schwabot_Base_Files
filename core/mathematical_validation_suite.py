@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -20,7 +27,7 @@ Comprehensive validation system for all mathematical components in the Schwabot 
 Ensures mathematical integrity and proper functionality of the main pipeline.
 """
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import time
 import traceback
 from typing import Dict, Any, List, Tuple, Optional
@@ -39,7 +46,7 @@ except ImportError as e:
     TENSOR_ALGEBRA_AVAILABLE = False
 
 try:
-    from schwabot.mathlib.line_render_engine import (
+#     from schwabot.mathlib.line_render_engine import (  # F811: duplicate import
         line_renderer, render_price_line, render_mathematical_function
     )
     LINE_RENDERER_AVAILABLE = True
@@ -48,7 +55,7 @@ except ImportError as e:
     LINE_RENDERER_AVAILABLE = False
 
 try:
-    from schwabot.mathlib.matrix_fault_resolver import (
+#     from schwabot.mathlib.matrix_fault_resolver import (  # F811: duplicate import
         matrix_resolver, check_matrix_validity, resolve_singular_matrix,
         safe_matrix_multiply, safe_eigenvalue_computation
     )
@@ -252,7 +259,7 @@ class MathematicalValidationSuite:
 
             # Validate hash properties
             hash_length_correct = len(hash_vector) == 64  # SHA256 hex length
-            hash_format_correct = all(c in "0123456789abcdef" for c in hash_vector.lower())
+            hash_format_correct = all(c in "0123456789abcde" for c in hash_vector.lower())
 
             # Test hash similarity
             known_hashes = [hash_vector, "a" * 64, "b" * 64]

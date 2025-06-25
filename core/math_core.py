@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """Mathematical Core - Baseline Tensor Harmonizer.
 
@@ -25,7 +26,7 @@ Based on SP 1.27-AE framework with advanced mathematical integration.
 import logging
 from typing import Any, Dict
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 

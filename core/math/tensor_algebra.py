@@ -1,4 +1,5 @@
 from core.unified_math_system import unified_math
+import numpy as np
 #!/usr/bin/env python3
 """
 SCHWABOT CORE MATHEMATICAL TENSOR ALGEBRA ENGINE
@@ -15,7 +16,7 @@ Key Features:
 - Entropy compensation calculations
 """
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import hashlib
 from typing import Union, List, Tuple, Any, Optional
 import logging

@@ -1,18 +1,25 @@
 from __future__ import annotations
+import numpy as np
 
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Hash Processor - Hash-Based Tick Analysis & Pattern Detection.
@@ -37,7 +44,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
@@ -547,7 +554,7 @@ def main() -> None:
         safe_print(f"  Confidence Level: {metrics.confidence_level:.3f}")
 
     # Pattern detection
-    safe_print(f"\nPattern Detection:")
+    safe_print("\nPattern Detection:")
     pattern_analysis = processor.detect_hash_patterns()
     safe_print(f"  Pattern Strength: {pattern_analysis.pattern_strength:.3f}")
     safe_print(f"  Recurring Sequences: {len(pattern_analysis.recurring_sequences)}")

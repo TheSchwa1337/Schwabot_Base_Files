@@ -5,14 +5,20 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -66,7 +72,7 @@ import threading
 import time
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING, Union
 
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 import numpy.typing as npt
 from scipy import linalg
 from scipy.linalg import blas
@@ -698,7 +704,7 @@ class RittleGEMM:
 
         except Exception as e:
             warning_msg = (
-                f"Aggressive optimization failed, "
+                "Aggressive optimization failed, "
                 f"falling back to standard: {e}"
             )
             self.safe_log("warning", warning_msg)
@@ -1392,22 +1398,22 @@ def main() -> None:
                     )
 
             # Test matrix decomposition
-            rittle.safe_safe_print(f"  Testing matrix decomposition...")
+            rittle.safe_safe_print("  Testing matrix decomposition...")
             try:
                 P, L, U = rittle.lu_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_safe_print(f"    ✅ LU decomposition completed")
+                rittle.safe_safe_print("    ✅ LU decomposition completed")
             except Exception as e:
                 rittle.safe_safe_print(f"    ❌ LU decomposition failed: {e}")
 
             # Test eigenvalue decomposition
-            rittle.safe_safe_print(f"  Testing eigenvalue decomposition...")
+            rittle.safe_safe_print("  Testing eigenvalue decomposition...")
             try:
                 eigenvalues, eigenvectors = rittle.eigenvalue_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_safe_print(f"    ✅ Eigenvalue decomposition completed")
+                rittle.safe_safe_print("    ✅ Eigenvalue decomposition completed")
             except Exception as e:
                 rittle.safe_safe_print(
                     f"    ❌ Eigenvalue decomposition failed: {e}"
@@ -1415,7 +1421,7 @@ def main() -> None:
 
         # Get performance summary
         summary = rittle.get_performance_summary()
-        rittle.safe_safe_print(f"\n📊 Performance Summary:")
+        rittle.safe_safe_print("\n📊 Performance Summary:")
         rittle.safe_safe_print(f"   Total operations: {summary.total_operations}")
         rittle.safe_safe_print(f"   Total FLOPs: {summary.total_flops:,}")
         rittle.safe_safe_print(

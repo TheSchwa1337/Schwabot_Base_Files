@@ -1,16 +1,23 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
 except ImportError:
     try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+def safe_print(message):
+    print(message)
+def info(message):
+    print(f"[INFO] {message}")
+def warn(message):
+    print(f"[WARN] {message}")
+def error(message):
+    print(f"[ERROR] {message}")
+def success(message):
+    print(f"[SUCCESS] {message}")
+def debug(message):
+    print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -28,7 +35,7 @@ Mathematical Pipeline:
 import json
 import time
 import logging
-from core.unified_math_system import unified_math
+# from core.unified_math_system import unified_math  # F811: duplicate import
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -101,7 +108,7 @@ class MathematicalIntegrationValidator:
         try:
             # Test 1: Basic bit phase resolution
             test_start = time.time()
-            strategy_id = "0x123456789abcdef"
+            strategy_id = "0x123456789abcde"
             bit_result = self.tensor_algebra.resolve_bit_phases(strategy_id)
 
             success = (
@@ -458,7 +465,7 @@ class MathematicalIntegrationValidator:
         try:
             # Test 1: Basic hash memory encoding
             test_start = time.time()
-            bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcdef")
+            bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcde")
             hash_result = self.tensor_algebra.encode_hash_memory(
                 1000.0, 50.0, bit_result
             )
@@ -556,7 +563,7 @@ class MathematicalIntegrationValidator:
         try:
             # Test 1: Complete unified operation
             test_start = time.time()
-            strategy_id = "0x123456789abcdef"
+            strategy_id = "0x123456789abcde"
             market_data = {
                 'current_profit': 1000.0,
                 'previous_profit': 950.0,
@@ -688,7 +695,7 @@ class MathematicalIntegrationValidator:
         overall_success = all(p.all_tests_passed for p in pipelines)
 
         # Print results
-        safe_print(f"\n📊 Validation Results:")
+        safe_print("\n📊 Validation Results:")
         safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {total_passed}")
@@ -696,7 +703,7 @@ class MathematicalIntegrationValidator:
         safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
         safe_print(f"  Total Execution Time: {total_time:.2f}s")
 
-        safe_print(f"\n📋 Pipeline Results:")
+        safe_print("\n📋 Pipeline Results:")
         for pipeline in pipelines:
             status = "✅ PASSED" if pipeline.all_tests_passed else "❌ FAILED"
             safe_print(f"  {pipeline.pipeline_name}: {status} ({pipeline.passed_tests}/{pipeline.total_tests})")
