@@ -23,26 +23,26 @@ class TypeEnforcer:
 
     def __init__(self: Any) -> None:
         """Initialize type-pattern and function-pattern dictionaries."""
-        self._type_patterns: Dict[str, str] = type_patterns
-        self._function_patterns: Dict[str, str] = function_patterns
+self._type_patterns: Dict[str, str] = type_patterns
+self._function_patterns: Dict[str, str] = function_patterns
 
     def enforce_type_annotations(self: Any, file_path: str) -> Dict[str, int]:
         """Enforce type annotations in a file with Windows CLI compatibility."""
-        stats: Dict[str, int] = {
-            "functions_fixed": 0,
-            "parameters_fixed": 0,
-            "returns_fixed": 0,
-        }
+stats: Dict[str, int] = {
+"functions_fixed": 0,
+"parameters_fixed": 0,
+"returns_fixed": 0,
+}
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Parse the file
-            tree = ast.parse(content)
+tree = ast.parse(content)
 
             # Apply fixes
-            fixed_content = self._apply_type_fixes(content, tree, stats)
+fixed_content = self._apply_type_fixes(content, tree, stats)
 
             # Write back if changes were made
             if fixed_content != content:
@@ -50,19 +50,19 @@ class TypeEnforcer:
                     f.write(fixed_content)
                 logger.info(
                     f"Applied type annotations to {file_path}"
-                )
+
 
             return stats
 
         except Exception as e:
-            logger.error(f"Error enforcing types in {file_path}: {e}")
+logger.error(f"Error enforcing types in {file_path}: {e}")
             return stats
 
     def _apply_type_fixes(
         self: Any, content: str, tree: ast.AST, stats: Dict[str, int]
-    ) -> str:
-        """Apply type annotation fixes to the content."""
-        lines = content.split("\n")
+) -> str:
+"""Apply type annotation fixes to the content."""
+lines = content.split("\n")
 
         # Sort nodes by line number (descending) to avoid line number shifts
         nodes = []
@@ -70,7 +70,7 @@ class TypeEnforcer:
             if hasattr(node, "lineno"):
                 nodes.append(node)
 
-        nodes.sort(key=lambda x: x.lineno, reverse=True)
+nodes.sort(key=lambda x: x.lineno, reverse=True)
 
         for node in nodes:
             if isinstance(node, ast.FunctionDef):
@@ -80,64 +80,64 @@ class TypeEnforcer:
 
     def _fix_function_annotations(
         self: Any,
-        node: ast.FunctionDef,
-        lines: List[str],
-        stats: Dict[str, int],
-    ) -> List[str]:
-        """Fix type annotations for a function."""
-        line_idx = node.lineno - 1  # Convert to 0-based index
+node: ast.FunctionDef,
+lines: List[str],
+stats: Dict[str, int],
+) -> List[str]:
+"""Fix type annotations for a function."""
+line_idx = node.lineno - 1  # Convert to 0-based index
 
         if line_idx >= len(lines):
             return lines
 
         # Fix function signature
-        original_line = lines[line_idx]
-        fixed_line = self._fix_function_signature(original_line, node, stats)
+original_line = lines[line_idx]
+fixed_line = self._fix_function_signature(original_line, node, stats)
 
         if fixed_line != original_line:
-            lines[line_idx] = fixed_line
-            stats["functions_fixed"] += 1
+lines[line_idx] = fixed_line
+stats["functions_fixed"] += 1
 
         # Fix parameter annotations
         for arg in node.args.args:
             if arg.arg != "sel" and arg.annotation is None:
-                param_line = self._find_parameter_line(
+param_line = self._find_parameter_line(
                     lines, line_idx, arg.arg
-                )
+
                 if param_line is not None:
-                    param_idx = param_line
-                    param_type = self._infer_parameter_type(arg.arg)
+param_idx = param_line
+param_type = self._infer_parameter_type(arg.arg)
                     if param_type:
-                        lines = self._add_parameter_annotation(
+lines = self._add_parameter_annotation(
                             lines, param_idx, arg.arg, param_type
-                        )
-                        stats["parameters_fixed"] += 1
+
+stats["parameters_fixed"] += 1
 
         # Fix return type annotation
         if node.returns is None and node.name != "__init__":
-            return_type = self._infer_return_type(node.name)
+return_type = self._infer_return_type(node.name)
             if return_type:
-                lines = self._add_return_annotation(
+lines = self._add_return_annotation(
                     lines, line_idx, return_type
-                )
-                stats["returns_fixed"] += 1
+
+stats["returns_fixed"] += 1
 
         return lines
 
     def _fix_function_signature(
         self: Any, line: str, node: ast.FunctionDef, stats: Dict[str, int]
-    ) -> str:
-        """Fix function signature with proper type annotations."""
+) -> str:
+"""Fix function signature with proper type annotations."""
         # Add missing parameter type annotations
         if "sel" in line and "self:" not in line:
-            line = line.replace("(self)", "(self: Any)")
+line = line.replace("(self)", "(self: Any)")
             line = line.replace("(self,", "(self: Any,")
 
         # Add missing return type annotation
         if line.strip().endswith(":") and not "->" in line:
             return_type = self._infer_return_type(node.name)
             if return_type:
-                line = line.rstrip(":") + f" -> {return_type}:"
+line = line.rstrip(":") + f" -> {return_type}:"
 
         return line
 
@@ -199,10 +199,10 @@ class TypeEnforcer:
 
     def _find_parameter_line(
         self: Any, lines: List[str], func_line: int, param_name: str
-    ) -> Optional[int]:
-        """Find the line containing a parameter definition."""
+) -> Optional[int]:
+"""Find the line containing a parameter definition."""
         # Look for the parameter in the function signature
-        func_line_content = lines[func_line]
+func_line_content = lines[func_line]
         if param_name in func_line_content:
             return func_line
 
@@ -210,40 +210,40 @@ class TypeEnforcer:
 
     def _add_parameter_annotation(
         self: Any,
-        lines: List[str],
-        line_idx: int,
-        param_name: str,
-        param_type: str,
-    ) -> List[str]:
-        """Add type annotation to a parameter."""
-        line = lines[line_idx]
+lines: List[str],
+line_idx: int,
+param_name: str,
+param_type: str,
+) -> List[str]:
+"""Add type annotation to a parameter."""
+line = lines[line_idx]
 
         # Add annotation to parameter
         if f"{param_name}," in line:
-            line = line.replace(
+line = line.replace(
                 f"{param_name},", f"{param_name}: {param_type},"
-            )
+
         elif f"{param_name})" in line:
-            line = line.replace(
+line = line.replace(
                 f"{param_name})", f"{param_name}: {param_type})"
-            )
+
         elif (
             f"{param_name}:" in line
-            and ":" not in line.split(param_name)[1].split(",")[0]
+and ":" not in line.split(param_name)[1].split(",")[0]
         ):
             # Parameter already has annotation
             pass
         else:
-            line = line.replace(param_name, f"{param_name}: {param_type}")
+line = line.replace(param_name, f"{param_name}: {param_type}")
 
-        lines[line_idx] = line
+lines[line_idx] = line
         return lines
 
     def _add_return_annotation(
         self: Any, lines: List[str], line_idx: int, return_type: str
-    ) -> List[str]:
-        """Add return type annotation to a function."""
-        line = lines[line_idx]
+) -> List[str]:
+"""Add return type annotation to a function."""
+line = lines[line_idx]
 
         if line.strip().endswith(":"):
             line = line.rstrip(":") + f" -> {return_type}:"
@@ -253,17 +253,17 @@ class TypeEnforcer:
 
     def add_custom_pattern(
         self: Any, name: str, type_name: str, pattern_type: str = "parameter"
-    ) -> None:
-        """Add a custom type pattern."""
+) -> None:
+"""Add a custom type pattern."""
         if pattern_type == "parameter":
-            self._type_patterns[name] = type_name
+self._type_patterns[name] = type_name
         elif pattern_type == "function":
-            self._function_patterns[name] = type_name
+self._function_patterns[name] = type_name
 
     def get_statistics(self: Any) -> Dict[str, int]:
         """Get statistics about type patterns."""
         return {
-            "parameter_patterns": len(self._type_patterns),
+"parameter_patterns": len(self._type_patterns),
             "function_patterns": len(self._function_patterns),
         }
 
@@ -279,16 +279,16 @@ def enforce_types_in_file(file_path: str) -> Dict[str, int]:
 
 def enforce_types_in_directory(directory: str) -> Dict[str, int]:
     """Enforce types in all Python files in a directory."""
-    total_stats = {
-        "functions_fixed": 0,
-        "parameters_fixed": 0,
-        "returns_fixed": 0,
-    }
+total_stats = {
+"functions_fixed": 0,
+"parameters_fixed": 0,
+"returns_fixed": 0,
+}
 
     for py_file in Path(directory).rglob("*.py"):
         if py_file.is_file():
             stats = enforce_types_in_file(str(py_file))
             for key in total_stats:
-                total_stats[key] += stats[key]
+total_stats[key] += stats[key]
 
     return total_stats

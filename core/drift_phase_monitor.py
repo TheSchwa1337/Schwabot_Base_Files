@@ -49,9 +49,9 @@ logger = logging.getLogger(__name__)
 
 # Default phase cycle durations (in seconds)
 DEFAULT_PHASE_CYCLES = {
-    4: 1.0,  # 4-bit: 1 second cycle
-    8: 0.5,  # 8-bit: 500ms cycle
-    42: 0.1,  # 42-bit: 100ms cycle
+4: 1.0,  # 4-bit: 1 second cycle
+8: 0.5,  # 8-bit: 500ms cycle
+42: 0.1,  # 42-bit: 100ms cycle
 }
 
 # Drift calculation parameters
@@ -61,39 +61,39 @@ MIN_CYCLE_DURATION = 0.001  # 1ms minimum
 
 def compute_phase_drift(
     start_timestamp: float,
-    current_timestamp: float,
-    expected_cycle: float,
+current_timestamp: float,
+expected_cycle: float,
 ) -> float:
-    """Compute phase drift penalty.
+"""Compute phase drift penalty.
 
-    Parameters
-    ----------
-    start_timestamp : float
-        Phase entry timestamp (seconds)
+Parameters
+----------
+start_timestamp : float
+Phase entry timestamp (seconds)
     current_timestamp : float
-        Current timestamp (seconds)
+Current timestamp (seconds)
     expected_cycle : float
-        Expected phase cycle duration (seconds)
+Expected phase cycle duration (seconds)
 
-    Returns
-    -------
-    float
-        Drift penalty in [0, 1] where 0 = perfect timing
-    """
+Returns
+-------
+float
+Drift penalty in [0, 1] where 0 = perfect timing
+"""
     try:
         if expected_cycle <= MIN_CYCLE_DURATION:
-            logger.warning(f"Invalid cycle duration: {expected_cycle}")
+logger.warning(f"Invalid cycle duration: {expected_cycle}")
             return MAX_DRIFT_PENALTY
 
         if current_timestamp < start_timestamp:
-            logger.warning("Current timestamp before start timestamp")
+logger.warning("Current timestamp before start timestamp")
             return MAX_DRIFT_PENALTY
 
         # Calculate elapsed time
-        elapsed = current_timestamp - start_timestamp
+elapsed = current_timestamp - start_timestamp
 
         # Calculate drift as fraction of cycle
-        drift_fraction = (elapsed % expected_cycle) / expected_cycle
+drift_fraction = (elapsed % expected_cycle) / expected_cycle
 
         # Normalize to [0, 1] range
         # Peak penalty at 0.5 (middle of cycle), minimum at 0 and 1
@@ -102,111 +102,111 @@ def compute_phase_drift(
         return unified_math.max(0.0, unified_math.min(MAX_DRIFT_PENALTY, normalized_drift))
 
     except Exception as e:
-        logger.error(f"Error computing phase drift: {e}")
+logger.error(f"Error computing phase drift: {e}")
         return MAX_DRIFT_PENALTY
 
 
 def get_cycle_duration(bit_depth: int) -> float:
     """Get expected cycle duration for bit depth.
 
-    Parameters
-    ----------
-    bit_depth : int
-        Phase bit depth (4, 8, or 42)
+Parameters
+----------
+bit_depth : int
+Phase bit depth (4, 8, or 42)
 
-    Returns
-    -------
-    float
-        Expected cycle duration in seconds
-    """
+Returns
+-------
+float
+Expected cycle duration in seconds
+"""
     return DEFAULT_PHASE_CYCLES.get(bit_depth, DEFAULT_PHASE_CYCLES[8])
 
 
 def analyze_drift_pattern(
     start_timestamp: float,
-    current_timestamp: float,
-    bit_depth: int = 8,
+current_timestamp: float,
+bit_depth: int = 8,
 ) -> Tuple[float, dict]:
-    """Analyze drift pattern and return penalty with diagnostics.
+"""Analyze drift pattern and return penalty with diagnostics.
 
-    Parameters
-    ----------
-    start_timestamp : float
-        Phase entry timestamp
-    current_timestamp : float
-        Current timestamp
-    bit_depth : int, optional
-        Phase bit depth for cycle duration
+Parameters
+----------
+start_timestamp : float
+Phase entry timestamp
+current_timestamp : float
+Current timestamp
+bit_depth : int, optional
+Phase bit depth for cycle duration
 
-    Returns
-    -------
-    Tuple[float, dict]
-        - Drift penalty (0-1)
+Returns
+-------
+Tuple[float, dict]
+- Drift penalty (0-1)
         - Diagnostic information dictionary
-    """
+"""
     try:
-        expected_cycle = get_cycle_duration(bit_depth)
+expected_cycle = get_cycle_duration(bit_depth)
         drift_penalty = compute_phase_drift(
             start_timestamp, current_timestamp, expected_cycle
-        )
+
 
         # Calculate diagnostic metrics
-        elapsed = current_timestamp - start_timestamp
-        cycles_completed = elapsed / expected_cycle
-        cycle_position = (elapsed % expected_cycle) / expected_cycle
+elapsed = current_timestamp - start_timestamp
+cycles_completed = elapsed / expected_cycle
+cycle_position = (elapsed % expected_cycle) / expected_cycle
 
-        diagnostics = {
-            "drift_penalty": drift_penalty,
-            "expected_cycle": expected_cycle,
-            "elapsed_time": elapsed,
-            "cycles_completed": cycles_completed,
-            "cycle_position": cycle_position,
-            "bit_depth": bit_depth,
-            "start_timestamp": start_timestamp,
-            "current_timestamp": current_timestamp,
-        }
+diagnostics = {
+"drift_penalty": drift_penalty,
+"expected_cycle": expected_cycle,
+"elapsed_time": elapsed,
+"cycles_completed": cycles_completed,
+"cycle_position": cycle_position,
+"bit_depth": bit_depth,
+"start_timestamp": start_timestamp,
+"current_timestamp": current_timestamp,
+}
 
         return drift_penalty, diagnostics
 
     except Exception as e:
-        logger.error(f"Error analyzing drift pattern: {e}")
+logger.error(f"Error analyzing drift pattern: {e}")
         return MAX_DRIFT_PENALTY, {"error": str(e)}
 
 
 def compute_multi_phase_drift(
     start_timestamp: float,
-    current_timestamp: float,
-    phases: Optional[list] = None,
+current_timestamp: float,
+phases: Optional[list] = None,
 ) -> Dict[int, float]:
-    """Compute drift penalties for multiple phase depths.
+"""Compute drift penalties for multiple phase depths.
 
-    Parameters
-    ----------
-    start_timestamp : float
-        Phase entry timestamp
-    current_timestamp : float
-        Current timestamp
-    phases : list, optional
-        List of bit depths to analyze (default: [4, 8, 42])
+Parameters
+----------
+start_timestamp : float
+Phase entry timestamp
+current_timestamp : float
+Current timestamp
+phases : list, optional
+List of bit depths to analyze (default: [4, 8, 42])
 
-    Returns
-    -------
-    Dict[int, float]
-        Dictionary mapping bit depth to drift penalty
-    """
+Returns
+-------
+Dict[int, float]
+Dictionary mapping bit depth to drift penalty
+"""
     if phases is None:
-        phases = [4, 8, 42]
+phases = [4, 8, 42]
 
-    results = {}
+results = {}
 
     for phase in phases:
         try:
-            drift_penalty, _ = analyze_drift_pattern(
+drift_penalty, _ = analyze_drift_pattern(
                 start_timestamp, current_timestamp, phase
-            )
-            results[phase] = drift_penalty
+
+results[phase] = drift_penalty
         except Exception as e:
-            logger.warning(f"Error computing drift for phase {phase}: {e}")
+logger.warning(f"Error computing drift for phase {phase}: {e}")
             results[phase] = MAX_DRIFT_PENALTY
 
     return results
@@ -214,35 +214,35 @@ def compute_multi_phase_drift(
 
 def get_optimal_phase_timing(
     start_timestamp: float,
-    current_timestamp: float,
+current_timestamp: float,
 ) -> Tuple[int, float]:
-    """Determine optimal phase depth based on drift penalties.
+"""Determine optimal phase depth based on drift penalties.
 
-    Parameters
-    ----------
-    start_timestamp : float
-        Phase entry timestamp
-    current_timestamp : float
-        Current timestamp
+Parameters
+----------
+start_timestamp : float
+Phase entry timestamp
+current_timestamp : float
+Current timestamp
 
-    Returns
-    -------
-    Tuple[int, float]
-        - Optimal bit depth (lowest drift penalty)
+Returns
+-------
+Tuple[int, float]
+- Optimal bit depth (lowest drift penalty)
         - Drift penalty for optimal phase
-    """
+"""
     try:
-        drift_penalties = compute_multi_phase_drift(start_timestamp, current_timestamp)
+drift_penalties = compute_multi_phase_drift(start_timestamp, current_timestamp)
 
         if not drift_penalties:
             return 8, MAX_DRIFT_PENALTY  # Default fallback
 
         # Find phase with lowest drift penalty
-        optimal_phase = unified_math.min(drift_penalties.items(), key=lambda x: x[1])
+optimal_phase = unified_math.min(drift_penalties.items(), key=lambda x: x[1])
         return optimal_phase[0], optimal_phase[1]
 
     except Exception as e:
-        logger.error(f"Error determining optimal phase timing: {e}")
+logger.error(f"Error determining optimal phase timing: {e}")
         return 8, MAX_DRIFT_PENALTY
 
 
@@ -252,66 +252,66 @@ class DriftPhaseMonitor:
     def __init__(self, default_bit_depth: int = 8):
         """Initialize drift phase monitor.
 
-        Parameters
-        ----------
-        default_bit_depth : int, optional
-            Default phase bit depth to use
-        """
-        self.default_bit_depth = default_bit_depth
-        self.phase_starts: Dict[int, float] = {}
-        self.last_drift_penalty = 0.0
-        self.last_diagnostics: dict = {}
+Parameters
+----------
+default_bit_depth : int, optional
+Default phase bit depth to use
+"""
+self.default_bit_depth = default_bit_depth
+self.phase_starts: Dict[int, float] = {}
+self.last_drift_penalty = 0.0
+self.last_diagnostics: dict = {}
 
     def start_phase(self, bit_depth: int, timestamp: Optional[float] = None) -> None:
         """Start tracking a new phase.
 
-        Parameters
-        ----------
-        bit_depth : int
-            Phase bit depth
-        timestamp : float, optional
-            Phase start timestamp (default: current time)
+Parameters
+----------
+bit_depth : int
+Phase bit depth
+timestamp : float, optional
+Phase start timestamp (default: current time)
         """
         if timestamp is None:
-            timestamp = time.time()
+timestamp = time.time()
 
-        self.phase_starts[bit_depth] = timestamp
-        logger.debug(f"Started phase {bit_depth} at {timestamp}")
+self.phase_starts[bit_depth] = timestamp
+logger.debug(f"Started phase {bit_depth} at {timestamp}")
 
     def get_current_drift(
         self,
-        bit_depth: Optional[int] = None,
-        timestamp: Optional[float] = None,
-    ) -> float:
-        """Get current drift penalty for specified phase.
+bit_depth: Optional[int] = None,
+timestamp: Optional[float] = None,
+) -> float:
+"""Get current drift penalty for specified phase.
 
-        Parameters
-        ----------
-        bit_depth : int, optional
-            Bit depth to check (default: instance default)
+Parameters
+----------
+bit_depth : int, optional
+Bit depth to check (default: instance default)
         timestamp : float, optional
-            Current timestamp (default: current time)
+Current timestamp (default: current time)
 
-        Returns
-        -------
-        float
-            Current drift penalty
-        """
+Returns
+-------
+float
+Current drift penalty
+"""
         if timestamp is None:
-            timestamp = time.time()
+timestamp = time.time()
 
-        depth = bit_depth or self.default_bit_depth
+depth = bit_depth or self.default_bit_depth
 
         if depth not in self.phase_starts:
-            logger.warning(f"No start time recorded for phase {depth}")
+logger.warning(f"No start time recorded for phase {depth}")
             return MAX_DRIFT_PENALTY
 
-        start_time = self.phase_starts[depth]
+start_time = self.phase_starts[depth]
 
         # Compute and cache drift penalty
-        self.last_drift_penalty, self.last_diagnostics = analyze_drift_pattern(
+self.last_drift_penalty, self.last_diagnostics = analyze_drift_pattern(
             start_time, timestamp, depth
-        )
+
 
         return self.last_drift_penalty
 
@@ -322,21 +322,21 @@ class DriftPhaseMonitor:
     def reset_phase(self, bit_depth: int) -> None:
         """Reset tracking for specified phase.
 
-        Parameters
-        ----------
-        bit_depth : int
-            Phase bit depth to reset
-        """
+Parameters
+----------
+bit_depth : int
+Phase bit depth to reset
+"""
         if bit_depth in self.phase_starts:
             del self.phase_starts[bit_depth]
-            logger.debug(f"Reset phase {bit_depth}")
+logger.debug(f"Reset phase {bit_depth}")
 
     def reset_all(self) -> None:
         """Reset all phase tracking."""
-        self.phase_starts.clear()
+self.phase_starts.clear()
         self.last_drift_penalty = 0.0
-        self.last_diagnostics = {}
-        logger.debug("Reset all phases")
+self.last_diagnostics = {}
+logger.debug("Reset all phases")
 
     def get_active_phases(self) -> list:
         """Get list of currently tracked phase bit depths."""
@@ -345,22 +345,22 @@ class DriftPhaseMonitor:
 
 def validate_timestamps(
     start_timestamp: float,
-    current_timestamp: float,
+current_timestamp: float,
 ) -> bool:
-    """Validate timestamp inputs for drift calculation.
+"""Validate timestamp inputs for drift calculation.
 
-    Parameters
-    ----------
-    start_timestamp : float
-        Phase start timestamp
-    current_timestamp : float
-        Current timestamp
+Parameters
+----------
+start_timestamp : float
+Phase start timestamp
+current_timestamp : float
+Current timestamp
 
-    Returns
-    -------
-    bool
-        True if timestamps are valid
-    """
+Returns
+-------
+bool
+True if timestamps are valid
+"""
     try:
         # Check for reasonable timestamp values
         if not (0 < start_timestamp < 2e9):  # Reasonable Unix timestamp range
@@ -387,21 +387,21 @@ def validate_timestamps(
 def main() -> None:
     """Demo function for testing drift phase monitor."""
     # Test different scenarios
-    current_time = time.time()
+current_time = time.time()
 
     # Scenario 1: Perfect timing (start of cycle)
     start_perfect = current_time - 0.0  # Just started
-    drift_perfect = compute_phase_drift(start_perfect, current_time, 1.0)
+drift_perfect = compute_phase_drift(start_perfect, current_time, 1.0)
 
     # Scenario 2: Half cycle elapsed (maximum drift)
     start_half = current_time - 0.5  # Half of 1-second cycle
-    drift_half = compute_phase_drift(start_half, current_time, 1.0)
+drift_half = compute_phase_drift(start_half, current_time, 1.0)
 
     # Scenario 3: Full cycle elapsed (back to perfect)
     start_full = current_time - 1.0  # Full 1-second cycle
-    drift_full = compute_phase_drift(start_full, current_time, 1.0)
+drift_full = compute_phase_drift(start_full, current_time, 1.0)
 
-    safe_print("Drift Phase Monitor Demo")
+safe_print("Drift Phase Monitor Demo")
     safe_print("=" * 30)
     safe_print(f"Perfect timing drift:  {drift_perfect:.3f}")
     safe_print(f"Half cycle drift:      {drift_half:.3f}")
@@ -409,23 +409,23 @@ def main() -> None:
     print()
 
     # Test monitor class
-    monitor = DriftPhaseMonitor()
+monitor = DriftPhaseMonitor()
 
     # Start phase tracking
-    monitor.start_phase(8, current_time - 0.25)  # 250ms ago
+monitor.start_phase(8, current_time - 0.25)  # 250ms ago
 
     # Get current drift
-    current_drift = monitor.get_current_drift(8)
+current_drift = monitor.get_current_drift(8)
     diagnostics = monitor.get_diagnostics()
 
-    safe_print(f"Monitor current drift: {current_drift:.3f}")
+safe_print(f"Monitor current drift: {current_drift:.3f}")
     safe_print(f"Cycle position: {diagnostics.get('cycle_position', 0):.3f}")
     safe_print(f"Cycles completed: {diagnostics.get('cycles_completed', 0):.3f}")
 
     # Test multi-phase analysis
-    multi_drift = compute_multi_phase_drift(current_time - 0.1, current_time)
+multi_drift = compute_multi_phase_drift(current_time - 0.1, current_time)
     safe_print(f"\nMulti-phase drift: {multi_drift}")
 
 
 if __name__ == "__main__":
-    main()
+main()

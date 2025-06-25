@@ -18,7 +18,7 @@ __all__: list[str] = ["news_to_glyph_weight"]
 def news_to_glyph_weight(
     news_vec: Sequence[float], glyph_mu: Sequence[float]
 ) -> float:
-    """Return dot-product weight between news vector and glyph mean vector."""
+"""Return dot-product weight between news vector and glyph mean vector."""
     if len(news_vec) != len(glyph_mu):
         raise ValueError("vector length mismatch")
     return float(unified_math.unified_math.dot_product(news_vec, glyph_mu))

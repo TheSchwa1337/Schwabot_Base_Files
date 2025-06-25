@@ -8,7 +8,7 @@ import math
 
 Implements the Φ₍ghost₎ matrix from the Ghost design doc:
 
-    Φ₍ghost₎ = M(t) · σ(W + B) + Ψ_noise
+Φ₍ghost₎ = M(t) · σ(W + B) + Ψ_noise
 
 where
 • ``M(t)``   – market-state transformation matrix (time varying).
@@ -42,27 +42,27 @@ def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
 
 def ghost_swap_vector(
     market_matrix: np.ndarray,
-    weights: np.ndarray,
-    bias: np.ndarray,
-    *,
-    noise: np.ndarray | None = None,
-    sigmoid_k: float = _SIGMOID_K,
+weights: np.ndarray,
+bias: np.ndarray,
+*,
+noise: np.ndarray | None = None,
+sigmoid_k: float = _SIGMOID_K,
 ) -> np.ndarray:
-    """Return ghost trade simulation matrix Φ₍ghost₎.
+"""Return ghost trade simulation matrix Φ₍ghost₎.
 
-    Parameters
-    ----------
-    market_matrix
-        ``M(t)`` – current market state features (2-D array).
+Parameters
+----------
+market_matrix
+``M(t)`` – current market state features (2-D array).
     weights, bias
-        Learned parameters (same shape as ``market_matrix``).  No broadcasting
+Learned parameters (same shape as ``market_matrix``).  No broadcasting
         is applied – exact shape match is required.
-    noise
-        Optional additive noise ``Ψ_noise``.  If ``None``, a zero matrix is
-        used.
-    sigmoid_k
-        Steepness parameter *k* of the logistic.  Higher ⇒ harder gate.
-    """
+noise
+Optional additive noise ``Ψ_noise``.  If ``None``, a zero matrix is
+used.
+sigmoid_k
+Steepness parameter *k* of the logistic.  Higher ⇒ harder gate.
+"""
     if not (market_matrix.shape == weights.shape == bias.shape):
         raise ValueError("market_matrix, weights and bias must share shape")
 
@@ -70,7 +70,7 @@ def ghost_swap_vector(
     activated = _sigmoid(weights + bias, k=sigmoid_k)
 
     # Core multiplication
-    phi = market_matrix * activated
+phi = market_matrix * activated
 
     if noise is None:
         return phi

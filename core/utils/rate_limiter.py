@@ -16,32 +16,32 @@ class RateLimiter:
     def __init__(self, max_requests: int, time_window: float = 60.0) -> None:
         """Initialize rate limiter.
 
-        Args:
-            max_requests: Maximum requests allowed in time window.
-            time_window: Time window in seconds.
-        """
-        self.max_requests = max_requests
-        self.time_window = time_window
-        self.requests: Deque[float] = deque()
+Args:
+max_requests: Maximum requests allowed in time window.
+time_window: Time window in seconds.
+"""
+self.max_requests = max_requests
+self.time_window = time_window
+self.requests: Deque[float] = deque()
 
     def can_make_request(self) -> bool:
         """Check if a request can be made without exceeding rate limit.
 
-        Returns:
-            True if request can be made, False otherwise.
-        """
-        now = time.time()
+Returns:
+True if request can be made, False otherwise.
+"""
+now = time.time()
 
         # Remove old requests outside the time window
         while self.requests and now - self.requests[0] > self.time_window:
-            self.requests.popleft()
+self.requests.popleft()
 
         # Check if we can make another request
         return len(self.requests) < self.max_requests
 
     def record_request(self) -> None:
         """Record that a request was made."""
-        self.requests.append(time.time())
+self.requests.append(time.time())
 
     def wait_if_needed(self) -> None:
         """Wait if necessary to respect rate limits."""

@@ -44,48 +44,48 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BusEvent:
     event_type: str
-    timestamp: datetime = field(default_factory=datetime.now)
+timestamp: datetime = field(default_factory=datetime.now)
     payload: Dict[str, Any] = field(default_factory=dict)
     source: Optional[str] = None
-    metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
+metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
 
 # Example event types
 @dataclass
 class TradeEvent(BusEvent):
     trade_id: Optional[str] = None
-    symbol: Optional[str] = None
-    price: Optional[float] = None
-    volume: Optional[float] = None
-    side: Optional[str] = None  # 'buy' or 'sell'
+symbol: Optional[str] = None
+price: Optional[float] = None
+volume: Optional[float] = None
+side: Optional[str] = None  # 'buy' or 'sell'
 
 @dataclass
 class SystemEvent(BusEvent):
     system_status: Optional[str] = None
-    message: Optional[str] = None
+message: Optional[str] = None
 
 @dataclass
 class ErrorEvent(BusEvent):
     error_code: Optional[int] = None
-    error_message: Optional[str] = None
-    severity: Optional[str] = None
+error_message: Optional[str] = None
+severity: Optional[str] = None
 
 # Event bus implementation
 class EventBus:
     def __init__(self):
         self._subscribers: Dict[str, List[Callable[[BusEvent], None]]] = {}
-        self._event_history: List[BusEvent] = []
-        logger.info("EventBus initialized")
+self._event_history: List[BusEvent] = []
+logger.info("EventBus initialized")
 
     def subscribe(self, event_type: str, handler: Callable[[BusEvent], None]) -> None:
         if event_type not in self._subscribers:
-            self._subscribers[event_type] = []
-        self._subscribers[event_type].append(handler)
+self._subscribers[event_type] = []
+self._subscribers[event_type].append(handler)
         logger.debug(f"Handler subscribed to event type: {event_type}")
 
     def unsubscribe(self, event_type: str, handler: Callable[[BusEvent], None]) -> None:
         if event_type in self._subscribers:
-            self._subscribers[event_type] = [h for h in self._subscribers[event_type] if h != handler]
-            logger.debug(f"Handler unsubscribed from event type: {event_type}")
+self._subscribers[event_type] = [h for h in self._subscribers[event_type] if h != handler]
+logger.debug(f"Handler unsubscribed from event type: {event_type}")
 
     def dispatch(self, event: BusEvent) -> None:
         self._event_history.append(event)
@@ -93,9 +93,9 @@ class EventBus:
         logger.info(f"Dispatching event: {event.event_type} at {event.timestamp}")
         for handler in handlers:
             try:
-                handler(event)
+handler(event)
             except Exception as e:
-                logger.error(f"Error in event handler for {event.event_type}: {e}")
+logger.error(f"Error in event handler for {event.event_type}: {e}")
 
     def get_event_history(self, event_type: Optional[str] = None) -> List[BusEvent]:
         if event_type:
@@ -109,12 +109,12 @@ class EventBus:
 # Example usage
 
 if __name__ == "__main__":
-    bus = EventBus()
+bus = EventBus()
 
     def print_trade(event: TradeEvent):
         safe_print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
 
-    bus.subscribe("trade", print_trade)
+bus.subscribe("trade", print_trade)
     trade_event = TradeEvent(event_type="trade", trade_id="T123", symbol="BTCUSD", price=45000.0, volume=1.5, side="buy")
     bus.dispatch(trade_event)
     safe_print("Event history:", bus.get_event_history("trade"))

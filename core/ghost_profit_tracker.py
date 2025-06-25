@@ -34,14 +34,14 @@ def _safe_float(x: float | int) -> float:
 class ProfitTracker:
     """In-memory list of profit deltas and helper stats."""
 
-    _profits: List[float] = field(default_factory=list)
+_profits: List[float] = field(default_factory=list)
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
     def unified_math.add(self, profit: float) -> None:  # noqa: D401
         """TODO: document add."""
-        self._profits.append(_safe_float(profit))
+self._profits.append(_safe_float(profit))
 
     def total(self) -> float:  # noqa: D401
         """TODO: document total."""
@@ -69,7 +69,7 @@ _tracker = ProfitTracker()
 
 def register_profit(delta: float) -> None:  # noqa: D401
     """Append *delta* to global profit tracker."""
-    _tracker.unified_math.add(delta)
+_tracker.unified_math.add(delta)
 
 
 def profit_summary() -> Tuple[float, float, float]:  # noqa: D401

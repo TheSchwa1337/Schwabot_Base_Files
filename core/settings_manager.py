@@ -35,174 +35,174 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SystemSettings:
     """System-level configuration settings."""
-    name: str = "Schwabot Trading System"
-    version: str = "2.0.0"
-    environment: str = "production"
-    debug_mode: bool = False
-    log_level: str = "INFO"
-    max_memory_usage_mb: int = 8192
-    cpu_threads: int = 4
-    enable_gpu_acceleration: bool = True
-    enable_distributed_mode: bool = True
+name: str = "Schwabot Trading System"
+version: str = "2.0.0"
+environment: str = "production"
+debug_mode: bool = False
+log_level: str = "INFO"
+max_memory_usage_mb: int = 8192
+cpu_threads: int = 4
+enable_gpu_acceleration: bool = True
+enable_distributed_mode: bool = True
 
 
 @dataclass
 class MathematicalSettings:
     """Mathematical components configuration."""
-    phantom_lag_model: Dict[str, Any] = field(default_factory=lambda: {
+phantom_lag_model: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'max_history_size': 1000,
-        'decay_lambda': 0.01,
-        'min_penalty_threshold': 0.1,
-        'max_price_window': 100,
-        'enable_adaptive_learning': True,
-        'learning_rate': 0.1
-    })
+'max_history_size': 1000,
+'decay_lambda': 0.01,
+'min_penalty_threshold': 0.1,
+'max_price_window': 100,
+'enable_adaptive_learning': True,
+'learning_rate': 0.1
+})
 
-    meta_layer_ghost_bridge: Dict[str, Any] = field(default_factory=lambda: {
+meta_layer_ghost_bridge: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'decay_lambda': 0.1,
-        'sync_threshold': 0.002,
-        'max_echo_entries': 1000,
-        'max_bridge_opportunities': 100,
-        'enable_arbitrage_detection': True,
-        'min_profit_threshold': 0.001
-    })
+'decay_lambda': 0.1,
+'sync_threshold': 0.002,
+'max_echo_entries': 1000,
+'max_bridge_opportunities': 100,
+'enable_arbitrage_detection': True,
+'min_profit_threshold': 0.001
+})
 
-    fallback_logic_router: Dict[str, Any] = field(default_factory=lambda: {
+fallback_logic_router: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'max_history_size': 1000,
-        'health_decay_rate': 0.1,
-        'enable_mathematical_integration': True,
-        'enable_context_aware_routing': True
-    })
+'max_history_size': 1000,
+'health_decay_rate': 0.1,
+'enable_mathematical_integration': True,
+'enable_context_aware_routing': True
+})
 
 
 @dataclass
 class TradingSettings:
     """Trading configuration settings."""
-    default_symbol: str = "BTC/USD"
-    supported_symbols: List[str] = field(default_factory=lambda: [
+default_symbol: str = "BTC/USD"
+supported_symbols: List[str] = field(default_factory=lambda: [
         "BTC/USD", "ETH/USD", "ADA/USD", "DOT/USD", "LINK/USD"
-    ])
+])
 
-    position_sizing: Dict[str, Any] = field(default_factory=lambda: {
+position_sizing: Dict[str, Any] = field(default_factory=lambda: {
         'max_position_size_usd': 10000,
-        'min_position_size_usd': 100,
-        'risk_per_trade_pct': 2.0,
-        'max_portfolio_risk_pct': 10.0
-    })
+'min_position_size_usd': 100,
+'risk_per_trade_pct': 2.0,
+'max_portfolio_risk_pct': 10.0
+})
 
-    execution: Dict[str, Any] = field(default_factory=lambda: {
+execution: Dict[str, Any] = field(default_factory=lambda: {
         'enable_real_trading': False,
-        'max_slippage_pct': 0.5,
-        'execution_timeout_seconds': 30,
-        'retry_attempts': 3,
-        'enable_smart_order_routing': True
-    })
+'max_slippage_pct': 0.5,
+'execution_timeout_seconds': 30,
+'retry_attempts': 3,
+'enable_smart_order_routing': True
+})
 
-    risk_management: Dict[str, Any] = field(default_factory=lambda: {
+risk_management: Dict[str, Any] = field(default_factory=lambda: {
         'max_daily_loss_usd': 1000,
-        'max_drawdown_pct': 15.0,
-        'stop_loss_pct': 5.0,
-        'take_profit_pct': 10.0,
-        'enable_trailing_stops': True,
-        'trailing_stop_distance_pct': 2.0
-    })
+'max_drawdown_pct': 15.0,
+'stop_loss_pct': 5.0,
+'take_profit_pct': 10.0,
+'enable_trailing_stops': True,
+'trailing_stop_distance_pct': 2.0
+})
 
 
 @dataclass
 class ExchangeSettings:
     """Exchange configuration settings."""
-    binance: Dict[str, Any] = field(default_factory=lambda: {
+binance: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'api_key': "${BINANCE_API_KEY}",
-        'api_secret': "${BINANCE_API_SECRET}",
-        'sandbox_mode': True,
-        'rate_limit_requests_per_minute': 1200,
-        'enable_websocket': True
-    })
+'api_key': "${BINANCE_API_KEY}",
+'api_secret': "${BINANCE_API_SECRET}",
+'sandbox_mode': True,
+'rate_limit_requests_per_minute': 1200,
+'enable_websocket': True
+})
 
-    coinbase: Dict[str, Any] = field(default_factory=lambda: {
+coinbase: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'api_key': "${COINBASE_API_KEY}",
-        'api_secret': "${COINBASE_API_SECRET}",
-        'sandbox_mode': True,
-        'rate_limit_requests_per_minute': 100,
-        'enable_websocket': True
-    })
+'api_key': "${COINBASE_API_KEY}",
+'api_secret': "${COINBASE_API_SECRET}",
+'sandbox_mode': True,
+'rate_limit_requests_per_minute': 100,
+'enable_websocket': True
+})
 
-    kraken: Dict[str, Any] = field(default_factory=lambda: {
+kraken: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'api_key': "${KRAKEN_API_KEY}",
-        'api_secret': "${KRAKEN_API_SECRET}",
-        'sandbox_mode': True,
-        'rate_limit_requests_per_minute': 15,
-        'enable_websocket': True
-    })
+'api_key': "${KRAKEN_API_KEY}",
+'api_secret': "${KRAKEN_API_SECRET}",
+'sandbox_mode': True,
+'rate_limit_requests_per_minute': 15,
+'enable_websocket': True
+})
 
 
 @dataclass
 class UISettings:
     """User interface configuration settings."""
-    web_dashboard: Dict[str, Any] = field(default_factory=lambda: {
+web_dashboard: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'host': "0.0.0.0",
-        'port': 8080,
-        'enable_ssl': False,
-        'ssl_cert_path': "",
-        'ssl_key_path': ""
-    })
+'host': "0.0.0.0",
+'port': 8080,
+'enable_ssl': False,
+'ssl_cert_path': "",
+'ssl_key_path': ""
+})
 
-    api_server: Dict[str, Any] = field(default_factory=lambda: {
+api_server: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'host': "0.0.0.0",
-        'port': 8081,
-        'enable_authentication': True,
-        'api_key_header': "X-API-Key",
-        'rate_limit_requests_per_minute': 100
-    })
+'host': "0.0.0.0",
+'port': 8081,
+'enable_authentication': True,
+'api_key_header': "X-API-Key",
+'rate_limit_requests_per_minute': 100
+})
 
-    real_time_updates: Dict[str, Any] = field(default_factory=lambda: {
+real_time_updates: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'websocket_port': 8082,
-        'update_interval_ms': 1000,
-        'enable_compression': True
-    })
+'websocket_port': 8082,
+'update_interval_ms': 1000,
+'enable_compression': True
+})
 
 
 @dataclass
 class MonitoringSettings:
     """Monitoring and alerting configuration."""
-    performance_metrics: Dict[str, Any] = field(default_factory=lambda: {
+performance_metrics: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'collection_interval_seconds': 60,
-        'retention_days': 30,
-        'enable_real_time_dashboard': True
-    })
+'collection_interval_seconds': 60,
+'retention_days': 30,
+'enable_real_time_dashboard': True
+})
 
-    alerts: Dict[str, Any] = field(default_factory=lambda: {
+alerts: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'channels': ["email", "slack", "telegram"],
-        'alert_types': ["high_loss", "system_error", "exchange_disconnect", "performance_degradation"]
-    })
+'channels': ["email", "slack", "telegram"],
+'alert_types': ["high_loss", "system_error", "exchange_disconnect", "performance_degradation"]
+})
 
-    logging: Dict[str, Any] = field(default_factory=lambda: {
+logging: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'log_file_path': "./logs/schwabot.log",
-        'max_file_size_mb': 100,
-        'backup_count': 10,
-        'enable_structured_logging': True
-    })
+'log_file_path': "./logs/schwabot.log",
+'max_file_size_mb': 100,
+'backup_count': 10,
+'enable_structured_logging': True
+})
 
 
 class ConfigurationValidator:
     """Validates configuration settings."""
 
-    @staticmethod
+@staticmethod
     def validate_system_settings(settings: Dict[str, Any]) -> List[str]:
         """Validate system settings."""
-        errors = []
+errors = []
 
         if not isinstance(settings.get('name'), str):
             errors.append("System name must be a string")
@@ -221,10 +221,10 @@ class ConfigurationValidator:
 
         return errors
 
-    @staticmethod
+@staticmethod
     def validate_trading_settings(settings: Dict[str, Any]) -> List[str]:
         """Validate trading settings."""
-        errors = []
+errors = []
 
         if not isinstance(settings.get('default_symbol'), str):
             errors.append("Default symbol must be a string")
@@ -232,7 +232,7 @@ class ConfigurationValidator:
         if not isinstance(settings.get('supported_symbols'), list):
             errors.append("Supported symbols must be a list")
 
-        position_sizing = settings.get('position_sizing', {})
+position_sizing = settings.get('position_sizing', {})
         if not isinstance(position_sizing.get('max_position_size_usd'), (int, float)):
             errors.append("Max position size must be a number")
 
@@ -241,10 +241,10 @@ class ConfigurationValidator:
 
         return errors
 
-    @staticmethod
+@staticmethod
     def validate_exchange_settings(settings: Dict[str, Any]) -> List[str]:
         """Validate exchange settings."""
-        errors = []
+errors = []
 
         for exchange_name, exchange_config in settings.items():
             if not isinstance(exchange_config, dict):
@@ -265,14 +265,14 @@ class SettingsManager:
 
     def __init__(self, config_path: str = "./config/schwabot_config.yaml"):
         """Initialize the settings manager."""
-        self.config_path = Path(config_path)
+self.config_path = Path(config_path)
         self.config_data: Dict[str, Any] = {}
-        self.last_modified: float = 0
-        self.observers: List[callable] = []
-        self._lock = threading.RLock()
+self.last_modified: float = 0
+self.observers: List[callable] = []
+self._lock = threading.RLock()
 
         # Initialize default settings
-        self.system_settings = SystemSettings()
+self.system_settings = SystemSettings()
         self.mathematical_settings = MathematicalSettings()
         self.trading_settings = TradingSettings()
         self.exchange_settings = ExchangeSettings()
@@ -280,12 +280,12 @@ class SettingsManager:
         self.monitoring_settings = MonitoringSettings()
 
         # Load configuration
-        self.load_configuration()
+self.load_configuration()
 
         # Setup file watcher for hot-reload
-        self._setup_file_watcher()
+self._setup_file_watcher()
 
-        logger.info("Settings Manager initialized")
+logger.info("Settings Manager initialized")
 
     def load_configuration(self) -> bool:
         """Load configuration from file."""
@@ -296,7 +296,7 @@ class SettingsManager:
                 return True
 
             # Check if file has been modified
-            current_mtime = self.config_path.stat().st_mtime
+current_mtime = self.config_path.stat().st_mtime
             if current_mtime <= self.last_modified:
                 return True
 
@@ -304,36 +304,36 @@ class SettingsManager:
                 self.config_data = yaml.safe_load(f)
 
             # Substitute environment variables
-            self._substitute_environment_variables()
+self._substitute_environment_variables()
 
             # Validate configuration
-            validation_errors = self._validate_configuration()
+validation_errors = self._validate_configuration()
             if validation_errors:
-                logger.error(f"Configuration validation errors: {validation_errors}")
+logger.error(f"Configuration validation errors: {validation_errors}")
                 return False
 
             # Update settings objects
-            self._update_settings_objects()
+self._update_settings_objects()
 
-            self.last_modified = current_mtime
+self.last_modified = current_mtime
 
             # Notify observers
-            self._notify_observers()
+self._notify_observers()
 
-            logger.info("Configuration loaded successfully")
+logger.info("Configuration loaded successfully")
             return True
 
         except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
+logger.error(f"Error loading configuration: {e}")
             return False
 
     def _create_default_configuration(self) -> None:
         """Create default configuration file."""
         try:
-            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+self.config_path.parent.mkdir(parents=True, exist_ok=True)
 
-            default_config = {
-                'system': asdict(self.system_settings),
+default_config = {
+'system': asdict(self.system_settings),
                 'mathematical_components': asdict(self.mathematical_settings),
                 'trading': asdict(self.trading_settings),
                 'exchanges': asdict(self.exchange_settings),
@@ -344,10 +344,10 @@ class SettingsManager:
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(default_config, f, default_flow_style=False, indent=2)
 
-            logger.info(f"Default configuration created: {self.config_path}")
+logger.info(f"Default configuration created: {self.config_path}")
 
         except Exception as e:
-            logger.error(f"Error creating default configuration: {e}")
+logger.error(f"Error creating default configuration: {e}")
 
     def _substitute_environment_variables(self) -> None:
         """Substitute environment variables in configuration."""
@@ -362,26 +362,26 @@ class SettingsManager:
             else:
                 return obj
 
-        self.config_data = substitute_recursive(self.config_data)
+self.config_data = substitute_recursive(self.config_data)
 
     def _validate_configuration(self) -> List[str]:
         """Validate the entire configuration."""
-        errors = []
+errors = []
 
         if not self.config_data:
-            errors.append("Configuration data is empty")
+errors.append("Configuration data is empty")
             return errors
 
         # Validate system settings
-        system_settings = self.config_data.get('system', {})
+system_settings = self.config_data.get('system', {})
         errors.extend(ConfigurationValidator.validate_system_settings(system_settings))
 
         # Validate trading settings
-        trading_settings = self.config_data.get('trading', {})
+trading_settings = self.config_data.get('trading', {})
         errors.extend(ConfigurationValidator.validate_trading_settings(trading_settings))
 
         # Validate exchange settings
-        exchange_settings = self.config_data.get('exchanges', {})
+exchange_settings = self.config_data.get('exchanges', {})
         errors.extend(ConfigurationValidator.validate_exchange_settings(exchange_settings))
 
         return errors
@@ -426,43 +426,43 @@ class SettingsManager:
                         setattr(self.monitoring_settings, key, value)
 
         except Exception as e:
-            logger.error(f"Error updating settings objects: {e}")
+logger.error(f"Error updating settings objects: {e}")
 
     def _setup_file_watcher(self) -> None:
         """Setup file watcher for hot-reload."""
         try:
-            self.observer = Observer()
+self.observer = Observer()
             event_handler = ConfigFileHandler(self)
             self.observer.schedule(event_handler, str(self.config_path.parent), recursive=False)
             self.observer.start()
             logger.info("Configuration file watcher started")
         except Exception as e:
-            logger.error(f"Error setting up file watcher: {e}")
+logger.error(f"Error setting up file watcher: {e}")
 
     def add_observer(self, callback: callable) -> None:
         """Add configuration change observer."""
         with self._lock:
-            self.observers.append(callback)
+self.observers.append(callback)
 
     def remove_observer(self, callback: callable) -> None:
         """Remove configuration change observer."""
         with self._lock:
             if callback in self.observers:
-                self.observers.remove(callback)
+self.observers.remove(callback)
 
     def _notify_observers(self) -> None:
         """Notify all observers of configuration changes."""
         with self._lock:
             for observer in self.observers:
                 try:
-                    observer(self.config_data)
+observer(self.config_data)
                 except Exception as e:
-                    logger.error(f"Error notifying observer: {e}")
+logger.error(f"Error notifying observer: {e}")
 
     def get_setting(self, path: str, default: Any = None) -> Any:
         """Get a setting value by path (e.g., 'system.debug_mode')."""
         try:
-            keys = path.split('.')
+keys = path.split('.')
             value = self.config_data
 
             for key in keys:
@@ -473,29 +473,29 @@ class SettingsManager:
 
             return value
         except Exception as e:
-            logger.error(f"Error getting setting {path}: {e}")
+logger.error(f"Error getting setting {path}: {e}")
             return default
 
     def set_setting(self, path: str, value: Any) -> bool:
         """Set a setting value by path."""
         try:
-            keys = path.split('.')
+keys = path.split('.')
             config = self.config_data
 
             # Navigate to the parent of the target key
             for key in keys[:-1]:
                 if key not in config:
-                    config[key] = {}
-                config = config[key]
+config[key] = {}
+config = config[key]
 
             # Set the value
-            config[keys[-1]] = value
+config[keys[-1]] = value
 
             # Save configuration
             return self.save_configuration()
 
         except Exception as e:
-            logger.error(f"Error setting setting {path}: {e}")
+logger.error(f"Error setting setting {path}: {e}")
             return False
 
     def save_configuration(self) -> bool:
@@ -504,11 +504,11 @@ class SettingsManager:
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(self.config_data, f, default_flow_style=False, indent=2)
 
-            logger.info("Configuration saved successfully")
+logger.info("Configuration saved successfully")
             return True
 
         except Exception as e:
-            logger.error(f"Error saving configuration: {e}")
+logger.error(f"Error saving configuration: {e}")
             return False
 
     def export_configuration(self, format: str = 'yaml') -> str:
@@ -522,14 +522,14 @@ class SettingsManager:
                 raise ValueError(f"Unsupported format: {format}")
 
         except Exception as e:
-            logger.error(f"Error exporting configuration: {e}")
+logger.error(f"Error exporting configuration: {e}")
             return ""
 
     def get_ui_settings(self) -> Dict[str, Any]:
         """Get settings formatted for UI consumption."""
         try:
             return {
-                'system': asdict(self.system_settings),
+'system': asdict(self.system_settings),
                 'mathematical_components': asdict(self.mathematical_settings),
                 'trading': asdict(self.trading_settings),
                 'exchanges': asdict(self.exchange_settings),
@@ -538,16 +538,16 @@ class SettingsManager:
                 'last_modified': datetime.fromtimestamp(self.last_modified).isoformat() if self.last_modified else None
             }
         except Exception as e:
-            logger.error(f"Error getting UI settings: {e}")
+logger.error(f"Error getting UI settings: {e}")
             return {}
 
     def validate_environment_variables(self) -> Dict[str, bool]:
         """Validate that required environment variables are set."""
-        required_vars = self.config_data.get('environment_variables', {}).get('required', [])
+required_vars = self.config_data.get('environment_variables', {}).get('required', [])
         validation_results = {}
 
         for var in required_vars:
-            validation_results[var] = os.getenv(var) is not None
+validation_results[var] = os.getenv(var) is not None
 
         return validation_results
 
@@ -555,22 +555,22 @@ class SettingsManager:
         """Get a summary of the current configuration."""
         try:
             return {
-                'config_file': str(self.config_path),
+'config_file': str(self.config_path),
                 'last_modified': datetime.fromtimestamp(self.last_modified).isoformat() if self.last_modified else None,
                 'environment': self.system_settings.environment,
-                'debug_mode': self.system_settings.debug_mode,
-                'log_level': self.system_settings.log_level,
-                'enabled_exchanges': [
-                    name for name, config in asdict(self.exchange_settings).items()
+'debug_mode': self.system_settings.debug_mode,
+'log_level': self.system_settings.log_level,
+'enabled_exchanges': [
+name for name, config in asdict(self.exchange_settings).items()
                     if config.get('enabled', False)
                 ],
-                'supported_symbols': self.trading_settings.supported_symbols,
-                'ui_enabled': self.ui_settings.web_dashboard.get('enabled', False),
+'supported_symbols': self.trading_settings.supported_symbols,
+'ui_enabled': self.ui_settings.web_dashboard.get('enabled', False),
                 'api_enabled': self.ui_settings.api_server.get('enabled', False),
                 'real_time_enabled': self.ui_settings.real_time_updates.get('enabled', False)
             }
         except Exception as e:
-            logger.error(f"Error getting configuration summary: {e}")
+logger.error(f"Error getting configuration summary: {e}")
             return {}
 
 
@@ -595,7 +595,7 @@ def get_settings_manager() -> SettingsManager:
     """Get the global settings manager instance."""
     global _settings_manager
     if _settings_manager is None:
-        _settings_manager = SettingsManager()
+_settings_manager = SettingsManager()
     return _settings_manager
 
 

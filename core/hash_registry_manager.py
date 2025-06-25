@@ -1,7 +1,7 @@
 # Import safe print for Windows compatibility
-try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
+try:
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -53,86 +53,86 @@ logger = logging.getLogger(__name__)
 @dataclass
 class HashRegistryConfig:
     """Hash registry configuration."""
-    total_entries: int = 32
-    bit_depths: List[int] = None
-    tensor_routes: List[str] = None
-    priority_range: tuple = (0.1, 3.2)
+total_entries: int = 32
+bit_depths: List[int] = None
+tensor_routes: List[str] = None
+priority_range: tuple = (0.1, 3.2)
     auto_generate: bool = True
-    dynamic_updates: bool = True
+dynamic_updates: bool = True
 
     def __post_init__(self):
         if self.bit_depths is None:
-            self.bit_depths = [4, 8, 42]
+self.bit_depths = [4, 8, 42]
         if self.tensor_routes is None:
-            self.tensor_routes = ["route_0", "route_1", "route_2", "route_3", "route_4"]
+self.tensor_routes = ["route_0", "route_1", "route_2", "route_3", "route_4"]
 
 class HashRegistryManager:
     """
-    Hash Registry Manager for Schwabot UROS v1.0.
+Hash Registry Manager for Schwabot UROS v1.0.
 
-    Main orchestration layer that combines:
-    - Pure mathematical functions (HashRegistryCore)
+Main orchestration layer that combines:
+- Pure mathematical functions (HashRegistryCore)
     - File I/O and persistence (HashRegistryStorage)
     - High-level management operations
 
-    Manages the 32-entry hash registry scaffold with:
-    - 4-bit to 42-bit range logic
-    - Hash ID naming structure (hash_00 to hash_31)
+Manages the 32-entry hash registry scaffold with:
+- 4-bit to 42-bit range logic
+- Hash ID naming structure (hash_00 to hash_31)
     - Basket IDs (0-31)
     - Route logic (route_0 to route_4)
     - Bit prioritization (0.1 to 3.2)
     - Enabled/disabled switch
-    """
+"""
 
     def __init__(self, registry_path: str = "core/hash_registry.json"):
         """Initialize hash registry manager."""
-        self.registry_path = registry_path
-        self.config = HashRegistryConfig()
+self.registry_path = registry_path
+self.config = HashRegistryConfig()
 
         # Core components
-        self.storage = HashRegistryStorage(registry_path)
+self.storage = HashRegistryStorage(registry_path)
 
         # Registry data
-        self.hash_entries: Dict[str, HashRegistryEntry] = {}
-        self.basket_mappings: Dict[int, str] = {}
-        self.route_mappings: Dict[str, List[str]] = {}
+self.hash_entries: Dict[str, HashRegistryEntry] = {}
+self.basket_mappings: Dict[int, str] = {}
+self.route_mappings: Dict[str, List[str]] = {}
 
         # Performance tracking
-        self.usage_stats: Dict[str, int] = {}
-        self.performance_metrics: Dict[str, float] = {}
+self.usage_stats: Dict[str, int] = {}
+self.performance_metrics: Dict[str, float] = {}
 
         # Load or generate registry
-        self._initialize_registry()
+self._initialize_registry()
         logger.info("Hash Registry Manager initialized")
 
     def _initialize_registry(self) -> None:
         """Initialize registry using storage layer."""
         try:
             # Load or generate registry using storage
-            self.hash_entries = self.storage.load_or_generate_registry()
+self.hash_entries = self.storage.load_or_generate_registry()
 
             # Build mappings
-            self._build_mappings()
+self._build_mappings()
 
         except Exception as e:
-            logger.error(f"Error initializing registry: {e}")
+logger.error(f"Error initializing registry: {e}")
             # Generate fallback registry
-            self.hash_entries = HashRegistryCore.generate_complete_registry()
+self.hash_entries = HashRegistryCore.generate_complete_registry()
             self._build_mappings()
 
     def _build_mappings(self) -> None:
         """Build basket and route mappings."""
-        self.basket_mappings = {}
-        self.route_mappings = {}
+self.basket_mappings = {}
+self.route_mappings = {}
 
         for entry in self.hash_entries.values():
             # Build basket mappings
-            self.basket_mappings[entry.matrix_basket_id] = entry.hash_id
+self.basket_mappings[entry.matrix_basket_id] = entry.hash_id
 
             # Build route mappings
             if entry.tensor_route not in self.route_mappings:
-                self.route_mappings[entry.tensor_route] = []
-            self.route_mappings[entry.tensor_route].append(entry.hash_id)
+self.route_mappings[entry.tensor_route] = []
+self.route_mappings[entry.tensor_route].append(entry.hash_id)
 
     def get_hash_entry(self, hash_id: str) -> Optional[HashRegistryEntry]:
         """Get hash registry entry by ID."""
@@ -162,95 +162,95 @@ class HashRegistryManager:
         """Enable a hash registry entry."""
         try:
             if hash_id in self.hash_entries:
-                self.hash_entries[hash_id].enabled = True
+self.hash_entries[hash_id].enabled = True
 
                 # Update storage
-                registry_data = self.storage.serialize_registry_entries(self.hash_entries)
+registry_data = self.storage.serialize_registry_entries(self.hash_entries)
                 success = self.storage.save_registry(registry_data)
 
                 if success:
-                    logger.info(f"Enabled hash entry: {hash_id}")
+logger.info(f"Enabled hash entry: {hash_id}")
                     return True
                 else:
-                    logger.error(f"Failed to save registry after enabling {hash_id}")
+logger.error(f"Failed to save registry after enabling {hash_id}")
                     return False
             return False
 
         except Exception as e:
-            logger.error(f"Error enabling entry {hash_id}: {e}")
+logger.error(f"Error enabling entry {hash_id}: {e}")
             return False
 
     def disable_entry(self, hash_id: str) -> bool:
         """Disable a hash registry entry."""
         try:
             if hash_id in self.hash_entries:
-                self.hash_entries[hash_id].enabled = False
+self.hash_entries[hash_id].enabled = False
 
                 # Update storage
-                registry_data = self.storage.serialize_registry_entries(self.hash_entries)
+registry_data = self.storage.serialize_registry_entries(self.hash_entries)
                 success = self.storage.save_registry(registry_data)
 
                 if success:
-                    logger.info(f"Disabled hash entry: {hash_id}")
+logger.info(f"Disabled hash entry: {hash_id}")
                     return True
                 else:
-                    logger.error(f"Failed to save registry after disabling {hash_id}")
+logger.error(f"Failed to save registry after disabling {hash_id}")
                     return False
             return False
 
         except Exception as e:
-            logger.error(f"Error disabling entry {hash_id}: {e}")
+logger.error(f"Error disabling entry {hash_id}: {e}")
             return False
 
     def update_priority(self, hash_id: str, new_priority: float) -> bool:
         """Update priority of a hash registry entry."""
         try:
             if hash_id in self.hash_entries:
-                self.hash_entries[hash_id].priority = new_priority
+self.hash_entries[hash_id].priority = new_priority
 
                 # Update storage
-                registry_data = self.storage.serialize_registry_entries(self.hash_entries)
+registry_data = self.storage.serialize_registry_entries(self.hash_entries)
                 success = self.storage.save_registry(registry_data)
 
                 if success:
-                    logger.info(f"Updated priority for {hash_id}: {new_priority}")
+logger.info(f"Updated priority for {hash_id}: {new_priority}")
                     return True
                 else:
-                    logger.error(f"Failed to save registry after updating priority for {hash_id}")
+logger.error(f"Failed to save registry after updating priority for {hash_id}")
                     return False
             return False
 
         except Exception as e:
-            logger.error(f"Error updating priority for {hash_id}: {e}")
+logger.error(f"Error updating priority for {hash_id}: {e}")
             return False
 
     def get_best_matching_hash(self, bit_depth: int, tensor_route: str = None, min_priority: float = 0.0) -> Optional[HashRegistryEntry]:
         """Get best matching hash entry based on criteria."""
         return HashRegistryCore.get_best_matching_hash(
             self.hash_entries, bit_depth, tensor_route, min_priority
-        )
+
 
     def resolve_hash_to_basket(self, hash_value: str, bit_depth: int = None) -> Optional[str]:
         """Resolve hash value to matrix basket using registry."""
         try:
             # Use core function for resolution
-            basket_id = HashRegistryCore.resolve_hash_to_basket(hash_value, bit_depth)
+basket_id = HashRegistryCore.resolve_hash_to_basket(hash_value, bit_depth)
 
             if basket_id:
                 # Update usage stats
-                entry = self.get_best_matching_hash(
+entry = self.get_best_matching_hash(
                     HashRegistryCore.determine_bit_depth_from_hash(hash_value)
-                )
-                if entry:
-                    self.usage_stats[entry.hash_id] = self.usage_stats.get(entry.hash_id, 0) + 1
 
-                logger.debug(f"Resolved hash to basket {basket_id}")
+                if entry:
+self.usage_stats[entry.hash_id] = self.usage_stats.get(entry.hash_id, 0) + 1
+
+logger.debug(f"Resolved hash to basket {basket_id}")
                 return basket_id
 
             return None
 
         except Exception as e:
-            logger.error(f"Error resolving hash to basket: {e}")
+logger.error(f"Error resolving hash to basket: {e}")
             return None
 
     def get_registry_statistics(self) -> Dict[str, Any]:
@@ -267,10 +267,10 @@ class HashRegistryManager:
 
     def restore_backup(self) -> bool:
         """Restore registry from backup."""
-        success = self.storage.restore_backup()
+success = self.storage.restore_backup()
         if success:
             # Reload registry after restore
-            self._initialize_registry()
+self._initialize_registry()
         return success
 
     def get_registry_info(self) -> Dict[str, Any]:
@@ -281,78 +281,78 @@ class HashRegistryManager:
         """Regenerate the entire registry."""
         try:
             # Generate new registry
-            self.hash_entries = HashRegistryCore.generate_complete_registry()
+self.hash_entries = HashRegistryCore.generate_complete_registry()
 
             # Build mappings
-            self._build_mappings()
+self._build_mappings()
 
             # Save to storage
-            registry_data = self.storage.serialize_registry_entries(self.hash_entries)
+registry_data = self.storage.serialize_registry_entries(self.hash_entries)
             success = self.storage.save_registry(registry_data)
 
             if success:
-                logger.info("Registry regenerated successfully")
+logger.info("Registry regenerated successfully")
                 return True
             else:
-                logger.error("Failed to save regenerated registry")
+logger.error("Failed to save regenerated registry")
                 return False
 
         except Exception as e:
-            logger.error(f"Error regenerating registry: {e}")
+logger.error(f"Error regenerating registry: {e}")
             return False
 
     def get_usage_statistics(self) -> Dict[str, Any]:
         """Get usage statistics."""
-        total_usage = sum(self.usage_stats.values())
+total_usage = sum(self.usage_stats.values())
         most_used = unified_math.max(self.usage_stats.items(), key=lambda x: x[1]) if self.usage_stats else (None, 0)
 
         return {
-            "total_usage": total_usage,
-            "most_used_entry": most_used[0],
-            "most_used_count": most_used[1],
-            "usage_by_entry": self.usage_stats.copy()
+"total_usage": total_usage,
+"most_used_entry": most_used[0],
+"most_used_count": most_used[1],
+"usage_by_entry": self.usage_stats.copy()
         }
 
 
 def main():
     """Main function for hash registry manager testing."""
-    safe_print("🗄️ Hash Registry Manager - Schwabot UROS v1.0")
+safe_print("🗄️ Hash Registry Manager - Schwabot UROS v1.0")
     safe_print("=" * 50)
 
     # Initialize manager
-    manager = HashRegistryManager()
+manager = HashRegistryManager()
 
     # Test basic functionality
-    safe_print(f"Total entries: {len(manager.hash_entries)}")
+safe_print(f"Total entries: {len(manager.hash_entries)}")
     safe_print(f"Enabled entries: {len(manager.get_enabled_entries())}")
 
     # Test bit depth queries
-    entries_4bit = manager.get_entries_by_bit_depth(4)
+entries_4bit = manager.get_entries_by_bit_depth(4)
     entries_8bit = manager.get_entries_by_bit_depth(8)
     entries_42bit = manager.get_entries_by_bit_depth(42)
 
-    safe_print(f"4-bit entries: {len(entries_4bit)}")
+safe_print(f"4-bit entries: {len(entries_4bit)}")
     safe_print(f"8-bit entries: {len(entries_8bit)}")
     safe_print(f"42-bit entries: {len(entries_42bit)}")
 
     # Test route queries
-    entries_route_0 = manager.get_entries_by_route("route_0")
+entries_route_0 = manager.get_entries_by_route("route_0")
     safe_print(f"Route 0 entries: {len(entries_route_0)}")
 
     # Test hash resolution
-    test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
-    basket_id = manager.resolve_hash_to_basket(test_hash)
+test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
+basket_id = manager.resolve_hash_to_basket(test_hash)
     safe_print(f"Resolved basket ID: {basket_id}")
 
     # Get statistics
-    stats = manager.get_registry_statistics()
+stats = manager.get_registry_statistics()
     safe_print(f"Registry statistics: {stats}")
 
     # Export summary
-    manager.export_registry_summary()
+manager.export_registry_summary()
 
-    safe_print("✅ Hash Registry Manager test completed")
+safe_print("✅ Hash Registry Manager test completed")
 
 
 if __name__ == "__main__":
-    main()
+main()

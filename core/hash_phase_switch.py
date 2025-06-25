@@ -26,40 +26,40 @@ _BASE_CYCLE_FALLBACK: Final = 42  # Schwabot universal harmonic constant
 
 def _hash_int(value: int, salt: str = "") -> int:
     """Return 256-bit hash of *value*||*salt* as an integer."""
-    data = f"{value}{salt}".encode()
+data = f"{value}{salt}".encode()
     digest = hashlib.sha256(data).digest()
     return int.from_bytes(digest, byteorder="big", signed=False)
 
 
 def phase_hash_gate(
     tick: int,
-    *,
-    base_cycle: int = _BASE_CYCLE_FALLBACK,
-    salt: str = "",
+*,
+base_cycle: int = _BASE_CYCLE_FALLBACK,
+salt: str = "",
 ) -> bool:
-    """Return ``True`` if *tick* hashes into phase **0** of *base_cycle*.
+"""Return ``True`` if *tick* hashes into phase **0** of *base_cycle*.
 
-    Parameters
-    ----------
-    tick
-        Monotonic tick counter (non-negative).  Converted to bytes before
+Parameters
+----------
+tick
+Monotonic tick counter (non-negative).  Converted to bytes before
         hashing.
-    base_cycle
-        Cycle length that defines the number of hash-phases.  Defaults to
-        **42** in line with Schwabot's harmonic conventions.
-    salt
-        Optional extra entropy to decorrelate multiple parallel hash-gates.
+base_cycle
+Cycle length that defines the number of hash-phases.  Defaults to
+**42** in line with Schwabot's harmonic conventions.
+salt
+Optional extra entropy to decorrelate multiple parallel hash-gates.
 
-    Notes
-    -----
-    • Uses SHA-256; swapping to Blake2 or SHA-3 later will not change the API.
-    • Gate condition is simply ``hash(tick) mod base_cycle == 0``.
+Notes
+-----
+• Uses SHA-256; swapping to Blake2 or SHA-3 later will not change the API.
+• Gate condition is simply ``hash(tick) mod base_cycle == 0``.
     """
     if tick < 0:
         raise ValueError("tick must be non-negative")
     if base_cycle <= 0:
         raise ValueError("base_cycle must be positive")
 
-    hashed = _hash_int(tick, salt=salt)
+hashed = _hash_int(tick, salt=salt)
     phase = hashed % base_cycle
     return phase == 0

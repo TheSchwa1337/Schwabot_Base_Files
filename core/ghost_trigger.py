@@ -15,7 +15,7 @@ continuous signals:
 
 The reference equation in the design doc is:
 
-    Γ₍ghost₎(t, Pₘ, Δₛ) = Λₛ(t) · exp(−η · |Δₛ − Δ₀|)
+Γ₍ghost₎(t, Pₘ, Δₛ) = Λₛ(t) · exp(−η · |Δₛ − Δ₀|)
 
 The current implementation simplifies this to a logistic gate so we stay
 CPU-light inside tight loops.  All parameters have sane defaults but can be
@@ -41,7 +41,7 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 def _logistic(x: float) -> float:
     """Cheap logistic activation without `unified_math.exp` overflow."""
     if x >= 0:
-        z = unified_math.exp(-x)
+z = unified_math.exp(-x)
         return 1.0 / (1.0 + z)
     z = unified_math.unified_math.exp(x)
     return z / (1.0 + z)
@@ -49,33 +49,33 @@ def _logistic(x: float) -> float:
 
 def ghost_trigger(
     entropy: float,
-    momentum: float,
-    delta_p: float,
-    *,
-    eta: float = _DAMPING,
-    delta0: float = _BASE_DELTA,
-    momentum_scale: float = _MOMENTUM_SCALE,
-    threshold: float = _THRESHOLD,
+momentum: float,
+delta_p: float,
+*,
+eta: float = _DAMPING,
+delta0: float = _BASE_DELTA,
+momentum_scale: float = _MOMENTUM_SCALE,
+threshold: float = _THRESHOLD,
 ) -> bool:
-    """Return ``True`` if ghost mode should activate.
+"""Return ``True`` if ghost mode should activate.
 
-    Parameters
-    ----------
-    entropy
-        Instantaneous entropy metric (higher ⇒ noisier market).
+Parameters
+----------
+entropy
+Instantaneous entropy metric (higher ⇒ noisier market).
     momentum
-        Projected momentum value ``Pₘ``.
-    delta_p
-        Profit delta ``Δₛ`` (expected ‑ realised).
+Projected momentum value ``Pₘ``.
+delta_p
+Profit delta ``Δₛ`` (expected ‑ realised).
     eta
-        Dampening coefficient **η**.
-    delta0
-        Baseline delta **Δ₀**.
-    momentum_scale
-        Scaling applied to momentum before gating.
-    threshold
-        Logistic output threshold above which mode triggers.
-    """
+Dampening coefficient **η**.
+delta0
+Baseline delta **Δ₀**.
+momentum_scale
+Scaling applied to momentum before gating.
+threshold
+Logistic output threshold above which mode triggers.
+"""
     # Core formula (simplified logistic gate)
     delta_term = unified_math.exp(-eta * unified_math.abs(delta_p - delta0))
     raw_score = entropy * (momentum * momentum_scale) * delta_term

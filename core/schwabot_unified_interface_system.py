@@ -82,12 +82,12 @@ from matrix_allocator import get_matrix_allocator
 @dataclass
 class InterfaceState:
     """Current state of the dual interface system"""
-    current_mode: str = "practical"  # "practical" or "unified"
-    is_monitoring: bool = False
-    last_update: datetime = None
-    system_health: float = 0.0
-    active_components: List[str] = None
-    configuration_profile: str = "default"
+current_mode: str = "practical"  # "practical" or "unified"
+is_monitoring: bool = False
+last_update: datetime = None
+system_health: float = 0.0
+active_components: List[str] = None
+configuration_profile: str = "default"
 
 
 class SchwabotUnifiedInterface:
@@ -100,77 +100,77 @@ class SchwabotUnifiedInterface:
         self.root.configure(bg='#1a1a1a')
 
         # State management
-        self.state = InterfaceState()
+self.state = InterfaceState()
         self.state.active_components = []
 
         # Core system integration
-        self.schwabot_core = None
-        self.metrics_queue = queue.Queue()
+self.schwabot_core = None
+self.metrics_queue = queue.Queue()
 
         # UI components
-        self.practical_interface = None
-        self.unified_interface = None
-        self.mode_selector = None
+self.practical_interface = None
+self.unified_interface = None
+self.mode_selector = None
 
         # Initialize the interface
-        self._setup_main_window()
+self._setup_main_window()
         self._initialize_core_integration()
         self._start_system()
 
     def _setup_main_window(self):
         """Setup the main window with mode selector and interface containers"""
         # Configure main window
-        self.root.configure(bg='#1a1a1a')
+self.root.configure(bg='#1a1a1a')
         self.root.option_add('*TFrame*background', '#1a1a1a')
         self.root.option_add('*TLabel*background', '#1a1a1a')
         self.root.option_add('*TLabel*foreground', '#fff')
 
         # Main container
-        main_container = ttk.Frame(self.root)
+main_container = ttk.Frame(self.root)
         main_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Header with mode selector
-        self._create_header(main_container)
+self._create_header(main_container)
 
         # Interface container
-        self.interface_container = ttk.Frame(main_container)
+self.interface_container = ttk.Frame(main_container)
         self.interface_container.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
 
         # Initialize interfaces
-        self._initialize_interfaces()
+self._initialize_interfaces()
 
     def _create_header(self, parent):
         """Create the header with mode selector and system status"""
-        header_frame = ttk.Frame(parent)
+header_frame = ttk.Frame(parent)
         header_frame.pack(fill=tk.X, pady=(0, 10))
 
         # Title
-        title_label = ttk.Label(header_frame, text="🚀 Schwabot Unified Dual-Interface System",
+title_label = ttk.Label(header_frame, text="🚀 Schwabot Unified Dual-Interface System",
                                font=("Arial", 18, "bold"))
         title_label.pack(side=tk.LEFT)
 
         # Mode selector
-        mode_frame = ttk.Frame(header_frame)
+mode_frame = ttk.Frame(header_frame)
         mode_frame.pack(side=tk.RIGHT)
 
-        ttk.Label(mode_frame, text="Interface Mode:").pack(side=tk.LEFT, padx=(0, 10))
+ttk.Label(mode_frame, text="Interface Mode:").pack(side=tk.LEFT, padx=(0, 10))
 
-        self.mode_selector = ttk.Combobox(mode_frame,
+self.mode_selector = ttk.Combobox(mode_frame,
                                          values=["Practical Interface", "Unified Interface"],
-                                         state="readonly",
-                                         width=20)
-        self.mode_selector.set("Practical Interface")
+state="readonly",
+width=20)
+self.mode_selector.set("Practical Interface")
         self.mode_selector.pack(side=tk.LEFT)
         self.mode_selector.bind('<<ComboboxSelected>>', self._on_mode_change)
 
         # System status
-        status_frame = ttk.Frame(header_frame)
+status_frame = ttk.Frame(header_frame)
         status_frame.pack(side=tk.RIGHT, padx=(20, 0))
 
-        self.status_indicator = tk.Canvas(status_frame, width=20, height=20, bg="gray")
+self.status_indicator = tk.Canvas(status_frame, width=20, height=20, bg="gray")
         self.status_indicator.pack(side=tk.LEFT, padx=(0, 5))
 
-        self.status_label = ttk.Label(status_frame, text="Initializing...")
+self.status_label = ttk.Label(status_frame, text="Initializing...")
         self.status_label.pack(side=tk.LEFT)
 
     def _initialize_interfaces(self):
@@ -182,13 +182,13 @@ class SchwabotUnifiedInterface:
         self.unified_interface = UnifiedInterface(self.interface_container, self)
 
         # Show practical interface by default
-        self._show_interface("practical")
+self._show_interface("practical")
 
     def _initialize_core_integration(self):
         """Initialize integration with Schwabot core components"""
         try:
             # Initialize core components
-            self.fault_bus = FaultBus()
+self.fault_bus = FaultBus()
             self.entropy_api = EntropyAPILayer()
             self.ai_bridge = AIIntegrationBridge()
             self.confidence_matrix = UnifiedConfidenceMatrix()
@@ -202,66 +202,66 @@ class SchwabotUnifiedInterface:
             self.profit_router = ProfitRoutingEngine()
 
             # Initialize settings controller components
-            self.settings_controller = get_settings_controller()
+self.settings_controller = get_settings_controller()
             self.vector_validator = get_vector_validator()
             self.matrix_allocator = get_matrix_allocator()
 
-            self.state.active_components = [
-                "FaultBus", "EntropyAPI", "AIBridge", "ConfidenceMatrix",
-                "EventMapper", "GhostHandler", "VolumeRouter", "TickRouter",
-                "HashEvaluator", "DLTEngine", "ThermalAllocator", "ProfitRouter",
-                "SettingsController", "VectorValidator", "MatrixAllocator"
-            ]
+self.state.active_components = [
+"FaultBus", "EntropyAPI", "AIBridge", "ConfidenceMatrix",
+"EventMapper", "GhostHandler", "VolumeRouter", "TickRouter",
+"HashEvaluator", "DLTEngine", "ThermalAllocator", "ProfitRouter",
+"SettingsController", "VectorValidator", "MatrixAllocator"
+]
 
         except Exception as e:
-            messagebox.showerror("Initialization Error", f"Failed to initialize core components: {e}")
+messagebox.showerror("Initialization Error", f"Failed to initialize core components: {e}")
 
     def _on_mode_change(self, event):
         """Handle interface mode change"""
-        selected = self.mode_selector.get()
+selected = self.mode_selector.get()
         if selected == "Practical Interface":
-            self._show_interface("practical")
+self._show_interface("practical")
         else:
-            self._show_interface("unified")
+self._show_interface("unified")
 
     def _show_interface(self, mode: str):
         """Show the selected interface"""
-        self.state.current_mode = mode
+self.state.current_mode = mode
 
         # Hide all interfaces
-        self.practical_interface.hide()
+self.practical_interface.hide()
         self.unified_interface.hide()
 
         # Show selected interface
         if mode == "practical":
-            self.practical_interface.show()
+self.practical_interface.show()
         else:
-            self.unified_interface.show()
+self.unified_interface.show()
 
     def _start_system(self):
         """Start the system monitoring and updates"""
-        self.state.is_monitoring = True
-        self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
+self.state.is_monitoring = True
+self.monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self.monitor_thread.start()
 
         # Update status
-        self._update_system_status("Active", "green")
+self._update_system_status("Active", "green")
 
     def _monitor_loop(self):
         """Main monitoring loop"""
         while self.state.is_monitoring:
             try:
                 # Update system health
-                self.state.system_health = self._calculate_system_health()
+self.state.system_health = self._calculate_system_health()
                 self.state.last_update = datetime.now()
 
                 # Update UI in main thread
-                self.root.after(0, self._update_ui)
+self.root.after(0, self._update_ui)
 
-                time.sleep(1)  # Update every second
+time.sleep(1)  # Update every second
 
             except Exception as e:
-                safe_print(f"Monitoring error: {e}")
+safe_print(f"Monitoring error: {e}")
                 time.sleep(5)
 
     def _calculate_system_health(self) -> float:
@@ -275,64 +275,64 @@ class SchwabotUnifiedInterface:
 
     def _update_system_status(self, status: str, color: str):
         """Update system status indicator"""
-        self.status_indicator.configure(bg=color)
+self.status_indicator.configure(bg=color)
         self.status_label.configure(text=status)
 
     def _update_ui(self):
         """Update UI components"""
         # Update status based on system health
         if self.state.system_health > 0.8:
-            self._update_system_status("Healthy", "green")
+self._update_system_status("Healthy", "green")
         elif self.state.system_health > 0.6:
-            self._update_system_status("Warning", "yellow")
+self._update_system_status("Warning", "yellow")
         else:
-            self._update_system_status("Critical", "red")
+self._update_system_status("Critical", "red")
 
         # Update active interface
         if self.state.current_mode == "practical":
-            self.practical_interface.update_display()
+self.practical_interface.update_display()
         else:
-            self.unified_interface.update_display()
+self.unified_interface.update_display()
 
     def launch_existing_dashboard(self, dashboard_type: str):
         """Launch existing dashboard components"""
         try:
             if dashboard_type == "enhanced_trading":
                 # Launch enhanced trading dashboard
-                dashboard_path = "ui/templates/enhanced_trading_dashboard.html"
+dashboard_path = "ui/templates/enhanced_trading_dashboard.html"
                 if os.path.exists(dashboard_path):
                     webbrowser.open(f"file://{os.path.abspath(dashboard_path)}")
                 else:
-                    messagebox.showwarning("Dashboard Not Found",
+messagebox.showwarning("Dashboard Not Found",
                                          "Enhanced trading dashboard not found. Please check the file path.")
 
             elif dashboard_type == "unified_visual":
                 # Launch unified visual dashboard
-                dashboard_path = "unified_visual_dashboard.html"
+dashboard_path = "unified_visual_dashboard.html"
                 if os.path.exists(dashboard_path):
                     webbrowser.open(f"file://{os.path.abspath(dashboard_path)}")
                 else:
-                    messagebox.showwarning("Dashboard Not Found",
+messagebox.showwarning("Dashboard Not Found",
                                          "Unified visual dashboard not found. Please check the file path.")
 
             elif dashboard_type == "react_dashboard":
                 # Launch React dashboard
                 try:
-                    subprocess.Popen(["npm", "start"], cwd="schwabot/gui")
+subprocess.Popen(["npm", "start"], cwd="schwabot/gui")
                 except:
-                    messagebox.showwarning("React Dashboard",
+messagebox.showwarning("React Dashboard",
                                          "React dashboard not available. Please ensure npm is installed and run 'npm start' in the gui directory.")
 
         except Exception as e:
-            messagebox.showerror("Dashboard Launch Error", f"Failed to launch dashboard: {e}")
+messagebox.showerror("Dashboard Launch Error", f"Failed to launch dashboard: {e}")
 
     def run(self):
         """Run the unified interface system"""
         try:
-            self.root.mainloop()
+self.root.mainloop()
         except KeyboardInterrupt:
-            self.state.is_monitoring = False
-            self.root.quit()
+self.state.is_monitoring = False
+self.root.quit()
 
 
 class PracticalInterface:
@@ -340,44 +340,44 @@ class PracticalInterface:
 
     def __init__(self, parent_frame: ttk.Frame, main_controller: SchwabotUnifiedInterface):
         self.parent = parent_frame
-        self.main_controller = main_controller
-        self.frame = None
-        self.is_visible = False
+self.main_controller = main_controller
+self.frame = None
+self.is_visible = False
 
-        self._create_interface()
+self._create_interface()
 
     def _create_interface(self):
         """Create the practical interface UI"""
-        self.frame = ttk.Frame(self.parent)
+self.frame = ttk.Frame(self.parent)
 
         # Title
-        title_label = ttk.Label(self.frame, text="🔍 Practical Interface - Real-Time Monitoring",
+title_label = ttk.Label(self.frame, text="🔍 Practical Interface - Real-Time Monitoring",
                                font=("Arial", 16, "bold"))
         title_label.pack(pady=(0, 20))
 
         # Quick access buttons for existing dashboards
-        self._create_dashboard_launcher()
+self._create_dashboard_launcher()
 
         # System overview
-        self._create_system_overview()
+self._create_system_overview()
 
         # Process monitoring
-        self._create_process_monitor()
+self._create_process_monitor()
 
         # Performance analytics
-        self._create_performance_analytics()
+self._create_performance_analytics()
 
     def _create_dashboard_launcher(self):
         """Create buttons to launch existing dashboards"""
-        launcher_frame = ttk.LabelFrame(self.frame, text="📊 Existing Dashboard Access")
+launcher_frame = ttk.LabelFrame(self.frame, text="📊 Existing Dashboard Access")
         launcher_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        button_frame = ttk.Frame(launcher_frame)
+button_frame = ttk.Frame(launcher_frame)
         button_frame.pack(padx=10, pady=10)
 
         # Dashboard launch buttons
-        dashboards = [
-            ("Enhanced Trading Dashboard", "enhanced_trading"),
+dashboards = [
+("Enhanced Trading Dashboard", "enhanced_trading"),
             ("Unified Visual Dashboard", "unified_visual"),
             ("React Dashboard", "react_dashboard")
         ]
@@ -389,16 +389,16 @@ class PracticalInterface:
 
     def _create_system_overview(self):
         """Create system overview panel"""
-        overview_frame = ttk.LabelFrame(self.frame, text="📈 System Overview")
+overview_frame = ttk.LabelFrame(self.frame, text="📈 System Overview")
         overview_frame.pack(fill=tk.X, padx=10, pady=10)
 
         # System metrics grid
-        metrics_frame = ttk.Frame(overview_frame)
+metrics_frame = ttk.Frame(overview_frame)
         metrics_frame.pack(padx=10, pady=10)
 
-        self.system_vars = {}
-        metrics = [
-            ("System Health", "system_health", "%"),
+self.system_vars = {}
+metrics = [
+("System Health", "system_health", "%"),
             ("Active Components", "active_components", ""),
             ("Last Update", "last_update", ""),
             ("Monitoring Status", "monitoring_status", "")
@@ -406,98 +406,98 @@ class PracticalInterface:
 
         for i, (label, key, unit) in enumerate(metrics):
             row = i // 2
-            col = i % 2
+col = i % 2
 
-            frame = ttk.Frame(metrics_frame)
+frame = ttk.Frame(metrics_frame)
             frame.grid(row=row, column=col, padx=10, pady=5, sticky="ew")
 
-            ttk.Label(frame, text=f"{label}:").pack(anchor="w")
+ttk.Label(frame, text=f"{label}:").pack(anchor="w")
             var = tk.StringVar(value="--")
             self.system_vars[key] = var
-            ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
+ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
             if unit:
-                ttk.Label(frame, text=unit).pack(anchor="w")
+ttk.Label(frame, text=unit).pack(anchor="w")
 
     def _create_process_monitor(self):
         """Create process monitoring panel"""
-        monitor_frame = ttk.LabelFrame(self.frame, text="⚙️ Process Monitor")
+monitor_frame = ttk.LabelFrame(self.frame, text="⚙️ Process Monitor")
         monitor_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Process list
-        columns = ("Component", "Status", "Health", "Last Activity")
+columns = ("Component", "Status", "Health", "Last Activity")
         self.process_tree = ttk.Treeview(monitor_frame, columns=columns, show="headings", height=8)
 
         for col in columns:
-            self.process_tree.heading(col, text=col)
+self.process_tree.heading(col, text=col)
             self.process_tree.column(col, width=150)
 
-        self.process_tree.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+self.process_tree.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Scrollbar
-        scrollbar = ttk.Scrollbar(monitor_frame, orient=tk.VERTICAL, command=self.process_tree.yview)
+scrollbar = ttk.Scrollbar(monitor_frame, orient=tk.VERTICAL, command=self.process_tree.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.process_tree.configure(yscrollcommand=scrollbar.set)
 
     def _create_performance_analytics(self):
         """Create performance analytics panel"""
-        analytics_frame = ttk.LabelFrame(self.frame, text="📊 Performance Analytics")
+analytics_frame = ttk.LabelFrame(self.frame, text="📊 Performance Analytics")
         analytics_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Create matplotlib figure for charts
-        self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(10, 6))
+self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(10, 6))
         self.canvas = FigureCanvasTkAgg(self.fig, analytics_frame)
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Initialize charts
-        self._update_performance_charts()
+self._update_performance_charts()
 
     def _update_performance_charts(self):
         """Update performance charts"""
         # Clear previous plots
-        self.ax1.clear()
+self.ax1.clear()
         self.ax2.clear()
 
         # Generate sample data
-        timestamps = [datetime.now() - timedelta(minutes=i) for i in range(60, 0, -1)]
+timestamps = [datetime.now() - timedelta(minutes=i) for i in range(60, 0, -1)]
         system_health = [np.random.uniform(0.7, 0.95) for _ in range(60)]
         component_count = [np.random.randint(10, 15) for _ in range(60)]
 
         # System health chart
-        self.ax1.plot(timestamps, system_health, 'g-', linewidth=2)
+self.ax1.plot(timestamps, system_health, 'g-', linewidth=2)
         self.ax1.set_title('System Health Over Time')
         self.ax1.set_ylabel('Health Score')
         self.ax1.tick_params(axis='x', rotation=45)
 
         # Active components chart
-        self.ax2.plot(timestamps, component_count, 'b-', linewidth=2)
+self.ax2.plot(timestamps, component_count, 'b-', linewidth=2)
         self.ax2.set_title('Active Components')
         self.ax2.set_ylabel('Component Count')
         self.ax2.tick_params(axis='x', rotation=45)
 
         # Format timestamps
         for ax in [self.ax1, self.ax2]:
-            ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M'))
+ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M'))
 
-        self.fig.tight_layout()
+self.fig.tight_layout()
         self.canvas.draw()
 
     def update_display(self):
         """Update the practical interface display"""
         if not self.is_visible:
-            return
+return
 
         # Update system metrics
-        state = self.main_controller.state
-        self.system_vars["system_health"].set(f"{state.system_health:.1%}")
+state = self.main_controller.state
+self.system_vars["system_health"].set(f"{state.system_health:.1%}")
         self.system_vars["active_components"].set(str(len(state.active_components)))
         self.system_vars["last_update"].set(state.last_update.strftime("%H:%M:%S") if state.last_update else "--")
         self.system_vars["monitoring_status"].set("Active" if state.is_monitoring else "Inactive")
 
         # Update process tree
-        self._update_process_tree()
+self._update_process_tree()
 
         # Update performance charts
-        self._update_performance_charts()
+self._update_performance_charts()
 
     def _update_process_tree(self):
         """Update the process tree with current component status"""
@@ -507,20 +507,20 @@ class PracticalInterface:
 
         # Add current components
         for component in self.main_controller.state.active_components:
-            status = np.random.choice(["Active", "Warning", "Error"], p=[0.8, 0.15, 0.05])
+status = np.random.choice(["Active", "Warning", "Error"], p=[0.8, 0.15, 0.05])
             health = f"{np.random.uniform(0.6, 1.0):.1%}"
             last_activity = datetime.now().strftime("%H:%M:%S")
 
-            self.process_tree.insert("", "end", values=(component, status, health, last_activity))
+self.process_tree.insert("", "end", values=(component, status, health, last_activity))
 
     def show(self):
         """Show the practical interface"""
-        self.frame.pack(fill=tk.BOTH, expand=True)
+self.frame.pack(fill=tk.BOTH, expand=True)
         self.is_visible = True
 
     def hide(self):
         """Hide the practical interface"""
-        self.frame.pack_forget()
+self.frame.pack_forget()
         self.is_visible = False
 
 
@@ -529,58 +529,58 @@ class UnifiedInterface:
 
     def __init__(self, parent_frame: ttk.Frame, main_controller: SchwabotUnifiedInterface):
         self.parent = parent_frame
-        self.main_controller = main_controller
-        self.frame = None
-        self.is_visible = False
+self.main_controller = main_controller
+self.frame = None
+self.is_visible = False
 
-        self._create_interface()
+self._create_interface()
 
     def _create_interface(self):
         """Create the unified interface UI"""
-        self.frame = ttk.Frame(self.parent)
+self.frame = ttk.Frame(self.parent)
 
         # Title
-        title_label = ttk.Label(self.frame, text="⚙️ Unified Interface - Configuration & Settings",
+title_label = ttk.Label(self.frame, text="⚙️ Unified Interface - Configuration & Settings",
                                font=("Arial", 16, "bold"))
         title_label.pack(pady=(0, 20))
 
         # Create notebook for different configuration sections
-        self.notebook = ttk.Notebook(self.frame)
+self.notebook = ttk.Notebook(self.frame)
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
         # Mathematical parameters tab
-        self._create_mathematical_parameters_tab()
+self._create_mathematical_parameters_tab()
 
         # Performance optimization tab
-        self._create_performance_optimization_tab()
+self._create_performance_optimization_tab()
 
         # System configuration tab
-        self._create_system_configuration_tab()
+self._create_system_configuration_tab()
 
         # Backlog analysis tab
-        self._create_backlog_analysis_tab()
+self._create_backlog_analysis_tab()
 
         # Risk management tab
-        self._create_risk_management_tab()
+self._create_risk_management_tab()
 
         # Vector validation tab
-        self._create_vector_validation_tab()
+self._create_vector_validation_tab()
 
         # Matrix allocation tab
-        self._create_matrix_allocation_tab()
+self._create_matrix_allocation_tab()
 
     def _create_mathematical_parameters_tab(self):
         """Create mathematical parameters configuration tab"""
-        math_frame = ttk.Frame(self.notebook)
+math_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(math_frame, text="🔢 Mathematical Parameters")
 
         # Parameter controls
-        params_frame = ttk.LabelFrame(math_frame, text="Core Mathematical Parameters")
+params_frame = ttk.LabelFrame(math_frame, text="Core Mathematical Parameters")
         params_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.math_vars = {}
-        parameters = [
-            ("Confidence Threshold", 0.0, 1.0, 0.7),
+self.math_vars = {}
+parameters = [
+("Confidence Threshold", 0.0, 1.0, 0.7),
             ("Risk Tolerance", 0.0, 1.0, 0.5),
             ("Entropy Weight", 0.0, 1.0, 0.3),
             ("Thermal Limit", 0.0, 1.0, 0.8),
@@ -591,32 +591,32 @@ class UnifiedInterface:
             frame = ttk.Frame(params_frame)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
+ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
 
-            var = tk.DoubleVar(value=default)
+var = tk.DoubleVar(value=default)
             self.math_vars[label] = var
 
-            scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
+scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
             scale.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
 
-            value_label = ttk.Label(frame, text=f"{default:.2f}")
+value_label = ttk.Label(frame, text=f"{default:.2f}")
             value_label.pack(side=tk.RIGHT)
 
             # Update value label when scale changes
-            scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.2f}"))
+scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.2f}"))
 
     def _create_performance_optimization_tab(self):
         """Create performance optimization configuration tab"""
-        perf_frame = ttk.Frame(self.notebook)
+perf_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(perf_frame, text="⚡ Performance Optimization")
 
         # Optimization settings
-        opt_frame = ttk.LabelFrame(perf_frame, text="Performance Settings")
+opt_frame = ttk.LabelFrame(perf_frame, text="Performance Settings")
         opt_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.perf_vars = {}
-        settings = [
-            ("CPU Utilization Limit", 0.0, 1.0, 0.8),
+self.perf_vars = {}
+settings = [
+("CPU Utilization Limit", 0.0, 1.0, 0.8),
             ("Memory Optimization", 0.0, 1.0, 0.7),
             ("GPU Acceleration", 0.0, 1.0, 0.9),
             ("Cache Efficiency", 0.0, 1.0, 0.6),
@@ -627,65 +627,65 @@ class UnifiedInterface:
             frame = ttk.Frame(opt_frame)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
+ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
 
-            var = tk.DoubleVar(value=default)
+var = tk.DoubleVar(value=default)
             self.perf_vars[label] = var
 
-            scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
+scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
             scale.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
 
-            value_label = ttk.Label(frame, text=f"{default:.2f}")
+value_label = ttk.Label(frame, text=f"{default:.2f}")
             value_label.pack(side=tk.RIGHT)
 
-            scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.2f}"))
+scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.2f}"))
 
     def _create_system_configuration_tab(self):
         """Create system configuration tab"""
-        config_frame = ttk.Frame(self.notebook)
+config_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(config_frame, text="🔧 System Configuration")
 
         # Configuration options
-        config_options_frame = ttk.LabelFrame(config_frame, text="System Settings")
+config_options_frame = ttk.LabelFrame(config_frame, text="System Settings")
         config_options_frame.pack(fill=tk.X, padx=10, pady=10)
 
         # Checkboxes for various options
-        self.config_vars = {}
-        options = [
-            "Enable Auto-Scaling",
-            "Enable Thermal Management",
-            "Enable Fault Tolerance",
-            "Enable Performance Monitoring",
-            "Enable Debug Logging"
-        ]
+self.config_vars = {}
+options = [
+"Enable Auto-Scaling",
+"Enable Thermal Management",
+"Enable Fault Tolerance",
+"Enable Performance Monitoring",
+"Enable Debug Logging"
+]
 
         for option in options:
-            var = tk.BooleanVar(value=True)
+var = tk.BooleanVar(value=True)
             self.config_vars[option] = var
-            ttk.Checkbutton(config_options_frame, text=option, variable=var).pack(anchor="w", padx=10, pady=2)
+ttk.Checkbutton(config_options_frame, text=option, variable=var).pack(anchor="w", padx=10, pady=2)
 
         # Save/Reset buttons
-        button_frame = ttk.Frame(config_frame)
+button_frame = ttk.Frame(config_frame)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        ttk.Button(button_frame, text="Save Configuration",
+ttk.Button(button_frame, text="Save Configuration",
                   command=self._save_configuration).pack(side=tk.LEFT, padx=(0, 10))
         ttk.Button(button_frame, text="Reset to Defaults",
                   command=self._reset_configuration).pack(side=tk.LEFT)
 
     def _create_backlog_analysis_tab(self):
         """Create backlog analysis tab"""
-        backlog_frame = ttk.Frame(self.notebook)
+backlog_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(backlog_frame, text="📋 Backlog Analysis")
 
         # Backlog insights
-        insights_frame = ttk.LabelFrame(backlog_frame, text="Backlog Insights")
+insights_frame = ttk.LabelFrame(backlog_frame, text="Backlog Insights")
         insights_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # Backlog metrics
-        self.backlog_vars = {}
-        metrics = [
-            ("Backlog Size", "backlog_size", ""),
+self.backlog_vars = {}
+metrics = [
+("Backlog Size", "backlog_size", ""),
             ("Processing Rate", "processing_rate", "events/sec"),
             ("Success Rate", "success_rate", "%"),
             ("Average Processing Time", "avg_processing_time", "ms"),
@@ -694,30 +694,30 @@ class UnifiedInterface:
 
         for i, (label, key, unit) in enumerate(metrics):
             row = i // 2
-            col = i % 2
+col = i % 2
 
-            frame = ttk.Frame(insights_frame)
+frame = ttk.Frame(insights_frame)
             frame.grid(row=row, column=col, padx=10, pady=5, sticky="ew")
 
-            ttk.Label(frame, text=f"{label}:").pack(anchor="w")
+ttk.Label(frame, text=f"{label}:").pack(anchor="w")
             var = tk.StringVar(value="--")
             self.backlog_vars[key] = var
-            ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
+ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
             if unit:
-                ttk.Label(frame, text=unit).pack(anchor="w")
+ttk.Label(frame, text=unit).pack(anchor="w")
 
     def _create_risk_management_tab(self):
         """Create risk management tab"""
-        risk_frame = ttk.Frame(self.notebook)
+risk_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(risk_frame, text="⚠️ Risk Management")
 
         # Risk parameters
-        risk_params_frame = ttk.LabelFrame(risk_frame, text="Risk Parameters")
+risk_params_frame = ttk.LabelFrame(risk_frame, text="Risk Parameters")
         risk_params_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.risk_vars = {}
-        risk_params = [
-            ("Maximum Drawdown", 0.0, 0.5, 0.1),
+self.risk_vars = {}
+risk_params = [
+("Maximum Drawdown", 0.0, 0.5, 0.1),
             ("Position Size Limit", 0.0, 1.0, 0.2),
             ("Stop Loss Threshold", 0.0, 0.3, 0.05),
             ("Correlation Limit", 0.0, 1.0, 0.7),
@@ -728,31 +728,31 @@ class UnifiedInterface:
             frame = ttk.Frame(risk_params_frame)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
+ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
 
-            var = tk.DoubleVar(value=default)
+var = tk.DoubleVar(value=default)
             self.risk_vars[label] = var
 
-            scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
+scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
             scale.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
 
-            value_label = ttk.Label(frame, text=f"{default:.3f}")
+value_label = ttk.Label(frame, text=f"{default:.3f}")
             value_label.pack(side=tk.RIGHT)
 
-            scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.3f}"))
+scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.3f}"))
 
     def _create_vector_validation_tab(self):
         """Create vector validation tab"""
-        vector_frame = ttk.Frame(self.notebook)
+vector_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(vector_frame, text="🔍 Vector Validation")
 
         # Vector validation controls
-        vector_controls_frame = ttk.LabelFrame(vector_frame, text="Vector Validation Settings")
+vector_controls_frame = ttk.LabelFrame(vector_frame, text="Vector Validation Settings")
         vector_controls_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.vector_vars = {}
-        controls = [
-            ("Vector Validation Threshold", 0.0, 1.0, 0.7),
+self.vector_vars = {}
+controls = [
+("Vector Validation Threshold", 0.0, 1.0, 0.7),
             ("Learning Rate", 0.0, 0.1, 0.05),
             ("Memory Decay", 0.8, 1.0, 0.95),
             ("Success Reward", 1.0, 1.2, 1.05),
@@ -763,26 +763,26 @@ class UnifiedInterface:
             frame = ttk.Frame(vector_controls_frame)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
+ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
 
-            var = tk.DoubleVar(value=default)
+var = tk.DoubleVar(value=default)
             self.vector_vars[label] = var
 
-            scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
+scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
             scale.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
 
-            value_label = ttk.Label(frame, text=f"{default:.3f}")
+value_label = ttk.Label(frame, text=f"{default:.3f}")
             value_label.pack(side=tk.RIGHT)
 
-            scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.3f}"))
+scale.configure(command=lambda v, lbl=value_label: lbl.configure(text=f"{float(v):.3f}"))
 
         # Vector performance display
-        performance_frame = ttk.LabelFrame(vector_frame, text="Vector Performance")
+performance_frame = ttk.LabelFrame(vector_frame, text="Vector Performance")
         performance_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        self.vector_performance_vars = {}
-        performance_metrics = [
-            ("Total Vectors", "total_vectors", ""),
+self.vector_performance_vars = {}
+performance_metrics = [
+("Total Vectors", "total_vectors", ""),
             ("Success Rate", "success_rate", "%"),
             ("Average Confidence", "avg_confidence", ""),
             ("Known Bad Vectors", "bad_vectors", "")
@@ -790,30 +790,30 @@ class UnifiedInterface:
 
         for i, (label, key, unit) in enumerate(performance_metrics):
             row = i // 2
-            col = i % 2
+col = i % 2
 
-            frame = ttk.Frame(performance_frame)
+frame = ttk.Frame(performance_frame)
             frame.grid(row=row, column=col, padx=10, pady=5, sticky="ew")
 
-            ttk.Label(frame, text=f"{label}:").pack(anchor="w")
+ttk.Label(frame, text=f"{label}:").pack(anchor="w")
             var = tk.StringVar(value="--")
             self.vector_performance_vars[key] = var
-            ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
+ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
             if unit:
-                ttk.Label(frame, text=unit).pack(anchor="w")
+ttk.Label(frame, text=unit).pack(anchor="w")
 
     def _create_matrix_allocation_tab(self):
         """Create matrix allocation tab"""
-        matrix_frame = ttk.Frame(self.notebook)
+matrix_frame = ttk.Frame(self.notebook)
         self.notebook.unified_math.add(matrix_frame, text="🧮 Matrix Allocation")
 
         # Matrix allocation controls
-        allocation_controls_frame = ttk.LabelFrame(matrix_frame, text="Matrix Allocation Settings")
+allocation_controls_frame = ttk.LabelFrame(matrix_frame, text="Matrix Allocation Settings")
         allocation_controls_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.matrix_vars = {}
-        controls = [
-            ("Tick Map Size", 1000, 20000, 10000),
+self.matrix_vars = {}
+controls = [
+("Tick Map Size", 1000, 20000, 10000),
             ("Thermal Load Limit", 0.0, 1.0, 0.8),
             ("Entropy Threshold", 0.0, 1.0, 0.5),
             ("Memory Usage Limit", 0.0, 1.0, 0.9)
@@ -823,27 +823,27 @@ class UnifiedInterface:
             frame = ttk.Frame(allocation_controls_frame)
             frame.pack(fill=tk.X, padx=10, pady=5)
 
-            ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
+ttk.Label(frame, text=f"{label}:").pack(side=tk.LEFT)
 
-            var = tk.DoubleVar(value=default)
+var = tk.DoubleVar(value=default)
             self.matrix_vars[label] = var
 
-            scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
+scale = ttk.Scale(frame, from_=min_val, to=max_val, variable=var, orient=tk.HORIZONTAL)
             scale.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(10, 10))
 
-            value_label = ttk.Label(frame, text=f"{default:.0f}" if label == "Tick Map Size" else f"{default:.2f}")
+value_label = ttk.Label(frame, text=f"{default:.0f}" if label == "Tick Map Size" else f"{default:.2f}")
             value_label.pack(side=tk.RIGHT)
 
-            scale.configure(command=lambda v, lbl=value_label, is_int=label=="Tick Map Size":
+scale.configure(command=lambda v, lbl=value_label, is_int=label=="Tick Map Size":
                           lbl.configure(text=f"{int(float(v))}" if is_int else f"{float(v):.2f}"))
 
         # Matrix status display
-        status_frame = ttk.LabelFrame(matrix_frame, text="Matrix Status")
+status_frame = ttk.LabelFrame(matrix_frame, text="Matrix Status")
         status_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        self.matrix_status_vars = {}
-        status_metrics = [
-            ("Current Tick", "current_tick", ""),
+self.matrix_status_vars = {}
+status_metrics = [
+("Current Tick", "current_tick", ""),
             ("Active Matrices", "active_matrices", ""),
             ("Total Allocations", "total_allocations", ""),
             ("Average Confidence", "avg_confidence", "")
@@ -851,23 +851,23 @@ class UnifiedInterface:
 
         for i, (label, key, unit) in enumerate(status_metrics):
             row = i // 2
-            col = i % 2
+col = i % 2
 
-            frame = ttk.Frame(status_frame)
+frame = ttk.Frame(status_frame)
             frame.grid(row=row, column=col, padx=10, pady=5, sticky="ew")
 
-            ttk.Label(frame, text=f"{label}:").pack(anchor="w")
+ttk.Label(frame, text=f"{label}:").pack(anchor="w")
             var = tk.StringVar(value="--")
             self.matrix_status_vars[key] = var
-            ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
+ttk.Label(frame, textvariable=var, font=("Arial", 12, "bold")).pack(anchor="w")
             if unit:
-                ttk.Label(frame, text=unit).pack(anchor="w")
+ttk.Label(frame, text=unit).pack(anchor="w")
 
     def _save_configuration(self):
         """Save current configuration"""
         try:
-            config = {
-                "mathematical_parameters": {k: v.get() for k, v in self.math_vars.items()},
+config = {
+"mathematical_parameters": {k: v.get() for k, v in self.math_vars.items()},
                 "performance_settings": {k: v.get() for k, v in self.perf_vars.items()},
                 "system_configuration": {k: v.get() for k, v in self.config_vars.items()},
                 "risk_parameters": {k: v.get() for k, v in self.risk_vars.items()},
@@ -877,10 +877,10 @@ class UnifiedInterface:
             with open("schwabot_configuration.json", "w") as f:
                 json.dump(config, f, indent=2)
 
-            messagebox.showinfo("Configuration Saved", "Configuration has been saved successfully!")
+messagebox.showinfo("Configuration Saved", "Configuration has been saved successfully!")
 
         except Exception as e:
-            messagebox.showerror("Save Error", f"Failed to save configuration: {e}")
+messagebox.showerror("Save Error", f"Failed to save configuration: {e}")
 
     def _reset_configuration(self):
         """Reset configuration to defaults"""
@@ -898,15 +898,15 @@ class UnifiedInterface:
             for var in self.risk_vars.values():
                 var.set(0.1)  # Default value
 
-            messagebox.showinfo("Configuration Reset", "Configuration has been reset to defaults!")
+messagebox.showinfo("Configuration Reset", "Configuration has been reset to defaults!")
 
     def update_display(self):
         """Update the unified interface display"""
         if not self.is_visible:
-            return
+return
 
         # Update backlog metrics with mock data
-        self.backlog_vars["backlog_size"].set(str(np.random.randint(100, 1000)))
+self.backlog_vars["backlog_size"].set(str(np.random.randint(100, 1000)))
         self.backlog_vars["processing_rate"].set(f"{np.random.uniform(10, 100):.1f}")
         self.backlog_vars["success_rate"].set(f"{np.random.uniform(85, 99):.1f}")
         self.backlog_vars["avg_processing_time"].set(f"{np.random.uniform(1, 50):.1f}")
@@ -925,34 +925,34 @@ class UnifiedInterface:
             tick_summary = self.main_controller.matrix_allocator.get_tick_map_summary()
             allocation_summary = self.main_controller.matrix_allocator.get_allocation_summary()
 
-            self.matrix_status_vars["current_tick"].set(str(tick_summary["current_tick_id"]))
+self.matrix_status_vars["current_tick"].set(str(tick_summary["current_tick_id"]))
             self.matrix_status_vars["active_matrices"].set(str(len(tick_summary["active_matrices"])))
             self.matrix_status_vars["total_allocations"].set(str(allocation_summary["total_allocations"]))
             self.matrix_status_vars["avg_confidence"].set(f"{allocation_summary.get('average_confidence', 0.5):.3f}")
 
     def show(self):
         """Show the unified interface"""
-        self.frame.pack(fill=tk.BOTH, expand=True)
+self.frame.pack(fill=tk.BOTH, expand=True)
         self.is_visible = True
 
     def hide(self):
         """Hide the unified interface"""
-        self.frame.pack_forget()
+self.frame.pack_forget()
         self.is_visible = False
 
 
 def main():
     """Main entry point for the Schwabot Unified Interface System"""
     try:
-        interface = SchwabotUnifiedInterface()
+interface = SchwabotUnifiedInterface()
         interface.run()
     except Exception as e:
-        safe_print(f"Failed to start Schwabot Unified Interface: {e}")
+safe_print(f"Failed to start Schwabot Unified Interface: {e}")
         messagebox.showerror("Startup Error", f"Failed to start interface: {e}")
 
 
 if __name__ == "__main__":
-    main()
+main()
 
 # Alias for compatibility with imports
 SchwabotUnifiedInterfaceSystem = SchwabotUnifiedInterface

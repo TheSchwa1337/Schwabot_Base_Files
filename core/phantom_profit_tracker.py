@@ -16,9 +16,9 @@ from .ghost_profit_tracker import (
 from .ghost_profit_tracker import register_profit as _register_profit
 
 __all__: list[str] = [
-    "ProfitTracker",
-    "register_profit",
-    "profit_summary",
+"ProfitTracker",
+"register_profit",
+"profit_summary",
 ]
 
 # Public re-exports

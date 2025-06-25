@@ -26,11 +26,11 @@ from typing import Sequence
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
-    "build_strategy_matrix",
-    "strategy_match_matrix",
-    "reward_matrix",
-    "dynamic_strategy_switch",
-    "update_strategy_matrix",
+"build_strategy_matrix",
+"strategy_match_matrix",
+"reward_matrix",
+"dynamic_strategy_switch",
+"update_strategy_matrix",
 ]
 
 # ---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ __all__: list[str] = [
 def build_strategy_matrix(
     phi: np.ndarray, kappa: np.ndarray
 ) -> np.ndarray:  # noqa: D401
-    """Return outer product S = phi[:, None] * kappa[None, :]."""
+"""Return outer product S = phi[:, None] * kappa[None, :]."""
     return np.outer(phi, kappa)
 
 
@@ -63,15 +63,15 @@ def _find_band_idx(value: float | int, edges: Sequence[float | int]) -> int:
 
 def strategy_match_matrix(
     H_t: int,
-    zeta_t: float,
-    hash_edges: Sequence[int],
-    zeta_edges: Sequence[float],
+zeta_t: float,
+hash_edges: Sequence[int],
+zeta_edges: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
-    """Return binary M with a single 1 where current state falls.
+"""Return binary M with a single 1 where current state falls.
 
-    The matrix shape is (len(hash_edges)-1, len(zeta_edges)-1).
+The matrix shape is (len(hash_edges)-1, len(zeta_edges)-1).
     """
-    i = _find_band_idx(H_t, hash_edges)
+i = _find_band_idx(H_t, hash_edges)
     j = _find_band_idx(zeta_t, zeta_edges)
     M = np.zeros((len(hash_edges) - 1, len(zeta_edges) - 1), dtype=int)
     M[i, j] = 1
@@ -85,13 +85,13 @@ def strategy_match_matrix(
 
 def reward_matrix(
     P: np.ndarray,
-    delta_G: np.ndarray,
-    zeta: np.ndarray,
+delta_G: np.ndarray,
+zeta: np.ndarray,
 ) -> np.ndarray:  # noqa: D401
-    """Return element-wise product R = P * delta_G * zeta.
+"""Return element-wise product R = P * delta_G * zeta.
 
-    Arrays must share the same shape.
-    """
+Arrays must share the same shape.
+"""
     if not (P.shape == delta_G.shape == zeta.shape):
         raise ValueError("input arrays must share shape")
     return P * delta_G * zeta
@@ -104,17 +104,17 @@ def reward_matrix(
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
     """TODO: document _softmax."""
-    x_shift = x - unified_math.unified_math.max(x)
+x_shift = x - unified_math.unified_math.max(x)
     e_x = unified_math.unified_math.exp(x_shift)
     return e_x / np.sum(e_x)
 
 
 def dynamic_strategy_switch(
     Q: np.ndarray,
-    T: np.ndarray,
-    lam: np.ndarray,
+T: np.ndarray,
+lam: np.ndarray,
 ) -> int:  # noqa: D401
-    """Return strategy index i that maximises softmax(Q * T * lam)."""
+"""Return strategy index i that maximises softmax(Q * T * lam)."""
     if not (Q.shape == T.shape == lam.shape):
         raise ValueError("arrays Q, T, lam must share shape")
     score = _softmax(Q * T * lam)
@@ -128,40 +128,40 @@ def dynamic_strategy_switch(
 
 def update_strategy_matrix(
     M_prev: np.ndarray,
-    R: np.ndarray,
-    E: np.ndarray,
-    *,
-    gamma: float = 0.1,
-    beta: float = 0.05,
-    sigma: np.ndarray | None = None,
-    eta_noise: np.ndarray | None = None,
+R: np.ndarray,
+E: np.ndarray,
+*,
+gamma: float = 0.1,
+beta: float = 0.05,
+sigma: np.ndarray | None = None,
+eta_noise: np.ndarray | None = None,
 ) -> np.ndarray:  # noqa: D401
-    """Return updated matrix according to ΔM formulation.
+"""Return updated matrix according to ΔM formulation.
 
-    Parameters
-    ----------
-    M_prev, R, E
-        Previous matrix, reward matrix and EchoBand cluster activations.
-    gamma
-        Damping factor (resistance to switch).
+Parameters
+----------
+M_prev, R, E
+Previous matrix, reward matrix and EchoBand cluster activations.
+gamma
+Damping factor (resistance to switch).
     beta
-        Volatility gain coefficient.
-    sigma, eta_noise
-        Optional volatility σ_ij and noise η arrays. If omitted zeros are used.
-    """
+Volatility gain coefficient.
+sigma, eta_noise
+Optional volatility σ_ij and noise η arrays. If omitted zeros are used.
+"""
     if not (M_prev.shape == R.shape == E.shape):
         raise ValueError("M_prev, R, E must share shape")
 
     # Echo-band reinforcement
-    alpha = 1.0 / (1.0 + unified_math.exp(-E))  # logistic scaling α(E_i)
+alpha = 1.0 / (1.0 + unified_math.exp(-E))  # logistic scaling α(E_i)
     delta_M = alpha * (R - gamma * M_prev)
     M_new = M_prev + delta_M
 
     # Volatility & noise adjustment
     if sigma is None:
-        sigma = np.zeros_like(M_new)
+sigma = np.zeros_like(M_new)
     if eta_noise is None:
-        eta_noise = np.zeros_like(M_new)
+eta_noise = np.zeros_like(M_new)
     M_new = M_new + beta * sigma - 0.01 * eta_noise
 
     return M_new

@@ -1,6 +1,6 @@
 # Import safe print for Windows compatibility
-try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+try:
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -45,29 +45,29 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BusMessage:
     message_type: str
-    timestamp: datetime = field(default_factory=datetime.now)
+timestamp: datetime = field(default_factory=datetime.now)
     payload: Dict[str, Any] = field(default_factory=dict)
     source: Optional[str] = None
-    destination: Optional[str] = None
-    metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
+destination: Optional[str] = None
+metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
 
 class BusCore:
     def __init__(self):
         self._routes: Dict[str, List[Callable[[BusMessage], None]]] = {}
-        self._middleware: List[Callable[[BusMessage], BusMessage]] = []
-        self._message_history: List[BusMessage] = []
-        logger.info("BusCore initialized")
+self._middleware: List[Callable[[BusMessage], BusMessage]] = []
+self._message_history: List[BusMessage] = []
+logger.info("BusCore initialized")
 
     def register_route(self, message_type: str, handler: Callable[[BusMessage], None]) -> None:
         if message_type not in self._routes:
-            self._routes[message_type] = []
-        self._routes[message_type].append(handler)
+self._routes[message_type] = []
+self._routes[message_type].append(handler)
         logger.debug(f"Handler registered for message type: {message_type}")
 
     def unregister_route(self, message_type: str, handler: Callable[[BusMessage], None]) -> None:
         if message_type in self._routes:
-            self._routes[message_type] = [h for h in self._routes[message_type] if h != handler]
-            logger.debug(f"Handler unregistered for message type: {message_type}")
+self._routes[message_type] = [h for h in self._routes[message_type] if h != handler]
+logger.debug(f"Handler unregistered for message type: {message_type}")
 
     def add_middleware(self, middleware: Callable[[BusMessage], BusMessage]) -> None:
         self._middleware.append(middleware)
@@ -77,17 +77,17 @@ class BusCore:
         # Apply middleware
         for mw in self._middleware:
             try:
-                message = mw(message)
+message = mw(message)
             except Exception as e:
-                logger.error(f"Error in middleware: {e}")
+logger.error(f"Error in middleware: {e}")
         self._message_history.append(message)
         handlers = self._routes.get(message.message_type, [])
         logger.info(f"Routing message: {message.message_type} from {message.source} to {message.destination}")
         for handler in handlers:
             try:
-                handler(message)
+handler(message)
             except Exception as e:
-                logger.error(f"Error in handler for {message.message_type}: {e}")
+logger.error(f"Error in handler for {message.message_type}: {e}")
 
     def get_message_history(self, message_type: Optional[str] = None) -> List[BusMessage]:
         if message_type:
@@ -99,7 +99,7 @@ class BusCore:
         logger.info("BusCore message history cleared")
 
 if __name__ == "__main__":
-    bus = BusCore()
+bus = BusCore()
     def print_message(msg: BusMessage):
         safe_print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
     bus.register_route("trade", print_message)

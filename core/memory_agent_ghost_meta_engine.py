@@ -59,97 +59,97 @@ logger = logging.getLogger(__name__)
 
 class MemoryType(Enum):
     SHORT_TERM = "short_term"
-    LONG_TERM = "long_term"
-    EPISODIC = "episodic"
-    SEMANTIC = "semantic"
-    PROCEDURAL = "procedural"
-    GHOST = "ghost"
+LONG_TERM = "long_term"
+EPISODIC = "episodic"
+SEMANTIC = "semantic"
+PROCEDURAL = "procedural"
+GHOST = "ghost"
 
 class MemoryPriority(Enum):
     CRITICAL = "critical"
-    HIGH = "high"
-    MEDIUM = "medium"
-    LOW = "low"
-    MINIMAL = "minimal"
+HIGH = "high"
+MEDIUM = "medium"
+LOW = "low"
+MINIMAL = "minimal"
 
 class LearningMode(Enum):
     SUPERVISED = "supervised"
-    UNSUPERVISED = "unsupervised"
-    REINFORCEMENT = "reinforcement"
-    TRANSFER = "transfer"
+UNSUPERVISED = "unsupervised"
+REINFORCEMENT = "reinforcement"
+TRANSFER = "transfer"
 
 @dataclass
 class MemoryKey:
     key_id: str
-    key_type: str
-    key_hash: str
-    creation_time: datetime
-    last_access: datetime
-    access_count: int
-    priority: MemoryPriority
-    metadata: Dict[str, Any] = field(default_factory=dict)
+key_type: str
+key_hash: str
+creation_time: datetime
+last_access: datetime
+access_count: int
+priority: MemoryPriority
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class MemoryValue:
     value_id: str
-    data: Any
-    data_type: str
-    size_bytes: int
-    compression_ratio: float
-    checksum: str
-    creation_time: datetime
-    last_modified: datetime
-    version: int
-    metadata: Dict[str, Any] = field(default_factory=dict)
+data: Any
+data_type: str
+size_bytes: int
+compression_ratio: float
+checksum: str
+creation_time: datetime
+last_modified: datetime
+version: int
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class MemoryEntry:
     key: MemoryKey
-    value: MemoryValue
-    memory_type: MemoryType
-    learning_context: Optional[Dict[str, Any]] = None
-    associations: List[str] = field(default_factory=list)
+value: MemoryValue
+memory_type: MemoryType
+learning_context: Optional[Dict[str, Any]] = None
+associations: List[str] = field(default_factory=list)
     confidence_score: float = 1.0
 
 @dataclass
 class GhostPattern:
     pattern_id: str
-    pattern_type: str
-    pattern_data: np.ndarray
-    confidence_score: float
-    frequency: int
-    last_seen: datetime
-    associations: List[str] = field(default_factory=list)
+pattern_type: str
+pattern_data: np.ndarray
+confidence_score: float
+frequency: int
+last_seen: datetime
+associations: List[str] = field(default_factory=list)
     mathematical_signature: Dict[str, float] = field(default_factory=dict)
 
 @dataclass
 class LearningContext:
     context_id: str
-    learning_mode: LearningMode
-    input_data: np.ndarray
-    learning_rate: float
-    timestamp: datetime
-    expected_output: Optional[np.ndarray] = None
-    actual_output: Optional[np.ndarray] = None
-    error_metrics: Dict[str, float] = field(default_factory=dict)
+learning_mode: LearningMode
+input_data: np.ndarray
+learning_rate: float
+timestamp: datetime
+expected_output: Optional[np.ndarray] = None
+actual_output: Optional[np.ndarray] = None
+error_metrics: Dict[str, float] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 class MemoryAgentGhostMetaEngine:
     def __init__(self, config_path: str = "./config/memory_config.json"):
         self.config_path = config_path
-        self.memory_store: Dict[str, MemoryEntry] = {}
-        self.ghost_patterns: Dict[str, GhostPattern] = {}
-        self.learning_contexts: Dict[str, LearningContext] = {}
-        self.memory_index: Dict[str, List[str]] = defaultdict(list)
+self.memory_store: Dict[str, MemoryEntry] = {}
+self.ghost_patterns: Dict[str, GhostPattern] = {}
+self.learning_contexts: Dict[str, LearningContext] = {}
+self.memory_index: Dict[str, List[str]] = defaultdict(list)
         self.pattern_matcher: Optional[Callable] = None
-        self.sfsss_tensors: Dict[str, np.ndarray] = {}
-        self.ufs_tensors: Dict[str, np.ndarray] = {}
-        self.memory_stats: Dict[str, Any] = {}
-        self.gc_threshold: int = 10000
-        self.max_memory_size: int = 1000000000  # 1GB
-        self.current_memory_size: int = 0
-        self.db_connection: Optional[sqlite3.Connection] = None
-        self.executor: ThreadPoolExecutor = ThreadPoolExecutor(max_workers=4)
+self.sfsss_tensors: Dict[str, np.ndarray] = {}
+self.ufs_tensors: Dict[str, np.ndarray] = {}
+self.memory_stats: Dict[str, Any] = {}
+self.gc_threshold: int = 10000
+self.max_memory_size: int = 1000000000  # 1GB
+self.current_memory_size: int = 0
+self.db_connection: Optional[sqlite3.Connection] = None
+self.executor: ThreadPoolExecutor = ThreadPoolExecutor(max_workers=4)
         self._load_configuration()
         self._initialize_database()
         self._initialize_mathematical_tensors()
@@ -163,82 +163,82 @@ class MemoryAgentGhostMetaEngine:
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
 
-                self.gc_threshold = config.get("gc_threshold", 10000)
+self.gc_threshold = config.get("gc_threshold", 10000)
                 self.max_memory_size = config.get("max_memory_size", 1000000000)
 
-                logger.info("Loaded memory configuration")
+logger.info("Loaded memory configuration")
             else:
-                self._create_default_configuration()
+self._create_default_configuration()
 
         except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
+logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
     def _create_default_configuration(self) -> None:
         """Create default memory configuration."""
-        config = {
-            "gc_threshold": 10000,
-            "max_memory_size": 1000000000,
-            "compression_enabled": True,
-            "pattern_recognition_enabled": True,
-            "learning_enabled": True
-        }
+config = {
+"gc_threshold": 10000,
+"max_memory_size": 1000000000,
+"compression_enabled": True,
+"pattern_recognition_enabled": True,
+"learning_enabled": True
+}
 
         try:
-            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
+os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent=2)
         except Exception as e:
-            logger.error(f"Error saving configuration: {e}")
+logger.error(f"Error saving configuration: {e}")
 
     def _initialize_database(self) -> None:
         """Initialize SQLite database for persistent storage."""
         try:
-            db_path = "./data/memory_agent.db"
-            os.makedirs(os.path.dirname(db_path), exist_ok=True)
+db_path = "./data/memory_agent.db"
+os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
-            self.db_connection = sqlite3.connect(db_path, check_same_thread=False)
+self.db_connection = sqlite3.connect(db_path, check_same_thread=False)
             self.db_connection.execute("""
                 CREATE TABLE IF NOT EXISTS memory_entries (
                     key_id TEXT PRIMARY KEY,
-                    key_type TEXT,
-                    key_hash TEXT,
-                    data BLOB,
-                    data_type TEXT,
-                    memory_type TEXT,
-                    creation_time TEXT,
-                    last_access TEXT,
-                    access_count INTEGER,
-                    priority TEXT,
-                    metadata TEXT
-                )
-            """)
+key_type TEXT,
+key_hash TEXT,
+data BLOB,
+data_type TEXT,
+memory_type TEXT,
+creation_time TEXT,
+last_access TEXT,
+access_count INTEGER,
+priority TEXT,
+metadata TEXT
 
-            self.db_connection.execute("""
+""")
+
+self.db_connection.execute("""
                 CREATE TABLE IF NOT EXISTS ghost_patterns (
                     pattern_id TEXT PRIMARY KEY,
-                    pattern_type TEXT,
-                    pattern_data BLOB,
-                    confidence_score REAL,
-                    frequency INTEGER,
-                    last_seen TEXT,
-                    associations TEXT,
-                    mathematical_signature TEXT
-                )
-            """)
+pattern_type TEXT,
+pattern_data BLOB,
+confidence_score REAL,
+frequency INTEGER,
+last_seen TEXT,
+associations TEXT,
+mathematical_signature TEXT
 
-            self.db_connection.commit()
+""")
+
+self.db_connection.commit()
             logger.info("Database initialized")
 
         except Exception as e:
-            logger.error(f"Error initializing database: {e}")
+logger.error(f"Error initializing database: {e}")
 
     def _initialize_mathematical_tensors(self) -> None:
         """Initialize SFSSS and UFS tensors."""
         try:
             # Initialize SFSSS (Schwabot Fractal Signal System) tensors
             self.sfsss_tensors = {
-                "fractal_signals": np.zeros((100, 100, 10)),
+"fractal_signals": np.zeros((100, 100, 10)),
                 "signal_patterns": np.zeros((50, 50, 20)),
                 "fractal_coefficients": np.zeros((25, 25, 5)),
                 "signal_momentum": np.zeros((10, 10, 3))
@@ -246,120 +246,120 @@ class MemoryAgentGhostMetaEngine:
 
             # Initialize UFS (Unified Fractal System) tensors
             self.ufs_tensors = {
-                "unified_patterns": np.zeros((200, 200, 15)),
+"unified_patterns": np.zeros((200, 200, 15)),
                 "fractal_memory": np.zeros((100, 100, 8)),
                 "pattern_correlations": np.zeros((75, 75, 12)),
                 "memory_signatures": np.zeros((30, 30, 6))
             }
 
-            logger.info("Mathematical tensors initialized")
+logger.info("Mathematical tensors initialized")
 
         except Exception as e:
-            logger.error(f"Error initializing mathematical tensors: {e}")
+logger.error(f"Error initializing mathematical tensors: {e}")
 
     def _start_background_processors(self) -> None:
         """Start background processing threads."""
         def memory_optimizer():
             while True:
                 try:
-                    self._optimize_memory()
+self._optimize_memory()
                     time.sleep(300)  # Optimize every 5 minutes
                 except Exception as e:
-                    logger.error(f"Error in memory optimizer: {e}")
+logger.error(f"Error in memory optimizer: {e}")
 
         def pattern_analyzer():
             while True:
                 try:
-                    self._analyze_patterns()
+self._analyze_patterns()
                     time.sleep(60)  # Analyze every minute
                 except Exception as e:
-                    logger.error(f"Error in pattern analyzer: {e}")
+logger.error(f"Error in pattern analyzer: {e}")
 
         def tensor_updater():
             while True:
                 try:
-                    self._update_mathematical_tensors()
+self._update_mathematical_tensors()
                     time.sleep(30)  # Update every 30 seconds
                 except Exception as e:
-                    logger.error(f"Error in tensor updater: {e}")
+logger.error(f"Error in tensor updater: {e}")
 
-        self.memory_optimizer_thread = threading.Thread(target=memory_optimizer, daemon=True)
+self.memory_optimizer_thread = threading.Thread(target=memory_optimizer, daemon=True)
         self.pattern_analyzer_thread = threading.Thread(target=pattern_analyzer, daemon=True)
         self.tensor_updater_thread = threading.Thread(target=tensor_updater, daemon=True)
 
-        self.memory_optimizer_thread.start()
+self.memory_optimizer_thread.start()
         self.pattern_analyzer_thread.start()
         self.tensor_updater_thread.start()
 
-        logger.info("Background processors started")
+logger.info("Background processors started")
 
     def store_memory(self, key: str, data: Any, memory_type: MemoryType = MemoryType.SHORT_TERM,
                     priority: MemoryPriority = MemoryPriority.MEDIUM,
-                    metadata: Optional[Dict[str, Any]] = None) -> str:
-        """Store data in memory with advanced indexing."""
+metadata: Optional[Dict[str, Any]] = None) -> str:
+"""Store data in memory with advanced indexing."""
         try:
             # Generate memory key
-            key_hash = hashlib.sha256(key.encode()).hexdigest()
+key_hash = hashlib.sha256(key.encode()).hexdigest()
             key_id = f"{memory_type.value}_{key_hash[:16]}"
 
             # Create memory key
-            memory_key = MemoryKey(
+memory_key = MemoryKey(
                 key_id=key_id,
-                key_type=type(data).__name__,
+key_type=type(data).__name__,
                 key_hash=key_hash,
-                creation_time=datetime.now(),
+creation_time=datetime.now(),
                 last_access=datetime.now(),
                 access_count=1,
-                priority=priority,
-                metadata=metadata or {}
-            )
+priority=priority,
+metadata=metadata or {}
+
 
             # Serialize and compress data
-            serialized_data = pickle.dumps(data)
+serialized_data = pickle.dumps(data)
             compressed_data = self._compress_data(serialized_data)
             checksum = hashlib.md5(compressed_data).hexdigest()
 
             # Create memory value
-            memory_value = MemoryValue(
+memory_value = MemoryValue(
                 value_id=f"val_{key_id}",
-                data=compressed_data,
-                data_type=type(data).__name__,
+data=compressed_data,
+data_type=type(data).__name__,
                 size_bytes=len(compressed_data),
                 compression_ratio=len(compressed_data) / len(serialized_data),
                 checksum=checksum,
-                creation_time=datetime.now(),
+creation_time=datetime.now(),
                 last_modified=datetime.now(),
                 version=1,
-                metadata={}
-            )
+metadata={}
+
 
             # Create memory entry
-            memory_entry = MemoryEntry(
+memory_entry = MemoryEntry(
                 key=memory_key,
-                value=memory_value,
-                memory_type=memory_type,
-                confidence_score=1.0
-            )
+value=memory_value,
+memory_type=memory_type,
+confidence_score=1.0
+
 
             # Store in memory
-            self.memory_store[key_id] = memory_entry
-            self.current_memory_size += memory_value.size_bytes
+self.memory_store[key_id] = memory_entry
+self.current_memory_size += memory_value.size_bytes
 
             # Update index
-            self._update_memory_index(key_id, memory_entry)
+self._update_memory_index(key_id, memory_entry)
 
             # Store in database
-            self._store_in_database(memory_entry)
+self._store_in_database(memory_entry)
 
             # Check if garbage collection is needed
             if len(self.memory_store) > self.gc_threshold:
                 self._trigger_garbage_collection()
 
-            logger.debug(f"Stored memory: {key_id}")
+logger.debug(f"Stored memory: {key_id}")
             return key_id
 
         except Exception as e:
-            logger.error(f"Error storing memory: {e}")
+logger.error(f"Error storing memory: {e}")
             return ""
 
     def retrieve_memory(self, key: str, memory_type: Optional[MemoryType] = None) -> Optional[Any]:
@@ -367,57 +367,57 @@ class MemoryAgentGhostMetaEngine:
         try:
             # Try direct lookup first
             if key in self.memory_store:
-                memory_entry = self.memory_store[key]
-                self._update_access_stats(memory_entry)
+memory_entry = self.memory_store[key]
+self._update_access_stats(memory_entry)
                 return self._decompress_data(memory_entry.value.data)
 
             # Try hash-based lookup
-            key_hash = hashlib.sha256(key.encode()).hexdigest()
+key_hash = hashlib.sha256(key.encode()).hexdigest()
             key_id = f"{memory_type.value}_{key_hash[:16]}" if memory_type else None
 
             if key_id and key_id in self.memory_store:
-                memory_entry = self.memory_store[key_id]
-                self._update_access_stats(memory_entry)
+memory_entry = self.memory_store[key_id]
+self._update_access_stats(memory_entry)
                 return self._decompress_data(memory_entry.value.data)
 
             # Try pattern-based lookup
-            pattern_result = self._pattern_based_lookup(key)
+pattern_result = self._pattern_based_lookup(key)
             if pattern_result:
                 return pattern_result
 
             # Try database lookup
-            db_result = self._retrieve_from_database(key)
+db_result = self._retrieve_from_database(key)
             if db_result:
                 return db_result
 
-            logger.debug(f"Memory not found: {key}")
+logger.debug(f"Memory not found: {key}")
             return None
 
         except Exception as e:
-            logger.error(f"Error retrieving memory: {e}")
+logger.error(f"Error retrieving memory: {e}")
             return None
 
     def _update_access_stats(self, memory_entry: MemoryEntry) -> None:
         """Update access statistics for a memory entry."""
-        memory_entry.key.last_access = datetime.now()
+memory_entry.key.last_access = datetime.now()
         memory_entry.key.access_count += 1
 
         # Update in database
         if self.db_connection:
-            self.db_connection.execute("""
+self.db_connection.execute("""
                 UPDATE memory_entries
-                SET last_access = ?, access_count = ?
-                WHERE key_id = ?
-            """, (memory_entry.key.last_access.isoformat(),
+SET last_access = ?, access_count = ?
+WHERE key_id = ?
+""", (memory_entry.key.last_access.isoformat(),
                   memory_entry.key.access_count,
-                  memory_entry.key.key_id))
-            self.db_connection.commit()
+memory_entry.key.key_id))
+self.db_connection.commit()
 
     def _pattern_based_lookup(self, key: str) -> Optional[Any]:
         """Perform pattern-based memory lookup."""
         try:
             # Convert key to pattern
-            key_pattern = self._extract_pattern(key)
+key_pattern = self._extract_pattern(key)
 
             # Find similar patterns in ghost patterns
             for pattern_id, pattern in self.ghost_patterns.items():
@@ -426,14 +426,14 @@ class MemoryAgentGhostMetaEngine:
                     # Look up associated memories
                     for association in pattern.associations:
                         if association in self.memory_store:
-                            memory_entry = self.memory_store[association]
-                            self._update_access_stats(memory_entry)
+memory_entry = self.memory_store[association]
+self._update_access_stats(memory_entry)
                             return self._decompress_data(memory_entry.value.data)
 
             return None
 
         except Exception as e:
-            logger.error(f"Error in pattern-based lookup: {e}")
+logger.error(f"Error in pattern-based lookup: {e}")
             return None
 
     def _extract_pattern(self, data: Any) -> np.ndarray:
@@ -453,65 +453,65 @@ class MemoryAgentGhostMetaEngine:
                 return self._extract_pattern(str(data))
 
         except Exception as e:
-            logger.error(f"Error extracting pattern: {e}")
+logger.error(f"Error extracting pattern: {e}")
             return np.array([])
 
     def _calculate_pattern_similarity(self, pattern1: np.ndarray, pattern2: np.ndarray) -> float:
         """Calculate similarity between two patterns."""
         try:
             # Normalize patterns
-            p1_norm = pattern1 / (np.linalg.norm(pattern1) + 1e-8)
+p1_norm = pattern1 / (np.linalg.norm(pattern1) + 1e-8)
             p2_norm = pattern2 / (np.linalg.norm(pattern2) + 1e-8)
 
             # Calculate cosine similarity
-            similarity = unified_math.unified_math.dot_product(p1_norm, p2_norm)
+similarity = unified_math.unified_math.dot_product(p1_norm, p2_norm)
             return float(similarity)
 
         except Exception as e:
-            logger.error(f"Error calculating pattern similarity: {e}")
+logger.error(f"Error calculating pattern similarity: {e}")
             return 0.0
 
     def learn_pattern(self, pattern_data: np.ndarray, pattern_type: str = "general",
                      confidence_score: float = 1.0) -> str:
-        """Learn and store a new pattern."""
+"""Learn and store a new pattern."""
         try:
-            pattern_id = f"pattern_{hashlib.md5(pattern_data.tobytes()).hexdigest()[:16]}"
+pattern_id = f"pattern_{hashlib.md5(pattern_data.tobytes()).hexdigest()[:16]}"
 
             # Check if pattern already exists
             if pattern_id in self.ghost_patterns:
                 # Update existing pattern
-                pattern = self.ghost_patterns[pattern_id]
-                pattern.frequency += 1
-                pattern.last_seen = datetime.now()
+pattern = self.ghost_patterns[pattern_id]
+pattern.frequency += 1
+pattern.last_seen = datetime.now()
                 pattern.confidence_score = (pattern.confidence_score + confidence_score) / 2
             else:
                 # Create new pattern
-                pattern = GhostPattern(
+pattern = GhostPattern(
                     pattern_id=pattern_id,
-                    pattern_type=pattern_type,
-                    pattern_data=pattern_data,
-                    confidence_score=confidence_score,
-                    frequency=1,
-                    last_seen=datetime.now(),
+pattern_type=pattern_type,
+pattern_data=pattern_data,
+confidence_score=confidence_score,
+frequency=1,
+last_seen=datetime.now(),
                     mathematical_signature=self._calculate_mathematical_signature(pattern_data)
-                )
-                self.ghost_patterns[pattern_id] = pattern
+
+self.ghost_patterns[pattern_id] = pattern
 
             # Store in database
-            self._store_pattern_in_database(pattern)
+self._store_pattern_in_database(pattern)
 
-            logger.debug(f"Learned pattern: {pattern_id}")
+logger.debug(f"Learned pattern: {pattern_id}")
             return pattern_id
 
         except Exception as e:
-            logger.error(f"Error learning pattern: {e}")
+logger.error(f"Error learning pattern: {e}")
             return ""
 
     def _calculate_mathematical_signature(self, pattern_data: np.ndarray) -> Dict[str, float]:
         """Calculate mathematical signature for a pattern."""
         try:
-            signature = {
-                "mean": float(unified_math.unified_math.mean(pattern_data)),
+signature = {
+"mean": float(unified_math.unified_math.mean(pattern_data)),
                 "std": float(unified_math.unified_math.std(pattern_data)),
                 "skewness": float(self._calculate_skewness(pattern_data)),
                 "kurtosis": float(self._calculate_kurtosis(pattern_data)),
@@ -521,17 +521,17 @@ class MemoryAgentGhostMetaEngine:
             return signature
 
         except Exception as e:
-            logger.error(f"Error calculating mathematical signature: {e}")
+logger.error(f"Error calculating mathematical signature: {e}")
             return {}
 
     def _calculate_skewness(self, data: np.ndarray) -> float:
         """Calculate skewness of data."""
         try:
-            mean = unified_math.unified_math.mean(data)
+mean = unified_math.unified_math.mean(data)
             std = unified_math.unified_math.std(data)
             if std == 0:
                 return 0.0
-            skewness = unified_math.mean(((data - mean) / std) ** 3)
+skewness = unified_math.mean(((data - mean) / std) ** 3)
             return float(skewness)
         except Exception:
             return 0.0
@@ -539,11 +539,11 @@ class MemoryAgentGhostMetaEngine:
     def _calculate_kurtosis(self, data: np.ndarray) -> float:
         """Calculate kurtosis of data."""
         try:
-            mean = unified_math.unified_math.mean(data)
+mean = unified_math.unified_math.mean(data)
             std = unified_math.unified_math.std(data)
             if std == 0:
                 return 0.0
-            kurtosis = unified_math.mean(((data - mean) / std) ** 4) - 3
+kurtosis = unified_math.mean(((data - mean) / std) ** 4) - 3
             return float(kurtosis)
         except Exception:
             return 0.0
@@ -552,11 +552,11 @@ class MemoryAgentGhostMetaEngine:
         """Calculate entropy of data."""
         try:
             # Discretize data for entropy calculation
-            hist, _ = np.histogram(data, bins=unified_math.min(50, len(data)))
+hist, _ = np.histogram(data, bins=unified_math.min(50, len(data)))
             hist = hist[hist > 0]  # Remove zero bins
             if len(hist) == 0:
                 return 0.0
-            prob = hist / np.sum(hist)
+prob = hist / np.sum(hist)
             entropy = -np.sum(prob * np.log2(prob))
             return float(entropy)
         except Exception:
@@ -570,21 +570,21 @@ class MemoryAgentGhostMetaEngine:
                 return 1.0
 
             # Normalize data to [0, 1]
-            data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data) + 1e-8)
+data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data) + 1e-8)
 
             # Count boxes at different scales
-            scales = np.logspace(-2, 0, 10)
+scales = np.logspace(-2, 0, 10)
             counts = []
 
             for scale in scales:
-                boxes = int(1 / scale)
+boxes = int(1 / scale)
                 count = 0
                 for i in range(boxes):
                     start = int(i * len(data_norm) / boxes)
                     end = int((i + 1) * len(data_norm) / boxes)
                     if np.any(data_norm[start:end] > 0):
                         count += 1
-                counts.append(count)
+counts.append(count)
 
             # Calculate fractal dimension
             if len(counts) > 1:
@@ -610,7 +610,7 @@ class MemoryAgentGhostMetaEngine:
         """Decompress data using zlib."""
         try:
             import zlib
-            decompressed = zlib.decompress(compressed_data)
+decompressed = zlib.decompress(compressed_data)
             return pickle.loads(decompressed)
         except Exception:
             return None
@@ -618,90 +618,90 @@ class MemoryAgentGhostMetaEngine:
     def _update_memory_index(self, key_id: str, memory_entry: MemoryEntry) -> None:
         """Update memory index for efficient lookup."""
         # Index by memory type
-        self.memory_index[memory_entry.memory_type.value].append(key_id)
+self.memory_index[memory_entry.memory_type.value].append(key_id)
 
         # Index by priority
-        self.memory_index[f"priority_{memory_entry.key.priority.value}"].append(key_id)
+self.memory_index[f"priority_{memory_entry.key.priority.value}"].append(key_id)
 
         # Index by data type
-        self.memory_index[f"type_{memory_entry.value.data_type}"].append(key_id)
+self.memory_index[f"type_{memory_entry.value.data_type}"].append(key_id)
 
     def _store_in_database(self, memory_entry: MemoryEntry) -> None:
         """Store memory entry in database."""
         try:
             if self.db_connection:
-                self.db_connection.execute("""
+self.db_connection.execute("""
                     INSERT OR REPLACE INTO memory_entries
-                    (key_id, key_type, key_hash, data, data_type, memory_type,
+(key_id, key_type, key_hash, data, data_type, memory_type,
                      creation_time, last_access, access_count, priority, metadata)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     memory_entry.key.key_id,
-                    memory_entry.key.key_type,
-                    memory_entry.key.key_hash,
-                    memory_entry.value.data,
-                    memory_entry.value.data_type,
-                    memory_entry.memory_type.value,
-                    memory_entry.key.creation_time.isoformat(),
+memory_entry.key.key_type,
+memory_entry.key.key_hash,
+memory_entry.value.data,
+memory_entry.value.data_type,
+memory_entry.memory_type.value,
+memory_entry.key.creation_time.isoformat(),
                     memory_entry.key.last_access.isoformat(),
                     memory_entry.key.access_count,
-                    memory_entry.key.priority.value,
-                    json.dumps(memory_entry.key.metadata)
+memory_entry.key.priority.value,
+json.dumps(memory_entry.key.metadata)
                 ))
-                self.db_connection.commit()
+self.db_connection.commit()
 
         except Exception as e:
-            logger.error(f"Error storing in database: {e}")
+logger.error(f"Error storing in database: {e}")
 
     def _retrieve_from_database(self, key: str) -> Optional[Any]:
         """Retrieve memory from database."""
         try:
             if self.db_connection:
-                cursor = self.db_connection.execute("""
+cursor = self.db_connection.execute("""
                     SELECT data, data_type FROM memory_entries
-                    WHERE key_id = ? OR key_hash LIKE ?
-                """, (key, f"%{key}%"))
+WHERE key_id = ? OR key_hash LIKE ?
+""", (key, f"%{key}%"))
 
-                row = cursor.fetchone()
+row = cursor.fetchone()
                 if row:
-                    compressed_data, data_type = row
+compressed_data, data_type = row
                     return self._decompress_data(compressed_data)
 
             return None
 
         except Exception as e:
-            logger.error(f"Error retrieving from database: {e}")
+logger.error(f"Error retrieving from database: {e}")
             return None
 
     def _store_pattern_in_database(self, pattern: GhostPattern) -> None:
         """Store ghost pattern in database."""
         try:
             if self.db_connection:
-                self.db_connection.execute("""
+self.db_connection.execute("""
                     INSERT OR REPLACE INTO ghost_patterns
-                    (pattern_id, pattern_type, pattern_data, confidence_score,
+(pattern_id, pattern_type, pattern_data, confidence_score,
                      frequency, last_seen, associations, mathematical_signature)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     pattern.pattern_id,
-                    pattern.pattern_type,
-                    pattern.pattern_data.tobytes(),
+pattern.pattern_type,
+pattern.pattern_data.tobytes(),
                     pattern.confidence_score,
-                    pattern.frequency,
-                    pattern.last_seen.isoformat(),
+pattern.frequency,
+pattern.last_seen.isoformat(),
                     json.dumps(pattern.associations),
                     json.dumps(pattern.mathematical_signature)
                 ))
-                self.db_connection.commit()
+self.db_connection.commit()
 
         except Exception as e:
-            logger.error(f"Error storing pattern in database: {e}")
+logger.error(f"Error storing pattern in database: {e}")
 
     def _optimize_memory(self) -> None:
         """Optimize memory usage and perform garbage collection."""
         try:
             # Remove old, low-priority memories
-            current_time = datetime.now()
+current_time = datetime.now()
             keys_to_remove = []
 
             for key_id, memory_entry in self.memory_store.items():
@@ -711,44 +711,44 @@ class MemoryAgentGhostMetaEngine:
                 # Remove if old and rarely accessed
                 if (age_hours > 24 and access_frequency < 0.1 and
                     memory_entry.key.priority in [MemoryPriority.LOW, MemoryPriority.MINIMAL]):
-                    keys_to_remove.append(key_id)
+keys_to_remove.append(key_id)
 
                 # Remove if memory size exceeded
                 if self.current_memory_size > self.max_memory_size:
                     if memory_entry.key.priority == MemoryPriority.MINIMAL:
-                        keys_to_remove.append(key_id)
+keys_to_remove.append(key_id)
 
             # Remove selected keys
             for key_id in keys_to_remove:
                 if key_id in self.memory_store:
-                    memory_entry = self.memory_store[key_id]
-                    self.current_memory_size -= memory_entry.value.size_bytes
+memory_entry = self.memory_store[key_id]
+self.current_memory_size -= memory_entry.value.size_bytes
                     del self.memory_store[key_id]
 
             # Force garbage collection
-            gc.collect()
+gc.collect()
 
-            logger.debug(f"Memory optimization completed, removed {len(keys_to_remove)} entries")
+logger.debug(f"Memory optimization completed, removed {len(keys_to_remove)} entries")
 
         except Exception as e:
-            logger.error(f"Error optimizing memory: {e}")
+logger.error(f"Error optimizing memory: {e}")
 
     def _analyze_patterns(self) -> None:
         """Analyze and update ghost patterns."""
         try:
             # Analyze memory access patterns
-            access_patterns = defaultdict(int)
+access_patterns = defaultdict(int)
             for memory_entry in self.memory_store.values():
                 pattern_key = f"{memory_entry.memory_type.value}_{memory_entry.key.priority.value}"
-                access_patterns[pattern_key] += memory_entry.key.access_count
+access_patterns[pattern_key] += memory_entry.key.access_count
 
             # Update pattern frequencies
             for pattern_key, frequency in access_patterns.items():
                 if pattern_key in self.ghost_patterns:
-                    self.ghost_patterns[pattern_key].frequency = frequency
+self.ghost_patterns[pattern_key].frequency = frequency
 
             # Remove old patterns
-            current_time = datetime.now()
+current_time = datetime.now()
             patterns_to_remove = []
             for pattern_id, pattern in self.ghost_patterns.items():
                 if (current_time - pattern.last_seen).days > 7 and pattern.frequency < 5:
@@ -757,10 +757,10 @@ class MemoryAgentGhostMetaEngine:
             for pattern_id in patterns_to_remove:
                 del self.ghost_patterns[pattern_id]
 
-            logger.debug(f"Pattern analysis completed, removed {len(patterns_to_remove)} patterns")
+logger.debug(f"Pattern analysis completed, removed {len(patterns_to_remove)} patterns")
 
         except Exception as e:
-            logger.error(f"Error analyzing patterns: {e}")
+logger.error(f"Error analyzing patterns: {e}")
 
     def _update_mathematical_tensors(self) -> None:
         """Update SFSSS and UFS tensors with current memory state."""
@@ -768,31 +768,31 @@ class MemoryAgentGhostMetaEngine:
             # Update SFSSS tensors
             for tensor_name, tensor in self.sfsss_tensors.items():
                 # Update with current memory patterns
-                pattern_data = self._extract_tensor_patterns(tensor_name)
+pattern_data = self._extract_tensor_patterns(tensor_name)
                 if pattern_data is not None:
-                    self.sfsss_tensors[tensor_name] = self._update_tensor(tensor, pattern_data)
+self.sfsss_tensors[tensor_name] = self._update_tensor(tensor, pattern_data)
 
             # Update UFS tensors
             for tensor_name, tensor in self.ufs_tensors.items():
                 # Update with current memory patterns
-                pattern_data = self._extract_tensor_patterns(tensor_name)
+pattern_data = self._extract_tensor_patterns(tensor_name)
                 if pattern_data is not None:
-                    self.ufs_tensors[tensor_name] = self._update_tensor(tensor, pattern_data)
+self.ufs_tensors[tensor_name] = self._update_tensor(tensor, pattern_data)
 
-            logger.debug("Mathematical tensors updated")
+logger.debug("Mathematical tensors updated")
 
         except Exception as e:
-            logger.error(f"Error updating mathematical tensors: {e}")
+logger.error(f"Error updating mathematical tensors: {e}")
 
     def _extract_tensor_patterns(self, tensor_name: str) -> Optional[np.ndarray]:
         """Extract patterns for tensor update."""
         try:
             if "fractal" in tensor_name:
                 # Extract fractal patterns from memory
-                fractal_data = []
+fractal_data = []
                 for memory_entry in self.memory_store.values():
                     if memory_entry.memory_type == MemoryType.GHOST:
-                        pattern = self._extract_pattern(memory_entry.value.data)
+pattern = self._extract_pattern(memory_entry.value.data)
                         if len(pattern) > 0:
                             fractal_data.append(pattern)
 
@@ -801,10 +801,10 @@ class MemoryAgentGhostMetaEngine:
 
             elif "signal" in tensor_name:
                 # Extract signal patterns from memory
-                signal_data = []
+signal_data = []
                 for memory_entry in self.memory_store.values():
                     if memory_entry.memory_type == MemoryType.SHORT_TERM:
-                        pattern = self._extract_pattern(memory_entry.value.data)
+pattern = self._extract_pattern(memory_entry.value.data)
                         if len(pattern) > 0:
                             signal_data.append(pattern)
 
@@ -814,7 +814,7 @@ class MemoryAgentGhostMetaEngine:
             return None
 
         except Exception as e:
-            logger.error(f"Error extracting tensor patterns: {e}")
+logger.error(f"Error extracting tensor patterns: {e}")
             return None
 
     def _update_tensor(self, tensor: np.ndarray, pattern_data: np.ndarray) -> np.ndarray:
@@ -823,74 +823,74 @@ class MemoryAgentGhostMetaEngine:
             # Simple tensor update - in a real system, you'd use more sophisticated methods
             if pattern_data.size > 0:
                 # Reshape pattern data to match tensor dimensions
-                pattern_reshaped = pattern_data.flatten()[:tensor.size]
+pattern_reshaped = pattern_data.flatten()[:tensor.size]
                 pattern_reshaped = pattern_reshaped.reshape(tensor.shape)
 
                 # Update tensor with exponential moving average
-                alpha = 0.1
-                updated_tensor = alpha * pattern_reshaped + (1 - alpha) * tensor
+alpha = 0.1
+updated_tensor = alpha * pattern_reshaped + (1 - alpha) * tensor
                 return updated_tensor
 
             return tensor
 
         except Exception as e:
-            logger.error(f"Error updating tensor: {e}")
+logger.error(f"Error updating tensor: {e}")
             return tensor
 
     def _trigger_garbage_collection(self) -> None:
         """Trigger garbage collection."""
         try:
-            gc.collect()
+gc.collect()
             logger.debug("Garbage collection triggered")
         except Exception as e:
-            logger.error(f"Error in garbage collection: {e}")
+logger.error(f"Error in garbage collection: {e}")
 
     def get_memory_statistics(self) -> Dict[str, Any]:
         """Get comprehensive memory statistics."""
-        total_entries = len(self.memory_store)
+total_entries = len(self.memory_store)
         total_patterns = len(self.ghost_patterns)
 
-        memory_type_counts = defaultdict(int)
+memory_type_counts = defaultdict(int)
         priority_counts = defaultdict(int)
 
         for memory_entry in self.memory_store.values():
             memory_type_counts[memory_entry.memory_type.value] += 1
-            priority_counts[memory_entry.key.priority.value] += 1
+priority_counts[memory_entry.key.priority.value] += 1
 
         return {
-            "total_memory_entries": total_entries,
-            "total_ghost_patterns": total_patterns,
-            "current_memory_size_bytes": self.current_memory_size,
-            "max_memory_size_bytes": self.max_memory_size,
-            "memory_utilization_percent": (self.current_memory_size / self.max_memory_size) * 100,
+"total_memory_entries": total_entries,
+"total_ghost_patterns": total_patterns,
+"current_memory_size_bytes": self.current_memory_size,
+"max_memory_size_bytes": self.max_memory_size,
+"memory_utilization_percent": (self.current_memory_size / self.max_memory_size) * 100,
             "memory_type_distribution": dict(memory_type_counts),
             "priority_distribution": dict(priority_counts),
             "sfsss_tensors_count": len(self.sfsss_tensors),
             "ufs_tensors_count": len(self.ufs_tensors),
             "database_connected": self.db_connection is not None
-        }
+}
 
 def main() -> None:
     """Main function for testing and demonstration."""
-    engine = MemoryAgentGhostMetaEngine("./test_memory_config.json")
+engine = MemoryAgentGhostMetaEngine("./test_memory_config.json")
 
     # Test memory storage and retrieval
-    test_data = {"price": 50000, "timestamp": datetime.now(), "source": "BTC"}
+test_data = {"price": 50000, "timestamp": datetime.now(), "source": "BTC"}
     key_id = engine.store_memory("btc_price_001", test_data, MemoryType.SHORT_TERM, MemoryPriority.HIGH)
     safe_print(f"Stored memory with key: {key_id}")
 
     # Test pattern learning
-    pattern_data = np.random.rand(10, 10)
+pattern_data = np.random.rand(10, 10)
     pattern_id = engine.learn_pattern(pattern_data, "price_pattern", 0.9)
     safe_print(f"Learned pattern with ID: {pattern_id}")
 
     # Test memory retrieval
-    retrieved_data = engine.retrieve_memory("btc_price_001")
+retrieved_data = engine.retrieve_memory("btc_price_001")
     safe_print(f"Retrieved data: {retrieved_data}")
 
     # Get statistics
-    stats = engine.get_memory_statistics()
+stats = engine.get_memory_statistics()
     safe_print(f"Memory Statistics: {stats}")
 
 if __name__ == "__main__":
-    main()
+main()

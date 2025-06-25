@@ -51,28 +51,28 @@ logger = logging.getLogger(__name__)
 @dataclass
 class AltitudeGenerationResult:
     """Result of altitude generation operation."""
-    success: bool
-    altitude_value: float
-    generation_time: datetime
-    confidence_score: float
-    altitude_zone: str
-    adjustment_factors: Dict[str, float]
-    error_message: Optional[str] = None
-    metadata: Dict[str, Any] = None
+success: bool
+altitude_value: float
+generation_time: datetime
+confidence_score: float
+altitude_zone: str
+adjustment_factors: Dict[str, float]
+error_message: Optional[str] = None
+metadata: Dict[str, Any] = None
 
 
 @dataclass
 class AltitudeMetrics:
     """Comprehensive altitude metrics."""
-    base_altitude: float
-    adjusted_altitude: float
-    altitude_zone: str
-    trend_direction: str
-    volatility_factor: float
-    liquidity_factor: float
-    pressure_factor: float
-    confidence_score: float
-    generation_timestamp: datetime
+base_altitude: float
+adjusted_altitude: float
+altitude_zone: str
+trend_direction: str
+volatility_factor: float
+liquidity_factor: float
+pressure_factor: float
+confidence_score: float
+generation_timestamp: datetime
 
 
 class AltitudeGenerator:
@@ -80,82 +80,82 @@ class AltitudeGenerator:
 
     def __init__(self):
         """Initialize the altitude generator."""
-        self.altitude_history: List[float] = []
-        self.generation_history: List[AltitudeGenerationResult] = []
-        self.zone_thresholds = {
-            "low": (0.0, 0.3),
+self.altitude_history: List[float] = []
+self.generation_history: List[AltitudeGenerationResult] = []
+self.zone_thresholds = {
+"low": (0.0, 0.3),
             "medium": (0.3, 0.7),
             "high": (0.7, 1.0)
         }
-        self.generation_count = 0
+self.generation_count = 0
 
-        logger.info("Altitude Generator initialized")
+logger.info("Altitude Generator initialized")
 
     def generate_altitude(self, market_data: Dict[str, Any]) -> AltitudeGenerationResult:
         """Generate altitude based on market data."""
         try:
             # Extract key market metrics
-            volume = market_data.get('volume', 0.0)
+volume = market_data.get('volume', 0.0)
             price_change = market_data.get('price_change', 0.0)
             volatility = market_data.get('volatility', 0.0)
             liquidity = market_data.get('liquidity', 0.0)
             pressure = market_data.get('pressure', 0.5)
 
             # Calculate base altitude
-            base_altitude = self._calculate_base_altitude(volume, price_change, volatility)
+base_altitude = self._calculate_base_altitude(volume, price_change, volatility)
 
             # Apply adjustment factors
-            adjusted_altitude = self._apply_altitude_adjustments(
+adjusted_altitude = self._apply_altitude_adjustments(
                 base_altitude, liquidity, pressure, volatility
-            )
+
 
             # Determine altitude zone
-            altitude_zone = self._determine_altitude_zone(adjusted_altitude)
+altitude_zone = self._determine_altitude_zone(adjusted_altitude)
 
             # Calculate confidence score
-            confidence_score = self._calculate_confidence_score(market_data)
+confidence_score = self._calculate_confidence_score(market_data)
 
             # Create adjustment factors
-            adjustment_factors = {
-                'liquidity_factor': self._calculate_liquidity_factor(liquidity),
+adjustment_factors = {
+'liquidity_factor': self._calculate_liquidity_factor(liquidity),
                 'pressure_factor': self._calculate_pressure_factor(pressure),
                 'volatility_factor': self._calculate_volatility_factor(volatility),
                 'volume_factor': self._calculate_volume_factor(volume)
             }
 
-            result = AltitudeGenerationResult(
+result = AltitudeGenerationResult(
                 success=True,
-                altitude_value=adjusted_altitude,
-                generation_time=datetime.now(),
+altitude_value=adjusted_altitude,
+generation_time=datetime.now(),
                 confidence_score=confidence_score,
-                altitude_zone=altitude_zone,
-                adjustment_factors=adjustment_factors,
-                metadata={
-                    'base_altitude': base_altitude,
-                    'market_metrics': market_data,
-                    'generation_count': self.generation_count
-                }
-            )
+altitude_zone=altitude_zone,
+adjustment_factors=adjustment_factors,
+metadata={
+'base_altitude': base_altitude,
+'market_metrics': market_data,
+'generation_count': self.generation_count
+}
+
 
             # Update history
-            self.altitude_history.append(adjusted_altitude)
+self.altitude_history.append(adjusted_altitude)
             self.generation_history.append(result)
             self.generation_count += 1
 
-            logger.info(f"Altitude generated: {adjusted_altitude:.3f} ({altitude_zone})")
+logger.info(f"Altitude generated: {adjusted_altitude:.3f} ({altitude_zone})")
             return result
 
         except Exception as e:
-            logger.error(f"Altitude generation error: {e}")
+logger.error(f"Altitude generation error: {e}")
             return AltitudeGenerationResult(
                 success=False,
-                altitude_value=0.5,
-                generation_time=datetime.now(),
+altitude_value=0.5,
+generation_time=datetime.now(),
                 confidence_score=0.0,
-                altitude_zone="unknown",
-                adjustment_factors={},
-                error_message=str(e)
-            )
+altitude_zone="unknown",
+adjustment_factors={},
+error_message=str(e)
+
 
     def _calculate_base_altitude(self, volume: float, price_change: float, volatility: float) -> float:
         """Calculate base altitude from fundamental metrics."""
@@ -170,21 +170,21 @@ class AltitudeGenerator:
             volatility_component = unified_math.min(volatility / 0.5, 1.0)
 
             # Combine components with weights
-            base_altitude = (
+base_altitude = (
                 volume_component * 0.4 +
-                price_component * 0.3 +
-                volatility_component * 0.3
-            )
+price_component * 0.3 +
+volatility_component * 0.3
+
 
             return unified_math.max(0.0, unified_math.min(1.0, base_altitude))
 
         except Exception as e:
-            logger.error(f"Base altitude calculation error: {e}")
+logger.error(f"Base altitude calculation error: {e}")
             return 0.5
 
     def _apply_altitude_adjustments(self, base_altitude: float, liquidity: float,
                                   pressure: float, volatility: float) -> float:
-        """Apply adjustment factors to base altitude."""
+"""Apply adjustment factors to base altitude."""
         try:
             # Liquidity adjustment (lower liquidity = higher altitude)
             liquidity_adjustment = (1.0 - liquidity) * 0.2
@@ -196,12 +196,12 @@ class AltitudeGenerator:
             volatility_adjustment = volatility * 0.25
 
             # Apply adjustments
-            adjusted_altitude = base_altitude + liquidity_adjustment + pressure_adjustment + volatility_adjustment
+adjusted_altitude = base_altitude + liquidity_adjustment + pressure_adjustment + volatility_adjustment
 
             return unified_math.max(0.0, unified_math.min(1.0, adjusted_altitude))
 
         except Exception as e:
-            logger.error(f"Altitude adjustment error: {e}")
+logger.error(f"Altitude adjustment error: {e}")
             return base_altitude
 
     def _determine_altitude_zone(self, altitude: float) -> str:
@@ -215,20 +215,20 @@ class AltitudeGenerator:
         """Calculate confidence score for altitude generation."""
         try:
             # Check data completeness
-            required_fields = ['volume', 'price_change', 'volatility', 'liquidity']
-            completeness = sum(1 for field in required_fields if field in market_data) / len(required_fields)
+required_fields = ['volume', 'price_change', 'volatility', 'liquidity']
+completeness = sum(1 for field in required_fields if field in market_data) / len(required_fields)
 
             # Check data quality (simple heuristics)
             volume_quality = unified_math.min(market_data.get('volume', 0) / 100.0, 1.0)
             volatility_quality = unified_math.min(market_data.get('volatility', 0) / 0.5, 1.0)
 
             # Combine quality metrics
-            confidence = (completeness * 0.4 + volume_quality * 0.3 + volatility_quality * 0.3)
+confidence = (completeness * 0.4 + volume_quality * 0.3 + volatility_quality * 0.3)
 
             return unified_math.max(0.0, unified_math.min(1.0, confidence))
 
         except Exception as e:
-            logger.error(f"Confidence calculation error: {e}")
+logger.error(f"Confidence calculation error: {e}")
             return 0.5
 
     def _calculate_liquidity_factor(self, liquidity: float) -> float:
@@ -253,10 +253,10 @@ class AltitudeGenerator:
             if len(self.altitude_history) < window_size:
                 return "insufficient_data"
 
-            recent_altitudes = np.array(self.altitude_history[-window_size:])
+recent_altitudes = np.array(self.altitude_history[-window_size:])
 
             # Calculate trend using linear regression
-            x = np.arange(len(recent_altitudes))
+x = np.arange(len(recent_altitudes))
             slope = np.polyfit(x, recent_altitudes, 1)[0]
 
             if slope > 0.01:
@@ -267,7 +267,7 @@ class AltitudeGenerator:
                 return "stable"
 
         except Exception as e:
-            logger.error(f"Altitude trend calculation error: {e}")
+logger.error(f"Altitude trend calculation error: {e}")
             return "unknown"
 
     def get_altitude_metrics(self) -> AltitudeMetrics:
@@ -276,91 +276,91 @@ class AltitudeGenerator:
             if not self.altitude_history:
                 return self._create_default_metrics()
 
-            current_altitude = self.altitude_history[-1]
-            trend_direction = self.get_altitude_trend()
+current_altitude = self.altitude_history[-1]
+trend_direction = self.get_altitude_trend()
 
             # Calculate volatility factor from recent history
-            recent_altitudes = np.array(self.altitude_history[-10:])
+recent_altitudes = np.array(self.altitude_history[-10:])
             volatility_factor = unified_math.unified_math.std(recent_altitudes) if len(recent_altitudes) > 1 else 0.0
 
             return AltitudeMetrics(
                 base_altitude=current_altitude,
-                adjusted_altitude=current_altitude,
-                altitude_zone=self._determine_altitude_zone(current_altitude),
+adjusted_altitude=current_altitude,
+altitude_zone=self._determine_altitude_zone(current_altitude),
                 trend_direction=trend_direction,
-                volatility_factor=volatility_factor,
-                liquidity_factor=0.5,  # Placeholder
-                pressure_factor=0.5,   # Placeholder
-                confidence_score=0.8,  # Placeholder
-                generation_timestamp=datetime.now()
-            )
+volatility_factor=volatility_factor,
+liquidity_factor=0.5,  # Placeholder
+pressure_factor=0.5,   # Placeholder
+confidence_score=0.8,  # Placeholder
+generation_timestamp=datetime.now()
+
 
         except Exception as e:
-            logger.error(f"Altitude metrics calculation error: {e}")
+logger.error(f"Altitude metrics calculation error: {e}")
             return self._create_default_metrics()
 
     def _create_default_metrics(self) -> AltitudeMetrics:
         """Create default altitude metrics."""
         return AltitudeMetrics(
             base_altitude=0.5,
-            adjusted_altitude=0.5,
-            altitude_zone="medium",
-            trend_direction="stable",
-            volatility_factor=0.0,
-            liquidity_factor=0.5,
-            pressure_factor=0.5,
-            confidence_score=0.5,
-            generation_timestamp=datetime.now()
-        )
+adjusted_altitude=0.5,
+altitude_zone="medium",
+trend_direction="stable",
+volatility_factor=0.0,
+liquidity_factor=0.5,
+pressure_factor=0.5,
+confidence_score=0.5,
+generation_timestamp=datetime.now()
+
 
     def get_generator_statistics(self) -> Dict[str, Any]:
         """Get altitude generator statistics."""
-        total_generations = len(self.generation_history)
+total_generations = len(self.generation_history)
         successful_generations = sum(1 for result in self.generation_history if result.success)
 
-        avg_altitude = 0.0
+avg_altitude = 0.0
         if self.altitude_history:
-            avg_altitude = sum(self.altitude_history) / len(self.altitude_history)
+avg_altitude = sum(self.altitude_history) / len(self.altitude_history)
 
-        zone_distribution = {"low": 0, "medium": 0, "high": 0}
+zone_distribution = {"low": 0, "medium": 0, "high": 0}
         for result in self.generation_history:
             if result.success:
-                zone_distribution[result.altitude_zone] += 1
+zone_distribution[result.altitude_zone] += 1
 
         return {
-            "total_generations": total_generations,
-            "successful_generations": successful_generations,
-            "success_rate": successful_generations / total_generations if total_generations > 0 else 0.0,
-            "average_altitude": avg_altitude,
-            "current_altitude": self.altitude_history[-1] if self.altitude_history else 0.5,
-            "altitude_trend": self.get_altitude_trend(),
+"total_generations": total_generations,
+"successful_generations": successful_generations,
+"success_rate": successful_generations / total_generations if total_generations > 0 else 0.0,
+"average_altitude": avg_altitude,
+"current_altitude": self.altitude_history[-1] if self.altitude_history else 0.5,
+"altitude_trend": self.get_altitude_trend(),
             "zone_distribution": zone_distribution,
-            "history_size": len(self.altitude_history)
+"history_size": len(self.altitude_history)
         }
 
 
 def main() -> None:
     """Main function for testing altitude generator."""
-    generator = AltitudeGenerator()
+generator = AltitudeGenerator()
 
     # Test altitude generation
-    test_market_data = {
-        'volume': 500.0,
-        'price_change': 0.05,
-        'volatility': 0.3,
-        'liquidity': 0.7,
-        'pressure': 0.6
-    }
+test_market_data = {
+'volume': 500.0,
+'price_change': 0.05,
+'volatility': 0.3,
+'liquidity': 0.7,
+'pressure': 0.6
+}
 
-    result = generator.generate_altitude(test_market_data)
+result = generator.generate_altitude(test_market_data)
     safe_print(f"Altitude generation result: {result.success}")
     safe_print(f"Altitude value: {result.altitude_value:.3f}")
     safe_print(f"Altitude zone: {result.altitude_zone}")
 
     # Get statistics
-    stats = generator.get_generator_statistics()
+stats = generator.get_generator_statistics()
     safe_print(f"Generator statistics: {stats}")
 
 
 if __name__ == "__main__":
-    main()
+main()

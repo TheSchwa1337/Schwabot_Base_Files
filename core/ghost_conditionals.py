@@ -29,11 +29,11 @@ def _sigmoid(x: float) -> float:  # noqa: D401
 def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
     """Return Γᵣ activation probability in (0, 1).
 
-    Parameters
-    ----------
-    delta_t
-        Time delta since last ghost evaluation (seconds).
+Parameters
+----------
+delta_t
+Time delta since last ghost evaluation (seconds).
     xi_ghost
-        Scalar intensity of current ghost signal, expected in [0, 1].
-    """
+Scalar intensity of current ghost signal, expected in [0, 1].
+"""
     return _sigmoid(delta_t * xi_ghost)

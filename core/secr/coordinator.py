@@ -10,4 +10,4 @@ def main() -> None:
     """Stub main function."""
 
 if __name__ == "__main__":
-    main()
+main()

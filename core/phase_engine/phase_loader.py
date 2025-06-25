@@ -50,50 +50,50 @@ logger = logging.getLogger(__name__)
 
 class LoaderStatus(Enum):
     IDLE = "idle"
-    LOADING = "loading"
-    VALIDATING = "validating"
-    ERROR = "error"
-    READY = "ready"
+LOADING = "loading"
+VALIDATING = "validating"
+ERROR = "error"
+READY = "ready"
 
 class DataFormat(Enum):
     JSON = "json"
-    YAML = "yaml"
-    CSV = "csv"
-    BINARY = "binary"
-    CUSTOM = "custom"
+YAML = "yaml"
+CSV = "csv"
+BINARY = "binary"
+CUSTOM = "custom"
 
 @dataclass
 class PhaseConfiguration:
     config_id: str
-    phase_type: str
-    parameters: Dict[str, Any]
-    constraints: Dict[str, Any]
-    metadata: Dict[str, Any]
-    version: str
-    created_at: datetime
-    updated_at: datetime
-    is_active: bool = True
+phase_type: str
+parameters: Dict[str, Any]
+constraints: Dict[str, Any]
+metadata: Dict[str, Any]
+version: str
+created_at: datetime
+updated_at: datetime
+is_active: bool = True
 
 @dataclass
 class LoadedPhaseData:
     data_id: str
-    phase_id: str
-    data_format: DataFormat
-    data_content: Any
-    size_bytes: int
-    checksum: str
-    loaded_at: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+phase_id: str
+data_format: DataFormat
+data_content: Any
+size_bytes: int
+checksum: str
+loaded_at: datetime
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 class PhaseLoader:
     def __init__(self, config_path: str = "./config/phase_loader_config.json"):
         self.config_path = config_path
-        self.loaded_configurations: Dict[str, PhaseConfiguration] = {}
-        self.loaded_data: Dict[str, LoadedPhaseData] = {}
-        self.data_cache: Dict[str, Any] = {}
-        self.loader_status: LoaderStatus = LoaderStatus.IDLE
-        self.validation_rules: Dict[str, Dict[str, Any]] = {}
-        self._load_configuration()
+self.loaded_configurations: Dict[str, PhaseConfiguration] = {}
+self.loaded_data: Dict[str, LoadedPhaseData] = {}
+self.data_cache: Dict[str, Any] = {}
+self.loader_status: LoaderStatus = LoaderStatus.IDLE
+self.validation_rules: Dict[str, Dict[str, Any]] = {}
+self._load_configuration()
         self._initialize_loader()
         self._start_background_loader()
         logger.info("PhaseLoader initialized")
@@ -106,50 +106,50 @@ class PhaseLoader:
                     config = json.load(f)
 
                 # Load validation rules
-                self.validation_rules = config.get("validation_rules", {})
+self.validation_rules = config.get("validation_rules", {})
 
-                logger.info("Loaded phase loader configuration")
+logger.info("Loaded phase loader configuration")
             else:
-                self._create_default_configuration()
+self._create_default_configuration()
 
         except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
+logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
     def _create_default_configuration(self) -> None:
         """Create default phase loader configuration."""
-        config = {
-            "cache_size": 1000,
-            "auto_reload_enabled": True,
-            "validation_enabled": True,
-            "default_data_format": "json",
-            "validation_rules": {
-                "phase_configuration": {
-                    "required_fields": ["phase_type", "parameters"],
-                    "parameter_types": {
-                        "duration_minutes": "int",
-                        "confidence_threshold": "float",
-                        "risk_parameters": "dict"
-                    }
-                }
-            }
-        }
+config = {
+"cache_size": 1000,
+"auto_reload_enabled": True,
+"validation_enabled": True,
+"default_data_format": "json",
+"validation_rules": {
+"phase_configuration": {
+"required_fields": ["phase_type", "parameters"],
+"parameter_types": {
+"duration_minutes": "int",
+"confidence_threshold": "float",
+"risk_parameters": "dict"
+}
+}
+}
+}
 
         try:
-            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
+os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent=2)
         except Exception as e:
-            logger.error(f"Error saving configuration: {e}")
+logger.error(f"Error saving configuration: {e}")
 
     def _initialize_loader(self) -> None:
         """Initialize the phase loader."""
-        self.loader_status = LoaderStatus.READY
-        logger.info("Phase loader initialized and ready")
+self.loader_status = LoaderStatus.READY
+logger.info("Phase loader initialized and ready")
 
     def _start_background_loader(self) -> None:
         """Start the background loading thread."""
-        self.background_loader = threading.Thread(target=self._background_load_loop, daemon=True)
+self.background_loader = threading.Thread(target=self._background_load_loop, daemon=True)
         self.background_loader.start()
         logger.info("Background loader started")
 
@@ -158,15 +158,15 @@ class PhaseLoader:
         while True:
             try:
                 if self.loader_status == LoaderStatus.READY:
-                    self._check_for_updates()
+self._check_for_updates()
                 time.sleep(30)  # Check every 30 seconds
             except Exception as e:
-                logger.error(f"Error in background loader: {e}")
+logger.error(f"Error in background loader: {e}")
 
     def load_phase_configuration(self, config_file_path: str) -> Optional[PhaseConfiguration]:
         """Load a phase configuration from file."""
         try:
-            self.loader_status = LoaderStatus.LOADING
+self.loader_status = LoaderStatus.LOADING
 
             if not os.path.exists(config_file_path):
                 logger.error(f"Configuration file not found: {config_file_path}")
@@ -184,10 +184,10 @@ class PhaseLoader:
                 return None
 
             # Create configuration object
-            config_id = f"config_{int(time.time())}"
+config_id = f"config_{int(time.time())}"
             configuration = PhaseConfiguration(
                 config_id=config_id,
-                phase_type=config_data.get("phase_type", ""),
+phase_type=config_data.get("phase_type", ""),
                 parameters=config_data.get("parameters", {}),
                 constraints=config_data.get("constraints", {}),
                 metadata=config_data.get("metadata", {}),
@@ -195,40 +195,40 @@ class PhaseLoader:
                 created_at=datetime.now(),
                 updated_at=datetime.now(),
                 is_active=True
-            )
+
 
             # Store configuration
-            self.loaded_configurations[config_id] = configuration
+self.loaded_configurations[config_id] = configuration
 
-            self.loader_status = LoaderStatus.READY
-            logger.info(f"Loaded phase configuration: {config_id}")
+self.loader_status = LoaderStatus.READY
+logger.info(f"Loaded phase configuration: {config_id}")
             return configuration
 
         except Exception as e:
-            logger.error(f"Error loading phase configuration: {e}")
+logger.error(f"Error loading phase configuration: {e}")
             self.loader_status = LoaderStatus.ERROR
             return None
 
     def _validate_configuration(self, config_data: Dict[str, Any]) -> bool:
         """Validate a configuration against validation rules."""
         try:
-            self.loader_status = LoaderStatus.VALIDATING
+self.loader_status = LoaderStatus.VALIDATING
 
-            validation_rules = self.validation_rules.get("phase_configuration", {})
+validation_rules = self.validation_rules.get("phase_configuration", {})
             required_fields = validation_rules.get("required_fields", [])
             parameter_types = validation_rules.get("parameter_types", {})
 
             # Check required fields
             for field in required_fields:
                 if field not in config_data:
-                    logger.error(f"Missing required field: {field}")
+logger.error(f"Missing required field: {field}")
                     return False
 
             # Check parameter types
-            parameters = config_data.get("parameters", {})
+parameters = config_data.get("parameters", {})
             for param_name, expected_type in parameter_types.items():
                 if param_name in parameters:
-                    param_value = parameters[param_name]
+param_value = parameters[param_name]
                     if not self._check_type(param_value, expected_type):
                         logger.error(f"Invalid type for parameter {param_name}: expected {expected_type}")
                         return False
@@ -236,7 +236,7 @@ class PhaseLoader:
             return True
 
         except Exception as e:
-            logger.error(f"Error validating configuration: {e}")
+logger.error(f"Error validating configuration: {e}")
             return False
 
     def _check_type(self, value: Any, expected_type: str) -> bool:
@@ -261,45 +261,45 @@ class PhaseLoader:
 
     def load_phase_data(self, data_file_path: str, phase_id: str,
                        data_format: DataFormat = DataFormat.JSON) -> Optional[LoadedPhaseData]:
-        """Load phase data from file."""
+"""Load phase data from file."""
         try:
             if not os.path.exists(data_file_path):
                 logger.error(f"Data file not found: {data_file_path}")
                 return None
 
             # Load data based on format
-            data_content = self._load_data_by_format(data_file_path, data_format)
+data_content = self._load_data_by_format(data_file_path, data_format)
             if data_content is None:
                 return None
 
             # Calculate file size and checksum
-            file_size = os.path.getsize(data_file_path)
+file_size = os.path.getsize(data_file_path)
             checksum = self._calculate_checksum(data_file_path)
 
             # Create loaded data object
-            data_id = f"data_{phase_id}_{int(time.time())}"
+data_id = f"data_{phase_id}_{int(time.time())}"
             loaded_data = LoadedPhaseData(
                 data_id=data_id,
-                phase_id=phase_id,
-                data_format=data_format,
-                data_content=data_content,
-                size_bytes=file_size,
-                checksum=checksum,
-                loaded_at=datetime.now(),
+phase_id=phase_id,
+data_format=data_format,
+data_content=data_content,
+size_bytes=file_size,
+checksum=checksum,
+loaded_at=datetime.now(),
                 metadata={"file_path": data_file_path}
-            )
+
 
             # Store loaded data
-            self.loaded_data[data_id] = loaded_data
+self.loaded_data[data_id] = loaded_data
 
             # Cache data for quick access
-            self.data_cache[phase_id] = data_content
+self.data_cache[phase_id] = data_content
 
-            logger.info(f"Loaded phase data: {data_id}")
+logger.info(f"Loaded phase data: {data_id}")
             return loaded_data
 
         except Exception as e:
-            logger.error(f"Error loading phase data: {e}")
+logger.error(f"Error loading phase data: {e}")
             return None
 
     def _load_data_by_format(self, file_path: str, data_format: DataFormat) -> Optional[Any]:
@@ -316,24 +316,24 @@ class PhaseLoader:
                 with open(file_path, 'r') as f:
                     return yaml.safe_load(f)
             else:
-                logger.error(f"Unsupported data format: {data_format}")
+logger.error(f"Unsupported data format: {data_format}")
                 return None
 
         except Exception as e:
-            logger.error(f"Error loading data by format: {e}")
+logger.error(f"Error loading data by format: {e}")
             return None
 
     def _calculate_checksum(self, file_path: str) -> str:
         """Calculate checksum for a file."""
         try:
             import hashlib
-            hash_md5 = hashlib.md5()
+hash_md5 = hashlib.md5()
             with open(file_path, "rb") as f:
                 for chunk in iter(lambda: f.read(4096), b""):
                     hash_md5.update(chunk)
             return hash_md5.hexdigest()
         except Exception as e:
-            logger.error(f"Error calculating checksum: {e}")
+logger.error(f"Error calculating checksum: {e}")
             return ""
 
     def get_phase_configuration(self, config_id: str) -> Optional[PhaseConfiguration]:
@@ -356,23 +356,23 @@ class PhaseLoader:
         """Update a configuration."""
         try:
             if config_id not in self.loaded_configurations:
-                logger.warning(f"Configuration {config_id} not found")
+logger.warning(f"Configuration {config_id} not found")
                 return False
 
-            configuration = self.loaded_configurations[config_id]
+configuration = self.loaded_configurations[config_id]
 
             # Update fields
             for key, value in updates.items():
                 if hasattr(configuration, key):
                     setattr(configuration, key, value)
 
-            configuration.updated_at = datetime.now()
+configuration.updated_at = datetime.now()
 
-            logger.info(f"Updated configuration: {config_id}")
+logger.info(f"Updated configuration: {config_id}")
             return True
 
         except Exception as e:
-            logger.error(f"Error updating configuration: {e}")
+logger.error(f"Error updating configuration: {e}")
             return False
 
     def deactivate_configuration(self, config_id: str) -> bool:
@@ -381,15 +381,15 @@ class PhaseLoader:
             if config_id not in self.loaded_configurations:
                 return False
 
-            configuration = self.loaded_configurations[config_id]
-            configuration.is_active = False
-            configuration.updated_at = datetime.now()
+configuration = self.loaded_configurations[config_id]
+configuration.is_active = False
+configuration.updated_at = datetime.now()
 
-            logger.info(f"Deactivated configuration: {config_id}")
+logger.info(f"Deactivated configuration: {config_id}")
             return True
 
         except Exception as e:
-            logger.error(f"Error deactivating configuration: {e}")
+logger.error(f"Error deactivating configuration: {e}")
             return False
 
     def _check_for_updates(self) -> None:
@@ -399,63 +399,63 @@ class PhaseLoader:
             # and reload configurations automatically
             pass
         except Exception as e:
-            logger.error(f"Error checking for updates: {e}")
+logger.error(f"Error checking for updates: {e}")
 
     def clear_cache(self) -> None:
         """Clear the data cache."""
-        self.data_cache.clear()
+self.data_cache.clear()
         logger.info("Data cache cleared")
 
     def get_loader_statistics(self) -> Dict[str, Any]:
         """Get comprehensive loader statistics."""
-        total_configurations = len(self.loaded_configurations)
+total_configurations = len(self.loaded_configurations)
         active_configurations = len(self.get_active_configurations())
         total_data_files = len(self.loaded_data)
         cache_size = len(self.data_cache)
 
         # Calculate data sizes
-        total_data_size = sum(data.size_bytes for data in self.loaded_data.values())
+total_data_size = sum(data.size_bytes for data in self.loaded_data.values())
 
         return {
-            "loader_status": self.loader_status.value,
-            "total_configurations": total_configurations,
-            "active_configurations": active_configurations,
-            "total_data_files": total_data_files,
-            "cache_size": cache_size,
-            "total_data_size_bytes": total_data_size,
-            "validation_rules_count": len(self.validation_rules)
+"loader_status": self.loader_status.value,
+"total_configurations": total_configurations,
+"active_configurations": active_configurations,
+"total_data_files": total_data_files,
+"cache_size": cache_size,
+"total_data_size_bytes": total_data_size,
+"validation_rules_count": len(self.validation_rules)
         }
 
 def main() -> None:
     """Main function for testing and demonstration."""
-    loader = PhaseLoader("./test_phase_loader_config.json")
+loader = PhaseLoader("./test_phase_loader_config.json")
 
     # Create a test configuration
-    test_config = {
-        "phase_type": "accumulation",
-        "parameters": {
-            "duration_minutes": 60,
-            "confidence_threshold": 0.8,
-            "risk_parameters": {"max_drawdown": 0.05}
-        },
-        "constraints": {"max_position_size": 0.1},
-        "version": "1.0"
-    }
+test_config = {
+"phase_type": "accumulation",
+"parameters": {
+"duration_minutes": 60,
+"confidence_threshold": 0.8,
+"risk_parameters": {"max_drawdown": 0.05}
+},
+"constraints": {"max_position_size": 0.1},
+"version": "1.0"
+}
 
     # Save test configuration to file
-    test_config_path = "./test_phase_config.json"
+test_config_path = "./test_phase_config.json"
     with open(test_config_path, 'w') as f:
         json.dump(test_config, f, indent=2)
 
     # Load configuration
-    configuration = loader.load_phase_configuration(test_config_path)
+configuration = loader.load_phase_configuration(test_config_path)
     if configuration:
-        safe_print(f"Loaded configuration: {configuration.config_id}")
+safe_print(f"Loaded configuration: {configuration.config_id}")
         safe_print(f"Phase type: {configuration.phase_type}")
 
     # Get statistics
-    stats = loader.get_loader_statistics()
+stats = loader.get_loader_statistics()
     safe_print(f"Loader Statistics: {stats}")
 
 if __name__ == "__main__":
-    main()
+main()

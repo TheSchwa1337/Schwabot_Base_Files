@@ -23,9 +23,9 @@ import numpy.typing as npt
 # Import CLI handler for safe output
 try:
     from core.type_binding_system import cli_handler
-    CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE = True
 except ImportError:
-    CLI_HANDLER_AVAILABLE = False
+CLI_HANDLER_AVAILABLE = False
     # Fallback for CLI safety
     def safe_print(msg: str) -> None:
         try:
@@ -44,17 +44,17 @@ class MathLib:
 
     def __init__(self) -> None:
         """Initialize the MathLib component."""
-        self.version = "1.0.0"
-        self.initialized = True
+self.version = "1.0.0"
+self.initialized = True
         if CLI_HANDLER_AVAILABLE:
-            cli_handler.log_safe(logger, "info", f"MathLib v{self.version} initialized")
+cli_handler.log_safe(logger, "info", f"MathLib v{self.version} initialized")
         else:
-            logger.info(f"MathLib v{self.version} initialized")
+logger.info(f"MathLib v{self.version} initialized")
 
     def calculate(self, operation: str, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Perform a mathematical calculation based on the requested operation."""
-        operations = {
-            "mean": lambda x: unified_math.unified_math.mean(x),
+operations = {
+"mean": lambda x: unified_math.unified_math.mean(x),
             "std": lambda x: unified_math.unified_math.std(x),
             "sum": lambda x: np.sum(x),
             "sqrt": lambda x: unified_math.unified_math.sqrt(x),
@@ -67,50 +67,50 @@ class MathLib:
 
         if operation in operations and args:
             try:
-                result = operations[operation](args[0])
+result = operations[operation](args[0])
                 return {
-                    "operation": operation,
-                    "result": result,
-                    "status": "success",
-                }
+"operation": operation,
+"result": result,
+"status": "success",
+}
             except Exception as e:
                 if CLI_HANDLER_AVAILABLE:
-                    cli_handler.log_safe(logger, "error", f"Error in {operation}: {e}")
+cli_handler.log_safe(logger, "error", f"Error in {operation}: {e}")
                 else:
-                    logger.error(f"Error in {operation}: {e}")
+logger.error(f"Error in {operation}: {e}")
                 return {
-                    "operation": operation,
-                    "error": str(e),
+"operation": operation,
+"error": str(e),
                     "status": "error",
-                }
+}
 
         return {
-            "operation": operation,
-            "args": args,
-            "kwargs": kwargs,
-            "status": "processed",
-        }
+"operation": operation,
+"args": args,
+"kwargs": kwargs,
+"status": "processed",
+}
 
 
 def mathematical_constants() -> Dict[str, float]:
     """Return common mathematical constants."""
     return {
-        "pi": math.pi,
-        "e": math.e,
-        "golden_ratio": 1.618033988749895,
-        "euler_mascheroni": 0.5772156649015329,
-    }
+"pi": math.pi,
+"e": math.e,
+"golden_ratio": 1.618033988749895,
+"euler_mascheroni": 0.5772156649015329,
+}
 
 
 def main() -> None:
     """Run MathLib as a standalone utility."""
-    lib = MathLib()
+lib = MathLib()
     if CLI_HANDLER_AVAILABLE:
-        cli_handler.log_safe(logger, "info", "MathLib main function executed successfully")
+cli_handler.log_safe(logger, "info", "MathLib main function executed successfully")
     else:
-        logger.info("MathLib main function executed successfully")
+logger.info("MathLib main function executed successfully")
     return lib
 
 
 if __name__ == "__main__":
-    main()
+main()

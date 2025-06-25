@@ -1,7 +1,7 @@
 # Import safe print for Windows compatibility
-try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
+try:
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -49,141 +49,141 @@ logger = logging.getLogger(__name__)
 class EnhancedWindowsCliCompatibilityHandler:
     """
 
-    Enhanced Windows CLI compatibility handler with bulletproof emoji management
-    and robust error handling for all CLI environments
-    """
+Enhanced Windows CLI compatibility handler with bulletproof emoji management
+and robust error handling for all CLI environments
+"""
 
     # Comprehensive emoji to ASIC mapping
-    EMOJI_TO_ASIC_MAPPING = {
+EMOJI_TO_ASIC_MAPPING = {
         # Status indicators
-        "✅": "[SUCCESS]",
-        "❌": "[ERROR]",
-        "⚠️": "[WARNING]",
-        "🚨": "[ALERT]",
-        "🎉": "[COMPLETE]",
-        "🔄": "[PROCESSING]",
-        "⏳": "[WAITING]",
-        "⭐": "[STAR]",
+"✅": "[SUCCESS]",
+"❌": "[ERROR]",
+"⚠️": "[WARNING]",
+"🚨": "[ALERT]",
+"🎉": "[COMPLETE]",
+"🔄": "[PROCESSING]",
+"⏳": "[WAITING]",
+"⭐": "[STAR]",
         # Action indicators
-        "🚀": "[LAUNCH]",
-        "🔧": "[TOOLS]",
-        "🛠️": "[REPAIR]",
-        "⚡": "[FAST]",
-        "🔍": "[SEARCH]",
-        "🎯": "[TARGET]",
-        "🔥": "[HOT]",
-        "❄️": "[COOL]",
+"🚀": "[LAUNCH]",
+"🔧": "[TOOLS]",
+"🛠️": "[REPAIR]",
+"⚡": "[FAST]",
+"🔍": "[SEARCH]",
+"🎯": "[TARGET]",
+"🔥": "[HOT]",
+"❄️": "[COOL]",
         # Data and analysis
-        "📊": "[DATA]",
-        "📈": "[PROFIT]",
-        "📉": "[LOSS]",
-        "💰": "[MONEY]",
-        "🧪": "[TEST]",
-        "⚖️": "[BALANCE]",
-        "🌡️": "[TEMP]",
-        "🔬": "[ANALYZE]",
+"📊": "[DATA]",
+"📈": "[PROFIT]",
+"📉": "[LOSS]",
+"💰": "[MONEY]",
+"🧪": "[TEST]",
+"⚖️": "[BALANCE]",
+"🌡️": "[TEMP]",
+"🔬": "[ANALYZE]",
         # System and technical
-        "💻": "[SYSTEM]",
-        "🖥️": "[COMPUTER]",
-        "📱": "[MOBILE]",
-        "🌐": "[NETWORK]",
-        "🔒": "[SECURE]",
-        "🔓": "[UNLOCK]",
-        "🔑": "[KEY]",
-        "🛡️": "[SHIELD]",
+"💻": "[SYSTEM]",
+"🖥️": "[COMPUTER]",
+"📱": "[MOBILE]",
+"🌐": "[NETWORK]",
+"🔒": "[SECURE]",
+"🔓": "[UNLOCK]",
+"🔑": "[KEY]",
+"🛡️": "[SHIELD]",
         # Mathematical and scientific
-        "🧮": "[CALC]",
-        "📐": "[MATH]",
-        "🔢": "[NUMBERS]",
-        "∞": "[INFINITY]",
-        "φ": "[PHI]",
-        "π": "[PI]",
-        "∑": "[SUM]",
-        "∫": "[INTEGRAL]",
+"🧮": "[CALC]",
+"📐": "[MATH]",
+"🔢": "[NUMBERS]",
+"∞": "[INFINITY]",
+"φ": "[PHI]",
+"π": "[PI]",
+"∑": "[SUM]",
+"∫": "[INTEGRAL]",
         # Trading specific
-        "📊": "[CHART]",
-        "📈": "[BULL]",
-        "📉": "[BEAR]",
-        "💹": "[TRADING]",
-        "🏦": "[BANK]",
-        "💳": "[CARD]",
-        "💎": "[DIAMOND]",
-        "🎰": "[RISK]",
+"📊": "[CHART]",
+"📈": "[BULL]",
+"📉": "[BEAR]",
+"💹": "[TRADING]",
+"🏦": "[BANK]",
+"💳": "[CARD]",
+"💎": "[DIAMOND]",
+"🎰": "[RISK]",
         # Quantum and advanced
-        "⚛️": "[QUANTUM]",
-        "🌀": "[SPIRAL]",
-        "🔮": "[CRYSTAL]",
-        "🌌": "[COSMOS]",
-        "🎡": "[FERRIS]",
-        "🔬": "[SCOPE]",
-        "⚗️": "[ALCHEMY]",
-        "🧬": "[DNA]",
+"⚛️": "[QUANTUM]",
+"🌀": "[SPIRAL]",
+"🔮": "[CRYSTAL]",
+"🌌": "[COSMOS]",
+"🎡": "[FERRIS]",
+"🔬": "[SCOPE]",
+"⚗️": "[ALCHEMY]",
+"🧬": "[DNA]",
         # Communication and flow
-        "📢": "[ANNOUNCE]",
-        "📝": "[NOTES]",
-        "📋": "[CLIPBOARD]",
-        "📎": "[ATTACH]",
-        "🔗": "[LINK]",
-        "🔀": "[SHUFFLE]",
-        "🔁": "[REPEAT]",
-        "↩️": "[RETURN]",
+"📢": "[ANNOUNCE]",
+"📝": "[NOTES]",
+"📋": "[CLIPBOARD]",
+"📎": "[ATTACH]",
+"🔗": "[LINK]",
+"🔀": "[SHUFFLE]",
+"🔁": "[REPEAT]",
+"↩️": "[RETURN]",
         # General symbols
-        "💥": "[EXPLOSION]",
-        "💡": "[IDEA]",
-        "🎪": "[CIRCUS]",
-        "🎭": "[MASK]",
-        "🎨": "[ART]",
-        "🏗️": "[CONSTRUCT]",
-        "🗂️": "[FOLDER]",
-        "📦": "[PACKAGE]",
-    }
+"💥": "[EXPLOSION]",
+"💡": "[IDEA]",
+"🎪": "[CIRCUS]",
+"🎭": "[MASK]",
+"🎨": "[ART]",
+"🏗️": "[CONSTRUCT]",
+"🗂️": "[FOLDER]",
+"📦": "[PACKAGE]",
+}
 
     # Unicode fallback mappings for special characters
-    UNICODE_FALLBACKS = {
-        "→": "->",
-        "←": "<-",
-        "↑": "^",
-        "↓": "v",
-        "≤": "<=",
-        "≥": ">=",
-        "≠": "!=",
-        "≈": "~=",
-        "∞": "in",
-        "α": "alpha",
-        "β": "beta",
-        "γ": "gamma",
-        "δ": "delta",
-        "ε": "epsilon",
-        "θ": "theta",
-        "λ": "lambda",
-        "μ": "mu",
-        "π": "pi",
-        "σ": "sigma",
-        "φ": "phi",
-        "ψ": "psi",
-        "ω": "omega",
-    }
+UNICODE_FALLBACKS = {
+"→": "->",
+"←": "<-",
+"↑": "^",
+"↓": "v",
+"≤": "<=",
+"≥": ">=",
+"≠": "!=",
+"≈": "~=",
+"∞": "in",
+"α": "alpha",
+"β": "beta",
+"γ": "gamma",
+"δ": "delta",
+"ε": "epsilon",
+"θ": "theta",
+"λ": "lambda",
+"μ": "mu",
+"π": "pi",
+"σ": "sigma",
+"φ": "phi",
+"ψ": "psi",
+"ω": "omega",
+}
 
     # CLI environment detection cache
-    _cli_environment_cache: Optional[Dict[str, Any]] = None
-    _encoding_cache: Optional[str] = None
+_cli_environment_cache: Optional[Dict[str, Any]] = None
+_encoding_cache: Optional[str] = None
 
-    @classmethod
+@classmethod
     def detect_cli_environment(cls) -> Dict[str, Any]:
         """
 
-        Detect CLI environment capabilities and limitations
+Detect CLI environment capabilities and limitations
 
-        Returns:
-            Dictionary with environment information
-        """
+Returns:
+Dictionary with environment information
+"""
         if cls._cli_environment_cache is not None:
             return cls._cli_environment_cache
 
-        env_info = {
-            "platform": sys.platform,
-            "python_version": sys.version_info,
-            "encoding": cls._detect_encoding(),
+env_info = {
+"platform": sys.platform,
+"python_version": sys.version_info,
+"encoding": cls._detect_encoding(),
             "emoji_safe": cls._test_emoji_support(),
             "unicode_safe": cls._test_unicode_support(),
             "color_safe": cls._test_color_support(),
@@ -194,65 +194,65 @@ class EnhancedWindowsCliCompatibilityHandler:
             "wsl": cls._is_wsl(),
         }
 
-        cls._cli_environment_cache = env_info
+cls._cli_environment_cache = env_info
         return env_info
 
-    @classmethod
+@classmethod
     def _detect_encoding(cls) -> str:
         """Detect system encoding."""
         if cls._encoding_cache is not None:
             return cls._encoding_cache
 
         try:
-            encoding = sys.stdout.encoding or "utf-8"
-            cls._encoding_cache = encoding
+encoding = sys.stdout.encoding or "utf-8"
+cls._encoding_cache = encoding
             return encoding
         except Exception:
-            cls._encoding_cache = "utf-8"
+cls._encoding_cache = "utf-8"
             return "utf-8"
 
-    @classmethod
+@classmethod
     def _test_emoji_support(cls) -> bool:
         """Test if emoji are supported in current environment."""
         try:
-            test_emoji = "🚀"
-            safe_print(test_emoji, end="", flush=True)
+test_emoji = "🚀"
+safe_print(test_emoji, end="", flush=True)
             return True
         except Exception:
             return False
 
-    @classmethod
+@classmethod
     def _test_unicode_support(cls) -> bool:
         """Test if Unicode is supported."""
         try:
-            test_unicode = "αβγδε"
-            safe_print(test_unicode, end="", flush=True)
+test_unicode = "αβγδε"
+safe_print(test_unicode, end="", flush=True)
             return True
         except Exception:
             return False
 
-    @classmethod
+@classmethod
     def _test_color_support(cls) -> bool:
         """Test if colors are supported."""
-        try:
             import colorama
+        try:
 
-            colorama.init()
+colorama.init()
             return True
         except ImportError:
             return False
 
-    @classmethod
+@classmethod
     def _is_interactive(cls) -> bool:
         """Check if running in interactive mode."""
         return hasattr(sys, "ps1")
 
-    @classmethod
+@classmethod
     def _is_windows_cli(cls) -> bool:
         """Check if running in Windows CLI."""
         return sys.platform == "win32"
 
-    @classmethod
+@classmethod
     def _is_powershell(cls) -> bool:
         """Check if running in PowerShell."""
         try:
@@ -260,7 +260,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         except Exception:
             return False
 
-    @classmethod
+@classmethod
     def _is_cmd(cls) -> bool:
         """Check if running in CMD."""
         try:
@@ -268,7 +268,7 @@ class EnhancedWindowsCliCompatibilityHandler:
         except Exception:
             return False
 
-    @classmethod
+@classmethod
     def _is_wsl(cls) -> bool:
         """Check if running in WSL."""
         try:
@@ -277,33 +277,33 @@ class EnhancedWindowsCliCompatibilityHandler:
         except Exception:
             return False
 
-    @classmethod
+@classmethod
     def safe_emoji_print(cls, message: str, force_ascii: bool = False) -> str:
         """
 
-        Safely print message with emoji handling
+Safely print message with emoji handling
 
-        Args:
-            message: Message to print
-            force_ascii: Force ASCII-only output
+Args:
+message: Message to print
+force_ascii: Force ASCII-only output
 
-        Returns:
-            Safe message string
-        """
+Returns:
+Safe message string
+"""
         if force_ascii:
             return cls._convert_to_ascii(message)
 
-        env_info = cls.detect_cli_environment()
+env_info = cls.detect_cli_environment()
 
         if env_info["emoji_safe"] and not env_info["windows_cli"]:
             return message
 
         return cls._convert_to_ascii(message)
 
-    @classmethod
+@classmethod
     def _convert_to_ascii(cls, message: str) -> str:
         """Convert message to ASCII-safe format."""
-        result = message
+result = message
 
         # Convert emojis
         for emoji, ascii_text in cls.EMOJI_TO_ASIC_MAPPING.items():
@@ -315,258 +315,258 @@ class EnhancedWindowsCliCompatibilityHandler:
 
         return result
 
-    @classmethod
+@classmethod
     def safe_encoding_write(cls, text: str, stream=None) -> bool:
         """
 
-        Safely write text with proper encoding
+Safely write text with proper encoding
 
-        Args:
-            text: Text to write
-            stream: Output stream (defaults to sys.stdout)
+Args:
+text: Text to write
+stream: Output stream (defaults to sys.stdout)
 
-        Returns:
-            Success status
-        """
+Returns:
+Success status
+"""
         if stream is None:
-            stream = sys.stdout
+stream = sys.stdout
 
         try:
             if hasattr(stream, "buffer"):
                 # Binary stream
-                encoded_text = text.encode(cls._detect_encoding(), errors="replace")
+encoded_text = text.encode(cls._detect_encoding(), errors="replace")
                 stream.buffer.write(encoded_text)
                 stream.buffer.flush()
             else:
                 # Text stream
-                stream.write(text)
+stream.write(text)
                 stream.flush()
             return True
         except Exception as e:
-            logger.error(f"Encoding write failed: {e}")
+logger.error(f"Encoding write failed: {e}")
             return False
 
-    @classmethod
+@classmethod
     def robust_log_handler(
         cls, logger: Any, level: str, message: str, context: str = ""
-    ) -> bool:
-        """
-        Robust logging handler with fallback mechanisms
+) -> bool:
+"""
+Robust logging handler with fallback mechanisms
 
-        Args:
-            logger: Logger instance
-            level: Log level
-            message: Log message
-            context: Additional context
+Args:
+logger: Logger instance
+level: Log level
+message: Log message
+context: Additional context
 
-        Returns:
-            Success status
-        """
+Returns:
+Success status
+"""
         try:
-            safe_message = cls.safe_emoji_print(message)
+safe_message = cls.safe_emoji_print(message)
             if context:
-                safe_message = f"{context}: {safe_message}"
+safe_message = f"{context}: {safe_message}"
 
-            log_method = getattr(logger, level.lower(), logger.info)
+log_method = getattr(logger, level.lower(), logger.info)
             log_method(safe_message)
             return True
         except Exception as e:
             # Fallback to print if logging fails
             try:
-                safe_print(f"[{level.upper()}] {message}")
+safe_print(f"[{level.upper()}] {message}")
                 return True
             except Exception:
                 return False
 
-    @classmethod
+@classmethod
     def create_safe_function_wrapper(cls, func: Callable) -> Callable:
         """
-        Create a safe wrapper for functions that handles CLI compatibility
+Create a safe wrapper for functions that handles CLI compatibility
 
-        Args:
-            func: Function to wrap
+Args:
+func: Function to wrap
 
-        Returns:
-            Wrapped function
-        """
+Returns:
+Wrapped function
+"""
 
-        @wraps(func)
+@wraps(func)
         def wrapper(*args, **kwargs):
             """TODO: document wrapper."""
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                error_msg = cls.safe_format_error(e, func.__name__)
+error_msg = cls.safe_format_error(e, func.__name__)
                 cls.safe_encoding_write(error_msg + "\n")
                 raise
 
         return wrapper
 
-    @classmethod
+@classmethod
     def safe_format_error(cls, error: Exception, context: str = "") -> str:
         """
-        Safely format error message for CLI output
+Safely format error message for CLI output
 
-        Args:
-            error: Exception to format
-            context: Error context
+Args:
+error: Exception to format
+context: Error context
 
-        Returns:
-            Formatted error message
-        """
+Returns:
+Formatted error message
+"""
         try:
-            error_type = type(error).__name__
+error_type = type(error).__name__
             error_msg = str(error)
 
             if context:
-                formatted = f"Error in {context}: {error_type}: {error_msg}"
+formatted = f"Error in {context}: {error_type}: {error_msg}"
             else:
-                formatted = f"{error_type}: {error_msg}"
+formatted = f"{error_type}: {error_msg}"
 
             return cls.safe_emoji_print(formatted)
         except Exception:
             return "Unknown error occurred"
 
-    @classmethod
+@classmethod
     def safe_progress_indicator(
         cls, current: int, total: int, prefix: str = "", suffix: str = ""
-    ) -> str:
-        """
-        Create a safe progress indicator
+) -> str:
+"""
+Create a safe progress indicator
 
-        Args:
-            current: Current progress value
-            total: Total value
-            prefix: Prefix text
-            suffix: Suffix text
+Args:
+current: Current progress value
+total: Total value
+prefix: Prefix text
+suffix: Suffix text
 
-        Returns:
-            Progress indicator string
-        """
+Returns:
+Progress indicator string
+"""
         try:
             if total == 0:
-                percentage = 0
+percentage = 0
             else:
-                percentage = unified_math.min(100, int((current / total) * 100))
+percentage = unified_math.min(100, int((current / total) * 100))
 
-            bar_length = 20
-            filled_length = int(bar_length * current // total)
+bar_length = 20
+filled_length = int(bar_length * current // total)
             bar = "█" * filled_length + "-" * (bar_length - filled_length)
 
-            progress_text = f"{prefix} |{bar}| {percentage}% {suffix}"
+progress_text = f"{prefix} |{bar}| {percentage}% {suffix}"
             return cls.safe_emoji_print(progress_text)
         except Exception:
             return f"{prefix} {current}/{total} {suffix}"
 
-    @classmethod
+@classmethod
     def create_safe_validation_reporter(cls) -> Callable:
         """
-        Create a validation reporter that works reliably across all CLI environments
+Create a validation reporter that works reliably across all CLI environments
 
-        Returns:
-            Safe reporting function
-        """
+Returns:
+Safe reporting function
+"""
 
         def safe_report(
             test_name: str,
-            status: bool,
-            details: str = "",
-            metrics: Dict[str, Any] = None,
-        ) -> str:
-            """
-            Report validation results safely
+status: bool,
+details: str = "",
+metrics: Dict[str, Any] = None,
+) -> str:
+"""
+Report validation results safely
 
-            Args:
-                test_name: Name of the test
-                status: Pass/fail status
-                details: Additional details
-                metrics: Performance metrics
+Args:
+test_name: Name of the test
+status: Pass/fail status
+details: Additional details
+metrics: Performance metrics
 
-            Returns:
-                Formatted report string
-            """
-            env_info = cls.detect_cli_environment()
+Returns:
+Formatted report string
+"""
+env_info = cls.detect_cli_environment()
 
             # Status indicators
             if env_info["emoji_safe"]:
-                status_indicator = "✅ PASS" if status else "❌ FAIL"
+status_indicator = "✅ PASS" if status else "❌ FAIL"
             else:
-                status_indicator = "[PASS]" if status else "[FAIL]"
+status_indicator = "[PASS]" if status else "[FAIL]"
 
             # Build report
-            report_lines = [f"{status_indicator} {test_name}"]
+report_lines = [f"{status_indicator} {test_name}"]
 
             if details:
-                report_lines.append(f"   Details: {details}")
+report_lines.append(f"   Details: {details}")
 
             if metrics:
                 for key, value in metrics.items():
                     if isinstance(value, float):
                         report_lines.append(f"   {key}: {value:.4f}")
                     else:
-                        report_lines.append(f"   {key}: {value}")
+report_lines.append(f"   {key}: {value}")
 
-            report = "\n".join(report_lines)
+report = "\n".join(report_lines)
             return cls.safe_emoji_print(report)
 
         return safe_report
 
-    @classmethod
+@classmethod
     def test_cli_compatibility(cls) -> Dict[str, Any]:
         """
-        Test CLI compatibility and return detailed results
+Test CLI compatibility and return detailed results
 
-        Returns:
-            Dictionary with compatibility test results
-        """
-        results = {
-            "environment": cls.detect_cli_environment(),
+Returns:
+Dictionary with compatibility test results
+"""
+results = {
+"environment": cls.detect_cli_environment(),
             "emoji_test": False,
-            "unicode_test": False,
-            "encoding_test": False,
-            "output_test": False,
-            "overall_compatibility": False,
-        }
+"unicode_test": False,
+"encoding_test": False,
+"output_test": False,
+"overall_compatibility": False,
+}
 
         # Test emoji handling
         try:
-            test_message = "🚀 Test message with emoji ✅"
-            safe_message = cls.safe_emoji_print(test_message)
+test_message = "🚀 Test message with emoji ✅"
+safe_message = cls.safe_emoji_print(test_message)
             results["emoji_test"] = len(safe_message) > 0
         except Exception:
-            results["emoji_test"] = False
+results["emoji_test"] = False
 
         # Test Unicode handling
         try:
-            unicode_message = "Testing Unicode: α β γ δ ε → ← ↑ ↓"
-            safe_unicode = cls.safe_emoji_print(unicode_message)
+unicode_message = "Testing Unicode: α β γ δ ε → ← ↑ ↓"
+safe_unicode = cls.safe_emoji_print(unicode_message)
             results["unicode_test"] = len(safe_unicode) > 0
         except Exception:
-            results["unicode_test"] = False
+results["unicode_test"] = False
 
         # Test encoding
         try:
-            test_text = "Encoding test: special chars åÅæÆøØ"
-            results["encoding_test"] = cls.safe_encoding_write(test_text, io.StringIO())
+test_text = "Encoding test: special chars åÅæÆøØ"
+results["encoding_test"] = cls.safe_encoding_write(test_text, io.StringIO())
         except Exception:
-            results["encoding_test"] = False
+results["encoding_test"] = False
 
         # Test output
         try:
-            test_stream = io.StringIO()
+test_stream = io.StringIO()
             results["output_test"] = cls.safe_encoding_write("Output test", test_stream)
         except Exception:
-            results["output_test"] = False
+results["output_test"] = False
 
         # Overall compatibility
-        results["overall_compatibility"] = all(
+results["overall_compatibility"] = all(
             [
-                results["emoji_test"],
-                results["unicode_test"],
-                results["encoding_test"],
-                results["output_test"],
-            ]
-        )
+results["emoji_test"],
+results["unicode_test"],
+results["encoding_test"],
+results["output_test"],
+]
+
 
         return results
 
@@ -575,9 +575,9 @@ class EnhancedWindowsCliCompatibilityHandler:
 def cli_safe(func: Callable) -> Callable:
     """Make a function CLI-safe across Windows environments.
 
-    Usage::
+Usage::
 
-        @cli_safe
+@cli_safe
         def my_function():
             safe_print("🚀 This will work everywhere!")
     """
@@ -587,17 +587,17 @@ def cli_safe(func: Callable) -> Callable:
 # Convenience functions for common operations
 def safe_print(message: str, force_ascii: bool = False) -> None:
     """Print message safely across all CLI environments."""
-    safe_message = EnhancedWindowsCliCompatibilityHandler.safe_emoji_print(
+safe_message = EnhancedWindowsCliCompatibilityHandler.safe_emoji_print(
         message, force_ascii
-    )
-    EnhancedWindowsCliCompatibilityHandler.safe_encoding_write(safe_message + "\n")
+
+EnhancedWindowsCliCompatibilityHandler.safe_encoding_write(safe_message + "\n")
 
 
 def safe_log(logger: Any, level: str, message: str, context: str = "") -> bool:
     """Log message safely across all CLI environments."""
     return EnhancedWindowsCliCompatibilityHandler.robust_log_handler(
         logger, level, message, context
-    )
+
 
 
 def get_safe_reporter() -> Callable:
@@ -613,60 +613,60 @@ def get_cli_info() -> Dict[str, Any]:
 # Example usage and testing
 def main():
     """Test the enhanced Windows CLI compatibility handler."""
-    safe_safe_print("🎯 Enhanced Windows CLI Compatibility Handler Test")
+safe_safe_print("🎯 Enhanced Windows CLI Compatibility Handler Test")
     safe_safe_print("=" * 60)
 
     # Test environment detection
-    env_info = get_cli_info()
+env_info = get_cli_info()
     safe_safe_print("📊 Environment Detection Results:")
     for key, value in env_info.items():
         safe_safe_print(f"   {key}: {value}")
 
     # Test emoji handling
-    safe_safe_print("\n🔍 Testing Emoji Handling:")
+safe_safe_print("\n🔍 Testing Emoji Handling:")
     test_messages = [
-        "✅ Success message",
-        "❌ Error message",
-        "🚀 Launch sequence",
-        "📈 Profit trajectory",
-        "🎡 Ferris wheel analysis",
-    ]
+"✅ Success message",
+"❌ Error message",
+"🚀 Launch sequence",
+"📈 Profit trajectory",
+"🎡 Ferris wheel analysis",
+]
 
     for msg in test_messages:
-        safe_safe_print(f"   {msg}")
+safe_safe_print(f"   {msg}")
 
     # Test progress indicator
-    safe_safe_print("\n🔄 Testing Progress Indicators:")
+safe_safe_print("\n🔄 Testing Progress Indicators:")
     for i in range(0, 101, 25):
         progress = EnhancedWindowsCliCompatibilityHandler.safe_progress_indicator(
             i, 100, "Progress:", "complete"
-        )
-        safe_safe_print(f"   {progress}")
+
+safe_safe_print(f"   {progress}")
 
     # Test validation reporter
-    safe_safe_print("\n🧪 Testing Validation Reporter:")
+safe_safe_print("\n🧪 Testing Validation Reporter:")
     reporter = get_safe_reporter()
     safe_safe_print(
         reporter("Core Math Integration", True, "All tests passed", {"speed": 125.5})
-    )
-    safe_safe_print(reporter("Unicode Support", False, "Encoding issues detected"))
+
+safe_safe_print(reporter("Unicode Support", False, "Encoding issues detected"))
 
     # Run compatibility test
-    safe_safe_print("\n🎯 Running Compatibility Test:")
+safe_safe_print("\n🎯 Running Compatibility Test:")
     compat_results = EnhancedWindowsCliCompatibilityHandler.test_cli_compatibility()
     for test, result in compat_results.items():
         if test != "environment":
-            status = "✅ PASS" if result else "❌ FAIL"
-            safe_safe_print(f"   {test}: {status}")
+status = "✅ PASS" if result else "❌ FAIL"
+safe_safe_print(f"   {test}: {status}")
 
-    safe_safe_print("\n🎉 CLI Compatibility Test Complete!")
+safe_safe_print("\n🎉 CLI Compatibility Test Complete!")
     overall_status = (
         "✅ COMPATIBLE"
         if compat_results["overall_compatibility"]
-        else "⚠️ PARTIAL COMPATIBILITY"
-    )
-    safe_safe_print(f"Overall Status: {overall_status}")
+else "⚠️ PARTIAL COMPATIBILITY"
+
+safe_safe_print(f"Overall Status: {overall_status}")
 
 
 if __name__ == "__main__":
-    main()
+main()

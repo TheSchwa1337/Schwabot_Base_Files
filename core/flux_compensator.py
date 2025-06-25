@@ -34,26 +34,26 @@ __all__ = ["FluxCompensator", "sync_flux_compensator"]
 class FluxCompensator:
     """Exponential-smoothing entropy corrector.
 
-    Parameters
-    ----------
-    threshold
-        Base entropy threshold.  When the *smoothed* entropy exceeds
-        ``threshold * multiplier`` the validator flags *False*.
-    alpha
-        Smoothing factor for EMA – between 0 and 1.  Higher = faster reaction.
-    window
-        Optional fixed window for simple moving average (SMA) if you prefer
+Parameters
+----------
+threshold
+Base entropy threshold.  When the *smoothed* entropy exceeds
+``threshold * multiplier`` the validator flags *False*.
+alpha
+Smoothing factor for EMA – between 0 and 1.  Higher = faster reaction.
+window
+Optional fixed window for simple moving average (SMA) if you prefer
         deterministic lag.  If ``window`` is ``None`` the class uses EMA.
     multiplier
-        Safety margin.  A value of 0.9 ⇒ allow 10 % slack under threshold.
-    """
+Safety margin.  A value of 0.9 ⇒ allow 10 % slack under threshold.
+"""
 
-    threshold: float = 5.0
-    alpha: float = 0.3
-    window: int | None = None
-    multiplier: float = 0.9
+threshold: float = 5.0
+alpha: float = 0.3
+window: int | None = None
+multiplier: float = 0.9
 
-    _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=False)
+_sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=False)
     _ema: float | None = field(default=None, init=False)
 
     # ------------------------------------------------------------------
@@ -71,14 +71,14 @@ class FluxCompensator:
     def _smooth(self, value: float) -> float:
         """TODO: document _smooth."""
         if self.window is not None and self.window > 1:
-            self._sma_buf.append(value)
+self._sma_buf.append(value)
             smoothed = float(unified_math.unified_math.mean(self._sma_buf))
             return smoothed
         # EMA path
         if self._ema is None:
-            self._ema = value
+self._ema = value
         else:
-            self._ema = self.alpha * value + (1.0 - self.alpha) * self._ema
+self._ema = self.alpha * value + (1.0 - self.alpha) * self._ema
         return self._ema
 
 
@@ -90,7 +90,7 @@ class FluxCompensator:
 def sync_flux_compensator(entropy: float, threshold: float) -> bool:
     """Single-shot flux compensation check.
 
-    Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for
+Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for
     quick gating where persistent history is not necessary.
-    """
+"""
     return entropy < threshold * 0.9

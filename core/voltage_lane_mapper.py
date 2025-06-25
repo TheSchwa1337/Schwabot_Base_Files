@@ -58,491 +58,491 @@ logger = logging.getLogger(__name__)
 
 class ComputeChannel(Enum):
     """Available compute channels."""
-    CPU = "cpu"
-    GPU = "gpu"
-    TENSOR = "tensor"
-    HYBRID = "hybrid"
+CPU = "cpu"
+GPU = "gpu"
+TENSOR = "tensor"
+HYBRID = "hybrid"
 
 class VoltageLevel(Enum):
     """Voltage level categories."""
-    LOW = "low"      # 0.8V - 1.2V
-    MEDIUM = "medium"  # 1.2V - 2.0V
-    HIGH = "high"    # 2.0V - 3.3V
+LOW = "low"      # 0.8V - 1.2V
+MEDIUM = "medium"  # 1.2V - 2.0V
+HIGH = "high"    # 2.0V - 3.3V
 
 class HandoffStatus(Enum):
     """Hand-off status types."""
-    PENDING = "pending"
-    SUCCESS = "success"
-    FAILED = "failed"
-    ROLLBACK = "rollback"
+PENDING = "pending"
+SUCCESS = "success"
+FAILED = "failed"
+ROLLBACK = "rollback"
 
 @dataclass
 class VoltageMapping:
     """Voltage mapping configuration."""
-    bit_depth: int
-    base_voltage: float
-    calculated_voltage: float
-    voltage_level: VoltageLevel
-    safety_margin: float
-    timestamp: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+bit_depth: int
+base_voltage: float
+calculated_voltage: float
+voltage_level: VoltageLevel
+safety_margin: float
+timestamp: datetime
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class ChannelAssignment:
     """Channel assignment result."""
-    channel_id: str
-    compute_channel: ComputeChannel
-    voltage_level: VoltageLevel
-    priority: float
-    capacity: float
-    current_load: float
-    assignment_score: float
-    timestamp: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+channel_id: str
+compute_channel: ComputeChannel
+voltage_level: VoltageLevel
+priority: float
+capacity: float
+current_load: float
+assignment_score: float
+timestamp: datetime
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class HandoffRequest:
     """Hand-off request structure."""
-    request_id: str
-    source_channel: str
-    target_channel: str
-    bit_depth: int
-    voltage_level: VoltageLevel
-    priority: float
-    timestamp: datetime
-    timeout: float = 5.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
+request_id: str
+source_channel: str
+target_channel: str
+bit_depth: int
+voltage_level: VoltageLevel
+priority: float
+timestamp: datetime
+timeout: float = 5.0
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class HandoffResult:
     """Hand-off result structure."""
-    request_id: str
-    status: HandoffStatus
-    source_channel: str
-    target_channel: str
-    handoff_time: float
-    voltage_delta: float
-    latency: float
-    error_message: Optional[str] = None
-    timestamp: datetime = field(default_factory=datetime.now)
+request_id: str
+status: HandoffStatus
+source_channel: str
+target_channel: str
+handoff_time: float
+voltage_delta: float
+latency: float
+error_message: Optional[str] = None
+timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 class VoltageLaneMapper:
     """
-    Voltage Lane Mapper for Schwabot UROS v1.0.
+Voltage Lane Mapper for Schwabot UROS v1.0.
 
-    Mathematical Foundation:
-    - Voltage Calculation: V(bit_depth) = base_voltage * (2^(bit_depth/8))
+Mathematical Foundation:
+- Voltage Calculation: V(bit_depth) = base_voltage * (2^(bit_depth/8))
     - Channel Assignment: channel_id = (voltage_level % num_channels) + 1
     - Safety Validation: ΔV < threshold && latency < max_latency
-    - Hand-off Score: score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
+- Hand-off Score: score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
     """
 
     def __init__(self, config_path: str = "./config/voltage_lane_config.json"):
         self.config_path = config_path
 
         # Voltage configuration
-        self.base_voltage = 1.0  # Base voltage for calculations
-        self.max_voltage = 3.3   # Maximum safe voltage
-        self.min_voltage = 0.8   # Minimum safe voltage
-        self.voltage_threshold = 0.1  # Maximum voltage delta for hand-off
+self.base_voltage = 1.0  # Base voltage for calculations
+self.max_voltage = 3.3   # Maximum safe voltage
+self.min_voltage = 0.8   # Minimum safe voltage
+self.voltage_threshold = 0.1  # Maximum voltage delta for hand-off
 
         # Channel configuration
-        self.channels: Dict[str, Dict[str, Any]] = {
-            "cpu": {"capacity": 1.0, "current_load": 0.0, "voltage_range": (0.8, 1.2)},
+self.channels: Dict[str, Dict[str, Any]] = {
+"cpu": {"capacity": 1.0, "current_load": 0.0, "voltage_range": (0.8, 1.2)},
             "gpu": {"capacity": 2.0, "current_load": 0.0, "voltage_range": (1.0, 2.0)},
             "tensor": {"capacity": 3.0, "current_load": 0.0, "voltage_range": (1.5, 3.3)}
         }
 
         # Hand-off configuration
-        self.max_handoff_latency = 0.001  # 1ms maximum
-        self.handoff_timeout = 5.0  # 5 seconds timeout
-        self.rollback_threshold = 0.5  # 50% failure rate triggers rollback
+self.max_handoff_latency = 0.001  # 1ms maximum
+self.handoff_timeout = 5.0  # 5 seconds timeout
+self.rollback_threshold = 0.5  # 50% failure rate triggers rollback
 
         # Performance tracking
-        self.voltage_mappings: List[VoltageMapping] = []
-        self.channel_assignments: List[ChannelAssignment] = []
-        self.handoff_requests: List[HandoffRequest] = []
-        self.handoff_results: List[HandoffResult] = []
+self.voltage_mappings: List[VoltageMapping] = []
+self.channel_assignments: List[ChannelAssignment] = []
+self.handoff_requests: List[HandoffRequest] = []
+self.handoff_results: List[HandoffResult] = []
 
         # Threading for async operations
-        self.handoff_queue = queue.Queue()
+self.handoff_queue = queue.Queue()
         self.handoff_thread = None
-        self.handoff_running = False
+self.handoff_running = False
 
         # Load configuration
-        self._load_configuration()
+self._load_configuration()
         self._start_handoff_processor()
 
-        logger.info("Voltage Lane Mapper initialized")
+logger.info("Voltage Lane Mapper initialized")
 
     def _load_configuration(self) -> None:
         """Load voltage lane configuration."""
         try:
             # Default configuration
-            config = {
-                "voltage_parameters": {
-                    "base_voltage": 1.0,
-                    "max_voltage": 3.3,
-                    "min_voltage": 0.8,
-                    "voltage_threshold": 0.1
-                },
-                "channel_configuration": {
-                    "cpu": {"capacity": 1.0, "voltage_range": [0.8, 1.2]},
-                    "gpu": {"capacity": 2.0, "voltage_range": [1.0, 2.0]},
-                    "tensor": {"capacity": 3.0, "voltage_range": [1.5, 3.3]}
-                },
-                "handoff_parameters": {
-                    "max_latency": 0.001,
-                    "timeout": 5.0,
-                    "rollback_threshold": 0.5
-                }
-            }
+config = {
+"voltage_parameters": {
+"base_voltage": 1.0,
+"max_voltage": 3.3,
+"min_voltage": 0.8,
+"voltage_threshold": 0.1
+},
+"channel_configuration": {
+"cpu": {"capacity": 1.0, "voltage_range": [0.8, 1.2]},
+"gpu": {"capacity": 2.0, "voltage_range": [1.0, 2.0]},
+"tensor": {"capacity": 3.0, "voltage_range": [1.5, 3.3]}
+},
+"handoff_parameters": {
+"max_latency": 0.001,
+"timeout": 5.0,
+"rollback_threshold": 0.5
+}
+}
 
-            self.config = config
+self.config = config
 
             # Update parameters from config
-            self.base_voltage = config["voltage_parameters"]["base_voltage"]
-            self.max_voltage = config["voltage_parameters"]["max_voltage"]
-            self.min_voltage = config["voltage_parameters"]["min_voltage"]
-            self.voltage_threshold = config["voltage_parameters"]["voltage_threshold"]
+self.base_voltage = config["voltage_parameters"]["base_voltage"]
+self.max_voltage = config["voltage_parameters"]["max_voltage"]
+self.min_voltage = config["voltage_parameters"]["min_voltage"]
+self.voltage_threshold = config["voltage_parameters"]["voltage_threshold"]
 
-            logger.info("Voltage lane configuration loaded")
+logger.info("Voltage lane configuration loaded")
 
         except Exception as e:
-            logger.error(f"Error loading configuration: {e}")
+logger.error(f"Error loading configuration: {e}")
 
     def _start_handoff_processor(self) -> None:
         """Start the hand-off processing thread."""
         try:
-            self.handoff_running = True
-            self.handoff_thread = threading.Thread(target=self._process_handoffs, daemon=True)
+self.handoff_running = True
+self.handoff_thread = threading.Thread(target=self._process_handoffs, daemon=True)
             self.handoff_thread.start()
             logger.info("Hand-off processor started")
 
         except Exception as e:
-            logger.error(f"Error starting hand-off processor: {e}")
+logger.error(f"Error starting hand-off processor: {e}")
 
     def _process_handoffs(self) -> None:
         """Process hand-off queue in background thread."""
         while self.handoff_running:
             try:
                 # Get hand-off request from queue with timeout
-                request = self.handoff_queue.get(timeout=1.0)
+request = self.handoff_queue.get(timeout=1.0)
 
                 if request:
-                    result = self._execute_handoff(request)
+result = self._execute_handoff(request)
                     self.handoff_results.append(result)
 
             except queue.Empty:
                 continue
             except Exception as e:
-                logger.error(f"Error processing hand-off: {e}")
+logger.error(f"Error processing hand-off: {e}")
 
     def calculate_voltage_for_bit_depth(self, bit_depth: int) -> VoltageMapping:
         """
-        Calculate voltage for given bit depth.
+Calculate voltage for given bit depth.
 
-        Mathematical Formula:
-        V(bit_depth) = base_voltage * (2^(bit_depth/8))
+Mathematical Formula:
+V(bit_depth) = base_voltage * (2^(bit_depth/8))
 
-        Parameters:
-        -----------
-        bit_depth : int
-            Bit depth (4, 8, or 42)
+Parameters:
+-----------
+bit_depth : int
+Bit depth (4, 8, or 42)
 
-        Returns:
-        --------
-        VoltageMapping
-            Voltage mapping result
-        """
+Returns:
+--------
+VoltageMapping
+Voltage mapping result
+"""
         try:
             # Calculate voltage using mathematical formula
-            calculated_voltage = self.base_voltage * (2 ** (bit_depth / 8))
+calculated_voltage = self.base_voltage * (2 ** (bit_depth / 8))
 
             # Apply safety constraints
-            calculated_voltage = unified_math.max(self.min_voltage, unified_math.min(self.max_voltage, calculated_voltage))
+calculated_voltage = unified_math.max(self.min_voltage, unified_math.min(self.max_voltage, calculated_voltage))
 
             # Determine voltage level
             if calculated_voltage <= 1.2:
-                voltage_level = VoltageLevel.LOW
+voltage_level = VoltageLevel.LOW
             elif calculated_voltage <= 2.0:
-                voltage_level = VoltageLevel.MEDIUM
+voltage_level = VoltageLevel.MEDIUM
             else:
-                voltage_level = VoltageLevel.HIGH
+voltage_level = VoltageLevel.HIGH
 
             # Calculate safety margin
-            safety_margin = (self.max_voltage - calculated_voltage) / self.max_voltage
+safety_margin = (self.max_voltage - calculated_voltage) / self.max_voltage
 
             # Create voltage mapping
-            mapping = VoltageMapping(
+mapping = VoltageMapping(
                 bit_depth=bit_depth,
-                base_voltage=self.base_voltage,
-                calculated_voltage=calculated_voltage,
-                voltage_level=voltage_level,
-                safety_margin=safety_margin,
-                timestamp=datetime.now()
-            )
+base_voltage=self.base_voltage,
+calculated_voltage=calculated_voltage,
+voltage_level=voltage_level,
+safety_margin=safety_margin,
+timestamp=datetime.now()
 
-            self.voltage_mappings.append(mapping)
+
+self.voltage_mappings.append(mapping)
             logger.debug(f"Calculated voltage {calculated_voltage:.3f}V for bit depth {bit_depth}")
 
             return mapping
 
         except Exception as e:
-            logger.error(f"Error calculating voltage for bit depth {bit_depth}: {e}")
+logger.error(f"Error calculating voltage for bit depth {bit_depth}: {e}")
             raise
 
     def assign_channel_for_voltage(self, voltage_mapping: VoltageMapping, priority: float = 1.0) -> ChannelAssignment:
         """
-        Assign compute channel for voltage level.
+Assign compute channel for voltage level.
 
-        Parameters:
-        -----------
-        voltage_mapping : VoltageMapping
-            Voltage mapping result
-        priority : float
-            Assignment priority (0.1 to 3.2)
+Parameters:
+-----------
+voltage_mapping : VoltageMapping
+Voltage mapping result
+priority : float
+Assignment priority (0.1 to 3.2)
 
-        Returns:
-        --------
-        ChannelAssignment
-            Channel assignment result
-        """
+Returns:
+--------
+ChannelAssignment
+Channel assignment result
+"""
         try:
-            voltage = voltage_mapping.calculated_voltage
-            voltage_level = voltage_mapping.voltage_level
+voltage = voltage_mapping.calculated_voltage
+voltage_level = voltage_mapping.voltage_level
 
             # Find suitable channels based on voltage level
-            suitable_channels = []
+suitable_channels = []
 
             for channel_id, channel_config in self.channels.items():
                 min_voltage, max_voltage = channel_config["voltage_range"]
 
                 if min_voltage <= voltage <= max_voltage:
                     # Calculate assignment score
-                    capacity = channel_config["capacity"]
-                    current_load = channel_config["current_load"]
-                    load_factor = current_load / capacity
+capacity = channel_config["capacity"]
+current_load = channel_config["current_load"]
+load_factor = current_load / capacity
 
                     # Score based on load, voltage compatibility, and priority
-                    voltage_compatibility = 1.0 - unified_math.abs(voltage - (min_voltage + max_voltage) / 2) / max_voltage
+voltage_compatibility = 1.0 - unified_math.abs(voltage - (min_voltage + max_voltage) / 2) / max_voltage
                     assignment_score = (1.0 - load_factor) * voltage_compatibility * priority
 
-                    suitable_channels.append({
+suitable_channels.append({
                         "channel_id": channel_id,
-                        "compute_channel": ComputeChannel(channel_id),
+"compute_channel": ComputeChannel(channel_id),
                         "assignment_score": assignment_score,
-                        "capacity": capacity,
-                        "current_load": current_load
-                    })
+"capacity": capacity,
+"current_load": current_load
+})
 
             if not suitable_channels:
                 raise ValueError(f"No suitable channels found for voltage {voltage}V")
 
             # Select best channel
-            best_channel = unified_math.max(suitable_channels, key=lambda x: x["assignment_score"])
+best_channel = unified_math.max(suitable_channels, key=lambda x: x["assignment_score"])
 
             # Create channel assignment
-            assignment = ChannelAssignment(
+assignment = ChannelAssignment(
                 channel_id=best_channel["channel_id"],
-                compute_channel=best_channel["compute_channel"],
-                voltage_level=voltage_level,
-                priority=priority,
-                capacity=best_channel["capacity"],
-                current_load=best_channel["current_load"],
-                assignment_score=best_channel["assignment_score"],
-                timestamp=datetime.now()
-            )
+compute_channel=best_channel["compute_channel"],
+voltage_level=voltage_level,
+priority=priority,
+capacity=best_channel["capacity"],
+current_load=best_channel["current_load"],
+assignment_score=best_channel["assignment_score"],
+timestamp=datetime.now()
+
 
             # Update channel load
-            self.channels[best_channel["channel_id"]]["current_load"] += 0.1
+self.channels[best_channel["channel_id"]]["current_load"] += 0.1
 
-            self.channel_assignments.append(assignment)
+self.channel_assignments.append(assignment)
             logger.debug(f"Assigned {best_channel['channel_id']} for voltage {voltage}V")
 
             return assignment
 
         except Exception as e:
-            logger.error(f"Error assigning channel for voltage {voltage_mapping.calculated_voltage}V: {e}")
+logger.error(f"Error assigning channel for voltage {voltage_mapping.calculated_voltage}V: {e}")
             raise
 
     def request_handoff(self, source_channel: str, target_channel: str, bit_depth: int,
                        priority: float = 1.0) -> str:
-        """
-        Request hand-off between channels.
+"""
+Request hand-off between channels.
 
-        Parameters:
-        -----------
-        source_channel : str
-            Source channel ID
-        target_channel : str
-            Target channel ID
-        bit_depth : int
-            Bit depth for voltage calculation
-        priority : float
-            Hand-off priority
+Parameters:
+-----------
+source_channel : str
+Source channel ID
+target_channel : str
+Target channel ID
+bit_depth : int
+Bit depth for voltage calculation
+priority : float
+Hand-off priority
 
-        Returns:
-        --------
-        str
-            Hand-off request ID
-        """
+Returns:
+--------
+str
+Hand-off request ID
+"""
         try:
             # Calculate voltage for bit depth
-            voltage_mapping = self.calculate_voltage_for_bit_depth(bit_depth)
+voltage_mapping = self.calculate_voltage_for_bit_depth(bit_depth)
 
             # Create hand-off request
-            request_id = f"handoff_{int(time.time() * 1000)}"
+request_id = f"handoff_{int(time.time() * 1000)}"
             request = HandoffRequest(
                 request_id=request_id,
-                source_channel=source_channel,
-                target_channel=target_channel,
-                bit_depth=bit_depth,
-                voltage_level=voltage_mapping.voltage_level,
-                priority=priority,
-                timestamp=datetime.now(),
+source_channel=source_channel,
+target_channel=target_channel,
+bit_depth=bit_depth,
+voltage_level=voltage_mapping.voltage_level,
+priority=priority,
+timestamp=datetime.now(),
                 timeout=self.handoff_timeout
-            )
 
-            self.handoff_requests.append(request)
+
+self.handoff_requests.append(request)
 
             # Queue for processing
-            self.handoff_queue.put(request)
+self.handoff_queue.put(request)
 
-            logger.info(f"Hand-off request {request_id} queued: {source_channel} → {target_channel}")
+logger.info(f"Hand-off request {request_id} queued: {source_channel} → {target_channel}")
 
             return request_id
 
         except Exception as e:
-            logger.error(f"Error requesting hand-off: {e}")
+logger.error(f"Error requesting hand-off: {e}")
             raise
 
     def _execute_handoff(self, request: HandoffRequest) -> HandoffResult:
         """
-        Execute hand-off operation.
+Execute hand-off operation.
 
-        Parameters:
-        -----------
-        request : HandoffRequest
-            Hand-off request
+Parameters:
+-----------
+request : HandoffRequest
+Hand-off request
 
-        Returns:
-        --------
-        HandoffResult
-            Hand-off result
-        """
+Returns:
+--------
+HandoffResult
+Hand-off result
+"""
         try:
-            start_time = time.time()
+start_time = time.time()
 
             # Validate source and target channels
             if request.source_channel not in self.channels:
                 return HandoffResult(
                     request_id=request.request_id,
-                    status=HandoffStatus.FAILED,
-                    source_channel=request.source_channel,
-                    target_channel=request.target_channel,
-                    handoff_time=0.0,
-                    voltage_delta=0.0,
-                    latency=0.0,
-                    error_message=f"Source channel {request.source_channel} not found"
-                )
+status=HandoffStatus.FAILED,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=0.0,
+voltage_delta=0.0,
+latency=0.0,
+error_message=f"Source channel {request.source_channel} not found"
+
 
             if request.target_channel not in self.channels:
                 return HandoffResult(
                     request_id=request.request_id,
-                    status=HandoffStatus.FAILED,
-                    source_channel=request.source_channel,
-                    target_channel=request.target_channel,
-                    handoff_time=0.0,
-                    voltage_delta=0.0,
-                    latency=0.0,
-                    error_message=f"Target channel {request.target_channel} not found"
-                )
+status=HandoffStatus.FAILED,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=0.0,
+voltage_delta=0.0,
+latency=0.0,
+error_message=f"Target channel {request.target_channel} not found"
+
 
             # Calculate voltage delta
-            source_voltage = self.channels[request.source_channel].get("current_voltage", 1.0)
+source_voltage = self.channels[request.source_channel].get("current_voltage", 1.0)
             target_voltage = self.channels[request.target_channel].get("current_voltage", 1.0)
             voltage_delta = unified_math.abs(source_voltage - target_voltage)
 
             # Simulate hand-off latency
-            handoff_latency = np.random.exponential(0.0005)  # Average 0.5ms
+handoff_latency = np.random.exponential(0.0005)  # Average 0.5ms
 
             # Check safety conditions
             if voltage_delta > self.voltage_threshold:
                 return HandoffResult(
                     request_id=request.request_id,
-                    status=HandoffStatus.FAILED,
-                    source_channel=request.source_channel,
-                    target_channel=request.target_channel,
-                    handoff_time=time.time() - start_time,
+status=HandoffStatus.FAILED,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=time.time() - start_time,
                     voltage_delta=voltage_delta,
-                    latency=handoff_latency,
-                    error_message=f"Voltage delta {voltage_delta:.3f}V exceeds threshold {self.voltage_threshold}V"
-                )
+latency=handoff_latency,
+error_message=f"Voltage delta {voltage_delta:.3f}V exceeds threshold {self.voltage_threshold}V"
+
 
             if handoff_latency > self.max_handoff_latency:
                 return HandoffResult(
                     request_id=request.request_id,
-                    status=HandoffStatus.FAILED,
-                    source_channel=request.source_channel,
-                    target_channel=request.target_channel,
-                    handoff_time=time.time() - start_time,
+status=HandoffStatus.FAILED,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=time.time() - start_time,
                     voltage_delta=voltage_delta,
-                    latency=handoff_latency,
-                    error_message=f"Hand-off latency {handoff_latency:.6f}s exceeds maximum {self.max_handoff_latency}s"
-                )
+latency=handoff_latency,
+error_message=f"Hand-off latency {handoff_latency:.6f}s exceeds maximum {self.max_handoff_latency}s"
+
 
             # Execute hand-off
             # Update channel loads
-            self.channels[request.source_channel]["current_load"] = unified_math.max(0.0,
+self.channels[request.source_channel]["current_load"] = unified_math.max(0.0,
                 self.channels[request.source_channel]["current_load"] - 0.1)
-            self.channels[request.target_channel]["current_load"] = min(
+self.channels[request.target_channel]["current_load"] = min(
                 self.channels[request.target_channel]["capacity"],
-                self.channels[request.target_channel]["current_load"] + 0.1)
+self.channels[request.target_channel]["current_load"] + 0.1)
 
             # Success result
-            result = HandoffResult(
+result = HandoffResult(
                 request_id=request.request_id,
-                status=HandoffStatus.SUCCESS,
-                source_channel=request.source_channel,
-                target_channel=request.target_channel,
-                handoff_time=time.time() - start_time,
+status=HandoffStatus.SUCCESS,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=time.time() - start_time,
                 voltage_delta=voltage_delta,
-                latency=handoff_latency
-            )
+latency=handoff_latency
 
-            logger.info(f"Hand-off {request.request_id} successful: {request.source_channel} → {request.target_channel}")
+
+logger.info(f"Hand-off {request.request_id} successful: {request.source_channel} → {request.target_channel}")
 
             return result
 
         except Exception as e:
-            logger.error(f"Error executing hand-off {request.request_id}: {e}")
+logger.error(f"Error executing hand-off {request.request_id}: {e}")
             return HandoffResult(
                 request_id=request.request_id,
-                status=HandoffStatus.FAILED,
-                source_channel=request.source_channel,
-                target_channel=request.target_channel,
-                handoff_time=0.0,
-                voltage_delta=0.0,
-                latency=0.0,
-                error_message=str(e)
-            )
+status=HandoffStatus.FAILED,
+source_channel=request.source_channel,
+target_channel=request.target_channel,
+handoff_time=0.0,
+voltage_delta=0.0,
+latency=0.0,
+error_message=str(e)
+
 
     def get_handoff_status(self, request_id: str) -> Optional[HandoffResult]:
         """
-        Get hand-off status by request ID.
+Get hand-off status by request ID.
 
-        Parameters:
-        -----------
-        request_id : str
-            Hand-off request ID
+Parameters:
+-----------
+request_id : str
+Hand-off request ID
 
-        Returns:
-        --------
-        Optional[HandoffResult]
-            Hand-off result if found
-        """
+Returns:
+--------
+Optional[HandoffResult]
+Hand-off result if found
+"""
         for result in self.handoff_results:
             if result.request_id == request_id:
                 return result
@@ -550,17 +550,17 @@ class VoltageLaneMapper:
 
     def get_channel_statistics(self) -> Dict[str, Any]:
         """
-        Get channel statistics.
+Get channel statistics.
 
-        Returns:
-        --------
-        Dict[str, Any]
-            Channel statistics
-        """
+Returns:
+--------
+Dict[str, Any]
+Channel statistics
+"""
         try:
-            stats = {
-                "channels": {},
-                "total_assignments": len(self.channel_assignments),
+stats = {
+"channels": {},
+"total_assignments": len(self.channel_assignments),
                 "total_handoffs": len(self.handoff_results),
                 "successful_handoffs": len([r for r in self.handoff_results if r.status == HandoffStatus.SUCCESS]),
                 "failed_handoffs": len([r for r in self.handoff_results if r.status == HandoffStatus.FAILED]),
@@ -570,110 +570,110 @@ class VoltageLaneMapper:
 
             for channel_id, config in self.channels.items():
                 stats["channels"][channel_id] = {
-                    "capacity": config["capacity"],
-                    "current_load": config["current_load"],
-                    "utilization": config["current_load"] / config["capacity"],
-                    "voltage_range": config["voltage_range"]
-                }
+"capacity": config["capacity"],
+"current_load": config["current_load"],
+"utilization": config["current_load"] / config["capacity"],
+"voltage_range": config["voltage_range"]
+}
 
             return stats
 
         except Exception as e:
-            logger.error(f"Error getting channel statistics: {e}")
+logger.error(f"Error getting channel statistics: {e}")
             return {}
 
     def export_mapping_data(self, output_path: str = "voltage_lane_mapping_data.json") -> None:
         """
-        Export voltage lane mapping data.
+Export voltage lane mapping data.
 
-        Parameters:
-        -----------
-        output_path : str
-            Output file path
-        """
+Parameters:
+-----------
+output_path : str
+Output file path
+"""
         try:
-            data = {
-                "voltage_mappings": [
-                    {
-                        "bit_depth": m.bit_depth,
-                        "calculated_voltage": m.calculated_voltage,
-                        "voltage_level": m.voltage_level.value,
-                        "safety_margin": m.safety_margin,
-                        "timestamp": m.timestamp.isoformat()
+data = {
+"voltage_mappings": [
+{
+"bit_depth": m.bit_depth,
+"calculated_voltage": m.calculated_voltage,
+"voltage_level": m.voltage_level.value,
+"safety_margin": m.safety_margin,
+"timestamp": m.timestamp.isoformat()
                     }
                     for m in self.voltage_mappings
-                ],
-                "channel_assignments": [
-                    {
-                        "channel_id": a.channel_id,
-                        "compute_channel": a.compute_channel.value,
-                        "voltage_level": a.voltage_level.value,
-                        "priority": a.priority,
-                        "assignment_score": a.assignment_score,
-                        "timestamp": a.timestamp.isoformat()
+],
+"channel_assignments": [
+{
+"channel_id": a.channel_id,
+"compute_channel": a.compute_channel.value,
+"voltage_level": a.voltage_level.value,
+"priority": a.priority,
+"assignment_score": a.assignment_score,
+"timestamp": a.timestamp.isoformat()
                     }
                     for a in self.channel_assignments
-                ],
-                "handoff_results": [
-                    {
-                        "request_id": r.request_id,
-                        "status": r.status.value,
-                        "source_channel": r.source_channel,
-                        "target_channel": r.target_channel,
-                        "voltage_delta": r.voltage_delta,
-                        "latency": r.latency,
-                        "timestamp": r.timestamp.isoformat()
+],
+"handoff_results": [
+{
+"request_id": r.request_id,
+"status": r.status.value,
+"source_channel": r.source_channel,
+"target_channel": r.target_channel,
+"voltage_delta": r.voltage_delta,
+"latency": r.latency,
+"timestamp": r.timestamp.isoformat()
                     }
                     for r in self.handoff_results
-                ],
-                "statistics": self.get_channel_statistics()
+],
+"statistics": self.get_channel_statistics()
             }
 
             with open(output_path, 'w') as f:
                 json.dump(data, f, indent=2)
 
-            logger.info(f"Voltage lane mapping data exported to {output_path}")
+logger.info(f"Voltage lane mapping data exported to {output_path}")
 
         except Exception as e:
-            logger.error(f"Error exporting mapping data: {e}")
+logger.error(f"Error exporting mapping data: {e}")
 
 def main():
     """Main function for testing voltage lane mapper."""
     try:
         # Initialize voltage lane mapper
-        mapper = VoltageLaneMapper()
+mapper = VoltageLaneMapper()
 
         # Test voltage calculations
         for bit_depth in [4, 8, 42]:
-            voltage_mapping = mapper.calculate_voltage_for_bit_depth(bit_depth)
+voltage_mapping = mapper.calculate_voltage_for_bit_depth(bit_depth)
             safe_print(f"Bit depth {bit_depth}: {voltage_mapping.calculated_voltage:.3f}V ({voltage_mapping.voltage_level.value})")
 
         # Test channel assignment
-        voltage_mapping = mapper.calculate_voltage_for_bit_depth(8)
+voltage_mapping = mapper.calculate_voltage_for_bit_depth(8)
         assignment = mapper.assign_channel_for_voltage(voltage_mapping, priority=2.0)
         safe_print(f"Channel assignment: {assignment.channel_id} (score: {assignment.assignment_score:.3f})")
 
         # Test hand-off
-        request_id = mapper.request_handoff("cpu", "gpu", 42, priority=1.5)
+request_id = mapper.request_handoff("cpu", "gpu", 42, priority=1.5)
         safe_print(f"Hand-off request: {request_id}")
 
         # Wait for hand-off completion
-        time.sleep(2)
+time.sleep(2)
 
         # Check hand-off status
-        result = mapper.get_handoff_status(request_id)
+result = mapper.get_handoff_status(request_id)
         if result:
-            safe_print(f"Hand-off status: {result.status.value}")
+safe_print(f"Hand-off status: {result.status.value}")
 
         # Export data
-        mapper.export_mapping_data()
+mapper.export_mapping_data()
 
         # Print statistics
-        stats = mapper.get_channel_statistics()
+stats = mapper.get_channel_statistics()
         safe_print(f"Channel statistics: {stats}")
 
     except Exception as e:
-        logger.error(f"Error in main: {e}")
+logger.error(f"Error in main: {e}")
 
 if __name__ == "__main__":
-    main()
+main()

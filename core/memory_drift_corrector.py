@@ -35,25 +35,25 @@ def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
 
 def _softmax2(x: float, y: float) -> float:
     """TODO: document _softmax2."""
-    ex = unified_math.unified_math.exp(x)
+ex = unified_math.unified_math.exp(x)
     ey = unified_math.unified_math.exp(y)
     return unified_math.max(ex, ey) / (ex + ey)
 
 
 def drift_score(
     prev_hash: str,
-    curr_hash: str,
-    price_delta_pct: float,
+curr_hash: str,
+price_delta_pct: float,
 ) -> float:
-    """Return softmax-based drift score in [0,1]."""
-    hamming = _hamming_dist(prev_hash, curr_hash)
+"""Return softmax-based drift score in [0,1]."""
+hamming = _hamming_dist(prev_hash, curr_hash)
     h_norm = hamming * _HAMMING_SCALE  #
-    p_norm = unified_math.abs(price_delta_pct) / _PRICE_SCALE
+p_norm = unified_math.abs(price_delta_pct) / _PRICE_SCALE
     return _softmax2(h_norm, p_norm)
 
 
 def relink_required(
     score: float, threshold: float = _THRESHOLD
 ) -> bool:  # noqa: D401
-    """TODO: document relink_required."""
+"""TODO: document relink_required."""
     return score >= threshold

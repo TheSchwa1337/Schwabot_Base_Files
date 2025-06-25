@@ -35,18 +35,18 @@ _DEFAULT_THRESHOLD: Final = 2.5  # °C
 class ThermalShift:
     """EWMA-based thermal drift detector.
 
-    Parameters
-    ----------
-    threshold
-        Absolute temperature delta (°C) that triggers an *unstable* flag.
+Parameters
+----------
+threshold
+Absolute temperature delta (°C) that triggers an *unstable* flag.
     alpha
-        EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
-    """
+EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
+"""
 
-    threshold: float = _DEFAULT_THRESHOLD
-    alpha: float = _DEFAULT_ALPHA
+threshold: float = _DEFAULT_THRESHOLD
+alpha: float = _DEFAULT_ALPHA
 
-    _ema: float | None = field(default=None, init=False)
+_ema: float | None = field(default=None, init=False)
 
     # ------------------------------------------------------------------
     # Public API
@@ -54,23 +54,23 @@ class ThermalShift:
     def update(self, temp: float) -> Tuple[bool, float]:
         """Process a new temperature reading and return stability status.
 
-        Parameters
-        ----------
-        temp
-            Current temperature reading (°C).
+Parameters
+----------
+temp
+Current temperature reading (°C).
 
-        Returns
-        -------
-        Tuple[bool, float]
-            ``(is_stable, delta)``, where *delta* is the absolute
+Returns
+-------
+Tuple[bool, float]
+``(is_stable, delta)``, where *delta* is the absolute
             temperature change with respect to the EWMA baseline.
-        """
+"""
         if self._ema is None:
-            self._ema = temp
+self._ema = temp
         else:
-            self._ema = self.alpha * temp + (1.0 - self.alpha) * self._ema
+self._ema = self.alpha * temp + (1.0 - self.alpha) * self._ema
 
-        delta = unified_math.abs(temp - self._ema)
+delta = unified_math.abs(temp - self._ema)
         is_stable = delta < self.threshold
         return is_stable, delta
 
@@ -82,20 +82,20 @@ class ThermalShift:
 
 def thermal_delta_switch(
     current: float,
-    previous: float,
-    *,
-    threshold: float = _DEFAULT_THRESHOLD,
+previous: float,
+*,
+threshold: float = _DEFAULT_THRESHOLD,
 ) -> bool:
-    """Return ``True`` if the temperature delta is below *threshold*.
+"""Return ``True`` if the temperature delta is below *threshold*.
 
-    Parameters
-    ----------
-    current
-        Current temperature reading (°C).
+Parameters
+----------
+current
+Current temperature reading (°C).
     previous
-        Previous or baseline temperature reading (°C).
+Previous or baseline temperature reading (°C).
     threshold
-        Allowed delta before declaring instability.  Defaults to 2.5 °C.
-    """
-    delta = unified_math.abs(current - previous)
+Allowed delta before declaring instability.  Defaults to 2.5 °C.
+"""
+delta = unified_math.abs(current - previous)
     return delta < threshold

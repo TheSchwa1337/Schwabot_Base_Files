@@ -14,7 +14,7 @@ Math Primer
 Given an integer tick **n** and a base cycle **C**, the fundamental resonance
 condition is simply
 
-    n mod C == 0
+n mod C == 0
 
 To cope with very-long sequences Schwabot employs a 42-bit ring counter; the
 mask ``0x3ffffffffff`` (2^42-1) limits the counter and avoids Python int → float
@@ -30,30 +30,30 @@ _PHASE_MASK: int = 0x3FFFF_FFFFFF  # 42 bits set
 
 def phase_resonance_gate(
     tick: int,
-    *,
-    base_cycle: int = 42,
-    use_mask: bool = True,
+*,
+base_cycle: int = 42,
+use_mask: bool = True,
 ) -> bool:
-    """Return ``True`` if *tick* aligns with the resonance gate.
+"""Return ``True`` if *tick* aligns with the resonance gate.
 
-    Parameters
-    ----------
-    tick
-        Monotonic tick counter (non-negative integer).
+Parameters
+----------
+tick
+Monotonic tick counter (non-negative integer).
     base_cycle
-        Fundamental cycle length **C**.  Default **42** – Schwabot's universal
-        harmonic constant.
-    use_mask
-        If ``True`` the *tick* is first masked to 42 bits; this mimics the ring
-        counter used in the C++/Rust back-ends and prevents 64-bit overflow
-        mismatch in long-running sessions.
-    """
+Fundamental cycle length **C**.  Default **42** – Schwabot's universal
+harmonic constant.
+use_mask
+If ``True`` the *tick* is first masked to 42 bits; this mimics the ring
+counter used in the C++/Rust back-ends and prevents 64-bit overflow
+mismatch in long-running sessions.
+"""
     if tick < 0:
         raise ValueError("tick must be non-negative")
     if base_cycle <= 0:
         raise ValueError("base_cycle must be positive")
 
     if use_mask:
-        tick &= _PHASE_MASK
+tick &= _PHASE_MASK
 
     return tick % base_cycle == 0

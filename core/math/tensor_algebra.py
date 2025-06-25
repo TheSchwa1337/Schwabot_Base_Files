@@ -29,11 +29,11 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BitPhaseResult:
     """Result of bit phase tensor operations."""
-    phi_4: int
-    phi_8: int
-    phi_42: int
-    strategy_id: int
-    mode: str
+phi_4: int
+phi_8: int
+phi_42: int
+strategy_id: int
+mode: str
 
 
 class UnifiedTensorAlgebra:
@@ -41,104 +41,104 @@ class UnifiedTensorAlgebra:
 
     def __init__(self):
         """Initialize the unified tensor algebra engine."""
-        self.precision = np.float64
-        self.epsilon = 1e-12
+self.precision = np.float64
+self.epsilon = 1e-12
 
     def tensor_contraction(self, A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
         """
-        Perform tensor contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
+Perform tensor contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
 
-        Args:
-            A: First tensor
-            B: Second tensor
-            axes: Axes to contract over
+Args:
+A: First tensor
+B: Second tensor
+axes: Axes to contract over
 
-        Returns:
-            Contracted tensor
-        """
+Returns:
+Contracted tensor
+"""
         try:
             return np.tensordot(A, B, axes=axes)
         except Exception as e:
-            logger.error(f"Tensor contraction failed: {e}")
+logger.error(f"Tensor contraction failed: {e}")
             # Return safe fallback
             return np.zeros((A.shape[0], B.shape[-1]), dtype=self.precision)
 
     def bit_phase_tensor(self, strategy_id: int, mode: str = '4bit') -> BitPhaseResult:
         """
-        Compute bit phase tensor operations for strategy routing.
+Compute bit phase tensor operations for strategy routing.
 
-        Mathematical implementation:
-        φ₄ = (strategy_id & 0b1111)
+Mathematical implementation:
+φ₄ = (strategy_id & 0b1111)
         φ₈ = (strategy_id >> 4) & 0b11111111
         φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
 
-        Args:
-            strategy_id: Integer strategy identifier
-            mode: Bit mode ('4bit', '8bit', '42bit')
+Args:
+strategy_id: Integer strategy identifier
+mode: Bit mode ('4bit', '8bit', '42bit')
 
-        Returns:
-            BitPhaseResult with phi values
-        """
+Returns:
+BitPhaseResult with phi values
+"""
         try:
-            phi_4 = strategy_id & 0b1111
-            phi_8 = (strategy_id >> 4) & 0b11111111
+phi_4 = strategy_id & 0b1111
+phi_8 = (strategy_id >> 4) & 0b11111111
             phi_42 = (strategy_id >> 12) & 0x3FFFFFFFFFF
             return BitPhaseResult(phi_4, phi_8, phi_42, strategy_id, mode)
         except Exception as e:
-            logger.error(f"Bit phase tensor calculation failed: {e}")
+logger.error(f"Bit phase tensor calculation failed: {e}")
             return BitPhaseResult(0, 0, 0, strategy_id, mode)
 
     def matrix_basket_operation(self, prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
         """
-        Perform matrix basket operations for asset allocation.
+Perform matrix basket operations for asset allocation.
 
-        Mathematical implementation:
-        B = W · P^T where W is weights matrix, P is prices vector
+Mathematical implementation:
+B = W · P^T where W is weights matrix, P is prices vector
 
-        Args:
-            prices: Price vector
-            weights: Weight matrix
+Args:
+prices: Price vector
+weights: Weight matrix
 
-        Returns:
-            Basket allocation matrix
-        """
+Returns:
+Basket allocation matrix
+"""
         try:
             if len(prices.shape) == 1:
                 prices = prices.reshape(-1, 1)
             return unified_math.unified_math.dot_product(weights, prices.T)
         except Exception as e:
-            logger.error(f"Matrix basket operation failed: {e}")
+logger.error(f"Matrix basket operation failed: {e}")
             return np.zeros_like(weights)
 
     def tensor_similarity_score(self, tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
         """
-        Calculate similarity score between two tensors.
+Calculate similarity score between two tensors.
 
-        Mathematical implementation:
-        similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
+Mathematical implementation:
+similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
 
-        Args:
-            tensor_a: First tensor
-            tensor_b: Second tensor
+Args:
+tensor_a: First tensor
+tensor_b: Second tensor
 
-        Returns:
-            Similarity score [0, 1]
-        """
+Returns:
+Similarity score [0, 1]
+"""
         try:
-            flat_a = tensor_a.flatten()
+flat_a = tensor_a.flatten()
             flat_b = tensor_b.flatten()
 
-            dot_product = unified_math.unified_math.dot_product(flat_a, flat_b)
+dot_product = unified_math.unified_math.dot_product(flat_a, flat_b)
             norm_a = np.linalg.norm(flat_a)
             norm_b = np.linalg.norm(flat_b)
 
             if norm_a < self.epsilon or norm_b < self.epsilon:
                 return 0.0
 
-            similarity = dot_product / (norm_a * norm_b)
+similarity = dot_product / (norm_a * norm_b)
             return unified_math.max(0.0, unified_math.min(1.0, similarity))
         except Exception as e:
-            logger.error(f"Tensor similarity calculation failed: {e}")
+logger.error(f"Tensor similarity calculation failed: {e}")
             return 0.0
 
 
@@ -147,155 +147,155 @@ class TensorAlgebraEngine:
 
     def __init__(self):
         """Initialize the tensor algebra engine."""
-        self.precision = np.float64
-        self.epsilon = 1e-12
+self.precision = np.float64
+self.epsilon = 1e-12
 
     def tensor_contraction(self, A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
         """
-        Perform tensor contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
+Perform tensor contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
 
-        Args:
-            A: First tensor
-            B: Second tensor
-            axes: Axes to contract over
+Args:
+A: First tensor
+B: Second tensor
+axes: Axes to contract over
 
-        Returns:
-            Contracted tensor
-        """
+Returns:
+Contracted tensor
+"""
         try:
             return np.tensordot(A, B, axes=axes)
         except Exception as e:
-            logger.error(f"Tensor contraction failed: {e}")
+logger.error(f"Tensor contraction failed: {e}")
             # Return safe fallback
             return np.zeros((A.shape[0], B.shape[-1]), dtype=self.precision)
 
     def bit_phase_tensor(self, strategy_id: int, mode: str = '4bit') -> Tuple[int, int, int]:
         """
-        Compute bit phase tensor operations for strategy routing.
+Compute bit phase tensor operations for strategy routing.
 
-        Mathematical implementation:
-        φ₄ = (strategy_id & 0b1111)
+Mathematical implementation:
+φ₄ = (strategy_id & 0b1111)
         φ₈ = (strategy_id >> 4) & 0b11111111
         φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
 
-        Args:
-            strategy_id: Integer strategy identifier
-            mode: Bit mode ('4bit', '8bit', '42bit')
+Args:
+strategy_id: Integer strategy identifier
+mode: Bit mode ('4bit', '8bit', '42bit')
 
-        Returns:
-            Tuple of (phi_4, phi_8, phi_42)
+Returns:
+Tuple of (phi_4, phi_8, phi_42)
         """
         try:
-            phi_4 = strategy_id & 0b1111
-            phi_8 = (strategy_id >> 4) & 0b11111111
+phi_4 = strategy_id & 0b1111
+phi_8 = (strategy_id >> 4) & 0b11111111
             phi_42 = (strategy_id >> 12) & 0x3FFFFFFFFFF
             return (phi_4, phi_8, phi_42)
         except Exception as e:
-            logger.error(f"Bit phase tensor calculation failed: {e}")
+logger.error(f"Bit phase tensor calculation failed: {e}")
             return (0, 0, 0)
 
     def matrix_basket_operation(self, prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
         """
-        Perform matrix basket operations for asset allocation.
+Perform matrix basket operations for asset allocation.
 
-        Mathematical implementation:
-        B = W · P^T where W is weights matrix, P is prices vector
+Mathematical implementation:
+B = W · P^T where W is weights matrix, P is prices vector
 
-        Args:
-            prices: Price vector
-            weights: Weight matrix
+Args:
+prices: Price vector
+weights: Weight matrix
 
-        Returns:
-            Basket allocation matrix
-        """
+Returns:
+Basket allocation matrix
+"""
         try:
             if len(prices.shape) == 1:
                 prices = prices.reshape(-1, 1)
             return unified_math.unified_math.dot_product(weights, prices.T)
         except Exception as e:
-            logger.error(f"Matrix basket operation failed: {e}")
+logger.error(f"Matrix basket operation failed: {e}")
             return np.zeros_like(weights)
 
     def tensor_similarity_score(self, tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
         """
-        Calculate similarity score between two tensors.
+Calculate similarity score between two tensors.
 
-        Mathematical implementation:
-        similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
+Mathematical implementation:
+similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
 
-        Args:
-            tensor_a: First tensor
-            tensor_b: Second tensor
+Args:
+tensor_a: First tensor
+tensor_b: Second tensor
 
-        Returns:
-            Similarity score [0, 1]
-        """
+Returns:
+Similarity score [0, 1]
+"""
         try:
-            flat_a = tensor_a.flatten()
+flat_a = tensor_a.flatten()
             flat_b = tensor_b.flatten()
 
-            dot_product = unified_math.unified_math.dot_product(flat_a, flat_b)
+dot_product = unified_math.unified_math.dot_product(flat_a, flat_b)
             norm_a = np.linalg.norm(flat_a)
             norm_b = np.linalg.norm(flat_b)
 
             if norm_a < self.epsilon or norm_b < self.epsilon:
                 return 0.0
 
-            similarity = dot_product / (norm_a * norm_b)
+similarity = dot_product / (norm_a * norm_b)
             return unified_math.max(0.0, unified_math.min(1.0, similarity))
         except Exception as e:
-            logger.error(f"Tensor similarity calculation failed: {e}")
+logger.error(f"Tensor similarity calculation failed: {e}")
             return 0.0
 
     def eigenvalue_decomposition(self, matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Perform eigenvalue decomposition for stability analysis.
+Perform eigenvalue decomposition for stability analysis.
 
-        Args:
-            matrix: Input matrix
+Args:
+matrix: Input matrix
 
-        Returns:
-            Tuple of (eigenvalues, eigenvectors)
+Returns:
+Tuple of (eigenvalues, eigenvectors)
         """
         try:
-            eigenvals, eigenvecs = unified_math.unified_math.eigenvectors(matrix)
+eigenvals, eigenvecs = unified_math.unified_math.eigenvectors(matrix)
             return eigenvals, eigenvecs
         except Exception as e:
-            logger.error(f"Eigenvalue decomposition failed: {e}")
+logger.error(f"Eigenvalue decomposition failed: {e}")
             n = matrix.shape[0]
             return np.zeros(n), np.eye(n)
 
     def tensor_normalize(self, tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
         """
-        Normalize tensor using specified method.
+Normalize tensor using specified method.
 
-        Args:
-            tensor: Input tensor
-            method: Normalization method ('l2', 'l1', 'max')
+Args:
+tensor: Input tensor
+method: Normalization method ('l2', 'l1', 'max')
 
-        Returns:
-            Normalized tensor
-        """
+Returns:
+Normalized tensor
+"""
         try:
             if method == 'l2':
-                norm = np.linalg.norm(tensor)
+norm = np.linalg.norm(tensor)
                 if norm < self.epsilon:
                     return tensor
                 return tensor / norm
             elif method == 'l1':
-                norm = np.sum(unified_math.unified_math.abs(tensor))
+norm = np.sum(unified_math.unified_math.abs(tensor))
                 if norm < self.epsilon:
                     return tensor
                 return tensor / norm
             elif method == 'max':
-                max_val = unified_math.unified_math.max(unified_math.unified_math.abs(tensor))
+max_val = unified_math.unified_math.max(unified_math.unified_math.abs(tensor))
                 if max_val < self.epsilon:
                     return tensor
                 return tensor / max_val
             else:
                 return tensor
         except Exception as e:
-            logger.error(f"Tensor normalization failed: {e}")
+logger.error(f"Tensor normalization failed: {e}")
             return tensor
 
 
@@ -304,70 +304,70 @@ class ProfitCalculusEngine:
 
     def __init__(self):
         """Initialize the profit calculus engine."""
-        self.precision = np.float64
+self.precision = np.float64
 
     def profit_derivative(self, prices: np.ndarray, timestamps: np.ndarray) -> np.ndarray:
         """
-        Calculate profit derivative: dP/dt = (P_t - P_t-1) / Δt
+Calculate profit derivative: dP/dt = (P_t - P_t-1) / Δt
 
-        Args:
-            prices: Price series
-            timestamps: Timestamp series
+Args:
+prices: Price series
+timestamps: Timestamp series
 
-        Returns:
-            Profit derivative series
-        """
+Returns:
+Profit derivative series
+"""
         try:
-            dp = np.diff(prices)
+dp = np.diff(prices)
             dt = np.diff(timestamps)
 
             # Avoid division by zero
-            dt = np.where(dt == 0, 1e-8, dt)
+dt = np.where(dt == 0, 1e-8, dt)
 
             return dp / dt
         except Exception as e:
-            logger.error(f"Profit derivative calculation failed: {e}")
+logger.error(f"Profit derivative calculation failed: {e}")
             return np.zeros(len(prices) - 1)
 
     def should_execute_trade(self, dP_dt: float, lambda_threshold: float) -> bool:
         """
-        Trade trigger logic: if dP/dt > λ_threshold: execute_trade()
+Trade trigger logic: if dP/dt > λ_threshold: execute_trade()
 
-        Args:
-            dP_dt: Profit derivative
-            lambda_threshold: Threshold for trade execution
+Args:
+dP_dt: Profit derivative
+lambda_threshold: Threshold for trade execution
 
-        Returns:
-            Boolean trade execution decision
-        """
+Returns:
+Boolean trade execution decision
+"""
         try:
             return float(dP_dt) > float(lambda_threshold)
         except Exception as e:
-            logger.error(f"Trade execution logic failed: {e}")
+logger.error(f"Trade execution logic failed: {e}")
             return False
 
     def profit_momentum(self, prices: np.ndarray, window: int = 10) -> np.ndarray:
         """
-        Calculate profit momentum using moving averages.
+Calculate profit momentum using moving averages.
 
-        Args:
-            prices: Price series
-            window: Moving average window
+Args:
+prices: Price series
+window: Moving average window
 
-        Returns:
-            Momentum series
-        """
+Returns:
+Momentum series
+"""
         try:
             if len(prices) < window:
                 return np.zeros_like(prices)
 
-            momentum = np.zeros_like(prices)
+momentum = np.zeros_like(prices)
             for i in range(window, len(prices)):
                 momentum[i] = unified_math.unified_math.mean(prices[i-window:i])
 
             return momentum
         except Exception as e:
-            logger.error(f"Profit momentum calculation failed: {e}")
+logger.error(f"Profit momentum calculation failed: {e}")
             return np.zeros_like(prices)
 
 
@@ -376,42 +376,42 @@ class EntropyCompensationEngine:
 
     def __init__(self):
         """Initialize the entropy compensation engine."""
-        self.precision = np.float64
+self.precision = np.float64
 
     def calculate_entropy(self, volume: float, delta: float) -> float:
         """
-        Calculate entropy: E(t) = unified_math.log(V + 1) / (1 + δ)
+Calculate entropy: E(t) = unified_math.log(V + 1) / (1 + δ)
 
-        Args:
-            volume: Trading volume
-            delta: Price delta
+Args:
+volume: Trading volume
+delta: Price delta
 
-        Returns:
-            Entropy value
-        """
+Returns:
+Entropy value
+"""
         try:
             return unified_math.unified_math.log(volume + 1) / (1 + unified_math.abs(delta))
         except Exception as e:
-            logger.error(f"Entropy calculation failed: {e}")
+logger.error(f"Entropy calculation failed: {e}")
             return 0.0
 
     def entropy_trigger(self, profit_gain: float, entropy: float) -> float:
         """
-        Calculate entropy trigger: Trigger = P_gain / E(t)
+Calculate entropy trigger: Trigger = P_gain / E(t)
 
-        Args:
-            profit_gain: Profit gain value
-            entropy: Entropy value
+Args:
+profit_gain: Profit gain value
+entropy: Entropy value
 
-        Returns:
-            Trigger value
-        """
+Returns:
+Trigger value
+"""
         try:
             if unified_math.abs(entropy) < 1e-12:
                 return 0.0
             return profit_gain / entropy
         except Exception as e:
-            logger.error(f"Entropy trigger calculation failed: {e}")
+logger.error(f"Entropy trigger calculation failed: {e}")
             return 0.0
 
 
@@ -420,43 +420,43 @@ class HashMemoryEngine:
 
     def __init__(self):
         """Initialize the hash memory engine."""
-        self.precision = np.float64
+self.precision = np.float64
 
     def generate_hash_vector(self, price: float, delta_price: float, phi_t: int) -> str:
         """
-        Generate hash vector: H(t) = SHA256(P_t || ΔP || φ_t)
+Generate hash vector: H(t) = SHA256(P_t || ΔP || φ_t)
 
-        Args:
-            price: Current price
-            delta_price: Price delta
-            phi_t: Phase tensor value
+Args:
+price: Current price
+delta_price: Price delta
+phi_t: Phase tensor value
 
-        Returns:
-            Hash vector string
-        """
+Returns:
+Hash vector string
+"""
         try:
-            data = f"{price:.8f}|{delta_price:.8f}|{phi_t}".encode()
+data = f"{price:.8f}|{delta_price:.8f}|{phi_t}".encode()
             return hashlib.sha256(data).hexdigest()
         except Exception as e:
-            logger.error(f"Hash vector generation failed: {e}")
+logger.error(f"Hash vector generation failed: {e}")
             return "0" * 64
 
     def hash_similarity_score(self, hash_t: str, known_hash_set: List[str]) -> float:
         """
-        Calculate hash similarity score: score = sim(H(t), known_hash_set)
+Calculate hash similarity score: score = sim(H(t), known_hash_set)
 
-        Args:
-            hash_t: Current hash
-            known_hash_set: Set of known hashes
+Args:
+hash_t: Current hash
+known_hash_set: Set of known hashes
 
-        Returns:
-            Similarity score [0, 1]
-        """
+Returns:
+Similarity score [0, 1]
+"""
         try:
             if not known_hash_set:
                 return 0.0
 
-            max_similarity = 0.0
+max_similarity = 0.0
             for known_hash in known_hash_set:
                 # Calculate Hamming distance based similarity
                 if len(hash_t) == len(known_hash):
@@ -466,7 +466,7 @@ class HashMemoryEngine:
 
             return max_similarity
         except Exception as e:
-            logger.error(f"Hash similarity calculation failed: {e}")
+logger.error(f"Hash similarity calculation failed: {e}")
             return 0.0
 
 
@@ -510,18 +510,18 @@ def should_execute_trade(dP_dt: float, lambda_threshold: float) -> bool:
 
 # Export main components for import
 __all__ = [
-    'TensorAlgebraEngine',
-    'ProfitCalculusEngine',
-    'EntropyCompensationEngine',
-    'HashMemoryEngine',
-    'tensor_engine',
-    'profit_engine',
-    'entropy_engine',
-    'hash_engine',
-    'tensor_contraction',
-    'bit_phase_tensor',
-    'profit_derivative',
-    'calculate_entropy',
-    'generate_hash_vector',
-    'should_execute_trade'
+'TensorAlgebraEngine',
+'ProfitCalculusEngine',
+'EntropyCompensationEngine',
+'HashMemoryEngine',
+'tensor_engine',
+'profit_engine',
+'entropy_engine',
+'hash_engine',
+'tensor_contraction',
+'bit_phase_tensor',
+'profit_derivative',
+'calculate_entropy',
+'generate_hash_vector',
+'should_execute_trade'
 ]

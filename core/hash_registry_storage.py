@@ -51,14 +51,14 @@ logger = logging.getLogger(__name__)
 
 class HashRegistryStorage:
     """
-    Storage layer for hash registry operations.
-    Handles file I/O and persistence with minimal dependencies.
-    """
+Storage layer for hash registry operations.
+Handles file I/O and persistence with minimal dependencies.
+"""
 
     def __init__(self, registry_path: str = "core/hash_registry.json"):
         """Initialize storage with registry file path."""
-        self.registry_path = registry_path
-        self.backup_path = f"{registry_path}.backup"
+self.registry_path = registry_path
+self.backup_path = f"{registry_path}.backup"
 
     def load_registry(self) -> Dict[str, Dict[str, Any]]:
         """Load hash registry from JSON file."""
@@ -70,67 +70,67 @@ class HashRegistryStorage:
             with open(self.registry_path, 'r') as f:
                 registry_data = json.load(f)
 
-            logger.info(f"Loaded registry from {self.registry_path}")
+logger.info(f"Loaded registry from {self.registry_path}")
             return registry_data
 
         except Exception as e:
-            logger.error(f"Error loading registry: {e}")
+logger.error(f"Error loading registry: {e}")
             return {}
 
     def save_registry(self, registry_data: Dict[str, Dict[str, Any]]) -> bool:
         """Save hash registry to JSON file."""
         try:
             # Create directory if it doesn't exist
-            dir_path = os.path.dirname(self.registry_path)
+dir_path = os.path.dirname(self.registry_path)
             if dir_path:  # Only create directory if path is not empty
-                os.makedirs(dir_path, exist_ok=True)
+os.makedirs(dir_path, exist_ok=True)
 
             with open(self.registry_path, 'w') as f:
                 json.dump(registry_data, f, indent=2)
 
-            logger.info(f"Registry saved to {self.registry_path}")
+logger.info(f"Registry saved to {self.registry_path}")
             return True
 
         except Exception as e:
-            logger.error(f"Error saving registry: {e}")
+logger.error(f"Error saving registry: {e}")
             return False
 
     def parse_registry_entries(self, registry_data: Dict[str, Dict[str, Any]]) -> Dict[str, HashRegistryEntry]:
         """Parse registry data into HashRegistryEntry objects."""
-        entries = {}
+entries = {}
 
         for hash_id, entry_data in registry_data.items():
             try:
-                entry = HashRegistryEntry(
+entry = HashRegistryEntry(
                     hash_id=hash_id,
-                    bit_depth=entry_data.get('bit_depth', 8),
+bit_depth=entry_data.get('bit_depth', 8),
                     tensor_route=entry_data.get('tensor_route', 'route_0'),
                     matrix_basket_id=entry_data.get('matrix_basket_id', 0),
                     priority=entry_data.get('priority', 1.0),
                     enabled=entry_data.get('enabled', True),
                     metadata=entry_data.get('metadata', {})
-                )
-                entries[hash_id] = entry
+
+entries[hash_id] = entry
 
             except Exception as e:
-                logger.warning(f"Error parsing entry {hash_id}: {e}")
+logger.warning(f"Error parsing entry {hash_id}: {e}")
                 continue
 
         return entries
 
     def serialize_registry_entries(self, entries: Dict[str, HashRegistryEntry]) -> Dict[str, Dict[str, Any]]:
         """Serialize HashRegistryEntry objects to dictionary format."""
-        registry_data = {}
+registry_data = {}
 
         for hash_id, entry in entries.items():
             registry_data[hash_id] = {
-                "bit_depth": entry.bit_depth,
-                "tensor_route": entry.tensor_route,
-                "matrix_basket_id": entry.matrix_basket_id,
-                "priority": entry.priority,
-                "enabled": entry.enabled,
-                "metadata": entry.metadata
-            }
+"bit_depth": entry.bit_depth,
+"tensor_route": entry.tensor_route,
+"matrix_basket_id": entry.matrix_basket_id,
+"priority": entry.priority,
+"enabled": entry.enabled,
+"metadata": entry.metadata
+}
 
         return registry_data
 
@@ -139,13 +139,13 @@ class HashRegistryStorage:
         try:
             if os.path.exists(self.registry_path):
                 import shutil
-                shutil.copy2(self.registry_path, self.backup_path)
+shutil.copy2(self.registry_path, self.backup_path)
                 logger.info(f"Registry backup created: {self.backup_path}")
                 return True
             return False
 
         except Exception as e:
-            logger.error(f"Error creating backup: {e}")
+logger.error(f"Error creating backup: {e}")
             return False
 
     def restore_backup(self) -> bool:
@@ -153,93 +153,93 @@ class HashRegistryStorage:
         try:
             if os.path.exists(self.backup_path):
                 import shutil
-                shutil.copy2(self.backup_path, self.registry_path)
+shutil.copy2(self.backup_path, self.registry_path)
                 logger.info(f"Registry restored from backup: {self.backup_path}")
                 return True
             return False
 
         except Exception as e:
-            logger.error(f"Error restoring backup: {e}")
+logger.error(f"Error restoring backup: {e}")
             return False
 
     def export_registry_summary(self, entries: Dict[str, HashRegistryEntry],
                               output_path: str = "hash_registry_summary.json") -> bool:
-        """Export registry summary to JSON file."""
+"""Export registry summary to JSON file."""
         try:
             # Calculate statistics
-            stats = HashRegistryCore.calculate_registry_statistics(entries)
+stats = HashRegistryCore.calculate_registry_statistics(entries)
 
             # Create summary
-            summary = {
-                "export_info": {
-                    "timestamp": datetime.now().isoformat(),
+summary = {
+"export_info": {
+"timestamp": datetime.now().isoformat(),
                     "total_entries": len(entries),
                     "export_version": "1.0"
-                },
-                "registry_info": {
-                    "total_entries": len(entries),
+},
+"registry_info": {
+"total_entries": len(entries),
                     "enabled_entries": len(HashRegistryCore.get_enabled_entries(entries)),
                     "bit_depths": list(set(entry.bit_depth for entry in entries.values())),
                     "tensor_routes": list(set(entry.tensor_route for entry in entries.values())),
                     "priority_range": {
-                        "min": unified_math.min(entry.priority for entry in entries.values()),
+"min": unified_math.min(entry.priority for entry in entries.values()),
                         "max": unified_math.max(entry.priority for entry in entries.values())
                     }
-                },
-                "entries": {
-                    hash_id: {
-                        "bit_depth": entry.bit_depth,
-                        "tensor_route": entry.tensor_route,
-                        "matrix_basket_id": entry.matrix_basket_id,
-                        "priority": entry.priority,
-                        "enabled": entry.enabled
-                    }
+},
+"entries": {
+hash_id: {
+"bit_depth": entry.bit_depth,
+"tensor_route": entry.tensor_route,
+"matrix_basket_id": entry.matrix_basket_id,
+"priority": entry.priority,
+"enabled": entry.enabled
+}
                     for hash_id, entry in entries.items()
                 },
-                "statistics": stats
-            }
+"statistics": stats
+}
 
             # Create directory if it doesn't exist
-            dir_path = os.path.dirname(output_path)
+dir_path = os.path.dirname(output_path)
             if dir_path:  # Only create directory if path is not empty
-                os.makedirs(dir_path, exist_ok=True)
+os.makedirs(dir_path, exist_ok=True)
 
             with open(output_path, 'w') as f:
                 json.dump(summary, f, indent=2)
 
-            logger.info(f"Registry summary exported to {output_path}")
+logger.info(f"Registry summary exported to {output_path}")
             return True
 
         except Exception as e:
-            logger.error(f"Error exporting registry summary: {e}")
+logger.error(f"Error exporting registry summary: {e}")
             return False
 
     def load_or_generate_registry(self) -> Dict[str, HashRegistryEntry]:
         """Load existing registry or generate new one."""
         try:
             # Try to load existing registry
-            registry_data = self.load_registry()
+registry_data = self.load_registry()
 
             if registry_data:
                 # Parse existing entries
-                entries = self.parse_registry_entries(registry_data)
+entries = self.parse_registry_entries(registry_data)
                 logger.info(f"Loaded existing registry with {len(entries)} entries")
                 return entries
             else:
                 # Generate new registry
-                entries = HashRegistryCore.generate_complete_registry()
+entries = HashRegistryCore.generate_complete_registry()
 
                 # Save new registry
-                registry_data = self.serialize_registry_entries(entries)
+registry_data = self.serialize_registry_entries(entries)
                 self.save_registry(registry_data)
 
-                logger.info(f"Generated new registry with {len(entries)} entries")
+logger.info(f"Generated new registry with {len(entries)} entries")
                 return entries
 
         except Exception as e:
-            logger.error(f"Error loading/generating registry: {e}")
+logger.error(f"Error loading/generating registry: {e}")
             # Generate fallback registry
-            entries = HashRegistryCore.generate_complete_registry()
+entries = HashRegistryCore.generate_complete_registry()
             logger.warning(f"Generated fallback registry with {len(entries)} entries")
             return entries
 
@@ -247,32 +247,32 @@ class HashRegistryStorage:
         """Update a specific registry entry."""
         try:
             # Load current registry
-            registry_data = self.load_registry()
+registry_data = self.load_registry()
 
             if hash_id not in registry_data:
-                logger.warning(f"Entry {hash_id} not found in registry")
+logger.warning(f"Entry {hash_id} not found in registry")
                 return False
 
             # Apply updates
             for key, value in updates.items():
                 if key in ['bit_depth', 'tensor_route', 'matrix_basket_id', 'priority', 'enabled', 'metadata']:
-                    registry_data[hash_id][key] = value
+registry_data[hash_id][key] = value
 
             # Save updated registry
             return self.save_registry(registry_data)
 
         except Exception as e:
-            logger.error(f"Error updating entry {hash_id}: {e}")
+logger.error(f"Error updating entry {hash_id}: {e}")
             return False
 
     def delete_entry(self, hash_id: str) -> bool:
         """Delete a specific registry entry."""
         try:
             # Load current registry
-            registry_data = self.load_registry()
+registry_data = self.load_registry()
 
             if hash_id not in registry_data:
-                logger.warning(f"Entry {hash_id} not found in registry")
+logger.warning(f"Entry {hash_id} not found in registry")
                 return False
 
             # Remove entry
@@ -282,7 +282,7 @@ class HashRegistryStorage:
             return self.save_registry(registry_data)
 
         except Exception as e:
-            logger.error(f"Error deleting entry {hash_id}: {e}")
+logger.error(f"Error deleting entry {hash_id}: {e}")
             return False
 
     def get_registry_info(self) -> Dict[str, Any]:
@@ -291,75 +291,75 @@ class HashRegistryStorage:
             if os.path.exists(self.registry_path):
                 stat = os.stat(self.registry_path)
                 return {
-                    "exists": True,
-                    "size_bytes": stat.st_size,
-                    "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+"exists": True,
+"size_bytes": stat.st_size,
+"modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
                     "path": self.registry_path
-                }
+}
             else:
                 return {
-                    "exists": False,
-                    "path": self.registry_path
-                }
+"exists": False,
+"path": self.registry_path
+}
 
         except Exception as e:
-            logger.error(f"Error getting registry info: {e}")
+logger.error(f"Error getting registry info: {e}")
             return {"error": str(e)}
 
 
 def main():
     """Test the storage layer."""
-    safe_print("💾 Hash Registry Storage - File I/O Test")
+safe_print("💾 Hash Registry Storage - File I/O Test")
     safe_print("=" * 50)
 
     # Initialize storage
-    storage = HashRegistryStorage("test_registry.json")
+storage = HashRegistryStorage("test_registry.json")
 
     # Test registry generation
-    safe_print("Generating test registry...")
+safe_print("Generating test registry...")
     entries = HashRegistryCore.generate_complete_registry()
     safe_print(f"Generated {len(entries)} entries")
 
     # Test serialization
-    safe_print("\nSerializing registry...")
+safe_print("\nSerializing registry...")
     registry_data = storage.serialize_registry_entries(entries)
     safe_print(f"Serialized {len(registry_data)} entries")
 
     # Test saving
-    safe_print("\nSaving registry...")
+safe_print("\nSaving registry...")
     success = storage.save_registry(registry_data)
     safe_print(f"Save successful: {success}")
 
     # Test loading
-    safe_print("\nLoading registry...")
+safe_print("\nLoading registry...")
     loaded_data = storage.load_registry()
     safe_print(f"Loaded {len(loaded_data)} entries")
 
     # Test parsing
-    safe_print("\nParsing entries...")
+safe_print("\nParsing entries...")
     parsed_entries = storage.parse_registry_entries(loaded_data)
     safe_print(f"Parsed {len(parsed_entries)} entries")
 
     # Test export
-    safe_print("\nExporting summary...")
+safe_print("\nExporting summary...")
     export_success = storage.export_registry_summary(parsed_entries, "test_summary.json")
     safe_print(f"Export successful: {export_success}")
 
     # Test registry info
-    safe_print("\nRegistry info:")
+safe_print("\nRegistry info:")
     info = storage.get_registry_info()
     safe_print(f"  {info}")
 
     # Cleanup
     try:
-        os.remove("test_registry.json")
+os.remove("test_registry.json")
         os.remove("test_summary.json")
         safe_print("\n✅ Test files cleaned up")
     except:
         pass
 
-    safe_print("\n✅ Hash Registry Storage test completed")
+safe_print("\n✅ Hash Registry Storage test completed")
 
 
 if __name__ == "__main__":
-    main()
+main()

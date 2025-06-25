@@ -5,8 +5,8 @@ from .ghost_phase_integrator import build_packet, PhasePacket
 from .ghost_news_vectorizer import sentiment_lambda
 
 __all__ = [
-    "exec_gate",
-    "build_packet",
-    "PhasePacket",
-    "sentiment_lambda",
+"exec_gate",
+"build_packet",
+"PhasePacket",
+"sentiment_lambda",
 ]

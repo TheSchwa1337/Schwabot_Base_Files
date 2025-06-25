@@ -14,7 +14,7 @@ Mathematics
 ~~~~~~~~~~
 Damped harmonic oscillator (underdamped case):
 
-    x(t) = A · e^(−γ t) · unified_math.cos(2π f t + φ)
+x(t) = A · e^(−γ t) · unified_math.cos(2π f t + φ)
 
 where 0 < γ < ∞ is the damping coefficient.
 
@@ -33,32 +33,32 @@ _PI2: Final = 2.0 * math.pi
 
 def fallback_oscillator(
     t: float,
-    *,
-    amplitude: float = 1.0,
-    frequency: float = 1.0,
-    damping: float = 0.1,
-    phase: float = 0.0,
+*,
+amplitude: float = 1.0,
+frequency: float = 1.0,
+damping: float = 0.1,
+phase: float = 0.0,
 ) -> float:
-    """Return damped cosine value x(t).
+"""Return damped cosine value x(t).
 
-    Parameters
-    ----------
-    t
-        Time (seconds) or dimension-less tick.
+Parameters
+----------
+t
+Time (seconds) or dimension-less tick.
     amplitude
-        Initial amplitude ``A``.  Defaults to **1.0**.
-    frequency
-        Frequency ``f`` in Hz.  Defaults to **1.0**.
-    damping
-        Damping coefficient ``γ``.  **0.0** ⇒ no damping.  Must be ≥ 0.
-    phase
-        Phase offset ``φ`` in radians.
+Initial amplitude ``A``.  Defaults to **1.0**.
+frequency
+Frequency ``f`` in Hz.  Defaults to **1.0**.
+damping
+Damping coefficient ``γ``.  **0.0** ⇒ no damping.  Must be ≥ 0.
+phase
+Phase offset ``φ`` in radians.
 
-    Returns
-    -------
-    float
-        Damped oscillator value at *t*.
-    """
+Returns
+-------
+float
+Damped oscillator value at *t*.
+"""
     if damping < 0:
         raise ValueError("damping must be non-negative")
     envelope = unified_math.exp(-damping * t)

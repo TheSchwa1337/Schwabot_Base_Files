@@ -4,6 +4,6 @@ from .trigger import lantern_trigger
 from .vector_memory import rolling_pca
 
 __all__ = [
-    "lantern_trigger",
-    "rolling_pca",
+"lantern_trigger",
+"rolling_pca",
 ]

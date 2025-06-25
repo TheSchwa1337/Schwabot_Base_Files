@@ -32,32 +32,32 @@ class AnomalyFilterComprehensive:
 
     def __init__(self):
         """Initialize the comprehensive anomaly filter."""
-        self.detection_count = 0
-        logger.info("AnomalyFilterComprehensive initialized")
+self.detection_count = 0
+logger.info("AnomalyFilterComprehensive initialized")
 
     def detect_anomalies(self, price, volume, volatility):
         """Detect anomalies using multiple methods."""
-        self.detection_count += 1
+self.detection_count += 1
         return {
-            "is_anomaly": False,
-            "confidence_score": 0.0,
-            "anomaly_score": 0.0,
-            "detection_method": "safe_fallback"
-        }
+"is_anomaly": False,
+"confidence_score": 0.0,
+"anomaly_score": 0.0,
+"detection_method": "safe_fallback"
+}
 
     def get_anomaly_summary(self):
         """Get summary of anomaly detection performance."""
         return {
-            "detection_count": self.detection_count,
-            "status": "operational"
-        }
+"detection_count": self.detection_count,
+"status": "operational"
+}
 
 def create_anomaly_filter():
     """Factory function to create an anomaly filter."""
     return AnomalyFilterComprehensive()
 
 if __name__ == "__main__":
-    safe_print("Anomaly Filter Comprehensive - Basic Implementation")
+safe_print("Anomaly Filter Comprehensive - Basic Implementation")
 '''
 
 with open('anomaly_filter_comprehensive.py', 'w', encoding='utf-8') as f:

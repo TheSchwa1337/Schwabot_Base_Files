@@ -21,84 +21,84 @@ Mathematical Foundation:
 
 from .unified_tensor_algebra import (
     tensor_dot,
-    tensor_project,
-    tensor_entropy_gradient,
-    tensor_normalize,
-    tensor_correlation,
-    tensor_distance,
-    tensor_similarity,
-    tensor_convolution,
-    tensor_fft,
-    tensor_inverse_fft,
-    UnifiedTensorAlgebra
-)
+tensor_project,
+tensor_entropy_gradient,
+tensor_normalize,
+tensor_correlation,
+tensor_distance,
+tensor_similarity,
+tensor_convolution,
+tensor_fft,
+tensor_inverse_fft,
+UnifiedTensorAlgebra
+
 
 # from .tensor_engine import (  # F811: duplicate import
     TensorEngine,
-    create_tensor_space,
-    analyze_tensor_patterns,
-    compute_tensor_statistics,
-    tensor_pattern_matching,
-    tensor_clustering,
-    tensor_dimensionality_reduction
-)
+create_tensor_space,
+analyze_tensor_patterns,
+compute_tensor_statistics,
+tensor_pattern_matching,
+tensor_clustering,
+tensor_dimensionality_reduction
+
 
 # from .profit_engine import (  # F811: duplicate import
     compute_profit_surface,
-    optimize_long_hold_positions,
-    calculate_profit_gradient,
-    estimate_profit_curves,
-    analyze_profit_distribution,
-    ProfitEngine
-)
+optimize_long_hold_positions,
+calculate_profit_gradient,
+estimate_profit_curves,
+analyze_profit_distribution,
+ProfitEngine
+
 
 # from .entropy_engine import (  # F811: duplicate import
     entropy_filter,
-    calculate_dynamic_entropy,
-    entropy_wave_detection,
-    entropy_pattern_analysis,
-    entropy_based_clustering,
-    EntropyEngine
-)
+calculate_dynamic_entropy,
+entropy_wave_detection,
+entropy_pattern_analysis,
+entropy_based_clustering,
+EntropyEngine
+
 
 __all__ = [
     # Unified Tensor Algebra
-    'tensor_dot',
-    'tensor_project',
-    'tensor_entropy_gradient',
-    'tensor_normalize',
-    'tensor_correlation',
-    'tensor_distance',
-    'tensor_similarity',
-    'tensor_convolution',
-    'tensor_fft',
-    'tensor_inverse_fft',
-    'UnifiedTensorAlgebra',
+'tensor_dot',
+'tensor_project',
+'tensor_entropy_gradient',
+'tensor_normalize',
+'tensor_correlation',
+'tensor_distance',
+'tensor_similarity',
+'tensor_convolution',
+'tensor_fft',
+'tensor_inverse_fft',
+'UnifiedTensorAlgebra',
 
     # Tensor Engine
-    'TensorEngine',
-    'create_tensor_space',
-    'analyze_tensor_patterns',
-    'compute_tensor_statistics',
-    'tensor_pattern_matching',
-    'tensor_clustering',
-    'tensor_dimensionality_reduction',
+'TensorEngine',
+'create_tensor_space',
+'analyze_tensor_patterns',
+'compute_tensor_statistics',
+'tensor_pattern_matching',
+'tensor_clustering',
+'tensor_dimensionality_reduction',
 
     # Profit Engine
-    'compute_profit_surface',
-    'optimize_long_hold_positions',
-    'calculate_profit_gradient',
-    'estimate_profit_curves',
-    'analyze_profit_distribution',
-    'ProfitEngine',
+'compute_profit_surface',
+'optimize_long_hold_positions',
+'calculate_profit_gradient',
+'estimate_profit_curves',
+'analyze_profit_distribution',
+'ProfitEngine',
 
     # Entropy Engine
-    'entropy_filter',
-    'calculate_dynamic_entropy',
-    'entropy_wave_detection',
-    'entropy_pattern_analysis',
-    'entropy_based_clustering',
-    'EntropyEngine'
+'entropy_filter',
+'calculate_dynamic_entropy',
+'entropy_wave_detection',
+'entropy_pattern_analysis',
+'entropy_based_clustering',
+'EntropyEngine'
 ]
 
 # Version information

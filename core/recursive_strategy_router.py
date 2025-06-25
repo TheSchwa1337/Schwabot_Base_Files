@@ -13,8 +13,8 @@ from dataclasses import dataclass
 from typing import Any, Dict
 
 __all__: list[str] = [
-    "RecursiveStrategyRouter",
-    "route_strategy",
+"RecursiveStrategyRouter",
+"route_strategy",
 ]
 
 
@@ -22,13 +22,13 @@ __all__: list[str] = [
 class RecursiveStrategyRouter:
     """No-op recursive router stub."""
 
-    max_depth: int = 1
+max_depth: int = 1
 
     def route(self, packet: Dict[str, Any], depth: int = 0) -> Dict[str, Any]:
         """Return packet unchanged, simulating routing recursion.
 
-        Guards against exceeding *max_depth* to avoid runaway recursion.
-        """
+Guards against exceeding *max_depth* to avoid runaway recursion.
+"""
         if depth >= self.max_depth:
             return packet
         # In future: inspect packet and re-route as needed.

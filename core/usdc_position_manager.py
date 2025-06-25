@@ -7,9 +7,9 @@ import math
 """USDC position manager – exponential decay and position optimization.
 
 Implements the formulas:
-    P_usdc(t) = Σ_holdings·e^(−r·Δt)
+P_usdc(t) = Σ_holdings·e^(−r·Δt)
     T_usdc = α_entry·δ_buy − β_exit·δ_sell
-    σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc)
+σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc)
     Ψ_usdc = argmax_t(σ_usdc(t) > θ_usdc)
 
 This module manages USDC positions with time-decay modeling and optimal
@@ -22,10 +22,10 @@ from typing import Sequence
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = [
-    "usdc_position",
-    "usdc_trading",
-    "usdc_sigma",
-    "usdc_optimal_time",
+"usdc_position",
+"usdc_trading",
+"usdc_sigma",
+"usdc_optimal_time",
 ]
 
 # ---------------------------------------------------------------------------
@@ -35,24 +35,24 @@ __all__: list[str] = [
 
 def usdc_position(
     holdings: Sequence[float],
-    rates: Sequence[float],
-    time_deltas: Sequence[float],
+rates: Sequence[float],
+time_deltas: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return P_usdc(t) = Σ_holdings·e^(−r·Δt).
+"""Return P_usdc(t) = Σ_holdings·e^(−r·Δt).
 
-    Parameters
-    ----------
-    holdings
-        Current USDC holdings amounts.
-    rates
-        Decay rates r for each holding.
-    time_deltas
-        Time deltas Δt since each holding was acquired.
-    """
+Parameters
+----------
+holdings
+Current USDC holdings amounts.
+rates
+Decay rates r for each holding.
+time_deltas
+Time deltas Δt since each holding was acquired.
+"""
     if not (len(holdings) == len(rates) == len(time_deltas)):
         raise ValueError("all input sequences must have same length")
 
-    hold_arr = np.asarray(holdings, dtype=float)
+hold_arr = np.asarray(holdings, dtype=float)
     rate_arr = np.asarray(rates, dtype=float)
     dt_arr = np.asarray(time_deltas, dtype=float)
 
@@ -60,85 +60,85 @@ def usdc_position(
     decay_factors = unified_math.exp(-rate_arr * dt_arr)
 
     # Sum of decayed holdings
-    decayed_holdings = hold_arr * decay_factors
+decayed_holdings = hold_arr * decay_factors
 
     return float(np.sum(decayed_holdings))
 
 
 def usdc_trading(
     alpha_entry: float,
-    delta_buy: float,
-    beta_exit: float,
-    delta_sell: float,
+delta_buy: float,
+beta_exit: float,
+delta_sell: float,
 ) -> float:  # noqa: D401
-    """Return T_usdc = α_entry·δ_buy − β_exit·δ_sell.
+"""Return T_usdc = α_entry·δ_buy − β_exit·δ_sell.
 
-    Parameters
-    ----------
-    alpha_entry
-        Entry coefficient α_entry.
-    delta_buy
-        Buy signal magnitude δ_buy.
-    beta_exit
-        Exit coefficient β_exit.
-    delta_sell
-        Sell signal magnitude δ_sell.
-    """
-    entry_term = alpha_entry * delta_buy
-    exit_term = beta_exit * delta_sell
+Parameters
+----------
+alpha_entry
+Entry coefficient α_entry.
+delta_buy
+Buy signal magnitude δ_buy.
+beta_exit
+Exit coefficient β_exit.
+delta_sell
+Sell signal magnitude δ_sell.
+"""
+entry_term = alpha_entry * delta_buy
+exit_term = beta_exit * delta_sell
 
     return entry_term - exit_term
 
 
 def usdc_sigma(
     position_gradient: Sequence[float],
-    t_usdc: float,
+t_usdc: float,
 ) -> np.ndarray:  # noqa: D401
-    """Return σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc).
+"""Return σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc).
 
-    Parameters
-    ----------
-    position_gradient
-        Gradient ∇P_usdc(t) of the position function.
+Parameters
+----------
+position_gradient
+Gradient ∇P_usdc(t) of the position function.
     t_usdc
-        Trading signal T_usdc from usdc_trading().
+Trading signal T_usdc from usdc_trading().
     """
-    grad_arr = np.asarray(position_gradient, dtype=float)
+grad_arr = np.asarray(position_gradient, dtype=float)
 
     # Compute unified_math.log(1 + T_usdc), handling negative values safely
     if t_usdc <= -1:
-        log_term = unified_math.unified_math.log(1e-10)  # Avoid unified_math.log(0) or unified_math.log(negative)
+log_term = unified_math.unified_math.log(1e-10)  # Avoid unified_math.log(0) or unified_math.log(negative)
     else:
-        log_term = unified_math.unified_math.log(1 + t_usdc)
+log_term = unified_math.unified_math.log(1 + t_usdc)
 
-    sigma_usdc = grad_arr * log_term
+sigma_usdc = grad_arr * log_term
 
     return sigma_usdc
 
 
 def usdc_optimal_time(
     sigma_series: Sequence[float],
-    theta_usdc: float,
-    *,
-    times: Sequence[float] | None = None,
+theta_usdc: float,
+*,
+times: Sequence[float] | None = None,
 ) -> int:  # noqa: D401
-    """Return Ψ_usdc = argmax_t(σ_usdc(t) > θ_usdc).
+"""Return Ψ_usdc = argmax_t(σ_usdc(t) > θ_usdc).
 
-    Parameters
-    ----------
-    sigma_series
-        Time series of σ_usdc(t) values.
+Parameters
+----------
+sigma_series
+Time series of σ_usdc(t) values.
     theta_usdc
-        Threshold θ_usdc for optimal timing.
-    times
-        Optional time indices. If None, uses array indices.
+Threshold θ_usdc for optimal timing.
+times
+Optional time indices. If None, uses array indices.
 
-    Returns
-    -------
-    int
-        Index of optimal time when condition is maximally satisfied.
-    """
-    sigma_arr = np.asarray(sigma_series, dtype=float)
+Returns
+-------
+int
+Index of optimal time when condition is maximally satisfied.
+"""
+sigma_arr = np.asarray(sigma_series, dtype=float)
 
     if len(sigma_arr) == 0:
         return 0
@@ -151,8 +151,8 @@ def usdc_optimal_time(
         return int(np.argmax(sigma_arr))
 
     # Among values above threshold, find the maximum
-    valid_indices = np.where(above_threshold)[0]
+valid_indices = np.where(above_threshold)[0]
     valid_values = sigma_arr[valid_indices]
-    max_idx_in_valid = np.argmax(valid_values)
+max_idx_in_valid = np.argmax(valid_values)
 
     return int(valid_indices[max_idx_in_valid])

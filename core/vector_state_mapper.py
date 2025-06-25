@@ -43,25 +43,25 @@ def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
 
 def map_glyph_to_state(
     glyph_vec: np.ndarray,
-    state_matrix: np.ndarray,
+state_matrix: np.ndarray,
 ) -> Tuple[np.ndarray, int]:
-    """Project *glyph_vec* onto *state_matrix* and return similarities.
+"""Project *glyph_vec* onto *state_matrix* and return similarities.
 
-    Parameters
-    ----------
-    glyph_vec
-        1-D NumPy array of length *dim* – L2-normalised.
-    state_matrix
-        2-D NumPy array of shape ``(n_channels, dim)`` representing live BTC
+Parameters
+----------
+glyph_vec
+1-D NumPy array of length *dim* – L2-normalised.
+state_matrix
+2-D NumPy array of shape ``(n_channels, dim)`` representing live BTC
         feature channels.  Must share the trailing dimension with *glyph_vec*.
 
-    Returns
-    -------
-    Tuple[np.ndarray, int]
-        ``(similarities, best_idx)`` where *similarities* is the 1-D array of
+Returns
+-------
+Tuple[np.ndarray, int]
+``(similarities, best_idx)`` where *similarities* is the 1-D array of
         cosine scores, and *best_idx* is the index of the row with the highest
-        similarity.  Values lie in ``[-1, 1]``.
-    """
+similarity.  Values lie in ``[-1, 1]``.
+"""
     if glyph_vec.ndim != 1:
         raise ValueError("glyph_vec must be 1-D")
     if state_matrix.ndim != 2:
@@ -69,6 +69,6 @@ def map_glyph_to_state(
     if state_matrix.shape[1] != glyph_vec.shape[0]:
         raise ValueError("state_matrix dim mismatch with glyph_vec length")
 
-    sims = _cosine(glyph_vec, state_matrix)
+sims = _cosine(glyph_vec, state_matrix)
     best_idx = int(np.argmax(sims))
     return sims, best_idx

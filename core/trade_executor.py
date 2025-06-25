@@ -48,10 +48,10 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class ExecutedTrade:
     """Represents a trade that has been successfully executed."""
-    proposal: TradeProposal
-    execution_price: float
-    execution_timestamp: float
-    status: str = "SIMULATED_EXECUTION"
+proposal: TradeProposal
+execution_price: float
+execution_timestamp: float
+status: str = "SIMULATED_EXECUTION"
 
 
 # --- Trade Executor ---
@@ -59,34 +59,34 @@ class ExecutedTrade:
 class TradeExecutor:
     """
 
-    Listens for accepted proposals and simulates their execution.
-    """
+Listens for accepted proposals and simulates their execution.
+"""
 
     def __init__(self, fault_bus: FaultBus):
         """
-        Initializes the TradeExecutor.
+Initializes the TradeExecutor.
 
-        Args:
-            fault_bus: An instance of the central FaultBus.
-        """
-        self.bus = fault_bus
-        logger.info("TradeExecutor initialized.")
+Args:
+fault_bus: An instance of the central FaultBus.
+"""
+self.bus = fault_bus
+logger.info("TradeExecutor initialized.")
 
     def start_listening(self):
         """Subscribes to accepted trade proposals on the FaultBus."""
-        self.bus.subscribe("trade_proposal_accepted", self.execute_trade)
+self.bus.subscribe("trade_proposal_accepted", self.execute_trade)
         logger.info("TradeExecutor is now listening for accepted proposals.")
 
-    async def execute_trade(self, proposal: TradeProposal):
+async def execute_trade(self, proposal: TradeProposal):
         """
-        Receives an accepted proposal and simulates its execution.
-        In a real system, this would contain logic to connect to an
-        exchange's API (e.g., via CCXT or a direct integration).
+Receives an accepted proposal and simulates its execution.
+In a real system, this would contain logic to connect to an
+exchange's API (e.g., via CCXT or a direct integration).
         """
-        logger.warning(
+logger.warning(
             f"EXECUTING TRADE for {proposal.symbol}: "
-            f"{proposal.direction.value} @ ${proposal.entry_price:.2f}"
-        )
+f"{proposal.direction.value} @ ${proposal.entry_price:.2f}"
+
 
         # --- SIMULATED EXCHANGE INTERACTION ---
         # Here you would:
@@ -94,17 +94,17 @@ class TradeExecutor:
         # 2. Create an order (LIMIT or MARKET).
         # 3. Submit the order.
         # 4. Wait for confirmation and the final execution price.
-        await asyncio.sleep(0.05)  # Simulate network latency
+await asyncio.sleep(0.05)  # Simulate network latency
         execution_price = proposal.entry_price * 1.0001 # Simulate small slippage
         # --- END SIMULATION ---
 
-        executed_trade = ExecutedTrade(
+executed_trade = ExecutedTrade(
             proposal=proposal,
-            execution_price=execution_price,
-            execution_timestamp=datetime.now().timestamp()
-        )
+execution_price=execution_price,
+execution_timestamp=datetime.now().timestamp()
 
-        logger.info(f"Trade for {proposal.symbol} executed. Publishing confirmation.")
+
+logger.info(f"Trade for {proposal.symbol} executed. Publishing confirmation.")
         await self.bus.publish("trade_executed", trade=executed_trade)
 
 
@@ -112,28 +112,28 @@ class TradeExecutor:
 
 async def main():
     """Demonstrates the functionality of the TradeExecutor."""
-    logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
-    bus = FaultBus()
+bus = FaultBus()
     executor = TradeExecutor(bus)
     executor.start_listening()
 
     # Dummy listener for the final trade confirmation
-    async def audit_logger(trade: ExecutedTrade):
+async def audit_logger(trade: ExecutedTrade):
         safe_print(
             "\n[AUDIT LOG] Confirmed trade execution:\n"
-            f"  -> Symbol: {trade.proposal.symbol}\n"
-            f"  -> Direction: {trade.proposal.direction.value}\n"
-            f"  -> Executed Price: ${trade.execution_price:.2f}"
-        )
+f"  -> Symbol: {trade.proposal.symbol}\n"
+f"  -> Direction: {trade.proposal.direction.value}\n"
+f"  -> Executed Price: ${trade.execution_price:.2f}"
 
-    bus.subscribe("trade_executed", audit_logger)
+
+bus.subscribe("trade_executed", audit_logger)
 
     # Simulate a proposal being accepted by the Risk Manager
-    safe_print("[RiskManager] Publishing an accepted trade proposal...")
+safe_print("[RiskManager] Publishing an accepted trade proposal...")
     accepted_proposal = TradeProposal("BTC", "BUY", 51000, 0.93, "hash-final")
     await bus.publish("trade_proposal_accepted", proposal=accepted_proposal)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())

@@ -44,47 +44,47 @@ _BASE_CYCLE: Final = 42  # phase_hash_gate default
 class GhostPipeline:
     """Runtime container that evaluates ghost-mode pre-conditions."""
 
-    entropy_threshold: float
-    temp_threshold: float
-    base_cycle: int
+entropy_threshold: float
+temp_threshold: float
+base_cycle: int
 
     def __init__(
         self,
-        *,
-        entropy_threshold: float = _ENTROPY_THRESHOLD,
-        temp_threshold: float = _TEMP_THRESHOLD,
-        base_cycle: int = _BASE_CYCLE,
-    ) -> None:  # noqa: D401
-        """TODO: document __init__."""
-        self.entropy_threshold = entropy_threshold
-        self.temp_threshold = temp_threshold
-        self.base_cycle = base_cycle
+*,
+entropy_threshold: float = _ENTROPY_THRESHOLD,
+temp_threshold: float = _TEMP_THRESHOLD,
+base_cycle: int = _BASE_CYCLE,
+) -> None:  # noqa: D401
+"""TODO: document __init__."""
+self.entropy_threshold = entropy_threshold
+self.temp_threshold = temp_threshold
+self.base_cycle = base_cycle
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
     def validate(
         self,
-        entropy: float,
-        temp_current: float,
-        temp_previous: float,
-        tick: int,
-        *,
-        salt: str = "",
-    ) -> Tuple[bool, dict[str, bool]]:
-        """Return overall validity flag and individual component map."""
-        entropy_ok = sync_flux_compensator(entropy, self.entropy_threshold)
+entropy: float,
+temp_current: float,
+temp_previous: float,
+tick: int,
+*,
+salt: str = "",
+) -> Tuple[bool, dict[str, bool]]:
+"""Return overall validity flag and individual component map."""
+entropy_ok = sync_flux_compensator(entropy, self.entropy_threshold)
         temp_ok = thermal_delta_switch(
             temp_current, temp_previous, threshold=self.temp_threshold
-        )
-        phase_ok = phase_hash_gate(tick, base_cycle=self.base_cycle, salt=salt)
 
-        all_ok = entropy_ok and temp_ok and phase_ok
-        component_map = {
-            "entropy_ok": entropy_ok,
-            "temp_ok": temp_ok,
-            "phase_ok": phase_ok,
-        }
+phase_ok = phase_hash_gate(tick, base_cycle=self.base_cycle, salt=salt)
+
+all_ok = entropy_ok and temp_ok and phase_ok
+component_map = {
+"entropy_ok": entropy_ok,
+"temp_ok": temp_ok,
+"phase_ok": phase_ok,
+}
         return all_ok, component_map
 
 
@@ -95,25 +95,25 @@ class GhostPipeline:
 
 def ghost_validator_pipeline(
     entropy: float,
-    temp_current: float,
-    temp_previous: float,
-    tick: int,
-    *,
-    entropy_threshold: float = _ENTROPY_THRESHOLD,
-    temp_threshold: float = _TEMP_THRESHOLD,
-    base_cycle: int = _BASE_CYCLE,
-    salt: str = "",
+temp_current: float,
+temp_previous: float,
+tick: int,
+*,
+entropy_threshold: float = _ENTROPY_THRESHOLD,
+temp_threshold: float = _TEMP_THRESHOLD,
+base_cycle: int = _BASE_CYCLE,
+salt: str = "",
 ) -> bool:
-    """One-shot validation wrapper around :class:`GhostPipeline`.
+"""One-shot validation wrapper around :class:`GhostPipeline`.
 
-    Returns ``True`` only if *all* component validators pass.
-    """
-    pipeline = GhostPipeline(
+Returns ``True`` only if *all* component validators pass.
+"""
+pipeline = GhostPipeline(
         entropy_threshold=entropy_threshold,
-        temp_threshold=temp_threshold,
-        base_cycle=base_cycle,
-    )
-    result, _ = pipeline.validate(
+temp_threshold=temp_threshold,
+base_cycle=base_cycle,
+
+result, _ = pipeline.validate(
         entropy, temp_current, temp_previous, tick, salt=salt
-    )
+
     return result

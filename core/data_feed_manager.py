@@ -1,6 +1,6 @@
 # Import safe print for Windows compatibility
-try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+try:
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -45,33 +45,33 @@ logger = logging.getLogger(__name__)
 
 class FeedType(Enum):
     """Type of data feed."""
-    WEBSOCKET = "websocket"
-    REST_API = "rest_api"
-    CSV_FILE = "csv_file"
-    DATABASE = "database"
+WEBSOCKET = "websocket"
+REST_API = "rest_api"
+CSV_FILE = "csv_file"
+DATABASE = "database"
 
 
 @dataclass
 class FeedConfig:
     """Configuration for a single data feed."""
-    name: str
-    feed_type: FeedType
-    uri: str
-    symbol: str
-    update_interval: float = 1.0  # In seconds
-    is_active: bool = True
-    metadata: Dict[str, Any] = field(default_factory=dict)
+name: str
+feed_type: FeedType
+uri: str
+symbol: str
+update_interval: float = 1.0  # In seconds
+is_active: bool = True
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class TickData:
     """Standardized tick data format."""
-    symbol: str
-    price: float
-    volume: float
-    timestamp: datetime
-    source: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+symbol: str
+price: float
+volume: float
+timestamp: datetime
+source: str
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class DataFeedManager:
@@ -79,123 +79,123 @@ class DataFeedManager:
 
     def __init__(self, configs: List[FeedConfig] = None):
         """Initialize the DataFeedManager."""
-        self.feeds: Dict[str, FeedConfig] = {}
-        self.active_tasks: Dict[str, asyncio.Task] = {}
-        self.subscribers: List[Callable[[TickData], None]] = []
+self.feeds: Dict[str, FeedConfig] = {}
+self.active_tasks: Dict[str, asyncio.Task] = {}
+self.subscribers: List[Callable[[TickData], None]] = []
         if configs:
             for config in configs:
-                self.add_feed(config)
+self.add_feed(config)
         logger.info("DataFeedManager initialized.")
 
     def add_feed(self, config: FeedConfig):
         """Add and configure a new data feed."""
         if config.name in self.feeds:
-            logger.warning(f"Feed '{config.name}' already exists. Overwriting.")
+logger.warning(f"Feed '{config.name}' already exists. Overwriting.")
         self.feeds[config.name] = config
-        logger.info(f"Added data feed: {config.name} ({config.feed_type.value})")
+logger.info(f"Added data feed: {config.name} ({config.feed_type.value})")
 
     def subscribe(self, callback: Callable[[TickData], None]):
         """Subscribe a callback function to receive tick data."""
         if callback not in self.subscribers:
-            self.subscribers.append(callback)
+self.subscribers.append(callback)
             logger.info(f"New subscriber added: {callback.__name__}")
 
-    async def start_all(self):
+async def start_all(self):
         """Start all active data feeds."""
-        logger.info("Starting all active data feeds...")
+logger.info("Starting all active data feeds...")
         for name, config in self.feeds.items():
             if config.is_active:
-                await self.start_feed(name)
+await self.start_feed(name)
 
-    async def start_feed(self, name: str):
+async def start_feed(self, name: str):
         """Start a specific data feed."""
         if name not in self.feeds:
-            logger.error(f"Feed '{name}' not found.")
+logger.error(f"Feed '{name}' not found.")
             return
 
         if name in self.active_tasks and not self.active_tasks[name].done():
             logger.warning(f"Feed '{name}' is already running.")
             return
 
-        config = self.feeds[name]
-        logger.info(f"Starting feed: {name}")
+config = self.feeds[name]
+logger.info(f"Starting feed: {name}")
         task = asyncio.create_task(self._run_feed(config))
         self.active_tasks[name] = task
 
-    async def stop_all(self):
+async def stop_all(self):
         """Stop all running data feeds."""
-        logger.info("Stopping all active data feeds...")
+logger.info("Stopping all active data feeds...")
         for name in self.active_tasks:
-            await self.stop_feed(name)
+await self.stop_feed(name)
 
-    async def stop_feed(self, name: str):
+async def stop_feed(self, name: str):
         """Stop a specific data feed."""
         if name not in self.active_tasks:
-            logger.warning(f"Feed '{name}' is not running.")
+logger.warning(f"Feed '{name}' is not running.")
             return
 
-        task = self.active_tasks[name]
-        task.cancel()
+task = self.active_tasks[name]
+task.cancel()
         try:
-            await task
+await task
         except asyncio.CancelledError:
-            logger.info(f"Feed '{name}' stopped successfully.")
+logger.info(f"Feed '{name}' stopped successfully.")
         del self.active_tasks[name]
 
-    async def _run_feed(self, config: FeedConfig):
+async def _run_feed(self, config: FeedConfig):
         """The main loop for a single data feed."""
         # This is a placeholder for the actual feed implementation
         # A real implementation would connect to the source based on `feed_type`
-        logger.info(f"Running feed '{config.name}'...")
+logger.info(f"Running feed '{config.name}'...")
         while True:
             try:
                 # Simulate fetching data
-                price = 100 + (hash(datetime.now()) % 10)
+price = 100 + (hash(datetime.now()) % 10)
                 volume = 1000 + (hash(datetime.now()) % 100)
 
-                tick = TickData(
+tick = TickData(
                     symbol=config.symbol,
-                    price=price,
-                    volume=volume,
-                    timestamp=datetime.now(),
+price=price,
+volume=volume,
+timestamp=datetime.now(),
                     source=config.name
-                )
+
 
                 # Broadcast to subscribers
                 for callback in self.subscribers:
-                    callback(tick)
+callback(tick)
 
-                await asyncio.sleep(config.update_interval)
+await asyncio.sleep(config.update_interval)
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"Error in feed '{config.name}': {e}")
+logger.error(f"Error in feed '{config.name}': {e}")
                 await asyncio.sleep(5)  # Wait before retrying
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
     # Example of how to use the DataFeedManager
-    async def example_subscriber(tick: TickData):
+async def example_subscriber(tick: TickData):
         """A simple subscriber function to print received ticks."""
-        safe_print(f"Received tick from {tick.source}: {tick.symbol} - Price: ${tick.price:.2f}")
+safe_print(f"Received tick from {tick.source}: {tick.symbol} - Price: ${tick.price:.2f}")
 
-    async def main():
+async def main():
         """Main function to demonstrate DataFeedManager."""
         # Configuration for two example feeds
-        feed_configs = [
-            FeedConfig(name="LiveBTC", feed_type=FeedType.WEBSOCKET, uri="wss://example.com/btc", symbol="BTC", update_interval=2),
+feed_configs = [
+FeedConfig(name="LiveBTC", feed_type=FeedType.WEBSOCKET, uri="wss://example.com/btc", symbol="BTC", update_interval=2),
             FeedConfig(name="HistoricalETH", feed_type=FeedType.CSV_FILE, uri="/data/eth.csv", symbol="ETH", update_interval=5),
         ]
 
-        manager = DataFeedManager(feed_configs)
+manager = DataFeedManager(feed_configs)
         manager.subscribe(example_subscriber)
 
-        await manager.start_all()
+await manager.start_all()
 
         # Run for a short period
-        await asyncio.sleep(10)
+await asyncio.sleep(10)
 
-        await manager.stop_all()
+await manager.stop_all()
 
-    asyncio.run(main())
+asyncio.run(main())

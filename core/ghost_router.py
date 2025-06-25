@@ -87,17 +87,17 @@ def _lantern_match(vec: np.ndarray, reference: np.ndarray) -> bool:
 def _ai_consensus(
     hashes: Tuple[str, str, str], weights: Tuple[float, float, float]
 ) -> bool:
-    """TODO: document _ai_consensus."""
-    h1, h2, h3 = hashes
+"""TODO: document _ai_consensus."""
+h1, h2, h3 = hashes
     if not (h1 == h2 == h3):
         return False
-    trust = sum(weights)
+trust = sum(weights)
     return trust >= _AI_TRUST_THRESHOLD
 
 
 def _reentry_tolerance(opportunity_ts: float, now_ts: float) -> bool:
     """TODO: document _reentry_tolerance."""
-    decay = unified_math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
+decay = unified_math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
     return decay >= _DECAY_THRESHOLD
 
 
@@ -120,21 +120,21 @@ def _news_overlay_route(score: float) -> bool:
 class RouterInput:
     """TODO: document RouterInput."""
 
-    tick_hash: str
-    mem_hash: str
-    pool_volumes: np.ndarray  # USDC pool volume window
-    btc_dip: bool  # Quick boolean indicator
-    lantern_vec: np.ndarray
-    lantern_ref: np.ndarray
-    ai_hashes: Tuple[str, str, str]
-    ai_weights: Tuple[float, float, float] = (1.0, 1.0, 1.0)
+tick_hash: str
+mem_hash: str
+pool_volumes: np.ndarray  # USDC pool volume window
+btc_dip: bool  # Quick boolean indicator
+lantern_vec: np.ndarray
+lantern_ref: np.ndarray
+ai_hashes: Tuple[str, str, str]
+ai_weights: Tuple[float, float, float] = (1.0, 1.0, 1.0)
     opportunity_ts: float = 0.0
-    now_ts: float = time.time()
+now_ts: float = time.time()
     price_now: float = 0.0
-    price_pred: float = 0.0
-    curr_profit: float = 0.0
-    projected_exit: float = 0.0
-    news_score: float = 0.0  # aggregated sentiment score
+price_pred: float = 0.0
+curr_profit: float = 0.0
+projected_exit: float = 0.0
+news_score: float = 0.0  # aggregated sentiment score
 
 
 # -----------------------------------------------------------------------------
@@ -193,10 +193,10 @@ def ghost_router(data: RouterInput) -> str:  # noqa: D401
 class ExecPacket:
     """Executable order packet ⟨V_final , route , O_t , τ_t⟩ (formula 16)."""
 
-    volume: float
-    route: Literal["vault_mode", "long_mode", "short_mode", "mid_mode"]
-    price_offset: float
-    hash_tag: str
+volume: float
+route: Literal["vault_mode", "long_mode", "short_mode", "mid_mode"]
+price_offset: float
+hash_tag: str
 
 
 # ------------------------------------------------------------------
@@ -206,34 +206,34 @@ class ExecPacket:
 
 def compute_ghost_route(
     *,
-    H_t: int,
-    H_prev: int,
-    E_t: float,
-    D_t: float,
-    rho_t: float,
-    P_res: float,
-    S_t: float,
-    base_vol: float,
-    psi: float = 0.5,
-    theta_high: float = 0.8,
-    theta_low: float = 0.2,
-    beta1: float = 1.0,
-    beta2: float = 0.5,
-    beta3: float = 0.3,
-    kappa: float = 0.01,
-    epsilon: float = 1e-9,
-    Q_max: float = 1e6,
-    timestamp: float | None = None,
+H_t: int,
+H_prev: int,
+E_t: float,
+D_t: float,
+rho_t: float,
+P_res: float,
+S_t: float,
+base_vol: float,
+psi: float = 0.5,
+theta_high: float = 0.8,
+theta_low: float = 0.2,
+beta1: float = 1.0,
+beta2: float = 0.5,
+beta3: float = 0.3,
+kappa: float = 0.01,
+epsilon: float = 1e-9,
+Q_max: float = 1e6,
+timestamp: float | None = None,
 ) -> ExecPacket:  # noqa: D401
-    """Compute ghost routing decision and order size.
+"""Compute ghost routing decision and order size.
 
-    Returns an :class:`ExecPacket` with volume, route string, price offset 0.0
-    (placeholder) and hash-tag τₜ.
+Returns an :class:`ExecPacket` with volume, route string, price offset 0.0
+(placeholder) and hash-tag τₜ.
     """
     import hashlib
 #     from core.unified_math_system import unified_math  # F811: duplicate import
 
-    delta_H = H_t - H_prev
+delta_H = H_t - H_prev
     # (1) Φ_t
     phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
 
@@ -249,13 +249,13 @@ def compute_ghost_route(
 
     # (7) route decision
     if phi_t > theta_high:
-        route = "vault_mode"
+route = "vault_mode"
     elif phi_t < theta_low and delta_H < 0:
-        route = "long_mode"
+route = "long_mode"
     elif phi_t < theta_low and delta_H > 0:
-        route = "short_mode"
+route = "short_mode"
     else:
-        route = "mid_mode"
+route = "mid_mode"
 
     # (8) final executable size
     Q_exec = unified_math.max(0.0, unified_math.min(V_adj * (w_btc + w_usdc), Q_max))
@@ -264,7 +264,7 @@ def compute_ghost_route(
     if timestamp is None:
         import time as _time
 
-        timestamp = _time.time()
+timestamp = _time.time()
     tag_data = f"{H_t}{route}{timestamp}".encode()
     tau_t = hashlib.sha256(tag_data).hexdigest()
 
