@@ -1,6 +1,7 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import math
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -18,7 +19,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Line Render Engine - Trading Chart and Technical Indicator Visualization for Schwabot
 ===================================================================================
@@ -76,7 +77,7 @@ class DataPoint:
 class ChartStyle:
     primary_color: str = "#1f77b4"
     secondary_color: str = "#ff7f0e"
-    background_color: str = "#ffff"
+    background_color: str = "#fff"
     grid_color: str = "#e0e0e0"
     text_color: str = "#000000"
     line_width: float = 2.0

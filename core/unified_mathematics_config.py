@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -21,7 +22,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Unified Mathematics Configuration for Schwabot Hybrid ZPE-Reactive System.
 
 This module provides centralized configuration for all mathematical operations,
@@ -516,6 +517,7 @@ def get_math_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test unified mathematics system
     safe_print("🧪 Testing Unified Mathematics System...")

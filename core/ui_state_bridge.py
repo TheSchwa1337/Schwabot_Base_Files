@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """UI State Bridge - State Management and Synchronization for Schwabot UI Components.
 
 This module provides a bridge between the core mathematical systems and UI components,

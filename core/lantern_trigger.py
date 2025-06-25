@@ -1,9 +1,10 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Lantern trigger – Lₜ = σ(Δ_price) · ∂ᵢτ_k."""
 
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
+import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 __all__: list[str] = ["lantern_trigger"]

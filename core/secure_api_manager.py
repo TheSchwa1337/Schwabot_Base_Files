@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Secure API Manager - Linux-based secure storage for Schwabot APIs.
 
 This module provides secure API management for:
@@ -722,6 +723,7 @@ def get_api_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test secure API manager
     safe_print("🧪 Testing Secure API Manager...")

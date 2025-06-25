@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Oscillator fallback – damped harmonic pulse generator.
 
 This helper provides a mathematically–stable fallback oscillator that produces

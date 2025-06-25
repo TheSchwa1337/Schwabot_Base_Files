@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Entropy-based signal validator.
 
 This module exposes :func:`validate_entropy_envelope` – a helper that checks

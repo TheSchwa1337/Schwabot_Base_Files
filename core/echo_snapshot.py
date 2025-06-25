@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Echo Snapshot - System State Capture and Replay for Schwabot
 ===========================================================

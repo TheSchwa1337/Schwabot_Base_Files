@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """optimized_constants_wrapper.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package

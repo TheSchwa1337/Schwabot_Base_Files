@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Pool-volume translator – link news sentiment to USDC pool behaviour.
 
 Implements Ω_pool_vector from the design notes.  We derive a *scalar influence

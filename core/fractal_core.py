@@ -1,6 +1,7 @@
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Fractal Core - Grayscale Collapse and Recursive Hash Structures.
 
 Implements the core mathematical framework for:

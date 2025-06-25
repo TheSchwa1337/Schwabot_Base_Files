@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Exchange Plumbing - Comprehensive CCXT Integration with Robust Features.
 
 This module provides enterprise-grade exchange connectivity including:
@@ -1144,6 +1145,7 @@ def get_exchange_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test exchange plumbing
     safe_print("🧪 Testing Exchange Plumbing...")

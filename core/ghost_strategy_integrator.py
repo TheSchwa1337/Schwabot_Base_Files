@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Ghost Strategy Integrator – Unified pipeline integration for Schwabot.
 
 This module provides the class-based architecture that integrates all ghost

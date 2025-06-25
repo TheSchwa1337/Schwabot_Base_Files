@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Precision and Performance Optimization - High-Performance Math and Profiling.
 
 This module provides comprehensive precision and performance optimization including:
@@ -826,6 +827,7 @@ def get_precision_performance_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test precision and performance manager
     safe_print("🧪 Testing Precision and Performance Manager...")

@@ -1,6 +1,7 @@
 # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import math
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -19,7 +20,7 @@ def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Profit Routing Engine - Schwabot UROS v1.0
 =========================================

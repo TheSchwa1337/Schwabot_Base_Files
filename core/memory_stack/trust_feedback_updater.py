@@ -2,6 +2,7 @@
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
+import math
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -19,7 +20,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Trust Feedback Updater - Agent Reliability Tracking.
 
@@ -380,6 +381,7 @@ def log_command_feedback(
 
 
 # Test function
+
 if __name__ == "__main__":
     async def test_trust_updater():
         """Test trust feedback updater."""

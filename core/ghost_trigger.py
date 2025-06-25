@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Ghost trigger – stealth-mode activation predicate.
 
 This micro-module exposes a *single* public helper – :func:`ghost_trigger` –

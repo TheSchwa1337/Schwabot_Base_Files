@@ -1,6 +1,7 @@
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Unified Confidence Matrix - Central Hub for Schwabot Confidence Calculations.
 
 This module serves as the central hub connecting all confidence-related systems:

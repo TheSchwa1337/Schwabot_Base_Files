@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Memory-drift corrector – detect glyph hash drift and decide re-link.
 
 Implements ΔΞ_mem logic from the design doc.  Given the *previous* profitable

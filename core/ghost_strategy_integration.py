@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Ghost Strategy Integration - Enhanced Strategy Pathway Integration
 ================================================================
@@ -22,6 +22,7 @@ from typing import Dict, List, Optional, Any, Union, Literal, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+import math
 
 # Import our robust systems with Unicode fallback
 try:

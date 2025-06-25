@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """phantom_profit_tracker – thin wrapper around ghost_profit_tracker.
 
 Some legacy modules reference *phantom_profit_tracker*.  Internally we simply

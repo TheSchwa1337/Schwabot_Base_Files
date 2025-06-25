@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Hash tick synchronizer – SHA256-based tick matching and timing sync.
 
 Implements the formulas:

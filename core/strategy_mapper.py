@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Strategy Mapper - UROS v1.0 Integration with ZPE Mathematical Framework.
 
 This module maps strategies using the new UROS v1.0 components:

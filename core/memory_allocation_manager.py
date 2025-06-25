@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Memory Allocation Manager - Intelligent Memory Management System.
 
 This module provides comprehensive memory allocation management including:
@@ -784,6 +785,7 @@ def get_memory_allocation_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test memory allocation manager
     safe_print("🧪 Testing Memory Allocation Manager...")

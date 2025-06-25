@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """UI Integration Bridge - UI Component Integration and Coordination for Schwabot.
 
 This module provides integration between UI components and the core mathematical systems,

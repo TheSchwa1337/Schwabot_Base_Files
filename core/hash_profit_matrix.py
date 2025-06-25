@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """hash_profit_matrix.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package

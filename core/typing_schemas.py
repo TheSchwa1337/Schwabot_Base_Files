@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Schwabot Typing Schemas - Centralized Type Definitions
 =====================================================

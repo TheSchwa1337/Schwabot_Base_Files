@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Ferris RDE Core - Recursive Dynamic Engine for Schwabot.
 
 This module implements the Ferris RDE (Recursive Dynamic Engine) that provides:
@@ -810,6 +811,7 @@ def get_ferris_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test Ferris RDE core
     safe_print("🧪 Testing Ferris RDE Core...")

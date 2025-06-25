@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -21,7 +22,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Tick Resonance Engine - Harmony Score Calculator.
 
 This module computes harmony scores (𝓗) that measure how well tick timing

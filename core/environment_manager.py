@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Environment Manager - Canary Environments and Configuration Management.
 
 This module provides comprehensive environment management including:
@@ -927,6 +927,7 @@ def get_environment_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test environment manager
     print("🧪 Testing Environment Manager...")

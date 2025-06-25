@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Settings Manager - Central Configuration Management for Schwabot
 ================================================================

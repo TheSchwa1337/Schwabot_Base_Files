@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """quantum_mathematical_pathway_validator.py"""
 
 

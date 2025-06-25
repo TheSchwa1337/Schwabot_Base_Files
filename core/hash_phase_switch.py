@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Phase-hash switch helper.
 
 This stub offers a deterministic *hash-phase gate* so legacy modules can

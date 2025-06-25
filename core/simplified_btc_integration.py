@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Simplified BTC Integration - Bitcoin Trading Integration Layer.
 
 This module provides a clean, simplified interface for Bitcoin trading

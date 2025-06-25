@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Master Orchestrator - System Coordination Hub.
 
 ============================================

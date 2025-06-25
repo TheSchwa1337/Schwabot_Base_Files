@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Main Entry Point - Schwabot System Initialization and Management.
 
 This module provides the unified entry point for Schwabot's full architecture,

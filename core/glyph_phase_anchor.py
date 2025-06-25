@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Glyph phase anchor – map glyph hash to Ferris wheel tick phase.
 
 Given the 42-tick Ferris wheel used in Schwabot, we often quantise down to

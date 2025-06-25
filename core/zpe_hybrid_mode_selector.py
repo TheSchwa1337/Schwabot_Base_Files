@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """ZPE Hybrid Mode Selector - Dynamic Mode Selection System.
 
 This module provides intelligent mode selection between ZPE (recursive velocity)
@@ -644,6 +645,7 @@ def get_mode_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test mode selection
     test_market_data = {

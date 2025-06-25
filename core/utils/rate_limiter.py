@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Rate limiter utility for API request management.
 
 This module provides rate limiting functionality to ensure API

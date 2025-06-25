@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Anomaly Filter Comprehensive - Advanced Anomaly Detection and Filtering"""
 
 import logging

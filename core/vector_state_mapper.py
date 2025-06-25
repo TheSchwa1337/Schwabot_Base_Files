@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Vector-state mapper – align news glyph vectors with live BTC state space.
 
 The purpose of this component is to project a *glyph vector* (semantic signal

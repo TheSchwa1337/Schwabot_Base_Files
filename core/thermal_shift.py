@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Thermal delta switch – minimal thermal drift detector.
 
 This helper flags sudden temperature jumps (*thermal shifts*) above a preset

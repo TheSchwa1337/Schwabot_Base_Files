@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Phase-resonance gate logic.
 
 This helper exposes a single function – :func:`phase_resonance_gate`.  It acts

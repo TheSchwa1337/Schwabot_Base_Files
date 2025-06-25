@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Ghost swap vector – trade simulation projection.
 
 Implements the Φ₍ghost₎ matrix from the Ghost design doc:

@@ -1,5 +1,6 @@
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Ghost Strategy Handler - Stealth Entry and Non-Standard Positioning.
 
 This module implements "ghost entry" trades - subtle entries that don't match

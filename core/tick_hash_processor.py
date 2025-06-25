@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -21,7 +22,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Tick Hash Processor - Hash-Based Tick Analysis & Pattern Detection.
 
 This module processes tick-based hash signatures for pattern recognition,

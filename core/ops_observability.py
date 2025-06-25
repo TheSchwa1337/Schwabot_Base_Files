@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Ops and Observability - Comprehensive Monitoring and Logging System.
 
 This module provides enterprise-grade observability including:
@@ -1046,6 +1047,7 @@ def get_observability_summary() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test Ops and Observability
     safe_print("🔍 Testing Ops and Observability...")

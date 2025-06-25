@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 API Configuration - CoinMarketCap and CoinGecko Integration
 ==========================================================

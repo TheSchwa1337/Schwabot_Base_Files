@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """news_intelligence_engine.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package

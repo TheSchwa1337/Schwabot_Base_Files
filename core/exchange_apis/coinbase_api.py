@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Coinbase Pro/Advanced Trade API implementation.
 
 This module provides Coinbase-specific API functionality with proper

@@ -1,5 +1,6 @@
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Tick Cycle Validator - Temporal Execution Correction Layer.
 
 This module validates tick cycles and provides temporal execution correction,

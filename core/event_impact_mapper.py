@@ -1,6 +1,7 @@
 from core.unified_math_system import unified_math
 import numpy as np
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Event Impact Mapper - External Event Processing for Schwabot.
 
 This module processes external events (news, market sentiment, API events)

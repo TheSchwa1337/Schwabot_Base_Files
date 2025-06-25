@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Hash Registry - AI Consciousness Memory System.
 
@@ -902,6 +902,7 @@ async def get_registry_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     async def test_hash_registry():
         """Test hash registry functionality."""

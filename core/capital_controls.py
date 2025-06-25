@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Capital Controls - Advanced Position Sizing and Portfolio Risk Management.
 
 This module provides sophisticated capital controls including:
@@ -820,6 +821,7 @@ def get_capital_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test capital controls
     safe_print("💰 Testing Capital Controls...")

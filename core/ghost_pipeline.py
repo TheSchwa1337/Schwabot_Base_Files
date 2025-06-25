@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Ghost pipeline – stealth-mode validator & orchestrator.
 
 This module glues together the *stealth* helpers that were recently added to

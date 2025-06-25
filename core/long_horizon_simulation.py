@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -21,7 +22,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Long-Horizon Simulation - Multi-Day Monte-Carlo and Chaos Testing.
 
 This module provides comprehensive long-horizon simulation including:
@@ -999,6 +1000,7 @@ def get_simulation_status() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test long-horizon simulation
     safe_print("🧪 Testing Long-Horizon Simulation...")

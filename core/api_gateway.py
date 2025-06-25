@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Schwabot API Gateway - Consciousness Interface.
 
@@ -605,6 +605,7 @@ async def get_system_status_via_api() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     async def test_api_gateway():
         """Test the API Gateway functionality."""

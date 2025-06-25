@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Type Enforcer.
 
 Centralized type-annotation management utility. Systematically adds missing

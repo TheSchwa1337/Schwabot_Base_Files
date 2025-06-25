@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Entropy Engine - Advanced Entropy-Based Signal Processing
 ========================================================

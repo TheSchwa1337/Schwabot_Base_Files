@@ -1,4 +1,5 @@
 from __future__ import annotations
+import math
 
 # Import safe print for Windows compatibility
 try:
@@ -20,7 +21,7 @@ def success(message):
 def debug(message):
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Trajectory Sphere - Live Backtesting and Self-Validation Engine.
 
 This module enables Schwabot to live-trade its own simulation recursively,
@@ -545,6 +546,7 @@ def get_simulation_stats() -> Dict[str, Any]:
 
 
 # Example usage
+
 if __name__ == "__main__":
     # Test trajectory sphere
     safe_print("🧪 Testing Trajectory Sphere...")

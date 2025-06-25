@@ -1,5 +1,6 @@
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Event-Matrix Integration Bridge - Schwabot Framework.
 
 This module bridges the event impact mapper with matrix controllers and Ferris wheel

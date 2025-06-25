@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """Trading enums for Schwabot BTC integration.
 
 This module contains all enumeration types used for trading operations,

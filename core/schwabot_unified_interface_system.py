@@ -2,6 +2,7 @@
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
+import math
 except ImportError:
     try:
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
@@ -122,7 +123,7 @@ class SchwabotUnifiedInterface:
         self.root.configure(bg='#1a1a1a')
         self.root.option_add('*TFrame*background', '#1a1a1a')
         self.root.option_add('*TLabel*background', '#1a1a1a')
-        self.root.option_add('*TLabel*foreground', '#ffff')
+        self.root.option_add('*TLabel*foreground', '#fff')
 
         # Main container
         main_container = ttk.Frame(self.root)

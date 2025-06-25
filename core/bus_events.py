@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Bus Events - Core Event Bus System for Schwabot
 ==============================================
@@ -107,6 +107,7 @@ class EventBus:
         logger.info("Event history cleared")
 
 # Example usage
+
 if __name__ == "__main__":
     bus = EventBus()
 

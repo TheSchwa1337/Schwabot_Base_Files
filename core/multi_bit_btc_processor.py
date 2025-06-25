@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Multi-bit BTC Processor - Schwabot UROS v1.0
 ===========================================
@@ -19,6 +19,7 @@ import numpy as np
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
+import math
 
 # Import safe print for Windows compatibility
 try:

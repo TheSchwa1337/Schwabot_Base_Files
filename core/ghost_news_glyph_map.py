@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+import math
+# #!/usr/bin/env python3
 """Map news sentiment vector to glyph weight.
 
 Ξ_b = ζ(news) · μ_g(glyph)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """
 Hash Trigger Mapper - Enhanced Hash-to-Strategy Mapping System
 ============================================================
@@ -25,6 +25,7 @@ from typing import Dict, List, Optional, Any, Union, Literal, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+import math
 
 # Import our robust systems with Unicode fallback
 try:
@@ -298,7 +299,7 @@ class HashTriggerMapper:
         default_mappings = [
             # Aggressive patterns
             ("000000", "aggressive_ghost", "high", HashPatternType.CRITICAL),
-            ("ffff", "aggressive_ghost", "high", HashPatternType.CRITICAL),
+            ("fff", "aggressive_ghost", "high", HashPatternType.CRITICAL),
             ("123456", "aggressive_ghost", "medium", HashPatternType.SEQUENTIAL),
 
             # Momentum patterns
@@ -487,7 +488,7 @@ class HashTriggerMapper:
         """Check if hash trigger is critical pattern."""
         try:
             critical_patterns = [
-                "000000", "ffff", "111111", "999999",
+                "000000", "fff", "111111", "999999",
                 "aaaaaa", "bbbbbb", "cccccc", "dddddd"
             ]
             return hash_trigger.lower() in critical_patterns

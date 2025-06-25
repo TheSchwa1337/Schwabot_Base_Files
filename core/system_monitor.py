@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """System Monitor - Real-time System Health and Performance Monitoring.
 
 =================================================================

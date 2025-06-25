@@ -17,7 +17,7 @@ def success(message):
     print(f"[SUCCESS] {message}")
 def debug(message):
     print(f"[DEBUG] {message}")
-#!/usr/bin/env python3
+# #!/usr/bin/env python3
 """UI Bridge Integration Manager - Connects UI Bridges with Trading System.
 
 This module integrates the three low-risk UI bridges (UI State, Visual Integration,
