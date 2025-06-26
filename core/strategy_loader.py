@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -98,8 +94,6 @@ from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 # Import Windows CLI compatibility handler
 try:
-    pass
-    pass
 from core.enhanced_windows_cli_compatibility import \
         EnhancedWindowsCliCompatibilityHandler as CLIHandler
 from core.enhanced_windows_cli_compatibility import safe_log
@@ -345,8 +339,6 @@ Returns:
 Validation results dictionary
 """
         try:
-    pass
-    pass
 results = {
 "syntax_valid": False,
 "dependencies_valid": False,
@@ -415,8 +407,6 @@ def _validate_syntax(self, strategy_code: str) -> Dict[str, Any]:
     pass
         """Validate strategy syntax"""
         try:
-    pass
-    pass
 compile(strategy_code, "<strategy>", "exec")
             return {"valid": True, "warnings": [], "errors": []}
         except SyntaxError as e:
@@ -439,8 +429,6 @@ def _validate_dependencies(self, strategy_code: str) -> Dict[str, Any]:
     pass
         """Validate strategy dependencies"""
         try:
-    pass
-    pass
             # Extract import statements
 import_lines = [
 line.strip()
@@ -489,8 +477,6 @@ def _validate_safety(self, strategy_code: str) -> Dict[str, Any]:
     pass
         """Validate strategy safety"""
         try:
-    pass
-    pass
 warnings = []
 errors = []
 
@@ -536,8 +522,6 @@ def _validate_performance(self, strategy_code: str) -> Dict[str, Any]:
     pass
         """Validate strategy performance characteristics"""
         try:
-    pass
-    pass
 warnings = []
 errors = []
 
@@ -694,8 +678,6 @@ True if logging was successful
             return safe_log(logger, level, message, context)
         else:
             try:
-    pass
-    pass
 log_func = getattr(logger, level.lower(), logger.info)
                 log_func(message)
                 return True
@@ -722,8 +704,6 @@ Returns:
 LoaderResult containing load status and strategy instance
 """
         try:
-    pass
-    pass
 start_time = time.time()
 
             # Check if strategy is already loaded
@@ -806,8 +786,6 @@ Returns:
 LoaderResult containing load status
 """
         try:
-    pass
-    pass
             # Read strategy file
             with open(file_path, "r", encoding="utf-8") as f:
                 strategy_code = f.read()
@@ -888,8 +866,6 @@ Returns:
 LoaderResult containing load status
 """
         try:
-    pass
-    pass
             # This would integrate with your database system
             # For now, return a placeholder implementation
 self.safe_safe_print(
@@ -923,8 +899,6 @@ Returns:
 LoaderResult containing load status
 """
         try:
-    pass
-    pass
             # This would integrate with your API system
             # For now, return a placeholder implementation
 self.safe_safe_print(f"🔄 Loading strategy from API: {api_endpoint}")
@@ -954,8 +928,6 @@ Returns:
 LoaderResult containing load status
 """
         try:
-    pass
-    pass
             # This would integrate with your plugin system
             # For now, return a placeholder implementation
 self.safe_safe_print(f"🔄 Loading strategy plugin: {plugin_name}")
@@ -986,8 +958,6 @@ Returns:
 StrategyConfig object
 """
         try:
-    pass
-    pass
             # Try to extract configuration from code comments
 config = self._extract_config_from_comments(strategy_code)
 
@@ -1028,8 +998,6 @@ Returns:
 StrategyConfig if found, None otherwise
 """
         try:
-    pass
-    pass
             # Look for configuration in comments
 lines = strategy_code.split("\n")
             config_lines = []
@@ -1079,8 +1047,6 @@ Returns:
 Dictionary containing safe namespace for strategy execution
 """
         try:
-    pass
-    pass
             # Create safe namespace with allowed imports
 namespace = {
 "__builtins__": {
@@ -1133,8 +1099,6 @@ namespace = {
 
             # Add safe mathematical libraries
             try:
-    pass
-    pass
 #                 from core.unified_math_system import unified_math  # F811: duplicate import
 
 namespace["np"] = np
@@ -1144,8 +1108,6 @@ namespace["np"] = np
                 pass
 
             try:
-    pass
-    pass
 import pandas as pd
 
 namespace["pd"] = pd
@@ -1177,8 +1139,6 @@ Returns:
 Strategy instance if found, None otherwise
 """
         try:
-    pass
-    pass
             # Look for strategy class or function
             strategy_instance = None
 
@@ -1227,8 +1187,6 @@ Returns:
 True if successfully unloaded, False otherwise
 """
         try:
-    pass
-    pass
             if strategy_name not in self.loaded_strategies:
 self.safe_safe_print(f"⚠️ Strategy {strategy_name} not loaded")
                 return False
@@ -1276,8 +1234,6 @@ Returns:
 LoaderResult containing reload status
 """
         try:
-    pass
-    pass
             if strategy_name not in self.loaded_strategies:
                 return LoaderResult(
                     success=False,
@@ -1341,8 +1297,6 @@ def _start_monitoring(self) -> None:
     pass
         """Start strategy monitoring thread"""
         try:
-    pass
-    pass
 self.monitoring_active = True
 self.monitoring_thread = threading.Thread(
                 target=self._monitoring_loop, daemon=True
@@ -1362,8 +1316,6 @@ def _monitoring_loop(self) -> None:
     pass
         """Strategy monitoring loop"""
         try:
-    pass
-    pass
             while self.monitoring_active:
                 # Monitor loaded strategies
                 for (
@@ -1395,8 +1347,6 @@ strategy_name: Name of strategy
 strategy_instance: Strategy instance to check
 """
         try:
-    pass
-    pass
             # Check if strategy is responding
 current_time = time.time()
             time_since_activity = (
@@ -1435,8 +1385,6 @@ Returns:
 Dictionary containing performance metrics
 """
         try:
-    pass
-    pass
 success_rate = 0.0
             if self.total_loads > 0:
 success_rate = self.successful_loads / self.total_loads
@@ -1474,8 +1422,6 @@ and provides testing for various loading scenarios.
 Uses CLI-safe output with emoji fallbacks for Windows compatibility.
 """
     try:
-    pass
-    pass
         # Initialize Strategy Loader
 loader = StrategyLoader()
 
@@ -1523,8 +1469,6 @@ f.write(test_strategy_code)
             temp_file = f.name
 
         try:
-    pass
-    pass
             # Test loading
 result = loader.load_strategy(temp_file)
 

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -84,8 +80,6 @@ import threading
 
 # AI API imports
 try:
-    pass
-    pass
 import openai
 OPENAI_AVAILABLE = True
 except ImportError:
@@ -95,8 +89,6 @@ OPENAI_AVAILABLE = False
 logging.warning("OpenAI not available. Install with: pip install openai")
 
 try:
-    pass
-    pass
 import anthropic
 ANTHROPIC_AVAILABLE = True
 except ImportError:
@@ -106,8 +98,6 @@ ANTHROPIC_AVAILABLE = False
 logging.warning("Anthropic not available. Install with: pip install anthropic")
 
 try:
-    pass
-    pass
 import google.generativeai as genai
 GEMINI_AVAILABLE = True
 except ImportError:
@@ -118,8 +108,6 @@ logging.warning("Google Generative AI not available. Install with: pip install g
 
 # WebSocket imports
 try:
-    pass
-    pass
 import websockets
 WEBSOCKETS_AVAILABLE = True
 except ImportError:
@@ -265,8 +253,6 @@ def _initialize_model_client(self, model_name: str, config: AIModelConfig):
     pass
         """Initialize client for an AI model."""
         try:
-    pass
-    pass
             if model_name == 'gpt' and OPENAI_AVAILABLE:
 openai.api_key = config.api_key
 self.model_clients[model_name] = openai
@@ -306,8 +292,6 @@ Returns:
 Decision request object
 """
         try:
-    pass
-    pass
             # Generate request ID
 request_id = f"decision_{int(time.time())}_{hashlib.md5(str(market_state).encode()).hexdigest()[:8]}"
 
@@ -351,8 +335,6 @@ def _generate_request_hash(self, request_data: Dict[str, Any]) -> str:
     pass
         """Generate hash for decision request."""
         try:
-    pass
-    pass
 state_string = json.dumps(request_data, sort_keys=True)
             timestamp = str(int(time.time()))
             state_string += timestamp
@@ -376,8 +358,6 @@ List of AI responses
 responses = []
 
         try:
-    pass
-    pass
             # Create tasks for each AI model
 tasks = []
             for model_name, config in self.ai_models.items():
@@ -427,8 +407,6 @@ Returns:
 AI response
 """
         try:
-    pass
-    pass
             # Create prompt for the AI model
 prompt = self._create_ai_prompt(request, model_name)
 
@@ -465,8 +443,6 @@ def _create_ai_prompt(self, request: AIDecisionRequest, model_name: str) -> str:
     pass
         """Create a prompt for AI analysis."""
         try:
-    pass
-    pass
             # Extract key information
 entropy = request.entropy_value
 bit_positions = request.bit_positions
@@ -516,8 +492,6 @@ def _format_bit_positions(self, bit_positions: Dict[int, Dict[str, Any]]) -> str
     pass
         """Format bit positions for AI prompt."""
         try:
-    pass
-    pass
 formatted = []
             for bit, pos in bit_positions.items():
                 status = "ACTIVE" if pos.get('active', False) else "INACTIVE"
@@ -529,8 +503,6 @@ formatted = []
 async def _query_gpt(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query GPT model."""
         try:
-    pass
-    pass
 config = self.ai_models[model_name]
 
 response = await asyncio.get_event_loop().run_in_executor()
@@ -559,8 +531,6 @@ logger.error(f"❌ GPT query error: {e}")
 async def _query_claude(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query the Claude model."""
         try:
-    pass
-    pass
 client = self.model_clients.get(model_name)
             if not client:
                 raise ValueError(f"{model_name} client not initialized")
@@ -592,8 +562,6 @@ logger.error(f"❌ Error querying {model_name}: {e}")
 async def _query_gemini(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query Gemini model."""
         try:
-    pass
-    pass
 config = self.ai_models[model_name]
 model = self.model_clients[model_name]
 
@@ -619,8 +587,6 @@ def _parse_ai_response(self, content: str, model_name: str) -> AIDecisionRespons
     pass
         """Parse AI response content."""
         try:
-    pass
-    pass
             # Try to extract JSON from response
 json_start = content.find('{'))
             json_end = content.rfind('}') + 1
@@ -675,8 +641,6 @@ def _generate_consensus(self, request_id: str, responses: List[AIDecisionRespons
     pass
         """Generate consensus from multiple AI responses."""
         try:
-    pass
-    pass
             if not responses:
                 return None
 
@@ -745,8 +709,6 @@ logger.warning("WebSockets not available")
             return
 
         try:
-    pass
-    pass
 self.websocket = await websockets.connect(
                 f"ws://{self.websocket_host}:{self.websocket_port}"
 
@@ -771,8 +733,6 @@ logger.warning("AI Integration Bridge already running")
             return
 
         try:
-    pass
-    pass
             # Connect to entropy API
 await self.connect_to_entropy_api()
 
@@ -806,8 +766,6 @@ def _response_loop(self):
         """Main loop for processing responses and maintaining connection."""
         while self.is_running:
             try:
-    pass
-    pass
                 # Process any pending responses
 self._process_pending_responses()
 
@@ -825,8 +783,6 @@ def _process_pending_responses(self):
     pass
         """Process any pending AI responses."""
         try:
-    pass
-    pass
             # Check for new decision requests
             if self.entropy_api_layer:
                 # This would integrate with the entropy API layer
@@ -961,16 +917,12 @@ asyncio.run(bridge.start())
 
     # Keep running
     try:
-    pass
-    pass
 asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
 bridge.stop()
 
     # Run the test
     try:
-    pass
-    pass
 asyncio.run(test_ai_bridge())
     except KeyboardInterrupt:
 safe_print("🛑 Test stopped by user")

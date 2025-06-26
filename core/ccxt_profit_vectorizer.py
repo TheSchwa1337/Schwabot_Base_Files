@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -188,8 +184,6 @@ Mathematical Process:
 4. Create normalized profit vector
 """
         try:
-    pass
-    pass
             # Extract market data
 price = float(market_data.get('price', 0.0))
             volume = float(market_data.get('volume', 0.0))
@@ -262,8 +256,6 @@ Optimization Process:
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Create base profit vector
 base_vector = self.create_profit_vector(symbol, market_data, matrix_controller)
 

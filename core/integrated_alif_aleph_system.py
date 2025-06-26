@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -139,8 +135,6 @@ logger.warning(f"State not found: {state_id}")
             return
         for name, hook in self.hooks.items():
             try:
-    pass
-    pass
 hook(state)
                 logger.debug(f"Hook executed: {name} for state {state_id}")
             except Exception as e:

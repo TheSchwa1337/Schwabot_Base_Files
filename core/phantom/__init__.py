@@ -1,4 +1,4 @@
-"""Phantom entry/exit logic for Schwabot trading system."""
+# -*- coding: utf-8 -*-\n"""Phantom entry/exit logic for Schwabot trading system."""
 
 from .entry_logic import entry_score
 from .exit_logic import exit_weight

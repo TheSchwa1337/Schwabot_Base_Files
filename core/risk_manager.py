@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
 except ImportError:
     pass
@@ -291,8 +287,6 @@ def update_risk_budget(self, portfolio_data: Dict[str, Any]-> RiskBudget:
     pass
         """Update risk budget based on current portfolio state."""
     try:
-    pass
-    pass
 total_value = portfolio_data.get("total_value", 0.0)
 positions = portfolio_data.get("positions", {)
 
@@ -342,8 +336,6 @@ def _calculate_allocated_risk(
 ) -> float:
 """Calculate current allocated risk."""
 try:
-    pass
-    pass
     if total_value <= 0:
         return 0.0
 
@@ -379,8 +371,6 @@ def _calculate_correlation_adjustment(self, positions: Dict[str, Any]-> float:
     pass
         """Calculate correlation-based risk adjustment."""
     try:
-    pass
-    pass
     if len(positions) < 2:
         return 1.0
 
@@ -416,8 +406,6 @@ def _calculate_volatility_adjustment(self, portfolio_data: Dict[str, Any]-> floa
     pass
         """Calculate volatility-based risk adjustment."""
     try:
-    pass
-    pass
     # Get portfolio volatility from risk history
     if len(self.risk_history) < self.volatility_lookback:
         return 1.0
@@ -458,8 +446,6 @@ def _calculate_thermal_adjustment(self, positions: Dict[str, Any]-> float:
     pass
         """Calculate thermal-based risk adjustment."""
     try:
-    pass
-    pass
     if not positions:
         return 1.0
 
@@ -493,8 +479,6 @@ def _cleanup_history(self) -> None:
     pass
         """Clean up old risk history."""
     try:
-    pass
-    pass
 retention_days = self.config.get("alert_retention_days", 30)
 cutoff_time = time.time() - (retention_days * 24 * 3600)
 
@@ -516,8 +500,6 @@ def main() -> None:
     pass
     """Main function for testing risk manager."""
     try:
-    pass
-    pass
 safe_print("🔍 Risk Manager Test")
 safe_print("=" * 40)
 

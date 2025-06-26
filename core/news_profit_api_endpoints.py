@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """news_profit_api_endpoints.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package

@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass

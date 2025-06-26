@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -133,8 +129,6 @@ def send(self, message: BusMessage) -> None:
         # Apply middleware
         for mw in self._middleware:
             try:
-    pass
-    pass
 message = mw(message)
             except Exception as e:
 logger.error(f"Error in middleware: {e}")
@@ -143,8 +137,6 @@ logger.error(f"Error in middleware: {e}")
         logger.info(f"Routing message: {message.message_type} from {message.source} to {message.destination}")
         for handler in handlers:
             try:
-    pass
-    pass
 handler(message)
             except Exception as e:
 logger.error(f"Error in handler for {message.message_type}: {e}")

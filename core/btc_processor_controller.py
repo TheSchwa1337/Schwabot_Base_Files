@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -221,8 +217,6 @@ async def _processing_loop(self) -> None:
         """Main processing loop."""
         while self.is_processing:
             try:
-    pass
-    pass
                 # Get next task from queue
 task = await asyncio.wait_for(self.processing_queue.get(), timeout=1.0)
 
@@ -288,8 +282,6 @@ async def _process_task(self, task: ProcessingTask) -> ProcessingResult:
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Update task status
 task.status = "processing"
 self.active_tasks[task.task_id] = task

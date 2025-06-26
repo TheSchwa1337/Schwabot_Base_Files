@@ -1,4 +1,4 @@
-"""Phantom exit logic for profit-target based signals."""
+# -*- coding: utf-8 -*-\n"""Phantom exit logic for profit-target based signals."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

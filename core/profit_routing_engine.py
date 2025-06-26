@@ -1,4 +1,4 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
@@ -419,8 +419,6 @@ def _calculate_eigenvector_centrality(self, matrix: np.ndarray[Any, Any) -> np.n
     pass
         """Calculate eigenvector centrality of the matrix."""
     try:
-    pass
-    pass
     # Ensure matrix is symmetric
 symmetric_matrix = (matrix + matrix.T) / 2
 
@@ -467,8 +465,6 @@ for i in range(len(self.profit_history) - 1):
 
     if current_dominant and next_dominant:
         try:
-    pass
-    pass
 current_idx = self.supported_assets.index(current_dominant)
 next_idx = self.supported_assets.index(next_dominant)
 transition_matrix[current_idx, next_idx] += 1

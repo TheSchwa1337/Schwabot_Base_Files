@@ -1,4 +1,4 @@
-"""Price vector synchronizer with EMA smoothing."""
+# -*- coding: utf-8 -*-\n"""Price vector synchronizer with EMA smoothing."""
 
 from __future__ import annotations
 

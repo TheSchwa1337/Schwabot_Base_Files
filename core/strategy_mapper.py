@@ -1,4 +1,4 @@
-"""Strategy Mapper - Hybrid Implementation with Legacy & Ghost Phase Integration
+# -*- coding: utf-8 -*-\n"""Strategy Mapper - Hybrid Implementation with Legacy & Ghost Phase Integration
 
 This module provides both legacy UROS v1.0/ZPE mathematical framework and modern
 Ghost Phase Strategy Loader integration via a dual-path system.

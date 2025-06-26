@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """Wall Builder Anomaly Handler for Schwabot Trading System.
 
 This module handles buy/sell wall events detected in the order book and provides

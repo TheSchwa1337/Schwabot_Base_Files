@@ -68,7 +68,7 @@ def test_ghost_phase_strategy_loader():
 
 def test_ghost_trigger_mapper():
     """Test GhostTriggerMapper functionality."""
-    safe_print("\n🧪 Testing GhostTriggerMapper...")
+    safe_print("\n# -*- coding: utf-8 -*-\n🧪 Testing GhostTriggerMapper...")
     
     try:
         # Initialize mapper

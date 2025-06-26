@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -132,8 +128,6 @@ BraidState
 Generated braid state
 """
         try:
-    pass
-    pass
 generators = []
 crossings = []
 
@@ -176,8 +170,6 @@ Mathematical Formula:
 C = Σᵢⱼ |σᵢ - σⱼ| / (n-1)
         """
         try:
-    pass
-    pass
             if len(generators) < 2:
                 return 0.0
 
@@ -212,8 +204,6 @@ Mathematical Formula:
 H = -Σ pᵢ unified_math.log(pᵢ)
         """
         try:
-    pass
-    pass
             if not generators:
                 return 0.0
 
@@ -258,8 +248,6 @@ FractalBraid
 Generated fractal braid
 """
         try:
-    pass
-    pass
 states = []
 
             # Generate braid states for each iteration
@@ -308,8 +296,6 @@ Mathematical Formula:
 D = unified_math.log(N) / unified_math.log(1/r) where N is number of self-similar pieces
         """
         try:
-    pass
-    pass
             if len(states) < 2:
                 return 1.0
 
@@ -338,8 +324,6 @@ def _calculate_pattern_score(self, states: List[BraidState]) -> float:
     pass
         """Calculate pattern recognition score."""
         try:
-    pass
-    pass
             if len(states) < 2:
                 return 0.0
 
@@ -387,8 +371,6 @@ Dict[str, Any]
 Pattern analysis results
 """
         try:
-    pass
-    pass
 analysis = {
 'fractal_dimension': fractal_braid.dimension,
 'pattern_score': fractal_braid.pattern_score,
@@ -421,8 +403,6 @@ def _analyze_pattern_evolution(self, states: List[BraidState]) -> Dict[str, Any]
     pass
         """Analyze how patterns evolve across states."""
         try:
-    pass
-    pass
             if len(states) < 2:
                 return {}
 
@@ -474,8 +454,6 @@ List[Dict[str, Any]]
 Detected trading patterns
 """
         try:
-    pass
-    pass
 patterns = []
 
             # Pattern 1: Increasing complexity (bullish)
@@ -545,8 +523,6 @@ def get_braid_statistics(self) -> Dict[str, Any]:
     pass
         """Get statistics from braid history."""
         try:
-    pass
-    pass
             if not self.braid_history:
                 return {"error": "No braid history available"}
 

@@ -1,4 +1,4 @@
-"""Conditional glyph feedback loop with exponential smoothing."""
+# -*- coding: utf-8 -*-\n"""Conditional glyph feedback loop with exponential smoothing."""
 
 from __future__ import annotations
 

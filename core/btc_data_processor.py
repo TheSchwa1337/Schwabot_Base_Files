@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -156,8 +152,6 @@ BTCDataMetrics
 Processed BTC data metrics
 """
         try:
-    pass
-    pass
 current_time = time.time()
 
             # Update histories
@@ -220,8 +214,6 @@ VolumeAnalysis
 Volume analysis results
 """
         try:
-    pass
-    pass
             if len(self.volume_history) < 10:
                 return VolumeAnalysis(0.5, 0.0, False, 0.0)
 
@@ -282,8 +274,6 @@ float
 Execution velocity score
 """
         try:
-    pass
-    pass
 epsilon = 1e-6
 density_factor = unified_math.max(market_density, 0.1)  # Prevent division by near-zero
 
@@ -324,8 +314,6 @@ Tuple[float, bool]
 (velocity_differential, should_delay_execution)
         """
         try:
-    pass
-    pass
 epsilon = 1e-6
 v_diff = (actual_velocity - expected_velocity) / ()
                 expected_velocity + epsilon
@@ -379,8 +367,6 @@ Formula: ρ_market = 1 - unified_math.min(vol_density, 1.0)
             return 0.5
 
         try:
-    pass
-    pass
 recent_volumes = self.volume_history[-10:]
 avg_volume = unified_math.unified_math.mean(recent_volumes)
 
@@ -412,8 +398,6 @@ Formula: H_tick = -Σ(p_i * unified_math.log(p_i))
             return 0.5
 
         try:
-    pass
-    pass
 recent_prices = np.array(self.price_history[-self.entropy_window:])
             price_changes = np.diff(recent_prices)
 
@@ -453,8 +437,6 @@ entropy_score: float,
 Formula: P_exec = √(profit_residual / ρ_market)
         """
         try:
-    pass
-    pass
             # Use entropy as proxy for profit residual
 profit_residual = entropy_score
 rho_market = unified_math.max(volume_density, 0.1)  # Prevent division by zero
@@ -478,8 +460,6 @@ def _calculate_hash_correlation(self, network_data: Optional[Dict]) -> float:
             return 0.5
 
         try:
-    pass
-    pass
 hash_rate = network_data.get('hash_rate', 0)
             difficulty = network_data.get('difficulty', 0)
 

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -548,8 +544,6 @@ def load_learning_data(self, filepath: str = "learning_data.json"):
     pass
         """Load learning data from file"""
         try:
-    pass
-    pass
             with open(filepath, 'r') as f:
                 data = json.load(f)
 

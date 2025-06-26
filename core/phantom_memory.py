@@ -1,4 +1,4 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import math

@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -85,8 +81,6 @@ def safe_print(message: str) -> None:
     pass
     """Safely print messages with Unicode support."""
     try:
-    pass
-    pass
         print(message)
     except UnicodeEncodeError:
         # Fallback to ASCII-safe version
@@ -100,8 +94,6 @@ def test_voltage_lane_mapper():
     pass
     """Test voltage lane mapper."""
     try:
-    pass
-    pass
 from voltage_lane_mapper import VoltageLaneMapper
 
 safe_safe_print("Testing Voltage Lane Mapper...")
@@ -131,8 +123,6 @@ def test_tensor_path_router():
     pass
     """Test tensor path router."""
     try:
-    pass
-    pass
 from tensor_path_router import TensorPathRouter
 
 safe_safe_print("Testing Tensor Path Router...")
@@ -167,8 +157,6 @@ def test_tensor_harness_matrix():
     pass
     """Test tensor harness matrix."""
     try:
-    pass
-    pass
 from tensor_harness_matrix import TensorHarnessMatrix, TensorMode
 
 safe_safe_print("Testing Tensor Harness Matrix...")
@@ -210,8 +198,6 @@ def test_hash_registry_manager():
     pass
     """Test hash registry manager."""
     try:
-    pass
-    pass
 from hash_registry_manager import HashRegistryManager
 
 safe_safe_print("Testing Hash Registry Manager...")

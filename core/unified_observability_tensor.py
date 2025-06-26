@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """unified_observability_tensor.py"""
 
 

@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -197,8 +193,6 @@ headers = self._sign_request(method, endpoint, params, data, headers)
 
         # Make request
         try:
-    pass
-    pass
 response = self.session.request(
                 method=method,
 url=url,
@@ -254,8 +248,6 @@ Returns:
 Market data containing ticker information.
 """
         try:
-    pass
-    pass
 endpoint = f"/products/{symbol}/ticker"
 result = self._make_request("GET", endpoint)
 
@@ -286,8 +278,6 @@ Returns:
 Market data containing order book information.
 """
         try:
-    pass
-    pass
 endpoint = f"/products/{symbol}/book"
 params = {"level": level}
 result = self._make_request("GET", endpoint, params=params)
@@ -318,8 +308,6 @@ Returns:
 Order response with execution details.
 """
         try:
-    pass
-    pass
             # Prepare order data
 order_data = {
 "product_id": order_request.symbol,
@@ -377,8 +365,6 @@ Returns:
 List of balance objects.
 """
         try:
-    pass
-    pass
 endpoint = "/accounts"
 result = self._make_request("GET", endpoint, signed=True)
 

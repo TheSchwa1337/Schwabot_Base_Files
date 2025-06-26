@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -108,8 +104,6 @@ int
 Rotated value
 """
         try:
-    pass
-    pass
 mask = self.bit_masks.get(bits, (1 << bits) - 1)
             shift = shift % bits
             return ((value << shift) | (value >> (bits - shift))) & mask
@@ -140,8 +134,6 @@ int
 Rotated value
 """
         try:
-    pass
-    pass
 mask = self.bit_masks.get(bits, (1 << bits) - 1)
             shift = shift % bits
             return ((value >> shift) | (value << (bits - shift))) & mask
@@ -168,8 +160,6 @@ int
 Number of set bits
 """
         try:
-    pass
-    pass
             return bin(value).count('1')
         except Exception as e:
 logger.error(f"Error in popcount: {e}")
@@ -196,8 +186,6 @@ int
 Hamming distance
 """
         try:
-    pass
-    pass
             return self.popcount(x ^ y)
         except Exception as e:
 logger.error(f"Error in hamming_distance: {e}")
@@ -226,8 +214,6 @@ int
 Extracted bit phase
 """
         try:
-    pass
-    pass
 mask = self.bit_masks.get(length, (1 << length) - 1)
             return (hash_value >> offset) & mask
         except Exception as e:
@@ -241,8 +227,6 @@ def set_bit(self, value: int, position: int) -> int:
     pass
         """Set bit at specified position."""
         try:
-    pass
-    pass
             return value | (1 << position)
         except Exception as e:
 logger.error(f"Error in set_bit: {e}")
@@ -255,8 +239,6 @@ def clear_bit(self, value: int, position: int) -> int:
     pass
         """Clear bit at specified position."""
         try:
-    pass
-    pass
             return value & ~(1 << position)
         except Exception as e:
 logger.error(f"Error in clear_bit: {e}")
@@ -269,8 +251,6 @@ def toggle_bit(self, value: int, position: int) -> int:
     pass
         """Toggle bit at specified position."""
         try:
-    pass
-    pass
             return value ^ (1 << position)
         except Exception as e:
 logger.error(f"Error in toggle_bit: {e}")
@@ -283,8 +263,6 @@ def test_bit(self, value: int, position: int) -> bool:
     pass
         """Test if bit is set at specified position."""
         try:
-    pass
-    pass
             return bool(value & (1 << position))
         except Exception as e:
 logger.error(f"Error in test_bit: {e}")
@@ -297,8 +275,6 @@ def count_trailing_zeros(self, value: int) -> int:
     pass
         """Count trailing zero bits."""
         try:
-    pass
-    pass
             if value == 0:
                 return 64
             return (value & -value).bit_length() - 1
@@ -313,8 +289,6 @@ def count_leading_zeros(self, value: int) -> int:
     pass
         """Count leading zero bits."""
         try:
-    pass
-    pass
             if value == 0:
                 return 64
             return 64 - value.bit_length()
@@ -329,8 +303,6 @@ def reverse_bits(self, value: int, bits: int = 32) -> int:
     pass
         """Reverse bit order."""
         try:
-    pass
-    pass
 result = 0
             for i in range(bits):
                 if value & (1 << i):
@@ -359,8 +331,6 @@ float
 Bit entropy score [0, 1]
 """
         try:
-    pass
-    pass
             if not values:
                 return 0.0
 
@@ -425,8 +395,6 @@ float
 Correlation score [-1, 1]
 """
         try:
-    pass
-    pass
             # Extract bits
 x_bits = [(x >> i) & 1 for i in range(bits)]
             y_bits = [(y >> i) & 1 for i in range(bits)]
@@ -472,8 +440,6 @@ Dict[str, float]
 Analysis results for each phase length
 """
         try:
-    pass
-    pass
 results = {}
 
             for length in phase_lengths:

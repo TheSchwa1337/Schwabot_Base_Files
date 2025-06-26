@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -115,8 +111,6 @@ float
 Drift penalty in [0, 1] where 0 = perfect timing
 """
     try:
-    pass
-    pass
         if expected_cycle <= MIN_CYCLE_DURATION:
 logger.warning(f"Invalid cycle duration: {expected_cycle}")
             return MAX_DRIFT_PENALTY
@@ -187,8 +181,6 @@ Tuple[float, dict]
         - Diagnostic information dictionary
 """
     try:
-    pass
-    pass
 expected_cycle = get_cycle_duration(bit_depth)
         drift_penalty = compute_phase_drift(
             start_timestamp, current_timestamp, expected_cycle
@@ -247,8 +239,6 @@ results = {}
 
     for phase in phases:
         try:
-    pass
-    pass
 drift_penalty, _ = analyze_drift_pattern(
                 start_timestamp, current_timestamp, phase
 
@@ -282,8 +272,6 @@ Tuple[int, float]
         - Drift penalty for optimal phase
 """
     try:
-    pass
-    pass
 drift_penalties = compute_multi_phase_drift(start_timestamp, current_timestamp)
 
         if not drift_penalties:
@@ -444,8 +432,6 @@ bool
 True if timestamps are valid
 """
     try:
-    pass
-    pass
         # Check for reasonable timestamp values
         if not (0 < start_timestamp < 2e9):  # Reasonable Unix timestamp range
             return False

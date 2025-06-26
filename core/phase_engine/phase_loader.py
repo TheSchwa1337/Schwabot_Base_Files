@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -151,8 +147,6 @@ def _load_configuration(self) -> None:
     pass
         """Load phase loader configuration."""
         try:
-    pass
-    pass
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
@@ -192,8 +186,6 @@ config = {
 }
 
         try:
-    pass
-    pass
 os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent=2)
@@ -227,8 +219,6 @@ def _background_load_loop(self) -> None:
         """Background loading loop for auto-reloading configurations."""
         while True:
             try:
-    pass
-    pass
                 if self.loader_status == LoaderStatus.READY:
 self._check_for_updates()
                 time.sleep(30)  # Check every 30 seconds
@@ -242,8 +232,6 @@ def load_phase_configuration(self, config_file_path: str) -> Optional[PhaseConfi
     pass
         """Load a phase configuration from file."""
         try:
-    pass
-    pass
 self.loader_status = LoaderStatus.LOADING
 
             if not os.path.exists(config_file_path):
@@ -294,8 +282,6 @@ def _validate_configuration(self, config_data: Dict[str, Any]) -> bool:
     pass
         """Validate a configuration against validation rules."""
         try:
-    pass
-    pass
 self.loader_status = LoaderStatus.VALIDATING
 
 validation_rules = self.validation_rules.get("phase_configuration", {})
@@ -330,8 +316,6 @@ def _check_type(self, value: Any, expected_type: str) -> bool:
     pass
         """Check if a value matches the expected type."""
         try:
-    pass
-    pass
             if expected_type == "int":
                 return isinstance(value, int)
             elif expected_type == "float":
@@ -355,8 +339,6 @@ def load_phase_data(self, data_file_path: str, phase_id: str,
                        data_format: DataFormat = DataFormat.JSON) -> Optional[LoadedPhaseData]:
 """Load phase data from file."""
         try:
-    pass
-    pass
             if not os.path.exists(data_file_path):
                 logger.error(f"Data file not found: {data_file_path}")
                 return None
@@ -403,8 +385,6 @@ def _load_data_by_format(self, file_path: str, data_format: DataFormat) -> Optio
     pass
         """Load data from file based on format."""
         try:
-    pass
-    pass
             if data_format == DataFormat.JSON:
                 with open(file_path, 'r') as f:
                     return json.load(f)
@@ -430,8 +410,6 @@ def _calculate_checksum(self, file_path: str) -> str:
     pass
         """Calculate checksum for a file."""
         try:
-    pass
-    pass
 import hashlib
 hash_md5 = hashlib.md5()
             with open(file_path, "rb") as f:
@@ -481,8 +459,6 @@ def update_configuration(self, config_id: str, updates: Dict[str, Any]) -> bool:
     pass
         """Update a configuration."""
         try:
-    pass
-    pass
             if config_id not in self.loaded_configurations:
 logger.warning(f"Configuration {config_id} not found")
                 return False
@@ -510,8 +486,6 @@ def deactivate_configuration(self, config_id: str) -> bool:
     pass
         """Deactivate a configuration."""
         try:
-    pass
-    pass
             if config_id not in self.loaded_configurations:
                 return False
 
@@ -533,8 +507,6 @@ def _check_for_updates(self) -> None:
     pass
         """Check for configuration updates."""
         try:
-    pass
-    pass
             # This would implement logic to check for file changes
             # and reload configurations automatically
             pass

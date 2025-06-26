@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -151,8 +147,6 @@ def dispatch(self, event: BusEvent) -> None:
         logger.info(f"Dispatching event: {event.event_type} at {event.timestamp}")
         for handler in handlers:
             try:
-    pass
-    pass
 handler(event)
             except Exception as e:
 logger.error(f"Error in event handler for {event.event_type}: {e}")

@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -172,8 +168,6 @@ def _load_demo_config(self) -> Dict[str, Any]:
     pass
         """Load demo configuration from settings"""
         try:
-    pass
-    pass
 demo_config_path = Path("settings/demo_backtest_mode.yaml")
             if demo_config_path.exists():
                 with open(demo_config_path, 'r') as f:
@@ -219,8 +213,6 @@ def _load_demo_data(self):
     pass
         """Load existing demo data from files"""
         try:
-    pass
-    pass
             # Load demo trades
 trades_file = Path("tests/demo_data/demo_trades.json")
             if trades_file.exists():
@@ -632,8 +624,6 @@ def _save_demo_data(self):
     pass
         """Save demo data to files"""
         try:
-    pass
-    pass
             # Save demo trades
 trades_file = Path("tests/demo_data/demo_trades.json")
             with open(trades_file, 'w') as f:

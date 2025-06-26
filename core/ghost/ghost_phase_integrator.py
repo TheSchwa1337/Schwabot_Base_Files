@@ -1,4 +1,4 @@
-"""Phase packet builder for ghost routing system."""
+# -*- coding: utf-8 -*-\n"""Phase packet builder for ghost routing system."""
 
 from __future__ import annotations
 from dataclasses import dataclass

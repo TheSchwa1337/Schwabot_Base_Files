@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """Trading data containers for Schwabot BTC integration.
 
 This module contains all dataclass containers used for trading operations,

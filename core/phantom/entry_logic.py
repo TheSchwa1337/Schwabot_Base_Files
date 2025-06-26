@@ -1,4 +1,4 @@
-"""Phantom entry logic for price-pressure based signals."""
+# -*- coding: utf-8 -*-\n"""Phantom entry logic for price-pressure based signals."""
 
 from __future__ import annotations
 

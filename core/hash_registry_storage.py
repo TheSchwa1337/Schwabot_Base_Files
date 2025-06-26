@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -74,8 +70,6 @@ from datetime import datetime
 
 # Conditional import to handle both script and module execution
 try:
-    pass
-    pass
 from .hash_registry_core import HashRegistryEntry, HashRegistryCore
 except ImportError:
     pass
@@ -109,8 +103,6 @@ def load_registry(self) -> Dict[str, Dict[str, Any]]:
     pass
         """Load hash registry from JSON file."""
         try:
-    pass
-    pass
             if not os.path.exists(self.registry_path):
                 logger.warning(f"Registry file not found: {self.registry_path}")
                 return {}
@@ -132,8 +124,6 @@ def save_registry(self, registry_data: Dict[str, Dict[str, Any]]) -> bool:
     pass
         """Save hash registry to JSON file."""
         try:
-    pass
-    pass
             # Create directory if it doesn't exist
 dir_path = os.path.dirname(self.registry_path)
             if dir_path:  # Only create directory if path is not empty
@@ -159,8 +149,6 @@ entries = {}
 
         for hash_id, entry_data in registry_data.items():
             try:
-    pass
-    pass
 entry = HashRegistryEntry(
                     hash_id=hash_id,
 bit_depth=entry_data.get('bit_depth', 8),
@@ -205,8 +193,6 @@ def create_backup(self) -> bool:
     pass
         """Create backup of current registry."""
         try:
-    pass
-    pass
             if os.path.exists(self.registry_path):
 import shutil
 shutil.copy2(self.registry_path, self.backup_path)
@@ -225,8 +211,6 @@ def restore_backup(self) -> bool:
     pass
         """Restore registry from backup."""
         try:
-    pass
-    pass
             if os.path.exists(self.backup_path):
 shutil.copy2(self.backup_path, self.registry_path)
                 logger.info(f"Registry restored from backup: {self.backup_path}")
@@ -243,8 +227,6 @@ def export_registry_summary(self, entries: Dict[str, HashRegistryEntry],]
                               output_path: str = "hash_registry_summary.json") -> bool:
 """Export registry summary to JSON file."""
         try:
-    pass
-    pass
             # Calculate statistics
 stats = HashRegistryCore.calculate_registry_statistics(entries)
 
@@ -300,8 +282,6 @@ def load_or_generate_registry(self) -> Dict[str, HashRegistryEntry]:
     pass
         """Load existing registry or generate new one."""
         try:
-    pass
-    pass
             # Try to load existing registry
 registry_data = self.load_registry()
 
@@ -335,8 +315,6 @@ def update_entry(self, hash_id: str, updates: Dict[str, Any]) -> bool:
     pass
         """Update a specific registry entry."""
         try:
-    pass
-    pass
             # Load current registry
 registry_data = self.load_registry()
 
@@ -363,8 +341,6 @@ def delete_entry(self, hash_id: str) -> bool:
     pass
         """Delete a specific registry entry."""
         try:
-    pass
-    pass
             # Load current registry
 registry_data = self.load_registry()
 
@@ -389,8 +365,6 @@ def get_registry_info(self) -> Dict[str, Any]:
     pass
         """Get basic registry information."""
         try:
-    pass
-    pass
             if os.path.exists(self.registry_path):
                 stat = os.stat(self.registry_path)
                 return {
@@ -459,8 +433,6 @@ safe_print("\nRegistry info:")
 
     # Cleanup
     try:
-    pass
-    pass
 os.remove("test_registry.json")
         os.remove("test_summary.json")
         safe_print("\n✅ Test files cleaned up")

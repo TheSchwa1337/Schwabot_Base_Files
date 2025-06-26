@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -204,8 +200,6 @@ demo_modules = []
         for file_path in self.core_directory.rglob("*.py"):
             if file_path not in [f for f, _ in demo_modules]:
                 try:
-    pass
-    pass
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read().lower()
                         if any(keyword in content for keyword in ["demo", "test", "simulator", "backtest"]):
@@ -265,8 +259,6 @@ def _analyze_single_module(self, module_info: DemoModuleInfo) -> None:
     pass
         """Analyze a single demo module."""
         try:
-    pass
-    pass
             with open(module_info.file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
 

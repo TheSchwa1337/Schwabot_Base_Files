@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -77,8 +73,6 @@ from pathlib import Path
 
 # Import unified mathematics
 try:
-    pass
-    pass
 from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
@@ -89,8 +83,6 @@ UNIFIED_MATH_AVAILABLE = False
 
 # Import fault bus for integration
 try:
-    pass
-    pass
 from core.fault_bus import get_fault_bus
 fault_bus = get_fault_bus()
     FAULT_BUS_AVAILABLE = True
@@ -101,8 +93,6 @@ FAULT_BUS_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -265,8 +255,6 @@ def check_daily_loss_limit(self, trade_pnl: float) -> bool:
     pass
         """Check if trade would exceed daily loss limit."""
         try:
-    pass
-    pass
             # Check if we need to reset daily tracking
 now = datetime.now()
             if now.date() > self.daily_start_time.date():
@@ -298,8 +286,6 @@ def check_single_trade_limit(self, trade_size: float) -> bool:
     pass
         """Check if trade size exceeds single trade limit."""
         try:
-    pass
-    pass
             if trade_size > self.risk_limits.single_trade_limit:
 self._record_risk_event(
                     "single_trade_limit",
@@ -322,8 +308,6 @@ def check_exposure_limit(self, new_exposure: float) -> bool:
     pass
         """Check if new exposure would exceed total exposure limit."""
         try:
-    pass
-    pass
 total_exposure = self.total_exposure + new_exposure
 
             if total_exposure > self.risk_limits.exposure_limit:
@@ -358,8 +342,6 @@ Circuit breaker is triggered by:
 - Market anomalies
 """
         try:
-    pass
-    pass
             # Update history
 self.volatility_history.append(volatility)
             self.entropy_history.append(entropy)
@@ -416,8 +398,6 @@ current_price: float
 ) -> None:
 """Update position data."""
         try:
-    pass
-    pass
 unrealized_pnl = (current_price - entry_price) * quantity
 
 position = PositionData(
@@ -447,8 +427,6 @@ This ensures our internal position tracking matches
 the actual exchange balances.
 """
         try:
-    pass
-    pass
 reconciliation_results = {
 'reconciled': True,
 'discrepancies': [],
@@ -510,8 +488,6 @@ This is the manual panic button that immediately stops
 all trading activity.
 """
         try:
-    pass
-    pass
 self.panic_mode = True
 self.panic_triggered_at = datetime.now()
 
@@ -544,8 +520,6 @@ def reset_panic_mode(self) -> None:
     pass
         """Reset panic mode."""
         try:
-    pass
-    pass
 self.panic_mode = False
 self.panic_triggered_at = None
 
@@ -618,8 +592,6 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> None:
 """Record a risk event."""
         try:
-    pass
-    pass
 event = RiskEvent(
                 event_type=event_type,
 severity=severity,
@@ -652,8 +624,6 @@ entropy: float
 ) -> None:
 """Record circuit breaker event."""
         try:
-    pass
-    pass
 event = RiskEvent(
                 event_type=f"circuit_breaker_{event_type}",
 severity=RiskLevel.HIGH if event_type == "tripped" else RiskLevel.MEDIUM,

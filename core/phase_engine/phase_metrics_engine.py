@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -157,8 +153,6 @@ def _load_configuration(self) -> None:
     pass
         """Load phase metrics configuration."""
         try:
-    pass
-    pass
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
@@ -219,8 +213,6 @@ def _save_configuration(self) -> None:
     pass
         """Save current configuration to file."""
         try:
-    pass
-    pass
 os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             config = {
 "alert_thresholds": {
@@ -262,8 +254,6 @@ def _process_metrics(self) -> None:
         """Background metrics processing loop."""
         while True:
             try:
-    pass
-    pass
 self._update_real_time_metrics()
                 self._check_alert_thresholds()
                 self._generate_optimization_recommendations()
@@ -279,8 +269,6 @@ confidence_score: float = 1.0,
 metadata: Optional[Dict[str, Any]] = None) -> str:
 """Record a new phase metric."""
         try:
-    pass
-    pass
 metric_id = f"metric_{phase_id}_{metric_type.value}_{int(time.time())}"
 
 metric = PhaseMetric(
@@ -318,8 +306,6 @@ def get_phase_metrics(self, phase_id: str, metric_type: Optional[MetricType] = N
 end_time: Optional[datetime] = None) -> List[PhaseMetric]:
 """Get metrics for a specific phase."""
         try:
-    pass
-    pass
 metrics = []
 
             for metric in self.metrics_store.values():
@@ -350,8 +336,6 @@ def calculate_performance_metrics(self, phase_id: str, start_time: datetime,
                                     end_time: datetime) -> Dict[str, float]:
 """Calculate comprehensive performance metrics for a phase."""
         try:
-    pass
-    pass
 metrics = self.get_phase_metrics(phase_id, start_time=start_time, end_time=end_time)
 
             if not metrics:
@@ -400,8 +384,6 @@ def _calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 
     pass
         """Calculate Sharpe ratio."""
         try:
-    pass
-    pass
             if not returns:
                 return 0.0
 
@@ -423,8 +405,6 @@ def _calculate_max_drawdown(self, returns: List[float]) -> float:
     pass
         """Calculate maximum drawdown."""
         try:
-    pass
-    pass
             if not returns:
                 return 0.0
 
@@ -442,8 +422,6 @@ def generate_performance_report(self, phase_id: str, start_time: datetime,
                                   end_time: datetime) -> PerformanceReport:
 """Generate a comprehensive performance report for a phase."""
         try:
-    pass
-    pass
 report_id = f"report_{phase_id}_{int(start_time.timestamp())}"
 
             # Calculate performance metrics
@@ -485,8 +463,6 @@ def _calculate_win_rate(self, phase_id: str, start_time: datetime, end_time: dat
     pass
         """Calculate win rate for a phase."""
         try:
-    pass
-    pass
 performance_metrics = self.get_phase_metrics(
                 phase_id, MetricType.PERFORMANCE, start_time, end_time
 
@@ -509,8 +485,6 @@ def _calculate_profit_factor(self, phase_id: str, start_time: datetime, end_time
     pass
         """Calculate profit factor for a phase."""
         try:
-    pass
-    pass
 performance_metrics = self.get_phase_metrics(
                 phase_id, MetricType.PERFORMANCE, start_time, end_time
 
@@ -535,8 +509,6 @@ def _generate_recommendations(self, performance_metrics: Dict[str, float]) -> Li
 recommendations = []
 
         try:
-    pass
-    pass
             # Check Sharpe ratio
 sharpe_ratio = performance_metrics.get("sharpe_ratio", 0.0)
             if sharpe_ratio < 1.0:
@@ -569,8 +541,6 @@ def _update_real_time_metrics(self) -> None:
     pass
         """Update real-time metrics calculations."""
         try:
-    pass
-    pass
             for metric_type, metrics_queue in self.real_time_metrics.items():
                 if metrics_queue:
                     # Calculate real-time statistics
@@ -588,8 +558,6 @@ def _check_alert_thresholds(self) -> None:
     pass
         """Check if any metrics exceed alert thresholds."""
         try:
-    pass
-    pass
             for metric_type, threshold in self.alert_thresholds.items():
                 metrics_queue = self.real_time_metrics.get(metric_type.value, deque())
                 if metrics_queue:
@@ -608,8 +576,6 @@ def _generate_optimization_recommendations(self) -> None:
     pass
         """Generate real-time optimization recommendations."""
         try:
-    pass
-    pass
             # This would implement real-time optimization logic
             # based on current performance metrics
             pass

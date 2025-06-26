@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -86,8 +82,6 @@ from contextlib import contextmanager
 
 # Try to import PostgreSQL
 try:
-    pass
-    pass
 import psycopg2
 import psycopg2.extras
 POSTGRES_AVAILABLE = True
@@ -98,8 +92,6 @@ POSTGRES_AVAILABLE = False
 
 # Try to import TimescaleDB
 try:
-    pass
-    pass
 TIMESCALE_AVAILABLE = POSTGRES_AVAILABLE
 except ImportError:
     pass
@@ -108,8 +100,6 @@ TIMESCALE_AVAILABLE = False
 
 # Import core systems
 try:
-    pass
-    pass
 from core.ops_observability import log_operation, LogLevel
 from core.demo_memory_core import get_demo_memory_core, MemoryType
 from core.exchange_plumbing import OrderRequest, OrderResponse, Balance, Position
@@ -121,8 +111,6 @@ CORE_SYSTEMS_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -276,8 +264,6 @@ def _load_chain(self) -> None:
     pass
         """Load existing hash chain."""
         try:
-    pass
-    pass
             if self.chain_file.exists():
                 with open(self.chain_file, 'r') as f:
                     chain_json = json.load(f)
@@ -311,8 +297,6 @@ def add_entry(self, operation: str, component: str, data: Dict[str, Any]) -> str
     pass
         """Add entry to hash chain."""
         try:
-    pass
-    pass
             # Generate data hash
 data_json = json.dumps(data, sort_keys=True, default=str)
             data_hash = hashlib.sha256(data_json.encode()).hexdigest()
@@ -358,8 +342,6 @@ def _save_chain(self) -> None:
     pass
         """Save hash chain to file."""
         try:
-    pass
-    pass
             # Ensure directory exists
 self.chain_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -384,8 +366,6 @@ def verify_chain_integrity(self) -> bool:
     pass
         """Verify hash chain integrity."""
         try:
-    pass
-    pass
             if not self.chain_data:
                 return True
 
@@ -456,8 +436,6 @@ def _initialize_database(self) -> None:
     pass
         """Initialize database connection and tables."""
         try:
-    pass
-    pass
             if self.storage_type == StorageType.SQLITE:
 self._init_sqlite()
             elif self.storage_type == StorageType.POSTGRESQL:
@@ -514,8 +492,6 @@ def _create_tables(self) -> None:
     pass
         """Create database tables."""
         try:
-    pass
-    pass
 cursor = self.connection.cursor()
 
             # Memory entries table
@@ -608,8 +584,6 @@ def get_cursor(self) -> Any:
         if self.storage_type == StorageType.SQLITE:
 cursor = self.connection.cursor()
             try:
-    pass
-    pass
                 yield cursor
 self.connection.commit()
             except Exception:
@@ -620,8 +594,6 @@ cursor.close()
         elif self.storage_type in [StorageType.POSTGRESQL, StorageType.TIMESCALEDB]:
 cursor = self.connection.cursor()
             try:
-    pass
-    pass
                 yield cursor
 self.connection.commit()
             except Exception:
@@ -637,8 +609,6 @@ def store_memory_entry(self, entry: MemoryEntry) -> bool:
     pass
         """Store memory entry."""
         try:
-    pass
-    pass
             with self.get_cursor() as cursor:
                 cursor.execute("""
                     INSERT INTO memory_entries
@@ -679,8 +649,6 @@ def store_trade_ledger_entry(self, entry: TradeLedgerEntry) -> bool:
     pass
         """Store trade ledger entry."""
         try:
-    pass
-    pass
             with self.get_cursor() as cursor:
                 cursor.execute("""
                     INSERT INTO trade_ledger
@@ -724,8 +692,6 @@ def get_memory_entries(self, allocation_type: MemoryAllocationType, limit: int =
     pass
         """Get memory entries by type."""
         try:
-    pass
-    pass
             with self.get_cursor() as cursor:
                 cursor.execute("""
                     SELECT * FROM memory_entries
@@ -763,8 +729,6 @@ def get_trade_history(self, exchange: Optional[str] = None, limit: int = 100) ->
     pass
         """Get trade history."""
         try:
-    pass
-    pass
             with self.get_cursor() as cursor:
                 if exchange:
 cursor.execute("""
@@ -812,8 +776,6 @@ def cleanup_expired_entries(self) -> int:
     pass
         """Clean up expired memory entries."""
         try:
-    pass
-    pass
             with self.get_cursor() as cursor:
                 cursor.execute("""
                     DELETE FROM memory_entries
@@ -911,8 +873,6 @@ def allocate_memory(self, data: Dict[str, Any], data_type: str,]
                        allocation_type: MemoryAllocationType) -> Optional[str]:
 """Allocate memory for data."""
         try:
-    pass
-    pass
 allocation = self.allocations.get(allocation_type)
             if not allocation:
 safe_safe_print(f"❌ No allocation for type: {allocation_type.value}")
@@ -967,8 +927,6 @@ def get_allocation_stats(self) -> Dict[str, Any]:
     pass
         """Get allocation statistics."""
         try:
-    pass
-    pass
 stats = {}
             for allocation_type, allocation in self.allocations.items():
                 entries = self.db_manager.get_memory_entries(allocation_type, limit=1000000)
@@ -1028,8 +986,6 @@ def store_btc_hashing_data(self, btc_data: Dict[str, Any]) -> Optional[str]:
     pass
         """Store BTC hashing data (3.75 minute intervals)."""
         try:
-    pass
-    pass
             # Add metadata
 btc_data['data_type'] = 'btc_hashing'
 btc_data['interval_minutes'] = 3.75
@@ -1071,8 +1027,6 @@ def store_trade_data(self, trade_data: Dict[str, Any]) -> Optional[str]:
     pass
         """Store trade data."""
         try:
-    pass
-    pass
             # Create trade ledger entry
 ledger_id = str(uuid.uuid4())
             trade_hash = hashlib.sha256(
@@ -1134,8 +1088,6 @@ def store_analysis_data(self, analysis_data: Dict[str, Any]) -> Optional[str]:
     pass
         """Store analysis data (long-term)."""
         try:
-    pass
-    pass
             # Add metadata
 analysis_data['data_type'] = 'analysis'
 analysis_data['timestamp'] = datetime.now().isoformat()
@@ -1176,8 +1128,6 @@ def get_btc_hashing_history(self, hours: int = 24) -> List[Dict[str, Any]]:
     pass
         """Get BTC hashing history."""
         try:
-    pass
-    pass
 cutoff_time = datetime.now() - timedelta(hours=hours)
             entries = self.db_manager.get_memory_entries(MemoryAllocationType.SHORT_TERM, limit=10000)
 
@@ -1200,8 +1150,6 @@ def get_trade_history(self, exchange: Optional[str] = None, days: int = 7) -> Li
     pass
         """Get trade history."""
         try:
-    pass
-    pass
 entries = self.db_manager.get_trade_history(exchange, limit=10000)
 
             # Filter by time

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -191,8 +187,6 @@ def _load_settings(self) -> None:
     pass
         """Load settings from configuration files"""
         try:
-    pass
-    pass
             # Load main settings
 main_config = self.config_path / "main_settings.yaml"
             if main_config.exists():
@@ -304,8 +298,6 @@ bad_vectors_path = self.config_path / "known_bad_vector_map.json"
 
         if bad_vectors_path.exists():
             try:
-    pass
-    pass
                 with open(bad_vectors_path, 'r') as f:
                     return json.load(f)
             except Exception as e:
@@ -549,8 +541,6 @@ def save_settings(self) -> None:
     pass
         """Save current settings to configuration files"""
         try:
-    pass
-    pass
             # Save main settings
 main_settings = {
 "mode": "production",

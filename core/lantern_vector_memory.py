@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -71,8 +67,6 @@ from dataclasses import dataclass
 
 # Import ZPE Mathematical Framework
 try:
-    pass
-    pass
 from core.zpe_core import ZPECore
 ZPE_MODULES_AVAILABLE = True
 except ImportError as e:
@@ -81,8 +75,6 @@ logging.warning(f"ZPE modules not available: {e}")
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -111,8 +103,6 @@ def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
 
 try:
-    pass
-    pass
 from sklearn.decomposition import PCA
 except ImportError:
     pass
@@ -196,8 +186,6 @@ Returns identity matrix if sklearn not available
         return np.eye(n_components)
 
     try:
-    pass
-    pass
         # Take last 256 vectors or all if fewer
 recent_vecs = vecs[-256:] if len(vecs) > 256 else vecs
         X = np.array(recent_vecs)
@@ -255,8 +243,6 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> LanternMemoryEntry:
 """Add a new memory entry with ZPE calculations."""
         try:
-    pass
-    pass
             # Create base memory entry
 entry = LanternMemoryEntry(
                 vector=vector,
@@ -270,8 +256,6 @@ metadata=metadata or {}
             # Apply ZPE calculations if available
             if self.zpe_core:
                 try:
-    pass
-    pass
                     # Map news/lantern signals
 entry.zpe_lantern_signal = self.zpe_core.map_news_lantern_signals(
                         news_density, sentiment_delta
@@ -321,8 +305,6 @@ def get_memory_analysis(self, n_components: int = 4) -> LanternMemoryResult:
     pass
         """Get comprehensive memory analysis with ZPE integration."""
         try:
-    pass
-    pass
             if not self.memory_entries:
                 return LanternMemoryResult(
                     success=False,
@@ -374,8 +356,6 @@ def get_zpe_metrics(self) -> Dict[str, Any]:
             return {'zpe_available': False}
 
         try:
-    pass
-    pass
 recent_entries = self.memory_entries[-100:] if self.memory_entries else []
 
             if not recent_entries:

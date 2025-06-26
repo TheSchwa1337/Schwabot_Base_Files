@@ -1,4 +1,4 @@
-"""Type-inference name patterns for TypeEnforcer helper."""
+# -*- coding: utf-8 -*-\n"""Type-inference name patterns for TypeEnforcer helper."""
 
 # core/type_patterns.py
 # SCHWABOT_DYNAMIC_EXPANSION_START

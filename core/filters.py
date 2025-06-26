@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -193,8 +189,6 @@ Returns:
 Predicted state
 """
         try:
-    pass
-    pass
             # State prediction
 x_pred = self.F @ self.state.x
             if control_input is not None and B is not None:
@@ -232,8 +226,6 @@ Returns:
 Updated state
 """
         try:
-    pass
-    pass
             # Innovation (residual)
             y = measurement - self.H @ self.state.x
 
@@ -268,8 +260,6 @@ def _ensure_positive_definite(self, matrix: Matrix) -> Matrix:
     pass
         """Ensure matrix is positive definite for numerical stability."""
         try:
-    pass
-    pass
             # Add small diagonal term if needed
 eigenvals = unified_math.unified_math.eigenvalues(matrix)
             if unified_math.unified_math.min(eigenvals) < self.epsilon:
@@ -287,8 +277,6 @@ def _calculate_likelihood(
 """Calculate log-likelihood of current measurement."""
 
         try:
-    pass
-    pass
             return multivariate_normal.logpdf(
                 innovation, mean=np.zeros(len(innovation)), cov=innovation_cov
 
@@ -376,8 +364,6 @@ Args:
 process_noise_std: Standard deviation of process noise
 """
         try:
-    pass
-    pass
             for particle in self.particles:
                 # Generate process noise
 noise = np.random.normal(0, process_noise_std, self.state_dim)
@@ -406,8 +392,6 @@ measurement_noise_std: Standard deviation of measurement noise
 timestamp: Measurement timestamp
 """
         try:
-    pass
-    pass
 total_weight = 0.0
 
             for particle in self.particles:
@@ -449,8 +433,6 @@ def _resample(self) -> None:
     pass
         """Systematic resampling of particles."""
         try:
-    pass
-    pass
             # Extract weights
 weights = np.array([p.weight for p in self.particles])
 
@@ -510,8 +492,6 @@ Returns:
 (mean_state, covariance_matrix)
         """
         try:
-    pass
-    pass
             # Extract states and weights
 states = np.array([p.state for p in self.particles])
             weights = np.array([p.weight for p in self.particles])
@@ -583,8 +563,6 @@ Returns:
 Updated EMA value
 """
         try:
-    pass
-    pass
             if not self.initialized:
 self.value = new_value
 self.last_time = timestamp
@@ -652,8 +630,6 @@ Returns:
 Filtered value
 """
         try:
-    pass
-    pass
             # Update volatility estimate
 self._update_volatility(value)
 

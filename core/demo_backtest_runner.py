@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -185,8 +181,6 @@ def _load_backtest_data(self):
     pass
         """Load existing backtest data from files"""
         try:
-    pass
-    pass
             # Load backtest results
 results_file = Path("tests/demo_results/backtest_results.json")
             if results_file.exists():
@@ -631,8 +625,6 @@ def _save_backtest_results(self):
     pass
         """Save backtest results to file"""
         try:
-    pass
-    pass
 results_file = Path("tests/demo_results/backtest_results.json")
 
 data = {

@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -195,8 +191,6 @@ InvestmentRatioResult
 Complete investment ratio analysis
 """
         try:
-    pass
-    pass
 current_time = time.time()
 
             # Check cooldown period
@@ -289,8 +283,6 @@ def _calculate_execution_confidence(self, signals: TradingSignalMetrics) -> floa
     pass
         """Calculate execution confidence scalar Ξ."""
         try:
-    pass
-    pass
 from core.entry_gate import execution_confidence
 
             return execution_confidence(
@@ -316,8 +308,6 @@ def _calculate_entry_score(self, signals: TradingSignalMetrics) -> float:
     pass
         """Calculate entropy-weighted entry score 𝓔ₛ."""
         try:
-    pass
-    pass
 from core.entry_gate import entry_score
 
             return entry_score(
@@ -457,8 +447,6 @@ btc_strength: float,
 ) -> float:
 """Calculate position size multiplier."""
         try:
-    pass
-    pass
 from core.auto_scaler import scale_position
 
             # Use projected profit from entry score as proxy

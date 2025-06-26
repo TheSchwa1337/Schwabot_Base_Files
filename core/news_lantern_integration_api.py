@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """news_lantern_integration_api – temporary stub.
 
 This placeholder exists so that imports resolve while the real

@@ -1,4 +1,4 @@
-"""Matrix operations for strategy allocation and fault resolution."""
+# -*- coding: utf-8 -*-\n"""Matrix operations for strategy allocation and fault resolution."""
 
 from .strategy_matrix import project
 from .fault_resolver import check_rank

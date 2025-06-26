@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -262,8 +258,6 @@ def _update_loop(self) -> None:
         """Main dashboard update loop."""
         while self.is_running:
             try:
-    pass
-    pass
                 # Update system metrics
 self._update_system_metrics()
 
@@ -454,8 +448,6 @@ dashboard_data = self.get_dashboard_data()
 
         for subscriber in self.subscribers:
             try:
-    pass
-    pass
 subscriber(dashboard_data)
             except Exception as e:
 logger.error(f"Subscriber notification error: {e}")
@@ -546,8 +538,6 @@ def export_dashboard_data(self, filepath: str = "dashboard_export.json") -> str:
     pass
         """Export dashboard data to file."""
         try:
-    pass
-    pass
 export_data = {
 "export_timestamp": datetime.now().isoformat(),
                 "dashboard_data": self.get_dashboard_data(),

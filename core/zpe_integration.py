@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -104,8 +100,6 @@ Integrate ZPE core with strategy_mapper.py
 Applies ZPE mathematical framework to strategy vector calculations.
 """
         try:
-    pass
-    pass
             # Extract strategy vectors for multi-asset alignment
 strategy_vectors = strategy_data.get('vectors', {})
             weights = strategy_data.get('weights', {})
@@ -140,8 +134,6 @@ Integrate ZPE core with profit_cycle_allocator.py
 Applies ZPE profit reinjection and thermal efficiency calculations.
 """
         try:
-    pass
-    pass
             # Calculate thermal efficiency
 profit_generated = profit_data.get('profit_generated', 0.0)
             capital_exposure = profit_data.get('capital_exposure', 1.0)
@@ -177,8 +169,6 @@ Integrate ZPE core with fractal_core.py
 Applies ZPE recursive cycle depth and rotational torque calculations.
 """
         try:
-    pass
-    pass
             # Update recursive cycle depth
 tick_interval = fractal_data.get('tick_interval', 1.0)
             price_trigger = fractal_data.get('price_trigger', 0.0)
@@ -214,8 +204,6 @@ Integrate ZPE core with lantern_vector_memory.py
 Applies ZPE news/lantern signal mapping and elastic resonance calculations.
 """
         try:
-    pass
-    pass
             # Map news/lantern signals
 news_density = lantern_data.get('news_density', 0.0)
             sentiment_delta = lantern_data.get('sentiment_delta', 0.0)
@@ -253,8 +241,6 @@ Integrate ZPE core with fault_bus.py
 Applies ZPE temporal fault correction and agent consensus calculations.
 """
         try:
-    pass
-    pass
             # Calculate temporal fault correction
 expected_phase = fault_data.get('expected_phase', 0.0)
             actual_phase = fault_data.get('actual_phase', 0.0)
@@ -290,8 +276,6 @@ Integrate ZPE core with hash_registry.py
 Applies ZPE mathematical framework to hash-based memory and strategy tracking.
 """
         try:
-    pass
-    pass
             # Apply ZPE calculations to hash data
 hash_data['zpe_timestamp'] = datetime.now()
             hash_data['zpe_recursion_depth'] = self.zpe_core.recursion_depth

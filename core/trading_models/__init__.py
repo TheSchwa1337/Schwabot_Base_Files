@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """Trading models package for Schwabot BTC integration.
 
 This package contains all data models, enums, and containers used

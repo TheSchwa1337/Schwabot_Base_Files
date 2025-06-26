@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -616,8 +612,6 @@ def match_triplet(self, values: Tuple[float, float, float]) -> Dict[str, Any]:
     pass
         """Main triplet matching interface."""
         try:
-    pass
-    pass
             # Vector pattern matching
 match_result = self.vector_matcher.match_vector_triplet(values)
 
@@ -704,8 +698,6 @@ def main() -> None:
     pass
     """Demo of triplet matcher system."""
     try:
-    pass
-    pass
 matcher = TripletMatcher()
         safe_print(f"✅ TripletMatcher v{matcher.version} initialized")
 

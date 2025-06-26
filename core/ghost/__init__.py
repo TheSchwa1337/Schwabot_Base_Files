@@ -1,4 +1,4 @@
-"""Ghost routing system for Schwabot mathematical framework."""
+# -*- coding: utf-8 -*-\n"""Ghost routing system for Schwabot mathematical framework."""
 
 from .ghost_conditionals import exec_gate
 from .ghost_phase_integrator import build_packet, PhasePacket

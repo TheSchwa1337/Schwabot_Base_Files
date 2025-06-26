@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -191,8 +187,6 @@ float
 Entropy gradient
 """
         try:
-    pass
-    pass
             if len(entropy_sequence) < 3:
                 return 0.0
 
@@ -240,8 +234,6 @@ float
 Strategy confidence [0, 1]
 """
         try:
-    pass
-    pass
 entropy_diff = good_entropy - bad_entropy
 confidence = 1.0 / (1.0 + unified_math.exp(-k * entropy_diff))
 
@@ -276,8 +268,6 @@ float
 State change resistance [0, 1]
 """
         try:
-    pass
-    pass
             # Tanh component for performance
 performance_component = np.tanh(performance_delta)
 
@@ -321,8 +311,6 @@ float
 Strategy fitness score [0, 1]
 """
         try:
-    pass
-    pass
             if not performance_history:
                 return 0.5
 
@@ -374,8 +362,6 @@ SwitchSignal
 Strategy switch signal
 """
         try:
-    pass
-    pass
             # Update entropy history
 self.entropy_history.append(current_entropy)
             if len(self.entropy_history) > self.max_history:
@@ -474,8 +460,6 @@ bool
 True if switch was executed
 """
         try:
-    pass
-    pass
             if not switch_signal.should_switch:
                 return False
 
@@ -527,8 +511,6 @@ performance_score : float
 Performance score [0, 1]
 """
         try:
-    pass
-    pass
 self.performance_history[self.current_strategy].append(performance_score)
 
             # Trim history
@@ -547,8 +529,6 @@ def _find_best_strategy(self, entropy_level: float, performance_score: float) ->
     pass
         """Find best strategy for current conditions."""
         try:
-    pass
-    pass
 strategy_scores = {}
 
             for strategy in TradingStrategy:

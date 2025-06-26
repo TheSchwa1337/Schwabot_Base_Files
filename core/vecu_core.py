@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -77,8 +73,6 @@ from enum import Enum
 
 # Import unified mathematics
 try:
-    pass
-    pass
 from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
@@ -89,8 +83,6 @@ UNIFIED_MATH_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -266,8 +258,6 @@ This is the core function that implements the ECU analog,
 providing phase-corrected profit amplification.
 """
         try:
-    pass
-    pass
             # Calculate tick phase (16-bit normalized)
             tick_phase = (tick_id % self.tick_phase_window) / float(self.tick_phase_window)
 
@@ -328,8 +318,6 @@ This implements the spark injection analog for profit delivery,
 using pulse-width modulation for optimal timing.
 """
         try:
-    pass
-    pass
             # Calculate duty cycle based on phase and market conditions
 duty_cycle = (self.duty_cycle_base +
                          self.duty_cycle_modulation * unified_math.unified_math.sin(current_phase * math.pi))
@@ -391,8 +379,6 @@ This implements the ECU feedback analog, adjusting future
 strategy based on trade execution results.
 """
         try:
-    pass
-    pass
             # Calculate error delta
 error_delta = actual_profit - predicted_profit
 
@@ -449,8 +435,6 @@ rpm_equivalent: float
 ) -> float:
 """Calculate resonance score for timing optimization."""
         try:
-    pass
-    pass
             # Phase resonance
 phase_resonance = unified_math.unified_math.cos(2 * math.pi * tick_phase)
 
@@ -479,8 +463,6 @@ market_volatility: float
 ) -> float:
 """Calculate PWM modulation factor."""
         try:
-    pass
-    pass
             # Base modulation
 base_modulation = unified_math.unified_math.sin(current_phase * math.pi)
 
@@ -508,8 +490,6 @@ resonance_score: float
 ) -> float:
 """Calculate resonance-based correction."""
         try:
-    pass
-    pass
             # Error-based correction
 error_correction = math.tanh(error_delta) * 0.1
 

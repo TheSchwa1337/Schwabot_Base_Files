@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -246,8 +242,6 @@ def _detect_encoding(cls) -> str:
             return cls._encoding_cache
 
         try:
-    pass
-    pass
 encoding = sys.stdout.encoding or "utf-8"
 cls._encoding_cache = encoding
             return encoding
@@ -263,8 +257,6 @@ def _test_emoji_support(cls) -> bool:
     pass
         """Test if emoji are supported in current environment."""
         try:
-    pass
-    pass
 test_emoji = "🚀"
 safe_print(test_emoji, end="", flush=True)
             return True
@@ -279,8 +271,6 @@ def _test_unicode_support(cls) -> bool:
     pass
         """Test if Unicode is supported."""
         try:
-    pass
-    pass
 test_unicode = "αβγδε"
 safe_print(test_unicode, end="", flush=True)
             return True
@@ -330,8 +320,6 @@ def _is_powershell(cls) -> bool:
     pass
         """Check if running in PowerShell."""
         try:
-    pass
-    pass
             return "powershell" in os.environ.get("PSModulePath", "").lower()
         except Exception:
             return False
@@ -344,8 +332,6 @@ def _is_cmd(cls) -> bool:
     pass
         """Check if running in CMD."""
         try:
-    pass
-    pass
             return "cmd" in os.environ.get("ComSpec", "").lower()
         except Exception:
             return False
@@ -358,8 +344,6 @@ def _is_wsl(cls) -> bool:
     pass
         """Check if running in WSL."""
         try:
-    pass
-    pass
             with open("/proc/version", "r") as f:
                 return "microsoft" in f.read().lower()
         except Exception:
@@ -432,8 +416,6 @@ Success status
 stream = sys.stdout
 
         try:
-    pass
-    pass
             if hasattr(stream, "buffer"):
                 # Binary stream
 encoded_text = text.encode(cls._detect_encoding(), errors="replace")
@@ -467,8 +449,6 @@ Returns:
 Success status
 """
         try:
-    pass
-    pass
 safe_message = cls.safe_emoji_print(message)
             if context:
 safe_message = f"{context}: {safe_message}"
@@ -479,8 +459,6 @@ log_method = getattr(logger, level.lower(), logger.info)
         except Exception as e:
             # Fallback to print if logging fails
             try:
-    pass
-    pass
 safe_print(f"[{level.upper()}] {message}")
                 return True
             except Exception:
@@ -510,8 +488,6 @@ def wrapper(*args, **kwargs):
     pass
             """TODO: document wrapper."""
             try:
-    pass
-    pass
                 return func(*args, **kwargs)
             except Exception as e:
 error_msg = cls.safe_format_error(e, func.__name__)
@@ -537,8 +513,6 @@ Returns:
 Formatted error message
 """
         try:
-    pass
-    pass
 error_type = type(error).__name__
             error_msg = str(error)
 
@@ -570,8 +544,6 @@ Returns:
 Progress indicator string
 """
         try:
-    pass
-    pass
             if total == 0:
 percentage = 0
             else:
@@ -668,8 +640,6 @@ results = {
 
         # Test emoji handling
         try:
-    pass
-    pass
 test_message = "🚀 Test message with emoji ✅"
 safe_message = cls.safe_emoji_print(test_message)
             results["emoji_test"] = len(safe_message) > 0
@@ -678,8 +648,6 @@ results["emoji_test"] = False
 
         # Test Unicode handling
         try:
-    pass
-    pass
 unicode_message = "Testing Unicode: α β γ δ ε → ← ↑ ↓"
 safe_unicode = cls.safe_emoji_print(unicode_message)
             results["unicode_test"] = len(safe_unicode) > 0
@@ -688,8 +656,6 @@ results["unicode_test"] = False
 
         # Test encoding
         try:
-    pass
-    pass
 test_text = "Encoding test: special chars åÅæÆøØ"
 results["encoding_test"] = cls.safe_encoding_write(test_text, io.StringIO())
         except Exception:
@@ -697,8 +663,6 @@ results["encoding_test"] = False
 
         # Test output
         try:
-    pass
-    pass
 test_stream = io.StringIO()
             results["output_test"] = cls.safe_encoding_write("Output test", test_stream)
         except Exception:

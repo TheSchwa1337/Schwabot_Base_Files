@@ -1,4 +1,4 @@
-"""TODO: document module."""
+# -*- coding: utf-8 -*-\n"""TODO: document module."""
 
 # core/function_patterns.py
 # SCHWABOT_DYNAMIC_EXPANSION_START

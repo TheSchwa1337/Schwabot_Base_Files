@@ -1,4 +1,4 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
@@ -29,8 +29,6 @@ from typing import Tuple, Dict, Any
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
-    pass
-    pass
 from scipy.signal import welch  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
 

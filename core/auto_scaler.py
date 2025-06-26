@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -169,8 +165,6 @@ Mathematical Process:
 4. Apply bounds and constraints
 """
         try:
-    pass
-    pass
             # Validate inputs
             if confidence < 0 or projected_profit < 0:
 logger.warning(
@@ -222,8 +216,6 @@ Mathematical Process:
 4. Return position size and detailed results
 """
         try:
-    pass
-    pass
             # Calculate scale factor with DLT integration
 scale_factor = self.scale_position(confidence, projected_profit, **scaling_params)
 
@@ -329,8 +321,6 @@ account_balance: float,
 ) -> bool:
 """Validate scaling inputs."""
     try:
-    pass
-    pass
         # Check confidence bounds
         if not (0.0 <= confidence <= 10.0):
             logger.warning(f"Confidence out of bounds: {confidence}")

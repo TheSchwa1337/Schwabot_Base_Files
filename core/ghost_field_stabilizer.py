@@ -1,4 +1,4 @@
-"""ghost_field_stabilizer.py
+# -*- coding: utf-8 -*-\n"""ghost_field_stabilizer.py
 Ghost Field Stabilizer
 ======================
 

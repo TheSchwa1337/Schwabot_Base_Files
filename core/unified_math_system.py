@@ -1,4 +1,4 @@
-"""
+# -*- coding: utf-8 -*-\n"""
 Unified Mathematical System
 
 This module provides a centralized mathematical system that consolidates all mathematical
@@ -14,8 +14,6 @@ import logging
 
 # Import safe print for CLI compatibility
 try:
-    pass
-    pass
 from utils.safe_print import safe_print, safe_math, info, warn, error
 except ImportError:
     pass
@@ -181,8 +179,6 @@ def _safe_operation(self, operation_func, inputs: List[Any],]
                        operation: MathOperation) -> MathResult:
 """Safely execute a mathematical operation with error handling."""
         try:
-    pass
-    pass
 result = operation_func(*inputs)
 
             # Round floating point results to specified precision
@@ -445,8 +441,6 @@ def calculate_returns(self, prices: List[float]) -> MathResult:
             return MathResult(None, MathOperation.DIVIDE, [prices], {}, False, "Need at least 2 prices")
 
         try:
-    pass
-    pass
 returns = []
             for i in range(1, len(prices)):
                 if prices[i-1] != 0:
@@ -475,8 +469,6 @@ def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0
             return MathResult(None, MathOperation.DIVIDE, [returns], {}, False, "Empty returns list")
 
         try:
-    pass
-    pass
 mean_return = np.mean(returns)
             std_return = np.std(returns)
 
@@ -505,8 +497,6 @@ def calculate_max_drawdown(self, prices: List[float]) -> MathResult:
             return MathResult(None, MathOperation.MIN, [prices], {}, False, "Empty prices list")
 
         try:
-    pass
-    pass
 peak = prices[0]
 max_dd = 0.0
 
@@ -536,8 +526,6 @@ def calculate_volatility(self, returns: List[float], window: int = 252) -> MathR
             return MathResult(None, MathOperation.STD, [returns], {}, False, f"Need at least {window} returns")
 
         try:
-    pass
-    pass
 volatilities = []
             for i in range(window, len(returns) + 1):
                 window_returns = returns[i-window:i]

@@ -1,4 +1,4 @@
-"""News→sentiment vectoriser for ghost routing."""
+# -*- coding: utf-8 -*-\n"""News→sentiment vectoriser for ghost routing."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math
@@ -7,8 +7,6 @@ import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
-    pass
-    pass
 from sklearn.feature_extraction.text import TfidfVectorizer
 except ImportError:
     pass
@@ -50,8 +48,6 @@ Returns 0.0 if sklearn not available or corpus empty
 _VEC = TfidfVectorizer(max_features=512, stop_words="english")
 
     try:
-    pass
-    pass
         # Vectorize corpus and get mean vector
 tfidf_matrix = _VEC.fit_transform(corpus)
         vec = tfidf_matrix.unified_math.mean(axis=0).A1

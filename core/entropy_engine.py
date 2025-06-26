@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -142,8 +138,6 @@ def calculate_entropy(self, market_data: Dict[str, Any], entropy_type: str = "sh
     pass
         """Calculate entropy based on market data."""
         try:
-    pass
-    pass
             # Extract price data
 prices = market_data.get('prices', [])
             volumes = market_data.get('volumes', [])
@@ -216,8 +210,6 @@ def _calculate_shannon_entropy(self, prices: List[float]) -> float:
     pass
         """Calculate Shannon entropy for price data."""
         try:
-    pass
-    pass
             if len(prices) < 2:
                 return 0.0
 
@@ -256,8 +248,6 @@ def _calculate_relative_entropy(self, prices: List[float], volumes: List[float])
     pass
         """Calculate relative entropy considering volume."""
         try:
-    pass
-    pass
             if len(prices) < 2 or len(volumes) < 2:
                 return 0.0
 
@@ -298,8 +288,6 @@ def _calculate_conditional_entropy(self, prices: List[float]) -> float:
     pass
         """Calculate conditional entropy based on price patterns."""
         try:
-    pass
-    pass
             if len(prices) < 3:
                 return 0.0
 
@@ -360,8 +348,6 @@ def _detect_entropy_patterns(self, entropy_value: float, prices: List[float]) ->
     pass
         """Detect patterns in entropy data."""
         try:
-    pass
-    pass
             if len(self.entropy_history) < 5:
                 return False
 
@@ -392,8 +378,6 @@ def _calculate_entropy_confidence(self, prices: List[float], volumes: List[float
     pass
         """Calculate confidence score for entropy calculation."""
         try:
-    pass
-    pass
             # Data quality factors
 data_length_factor = unified_math.min(len(prices) / 100.0, 1.0)
             price_range_factor = min((unified_math.max(prices) - unified_math.min(prices)) / 1000.0, 1.0)
@@ -422,8 +406,6 @@ def get_entropy_trend(self, window_size: int = 10) -> str:
     pass
         """Get entropy trend direction."""
         try:
-    pass
-    pass
             if len(self.entropy_history) < window_size:
                 return "insufficient_data"
 
@@ -451,8 +433,6 @@ def get_entropy_metrics(self) -> EntropyMetrics:
     pass
         """Get comprehensive entropy metrics."""
         try:
-    pass
-    pass
             if not self.entropy_history:
                 return self._create_default_metrics()
 

@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -285,8 +281,6 @@ logger.debug(f"Using cached configuration for {config_name}")
 config_path = self.config_dir / config_name
 
         try:
-    pass
-    pass
             if config_path.exists():
                 with open(config_path, 'r', encoding='utf-8') as f:
                     config = yaml.safe_load(f)
@@ -370,8 +364,6 @@ Returns:
 True if configuration is valid, False otherwise
 """
         try:
-    pass
-    pass
             # Basic validation - check if config is not empty
             if not config:
 logger.error(f"Configuration {config_name} is empty")
@@ -415,8 +407,6 @@ Returns:
 Configuration value or default
 """
         try:
-    pass
-    pass
 keys = key_path.split('.')
             value = config
 
@@ -450,8 +440,6 @@ Returns:
 True if successful, False otherwise
 """
         try:
-    pass
-    pass
 keys = key_path.split('.')
             current = config
 
@@ -485,8 +473,6 @@ Returns:
 True if successful, False otherwise
 """
         try:
-    pass
-    pass
 config_path = self.config_dir / config_name
 
             # Ensure config directory exists

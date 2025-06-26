@@ -1,4 +1,4 @@
-"""core.ghost_trigger_map
+# -*- coding: utf-8 -*-\n"""core.ghost_trigger_map
 Ghost Trigger Map
 =================
 

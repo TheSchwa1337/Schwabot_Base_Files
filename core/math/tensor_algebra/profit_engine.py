@@ -1,4 +1,4 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 # #!/usr/bin/env python3
 """
@@ -71,8 +71,6 @@ Returns:
 Profit surface matrix
 """
         try:
-    pass
-    pass
             if price_map.shape != hold_map.shape:
                 raise ValueError("Price and hold maps must have the same shape")
 
@@ -109,8 +107,6 @@ Returns:
 Optimized holding periods
 """
         try:
-    pass
-    pass
             if len(price_series) < 10:
                 return np.array([1.0] * len(price_series))
 
@@ -159,8 +155,6 @@ Returns:
 Tuple of (gradient_x, gradient_y)
         """
         try:
-    pass
-    pass
             # Calculate gradients
 gradient_x = np.gradient(profit_surface, axis=1)
             gradient_y = np.gradient(profit_surface, axis=0)
@@ -196,8 +190,6 @@ Returns:
 Dictionary of profit curves for each horizon
 """
         try:
-    pass
-    pass
 profit_curves = {}
 
             for horizon in time_horizons:
@@ -236,8 +228,6 @@ Returns:
 Dictionary of distribution statistics
 """
         try:
-    pass
-    pass
             if len(profit_data) == 0:
                 return {
 'mean': 0.0,
@@ -305,8 +295,6 @@ Returns:
 Dictionary of optimal allocations
 """
         try:
-    pass
-    pass
 allocations = {}
 total_weight = 0.0
 
@@ -365,8 +353,6 @@ Returns:
 List of optimal entry indices
 """
         try:
-    pass
-    pass
 optimal_entries = []
 
             # Calculate rolling profit potential
@@ -397,8 +383,6 @@ def _smooth_surface(self, surface: NDArray, sigma: float = 1.0) -> NDArray:
     pass
         """Apply Gaussian smoothing to surface."""
         try:
-    pass
-    pass
 from scipy.ndimage import gaussian_filter
             return gaussian_filter(surface, sigma=sigma)
         except ImportError:
@@ -416,8 +400,6 @@ def _calculate_trend_strength(self, price_series: NDArray) -> float:
     pass
         """Calculate trend strength of price series."""
         try:
-    pass
-    pass
             if len(price_series) < 2:
                 return 0.0
 
@@ -494,15 +476,11 @@ import numpy as np
 
     # Import safe print for Windows compatibility
     try:
-    pass
-    pass
 from ...utils.windows_cli_compatibility import safe_print
     except ImportError:
     pass
     pass
         try:
-    pass
-    pass
 #             from core.utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
     pass
@@ -521,8 +499,6 @@ def main():
     pass
         """Main function to test profit engine and ensure proper initialization."""
         try:
-    pass
-    pass
 safe_print("💰 Testing Profit Engine")
             safe_print("=" * 40)
 

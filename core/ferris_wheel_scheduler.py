@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -78,8 +74,6 @@ logger = logging.getLogger(__name__)
 
 # Import Ferris RDE core
 try:
-    pass
-    pass
 from core.ferris_rde_core import get_ferris_rde_core, FerrisPhase, FerrisWheelData
 FERRIS_RDE_AVAILABLE = True
 except ImportError:
@@ -200,8 +194,6 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> str:
 """Schedule a task for execution."""
         try:
-    pass
-    pass
 task_id = f"task_{int(time.time() * 1000)}_{len(self.scheduled_tasks)}"
 
 task = ScheduledTask(
@@ -236,8 +228,6 @@ def cancel_task(self, task_id: str) -> bool:
     pass
         """Cancel a scheduled task."""
         try:
-    pass
-    pass
             if task_id in self.scheduled_tasks:
 task = self.scheduled_tasks[task_id]
 task.status = TaskStatus.CANCELLED
@@ -261,8 +251,6 @@ def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
     pass
         """Get status of a specific task."""
         try:
-    pass
-    pass
             if task_id in self.scheduled_tasks:
 task = self.scheduled_tasks[task_id]
                 return {
@@ -290,8 +278,6 @@ def update_ferris_wheel(self) -> Optional[FerrisWheelData]:
     pass
         """Update Ferris wheel state."""
         try:
-    pass
-    pass
             if not FERRIS_RDE_AVAILABLE or not self.ferris_rde:
                 # Fallback wheel update
 self.current_angle += self.config.angular_velocity * self.config.update_interval
@@ -327,8 +313,6 @@ def execute_eligible_tasks(self) -> List[Dict[str, Any]]:
     pass
         """Execute tasks that are eligible for the current phase."""
         try:
-    pass
-    pass
 executed_tasks = []
 
             # Get current time
@@ -344,8 +328,6 @@ eligible_tasks = []
             # Execute eligible tasks
             for task in eligible_tasks:
                 try:
-    pass
-    pass
                     # Update status
 task.status = TaskStatus.EXECUTING
 
@@ -412,8 +394,6 @@ def _is_task_eligible(self, task: ScheduledTask, current_time: datetime) -> bool
     pass
         """Check if a task is eligible for execution."""
         try:
-    pass
-    pass
             # Check phase requirement
             if (self.config.enable_phase_scheduling and
                 task.phase_requirement and
@@ -457,8 +437,6 @@ def cleanup_old_tasks(self, max_age_hours: float = 24.0) -> int:
     pass
         """Clean up old completed and failed tasks."""
         try:
-    pass
-    pass
 cutoff_time = datetime.now() - timedelta(hours=max_age_hours)
             cleaned_count = 0
 

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -210,8 +206,6 @@ def enqueue_packet(self, packet: ExecPacket) -> bool:
     pass
         """Add packet to appropriate priority queue."""
         try:
-    pass
-    pass
             if packet.packet_id in self.active_packets:
 logger.warning(f"Packet {packet.packet_id} already exists")
                 return False
@@ -246,8 +240,6 @@ def dequeue_packet(self) -> Optional[ExecPacket]:
     pass
         """Get next packet from highest priority queue."""
         try:
-    pass
-    pass
             # Check queues in priority order
             for priority in PacketPriority:
                 if not self.queues[priority].empty():
@@ -274,8 +266,6 @@ def complete_packet(self, packet_id: str, result: Dict[str, Any],]
                         execution_time: float) -> bool:
 """Mark packet as completed."""
         try:
-    pass
-    pass
             if packet_id not in self.active_packets:
 logger.warning(f"Packet {packet_id} not found in active packets")
                 return False
@@ -307,8 +297,6 @@ def fail_packet(self, packet_id: str, error_message: str) -> bool:
     pass
         """Mark packet as failed."""
         try:
-    pass
-    pass
             if packet_id not in self.active_packets:
 logger.warning(f"Packet {packet_id} not found in active packets")
                 return False
@@ -354,8 +342,6 @@ def cancel_packet(self, packet_id: str) -> bool:
     pass
         """Cancel a pending packet."""
         try:
-    pass
-    pass
             if packet_id not in self.active_packets:
 logger.warning(f"Packet {packet_id} not found in active packets")
                 return False
@@ -380,8 +366,6 @@ def get_packet_status(self, packet_id: str) -> Optional[Dict[str, Any]]:
     pass
         """Get status of a specific packet."""
         try:
-    pass
-    pass
             # Check active packets
             if packet_id in self.active_packets:
 packet = self.active_packets[packet_id]
@@ -463,8 +447,6 @@ def cleanup_old_packets(self, max_age_hours: float = 24.0) -> int:
     pass
         """Clean up old completed and failed packets."""
         try:
-    pass
-    pass
 cutoff_time = datetime.now() - timedelta(hours=max_age_hours)
             cleaned_count = 0
 
@@ -561,8 +543,6 @@ def process_next_packet(self) -> Optional[Dict[str, Any]]:
     pass
         """Process the next available packet."""
         try:
-    pass
-    pass
 packet = self.queue.dequeue_packet()
             if not packet:
                 return None
@@ -577,8 +557,6 @@ self.queue.fail_packet(packet.packet_id, error_msg)
 
             # Process packet
             try:
-    pass
-    pass
 processor = self.processors[packet.packet_type]
 result = processor(packet)
 

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+# -*- coding: utf-8 -*-\nfrom dataclasses import dataclass
 from typing import Literal
 
 @dataclass

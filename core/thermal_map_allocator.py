@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -79,8 +75,6 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 # NOTE: core.type_defs is under construction; import only the symbols that
 # currently exist or fall back to basic typing.FallbackType aliases.
 try:
-    pass
-    pass
 from core.type_defs import (
         Temperature,
 Pressure,

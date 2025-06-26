@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -219,8 +215,6 @@ new_balance : float
 New balance amount
 """
         try:
-    pass
-    pass
             if asset not in self.vault_balances:
 logger.warning(f"Unknown asset: {asset}")
                 return
@@ -246,8 +240,6 @@ def _recalculate_allocations(self) -> None:
     pass
         """Recalculate actual allocations and imbalance deltas."""
         try:
-    pass
-    pass
             # Calculate total vault value (assuming USD values)
             total_value = sum(vault.balance for vault in self.vault_balances.values())
 
@@ -290,8 +282,6 @@ float
 Imbalance delta
 """
         try:
-    pass
-    pass
             if actual == 0:
                 return 1.0 if target > 0 else 0.0
 
@@ -329,8 +319,6 @@ float
 Mean reversion trigger value
 """
         try:
-    pass
-    pass
 balance_history = self.balance_history[asset]
 
             if len(balance_history) < 5:
@@ -370,8 +358,6 @@ float
 Threshold ping value
 """
         try:
-    pass
-    pass
             # ReLU function: unified_math.max(0, x)
             ping_value = unified_math.max(0.0, imbalance_delta - self.ping_threshold_delta)
 
@@ -403,8 +389,6 @@ List[RebalanceSignal]
 List of rebalance signals
 """
         try:
-    pass
-    pass
 signals = []
 current_time = time.time()
 
@@ -515,8 +499,6 @@ bool
 True if rebalance was executed successfully
 """
         try:
-    pass
-    pass
             if signal.action == RebalanceAction.HOLD:
                 return True
 
@@ -559,8 +541,6 @@ VaultState
 Current vault state
 """
         try:
-    pass
-    pass
             # Calculate total value
 total_value = sum(vault.balance for vault in self.vault_balances.values())
 
@@ -631,8 +611,6 @@ bool
 True if update was successful
 """
         try:
-    pass
-    pass
             # Validate allocations sum to 1.0
 total_allocation = sum(new_targets.values())
             if unified_math.abs(total_allocation - 1.0) > 0.01:

@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -231,8 +227,6 @@ def _load_configuration(self) -> None:
     pass
         """Load demo ledger configuration."""
         try:
-    pass
-    pass
             # Default configuration
 config = {
 "data_paths": {
@@ -266,8 +260,6 @@ def _ensure_data_directories(self) -> None:
     pass
         """Ensure data directories exist."""
         try:
-    pass
-    pass
 directories = [
 self.tick_data_path,
 self.portfolio_snapshots_path,
@@ -301,8 +293,6 @@ bool
 True if injection successful, False otherwise
 """
         try:
-    pass
-    pass
             # Convert scenario name to enum
 scenario = DemoScenario(scenario_name.lower())
             self.current_scenario = scenario
@@ -330,8 +320,6 @@ def _generate_demo_ledger_state(self, scenario: DemoScenario) -> DemoLedgerState
     pass
         """Generate complete demo ledger state for scenario."""
         try:
-    pass
-    pass
             # Get scenario configuration
 config = self.scenario_configs[scenario]
 
@@ -384,8 +372,6 @@ def _generate_initial_portfolio(self, config: Dict[str, Any]) -> PortfolioSnapsh
     pass
         """Generate initial portfolio snapshot."""
         try:
-    pass
-    pass
 initial_capital = config.get('initial_capital', 100000.0)
             cash_buffer = config.get('cash_buffer', 0.2)
             max_position_size = config.get('max_position_size', 0.3)
@@ -445,8 +431,6 @@ def _generate_tick_data(self, start_time: datetime, end_time: datetime,
                            scenario: DemoScenario) -> List[TickData]:
 """Generate historical tick data for scenario."""
         try:
-    pass
-    pass
 tick_data = []
 current_time = start_time
 assets = ["BTC", "ETH", "USDC", "XRP", "SOL"]
@@ -534,8 +518,6 @@ def _simulate_trading(self, initial_portfolio: PortfolioSnapshot,
                          tick_data: List[TickData], config: Dict[str, Any]) -> Tuple[PortfolioSnapshot, List[Dict[str, Any]]]:
 """Simulate trading based on tick data."""
         try:
-    pass
-    pass
             # Initialize portfolio state
 current_portfolio = initial_portfolio
 trade_history = []
@@ -574,8 +556,6 @@ def _simulate_asset_trading(self, asset: str, ticks: List[TickData],]
                                portfolio: PortfolioSnapshot, config: Dict[str, Any]) -> List[Dict[str, Any]]:
 """Simulate trading for a specific asset."""
         try:
-    pass
-    pass
 trades = []
 position = portfolio.positions.get(asset, {'quantity': 0.0, 'entry_price': 0.0})
             risk_tolerance = config.get('risk_tolerance', 0.3)
@@ -637,8 +617,6 @@ def _make_trade_decision(self, tensor_score: float, risk_tolerance: float,
                             position: Dict[str, Any], tick: TickData) -> Optional[Dict[str, Any]]:
 """Make trade decision based on tensor score and risk tolerance."""
         try:
-    pass
-    pass
 entry_threshold = 0.02 * risk_tolerance
 exit_threshold = -0.05 * risk_tolerance
 
@@ -662,8 +640,6 @@ def _update_portfolio_from_trades(self, portfolio: PortfolioSnapshot,
                                      trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
 """Update portfolio state from trades."""
         try:
-    pass
-    pass
             # Create new portfolio snapshot
 new_portfolio = PortfolioSnapshot(
                 timestamp=portfolio.timestamp,
@@ -736,8 +712,6 @@ def _calculate_final_portfolio(self, portfolio: PortfolioSnapshot,
                                   trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
 """Calculate final portfolio state."""
         try:
-    pass
-    pass
             # Calculate total value
 total_value = portfolio.cash
 unrealized_pnl = 0.0
@@ -775,8 +749,6 @@ def _calculate_risk_metrics(self, trades: List[Dict[str, Any]]) -> Dict[str, flo
     pass
         """Calculate risk metrics from trade history."""
         try:
-    pass
-    pass
             if not trades:
                 return {'volatility': 0.0, 'sharpe_ratio': 0.0, 'max_drawdown': 0.0, 'win_rate': 0.0}
 
@@ -825,8 +797,6 @@ def _calculate_performance_metrics(self, initial_portfolio: PortfolioSnapshot,
 trade_history: List[Dict[str, Any]]) -> Dict[str, Any]:
 """Calculate overall performance metrics."""
         try:
-    pass
-    pass
             # Calculate total return
 total_return = (final_portfolio.total_value - initial_portfolio.total_value) / initial_portfolio.total_value
 
@@ -861,8 +831,6 @@ def _export_demo_state(self, demo_state: DemoLedgerState, scenario_name: str) ->
     pass
         """Export demo state to file."""
         try:
-    pass
-    pass
 output_path = f"./data/demo_states/{scenario_name}_demo_state.json"
 
             # Convert to serializable format
@@ -909,8 +877,6 @@ def load_demo_state(self, scenario_name: str) -> Optional[DemoLedgerState]:
     pass
         """Load demo state from file."""
         try:
-    pass
-    pass
 file_path = f"./data/demo_states/{scenario_name}_demo_state.json"
 
             if not os.path.exists(file_path):

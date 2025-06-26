@@ -1,4 +1,4 @@
-from core.unified_math_system import unified_math
+# -*- coding: utf-8 -*-\nfrom core.unified_math_system import unified_math
 import math
 # #!/usr/bin/env python3
 """Tick Cycle Validator - Temporal Execution Correction Layer.

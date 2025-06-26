@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -163,8 +159,6 @@ str
 Generated hash signature
 """
         try:
-    pass
-    pass
             # Create hash input string
 hash_input = f"{price:.8f}|{volume:.6f}|{timestamp:.3f}"
 
@@ -214,8 +208,6 @@ float
 Entropy level [0, 1]
 """
         try:
-    pass
-    pass
             if not hash_sequence:
                 return 0.5
 
@@ -275,8 +267,6 @@ float
 Drift correction value
 """
         try:
-    pass
-    pass
             # Calculate Levenshtein distance
 len1, len2 = len(hash1), len(hash2)
 
@@ -344,8 +334,6 @@ bool
 Trigger gate status
 """
         try:
-    pass
-    pass
             # Heaviside step function for volume
 theta_volume = 1.0 if volume_delta > self.volume_threshold else 0.0
 
@@ -379,8 +367,6 @@ float
 Frequency analysis score [0, 1]
 """
         try:
-    pass
-    pass
             if not self.hash_history:
                 return 0.0
 
@@ -427,8 +413,6 @@ HashPatternAnalysis
 Pattern analysis results
 """
         try:
-    pass
-    pass
             if len(self.hash_history) < window_size:
                 return HashPatternAnalysis(0.0, [], 0.0, 0.0)
 
@@ -504,8 +488,6 @@ TickHashMetrics
 Complete hash analysis metrics
 """
         try:
-    pass
-    pass
             # Frequency analysis
 frequency_score = self.analyze_hash_frequency(tick_hash)
 

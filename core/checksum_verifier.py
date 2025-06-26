@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -166,8 +162,6 @@ str
 Hexadecimal checksum string
 """
         try:
-    pass
-    pass
             if algorithm not in self.supported_algorithms:
                 raise ValueError(f"Unsupported algorithm: {algorithm}")
 
@@ -227,8 +221,6 @@ Verification result with details
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Calculate actual checksum
 calculated_checksum = self.calculate_checksum(data, algorithm)
 
@@ -301,8 +293,6 @@ ChecksumResult
 File verification result
 """
         try:
-    pass
-    pass
             with open(file_path, 'rb') as f:
                 file_data = f.read()
 
@@ -346,8 +336,6 @@ str
 Mathematical checksum
 """
         try:
-    pass
-    pass
             # Convert to numpy array if needed
             if isinstance(numerical_data, list):
                 data_array = np.array(numerical_data)
@@ -396,8 +384,6 @@ ChecksumResult
 Trading data verification result
 """
         try:
-    pass
-    pass
             # Create deterministic representation of trading data
 sorted_items = sorted(trading_data.items())
             data_str = str(sorted_items)

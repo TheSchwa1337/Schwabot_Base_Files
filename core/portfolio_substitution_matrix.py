@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -335,8 +331,6 @@ anomaly_context: Optional[Dict[str, Any]] = None,
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Determine substitution strategy based on context
 strategy = self._determine_substitution_strategy(
                 parameters, phase_mode, rebalance_reason, anomaly_context
@@ -1103,8 +1097,6 @@ phase_mode_enum = PhaseMode(phase_mode)
 current_allocation_typed = {}
     for asset_str, amount in current_allocation.items():
         try:
-    pass
-    pass
 asset_type = AssetType(asset_str)
             current_allocation_typed[asset_type] = amount
         except ValueError:

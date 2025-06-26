@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -144,8 +140,6 @@ Returns:
 (fft_coefficients, frequencies)
         """
         try:
-    pass
-    pass
             # Apply window to reduce spectral leakage
 windowed_signal = time_series * np.hanning(len(time_series))
 
@@ -176,8 +170,6 @@ Returns:
 (frequencies, power_density)
         """
         try:
-    pass
-    pass
             # Use Welch's method for robust PSD estimation
 freqs, psd = signal.welch(
                 time_series,
@@ -214,8 +206,6 @@ Returns:
 (cwt_coefficients, scales_used)
         """
         try:
-    pass
-    pass
             if scales is None:
                 # Auto-generate logarithmic scale distribution
 scales = np.logspace(0, np.log10(len(time_series) / 4), 32)
@@ -248,8 +238,6 @@ Returns:
 Spectral entropy value
 """
         try:
-    pass
-    pass
             # Compute power spectrum
 fft_coeffs, _ = self.fft_transform(time_series)
             power_spectrum = unified_math.unified_math.abs(fft_coeffs) ** 2
@@ -294,8 +282,6 @@ Returns:
 Dominant frequency in Hz
 """
         try:
-    pass
-    pass
 freqs, psd = self.power_spectral_density(time_series)
 
             # Find frequency with maximum power (excluding DC component)
@@ -328,8 +314,6 @@ Returns:
 Power in specified band
 """
         try:
-    pass
-    pass
 freqs, psd = self.power_spectral_density(time_series)
 
             # Find indices corresponding to frequency range
@@ -365,8 +349,6 @@ Returns:
 SNR in dB
 """
         try:
-    pass
-    pass
 signal_power = self.bandpower(time_series, signal_band)
             noise_power = self.bandpower(time_series, noise_band)
 
@@ -419,8 +401,6 @@ Returns:
 Analysis dictionary with spectral characteristics
 """
         try:
-    pass
-    pass
 analysis = {
 "signal_length": len(signal),
                 "spectral_entropy": self.spectral.spectral_entropy(signal),
@@ -468,8 +448,6 @@ Returns:
 True if entropy exceeds threshold
 """
         try:
-    pass
-    pass
 entropy = self.spectral.spectral_entropy(signal)
             return entropy > threshold
 

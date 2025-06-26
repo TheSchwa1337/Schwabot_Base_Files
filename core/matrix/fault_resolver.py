@@ -1,4 +1,4 @@
-"""Matrix fault resolver for rank consistency checking."""
+# -*- coding: utf-8 -*-\n"""Matrix fault resolver for rank consistency checking."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -189,8 +185,6 @@ logger.warning(f"Feed '{name}' is not running.")
 task = self.active_tasks[name]
 task.cancel()
         try:
-    pass
-    pass
 await task
         except asyncio.CancelledError:
 logger.info(f"Feed '{name}' stopped successfully.")
@@ -203,8 +197,6 @@ async def _run_feed(self, config: FeedConfig):
 logger.info(f"Running feed '{config.name}'...")
         while True:
             try:
-    pass
-    pass
                 # Simulate fetching data
 price = 100 + (hash(datetime.now()) % 10)
                 volume = 1000 + (hash(datetime.now()) % 100)

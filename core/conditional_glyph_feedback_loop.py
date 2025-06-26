@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -225,8 +221,6 @@ List[GlyphPattern]
 Detected glyph patterns
 """
         try:
-    pass
-    pass
 patterns = []
 
             if len(price_data) < 10:
@@ -262,8 +256,6 @@ technical_indicators: Dict[str, List[float]]
 patterns = []
 
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return patterns
 
@@ -325,8 +317,6 @@ technical_indicators: Dict[str, List[float]]
 patterns = []
 
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return patterns
 
@@ -388,8 +378,6 @@ technical_indicators: Dict[str, List[float]]
 patterns = []
 
         try:
-    pass
-    pass
             if len(price_data) < 10:
                 return patterns
 
@@ -441,8 +429,6 @@ technical_indicators: Dict[str, List[float]]
 patterns = []
 
         try:
-    pass
-    pass
             if len(price_data) < 8:
                 return patterns
 
@@ -489,8 +475,6 @@ technical_indicators: Dict[str, List[float]]
 patterns = []
 
         try:
-    pass
-    pass
             if len(price_data) < 10:
                 return patterns
 
@@ -536,8 +520,6 @@ def _calculate_trend(self, data: List[float]) -> float:
     pass
         """Calculate trend of data series."""
         try:
-    pass
-    pass
             if len(data) < 2:
                 return 0.0
 
@@ -561,8 +543,6 @@ def _is_double_top(self, price_data: List[float]) -> bool:
     pass
         """Check for double top pattern."""
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return False
 
@@ -593,8 +573,6 @@ def _is_double_bottom(self, price_data: List[float]) -> bool:
     pass
         """Check for double bottom pattern."""
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return False
 
@@ -625,8 +603,6 @@ def _has_divergence(self, price_data: List[float], indicator_data: List[float]) 
     pass
         """Check for price-indicator divergence."""
         try:
-    pass
-    pass
             if len(price_data) < 3 or len(indicator_data) < 3:
                 return False
 
@@ -647,8 +623,6 @@ def _is_flag_pattern(self, price_data: List[float]) -> bool:
     pass
         """Check for flag pattern."""
         try:
-    pass
-    pass
             if len(price_data) < 6:
                 return False
 
@@ -673,8 +647,6 @@ def _is_triangle_pattern(self, price_data: List[float]) -> bool:
     pass
         """Check for triangle pattern."""
         try:
-    pass
-    pass
             if len(price_data) < 6:
                 return False
 
@@ -699,8 +671,6 @@ def _is_resistance_break(self, price_data: List[float]) -> bool:
     pass
         """Check for resistance break."""
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return False
 
@@ -721,8 +691,6 @@ def _is_support_break(self, price_data: List[float]) -> bool:
     pass
         """Check for support break."""
         try:
-    pass
-    pass
             if len(price_data) < 5:
                 return False
 
@@ -765,8 +733,6 @@ ConditionalRule
 Created conditional rule
 """
         try:
-    pass
-    pass
 rule = ConditionalRule(
                 rule_id=f"rule_{int(time.time())}",
                 condition=condition,
@@ -801,8 +767,6 @@ List[str]
 Actions to take
 """
         try:
-    pass
-    pass
 actions = []
 
             for rule in self.rules:
@@ -838,8 +802,6 @@ def _evaluate_condition(self, rule: ConditionalRule, patterns: List[GlyphPattern
     pass
         """Evaluate if a condition is met."""
         try:
-    pass
-    pass
             # Simple condition evaluation
             # In a real system, this would be more sophisticated
 
@@ -871,8 +833,6 @@ GlyphAnalysis
 Complete glyph analysis result
 """
         try:
-    pass
-    pass
             # Get recent patterns
 recent_patterns = self.patterns[-10:] if self.patterns else []
 
@@ -917,8 +877,6 @@ confidence_score: float
 ) -> str:
 """Generate recommendation based on patterns."""
         try:
-    pass
-    pass
             if not patterns:
                 return "No patterns detected"
 
@@ -949,8 +907,6 @@ def get_glyph_statistics(self) -> Dict[str, Any]:
     pass
         """Get glyph pattern statistics."""
         try:
-    pass
-    pass
 total_patterns = len(self.patterns)
             total_rules = len(self.rules)
             total_feedback = len(self.feedback_loops)

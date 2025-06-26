@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -383,8 +379,6 @@ remediation_suggestion=(
         # Check condition number for square matrices
         if matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
             try:
-    pass
-    pass
 condition_number = np.linalg.cond(matrix)
                 if condition_number > 1.0 / self.min_matrix_condition_number:
 violations.append(
@@ -790,8 +784,6 @@ def main() -> None:
     pass
     """Demo of constraint validation system."""
     try:
-    pass
-    pass
 validator = ConstraintValidator()
         safe_print(f"[OK] ConstraintValidator v{validator.version} initialized")
 

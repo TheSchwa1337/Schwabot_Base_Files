@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -75,8 +71,6 @@ import queue
 
 # Import core components
 try:
-    pass
-    pass
 from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
 from core.matrix_mapper import MatrixMapper, BitPhase as MatrixBitPhase
 from core.profit_cycle_allocator import ProfitCycleAllocator
@@ -193,8 +187,6 @@ def generate_market_data(self, symbol: str) -> DemoMarketData:
     pass
         """Generate simulated market data for a symbol."""
         try:
-    pass
-    pass
             # Update price with random walk
 current_price = self.current_prices[symbol]
 volatility = self.volatility[symbol]
@@ -300,8 +292,6 @@ def _initialize_core_components(self) -> None:
     pass
         """Initialize all core components with real implementations."""
         try:
-    pass
-    pass
             # Initialize core components
 self.dlt_engine = DLTWaveformEngine()
             self.matrix_mapper = MatrixMapper()
@@ -365,8 +355,6 @@ def _trading_loop(self) -> None:
         """Main trading loop."""
         while self.is_running:
             try:
-    pass
-    pass
 start_time = time.time()
 
                 # Generate market data
@@ -393,8 +381,6 @@ def _process_symbol(self, symbol: str, market_data: DemoMarketData) -> None:
     pass
         """Process a single symbol for trading decisions."""
         try:
-    pass
-    pass
             # Generate waveform data from price movement
 price_history = self._get_price_history(symbol)
             if len(price_history) < 100:
@@ -445,8 +431,6 @@ def _make_trading_decision(self, symbol: str, market_data: DemoMarketData, tenso
     pass
         """Make trading decision based on mathematical analysis."""
         try:
-    pass
-    pass
             # Determine bit phase
 bit_phase = self._determine_bit_phase(market_data)
 
@@ -475,8 +459,6 @@ def _determine_bit_phase(self, market_data: DemoMarketData) -> int:
     pass
         """Determine optimal bit phase based on market conditions."""
         try:
-    pass
-    pass
 entropy_level = market_data.entropy_level
 complexity = market_data.complexity
 volatility = market_data.volatility
@@ -503,8 +485,6 @@ def _calculate_position_size(self, tensor_score: float, bit_phase: int) -> float
     pass
         """Calculate position size based on tensor score and bit phase."""
         try:
-    pass
-    pass
             # Base position size
 base_size = self.current_capital * 0.01  # 1% of capital
 
@@ -538,8 +518,6 @@ def _execute_trade(self, symbol: str, side: str, quantity: float, price: float,
                       tensor_score: float, bit_phase: int) -> None:
 """Execute a demo trade."""
         try:
-    pass
-    pass
             # Generate real tick hash for the trade
 tick_hash = self.tick_processor.generate_tick_hash(
                 price=price,
@@ -630,8 +608,6 @@ def _calculate_trade_confidence(self, tensor_score: float, bit_phase: int, dlt_a
     pass
         """Calculate trade confidence using mathematical models."""
         try:
-    pass
-    pass
             # Base confidence from tensor score
 base_confidence = tensor_score
 
@@ -661,8 +637,6 @@ def _update_portfolio(self, trade_result: Dict[str, Any], tensor_score: float, b
     pass
         """Update portfolio using real profit allocation logic."""
         try:
-    pass
-    pass
             # Use profit cycle allocator for portfolio updates
 portfolio_update = self.profit_allocator.calculate_portfolio_update(
                 trade_result=trade_result,
@@ -687,8 +661,6 @@ def _update_performance_metrics(self, trade_result: Dict[str, Any], tensor_score
     pass
         """Update performance metrics using mathematical models."""
         try:
-    pass
-    pass
             # Calculate trade performance
 trade_pnl = trade_result.get("realized_pnl", 0.0)
 
@@ -709,8 +681,6 @@ def _calculate_performance_metrics(self, trade_pnl: float, tensor_score: float, 
     pass
         """Calculate performance metrics using mathematical models."""
         try:
-    pass
-    pass
             # Initialize metrics if not present
             if not current_metrics:
 current_metrics = {
@@ -755,8 +725,6 @@ def get_portfolio_status(self) -> DemoPortfolio:
     pass
         """Get current portfolio status."""
         try:
-    pass
-    pass
             # Calculate current portfolio value
 portfolio_value = self.current_capital
 
@@ -798,8 +766,6 @@ def run_mathematical_validation(self) -> Dict[str, Any]:
     pass
         """Run mathematical validation on the demo system."""
         try:
-    pass
-    pass
             if not CORE_COMPONENTS_AVAILABLE:
                 return {'error': 'Core components not available'}
 
@@ -825,8 +791,6 @@ def export_demo_results(self, output_path: str = "demo_trading_results.json") ->
     pass
         """Export demo trading results."""
         try:
-    pass
-    pass
 portfolio = self.get_portfolio_status()
 
 results_data = {
@@ -913,8 +877,6 @@ demo_system.add_strategy(strategy2)
 demo_system.start_trading()
 
     try:
-    pass
-    pass
         # Run for 60 seconds
 safe_print("📈 Demo trading running for 60 seconds...")
         time.sleep(60)

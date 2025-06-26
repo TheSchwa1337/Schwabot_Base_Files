@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """
 Multi-bit BTC Processor - Schwabot UROS v1.0
 ===========================================
@@ -23,15 +23,11 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
 except ImportError:
     pass
@@ -204,8 +200,6 @@ metadata: Optional[Dict[str, Any]] = None,
 start_time = time.time()
 
 try:
-    pass
-    pass
     # Generate hash signature
 hash_input = f"{price}_{volume}_{bit_level.value}_{int(time.time())}"
 hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()[:16]

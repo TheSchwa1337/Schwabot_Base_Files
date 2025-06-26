@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """
 Tensor Algebra Module - Mathematical Foundation for AI Vector Operations
 =======================================================================

@@ -1,4 +1,4 @@
-"""
+# -*- coding: utf-8 -*-\n"""
 Ghost Strategy Signal Types - Schwabot UROS v1.0
 ===============================================
 

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -184,8 +180,6 @@ def determine_bit_depth_from_hash(hash_value: str) -> int:
     pass
         """Determine bit depth from hash value using first byte analysis."""
         try:
-    pass
-    pass
             # Use first byte to determine bit depth
 first_byte = int(hash_value[0:2], 16)
 
@@ -220,8 +214,6 @@ def resolve_hash_to_basket(hash_value: str, bit_depth: Optional[int] = None) -> 
     pass
         """Resolve hash value to matrix basket ID."""
         try:
-    pass
-    pass
             # If bit_depth not specified, determine from hash
             if bit_depth is None:
 bit_depth = HashRegistryCore.determine_bit_depth_from_hash(hash_value)

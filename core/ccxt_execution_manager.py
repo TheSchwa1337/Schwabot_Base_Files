@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -188,8 +184,6 @@ logger.info("CCXT Execution Manager initialized")
 async def connect(self) -> bool:
         """Connect to the exchange."""
         try:
-    pass
-    pass
 exchange_class = getattr(ccxt, self.exchange_config['exchange'])
             self.exchange = exchange_class({
                 'apiKey': self.exchange_config.get('api_key'),
@@ -246,8 +240,6 @@ error_message="Not connected to exchange"
 
 
         try:
-    pass
-    pass
             # Generate order ID
 order_id = f"order_{self.order_counter}_{int(time.time())}"
             self.order_counter += 1
@@ -307,8 +299,6 @@ async def _execute_optimized_order(self, order: ExecutionOrder) -> ExecutionResu
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Prepare order parameters
 order_params = {
 'symbol': order.symbol,
@@ -467,8 +457,6 @@ async def get_market_data(self, symbol: str) -> Optional[MarketData]:
             return None
 
         try:
-    pass
-    pass
 ticker = await self.exchange.fetch_ticker(symbol)
             return {
 'symbol': symbol,

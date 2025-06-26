@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """Exchange APIs package for Schwabot BTC integration.
 
 This package contains all exchange-specific API implementations

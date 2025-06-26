@@ -1,4 +1,4 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 # #!/usr/bin/env python3
 """Glyph hysteresis field – prevent flip-flopping on glyph activation.

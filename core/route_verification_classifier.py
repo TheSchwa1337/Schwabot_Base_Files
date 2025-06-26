@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -228,8 +224,6 @@ Returns:
 Feature vector for classification
 """
         try:
-    pass
-    pass
             # Normalize profit by volume
 profit_per_unit = float(route.profit / (route.volume + Decimal("1e-10")))
 
@@ -287,8 +281,6 @@ Returns:
 Risk score (0 = low risk, 1 = high risk)
         """
         try:
-    pass
-    pass
             # Volatility component
 vol_risk = unified_math.min(1.0, route.volatility / 0.5)  # Normalize to 50% volatility
 
@@ -375,8 +367,6 @@ Returns:
 Classification result with override decision
 """
         try:
-    pass
-    pass
             # Extract features
 features = self.feature_extractor.extract_features(route)
 
@@ -440,8 +430,6 @@ def _compute_classification_scores(
 ) -> Dict[str, float]:
 """Compute classification scores for each route type."""
         try:
-    pass
-    pass
             # Simple linear classifier (would be replaced with trained ML model)
             base_score = unified_math.unified_math.dot_product(features, self.learned_weights)
 
@@ -517,8 +505,6 @@ Returns:
 (should_override, reason, alternative_route_id)
         """
         try:
-    pass
-    pass
             # Override conditions
 
             # 1. Trap classification with high confidence
@@ -571,8 +557,6 @@ def _update_route_memory(self, route: RouteVector) -> None:
     pass
         """Update route memory for pattern learning."""
         try:
-    pass
-    pass
             if route.asset_pair not in self.route_memory:
 self.route_memory[route.asset_pair] = []
 
@@ -594,8 +578,6 @@ def get_classification_stats(self) -> Dict[str, Any]:
     pass
         """Get statistics about recent classifications."""
         try:
-    pass
-    pass
             if not self.classification_history:
                 return {"message": "No classification history available"}
 
@@ -648,8 +630,6 @@ Args:
 feedback: Dictionary with performance feedback
 """
         try:
-    pass
-    pass
             # Simple learning rate
 learning_rate = 0.01
 
@@ -705,8 +685,6 @@ Returns:
 (approved, classification_result)
         """
         try:
-    pass
-    pass
             # Get classification
 result = self.classifier.classify_route(route)
 
@@ -744,8 +722,6 @@ def get_route_summary(self) -> Dict[str, Any]:
     pass
         """Get summary of route validation activity."""
         try:
-    pass
-    pass
 total_routes = len(self.approved_routes) + len(self.rejected_routes)
             approval_rate = (
                 len(self.approved_routes) / total_routes if total_routes > 0 else 0

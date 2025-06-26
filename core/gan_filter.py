@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -103,8 +99,6 @@ import numpy.typing as npt
 
 # PyTorch imports with fallback handling
 try:
-    pass
-    pass
 import torch
 from torch.autograd import grad
 import torch.nn as nn
@@ -131,8 +125,6 @@ torch = None
 
 # Import Windows CLI compatibility handler
 try:
-    pass
-    pass
 from core.enhanced_windows_cli_compatibility import \
         EnhancedWindowsCliCompatibilityHandler as CLIHandler
 from core.enhanced_windows_cli_compatibility import safe_log
@@ -548,8 +540,6 @@ def safe_log(self, level: str, message: str, context: str = "") -> bool:
             return safe_log(logger, level, message, context)
         else:
             try:
-    pass
-    pass
 log_func = getattr(logger, level.lower(), logger.info)
                 log_func(message)
                 return True
@@ -573,8 +563,6 @@ Returns:
 Shannon entropy value
 """
         try:
-    pass
-    pass
             # Convert to probability distribution
 signal_np = signal.detach().cpu().numpy().flatten()
 
@@ -613,8 +601,6 @@ Returns:
 Gradient penalty loss
 """
         try:
-    pass
-    pass
 batch_size = real_data.size(0)
 
             # Random interpolation factor
@@ -663,8 +649,6 @@ Returns:
 Training metrics for this step
 """
         try:
-    pass
-    pass
 batch_size = real_data.size(0)
             metrics = TrainingMetrics()
             step_start_time = time.time()
@@ -790,8 +774,6 @@ Returns:
 List of training metrics
 """
         try:
-    pass
-    pass
             with self.training_lock:
 self.is_training = True
 
@@ -809,8 +791,6 @@ training_start_time = time.time()
 
                 for epoch in range(epochs):
                     try:
-    pass
-    pass
                         # Get real data batch
 real_data = real_data_fn(batch_size)
                         if not isinstance(real_data, torch.Tensor):
@@ -926,8 +906,6 @@ Returns:
 Validated signals above threshold
 """
         try:
-    pass
-    pass
 threshold = threshold or self.config.threshold
 
             # Convert to tensor if needed
@@ -997,8 +975,6 @@ Returns:
 Filtered signal batch
 """
         try:
-    pass
-    pass
             # Get signal batch
 signal = signal_fn(batch_size)
 
@@ -1018,8 +994,6 @@ def _update_adaptive_threshold(self, scores: torch.Tensor) -> None:
     pass
         """Update adaptive threshold based on recent scores"""
         try:
-    pass
-    pass
             # Add scores to history
 score_values = scores.view(-1).cpu().numpy().tolist()
             self.confidence_history.extend(score_values)
@@ -1052,8 +1026,6 @@ Returns:
 Dictionary containing filter performance metrics
 """
         try:
-    pass
-    pass
             if self.total_count > 0:
 filter_rate = self.filtered_count / self.total_count
             else:
@@ -1097,8 +1069,6 @@ def signal_provider(batch_size: int) -> torch.Tensor:
     pass
         """Generate synthetic entropy signals for testing"""
         try:
-    pass
-    pass
             # Generate base signals (sinusoidal with varying frequency)
             t = torch.linspace(0, 2 * math.pi, signal_dim)
             signals = []
@@ -1135,8 +1105,6 @@ Demonstrates the complete GAN training and filtering pipeline with
 CLI-safe output and comprehensive error handling.
 """
     try:
-    pass
-    pass
         if not TORCH_AVAILABLE:
 safe_print(
                 "❌ PyTorch not available - cannot run Entropy GAN Filter test"

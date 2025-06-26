@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -318,8 +314,6 @@ def _data_update_loop(self) -> None:
         """Main data update loop."""
         while self.is_running:
             try:
-    pass
-    pass
                 # Update all active streams
                 for stream_id, stream in self.data_streams.items():
                     if stream.is_active:
@@ -468,8 +462,6 @@ def _notify_subscribers(self, cache_key: str, data_point: DataPoint) -> None:
         if cache_key in self.subscribers:
             for subscriber in self.subscribers[cache_key]:
                 try:
-    pass
-    pass
 subscriber(data_point)
                 except Exception as e:
 logger.error(f"Subscriber notification error: {e}")

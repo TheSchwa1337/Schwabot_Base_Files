@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -303,8 +299,6 @@ def _monitor_loop(self) -> None:
         """Main monitoring loop."""
         while self.is_running:
             try:
-    pass
-    pass
                 # Update activity level
 self._update_activity_level()
 
@@ -408,8 +402,6 @@ self.state_transitions.append(transition_record)
             # Notify callbacks
             for callback in self.state_change_callbacks:
                 try:
-    pass
-    pass
 callback(old_state, new_state)
                 except Exception as e:
 logger.error(f"State change callback error: {e}")
@@ -442,8 +434,6 @@ def _execute_state_transition(self, new_state: PowerState) -> bool:
     pass
         """Execute the actual state transition."""
         try:
-    pass
-    pass
             # Calculate power consumption for new state
 power_consumption = self._calculate_power_consumption(new_state)
 
@@ -627,8 +617,6 @@ def _wake_up(self, condition: WakeCondition) -> bool:
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Transition to active state
 success = self._transition_to_state(PowerState.ACTIVE)
 
@@ -648,8 +636,6 @@ self.wake_events.append(wake_event)
                 # Notify wake callbacks
                 for callback in self.wake_callbacks:
                     try:
-    pass
-    pass
 callback(wake_event)
                     except Exception as e:
 logger.error(f"Wake callback error: {e}")

@@ -1,4 +1,4 @@
-"""Lantern trigger for spike detection."""
+# -*- coding: utf-8 -*-\n"""Lantern trigger for spike detection."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

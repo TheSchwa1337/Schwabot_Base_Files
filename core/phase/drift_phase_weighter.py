@@ -1,4 +1,4 @@
-"""core.phase.drift_phase_weighter
+# -*- coding: utf-8 -*-\n"""core.phase.drift_phase_weighter
 Drift-Phase Weighter
 ====================
 

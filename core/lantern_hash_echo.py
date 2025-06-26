@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """Lantern hash echo – H_L = hash(Ξₜ) · e^−τ."""
 
 from __future__ import annotations

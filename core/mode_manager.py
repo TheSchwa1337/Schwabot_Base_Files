@@ -1,16 +1,12 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -335,8 +331,6 @@ def _execute_mode_transition(
 import time
 
         try:
-    pass
-    pass
 logger.info(
                 f"Transitioning from {self.current_mode.value} to {target_mode.value}: {reason}"
 
@@ -375,8 +369,6 @@ def _execute_emergency_transition(self: Self, reason: str) -> bool:
         """Execute emergency mode transition."""
 
         try:
-    pass
-    pass
 logger.critical(f"EMERGENCY MODE ACTIVATED: {reason}")
 
 self.previous_mode = self.current_mode
@@ -529,8 +521,6 @@ def main() -> None:
     pass
     """Demo of mode management system."""
     try:
-    pass
-    pass
 mode_manager = ModeManager()
         safe_print(f"✅ ModeManager v{mode_manager.version} initialized")
         safe_print(f"🔧 Current mode: {mode_manager.get_current_mode().value}")

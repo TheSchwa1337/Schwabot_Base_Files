@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -235,8 +231,6 @@ def _load_configuration(self) -> None:
     pass
         """Load voltage lane configuration."""
         try:
-    pass
-    pass
             # Default configuration
 config = {
 "voltage_parameters": {
@@ -277,8 +271,6 @@ def _start_handoff_processor(self) -> None:
     pass
         """Start the hand-off processing thread."""
         try:
-    pass
-    pass
 self.handoff_running = True
 self.handoff_thread = threading.Thread(target=self._process_handoffs, daemon=True)
             self.handoff_thread.start()
@@ -295,8 +287,6 @@ def _process_handoffs(self) -> None:
         """Process hand-off queue in background thread."""
         while self.handoff_running:
             try:
-    pass
-    pass
                 # Get hand-off request from queue with timeout
 request = self.handoff_queue.get(timeout=1.0)
 
@@ -331,8 +321,6 @@ VoltageMapping
 Voltage mapping result
 """
         try:
-    pass
-    pass
             # Calculate voltage using mathematical formula
 calculated_voltage = self.base_voltage * (2 ** (bit_depth / 8))
 
@@ -390,8 +378,6 @@ ChannelAssignment
 Channel assignment result
 """
         try:
-    pass
-    pass
 voltage = voltage_mapping.calculated_voltage
 voltage_level = voltage_mapping.voltage_level
 
@@ -473,8 +459,6 @@ str
 Hand-off request ID
 """
         try:
-    pass
-    pass
             # Calculate voltage for bit depth
 voltage_mapping = self.calculate_voltage_for_bit_depth(bit_depth)
 
@@ -523,8 +507,6 @@ HandoffResult
 Hand-off result
 """
         try:
-    pass
-    pass
 start_time = time.time()
 
             # Validate source and target channels
@@ -658,8 +640,6 @@ Dict[str, Any]
 Channel statistics
 """
         try:
-    pass
-    pass
 stats = {
 "channels": {},
 "total_assignments": len(self.channel_assignments),
@@ -698,8 +678,6 @@ output_path : str
 Output file path
 """
         try:
-    pass
-    pass
 data = {
 "voltage_mappings": [
 {
@@ -752,8 +730,6 @@ def main():
     pass
     """Main function for testing voltage lane mapper."""
     try:
-    pass
-    pass
         # Initialize voltage lane mapper
 mapper = VoltageLaneMapper()
 

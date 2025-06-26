@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -74,8 +70,6 @@ from enum import Enum
 
 # Import unified mathematics
 try:
-    pass
-    pass
 from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
@@ -86,8 +80,6 @@ UNIFIED_MATH_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -251,8 +243,6 @@ This is the core function that applies mechanical timing logic
 to digital trading, similar to how an ECU regulates combustion timing.
 """
         try:
-    pass
-    pass
             # Calculate phase using tick compression logic
 phase = (tick_id % self.tick_phase_window) / float(self.tick_phase_window)
 
@@ -304,8 +294,6 @@ def _calculate_entropy_field(self, tick_id: int, market_vector: MarketVector) ->
     pass
         """Calculate entropy field (like engine temperature affecting combustion)."""
         try:
-    pass
-    pass
             # Use price volatility as entropy source
 price_volatility = unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
 
@@ -326,8 +314,6 @@ def _calculate_zpe_resonance(self, phase: float, entropy_field: float) -> float:
     pass
         """Calculate ZPE resonance (like harmonic engine resonance)."""
         try:
-    pass
-    pass
             # Calculate resonance based on phase and entropy alignment
 phase_resonance = unified_math.unified_math.cos(2 * math.pi * phase)
             entropy_resonance = unified_math.exp(-unified_math.abs(entropy_field - 0.5))
@@ -348,8 +334,6 @@ def _calculate_base_profit(self, market_vector: MarketVector) -> float:
     pass
         """Calculate base profit potential."""
         try:
-    pass
-    pass
             # Simple profit calculation based on volume and price movement
 total_volume = (market_vector.volume_btc + market_vector.volume_eth +
                           market_vector.volume_xrp + market_vector.volume_usdc)
@@ -374,8 +358,6 @@ zpe_resonance: float
 ) -> float:
 """Calculate execution confidence based on phase alignment."""
         try:
-    pass
-    pass
             # Phase alignment (like spark timing)
             phase_alignment = 1.0 - unified_math.abs(phase - 0.5) * 2.0
 
@@ -429,8 +411,6 @@ live-trade its own simulation recursively.
 start_time = time.time()
 
         try:
-    pass
-    pass
             # Create market vector from data
 market_vector = self._create_market_vector(market_data)
 
@@ -525,8 +505,6 @@ strategy_mapper: Any
 ) -> float:
 """Simulate strategy execution."""
         try:
-    pass
-    pass
             if strategy_mapper:
                 # Use actual strategy mapper if available
 strategy_result = await strategy_mapper.map_strategy_enhanced(
@@ -556,8 +534,6 @@ profit_tracker: Any
 ) -> float:
 """Get profit projection."""
         try:
-    pass
-    pass
             if profit_tracker:
                 # Use actual profit tracker if available
 projection = profit_tracker.predict(reconstruction.tick_id)
@@ -577,8 +553,6 @@ def _calculate_phase_alignment(self, reconstruction: TickReconstruction) -> floa
     pass
         """Calculate phase alignment score."""
         try:
-    pass
-    pass
             # Phase alignment based on compression and resonance
 phase_score = 1.0 - unified_math.abs(reconstruction.phase_compression)
             resonance_score = unified_math.abs(reconstruction.zpe_resonance)
@@ -596,8 +570,6 @@ def _calculate_entropy_correlation(self, reconstruction: TickReconstruction) -> 
     pass
         """Calculate entropy correlation score."""
         try:
-    pass
-    pass
             # Entropy correlation based on field stability
             return 1.0 - unified_math.abs(reconstruction.entropy_field - 0.5) * 2.0
 

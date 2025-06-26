@@ -1,4 +1,4 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """Test Registry - Central Test Management for Schwabot.
 

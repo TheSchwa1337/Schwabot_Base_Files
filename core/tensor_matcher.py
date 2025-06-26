@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -192,8 +188,6 @@ def _load_configuration(self) -> None:
     pass
         """Load tensor matcher configuration."""
         try:
-    pass
-    pass
             # Default configuration
 config = {
 "phase_weight": {
@@ -243,8 +237,6 @@ float
 Phase weight score
 """
         try:
-    pass
-    pass
             if not bit_pattern:
 logger.warning("Empty bit pattern, returning 0")
                 return 0.0
@@ -305,8 +297,6 @@ float
 Tensor score for trade priority
 """
         try:
-    pass
-    pass
             if entry_price <= 0:
 logger.warning("Invalid entry price, returning 0")
                 return 0.0
@@ -353,8 +343,6 @@ StrategyType
 Mapped strategy type
 """
         try:
-    pass
-    pass
             # Determine bit phase type
             if phase_value < 16:
 bit_phase = BitPhase.FOUR_BIT
@@ -402,8 +390,6 @@ str
 Basket ID for profit allocation
 """
         try:
-    pass
-    pass
             # Use hash to generate basket ID
             if bit_phase == BitPhase.FOUR_BIT:
 basket_id = f"basket_4bit_{int(hash_value[0:1], 16) % 16}"
@@ -442,8 +428,6 @@ TensorMatchResult
 Complete tensor match result
 """
         try:
-    pass
-    pass
             # Determine bit phase
             if self.bit_phase_engine:
 phase_value = self.bit_phase_engine.resolve_bit_phase(hash_value, "auto")
@@ -517,8 +501,6 @@ def _calculate_confidence(self, phase_weight: float, tensor_score: float, entrop
     pass
         """Calculate confidence score for tensor match."""
         try:
-    pass
-    pass
             # Base confidence on phase weight stability
 weight_confidence = unified_math.min(phase_weight / 5.0, 1.0)
 
@@ -571,8 +553,6 @@ def get_match_statistics(self) -> Dict[str, Any]:
     pass
         """Get tensor match statistics."""
         try:
-    pass
-    pass
             if not self.match_history:
                 return {'error': 'No match history available'}
 
@@ -608,8 +588,6 @@ def export_match_data(self, output_path: str = "tensor_match_data.json") -> None
     pass
         """Export tensor match data to file."""
         try:
-    pass
-    pass
 export_data = {
 'timestamp': datetime.now().isoformat(),
                 'total_matches': len(self.match_history),

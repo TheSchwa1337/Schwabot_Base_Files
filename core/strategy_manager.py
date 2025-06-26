@@ -1,4 +1,4 @@
-import numpy as np
+# -*- coding: utf-8 -*-\nimport numpy as np
 
 class StrategyManager:
 

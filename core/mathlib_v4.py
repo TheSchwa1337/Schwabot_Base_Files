@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -78,8 +74,6 @@ import numpy.typing as npt
 
 # Import CLI handler for safe output
 try:
-    pass
-    pass
 from core.type_binding_system import cli_handler
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
@@ -93,8 +87,6 @@ def safe_print(msg: str) -> None:
     pass
     pass
         try:
-    pass
-    pass
             print(msg)
         except UnicodeEncodeError:
             print(msg.encode('ascii', errors='replace').decode('ascii'))

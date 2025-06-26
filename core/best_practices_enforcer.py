@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -220,8 +216,6 @@ def enforce_on_file(self, file_path: str) -> EnforcementResult:
 result = EnforcementResult(file_path=file_path)
 
         try:
-    pass
-    pass
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
@@ -230,8 +224,6 @@ original_content = content
             # Apply each pattern
             for pattern in self._patterns:
                 try:
-    pass
-    pass
                     if re.search(pattern.pattern, content, re.DOTALL | re.MULTILINE):
                         content = re.sub(
                             pattern.pattern,
@@ -255,8 +247,6 @@ result.issues_found.append(f"Error applying {pattern.name}: {e}")
 
             # Validate the file still parses
             try:
-    pass
-    pass
 ast.parse(content)
             except SyntaxError as e:
 result.issues_found.append(f"Syntax error after applying patterns: {e}")

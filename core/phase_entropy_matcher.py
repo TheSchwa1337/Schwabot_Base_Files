@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -146,8 +142,6 @@ Returns:
 float: Phase weight score
 """
         try:
-    pass
-    pass
             if not bit_pattern:
 logger.warning("Empty bit pattern, returning 0")
                 return 0.0
@@ -182,8 +176,6 @@ Returns:
 PhaseEntropyMatch: Matching result with priority score
 """
         try:
-    pass
-    pass
             # Calculate phase weight
 phase_weight = self.phase_weight_matrix(bit_pattern, entropy)
 
@@ -230,8 +222,6 @@ def _calculate_priority_score(self, bit_pattern: List[int], entropy: float,]
 market_conditions: Dict[str, Any]) -> float:
 """Calculate priority score for trade routing."""
         try:
-    pass
-    pass
             # Calculate component scores
 entropy_score = self._calculate_entropy_score(entropy)
             bit_complexity_score = self._calculate_bit_complexity_score(bit_pattern)
@@ -260,8 +250,6 @@ def _calculate_entropy_score(self, entropy: float) -> float:
     pass
         """Calculate entropy-based score."""
         try:
-    pass
-    pass
             # Normalize entropy to [0, 1] range
             # Assume maximum useful entropy is around 8.0
 normalized_entropy = unified_math.min(entropy / 8.0, 1.0)
@@ -282,8 +270,6 @@ def _calculate_bit_complexity_score(self, bit_pattern: List[int]) -> float:
     pass
         """Calculate bit complexity score."""
         try:
-    pass
-    pass
             if not bit_pattern:
                 return 0.0
 
@@ -314,8 +300,6 @@ def _calculate_pattern_stability_score(self, bit_pattern: List[int]) -> float:
     pass
         """Calculate pattern stability score."""
         try:
-    pass
-    pass
             if len(bit_pattern) < 2:
                 return 1.0  # Single bit is considered stable
 
@@ -348,8 +332,6 @@ def _calculate_basket_affinity_score(self, basket_id: str, market_conditions: Di
     pass
         """Calculate basket affinity score based on market conditions."""
         try:
-    pass
-    pass
             # Extract market parameters
 volatility = market_conditions.get('volatility', 0.1)
             entropy_level = market_conditions.get('entropy_level', 4.0)
@@ -387,8 +369,6 @@ def _calculate_bit_complexity(self, bit_pattern: List[int]) -> float:
     pass
         """Calculate bit pattern complexity."""
         try:
-    pass
-    pass
             if not bit_pattern:
                 return 0.0
 
@@ -417,8 +397,6 @@ def _calculate_pattern_stability(self, bit_pattern: List[int]) -> float:
     pass
         """Calculate pattern stability metric."""
         try:
-    pass
-    pass
             if len(bit_pattern) < 2:
                 return 1.0
 
@@ -447,8 +425,6 @@ def _categorize_entropy(self, entropy: float) -> str:
     pass
         """Categorize entropy level."""
         try:
-    pass
-    pass
             if entropy < self.entropy_thresholds['low']:
                 return 'low'
             elif entropy < self.entropy_thresholds['medium']:
@@ -475,8 +451,6 @@ Returns:
 Dict[str, Any]: Entropy pattern analysis
 """
         try:
-    pass
-    pass
             if not entropy_sequence:
                 return {}
 
@@ -515,8 +489,6 @@ def _detect_entropy_patterns(self, entropy_sequence: List[float]) -> Dict[str, A
     pass
         """Detect patterns in entropy sequence."""
         try:
-    pass
-    pass
             if len(entropy_sequence) < 2:
                 return {'patterns': [], 'confidence': 0.0}
 
@@ -567,8 +539,6 @@ def _analyze_entropy_categories(self, entropy_sequence: List[float]) -> Dict[str
     pass
         """Analyze distribution of entropy categories."""
         try:
-    pass
-    pass
 category_counts = {'low': 0, 'medium': 0, 'high': 0}
 
             for entropy in entropy_sequence:
@@ -615,8 +585,6 @@ def export_match_data(self, output_path: str = "phase_entropy_match_data.json") 
     pass
         """Export phase-entropy match data to JSON."""
         try:
-    pass
-    pass
 import json
 
 export_data = {

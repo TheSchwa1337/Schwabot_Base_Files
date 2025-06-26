@@ -1,4 +1,4 @@
-"""core.phase.bit_wave_propagator
+# -*- coding: utf-8 -*-\n"""core.phase.bit_wave_propagator
 Bit-Wave Propagator
 ===================
 

@@ -1,4 +1,4 @@
-"""Profit cycle allocator for basket distribution."""
+# -*- coding: utf-8 -*-\n"""Profit cycle allocator for basket distribution."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

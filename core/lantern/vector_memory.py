@@ -1,4 +1,4 @@
-"""Vector memory with rolling PCA analysis."""
+# -*- coding: utf-8 -*-\n"""Vector memory with rolling PCA analysis."""
 
 from __future__ import annotations
 
@@ -8,8 +8,6 @@ import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
-    pass
-    pass
 from sklearn.decomposition import PCA
 except ImportError:
     pass
@@ -41,8 +39,6 @@ Returns identity matrix if sklearn not available
         return np.eye(n_components)
 
     try:
-    pass
-    pass
         # Take last 256 vectors or all if fewer
 recent_vecs = vecs[-256:] if len(vecs) > 256 else vecs
         X = np.array(recent_vecs)

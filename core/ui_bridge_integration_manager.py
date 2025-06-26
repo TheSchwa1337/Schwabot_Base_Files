@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -76,8 +72,6 @@ from enum import Enum
 
 # Import our UI bridges
 try:
-    pass
-    pass
 from core.ui_state_bridge import get_ui_state_bridge, StateType, StateStatus
 from core.visual_integration_bridge import get_visual_integration_bridge, ChartType, DataType
 from core.ui_integration_bridge import get_ui_integration_bridge, ComponentType, ComponentStatus, EventType
@@ -88,8 +82,6 @@ logging.error(f"UI bridges not available: {e}")
 
 # Import CLI handler for safe output
 try:
-    pass
-    pass
 from core.type_binding_system import cli_handler
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
@@ -212,12 +204,8 @@ def _get_profit_data(self) -> Dict[str, Any]:
     pass
         """Get profit tracking data from the system."""
         try:
-    pass
-    pass
             # Try to import and use the profit tracking system
             try:
-    pass
-    pass
 from core.ghost_profit_tracker import profit_summary
 total, mean, variance = profit_summary()
 
@@ -255,12 +243,8 @@ def _get_system_status(self) -> Dict[str, Any]:
     pass
         """Get system status data."""
         try:
-    pass
-    pass
             # Try to get status from trading controller
             try:
-    pass
-    pass
 from core.unified_mathematical_trading_controller import UnifiedMathematicalTradingController
                 # This would require an instance, so we'll use a mock for now
                 return {
@@ -299,8 +283,6 @@ def _get_performance_metrics(self) -> Dict[str, Any]:
     pass
         """Get performance metrics data."""
         try:
-    pass
-    pass
             return {
 "cpu_usage": 0.0,
 "memory_usage": 0.0,
@@ -323,8 +305,6 @@ def _get_trading_state(self) -> Dict[str, Any]:
     pass
         """Get trading state data."""
         try:
-    pass
-    pass
             return {
 "trading_active": False,
 "current_phase": "idle",
@@ -347,8 +327,6 @@ def register_data_source(self, source_id: str, data_func: Callable[[], Dict[str,
     pass
         """Register a data source function."""
         try:
-    pass
-    pass
 self.data_sources[source_id] = data_func
 
             # Register with visual bridge
@@ -375,8 +353,6 @@ def register_update_callback(self, callback_id: str, callback: Callable[[Dict[st
     pass
         """Register an update callback."""
         try:
-    pass
-    pass
             if callback_id not in self.update_callbacks:
 self.update_callbacks[callback_id] = []
 
@@ -425,8 +401,6 @@ retry_count = 0
 
         while self.integration_active:
             try:
-    pass
-    pass
 self._perform_integration_update()
                 self.integration_status = IntegrationStatus.CONNECTED
 retry_count = 0  # Reset retry count on success
@@ -462,8 +436,6 @@ start_time = time.time()
         self.metrics.total_updates += 1
 
         try:
-    pass
-    pass
             # Update UI state with system data
 self._update_ui_state()
 
@@ -497,8 +469,6 @@ def _update_ui_state(self) -> None:
     pass
         """Update UI state with system data."""
         try:
-    pass
-    pass
             # Update trading overview state
 trading_data = self._get_trading_state()
             self.ui_state_bridge.update_state(
@@ -553,8 +523,6 @@ def _update_visualizations(self) -> None:
     pass
         """Update visualizations with latest data."""
         try:
-    pass
-    pass
             # Update profit chart
 profit_data = self._get_profit_data()
             if "error" not in profit_data:
@@ -589,8 +557,6 @@ def _update_ui_components(self) -> None:
     pass
         """Update UI components with system events."""
         try:
-    pass
-    pass
             # Emit system status update event
 system_data = self._get_system_status()
             self.ui_integration_bridge.emit_event(
@@ -628,13 +594,9 @@ def _notify_callbacks(self) -> None:
     pass
         """Notify registered callbacks of updates."""
         try:
-    pass
-    pass
             for callback_id, callbacks in self.update_callbacks.items():
                 for callback in callbacks:
                     try:
-    pass
-    pass
                         # Get latest data for this callback
                         if callback_id in self.data_sources:
 data = self.data_sources[callback_id]()
@@ -722,8 +684,6 @@ def main() -> None:
     pass
     """Demo of UI Bridge Integration Manager functionality."""
     try:
-    pass
-    pass
         if not BRIDGES_AVAILABLE:
 safe_print("❌ UI bridges are not available")
             return

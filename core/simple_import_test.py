@@ -1,8 +1,6 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
@@ -54,8 +52,6 @@ import traceback
 safe_print("Starting import and runtime test...")
 
 try:
-    pass
-    pass
 from hash_registry_manager import HashRegistryManager
     safe_print("✓ HashRegistryManager import - SUCCESS")
     mgr = HashRegistryManager()
@@ -79,8 +75,6 @@ def test_import(module_name, class_name=None):
     pass
     """Test importing a module and optionally a class."""
     try:
-    pass
-    pass
         if class_name:
             exec(f"from {module_name} import {class_name}")
             safe_print(f"✓ {module_name}.{class_name} - SUCCESS")

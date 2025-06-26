@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -79,8 +75,6 @@ import hashlib
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         WindowsCliCompatibilityHandler,
 safe_print,
@@ -269,8 +263,6 @@ def _load_curve_map(self) -> None:
     pass
         """Load curve map from file."""
         try:
-    pass
-    pass
             if os.path.exists(self.curve_map_file):
                 with open(self.curve_map_file, 'r') as f:
                     curve_data = json.load(f)
@@ -302,8 +294,6 @@ def _save_curve_map(self) -> None:
     pass
         """Save curve map to file."""
         try:
-    pass
-    pass
 os.makedirs(os.path.dirname(self.curve_map_file), exist_ok=True)
 
 curve_data = {
@@ -340,8 +330,6 @@ def add_curve(self, curve: ProphetCurve) -> bool:
     pass
         """Add a new Prophet curve."""
         try:
-    pass
-    pass
 self.curves[curve.curve_id] = curve
 self._save_curve_map()
 
@@ -401,8 +389,6 @@ Returns:
 AlphaScore object with calculation results
 """
         try:
-    pass
-    pass
             if timestamp is None:
 timestamp = datetime.now()
 
@@ -496,8 +482,6 @@ Returns:
 CurveAlignment object with analysis results
 """
         try:
-    pass
-    pass
 curve = self.get_curve(curve_id)
             if not curve:
                 return self._create_unknown_alignment(curve_id)
@@ -659,8 +643,6 @@ def _calculate_resonance_strength(self, curve: ProphetCurve, current_time: datet
                                     market_data: Optional[Dict[str, Any]]) -> float:
 """Calculate resonance strength (waveform alignment)."""
         try:
-    pass
-    pass
             # Get recent data points for resonance calculation
 recent_points = curve.data_points[-10:] if len(curve.data_points) >= 10 else curve.data_points
 
@@ -695,8 +677,6 @@ def _calculate_drift_magnitude(self, curve: ProphetCurve, current_time: datetime
                                  nearest_point: Dict[str, Any]) -> float:
 """Calculate drift magnitude from expected timing."""
         try:
-    pass
-    pass
 expected_timestamp = nearest_point.get('timestamp', current_time.timestamp())
             current_timestamp = current_time.timestamp()
 

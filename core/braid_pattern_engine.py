@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -139,8 +135,6 @@ BraidPattern
 Registered pattern
 """
         try:
-    pass
-    pass
             # Calculate pattern properties
 confidence = self._calculate_pattern_confidence(generators, crossings)
             signal_strength = self._calculate_signal_strength(generators, crossings)
@@ -175,8 +169,6 @@ Mathematical Formula:
 C = (1 - unified_math.std(generators)) * (1 - unified_math.std(crossings)) * complexity_factor
         """
         try:
-    pass
-    pass
             if not generators or not crossings:
                 return 0.0
 
@@ -213,8 +205,6 @@ Mathematical Formula:
 SS = α * pattern_confidence + β * market_correlation
 """
         try:
-    pass
-    pass
             if not generators or not crossings:
                 return 0.0
 
@@ -260,8 +250,6 @@ List[PatternMatch]
 Pattern matches found
 """
         try:
-    pass
-    pass
 matches = []
 
             for pattern_id, pattern in self.known_patterns.items():
@@ -307,8 +295,6 @@ Mathematical Formula:
 S = 1 - d(P₁, P₂) / unified_math.max(d(P₁), d(P₂))
         """
         try:
-    pass
-    pass
             # Normalize lengths
 min_length = unified_math.min(len(gen1), len(gen2))
             if min_length == 0:
@@ -346,8 +332,6 @@ def _determine_trading_signal(self, pattern: BraidPattern,
                                  similarity: float) -> str:
 """Determine trading signal based on pattern."""
         try:
-    pass
-    pass
             # Base signal on pattern type and signal strength
             if pattern.signal_strength > 0.7:
                 if pattern.pattern_type in ['bullish', 'uptrend']:
@@ -389,8 +373,6 @@ Dict[str, Any]
 Evolution analysis results
 """
         try:
-    pass
-    pass
             if len(pattern_sequence) < 2:
                 return {}
 
@@ -445,8 +427,6 @@ List[Dict[str, Any]]
 Generated trading signals
 """
         try:
-    pass
-    pass
 signals = []
 
             # Analyze recent pattern matches
@@ -511,8 +491,6 @@ def get_pattern_statistics(self) -> Dict[str, Any]:
     pass
         """Get statistics from pattern history."""
         try:
-    pass
-    pass
             if not self.pattern_history:
                 return {"error": "No pattern history available"}
 

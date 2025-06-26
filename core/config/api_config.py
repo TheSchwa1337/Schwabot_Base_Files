@@ -1,4 +1,4 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 # #!/usr/bin/env python3
 """
@@ -113,8 +113,6 @@ def _load_secrets(self):
     pass
         """Load secrets from file."""
         try:
-    pass
-    pass
             if self.secrets_file.exists():
                 with open(self.secrets_file, 'r') as f:
                     secrets = json.load(f)
@@ -132,8 +130,6 @@ def _save_secrets(self):
     pass
         """Save secrets to file."""
         try:
-    pass
-    pass
 secrets_data = {
 'secrets': self._secrets_cache,
 'last_updated': datetime.now().isoformat()
@@ -314,8 +310,6 @@ def _make_request(self, url: str, params: Dict[str, Any] = None,]
                      headers: Dict[str, str] = None) -> Dict[str, Any]:
 """Make HTTP request with error handling."""
         try:
-    pass
-    pass
 response = self.session.get(
                 url,
 params=params,
@@ -533,8 +527,6 @@ def get_crypto_data(self, symbols: List[str], source: str = 'coingecko') -> Dict
     pass
         """Get cryptocurrency data from specified source."""
         try:
-    pass
-    pass
             if source.lower() == 'coinmarketcap':
                 if not self.secret_manager.has_secret('coinmarketcap_api_key'):
                     raise ValueError("CoinMarketCap API key not configured")
@@ -559,8 +551,6 @@ def get_global_metrics(self, source: str = 'coingecko') -> Dict[str, Any]:
     pass
         """Get global cryptocurrency metrics."""
         try:
-    pass
-    pass
             if source.lower() == 'coinmarketcap':
                 if not self.secret_manager.has_secret('coinmarketcap_api_key'):
                     raise ValueError("CoinMarketCap API key not configured")
@@ -620,15 +610,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
     # Import safe print for Windows compatibility
     try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import safe_print
     except ImportError:
     pass
     pass
         try:
-    pass
-    pass
 #             from utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
     pass
@@ -647,8 +633,6 @@ def main():
     pass
         """Main function to test API configuration and ensure proper initialization."""
         try:
-    pass
-    pass
 safe_print("🌐 Testing API Configuration")
             safe_print("=" * 40)
 
@@ -699,8 +683,6 @@ safe_print("\n🔧 Testing API Manager:")
             # Test CoinGecko client (no API key required)
             safe_print("\n🪙 Testing CoinGecko Integration:")
             try:
-    pass
-    pass
 global_data = manager.get_global_metrics('coingecko')
                 safe_print(f"✅ Global data keys: {list(global_data.keys())}")
 
@@ -714,8 +696,6 @@ safe_print(f"⚠️ CoinGecko test failed: {e}")
             # Test CoinMarketCap client (requires API key)
             safe_print("\n💱 Testing CoinMarketCap Integration:")
             try:
-    pass
-    pass
                 # Test without API key
                 if not secret_manager.has_secret('coinmarketcap_api_key'):
                     safe_print("⚠️ CoinMarketCap API key not configured - skipping tests")
@@ -742,8 +722,6 @@ setup_api_keys()  # No key provided
 
             # Test get_crypto_data
             try:
-    pass
-    pass
 crypto_data = get_crypto_data(['bitcoin'], 'coingecko')
                 safe_print(f"✅ get_crypto_data: {len(crypto_data)} entries")
             except Exception as e:
@@ -751,8 +729,6 @@ safe_print(f"⚠️ get_crypto_data failed: {e}")
 
             # Test get_global_metrics
             try:
-    pass
-    pass
 global_metrics = get_global_metrics('coingecko')
                 safe_print(f"✅ get_global_metrics: {len(global_metrics)} keys")
             except Exception as e:
@@ -761,8 +737,6 @@ safe_print(f"⚠️ get_global_metrics failed: {e}")
             # Test configuration validation
 safe_print("\n✅ Testing Configuration Validation:")
             try:
-    pass
-    pass
                 # Test invalid configuration
 invalid_config = APIConfig()
                 invalid_config.coinmarketcap_rate_limit = -1

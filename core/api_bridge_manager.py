@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -197,8 +193,6 @@ params = {
 "sparkline": "false",
 }
         try:
-    pass
-    pass
 async with self.session.get(f"{self.base_url}{endpoint}", params=params) as response:
                 response.raise_for_status()
                 data = await response.json()
@@ -215,8 +209,6 @@ def _parse_data(self, data: List[Dict]) -> List[CryptoData]:
         parsed_data = []
         for item in data:
             try:
-    pass
-    pass
 crypto = CryptoData(
                     symbol=self._safe_get(item, 'symbol', '').upper(),
                     name=self._safe_get(item, 'name', 'Unknown'),
@@ -258,8 +250,6 @@ endpoint = "/cryptocurrency/quotes/latest"
 headers = {"X-CMC_PRO_API_KEY": self.api_key}
 params = {"symbol": ",".join(s.upper() for s in symbols)}
         try:
-    pass
-    pass
 async with self.session.get(f"{self.base_url}{endpoint}", headers=headers, params=params) as response:
                 response.raise_for_status()
                 data = await response.json()
@@ -283,8 +273,6 @@ item_data = data['data'][symbol_upper]
                 item_data = item_data[0]
 
             try:
-    pass
-    pass
 quote = self._safe_get(item_data, 'quote.USD', {})
                 crypto = CryptoData(
                     symbol=self._safe_get(item_data, 'symbol', '').upper(),
@@ -348,8 +336,6 @@ def _load_configuration(self):
     pass
         """Loads API configuration from a JSON file."""
         try:
-    pass
-    pass
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
@@ -481,8 +467,6 @@ async def _fetch_with_retry(
 self._request_stats[adapter.__class__.__name__]['attempts'] += 1
         for i in range(retries):
             try:
-    pass
-    pass
 data = await adapter.get_crypto_data(symbols)
                 self._request_stats[adapter.__class__.__name__]['successes'] += 1
                 return data
@@ -524,8 +508,6 @@ bus.subscribe("new_market_price", price_listener)
 manager = APIBridgeManager(fault_bus=bus)
 
     try:
-    pass
-    pass
 await manager.initialize()
         # For CoinGecko, use IDs. For CMC, use symbols.
         # Example using CoinGecko IDs:

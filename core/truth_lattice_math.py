@@ -1,4 +1,4 @@
-"""truth_lattice_math.py
+# -*- coding: utf-8 -*-\n"""truth_lattice_math.py
 Truth-Lattice Math – Consensus Engine
 ====================================
 

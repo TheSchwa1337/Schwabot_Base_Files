@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -72,8 +68,6 @@ from enum import Enum
 
 # Import ZPE Mathematical Framework
 try:
-    pass
-    pass
 from core.zpe_core import ZPECore
 ZPE_MODULES_AVAILABLE = True
 except ImportError as e:
@@ -82,8 +76,6 @@ logging.warning(f"ZPE modules not available: {e}")
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -255,8 +247,6 @@ Returns:
 ModeSelectionResult with selected mode and reasoning
 """
         try:
-    pass
-    pass
             # Analyze market conditions
 market_condition = self._analyze_market_condition(market_data)
 
@@ -315,8 +305,6 @@ def _analyze_market_condition(self, market_data: Dict[str, Any]) -> MarketCondit
     pass
         """Analyze current market condition."""
         try:
-    pass
-    pass
 trend_strength = market_data.get('trend_strength', 0.0)
             volatility = market_data.get('volatility', 0.5)
             price_change = market_data.get('price_change_24h', 0.0)
@@ -358,8 +346,6 @@ timeframe: str
 ) -> ModeSelectionCriteria:
 """Calculate mode selection criteria."""
         try:
-    pass
-    pass
 volatility_score = market_data.get('volatility', 0.5)
             trend_strength = market_data.get('trend_strength', 0.0)
             profit_performance = market_data.get('profit_performance', 0.0)
@@ -401,8 +387,6 @@ def _update_phase_logic(self, market_data: Dict[str, Any]) -> None:
     pass
         """Update 488 and 42-bit phase logic."""
         try:
-    pass
-    pass
             # Simple phase switching logic based on market conditions
 current_time = time.time()
 
@@ -437,8 +421,6 @@ reasoning = []
 mode_scores = {}
 
         try:
-    pass
-    pass
             # Emergency fallback check
             if criteria.emergency_triggered:
 reasoning.append("Emergency conditions detected")
@@ -636,8 +618,6 @@ def _update_portfolio_assets(self, portfolio_data: Dict[str, Any]) -> None:
     pass
         """Update portfolio assets for retroactive tasking."""
         try:
-    pass
-    pass
 assets = portfolio_data.get('assets', {})
 
             for symbol, asset_data in assets.items():
@@ -691,8 +671,6 @@ market_condition: MarketCondition
 ) -> None:
 """Record performance for mode selection learning."""
         try:
-    pass
-    pass
             if mode not in self.mode_performance_history:
 self.mode_performance_history[mode] = []
 
@@ -712,8 +690,6 @@ def get_mode_statistics(self) -> Dict[str, Any]:
     pass
         """Get mode selection statistics."""
         try:
-    pass
-    pass
 stats = {
 'total_selections': sum(len(perf) for perf in self.mode_performance_history.values()),
                 'mode_performance': {},

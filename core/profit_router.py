@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -139,8 +135,6 @@ Tuple[np.ndarray, Dict[str, Any]]
 - Substitution metadata
 """
     try:
-    pass
-    pass
         # Set random seed for deterministic behavior
 np.random.seed(substitution_seed)
         random.seed(substitution_seed)
@@ -222,8 +216,6 @@ Dict[str, float]
 Dictionary mapping asset names to allocation amounts
 """
     try:
-    pass
-    pass
         if profit_amount <= 0:
 logger.warning(f"Invalid profit amount: {profit_amount}")
             return dict.fromkeys(ASSETS, 0.0)
@@ -293,8 +285,6 @@ Dict[str, Any]
 Analysis results including efficiency metrics
 """
     try:
-    pass
-    pass
 total_allocation = sum(allocations.values())
 
         if total_allocation <= 0:
@@ -514,8 +504,6 @@ bool
 True if matrix is valid
 """
     try:
-    pass
-    pass
         # Check shape
         if matrix.shape != (3, 4):
             return False

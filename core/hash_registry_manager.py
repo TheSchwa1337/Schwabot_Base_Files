@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -73,8 +69,6 @@ from dataclasses import dataclass
 
 # Conditional imports to handle both script and module execution
 try:
-    pass
-    pass
 from .hash_registry_core import HashRegistryEntry, HashRegistryCore
 from .hash_registry_storage import HashRegistryStorage
 except ImportError:
@@ -160,8 +154,6 @@ def _initialize_registry(self) -> None:
     pass
         """Initialize registry using storage layer."""
         try:
-    pass
-    pass
             # Load or generate registry using storage
 self.hash_entries = self.storage.load_or_generate_registry()
 
@@ -247,8 +239,6 @@ def enable_entry(self, hash_id: str) -> bool:
     pass
         """Enable a hash registry entry."""
         try:
-    pass
-    pass
             if hash_id in self.hash_entries:
 self.hash_entries[hash_id].enabled = True
 
@@ -275,8 +265,6 @@ def disable_entry(self, hash_id: str) -> bool:
     pass
         """Disable a hash registry entry."""
         try:
-    pass
-    pass
             if hash_id in self.hash_entries:
 self.hash_entries[hash_id].enabled = False
 
@@ -303,8 +291,6 @@ def update_priority(self, hash_id: str, new_priority: float) -> bool:
     pass
         """Update priority of a hash registry entry."""
         try:
-    pass
-    pass
             if hash_id in self.hash_entries:
 self.hash_entries[hash_id].priority = new_priority
 
@@ -341,8 +327,6 @@ def resolve_hash_to_basket(self, hash_value: str, bit_depth: int = None) -> Opti
     pass
         """Resolve hash value to matrix basket using registry."""
         try:
-    pass
-    pass
             # Use core function for resolution
 basket_id = HashRegistryCore.resolve_hash_to_basket(hash_value, bit_depth)
 
@@ -414,8 +398,6 @@ def regenerate_registry(self) -> bool:
     pass
         """Regenerate the entire registry."""
         try:
-    pass
-    pass
             # Generate new registry
 self.hash_entries = HashRegistryCore.generate_complete_registry()
 

@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -183,8 +179,6 @@ def _load_configuration(self) -> None:
     pass
         """Load tick feed configuration."""
         try:
-    pass
-    pass
             # Default configuration
 config = {
 "assets": ["BTC", "USDC", "XRP", "ETH", "SOL"],
@@ -220,8 +214,6 @@ def _load_hash_registry(self) -> None:
     pass
         """Load hash registry with strategy mappings."""
         try:
-    pass
-    pass
             # Generate 32 hash-to-strategy mappings
 strategies = [
 {"hash_segment": f"aa3f{i:02x}", "tensor_path": f"BTC_to_USDC_long_{i}", "bit_depth": 42, "entry_rule": "delta>0.03", "exit_rule": "delta<0.01"},
@@ -264,8 +256,6 @@ def _initialize_strategies(self) -> None:
     pass
         """Initialize strategy mappings."""
         try:
-    pass
-    pass
             # Initialize current prices for demo mode
             if self.mode == FeedMode.DEMO:
 self.current_prices = self.config["demo_prices"].copy()
@@ -296,8 +286,6 @@ float
 Current price
 """
         try:
-    pass
-    pass
             if demo or self.mode == FeedMode.DEMO:
                 return self._fetch_demo_price(asset)
             else:
@@ -314,8 +302,6 @@ def _fetch_demo_price(self, asset: str) -> float:
     pass
         """Fetch demo price with simulated volatility."""
         try:
-    pass
-    pass
 base_price = self.current_prices.get(asset, 1.0)
             volatility_range = self.config["volatility_ranges"].get(asset, (0.001, 0.05))
 
@@ -340,8 +326,6 @@ def _fetch_live_ccxt_price(self, asset: str) -> float:
     pass
         """Fetch live price from CCXT (placeholder for now)."""
         try:
-    pass
-    pass
             # TODO: Implement actual CCXT integration
             # For now, return demo price
             return self._fetch_demo_price(asset)
@@ -369,8 +353,6 @@ List[TickData]
 Simulated tick data
 """
         try:
-    pass
-    pass
 ticks = []
 assets = self.config["assets"]
 
@@ -433,8 +415,6 @@ TickData
 Enriched tick data with strategy
 """
         try:
-    pass
-    pass
             # Generate strategy ID from hash
 strategy_id = f"strategy_{int(hash_signature[:8], 16) % len(self.strategy_mappings):03d}"
             strategy = self.strategy_mappings.get(strategy_id, list(self.strategy_mappings.values())[0])
@@ -550,8 +530,6 @@ float
 Tensor score
 """
         try:
-    pass
-    pass
 multiplier = {4: 0.5, 8: 1.0, 42: 3.0}.get(bit_depth, 1.0)
             return (delta ** 2) * entropy * multiplier
 
@@ -566,8 +544,6 @@ def get_feed_statistics(self) -> Dict[str, Any]:
     pass
         """Get feed statistics."""
         try:
-    pass
-    pass
             return {
 "total_ticks": self.total_ticks,
 "rebalance_triggers": self.rebalance_triggers,
@@ -589,8 +565,6 @@ def export_feed_history(self, output_path: str = "demo_rebalance_output.jsonl") 
     pass
         """Export feed history to JSONL file."""
         try:
-    pass
-    pass
             with open(output_path, 'w') as f:
                 for tick in self.feed_history:
 tick_dict = {

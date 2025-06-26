@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -185,8 +181,6 @@ def _setup_integrations(self) -> None:
     pass
         """Setup integrations with other components."""
         try:
-    pass
-    pass
             # Integrate hash registry with matrix mapper
 self.hash_registry_manager.integrate_with_matrix_mapper(self.matrix_mapper)
 
@@ -206,8 +200,6 @@ def _start_trigger_system(self) -> None:
     pass
         """Start the trigger processing system."""
         try:
-    pass
-    pass
 self.trigger_running = True
 self.trigger_thread = threading.Thread(target=self._process_triggers, daemon=True)
             self.trigger_thread.start()
@@ -224,8 +216,6 @@ def _process_triggers(self) -> None:
         """Process trigger queue in background thread."""
         while self.trigger_running:
             try:
-    pass
-    pass
                 # Get trigger from queue with timeout
 trigger_data = self.trigger_queue.get(timeout=1.0)
 
@@ -244,8 +234,6 @@ def _execute_trigger(self, trigger_data: Dict[str, Any]) -> None:
     pass
         """Execute a trigger action."""
         try:
-    pass
-    pass
 trigger_type = trigger_data.get('trigger_type')
             basket_id = trigger_data.get('basket_id')
             hash_id = trigger_data.get('hash_id')
@@ -271,8 +259,6 @@ def load_basket_from_registry(self, hash_id: str, trigger: BasketLoadTrigger = B
     pass
         """Load basket from hash registry entry."""
         try:
-    pass
-    pass
 start_time = time.time()
 
             # Get hash registry entry
@@ -371,8 +357,6 @@ def _create_basket_from_entry(self, entry: HashRegistryEntry) -> Optional[Matrix
     pass
         """Create matrix basket from hash registry entry."""
         try:
-    pass
-    pass
             # Convert bit depth to BitPhase
 bit_phase = BitPhase(entry.bit_depth)
 
@@ -435,8 +419,6 @@ def _generate_asset_weights_from_route(self, tensor_route: str) -> Dict[str, flo
     pass
         """Generate asset weights based on tensor route."""
         try:
-    pass
-    pass
             # Base asset weights
 base_weights = {
 'BTC': 0.4,
@@ -484,8 +466,6 @@ def _generate_sequence_vector(self, tensor_dimensions: List[int], hash_id: str) 
     pass
         """Generate sequence vector for basket."""
         try:
-    pass
-    pass
             # Use hash_id to generate deterministic sequence
 hash_bytes = hashlib.sha256(hash_id.encode()).digest()
 
@@ -518,8 +498,6 @@ def _calculate_resonance_score(self, asset_weights: Dict[str, float], sequence_v
     pass
         """Calculate resonance score for basket."""
         try:
-    pass
-    pass
             # Base resonance from asset diversity
 asset_diversity = len(asset_weights) / 5.0  # Normalize by max expected assets
 
@@ -547,8 +525,6 @@ def _generate_basket_hash_signature(self, entry: HashRegistryEntry) -> str:
     pass
         """Generate hash signature for basket."""
         try:
-    pass
-    pass
 content = f"{entry.hash_id}_{entry.bit_depth}_{entry.tensor_route}_{entry.matrix_basket_id}_{entry.priority}"
             return hashlib.sha256(content.encode()).hexdigest()
 
@@ -563,8 +539,6 @@ def load_baskets_by_bit_depth(self, bit_depth: int) -> List[BasketLoadResult]:
     pass
         """Load all baskets with specified bit depth."""
         try:
-    pass
-    pass
 results = []
 entries = self.hash_registry_manager.get_entries_by_bit_depth(bit_depth)
 
@@ -587,8 +561,6 @@ def load_baskets_by_route(self, tensor_route: str) -> List[BasketLoadResult]:
     pass
         """Load all baskets with specified tensor route."""
         try:
-    pass
-    pass
 results = []
 entries = self.hash_registry_manager.get_entries_by_route(tensor_route)
 
@@ -611,8 +583,6 @@ def load_baskets_by_priority_range(self, min_priority: float, max_priority: floa
     pass
         """Load baskets within priority range."""
         try:
-    pass
-    pass
 results = []
 entries = self.hash_registry_manager.get_entries_by_priority_range(min_priority, max_priority)
 
@@ -635,8 +605,6 @@ def load_all_enabled_baskets(self) -> List[BasketLoadResult]:
     pass
         """Load all enabled baskets from registry."""
         try:
-    pass
-    pass
 results = []
 entries = self.hash_registry_manager.get_enabled_entries()
 
@@ -658,8 +626,6 @@ def unload_basket(self, basket_id: str) -> bool:
     pass
         """Unload a basket from memory."""
         try:
-    pass
-    pass
             if basket_id in self.loaded_baskets:
                 del self.loaded_baskets[basket_id]
 self.active_baskets[basket_id] = False
@@ -695,8 +661,6 @@ def add_trigger_callback(self, trigger: BasketLoadTrigger, callback: Callable) -
     pass
         """Add callback for trigger events."""
         try:
-    pass
-    pass
             if trigger not in self.load_triggers:
 self.load_triggers[trigger] = []
 self.load_triggers[trigger].append(callback)
@@ -712,13 +676,9 @@ def _trigger_callbacks(self, trigger: BasketLoadTrigger, result: BasketLoadResul
     pass
         """Trigger callbacks for a specific trigger type."""
         try:
-    pass
-    pass
             if trigger in self.load_triggers:
                 for callback in self.load_triggers[trigger]:
                     try:
-    pass
-    pass
 callback(result)
                     except Exception as e:
 logger.error(f"Error in trigger callback: {e}")
@@ -733,8 +693,6 @@ def _handle_hash_resolution_trigger(self, basket_id: str, hash_id: str) -> None:
     pass
         """Handle hash resolution trigger."""
         try:
-    pass
-    pass
             # Reload basket with updated hash resolution
 self.load_basket_from_registry(hash_id, BasketLoadTrigger.HASH_RESOLUTION)
 
@@ -748,8 +706,6 @@ def _handle_priority_update_trigger(self, basket_id: str, hash_id: str) -> None:
     pass
         """Handle priority update trigger."""
         try:
-    pass
-    pass
             # Reload basket with updated priority
 self.load_basket_from_registry(hash_id, BasketLoadTrigger.PRIORITY_UPDATE)
 
@@ -763,8 +719,6 @@ def _handle_route_change_trigger(self, basket_id: str, hash_id: str) -> None:
     pass
         """Handle route change trigger."""
         try:
-    pass
-    pass
             # Reload basket with updated route
 self.load_basket_from_registry(hash_id, BasketLoadTrigger.ROUTE_CHANGE)
 
@@ -778,8 +732,6 @@ def _handle_enable_toggle_trigger(self, basket_id: str, hash_id: str) -> None:
     pass
         """Handle enable toggle trigger."""
         try:
-    pass
-    pass
 entry = self.hash_registry_manager.get_hash_entry(hash_id)
             if entry and entry.enabled:
                 # Load basket if enabled
@@ -798,8 +750,6 @@ def _handle_auto_refresh_trigger(self) -> None:
     pass
         """Handle auto refresh trigger."""
         try:
-    pass
-    pass
             # Reload all active baskets
 active_basket_ids = list(self.active_baskets.keys())
             for basket_id in active_basket_ids:
@@ -820,8 +770,6 @@ def get_loader_statistics(self) -> Dict[str, Any]:
     pass
         """Get comprehensive loader statistics."""
         try:
-    pass
-    pass
 total_loaded = len(self.loaded_baskets)
             active_baskets = len(self.get_active_baskets())
 
@@ -872,8 +820,6 @@ def export_loader_summary(self, output_path: str = "matrix_basket_loader_summary
     pass
         """Export loader summary to JSON file."""
         try:
-    pass
-    pass
 summary = {
 "loader_info": {
 "total_loaded_baskets": len(self.loaded_baskets),

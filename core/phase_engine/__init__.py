@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -154,8 +150,6 @@ def _load_configuration(self) -> None:
     pass
         """Load phase engine configuration."""
         try:
-    pass
-    pass
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
@@ -240,8 +234,6 @@ def _save_configuration(self) -> None:
     pass
         """Save current configuration to file."""
         try:
-    pass
-    pass
 os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             config = {
 "phase_configs": [
@@ -285,8 +277,6 @@ def _phase_monitor(self) -> None:
         """Background phase monitoring thread."""
         while True:
             try:
-    pass
-    pass
 self._check_phase_transitions()
                 self._update_phase_metrics()
                 time.sleep(30)  # Check every 30 seconds
@@ -300,8 +290,6 @@ def start_phase(self, phase_type: PhaseType, initial_confidence: float = 0.5) ->
     pass
         """Start a new trading phase."""
         try:
-    pass
-    pass
             if phase_type not in self.phase_configs:
                 raise ValueError(f"Unknown phase type: {phase_type}")
 
@@ -336,8 +324,6 @@ def end_phase(self, phase_id: str, reason: str = "completed") -> bool:
     pass
         """End an active trading phase."""
         try:
-    pass
-    pass
             if phase_id not in self.active_phases:
 logger.warning(f"Phase {phase_id} not found")
                 return False
@@ -365,8 +351,6 @@ def update_phase_confidence(self, phase_id: str, confidence_score: float) -> boo
     pass
         """Update confidence score for an active phase."""
         try:
-    pass
-    pass
             if phase_id not in self.active_phases:
                 return False
 

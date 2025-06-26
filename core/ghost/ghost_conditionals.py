@@ -1,4 +1,4 @@
-"""Ghost condition-gate for routing decisions."""
+# -*- coding: utf-8 -*-\n"""Ghost condition-gate for routing decisions."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

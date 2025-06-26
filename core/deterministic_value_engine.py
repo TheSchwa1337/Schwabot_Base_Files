@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -264,8 +260,6 @@ def calculate_deterministic_decision(
 start_time = time.time()
 
         try:
-    pass
-    pass
             # 1. WHEN - Calculate timing score
 timing_score = self._calculate_timing_determinism(market_state)
 
@@ -458,8 +452,6 @@ strategy_scores = {}
         for strategy_type in StrategyType:
             if strategy_type in self.strategy_scorers:
                 try:
-    pass
-    pass
 score = self.strategy_scorers[strategy_type](market_state)
                     strategy_scores[strategy_type] = np.clip(score, 0.0, 1.0)
                 except Exception as e:

@@ -1,4 +1,4 @@
-"""
+# -*- coding: utf-8 -*-\n"""
 BTC Vector Processor - Schwabot UROS v1.0
 ========================================
 

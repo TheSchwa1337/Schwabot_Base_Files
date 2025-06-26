@@ -1,4 +1,4 @@
-"""Strategy matrix for adaptive vector projection."""
+# -*- coding: utf-8 -*-\n"""Strategy matrix for adaptive vector projection."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math

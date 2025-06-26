@@ -1,14 +1,10 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -179,8 +175,6 @@ metadata_dir = os.path.join(self.storage_path, "metadata")
         for filename in os.listdir(metadata_dir):
             if filename.endswith(".json"):
                 try:
-    pass
-    pass
                     with open(os.path.join(metadata_dir, filename), 'r') as f:
                         metadata_dict = json.load(f)
                         metadata = SnapshotMetadata(**metadata_dict)
@@ -332,8 +326,6 @@ logger.error(f"Snapshot not found: {snapshot_id}")
             return None
 
         try:
-    pass
-    pass
 data_path = os.path.join(self.storage_path, "data", f"{snapshot_id}.gz")
             with open(data_path, 'rb') as f:
                 compressed_data = f.read()
@@ -367,8 +359,6 @@ replay_config = replay_config or {}
 replay_id = f"replay_{snapshot_id}_{int(datetime.now().timestamp())}"
 
         try:
-    pass
-    pass
             # Mark snapshot as replaying
             if snapshot_id in self.snapshots:
 self.snapshots[snapshot_id].status = SnapshotStatus.REPLAYING
@@ -454,8 +444,6 @@ logger.error(f"Snapshot not found for deletion: {snapshot_id}")
             return False
 
         try:
-    pass
-    pass
             # Remove data file
 data_path = os.path.join(self.storage_path, "data", f"{snapshot_id}.gz")
             if os.path.exists(data_path):

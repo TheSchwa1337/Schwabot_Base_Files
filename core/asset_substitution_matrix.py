@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -168,8 +164,6 @@ def _load_configuration(self) -> None:
     pass
         """Load asset substitution configuration."""
         try:
-    pass
-    pass
             # Default configuration
 config = {
 "volatility_thresholds": {
@@ -222,8 +216,6 @@ def _initialize_asset_profiles(self) -> None:
     pass
         """Initialize asset profiles with substitution characteristics."""
         try:
-    pass
-    pass
             # Define fallback asset mappings
 fallback_mappings = {
 "BTC": ["XRP", "ETH", "USDC"],
@@ -278,8 +270,6 @@ str
 Substitute asset symbol
 """
         try:
-    pass
-    pass
             if asset not in self.asset_profiles:
 logger.warning(f"Asset {asset} not found in profiles, using USDC as fallback")
                 return "USDC"
@@ -317,8 +307,6 @@ def _select_lowest_volatility_substitute(self, fallback_assets: List[str]) -> st
     pass
         """Select substitute with lowest volatility."""
         try:
-    pass
-    pass
 lowest_volatility = float('in')
             best_substitute = "USDC"
 
@@ -342,8 +330,6 @@ def _select_highest_liquidity_substitute(self, fallback_assets: List[str]) -> st
     pass
         """Select substitute with highest liquidity."""
         try:
-    pass
-    pass
 highest_liquidity = 0.0
 best_substitute = "USDC"
 
@@ -367,8 +353,6 @@ def _select_stablecoin_substitute(self, fallback_assets: List[str]) -> str:
     pass
         """Select stablecoin substitute."""
         try:
-    pass
-    pass
             for asset in fallback_assets:
                 if asset in self.asset_profiles:
 profile = self.asset_profiles[asset]
@@ -389,8 +373,6 @@ def _record_substitution_decision(self, original_asset: str, substitute_asset: s
     pass
         """Record substitution decision."""
         try:
-    pass
-    pass
 decision = SubstitutionDecision(
                 original_asset=original_asset,
 substitute_asset=substitute_asset,
@@ -441,8 +423,6 @@ float
 Confidence score (0-1)
         """
         try:
-    pass
-    pass
 original_profile = self.asset_profiles[original_asset]
 substitute_profile = self.asset_profiles[substitute_asset]
 
@@ -483,8 +463,6 @@ Dict[str, float]
 Asset allocation
 """
         try:
-    pass
-    pass
             if demo_mode:
                 # Demo mode allocation with substitution
 base_allocation = {"USDC": 0.7, "SOL": 0.3}
@@ -517,8 +495,6 @@ def _should_substitute_asset(self, asset: str) -> bool:
     pass
         """Determine if asset should be substituted."""
         try:
-    pass
-    pass
             if asset not in self.asset_profiles:
                 return False
 
@@ -547,8 +523,6 @@ def get_substitution_statistics(self) -> Dict[str, Any]:
     pass
         """Get substitution statistics."""
         try:
-    pass
-    pass
             return {
 "total_substitutions": self.total_substitutions,
 "successful_substitutions": self.successful_substitutions,
@@ -575,8 +549,6 @@ def export_substitution_history(self, output_path: str = "asset_substitution_his
     pass
         """Export substitution history to JSONL file."""
         try:
-    pass
-    pass
             with open(output_path, 'w') as f:
                 for decision in self.substitution_history:
 decision_dict = {

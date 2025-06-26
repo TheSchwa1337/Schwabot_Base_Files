@@ -1,4 +1,4 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry/Exit Sequence Integrity Test - Schwabot Framework.

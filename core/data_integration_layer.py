@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
-    pass
-    pass
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -70,8 +66,6 @@ import json
 # Try to import CCXT for exchange data
 import ccxt
 try:
-    pass
-    pass
 CCXT_AVAILABLE = True
 except ImportError:
     pass
@@ -82,8 +76,6 @@ logging.warning("CCXT not available. Install with: pip install ccxt")
 # Try to import Coinbase API
 import requests
 try:
-    pass
-    pass
 REQUESTS_AVAILABLE = True
 except ImportError:
     pass
@@ -164,8 +156,6 @@ exchanges_to_try = ['binance', 'coinbase', 'kraken']
 
             for exchange_name in exchanges_to_try:
                 try:
-    pass
-    pass
 exchange_class = getattr(ccxt, exchange_name)
                     exchange = exchange_class({
                         'enableRateLimit': True,
@@ -193,8 +183,6 @@ self.is_running = True
 logger.info("🚀 Starting data integration feed...")
 
         try:
-    pass
-    pass
             while self.is_running:
 await self._update_market_data()
                 await asyncio.sleep(self.update_interval)
@@ -211,8 +199,6 @@ logger.info("🛑 Stopping data integration feed...")
 async def _update_market_data(self) -> None:
         """Update market data from all sources."""
         try:
-    pass
-    pass
 new_data = {}
 
             # Fetch data from exchanges
@@ -246,8 +232,6 @@ async def _fetch_from_exchanges(self, symbol: str) -> Optional[CryptoDataPoint]:
         """Fetch data for a symbol from available exchanges."""
         for exchange_name, exchange in self.exchanges.items():
             try:
-    pass
-    pass
                 # Fetch ticker data
 ticker = await asyncio.get_event_loop().run_in_executor()
                     None, exchange.fetch_ticker, symbol
@@ -457,8 +441,6 @@ def export_data(self, filename: str) -> None:
     pass
         """Export current market data to JSON file."""
         try:
-    pass
-    pass
 export_data = {
 'timestamp': datetime.now().isoformat(),
                 'market_data': {},
@@ -519,8 +501,6 @@ import websockets
 async def handler(websocket, path):
                 self.clients.unified_math.add(websocket)
                 try:
-    pass
-    pass
 async for message in websocket:
                         # Handle client messages if needed
                         pass
@@ -543,8 +523,6 @@ async def broadcast_data(self, data: Dict[str, Any]):
 return
 
         try:
-    pass
-    pass
 message = json.dumps(data)
             await asyncio.gather(
                 *[client.send(message) for client in self.clients],

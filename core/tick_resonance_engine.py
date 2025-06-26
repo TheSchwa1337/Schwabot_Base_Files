@@ -1,18 +1,14 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import numpy as np
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -117,8 +113,6 @@ float
 Harmony score in [0, 1] where 1 = perfect alignment
 """
     try:
-    pass
-    pass
         if len(tick_deltas) < MIN_TICKS_REQUIRED:
             logger.debug(f"Insufficient ticks for harmony: {len(tick_deltas)}")
             return 0.0
@@ -185,8 +179,6 @@ Tuple[float, dict]
         - Diagnostic information dictionary
 """
     try:
-    pass
-    pass
 target = get_phase_target(bit_depth)
         harmony = compute_harmony_vector(tick_deltas, target)
 
@@ -245,8 +237,6 @@ results = {}
 
     for phase in phases:
         try:
-    pass
-    pass
 harmony, _ = analyze_tick_pattern(tick_deltas, phase)
             results[phase] = harmony
         except Exception as e:
@@ -275,8 +265,6 @@ Tuple[int, float]
 - Harmony score for optimal phase
 """
     try:
-    pass
-    pass
 harmonies = compute_multi_phase_harmony(tick_deltas)
 
         if not harmonies:
@@ -399,8 +387,6 @@ bool
 True if valid for harmony calculation
 """
     try:
-    pass
-    pass
         if not isinstance(tick_deltas, np.ndarray):
             return False
 

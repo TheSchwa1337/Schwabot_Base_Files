@@ -91,7 +91,7 @@ def test_hybrid_strategy_mapper_simple():
 
 def test_legacy_compatibility():
     """Test legacy compatibility functions."""
-    safe_print("\n🧪 Testing Legacy Compatibility...")
+    safe_print("\n# -*- coding: utf-8 -*-\n🧪 Testing Legacy Compatibility...")
     
     try:
         from core.strategy_mapper import map_strategy

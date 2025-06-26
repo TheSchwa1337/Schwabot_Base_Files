@@ -1,4 +1,4 @@
-"""core.ghost_phase_strategy_loader
+# -*- coding: utf-8 -*-\n"""core.ghost_phase_strategy_loader
 Ghost-Phase Strategy Loader
 ===========================
 

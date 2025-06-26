@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -79,8 +75,6 @@ from pathlib import Path
 
 # Import unified mathematics
 try:
-    pass
-    pass
 from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
@@ -91,8 +85,6 @@ UNIFIED_MATH_AVAILABLE = False
 
 # Import risk guard for integration
 try:
-    pass
-    pass
 from core.risk_guard import get_risk_guard, is_trading_allowed
 risk_guard = get_risk_guard()
     RISK_GUARD_AVAILABLE = True
@@ -103,8 +95,6 @@ RISK_GUARD_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    pass
-    pass
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
@@ -305,8 +295,6 @@ This implements sophisticated position sizing algorithms
 including Kelly Criterion, volatility adjustment, and risk parity.
 """
         try:
-    pass
-    pass
 available_capital = self.current_capital - self.reserved_capital - self.allocated_capital
 
             if available_capital <= 0:
@@ -400,8 +388,6 @@ confidence: float
 ) -> float:
 """Calculate volatility-adjusted position size."""
         try:
-    pass
-    pass
             # Base size on inverse volatility
 base_size = self.capital_config.max_position_size
 
@@ -431,8 +417,6 @@ confidence: float
 ) -> float:
 """Calculate Kelly Criterion position size."""
         try:
-    pass
-    pass
             # Kelly Criterion: f = (bp - q) / b
             # where b = odds received, p = probability of win, q = probability of loss
 
@@ -466,8 +450,6 @@ volatility: float
 ) -> float:
 """Calculate risk parity position size."""
         try:
-    pass
-    pass
             # Risk parity: equal risk contribution
             # For single asset, size inversely proportional to volatility
 target_risk = self.capital_config.max_portfolio_risk
@@ -492,8 +474,6 @@ current_price: float
 ) -> float:
 """Calculate position size based on maximum drawdown."""
         try:
-    pass
-    pass
             # Reduce position size as drawdown increases
 drawdown_factor = 1.0 - (self.current_drawdown / self.capital_config.max_drawdown)
             drawdown_factor = unified_math.max(0.1, drawdown_factor)  # Minimum 10%
@@ -517,8 +497,6 @@ volatility: float
 ) -> float:
 """Calculate risk contribution of position."""
         try:
-    pass
-    pass
             # Risk contribution = position_value * volatility
 risk_contribution = position_value * volatility
 
@@ -547,8 +525,6 @@ This calculates portfolio-level metrics including:
 - Risk contributions
 """
         try:
-    pass
-    pass
             # Update positions
 self.positions = positions
 
@@ -640,8 +616,6 @@ market_data: Dict[str, Any]
 ) -> float:
 """Calculate portfolio volatility."""
         try:
-    pass
-    pass
             if not positions:
                 return 0.0
 
@@ -670,8 +644,6 @@ def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
     pass
         """Calculate Sharpe ratio."""
         try:
-    pass
-    pass
             if volatility == 0:
                 return 0.0
 
@@ -693,8 +665,6 @@ market_data: Dict[str, Any]
 ) -> Dict[str, Dict[str, float]]:
 """Calculate correlation matrix between positions."""
         try:
-    pass
-    pass
 correlation_matrix = {}
 
 assets = list(positions.keys())
@@ -730,8 +700,6 @@ This checks:
 - Correlation limits
 """
         try:
-    pass
-    pass
             # Check drawdown limit
             if portfolio_state.current_drawdown > self.capital_config.max_drawdown:
 self._record_capital_event(
@@ -793,8 +761,6 @@ This analyzes the current portfolio and suggests:
 - Rebalancing urgency
 """
         try:
-    pass
-    pass
 rebalancing_suggestions = {
 'rebalancing_needed': False,
 'urgency': 'low',
@@ -893,8 +859,6 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> None:
 """Record a capital control event."""
         try:
-    pass
-    pass
 event = CapitalEvent(
                 event_type=event_type,
 severity=severity,

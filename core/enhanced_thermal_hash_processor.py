@@ -1,15 +1,11 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -153,8 +149,6 @@ def _check_gpu_availability(self) -> bool:
     pass
         """Check if GPU is available for processing."""
         try:
-    pass
-    pass
 gpus = GPUtil.getGPUs()
             return len(gpus) > 0
         except Exception as e:
@@ -168,8 +162,6 @@ def get_thermal_metrics(self) -> ThermalMetrics:
     pass
         """Get current thermal metrics."""
         try:
-    pass
-    pass
             # Get CPU metrics
 cpu_percent = psutil.cpu_percent(interval=1)
             cpu_temp = self._get_cpu_temperature()
@@ -184,8 +176,6 @@ gpu_util = 0.0
 
             if self.gpu_available:
                 try:
-    pass
-    pass
 gpus = GPUtil.getGPUs()
                     if gpus:
 gpu = gpus[0]  # Use first GPU
@@ -234,8 +224,6 @@ def _get_cpu_temperature(self) -> float:
     pass
         """Get CPU temperature (platform-dependent)."""
         try:
-    pass
-    pass
             # This is a simplified implementation
             # In practice, you'd use platform-specific methods
             return 50.0 + (psutil.cpu_percent() * 0.5)  # Estimate based on CPU usage
@@ -250,8 +238,6 @@ def _calculate_thermal_pressure(self, gpu_temp: float, cpu_temp: float, memory_u
     pass
         """Calculate thermal pressure score."""
         try:
-    pass
-    pass
             # Normalize temperatures
 gpu_pressure = unified_math.min(gpu_temp / 100.0, 1.0)
             cpu_pressure = unified_math.min(cpu_temp / 100.0, 1.0)
@@ -272,8 +258,6 @@ def process_hash(self, data: str, hash_type: str = "sha256") -> HashProcessingRe
     pass
         """Process hash with thermal awareness."""
         try:
-    pass
-    pass
 start_time = time.time()
 
             # Get current thermal metrics
@@ -339,8 +323,6 @@ def _determine_performance_mode(self, thermal_metrics: ThermalMetrics) -> str:
     pass
         """Determine optimal performance mode based on thermal conditions."""
         try:
-    pass
-    pass
 max_temp = unified_math.max(thermal_metrics.gpu_temperature, thermal_metrics.cpu_temperature)
 
             if max_temp >= self.thermal_thresholds["emergency"]:
@@ -365,8 +347,6 @@ def _process_hash_gpu(self, data: str, hash_type: str, thermal_metrics: ThermalM
     pass
         """Process hash using GPU (simulated)."""
         try:
-    pass
-    pass
             # Simulate GPU processing with thermal awareness
 mode_config = self.performance_modes[self.current_mode]
 gpu_utilization = mode_config["gpu_utilization"]
@@ -397,8 +377,6 @@ def _process_hash_cpu(self, data: str, hash_type: str) -> str:
     pass
         """Process hash using CPU."""
         try:
-    pass
-    pass
             if hash_type == "sha256":
                 return hashlib.sha256(data.encode()).hexdigest()
             elif hash_type == "md5":
@@ -417,8 +395,6 @@ def _calculate_thermal_impact(self, thermal_metrics: ThermalMetrics, processing_
     pass
         """Calculate thermal impact of processing."""
         try:
-    pass
-    pass
             # Base impact from processing time
 base_impact = processing_time * 0.1
 
@@ -443,8 +419,6 @@ def _calculate_processing_confidence(self, thermal_metrics: ThermalMetrics, proc
     pass
         """Calculate confidence score for processing result."""
         try:
-    pass
-    pass
             # Thermal stability factor
 thermal_stability = 1.0 - thermal_metrics.thermal_pressure
 

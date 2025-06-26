@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -119,8 +115,6 @@ float
 <0.85: Defer/cooldown
 """
     try:
-    pass
-    pass
         # Ξ = (T · Δθ) + (ε × σ_f) + τ_p
         confidence = (
             (triplet_entropy * theta_drift)
@@ -166,8 +160,6 @@ float
 <0.70: Suppress/cooldown
 """
     try:
-    pass
-    pass
         # 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
         score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
@@ -207,8 +199,6 @@ Decision dictionary with:
 - reason: Human-readable explanation
 """
     try:
-    pass
-    pass
         # Primary gate: both confidence and entry score must pass
         if (
             confidence > MIN_CONFIDENCE_THRESHOLD
@@ -295,8 +285,6 @@ projected_profit: float,
 ) -> bool:
 """Validate that all input values are in expected ranges."""
     try:
-    pass
-    pass
         # Check ranges for all inputs
 checks = [
 0.0 <= triplet_entropy <= 1.0,

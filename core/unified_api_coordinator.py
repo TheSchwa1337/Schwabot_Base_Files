@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -429,8 +425,6 @@ def register_exchange(self, exchange_config: ExchangeConfig) -> bool:
     pass
         """Register an exchange configuration."""
         try:
-    pass
-    pass
 exchange_name = exchange_config.name
 self.exchanges[exchange_name] = exchange_config
 
@@ -477,8 +471,6 @@ callback: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> Optional[APIResponse]:
 """Make API request to exchange."""
         try:
-    pass
-    pass
             if exchange not in self.exchanges:
                 raise ValueError(f"Exchange {exchange} not registered")
 
@@ -548,8 +540,6 @@ self.request_history.append(response)
             # Execute callback if provided
             if callback and response.success:
                 try:
-    pass
-    pass
 callback(response.data)
                 except Exception as e:
 logger.error(f"Error in request callback: {e}")
@@ -564,8 +554,6 @@ logger.error(f"Error making request to {exchange}: {e}")
 async def _execute_request(self, request: APIRequest) -> APIResponse:
         """Execute HTTP request."""
         try:
-    pass
-    pass
             if not self.session:
 self.session = aiohttp.ClientSession()
 
@@ -623,8 +611,6 @@ data: Dict[str, Any],
 ) -> Dict[str, str]:
 """Generate authentication headers."""
         try:
-    pass
-    pass
             if not exchange_config.api_key or not exchange_config.api_secret:
                 return {}
 
@@ -669,8 +655,6 @@ logger.error(f"Error generating auth headers: {e}")
 async def get_ticker(self, exchange: str, symbol: str) -> Optional[Dict[str, Any]]:
         """Get ticker data for symbol."""
         try:
-    pass
-    pass
 params = (
                 {"product_id": symbol} if exchange == "coinbase" else {"symbol": symbol}
 
@@ -687,8 +671,6 @@ async def get_order_book(
 ) -> Optional[Dict[str, Any]]:
 """Get order book for symbol."""
         try:
-    pass
-    pass
 params = (
                 {"product_id": symbol, "level": 2}
                 if exchange == "coinbase"
@@ -707,8 +689,6 @@ async def get_recent_trades(
 ) -> Optional[List[Dict[str, Any]]]:
 """Get recent trades for symbol."""
         try:
-    pass
-    pass
 params = (
                 {"product_id": symbol, "limit": limit}
                 if exchange == "coinbase"
@@ -729,8 +709,6 @@ def get_performance_metrics(self) -> Dict[str, Any]:
     pass
         """Get performance metrics."""
         try:
-    pass
-    pass
 avg_latency = self.total_latency / unified_math.max(self.total_requests, 1)
             success_rate = self.successful_requests / unified_math.max(self.total_requests, 1)
 
@@ -771,8 +749,6 @@ def get_all_exchanges(self) -> List[str]:
 async def start(self) -> None:
         """Start API coordinator."""
         try:
-    pass
-    pass
 self.is_running = True
 logger.info("API coordinator started")
         except Exception as e:
@@ -781,8 +757,6 @@ logger.error(f"Error starting API coordinator: {e}")
 async def stop(self) -> None:
         """Stop API coordinator."""
         try:
-    pass
-    pass
 self.is_running = False
             if self.session:
 await self.session.close()
@@ -794,8 +768,6 @@ logger.error(f"Error stopping API coordinator: {e}")
 async def main() -> None:
     """Main function for testing API coordinator."""
     try:
-    pass
-    pass
 safe_print("🌐 Unified API Coordinator Test")
         safe_print("=" * 40)
 

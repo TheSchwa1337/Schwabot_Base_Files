@@ -1,7 +1,5 @@
-# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -9,8 +7,6 @@ except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -608,8 +604,6 @@ def _apply_dlt_validation(self, entry_data: Dict[str, Any]) -> Dict[str, Any]:
     pass
         """Apply DLT waveform validation to entry data."""
         try:
-    pass
-    pass
             # Extract key metrics
 confidence = entry_data["confidence"]
 ghost_signal = entry_data["ghost_signal_strength"]
@@ -650,8 +644,6 @@ def _calculate_entry_success_probability(self, entry_data: Dict[str, Any],]
 market_conditions: Dict[str, float]) -> float:
 """Calculate success probability using mathematical models."""
         try:
-    pass
-    pass
             # Base probability from confidence
 base_prob = entry_data["confidence"]
 
@@ -678,8 +670,6 @@ def _calculate_dlt_waveform_score(self, entry_data: Dict[str, Any],]
                                     dlt_validation: Dict[str, Any]) -> float:
 """Calculate DLT waveform score for entry."""
         try:
-    pass
-    pass
             # Extract components
 confidence = entry_data["confidence"]
 ghost_signal = entry_data["ghost_signal_strength"]
@@ -828,8 +818,6 @@ results = {}
             strategy_results = {}
             for market_condition in self.market_conditions.keys():
                 try:
-    pass
-    pass
 analysis = self.simulate_entry(strategy, market_condition, num_simulations)
                     strategy_results[market_condition] = asdict(analysis)
                 except Exception as e:
@@ -917,8 +905,6 @@ def save_entry_analysis(self, filepath: str = "tests/demo_analysis/entry_analysi
     pass
         """Save entry analysis results to file."""
         try:
-    pass
-    pass
             # Create directory if it doesn't exist
 Path(filepath).parent.mkdir(parents=True, exist_ok=True)
 

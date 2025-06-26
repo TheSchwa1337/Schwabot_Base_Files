@@ -1,17 +1,13 @@
-from __future__ import annotations
+# -*- coding: utf-8 -*-\nfrom __future__ import annotations
 import math
 
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-    pass
-    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
     pass
@@ -770,8 +766,6 @@ def main() -> None:
     pass
     """Demo of thermal zone manager system."""
     try:
-    pass
-    pass
 manager = ThermalZoneManager()
         safe_print(f"✅ ThermalZoneManager v{manager.version} initialized")
 

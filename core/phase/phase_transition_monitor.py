@@ -1,4 +1,4 @@
-"""core.phase.phase_transition_monitor
+# -*- coding: utf-8 -*-\n"""core.phase.phase_transition_monitor
 Phase Transition Monitor
 ========================
 

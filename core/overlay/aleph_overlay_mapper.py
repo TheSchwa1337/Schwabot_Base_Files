@@ -1,4 +1,4 @@
-"""core.overlay.aleph_overlay_mapper
+# -*- coding: utf-8 -*-\n"""core.overlay.aleph_overlay_mapper
 Aleph Overlay Mapper
 ====================
 
