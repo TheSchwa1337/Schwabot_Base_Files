@@ -1,55 +1,28 @@
 # Import safe print for Windows compatibility
 try:
-    pass
-    pass
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-import math
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
-    pass
-    pass
     try:
-    pass
-    pass
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
-except ImportError:
-    pass
-    pass
-    def safe_print(message):
+        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    except ImportError:
+        def safe_print(message):
+            print(message)
+        
+        def info(message):
+            print(f"[INFO] {message}")
+        
+        def warn(message):
+            print(f"[WARN] {message}")
+        
+        def error(message):
+            print(f"[ERROR] {message}")
+        
+        def success(message):
+            print(f"[SUCCESS] {message}")
+        
+        def debug(message):
+            print(f"[DEBUG] {message}")
 
-
-    pass
-    pass
-    print(message)
-    def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO) {message}")
-    def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN) {message}")
-    def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR) {message}")
-    def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS) {message}")
-    def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG) {message}")
 from core.unified_math_system import unified_math
 import numpy as np
 # #!/usr/bin/env python3
@@ -203,7 +176,7 @@ if len(self.routes) > self.max_routes:
 oldest_route_id = unified_math.min(self.routes.keys(), key=lambda k: self.routes[k].timestamp)
 del self.routes[oldest_route_id]
 
-logger.info(f"Created profit route: {route_name} ({strategy.value))"}
+logger.info(f"Created profit route: {route_name} ({strategy.value})")
 return route
 
 def _calculate_allocation_weights(
@@ -237,7 +210,7 @@ base_weights["XRP"] *= (1.0 + 0.1 * risk_tolerance)
 
 # Normalize weights
 total_weight = sum(base_weights.values())
-normalized_weights = {asset: weight / total_weight for asset, weight in base_weights.items(}}
+normalized_weights = {asset: weight / total_weight for asset, weight in base_weights.items()}
 
 return normalized_weights
 
@@ -263,7 +236,7 @@ profit_factor=profit_factor
 
 
 self.strategy_performances[strategy_name] = performance
-logger.debug(f"Updated performance for strategy: {strategy_name)"}
+logger.debug(f"Updated performance for strategy: {strategy_name}")
 
 def route_profit(
 
@@ -283,7 +256,7 @@ for route in self.routes.values():
         break
 
         if not target_route:
-logger.warning(f"Route '{route_name)' not found, using default allocation"}
+logger.warning(f"Route '{route_name}' not found, using default allocation")
 target_route = list(self.routes.values())[0]
 
 # Calculate profit allocation using profit delta vector
@@ -308,13 +281,13 @@ self.profit_history.append({
 "route": route_name,
 "amount": profit_amount,
 "allocation": profit_allocation
-}
+})
 
 # Maintain history size
 if len(self.profit_history) > self.markov_memory_size:
     self.profit_history = self.profit_history[-self.markov_memory_size:]
 
-logger.info(f"Routed {profit_amount:.2f} profit using {route_name)"}
+logger.info(f"Routed {profit_amount:.2f} profit using {route_name}")
 return profit_allocation
 
 def _calculate_routing_efficiency(
@@ -331,7 +304,7 @@ total_allocation = sum(allocation.values())
 if total_allocation == 0:
     return 0.0
 
-probabilities = [amount / total_allocation for amount in allocation.values(]
+probabilities = [amount / total_allocation for amount in allocation.values()]
 entropy = -sum(p * np.log2(p + 1e-10) for p in probabilities)
 
 # Normalize entropy to [0, 1]
@@ -398,7 +371,7 @@ def _build_profit_delta_vector(self) -> Dict[str, float]:
 asset_profits = {asset: 0.0 for asset in self.supported_assets}
 
 for entry in self.profit_history:
-allocation = entry.get("allocation", {)
+allocation = entry.get("allocation", {})
 for asset, amount in allocation.items():
     if asset in asset_profits:
 asset_profits[asset] += amount
@@ -465,7 +438,7 @@ centrality_vector = centrality_vector / np.sum(centrality_vector)
 return centrality_vector
 
 except Exception as e:
-logger.warning(f"Eigenvector centrality calculation failed: {e)"}
+logger.warning(f"Eigenvector centrality calculation failed: {e}")
 # Return uniform distribution as fallback
 n_assets = len(self.supported_assets)
 return np.ones(n_assets) / n_assets
@@ -485,8 +458,8 @@ transition_matrix = np.zeros((n_assets, n_assets))
 
 # Count transitions between assets
 for i in range(len(self.profit_history) - 1):
-    current_allocation = self.profit_history[i].get("allocation", {)
-    next_allocation = self.profit_history[i + 1].get("allocation", {)
+    current_allocation = self.profit_history[i].get("allocation", {})
+    next_allocation = self.profit_history[i + 1].get("allocation", {})
 
     # Find dominant assets (highest allocation)
     current_dominant = unified_math.max(current_allocation.items(), key=lambda x: x[1])[0] if current_allocation else None
@@ -523,7 +496,7 @@ if self.transition_matrix is None:
     # Use only centrality weights
 allocation = {}
 for i, asset in enumerate(self.supported_assets):
-    allocation[asset] = float(centrality_weights[i)
+    allocation[asset] = float(centrality_weights[i])
     return allocation
 
         # Combine centrality with transition probabilities
@@ -533,7 +506,7 @@ combined_weights = np.zeros(n_assets)
 for i in range(n_assets):
     # Weighted combination: 70% centrality, 30% transition probability
 centrality_component = 0.7 * centrality_weights[i]
-transition_component = 0.3 * unified_math.unified_math.mean(self.transition_matrix[:, i)
+transition_component = 0.3 * unified_math.unified_math.mean(self.transition_matrix[:, i])
 combined_weights[i] = centrality_component + transition_component
 
 # Normalize
@@ -543,7 +516,7 @@ combined_weights = combined_weights / np.sum(combined_weights)
 # Convert to dictionary
 allocation = {}
 for i, asset in enumerate(self.supported_assets):
-    allocation[asset] = float(combined_weights[i)
+    allocation[asset] = float(combined_weights[i])
 
         return allocation
 
@@ -604,7 +577,7 @@ recommendations.append({
 "strategy": best_route.strategy.value,
 "total_profit": best_route.performance_metrics["total_profit"],
 "efficiency": best_route.performance_metrics["routing_efficiency"]
-}
+})
 
 # Check for rebalancing opportunities
 if self.routing_efficiency < self.entropy_threshold:
@@ -613,7 +586,7 @@ recommendations.append({
 "current_efficiency": self.routing_efficiency,
 "threshold": self.entropy_threshold,
 "suggestion": "Consider rebalancing allocation weights"
-}
+})
 
 # Strategy performance recommendations
 if self.strategy_performances:
@@ -627,7 +600,7 @@ recommendations.append({
 "strategy_name": best_strategy.strategy_name,
 "sharpe_ratio": best_strategy.sharpe_ratio,
 "win_rate": best_strategy.win_rate
-}
+})
 
 return recommendations
 
@@ -652,7 +625,7 @@ signals.append({
 "total_routes": len(self.routes),
 "total_profit_routed": self.total_profit_routed
 }
-}
+})
 
 # Rebalancing signal
 if self.routing_efficiency < self.entropy_threshold:
@@ -664,7 +637,7 @@ signals.append({
 "metadata": {
 "suggestion": "Optimize allocation weights"
 }
-}
+})
 
 # Strategy performance signals
 for strategy_name, performance in self.strategy_performances.items():
@@ -678,7 +651,7 @@ signals.append({
 "win_rate": performance.win_rate,
 "profit_factor": performance.profit_factor
 }
-}
+})
 
 return signals
 
@@ -706,16 +679,16 @@ engine.route_profit(1000.0, "strategy_1", "conservative")
 
     # Optimize allocations
 optimal_allocations = engine.optimize_routing_allocation()
-    safe_print(f"Optimal allocations: {optimal_allocations)"}
+    safe_print(f"Optimal allocations: {optimal_allocations}")
 
     # Get statistics
 stats = engine.get_routing_statistics()
-    safe_print(f"Routing statistics: {stats)"}
+    safe_print(f"Routing statistics: {stats}")
 
     # Get recommendations
 recommendations = engine.get_routing_recommendations()
-    safe_print(f"Routing recommendations: {len(recommendations}}")
+    safe_print(f"Routing recommendations: {len(recommendations)}")
 
     # Get trading signals
 signals = engine.get_trading_signals()
-    safe_print(f"Generated {len(signals}} trading signals")
+    safe_print(f"Generated {len(signals)} trading signals")

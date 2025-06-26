@@ -430,5 +430,4 @@ if __name__ == "__main__":
     
     # Generate signals
     signals = processor.get_trading_signals()
-    safe_print(f"Generated {len(signals)} trading signals")  
- 
+    safe_print(f"Generated {len(signals)} trading signals") 
