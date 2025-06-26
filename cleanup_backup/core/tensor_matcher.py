@@ -28,6 +28,7 @@ from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
+
 class StrategyType(Enum):
     """Trading strategy types based on tensor matching."""
     CONSERVATIVE = "conservative"
@@ -35,11 +36,13 @@ class StrategyType(Enum):
     AGGRESSIVE = "aggressive"
     QUANTUM = "quantum"
 
+
 class BitPhase(Enum):
     """Bit resolution phases for tensor matching."""
     FOUR_BIT = 4
     EIGHT_BIT = 8
     FORTY_TWO_BIT = 42
+
 
 @dataclass
 class TensorMatchResult:
@@ -54,6 +57,7 @@ class TensorMatchResult:
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PhaseWeightMatrix:
     """Phase weight matrix calculation result."""
@@ -65,20 +69,21 @@ class PhaseWeightMatrix:
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class TensorMatcher:
     """
     Tensor Matcher for phase → strategy scoring and matrix basket routing.
-    
+
     Mathematical Foundation:
     - Phase Weight Matrix: phase_weight = (bit_score * entropy) / (len(bits) + ε)
     - Tensor Scoring: T = (current - entry) / entry * (phase + 1)
     - Strategy Mapping: strategy = f(bit_phase, entropy, volatility)
     - Matrix Basket Routing: basket = hash_to_basket(hash, bit_phase)
     """
-    
+
     def __init__(self, config_path: str = "./config/tensor_matcher_config.json"):
         self.config_path = config_path
-        
+
         # Strategy mappings
         self.strategy_mappings: Dict[str, Dict[str, Any]] = {
             "conservative": {
@@ -106,16 +111,16 @@ class TensorMatcher:
                 "entropy_threshold": 8.0
             }
         }
-        
+
         # Performance tracking
         self.match_history: List[TensorMatchResult] = []
         self.phase_weight_history: List[PhaseWeightMatrix] = []
-        
+
         # Integration with other components
         self.bit_phase_engine = None
         self.matrix_mapper = None
         self.profit_allocator = None
-        
+
         # Load configuration
         self._load_configuration()
         logger.info("Tensor Matcher initialized")
@@ -142,26 +147,26 @@ class TensorMatcher:
                     "quantum": {"risk_tolerance": 0.7, "position_multiplier": 2.0}
                 }
             }
-            
+
             logger.info("Tensor matcher configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
     def phase_weight_matrix(self, bit_pattern: List[int], entropy: float) -> float:
         """
         Calculate phase weight matrix score.
-        
+
         Mathematical Formula:
         phase_weight = (bit_score * entropy) / (len(bits) + ε)
-        
+
         Parameters:
         -----------
         bit_pattern : List[int]
             List of bit values
         entropy : float
             Entropy value
-            
+
         Returns:
         --------
         float
@@ -171,17 +176,17 @@ class TensorMatcher:
             if not bit_pattern:
                 logger.warning("Empty bit pattern, returning 0")
                 return 0.0
-            
+
             # Calculate bit score
             bit_score = sum(bit_pattern)
-            
+
             # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + ε)
             epsilon = 1e-6  # Small constant to avoid division by zero
             phase_weight = (bit_score * entropy) / (len(bit_pattern) + epsilon)
-            
+
             # Normalize to reasonable range
             phase_weight = unified_math.max(0.01, unified_math.min(10.0, phase_weight))
-            
+
             # Create phase weight matrix result
             result = PhaseWeightMatrix(
                 bit_pattern=bit_pattern.copy(),
@@ -191,13 +196,13 @@ class TensorMatcher:
                 pattern_length=len(bit_pattern),
                 timestamp=datetime.now()
             )
-            
+
             # Store in history
             self.phase_weight_history.append(result)
-            
+
             logger.debug(f"Phase weight: {phase_weight:.4f} (bit_score: {bit_score}, entropy: {entropy:.4f})")
             return phase_weight
-            
+
         except Exception as e:
             logger.error(f"Error calculating phase weight matrix: {e}")
             return 0.0
@@ -205,10 +210,10 @@ class TensorMatcher:
     def tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
         """
         Calculate tensor score for trade priority.
-        
+
         Mathematical Formula:
         T = (current - entry) / entry * (phase + 1)
-        
+
         Parameters:
         -----------
         entry_price : float
@@ -217,7 +222,7 @@ class TensorMatcher:
             Current market price
         phase : int
             Bit phase value
-            
+
         Returns:
         --------
         float
@@ -227,22 +232,22 @@ class TensorMatcher:
             if entry_price <= 0:
                 logger.warning("Invalid entry price, returning 0")
                 return 0.0
-            
+
             # Calculate price delta
             delta = (current_price - entry_price) / entry_price
-            
+
             # Apply phase multiplier
             tensor_score = delta * (phase + 1)
-            
+
             # Normalize to reasonable range
             tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
-            
+
             # Round to 4 decimal places
             result = round(tensor_score, 4)
-            
+
             logger.debug(f"Tensor score: {result} (delta: {delta:.4f}, phase: {phase})")
             return result
-            
+
         except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
             return 0.0
@@ -250,7 +255,7 @@ class TensorMatcher:
     def map_phase_to_strategy(self, phase_value: int, entropy: float, volatility: float) -> StrategyType:
         """
         Map bit phase to trading strategy.
-        
+
         Parameters:
         -----------
         phase_value : int
@@ -259,7 +264,7 @@ class TensorMatcher:
             Market entropy level
         volatility : float
             Market volatility
-            
+
         Returns:
         --------
         StrategyType
@@ -273,7 +278,7 @@ class TensorMatcher:
                 bit_phase = BitPhase.EIGHT_BIT
             else:
                 bit_phase = BitPhase.FORTY_TWO_BIT
-            
+
             # Map to strategy based on bit phase and market conditions
             if bit_phase == BitPhase.FOUR_BIT:
                 strategy_type = StrategyType.CONSERVATIVE
@@ -284,10 +289,10 @@ class TensorMatcher:
                     strategy_type = StrategyType.BALANCED
             else:  # 42-bit
                 strategy_type = StrategyType.QUANTUM
-            
+
             logger.debug(f"Mapped phase {phase_value} to strategy: {strategy_type.value}")
             return strategy_type
-            
+
         except Exception as e:
             logger.error(f"Error mapping phase to strategy: {e}")
             return StrategyType.BALANCED
@@ -295,14 +300,14 @@ class TensorMatcher:
     def hash_to_basket(self, hash_value: str, bit_phase: BitPhase) -> str:
         """
         Map hash to basket ID for profit allocation.
-        
+
         Parameters:
         -----------
         hash_value : str
             Hash value to map
         bit_phase : BitPhase
             Bit resolution phase
-            
+
         Returns:
         --------
         str
@@ -316,18 +321,18 @@ class TensorMatcher:
                 basket_id = f"basket_8bit_{int(hash_value[0:2], 16) % 256}"
             else:  # 42-bit
                 basket_id = f"basket_42bit_{int(hash_value[0:11], 16) % 1024}"
-            
+
             return basket_id
-            
+
         except Exception as e:
             logger.error(f"Error mapping hash to basket: {e}")
             return f"basket_fallback_{int(time.time())}"
 
     def match_tensor(self, hash_value: str, entry_price: float, current_price: float,
-                    market_data: Dict[str, Any]) -> TensorMatchResult:
+                     market_data: Dict[str, Any]) -> TensorMatchResult:
         """
         Perform complete tensor matching operation.
-        
+
         Parameters:
         -----------
         hash_value : str
@@ -338,7 +343,7 @@ class TensorMatcher:
             Current market price
         market_data : Dict[str, Any]
             Market data including entropy, volatility, etc.
-            
+
         Returns:
         --------
         TensorMatchResult
@@ -357,7 +362,7 @@ class TensorMatcher:
                     phase_value = int(hash_value[0:2], 16) % 256
                 else:
                     phase_value = int(hash_value[0:11], 16) % 4398046511104
-            
+
             # Determine bit phase type
             if phase_value < 16:
                 bit_phase = BitPhase.FOUR_BIT
@@ -365,25 +370,25 @@ class TensorMatcher:
                 bit_phase = BitPhase.EIGHT_BIT
             else:
                 bit_phase = BitPhase.FORTY_TWO_BIT
-            
+
             # Calculate phase weight matrix
             bit_pattern = [int(c, 16) for c in hash_value[:8]]  # First 8 hex chars
             entropy = market_data.get('entropy_level', 4.0)
             phase_weight = self.phase_weight_matrix(bit_pattern, entropy)
-            
+
             # Calculate tensor score
             tensor_score = self.tensor_score(entry_price, current_price, phase_value)
-            
+
             # Map to strategy
             volatility = market_data.get('volatility', 0.02)
             strategy_type = self.map_phase_to_strategy(phase_value, entropy, volatility)
-            
+
             # Map to basket
             basket_id = self.hash_to_basket(hash_value, bit_phase)
-            
+
             # Calculate confidence
             confidence = self._calculate_confidence(phase_weight, tensor_score, entropy)
-            
+
             # Create result
             result = TensorMatchResult(
                 phase_value=phase_value,
@@ -400,13 +405,13 @@ class TensorMatcher:
                     'bit_pattern': bit_pattern
                 }
             )
-            
+
             # Store in history
             self.match_history.append(result)
-            
+
             logger.info(f"Tensor match: phase={phase_value}, strategy={strategy_type.value}, tensor={tensor_score:.4f}")
             return result
-            
+
         except Exception as e:
             logger.error(f"Error matching tensor: {e}")
             return None
@@ -416,18 +421,18 @@ class TensorMatcher:
         try:
             # Base confidence on phase weight stability
             weight_confidence = unified_math.min(phase_weight / 5.0, 1.0)
-            
+
             # Tensor score confidence (absolute value)
             tensor_confidence = unified_math.min(unified_math.abs(tensor_score), 1.0)
-            
+
             # Entropy confidence (normalized)
             entropy_confidence = unified_math.min(entropy / 8.0, 1.0)
-            
+
             # Weighted combination
             confidence = (weight_confidence * 0.4 + tensor_confidence * 0.3 + entropy_confidence * 0.3)
-            
+
             return round(confidence, 4)
-            
+
         except Exception as e:
             logger.error(f"Error calculating confidence: {e}")
             return 0.5
@@ -452,18 +457,18 @@ class TensorMatcher:
         try:
             if not self.match_history:
                 return {'error': 'No match history available'}
-            
+
             # Calculate statistics
             total_matches = len(self.match_history)
             strategy_counts = {strategy.value: 0 for strategy in StrategyType}
             bit_phase_counts = {phase.value: 0 for phase in BitPhase}
             tensor_scores = [r.tensor_score for r in self.match_history]
             phase_weights = [r.phase_weight for r in self.match_history]
-            
+
             for result in self.match_history:
                 strategy_counts[result.strategy_type.value] += 1
                 bit_phase_counts[result.bit_phase.value] += 1
-            
+
             return {
                 'total_matches': total_matches,
                 'strategy_distribution': strategy_counts,
@@ -473,7 +478,7 @@ class TensorMatcher:
                 'average_phase_weight': unified_math.unified_math.mean(phase_weights) if phase_weights else 0.0,
                 'phase_weight_std': unified_math.unified_math.std(phase_weights) if phase_weights else 0.0
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting match statistics: {e}")
             return {'error': str(e)}
@@ -509,29 +514,30 @@ class TensorMatcher:
                     for matrix in self.phase_weight_history[-50:]  # Last 50 phase weights
                 ]
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(export_data, f, indent=2, default=str)
-            
+
             logger.info(f"Tensor match data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting match data: {e}")
+
 
 if __name__ == "__main__":
     # Test tensor matcher
     matcher = TensorMatcher()
-    
+
     # Test phase weight matrix
     bit_pattern = [1, 0, 1, 1, 0, 1, 0, 1]
     entropy = 4.5
     phase_weight = matcher.phase_weight_matrix(bit_pattern, entropy)
     safe_print(f"Phase Weight: {phase_weight:.4f}")
-    
+
     # Test tensor score
     tensor_score = matcher.tensor_score(45000.0, 46000.0, 8)
     safe_print(f"Tensor Score: {tensor_score}")
-    
+
     # Test complete tensor matching
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     market_data = {
@@ -539,7 +545,7 @@ if __name__ == "__main__":
         'volatility': 0.03,
         'market_heat': 0.6
     }
-    
+
     result = matcher.match_tensor(test_hash, 45000.0, 46000.0, market_data)
     if result:
         safe_print(f"Tensor Match Result:")
@@ -548,7 +554,7 @@ if __name__ == "__main__":
         safe_print(f"  Tensor Score: {result.tensor_score:.4f}")
         safe_print(f"  Basket ID: {result.basket_id}")
         safe_print(f"  Confidence: {result.confidence:.4f}")
-    
+
     # Get statistics
     stats = matcher.get_match_statistics()
-    safe_print(f"Match Statistics: {stats}") 
+    safe_print(f"Match Statistics: {stats}")

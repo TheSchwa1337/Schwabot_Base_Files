@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Dict, List
+from enum import Enum
+import time
+import logging
+from dataclasses import dataclass
 import numpy as np
 import math
 
@@ -13,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Strategy Entropy Switcher - Dynamic Strategy Selection Engine.
 
@@ -66,12 +79,6 @@ Windows CLI compatible with comprehensive error handling.
 """
 
 
-from dataclasses import dataclass
-import logging
-import time
-from enum import Enum
-from typing import Dict, List
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -79,8 +86,8 @@ logger = logging.getLogger(__name__)
 
 class TradingStrategy(Enum):
 
-
     """Available trading strategies."""
+
 
 AGGRESSIVE_ACCUMULATION = "aggressive_accumulation"
 BALANCED_TRADING = "balanced_trading"
@@ -94,8 +101,8 @@ EMERGENCY_HALT = "emergency_halt"
 @dataclass
 class StrategyMetrics:
 
-
     """Strategy performance metrics."""
+
 
 strategy: TradingStrategy
 performance_score: float           # Recent performance [0, 1]
@@ -110,8 +117,8 @@ trade_count: int                  # Number of trades executed
 @dataclass
 class SwitchSignal:
 
-
     """Strategy switch signal."""
+
 
 should_switch: bool               # Whether to switch strategies
 target_strategy: TradingStrategy  # Target strategy to switch to
@@ -123,15 +130,16 @@ switch_urgency: float            # Urgency of switch [0, 1]
 
 class StrategyEntropySwitcher:
 
-
     """Dynamic strategy switching engine based on entropy and performance."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize strategy entropy switcher."""
+
+
 self.current_strategy = TradingStrategy.BALANCED_TRADING
 self.strategy_history: List[StrategyMetrics] = []
 self.performance_history: Dict[TradingStrategy, List[float]] = {]

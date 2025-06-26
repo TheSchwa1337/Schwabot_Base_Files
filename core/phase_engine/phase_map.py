@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from collections import defaultdict, deque
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import threading
+import time
+import json
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Phase Map - Trading Phase Transition and Mapping System for Schwabot
@@ -64,42 +81,39 @@ Core Functionality:
 - Integration with trading pipeline
 """
 
-import logging
-import json
-import time
-import threading
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class PhaseState(Enum):
 
-
     ACTIVE = "active"
+
+
 TRANSITIONING = "transitioning"
 COMPLETED = "completed"
 FAILED = "failed"
 PENDING = "pending"
 
+
 class TransitionType(Enum):
 
-
     NATURAL = "natural"
+
+
 FORCED = "forced"
 EMERGENCY = "emergency"
 OPTIMIZED = "optimized"
 SCHEDULED = "scheduled"
 
+
 @dataclass
 class PhaseNode:
 
-
     phase_id: str
+
+
 phase_type: str
 state: PhaseState
 start_time: datetime
@@ -108,11 +122,13 @@ duration_minutes: int
 confidence_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PhaseTransition:
 
-
     transition_id: str
+
+
 from_phase_id: str
 to_phase_id: str
 transition_type: TransitionType
@@ -122,11 +138,13 @@ duration_seconds: float
 success: bool
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PhaseRelationship:
 
-
     relationship_id: str
+
+
 phase_a_id: str
 phase_b_id: str
 relationship_type: str
@@ -135,15 +153,17 @@ confidence: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class PhaseMap:
 
 
 def __init__(self, config_path: str = "./config/phase_map_config.json"):
 
-
     pass
     pass
         self.config_path = config_path
+
+
 self.phase_nodes: Dict[str, PhaseNode] = {}
 self.phase_transitions: Dict[str, PhaseTransition] = {}
 self.phase_relationships: Dict[str, PhaseRelationship] = {}
@@ -154,8 +174,8 @@ self._load_configuration()
         self._start_phase_monitor()
         logger.info("PhaseMap initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
@@ -165,6 +185,7 @@ def _load_configuration(self) -> None:
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
 
+
 logger.info("Loaded phase map configuration")
             else:
 self._create_default_configuration()
@@ -173,12 +194,14 @@ self._create_default_configuration()
 logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
-def _create_default_configuration(self) -> None:
 
+def _create_default_configuration(self) -> None:
 
     pass
     pass
         """Create default phase map configuration."""
+
+
 config = {
 "default_phase_duration": 60,
 "transition_probability_threshold": 0.7,

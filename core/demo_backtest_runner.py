@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .demo_entry_simulator import get_demo_entry_simulator
+from .demo_integration_system import get_demo_integration_system
+from .matrix_allocator import get_matrix_allocator
+from .vector_validator import get_vector_validator
+from .settings_controller import get_settings_controller
+import time
+import threading
+from pathlib import Path
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Any, Optional, Tuple
+import yaml
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +26,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 """
 Schwabot Demo Backtest Runner
 ============================
@@ -63,29 +85,15 @@ This system:
 - Enables reinforcement learning from backtest results
 """
 
-import json
-import yaml
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import threading
-import time
-
-from .settings_controller import get_settings_controller
-from .vector_validator import get_vector_validator
-from .matrix_allocator import get_matrix_allocator
-from .demo_integration_system import get_demo_integration_system
-from .demo_entry_simulator import get_demo_entry_simulator
 
 
 @dataclass
 class BacktestConfig:
 
-
     """Configuration for backtest runs"""
+
+
 backtest_id: str
 strategy_types: List[str]
 market_conditions: List[str]
@@ -102,8 +110,9 @@ timestamp: datetime
 @dataclass
 class BacktestResult:
 
-
     """Result of a backtest run"""
+
+
 backtest_id: str
 total_trades: int
 successful_trades: int
@@ -122,11 +131,10 @@ timestamp: datetime
 
 class DemoBacktestRunner:
 
-
     """Comprehensive backtest runner for Schwabot demo system"""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
@@ -135,6 +143,7 @@ def __init__(self):
         self.matrix_allocator = get_matrix_allocator()
         self.demo_system = get_demo_integration_system()
         self.entry_simulator = get_demo_entry_simulator()
+
 
         # Backtest data
 self.backtest_configs: List[BacktestConfig] = []
@@ -157,12 +166,14 @@ self._initialize_backtest_directories()
         # Load existing backtest data
 self._load_backtest_data()
 
-def _initialize_backtest_directories(self):
 
+def _initialize_backtest_directories(self):
 
     pass
     pass
         """Initialize backtest-related directories"""
+
+
 backtest_dirs = [
 "tests/demo_backlog/",
 "tests/demo_results/",
@@ -174,13 +185,14 @@ backtest_dirs = [
         for dir_path in backtest_dirs:
 Path(dir_path).mkdir(parents=True, exist_ok=True)
 
-def _load_backtest_data(self):
 
+def _load_backtest_data(self):
 
     pass
     pass
         """Load existing backtest data from files"""
         try:
+
             # Load backtest results
 results_file = Path("tests/demo_results/backtest_results.json")
             if results_file.exists():
@@ -194,13 +206,15 @@ self._update_performance_metrics()
         except Exception as e:
 safe_print(f"Warning: Could not load backtest data: {e}")
 
-def _update_performance_metrics(self):
 
+def _update_performance_metrics(self):
 
     pass
     pass
         """Update performance metrics from backtest results"""
         if not self.backtest_results:
+
+
 return
 
 self.performance_metrics["total_backtests"] = len(self.backtest_results)
@@ -221,10 +235,12 @@ best_backtest = unified_math.max(self.backtest_results, key=lambda x: x.success_
 self.performance_metrics["best_backtest"] = best_backtest.backtest_id
 self.performance_metrics["worst_backtest"] = worst_backtest.backtest_id
 
+
 def create_backtest_config(self, strategy_types: List[str] = None,]
 
-
                              market_conditions: List[str] = None,
+
+
 num_trades_per_strategy: int = 100,
 base_price: float = 50000.0,
 price_volatility: float = 0.02,
@@ -246,17 +262,17 @@ market_conditions = list(self.entry_simulator.market_conditions.keys())
 backtest_id = f"backtest_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(strategy_types) % 1000}"
 
 config = BacktestConfig(
-            backtest_id=backtest_id,
-strategy_types=strategy_types,
-market_conditions=market_conditions,
-num_trades_per_strategy=num_trades_per_strategy,
-base_price=base_price,
-price_volatility=price_volatility,
-volume_multiplier=volume_multiplier,
-enable_reinforcement_learning=enable_reinforcement_learning,
-enable_performance_tracking=enable_performance_tracking,
-save_detailed_results=save_detailed_results,
-timestamp=datetime.now()
+            backtest_id = backtest_id,
+strategy_types = strategy_types,
+market_conditions = market_conditions,
+num_trades_per_strategy = num_trades_per_strategy,
+base_price = base_price,
+price_volatility = price_volatility,
+volume_multiplier = volume_multiplier,
+enable_reinforcement_learning = enable_reinforcement_learning,
+enable_performance_tracking = enable_performance_tracking,
+save_detailed_results = save_detailed_results,
+timestamp = datetime.now()
 
 
 self.backtest_configs.append(config)
@@ -264,7 +280,6 @@ self.backtest_configs.append(config)
         return config
 
 def run_backtest(self, config: BacktestConfig) -> BacktestResult:
-
 
     pass
     pass
@@ -319,7 +334,7 @@ total_profit += backtest_analysis["total_profit"]
 profits.extend([backtest_analysis["average_profit"]] * backtest_analysis["total_trades"])
 
                 # Store strategy performance
-strategy_performance[strategy_type][market_condition] = {]
+strategy_performance[strategy_type][market_condition]={]
 "success_rate": backtest_analysis["success_rate"],
 "total_profit": backtest_analysis["total_profit"],
 "average_profit": backtest_analysis["average_profit"],
@@ -417,9 +432,9 @@ def _calculate_max_drawdown(self, profits: List[float]) -> float:
         if not profits:
             return 0.0
 
-cumulative = np.cumsum(profits)
-        running_max = np.maximum.accumulate(cumulative)
-        drawdown = cumulative - running_max
+cumulative=np.cumsum(profits)
+        running_max=np.maximum.accumulate(cumulative)
+        drawdown=cumulative - running_max
 
         return unified_math.abs(unified_math.min(drawdown)) if len(drawdown) > 0 else 0.0
 
@@ -432,19 +447,19 @@ def _calculate_sharpe_ratio(self, profits: List[float]) -> float:
         if not profits or len(profits) < 2:
             return 0.0
 
-returns = np.array(profits)
-        mean_return = unified_math.unified_math.mean(returns)
-        std_return = unified_math.unified_math.std(returns)
+returns=np.array(profits)
+        mean_return=unified_math.unified_math.mean(returns)
+        std_return=unified_math.unified_math.std(returns)
 
         if std_return == 0:
             return 0.0
 
         # Assuming risk-free rate of 0 for simplicity
-sharpe_ratio = mean_return / std_return
+sharpe_ratio=mean_return / std_return
 
         return sharpe_ratio
 
-def run_comprehensive_backtest(self, num_trades_per_strategy: int = 50) -> Dict[str, Any]:
+def run_comprehensive_backtest(self, num_trades_per_strategy: int=50) -> Dict[str, Any]:
 
 
     pass
@@ -453,7 +468,7 @@ def run_comprehensive_backtest(self, num_trades_per_strategy: int = 50) -> Dict[
 safe_print("🚀 Starting comprehensive backtest...")
 
         # Create comprehensive config
-config = self.create_backtest_config(
+config=self.create_backtest_config(
             strategy_types=list(self.entry_simulator.entry_strategies.keys()),
             market_conditions=list(self.entry_simulator.market_conditions.keys()),
             num_trades_per_strategy=num_trades_per_strategy,
@@ -462,10 +477,10 @@ save_detailed_results=True
 
 
         # Run backtest
-result = self.run_backtest(config)
+result=self.run_backtest(config)
 
         # Generate comprehensive analysis
-analysis = self._generate_comprehensive_analysis(result)
+analysis=self._generate_comprehensive_analysis(result)
 
         return analysis
 
@@ -475,7 +490,7 @@ def _generate_comprehensive_analysis(self, result: BacktestResult) -> Dict[str, 
     pass
     pass
         """Generate comprehensive analysis of backtest results"""
-analysis = {
+analysis={
 "backtest_id": result.backtest_id,
 "summary": {
 "total_trades": result.total_trades,
@@ -494,27 +509,27 @@ analysis = {
 }
 
         # Strategy analysis
-strategy_performance = {}
+strategy_performance={}
         for strategy_type, market_results in result.strategy_performance.items():
-            avg_success_rate = unified_math.mean([r["success_rate"] for r in market_results.values()])
-            avg_profit = unified_math.mean([r["total_profit"] for r in market_results.values()])
-            strategy_performance[strategy_type] = {]
+            avg_success_rate=unified_math.mean([r["success_rate"] for r in market_results.values()])
+            avg_profit=unified_math.mean([r["total_profit"] for r in market_results.values()])
+            strategy_performance[strategy_type]={]
 "avg_success_rate": avg_success_rate,
 "avg_profit": avg_profit,
 "market_performance": market_results
 }
 
-analysis["strategy_analysis"] = strategy_performance
+analysis["strategy_analysis"]=strategy_performance
 
         # Matrix analysis
-analysis["matrix_analysis"] = result.matrix_performance
+analysis["matrix_analysis"]=result.matrix_performance
 
         # Market condition analysis
-analysis["market_condition_analysis"] = result.market_condition_performance
+analysis["market_condition_analysis"]=result.market_condition_performance
 
         # Reinforcement learning analysis
         if result.reinforcement_learning_updates:
-analysis["reinforcement_learning_analysis"] = {]
+analysis["reinforcement_learning_analysis"]={]
 "matrix_weight_changes": result.reinforcement_learning_updates.get("matrix_weights", {}),
                 "bad_vectors_count": result.reinforcement_learning_updates.get("known_bad_vectors", 0),
                 "vector_validator_summary": result.reinforcement_learning_updates.get("vector_validator_performance", {})
@@ -525,15 +540,18 @@ recommendations = []
 
         # Best strategy recommendation
 best_strategy = unified_math.max(strategy_performance.items(), key=lambda x: x[1]["avg_success_rate"])
-        recommendations.append(f"Best performing strategy: {best_strategy[0]} (Success rate: {best_strategy[1]['avg_success_rate']:.2%})")
+        recommendations.append(
+            f"Best performing strategy: {best_strategy[0]} (Success rate: {best_strategy[1]['avg_success_rate']:.2%})")
 
         # Best matrix recommendation
 best_matrix = unified_math.max(result.matrix_performance.items(), key=lambda x: x[1]["success_rate"])
-        recommendations.append(f"Best performing matrix: {best_matrix[0]} (Success rate: {best_matrix[1]['success_rate']:.2%})")
+        recommendations.append(
+            f"Best performing matrix: {best_matrix[0]} (Success rate: {best_matrix[1]['success_rate']:.2%})")
 
         # Best market condition recommendation
 best_market = unified_math.max(result.market_condition_performance.items(), key=lambda x: x[1]["success_rate"])
-        recommendations.append(f"Best market condition: {best_market[0]} (Success rate: {best_market[1]['success_rate']:.2%})")
+        recommendations.append(
+            f"Best market condition: {best_market[0]} (Success rate: {best_market[1]['success_rate']:.2%})")
 
         # Risk management recommendations
         if result.max_drawdown > 0.1:
@@ -620,7 +638,6 @@ safe_print(f"📊 Backtest report saved to {filepath}")
 
 def _save_backtest_results(self):
 
-
     pass
     pass
         """Save backtest results to file"""
@@ -642,7 +659,6 @@ safe_print("💾 Backtest results saved successfully")
 safe_print(f"Error saving backtest results: {e}")
 
 def get_backtest_summary(self) -> Dict[str, Any]:
-
 
     pass
     pass
@@ -666,7 +682,6 @@ def get_backtest_summary(self) -> Dict[str, Any]:
 
 def _get_best_performing_strategies(self) -> Dict[str, float]:
 
-
     pass
     pass
         """Get best performing strategies across all backtests"""
@@ -689,7 +704,6 @@ sorted_strategies = sorted(avg_performance.items(), key=lambda x: x[1], reverse=
         return dict(sorted_strategies[:3])
 
 def _get_best_performing_matrices(self) -> Dict[str, float]:
-
 
     pass
     pass
@@ -719,7 +733,6 @@ demo_backtest_runner = DemoBacktestRunner()
 
 def get_demo_backtest_runner() -> DemoBacktestRunner:
 
-
     pass
     pass
     """Get the global demo backtest runner instance"""
@@ -742,7 +755,7 @@ num_trades_per_strategy=20
 
 
     # Run backtest
-result = runner.run_backtest(config)
+result=runner.run_backtest(config)
 
 safe_print(f"Backtest ID: {result.backtest_id}")
     safe_print(f"Success Rate: {result.success_rate:.2%}")
@@ -750,11 +763,11 @@ safe_print(f"Backtest ID: {result.backtest_id}")
     safe_print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
 
     # Generate report
-report_path = runner.generate_backtest_report(result)
+report_path=runner.generate_backtest_report(result)
     safe_print(f"Report generated: {report_path}")
 
     # Get summary
-summary = runner.get_backtest_summary()
+summary=runner.get_backtest_summary()
     safe_print(f"Best Strategies: {summary['best_performing_strategies']}")
     safe_print(f"Best Matrices: {summary['best_performing_matrices']}")
 

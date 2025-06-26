@@ -82,7 +82,7 @@ class ThermalMapAllocator:
         logger.info(f"Initialized ThermalMapAllocator with conductivity {self.thermal_conductivity}")
 
     def calculate_thermal_pressure(self, temp: Union[float, Temperature],
-                                 volume: float, particles: int) -> Pressure:
+                                   volume: float, particles: int) -> Pressure:
         """
         Calculate thermal pressure using ideal gas law.
 
@@ -106,8 +106,8 @@ class ThermalMapAllocator:
         return Pressure(pressure_value)
 
     def compute_thermal_field(self, x: float, y: float, t: float,
-                            initial_temp: Union[float, Temperature] = 300.0,
-                            diffusion_coeff: float = 1.0e-5) -> Temperature:
+                              initial_temp: Union[float, Temperature] = 300.0,
+                              diffusion_coeff: float = 1.0e-5) -> Temperature:
         """
         Compute thermal field using heat diffusion equation.
 
@@ -131,8 +131,8 @@ class ThermalMapAllocator:
         return Temperature(temp_value)
 
     def compute_thermal_gradient(self, temp_field: Callable[[float, float, float], Temperature],
-                               x: float, y: float, t: float,
-                               dx: float = 1e-6, dy: float = 1e-6) -> Vector:
+                                 x: float, y: float, t: float,
+                                 dx: float = 1e-6, dy: float = 1e-6) -> Vector:
         """
         Compute thermal gradient vector.
 
@@ -156,8 +156,8 @@ class ThermalMapAllocator:
         return Vector(np.array([grad_x, grad_y]))
 
     def generate_thermal_entropy_map(self, temp_field: Callable[[float, float, float], Temperature],
-                                   dimensions: Tuple[int, int],
-                                   time: float) -> EntropyMap:
+                                     dimensions: Tuple[int, int],
+                                     time: float) -> EntropyMap:
         """
         Generate entropy map from thermal field.
 
@@ -190,9 +190,9 @@ class ThermalMapAllocator:
         return EntropyMap(entropy_map)
 
     def integrate_with_grayscale(self, thermal_map: EntropyMap,
-                               grayscale_map: EntropyMap,
-                               weight_thermal: float = 0.6,
-                               weight_grayscale: float = 0.4) -> EntropyMap:
+                                 grayscale_map: EntropyMap,
+                                 weight_thermal: float = 0.6,
+                                 weight_grayscale: float = 0.4) -> EntropyMap:
         """
         Integrate thermal map with grayscale map.
 
@@ -210,13 +210,13 @@ class ThermalMapAllocator:
 
         # Weighted combination
         integrated_map = (weight_thermal * thermal_map +
-                         weight_grayscale * grayscale_map)
+                          weight_grayscale * grayscale_map)
 
         return EntropyMap(integrated_map)
 
     def create_thermal_state(self, temp: Union[float, Temperature],
-                           pressure: Union[float, Pressure],
-                           timestamp: Optional[datetime] = None) -> ThermalState:
+                             pressure: Union[float, Pressure],
+                             timestamp: Optional[datetime] = None) -> ThermalState:
         """
         Create thermal state object.
 
@@ -291,13 +291,14 @@ class SubsurfaceGrayscaleMapper:
             heatmap += heat_contribution
 
         # Normalize and apply sigmoid
-        heatmap = heatmap / unified_math.unified_math.max(heatmap) if unified_math.unified_math.max(heatmap) > 0 else heatmap
+        heatmap = heatmap / \
+            unified_math.unified_math.max(heatmap) if unified_math.unified_math.max(heatmap) > 0 else heatmap
         grayscale_map = 1 / (1 + unified_math.exp(-heatmap))
 
         return EntropyMap(grayscale_map)
 
     def activate_zone(self, grayscale_map: EntropyMap,
-                     threshold: Optional[float] = None) -> Matrix:
+                      threshold: Optional[float] = None) -> Matrix:
         """
         Establish grayscale node activation thresholds.
 

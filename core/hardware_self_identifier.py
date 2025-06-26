@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import threading
+import psutil
+import platform
+import hashlib
+import logging
+import time
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +22,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Hardware Self-Identifier - Schwabot UROS v1.0
@@ -63,46 +82,41 @@ Features:
 - Real-time capability monitoring and adjustment
 """
 
-import json
-import time
-import logging
-import hashlib
-import platform
-import psutil
-import threading
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 class HardwareTier(Enum):
 
-
     """Hardware capability tiers."""
+
+
 MINIMAL = "minimal"      # Raspberry Pi, old Chromebook
 BASIC = "basic"          # Basic laptop, older desktop
 STANDARD = "standard"    # Modern laptop, mid-range desktop
 PERFORMANCE = "performance"  # Gaming laptop, high-end desktop
 ENTERPRISE = "enterprise"    # Server, workstation
 
+
 class ComputeCapability(Enum):
 
-
     """Compute capability types."""
+
+
 CPU_ONLY = "cpu_only"
 GPU_BASIC = "gpu_basic"
 GPU_PERFORMANCE = "gpu_performance"
 GPU_ENTERPRISE = "gpu_enterprise"
 HYBRID = "hybrid"
 
+
 @dataclass
 class HardwareProfile:
 
-
     """Hardware capability profile."""
+
+
 device_id: str
 device_name: str
 hardware_tier: HardwareTier
@@ -147,11 +161,13 @@ tensor_processing_capacity: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class NetworkRegistration:
 
-
     """Network registration result."""
+
+
 registration_id: str
 device_id: str
 success: bool
@@ -162,8 +178,8 @@ error_message: Optional[str] = None
 timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-class HardwareSelfIdentifier:
 
+class HardwareSelfIdentifier:
 
     """
 Hardware Self-Identifier for Schwabot UROS v1.0.
@@ -172,12 +188,14 @@ Automatically detects hardware capabilities and registers with the Schwabot netw
 to enable universal deployment across any hardware configuration.
 """
 
-def __init__(self, schwabot_server_url: str = "http://localhost:5000"):
 
+def __init__(self, schwabot_server_url: str = "http://localhost:5000"):
 
     pass
     pass
         self.server_url = schwabot_server_url
+
+
 self.device_id = self._generate_device_id()
         self.hardware_profile: Optional[HardwareProfile] = None
 self.network_registration: Optional[NetworkRegistration] = None
@@ -192,13 +210,14 @@ self.monitoring_running = False
 
 logger.info("Hardware Self-Identifier initialized")
 
-def _generate_device_id(self) -> str:
 
+def _generate_device_id(self) -> str:
 
     pass
     pass
         """Generate unique device ID based on hardware characteristics."""
         try:
+
             # Combine multiple hardware identifiers
 cpu_info = platform.processor()
             machine_id = platform.machine()

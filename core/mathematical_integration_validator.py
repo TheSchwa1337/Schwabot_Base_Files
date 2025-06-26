@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from core.zpe_core import ZPECore
+from core.profit_cycle_allocator import ProfitCycleAllocator
+from core.matrix_mapper import MatrixMapper, BitPhase as MatrixBitPhase
+from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
+import hashlib
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import time
+import json
+import yaml
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +24,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Mathematical Integration Validator - Schwabot UROS v1.0
@@ -57,22 +77,10 @@ Validates mathematical consistency and integration across all trading system mod
 Tests mathematical functions, their implementations, and cross-module integration.
 """
 
-import yaml
-import json
-import time
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import hashlib
 
 # Import core components
 try:
-from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
-from core.matrix_mapper import MatrixMapper, BitPhase as MatrixBitPhase
-from core.profit_cycle_allocator import ProfitCycleAllocator
-from core.zpe_core import ZPECore
 CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
 CORE_COMPONENTS_AVAILABLE = False
@@ -80,11 +88,13 @@ safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class MathematicalTestResult:
 
-
     """Result of a mathematical function test."""
+
+
 function_name: str
 module: str
 test_name: str
@@ -95,11 +105,13 @@ execution_time_ms: float
 error_message: Optional[str] = None
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class IntegrationTestResult:
 
-
     """Result of an integration test."""
+
+
 test_name: str
 success: bool
 component_results: List[MathematicalTestResult]
@@ -108,8 +120,8 @@ error_count: int
 warning_count: int
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class MathematicalIntegrationValidator:
 
+class MathematicalIntegrationValidator:
 
     """
 Validates mathematical consistency and integration across the trading system.
@@ -122,12 +134,14 @@ Tests:
 - Error handling and edge cases
 """
 
-def __init__(self, config_path: str = "config/mathematical_functions_registry.yaml"):
 
+def __init__(self, config_path: str = "config/mathematical_functions_registry.yaml"):
 
     pass
     pass
         self.config_path = config_path
+
+
 self.test_results: List[MathematicalTestResult] = []
 self.integration_results: List[IntegrationTestResult] = []
 
@@ -145,8 +159,8 @@ self._initialize_components()
 
 logger.info("Mathematical Integration Validator initialized")
 
-def _load_functions_registry(self) -> Dict[str, Any]:
 
+def _load_functions_registry(self) -> Dict[str, Any]:
 
     pass
     pass
@@ -155,16 +169,20 @@ def _load_functions_registry(self) -> Dict[str, Any]:
             with open(self.config_path, 'r') as f:
                 return yaml.safe_load(f)
         except Exception as e:
+
+
 logger.error(f"Error loading functions registry: {e}")
             return {}
 
-def _initialize_components(self) -> None:
 
+def _initialize_components(self) -> None:
 
     pass
     pass
         """Initialize core components for testing."""
         try:
+
+
 self.dlt_engine = DLTWaveformEngine()
             self.matrix_mapper = MatrixMapper()
             self.profit_allocator = ProfitCycleAllocator()

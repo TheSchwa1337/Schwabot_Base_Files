@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Line Render Engine - Trading Chart and Technical Indicator Visualization for Schwabot
@@ -66,39 +79,40 @@ Core Functionality:
 - Interactive chart elements
 """
 
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 class ChartType(Enum):
 
-
     LINE = "line"
+
+
 CANDLESTICK = "candlestick"
 BAR = "bar"
 AREA = "area"
 SCATTER = "scatter"
 
+
 class IndicatorType(Enum):
 
-
     SMA = "sma"
+
+
 EMA = "ema"
 RSI = "rsi"
 MACD = "macd"
 BOLLINGER_BANDS = "bollinger_bands"
 STOCHASTIC = "stochastic"
 
+
 @dataclass
 class DataPoint:
 
-
     timestamp: datetime
+
+
 value: float
 volume: Optional[float] = None
 open_price: Optional[float] = None
@@ -107,11 +121,13 @@ low_price: Optional[float] = None
 close_price: Optional[float] = None
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class ChartStyle:
 
-
     primary_color: str = "#1f77b4"
+
+
 secondary_color: str = "#ff7f0e"
 background_color: str = "#fff"
 grid_color: str = "#e0e0e0"
@@ -121,36 +137,42 @@ opacity: float = 1.0
 show_grid: bool = True
 show_legend: bool = True
 
+
 @dataclass
 class IndicatorConfig:
 
-
     indicator_type: IndicatorType
+
+
 period: int
 color: str
 line_width: float = 1.0
 opacity: float = 0.8
 parameters: Dict[str, Any] = field(default_factory=dict)
 
+
 class LineRenderEngine:
 
 
 def __init__(self):
 
-
     pass
     pass
         self.charts: Dict[str, Dict[str, Any]] = {}
+
+
 self.indicators: Dict[str, List[IndicatorConfig]] = {}
 self.data_series: Dict[str, List[DataPoint]] = {}
 self.styles: Dict[str, ChartStyle] = {}
 self.render_callbacks: Dict[str, List[callable]] = {}
 logger.info("LineRenderEngine initialized")
 
+
 def create_chart(self, chart_id: str, chart_type: ChartType,
 
 
                     title: str = "", style: Optional[ChartStyle] = None) -> None:
+
 """Create a new chart with specified type and styling."""
         if style is None:
 style = ChartStyle()
@@ -168,7 +190,6 @@ self.render_callbacks[chart_id] = []
 logger.info(f"Chart created: {chart_id} ({chart_type.value})")
 
 def add_data_series(self, chart_id: str, series_name: str,
-
 
                        data: List[DataPoint]) -> None:
 """Add a data series to a chart."""
@@ -229,8 +250,8 @@ sma_data = []
             values = [data[j].value for j in range(i - period + 1, i + 1)]
             sma_value = sum(values) / period
             sma_data.append(DataPoint(
-                timestamp=data[i].timestamp,
-value=sma_value
+                timestamp = data[i].timestamp,
+value = sma_value
 ))
         return sma_data
 
@@ -329,8 +350,8 @@ min_length = unified_math.min(len(fast_ema), len(slow_ema))
         for i in range(min_length):
             macd_value = fast_ema[i].value - slow_ema[i].value
 macd_data.append(DataPoint(
-                timestamp=fast_ema[i].timestamp,
-value=macd_value
+                timestamp = fast_ema[i].timestamp,
+value = macd_value
 ))
 
         return macd_data
@@ -355,9 +376,9 @@ upper_band = sma + (2 * std_dev)
             lower_band = sma - (2 * std_dev)
 
 bands_data.append(DataPoint(
-                timestamp=data[i].timestamp,
-value=sma,  # Middle band (SMA)
-                metadata={"upper": upper_band, "lower": lower_band}
+                timestamp = data[i].timestamp,
+value = sma,  # Middle band (SMA)
+                metadata = {"upper": upper_band, "lower": lower_band}
 ))
 
         return bands_data
@@ -390,10 +411,10 @@ indicator_values = self.calculate_indicator(
                         self.data_series[series_name],
 indicator_config
 
-indicator_data[f"{indicator_config.indicator_type.value}_{series_name}"] = indicator_values
+indicator_data[f"{indicator_config.indicator_type.value}_{series_name}"]=indicator_values
 
         # Prepare render data
-render_data = {
+render_data={
 "chart_id": chart_id,
 "chart_type": chart_info["type"].value,
 "title": chart_info["title"],
@@ -434,7 +455,6 @@ self.render_callbacks[chart_id].append(callback)
             logger.debug(f"Render callback added for chart: {chart_id}")
 
 def update_data_point(self, series_name: str, timestamp: datetime,
-
 
                          value: float, **kwargs) -> None:
 """Update a single data point in a series."""
@@ -512,9 +532,9 @@ engine.add_data_series("price_chart", "BTC", sample_data)
 
     # Add indicators
 sma_config = IndicatorConfig(
-        indicator_type=IndicatorType.SMA,
-period=20,
-color="#ff7f0e"
+        indicator_type = IndicatorType.SMA,
+period = 20,
+color = "#ff7f0e"
 
 engine.add_indicator("price_chart", sma_config)
 

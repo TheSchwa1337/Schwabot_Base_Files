@@ -28,15 +28,14 @@ __all__: list[str] = []
 "btc_spectral_aggregate",
 ]
 
-# ---------------------------------------------------------------------------
-# Core aggregation functions
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Core aggregation functions
+    # ---------------------------------------------------------------------------
 
 
-def btc_vector(
+    def btc_vector(
 
-
-    exit_prices: Sequence[float],
+exit_prices: Sequence[float],
 entry_prices: Sequence[float],
 volume_weights: Sequence[float],
 ) -> float:  # noqa: D401
@@ -67,8 +66,7 @@ weighted_diffs = price_diffs * vol_arr
 
 def btc_eta(
 
-
-    price_delta: float,
+price_delta: float,
 time_delta: float,
 volumes: Sequence[float],
 ) -> float:  # noqa: D401
@@ -110,8 +108,7 @@ product = v_btc * eta_btc
 
 def btc_spectral_aggregate(
 
-
-    xi_series: Sequence[float],
+xi_series: Sequence[float],
 peak_frequency: float,
 *,
 filter_width: float = 1.0,

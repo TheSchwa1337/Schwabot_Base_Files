@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.unified_math_system import unified_math
+from .hash_registry_storage import HashRegistryStorage
+from .hash_registry_core import HashRegistryEntry, HashRegistryCore
+from dataclasses import dataclass
+from typing import Dict, List, Any, Optional
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
@@ -10,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Hash Registry Manager - Schwabot UROS v1.0
@@ -63,14 +76,9 @@ Mathematical Foundation:
 - Priority System: 0.1 to 3.2 with enabled/disabled states
 """
 
-import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
 
 # Conditional imports to handle both script and module execution
 try:
-from .hash_registry_core import HashRegistryEntry, HashRegistryCore
-from .hash_registry_storage import HashRegistryStorage
 except ImportError:
     pass
     pass
@@ -80,11 +88,13 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class HashRegistryConfig:
 
-
     """Hash registry configuration."""
+
+
 total_entries: int = 32
 bit_depths: List[int] = None
 tensor_routes: List[str] = None
@@ -92,18 +102,20 @@ priority_range: tuple = (0.1, 3.2)
     auto_generate: bool = True
 dynamic_updates: bool = True
 
-def __post_init__(self):
 
+def __post_init__(self):
 
     pass
     pass
         if self.bit_depths is None:
+
+
 self.bit_depths = [4, 8, 42]
         if self.tensor_routes is None:
 self.tensor_routes = ["route_0", "route_1", "route_2", "route_3", "route_4"]
 
-class HashRegistryManager:
 
+class HashRegistryManager:
 
     """
 Hash Registry Manager for Schwabot UROS v1.0.
@@ -122,12 +134,14 @@ Manages the 32-entry hash registry scaffold with:
     - Enabled/disabled switch
 """
 
-def __init__(self, registry_path: str = "core/hash_registry.json"):
 
+def __init__(self, registry_path: str = "core/hash_registry.json"):
 
     pass
     pass
         """Initialize hash registry manager."""
+
+
 self.registry_path = registry_path
 self.config = HashRegistryConfig()
 
@@ -147,13 +161,14 @@ self.performance_metrics: Dict[str, float] = {}
 self._initialize_registry()
         logger.info("Hash Registry Manager initialized")
 
-def _initialize_registry(self) -> None:
 
+def _initialize_registry(self) -> None:
 
     pass
     pass
         """Initialize registry using storage layer."""
         try:
+
             # Load or generate registry using storage
 self.hash_entries = self.storage.load_or_generate_registry()
 
@@ -166,12 +181,14 @@ logger.error(f"Error initializing registry: {e}")
 self.hash_entries = HashRegistryCore.generate_complete_registry()
             self._build_mappings()
 
-def _build_mappings(self) -> None:
 
+def _build_mappings(self) -> None:
 
     pass
     pass
         """Build basket and route mappings."""
+
+
 self.basket_mappings = {}
 self.route_mappings = {}
 
@@ -184,62 +201,64 @@ self.basket_mappings[entry.matrix_basket_id] = entry.hash_id
 self.route_mappings[entry.tensor_route] = []
 self.route_mappings[entry.tensor_route].append(entry.hash_id)
 
-def get_hash_entry(self, hash_id: str) -> Optional[HashRegistryEntry]:
 
+def get_hash_entry(self, hash_id: str) -> Optional[HashRegistryEntry]:
 
     pass
     pass
         """Get hash registry entry by ID."""
         return self.hash_entries.get(hash_id)
 
-def get_entries_by_bit_depth(self, bit_depth: int) -> List[HashRegistryEntry]:
 
+def get_entries_by_bit_depth(self, bit_depth: int) -> List[HashRegistryEntry]:
 
     pass
     pass
         """Get all entries with specified bit depth."""
         return HashRegistryCore.get_entries_by_bit_depth(self.hash_entries, bit_depth)
 
-def get_entries_by_route(self, tensor_route: str) -> List[HashRegistryEntry]:
 
+def get_entries_by_route(self, tensor_route: str) -> List[HashRegistryEntry]:
 
     pass
     pass
         """Get all entries with specified tensor route."""
         return HashRegistryCore.get_entries_by_route(self.hash_entries, tensor_route)
 
-def get_entries_by_priority_range(self, min_priority: float, max_priority: float) -> List[HashRegistryEntry]:
 
+def get_entries_by_priority_range(self, min_priority: float, max_priority: float) -> List[HashRegistryEntry]:
 
     pass
     pass
         """Get entries within priority range."""
         return HashRegistryCore.get_entries_by_priority_range(self.hash_entries, min_priority, max_priority)
 
-def get_enabled_entries(self) -> List[HashRegistryEntry]:
 
+def get_enabled_entries(self) -> List[HashRegistryEntry]:
 
     pass
     pass
         """Get all enabled entries."""
         return HashRegistryCore.get_enabled_entries(self.hash_entries)
 
-def get_disabled_entries(self) -> List[HashRegistryEntry]:
 
+def get_disabled_entries(self) -> List[HashRegistryEntry]:
 
     pass
     pass
         """Get all disabled entries."""
         return HashRegistryCore.get_disabled_entries(self.hash_entries)
 
-def enable_entry(self, hash_id: str) -> bool:
 
+def enable_entry(self, hash_id: str) -> bool:
 
     pass
     pass
         """Enable a hash registry entry."""
         try:
             if hash_id in self.hash_entries:
+
+
 self.hash_entries[hash_id].enabled = True
 
                 # Update storage

@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SystemState:
 
-
     """Current system state snapshot."""
+
 
 tick_phase: Optional[str] = None
 portfolio_shift: Optional[Dict[str, Any]] = None
@@ -32,15 +32,16 @@ market_conditions: Dict[str, Any] = field(default_factory=dict)
 
 class StateTracker:
 
-
     """Centralized state tracking and routing for the trading system."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the state tracker."""
+
+
 self.current_state = SystemState()
         self.state_history = []
 self.max_history = 100
@@ -54,13 +55,15 @@ self.callbacks = {
 
 logger.info("StateTracker initialized")
 
-def update_tick_phase(self, tick_phase: str) -> None:
 
+def update_tick_phase(self, tick_phase: str) -> None:
 
     pass
     pass
         """Update tick phase and trigger callbacks."""
         if tick_phase != self.current_state.tick_phase:
+
+
 old_phase = self.current_state.tick_phase
 self.current_state.tick_phase = tick_phase
 self.current_state.timestamp = datetime.now()
@@ -68,68 +71,78 @@ self.current_state.timestamp = datetime.now()
 logger.debug(f"Tick phase changed: {old_phase} -> {tick_phase}")
             self._trigger_callbacks('tick_phase_change', tick_phase)
 
-def update_portfolio_shift(self, portfolio_shift: Dict[str, Any]) -> None:
 
+def update_portfolio_shift(self, portfolio_shift: Dict[str, Any]) -> None:
 
     pass
     pass
         """Update portfolio shift and trigger callbacks."""
+
+
 self.current_state.portfolio_shift = portfolio_shift
 self.current_state.timestamp = datetime.now()
 
 logger.debug(f"Portfolio shift updated: {portfolio_shift}")
         self._trigger_callbacks('portfolio_shift', portfolio_shift)
 
-def update_validation_state(self, state_valid: bool) -> None:
 
+def update_validation_state(self, state_valid: bool) -> None:
 
     pass
     pass
         """Update validation state and trigger callbacks."""
         if state_valid != self.current_state.state_valid:
+
+
 self.current_state.state_valid = state_valid
 self.current_state.timestamp = datetime.now()
 
 logger.debug(f"Validation state changed: {state_valid}")
             self._trigger_callbacks('validation_change', state_valid)
 
-def update_market_conditions(self, conditions: Dict[str, Any]) -> None:
 
+def update_market_conditions(self, conditions: Dict[str, Any]) -> None:
 
     pass
     pass
         """Update market conditions."""
+
+
 self.current_state.market_conditions.update(conditions)
         self.current_state.timestamp = datetime.now()
 
-def update_risk_metrics(self, metrics: Dict[str, float]) -> None:
 
+def update_risk_metrics(self, metrics: Dict[str, float]) -> None:
 
     pass
     pass
         """Update risk metrics."""
+
+
 self.current_state.risk_metrics.update(metrics)
         self.current_state.timestamp = datetime.now()
 
-def set_execution_flag(self, flag_name: str, value: bool) -> None:
 
+def set_execution_flag(self, flag_name: str, value: bool) -> None:
 
     pass
     pass
         """Set execution flag."""
+
+
 self.current_state.execution_flags[flag_name] = value
 self.current_state.timestamp = datetime.now()
 
-def get_current_state(self) -> SystemState:
 
+def get_current_state(self) -> SystemState:
 
     pass
     pass
         """Get current system state."""
         return self.current_state
 
-def is_ready_for_execution(self) -> bool:
 
+def is_ready_for_execution(self) -> bool:
 
     pass
     pass
@@ -171,7 +184,7 @@ def store_state_snapshot(self) -> None:
     pass
     pass
         """Store current state in history."""
-snapshot = SystemState(
+snapshot=SystemState(
             tick_phase=self.current_state.tick_phase,
 portfolio_shift=self.current_state.portfolio_shift.copy() if self.current_state.portfolio_shift else None,
             state_valid=self.current_state.state_valid,
@@ -185,7 +198,7 @@ self.state_history.append(snapshot)
 
         # Maintain history size
         if len(self.state_history) > self.max_history:
-            self.state_history = self.state_history[-self.max_history:]
+            self.state_history=self.state_history[-self.max_history:]
 
 def get_state_summary(self) -> Dict[str, Any]:
 

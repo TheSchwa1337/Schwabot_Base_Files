@@ -7,14 +7,19 @@ except ImportError:
     except ImportError:
         def safe_print(message):
             print(message)
+
         def info(message):
             print(f"[INFO] {message}")
+
         def warn(message):
             print(f"[WARN] {message}")
+
         def error(message):
             print(f"[ERROR] {message}")
+
         def success(message):
             print(f"[SUCCESS] {message}")
+
         def debug(message):
             print(f"[DEBUG] {message}")
 
@@ -57,8 +62,10 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
     cli_handler = None
@@ -111,7 +118,7 @@ class ExecutionCost:
     def __post_init__(self):
         """Post-initialization processing."""
         if not self.metadata:
-            self.metadata = {}
+        self.metadata = {}
 
 
 @dataclass
@@ -131,7 +138,7 @@ class DriftValidation:
     def __post_init__(self):
         """Post-initialization processing."""
         if not self.metadata:
-            self.metadata = {}
+        self.metadata = {}
 
 
 @dataclass
@@ -172,25 +179,25 @@ class ExecutionValidator:
 
     def __init__(self, overlay_json: str = "memory_stack/aleph_overlays.json") -> None:
         """Initialize the execution validator."""
-        self.loader = GhostPhaseStrategyLoader(overlay_json)
-        self.decision_log = []
-        self.validation_file = "memory_stack/execution_validations.json"
+    self.loader = GhostPhaseStrategyLoader(overlay_json)
+    self.decision_log = []
+    self.validation_file = "memory_stack/execution_validations.json"
         safe_print("🛡️ ExecutionValidator initialized.")
 
         # Validation storage
-        self.execution_costs: Dict[str, ExecutionCost] = {}
-        self.drift_validations: Dict[str, DriftValidation] = {}
-        self.execution_validations: Dict[str, ExecutionValidation] = {}
+    self.execution_costs: Dict[str, ExecutionCost] = {}
+    self.drift_validations: Dict[str, DriftValidation] = {}
+    self.execution_validations: Dict[str, ExecutionValidation] = {}
 
         # Configuration parameters
-        self.base_cost_threshold = 10.0
-        self.complexity_factor = 0.1
-        self.market_impact_factor = 0.05
-        self.network_cost_factor = 0.02
-        self.computational_cost_factor = 0.03
+    self.base_cost_threshold = 10.0
+    self.complexity_factor = 0.1
+    self.market_impact_factor = 0.05
+    self.network_cost_factor = 0.02
+    self.computational_cost_factor = 0.03
 
         # Drift thresholds
-        self.drift_thresholds = {
+    self.drift_thresholds = {
             DriftLevel.NONE: 0.0,
             DriftLevel.MINOR: 1.0,
             DriftLevel.MODERATE: 3.0,
@@ -199,29 +206,29 @@ class ExecutionValidator:
         }
 
         # Validation thresholds
-        self.approval_threshold = 0.7
-        self.conditional_threshold = 0.5
-        self.rejection_threshold = 0.3
+    self.approval_threshold = 0.7
+    self.conditional_threshold = 0.5
+    self.rejection_threshold = 0.3
 
         # Performance tracking
-        self.total_validations = 0
-        self.successful_validations = 0
-        self.validation_success_rate = 0.0
+    self.total_validations = 0
+    self.successful_validations = 0
+    self.validation_success_rate = 0.0
 
         # Validation parameters
-        self.default_confidence_threshold = 0.7
-        self.default_drift_tolerance = 0.3
-        self.hash_similarity_threshold = 0.8
-        self.sequence_match_threshold = 0.6
+    self.default_confidence_threshold = 0.7
+    self.default_drift_tolerance = 0.3
+    self.hash_similarity_threshold = 0.8
+    self.sequence_match_threshold = 0.6
 
         # CLI compatibility
         if CLI_HANDLER_AVAILABLE:
-            self.cli_handler = WindowsCliCompatibilityHandler()
+        self.cli_handler = WindowsCliCompatibilityHandler()
         else:
             self.cli_handler = None
 
         # Load existing validations
-        self._load_validations()
+            self._load_validations()
 
         safe_print("✅ Execution Validator initialized - Cost simulation active")
 
@@ -263,7 +270,7 @@ class ExecutionValidator:
                         recommendations=drift_data.get('recommendations', []),
                         metadata=drift_data.get('metadata', {})
                     )
-                    self.drift_validations[drift_validation.validation_id] = drift_validation
+                        self.drift_validations[drift_validation.validation_id] = drift_validation
 
                 # Load execution validations
                 for exec_data in validation_data.get('execution_validations', []):
@@ -280,9 +287,10 @@ class ExecutionValidator:
                         validation_details=exec_data.get('validation_details', {}),
                         metadata=exec_data.get('metadata', {})
                     )
-                    self.execution_validations[execution_validation.validation_id] = execution_validation
+                            self.execution_validations[execution_validation.validation_id] = execution_validation
 
-            safe_print(f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
+            safe_print(
+                f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
 
         except Exception as e:
             error_msg = safe_format_error(e, "load_validations")
@@ -396,7 +404,7 @@ class ExecutionValidator:
             recommendation="Proceed" if action_allowed else "Hold due to phase conflict"
         )
         # Log for feedback learning
-        self._log_decision(exec_decision, proposed_action)
+    self._log_decision(exec_decision, proposed_action)
         return exec_decision
 
     def _evaluate_action(
@@ -424,9 +432,9 @@ class ExecutionValidator:
             "similarity": exec_decision.overlay_confidence,
             "consensus": exec_decision.consensus
         }
-        self.decision_log.append(entry)
+    self.decision_log.append(entry)
         if len(self.decision_log) > 1000:
-            self.decision_log = self.decision_log[-1000:]
+        self.decision_log = self.decision_log[-1000:]
         # Optionally, persist to disk or external system
         # with open("execution_decision_log.json", "w") as f:
         #     json.dump(self.decision_log, f, indent=2)
@@ -819,7 +827,8 @@ class ExecutionValidator:
             # Check quantity pattern
             expected_quantity = expected_pattern.get('quantity', 0.0)
             actual_quantity = trade.get('quantity', 0.0)
-            quantity_match = abs(actual_quantity - expected_quantity) / max(expected_quantity, 1e-8) < 0.1  # 10% tolerance
+            quantity_match = abs(actual_quantity - expected_quantity) / \
+                max(expected_quantity, 1e-8) < 0.1  # 10% tolerance
 
             return price_match and time_match and quantity_match
 
@@ -874,7 +883,7 @@ if __name__ == "__main__":
     # Test validation with different actions
     for action in ["buy", "sell", "hold"]:
         safe_print(f"\nTesting action: {action}")
-        
+
         # Validate execution
         decision = validator.validate(test_prices, test_live_vector, test_raw_signals, action)
         safe_print(f"Validation result: {decision}")
@@ -891,7 +900,7 @@ if __name__ == "__main__":
         'timestamp': '2024-01-01T12:00:00Z',
         'market_data': {'volatility': 0.15}
     }
-    
+
     cost = validator.simulate_execution_cost(test_trade)
     safe_print(f"Execution cost: {cost:.4f}")
 

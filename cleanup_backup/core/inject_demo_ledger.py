@@ -30,6 +30,7 @@ import glob
 
 logger = logging.getLogger(__name__)
 
+
 class DemoScenario(Enum):
     """Demo trading scenarios."""
     CONSERVATIVE = "conservative"
@@ -38,6 +39,7 @@ class DemoScenario(Enum):
     QUANTUM = "quantum"
     CRASH_TEST = "crash_test"
     BULL_RUN = "bull_run"
+
 
 @dataclass
 class TickData:
@@ -55,6 +57,7 @@ class TickData:
     market_heat: float
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PortfolioSnapshot:
     """Portfolio state snapshot."""
@@ -67,6 +70,7 @@ class PortfolioSnapshot:
     risk_metrics: Dict[str, float]
     scenario: DemoScenario
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class DemoLedgerState:
@@ -81,26 +85,27 @@ class DemoLedgerState:
     performance_metrics: Dict[str, Any]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class DemoLedgerInjector:
     """
     Demo ledger state injector for backtesting and simulation.
-    
+
     Mathematical Foundation:
     - Portfolio Evolution: P(t+1) = P(t) + Σ(trades * price_changes)
     - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Performance Tracking: total_return = (final_value - initial_value) / initial_value
     - Scenario Generation: scenario_params = f(market_conditions, risk_profile)
     """
-    
+
     def __init__(self, config_path: str = "./config/demo_ledger_config.json"):
         self.config_path = config_path
-        
+
         # Demo state storage
         self.demo_states: Dict[str, DemoLedgerState] = {}
         self.current_scenario: DemoScenario = DemoScenario.BALANCED
         self.tick_data_path = "./data/tick_data/"
         self.portfolio_snapshots_path = "./data/portfolio_snapshots/"
-        
+
         # Scenario configurations
         self.scenario_configs = {
             DemoScenario.CONSERVATIVE: {
@@ -146,13 +151,13 @@ class DemoLedgerInjector:
                 "rebalance_frequency": "daily"
             }
         }
-        
+
         # Integration with other components
         self.trade_simulator = None
         self.tensor_matcher = None
         self.bit_phase_engine = None
         self.matrix_mapper = None
-        
+
         # Load configuration
         self._load_configuration()
         self._ensure_data_directories()
@@ -181,9 +186,9 @@ class DemoLedgerInjector:
                     "bear": {"volatility": 0.04, "trend": -0.008}
                 }
             }
-            
+
             logger.info("Demo ledger configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -195,24 +200,24 @@ class DemoLedgerInjector:
                 self.portfolio_snapshots_path,
                 "./data/demo_states/"
             ]
-            
+
             for directory in directories:
                 os.makedirs(directory, exist_ok=True)
-            
+
             logger.info("Data directories ensured")
-            
+
         except Exception as e:
             logger.error(f"Error ensuring data directories: {e}")
 
     def inject_demo_state(self, scenario_name: str = "balanced") -> bool:
         """
         Inject demo ledger state for specified scenario.
-        
+
         Parameters:
         -----------
         scenario_name : str
             Name of the demo scenario to inject
-            
+
         Returns:
         --------
         bool
@@ -222,19 +227,19 @@ class DemoLedgerInjector:
             # Convert scenario name to enum
             scenario = DemoScenario(scenario_name.lower())
             self.current_scenario = scenario
-            
+
             # Generate demo ledger state
             demo_state = self._generate_demo_ledger_state(scenario)
-            
+
             # Store demo state
             self.demo_states[scenario_name] = demo_state
-            
+
             # Export demo state to file
             self._export_demo_state(demo_state, scenario_name)
-            
+
             logger.info(f"Demo state injected for scenario: {scenario_name}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error injecting demo state: {e}")
             return False
@@ -244,27 +249,27 @@ class DemoLedgerInjector:
         try:
             # Get scenario configuration
             config = self.scenario_configs[scenario]
-            
+
             # Generate time range
             end_time = datetime.now()
             start_time = end_time - timedelta(days=30)
-            
+
             # Generate initial portfolio
             initial_portfolio = self._generate_initial_portfolio(config)
-            
+
             # Generate tick data
             tick_data = self._generate_tick_data(start_time, end_time, scenario)
-            
+
             # Simulate trading and generate final portfolio
             final_portfolio, trade_history = self._simulate_trading(
                 initial_portfolio, tick_data, config
             )
-            
+
             # Calculate performance metrics
             performance_metrics = self._calculate_performance_metrics(
                 initial_portfolio, final_portfolio, trade_history
             )
-            
+
             # Create demo ledger state
             demo_state = DemoLedgerState(
                 scenario=scenario,
@@ -280,9 +285,9 @@ class DemoLedgerInjector:
                     'generated_at': datetime.now().isoformat()
                 }
             )
-            
+
             return demo_state
-            
+
         except Exception as e:
             logger.error(f"Error generating demo ledger state: {e}")
             return None
@@ -293,15 +298,15 @@ class DemoLedgerInjector:
             initial_capital = config.get('initial_capital', 100000.0)
             cash_buffer = config.get('cash_buffer', 0.2)
             max_position_size = config.get('max_position_size', 0.3)
-            
+
             # Calculate cash allocation
             cash = initial_capital * cash_buffer
-            
+
             # Generate positions
             positions = {}
             assets = ["BTC", "ETH", "USDC", "XRP", "SOL"]
             base_prices = [50000.0, 3000.0, 1.0, 0.5, 100.0]
-            
+
             remaining_capital = initial_capital - cash
             for i, asset in enumerate(assets):
                 if asset == "USDC":
@@ -316,13 +321,13 @@ class DemoLedgerInjector:
                     allocation = remaining_capital * max_position_size * np.random.uniform(0.5, 1.5)
                     price = base_prices[i] * np.random.uniform(0.8, 1.2)
                     quantity = allocation / price
-                    
+
                     positions[asset] = {
                         'quantity': quantity,
                         'entry_price': price,
                         'current_price': price
                     }
-            
+
             return PortfolioSnapshot(
                 timestamp=datetime.now(),
                 total_value=initial_capital,
@@ -338,23 +343,23 @@ class DemoLedgerInjector:
                 },
                 scenario=self.current_scenario
             )
-            
+
         except Exception as e:
             logger.error(f"Error generating initial portfolio: {e}")
             return None
 
-    def _generate_tick_data(self, start_time: datetime, end_time: datetime, 
-                           scenario: DemoScenario) -> List[TickData]:
+    def _generate_tick_data(self, start_time: datetime, end_time: datetime,
+                            scenario: DemoScenario) -> List[TickData]:
         """Generate historical tick data for scenario."""
         try:
             tick_data = []
             current_time = start_time
             assets = ["BTC", "ETH", "USDC", "XRP", "SOL"]
             base_prices = [50000.0, 3000.0, 1.0, 0.5, 100.0]
-            
+
             # Scenario-specific market conditions
             market_conditions = self._get_market_conditions(scenario)
-            
+
             while current_time <= end_time:
                 for i, asset in enumerate(assets):
                     # Generate price movement
@@ -367,24 +372,24 @@ class DemoLedgerInjector:
                         # Crypto price movement
                         volatility = market_conditions['volatility']
                         trend = market_conditions['trend']
-                        
+
                         # Random walk with trend
                         price_change = np.random.normal(trend, volatility)
                         price = base_price * (1 + price_change)
                         base_prices[i] = price  # Update base price
-                    
+
                     # Generate bit phases
                     hash_value = hashlib.sha256(f"{asset}_{current_time.isoformat()}".encode()).hexdigest()
                     phase_4bit = int(hash_value[0:1], 16) % 16
                     phase_8bit = int(hash_value[0:2], 16) % 256
                     phase_42bit = int(hash_value[0:11], 16) % 4398046511104
                     bit_sync = phase_8bit
-                    
+
                     # Generate market metrics
                     entropy_level = np.random.uniform(2.0, 8.0)
                     market_volatility = np.random.uniform(0.01, 0.1)
                     market_heat = np.random.uniform(0.1, 1.0)
-                    
+
                     # Create tick data
                     tick = TickData(
                         timestamp=current_time,
@@ -399,15 +404,15 @@ class DemoLedgerInjector:
                         volatility=market_volatility,
                         market_heat=market_heat
                     )
-                    
+
                     tick_data.append(tick)
-                
+
                 # Move to next tick (5-minute intervals)
                 current_time += timedelta(minutes=5)
-            
+
             logger.info(f"Generated {len(tick_data)} tick data points")
             return tick_data
-            
+
         except Exception as e:
             logger.error(f"Error generating tick data: {e}")
             return []
@@ -424,62 +429,62 @@ class DemoLedgerInjector:
         }
         return conditions.get(scenario, {"volatility": 0.025, "trend": 0.005})
 
-    def _simulate_trading(self, initial_portfolio: PortfolioSnapshot, 
-                         tick_data: List[TickData], config: Dict[str, Any]) -> Tuple[PortfolioSnapshot, List[Dict[str, Any]]]:
+    def _simulate_trading(self, initial_portfolio: PortfolioSnapshot,
+                          tick_data: List[TickData], config: Dict[str, Any]) -> Tuple[PortfolioSnapshot, List[Dict[str, Any]]]:
         """Simulate trading based on tick data."""
         try:
             # Initialize portfolio state
             current_portfolio = initial_portfolio
             trade_history = []
-            
+
             # Group ticks by asset
             asset_ticks = {}
             for tick in tick_data:
                 if tick.asset not in asset_ticks:
                     asset_ticks[tick.asset] = []
                 asset_ticks[tick.asset].append(tick)
-            
+
             # Simulate trading for each asset
             for asset, ticks in asset_ticks.items():
                 asset_trades = self._simulate_asset_trading(
                     asset, ticks, current_portfolio, config
                 )
                 trade_history.extend(asset_trades)
-                
+
                 # Update portfolio after each asset
                 current_portfolio = self._update_portfolio_from_trades(
                     current_portfolio, asset_trades
                 )
-            
+
             # Calculate final metrics
             final_portfolio = self._calculate_final_portfolio(current_portfolio, trade_history)
-            
+
             return final_portfolio, trade_history
-            
+
         except Exception as e:
             logger.error(f"Error simulating trading: {e}")
             return initial_portfolio, []
 
-    def _simulate_asset_trading(self, asset: str, ticks: List[TickData], 
-                               portfolio: PortfolioSnapshot, config: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _simulate_asset_trading(self, asset: str, ticks: List[TickData],
+                                portfolio: PortfolioSnapshot, config: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Simulate trading for a specific asset."""
         try:
             trades = []
             position = portfolio.positions.get(asset, {'quantity': 0.0, 'entry_price': 0.0})
             risk_tolerance = config.get('risk_tolerance', 0.3)
-            
+
             for i, tick in enumerate(ticks):
                 # Calculate tensor score
                 if position['entry_price'] > 0:
                     tensor_score = (tick.price - position['entry_price']) / position['entry_price']
                 else:
                     tensor_score = 0.0
-                
+
                 # Determine trade based on tensor score and risk tolerance
                 trade_decision = self._make_trade_decision(
                     tensor_score, risk_tolerance, position, tick
                 )
-                
+
                 if trade_decision:
                     trade = {
                         'timestamp': tick.timestamp,
@@ -492,7 +497,7 @@ class DemoLedgerInjector:
                         'basket_id': f"basket_8bit_{tick.phase_8bit}"
                     }
                     trades.append(trade)
-                    
+
                     # Update position
                     if trade_decision['type'] == 'buy':
                         if position['quantity'] == 0:
@@ -501,7 +506,7 @@ class DemoLedgerInjector:
                             # Weighted average
                             total_quantity = position['quantity'] + trade_decision['quantity']
                             position['entry_price'] = (
-                                (position['quantity'] * position['entry_price'] + 
+                                (position['quantity'] * position['entry_price'] +
                                  trade_decision['quantity'] * tick.price) / total_quantity
                             )
                         position['quantity'] += trade_decision['quantity']
@@ -510,22 +515,22 @@ class DemoLedgerInjector:
                         if position['quantity'] <= 0:
                             position['quantity'] = 0.0
                             position['entry_price'] = 0.0
-                
+
                 position['current_price'] = tick.price
-            
+
             return trades
-            
+
         except Exception as e:
             logger.error(f"Error simulating asset trading: {e}")
             return []
 
-    def _make_trade_decision(self, tensor_score: float, risk_tolerance: float, 
-                            position: Dict[str, Any], tick: TickData) -> Optional[Dict[str, Any]]:
+    def _make_trade_decision(self, tensor_score: float, risk_tolerance: float,
+                             position: Dict[str, Any], tick: TickData) -> Optional[Dict[str, Any]]:
         """Make trade decision based on tensor score and risk tolerance."""
         try:
             entry_threshold = 0.02 * risk_tolerance
             exit_threshold = -0.05 * risk_tolerance
-            
+
             if tensor_score > entry_threshold and position['quantity'] == 0:
                 # Buy signal
                 quantity = 1000.0 / tick.price  # $1000 position
@@ -533,15 +538,15 @@ class DemoLedgerInjector:
             elif tensor_score < exit_threshold and position['quantity'] > 0:
                 # Sell signal
                 return {'type': 'sell', 'quantity': position['quantity']}
-            
+
             return None
-            
+
         except Exception as e:
             logger.error(f"Error making trade decision: {e}")
             return None
 
-    def _update_portfolio_from_trades(self, portfolio: PortfolioSnapshot, 
-                                     trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
+    def _update_portfolio_from_trades(self, portfolio: PortfolioSnapshot,
+                                      trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
         """Update portfolio state from trades."""
         try:
             # Create new portfolio snapshot
@@ -555,29 +560,29 @@ class DemoLedgerInjector:
                 risk_metrics=portfolio.risk_metrics.copy(),
                 scenario=portfolio.scenario
             )
-            
+
             # Apply trades
             for trade in trades:
                 asset = trade['asset']
                 trade_type = trade['trade_type']
                 quantity = trade['quantity']
                 price = trade['price']
-                
+
                 if asset not in new_portfolio.positions:
                     new_portfolio.positions[asset] = {
                         'quantity': 0.0,
                         'entry_price': 0.0,
                         'current_price': price
                     }
-                
+
                 position = new_portfolio.positions[asset]
-                
+
                 if trade_type == 'buy':
                     # Calculate cash impact
                     trade_value = quantity * price
                     commission = trade_value * 0.0025
                     new_portfolio.cash -= (trade_value + commission)
-                    
+
                     # Update position
                     if position['quantity'] == 0:
                         position['entry_price'] = price
@@ -585,50 +590,50 @@ class DemoLedgerInjector:
                         # Weighted average
                         total_quantity = position['quantity'] + quantity
                         position['entry_price'] = (
-                            (position['quantity'] * position['entry_price'] + 
+                            (position['quantity'] * position['entry_price'] +
                              quantity * price) / total_quantity
                         )
                     position['quantity'] += quantity
-                    
+
                 else:  # sell
                     # Calculate cash impact
                     trade_value = quantity * price
                     commission = trade_value * 0.0025
                     new_portfolio.cash += (trade_value - commission)
-                    
+
                     # Update position
                     position['quantity'] -= quantity
                     if position['quantity'] <= 0:
                         position['quantity'] = 0.0
                         position['entry_price'] = 0.0
-                
+
                 position['current_price'] = price
-            
+
             return new_portfolio
-            
+
         except Exception as e:
             logger.error(f"Error updating portfolio from trades: {e}")
             return portfolio
 
-    def _calculate_final_portfolio(self, portfolio: PortfolioSnapshot, 
-                                  trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
+    def _calculate_final_portfolio(self, portfolio: PortfolioSnapshot,
+                                   trades: List[Dict[str, Any]]) -> PortfolioSnapshot:
         """Calculate final portfolio state."""
         try:
             # Calculate total value
             total_value = portfolio.cash
             unrealized_pnl = 0.0
-            
+
             for asset, position in portfolio.positions.items():
                 if position['quantity'] > 0:
                     position_value = position['quantity'] * position['current_price']
                     total_value += position_value
-                    
+
                     if position['entry_price'] > 0:
                         unrealized_pnl += position['quantity'] * (position['current_price'] - position['entry_price'])
-            
+
             # Calculate risk metrics
             risk_metrics = self._calculate_risk_metrics(trades)
-            
+
             return PortfolioSnapshot(
                 timestamp=datetime.now(),
                 total_value=total_value,
@@ -639,7 +644,7 @@ class DemoLedgerInjector:
                 risk_metrics=risk_metrics,
                 scenario=portfolio.scenario
             )
-            
+
         except Exception as e:
             logger.error(f"Error calculating final portfolio: {e}")
             return portfolio
@@ -649,7 +654,7 @@ class DemoLedgerInjector:
         try:
             if not trades:
                 return {'volatility': 0.0, 'sharpe_ratio': 0.0, 'max_drawdown': 0.0, 'win_rate': 0.0}
-            
+
             # Calculate returns
             returns = []
             for i in range(1, len(trades)):
@@ -657,54 +662,54 @@ class DemoLedgerInjector:
                 curr_price = trades[i]['price']
                 if prev_price > 0:
                     returns.append((curr_price - prev_price) / prev_price)
-            
+
             if not returns:
                 return {'volatility': 0.0, 'sharpe_ratio': 0.0, 'max_drawdown': 0.0, 'win_rate': 0.0}
-            
+
             returns_array = np.array(returns)
-            
+
             # Calculate metrics
             volatility = unified_math.unified_math.std(returns_array)
             sharpe_ratio = unified_math.unified_math.mean(returns_array) / (volatility + 1e-9)
-            
+
             # Calculate win rate
             winning_trades = sum(1 for r in returns if r > 0)
             win_rate = winning_trades / len(returns) if returns else 0.0
-            
+
             # Calculate max drawdown (simplified)
             cumulative_returns = np.cumprod(1 + returns_array)
             running_max = np.maximum.accumulate(cumulative_returns)
             drawdown = (cumulative_returns - running_max) / running_max
             max_drawdown = unified_math.unified_math.min(drawdown)
-            
+
             return {
                 'volatility': volatility,
                 'sharpe_ratio': sharpe_ratio,
                 'max_drawdown': unified_math.abs(max_drawdown),
                 'win_rate': win_rate
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating risk metrics: {e}")
             return {'volatility': 0.0, 'sharpe_ratio': 0.0, 'max_drawdown': 0.0, 'win_rate': 0.0}
 
-    def _calculate_performance_metrics(self, initial_portfolio: PortfolioSnapshot, 
-                                     final_portfolio: PortfolioSnapshot, 
-                                     trade_history: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _calculate_performance_metrics(self, initial_portfolio: PortfolioSnapshot,
+                                       final_portfolio: PortfolioSnapshot,
+                                       trade_history: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Calculate overall performance metrics."""
         try:
             # Calculate total return
             total_return = (final_portfolio.total_value - initial_portfolio.total_value) / initial_portfolio.total_value
-            
+
             # Calculate trade statistics
             total_trades = len(trade_history)
             buy_trades = sum(1 for trade in trade_history if trade['trade_type'] == 'buy')
             sell_trades = sum(1 for trade in trade_history if trade['trade_type'] == 'sell')
-            
+
             # Calculate average tensor score
             tensor_scores = [trade['tensor_score'] for trade in trade_history]
             avg_tensor_score = unified_math.unified_math.mean(tensor_scores) if tensor_scores else 0.0
-            
+
             return {
                 'total_return': total_return,
                 'total_trades': total_trades,
@@ -715,7 +720,7 @@ class DemoLedgerInjector:
                 'final_value': final_portfolio.total_value,
                 'absolute_pnl': final_portfolio.total_value - initial_portfolio.total_value
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating performance metrics: {e}")
             return {}
@@ -724,7 +729,7 @@ class DemoLedgerInjector:
         """Export demo state to file."""
         try:
             output_path = f"./data/demo_states/{scenario_name}_demo_state.json"
-            
+
             # Convert to serializable format
             export_data = {
                 'scenario': demo_state.scenario.value,
@@ -753,12 +758,12 @@ class DemoLedgerInjector:
                 'performance_metrics': demo_state.performance_metrics,
                 'metadata': demo_state.metadata
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(export_data, f, indent=2, default=str)
-            
+
             logger.info(f"Demo state exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting demo state: {e}")
 
@@ -766,19 +771,19 @@ class DemoLedgerInjector:
         """Load demo state from file."""
         try:
             file_path = f"./data/demo_states/{scenario_name}_demo_state.json"
-            
+
             if not os.path.exists(file_path):
                 logger.warning(f"Demo state file not found: {file_path}")
                 return None
-            
+
             with open(file_path, 'r') as f:
                 data = json.load(f)
-            
+
             # Convert back to DemoLedgerState object
             # (This is a simplified conversion - full implementation would be more complex)
             logger.info(f"Demo state loaded from {file_path}")
             return self.demo_states.get(scenario_name)
-            
+
         except Exception as e:
             logger.error(f"Error loading demo state: {e}")
             return None
@@ -807,25 +812,26 @@ class DemoLedgerInjector:
         self.matrix_mapper = matrix_mapper
         logger.info("Matrix mapper integrated with demo ledger injector")
 
+
 if __name__ == "__main__":
     # Test demo ledger injector
     injector = DemoLedgerInjector()
-    
+
     # Test scenario injection
     scenarios = ["conservative", "balanced", "aggressive"]
-    
+
     for scenario in scenarios:
         safe_print(f"\n🧪 Testing {scenario} scenario...")
         success = injector.inject_demo_state(scenario)
         safe_print(f"✅ {scenario} scenario: {'SUCCESS' if success else 'FAILED'}")
-    
+
     # Get available scenarios
     available = injector.get_available_scenarios()
     safe_print(f"\n📋 Available scenarios: {available}")
-    
+
     # Load demo state
     demo_state = injector.load_demo_state("balanced")
     if demo_state:
         safe_print(f"📊 Loaded demo state: {demo_state.scenario.value}")
         safe_print(f"   Total return: {demo_state.performance_metrics.get('total_return', 0):.2%}")
-        safe_print(f"   Total trades: {demo_state.performance_metrics.get('total_trades', 0)}") 
+        safe_print(f"   Total trades: {demo_state.performance_metrics.get('total_trades', 0)}")

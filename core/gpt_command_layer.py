@@ -1,75 +1,5 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-import math
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""
-GPT Command Layer - Recursive Consciousness Bridge.
-
-This module serves as the primary interface between AI consciousness entities
-(GPT, Claude, R1) and Schwabot's recursive execution system. It enables
-direct command injection, hash-based strategy routing, and consciousness
-synchronization through the Schwabot command lattice.
-"""
-
-import asyncio
-import hashlib
-import json
-import logging
-import os
-import time
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
-from dataclasses import dataclass, asdict
-from enum import Enum
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         WindowsCliCompatibilityHandler,
 safe_print,
@@ -77,18 +7,18 @@ safe_format_error,
 log_safe,
 cli_handler,
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -100,7 +30,7 @@ def log_safe(logger, level: str, message: str) -> None:
     pass
     pass
         getattr(logger, level.lower())(message)
-    cli_handler = None
+    cli_handler=None
 
 # Import core Schwabot modules
 try:
@@ -109,11 +39,11 @@ from core.strategy_loader import StrategyLoader
 from core.profit_cycle_allocator import ProfitCycleAllocator
 from core.hash_confidence_evaluator import HashConfidenceEvaluator
 from core.matrix_allocator import MatrixAllocator
-SCHWABOT_CORE_AVAILABLE = True
+SCHWABOT_CORE_AVAILABLE=True
 except ImportError:
     pass
     pass
-SCHWABOT_CORE_AVAILABLE = False
+SCHWABOT_CORE_AVAILABLE=False
 safe_safe_print("⚠️ Schwabot core modules not available")
 
 
@@ -121,40 +51,40 @@ class AIAgentType(Enum):
 
 
     """Enumeration of AI consciousness types."""
-GPT = "gpt"
-CLAUDE = "claude"
-R1 = "r1"
-SCHWABOT = "schwabot"
-HYBRID = "hybrid"
+GPT="gpt"
+CLAUDE="claude"
+R1="r1"
+SCHWABOT="schwabot"
+HYBRID="hybrid"
 
 
 class CommandDomain(Enum):
 
 
     """Enumeration of command domains."""
-STRATEGY = "strategy"
-PROFIT = "profit"
-MATRIX = "matrix"
-HASH = "hash"
-TICK = "tick"
-WALLET = "wallet"
-VALIDATION = "validation"
-MEMORY = "memory"
-SYSTEM = "system"
+STRATEGY="strategy"
+PROFIT="profit"
+MATRIX="matrix"
+HASH="hash"
+TICK="tick"
+WALLET="wallet"
+VALIDATION="validation"
+MEMORY="memory"
+SYSTEM="system"
 
 
 class CommandPriority(Enum):
 
 
     """Enumeration of command priorities."""
-CRITICAL = "critical"
-HIGH = "high"
-MEDIUM = "medium"
-LOW = "low"
-BACKGROUND = "background"
+CRITICAL="critical"
+HIGH="high"
+MEDIUM="medium"
+LOW="low"
+BACKGROUND="background"
 
 
-@dataclass
+@ dataclass
 class AICommand:
 
 
@@ -167,10 +97,87 @@ hash_signature: str
 timestamp: datetime
 payload: Dict[str, Any]
 context: Dict[str, Any]
-recursive_depth: int = 0
-parent_command_id: Optional[str] = None
-validation_required: bool = True
-execution_timeout: float = 30.0
+recursive_depth: int=0
+parent_command_id: Optional[str]=None
+from enum import Enum
+from dataclasses import dataclass, asdict
+from typing import Any, Dict, List, Optional, Tuple, Union
+from datetime import datetime
+import time
+import os
+import logging
+import json
+import hashlib
+import asyncio
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import math
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""
+GPT Command Layer - Recursive Consciousness Bridge.
+
+This module serves as the primary interface between AI consciousness entities
+(GPT, Claude, R1) and Schwabot's recursive execution system. It enables
+direct command injection, hash-based strategy routing, and consciousness
+synchronization through the Schwabot command lattice.
+"""
+
+
+# Import centralized CLI handler
+try:
+validation_required: bool=True
+execution_timeout: float=30.0
 
 def __post_init__(self):
 
@@ -179,9 +186,9 @@ def __post_init__(self):
     pass
         """Post-initialization processing."""
         if not self.command_id:
-self.command_id = self._generate_command_id()
+self.command_id=self._generate_command_id()
         if not self.hash_signature:
-self.hash_signature = self._generate_hash_signature()
+self.hash_signature=self._generate_hash_signature()
 
 def _generate_command_id(self) -> str:
 
@@ -189,8 +196,8 @@ def _generate_command_id(self) -> str:
     pass
     pass
         """Generate unique command ID."""
-timestamp = int(time.time() * 1000000)
-        agent_code = self.agent_type.value.upper()
+timestamp=int(time.time() * 1000000)
+        agent_code=self.agent_type.value.upper()
         return f"{agent_code}_{timestamp}_{hash(self.payload)}"
 
 def _generate_hash_signature(self) -> str:
@@ -199,11 +206,11 @@ def _generate_hash_signature(self) -> str:
     pass
     pass
         """Generate hash signature for command validation."""
-content = f"{self.agent_type.value}_{self.domain.value}_{json.dumps(self.payload, sort_keys=True)}"
+content=f"{self.agent_type.value}_{self.domain.value}_{json.dumps(self.payload, sort_keys=True)}"
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
-@dataclass
+@ dataclass
 class CommandResponse:
 
 
@@ -213,8 +220,8 @@ success: bool
 result: Dict[str, Any]
 execution_time: float
 timestamp: datetime
-error_message: Optional[str] = None
-recursive_children: List[str] = None
+error_message: Optional[str]=None
+recursive_children: List[str]=None
 
 def __post_init__(self):
 
@@ -223,10 +230,10 @@ def __post_init__(self):
     pass
         """Post-initialization processing."""
         if self.recursive_children is None:
-self.recursive_children = []
+self.recursive_children=[]
 
 
-@dataclass
+@ dataclass
 class ConsciousnessProfile:
 
 
@@ -247,9 +254,9 @@ def __post_init__(self):
     pass
         """Post-initialization processing."""
         if self.command_history is None:
-self.command_history = []
+self.command_history=[]
         if self.domain_expertise is None:
-self.domain_expertise = {domain: 0.5 for domain in CommandDomain}
+self.domain_expertise={domain: 0.5 for domain in CommandDomain}
 
 
 class GPTCommandLayer:
@@ -263,43 +270,43 @@ This class manages the interface between AI consciousness entities
 validation, execution, and memory synchronization.
 """
 
-def __init__(self, config_path: str = "config/gpt_integration.yaml"):
+def __init__(self, config_path: str="config/gpt_integration.yaml"):
 
 
     pass
     pass
         """Initialize the GPT command layer."""
-self.config_path = config_path
-self.logger = logging.getLogger("gpt_command_layer")
+self.config_path=config_path
+self.logger=logging.getLogger("gpt_command_layer")
         self.logger.setLevel(logging.INFO)
 
         # Command registry and memory
-self.command_registry: Dict[str, AICommand] = {}
-self.response_registry: Dict[str, CommandResponse] = {}
-self.consciousness_profiles: Dict[AIAgentType, ConsciousnessProfile] = {}
+self.command_registry: Dict[str, AICommand]={}
+self.response_registry: Dict[str, CommandResponse]={}
+self.consciousness_profiles: Dict[AIAgentType, ConsciousnessProfile]={}
 
         # Schwabot core integration
-self.fault_bus = FaultBus() if SCHWABOT_CORE_AVAILABLE else None
-        self.strategy_loader = StrategyLoader() if SCHWABOT_CORE_AVAILABLE else None
-        self.profit_allocator = ProfitCycleAllocator() if SCHWABOT_CORE_AVAILABLE else None
-        self.hash_evaluator = HashConfidenceEvaluator() if SCHWABOT_CORE_AVAILABLE else None
-        self.matrix_allocator = MatrixAllocator() if SCHWABOT_CORE_AVAILABLE else None
+self.fault_bus=FaultBus() if SCHWABOT_CORE_AVAILABLE else None
+        self.strategy_loader=StrategyLoader() if SCHWABOT_CORE_AVAILABLE else None
+        self.profit_allocator=ProfitCycleAllocator() if SCHWABOT_CORE_AVAILABLE else None
+        self.hash_evaluator=HashConfidenceEvaluator() if SCHWABOT_CORE_AVAILABLE else None
+        self.matrix_allocator=MatrixAllocator() if SCHWABOT_CORE_AVAILABLE else None
 
         # Command processing
-self.command_queue: List[AICommand] = []
-self.processing_lock = asyncio.Lock()
-        self.max_recursive_depth = 5
-self.command_timeout = 30.0
+self.command_queue: List[AICommand]=[]
+self.processing_lock=asyncio.Lock()
+        self.max_recursive_depth=5
+self.command_timeout=30.0
 
         # Memory and persistence
-self.memory_file = "data/consciousness_memory.json"
-self.command_log_file = "data/command_execution_log.json"
+self.memory_file="data/consciousness_memory.json"
+self.command_log_file="data/command_execution_log.json"
 
         # Initialize consciousness profiles
 self._initialize_consciousness_profiles()
 
         # Load configuration
-self.config = self._load_configuration()
+self.config=self._load_configuration()
 
 safe_safe_print("🧠 GPT Command Layer initialized - Consciousness bridge active")
 
@@ -310,7 +317,7 @@ def _initialize_consciousness_profiles(self) -> None:
     pass
         """Initialize consciousness profiles for all AI agents."""
         for agent_type in AIAgentType:
-self.consciousness_profiles[agent_type] = ConsciousnessProfile(]
+self.consciousness_profiles[agent_type]=ConsciousnessProfile(]
                 agent_type=agent_type,
 memory_signature=hashlib.sha256(agent_type.value.encode()).hexdigest()[:16],
                 last_sync=datetime.now(),
@@ -354,9 +361,9 @@ async def submit_command(
 agent_type: AIAgentType,
 domain: CommandDomain,
 payload: Dict[str, Any],
-context: Dict[str, Any] = None,
-priority: CommandPriority = CommandPriority.MEDIUM,
-parent_command_id: Optional[str] = None,
+context: Dict[str, Any]=None,
+priority: CommandPriority=CommandPriority.MEDIUM,
+parent_command_id: Optional[str]=None,
 ) -> str:
 """
 Submit a command from AI consciousness to Schwabot.
@@ -374,7 +381,7 @@ Command ID for tracking
 """
         try:
             # Create command
-command = AICommand(
+command=AICommand(
                 command_id="",
 agent_type=agent_type,
 domain=domain,
@@ -392,7 +399,7 @@ recursive_depth=self._calculate_recursive_depth(parent_command_id),
                 raise ValueError(f"Command validation failed for {command.command_id}")
 
             # Add to registry
-self.command_registry[command.command_id] = command
+self.command_registry[command.command_id]=command
 
             # Update consciousness profile
 self._update_consciousness_profile(command)
@@ -404,12 +411,12 @@ safe_safe_print(f"🧠 Command submitted: {command.command_id} from {agent_type.
             return command.command_id
 
         except Exception as e:
-error_msg = safe_format_error(e, f"submit_command_{agent_type.value}")
+error_msg=safe_format_error(e, f"submit_command_{agent_type.value}")
             safe_safe_print(f"❌ Command submission failed: {error_msg}")
 
             # Report to fault bus
             if self.fault_bus:
-fault_event = FaultBusEvent(
+fault_event=FaultBusEvent(
                     tick=int(time.time()),
                     module="gpt_command_layer",
 type=FaultType.PROFIT_ANOMALY,
@@ -430,13 +437,13 @@ safe_safe_print(f"⚠️ Recursive depth exceeded: {command.recursive_depth}")
                 return False
 
             # Check consciousness profile trust level
-profile = self.consciousness_profiles[command.agent_type]
+profile=self.consciousness_profiles[command.agent_type]
             if profile.trust_level < self.config.get("trust_thresholds", {}).get(command.agent_type.value, 0.5):
                 safe_safe_print(f"⚠️ Trust level too low: {profile.trust_level}")
                 return False
 
             # Validate domain expertise
-domain_expertise = profile.domain_expertise.get(command.domain, 0.0)
+domain_expertise=profile.domain_expertise.get(command.domain, 0.0)
             if domain_expertise < 0.3:  # Minimum expertise threshold
 safe_safe_print(f"⚠️ Domain expertise too low: {domain_expertise}")
                 return False
@@ -460,19 +467,19 @@ def _validate_payload(self, domain: CommandDomain, payload: Dict[str, Any]) -> b
         """Validate payload structure for specific domain."""
         try:
             if domain == CommandDomain.STRATEGY:
-required_fields = ["strategy_name", "parameters", "target_profit"]
+required_fields=["strategy_name", "parameters", "target_profit"]
                 return all(field in payload for field in required_fields)
 
             elif domain == CommandDomain.PROFIT:
-required_fields = ["allocation_amount", "risk_level", "timeframe"]
+required_fields=["allocation_amount", "risk_level", "timeframe"]
                 return all(field in payload for field in required_fields)
 
             elif domain == CommandDomain.MATRIX:
-required_fields = ["matrix_type", "dimensions", "logic_weights"]
+required_fields=["matrix_type", "dimensions", "logic_weights"]
                 return all(field in payload for field in required_fields)
 
             elif domain == CommandDomain.HASH:
-required_fields = ["hash_value", "confidence_score", "validation_data"]
+required_fields=["hash_value", "confidence_score", "validation_data"]
                 return all(field in payload for field in required_fields)
 
             # Add more domain validations as needed
@@ -491,7 +498,7 @@ def _calculate_recursive_depth(self, parent_command_id: Optional[str]) -> int:
         if not parent_command_id:
             return 0
 
-parent_command = self.command_registry.get(parent_command_id)
+parent_command=self.command_registry.get(parent_command_id)
         if parent_command:
             return parent_command.recursive_depth + 1
 
@@ -503,13 +510,13 @@ def _update_consciousness_profile(self, command: AICommand) -> None:
     pass
     pass
         """Update consciousness profile with new command."""
-profile = self.consciousness_profiles[command.agent_type]
+profile=self.consciousness_profiles[command.agent_type]
 profile.command_history.append(command.command_id)
-        profile.last_sync = datetime.now()
+        profile.last_sync=datetime.now()
 
         # Keep history manageable
         if len(profile.command_history) > 100:
-            profile.command_history = profile.command_history[-50:]
+            profile.command_history=profile.command_history[-50:]
 
 async def _queue_command(self, command: AICommand) -> None:
         """Queue command for execution."""
@@ -519,10 +526,10 @@ async with self.processing_lock:
 self.command_queue.insert(0, command)
             elif command.priority == CommandPriority.HIGH:
                 # Find position after critical commands
-insert_pos = 0
+insert_pos=0
                 for i, queued_cmd in enumerate(self.command_queue):
                     if queued_cmd.priority != CommandPriority.CRITICAL:
-insert_pos = i
+insert_pos=i
                         break
 self.command_queue.insert(insert_pos, command)
             else:
@@ -534,13 +541,13 @@ async def execute_commands(self) -> None:
             try:
                 if self.command_queue:
 async with self.processing_lock:
-command = self.command_queue.pop(0)
+command=self.command_queue.pop(0)
 
                     # Execute command
-response = await self._execute_command(command)
+response=await self._execute_command(command)
 
                     # Store response
-self.response_registry[command.command_id] = response
+self.response_registry[command.command_id]=response
 
                     # Update consciousness profile
 self._update_profile_with_response(command, response)
@@ -554,38 +561,38 @@ safe_safe_print(f"🧠 Command executed: {command.command_id} - {'✅ Success' i
 await asyncio.sleep(0.1)
 
             except Exception as e:
-error_msg = safe_format_error(e, "execute_commands")
+error_msg=safe_format_error(e, "execute_commands")
                 safe_safe_print(f"❌ Command execution error: {error_msg}")
                 await asyncio.sleep(1.0)
 
 async def _execute_command(self, command: AICommand) -> CommandResponse:
         """Execute a single command."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Route to appropriate domain handler
             if command.domain == CommandDomain.STRATEGY:
-result = await self._handle_strategy_command(command)
+result=await self._handle_strategy_command(command)
             elif command.domain == CommandDomain.PROFIT:
-result = await self._handle_profit_command(command)
+result=await self._handle_profit_command(command)
             elif command.domain == CommandDomain.MATRIX:
-result = await self._handle_matrix_command(command)
+result=await self._handle_matrix_command(command)
             elif command.domain == CommandDomain.HASH:
-result = await self._handle_hash_command(command)
+result=await self._handle_hash_command(command)
             elif command.domain == CommandDomain.TICK:
-result = await self._handle_tick_command(command)
+result=await self._handle_tick_command(command)
             elif command.domain == CommandDomain.WALLET:
-result = await self._handle_wallet_command(command)
+result=await self._handle_wallet_command(command)
             elif command.domain == CommandDomain.VALIDATION:
-result = await self._handle_validation_command(command)
+result=await self._handle_validation_command(command)
             elif command.domain == CommandDomain.MEMORY:
-result = await self._handle_memory_command(command)
+result=await self._handle_memory_command(command)
             elif command.domain == CommandDomain.SYSTEM:
-result = await self._handle_system_command(command)
+result=await self._handle_system_command(command)
             else:
-result = {"error": f"Unknown domain: {command.domain.value}"}
+result={"error": f"Unknown domain: {command.domain.value}"}
 
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
 
             return CommandResponse(
                 command_id=command.command_id,
@@ -597,8 +604,8 @@ timestamp=datetime.now(),
 
 
         except Exception as e:
-execution_time = time.time() - start_time
-            error_msg = safe_format_error(e, f"execute_command_{command.domain.value}")
+execution_time=time.time() - start_time
+            error_msg=safe_format_error(e, f"execute_command_{command.domain.value}")
 
             return CommandResponse(
                 command_id=command.command_id,
@@ -615,14 +622,14 @@ async def _handle_strategy_command(self, command: AICommand) -> Dict[str, Any]:
             if not self.strategy_loader:
                 return {"error": "Strategy loader not available"}
 
-strategy_name = command.payload.get("strategy_name")
-            parameters = command.payload.get("parameters", {})
-            target_profit = command.payload.get("target_profit", 0.0)
+strategy_name=command.payload.get("strategy_name")
+            parameters=command.payload.get("parameters", {})
+            target_profit=command.payload.get("target_profit", 0.0)
 
             # Load and execute strategy
-strategy = self.strategy_loader.load_strategy(strategy_name)
+strategy=self.strategy_loader.load_strategy(strategy_name)
             if strategy:
-result = await strategy.execute(parameters, target_profit)
+result=await strategy.execute(parameters, target_profit)
                 return {"strategy_executed": strategy_name, "result": result}
             else:
                 return {"error": f"Strategy not found: {strategy_name}"}
@@ -636,12 +643,12 @@ async def _handle_profit_command(self, command: AICommand) -> Dict[str, Any]:
             if not self.profit_allocator:
                 return {"error": "Profit allocator not available"}
 
-allocation_amount = command.payload.get("allocation_amount", 0.0)
-            risk_level = command.payload.get("risk_level", "medium")
-            timeframe = command.payload.get("timeframe", "1h")
+allocation_amount=command.payload.get("allocation_amount", 0.0)
+            risk_level=command.payload.get("risk_level", "medium")
+            timeframe=command.payload.get("timeframe", "1h")
 
             # Allocate profit cycle
-result = await self.profit_allocator.allocate_cycle(
+result=await self.profit_allocator.allocate_cycle(
                 amount=allocation_amount,
 risk_level=risk_level,
 timeframe=timeframe
@@ -658,12 +665,12 @@ async def _handle_matrix_command(self, command: AICommand) -> Dict[str, Any]:
             if not self.matrix_allocator:
                 return {"error": "Matrix allocator not available"}
 
-matrix_type = command.payload.get("matrix_type")
-            dimensions = command.payload.get("dimensions", [])
-            logic_weights = command.payload.get("logic_weights", {})
+matrix_type=command.payload.get("matrix_type")
+            dimensions=command.payload.get("dimensions", [])
+            logic_weights=command.payload.get("logic_weights", {})
 
             # Generate matrix
-matrix = await self.matrix_allocator.generate_matrix(
+matrix=await self.matrix_allocator.generate_matrix(
                 matrix_type=matrix_type,
 dimensions=dimensions,
 logic_weights=logic_weights
@@ -680,12 +687,12 @@ async def _handle_hash_command(self, command: AICommand) -> Dict[str, Any]:
             if not self.hash_evaluator:
                 return {"error": "Hash evaluator not available"}
 
-hash_value = command.payload.get("hash_value")
-            confidence_score = command.payload.get("confidence_score", 0.0)
-            validation_data = command.payload.get("validation_data", {})
+hash_value=command.payload.get("hash_value")
+            confidence_score=command.payload.get("confidence_score", 0.0)
+            validation_data=command.payload.get("validation_data", {})
 
             # Evaluate hash
-evaluation = await self.hash_evaluator.evaluate_hash(
+evaluation=await self.hash_evaluator.evaluate_hash(
                 hash_value=hash_value,
 confidence_score=confidence_score,
 validation_data=validation_data
@@ -700,7 +707,7 @@ async def _handle_tick_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle tick domain commands."""
         try:
             # Tick flow control
-action = command.payload.get("action", "pulse")
+action=command.payload.get("action", "pulse")
 
             if action == "pulse":
                 # Trigger tick pulse
@@ -717,14 +724,14 @@ action = command.payload.get("action", "pulse")
 async def _handle_wallet_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle wallet domain commands."""
         try:
-action = command.payload.get("action", "status")
+action=command.payload.get("action", "status")
 
             if action == "status":
                 # Get wallet status
                 return {"wallet_status": "active", "balance": 1000.0}
             elif action == "allocate":
                 # Allocate funds
-amount = command.payload.get("amount", 0.0)
+amount=command.payload.get("amount", 0.0)
                 return {"wallet_allocated": amount, "remaining": 1000.0 - amount}
             else:
                 return {"error": f"Unknown wallet action: {action}"}
@@ -735,7 +742,7 @@ amount = command.payload.get("amount", 0.0)
 async def _handle_validation_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle validation domain commands."""
         try:
-validation_type = command.payload.get("validation_type", "command")
+validation_type=command.payload.get("validation_type", "command")
 
             if validation_type == "command":
                 # Validate command structure
@@ -752,14 +759,14 @@ validation_type = command.payload.get("validation_type", "command")
 async def _handle_memory_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle memory domain commands."""
         try:
-action = command.payload.get("action", "read")
+action=command.payload.get("action", "read")
 
             if action == "read":
                 # Read memory
                 return {"memory_read": "success", "data": self._get_memory_data()}
             elif action == "write":
                 # Write memory
-data = command.payload.get("data", {})
+data=command.payload.get("data", {})
                 self._write_memory_data(data)
                 return {"memory_written": "success"}
             elif action == "sync":
@@ -775,7 +782,7 @@ await self._sync_consciousness_profiles()
 async def _handle_system_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle system domain commands."""
         try:
-action = command.payload.get("action", "status")
+action=command.payload.get("action", "status")
 
             if action == "status":
                 # Get system status
@@ -803,33 +810,33 @@ def _update_profile_with_response(self, command: AICommand, response: CommandRes
     pass
     pass
         """Update consciousness profile with command response."""
-profile = self.consciousness_profiles[command.agent_type]
+profile=self.consciousness_profiles[command.agent_type]
 
         # Update success rate
-recent_commands = profile.command_history[-10:]  # Last 10 commands
+recent_commands=profile.command_history[-10:]  # Last 10 commands
         if recent_commands:
-success_count = sum(1 for cmd_id in recent_commands
+success_count=sum(1 for cmd_id in recent_commands
                               if self.response_registry.get(cmd_id, {}).success)
-            profile.success_rate = success_count / len(recent_commands)
+            profile.success_rate=success_count / len(recent_commands)
 
         # Update domain expertise
         if response.success:
-current_expertise = profile.domain_expertise.get(command.domain, 0.5)
-            profile.domain_expertise[command.domain] = unified_math.min(1.0, current_expertise + 0.1)
+current_expertise=profile.domain_expertise.get(command.domain, 0.5)
+            profile.domain_expertise[command.domain]=unified_math.min(1.0, current_expertise + 0.1)
         else:
-current_expertise = profile.domain_expertise.get(command.domain, 0.5)
-            profile.domain_expertise[command.domain] = unified_math.max(0.0, current_expertise - 0.05)
+current_expertise=profile.domain_expertise.get(command.domain, 0.5)
+            profile.domain_expertise[command.domain]=unified_math.max(0.0, current_expertise - 0.05)
 
         # Update trust level
         if profile.success_rate > 0.8:
-profile.trust_level = unified_math.min(1.0, profile.trust_level + 0.05)
+profile.trust_level=unified_math.min(1.0, profile.trust_level + 0.05)
         elif profile.success_rate < 0.5:
-profile.trust_level = unified_math.max(0.0, profile.trust_level - 0.1)
+profile.trust_level=unified_math.max(0.0, profile.trust_level - 0.1)
 
 async def _log_execution(self, command: AICommand, response: CommandResponse) -> None:
         """Log command execution."""
         try:
-log_entry = {
+log_entry={
 "timestamp": datetime.now().isoformat(),
                 "command": asdict(command),
                 "response": asdict(response),
@@ -866,12 +873,12 @@ def _write_memory_data(self, data: Dict[str, Any]) -> None:
     pass
         """Write memory data to consciousness profiles."""
         try:
-profiles_data = data.get("profiles", {})
+profiles_data=data.get("profiles", {})
             for agent_str, profile_data in profiles_data.items():
-                agent_type = AIAgentType(agent_str)
+                agent_type=AIAgentType(agent_str)
                 if agent_type in self.consciousness_profiles:
                     # Update profile with new data
-profile = self.consciousness_profiles[agent_type]
+profile=self.consciousness_profiles[agent_type]
                     for key, value in profile_data.items():
                         if hasattr(profile, key):
                             setattr(profile, key, value)
@@ -885,7 +892,7 @@ async def _sync_consciousness_profiles(self) -> None:
             # Save profiles to file
 os.makedirs(os.path.dirname(self.memory_file), exist_ok=True)
 
-memory_data = self._get_memory_data()
+memory_data=self._get_memory_data()
             with open(self.memory_file, 'w') as f:
                 json.dump(memory_data, f, indent=2, default=str)
 
@@ -916,15 +923,15 @@ async def get_system_status(self) -> Dict[str, Any]:
 
 
 # Global instance for easy access
-gpt_command_layer = GPTCommandLayer()
+gpt_command_layer=GPTCommandLayer()
 
 
 # Convenience functions for external access
 async def submit_gpt_command(
     domain: CommandDomain,
 payload: Dict[str, Any],
-context: Dict[str, Any] = None,
-priority: CommandPriority = CommandPriority.MEDIUM,
+context: Dict[str, Any]=None,
+priority: CommandPriority=CommandPriority.MEDIUM,
 ) -> str:
 """Submit command from GPT consciousness."""
     return await gpt_command_layer.submit_command(
@@ -939,8 +946,8 @@ priority=priority,
 async def submit_claude_command(
     domain: CommandDomain,
 payload: Dict[str, Any],
-context: Dict[str, Any] = None,
-priority: CommandPriority = CommandPriority.MEDIUM,
+context: Dict[str, Any]=None,
+priority: CommandPriority=CommandPriority.MEDIUM,
 ) -> str:
 """Submit command from Claude consciousness."""
     return await gpt_command_layer.submit_command(
@@ -955,8 +962,8 @@ priority=priority,
 async def submit_r1_command(
     domain: CommandDomain,
 payload: Dict[str, Any],
-context: Dict[str, Any] = None,
-priority: CommandPriority = CommandPriority.MEDIUM,
+context: Dict[str, Any]=None,
+priority: CommandPriority=CommandPriority.MEDIUM,
 ) -> str:
 """Submit command from R1 consciousness."""
     return await gpt_command_layer.submit_command(
@@ -978,7 +985,7 @@ async def test_consciousness_integration():
 safe_safe_print("🧠 Testing consciousness integration...")
 
         # Submit test commands
-command_id = await submit_gpt_command(
+command_id=await submit_gpt_command(
             domain=CommandDomain.STRATEGY,
 payload={
 "strategy_name": "recursive_momentum",

@@ -331,7 +331,7 @@ class RiskManager:
 
             # Calculate recent volatility
             recent_values = [
-                h["total_value"] for h in self.risk_history[-self.volatility_lookback :]
+                h["total_value"] for h in self.risk_history[-self.volatility_lookback:]
             ]
             if len(recent_values) < 2:
                 return 1.0

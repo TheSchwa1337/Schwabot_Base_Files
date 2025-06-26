@@ -88,7 +88,8 @@ class GrayscaleDriftTensorCore:
             Drift field value
         """
         decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
-        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 +
+                     unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         return decay * stability
 
     def allocate_ring_drift(self, layer_index: int, entropy_gradient: float) -> float:

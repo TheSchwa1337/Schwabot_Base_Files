@@ -17,6 +17,8 @@ Core Functionality:
 This module provides the bridge between hash trigger mapping and ghost signal processing.
 """
 
+from core.hash_trigger_mapper import HashTriggerMapper, HashTriggerMapping
+from core.ghost_signal import GhostSignal, GhostSignalProcessor
 import time
 from typing import Dict, List, Optional, Any, Union, Literal, Tuple
 from dataclasses import dataclass, field
@@ -37,48 +39,57 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}"), safe_math
+
+
 except ImportError:
     pass
     pass
     # Fallback for CLI compatibility with proper Unicode handling
-def safe_print(*args, **kwargs):
 
+
+def safe_print(*args, **kwargs):
 
     pass
     pass
@@ -86,6 +97,8 @@ def safe_print(*args, **kwargs):
         try:
             print(*args, **kwargs)
         except UnicodeEncodeError:
+
+
             # Fallback to ASCII-safe output
 safe_args = []
             for arg in args:
@@ -95,8 +108,8 @@ safe_args = []
 safe_args.append(arg)
             print(*safe_args, **kwargs)
 
-def info(*args, **kwargs):
 
+def info(*args, **kwargs):
 
     pass
     pass
@@ -104,6 +117,8 @@ def info(*args, **kwargs):
         try:
             print("[INFO]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -112,8 +127,8 @@ safe_args = []
 safe_args.append(arg)
             print("[INFO]", *safe_args, **kwargs)
 
-def warn(*args, **kwargs):
 
+def warn(*args, **kwargs):
 
     pass
     pass
@@ -121,6 +136,8 @@ def warn(*args, **kwargs):
         try:
             print("[WARN]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -129,8 +146,8 @@ safe_args = []
 safe_args.append(arg)
             print("[WARN]", *safe_args, **kwargs)
 
-def error(*args, **kwargs):
 
+def error(*args, **kwargs):
 
     pass
     pass
@@ -138,6 +155,8 @@ def error(*args, **kwargs):
         try:
             print("[ERROR]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -146,8 +165,8 @@ safe_args = []
 safe_args.append(arg)
             print("[ERROR]", *safe_args, **kwargs)
 
-def success(*args, **kwargs):
 
+def success(*args, **kwargs):
 
     pass
     pass
@@ -155,6 +174,8 @@ def success(*args, **kwargs):
         try:
             print("[SUCCESS]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -163,8 +184,8 @@ safe_args = []
 safe_args.append(arg)
             print("[SUCCESS]", *safe_args, **kwargs)
 
-def debug(*args, **kwargs):
 
+def debug(*args, **kwargs):
 
     pass
     pass
@@ -172,6 +193,8 @@ def debug(*args, **kwargs):
         try:
             print("[DEBUG]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -180,8 +203,8 @@ safe_args = []
 safe_args.append(arg)
             print("[DEBUG]", *safe_args, **kwargs)
 
-def safe_math(*args, **kwargs):
 
+def safe_math(*args, **kwargs):
 
     pass
     pass
@@ -189,6 +212,8 @@ def safe_math(*args, **kwargs):
         try:
             print("[MATH]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -199,37 +224,40 @@ safe_args.append(arg)
 
 # Import our modules
 try:
-from core.ghost_signal import GhostSignal, GhostSignalProcessor
-from core.hash_trigger_mapper import HashTriggerMapper, HashTriggerMapping
 except ImportError as e:
 error(f"Import error: {e}")
     # Create mock classes for testing
+
+
 class MockGhostSignal:
 
-
         """Mock GhostSignal for testing."""
-def __init__(self, **kwargs):
 
+
+def __init__(self, **kwargs):
 
     pass
     pass
             for key, value in kwargs.items():
                 setattr(self, key, value)
 
+
 class MockGhostSignalProcessor:
 
-
         """Mock GhostSignalProcessor for testing."""
-def __init__(self):
 
+
+def __init__(self):
 
     pass
     pass
             self.signal_history = []
+
+
 self.last_signal = None
 
-def create_signal(self, btc_vector, entropy, timestamp=None):
 
+def create_signal(self, btc_vector, entropy, timestamp=None):
 
     pass
     pass
@@ -255,7 +283,7 @@ confidence_threshold=0.6,
 risk_level="medium"
 
 self.signal_history.append(signal)
-            self.last_signal = signal
+            self.last_signal=signal
             return signal
 
 class MockHashTriggerMapping:
@@ -279,7 +307,7 @@ def __init__(self):
 
     pass
     pass
-            self.mappings = {}
+            self.mappings={}
 
 def map_hash_trigger(self, hash_trigger, market_data=None, ghost_signal_data=None):
 
@@ -303,10 +331,10 @@ trigger_engine_compatible=True,
 ghost_signal_compatible=True
 
 
-GhostSignal = MockGhostSignal
-GhostSignalProcessor = MockGhostSignalProcessor
-HashTriggerMapping = MockHashTriggerMapping
-HashTriggerMapper = MockHashTriggerMapper
+GhostSignal=MockGhostSignal
+GhostSignalProcessor=MockGhostSignalProcessor
+HashTriggerMapping=MockHashTriggerMapping
+HashTriggerMapper=MockHashTriggerMapper
 
 try:
 from core.unified_math_system import unified_math
@@ -321,7 +349,7 @@ class FallbackMath:
 
         """Fallback math system for when unified_math_system is unavailable."""
 
-@staticmethod
+@ staticmethod
 def mean(data: List[float]) -> float:
 
 
@@ -330,7 +358,7 @@ def mean(data: List[float]) -> float:
             """Calculate mean of data."""
             return float(np.mean(data))
 
-@staticmethod
+@ staticmethod
 def std(data: List[float]) -> float:
 
 
@@ -339,7 +367,7 @@ def std(data: List[float]) -> float:
             """Calculate standard deviation of data."""
             return float(np.std(data))
 
-@staticmethod
+@ staticmethod
 def min(data: List[float]) -> float:
 
 
@@ -348,7 +376,7 @@ def min(data: List[float]) -> float:
             """Calculate minimum of data."""
             return float(np.min(data))
 
-@staticmethod
+@ staticmethod
 def max(data: List[float]) -> float:
 
 
@@ -357,7 +385,7 @@ def max(data: List[float]) -> float:
             """Calculate maximum of data."""
             return float(np.max(data))
 
-@staticmethod
+@ staticmethod
 def abs(value: float) -> float:
 
 
@@ -366,7 +394,7 @@ def abs(value: float) -> float:
             """Calculate absolute value."""
             return float(np.abs(value))
 
-@staticmethod
+@ staticmethod
 def correlation(data1: List[float], data2: List[float]) -> float:
 
 
@@ -377,7 +405,7 @@ def correlation(data1: List[float], data2: List[float]) -> float:
                 return float(np.corrcoef(data1, data2)[0, 1])
             return 0.0
 
-@staticmethod
+@ staticmethod
 def sqrt(value: float) -> float:
 
 
@@ -386,7 +414,7 @@ def sqrt(value: float) -> float:
             """Calculate square root."""
             return float(np.sqrt(value))
 
-@staticmethod
+@ staticmethod
 def log(value: float) -> float:
 
 
@@ -395,23 +423,23 @@ def log(value: float) -> float:
             """Calculate natural logarithm."""
             return float(np.log(value))
 
-unified_math = FallbackMath()
+unified_math=FallbackMath()
 
 # Type definitions
-IntegrationMode = Literal["enhanced", "fallback", "hybrid"]
-StrategyDecision = Literal["execute", "hold", "modify", "abort"]
+IntegrationMode=Literal["enhanced", "fallback", "hybrid"]
+StrategyDecision=Literal["execute", "hold", "modify", "abort"]
 
 class IntegrationStatus(Enum):
 
 
     """Integration status for the strategy system."""
-ACTIVE = "active"
-STANDBY = "standby"
-ERROR = "error"
-INITIALIZING = "initializing"
+ACTIVE="active"
+STANDBY="standby"
+ERROR="error"
+INITIALIZING="initializing"
 
 
-@dataclass
+@ dataclass
 class EnhancedStrategyDecision:
 
 
@@ -439,7 +467,7 @@ decision_factors: Dict[str, float]
     # Timing and metadata
 timestamp: datetime
 processing_time: float  # Time taken to make decision
-metadata: Dict[str, Any] = field(default_factory=dict)
+metadata: Dict[str, Any]=field(default_factory=dict)
 
 def to_dict(self) -> Dict[str, Any]:
 
@@ -472,32 +500,32 @@ This class provides sophisticated strategy decision making by integrating
     hash trigger mapping with ghost signal analysis.
 """
 
-def __init__(self, integration_mode: IntegrationMode = "enhanced") -> None:
+def __init__(self, integration_mode: IntegrationMode="enhanced") -> None:
 
 
     pass
     pass
         """Initialize the ghost strategy integrator."""
-self.integration_mode = integration_mode
-self.status = IntegrationStatus.INITIALIZING
+self.integration_mode=integration_mode
+self.status=IntegrationStatus.INITIALIZING
 
         # Initialize components
-self.hash_mapper = HashTriggerMapper()
-        self.ghost_processor = GhostSignalProcessor()
+self.hash_mapper=HashTriggerMapper()
+        self.ghost_processor=GhostSignalProcessor()
 
         # Decision history
-self.decision_history: List[EnhancedStrategyDecision] = []
-self.max_history = 1000
+self.decision_history: List[EnhancedStrategyDecision]=[]
+self.max_history=1000
 
         # Performance tracking
-self.total_decisions = 0
-self.successful_decisions = 0
-self.average_processing_time = 0.0
+self.total_decisions=0
+self.successful_decisions=0
+self.average_processing_time=0.0
 
         # Integration flags
-self.hash_mapper.ghost_signal_available = True
+self.hash_mapper.ghost_signal_available=True
 
-self.status = IntegrationStatus.ACTIVE
+self.status=IntegrationStatus.ACTIVE
 info("Ghost Strategy Integrator initialized")
 
 def make_enhanced_decision(
@@ -506,7 +534,7 @@ def make_enhanced_decision(
         self,
 btc_vector: Any,  # BTCVector type
 entropy: float,
-timestamp: Optional[float] = None
+timestamp: Optional[float]=None
 ) -> EnhancedStrategyDecision:
 """
 Make an enhanced strategy decision using both hash mapping and ghost signals.
@@ -519,21 +547,21 @@ timestamp: Current timestamp (defaults to time.time())
 Returns:
 EnhancedStrategyDecision with comprehensive strategy information
 """
-start_time = time.time()
+start_time=time.time()
 
         try:
             if timestamp is None:
-timestamp = time.time()
+timestamp=time.time()
 
             # Step 1: Create ghost signal
-ghost_signal = self.ghost_processor.create_signal(
+ghost_signal=self.ghost_processor.create_signal(
                 btc_vector=btc_vector,
 entropy=entropy,
 timestamp=timestamp
 
 
             # Step 2: Create market data for hash mapping
-market_data = {
+market_data={
 "volatility": ghost_signal.volatility,
 "entropy": ghost_signal.entropy,
 "momentum": ghost_signal.momentum,
@@ -542,7 +570,7 @@ market_data = {
 }
 
             # Step 3: Create ghost signal data for hash mapping
-ghost_data = {
+ghost_data={
 "phase_state": ghost_signal.phase_state,
 "signal_strength": getattr(ghost_signal, 'signal_strength', 0.5),
                 "resonance_score": ghost_signal.resonance_score,
@@ -551,32 +579,32 @@ ghost_data = {
 }
 
             # Step 4: Map hash trigger
-hash_mapping = self.hash_mapper.map_hash_trigger(
+hash_mapping=self.hash_mapper.map_hash_trigger(
                 hash_trigger=btc_vector.hash_trigger,
 market_data=market_data,
 ghost_signal_data=ghost_data
 
 
             # Step 5: Integrate decisions
-decision = self._integrate_decisions(ghost_signal, hash_mapping)
+decision=self._integrate_decisions(ghost_signal, hash_mapping)
 
             # Step 6: Calculate combined score
-combined_score = self._calculate_combined_score(ghost_signal, hash_mapping)
+combined_score=self._calculate_combined_score(ghost_signal, hash_mapping)
 
             # Step 7: Determine final strategy pathway
-final_pathway = self._determine_final_pathway(ghost_signal, hash_mapping, combined_score)
+final_pathway=self._determine_final_pathway(ghost_signal, hash_mapping, combined_score)
 
             # Step 8: Calculate decision factors
-decision_factors = self._calculate_decision_factors(ghost_signal, hash_mapping)
+decision_factors=self._calculate_decision_factors(ghost_signal, hash_mapping)
 
             # Step 9: Determine strategy decision
-strategy_decision = self._determine_strategy_decision(combined_score, decision_factors)
+strategy_decision=self._determine_strategy_decision(combined_score, decision_factors)
 
             # Calculate processing time
-processing_time = time.time() - start_time
+processing_time=time.time() - start_time
 
             # Create enhanced decision
-enhanced_decision = EnhancedStrategyDecision(
+enhanced_decision=EnhancedStrategyDecision(
                 decision=strategy_decision,
 strategy_pathway=final_pathway,
 confidence_score=combined_score,
@@ -609,19 +637,19 @@ hash_mapping: HashTriggerMapping
 """Integrate decisions from both ghost signal and hash mapping."""
         try:
             # Check for conflicts
-ghost_pathway = ghost_signal.suggested_pathway
-hash_pathway = hash_mapping.strategy_pathway
+ghost_pathway=ghost_signal.suggested_pathway
+hash_pathway=hash_mapping.strategy_pathway
 
             # Calculate agreement score
-agreement_score = 1.0 if ghost_pathway == hash_pathway else 0.5
+agreement_score=1.0 if ghost_pathway == hash_pathway else 0.5
 
             # Determine integration mode
             if agreement_score > 0.8:
-integration_mode = "enhanced"
+integration_mode="enhanced"
             elif agreement_score > 0.5:
-integration_mode = "hybrid"
+integration_mode="hybrid"
             else:
-integration_mode = "fallback"
+integration_mode="fallback"
 
             return {
 "ghost_pathway": ghost_pathway,
@@ -651,26 +679,26 @@ hash_mapping: HashTriggerMapping
 """Calculate combined confidence score from both systems."""
         try:
             # Ghost signal confidence factors
-ghost_confidence = ghost_signal.confidence_threshold
-ghost_resonance = ghost_signal.resonance_score
-ghost_hash_confidence = ghost_signal.hash_confidence
+ghost_confidence=ghost_signal.confidence_threshold
+ghost_resonance=ghost_signal.resonance_score
+ghost_hash_confidence=ghost_signal.hash_confidence
 
             # Hash mapping confidence factors
-hash_confidence = hash_mapping.mapping_score
-hash_pattern_confidence = self._get_pattern_confidence(hash_mapping.pattern_type)
-            hash_frequency_confidence = min(hash_mapping.frequency_count / 10.0, 1.0)
+hash_confidence=hash_mapping.mapping_score
+hash_pattern_confidence=self._get_pattern_confidence(hash_mapping.pattern_type)
+            hash_frequency_confidence=min(hash_mapping.frequency_count / 10.0, 1.0)
 
             # Weighted combination
-ghost_score = (ghost_confidence * 0.4 + ghost_resonance * 0.3 + ghost_hash_confidence * 0.3)
-            hash_score = (hash_confidence * 0.4 + hash_pattern_confidence * 0.3 + hash_frequency_confidence * 0.3)
+ghost_score=(ghost_confidence * 0.4 + ghost_resonance * 0.3 + ghost_hash_confidence * 0.3)
+            hash_score=(hash_confidence * 0.4 + hash_pattern_confidence * 0.3 + hash_frequency_confidence * 0.3)
 
             # Combined score with integration mode weighting
             if self.integration_mode == "enhanced":
-combined_score = (ghost_score * 0.6 + hash_score * 0.4)
+combined_score=(ghost_score * 0.6 + hash_score * 0.4)
             elif self.integration_mode == "hybrid":
-combined_score = (ghost_score * 0.5 + hash_score * 0.5)
+combined_score=(ghost_score * 0.5 + hash_score * 0.5)
             else:  # fallback
-combined_score = max(ghost_score, hash_score)
+combined_score=max(ghost_score, hash_score)
 
             return min(max(combined_score, 0.0), 1.0)
 
@@ -685,7 +713,7 @@ def _get_pattern_confidence(self, pattern_type: Any) -> float:
     pass
         """Get confidence score for pattern type."""
         try:
-pattern_confidences = {
+pattern_confidences={
 "critical": 0.9,
 "sequential": 0.7,
 "patterned": 0.6,
@@ -693,7 +721,7 @@ pattern_confidences = {
 "random": 0.3
 }
 
-pattern_name = pattern_type.value if hasattr(pattern_type, 'value') else str(pattern_type)
+pattern_name=pattern_type.value if hasattr(pattern_type, 'value') else str(pattern_type)
             return pattern_confidences.get(pattern_name, 0.5)
 
         except Exception as e:
@@ -710,8 +738,8 @@ combined_score: float
 ) -> str:
 """Determine final strategy pathway based on integration."""
         try:
-ghost_pathway = ghost_signal.suggested_pathway
-hash_pathway = hash_mapping.strategy_pathway
+ghost_pathway=ghost_signal.suggested_pathway
+hash_pathway=hash_mapping.strategy_pathway
 
             # High confidence agreement
             if combined_score > 0.8:
@@ -729,7 +757,7 @@ hash_pathway = hash_mapping.strategy_pathway
             # Low confidence
             else:
                 # Use safer pathway
-safe_pathways = ["monitor_ghost", "cautious_ghost", "defensive_ghost"]
+safe_pathways=["monitor_ghost", "cautious_ghost", "defensive_ghost"]
                 if ghost_pathway in safe_pathways:
                     return ghost_pathway
                 elif hash_pathway in safe_pathways:
@@ -794,7 +822,7 @@ decision_factors: Dict[str, float]
             # Medium confidence with good factors
             elif combined_score > 0.6:
                 # Check for favorable conditions
-favorable_factors = sum([
+favorable_factors=sum([
                     decision_factors.get("resonance_factor", 0.5) > 0.7,
                     decision_factors.get("hash_confidence_factor", 0.5) > 0.7,
                     decision_factors.get("mapping_score_factor", 0.5) > 0.7
@@ -808,7 +836,7 @@ favorable_factors = sum([
             # Low confidence or poor conditions
             else:
                 # Check for dangerous conditions
-dangerous_factors = sum([
+dangerous_factors=sum([
                     decision_factors.get("volatility_factor", 0.5) > 0.8,
                     decision_factors.get("entropy_factor", 0.5) > 0.8,
                     decision_factors.get("drift_factor", 0.5) > 0.01
@@ -836,7 +864,7 @@ self.decision_history.append(decision)
 
             # Maintain history size
             if len(self.decision_history) > self.max_history:
-                self.decision_history = self.decision_history[-self.max_history:]
+                self.decision_history=self.decision_history[-self.max_history:]
 
             # Update successful decisions
             if decision.decision in ["execute", "hold"]:
@@ -844,9 +872,9 @@ self.successful_decisions += 1
 
             # Update average processing time
             if self.total_decisions == 1:
-self.average_processing_time = decision.processing_time
+self.average_processing_time=decision.processing_time
             else:
-self.average_processing_time = (
+self.average_processing_time=(
                     (self.average_processing_time * (self.total_decisions - 1) + decision.processing_time) /
                     self.total_decisions
 
@@ -866,7 +894,7 @@ start_time: float
 """Create fallback decision when normal decision making fails."""
         try:
             # Create minimal ghost signal
-ghost_signal = GhostSignal(
+ghost_signal=GhostSignal(
                 price=btc_vector.mean_price,
 volatility=btc_vector.volatility,
 momentum=btc_vector.momentum,
@@ -889,7 +917,7 @@ risk_level="high"
 
 
             # Create minimal hash mapping
-hash_mapping = HashTriggerMapping(
+hash_mapping=HashTriggerMapping(
                 hash_trigger=btc_vector.hash_trigger,
 strategy_pathway="monitor_ghost",
 confidence_level="low",
@@ -906,7 +934,7 @@ trigger_engine_compatible=False,
 ghost_signal_compatible=False
 
 
-processing_time = time.time() - start_time
+processing_time=time.time() - start_time
 
             return EnhancedStrategyDecision(
                 decision="hold",
@@ -948,27 +976,27 @@ def get_integration_statistics(self) -> Dict[str, Any]:
                 return {"total_decisions": 0}
 
             # Basic statistics
-total_decisions = len(self.decision_history)
-            success_rate = self.successful_decisions / self.total_decisions if self.total_decisions > 0 else 0.0
+total_decisions=len(self.decision_history)
+            success_rate=self.successful_decisions / self.total_decisions if self.total_decisions > 0 else 0.0
 
             # Decision distribution
-decision_counts: Dict[str, int] = {}
-pathway_counts: Dict[str, int] = {}
-mode_counts: Dict[str, int] = {}
+decision_counts: Dict[str, int]={}
+pathway_counts: Dict[str, int]={}
+mode_counts: Dict[str, int]={}
 
             for decision in self.decision_history:
                 # Count decisions
-decision_counts[decision.decision] = decision_counts.get(decision.decision, 0) + 1
+decision_counts[decision.decision]=decision_counts.get(decision.decision, 0) + 1
 
                 # Count pathways
-pathway_counts[decision.strategy_pathway] = pathway_counts.get(decision.strategy_pathway, 0) + 1
+pathway_counts[decision.strategy_pathway]=pathway_counts.get(decision.strategy_pathway, 0) + 1
 
                 # Count integration modes
-mode_counts[decision.integration_mode] = mode_counts.get(decision.integration_mode, 0) + 1
+mode_counts[decision.integration_mode]=mode_counts.get(decision.integration_mode, 0) + 1
 
             # Calculate averages
-avg_confidence = unified_math.mean([d.confidence_score for d in self.decision_history])
-            avg_combined_score = unified_math.mean([d.combined_score for d in self.decision_history])
+avg_confidence=unified_math.mean([d.confidence_score for d in self.decision_history])
+            avg_combined_score=unified_math.mean([d.combined_score for d in self.decision_history])
 
             return {
 "total_decisions": total_decisions,
@@ -995,9 +1023,9 @@ def clear_history(self) -> None:
         """Clear decision history."""
         try:
 self.decision_history.clear()
-            self.total_decisions = 0
-self.successful_decisions = 0
-self.average_processing_time = 0.0
+            self.total_decisions=0
+self.successful_decisions=0
+self.average_processing_time=0.0
 info("Decision history cleared")
 
         except Exception as e:
@@ -1015,7 +1043,7 @@ def test_ghost_strategy_integration() -> None:
     print("=" * 50)
 
     # Initialize integrator
-integrator = GhostStrategyIntegrator()
+integrator=GhostStrategyIntegrator()
 
     # Create mock BTCVector
 class MockBTCVector:
@@ -1028,14 +1056,14 @@ def __init__(self) -> None:
 
     pass
     pass
-            self.price = 50000.0
-self.volatility = 0.025
-self.momentum = 0.003
-self.mean_price = 50000.0
-self.hash_trigger = "a1b2c3"
+            self.price=50000.0
+self.volatility=0.025
+self.momentum=0.003
+self.mean_price=50000.0
+self.hash_trigger="a1b2c3"
 
     # Test different scenarios
-test_scenarios = [
+test_scenarios=[
 {"name": "Low Risk", "entropy": 0.2, "volatility": 0.01, "momentum": 0.001},
 {"name": "Medium Risk", "entropy": 0.5, "volatility": 0.025, "momentum": 0.003},
 {"name": "High Risk", "entropy": 0.8, "volatility": 0.06, "momentum": 0.01},
@@ -1045,12 +1073,12 @@ test_scenarios = [
         print(f"\nTesting scenario: {scenario['name']}")
 
         # Create BTCVector with scenario conditions
-btc_vector = MockBTCVector()
-        btc_vector.volatility = scenario['volatility']
-btc_vector.momentum = scenario['momentum']
+btc_vector=MockBTCVector()
+        btc_vector.volatility=scenario['volatility']
+btc_vector.momentum=scenario['momentum']
 
         # Make enhanced decision
-decision = integrator.make_enhanced_decision(
+decision=integrator.make_enhanced_decision(
             btc_vector=btc_vector,
 entropy=scenario['entropy'],
 timestamp=time.time()
@@ -1064,7 +1092,7 @@ timestamp=time.time()
         print(f"  Processing Time: {decision.processing_time:.4f}s")
 
     # Get statistics
-stats = integrator.get_integration_statistics()
+stats=integrator.get_integration_statistics()
     print("\nIntegration Statistics:")
     print(f"  Total decisions: {stats['total_decisions']}")
     print(f"  Success rate: {stats['success_rate']:.2%}")

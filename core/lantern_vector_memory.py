@@ -1,95 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import numpy as np
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Lantern Vector Memory with ZPE Mathematical Framework Integration.
-
-Vector memory with rolling PCA analysis and ZPE news/lantern signal mapping.
-The ZPE framework provides elastic resonance calculations for enhanced
-memory pattern recognition and signal processing.
-"""
-
-
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import logging
-from typing import Dict, List, Optional, Any
-from datetime import datetime
-from dataclasses import dataclass
-
-# Import ZPE Mathematical Framework
-try:
-from core.zpe_core import ZPECore
-ZPE_MODULES_AVAILABLE = True
-except ImportError as e:
-logging.warning(f"ZPE modules not available: {e}")
-    ZPE_MODULES_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -107,24 +31,24 @@ from sklearn.decomposition import PCA
 except ImportError:
     pass
     pass
-PCA = None
+PCA=None
 
 
-@dataclass
+@ dataclass
 class LanternMemoryEntry:
 
 
     """Enhanced memory entry with ZPE integration."""
 vector: List[float]
 timestamp: datetime
-news_density: float = 0.0
-sentiment_delta: float = 0.0
-price_derivative: float = 0.0
+news_density: float=0.0
+sentiment_delta: float=0.0
+price_derivative: float=0.0
     # ZPE Integration Fields
-zpe_lantern_signal: float = 0.0
-zpe_resonance: float = 0.0
-zpe_signal_strength: float = 0.0
-metadata: Dict[str, Any] = None
+zpe_lantern_signal: float=0.0
+zpe_resonance: float=0.0
+zpe_signal_strength: float=0.0
+metadata: Dict[str, Any]=None
 
 def __post_init__(self):
 
@@ -132,22 +56,22 @@ def __post_init__(self):
     pass
     pass
         if self.metadata is None:
-self.metadata = {}
+self.metadata={}
 
 
-@dataclass
+@ dataclass
 class LanternMemoryResult:
 
 
     """Result of lantern memory operations with ZPE integration."""
 success: bool
 memory_entries: List[LanternMemoryEntry]
-pca_components: Optional[np.ndarray] = None
+pca_components: Optional[np.ndarray]=None
     # ZPE Integration Fields
-zpe_signals: List[float] = None
-zpe_resonances: List[float] = None
-average_signal_strength: float = 0.0
-metadata: Dict[str, Any] = None
+zpe_signals: List[float]=None
+zpe_resonances: List[float]=None
+average_signal_strength: float=0.0
+metadata: Dict[str, Any]=None
 
 def __post_init__(self):
 
@@ -155,14 +79,14 @@ def __post_init__(self):
     pass
     pass
         if self.zpe_signals is None:
-self.zpe_signals = []
+self.zpe_signals=[]
         if self.zpe_resonances is None:
-self.zpe_resonances = []
+self.zpe_resonances=[]
         if self.metadata is None:
-self.metadata = {}
+self.metadata={}
 
 
-def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
+def rolling_pca(vecs: list[list[float]], n_components: int=4) -> np.ndarray:
 
 
     pass
@@ -174,6 +98,89 @@ historical shape memory for cosine matching.
 
 Args:
 vecs: List of vector histories
+from core.zpe_core import ZPECore
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, List, Optional, Any
+import logging
+import numpy as np
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Lantern Vector Memory with ZPE Mathematical Framework Integration.
+
+Vector memory with rolling PCA analysis and ZPE news/lantern signal mapping.
+The ZPE framework provides elastic resonance calculations for enhanced
+memory pattern recognition and signal processing.
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Import ZPE Mathematical Framework
+try:
+ZPE_MODULES_AVAILABLE = True
+except ImportError as e:
+logging.warning(f"ZPE modules not available: {e}")
+    ZPE_MODULES_AVAILABLE = False
+
+# Import centralized CLI handler
+try:
 n_components: Number of principal components
 
 Returns:
@@ -187,15 +194,15 @@ Returns identity matrix if sklearn not available
 
     try:
         # Take last 256 vectors or all if fewer
-recent_vecs = vecs[-256:] if len(vecs) > 256 else vecs
-        X = np.array(recent_vecs)
+recent_vecs=vecs[-256:] if len(vecs) > 256 else vecs
+        X=np.array(recent_vecs)
 
         # Handle edge cases
         if X.shape[0] < n_components:
-n_components = unified_math.min(n_components, X.shape[0])
+n_components=unified_math.min(n_components, X.shape[0])
 
         # Compute PCA
-pca = PCA(n_components=n_components).fit(X)
+pca=PCA(n_components=n_components).fit(X)
         return pca.components_
 
     except Exception:
@@ -214,9 +221,9 @@ def __init__(self):
     pass
     pass
         """Initialize Lantern Memory with ZPE integration."""
-self.state = {}
-self.memory_entries: List[LanternMemoryEntry] = []
-self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
+self.state={}
+self.memory_entries: List[LanternMemoryEntry]=[]
+self.zpe_core=ZPECore() if ZPE_MODULES_AVAILABLE else None
 
         if ZPE_MODULES_AVAILABLE:
 safe_safe_print("🔄 Lantern Memory initialized with ZPE integration")
@@ -236,15 +243,15 @@ def add_memory_entry(
 
         self,
 vector: List[float],
-news_density: float = 0.0,
-sentiment_delta: float = 0.0,
-price_derivative: float = 0.0,
-metadata: Optional[Dict[str, Any]] = None
+news_density: float=0.0,
+sentiment_delta: float=0.0,
+price_derivative: float=0.0,
+metadata: Optional[Dict[str, Any]]=None
 ) -> LanternMemoryEntry:
 """Add a new memory entry with ZPE calculations."""
         try:
             # Create base memory entry
-entry = LanternMemoryEntry(
+entry=LanternMemoryEntry(
                 vector=vector,
 timestamp=datetime.now(),
                 news_density=news_density,
@@ -257,20 +264,20 @@ metadata=metadata or {}
             if self.zpe_core:
                 try:
                     # Map news/lantern signals
-entry.zpe_lantern_signal = self.zpe_core.map_news_lantern_signals(
+entry.zpe_lantern_signal=self.zpe_core.map_news_lantern_signals(
                         news_density, sentiment_delta
 
 
                     # Calculate elastic resonance
-frequency = 1.0  # Default frequency
-phase_offset = 0.0  # Default phase offset
-time_window = 1.0  # Default time window
-entry.zpe_resonance = self.zpe_core.calculate_elastic_resonance(
+frequency=1.0  # Default frequency
+phase_offset=0.0  # Default phase offset
+time_window=1.0  # Default time window
+entry.zpe_resonance=self.zpe_core.calculate_elastic_resonance(
                         price_derivative, frequency, phase_offset, time_window
 
 
                     # Calculate signal strength
-entry.zpe_signal_strength = (entry.zpe_lantern_signal + entry.zpe_resonance) / 2.0
+entry.zpe_signal_strength=(entry.zpe_lantern_signal + entry.zpe_resonance) / 2.0
 
                     # Update metadata with ZPE info
 entry.metadata.update({
@@ -282,15 +289,15 @@ entry.metadata.update({
 
                 except Exception as e:
 safe_safe_print(f"⚠️ ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
-                    entry.metadata['zpe_integration'] = False
-entry.metadata['zpe_error'] = str(e)
+                    entry.metadata['zpe_integration']=False
+entry.metadata['zpe_error']=str(e)
 
             # Add to memory
 self.memory_entries.append(entry)
 
             # Keep only recent entries (last 1000)
             if len(self.memory_entries) > 1000:
-                self.memory_entries = self.memory_entries[-1000:]
+                self.memory_entries=self.memory_entries[-1000:]
 
             return entry
 
@@ -298,7 +305,7 @@ self.memory_entries.append(entry)
 safe_safe_print(f"❌ Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
             return None
 
-def get_memory_analysis(self, n_components: int = 4) -> LanternMemoryResult:
+def get_memory_analysis(self, n_components: int=4) -> LanternMemoryResult:
 
 
     pass
@@ -313,16 +320,16 @@ metadata={'error': 'No memory entries available'}
 
 
             # Extract vectors for PCA
-vectors = [entry.vector for entry in self.memory_entries]
-pca_components = rolling_pca(vectors, n_components)
+vectors=[entry.vector for entry in self.memory_entries]
+pca_components=rolling_pca(vectors, n_components)
 
             # Extract ZPE signals
-zpe_signals = [entry.zpe_lantern_signal for entry in self.memory_entries]
-zpe_resonances = [entry.zpe_resonance for entry in self.memory_entries]
-signal_strengths = [entry.zpe_signal_strength for entry in self.memory_entries]
+zpe_signals=[entry.zpe_lantern_signal for entry in self.memory_entries]
+zpe_resonances=[entry.zpe_resonance for entry in self.memory_entries]
+signal_strengths=[entry.zpe_signal_strength for entry in self.memory_entries]
 
             # Calculate average signal strength
-average_signal_strength = sum(signal_strengths) / len(signal_strengths) if signal_strengths else 0.0
+average_signal_strength=sum(signal_strengths) / len(signal_strengths) if signal_strengths else 0.0
 
             return LanternMemoryResult(
                 success=True,
@@ -356,7 +363,7 @@ def get_zpe_metrics(self) -> Dict[str, Any]:
             return {'zpe_available': False}
 
         try:
-recent_entries = self.memory_entries[-100:] if self.memory_entries else []
+recent_entries=self.memory_entries[-100:] if self.memory_entries else []
 
             if not recent_entries:
                 return {
@@ -365,9 +372,9 @@ recent_entries = self.memory_entries[-100:] if self.memory_entries else []
 'average_signal_strength': 0.0
 }
 
-signal_strengths = [entry.zpe_signal_strength for entry in recent_entries]
-lantern_signals = [entry.zpe_lantern_signal for entry in recent_entries]
-resonances = [entry.zpe_resonance for entry in recent_entries]
+signal_strengths=[entry.zpe_signal_strength for entry in recent_entries]
+lantern_signals=[entry.zpe_lantern_signal for entry in recent_entries]
+resonances=[entry.zpe_resonance for entry in recent_entries]
 
             return {
 'zpe_available': True,
@@ -394,7 +401,7 @@ def clear_memory(self) -> None:
 self.memory_entries.clear()
         safe_safe_print("🗑️ Lantern Memory cleared")
 
-def get_recent_entries(self, count: int = 10) -> List[LanternMemoryEntry]:
+def get_recent_entries(self, count: int=10) -> List[LanternMemoryEntry]:
 
 
     pass
@@ -402,7 +409,7 @@ def get_recent_entries(self, count: int = 10) -> List[LanternMemoryEntry]:
         """Get recent memory entries."""
         return self.memory_entries[-count:] if self.memory_entries else []
 
-def search_by_signal_strength(self, min_strength: float = 0.0) -> List[LanternMemoryEntry]:
+def search_by_signal_strength(self, min_strength: float=0.0) -> List[LanternMemoryEntry]:
 
 
     pass
@@ -415,7 +422,7 @@ entry for entry in self.memory_entries
 
 
 # Legacy function for backward compatibility
-def rolling_pca_legacy(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
+def rolling_pca_legacy(vecs: list[list[float]], n_components: int=4) -> np.ndarray:
 
 
     pass

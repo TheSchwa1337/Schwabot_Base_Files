@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .profit_navigation_engine import TradeProposal
+from .mathlib_v4 import MathLibV4, DLTPattern
+from .fault_bus import FaultBus
+from typing import Dict, List, Optional, Tuple
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+import logging
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Enhanced Risk Manager - DLT Pattern-Based Risk Analytics
@@ -64,18 +81,9 @@ Core Risk Philosophy:
 - Risk thresholds based on DLT hash confirmation strength
 """
 
-import asyncio
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Optional, Tuple
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-from .fault_bus import FaultBus
-from .mathlib_v4 import MathLibV4, DLTPattern
-from .profit_navigation_engine import TradeProposal
 
 logger = logging.getLogger(__name__)
 
@@ -84,8 +92,9 @@ logger = logging.getLogger(__name__)
 
 class DLTRiskLevel(Enum):
 
-
     """Risk levels based on pattern confidence degradation."""
+
+
 MINIMAL = "minimal"          # > 0.9 confidence
 LOW = "low"                  # 0.7 - 0.9 confidence
 MODERATE = "moderate"        # 0.5 - 0.7 confidence
@@ -95,8 +104,9 @@ CRITICAL = "critical"        # < 0.3 confidence
 
 class PatternRiskType(Enum):
 
-
     """Types of pattern-based risks in the DLT system."""
+
+
 CONFIDENCE_DECAY = "confidence_decay"
 TEMPORAL_DRIFT = "temporal_drift"
 TRIPLET_INSTABILITY = "triplet_instability"
@@ -107,8 +117,9 @@ OBSERVER_DESYNC = "observer_desync"
 @dataclass
 class DLTRiskMetrics:
 
-
     """Comprehensive DLT-based risk assessment."""
+
+
 overall_risk_level: DLTRiskLevel
 pattern_confidence: float
 temporal_drift_velocity: float
@@ -122,8 +133,9 @@ risk_timestamp: datetime = field(default_factory=datetime.now)
 @dataclass
 class PatternRiskAlert:
 
-
     """Alert for specific pattern-based risk events."""
+
+
 risk_type: PatternRiskType
 pattern_hash: str
 risk_severity: float  # 0.0 - 1.0
@@ -135,8 +147,9 @@ timestamp: datetime = field(default_factory=datetime.now)
 @dataclass
 class TemporalRiskSnapshot:
 
-
     """Snapshot of temporal drift risk over time."""
+
+
 base_timestamp: datetime
 drift_velocity: float
 correction_stability: float
@@ -148,18 +161,18 @@ risk_projection: float  # Projected risk in next time window
 
 class DLTRiskCalculator:
 
-
     """
 Pure mathematical functions for DLT-based risk calculations.
 Uses the Schwabot mathematical framework for risk assessment.
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.math_lib = MathLibV4()
+
 
 def calculate_confidence_decay_risk(
 
@@ -169,6 +182,7 @@ current_confidence: float,
 historical_confidences: List[float],
 decay_window: int = 10
 ) -> float:
+
 """
 Calculates risk based on pattern confidence decay over time.
 Uses exponential decay model to predict confidence degradation.
@@ -209,6 +223,7 @@ decay_risk = unified_math.min(1.0, decay_rate * 2.0)  # Scale to [0,1]
 
         return float(decay_risk)
 
+
 def calculate_temporal_drift_risk(
 
 
@@ -216,6 +231,7 @@ def calculate_temporal_drift_risk(
 drift_velocity: float,
 stability_threshold: float = 0.1
 ) -> float:
+
 """
 Calculates risk from temporal drift velocity.
 High drift indicates Observer-aware corrections are struggling.
@@ -227,6 +243,7 @@ normalized_drift = unified_math.abs(drift_velocity) / stability_threshold
 
         return float(drift_risk)
 
+
 def calculate_triplet_stability_risk(
 
 
@@ -234,6 +251,7 @@ def calculate_triplet_stability_risk(
 recent_deltas: np.ndarray,
 stability_window: int = 9  # 3 triplets
 ) -> float:
+
 """
 Assesses risk from Triplet Lock instability.
 Monitors how well recent deltas maintain triplet lock patterns.
@@ -259,6 +277,7 @@ avg_stability = unified_math.unified_math.mean(stability_scores)
 
         return float(instability_risk)
 
+
 def calculate_fractal_coherence_risk(
 
 
@@ -266,6 +285,7 @@ def calculate_fractal_coherence_risk(
 pattern_hashes: List[str],
 coherence_window: int = 5
 ) -> float:
+
 """
 Measures risk from Forever Fractal pattern incoherence.
 High risk when recent patterns show no similarity to established patterns.

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Bit Phase Engine - Schwabot UROS v1.0
@@ -57,28 +70,25 @@ Handles dynamic bit-phase extraction from hash strings for strategy allocation.
 Provides mathematical functions for bit phase resolution across different modes.
 """
 
-import hashlib
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BitPhaseResult:
 
-
     """Result of bit phase resolution."""
+
+
 phase_value: int
 mode: str
 hash_input: str
 confidence: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class BitPhaseEngine:
 
+class BitPhaseEngine:
 
     """
 Engine for resolving bit phases from hash strings.
@@ -89,12 +99,14 @@ Supports three bit resolution modes:
 - 42-bit Quantum: High complexity, maximum precision
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.supported_modes = ["4bit", "8bit", "42bit"]
+
+
 self.phase_limits = {
 "4bit": 16,
 "8bit": 256,
@@ -104,8 +116,8 @@ self.phase_history: List[BitPhaseResult] = []
 
 logger.info("Bit Phase Engine initialized")
 
-def resolve_bit_phase(self, hash_str: str, mode: str = "16bit") -> int:
 
+def resolve_bit_phase(self, hash_str: str, mode: str = "16bit") -> int:
 
     pass
     pass
@@ -122,6 +134,8 @@ int: Resolved bit phase value
         try:
             # Normalize mode
             if mode == "16bit":
+
+
 mode = "8bit"  # Default to 8-bit for 16bit mode
 
             if mode not in self.supported_modes:

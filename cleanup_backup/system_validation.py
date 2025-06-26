@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 class SystemValidator:
     """Comprehensive system validator for Schwabot."""
-    
+
     def __init__(self):
         """Initialize the system validator."""
         self.results = {
@@ -51,18 +51,18 @@ class SystemValidator:
             'warnings': 0,
             'checks': {}
         }
-        
+
         self.project_root = Path(__file__).parent
         self.core_dir = self.project_root / 'core'
         self.ui_dir = self.project_root / 'ui'
         self.config_dir = self.project_root / 'config'
-        
+
         logger.info("System Validator initialized")
-    
+
     def run_all_validations(self) -> Dict[str, Any]:
         """Run all validation checks."""
         logger.info("🧠 Starting comprehensive Schwabot system validation...")
-        
+
         validation_suites = [
             self.validate_code_quality,
             self.validate_mathematical_components,
@@ -73,21 +73,21 @@ class SystemValidator:
             self.validate_documentation,
             self.validate_ui_components
         ]
-        
+
         for validation_suite in validation_suites:
             try:
                 suite_name = validation_suite.__name__.replace('validate_', '')
                 logger.info(f"Running {suite_name} validation...")
-                
+
                 result = validation_suite()
                 self.results['checks'][suite_name] = result
-                
+
                 # Update counters
                 self.results['total_checks'] += result.get('total_checks', 0)
                 self.results['passed_checks'] += result.get('passed_checks', 0)
                 self.results['failed_checks'] += result.get('failed_checks', 0)
                 self.results['warnings'] += result.get('warnings', 0)
-                
+
             except Exception as e:
                 logger.error(f"Error in {validation_suite.__name__}: {e}")
                 self.results['checks'][suite_name] = {
@@ -98,11 +98,11 @@ class SystemValidator:
                     'failed_checks': 0,
                     'warnings': 0
                 }
-        
+
         # Calculate overall status
         if self.results['total_checks'] > 0:
             success_rate = self.results['passed_checks'] / self.results['total_checks']
-            
+
             if success_rate >= 0.95:
                 self.results['overall_status'] = 'excellent'
             elif success_rate >= 0.90:
@@ -111,10 +111,10 @@ class SystemValidator:
                 self.results['overall_status'] = 'acceptable'
             else:
                 self.results['overall_status'] = 'needs_improvement'
-        
+
         logger.info(f"Validation completed: {self.results['passed_checks']}/{self.results['total_checks']} passed")
         return self.results
-    
+
     def validate_code_quality(self) -> Dict[str, Any]:
         """Validate code quality using flake8 and mypy."""
         checks = []
@@ -122,7 +122,7 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Flake8 syntax and style
         try:
             result = subprocess.run(
@@ -131,10 +131,10 @@ class SystemValidator:
                 text=True,
                 cwd=self.project_root
             )
-            
+
             syntax_errors = int(result.stdout.strip()) if result.stdout.strip() else 0
             total_checks += 1
-            
+
             if syntax_errors == 0:
                 checks.append({
                     'name': 'Flake8 Syntax Check',
@@ -150,7 +150,7 @@ class SystemValidator:
                     'output': result.stdout
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Flake8 Syntax Check',
@@ -159,7 +159,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 2: Flake8 style issues
         try:
             result = subprocess.run(
@@ -168,10 +168,10 @@ class SystemValidator:
                 text=True,
                 cwd=self.project_root
             )
-            
+
             style_issues = int(result.stdout.strip()) if result.stdout.strip() else 0
             total_checks += 1
-            
+
             if style_issues == 0:
                 checks.append({
                     'name': 'Flake8 Style Check',
@@ -196,7 +196,7 @@ class SystemValidator:
                     'output': result.stdout
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Flake8 Style Check',
@@ -205,7 +205,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 3: MyPy type checking
         try:
             result = subprocess.run(
@@ -214,10 +214,10 @@ class SystemValidator:
                 text=True,
                 cwd=self.project_root
             )
-            
+
             type_errors = len([line for line in result.stdout.split('\n') if 'error:' in line])
             total_checks += 1
-            
+
             if type_errors == 0:
                 checks.append({
                     'name': 'MyPy Type Check',
@@ -242,7 +242,7 @@ class SystemValidator:
                     'output': result.stdout
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'MyPy Type Check',
@@ -251,7 +251,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -260,7 +260,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_mathematical_components(self) -> Dict[str, Any]:
         """Validate mathematical components."""
         checks = []
@@ -268,17 +268,17 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Phantom Lag Model
         try:
             from core.phantom_lag_model import PhantomLagModel
-            
+
             model = PhantomLagModel()
-            
+
             # Test basic calculation
             penalty = model.calculate_phantom_lag_penalty(1000.0, 0.3, 70000.0)
             total_checks += 1
-            
+
             if 0.0 <= penalty <= 1.0:
                 checks.append({
                     'name': 'Phantom Lag Model - Basic Calculation',
@@ -293,13 +293,13 @@ class SystemValidator:
                     'details': f'Invalid penalty value: {penalty}'
                 })
                 failed_checks += 1
-            
+
             # Test missed opportunity analysis
             analysis = model.analyze_missed_opportunity(
                 50000.0, 52000.0, "test_hash", 0.5, "missed_entry"
             )
             total_checks += 1
-            
+
             if analysis.mathematical_validity:
                 checks.append({
                     'name': 'Phantom Lag Model - Missed Opportunity Analysis',
@@ -314,7 +314,7 @@ class SystemValidator:
                     'details': 'Analysis not mathematically valid'
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Phantom Lag Model',
@@ -323,19 +323,19 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 2: Meta-Layer Ghost Bridge
         try:
             from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-            
+
             bridge = MetaLayerGhostBridge()
-            
+
             # Test exchange data update
             ghost_price = bridge.update_exchange_data(
                 "test_exchange", "BTC/USD", 50000.0, 1000.0, time.time()
             )
             total_checks += 1
-            
+
             if ghost_price > 0:
                 checks.append({
                     'name': 'Meta-Layer Ghost Bridge - Exchange Data Update',
@@ -350,11 +350,11 @@ class SystemValidator:
                     'details': 'Ghost price calculation failed'
                 })
                 failed_checks += 1
-            
+
             # Test meta vector calculation
             meta_vector = bridge.get_meta_vector()
             total_checks += 1
-            
+
             if isinstance(meta_vector, (int, float)):
                 checks.append({
                     'name': 'Meta-Layer Ghost Bridge - Meta Vector',
@@ -369,7 +369,7 @@ class SystemValidator:
                     'details': f'Invalid meta vector type: {type(meta_vector)}'
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Meta-Layer Ghost Bridge',
@@ -378,18 +378,18 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 3: Fallback Logic Router
         try:
             from core.fallback_logic_router import FallbackLogicRouter
-            
+
             router = FallbackLogicRouter()
-            
+
             # Test fallback routing
             error = Exception("Test error")
             result = router.route_fallback('data_processor', error)
             total_checks += 1
-            
+
             if result is not None:
                 checks.append({
                     'name': 'Fallback Logic Router - Basic Routing',
@@ -404,11 +404,11 @@ class SystemValidator:
                     'details': 'Fallback routing failed'
                 })
                 failed_checks += 1
-            
+
             # Test statistics
             stats = router.get_fallback_statistics()
             total_checks += 1
-            
+
             if isinstance(stats, dict) and 'total_fallbacks' in stats:
                 checks.append({
                     'name': 'Fallback Logic Router - Statistics',
@@ -423,7 +423,7 @@ class SystemValidator:
                     'details': 'Statistics not available'
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Fallback Logic Router',
@@ -432,7 +432,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -441,7 +441,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_integration(self) -> Dict[str, Any]:
         """Validate component integration."""
         checks = []
@@ -449,14 +449,14 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Settings Manager Integration
         try:
             from core.settings_manager import get_settings_manager
-            
+
             settings_manager = get_settings_manager()
             total_checks += 1
-            
+
             if settings_manager is not None:
                 checks.append({
                     'name': 'Settings Manager Integration',
@@ -471,7 +471,7 @@ class SystemValidator:
                     'details': 'Settings manager initialization failed'
                 })
                 failed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Settings Manager Integration',
@@ -480,26 +480,26 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 2: Component Communication
         try:
             from core.phantom_lag_model import PhantomLagModel
             from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
             from core.fallback_logic_router import FallbackLogicRouter
-            
+
             # Test integration between components
             phantom_model = PhantomLagModel()
             meta_bridge = MetaLayerGhostBridge()
             fallback_router = FallbackLogicRouter()
-            
+
             # Test data flow
             meta_bridge.update_exchange_data("test", "BTC/USD", 50000.0, 1000.0, time.time())
             ghost_price_info = meta_bridge.get_ghost_price("BTC/USD")
-            
+
             if ghost_price_info:
                 delta_price = unified_math.abs(ghost_price_info['price'] - 50000.0)
                 lag_penalty = phantom_model.calculate_phantom_lag_penalty(delta_price, 0.3, 70000.0)
-                
+
                 total_checks += 1
                 if 0.0 <= lag_penalty <= 1.0:
                     checks.append({
@@ -523,7 +523,7 @@ class SystemValidator:
                 })
                 failed_checks += 1
                 total_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Component Communication',
@@ -532,7 +532,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -541,7 +541,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_configuration(self) -> Dict[str, Any]:
         """Validate configuration files."""
         checks = []
@@ -549,11 +549,11 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Configuration file exists
         config_file = self.config_dir / 'schwabot_config.yaml'
         total_checks += 1
-        
+
         if config_file.exists():
             checks.append({
                 'name': 'Configuration File Exists',
@@ -568,14 +568,14 @@ class SystemValidator:
                 'details': 'Configuration file not found'
             })
             failed_checks += 1
-        
+
         # Check 2: Configuration file is valid YAML
         if config_file.exists():
             try:
                 import yaml
                 with open(config_file, 'r') as f:
                     config_data = yaml.safe_load(f)
-                
+
                 total_checks += 1
                 if isinstance(config_data, dict):
                     checks.append({
@@ -591,7 +591,7 @@ class SystemValidator:
                         'details': 'Configuration file is not valid YAML'
                     })
                     failed_checks += 1
-                    
+
             except Exception as e:
                 checks.append({
                     'name': 'Configuration File - Valid YAML',
@@ -600,11 +600,11 @@ class SystemValidator:
                 })
                 failed_checks += 1
                 total_checks += 1
-        
+
         # Check 3: MyPy configuration
         mypy_config = self.project_root / 'mypy.ini'
         total_checks += 1
-        
+
         if mypy_config.exists():
             checks.append({
                 'name': 'MyPy Configuration',
@@ -619,7 +619,7 @@ class SystemValidator:
                 'details': 'MyPy configuration file not found'
             })
             failed_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -628,7 +628,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_performance(self) -> Dict[str, Any]:
         """Validate performance benchmarks."""
         checks = []
@@ -636,21 +636,21 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Phantom Lag Model Performance
         try:
             from core.phantom_lag_model import PhantomLagModel
-            
+
             model = PhantomLagModel()
             start_time = time.time()
-            
+
             # Run 1000 calculations
             for i in range(1000):
                 model.calculate_phantom_lag_penalty(1000.0 + i, 0.3, 70000.0)
-            
+
             execution_time = time.time() - start_time
             avg_time = execution_time / 1000
-            
+
             total_checks += 1
             if avg_time < 0.001:  # Less than 1ms per calculation
                 checks.append({
@@ -667,7 +667,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Phantom Lag Model Performance',
@@ -676,21 +676,21 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         # Check 2: Meta-Layer Ghost Bridge Performance
         try:
             from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-            
+
             bridge = MetaLayerGhostBridge()
             start_time = time.time()
-            
+
             # Run 100 exchange updates
             for i in range(100):
                 bridge.update_exchange_data(f"exchange_{i}", "BTC/USD", 50000.0 + i, 1000.0, time.time())
-            
+
             execution_time = time.time() - start_time
             avg_time = execution_time / 100
-            
+
             total_checks += 1
             if avg_time < 0.01:  # Less than 10ms per update
                 checks.append({
@@ -707,7 +707,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Meta-Layer Ghost Bridge Performance',
@@ -716,7 +716,7 @@ class SystemValidator:
             })
             failed_checks += 1
             total_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -725,7 +725,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_security(self) -> Dict[str, Any]:
         """Validate security aspects."""
         checks = []
@@ -733,14 +733,14 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: No hardcoded secrets
         total_checks += 1
         try:
             # Search for potential hardcoded secrets
             secret_patterns = ['password', 'secret', 'key', 'token']
             found_secrets = []
-            
+
             for pattern in secret_patterns:
                 result = subprocess.run(
                     ['grep', '-r', '-i', pattern, 'core/', 'ui/'],
@@ -748,13 +748,13 @@ class SystemValidator:
                     text=True,
                     cwd=self.project_root
                 )
-                
+
                 if result.stdout:
                     lines = result.stdout.split('\n')
                     for line in lines:
                         if line.strip() and 'test' not in line.lower() and 'example' not in line.lower():
                             found_secrets.append(line.strip())
-            
+
             if not found_secrets:
                 checks.append({
                     'name': 'No Hardcoded Secrets',
@@ -770,7 +770,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'No Hardcoded Secrets',
@@ -778,18 +778,18 @@ class SystemValidator:
                 'details': f'Error checking for secrets: {e}'
             })
             failed_checks += 1
-        
+
         # Check 2: Environment variable usage
         total_checks += 1
         try:
             from core.settings_manager import get_settings_manager
-            
+
             settings_manager = get_settings_manager()
             env_validation = settings_manager.validate_environment_variables()
-            
+
             required_vars = list(env_validation.keys())
             missing_vars = [var for var, present in env_validation.items() if not present]
-            
+
             if not missing_vars:
                 checks.append({
                     'name': 'Environment Variables',
@@ -805,7 +805,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Environment Variables',
@@ -813,7 +813,7 @@ class SystemValidator:
                 'details': f'Error checking environment variables: {e}'
             })
             failed_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -822,7 +822,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_documentation(self) -> Dict[str, Any]:
         """Validate documentation completeness."""
         checks = []
@@ -830,11 +830,11 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: README exists
         readme_file = self.project_root / 'README.md'
         total_checks += 1
-        
+
         if readme_file.exists():
             checks.append({
                 'name': 'README Documentation',
@@ -849,17 +849,17 @@ class SystemValidator:
                 'details': 'README.md file not found'
             })
             failed_checks += 1
-        
+
         # Check 2: Mathematical documentation
         math_docs = [
             'MATHEMATICAL_INTEGRATION_SUMMARY.md',
             'SCHWABOT_MATHEMATICAL_INTEGRATION.md'
         ]
-        
+
         for doc in math_docs:
             doc_file = self.project_root / doc
             total_checks += 1
-            
+
             if doc_file.exists():
                 checks.append({
                     'name': f'Mathematical Documentation - {doc}',
@@ -874,7 +874,7 @@ class SystemValidator:
                     'details': f'{doc} not found'
                 })
                 failed_checks += 1
-        
+
         # Check 3: Code documentation
         total_checks += 1
         try:
@@ -885,7 +885,7 @@ class SystemValidator:
                 'core.fallback_logic_router',
                 'core.settings_manager'
             ]
-            
+
             documented_modules = 0
             for module_name in core_modules:
                 try:
@@ -894,7 +894,7 @@ class SystemValidator:
                         documented_modules += 1
                 except ImportError:
                     pass
-            
+
             if documented_modules >= len(core_modules) * 0.8:  # 80% documented
                 checks.append({
                     'name': 'Code Documentation',
@@ -910,7 +910,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-                
+
         except Exception as e:
             checks.append({
                 'name': 'Code Documentation',
@@ -918,7 +918,7 @@ class SystemValidator:
                 'details': f'Error checking documentation: {e}'
             })
             failed_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -927,7 +927,7 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def validate_ui_components(self) -> Dict[str, Any]:
         """Validate UI components."""
         checks = []
@@ -935,11 +935,11 @@ class SystemValidator:
         passed_checks = 0
         failed_checks = 0
         warnings = 0
-        
+
         # Check 1: Dashboard file exists
         dashboard_file = self.ui_dir / 'schwabot_dashboard.py'
         total_checks += 1
-        
+
         if dashboard_file.exists():
             checks.append({
                 'name': 'Web Dashboard',
@@ -954,13 +954,13 @@ class SystemValidator:
                 'details': 'Dashboard file not found'
             })
             failed_checks += 1
-        
+
         # Check 2: UI directory structure
         ui_dirs = ['templates', 'static']
         for dir_name in ui_dirs:
             ui_subdir = self.ui_dir / dir_name
             total_checks += 1
-            
+
             if ui_subdir.exists():
                 checks.append({
                     'name': f'UI Directory - {dir_name}',
@@ -976,7 +976,7 @@ class SystemValidator:
                 })
                 warnings += 1
                 passed_checks += 1
-        
+
         return {
             'status': 'passed' if failed_checks == 0 else 'failed',
             'total_checks': total_checks,
@@ -985,47 +985,47 @@ class SystemValidator:
             'warnings': warnings,
             'checks': checks
         }
-    
+
     def save_results(self, output_file: str = 'system_validation_results.json'):
         """Save validation results to file."""
         try:
             with open(output_file, 'w') as f:
                 json.dump(self.results, f, indent=2, default=str)
-            
+
             logger.info(f"Validation results saved to {output_file}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error saving results: {e}")
             return False
-    
+
     def print_summary(self):
         """Print validation summary."""
         safe_print("\n" + "="*60)
         safe_print("🧠 SCHWABOT SYSTEM VALIDATION SUMMARY")
         safe_print("="*60)
-        
+
         safe_print(f"Overall Status: {self.results['overall_status'].upper()}")
         safe_print(f"Total Checks: {self.results['total_checks']}")
         safe_print(f"Passed: {self.results['passed_checks']}")
         safe_print(f"Failed: {self.results['failed_checks']}")
         safe_print(f"Warnings: {self.results['warnings']}")
-        
+
         if self.results['total_checks'] > 0:
             success_rate = self.results['passed_checks'] / self.results['total_checks'] * 100
             safe_print(f"Success Rate: {success_rate:.1f}%")
-        
+
         safe_print("\nDetailed Results:")
         safe_print("-" * 40)
-        
+
         for suite_name, suite_result in self.results['checks'].items():
             status = suite_result.get('status', 'unknown')
             total = suite_result.get('total_checks', 0)
             passed = suite_result.get('passed_checks', 0)
-            
+
             status_icon = "✅" if status == 'passed' else "⚠️" if status == 'warning' else "❌"
             safe_print(f"{status_icon} {suite_name}: {passed}/{total} passed")
-            
+
             # Show failed checks
             checks = suite_result.get('checks', [])
             failed_checks = [check for check in checks if check.get('status') == 'failed']
@@ -1037,16 +1037,16 @@ def main():
     """Main validation function."""
     safe_print("🧠 Schwabot Comprehensive System Validation")
     safe_print("=" * 50)
-    
+
     validator = SystemValidator()
     results = validator.run_all_validations()
-    
+
     # Print summary
     validator.print_summary()
-    
+
     # Save results
     validator.save_results()
-    
+
     # Return exit code
     if results['overall_status'] in ['excellent', 'good']:
         safe_print("\n✅ System validation completed successfully!")
@@ -1060,4 +1060,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main()) 
+    sys.exit(main())

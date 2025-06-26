@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .simulate_trade import TradeSimulator, TradeExecution
+from .trade_executor import ExecutedTrade
+import json
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Dict, List, Any, Optional
+import logging
+import time
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Medium-Risk Phase II Integration Test - Schwabot UROS v1.0
@@ -62,55 +78,53 @@ Components Tested:
 - Unified Mathematical Trading Controller
 """
 
-import time
-import logging
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from datetime import datetime
-import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class TestResult:
 
-
     """Test result structure."""
+
+
 component: str
 status: str  # PASS, FAIL, SKIP
 details: str
 execution_time: float
 error_message: Optional[str] = None
 
-class MediumRiskPhaseIITester:
 
+class MediumRiskPhaseIITester:
 
     """Comprehensive tester for medium-risk Phase II components."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the tester."""
+
+
 self.test_results: List[TestResult] = []
 self.components_status: Dict[str, bool] = {}
 
-def test_trade_execution_engine(self) -> TestResult:
 
+def test_trade_execution_engine(self) -> TestResult:
 
     pass
     pass
         """Test trade execution engine functionality."""
+
+
 start_time = time.time()
 
         try:
             # Try to import trade execution components
             try:
-from .trade_executor import ExecutedTrade
-from .simulate_trade import TradeSimulator, TradeExecution
 logger.info("✅ Trade execution components imported successfully")
             except ImportError as e:
                 return TestResult(
@@ -122,10 +136,10 @@ execution_time=time.time() - start_time,
 
 
             # Test trade simulator
-simulator = TradeSimulator()
+simulator=TradeSimulator()
 
             # Test strategy bucket
-strategy_bucket = {
+strategy_bucket={
 'asset': 'BTC',
 'strategy_id': 'long_hold_btc',
 'tensor_score': 0.75,
@@ -136,7 +150,7 @@ strategy_bucket = {
 }
 
             # Simulate trade
-trade_result = simulator.simulate_trade(strategy_bucket, mode="DEMO")
+trade_result=simulator.simulate_trade(strategy_bucket, mode="DEMO")
 
             if trade_result and trade_result.status.value == "EXECUTED":
                 return TestResult(
@@ -169,7 +183,7 @@ def test_strategy_execution_engine(self) -> TestResult:
     pass
     pass
         """Test strategy execution engine functionality."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Try to import strategy components
@@ -186,10 +200,10 @@ execution_time=time.time() - start_time,
 
 
             # Test strategy logic
-strategy_logic = StrategyLogic()
+strategy_logic=StrategyLogic()
 
             # Test strategy registration
-strategies = strategy_logic.get_registered_strategies()
+strategies=strategy_logic.get_registered_strategies()
 
             if strategies and len(strategies) > 0:
                 return TestResult(
@@ -222,7 +236,7 @@ def test_phase_engine(self) -> TestResult:
     pass
     pass
         """Test phase engine functionality."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Try to import phase engine components
@@ -239,10 +253,10 @@ execution_time=time.time() - start_time,
 
 
             # Test phase engine
-phase_engine = PhaseEngine()
+phase_engine=PhaseEngine()
 
             # Test phase detection
-market_data = {
+market_data={
 'price': 50000.0,
 'volume': 1000,
 'volatility': 0.02,
@@ -250,7 +264,7 @@ market_data = {
 }
 
             # Get current phase
-current_phase = phase_engine.get_current_phase(market_data)
+current_phase=phase_engine.get_current_phase(market_data)
 
             if current_phase:
                 return TestResult(
@@ -283,7 +297,7 @@ def test_portfolio_substitution_matrix(self) -> TestResult:
     pass
     pass
         """Test portfolio substitution matrix functionality."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Try to import portfolio components
@@ -300,13 +314,13 @@ execution_time=time.time() - start_time,
 
 
             # Test portfolio substitution
-matrix = PortfolioSubstitutionMatrix()
+matrix=PortfolioSubstitutionMatrix()
 
             # Test substitution calculation
-current_allocation = {"BTC": 0.4, "ETH": 0.3, "USDC": 0.3}
-target_allocation = {"BTC": 0.5, "ETH": 0.3, "USDC": 0.2}
+current_allocation={"BTC": 0.4, "ETH": 0.3, "USDC": 0.3}
+target_allocation={"BTC": 0.5, "ETH": 0.3, "USDC": 0.2}
 
-result = matrix.calculate_substitution(
+result=matrix.calculate_substitution(
                 current_allocation, target_allocation, 100000.0
 
 
@@ -341,7 +355,7 @@ def test_deterministic_value_engine(self) -> TestResult:
     pass
     pass
         """Test deterministic value engine functionality."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Try to import deterministic value components
@@ -358,12 +372,12 @@ execution_time=time.time() - start_time,
 
 
             # Test deterministic value engine
-engine = DeterministicValueEngine()
+engine=DeterministicValueEngine()
 
             # Create test market state
 from .deterministic_value_engine import MarketState, AssetType
 
-market_state = MarketState(
+market_state=MarketState(
                 prices={AssetType.BTC: 50000.0, AssetType.ETH: 3000.0},
 volumes={AssetType.BTC: 1000.0, AssetType.ETH: 5000.0},
 volatility={AssetType.BTC: 0.02, AssetType.ETH: 0.03},
@@ -371,7 +385,7 @@ entropy={AssetType.BTC: 5.0, AssetType.ETH: 4.5}
 
 
             # Calculate deterministic decision
-decision = engine.calculate_deterministic_decision(market_state)
+decision=engine.calculate_deterministic_decision(market_state)
 
             if decision and decision.execution_confidence > 0:
                 return TestResult(
@@ -404,7 +418,7 @@ def test_unified_mathematical_trading_controller(self) -> TestResult:
     pass
     pass
         """Test unified mathematical trading controller functionality."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Try to import unified trading components
@@ -421,10 +435,10 @@ execution_time=time.time() - start_time,
 
 
             # Test unified trading controller
-controller = UnifiedMathematicalTradingController()
+controller=UnifiedMathematicalTradingController()
 
             # Test opportunity analysis
-market_data = {
+market_data={
 'symbol': 'BTC',
 'price': 50000.0,
 'volume': 1000,
@@ -432,7 +446,7 @@ market_data = {
 'momentum': 0.01
 }
 
-opportunity = controller.analyze_trading_opportunity(market_data)
+opportunity=controller.analyze_trading_opportunity(market_data)
 
             if opportunity and opportunity.unified_confidence > 0:
                 return TestResult(
@@ -469,7 +483,7 @@ logger.info("🚀 Starting Medium-Risk Phase II Integration Tests")
         logger.info("=" * 60)
 
         # Run individual tests
-tests = [
+tests=[
 self.test_trade_execution_engine,
 self.test_strategy_execution_engine,
 self.test_phase_engine,
@@ -479,11 +493,11 @@ self.test_unified_mathematical_trading_controller
 ]
 
         for test in tests:
-result = test()
+result=test()
             self.test_results.append(result)
 
             # Log result
-status_emoji = "✅" if result.status == "PASS" else "❌" if result.status == "FAIL" else "⚠️"
+status_emoji="✅" if result.status == "PASS" else "❌" if result.status == "FAIL" else "⚠️"
 logger.info(f"{status_emoji} {result.component}: {result.status}")
             if result.details:
 logger.info(f"   Details: {result.details}")
@@ -491,10 +505,10 @@ logger.info(f"   Details: {result.details}")
 logger.warning(f"   Error: {result.error_message}")
 
         # Calculate summary
-total_tests = len(self.test_results)
-        passed_tests = len([r for r in self.test_results if r.status == "PASS"])
-        failed_tests = len([r for r in self.test_results if r.status == "FAIL"])
-        skipped_tests = len([r for r in self.test_results if r.status == "SKIP"])
+total_tests=len(self.test_results)
+        passed_tests=len([r for r in self.test_results if r.status == "PASS"])
+        failed_tests=len([r for r in self.test_results if r.status == "FAIL"])
+        skipped_tests=len([r for r in self.test_results if r.status == "SKIP"])
 
         # Print summary
 logger.info("=" * 60)
@@ -508,13 +522,13 @@ logger.info("=" * 60)
 
         # Determine overall status
         if failed_tests == 0:
-overall_status = "READY"
+overall_status="READY"
 logger.info("🎉 All medium-risk components are ready for Phase II!")
         elif passed_tests > 0:
-overall_status = "PARTIAL"
+overall_status="PARTIAL"
 logger.info("⚠️ Some medium-risk components need implementation")
         else:
-overall_status = "NOT_READY"
+overall_status="NOT_READY"
 logger.warning("❌ Medium-risk components need significant work")
 
         return {
@@ -538,10 +552,10 @@ safe_print("🚀 Medium-Risk Phase II Integration Test - Schwabot UROS v1.0")
     safe_print("=" * 70)
 
     # Initialize tester
-tester = MediumRiskPhaseIITester()
+tester=MediumRiskPhaseIITester()
 
     # Run all tests
-results = tester.run_all_tests()
+results=tester.run_all_tests()
 
     # Save results
     with open("medium_risk_phase_ii_results.json", "w") as f:

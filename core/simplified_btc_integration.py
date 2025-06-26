@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .utils.cli_handler import safe_log
+from .utils.cli_handler import CLIHandler
+from .trading_models.enums import ExchangeType
+from .trading_models.containers import PerformanceMetrics
+from .trading_models.containers import OrderResponse
+from .trading_models.containers import OrderRequest
+from .trading_models.containers import MarketData
+from .trading_models.containers import ExchangeConfig
+from .trading_models.containers import Balance
+from .exchange_apis import ExchangeAPI
+from .exchange_apis import CoinbaseAPI
+from typing import Any, Dict, List, Optional
+import time
+import threading
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +24,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """Simplified BTC Integration - Bitcoin Trading Integration Layer.
 
@@ -59,28 +82,11 @@ The module is now restructured to use separate packages for:
 This eliminates flake8 issues by keeping each module focused and concise.
 """
 
-import logging
-import threading
-import time
-from typing import Any, Dict, List, Optional
-
-from .exchange_apis import CoinbaseAPI
-from .exchange_apis import ExchangeAPI
-from .trading_models.containers import Balance
-from .trading_models.containers import ExchangeConfig
-from .trading_models.containers import MarketData
-from .trading_models.containers import OrderRequest
-from .trading_models.containers import OrderResponse
-from .trading_models.containers import PerformanceMetrics
-from .trading_models.enums import ExchangeType
-from .utils.cli_handler import CLIHandler
-from .utils.cli_handler import safe_log
 
 logger = logging.getLogger(__name__)
 
 
 class SimplifiedBTCIntegration:
-
 
     """Simplified Bitcoin trading integration system.
 
@@ -88,8 +94,8 @@ This class provides a simplified interface for Bitcoin trading operations
     with mathematical optimization and comprehensive error handling.
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
     pass
     pass
@@ -98,6 +104,8 @@ def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 Args:
 config: Integration configuration.
 """
+
+
 self.version = "1.0.0"
 self.config = config or self._default_config()
 
@@ -124,10 +132,10 @@ cache_misses=0,
 
 
         # Threading and synchronization
-self.integration_lock = threading.Lock()
-        self.order_lock = threading.Lock()
-        self.monitoring_thread: Optional[threading.Thread] = None
-self.monitoring_active = False
+self.integration_lock=threading.Lock()
+        self.order_lock=threading.Lock()
+        self.monitoring_thread: Optional[threading.Thread]=None
+self.monitoring_active=False
 
         # Initialize exchanges
 self._initialize_exchanges()
@@ -137,7 +145,7 @@ self._initialize_exchanges()
             self._start_monitoring()
 
         # Log initialization
-init_message = f"SimplifiedBTCIntegration v{self.version} initialized"
+init_message=f"SimplifiedBTCIntegration v{self.version} initialized"
 safe_log(logger, "info", init_message)
 
 def _default_config(self) -> Dict[str, Any]:
@@ -168,7 +176,7 @@ Default configuration dictionary.
 def safe_print(
 
 
-        self, message: str, force_ascii: Optional[bool] = None
+        self, message: str, force_ascii: Optional[bool]=None
 ) -> None:
 """Safe print function with CLI compatibility.
 
@@ -177,11 +185,11 @@ message: Message to print.
 force_ascii: Whether to force ASCII conversion.
 """
         if force_ascii is None:
-force_ascii = self.config.get("force_ascii_output", False)
+force_ascii=self.config.get("force_ascii_output", False)
 
 self.cli_handler.safe_print(message, force_ascii)
 
-def safe_log(self, level: str, message: str, context: str = "") -> bool:
+def safe_log(self, level: str, message: str, context: str="") -> bool:
 
 
     pass
@@ -206,11 +214,11 @@ def _initialize_exchanges(self) -> None:
         """Initialize exchange connections."""
         try:
             # Add default exchanges based on configuration
-default_exchange = self.config.get("default_exchange", "coinbase")
+default_exchange=self.config.get("default_exchange", "coinbase")
 
             if default_exchange == "coinbase":
                 # Create Coinbase configuration
-coinbase_config = ExchangeConfig(
+coinbase_config=ExchangeConfig(
                     exchange_type=ExchangeType.COINBASE,
 api_key=self.config.get("coinbase_api_key", ""),
                     api_secret=self.config.get("coinbase_api_secret", ""),
@@ -225,7 +233,7 @@ self.safe_log(
 
 
         except Exception as e:
-error_msg = f"Error initializing exchanges: {e}"
+error_msg=f"Error initializing exchanges: {e}"
 self.safe_log("error", error_msg)
 
 def add_exchange(
@@ -245,8 +253,8 @@ True if exchange was added successfully.
         try:
             with self.integration_lock:
                 if exchange_type == ExchangeType.COINBASE:
-exchange = CoinbaseAPI(config)
-                    self.exchanges["coinbase"] = exchange
+exchange=CoinbaseAPI(config)
+                    self.exchanges["coinbase"]=exchange
 self.safe_log("info", "Added Coinbase exchange")
                     return True
                 else:
@@ -257,7 +265,7 @@ f"Unsupported exchange type: " f"{exchange_type}",
                     return False
 
         except Exception as e:
-error_msg = f"Error adding exchange {exchange_type}: {e}"
+error_msg=f"Error adding exchange {exchange_type}: {e}"
 self.safe_log("error", error_msg)
             return False
 
@@ -277,7 +285,7 @@ True if exchange was set successfully.
         try:
             with self.integration_lock:
                 if exchange_name in self.exchanges:
-self.active_exchange = self.exchanges[exchange_name]
+self.active_exchange=self.exchanges[exchange_name]
 self.safe_log(
                         "info", f"Set active exchange: {exchange_name}"
 
@@ -289,14 +297,14 @@ self.safe_log(
                     return False
 
         except Exception as e:
-error_msg = f"Error setting active exchange: {e}"
+error_msg=f"Error setting active exchange: {e}"
 self.safe_log("error", error_msg)
             return False
 
 def get_ticker(
 
 
-        self, symbol: str, exchange_name: Optional[str] = None
+        self, symbol: str, exchange_name: Optional[str]=None
 ) -> MarketData:
 """Get ticker data for symbol.
 
@@ -308,18 +316,18 @@ Returns:
 Market data containing ticker information.
 """
         try:
-exchange = self._get_exchange(exchange_name)
+exchange=self._get_exchange(exchange_name)
             return exchange.get_ticker(symbol)
 
         except Exception as e:
-error_msg = f"Error getting ticker for {symbol}: {e}"
+error_msg=f"Error getting ticker for {symbol}: {e}"
 self.safe_log("error", error_msg)
             raise
 
 def get_order_book(
 
 
-        self, symbol: str, level: int = 2, exchange_name: Optional[str] = None
+        self, symbol: str, level: int=2, exchange_name: Optional[str]=None
 ) -> MarketData:
 """Get order book for symbol.
 
@@ -332,18 +340,18 @@ Returns:
 Market data containing order book information.
 """
         try:
-exchange = self._get_exchange(exchange_name)
+exchange=self._get_exchange(exchange_name)
             return exchange.get_order_book(symbol, level)
 
         except Exception as e:
-error_msg = f"Error getting order book for {symbol}: {e}"
+error_msg=f"Error getting order book for {symbol}: {e}"
 self.safe_log("error", error_msg)
             raise
 
 def place_order(
 
 
-        self, order_request: OrderRequest, exchange_name: Optional[str] = None
+        self, order_request: OrderRequest, exchange_name: Optional[str]=None
 ) -> OrderResponse:
 """Place order on exchange.
 
@@ -355,29 +363,29 @@ Returns:
 Order response with execution details.
 """
         try:
-exchange = self._get_exchange(exchange_name)
+exchange=self._get_exchange(exchange_name)
 
             # Track performance
-start_time = time.time()
+start_time=time.time()
 
             # Place order
-order_response = exchange.place_order(order_request)
+order_response=exchange.place_order(order_request)
 
             # Update metrics
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
             self._update_order_metrics(order_response, execution_time)
 
             return order_response
 
         except Exception as e:
-error_msg = f"Error placing order: {e}"
+error_msg=f"Error placing order: {e}"
 self.safe_log("error", error_msg)
             raise
 
 def get_balances(
 
 
-        self, exchange_name: Optional[str] = None
+        self, exchange_name: Optional[str]=None
 ) -> List[Balance]:
 """Get account balances.
 
@@ -388,18 +396,18 @@ Returns:
 List of balance objects.
 """
         try:
-exchange = self._get_exchange(exchange_name)
+exchange=self._get_exchange(exchange_name)
             return exchange.get_balances()
 
         except Exception as e:
-error_msg = f"Error getting balances: {e}"
+error_msg=f"Error getting balances: {e}"
 self.safe_log("error", error_msg)
             raise
 
 def _get_exchange(
 
 
-        self, exchange_name: Optional[str] = None
+        self, exchange_name: Optional[str]=None
 ) -> ExchangeAPI:
 """Get exchange instance.
 
@@ -463,7 +471,7 @@ self.performance_metrics.failed_orders += 1
 
             # Update average execution time
             if self.performance_metrics.total_orders > 0:
-self.performance_metrics.average_execution_time = (
+self.performance_metrics.average_execution_time=(
                     self.performance_metrics.total_execution_time
 / self.performance_metrics.total_orders
 
@@ -489,8 +497,8 @@ def _start_monitoring(self) -> None:
         if self.monitoring_active:
 return
 
-self.monitoring_active = True
-self.monitoring_thread = threading.Thread(
+self.monitoring_active=True
+self.monitoring_thread=threading.Thread(
             target=self._monitoring_loop, daemon=True
 
 self.monitoring_thread.start()
@@ -511,7 +519,7 @@ self._update_performance_metrics()
 time.sleep(5.0)  # 5 second interval
 
             except Exception as e:
-error_msg = f"Error in monitoring loop: {e}"
+error_msg=f"Error in monitoring loop: {e}"
 self.safe_log("error", error_msg)
                 time.sleep(10.0)  # Longer sleep on error
 
@@ -523,16 +531,16 @@ def main() -> None:
     pass
     """Run main function for testing."""
     # Create integration instance
-integration = SimplifiedBTCIntegration()
+integration=SimplifiedBTCIntegration()
 
     # Example usage
     try:
         # Get ticker data
-ticker = integration.get_ticker("BTC-USD")
+ticker=integration.get_ticker("BTC-USD")
         safe_print(f"BTC Price: {ticker.data.get('price', 'N/A')}")
 
         # Get balances
-balances = integration.get_balances()
+balances=integration.get_balances()
         for balance in balances:
 safe_print(f"{balance.currency}: {balance.available}")
 

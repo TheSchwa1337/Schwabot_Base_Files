@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Any, Dict, List, Optional, Tuple
+import logging
 import numpy as np
 import math
 
@@ -13,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """GAN Anomaly Filter - Machine Learning Anomaly Detection.
 
@@ -63,9 +73,6 @@ trading decisions in the entropy-weighted entry score pipeline.
 Windows CLI compatible with proper fallback handling.
 """
 
-
-import logging
-from typing import Any, Dict, List, Optional, Tuple
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
@@ -86,8 +93,8 @@ GAN_MODE_ADAPTIVE = "adaptive"  # Adaptive threshold based on market conditions
 
 class GANAnomalyFilter:
 
-
     """GAN-based anomaly detection filter for trading signals."""
+
 
 def __init__(
 
@@ -98,6 +105,7 @@ validity_threshold: float = DEFAULT_VALIDITY_THRESHOLD,
 stub_mode: str = GAN_MODE_AUTOENCODER,
 feature_dimensions: int = DEFAULT_FEATURE_DIMENSIONS,
 ):
+
 """Initialize GAN anomaly filter.
 
 Parameters
@@ -135,8 +143,8 @@ self._gan_state = {
 
 logger.info(f"Initialized GAN filter in {stub_mode} mode")
 
-def predict(self, features: np.ndarray) -> Dict[str, Any]:
 
+def predict(self, features: np.ndarray) -> Dict[str, Any]:
 
     pass
     pass
@@ -169,6 +177,8 @@ Prediction results with validity_score and metadata
             return self._predict_stub(features)
 
         except Exception as e:
+
+
 logger.error(f"Error in GAN prediction: {e}")
             return {
 "validity_score": 0.0,
@@ -176,8 +186,8 @@ logger.error(f"Error in GAN prediction: {e}")
 "error": str(e),
             }
 
-def is_valid(self, features: np.ndarray) -> bool:
 
+def is_valid(self, features: np.ndarray) -> bool:
 
     pass
     pass
@@ -193,11 +203,13 @@ Returns
 bool
 True if validity score exceeds threshold
 """
+
+
 prediction = self.predict(features)
         return prediction.get("validity_score", 0.0) >= self.validity_threshold
 
-def batch_predict(self, feature_batch: np.ndarray) -> List[Dict[str, Any]]:
 
+def batch_predict(self, feature_batch: np.ndarray) -> List[Dict[str, Any]]:
 
     pass
     pass
@@ -216,6 +228,7 @@ List of prediction results
         try:
             if len(feature_batch.shape) != 2:
                 raise ValueError("Feature batch must be 2D array")
+
 
 results = []
             for i in range(feature_batch.shape[0]):

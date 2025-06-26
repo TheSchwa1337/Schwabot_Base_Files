@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EntrySignal:
 
-
     """Represents an entry signal with confidence and metadata."""
+
 
 signal_type: str  # 'buy', 'sell', 'hold'
 confidence: float  # 0.0 to 1.0
@@ -47,8 +47,8 @@ timestamp: datetime = field(default_factory=datetime.now)
 @dataclass
 class ExitSignal:
 
-
     """Represents an exit signal with confidence and metadata."""
+
 
 signal_type: str  # 'exit', 'hold', 'partial'
 confidence: float  # 0.0 to 1.0
@@ -62,8 +62,8 @@ timestamp: datetime = field(default_factory=datetime.now)
 @dataclass
 class ProfitCorridor:
 
-
     """Represents a profit corridor with boundaries and navigation data."""
+
 
 upper_bound: float
 lower_bound: float
@@ -76,19 +76,20 @@ timestamp: datetime = field(default_factory=datetime.now)
 
 class EntryExitVector:
 
-
     """Profit corridor navigation logic for Schwabot."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize the entry exit vector analyzer."""
+
+
 self.entry_threshold = 0.75  # Minimum confidence for entry
 self.exit_threshold = 0.65   # Minimum confidence for exit
 self.entropy_window = 100    # Window for entropy calculation
-self.drift_sensitivity = 0.1 # Sensitivity to drift changes
+self.drift_sensitivity = 0.1  # Sensitivity to drift changes
 
         # Historical data for analysis
 self.tick_history: List[Dict[str, Any]] = []
@@ -102,9 +103,9 @@ self.total_signals = 0
 
 logger.info("EntryExitVector initialized")
 
+
 @memoize
 def calculate_entry_vector(self, tick_hash: str, signal_entropy: float) -> EntrySignal:
-
 
     pass
     pass
@@ -174,7 +175,7 @@ tick_hash=tick_hash,
 signal_entropy=signal_entropy
 
 
-@memoize
+@ memoize
 def calculate_exit_vector(self, volume_surface: Dict[str, float],]
 
 
@@ -192,24 +193,24 @@ ExitSignal with confidence and metadata
     pass
     pass
             # Extract parameters from volume surface and drift map
-beta_k = volume_surface.get('beta_k', 0.0)
-            psi_delta = drift_map.get('psi_delta', 0.0)
-            delta_beta_v = drift_map.get('delta_beta_v', 0.0)
+beta_k=volume_surface.get('beta_k', 0.0)
+            psi_delta=drift_map.get('psi_delta', 0.0)
+            delta_beta_v=drift_map.get('delta_beta_v', 0.0)
 
             # Calculate exit vector: P_{exit} = βk - ψδ + ∆βv
-exit_vector = beta_k - psi_delta + delta_beta_v
+exit_vector=beta_k - psi_delta + delta_beta_v
 
             # Normalize exit vector
-exit_vector = np.tanh(exit_vector)  # Bound to [-1, 1]
+exit_vector=np.tanh(exit_vector)  # Bound to [-1, 1]
 
             # Calculate confidence based on volume surface stability
-confidence = self._calculate_exit_confidence(volume_surface, drift_map)
+confidence=self._calculate_exit_confidence(volume_surface, drift_map)
 
             # Determine signal type
-signal_type = self._determine_exit_signal_type(exit_vector, confidence)
+signal_type=self._determine_exit_signal_type(exit_vector, confidence)
 
             # Create exit signal
-exit_signal = ExitSignal(
+exit_signal=ExitSignal(
                 signal_type=signal_type,
 confidence=confidence,
 exit_vector=exit_vector,
@@ -254,15 +255,15 @@ EntrySignal if conditions are met, None otherwise
     pass
     pass
             # Extract tick hash and calculate signal entropy
-tick_hash = market_data.get('tick_hash', '')
+tick_hash=market_data.get('tick_hash', '')
             if not tick_hash:
                 return None
 
             # Calculate signal entropy from market data
-signal_entropy = self._calculate_signal_entropy(market_data)
+signal_entropy=self._calculate_signal_entropy(market_data)
 
             # Calculate entry vector
-entry_signal = self.calculate_entry_vector(tick_hash, signal_entropy)
+entry_signal=self.calculate_entry_vector(tick_hash, signal_entropy)
 
             # Check if entry conditions are met
             if (entry_signal.confidence >= self.entry_threshold and
@@ -295,13 +296,13 @@ ExitSignal if conditions are met, None otherwise
     pass
     pass
             # Create volume surface from market data
-volume_surface = self._create_volume_surface(market_data)
+volume_surface=self._create_volume_surface(market_data)
 
             # Create drift map from position and market data
-drift_map = self._create_drift_map(position_data, market_data)
+drift_map=self._create_drift_map(position_data, market_data)
 
             # Calculate exit vector
-exit_signal = self.calculate_exit_vector(volume_surface, drift_map)
+exit_signal=self.calculate_exit_vector(volume_surface, drift_map)
 
             # Check if exit conditions are met
             if (exit_signal.confidence >= self.exit_threshold and

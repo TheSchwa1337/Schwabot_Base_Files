@@ -191,7 +191,8 @@ class LegacyBacklogHydratorTest:
                 # Validate trade properties
                 for j, trade in enumerate(loaded_trades):
                     # Validate required fields
-                    required_fields = ['trade_id', 'asset', 'entry_price', 'exit_price', 'volume', 'entry_time', 'exit_time', 'profit_loss']
+                    required_fields = ['trade_id', 'asset', 'entry_price', 'exit_price',
+                                       'volume', 'entry_time', 'exit_time', 'profit_loss']
                     for field in required_fields:
                         if not hasattr(trade, field):
                             error_msg = f"Test case {i}, Trade {j}: Missing required field '{field}'"

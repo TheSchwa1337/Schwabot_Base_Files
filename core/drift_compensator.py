@@ -24,9 +24,10 @@ def compute_drift_vector(
 
 
     current: np.ndarray,
-expected: np.ndarray,
-delta_t: float,
+    expected: np.ndarray,
+    delta_t: float,
 ) -> np.ndarray:
+
 """Return drift compensation vector Ξ_drift.
 
 Parameters
@@ -37,7 +38,7 @@ state vectors.
 delta_t
 Time lag in **seconds** (or ticks).  Must be non-negative.
     """
-    if delta_t < 0:
+   if delta_t < 0:
         raise ValueError("delta_t must be non-negative")
     if current.shape != expected.shape:
         raise ValueError("current and expected must share shape")

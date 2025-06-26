@@ -1,123 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import numpy as np
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Long-Horizon Simulation - Multi-Day Monte-Carlo and Chaos Testing.
-
-This module provides comprehensive long-horizon simulation including:
-- Multi-day Monte-Carlo scenarios with random network outages / API anomalies
-- Chaos-monkey tests that flip execution modes mid-run to ensure graceful degradation
-- Integration with all Schwabot mathematical frameworks and core logic
-- Advanced scenario modeling and stress testing
-"""
-
-
-import asyncio
-import json
-import logging
-import time
-import uuid
-import random
-from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from datetime import datetime, timedelta
-from enum import Enum
-import threading
-import queue
-import os
-import hashlib
-from pathlib import Path
-# from core.unified_math_system import unified_math  # F811: duplicate import
-from decimal import Decimal
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# Import core systems
-try:
-from core.ops_observability import log_operation, LogLevel
-from core.environment_manager import get_environment_manager, EnvironmentType
-from core.precision_performance import get_precision_performance_manager
-from core.vecu_core import get_vecu_core
-from core.ferris_rde_core import get_ferris_rde
-from core.zpe_core import get_zpe_core
-from core.zpe_integration import get_zpe_integration
-from core.zpe_rotational_engine import get_zpe_rotational_engine
-from core.exchange_plumbing import get_exchange_plumbing, ExchangeType
-from core.risk_guard import get_risk_guard
-from core.capital_controls import get_capital_controls
-from core.enhanced_risk_manager import get_enhanced_risk_manager
-CORE_SYSTEMS_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CORE_SYSTEMS_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -135,54 +31,54 @@ class SimulationType(Enum):
 
 
     """Simulation types."""
-MONTE_CARLO = "monte_carlo"
-CHAOS_MONKEY = "chaos_monkey"
-STRESS_TEST = "stress_test"
-SCENARIO_TEST = "scenario_test"
-INTEGRATION_TEST = "integration_test"
+MONTE_CARLO="monte_carlo"
+CHAOS_MONKEY="chaos_monkey"
+STRESS_TEST="stress_test"
+SCENARIO_TEST="scenario_test"
+INTEGRATION_TEST="integration_test"
 
 
 class ExecutionMode(Enum):
 
 
     """Execution modes for chaos testing."""
-NORMAL = "normal"
-DEGRADED = "degraded"
-EMERGENCY = "emergency"
-OFFLINE = "offline"
-RECOVERY = "recovery"
+NORMAL="normal"
+DEGRADED="degraded"
+EMERGENCY="emergency"
+OFFLINE="offline"
+RECOVERY="recovery"
 
 
 class FailureType(Enum):
 
 
     """Types of failures for chaos testing."""
-NETWORK_OUTAGE = "network_outage"
-API_FAILURE = "api_failure"
-DATABASE_FAILURE = "database_failure"
-MEMORY_LEAK = "memory_leak"
-CPU_SPIKE = "cpu_spike"
-DISK_FULL = "disk_full"
-RANDOM_CRASH = "random_crash"
+NETWORK_OUTAGE="network_outage"
+API_FAILURE="api_failure"
+DATABASE_FAILURE="database_failure"
+MEMORY_LEAK="memory_leak"
+CPU_SPIKE="cpu_spike"
+DISK_FULL="disk_full"
+RANDOM_CRASH="random_crash"
 
 
-@dataclass
+@ dataclass
 class SimulationConfig:
 
 
     """Simulation configuration."""
 simulation_type: SimulationType
-duration_days: int = 7
-num_scenarios: int = 100
-failure_probability: float = 0.1
-recovery_time_minutes: int = 30
-enable_chaos_monkey: bool = True
-enable_graceful_degradation: bool = True
-enable_metrics_collection: bool = True
-output_dir: str = "simulations"
+duration_days: int=7
+num_scenarios: int=100
+failure_probability: float=0.1
+recovery_time_minutes: int=30
+enable_chaos_monkey: bool=True
+enable_graceful_degradation: bool=True
+enable_metrics_collection: bool=True
+output_dir: str="simulations"
 
 
-@dataclass
+@ dataclass
 class ScenarioParameters:
 
 
@@ -197,11 +93,122 @@ market_conditions: Dict[str, Any]
 risk_parameters: Dict[str, Any]
 
 
-@dataclass
+@ dataclass
 class SimulationResult:
 
 
     """Result of a simulation run."""
+from core.enhanced_risk_manager import get_enhanced_risk_manager
+from core.capital_controls import get_capital_controls
+from core.risk_guard import get_risk_guard
+from core.exchange_plumbing import get_exchange_plumbing, ExchangeType
+from core.zpe_rotational_engine import get_zpe_rotational_engine
+from core.zpe_integration import get_zpe_integration
+from core.zpe_core import get_zpe_core
+from core.ferris_rde_core import get_ferris_rde
+from core.vecu_core import get_vecu_core
+from core.precision_performance import get_precision_performance_manager
+from core.environment_manager import get_environment_manager, EnvironmentType
+from core.ops_observability import log_operation, LogLevel
+import seaborn as sns
+import matplotlib.pyplot as plt
+from decimal import Decimal
+from pathlib import Path
+import hashlib
+import os
+import queue
+import threading
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from dataclasses import dataclass, field, asdict
+import random
+import uuid
+import time
+import logging
+import json
+import asyncio
+import numpy as np
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Long-Horizon Simulation - Multi-Day Monte-Carlo and Chaos Testing.
+
+This module provides comprehensive long-horizon simulation including:
+- Multi-day Monte-Carlo scenarios with random network outages / API anomalies
+- Chaos-monkey tests that flip execution modes mid-run to ensure graceful degradation
+- Integration with all Schwabot mathematical frameworks and core logic
+- Advanced scenario modeling and stress testing
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Import core systems
+try:
+CORE_SYSTEMS_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CORE_SYSTEMS_AVAILABLE=False
+
+# Import centralized CLI handler
+try:
 simulation_id: str
 scenario_id: str
 start_time: datetime
@@ -219,7 +226,7 @@ failure_log: List[Dict[str, Any]]
 market_data: List[Dict[str, Any]]
 
 
-@dataclass
+@ dataclass
 class ChaosEvent:
 
 
@@ -245,16 +252,16 @@ def __init__(self, config: SimulationConfig) -> None:
     pass
     pass
         """Initialize Monte Carlo simulator."""
-self.config = config
-self.results: List[SimulationResult] = []
-self.current_scenario: Optional[ScenarioParameters] = None
+self.config=config
+self.results: List[SimulationResult]=[]
+self.current_scenario: Optional[ScenarioParameters]=None
 
         # Market data generation
-self.market_generator = MarketDataGenerator()
+self.market_generator=MarketDataGenerator()
 
         # Performance tracking
-self.total_simulations = 0
-self.successful_simulations = 0
+self.total_simulations=0
+self.successful_simulations=0
 
 safe_safe_print("🎲 Monte Carlo Simulator initialized")
 
@@ -266,27 +273,27 @@ def generate_scenario(self, scenario_id: str) -> ScenarioParameters:
         """Generate a random scenario."""
         try:
             # Generate random parameters
-btc_price_base = random.uniform(40000, 60000)
-            btc_price_range = (btc_price_base * 0.8, btc_price_base * 1.2)
+btc_price_base=random.uniform(40000, 60000)
+            btc_price_range=(btc_price_base * 0.8, btc_price_base * 1.2)
 
-volatility_base = random.uniform(0.02, 0.08)
-            volatility_range = (volatility_base * 0.5, volatility_base * 2.0)
+volatility_base=random.uniform(0.02, 0.08)
+            volatility_range=(volatility_base * 0.5, volatility_base * 2.0)
 
-volume_base = random.uniform(1000, 10000)
-            volume_range = (volume_base * 0.3, volume_base * 3.0)
+volume_base=random.uniform(1000, 10000)
+            volume_range=(volume_base * 0.3, volume_base * 3.0)
 
             # Generate failure scenarios
-failure_scenarios = []
+failure_scenarios=[]
             if random.random() < self.config.failure_probability:
-                failure_scenarios = random.sample(list(FailureType), random.randint(1, 3))
+                failure_scenarios=random.sample(list(FailureType), random.randint(1, 3))
 
             # Generate execution modes
-execution_modes = [ExecutionMode.NORMAL]
+execution_modes=[ExecutionMode.NORMAL]
             if self.config.enable_graceful_degradation:
 execution_modes.extend(random.sample(list(ExecutionMode)[1:], random.randint(1, 2)))
 
             # Market conditions
-market_conditions = {
+market_conditions={
 'trend': random.choice(['bullish', 'bearish', 'sideways']),
                 'correlation': random.uniform(-0.8, 0.8),
                 'regime': random.choice(['low_vol', 'normal', 'high_vol', 'crisis']),
@@ -294,7 +301,7 @@ market_conditions = {
             }
 
             # Risk parameters
-risk_parameters = {
+risk_parameters={
 'var_confidence': random.uniform(0.95, 0.99),
                 'position_limit': random.uniform(0.01, 0.05),
                 'stop_loss': random.uniform(0.02, 0.10),
@@ -319,41 +326,41 @@ safe_safe_print(f"❌ Scenario generation failed: {safe_format_error(e, 'scenari
 async def run_simulation(self, scenario: ScenarioParameters) -> SimulationResult:
         """Run a single simulation."""
         try:
-simulation_id = str(uuid.uuid4())
-            start_time = datetime.now()
+simulation_id=str(uuid.uuid4())
+            start_time=datetime.now()
 
             # Initialize simulation state
-current_mode = ExecutionMode.NORMAL
-failure_count = 0
-recovery_count = 0
-mode_changes = 0
-failure_log = []
-market_data = []
+current_mode=ExecutionMode.NORMAL
+failure_count=0
+recovery_count=0
+mode_changes=0
+failure_log=[]
+market_data=[]
 
             # Generate market data
-market_data = self.market_generator.generate_market_data(
+market_data=self.market_generator.generate_market_data(
                 scenario, self.config.duration_days
 
 
             # Run simulation loop
-total_trades = 0
-total_pnl = 0.0
-pnl_history = []
+total_trades=0
+total_pnl=0.0
+pnl_history=[]
 
             for i, market_point in enumerate(market_data):
                 # Check for failures
                 if scenario.failure_scenarios and random.random() < 0.01:  # 1% chance per iteration
-                    failure_event = self._trigger_failure(scenario.failure_scenarios[0])
+                    failure_event=self._trigger_failure(scenario.failure_scenarios[0])
                     failure_log.append(failure_event)
                     failure_count += 1
 
                     # Change execution mode
                     if self.config.enable_graceful_degradation:
-current_mode = self._determine_execution_mode(failure_event)
+current_mode=self._determine_execution_mode(failure_event)
                         mode_changes += 1
 
                 # Simulate trading based on current mode
-trade_result = await self._simulate_trading(
+trade_result=await self._simulate_trading(
                     market_point, current_mode, scenario
 
 
@@ -364,21 +371,21 @@ pnl_history.append(trade_result['pnl'])
 
                 # Recovery check
                 if current_mode != ExecutionMode.NORMAL and random.random() < 0.1:
-                    current_mode = ExecutionMode.NORMAL
+                    current_mode=ExecutionMode.NORMAL
 recovery_count += 1
 mode_changes += 1
 
                 # Add small delay for realism
 await asyncio.sleep(0.001)
 
-end_time = datetime.now()
-            duration_minutes = (end_time - start_time).total_seconds() / 60
+end_time=datetime.now()
+            duration_minutes=(end_time - start_time).total_seconds() / 60
 
             # Calculate performance metrics
-performance_metrics = self._calculate_performance_metrics(pnl_history)
+performance_metrics=self._calculate_performance_metrics(pnl_history)
 
             # Create result
-result = SimulationResult(
+result=SimulationResult(
                 simulation_id=simulation_id,
 scenario_id=scenario.scenario_id,
 start_time=start_time,
@@ -415,24 +422,24 @@ def _trigger_failure(self, failure_type: FailureType) -> Dict[str, Any]:
     pass
         """Trigger a failure event."""
         try:
-severity = random.uniform(0.3, 1.0)
-            duration = random.randint(5, self.config.recovery_time_minutes)
+severity=random.uniform(0.3, 1.0)
+            duration=random.randint(5, self.config.recovery_time_minutes)
 
-affected_components = []
+affected_components=[]
             if failure_type == FailureType.NETWORK_OUTAGE:
-affected_components = ['exchange_api', 'websocket', 'data_feed']
+affected_components=['exchange_api', 'websocket', 'data_feed']
             elif failure_type == FailureType.API_FAILURE:
-affected_components = ['order_execution', 'market_data']
+affected_components=['order_execution', 'market_data']
             elif failure_type == FailureType.DATABASE_FAILURE:
-affected_components = ['persistent_state', 'audit_trail']
+affected_components=['persistent_state', 'audit_trail']
             elif failure_type == FailureType.MEMORY_LEAK:
-affected_components = ['memory_allocation', 'cache']
+affected_components=['memory_allocation', 'cache']
             elif failure_type == FailureType.CPU_SPIKE:
-affected_components = ['mathematical_calculations', 'optimization']
+affected_components=['mathematical_calculations', 'optimization']
             elif failure_type == FailureType.DISK_FULL:
-affected_components = ['logging', 'data_storage']
+affected_components=['logging', 'data_storage']
             elif failure_type == FailureType.RANDOM_CRASH:
-affected_components = ['random_component']
+affected_components=['random_component']
 
             return {
 'failure_type': failure_type.value,
@@ -453,8 +460,8 @@ def _determine_execution_mode(self, failure_event: Dict[str, Any]) -> ExecutionM
     pass
         """Determine execution mode based on failure."""
         try:
-severity = failure_event.get('severity', 0.5)
-            failure_type = failure_event.get('failure_type', '')
+severity=failure_event.get('severity', 0.5)
+            failure_type=failure_event.get('failure_type', '')
 
             if severity > 0.8 or failure_type in ['random_crash', 'database_failure']:
                 return ExecutionMode.EMERGENCY
@@ -510,32 +517,32 @@ def _execute_normal_trade(self, market_point: Dict[str, Any],]
         try:
             # Use ZPE core for trade decision
             if CORE_SYSTEMS_AVAILABLE:
-zpe_core = get_zpe_core()
-                vecu_core = get_vecu_core()
-                ferris_rde = get_ferris_rde()
+zpe_core=get_zpe_core()
+                vecu_core=get_vecu_core()
+                ferris_rde=get_ferris_rde()
 
                 # Get signals from core systems
-zpe_signal = zpe_core.calculate_resonance(market_point['btc_price'])
-                vecu_signal = vecu_core.calculate_timing_phase(market_point['timestamp'])
-                ferris_signal = ferris_rde.calculate_wheel_position(market_point['volume'])
+zpe_signal=zpe_core.calculate_resonance(market_point['btc_price'])
+                vecu_signal=vecu_core.calculate_timing_phase(market_point['timestamp'])
+                ferris_signal=ferris_rde.calculate_wheel_position(market_point['volume'])
 
                 # Combine signals
-combined_signal = (zpe_signal + vecu_signal + ferris_signal) / 3
+combined_signal=(zpe_signal + vecu_signal + ferris_signal) / 3
 
                 # Determine trade direction
                 if combined_signal > 0.6:
-side = 'buy'
-pnl = random.uniform(0.001, 0.01) * market_point['btc_price']
+side='buy'
+pnl=random.uniform(0.001, 0.01) * market_point['btc_price']
                 elif combined_signal < 0.4:
-side = 'sell'
-pnl = random.uniform(0.001, 0.01) * market_point['btc_price']
+side='sell'
+pnl=random.uniform(0.001, 0.01) * market_point['btc_price']
                 else:
-side = 'hold'
-pnl = 0.0
+side='hold'
+pnl=0.0
             else:
                 # Fallback to random trading
-side = random.choice(['buy', 'sell', 'hold'])
-                pnl = random.uniform(-0.005, 0.005) * market_point['btc_price']
+side=random.choice(['buy', 'sell', 'hold'])
+                pnl=random.uniform(-0.005, 0.005) * market_point['btc_price']
 
             return {
 'side': side,
@@ -555,8 +562,8 @@ def _execute_emergency_trade(self, market_point: Dict[str, Any],]
 """Execute an emergency trade."""
         try:
             # Emergency trades are usually defensive
-side = 'sell' if random.random() < 0.7 else 'hold'
-            pnl = random.uniform(-0.02, 0.005) * market_point['btc_price']  # Usually negative
+side='sell' if random.random() < 0.7 else 'hold'
+            pnl=random.uniform(-0.02, 0.005) * market_point['btc_price']  # Usually negative
 
             return {
 'side': side,
@@ -585,18 +592,18 @@ def _calculate_performance_metrics(self, pnl_history: List[float]) -> Dict[str, 
 'total_return': 0.0
 }
 
-pnl_array = np.array(pnl_history)
+pnl_array=np.array(pnl_history)
 
             # Calculate metrics
-total_return = np.sum(pnl_array)
-            volatility = unified_math.unified_math.std(pnl_array) if len(pnl_array) > 1 else 0.0
-            sharpe_ratio = (unified_math.unified_math.mean(pnl_array) / volatility) if volatility > 0 else 0.0
+total_return=np.sum(pnl_array)
+            volatility=unified_math.unified_math.std(pnl_array) if len(pnl_array) > 1 else 0.0
+            sharpe_ratio=(unified_math.unified_math.mean(pnl_array) / volatility) if volatility > 0 else 0.0
 
             # Calculate max drawdown
-cumulative = np.cumsum(pnl_array)
-            running_max = np.maximum.accumulate(cumulative)
-            drawdown = cumulative - running_max
-max_drawdown = unified_math.unified_math.min(drawdown) if len(drawdown) > 0 else 0.0
+cumulative=np.cumsum(pnl_array)
+            running_max=np.maximum.accumulate(cumulative)
+            drawdown=cumulative - running_max
+max_drawdown=unified_math.unified_math.min(drawdown) if len(drawdown) > 0 else 0.0
 
             return {
 'sharpe_ratio': float(sharpe_ratio),
@@ -637,31 +644,31 @@ def generate_market_data(self, scenario: ScenarioParameters,
                            duration_days: int) -> List[Dict[str, Any]]:
 """Generate market data for simulation."""
         try:
-market_data = []
-start_time = datetime.now()
+market_data=[]
+start_time=datetime.now()
 
             # Generate data points (one per minute for duration)
-            total_minutes = duration_days * 24 * 60
+            total_minutes=duration_days * 24 * 60
 
             # Initialize price
-current_price = random.uniform(*scenario.btc_price_range)
-            current_volatility = random.uniform(*scenario.volatility_range)
+current_price=random.uniform(*scenario.btc_price_range)
+            current_volatility=random.uniform(*scenario.volatility_range)
 
             for minute in range(total_minutes):
-                timestamp = start_time + timedelta(minutes=minute)
+                timestamp=start_time + timedelta(minutes=minute)
 
                 # Update price with random walk
-price_change = np.random.normal(0, current_volatility * current_price / 100)
+price_change=np.random.normal(0, current_volatility * current_price / 100)
                 current_price += price_change
 
                 # Keep price within range
-current_price = unified_math.max(scenario.btc_price_range[0],]
+current_price=unified_math.max(scenario.btc_price_range[0],]
                                   unified_math.min(scenario.btc_price_range[1], current_price))
 
                 # Update volatility (mean reversion)
-                volatility_change = np.random.normal(0, 0.01)
+                volatility_change=np.random.normal(0, 0.01)
                 current_volatility += volatility_change
-current_volatility = unified_math.max(scenario.volatility_range[0],]
+current_volatility=unified_math.max(scenario.volatility_range[0],]
                                        unified_math.min(scenario.volatility_range[1], current_volatility))
 
                 # Generate volume

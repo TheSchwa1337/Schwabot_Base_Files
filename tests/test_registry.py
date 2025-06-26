@@ -750,9 +750,9 @@ if __name__ == "__main__":
                 for warning in validation['warnings']:
                     safe_print(f"  ⚠️ {warning}")
         elif command in ['profit_vector_calibration', 'matrix_mapping_validation',
-                        'entry_exit_sequence_integrity', 'legacy_backlog_hydrator',
-                        'sfs_trigger_positioning', 'fallback_trade_controller',
-                        'tick_hold_logic', 'api_price_entry_feedback', 'trade_chain_timeline_replay']:
+                         'entry_exit_sequence_integrity', 'legacy_backlog_hydrator',
+                         'sfs_trigger_positioning', 'fallback_trade_controller',
+                         'tick_hold_logic', 'api_price_entry_feedback', 'trade_chain_timeline_replay']:
             result = run_specific_test(command)
             safe_print(f"\nTest Result for {command}:")
             safe_print(f"  Success: {'✅ PASS' if result.success else '❌ FAIL'}")

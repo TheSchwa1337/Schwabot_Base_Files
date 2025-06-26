@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-\n"""ghost_field_stabilizer.py
 Ghost Field Stabilizer
-======================
+== == == == == == == == == == ==
 
 Purpose
 -------
-Detect whether Schwabot is operating in a **Stable-Field State (SFS)** or an
-**Unstable-Field State (UFS)** by measuring the short-term entropy delta of an
+Detect whether Schwabot is operating in a ** Stable-Field State(SFS) ** or an
+**Unstable-Field State(UFS) ** by measuring the short-term entropy delta of an
 input signal series.
 
 Mathematical model

@@ -41,31 +41,31 @@ class IntegrityCheckResult:
 
 class FileIntegrityChecker:
     """Core file integrity checking system for Schwabot."""
-    
+
     def __init__(self):
         """Initialize the file integrity checker."""
         self.check_history: List[IntegrityCheckResult] = []
         self.file_checksums: Dict[str, str] = {}
         self.corrupted_files: List[str] = []
         self.check_count = 0
-        
+
         logger.info("File Integrity Checker initialized")
-    
+
     def calculate_file_checksum(self, file_path: str, algorithm: str = "sha256") -> str:
         """Calculate checksum for a file."""
         try:
             hash_func = getattr(hashlib, algorithm)()
-            
+
             with open(file_path, 'rb') as f:
                 for chunk in iter(lambda: f.read(4096), b""):
                     hash_func.update(chunk)
-            
+
             return hash_func.hexdigest()
-            
+
         except Exception as e:
             logger.error(f"Error calculating checksum for {file_path}: {e}")
             return ""
-    
+
     def check_file_integrity(self, file_path: str, expected_checksum: Optional[str] = None) -> IntegrityCheckResult:
         """Check integrity of a file."""
         try:
@@ -78,13 +78,13 @@ class FileIntegrityChecker:
                     file_size=0,
                     error_message="File does not exist"
                 )
-            
+
             # Get file size
             file_size = os.path.getsize(file_path)
-            
+
             # Calculate current checksum
             current_checksum = self.calculate_file_checksum(file_path)
-            
+
             if not current_checksum:
                 return IntegrityCheckResult(
                     file_path=file_path,
@@ -94,10 +94,10 @@ class FileIntegrityChecker:
                     file_size=file_size,
                     error_message="Failed to calculate checksum"
                 )
-            
+
             # Check if we have a stored checksum
             stored_checksum = self.file_checksums.get(file_path)
-            
+
             # Determine validity
             if expected_checksum:
                 is_valid = current_checksum == expected_checksum
@@ -107,14 +107,14 @@ class FileIntegrityChecker:
                 # First time checking this file, store the checksum
                 is_valid = True
                 self.file_checksums[file_path] = current_checksum
-            
+
             # Update stored checksum if valid
             if is_valid:
                 self.file_checksums[file_path] = current_checksum
             else:
                 if file_path not in self.corrupted_files:
                     self.corrupted_files.append(file_path)
-            
+
             result = IntegrityCheckResult(
                 file_path=file_path,
                 is_valid=is_valid,
@@ -126,13 +126,13 @@ class FileIntegrityChecker:
                     "expected_checksum": expected_checksum
                 }
             )
-            
+
             self.check_history.append(result)
             self.check_count += 1
-            
+
             logger.debug(f"File integrity check completed: {file_path} - {is_valid}")
             return result
-            
+
         except Exception as e:
             logger.error(f"File integrity check error for {file_path}: {e}")
             return IntegrityCheckResult(
@@ -143,75 +143,75 @@ class FileIntegrityChecker:
                 file_size=0,
                 error_message=str(e)
             )
-    
+
     def check_directory_integrity(self, directory_path: str, recursive: bool = True) -> List[IntegrityCheckResult]:
         """Check integrity of all files in a directory."""
         results = []
-        
+
         try:
             directory = Path(directory_path)
             if not directory.exists():
                 logger.error(f"Directory does not exist: {directory_path}")
                 return results
-            
+
             # Get all files in directory
             if recursive:
                 files = list(directory.rglob("*"))
             else:
                 files = list(directory.glob("*"))
-            
+
             # Filter for files only
             files = [f for f in files if f.is_file()]
-            
+
             logger.info(f"Checking integrity of {len(files)} files in {directory_path}")
-            
+
             for file_path in files:
                 result = self.check_file_integrity(str(file_path))
                 results.append(result)
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Directory integrity check error: {e}")
             return results
-    
+
     def detect_corrupted_files(self, directory_path: str) -> List[str]:
         """Detect corrupted files in a directory."""
         corrupted = []
-        
+
         try:
             directory = Path(directory_path)
             if not directory.exists():
                 return corrupted
-            
+
             # Check all files in directory
             results = self.check_directory_integrity(directory_path)
-            
+
             # Find corrupted files
             for result in results:
                 if not result.is_valid:
                     corrupted.append(result.file_path)
-            
+
             logger.info(f"Detected {len(corrupted)} corrupted files in {directory_path}")
             return corrupted
-            
+
         except Exception as e:
             logger.error(f"Corrupted file detection error: {e}")
             return corrupted
-    
+
     def repair_corrupted_file(self, file_path: str, backup_path: Optional[str] = None) -> bool:
         """Attempt to repair a corrupted file."""
         try:
             if file_path not in self.corrupted_files:
                 logger.warning(f"File not marked as corrupted: {file_path}")
                 return False
-            
+
             # Try to restore from backup
             if backup_path and os.path.exists(backup_path):
                 import shutil
                 shutil.copy2(backup_path, file_path)
                 logger.info(f"Restored {file_path} from backup")
-                
+
                 # Re-check integrity
                 result = self.check_file_integrity(file_path)
                 if result.is_valid:
@@ -223,17 +223,17 @@ class FileIntegrityChecker:
             else:
                 logger.error(f"No backup available for corrupted file: {file_path}")
                 return False
-                
+
         except Exception as e:
             logger.error(f"File repair error: {e}")
             return False
-    
+
     def get_integrity_statistics(self) -> Dict[str, Any]:
         """Get integrity check statistics."""
         total_checks = len(self.check_history)
         valid_files = sum(1 for result in self.check_history if result.is_valid)
         success_rate = valid_files / total_checks if total_checks > 0 else 0.0
-        
+
         return {
             "total_checks": total_checks,
             "valid_files": valid_files,
@@ -241,21 +241,21 @@ class FileIntegrityChecker:
             "success_rate": success_rate,
             "tracked_files": len(self.file_checksums)
         }
-    
+
     def export_checksums(self, output_file: str) -> bool:
         """Export checksums to a file."""
         try:
             with open(output_file, 'w') as f:
                 for file_path, checksum in self.file_checksums.items():
                     f.write(f"{file_path}:{checksum}\n")
-            
+
             logger.info(f"Checksums exported to {output_file}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Checksum export error: {e}")
             return False
-    
+
     def import_checksums(self, input_file: str) -> bool:
         """Import checksums from a file."""
         try:
@@ -264,10 +264,10 @@ class FileIntegrityChecker:
                     if ':' in line:
                         file_path, checksum = line.strip().split(':', 1)
                         self.file_checksums[file_path] = checksum
-            
+
             logger.info(f"Checksums imported from {input_file}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Checksum import error: {e}")
             return False
@@ -276,16 +276,16 @@ class FileIntegrityChecker:
 def main() -> None:
     """Main function for testing file integrity checking."""
     checker = FileIntegrityChecker()
-    
+
     # Test file integrity check
     test_file = __file__  # Check this file
     result = checker.check_file_integrity(test_file)
     safe_print(f"File integrity check result: {result.is_valid}")
-    
+
     # Get statistics
     stats = checker.get_integrity_statistics()
     safe_print(f"Integrity statistics: {stats}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

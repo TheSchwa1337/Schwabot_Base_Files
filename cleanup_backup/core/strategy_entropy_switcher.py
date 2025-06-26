@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 class TradingStrategy(Enum):
     """Available trading strategies."""
-    
+
     AGGRESSIVE_ACCUMULATION = "aggressive_accumulation"
     BALANCED_TRADING = "balanced_trading"
     CONSERVATIVE_SCALING = "conservative_scaling"
@@ -44,7 +44,7 @@ class TradingStrategy(Enum):
 @dataclass
 class StrategyMetrics:
     """Strategy performance metrics."""
-    
+
     strategy: TradingStrategy
     performance_score: float           # Recent performance [0, 1]
     entropy_level: float              # Strategy entropy level
@@ -58,7 +58,7 @@ class StrategyMetrics:
 @dataclass
 class SwitchSignal:
     """Strategy switch signal."""
-    
+
     should_switch: bool               # Whether to switch strategies
     target_strategy: TradingStrategy  # Target strategy to switch to
     switch_confidence: float          # Confidence in switch decision
@@ -69,7 +69,7 @@ class SwitchSignal:
 
 class StrategyEntropySwitcher:
     """Dynamic strategy switching engine based on entropy and performance."""
-    
+
     def __init__(self) -> None:
         """Initialize strategy entropy switcher."""
         self.current_strategy = TradingStrategy.BALANCED_TRADING
@@ -79,17 +79,17 @@ class StrategyEntropySwitcher:
         }
         self.entropy_history: List[float] = []
         self.switch_history: List[SwitchSignal] = []
-        
+
         self.max_history = 100
         self.entropy_window = 20
         self.performance_window = 15
-        
+
         # Strategy switching parameters
         self.switch_threshold = 0.3
         self.confidence_threshold = 0.6
         self.resistance_decay = 0.95
         self.entropy_sensitivity = 2.0
-        
+
         # Strategy characteristics
         self.strategy_entropy_weights = {
             TradingStrategy.AGGRESSIVE_ACCUMULATION: 0.8,
@@ -100,23 +100,23 @@ class StrategyEntropySwitcher:
             TradingStrategy.VAULT_PRESERVATION: 0.2,
             TradingStrategy.EMERGENCY_HALT: 0.1,
         }
-        
+
         # Current strategy state
         self.strategy_start_time = time.time()
         self.current_resistance = 0.0
         self.trade_count = 0
-    
+
     def calculate_entropy_gradient(self, entropy_sequence: List[float]) -> float:
         """Calculate entropy gradient for switch signal.
-        
+
         Mathematical Formula:
         ∇E_state = (E_current - E_mean) / σ_E
-        
+
         Parameters
         ----------
         entropy_sequence : List[float]
             Recent entropy measurements
-            
+
         Returns
         -------
         float
@@ -125,23 +125,23 @@ class StrategyEntropySwitcher:
         try:
             if len(entropy_sequence) < 3:
                 return 0.0
-            
+
             # Calculate gradient using finite differences
             recent_entropy = np.array(entropy_sequence[-self.entropy_window:])
-            
+
             if len(recent_entropy) < 2:
                 return 0.0
-            
+
             # Simple gradient calculation
             gradient = np.gradient(recent_entropy)
-            
+
             # Return the most recent gradient value
             return float(gradient[-1])
-            
+
         except Exception as e:
             logger.error(f"Error calculating entropy gradient: {e}")
             return 0.0
-    
+
     def calculate_strategy_confidence(
         self,
         good_entropy: float,
@@ -149,10 +149,10 @@ class StrategyEntropySwitcher:
         k: float = 5.0,
     ) -> float:
         """Calculate strategy confidence using sigmoid function.
-        
+
         Mathematical Formula:
         C_s = 1/(1 + e^(-k(E_good - E_bad)))
-        
+
         Parameters
         ----------
         good_entropy : float
@@ -161,7 +161,7 @@ class StrategyEntropySwitcher:
             Entropy of bad performance periods
         k : float
             Sigmoid steepness parameter
-            
+
         Returns
         -------
         float
@@ -170,30 +170,30 @@ class StrategyEntropySwitcher:
         try:
             entropy_diff = good_entropy - bad_entropy
             confidence = 1.0 / (1.0 + unified_math.exp(-k * entropy_diff))
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, confidence))
-            
+
         except Exception as e:
             logger.error(f"Error calculating strategy confidence: {e}")
             return 0.5
-    
+
     def calculate_state_change_resistance(
         self,
         performance_delta: float,
         volume_delta: float,
     ) -> float:
         """Calculate resistance to state change.
-        
+
         Mathematical Formula:
         R_state = tanh(Δ_performance) * (1 - σ(Δ_vol))
-        
+
         Parameters
         ----------
         performance_delta : float
             Performance change
         volume_delta : float
             Volume change
-            
+
         Returns
         -------
         float
@@ -202,19 +202,19 @@ class StrategyEntropySwitcher:
         try:
             # Tanh component for performance
             performance_component = np.tanh(performance_delta)
-            
+
             # Sigmoid component for volume
             volume_sigmoid = 1.0 / (1.0 + unified_math.exp(-volume_delta))
             volume_component = 1.0 - volume_sigmoid
-            
+
             resistance = performance_component * volume_component
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, resistance))
-            
+
         except Exception as e:
             logger.error(f"Error calculating state change resistance: {e}")
             return 0.5
-    
+
     def calculate_strategy_fitness(
         self,
         strategy: TradingStrategy,
@@ -222,10 +222,10 @@ class StrategyEntropySwitcher:
         entropy_level: float,
     ) -> float:
         """Calculate strategy fitness score.
-        
+
         Mathematical Formula:
         F_s = Σ(performance_i * entropy_weight_i) / n
-        
+
         Parameters
         ----------
         strategy : TradingStrategy
@@ -234,7 +234,7 @@ class StrategyEntropySwitcher:
             Recent performance history
         entropy_level : float
             Current entropy level
-            
+
         Returns
         -------
         float
@@ -243,30 +243,30 @@ class StrategyEntropySwitcher:
         try:
             if not performance_history:
                 return 0.5
-            
+
             # Get strategy entropy weight
             entropy_weight = self.strategy_entropy_weights.get(strategy, 0.5)
-            
+
             # Calculate weighted performance
             recent_performance = performance_history[-self.performance_window:]
-            
+
             # Apply entropy weighting
             entropy_factor = entropy_weight * entropy_level
-            
+
             # Calculate fitness as weighted average
             fitness_components = []
             for perf in recent_performance:
                 weighted_perf = perf * (1.0 + entropy_factor)
                 fitness_components.append(weighted_perf)
-            
+
             fitness_score = unified_math.unified_math.mean(fitness_components)
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, fitness_score))
-            
+
         except Exception as e:
             logger.error(f"Error calculating strategy fitness: {e}")
             return 0.5
-    
+
     def evaluate_switch_signal(
         self,
         current_entropy: float,
@@ -274,7 +274,7 @@ class StrategyEntropySwitcher:
         volume_delta: float = 0.0,
     ) -> SwitchSignal:
         """Evaluate whether to switch strategies.
-        
+
         Parameters
         ----------
         current_entropy : float
@@ -283,7 +283,7 @@ class StrategyEntropySwitcher:
             Current performance score
         volume_delta : float
             Volume change indicator
-            
+
         Returns
         -------
         SwitchSignal
@@ -294,28 +294,29 @@ class StrategyEntropySwitcher:
             self.entropy_history.append(current_entropy)
             if len(self.entropy_history) > self.max_history:
                 self.entropy_history = self.entropy_history[-50:]
-            
+
             # Calculate entropy gradient
             entropy_gradient = self.calculate_entropy_gradient(self.entropy_history)
-            
+
             # Calculate performance delta
             current_performance = self.performance_history[self.current_strategy]
             if len(current_performance) >= 2:
                 performance_delta = current_performance[-1] - current_performance[-2]
             else:
                 performance_delta = 0.0
-            
+
             # Calculate state change resistance
             resistance = self.calculate_state_change_resistance(
                 performance_delta, volume_delta
             )
-            
+
             # Update current resistance with decay
-            self.current_resistance = self.current_resistance * self.resistance_decay + resistance * (1 - self.resistance_decay)
-            
+            self.current_resistance = self.current_resistance * \
+                self.resistance_decay + resistance * (1 - self.resistance_decay)
+
             # Determine best strategy for current conditions
             best_strategy = self._find_best_strategy(current_entropy, performance_score)
-            
+
             # Calculate switch confidence
             if best_strategy != self.current_strategy:
                 # Calculate confidence based on entropy and performance
@@ -324,32 +325,32 @@ class StrategyEntropySwitcher:
                     self.performance_history[self.current_strategy],
                     current_entropy
                 )
-                
+
                 target_fitness = self.calculate_strategy_fitness(
                     best_strategy,
                     self.performance_history[best_strategy],
                     current_entropy
                 )
-                
+
                 fitness_diff = target_fitness - current_fitness
                 switch_confidence = unified_math.max(0.0, unified_math.min(1.0, fitness_diff * 2.0))
-                
+
                 # Apply resistance penalty
                 switch_confidence *= (1.0 - self.current_resistance)
-                
+
                 should_switch = (
                     switch_confidence > self.confidence_threshold and
                     unified_math.abs(entropy_gradient) > self.switch_threshold
                 )
-                
+
                 switch_urgency = unified_math.min(1.0, unified_math.abs(entropy_gradient) * switch_confidence)
-                
+
             else:
                 should_switch = False
                 switch_confidence = 0.0
                 switch_urgency = 0.0
                 best_strategy = self.current_strategy
-            
+
             switch_signal = SwitchSignal(
                 should_switch=should_switch,
                 target_strategy=best_strategy,
@@ -358,26 +359,26 @@ class StrategyEntropySwitcher:
                 performance_delta=performance_delta,
                 switch_urgency=switch_urgency,
             )
-            
+
             # Store switch signal
             self.switch_history.append(switch_signal)
             if len(self.switch_history) > self.max_history:
                 self.switch_history = self.switch_history[-50:]
-            
+
             return switch_signal
-            
+
         except Exception as e:
             logger.error(f"Error evaluating switch signal: {e}")
             return self._create_safe_switch_signal()
-    
+
     def execute_strategy_switch(self, switch_signal: SwitchSignal) -> bool:
         """Execute strategy switch if conditions are met.
-        
+
         Parameters
         ----------
         switch_signal : SwitchSignal
             Switch signal to execute
-            
+
         Returns
         -------
         bool
@@ -386,7 +387,7 @@ class StrategyEntropySwitcher:
         try:
             if not switch_signal.should_switch:
                 return False
-            
+
             # Record current strategy metrics
             current_metrics = StrategyMetrics(
                 strategy=self.current_strategy,
@@ -402,29 +403,29 @@ class StrategyEntropySwitcher:
                 active_duration=time.time() - self.strategy_start_time,
                 trade_count=self.trade_count,
             )
-            
+
             self.strategy_history.append(current_metrics)
             if len(self.strategy_history) > self.max_history:
                 self.strategy_history = self.strategy_history[-50:]
-            
+
             # Execute switch
             old_strategy = self.current_strategy
             self.current_strategy = switch_signal.target_strategy
             self.strategy_start_time = time.time()
             self.current_resistance = 0.0  # Reset resistance after switch
             self.trade_count = 0  # Reset trade count
-            
+
             logger.info(f"Strategy switched from {old_strategy.value} to {self.current_strategy.value}")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error executing strategy switch: {e}")
             return False
-    
+
     def update_performance(self, performance_score: float) -> None:
         """Update performance for current strategy.
-        
+
         Parameters
         ----------
         performance_score : float
@@ -432,48 +433,48 @@ class StrategyEntropySwitcher:
         """
         try:
             self.performance_history[self.current_strategy].append(performance_score)
-            
+
             # Trim history
             if len(self.performance_history[self.current_strategy]) > self.max_history:
                 self.performance_history[self.current_strategy] = self.performance_history[self.current_strategy][-50:]
-            
+
             self.trade_count += 1
-            
+
         except Exception as e:
             logger.error(f"Error updating performance: {e}")
-    
+
     def _find_best_strategy(self, entropy_level: float, performance_score: float) -> TradingStrategy:
         """Find best strategy for current conditions."""
         try:
             strategy_scores = {}
-            
+
             for strategy in TradingStrategy:
                 # Skip emergency halt unless performance is very poor
                 if strategy == TradingStrategy.EMERGENCY_HALT and performance_score > 0.2:
                     continue
-                
+
                 fitness = self.calculate_strategy_fitness(
                     strategy,
                     self.performance_history[strategy],
                     entropy_level
                 )
-                
+
                 # Adjust for entropy compatibility
                 entropy_weight = self.strategy_entropy_weights.get(strategy, 0.5)
                 entropy_compatibility = 1.0 - unified_math.abs(entropy_weight - entropy_level)
-                
+
                 combined_score = fitness * 0.7 + entropy_compatibility * 0.3
                 strategy_scores[strategy] = combined_score
-            
+
             # Return strategy with highest score
             best_strategy = unified_math.max(strategy_scores.items(), key=lambda x: x[1])[0]
-            
+
             return best_strategy
-            
+
         except Exception as e:
             logger.error(f"Error finding best strategy: {e}")
             return TradingStrategy.BALANCED_TRADING
-    
+
     def _create_safe_switch_signal(self) -> SwitchSignal:
         """Create safe fallback switch signal."""
         return SwitchSignal(
@@ -484,7 +485,7 @@ class StrategyEntropySwitcher:
             performance_delta=0.0,
             switch_urgency=0.0,
         )
-    
+
     def get_current_strategy_info(self) -> Dict:
         """Get current strategy information."""
         return {
@@ -500,7 +501,7 @@ class StrategyEntropySwitcher:
             "strategy_switches": len(self.switch_history),
             "entropy_level": self.entropy_history[-1] if self.entropy_history else 0.5,
         }
-    
+
     def get_switcher_summary(self) -> Dict:
         """Get strategy switcher summary."""
         return {
@@ -524,9 +525,9 @@ def main() -> None:
     """Demo function for testing strategy entropy switcher."""
     safe_print("Strategy Entropy Switcher Demo")
     safe_print("=" * 35)
-    
+
     switcher = StrategyEntropySwitcher()
-    
+
     # Simulate strategy switching over time
     test_scenarios = [
         (0.3, 0.8, 0.1),  # Low entropy, high performance
@@ -536,42 +537,42 @@ def main() -> None:
         (0.2, 0.9, 0.0),  # Low entropy, excellent performance
         (0.8, 0.2, 0.8),  # High entropy, poor performance
     ]
-    
+
     safe_print("Simulating strategy switching:")
     for i, (entropy, performance, volume_delta) in enumerate(test_scenarios):
         safe_print(f"\nScenario {i+1}:")
         safe_print(f"  Entropy: {entropy:.1f}, Performance: {performance:.1f}, Volume Δ: {volume_delta:.1f}")
-        
+
         # Update performance
         switcher.update_performance(performance)
-        
+
         # Evaluate switch signal
         switch_signal = switcher.evaluate_switch_signal(
             current_entropy=entropy,
             performance_score=performance,
             volume_delta=volume_delta
         )
-        
+
         safe_print(f"  Current Strategy: {switcher.current_strategy.value}")
         safe_print(f"  Should Switch: {switch_signal.should_switch}")
         safe_print(f"  Target Strategy: {switch_signal.target_strategy.value}")
         safe_print(f"  Switch Confidence: {switch_signal.switch_confidence:.3f}")
         safe_print(f"  Entropy Gradient: {switch_signal.entropy_gradient:.3f}")
         safe_print(f"  Switch Urgency: {switch_signal.switch_urgency:.3f}")
-        
+
         # Execute switch if recommended
         if switch_signal.should_switch:
             switched = switcher.execute_strategy_switch(switch_signal)
             safe_print("  → Switch Executed: {switched}")
-        
+
         time.sleep(0.1)  # Small delay for realistic timing
-    
+
     # Strategy info
     safe_print("\nCurrent Strategy Info:")
     strategy_info = switcher.get_current_strategy_info()
     for key, value in strategy_info.items():
         safe_print(f"  {key}: {value}")
-    
+
     # Switcher summary
     safe_print("\nSwitcher Summary:")
     summary = switcher.get_switcher_summary()
@@ -580,4 +581,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

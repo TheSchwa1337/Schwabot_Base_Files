@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from typing import List, Tuple, Optional, Union
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +14,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Bit Operations - Mathematical Bit Manipulation for Schwabot.
 
@@ -61,28 +71,28 @@ Mathematical Foundation:
 - Hamming distance: d(x,y) = popcount(x ⊕ y)
 """
 
-import logging
-from typing import List, Tuple, Optional, Union
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
-class BitOperations:
 
+class BitOperations:
 
     """Mathematical bit operations for hash and signal processing."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.max_bits = 64
+
+
 self.bit_masks = {i: (1 << i) - 1 for i in range(1, 65)}
         logger.info("BitOperations initialized")
 
-def rotate_left(self, value: int, shift: int, bits: int = 32) -> int:
 
+def rotate_left(self, value: int, shift: int, bits: int = 32) -> int:
 
     pass
     pass
@@ -104,6 +114,8 @@ int
 Rotated value
 """
         try:
+
+
 mask = self.bit_masks.get(bits, (1 << bits) - 1)
             shift = shift % bits
             return ((value << shift) | (value >> (bits - shift))) & mask

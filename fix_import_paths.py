@@ -11,16 +11,17 @@ import os
 import re
 from pathlib import Path
 
+
 def fix_import_paths_in_file(file_path):
     """Fix import paths in a single file."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Check if file has the problematic import
         if 'from utils.safe_print import' in content:
             print(f"Fixing: {file_path}")
-            
+
             # Replace the problematic import with correct import
             new_content = re.sub(
                 r'from utils\.safe_print import safe_print, info, warn, error, success, debug',
@@ -39,37 +40,39 @@ except ImportError:
         def debug(message): print(f"[DEBUG] {message}")''',
                 content
             )
-            
+
             # Write the fixed content back
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(new_content)
-            
+
             return True
         else:
             return False
-            
+
     except Exception as e:
         print(f"Error fixing {file_path}: {e}")
         return False
+
 
 def main():
     """Main function to fix all import paths."""
     print("🔧 Fixing Import Paths in Schwabot Core Files")
     print("=" * 50)
-    
+
     # Get all Python files in core directory
     core_dir = Path("core")
     python_files = list(core_dir.rglob("*.py"))
-    
+
     print(f"Found {len(python_files)} Python files in core directory")
-    
+
     fixed_count = 0
     for file_path in python_files:
         if fix_import_paths_in_file(file_path):
             fixed_count += 1
-    
+
     print(f"\n✅ Fixed {fixed_count} files")
     print("🎉 Import path fixing completed!")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

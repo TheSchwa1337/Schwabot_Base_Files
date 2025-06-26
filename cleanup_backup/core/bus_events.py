@@ -23,6 +23,8 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 # Event base class
+
+
 @dataclass
 class BusEvent:
     event_type: str
@@ -32,6 +34,8 @@ class BusEvent:
     metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
 
 # Example event types
+
+
 @dataclass
 class TradeEvent(BusEvent):
     trade_id: Optional[str] = None
@@ -40,10 +44,12 @@ class TradeEvent(BusEvent):
     volume: Optional[float] = None
     side: Optional[str] = None  # 'buy' or 'sell'
 
+
 @dataclass
 class SystemEvent(BusEvent):
     system_status: Optional[str] = None
     message: Optional[str] = None
+
 
 @dataclass
 class ErrorEvent(BusEvent):
@@ -52,6 +58,8 @@ class ErrorEvent(BusEvent):
     severity: Optional[str] = None
 
 # Event bus implementation
+
+
 class EventBus:
     def __init__(self):
         self._subscribers: Dict[str, List[Callable[[BusEvent], None]]] = {}
@@ -88,6 +96,7 @@ class EventBus:
         self._event_history.clear()
         logger.info("Event history cleared")
 
+
 # Example usage
 if __name__ == "__main__":
     bus = EventBus()
@@ -96,6 +105,7 @@ if __name__ == "__main__":
         safe_print(f"Trade Event: {event.trade_id} {event.symbol} {event.price} {event.volume} {event.side}")
 
     bus.subscribe("trade", print_trade)
-    trade_event = TradeEvent(event_type="trade", trade_id="T123", symbol="BTCUSD", price=45000.0, volume=1.5, side="buy")
+    trade_event = TradeEvent(event_type="trade", trade_id="T123", symbol="BTCUSD",
+                             price=45000.0, volume=1.5, side="buy")
     bus.dispatch(trade_event)
     safe_print("Event history:", bus.get_event_history("trade"))

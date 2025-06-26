@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import pandas as pd
+from random import uniform, choice
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import hashlib
+import logging
+import time
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +22,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Backtest Injector - Schwabot UROS v1.0
@@ -66,44 +84,40 @@ Features:
 - Integration with tick feed harness and asset substitution
 """
 
-import json
-import time
-import logging
-import hashlib
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from random import uniform, choice
-import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+
 class InjectionMode(Enum):
 
-
     """Backtest injection modes."""
+
+
 HISTORICAL = "historical"
 SIMULATED = "simulated"
 HYBRID = "hybrid"
 STRESS_TEST = "stress_test"
 
+
 class CycleType(Enum):
 
-
     """Trading cycle types."""
+
+
 BULL_MARKET = "bull_market"
 BEAR_MARKET = "bear_market"
 SIDEWAYS = "sideways"
 VOLATILE = "volatile"
 CRASH = "crash"
 
+
 @dataclass
 class BacktestData:
 
-
     """Backtest data structure."""
+
+
 timestamp: datetime
 asset: str
 price: float
@@ -115,11 +129,13 @@ profit_vector: Dict[str, float]
 rebalance_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class CycleAnalysis:
 
-
     """Trading cycle analysis."""
+
+
 cycle_id: str
 start_time: datetime
 end_time: datetime
@@ -132,8 +148,8 @@ entropy_score: float
 rebalance_count: int
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class BacktestInjector:
 
+class BacktestInjector:
 
     """
 Backtest injector for historical trading simulation.
@@ -145,12 +161,13 @@ Mathematical Foundation:
     - Rebalance Score: R = Σᵢ wᵢ * Pᵢ * (1 + entropy_bonus)
     """
 
-def __init__(self, config_path: str = "./config/backtest_config.json"):
 
+def __init__(self, config_path: str = "./config/backtest_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Backtest state and data
 self.backtest_data: List[BacktestData] = []
@@ -173,13 +190,14 @@ self._load_configuration()
 
 logger.info("Backtest Injector initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
         """Load backtest configuration."""
         try:
+
             # Default configuration
 config = {
 "assets": ["BTC", "USDC", "XRP", "ETH", "SOL"],
@@ -213,13 +231,14 @@ logger.info("Backtest configuration loaded")
         except Exception as e:
 logger.error(f"Error loading configuration: {e}")
 
-def _initialize_backtest_state(self) -> None:
 
+def _initialize_backtest_state(self) -> None:
 
     pass
     pass
         """Initialize backtest state."""
         try:
+
             # Initialize with default values
 self.current_cycle = None
 self.backtest_data = []
@@ -230,12 +249,14 @@ logger.info("Backtest state initialized")
         except Exception as e:
 logger.error(f"Error initializing backtest state: {e}")
 
+
 def inject_historical_data(self,
 
 
                                start_date: datetime,
 end_date: datetime,
 assets: List[str] = None) -> List[BacktestData]:
+
 """
 Inject historical data for backtesting.
 
@@ -321,7 +342,7 @@ def _simulate_historical_price(self, asset: str, date: datetime) -> float:
         """Simulate historical price data."""
         try:
             # Base prices for different assets
-base_prices = {
+base_prices={
 "BTC": 45000.0,
 "USDC": 1.0,
 "XRP": 0.55,
@@ -329,16 +350,16 @@ base_prices = {
 "SOL": 95.0
 }
 
-base_price = base_prices.get(asset, 100.0)
+base_price=base_prices.get(asset, 100.0)
 
             # Add time-based trend and volatility
-days_since_start = (date - datetime(2020, 1, 1)).days
-            trend_factor = 1 + (days_since_start * 0.0001)  # Small daily growth
-            volatility = uniform(0.95, 1.05)  # 5% daily volatility
+days_since_start=(date - datetime(2020, 1, 1)).days
+            trend_factor=1 + (days_since_start * 0.0001)  # Small daily growth
+            volatility=uniform(0.95, 1.05)  # 5% daily volatility
 
             # Add seasonal effects
-day_of_year = date.timetuple().tm_yday
-            seasonal_factor = 1 + 0.1 * np.unified_math.sin(2 * np.pi * day_of_year / 365)
+day_of_year=date.timetuple().tm_yday
+            seasonal_factor=1 + 0.1 * np.unified_math.sin(2 * np.pi * day_of_year / 365)
 
             return base_price * trend_factor * volatility * seasonal_factor
 
@@ -354,7 +375,7 @@ def _simulate_historical_volume(self, asset: str, date: datetime) -> float:
         """Simulate historical volume data."""
         try:
             # Base volumes for different assets
-base_volumes = {
+base_volumes={
 "BTC": 5000.0,
 "USDC": 100000.0,
 "XRP": 20000.0,
@@ -362,14 +383,14 @@ base_volumes = {
 "SOL": 3000.0
 }
 
-base_volume = base_volumes.get(asset, 1000.0)
+base_volume=base_volumes.get(asset, 1000.0)
 
             # Add random variation
-volume_variation = uniform(0.5, 2.0)
+volume_variation=uniform(0.5, 2.0)
 
             # Add day-of-week effects (higher volume on weekdays)
-            day_of_week = date.weekday()
-            weekday_factor = 1.2 if day_of_week < 5 else 0.8
+            day_of_week=date.weekday()
+            weekday_factor=1.2 if day_of_week < 5 else 0.8
 
             return base_volume * volume_variation * weekday_factor
 
@@ -385,7 +406,7 @@ def _determine_cycle_type(self, date: datetime, price: float, volume: float) -> 
         """Determine trading cycle type based on market conditions."""
         try:
             # Simple cycle determination based on date and price movement
-day_of_year = date.timetuple().tm_yday
+day_of_year=date.timetuple().tm_yday
 
             # Bull market periods (spring and fall)
             if (60 <= day_of_year <= 120) or (240 <= day_of_year <= 300):
@@ -420,21 +441,21 @@ H = -Σᵢ pᵢ * log₂(pᵢ) where pᵢ is the probability of price state i
         """
         try:
             # Create price state probabilities
-price_states = [
+price_states=[
 price / market_cap,  # Price relative to market cap
 volume / (price + 1e-6),  # Volume to price ratio
                 market_cap / 1e9  # Market cap normalized
 ]
 
             # Normalize probabilities
-total_prob = sum(price_states)
+total_prob=sum(price_states)
             if total_prob > 0:
-probabilities = [p / total_prob for p in price_states]
+probabilities=[p / total_prob for p in price_states]
             else:
-probabilities = [1/3, 1/3, 1/3]
+probabilities=[1/3, 1/3, 1/3]
 
             # Calculate entropy
-entropy = 0.0
+entropy=0.0
             for p in probabilities:
                 if p > 0:
 entropy -= p * np.log2(p)
@@ -458,10 +479,10 @@ P = {short: profit * 0.3, mid: profit * 0.5, long: profit * 0.8}
 """
         try:
             # Base profit calculation
-base_profit = price * volume * 0.001  # 0.1% of volume
+base_profit=price * volume * 0.001  # 0.1% of volume
 
             # Adjust based on cycle type
-cycle_multipliers = {
+cycle_multipliers={
 CycleType.BULL_MARKET: 1.2,
 CycleType.BEAR_MARKET: 0.8,
 CycleType.SIDEWAYS: 1.0,
@@ -469,12 +490,12 @@ CycleType.VOLATILE: 1.5,
 CycleType.CRASH: 0.5
 }
 
-cycle_multiplier = cycle_multipliers.get(cycle_type, 1.0)
-            adjusted_profit = base_profit * cycle_multiplier
+cycle_multiplier=cycle_multipliers.get(cycle_type, 1.0)
+            adjusted_profit=base_profit * cycle_multiplier
 
             # Calculate profit vector
-profit_weights = self.config["profit_weights"]
-profit_vector = {
+profit_weights=self.config["profit_weights"]
+profit_vector={
 "short": adjusted_profit * profit_weights["short"],
 "mid": adjusted_profit * profit_weights["mid"],
 "long": adjusted_profit * profit_weights["long"]
@@ -499,18 +520,18 @@ R = Σᵢ wᵢ * Pᵢ * (1 + entropy_bonus)
         """
         try:
             # Weights for different profit components
-weights = {"short": 0.3, "mid": 0.5, "long": 0.2}
+weights={"short": 0.3, "mid": 0.5, "long": 0.2}
 
             # Calculate weighted profit sum
-weighted_profit = sum(
+weighted_profit=sum(
                 weights[horizon] * profit_vector[horizon]
                 for horizon in profit_vector
 
 
             # Add entropy bonus
-entropy_bonus = entropy * 0.2  # 20% bonus for high entropy
+entropy_bonus=entropy * 0.2  # 20% bonus for high entropy
 
-rebalance_score = weighted_profit * (1 + entropy_bonus)
+rebalance_score=weighted_profit * (1 + entropy_bonus)
 
             return unified_math.max(rebalance_score, 0.0)
 
@@ -525,7 +546,7 @@ def _get_market_phase(self, date: datetime) -> str:
     pass
         """Get market phase based on date."""
         try:
-month = date.month
+month=date.month
 
             if month in [12, 1, 2]:
                 return "winter"
@@ -547,7 +568,7 @@ def _get_volatility_regime(self, entropy: float) -> str:
     pass
         """Get volatility regime based on entropy."""
         try:
-thresholds = self.config["entropy_thresholds"]
+thresholds=self.config["entropy_thresholds"]
 
             if entropy < thresholds["low"]:
                 return "low_volatility"
@@ -572,16 +593,16 @@ logger.warning("No backtest data available for cycle analysis")
                 return []
 
             # Group data by cycles
-cycles = self._identify_cycles()
+cycles=self._identify_cycles()
 
             # Analyze each cycle
-cycle_analyses = []
+cycle_analyses=[]
             for cycle_data in cycles:
-analysis = self._analyze_cycle(cycle_data)
+analysis=self._analyze_cycle(cycle_data)
                 cycle_analyses.append(analysis)
 
-self.cycle_analyses = cycle_analyses
-self.successful_cycles = len([c for c in cycle_analyses if c.total_return > 0])
+self.cycle_analyses=cycle_analyses
+self.successful_cycles=len([c for c in cycle_analyses if c.total_return > 0])
 
 logger.info(f"Analyzed {len(cycle_analyses)} trading cycles")
             return cycle_analyses
@@ -597,24 +618,24 @@ def _identify_cycles(self) -> List[List[BacktestData]]:
     pass
         """Identify trading cycles from backtest data."""
         try:
-cycles = []
-current_cycle = []
+cycles=[]
+current_cycle=[]
 
             for data_point in self.backtest_data:
                 if not current_cycle:
-current_cycle = [data_point]
+current_cycle=[data_point]
                 else:
                     # Check if cycle should continue or break
-last_point = current_cycle[-1]
+last_point=current_cycle[-1]
 
                     # Break cycle if significant change in conditions
-price_change = unified_math.abs(data_point.price - last_point.price) / last_point.price
-                    entropy_change = unified_math.abs(data_point.waveform_entropy - last_point.waveform_entropy)
+price_change=unified_math.abs(data_point.price - last_point.price) / last_point.price
+                    entropy_change=unified_math.abs(data_point.waveform_entropy - last_point.waveform_entropy)
 
                     if price_change > 0.1 or entropy_change > 0.3:  # 10% price change or 30% entropy change
                         if len(current_cycle) >= 5:  # Minimum cycle length
                             cycles.append(current_cycle)
-                        current_cycle = [data_point]
+                        current_cycle=[data_point]
                     else:
 current_cycle.append(data_point)
 
@@ -638,34 +659,35 @@ def _analyze_cycle(self, cycle_data: List[BacktestData]) -> CycleAnalysis:
             if not cycle_data:
                 return None
 
-start_time = cycle_data[0].timestamp
-end_time = cycle_data[-1].timestamp
-duration_days = (end_time - start_time).days
+start_time=cycle_data[0].timestamp
+end_time=cycle_data[-1].timestamp
+duration_days=(end_time - start_time).days
 
             # Calculate cycle metrics
-prices = [d.price for d in cycle_data]
-volumes = [d.volume for d in cycle_data]
-entropies = [d.waveform_entropy for d in cycle_data]
+prices=[d.price for d in cycle_data]
+volumes=[d.volume for d in cycle_data]
+entropies=[d.waveform_entropy for d in cycle_data]
 
             # Total return
-total_return = (prices[-1] - prices[0]) / prices[0] if prices[0] > 0 else 0
+total_return=(prices[-1] - prices[0]) / prices[0] if prices[0] > 0 else 0
 
             # Maximum drawdown
-max_drawdown = self._calculate_max_drawdown(prices)
+max_drawdown=self._calculate_max_drawdown(prices)
 
             # Volatility
-volatility = unified_math.unified_math.std(prices) / unified_math.unified_math.mean(prices) if unified_math.unified_math.mean(prices) > 0 else 0
+volatility=unified_math.unified_math.std(
+    prices) / unified_math.unified_math.mean(prices) if unified_math.unified_math.mean(prices) > 0 else 0
 
             # Average entropy
-entropy_score = unified_math.unified_math.mean(entropies)
+entropy_score=unified_math.unified_math.mean(entropies)
 
             # Rebalance count
-rebalance_count = sum(1 for d in cycle_data if d.rebalance_score > 0.7)
+rebalance_count=sum(1 for d in cycle_data if d.rebalance_score > 0.7)
 
             # Determine cycle type
-cycle_type = self._determine_cycle_type_from_data(cycle_data)
+cycle_type=self._determine_cycle_type_from_data(cycle_data)
 
-analysis = CycleAnalysis(
+analysis=CycleAnalysis(
                 cycle_id=f"cycle_{len(self.cycle_analyses):04d}",
                 start_time=start_time,
 end_time=end_time,
@@ -699,14 +721,14 @@ def _calculate_max_drawdown(self, prices: List[float]) -> float:
             if not prices:
                 return 0.0
 
-peak = prices[0]
-max_drawdown = 0.0
+peak=prices[0]
+max_drawdown=0.0
 
             for price in prices:
                 if price > peak:
-peak = price
-drawdown = (peak - price) / peak if peak > 0 else 0
-                max_drawdown = unified_math.max(max_drawdown, drawdown)
+peak=price
+drawdown=(peak - price) / peak if peak > 0 else 0
+                max_drawdown=unified_math.max(max_drawdown, drawdown)
 
             return max_drawdown
 
@@ -725,8 +747,8 @@ def _determine_cycle_type_from_data(self, cycle_data: List[BacktestData]) -> Cyc
                 return CycleType.SIDEWAYS
 
             # Calculate average metrics
-avg_entropy = unified_math.mean([d.waveform_entropy for d in cycle_data])
-            avg_rebalance = unified_math.mean([d.rebalance_score for d in cycle_data])
+avg_entropy=unified_math.mean([d.waveform_entropy for d in cycle_data])
+            avg_rebalance=unified_math.mean([d.rebalance_score for d in cycle_data])
 
             # Determine cycle type based on metrics
             if avg_entropy > 0.8:
@@ -752,8 +774,8 @@ def get_backtest_statistics(self) -> Dict[str, Any]:
             if not self.cycle_analyses:
                 return {}
 
-returns = [c.total_return for c in self.cycle_analyses]
-drawdowns = [c.max_drawdown for c in self.cycle_analyses]
+returns=[c.total_return for c in self.cycle_analyses]
+drawdowns=[c.max_drawdown for c in self.cycle_analyses]
 
             return {
 "total_injections": self.total_injections,
@@ -774,14 +796,14 @@ cycle_type.value: len([c for c in self.cycle_analyses if c.cycle_type == cycle_t
 logger.error(f"Error getting backtest statistics: {e}")
             return {}
 
-def export_backtest_results(self, output_path: str = "backtest_results.json") -> None:
+def export_backtest_results(self, output_path: str="backtest_results.json") -> None:
 
 
     pass
     pass
         """Export backtest results to JSON file."""
         try:
-results = {
+results={
 "statistics": self.get_backtest_statistics(),
                 "cycles": [
 {
@@ -819,26 +841,26 @@ def main():
 safe_print("🔄 Testing Backtest Injector...")
 
     # Initialize injector
-injector = BacktestInjector()
+injector=BacktestInjector()
 
     # Inject historical data for 1 year
-start_date = datetime(2023, 1, 1)
-    end_date = datetime(2023, 12, 31)
+start_date=datetime(2023, 1, 1)
+    end_date=datetime(2023, 12, 31)
 
 safe_print("📊 Injecting historical data...")
-    historical_data = injector.inject_historical_data(start_date, end_date)
+    historical_data=injector.inject_historical_data(start_date, end_date)
 
 safe_print(f"✅ Injected {len(historical_data)} data points")
 
     # Analyze trading cycles
 safe_print("\n📈 Analyzing trading cycles...")
-    cycles = injector.analyze_trading_cycles()
+    cycles=injector.analyze_trading_cycles()
 
 safe_print(f"✅ Analyzed {len(cycles)} trading cycles")
 
     # Print sample cycle
     if cycles:
-sample_cycle = cycles[0]
+sample_cycle=cycles[0]
 safe_print("\n📊 Sample Cycle:")
         safe_print(f"  ID: {sample_cycle.cycle_id}")
         safe_print(f"  Type: {sample_cycle.cycle_type.value}")
@@ -848,7 +870,7 @@ safe_print("\n📊 Sample Cycle:")
         safe_print(f"  Volatility: {sample_cycle.volatility:.2%}")
 
     # Get statistics
-stats = injector.get_backtest_statistics()
+stats=injector.get_backtest_statistics()
     safe_print("\n📊 Backtest Statistics:")
     for key, value in stats.items():
         safe_print(f"  - {key.replace('_', ' ').title()}: {value}")

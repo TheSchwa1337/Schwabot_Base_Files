@@ -445,7 +445,7 @@ class ThermalZoneManager:
         # Trim history if too long
         if len(self.thermal_history[zone_id]) > self.max_history_length:
             self.thermal_history[zone_id] = self.thermal_history[zone_id][
-                -self.max_history_length :
+                -self.max_history_length:
             ]
 
         # Check for thermal alerts

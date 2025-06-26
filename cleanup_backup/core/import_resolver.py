@@ -208,7 +208,7 @@ class ImportResolver:
         return mock
 
     def register_fallback(self, module_name: str,
-                         fallback_factory: Callable) -> None:
+                          fallback_factory: Callable) -> None:
         """Register a custom fallback factory for a module."""
         self._fallback_registry[module_name] = fallback_factory
 

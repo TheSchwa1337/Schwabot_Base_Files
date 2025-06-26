@@ -18,223 +18,6 @@ Key Features:
 """
 
 
-import logging
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
-
-# Configure logging
-logger = logging.getLogger(__name__)
-
-# Version information
-__version__ = "0.5.1"
-__author__ = "Schwabot Development Team"
-__description__ = "Advanced AI-Powered Trading System"
-
-# Core module exports
-from .typing_schemas import (
-    FaultLog, FaultEvent, RecoveryStrategy, StrategyHash, AIStrategyResponse,
-    MathematicalOperation, VectorOperation, MatrixOperation, TradingSignal,
-    SystemState, PerformanceMetrics, parse_ai_response, create_fault_log,
-    validate_mathematical_operation
-)
-
-from .multi_bit_btc_processor import MultiBitBTCProcessor
-from .profit_routing_engine import ProfitRoutingEngine
-from .hash_registry import HashRegistry, HashEntry, HashType, HashStatus
-from .hash_registry_manager import HashRegistryManager
-from .hash_registry_storage import HashRegistryStorage
-from .hash_registry_core import HashRegistryCore
-from .strategy_loader import StrategyLoader, StrategyConfig, LoaderResult
-from .ops_observability import OpsObservability, MetricData, MetricType
-from .regulatory_compliance import RegulatoryCompliance, ComplianceReport, ComplianceType
-from .risk_guard import RiskGuard, RiskEvent, RiskLevel
-from .secure_api_manager import SecureAPIManager
-from .exchange_plumbing import ExchangePlumbing
-from .persistent_state_manager import PersistentStateManager
-from .environment_manager import EnvironmentManager
-from .memory_allocation_manager import MemoryAllocationManager
-from .precision_performance import PrecisionPerformanceManager
-from .long_horizon_simulation import LongHorizonSimulation
-from .thermal_boundary_manager import ThermalBoundaryManager
-from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine
-
-# Medium Risk Phase II components
-from .test_medium_risk_phase_ii import MediumRiskPhaseIITester
-from .enhanced_phase_risk_manager import EnhancedPhaseRiskManager
-from .pipeline_integration_manager import PipelineIntegrationManager
-
-# Type definitions
-from .type_defs import (
-    BitLevel, MatrixPhase, MatrixController, MatrixControllerType,
-    Vector, Matrix, Tensor, Price, Volume, Quantity, Amount,
-    Temperature, Pressure, ThermalConductivity, HeatCapacity,
-    WarpFactor, LightSpeed, Distance, Time
-)
-
-# Unified mathematical system (imported after basic components to avoid circular imports)
-try:
-    from .unified_math_system import UnifiedMathSystem, unified_math, MathResult, MathOperation
-except ImportError:
-    # Fallback if unified math system is not available
-    UnifiedMathSystem = None
-    unified_math = None
-    MathResult = None
-    MathOperation = None
-
-# Utility functions
-from .utils.windows_cli_compatibility import (
-    safe_print, safe_format_error, log_safe
-)
-
-# Fault handling
-from .fault_bus import FaultBus, FaultBusEvent, FaultType
-
-# Mathematical components
-from .mathematical_pipeline_validator import MathematicalPipelineValidator
-from .mathematical_pipeline_validator_simple import SimplifiedMathematicalPipelineValidator
-
-# AI and strategy components
-from .gpt_command_layer import GPTCommandLayer
-# from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer  
-# F811: duplicate import
-from .strategy_mapper import StrategyMapper
-
-# Memory and execution components
-from .memory_stack.ai_command_sequencer import AICommandSequencer
-from .memory_stack.execution_validator import ExecutionValidator
-
-# Risk and compliance components
-from .enhanced_risk_manager import EnhancedRiskManager
-from .capital_controls import CapitalControls
-
-# Performance and optimization
-from .auto_scaler import AutoScaler
-
-# Thermal and hardware management
-# from .thermal_boundary_manager import ThermalBoundaryManager  # F811: duplicate import
-# from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine  # F811: duplicate import
-
-# Advanced mathematical frameworks
-from .zpe_core import ZPECore
-from .zpe_integration import ZPEIntegration
-from .zpe_rotational_engine import ZPERotationalEngine
-from .zpe_hybrid_mode_selector import ZPEHybridModeSelector
-
-# Vector and matrix operations
-from .unified_confidence_matrix import UnifiedConfidenceMatrix
-from .hash_confidence_evaluator import HashConfidenceEvaluator
-from .vector_validator import VectorValidator
-from .matrix_allocator import MatrixAllocator
-
-# Event and communication systems
-from .bus_core import BusCore
-from .bus_events import EventBus, TradeEvent, BusEvent
-from .echo_snapshot import EchoSnapshot
-
-# Advanced engines
-from .future_corridor_engine import FutureCorridorEngine
-from .enhanced_fractal_core import EnhancedFractalCore
-from .hash_trigger_engine import HashTriggerEngine
-from .entropy_engine import EntropyEngine
-from .altitude_generator import AltitudeGenerator
-
-# Hash trigger mapping system
-from .hash_trigger_mapper import HashTriggerMapper, HashTriggerMapping
-from .ghost_strategy_integration import GhostStrategyIntegrator, EnhancedStrategyDecision
-
-# API and integration
-from .api_gateway import SchwabotAPIGateway as APIGateway
-from .api_bridge_manager import APIBridgeManager
-from .coldbase_bridge import ColdbaseBridge
-from .prophet_connector import ProphetConnector
-
-# Orchestration and management
-from .main_orcestrator import MainOrchestrator
-from .master_orchestrator import MasterOrchestrator
-from .settings_controller import SettingsController
-
-# Data and analysis
-from .data_integration_layer import DataIntegrationLayer
-from .line_render_engine import LineRenderEngine
-from .trajectory_sphere import TrajectorySphere
-
-# Error handling and validation
-from .error_handler import ErrorHandler, safe_execute
-from .error_handling_pipeline import ErrorHandlingPipeline
-from .import_resolver import ImportResolver
-from .best_practices_enforcer import BestPracticesEnforcer
-
-# State and mode management
-from .state_tracker import StateTracker
-from .mode_manager import ModeManager
-from .drift_phase_monitor import DriftPhaseMonitor
-
-# Windows compatibility
-from .enhanced_windows_cli_compatibility import EnhancedWindowsCliCompatibilityHandler
-
-# Phase engine components
-from .phase_engine.basket_phase_map import BasketPhaseMap
-
-# Advanced components
-from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
-from .memory_agent_ghost_meta_engine import MemoryAgentGhostMetaEngine
-from .lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
-from .advanced_test_harness import AdvancedTestHarness
-
-# Ghost and advanced logic
-from .ghost_architecture_btc_profit_handoff import GhostArchitectureBTCProfitHandoff
-from .ghost_strategy_handler import GhostStrategyHandler
-from .compute_ghost_route import compute_ghost_route
-
-# Volume and tick management
-from .volume_tick_router import VolumeTickRouter
-from .tick_backlog_router import TickBacklogRouter
-from .tick_cycle_validator import TickCycleValidator
-
-# Event matrix and impact
-from .event_matrix_integration_bridge import EventMatrixIntegrationBridge
-from .event_impact_mapper import EventImpactMapper
-
-# Advanced mathematical operations
-from .advanced_mathematical_core import AdvancedMathematicalCore
-from .riddle_gemm import RiddleGEMM
-from .altitude_adjustment_math import AltitudeAdjustmentMath
-from .anomaly_filter_comprehensive import AnomalyFilterComprehensive
-
-# Demo and testing components
-from .demo_backtest_runner import DemoBacktestRunner
-from .demo_entry_simulator import DemoEntrySimulator
-from .demo_integration_system import DemoIntegrationSystem
-from .demo_memory_core import DemoMemoryCore
-
-# Unified interfaces
-from .schwabot_unified_interface_system import SchwabotUnifiedInterfaceSystem
-
-# Post-failure recovery
-from .post_failure_recovery_intelligence_loop import PostFailureRecoveryIntelligenceLoop
-
-# Temporal corrections
-from .temporal_execution_correction_layer import TemporalExecutionCorrectionLayer
-
-# Profit and strategy management
-from .profit_cycle_allocator import ProfitCycleAllocator
-
-# Memory and vector operations
-from .lantern_vector_memory import LanternVectorMemory
-
-# Unified mathematics
-from .unified_mathematics_config import UnifiedMathematicsConfig
-
-# UI Bridge components (Low-risk phase)
-from .ui_state_bridge import UIStateBridge, get_ui_state_bridge
-from .visual_integration_bridge import VisualIntegrationBridge, get_visual_integration_bridge
-from .ui_integration_bridge import UIIntegrationBridge, get_ui_integration_bridge
-from .ui_bridge_integration_manager import UIBridgeIntegrationManager, get_ui_bridge_integration_manager
-
-# Type binding system
-from .type_binding_system import TypeBindingValidator, WindowsCliCompatibilityHandler, cli_handler
-
-# Constants - import specific constants instead of wildcard
 from .constants import (
     PSI_INFINITY, FIBONACCI_SCALING, INVERSE_PSI, CONFIG_DIR, DATA_DIR, LOG_DIR,
     KELLY_SAFETY_FACTOR, SHARPE_TARGET, MAX_POSITION_SIZE, MIN_POSITION_SIZE,
@@ -248,6 +31,223 @@ from .constants import (
     DEFAULT_BATCH_SIZE, KELLY_SHARPE_COMPOSITE, FRACTAL_THERMAL_RATIO,
     VECTORIZATION_THRESHOLD, PARALLEL_PROCESSING_THRESHOLD
 )
+from .type_binding_system import TypeBindingValidator, WindowsCliCompatibilityHandler, cli_handler
+from .ui_bridge_integration_manager import UIBridgeIntegrationManager, get_ui_bridge_integration_manager
+from .ui_integration_bridge import UIIntegrationBridge, get_ui_integration_bridge
+from .visual_integration_bridge import VisualIntegrationBridge, get_visual_integration_bridge
+from .ui_state_bridge import UIStateBridge, get_ui_state_bridge
+from .unified_mathematics_config import UnifiedMathematicsConfig
+from .lantern_vector_memory import LanternVectorMemory
+from .profit_cycle_allocator import ProfitCycleAllocator
+from .temporal_execution_correction_layer import TemporalExecutionCorrectionLayer
+from .post_failure_recovery_intelligence_loop import PostFailureRecoveryIntelligenceLoop
+from .schwabot_unified_interface_system import SchwabotUnifiedInterfaceSystem
+from .demo_memory_core import DemoMemoryCore
+from .demo_integration_system import DemoIntegrationSystem
+from .demo_entry_simulator import DemoEntrySimulator
+from .demo_backtest_runner import DemoBacktestRunner
+from .anomaly_filter_comprehensive import AnomalyFilterComprehensive
+from .altitude_adjustment_math import AltitudeAdjustmentMath
+from .riddle_gemm import RiddleGEMM
+from .advanced_mathematical_core import AdvancedMathematicalCore
+from .event_impact_mapper import EventImpactMapper
+from .event_matrix_integration_bridge import EventMatrixIntegrationBridge
+from .tick_cycle_validator import TickCycleValidator
+from .tick_backlog_router import TickBacklogRouter
+from .volume_tick_router import VolumeTickRouter
+from .compute_ghost_route import compute_ghost_route
+from .ghost_strategy_handler import GhostStrategyHandler
+from .ghost_architecture_btc_profit_handoff import GhostArchitectureBTCProfitHandoff
+from .advanced_test_harness import AdvancedTestHarness
+from .lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
+from .memory_agent_ghost_meta_engine import MemoryAgentGhostMetaEngine
+from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
+from .phase_engine.basket_phase_map import BasketPhaseMap
+from .enhanced_windows_cli_compatibility import EnhancedWindowsCliCompatibilityHandler
+from .drift_phase_monitor import DriftPhaseMonitor
+from .mode_manager import ModeManager
+from .state_tracker import StateTracker
+from .best_practices_enforcer import BestPracticesEnforcer
+from .import_resolver import ImportResolver
+from .error_handling_pipeline import ErrorHandlingPipeline
+from .error_handler import ErrorHandler, safe_execute
+from .trajectory_sphere import TrajectorySphere
+from .line_render_engine import LineRenderEngine
+from .data_integration_layer import DataIntegrationLayer
+from .settings_controller import SettingsController
+from .master_orchestrator import MasterOrchestrator
+from .main_orcestrator import MainOrchestrator
+from .prophet_connector import ProphetConnector
+from .coldbase_bridge import ColdbaseBridge
+from .api_bridge_manager import APIBridgeManager
+from .api_gateway import SchwabotAPIGateway as APIGateway
+from .ghost_strategy_integration import GhostStrategyIntegrator, EnhancedStrategyDecision
+from .hash_trigger_mapper import HashTriggerMapper, HashTriggerMapping
+from .altitude_generator import AltitudeGenerator
+from .entropy_engine import EntropyEngine
+from .hash_trigger_engine import HashTriggerEngine
+from .enhanced_fractal_core import EnhancedFractalCore
+from .future_corridor_engine import FutureCorridorEngine
+from .echo_snapshot import EchoSnapshot
+from .bus_events import EventBus, TradeEvent, BusEvent
+from .bus_core import BusCore
+from .matrix_allocator import MatrixAllocator
+from .vector_validator import VectorValidator
+from .hash_confidence_evaluator import HashConfidenceEvaluator
+from .unified_confidence_matrix import UnifiedConfidenceMatrix
+from .zpe_hybrid_mode_selector import ZPEHybridModeSelector
+from .zpe_rotational_engine import ZPERotationalEngine
+from .zpe_integration import ZPEIntegration
+from .zpe_core import ZPECore
+from .auto_scaler import AutoScaler
+from .capital_controls import CapitalControls
+from .enhanced_risk_manager import EnhancedRiskManager
+from .memory_stack.execution_validator import ExecutionValidator
+from .memory_stack.ai_command_sequencer import AICommandSequencer
+from .strategy_mapper import StrategyMapper
+from .gpt_command_layer import GPTCommandLayer
+from .mathematical_pipeline_validator_simple import SimplifiedMathematicalPipelineValidator
+from .mathematical_pipeline_validator import MathematicalPipelineValidator
+from .fault_bus import FaultBus, FaultBusEvent, FaultType
+from .utils.windows_cli_compatibility import (
+    safe_print, safe_format_error, log_safe
+)
+from .type_defs import (
+    BitLevel, MatrixPhase, MatrixController, MatrixControllerType,
+    Vector, Matrix, Tensor, Price, Volume, Quantity, Amount,
+    Temperature, Pressure, ThermalConductivity, HeatCapacity,
+    WarpFactor, LightSpeed, Distance, Time
+)
+from .pipeline_integration_manager import PipelineIntegrationManager
+from .enhanced_phase_risk_manager import EnhancedPhaseRiskManager
+from .test_medium_risk_phase_ii import MediumRiskPhaseIITester
+from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine
+from .thermal_boundary_manager import ThermalBoundaryManager
+from .long_horizon_simulation import LongHorizonSimulation
+from .precision_performance import PrecisionPerformanceManager
+from .memory_allocation_manager import MemoryAllocationManager
+from .environment_manager import EnvironmentManager
+from .persistent_state_manager import PersistentStateManager
+from .exchange_plumbing import ExchangePlumbing
+from .secure_api_manager import SecureAPIManager
+from .risk_guard import RiskGuard, RiskEvent, RiskLevel
+from .regulatory_compliance import RegulatoryCompliance, ComplianceReport, ComplianceType
+from .ops_observability import OpsObservability, MetricData, MetricType
+from .strategy_loader import StrategyLoader, StrategyConfig, LoaderResult
+from .hash_registry_core import HashRegistryCore
+from .hash_registry_storage import HashRegistryStorage
+from .hash_registry_manager import HashRegistryManager
+from .hash_registry import HashRegistry, HashEntry, HashType, HashStatus
+from .profit_routing_engine import ProfitRoutingEngine
+from .multi_bit_btc_processor import MultiBitBTCProcessor
+from .typing_schemas import (
+    FaultLog, FaultEvent, RecoveryStrategy, StrategyHash, AIStrategyResponse,
+    MathematicalOperation, VectorOperation, MatrixOperation, TradingSignal,
+    SystemState, PerformanceMetrics, parse_ai_response, create_fault_log,
+    validate_mathematical_operation
+)
+import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Version information
+__version__ = "0.5.1"
+__author__ = "Schwabot Development Team"
+__description__ = "Advanced AI-Powered Trading System"
+
+# Core module exports
+
+
+# Medium Risk Phase II components
+
+# Type definitions
+
+# Unified mathematical system (imported after basic components to avoid circular imports)
+try:
+    from .unified_math_system import UnifiedMathSystem, unified_math, MathResult, MathOperation
+except ImportError:
+    # Fallback if unified math system is not available
+    UnifiedMathSystem = None
+    unified_math = None
+    MathResult = None
+    MathOperation = None
+
+# Utility functions
+
+# Fault handling
+
+# Mathematical components
+
+# AI and strategy components
+# from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer
+# F811: duplicate import
+
+# Memory and execution components
+
+# Risk and compliance components
+
+# Performance and optimization
+
+# Thermal and hardware management
+# from .thermal_boundary_manager import ThermalBoundaryManager  # F811: duplicate import
+# from .gpu_flash_engine import GPUFlasherEngine as GPUFlashEngine  # F811: duplicate import
+
+# Advanced mathematical frameworks
+
+# Vector and matrix operations
+
+# Event and communication systems
+
+# Advanced engines
+
+# Hash trigger mapping system
+
+# API and integration
+
+# Orchestration and management
+
+# Data and analysis
+
+# Error handling and validation
+
+# State and mode management
+
+# Windows compatibility
+
+# Phase engine components
+
+# Advanced components
+
+# Ghost and advanced logic
+
+# Volume and tick management
+
+# Event matrix and impact
+
+# Advanced mathematical operations
+
+# Demo and testing components
+
+# Unified interfaces
+
+# Post-failure recovery
+
+# Temporal corrections
+
+# Profit and strategy management
+
+# Memory and vector operations
+
+# Unified mathematics
+
+# UI Bridge components (Low-risk phase)
+
+# Type binding system
+
+# Constants - import specific constants instead of wildcard
 
 
 # =============================================================================
@@ -314,7 +314,8 @@ def initialize_core_system() -> Dict[str, Any]:
 
         # Initialize core components
         core_components = [
-            ("unified_mathematical_trading_controller", "UnifiedMathematicalTradingController", "Unified mathematical trading controller"),
+            ("unified_mathematical_trading_controller", "UnifiedMathematicalTradingController",
+             "Unified mathematical trading controller"),
             ("ghost_profit_tracker", "ProfitTracker", "Ghost profit tracking system"),
             ("state_tracker", "StateTracker", "System state tracking"),
             ("dual_state_tracker", "DualStateTracker", "Dual state tracking system"),
@@ -435,7 +436,8 @@ def check_system_health() -> Dict[str, Any]:
             "warning_count": len(health_status["warnings"])
         }
 
-        logger.info(f"System health check: {health_status['overall_health']} ({healthy_components}/{total_components} components healthy)")
+        logger.info(
+            f"System health check: {health_status['overall_health']} ({healthy_components}/{total_components} components healthy)")
         return health_status
 
     except Exception as e:

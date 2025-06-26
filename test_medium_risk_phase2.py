@@ -1,3 +1,4 @@
+from .visual_fallbacks import VisualFallback
 from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
@@ -36,8 +37,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Visual mode core
-from .visual_fallbacks import VisualFallback
 visual = VisualFallback()
+
 
 @dataclass
 class TestResult:
@@ -66,7 +67,7 @@ class MediumRiskPhase2Tester:
         start = time.time()
         try:
             try:
-                from core.trade_executor import ExecutedTrade  # noqa: F401  
+                from core.trade_executor import ExecutedTrade  # noqa: F401
                 from core.simulate_trade import (  # type: ignore
                     TradeSimulator,
                 )
@@ -342,7 +343,7 @@ class MediumRiskPhase2Tester:
         """Run all medium-risk Phase II tests."""
         logger.info(f"{visual.get('INFO')} Starting Medium-Risk Phase II Integration Tests")
         logger.info("=" * 60)
-        
+
         # Run individual tests
         tests = [
             self.test_trade_execution_engine,
@@ -352,11 +353,11 @@ class MediumRiskPhase2Tester:
             self.test_deterministic_value_engine,
             self.test_unified_mathematical_trading_controller
         ]
-        
+
         for test in tests:
             result = test()
             self.test_results.append(result)
-            
+
             # Log result
             status_emoji = visual.get(result.status)
             logger.info(f"{status_emoji} {result.component}: {result.status}")
@@ -364,13 +365,13 @@ class MediumRiskPhase2Tester:
                 logger.info(f"   Details: {result.details}")
             if result.error_message:
                 logger.warning(f"   Error: {result.error_message}")
-        
+
         # Calculate summary
         total_tests = len(self.test_results)
         passed_tests = len([r for r in self.test_results if r.status == "PASS"])
         failed_tests = len([r for r in self.test_results if r.status == "FAIL"])
         skipped_tests = len([r for r in self.test_results if r.status == "SKIP"])
-        
+
         # Print summary
         logger.info("=" * 60)
         logger.info(f"{visual.get('INFO')} Medium-Risk Phase II Test Summary")
@@ -380,7 +381,7 @@ class MediumRiskPhase2Tester:
         logger.info(f"{visual.get('FAIL')} Failed: {failed_tests}")
         logger.info(f"{visual.get('SKIP')} Skipped: {skipped_tests}")
         logger.info(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
-        
+
         # Determine overall status
         if failed_tests == 0:
             overall_status = "READY"
@@ -391,7 +392,7 @@ class MediumRiskPhase2Tester:
         else:
             overall_status = "NOT_READY"
             logger.warning(f"{visual.get('NOT_READY')} Medium-risk components need significant work")
-        
+
         return {
             "overall_status": overall_status,
             "total_tests": total_tests,
@@ -411,20 +412,20 @@ def main():
     """Main function for medium-risk Phase II testing."""
     print(f"{visual.get('INFO')} Medium-Risk Phase II Integration Test - Schwabot UROS v1.0")
     print("=" * 70)
-    
+
     # Initialize tester
     tester = MediumRiskPhase2Tester()
-    
+
     # Run all tests
     results = tester.run_all_tests()
-    
+
     # Save results
     with open("medium_risk_phase_ii_results.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
-    
+
     print(f"\n{visual.get('SAVE')} Results saved to: medium_risk_phase_ii_results.json")
     print(f"{visual.get(results['overall_status'])} Overall Status: {results['overall_status']}")
-    
+
     if results['overall_status'] == "READY":
         print(f"{visual.get('READY')} Medium-Risk Phase II is ready for deployment!")
     elif results['overall_status'] == "PARTIAL":
@@ -434,4 +435,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

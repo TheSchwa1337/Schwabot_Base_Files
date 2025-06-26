@@ -40,11 +40,12 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 
 def _logistic(x: float) -> float:
 
-
     pass
     pass
     """Cheap logistic activation without `unified_math.exp` overflow."""
     if x >= 0:
+
+
 z = unified_math.exp(-x)
         return 1.0 / (1.0 + z)
     z = unified_math.unified_math.exp(x)

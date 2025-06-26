@@ -5,6 +5,7 @@ from core.unified_math_system import unified_math
 Comprehensive fix for all flake8 indentation issues in newmath files
 """
 
+
 def fix_entropy_calc():
     """Fix all indentation issues in entropy_calc.py"""
     content = '''#!/usr/bin/env python3
@@ -309,10 +310,11 @@ __all__ = [
     'entropy_divergence'
 ]
 '''
-    
+
     with open('newmath/entropy_calc.py', 'w') as f:
         f.write(content)
 
+
 if __name__ == "__main__":
     fix_entropy_calc()
-    safe_print("Fixed entropy_calc.py with proper indentation") 
+    safe_print("Fixed entropy_calc.py with proper indentation")

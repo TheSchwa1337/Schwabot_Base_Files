@@ -53,25 +53,25 @@ class QuantumStrategyEngine:
     Implements quantum-inspired strategies for trading decisions.
     Uses quantum computing concepts for portfolio optimization and risk management.
     """
-    
+
     def __init__(self):
         """Initialize the quantum strategy engine."""
         self.quantum_states: Dict[str, QuantumState] = {}
         self.strategies: Dict[str, QuantumStrategy] = {}
         self.measurement_results: List[Dict[str, Any]] = []
-        
+
         # Quantum parameters
         self.decoherence_rate = 0.1
         self.measurement_noise = 0.05
         self.entanglement_threshold = 0.7
-        
+
         # Strategy parameters
         self.max_superposition_states = 10
         self.annealing_iterations = 1000
         self.optimization_tolerance = 1e-6
-        
+
         logger.info("Quantum Strategy Engine initialized")
-    
+
     def create_superposition_strategy(
         self,
         strategy_id: str,
@@ -81,23 +81,23 @@ class QuantumStrategyEngine:
         """Create a superposition-based trading strategy."""
         if weights is None:
             weights = [1.0 / len(assets)] * len(assets)
-        
+
         # Normalize weights
         total_weight = sum(weights)
         normalized_weights = [w / total_weight for w in weights]
-        
+
         # Create quantum state with superposition
         amplitudes = np.array(normalized_weights, dtype=complex)
         amplitudes = amplitudes / np.linalg.norm(amplitudes)  # Normalize
-        
+
         basis_states = [f"asset_{asset}" for asset in assets]
-        
+
         quantum_state = QuantumState(
             state_id=f"state_{strategy_id}",
             amplitudes=amplitudes,
             basis_states=basis_states
         )
-        
+
         strategy = QuantumStrategy(
             strategy_id=strategy_id,
             strategy_type="superposition",
@@ -107,13 +107,13 @@ class QuantumStrategyEngine:
                 "state_id": quantum_state.state_id
             }
         )
-        
+
         self.quantum_states[quantum_state.state_id] = quantum_state
         self.strategies[strategy_id] = strategy
-        
+
         logger.info(f"Created superposition strategy: {strategy_id}")
         return strategy
-    
+
     def create_entanglement_strategy(
         self,
         strategy_id: str,
@@ -123,16 +123,16 @@ class QuantumStrategyEngine:
         """Create an entanglement-based correlation strategy."""
         if correlation_strengths is None:
             correlation_strengths = [0.5] * len(asset_pairs)
-        
+
         # Create entangled quantum state
         entangled_states = []
         for i, (asset1, asset2) in enumerate(asset_pairs):
             correlation = correlation_strengths[i]
-            
+
             # Create Bell state-like entanglement
             alpha = unified_math.sqrt((1 + correlation) / 2)
             beta = unified_math.sqrt((1 - correlation) / 2)
-            
+
             entangled_state = {
                 "pair": (asset1, asset2),
                 "correlation": correlation,
@@ -140,7 +140,7 @@ class QuantumStrategyEngine:
                 "beta": beta
             }
             entangled_states.append(entangled_state)
-        
+
         strategy = QuantumStrategy(
             strategy_id=strategy_id,
             strategy_type="entanglement",
@@ -150,12 +150,12 @@ class QuantumStrategyEngine:
                 "entangled_states": entangled_states
             }
         )
-        
+
         self.strategies[strategy_id] = strategy
-        
+
         logger.info(f"Created entanglement strategy: {strategy_id}")
         return strategy
-    
+
     def create_quantum_annealing_strategy(
         self,
         strategy_id: str,
@@ -172,46 +172,46 @@ class QuantumStrategyEngine:
                 "temperature_schedule": self._create_temperature_schedule()
             }
         )
-        
+
         self.strategies[strategy_id] = strategy
-        
+
         logger.info(f"Created quantum annealing strategy: {strategy_id}")
         return strategy
-    
+
     def _create_temperature_schedule(self) -> List[float]:
         """Create temperature schedule for quantum annealing."""
         initial_temp = 100.0
         final_temp = 0.01
         schedule = []
-        
+
         for i in range(self.annealing_iterations):
             temp = initial_temp * (final_temp / initial_temp) ** (i / self.annealing_iterations)
             schedule.append(temp)
-        
+
         return schedule
-    
+
     def measure_quantum_state(self, state_id: str) -> Dict[str, Any]:
         """Measure a quantum state and return the result."""
         if state_id not in self.quantum_states:
             logger.error(f"Quantum state not found: {state_id}")
             return {}
-        
+
         quantum_state = self.quantum_states[state_id]
-        
+
         # Apply decoherence
         decohered_amplitudes = self._apply_decoherence(quantum_state.amplitudes)
-        
+
         # Add measurement noise
         noisy_amplitudes = self._add_measurement_noise(decohered_amplitudes)
-        
+
         # Perform measurement (collapse to basis state)
         probabilities = unified_math.unified_math.abs(noisy_amplitudes) ** 2
         probabilities = probabilities / np.sum(probabilities)  # Renormalize
-        
+
         # Sample from probability distribution
         measured_index = np.random.choice(len(probabilities), p=probabilities)
         measured_state = quantum_state.basis_states[measured_index]
-        
+
         # Record measurement
         measurement_result = {
             "state_id": state_id,
@@ -221,55 +221,55 @@ class QuantumStrategyEngine:
             "decoherence_applied": True,
             "noise_applied": True
         }
-        
+
         quantum_state.measurement_history.append(measurement_result)
         self.measurement_results.append(measurement_result)
-        
+
         logger.info(f"Measured quantum state {state_id}: {measured_state}")
         return measurement_result
-    
+
     def _apply_decoherence(self, amplitudes: np.ndarray) -> np.ndarray:
         """Apply decoherence to quantum amplitudes."""
         # Simulate decoherence by reducing off-diagonal elements
         decohered = amplitudes.copy()
-        
+
         for i in range(len(amplitudes)):
             for j in range(i + 1, len(amplitudes)):
                 # Reduce off-diagonal elements
                 decohered[i] *= (1 - self.decoherence_rate)
                 decohered[j] *= (1 - self.decoherence_rate)
-        
+
         return decohered
-    
+
     def _add_measurement_noise(self, amplitudes: np.ndarray) -> np.ndarray:
         """Add measurement noise to quantum amplitudes."""
         noisy = amplitudes.copy()
-        
+
         for i in range(len(amplitudes)):
             # Add random phase noise
             phase_noise = np.random.normal(0, self.measurement_noise)
             noisy[i] *= unified_math.unified_math.exp(1j * phase_noise)
-        
+
         return noisy
-    
+
     def execute_superposition_strategy(self, strategy_id: str) -> Dict[str, Any]:
         """Execute a superposition-based strategy."""
         if strategy_id not in self.strategies:
             logger.error(f"Strategy not found: {strategy_id}")
             return {}
-        
+
         strategy = self.strategies[strategy_id]
         if strategy.strategy_type != "superposition":
             logger.error(f"Strategy {strategy_id} is not a superposition strategy")
             return {}
-        
+
         state_id = strategy.parameters["state_id"]
         measurement_result = self.measure_quantum_state(state_id)
-        
+
         # Generate trading decision based on measurement
         measured_asset = measurement_result["measured_state"]
         asset_name = measured_asset.replace("asset_", "")
-        
+
         decision = {
             "strategy_id": strategy_id,
             "strategy_type": "superposition",
@@ -279,31 +279,31 @@ class QuantumStrategyEngine:
             "timestamp": datetime.now(),
             "measurement_result": measurement_result
         }
-        
+
         strategy.last_execution = datetime.now()
         logger.info(f"Executed superposition strategy: {decision}")
         return decision
-    
+
     def execute_entanglement_strategy(self, strategy_id: str) -> Dict[str, Any]:
         """Execute an entanglement-based strategy."""
         if strategy_id not in self.strategies:
             logger.error(f"Strategy not found: {strategy_id}")
             return {}
-        
+
         strategy = self.strategies[strategy_id]
         if strategy.strategy_type != "entanglement":
             logger.error(f"Strategy {strategy_id} is not an entanglement strategy")
             return {}
-        
+
         entangled_states = strategy.parameters["entangled_states"]
         decisions = []
-        
+
         for entangled_state in entangled_states:
             asset1, asset2 = entangled_state["pair"]
             correlation = entangled_state["correlation"]
             alpha = entangled_state["alpha"]
             beta = entangled_state["beta"]
-            
+
             # Simulate entangled measurement
             if np.random.random() < alpha ** 2:
                 # Measure in correlated state
@@ -321,57 +321,57 @@ class QuantumStrategyEngine:
                     "correlation_strength": correlation,
                     "confidence": beta ** 2
                 }
-            
+
             decisions.append(decision)
-        
+
         result = {
             "strategy_id": strategy_id,
             "strategy_type": "entanglement",
             "decisions": decisions,
             "timestamp": datetime.now()
         }
-        
+
         strategy.last_execution = datetime.now()
         logger.info(f"Executed entanglement strategy: {len(decisions)} decisions")
         return result
-    
+
     def execute_quantum_annealing_strategy(self, strategy_id: str) -> Dict[str, Any]:
         """Execute a quantum annealing optimization strategy."""
         if strategy_id not in self.strategies:
             logger.error(f"Strategy not found: {strategy_id}")
             return {}
-        
+
         strategy = self.strategies[strategy_id]
         if strategy.strategy_type != "annealing":
             logger.error(f"Strategy {strategy_id} is not an annealing strategy")
             return {}
-        
+
         objective_function = strategy.parameters["objective_function"]
         constraints = strategy.parameters["constraints"]
         temperature_schedule = strategy.parameters["temperature_schedule"]
-        
+
         # Initialize solution
         current_solution = self._initialize_solution(constraints)
         current_energy = objective_function(current_solution)
         best_solution = current_solution.copy()
         best_energy = current_energy
-        
+
         # Quantum annealing loop
         for i, temperature in enumerate(temperature_schedule):
             # Generate neighbor solution
             neighbor_solution = self._generate_neighbor(current_solution, constraints)
             neighbor_energy = objective_function(neighbor_solution)
-            
+
             # Accept or reject based on temperature
             delta_energy = neighbor_energy - current_energy
             if delta_energy < 0 or np.random.random() < unified_math.exp(-delta_energy / temperature):
                 current_solution = neighbor_solution
                 current_energy = neighbor_energy
-                
+
                 if current_energy < best_energy:
                     best_solution = current_solution.copy()
                     best_energy = current_energy
-        
+
         result = {
             "strategy_id": strategy_id,
             "strategy_type": "annealing",
@@ -380,45 +380,45 @@ class QuantumStrategyEngine:
             "iterations": len(temperature_schedule),
             "timestamp": datetime.now()
         }
-        
+
         strategy.last_execution = datetime.now()
         logger.info(f"Executed quantum annealing strategy: optimal energy = {best_energy}")
         return result
-    
+
     def _initialize_solution(self, constraints: List[Dict[str, Any]]) -> np.ndarray:
         """Initialize a solution satisfying constraints."""
         # Simplified initialization - in practice, use more sophisticated methods
         solution_size = unified_math.max(constraint.get("size", 10) for constraint in constraints)
         return np.random.random(solution_size)
-    
+
     def _generate_neighbor(self, solution: np.ndarray, constraints: List[Dict[str, Any]]) -> np.ndarray:
         """Generate a neighbor solution."""
         neighbor = solution.copy()
-        
+
         # Random perturbation
         perturbation = np.random.normal(0, 0.1, len(solution))
         neighbor += perturbation
-        
+
         # Apply constraints
         for constraint in constraints:
             if constraint.get("type") == "bounds":
                 min_val = constraint.get("min", 0)
                 max_val = constraint.get("max", 1)
                 neighbor = np.clip(neighbor, min_val, max_val)
-        
+
         return neighbor
-    
+
     def get_strategy_performance(self, strategy_id: str) -> Dict[str, Any]:
         """Get performance metrics for a strategy."""
         if strategy_id not in self.strategies:
             logger.error(f"Strategy not found: {strategy_id}")
             return {}
-        
+
         strategy = self.strategies[strategy_id]
-        
+
         # Calculate performance metrics
         execution_count = len([r for r in self.measurement_results if strategy_id in str(r)])
-        
+
         performance = {
             "strategy_id": strategy_id,
             "strategy_type": strategy.strategy_type,
@@ -427,24 +427,24 @@ class QuantumStrategyEngine:
             "performance_metrics": strategy.performance_metrics.copy(),
             "parameters": strategy.parameters.copy()
         }
-        
+
         return performance
-    
+
     def get_quantum_statistics(self) -> Dict[str, Any]:
         """Get statistics about quantum states and measurements."""
         total_states = len(self.quantum_states)
         total_measurements = len(self.measurement_results)
         total_strategies = len(self.strategies)
-        
+
         # Strategy type distribution
         strategy_types = {}
         for strategy in self.strategies.values():
             strategy_type = strategy.strategy_type
             strategy_types[strategy_type] = strategy_types.get(strategy_type, 0) + 1
-        
+
         # Measurement statistics
         measurement_success_rate = 1.0  # Simplified - in practice, track actual success
-        
+
         return {
             "total_quantum_states": total_states,
             "total_measurements": total_measurements,
@@ -460,26 +460,26 @@ def main() -> None:
     """Main function for testing quantum strategies."""
     # Initialize engine
     engine = QuantumStrategyEngine()
-    
+
     # Create superposition strategy
     assets = ["BTC", "ETH", "ADA", "DOT"]
     superposition_strategy = engine.create_superposition_strategy("super_1", assets)
-    
+
     # Create entanglement strategy
     asset_pairs = [("BTC", "ETH"), ("ADA", "DOT")]
     entanglement_strategy = engine.create_entanglement_strategy("entangle_1", asset_pairs)
-    
+
     # Execute strategies
     super_result = engine.execute_superposition_strategy("super_1")
     entangle_result = engine.execute_entanglement_strategy("entangle_1")
-    
+
     safe_print(f"Superposition result: {super_result}")
     safe_print(f"Entanglement result: {entangle_result}")
-    
+
     # Get statistics
     stats = engine.get_quantum_statistics()
     safe_print(f"Quantum statistics: {stats}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-\nfrom core.unified_math_system import unified_math
+import re
 import math
 # #!/usr/bin/env python3
 """Constants - Core System Constants and Configuration.
@@ -76,59 +77,45 @@ REDUCED_PLANCK = 1.054571817e-34  # Reduced Planck constant
 FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 
 # Windows CLI compatibility handler
-class WindowsCliCompatibilityHandler:
 
+
+class WindowsCliCompatibilityHandler:
 
     """Handles Windows CLI compatibility for cross-platform operation."""
 
+
 @staticmethod
 def is_windows_cli() -> bool:
-
-
-    pass
-    pass
-        """Check if running in Windows CLI environment."""
-        return platform.system() == "Windows" and ()
-    "cmd" in os.environ.get("COMSPEC", "").lower()
-    or "powershell" in os.environ.get("PSModulePath", "").lower()
+    """Check if running in Windows CLI environment."""
+    return (platform.system() == "Windows" and 
+            ("cmd" in os.environ.get("COMSPEC", "").lower() or 
+             "powershell" in os.environ.get("PSModulePath", "").lower()))
 
 
 @staticmethod
 def safe_print(message: str, use_emoji: bool = True) -> str:
-
-
-    pass
-    pass
-        """Safely print messages with optional emoji support."""
+    """Safely print messages with optional emoji support."""
     if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
-            # Strip emojis for Windows CLI compatibility
-import re
+        # Strip emojis for Windows CLI compatibility
+        message = re.sub(r"[^\w\s\-_.,!?)]", "", message)
+    return message
 
-message = re.sub(r"[^\w\s\-_.,!?)", "", message)
-return message
 
 @staticmethod
 def log_safe(logger: Any, level: str, message: str) -> None:
+    """Safely log messages with CLI compatibility."""
+    safe_message = WindowsCliCompatibilityHandler.safe_print(message)
+    if hasattr(logger, level.lower()):
+        getattr(logger, level.lower())(safe_message)
 
-
-    pass
-    pass
-        """Safely log messages with CLI compatibility."""
-safe_message = WindowsCliCompatibilityHandler.safe_print(message)
-if hasattr(logger, level.lower()):
-    getattr(logger, level.lower())(safe_message)
 
 @staticmethod
 def safe_format_error(error: Exception, context: str = "") -> str:
-
-
-    pass
-    pass
-        """Safely format error messages for CLI compatibility."""
-error_msg = str(error)
-if context:
-error_msg = f"{context}: {error_msg}"
-return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
+    """Safely format error messages for CLI compatibility."""
+    error_msg = str(error)
+    if context:
+        error_msg = f"{context}: {error_msg}"
+    return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
 
 
 # Shared constants across the Schwabot code-base
@@ -137,7 +124,7 @@ MAX_RETRY_ATTEMPTS = 3  # Maximum retry attempts
 DEFAULT_BATCH_SIZE = 1000  # Default batch processing size
 
 # Composite constants for advanced calculations
-KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / unified_math.unified_math.sqrt(2)
+# KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET / unified_math.unified_math.sqrt(2)
 FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 
 # Performance optimization constants

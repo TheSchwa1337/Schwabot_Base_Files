@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+import numpy.typing as npt
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+import logging
+from decimal import getcontext
+from decimal import Decimal
+from dataclasses import dataclass
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Triplet Matcher - Schwabot Mathematical Framework.
 
@@ -97,14 +111,7 @@ Key Features:
 """
 
 
-from dataclasses import dataclass
-from decimal import Decimal
-from decimal import getcontext
-import logging
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
 
 if TYPE_CHECKING:
     pass
@@ -122,8 +129,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TripletPattern:
 
-
     """Container for a mathematical triplet pattern."""
+
 
 pattern_id: str
 values: Tuple[Decimal, Decimal, Decimal]
@@ -136,8 +143,8 @@ correlation_strength: Optional[float] = None
 @dataclass
 class MatchResult:
 
-
     """Container for pattern matching results."""
+
 
 found_match: bool
 pattern: Optional[TripletPattern]
@@ -148,25 +155,27 @@ deviation_metrics: Dict[str, float]
 
 class MathematicalSequenceDetector:
 
-
     """Detects mathematical sequences and patterns."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize sequence detector."""
+
+
 self.epsilon = Decimal("1e-10")
 
-def detect_arithmetic_progression(self, values: List[Decimal]) -> Dict[str, Any]:
 
+def detect_arithmetic_progression(self, values: List[Decimal]) -> Dict[str, Any]:
 
     pass
     pass
         """Detect arithmetic progression in sequence."""
         if len(values) < 3:
             return {"is_ap": False, "common_difference": None}
+
 
 differences = [values[i + 1] - values[i] for i in range(len(values) - 1)]
 
@@ -184,14 +193,15 @@ else 0.0
 ),
 }
 
-def detect_geometric_progression(self, values: List[Decimal]) -> Dict[str, Any]:
 
+def detect_geometric_progression(self, values: List[Decimal]) -> Dict[str, Any]:
 
     pass
     pass
         """Detect geometric progression in sequence."""
         if len(values) < 3 or any(v == 0 for v in values[:-1]):
             return {"is_gp": False, "common_ratio": None}
+
 
 ratios = [values[i + 1] / values[i] for i in range(len(values) - 1)]
 
@@ -207,14 +217,15 @@ is_gp = all(unified_math.abs(r - first_ratio) < self.epsilon for r in ratios)
             ),
 }
 
-def detect_fibonacci_like(self, values: List[Decimal]) -> Dict[str, Any]:
 
+def detect_fibonacci_like(self, values: List[Decimal]) -> Dict[str, Any]:
 
     pass
     pass
         """Detect Fibonacci-like sequences."""
         if len(values) < 3:
             return {"is_fibonacci_like": False, "ratio_to_golden": None}
+
 
         # Check if each term is sum of previous two
 fibonacci_like = True
@@ -246,26 +257,28 @@ ratio_to_golden = None
 
 class ThermalSignatureAnalyzer:
 
-
     """Analyzes thermal signatures for pattern matching."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize thermal signature analyzer."""
+
+
 self.signature_cache = {}
 self.pattern_threshold = 0.8
 
-def compute_thermal_signature(self, thermal_values: List[float]) -> Decimal:
 
+def compute_thermal_signature(self, thermal_values: List[float]) -> Decimal:
 
     pass
     pass
         """Compute thermal signature from values."""
         if not thermal_values:
             return Decimal("0.0")
+
 
         # Weighted sum with exponential decay
 weights = [Decimal(str(unified_math.exp(-0.1 * i))) for i in range(len(thermal_values))]
@@ -274,14 +287,15 @@ weights = [Decimal(str(unified_math.exp(-0.1 * i))) for i in range(len(thermal_v
 
         return weighted_sum / weight_sum if weight_sum > 0 else Decimal("0.0")
 
-def compare_thermal_signatures(self, sig1: Decimal, sig2: Decimal) -> float:
 
+def compare_thermal_signatures(self, sig1: Decimal, sig2: Decimal) -> float:
 
     pass
     pass
         """Compare two thermal signatures and return similarity score."""
         if sig1 == 0 and sig2 == 0:
             return 1.0
+
 
 max_sig = unified_math.max(unified_math.abs(sig1), unified_math.abs(sig2))
         if max_sig == 0:
@@ -292,11 +306,13 @@ difference = unified_math.abs(sig1 - sig2)
 
         return unified_math.max(0.0, similarity)
 
+
 def analyze_thermal_triplet(
 
 
         self, t1: float, t2: float, t3: float
 ) -> Dict[str, Any]:
+
 """Analyze thermal triplet for patterns."""
 values = [Decimal(str(v)) for v in [t1, t2, t3]]
 
@@ -331,26 +347,29 @@ pattern_type = "irregular"
 
 class VectorTripletMatcher:
 
-
     """Matches vector triplets for trading patterns."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize vector triplet matcher."""
+
+
 self.known_patterns = []
 self.match_threshold = 0.75
 self.sequence_detector = MathematicalSequenceDetector()
         self.thermal_analyzer = ThermalSignatureAnalyzer()
 
-def register_pattern(self, pattern: TripletPattern) -> None:
 
+def register_pattern(self, pattern: TripletPattern) -> None:
 
     pass
     pass
         """Register a known pattern for matching."""
+
+
 self.known_patterns.append(pattern)
         logger.info(
             f"Registered pattern {pattern.pattern_id} of type {pattern.pattern_type}"
@@ -362,19 +381,19 @@ def create_triplet_pattern(
         self,
 values: Tuple[float, float, float],
 pattern_type: str,
-confidence: float = 1.0,
+confidence: float=1.0,
 ) -> TripletPattern:
 """Create a new triplet pattern."""
-decimal_values = tuple(Decimal(str(v)) for v in values)
+decimal_values=tuple(Decimal(str(v)) for v in values)
 
         # Generate pattern ID
 import hashlib
 
-pattern_data = f"{values}{pattern_type}{confidence}"
-pattern_id = hashlib.md5(pattern_data.encode()).hexdigest()[:8]
+pattern_data=f"{values}{pattern_type}{confidence}"
+pattern_id=hashlib.md5(pattern_data.encode()).hexdigest()[:8]
 
         # Compute thermal signature
-thermal_sig = self.thermal_analyzer.compute_thermal_signature(list(values))
+thermal_sig=self.thermal_analyzer.compute_thermal_signature(list(values))
 
         return TripletPattern(
             pattern_id=pattern_id,
@@ -390,27 +409,27 @@ def match_vector_triplet(
         self, test_values: Tuple[float, float, float]
 ) -> MatchResult:
 """Match a vector triplet against known patterns."""
-test_decimals = [Decimal(str(v)) for v in test_values]
-        best_match = None
-best_score = 0.0
-best_indices = None
+test_decimals=[Decimal(str(v)) for v in test_values]
+        best_match=None
+best_score=0.0
+best_indices=None
 
         # Check against all known patterns
         for pattern in self.known_patterns:
-score = self._calculate_similarity(test_decimals, list(pattern.values))
+score=self._calculate_similarity(test_decimals, list(pattern.values))
 
             if score > best_score and score >= self.match_threshold:
-best_score = score
-best_match = pattern
-best_indices = (0, 1, 2)  # Direct triplet match
+best_score=score
+best_match=pattern
+best_indices=(0, 1, 2)  # Direct triplet match
 
         # Calculate deviation metrics
-deviation_metrics = {}
+deviation_metrics={}
         if best_match:
-deviations = [
+deviations=[
 unified_math.abs(test_decimals[i] - best_match.values[i]) for i in range(3)
             ]
-deviation_metrics = {
+deviation_metrics={
 "max_deviation": float(unified_math.max(deviations)),
                 "avg_deviation": float(sum(deviations) / 3),
                 "relative_deviation": float(
@@ -436,21 +455,21 @@ def _calculate_similarity(
             return 0.0
 
         # Normalize values for comparison
-max_val1 = unified_math.max(unified_math.abs(v) for v in values1)
-        max_val2 = unified_math.max(unified_math.abs(v) for v in values2)
+max_val1=unified_math.max(unified_math.abs(v) for v in values1)
+        max_val2=unified_math.max(unified_math.abs(v) for v in values2)
 
         if max_val1 == 0 or max_val2 == 0:
             return 1.0 if max_val1 == max_val2 else 0.0
 
-norm_vals1 = [v / max_val1 for v in values1]
-norm_vals2 = [v / max_val2 for v in values2]
+norm_vals1=[v / max_val1 for v in values1]
+norm_vals2=[v / max_val2 for v in values2]
 
         # Calculate Euclidean distance
-distance = sum((v1 - v2) ** 2 for v1, v2 in zip(norm_vals1, norm_vals2))
-        distance = float(distance ** Decimal("0.5"))
+distance=sum((v1 - v2) ** 2 for v1, v2 in zip(norm_vals1, norm_vals2))
+        distance=float(distance ** Decimal("0.5"))
 
         # Convert to similarity score
-similarity = 1.0 / (1.0 + distance)
+similarity=1.0 / (1.0 + distance)
 
         return similarity
 
@@ -463,27 +482,27 @@ def analyze_triplet_patterns(self, values: List[float]) -> Dict[str, Any]:
         if len(values) < 3:
             return {"error": "Insufficient values for triplet analysis"}
 
-triplet_analyses = []
+triplet_analyses=[]
 
         # Analyze all consecutive triplets
         for i in range(len(values) - 2):
-            triplet = values[i : i + 3]
+            triplet=values[i: i + 3]
 
             # Mathematical sequence analysis
-decimal_triplet = [Decimal(str(v)) for v in triplet]
-            ap_analysis = self.sequence_detector.detect_arithmetic_progression(
+decimal_triplet=[Decimal(str(v)) for v in triplet]
+            ap_analysis=self.sequence_detector.detect_arithmetic_progression(
                 decimal_triplet
 
-gp_analysis = self.sequence_detector.detect_geometric_progression(
+gp_analysis=self.sequence_detector.detect_geometric_progression(
                 decimal_triplet
 
-fib_analysis = self.sequence_detector.detect_fibonacci_like(decimal_triplet)
+fib_analysis=self.sequence_detector.detect_fibonacci_like(decimal_triplet)
 
             # Thermal analysis
-thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(*triplet)
+thermal_analysis=self.thermal_analyzer.analyze_thermal_triplet(*triplet)
 
             # Pattern matching
-match_result = self.match_vector_triplet(tuple(triplet))
+match_result=self.match_vector_triplet(tuple(triplet))
 
 triplet_analyses.append(
                 {
@@ -521,16 +540,16 @@ def _summarize_triplet_analysis(
             return {}
 
         # Count pattern types
-ap_count = sum(1 for a in analyses if a["arithmetic_progression"]["is_ap"])
-        gp_count = sum(1 for a in analyses if a["geometric_progression"]["is_gp"])
-        fib_count = sum(1 for a in analyses if a["fibonacci_like"]["is_fibonacci_like"])
-        match_count = sum(1 for a in analyses if a["pattern_match"]["found_match"])
+ap_count=sum(1 for a in analyses if a["arithmetic_progression"]["is_ap"])
+        gp_count=sum(1 for a in analyses if a["geometric_progression"]["is_gp"])
+        fib_count=sum(1 for a in analyses if a["fibonacci_like"]["is_fibonacci_like"])
+        match_count=sum(1 for a in analyses if a["pattern_match"]["found_match"])
 
         # Average metrics
-avg_similarity = sum(
+avg_similarity=sum(
             a["pattern_match"]["similarity_score"] for a in analyses
 ) / len(analyses)
-        avg_stability = sum(
+        avg_stability=sum(
             a["thermal_analysis"]["stability_score"] for a in analyses
 ) / len(analyses)
 
@@ -550,11 +569,11 @@ def _find_dominant_pattern_type(self, analyses: List[Dict[str, Any]]) -> str:
     pass
     pass
         """Find the most common pattern type in analyses."""
-pattern_counts = {}
+pattern_counts={}
 
         for analysis in analyses:
-thermal_type = analysis["thermal_analysis"]["pattern_type"]
-pattern_counts[thermal_type] = pattern_counts.get(thermal_type, 0) + 1
+thermal_type=analysis["thermal_analysis"]["pattern_type"]
+pattern_counts[thermal_type]=pattern_counts.get(thermal_type, 0) + 1
 
         return (
             unified_math.max(pattern_counts.items(), key=lambda x: x[1])[0]
@@ -574,10 +593,10 @@ def __init__(self) -> None:
     pass
     pass
         """Initialize triplet matcher."""
-self.version = "1.0.0"
-self.vector_matcher = VectorTripletMatcher()
-        self.sequence_detector = MathematicalSequenceDetector()
-        self.thermal_analyzer = ThermalSignatureAnalyzer()
+self.version="1.0.0"
+self.vector_matcher=VectorTripletMatcher()
+        self.sequence_detector=MathematicalSequenceDetector()
+        self.thermal_analyzer=ThermalSignatureAnalyzer()
 
         # Register some default patterns
 self._register_default_patterns()
@@ -591,7 +610,7 @@ def _register_default_patterns(self) -> None:
     pass
         """Register default mathematical patterns."""
         # Common trading patterns
-default_patterns = [
+default_patterns=[
 ((1.0, 1.1, 1.21), "geometric_growth", 0.9),  # 10% growth pattern
             ((100.0, 105.0, 110.0), "linear_growth", 0.85),  # Linear increase
             ((1.0, 0.9, 0.81), "geometric_decay", 0.9),  # 10% decay pattern
@@ -600,7 +619,7 @@ default_patterns = [
         ]
 
         for values, pattern_type, confidence in default_patterns:
-pattern = self.vector_matcher.create_triplet_pattern(
+pattern=self.vector_matcher.create_triplet_pattern(
                 values, pattern_type, confidence
 
 self.vector_matcher.register_pattern(pattern)
@@ -613,20 +632,20 @@ def match_triplet(self, values: Tuple[float, float, float]) -> Dict[str, Any]:
         """Main triplet matching interface."""
         try:
             # Vector pattern matching
-match_result = self.vector_matcher.match_vector_triplet(values)
+match_result=self.vector_matcher.match_vector_triplet(values)
 
             # Mathematical sequence analysis
-decimal_values = [Decimal(str(v)) for v in values]
-            ap_analysis = self.sequence_detector.detect_arithmetic_progression(
+decimal_values=[Decimal(str(v)) for v in values]
+            ap_analysis=self.sequence_detector.detect_arithmetic_progression(
                 decimal_values
 
-gp_analysis = self.sequence_detector.detect_geometric_progression(
+gp_analysis=self.sequence_detector.detect_geometric_progression(
                 decimal_values
 
-fib_analysis = self.sequence_detector.detect_fibonacci_like(decimal_values)
+fib_analysis=self.sequence_detector.detect_fibonacci_like(decimal_values)
 
             # Thermal analysis
-thermal_analysis = self.thermal_analyzer.analyze_thermal_triplet(*values)
+thermal_analysis=self.thermal_analyzer.analyze_thermal_triplet(*values)
 
             return {
 "status": "success",
@@ -698,11 +717,11 @@ def main() -> None:
     pass
     """Demo of triplet matcher system."""
     try:
-matcher = TripletMatcher()
+matcher=TripletMatcher()
         safe_print(f"✅ TripletMatcher v{matcher.version} initialized")
 
         # Test triplets
-test_triplets = [
+test_triplets=[
 (100.0, 110.0, 121.0),  # Should match geometric growth
             (10.0, 15.0, 20.0),  # Should match linear growth
             (50.0, 50.0, 50.0),  # Should match stable pattern
@@ -713,11 +732,11 @@ test_triplets = [
 safe_print(f"🔍 Testing {len(test_triplets)} triplet patterns:")
 
         for i, triplet in enumerate(test_triplets):
-            result = matcher.match_triplet(triplet)
+            result=matcher.match_triplet(triplet)
 
             if result["status"] == "success":
-match_info = result["pattern_match"]
-thermal_info = result["thermal_analysis"]
+match_info=result["pattern_match"]
+thermal_info=result["thermal_analysis"]
 
 safe_print(f"   Triplet {i + 1}: {triplet}")
                 safe_print(f"      Match: {'✅' if match_info['found_match'] else '❌'}")
@@ -731,11 +750,11 @@ f"(stability: {thermal_info['stability_score']:.3f})"
 
         # Test sequence analysis
 safe_print("\n📊 Sequence Analysis:")
-        test_sequence = [100.0, 105.0, 110.0, 115.0, 120.0, 125.0]
-sequence_result = matcher.analyze_sequence(test_sequence)
+        test_sequence=[100.0, 105.0, 110.0, 115.0, 120.0, 125.0]
+sequence_result=matcher.analyze_sequence(test_sequence)
 
         if "summary" in sequence_result:
-summary = sequence_result["summary"]
+summary=sequence_result["summary"]
 safe_print(f"   Total triplets analyzed: {sequence_result['total_triplets']}")
             safe_print(f"   Pattern matches: {summary['pattern_matches']}")
             safe_print(f"   Dominant pattern: {summary['dominant_pattern_type']}")

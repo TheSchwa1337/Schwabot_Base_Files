@@ -57,7 +57,7 @@ class WindowsCliCompatibilityHandler:
 
 class OrderBookUpdate(BaseModel):
     """TODO: document OrderBookUpdate."""
-    
+
     ts: datetime
     price: float
     volume: float
@@ -66,7 +66,7 @@ class OrderBookUpdate(BaseModel):
 
 class Fill(BaseModel):
     """TODO: document Fill."""
-    
+
     ts: datetime
     ftype: FillType
     price: float
@@ -76,7 +76,7 @@ class Fill(BaseModel):
 
 class TickPacket(BaseModel):
     """TODO: document TickPacket."""
-    
+
     tick_id: int
     mid_price: float
     wall_snap: Dict

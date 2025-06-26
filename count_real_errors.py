@@ -12,6 +12,7 @@ def is_stub_file(filepath):
     except:
         return False
 
+
 def count_errors():
     """Count real vs stub E501 errors."""."""
     real_errors = []

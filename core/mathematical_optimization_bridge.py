@@ -1,4 +1,22 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from core.type_defs import Vector
+from core.type_defs import Tensor
+from core.type_defs import Matrix
+from core.mathlib_v3 import MathLibV3
+from core.mathlib_v3 import Dual
+from core.constants import *
+from core.advanced_mathematical_core import robust_matrix_inverse
+from scipy import optimize
+from scipy import linalg
+import numpy.typing as npt
+from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
+import time
+import logging
+from enum import Enum
+from dataclasses import field
+from dataclasses import dataclass
+from collections import deque
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +30,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Mathematical Optimization Bridge - Multi-Vector Enhancement Layer.
 
@@ -89,31 +114,13 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-from collections import deque
-from dataclasses import dataclass
-from dataclasses import field
-from enum import Enum
-import logging
-import time
-from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
-from scipy import linalg
-from scipy import optimize
 
 if TYPE_CHECKING:
     pass
 
 # Import existing mathematical components
 try:
-from core.advanced_mathematical_core import robust_matrix_inverse
-from core.constants import *
-from core.mathlib_v3 import Dual
-from core.mathlib_v3 import MathLibV3
-from core.type_defs import Matrix
-from core.type_defs import Tensor
-from core.type_defs import Vector
 except ImportError as e:
 logger.warning(f"Some mathematical components not available: {e}")
     # Fallback type definitions
@@ -126,8 +133,8 @@ logger = logging.getLogger(__name__)
 
 class OptimizationMode(Enum):
 
-
     """Optimization mode enumeration."""
+
 
 GEMM_ACCELERATED = "gemm_accelerated"
 DUAL_NUMBER = "dual_number"
@@ -138,8 +145,8 @@ ADAPTIVE = "adaptive"
 
 class MathematicalOperation(Enum):
 
-
     """Mathematical operation enumeration."""
+
 
 MATRIX_MULTIPLY = "matrix_multiply"
 EIGENVALUE_DECOMPOSITION = "eigenvalue_decomposition"
@@ -152,8 +159,8 @@ SIGNAL_PROCESSING = "signal_processing"
 @dataclass
 class OptimizationResult:
 
-
     """Optimization result container."""
+
 
 result: Any
 operation_type: MathematicalOperation
@@ -168,8 +175,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class MultiVectorState:
 
-
     """Multi-vector mathematical state."""
+
 
 primary_vector: Vector
 secondary_vectors: List[Vector]
@@ -181,19 +188,20 @@ timestamp: float
 
 class MathematicalOptimizationBridge:
 
-
     """
 
 Mathematical optimization bridge that enhances existing components
     with multi-vector operations and GEMM acceleration
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
     pass
     pass
         """Initialize mathematical optimization bridge."""
+
+
 self.version = "1.0.0"
 self.config = config or self._default_config()
 
@@ -204,23 +212,23 @@ self.mathlib_v3 = MathLibV3() if "MathLibV3" in globals() else None
 self.operation_history: deque = deque(
             maxlen=self.config.get("max_history_size", 1000)
 
-self.total_operations = 0
-self.total_optimization_time = 0.0
+self.total_operations=0
+self.total_optimization_time=0.0
 
         # Multi-vector state management
-self.multi_vector_states: Dict[str, MultiVectorState] = {}
+self.multi_vector_states: Dict[str, MultiVectorState]={}
 
         # Optimization caches
-self.matrix_cache: Dict[str, Matrix] = {}
-self.eigenvalue_cache: Dict[str, Tuple[Vector, Matrix]] = {}
-self.svd_cache: Dict[str, Tuple[Matrix, Vector, Matrix]] = {}
+self.matrix_cache: Dict[str, Matrix]={}
+self.eigenvalue_cache: Dict[str, Tuple[Vector, Matrix]]={}
+self.svd_cache: Dict[str, Tuple[Matrix, Vector, Matrix]]={}
 
         # Threading and parallel processing
-self.optimization_thread_pool = self.config.get("thread_pool_size", 4)
-        self.parallel_enabled = self.config.get("enable_parallel", True)
+self.optimization_thread_pool=self.config.get("thread_pool_size", 4)
+        self.parallel_enabled=self.config.get("enable_parallel", True)
 
         # Performance monitoring
-self.performance_stats = {
+self.performance_stats={
 "gemm_operations": 0,
 "optimization_operations": 0,
 "eigenvalue_operations": 0,
@@ -259,7 +267,7 @@ def enhanced_matrix_multiply(
         self,
 A: Matrix,
 B: Matrix,
-mode: OptimizationMode = OptimizationMode.GEMM_ACCELERATED,
+mode: OptimizationMode=OptimizationMode.GEMM_ACCELERATED,
 **kwargs,
 ) -> OptimizationResult:
 """Enhance matrix multiplication with multiple optimization modes.
@@ -268,15 +276,15 @@ This method enhances existing matrix operations with additional
 optimization layers.
 """
         try:
-start_time = time.time()
+start_time=time.time()
 
             # Check cache first
-cache_key = f"gemm_{hash(str(A.shape))}_{hash(str(B.shape))}_{mode.value}"
+cache_key=f"gemm_{hash(str(A.shape))}_{hash(str(B.shape))}_{mode.value}"
             if (
                 self.config.get("enable_caching", True)
                 and cache_key in self.matrix_cache
 ):
-cached_result = self.matrix_cache[cache_key]
+cached_result=self.matrix_cache[cache_key]
                 return OptimizationResult(
                     result=cached_result,
 operation_type=MathematicalOperation.MATRIX_MULTIPLY,
@@ -289,24 +297,24 @@ metadata={"cached": True},
 
             # Choose optimization strategy based on mode and matrix properties
             if mode == OptimizationMode.GEMM_ACCELERATED:
-result = self._gemm_accelerated_multiply(A, B, **kwargs)
+result=self._gemm_accelerated_multiply(A, B, **kwargs)
             elif mode == OptimizationMode.DUAL_NUMBER:
-result = self._dual_number_multiply(A, B, **kwargs)
+result=self._dual_number_multiply(A, B, **kwargs)
             elif mode == OptimizationMode.QUANTUM_ENHANCED:
-result = self._quantum_enhanced_multiply(A, B, **kwargs)
+result=self._quantum_enhanced_multiply(A, B, **kwargs)
             elif mode == OptimizationMode.HYBRID:
-result = self._hybrid_multiply(A, B, **kwargs)
+result=self._hybrid_multiply(A, B, **kwargs)
             elif mode == OptimizationMode.ADAPTIVE:
-result = self._adaptive_multiply(A, B, **kwargs)
+result=self._adaptive_multiply(A, B, **kwargs)
             else:
                 # Fallback to standard multiplication
-result = A @ B
+result=A @ B
 
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
 
             # Cache result
             if self.config.get("enable_caching", True):
-                self.matrix_cache[cache_key] = result
+                self.matrix_cache[cache_key]=result
 self._manage_cache_size()
 
             # Update performance tracking
@@ -364,14 +372,14 @@ def _dual_number_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
                 return A @ B
 
             # Convert to dual numbers for automatic differentiation
-A_dual = np.vectorize(lambda x: Dual(x, 0.0))(A)
-            B_dual = np.vectorize(lambda x: Dual(x, 0.0))(B)
+A_dual=np.vectorize(lambda x: Dual(x, 0.0))(A)
+            B_dual=np.vectorize(lambda x: Dual(x, 0.0))(B)
 
             # Perform multiplication with dual numbers
-result_dual = A_dual @ B_dual
+result_dual=A_dual @ B_dual
 
             # Extract real part
-result = np.vectorize(lambda x: x.val if hasattr(x, "val") else x)()
+result=np.vectorize(lambda x: x.val if hasattr(x, "val") else x)()
                 result_dual
 
 
@@ -393,10 +401,10 @@ def _quantum_enhanced_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
             # the future
 
             # For now, use enhanced numerical stability
-A_stable = self._ensure_numerical_stability(A)
-            B_stable = self._ensure_numerical_stability(B)
+A_stable=self._ensure_numerical_stability(A)
+            B_stable=self._ensure_numerical_stability(B)
 
-result = A_stable @ B_stable
+result=A_stable @ B_stable
 
             return result
 
@@ -412,10 +420,10 @@ def _hybrid_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
         """Hybrid optimization combining multiple approaches."""
         try:
             # Combine GEMM acceleration with numerical stability
-result = self._gemm_accelerated_multiply(A, B)
+result=self._gemm_accelerated_multiply(A, B)
 
             # Apply additional stability enhancements
-result = self._ensure_numerical_stability(result)
+result=self._ensure_numerical_stability(result)
 
             return result
 
@@ -431,10 +439,10 @@ def _adaptive_multiply(self, A: Matrix, B: Matrix, **kwargs) -> Matrix:
         """Adaptive optimization based on matrix properties."""
         try:
             # Analyze matrix properties
-A_condition = (
+A_condition=(
                 np.linalg.cond(A) if A.shape[0] == A.shape[1] else float("in")
 
-B_condition = (
+B_condition=(
                 np.linalg.cond(B) if B.shape[0] == B.shape[1] else float("in")
 
 
@@ -461,17 +469,17 @@ def _robust_multiply(self, A: Matrix, B: Matrix) -> Matrix:
         """Robust matrix multiplication for ill-conditioned matrices."""
         try:
             # Use SVD-based approach for numerical stability
-U_A, S_A, Vt_A = linalg.unified_math.svd(A, full_matrices=False)
-            U_B, S_B, Vt_B = linalg.unified_math.svd(B, full_matrices=False)
+U_A, S_A, Vt_A=linalg.unified_math.svd(A, full_matrices=False)
+            U_B, S_B, Vt_B=linalg.unified_math.svd(B, full_matrices=False)
 
             # Truncate small singular values
-threshold = 1e-12
-S_A = np.where(S_A > threshold, S_A, 0)
-            S_B = np.where(S_B > threshold, S_B, 0)
+threshold=1e-12
+S_A=np.where(S_A > threshold, S_A, 0)
+            S_B=np.where(S_B > threshold, S_B, 0)
 
             # Reconstruct matrices
-A_stable = U_A @ np.diag(S_A) @ Vt_A
-            B_stable = U_B @ np.diag(S_B) @ Vt_B
+A_stable=U_A @ np.diag(S_A) @ Vt_A
+            B_stable=U_B @ np.diag(S_B) @ Vt_B
 
             return A_stable @ B_stable
 
@@ -484,7 +492,7 @@ def enhanced_eigenvalue_decomposition(
 
         self,
 A: Matrix,
-mode: OptimizationMode = OptimizationMode.ADAPTIVE,
+mode: OptimizationMode=OptimizationMode.ADAPTIVE,
 **kwargs,
 ) -> OptimizationResult:
 """
@@ -494,15 +502,15 @@ Enhanced eigenvalue decomposition with multiple optimization modes
 This ENHANCES existing eigenvalue operations
 """
         try:
-start_time = time.time()
+start_time=time.time()
 
             # Check cache
-cache_key = f"eigen_{hash(str(A.shape))}_{mode.value}"
+cache_key=f"eigen_{hash(str(A.shape))}_{mode.value}"
             if (
                 self.config.get("enable_caching", True)
                 and cache_key in self.eigenvalue_cache
 ):
-cached_result = self.eigenvalue_cache[cache_key]
+cached_result=self.eigenvalue_cache[cache_key]
                 return OptimizationResult(
                     result=cached_result,
 operation_type=(MathematicalOperation.EIGENVALUE_DECOMPOSITION),
@@ -515,28 +523,28 @@ metadata={"cached": True},
 
             # Choose optimization strategy
             if mode == OptimizationMode.GEMM_ACCELERATED:
-eigenvalues, eigenvectors = self._gemm_accelerated_eigenvalue(
+eigenvalues, eigenvectors=self._gemm_accelerated_eigenvalue(
                     A, **kwargs
 
             elif mode == OptimizationMode.QUANTUM_ENHANCED:
-eigenvalues, eigenvectors = self._quantum_enhanced_eigenvalue(
+eigenvalues, eigenvectors=self._quantum_enhanced_eigenvalue(
                     A, **kwargs
 
             elif mode == OptimizationMode.ADAPTIVE:
-eigenvalues, eigenvectors = self._adaptive_eigenvalue(A, **kwargs)
+eigenvalues, eigenvectors=self._adaptive_eigenvalue(A, **kwargs)
             else:
                 # Use existing robust matrix inverse if available
                 if "robust_matrix_inverse" in globals():
-                    A_inv = robust_matrix_inverse(A)
-                    eigenvalues, eigenvectors = linalg.eig(A_inv)
+                    A_inv=robust_matrix_inverse(A)
+                    eigenvalues, eigenvectors=linalg.eig(A_inv)
                 else:
-eigenvalues, eigenvectors = linalg.eig(A)
+eigenvalues, eigenvectors=linalg.eig(A)
 
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
 
             # Cache result
             if self.config.get("enable_caching", True):
-                self.eigenvalue_cache[cache_key] = (eigenvalues, eigenvectors)
+                self.eigenvalue_cache[cache_key]=(eigenvalues, eigenvectors)
                 self._manage_cache_size()
 
             # Update performance tracking
@@ -575,7 +583,7 @@ def _gemm_accelerated_eigenvalue(
 """GEMM-accelerated eigenvalue decomposition."""
         try:
             # Use optimized eigenvalue decomposition
-eigenvalues, eigenvectors = linalg.eig(A)
+eigenvalues, eigenvectors=linalg.eig(A)
             return eigenvalues, eigenvectors
         except Exception as e:
 logger.error(f"Error in GEMM accelerated eigenvalue: {e}")
@@ -589,8 +597,8 @@ def _quantum_enhanced_eigenvalue(
 """Quantum-enhanced eigenvalue decomposition."""
         try:
             # Apply quantum-inspired numerical stability
-A_stable = self._ensure_numerical_stability(A)
-            eigenvalues, eigenvectors = linalg.eig(A_stable)
+A_stable=self._ensure_numerical_stability(A)
+            eigenvalues, eigenvectors=linalg.eig(A_stable)
             return eigenvalues, eigenvectors
         except Exception as e:
 logger.error(f"Error in quantum enhanced eigenvalue: {e}")
@@ -604,15 +612,15 @@ def _adaptive_eigenvalue(self, A: Matrix, **kwargs) -> Tuple[Vector, Matrix]:
         """Adaptive eigenvalue decomposition."""
         try:
             # Analyze matrix properties
-condition_number = np.linalg.cond(A)
+condition_number=np.linalg.cond(A)
 
             if condition_number > 1e10:
                 # Use robust approach for ill-conditioned matrices
-A_stable = self._ensure_numerical_stability(A)
-                eigenvalues, eigenvectors = linalg.eig(A_stable)
+A_stable=self._ensure_numerical_stability(A)
+                eigenvalues, eigenvectors=linalg.eig(A_stable)
             else:
                 # Use standard approach for well-conditioned matrices
-eigenvalues, eigenvectors = linalg.eig(A)
+eigenvalues, eigenvectors=linalg.eig(A)
 
             return eigenvalues, eigenvectors
 
@@ -626,8 +634,8 @@ def multi_vector_optimization(
         self,
 vectors: List[Vector],
 objective_function: Callable[[Vector], float],
-constraints: Optional[List[Callable]] = None,
-mode: OptimizationMode = OptimizationMode.HYBRID,
+constraints: Optional[List[Callable]]=None,
+mode: OptimizationMode=OptimizationMode.HYBRID,
 **kwargs,
 ) -> OptimizationResult:
 """
@@ -637,10 +645,10 @@ Multi-vector optimization that leverages all mathematical components
 This ENHANCES existing optimization capabilities
 """
         try:
-start_time = time.time()
+start_time=time.time()
 
             # Create multi-vector state
-multi_state = MultiVectorState(
+multi_state=MultiVectorState(
                 primary_vector=vectors[0],
 secondary_vectors=vectors[1:] if len(vectors) > 1 else [],
                 coupling_matrix=np.eye(len(vectors[0])),
@@ -651,23 +659,23 @@ timestamp=time.time(),
 
             # Choose optimization strategy
             if mode == OptimizationMode.DUAL_NUMBER:
-result = self._dual_number_optimization(
+result=self._dual_number_optimization(
                     multi_state, objective_function, constraints, **kwargs
 
             elif mode == OptimizationMode.QUANTUM_ENHANCED:
-result = self._quantum_enhanced_optimization(
+result=self._quantum_enhanced_optimization(
                     multi_state, objective_function, constraints, **kwargs
 
             elif mode == OptimizationMode.HYBRID:
-result = self._hybrid_optimization(
+result=self._hybrid_optimization(
                     multi_state, objective_function, constraints, **kwargs
 
             else:
-result = self._standard_optimization(
+result=self._standard_optimization(
                     multi_state, objective_function, constraints, **kwargs
 
 
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
 
             # Update performance tracking
 self._update_performance_metrics(
@@ -701,7 +709,7 @@ def _dual_number_optimization(
         self,
 multi_state: MultiVectorState,
 objective_function: Callable[[Vector], float],
-constraints: Optional[List[Callable]] = None,
+constraints: Optional[List[Callable]]=None,
 **kwargs,
 ) -> Vector:
 """Dual number enhanced optimization."""
@@ -712,13 +720,13 @@ constraints: Optional[List[Callable]] = None,
 
 
             # Use dual numbers for automatic differentiation
-initial_guess = multi_state.primary_vector
+initial_guess=multi_state.primary_vector
 
             # Convert to dual numbers
-x_dual = np.vectorize(lambda x: Dual(x, 1.0))(initial_guess)
+x_dual=np.vectorize(lambda x: Dual(x, 1.0))(initial_guess)
 
             # Optimize using dual number gradients
-result = optimize.minimize(
+result=optimize.minimize(
                 lambda x: objective_function(
                     np.vectorize(lambda d: d.val if hasattr(d, "val") else d)(x)
                 ),
@@ -744,7 +752,7 @@ def _quantum_enhanced_optimization(
         self,
 multi_state: MultiVectorState,
 objective_function: Callable[[Vector], float],
-constraints: Optional[List[Callable]] = None,
+constraints: Optional[List[Callable]]=None,
 **kwargs,
 ) -> Vector:
 """Quantum-enhanced optimization."""
@@ -753,7 +761,7 @@ constraints: Optional[List[Callable]] = None,
             # This could integrate with quantum computing components
 
             # For now, use enhanced numerical optimization
-result = optimize.minimize(
+result=optimize.minimize(
                 objective_function,
 multi_state.primary_vector,
 method="L-BFGS-B",
@@ -774,13 +782,13 @@ def _hybrid_optimization(
         self,
 multi_state: MultiVectorState,
 objective_function: Callable[[Vector], float],
-constraints: Optional[List[Callable]] = None,
+constraints: Optional[List[Callable]]=None,
 **kwargs,
 ) -> Vector:
 """Hybrid optimization combining multiple approaches."""
         try:
             # Combine multiple optimization strategies
-strategies = [
+strategies=[
 lambda: self._dual_number_optimization(
                     multi_state, objective_function, constraints, **kwargs
 ),
@@ -792,16 +800,16 @@ lambda: self._standard_optimization(
 ),
 ]
 
-best_result = None
-best_value = float("in")
+best_result=None
+best_value=float("in")
 
             for strategy in strategies:
                 try:
-result = strategy()
-                    value = objective_function(result)
+result=strategy()
+                    value=objective_function(result)
                     if value < best_value:
-best_value = value
-best_result = result
+best_value=value
+best_result=result
                 except Exception as e:
 logger.warning(f"Strategy failed: {e}")
                     continue
@@ -822,12 +830,12 @@ def _standard_optimization(
         self,
 multi_state: MultiVectorState,
 objective_function: Callable[[Vector], float],
-constraints: Optional[List[Callable]] = None,
+constraints: Optional[List[Callable]]=None,
 **kwargs,
 ) -> Vector:
 """Perform standard optimization using SciPy."""
         try:
-result = optimize.minimize(
+result=optimize.minimize(
                 objective_function,
 multi_state.primary_vector,
 method="L-BFGS-B",
@@ -848,7 +856,7 @@ def _ensure_numerical_stability(self, matrix: Matrix) -> Matrix:
         """Ensure numerical stability of matrix operations."""
         try:
             # Add small regularization if needed
-eigenvals = unified_math.unified_math.eigenvalues(matrix)
+eigenvals=unified_math.unified_math.eigenvalues(matrix)
             if unified_math.unified_math.min(np.real(eigenvals)) < 1e-12:
                 matrix += 1e-12 * np.eye(matrix.shape[0])
             return matrix
@@ -863,12 +871,12 @@ def _manage_cache_size(self) -> None:
     pass
         """Manage cache size to prevent memory overflow."""
         try:
-max_cache_size = self.config.get("cache_size", 100)
+max_cache_size=self.config.get("cache_size", 100)
 
             # Trim matrix cache
             if len(self.matrix_cache) > max_cache_size:
                 # Remove oldest entries
-keys_to_remove = list(self.matrix_cache.keys())[)
+keys_to_remove=list(self.matrix_cache.keys())[)
 len(self.matrix_cache) - max_cache_size
                 ]
                 for key in keys_to_remove:
@@ -876,7 +884,7 @@ len(self.matrix_cache) - max_cache_size
 
             # Trim eigenvalue cache
             if len(self.eigenvalue_cache) > max_cache_size:
-                keys_to_remove = list(self.eigenvalue_cache.keys())[)
+                keys_to_remove=list(self.eigenvalue_cache.keys())[)
 len(self.eigenvalue_cache) - max_cache_size
                 ]
                 for key in keys_to_remove:
@@ -908,7 +916,7 @@ self.performance_stats["optimization_operations"] += 1
 
             # Update average execution time
             if self.total_operations > 0:
-self.performance_stats["average_execution_time"] = (]
+self.performance_stats["average_execution_time"]=(]
                     self.total_optimization_time / self.total_operations
 
 
@@ -966,18 +974,18 @@ safe_print("🔬 Mathematical Optimization Bridge Test")
         safe_print("=" * 50)
 
         # Initialize bridge
-bridge = MathematicalOptimizationBridge()
+bridge=MathematicalOptimizationBridge()
 
         # Test matrices
-A = np.random.rand(50, 50)
-        B = np.random.rand(50, 50)
+A=np.random.rand(50, 50)
+        B=np.random.rand(50, 50)
 
 safe_print(f"Matrix A shape: {A.shape}")
         safe_print(f"Matrix B shape: {B.shape}")
 
         # Test enhanced matrix multiplication
 safe_print("\nTesting enhanced matrix multiplication...")
-        result = bridge.enhanced_matrix_multiply(
+        result=bridge.enhanced_matrix_multiply(
             A, B, OptimizationMode.GEMM_ACCELERATED
 
         if result.convergence:
@@ -991,11 +999,11 @@ safe_print(f"❌ GEMM multiply failed: {result.error}")
 
         # Test enhanced eigenvalue decomposition
 safe_print("\nTesting enhanced eigenvalue decomposition...")
-        eigen_result = bridge.enhanced_eigenvalue_decomposition(
+        eigen_result=bridge.enhanced_eigenvalue_decomposition(
             A, OptimizationMode.ADAPTIVE
 
         if eigen_result.convergence:
-eigenvalues, eigenvectors = eigen_result.result
+eigenvalues, eigenvectors=eigen_result.result
 safe_print(
                 "✅ Eigenvalue decomposition completed in "
 f"{eigen_result.execution_time:.6f}s"
@@ -1007,10 +1015,10 @@ safe_print(f"❌ Eigenvalue decomposition failed: {eigen_result.error}")
 
         # Test multi-vector optimization
 safe_print("\nTesting multi-vector optimization...")
-        vectors = [np.random.rand(10), np.random.rand(10)]
-        objective = lambda x: np.sum(x**2)  # Simple quadratic objective
+        vectors=[np.random.rand(10), np.random.rand(10)]
+        objective=lambda x: np.sum(x**2)  # Simple quadratic objective
 
-opt_result = bridge.multi_vector_optimization(
+opt_result=bridge.multi_vector_optimization(
             vectors, objective, mode=OptimizationMode.HYBRID
 
         if opt_result.convergence:
@@ -1023,7 +1031,7 @@ safe_print(f"   Iterations: {opt_result.iterations}")
 safe_print(f"❌ Multi-vector optimization failed: {opt_result.error}")
 
         # Get performance summary
-summary = bridge.get_performance_summary()
+summary=bridge.get_performance_summary()
         safe_print("\n✅ Performance Summary:")
         safe_print(f"   Total operations: {summary['total_operations']}")
         safe_print(

@@ -30,9 +30,12 @@ import numpy as np
 from numpy.typing import NDArray
 
 # Fallback math functions to avoid circular imports
+
+
 def _safe_math_max(a: float, b: float) -> float:
     """Safe max function to avoid circular imports."""
     return max(a, b)
+
 
 def _safe_math_min(a: float, b: float) -> float:
     """Safe min function to avoid circular imports."""
@@ -41,6 +44,7 @@ def _safe_math_min(a: float, b: float) -> float:
 # =============================================================================
 # FAULT HANDLING SCHEMAS
 # =============================================================================
+
 
 class FaultLog(TypedDict):
     """Centralized fault log structure for AI triage logic."""
@@ -117,7 +121,7 @@ class AIStrategyResponse:
     def __post_init__(self) -> None:
         """Validate and enhance the response."""
         if not self.strategy_hash:
-            self.strategy_hash = self._generate_hash()
+        self.strategy_hash = self._generate_hash()
 
         # Ensure confidence is bounded
         self.confidence_score = _safe_math_max(0.0, _safe_math_min(1.0, self.confidence_score))
@@ -247,7 +251,7 @@ class PerformanceMetrics:
 
 class FaultHandler(Protocol):
     """Protocol for fault handling components."""
-    
+
     def handle_fault(self, fault_event: FaultEvent) -> bool:
         """Handle a fault event and return success status."""
 
@@ -257,7 +261,7 @@ class FaultHandler(Protocol):
 
 class AIStrategyParser(Protocol):
     """Protocol for AI strategy response parsing."""
-    
+
     def parse_response(self, response: Dict[str, Any]) -> AIStrategyResponse:
         """Parse AI response into structured format."""
 
@@ -267,7 +271,7 @@ class AIStrategyParser(Protocol):
 
 class MathematicalValidator(Protocol):
     """Protocol for mathematical operation validation."""
-    
+
     def validate_operation(self, operation: MathematicalOperation) -> bool:
         """Validate mathematical operation."""
 
@@ -392,23 +396,23 @@ PerformanceMetricsType = Union[PerformanceMetrics, Dict[str, Any]]
 __all__ = [
     # Fault handling
     "FaultLog", "FaultEvent", "RecoveryStrategy", "FaultHandler",
-    
+
     # AI strategy
     "StrategyHash", "AIStrategyResponse", "AIStrategyParser", "parse_ai_response",
-    
+
     # Mathematical operations
     "MathematicalOperation", "VectorOperation", "MatrixOperation",
     "MathematicalValidator", "validate_mathematical_operation",
-    
+
     # Trading
     "TradingDecision", "TradingSignal",
-    
+
     # System state
     "SystemState", "PerformanceMetrics",
-    
+
     # Utilities
     "create_fault_log",
-    
+
     # Type aliases
     "Vector", "Matrix", "Tensor", "FaultHandlerType", "RecoveryStrategyType",
     "AIResponseType", "StrategyHashType", "MathOpType", "TradingSignalType",

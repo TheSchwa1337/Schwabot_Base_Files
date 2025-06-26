@@ -315,7 +315,8 @@ class SignalCollector:
             # Historical volatility proxy
             recent_prices = market_data.get("recent_prices", [bid_price])
             if len(recent_prices) > 1:
-                volatility = unified_math.unified_math.std(recent_prices) / unified_math.unified_math.mean(recent_prices)
+                volatility = unified_math.unified_math.std(
+                    recent_prices) / unified_math.unified_math.mean(recent_prices)
             else:
                 volatility = 0.01
 

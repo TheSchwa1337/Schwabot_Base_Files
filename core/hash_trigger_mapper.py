@@ -18,6 +18,8 @@ Core Functionality:
 This module enhances rather than replaces existing functionality.
 """
 
+import numpy as np
+from core.unified_math_system import unified_math
 import hashlib
 import time
 import json
@@ -40,48 +42,57 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}"), safe_math
+
+
 except ImportError:
     pass
     pass
     # Fallback for CLI compatibility with proper Unicode handling
-def safe_print(*args, **kwargs):
 
+
+def safe_print(*args, **kwargs):
 
     pass
     pass
@@ -89,6 +100,8 @@ def safe_print(*args, **kwargs):
         try:
             print(*args, **kwargs)
         except UnicodeEncodeError:
+
+
             # Fallback to ASCII-safe output
 safe_args = []
             for arg in args:
@@ -98,8 +111,8 @@ safe_args = []
 safe_args.append(arg)
             print(*safe_args, **kwargs)
 
-def info(*args, **kwargs):
 
+def info(*args, **kwargs):
 
     pass
     pass
@@ -107,6 +120,8 @@ def info(*args, **kwargs):
         try:
             print("[INFO]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -115,8 +130,8 @@ safe_args = []
 safe_args.append(arg)
             print("[INFO]", *safe_args, **kwargs)
 
-def warn(*args, **kwargs):
 
+def warn(*args, **kwargs):
 
     pass
     pass
@@ -124,6 +139,8 @@ def warn(*args, **kwargs):
         try:
             print("[WARN]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -132,8 +149,8 @@ safe_args = []
 safe_args.append(arg)
             print("[WARN]", *safe_args, **kwargs)
 
-def error(*args, **kwargs):
 
+def error(*args, **kwargs):
 
     pass
     pass
@@ -141,6 +158,8 @@ def error(*args, **kwargs):
         try:
             print("[ERROR]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -149,8 +168,8 @@ safe_args = []
 safe_args.append(arg)
             print("[ERROR]", *safe_args, **kwargs)
 
-def success(*args, **kwargs):
 
+def success(*args, **kwargs):
 
     pass
     pass
@@ -158,6 +177,8 @@ def success(*args, **kwargs):
         try:
             print("[SUCCESS]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -166,8 +187,8 @@ safe_args = []
 safe_args.append(arg)
             print("[SUCCESS]", *safe_args, **kwargs)
 
-def debug(*args, **kwargs):
 
+def debug(*args, **kwargs):
 
     pass
     pass
@@ -175,6 +196,8 @@ def debug(*args, **kwargs):
         try:
             print("[DEBUG]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -183,8 +206,8 @@ safe_args = []
 safe_args.append(arg)
             print("[DEBUG]", *safe_args, **kwargs)
 
-def safe_math(*args, **kwargs):
 
+def safe_math(*args, **kwargs):
 
     pass
     pass
@@ -192,6 +215,8 @@ def safe_math(*args, **kwargs):
         try:
             print("[MATH]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -201,66 +226,64 @@ safe_args.append(arg)
             print("[MATH]", *safe_args, **kwargs)
 
 try:
-from core.unified_math_system import unified_math
 except ImportError:
     pass
     pass
     # Fallback math system with proper type annotations
-import numpy as np
+
 
 class FallbackMath:
 
-
         """Fallback math system for when unified_math_system is unavailable."""
+
 
 @staticmethod
 def mean(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate mean of data."""
             return float(np.mean(data))
 
+
 @staticmethod
 def std(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate standard deviation of data."""
             return float(np.std(data))
 
+
 @staticmethod
 def min(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate minimum of data."""
             return float(np.min(data))
 
+
 @staticmethod
 def max(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate maximum of data."""
             return float(np.max(data))
 
+
 @staticmethod
 def abs(value: float) -> float:
-
 
     pass
     pass
             """Calculate absolute value."""
             return float(np.abs(value))
 
+
 @staticmethod
 def correlation(data1: List[float], data2: List[float]) -> float:
-
 
     pass
     pass
@@ -269,23 +292,24 @@ def correlation(data1: List[float], data2: List[float]) -> float:
                 return float(np.corrcoef(data1, data2)[0, 1])
             return 0.0
 
+
 @staticmethod
 def sqrt(value: float) -> float:
-
 
     pass
     pass
             """Calculate square root."""
             return float(np.sqrt(value))
 
+
 @staticmethod
 def log(value: float) -> float:
-
 
     pass
     pass
             """Calculate natural logarithm."""
             return float(np.log(value))
+
 
 unified_math = FallbackMath()
 
@@ -297,10 +321,12 @@ StrategyPathway = Literal[
 ]
 MappingConfidence = Literal["low", "medium", "high", "critical"]
 
+
 class HashPatternType(Enum):
 
-
     """Types of hash patterns for mapping."""
+
+
 SEQUENTIAL = "sequential"
 REPEATING = "repeating"
 RANDOM = "random"
@@ -310,7 +336,6 @@ CRITICAL = "critical"
 
 @dataclass
 class HashTriggerMapping:
-
 
     """
 Hash trigger mapping configuration.
@@ -344,8 +369,8 @@ ghost_signal_compatible: bool
     # Metadata
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-def to_dict(self) -> Dict[str, Any]:
 
+def to_dict(self) -> Dict[str, Any]:
 
     pass
     pass
@@ -371,7 +396,6 @@ def to_dict(self) -> Dict[str, Any]:
 
 class HashTriggerMapper:
 
-
     """
 Enhanced hash trigger mapper for strategy pathway determination.
 
@@ -379,12 +403,14 @@ This class provides sophisticated mapping from hash triggers to strategy pathway
     integrating with existing systems while providing enhanced decision logic.
 """
 
-def __init__(self, max_mappings: int = 10000) -> None:
 
+def __init__(self, max_mappings: int = 10000) -> None:
 
     pass
     pass
         """Initialize the hash trigger mapper."""
+
+
 self.mappings: Dict[str, HashTriggerMapping] = {}
 self.mapping_history: List[HashTriggerMapping] = []
 self.max_mappings = max_mappings
@@ -402,12 +428,14 @@ self._initialize_default_mappings()
 
 info("Hash Trigger Mapper initialized")
 
-def _initialize_default_mappings(self) -> None:
 
+def _initialize_default_mappings(self) -> None:
 
     pass
     pass
         """Initialize default hash trigger mappings."""
+
+
 default_mappings = [
             # Aggressive patterns
 ("000000", "aggressive_ghost", "high", HashPatternType.CRITICAL),
@@ -448,7 +476,7 @@ bit_phase_compatibility=["4bit", "8bit", "42bit"],
 trigger_engine_compatible=True,
 ghost_signal_compatible=True
 
-self.mappings[hash_trigger] = mapping
+self.mappings[hash_trigger]=mapping
 
 info(f"Initialized {len(default_mappings)} default mappings")
 
@@ -457,8 +485,8 @@ def map_hash_trigger(
 
         self,
 hash_trigger: str,
-market_data: Optional[Dict[str, Any]] = None,
-ghost_signal_data: Optional[Dict[str, Any]] = None
+market_data: Optional[Dict[str, Any]]=None,
+ghost_signal_data: Optional[Dict[str, Any]]=None
 ) -> HashTriggerMapping:
 """
 Map a hash trigger to a strategy pathway.
@@ -474,35 +502,35 @@ HashTriggerMapping with strategy pathway and confidence
         try:
             # Check if mapping already exists
             if hash_trigger in self.mappings:
-mapping = self.mappings[hash_trigger]
+mapping=self.mappings[hash_trigger]
 self._update_mapping_frequency(mapping)
                 return mapping
 
             # Analyze hash pattern
-pattern_type = self._analyze_hash_pattern(hash_trigger)
+pattern_type=self._analyze_hash_pattern(hash_trigger)
 
             # Determine strategy pathway
-strategy_pathway = self._determine_strategy_pathway(
+strategy_pathway=self._determine_strategy_pathway(
                 hash_trigger, pattern_type, market_data, ghost_signal_data
 
 
             # Calculate mapping confidence
-confidence_level = self._calculate_mapping_confidence(
+confidence_level=self._calculate_mapping_confidence(
                 hash_trigger, pattern_type, market_data
 
 
             # Calculate mapping factors
-volatility_factor = market_data.get('volatility', 0.5) if market_data else 0.5
-            entropy_factor = market_data.get('entropy', 0.5) if market_data else 0.5
-            momentum_factor = market_data.get('momentum', 0.5) if market_data else 0.5
+volatility_factor=market_data.get('volatility', 0.5) if market_data else 0.5
+            entropy_factor=market_data.get('entropy', 0.5) if market_data else 0.5
+            momentum_factor=market_data.get('momentum', 0.5) if market_data else 0.5
 
             # Calculate mapping score
-mapping_score = self._calculate_mapping_score(
+mapping_score=self._calculate_mapping_score(
                 pattern_type, confidence_level, volatility_factor, entropy_factor, momentum_factor
 
 
             # Create mapping
-mapping = HashTriggerMapping(
+mapping=HashTriggerMapping(
                 hash_trigger=hash_trigger,
 strategy_pathway=strategy_pathway,
 confidence_level=confidence_level,
@@ -520,12 +548,12 @@ ghost_signal_compatible=self.ghost_signal_available
 
 
             # Store mapping
-self.mappings[hash_trigger] = mapping
+self.mappings[hash_trigger]=mapping
 self.mapping_history.append(mapping)
 
             # Maintain mapping size
             if len(self.mappings) > self.max_mappings:
-                oldest_key = next(iter(self.mappings))
+                oldest_key=next(iter(self.mappings))
                 del self.mappings[oldest_key]
 
 info(f"Mapped hash trigger {hash_trigger} to {strategy_pathway} (confidence: {confidence_level})")
@@ -617,7 +645,7 @@ def _is_critical(self, hash_trigger: str) -> bool:
     pass
         """Check if hash trigger is critical pattern."""
         try:
-critical_patterns = [
+critical_patterns=[
 "000000", "fff", "111111", "999999",
 "aaaaaa", "bbbbbb", "cccccc", "dddddd"
 ]
@@ -635,8 +663,8 @@ def _is_patterned(self, hash_trigger: str) -> bool:
         try:
             # Check for alternating patterns
             if len(hash_trigger) >= 4:
-                pattern1 = hash_trigger[0]
-pattern2 = hash_trigger[1]
+                pattern1=hash_trigger[0]
+pattern2=hash_trigger[1]
 
                 for i in range(2, len(hash_trigger), 2):
                     if i + 1 < len(hash_trigger):
@@ -664,13 +692,13 @@ ghost_signal_data: Optional[Dict[str, Any]]
 """Determine strategy pathway based on hash trigger and context."""
         try:
             # Get market conditions
-volatility = market_data.get('volatility', 0.5) if market_data else 0.5
-            entropy = market_data.get('entropy', 0.5) if market_data else 0.5
-            momentum = market_data.get('momentum', 0.5) if market_data else 0.5
+volatility=market_data.get('volatility', 0.5) if market_data else 0.5
+            entropy=market_data.get('entropy', 0.5) if market_data else 0.5
+            momentum=market_data.get('momentum', 0.5) if market_data else 0.5
 
             # Get ghost signal context
-phase_state = ghost_signal_data.get('phase_state', 'dormant') if ghost_signal_data else 'dormant'
-            signal_strength = ghost_signal_data.get('signal_strength', 0.5) if ghost_signal_data else 0.5
+phase_state=ghost_signal_data.get('phase_state', 'dormant') if ghost_signal_data else 'dormant'
+            signal_strength=ghost_signal_data.get('signal_strength', 0.5) if ghost_signal_data else 0.5
 
             # Pattern-based pathway determination
             if pattern_type == HashPatternType.CRITICAL:
@@ -718,7 +746,7 @@ market_data: Optional[Dict[str, Any]]
 """Calculate mapping confidence level."""
         try:
             # Base confidence from pattern type
-pattern_confidence = {
+pattern_confidence={
 HashPatternType.CRITICAL: 0.9,
 HashPatternType.SEQUENTIAL: 0.7,
 HashPatternType.PATTERNED: 0.6,
@@ -726,20 +754,20 @@ HashPatternType.REPEATING: 0.5,
 HashPatternType.RANDOM: 0.3
 }
 
-base_confidence = pattern_confidence.get(pattern_type, 0.5)
+base_confidence=pattern_confidence.get(pattern_type, 0.5)
 
             # Adjust for hash length
-length_factor = min(len(hash_trigger) / 6.0, 1.0)
+length_factor=min(len(hash_trigger) / 6.0, 1.0)
 
             # Adjust for market conditions
-market_factor = 0.5
+market_factor=0.5
             if market_data:
-volatility = market_data.get('volatility', 0.5)
-                entropy = market_data.get('entropy', 0.5)
-                market_factor = (1.0 - volatility) * 0.6 + (1.0 - entropy) * 0.4
+volatility=market_data.get('volatility', 0.5)
+                entropy=market_data.get('entropy', 0.5)
+                market_factor=(1.0 - volatility) * 0.6 + (1.0 - entropy) * 0.4
 
             # Calculate final confidence
-final_confidence = (base_confidence * 0.5 + length_factor * 0.3 + market_factor * 0.2)
+final_confidence=(base_confidence * 0.5 + length_factor * 0.3 + market_factor * 0.2)
 
             # Map to confidence level
             if final_confidence >= 0.8:
@@ -768,7 +796,7 @@ momentum_factor: float
 """Calculate overall mapping score."""
         try:
             # Pattern type weight
-pattern_weights = {
+pattern_weights={
 HashPatternType.CRITICAL: 0.9,
 HashPatternType.SEQUENTIAL: 0.7,
 HashPatternType.PATTERNED: 0.6,
@@ -776,23 +804,23 @@ HashPatternType.REPEATING: 0.5,
 HashPatternType.RANDOM: 0.3
 }
 
-pattern_score = pattern_weights.get(pattern_type, 0.5)
+pattern_score=pattern_weights.get(pattern_type, 0.5)
 
             # Confidence weight
-confidence_weights = {
+confidence_weights={
 "critical": 0.9,
 "high": 0.7,
 "medium": 0.5,
 "low": 0.3
 }
 
-confidence_score = confidence_weights.get(confidence_level, 0.5)
+confidence_score=confidence_weights.get(confidence_level, 0.5)
 
             # Market factors
-market_score = (volatility_factor + entropy_factor + momentum_factor) / 3.0
+market_score=(volatility_factor + entropy_factor + momentum_factor) / 3.0
 
             # Calculate final score
-final_score = (
+final_score=(
                 pattern_score * 0.4 +
 confidence_score * 0.3 +
 market_score * 0.3
@@ -811,7 +839,7 @@ def _determine_bit_phase_compatibility(self, hash_trigger: str) -> List[str]:
     pass
         """Determine bit phase compatibility for hash trigger."""
         try:
-compatibility = []
+compatibility=[]
 
             # 4-bit compatibility
             if len(hash_trigger) >= 4:
@@ -837,23 +865,23 @@ def _update_mapping_frequency(self, mapping: HashTriggerMapping) -> None:
     pass
         """Update frequency count and timing for existing mapping."""
         try:
-current_time = datetime.now()
-            time_diff = (current_time - mapping.last_seen).total_seconds()
+current_time=datetime.now()
+            time_diff=(current_time - mapping.last_seen).total_seconds()
 
             # Update frequency count
 mapping.frequency_count += 1
 
             # Update average interval
             if mapping.frequency_count > 1:
-mapping.average_interval = (
+mapping.average_interval=(
                     (mapping.average_interval * (mapping.frequency_count - 1) + time_diff) /
                     mapping.frequency_count
 
             else:
-mapping.average_interval = time_diff
+mapping.average_interval=time_diff
 
             # Update last seen
-mapping.last_seen = current_time
+mapping.last_seen=current_time
 
         except Exception as e:
 error(f"Error updating mapping frequency: {e}")
@@ -912,25 +940,25 @@ def get_mapping_statistics(self) -> Dict[str, Any]:
             if not self.mappings:
                 return {"total_mappings": 0}
 
-total_mappings = len(self.mappings)
-            pathway_counts: Dict[str, int] = {}
-confidence_counts: Dict[str, int] = {}
-pattern_counts: Dict[str, int] = {}
+total_mappings=len(self.mappings)
+            pathway_counts: Dict[str, int]={}
+confidence_counts: Dict[str, int]={}
+pattern_counts: Dict[str, int]={}
 
             for mapping in self.mappings.values():
                 # Count pathways
-pathway_counts[mapping.strategy_pathway] = pathway_counts.get(mapping.strategy_pathway, 0) + 1
+pathway_counts[mapping.strategy_pathway]=pathway_counts.get(mapping.strategy_pathway, 0) + 1
 
                 # Count confidence levels
-confidence_counts[mapping.confidence_level] = confidence_counts.get(mapping.confidence_level, 0) + 1
+confidence_counts[mapping.confidence_level]=confidence_counts.get(mapping.confidence_level, 0) + 1
 
                 # Count pattern types
-pattern_counts[mapping.pattern_type.value] = pattern_counts.get(mapping.pattern_type.value, 0) + 1
+pattern_counts[mapping.pattern_type.value]=pattern_counts.get(mapping.pattern_type.value, 0) + 1
 
             # Calculate averages
-avg_mapping_score = unified_math.mean([m.mapping_score for m in self.mappings.values()])
-            avg_frequency = unified_math.mean([m.frequency_count for m in self.mappings.values()])
-            avg_interval = unified_math.mean([m.average_interval for m in self.mappings.values()])
+avg_mapping_score=unified_math.mean([m.mapping_score for m in self.mappings.values()])
+            avg_frequency=unified_math.mean([m.frequency_count for m in self.mappings.values()])
+            avg_interval=unified_math.mean([m.average_interval for m in self.mappings.values()])
 
             return {
 "total_mappings": total_mappings,
@@ -973,10 +1001,10 @@ def test_hash_trigger_mapper() -> None:
     print("=" * 50)
 
     # Initialize mapper
-mapper = HashTriggerMapper()
+mapper=HashTriggerMapper()
 
     # Test hash triggers
-test_triggers = [
+test_triggers=[
 "000000",  # Critical - should map to aggressive/defensive
 "123456",  # Sequential - should map to momentum/adaptive
 "a1b2c3",  # Patterned - should map to momentum/adaptive
@@ -989,20 +1017,20 @@ test_triggers = [
         print(f"\nTesting trigger: {trigger}")
 
         # Create mock market data
-market_data = {
+market_data={
 "volatility": 0.025,
 "entropy": 0.3,
 "momentum": 0.003
 }
 
         # Create mock ghost signal data
-ghost_data = {
+ghost_data={
 "phase_state": "active",
 "signal_strength": 0.6
 }
 
         # Map trigger
-mapping = mapper.map_hash_trigger(trigger, market_data, ghost_data)
+mapping=mapper.map_hash_trigger(trigger, market_data, ghost_data)
 
         print(f"  Strategy Pathway: {mapping.strategy_pathway}")
         print(f"  Confidence Level: {mapping.confidence_level}")
@@ -1011,7 +1039,7 @@ mapping = mapper.map_hash_trigger(trigger, market_data, ghost_data)
         print(f"  Frequency Count: {mapping.frequency_count}")
 
     # Get statistics
-stats = mapper.get_mapping_statistics()
+stats=mapper.get_mapping_statistics()
     print("\nStatistics:")
     print(f"  Total mappings: {stats['total_mappings']}")
     print(f"  Pathway distribution: {stats['pathway_distribution']}")

@@ -61,7 +61,7 @@ entropy_based_clustering,
 EntropyEngine
 
 
-__all__ = [
+__all__=[
     # Unified Tensor Algebra
 'tensor_dot',
 'tensor_project',
@@ -102,6 +102,6 @@ __all__ = [
 ]
 
 # Version information
-__version__ = "1.0.0"
-__author__ = "Schwabot Development Team"
-__description__ = "Tensor Algebra Module for Advanced AI Vector Operations"
+__version__="1.0.0"
+__author__="Schwabot Development Team"
+__description__="Tensor Algebra Module for Advanced AI Vector Operations"

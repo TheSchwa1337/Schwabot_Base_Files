@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +10,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """CLI compatibility handler for Windows systems.
 
@@ -52,19 +61,17 @@ This module provides safe printing and logging functions that work
 across different Windows CLI environments.
 """
 
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 class CLIHandler:
 
-
     """CLI compatibility handler for Windows systems."""
+
 
 @staticmethod
 def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
-
 
     pass
     pass
@@ -77,6 +84,8 @@ force_ascii: Whether to force ASCII conversion.
 Returns:
 Message with emojis converted to ASCII representations.
 """
+
+
 emoji_mapping = {
 "✅": "[SUCCESS]",
 "❌": "[ERROR]",
@@ -123,9 +132,9 @@ emoji_mapping = {
 
         return message
 
+
 @staticmethod
 def safe_print(message: str, force_ascii: bool = False) -> None:
-
 
     pass
     pass
@@ -135,6 +144,8 @@ Args:
 message: Message to print.
 force_ascii: Whether to force ASCII conversion.
 """
+
+
 safe_message = CLIHandler.safe_emoji_print(message, force_ascii)
         print(safe_message)
 
@@ -147,6 +158,8 @@ level: str,
 message: str,
 context: str = "",
 ) -> bool:
+
+
 """Safe logging function with CLI compatibility.
 
 Args:

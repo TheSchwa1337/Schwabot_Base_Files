@@ -28,6 +28,7 @@ from random import uniform, choice
 
 logger = logging.getLogger(__name__)
 
+
 class AssetType(Enum):
     """Supported asset types."""
     BTC = "BTC"
@@ -36,6 +37,7 @@ class AssetType(Enum):
     ETH = "ETH"
     SOL = "SOL"
 
+
 class SubstitutionTrigger(Enum):
     """Asset substitution triggers."""
     VOLATILITY_EXCEEDED = "volatility_exceeded"
@@ -43,6 +45,7 @@ class SubstitutionTrigger(Enum):
     LIQUIDITY_CRISIS = "liquidity_crisis"
     CORRELATION_BREAKDOWN = "correlation_breakdown"
     PERFORMANCE_DEGRADATION = "performance_degradation"
+
 
 @dataclass
 class AssetProfile:
@@ -56,6 +59,7 @@ class AssetProfile:
     risk_multiplier: float
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class SubstitutionDecision:
     """Asset substitution decision."""
@@ -66,34 +70,35 @@ class SubstitutionDecision:
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class AssetSubstitutionMatrix:
     """
     Asset substitution matrix for dynamic portfolio management.
-    
+
     Mathematical Foundation:
     - Volatility Threshold: V_threshold = base_volatility * risk_multiplier
     - Substitution Score: S = (1 - correlation) * liquidity_score * confidence
     - Fallback Priority: P = substitution_priority * (1 / risk_multiplier)
     - Rebalance Allocation: A = base_allocation * (1 + substitution_bonus)
     """
-    
+
     def __init__(self, config_path: str = "./config/asset_substitution_config.json"):
         self.config_path = config_path
-        
+
         # Asset profiles and substitution mappings
         self.asset_profiles: Dict[str, AssetProfile] = {}
         self.substitution_history: List[SubstitutionDecision] = []
         self.current_substitutions: Dict[str, str] = {}
-        
+
         # Performance tracking
         self.total_substitutions = 0
         self.successful_substitutions = 0
         self.substitution_confidence = 0.0
-        
+
         # Load configuration and initialize asset profiles
         self._load_configuration()
         self._initialize_asset_profiles()
-        
+
         logger.info("Asset Substitution Matrix initialized")
 
     def _load_configuration(self) -> None:
@@ -137,10 +142,10 @@ class AssetSubstitutionMatrix:
                     "SOL": 2.0
                 }
             }
-            
+
             self.config = config
             logger.info("Asset substitution configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -155,11 +160,11 @@ class AssetSubstitutionMatrix:
                 "ETH": ["BTC", "XRP", "SOL"],
                 "SOL": ["ETH", "XRP", "USDC"]
             }
-            
+
             # Create asset profiles
             for asset in AssetType:
                 symbol = asset.value
-                
+
                 self.asset_profiles[symbol] = AssetProfile(
                     symbol=symbol,
                     volatility_threshold=self.config["volatility_thresholds"].get(symbol, 0.05),
@@ -174,23 +179,23 @@ class AssetSubstitutionMatrix:
                         "success_rate": 1.0
                     }
                 )
-            
+
             logger.info(f"Initialized {len(self.asset_profiles)} asset profiles")
-            
+
         except Exception as e:
             logger.error(f"Error initializing asset profiles: {e}")
 
     def get_substitute_asset(self, asset: str, trigger: SubstitutionTrigger = SubstitutionTrigger.VOLATILITY_EXCEEDED) -> str:
         """
         Get substitute asset for given asset.
-        
+
         Parameters:
         -----------
         asset : str
             Original asset symbol
         trigger : SubstitutionTrigger
             Trigger for substitution
-            
+
         Returns:
         --------
         str
@@ -200,10 +205,10 @@ class AssetSubstitutionMatrix:
             if asset not in self.asset_profiles:
                 logger.warning(f"Asset {asset} not found in profiles, using USDC as fallback")
                 return "USDC"
-            
+
             profile = self.asset_profiles[asset]
             fallback_assets = profile.fallback_assets
-            
+
             # Select best substitute based on trigger
             if trigger == SubstitutionTrigger.VOLATILITY_EXCEEDED:
                 # Choose lowest volatility substitute
@@ -217,12 +222,12 @@ class AssetSubstitutionMatrix:
             else:
                 # Default to first fallback
                 substitute = fallback_assets[0] if fallback_assets else "USDC"
-            
+
             # Record substitution decision
             self._record_substitution_decision(asset, substitute, trigger)
-            
+
             return substitute
-            
+
         except Exception as e:
             logger.error(f"Error getting substitute asset for {asset}: {e}")
             return "USDC"
@@ -232,16 +237,16 @@ class AssetSubstitutionMatrix:
         try:
             lowest_volatility = float('inf')
             best_substitute = "USDC"
-            
+
             for asset in fallback_assets:
                 if asset in self.asset_profiles:
                     volatility = self.asset_profiles[asset].volatility_threshold
                     if volatility < lowest_volatility:
                         lowest_volatility = volatility
                         best_substitute = asset
-            
+
             return best_substitute
-            
+
         except Exception as e:
             logger.error(f"Error selecting lowest volatility substitute: {e}")
             return "USDC"
@@ -251,16 +256,16 @@ class AssetSubstitutionMatrix:
         try:
             highest_liquidity = 0.0
             best_substitute = "USDC"
-            
+
             for asset in fallback_assets:
                 if asset in self.asset_profiles:
                     liquidity = self.asset_profiles[asset].liquidity_score
                     if liquidity > highest_liquidity:
                         highest_liquidity = liquidity
                         best_substitute = asset
-            
+
             return best_substitute
-            
+
         except Exception as e:
             logger.error(f"Error selecting highest liquidity substitute: {e}")
             return "USDC"
@@ -273,10 +278,10 @@ class AssetSubstitutionMatrix:
                     profile = self.asset_profiles[asset]
                     if profile.correlation_group == "stablecoin":
                         return asset
-            
+
             # Default to USDC if no stablecoin found
             return "USDC"
-            
+
         except Exception as e:
             logger.error(f"Error selecting stablecoin substitute: {e}")
             return "USDC"
@@ -296,34 +301,35 @@ class AssetSubstitutionMatrix:
                     "liquidity_improvement": self.asset_profiles[substitute_asset].liquidity_score - self.asset_profiles[original_asset].liquidity_score
                 }
             )
-            
+
             self.substitution_history.append(decision)
             self.current_substitutions[original_asset] = substitute_asset
             self.total_substitutions += 1
-            
+
             # Update asset profile metadata
             self.asset_profiles[original_asset].metadata["last_substitution"] = datetime.now()
             self.asset_profiles[original_asset].metadata["substitution_count"] += 1
-            
-            logger.info(f"Recorded substitution: {original_asset} -> {substitute_asset} (confidence: {decision.confidence_score:.2f})")
-            
+
+            logger.info(
+                f"Recorded substitution: {original_asset} -> {substitute_asset} (confidence: {decision.confidence_score:.2f})")
+
         except Exception as e:
             logger.error(f"Error recording substitution decision: {e}")
 
     def _calculate_substitution_confidence(self, original_asset: str, substitute_asset: str) -> float:
         """
         Calculate substitution confidence score.
-        
+
         Mathematical Formula:
         C = (1 - correlation) * liquidity_score * (1 / risk_multiplier)
-        
+
         Parameters:
         -----------
         original_asset : str
             Original asset
         substitute_asset : str
             Substitute asset
-            
+
         Returns:
         --------
         float
@@ -332,19 +338,19 @@ class AssetSubstitutionMatrix:
         try:
             original_profile = self.asset_profiles[original_asset]
             substitute_profile = self.asset_profiles[substitute_asset]
-            
+
             # Calculate correlation penalty (different groups = higher confidence)
             correlation_penalty = 0.5 if original_profile.correlation_group == substitute_profile.correlation_group else 1.0
-            
+
             # Calculate confidence score
             confidence = (
                 correlation_penalty *
                 substitute_profile.liquidity_score *
                 (1 / substitute_profile.risk_multiplier)
             )
-            
+
             return unified_math.min(confidence, 1.0)
-            
+
         except Exception as e:
             logger.error(f"Error calculating substitution confidence: {e}")
             return 0.5
@@ -352,14 +358,14 @@ class AssetSubstitutionMatrix:
     def rebalance_portfolio(self, profit: float, demo_mode: bool = False) -> Dict[str, float]:
         """
         Rebalance portfolio with asset substitution logic.
-        
+
         Parameters:
         -----------
         profit : float
             Profit to allocate
         demo_mode : bool
             Whether in demo mode
-            
+
         Returns:
         --------
         Dict[str, float]
@@ -373,7 +379,7 @@ class AssetSubstitutionMatrix:
             else:
                 # Live mode allocation with dynamic substitution
                 base_allocation = {"BTC": 0.5, "ETH": 0.3, "USDC": 0.2}
-                
+
                 # Apply substitution logic
                 substituted_allocation = {}
                 for asset, pct in base_allocation.items():
@@ -383,9 +389,9 @@ class AssetSubstitutionMatrix:
                         substituted_allocation[substitute] = substituted_allocation.get(substitute, 0) + pct
                     else:
                         substituted_allocation[asset] = substituted_allocation.get(asset, 0) + pct
-                
+
                 return {asset: profit * pct for asset, pct in substituted_allocation.items()}
-                
+
         except Exception as e:
             logger.error(f"Error rebalancing portfolio: {e}")
             # Fallback allocation
@@ -396,21 +402,21 @@ class AssetSubstitutionMatrix:
         try:
             if asset not in self.asset_profiles:
                 return False
-            
+
             profile = self.asset_profiles[asset]
-            
+
             # Check recent substitution history
             recent_substitutions = [
                 decision for decision in self.substitution_history[-10:]
                 if decision.original_asset == asset
             ]
-            
+
             # Substitute if too many recent substitutions or high risk
             if len(recent_substitutions) > 3 or profile.risk_multiplier > 1.5:
                 return True
-            
+
             return False
-            
+
         except Exception as e:
             logger.error(f"Error checking asset substitution: {e}")
             return False
@@ -432,7 +438,7 @@ class AssetSubstitutionMatrix:
                     for symbol, profile in self.asset_profiles.items()
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting substitution statistics: {e}")
             return {}
@@ -451,9 +457,9 @@ class AssetSubstitutionMatrix:
                         "metadata": decision.metadata
                     }
                     f.write(json.dumps(decision_dict) + '\n')
-            
+
             logger.info(f"Substitution history exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting substitution history: {e}")
 
@@ -461,37 +467,37 @@ class AssetSubstitutionMatrix:
 def main():
     """Test function for Asset Substitution Matrix."""
     safe_print("🔄 Testing Asset Substitution Matrix...")
-    
+
     # Initialize matrix
     matrix = AssetSubstitutionMatrix()
-    
+
     # Test asset substitutions
     test_assets = ["BTC", "XRP", "ETH", "SOL"]
-    
+
     safe_print("\n📊 Testing Asset Substitutions:")
     for asset in test_assets:
         substitute = matrix.get_substitute_asset(asset, SubstitutionTrigger.VOLATILITY_EXCEEDED)
         safe_print(f"  {asset} -> {substitute}")
-    
+
     # Test portfolio rebalancing
     safe_print("\n💰 Testing Portfolio Rebalancing:")
     live_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=False)
     demo_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=True)
-    
+
     safe_print(f"  Live Mode: {live_allocation}")
     safe_print(f"  Demo Mode: {demo_allocation}")
-    
+
     # Get statistics
     stats = matrix.get_substitution_statistics()
     safe_print(f"\n📈 Substitution Statistics:")
     safe_print(f"  Total Substitutions: {stats['total_substitutions']}")
     safe_print(f"  Current Substitutions: {stats['current_substitutions']}")
-    
+
     # Export history
     matrix.export_substitution_history()
-    
+
     return 0
 
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

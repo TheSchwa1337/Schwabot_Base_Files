@@ -65,10 +65,13 @@ try:
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
     # Fallback for testing when package import fails
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
     cli_handler = None
@@ -128,7 +131,7 @@ try:
     from core.type_defs import *  # noqa: F403, F401
     # Import successful, but ensure we have fallback definitions available
     from core.type_defs import (
-        BitLevel, MatrixPhase, MatrixController, IdentityState, 
+        BitLevel, MatrixPhase, MatrixController, IdentityState,
         IdentityTrace, GhostLogicState, AIFeedback, AIConsensus
     )
 except ImportError:
@@ -138,14 +141,14 @@ except ImportError:
     from dataclasses import dataclass
     from datetime import datetime
     from enum import Enum
-    
+
     # Fallback enums and classes
     class BitLevel(Enum):
         FOUR_BIT = 4
         EIGHT_BIT = 8
         SIXTEEN_BIT = 16
         FORTY_TWO_BIT = 42
-    
+
     class MatrixPhase(Enum):
         INITIALIZATION = "INIT"
         ACCUMULATION = "ACCUM"
@@ -153,7 +156,7 @@ except ImportError:
         DISPERSION = "DISP"
         CONVERGENCE = "CONV"
         FORTY_TWO_PHASE = "42P"
-    
+
     @dataclass
     class MatrixController:
         bit_level: BitLevel
@@ -163,7 +166,7 @@ except ImportError:
         confidence_score: float = 0.0
         fallback_triggered: bool = False
         state_vector: np.ndarray = np.zeros(10)
-    
+
     @dataclass
     class IdentityState:
         tick: int
@@ -171,16 +174,16 @@ except ImportError:
         ai_feedback: Optional[Dict[str, Any]] = None
         hash_signature: str = ""
         timestamp: datetime = datetime.now()
-    
+
     @dataclass
     class IdentityTrace:
         identity_states: List[IdentityState] = None
         trace_hash: str = ""
-        
+
         def __post_init__(self):
             if self.identity_states is None:
                 self.identity_states = []
-    
+
     @dataclass
     class GhostLogicState:
         is_active: bool = False
@@ -188,7 +191,7 @@ except ImportError:
         shadow_mode: bool = False
         confidence_threshold: float = 0.7
         last_trigger_time: Optional[datetime] = None
-    
+
     @dataclass
     class AIFeedback:
         model_name: str
@@ -197,17 +200,17 @@ except ImportError:
         matrix_adjustments: Dict[str, float] = None
         timestamp: datetime = datetime.now()
         feedback_hash: str = ""
-        
+
         def __post_init__(self):
             if self.matrix_adjustments is None:
                 self.matrix_adjustments = {}
-    
+
     @dataclass
     class AIConsensus:
         feedbacks: List[AIFeedback] = None
         consensus_score: float = 0.0
         final_recommendation: str = ""
-        
+
         def __post_init__(self):
             if self.feedbacks is None:
                 self.feedbacks = []
@@ -587,7 +590,7 @@ class EventSeverity:
 class FaultBus:
     """
     Enhanced Fault Bus with AI Integration and Typed Fault Handling.
-    
+
     Provides centralized fault management with:
     - Consistent typed fault events
     - AI-powered recovery suggestions
@@ -630,14 +633,14 @@ class FaultBus:
         self.riddle_engine = RiddleGEMMEngine(vector_size=STATE_VECTOR_SIZE)
         self.multi_bit_engine = MultiBitBTCProcessor()
         self.temporal_corrector = TemporalExecutionCorrectionLayer()
-        
+
         # ✨ NEW: ZPE Mathematical Framework Integration
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
         if ZPE_MODULES_AVAILABLE:
             logging.info("[ZPE] ZPE Mathematical Framework integrated with FaultBus")
         else:
             logging.warning("[ZPE] ZPE Mathematical Framework not available")
-        
+
         self._initialize_strategies()
 
         # ✨ NEW: Matrix Controllers for different bit levels
@@ -704,11 +707,11 @@ class FaultBus:
         self.fault_events: List[FaultEvent] = []
         self.fault_logs: List[FaultLog] = []
         self.recovery_strategies: Dict[str, RecoveryStrategy] = {}
-        
+
         # AI integration
         self.ai_feedback_enabled: bool = True
         self.fault_analysis_threshold: float = 0.7
-        
+
         # Performance tracking
         self.fault_resolution_times: List[float] = []
         self.recovery_success_rates: Dict[str, float] = {}
@@ -732,37 +735,37 @@ class FaultBus:
         try:
             # Try to import from type_defs first
             from .type_defs import BitLevel, MatrixPhase, MatrixController
-            
+
             # Initialize 4-bit controller for basic operations
             self.matrix_controllers[BitLevel.FOUR_BIT] = MatrixController(
                 bit_level=BitLevel.FOUR_BIT,
                 phase=MatrixPhase.INITIALIZATION,
                 hash_signature=hashlib.sha256("4bit_init".encode()).hexdigest()[:16]
             )
-            
+
             # Initialize 8-bit controller for intermediate operations
             self.matrix_controllers[BitLevel.EIGHT_BIT] = MatrixController(
                 bit_level=BitLevel.EIGHT_BIT,
                 phase=MatrixPhase.ACCUMULATION,
                 hash_signature=hashlib.sha256("8bit_accum".encode()).hexdigest()[:16]
             )
-            
+
             # Initialize 16-bit controller for advanced operations
             self.matrix_controllers[BitLevel.SIXTEEN_BIT] = MatrixController(
                 bit_level=BitLevel.SIXTEEN_BIT,
                 phase=MatrixPhase.RESONANCE,
                 hash_signature=hashlib.sha256("16bit_reson".encode()).hexdigest()[:16]
             )
-            
+
             # Initialize 42-bit controller for quantum operations
             self.matrix_controllers[BitLevel.FORTY_TWO_BIT] = MatrixController(
                 bit_level=BitLevel.FORTY_TWO_BIT,
                 phase=MatrixPhase.FORTY_TWO_PHASE,
                 hash_signature=hashlib.sha256("42bit_quantum".encode()).hexdigest()[:16]
             )
-            
+
             logging.info(f"Initialized {len(self.matrix_controllers)} matrix controllers.")
-            
+
         except ImportError:
             logging.warning("type_defs import failed, using fallback definitions")
             self._create_fallback_controllers()
@@ -774,12 +777,12 @@ class FaultBus:
     def _create_fallback_controllers(self) -> None:
         """Create fallback matrix controllers if initialization fails."""
         logging.warning("Creating fallback matrix controllers...")
-        
+
         # Simple fallback controllers using the fallback definitions
         try:
             # Use the fallback BitLevel and MatrixController definitions from this file
             from .type_defs import BitLevel, MatrixPhase, MatrixController
-            
+
             for bit_level in [BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT, BitLevel.SIXTEEN_BIT]:
                 try:
                     self.matrix_controllers[bit_level] = MatrixController(
@@ -792,14 +795,14 @@ class FaultBus:
         except ImportError:
             # If type_defs import fails, use the fallback definitions in this file
             logging.warning("Using fallback definitions from fault_bus.py")
-            
+
             # Define fallback enums locally
             class FallbackBitLevel(Enum):
                 FOUR_BIT = 4
                 EIGHT_BIT = 8
                 SIXTEEN_BIT = 16
                 FORTY_TWO_BIT = 42
-            
+
             class FallbackMatrixPhase(Enum):
                 INITIALIZATION = "INIT"
                 ACCUMULATION = "ACCUM"
@@ -807,7 +810,7 @@ class FaultBus:
                 DISPERSION = "DISP"
                 CONVERGENCE = "CONV"
                 FORTY_TWO_PHASE = "42P"
-            
+
             @dataclass
             class FallbackMatrixController:
                 bit_level: FallbackBitLevel
@@ -817,12 +820,12 @@ class FaultBus:
                 confidence_score: float = 0.0
                 fallback_triggered: bool = False
                 state_vector: np.ndarray = np.zeros(10)
-                
+
                 def update_state(self, new_state: np.ndarray) -> None:
                     """Update state vector."""
                     if new_state.size == self.state_vector.size:
                         self.state_vector = new_state
-            
+
             for bit_level in [FallbackBitLevel.FOUR_BIT, FallbackBitLevel.EIGHT_BIT, FallbackBitLevel.SIXTEEN_BIT]:
                 try:
                     self.matrix_controllers[bit_level] = FallbackMatrixController(
@@ -842,8 +845,8 @@ class FaultBus:
                 "module": event.module,
                 "tick": event.tick,
                 "profit_context": event.profit_context,
-                "matrix_controllers": {level.value: controller.phase.value 
-                                     for level, controller in self.matrix_controllers.items()}
+                "matrix_controllers": {level.value: controller.phase.value
+                                       for level, controller in self.matrix_controllers.items()}
             }
 
             # Create identity state
@@ -855,7 +858,7 @@ class FaultBus:
 
             # Add to trace
             self.identity_trace.add_state(self.current_identity_state)
-            
+
             # Save trace to log
             self._save_identity_trace("fault_bus_identity")
 
@@ -1235,25 +1238,26 @@ class FaultBus:
                 tick_interval = 1.0  # Default tick interval
                 price_trigger = price  # Use current price as trigger
                 recursion_depth = self.zpe_core.update_recursive_cycle_depth(tick_interval, price_trigger)
-                
+
                 # Calculate temporal fault correction
                 expected_phase = 0.0  # Expected phase from matrix logic
                 actual_phase = event.severity  # Actual phase from event severity
                 fault_correction = self.zpe_core.calculate_temporal_fault_correction(expected_phase, actual_phase)
-                
+
                 # Update agent consensus
                 agent_name = "FaultBus"
                 confidence = 1.0 - event.severity  # Higher severity = lower confidence
                 consensus = self.zpe_core.update_agent_consensus(agent_name, confidence)
-                
+
                 # Store ZPE calculations in market data
                 self.current_market_data["zpe_recursion_depth"] = recursion_depth
                 self.current_market_data["zpe_fault_correction"] = fault_correction
                 self.current_market_data["zpe_consensus"] = consensus
                 self.current_market_data["zpe_agent_consensus"] = self.zpe_core.agent_consensus.copy()
-                
-                logging.info(f"[ZPE] Recursion Depth: {recursion_depth}, Fault Correction: {fault_correction:.6f}, Consensus: {consensus:.6f}")
-                
+
+                logging.info(
+                    f"[ZPE] Recursion Depth: {recursion_depth}, Fault Correction: {fault_correction:.6f}, Consensus: {consensus:.6f}")
+
             except Exception as e:
                 logging.warning(f"[ZPE] ZPE calculations failed: {e}")
                 self.current_market_data["zpe_recursion_depth"] = 0
@@ -1262,12 +1266,12 @@ class FaultBus:
 
         # 4. Construct state vector for Riddle GEMM Engine
         state_vector = self._construct_state_vector(event, dlt_analysis)
-        
+
         # 5. Update Riddle GEMM Engine
         best_strategy, best_score = self.riddle_engine.find_best_strategy(state_vector.tolist())
         self.current_market_data["best_strategy"] = best_strategy
         self.current_market_data["best_strategy_score"] = best_score
-        
+
         logging.info("[BRAIN] Contextual engines updated.")
         logging.info(f"   DLT Acceleration: {dlt_analysis.get('current_acceleration', 0):.4f}")
         logging.info(f"   Multi-Bit Confidence: {self.current_market_data['multi_bit_confidence']:.4f}")
@@ -1280,13 +1284,15 @@ class FaultBus:
     ) -> np.ndarray:
         """Construct the standardized state vector for the Riddle engine."""
         vector = np.zeros(STATE_VECTOR_SIZE)
-        
+
         # Normalize and fill vector components
-        vector[0] = np.clip((event.metadata.get("price", 0) if event.metadata else 0) / 70000, 0, 1) # Normalize price against a high value
-        vector[1] = np.clip((event.metadata.get("volume", 0) if event.metadata else 0) / 10000, 0, 1) # Normalize volume
+        vector[0] = np.clip((event.metadata.get("price", 0) if event.metadata else 0) /
+                            70000, 0, 1)  # Normalize price against a high value
+        vector[1] = np.clip((event.metadata.get("volume", 0) if event.metadata else 0) /
+                            10000, 0, 1)  # Normalize volume
         vector[2] = np.clip((event.metadata.get("volatility", 0) if event.metadata else 0), 0, 1)
-        vector[3] = np.clip(dlt_analysis.get("current_velocity", 0) / 100, -1, 1) # Normalize velocity
-        vector[4] = np.clip(dlt_analysis.get("smoothed_acceleration", 0) / 10, -1, 1) # Normalize acceleration
+        vector[3] = np.clip(dlt_analysis.get("current_velocity", 0) / 100, -1, 1)  # Normalize velocity
+        vector[4] = np.clip(dlt_analysis.get("smoothed_acceleration", 0) / 10, -1, 1)  # Normalize acceleration
         vector[5] = np.clip((event.profit_context or 0) / MAX_PROFIT_THRESHOLD, -1, 1)
         vector[6] = event.severity
         vector[7] = self.current_market_data.get("jumbo_signal", 0.0)
@@ -1682,10 +1688,10 @@ class FaultBus:
         """Register a fault with enhanced typing and AI integration."""
         try:
             fault_id = f"fault_{int(time.time() * 1000)}"
-            
+
             # Determine recovery suggestion
             recovery_suggestion = self._get_recovery_suggestion(fault_type, severity)
-            
+
             # Create typed fault event
             fault_event = FaultEvent(
                 fault_id=fault_id,
@@ -1698,7 +1704,7 @@ class FaultBus:
                 ai_feedback=ai_feedback,
                 context=context or {}
             )
-            
+
             # Create fault log
             fault_log = create_fault_log(
                 error_code=fault_type,
@@ -1708,21 +1714,21 @@ class FaultBus:
                 context=context,
                 ai_feedback=ai_feedback
             )
-            
+
             # Store fault data
             self.fault_events.append(fault_event)
             self.fault_logs.append(fault_log)
-            
+
             # Attempt automatic recovery if severity is high
             if severity > self.fault_analysis_threshold:
                 self._attempt_automatic_recovery(fault_event)
-            
+
             # Update performance metrics
             self._update_fault_metrics(fault_event)
-            
+
             logger.warning(f"Registered fault: {fault_type} in {module} (severity: {severity:.3f})")
             return fault_event
-            
+
         except Exception as e:
             logger.error(f"Error registering fault: {e}")
             # Return a safe default fault event
@@ -1753,15 +1759,15 @@ class FaultBus:
                 "profit_anomaly": "Analyze market data and adjust algorithms",
                 "sha_collision": "Regenerate hash and verify uniqueness"
             }
-            
+
             suggestion = base_suggestions.get(fault_type.lower(), "Review system logs and implement standard recovery")
-            
+
             # Enhance with AI feedback if available
             if self.ai_feedback_enabled and severity > 0.7:
                 suggestion += " | AI Analysis: High severity detected, consider advanced recovery protocols"
-            
+
             return suggestion
-            
+
         except Exception as e:
             logger.error(f"Error getting recovery suggestion: {e}")
             return "Standard recovery procedure recommended"
@@ -1770,31 +1776,31 @@ class FaultBus:
         """Attempt automatic recovery for high-severity faults."""
         try:
             start_time = time.time()
-            
+
             # Select recovery strategy based on fault type
             strategy = self._select_recovery_strategy(fault_event)
-            
+
             # Execute recovery
             success = self._execute_recovery_strategy(fault_event, strategy)
-            
+
             # Update fault event
             fault_event.resolved = success
             if success:
                 fault_event.resolution_time = datetime.now()
-            
+
             # Track performance
             recovery_time = time.time() - start_time
             self.fault_resolution_times.append(recovery_time)
-            
+
             # Update success rates
             strategy_name = strategy.value
             current_rate = self.recovery_success_rates.get(strategy_name, 0.5)
             new_rate = (current_rate * 0.9 + (1.0 if success else 0.0) * 0.1)
             self.recovery_success_rates[strategy_name] = new_rate
-            
+
             logger.info(f"Automatic recovery {'succeeded' if success else 'failed'} for {fault_event.fault_type}")
             return success
-            
+
         except Exception as e:
             logger.error(f"Error in automatic recovery: {e}")
             return False
@@ -1815,7 +1821,7 @@ class FaultBus:
                 return RecoveryStrategy.ADAPTIVE_RECOVERY
             else:
                 return RecoveryStrategy.IMMEDIATE_RETRY
-                
+
         except Exception as e:
             logger.error(f"Error selecting recovery strategy: {e}")
             return RecoveryStrategy.ADAPTIVE_RECOVERY
@@ -1838,7 +1844,7 @@ class FaultBus:
             else:
                 logger.warning(f"Unknown recovery strategy: {strategy}")
                 return False
-                
+
         except Exception as e:
             logger.error(f"Error executing recovery strategy: {e}")
             return False
@@ -1912,10 +1918,10 @@ class FaultBus:
             fault_type = fault_event.fault_type
             if fault_type not in self.fault_metrics:
                 self.fault_metrics[fault_type] = {"count": 0, "total_severity": 0.0}
-            
+
             self.fault_metrics[fault_type]["count"] += 1
             self.fault_metrics[fault_type]["total_severity"] += fault_event.severity
-            
+
         except Exception as e:
             logger.error(f"Error updating fault metrics: {e}")
 
@@ -1924,8 +1930,9 @@ class FaultBus:
         try:
             total_faults = len(self.fault_events)
             resolved_faults = sum(1 for f in self.fault_events if f.resolved)
-            avg_resolution_time = unified_math.unified_math.mean(self.fault_resolution_times) if self.fault_resolution_times else 0.0
-            
+            avg_resolution_time = unified_math.unified_math.mean(
+                self.fault_resolution_times) if self.fault_resolution_times else 0.0
+
             return {
                 "total_faults": total_faults,
                 "resolved_faults": resolved_faults,
@@ -1935,7 +1942,7 @@ class FaultBus:
                 "fault_metrics": self.fault_metrics.copy(),
                 "recent_faults": [f.fault_type for f in self.fault_events[-10:]]
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting fault statistics: {e}")
             return {"error": str(e)}

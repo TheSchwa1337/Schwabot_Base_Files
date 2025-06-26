@@ -7,6 +7,7 @@ Now with targeted repair for mismatched brackets/parentheses in type annotations
 import os
 import re
 
+
 def fix_missing_indented_blocks(content):
     """Fix missing indented blocks after try, class, def, etc."""
     lines = content.split('\n')
@@ -32,6 +33,7 @@ def fix_missing_indented_blocks(content):
             i += 1
     return '\n'.join(fixed_lines)
 
+
 def fix_mismatched_brackets_in_types(content):
     """Fix mismatched brackets/parentheses in type annotations and function signatures."""
     try:
@@ -44,6 +46,7 @@ def fix_mismatched_brackets_in_types(content):
     except re.error as e:
         print(f"Regex error in fix_mismatched_brackets_in_types: {e}")
     return content
+
 
 def fix_unmatched_brackets(content):
     """Fix unmatched or misplaced parentheses/brackets in lines."""
@@ -68,6 +71,7 @@ def fix_unmatched_brackets(content):
     content = re.sub(r'\(\s*$', '', content)
     content = re.sub(r'\[\s*$', '', content)
     return content
+
 
 def normalize_indentation(content):
     """Stack-based normalization of indentation to 4 spaces for all blocks."""
@@ -125,6 +129,7 @@ def normalize_indentation(content):
             i += 1
     return '\n'.join(fixed_lines)
 
+
 def fix_generator_expression_parentheses(content):
     """Fix generator expression parentheses issue."""
     # Fix the specific pattern in common.py
@@ -132,6 +137,7 @@ def fix_generator_expression_parentheses(content):
     # More general fix for generator expressions
     content = re.sub(r'for\s+([^:]+)\s+in\s+([^:]+)\s+if\s+([^:]+):', r'for \1 in (\2 if \3):', content)
     return content
+
 
 def fix_file(filepath):
     """Fix all syntax errors in a single file."""
@@ -154,6 +160,7 @@ def fix_file(filepath):
     except Exception as e:
         print(f"Error fixing {filepath}: {e}")
         return False
+
 
 def main():
     """Main function to fix core directory E999 errors."""
@@ -204,5 +211,6 @@ def main():
     print(f"\nFixed {fixed_count} files")
     print("Core E999 error fixing complete!")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

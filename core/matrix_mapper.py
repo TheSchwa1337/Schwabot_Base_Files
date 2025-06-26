@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import json
+import time
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Matrix Mapper - Schwabot UROS v1.0
@@ -62,41 +78,39 @@ Features:
 - Integration with DLT waveform engine and profit cycle allocator
 """
 
-import hashlib
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 class BitPhase(Enum):
 
-
     """Bit resolution phases for matrix mapping."""
+
+
 FOUR_BIT = 4
 EIGHT_BIT = 8
 FORTY_TWO_BIT = 42
 
+
 class BasketType(Enum):
 
-
     """Matrix basket types for different trading strategies."""
+
+
 CONSERVATIVE = "conservative"
 BALANCED = "balanced"
 AGGRESSIVE = "aggressive"
 QUANTUM = "quantum"
 FRACTAL = "fractal"
 
+
 @dataclass
 class HashBasketMapping:
 
-
     """Mapping between hash and matrix basket."""
+
+
 hash_id: str
 basket_id: str
 bit_phase: BitPhase
@@ -107,11 +121,13 @@ resonance_score: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class MatrixBasket:
 
-
     """Matrix basket with tensor calculations."""
+
+
 basket_id: str
 basket_type: BasketType
 bit_phase: BitPhase
@@ -125,11 +141,13 @@ timestamp: datetime
 performance_metrics: Dict[str, float] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class TensorRoute:
 
-
     """Tensor route for profit allocation."""
+
+
 route_id: str
 basket_id: str
 tensor_score: float
@@ -138,11 +156,13 @@ bit_phase: BitPhase
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class ProfitAllocation:
 
-
     """Profit allocation result with tensor scoring."""
+
+
 allocation_id: str
 basket_id: str
 profit_amount: float
@@ -152,8 +172,8 @@ allocation_weights: Dict[str, float]
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class MatrixMapper:
 
+class MatrixMapper:
 
     """
 Matrix Mapper for basket ID registry and hash phase decoders.
@@ -166,12 +186,13 @@ Mathematical Foundation:
     - Profit Routing: P = Σᵢ wᵢ * Tᵢ * Rᵢ where R is resonance score
 """
 
-def __init__(self, config_path: str = "./config/matrix_mapper_config.json"):
 
+def __init__(self, config_path: str = "./config/matrix_mapper_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Hash registry
 self.hash_registry: Dict[str, HashBasketMapping] = {}

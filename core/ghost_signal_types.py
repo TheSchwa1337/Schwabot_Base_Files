@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-\n"""
 Ghost Strategy Signal Types - Schwabot UROS v1.0
-===============================================
+== == == == == == == == == == == == == == == == == == == == == == == =
 
 Core data structures for ghost strategy engine with unified math integration.
 Provides type-safe ghost signal processing and BTC/USDC volatility analysis.

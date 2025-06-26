@@ -34,8 +34,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EventImpact:
 
-
     """Represents an event impact with metadata and influence vector."""
+
 
 event_id: str
 source: str
@@ -52,8 +52,8 @@ influence_vector: List[float] = field(default_factory=list)
 @dataclass
 class EventSource:
 
-
     """Configuration for an event source."""
+
 
 name: str
 enabled: bool
@@ -66,15 +66,16 @@ keywords: List[str] = field(default_factory=list)
 
 class EventImpactMapper:
 
-
     """Maps external events to influence vectors for trading decisions."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
 
+def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     pass
     pass
         """Initialize the event impact mapper."""
+
+
 self.config = config or self._default_config()
 
         # Event sources configuration
@@ -97,8 +98,8 @@ self.last_cleanup_time = time.time()
 
 logger.info("🎯 Event Impact Mapper initialized")
 
-def process_external_event(self, event_data: Dict[str, Any]) -> Optional[EventImpact]:
 
+def process_external_event(self, event_data: Dict[str, Any]) -> Optional[EventImpact]:
 
     pass
     pass
@@ -135,7 +136,7 @@ influence_vector = self._generate_influence_vector(
 
 
             # Create event impact object
-event_impact = EventImpact(
+event_impact=EventImpact(
                 event_id=event_id,
 source=event_data.get('source', 'unknown'),
                 event_type=event_data.get('type', 'general'),
@@ -166,8 +167,8 @@ logger.error(f"Error processing external event: {e}")
 def get_active_influence_vectors(self,
 
 
-                                   min_priority: int = 0,
-max_age_hours: float = 24.0) -> List[Tuple[str, List[float]]]:
+                                   min_priority: int=0,
+max_age_hours: float=24.0) -> List[Tuple[str, List[float]]]:
 """Get active influence vectors for trading decisions.
 
 Args:
@@ -180,10 +181,10 @@ List of (event_id, influence_vector) tuples
         try:
     pass
     pass
-current_time = time.time()
-            cutoff_time = current_time - (max_age_hours * 3600)
+current_time=time.time()
+            cutoff_time=current_time - (max_age_hours * 3600)
 
-active_vectors = []
+active_vectors=[]
 
             for event_id, event_impact in self.active_events.items():
                 # Check priority and age filters
@@ -191,7 +192,7 @@ active_vectors = []
                     event_impact.timestamp >= cutoff_time):
 
                     # Apply temporal decay
-decayed_vector = self._apply_temporal_decay(
+decayed_vector=self._apply_temporal_decay(
                         event_impact.influence_vector,
 event_impact.timestamp,
 current_time
@@ -211,8 +212,8 @@ logger.error(f"Error getting active influence vectors: {e}")
 def get_aggregated_impact(self,
 
 
-                            event_types: Optional[List[str]] = None,
-time_window_hours: float = 1.0) -> List[float]:
+                            event_types: Optional[List[str]]=None,
+time_window_hours: float=1.0) -> List[float]:
 """Get aggregated impact vector for specified event types and time window.
 
 Args:
@@ -225,11 +226,11 @@ Aggregated influence vector
         try:
     pass
     pass
-current_time = time.time()
-            cutoff_time = current_time - (time_window_hours * 3600)
+current_time=time.time()
+            cutoff_time=current_time - (time_window_hours * 3600)
 
             # Get relevant events
-relevant_events = []
+relevant_events=[]
             for event_impact in self.active_events.values():
                 if (event_impact.timestamp >= cutoff_time and
                     (event_types is None or event_impact.event_type in event_types)):
@@ -239,17 +240,17 @@ relevant_events = []
                 return [0.0] * self.vector_dimension
 
             # Aggregate influence vectors
-aggregated_vector = np.zeros(self.vector_dimension)
-            total_weight = 0.0
+aggregated_vector=np.zeros(self.vector_dimension)
+            total_weight=0.0
 
             for event_impact in relevant_events:
                 # Calculate weight based on priority and recency
-time_weight = self._calculate_time_weight(event_impact.timestamp, current_time)
-                priority_weight = event_impact.priority / 10.0  # Normalize priority
-weight = time_weight * priority_weight
+time_weight=self._calculate_time_weight(event_impact.timestamp, current_time)
+                priority_weight=event_impact.priority / 10.0  # Normalize priority
+weight=time_weight * priority_weight
 
                 # Apply decay
-decayed_vector = self._apply_temporal_decay(
+decayed_vector=self._apply_temporal_decay(
                     event_impact.influence_vector,
 event_impact.timestamp,
 current_time
@@ -286,13 +287,13 @@ EventImpact object for news sentiment
     pass
     pass
             # Extract sentiment information
-sentiment_score = news_data.get('sentiment_score', 0.0)
-            headline = news_data.get('headline', '')
-            content = news_data.get('content', '')
-            source = news_data.get('source', 'unknown')
+sentiment_score=news_data.get('sentiment_score', 0.0)
+            headline=news_data.get('headline', '')
+            content=news_data.get('content', '')
+            source=news_data.get('source', 'unknown')
 
             # Create event data
-event_data = {
+event_data={
 'type': 'news_sentiment',
 'source': source,
 'sentiment_score': sentiment_score,
@@ -329,18 +330,18 @@ EventImpact object for market event
     pass
     pass
             # Extract market information
-event_type = market_data.get('event_type', 'market_update')
-            price_change = market_data.get('price_change', 0.0)
-            volume_change = market_data.get('volume_change', 0.0)
-            volatility = market_data.get('volatility', 0.0)
+event_type=market_data.get('event_type', 'market_update')
+            price_change=market_data.get('price_change', 0.0)
+            volume_change=market_data.get('volume_change', 0.0)
+            volatility=market_data.get('volatility', 0.0)
 
             # Calculate market sentiment
-market_sentiment = self._calculate_market_sentiment(
+market_sentiment=self._calculate_market_sentiment(
                 price_change, volume_change, volatility
 
 
             # Create event data
-event_data = {
+event_data={
 'type': event_type,
 'source': 'market_data',
 'sentiment_score': market_sentiment,
@@ -361,7 +362,7 @@ event_data = {
 logger.error(f"Error processing market event: {e}")
             return None
 
-def cleanup_old_events(self, max_age_hours: float = 48.0) -> int:
+def cleanup_old_events(self, max_age_hours: float=48.0) -> int:
 
 
     pass
@@ -514,10 +515,10 @@ def _calculate_event_priority(self, event_data: Dict[str, Any],]
 
                                 sentiment_score: float, relevance_score: float) -> int:
 """Calculate event priority (1-10)."""
-        priority = 5  # Base priority
+        priority=5  # Base priority
 
         # Adjust based on sentiment magnitude
-sentiment_magnitude = unified_math.abs(sentiment_score)
+sentiment_magnitude=unified_math.abs(sentiment_score)
         if sentiment_magnitude > 0.8:
 priority += 2
         elif sentiment_magnitude > 0.5:
@@ -530,7 +531,7 @@ priority += 2
 priority += 1
 
         # Adjust based on event type
-event_type = event_data.get('type', '')
+event_type=event_data.get('type', '')
         if event_type in ['regulatory_announcement', 'market_crash', 'major_news']:
 priority += 2
         elif event_type in ['news_sentiment', 'market_event']:
@@ -544,30 +545,30 @@ def _generate_influence_vector(self, event_data: Dict[str, Any],]
                                  sentiment_score: float, relevance_score: float) -> List[float]:
 """Generate influence vector from event data."""
         # Initialize vector with zeros
-vector = np.zeros(self.vector_dimension)
+vector=np.zeros(self.vector_dimension)
 
         # Set sentiment component (first 16 dimensions)
-        sentiment_component = np.tanh(sentiment_score * 2.0)  # Scale and bound
-        vector[:16] = sentiment_component
+        sentiment_component=np.tanh(sentiment_score * 2.0)  # Scale and bound
+        vector[:16]=sentiment_component
 
         # Set relevance component (next 16 dimensions)
-        relevance_component = relevance_score
-vector[16:32] = relevance_component
+        relevance_component=relevance_score
+vector[16:32]=relevance_component
 
         # Set event type component (next 16 dimensions)
-        event_type_hash = hash(event_data.get('type', 'general')) % 16
-        vector[32 + event_type_hash] = 1.0
+        event_type_hash=hash(event_data.get('type', 'general')) % 16
+        vector[32 + event_type_hash]=1.0
 
         # Set source component (next 16 dimensions)
-        source_hash = hash(event_data.get('source', 'unknown')) % 16
-        vector[48 + source_hash] = 1.0
+        source_hash=hash(event_data.get('source', 'unknown')) % 16
+        vector[48 + source_hash]=1.0
 
         # Add some noise for uniqueness
-noise = np.random.normal(0, 0.01, self.vector_dimension)
+noise=np.random.normal(0, 0.01, self.vector_dimension)
         vector += noise
 
         # Normalize vector
-vector_norm = np.linalg.norm(vector)
+vector_norm=np.linalg.norm(vector)
         if vector_norm > 0:
 vector /= vector_norm
 
@@ -578,10 +579,10 @@ def _apply_temporal_decay(self, vector: List[float], event_timestamp: float,]
 
                             current_time: float) -> List[float]:
 """Apply temporal decay to influence vector."""
-time_diff = current_time - event_timestamp
-decay_factor = self.impact_decay_rate ** (time_diff / 3600)  # Decay per hour
+time_diff=current_time - event_timestamp
+decay_factor=self.impact_decay_rate ** (time_diff / 3600)  # Decay per hour
 
-decayed_vector = np.array(vector) * decay_factor
+decayed_vector=np.array(vector) * decay_factor
         return decayed_vector.tolist()
 
 def _calculate_time_weight(self, event_timestamp: float, current_time: float) -> float:
@@ -590,11 +591,11 @@ def _calculate_time_weight(self, event_timestamp: float, current_time: float) ->
     pass
     pass
         """Calculate time-based weight for event."""
-time_diff = current_time - event_timestamp
-hours_diff = time_diff / 3600
+time_diff=current_time - event_timestamp
+hours_diff=time_diff / 3600
 
         # Exponential decay
-weight = unified_math.exp(-hours_diff / 24.0)  # 24-hour half-life
+weight=unified_math.exp(-hours_diff / 24.0)  # 24-hour half-life
         return unified_math.max(0.0, unified_math.min(1.0, weight))
 
 def _analyze_text_sentiment(self, text: str) -> float:
@@ -604,18 +605,18 @@ def _analyze_text_sentiment(self, text: str) -> float:
     pass
         """Analyze sentiment from text content."""
         # Simple keyword-based sentiment analysis
-positive_words = ['bullish', 'surge', 'rally', 'gain', 'positive', 'up', 'rise']
-negative_words = ['bearish', 'crash', 'drop', 'fall', 'negative', 'down', 'decline']
+positive_words=['bullish', 'surge', 'rally', 'gain', 'positive', 'up', 'rise']
+negative_words=['bearish', 'crash', 'drop', 'fall', 'negative', 'down', 'decline']
 
-text_lower = text.lower()
+text_lower=text.lower()
 
-positive_count = sum(1 for word in positive_words if word in text_lower)
-        negative_count = sum(1 for word in negative_words if word in text_lower)
+positive_count=sum(1 for word in positive_words if word in text_lower)
+        negative_count=sum(1 for word in negative_words if word in text_lower)
 
         if positive_count == 0 and negative_count == 0:
             return 0.0
 
-sentiment = (positive_count - negative_count) / (positive_count + negative_count)
+sentiment=(positive_count - negative_count) / (positive_count + negative_count)
         return max(-1.0, unified_math.min(1.0, sentiment))
 
 def _classify_sentiment(self, sentiment_score: float) -> str:
@@ -637,16 +638,16 @@ def _calculate_market_sentiment(self, price_change: float, volume_change: float,
                                   volatility: float) -> float:
 """Calculate market sentiment from market data."""
         # Price change sentiment (positive change = positive sentiment)
-        price_sentiment = np.tanh(price_change / 100.0)  # Scale price changes
+        price_sentiment=np.tanh(price_change / 100.0)  # Scale price changes
 
         # Volume change sentiment (higher volume = more significant)
-        volume_sentiment = np.tanh(volume_change / 50.0)
+        volume_sentiment=np.tanh(volume_change / 50.0)
 
         # Volatility sentiment (lower volatility = more stable = positive)
-        volatility_sentiment = -np.tanh(volatility / 0.1)
+        volatility_sentiment=-np.tanh(volatility / 0.1)
 
         # Combine sentiments with weights
-combined_sentiment = (
+combined_sentiment=(
             price_sentiment * 0.5 +
 volume_sentiment * 0.3 +
 volatility_sentiment * 0.2
@@ -675,13 +676,13 @@ def _store_event_impact(self, event_impact: EventImpact) -> None:
     pass
         """Store event impact in memory."""
         # Add to active events
-self.active_events[event_impact.event_id] = event_impact
+self.active_events[event_impact.event_id]=event_impact
 
         # Add to history
 self.event_history.append(event_impact)
 
         # Cache influence vector
-self.impact_cache[event_impact.event_id] = event_impact.influence_vector
+self.impact_cache[event_impact.event_id]=event_impact.influence_vector
 
 def _initialize_event_sources(self) -> Dict[str, EventSource]:
 
@@ -763,7 +764,7 @@ def process_event(event_data: Dict[str, Any]) -> Optional[EventImpact]:
     return event_mapper.process_external_event(event_data)
 
 
-def get_active_vectors(min_priority: int = 0, max_age_hours: float = 24.0) -> List[Tuple[str, List[float]]]:
+def get_active_vectors(min_priority: int=0, max_age_hours: float=24.0) -> List[Tuple[str, List[float]]]:
 
 
     pass
@@ -772,7 +773,7 @@ def get_active_vectors(min_priority: int = 0, max_age_hours: float = 24.0) -> Li
     return event_mapper.get_active_influence_vectors(min_priority, max_age_hours)
 
 
-def get_aggregated_impact(event_types: Optional[List[str]] = None,]
+def get_aggregated_impact(event_types: Optional[List[str]]=None,]
 
 
                          time_window_hours: float = 1.0) -> List[float]:

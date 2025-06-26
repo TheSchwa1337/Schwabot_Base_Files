@@ -1,5 +1,18 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .matrix_allocator import get_matrix_allocator
+from .vector_validator import get_vector_validator
+from .settings_controller import get_settings_controller
+import time
+import threading
+from pathlib import Path
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Any, Optional, Tuple
+import yaml
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +24,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 """
 Schwabot Demo Integration System
 ===============================
@@ -63,27 +83,15 @@ This system:
 - Manages demo data collection and analysis
 """
 
-import json
-import yaml
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import threading
-import time
-
-from .settings_controller import get_settings_controller
-from .vector_validator import get_vector_validator
-from .matrix_allocator import get_matrix_allocator
 
 
 @dataclass
 class DemoTrade:
 
-
     """Represents a demo trade for backtesting"""
+
+
 trade_id: str
 matrix_id: str
 entry_price: float
@@ -103,8 +111,9 @@ reinforcement_notes: List[str] = None
 @dataclass
 class DemoResult:
 
-
     """Result of a demo trade execution"""
+
+
 trade_id: str
 success: bool
 profit_loss: float
@@ -118,17 +127,17 @@ reinforcement_learning_update: Dict[str, Any]
 
 class DemoIntegrationSystem:
 
-
     """Comprehensive demo integration system"""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
         self.matrix_allocator = get_matrix_allocator()
+
 
         # Demo configuration
 self.demo_config = self._load_demo_config()
@@ -161,13 +170,15 @@ self._initialize_demo_directories()
         # Load existing demo data
 self._load_demo_data()
 
-def _load_demo_config(self) -> Dict[str, Any]:
 
+def _load_demo_config(self) -> Dict[str, Any]:
 
     pass
     pass
         """Load demo configuration from settings"""
         try:
+
+
 demo_config_path = Path("settings/demo_backtest_mode.yaml")
             if demo_config_path.exists():
                 with open(demo_config_path, 'r') as f:

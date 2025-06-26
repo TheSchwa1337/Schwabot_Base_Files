@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import List, Optional, Tuple
+import logging
 import numpy as np
 import math
 
@@ -13,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Tick Resonance Engine - Harmony Score Calculator.
 
@@ -69,9 +79,7 @@ Windows CLI compatible with ASCII fallback for special characters.
 """
 
 
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import List, Optional, Tuple
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
@@ -96,6 +104,7 @@ def compute_harmony_vector(
 target_phase: float,
 window_size: int = HARMONY_WINDOW_SIZE,
 ) -> float:
+
 """Compute harmony score for tick timing alignment.
 
 Parameters

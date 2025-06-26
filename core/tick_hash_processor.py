@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from collections import defaultdict, deque
+import time
+import logging
+import hashlib
 import numpy as np
 import math
 
@@ -13,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Tick Hash Processor - Hash-Based Tick Analysis & Pattern Detection.
 
@@ -66,13 +80,6 @@ Windows CLI compatible with comprehensive error handling.
 """
 
 
-import hashlib
-import logging
-import time
-from collections import defaultdict, deque
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -81,8 +88,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TickHashMetrics:
 
-
     """Tick hash analysis metrics."""
+
 
 hash_value: str                    # Generated hash
 frequency_score: float             # Frequency analysis score
@@ -96,8 +103,8 @@ confidence_level: float            # Overall confidence level
 @dataclass
 class HashPatternAnalysis:
 
-
     """Hash pattern analysis results."""
+
 
 pattern_strength: float            # Pattern strength [0, 1]
 recurring_sequences: List[str]     # Detected recurring sequences
@@ -107,15 +114,16 @@ stability_index: float             # Pattern stability index
 
 class TickHashProcessor:
 
-
     """Processes tick hashes for pattern detection and anomaly analysis."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize tick hash processor."""
+
+
 self.hash_history: deque = deque(maxlen=1000)
         self.frequency_map: Dict[str, int] = defaultdict(int)
         self.pattern_cache: Dict[str, float] = {}
@@ -131,6 +139,7 @@ self.min_pattern_length = 4
 self.max_pattern_length = 16
 self.pattern_confidence_threshold = 0.7
 
+
 def generate_tick_hash(
 
 
@@ -140,6 +149,7 @@ volume: float,
 timestamp: float,
 additional_data: Optional[Dict] = None,
 ) -> str:
+
 """Generate hash signature for tick data.
 
 Parameters

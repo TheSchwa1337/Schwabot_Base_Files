@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from collections import defaultdict, deque
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import threading
+import time
+import json
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Phase Metrics Engine - Trading Phase Performance Analytics for Schwabot
@@ -65,43 +82,40 @@ Core Functionality:
 - Integration with trading pipeline
 """
 
-import logging
-import json
-import time
-import threading
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class MetricType(Enum):
 
-
     PERFORMANCE = "performance"
+
+
 RISK = "risk"
 EFFICIENCY = "efficiency"
 TIMING = "timing"
 VOLUME = "volume"
 PROFITABILITY = "profitability"
 
+
 class MetricPeriod(Enum):
 
-
     MINUTE = "minute"
+
+
 HOUR = "hour"
 DAY = "day"
 WEEK = "week"
 MONTH = "month"
 
+
 @dataclass
 class PhaseMetric:
 
-
     metric_id: str
+
+
 phase_id: str
 metric_type: MetricType
 value: float
@@ -110,11 +124,13 @@ period: MetricPeriod
 confidence_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PerformanceReport:
 
-
     report_id: str
+
+
 phase_id: str
 start_time: datetime
 end_time: datetime
@@ -127,15 +143,17 @@ metrics_summary: Dict[str, float]
 recommendations: List[str]
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class PhaseMetricsEngine:
 
 
 def __init__(self, config_path: str = "./config/phase_metrics_config.json"):
 
-
     pass
     pass
         self.config_path = config_path
+
+
 self.metrics_store: Dict[str, PhaseMetric] = {}
 self.performance_reports: Dict[str, PerformanceReport] = {}
 self.real_time_metrics: Dict[str, deque] = defaultdict(lambda: deque(maxlen=1000))
@@ -146,8 +164,8 @@ self._load_configuration()
         self._start_metrics_processor()
         logger.info("PhaseMetricsEngine initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
@@ -156,6 +174,7 @@ def _load_configuration(self) -> None:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
+
 
                 # Load alert thresholds
 thresholds = config.get("alert_thresholds", {})
@@ -175,19 +194,21 @@ self._create_default_configuration()
 logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
-def _create_default_configuration(self) -> None:
 
+def _create_default_configuration(self) -> None:
 
     pass
     pass
         """Create default phase metrics configuration."""
+
+
 self.alert_thresholds = {
 MetricType.PERFORMANCE: 0.05,  # 5% performance threshold
 MetricType.RISK: 0.02,         # 2% risk threshold
 MetricType.EFFICIENCY: 0.8,    # 80% efficiency threshold
 MetricType.TIMING: 0.7,        # 70% timing accuracy threshold
 MetricType.VOLUME: 1000000,    # 1M volume threshold
-MetricType.PROFITABILITY: 0.03 # 3% profitability threshold
+MetricType.PROFITABILITY: 0.03  # 3% profitability threshold
 }
 
 self.optimization_rules = {
@@ -206,13 +227,15 @@ self.optimization_rules = {
 self._save_configuration()
         logger.info("Default phase metrics configuration created")
 
-def _save_configuration(self) -> None:
 
+def _save_configuration(self) -> None:
 
     pass
     pass
         """Save current configuration to file."""
         try:
+
+
 os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             config = {
 "alert_thresholds": {

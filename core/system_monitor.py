@@ -66,8 +66,8 @@ logger = logging.getLogger(__name__)
 
 class SystemStatus(Enum):
 
-
     """System status enumeration."""
+
 
 HEALTHY = "healthy"
 WARNING = "warning"
@@ -77,8 +77,8 @@ OFFLINE = "offline"
 
 class AlertLevel(Enum):
 
-
     """Alert level enumeration."""
+
 
 INFO = "info"
 WARNING = "warning"
@@ -89,8 +89,8 @@ CRITICAL = "critical"
 @dataclass
 class SystemMetrics:
 
-
     """System performance metrics."""
+
 
 timestamp: float
 cpu_percent: float
@@ -108,8 +108,8 @@ load_average: Tuple[float, float, float]
 @dataclass
 class TradingSystemMetrics:
 
-
     """Trading system specific metrics."""
+
 
 timestamp: float
 active_strategies: int
@@ -125,8 +125,8 @@ system_latency: float
 @dataclass
 class SystemAlert:
 
-
     """System alert container."""
+
 
 alert_id: str
 level: AlertLevel
@@ -142,15 +142,16 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 class SystemMonitor:
 
-
     """Real-time system monitoring and health checking."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
     pass
     pass
         """Initialize system monitor."""
+
+
 self.version = "1.0.0"
 self.config = config or self._default_config()
 
@@ -162,31 +163,31 @@ self.monitoring_thread: Optional[threading.Thread] = None
 self.system_metrics_history: deque = deque(
             maxlen=self.config.get("max_history_size", 1000)
 
-self.trading_metrics_history: deque = deque(
+self.trading_metrics_history: deque=deque(
             maxlen=self.config.get("max_history_size", 1000)
 
 
         # Alert management
-self.active_alerts: Dict[str, SystemAlert] = {}
-self.alert_history: deque = deque(
+self.active_alerts: Dict[str, SystemAlert]={}
+self.alert_history: deque=deque(
             maxlen=self.config.get("max_alert_history", 100)
 
 
         # Thresholds and limits
-self.thresholds = self._initialize_thresholds()
+self.thresholds=self._initialize_thresholds()
 
         # Callbacks and hooks
-self.alert_callbacks: List[Callable[[SystemAlert], None]] = []
-self.metrics_callbacks: List[Callable[[SystemMetrics], None]] = []
+self.alert_callbacks: List[Callable[[SystemAlert], None]]=[]
+self.metrics_callbacks: List[Callable[[SystemMetrics], None]]=[]
 
         # Component health tracking
-self.component_health: Dict[str, SystemStatus] = {}
-self.component_metrics: Dict[str, Dict[str, float]] = defaultdict(dict)
+self.component_health: Dict[str, SystemStatus]={}
+self.component_metrics: Dict[str, Dict[str, float]]=defaultdict(dict)
 
         # Performance tracking
-self.monitoring_start_time = time.time()
-        self.total_checks = 0
-self.total_alerts = 0
+self.monitoring_start_time=time.time()
+        self.total_checks=0
+self.total_alerts=0
 
 logger.info(f"SystemMonitor v{self.version} initialized")
 
@@ -258,8 +259,8 @@ def start_monitoring(self) -> None:
         if self.is_monitoring:
 return
 
-self.is_monitoring = True
-self.monitoring_thread = threading.Thread(
+self.is_monitoring=True
+self.monitoring_thread=threading.Thread(
             target=self._monitoring_loop, daemon=True
 
 self.monitoring_thread.start()
@@ -271,7 +272,7 @@ def stop_monitoring(self) -> None:
     pass
     pass
         """Stop system monitoring."""
-self.is_monitoring = False
+self.is_monitoring=False
         if self.monitoring_thread:
 self.monitoring_thread.join(timeout=5.0)
         logger.info("System monitoring stopped")
@@ -286,15 +287,15 @@ def _monitoring_loop(self) -> None:
             try:
     pass
     pass
-start_time = time.time()
+start_time=time.time()
 
                 # Collect system metrics
-system_metrics = self._collect_system_metrics()
+system_metrics=self._collect_system_metrics()
                 self.system_metrics_history.append(system_metrics)
 
                 # Collect trading metrics if enabled
                 if self.config.get("enable_trading_monitoring", True):
-                    trading_metrics = self._collect_trading_metrics()
+                    trading_metrics=self._collect_trading_metrics()
                     self.trading_metrics_history.append(trading_metrics)
 
                 # Check thresholds and generate alerts
@@ -314,8 +315,8 @@ logger.error(f"Error in metrics callback: {e}")
 self.total_checks += 1
 
                 # Sleep for monitoring interval
-elapsed = time.time() - start_time
-                sleep_time = max(
+elapsed=time.time() - start_time
+                sleep_time=max(
                     0, self.config.get("monitoring_interval", 1.0) - elapsed
 
 time.sleep(sleep_time)
@@ -334,41 +335,41 @@ def _collect_system_metrics(self) -> SystemMetrics:
     pass
     pass
             # CPU metrics
-cpu_percent = psutil.cpu_percent(interval=0.1)
+cpu_percent=psutil.cpu_percent(interval=0.1)
 
             # Memory metrics
-memory = psutil.virtual_memory()
-            memory_percent = memory.percent
-memory_used = memory.used / (1024**3)  # GB
-            memory_available = memory.available / (1024**3)  # GB
+memory=psutil.virtual_memory()
+            memory_percent=memory.percent
+memory_used=memory.used / (1024**3)  # GB
+            memory_available=memory.available / (1024**3)  # GB
 
             # Disk metrics
-disk = psutil.disk_usage("/")
-            disk_usage_percent = disk.percent
+disk=psutil.disk_usage("/")
+            disk_usage_percent=disk.percent
 
             # Network metrics
-network = psutil.net_io_counters()
-            network_io_sent = network.bytes_sent / (1024**2)  # MB
-            network_io_recv = network.bytes_recv / (1024**2)  # MB
+network=psutil.net_io_counters()
+            network_io_sent=network.bytes_sent / (1024**2)  # MB
+            network_io_recv=network.bytes_recv / (1024**2)  # MB
 
             # Process metrics
-process_count = len(psutil.pids())
-            thread_count = psutil.cpu_count()
+process_count=len(psutil.pids())
+            thread_count=psutil.cpu_count()
 
             # Load average (Unix-like systems)
             try:
     pass
     pass
-load_avg = os.getloadavg()
+load_avg=os.getloadavg()
             except AttributeError:
                 # Windows fallback
-load_avg = (
+load_avg=(
                     cpu_percent / 100.0,
 cpu_percent / 100.0,
 cpu_percent / 100.0,
 
 
-metrics = SystemMetrics(
+metrics=SystemMetrics(
                 timestamp=time.time(),
                 cpu_percent=cpu_percent,
 memory_percent=memory_percent,
@@ -413,7 +414,7 @@ def _collect_trading_metrics(self) -> TradingSystemMetrics:
             # This would integrate with your trading system components
             # For now, return placeholder metrics
 
-metrics = TradingSystemMetrics(
+metrics=TradingSystemMetrics(
                 timestamp=time.time(),
                 active_strategies=0,
 total_positions=0,
@@ -478,8 +479,8 @@ def _check_cpu_thresholds(self, metrics: SystemMetrics) -> None:
         try:
     pass
     pass
-cpu_warning = self.thresholds["cpu"]["warning"]
-cpu_critical = self.thresholds["cpu"]["critical"]
+cpu_warning=self.thresholds["cpu"]["warning"]
+cpu_critical=self.thresholds["cpu"]["critical"]
 
             if metrics.cpu_percent >= cpu_critical:
 self._create_alert(
@@ -514,8 +515,8 @@ def _check_memory_thresholds(self, metrics: SystemMetrics) -> None:
         try:
     pass
     pass
-memory_warning = self.thresholds["memory"]["warning"]
-memory_critical = self.thresholds["memory"]["critical"]
+memory_warning=self.thresholds["memory"]["warning"]
+memory_critical=self.thresholds["memory"]["critical"]
 
             if metrics.memory_percent >= memory_critical:
 self._create_alert(
@@ -550,8 +551,8 @@ def _check_disk_thresholds(self, metrics: SystemMetrics) -> None:
         try:
     pass
     pass
-disk_warning = self.thresholds["disk"]["warning"]
-disk_critical = self.thresholds["disk"]["critical"]
+disk_warning=self.thresholds["disk"]["warning"]
+disk_critical=self.thresholds["disk"]["critical"]
 
             if metrics.disk_usage_percent >= disk_critical:
 self._create_alert(
@@ -586,10 +587,10 @@ def _check_network_thresholds(self, metrics: SystemMetrics) -> None:
         try:
     pass
     pass
-network_warning = self.thresholds["network"]["warning"]
-network_critical = self.thresholds["network"]["critical"]
+network_warning=self.thresholds["network"]["warning"]
+network_critical=self.thresholds["network"]["critical"]
 
-total_network_io = metrics.network_io_sent + metrics.network_io_recv
+total_network_io=metrics.network_io_sent + metrics.network_io_recv
 
             if total_network_io >= network_critical:
 self._create_alert(
@@ -633,12 +634,12 @@ threshold: float,
     pass
             # Check if alert already exists and is within cooldown
             if alert_id in self.active_alerts:
-existing_alert = self.active_alerts[alert_id]
-cooldown = self.config.get("alert_cooldown", 60.0)
+existing_alert=self.active_alerts[alert_id]
+cooldown=self.config.get("alert_cooldown", 60.0)
                 if time.time() - existing_alert.timestamp < cooldown:
                     return
 
-alert = SystemAlert(
+alert=SystemAlert(
                 alert_id=alert_id,
 level=level,
 message=message,
@@ -650,7 +651,7 @@ threshold=threshold,
 
 
             # Store alert
-self.active_alerts[alert_id] = alert
+self.active_alerts[alert_id]=alert
 self.alert_history.append(alert)
             self.total_alerts += 1
 
@@ -678,7 +679,7 @@ def resolve_alert(self, alert_id: str) -> bool:
     pass
     pass
             if alert_id in self.active_alerts:
-self.active_alerts[alert_id].resolved = True
+self.active_alerts[alert_id].resolved=True
                 del self.active_alerts[alert_id]
                 return True
             return False
@@ -699,7 +700,7 @@ def get_system_status(self) -> SystemStatus:
                 return SystemStatus.OFFLINE
 
             # Check for critical alerts
-critical_alerts = [
+critical_alerts=[
 a
                 for a in self.active_alerts.values()
                 if a.level == AlertLevel.CRITICAL and not a.resolved
@@ -708,7 +709,7 @@ a
                 return SystemStatus.CRITICAL
 
             # Check for warning alerts
-warning_alerts = [
+warning_alerts=[
 a
                 for a in self.active_alerts.values()
                 if a.level == AlertLevel.WARNING and not a.resolved
@@ -730,7 +731,7 @@ def get_latest_metrics(self) -> Optional[SystemMetrics]:
         """Get latest system metrics."""
         return self.system_metrics_history[-1] if self.system_metrics_history else None
 
-def get_metrics_history(self, count: int = 100) -> List[SystemMetrics]:
+def get_metrics_history(self, count: int=100) -> List[SystemMetrics]:
 
 
     pass
@@ -739,7 +740,7 @@ def get_metrics_history(self, count: int = 100) -> List[SystemMetrics]:
         try:
     pass
     pass
-metrics = list(self.system_metrics_history)
+metrics=list(self.system_metrics_history)
             return metrics[-count:] if count > 0 else metrics
         except Exception as e:
 logger.error(f"Error getting metrics history: {e}")
@@ -762,7 +763,7 @@ def get_performance_summary(self) -> Dict[str, Any]:
         try:
     pass
     pass
-uptime = time.time() - self.monitoring_start_time
+uptime=time.time() - self.monitoring_start_time
 
             return {
 "version": self.version,

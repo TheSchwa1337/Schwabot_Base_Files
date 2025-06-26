@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+import numpy.typing as npt
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+import time
+import threading
+import logging
+from enum import Enum
+from decimal import getcontext
+from dataclasses import field
+from dataclasses import dataclass
+from collections import deque
+from collections import defaultdict
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +24,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Tick Processor - Real-time Market Data Processing Engine.
 
@@ -87,19 +106,7 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-from collections import defaultdict
-from collections import deque
-from dataclasses import dataclass
-from dataclasses import field
-from decimal import getcontext
-from enum import Enum
-import logging
-import threading
-import time
-from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
 
 if TYPE_CHECKING:
     pass
@@ -116,8 +123,8 @@ logger = logging.getLogger(__name__)
 
 class TickType(Enum):
 
-
     """Tick type enumeration."""
+
 
 TRADE = "trade"
 QUOTE = "quote"
@@ -128,8 +135,8 @@ OHLCV = "ohlcv"
 
 class TickStatus(Enum):
 
-
     """Tick processing status."""
+
 
 VALID = "valid"
 INVALID = "invalid"
@@ -141,8 +148,8 @@ PROCESSING = "processing"
 @dataclass
 class MarketTick:
 
-
     """Market tick data container."""
+
 
 tick_id: str
 tick_type: TickType
@@ -163,8 +170,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class OrderBookLevel:
 
-
     """Order book level data."""
+
 
 price: float
 size: float
@@ -175,8 +182,8 @@ timestamp: float
 @dataclass
 class OrderBook:
 
-
     """Order book snapshot."""
+
 
 symbol: str
 timestamp: float
@@ -191,8 +198,8 @@ total_ask_volume: float
 @dataclass
 class TickAggregate:
 
-
     """Aggregated tick data."""
+
 
 symbol: str
 start_time: float
@@ -209,15 +216,16 @@ tick_count: int
 
 class TickProcessor:
 
-
     """High-performance tick processing engine."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
     pass
     pass
         """Initialize tick processor."""
+
+
 self.version = "1.0.0"
 self.config = config or self._default_config()
 
@@ -228,35 +236,35 @@ self.tick_queue: deque = deque(maxlen=self.config.get("max_queue_size", 10000))
 
 
         # Order book management
-self.order_books: Dict[str, OrderBook] = {}
-self.order_book_depth = self.config.get("order_book_depth", 10)
+self.order_books: Dict[str, OrderBook]={}
+self.order_book_depth=self.config.get("order_book_depth", 10)
 
         # Aggregation settings
-self.aggregation_intervals = self.config.get(
+self.aggregation_intervals=self.config.get(
             "aggregation_intervals", [1, 5, 15, 60]
 
-self.aggregated_data: Dict[str, Dict[int, deque]] = defaultdict(]
+self.aggregated_data: Dict[str, Dict[int, deque]]=defaultdict(]
             lambda: defaultdict(lambda: deque(maxlen=1000))
 
 
         # Performance tracking
-self.total_ticks_processed = 0
-self.total_ticks_rejected = 0
-self.processing_latency = []
-self.last_processing_time = 0.0
+self.total_ticks_processed=0
+self.total_ticks_rejected=0
+self.processing_latency=[]
+self.last_processing_time=0.0
 
         # Callbacks and hooks
-self.tick_callbacks: List[Callable[[MarketTick], None]] = []
-self.aggregate_callbacks: List[Callable[[TickAggregate], None]] = []
+self.tick_callbacks: List[Callable[[MarketTick], None]]=[]
+self.aggregate_callbacks: List[Callable[[TickAggregate], None]]=[]
 
         # Threading and synchronization
-self.processing_lock = threading.Lock()
-        self.is_processing = False
-self.processing_thread: Optional[threading.Thread] = None
+self.processing_lock=threading.Lock()
+        self.is_processing=False
+self.processing_thread: Optional[threading.Thread]=None
 
         # Validation and filtering
-self.price_filters = self._initialize_price_filters()
-        self.volume_filters = self._initialize_volume_filters()
+self.price_filters=self._initialize_price_filters()
+        self.volume_filters=self._initialize_volume_filters()
 
 logger.info(f"TickProcessor v{self.version} initialized")
 
@@ -330,7 +338,7 @@ def process_tick(self, tick_data: Dict[str, Any]) -> Optional[MarketTick]:
     pass
         """Process a single market tick."""
         try:
-start_time = time.time()
+start_time=time.time()
 
             # Validate tick data
             if not self._validate_tick_data(tick_data):
@@ -338,7 +346,7 @@ start_time = time.time()
                 return None
 
             # Create market tick object
-tick = self._create_market_tick(tick_data)
+tick=self._create_market_tick(tick_data)
 
             # Apply filters and validation
             if not self._apply_filters(tick):
@@ -358,14 +366,14 @@ self.tick_queue.append(tick)
                 self._trigger_aggregation(tick)
 
             # Update performance metrics
-processing_time = time.time() - start_time
+processing_time=time.time() - start_time
             self.processing_latency.append(processing_time)
             self.total_ticks_processed += 1
-self.last_processing_time = time.time()
+self.last_processing_time=time.time()
 
             # Trim latency history
             if len(self.processing_latency) > 1000:
-                self.processing_latency = self.processing_latency[-1000:]
+                self.processing_latency=self.processing_latency[-1000:]
 
             # Execute callbacks
             for callback in self.tick_callbacks:
@@ -388,7 +396,7 @@ def _validate_tick_data(self, tick_data: Dict[str, Any]) -> bool:
     pass
         """Validate tick data structure."""
         try:
-required_fields = ["symbol", "timestamp", "price"]
+required_fields=["symbol", "timestamp", "price"]
             for field in required_fields:
                 if field not in tick_data:
 logger.warning(f"Missing required field: {field}")
@@ -403,7 +411,7 @@ logger.warning(f"Missing required field: {field}")
                 return False
 
             # Validate price range
-price = float(tick_data["price"])
+price=float(tick_data["price"])
             if (
                 price < self.price_filters["min_price"]
 or price > self.price_filters["max_price"]
@@ -424,9 +432,9 @@ def _create_market_tick(self, tick_data: Dict[str, Any]) -> MarketTick:
     pass
         """Create MarketTick object from raw data."""
         try:
-tick_type = TickType(tick_data.get("type", "trade"))
+tick_type=TickType(tick_data.get("type", "trade"))
 
-tick = MarketTick(
+tick=MarketTick(
                 tick_id=tick_data.get(
                     "id", f"{tick_data['symbol']}_{tick_data['timestamp']}"
 ),
@@ -471,12 +479,12 @@ def _apply_filters(self, tick: MarketTick) -> bool:
         try:
             # Check for duplicate ticks
             if self._is_duplicate_tick(tick):
-                tick.status = TickStatus.DUPLICATE
+                tick.status=TickStatus.DUPLICATE
                 return False
 
             # Check for out-of-sequence ticks
             if self._is_out_of_sequence(tick):
-                tick.status = TickStatus.OUT_OF_SEQUENCE
+                tick.status=TickStatus.OUT_OF_SEQUENCE
                 return False
 
             # Check price change limits
@@ -510,8 +518,8 @@ def _is_out_of_sequence(self, tick: MarketTick) -> bool:
     pass
         """Check if tick is out of sequence."""
         # Check if tick timestamp is reasonable
-current_time = time.time()
-        time_diff = unified_math.abs(current_time - tick.timestamp)
+current_time=time.time()
+        time_diff=unified_math.abs(current_time - tick.timestamp)
 
         # Allow for some clock skew (5 seconds)
         return time_diff > 5.0
@@ -524,16 +532,16 @@ def _validate_price_change(self, tick: MarketTick) -> bool:
         """Validate price change is within limits."""
         try:
             # Get previous price for this symbol
-previous_ticks = [
+previous_ticks=[
 t for t in self.processed_ticks if t.symbol == tick.symbol
 ]
             if not previous_ticks:
                 return True
 
-last_tick = previous_ticks[-1]
-price_change = unified_math.abs(tick.price - last_tick.price) / last_tick.price
+last_tick=previous_ticks[-1]
+price_change=unified_math.abs(tick.price - last_tick.price) / last_tick.price
 
-max_change = self.price_filters["max_price_change"]
+max_change=self.price_filters["max_price_change"]
             if price_change > max_change:
 logger.warning(
                     f"Price change too large: {price_change:.4f} > {max_change}"
@@ -557,18 +565,18 @@ def _validate_volume_spike(self, tick: MarketTick) -> bool:
                 return True
 
             # Calculate average volume for this symbol
-recent_ticks = [t for t in self.processed_ticks if t.symbol == tick.symbol][]
--100:
+recent_ticks=[t for t in self.processed_ticks if t.symbol == tick.symbol][]
+- 100:
 ]
             if len(recent_ticks) < 10:
                 return True
 
-avg_volume = unified_math.mean([t.volume for t in recent_ticks if t.volume > 0])
+avg_volume=unified_math.mean([t.volume for t in recent_ticks if t.volume > 0])
             if avg_volume <= 0:
                 return True
 
-volume_ratio = tick.volume / avg_volume
-max_ratio = self.volume_filters["volume_spike_threshold"]
+volume_ratio=tick.volume / avg_volume
+max_ratio=self.volume_filters["volume_spike_threshold"]
 
             if volume_ratio > max_ratio:
 logger.warning(f"Volume spike detected: {volume_ratio:.2f}x average")
@@ -590,11 +598,11 @@ def _update_order_book(self, tick: MarketTick) -> None:
             if tick.tick_type != TickType.ORDER_BOOK:
 return
 
-symbol = tick.symbol
+symbol=tick.symbol
 
             # Initialize order book if needed
             if symbol not in self.order_books:
-self.order_books[symbol] = OrderBook(]
+self.order_books[symbol]=OrderBook(]
                     symbol=symbol,
 timestamp=tick.timestamp,
 bids=[],
@@ -605,11 +613,11 @@ total_bid_volume=0.0,
 total_ask_volume=0.0,
 
 
-order_book = self.order_books[symbol]
+order_book=self.order_books[symbol]
 
             # Update bids and asks
             if tick.bid and tick.bid_size:
-bid_level = OrderBookLevel(
+bid_level=OrderBookLevel(
                     price=tick.bid,
 size=tick.bid_size,
 side="bid",
@@ -618,7 +626,7 @@ timestamp=tick.timestamp,
 order_book.bids.append(bid_level)
 
             if tick.ask and tick.ask_size:
-ask_level = OrderBookLevel(
+ask_level=OrderBookLevel(
                     price=tick.ask,
 size=tick.ask_size,
 side="ask",
@@ -630,19 +638,19 @@ order_book.asks.append(ask_level)
 order_book.bids.sort(key=lambda x: x.price, reverse=True)
             order_book.asks.sort(key=lambda x: x.price)
 
-order_book.bids = order_book.bids[: self.order_book_depth]
-order_book.asks = order_book.asks[: self.order_book_depth]
+order_book.bids=order_book.bids[: self.order_book_depth]
+order_book.asks=order_book.asks[: self.order_book_depth]
 
             # Calculate metrics
             if order_book.bids and order_book.asks:
-best_bid = order_book.bids[0].price
-best_ask = order_book.asks[0].price
-order_book.spread = best_ask - best_bid
-order_book.mid_price = (best_bid + best_ask) / 2
-                order_book.total_bid_volume = sum(b.size for b in order_book.bids)
-                order_book.total_ask_volume = sum(a.size for a in order_book.asks)
+best_bid=order_book.bids[0].price
+best_ask=order_book.asks[0].price
+order_book.spread=best_ask - best_bid
+order_book.mid_price=(best_bid + best_ask) / 2
+                order_book.total_bid_volume=sum(b.size for b in order_book.bids)
+                order_book.total_ask_volume=sum(a.size for a in order_book.asks)
 
-order_book.timestamp = tick.timestamp
+order_book.timestamp=tick.timestamp
 
         except Exception as e:
 logger.error(f"Error updating order book: {e}")
@@ -666,16 +674,16 @@ def _aggregate_tick(self, tick: MarketTick, interval: int) -> None:
     pass
         """Aggregate tick data for specific time interval."""
         try:
-symbol = tick.symbol
-timestamp = tick.timestamp
+symbol=tick.symbol
+timestamp=tick.timestamp
 
             # Calculate interval start time
-interval_start = int(timestamp // interval) * interval
+interval_start=int(timestamp // interval) * interval
 
             # Get or create aggregate for this interval
             if interval_start not in self.aggregated_data[symbol][interval]:
                 # Create new aggregate
-aggregate = TickAggregate(
+aggregate=TickAggregate(
                     symbol=symbol,
 start_time=interval_start,
 end_time=interval_start + interval,
@@ -691,20 +699,20 @@ tick_count=1,
 self.aggregated_data[symbol][interval].append(aggregate)
             else:
                 # Update existing aggregate
-aggregate = self.aggregated_data[symbol][interval][-1]
-aggregate.high_price = unified_math.max(aggregate.high_price, tick.price)
-                aggregate.low_price = unified_math.min(aggregate.low_price, tick.price)
-                aggregate.close_price = tick.price
+aggregate=self.aggregated_data[symbol][interval][-1]
+aggregate.high_price=unified_math.max(aggregate.high_price, tick.price)
+                aggregate.low_price=unified_math.min(aggregate.low_price, tick.price)
+                aggregate.close_price=tick.price
 aggregate.total_volume += tick.volume
 aggregate.trade_count += 1
 aggregate.tick_count += 1
 
                 # Update VWAP
-total_value = (
+total_value=(
                     aggregate.vwap * (aggregate.trade_count - 1)
                     + tick.price * tick.volume
 
-aggregate.vwap = (
+aggregate.vwap=(
                     total_value / aggregate.total_volume
                     if aggregate.total_volume > 0
 else tick.price
@@ -731,7 +739,7 @@ def get_order_book(self, symbol: str) -> Optional[OrderBook]:
 def get_aggregated_data(
 
 
-        self, symbol: str, interval: int, count: int = 100
+        self, symbol: str, interval: int, count: int=100
 ) -> List[TickAggregate]:
 """Get aggregated data for symbol and interval."""
         try:
@@ -741,7 +749,7 @@ or interval not in self.aggregated_data[symbol]
 ):
                 return []
 
-data = list(self.aggregated_data[symbol][interval])
+data=list(self.aggregated_data[symbol][interval])
             return data[-count:] if count > 0 else data
 
         except Exception as e:
@@ -755,10 +763,10 @@ def get_performance_metrics(self) -> Dict[str, Any]:
     pass
         """Get performance metrics."""
         try:
-avg_latency = (
+avg_latency=(
                 unified_math.unified_math.mean(self.processing_latency) if self.processing_latency else 0.0
 
-max_latency = (
+max_latency=(
                 unified_math.unified_math.max(self.processing_latency) if self.processing_latency else 0.0
 
 
@@ -788,8 +796,8 @@ def start_processing(self) -> None:
         if self.is_processing:
 return
 
-self.is_processing = True
-self.processing_thread = threading.Thread(
+self.is_processing=True
+self.processing_thread=threading.Thread(
             target=self._processing_loop, daemon=True
 
 self.processing_thread.start()
@@ -801,7 +809,7 @@ def stop_processing(self) -> None:
     pass
     pass
         """Stop background processing thread."""
-self.is_processing = False
+self.is_processing=False
         if self.processing_thread:
 self.processing_thread.join(timeout=5.0)
         logger.info("Tick processing stopped")
@@ -817,7 +825,7 @@ def _processing_loop(self) -> None:
                 # Process queued ticks
                 with self.processing_lock:
                     while self.tick_queue:
-tick = self.tick_queue.popleft()
+tick=self.tick_queue.popleft()
                         self.processed_ticks.append(tick)
 
                 # Sleep briefly to prevent CPU spinning
@@ -839,10 +847,10 @@ safe_print("📊 Tick Processor Test")
         safe_print("=" * 40)
 
         # Initialize tick processor
-processor = TickProcessor()
+processor=TickProcessor()
 
         # Test tick data
-test_ticks = [
+test_ticks=[
 {
 "id": "test_1",
 "type": "trade",
@@ -867,14 +875,14 @@ test_ticks = [
 
         # Process test ticks
         for tick_data in test_ticks:
-tick = processor.process_tick(tick_data)
+tick=processor.process_tick(tick_data)
             if tick:
 safe_print(f"✅ Processed tick: {tick.symbol} @ {tick.price:.2f}")
             else:
 safe_print(f"❌ Rejected tick: {tick_data['symbol']}")
 
         # Get performance metrics
-metrics = processor.get_performance_metrics()
+metrics=processor.get_performance_metrics()
         safe_print(
             f"✅ Performance: {metrics['total_ticks_processed']} processed, "
 f"{metrics['total_ticks_rejected']} rejected"

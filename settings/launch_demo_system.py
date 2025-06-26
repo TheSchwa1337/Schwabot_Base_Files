@@ -1,3 +1,7 @@
+from demo_integration_system import get_demo_integration_system
+from matrix_allocator import get_matrix_allocator
+from vector_validator import get_vector_validator
+from settings_controller import get_settings_controller
 from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
@@ -18,43 +22,39 @@ from typing import Dict, List, Any, Optional
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Import our components
-from settings_controller import get_settings_controller
-from vector_validator import get_vector_validator
-from matrix_allocator import get_matrix_allocator
-from demo_integration_system import get_demo_integration_system
 
 
 class DemoSystemLauncher:
     """Comprehensive demo system launcher"""
-    
+
     def __init__(self):
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
         self.matrix_allocator = get_matrix_allocator()
         self.demo_system = get_demo_integration_system()
-        
+
         # Available scenarios
         self.scenarios = ["conservative", "moderate", "aggressive"]
-        
+
         # Available optimization strategies
         self.optimization_strategies = ["risk_parity", "max_sharpe", "equal_weight", "performance_weighted"]
-    
+
     def run_backtest(self, scenario: str = "moderate", duration: int = None) -> None:
         """Run a complete backtest"""
         safe_print(f"🚀 Starting backtest with scenario: {scenario}")
         safe_print(f"⏱️  Duration: {duration or 'default'} seconds")
         safe_print("-" * 50)
-        
+
         start_time = time.time()
         result = self.demo_system.run_backtest(scenario, duration)
         end_time = time.time()
-        
+
         safe_print(f"✅ Backtest completed in {end_time - start_time:.2f} seconds")
         safe_print("-" * 50)
-        
+
         # Display results
         self._display_backtest_results(result)
-    
+
     def _display_backtest_results(self, result) -> None:
         """Display backtest results"""
         safe_print("📊 BACKTEST RESULTS")
@@ -76,52 +76,52 @@ class DemoSystemLauncher:
         safe_print(f"Avg Trade Profit: ${result.performance_metrics.get('avg_trade_profit', 0):.2f}")
         safe_print(f"Max Consecutive Losses: {result.performance_metrics.get('max_consecutive_losses', 0)}")
         print()
-        
+
         if result.recommendations:
             safe_print("💡 RECOMMENDATIONS")
             safe_print("-" * 20)
             for i, rec in enumerate(result.recommendations, 1):
                 safe_print(f"{i}. {rec}")
             print()
-    
+
     def test_vector_validation(self, vector_data: Dict[str, Any]) -> None:
         """Test vector validation"""
         safe_print("🔍 Testing Vector Validation")
         safe_print("-" * 30)
-        
+
         result = self.vector_validator.validate_vector(vector_data, "test")
-        
+
         safe_print(f"Valid: {'✅ YES' if result.is_valid else '❌ NO'}")
         safe_print(f"Confidence Score: {result.confidence_score:.3f}")
         safe_print(f"Validation Duration: {result.validation_duration:.3f}s")
         print()
-        
+
         if result.validation_errors:
             safe_print("❌ VALIDATION ERRORS")
             for error in result.validation_errors:
                 safe_print(f"  • {error}")
             print()
-        
+
         if result.warnings:
             safe_print("⚠️  WARNINGS")
             for warning in result.warnings:
                 safe_print(f"  • {warning}")
             print()
-        
+
         if result.recommendations:
             safe_print("💡 RECOMMENDATIONS")
             for rec in result.recommendations:
                 safe_print(f"  • {rec}")
             print()
-    
+
     def test_matrix_allocation(self, basket_id: str = "test_basket") -> None:
         """Test matrix allocation"""
         safe_print("📊 Testing Matrix Allocation")
         safe_print("-" * 30)
-        
+
         # Create test basket
         self.matrix_allocator.create_matrix_basket(basket_id, 10000.0, 0.2, 0.1)
-        
+
         # Add test matrices
         test_matrices = [
             {
@@ -152,27 +152,28 @@ class DemoSystemLauncher:
                 'performance_score': 0.6
             }
         ]
-        
+
         for matrix_data in test_matrices:
             self.matrix_allocator.add_matrix_to_basket(basket_id, matrix_data)
-        
+
         # Test optimization
         for strategy in self.optimization_strategies:
             safe_print(f"Testing {strategy} optimization...")
             result = self.matrix_allocator.optimize_allocation(basket_id, strategy)
-            
+
             if result.success:
-                safe_print(f"  ✅ Success - Risk: {result.risk_score:.3f}, Return: {result.expected_return:.3f}, Diversification: {result.diversification_score:.3f}")
+                safe_print(
+                    f"  ✅ Success - Risk: {result.risk_score:.3f}, Return: {result.expected_return:.3f}, Diversification: {result.diversification_score:.3f}")
             else:
                 safe_print(f"  ❌ Failed - {result.recommendations[0] if result.recommendations else 'Unknown error'}")
-        
+
         print()
-    
+
     def show_system_status(self) -> None:
         """Show system status"""
         safe_print("🔧 SYSTEM STATUS")
         safe_print("=" * 50)
-        
+
         # Settings Controller Status
         safe_print("📋 SETTINGS CONTROLLER")
         safe_print("-" * 25)
@@ -183,7 +184,7 @@ class DemoSystemLauncher:
         safe_print(f"Recent Successes (24h): {settings_stats['recent_successes_24h']}")
         safe_print(f"Known Bad Vectors: {settings_stats['known_bad_vectors']}")
         print()
-        
+
         # Vector Validator Status
         safe_print("🔍 VECTOR VALIDATOR")
         safe_print("-" * 20)
@@ -192,7 +193,7 @@ class DemoSystemLauncher:
         safe_print(f"Success Rate: {validator_stats['success_rate']:.2%}")
         safe_print(f"Average Confidence: {validator_stats['average_confidence']:.3f}")
         print()
-        
+
         # Matrix Allocator Status
         safe_print("📊 MATRIX ALLOCATOR")
         safe_print("-" * 22)
@@ -202,7 +203,7 @@ class DemoSystemLauncher:
         safe_print(f"Average Risk Score: {allocator_stats['average_risk_score']:.3f}")
         safe_print(f"Average Expected Return: {allocator_stats['average_expected_return']:.3f}")
         print()
-        
+
         # Demo System Status
         safe_print("🎮 DEMO SYSTEM")
         safe_print("-" * 15)
@@ -213,12 +214,12 @@ class DemoSystemLauncher:
         safe_print(f"Average Sharpe: {demo_stats['average_sharpe']:.3f}")
         safe_print(f"Active Sessions: {demo_stats['active_sessions']}")
         print()
-    
+
     def show_configuration(self) -> None:
         """Show current configuration"""
         safe_print("⚙️  CURRENT CONFIGURATION")
         safe_print("=" * 50)
-        
+
         # Mathematical Flow Parameters
         safe_print("🧮 MATHEMATICAL FLOW PARAMETERS")
         safe_print("-" * 35)
@@ -234,7 +235,7 @@ class DemoSystemLauncher:
         safe_print(f"Ghost Strategy Weight: {math_params.ghost_strategy_weight}")
         safe_print(f"Backlog Retention Cycles: {math_params.backlog_retention_cycles}")
         print()
-        
+
         # Reinforcement Learning Parameters
         safe_print("🤖 REINFORCEMENT LEARNING PARAMETERS")
         safe_print("-" * 40)
@@ -250,7 +251,7 @@ class DemoSystemLauncher:
         safe_print(f"Max Iterations: {rl_params.max_iterations}")
         safe_print(f"Adaptive Learning: {rl_params.adaptive_learning}")
         print()
-        
+
         # Demo Backtest Parameters
         safe_print("🎮 DEMO BACKTEST PARAMETERS")
         safe_print("-" * 30)
@@ -268,11 +269,11 @@ class DemoSystemLauncher:
         safe_print(f"Data Source: {demo_params.data_source}")
         safe_print(f"Validation Mode: {demo_params.validation_mode}")
         print()
-    
+
     def update_parameter(self, param_type: str, param_name: str, value: Any) -> None:
         """Update a parameter"""
         safe_print(f"🔧 Updating {param_type} parameter: {param_name} = {value}")
-        
+
         try:
             if param_type == "mathematical_flow":
                 self.settings_controller.update_mathematical_flow(**{param_name: value})
@@ -283,16 +284,16 @@ class DemoSystemLauncher:
             else:
                 safe_print(f"❌ Unknown parameter type: {param_type}")
                 return
-            
+
             safe_print(f"✅ Successfully updated {param_name}")
-            
+
         except Exception as e:
             safe_print(f"❌ Error updating parameter: {e}")
-    
+
     def export_data(self, export_type: str, filepath: str) -> None:
         """Export system data"""
         safe_print(f"📤 Exporting {export_type} data to {filepath}")
-        
+
         try:
             if export_type == "settings":
                 self.settings_controller.export_configuration(filepath)
@@ -305,17 +306,17 @@ class DemoSystemLauncher:
             else:
                 safe_print(f"❌ Unknown export type: {export_type}")
                 return
-            
+
             safe_print(f"✅ Successfully exported {export_type} data")
-            
+
         except Exception as e:
             safe_print(f"❌ Error exporting data: {e}")
-    
+
     def run_quick_test(self) -> None:
         """Run a quick comprehensive test"""
         safe_print("⚡ Running Quick Comprehensive Test")
         safe_print("=" * 50)
-        
+
         # Test vector validation
         safe_print("1. Testing Vector Validation...")
         test_vector = {
@@ -323,17 +324,17 @@ class DemoSystemLauncher:
             'type': 'test_vector'
         }
         self.test_vector_validation(test_vector)
-        
+
         # Test matrix allocation
         safe_print("2. Testing Matrix Allocation...")
         self.test_matrix_allocation("quick_test_basket")
-        
+
         # Run quick backtest
         safe_print("3. Running Quick Backtest...")
         self.run_backtest("moderate", duration=60)  # 1 minute
-        
+
         safe_print("✅ Quick test completed!")
-    
+
     def show_help(self) -> None:
         """Show help information"""
         safe_print("🎮 SCHWABOT DEMO SYSTEM LAUNCHER")
@@ -372,42 +373,42 @@ def main():
     parser = argparse.ArgumentParser(description="Schwabot Demo System Launcher")
     parser.add_argument("command", nargs="?", default="help", help="Command to execute")
     parser.add_argument("args", nargs="*", help="Command arguments")
-    
+
     args = parser.parse_args()
-    
+
     launcher = DemoSystemLauncher()
-    
+
     try:
         if args.command == "backtest":
             scenario = args.args[0] if args.args else "moderate"
             duration = int(args.args[1]) if len(args.args) > 1 else None
             launcher.run_backtest(scenario, duration)
-            
+
         elif args.command == "test-vector":
             test_vector = {
                 'components': [1.0, 2.0, 3.0, 4.0, 5.0],
                 'type': 'test_vector'
             }
             launcher.test_vector_validation(test_vector)
-            
+
         elif args.command == "test-allocation":
             launcher.test_matrix_allocation()
-            
+
         elif args.command == "quick-test":
             launcher.run_quick_test()
-            
+
         elif args.command == "status":
             launcher.show_system_status()
-            
+
         elif args.command == "config":
             launcher.show_configuration()
-            
+
         elif args.command == "update":
             if len(args.args) >= 3:
                 param_type = args.args[0]
                 param_name = args.args[1]
                 value = args.args[2]
-                
+
                 # Convert value to appropriate type
                 try:
                     if value.lower() in ['true', 'false']:
@@ -418,11 +419,11 @@ def main():
                         value = int(value)
                 except ValueError:
                     pass  # Keep as string
-                
+
                 launcher.update_parameter(param_type, param_name, value)
             else:
                 safe_print("❌ Usage: update <type> <param> <value>")
-                
+
         elif args.command == "export":
             if len(args.args) >= 2:
                 export_type = args.args[0]
@@ -430,14 +431,14 @@ def main():
                 launcher.export_data(export_type, filepath)
             else:
                 safe_print("❌ Usage: export <type> <filepath>")
-                
+
         elif args.command == "help":
             launcher.show_help()
-            
+
         else:
             safe_print(f"❌ Unknown command: {args.command}")
             launcher.show_help()
-            
+
     except KeyboardInterrupt:
         safe_print("\n🛑 Operation cancelled by user")
     except Exception as e:
@@ -446,4 +447,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

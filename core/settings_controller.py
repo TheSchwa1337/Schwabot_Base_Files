@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from pathlib import Path
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Any, Optional, Union
+import os
+import yaml
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 """
 Schwabot Settings Controller
 ============================
@@ -63,21 +78,15 @@ This controller integrates with:
 - Reinforcement learning from known bad vectors
 """
 
-import json
-import yaml
-import os
-from typing import Dict, List, Any, Optional, Union
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from pathlib import Path
 
 
 @dataclass
 class MatrixSettings:
 
-
     """Settings for matrix waveform processing"""
+
+
 matrix_id: str
 entry_tolerance: float = 0.015
 exit_flex: float = 0.012
@@ -92,8 +101,9 @@ entropy_weight: float = 0.3
 @dataclass
 class VectorSettings:
 
-
     """Settings for entry/exit vector logic"""
+
+
 entry_logic: str = "tick+fractal"
 exit_logic: str = "hash+api_vol"
 ghost_signal_weight: float = 0.7
@@ -107,8 +117,9 @@ api_echo_sync: bool = True
 @dataclass
 class AllocatorSettings:
 
-
     """Settings for position allocation"""
+
+
 allocator_mode: List[str] = None
 long_weight: float = 0.4
 mid_weight: float = 0.35
@@ -122,8 +133,9 @@ auto_scaling_enabled: bool = True
 @dataclass
 class ReinforcementSettings:
 
-
     """Settings for reinforcement learning"""
+
+
 enable_backlog_reinforcement: bool = True
 reinforce_bad_vectors: bool = True
 log_ghost_trades: bool = True
@@ -138,8 +150,9 @@ failure_penalty: float = 0.92
 @dataclass
 class FaultSettings:
 
-
     """Settings for fault tolerance and override"""
+
+
 fault_tolerance: float = 0.015
 enable_emergency_stop: bool = True
 max_drawdown_limit: float = 0.1
@@ -151,16 +164,16 @@ experimental_mode: bool = False
 
 class SettingsController:
 
-
     """Central settings controller for Schwabot"""
 
-def __init__(self, config_path: str = "settings/"):
 
+def __init__(self, config_path: str = "settings/"):
 
     pass
     pass
         self.config_path = Path(config_path)
         self.config_path.mkdir(exist_ok=True)
+
 
         # Initialize default settings
 self.matrix_settings = MatrixSettings("SFS8-A5")
@@ -180,13 +193,14 @@ self.known_bad_vectors = self._load_known_bad_vectors()
 self.matrix_path_weights = {}
 self._initialize_matrix_weights()
 
-def _load_settings(self) -> None:
 
+def _load_settings(self) -> None:
 
     pass
     pass
         """Load settings from configuration files"""
         try:
+
             # Load main settings
 main_config = self.config_path / "main_settings.yaml"
             if main_config.exists():

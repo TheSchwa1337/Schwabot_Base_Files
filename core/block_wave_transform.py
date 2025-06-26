@@ -27,29 +27,29 @@ try:
     # SciPy gives us a proper DCT-II.
 from scipy.fftpack import dct  # type: ignore
 
+
 def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+    """TODO: document _dct_block."""
+    return dct(arr, type=2, norm="ortho")
 
-
-        """TODO: document _dct_block."""
-        return dct(arr, type=2, norm="ortho")
 
 except ModuleNotFoundError:  # pragma: no cover – keep pure-NumPy fallback
 
+
 def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+    """Fallback: approximate DCT-II via real FFT symmetry trick."""
 
 
-        """Fallback: approximate DCT-II via real FFT symmetry trick."""
 n = arr.shape[-1]
 extended = np.concatenate([arr, arr[..., ::-1]], axis=-1)
-        spectrum = np.fft.rfft(extended)
-        return np.real_if_close(spectrum[..., :n])
+   spectrum = np.fft.rfft(extended)
+    return np.real_if_close(spectrum[..., :n])
 
 
 __all__ = ["define_block_wave_transform"]
 
 
 def _shannon_entropy(block: np.ndarray) -> float:
-
 
     pass
     pass
@@ -65,6 +65,8 @@ def define_block_wave_transform(
 
     signal: np.ndarray, block_size: int
 ) -> Tuple[np.ndarray, np.ndarray]:
+
+
 """Apply a block-wise DCT transform and return entropy per block.
 
 Parameters
@@ -81,7 +83,7 @@ Tuple[np.ndarray, np.ndarray]
         coefficients and entropy is a vector of Shannon entropies for each
 block.
 """
-    if signal.ndim != 1:
+   if signal.ndim != 1:
         raise ValueError("signal must be 1-D")
     if signal.size % block_size != 0:
         raise ValueError("block_size must divide signal length")
@@ -92,8 +94,8 @@ block.
     # Transform each block.
 transformed_blocks = _dct_block(blocks)
 
-    # Compute entropy per block.
+   # Compute entropy per block.
 entropies = np.apply_along_axis(_shannon_entropy, 1, transformed_blocks)
 
-    # Flatten transformed back to 1-D for convenience.
-    return transformed_blocks.ravel(), entropies
+   # Flatten transformed back to 1-D for convenience.
+   return transformed_blocks.ravel(), entropies

@@ -33,7 +33,6 @@ __all__ = ["FluxCompensator", "sync_flux_compensator"]
 @dataclass(slots=True)
 class FluxCompensator:
 
-
     """Exponential-smoothing entropy corrector.
 
 Parameters
@@ -50,6 +49,7 @@ Optional fixed window for simple moving average (SMA) if you prefer
 Safety margin.  A value of 0.9 ⇒ allow 10 % slack under threshold.
 """
 
+
 threshold: float = 5.0
 alpha: float = 0.3
 window: int | None = None
@@ -61,8 +61,9 @@ _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=Fa
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-def update(self, entropy: float) -> Tuple[bool, float]:
 
+
+def update(self, entropy: float) -> Tuple[bool, float]:
 
     pass
     pass
@@ -74,13 +75,16 @@ def update(self, entropy: float) -> Tuple[bool, float]:
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
-def _smooth(self, value: float) -> float:
 
+
+def _smooth(self, value: float) -> float:
 
     pass
     pass
         """TODO: document _smooth."""
         if self.window is not None and self.window > 1:
+
+
 self._sma_buf.append(value)
             smoothed = float(unified_math.unified_math.mean(self._sma_buf))
             return smoothed

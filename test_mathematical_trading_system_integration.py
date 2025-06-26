@@ -84,7 +84,7 @@ logger = logging.getLogger(__name__)
 
 class WindowsCliCompatibilityHandler:
     """
-    
+
     Windows CLI compatibility for emoji and Unicode handling with ASIC
     fallbacks.
     """
@@ -100,7 +100,7 @@ class WindowsCliCompatibilityHandler:
     @staticmethod
     def safe_print(message: str, use_emoji: bool = True) -> str:
         """Print message safely with Windows CLI compatibility and ASIC.
-        
+
         fallbacks."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             # ASIC (ASCII) emoji mapping for Windows compatibility
@@ -155,7 +155,7 @@ class WindowsCliCompatibilityHandler:
 
 class YAMLConfigManager:
     """
-    
+
     YAML configuration manager for test settings and mathematical
     parameters.
     """
@@ -217,7 +217,7 @@ class YAMLConfigManager:
 
     def get(self, key_path: str, default: Any = None) -> Any:
         """Get configuration value using dot notation (e.g.,
-        
+
         'mathematical_tests.precision_digits')"""
         keys = key_path.split(".")
         value = self.config
@@ -231,6 +231,7 @@ class YAMLConfigManager:
 
 class FerrisWheelTimingValidator:
     """Validates Ferris wheel timing logic and trigger sequences."""
+
     def __init__(self, config: YAMLConfigManager):
         """TODO: document __init__."""
         self.config = config
@@ -274,7 +275,7 @@ class FerrisWheelTimingValidator:
         # Check harmonic alignment
         fft_values = np.fft.fft(trigger_values)
         dominant_freq_idx = (
-            np.argmax(unified_math.unified_math.abs(fft_values[1 : len(fft_values) // 2])) + 1
+            np.argmax(unified_math.unified_math.abs(fft_values[1: len(fft_values) // 2])) + 1
         )
         dominant_period = len(trigger_values) / dominant_freq_idx
 
@@ -645,7 +646,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
 
     def test_002_mathematical_pathway_validation(self):
         """Test all mathematical analysis layers (mathlib v1-v3, NCCO,
-        
+
         SFS, UFS)"""
         self.cli_handler.log_safe(
             logger,

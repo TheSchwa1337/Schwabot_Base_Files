@@ -879,7 +879,7 @@ def main() -> None:
         # Test multi-vector optimization
         safe_print("\nTesting multi-vector optimization...")
         vectors = [np.random.rand(10), np.random.rand(10)]
-        objective = lambda x: np.sum(x**2)  # Simple quadratic objective
+        def objective(x): return np.sum(x**2)  # Simple quadratic objective
 
         opt_result = bridge.multi_vector_optimization(
             vectors, objective, mode=OptimizationMode.HYBRID

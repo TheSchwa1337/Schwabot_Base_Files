@@ -28,7 +28,6 @@ if sys.platform == "win32":
     os.environ["PYTHONIOENCODING"] = "utf-8"
     try:
         pass
-        pass
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
@@ -48,6 +47,8 @@ if sys.platform == "win32":
         pass
 
 # --- ANSI Color Codes ---
+
+
 class Colors:
     """ANSI color codes for terminal output."""
     RESET = "\033[0m"
@@ -61,25 +62,25 @@ class Colors:
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
+
 class WindowsCliCompatibilityHandler:
 
     """Centralized handler for Windows CLI compatibility."""
 
     def __init__(self):
         """Initialize the Windows CLI compatibility handler."""
-        self.is_windows = platform.system().lower() == "windows"
-        self.encoding = 'utf-8' if not self.is_windows else 'cp1252'
-        self.shell = True if self.is_windows else False
+    self.is_windows = platform.system().lower() == "windows"
+    self.encoding = 'utf-8' if not self.is_windows else 'cp1252'
+    self.shell = True if self.is_windows else False
 
         # Windows-specific configurations
         if self.is_windows:
-            self._setup_windows_environment()
+        self._setup_windows_environment()
 
     def _setup_windows_environment(self) -> None:
         """Setup Windows-specific environment configurations."""
-        try:
-            pass
-            pass
+    try:
+        pass
             # Set console encoding for Windows
             if hasattr(sys.stdout, 'reconfigure'):
                 sys.stdout.reconfigure(encoding=self.encoding)
@@ -134,7 +135,7 @@ class WindowsCliCompatibilityHandler:
         except Exception as e:
             # Fallback logging
             logger.error(f"Log error: {e}")
-            self.safe_print(f"[{level.upper()}] {message}")
+                self.safe_print(f"[{level.upper()}] {message}")
 
     def _remove_emojis(self, text: str) -> str:
         """Remove emoji characters from text for Windows compatibility."""
@@ -218,10 +219,13 @@ class WindowsCliCompatibilityHandler:
             logger.error(f"File operation error ({operation}): {e}")
             return None
 
+
 # Global instance
 cli_handler = WindowsCliCompatibilityHandler()
 
 # Convenience functions
+
+
 def safe_print(message: str, **kwargs):
     """Global safe print function."""
     try:
@@ -256,17 +260,21 @@ def safe_print(message: str, **kwargs):
         logger.error(f"Print error: {e}")
         return str(message)
 
+
 def safe_format_error(error: Exception, context: str = "") -> str:
     """Global safe error formatting function."""
     return cli_handler.safe_format_error(error, context)
+
 
 def log_safe(logger_instance, level: str, message: str) -> None:
     """Global safe logging function."""
     cli_handler.log_safe(logger_instance, level, message)
 
+
 def main():
     print("Windows CLI Compatibility Handler test ran successfully.")
     return True
+
 
 if __name__ == "__main__":
     # Test the compatibility handler

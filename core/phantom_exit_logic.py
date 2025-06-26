@@ -22,11 +22,13 @@ def phantom_exit_score(
 
 
     *,
-lambda_trust: float,
-profit_delta: float,
-zeta_derivative: float,
-halt_bias: float = 0.0,
+    lambda_trust: float,
+    profit_delta: float,
+    zeta_derivative: float,
+    halt_bias: float = 0.0,
 ) -> float:
+
+
 """Return exit probability P_exit ∈ [0, 1].
 
 Implements:
@@ -34,4 +36,4 @@ P_exit = sigmoid( λ_trust + Δprofit · dζ/dt − ε_halt )
     where ε_halt is *halt_bias*.
 """
 val = lambda_trust + profit_delta * zeta_derivative - halt_bias
-    return 1.0 / (1.0 + unified_math.exp(-val))
+return 1.0 / (1.0 + unified_math.exp(-val))

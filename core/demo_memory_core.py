@@ -1,100 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Demo Memory Core - In-Memory Simulation Pool for Self-Trade Testing.
-
-This module provides in-memory simulation capabilities that enable Schwabot
-to validate its own logic through recursive memory and historical data,
-creating a self-referential testing environment.
-"""
-
-
-import asyncio
-import logging
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
-from enum import Enum
-# from core.unified_math_system import unified_math  # F811: duplicate import
-
-# Import unified mathematics
-try:
-from core.unified_mathematics_config import get_unified_math
-unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-UNIFIED_MATH_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -107,30 +26,30 @@ def log_safe(logger, level: str, message: str) -> None:
     pass
         getattr(logger, level.lower())(message)
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 class MemoryType(Enum):
 
 
     """Memory types for different storage strategies."""
-SHORT_TERM = "short_term"    # 16-bit memory for momentum
-MID_TERM = "mid_term"        # 256-bit memory for patterns
-LONG_TERM = "long_term"      # 10k-bit memory for cycles
-LANTERN = "lantern"          # Textual hash memory
+SHORT_TERM="short_term"    # 16-bit memory for momentum
+MID_TERM="mid_term"        # 256-bit memory for patterns
+LONG_TERM="long_term"      # 10k-bit memory for cycles
+LANTERN="lantern"          # Textual hash memory
 
 
 class SimulationMode(Enum):
 
 
     """Simulation modes for different testing scenarios."""
-HISTORICAL = "historical"    # Use historical ledger data
-SYNTHETIC = "synthetic"      # Generate synthetic data
-HYBRID = "hybrid"            # Mix historical and synthetic
-ADAPTIVE = "adaptive"        # Adaptive based on performance
+HISTORICAL="historical"    # Use historical ledger data
+SYNTHETIC="synthetic"      # Generate synthetic data
+HYBRID="hybrid"            # Mix historical and synthetic
+ADAPTIVE="adaptive"        # Adaptive based on performance
 
 
-@dataclass
+@ dataclass
 class MemoryEntry:
 
 
@@ -145,25 +64,25 @@ phase_compression: float
 entropy_field: float
 zpe_resonance: float
 memory_type: MemoryType
-hash_id: str = ""
-confidence_score: float = 0.0
+hash_id: str=""
+confidence_score: float=0.0
 
 
-@dataclass
+@ dataclass
 class SimulationMemory:
 
 
     """Simulation memory pool for self-trade testing."""
-short_term_memory: Dict[int, MemoryEntry] = field(default_factory=dict)
-    mid_term_memory: Dict[int, MemoryEntry] = field(default_factory=dict)
-    long_term_memory: Dict[str, MemoryEntry] = field(default_factory=dict)
-    lantern_memory: Dict[str, MemoryEntry] = field(default_factory=dict)
+short_term_memory: Dict[int, MemoryEntry]=field(default_factory=dict)
+    mid_term_memory: Dict[int, MemoryEntry]=field(default_factory=dict)
+    long_term_memory: Dict[str, MemoryEntry]=field(default_factory=dict)
+    lantern_memory: Dict[str, MemoryEntry]=field(default_factory=dict)
 
     # Memory limits
-short_term_limit: int = 65536  # 16-bit memory
-mid_term_limit: int = 16777216  # 24-bit memory
-long_term_limit: int = 10000    # 10k entries
-lantern_limit: int = 5000       # 5k textual entries
+short_term_limit: int=65536  # 16-bit memory
+mid_term_limit: int=16777216  # 24-bit memory
+long_term_limit: int=10000    # 10k entries
+lantern_limit: int=5000       # 5k textual entries
 
 
 class DemoMemoryCore:
@@ -179,24 +98,112 @@ Enables Schwabot to:
 - Apply memory-based learning to improve strategies
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+from core.unified_mathematics_config import get_unified_math
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Demo Memory Core - In-Memory Simulation Pool for Self-Trade Testing.
+
+This module provides in-memory simulation capabilities that enable Schwabot
+to validate its own logic through recursive memory and historical data,
+creating a self-referential testing environment.
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Import unified mathematics
+try:
+unified_math=get_unified_math()
+    UNIFIED_MATH_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+UNIFIED_MATH_AVAILABLE=False
+
+# Import centralized CLI handler
+try:
+def __init__(self, config: Optional[Dict[str, Any]]=None):
 
 
     pass
     pass
         """Initialize demo memory core."""
-self.config = config or {}
-self.simulation_mode = SimulationMode.HYBRID
-self.memory = SimulationMemory()
+self.config=config or {}
+self.simulation_mode=SimulationMode.HYBRID
+self.memory=SimulationMemory()
 
         # Performance tracking
-self.total_entries = 0
-self.memory_hits = 0
-self.memory_misses = 0
+self.total_entries=0
+self.memory_hits=0
+self.memory_misses=0
 
         # Memory management
-self.auto_cleanup = True
-self.cleanup_interval = 1000  # Cleanup every 1000 entries
+self.auto_cleanup=True
+self.cleanup_interval=1000  # Cleanup every 1000 entries
 
 safe_safe_print("🧠 Demo Memory Core initialized")
 
@@ -206,7 +213,7 @@ def set_simulation_mode(self, mode: SimulationMode) -> None:
     pass
     pass
         """Set simulation mode."""
-self.simulation_mode = mode
+self.simulation_mode=mode
 safe_safe_print(f"🔄 Simulation mode set to: {mode.value}")
 
 def store_memory_entry(
@@ -222,7 +229,7 @@ strategy_used: str,
 phase_compression: float,
 entropy_field: float,
 zpe_resonance: float,
-memory_type: MemoryType = MemoryType.SHORT_TERM
+memory_type: MemoryType=MemoryType.SHORT_TERM
 ) -> str:
 """
 Store memory entry for future reference and learning.
@@ -232,10 +239,10 @@ its own trading history and improve future decisions.
 """
         try:
             # Generate hash ID
-hash_id = self._generate_hash_id(tick_id, timestamp, market_data)
+hash_id=self._generate_hash_id(tick_id, timestamp, market_data)
 
             # Create memory entry
-entry = MemoryEntry(
+entry=MemoryEntry(
                 tick_id=tick_id,
 timestamp=timestamp,
 market_data=market_data,
@@ -254,15 +261,15 @@ confidence_score=self._calculate_confidence_score(
 
             # Store based on memory type
             if memory_type == MemoryType.SHORT_TERM:
-self.memory.short_term_memory[tick_id % self.memory.short_term_limit] = entry
+self.memory.short_term_memory[tick_id % self.memory.short_term_limit]=entry
             elif memory_type == MemoryType.MID_TERM:
-self.memory.mid_term_memory[tick_id % self.memory.mid_term_limit] = entry
+self.memory.mid_term_memory[tick_id % self.memory.mid_term_limit]=entry
             elif memory_type == MemoryType.LONG_TERM:
                 if len(self.memory.long_term_memory) < self.memory.long_term_limit:
-                    self.memory.long_term_memory[hash_id] = entry
+                    self.memory.long_term_memory[hash_id]=entry
             elif memory_type == MemoryType.LANTERN:
                 if len(self.memory.lantern_memory) < self.memory.lantern_limit:
-                    self.memory.lantern_memory[hash_id] = entry
+                    self.memory.lantern_memory[hash_id]=entry
 
 self.total_entries += 1
 
@@ -281,10 +288,10 @@ def retrieve_memory_entry(
 
 
         self,
-tick_id: Optional[int] = None,
-hash_id: Optional[str] = None,
-memory_type: Optional[MemoryType] = None,
-market_conditions: Optional[Dict[str, Any]] = None
+tick_id: Optional[int]=None,
+hash_id: Optional[str]=None,
+memory_type: Optional[MemoryType]=None,
+market_conditions: Optional[Dict[str, Any]]=None
 ) -> Optional[MemoryEntry]:
 """
 Retrieve memory entry based on various criteria.
@@ -326,10 +333,10 @@ def _generate_hash_id(self, tick_id: int, timestamp: datetime, market_data: Dict
 import hashlib
 
             # Create hash data
-hash_data = f"{tick_id}_{timestamp.isoformat()}_{str(sorted(market_data.items()))}"
+hash_data=f"{tick_id}_{timestamp.isoformat()}_{str(sorted(market_data.items()))}"
 
             # Generate hash
-hash_object = hashlib.sha256(hash_data.encode())
+hash_object=hashlib.sha256(hash_data.encode())
             return hash_object.hexdigest()
 
         except Exception as e:
@@ -348,19 +355,19 @@ zpe_resonance: float
 """Calculate confidence score for memory entry."""
         try:
             # Profit-based confidence
-profit_confidence = unified_math.min(1.0, unified_math.max(0.0, profit_result / 100.0))
+profit_confidence=unified_math.min(1.0, unified_math.max(0.0, profit_result / 100.0))
 
             # Phase alignment confidence
-phase_confidence = 1.0 - unified_math.abs(phase_compression)
+phase_confidence=1.0 - unified_math.abs(phase_compression)
 
             # Entropy stability confidence
-entropy_confidence = 1.0 - unified_math.abs(entropy_field - 0.5) * 2.0
+entropy_confidence=1.0 - unified_math.abs(entropy_field - 0.5) * 2.0
 
             # ZPE resonance confidence
-resonance_confidence = unified_math.abs(zpe_resonance)
+resonance_confidence=unified_math.abs(zpe_resonance)
 
             # Combined confidence
-confidence = (profit_confidence + phase_confidence +
+confidence=(profit_confidence + phase_confidence +
                          entropy_confidence + resonance_confidence) / 4.0
 
             return unified_math.min(1.0, unified_math.max(0.0, confidence))
@@ -378,22 +385,22 @@ memory_type: Optional[MemoryType]
 ) -> Optional[MemoryEntry]:
 """Find similar memory entry based on market conditions."""
         try:
-best_match = None
-best_score = 0.0
+best_match=None
+best_score=0.0
 
             # Determine which memory pool to search
-memory_pools = []
+memory_pools=[]
             if memory_type == MemoryType.SHORT_TERM:
-memory_pools = [self.memory.short_term_memory]
+memory_pools=[self.memory.short_term_memory]
             elif memory_type == MemoryType.MID_TERM:
-memory_pools = [self.memory.mid_term_memory]
+memory_pools=[self.memory.mid_term_memory]
             elif memory_type == MemoryType.LONG_TERM:
-memory_pools = [self.memory.long_term_memory]
+memory_pools=[self.memory.long_term_memory]
             elif memory_type == MemoryType.LANTERN:
-memory_pools = [self.memory.lantern_memory]
+memory_pools=[self.memory.lantern_memory]
             else:
                 # Search all pools
-memory_pools = [
+memory_pools=[
 self.memory.short_term_memory,
 self.memory.mid_term_memory,
 self.memory.long_term_memory,
@@ -403,13 +410,13 @@ self.memory.lantern_memory
             # Search for best match
             for memory_pool in memory_pools:
                 for entry in memory_pool.values():
-                    similarity_score = self._calculate_similarity_score(
+                    similarity_score=self._calculate_similarity_score(
                         market_conditions, entry.market_data
 
 
                     if similarity_score > best_score:
-best_score = similarity_score
-best_match = entry
+best_score=similarity_score
+best_match=entry
 
             # Only return if similarity is above threshold
             if best_score > 0.7:
@@ -432,30 +439,30 @@ historical_conditions: Dict[str, Any]
 ) -> float:
 """Calculate similarity score between current and historical conditions."""
         try:
-score = 0.0
-total_factors = 0
+score=0.0
+total_factors=0
 
             # Compare price factors
             for asset in ['btc_price', 'eth_price', 'xrp_price']:
                 if asset in current_conditions and asset in historical_conditions:
-current_price = current_conditions[asset]
-historical_price = historical_conditions[asset]
+current_price=current_conditions[asset]
+historical_price=historical_conditions[asset]
 
                     if historical_price > 0:
-price_diff = unified_math.abs(current_price - historical_price) / historical_price
-                        price_similarity = unified_math.max(0.0, 1.0 - price_diff)
+price_diff=unified_math.abs(current_price - historical_price) / historical_price
+                        price_similarity=unified_math.max(0.0, 1.0 - price_diff)
                         score += price_similarity
 total_factors += 1
 
             # Compare volume factors
             for asset in ['volume_btc', 'volume_eth', 'volume_xrp']:
                 if asset in current_conditions and asset in historical_conditions:
-current_volume = current_conditions[asset]
-historical_volume = historical_conditions[asset]
+current_volume=current_conditions[asset]
+historical_volume=historical_conditions[asset]
 
                     if historical_volume > 0:
-volume_diff = unified_math.abs(current_volume - historical_volume) / historical_volume
-                        volume_similarity = unified_math.max(0.0, 1.0 - volume_diff)
+volume_diff=unified_math.abs(current_volume - historical_volume) / historical_volume
+                        volume_similarity=unified_math.max(0.0, 1.0 - volume_diff)
                         score += volume_similarity
 total_factors += 1
 
@@ -474,7 +481,7 @@ def _cleanup_memory(self) -> None:
         """Clean up old memory entries."""
         try:
             # Remove low-confidence entries from long-term memory
-low_confidence_entries = [
+low_confidence_entries=[
 hash_id for hash_id, entry in self.memory.long_term_memory.items()
                 if entry.confidence_score < 0.3
 ]
@@ -483,8 +490,8 @@ hash_id for hash_id, entry in self.memory.long_term_memory.items()
                 del self.memory.long_term_memory[hash_id]
 
             # Remove old entries from lantern memory
-current_time = datetime.now()
-            old_lantern_entries = [
+current_time=datetime.now()
+            old_lantern_entries=[
 hash_id for hash_id, entry in self.memory.lantern_memory.items()
                 if (current_time - entry.timestamp).days > 30
             ]
@@ -492,7 +499,8 @@ hash_id for hash_id, entry in self.memory.lantern_memory.items()
             for hash_id in old_lantern_entries:
                 del self.memory.lantern_memory[hash_id]
 
-safe_safe_print(f"🗑️ Memory cleanup completed: {len(low_confidence_entries)} long-term, {len(old_lantern_entries)} lantern entries removed")
+safe_safe_print(
+    f"🗑️ Memory cleanup completed: {len(low_confidence_entries)} long-term, {len(old_lantern_entries)} lantern entries removed")
 
         except Exception as e:
 safe_safe_print(f"⚠️ Memory cleanup failed: {safe_format_error(e, 'memory_cleanup')}")
@@ -515,7 +523,7 @@ def get_memory_statistics(self) -> Dict[str, Any]:
             'simulation_mode': self.simulation_mode.value
 }
 
-def clear_memory(self, memory_type: Optional[MemoryType] = None) -> None:
+def clear_memory(self, memory_type: Optional[MemoryType]=None) -> None:
 
 
     pass
@@ -546,7 +554,7 @@ safe_safe_print(f"⚠️ Memory clear failed: {safe_format_error(e, 'memory_clea
 
 
 # Global demo memory core instance
-demo_memory_core = DemoMemoryCore()
+demo_memory_core=DemoMemoryCore()
 
 
 # Convenience functions for external access
@@ -571,7 +579,7 @@ strategy_used: str,
 phase_compression: float,
 entropy_field: float,
 zpe_resonance: float,
-memory_type: MemoryType = MemoryType.SHORT_TERM
+memory_type: MemoryType=MemoryType.SHORT_TERM
 ) -> str:
 """Store memory entry."""
     return demo_memory_core.store_memory_entry(
@@ -583,10 +591,10 @@ strategy_used, phase_compression, entropy_field, zpe_resonance, memory_type
 def retrieve_memory_entry(
 
 
-    tick_id: Optional[int] = None,
-hash_id: Optional[str] = None,
-memory_type: Optional[MemoryType] = None,
-market_conditions: Optional[Dict[str, Any]] = None
+    tick_id: Optional[int]=None,
+hash_id: Optional[str]=None,
+memory_type: Optional[MemoryType]=None,
+market_conditions: Optional[Dict[str, Any]]=None
 ) -> Optional[MemoryEntry]:
 """Retrieve memory entry."""
     return demo_memory_core.retrieve_memory_entry(
@@ -612,7 +620,7 @@ if __name__ == "__main__":
 safe_print("🧪 Testing Demo Memory Core...")
 
     # Test market data
-test_market_data = {
+test_market_data={
 'btc_price': 50000.0,
 'eth_price': 3000.0,
 'xrp_price': 0.5,
@@ -621,7 +629,7 @@ test_market_data = {
 'volume_xrp': 100.0
 }
 
-test_trade_data = {
+test_trade_data={
 'strategy': 'momentum',
 'volume': 100.0,
 'entry_price': 50000.0,
@@ -629,7 +637,7 @@ test_trade_data = {
 }
 
     # Store memory entry
-hash_id = store_memory_entry(
+hash_id=store_memory_entry(
         tick_id=1,
 timestamp=datetime.now(),
         market_data=test_market_data,
@@ -645,7 +653,7 @@ memory_type=MemoryType.SHORT_TERM
 safe_print(f"✅ Memory entry stored: {hash_id}")
 
     # Retrieve memory entry
-retrieved_entry = retrieve_memory_entry(
+retrieved_entry=retrieve_memory_entry(
         tick_id=1,
 memory_type=MemoryType.SHORT_TERM
 
@@ -656,5 +664,5 @@ safe_print(f"✅ Memory entry retrieved: {retrieved_entry.hash_id[:8]}...")
         safe_print(f"   Confidence Score: {retrieved_entry.confidence_score:.3f}")
 
     # Get statistics
-stats = get_memory_stats()
+stats=get_memory_stats()
     safe_print(f"✅ Memory Statistics: {stats}")

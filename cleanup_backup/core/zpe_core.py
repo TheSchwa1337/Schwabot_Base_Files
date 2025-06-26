@@ -32,18 +32,18 @@ logger = logging.getLogger(__name__)
 
 class ZPECore:
     """Core ZPE mathematical functions for Schwabot's rotational profit engine."""
-    
+
     def __init__(self):
         """Initialize ZPE Core."""
         self.recursion_depth = 0
         self.max_recursion_depth = 16  # 16 BTC bitmap depth
         self.thermal_history = []
         self.agent_consensus = {'R1': 0.0, 'GPT4o': 0.0, 'Claude': 0.0, 'Schwafit': 0.0}
-    
+
     def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> float:
         """
         ZPE Work Core: W = F · d = ΔP
-        
+
         Where:
         - W: Work Schwabot performs (profit vector potential)
         - F: Force of trend momentum (ΔPrice / ΔTime)
@@ -54,11 +54,11 @@ class ZPECore:
         work = market_force * entry_exit_range
         logger.debug(f"ZPE Work: {work:.6f}")
         return work
-    
+
     def calculate_rotational_torque(self, liquidity_depth: float, trend_change_rate: float) -> float:
         """
         Rotational Vectorization: τ = I · α
-        
+
         Where:
         - τ: Torque applied to profit wheel (rotational force)
         - I: Market inertia (resistance from liquidity walls, spread delay)
@@ -69,11 +69,11 @@ class ZPECore:
         torque = inertia * angular_acceleration
         logger.debug(f"Rotational Torque: {torque:.6f}")
         return torque
-    
+
     def calculate_thermal_efficiency(self, profit_generated: float, capital_exposure: float) -> float:
         """
         Thermal Integrity Differential: η = W_out / Q_in
-        
+
         Where:
         - η: Efficiency of Schwabot's thermal core
         - W_out: Profit generated
@@ -85,24 +85,27 @@ class ZPECore:
         self.thermal_history.append({'timestamp': datetime.now(), 'efficiency': efficiency})
         logger.debug(f"Thermal Efficiency: {efficiency:.6f}")
         return efficiency
-    
+
     def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
         """
         Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
         """
         dt = 0.001
         t_values = np.arange(0, time_window, dt)
-        integral_sum = sum(price_derivative * unified_math.unified_math.sin(frequency * t + phase_offset) * dt for t in t_values)
+        integral_sum = sum(price_derivative * unified_math.unified_math.sin(frequency *
+                           t + phase_offset) * dt for t in t_values)
         logger.debug(f"Elastic Resonance: {integral_sum:.6f}")
         return integral_sum
-    
+
     def calculate_multi_vector_alignment(self, strategy_vectors: Dict[str, Dict], weights: Dict[str, float]) -> Dict:
         """
         Multi-Vector Trade Alignment: V⃗_total = Σ_i w_i · V⃗_i
         """
-        total_magnitude = sum(weights.get(asset, 0.0) * vector.get('magnitude', 0.0) for asset, vector in strategy_vectors.items())
-        total_resonance = sum(weights.get(asset, 0.0) * vector.get('resonance', 0.0) for asset, vector in strategy_vectors.items())
-        
+        total_magnitude = sum(weights.get(asset, 0.0) * vector.get('magnitude', 0.0)
+                              for asset, vector in strategy_vectors.items())
+        total_resonance = sum(weights.get(asset, 0.0) * vector.get('resonance', 0.0)
+                              for asset, vector in strategy_vectors.items())
+
         result = {
             'magnitude': total_magnitude,
             'resonance': total_resonance,
@@ -110,7 +113,7 @@ class ZPECore:
         }
         logger.debug(f"Multi-Vector Alignment: magnitude={total_magnitude:.6f}, resonance={total_resonance:.6f}")
         return result
-    
+
     def update_recursive_cycle_depth(self, tick_interval: float, price_trigger: float) -> int:
         """
         Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
@@ -120,7 +123,7 @@ class ZPECore:
         self.recursion_depth = int(complexity)
         logger.debug(f"Recursive Cycle Depth: {self.recursion_depth}")
         return self.recursion_depth
-    
+
     def update_agent_consensus(self, agent_name: str, confidence: float) -> float:
         """
         Agent Consensus Feedback Function: C(t) = (R1 + GPT4o + Claude + Schwafit) / 4
@@ -131,7 +134,7 @@ class ZPECore:
             logger.debug(f"Agent Consensus: {average_consensus:.6f}")
             return average_consensus
         return 0.0
-    
+
     def calculate_temporal_fault_correction(self, expected_phase: float, actual_phase: float) -> float:
         """
         Temporal Fault-Bus Diff Correction: Δφ_fault = φ_actual - φ_expected
@@ -144,7 +147,7 @@ class ZPECore:
             phase_difference += 2 * math.pi
         logger.debug(f"Temporal Fault Correction: {phase_difference:.6f}")
         return phase_difference
-    
+
     def map_news_lantern_signals(self, news_density: float, sentiment_delta: float) -> float:
         """
         News / Lantern API Signal Mapping: Lₜ = g(nₜ, ΔSₜ)
@@ -154,7 +157,7 @@ class ZPECore:
         lantern_signal = normalized_density * (1.0 + normalized_sentiment)
         logger.debug(f"Lantern Signal: {lantern_signal:.6f}")
         return lantern_signal
-    
+
     def calculate_profit_reinjection(self, profit_delta: float, market_heat: float) -> float:
         """
         Profit Loop Reinjection: Π(t) = Π₀ + Σ(ΔΠᵢ · αᵢ)
@@ -163,13 +166,13 @@ class ZPECore:
         reinjected_profit = profit_delta * reinjection_coefficient
         logger.debug(f"Profit Reinjection: {reinjected_profit:.6f}")
         return reinjected_profit
-    
+
     def spin_profit_wheel(self, market_data: Dict) -> Dict:
         """
         Main ZPE Profit Wheel function - where Schwabot becomes the wheel.
         """
         logger.info("🔄 Spinning ZPE Profit Wheel...")
-        
+
         # Extract market data
         trend_strength = market_data.get('trend_strength', 0.0)
         entry_exit_range = market_data.get('entry_exit_range', 0.0)
@@ -178,18 +181,18 @@ class ZPECore:
         price_derivative = market_data.get('price_derivative', 0.0)
         news_density = market_data.get('news_density', 0.0)
         sentiment_delta = market_data.get('sentiment_delta', 0.0)
-        
+
         # Execute ZPE mathematical framework
         zpe_work = self.calculate_zpe_work(trend_strength, entry_exit_range)
         rotational_torque = self.calculate_rotational_torque(liquidity_depth, trend_change_rate)
         elastic_resonance = self.calculate_elastic_resonance(price_derivative, 1.0, 0.0, 1.0)
         lantern_signal = self.map_news_lantern_signals(news_density, sentiment_delta)
-        
+
         # Calculate spin decision
         spin_threshold = 0.5
         spin_score = (zpe_work + elastic_resonance + lantern_signal) / 3.0
         should_spin = spin_score > spin_threshold
-        
+
         result = {
             'zpe_work': zpe_work,
             'rotational_torque': rotational_torque,
@@ -200,7 +203,7 @@ class ZPECore:
             'recursion_depth': self.recursion_depth,
             'agent_consensus': self.agent_consensus.copy()
         }
-        
+
         logger.info(f"🎯 ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
         return result
 
@@ -209,9 +212,9 @@ def main():
     """Test the ZPE Core."""
     safe_print("🧠 Testing Schwabot ZPE Core")
     safe_print("=" * 40)
-    
+
     engine = ZPECore()
-    
+
     market_data = {
         'trend_strength': 0.8,
         'entry_exit_range': 0.05,
@@ -221,9 +224,9 @@ def main():
         'news_density': 0.6,
         'sentiment_delta': 0.2
     }
-    
+
     result = engine.spin_profit_wheel(market_data)
-    
+
     safe_print(f"ZPE Work: {result['zpe_work']:.6f}")
     safe_print(f"Rotational Torque: {result['rotational_torque']:.6f}")
     safe_print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
@@ -231,9 +234,9 @@ def main():
     safe_print(f"Spin Score: {result['spin_score']:.6f}")
     safe_print(f"Should Spin: {result['should_spin']}")
     safe_print(f"Recursion Depth: {result['recursion_depth']}")
-    
+
     safe_print("\n🎉 ZPE Core test complete!")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

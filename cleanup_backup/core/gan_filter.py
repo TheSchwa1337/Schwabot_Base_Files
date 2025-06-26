@@ -198,12 +198,12 @@ class TrainingMetrics:
 
 class EntropyGenerator(nn.Module if TORCH_AVAILABLE else object):
     """
-    
+
     Entropy Generator Neural Network
-    
+
     Generates synthetic entropy signals from random noise using the mathematical
     framework: G(z) = σ(W₂ · ReLU(W₁z + b₁) + b₂)
-    
+
     Architecture:
     - Input: Random noise vector z ∈ ℝⁿ
     - Hidden: ReLU activation with configurable dimensions
@@ -861,7 +861,7 @@ class GanFilter:
             # Keep only recent history
             if len(self.confidence_history) > self.config.adaptive_window:
                 self.confidence_history = self.confidence_history[
-                    -self.config.adaptive_window :
+                    -self.config.adaptive_window:
                 ]
 
             # Update threshold if we have enough samples

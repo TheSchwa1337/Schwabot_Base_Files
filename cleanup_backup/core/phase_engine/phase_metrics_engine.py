@@ -30,6 +30,7 @@ from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class MetricType(Enum):
     PERFORMANCE = "performance"
     RISK = "risk"
@@ -38,12 +39,14 @@ class MetricType(Enum):
     VOLUME = "volume"
     PROFITABILITY = "profitability"
 
+
 class MetricPeriod(Enum):
     MINUTE = "minute"
     HOUR = "hour"
     DAY = "day"
     WEEK = "week"
     MONTH = "month"
+
 
 @dataclass
 class PhaseMetric:
@@ -55,6 +58,7 @@ class PhaseMetric:
     period: MetricPeriod
     confidence_score: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class PerformanceReport:
@@ -70,6 +74,7 @@ class PerformanceReport:
     metrics_summary: Dict[str, float]
     recommendations: List[str]
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class PhaseMetricsEngine:
     def __init__(self, config_path: str = "./config/phase_metrics_config.json"):
@@ -90,21 +95,21 @@ class PhaseMetricsEngine:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 # Load alert thresholds
                 thresholds = config.get("alert_thresholds", {})
                 self.alert_thresholds = {
                     MetricType(metric_type): threshold
                     for metric_type, threshold in thresholds.items()
                 }
-                
+
                 # Load optimization rules
                 self.optimization_rules = config.get("optimization_rules", {})
-                
+
                 logger.info(f"Loaded configuration for {len(self.alert_thresholds)} metric types")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -117,9 +122,9 @@ class PhaseMetricsEngine:
             MetricType.EFFICIENCY: 0.8,    # 80% efficiency threshold
             MetricType.TIMING: 0.7,        # 70% timing accuracy threshold
             MetricType.VOLUME: 1000000,    # 1M volume threshold
-            MetricType.PROFITABILITY: 0.03 # 3% profitability threshold
+            MetricType.PROFITABILITY: 0.03  # 3% profitability threshold
         }
-        
+
         self.optimization_rules = {
             "performance_optimization": {
                 "min_improvement": 0.01,
@@ -132,7 +137,7 @@ class PhaseMetricsEngine:
                 "stop_loss": 0.02
             }
         }
-        
+
         self._save_configuration()
         logger.info("Default phase metrics configuration created")
 
@@ -176,13 +181,13 @@ class PhaseMetricsEngine:
                 logger.error(f"Error in metrics processor: {e}")
 
     def record_metric(self, phase_id: str, metric_type: MetricType, value: float,
-                     period: MetricPeriod = MetricPeriod.MINUTE,
-                     confidence_score: float = 1.0,
-                     metadata: Optional[Dict[str, Any]] = None) -> str:
+                      period: MetricPeriod = MetricPeriod.MINUTE,
+                      confidence_score: float = 1.0,
+                      metadata: Optional[Dict[str, Any]] = None) -> str:
         """Record a new phase metric."""
         try:
             metric_id = f"metric_{phase_id}_{metric_type.value}_{int(time.time())}"
-            
+
             metric = PhaseMetric(
                 metric_id=metric_id,
                 phase_id=phase_id,
@@ -193,70 +198,70 @@ class PhaseMetricsEngine:
                 confidence_score=confidence_score,
                 metadata=metadata or {}
             )
-            
+
             # Store metric
             self.metrics_store[metric_id] = metric
-            
+
             # Add to real-time metrics
             self.real_time_metrics[metric_type.value].append({
                 "value": value,
                 "timestamp": metric.timestamp,
                 "phase_id": phase_id
             })
-            
+
             logger.debug(f"Recorded metric: {metric_id} = {value}")
             return metric_id
-            
+
         except Exception as e:
             logger.error(f"Error recording metric: {e}")
             return ""
 
     def get_phase_metrics(self, phase_id: str, metric_type: Optional[MetricType] = None,
-                         start_time: Optional[datetime] = None,
-                         end_time: Optional[datetime] = None) -> List[PhaseMetric]:
+                          start_time: Optional[datetime] = None,
+                          end_time: Optional[datetime] = None) -> List[PhaseMetric]:
         """Get metrics for a specific phase."""
         try:
             metrics = []
-            
+
             for metric in self.metrics_store.values():
                 if metric.phase_id == phase_id:
                     # Filter by metric type if specified
                     if metric_type and metric.metric_type != metric_type:
                         continue
-                    
+
                     # Filter by time range if specified
                     if start_time and metric.timestamp < start_time:
                         continue
                     if end_time and metric.timestamp > end_time:
                         continue
-                    
+
                     metrics.append(metric)
-            
+
             # Sort by timestamp
             metrics.sort(key=lambda x: x.timestamp)
             return metrics
-            
+
         except Exception as e:
             logger.error(f"Error getting phase metrics: {e}")
             return []
 
     def calculate_performance_metrics(self, phase_id: str, start_time: datetime,
-                                    end_time: datetime) -> Dict[str, float]:
+                                      end_time: datetime) -> Dict[str, float]:
         """Calculate comprehensive performance metrics for a phase."""
         try:
             metrics = self.get_phase_metrics(phase_id, start_time=start_time, end_time=end_time)
-            
+
             if not metrics:
                 return {}
-            
+
             # Extract values by metric type
             performance_values = [m.value for m in metrics if m.metric_type == MetricType.PERFORMANCE]
             risk_values = [m.value for m in metrics if m.metric_type == MetricType.RISK]
             efficiency_values = [m.value for m in metrics if m.metric_type == MetricType.EFFICIENCY]
-            
+
             # Calculate performance metrics
             performance_metrics = {}
-            
+
             if performance_values:
                 performance_metrics.update({
                     "total_return": np.sum(performance_values),
@@ -265,22 +270,22 @@ class PhaseMetricsEngine:
                     "sharpe_ratio": self._calculate_sharpe_ratio(performance_values),
                     "max_drawdown": self._calculate_max_drawdown(performance_values)
                 })
-            
+
             if risk_values:
                 performance_metrics.update({
                     "average_risk": unified_math.unified_math.mean(risk_values),
                     "risk_volatility": unified_math.unified_math.std(risk_values),
                     "max_risk": unified_math.unified_math.max(risk_values)
                 })
-            
+
             if efficiency_values:
                 performance_metrics.update({
                     "average_efficiency": unified_math.unified_math.mean(efficiency_values),
                     "efficiency_consistency": 1.0 - unified_math.unified_math.std(efficiency_values)
                 })
-            
+
             return performance_metrics
-            
+
         except Exception as e:
             logger.error(f"Error calculating performance metrics: {e}")
             return {}
@@ -290,14 +295,15 @@ class PhaseMetricsEngine:
         try:
             if not returns:
                 return 0.0
-            
+
             returns_array = np.array(returns)
             excess_returns = returns_array - risk_free_rate / 252  # Daily risk-free rate
-            
+
             if unified_math.unified_math.std(excess_returns) == 0:
                 return 0.0
-            
-            sharpe_ratio = unified_math.unified_math.mean(excess_returns) / unified_math.unified_math.std(excess_returns) * unified_math.unified_math.sqrt(252)
+
+            sharpe_ratio = unified_math.unified_math.mean(
+                excess_returns) / unified_math.unified_math.std(excess_returns) * unified_math.unified_math.sqrt(252)
             return float(sharpe_ratio)
         except Exception:
             return 0.0
@@ -307,7 +313,7 @@ class PhaseMetricsEngine:
         try:
             if not returns:
                 return 0.0
-            
+
             cumulative_returns = np.cumprod(1 + np.array(returns))
             running_max = np.maximum.accumulate(cumulative_returns)
             drawdown = (cumulative_returns - running_max) / running_max
@@ -317,17 +323,17 @@ class PhaseMetricsEngine:
             return 0.0
 
     def generate_performance_report(self, phase_id: str, start_time: datetime,
-                                  end_time: datetime) -> PerformanceReport:
+                                    end_time: datetime) -> PerformanceReport:
         """Generate a comprehensive performance report for a phase."""
         try:
             report_id = f"report_{phase_id}_{int(start_time.timestamp())}"
-            
+
             # Calculate performance metrics
             performance_metrics = self.calculate_performance_metrics(phase_id, start_time, end_time)
-            
+
             # Generate recommendations
             recommendations = self._generate_recommendations(performance_metrics)
-            
+
             # Create performance report
             report = PerformanceReport(
                 report_id=report_id,
@@ -343,13 +349,13 @@ class PhaseMetricsEngine:
                 recommendations=recommendations,
                 metadata={"generated_at": datetime.now().isoformat()}
             )
-            
+
             # Store report
             self.performance_reports[report_id] = report
-            
+
             logger.info(f"Generated performance report: {report_id}")
             return report
-            
+
         except Exception as e:
             logger.error(f"Error generating performance report: {e}")
             return None
@@ -360,15 +366,15 @@ class PhaseMetricsEngine:
             performance_metrics = self.get_phase_metrics(
                 phase_id, MetricType.PERFORMANCE, start_time, end_time
             )
-            
+
             if not performance_metrics:
                 return 0.0
-            
+
             positive_trades = sum(1 for m in performance_metrics if m.value > 0)
             total_trades = len(performance_metrics)
-            
+
             return positive_trades / total_trades if total_trades > 0 else 0.0
-            
+
         except Exception:
             return 0.0
 
@@ -378,46 +384,46 @@ class PhaseMetricsEngine:
             performance_metrics = self.get_phase_metrics(
                 phase_id, MetricType.PERFORMANCE, start_time, end_time
             )
-            
+
             if not performance_metrics:
                 return 0.0
-            
+
             gross_profit = sum(m.value for m in performance_metrics if m.value > 0)
             gross_loss = unified_math.abs(sum(m.value for m in performance_metrics if m.value < 0))
-            
+
             return gross_profit / gross_loss if gross_loss > 0 else float('inf')
-            
+
         except Exception:
             return 0.0
 
     def _generate_recommendations(self, performance_metrics: Dict[str, float]) -> List[str]:
         """Generate optimization recommendations based on performance metrics."""
         recommendations = []
-        
+
         try:
             # Check Sharpe ratio
             sharpe_ratio = performance_metrics.get("sharpe_ratio", 0.0)
             if sharpe_ratio < 1.0:
                 recommendations.append("Consider improving risk-adjusted returns through better position sizing")
-            
+
             # Check max drawdown
             max_drawdown = performance_metrics.get("max_drawdown", 0.0)
             if unified_math.abs(max_drawdown) > 0.05:
                 recommendations.append("Implement stricter risk management to reduce maximum drawdown")
-            
+
             # Check efficiency
             efficiency = performance_metrics.get("average_efficiency", 0.0)
             if efficiency < 0.8:
                 recommendations.append("Optimize execution timing and reduce slippage")
-            
+
             # Check volatility
             volatility = performance_metrics.get("return_volatility", 0.0)
             if volatility > 0.02:
                 recommendations.append("Consider diversifying strategies to reduce volatility")
-            
+
         except Exception as e:
             logger.error(f"Error generating recommendations: {e}")
-        
+
         return recommendations
 
     def _update_real_time_metrics(self) -> None:
@@ -460,16 +466,16 @@ class PhaseMetricsEngine:
         """Get comprehensive metrics statistics."""
         total_metrics = len(self.metrics_store)
         total_reports = len(self.performance_reports)
-        
+
         metric_type_counts = defaultdict(int)
         for metric in self.metrics_store.values():
             metric_type_counts[metric.metric_type.value] += 1
-        
+
         real_time_metrics_count = {
             metric_type: len(metrics_queue)
             for metric_type, metrics_queue in self.real_time_metrics.items()
         }
-        
+
         return {
             "total_metrics": total_metrics,
             "total_reports": total_reports,
@@ -479,30 +485,32 @@ class PhaseMetricsEngine:
             "optimization_rules_count": len(self.optimization_rules)
         }
 
+
 def main() -> None:
     """Main function for testing and demonstration."""
     engine = PhaseMetricsEngine("./test_phase_metrics_config.json")
-    
+
     # Record some test metrics
     phase_id = "test_phase_001"
     engine.record_metric(phase_id, MetricType.PERFORMANCE, 0.02)
     engine.record_metric(phase_id, MetricType.RISK, 0.01)
     engine.record_metric(phase_id, MetricType.EFFICIENCY, 0.85)
-    
+
     # Generate performance report
     start_time = datetime.now() - timedelta(hours=1)
     end_time = datetime.now()
     report = engine.generate_performance_report(phase_id, start_time, end_time)
-    
+
     if report:
         safe_print(f"Performance Report: {report.report_id}")
         safe_print(f"Total Return: {report.total_return:.4f}")
         safe_print(f"Sharpe Ratio: {report.sharpe_ratio:.4f}")
         safe_print(f"Recommendations: {report.recommendations}")
-    
+
     # Get statistics
     stats = engine.get_metrics_statistics()
     safe_print(f"Metrics Statistics: {stats}")
+
 
 if __name__ == "__main__":
     main()

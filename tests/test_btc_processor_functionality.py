@@ -41,6 +41,7 @@ try:
 except ImportError as e:
     safe_print(f"Warning: Could not import required modules: {e}")
     # Create mock classes for testing
+
     class MockProcessor:
         def __init__(self):
             pass
@@ -52,6 +53,7 @@ except ImportError as e:
     CompressionHash = type('CompressionHash', (), {})
     ProcessingMetrics = type('ProcessingMetrics', (), {})
 
+
 @dataclass
 class TestData:
     """Test data structure for BTC processor tests."""
@@ -60,6 +62,7 @@ class TestData:
     expected_profit_drift: float
     expected_compression_ratio: float
     processing_time_threshold: float
+
 
 class TestBTCProcessorFunctionality(unittest.TestCase):
     """Test suite for BTC processor functionality."""
@@ -136,7 +139,7 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
         # Performance validation
         self.assertLess(processing_time, self.test_data.processing_time_threshold,
-                       f"Processing time {processing_time:.3f}s exceeds threshold")
+                        f"Processing time {processing_time:.3f}s exceeds threshold")
 
     def test_entropy_calculation(self):
         """Test entropy calculation accuracy."""
@@ -228,10 +231,10 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
         # Performance validation
         self.assertLess(processing_time, self.performance_thresholds["processing_time"],
-                       f"Processing time {processing_time:.3f}s exceeds threshold")
+                        f"Processing time {processing_time:.3f}s exceeds threshold")
 
         self.assertLess(memory_usage, self.performance_thresholds["memory_usage"],
-                       f"Memory usage {memory_usage:.1f}MB exceeds threshold")
+                        f"Memory usage {memory_usage:.1f}MB exceeds threshold")
 
     def test_error_handling(self):
         """Test error handling and edge cases."""
@@ -328,6 +331,7 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
         self.assertFalse(self.processor.validate_configuration(invalid_config))
 
+
 def run_performance_benchmark():
     """Run comprehensive performance benchmark."""
     safe_print("🚀 Running BTC Processor Performance Benchmark...")
@@ -377,9 +381,10 @@ def run_performance_benchmark():
 
     for size, result in results.items():
         safe_print(f"{size:<10} {result['processing_time']:<12.3f} "
-              f"{result['memory_usage']:<15.1f} {result['throughput']:<15.0f}")
+                   f"{result['memory_usage']:<15.1f} {result['throughput']:<15.0f}")
 
     return results
+
 
 def main():
     """Main test execution function."""
@@ -419,6 +424,7 @@ def main():
         safe_print(f"⚠️  Could not save test report: {e}")
 
     safe_print("\n🎉 BTC Processor functionality tests completed!")
+
 
 if __name__ == "__main__":
     main()

@@ -17,6 +17,8 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding='utf-8')
 
 # Read requirements
+
+
 def read_requirements(filename):
     """Read requirements from file."""
     requirements = []
@@ -26,6 +28,7 @@ def read_requirements(filename):
             if line and not line.startswith('#'):
                 requirements.append(line)
     return requirements
+
 
 # Package configuration
 PACKAGE_CONFIG = {
@@ -55,7 +58,7 @@ PACKAGE_CONFIG = {
     "python_requires": ">=3.8",
     "packages": find_packages(include=[
         "core*",
-        "ui*", 
+        "ui*",
         "config*",
         "utils*",
         "mathlib*",
@@ -70,7 +73,7 @@ PACKAGE_CONFIG = {
     "package_data": {
         "": [
             "*.yaml",
-            "*.yml", 
+            "*.yml",
             "*.json",
             "*.md",
             "*.txt",
@@ -86,7 +89,7 @@ PACKAGE_CONFIG = {
     "extras_require": {
         "dev": [
             "pytest>=6.2.0",
-            "pytest-asyncio>=0.15.0", 
+            "pytest-asyncio>=0.15.0",
             "pytest-cov>=2.12.0",
             "flake8>=3.9.0",
             "black>=21.0.0",
@@ -137,7 +140,7 @@ PACKAGE_CONFIG = {
     "platforms": ["Linux", "Windows", "macOS"],
     "keywords": [
         "trading",
-        "cryptocurrency", 
+        "cryptocurrency",
         "algorithmic-trading",
         "mathematical-trading",
         "distributed-systems",
@@ -157,4 +160,4 @@ PACKAGE_CONFIG = {
 }
 
 if __name__ == "__main__":
-    setup(**PACKAGE_CONFIG) 
+    setup(**PACKAGE_CONFIG)

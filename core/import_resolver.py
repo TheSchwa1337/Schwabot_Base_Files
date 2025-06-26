@@ -22,25 +22,28 @@ logger = logging.getLogger(__name__)
 
 class ImportResolver:
 
-
     """Centralized import resolution with consistent fallback patterns."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize the import resolver."""
+
+
 self._import_cache: Dict[str, Any] = {}
 self._fallback_registry: Dict[str, Callable] = {}
 self._register_default_fallbacks()
 
-def _register_default_fallbacks(self) -> None:
 
+def _register_default_fallbacks(self) -> None:
 
     pass
     pass
         """Register default fallback factories for common modules."""
+
+
 self._fallback_registry.update(
             {
 "quantum_visualizer": (
@@ -64,7 +67,7 @@ def safe_import(
         self,
 module_name: str,
 class_names: List[str],
-fallback_factory: Optional[Callable] = None,
+fallback_factory: Optional[Callable]=None,
 ) -> Dict[str, Any]:
 """Safely import modules with consistent fallback patterns.
 
@@ -76,27 +79,27 @@ fallback_factory: Custom fallback factory function
 Returns:
 Dictionary mapping class names to imported objects or fallbacks
         """
-cache_key = f"{module_name}:{','.join(class_names)}"
+cache_key=f"{module_name}:{','.join(class_names)}"
 
         if cache_key in self._import_cache:
             return self._import_cache[cache_key]
 
-result = {}
+result={}
 
         try:
     pass
     pass
             # Try to import the module
-module = __import__(module_name, fromlist=class_names)
+module=__import__(module_name, fromlist=class_names)
 
             # Import each requested class/function
             for class_name in class_names:
                 if hasattr(module, class_name):
-                    result[class_name] = getattr(module, class_name)
+                    result[class_name]=getattr(module, class_name)
                 else:
 logger.warning(
                         f"Class {class_name} not found in {module_name}")
-result[class_name] = self._create_generic_fallback(]
+result[class_name]=self._create_generic_fallback(]
                         class_name)
 
         except ImportError as e:

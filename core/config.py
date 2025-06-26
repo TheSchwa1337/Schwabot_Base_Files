@@ -11,36 +11,30 @@ except ImportError:
     pass
     def safe_print(message):
 
-
     pass
     pass
     print(message)
     def info(message):
-
 
     pass
     pass
     print(f"[INFO) {message}")
     def warn(message):
 
-
     pass
     pass
     print(f"[WARN) {message}")
     def error(message):
-
 
     pass
     pass
     print(f"[ERROR) {message}")
     def success(message):
 
-
     pass
     pass
     print(f"[SUCCESS) {message}")
     def debug(message):
-
 
     pass
     pass
@@ -111,8 +105,9 @@ except ImportError:
 CLI_COMPATIBILITY_AVAILABLE = False
 
     # Fallback CLI handler
-class CLIHandler:
 
+
+class CLIHandler:
 
         @staticmethod
     def safe_emoji_print(message: str, force_ascii: bool = False) -> str:

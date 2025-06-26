@@ -73,104 +73,104 @@ logger = logging.getLogger(__name__)
 class UROSv1IntegrationTest:
     """
     Schwabot UROS v1.0 Integration Test Suite.
-    
+
     This class demonstrates the complete integration of all Schwabot
     components working together in a realistic trading scenario.
     """
-    
+
     def __init__(self):
         """Initialize the integration test suite."""
         self.test_results = {}
         self.current_tick = 1000
         self.test_start_time = datetime.now()
-        
+
         # Initialize all core components
         self._initialize_components()
-        
+
         safe_print("🚀 Schwabot UROS v1.0 Integration Test Initialized")
-    
+
     def _initialize_components(self):
         """Initialize all core components."""
         try:
             # Initialize GPT command layer
             self.gpt_layer = GPTCommandLayer()
-            
+
             # Initialize Prophet connector
             self.prophet_connector = ProphetConnector()
-            
+
             # Initialize AI command sequencer
             self.ai_sequencer = AICommandSequencer()
-            
+
             # Initialize memory key allocator
             self.memory_allocator = MemoryKeyAllocator()
-            
+
             # Initialize execution validator
             self.execution_validator = ExecutionValidator()
-            
+
             # Initialize hash registry
             self.hash_registry = HashRegistry()
-            
+
             # Initialize API gateway
             self.api_gateway = APIGateway()
-            
+
             # Initialize fault bus
             self.fault_bus = FaultBus()
-            
+
             safe_print("✅ All core components initialized successfully")
-            
+
         except Exception as e:
             safe_print(f"❌ Component initialization failed: {safe_format_error(e, 'initialization')}")
             raise
-    
+
     async def run_complete_integration_test(self):
         """Run the complete integration test."""
         safe_print("\n" + "="*80)
         safe_print("🧠 SCHWABOT UROS v1.0 COMPLETE INTEGRATION TEST")
         safe_print("="*80)
-        
+
         try:
             # Test 1: Prophet Curve Setup and Alignment
             await self._test_prophet_integration()
-            
+
             # Test 2: Multi-Agent Command Processing
             await self._test_multi_agent_commands()
-            
+
             # Test 3: Command Sequencing and Memory Tracking
             await self._test_command_sequencing()
-            
+
             # Test 4: Memory Key Allocation and Clustering
             await self._test_memory_management()
-            
+
             # Test 5: Execution Validation and Cost Analysis
             await self._test_execution_validation()
-            
+
             # Test 6: Hash Registry Integration
             await self._test_hash_registry()
-            
+
             # Test 7: API Gateway Functionality
             await self._test_api_gateway()
-            
+
             # Test 8: Complete Recursive Execution Cycle
             await self._test_recursive_execution_cycle()
-            
+
             # Test 9: Fault Handling and Recovery
             await self._test_fault_handling()
-            
+
             # Test 10: Performance Metrics and Analysis
             await self._test_performance_analysis()
-            
+
             # Generate final report
             await self._generate_final_report()
-            
+
         except Exception as e:
             safe_print(f"❌ Integration test failed: {safe_format_error(e, 'integration_test')}")
             raise
-    
+
     async def _test_prophet_integration(self):
         """Test Prophet curve setup and alignment."""
         safe_print("\n🔮 TEST 1: Prophet Integration")
         safe_print("-" * 50)
-        
+
         try:
             # Create test Prophet curve
             test_curve = ProphetCurve(
@@ -194,11 +194,11 @@ class UROSv1IntegrationTest:
                 ],
                 confidence_score=0.85
             )
-            
+
             # Add curve to Prophet connector
             success = self.prophet_connector.add_curve(test_curve)
             self.test_results['prophet_curve_added'] = success
-            
+
             # Test alpha score calculation
             alpha_score = compute_alpha_score(
                 p_actual=0.05,
@@ -207,7 +207,7 @@ class UROSv1IntegrationTest:
                 curve_id="btc_price_june_2025"
             )
             self.test_results['alpha_score'] = alpha_score.alpha_value
-            
+
             # Test curve alignment
             alignment = analyze_curve_alignment(
                 curve_id="btc_price_june_2025",
@@ -216,23 +216,24 @@ class UROSv1IntegrationTest:
                 current_time=datetime.now()
             )
             self.test_results['curve_alignment'] = alignment.alignment_score
-            
-            safe_print(f"✅ Prophet integration: Alpha={alpha_score.alpha_value:.4f}, Alignment={alignment.alignment_score:.3f}")
-            
+
+            safe_print(
+                f"✅ Prophet integration: Alpha={alpha_score.alpha_value:.4f}, Alignment={alignment.alignment_score:.3f}")
+
         except Exception as e:
             safe_print(f"❌ Prophet integration test failed: {safe_format_error(e, 'prophet_test')}")
             self.test_results['prophet_curve_added'] = False
-    
+
     async def _test_multi_agent_commands(self):
         """Test multi-agent command processing."""
         safe_print("\n🤖 TEST 2: Multi-Agent Command Processing")
         safe_print("-" * 50)
-        
+
         try:
             # Create commands from different AI agents
             agents = [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1, AIAgentType.GEMINI]
             domains = [CommandDomain.STRATEGY, CommandDomain.PROFIT, CommandDomain.ANALYSIS, CommandDomain.EXECUTION]
-            
+
             commands = []
             for i, (agent, domain) in enumerate(zip(agents, domains)):
                 command = AICommand(
@@ -250,24 +251,25 @@ class UROSv1IntegrationTest:
                     context={"test_round": 1, "agent_type": agent.value}
                 )
                 commands.append(command)
-            
+
             # Process commands through GPT layer
             responses = []
             for command in commands:
                 response = await self.gpt_layer.process_command(command)
                 responses.append(response)
                 self.test_results[f'command_{command.command_id}_processed'] = response.success
-            
-            safe_print(f"✅ Multi-agent processing: {len([r for r in responses if r.success])}/{len(responses)} successful")
-            
+
+            safe_print(
+                f"✅ Multi-agent processing: {len([r for r in responses if r.success])}/{len(responses)} successful")
+
         except Exception as e:
             safe_print(f"❌ Multi-agent command test failed: {safe_format_error(e, 'multi_agent_test')}")
-    
+
     async def _test_command_sequencing(self):
         """Test command sequencing and memory tracking."""
         safe_print("\n🧠 TEST 3: Command Sequencing and Memory Tracking")
         safe_print("-" * 50)
-        
+
         try:
             # Create test command
             test_command = AICommand(
@@ -284,7 +286,7 @@ class UROSv1IntegrationTest:
                 },
                 context={"test_type": "sequencing"}
             )
-            
+
             # Sequence the command
             sequence = await sequence_ai_command(
                 command=test_command,
@@ -292,7 +294,7 @@ class UROSv1IntegrationTest:
                 prophet_curve_id="btc_price_june_2025"
             )
             self.test_results['command_sequenced'] = sequence.sequence_id is not None
-            
+
             # Create test response
             test_response = CommandResponse(
                 command_id=test_command.command_id,
@@ -301,7 +303,7 @@ class UROSv1IntegrationTest:
                 execution_time=2.5,
                 timestamp=datetime.now()
             )
-            
+
             # Update sequence result
             success = await update_command_sequence_result(
                 sequence_id=sequence.sequence_id,
@@ -310,26 +312,26 @@ class UROSv1IntegrationTest:
                 prophet_curve_id="btc_price_june_2025"
             )
             self.test_results['sequence_updated'] = success
-            
+
             # Get performance metrics
             metrics = self.ai_sequencer.get_performance_metrics()
             self.test_results['sequencer_metrics'] = metrics
-            
+
             safe_print(f"✅ Command sequencing: Sequence={sequence.sequence_id}, Updated={success}")
-            
+
         except Exception as e:
             safe_print(f"❌ Command sequencing test failed: {safe_format_error(e, 'sequencing_test')}")
-    
+
     async def _test_memory_management(self):
         """Test memory key allocation and clustering."""
         safe_print("\n🔑 TEST 4: Memory Key Allocation and Clustering")
         safe_print("-" * 50)
-        
+
         try:
             # Allocate memory keys for different agents
             agents = ["gpt", "claude", "r1", "gemini"]
             memory_keys = []
-            
+
             for i, agent in enumerate(agents):
                 memory_key = allocate_memory_key(
                     agent_type=agent,
@@ -343,7 +345,7 @@ class UROSv1IntegrationTest:
                 )
                 memory_keys.append(memory_key)
                 self.test_results[f'memory_key_{agent}_allocated'] = memory_key.key_id is not None
-            
+
             # Create memory links between keys
             links_created = 0
             for i in range(len(memory_keys) - 1):
@@ -356,28 +358,28 @@ class UROSv1IntegrationTest:
                 )
                 if link:
                     links_created += 1
-            
+
             self.test_results['memory_links_created'] = links_created
-            
+
             # Find similar keys
             if memory_keys:
                 similar_keys = find_similar_memory_keys(memory_keys[0].key_id, max_results=3)
                 self.test_results['similar_keys_found'] = len(similar_keys)
-            
+
             # Get performance metrics
             metrics = self.memory_allocator.get_performance_metrics()
             self.test_results['memory_metrics'] = metrics
-            
+
             safe_print(f"✅ Memory management: {len(memory_keys)} keys, {links_created} links created")
-            
+
         except Exception as e:
             safe_print(f"❌ Memory management test failed: {safe_format_error(e, 'memory_test')}")
-    
+
     async def _test_execution_validation(self):
         """Test execution validation and cost analysis."""
         safe_print("\n✅ TEST 5: Execution Validation and Cost Analysis")
         safe_print("-" * 50)
-        
+
         try:
             # Simulate execution cost
             test_payload = {
@@ -385,13 +387,13 @@ class UROSv1IntegrationTest:
                 "parameters": {"complexity": "high", "risk": "medium"},
                 "target_profit": 300.0
             }
-            
+
             market_data = {
                 "volatility": 0.15,
                 "volume": 1500.0,
                 "price": 50500.0
             }
-            
+
             execution_cost = simulate_execution_cost(
                 command_id="validation_test_001",
                 payload=test_payload,
@@ -399,11 +401,11 @@ class UROSv1IntegrationTest:
                 complexity_score=1.8
             )
             self.test_results['execution_cost_simulated'] = execution_cost.total_cost
-            
+
             # Validate drift
             expected_time = datetime.now() - timedelta(seconds=3)
             actual_time = datetime.now()
-            
+
             drift_validation = validate_drift(
                 command_id="validation_test_001",
                 expected_time=expected_time,
@@ -412,7 +414,7 @@ class UROSv1IntegrationTest:
                 confidence_score=0.85
             )
             self.test_results['drift_validated'] = drift_validation.drift_magnitude
-            
+
             # Validate execution
             execution_validation = validate_execution(
                 command_id="validation_test_001",
@@ -422,21 +424,22 @@ class UROSv1IntegrationTest:
                 risk_tolerance=0.6
             )
             self.test_results['execution_validated'] = execution_validation.validation_status.value
-            
+
             # Get performance metrics
             metrics = self.execution_validator.get_performance_metrics()
             self.test_results['validation_metrics'] = metrics
-            
-            safe_print(f"✅ Execution validation: Cost={execution_cost.total_cost:.2f}, Status={execution_validation.validation_status.value}")
-            
+
+            safe_print(
+                f"✅ Execution validation: Cost={execution_cost.total_cost:.2f}, Status={execution_validation.validation_status.value}")
+
         except Exception as e:
             safe_print(f"❌ Execution validation test failed: {safe_format_error(e, 'validation_test')}")
-    
+
     async def _test_hash_registry(self):
         """Test hash registry integration."""
         safe_print("\n🔗 TEST 6: Hash Registry Integration")
         safe_print("-" * 50)
-        
+
         try:
             # Register hash entries
             hash_entries = []
@@ -452,7 +455,7 @@ class UROSv1IntegrationTest:
                 )
                 hash_entries.append(hash_entry)
                 self.test_results[f'hash_entry_{i+1}_registered'] = hash_entry is not None
-            
+
             # Update hash status
             updates_successful = 0
             for i, entry in enumerate(hash_entries):
@@ -465,23 +468,23 @@ class UROSv1IntegrationTest:
                     )
                     if success:
                         updates_successful += 1
-            
+
             self.test_results['hash_updates_successful'] = updates_successful
-            
+
             # Get registry metrics
             metrics = self.hash_registry.get_performance_metrics()
             self.test_results['hash_registry_metrics'] = metrics
-            
+
             safe_print(f"✅ Hash registry: {len(hash_entries)} entries, {updates_successful} updates successful")
-            
+
         except Exception as e:
             safe_print(f"❌ Hash registry test failed: {safe_format_error(e, 'hash_test')}")
-    
+
     async def _test_api_gateway(self):
         """Test API gateway functionality."""
         safe_print("\n🌐 TEST 7: API Gateway Functionality")
         safe_print("-" * 50)
-        
+
         try:
             # Test REST API endpoints
             test_data = {
@@ -492,10 +495,10 @@ class UROSv1IntegrationTest:
                     "priority": "medium"
                 }
             }
-            
+
             # Simulate API calls (in real implementation, these would be HTTP requests)
             api_responses = []
-            
+
             # Test command submission
             api_responses.append({
                 "endpoint": "/api/v1/commands",
@@ -503,7 +506,7 @@ class UROSv1IntegrationTest:
                 "status": "success",
                 "data": test_data
             })
-            
+
             # Test status check
             api_responses.append({
                 "endpoint": "/api/v1/status",
@@ -511,7 +514,7 @@ class UROSv1IntegrationTest:
                 "status": "success",
                 "data": {"system_status": "operational"}
             })
-            
+
             # Test metrics endpoint
             api_responses.append({
                 "endpoint": "/api/v1/metrics",
@@ -519,27 +522,27 @@ class UROSv1IntegrationTest:
                 "status": "success",
                 "data": {"total_commands": 10, "success_rate": 0.9}
             })
-            
+
             self.test_results['api_responses'] = api_responses
             self.test_results['api_gateway_functional'] = len(api_responses) == 3
-            
+
             safe_print(f"✅ API gateway: {len(api_responses)} endpoints tested successfully")
-            
+
         except Exception as e:
             safe_print(f"❌ API gateway test failed: {safe_format_error(e, 'api_test')}")
-    
+
     async def _test_recursive_execution_cycle(self):
         """Test complete recursive execution cycle."""
         safe_print("\n🔄 TEST 8: Complete Recursive Execution Cycle")
         safe_print("-" * 50)
-        
+
         try:
             # Simulate a complete trading cycle
             cycle_results = []
-            
+
             for cycle in range(3):
                 safe_print(f"  🔄 Cycle {cycle + 1}/3")
-                
+
                 # 1. AI agent generates command
                 command = AICommand(
                     command_id=f"cycle_{cycle+1}_cmd",
@@ -555,10 +558,10 @@ class UROSv1IntegrationTest:
                     },
                     context={"recursive_cycle": cycle+1}
                 )
-                
+
                 # 2. Command is sequenced
                 sequence = await sequence_ai_command(command, self.current_tick + cycle)
-                
+
                 # 3. Memory key is allocated
                 memory_key = allocate_memory_key(
                     agent_type="gpt",
@@ -568,14 +571,14 @@ class UROSv1IntegrationTest:
                     alpha_score=0.05 + (cycle * 0.02),
                     profit_delta=150.0 + (cycle * 50)
                 )
-                
+
                 # 4. Execution cost is simulated
                 execution_cost = simulate_execution_cost(
                     command_id=command.command_id,
                     payload=command.payload,
                     complexity_score=1.0 + (cycle * 0.2)
                 )
-                
+
                 # 5. Command is executed (simulated)
                 response = CommandResponse(
                     command_id=command.command_id,
@@ -584,14 +587,14 @@ class UROSv1IntegrationTest:
                     execution_time=2.0 + (cycle * 0.5),
                     timestamp=datetime.now()
                 )
-                
+
                 # 6. Results are updated
                 await update_command_sequence_result(
                     sequence_id=sequence.sequence_id,
                     response=response,
                     profit_delta=150.0 + (cycle * 50)
                 )
-                
+
                 # 7. Hash is registered and updated
                 await register_hash_entry(
                     hash_type="command",
@@ -601,7 +604,7 @@ class UROSv1IntegrationTest:
                     command_id=command.command_id,
                     confidence_score=0.8
                 )
-                
+
                 cycle_results.append({
                     "cycle": cycle+1,
                     "command_id": command.command_id,
@@ -610,24 +613,24 @@ class UROSv1IntegrationTest:
                     "execution_cost": execution_cost.total_cost,
                     "profit": response.result.get("profit", 0)
                 })
-            
+
             self.test_results['recursive_cycles'] = cycle_results
             self.test_results['recursive_execution_successful'] = len(cycle_results) == 3
-            
+
             safe_print(f"✅ Recursive execution: {len(cycle_results)} cycles completed successfully")
-            
+
         except Exception as e:
             safe_print(f"❌ Recursive execution test failed: {safe_format_error(e, 'recursive_test')}")
-    
+
     async def _test_fault_handling(self):
         """Test fault handling and recovery."""
         safe_print("\n🛡️ TEST 9: Fault Handling and Recovery")
         safe_print("-" * 50)
-        
+
         try:
             # Simulate various fault scenarios
             fault_scenarios = []
-            
+
             # Scenario 1: Invalid command
             try:
                 invalid_command = AICommand(
@@ -640,7 +643,7 @@ class UROSv1IntegrationTest:
                     payload={"invalid": True, "should_fail": True},
                     context={"fault_test": True}
                 )
-                
+
                 # This should be handled gracefully
                 sequence = await sequence_ai_command(invalid_command, self.current_tick)
                 fault_scenarios.append({
@@ -648,14 +651,14 @@ class UROSv1IntegrationTest:
                     "handled": sequence.sequence_id is not None,
                     "status": "graceful_handling"
                 })
-                
+
             except Exception as e:
                 fault_scenarios.append({
                     "scenario": "invalid_command",
                     "handled": False,
                     "error": str(e)
                 })
-            
+
             # Scenario 2: Memory allocation failure
             try:
                 memory_key = allocate_memory_key(
@@ -670,14 +673,14 @@ class UROSv1IntegrationTest:
                     "handled": memory_key.key_id is not None,
                     "status": "fallback_created"
                 })
-                
+
             except Exception as e:
                 fault_scenarios.append({
                     "scenario": "memory_allocation",
                     "handled": False,
                     "error": str(e)
                 })
-            
+
             # Scenario 3: Execution validation failure
             try:
                 execution_cost = simulate_execution_cost(
@@ -690,58 +693,60 @@ class UROSv1IntegrationTest:
                     "handled": execution_cost.total_cost > 0,
                     "status": "fallback_cost"
                 })
-                
+
             except Exception as e:
                 fault_scenarios.append({
                     "scenario": "execution_validation",
                     "handled": False,
                     "error": str(e)
                 })
-            
+
             self.test_results['fault_scenarios'] = fault_scenarios
             self.test_results['fault_handling_successful'] = all(
                 scenario.get("handled", False) for scenario in fault_scenarios
             )
-            
-            safe_print(f"✅ Fault handling: {len([s for s in fault_scenarios if s.get('handled', False)])}/{len(fault_scenarios)} scenarios handled")
-            
+
+            safe_print(
+                f"✅ Fault handling: {len([s for s in fault_scenarios if s.get('handled', False)])}/{len(fault_scenarios)} scenarios handled")
+
         except Exception as e:
             safe_print(f"❌ Fault handling test failed: {safe_format_error(e, 'fault_test')}")
-    
+
     async def _test_performance_analysis(self):
         """Test performance metrics and analysis."""
         safe_print("\n📊 TEST 10: Performance Metrics and Analysis")
         safe_print("-" * 50)
-        
+
         try:
             # Collect performance metrics from all components
             performance_metrics = {}
-            
+
             # Prophet connector metrics
             prophet_metrics = self.prophet_connector.get_performance_metrics()
             performance_metrics['prophet'] = prophet_metrics
-            
+
             # AI sequencer metrics
             sequencer_metrics = self.ai_sequencer.get_performance_metrics()
             performance_metrics['sequencer'] = sequencer_metrics
-            
+
             # Memory allocator metrics
             memory_metrics = self.memory_allocator.get_performance_metrics()
             performance_metrics['memory'] = memory_metrics
-            
+
             # Execution validator metrics
             validator_metrics = self.execution_validator.get_performance_metrics()
             performance_metrics['validator'] = validator_metrics
-            
+
             # Hash registry metrics
             hash_metrics = self.hash_registry.get_performance_metrics()
             performance_metrics['hash_registry'] = hash_metrics
-            
+
             # Calculate overall system performance
             total_commands = sequencer_metrics.get('total_commands_processed', 0)
-            successful_commands = sequencer_metrics.get('agent_performance', {}).get('gpt', {}).get('successful_commands', 0)
+            successful_commands = sequencer_metrics.get(
+                'agent_performance', {}).get('gpt', {}).get('successful_commands', 0)
             success_rate = successful_commands / max(total_commands, 1)
-            
+
             overall_performance = {
                 'total_commands_processed': total_commands,
                 'successful_commands': successful_commands,
@@ -751,30 +756,30 @@ class UROSv1IntegrationTest:
                 'memory_keys_allocated': memory_metrics.get('total_keys_allocated', 0),
                 'hash_entries_registered': hash_metrics.get('total_entries', 0)
             }
-            
+
             performance_metrics['overall'] = overall_performance
             self.test_results['performance_metrics'] = performance_metrics
-            
+
             safe_print(f"✅ Performance analysis: Success rate={success_rate:.2%}, Total commands={total_commands}")
-            
+
         except Exception as e:
             safe_print(f"❌ Performance analysis test failed: {safe_format_error(e, 'performance_test')}")
-    
+
     async def _generate_final_report(self):
         """Generate final integration test report."""
         safe_print("\n" + "="*80)
         safe_print("📋 SCHWABOT UROS v1.0 INTEGRATION TEST REPORT")
         safe_print("="*80)
-        
+
         # Calculate test duration
         test_duration = datetime.now() - self.test_start_time
-        
+
         # Count successful tests
-        successful_tests = sum(1 for result in self.test_results.values() 
-                             if isinstance(result, bool) and result)
-        total_tests = sum(1 for result in self.test_results.values() 
-                         if isinstance(result, bool))
-        
+        successful_tests = sum(1 for result in self.test_results.values()
+                               if isinstance(result, bool) and result)
+        total_tests = sum(1 for result in self.test_results.values()
+                          if isinstance(result, bool))
+
         # Generate report
         report = {
             'test_summary': {
@@ -798,7 +803,7 @@ class UROSv1IntegrationTest:
             'performance_metrics': self.test_results.get('performance_metrics', {}),
             'detailed_results': self.test_results
         }
-        
+
         # Save report to file
         report_file = "uros_v1_integration_report.json"
         try:
@@ -807,18 +812,19 @@ class UROSv1IntegrationTest:
             safe_print(f"📄 Detailed report saved to: {report_file}")
         except Exception as e:
             safe_print(f"⚠️ Failed to save report: {safe_format_error(e, 'report_save')}")
-        
+
         # Display summary
         safe_print("\n📊 TEST SUMMARY:")
         safe_print(f"   Duration: {test_duration}")
-        safe_print(f"   Success Rate: {successful_tests}/{total_tests} ({successful_tests/max(total_tests,1):.1%})")
-        safe_print(f"   Components Active: {sum(report['component_status'].values())}/{len(report['component_status'])}")
-        
+        safe_print(f"   Success Rate: {successful_tests}/{total_tests} ({successful_tests/max(total_tests, 1):.1%})")
+        safe_print(
+            f"   Components Active: {sum(report['component_status'].values())}/{len(report['component_status'])}")
+
         if successful_tests == total_tests:
             safe_print("\n🎉 ALL TESTS PASSED! Schwabot UROS v1.0 is fully operational!")
         else:
             safe_print(f"\n⚠️ {total_tests - successful_tests} tests failed. Review detailed report for issues.")
-        
+
         safe_print("\n" + "="*80)
 
 
@@ -827,12 +833,12 @@ async def main():
     if not MODULES_AVAILABLE:
         safe_print("❌ Required modules not available. Cannot run integration test.")
         return
-    
+
     try:
         # Create and run integration test
         integration_test = UROSv1IntegrationTest()
         await integration_test.run_complete_integration_test()
-        
+
     except Exception as e:
         safe_print(f"❌ Integration test failed: {safe_format_error(e, 'main')}")
         raise
@@ -840,4 +846,4 @@ async def main():
 
 if __name__ == "__main__":
     # Run the integration test
-    asyncio.run(main()) 
+    asyncio.run(main())

@@ -21,7 +21,6 @@ _W: np.ndarray = np.random.randn(512) * 0.03  # Will be learned later
 
 def sentiment_lambda(corpus: list[str]) -> float:
 
-
     pass
     pass
     """Return λ_sent ∈ [-1,1] for latest news headline batch.
@@ -45,6 +44,8 @@ Returns 0.0 if sklearn not available or corpus empty
 
     # Initialize vectorizer on first use
     if _VEC is None:
+
+
 _VEC = TfidfVectorizer(max_features=512, stop_words="english")
 
     try:

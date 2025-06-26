@@ -45,15 +45,16 @@ logger = logging.getLogger(__name__)
 
 class UnifiedSchwabotIntegration:
 
-
     """
 Unified integration system for Schwabot.
 """
+
 
 def __init__(self,
 
 
                  config: Optional[Dict[str, Any]] = None):
+
 """
 Initialize the unified Schwabot integration system.
 
@@ -96,6 +97,7 @@ self.metrics = {
 }
 
 logger.info("🧠 Unified Schwabot Integration initialized")
+
 
 async def initialize_components(self):
         """Initialize all core components."""

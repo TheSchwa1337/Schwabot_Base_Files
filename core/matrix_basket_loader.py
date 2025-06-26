@@ -1,4 +1,22 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.unified_math_system import unified_math
+from hash_registry_manager import HashRegistryManager, HashRegistryEntry
+from bit_resolution_engine import BitResolutionEngine
+from tensor_matcher import TensorMatcher
+from matrix_mapper import MatrixMapper, BitPhase, MatrixBasket, BasketType
+from math.tensor_algebra import UnifiedTensorAlgebra, BitPhaseResult
+import queue
+import threading
+import sys
+import os
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Callable
+import logging
+import time
+import hashlib
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
@@ -10,43 +28,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Matrix Basket Loader - Schwabot UROS v1.0
@@ -63,34 +88,19 @@ Mathematical Foundation:
 - Enabled/Disabled State Management
 """
 
-import json
-import hashlib
-import time
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-import os
-import sys
-import threading
-import queue
 
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from math.tensor_algebra import UnifiedTensorAlgebra, BitPhaseResult
-from matrix_mapper import MatrixMapper, BitPhase, MatrixBasket, BasketType
-from tensor_matcher import TensorMatcher
-from bit_resolution_engine import BitResolutionEngine
-from hash_registry_manager import HashRegistryManager, HashRegistryEntry
 
 logger = logging.getLogger(__name__)
 
+
 class BasketLoadTrigger(Enum):
 
-
     """Basket load trigger types."""
+
+
 HASH_RESOLUTION = "hash_resolution"
 PRIORITY_UPDATE = "priority_update"
 ROUTE_CHANGE = "route_change"
@@ -98,11 +108,13 @@ ENABLE_TOGGLE = "enable_toggle"
 MANUAL_LOAD = "manual_load"
 AUTO_REFRESH = "auto_refresh"
 
+
 @dataclass
 class BasketLoadRequest:
 
-
     """Basket load request with trigger information."""
+
+
 basket_id: str
 hash_id: str
 bit_depth: int
@@ -112,11 +124,13 @@ trigger: BasketLoadTrigger
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class BasketLoadResult:
 
-
     """Result of basket loading operation."""
+
+
 success: bool
 basket_id: str
 hash_id: str
@@ -125,8 +139,8 @@ error_message: Optional[str] = None
 load_time: float = 0.0
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class MatrixBasketLoader:
 
+class MatrixBasketLoader:
 
     """
 Matrix Basket Loader for Schwabot UROS v1.0.
@@ -139,12 +153,13 @@ Integrates with the 32-entry hash registry scaffold to provide:
 - Seamless integration with matrix mapper
 """
 
-def __init__(self, hash_registry_manager: HashRegistryManager = None):
 
+def __init__(self, hash_registry_manager: HashRegistryManager = None):
 
     pass
     pass
         """Initialize matrix basket loader."""
+
         # Core components
 self.hash_registry_manager = hash_registry_manager or HashRegistryManager()
         self.matrix_mapper = MatrixMapper()

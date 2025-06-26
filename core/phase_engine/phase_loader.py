@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from collections import defaultdict, deque
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import threading
+import time
+import json
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Phase Loader - Trading Phase Configuration and Data Loading for Schwabot
@@ -63,42 +80,39 @@ Core Functionality:
 - Integration with trading pipeline
 """
 
-import logging
-import json
-import time
-import threading
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class LoaderStatus(Enum):
 
-
     IDLE = "idle"
+
+
 LOADING = "loading"
 VALIDATING = "validating"
 ERROR = "error"
 READY = "ready"
 
+
 class DataFormat(Enum):
 
-
     JSON = "json"
+
+
 YAML = "yaml"
 CSV = "csv"
 BINARY = "binary"
 CUSTOM = "custom"
 
+
 @dataclass
 class PhaseConfiguration:
 
-
     config_id: str
+
+
 phase_type: str
 parameters: Dict[str, Any]
 constraints: Dict[str, Any]
@@ -108,11 +122,13 @@ created_at: datetime
 updated_at: datetime
 is_active: bool = True
 
+
 @dataclass
 class LoadedPhaseData:
 
-
     data_id: str
+
+
 phase_id: str
 data_format: DataFormat
 data_content: Any
@@ -121,15 +137,17 @@ checksum: str
 loaded_at: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class PhaseLoader:
 
 
 def __init__(self, config_path: str = "./config/phase_loader_config.json"):
 
-
     pass
     pass
         self.config_path = config_path
+
+
 self.loaded_configurations: Dict[str, PhaseConfiguration] = {}
 self.loaded_data: Dict[str, LoadedPhaseData] = {}
 self.data_cache: Dict[str, Any] = {}
@@ -140,8 +158,8 @@ self._load_configuration()
         self._start_background_loader()
         logger.info("PhaseLoader initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
@@ -150,6 +168,7 @@ def _load_configuration(self) -> None:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
+
 
                 # Load validation rules
 self.validation_rules = config.get("validation_rules", {})
@@ -162,12 +181,14 @@ self._create_default_configuration()
 logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
-def _create_default_configuration(self) -> None:
 
+def _create_default_configuration(self) -> None:
 
     pass
     pass
         """Create default phase loader configuration."""
+
+
 config = {
 "cache_size": 1000,
 "auto_reload_enabled": True,

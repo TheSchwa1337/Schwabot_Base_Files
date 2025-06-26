@@ -362,7 +362,7 @@ class VectorTripletMatcher:
 
         # Analyze all consecutive triplets
         for i in range(len(values) - 2):
-            triplet = values[i : i + 3]
+            triplet = values[i: i + 3]
 
             # Mathematical sequence analysis
             decimal_triplet = [Decimal(str(v)) for v in triplet]

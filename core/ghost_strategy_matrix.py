@@ -33,15 +33,14 @@ __all__: list[str] = []
 "update_strategy_matrix",
 ]
 
-# ---------------------------------------------------------------------------
-# Basic outer-product helper (legacy)
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Basic outer-product helper (legacy)
+    # ---------------------------------------------------------------------------
 
 
-def build_strategy_matrix(
+    def build_strategy_matrix(
 
-
-    phi: np.ndarray, kappa: np.ndarray
+phi: np.ndarray, kappa: np.ndarray
 ) -> np.ndarray:  # noqa: D401
 """Return outer product S = phi[:, None] * kappa[None, :]."""
     return np.outer(phi, kappa)
@@ -69,8 +68,7 @@ def _find_band_idx(value: float | int, edges: Sequence[float | int]) -> int:
 
 def strategy_match_matrix(
 
-
-    H_t: int,
+H_t: int,
 zeta_t: float,
 hash_edges: Sequence[int],
 zeta_edges: Sequence[float],
@@ -93,8 +91,7 @@ i = _find_band_idx(H_t, hash_edges)
 
 def reward_matrix(
 
-
-    P: np.ndarray,
+P: np.ndarray,
 delta_G: np.ndarray,
 zeta: np.ndarray,
 ) -> np.ndarray:  # noqa: D401
@@ -123,8 +120,7 @@ x_shift = x - unified_math.unified_math.max(x)
 
 def dynamic_strategy_switch(
 
-
-    Q: np.ndarray,
+Q: np.ndarray,
 T: np.ndarray,
 lam: np.ndarray,
 ) -> int:  # noqa: D401
@@ -142,8 +138,7 @@ lam: np.ndarray,
 
 def update_strategy_matrix(
 
-
-    M_prev: np.ndarray,
+M_prev: np.ndarray,
 R: np.ndarray,
 E: np.ndarray,
 *,

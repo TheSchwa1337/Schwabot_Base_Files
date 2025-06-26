@@ -26,15 +26,14 @@ __all__: list[str] = []
 "hash_match_check",
 ]
 
-# ---------------------------------------------------------------------------
-# Hash computation
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Hash computation
+    # ---------------------------------------------------------------------------
 
 
-def compute_tick_hash(
+    def compute_tick_hash(
 
-
-    price: float,
+price: float,
 delta_volume: float,
 delta_time: float,
 ) -> str:  # noqa: D401
@@ -65,8 +64,7 @@ hash_obj = hashlib.sha256(data)
 
 def hash_match_check(
 
-
-    current_hash: str,
+current_hash: str,
 hash_map: Dict[str, float],
 *,
 tolerance: int = 2,
@@ -89,15 +87,14 @@ Maximum Hamming distance for fuzzy matching.
     for known_hash in hash_map:
         if len(known_hash) == len(current_hash):
             hamming_dist = sum(
-                c1 != c2 for c1, c2 in zip(current_hash, known_hash))
-            if hamming_dist <= tolerance:
-                return True
+          c1 != c2 for c1, c2 in zip(current_hash, known_hash))
+           if hamming_dist <= tolerance:
+           return True
 
-    return False
+           return False
 
 
-def sync_probability(
-
+           def sync_probability(
 
     tick_t1: float,
 tick_t2: float,

@@ -19,13 +19,13 @@ def fix_file(file_path: str) -> dict:
         "w292_fixed": 0,  # no newline at end of file
         "w293_fixed": 0,  # blank line contains whitespace
     }
-    
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Fix W291: trailing whitespace
         lines = content.split('\n')
         fixed_lines = []
@@ -33,27 +33,27 @@ def fix_file(file_path: str) -> dict:
             if line.rstrip() != line:
                 stats["w291_fixed"] += 1
             fixed_lines.append(line.rstrip())
-        
+
         # Fix W293: blank line contains whitespace
         for i, line in enumerate(fixed_lines):
             if line == '' and i < len(lines) and lines[i].strip() == '' and lines[i] != '':
                 stats["w293_fixed"] += 1
-        
+
         # Fix W292: no newline at end of file
         if fixed_lines and fixed_lines[-1] != '':
             fixed_lines.append('')
             stats["w292_fixed"] += 1
-        
+
         fixed_content = '\n'.join(fixed_lines)
-        
+
         # Write back if changes were made
         if fixed_content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(fixed_content)
             print(f"Fixed {file_path}: {stats}")
-        
+
         return stats
-        
+
     except Exception as e:
         print(f"Error fixing {file_path}: {e}")
         return stats
@@ -67,7 +67,7 @@ def main():
         "w293_fixed": 0,
         "files_processed": 0,
     }
-    
+
     # Process core directory
     core_path = Path("core")
     if core_path.exists():
@@ -78,7 +78,7 @@ def main():
                     if key in total_stats:
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
-    
+
     # Process tests directory
     tests_path = Path("tests")
     if tests_path.exists():
@@ -89,7 +89,7 @@ def main():
                     if key in total_stats:
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
-    
+
     print(f"\nTotal fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"W291 (trailing whitespace): {total_stats['w291_fixed']}")
@@ -98,4 +98,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

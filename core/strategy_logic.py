@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+import numpy.typing as npt
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
+import time
+import logging
+from enum import Enum
+from decimal import getcontext
+from dataclasses import field
+from dataclasses import dataclass
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Strategy Logic - Core Trading Strategy Implementation.
 
@@ -81,16 +97,7 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-from dataclasses import dataclass
-from dataclasses import field
-from decimal import getcontext
-from enum import Enum
-import logging
-import time
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
 
 if TYPE_CHECKING:
     pass
@@ -107,8 +114,8 @@ logger = logging.getLogger(__name__)
 
 class StrategyType(Enum):
 
-
     """Strategy type enumeration."""
+
 
 MEAN_REVERSION = "mean_reversion"
 MOMENTUM = "momentum"
@@ -120,8 +127,8 @@ QUANTUM_ENHANCED = "quantum_enhanced"
 
 class SignalType(Enum):
 
-
     """Signal type enumeration."""
+
 
 BUY = "buy"
 SELL = "sell"
@@ -132,8 +139,8 @@ HEDGE = "hedge"
 
 class SignalStrength(Enum):
 
-
     """Signal strength enumeration."""
+
 
 WEAK = "weak"
 MODERATE = "moderate"
@@ -144,8 +151,8 @@ VERY_STRONG = "very_strong"
 @dataclass
 class TradingSignal:
 
-
     """Trading signal container."""
+
 
 signal_type: SignalType
 strength: SignalStrength
@@ -161,8 +168,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class StrategyConfig:
 
-
     """Strategy configuration."""
+
 
 strategy_type: StrategyType
 name: str
@@ -177,8 +184,8 @@ parameters: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class StrategyPerformance:
 
-
     """Strategy performance metrics."""
+
 
 strategy_name: str
 total_trades: int = 0
@@ -194,15 +201,16 @@ last_updated: float = field(default_factory=time.time)
 
 class StrategyLogic:
 
-
     """Core strategy logic implementation."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
 
     pass
     pass
         """Initialize strategy logic."""
+
+
 self.version = "1.0.0"
 self.config = config or self._default_config()
 
@@ -224,8 +232,8 @@ self._initialize_default_strategies()
 
 logger.info(f"StrategyLogic v{self.version} initialized")
 
-def _default_config(self) -> Dict[str, Any]:
 
+def _default_config(self) -> Dict[str, Any]:
 
     pass
     pass
@@ -240,12 +248,14 @@ def _default_config(self) -> Dict[str, Any]:
 "signal_cooldown_period": 1.0,  # seconds
 }
 
-def _initialize_default_strategies(self) -> None:
 
+def _initialize_default_strategies(self) -> None:
 
     pass
     pass
         """Initialize default trading strategies."""
+
+
 default_strategies = [
 StrategyConfig(
                 strategy_type=StrategyType.MEAN_REVERSION,
@@ -294,18 +304,20 @@ parameters={
         for strategy in default_strategies:
 self.register_strategy(strategy)
 
-def register_strategy(self, strategy_config: StrategyConfig) -> bool:
 
+def register_strategy(self, strategy_config: StrategyConfig) -> bool:
 
     pass
     pass
         """Register a new trading strategy."""
         try:
+
+
 self.strategies[strategy_config.name] = strategy_config
 
             # Initialize performance tracking
 self.performance[strategy_config.name] = StrategyPerformance(]
-                strategy_name=strategy_config.name
+                strategy_name = strategy_config.name
 
 
 logger.info(f"Registered strategy: {strategy_config.name}")

@@ -1,3 +1,12 @@
+from enhanced_phase_risk_manager import (
+    EnhancedPhaseRiskManager,
+    PhaseRiskMetrics,
+    BitmapType,
+    IntegrationType,
+    DLTWaveformData,
+    TesseractVisualizationData,
+    BacklogEntry
+)
 from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
@@ -40,15 +49,6 @@ if str(CORE_PATH) not in sys.path:
     sys.path.insert(0, str(CORE_PATH))
 
 # Import enhanced phase risk manager
-from enhanced_phase_risk_manager import (
-    EnhancedPhaseRiskManager,
-    PhaseRiskMetrics,
-    BitmapType,
-    IntegrationType,
-    DLTWaveformData,
-    TesseractVisualizationData,
-    BacklogEntry
-)
 
 # Configure logging
 logging.basicConfig(
@@ -94,7 +94,7 @@ class ProfitVectorizationData:
 
 class PipelineIntegrationManager:
     """Comprehensive pipeline integration manager."""
-    
+
     def __init__(self):
         """Initialize the pipeline integration manager."""
         self.phase_risk_manager = EnhancedPhaseRiskManager()
@@ -103,15 +103,15 @@ class PipelineIntegrationManager:
         self.profit_vectors: List[ProfitVectorizationData] = []
         self.backlog_entries: List[BacklogEntry] = []
         self.api_endpoints: Dict[str, Callable] = {}
-        
+
         # Initialize components
         self._initialize_components()
-        
+
         # Initialize API endpoints
         self._initialize_api_endpoints()
-        
+
         logger.info("Pipeline Integration Manager initialized")
-    
+
     def _initialize_components(self):
         """Initialize all pipeline components."""
         components_config = [
@@ -156,14 +156,14 @@ class PipelineIntegrationManager:
                 'status': 'ACTIVE'
             }
         ]
-        
+
         for config in components_config:
             self.components[config['name']] = PipelineComponent(
                 name=config['name'],
                 component_type=config['component_type'],
                 status=config['status']
             )
-    
+
     def _initialize_api_endpoints(self):
         """Initialize API endpoints for external access."""
         self.api_endpoints = {
@@ -176,7 +176,7 @@ class PipelineIntegrationManager:
             'update_component_status': self.update_component_status,
             'get_pipeline_health': self.get_pipeline_health
         }
-    
+
     def get_comprehensive_risk_assessment(
         self,
         market_data: Dict[str, Any],
@@ -188,23 +188,23 @@ class PipelineIntegrationManager:
             risk_assessment = self.phase_risk_manager.get_comprehensive_risk_assessment(
                 market_data, trade_history
             )
-            
+
             # Add pipeline-specific metrics
             risk_assessment['pipeline_health'] = self.get_pipeline_health()
             risk_assessment['component_status'] = {
                 name: comp.status for name, comp in self.components.items()
             }
-            
+
             # Add profit vectorization data
             profit_vectors = self.get_profit_vectors()
             risk_assessment['profit_vectors'] = profit_vectors
-            
+
             # Add visual confirmation data
             visual_data = self.get_visual_confirmation()
             risk_assessment['visual_confirmation'] = visual_data
-            
+
             return risk_assessment
-            
+
         except Exception as e:
             logger.error(f"Error in comprehensive risk assessment: {e}")
             return {
@@ -212,7 +212,7 @@ class PipelineIntegrationManager:
                 'risk_level': 'medium',
                 'pipeline_health': 'degraded'
             }
-    
+
     def integrate_dlt_waveform(
         self,
         waveform_data: Dict[str, Any]
@@ -221,11 +221,11 @@ class PipelineIntegrationManager:
         try:
             # Integrate with phase risk manager
             dlt_result = self.phase_risk_manager.integrate_dlt_waveform(waveform_data)
-            
+
             # Update component status
             self.components['dlt_waveform_engine'].status = 'ACTIVE'
             self.components['dlt_waveform_engine'].last_update = datetime.now()
-            
+
             # Create visual confirmation
             visual_data = VisualConfirmationData(
                 component_id='dlt_waveform',
@@ -240,7 +240,7 @@ class PipelineIntegrationManager:
                 }
             )
             self.visual_confirmations.append(visual_data)
-            
+
             # Add to backlog for training
             backlog_entry = self.phase_risk_manager.add_backlog_entry(
                 trade_data={'waveform_data': waveform_data},
@@ -248,7 +248,7 @@ class PipelineIntegrationManager:
                 performance_metrics={'phase_coherence': dlt_result.phase_coherence},
                 training_tags=['dlt_waveform', 'high_frequency']
             )
-            
+
             return {
                 'success': True,
                 'dlt_result': {
@@ -262,17 +262,17 @@ class PipelineIntegrationManager:
                 },
                 'backlog_entry': backlog_entry.entry_id
             }
-            
+
         except Exception as e:
             logger.error(f"Error integrating DLT waveform: {e}")
             self.components['dlt_waveform_engine'].status = 'ERROR'
             self.components['dlt_waveform_engine'].error_count += 1
-            
+
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     def integrate_tesseract_visualization(
         self,
         tesseract_data: Dict[str, Any]
@@ -283,11 +283,11 @@ class PipelineIntegrationManager:
             tesseract_result = self.phase_risk_manager.integrate_tesseract_visualization(
                 tesseract_data
             )
-            
+
             # Update component status
             self.components['tesseract_visualizer'].status = 'ACTIVE'
             self.components['tesseract_visualizer'].last_update = datetime.now()
-            
+
             # Create visual confirmation
             visual_data = VisualConfirmationData(
                 component_id='tesseract_visualizer',
@@ -302,7 +302,7 @@ class PipelineIntegrationManager:
                 }
             )
             self.visual_confirmations.append(visual_data)
-            
+
             # Add to backlog for training
             backlog_entry = self.phase_risk_manager.add_backlog_entry(
                 trade_data={'tesseract_data': tesseract_data},
@@ -310,7 +310,7 @@ class PipelineIntegrationManager:
                 performance_metrics={'glyph_count': len(tesseract_result.glyphs)},
                 training_tags=['tesseract', 'visualization', tesseract_result.profit_tier.lower()]
             )
-            
+
             return {
                 'success': True,
                 'tesseract_result': {
@@ -324,17 +324,17 @@ class PipelineIntegrationManager:
                 },
                 'backlog_entry': backlog_entry.entry_id
             }
-            
+
         except Exception as e:
             logger.error(f"Error integrating Tesseract visualization: {e}")
             self.components['tesseract_visualizer'].status = 'ERROR'
             self.components['tesseract_visualizer'].error_count += 1
-            
+
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     def add_backlog_entry(
         self,
         trade_data: Dict[str, Any],
@@ -348,14 +348,14 @@ class PipelineIntegrationManager:
             backlog_entry = self.phase_risk_manager.add_backlog_entry(
                 trade_data, risk_assessment, performance_metrics, training_tags
             )
-            
+
             # Update component status
             self.components['backlog_manager'].status = 'ACTIVE'
             self.components['backlog_manager'].last_update = datetime.now()
-            
+
             # Store in local backlog
             self.backlog_entries.append(backlog_entry)
-            
+
             # Create visual confirmation
             visual_data = VisualConfirmationData(
                 component_id='backlog_manager',
@@ -369,7 +369,7 @@ class PipelineIntegrationManager:
                 }
             )
             self.visual_confirmations.append(visual_data)
-            
+
             return {
                 'success': True,
                 'backlog_entry': {
@@ -379,23 +379,23 @@ class PipelineIntegrationManager:
                 },
                 'total_entries': len(self.backlog_entries)
             }
-            
+
         except Exception as e:
             logger.error(f"Error adding backlog entry: {e}")
             self.components['backlog_manager'].status = 'ERROR'
             self.components['backlog_manager'].error_count += 1
-            
+
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     def get_profit_vectors(self) -> List[Dict[str, Any]]:
         """Get profit vectorization analysis."""
         try:
             # Calculate profit vectors from risk history
             profit_vectors = []
-            
+
             for risk_metric in self.phase_risk_manager.risk_history[-10:]:  # Last 10
                 profit_vector = ProfitVectorizationData(
                     vector_id=f"vector_{len(profit_vectors)}",
@@ -405,7 +405,7 @@ class PipelineIntegrationManager:
                     altitude_mapping=risk_metric.altitude_mapping_score,
                     cross_bitmap_correlation=risk_metric.cross_bitmap_correlation
                 )
-                
+
                 profit_vectors.append({
                     'vector_id': profit_vector.vector_id,
                     'profit_trend': profit_vector.profit_trend,
@@ -415,19 +415,19 @@ class PipelineIntegrationManager:
                     'cross_bitmap_correlation': profit_vector.cross_bitmap_correlation,
                     'timestamp': profit_vector.timestamp.isoformat()
                 })
-            
+
             return profit_vectors
-            
+
         except Exception as e:
             logger.error(f"Error getting profit vectors: {e}")
             return []
-    
+
     def get_visual_confirmation(self) -> List[Dict[str, Any]]:
         """Get visual confirmation data for UI components."""
         try:
             # Return recent visual confirmations
             recent_confirmations = self.visual_confirmations[-5:]  # Last 5
-            
+
             return [
                 {
                     'component_id': conf.component_id,
@@ -439,11 +439,11 @@ class PipelineIntegrationManager:
                 }
                 for conf in recent_confirmations
             ]
-            
+
         except Exception as e:
             logger.error(f"Error getting visual confirmation: {e}")
             return []
-    
+
     def update_component_status(
         self,
         component_name: str,
@@ -455,10 +455,10 @@ class PipelineIntegrationManager:
             if component_name in self.components:
                 self.components[component_name].status = status
                 self.components[component_name].last_update = datetime.now()
-                
+
                 if error_message:
                     self.components[component_name].error_count += 1
-                
+
                 return {
                     'success': True,
                     'component_name': component_name,
@@ -470,24 +470,24 @@ class PipelineIntegrationManager:
                     'success': False,
                     'error': f"Component {component_name} not found"
                 }
-                
+
         except Exception as e:
             logger.error(f"Error updating component status: {e}")
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     def get_pipeline_health(self) -> Dict[str, Any]:
         """Get overall pipeline health status."""
         try:
             total_components = len(self.components)
             active_components = len([c for c in self.components.values() if c.status == 'ACTIVE'])
             error_components = len([c for c in self.components.values() if c.status == 'ERROR'])
-            
+
             # Calculate health score
             health_score = active_components / total_components if total_components > 0 else 0.0
-            
+
             # Determine overall health
             if health_score >= 0.9:
                 overall_health = 'EXCELLENT'
@@ -497,7 +497,7 @@ class PipelineIntegrationManager:
                 overall_health = 'FAIR'
             else:
                 overall_health = 'POOR'
-            
+
             return {
                 'overall_health': overall_health,
                 'health_score': health_score,
@@ -513,7 +513,7 @@ class PipelineIntegrationManager:
                     for name, comp in self.components.items()
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting pipeline health: {e}")
             return {
@@ -521,15 +521,15 @@ class PipelineIntegrationManager:
                 'health_score': 0.0,
                 'error': str(e)
             }
-    
+
     def run_full_pipeline_test(self) -> Dict[str, Any]:
         """Run full pipeline integration test."""
         logger.info("🚀 Starting Full Pipeline Integration Test")
         logger.info("=" * 60)
-        
+
         start_time = time.time()
         test_results = []
-        
+
         # Test 1: DLT Waveform Integration
         logger.info("🔧 Testing DLT Waveform Integration...")
         dlt_data = {
@@ -544,7 +544,7 @@ class PipelineIntegrationManager:
             'status': 'PASS' if dlt_result['success'] else 'FAIL',
             'details': dlt_result.get('error', 'Integration successful')
         })
-        
+
         # Test 2: Tesseract Visualization Integration
         logger.info("🔧 Testing Tesseract Visualization Integration...")
         tesseract_data = {
@@ -562,7 +562,7 @@ class PipelineIntegrationManager:
             'status': 'PASS' if tesseract_result['success'] else 'FAIL',
             'details': tesseract_result.get('error', 'Integration successful')
         })
-        
+
         # Test 3: Backlog Management
         logger.info("🔧 Testing Backlog Management...")
         backlog_result = self.add_backlog_entry(
@@ -576,7 +576,7 @@ class PipelineIntegrationManager:
             'status': 'PASS' if backlog_result['success'] else 'FAIL',
             'details': backlog_result.get('error', 'Backlog entry added')
         })
-        
+
         # Test 4: Risk Assessment
         logger.info("🔧 Testing Comprehensive Risk Assessment...")
         market_data = {
@@ -595,7 +595,7 @@ class PipelineIntegrationManager:
             'status': 'PASS' if 'error' not in risk_result else 'FAIL',
             'details': risk_result.get('error', 'Risk assessment completed')
         })
-        
+
         # Test 5: Pipeline Health
         logger.info("🔧 Testing Pipeline Health...")
         health_result = self.get_pipeline_health()
@@ -604,30 +604,30 @@ class PipelineIntegrationManager:
             'status': 'PASS' if health_result['overall_health'] != 'UNKNOWN' else 'FAIL',
             'details': f"Health: {health_result['overall_health']}"
         })
-        
+
         # Calculate summary
         total_tests = len(test_results)
         passed_tests = len([r for r in test_results if r['status'] == 'PASS'])
         failed_tests = len([r for r in test_results if r['status'] == 'FAIL'])
-        
+
         execution_time = time.time() - start_time
-        
+
         # Print results
         logger.info("=" * 60)
         logger.info("📊 Full Pipeline Integration Test Results")
         logger.info("=" * 60)
-        
+
         for result in test_results:
             status_emoji = "✅" if result['status'] == "PASS" else "❌"
             logger.info(f"{status_emoji} {result['test']}: {result['status']}")
             logger.info(f"   Details: {result['details']}")
-        
+
         logger.info(f"\nTotal Tests: {total_tests}")
         logger.info(f"✅ Passed: {passed_tests}")
         logger.info(f"❌ Failed: {failed_tests}")
         logger.info(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
         logger.info(f"Execution Time: {execution_time:.2f}s")
-        
+
         # Determine overall status
         if failed_tests == 0:
             overall_status = "FULLY_INTEGRATED"
@@ -638,7 +638,7 @@ class PipelineIntegrationManager:
         else:
             overall_status = "INTEGRATION_NEEDED"
             logger.warning("❌ Pipeline integration needed - significant work required")
-        
+
         return {
             "overall_status": overall_status,
             "total_tests": total_tests,
@@ -656,28 +656,28 @@ def main():
     """Main function for pipeline integration testing."""
     safe_print("🚀 Pipeline Integration Manager - Schwabot UROS v1.0")
     safe_print("=" * 70)
-    
+
     # Initialize pipeline manager
     pipeline_manager = PipelineIntegrationManager()
-    
+
     # Run full pipeline test
     results = pipeline_manager.run_full_pipeline_test()
-    
+
     # Save results
     output_file = REPO_ROOT / "pipeline_integration_results.json"
     with output_file.open("w", encoding="utf-8") as fh:
         json.dump(results, fh, indent=2, default=str)
-    
+
     safe_print(f"\n📄 Results saved to: {output_file.relative_to(REPO_ROOT)}")
     safe_print(f"🎯 Overall Status: {results['overall_status']}")
     safe_print(f"📊 Success Rate: {results['success_rate']:.1f}%")
     safe_print(f"⏱️ Execution Time: {results['execution_time']:.2f}s")
-    
+
     # Print pipeline health
     health = results['pipeline_health']
     safe_print(f"🏥 Pipeline Health: {health['overall_health']} (Score: {health['health_score']:.2f})")
     safe_print(f"🔗 Active Components: {health['active_components']}/{health['total_components']}")
-    
+
     if results['overall_status'] == "FULLY_INTEGRATED":
         safe_print("\n🎉 Pipeline is fully integrated and ready for production!")
         safe_print("   All components are operational and connected.")
@@ -690,4 +690,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

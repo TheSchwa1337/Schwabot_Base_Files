@@ -28,6 +28,7 @@ import hashlib
 
 logger = logging.getLogger(__name__)
 
+
 class TradeType(Enum):
     """Trade execution types."""
     BUY = "buy"
@@ -36,12 +37,14 @@ class TradeType(Enum):
     STOP_LOSS = "stop_loss"
     TAKE_PROFIT = "take_profit"
 
+
 class TradeStatus(Enum):
     """Trade execution status."""
     PENDING = "pending"
     EXECUTED = "executed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
 
 @dataclass
 class TradeExecution:
@@ -60,6 +63,7 @@ class TradeExecution:
     portfolio_impact: Dict[str, float]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PortfolioState:
     """Portfolio state snapshot."""
@@ -72,25 +76,26 @@ class PortfolioState:
     risk_metrics: Dict[str, float]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class TradeSimulator:
     """
     Trade simulation engine with real strategy logic integration.
-    
+
     Mathematical Foundation:
     - Trade Impact: impact = quantity * price * direction
     - Portfolio Value: total = cash + Σ(positions * current_prices)
     - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Strategy Scoring: score = tensor_score * bit_phase * market_conditions
     """
-    
+
     def __init__(self, config_path: str = "./config/trade_simulator_config.json"):
         self.config_path = config_path
-        
+
         # Portfolio state
         self.portfolio_state: PortfolioState = None
         self.trade_history: List[TradeExecution] = []
         self.performance_metrics: Dict[str, Any] = {}
-        
+
         # Strategy configurations
         self.strategy_configs = {
             "long_hold_btc": {
@@ -124,13 +129,13 @@ class TradeSimulator:
                 "bit_phase": 16
             }
         }
-        
+
         # Integration with other components
         self.tensor_matcher = None
         self.bit_phase_engine = None
         self.matrix_mapper = None
         self.profit_allocator = None
-        
+
         # Load configuration
         self._load_configuration()
         self._initialize_portfolio()
@@ -159,9 +164,9 @@ class TradeSimulator:
                     "min_spread": 0.0005
                 }
             }
-            
+
             logger.info("Trade simulator configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -182,23 +187,23 @@ class TradeSimulator:
                     'win_rate': 0.0
                 }
             )
-            
+
             logger.info("Portfolio state initialized")
-            
+
         except Exception as e:
             logger.error(f"Error initializing portfolio: {e}")
 
     def simulate_trade(self, strategy_bucket: Dict[str, Any], mode: str = "DEMO") -> TradeExecution:
         """
         Simulate trade execution with real strategy logic.
-        
+
         Parameters:
         -----------
         strategy_bucket : Dict[str, Any]
             Strategy bucket containing trade parameters
         mode : str
             Execution mode ("DEMO" or "LIVE")
-            
+
         Returns:
         --------
         TradeExecution
@@ -213,41 +218,42 @@ class TradeSimulator:
             basket_id = strategy_bucket.get('basket_id', 'default')
             current_price = strategy_bucket.get('current_price', 50000.0)
             market_data = strategy_bucket.get('market_data', {})
-            
+
             # Get strategy configuration
             strategy_config = self.strategy_configs.get(strategy_id, self.strategy_configs['long_hold_btc'])
-            
+
             # Determine trade type and parameters
             trade_type, quantity, price = self._determine_trade_parameters(
                 strategy_bucket, strategy_config, tensor_score, bit_phase
             )
-            
+
             # Validate trade
             if not self._validate_trade(asset, quantity, price, trade_type):
                 return self._create_failed_trade(strategy_bucket, "Trade validation failed")
-            
+
             # Execute trade
             trade_execution = self._execute_trade(
                 asset, trade_type, quantity, price, strategy_id,
                 tensor_score, bit_phase, basket_id, mode
             )
-            
+
             # Update portfolio state
             self._update_portfolio_state(trade_execution)
-            
+
             # Calculate performance metrics
             self._calculate_performance_metrics()
-            
-            logger.info(f"Trade simulated: {trade_execution.trade_id} - {asset} {trade_type.value} {quantity:.4f} @ {price:.2f}")
+
+            logger.info(
+                f"Trade simulated: {trade_execution.trade_id} - {asset} {trade_type.value} {quantity:.4f} @ {price:.2f}")
             return trade_execution
-            
+
         except Exception as e:
             logger.error(f"Error simulating trade: {e}")
             return self._create_failed_trade(strategy_bucket, str(e))
 
-    def _determine_trade_parameters(self, strategy_bucket: Dict[str, Any], 
-                                  strategy_config: Dict[str, Any], 
-                                  tensor_score: float, bit_phase: int) -> Tuple[TradeType, float, float]:
+    def _determine_trade_parameters(self, strategy_bucket: Dict[str, Any],
+                                    strategy_config: Dict[str, Any],
+                                    tensor_score: float, bit_phase: int) -> Tuple[TradeType, float, float]:
         """Determine trade type and parameters based on strategy."""
         try:
             asset = strategy_bucket.get('asset', 'BTC')
@@ -255,11 +261,11 @@ class TradeSimulator:
             entry_threshold = strategy_config.get('entry_threshold', 0.02)
             exit_threshold = strategy_config.get('exit_threshold', -0.05)
             position_size = strategy_config.get('position_size', 0.4)
-            
+
             # Calculate position value
             available_capital = self.portfolio_state.cash * position_size
             quantity = available_capital / current_price
-            
+
             # Determine trade type based on tensor score and thresholds
             if tensor_score > entry_threshold:
                 trade_type = TradeType.BUY
@@ -268,13 +274,13 @@ class TradeSimulator:
             else:
                 trade_type = TradeType.REBALANCE
                 quantity *= 0.5  # Smaller rebalancing trade
-            
+
             # Apply slippage and commission
             slippage = 0.001 if trade_type == TradeType.BUY else -0.001
             execution_price = current_price * (1 + slippage)
-            
+
             return trade_type, quantity, execution_price
-            
+
         except Exception as e:
             logger.error(f"Error determining trade parameters: {e}")
             return TradeType.REBALANCE, 0.0, current_price
@@ -287,36 +293,36 @@ class TradeSimulator:
             if trade_value < 100.0:
                 logger.warning(f"Trade value {trade_value:.2f} below minimum")
                 return False
-            
+
             # Check available capital for buy trades
             if trade_type == TradeType.BUY:
                 if trade_value > self.portfolio_state.cash:
                     logger.warning(f"Insufficient cash for trade: {trade_value:.2f} > {self.portfolio_state.cash:.2f}")
                     return False
-            
+
             # Check available position for sell trades
             elif trade_type == TradeType.SELL:
                 current_position = self.portfolio_state.positions.get(asset, {}).get('quantity', 0.0)
                 if quantity > current_position:
                     logger.warning(f"Insufficient position for sell: {quantity:.4f} > {current_position:.4f}")
                     return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Error validating trade: {e}")
             return False
 
     def _execute_trade(self, asset: str, trade_type: TradeType, quantity: float, price: float,
-                      strategy_id: str, tensor_score: float, bit_phase: int, basket_id: str, mode: str) -> TradeExecution:
+                       strategy_id: str, tensor_score: float, bit_phase: int, basket_id: str, mode: str) -> TradeExecution:
         """Execute trade and return execution result."""
         try:
             # Generate trade ID
             trade_id = f"trade_{int(time.time())}_{asset}_{trade_type.value}"
-            
+
             # Calculate portfolio impact
             portfolio_impact = self._calculate_portfolio_impact(asset, trade_type, quantity, price)
-            
+
             # Create trade execution
             trade_execution = TradeExecution(
                 trade_id=trade_id,
@@ -337,12 +343,12 @@ class TradeSimulator:
                     'trade_value': quantity * price
                 }
             )
-            
+
             # Add to trade history
             self.trade_history.append(trade_execution)
-            
+
             return trade_execution
-            
+
         except Exception as e:
             logger.error(f"Error executing trade: {e}")
             return self._create_failed_trade({
@@ -358,7 +364,7 @@ class TradeSimulator:
         try:
             trade_value = quantity * price
             commission = trade_value * 0.0025  # 0.25% commission
-            
+
             if trade_type == TradeType.BUY:
                 cash_impact = -(trade_value + commission)
                 position_impact = quantity
@@ -368,14 +374,14 @@ class TradeSimulator:
             else:  # REBALANCE
                 cash_impact = 0.0
                 position_impact = 0.0
-            
+
             return {
                 'cash_impact': cash_impact,
                 'position_impact': position_impact,
                 'commission': commission,
                 'trade_value': trade_value
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating portfolio impact: {e}")
             return {'cash_impact': 0.0, 'position_impact': 0.0, 'commission': 0.0, 'trade_value': 0.0}
@@ -385,13 +391,13 @@ class TradeSimulator:
         try:
             if trade_execution.status != TradeStatus.EXECUTED:
                 return
-            
+
             asset = trade_execution.asset
             impact = trade_execution.portfolio_impact
-            
+
             # Update cash
             self.portfolio_state.cash += impact['cash_impact']
-            
+
             # Update positions
             if asset not in self.portfolio_state.positions:
                 self.portfolio_state.positions[asset] = {
@@ -399,10 +405,10 @@ class TradeSimulator:
                     'entry_price': 0.0,
                     'current_price': trade_execution.price
                 }
-            
+
             position = self.portfolio_state.positions[asset]
             position['quantity'] += impact['position_impact']
-            
+
             # Update entry price for new positions
             if impact['position_impact'] > 0:
                 if position['entry_price'] == 0.0:
@@ -413,12 +419,12 @@ class TradeSimulator:
                     old_value = (total_quantity - impact['position_impact']) * position['entry_price']
                     new_value = impact['position_impact'] * trade_execution.price
                     position['entry_price'] = (old_value + new_value) / total_quantity
-            
+
             position['current_price'] = trade_execution.price
-            
+
             # Update timestamp
             self.portfolio_state.timestamp = datetime.now()
-            
+
         except Exception as e:
             logger.error(f"Error updating portfolio state: {e}")
 
@@ -430,17 +436,17 @@ class TradeSimulator:
             for asset, position in self.portfolio_state.positions.items():
                 if position['quantity'] > 0:
                     total_value += position['quantity'] * position['current_price']
-            
+
             self.portfolio_state.total_value = total_value
-            
+
             # Calculate unrealized P&L
             unrealized_pnl = 0.0
             for asset, position in self.portfolio_state.positions.items():
                 if position['quantity'] > 0 and position['entry_price'] > 0:
                     unrealized_pnl += position['quantity'] * (position['current_price'] - position['entry_price'])
-            
+
             self.portfolio_state.unrealized_pnl = unrealized_pnl
-            
+
             # Calculate risk metrics
             if len(self.trade_history) > 1:
                 returns = []
@@ -450,17 +456,17 @@ class TradeSimulator:
                     if prev_trade.asset == curr_trade.asset:
                         return_val = (curr_trade.price - prev_trade.price) / prev_trade.price
                         returns.append(return_val)
-                
+
                 if returns:
                     returns_array = np.array(returns)
                     volatility = unified_math.unified_math.std(returns_array)
                     sharpe_ratio = unified_math.unified_math.mean(returns_array) / (volatility + 1e-9)
-                    
+
                     self.portfolio_state.risk_metrics.update({
                         'volatility': volatility,
                         'sharpe_ratio': sharpe_ratio
                     })
-            
+
         except Exception as e:
             logger.error(f"Error calculating performance metrics: {e}")
 
@@ -523,19 +529,20 @@ class TradeSimulator:
                 'risk_metrics': self.portfolio_state.risk_metrics,
                 'trade_count': len(self.trade_history)
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(snapshot_data, f, indent=2, default=str)
-            
+
             logger.info(f"Portfolio snapshot exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting portfolio snapshot: {e}")
+
 
 if __name__ == "__main__":
     # Test trade simulator
     simulator = TradeSimulator()
-    
+
     # Test trade simulation
     strategy_bucket = {
         'asset': 'BTC',
@@ -546,17 +553,17 @@ if __name__ == "__main__":
         'current_price': 50000.0,
         'market_data': {'entropy_level': 4.5, 'volatility': 0.03}
     }
-    
+
     trade_result = simulator.simulate_trade(strategy_bucket, "DEMO")
     safe_print(f"Trade Result: {trade_result.trade_id}")
     safe_print(f"Status: {trade_result.status.value}")
     safe_print(f"Portfolio Impact: {trade_result.portfolio_impact}")
-    
+
     # Get portfolio state
     portfolio = simulator.get_portfolio_state()
     safe_print(f"Portfolio Value: {portfolio.total_value:.2f}")
     safe_print(f"Cash: {portfolio.cash:.2f}")
     safe_print(f"Unrealized P&L: {portfolio.unrealized_pnl:.2f}")
-    
+
     # Export snapshot
-    simulator.export_portfolio_snapshot() 
+    simulator.export_portfolio_snapshot()

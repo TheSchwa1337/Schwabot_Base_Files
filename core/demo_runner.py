@@ -1,5 +1,26 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
+from .unified_mathematics_config import get_unified_math
+from .tick_hash_processor import TickHashProcessor
+from .ferris_rde_core import get_ferris_rde_core
+from .real_trading_integration import get_real_trading_integration
+from .profit_cycle_allocator import ProfitCycleAllocator
+from .matrix_mapper import MatrixMapper
+from .dlt_waveform_engine import DLTWaveformEngine
+import queue
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import asyncio
+import hashlib
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
+import json
+import time
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +32,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Demo Pipeline Runner - Schwabot UROS v1.0
@@ -65,46 +93,40 @@ Features:
 - Demo/live mode switching
 """
 
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import hashlib
-import asyncio
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import queue
 
 logger = logging.getLogger(__name__)
 
+
 class PipelineMode(Enum):
 
-
     """Pipeline execution modes."""
+
+
 DEMO = "demo"
 LIVE = "live"
 BACKTEST = "backtest"
 SIMULATION = "simulation"
 
+
 class PipelineStatus(Enum):
 
-
     """Pipeline execution status."""
+
+
 IDLE = "idle"
 RUNNING = "running"
 PAUSED = "paused"
 STOPPED = "stopped"
 ERROR = "error"
 
+
 @dataclass
 class TickEvent:
 
-
     """Tick event data."""
+
+
 timestamp: datetime
 asset: str
 price: float
@@ -114,11 +136,13 @@ hash_value: str
 bit_phases: Dict[str, int]
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class StrategyDecision:
 
-
     """Strategy decision result."""
+
+
 timestamp: datetime
 asset: str
 decision: str  # "buy", "sell", "hold", "rebalance"
@@ -130,11 +154,13 @@ quantity: float
 price: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PipelineResult:
 
-
     """Pipeline execution result."""
+
+
 execution_id: str
 start_time: datetime
 end_time: datetime
@@ -146,8 +172,8 @@ performance_metrics: Dict[str, Any]
 error_log: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-class DemoPipelineRunner:
 
+class DemoPipelineRunner:
 
     """
 Demo pipeline runner for complete Schwabot execution.
@@ -160,12 +186,13 @@ Mathematical Foundation:
     - Portfolio Update: P(t+1) = P(t) + Σ(trades * impacts)
     """
 
-def __init__(self, config_path: str = "./config/demo_runner_config.json"):
 
+def __init__(self, config_path: str = "./config/demo_runner_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Pipeline state
 self.mode: PipelineMode = PipelineMode.DEMO
@@ -202,22 +229,15 @@ self.executor = ThreadPoolExecutor(max_workers=4)
 self._load_configuration()
         logger.info("Demo Pipeline Runner initialized with real core components")
 
-def _initialize_core_components(self) -> None:
 
+def _initialize_core_components(self) -> None:
 
     pass
     pass
         """Initialize all core components with real implementations."""
         try:
+
             # Import and initialize real core components
-from .dlt_waveform_engine import DLTWaveformEngine
-from .matrix_mapper import MatrixMapper
-from .profit_cycle_allocator import ProfitCycleAllocator
-from .real_trading_integration import get_real_trading_integration
-from .ferris_rde_core import get_ferris_rde_core
-from .tick_hash_processor import TickHashProcessor
-from .unified_mathematics_config import get_unified_math
-from .integrated_alif_aleph_system import IntegratedAlifAlephSystem
 
             # Initialize core components
 self.dlt_engine = DLTWaveformEngine()

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Tensor Router - Schwabot UROS v1.0
@@ -57,31 +69,31 @@ Handles tensor score calculations and routing trades into recursive long/mid/sho
 Provides mathematical functions for tensor-profit routing via profit vector calculations.
 """
 
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class TensorRoute:
 
-
     """Tensor routing result."""
+
+
 tensor_score: float
 route_type: str  # "long", "mid", "short"
 confidence: float
 profit_vector: Dict[str, float]
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class TensorAnalysis:
 
-
     """Comprehensive tensor analysis result."""
+
+
 entry_price: float
 current_price: float
 phase: int
@@ -90,8 +102,8 @@ route_analysis: Dict[str, Any]
 market_conditions: Dict[str, Any]
 timestamp: datetime
 
-class TensorRouter:
 
+class TensorRouter:
 
     """
 Router for tensor score calculations and trade routing logic.
@@ -102,8 +114,8 @@ Routes trades into:
 - Short-term: Aggressive, high frequency, lower confidence
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
@@ -112,6 +124,7 @@ def __init__(self):
             'mid': {'min_score': 0.2, 'max_score': 0.5},
 'short': {'min_score': -0.5, 'max_score': 0.2}
 }
+
 
 self.route_weights = {
 'long': {'BTC': 0.6, 'ETH': 0.3, 'USDC': 0.1},
@@ -123,8 +136,8 @@ self.tensor_history: List[TensorAnalysis] = []
 
 logger.info("Tensor Router initialized")
 
-def tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
 
+def tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
 
     pass
     pass
@@ -141,6 +154,8 @@ float: Tensor score rounded to 4 decimal places
 """
         try:
             if entry_price <= 0:
+
+
 logger.warning("Invalid entry price, returning 0")
                 return 0.0
 

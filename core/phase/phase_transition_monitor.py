@@ -1,15 +1,16 @@
-# -*- coding: utf-8 -*-\n"""core.phase.phase_transition_monitor
+# -*- coding: utf-8 -*-
+"""core.phase.phase_transition_monitor
 Phase Transition Monitor
 ========================
 
 Determines the current phase state (LOW / MEDIUM / HIGH) of Schwabot by
-combining entropy dynamics, drift weight and the lattice–consensus score.
+combining entropy dynamics, drift weight and the lattice-consensus score.
 
 Key inputs
 ~~~~~~~~~~
-* entropy_trace (np.ndarray) – rolling entropy values over the last *N* ticks
-* drift_weight (float)       – λ-weighted drift score (e.g. from DriftPhaseWeighter)
-* raw_signals (Sequence[float]) – vector of strategy confidence values
+* entropy_trace (np.ndarray) - rolling entropy values over the last *N* ticks
+* drift_weight (float)       - λ-weighted drift score (e.g. from DriftPhaseWeighter)
+* raw_signals (Sequence[float]) - vector of strategy confidence values
 
 Public API
 ~~~~~~~~~~
@@ -82,9 +83,9 @@ class PhaseTransitionMonitor:
     # helpers
     # ------------------------------------------------------------------
     def _compute_entropy_delta(self, prices: np.ndarray) -> float:
-        recent = prices[-self.entropy_window :]
+        recent = prices[-self.entropy_window:]
         ent_now = calculate_entropy(recent)
-        ent_past = calculate_entropy(prices[-(self.entropy_window * 2) : -self.entropy_window])
+        ent_past = calculate_entropy(prices[-(self.entropy_window * 2): -self.entropy_window])
         return abs(ent_now - ent_past) / self.entropy_window
 
     def _phase_from_scores(self, drift_weight: float, entropy_delta: float) -> PhaseState:
@@ -128,4 +129,4 @@ class PhaseTransitionMonitor:
             drift_weight=drift_weight,
             transition_likelihood=transition_likelihood,
             consensus_score=consensus,
-        ) 
+        )

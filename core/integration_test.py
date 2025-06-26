@@ -1,5 +1,26 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from core.bit_phase_engine import BitPhaseEngine
+from core.tensor_matcher import TensorMatcher
+from core.demo_trading_system import DemoTradingSystem
+from core.demo_state_injector import DemoStateInjector
+from core.dlt_waveform_engine import DLTWaveformEngine
+from core.profit_cycle_allocator import ProfitCycleAllocator
+from core.matrix_mapper import MatrixMapper
+from core.tensor_score_utils import TensorScoreUtils
+from core.bit_resolution_engine import BitResolutionEngine
+import queue
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+import logging
+import json
+import time
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +32,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Integration Test - Schwabot UROS v1.0
@@ -68,30 +96,10 @@ Test Coverage:
 - Mathematical validation and performance metrics
 """
 
-import time
-import json
-import logging
-import asyncio
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import hashlib
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import queue
 
 # Import core components
 try:
-from core.bit_resolution_engine import BitResolutionEngine
-from core.tensor_score_utils import TensorScoreUtils
-from core.matrix_mapper import MatrixMapper
-from core.profit_cycle_allocator import ProfitCycleAllocator
-from core.dlt_waveform_engine import DLTWaveformEngine
-from core.demo_state_injector import DemoStateInjector
-from core.demo_trading_system import DemoTradingSystem
-from core.tensor_matcher import TensorMatcher
-from core.bit_phase_engine import BitPhaseEngine
 CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
 CORE_COMPONENTS_AVAILABLE = False
@@ -99,10 +107,12 @@ safe_print(f"Warning: Some core components not available: {e}")
 
 logger = logging.getLogger(__name__)
 
+
 class TestPhase(Enum):
 
-
     """Integration test phases."""
+
+
 INITIALIZATION = "initialization"
 DLT_WAVEFORM = "dlt_waveform"
 MATRIX_MAPPING = "matrix_mapping"
@@ -113,11 +123,13 @@ API_INTEGRATION = "api_integration"
 MATHEMATICAL_VALIDATION = "mathematical_validation"
 PERFORMANCE_TESTING = "performance_testing"
 
+
 @dataclass
 class TestResult:
 
-
     """Individual test result."""
+
+
 test_name: str
 phase: TestPhase
 status: str  # "passed", "failed", "error"
@@ -127,11 +139,13 @@ end_time: datetime
 details: Dict[str, Any] = field(default_factory=dict)
     error_message: Optional[str] = None
 
+
 @dataclass
 class IntegrationTestResult:
 
-
     """Complete integration test result."""
+
+
 test_id: str
 timestamp: datetime
 overall_status: str
@@ -144,8 +158,8 @@ test_results: List[TestResult]
 performance_metrics: Dict[str, Any] = field(default_factory=dict)
     system_health: Dict[str, Any] = field(default_factory=dict)
 
-class IntegrationTest:
 
+class IntegrationTest:
 
     """
 Comprehensive integration test for Schwabot system.
@@ -154,12 +168,13 @@ Tests the complete pipeline:
 DLT waveform → matrix mapping → tensor scoring → profit allocation → routing
 """
 
-def __init__(self, config_path: str = "./config/integration_test_config.json"):
 
+def __init__(self, config_path: str = "./config/integration_test_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Core components
 self.bit_engine = None
@@ -193,13 +208,14 @@ self._load_configuration()
 
 logger.info("Integration Test initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
         """Load integration test configuration."""
         try:
+
             # Default configuration
 config = {
 "test_phases": {
@@ -229,14 +245,16 @@ logger.info("Integration test configuration loaded")
         except Exception as e:
 logger.error(f"Error loading configuration: {e}")
 
-def _initialize_components(self) -> None:
 
+def _initialize_components(self) -> None:
 
     pass
     pass
         """Initialize all core components for testing."""
         try:
             if not CORE_COMPONENTS_AVAILABLE:
+
+
 logger.warning("Core components not available, using mock components")
                 return
 
@@ -279,8 +297,8 @@ logger.info("All core components initialized for integration testing")
         except Exception as e:
 logger.error(f"Error initializing components: {e}")
 
-def _generate_test_data(self) -> None:
 
+def _generate_test_data(self) -> None:
 
     pass
     pass
@@ -296,6 +314,8 @@ def _generate_test_data(self) -> None:
                     'price': np.random.uniform(45000.0, 55000.0),
                     'volume': np.random.uniform(100, 1000)
                 }
+
+
 self.test_market_data.append(market_data)
 
             # Generate test hashes
@@ -316,13 +336,14 @@ self.test_market_data.append(market_data)
 }
 self.test_portfolios.append(portfolio)
 
-logger.info(f"Generated test data: {len(self.test_market_data)} market data, {len(self.test_hashes)} hashes, {len(self.test_portfolios)} portfolios")
+logger.info(
+    f"Generated test data: {len(self.test_market_data)} market data, {len(self.test_hashes)} hashes, {len(self.test_portfolios)} portfolios")
 
         except Exception as e:
 logger.error(f"Error generating test data: {e}")
 
-def run_full_integration_test(self) -> IntegrationTestResult:
 
+def run_full_integration_test(self) -> IntegrationTestResult:
 
     pass
     pass
@@ -335,6 +356,8 @@ IntegrationTestResult
 Complete integration test results
 """
         try:
+
+
 test_id = f"integration_test_{int(time.time())}"
             start_time = datetime.now()
             overall_start_time = time.time()
@@ -422,11 +445,11 @@ def _test_initialization(self) -> None:
     pass
         """Test system initialization."""
         try:
-start_time = time.time()
-            test_name = "system_initialization"
+start_time=time.time()
+            test_name="system_initialization"
 
             # Test component availability
-components_available = all([
+components_available=all([
                 self.bit_engine is not None,
 self.tensor_utils is not None,
 self.matrix_mapper is not None,
@@ -435,15 +458,15 @@ self.dlt_engine is not None
 ])
 
             # Test configuration loading
-config_loaded = len(self.test_market_data) > 0 and len(self.test_hashes) > 0
+config_loaded=len(self.test_market_data) > 0 and len(self.test_hashes) > 0
 
             # Test data generation
-data_generated = len(self.test_portfolios) > 0
+data_generated=len(self.test_portfolios) > 0
 
-execution_time = time.time() - start_time
-            status = "passed" if components_available and config_loaded and data_generated else "failed"
+execution_time=time.time() - start_time
+            status="passed" if components_available and config_loaded and data_generated else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.INITIALIZATION,
 status=status,
@@ -471,31 +494,31 @@ def _test_dlt_waveform(self) -> None:
     pass
         """Test DLT waveform processing."""
         try:
-start_time = time.time()
-            test_name = "dlt_waveform_processing"
+start_time=time.time()
+            test_name="dlt_waveform_processing"
 
             if not self.dlt_engine:
 self._add_error_result(test_name, TestPhase.DLT_WAVEFORM, "DLT engine not available")
                 return
 
             # Test waveform processing
-test_sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
-waveform_result = self.dlt_engine.process_waveform_data(
+test_sequence=[1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
+waveform_result=self.dlt_engine.process_waveform_data(
                 name="test_waveform",
 x=np.array(test_sequence),
                 sample_rate=1.0
 
 
             # Test entropy calculation
-entropy = self.tensor_utils.calculate_wave_entropy(test_sequence) if self.tensor_utils else 0.0
+entropy=self.tensor_utils.calculate_wave_entropy(test_sequence) if self.tensor_utils else 0.0
 
             # Test matrix basket creation
-basket_result = self.dlt_engine.create_matrix_basket(self.test_market_data[0])
+basket_result=self.dlt_engine.create_matrix_basket(self.test_market_data[0])
 
-execution_time = time.time() - start_time
-            status = "passed" if waveform_result and basket_result else "failed"
+execution_time=time.time() - start_time
+            status="passed" if waveform_result and basket_result else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.DLT_WAVEFORM,
 status=status,
@@ -523,29 +546,29 @@ def _test_matrix_mapping(self) -> None:
     pass
         """Test matrix mapping operations."""
         try:
-start_time = time.time()
-            test_name = "matrix_mapping_operations"
+start_time=time.time()
+            test_name="matrix_mapping_operations"
 
             if not self.matrix_mapper:
 self._add_error_result(test_name, TestPhase.MATRIX_MAPPING, "Matrix mapper not available")
                 return
 
             # Test hash decoding
-test_hash = self.test_hashes[0]
-basket_id = self.matrix_mapper.decode_hash_to_basket(test_hash, 0, 50000.0)
+test_hash=self.test_hashes[0]
+basket_id=self.matrix_mapper.decode_hash_to_basket(test_hash, 0, 50000.0)
 
             # Test bit phase resolution
-phase_4bit = self.matrix_mapper.resolve_bit_phase(test_hash, "4bit")
-            phase_8bit = self.matrix_mapper.resolve_bit_phase(test_hash, "8bit")
-            phase_42bit = self.matrix_mapper.resolve_bit_phase(test_hash, "42bit")
+phase_4bit=self.matrix_mapper.resolve_bit_phase(test_hash, "4bit")
+            phase_8bit=self.matrix_mapper.resolve_bit_phase(test_hash, "8bit")
+            phase_42bit=self.matrix_mapper.resolve_bit_phase(test_hash, "42bit")
 
             # Test tensor score calculation
-tensor_score = self.matrix_mapper.calculate_tensor_score(45000.0, 46000.0, phase_8bit)
+tensor_score=self.matrix_mapper.calculate_tensor_score(45000.0, 46000.0, phase_8bit)
 
-execution_time = time.time() - start_time
-            status = "passed" if basket_id and tensor_score is not None else "failed"
+execution_time=time.time() - start_time
+            status="passed" if basket_id and tensor_score is not None else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.MATRIX_MAPPING,
 status=status,
@@ -574,39 +597,40 @@ def _test_tensor_scoring(self) -> None:
     pass
         """Test tensor scoring operations."""
         try:
-start_time = time.time()
-            test_name = "tensor_scoring_operations"
+start_time=time.time()
+            test_name="tensor_scoring_operations"
 
             if not self.tensor_utils:
 self._add_error_result(test_name, TestPhase.TENSOR_SCORING, "Tensor utils not available")
                 return
 
             # Test tensor score calculation
-market_data = self.test_market_data[0]
-tensor_score = self.tensor_utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
+market_data=self.test_market_data[0]
+tensor_score=self.tensor_utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
 
             # Test wave entropy calculation
-test_sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
-entropy = self.tensor_utils.calculate_wave_entropy(test_sequence)
+test_sequence=[1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
+entropy=self.tensor_utils.calculate_wave_entropy(test_sequence)
 
             # Test profit rebalancing
-rebalance_result = self.tensor_utils.rebalance_profit(1000.0, 0.25, 5.5)
+rebalance_result=self.tensor_utils.rebalance_profit(1000.0, 0.25, 5.5)
 
             # Test phase vector creation
-phase_vector = self.tensor_utils.create_phase_vector(42, 16, 4)
+phase_vector=self.tensor_utils.create_phase_vector(42, 16, 4)
 
             # Test tensor matcher
-tensor_match_result = None
+tensor_match_result=None
             if self.tensor_matcher:
-test_hash = self.test_hashes[0]
-tensor_match_result = self.tensor_matcher.match_tensor(
+test_hash=self.test_hashes[0]
+tensor_match_result=self.tensor_matcher.match_tensor(
                     test_hash, 45000.0, 46000.0, market_data
 
 
-execution_time = time.time() - start_time
-            status = "passed" if all([tensor_score is not None, entropy > 0, rebalance_result, phase_vector]) else "failed"
+execution_time=time.time() - start_time
+            status="passed" if all([tensor_score is not None, entropy > 0,
+                                   rebalance_result, phase_vector]) else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.TENSOR_SCORING,
 status=status,
@@ -639,29 +663,29 @@ def _test_profit_allocation(self) -> None:
     pass
         """Test profit allocation operations."""
         try:
-start_time = time.time()
-            test_name = "profit_allocation_operations"
+start_time=time.time()
+            test_name="profit_allocation_operations"
 
             if not self.profit_allocator:
 self._add_error_result(test_name, TestPhase.PROFIT_ALLOCATION, "Profit allocator not available")
                 return
 
             # Test profit allocation
-execution_packet = {
+execution_packet={
 'profit_amount': 1000.0,
 'market_data': self.test_market_data[0],
 'portfolio_state': self.test_portfolios[0]
 }
 
-allocation_result = self.profit_allocator.allocate(execution_packet)
+allocation_result=self.profit_allocator.allocate(execution_packet)
 
             # Test matrix integration
-matrix_metrics = self.profit_allocator.get_matrix_metrics()
+matrix_metrics=self.profit_allocator.get_matrix_metrics()
 
-execution_time = time.time() - start_time
-            status = "passed" if allocation_result and matrix_metrics else "failed"
+execution_time=time.time() - start_time
+            status="passed" if allocation_result and matrix_metrics else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.PROFIT_ALLOCATION,
 status=status,
@@ -688,33 +712,33 @@ def _test_demo_live_switching(self) -> None:
     pass
         """Test demo/live trading mode switching."""
         try:
-start_time = time.time()
-            test_name = "demo_live_mode_switching"
+start_time=time.time()
+            test_name="demo_live_mode_switching"
 
             if not self.demo_trading or not self.demo_injector:
 self._add_error_result(test_name, TestPhase.DEMO_LIVE_SWITCHING, "Demo components not available")
                 return
 
             # Test demo state injection
-demo_injected = self.demo_injector.inject_demo_state("conservative_test")
+demo_injected=self.demo_injector.inject_demo_state("conservative_test")
 
             # Test demo trading system
-demo_trading_started = False
+demo_trading_started=False
             try:
 self.demo_trading.start_trading()
-                demo_trading_started = True
+                demo_trading_started=True
 time.sleep(2)  # Let it run briefly
                 self.demo_trading.stop_trading()
             except Exception as e:
 logger.warning(f"Demo trading test warning: {e}")
 
             # Test mathematical validation
-validation_result = self.demo_injector.run_mathematical_validation()
+validation_result=self.demo_injector.run_mathematical_validation()
 
-execution_time = time.time() - start_time
-            status = "passed" if demo_injected and demo_trading_started and validation_result else "failed"
+execution_time=time.time() - start_time
+            status="passed" if demo_injected and demo_trading_started and validation_result else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.DEMO_LIVE_SWITCHING,
 status=status,
@@ -742,22 +766,22 @@ def _test_api_integration(self) -> None:
     pass
         """Test API integration (simulated)."""
         try:
-start_time = time.time()
-            test_name = "api_integration_testing"
+start_time=time.time()
+            test_name="api_integration_testing"
 
             # Simulate API integration tests
-api_available = True  # Simulated
-wallet_connected = True  # Simulated
-exchange_connected = True  # Simulated
+api_available=True  # Simulated
+wallet_connected=True  # Simulated
+exchange_connected=True  # Simulated
 
             # Test API endpoints (simulated)
-            ticker_data = {'BTC/USDC': {'price': 50000.0, 'volume': 1000.0}}  # Simulated
-order_book = {'bids': [[50000.0, 1.0]], 'asks': [[50001.0, 1.0]]}  # Simulated
+            ticker_data={'BTC/USDC': {'price': 50000.0, 'volume': 1000.0}}  # Simulated
+order_book={'bids': [[50000.0, 1.0]], 'asks': [[50001.0, 1.0]]}  # Simulated
 
-execution_time = time.time() - start_time
-            status = "passed" if all([api_available, wallet_connected, exchange_connected]) else "failed"
+execution_time=time.time() - start_time
+            status="passed" if all([api_available, wallet_connected, exchange_connected]) else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.API_INTEGRATION,
 status=status,
@@ -786,46 +810,47 @@ def _test_mathematical_validation(self) -> None:
     pass
         """Test mathematical validation."""
         try:
-start_time = time.time()
-            test_name = "mathematical_validation"
+start_time=time.time()
+            test_name="mathematical_validation"
 
             # Test bit resolution engine
-bit_resolution_stats = None
+bit_resolution_stats=None
             if self.bit_engine:
-bit_resolution_stats = self.bit_engine.get_resolution_statistics()
+bit_resolution_stats=self.bit_engine.get_resolution_statistics()
 
             # Test tensor score utils
-tensor_stats = None
+tensor_stats=None
             if self.tensor_utils:
-tensor_stats = self.tensor_utils.get_tensor_statistics()
+tensor_stats=self.tensor_utils.get_tensor_statistics()
 
             # Test matrix mapper
-matrix_stats = None
+matrix_stats=None
             if self.matrix_mapper:
-matrix_stats = self.matrix_mapper.get_hash_registry_status()
+matrix_stats=self.matrix_mapper.get_hash_registry_status()
 
             # Test profit allocator
-profit_stats = None
+profit_stats=None
             if self.profit_allocator:
-profit_stats = self.profit_allocator.get_matrix_metrics()
+profit_stats=self.profit_allocator.get_matrix_metrics()
 
             # Test tensor matcher
-tensor_match_stats = None
+tensor_match_stats=None
             if self.tensor_matcher:
-tensor_match_stats = self.tensor_matcher.get_match_statistics()
+tensor_match_stats=self.tensor_matcher.get_match_statistics()
 
             # Test bit phase engine
-bit_phase_stats = None
+bit_phase_stats=None
             if self.bit_phase_engine:
-bit_phase_stats = {
+bit_phase_stats={
 'phase_history_count': len(self.bit_phase_engine.phase_history),
                     'supported_modes': self.bit_phase_engine.supported_modes
 }
 
-execution_time = time.time() - start_time
-            status = "passed" if any([bit_resolution_stats, tensor_stats, matrix_stats, profit_stats, tensor_match_stats]) else "failed"
+execution_time=time.time() - start_time
+            status="passed" if any([bit_resolution_stats, tensor_stats, matrix_stats,
+                                   profit_stats, tensor_match_stats]) else "failed"
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.MATHEMATICAL_VALIDATION,
 status=status,
@@ -855,44 +880,44 @@ def _test_performance(self) -> None:
     pass
         """Test system performance."""
         try:
-start_time = time.time()
-            test_name = "performance_testing"
+start_time=time.time()
+            test_name="performance_testing"
 
             # Test execution speed
-execution_times = []
+execution_times=[]
             for i in range(10):
-                test_start = time.time()
+                test_start=time.time()
 
                 # Simulate typical operation
                 if self.bit_engine and self.test_hashes:
-hash_value = self.test_hashes[i % len(self.test_hashes)]
-                    market_data = self.test_market_data[i % len(self.test_market_data)]
+hash_value=self.test_hashes[i % len(self.test_hashes)]
+                    market_data=self.test_market_data[i % len(self.test_market_data)]
                     self.bit_engine.process_hash_resolution(hash_value, market_data)
 
 execution_times.append(time.time() - test_start)
 
-avg_execution_time = unified_math.unified_math.mean(execution_times)
-            max_execution_time = unified_math.unified_math.max(execution_times)
+avg_execution_time=unified_math.unified_math.mean(execution_times)
+            max_execution_time=unified_math.unified_math.max(execution_times)
 
             # Test memory usage (simulated)
-            memory_usage = 256  # MB (simulated)
+            memory_usage=256  # MB (simulated)
 
             # Performance thresholds
-max_allowed_time = 1.0  # seconds
-max_allowed_memory = 512  # MB
+max_allowed_time=1.0  # seconds
+max_allowed_memory=512  # MB
 
-execution_time = time.time() - start_time
-            status = "passed" if avg_execution_time < max_allowed_time and memory_usage < max_allowed_memory else "failed"
+execution_time=time.time() - start_time
+            status="passed" if avg_execution_time < max_allowed_time and memory_usage < max_allowed_memory else "failed"
 
             # Store performance metrics
-self.performance_metrics = {
+self.performance_metrics={
 'avg_execution_time': avg_execution_time,
 'max_execution_time': max_execution_time,
 'memory_usage_mb': memory_usage,
 'execution_count': len(execution_times)
             }
 
-result = TestResult(
+result=TestResult(
                 test_name=test_name,
 phase=TestPhase.PERFORMANCE_TESTING,
 status=status,
@@ -919,7 +944,7 @@ def _add_error_result(self, test_name: str, phase: TestPhase, error_message: str
     pass
     pass
         """Add error result to test results."""
-result = TestResult(
+result=TestResult(
             test_name=test_name,
 phase=phase,
 status="error",
@@ -930,14 +955,14 @@ start_time=datetime.now(),
 
 self.test_results.append(result)
 
-def export_test_results(self, integration_result: IntegrationTestResult, output_path: str = "integration_test_results.json") -> None:
+def export_test_results(self, integration_result: IntegrationTestResult, output_path: str="integration_test_results.json") -> None:
 
 
     pass
     pass
         """Export integration test results to file."""
         try:
-results_data = {
+results_data={
 'test_id': integration_result.test_id,
 'timestamp': integration_result.timestamp.isoformat(),
                 'overall_status': integration_result.overall_status,
@@ -978,11 +1003,11 @@ if __name__ == "__main__":
     # Run integration test
 safe_print("🚀 Starting Schwabot Integration Test...")
 
-integration_test = IntegrationTest()
+integration_test=IntegrationTest()
 
     try:
         # Run full integration test
-result = integration_test.run_full_integration_test()
+result=integration_test.run_full_integration_test()
 
         if result:
 safe_print("\n📊 INTEGRATION TEST RESULTS")
@@ -998,7 +1023,7 @@ safe_print("\n📊 INTEGRATION TEST RESULTS")
 integration_test.export_test_results(result)
 
             # Exit with appropriate code
-exit_code = 0 if result.overall_status == "passed" else 1
+exit_code=0 if result.overall_status == "passed" else 1
 safe_print(f"\n🏁 Integration test completed with exit code: {exit_code}")
 
         else:

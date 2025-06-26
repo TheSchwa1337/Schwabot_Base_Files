@@ -87,26 +87,28 @@ except ImportError as e:
     # Minimal fallback classes
     class MathLib:
         """TODO: document MathLib."""
-        
+
         def __init__(self):
             """TODO: document __init__."""
             self.version = "1.0.0-fallback"
 
     class MathLibV2:
         """TODO: document MathLibV2."""
-        
+
         def __init__(self):
             """TODO: document __init__."""
             self.version = "2.0.0-fallback"
 
     class MathLibV3:
         """TODO: document MathLibV3."""
+
         def __init__(self):
             """TODO: document __init__."""
             self.version = "3.0.0-fallback"
 
     class Dual:
         """TODO: document Dual."""
+
         def __init__(self, val: float, eps: float = 0.0):
             """TODO: document __init__."""
             self.val = val

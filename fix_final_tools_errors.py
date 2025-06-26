@@ -7,23 +7,24 @@ Fix final minor errors in tools directory:
 
 import re
 
+
 def fix_final_tools_errors():
     """Fix the final minor errors in tools files."""
-    
+
     print("🔧 Fixing final minor errors in tools directory")
-    
+
     # Fix uros_v1_integration_test.py
     file_path = "tools/uros_v1_integration_test.py"
-    
+
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     original_content = content
-    
+
     # Fix E128: Fix indentation of continuation lines
     lines = content.split('\n')
     fixed_lines = []
-    
+
     for i, line in enumerate(lines):
         # Fix line 774: if isinstance(result, bool) and result)
         if i == 773 and 'if isinstance(result, bool) and result)' in line:
@@ -42,25 +43,26 @@ def fix_final_tools_errors():
             print(f"  🔧 Fixed F541 f-string at line {i+1}")
         else:
             fixed_line = line
-        
+
         fixed_lines.append(fixed_line)
-    
+
     content = '\n'.join(fixed_lines)
-    
+
     # Check if changes were made
     if content != original_content:
         # Backup the original file
         backup_path = f"{file_path}.backup"
         with open(backup_path, 'w', encoding='utf-8') as f:
             f.write(original_content)
-        
+
         # Write the fixed content
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         print(f"✅ Fixed final errors in {file_path}")
     else:
         print(f"ℹ️ No final errors found in {file_path}")
 
+
 if __name__ == "__main__":
-    fix_final_tools_errors() 
+    fix_final_tools_errors()

@@ -4,7 +4,6 @@
 
 def main() -> None:
 
-
     pass
     pass
     """Stub main function."""

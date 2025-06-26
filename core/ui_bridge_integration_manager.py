@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.ghost_profit_tracker import profit_summary
+from core.type_binding_system import cli_handler
+from core.ui_integration_bridge import get_ui_integration_bridge, ComponentType, ComponentStatus, EventType
+from core.visual_integration_bridge import get_visual_integration_bridge, ChartType, DataType
+from core.ui_state_bridge import get_ui_state_bridge, StateType, StateStatus
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Callable
+import time
+import threading
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
 except ImportError:
@@ -9,42 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """UI Bridge Integration Manager - Connects UI Bridges with Trading System.
 
@@ -62,19 +82,9 @@ Key Features:
 This completes the low-risk implementation by making the bridges functional.
 """
 
-import logging
-import threading
-import time
-from typing import Any, Dict, List, Optional, Callable
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 
 # Import our UI bridges
 try:
-from core.ui_state_bridge import get_ui_state_bridge, StateType, StateStatus
-from core.visual_integration_bridge import get_visual_integration_bridge, ChartType, DataType
-from core.ui_integration_bridge import get_ui_integration_bridge, ComponentType, ComponentStatus, EventType
 BRIDGES_AVAILABLE = True
 except ImportError as e:
 logging.error(f"UI bridges not available: {e}")
@@ -82,7 +92,6 @@ logging.error(f"UI bridges not available: {e}")
 
 # Import CLI handler for safe output
 try:
-from core.type_binding_system import cli_handler
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
     pass
@@ -94,8 +103,9 @@ logger = logging.getLogger(__name__)
 
 class IntegrationStatus(Enum):
 
-
     """Integration status enumeration."""
+
+
 DISCONNECTED = "disconnected"
 CONNECTING = "connecting"
 CONNECTED = "connected"
@@ -106,8 +116,9 @@ RECONNECTING = "reconnecting"
 @dataclass
 class IntegrationMetrics:
 
-
     """Metrics for integration performance."""
+
+
 total_updates: int = 0
 successful_updates: int = 0
 failed_updates: int = 0
@@ -118,17 +129,17 @@ error_count: int = 0
 
 class UIBridgeIntegrationManager:
 
-
     """Manages integration between UI bridges and trading system components."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
 
+def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     pass
     pass
         """Initialize the UI Bridge Integration Manager."""
         if not BRIDGES_AVAILABLE:
             raise RuntimeError("UI bridges are not available")
+
 
 self.config = config or self._default_config()
         self.version = "1.0.0"
@@ -162,8 +173,8 @@ cli_handler.log_safe(logger, "info", f"UI Bridge Integration Manager v{self.vers
         else:
 logger.info(f"UI Bridge Integration Manager v{self.version} initialized")
 
-def _default_config(self) -> Dict[str, Any]:
 
+def _default_config(self) -> Dict[str, Any]:
 
     pass
     pass
@@ -179,12 +190,13 @@ def _default_config(self) -> Dict[str, Any]:
 "error_recovery_enabled": True
 }
 
-def _register_default_data_sources(self) -> None:
 
+def _register_default_data_sources(self) -> None:
 
     pass
     pass
         """Register default data sources for integration."""
+
         # Profit tracking data source
 self.register_data_source("profit_tracker", self._get_profit_data)
 
@@ -197,8 +209,8 @@ self.register_data_source("performance_metrics", self._get_performance_metrics)
         # Trading state data source
 self.register_data_source("trading_state", self._get_trading_state)
 
-def _get_profit_data(self) -> Dict[str, Any]:
 
+def _get_profit_data(self) -> Dict[str, Any]:
 
     pass
     pass
@@ -206,7 +218,8 @@ def _get_profit_data(self) -> Dict[str, Any]:
         try:
             # Try to import and use the profit tracking system
             try:
-from core.ghost_profit_tracker import profit_summary
+
+
 total, mean, variance = profit_summary()
 
                 return {

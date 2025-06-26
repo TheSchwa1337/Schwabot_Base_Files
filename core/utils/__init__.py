@@ -13,7 +13,7 @@ log_safe,
 cli_handler,
 
 
-__all__ = [
+__all__=[
 "WindowsCliCompatibilityHandler",
 "safe_print",
 "safe_format_error",

@@ -26,8 +26,10 @@ try:
     CORE_AVAILABLE = True
 except ImportError:
     CORE_AVAILABLE = False
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
 
@@ -42,7 +44,7 @@ class CommandCluster:
     similarity_score: float
     agent_count: int
     created_at: datetime
-    
+
     def __post_init__(self):
         if self.created_at is None:
             self.created_at = datetime.now()
@@ -51,35 +53,35 @@ class CommandCluster:
 class CommandDensityAnalyzer:
     """
     Analyzes command density to detect multi-agent echo situations.
-    
+
     This class monitors command patterns to identify when multiple agents
     are making similar suggestions in the same time window, which could
     indicate noise or echo chamber effects.
     """
-    
+
     def __init__(self, fault_bus: Optional[FaultBus] = None):
         """Initialize the command density analyzer."""
         self.logger = logging.getLogger("command_density_analyzer")
         self.logger.setLevel(logging.INFO)
-        
+
         # Configuration
         self.max_commands_per_window = 3  # Max similar commands in window
         self.tick_window_size = 5  # Tick window for clustering
         self.similarity_threshold = 0.85  # Hash similarity threshold
         self.density_threshold = 0.8  # Density threshold for warnings
-        
+
         # State tracking
         self.command_clusters: Dict[str, CommandCluster] = {}
         self.recent_commands: List[Dict] = []
         self.fault_bus = fault_bus
-        
+
         # Performance metrics
         self.total_commands_analyzed = 0
         self.clusters_detected = 0
         self.warnings_generated = 0
-        
+
         safe_safe_print("📊 Command Density Analyzer initialized")
-    
+
     def analyze_command(
         self,
         command: Dict,
@@ -87,39 +89,39 @@ class CommandDensityAnalyzer:
     ) -> Optional[Dict]:
         """
         Analyze a single command for density patterns.
-        
+
         Args:
             command: Command data dictionary
             current_tick: Current system tick
-            
+
         Returns:
             Warning dictionary if density threshold exceeded, None otherwise
         """
         try:
             self.total_commands_analyzed += 1
-            
+
             # Add command to recent list
             command_with_tick = {**command, "tick": current_tick}
             self.recent_commands.append(command_with_tick)
-            
+
             # Clean old commands
             self._clean_old_commands(current_tick)
-            
+
             # Check for clustering
             cluster = self._find_or_create_cluster(command_with_tick, current_tick)
-            
+
             if cluster and len(cluster.commands) >= self.max_commands_per_window:
                 warning = self._generate_density_warning(cluster, current_tick)
                 self.warnings_generated += 1
                 return warning
-            
+
             return None
-            
+
         except Exception as e:
             error_msg = safe_format_error(e, "analyze_command")
             safe_safe_print(f"❌ Command analysis failed: {error_msg}")
             return None
-    
+
     def _clean_old_commands(self, current_tick: int) -> None:
         """Remove commands outside the analysis window."""
         cutoff_tick = current_tick - self.tick_window_size
@@ -127,7 +129,7 @@ class CommandDensityAnalyzer:
             cmd for cmd in self.recent_commands
             if cmd.get("tick", 0) >= cutoff_tick
         ]
-    
+
     def _find_or_create_cluster(
         self,
         command: Dict,
@@ -137,7 +139,7 @@ class CommandDensityAnalyzer:
         try:
             command_hash = self._compute_command_hash(command)
             command_domain = CommandDomain(command.get("domain", "strategy"))
-            
+
             # Look for existing clusters in the time window
             for cluster in self.command_clusters.values():
                 if self._is_command_in_cluster(command, cluster, current_tick):
@@ -146,7 +148,7 @@ class CommandDensityAnalyzer:
                     cluster.agent_count = len(set(cmd.get("agent_type") for cmd in cluster.commands))
                     cluster.similarity_score = self._calculate_cluster_similarity(cluster)
                     return cluster
-            
+
             # Create new cluster
             cluster_id = f"cluster_{len(self.command_clusters)}_{current_tick}"
             new_cluster = CommandCluster(
@@ -157,16 +159,16 @@ class CommandDensityAnalyzer:
                 similarity_score=1.0,
                 agent_count=1
             )
-            
+
             self.command_clusters[cluster_id] = new_cluster
             self.clusters_detected += 1
-            
+
             return new_cluster
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Cluster creation failed: {safe_format_error(e, 'cluster_creation')}")
             return None
-    
+
     def _is_command_in_cluster(
         self,
         command: Dict,
@@ -179,12 +181,12 @@ class CommandDensityAnalyzer:
             command_domain = CommandDomain(command.get("domain", "strategy"))
             if command_domain != cluster.domain:
                 return False
-            
+
             # Check tick proximity
             cluster_tick_range = cluster.tick_range
             if not (cluster_tick_range[0] - self.tick_window_size <= current_tick <= cluster_tick_range[1] + self.tick_window_size):
                 return False
-            
+
             # Check hash similarity with existing commands
             command_hash = self._compute_command_hash(command)
             for existing_cmd in cluster.commands:
@@ -192,13 +194,13 @@ class CommandDensityAnalyzer:
                 similarity = self._calculate_hash_similarity(command_hash, existing_hash)
                 if similarity >= self.similarity_threshold:
                     return True
-            
+
             return False
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Cluster membership check failed: {safe_format_error(e, 'cluster_check')}")
             return False
-    
+
     def _compute_command_hash(self, command: Dict) -> str:
         """Compute hash for command similarity comparison."""
         try:
@@ -208,43 +210,43 @@ class CommandDensityAnalyzer:
                 "payload": command.get("payload", {}),
                 "priority": command.get("priority", "")
             }
-            
+
             # Create hash string
             hash_string = json.dumps(key_fields, sort_keys=True)
             return hashlib.sha256(hash_string.encode()).hexdigest()[:16]
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Hash computation failed: {safe_format_error(e, 'hash_computation')}")
             return hashlib.sha256(str(command).encode()).hexdigest()[:16]
-    
+
     def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
         """Calculate similarity between two hashes using Hamming distance."""
         try:
             if len(hash1) != len(hash2):
                 return 0.0
-            
+
             # Convert hex strings to binary
             bin1 = bin(int(hash1, 16))[2:].zfill(len(hash1) * 4)
             bin2 = bin(int(hash2, 16))[2:].zfill(len(hash2) * 4)
-            
+
             # Calculate Hamming distance
             hamming_distance = sum(b1 != b2 for b1, b2 in zip(bin1, bin2))
             max_distance = len(bin1)
-            
+
             # Convert to similarity score (0-1)
             similarity = 1.0 - (hamming_distance / max_distance)
             return similarity
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity_calc')}")
             return 0.0
-    
+
     def _calculate_cluster_similarity(self, cluster: CommandCluster) -> float:
         """Calculate average similarity within cluster."""
         try:
             if len(cluster.commands) < 2:
                 return 1.0
-            
+
             similarities = []
             for i, cmd1 in enumerate(cluster.commands):
                 for j, cmd2 in enumerate(cluster.commands[i+1:], i+1):
@@ -252,13 +254,13 @@ class CommandDensityAnalyzer:
                     hash2 = self._compute_command_hash(cmd2)
                     similarity = self._calculate_hash_similarity(hash1, hash2)
                     similarities.append(similarity)
-            
+
             return unified_math.unified_math.mean(similarities) if similarities else 1.0
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Cluster similarity calculation failed: {safe_format_error(e, 'cluster_similarity')}")
             return 1.0
-    
+
     def _generate_density_warning(
         self,
         cluster: CommandCluster,
@@ -279,7 +281,7 @@ class CommandDensityAnalyzer:
                 "severity": self._calculate_warning_severity(cluster),
                 "recommendation": self._generate_recommendation(cluster)
             }
-            
+
             # Send to fault bus if available
             if self.fault_bus:
                 fault_event = FaultBusEvent(
@@ -291,35 +293,36 @@ class CommandDensityAnalyzer:
                     profit_context=0.0  # No direct profit impact
                 )
                 self.fault_bus.push(fault_event)
-            
-            safe_safe_print(f"⚠️ Density warning: {cluster.agent_count} agents, {len(cluster.commands)} commands in {cluster.domain.value}")
-            
+
+            safe_safe_print(
+                f"⚠️ Density warning: {cluster.agent_count} agents, {len(cluster.commands)} commands in {cluster.domain.value}")
+
             return warning
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Warning generation failed: {safe_format_error(e, 'warning_generation')}")
             return {}
-    
+
     def _calculate_warning_severity(self, cluster: CommandCluster) -> float:
         """Calculate warning severity based on cluster characteristics."""
         try:
             # Base severity on command count
             command_factor = unified_math.min(len(cluster.commands) / self.max_commands_per_window, 1.0)
-            
+
             # Adjust for agent diversity (more agents = higher severity)
             agent_factor = unified_math.min(cluster.agent_count / 3.0, 1.0)
-            
+
             # Adjust for similarity (higher similarity = higher severity)
             similarity_factor = cluster.similarity_score
-            
+
             # Combine factors
             severity = (command_factor * 0.4 + agent_factor * 0.3 + similarity_factor * 0.3)
             return np.clip(severity, 0.0, 1.0)
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Severity calculation failed: {safe_format_error(e, 'severity_calc')}")
             return 0.5
-    
+
     def _generate_recommendation(self, cluster: CommandCluster) -> str:
         """Generate recommendation based on cluster analysis."""
         try:
@@ -331,11 +334,11 @@ class CommandDensityAnalyzer:
                 return "Very high similarity detected - potential echo chamber effect"
             else:
                 return "Monitor command patterns for emerging density issues"
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Recommendation generation failed: {safe_format_error(e, 'recommendation_gen')}")
             return "Review command patterns"
-    
+
     def get_density_metrics(self) -> Dict:
         """Get current density analysis metrics."""
         try:
@@ -351,7 +354,7 @@ class CommandDensityAnalyzer:
         except Exception as e:
             safe_safe_print(f"⚠️ Metrics calculation failed: {safe_format_error(e, 'metrics_calc')}")
             return {}
-    
+
     def get_active_clusters(self) -> List[Dict]:
         """Get information about active clusters."""
         try:
@@ -370,7 +373,7 @@ class CommandDensityAnalyzer:
         except Exception as e:
             safe_safe_print(f"⚠️ Cluster info retrieval failed: {safe_format_error(e, 'cluster_info')}")
             return []
-    
+
     def clear_old_clusters(self, current_tick: int) -> None:
         """Clear clusters older than the analysis window."""
         try:
@@ -379,13 +382,13 @@ class CommandDensityAnalyzer:
                 cluster_id for cluster_id, cluster in self.command_clusters.items()
                 if cluster.tick_range[1] < cutoff_tick
             ]
-            
+
             for cluster_id in old_clusters:
                 del self.command_clusters[cluster_id]
-            
+
             if old_clusters:
                 safe_safe_print(f"🧹 Cleared {len(old_clusters)} old clusters")
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Cluster cleanup failed: {safe_format_error(e, 'cluster_cleanup')}")
 
@@ -402,7 +405,7 @@ def analyze_command_density(
     """Convenience function to analyze command density."""
     if fault_bus and density_analyzer.fault_bus is None:
         density_analyzer.fault_bus = fault_bus
-    
+
     return density_analyzer.analyze_command(command, current_tick)
 
 
@@ -416,7 +419,7 @@ if __name__ == "__main__":
     async def test_density_analyzer():
         """Test command density analyzer."""
         safe_safe_print("📊 Testing Command Density Analyzer...")
-        
+
         # Create test commands
         test_commands = [
             {
@@ -441,21 +444,21 @@ if __name__ == "__main__":
                 "priority": "medium"
             }
         ]
-        
+
         # Analyze commands
         for i, cmd in enumerate(test_commands):
             warning = analyze_command_density(cmd, current_tick=100 + i)
             if warning:
                 safe_safe_print(f"Warning generated: {warning}")
-        
+
         # Get metrics
         metrics = get_density_metrics()
         clusters = density_analyzer.get_active_clusters()
-        
+
         safe_safe_print("✅ Command Density Analyzer test completed")
         safe_safe_print(f"Metrics: {metrics}")
         safe_safe_print(f"Active clusters: {len(clusters)}")
-    
+
     # Run test
     import asyncio
-    asyncio.run(test_density_analyzer()) 
+    asyncio.run(test_density_analyzer())

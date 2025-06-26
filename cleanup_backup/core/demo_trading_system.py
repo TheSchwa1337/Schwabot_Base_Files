@@ -35,6 +35,7 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DemoMarketData:
     """Simulated market data for demo trading."""
@@ -48,6 +49,7 @@ class DemoMarketData:
     trend_strength: float
     market_heat: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class DemoTrade:
@@ -64,6 +66,7 @@ class DemoTrade:
     profit: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class DemoPortfolio:
     """Demo portfolio state."""
@@ -76,6 +79,7 @@ class DemoPortfolio:
     win_rate: float
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class DemoStrategy:
@@ -91,9 +95,10 @@ class DemoStrategy:
     enabled: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class DemoMarketSimulator:
     """Simulates market data for demo trading."""
-    
+
     def __init__(self, symbols: List[str] = None):
         self.symbols = symbols or ['BTC/USDC', 'ETH/USDC', 'ADA/USDC', 'DOT/USDC']
         self.base_prices = {
@@ -105,12 +110,12 @@ class DemoMarketSimulator:
         self.current_prices = self.base_prices.copy()
         self.volatility = {symbol: 0.02 for symbol in self.symbols}
         self.trend_direction = {symbol: 1.0 for symbol in self.symbols}
-        
+
         # Market state
         self.market_heat = 0.5
         self.entropy_level = 4.0
         self.complexity = 0.6
-        
+
         logger.info(f"Demo market simulator initialized with {len(self.symbols)} symbols")
 
     def generate_market_data(self, symbol: str) -> DemoMarketData:
@@ -120,30 +125,30 @@ class DemoMarketSimulator:
             current_price = self.current_prices[symbol]
             volatility = self.volatility[symbol]
             trend = self.trend_direction[symbol]
-            
+
             # Random price movement
             price_change = np.random.normal(0, volatility) * current_price
             trend_change = trend * volatility * 0.1 * current_price
             total_change = price_change + trend_change
-            
+
             # Update price
             new_price = current_price + total_change
             self.current_prices[symbol] = unified_math.max(new_price, current_price * 0.5)  # Prevent negative prices
-            
+
             # Update trend direction occasionally
             if np.random.random() < 0.01:  # 1% chance to change trend
                 self.trend_direction[symbol] *= -1
-            
+
             # Generate volume
             base_volume = 1000.0
             volume_variation = np.random.normal(1.0, 0.3)
             volume = base_volume * volume_variation * (1 + unified_math.abs(price_change) / current_price)
-            
+
             # Update market state
             self.market_heat = np.clip(self.market_heat + np.random.normal(0, 0.01), 0.0, 1.0)
             self.entropy_level = np.clip(self.entropy_level + np.random.normal(0, 0.1), 1.0, 8.0)
             self.complexity = np.clip(self.complexity + np.random.normal(0, 0.02), 0.1, 1.0)
-            
+
             return DemoMarketData(
                 symbol=symbol,
                 price=self.current_prices[symbol],
@@ -155,7 +160,7 @@ class DemoMarketSimulator:
                 trend_strength=unified_math.abs(trend),
                 market_heat=self.market_heat
             )
-            
+
         except Exception as e:
             logger.error(f"Error generating market data for {symbol}: {e}")
             return None
@@ -169,10 +174,11 @@ class DemoMarketSimulator:
                 market_data[symbol] = data
         return market_data
 
+
 class DemoTradingSystem:
     """
     Demo trading system that simulates live trading using all mathematical functions.
-    
+
     Features:
     - Real-time market data simulation
     - Mathematical function integration
@@ -181,39 +187,39 @@ class DemoTradingSystem:
     - Risk management
     - Strategy backtesting
     """
-    
+
     def __init__(self, initial_capital: float = 100000.0):
         self.initial_capital = initial_capital
         self.current_capital = initial_capital
         self.positions: Dict[str, float] = {}
         self.trades: List[DemoTrade] = []
         self.strategies: Dict[str, DemoStrategy] = {}
-        
+
         # Initialize core components
         self.market_simulator = DemoMarketSimulator()
         self.dlt_engine = None
         self.matrix_mapper = None
         self.profit_allocator = None
         self.zpe_core = None
-        
+
         if CORE_COMPONENTS_AVAILABLE:
             self._initialize_components()
-        
+
         # Trading state
         self.is_running = False
         self.trading_thread = None
         self.market_data_queue = queue.Queue()
         self.trade_queue = queue.Queue()
-        
+
         # Performance tracking
         self.performance_history: List[Dict[str, Any]] = []
         self.mathematical_validation_results: List[Dict[str, Any]] = []
-        
+
         # Configuration
         self.tick_interval = 1.0  # seconds
         self.max_trades_per_tick = 5
         self.risk_management_enabled = True
-        
+
         logger.info(f"Demo trading system initialized with ${initial_capital:,.2f} capital")
 
     def _initialize_components(self) -> None:
@@ -223,14 +229,14 @@ class DemoTradingSystem:
             self.matrix_mapper = MatrixMapper()
             self.profit_allocator = ProfitCycleAllocator()
             self.zpe_core = ZPECore()
-            
+
             # Setup integrations
             if self.matrix_mapper and self.dlt_engine:
                 self.matrix_mapper.set_dlt_waveform_engine(self.dlt_engine)
                 self.matrix_mapper.set_profit_cycle_allocator(self.profit_allocator)
-            
+
             logger.info("Core components initialized successfully")
-            
+
         except Exception as e:
             logger.error(f"Error initializing components: {e}")
 
@@ -244,11 +250,11 @@ class DemoTradingSystem:
         if self.is_running:
             logger.warning("Demo trading system is already running")
             return
-        
+
         self.is_running = True
         self.trading_thread = threading.Thread(target=self._trading_loop, daemon=True)
         self.trading_thread.start()
-        
+
         logger.info("Demo trading system started")
 
     def stop_trading(self) -> None:
@@ -256,7 +262,7 @@ class DemoTradingSystem:
         self.is_running = False
         if self.trading_thread:
             self.trading_thread.join(timeout=5.0)
-        
+
         logger.info("Demo trading system stopped")
 
     def _trading_loop(self) -> None:
@@ -264,20 +270,20 @@ class DemoTradingSystem:
         while self.is_running:
             try:
                 start_time = time.time()
-                
+
                 # Generate market data
                 market_data = self.market_simulator.get_all_market_data()
-                
+
                 # Process each symbol
                 for symbol, data in market_data.items():
                     self._process_symbol(symbol, data)
-                
+
                 # Sleep for tick interval
                 elapsed = time.time() - start_time
                 sleep_time = unified_math.max(0, self.tick_interval - elapsed)
                 if sleep_time > 0:
                     time.sleep(sleep_time)
-                    
+
             except Exception as e:
                 logger.error(f"Error in trading loop: {e}")
                 time.sleep(1.0)
@@ -289,7 +295,7 @@ class DemoTradingSystem:
             price_history = self._get_price_history(symbol)
             if len(price_history) < 100:
                 return
-            
+
             # Process waveform
             if self.dlt_engine:
                 waveform_result = self.dlt_engine.process_waveform_data(
@@ -297,14 +303,14 @@ class DemoTradingSystem:
                     x=np.array(price_history),
                     sample_rate=1.0
                 )
-                
+
                 if waveform_result.get('success'):
                     # Get tensor score
                     tensor_score = waveform_result.get('tensor_score', 0.0)
-                    
+
                     # Make trading decision
                     self._make_trading_decision(symbol, market_data, tensor_score)
-                    
+
         except Exception as e:
             logger.error(f"Error processing symbol {symbol}: {e}")
 
@@ -314,14 +320,14 @@ class DemoTradingSystem:
         # For demo, we'll generate synthetic price history
         base_price = self.market_simulator.base_prices.get(symbol, 100.0)
         history = []
-        
+
         for i in range(100):
             # Generate price with some trend and noise
             trend = np.unified_math.sin(i * 0.1) * 0.01
             noise = np.random.normal(0, 0.005)
             price = base_price * (1 + trend + noise)
             history.append(price)
-        
+
         return history
 
     def _make_trading_decision(self, symbol: str, market_data: DemoMarketData, tensor_score: float) -> None:
@@ -329,10 +335,10 @@ class DemoTradingSystem:
         try:
             # Determine bit phase
             bit_phase = self._determine_bit_phase(market_data)
-            
+
             # Calculate position size based on tensor score and risk
             position_size = self._calculate_position_size(tensor_score, bit_phase)
-            
+
             if position_size > 0:
                 # Determine trade direction
                 if tensor_score > 0.3:
@@ -341,10 +347,10 @@ class DemoTradingSystem:
                     side = "sell"
                 else:
                     return  # No trade
-                
+
                 # Execute trade
                 self._execute_trade(symbol, side, position_size, market_data.price, tensor_score, bit_phase)
-                
+
         except Exception as e:
             logger.error(f"Error making trading decision for {symbol}: {e}")
 
@@ -354,10 +360,10 @@ class DemoTradingSystem:
             entropy_level = market_data.entropy_level
             complexity = market_data.complexity
             volatility = market_data.volatility
-            
+
             # Calculate composite score
             composite_score = (entropy_level * 0.4 + complexity * 0.3 + volatility * 100 * 0.3)
-            
+
             # Determine bit phase based on composite score
             if composite_score < 2.0:
                 return 4  # 4-bit conservative
@@ -365,7 +371,7 @@ class DemoTradingSystem:
                 return 8  # 8-bit balanced
             else:
                 return 42  # 42-bit quantum
-                
+
         except Exception as e:
             logger.error(f"Error determining bit phase: {e}")
             return 8  # Default to 8-bit
@@ -375,10 +381,10 @@ class DemoTradingSystem:
         try:
             # Base position size
             base_size = self.current_capital * 0.01  # 1% of capital
-            
+
             # Adjust based on tensor score
             tensor_factor = unified_math.abs(tensor_score)
-            
+
             # Adjust based on bit phase
             if bit_phase == 4:
                 bit_factor = 0.5  # Conservative
@@ -386,35 +392,35 @@ class DemoTradingSystem:
                 bit_factor = 1.0  # Balanced
             else:  # 42-bit
                 bit_factor = 1.5  # Aggressive
-            
+
             # Calculate final position size
             position_size = base_size * tensor_factor * bit_factor
-            
+
             # Apply risk management
             max_position = self.current_capital * 0.1  # Max 10% of capital
             position_size = unified_math.min(position_size, max_position)
-            
+
             return position_size
-            
+
         except Exception as e:
             logger.error(f"Error calculating position size: {e}")
             return 0.0
 
-    def _execute_trade(self, symbol: str, side: str, quantity: float, price: float, 
-                      tensor_score: float, bit_phase: int) -> None:
+    def _execute_trade(self, symbol: str, side: str, quantity: float, price: float,
+                       tensor_score: float, bit_phase: int) -> None:
         """Execute a demo trade."""
         try:
             # Generate trade ID
             trade_id = f"demo_trade_{int(time.time())}_{len(self.trades)}"
-            
+
             # Calculate trade value
             trade_value = quantity * price
-            
+
             # Check if we have enough capital
             if side == "buy" and trade_value > self.current_capital:
                 logger.warning(f"Insufficient capital for {side} trade: ${trade_value:.2f}")
                 return
-            
+
             # Update positions
             if side == "buy":
                 self.positions[symbol] = self.positions.get(symbol, 0.0) + quantity
@@ -424,10 +430,10 @@ class DemoTradingSystem:
                 if quantity > current_position:
                     logger.warning(f"Insufficient position for {side} trade")
                     return
-                
+
                 self.positions[symbol] = current_position - quantity
                 self.current_capital += trade_value
-            
+
             # Create trade record
             trade = DemoTrade(
                 trade_id=trade_id,
@@ -443,11 +449,11 @@ class DemoTradingSystem:
                     'remaining_capital': self.current_capital
                 }
             )
-            
+
             self.trades.append(trade)
-            
+
             logger.info(f"Executed {side} trade: {quantity} {symbol} @ ${price:.2f} (tensor_score: {tensor_score:.4f})")
-            
+
         except Exception as e:
             logger.error(f"Error executing trade: {e}")
 
@@ -456,23 +462,23 @@ class DemoTradingSystem:
         try:
             # Calculate current portfolio value
             portfolio_value = self.current_capital
-            
+
             # Add value of positions
             for symbol, quantity in self.positions.items():
                 if quantity > 0:
                     current_price = self.market_simulator.current_prices.get(symbol, 0.0)
                     portfolio_value += quantity * current_price
-            
+
             # Calculate profit
             total_profit = portfolio_value - self.initial_capital
-            
+
             # Calculate win rate
             if self.trades:
                 profitable_trades = sum(1 for trade in self.trades if trade.profit > 0)
                 win_rate = profitable_trades / len(self.trades)
             else:
                 win_rate = 0.0
-            
+
             return DemoPortfolio(
                 total_value=portfolio_value,
                 cash=self.current_capital,
@@ -483,7 +489,7 @@ class DemoTradingSystem:
                 win_rate=win_rate,
                 timestamp=datetime.now()
             )
-            
+
         except Exception as e:
             logger.error(f"Error getting portfolio status: {e}")
             return None
@@ -493,18 +499,18 @@ class DemoTradingSystem:
         try:
             if not CORE_COMPONENTS_AVAILABLE:
                 return {'error': 'Core components not available'}
-            
+
             validator = MathematicalIntegrationValidator()
             results = validator.run_comprehensive_validation()
-            
+
             # Store results
             self.mathematical_validation_results.append({
                 'timestamp': datetime.now().isoformat(),
                 'results': results
             })
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Error running mathematical validation: {e}")
             return {'error': str(e)}
@@ -513,7 +519,7 @@ class DemoTradingSystem:
         """Export demo trading results."""
         try:
             portfolio = self.get_portfolio_status()
-            
+
             results_data = {
                 'timestamp': datetime.now().isoformat(),
                 'initial_capital': self.initial_capital,
@@ -541,17 +547,18 @@ class DemoTradingSystem:
                 ],
                 'mathematical_validation': self.mathematical_validation_results
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
-            
+
             safe_print(f"✅ Demo results exported to {output_path}")
-            
+
         except Exception as e:
             safe_print(f"❌ Error exporting demo results: {e}")
 
-def create_demo_strategy(strategy_id: str, name: str, symbols: List[str], 
-                        initial_capital: float) -> DemoStrategy:
+
+def create_demo_strategy(strategy_id: str, name: str, symbols: List[str],
+                         initial_capital: float) -> DemoStrategy:
     """Create a demo trading strategy."""
     return DemoStrategy(
         strategy_id=strategy_id,
@@ -564,13 +571,14 @@ def create_demo_strategy(strategy_id: str, name: str, symbols: List[str],
         take_profit_pct=0.1
     )
 
+
 def main():
     """Main function to run demo trading system."""
     safe_print("🚀 Starting Demo Trading System...")
-    
+
     # Create demo trading system
     demo_system = DemoTradingSystem(initial_capital=100000.0)
-    
+
     # Add strategies
     strategy1 = create_demo_strategy(
         strategy_id="strategy_1",
@@ -579,7 +587,7 @@ def main():
         initial_capital=50000.0
     )
     demo_system.add_strategy(strategy1)
-    
+
     strategy2 = create_demo_strategy(
         strategy_id="strategy_2",
         name="Multi-Asset Strategy",
@@ -587,18 +595,18 @@ def main():
         initial_capital=50000.0
     )
     demo_system.add_strategy(strategy2)
-    
+
     # Start trading
     demo_system.start_trading()
-    
+
     try:
         # Run for 60 seconds
         safe_print("📈 Demo trading running for 60 seconds...")
         time.sleep(60)
-        
+
         # Stop trading
         demo_system.stop_trading()
-        
+
         # Get results
         portfolio = demo_system.get_portfolio_status()
         safe_print(f"\n📊 DEMO TRADING RESULTS")
@@ -607,20 +615,21 @@ def main():
         safe_print(f"Total Profit: ${portfolio.total_profit:,.2f}")
         safe_print(f"Total Trades: {portfolio.total_trades}")
         safe_print(f"Win Rate: {portfolio.win_rate:.2%}")
-        
+
         # Run mathematical validation
         safe_print("\n🧪 Running Mathematical Validation...")
         validation_results = demo_system.run_mathematical_validation()
         safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
-        
+
         # Export results
         demo_system.export_demo_results()
-        
+
     except KeyboardInterrupt:
         safe_print("\n⏹️ Demo trading stopped by user")
         demo_system.stop_trading()
-    
+
     return 0
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

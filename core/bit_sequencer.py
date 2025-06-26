@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.unified_math_system import unified_math
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional, Dict, Any
+import time
+import hashlib
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Bit Sequencer - Mathematical Bit Sequence Processing for Schwabot.
 
@@ -61,20 +74,17 @@ Mathematical Foundation:
 - Correlation analysis: C(S1, S2) = Σ(S1_i * S2_i) / √(ΣS1_i² * ΣS2_i²)
 """
 
-import logging
-import hashlib
-import time
-from typing import List, Tuple, Optional, Dict, Any
-from dataclasses import dataclass, field
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BitSequence:
 
-
     """Bit sequence with metadata."""
+
+
 sequence: List[int]
 length: int
 seed: int
@@ -83,24 +93,28 @@ entropy: float
 pattern_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class BitSequencer:
 
+class BitSequencer:
 
     """Mathematical bit sequencing for hash and signal processing."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.max_sequence_length = 1024
+
+
 self.default_seed = int(time.time())
         logger.info("BitSequencer initialized")
+
 
 def generate_sequence(self, hash_value: str, length: int = 64,
 
 
                          seed: Optional[int] = None) -> BitSequence:
+
 """
 Generate bit sequence from hash value.
 
@@ -193,19 +207,19 @@ def _calculate_entropy(self, sequence: List[int]) -> float:
                 return 0.0
 
             # Count 0s and 1s
-zeros = sequence.count(0)
-            ones = sequence.count(1)
-            total = len(sequence)
+zeros=sequence.count(0)
+            ones=sequence.count(1)
+            total=len(sequence)
 
             if total == 0:
                 return 0.0
 
             # Calculate probabilities
-p0 = zeros / total
-p1 = ones / total
+p0=zeros / total
+p1=ones / total
 
             # Shannon entropy
-entropy = 0.0
+entropy=0.0
             if p0 > 0:
 entropy -= p0 * np.log2(p0)
             if p1 > 0:
@@ -228,28 +242,28 @@ def _detect_patterns(self, sequence: List[int]) -> float:
                 return 0.0
 
             # Look for repeating patterns
-patterns = []
+patterns=[]
 
             # Check for 2-bit patterns
             for i in range(len(sequence) - 1):
-                pattern = (sequence[i] << 1) | sequence[i + 1]
+                pattern=(sequence[i] << 1) | sequence[i + 1]
                 patterns.append(pattern)
 
             # Count pattern frequencies
-pattern_counts = {}
+pattern_counts={}
             for pattern in patterns:
-pattern_counts[pattern] = pattern_counts.get(pattern, 0) + 1
+pattern_counts[pattern]=pattern_counts.get(pattern, 0) + 1
 
             # Calculate pattern score
-total_patterns = len(patterns)
+total_patterns=len(patterns)
             if total_patterns == 0:
                 return 0.0
 
             # Normalized pattern diversity
-unique_patterns = len(pattern_counts)
-            max_patterns = unified_math.min(4, total_patterns)  # Max 4 possible 2-bit patterns
+unique_patterns=len(pattern_counts)
+            max_patterns=unified_math.min(4, total_patterns)  # Max 4 possible 2-bit patterns
 
-pattern_score = unique_patterns / max_patterns
+pattern_score=unique_patterns / max_patterns
 
             return pattern_score
 
@@ -276,7 +290,7 @@ Dict[str, Any]
 Analysis results
 """
         try:
-analysis = {
+analysis={
 'length': sequence.length,
 'entropy': sequence.entropy,
 'pattern_score': sequence.pattern_score,
@@ -305,23 +319,23 @@ def _analyze_runs(self, sequence: List[int]) -> Dict[str, Any]:
             if not sequence:
                 return {}
 
-runs = []
-current_run = 1
-current_bit = sequence[0]
+runs=[]
+current_run=1
+current_bit=sequence[0]
 
             for i in range(1, len(sequence)):
                 if sequence[i] == current_bit:
 current_run += 1
                 else:
 runs.append((current_bit, current_run))
-                    current_run = 1
-current_bit = sequence[i]
+                    current_run=1
+current_bit=sequence[i]
 
             # Add final run
 runs.append((current_bit, current_run))
 
             # Calculate run statistics
-run_lengths = [run[1] for run in runs]
+run_lengths=[run[1] for run in runs]
 
             return {
 'total_runs': len(runs),
@@ -348,13 +362,13 @@ def _calculate_autocorrelation(self, sequence: List[int]) -> float:
                 return 0.0
 
             # Convert to numpy array
-seq_array = np.array(sequence, dtype=float)
+seq_array=np.array(sequence, dtype=float)
 
             # Calculate autocorrelation
-autocorr = np.correlate(seq_array, seq_array, mode='full')
+autocorr=np.correlate(seq_array, seq_array, mode='full')
 
             # Normalize
-autocorr = autocorr[len(autocorr)//2:] / autocorr[len(autocorr)//2]
+autocorr=autocorr[len(autocorr)//2:] / autocorr[len(autocorr)//2]
 
             # Return average autocorrelation (excluding lag 0)
             if len(autocorr) > 1:
@@ -377,18 +391,18 @@ def _calculate_complexity(self, sequence: List[int]) -> float:
                 return 0.0
 
             # Lempel-Ziv complexity approximation
-complexity = 1
-substrings = set()
+complexity=1
+substrings=set()
 
             for i in range(len(sequence)):
                 for j in range(i + 1, len(sequence) + 1):
-                    substring = tuple(sequence[i:j])
+                    substring=tuple(sequence[i:j])
                     if substring not in substrings:
 substrings.unified_math.add(substring)
                         complexity += 1
 
             # Normalize by sequence length
-normalized_complexity = complexity / len(sequence)
+normalized_complexity=complexity / len(sequence)
 
             return unified_math.min(1.0, normalized_complexity)
 
@@ -418,19 +432,19 @@ Comparison metrics
 """
         try:
             # Ensure sequences are same length
-min_length = unified_math.min(len(seq1.sequence), len(seq2.sequence))
-            s1 = seq1.sequence[:min_length]
-s2 = seq2.sequence[:min_length]
+min_length=unified_math.min(len(seq1.sequence), len(seq2.sequence))
+            s1=seq1.sequence[:min_length]
+s2=seq2.sequence[:min_length]
 
             # Calculate comparison metrics
-hamming_distance = sum(a != b for a, b in zip(s1, s2))
-            hamming_similarity = 1.0 - (hamming_distance / min_length)
+hamming_distance=sum(a != b for a, b in zip(s1, s2))
+            hamming_similarity=1.0 - (hamming_distance / min_length)
 
             # Correlation
-correlation = self._calculate_correlation(s1, s2)
+correlation=self._calculate_correlation(s1, s2)
 
             # Entropy difference
-entropy_diff = unified_math.abs(seq1.entropy - seq2.entropy)
+entropy_diff=unified_math.abs(seq1.entropy - seq2.entropy)
 
             return {
 'hamming_distance': hamming_distance,
@@ -455,11 +469,11 @@ def _calculate_correlation(self, seq1: List[int], seq2: List[int]) -> float:
                 return 0.0
 
             # Convert to numpy arrays
-s1 = np.array(seq1, dtype=float)
-            s2 = np.array(seq2, dtype=float)
+s1=np.array(seq1, dtype=float)
+            s2=np.array(seq2, dtype=float)
 
             # Calculate correlation
-correlation = unified_math.unified_math.correlation(s1, s2)[0, 1]
+correlation=unified_math.unified_math.correlation(s1, s2)[0, 1]
 
             return float(correlation) if not np.isnan(correlation) else 0.0
 
@@ -470,7 +484,7 @@ logger.error(f"Error calculating correlation: {e}")
 def generate_multiple_sequences(self, hash_values: List[str],]
 
 
-                                  length: int = 64) -> List[BitSequence]:
+                                  length: int=64) -> List[BitSequence]:
 """Generate multiple sequences from hash values."""
         try:
 sequences = []

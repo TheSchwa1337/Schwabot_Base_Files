@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-\nfrom dataclasses import dataclass
+# -*- coding: utf-8 -*-
+from dataclasses import dataclass
 from typing import Literal
+
 
 @dataclass
 class ExecutionDecision:
@@ -10,4 +12,5 @@ class ExecutionDecision:
     overlay_confidence: float
     recommendation: str
 
-TradeAction = Literal["buy", "sell", "hold"] 
+
+TradeAction = Literal["buy", "sell", "hold"]

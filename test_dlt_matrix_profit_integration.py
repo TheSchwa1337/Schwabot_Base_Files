@@ -34,9 +34,9 @@ except ImportError as e:
 def test_component_initialization():
     """Test initialization of all components."""
     safe_print("\n🧪 Testing Component Initialization...")
-    
+
     results = {}
-    
+
     try:
         # Test DLT Waveform Engine
         dlt_engine = DLTWaveformEngine()
@@ -61,30 +61,31 @@ def test_component_initialization():
     except Exception as e:
         results['error'] = str(e)
         safe_print(f"❌ Component initialization failed: {e}")
-    
+
     return results
 
 
 def test_dlt_waveform_processing():
     """Test DLT waveform processing with quantum integration."""
     safe_print("\n🌊 Testing DLT Waveform Processing...")
-    
+
     results = {}
-    
+
     try:
         dlt_engine = DLTWaveformEngine()
-        
+
         # Generate test waveform data
         t = np.linspace(0, 10, 1000)
-        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
-        
+        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * \
+            np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
+
         # Test waveform processing
         waveform_result = dlt_engine.process_waveform_data(
             name="test_waveform",
             x=waveform_data,
             sample_rate=1.0
         )
-        
+
         results['waveform_processing'] = {
             'success': waveform_result.get('success', False),
             'tensor_score': waveform_result.get('tensor_score', 0.0)
@@ -107,19 +108,19 @@ def test_dlt_waveform_processing():
     except Exception as e:
         results['error'] = str(e)
         safe_print(f"❌ DLT waveform processing failed: {e}")
-    
+
     return results
 
 
 def test_matrix_mapper_functionality():
     """Test matrix mapper functionality with hash-basket matching."""
     safe_print("\n🔗 Testing Matrix Mapper Functionality...")
-    
+
     results = {}
-    
+
     try:
         matrix_mapper = MatrixMapper()
-        
+
         # Test hash decoding
         test_hash = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
         basket_id = matrix_mapper.decode_hash_to_basket(test_hash, 100, 50000.0)
@@ -141,16 +142,16 @@ def test_matrix_mapper_functionality():
     except Exception as e:
         results['error'] = str(e)
         safe_print(f"❌ Matrix mapper functionality failed: {e}")
-    
+
     return results
 
 
 def test_profit_cycle_allocation():
     """Test profit cycle allocation with tensor scoring."""
     safe_print("\n💰 Testing Profit Cycle Allocation...")
-    
+
     results = {}
-    
+
     try:
         # Create test execution packet
         execution_packet = {
@@ -173,40 +174,42 @@ def test_profit_cycle_allocation():
             cycles=['cycle1', 'cycle2', 'cycle3'],
             market_data=market_data
         )
-        
+
         results['allocation'] = {
             'success': allocation_result.success,
             'tensor_score': allocation_result.tensor_score,
             'bit_phase': allocation_result.bit_phase,
             'zpe_efficiency': allocation_result.zpe_efficiency
         }
-        safe_print(f"✅ Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
+        safe_print(
+            f"✅ Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
 
     except Exception as e:
         results['error'] = str(e)
         safe_print(f"❌ Profit cycle allocation failed: {e}")
-    
+
     return results
 
 
 def test_complete_pipeline_integration():
     """Test complete pipeline integration from waveform to profit allocation."""
     safe_print("\n🔄 Testing Complete Pipeline Integration...")
-    
+
     results = {}
-    
+
     try:
         # Step 1: Process waveform data
         dlt_engine = DLTWaveformEngine()
         t = np.linspace(0, 10, 1000)
-        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
-        
+        waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * \
+            np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
+
         waveform_result = dlt_engine.process_waveform_data(
             name="pipeline_waveform",
             x=waveform_data,
             sample_rate=1.0
         )
-        
+
         results['step1_waveform'] = {
             'success': waveform_result.get('success', False),
             'tensor_score': waveform_result.get('tensor_score', 0.0)
@@ -234,18 +237,19 @@ def test_complete_pipeline_integration():
             'current_price': 51000.0,
             'tick': int(time.time())
         }
-        
+
         allocation_result = allocate_profit_cycle(
             execution_packet=execution_packet,
             market_data=market_data
         )
-        
+
         results['step3_profit_allocation'] = {
             'success': allocation_result.success,
             'tensor_score': allocation_result.tensor_score,
             'bit_phase': allocation_result.bit_phase
         }
-        safe_print(f"✅ Step 3 - Profit Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
+        safe_print(
+            f"✅ Step 3 - Profit Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
 
         # Verify pipeline success
         pipeline_success = (
@@ -253,7 +257,7 @@ def test_complete_pipeline_integration():
             basket.basket_id and
             allocation_result.success
         )
-        
+
         results['pipeline_integration'] = {
             'success': pipeline_success,
             'all_steps_completed': True
@@ -263,7 +267,7 @@ def test_complete_pipeline_integration():
     except Exception as e:
         results['error'] = str(e)
         safe_print(f"❌ Complete pipeline integration failed: {e}")
-    
+
     return results
 
 
@@ -271,11 +275,11 @@ def main():
     """Main function to run the integration tests."""
     safe_print("DLT Matrix Profit Integration Test - Schwabot UROS v1.0")
     safe_print("=" * 60)
-    
+
     if not CORE_COMPONENTS_AVAILABLE:
         safe_print("❌ Core components not available - skipping tests")
         return 1
-    
+
     # Run tests
     test_functions = [
         ('component_initialization', test_component_initialization),
@@ -284,30 +288,30 @@ def main():
         ('profit_cycle_allocation', test_profit_cycle_allocation),
         ('complete_pipeline_integration', test_complete_pipeline_integration)
     ]
-    
+
     all_results = {}
     successful_tests = 0
-    
+
     for test_name, test_func in test_functions:
         try:
             safe_print(f"\n{'='*20} {test_name.upper()} {'='*20}")
             result = test_func()
             all_results[test_name] = result
-            
+
             if 'error' not in result:
                 successful_tests += 1
                 safe_print(f"✅ {test_name} completed successfully")
             else:
                 safe_print(f"❌ {test_name} failed: {result['error']}")
-                
+
         except Exception as e:
             safe_print(f"❌ {test_name} failed with exception: {e}")
             all_results[test_name] = {'error': str(e)}
-    
+
     # Summary
     total_tests = len(test_functions)
     success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
-    
+
     safe_print("\n" + "=" * 60)
     safe_print("📊 INTEGRATION TEST SUMMARY")
     safe_print("=" * 60)
@@ -315,7 +319,7 @@ def main():
     safe_print(f"Successful: {successful_tests}")
     safe_print(f"Success Rate: {success_rate:.2%}")
     safe_print(f"Overall Status: {'PASS' if success_rate >= 0.8 else 'FAIL'}")
-    
+
     # Save results
     try:
         with open("dlt_matrix_profit_integration_results.json", 'w') as f:
@@ -323,9 +327,9 @@ def main():
         safe_print("✅ Test results saved to dlt_matrix_profit_integration_results.json")
     except Exception as e:
         safe_print(f"❌ Failed to save test results: {e}")
-    
+
     return 0 if success_rate >= 0.8 else 1
 
 
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

@@ -1,142 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Precision and Performance Optimization - High-Performance Math and Profiling.
-
-This module provides comprehensive precision and performance optimization including:
-- Switch critical PnL math to decimal.Decimal or numpy.float64 with explicit rounding
-- Optional Numba/Cython on inner loops (ZPE resonance or similarity search)
-- Heat-map profiling to spot hot paths
-- Integration with all Schwabot core systems and mathematical frameworks
-"""
-
-
-import asyncio
-import json
-import logging
-import time
-import uuid
-import cProfile
-import pstats
-import io
-from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from datetime import datetime, timedelta
-from enum import Enum
-import threading
-import queue
-import os
-import hashlib
-from pathlib import Path
-from decimal import Decimal, getcontext, ROUND_HALF_UP, ROUND_DOWN, ROUND_UP
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
-from collections import defaultdict, deque
-import functools
-import line_profiler
-import memory_profiler
-
-# Try to import Numba
-try:
-import numba
-from numba import jit, njit, prange
-NUMBA_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-NUMBA_AVAILABLE = False
-
-# Try to import Cython
-try:
-import cython
-Cython = cython
-CYTHON_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CYTHON_AVAILABLE = False
-
-# Import core systems
-try:
-from core.ops_observability import log_operation, LogLevel
-from core.environment_manager import get_environment_manager, get_math_constant
-from core.vecu_core import get_vecu_core
-from core.ferris_rde_core import get_ferris_rde
-from core.zpe_core import get_zpe_core
-from core.zpe_integration import get_zpe_integration
-from core.zpe_rotational_engine import get_zpe_rotational_engine
-CORE_SYSTEMS_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CORE_SYSTEMS_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -154,64 +31,64 @@ class PrecisionMode(Enum):
 
 
     """Precision modes for mathematical calculations."""
-DECIMAL = "decimal"      # High precision decimal arithmetic
-FLOAT64 = "float64"      # 64-bit floating point
-FLOAT32 = "float32"      # 32-bit floating point
-MIXED = "mixed"          # Mixed precision based on operation
+DECIMAL="decimal"      # High precision decimal arithmetic
+FLOAT64="float64"      # 64-bit floating point
+FLOAT32="float32"      # 32-bit floating point
+MIXED="mixed"          # Mixed precision based on operation
 
 
 class RoundingMode(Enum):
 
 
     """Rounding modes for precision control."""
-HALF_UP = "HALF_UP"
-HALF_DOWN = "HALF_DOWN"
-HALF_EVEN = "HALF_EVEN"
-UP = "UP"
-DOWN = "DOWN"
-FLOOR = "FLOOR"
-CEILING = "CEILING"
+HALF_UP="HALF_UP"
+HALF_DOWN="HALF_DOWN"
+HALF_EVEN="HALF_EVEN"
+UP="UP"
+DOWN="DOWN"
+FLOOR="FLOOR"
+CEILING="CEILING"
 
 
 class OptimizationLevel(Enum):
 
 
     """Optimization levels for performance."""
-NONE = "none"           # No optimization
-BASIC = "basic"         # Basic optimizations
-ADVANCED = "advanced"   # Advanced optimizations (Numba/Cython)
-    AGGRESSIVE = "aggressive"  # Aggressive optimizations
+NONE="none"           # No optimization
+BASIC="basic"         # Basic optimizations
+ADVANCED="advanced"   # Advanced optimizations (Numba/Cython)
+    AGGRESSIVE="aggressive"  # Aggressive optimizations
 
 
-@dataclass
+@ dataclass
 class PrecisionConfig:
 
 
     """Precision configuration."""
 mode: PrecisionMode
-decimal_precision: int = 28
-rounding_mode: RoundingMode = RoundingMode.HALF_UP
-enable_overflow_check: bool = True
-enable_underflow_check: bool = True
-enable_nan_check: bool = True
-enable_inf_check: bool = True
+decimal_precision: int=28
+rounding_mode: RoundingMode=RoundingMode.HALF_UP
+enable_overflow_check: bool=True
+enable_underflow_check: bool=True
+enable_nan_check: bool=True
+enable_inf_check: bool=True
 
 
-@dataclass
+@ dataclass
 class PerformanceConfig:
 
 
     """Performance configuration."""
 optimization_level: OptimizationLevel
-enable_numba: bool = True
-enable_cython: bool = True
-enable_profiling: bool = True
-enable_memory_profiling: bool = True
-enable_line_profiling: bool = True
-profile_output_dir: str = "profiles"
+enable_numba: bool=True
+enable_cython: bool=True
+enable_profiling: bool=True
+enable_memory_profiling: bool=True
+enable_line_profiling: bool=True
+profile_output_dir: str="profiles"
 
 
-@dataclass
+@ dataclass
 class ProfilingResult:
 
 
@@ -221,13 +98,143 @@ total_time: float
 call_count: int
 average_time: float
 min_time: float
+from core.zpe_rotational_engine import get_zpe_rotational_engine
+from core.zpe_integration import get_zpe_integration
+from core.zpe_core import get_zpe_core
+from core.ferris_rde_core import get_ferris_rde
+from core.vecu_core import get_vecu_core
+from core.environment_manager import get_environment_manager, get_math_constant
+from core.ops_observability import log_operation, LogLevel
+import cython
+from numba import jit, njit, prange
+import numba
+import memory_profiler
+import line_profiler
+import functools
+from collections import defaultdict, deque
+import numpy.typing as npt
+from decimal import Decimal, getcontext, ROUND_HALF_UP, ROUND_DOWN, ROUND_UP
+from pathlib import Path
+import hashlib
+import os
+import queue
+import threading
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from dataclasses import dataclass, field, asdict
+import io
+import pstats
+import cProfile
+import uuid
+import time
+import logging
+import json
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Precision and Performance Optimization - High-Performance Math and Profiling.
+
+This module provides comprehensive precision and performance optimization including:
+- Switch critical PnL math to decimal.Decimal or numpy.float64 with explicit rounding
+- Optional Numba/Cython on inner loops (ZPE resonance or similarity search)
+- Heat-map profiling to spot hot paths
+- Integration with all Schwabot core systems and mathematical frameworks
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Try to import Numba
+try:
+NUMBA_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+NUMBA_AVAILABLE=False
+
+# Try to import Cython
+try:
+Cython=cython
+CYTHON_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CYTHON_AVAILABLE=False
+
+# Import core systems
+try:
+CORE_SYSTEMS_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CORE_SYSTEMS_AVAILABLE=False
+
+# Import centralized CLI handler
+try:
 max_time: float
-memory_usage: Optional[float] = None
-line_times: Dict[int, float] = field(default_factory=dict)
-    hot_paths: List[str] = field(default_factory=list)
+memory_usage: Optional[float]=None
+line_times: Dict[int, float]=field(default_factory=dict)
+    hot_paths: List[str]=field(default_factory=list)
 
 
-@dataclass
+@ dataclass
 class HeatMapData:
 
 
@@ -237,12 +244,12 @@ line_number: int
 execution_count: int
 total_time: float
 average_time: float
-memory_usage: Optional[float] = None
-timestamp: datetime = field(default_factory=datetime.now)
+memory_usage: Optional[float]=None
+timestamp: datetime=field(default_factory=datetime.now)
 
 
 # Add rounding mode mapping after the imports
-ROUNDING_MODES = {
+ROUNDING_MODES={
 "HALF_UP": ROUND_HALF_UP,
 "HALF_DOWN": ROUND_DOWN,  # Using ROUND_DOWN as approximation
 "HALF_EVEN": ROUND_HALF_UP,  # Using ROUND_HALF_UP as approximation
@@ -258,26 +265,26 @@ class PrecisionManager:
 
     """High-precision mathematical operations manager."""
 
-def __init__(self, config: Optional[PrecisionConfig] = None) -> None:
+def __init__(self, config: Optional[PrecisionConfig]=None) -> None:
 
 
     pass
     pass
         """Initialize precision manager."""
-self.config = config or PrecisionConfig(
+self.config=config or PrecisionConfig(
             mode=PrecisionMode.DECIMAL,
 decimal_precision=28,
 rounding_mode=RoundingMode.HALF_UP
 
 
         # Configure decimal context
-getcontext().prec = self.config.decimal_precision
-        getcontext().rounding = ROUNDING_MODES.get(self.config.rounding_mode.value, ROUND_HALF_UP)
+getcontext().prec=self.config.decimal_precision
+        getcontext().rounding=ROUNDING_MODES.get(self.config.rounding_mode.value, ROUND_HALF_UP)
 
         # Performance tracking
-self.total_operations = 0
-self.precision_errors = 0
-self.overflow_errors = 0
+self.total_operations=0
+self.precision_errors=0
+self.overflow_errors=0
 
 safe_safe_print("🎯 Precision Manager initialized")
 
@@ -293,11 +300,11 @@ def to_decimal(self, value: Union[float, str, int, Decimal]) -> Decimal:
 
             # Convert to string first for precision
             if isinstance(value, float):
-                value_str = f"{value:.15g}"  # Avoid float precision issues
+                value_str=f"{value:.15g}"  # Avoid float precision issues
             else:
-value_str = str(value)
+value_str=str(value)
 
-decimal_value = Decimal(value_str)
+decimal_value=Decimal(value_str)
 
             # Check for overflow/underflow
             if self.config.enable_overflow_check and unified_math.abs(decimal_value) > Decimal('1e100'):
@@ -324,9 +331,9 @@ def to_float64(self, value: Union[float, str, int, Decimal]) -> np.float64:
         """Convert value to numpy.float64 with precision control."""
         try:
             if isinstance(value, Decimal):
-                value = float(value)
+                value=float(value)
 
-float64_value = np.float64(value)
+float64_value=np.float64(value)
 
             # Check for NaN/Inf
             if self.config.enable_nan_check and np.isnan(float64_value):
@@ -350,32 +357,32 @@ def calculate_pnl(self, entry_price: Union[float, Decimal],]
 
                      exit_price: Union[float, Decimal],
 quantity: Union[float, Decimal],
-fees: Union[float, Decimal] = Decimal('0')) -> Decimal:
+fees: Union[float, Decimal]=Decimal('0')) -> Decimal:
         """Calculate PnL with high precision."""
         try:
             if self.config.mode == PrecisionMode.DECIMAL:
-entry_decimal = self.to_decimal(entry_price)
-                exit_decimal = self.to_decimal(exit_price)
-                quantity_decimal = self.to_decimal(quantity)
-                fees_decimal = self.to_decimal(fees)
+entry_decimal=self.to_decimal(entry_price)
+                exit_decimal=self.to_decimal(exit_price)
+                quantity_decimal=self.to_decimal(quantity)
+                fees_decimal=self.to_decimal(fees)
 
                 # Calculate PnL: (exit_price - entry_price) * quantity - fees
-                price_diff = exit_decimal - entry_decimal
-gross_pnl = price_diff * quantity_decimal
-net_pnl = gross_pnl - fees_decimal
+                price_diff=exit_decimal - entry_decimal
+gross_pnl=price_diff * quantity_decimal
+net_pnl=gross_pnl - fees_decimal
 
                 return net_pnl
 
             elif self.config.mode == PrecisionMode.FLOAT64:
-entry_float = self.to_float64(entry_price)
-                exit_float = self.to_float64(exit_price)
-                quantity_float = self.to_float64(quantity)
-                fees_float = self.to_float64(fees)
+entry_float=self.to_float64(entry_price)
+                exit_float=self.to_float64(exit_price)
+                quantity_float=self.to_float64(quantity)
+                fees_float=self.to_float64(fees)
 
                 # Calculate PnL with numpy
-price_diff = exit_float - entry_float
-gross_pnl = price_diff * quantity_float
-net_pnl = gross_pnl - fees_float
+price_diff=exit_float - entry_float
+gross_pnl=price_diff * quantity_float
+net_pnl=gross_pnl - fees_float
 
                 return self.to_decimal(net_pnl)
 

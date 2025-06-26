@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
+import json
+import time
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Tensor Score Utilities - Schwabot UROS v1.0
@@ -65,33 +81,29 @@ Core Mathematical Functions:
 - Matrix tensor operations: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
 """
 
-import hashlib
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from enum import Enum
 
 logger = logging.getLogger(__name__)
 
+
 class TensorType(Enum):
 
-
     """Tensor types for different mathematical operations."""
+
+
 SFSSS = "sfsss"  # Schwabot Fractal Signal System
 UFS = "ufs"      # Unified Fractal System
 MATRIX = "matrix"
 PHASE = "phase"
 ENTROPY = "entropy"
 
+
 @dataclass
 class TensorScore:
 
-
     """Tensor score result with metadata."""
+
+
 score: float
 tensor_type: TensorType
 bit_phase: int
@@ -100,11 +112,13 @@ volatility: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class ProfitRebalance:
 
-
     """Profit rebalancing result."""
+
+
 profit_amount: float
 allocations: Dict[str, float]
 volatility: float
@@ -113,11 +127,13 @@ rebalance_threshold: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PhaseVector:
 
-
     """Phase vector for DLT routing."""
+
+
 tick: int
 total_ticks: int
 phase_value: int
@@ -125,8 +141,8 @@ vector_components: List[float]
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class TensorScoreUtils:
 
+class TensorScoreUtils:
 
     """
 Tensor Score Utilities for mathematical operations and valuations.
@@ -139,8 +155,8 @@ Mathematical Foundation:
     - Matrix Operations: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
 """
 
-def __init__(self, config_path: str = "./config/tensor_score_config.json"):
 
+def __init__(self, config_path: str = "./config/tensor_score_config.json"):
 
     pass
     pass
@@ -168,13 +184,15 @@ self.profit_allocator = None
 self._load_configuration()
         logger.info("Tensor Score Utils initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
         """Load tensor score configuration."""
         try:
+
+
             # Default configuration
 config = {
 "tensor_weights": {
@@ -205,10 +223,13 @@ logger.info("Tensor score configuration loaded")
         except Exception as e:
 logger.error(f"Error loading configuration: {e}")
 
+
 def calculate_tensor_score(self, entry_price: float, current_price: float, phase: int,
 
 
                              market_data: Dict[str, Any]) -> float:
+
+
 """
 Calculate tensor score for trade priority.
 
@@ -258,7 +279,7 @@ self.tensor_weights["market_heat"] * market_heat_component
 
 
             # Normalize to reasonable range
-tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
+tensor_score=max(-1.0, unified_math.min(1.0, tensor_score))
 
             return round(tensor_score, 4)
 
@@ -292,21 +313,21 @@ Wave entropy value
                 return 0.0
 
             # Convert to numpy array
-seq_array = np.array(sequence)
+seq_array=np.array(sequence)
 
             # Calculate FFT
-fft = np.fft.fft(seq_array)
-            power = unified_math.unified_math.abs(fft) ** 2
+fft=np.fft.fft(seq_array)
+            power=unified_math.unified_math.abs(fft) ** 2
 
             # Normalize power spectrum
-total_power = np.sum(power)
+total_power=np.sum(power)
             if total_power == 0:
                 return 0.0
 
-normalized = power / total_power
+normalized=power / total_power
 
             # Calculate entropy (avoid unified_math.log(0))
-            entropy = -np.sum(normalized * np.log2(normalized + 1e-9))
+            entropy=-np.sum(normalized * np.log2(normalized + 1e-9))
 
             return round(entropy, 4)
 
@@ -314,7 +335,7 @@ normalized = power / total_power
 logger.error(f"Error calculating wave entropy: {e}")
             return 0.0
 
-def rebalance_profit(self, profit: float, volatility: float, entropy_level: float = 4.0) -> ProfitRebalance:
+def rebalance_profit(self, profit: float, volatility: float, entropy_level: float=4.0) -> ProfitRebalance:
 
 
     pass
@@ -342,20 +363,20 @@ Rebalancing result with allocations
         try:
             # Determine rebalancing strategy based on conditions
             if profit > 0.12:  # High profit
-allocations = {"BTC": profit * 0.75, "USDC": profit * 0.25}
-rebalance_threshold = 0.12
+allocations={"BTC": profit * 0.75, "USDC": profit * 0.25}
+rebalance_threshold=0.12
             elif volatility > 0.3:  # High volatility
-allocations = {"USDC": profit * 0.6, "XRP": profit * 0.4}
-rebalance_threshold = 0.18
+allocations={"USDC": profit * 0.6, "XRP": profit * 0.4}
+rebalance_threshold=0.18
             elif entropy_level > 6.0:  # High entropy
-allocations = {"BTC": profit * 0.4, "USDC": profit * 0.4, "XRP": profit * 0.2}
-rebalance_threshold = 0.15
+allocations={"BTC": profit * 0.4, "USDC": profit * 0.4, "XRP": profit * 0.2}
+rebalance_threshold=0.15
             else:  # Default
-allocations = {"XRP": profit * 1.0}
-rebalance_threshold = 0.20
+allocations={"XRP": profit * 1.0}
+rebalance_threshold=0.20
 
             # Create rebalance result
-result = ProfitRebalance(
+result=ProfitRebalance(
                 profit_amount=profit,
 allocations=allocations,
 volatility=volatility,
@@ -373,7 +394,7 @@ self.rebalance_history.append(result)
 logger.error(f"Error rebalancing profit: {e}")
             return None
 
-def sync_tick_to_phase(self, tick: int, total_ticks: int = 16) -> int:
+def sync_tick_to_phase(self, tick: int, total_ticks: int=16) -> int:
 
 
     pass
@@ -397,14 +418,14 @@ int
 Synchronized phase value
 """
         try:
-phase_value = tick % total_ticks
+phase_value=tick % total_ticks
             return phase_value
 
         except Exception as e:
 logger.error(f"Error syncing tick to phase: {e}")
             return 0
 
-def create_phase_vector(self, tick: int, total_ticks: int = 16, vector_size: int = 4) -> PhaseVector:
+def create_phase_vector(self, tick: int, total_ticks: int=16, vector_size: int=4) -> PhaseVector:
 
 
     pass
@@ -428,17 +449,17 @@ Phase vector with components
 """
         try:
             # Calculate phase value
-phase_value = self.sync_tick_to_phase(tick, total_ticks)
+phase_value=self.sync_tick_to_phase(tick, total_ticks)
 
             # Generate vector components based on phase
-vector_components = []
+vector_components=[]
             for i in range(vector_size):
                 # Create component based on phase and position
-component = np.unified_math.sin(2 * np.pi * phase_value / total_ticks + i * np.pi / 2)
+component=np.unified_math.sin(2 * np.pi * phase_value / total_ticks + i * np.pi / 2)
                 vector_components.append(round(component, 4))
 
             # Create phase vector
-result = PhaseVector(
+result=PhaseVector(
                 tick=tick,
 total_ticks=total_ticks,
 phase_value=phase_value,
@@ -484,7 +505,7 @@ Matrix tensor result
                 raise ValueError("Matrix and vector dimensions must be compatible")
 
             # Calculate matrix tensor: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
-result = 0.0
+result=0.0
             for i in range(len(vector)):
                 for j in range(len(vector)):
                     result += matrix[i, j] * vector[i] * vector[j]
@@ -517,16 +538,16 @@ SFSSS tensor score
 """
         try:
             # Calculate fractal correlation
-fractal_corr = unified_math.unified_math.correlation(fractal_signals.flatten(), signal_patterns.flatten())[0, 1]
+fractal_corr=unified_math.unified_math.correlation(fractal_signals.flatten(), signal_patterns.flatten())[0, 1]
 
             # Calculate signal strength
-signal_strength = unified_math.unified_math.mean(unified_math.unified_math.abs(fractal_signals))
+signal_strength=unified_math.unified_math.mean(unified_math.unified_math.abs(fractal_signals))
 
             # Calculate pattern complexity
-pattern_complexity = unified_math.unified_math.std(signal_patterns)
+pattern_complexity=unified_math.unified_math.std(signal_patterns)
 
             # Combine into SFSSS tensor score
-sfsss_score = (fractal_corr * 0.4 + signal_strength * 0.3 + pattern_complexity * 0.3)
+sfsss_score=(fractal_corr * 0.4 + signal_strength * 0.3 + pattern_complexity * 0.3)
 
             return round(sfsss_score, 4)
 
@@ -556,16 +577,16 @@ UFS tensor score
 """
         try:
             # Calculate pattern coherence
-pattern_coherence = unified_math.unified_math.mean(unified_math.unified_math.abs(unified_patterns))
+pattern_coherence=unified_math.unified_math.mean(unified_math.unified_math.abs(unified_patterns))
 
             # Calculate memory retention
-memory_retention = unified_math.unified_math.std(fractal_memory)
+memory_retention=unified_math.unified_math.std(fractal_memory)
 
             # Calculate unified correlation
-unified_corr = unified_math.unified_math.correlation(unified_patterns.flatten(), fractal_memory.flatten())[0, 1]
+unified_corr=unified_math.unified_math.correlation(unified_patterns.flatten(), fractal_memory.flatten())[0, 1]
 
             # Combine into UFS tensor score
-ufs_score = (pattern_coherence * 0.4 + memory_retention * 0.3 + unified_corr * 0.3)
+ufs_score=(pattern_coherence * 0.4 + memory_retention * 0.3 + unified_corr * 0.3)
 
             return round(ufs_score, 4)
 
@@ -596,23 +617,23 @@ Hurst exponent value
                 return 0.5
 
             # Calculate returns
-returns = np.diff(unified_math.unified_math.log(data))
+returns=np.diff(unified_math.unified_math.log(data))
 
             # Calculate cumulative sum
-cumsum = np.cumsum(returns)
+cumsum=np.cumsum(returns)
 
             # Calculate range and standard deviation for different lags
-lags = range(2, unified_math.min(20, len(returns) // 2))
-            tau = []
-lagvec = []
+lags=range(2, unified_math.min(20, len(returns) // 2))
+            tau=[]
+lagvec=[]
 
             for lag in lags:
                 # Calculate R/S for this lag
-rs_values = []
+rs_values=[]
                 for i in range(0, len(returns) - lag, lag):
-                    segment = cumsum[i:i + lag]
-R = unified_math.unified_math.max(segment) - unified_math.unified_math.min(segment)
-                    S = unified_math.unified_math.std(returns[i:i + lag])
+                    segment=cumsum[i:i + lag]
+R=unified_math.unified_math.max(segment) - unified_math.unified_math.min(segment)
+                    S=unified_math.unified_math.std(returns[i:i + lag])
                     if S > 0:
 rs_values.append(R / S)
 
@@ -624,8 +645,8 @@ tau.append(unified_math.unified_math.mean(rs_values))
                 return 0.5
 
             # Calculate Hurst exponent
-m = np.polyfit(unified_math.unified_math.log(lagvec), unified_math.unified_math.log(tau), 1)
-            hurst = m[0]
+m=np.polyfit(unified_math.unified_math.log(lagvec), unified_math.unified_math.log(tau), 1)
+            hurst=m[0]
 
             return round(hurst, 4)
 
@@ -656,30 +677,31 @@ Fractal dimension value
                 return 1.0
 
             # Normalize data
-data_norm = (data - unified_math.unified_math.min(data)) / (unified_math.unified_math.max(data) - unified_math.unified_math.min(data))
+data_norm=(data - unified_math.unified_math.min(data)) /
+           (unified_math.unified_math.max(data) - unified_math.unified_math.min(data))
 
             # Box counting for different scales
-scales = np.logspace(-3, 0, 20)
-            counts = []
+scales=np.logspace(-3, 0, 20)
+            counts=[]
 
             for scale in scales:
                 # Count boxes needed to cover the data
-boxes = int(1.0 / scale)
+boxes=int(1.0 / scale)
                 if boxes < 1:
-boxes = 1
+boxes=1
 
                 # Create grid
-grid = np.zeros((boxes, boxes))
+grid=np.zeros((boxes, boxes))
 
                 # Fill grid based on data
                 for i, value in enumerate(data_norm):
-                    x = int(i * boxes / len(data_norm))
-                    y = int(value * boxes)
+                    x=int(i * boxes / len(data_norm))
+                    y=int(value * boxes)
                     if 0 <= x < boxes and 0 <= y < boxes:
-grid[x, y] = 1
+grid[x, y]=1
 
                 # Count non-empty boxes
-count = np.sum(grid > 0)
+count=np.sum(grid > 0)
                 if count > 0:
 counts.append(count)
                 else:
@@ -689,8 +711,8 @@ counts.append(1)
             if len(counts) < 2:
                 return 1.0
 
-m = np.polyfit(unified_math.unified_math.log(scales[:len(counts)]), unified_math.unified_math.log(counts), 1)
-            fractal_dim = -m[0]
+m=np.polyfit(unified_math.unified_math.log(scales[:len(counts)]), unified_math.unified_math.log(counts), 1)
+            fractal_dim=-m[0]
 
             return round(fractal_dim, 4)
 
@@ -704,7 +726,7 @@ def set_bit_resolution_engine(self, bit_engine) -> None:
     pass
     pass
         """Set bit resolution engine for integration."""
-self.bit_resolution_engine = bit_engine
+self.bit_resolution_engine=bit_engine
 logger.info("Bit resolution engine integrated with tensor score utils")
 
 def set_matrix_mapper(self, matrix_mapper) -> None:
@@ -713,7 +735,7 @@ def set_matrix_mapper(self, matrix_mapper) -> None:
     pass
     pass
         """Set matrix mapper for integration."""
-self.matrix_mapper = matrix_mapper
+self.matrix_mapper=matrix_mapper
 logger.info("Matrix mapper integrated with tensor score utils")
 
 def set_profit_allocator(self, profit_allocator) -> None:
@@ -722,7 +744,7 @@ def set_profit_allocator(self, profit_allocator) -> None:
     pass
     pass
         """Set profit allocator for integration."""
-self.profit_allocator = profit_allocator
+self.profit_allocator=profit_allocator
 logger.info("Profit allocator integrated with tensor score utils")
 
 def get_tensor_statistics(self) -> Dict[str, Any]:
@@ -736,9 +758,9 @@ def get_tensor_statistics(self) -> Dict[str, Any]:
                 return {'error': 'No tensor score history available'}
 
             # Calculate statistics
-scores = [score.score for score in self.score_history]
-tensor_types = [score.tensor_type.value for score in self.score_history]
-bit_phases = [score.bit_phase for score in self.score_history]
+scores=[score.score for score in self.score_history]
+tensor_types=[score.tensor_type.value for score in self.score_history]
+bit_phases=[score.bit_phase for score in self.score_history]
 
             return {
 'total_scores': len(self.score_history),
@@ -758,31 +780,31 @@ if __name__ == "__main__":
     pass
     pass
     # Test tensor score utils
-utils = TensorScoreUtils()
+utils=TensorScoreUtils()
 
     # Test tensor score calculation
-market_data = {
+market_data={
 'entropy_level': 4.5,
 'volatility': 0.03,
 'market_heat': 0.6
 }
 
-tensor_score = utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
+tensor_score=utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
     safe_print(f"Tensor Score: {tensor_score}")
 
     # Test wave entropy
-sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
-entropy = utils.calculate_wave_entropy(sequence)
+sequence=[1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
+entropy=utils.calculate_wave_entropy(sequence)
     safe_print(f"Wave Entropy: {entropy}")
 
     # Test profit rebalancing
-rebalance = utils.rebalance_profit(1000.0, 0.25, 5.5)
+rebalance=utils.rebalance_profit(1000.0, 0.25, 5.5)
     safe_print(f"Profit Rebalance: {rebalance.allocations}")
 
     # Test phase vector
-phase_vector = utils.create_phase_vector(42, 16, 4)
+phase_vector=utils.create_phase_vector(42, 16, 4)
     safe_print(f"Phase Vector: {phase_vector.vector_components}")
 
     # Get statistics
-stats = utils.get_tensor_statistics()
+stats=utils.get_tensor_statistics()
     safe_print(f"Tensor Statistics: {stats}")

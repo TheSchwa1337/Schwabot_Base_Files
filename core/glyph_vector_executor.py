@@ -29,8 +29,8 @@ __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 @dataclass(slots=True)
 class GlyphInstruction:
 
-
     """Executable instruction derived from glyph vector processing."""
+
 
 action: str  # "buy", "sell", "hold", "wait"
 volume: float
@@ -53,6 +53,7 @@ zeta_weightings: Sequence[float],
 action_threshold: float = 0.5,
 volume_scale: float = 1.0,
 ) -> GlyphInstruction:  # noqa: D401
+
 """Return executable instruction from weighted glyph vectors.
 
 Parameters
@@ -73,7 +74,7 @@ Returns
 GlyphInstruction
 Executable instruction with action, volume, confidence.
 """
-    if not (len(omega_weights) == len(glyph_vectors) == len(zeta_weightings)):
+   if not (len(omega_weights) == len(glyph_vectors) == len(zeta_weightings)):
         raise ValueError("input sequences must share length")
 
     if not glyph_vectors:
@@ -81,11 +82,11 @@ Executable instruction with action, volume, confidence.
 
     # Convert inputs to arrays
 omega = np.asarray(omega_weights, dtype=float)
-    zeta = np.asarray(zeta_weightings, dtype=float)
+   zeta = np.asarray(zeta_weightings, dtype=float)
 
     # Compute weighted sum: Σ ω_i · G_i · ζ_i
 weighted_sum = np.zeros_like(glyph_vectors[0], dtype=float)
-    for i, g_vec in enumerate(glyph_vectors):
+   for i, g_vec in enumerate(glyph_vectors):
         g_array = np.asarray(g_vec, dtype=float)
         weighted_sum += omega[i] * g_array * zeta[i]
 
@@ -98,22 +99,22 @@ sell_signal = weighted_sum[1]
 hold_signal = weighted_sum[2]
 wait_signal = weighted_sum[3]
 
-    # Determine action
+   # Determine action
 signals = [buy_signal, sell_signal, hold_signal, wait_signal]
 actions = ["buy", "sell", "hold", "wait"]
 max_idx = int(np.argmax(unified_math.unified_math.abs(signals)))
-    max_signal = signals[max_idx]
+   max_signal = signals[max_idx]
 confidence = float(unified_math.unified_math.abs(max_signal))
 
-    if confidence < action_threshold:
+   if confidence < action_threshold:
 action = "hold"
 volume = 0.0
-    else:
+   else:
 action = actions[max_idx]
 volume = confidence * volume_scale
 
-    # Generate signature from vector hash
+   # Generate signature from vector hash
 vector_hash = hash(tuple(weighted_sum.round(6)))
-    signature = f"glyph_{vector_hash & 0xFFFF:04x}"
+   signature = f"glyph_{vector_hash & 0xFFFF:04x}"
 
     return GlyphInstruction(action, volume, confidence, signature)

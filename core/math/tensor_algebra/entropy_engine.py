@@ -35,7 +35,6 @@ logger = logging.getLogger(__name__)
 
 class EntropyEngine:
 
-
     """
 Advanced Entropy Engine for Schwabot Trading System.
 
@@ -43,12 +42,14 @@ This engine provides comprehensive entropy-based signal processing
 and pattern analysis capabilities.
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the entropy engine."""
+
+
 self.epsilon = 1e-8  # Small value to prevent division by zero
 self.min_entropy_threshold = 0.1  # Minimum entropy threshold
 self.max_entropy_threshold = 0.9  # Maximum entropy threshold
@@ -56,8 +57,8 @@ self.wave_detection_sensitivity = 0.5  # Wave detection sensitivity
 
 logger.info("Entropy Engine initialized")
 
-def entropy_filter(self, signal: NDArray, threshold: float = 0.5) -> NDArray:
 
+def entropy_filter(self, signal: NDArray, threshold: float = 0.5) -> NDArray:
 
     pass
     pass

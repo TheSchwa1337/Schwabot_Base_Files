@@ -283,9 +283,9 @@ class IntegrationConfig:
 @dataclass
 class SchwaConfig:
     """
-    
+
     Comprehensive Schwabot configuration container
-    
+
     This class provides centralized configuration management for all
     components of the Schwabot system with validation and hot-reloading.
     """

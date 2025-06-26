@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-\n"""truth_lattice_math.py
-Truth-Lattice Math – Consensus Engine
+# -*- coding: utf-8 -*-
+"""truth_lattice_math.py
+Truth-Lattice Math - Consensus Engine
 ====================================
 
 Purpose
@@ -122,4 +123,4 @@ def collapse_truth_lattice(inputs: Sequence[float] | np.ndarray, omega: float) -
 
 
 # Export alias
-__all__.append("collapse_truth_lattice") 
+__all__.append("collapse_truth_lattice")

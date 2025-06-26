@@ -401,7 +401,8 @@ class MatrixMappingValidationTest:
 
             # Validate identity state properties
             for i, state in enumerate(identity_states):
-                required_fields = ['state_id', 'controller_type', 'hash_pattern', 'timestamp', 'entropy_level', 'complexity_level']
+                required_fields = ['state_id', 'controller_type', 'hash_pattern',
+                                   'timestamp', 'entropy_level', 'complexity_level']
 
                 for field in required_fields:
                     if field not in state:

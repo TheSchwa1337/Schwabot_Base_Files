@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from core.fault_bus import FaultBus, FaultType, FaultBusEvent
+from core.gpt_command_layer_simple import AIAgentType, CommandDomain
+from collections import defaultdict
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple, Set
+from datetime import datetime, timedelta
+import os
+import logging
+import json
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +22,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Command Density Analyzer - Multi-Agent Echo Detection.
@@ -56,34 +74,26 @@ This module clusters commands by hash-similarity and tick-proximity to detect
 when too many redundant suggestions enter the same strategy domain.
 """
 
-import hashlib
-import json
-import logging
-import os
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Set
-from dataclasses import dataclass
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from collections import defaultdict
 
 # Import core modules
 try:
-from core.gpt_command_layer_simple import AIAgentType, CommandDomain
-from core.fault_bus import FaultBus, FaultType, FaultBusEvent
 #     from core.utils.windows_cli_compatibility import safe_print, safe_format_error  # F811: duplicate import
 CORE_AVAILABLE = True
 except ImportError:
     pass
     pass
 CORE_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
 
+
+def safe_print(message: str, use_emoji: bool = True) -> str:
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
 
+
+def safe_format_error(error: Exception, context: str = "") -> str:
 
     pass
     pass
@@ -93,8 +103,9 @@ def safe_format_error(error: Exception, context: str = "") -> str:
 @dataclass
 class CommandCluster:
 
-
     """Cluster of similar commands."""
+
+
 cluster_id: str
 commands: List[Dict]
 domain: CommandDomain
@@ -103,17 +114,18 @@ similarity_score: float
 agent_count: int
 created_at: datetime
 
-def __post_init__(self):
 
+def __post_init__(self):
 
     pass
     pass
         if self.created_at is None:
+
+
 self.created_at = datetime.now()
 
 
 class CommandDensityAnalyzer:
-
 
     """
 Analyzes command density to detect multi-agent echo situations.
@@ -123,12 +135,14 @@ This class monitors command patterns to identify when multiple agents
 indicate noise or echo chamber effects.
 """
 
-def __init__(self, fault_bus: Optional[FaultBus] = None):
 
+def __init__(self, fault_bus: Optional[FaultBus] = None):
 
     pass
     pass
         """Initialize the command density analyzer."""
+
+
 self.logger = logging.getLogger("command_density_analyzer")
         self.logger.setLevel(logging.INFO)
 
@@ -150,6 +164,7 @@ self.warnings_generated = 0
 
 safe_safe_print("📊 Command Density Analyzer initialized")
 
+
 def analyze_command(
 
 
@@ -157,6 +172,7 @@ def analyze_command(
 command: Dict,
 current_tick: int
 ) -> Optional[Dict]:
+
 """
 Analyze a single command for density patterns.
 

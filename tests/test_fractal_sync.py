@@ -15,6 +15,11 @@ Key Test Areas:
 Flake8 compliant with comprehensive test coverage.
 """
 
+from ghost_strategy_handler import GhostStrategyHandler, GhostEntry
+from volume_tick_router import VolumeTickRouter, VolumeConfidence
+from tick_backlog_router import TickBacklogRouter, BacklogProfit
+from hash_confidence_evaluator import HashConfidenceEvaluator, HashResonance
+from fractal_core import FractalCore, FractalState, GrayscaleCollapseResult
 import unittest
 import time
 import json
@@ -25,12 +30,6 @@ from unittest.mock import Mock, patch, MagicMock
 
 # Add core directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))
-
-from fractal_core import FractalCore, FractalState, GrayscaleCollapseResult
-from hash_confidence_evaluator import HashConfidenceEvaluator, HashResonance
-from tick_backlog_router import TickBacklogRouter, BacklogProfit
-from volume_tick_router import VolumeTickRouter, VolumeConfidence
-from ghost_strategy_handler import GhostStrategyHandler, GhostEntry
 
 
 class TestFractalSync(unittest.TestCase):

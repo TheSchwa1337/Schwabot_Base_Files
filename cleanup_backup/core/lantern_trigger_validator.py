@@ -31,7 +31,7 @@ class LanternTriggerValidator:
     historical_data_path: str = "./data/lantern_historical.json"
     validation_threshold: float = 0.7
     min_confidence: float = 0.6
-    
+
     def __post_init__(self):
         """Initialize validator with historical data."""
         self.historical_patterns = self._load_historical_patterns()
@@ -104,15 +104,15 @@ class LanternTriggerValidator:
             price_change = trigger_packet.get('price_change', 0.0)
             volume = trigger_packet.get('volume', 0.0)
             volatility = trigger_packet.get('volatility', 0.0)
-            
+
             # Calculate validation confidence
             confidence = self._calculate_validation_confidence(
                 trigger_type, price_change, volume, volatility, timestamp
             )
-            
+
             # Update statistics
             self._update_validation_stats(confidence)
-            
+
             # Store recent trigger
             self.recent_triggers.append({
                 'timestamp': timestamp,
@@ -121,55 +121,55 @@ class LanternTriggerValidator:
                 'confidence': confidence,
                 'valid': confidence >= self.validation_threshold
             })
-            
+
             # Keep only recent triggers
             if len(self.recent_triggers) > 1000:
                 self.recent_triggers = self.recent_triggers[-500:]
-            
+
             # Return validation result
             return confidence >= self.validation_threshold
-            
+
         except Exception as e:
             safe_print(f"Error in trigger validation: {e}")
             return False  # Fail safe - reject if validation fails
 
     def _calculate_validation_confidence(
-        self, 
-        trigger_type: str, 
-        price_change: float, 
-        volume: float, 
-        volatility: float, 
+        self,
+        trigger_type: str,
+        price_change: float,
+        volume: float,
+        volatility: float,
         timestamp: datetime
     ) -> float:
         """Calculate validation confidence using multiple factors."""
         try:
             confidence_scores = []
-            
+
             # 1. Timing validation (Ferris Wheel cycles)
             timing_score = self._validate_timing(timestamp)
             confidence_scores.append(timing_score * 0.3)
-            
+
             # 2. Magnitude validation
             magnitude_score = self._validate_magnitude(trigger_type, price_change)
             confidence_scores.append(magnitude_score * 0.4)
-            
+
             # 3. Volume validation
             volume_score = self._validate_volume(volume)
             confidence_scores.append(volume_score * 0.2)
-            
+
             # 4. Volatility validation
             volatility_score = self._validate_volatility(volatility)
             confidence_scores.append(volatility_score * 0.1)
-            
+
             # Calculate weighted average
             total_confidence = sum(confidence_scores)
-            
+
             # Apply market regime adjustment
             market_adjustment = self._get_market_regime_adjustment(trigger_type, price_change)
             total_confidence *= market_adjustment
-            
+
             return np.clip(total_confidence, 0.0, 1.0)
-            
+
         except Exception as e:
             safe_print(f"Error calculating confidence: {e}")
             return 0.5  # Default confidence
@@ -179,18 +179,18 @@ class LanternTriggerValidator:
         try:
             # Check if timestamp aligns with known cycle patterns
             cycle_duration = self.historical_patterns['ferris_wheel_patterns']['cycle_duration']
-            
+
             # Calculate time since epoch
             epoch_time = timestamp.timestamp()
             cycle_position = (epoch_time % cycle_duration) / cycle_duration
-            
+
             # Check if timing is in a valid window (e.g., within 10% of cycle boundaries)
             timing_tolerance = 0.1
             if cycle_position <= timing_tolerance or cycle_position >= (1 - timing_tolerance):
                 return 0.9  # High confidence for cycle-aligned triggers
             else:
                 return 0.3  # Lower confidence for off-cycle triggers
-                
+
         except Exception as e:
             safe_print(f"Error in timing validation: {e}")
             return 0.5
@@ -199,7 +199,7 @@ class LanternTriggerValidator:
         """Validate price change magnitude."""
         try:
             patterns = self.historical_patterns['ferris_wheel_patterns']
-            
+
             if trigger_type == 'spike':
                 threshold = patterns['spike_threshold']
                 if unified_math.abs(price_change) >= threshold:
@@ -214,7 +214,7 @@ class LanternTriggerValidator:
                     return 0.3
             else:
                 return 0.5  # Unknown trigger type
-                
+
         except Exception as e:
             safe_print(f"Error in magnitude validation: {e}")
             return 0.5
@@ -225,7 +225,7 @@ class LanternTriggerValidator:
             # Normalize volume to 0-1 range (assuming typical volume range)
             normalized_volume = unified_math.min(volume / 1000000, 1.0)  # Assume 1M is max volume
             return normalized_volume
-            
+
         except Exception as e:
             safe_print(f"Error in volume validation: {e}")
             return 0.5
@@ -236,7 +236,7 @@ class LanternTriggerValidator:
             # Higher volatility can indicate more reliable signals
             normalized_volatility = unified_math.min(volatility / 0.1, 1.0)  # Assume 10% is max volatility
             return normalized_volatility
-            
+
         except Exception as e:
             safe_print(f"Error in volatility validation: {e}")
             return 0.5
@@ -247,26 +247,26 @@ class LanternTriggerValidator:
             # Determine current market regime based on recent price changes
             if len(self.recent_triggers) < 10:
                 return 1.0  # Default adjustment
-            
+
             recent_changes = [t['price_change'] for t in self.recent_triggers[-10:]]
             avg_change = unified_math.unified_math.mean(recent_changes)
-            
+
             if avg_change > 0.02:  # Bull market
                 regime = 'bull_market'
             elif avg_change < -0.02:  # Bear market
                 regime = 'bear_market'
             else:  # Sideways market
                 regime = 'sideways_market'
-            
+
             patterns = self.historical_patterns['market_regime_patterns'][regime]
-            
+
             if trigger_type == 'spike':
                 return patterns['spike_probability']
             elif trigger_type == 'dip':
                 return patterns['dip_probability']
             else:
                 return 0.5
-                
+
         except Exception as e:
             safe_print(f"Error in market regime adjustment: {e}")
             return 1.0
@@ -279,12 +279,12 @@ class LanternTriggerValidator:
                 self.validation_stats['valid_triggers'] += 1
             else:
                 self.validation_stats['invalid_triggers'] += 1
-            
+
             # Update average confidence
             total = self.validation_stats['total_validations']
             current_avg = self.validation_stats['average_confidence']
             self.validation_stats['average_confidence'] = (current_avg * (total - 1) + confidence) / total
-            
+
         except Exception as e:
             safe_print(f"Error updating validation stats: {e}")
 

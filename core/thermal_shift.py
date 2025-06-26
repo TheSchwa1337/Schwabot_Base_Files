@@ -34,7 +34,6 @@ _DEFAULT_THRESHOLD: Final = 2.5  # °C
 @dataclass(slots=True)
 class ThermalShift:
 
-
     """EWMA-based thermal drift detector.
 
 Parameters
@@ -45,20 +44,22 @@ Absolute temperature delta (°C) that triggers an *unstable* flag.
 EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
 """
 
+
 threshold: float = _DEFAULT_THRESHOLD
 alpha: float = _DEFAULT_ALPHA
 
 _ema: float | None = field(default=None, init=False)
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Public API
+# ------------------------------------------------------------------
+
+
 def update(self, temp: float) -> Tuple[bool, float]:
 
-
     pass
     pass
-        """Process a new temperature reading and return stability status.
+    """Process a new temperature reading and return stability status.
 
 Parameters
 ----------
@@ -71,14 +72,16 @@ Tuple[bool, float]
 ``(is_stable, delta)``, where *delta* is the absolute
             temperature change with respect to the EWMA baseline.
 """
-        if self._ema is None:
+    if self._ema is None:
+
+
 self._ema = temp
-        else:
+else:
 self._ema = self.alpha * temp + (1.0 - self.alpha) * self._ema
 
 delta = unified_math.abs(temp - self._ema)
-        is_stable = delta < self.threshold
-        return is_stable, delta
+is_stable = delta < self.threshold
+return is_stable, delta
 
 
 # -----------------------------------------------------------------------------
@@ -90,10 +93,11 @@ def thermal_delta_switch(
 
 
     current: float,
-previous: float,
-*,
-threshold: float = _DEFAULT_THRESHOLD,
+    previous: float,
+    *,
+    threshold: float = _DEFAULT_THRESHOLD,
 ) -> bool:
+
 """Return ``True`` if the temperature delta is below *threshold*.
 
 Parameters
@@ -106,4 +110,4 @@ Previous or baseline temperature reading (°C).
 Allowed delta before declaring instability.  Defaults to 2.5 °C.
 """
 delta = unified_math.abs(current - previous)
-    return delta < threshold
+return delta < threshold

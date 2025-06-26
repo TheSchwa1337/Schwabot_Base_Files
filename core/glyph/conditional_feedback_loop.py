@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-\n"""Conditional glyph feedback loop with exponential smoothing."""
 
 from __future__ import annotations
-
-
-def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
-
-
-    pass
+    def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
     pass
     """Apply exponential moving feedback to glyph weights.
 

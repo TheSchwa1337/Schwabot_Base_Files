@@ -8,6 +8,8 @@ def entry_score(
 
     dp_norm: float, sigma_vol: float, w_btc: float = 1.2, w_usdc: float = 0.8
 ) -> float:
+
+
 """Calculate entry score based on price pressure.
 
 Compute entry signal: Φ_entry = w_btc·Δp_norm – w_usdc·σ_vol
@@ -21,4 +23,4 @@ w_btc: BTC weight coefficient (default 1.2)
 Returns:
 Entry score (positive → long, negative → short)
     """
-    return (w_btc * dp_norm) - (w_usdc * sigma_vol)
+return (w_btc * dp_norm) - (w_usdc * sigma_vol)

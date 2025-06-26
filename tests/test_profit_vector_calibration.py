@@ -141,7 +141,8 @@ class ProfitVectorCalibrationTest:
                 result = self.controller.process_trade_signal(signal_data)
 
                 if result['status'] != 'success':
-                    results['errors'].append(f"Test case {i}: Processing failed - {result.get('error', 'Unknown error')}")
+                    results['errors'].append(
+                        f"Test case {i}: Processing failed - {result.get('error', 'Unknown error')}")
                     results['success'] = False
                     continue
 

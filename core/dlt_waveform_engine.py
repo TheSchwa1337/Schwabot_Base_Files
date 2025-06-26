@@ -45,35 +45,35 @@ except ImportError:
         @staticmethod
         def sin(x):
             return np.sin(x)
-        
-        @staticmethod 
+
+        @staticmethod
         def exp(x):
             return np.exp(x)
-        
+
         @staticmethod
         def abs(x):
             return np.abs(x)
-        
+
         @staticmethod
         def max(x, y):
             return max(x, y)
-        
+
         @staticmethod
         def min(x, y):
             return min(x, y)
-        
+
         @staticmethod
         def mean(x):
             return np.mean(x)
-        
+
         @staticmethod
         def std(x):
             return np.std(x)
-        
+
         @staticmethod
         def var(x):
             return np.var(x)
-        
+
         @staticmethod
         def log(x):
             return np.log(x)
@@ -92,7 +92,7 @@ class BitPhase(Enum):
 class WaveformType(Enum):
     """Waveform types for analysis."""
     SINE = "sine"
-    SQUARE = "square" 
+    SQUARE = "square"
     SAW = "saw"
     TRIANGLE = "triangle"
     COMPLEX = "complex"
@@ -175,37 +175,37 @@ class DLTWaveformEngine:
     """
     Enhanced DLT Waveform Engine with quantum strategy integration.
     """
-    
+
     def __init__(self, history_size: int = 1000):
         self.history_size = history_size
         self.waveform_history: List[WaveformAnalysis] = []
         self.pattern_signatures: List[str] = []
         self.signal_cache: List[Dict[str, Any]] = []
-        
+
         # Matrix basket management
         self.matrix_baskets: Dict[str, MatrixBasket] = {}
         self.basket_history: List[MatrixBasket] = []
-        
+
         # Bit phase controllers
         self.bit_phase_controllers: Dict[BitPhase, Dict[str, Any]] = {
             BitPhase.FOUR_BIT: {"entropy_threshold": 2.0, "complexity_limit": 0.3},
             BitPhase.EIGHT_BIT: {"entropy_threshold": 4.0, "complexity_limit": 0.6},
             BitPhase.FORTY_TWO_BIT: {"entropy_threshold": 6.0, "complexity_limit": 1.0}
         }
-        
+
         # Hash registry integration
         self.hash_registry: Dict[str, Dict[str, Any]] = {}
-        
+
         # Profit cycle integration
         self.profit_cycles: Dict[str, Dict[str, Any]] = {}
         self.tensor_scores: Dict[str, float] = {}
-        
+
         # GPU offload support
         self.gpu_available = self._check_gpu_availability()
-        
+
         # ZPE thermal integration
         self.zpe_thermal_history: List[Dict[str, Any]] = []
-        
+
         safe_print("🌊 Enhanced DLT Waveform Engine initialized")
 
     def _check_gpu_availability(self) -> bool:
@@ -259,13 +259,13 @@ class DLTWaveformEngine:
     def get_trading_signals(self) -> List[Dict[str, Any]]:
         """Generate trading signals based on waveform analysis."""
         signals = []
-        
+
         if not self.waveform_history:
             return signals
-        
+
         # Get recent analyses
         recent_analyses = self.waveform_history[-5:]  # Last 5 analyses
-        
+
         for analysis in recent_analyses:
             # Generate signal based on tensor score
             if analysis.tensor_score > 0.7:
@@ -278,7 +278,7 @@ class DLTWaveformEngine:
                 signal_type = "strong_sell"
             else:
                 signal_type = "hold"
-            
+
             signal = {
                 'signal_id': f"signal_{len(signals)}",
                 'waveform_name': analysis.name,
@@ -290,7 +290,7 @@ class DLTWaveformEngine:
                 'timestamp': analysis.timestamp
             }
             signals.append(signal)
-        
+
         return signals
 
 
@@ -322,11 +322,11 @@ class MarketSignalProcessor:
             fft_result = np.fft.fft(windowed_signal)
             frequencies = np.fft.fftfreq(len(signal_data), 1/sample_rate)
             magnitudes = np.abs(fft_result)
-            
+
             # Create hash signature
             hash_content = f"{name}_{np.sum(magnitudes):.6f}_{len(magnitudes)}"
             hash_signature = hashlib.sha256(hash_content.encode()).hexdigest()
-            
+
             # Create analysis object
             analysis = SignalAnalysis(
                 name=name,
@@ -336,18 +336,18 @@ class MarketSignalProcessor:
                 resolution=AnalysisResolution.MEDIUM,
                 metadata={'sample_rate': sample_rate}
             )
-            
+
             # Store in history
             self.analysis_history.append(analysis)
             if len(self.analysis_history) > self.history_size:
                 self.analysis_history.pop(0)
-            
+
             return {
                 'success': True,
                 'analysis': analysis,
                 'hash_signature': hash_signature
             }
-            
+
         except Exception as e:
             logger.error(f"Error processing signal: {e}")
             return {'success': False, 'error': str(e)}
@@ -372,15 +372,15 @@ class MarketSignalProcessor:
         """Create an asset basket with given weights."""
         basket_id = f"basket_{int(time.time())}"
         asset_weights = dict(zip(assets, weights))
-        
+
         # Calculate resonance score
         weight_variance = np.var(weights) if weights else 0.0
         resonance_score = min(1.0, weight_variance)
-        
+
         # Generate hash
         content = f"{basket_id}_{json.dumps(asset_weights, sort_keys=True)}"
         hash_signature = hashlib.sha256(content.encode()).hexdigest()
-        
+
         basket = AssetBasket(
             basket_id=basket_id,
             resolution=AnalysisResolution.MEDIUM,
@@ -388,7 +388,7 @@ class MarketSignalProcessor:
             resonance_score=resonance_score,
             hash_signature=hash_signature
         )
-        
+
         self.baskets[basket_id] = basket
         return basket
 
@@ -405,13 +405,13 @@ class MarketSignalProcessor:
                 signal_type = "sell"
             else:
                 signal_type = "hold"
-            
+
             signals.append({
                 'signal_type': signal_type,
                 'confidence': min(1.0, mag_var),
                 'analysis_name': latest.name
             })
-        
+
         return signals
 
 
@@ -419,16 +419,16 @@ if __name__ == "__main__":
     # Example usage
     engine = DLTWaveformEngine()
     processor = MarketSignalProcessor()
-    
+
     # Generate test signal
     t = np.linspace(0, 1, 1000)
     test_signal = np.sin(2 * np.pi * 50 * t) + 0.5 * np.sin(2 * np.pi * 120 * t)
-    
+
     # Process signal
     result = processor.process_signal("test_waveform", test_signal, 1000)
     safe_print(f"Processing result: {result['success']}")
-    
+
     # Generate signals
     signals = processor.get_trading_signals()
-    safe_print(f"Generated {len(signals)} trading signals") 
+    safe_print(f"Generated {len(signals)} trading signals")
 \n# -*- coding: utf-8 -*-\n

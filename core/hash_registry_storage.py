@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .hash_registry_core import HashRegistryEntry, HashRegistryCore
+from datetime import datetime
+from typing import Dict, Any, Optional
+import logging
+import os
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Hash Registry Storage - File I/O and Persistence
@@ -62,15 +76,9 @@ Functions:
 - Registry backup and restore
 """
 
-import json
-import os
-import logging
-from typing import Dict, Any, Optional
-from datetime import datetime
 
 # Conditional import to handle both script and module execution
 try:
-from .hash_registry_core import HashRegistryEntry, HashRegistryCore
 except ImportError:
     pass
     pass
@@ -79,25 +87,27 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-class HashRegistryStorage:
 
+class HashRegistryStorage:
 
     """
 Storage layer for hash registry operations.
 Handles file I/O and persistence with minimal dependencies.
 """
 
-def __init__(self, registry_path: str = "core/hash_registry.json"):
 
+def __init__(self, registry_path: str = "core/hash_registry.json"):
 
     pass
     pass
         """Initialize storage with registry file path."""
+
+
 self.registry_path = registry_path
 self.backup_path = f"{registry_path}.backup"
 
-def load_registry(self) -> Dict[str, Dict[str, Any]]:
 
+def load_registry(self) -> Dict[str, Dict[str, Any]]:
 
     pass
     pass
@@ -109,6 +119,7 @@ def load_registry(self) -> Dict[str, Dict[str, Any]]:
 
             with open(self.registry_path, 'r') as f:
                 registry_data = json.load(f)
+
 
 logger.info(f"Loaded registry from {self.registry_path}")
             return registry_data

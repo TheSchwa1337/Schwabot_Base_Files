@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from .zpe_core import ZPECore
+from datetime import datetime
+from typing import Dict, List, Any, Optional
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
 except ImportError:
@@ -9,42 +13,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 ZPE Integration Layer
@@ -53,17 +65,11 @@ ZPE Integration Layer
 Connects the ZPE core to existing Schwabot systems like strategy_mapper, profit_cycle_allocator, and fractal_core.
 """
 
-import logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime
-
-from .zpe_core import ZPECore
 
 logger = logging.getLogger(__name__)
 
 
 class ZPEIntegration:
-
 
     """
 Integration layer that connects ZPE mathematical framework to Schwabot's existing systems.
@@ -71,12 +77,14 @@ Integration layer that connects ZPE mathematical framework to Schwabot's existin
 This is where Schwabot becomes the wheel - spinning into profit, not pinging against it.
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize ZPE Integration."""
+
+
 self.zpe_core = ZPECore()
         self.integration_status = {
 'strategy_mapper': False,
@@ -89,8 +97,8 @@ self.zpe_core = ZPECore()
 
 logger.info("ZPE Integration Layer initialized")
 
-def integrate_with_strategy_mapper(self, strategy_data: Dict[str, Any]) -> Dict[str, Any]:
 
+def integrate_with_strategy_mapper(self, strategy_data: Dict[str, Any]) -> Dict[str, Any]:
 
     pass
     pass
@@ -100,6 +108,8 @@ Integrate ZPE core with strategy_mapper.py
 Applies ZPE mathematical framework to strategy vector calculations.
 """
         try:
+
+
             # Extract strategy vectors for multi-asset alignment
 strategy_vectors = strategy_data.get('vectors', {})
             weights = strategy_data.get('weights', {})

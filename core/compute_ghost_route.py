@@ -7,12 +7,7 @@ Provides ghost route computation functionality for the Schwabot system.
 """
 
 from typing import Any
-
-
-def compute_ghost_route(*args: Any, **kwargs: Any) -> None:
-
-
-    pass
+    def compute_ghost_route(*args: Any, **kwargs: Any) -> None:
     pass
     """Compute ghost route for the given arguments."""
     pass

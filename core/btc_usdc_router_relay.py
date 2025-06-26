@@ -26,7 +26,7 @@ __all__: list[str] = []
 ]
 
 
-@dataclass(slots=True)
+@ dataclass(slots=True)
 class BTCUSDCRouterRelay:
 
 
@@ -36,7 +36,6 @@ trigger_threshold: float = 0.5
 delta_tolerance: float = 0.1
 
 def compute_theta_g(
-
 
         self,
 theta_values: Sequence[float],
@@ -170,7 +169,7 @@ ghost_strength = self.compute_theta_g(
 
         # Route each flow pair
         for i, (btc_flow, usdc_flow) in enumerate(zip(btc_array, usdc_array)):
-            routed_btc[i], routed_usdc[i] = self.route_flow_decision(]
+            routed_btc[i], routed_usdc[i]=self.route_flow_decision(]
                 btc_flow, usdc_flow, ghost_strength
 
 
@@ -187,10 +186,10 @@ def compute_ghost_triggers(
 zeta_series: Sequence[float],
 timestamps: Sequence[float],
 trigger_times: Sequence[float],
-delta_tolerance: float = 0.1,
+delta_tolerance: float=0.1,
 ) -> float:  # noqa: D401
 """Compute ghost conditional triggers Θᴳ(t)."""
-    relay = BTCUSDCRouterRelay(delta_tolerance=delta_tolerance)
+    relay=BTCUSDCRouterRelay(delta_tolerance=delta_tolerance)
     return relay.compute_theta_g(
         theta_values, zeta_series, timestamps, trigger_times
 
@@ -202,10 +201,9 @@ def route_btc_usdc_flow(
     btc_flow: float,
 usdc_flow: float,
 ghost_trigger_strength: float,
-threshold: float = 0.5,
+threshold: float=0.5,
 ) -> tuple[float, float]:  # noqa: D401
 """Route BTC/USDC flows using ghost trigger strength."""
-relay = BTCUSDCRouterRelay(trigger_threshold=threshold)
+relay=BTCUSDCRouterRelay(trigger_threshold=threshold)
     return relay.route_flow_decision(
         btc_flow, usdc_flow, ghost_trigger_strength
-

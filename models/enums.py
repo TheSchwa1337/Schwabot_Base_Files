@@ -51,21 +51,21 @@ class WindowsCliCompatibilityHandler:
 
 class Side(str, Enum):
     """TODO: document Side."""
-    
+
     BUY = "BUY"
     SELL = "SELL"
 
 
 class FillType(str, Enum):
     """TODO: document FillType."""
-    
+
     BUY_FILL = "BUY_FILL"
     SELL_FILL = "SELL_FILL"
 
 
 class OrderState(str, Enum):
     """TODO: document OrderState."""
-    
+
     OPEN = "open"
     PARTIAL = "partial"
     FILLED = "filled"

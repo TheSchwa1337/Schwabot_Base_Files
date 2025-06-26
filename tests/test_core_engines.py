@@ -80,9 +80,9 @@ class TestCoreMathAndEngines(unittest.TestCase):
 
     def test_wavelet_decompose(self):
         """Test wavelet decomposition."""
-        data = np.random.rand(32) # Must be a power of 2 for simple Haar
+        data = np.random.rand(32)  # Must be a power of 2 for simple Haar
         coeffs = wavelet_decompose(data, level=3)
-        self.assertEqual(len(coeffs), 4) # approx, detail1, detail2, detail3
+        self.assertEqual(len(coeffs), 4)  # approx, detail1, detail2, detail3
 
     def test_calculate_temporal_confidence_merge(self):
         """Test temporal confidence merge."""

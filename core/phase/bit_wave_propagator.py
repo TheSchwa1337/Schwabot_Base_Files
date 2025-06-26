@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-\n"""core.phase.bit_wave_propagator
+# -*- coding: utf-8 -*-
+"""core.phase.bit_wave_propagator
 Bit-Wave Propagator
 ===================
 
-Translates a numerical signal into a bit-depth–aligned *phase vector* that can
+Translates a numerical signal into a bit-depth-aligned *phase vector* that can
 be injected into strategy layers operating at 4/8/16-bit resolution.
 
-A minimal, Flake8-clean implementation – enough to satisfy imports while still
+A minimal, Flake8-clean implementation - enough to satisfy imports while still
 being mathematically meaningful.
 """
 
@@ -114,4 +115,4 @@ def inject_harmonic(bit_level: int, t: float, phi: float, duration: float) -> fl
     # use numpy for sin so that the function can accept numpy arrays too
     import numpy as np  # local import to avoid polluting module globals
 
-    return float(bit_level * phi * np.sin(np.pi * t / duration)) 
+    return float(bit_level * phi * np.sin(np.pi * t / duration))

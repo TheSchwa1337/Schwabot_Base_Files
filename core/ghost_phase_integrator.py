@@ -29,8 +29,6 @@ __all__: list[str] = ["GhostPhasePacket", "compute_ghost_phase_packet"]
 
 
 def _levenshtein(a: str, b: str) -> int:  # noqa: D401
-
-
     """Return Levenshtein edit distance (simple O(n²) DP).
 
 The strings are expected to be hex-encoded hashes of identical length
@@ -38,6 +36,7 @@ The strings are expected to be hex-encoded hashes of identical length
     """
     if len(a) != len(b):
         raise ValueError("hash strings must have equal length")
+
 
 prev_row = list(range(len(b) + 1))
     for i, ch_a in enumerate(a, start=1):

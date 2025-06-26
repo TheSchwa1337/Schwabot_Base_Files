@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .profit_navigation_engine import TradeProposal
+from .fault_bus import FaultBus
+from datetime import datetime
+from dataclasses import dataclass
+import logging
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +15,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Trade Executor - Final Trade Execution Layer
@@ -60,13 +74,6 @@ Core Responsibilities:
 - Publishes a final confirmation of the executed trade.
 """
 
-import asyncio
-import logging
-from dataclasses import dataclass
-from datetime import datetime
-
-from .fault_bus import FaultBus
-from .profit_navigation_engine import TradeProposal
 
 logger = logging.getLogger(__name__)
 
@@ -76,8 +83,9 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class ExecutedTrade:
 
-
     """Represents a trade that has been successfully executed."""
+
+
 proposal: TradeProposal
 execution_price: float
 execution_timestamp: float
@@ -88,14 +96,13 @@ status: str = "SIMULATED_EXECUTION"
 
 class TradeExecutor:
 
-
     """
 
 Listens for accepted proposals and simulates their execution.
 """
 
-def __init__(self, fault_bus: FaultBus):
 
+def __init__(self, fault_bus: FaultBus):
 
     pass
     pass
@@ -105,17 +112,22 @@ Initializes the TradeExecutor.
 Args:
 fault_bus: An instance of the central FaultBus.
 """
+
+
 self.bus = fault_bus
 logger.info("TradeExecutor initialized.")
 
-def start_listening(self):
 
+def start_listening(self):
 
     pass
     pass
         """Subscribes to accepted trade proposals on the FaultBus."""
+
+
 self.bus.subscribe("trade_proposal_accepted", self.execute_trade)
         logger.info("TradeExecutor is now listening for accepted proposals.")
+
 
 async def execute_trade(self, proposal: TradeProposal):
         """
@@ -135,10 +147,10 @@ f"{proposal.direction.value} @ ${proposal.entry_price:.2f}"
         # 3. Submit the order.
         # 4. Wait for confirmation and the final execution price.
 await asyncio.sleep(0.05)  # Simulate network latency
-        execution_price = proposal.entry_price * 1.0001 # Simulate small slippage
+        execution_price=proposal.entry_price * 1.0001  # Simulate small slippage
         # --- END SIMULATION ---
 
-executed_trade = ExecutedTrade(
+executed_trade=ExecutedTrade(
             proposal=proposal,
 execution_price=execution_price,
 execution_timestamp=datetime.now().timestamp()
@@ -154,8 +166,8 @@ async def main():
     """Demonstrates the functionality of the TradeExecutor."""
 logging.basicConfig(level=logging.INFO)
 
-bus = FaultBus()
-    executor = TradeExecutor(bus)
+bus=FaultBus()
+    executor=TradeExecutor(bus)
     executor.start_listening()
 
     # Dummy listener for the final trade confirmation
@@ -171,7 +183,7 @@ bus.subscribe("trade_executed", audit_logger)
 
     # Simulate a proposal being accepted by the Risk Manager
 safe_print("[RiskManager] Publishing an accepted trade proposal...")
-    accepted_proposal = TradeProposal("BTC", "BUY", 51000, 0.93, "hash-final")
+    accepted_proposal=TradeProposal("BTC", "BUY", 51000, 0.93, "hash-final")
     await bus.publish("trade_proposal_accepted", proposal=accepted_proposal)
 
 

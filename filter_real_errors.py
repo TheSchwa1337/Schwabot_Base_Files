@@ -18,6 +18,7 @@ def is_stub_file(filepath):
     except (FileNotFoundError, UnicodeDecodeError):
         return False
 
+
 def filter_e501_errors():
     """Read E501 errors and filter out stub files."""
     real_errors = []
@@ -67,6 +68,7 @@ def filter_e501_errors():
             safe_print(f"   {error}")
         if len(real_errors) > 10:
             safe_print(f"   ... and {len(real_errors) - 10} more")
+
 
 if __name__ == "__main__":
     filter_e501_errors()

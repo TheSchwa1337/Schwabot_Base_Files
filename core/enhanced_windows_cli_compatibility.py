@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.unified_math_system import unified_math
+from typing import Any, Callable, Dict, Optional
+import sys
+import os
+import logging
+import io
+from functools import wraps
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
@@ -10,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Enhanced Windows CLI Compatibility Handler.
 
@@ -64,24 +78,18 @@ Based on systematic elimination of 30+ flake8 issues.
 
 """
 
-from functools import wraps
-import io
-import logging
-import os
-import sys
-from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class EnhancedWindowsCliCompatibilityHandler:
 
-
     """
 
 Enhanced Windows CLI compatibility handler with bulletproof emoji management
 and robust error handling for all CLI environments
 """
+
 
     # Comprehensive emoji to ASIC mapping
 EMOJI_TO_ASIC_MAPPING = {
@@ -198,9 +206,9 @@ UNICODE_FALLBACKS = {
 _cli_environment_cache: Optional[Dict[str, Any]] = None
 _encoding_cache: Optional[str] = None
 
+
 @classmethod
 def detect_cli_environment(cls) -> Dict[str, Any]:
-
 
     pass
     pass
@@ -213,6 +221,7 @@ Dictionary with environment information
 """
         if cls._cli_environment_cache is not None:
             return cls._cli_environment_cache
+
 
 env_info = {
 "platform": sys.platform,
@@ -231,9 +240,9 @@ env_info = {
 cls._cli_environment_cache = env_info
         return env_info
 
+
 @classmethod
 def _detect_encoding(cls) -> str:
-
 
     pass
     pass
@@ -242,6 +251,8 @@ def _detect_encoding(cls) -> str:
             return cls._encoding_cache
 
         try:
+
+
 encoding = sys.stdout.encoding or "utf-8"
 cls._encoding_cache = encoding
             return encoding

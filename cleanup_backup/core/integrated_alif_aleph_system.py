@@ -24,6 +24,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class AlifAlephState:
     state_id: str
@@ -33,6 +34,7 @@ class AlifAlephState:
     quantum_context: Dict[str, Any] = field(default_factory=dict)
     status: str = "initialized"
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class IntegratedAlifAlephSystem:
     def __init__(self):
@@ -100,10 +102,12 @@ class IntegratedAlifAlephSystem:
             "hook_count": len(self.hooks)
         }
 
+
 if __name__ == "__main__":
     system = IntegratedAlifAlephSystem()
     # Example: create a state and register a hook
     state = system.create_state({"ai": "context"}, {"ml": "context"})
+
     def print_state(s: AlifAlephState):
         safe_print(f"State: {s.state_id}, status: {s.status}")
     system.register_hook("print", print_state)

@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .mathlib_v4 import MathLibV4
+from .fault_bus import FaultBus
+from typing import Dict
+from enum import Enum
+from dataclasses import dataclass, field
+import logging
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,42 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Profit Navigation Engine - DLT-Based Decision Making Core
@@ -62,14 +77,6 @@ Core Responsibilities:
 - Publishes trade proposals to the Fault Bus for execution.
 """
 
-import asyncio
-import logging
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict
-
-from .fault_bus import FaultBus
-from .mathlib_v4 import MathLibV4
 
 logger = logging.getLogger(__name__)
 
@@ -78,8 +85,9 @@ logger = logging.getLogger(__name__)
 
 class TradeDirection(Enum):
 
-
     """Enumeration for trade direction."""
+
+
 BUY = "BUY"
 SELL = "SELL"
 HOLD = "HOLD"
@@ -88,11 +96,12 @@ HOLD = "HOLD"
 @dataclass(frozen=True)
 class KnownFractal:
 
-
     """
 Represents our knowledge about a specific "Forever Fractal".
 In a real system, this would be loaded from a persistent database.
 """
+
+
 pattern_hash: str
 description: str
 expected_outcome_direction: TradeDirection
@@ -102,10 +111,11 @@ base_profitability_score: float  # Historical profitability (0.0 to 1.0)
 @dataclass(frozen=True)
 class TradeProposal:
 
-
     """
 A fully-formed, actionable trade proposal to be published to the bus.
 """
+
+
 symbol: str
 direction: TradeDirection
 entry_price: float
@@ -118,10 +128,10 @@ metadata: Dict = field(default_factory=dict)
 
 class ProfitNavigationEngine:
 
-
     """
 The decision-making core of Schwabot.
 """
+
 
 def __init__(
 
@@ -131,6 +141,8 @@ fault_bus: FaultBus,
 math_lib: MathLibV4,
 confidence_threshold: float = 0.75,
 ):
+
+
 """
 Initializes the ProfitNavigationEngine.
 
@@ -144,25 +156,30 @@ self.math = math_lib
 self.confidence_threshold = confidence_threshold
 self.fractal_registry: Dict[str, KnownFractal] = {}
 
-def load_fractal_registry(self, known_fractals: list[KnownFractal]):
 
+def load_fractal_registry(self, known_fractals: list[KnownFractal]):
 
     pass
     pass
         """Loads the registry of known patterns."""
+
+
 self.fractal_registry = {f.pattern_hash: f for f in known_fractals}
 logger.info(f"Loaded {len(self.fractal_registry)} known fractals into registry.")
 
-def start_listening(self):
 
+def start_listening(self):
 
     pass
     pass
         """
 Subscribes the engine's evaluation handler to DLT hash confirmations.
 """
+
+
 self.bus.subscribe("dlt_hash_confirmed", self.evaluate_pattern_confirmation)
         logger.info("ProfitNavigationEngine is now listening for DLT confirmations.")
+
 
 async def evaluate_pattern_confirmation(
         self, pattern_hash: str, timestamp: float, last_price: float, **kwargs
@@ -192,7 +209,7 @@ f"Greyscale Confidence: {confidence:.2f}"
 
 
         if confidence >= self.confidence_threshold:
-proposal = TradeProposal(
+proposal=TradeProposal(
                 symbol="BTC/USD",  # Symbol should ideally come from the event
 direction=known_fractal.expected_outcome_direction,
 entry_price=last_price,
@@ -215,13 +232,13 @@ async def main():
 logging.basicConfig(level=logging.INFO)
 
     # 1. Setup core components
-bus = FaultBus()
-    math_lib = MathLibV4()
-    engine = ProfitNavigationEngine(bus, math_lib)
+bus=FaultBus()
+    math_lib=MathLibV4()
+    engine=ProfitNavigationEngine(bus, math_lib)
 
     # 2. Load the engine's knowledge base with some "Forever Fractals"
-PROFITABLE_HASH = "4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515"
-UNPROFITABLE_HASH = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+PROFITABLE_HASH="4d6d9e794383141a5435e98341648a89b657956a827643e49e25a818c64a515"
+UNPROFITABLE_HASH="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
 engine.load_fractal_registry([
         KnownFractal(

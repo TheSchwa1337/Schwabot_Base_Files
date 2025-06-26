@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from .settings_controller import get_settings_controller
+from pathlib import Path
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Any, Optional, Tuple
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 """
 Schwabot Vector Validator
 =========================
@@ -66,22 +81,15 @@ It then adjusts:
 - Matrix routing preferences
 """
 
-import json
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-
-from .settings_controller import get_settings_controller
 
 
 @dataclass
 class Vector:
 
-
     """Represents a trading vector with all associated data"""
+
+
 vector_id: str
 matrix_id: str
 tick_id: int
@@ -103,8 +111,9 @@ reinforcement_weight: float = 1.0
 @dataclass
 class ValidationResult:
 
-
     """Result of vector validation"""
+
+
 is_valid: bool
 confidence_score: float
 adjusted_weight: float
@@ -115,15 +124,15 @@ reinforcement_notes: List[str] = None
 
 class VectorValidator:
 
-
     """Reinforcement learning engine for vector validation"""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.settings_controller = get_settings_controller()
+
 
         # Vector history for learning
 self.vector_history: List[Vector] = []
@@ -147,8 +156,8 @@ self.volume_response_curves: Dict[str, List[float]] = {}
         # Initialize response curves
 self._initialize_response_curves()
 
-def _initialize_response_curves(self):
 
+def _initialize_response_curves(self):
 
     pass
     pass
@@ -159,12 +168,13 @@ def _initialize_response_curves(self):
         # Volume response curve (confidence vs volume ratio)
         self.volume_response_curves["default"] = [0.2, 0.4, 0.6, 0.8, 1.0]
 
-def validate_vector(self, vector_data: Dict[str, Any]) -> ValidationResult:
 
+def validate_vector(self, vector_data: Dict[str, Any]) -> ValidationResult:
 
     pass
     pass
         """Validate a trading vector using reinforcement learning"""
+
         # Create vector object
 vector = self._create_vector_from_data(vector_data)
 
@@ -180,27 +190,27 @@ reinforcement_notes=["Vector matches known bad vector pattern"]
 
 
         # Calculate base confidence
-base_confidence = self._calculate_base_confidence(vector)
+base_confidence=self._calculate_base_confidence(vector)
 
         # Apply reinforcement learning adjustments
-adjusted_confidence = self._apply_reinforcement_adjustments(vector, base_confidence)
+adjusted_confidence=self._apply_reinforcement_adjustments(vector, base_confidence)
 
         # Get path weight
-path_weight = self.settings_controller.get_matrix_weight(vector.matrix_id)
+path_weight=self.settings_controller.get_matrix_weight(vector.matrix_id)
 
         # Determine validity
-is_valid = adjusted_confidence >= self.min_confidence_threshold
+is_valid=adjusted_confidence >= self.min_confidence_threshold
 
         # Determine recommended action
         if is_valid:
-recommended_action = "execute"
+recommended_action="execute"
         elif adjusted_confidence > 0.4:
-recommended_action = "monitor"
+recommended_action="monitor"
         else:
-recommended_action = "avoid"
+recommended_action="avoid"
 
         # Create validation result
-result = ValidationResult(
+result=ValidationResult(
             is_valid=is_valid,
 confidence_score=adjusted_confidence,
 adjusted_weight=path_weight * adjusted_confidence,
@@ -220,8 +230,8 @@ def _create_vector_from_data(self, vector_data: Dict[str, Any]) -> Vector:
     pass
         """Create a Vector object from input data"""
         # Generate hash signature
-hash_input = f"{vector_data.get('matrix_id', '')}{vector_data.get('tick_id', 0)}{vector_data.get('entry_price', 0)}"
-        hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()
+hash_input=f"{vector_data.get('matrix_id', '')}{vector_data.get('tick_id', 0)}{vector_data.get('entry_price', 0)}"
+        hash_signature=hashlib.sha256(hash_input.encode()).hexdigest()
 
         return Vector(
             vector_id=vector_data.get('vector_id', f"vec_{hash_signature[:8]}"),
@@ -249,22 +259,22 @@ def _calculate_base_confidence(self, vector: Vector) -> float:
     pass
         """Calculate base confidence score for a vector"""
         # Start with vector's base confidence
-confidence = vector.confidence
+confidence=vector.confidence
 
         # Adjust based on ghost signal strength
-ghost_adjustment = vector.ghost_signal_strength * 0.3
+ghost_adjustment=vector.ghost_signal_strength * 0.3
 confidence += ghost_adjustment
 
         # Adjust based on entropy level
-entropy_adjustment = (1.0 - vector.entropy_level) * 0.2
+entropy_adjustment=(1.0 - vector.entropy_level) * 0.2
         confidence += entropy_adjustment
 
         # Adjust based on volume data
-volume_adjustment = self._calculate_volume_adjustment(vector.volume_data)
+volume_adjustment=self._calculate_volume_adjustment(vector.volume_data)
         confidence += volume_adjustment
 
         # Ensure confidence is within bounds
-confidence = unified_math.max(0.0, unified_math.min(1.0, confidence))
+confidence=unified_math.max(0.0, unified_math.min(1.0, confidence))
 
         return confidence
 
@@ -278,13 +288,13 @@ def _calculate_volume_adjustment(self, volume_data: Dict[str, float]) -> float:
             return 0.0
 
         # Calculate volume ratio
-current_volume = volume_data.get('current', 0.0)
-        avg_volume = volume_data.get('average', 1.0)
+current_volume=volume_data.get('current', 0.0)
+        avg_volume=volume_data.get('average', 1.0)
 
         if avg_volume == 0:
             return 0.0
 
-volume_ratio = current_volume / avg_volume
+volume_ratio=current_volume / avg_volume
 
         # Apply volume response curve
         if volume_ratio < 0.5:
@@ -302,28 +312,28 @@ def _apply_reinforcement_adjustments(self, vector: Vector, base_confidence: floa
     pass
     pass
         """Apply reinforcement learning adjustments to confidence"""
-adjusted_confidence = base_confidence
+adjusted_confidence=base_confidence
 
         # Get matrix performance history
-matrix_perf = self.matrix_performance.get(vector.matrix_id, {})
-        success_rate = matrix_perf.get('success_rate', 0.5)
+matrix_perf=self.matrix_performance.get(vector.matrix_id, {})
+        success_rate=matrix_perf.get('success_rate', 0.5)
 
         # Adjust based on matrix success rate
-matrix_adjustment = (success_rate - 0.5) * 0.2
+matrix_adjustment=(success_rate - 0.5) * 0.2
         adjusted_confidence += matrix_adjustment
 
         # Adjust based on path performance
-path_perf = self.path_performance.get(vector.matrix_id, {})
-        path_success_rate = path_perf.get('success_rate', 0.5)
+path_perf=self.path_performance.get(vector.matrix_id, {})
+        path_success_rate=path_perf.get('success_rate', 0.5)
 
-path_adjustment = (path_success_rate - 0.5) * 0.15
+path_adjustment=(path_success_rate - 0.5) * 0.15
         adjusted_confidence += path_adjustment
 
         # Apply reinforcement weight
 adjusted_confidence *= vector.reinforcement_weight
 
         # Ensure confidence is within bounds
-adjusted_confidence = unified_math.max(0.0, unified_math.min(1.0, adjusted_confidence))
+adjusted_confidence=unified_math.max(0.0, unified_math.min(1.0, adjusted_confidence))
 
         return adjusted_confidence
 
@@ -333,18 +343,18 @@ def _generate_reinforcement_notes(self, vector: Vector, confidence: float) -> Li
     pass
     pass
         """Generate reinforcement learning notes"""
-notes = []
+notes=[]
 
         # Matrix performance note
-matrix_perf = self.matrix_performance.get(vector.matrix_id, {})
+matrix_perf=self.matrix_performance.get(vector.matrix_id, {})
         if matrix_perf:
-success_rate = matrix_perf.get('success_rate', 0.5)
+success_rate=matrix_perf.get('success_rate', 0.5)
             notes.append(f"Matrix {vector.matrix_id} success rate: {success_rate:.2f}")
 
         # Path performance note
-path_perf = self.path_performance.get(vector.matrix_id, {})
+path_perf=self.path_performance.get(vector.matrix_id, {})
         if path_perf:
-path_success_rate = path_perf.get('success_rate', 0.5)
+path_success_rate=path_perf.get('success_rate', 0.5)
             notes.append(f"Path success rate: {path_success_rate:.2f}")
 
         # Ghost signal note
@@ -401,10 +411,10 @@ def _update_matrix_performance(self, vector: Vector):
     pass
     pass
         """Update matrix performance statistics"""
-matrix_id = vector.matrix_id
+matrix_id=vector.matrix_id
 
         if matrix_id not in self.matrix_performance:
-self.matrix_performance[matrix_id] = {]
+self.matrix_performance[matrix_id]={]
 'total_trades': 0,
 'successful_trades': 0,
 'success_rate': 0.5,
@@ -412,21 +422,21 @@ self.matrix_performance[matrix_id] = {]
 'avg_confidence': 0.5
 }
 
-perf = self.matrix_performance[matrix_id]
+perf=self.matrix_performance[matrix_id]
 perf['total_trades'] += 1
 
         if vector.success:
 perf['successful_trades'] += 1
 
-perf['success_rate'] = perf['successful_trades'] / perf['total_trades']
+perf['success_rate']=perf['successful_trades'] / perf['total_trades']
 
         # Update average profit
-current_avg = perf['avg_profit']
-perf['avg_profit'] = (current_avg * (perf['total_trades'] - 1) + vector.profit_loss) / perf['total_trades']
+current_avg=perf['avg_profit']
+perf['avg_profit']=(current_avg * (perf['total_trades'] - 1) + vector.profit_loss) / perf['total_trades']
 
         # Update average confidence
-current_avg_conf = perf['avg_confidence']
-perf['avg_confidence'] = (current_avg_conf * (perf['total_trades'] - 1) + vector.confidence) / perf['total_trades']
+current_avg_conf=perf['avg_confidence']
+perf['avg_confidence']=(current_avg_conf * (perf['total_trades'] - 1) + vector.confidence) / perf['total_trades']
 
 def _update_path_performance(self, vector: Vector):
 
@@ -434,10 +444,10 @@ def _update_path_performance(self, vector: Vector):
     pass
     pass
         """Update path performance statistics"""
-matrix_id = vector.matrix_id
+matrix_id=vector.matrix_id
 
         if matrix_id not in self.path_performance:
-self.path_performance[matrix_id] = {]
+self.path_performance[matrix_id]={]
 'total_trades': 0,
 'successful_trades': 0,
 'success_rate': 0.5,
@@ -445,21 +455,21 @@ self.path_performance[matrix_id] = {]
 'avg_confidence': 0.5
 }
 
-perf = self.path_performance[matrix_id]
+perf=self.path_performance[matrix_id]
 perf['total_trades'] += 1
 
         if vector.success:
 perf['successful_trades'] += 1
 
-perf['success_rate'] = perf['successful_trades'] / perf['total_trades']
+perf['success_rate']=perf['successful_trades'] / perf['total_trades']
 
         # Update average profit
-current_avg = perf['avg_profit']
-perf['avg_profit'] = (current_avg * (perf['total_trades'] - 1) + vector.profit_loss) / perf['total_trades']
+current_avg=perf['avg_profit']
+perf['avg_profit']=(current_avg * (perf['total_trades'] - 1) + vector.profit_loss) / perf['total_trades']
 
         # Update average confidence
-current_avg_conf = perf['avg_confidence']
-perf['avg_confidence'] = (current_avg_conf * (perf['total_trades'] - 1) + vector.confidence) / perf['total_trades']
+current_avg_conf=perf['avg_confidence']
+perf['avg_confidence']=(current_avg_conf * (perf['total_trades'] - 1) + vector.confidence) / perf['total_trades']
 
 def update_vector_weights(self, bad_vectors: List[Vector], good_vectors: List[Vector]):
 
@@ -491,7 +501,7 @@ def get_performance_summary(self) -> Dict[str, Any]:
     pass
     pass
         """Get performance summary for all matrices and paths"""
-summary = {
+summary={
 'matrix_performance': self.matrix_performance,
 'path_performance': self.path_performance,
 'total_vectors': len(self.vector_history),
@@ -512,20 +522,20 @@ def adjust_response_curves(self, matrix_id: str, success_rate: float):
         """Adjust response curves based on matrix performance"""
         if success_rate > 0.7:
             # Increase sensitivity for successful matrices
-self.hash_response_curves[matrix_id] = [0.05, 0.2, 0.4, 0.6, 0.8]
-self.volume_response_curves[matrix_id] = [0.1, 0.3, 0.5, 0.7, 0.9]
+self.hash_response_curves[matrix_id]=[0.05, 0.2, 0.4, 0.6, 0.8]
+self.volume_response_curves[matrix_id]=[0.1, 0.3, 0.5, 0.7, 0.9]
         elif success_rate < 0.3:
             # Decrease sensitivity for failing matrices
-self.hash_response_curves[matrix_id] = [0.2, 0.4, 0.6, 0.8, 0.95]
-self.volume_response_curves[matrix_id] = [0.3, 0.5, 0.7, 0.85, 0.95]
+self.hash_response_curves[matrix_id]=[0.2, 0.4, 0.6, 0.8, 0.95]
+self.volume_response_curves[matrix_id]=[0.3, 0.5, 0.7, 0.85, 0.95]
 
-def save_learning_data(self, filepath: str = "learning_data.json"):
+def save_learning_data(self, filepath: str="learning_data.json"):
 
 
     pass
     pass
         """Save learning data to file"""
-data = {
+data={
 'vector_history': [asdict(v) for v in self.vector_history],
             'matrix_performance': self.matrix_performance,
 'path_performance': self.path_performance,
@@ -537,7 +547,7 @@ data = {
         with open(filepath, 'w') as f:
             json.dump(data, f, indent=2, default=str)
 
-def load_learning_data(self, filepath: str = "learning_data.json"):
+def load_learning_data(self, filepath: str="learning_data.json"):
 
 
     pass
@@ -545,22 +555,22 @@ def load_learning_data(self, filepath: str = "learning_data.json"):
         """Load learning data from file"""
         try:
             with open(filepath, 'r') as f:
-                data = json.load(f)
+                data=json.load(f)
 
             # Load vector history
-self.vector_history = [Vector(**v) for v in data.get('vector_history', [])]
+self.vector_history=[Vector(**v) for v in data.get('vector_history', [])]
 
             # Load performance data
-self.matrix_performance = data.get('matrix_performance', {})
-            self.path_performance = data.get('path_performance', {})
+self.matrix_performance=data.get('matrix_performance', {})
+            self.path_performance=data.get('path_performance', {})
 
             # Load response curves
-self.hash_response_curves = data.get('hash_response_curves', {})
-            self.volume_response_curves = data.get('volume_response_curves', {})
+self.hash_response_curves=data.get('hash_response_curves', {})
+            self.volume_response_curves=data.get('volume_response_curves', {})
 
             # Rebuild successful/failed vectors lists
-self.successful_vectors = [v for v in self.vector_history if v.success]
-self.failed_vectors = [v for v in self.vector_history if not v.success]
+self.successful_vectors=[v for v in self.vector_history if v.success]
+self.failed_vectors=[v for v in self.vector_history if not v.success]
 
         except FileNotFoundError:
 safe_print(f"Learning data file {filepath} not found. Starting with empty data.")
@@ -569,7 +579,7 @@ safe_print(f"Error loading learning data: {e}")
 
 
 # Global vector validator instance
-vector_validator = VectorValidator()
+vector_validator=VectorValidator()
 
 
 def get_vector_validator() -> VectorValidator:
@@ -585,12 +595,12 @@ if __name__ == "__main__":
     pass
     pass
     # Test the vector validator
-validator = VectorValidator()
+validator=VectorValidator()
 
 safe_print("=== Schwabot Vector Validator Test ===")
 
     # Test vector data
-test_vector_data = {
+test_vector_data={
 'vector_id': 'test_vec_001',
 'matrix_id': 'SFS8-A5',
 'tick_id': 12345,
@@ -607,7 +617,7 @@ test_vector_data = {
 }
 
     # Validate vector
-result = validator.validate_vector(test_vector_data)
+result=validator.validate_vector(test_vector_data)
 
 safe_print(f"Vector ID: {test_vector_data['vector_id']}")
     safe_print(f"Valid: {result.is_valid}")
@@ -617,7 +627,7 @@ safe_print(f"Vector ID: {test_vector_data['vector_id']}")
     safe_print(f"Reinforcement Notes: {result.reinforcement_notes}")
 
     # Get performance summary
-summary = validator.get_performance_summary()
+summary=validator.get_performance_summary()
     safe_print("\nPerformance Summary:")
     safe_print(f"Total Vectors: {summary['total_vectors']}")
     safe_print(f"Success Rate: {summary['overall_success_rate']:.2%}")

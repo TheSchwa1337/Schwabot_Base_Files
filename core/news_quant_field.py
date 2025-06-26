@@ -28,15 +28,14 @@ __all__: list[str] = []
 "news_spectral_field",
 ]
 
-# ---------------------------------------------------------------------------
-# Core quantization
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Core quantization
+    # ---------------------------------------------------------------------------
 
 
-def quantize_news(
+    def quantize_news(
 
-
-    weights: Sequence[float],
+weights: Sequence[float],
 news_values: Sequence[Sequence[float]],
 ) -> np.ndarray:  # noqa: D401
 """Return Q_news(t) = Σ_i W_i·N_i(t) weighted news quantization.
@@ -72,8 +71,7 @@ length = len(news_arrays[0])
 
 def news_gradient(
 
-
-    q_news: np.ndarray,
+q_news: np.ndarray,
 *,
 dx: float = 1.0,
 dt: float = 1.0,
@@ -105,8 +103,7 @@ spatial_grad = np.zeros_like(grad_q)
 
 def news_psi(
 
-
-    spatial_grad: np.ndarray,
+spatial_grad: np.ndarray,
 temporal_grad: np.ndarray,
 sigma: float,
 ) -> np.ndarray:  # noqa: D401

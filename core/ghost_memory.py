@@ -28,18 +28,17 @@ __all__: list[str] = []
 "last_profitable_hash",
 ]
 
-_DEFAULT_CAPACITY: Final = 1000
+    _DEFAULT_CAPACITY: Final = 1000
 
 
-class GhostMemory:
+    class GhostMemory:
 
 
     """Ring-buffer store of profitable trade hashes."""
 
-def __init__(
+    def __init__(
 
-
-        self, capacity: int = _DEFAULT_CAPACITY
+self, capacity: int = _DEFAULT_CAPACITY
 ) -> None:  # noqa: D401
 """TODO: document __init__."""
 self._buf: Deque[str] = deque(maxlen=capacity)
@@ -66,8 +65,8 @@ hash_hex
 def last(self) -> str | None:  # noqa: D401
 
 
-        """Return the most recent stored hash or ``None`` if empty."""
-        return self._buf[-1] if self._buf else None
+    """Return the most recent stored hash or ``None`` if empty."""
+    return self._buf[-1] if self._buf else None
 
 def all(self) -> List[str]:
 

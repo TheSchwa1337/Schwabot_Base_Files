@@ -43,8 +43,9 @@ logger = logging.getLogger(__name__)
 
 class VolumePressureType(Enum):
 
-
     """Volume pressure types."""
+
+
 NORMAL = "normal"
 SPIKE = "spike"
 DROP = "drop"
@@ -54,8 +55,9 @@ COLLAPSE = "collapse"
 
 class VolumeConfidenceLevel(Enum):
 
-
     """Volume confidence levels."""
+
+
 LOW = "low"
 MEDIUM = "medium"
 HIGH = "high"
@@ -65,8 +67,9 @@ CRITICAL = "critical"
 @dataclass
 class VolumeShift:
 
-
     """Represents a volume shift event."""
+
+
 timestamp: float
 volume_before: float
 volume_after: float
@@ -80,8 +83,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class PriceDelta:
 
-
     """Represents a price delta event."""
+
+
 timestamp: float
 price_before: float
 price_after: float
@@ -95,8 +99,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class VolumeConfidence:
 
-
     """Represents volume confidence calculation."""
+
+
 timestamp: float
 confidence_score: float
 volume_sensitivity: float
@@ -110,8 +115,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class VolumeMatch:
 
-
     """Represents a volume-price match."""
+
+
 timestamp: float
 volume_shift: VolumeShift
 price_delta: PriceDelta
@@ -123,15 +129,16 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 class VolumeTickRouter:
 
-
     """Core volume tick router with dynamic pressure logic."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
 
+def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     pass
     pass
         """Initialize the volume tick router."""
+
+
 self.config = config or self._default_config()
 
         # Volume tracking
@@ -154,10 +161,12 @@ self.volume_sensitivity = self.config.get('volume_sensitivity', 0.8)
 
 logger.info("📊 Volume Tick Router initialized")
 
+
 def process_volume_event(self, volume_data: Dict[str, Any],]
 
-
                            price_data: Optional[Dict[str, Any]] = None,
+
+
 ai_feedback: Optional[Dict[str, Any]] = None) -> VolumeConfidence:
 """Process volume event and calculate confidence.
 

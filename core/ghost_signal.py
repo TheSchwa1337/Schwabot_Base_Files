@@ -14,6 +14,7 @@ This module provides:
 - Integration with existing BTCVector and unified math systems
 """
 
+from core.unified_math_system import unified_math
 import numpy as np
 import hashlib
 import time
@@ -36,48 +37,57 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}"), safe_math
+
+
 except ImportError:
     pass
     pass
     # Fallback for CLI compatibility with proper Unicode handling
-def safe_print(*args, **kwargs):
 
+
+def safe_print(*args, **kwargs):
 
     pass
     pass
@@ -85,6 +95,8 @@ def safe_print(*args, **kwargs):
         try:
             print(*args, **kwargs)
         except UnicodeEncodeError:
+
+
             # Fallback to ASCII-safe output
 safe_args = []
             for arg in args:
@@ -94,8 +106,8 @@ safe_args = []
 safe_args.append(arg)
             print(*safe_args, **kwargs)
 
-def info(*args, **kwargs):
 
+def info(*args, **kwargs):
 
     pass
     pass
@@ -103,6 +115,8 @@ def info(*args, **kwargs):
         try:
             print("[INFO]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -111,8 +125,8 @@ safe_args = []
 safe_args.append(arg)
             print("[INFO]", *safe_args, **kwargs)
 
-def warn(*args, **kwargs):
 
+def warn(*args, **kwargs):
 
     pass
     pass
@@ -120,6 +134,8 @@ def warn(*args, **kwargs):
         try:
             print("[WARN]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -128,8 +144,8 @@ safe_args = []
 safe_args.append(arg)
             print("[WARN]", *safe_args, **kwargs)
 
-def error(*args, **kwargs):
 
+def error(*args, **kwargs):
 
     pass
     pass
@@ -137,6 +153,8 @@ def error(*args, **kwargs):
         try:
             print("[ERROR]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -145,8 +163,8 @@ safe_args = []
 safe_args.append(arg)
             print("[ERROR]", *safe_args, **kwargs)
 
-def success(*args, **kwargs):
 
+def success(*args, **kwargs):
 
     pass
     pass
@@ -154,6 +172,8 @@ def success(*args, **kwargs):
         try:
             print("[SUCCESS]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -162,8 +182,8 @@ safe_args = []
 safe_args.append(arg)
             print("[SUCCESS]", *safe_args, **kwargs)
 
-def debug(*args, **kwargs):
 
+def debug(*args, **kwargs):
 
     pass
     pass
@@ -171,6 +191,8 @@ def debug(*args, **kwargs):
         try:
             print("[DEBUG]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -179,8 +201,8 @@ safe_args = []
 safe_args.append(arg)
             print("[DEBUG]", *safe_args, **kwargs)
 
-def safe_math(*args, **kwargs):
 
+def safe_math(*args, **kwargs):
 
     pass
     pass
@@ -188,6 +210,8 @@ def safe_math(*args, **kwargs):
         try:
             print("[MATH]", *args, **kwargs)
         except UnicodeEncodeError:
+
+
 safe_args = []
             for arg in args:
                 if isinstance(arg, str):
@@ -197,64 +221,64 @@ safe_args.append(arg)
             print("[MATH]", *safe_args, **kwargs)
 
 try:
-from core.unified_math_system import unified_math
 except ImportError:
     pass
     pass
     # Fallback math system with proper type annotations
-class FallbackMath:
 
+
+class FallbackMath:
 
         """Fallback math system for when unified_math_system is unavailable."""
 
+
 @staticmethod
 def mean(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate mean of data."""
             return float(np.mean(data))
 
+
 @staticmethod
 def std(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate standard deviation of data."""
             return float(np.std(data))
 
+
 @staticmethod
 def min(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate minimum of data."""
             return float(np.min(data))
 
+
 @staticmethod
 def max(data: List[float]) -> float:
-
 
     pass
     pass
             """Calculate maximum of data."""
             return float(np.max(data))
 
+
 @staticmethod
 def abs(value: float) -> float:
-
 
     pass
     pass
             """Calculate absolute value."""
             return float(np.abs(value))
 
+
 @staticmethod
 def correlation(data1: List[float], data2: List[float]) -> float:
-
 
     pass
     pass
@@ -263,23 +287,24 @@ def correlation(data1: List[float], data2: List[float]) -> float:
                 return float(np.corrcoef(data1, data2)[0, 1])
             return 0.0
 
+
 @staticmethod
 def sqrt(value: float) -> float:
-
 
     pass
     pass
             """Calculate square root."""
             return float(np.sqrt(value))
 
+
 @staticmethod
 def log(value: float) -> float:
-
 
     pass
     pass
             """Calculate natural logarithm."""
             return float(np.log(value))
+
 
 unified_math = FallbackMath()
 
@@ -288,10 +313,12 @@ HashTriggerLevel = Literal["low", "medium", "high", "critical"]
 PhaseState = Literal["dormant", "awakening", "active", "resonant", "decaying"]
 DriftDirection = Literal["positive", "negative", "neutral", "oscillating"]
 
+
 class SignalStrength(Enum):
 
-
     """Signal strength levels for ghost signals."""
+
+
 WEAK = 0.1
 MODERATE = 0.3
 STRONG = 0.6
@@ -301,7 +328,6 @@ CRITICAL = 1.0
 
 @dataclass
 class GhostSignal:
-
 
     """
 Comprehensive ghost signal with multi-factor decision logic.
@@ -343,6 +369,7 @@ risk_level: str
     # Metadata
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @classmethod
 def from_btc_vector(
 
@@ -353,6 +380,8 @@ entropy: float,
 timestamp: Optional[float] = None,
 previous_signal: Optional['GhostSignal'] = None
 ) -> 'GhostSignal':
+
+
 """
 Create a GhostSignal from a BTCVector with enhanced logic.
 
@@ -391,10 +420,10 @@ cycle_position = cls._calculate_cycle_position(timestamp)
 suggested_pathway = cls._determine_pathway(
             hash_trigger, phase_state, signal_strength, drift_direction, resonance_score
 
-confidence_threshold = cls._calculate_confidence_threshold(
+confidence_threshold=cls._calculate_confidence_threshold(
             signal_strength, hash_confidence, resonance_score
 
-risk_level = cls._determine_risk_level(volatility, entropy, drift_magnitude)
+risk_level=cls._determine_risk_level(volatility, entropy, drift_magnitude)
 
         return cls(
             price=price,
@@ -418,7 +447,7 @@ confidence_threshold=confidence_threshold,
 risk_level=risk_level
 
 
-@staticmethod
+@ staticmethod
 def _calculate_phase_state(entropy: float, volatility: float, momentum: float) -> PhaseState:
 
 
@@ -445,7 +474,7 @@ def _calculate_phase_state(entropy: float, volatility: float, momentum: float) -
         else:
             return "dormant"
 
-@staticmethod
+@ staticmethod
 def _calculate_signal_strength(volatility: float, momentum: float, entropy: float) -> SignalStrength:
 
 
@@ -453,11 +482,11 @@ def _calculate_signal_strength(volatility: float, momentum: float, entropy: floa
     pass
         """Calculate signal strength based on market conditions."""
         # Base strength from volatility and momentum
-base_strength = (volatility * 10) + (abs(momentum) * 100)
+base_strength=(volatility * 10) + (abs(momentum) * 100)
 
         # Adjust for entropy (lower entropy = stronger signal)
-        entropy_factor = 1.0 - entropy
-adjusted_strength = base_strength * entropy_factor
+        entropy_factor=1.0 - entropy
+adjusted_strength=base_strength * entropy_factor
 
         # Map to signal strength levels
         if adjusted_strength < 0.1:
@@ -471,7 +500,7 @@ adjusted_strength = base_strength * entropy_factor
         else:
             return SignalStrength.CRITICAL
 
-@staticmethod
+@ staticmethod
 def _calculate_drift(
 
 
@@ -483,14 +512,14 @@ timestamp: float
         if previous_signal is None:
             return "neutral", 0.0
 
-price_change = current_price - previous_signal.price
-time_change = timestamp - previous_signal.timestamp
+price_change=current_price - previous_signal.price
+time_change=timestamp - previous_signal.timestamp
 
         if time_change == 0:
             return "neutral", 0.0
 
-drift_rate = price_change / time_change
-drift_magnitude = abs(drift_rate)
+drift_rate=price_change / time_change
+drift_magnitude=abs(drift_rate)
 
         # Determine direction
         if drift_magnitude < 0.0001:
@@ -500,7 +529,7 @@ drift_magnitude = abs(drift_rate)
         else:
             return "negative", drift_magnitude
 
-@staticmethod
+@ staticmethod
 def _calculate_resonance_score(entropy: float, volatility: float, momentum: float) -> float:
 
 
@@ -508,15 +537,15 @@ def _calculate_resonance_score(entropy: float, volatility: float, momentum: floa
     pass
         """Calculate phase resonance score."""
         # Resonance is high when entropy is low and volatility/momentum are balanced
-entropy_factor = 1.0 - entropy
-volatility_factor = min(volatility * 20, 1.0)  # Normalize volatility
-        momentum_factor = min(abs(momentum) * 100, 1.0)  # Normalize momentum
+entropy_factor=1.0 - entropy
+volatility_factor=min(volatility * 20, 1.0)  # Normalize volatility
+        momentum_factor=min(abs(momentum) * 100, 1.0)  # Normalize momentum
 
         # Resonance formula: low entropy + balanced volatility/momentum
-resonance = entropy_factor * (volatility_factor + momentum_factor) / 2.0
+resonance=entropy_factor * (volatility_factor + momentum_factor) / 2.0
         return min(resonance, 1.0)
 
-@staticmethod
+@ staticmethod
 def _calculate_hash_confidence(hash_trigger: str, volatility: float) -> float:
 
 
@@ -524,16 +553,16 @@ def _calculate_hash_confidence(hash_trigger: str, volatility: float) -> float:
     pass
         """Calculate confidence in the hash trigger based on market conditions."""
         # Longer hash triggers are more confident
-hash_length_factor = min(len(hash_trigger) / 6.0, 1.0)
+hash_length_factor=min(len(hash_trigger) / 6.0, 1.0)
 
         # Lower volatility increases confidence
-volatility_factor = 1.0 - min(volatility * 10, 1.0)
+volatility_factor=1.0 - min(volatility * 10, 1.0)
 
         # Combined confidence
-confidence = (hash_length_factor + volatility_factor) / 2.0
+confidence=(hash_length_factor + volatility_factor) / 2.0
         return min(confidence, 1.0)
 
-@staticmethod
+@ staticmethod
 def _calculate_cycle_position(timestamp: float) -> float:
 
 
@@ -541,11 +570,11 @@ def _calculate_cycle_position(timestamp: float) -> float:
     pass
         """Calculate position within the current cycle (0.0 to 1.0)."""
         # Use a 24-hour cycle for demonstration
-cycle_length = 24 * 60 * 60  # 24 hours in seconds
-cycle_position = (timestamp % cycle_length) / cycle_length
+cycle_length=24 * 60 * 60  # 24 hours in seconds
+cycle_position=(timestamp % cycle_length) / cycle_length
         return cycle_position
 
-@staticmethod
+@ staticmethod
 def _calculate_time_delta(previous_signal: Optional['GhostSignal'], timestamp: float) -> float:
 
 
@@ -556,7 +585,7 @@ def _calculate_time_delta(previous_signal: Optional['GhostSignal'], timestamp: f
             return 0.0
         return timestamp - previous_signal.timestamp
 
-@staticmethod
+@ staticmethod
 def _calculate_frequency_score(hash_trigger: str, previous_signal: Optional['GhostSignal']) -> float:
 
 
@@ -576,7 +605,7 @@ def _calculate_frequency_score(hash_trigger: str, previous_signal: Optional['Gho
         else:
             return 0.0
 
-@staticmethod
+@ staticmethod
 def _determine_pathway(
 
 
@@ -611,7 +640,7 @@ resonance_score: float
         else:
             return "monitor_ghost"
 
-@staticmethod
+@ staticmethod
 def _calculate_confidence_threshold(
 
 
@@ -621,14 +650,14 @@ resonance_score: float
 ) -> float:
 """Calculate the confidence threshold for this signal."""
         # Weighted average of factors
-threshold = (
+threshold=(
             signal_strength.value * 0.4 +
 hash_confidence * 0.3 +
 resonance_score * 0.3
 
         return min(threshold, 1.0)
 
-@staticmethod
+@ staticmethod
 def _determine_risk_level(volatility: float, entropy: float, drift_magnitude: float) -> str:
 
 
@@ -714,15 +743,15 @@ This class provides methods for creating ghost signals from various
     data sources and managing signal history for drift calculations.
 """
 
-def __init__(self, max_history: int = 1000) -> None:
+def __init__(self, max_history: int=1000) -> None:
 
 
     pass
     pass
         """Initialize the ghost signal processor."""
-self.signal_history: List[GhostSignal] = []
-self.max_history = max_history
-self.last_signal: Optional[GhostSignal] = None
+self.signal_history: List[GhostSignal]=[]
+self.max_history=max_history
+self.last_signal: Optional[GhostSignal]=None
 
 info("Ghost Signal Processor initialized")
 
@@ -732,10 +761,10 @@ def create_signal(
         self,
 btc_vector: Any,  # BTCVector type
 entropy: float,
-timestamp: Optional[float] = None
+timestamp: Optional[float]=None
 ) -> GhostSignal:
 """Create a new ghost signal from BTCVector data."""
-signal = GhostSignal.from_btc_vector(
+signal=GhostSignal.from_btc_vector(
             btc_vector=btc_vector,
 entropy=entropy,
 timestamp=timestamp,
@@ -744,11 +773,11 @@ previous_signal=self.last_signal
 
         # Update history
 self.signal_history.append(signal)
-        self.last_signal = signal
+        self.last_signal=signal
 
         # Maintain history size
         if len(self.signal_history) > self.max_history:
-            self.signal_history = self.signal_history[-self.max_history:]
+            self.signal_history=self.signal_history[-self.max_history:]
 
         return signal
 
@@ -761,25 +790,25 @@ def get_signal_statistics(self) -> Dict[str, Any]:
         if not self.signal_history:
             return {"total_signals": 0}
 
-total_signals = len(self.signal_history)
-        phase_counts: Dict[str, int] = {}
-pathway_counts: Dict[str, int] = {}
-risk_counts: Dict[str, int] = {}
+total_signals=len(self.signal_history)
+        phase_counts: Dict[str, int]={}
+pathway_counts: Dict[str, int]={}
+risk_counts: Dict[str, int]={}
 
         for signal in self.signal_history:
             # Count phase states
-phase_counts[signal.phase_state] = phase_counts.get(signal.phase_state, 0) + 1
+phase_counts[signal.phase_state]=phase_counts.get(signal.phase_state, 0) + 1
 
             # Count pathways
-pathway_counts[signal.suggested_pathway] = pathway_counts.get(signal.suggested_pathway, 0) + 1
+pathway_counts[signal.suggested_pathway]=pathway_counts.get(signal.suggested_pathway, 0) + 1
 
             # Count risk levels
-risk_counts[signal.risk_level] = risk_counts.get(signal.risk_level, 0) + 1
+risk_counts[signal.risk_level]=risk_counts.get(signal.risk_level, 0) + 1
 
         # Calculate averages
-avg_resonance = unified_math.mean([s.resonance_score for s in self.signal_history])
-        avg_confidence = unified_math.mean([s.confidence_threshold for s in self.signal_history])
-        avg_entropy = unified_math.mean([s.entropy for s in self.signal_history])
+avg_resonance=unified_math.mean([s.resonance_score for s in self.signal_history])
+        avg_confidence=unified_math.mean([s.confidence_threshold for s in self.signal_history])
+        avg_entropy=unified_math.mean([s.entropy for s in self.signal_history])
 
         return {
 "total_signals": total_signals,
@@ -791,7 +820,7 @@ avg_resonance = unified_math.mean([s.resonance_score for s in self.signal_histor
 "average_entropy": avg_entropy
 }
 
-def get_recent_signals(self, count: int = 10) -> List[GhostSignal]:
+def get_recent_signals(self, count: int=10) -> List[GhostSignal]:
 
 
     pass
@@ -806,7 +835,7 @@ def clear_history(self) -> None:
     pass
         """Clear signal history."""
 self.signal_history.clear()
-        self.last_signal = None
+        self.last_signal=None
 info("Ghost signal history cleared")
 
 
@@ -831,24 +860,24 @@ def __init__(self) -> None:
 
     pass
     pass
-            self.price = 50000.0
-self.volatility = 0.025
-self.momentum = 0.003
-self.mean_price = 50000.0
-self.hash_trigger = "a1b2c3"
+            self.price=50000.0
+self.volatility=0.025
+self.momentum=0.003
+self.mean_price=50000.0
+self.hash_trigger="a1b2c3"
 
     # Initialize processor
-processor = GhostSignalProcessor()
+processor=GhostSignalProcessor()
 
     # Create test signals
-mock_vector = MockBTCVector()
+mock_vector=MockBTCVector()
 
     for i in range(5):
         # Vary entropy for different phase states
-entropy = 0.1 + (i * 0.2)
-        timestamp = time.time() + i
+entropy=0.1 + (i * 0.2)
+        timestamp=time.time() + i
 
-signal = processor.create_signal(
+signal=processor.create_signal(
             btc_vector=mock_vector,
 entropy=entropy,
 timestamp=timestamp
@@ -862,7 +891,7 @@ timestamp=timestamp
         print()
 
     # Get statistics
-stats = processor.get_signal_statistics()
+stats=processor.get_signal_statistics()
     print("Statistics:")
     print(f"  Total signals: {stats['total_signals']}")
     print(f"  Phase distribution: {stats['phase_distribution']}")

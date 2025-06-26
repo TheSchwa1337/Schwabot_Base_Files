@@ -1,50 +1,4 @@
-# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
+# -*- coding: utf-8 -*-
 # #!/usr/bin/env python3
 """Base exchange API implementation.
 
@@ -52,336 +6,324 @@ This module provides the base ExchangeAPI class that all exchange-specific
 implementations inherit from.
 """
 
-from abc import ABC
-from abc import abstractmethod
+from __future__ import annotations
+
 import logging
 import time
+from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from ..trading_models.containers import Balance
-from ..trading_models.containers import ExchangeConfig
-from ..trading_models.containers import MarketData
-from ..trading_models.containers import OrderRequest
-from ..trading_models.containers import OrderResponse
-from ..trading_models.enums import DataType
-from ..utils.cli_handler import CLIHandler
-from ..utils.cli_handler import safe_log
+# Import safe print for Windows compatibility
+try:
+    from ..utils.cli_handler import safe_log, CLIHandler
+    from ..trading_models.enums import DataType
+    from ..trading_models.containers import (
+        OrderResponse, OrderRequest, MarketData, 
+        ExchangeConfig, Balance
+    )
+    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    # Fallback functions if imports fail
+    def safe_print(message):
+        print(message)
 
+    def info(message):
+        print(f"[INFO] {message}")
+
+    def warn(message):
+        print(f"[WARN] {message}")
+
+    def error(message):
+        print(f"[ERROR] {message}")
+
+    def success(message):
+        print(f"[SUCCESS] {message}")
+
+    def debug(message):
+        print(f"[DEBUG] {message}")
+
+    # Fallback classes
+    class CLIHandler:
+        def safe_print(self, message, force_ascii=False):
+            print(message)
+    class DataType:
+        pass    class OrderResponse:
+        pass    class OrderRequest:
+        pass    class MarketData:
+        pass    class ExchangeConfig:
+        pass    class Balance:
+                        pass
 logger = logging.getLogger(__name__)
 
 
 class ExchangeAPI(ABC):
-
-
     """Base exchange API class."""
 
-def __init__(self: "ExchangeAPI", config: ExchangeConfig) -> None:
-
-
-    pass
-    pass
+    def __init__(self: "ExchangeAPI", config: ExchangeConfig) -> None:
         """Initialize exchange API.
 
-Args:
-config: Exchange configuration.
-"""
-self.config = config
-self.session = self._create_session()
+        Args:
+            config: Exchange configuration.
+        """
+        self.config = config
+        self.session = self._create_session()
         self.rate_limiter = None  # Will be set by subclasses
 
         # Initialize CLI compatibility
-self.cli_handler = CLIHandler()
+        self.cli_handler = CLIHandler()
 
-def _create_session(self: "ExchangeAPI") -> requests.Session:
-
-
-    pass
-    pass
+    def _create_session(self: "ExchangeAPI") -> requests.Session:
         """Create HTTP session with retry logic.
 
-Returns:
-Configured requests session.
-"""
-session = requests.Session()
+        Returns:
+            Configured requests session.
+        """
+        session = requests.Session()
 
         # Configure retry strategy
-retry_strategy = Retry(
+        retry_strategy = Retry(
             total=self.config.retry_attempts,
-backoff_factor=self.config.retry_delay,
-status_forcelist=[429, 500, 502, 503, 504],
+            backoff_factor=self.config.retry_delay,
+            status_forcelist=[429, 500, 502, 503, 504],
+        )
 
-
-adapter = HTTPAdapter(max_retries=retry_strategy)
+        adapter = HTTPAdapter(max_retries=retry_strategy)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
 
         return session
 
-def safe_safe_print(
-
-
+    def safe_safe_print(
         self: "ExchangeAPI", message: str, force_ascii: Optional[bool] = None
-) -> None:
-"""Safe print with CLI compatibility.
+    ) -> None:
+        """Safe print with CLI compatibility.
 
-Args:
-message: Message to print.
-force_ascii: Whether to force ASCII conversion.
-"""
+        Args:
+            message: Message to print.
+            force_ascii: Whether to force ASCII conversion.
+        """
         if force_ascii is None:
-force_ascii = getattr(self.config, "force_ascii_output", False)
+            force_ascii = getattr(self.config, "force_ascii_output", False)
 
-self.cli_handler.safe_print(message, force_ascii)
+                self.cli_handler.safe_print(message, force_ascii)
 
-def safe_log(
-
-
+    def safe_log(
         self: "ExchangeAPI", level: str, message: str, context: str = ""
-) -> bool:
-"""Safe logging with CLI compatibility.
+    ) -> bool:
+        """Safe logging with CLI compatibility.
 
-Args:
-level: Log level.
-message: Log message.
-context: Additional context.
+        Args:
+            level: Log level.
+            message: Log message.
+            context: Additional context.
 
-Returns:
-True if logging was successful.
-"""
+        Returns:
+            True if logging was successful.
+        """
         return safe_log(logger, level, message, context)
 
-def _make_request(
-
-
+    def _make_request(
         self: "ExchangeAPI",
-method: str,
-endpoint: str,
-params: Optional[Dict[str, Any]] = None,
-data: Optional[Dict[str, Any]] = None,
-headers: Optional[Dict[str, str]] = None,
-signed: bool = False,
-) -> Dict[str, Any]:
-"""Make HTTP request to exchange API.
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        data: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
+        signed: bool = False,
+    ) -> Dict[str, Any]:
+        """Make HTTP request to exchange API.
 
-Args:
-method: HTTP method.
-endpoint: API endpoint.
-params: Query parameters.
-data: Request data.
-headers: Request headers.
-signed: Whether request needs signature.
+        Args:
+            method: HTTP method.
+            endpoint: API endpoint.
+            params: Query parameters.
+            data: Request data.
+            headers: Request headers.
+            signed: Whether request needs signature.
 
-Returns:
-API response data.
+        Returns:
+            API response data.
 
-Raises:
-Exception: If request fails.
-"""
-url = f"{self.config.base_url}{endpoint}"
+        Raises:
+            Exception: If request fails.
+        """
+        url = f"{self.config.base_url}{endpoint}"
 
         # Prepare headers
         if headers is None:
-headers = {}
+            headers = {}
 
         # Add signature if required
         if signed:
-headers = self._sign_request(method, endpoint, params, data, headers)
+            headers.update(self._sign_request(method, endpoint, params, data))
 
         # Make request
         try:
-response = self.session.request(
+            response = self.session.request(
                 method=method,
-url=url,
-params=params,
-json=data,
-headers=headers,
-timeout=self.config.timeout,
-
-
-response.raise_for_status()
+                url=url,
+                params=params,
+                json=data,
+                headers=headers,
+                timeout=self.config.timeout,
+            )
+            response.raise_for_status()
             return response.json()
-
         except requests.exceptions.RequestException as e:
-error_msg = f"API request failed: {e}"
-self.safe_log("error", error_msg)
-            raise Exception(error_msg) from e
+            error(f"❌ API request failed: {e}")
+            raise
 
-@abstractmethod
-def _sign_request(
-
-
+    @abstractmethod
+    def _sign_request(
         self: "ExchangeAPI",
-method: str,
-endpoint: str,
-params: Optional[Dict[str, Any]] = None,
-data: Optional[Dict[str, Any]] = None,
-headers: Optional[Dict[str, str]] = None,
-) -> Dict[str, str]:
-"""Sign request for exchange-specific authentication.
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+        data: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, str]:
+        """Sign request for authentication.
 
-Args:
-method: HTTP method.
-endpoint: API endpoint.
-params: Query parameters.
-data: Request data.
-headers: Request headers.
+        Args:
+            method: HTTP method.
+            endpoint: API endpoint.
+            params: Query parameters.
+            data: Request data.
 
-Returns:
-Updated headers with signature.
-"""
+        Returns:
+            Headers with signature.
+        """
+                pass
 
-def get_ticker(self: "ExchangeAPI", symbol: str) -> MarketData:
+    @abstractmethod
+    def get_balance(self: "ExchangeAPI") -> List[Balance]:
+        """Get account balance.
 
+        Returns:
+            List of balances.
+        """
+        pass
 
-    pass
-    pass
-        """Get ticker data for symbol.
+    @abstractmethod
+    def get_market_data(self: "ExchangeAPI", symbol: str) -> MarketData:
+        """Get market data for symbol.
 
-Args:
-symbol: Trading symbol.
+        Args:
+            symbol: Trading symbol.
 
-Returns:
-Market data containing ticker information.
-"""
+        Returns:
+            Market data.
+        """
+            pass
+
+    @abstractmethod
+    def place_order(self: "ExchangeAPI", order: OrderRequest) -> OrderResponse:
+        """Place order.
+
+        Args:
+            order: Order request.
+
+        Returns:
+            Order response.
+        """
+            pass
+
+    @abstractmethod
+    def cancel_order(self: "ExchangeAPI", order_id: str) -> bool:
+        """Cancel order.
+
+        Args:
+            order_id: Order ID.
+
+        Returns:
+            True if cancelled successfully.
+        """
+            pass
+
+    @abstractmethod
+    def get_order_status(self: "ExchangeAPI", order_id: str) -> OrderResponse:
+        """Get order status.
+
+        Args:
+            order_id: Order ID.
+
+        Returns:
+            Order response.
+        """
+            pass
+
+    def _handle_rate_limit(self: "ExchangeAPI") -> None:
+        """Handle rate limiting."""
+        if self.rate_limiter:
+        self.rate_limiter.wait_if_needed()
+
+    def _validate_response(self: "ExchangeAPI", response: Dict[str, Any]) -> bool:
+        """Validate API response.
+
+        Args:
+            response: API response.
+
+        Returns:
+            True if response is valid.
+        """
+        # Basic validation - subclasses can override
+        return isinstance(response, dict) and "error" not in response
+
+    def _log_request(
+        self: "ExchangeAPI",
+        method: str,
+        endpoint: str,
+        params: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Log API request.
+
+        Args:
+            method: HTTP method.
+            endpoint: API endpoint.
+            params: Query parameters.
+        """
+        debug(f"🔗 {method} {endpoint}")
+        if params:
+            debug(f"   Params: {params}")
+
+    def _log_response(self: "ExchangeAPI", response: Dict[str, Any]) -> None:
+        """Log API response.
+
+        Args:
+            response: API response.
+        """
+        debug(f"📥 Response: {len(str(response))} chars")
+
+    def health_check(self: "ExchangeAPI") -> bool:
+        """Check API health.
+
+        Returns:
+            True if API is healthy.
+        """
         try:
-endpoint = f"/products/{symbol}/ticker"
-result = self._make_request("GET", endpoint)
-
-            return MarketData(
-                symbol=symbol,
-data_type=DataType.TICKER,
-timestamp=time.time(),
-                data=result,
-
-
+            # Simple health check - subclasses can override
+            response = self._make_request("GET", "/health")
+            return self._validate_response(response)
         except Exception as e:
-error_msg = f"Error getting ticker for {symbol}: {e}"
-self.safe_log("error", error_msg)
-            raise
+            error(f"❌ Health check failed: {e}")
+            return False
 
-def get_order_book(self: "ExchangeAPI", symbol: str, level: int = 2) -> MarketData:
+    def get_api_info(self: "ExchangeAPI") -> Dict[str, Any]:
+        """Get API information.
 
-
-    pass
-    pass
-        """Get order book for symbol.
-
-Args:
-symbol: Trading symbol.
-level: Order book depth level.
-
-Returns:
-Market data containing order book information.
-"""
-        try:
-endpoint = f"/products/{symbol}/book"
-params = {"level": level}
-result = self._make_request("GET", endpoint, params=params)
-
-            return MarketData(
-                symbol=symbol,
-data_type=DataType.ORDER_BOOK,
-timestamp=time.time(),
-                data=result,
+        Returns:
+            API information.
+        """
+        return {
+            "base_url": self.config.base_url,
+            "timeout": self.config.timeout,
+            "retry_attempts": self.config.retry_attempts,
+            "retry_delay": self.config.retry_delay,
+        }
 
 
-        except Exception as e:
-error_msg = f"Error getting order book for {symbol}: {e}"
-self.safe_log("error", error_msg)
-            raise
-
-def place_order(self: "ExchangeAPI", order_request: OrderRequest) -> OrderResponse:
-
-
-    pass
-    pass
-        """Place order on exchange.
-
-Args:
-order_request: Order request details.
-
-Returns:
-Order response with execution details.
-"""
-        try:
-            # Prepare order data
-order_data = {
-"product_id": order_request.symbol,
-"side": order_request.side.value,
-"type": order_request.order_type.value,
-"size": str(order_request.quantity),
-            }
-
-            if order_request.price:
-order_data["price"] = str(order_request.price)
-
-            if order_request.client_order_id:
-order_data["client_order_id"] = order_request.client_order_id
-
-            # Make API request
-endpoint = "/orders"
-result = self._make_request("POST", endpoint, data=order_data, signed=True)
-
-            # Create order response
-price = None
-            if result.get("price"):
-                price = float(result.get("price", 0))
-
-order_response = OrderResponse(
-                order_id=result.get("id", ""),
-                client_order_id=result.get("client_order_id"),
-                symbol=result.get("product_id", order_request.symbol),
-                side=order_request.side,
-order_type=order_request.order_type,
-quantity=float(result.get("size", order_request.quantity)),
-                price=price,
-status=result.get("status", "pending"),
-                filled_quantity=float(result.get("filled_size", 0)),
-                average_price=float(result.get("executed_value", 0)),
-                commission=float(result.get("fill_fees", 0)),
-                created_at=time.time(),
-                metadata=result,
-
-
-            return order_response
-
-        except Exception as e:
-error_msg = f"Error placing order: {e}"
-self.safe_log("error", error_msg)
-            raise
-
-def get_balances(self: "ExchangeAPI") -> List[Balance]:
-
-
-    pass
-    pass
-        """Get account balances.
-
-Returns:
-List of balance objects.
-"""
-        try:
-endpoint = "/accounts"
-result = self._make_request("GET", endpoint, signed=True)
-
-balances = []
-            for account in result:
-balance = Balance(
-                    currency=account.get("currency", ""),
-                    available=float(account.get("available", 0)),
-                    total=float(account.get("balance", 0)),
-                    locked=float(account.get("hold", 0)),
-                    timestamp=time.time(),
-
-balances.append(balance)
-
-            return balances
-
-        except Exception as e:
-error_msg = f"Error getting balances: {e}"
-self.safe_log("error", error_msg)
-            raise
+# Module exports
+__all__ = ["ExchangeAPI"]

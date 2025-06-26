@@ -13,6 +13,7 @@ real-time view of the system's state (market data, proposals, etc.).
 It is stateless and queries the `SystemStateOracle` for data.
 """
 
+import multiprocessing
 import asyncio
 import logging
 import time
@@ -32,8 +33,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SystemState:
 
-
     """A snapshot of the current state of the Schwabot system."""
+
+
 last_price_update: Dict[str, Any] = field(default_factory=dict)
     dlt_confirmations: List[Dict[str, Any]] = field(default_factory=list)
     trade_proposals: List[TradeProposal] = field(default_factory=list)
@@ -43,36 +45,42 @@ last_update_timestamp: float = 0.0
 
 class SystemStateOracle:
 
-
     """
 Maintains a real-time view of the system by listening to the FaultBus.
 This class is the single source of truth for the API server.
     """
-def __init__(self, fault_bus: FaultBus):
 
+
+def __init__(self, fault_bus: FaultBus):
 
     pass
     pass
         self.bus = fault_bus
+
+
 self.state = SystemState()
         self._start_time = time.time()
         logger.info("SystemStateOracle initialized.")
 
-def start_listening(self):
 
+def start_listening(self):
 
     pass
     pass
         """Subscribes to all relevant topics on the FaultBus."""
+
+
 self.bus.subscribe("new_market_price", self.handle_price_update)
         self.bus.subscribe("dlt_hash_confirmed", self.handle_dlt_confirmation)
         self.bus.subscribe("trade_proposal_ready", self.handle_trade_proposal)
         logger.info("SystemStateOracle is now listening to the FaultBus.")
 
+
 async def handle_price_update(self, **kwargs):
         """Handles new price data from the bus."""
 self.state.last_price_update = kwargs
 self._update_timestamp()
+
 
 async def handle_dlt_confirmation(self, **kwargs):
         """Handles new DLT hash confirmations."""
@@ -81,6 +89,7 @@ self.state.dlt_confirmations.insert(0, kwargs)
 self.state.dlt_confirmations = self.state.dlt_confirmations[:50]
 self._update_timestamp()
 
+
 async def handle_trade_proposal(self, proposal: TradeProposal):
         """Handles new trade proposals."""
 self.state.trade_proposals.insert(0, proposal)
@@ -88,12 +97,14 @@ self.state.trade_proposals.insert(0, proposal)
 self.state.trade_proposals = self.state.trade_proposals[:50]
 self._update_timestamp()
 
-def get_current_state(self) -> Dict[str, Any]:
 
+def get_current_state(self) -> Dict[str, Any]:
 
     pass
     pass
         """Returns the current system state as a serializable dictionary."""
+
+
 self.state.server_uptime_seconds = time.time() - self._start_time
         # Manually convert dataclass to dict for jsonify
         return {
@@ -104,8 +115,8 @@ self.state.server_uptime_seconds = time.time() - self._start_time
 "last_update_timestamp": self.state.last_update_timestamp,
 }
 
-def _update_timestamp(self):
 
+def _update_timestamp(self):
 
     pass
     pass
@@ -116,42 +127,46 @@ def _update_timestamp(self):
 
 class APIServer:
 
-
     """
 A stateless Flask-based server that exposes system state.
 """
-def __init__(self, oracle: SystemStateOracle, host: str, port: int):
 
+
+def __init__(self, oracle: SystemStateOracle, host: str, port: int):
 
     pass
     pass
         self.oracle = oracle
+
+
 self.host = host
 self.port = port
 self.app = Flask(__name__)
         self._setup_routes()
 
-def _setup_routes(self):
 
+def _setup_routes(self):
 
     pass
     pass
         """Configures the API endpoints."""
 
+
 @self.app.route("/api/status", methods=['GET'])
 def get_status():
-
 
     pass
     pass
             return jsonify(self.oracle.get_current_state())
 
-def run(self):
 
+def run(self):
 
     pass
     pass
         """Starts the Flask server."""
+
+
 logger.info(f"Starting Flask API server on http://{self.host}:{self.port}")
         # For production, a proper WSGI server like Gunicorn should be used.
 self.app.run(host=self.host, port=self.port, debug=False)
@@ -177,16 +192,16 @@ logger.info("Dummy data published.")
 
 def run_api_server_process(oracle: SystemStateOracle, host: str, port: int):
 
-
     pass
     pass
     """Function to run the Flask server, suitable for running in a process."""
+
+
 api_server = APIServer(oracle, host=host, port=port)
     api_server.run()
 
 
 if __name__ == '__main__':
-import multiprocessing
 
 logging.basicConfig(level=logging.INFO)
 

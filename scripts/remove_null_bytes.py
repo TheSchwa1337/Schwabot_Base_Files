@@ -36,4 +36,4 @@ if __name__ == "__main__":
         for p in affected:
             print("  ", p)
     else:
-        print("No null bytes found.") 
+        print("No null bytes found.")

@@ -271,7 +271,7 @@ class StrategyLogic:
 
             # Trim signal history if needed
             if len(self.signal_history) > self.max_signals_history:
-                self.signal_history = self.signal_history[-self.max_signals_history :]
+                self.signal_history = self.signal_history[-self.max_signals_history:]
 
             return filtered_signals
 
@@ -317,7 +317,7 @@ class StrategyLogic:
             if len(prices) < strategy_config.lookback_period:
                 return signals
 
-            prices = np.array(prices[-strategy_config.lookback_period :])
+            prices = np.array(prices[-strategy_config.lookback_period:])
 
             # Calculate z-score
             mean_price = unified_math.unified_math.mean(prices)
@@ -386,7 +386,7 @@ class StrategyLogic:
             if len(prices) < strategy_config.lookback_period:
                 return signals
 
-            prices = np.array(prices[-strategy_config.lookback_period :])
+            prices = np.array(prices[-strategy_config.lookback_period:])
 
             # Calculate momentum indicators
             short_period = unified_math.min(20, len(prices) // 4)

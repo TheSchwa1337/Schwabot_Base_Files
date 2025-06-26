@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import glob
+import os
+import hashlib
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
+import json
+import time
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +22,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Demo Ledger State Injector - Schwabot UROS v1.0
@@ -64,24 +82,16 @@ Features:
 - Export state snapshots for verification
 """
 
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import hashlib
-import os
-import glob
 
 logger = logging.getLogger(__name__)
 
+
 class DemoScenario(Enum):
 
-
     """Demo trading scenarios."""
+
+
 CONSERVATIVE = "conservative"
 BALANCED = "balanced"
 AGGRESSIVE = "aggressive"
@@ -89,11 +99,13 @@ QUANTUM = "quantum"
 CRASH_TEST = "crash_test"
 BULL_RUN = "bull_run"
 
+
 @dataclass
 class TickData:
 
-
     """Historical tick data point."""
+
+
 timestamp: datetime
 asset: str
 price: float
@@ -107,11 +119,13 @@ volatility: float
 market_heat: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PortfolioSnapshot:
 
-
     """Portfolio state snapshot."""
+
+
 timestamp: datetime
 total_value: float
 cash: float
@@ -122,11 +136,13 @@ risk_metrics: Dict[str, float]
 scenario: DemoScenario
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class DemoLedgerState:
 
-
     """Complete demo ledger state."""
+
+
 scenario: DemoScenario
 start_timestamp: datetime
 end_timestamp: datetime
@@ -137,8 +153,8 @@ trade_history: List[Dict[str, Any]]
 performance_metrics: Dict[str, Any]
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class DemoLedgerInjector:
 
+class DemoLedgerInjector:
 
     """
 Demo ledger state injector for backtesting and simulation.
@@ -150,12 +166,13 @@ Mathematical Foundation:
     - Scenario Generation: scenario_params = f(market_conditions, risk_profile)
     """
 
-def __init__(self, config_path: str = "./config/demo_ledger_config.json"):
 
+def __init__(self, config_path: str = "./config/demo_ledger_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Demo state storage
 self.demo_states: Dict[str, DemoLedgerState] = {}
@@ -220,13 +237,14 @@ self._load_configuration()
         self._ensure_data_directories()
         logger.info("Demo Ledger Injector initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
         """Load demo ledger configuration."""
         try:
+
             # Default configuration
 config = {
 "data_paths": {
@@ -253,13 +271,15 @@ logger.info("Demo ledger configuration loaded")
         except Exception as e:
 logger.error(f"Error loading configuration: {e}")
 
-def _ensure_data_directories(self) -> None:
 
+def _ensure_data_directories(self) -> None:
 
     pass
     pass
         """Ensure data directories exist."""
         try:
+
+
 directories = [
 self.tick_data_path,
 self.portfolio_snapshots_path,
@@ -274,8 +294,8 @@ logger.info("Data directories ensured")
         except Exception as e:
 logger.error(f"Error ensuring data directories: {e}")
 
-def inject_demo_state(self, scenario_name: str = "balanced") -> bool:
 
+def inject_demo_state(self, scenario_name: str = "balanced") -> bool:
 
     pass
     pass
@@ -293,6 +313,7 @@ bool
 True if injection successful, False otherwise
 """
         try:
+
             # Convert scenario name to enum
 scenario = DemoScenario(scenario_name.lower())
             self.current_scenario = scenario

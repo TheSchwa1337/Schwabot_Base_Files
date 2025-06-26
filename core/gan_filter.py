@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from core.enhanced_windows_cli_compatibility import safe_log
+from core.enhanced_windows_cli_compatibility import \
+        EnhancedWindowsCliCompatibilityHandler as CLIHandler
+import torch.optim as optim
+import torch.nn as nn
+from torch.autograd import grad
+import torch
+import numpy.typing as npt
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING, Union
+import time
+import threading
+import logging
+from enum import Enum
+from dataclasses import dataclass
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +27,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 
@@ -86,23 +108,12 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-from dataclasses import dataclass
-from enum import Enum
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import threading
-import time
-from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING, Union
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
 
 # PyTorch imports with fallback handling
 try:
-import torch
-from torch.autograd import grad
-import torch.nn as nn
-import torch.optim as optim
 
 TORCH_AVAILABLE = True
 except ImportError:
@@ -111,23 +122,23 @@ except ImportError:
 TORCH_AVAILABLE = False
 
     # Create mock classes for type hints
+
+
 class nn:
 
-
         """TODO: document nn."""
-class Module:
 
+
+class Module:
 
             """TODO: document Module."""
             pass
+
 
 torch = None
 
 # Import Windows CLI compatibility handler
 try:
-from core.enhanced_windows_cli_compatibility import \
-        EnhancedWindowsCliCompatibilityHandler as CLIHandler
-from core.enhanced_windows_cli_compatibility import safe_log
 
 CLI_COMPATIBILITY_AVAILABLE = True
 except ImportError:
@@ -136,16 +147,18 @@ except ImportError:
 CLI_COMPATIBILITY_AVAILABLE = False
 
     # Fallback CLI handler
-class CLIHandler:
 
+
+class CLIHandler:
 
         @staticmethod
 def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
 
-
     pass
     pass
             """TODO: document safe_emoji_print."""
+
+
 emoji_mapping = {
 "✅": "[SUCCESS]",
 "❌": "[ERROR]",
@@ -195,8 +208,8 @@ logger = logging.getLogger(__name__)
 
 class GANMode(Enum):
 
-
     """GAN training mode enumeration."""
+
 
 VANILLA = "vanilla"  # Standard GAN with BCE loss
 WASSERSTEIN = "wasserstein"  # Wasserstein GAN
@@ -205,8 +218,8 @@ WASSERSTEIN_GP = "wasserstein_gp"  # Wasserstein GAN with Gradient Penalty
 
 class FilterMode(Enum):
 
-
     """Signal filtering mode enumeration."""
+
 
 THRESHOLD = "threshold"  # Simple threshold filtering
 CONFIDENCE = "confidence"  # Confidence-based filtering
@@ -217,8 +230,8 @@ ADAPTIVE = "adaptive"  # Adaptive threshold filtering
 @dataclass
 class GANConfig:
 
-
     """GAN configuration container."""
+
 
 noise_dim: int = 100
 signal_dim: int = 64
@@ -238,8 +251,8 @@ clip_value: float = 0.01  # For WGAN weight clipping
 @dataclass
 class FilterConfig:
 
-
     """Filter configuration container."""
+
 
 threshold: float = 0.5
 mode: FilterMode = FilterMode.THRESHOLD
@@ -252,8 +265,8 @@ min_samples: int = 10
 @dataclass
 class TrainingMetrics:
 
-
     """Training metrics container."""
+
 
 epoch: int = 0
 generator_loss: float = 0.0
@@ -268,7 +281,6 @@ total_time: float = 0.0
 
 class EntropyGenerator(nn.Module if TORCH_AVAILABLE else object):
 
-
     """
 
 Entropy Generator Neural Network
@@ -282,11 +294,14 @@ Architecture:
 - Output: Synthetic signal with tanh activation for bounded output
 """
 
+
 def __init__(
 
 
         self, noise_dim: int, output_dim: int, hidden_dim: int = 128
 ) -> None:
+
+
 """
 Initialize entropy generator
 
@@ -349,7 +364,7 @@ Generated signal tensor [batch_size, output_dim]
 def generate_batch(
 
 
-        self, batch_size: int, device: Optional[str] = None
+        self, batch_size: int, device: Optional[str]=None
 ) -> torch.Tensor:
 """
 Generate a batch of synthetic signals
@@ -362,9 +377,9 @@ Returns:
 Generated signals tensor
 """
         if device is None:
-device = next(self.parameters()).device
+device=next(self.parameters()).device
 
-noise = torch.randn(batch_size, self.noise_dim, device=device)
+noise=torch.randn(batch_size, self.noise_dim, device=device)
         return self.forward(noise)
 
 
@@ -383,7 +398,7 @@ Architecture:
 - Output: Probability score [0, 1] for real vs fake classification
 """
 
-def __init__(self, input_dim: int, hidden_dim: int = 128) -> None:
+def __init__(self, input_dim: int, hidden_dim: int=128) -> None:
 
 
     pass
@@ -398,11 +413,11 @@ hidden_dim: Hidden layer dimension
         if TORCH_AVAILABLE:
 super().__init__()
 
-self.input_dim = input_dim
-self.hidden_dim = hidden_dim
+self.input_dim=input_dim
+self.hidden_dim=hidden_dim
 
             # Discriminator network: x -> hidden -> probability
-self.model = nn.Sequential(
+self.model=nn.Sequential(
                 nn.Linear(input_dim, hidden_dim),
                 nn.LeakyReLU(0.2, inplace=True),
                 nn.Dropout(0.3),
@@ -474,35 +489,35 @@ config: GAN configuration
                 "PyTorch not available - cannot create EntropyGAN"
 
 
-self.config = config
-self.cli_handler = CLIHandler()
+self.config=config
+self.cli_handler=CLIHandler()
 
         # Initialize networks
-self.generator = EntropyGenerator(
+self.generator=EntropyGenerator(
             config.noise_dim, config.signal_dim, config.generator_hidden
 
-self.discriminator = EntropyDiscriminator(
+self.discriminator=EntropyDiscriminator(
             config.signal_dim, config.discriminator_hidden
 
 
         # Initialize optimizers
-self.optimizer_g = optim.Adam(
+self.optimizer_g=optim.Adam(
             self.generator.parameters(),
             lr=config.learning_rate,
 betas=(config.beta1, config.beta2),
 
-self.optimizer_d = optim.Adam(
+self.optimizer_d=optim.Adam(
             self.discriminator.parameters(),
             lr=config.learning_rate,
 betas=(config.beta1, config.beta2),
 
 
         # Loss functions
-self.bce_loss = nn.BCELoss()
+self.bce_loss=nn.BCELoss()
 
         # Training state
-self.training_metrics: List[TrainingMetrics] = []
-self.device = torch.device(
+self.training_metrics: List[TrainingMetrics]=[]
+self.device=torch.device(
             "cuda" if torch.cuda.is_available() else "cpu"
 
 
@@ -511,12 +526,12 @@ self.generator.to(self.device)
         self.discriminator.to(self.device)
 
         # Threading for training
-self.training_lock = threading.Lock()
-        self.is_training = False
+self.training_lock=threading.Lock()
+        self.is_training=False
 
 logger.info(f"EntropyGAN initialized with {config.mode.value} mode")
 
-def safe_print(self, message: str, force_ascii: bool = False) -> None:
+def safe_print(self, message: str, force_ascii: bool=False) -> None:
 
 
     pass
@@ -525,12 +540,12 @@ def safe_print(self, message: str, force_ascii: bool = False) -> None:
         if CLI_COMPATIBILITY_AVAILABLE:
 safe_print(message, force_ascii=force_ascii)
         else:
-safe_message = self.cli_handler.safe_emoji_print(
+safe_message=self.cli_handler.safe_emoji_print(
                 message, force_ascii=force_ascii
 
             print(safe_message)
 
-def safe_log(self, level: str, message: str, context: str = "") -> bool:
+def safe_log(self, level: str, message: str, context: str="") -> bool:
 
 
     pass
@@ -540,7 +555,7 @@ def safe_log(self, level: str, message: str, context: str = "") -> bool:
             return safe_log(logger, level, message, context)
         else:
             try:
-log_func = getattr(logger, level.lower(), logger.info)
+log_func=getattr(logger, level.lower(), logger.info)
                 log_func(message)
                 return True
             except Exception:
@@ -564,17 +579,17 @@ Shannon entropy value
 """
         try:
             # Convert to probability distribution
-signal_np = signal.detach().cpu().numpy().flatten()
+signal_np=signal.detach().cpu().numpy().flatten()
 
             # Create histogram
-hist, _ = np.histogram(signal_np, bins=50, density=True)
-            hist = hist + 1e-10  # Add small epsilon to avoid unified_math.log(0)
+hist, _=np.histogram(signal_np, bins=50, density=True)
+            hist=hist + 1e-10  # Add small epsilon to avoid unified_math.log(0)
 
             # Normalize to get probabilities
-prob = hist / np.sum(hist)
+prob=hist / np.sum(hist)
 
             # Compute entropy
-entropy = -np.sum(prob * np.log2(prob + 1e-10))
+entropy=-np.sum(prob * np.log2(prob + 1e-10))
 
             return float(entropy)
 
@@ -601,21 +616,21 @@ Returns:
 Gradient penalty loss
 """
         try:
-batch_size = real_data.size(0)
+batch_size=real_data.size(0)
 
             # Random interpolation factor
-epsilon = torch.rand(batch_size, 1, device=self.device)
-            epsilon = epsilon.expand_as(real_data)
+epsilon=torch.rand(batch_size, 1, device=self.device)
+            epsilon=epsilon.expand_as(real_data)
 
             # Interpolated samples
-interpolated = epsilon * real_data + (1 - epsilon) * fake_data
+interpolated=epsilon * real_data + (1 - epsilon) * fake_data
             interpolated.requires_grad_(True)
 
             # Discriminator output for interpolated samples
-d_interpolated = self.discriminator(interpolated)
+d_interpolated=self.discriminator(interpolated)
 
             # Compute gradients
-gradients = grad(
+gradients=grad(
                 outputs=d_interpolated,
 inputs=interpolated,
 grad_outputs=torch.ones_like(d_interpolated),
@@ -625,8 +640,8 @@ only_inputs=True,
 )[0]
 
             # Gradient penalty
-gradient_norm = gradients.view(batch_size, -1).norm(2, dim=1)
-            penalty = ((gradient_norm - 1) ** 2).mean()
+gradient_norm=gradients.view(batch_size, -1).norm(2, dim=1)
+            penalty=((gradient_norm - 1) ** 2).mean()
 
             return penalty
 
@@ -649,58 +664,58 @@ Returns:
 Training metrics for this step
 """
         try:
-batch_size = real_data.size(0)
-            metrics = TrainingMetrics()
-            step_start_time = time.time()
+batch_size=real_data.size(0)
+            metrics=TrainingMetrics()
+            step_start_time=time.time()
 
             # Generate fake data
-noise = torch.randn(
+noise=torch.randn(
                 batch_size, self.config.noise_dim, device=self.device
 
-fake_data = self.generator(noise)
+fake_data=self.generator(noise)
 
             # Train Discriminator
 self.optimizer_d.zero_grad()
 
             if self.config.mode == GANMode.VANILLA:
                 # Standard GAN with BCE loss
-real_labels = torch.ones(batch_size, 1, device=self.device)
-                fake_labels = torch.zeros(batch_size, 1, device=self.device)
+real_labels=torch.ones(batch_size, 1, device=self.device)
+                fake_labels=torch.zeros(batch_size, 1, device=self.device)
 
                 # Real data loss
-d_real = self.discriminator(real_data)
-                d_loss_real = self.bce_loss(d_real, real_labels)
+d_real=self.discriminator(real_data)
+                d_loss_real=self.bce_loss(d_real, real_labels)
 
                 # Fake data loss
-d_fake = self.discriminator(fake_data.detach())
-                d_loss_fake = self.bce_loss(d_fake, fake_labels)
+d_fake=self.discriminator(fake_data.detach())
+                d_loss_fake=self.bce_loss(d_fake, fake_labels)
 
                 # Total discriminator loss
-d_loss = d_loss_real + d_loss_fake
+d_loss=d_loss_real + d_loss_fake
 
                 # Accuracy metrics
-metrics.real_accuracy = (d_real > 0.5).float().mean().item()
-                metrics.fake_accuracy = (d_fake < 0.5).float().mean().item()
+metrics.real_accuracy=(d_real > 0.5).float().mean().item()
+                metrics.fake_accuracy=(d_fake < 0.5).float().mean().item()
 
             elif self.config.mode in [
 GANMode.WASSERSTEIN,
 GANMode.WASSERSTEIN_GP,
 ]:
                 # Wasserstein GAN loss
-d_real = self.discriminator(real_data)
-                d_fake = self.discriminator(fake_data.detach())
+d_real=self.discriminator(real_data)
+                d_fake=self.discriminator(fake_data.detach())
 
-d_loss = d_fake.mean() - d_real.mean()
+d_loss=d_fake.mean() - d_real.mean()
 
                 # Gradient penalty for WGAN-GP
                 if self.config.mode == GANMode.WASSERSTEIN_GP:
-gp = self.gradient_penalty(real_data, fake_data)
+gp=self.gradient_penalty(real_data, fake_data)
                     d_loss += self.config.gradient_penalty_lambda * gp
-metrics.gradient_penalty = gp.item()
+metrics.gradient_penalty=gp.item()
 
                 # Accuracy metrics (adapted for Wasserstein)
-                metrics.real_accuracy = (d_real > 0).float().mean().item()
-                metrics.fake_accuracy = (d_fake < 0).float().mean().item()
+                metrics.real_accuracy=(d_real > 0).float().mean().item()
+                metrics.fake_accuracy=(d_fake < 0).float().mean().item()
 
 d_loss.backward()
             self.optimizer_d.step()
@@ -712,39 +727,39 @@ d_loss.backward()
                         -self.config.clip_value, self.config.clip_value
 
 
-metrics.discriminator_loss = d_loss.item()
+metrics.discriminator_loss=d_loss.item()
 
             # Train Generator
 self.optimizer_g.zero_grad()
 
             # Generate new fake data for generator training
-noise = torch.randn(
+noise=torch.randn(
                 batch_size, self.config.noise_dim, device=self.device
 
-fake_data = self.generator(noise)
+fake_data=self.generator(noise)
 
             if self.config.mode == GANMode.VANILLA:
                 # Standard GAN generator loss
-d_fake = self.discriminator(fake_data)
-                g_loss = self.bce_loss(d_fake, torch.ones_like(d_fake))
+d_fake=self.discriminator(fake_data)
+                g_loss=self.bce_loss(d_fake, torch.ones_like(d_fake))
             else:
                 # Wasserstein generator loss
-d_fake = self.discriminator(fake_data)
-                g_loss = -d_fake.mean()
+d_fake=self.discriminator(fake_data)
+                g_loss=-d_fake.mean()
 
             # Entropy regularization
             if self.config.entropy_weight > 0:
-real_entropy = self.compute_entropy(real_data)
-                fake_entropy = self.compute_entropy(fake_data)
-                entropy_loss = unified_math.abs(real_entropy - fake_entropy)
+real_entropy=self.compute_entropy(real_data)
+                fake_entropy=self.compute_entropy(fake_data)
+                entropy_loss=unified_math.abs(real_entropy - fake_entropy)
                 g_loss += self.config.entropy_weight * entropy_loss
-metrics.entropy_difference = entropy_loss
+metrics.entropy_difference=entropy_loss
 
 g_loss.backward()
             self.optimizer_g.step()
 
-metrics.generator_loss = g_loss.item()
-            metrics.training_time = time.time() - step_start_time
+metrics.generator_loss=g_loss.item()
+            metrics.training_time=time.time() - step_start_time
 
             return metrics
 
@@ -757,9 +772,9 @@ def train_entropy_gan(
 
         self,
 real_data_fn: Callable[[int], torch.Tensor],
-epochs: Optional[int] = None,
-batch_size: Optional[int] = None,
-progress_callback: Optional[Callable[[TrainingMetrics], None]] = None,
+epochs: Optional[int]=None,
+batch_size: Optional[int]=None,
+progress_callback: Optional[Callable[[TrainingMetrics], None]]=None,
 ) -> List[TrainingMetrics]:
 """
 Train the Entropy GAN system
@@ -775,10 +790,10 @@ List of training metrics
 """
         try:
             with self.training_lock:
-self.is_training = True
+self.is_training=True
 
-epochs = epochs or self.config.epochs
-batch_size = batch_size or self.config.batch_size
+epochs=epochs or self.config.epochs
+batch_size=batch_size or self.config.batch_size
 
 self.safe_safe_print("🚀 Starting Entropy GAN training")
                 self.safe_safe_print(f"   Mode: {self.config.mode.value}")
@@ -786,23 +801,23 @@ self.safe_safe_print("🚀 Starting Entropy GAN training")
                 self.safe_safe_print(f"   Batch size: {batch_size}")
                 self.safe_safe_print(f"   Device: {self.device}")
 
-training_start_time = time.time()
-                metrics_history = []
+training_start_time=time.time()
+                metrics_history=[]
 
                 for epoch in range(epochs):
                     try:
                         # Get real data batch
-real_data = real_data_fn(batch_size)
+real_data=real_data_fn(batch_size)
                         if not isinstance(real_data, torch.Tensor):
-                            real_data = torch.tensor(
+                            real_data=torch.tensor(
                                 real_data, dtype=torch.float32
 
-real_data = real_data.to(self.device)
+real_data=real_data.to(self.device)
 
                         # Training step
-metrics = self.train_step(real_data)
-                        metrics.epoch = epoch
-metrics.total_time = time.time() - training_start_time
+metrics=self.train_step(real_data)
+                        metrics.epoch=epoch
+metrics.total_time=time.time() - training_start_time
 
 metrics_history.append(metrics)
                         self.training_metrics.append(metrics)
@@ -825,8 +840,8 @@ progress_callback(metrics)
 self.safe_log("error", f"Error in epoch {epoch}: {e}")
                         continue
 
-self.is_training = False
-total_time = time.time() - training_start_time
+self.is_training=False
+total_time=time.time() - training_start_time
 
 self.safe_safe_print(
                     f"🎉 Training completed in {total_time:.2f} seconds"
@@ -834,8 +849,8 @@ self.safe_safe_print(
                 return metrics_history
 
         except Exception as e:
-self.is_training = False
-error_msg = f"Error in GAN training: {e}"
+self.is_training=False
+error_msg=f"Error in GAN training: {e}"
 self.safe_log("error", error_msg)
             raise
 
@@ -862,21 +877,21 @@ Args:
 discriminator: Trained discriminator network
 config: Filter configuration
 """
-self.discriminator = discriminator
-self.config = config
-self.cli_handler = CLIHandler()
+self.discriminator=discriminator
+self.config=config
+self.cli_handler=CLIHandler()
 
         # Adaptive filtering state
-self.confidence_history: List[float] = []
-self.adaptive_threshold = config.threshold
+self.confidence_history: List[float]=[]
+self.adaptive_threshold=config.threshold
 
         # Performance metrics
-self.filtered_count = 0
-self.total_count = 0
+self.filtered_count=0
+self.total_count=0
 
 logger.info(f"GanFilter initialized with {config.mode.value} mode")
 
-def safe_print(self, message: str, force_ascii: bool = False) -> None:
+def safe_print(self, message: str, force_ascii: bool=False) -> None:
 
 
     pass
@@ -885,7 +900,7 @@ def safe_print(self, message: str, force_ascii: bool = False) -> None:
         if CLI_COMPATIBILITY_AVAILABLE:
 safe_print(message, force_ascii=force_ascii)
         else:
-safe_message = self.cli_handler.safe_emoji_print(
+safe_message=self.cli_handler.safe_emoji_print(
                 message, force_ascii=force_ascii
 
             print(safe_message)
@@ -893,7 +908,7 @@ safe_message = self.cli_handler.safe_emoji_print(
 def gan_filter(
 
 
-        self, signal: TensorType, threshold: Optional[float] = None
+        self, signal: TensorType, threshold: Optional[float]=None
 ) -> TensorType:
 """
 Filter entropy signal using trained discriminator
@@ -906,44 +921,44 @@ Returns:
 Validated signals above threshold
 """
         try:
-threshold = threshold or self.config.threshold
+threshold=threshold or self.config.threshold
 
             # Convert to tensor if needed
             if not isinstance(signal, torch.Tensor):
-                signal_tensor = torch.tensor(signal, dtype=torch.float32)
+                signal_tensor=torch.tensor(signal, dtype=torch.float32)
             else:
-signal_tensor = signal
+signal_tensor=signal
 
             # Ensure correct device
-device = next(self.discriminator.parameters()).device
-            signal_tensor = signal_tensor.to(device)
+device=next(self.discriminator.parameters()).device
+            signal_tensor=signal_tensor.to(device)
 
             # Get discriminator scores
             with torch.no_grad():
-                scores = self.discriminator(signal_tensor)
+                scores=self.discriminator(signal_tensor)
 
                 if self.config.mode == FilterMode.THRESHOLD:
                     # Simple threshold filtering
-mask = scores.view(-1) > threshold
+mask=scores.view(-1) > threshold
 
                 elif self.config.mode == FilterMode.CONFIDENCE:
                     # Confidence-based filtering using percentile
-confidence_threshold = torch.quantile(
+confidence_threshold=torch.quantile(
                         scores, self.config.confidence_percentile / 100.0
 
-mask = scores.view(-1) > confidence_threshold
+mask=scores.view(-1) > confidence_threshold
 
                 elif self.config.mode == FilterMode.ADAPTIVE:
                     # Adaptive threshold filtering
 self._update_adaptive_threshold(scores)
-                    mask = scores.view(-1) > self.adaptive_threshold
+                    mask=scores.view(-1) > self.adaptive_threshold
 
                 else:  # ENTROPY_AWARE
                     # Entropy-aware filtering (placeholder for more complex logic)
-                    mask = scores.view(-1) > threshold
+                    mask=scores.view(-1) > threshold
 
             # Filter signals
-filtered_signal = signal_tensor[mask]
+filtered_signal=signal_tensor[mask]
 
             # Update metrics
 self.total_count += signal_tensor.size(0)
@@ -951,7 +966,7 @@ self.total_count += signal_tensor.size(0)
 
             # Convert back to original type if needed
             if not isinstance(signal, torch.Tensor):
-                filtered_signal = filtered_signal.cpu().numpy()
+                filtered_signal=filtered_signal.cpu().numpy()
 
             return filtered_signal
 
@@ -976,10 +991,10 @@ Filtered signal batch
 """
         try:
             # Get signal batch
-signal = signal_fn(batch_size)
+signal=signal_fn(batch_size)
 
             # Apply filtering
-filtered_signal = self.gan_filter(signal)
+filtered_signal=self.gan_filter(signal)
 
             return filtered_signal
 
@@ -995,19 +1010,19 @@ def _update_adaptive_threshold(self, scores: torch.Tensor) -> None:
         """Update adaptive threshold based on recent scores"""
         try:
             # Add scores to history
-score_values = scores.view(-1).cpu().numpy().tolist()
+score_values=scores.view(-1).cpu().numpy().tolist()
             self.confidence_history.extend(score_values)
 
             # Keep only recent history
             if len(self.confidence_history) > self.config.adaptive_window:
-                self.confidence_history = self.confidence_history[
--self.config.adaptive_window :
+                self.confidence_history=self.confidence_history[
+-self.config.adaptive_window:
 ]
 
             # Update threshold if we have enough samples
             if len(self.confidence_history) >= self.config.min_samples:
                 # Use median as adaptive threshold
-self.adaptive_threshold = float(
+self.adaptive_threshold=float(
                     np.median(self.confidence_history)
 
 
@@ -1027,9 +1042,9 @@ Dictionary containing filter performance metrics
 """
         try:
             if self.total_count > 0:
-filter_rate = self.filtered_count / self.total_count
+filter_rate=self.filtered_count / self.total_count
             else:
-filter_rate = 0.0
+filter_rate=0.0
 
             return {
 "total_processed": self.total_count,
@@ -1049,7 +1064,7 @@ logger.error(f"Error getting filter stats: {e}")
 def create_entropy_signal_provider(
 
 
-    signal_dim: int = 64, noise_level: float = 0.1
+    signal_dim: int=64, noise_level: float=0.1
 ) -> Callable[[int], torch.Tensor]:
 """
 Create a sample entropy signal provider for testing
@@ -1070,16 +1085,16 @@ def signal_provider(batch_size: int) -> torch.Tensor:
         """Generate synthetic entropy signals for testing"""
         try:
             # Generate base signals (sinusoidal with varying frequency)
-            t = torch.linspace(0, 2 * math.pi, signal_dim)
-            signals = []
+            t=torch.linspace(0, 2 * math.pi, signal_dim)
+            signals=[]
 
             for _ in range(batch_size):
-                freq = torch.rand(1) * 5 + 1  # Random frequency 1-6
-                phase = torch.rand(1) * 2 * math.pi  # Random phase
-                signal = torch.unified_math.sin(freq * t + phase)
+                freq=torch.rand(1) * 5 + 1  # Random frequency 1-6
+                phase=torch.rand(1) * 2 * math.pi  # Random phase
+                signal=torch.unified_math.sin(freq * t + phase)
 
                 # Add noise
-noise = torch.randn_like(signal) * noise_level
+noise=torch.randn_like(signal) * noise_level
                 signal += noise
 
 signals.append(signal)
@@ -1115,7 +1130,7 @@ safe_print("🚀 Entropy GAN Filter Test")
         safe_print("=" * 50)
 
         # Configuration
-gan_config = GANConfig(
+gan_config=GANConfig(
             noise_dim=100,
 signal_dim=64,
 generator_hidden=128,
@@ -1126,7 +1141,7 @@ epochs=200,  # Reduced for testing
 mode=GANMode.VANILLA,
 
 
-filter_config = FilterConfig(threshold=0.5, mode=FilterMode.THRESHOLD)
+filter_config=FilterConfig(threshold=0.5, mode=FilterMode.THRESHOLD)
 
 safe_print("📊 Configuration:")
         safe_print(f"   Signal dimension: {gan_config.signal_dim}")
@@ -1136,24 +1151,24 @@ safe_print("📊 Configuration:")
 
         # Initialize GAN
 safe_print("\n🔧 Initializing Entropy GAN...")
-        entropy_gan = EntropyGAN(gan_config)
+        entropy_gan=EntropyGAN(gan_config)
 
         # Create signal provider
 safe_print("📡 Creating signal provider...")
-        signal_provider = create_entropy_signal_provider(
+        signal_provider=create_entropy_signal_provider(
             gan_config.signal_dim, 0.1
 
 
         # Train GAN
 safe_print("\n🎓 Training Entropy GAN...")
-        training_metrics = entropy_gan.train_entropy_gan(
+        training_metrics=entropy_gan.train_entropy_gan(
             real_data_fn=signal_provider,
 epochs=gan_config.epochs,
 batch_size=gan_config.batch_size,
 
 
         if training_metrics:
-final_metrics = training_metrics[-1]
+final_metrics=training_metrics[-1]
 safe_print("✅ Training completed:")
             safe_print(f"   Final G loss: {final_metrics.generator_loss:.4f}")
             safe_print(f"   Final D loss: {final_metrics.discriminator_loss:.4f}")
@@ -1162,18 +1177,18 @@ safe_print("✅ Training completed:")
 
         # Test filtering
 safe_print("\n🔍 Testing GAN filtering...")
-        gan_filter = GanFilter(entropy_gan.discriminator, filter_config)
+        gan_filter=GanFilter(entropy_gan.discriminator, filter_config)
 
         # Generate test signals
-test_signals = signal_provider(100)
+test_signals=signal_provider(100)
         safe_print(f"   Generated {test_signals.size(0)} test signals")
 
         # Apply filtering
-filtered_signals = gan_filter.gan_filter(test_signals)
+filtered_signals=gan_filter.gan_filter(test_signals)
         safe_print(f"   Filtered to {filtered_signals.size(0)} valid signals")
 
         # Get filter statistics
-stats = gan_filter.get_filter_stats()
+stats=gan_filter.get_filter_stats()
         safe_print("   Filter statistics:")
         safe_print(f"     Pass rate: {stats.get('pass_rate', 0):.2%}")
         safe_print(f"     Signals passed: {stats.get('signals_passed', 0)}")
@@ -1181,7 +1196,7 @@ stats = gan_filter.get_filter_stats()
 
         # Test batch filtering
 safe_print("\n📦 Testing batch filtering...")
-        batch_filtered = gan_filter.batch_filter(signal_provider, 50)
+        batch_filtered=gan_filter.batch_filter(signal_provider, 50)
         safe_print(f"   Batch filtered to {batch_filtered.size(0)} signals")
 
 safe_print("\n🎉 Entropy GAN Filter test completed successfully!")

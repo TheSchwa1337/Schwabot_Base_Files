@@ -291,13 +291,16 @@ class BacklogTestLoopValidator:
                         confidence_result = self.confidence_matrix.calculate_unified_confidence(
                             backlog_state=current_backlog_state,
                             ferris_wheel_position=ferris_wheel_position,
-                            ai_consensus={'chatgpt': {'confidence': 0.8}, 'claude': {'confidence': 0.7}, 'gemini': {'confidence': 0.9}},
-                            matrix_controller_state={'bit_level': '8bit', 'phase': 'ACCUM', 'confidence_score': 0.75, 'fallback_triggered': False}
+                            ai_consensus={'chatgpt': {'confidence': 0.8}, 'claude': {
+                                'confidence': 0.7}, 'gemini': {'confidence': 0.9}},
+                            matrix_controller_state={'bit_level': '8bit', 'phase': 'ACCUM',
+                                                     'confidence_score': 0.75, 'fallback_triggered': False}
                         )
                         confidence_scores.append(confidence_result.unified_confidence)
                     else:
                         # Fallback confidence calculation
-                        win_rate = current_backlog_state.get('winning_trades', 0) / unified_math.max(current_backlog_state.get('total_trades', 1), 1)
+                        win_rate = current_backlog_state.get(
+                            'winning_trades', 0) / unified_math.max(current_backlog_state.get('total_trades', 1), 1)
                         confidence_scores.append(win_rate)
 
                     # Calculate backlog metric
@@ -495,7 +498,8 @@ class BacklogTestLoopValidator:
             test_success = np.random.random() > 0.1  # 90% success rate
 
             # Calculate test confidence based on backlog
-            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / \
+                unified_math.max(backlog_state.get('total_trades', 1), 1)
             test_confidence = win_rate * 0.8 + np.random.random() * 0.2
 
             return {
@@ -517,7 +521,7 @@ class BacklogTestLoopValidator:
             }
 
     def _simulate_test_cycle_with_ferris(self, backlog_state: Dict[str, Any],
-                                       ferris_wheel_position: int, cycle: int) -> Dict[str, Any]:
+                                         ferris_wheel_position: int, cycle: int) -> Dict[str, Any]:
         """Simulate a test cycle with Ferris wheel integration."""
         try:
             # Base test cycle
@@ -525,7 +529,8 @@ class BacklogTestLoopValidator:
 
             # Add Ferris wheel influence
             ferris_influence = np.unified_math.sin(2 * np.pi * ferris_wheel_position / 8) * 0.1
-            base_result['confidence'] = unified_math.max(0.0, unified_math.min(1.0, base_result['confidence'] + ferris_influence))
+            base_result['confidence'] = unified_math.max(
+                0.0, unified_math.min(1.0, base_result['confidence'] + ferris_influence))
             base_result['ferris_wheel_position'] = ferris_wheel_position
             base_result['ferris_influence'] = ferris_influence
 
@@ -536,7 +541,7 @@ class BacklogTestLoopValidator:
             return self._simulate_test_cycle(backlog_state, cycle)
 
     def _update_backlog_state(self, current_state: Dict[str, Any],
-                            test_result: Dict[str, Any]) -> Dict[str, Any]:
+                              test_result: Dict[str, Any]) -> Dict[str, Any]:
         """Update backlog state based on test result."""
         try:
             updated_state = current_state.copy()
@@ -566,13 +571,14 @@ class BacklogTestLoopValidator:
             return current_state
 
     def _update_matrix_controller_state(self, matrix_state: Dict[str, Any],
-                                      backlog_state: Dict[str, Any]) -> Dict[str, Any]:
+                                        backlog_state: Dict[str, Any]) -> Dict[str, Any]:
         """Update matrix controller state based on backlog."""
         try:
             updated_state = matrix_state.copy()
 
             # Update confidence score based on backlog performance
-            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / \
+                unified_math.max(backlog_state.get('total_trades', 1), 1)
             updated_state['confidence_score'] = win_rate * 0.8 + matrix_state.get('confidence_score', 0.5) * 0.2
 
             # Update phase based on performance
@@ -598,7 +604,8 @@ class BacklogTestLoopValidator:
     def _calculate_backlog_metric(self, backlog_state: Dict[str, Any]) -> float:
         """Calculate a single metric from backlog state."""
         try:
-            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / \
+                unified_math.max(backlog_state.get('total_trades', 1), 1)
             profit_factor = unified_math.min(backlog_state.get('avg_profit', 0.0) / 1000.0, 1.0)
             recent_performance = backlog_state.get('recent_performance', 0.5)
 
@@ -609,8 +616,8 @@ class BacklogTestLoopValidator:
             return 0.5
 
     def _validate_backlog_persistence(self, initial_state: Dict[str, Any],
-                                    final_state: Dict[str, Any],
-                                    cycle_results: List[Dict[str, Any]]) -> bool:
+                                      final_state: Dict[str, Any],
+                                      cycle_results: List[Dict[str, Any]]) -> bool:
         """Validate that backlog state persists correctly."""
         try:
             # Check that state has evolved
@@ -633,7 +640,7 @@ class BacklogTestLoopValidator:
             return False
 
     def _validate_ferris_synchronization(self, sync_results: List[Dict[str, Any]],
-                                       expected_sync: bool) -> bool:
+                                         expected_sync: bool) -> bool:
         """Validate Ferris wheel synchronization."""
         try:
             if not sync_results:
@@ -658,11 +665,12 @@ class BacklogTestLoopValidator:
             return False
 
     def _validate_matrix_integration(self, matrix_state: Dict[str, Any],
-                                   backlog_state: Dict[str, Any]) -> bool:
+                                     backlog_state: Dict[str, Any]) -> bool:
         """Validate matrix controller integration."""
         try:
             # Check that matrix state is consistent with backlog
-            win_rate = backlog_state.get('winning_trades', 0) / unified_math.max(backlog_state.get('total_trades', 1), 1)
+            win_rate = backlog_state.get('winning_trades', 0) / \
+                unified_math.max(backlog_state.get('total_trades', 1), 1)
             matrix_confidence = matrix_state.get('confidence_score', 0.0)
 
             # Confidence should be reasonably correlated with win rate

@@ -28,15 +28,14 @@ __all__: list[str] = []
 "glyph_tensor",
 ]
 
-# ---------------------------------------------------------------------------
-# Core glyph computations
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Core glyph computations
+    # ---------------------------------------------------------------------------
 
 
-def glyph_determinant(
+    def glyph_determinant(
 
-
-    func: Callable[[float, float], float],
+func: Callable[[float, float], float],
 x: float,
 y: float,
 *,
@@ -55,28 +54,27 @@ Step size for finite difference approximation.
 """
     # Compute mixed partial derivative ∂²F/∂x∂y
 f_xy = (
-        func(x + h, y + h)
-        - func(x + h, y - h)
-        - func(x - h, y + h)
-        + func(x - h, y - h)
-    ) / (4 * h * h)
+func(x + h, y + h)
+- func(x + h, y - h)
+- func(x - h, y + h)
++ func(x - h, y - h)
+) / (4 * h * h)
 
     # Compute ∂²F/∂x²
-f_xx = (func(x + h, y) - 2 * func(x, y) + func(x - h, y)) / (h * h)
+    f_xx = (func(x + h, y) - 2 * func(x, y) + func(x - h, y)) / (h * h)
 
     # Compute ∂²F/∂y²
-f_yy = (func(x, y + h) - 2 * func(x, y) + func(x, y - h)) / (h * h)
+    f_yy = (func(x, y + h) - 2 * func(x, y) + func(x, y - h)) / (h * h)
 
     # Hessian determinant
-hessian_det = f_xx * f_yy - f_xy * f_xy
+ hessian_det = f_xx * f_yy - f_xy * f_xy
 
-    return unified_math.abs(hessian_det)
-
-
-def glyph_matrix(
+ return unified_math.abs(hessian_det)
 
 
-    glyph_values: Sequence[float],
+ def glyph_matrix(
+
+glyph_values: Sequence[float],
 weights: Sequence[float],
 ) -> float:  # noqa: D401
 """Return M_glyph = Σ_i^n G_glyph(x_i, y_i) · w_i.
@@ -120,8 +118,7 @@ tanh_g = np.tanh(g_glyph)
 
 def glyph_tensor(
 
-
-    psi_gradient: Sequence[float],
+psi_gradient: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
 """Return Θ_glyph = ∇ψ_glyph ⊗ ∇ψ_glyph^T outer product tensor.
 

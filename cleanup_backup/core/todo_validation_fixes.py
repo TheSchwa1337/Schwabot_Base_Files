@@ -517,7 +517,7 @@ class RuntimeValidator:
             # Calculate rolling entropy
             entropies = []
             for i in range(len(signal) - window_size + 1):
-                window = signal[i : i + window_size]
+                window = signal[i: i + window_size]
                 entropy = calculate_entropy(window)
                 entropies.append(entropy)
 

@@ -44,6 +44,7 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DemoState:
     """Demo state configuration for testing."""
@@ -58,6 +59,7 @@ class DemoState:
     enabled: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class TickData:
     """Historical tick data for replay."""
@@ -69,6 +71,7 @@ class TickData:
     ask: float
     market_data: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PortfolioSnapshot:
     """Portfolio state snapshot."""
@@ -79,6 +82,7 @@ class PortfolioSnapshot:
     unrealized_pnl: float
     realized_pnl: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class RebalanceEvent:
@@ -92,10 +96,11 @@ class RebalanceEvent:
     performance_impact: float
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class DemoStateInjector:
     """
     Demo State Injector for simulation and testing.
-    
+
     Features:
     - Demo state injection for testing
     - Portfolio rebalance simulation
@@ -103,43 +108,43 @@ class DemoStateInjector:
     - Strategy backtesting
     - Mathematical validation testing
     """
-    
+
     def __init__(self, config_path: str = "./config/demo_state_config.json"):
         self.config_path = config_path
-        
+
         # Demo states
         self.demo_states: Dict[str, DemoState] = {}
         self.active_state: Optional[DemoState] = None
-        
+
         # Historical data
         self.tick_history: List[TickData] = []
         self.portfolio_history: List[PortfolioSnapshot] = []
         self.rebalance_history: List[RebalanceEvent] = []
-        
+
         # Core components
         self.bit_engine = None
         self.tensor_utils = None
         self.matrix_mapper = None
         self.profit_allocator = None
         self.dlt_engine = None
-        
+
         # Testing state
         self.is_running = False
         self.injection_thread = None
         self.event_queue = queue.Queue()
-        
+
         # Performance tracking
         self.test_results: List[Dict[str, Any]] = []
         self.validation_results: List[Dict[str, Any]] = []
-        
+
         # Load configuration
         self._load_configuration()
         self._initialize_demo_states()
         self._load_historical_data()
-        
+
         if CORE_COMPONENTS_AVAILABLE:
             self._initialize_components()
-        
+
         logger.info("Demo State Injector initialized")
 
     def _load_configuration(self) -> None:
@@ -218,9 +223,9 @@ class DemoStateInjector:
                     "timeframe": "1m"
                 }
             }
-            
+
             logger.info("Demo state configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -255,7 +260,7 @@ class DemoStateInjector:
                 injection_rate=1.0
             )
             self.demo_states["conservative_test"] = conservative_state
-            
+
             # Aggressive test state
             aggressive_state = DemoState(
                 state_id="aggressive_test",
@@ -284,7 +289,7 @@ class DemoStateInjector:
                 injection_rate=2.0
             )
             self.demo_states["aggressive_test"] = aggressive_state
-            
+
             # Quantum test state
             quantum_state = DemoState(
                 state_id="quantum_test",
@@ -313,9 +318,9 @@ class DemoStateInjector:
                 injection_rate=3.0
             )
             self.demo_states["quantum_test"] = quantum_state
-            
+
             logger.info(f"Initialized {len(self.demo_states)} demo states")
-            
+
         except Exception as e:
             logger.error(f"Error initializing demo states: {e}")
 
@@ -325,28 +330,28 @@ class DemoStateInjector:
             # Generate synthetic historical data
             symbols = ["BTC/USDC", "ETH/USDC", "ADA/USDC", "DOT/USDC"]
             base_prices = {"BTC/USDC": 50000.0, "ETH/USDC": 3000.0, "ADA/USDC": 0.5, "DOT/USDC": 7.0}
-            
+
             start_time = datetime.now() - timedelta(hours=24)
-            
+
             for i in range(1000):  # 1000 data points
                 timestamp = start_time + timedelta(minutes=i)
-                
+
                 for symbol in symbols:
                     base_price = base_prices[symbol]
-                    
+
                     # Generate price with trend and noise
                     trend = np.unified_math.sin(i * 0.01) * 0.02
                     noise = np.random.normal(0, 0.005)
                     price = base_price * (1 + trend + noise)
-                    
+
                     # Generate volume
                     volume = np.random.uniform(100, 1000)
-                    
+
                     # Generate bid/ask spread
                     spread = price * 0.001
                     bid = price - spread / 2
                     ask = price + spread / 2
-                    
+
                     # Generate market data
                     market_data = {
                         "entropy_level": np.random.uniform(2.0, 8.0),
@@ -354,7 +359,7 @@ class DemoStateInjector:
                         "market_heat": np.random.uniform(0.1, 1.0),
                         "trend_strength": np.random.uniform(0.1, 1.0)
                     }
-                    
+
                     tick_data = TickData(
                         timestamp=timestamp,
                         symbol=symbol,
@@ -364,11 +369,11 @@ class DemoStateInjector:
                         ask=ask,
                         market_data=market_data
                     )
-                    
+
                     self.tick_history.append(tick_data)
-            
+
             logger.info(f"Loaded {len(self.tick_history)} historical tick data points")
-            
+
         except Exception as e:
             logger.error(f"Error loading historical data: {e}")
 
@@ -380,31 +385,31 @@ class DemoStateInjector:
             self.matrix_mapper = MatrixMapper()
             self.profit_allocator = ProfitCycleAllocator()
             self.dlt_engine = DLTWaveformEngine()
-            
+
             # Setup integrations
             if self.bit_engine and self.tensor_utils:
                 self.tensor_utils.set_bit_resolution_engine(self.bit_engine)
-            
+
             if self.matrix_mapper and self.bit_engine:
                 self.bit_engine.set_matrix_mapper(self.matrix_mapper)
-            
+
             if self.profit_allocator and self.tensor_utils:
                 self.tensor_utils.set_profit_allocator(self.profit_allocator)
-            
+
             logger.info("Core components initialized for demo state injector")
-            
+
         except Exception as e:
             logger.error(f"Error initializing components: {e}")
 
     def inject_demo_state(self, state_id: str) -> bool:
         """
         Inject a demo state for testing.
-        
+
         Parameters:
         -----------
         state_id : str
             ID of the demo state to inject
-            
+
         Returns:
         --------
         bool
@@ -414,11 +419,11 @@ class DemoStateInjector:
             if state_id not in self.demo_states:
                 logger.error(f"Demo state {state_id} not found")
                 return False
-            
+
             self.active_state = self.demo_states[state_id]
             logger.info(f"Injected demo state: {self.active_state.name}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error injecting demo state: {e}")
             return False
@@ -426,12 +431,12 @@ class DemoStateInjector:
     def start_state_injection(self, state_id: str) -> bool:
         """
         Start state injection with continuous event generation.
-        
+
         Parameters:
         -----------
         state_id : str
             ID of the demo state to inject
-            
+
         Returns:
         --------
         bool
@@ -440,18 +445,18 @@ class DemoStateInjector:
         try:
             if not self.inject_demo_state(state_id):
                 return False
-            
+
             if self.is_running:
                 logger.warning("State injection already running")
                 return False
-            
+
             self.is_running = True
             self.injection_thread = threading.Thread(target=self._injection_loop, daemon=True)
             self.injection_thread.start()
-            
+
             logger.info(f"Started state injection for {state_id}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error starting state injection: {e}")
             return False
@@ -461,7 +466,7 @@ class DemoStateInjector:
         self.is_running = False
         if self.injection_thread:
             self.injection_thread.join(timeout=5.0)
-        
+
         logger.info("Stopped state injection")
 
     def _injection_loop(self) -> None:
@@ -469,32 +474,32 @@ class DemoStateInjector:
         try:
             start_time = time.time()
             event_count = 0
-            
+
             while self.is_running and self.active_state:
                 # Check if test duration exceeded
                 elapsed = time.time() - start_time
                 if elapsed > self.active_state.test_duration:
                     logger.info("Test duration exceeded, stopping injection")
                     break
-                
+
                 # Generate events based on injection rate
                 events_per_second = self.active_state.injection_rate
                 sleep_time = 1.0 / events_per_second
-                
+
                 # Generate market event
                 self._generate_market_event()
-                
+
                 # Generate portfolio event
                 if event_count % 10 == 0:  # Every 10 events
                     self._generate_portfolio_event()
-                
+
                 # Generate rebalance event
                 if event_count % 50 == 0:  # Every 50 events
                     self._generate_rebalance_event()
-                
+
                 event_count += 1
                 time.sleep(sleep_time)
-                
+
         except Exception as e:
             logger.error(f"Error in injection loop: {e}")
 
@@ -503,23 +508,25 @@ class DemoStateInjector:
         try:
             if not self.active_state or not self.tick_history:
                 return
-            
+
             # Select random tick data
             tick_data = np.random.choice(self.tick_history)
-            
+
             # Update with current demo state conditions
             tick_data.market_data.update(self.active_state.market_conditions)
-            
+
             # Process through bit resolution engine
             if self.bit_engine:
-                hash_value = hashlib.sha256(f"{tick_data.timestamp}_{tick_data.symbol}_{tick_data.price}".encode()).hexdigest()
+                hash_value = hashlib.sha256(
+                    f"{tick_data.timestamp}_{tick_data.symbol}_{tick_data.price}".encode()).hexdigest()
                 resolution_result = self.bit_engine.process_hash_resolution(
                     hash_value, tick_data.market_data, tick_data.price * 0.99, tick_data.price
                 )
-                
+
                 if resolution_result:
-                    logger.debug(f"Processed market event: {resolution_result.bit_phase.value}-bit, tensor={resolution_result.tensor_score:.4f}")
-            
+                    logger.debug(
+                        f"Processed market event: {resolution_result.bit_phase.value}-bit, tensor={resolution_result.tensor_score:.4f}")
+
         except Exception as e:
             logger.error(f"Error generating market event: {e}")
 
@@ -528,11 +535,11 @@ class DemoStateInjector:
         try:
             if not self.active_state:
                 return
-            
+
             # Create portfolio snapshot
             portfolio_state = self.active_state.portfolio_state
             total_value = portfolio_state["cash"]
-            
+
             # Calculate position values
             for asset, allocation in portfolio_state["positions"].items():
                 # Get current price (simplified)
@@ -540,7 +547,7 @@ class DemoStateInjector:
                 current_price = base_prices.get(asset, 1.0)
                 position_value = allocation * portfolio_state["initial_capital"] * current_price
                 total_value += position_value
-            
+
             # Create snapshot
             snapshot = PortfolioSnapshot(
                 timestamp=datetime.now(),
@@ -550,9 +557,9 @@ class DemoStateInjector:
                 unrealized_pnl=total_value - portfolio_state["initial_capital"],
                 realized_pnl=0.0
             )
-            
+
             self.portfolio_history.append(snapshot)
-            
+
         except Exception as e:
             logger.error(f"Error generating portfolio event: {e}")
 
@@ -561,15 +568,15 @@ class DemoStateInjector:
         try:
             if not self.active_state or not self.tensor_utils:
                 return
-            
+
             # Simulate profit for rebalancing
             profit_amount = np.random.uniform(100, 1000)
             volatility = self.active_state.market_conditions["volatility"]
             entropy_level = self.active_state.market_conditions["entropy_level"]
-            
+
             # Calculate rebalance
             rebalance_result = self.tensor_utils.rebalance_profit(profit_amount, volatility, entropy_level)
-            
+
             if rebalance_result:
                 # Create rebalance event
                 event = RebalanceEvent(
@@ -581,14 +588,14 @@ class DemoStateInjector:
                     rebalance_amount=profit_amount,
                     performance_impact=0.0
                 )
-                
+
                 self.rebalance_history.append(event)
-                
+
                 # Update portfolio state
                 self.active_state.portfolio_state["positions"].update(rebalance_result.allocations)
-                
+
                 logger.info(f"Generated rebalance event: {profit_amount:.2f} profit")
-            
+
         except Exception as e:
             logger.error(f"Error generating rebalance event: {e}")
 
@@ -597,7 +604,7 @@ class DemoStateInjector:
         try:
             if not CORE_COMPONENTS_AVAILABLE:
                 return {'error': 'Core components not available'}
-            
+
             validation_results = {
                 'bit_resolution_tests': [],
                 'tensor_score_tests': [],
@@ -605,12 +612,12 @@ class DemoStateInjector:
                 'rebalance_tests': [],
                 'overall_status': 'unknown'
             }
-            
+
             # Test bit resolution
             if self.bit_engine:
                 test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
                 test_market_data = {'entropy_level': 4.5, 'volatility': 0.03, 'market_heat': 0.6}
-                
+
                 resolution_result = self.bit_engine.process_hash_resolution(test_hash, test_market_data)
                 if resolution_result:
                     validation_results['bit_resolution_tests'].append({
@@ -625,7 +632,7 @@ class DemoStateInjector:
                         'status': 'failed',
                         'error': 'No resolution result'
                     })
-            
+
             # Test tensor scoring
             if self.tensor_utils:
                 tensor_score = self.tensor_utils.calculate_tensor_score(45000.0, 46000.0, 8, test_market_data)
@@ -634,26 +641,26 @@ class DemoStateInjector:
                     'status': 'passed',
                     'score': tensor_score
                 })
-            
+
             # Determine overall status
-            passed_tests = sum(1 for test_list in validation_results.values() 
-                             if isinstance(test_list, list) and any(t.get('status') == 'passed' for t in test_list))
-            total_tests = sum(len(test_list) for test_list in validation_results.values() 
-                            if isinstance(test_list, list))
-            
+            passed_tests = sum(1 for test_list in validation_results.values()
+                               if isinstance(test_list, list) and any(t.get('status') == 'passed' for t in test_list))
+            total_tests = sum(len(test_list) for test_list in validation_results.values()
+                              if isinstance(test_list, list))
+
             if total_tests > 0:
                 success_rate = passed_tests / total_tests
                 validation_results['overall_status'] = 'passed' if success_rate > 0.8 else 'failed'
                 validation_results['success_rate'] = success_rate
-            
+
             # Store results
             self.validation_results.append({
                 'timestamp': datetime.now().isoformat(),
                 'results': validation_results
             })
-            
+
             return validation_results
-            
+
         except Exception as e:
             logger.error(f"Error running mathematical validation: {e}")
             return {'error': str(e)}
@@ -671,7 +678,7 @@ class DemoStateInjector:
                 'latest_rebalance': self.rebalance_history[-1] if self.rebalance_history else None,
                 'latest_validation': self.validation_results[-1] if self.validation_results else None
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting test results: {e}")
             return {'error': str(e)}
@@ -704,48 +711,49 @@ class DemoStateInjector:
                 ],
                 'validation_results': self.validation_results
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
-            
+
             safe_print(f"✅ Demo test results exported to {output_path}")
-            
+
         except Exception as e:
             safe_print(f"❌ Error exporting test results: {e}")
+
 
 if __name__ == "__main__":
     # Test demo state injector
     injector = DemoStateInjector()
-    
+
     # Test conservative strategy
     safe_print("🧪 Testing Conservative Strategy...")
     injector.start_state_injection("conservative_test")
-    
+
     try:
         # Run for 60 seconds
         safe_print("📈 Demo state injection running for 60 seconds...")
         time.sleep(60)
-        
+
         # Stop injection
         injector.stop_state_injection()
-        
+
         # Run mathematical validation
         safe_print("\n🧪 Running Mathematical Validation...")
         validation_results = injector.run_mathematical_validation()
         safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
-        
+
         # Get test results
         test_results = injector.get_test_results()
         safe_print(f"\n📊 TEST RESULTS")
         safe_print(f"Portfolio Snapshots: {test_results.get('portfolio_history_count', 0)}")
         safe_print(f"Rebalance Events: {test_results.get('rebalance_history_count', 0)}")
         safe_print(f"Validation Tests: {test_results.get('validation_results_count', 0)}")
-        
+
         # Export results
         injector.export_test_results()
-        
+
     except KeyboardInterrupt:
         safe_print("\n⏹️ Demo state injection stopped by user")
         injector.stop_state_injection()
-    
-    safe_print("✅ Demo state injector test completed") 
+
+    safe_print("✅ Demo state injector test completed")

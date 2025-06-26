@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-\nfrom core.unified_math_system import unified_math
+from typing import Any as EventImpact
 import math
 # #!/usr/bin/env python3
 """Event-Matrix Integration Bridge - Schwabot Framework.
@@ -43,7 +44,6 @@ from core.type_defs import MatrixController, BitLevel, MatrixPhase
 except ImportError as e:
 logging.warning(f"Some imports failed: {e}")
     # Fallback type definitions
-from typing import Any as EventImpact
 #     from typing import Any as MatrixController  # F811: duplicate import
 #     from enum import Enum as BitLevel  # F811: duplicate import
 #     from enum import Enum as MatrixPhase  # F811: duplicate import
@@ -53,8 +53,9 @@ logger = logging.getLogger(__name__)
 
 class EventProcessingStatus(Enum):
 
-
     """Status of event processing."""
+
+
 PENDING = "pending"
 PROCESSING = "processing"
 COMPLETED = "completed"
@@ -65,8 +66,9 @@ IGNORED = "ignored"
 @dataclass
 class EventMatrixResult:
 
-
     """Result of event-matrix integration processing."""
+
+
 event_id: str
 processing_status: EventProcessingStatus
 matrix_state_before: Dict[str, Any]
@@ -82,8 +84,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class EventProcessingMetrics:
 
-
     """Metrics for event processing performance."""
+
+
 total_events_processed: int
 successful_events: int
 failed_events: int
@@ -96,15 +99,16 @@ ferris_wheel_updates: int
 
 class EventMatrixIntegrationBridge:
 
-
     """Bridge between event impact mapper and matrix controllers."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
 
+def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     pass
     pass
         """Initialize the event-matrix integration bridge."""
+
+
 self.config = config or self._default_config()
 
         # Initialize components

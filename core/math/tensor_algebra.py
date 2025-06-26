@@ -29,8 +29,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BitPhaseResult:
 
-
     """Result of bit phase tensor operations."""
+
+
 phi_4: int
 phi_8: int
 phi_42: int
@@ -40,20 +41,21 @@ mode: str
 
 class UnifiedTensorAlgebra:
 
-
     """Unified tensor algebra operations for Schwabot mathematical pipeline."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the unified tensor algebra engine."""
+
+
 self.precision = np.float64
 self.epsilon = 1e-12
 
-def tensor_contraction(self, A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
 
+def tensor_contraction(self, A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
 
     pass
     pass

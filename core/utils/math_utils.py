@@ -34,8 +34,8 @@ warnings.filterwarnings('ignore', category=RuntimeWarning)
 # CORE MATHEMATICAL FUNCTIONS
 # =============================================================================
 
-def calculate_entropy(arr: NDArray) -> float:
 
+def calculate_entropy(arr: NDArray) -> float:
 
     pass
     pass
@@ -51,6 +51,7 @@ Entropy value (0.0 to 1.0)
     try:
         if len(arr) == 0:
             return 0.0
+
 
         # Normalize to probability distribution
 arr_norm = arr - np.min(arr)

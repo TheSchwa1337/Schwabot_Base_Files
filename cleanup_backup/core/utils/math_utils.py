@@ -104,8 +104,8 @@ def calculate_williams_r(high: Vector, low: Vector, close: Vector, period: int =
         return np.zeros_like(high)
     williams_r = np.zeros_like(high)
     for i in range(period - 1, len(high)):
-        highest_high = unified_math.unified_math.max(high[i - period + 1 : i + 1])
-        lowest_low = unified_math.unified_math.min(low[i - period + 1 : i + 1])
+        highest_high = unified_math.unified_math.max(high[i - period + 1: i + 1])
+        lowest_low = unified_math.unified_math.min(low[i - period + 1: i + 1])
         if highest_high - lowest_low == 0:
             williams_r[i] = -50.0
         else:
@@ -126,8 +126,8 @@ def calculate_stochastic(
         }
     k_percent = np.zeros_like(high)
     for i in range(k_period - 1, len(high)):
-        highest_high = unified_math.unified_math.max(high[i - k_period + 1 : i + 1])
-        lowest_low = unified_math.unified_math.min(low[i - k_period + 1 : i + 1])
+        highest_high = unified_math.unified_math.max(high[i - k_period + 1: i + 1])
+        lowest_low = unified_math.unified_math.min(low[i - k_period + 1: i + 1])
         if highest_high - lowest_low == 0:
             k_percent[i] = 50.0
         else:
@@ -136,7 +136,7 @@ def calculate_stochastic(
             )
     d_percent = np.zeros_like(k_percent)
     for i in range(d_period - 1, len(k_percent)):
-        d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1 : i + 1])
+        d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1: i + 1])
     return {"k_percent": k_percent, "d_percent": d_percent}
 
 
@@ -168,9 +168,9 @@ def calculate_centroid(data: np.ndarray) -> Tuple[float, ...]:
         return (centroid_y, centroid_x)
     elif data.ndim == 3:
         z_coords, y_coords, x_coords = np.meshgrid(
-            np.arange(data.shape[0]), 
-            np.arange(data.shape[1]), 
-            np.arange(data.shape[2]), 
+            np.arange(data.shape[0]),
+            np.arange(data.shape[1]),
+            np.arange(data.shape[2]),
             indexing='ij'
         )
         total_mass = np.sum(data)
@@ -192,8 +192,8 @@ def calculate_distance_score(pos_a: Tuple[float, ...], pos_b: Tuple[float, ...])
 
 
 def calculate_recursive_multiplier(
-    base_value: float, 
-    depth: int, 
+    base_value: float,
+    depth: int,
     decay_factor: float = 0.95,
     max_depth: int = 10
 ) -> float:
@@ -206,25 +206,25 @@ def calculate_recursive_multiplier(
 
 
 def calculate_allocation_efficiency(
-    volume_deltas: List[Tuple[str, float]], 
+    volume_deltas: List[Tuple[str, float]],
     target_distribution: Optional[Dict[str, float]] = None
 ) -> float:
     """Calculate allocation efficiency based on volume distribution."""
     if not volume_deltas:
         return 0.0
-    
+
     total_volume = sum(unified_math.abs(delta) for _, delta in volume_deltas)
     if total_volume == 0:
         return 0.0
-    
+
     # Calculate distribution uniformity
     volumes = [unified_math.abs(delta) for _, delta in volume_deltas]
     mean_volume = unified_math.unified_math.mean(volumes)
     variance = unified_math.unified_math.var(volumes)
-    
+
     # Efficiency is inversely proportional to variance (more uniform = higher efficiency)
     efficiency = 1.0 / (1.0 + variance / (mean_volume ** 2 + 1e-10))
-    
+
     # If target distribution is provided, calculate alignment
     if target_distribution:
         alignment_score = 0.0
@@ -235,71 +235,71 @@ def calculate_allocation_efficiency(
                 alignment_score += 1.0 - unified_math.abs(target_ratio - actual_ratio)
         alignment_score /= len(volume_deltas)
         efficiency = (efficiency + alignment_score) / 2.0
-    
+
     return np.clip(efficiency, 0.0, 1.0)
 
 
 def calculate_recursive_growth_factor(
-    profit_history: List[float], 
+    profit_history: List[float],
     window: int = 10,
     growth_threshold: float = 0.1
 ) -> float:
     """Calculate recursive growth factor based on profit history."""
     if len(profit_history) < 2:
         return 1.0
-    
+
     recent_profits = profit_history[-window:] if len(profit_history) >= window else profit_history
-    
+
     if len(recent_profits) < 2:
         return 1.0
-    
+
     # Calculate growth rate
     growth_rates = []
     for i in range(1, len(recent_profits)):
         if recent_profits[i-1] != 0:
             rate = (recent_profits[i] - recent_profits[i-1]) / unified_math.abs(recent_profits[i-1])
             growth_rates.append(rate)
-    
+
     if not growth_rates:
         return 1.0
-    
+
     # Calculate average growth rate
     avg_growth = unified_math.unified_math.mean(growth_rates)
-    
+
     # Apply sigmoid transformation to get growth factor
     growth_factor = 1.0 / (1.0 + unified_math.exp(-avg_growth / growth_threshold))
-    
+
     return np.clip(growth_factor, 0.5, 2.0)
 
 
 def apply_allocation_strategy(
-    base_value: Decimal, 
-    strategy: str, 
+    base_value: Decimal,
+    strategy: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Decimal:
     """Apply different allocation strategies to a base value."""
     if parameters is None:
         parameters = {}
-    
+
     base_float = float(base_value)
-    
+
     if strategy.upper() == "LINEAR":
         multiplier = parameters.get("multiplier", 1.0)
         return Decimal(str(base_float * multiplier))
-    
+
     elif strategy.upper() == "EXPONENTIAL":
         exponent = parameters.get("exponent", 1.5)
         return Decimal(str(base_float ** exponent))
-    
+
     elif strategy.upper() == "LOGARITHMIC":
         base = parameters.get("base", 10.0)
         return Decimal(str(unified_math.unified_math.log(base_float + 1) / unified_math.unified_math.log(base)))
-    
+
     elif strategy.upper() == "SIGMOID":
         steepness = parameters.get("steepness", 1.0)
         midpoint = parameters.get("midpoint", 0.0)
         return Decimal(str(1.0 / (1.0 + unified_math.exp(-steepness * (base_float - midpoint)))))
-    
+
     elif strategy.upper() == "FRACTAL":
         # Fractal scaling based on self-similarity
         scale_factor = parameters.get("scale_factor", 1.618)  # Golden ratio
@@ -308,7 +308,7 @@ def apply_allocation_strategy(
         for _ in range(iterations):
             result = result * scale_factor + base_float
         return Decimal(str(result))
-    
+
     else:
         # Default to linear
         return base_value
@@ -366,13 +366,13 @@ def calculate_tick_acceleration(
     """Calculate tick acceleration from velocities and time deltas."""
     if len(velocities) < 2 or len(velocities) != len(delta_times):
         return None
-    
+
     prev_velocities = np.roll(velocities, 1)
     prev_velocities[0] = velocities[0]  # Avoid wraparound
-    
+
     acceleration = np.zeros_like(velocities)
     valid_mask = delta_times > 1e-10
-    
+
     acceleration[valid_mask] = (velocities[valid_mask] - prev_velocities[valid_mask]) / delta_times[valid_mask]
     return acceleration
 
@@ -386,11 +386,13 @@ def waveform_pattern_match(
     """
     if len(live_wave) == 0 or len(reference_wave) == 0:
         return False, 0.0
-    
+
     # Normalize for scale-invariance
-    live_norm = (live_wave - unified_math.unified_math.mean(live_wave)) / (unified_math.unified_math.std(live_wave) + 1e-10)
-    ref_norm = (reference_wave - unified_math.unified_math.mean(reference_wave)) / (unified_math.unified_math.std(reference_wave) + 1e-10)
-    
+    live_norm = (live_wave - unified_math.unified_math.mean(live_wave)) / \
+        (unified_math.unified_math.std(live_wave) + 1e-10)
+    ref_norm = (reference_wave - unified_math.unified_math.mean(reference_wave)) / \
+        (unified_math.unified_math.std(reference_wave) + 1e-10)
+
     # Pad shorter waveform to match length
     if len(live_norm) < len(ref_norm):
         pad_width = len(ref_norm) - len(live_norm)
@@ -400,7 +402,7 @@ def waveform_pattern_match(
         ref_norm = np.pad(ref_norm, (0, pad_width), 'constant')
 
     correlation = np.correlate(live_norm, ref_norm, mode='valid')
-    
+
     if correlation.size == 0:
         return False, 0.0
 
@@ -415,35 +417,35 @@ def calculate_hash_distance(hash1_hex: str, hash2_hex: str, method: str = 'hammi
     try:
         bin1 = bin(int(hash1_hex, 16))[2:].zfill(256)
         bin2 = bin(int(hash2_hex, 16))[2:].zfill(256)
-        
+
         if method.lower() == 'hamming':
             return sum(c1 != c2 for c1, c2 in zip(bin1, bin2))
-        
+
         elif method.lower() == 'cosine':
             vec1 = np.array([int(b) for b in bin1])
             vec2 = np.array([int(b) for b in bin2])
             dot_product = unified_math.unified_math.dot_product(vec1, vec2)
             norm1 = np.linalg.norm(vec1)
             norm2 = np.linalg.norm(vec2)
-            
+
             if norm1 == 0 or norm2 == 0:
-                return 1.0 # Max distance if one vector is zero
-            
+                return 1.0  # Max distance if one vector is zero
+
             # Cosine similarity is between -1 and 1, distance is 1 - similarity
             return 1.0 - (dot_product / (norm1 * norm2))
-        
+
         else:
             raise ValueError(f"Unknown hash distance method: {method}")
-            
+
     except (ValueError, TypeError):
-        return float('inf') # Return max distance on error
+        return float('inf')  # Return max distance on error
 
 
 def calculate_weighted_confidence(strategy_vector: Vector, state_vector: Vector) -> float:
     """Calculate a weighted confidence score using a sigmoid function."""
     if len(strategy_vector) != len(state_vector):
         raise ValueError("Strategy and state vectors must have the same length.")
-        
+
     dot_product = unified_math.unified_math.dot_product(strategy_vector, state_vector)
     # Sigmoid function to scale output between 0 and 1
     confidence = 1 / (1 + unified_math.exp(-dot_product))
@@ -455,8 +457,8 @@ def calculate_weighted_confidence(strategy_vector: Vector, state_vector: Vector)
 def wavelet_decompose(data: Vector, level: int = 3) -> List[Vector]:
     """Perform a simple Haar wavelet decomposition."""
     if len(data) < 2**level:
-        return [data] # Not enough data for decomposition
-        
+        return [data]  # Not enough data for decomposition
+
     coeffs = [data]
     for i in range(level):
         current_data = coeffs[-1]
@@ -464,12 +466,12 @@ def wavelet_decompose(data: Vector, level: int = 3) -> List[Vector]:
         approximation = (current_data[0::2] + current_data[1::2]) / 2
         # Detail (high-pass filter)
         detail = (current_data[0::2] - current_data[1::2]) / 2
-        
+
         if i == 0:
             coeffs = [approximation, detail]
         else:
             coeffs = [approximation, detail] + coeffs[1:]
-            
+
     return coeffs
 
 
@@ -477,13 +479,13 @@ def calculate_temporal_confidence_merge(scores: List[float], weights: List[float
     """Merge scores from different timeframes using weighted average."""
     if len(scores) != len(weights) or not scores:
         return 0.0
-        
+
     weighted_sum = unified_math.unified_math.dot_product(scores, weights)
     total_weight = np.sum(weights)
-    
+
     if total_weight == 0:
         return 0.0
-        
+
     return float(weighted_sum / total_weight)
 
 
@@ -498,4 +500,4 @@ def apply_lag_compensation_curve(value: float, lag: float, sensitivity: float = 
     """Apply a simple compensation curve based on execution lag."""
     # Simple linear compensation model
     compensation = lag * sensitivity
-    return value - compensation 
+    return value - compensation

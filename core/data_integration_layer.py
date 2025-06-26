@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from core.unified_math_system import unified_math
+import requests
+import ccxt
+import json
+from datetime import datetime, timedelta
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Any
+import time
+import logging
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 try:
@@ -10,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Data Integration Layer for Schwabot
@@ -55,16 +72,8 @@ Connects to external APIs (CCXT, Coinbase) to fetch real-time cryptocurrency dat
 and integrates it with the FaultBus system for unified decision making.
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
-from datetime import datetime, timedelta
-import json
 
 # Try to import CCXT for exchange data
-import ccxt
 try:
 CCXT_AVAILABLE = True
 except ImportError:
@@ -74,7 +83,6 @@ CCXT_AVAILABLE = False
 logging.warning("CCXT not available. Install with: pip install ccxt")
 
 # Try to import Coinbase API
-import requests
 try:
 REQUESTS_AVAILABLE = True
 except ImportError:
@@ -89,8 +97,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CryptoDataPoint:
 
-
     """Represents a single cryptocurrency data point."""
+
+
 symbol: str
 price: float
 volume: float
@@ -106,8 +115,9 @@ low_24h: Optional[float] = None
 @dataclass
 class MarketState:
 
-
     """Represents the current market state across all tracked assets."""
+
+
 timestamp: datetime
 assets: Dict[str, CryptoDataPoint]
 overall_volatility: float
@@ -117,20 +127,20 @@ volume_trend: str  # 'increasing', 'decreasing', 'stable'
 
 class DataIntegrationLayer:
 
-
     """
 Integrates multiple data sources and provides unified access to market data.
 """
 
+
 def __init__(self, update_interval: float = 225.0):  # 3.75 minutes
-
-
         """
 Initialize the data integration layer.
 
 Args:
 update_interval: Time between data updates in seconds
 """
+
+
 self.update_interval = update_interval
 self.tracked_symbols = ['BTC/USDT', 'ETH/USDT', 'XRP/USDT']
 self.exchanges = {}
@@ -144,13 +154,14 @@ self._initialize_exchanges()
 
 logger.info(f"Data Integration Layer initialized with {len(self.tracked_symbols)} symbols")
 
-def _initialize_exchanges(self) -> None:
 
+def _initialize_exchanges(self) -> None:
 
     pass
     pass
         """Initialize exchange connections."""
         if CCXT_AVAILABLE:
+
             # Initialize major exchanges
 exchanges_to_try = ['binance', 'coinbase', 'kraken']
 
@@ -172,6 +183,7 @@ logger.warning(f"❌ Failed to connect to {exchange_name}: {e}")
 
         if not self.exchanges:
 logger.warning("⚠️ No exchanges available. Using mock data.")
+
 
 async def start_data_feed(self) -> None:
         """Start the continuous data feed."""

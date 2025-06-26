@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from scipy.stats import entropy
+from scipy.optimize import minimize
+import warnings
+from typing import Any, Dict, List, Optional, Tuple, Union
+import time
+import logging
+from enum import Enum
+from decimal import Decimal, getcontext
+from dataclasses import dataclass, field
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Portfolio Substitution Matrix for Schwabot Trading System.
 
@@ -65,17 +82,8 @@ Key Features:
 - Mathematical optimization for profit maximization
 """
 
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from enum import Enum
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-import warnings
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from scipy.optimize import minimize
-from scipy.stats import entropy
 
 # Set high precision for financial calculations
 getcontext().prec = 28
@@ -85,8 +93,8 @@ logger = logging.getLogger(__name__)
 
 class AssetType(Enum):
 
-
     """Supported asset types for portfolio substitution."""
+
 
 USDC = "USDC"
 XRP = "XRP"
@@ -96,8 +104,8 @@ ETH = "ETH"
 
 class PhaseMode(Enum):
 
-
     """Phase modes for bit-depth processing."""
+
 
 FOUR_BIT = 4
 EIGHT_BIT = 8
@@ -106,8 +114,8 @@ FORTY_TWO_BIT = 42
 
 class SubstitutionStrategy(Enum):
 
-
     """Portfolio substitution strategies."""
+
 
 CONSERVATIVE = "conservative"
 BALANCED = "balanced"
@@ -117,8 +125,8 @@ DEFENSIVE = "defensive"
 
 class RebalanceReason(Enum):
 
-
     """Reasons for portfolio rebalancing."""
+
 
 PHASE_SWITCH = "phase_switch"
 ANOMALY_DETECTED = "anomaly_detected"
@@ -131,8 +139,8 @@ PERIODIC_REBALANCE = "periodic_rebalance"
 @dataclass
 class SubstitutionParameters:
 
-
     """Parameters for portfolio substitution calculations."""
+
 
     # Current portfolio state
 current_allocation: Dict[AssetType, float] = field(default_factory=dict)
@@ -157,8 +165,8 @@ execution_urgency: float = 0.5  # 0-1 scale for execution speed
 @dataclass
 class SubstitutionResult:
 
-
     """Result of portfolio substitution calculation."""
+
 
 target_allocation: Dict[AssetType, float]
 trade_orders: List[Dict[str, Any]]
@@ -184,15 +192,15 @@ strategy_used: SubstitutionStrategy = SubstitutionStrategy.CONSERVATIVE
 
 class PortfolioSubstitutionMatrix:
 
-
     """Core portfolio substitution matrix system."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize the portfolio substitution matrix."""
+
 
         # Define substitution matrices for each phase
 self.substitution_matrices = {
@@ -317,6 +325,7 @@ self.risk_limits = {
 
 logger.info("📊 Portfolio Substitution Matrix initialized")
 
+
 def calculate_substitution(
 
 
@@ -326,6 +335,7 @@ phase_mode: PhaseMode,
 rebalance_reason: RebalanceReason,
 anomaly_context: Optional[Dict[str, Any]] = None,
 ) -> SubstitutionResult:
+
 """Calculate optimal portfolio substitution."""
 
 start_time = time.time()
@@ -337,45 +347,45 @@ strategy = self._determine_substitution_strategy(
 
 
             # Get base substitution weights
-substitution_weights = self._get_substitution_weights(
+substitution_weights=self._get_substitution_weights(
                 phase_mode, strategy, parameters, anomaly_context
 
 
             # Apply risk adjustments
-adjusted_weights = self._apply_risk_adjustments(
+adjusted_weights=self._apply_risk_adjustments(
                 substitution_weights, parameters
 
 
             # Calculate target allocation
-target_allocation = self._calculate_target_allocation(
+target_allocation=self._calculate_target_allocation(
                 adjusted_weights, parameters
 
 
             # Generate trade orders
-trade_orders = self._generate_trade_orders(
+trade_orders=self._generate_trade_orders(
                 parameters.current_allocation, target_allocation, parameters
 
 
             # Calculate expected return and risk
-expected_return = self._calculate_expected_return(
+expected_return=self._calculate_expected_return(
                 target_allocation, parameters
 
-risk_adjustment = self._calculate_risk_adjustment(
+risk_adjustment=self._calculate_risk_adjustment(
                 target_allocation, parameters
 
 
             # Calculate confidence score
-confidence_score = self._calculate_confidence_score(
+confidence_score=self._calculate_confidence_score(
                 strategy, parameters, anomaly_context
 
 
             # Generate substitution rationale
-rationale = self._generate_substitution_rationale(
+rationale=self._generate_substitution_rationale(
                 strategy, rebalance_reason, target_allocation, parameters
 
 
             # Create result
-result = SubstitutionResult(
+result=SubstitutionResult(
                 target_allocation=target_allocation,
 trade_orders=trade_orders,
 rebalance_reason=rebalance_reason,
@@ -401,7 +411,7 @@ strategy_used=strategy,
 self.substitution_history.append(result)
             self._update_performance_metrics(result)
 
-calculation_time = time.time() - start_time
+calculation_time=time.time() - start_time
             logger.debug(
                 f"📊 Portfolio substitution calculated in {calculation_time:.4f}s"
 
@@ -427,11 +437,11 @@ anomaly_context: Optional[Dict[str, Any]],
 
         # Base strategy selection based on phase mode
         if phase_mode == PhaseMode.FOUR_BIT:
-base_strategy = SubstitutionStrategy.CONSERVATIVE
+base_strategy=SubstitutionStrategy.CONSERVATIVE
         elif phase_mode == PhaseMode.EIGHT_BIT:
-base_strategy = SubstitutionStrategy.BALANCED
+base_strategy=SubstitutionStrategy.BALANCED
         else:  # FORTY_TWO_BIT
-base_strategy = SubstitutionStrategy.AGGRESSIVE
+base_strategy=SubstitutionStrategy.AGGRESSIVE
 
         # Adjust based on rebalance reason
         if rebalance_reason == RebalanceReason.ANOMALY_DETECTED:
@@ -447,8 +457,8 @@ base_strategy = SubstitutionStrategy.AGGRESSIVE
 
         # Adjust based on anomaly context
         if anomaly_context:
-market_regime = anomaly_context.get("market_regime", "normal")
-            volatility_level = anomaly_context.get("volatility_level", "normal")
+market_regime=anomaly_context.get("market_regime", "normal")
+            volatility_level=anomaly_context.get("volatility_level", "normal")
 
             if market_regime == "high_volatility" or volatility_level == "extreme":
                 return SubstitutionStrategy.DEFENSIVE
@@ -480,24 +490,24 @@ anomaly_context: Optional[Dict[str, Any]],
 """Get substitution weights based on phase, strategy, and context."""
 
         # Get base matrix
-base_matrix = self.substitution_matrices[phase_mode][strategy]
+base_matrix=self.substitution_matrices[phase_mode][strategy]
 
         # Select variant based on anomaly score or random selection
         if anomaly_context and "severity_score" in anomaly_context:
-severity_score = anomaly_context["severity_score"]
-variant_idx = unified_math.min(int(severity_score * 4), 3)
+severity_score=anomaly_context["severity_score"]
+variant_idx=unified_math.min(int(severity_score * 4), 3)
         else:
             # Use portfolio performance to select variant
-variant_idx = self._select_performance_based_variant(parameters)
+variant_idx=self._select_performance_based_variant(parameters)
 
-weights = base_matrix[variant_idx].copy()
+weights=base_matrix[variant_idx].copy()
 
         # Apply market regime adjustments
         if anomaly_context:
-weights = self._apply_market_regime_adjustments(weights, anomaly_context)
+weights=self._apply_market_regime_adjustments(weights, anomaly_context)
 
         # Apply correlation adjustments
-weights = self._apply_correlation_adjustments(weights, parameters)
+weights=self._apply_correlation_adjustments(weights, parameters)
 
         # Normalize to ensure sum equals 1.0
         return weights / np.sum(weights)
@@ -509,11 +519,11 @@ def _apply_risk_adjustments(
 ) -> np.ndarray[Any, Any]:
 """Apply risk-based adjustments to substitution weights."""
 
-adjusted_weights = weights.copy()
+adjusted_weights=weights.copy()
 
         # Volatility adjustment
         if parameters.volatility_levels:
-vol_scores = np.array(
+vol_scores=np.array(
                 [
 parameters.volatility_levels.get(asset, 0.02)
                     for asset in self.asset_order
@@ -521,12 +531,12 @@ parameters.volatility_levels.get(asset, 0.02)
 
 
             # Reduce allocation to high volatility assets
-vol_penalty = unified_math.exp(-vol_scores * 10)  # Exponential penalty for high vol
+vol_penalty=unified_math.exp(-vol_scores * 10)  # Exponential penalty for high vol
             adjusted_weights *= vol_penalty
 
         # Liquidity adjustment
         if parameters.liquidity_scores:
-liq_scores = np.array(
+liq_scores=np.array(
                 [
 parameters.liquidity_scores.get(asset, 0.5)
                     for asset in self.asset_order
@@ -534,11 +544,11 @@ parameters.liquidity_scores.get(asset, 0.5)
 
 
             # Increase allocation to high liquidity assets
-liq_bonus = liq_scores**0.5  # Square root for diminishing returns
+liq_bonus=liq_scores**0.5  # Square root for diminishing returns
 adjusted_weights *= liq_bonus
 
         # Apply position size limits
-adjusted_weights = np.clip(
+adjusted_weights=np.clip(
             adjusted_weights, parameters.min_position_size, parameters.max_position_size
 
 
@@ -552,8 +562,8 @@ def _apply_market_regime_adjustments(
 ) -> np.ndarray[Any, Any]:
 """Apply market regime specific adjustments."""
 
-adjusted_weights = weights.copy()
-        market_regime = anomaly_context.get("market_regime", "normal")
+adjusted_weights=weights.copy()
+        market_regime=anomaly_context.get("market_regime", "normal")
 
         if market_regime == "high_volatility":
             # Increase USDC allocation
@@ -576,7 +586,7 @@ adjusted_weights[0] += 0.15  # Increase USDC
 adjusted_weights[1:] -= 0.05  # Reduce crypto
 
         # Ensure no negative weights
-adjusted_weights = np.maximum(adjusted_weights, 0.01)
+adjusted_weights=np.maximum(adjusted_weights, 0.01)
 
         return adjusted_weights
 
@@ -590,17 +600,18 @@ def _apply_correlation_adjustments(
         if parameters.correlation_matrix.shape != (4, 4):
             return weights
 
-adjusted_weights = weights.copy()
-        corr_matrix = parameters.correlation_matrix
+adjusted_weights=weights.copy()
+        corr_matrix=parameters.correlation_matrix
 
         # Calculate correlation-weighted risk
-portfolio_variance = unified_math.unified_math.dot_product(weights, unified_math.unified_math.dot_product(corr_matrix, weights))
+portfolio_variance=unified_math.unified_math.dot_product(
+    weights, unified_math.unified_math.dot_product(corr_matrix, weights))
 
         # If portfolio is too correlated, diversify
         if portfolio_variance > self.risk_limits["max_correlation_exposure"]:
             # Reduce weights of highly correlated assets
             for i in range(len(weights)):
-                avg_correlation = unified_math.unified_math.mean(unified_math.unified_math.abs(corr_matrix[i, :]))
+                avg_correlation=unified_math.unified_math.mean(unified_math.unified_math.abs(corr_matrix[i, :]))
                 if avg_correlation > 0.7:  # High correlation threshold
 adjusted_weights[i] *= 0.8  # Reduce by 20%
 
@@ -614,11 +625,11 @@ def _calculate_target_allocation(
 ) -> Dict[AssetType, float]:
 """Calculate target allocation in dollar amounts."""
 
-target_allocation = {}
+target_allocation={}
 
         for i, asset in enumerate(self.asset_order):
-            target_amount = weights[i] * parameters.total_portfolio_value
-target_allocation[asset] = target_amount
+            target_amount=weights[i] * parameters.total_portfolio_value
+target_allocation[asset]=target_amount
 
         return target_allocation
 
@@ -632,31 +643,31 @@ parameters: SubstitutionParameters,
 ) -> List[Dict[str, Any]]:
 """Generate trade orders to achieve target allocation."""
 
-trade_orders = []
+trade_orders=[]
 
         for asset in self.asset_order:
-current_amount = current_allocation.get(asset, 0.0)
-            target_amount = target_allocation[asset]
+current_amount=current_allocation.get(asset, 0.0)
+            target_amount=target_allocation[asset]
 
-trade_amount = target_amount - current_amount
+trade_amount=target_amount - current_amount
 
             # Only create orders above minimum trade size
             if unified_math.abs(trade_amount) > parameters.min_trade_size:
 
                 # Determine trade action
-action = "buy" if trade_amount > 0 else "sell"
+action="buy" if trade_amount > 0 else "sell"
 
                 # Calculate priority based on urgency and amount
-priority = self._calculate_trade_priority(
+priority=self._calculate_trade_priority(
                     asset, unified_math.abs(trade_amount), parameters
 
 
                 # Estimate execution parameters
-estimated_slippage = self._estimate_slippage(
+estimated_slippage=self._estimate_slippage(
                     asset, unified_math.abs(trade_amount), parameters
 
 
-trade_order = {
+trade_order={
 "asset": asset.value,
 "action": action,
 "amount": unified_math.abs(trade_amount),
@@ -682,21 +693,21 @@ def _calculate_trade_priority(
 """Calculate trade priority based on asset and amount."""
 
         # Base priority on trade amount relative to portfolio
-amount_priority = unified_math.min(amount / parameters.total_portfolio_value, 0.5) * 2
+amount_priority=unified_math.min(amount / parameters.total_portfolio_value, 0.5) * 2
 
         # Liquidity priority
-liquidity_score = parameters.liquidity_scores.get(asset, 0.5)
-        liquidity_priority = liquidity_score
+liquidity_score=parameters.liquidity_scores.get(asset, 0.5)
+        liquidity_priority=liquidity_score
 
         # Urgency priority
-urgency_priority = parameters.execution_urgency
+urgency_priority=parameters.execution_urgency
 
         # Volatility priority (higher vol = higher priority to execute quickly)
-        volatility = parameters.volatility_levels.get(asset, 0.02)
-        volatility_priority = unified_math.min(volatility * 20, 1.0)
+        volatility=parameters.volatility_levels.get(asset, 0.02)
+        volatility_priority=unified_math.min(volatility * 20, 1.0)
 
         # Combine priorities
-total_priority = (
+total_priority=(
             amount_priority * 0.3
 + liquidity_priority * 0.25
 + urgency_priority * 0.25
@@ -713,13 +724,13 @@ def _estimate_slippage(
 """Estimate slippage for a trade."""
 
         # Base slippage model (simplified)
-        liquidity_score = parameters.liquidity_scores.get(asset, 0.5)
+        liquidity_score=parameters.liquidity_scores.get(asset, 0.5)
 
         # Higher amounts and lower liquidity increase slippage
-amount_impact = (amount / parameters.total_portfolio_value) * 0.01
-        liquidity_impact = (1.0 - liquidity_score) * 0.005
+amount_impact=(amount / parameters.total_portfolio_value) * 0.01
+        liquidity_impact=(1.0 - liquidity_score) * 0.005
 
-estimated_slippage = amount_impact + liquidity_impact
+estimated_slippage=amount_impact + liquidity_impact
 
         return unified_math.min(estimated_slippage, parameters.max_slippage)
 
@@ -733,7 +744,7 @@ def _estimate_total_slippage(
         if not trade_orders:
             return 0.0
 
-total_slippage = sum(order["estimated_slippage"] for order in trade_orders)
+total_slippage=sum(order["estimated_slippage"] for order in trade_orders)
         return total_slippage / len(trade_orders)  # Average slippage
 
 def _estimate_execution_time(
@@ -747,17 +758,17 @@ def _estimate_execution_time(
             return 0.0
 
         # Base execution time per trade
-base_time_per_trade = 30.0  # 30 seconds base
+base_time_per_trade=30.0  # 30 seconds base
 
         # Adjust based on urgency
-urgency_multiplier = (
+urgency_multiplier=(
             2.0 - parameters.execution_urgency
 )  # Higher urgency = faster
 
         # Adjust based on number of trades (parallel execution)
-        parallel_factor = unified_math.min(len(trade_orders) / 4, 1.0)  # Up to 4 parallel trades
+        parallel_factor=unified_math.min(len(trade_orders) / 4, 1.0)  # Up to 4 parallel trades
 
-total_time = (len(trade_orders) * base_time_per_trade * urgency_multiplier) / ()
+total_time=(len(trade_orders) * base_time_per_trade * urgency_multiplier) / ()
             1 + parallel_factor
 
 
@@ -773,7 +784,7 @@ parameters: SubstitutionParameters,
 """Calculate expected return for target allocation."""
 
         # Base expected returns (annualized)
-        base_returns = {
+        base_returns={
 AssetType.USDC: 0.03,  # 3% risk-free rate
 AssetType.XRP: 0.15,  # 15% expected return
 AssetType.BTC: 0.25,  # 25% expected return
@@ -781,13 +792,13 @@ AssetType.ETH: 0.20,  # 20% expected return
 }
 
         # Calculate weighted expected return
-total_value = parameters.total_portfolio_value
+total_value=parameters.total_portfolio_value
         if total_value == 0:
             return 0.0
 
-expected_return = 0.0
+expected_return=0.0
         for asset, amount in target_allocation.items():
-            weight = amount / total_value
+            weight=amount / total_value
 expected_return += weight * base_returns[asset]
 
         return expected_return
@@ -801,16 +812,16 @@ parameters: SubstitutionParameters,
 ) -> float:
 """Calculate risk adjustment factor for target allocation."""
 
-total_value = parameters.total_portfolio_value
+total_value=parameters.total_portfolio_value
         if total_value == 0:
             return 1.0
 
         # Calculate portfolio volatility
-weights = np.array(
+weights=np.array(
             [target_allocation[asset] / total_value for asset in self.asset_order]
 
 
-volatilities = np.array(
+volatilities=np.array(
             [
 parameters.volatility_levels.get(asset, 0.02)
                 for asset in self.asset_order
@@ -818,10 +829,10 @@ parameters.volatility_levels.get(asset, 0.02)
 
 
         # Portfolio volatility (simplified)
-        portfolio_vol = unified_math.unified_math.sqrt(unified_math.unified_math.dot_product(weights**2, volatilities**2))
+        portfolio_vol=unified_math.unified_math.sqrt(unified_math.unified_math.dot_product(weights**2, volatilities**2))
 
         # Risk adjustment based on volatility
-risk_adjustment = unified_math.exp(-portfolio_vol * 5)  # Exponential penalty for high vol
+risk_adjustment=unified_math.exp(-portfolio_vol * 5)  # Exponential penalty for high vol
 
         return np.clip(risk_adjustment, 0.1, 1.0)
 
@@ -835,20 +846,20 @@ anomaly_context: Optional[Dict[str, Any]],
 ) -> float:
 """Calculate confidence score for substitution decision."""
 
-confidence = 0.8  # Base confidence
+confidence=0.8  # Base confidence
 
         # Adjust based on data quality
         if parameters.liquidity_scores:
-avg_liquidity = unified_math.unified_math.mean(list(parameters.liquidity_scores.values()))
+avg_liquidity=unified_math.unified_math.mean(list(parameters.liquidity_scores.values()))
             confidence *= 0.5 + avg_liquidity * 0.5
 
         # Adjust based on anomaly context
         if anomaly_context:
-severity_score = anomaly_context.get("severity_score", 0.0)
+severity_score=anomaly_context.get("severity_score", 0.0)
             confidence *= 1.0 - severity_score * 0.3  # Reduce confidence with anomalies
 
         # Adjust based on strategy
-strategy_confidence = {
+strategy_confidence={
 SubstitutionStrategy.CONSERVATIVE: 0.9,
 SubstitutionStrategy.BALANCED: 0.8,
 SubstitutionStrategy.AGGRESSIVE: 0.7,
@@ -870,7 +881,7 @@ parameters: SubstitutionParameters,
 ) -> List[str]:
 """Generate human-readable rationale for substitution."""
 
-rationale = []
+rationale=[]
 
         # Strategy rationale
 rationale.append(
@@ -878,7 +889,7 @@ rationale.append(
 
 
         # Rebalance reason rationale
-reason_explanations = {
+reason_explanations={
 RebalanceReason.PHASE_SWITCH:
 "Portfolio rebalance triggered by phase mode switch",
 RebalanceReason.ANOMALY_DETECTED:
@@ -901,10 +912,10 @@ rationale.append(
 
 
         # Allocation rationale
-total_value = parameters.total_portfolio_value
+total_value=parameters.total_portfolio_value
         if total_value > 0:
             for asset, amount in target_allocation.items():
-                weight = amount / total_value
+                weight=amount / total_value
 rationale.append(
                     f"{asset.value}: {weight:.1%} allocation (${{amount:,.0f}})"
 
@@ -926,30 +937,30 @@ parameters: SubstitutionParameters,
 ) -> Dict[str, float]:
 """Calculate risk metrics for target allocation."""
 
-total_value = parameters.total_portfolio_value
+total_value=parameters.total_portfolio_value
         if total_value == 0:
             return {}
 
-weights = np.array(
+weights=np.array(
             [target_allocation[asset] / total_value for asset in self.asset_order]
 
 
         # Diversification score (inverse of Herfindahl index)
-        herfindahl_index = np.sum(weights**2)
-        diversification_score = 1.0 - herfindahl_index
+        herfindahl_index=np.sum(weights**2)
+        diversification_score=1.0 - herfindahl_index
 
         # Concentration risk (max single asset weight)
-        max_concentration = unified_math.unified_math.max(weights)
+        max_concentration=unified_math.unified_math.max(weights)
 
         # Volatility metrics
-volatilities = np.array(
+volatilities=np.array(
             [
 parameters.volatility_levels.get(asset, 0.02)
                 for asset in self.asset_order
 ]
 
 
-weighted_volatility = unified_math.unified_math.dot_product(weights, volatilities)
+weighted_volatility=unified_math.unified_math.dot_product(weights, volatilities)
 
         return {
 "diversification_score": diversification_score,
@@ -969,13 +980,13 @@ def _select_performance_based_variant(
             return 0  # Default to first variant
 
         # Analyze recent performance
-recent_results = self.substitution_history[-10:]  # Last 10 substitutions
+recent_results=self.substitution_history[-10:]  # Last 10 substitutions
 
         if not recent_results:
             return 0
 
         # Calculate average return
-avg_return = unified_math.mean([result.expected_return for result in recent_results])
+avg_return=unified_math.mean([result.expected_return for result in recent_results])
 
         # Select variant based on performance
         if avg_return > 0.2:  # High performance
@@ -996,18 +1007,18 @@ def _update_performance_metrics(self, result: SubstitutionResult) -> None:
 
         # Keep only recent history
         if len(self.substitution_history) > 100:
-            self.substitution_history = self.substitution_history[-100:]
+            self.substitution_history=self.substitution_history[-100:]
 
         # Calculate performance metrics
         if len(self.substitution_history) >= 5:
-            recent_returns = [
+            recent_returns=[
 r.expected_return for r in self.substitution_history[-10:]
 ]
-recent_confidence = [
+recent_confidence=[
 r.confidence_score for r in self.substitution_history[-10:]
 ]
 
-self.performance_metrics = {
+self.performance_metrics={
 "average_return": unified_math.unified_math.mean(recent_returns),
                 "return_volatility": unified_math.unified_math.std(recent_returns),
                 "average_confidence": unified_math.unified_math.mean(recent_confidence),
@@ -1027,11 +1038,11 @@ rebalance_reason: RebalanceReason,
 """Create fallback substitution when calculation fails."""
 
         # Use conservative allocation
-fallback_weights = np.array([0.60, 0.20, 0.15, 0.05])  # USDC, XRP, BTC, ETH
+fallback_weights=np.array([0.60, 0.20, 0.15, 0.05])  # USDC, XRP, BTC, ETH
 
-target_allocation = {}
+target_allocation={}
         for i, asset in enumerate(self.asset_order):
-            target_allocation[asset] = (]
+            target_allocation[asset]=(]
                 fallback_weights[i] * parameters.total_portfolio_value
 
 
@@ -1085,32 +1096,32 @@ def execute_portfolio_substitution(
 total_portfolio_value: float,
 phase_mode: int,
 rebalance_reason: str,
-anomaly_context: Optional[Dict[str, Any]] = None,
+anomaly_context: Optional[Dict[str, Any]]=None,
 ) -> Dict[str, Any]:
 """Main function to execute portfolio substitution."""
 
     # Convert inputs to proper types
-phase_mode_enum = PhaseMode(phase_mode)
-    rebalance_reason_enum = RebalanceReason(rebalance_reason)
+phase_mode_enum=PhaseMode(phase_mode)
+    rebalance_reason_enum=RebalanceReason(rebalance_reason)
 
     # Convert allocation keys to AssetType
-current_allocation_typed = {}
+current_allocation_typed={}
     for asset_str, amount in current_allocation.items():
         try:
-asset_type = AssetType(asset_str)
-            current_allocation_typed[asset_type] = amount
+asset_type=AssetType(asset_str)
+            current_allocation_typed[asset_type]=amount
         except ValueError:
 logger.warning(f"⚠️ Unknown asset type: {asset_str}")
 
     # Create parameters
-parameters = SubstitutionParameters(
+parameters=SubstitutionParameters(
         current_allocation=current_allocation_typed,
 total_portfolio_value=total_portfolio_value,
 
 
     # Create matrix and calculate substitution
-matrix = create_portfolio_substitution_matrix()
-    result = matrix.calculate_substitution(
+matrix=create_portfolio_substitution_matrix()
+    result=matrix.calculate_substitution(
         parameters, phase_mode_enum, rebalance_reason_enum, anomaly_context
 
 
@@ -1139,9 +1150,9 @@ if __name__ == "__main__":
     pass
     pass
     # Example usage
-current_allocation = {"USDC": 5000.0, "XRP": 2000.0, "BTC": 2500.0, "ETH": 500.0}
+current_allocation={"USDC": 5000.0, "XRP": 2000.0, "BTC": 2500.0, "ETH": 500.0}
 
-result = execute_portfolio_substitution(
+result=execute_portfolio_substitution(
         current_allocation=current_allocation,
 total_portfolio_value=10000.0,
 phase_mode=8,  # 8-bit phase

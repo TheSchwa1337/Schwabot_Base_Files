@@ -8,7 +8,6 @@ import numpy as np
 
 def allocate(phi: float, alphas: list[float]) -> np.ndarray:
 
-
     pass
     pass
     """Split entry weight across baskets proportionally.
@@ -28,10 +27,11 @@ ValueError: If alphas sum to zero
     if not alphas:
         return np.array([])
 
-a = np.array(alphas, dtype=float)
-    alpha_sum = a.sum()
 
-    if alpha_sum == 0:
+a = np.array(alphas, dtype=float)
+  alpha_sum = a.sum()
+
+   if alpha_sum == 0:
         raise ValueError("Alpha coefficients sum to zero")
 
     return phi * (a / alpha_sum)

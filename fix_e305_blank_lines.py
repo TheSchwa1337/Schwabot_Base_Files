@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 
+
 def fix_e305_in_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -41,6 +42,7 @@ def fix_e305_in_file(filepath):
         print(f"Fixed: {filepath}")
     return changed
 
+
 def main():
     core_path = Path('core')
     py_files = list(core_path.rglob('*.py'))
@@ -50,5 +52,6 @@ def main():
             total_fixed += 1
     print(f"\nE305 blank line fixes applied to {total_fixed} files.")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

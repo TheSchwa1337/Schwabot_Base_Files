@@ -57,10 +57,13 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
 
@@ -125,23 +128,23 @@ class VersionInfo:
 
 class HashBasedVersionPinning:
     """Hash-based version pinning for reproducibility."""
-    
+
     def __init__(self, config_dir: str = "config"):
         """Initialize hash-based version pinning."""
         self.config_dir = Path(config_dir)
         self.config_dir.mkdir(parents=True, exist_ok=True)
         self.version_file = self.config_dir / "version_pinning.json"
         self.math_constants_file = self.config_dir / "math_constants.json"
-        
+
         # Load existing versions
         self.version_pins: Dict[str, str] = {}
         self.math_constants: Dict[str, MathConstant] = {}
-        
+
         self._load_version_pins()
         self._load_math_constants()
-        
+
         safe_print("🔗 Hash-Based Version Pinning initialized")
-    
+
     def _load_version_pins(self) -> None:
         """Load version pins from file."""
         try:
@@ -151,14 +154,14 @@ class HashBasedVersionPinning:
                 safe_print(f"✅ Loaded {len(self.version_pins)} version pins")
         except Exception as e:
             safe_print(f"⚠️ Version pins load failed: {safe_format_error(e, 'version_load')}")
-    
+
     def _load_math_constants(self) -> None:
         """Load math constants from file."""
         try:
             if self.math_constants_file.exists():
                 with open(self.math_constants_file, 'r') as f:
                     constants_data = json.load(f)
-                
+
                 for name, data in constants_data.items():
                     constant = MathConstant(
                         name=name,
@@ -172,11 +175,11 @@ class HashBasedVersionPinning:
                         metadata=data.get('metadata', {})
                     )
                     self.math_constants[name] = constant
-                
+
                 safe_print(f"✅ Loaded {len(self.math_constants)} math constants")
         except Exception as e:
             safe_print(f"⚠️ Math constants load failed: {safe_format_error(e, 'constants_load')}")
-    
+
     def _save_version_pins(self) -> None:
         """Save version pins to file."""
         try:
@@ -184,7 +187,7 @@ class HashBasedVersionPinning:
                 json.dump(self.version_pins, f, indent=2)
         except Exception as e:
             safe_print(f"❌ Version pins save failed: {safe_format_error(e, 'version_save')}")
-    
+
     def _save_math_constants(self) -> None:
         """Save math constants to file."""
         try:
@@ -200,21 +203,21 @@ class HashBasedVersionPinning:
                     'last_updated': constant.last_updated.isoformat(),
                     'metadata': constant.metadata
                 }
-            
+
             with open(self.math_constants_file, 'w') as f:
                 json.dump(constants_data, f, indent=2)
         except Exception as e:
             safe_print(f"❌ Math constants save failed: {safe_format_error(e, 'constants_save')}")
-    
-    def pin_math_constant(self, name: str, value: Union[float, Decimal, str], 
-                         description: str, category: str) -> str:
+
+    def pin_math_constant(self, name: str, value: Union[float, Decimal, str],
+                          description: str, category: str) -> str:
         """Pin a mathematical constant with hash-based versioning."""
         try:
             # Create version hash
             value_str = str(value)
             hash_input = f"{name}:{value_str}:{description}:{category}:{datetime.now().isoformat()}"
             version_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
-            
+
             # Create or update constant
             constant = MathConstant(
                 name=name,
@@ -223,68 +226,68 @@ class HashBasedVersionPinning:
                 category=category,
                 version_hash=version_hash
             )
-            
+
             self.math_constants[name] = constant
             self.version_pins[f"math_constant_{name}"] = version_hash
-            
+
             # Save to files
             self._save_math_constants()
             self._save_version_pins()
-            
+
             safe_print(f"✅ Math constant pinned: {name} = {value} (hash: {version_hash})")
             return version_hash
-            
+
         except Exception as e:
             safe_print(f"❌ Math constant pinning failed: {safe_format_error(e, 'constant_pin')}")
             return ""
-    
+
     def get_math_constant(self, name: str) -> Optional[MathConstant]:
         """Get a mathematical constant."""
         return self.math_constants.get(name)
-    
+
     def verify_math_constant(self, name: str, expected_hash: str) -> bool:
         """Verify a mathematical constant hasn't changed."""
         constant = self.math_constants.get(name)
         if not constant:
             return False
         return constant.version_hash == expected_hash
-    
+
     def get_all_constants(self) -> Dict[str, MathConstant]:
         """Get all mathematical constants."""
         return self.math_constants.copy()
-    
+
     def get_constants_by_category(self, category: str) -> Dict[str, MathConstant]:
         """Get constants by category."""
-        return {name: constant for name, constant in self.math_constants.items() 
+        return {name: constant for name, constant in self.math_constants.items()
                 if constant.category == category}
 
 
 class SemVerManager:
     """Semantic versioning manager with changelog."""
-    
+
     def __init__(self, config_dir: str = "config"):
         """Initialize SemVer manager."""
         self.config_dir = Path(config_dir)
         self.config_dir.mkdir(parents=True, exist_ok=True)
         self.version_file = self.config_dir / "version.json"
         self.changelog_file = self.config_dir / "CHANGELOG.md"
-        
+
         # Current version
         self.current_version = VersionInfo(0, 1, 0)
         self.changelog: List[str] = []
-        
+
         self._load_version()
         self._load_changelog()
-        
+
         safe_print("🏷️ SemVer Manager initialized")
-    
+
     def _load_version(self) -> None:
         """Load version from file."""
         try:
             if self.version_file.exists():
                 with open(self.version_file, 'r') as f:
                     version_data = json.load(f)
-                
+
                 self.current_version = VersionInfo(
                     major=version_data['major'],
                     minor=version_data['minor'],
@@ -295,11 +298,11 @@ class SemVerManager:
                     build_date=datetime.fromisoformat(version_data['build_date']),
                     changelog=version_data.get('changelog', [])
                 )
-                
+
                 safe_print(f"✅ Loaded version: {self.get_version_string()}")
         except Exception as e:
             safe_print(f"⚠️ Version load failed: {safe_format_error(e, 'version_load')}")
-    
+
     def _load_changelog(self) -> None:
         """Load changelog from file."""
         try:
@@ -308,7 +311,7 @@ class SemVerManager:
                     self.changelog = f.readlines()
         except Exception as e:
             safe_print(f"⚠️ Changelog load failed: {safe_format_error(e, 'changelog_load')}")
-    
+
     def _save_version(self) -> None:
         """Save version to file."""
         try:
@@ -322,12 +325,12 @@ class SemVerManager:
                 'build_date': self.current_version.build_date.isoformat(),
                 'changelog': self.current_version.changelog
             }
-            
+
             with open(self.version_file, 'w') as f:
                 json.dump(version_data, f, indent=2)
         except Exception as e:
             safe_print(f"❌ Version save failed: {safe_format_error(e, 'version_save')}")
-    
+
     def _save_changelog(self) -> None:
         """Save changelog to file."""
         try:
@@ -335,7 +338,7 @@ class SemVerManager:
                 f.writelines(self.changelog)
         except Exception as e:
             safe_print(f"❌ Changelog save failed: {safe_format_error(e, 'changelog_save')}")
-    
+
     def get_version_string(self) -> str:
         """Get version as string."""
         version = f"{self.current_version.major}.{self.current_version.minor}.{self.current_version.patch}"
@@ -344,7 +347,7 @@ class SemVerManager:
         if self.current_version.build:
             version += f"+{self.current_version.build}"
         return version
-    
+
     def bump_major(self, changelog_entry: str) -> str:
         """Bump major version."""
         self.current_version.major += 1
@@ -353,19 +356,19 @@ class SemVerManager:
         self.current_version.prerelease = None
         self.current_version.build = None
         self.current_version.build_date = datetime.now()
-        
+
         # Add changelog entry
         entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Breaking Changes\n- {changelog_entry}\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
-        
+
         # Save
         self._save_version()
         self._save_changelog()
-        
+
         safe_print(f"✅ Bumped to major version: {self.get_version_string()}")
         return self.get_version_string()
-    
+
     def bump_minor(self, changelog_entry: str) -> str:
         """Bump minor version."""
         self.current_version.minor += 1
@@ -373,47 +376,47 @@ class SemVerManager:
         self.current_version.prerelease = None
         self.current_version.build = None
         self.current_version.build_date = datetime.now()
-        
+
         # Add changelog entry
         entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Features\n- {changelog_entry}\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
-        
+
         # Save
         self._save_version()
         self._save_changelog()
-        
+
         safe_print(f"✅ Bumped to minor version: {self.get_version_string()}")
         return self.get_version_string()
-    
+
     def bump_patch(self, changelog_entry: str) -> str:
         """Bump patch version."""
         self.current_version.patch += 1
         self.current_version.prerelease = None
         self.current_version.build = None
         self.current_version.build_date = datetime.now()
-        
+
         # Add changelog entry
         entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Bug Fixes\n- {changelog_entry}\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
-        
+
         # Save
         self._save_version()
         self._save_changelog()
-        
+
         safe_print(f"✅ Bumped to patch version: {self.get_version_string()}")
         return self.get_version_string()
-    
+
     def get_git_commit(self) -> Optional[str]:
         """Get current git commit hash."""
         try:
-            result = subprocess.run(['git', 'rev-parse', 'HEAD'], 
-                                  capture_output=True, text=True, check=True)
+            result = subprocess.run(['git', 'rev-parse', 'HEAD'],
+                                    capture_output=True, text=True, check=True)
             return result.stdout.strip()
         except Exception:
             return None
-    
+
     def update_git_commit(self) -> None:
         """Update git commit hash."""
         self.current_version.git_commit = self.get_git_commit()
@@ -422,37 +425,37 @@ class SemVerManager:
 
 class CanaryEnvironmentManager:
     """Canary environment manager for exchange testnets."""
-    
+
     def __init__(self, config_dir: str = "config"):
         """Initialize canary environment manager."""
         self.config_dir = Path(config_dir)
         self.config_dir.mkdir(parents=True, exist_ok=True)
         self.canary_config_file = self.config_dir / "canary_config.yaml"
-        
+
         # Canary configuration
         self.canary_config: Dict[str, Any] = {}
         self.exchange_testnets: Dict[str, Dict[str, Any]] = {}
         self.feature_flags: Dict[str, bool] = {}
-        
+
         self._load_canary_config()
         self._initialize_testnets()
-        
+
         safe_print("🦅 Canary Environment Manager initialized")
-    
+
     def _load_canary_config(self) -> None:
         """Load canary configuration."""
         try:
             if self.canary_config_file.exists():
                 with open(self.canary_config_file, 'r') as f:
                     self.canary_config = yaml.safe_load(f)
-                
+
                 self.exchange_testnets = self.canary_config.get('exchange_testnets', {})
                 self.feature_flags = self.canary_config.get('feature_flags', {})
-                
+
                 safe_print("✅ Canary configuration loaded")
         except Exception as e:
             safe_print(f"⚠️ Canary config load failed: {safe_format_error(e, 'canary_load')}")
-    
+
     def _save_canary_config(self) -> None:
         """Save canary configuration."""
         try:
@@ -461,12 +464,12 @@ class CanaryEnvironmentManager:
                 'feature_flags': self.feature_flags,
                 'last_updated': datetime.now().isoformat()
             }
-            
+
             with open(self.canary_config_file, 'w') as f:
                 yaml.dump(config_data, f, default_flow_style=False, indent=2)
         except Exception as e:
             safe_print(f"❌ Canary config save failed: {safe_format_error(e, 'canary_save')}")
-    
+
     def _initialize_testnets(self) -> None:
         """Initialize exchange testnets."""
         default_testnets = {
@@ -495,14 +498,14 @@ class CanaryEnvironmentManager:
                 'features': ['spot_trading', 'futures_trading']
             }
         }
-        
+
         # Merge with existing config
         for exchange, config in default_testnets.items():
             if exchange not in self.exchange_testnets:
                 self.exchange_testnets[exchange] = config
-        
+
         self._save_canary_config()
-    
+
     def enable_testnet(self, exchange: str) -> bool:
         """Enable exchange testnet."""
         try:
@@ -517,7 +520,7 @@ class CanaryEnvironmentManager:
         except Exception as e:
             safe_print(f"❌ Enable testnet failed: {safe_format_error(e, 'enable_testnet')}")
             return False
-    
+
     def disable_testnet(self, exchange: str) -> bool:
         """Disable exchange testnet."""
         try:
@@ -532,26 +535,26 @@ class CanaryEnvironmentManager:
         except Exception as e:
             safe_print(f"❌ Disable testnet failed: {safe_format_error(e, 'disable_testnet')}")
             return False
-    
+
     def get_enabled_testnets(self) -> List[str]:
         """Get list of enabled testnets."""
-        return [exchange for exchange, config in self.exchange_testnets.items() 
+        return [exchange for exchange, config in self.exchange_testnets.items()
                 if config.get('enabled', False)]
-    
+
     def get_testnet_config(self, exchange: str) -> Optional[Dict[str, Any]]:
         """Get testnet configuration."""
         return self.exchange_testnets.get(exchange)
-    
+
     def set_feature_flag(self, feature: str, enabled: bool) -> None:
         """Set feature flag."""
         self.feature_flags[feature] = enabled
         self._save_canary_config()
         safe_print(f"✅ Feature flag set: {feature} = {enabled}")
-    
+
     def is_feature_enabled(self, feature: str) -> bool:
         """Check if feature is enabled."""
         return self.feature_flags.get(feature, False)
-    
+
     def get_all_feature_flags(self) -> Dict[str, bool]:
         """Get all feature flags."""
         return self.feature_flags.copy()
@@ -560,33 +563,33 @@ class CanaryEnvironmentManager:
 class EnvironmentManager:
     """
     Environment Manager - Comprehensive environment and configuration management.
-    
+
     Provides enterprise-grade environment management including:
     - Canary environment pointing at exchange testnets
     - Single YAML/TOML config with hash-based version pinning
     - SemVer tags and changelog for reproducibility
     - Integration with all Schwabot core systems and mathematical frameworks
     """
-    
+
     def __init__(self, config_dir: str = "config"):
         """Initialize environment manager."""
         self.config_dir = Path(config_dir)
         self.config_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Initialize components
         self.version_pinning = HashBasedVersionPinning(str(self.config_dir))
         self.semver_manager = SemVerManager(str(self.config_dir))
         self.canary_manager = CanaryEnvironmentManager(str(self.config_dir))
-        
+
         # Current environment
         self.current_environment = EnvironmentType.DEVELOPMENT
         self.config_format = ConfigFormat.YAML
-        
+
         # Initialize mathematical constants
         self._initialize_math_constants()
-        
+
         safe_print("🌍 Environment Manager initialized")
-    
+
     def _initialize_math_constants(self) -> None:
         """Initialize mathematical constants with hash-based pinning."""
         try:
@@ -597,14 +600,14 @@ class EnvironmentManager:
                 description="ZPE resonance frequency (fine structure constant)",
                 category="zpe_core"
             )
-            
+
             self.version_pinning.pin_math_constant(
                 name="zpe_rotational_velocity",
                 value=Decimal("299792458"),
                 description="ZPE rotational velocity (speed of light)",
                 category="zpe_core"
             )
-            
+
             # VECU constants
             self.version_pinning.pin_math_constant(
                 name="vecu_timing_phase",
@@ -612,14 +615,14 @@ class EnvironmentManager:
                 description="VECU timing phase for profit synchronization",
                 category="vecu_core"
             )
-            
+
             self.version_pinning.pin_math_constant(
                 name="vecu_pwm_frequency",
                 value=Decimal("1000"),
                 description="VECU PWM frequency for profit burst modulation",
                 category="vecu_core"
             )
-            
+
             # Ferris RDE constants
             self.version_pinning.pin_math_constant(
                 name="ferris_wheel_radius",
@@ -627,14 +630,14 @@ class EnvironmentManager:
                 description="Ferris wheel radius for cyclical measurements",
                 category="ferris_rde"
             )
-            
+
             self.version_pinning.pin_math_constant(
                 name="ferris_btc_mapping_bits",
                 value=16,
                 description="Ferris RDE 16-bit BTC price mapping",
                 category="ferris_rde"
             )
-            
+
             # Risk management constants
             self.version_pinning.pin_math_constant(
                 name="circuit_breaker_threshold",
@@ -642,14 +645,14 @@ class EnvironmentManager:
                 description="Circuit breaker threshold for volatility spikes",
                 category="risk_management"
             )
-            
+
             self.version_pinning.pin_math_constant(
                 name="daily_loss_limit",
                 value=Decimal("0.02"),
                 description="Daily loss limit for risk controls",
                 category="risk_management"
             )
-            
+
             # Memory allocation constants
             self.version_pinning.pin_math_constant(
                 name="btc_hashing_interval",
@@ -657,42 +660,42 @@ class EnvironmentManager:
                 description="BTC hashing interval in minutes",
                 category="memory_allocation"
             )
-            
+
             self.version_pinning.pin_math_constant(
                 name="memory_compression_ratio",
                 value=Decimal("0.7"),
                 description="Memory compression ratio estimation",
                 category="memory_allocation"
             )
-            
+
             safe_print("✅ Mathematical constants initialized with hash-based pinning")
-            
+
         except Exception as e:
             safe_print(f"❌ Math constants initialization failed: {safe_format_error(e, 'math_init')}")
-    
+
     def set_environment(self, environment_type: EnvironmentType) -> None:
         """Set current environment."""
         self.current_environment = environment_type
         safe_print(f"✅ Environment set to: {environment_type.value}")
-    
+
     def get_environment(self) -> EnvironmentType:
         """Get current environment."""
         return self.current_environment
-    
+
     def is_canary_environment(self) -> bool:
         """Check if current environment is canary."""
         return self.current_environment == EnvironmentType.CANARY
-    
+
     def is_testnet_environment(self) -> bool:
         """Check if current environment uses testnets."""
         return self.current_environment in [EnvironmentType.CANARY, EnvironmentType.STAGING]
-    
+
     def get_environment_config(self) -> EnvironmentConfig:
         """Get current environment configuration."""
         try:
             # Get enabled testnets
             exchange_testnets = self.canary_manager.get_enabled_testnets()
-            
+
             # Get API endpoints based on environment
             api_endpoints = {}
             if self.is_testnet_environment():
@@ -707,23 +710,23 @@ class EnvironmentManager:
                     'coinbase': 'https://api.exchange.coinbase.com',
                     'kraken': 'https://api.kraken.com'
                 }
-            
+
             # Get database URLs
             database_urls = {
                 'sqlite': f"sqlite:///data/schwabot_{self.current_environment.value}.db",
                 'postgresql': os.getenv('DATABASE_URL', 'postgresql://localhost/schwabot'),
                 'redis': os.getenv('REDIS_URL', 'redis://localhost:6379')
             }
-            
+
             # Get feature flags
             feature_flags = self.canary_manager.get_all_feature_flags()
-            
+
             # Get math constants
             math_constants = self.version_pinning.get_all_constants()
-            
+
             # Get version pins
             version_pinning = self.version_pinning.version_pins.copy()
-            
+
             return EnvironmentConfig(
                 environment_type=self.current_environment,
                 exchange_testnets=exchange_testnets,
@@ -733,7 +736,7 @@ class EnvironmentManager:
                 math_constants=math_constants,
                 version_pinning=version_pinning
             )
-            
+
         except Exception as e:
             safe_print(f"❌ Environment config failed: {safe_format_error(e, 'env_config')}")
             return EnvironmentConfig(
@@ -745,13 +748,13 @@ class EnvironmentManager:
                 math_constants={},
                 version_pinning={}
             )
-    
+
     def save_config(self, format_type: ConfigFormat = ConfigFormat.YAML) -> bool:
         """Save environment configuration to file."""
         try:
             config = self.get_environment_config()
             config_file = self.config_dir / f"environment_config.{format_type.value}"
-            
+
             if format_type == ConfigFormat.YAML:
                 with open(config_file, 'w') as f:
                     yaml.dump(asdict(config), f, default_flow_style=False, indent=2)
@@ -761,14 +764,14 @@ class EnvironmentManager:
             elif format_type == ConfigFormat.JSON:
                 with open(config_file, 'w') as f:
                     json.dump(asdict(config), f, indent=2, default=str)
-            
+
             safe_print(f"✅ Environment config saved: {config_file}")
             return True
-            
+
         except Exception as e:
             safe_print(f"❌ Config save failed: {safe_format_error(e, 'config_save')}")
             return False
-    
+
     def load_config(self, config_file: str) -> bool:
         """Load environment configuration from file."""
         try:
@@ -776,7 +779,7 @@ class EnvironmentManager:
             if not config_path.exists():
                 safe_print(f"❌ Config file not found: {config_file}")
                 return False
-            
+
             with open(config_path, 'r') as f:
                 if config_path.suffix == '.yaml':
                     config_data = yaml.safe_load(f)
@@ -787,25 +790,25 @@ class EnvironmentManager:
                 else:
                     safe_print(f"❌ Unsupported config format: {config_path.suffix}")
                     return False
-            
+
             # Apply configuration
             self.current_environment = EnvironmentType(config_data['environment_type'])
-            
+
             # Update testnets
             for exchange in config_data.get('exchange_testnets', []):
                 self.canary_manager.enable_testnet(exchange)
-            
+
             # Update feature flags
             for feature, enabled in config_data.get('feature_flags', {}).items():
                 self.canary_manager.set_feature_flag(feature, enabled)
-            
+
             safe_print(f"✅ Environment config loaded: {config_file}")
             return True
-            
+
         except Exception as e:
             safe_print(f"❌ Config load failed: {safe_format_error(e, 'config_load')}")
             return False
-    
+
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
         try:
@@ -821,7 +824,7 @@ class EnvironmentManager:
                 'is_canary': self.is_canary_environment(),
                 'is_testnet': self.is_testnet_environment()
             }
-            
+
         except Exception as e:
             safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
             return {}
@@ -877,8 +880,8 @@ def get_math_constant(name: str) -> Optional[MathConstant]:
     return environment_manager.version_pinning.get_math_constant(name)
 
 
-def pin_math_constant(name: str, value: Union[float, Decimal, str], 
-                     description: str, category: str) -> str:
+def pin_math_constant(name: str, value: Union[float, Decimal, str],
+                      description: str, category: str) -> str:
     """Pin a mathematical constant with hash-based versioning."""
     return environment_manager.version_pinning.pin_math_constant(name, value, description, category)
 
@@ -930,31 +933,31 @@ def get_environment_status() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Test environment manager
     print("🧪 Testing Environment Manager...")
-    
+
     # Set environment
     set_environment(EnvironmentType.CANARY)
     print(f"✅ Environment set: {get_environment().value}")
-    
+
     # Enable testnets
     enable_testnet('binance')
     enable_testnet('coinbase')
     print(f"✅ Enabled testnets: {environment_manager.canary_manager.get_enabled_testnets()}")
-    
+
     # Set feature flags
     set_feature_flag('advanced_risk_controls', True)
     set_feature_flag('real_time_monitoring', True)
     print(f"✅ Feature flags: {environment_manager.canary_manager.get_all_feature_flags()}")
-    
+
     # Get math constant
     zpe_constant = get_math_constant('zpe_resonance_frequency')
     if zpe_constant:
         print(f"✅ Math constant: {zpe_constant.name} = {zpe_constant.value}")
-    
+
     # Save config
     save_config(ConfigFormat.YAML)
-    
+
     # Get status
     status = get_environment_status()
     print(f"✅ Environment status: {status}")
-    
-    print("✅ Environment Manager test completed") 
+
+    print("✅ Environment Manager test completed")

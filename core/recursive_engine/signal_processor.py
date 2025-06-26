@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
 """signal_processor.py"""
-
-
-def main() -> None:
-
-
-    pass
+    def main() -> None:
     pass
     """Stub main function."""
     pass
 
 
 if __name__ == "__main__":
-    pass
-    pass
+        pass
 main()

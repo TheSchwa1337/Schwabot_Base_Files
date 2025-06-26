@@ -75,6 +75,8 @@ REDUCED_PLANCK = 1.054571817e-34  # Reduced Planck constant
 FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 
 # Windows CLI compatibility handler
+
+
 class WindowsCliCompatibilityHandler:
     """Handles Windows CLI compatibility for cross-platform operation."""
 

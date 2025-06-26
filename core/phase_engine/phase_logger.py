@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from collections import defaultdict, deque
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import threading
+import time
+import json
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Phase Logger - Trading Phase Event Logging and Tracking for Schwabot
@@ -64,32 +81,27 @@ Core Functionality:
 - Integration with trading pipeline
 """
 
-import logging
-import json
-import time
-import threading
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class LogLevel(Enum):
 
-
     DEBUG = "debug"
+
+
 INFO = "info"
 WARNING = "warning"
 ERROR = "error"
 CRITICAL = "critical"
 
+
 class EventType(Enum):
 
-
     PHASE_START = "phase_start"
+
+
 PHASE_END = "phase_end"
 PHASE_TRANSITION = "phase_transition"
 PERFORMANCE_UPDATE = "performance_update"
@@ -97,11 +109,13 @@ ERROR_OCCURRED = "error_occurred"
 SYSTEM_EVENT = "system_event"
 TRADING_EVENT = "trading_event"
 
+
 @dataclass
 class PhaseLogEntry:
 
-
     log_id: str
+
+
 phase_id: str
 event_type: EventType
 log_level: LogLevel
@@ -111,11 +125,13 @@ data: Dict[str, Any]
 correlation_id: Optional[str] = None
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class LogSummary:
 
-
     summary_id: str
+
+
 phase_id: str
 start_time: datetime
 end_time: datetime
@@ -125,15 +141,17 @@ performance_metrics: Dict[str, float]
 error_count: int
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class PhaseLogger:
 
 
 def __init__(self, config_path: str = "./config/phase_logger_config.json"):
 
-
     pass
     pass
         self.config_path = config_path
+
+
 self.log_entries: Dict[str, PhaseLogEntry] = {}
 self.log_summaries: Dict[str, LogSummary] = {}
 self.event_correlations: Dict[str, List[str]] = defaultdict(list)
@@ -144,8 +162,8 @@ self.event_correlations: Dict[str, List[str]] = defaultdict(list)
         self._start_log_processor()
         logger.info("PhaseLogger initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
@@ -155,6 +173,7 @@ def _load_configuration(self) -> None:
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
 
+
 logger.info("Loaded phase logger configuration")
             else:
 self._create_default_configuration()
@@ -163,12 +182,14 @@ self._create_default_configuration()
 logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
-def _create_default_configuration(self) -> None:
 
+def _create_default_configuration(self) -> None:
 
     pass
     pass
         """Create default phase logger configuration."""
+
+
 config = {
 "log_retention_days": 30,
 "max_log_entries": 10000,

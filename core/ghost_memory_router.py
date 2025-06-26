@@ -18,7 +18,7 @@ __all__: list[str] = []
 ]
 
 
-@dataclass(slots=True)
+@ dataclass(slots=True)
 class GhostMemoryRouter:
 
 
@@ -29,20 +29,19 @@ _memory: List[Dict[str, Any]] = field(default_factory=list)
 def store(self, payload: Dict[str, Any]) -> None:  # noqa: D401
 
 
-        """Append *payload* to internal list."""
+    """Append *payload* to internal list."""
 self._memory.append(payload)
 
 def recall_recent(
 
-
-        self, limit: int = 10
+self, limit: int = 10
 ) -> List[Dict[str, Any]]:  # noqa: D401
 """Return *limit* most recent payloads (default 10)."""
-        return self._memory[-limit:]
+    return self._memory[-limit:]
 
-@property
+@ property
 def count(self) -> int:  # noqa: D401
 
 
-        """Current number of stored items."""
-        return len(self._memory)
+    """Current number of stored items."""
+    return len(self._memory)

@@ -19,27 +19,24 @@ from .enums import OrderType
 
 @dataclass
 class ExchangeConfig:
-
-
     """Exchange configuration container."""
-
-exchange_type: ExchangeType
-api_key: str
-api_secret: str
+    exchange_type: ExchangeType
+    api_key: str
+    api_secret: str
     passphrase: Optional[str] = None
-sandbox: bool = True
-base_url: str = ""
-timeout: int = 30
-rate_limit: int = 100  # requests per minute
-retry_attempts: int = 3
-retry_delay: float = 1.0
+    sandbox: bool = True
+    base_url: str = ""
+    timeout: int = 30
+    rate_limit: int = 100  # requests per minute
+    retry_attempts: int = 3
+    retry_delay: float = 1.0
 
 
 @dataclass
 class OrderRequest:
 
-
     """Order request container."""
+
 
 symbol: str
 side: OrderSide
@@ -55,8 +52,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class OrderResponse:
 
-
     """Order response container."""
+
 
 order_id: str
 client_order_id: Optional[str]
@@ -70,28 +67,28 @@ filled_quantity: float = 0.0
 average_price: float = 0.0
 commission: float = 0.0
 created_at: float = field(default_factory=time.time)
-    updated_at: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+updated_at: float = field(default_factory=time.time)
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class MarketData:
 
-
     """Market data container."""
+
 
 symbol: str
 data_type: DataType
 timestamp: float
 data: Dict[str, Any] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class Balance:
 
-
     """Balance container."""
+
 
 currency: str
 available: float
@@ -103,8 +100,8 @@ timestamp: float = field(default_factory=time.time)
 @dataclass
 class PerformanceMetrics:
 
-
     """Performance metrics for BTC integration."""
+
 
 total_orders: int
 successful_orders: int

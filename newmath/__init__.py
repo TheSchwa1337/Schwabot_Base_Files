@@ -100,12 +100,12 @@ def library_status() -> dict:
         "modules_loaded": [],
         "all_operational": True
     }
-    
+
     modules = [
-        "tensor_ops", "profit_math", "entropy_calc", 
+        "tensor_ops", "profit_math", "entropy_calc",
         "hash_vectors", "matrix_utils", "render_engine", "validation"
     ]
-    
+
     for module in modules:
         try:
             __import__(f"newmath.{module}")
@@ -113,34 +113,34 @@ def library_status() -> dict:
         except Exception as e:
             status["all_operational"] = False
             status[f"{module}_error"] = str(e)
-    
+
     return status
 
 
 # Export main components
 __all__ = [
     # Core modules
-    "tensor_ops", "profit_math", "entropy_calc", "hash_vectors", 
+    "tensor_ops", "profit_math", "entropy_calc", "hash_vectors",
     "matrix_utils", "render_engine", "validation",
-    
+
     # Tensor operations
     "tensor_contraction", "bit_phase_operations", "matrix_basket_calc", "tensor_similarity",
-    
-    # Profit mathematics  
+
+    # Profit mathematics
     "profit_derivative", "should_execute_trade", "profit_momentum", "risk_calculation",
-    
+
     # Entropy calculations
     "calculate_entropy", "entropy_trigger", "volume_entropy", "delta_compensation",
-    
+
     # Hash operations
     "generate_hash_vector", "hash_similarity_score", "memory_encoding", "pattern_matching",
-    
+
     # Matrix utilities
     "safe_matrix_multiply", "resolve_singular_matrix", "eigenvalue_analysis", "condition_check",
-    
+
     # Visualization
     "render_price_line", "plot_function", "visualize_tensor", "create_chart",
-    
+
     # Utilities
     "quick_test", "library_status"
-] 
+]

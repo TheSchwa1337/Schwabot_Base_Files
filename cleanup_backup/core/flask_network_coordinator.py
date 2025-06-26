@@ -32,6 +32,7 @@ import queue
 
 logger = logging.getLogger(__name__)
 
+
 class NetworkStatus(Enum):
     """Network status types."""
     ONLINE = "online"
@@ -39,12 +40,14 @@ class NetworkStatus(Enum):
     MAINTENANCE = "maintenance"
     ERROR = "error"
 
+
 class DeviceStatus(Enum):
     """Device status types."""
     ACTIVE = "active"
     IDLE = "idle"
     OFFLINE = "offline"
     ERROR = "error"
+
 
 @dataclass
 class NetworkDevice:
@@ -66,6 +69,7 @@ class NetworkDevice:
     total_calculations: int = 0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class NetworkTask:
     """Network task assignment."""
@@ -80,6 +84,7 @@ class NetworkTask:
     result: Optional[Dict[str, Any]] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class NetworkStatistics:
     """Network statistics."""
@@ -92,28 +97,29 @@ class NetworkStatistics:
     last_updated: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 class FlaskNetworkCoordinator:
     """
     Flask Network Coordinator for Schwabot UROS v1.0.
-    
+
     Manages distributed network of devices for coordinated profit calculations.
     """
-    
+
     def __init__(self, host: str = "0.0.0.0", port: int = 5000, debug: bool = False):
         self.host = host
         self.port = port
         self.debug = debug
-        
+
         # Initialize Flask app
         self.app = Flask(__name__)
         CORS(self.app)  # Enable CORS for cross-origin requests
-        
+
         # Network state
         self.devices: Dict[str, NetworkDevice] = {}
         self.tasks: Dict[str, NetworkTask] = {}
         self.network_status = NetworkStatus.ONLINE
         self.start_time = datetime.now()
-        
+
         # Performance tracking
         self.task_queue = queue.Queue()
         self.completed_tasks: List[NetworkTask] = []
@@ -126,25 +132,25 @@ class FlaskNetworkCoordinator:
             network_uptime=0.0,
             last_updated=datetime.now()
         )
-        
+
         # Threading for background processing
         self.task_processor_thread = None
         self.statistics_thread = None
         self.running = False
-        
+
         # Setup routes
         self._setup_routes()
-        
+
         logger.info("Flask Network Coordinator initialized")
 
     def _setup_routes(self) -> None:
         """Setup Flask routes."""
-        
+
         @self.app.route('/')
         def index():
             """Main dashboard."""
             return render_template_string(self._get_dashboard_template())
-        
+
         @self.app.route('/api/register', methods=['POST'])
         def register_device():
             """Register a new device with the network."""
@@ -152,13 +158,13 @@ class FlaskNetworkCoordinator:
                 data = request.get_json()
                 if not data:
                     return jsonify({"error": "No data provided"}), 400
-                
+
                 device_id = data.get('device_id')
                 hardware_profile = data.get('hardware_profile', {})
-                
+
                 if not device_id:
                     return jsonify({"error": "Device ID required"}), 400
-                
+
                 # Create network device
                 device = NetworkDevice(
                     device_id=device_id,
@@ -174,12 +180,12 @@ class FlaskNetworkCoordinator:
                     profit_allocation=self._calculate_profit_allocation(hardware_profile.get('hardware_tier', 'basic')),
                     sync_interval=self._calculate_sync_interval(hardware_profile.get('compute_capability', 'cpu_only'))
                 )
-                
+
                 self.devices[device_id] = device
                 self._update_network_statistics()
-                
+
                 logger.info(f"Device registered: {device_id}")
-                
+
                 return jsonify({
                     "success": True,
                     "device_id": device_id,
@@ -187,11 +193,11 @@ class FlaskNetworkCoordinator:
                     "profit_allocation": device.profit_allocation,
                     "sync_interval": device.sync_interval
                 })
-                
+
             except Exception as e:
                 logger.error(f"Error registering device: {e}")
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/api/heartbeat', methods=['POST'])
         def device_heartbeat():
             """Update device heartbeat."""
@@ -199,31 +205,31 @@ class FlaskNetworkCoordinator:
                 data = request.get_json()
                 if not data:
                     return jsonify({"error": "No data provided"}), 400
-                
+
                 device_id = data.get('device_id')
                 if not device_id or device_id not in self.devices:
                     return jsonify({"error": "Device not found"}), 404
-                
+
                 # Update device heartbeat
                 device = self.devices[device_id]
                 device.last_heartbeat = datetime.now()
                 device.status = DeviceStatus.ACTIVE
-                
+
                 # Update performance metrics if provided
                 if 'performance_metrics' in data:
                     metrics = data['performance_metrics']
                     device.current_load = metrics.get('cpu_usage', 0.0)
                     device.total_calculations += metrics.get('calculations_since_last_heartbeat', 0)
                     device.total_profit_contributed += metrics.get('profit_contributed', 0.0)
-                
+
                 self._update_network_statistics()
-                
+
                 return jsonify({"success": True, "timestamp": datetime.now().isoformat()})
-                
+
             except Exception as e:
                 logger.error(f"Error processing heartbeat: {e}")
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/api/task', methods=['POST'])
         def request_task():
             """Request a task for processing."""
@@ -231,16 +237,16 @@ class FlaskNetworkCoordinator:
                 data = request.get_json()
                 if not data:
                     return jsonify({"error": "No data provided"}), 400
-                
+
                 device_id = data.get('device_id')
                 if not device_id or device_id not in self.devices:
                     return jsonify({"error": "Device not found"}), 404
-                
+
                 # Get available task for device
                 task = self._get_available_task(device_id)
                 if not task:
                     return jsonify({"task_available": False})
-                
+
                 return jsonify({
                     "task_available": True,
                     "task_id": task.task_id,
@@ -248,11 +254,11 @@ class FlaskNetworkCoordinator:
                     "priority": task.priority,
                     "data": task.data
                 })
-                
+
             except Exception as e:
                 logger.error(f"Error requesting task: {e}")
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/api/task/complete', methods=['POST'])
         def complete_task():
             """Complete a task and return results."""
@@ -260,40 +266,40 @@ class FlaskNetworkCoordinator:
                 data = request.get_json()
                 if not data:
                     return jsonify({"error": "No data provided"}), 400
-                
+
                 task_id = data.get('task_id')
                 device_id = data.get('device_id')
                 result = data.get('result', {})
-                
+
                 if not task_id or task_id not in self.tasks:
                     return jsonify({"error": "Task not found"}), 404
-                
+
                 # Complete task
                 task = self.tasks[task_id]
                 task.status = "completed"
                 task.completed_at = datetime.now()
                 task.result = result
-                
+
                 # Move to completed tasks
                 self.completed_tasks.append(task)
                 del self.tasks[task_id]
-                
+
                 # Update device statistics
                 if device_id and device_id in self.devices:
                     device = self.devices[device_id]
                     device.total_calculations += 1
                     device.total_profit_contributed += result.get('profit_contributed', 0.0)
-                
+
                 self._update_network_statistics()
-                
+
                 logger.info(f"Task completed: {task_id}")
-                
+
                 return jsonify({"success": True})
-                
+
             except Exception as e:
                 logger.error(f"Error completing task: {e}")
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/api/network/status')
         def get_network_status():
             """Get network status and statistics."""
@@ -315,11 +321,11 @@ class FlaskNetworkCoordinator:
                         for device_id, device in self.devices.items()
                     }
                 })
-                
+
             except Exception as e:
                 logger.error(f"Error getting network status: {e}")
                 return jsonify({"error": str(e)}), 500
-        
+
         @self.app.route('/api/task/create', methods=['POST'])
         def create_task():
             """Create a new task for the network."""
@@ -327,14 +333,14 @@ class FlaskNetworkCoordinator:
                 data = request.get_json()
                 if not data:
                     return jsonify({"error": "No data provided"}), 400
-                
+
                 task_type = data.get('task_type')
                 priority = data.get('priority', 1.0)
                 task_data = data.get('data', {})
-                
+
                 if not task_type:
                     return jsonify({"error": "Task type required"}), 400
-                
+
                 # Create task
                 task_id = f"task_{int(time.time() * 1000)}"
                 task = NetworkTask(
@@ -346,16 +352,16 @@ class FlaskNetworkCoordinator:
                     status="pending",
                     created_at=datetime.now()
                 )
-                
+
                 self.tasks[task_id] = task
-                
+
                 logger.info(f"Task created: {task_id} ({task_type})")
-                
+
                 return jsonify({
                     "success": True,
                     "task_id": task_id
                 })
-                
+
             except Exception as e:
                 logger.error(f"Error creating task: {e}")
                 return jsonify({"error": str(e)}), 500
@@ -388,23 +394,23 @@ class FlaskNetworkCoordinator:
             device = self.devices.get(device_id)
             if not device or device.status != DeviceStatus.ACTIVE:
                 return None
-            
+
             # Find suitable task based on device capabilities
             available_tasks = [
                 task for task in self.tasks.values()
                 if task.status == "pending" and task.device_id == ""
             ]
-            
+
             if not available_tasks:
                 return None
-            
+
             # Sort by priority and assign to device
             best_task = unified_math.max(available_tasks, key=lambda t: t.priority)
             best_task.device_id = device_id
             best_task.status = "assigned"
-            
+
             return best_task
-            
+
         except Exception as e:
             logger.error(f"Error getting available task: {e}")
             return None
@@ -413,18 +419,18 @@ class FlaskNetworkCoordinator:
         """Update network statistics."""
         try:
             now = datetime.now()
-            
+
             # Count devices
             total_devices = len(self.devices)
             active_devices = len([
                 device for device in self.devices.values()
                 if device.status == DeviceStatus.ACTIVE
             ])
-            
+
             # Calculate totals
             total_profit = sum(device.total_profit_contributed for device in self.devices.values())
             total_calculations = sum(device.total_calculations for device in self.devices.values())
-            
+
             # Calculate average response time (simplified)
             if self.completed_tasks:
                 response_times = [
@@ -435,10 +441,10 @@ class FlaskNetworkCoordinator:
                 avg_response_time = unified_math.unified_math.mean(response_times) if response_times else 0.0
             else:
                 avg_response_time = 0.0
-            
+
             # Calculate uptime
             uptime = (now - self.start_time).total_seconds()
-            
+
             # Update statistics
             self.network_statistics = NetworkStatistics(
                 total_devices=total_devices,
@@ -449,7 +455,7 @@ class FlaskNetworkCoordinator:
                 network_uptime=uptime,
                 last_updated=now
             )
-            
+
         except Exception as e:
             logger.error(f"Error updating network statistics: {e}")
 
@@ -550,14 +556,14 @@ class FlaskNetworkCoordinator:
         """Start the Flask network coordinator."""
         try:
             self.running = True
-            
+
             # Start background threads
             self._start_background_threads()
-            
+
             # Start Flask app
             logger.info(f"Starting Flask Network Coordinator on {self.host}:{self.port}")
             self.app.run(host=self.host, port=self.port, debug=self.debug, threaded=True)
-            
+
         except Exception as e:
             logger.error(f"Error starting Flask coordinator: {e}")
             self.running = False
@@ -568,13 +574,13 @@ class FlaskNetworkCoordinator:
             # Start task processor
             self.task_processor_thread = threading.Thread(target=self._process_tasks, daemon=True)
             self.task_processor_thread.start()
-            
+
             # Start statistics updater
             self.statistics_thread = threading.Thread(target=self._update_statistics_loop, daemon=True)
             self.statistics_thread.start()
-            
+
             logger.info("Background threads started")
-            
+
         except Exception as e:
             logger.error(f"Error starting background threads: {e}")
 
@@ -588,7 +594,7 @@ class FlaskNetworkCoordinator:
                     task for task in self.completed_tasks
                     if task.completed_at and task.completed_at > cutoff_time
                 ]
-                
+
                 # Clean up stale tasks
                 stale_cutoff = datetime.now() - timedelta(minutes=30)
                 stale_tasks = [
@@ -597,9 +603,9 @@ class FlaskNetworkCoordinator:
                 ]
                 for task_id in stale_tasks:
                     del self.tasks[task_id]
-                
+
                 time.sleep(60)  # Check every minute
-                
+
             except Exception as e:
                 logger.error(f"Error processing tasks: {e}")
                 time.sleep(60)
@@ -610,7 +616,7 @@ class FlaskNetworkCoordinator:
             try:
                 self._update_network_statistics()
                 time.sleep(30)  # Update every 30 seconds
-                
+
             except Exception as e:
                 logger.error(f"Error updating statistics: {e}")
                 time.sleep(60)
@@ -620,24 +626,26 @@ class FlaskNetworkCoordinator:
         try:
             self.running = False
             logger.info("Flask Network Coordinator stopped")
-            
+
         except Exception as e:
             logger.error(f"Error stopping Flask coordinator: {e}")
+
 
 def main():
     """Main function for testing Flask network coordinator."""
     try:
         # Initialize coordinator
         coordinator = FlaskNetworkCoordinator(host="0.0.0.0", port=5000, debug=True)
-        
+
         # Start coordinator
         coordinator.start()
-        
+
     except KeyboardInterrupt:
         safe_print("\nShutting down...")
         coordinator.stop()
     except Exception as e:
         logger.error(f"Error in main: {e}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

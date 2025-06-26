@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Collapse Engine - Market Collapse Detection and Response System.
 
@@ -65,21 +79,16 @@ Mathematical Foundation:
 - Emergency protocol management
 """
 
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from enum import Enum
 
 logger = logging.getLogger(__name__)
 
 
 class CollapseType(Enum):
 
-
     """Types of market collapse events."""
+
+
 LIQUIDITY_CRISIS = "liquidity_crisis"
 VOLATILITY_SPIKE = "volatility_spike"
 PRICE_CRASH = "price_crash"
@@ -90,8 +99,9 @@ SYSTEMIC_RISK = "systemic_risk"
 
 class ResponseLevel(Enum):
 
-
     """Response levels for collapse events."""
+
+
 MONITOR = "monitor"
 CAUTION = "caution"
 DEFENSIVE = "defensive"
@@ -102,8 +112,9 @@ CRITICAL = "critical"
 @dataclass
 class CollapseSignal:
 
-
     """Represents a collapse detection signal."""
+
+
 signal_id: str
 collapse_type: CollapseType
 severity: float  # 0.0 to 1.0
@@ -116,8 +127,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class CollapseResponse:
 
-
     """Represents a response to a collapse event."""
+
+
 response_id: str
 signal_id: str
 response_level: ResponseLevel
@@ -131,8 +143,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class CollapseState:
 
-
     """Current state of collapse detection system."""
+
+
 active_signals: List[CollapseSignal]
 active_responses: List[CollapseResponse]
 system_status: str
@@ -142,7 +155,6 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class CollapseEngine:
-
 
     """
 Advanced market collapse detection and response engine.
@@ -154,12 +166,14 @@ Provides real-time monitoring and automated response systems for:
 - Pattern recognition and prediction
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize collapse engine."""
+
+
 self.signals: List[CollapseSignal] = []
 self.responses: List[CollapseResponse] = []
 self.max_history = 1000
@@ -185,6 +199,7 @@ ResponseLevel.CRITICAL: ["emergency_shutdown", "notify_authorities"]
 
 logger.info("CollapseEngine initialized")
 
+
 def process_market_data(
 
 
@@ -194,6 +209,7 @@ volume_data: Dict[str, float],
 volatility_data: Dict[str, float],
 liquidity_data: Optional[Dict[str, float]] = None
 ) -> List[CollapseSignal]:
+
 """
 Process market data and detect collapse signals.
 

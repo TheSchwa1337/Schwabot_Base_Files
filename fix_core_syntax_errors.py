@@ -9,59 +9,61 @@ import re
 import glob
 from pathlib import Path
 
+
 def fix_import_after_try_pattern(content):
     """Fix imports that appear after try statements without except/finally."""
     lines = content.split('\n')
     fixed_lines = []
     i = 0
-    
+
     while i < len(lines):
         line = lines[i].strip()
-        
+
         # Check if this is a try statement
         if line.startswith('try:'):
             fixed_lines.append(lines[i])
             i += 1
-            
+
             # Look for imports after try
             while i < len(lines) and (lines[i].strip().startswith('from ') or lines[i].strip().startswith('import ')):
                 # Move the import before the try
                 import_line = lines[i]
                 fixed_lines.insert(-1, import_line)  # Insert before the try line
                 i += 1
-            
+
             # Add pass if no except/finally found
             if i < len(lines) and not (lines[i].strip().startswith('except') or lines[i].strip().startswith('finally')):
                 fixed_lines.append('    pass')
         else:
             fixed_lines.append(lines[i])
             i += 1
-    
+
     return '\n'.join(fixed_lines)
+
 
 def fix_missing_indented_blocks(content):
     """Fix missing indented blocks after try, if, def, except statements."""
     lines = content.split('\n')
     fixed_lines = []
     i = 0
-    
+
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
-        
+
         # Check for statements that need indented blocks
-        if (stripped.endswith(':') and 
-            (stripped.startswith('try:') or 
-             stripped.startswith('if ') or 
+        if (stripped.endswith(':') and
+            (stripped.startswith('try:') or
+             stripped.startswith('if ') or
              stripped.startswith('def ') or
              stripped.startswith('except') or
              stripped.startswith('finally') or
              stripped.startswith('else:') or
              stripped.startswith('elif '))):
-            
+
             fixed_lines.append(line)
             i += 1
-            
+
             # Check if next line is not indented or is empty
             if i < len(lines):
                 next_line = lines[i]
@@ -70,14 +72,15 @@ def fix_missing_indented_blocks(content):
         else:
             fixed_lines.append(line)
             i += 1
-    
+
     return '\n'.join(fixed_lines)
+
 
 def fix_unexpected_indentation(content):
     """Fix unexpected indentation errors."""
     lines = content.split('\n')
     fixed_lines = []
-    
+
     for line in lines:
         # Fix lines that start with unexpected indentation
         if line.startswith('    ') and not line.strip():
@@ -94,27 +97,28 @@ def fix_unexpected_indentation(content):
             fixed_lines.append(line.lstrip())
         else:
             fixed_lines.append(line)
-    
+
     return '\n'.join(fixed_lines)
+
 
 def fix_continuation_line_indentation(content):
     """Fix continuation line indentation issues (E122)."""
     lines = content.split('\n')
     fixed_lines = []
     i = 0
-    
+
     while i < len(lines):
         line = lines[i]
-        
+
         # Check if this line starts a multi-line structure
-        if (line.strip().endswith('(') or 
-            line.strip().endswith('[') or 
+        if (line.strip().endswith('(') or
+            line.strip().endswith('[') or
             line.strip().endswith('{') or
-            line.strip().endswith(',') and not line.strip().endswith('),') and not line.strip().endswith('],') and not line.strip().endswith('},')):
-            
+                line.strip().endswith(',') and not line.strip().endswith('),') and not line.strip().endswith('],') and not line.strip().endswith('},')):
+
             fixed_lines.append(line)
             i += 1
-            
+
             # Fix continuation lines
             while i < len(lines):
                 next_line = lines[i]
@@ -132,8 +136,9 @@ def fix_continuation_line_indentation(content):
         else:
             fixed_lines.append(line)
             i += 1
-    
+
     return '\n'.join(fixed_lines)
+
 
 def fix_unmatched_parentheses(content):
     """Fix unmatched parentheses and brackets."""
@@ -142,40 +147,42 @@ def fix_unmatched_parentheses(content):
     content = re.sub(r'\[\s*\)', '[]', content)  # [) -> []
     content = re.sub(r'{\s*\]', '{}', content)   # {] -> {}
     content = re.sub(r'\[\s*}', '[]', content)   # [} -> []
-    
+
     # Fix specific patterns we've seen
     content = re.sub(r'\[\s*\]\s*\)', '[]', content)  # []) -> []
     content = re.sub(r'\(\s*\[\s*\]', '()', content)  # ([]) -> ()
-    
+
     return content
+
 
 def fix_specific_file_patterns(filepath, content):
     """Apply file-specific fixes based on the file path."""
     filename = os.path.basename(filepath)
-    
+
     # Fix specific files with known issues
     if 'core/__init__.py' in filepath:
         # Fix the unclosed parenthesis issue
         content = re.sub(r'initialization_status\["summary"\] = \{\]', 'initialization_status["summary"] = {}', content)
-    
+
     if 'data_provider.py' in filepath:
         # Fix the closing parenthesis issue
         content = re.sub(r'\(\s*\[.*?\]\s*\)', '[]', content)
-    
+
     if 'dormant_engine.py' in filepath:
         # Fix the closing parenthesis issue
         content = re.sub(r'\(\s*\[.*?\]\s*\)', '[]', content)
-    
+
     return content
+
 
 def fix_file(filepath):
     """Fix all syntax errors in a single file."""
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Apply all fixes
         content = fix_import_after_try_pattern(content)
         content = fix_missing_indented_blocks(content)
@@ -183,18 +190,19 @@ def fix_file(filepath):
         content = fix_continuation_line_indentation(content)
         content = fix_unmatched_parentheses(content)
         content = fix_specific_file_patterns(filepath, content)
-        
+
         # Only write if content changed
         if content != original_content:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-    
+
     except Exception as e:
         print(f"Error fixing {filepath}: {e}")
         return False
+
 
 def main():
     """Main function to fix core directory syntax errors."""
@@ -382,9 +390,9 @@ def main():
         'core/hash_affinity_vault.py',
         'core/hash_confidence_evaluator.py'
     ]
-    
+
     print(f"Targeting {len(target_files)} files")
-    
+
     fixed_count = 0
     for filepath in target_files:
         if os.path.exists(filepath):
@@ -393,9 +401,10 @@ def main():
                 fixed_count += 1
         else:
             print(f"File not found: {filepath}")
-    
+
     print(f"\nFixed {fixed_count} files")
     print("Core syntax error fixing complete!")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

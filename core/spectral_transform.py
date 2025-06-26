@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from scipy.fft import fftfreq
+from scipy.fft import fft
+from scipy import signal
+import pywt
+import numpy.typing as npt
+from typing import Any, Dict, Optional, Tuple
+import logging
+from decimal import getcontext
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Spectral Transform Engine - Schwabot Mathematical Framework.
 
@@ -81,16 +97,7 @@ Based on SxN-Math specifications and Windows-compatible architecture.
 """
 
 
-from decimal import getcontext
-import logging
-from typing import Any, Dict, Optional, Tuple
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
-import pywt
-from scipy import signal
-from scipy.fft import fft
-from scipy.fft import fftfreq
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -105,7 +112,6 @@ logger = logging.getLogger(__name__)
 
 class SpectralTransform:
 
-
     """
 
 Core spectral analysis engine for trading signals
@@ -114,18 +120,20 @@ Provides frequency domain analysis, wavelet decomposition,
 and entropy-based signal characterization.
 """
 
-def __init__(self, sample_rate: float = 1.0):
 
+def __init__(self, sample_rate: float = 1.0):
 
     pass
     pass
         """TODO: document __init__."""
+
+
 self.sample_rate = sample_rate
 self.epsilon = 1e-12  # Numerical stability constant
 logger.info("SpectralTransform engine initialized")
 
-def fft_transform(self, time_series: Vector) -> Tuple[ComplexVector, Vector]:
 
+def fft_transform(self, time_series: Vector) -> Tuple[ComplexVector, Vector]:
 
     pass
     pass
@@ -140,6 +148,7 @@ Returns:
 (fft_coefficients, frequencies)
         """
         try:
+
             # Apply window to reduce spectral leakage
 windowed_signal = time_series * np.hanning(len(time_series))
 

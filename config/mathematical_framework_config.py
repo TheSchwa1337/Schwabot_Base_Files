@@ -307,7 +307,7 @@ class MathematicalFrameworkConfig:
 
         Args:
             component_name: Name of the component
-        
+
         Returns:
             Component configuration or None if not found
         """

@@ -42,7 +42,7 @@ class GhostMemory:
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def unified_math.add(self, hash_hex: str) -> None:
+    def add(self, hash_hex: str) -> None:
         """Append *hash_hex* to the buffer.
 
         Parameters
@@ -72,7 +72,7 @@ _memory = GhostMemory()
 
 def store_ghost_hash(hash_hex: str) -> None:  # noqa: D401
     """Add *hash_hex* to global ghost memory ring-buffer."""
-    _memory.unified_math.add(hash_hex)
+    _memory.add(hash_hex)
 
 
 def last_profitable_hash() -> str | None:  # noqa: D401

@@ -1,139 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Exchange Plumbing - Comprehensive CCXT Integration with Robust Features.
-
-This module provides enterprise-grade exchange connectivity including:
-- CCXT wrappers with robust retry/back-off
-- Built-in rate-limit throttling
-- Auto-reconnect on websocket drops
-- Encrypted secrets management (.env + Vault / AWS Secrets)
-- Paper-trade / sandbox switch to avoid "fat-finger" orders
-- Position reconciliation against exchange balances
-- Manual "panic button" CLI
-- Integration with all Schwabot core systems
-"""
-
-
-import asyncio
-import json
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from datetime import datetime, timedelta
-from enum import Enum
-import threading
-import queue
-import os
-import hashlib
-import hmac
-import base64
-from pathlib import Path
-import aiohttp
-import websockets
-from websockets.exceptions import ConnectionClosed, WebSocketException
-
-# Try to import CCXT
-try:
-import ccxt
-import ccxt.async_support as ccxt_async
-CCXT_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CCXT_AVAILABLE = False
-
-# Try to import AWS Secrets Manager
-try:
-import boto3
-from botocore.exceptions import ClientError
-AWS_SECRETS_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-AWS_SECRETS_AVAILABLE = False
-
-# Import core systems
-try:
-from core.ops_observability import log_operation, record_api_request, LogLevel
-from core.risk_guard import get_risk_guard, check_circuit_breaker
-from core.capital_controls import get_capital_controls, check_portfolio_limits
-from core.enhanced_risk_manager import get_enhanced_risk_manager
-from core.secure_api_manager import get_secure_api_manager
-CORE_SYSTEMS_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CORE_SYSTEMS_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -151,46 +31,46 @@ class ExchangeType(Enum):
 
 
     """Supported exchange types."""
-BINANCE = "binance"
-COINBASE = "coinbase"
-KRAKEN = "kraken"
-KUCOIN = "kucoin"
-OKX = "okx"
-BYBIT = "bybit"
-GATE = "gate"
-HUOBI = "huobi"
+BINANCE="binance"
+COINBASE="coinbase"
+KRAKEN="kraken"
+KUCOIN="kucoin"
+OKX="okx"
+BYBIT="bybit"
+GATE="gate"
+HUOBI="huobi"
 
 
 class ConnectionState(Enum):
 
 
     """Connection state."""
-DISCONNECTED = "disconnected"
-CONNECTING = "connecting"
-CONNECTED = "connected"
-RECONNECTING = "reconnecting"
-ERROR = "error"
+DISCONNECTED="disconnected"
+CONNECTING="connecting"
+CONNECTED="connected"
+RECONNECTING="reconnecting"
+ERROR="error"
 
 
 class OrderType(Enum):
 
 
     """Order types."""
-MARKET = "market"
-LIMIT = "limit"
-STOP = "stop"
-STOP_LIMIT = "stop_limit"
+MARKET="market"
+LIMIT="limit"
+STOP="stop"
+STOP_LIMIT="stop_limit"
 
 
 class OrderSide(Enum):
 
 
     """Order sides."""
-BUY = "buy"
-SELL = "sell"
+BUY="buy"
+SELL="sell"
 
 
-@dataclass
+@ dataclass
 class ExchangeCredentials:
 
 
@@ -198,31 +78,158 @@ class ExchangeCredentials:
 exchange: ExchangeType
 api_key: str
 api_secret: str
-    passphrase: Optional[str] = None
-sandbox: bool = True
-encrypted: bool = True
-last_updated: datetime = field(default_factory=datetime.now)
+    passphrase: Optional[str]=None
+sandbox: bool=True
+encrypted: bool=True
+last_updated: datetime=field(default_factory=datetime.now)
 
 
-@dataclass
+@ dataclass
 class ExchangeConfig:
 
 
     """Exchange configuration."""
 exchange: ExchangeType
 credentials: ExchangeCredentials
-rate_limit: int = 100  # requests per minute
-timeout: int = 30
-retry_attempts: int = 3
-retry_delay: float = 1.0
-enable_websocket: bool = True
-enable_rest_api: bool = True
-paper_trade: bool = True
-position_reconciliation_interval: int = 300  # 5 minutes
-panic_button_enabled: bool = True
+rate_limit: int=100  # requests per minute
+timeout: int=30
+retry_attempts: int=3
+retry_delay: float=1.0
+enable_websocket: bool=True
+enable_rest_api: bool=True
+paper_trade: bool=True
+from core.secure_api_manager import get_secure_api_manager
+from core.enhanced_risk_manager import get_enhanced_risk_manager
+from core.capital_controls import get_capital_controls, check_portfolio_limits
+from core.risk_guard import get_risk_guard, check_circuit_breaker
+from core.ops_observability import log_operation, record_api_request, LogLevel
+from botocore.exceptions import ClientError
+import boto3
+import ccxt.async_support as ccxt_async
+import ccxt
+from websockets.exceptions import ConnectionClosed, WebSocketException
+import websockets
+import aiohttp
+from pathlib import Path
+import base64
+import hmac
+import hashlib
+import os
+import queue
+import threading
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from dataclasses import dataclass, field, asdict
+import uuid
+import time
+import logging
+import json
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
 
 
-@dataclass
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Exchange Plumbing - Comprehensive CCXT Integration with Robust Features.
+
+This module provides enterprise-grade exchange connectivity including:
+- CCXT wrappers with robust retry/back-off
+- Built-in rate-limit throttling
+- Auto-reconnect on websocket drops
+- Encrypted secrets management (.env + Vault / AWS Secrets)
+- Paper-trade / sandbox switch to avoid "fat-finger" orders
+- Position reconciliation against exchange balances
+- Manual "panic button" CLI
+- Integration with all Schwabot core systems
+"""
+
+
+
+# Try to import CCXT
+try:
+CCXT_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CCXT_AVAILABLE=False
+
+# Try to import AWS Secrets Manager
+try:
+AWS_SECRETS_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+AWS_SECRETS_AVAILABLE=False
+
+# Import core systems
+try:
+CORE_SYSTEMS_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CORE_SYSTEMS_AVAILABLE=False
+
+# Import centralized CLI handler
+try:
+position_reconciliation_interval: int=300  # 5 minutes
+panic_button_enabled: bool=True
+
+
+@ dataclass
 class OrderRequest:
 
 
@@ -231,13 +238,13 @@ symbol: str
 side: OrderSide
 order_type: OrderType
 amount: float
-price: Optional[float] = None
-stop_price: Optional[float] = None
-client_order_id: Optional[str] = None
-timestamp: datetime = field(default_factory=datetime.now)
+price: Optional[float]=None
+stop_price: Optional[float]=None
+client_order_id: Optional[str]=None
+timestamp: datetime=field(default_factory=datetime.now)
 
 
-@dataclass
+@ dataclass
 class OrderResponse:
 
 
@@ -249,15 +256,15 @@ order_type: OrderType
 amount: float
 price: Optional[float]
 status: str
-filled_amount: float = 0.0
-remaining_amount: float = 0.0
-average_price: Optional[float] = None
-fees: Dict[str, float] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.now)
-    exchange_timestamp: Optional[datetime] = None
+filled_amount: float=0.0
+remaining_amount: float=0.0
+average_price: Optional[float]=None
+fees: Dict[str, float]=field(default_factory=dict)
+    timestamp: datetime=field(default_factory=datetime.now)
+    exchange_timestamp: Optional[datetime]=None
 
 
-@dataclass
+@ dataclass
 class Balance:
 
 
@@ -266,10 +273,10 @@ currency: str
 free: float
 used: float
 total: float
-timestamp: datetime = field(default_factory=datetime.now)
+timestamp: datetime=field(default_factory=datetime.now)
 
 
-@dataclass
+@ dataclass
 class Position:
 
 
@@ -281,10 +288,10 @@ entry_price: float
 current_price: float
 unrealized_pnl: float
 realized_pnl: float
-timestamp: datetime = field(default_factory=datetime.now)
+timestamp: datetime=field(default_factory=datetime.now)
 
 
-@dataclass
+@ dataclass
 class MarketData:
 
 
@@ -294,7 +301,7 @@ bid: float
 ask: float
 last: float
 volume: float
-timestamp: datetime = field(default_factory=datetime.now)
+timestamp: datetime=field(default_factory=datetime.now)
 
 
 class RateLimiter:
@@ -302,16 +309,16 @@ class RateLimiter:
 
     """Rate limiter for exchange requests."""
 
-def __init__(self, max_requests: int, time_window: float = 60.0):
+def __init__(self, max_requests: int, time_window: float=60.0):
 
 
     pass
     pass
         """Initialize rate limiter."""
-self.max_requests = max_requests
-self.time_window = time_window
-self.requests = []
-self.lock = threading.Lock()
+self.max_requests=max_requests
+self.time_window=time_window
+self.requests=[]
+self.lock=threading.Lock()
 
 def can_make_request(self) -> bool:
 
@@ -320,9 +327,9 @@ def can_make_request(self) -> bool:
     pass
         """Check if request can be made."""
         with self.lock:
-now = time.time()
+now=time.time()
             # Remove old requests
-self.requests = [req_time for req_time in self.requests
+self.requests=[req_time for req_time in self.requests
                            if now - req_time < self.time_window]
             return len(self.requests) < self.max_requests
 
@@ -356,10 +363,10 @@ def __init__(self, config: Dict[str, Any]):
     pass
     pass
         """Initialize secrets manager."""
-self.config = config
-self.encryption_key = self._get_encryption_key()
-        self.env_file = Path(".env")
-        self.secrets_cache: Dict[str, Dict[str, str]] = {}
+self.config=config
+self.encryption_key=self._get_encryption_key()
+        self.env_file=Path(".env")
+        self.secrets_cache: Dict[str, Dict[str, str]]={}
 
         # Load secrets from .env
 self._load_env_secrets()
@@ -372,12 +379,12 @@ def _get_encryption_key(self) -> str:
     pass
     pass
         """Get encryption key from environment or generate."""
-key = os.getenv("SCHWABOT_ENCRYPTION_KEY")
+key=os.getenv("SCHWABOT_ENCRYPTION_KEY")
         if not key:
             # Generate a key based on system info
-system_info = f"{os.getenv('USERNAME', '')}{os.getenv('COMPUTERNAME', '')}"
-            key = hashlib.sha256(system_info.encode()).hexdigest()[:32]
-            os.environ["SCHWABOT_ENCRYPTION_KEY"] = key
+system_info=f"{os.getenv('USERNAME', '')}{os.getenv('COMPUTERNAME', '')}"
+            key=hashlib.sha256(system_info.encode()).hexdigest()[:32]
+            os.environ["SCHWABOT_ENCRYPTION_KEY"]=key
         return key
 
 def _load_env_secrets(self) -> None:
@@ -390,10 +397,10 @@ def _load_env_secrets(self) -> None:
             if self.env_file.exists():
                 with open(self.env_file, 'r') as f:
                     for line in f:
-line = line.strip()
+line=line.strip()
                         if line and not line.startswith('#') and '=' in line:
-                            key, value = line.split('=', 1)
-                            os.environ[key] = value
+                            key, value=line.split('=', 1)
+                            os.environ[key]=value
 safe_safe_print("✅ Environment secrets loaded")
         except Exception as e:
 safe_safe_print(f"⚠️ Environment secrets load failed: {safe_format_error(e, 'env_load')}")
@@ -409,8 +416,8 @@ import cryptography.fernet
 from cryptography.fernet import Fernet
 
             # Create Fernet key from our encryption key
-fernet_key = base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
-            fernet = Fernet(fernet_key)
+fernet_key=base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
+            fernet=Fernet(fernet_key)
 
             return fernet.encrypt(value.encode()).decode()
         except ImportError:
@@ -429,8 +436,8 @@ def _decrypt_value(self, encrypted_value: str) -> str:
 #             from cryptography.fernet import Fernet  # F811: duplicate import
 
             # Create Fernet key from our encryption key
-fernet_key = base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
-            fernet = Fernet(fernet_key)
+fernet_key=base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
+            fernet=Fernet(fernet_key)
 
             return fernet.decrypt(encrypted_value.encode()).decode()
         except ImportError:
@@ -447,20 +454,20 @@ def get_exchange_credentials(self, exchange: ExchangeType) -> Optional[ExchangeC
         """Get exchange credentials."""
         try:
             # Try environment variables first
-env_prefix = f"SCHWABOT_{exchange.value.upper()}"
-            api_key = os.getenv(f"{env_prefix}_API_KEY")
-            api_secret = os.getenv(f"{env_prefix}_API_SECRET")
-            passphrase = os.getenv(f"{env_prefix}_PASSPHRASE")
-            sandbox = os.getenv(f"{env_prefix}_SANDBOX", "true").lower() == "true"
+env_prefix=f"SCHWABOT_{exchange.value.upper()}"
+            api_key=os.getenv(f"{env_prefix}_API_KEY")
+            api_secret=os.getenv(f"{env_prefix}_API_SECRET")
+            passphrase=os.getenv(f"{env_prefix}_PASSPHRASE")
+            sandbox=os.getenv(f"{env_prefix}_SANDBOX", "true").lower() == "true"
 
             if api_key and api_secret:
                 # Decrypt if needed
                 if api_key.startswith("ENC:"):
-                    api_key = self._decrypt_value(api_key[4:])
+                    api_key=self._decrypt_value(api_key[4:])
                 if api_secret.startswith("ENC:"):
-                    api_secret = self._decrypt_value(api_secret[4:])
+                    api_secret=self._decrypt_value(api_secret[4:])
                 if passphrase and passphrase.startswith("ENC:"):
-                    passphrase = self._decrypt_value(passphrase[4:])
+                    passphrase=self._decrypt_value(passphrase[4:])
 
                 return ExchangeCredentials(
                     exchange=exchange,
@@ -487,16 +494,16 @@ def _get_aws_secrets(self, exchange: ExchangeType) -> Optional[ExchangeCredentia
     pass
         """Get secrets from AWS Secrets Manager."""
         try:
-secret_name = f"schwabot/{exchange.value}/credentials"
+secret_name=f"schwabot/{exchange.value}/credentials"
 
-session = boto3.session.Session()
-            client = session.client(
+session=boto3.session.Session()
+            client=session.client(
                 service_name='secretsmanager',
 region_name=os.getenv('AWS_REGION', 'us-east-1')
 
 
-response = client.get_secret_value(SecretId=secret_name)
-            secret_data = json.loads(response['SecretString'])
+response=client.get_secret_value(SecretId=secret_name)
+            secret_data=json.loads(response['SecretString'])
 
             return ExchangeCredentials(
                 exchange=exchange,
@@ -510,31 +517,31 @@ api_secret=secret_data['api_secret'],
 safe_safe_print(f"⚠️ AWS Secrets failed for {exchange.value}: {safe_format_error(e, 'aws_secrets')}")
             return None
 
-def store_exchange_credentials(self, credentials: ExchangeCredentials, encrypt: bool = True) -> bool:
+def store_exchange_credentials(self, credentials: ExchangeCredentials, encrypt: bool=True) -> bool:
 
 
     pass
     pass
         """Store exchange credentials."""
         try:
-env_prefix = f"SCHWABOT_{credentials.exchange.value.upper()}"
+env_prefix=f"SCHWABOT_{credentials.exchange.value.upper()}"
 
-api_key = credentials.api_key
-api_secret = credentials.api_secret
-            passphrase = credentials.passphrase
+api_key=credentials.api_key
+api_secret=credentials.api_secret
+            passphrase=credentials.passphrase
 
             if encrypt:
-api_key = f"ENC:{self._encrypt_value(api_key)}"
-                api_secret = f"ENC:{self._encrypt_value(api_secret)}"
+api_key=f"ENC:{self._encrypt_value(api_key)}"
+                api_secret=f"ENC:{self._encrypt_value(api_secret)}"
                 if passphrase:
-                    passphrase = f"ENC:{self._encrypt_value(passphrase)}"
+                    passphrase=f"ENC:{self._encrypt_value(passphrase)}"
 
             # Update environment
-os.environ[f"{env_prefix}_API_KEY"] = api_key
-os.environ[f"{env_prefix}_API_SECRET"] = api_secret
+os.environ[f"{env_prefix}_API_KEY"]=api_key
+os.environ[f"{env_prefix}_API_SECRET"]=api_secret
             if passphrase:
-os.environ[f"{env_prefix}_PASSPHRASE"] = passphrase
-os.environ[f"{env_prefix}_SANDBOX"] = str(credentials.sandbox).lower()
+os.environ[f"{env_prefix}_PASSPHRASE"]=passphrase
+os.environ[f"{env_prefix}_SANDBOX"]=str(credentials.sandbox).lower()
 
             # Update .env file
 self._update_env_file(env_prefix, api_key, api_secret, passphrase, credentials.sandbox)
@@ -553,26 +560,26 @@ def _update_env_file(self, prefix: str, api_key: str, api_secret: str,
 """Update .env file with new credentials."""
         try:
             # Read existing .env
-env_lines = []
+env_lines=[]
             if self.env_file.exists():
                 with open(self.env_file, 'r') as f:
-                    env_lines = f.readlines()
+                    env_lines=f.readlines()
 
             # Update or add credentials
-new_lines = []
-updated = {
+new_lines=[]
+updated={
 f"{prefix}_API_KEY": api_key,
 f"{prefix}_API_SECRET": api_secret,
 f"{prefix}_SANDBOX": str(sandbox).lower()
             }
             if passphrase:
-updated[f"{prefix}_PASSPHRASE"] = passphrase
+updated[f"{prefix}_PASSPHRASE"]=passphrase
 
             # Process existing lines
             for line in env_lines:
-line = line.strip()
+line=line.strip()
                 if line and not line.startswith('#') and '=' in line:
-                    key = line.split('=', 1)[0]
+                    key=line.split('=', 1)[0]
                     if key in updated:
 new_lines.append(f"{key}={updated[key]}\n")
                         del updated[key]
@@ -604,33 +611,33 @@ def __init__(self, config: ExchangeConfig, secrets_manager: EncryptedSecretsMana
     pass
     pass
         """Initialize exchange connection."""
-self.config = config
-self.secrets_manager = secrets_manager
-self.exchange = None
-self.websocket = None
-self.connection_state = ConnectionState.DISCONNECTED
-self.rate_limiter = RateLimiter(config.rate_limit)
-        self.last_heartbeat = time.time()
-        self.reconnect_attempts = 0
-self.max_reconnect_attempts = 5
-self.reconnect_delay = 1.0
+self.config=config
+self.secrets_manager=secrets_manager
+self.exchange=None
+self.websocket=None
+self.connection_state=ConnectionState.DISCONNECTED
+self.rate_limiter=RateLimiter(config.rate_limit)
+        self.last_heartbeat=time.time()
+        self.reconnect_attempts=0
+self.max_reconnect_attempts=5
+self.reconnect_delay=1.0
 
         # Performance tracking
-self.total_requests = 0
-self.successful_requests = 0
-self.failed_requests = 0
-self.average_response_time = 0.0
+self.total_requests=0
+self.successful_requests=0
+self.failed_requests=0
+self.average_response_time=0.0
 
         # Position tracking
-self.positions: Dict[str, Position] = {}
-self.balances: Dict[str, Balance] = {}
-self.last_reconciliation = time.time()
+self.positions: Dict[str, Position]={}
+self.balances: Dict[str, Balance]={}
+self.last_reconciliation=time.time()
 
         # Threading
-self.lock = threading.RLock()
-        self.websocket_thread = None
-self.reconciliation_thread = None
-self.running = False
+self.lock=threading.RLock()
+        self.websocket_thread=None
+self.reconciliation_thread=None
+self.running=False
 
 safe_safe_print(f"🔗 Exchange connection initialized for {config.exchange.value}")
 
@@ -642,14 +649,14 @@ safe_safe_print("❌ CCXT not available")
                 return False
 
             # Get credentials
-credentials = self.secrets_manager.get_exchange_credentials(self.config.exchange)
+credentials=self.secrets_manager.get_exchange_credentials(self.config.exchange)
             if not credentials:
 safe_safe_print(f"❌ No credentials for {self.config.exchange.value}")
                 return False
 
             # Create exchange instance
-exchange_class = getattr(ccxt_async, self.config.exchange.value)
-            self.exchange = exchange_class({
+exchange_class=getattr(ccxt_async, self.config.exchange.value)
+            self.exchange=exchange_class({
                 'apiKey': credentials.api_key,
 'secret': credentials.api_secret,
 'password': credentials.passphrase,
@@ -664,9 +671,9 @@ exchange_class = getattr(ccxt_async, self.config.exchange.value)
 
             # Test connection
 await self.exchange.load_markets()
-            self.connection_state = ConnectionState.CONNECTED
-self.last_heartbeat = time.time()
-            self.reconnect_attempts = 0
+            self.connection_state=ConnectionState.CONNECTED
+self.last_heartbeat=time.time()
+            self.reconnect_attempts=0
 
             # Start background tasks
             if self.config.enable_websocket:
@@ -679,14 +686,14 @@ safe_safe_print(f"✅ Connected to {self.config.exchange.value}")
             return True
 
         except Exception as e:
-self.connection_state = ConnectionState.ERROR
+self.connection_state=ConnectionState.ERROR
 safe_safe_print(f"❌ Connection failed: {safe_format_error(e, 'exchange_connect')}")
             return False
 
 async def disconnect(self) -> None:
         """Disconnect from exchange."""
         try:
-self.running = False
+self.running=False
 
             if self.websocket:
 await self.websocket.close()
@@ -694,7 +701,7 @@ await self.websocket.close()
             if self.exchange:
 await self.exchange.close()
 
-self.connection_state = ConnectionState.DISCONNECTED
+self.connection_state=ConnectionState.DISCONNECTED
 safe_safe_print(f"🔌 Disconnected from {self.config.exchange.value}")
 
         except Exception as e:
@@ -716,15 +723,15 @@ self.rate_limiter.wait_if_needed()
 
             # Check risk limits
             if CORE_SYSTEMS_AVAILABLE:
-risk_guard = get_risk_guard()
+risk_guard=get_risk_guard()
                 if not risk_guard.is_trading_allowed():
                     safe_safe_print("❌ Trading blocked by risk guard")
                     return None
 
             # Place actual order
-start_time = time.time()
+start_time=time.time()
 
-order_params = {
+order_params={
 'symbol': order_request.symbol,
 'type': order_request.order_type.value,
 'side': order_request.side.value,
@@ -732,19 +739,19 @@ order_params = {
 }
 
             if order_request.price:
-order_params['price'] = order_request.price
+order_params['price']=order_request.price
             if order_request.stop_price:
-order_params['stopPrice'] = order_request.stop_price
+order_params['stopPrice']=order_request.stop_price
             if order_request.client_order_id:
-order_params['clientOrderId'] = order_request.client_order_id
+order_params['clientOrderId']=order_request.client_order_id
 
-response = await self.exchange.create_order(**order_params)
-            duration = time.time() - start_time
+response=await self.exchange.create_order(**order_params)
+            duration=time.time() - start_time
 
             # Update metrics
 self.total_requests += 1
 self.successful_requests += 1
-self.average_response_time = (
+self.average_response_time=(
                 (self.average_response_time * (self.total_requests - 1) + duration) /
                 self.total_requests
 
@@ -759,7 +766,7 @@ latency=duration
 
 
             # Create order response
-order_response = OrderResponse(
+order_response=OrderResponse(
                 order_id=response['id'],
 symbol=response['symbol'],
 side=OrderSide(response['side']),
@@ -800,10 +807,10 @@ async def _simulate_order(self, order_request: OrderRequest) -> OrderResponse:
 await asyncio.sleep(0.1)
 
             # Generate fake order ID
-order_id = f"PAPER_{int(time.time() * 1000)}"
+order_id=f"PAPER_{int(time.time() * 1000)}"
 
             # Simulate market price
-current_price = order_request.price or 50000.0  # Default BTC price
+current_price=order_request.price or 50000.0  # Default BTC price
 
             return OrderResponse(
                 order_id=order_id,
@@ -831,21 +838,21 @@ async def get_balances(self) -> List[Balance]:
 
 self.rate_limiter.wait_if_needed()
 
-start_time = time.time()
-            response = await self.exchange.fetch_balance()
-            duration = time.time() - start_time
+start_time=time.time()
+            response=await self.exchange.fetch_balance()
+            duration=time.time() - start_time
 
-balances = []
+balances=[]
             for currency, balance_data in response['total'].items():
                 if balance_data > 0:
-balance = Balance(
+balance=Balance(
                         currency=currency,
 free=response['free'].get(currency, 0.0),
                         used=response['used'].get(currency, 0.0),
                         total=balance_data
 
 balances.append(balance)
-                    self.balances[currency] = balance
+                    self.balances[currency]=balance
 
             # Record API request
             if CORE_SYSTEMS_AVAILABLE:
@@ -870,14 +877,14 @@ async def get_positions(self) -> List[Position]:
 
 self.rate_limiter.wait_if_needed()
 
-start_time = time.time()
-            response = await self.exchange.fetch_positions()
-            duration = time.time() - start_time
+start_time=time.time()
+            response=await self.exchange.fetch_positions()
+            duration=time.time() - start_time
 
-positions = []
+positions=[]
             for pos_data in response:
                 if pos_data['size'] > 0:
-position = Position(
+position=Position(
                         symbol=pos_data['symbol'],
 side=OrderSide(pos_data['side']),
                         size=pos_data['size'],
@@ -887,7 +894,7 @@ unrealized_pnl=pos_data['unrealizedPnl'],
 realized_pnl=pos_data.get('realizedPnl', 0.0)
 
 positions.append(position)
-                    self.positions[pos_data['symbol']] = position
+                    self.positions[pos_data['symbol']]=position
 
             # Record API request
             if CORE_SYSTEMS_AVAILABLE:
@@ -913,7 +920,7 @@ def _start_websocket(self) -> None:
         if self.websocket_thread and self.websocket_thread.is_alive():
             return
 
-self.websocket_thread = threading.Thread(target=self._websocket_worker, daemon=True)
+self.websocket_thread=threading.Thread(target=self._websocket_worker, daemon=True)
         self.websocket_thread.start()
 
 def _websocket_worker(self) -> None:
@@ -936,16 +943,16 @@ async def _websocket_loop(self) -> None:
             if not self.exchange:
 return
 
-ws_url = self.exchange.urls.get('ws', {}).get('public')
+ws_url=self.exchange.urls.get('ws', {}).get('public')
             if not ws_url:
 return
 
 async with websockets.connect(ws_url) as websocket:
-                self.websocket = websocket
-self.connection_state = ConnectionState.CONNECTED
+                self.websocket=websocket
+self.connection_state=ConnectionState.CONNECTED
 
                 # Subscribe to relevant channels
-subscribe_message = {
+subscribe_message={
 "method": "SUBSCRIBE",
 "params": [
 "btcusdt@ticker",
@@ -962,7 +969,7 @@ async for message in websocket:
                         break
 
                     try:
-data = json.loads(message)
+data=json.loads(message)
                         await self._handle_websocket_message(data)
                     except json.JSONDecodeError:
                         continue
@@ -974,15 +981,15 @@ safe_safe_print("🔌 Websocket connection closed")
         except WebSocketException as e:
 safe_safe_print(f"⚠️ Websocket error: {safe_format_error(e, 'websocket')}")
         finally:
-self.websocket = None
-self.connection_state = ConnectionState.DISCONNECTED
+self.websocket=None
+self.connection_state=ConnectionState.DISCONNECTED
 
 async def _handle_websocket_message(self, data: Dict[str, Any]) -> None:
         """Handle websocket message."""
         try:
             # Handle different message types
             if 'e' in data:  # Binance format
-event_type = data['e']
+event_type=data['e']
                 if event_type == '24hrTicker':
 await self._handle_ticker_update(data)
                 elif event_type == 'depthUpdate':
@@ -991,7 +998,7 @@ await self._handle_depth_update(data)
 await self._handle_trade_update(data)
 
             # Update heartbeat
-self.last_heartbeat = time.time()
+self.last_heartbeat=time.time()
 
         except Exception as e:
 safe_safe_print(f"⚠️ Message handling error: {safe_format_error(e, 'ws_handle')}")
@@ -1020,7 +1027,7 @@ def _start_reconciliation(self) -> None:
         if self.reconciliation_thread and self.reconciliation_thread.is_alive():
             return
 
-self.reconciliation_thread = threading.Thread(target=self._reconciliation_worker, daemon=True)
+self.reconciliation_thread=threading.Thread(target=self._reconciliation_worker, daemon=True)
         self.reconciliation_thread.start()
 
 def _reconciliation_worker(self) -> None:
@@ -1041,15 +1048,16 @@ async def _reconcile_positions(self) -> None:
         """Reconcile positions with exchange."""
         try:
             # Get current positions from exchange
-exchange_positions = await self.get_positions()
+exchange_positions=await self.get_positions()
 
             # Compare with local positions
             for pos in exchange_positions:
-local_pos = self.positions.get(pos.symbol)
+local_pos=self.positions.get(pos.symbol)
                 if not local_pos or unified_math.abs(local_pos.size - pos.size) > 0.0001:
-                    safe_safe_print(f"⚠️ Position mismatch for {pos.symbol}: local={local_pos.size if local_pos else 0}, exchange={pos.size}")
+                    safe_safe_print(
+                        f"⚠️ Position mismatch for {pos.symbol}: local={local_pos.size if local_pos else 0}, exchange={pos.size}")
 
-self.last_reconciliation = time.time()
+self.last_reconciliation=time.time()
 
         except Exception as e:
 safe_safe_print(f"❌ Position reconciliation failed: {safe_format_error(e, 'reconcile')}")
@@ -1091,22 +1099,22 @@ Provides enterprise-grade exchange connectivity including:
 - Manual panic button
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]]=None):
 
 
     pass
     pass
         """Initialize exchange plumbing."""
-self.config = config or {}
-self.secrets_manager = EncryptedSecretsManager(self.config)
-        self.connections: Dict[ExchangeType, ExchangeConnection] = {}
-self.panic_mode = False
-self.panic_button_enabled = True
+self.config=config or {}
+self.secrets_manager=EncryptedSecretsManager(self.config)
+        self.connections: Dict[ExchangeType, ExchangeConnection]={}
+self.panic_mode=False
+self.panic_button_enabled=True
 
         # Performance tracking
-self.total_orders = 0
-self.successful_orders = 0
-self.failed_orders = 0
+self.total_orders=0
+self.successful_orders=0
+self.failed_orders=0
 
 safe_safe_print("🔗 Exchange Plumbing initialized")
 
@@ -1117,8 +1125,8 @@ def add_exchange(self, exchange_config: ExchangeConfig) -> bool:
     pass
         """Add exchange connection."""
         try:
-connection = ExchangeConnection(exchange_config, self.secrets_manager)
-            self.connections[exchange_config.exchange] = connection
+connection=ExchangeConnection(exchange_config, self.secrets_manager)
+            self.connections[exchange_config.exchange]=connection
 safe_safe_print(f"✅ Exchange added: {exchange_config.exchange.value}")
             return True
         except Exception as e:
@@ -1128,7 +1136,7 @@ safe_safe_print(f"❌ Failed to add exchange: {safe_format_error(e, 'add_exchang
 async def connect_all(self) -> bool:
         """Connect to all exchanges."""
         try:
-success_count = 0
+success_count=0
             for connection in self.connections.values():
                 if await connection.connect():
                     success_count += 1
@@ -1156,26 +1164,26 @@ async def place_order(self, exchange: ExchangeType, order_request: OrderRequest)
 safe_safe_print("❌ Trading blocked - panic mode active")
                 return None
 
-connection = self.connections.get(exchange)
+connection=self.connections.get(exchange)
             if not connection:
 safe_safe_print(f"❌ Exchange {exchange.value} not connected")
                 return None
 
             # Check risk limits
             if CORE_SYSTEMS_AVAILABLE:
-risk_guard = get_risk_guard()
+risk_guard=get_risk_guard()
                 if not risk_guard.is_trading_allowed():
                     safe_safe_print("❌ Trading blocked by risk guard")
                     return None
 
                 # Check capital controls
-capital_controls = get_capital_controls()
+capital_controls=get_capital_controls()
                 if not capital_controls.check_portfolio_limits():
                     safe_safe_print("❌ Trading blocked by capital controls")
                     return None
 
             # Place order
-response = await connection.place_order(order_request)
+response=await connection.place_order(order_request)
 
             # Update metrics
 self.total_orders += 1
@@ -1194,9 +1202,9 @@ safe_safe_print(f"❌ Order failed: {safe_format_error(e, 'place_order')}")
 async def get_all_balances(self) -> Dict[ExchangeType, List[Balance]]:
         """Get balances from all exchanges."""
         try:
-balances = {}
+balances={}
             for exchange, connection in self.connections.items():
-                balances[exchange] = await connection.get_balances()
+                balances[exchange]=await connection.get_balances()
             return balances
         except Exception as e:
 safe_safe_print(f"❌ Balance fetch failed: {safe_format_error(e, 'get_balances')}")
@@ -1205,9 +1213,9 @@ safe_safe_print(f"❌ Balance fetch failed: {safe_format_error(e, 'get_balances'
 async def get_all_positions(self) -> Dict[ExchangeType, List[Position]]:
         """Get positions from all exchanges."""
         try:
-positions = {}
+positions={}
             for exchange, connection in self.connections.items():
-                positions[exchange] = await connection.get_positions()
+                positions[exchange]=await connection.get_positions()
             return positions
         except Exception as e:
 safe_safe_print(f"❌ Position fetch failed: {safe_format_error(e, 'get_positions')}")
@@ -1220,7 +1228,7 @@ def activate_panic_button(self) -> None:
     pass
         """Activate panic button to stop all trading."""
         try:
-self.panic_mode = True
+self.panic_mode=True
 safe_safe_print("🚨 PANIC BUTTON ACTIVATED - ALL TRADING STOPPED")
 
             # Log operation
@@ -1243,7 +1251,7 @@ def deactivate_panic_button(self) -> None:
     pass
         """Deactivate panic button."""
         try:
-self.panic_mode = False
+self.panic_mode=False
 safe_safe_print("✅ Panic button deactivated - trading resumed")
 
             # Log operation
@@ -1280,7 +1288,7 @@ exchange.value: connection.get_connection_status()
 
 
 # Global exchange plumbing instance
-exchange_plumbing = ExchangePlumbing()
+exchange_plumbing=ExchangePlumbing()
 
 
 # Convenience functions for external access
@@ -1344,7 +1352,7 @@ if __name__ == "__main__":
 safe_print("🧪 Testing Exchange Plumbing...")
 
     # Create exchange config
-config = ExchangeConfig(
+config=ExchangeConfig(
         exchange=ExchangeType.BINANCE,
 credentials=ExchangeCredentials(
             exchange=ExchangeType.BINANCE,
@@ -1356,11 +1364,11 @@ paper_trade=True
 
 
     # Add exchange
-success = exchange_plumbing.add_exchange(config)
+success=exchange_plumbing.add_exchange(config)
     safe_print(f"✅ Exchange added: {success}")
 
     # Test order
-order_request = OrderRequest(
+order_request=OrderRequest(
         symbol="BTC/USDT",
 side=OrderSide.BUY,
 order_type=OrderType.MARKET,

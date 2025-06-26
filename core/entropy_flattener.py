@@ -24,15 +24,14 @@ __all__: list[str] = []
 "adaptive_smooth",
 ]
 
-# ---------------------------------------------------------------------------
-# Core flattening logic
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Core flattening logic
+    # ---------------------------------------------------------------------------
 
 
-def compute_second_derivative(
+    def compute_second_derivative(
 
-
-    signal: Sequence[float],
+signal: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
 """Return second derivative ∂²S/∂t² using finite differences.
 
@@ -60,8 +59,7 @@ x_shifted = x - unified_math.unified_math.max(x)
 
 def entropy_flatten(
 
-
-    signal: Sequence[float],
+signal: Sequence[float],
 price_sigma: float,
 *,
 epsilon: float = 1e-9,
@@ -95,8 +93,7 @@ smoothed = _softmax(flatten_term)
 
 def adaptive_smooth(
 
-
-    current_value: float,
+current_value: float,
 smoothed_value: float,
 entropy_coeff: float,
 *,

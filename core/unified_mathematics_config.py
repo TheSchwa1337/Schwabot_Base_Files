@@ -1,90 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import numpy as np
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Unified Mathematics Configuration for Schwabot Hybrid ZPE-Reactive System.
-
-This module provides centralized configuration for all mathematical operations,
-ensuring consistency, performance, and error handling across the entire pipeline.
-"""
-
-
-import logging
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union, Callable
-from enum import Enum
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import scipy as sp
-from scipy import signal, optimize, stats
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -97,63 +26,63 @@ def log_safe(logger, level: str, message: str) -> None:
     pass
         getattr(logger, level.lower())(message)
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 class MathPrecision(Enum):
 
 
     """Mathematical precision levels."""
-LOW = "low"          # 32-bit float
-MEDIUM = "medium"    # 64-bit float (default)
-    HIGH = "high"        # 128-bit float
-EXACT = "exact"      # Symbolic computation
+LOW="low"          # 32-bit float
+MEDIUM="medium"    # 64-bit float (default)
+    HIGH="high"        # 128-bit float
+EXACT="exact"      # Symbolic computation
 
 
 class MathOptimization(Enum):
 
 
     """Mathematical optimization strategies."""
-SPEED = "speed"      # Fastest computation
-ACCURACY = "accuracy"  # Most accurate
-BALANCED = "balanced"  # Balanced approach (default)
-    MEMORY = "memory"    # Memory efficient
+SPEED="speed"      # Fastest computation
+ACCURACY="accuracy"  # Most accurate
+BALANCED="balanced"  # Balanced approach (default)
+    MEMORY="memory"    # Memory efficient
 
 
-@dataclass
+@ dataclass
 class MathConfig:
 
 
     """Unified mathematics configuration."""
-precision: MathPrecision = MathPrecision.MEDIUM
-optimization: MathOptimization = MathOptimization.BALANCED
-max_iterations: int = 1000
-tolerance: float = 1e-6
-cache_size: int = 1000
-enable_parallel: bool = True
-enable_caching: bool = True
-enable_error_handling: bool = True
-enable_logging: bool = True
+precision: MathPrecision=MathPrecision.MEDIUM
+optimization: MathOptimization=MathOptimization.BALANCED
+max_iterations: int=1000
+tolerance: float=1e-6
+cache_size: int=1000
+enable_parallel: bool=True
+enable_caching: bool=True
+enable_error_handling: bool=True
+enable_logging: bool=True
 
     # Performance thresholds
-max_execution_time: float = 1.0  # seconds
-max_memory_usage: float = 100.0  # MB
+max_execution_time: float=1.0  # seconds
+max_memory_usage: float=100.0  # MB
 
     # ZPE-specific parameters
-zpe_work_precision: float = 1e-6
-zpe_torque_precision: float = 1e-6
-zpe_resonance_precision: float = 1e-6
-zpe_thermal_precision: float = 1e-6
+zpe_work_precision: float=1e-6
+zpe_torque_precision: float=1e-6
+zpe_resonance_precision: float=1e-6
+zpe_thermal_precision: float=1e-6
 
     # Reactive-specific parameters
-reactive_threshold: float = 0.5
-reactive_decay_rate: float = 0.95
-reactive_memory_size: int = 100
+reactive_threshold: float=0.5
+reactive_decay_rate: float=0.95
+reactive_memory_size: int=100
 
     # Hybrid-specific parameters
-hybrid_switch_threshold: float = 0.7
-hybrid_blend_factor: float = 0.5
-hybrid_learning_rate: float = 0.01
+hybrid_switch_threshold: float=0.7
+hybrid_blend_factor: float=0.5
+hybrid_learning_rate: float=0.01
 
 
 class UnifiedMathematics:
@@ -169,18 +98,96 @@ Provides centralized mathematical functions with:
 - Caching for repeated operations
 - Parallel processing capabilities
 """
+from scipy import signal, optimize, stats
+import scipy as sp
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union, Callable
+from dataclasses import dataclass, field
+import time
+import logging
+import numpy as np
+import math
 
-def __init__(self, config: Optional[MathConfig] = None):
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Unified Mathematics Configuration for Schwabot Hybrid ZPE-Reactive System.
+
+This module provides centralized configuration for all mathematical operations,
+ensuring consistency, performance, and error handling across the entire pipeline.
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Import centralized CLI handler
+try:
+
+def __init__(self, config: Optional[MathConfig]=None):
 
 
     pass
     pass
         """Initialize unified mathematics system."""
-self.config = config or MathConfig()
-        self.cache: Dict[str, Any] = {}
-self.performance_stats: Dict[str, List[float]] = {}
-self.error_count = 0
-self.total_operations = 0
+self.config=config or MathConfig()
+        self.cache: Dict[str, Any]={}
+self.performance_stats: Dict[str, List[float]]={}
+self.error_count=0
+self.total_operations=0
 
         # Initialize mathematical libraries
 self._initialize_libraries()
@@ -241,26 +248,26 @@ operation_func: Function to execute
 Returns:
 Result of the operation
 """
-start_time = time.time()
-        start_memory = self._get_memory_usage()
+start_time=time.time()
+        start_memory=self._get_memory_usage()
 
         try:
             # Check cache first
-cache_key = self._generate_cache_key(operation_name, args, kwargs)
+cache_key=self._generate_cache_key(operation_name, args, kwargs)
             if self.config.enable_caching and cache_key in self.cache:
-result = self.cache[cache_key]
+result=self.cache[cache_key]
 safe_safe_print(f"✅ {operation_name}: Cached result used")
             else:
                 # Execute operation
-result = operation_func(*args, **kwargs)
+result=operation_func(*args, **kwargs)
 
                 # Cache result
                 if self.config.enable_caching:
 self._cache_result(cache_key, result)
 
             # Record performance
-execution_time = time.time() - start_time
-            memory_usage = self._get_memory_usage() - start_memory
+execution_time=time.time() - start_time
+            memory_usage=self._get_memory_usage() - start_memory
 
 self._record_performance(operation_name, execution_time, memory_usage)
 
@@ -276,7 +283,7 @@ self.total_operations += 1
 
         except Exception as e:
 self.error_count += 1
-error_msg = safe_format_error(e, operation_name)
+error_msg=safe_format_error(e, operation_name)
             safe_safe_print(f"❌ {operation_name} failed: {error_msg}")
 
             if self.config.enable_error_handling:
@@ -291,7 +298,7 @@ def _generate_cache_key(self, operation_name: str, args: tuple, kwargs: dict) ->
     pass
         """Generate cache key for operation."""
 import hashlib
-key_data = f"{operation_name}_{str(args)}_{str(sorted(kwargs.items()))}"
+key_data=f"{operation_name}_{str(args)}_{str(sorted(kwargs.items()))}"
         return hashlib.sha256(key_data.encode()).hexdigest()[:16]
 
 def _cache_result(self, cache_key: str, result: Any) -> None:
@@ -302,10 +309,10 @@ def _cache_result(self, cache_key: str, result: Any) -> None:
         """Cache operation result."""
         if len(self.cache) >= self.config.cache_size:
             # Remove oldest entry
-oldest_key = next(iter(self.cache))
+oldest_key=next(iter(self.cache))
             del self.cache[oldest_key]
 
-self.cache[cache_key] = result
+self.cache[cache_key]=result
 
 def _get_memory_usage(self) -> float:
 
@@ -315,7 +322,7 @@ def _get_memory_usage(self) -> float:
         """Get current memory usage in MB."""
         try:
 import psutil
-process = psutil.Process()
+process=psutil.Process()
             return process.memory_info().rss / 1024 / 1024
         except ImportError:
     pass
@@ -329,7 +336,7 @@ def _record_performance(self, operation_name: str, execution_time: float, memory
     pass
         """Record performance statistics."""
         if operation_name not in self.performance_stats:
-self.performance_stats[operation_name] = []
+self.performance_stats[operation_name]=[]
 
 self.performance_stats[operation_name].append({]]
             'execution_time': execution_time,

@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Conditional Glyph Feedback Loop - Pattern Recognition and Conditional Logic.
 
@@ -66,21 +80,16 @@ Mathematical Foundation:
 - Adaptive threshold adjustment
 """
 
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from enum import Enum
 
 logger = logging.getLogger(__name__)
 
 
 class GlyphType(Enum):
 
-
     """Types of glyph patterns."""
+
+
 BULLISH = "bullish"
 BEARISH = "bearish"
 NEUTRAL = "neutral"
@@ -91,8 +100,9 @@ BREAKOUT = "breakout"
 
 class FeedbackType(Enum):
 
-
     """Types of feedback mechanisms."""
+
+
 POSITIVE = "positive"
 NEGATIVE = "negative"
 NEUTRAL = "neutral"
@@ -102,8 +112,9 @@ ADAPTIVE = "adaptive"
 @dataclass
 class GlyphPattern:
 
-
     """Represents a glyph pattern."""
+
+
 pattern_id: str
 glyph_type: GlyphType
 confidence: float  # 0.0 to 1.0
@@ -116,8 +127,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class ConditionalRule:
 
-
     """Represents a conditional rule."""
+
+
 rule_id: str
 condition: str
 action: str
@@ -130,8 +142,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class FeedbackLoop:
 
-
     """Represents a feedback loop."""
+
+
 loop_id: str
 input_pattern: GlyphPattern
 output_signal: str
@@ -144,8 +157,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class GlyphAnalysis:
 
-
     """Result of glyph pattern analysis."""
+
+
 detected_patterns: List[GlyphPattern]
 active_rules: List[ConditionalRule]
 feedback_loops: List[FeedbackLoop]
@@ -155,7 +169,6 @@ timestamp: datetime = field(default_factory=datetime.now)
 
 
 class ConditionalGlyphFeedbackLoop:
-
 
     """
 Advanced glyph pattern recognition and conditional feedback system.
@@ -167,12 +180,14 @@ Provides mathematical models for:
 - Adaptive learning
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize conditional glyph feedback loop system."""
+
+
 self.patterns: List[GlyphPattern] = []
 self.rules: List[ConditionalRule] = []
 self.feedback_loops: List[FeedbackLoop] = []
@@ -195,6 +210,7 @@ self.adaptation_threshold = 0.1
 
 logger.info("ConditionalGlyphFeedbackLoop initialized")
 
+
 def detect_glyph_patterns(
 
 
@@ -203,6 +219,7 @@ price_data: List[float],
 volume_data: List[float],
 technical_indicators: Dict[str, List[float]]
 ) -> List[GlyphPattern]:
+
 """
 Detect glyph patterns in market data.
 

@@ -328,11 +328,13 @@ class DLTWaveformEngine:
             freqs, psd = self.spectral.power_spectral_density(signal)
             if len(psd) > 1:
                 analysis["peak_frequency_power"] = float(unified_math.unified_math.max(psd))
-                analysis["frequency_spread"] = float(unified_math.unified_math.std(freqs[psd > unified_math.unified_math.mean(psd)]))
+                analysis["frequency_spread"] = float(unified_math.unified_math.std(
+                    freqs[psd > unified_math.unified_math.mean(psd)]))
 
             # Waveform complexity measure
             cwt_coeffs, scales = self.spectral.continuous_wavelet_transform(signal)
-            analysis["waveform_complexity"] = float(unified_math.unified_math.std(unified_math.unified_math.abs(cwt_coeffs)))
+            analysis["waveform_complexity"] = float(
+                unified_math.unified_math.std(unified_math.unified_math.abs(cwt_coeffs)))
 
             # Cache results if ID provided
             if signal_id:

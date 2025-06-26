@@ -1,84 +1,4 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Ops and Observability - Comprehensive Monitoring and Logging System.
-
-This module provides enterprise-grade observability including:
-- Structured logging with ELK/Loki integration
-- Prometheus metrics for latency, PnL, hit rate, memory, GC
-- Health endpoints and monitoring
-- Slack alerts and notifications
-- Integration with all Schwabot core systems
-- Unified mathematics and trading metrics
-"""
-
-
-import asyncio
-import json
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from datetime import datetime, timedelta
-from enum import Enum
-import threading
-import queue
-import socket
-import psutil
-import gc
-from pathlib import Path
-import aiohttp
-import structlog
 from prometheus_client import (
     Counter, Gauge, Histogram, Summary, generate_latest,
 CONTENT_TYPE_LATEST, start_http_server
@@ -87,12 +7,12 @@ CONTENT_TYPE_LATEST, start_http_server
 # Import unified mathematics
 try:
 from core.unified_mathematics_config import get_unified_math
-unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
+unified_math=get_unified_math()
+    UNIFIED_MATH_AVAILABLE=True
 except ImportError:
     pass
     pass
-UNIFIED_MATH_AVAILABLE = False
+UNIFIED_MATH_AVAILABLE=False
 
 # Import all core systems for integration
 try:
@@ -102,29 +22,29 @@ from core.risk_guard import get_risk_guard, get_risk_status
 from core.vecu_core import get_vecu_core
 from core.ferris_rde_core import get_ferris_rde
 from core.secure_api_manager import get_secure_api_manager
-CORE_SYSTEMS_AVAILABLE = True
+CORE_SYSTEMS_AVAILABLE=True
 except ImportError:
     pass
     pass
-CORE_SYSTEMS_AVAILABLE = False
+CORE_SYSTEMS_AVAILABLE=False
 
 # Import centralized CLI handler
 try:
 #     from core.utils.windows_cli_compatibility import (  # F811: duplicate import, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -142,34 +62,34 @@ class LogLevel(Enum):
 
 
     """Log levels."""
-DEBUG = "debug"
-INFO = "info"
-WARNING = "warning"
-ERROR = "error"
-CRITICAL = "critical"
+DEBUG="debug"
+INFO="info"
+WARNING="warning"
+ERROR="error"
+CRITICAL="critical"
 
 
 class MetricType(Enum):
 
 
     """Metric types."""
-COUNTER = "counter"
-GAUGE = "gauge"
-HISTOGRAM = "histogram"
-SUMMARY = "summary"
+COUNTER="counter"
+GAUGE="gauge"
+HISTOGRAM="histogram"
+SUMMARY="summary"
 
 
 class AlertSeverity(Enum):
 
 
     """Alert severity levels."""
-INFO = "info"
-WARNING = "warning"
-ERROR = "error"
-CRITICAL = "critical"
+INFO="info"
+WARNING="warning"
+ERROR="error"
+CRITICAL="critical"
 
 
-@dataclass
+@ dataclass
 class LogEntry:
 
 
@@ -178,15 +98,102 @@ timestamp: datetime
 level: LogLevel
 message: str
 component: str
+import structlog
+import aiohttp
+from pathlib import Path
+import gc
+import psutil
+import socket
+import queue
+import threading
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from dataclasses import dataclass, field, asdict
+import uuid
+import time
+import logging
+import json
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Ops and Observability - Comprehensive Monitoring and Logging System.
+
+This module provides enterprise-grade observability including:
+- Structured logging with ELK/Loki integration
+- Prometheus metrics for latency, PnL, hit rate, memory, GC
+- Health endpoints and monitoring
+- Slack alerts and notifications
+- Integration with all Schwabot core systems
+- Unified mathematics and trading metrics
+"""
+
+
 trace_id: str
 span_id: str
-user_id: Optional[str] = None
-session_id: Optional[str] = None
-metadata: Dict[str, Any] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
+user_id: Optional[str]=None
+session_id: Optional[str]=None
+metadata: Dict[str, Any]=field(default_factory=dict)
+    tags: List[str]=field(default_factory=list)
 
 
-@dataclass
+@ dataclass
 class MetricData:
 
 
@@ -195,11 +202,11 @@ name: str
 value: float
 metric_type: MetricType
 timestamp: datetime
-labels: Dict[str, str] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+labels: Dict[str, str]=field(default_factory=dict)
+    metadata: Dict[str, Any]=field(default_factory=dict)
 
 
-@dataclass
+@ dataclass
 class HealthCheck:
 
 
@@ -208,11 +215,11 @@ component: str
 status: str
 timestamp: datetime
 response_time: float
-details: Dict[str, Any] = field(default_factory=dict)
-    error: Optional[str] = None
+details: Dict[str, Any]=field(default_factory=dict)
+    error: Optional[str]=None
 
 
-@dataclass
+@ dataclass
 class Alert:
 
 
@@ -223,10 +230,10 @@ title: str
 message: str
 component: str
 timestamp: datetime
-acknowledged: bool = False
-acknowledged_by: Optional[str] = None
-acknowledged_at: Optional[datetime] = None
-metadata: Dict[str, Any] = field(default_factory=dict)
+acknowledged: bool=False
+acknowledged_by: Optional[str]=None
+acknowledged_at: Optional[datetime]=None
+metadata: Dict[str, Any]=field(default_factory=dict)
 
 
 class PrometheusMetrics:
@@ -241,51 +248,54 @@ def __init__(self) -> None:
     pass
         """Initialize Prometheus metrics."""
         # Trading metrics
-self.trades_total = Counter('schwabot_trades_total', 'Total number of trades', ['asset', 'side', 'status'])
-        self.trade_pnl = Histogram('schwabot_trade_pnl', 'Trade PnL distribution', ['asset', 'side'])
-        self.trade_latency = Histogram('schwabot_trade_latency_seconds', 'Trade execution latency', ['asset', 'side'])
-        self.hit_rate = Gauge('schwabot_hit_rate', 'Trading hit rate percentage', ['asset'])
-        self.portfolio_value = Gauge('schwabot_portfolio_value_usd', 'Current portfolio value in USD')
-        self.portfolio_pnl = Gauge('schwabot_portfolio_pnl_usd', 'Current portfolio PnL in USD')
+self.trades_total=Counter('schwabot_trades_total', 'Total number of trades', ['asset', 'side', 'status'])
+        self.trade_pnl=Histogram('schwabot_trade_pnl', 'Trade PnL distribution', ['asset', 'side'])
+        self.trade_latency=Histogram('schwabot_trade_latency_seconds', 'Trade execution latency', ['asset', 'side'])
+        self.hit_rate=Gauge('schwabot_hit_rate', 'Trading hit rate percentage', ['asset'])
+        self.portfolio_value=Gauge('schwabot_portfolio_value_usd', 'Current portfolio value in USD')
+        self.portfolio_pnl=Gauge('schwabot_portfolio_pnl_usd', 'Current portfolio PnL in USD')
 
         # Risk metrics
-self.var_95 = Gauge('schwabot_var_95_percent', '95% Value at Risk')
-        self.var_99 = Gauge('schwabot_var_99_percent', '99% Value at Risk')
-        self.portfolio_volatility = Gauge('schwabot_portfolio_volatility', 'Portfolio volatility')
-        self.drawdown = Gauge('schwabot_drawdown_percent', 'Current drawdown percentage')
+self.var_95=Gauge('schwabot_var_95_percent', '95% Value at Risk')
+        self.var_99=Gauge('schwabot_var_99_percent', '99% Value at Risk')
+        self.portfolio_volatility=Gauge('schwabot_portfolio_volatility', 'Portfolio volatility')
+        self.drawdown=Gauge('schwabot_drawdown_percent', 'Current drawdown percentage')
 
         # System metrics
-self.memory_usage_bytes = Gauge('schwabot_memory_usage_bytes', 'Memory usage in bytes')
-        self.cpu_usage_percent = Gauge('schwabot_cpu_usage_percent', 'CPU usage percentage')
-        self.gc_collections = Counter('schwabot_gc_collections_total', 'Total garbage collection events')
-        self.gc_time_seconds = Histogram('schwabot_gc_time_seconds', 'Garbage collection time')
+self.memory_usage_bytes=Gauge('schwabot_memory_usage_bytes', 'Memory usage in bytes')
+        self.cpu_usage_percent=Gauge('schwabot_cpu_usage_percent', 'CPU usage percentage')
+        self.gc_collections=Counter('schwabot_gc_collections_total', 'Total garbage collection events')
+        self.gc_time_seconds=Histogram('schwabot_gc_time_seconds', 'Garbage collection time')
 
         # API metrics
-self.api_requests_total = Counter('schwabot_api_requests_total', 'Total API requests', ['api_type', 'endpoint', 'status'])
-        self.api_latency = Histogram('schwabot_api_latency_seconds', 'API request latency', ['api_type', 'endpoint'])
-        self.api_errors = Counter('schwabot_api_errors_total', 'Total API errors', ['api_type', 'endpoint', 'error_type'])
+self.api_requests_total=Counter('schwabot_api_requests_total', 'Total API requests', ['api_type', 'endpoint', 'status'])
+        self.api_latency=Histogram('schwabot_api_latency_seconds', 'API request latency', ['api_type', 'endpoint'])
+        self.api_errors=Counter('schwabot_api_errors_total', 'Total API errors', ['api_type', 'endpoint', 'error_type'])
 
         # VECU and Ferris metrics
-self.vecu_timing_accuracy = Gauge('schwabot_vecu_timing_accuracy', 'VECU timing accuracy')
-        self.ferris_wheel_phase = Gauge('schwabot_ferris_wheel_phase', 'Current Ferris wheel phase')
-        self.ferris_wheel_confidence = Gauge('schwabot_ferris_wheel_confidence', 'Ferris wheel confidence score')
+self.vecu_timing_accuracy=Gauge('schwabot_vecu_timing_accuracy', 'VECU timing accuracy')
+        self.ferris_wheel_phase=Gauge('schwabot_ferris_wheel_phase', 'Current Ferris wheel phase')
+        self.ferris_wheel_confidence=Gauge('schwabot_ferris_wheel_confidence', 'Ferris wheel confidence score')
 
         # Capital controls metrics
-self.position_size_requests = Counter('schwabot_position_size_requests_total', 'Position size calculation requests', ['method'])
-        self.rebalancing_events = Counter('schwabot_rebalancing_events_total', 'Portfolio rebalancing events')
-        self.risk_violations = Counter('schwabot_risk_violations_total', 'Risk limit violations', ['violation_type'])
+self.position_size_requests=Counter('schwabot_position_size_requests_total',
+                                    'Position size calculation requests', ['method'])
+        self.rebalancing_events=Counter('schwabot_rebalancing_events_total', 'Portfolio rebalancing events')
+        self.risk_violations=Counter('schwabot_risk_violations_total', 'Risk limit violations', ['violation_type'])
 
         # Unified mathematics metrics
-self.math_operations = Counter('schwabot_math_operations_total', 'Mathematical operations', ['operation_type'])
-        self.math_latency = Histogram('schwabot_math_latency_seconds', 'Mathematical operation latency', ['operation_type'])
+self.math_operations=Counter('schwabot_math_operations_total', 'Mathematical operations', ['operation_type'])
+        self.math_latency=Histogram('schwabot_math_latency_seconds',
+                                    'Mathematical operation latency', ['operation_type'])
 
         # Circuit breaker metrics
-self.circuit_breaker_trips = Counter('schwabot_circuit_breaker_trips_total', 'Circuit breaker trips', ['trigger'])
-        self.circuit_breaker_state = Gauge('schwabot_circuit_breaker_state', 'Circuit breaker state (0=closed, 1=open)')
+self.circuit_breaker_trips=Counter('schwabot_circuit_breaker_trips_total', 'Circuit breaker trips', ['trigger'])
+        self.circuit_breaker_state=Gauge('schwabot_circuit_breaker_state', 'Circuit breaker state (0=closed, 1=open)')
 
         # Health check metrics
-self.health_check_duration = Histogram('schwabot_health_check_duration_seconds', 'Health check duration', ['component'])
-        self.health_check_status = Gauge('schwabot_health_check_status', 'Health check status (0=unhealthy, 1=healthy)', ['component'])
+self.health_check_duration=Histogram('schwabot_health_check_duration_seconds', 'Health check duration', ['component'])
+        self.health_check_status=Gauge('schwabot_health_check_status',
+                                       'Health check status (0=unhealthy, 1=healthy)', ['component'])
 
 
 class StructuredLogger:
@@ -299,10 +309,10 @@ def __init__(self, config: Dict[str, Any]) -> None:
     pass
     pass
         """Initialize structured logger."""
-self.config = config
-self.log_queue = queue.Queue()
-        self.log_worker = None
-self.running = False
+self.config=config
+self.log_queue=queue.Queue()
+        self.log_worker=None
+self.running=False
 
         # Configure structlog
 structlog.configure(
@@ -323,7 +333,7 @@ logger_factory=structlog.stdlib.LoggerFactory(),
 cache_logger_on_first_use=True,
 
 
-self.logger = structlog.get_logger()
+self.logger=structlog.get_logger()
 
         # Start log worker
 self.start_log_worker()
@@ -334,8 +344,8 @@ def start_log_worker(self) -> None:
     pass
     pass
         """Start log worker thread."""
-self.running = True
-self.log_worker = threading.Thread(target=self._log_worker, daemon=True)
+self.running=True
+self.log_worker=threading.Thread(target=self._log_worker, daemon=True)
         self.log_worker.start()
 
 def _log_worker(self) -> None:
@@ -346,7 +356,7 @@ def _log_worker(self) -> None:
         """Log worker thread."""
         while self.running:
             try:
-log_entry = self.log_queue.get(timeout=1)
+log_entry=self.log_queue.get(timeout=1)
                 self._send_log(log_entry)
             except queue.Empty:
                 continue
@@ -361,7 +371,7 @@ def _send_log(self, log_entry: LogEntry) -> None:
         """Send log to ELK/Loki."""
         try:
             # Format log entry for ELK/Loki
-log_data = {
+log_data={
 'timestamp': log_entry.timestamp.isoformat(),
                 'level': log_entry.level.value,
 'message': log_entry.message,
@@ -382,7 +392,7 @@ log_data = {
                 self._send_to_loki(log_data)
 
             # Also log locally
-log_method = getattr(self.logger, log_entry.level.value)
+log_method=getattr(self.logger, log_entry.level.value)
             log_method(
                 log_entry.message,
 component=log_entry.component,
@@ -417,7 +427,7 @@ def unified_math.log(self, level: LogLevel, message: str, component: str, **kwar
     pass
     pass
         """Log a message."""
-log_entry = LogEntry(
+log_entry=LogEntry(
             timestamp=datetime.now(),
             level=level,
 message=message,
@@ -444,12 +454,12 @@ def __init__(self, config: Dict[str, Any]) -> None:
     pass
     pass
         """Initialize health monitor."""
-self.config = config
-self.health_checks: Dict[str, Callable] = {}
-self.health_status: Dict[str, HealthCheck] = {}
-self.monitoring_interval = config.get('health_check_interval', 30)
-        self.monitoring_thread = None
-self.running = False
+self.config=config
+self.health_checks: Dict[str, Callable]={}
+self.health_status: Dict[str, HealthCheck]={}
+self.monitoring_interval=config.get('health_check_interval', 30)
+        self.monitoring_thread=None
+self.running=False
 
         # Register default health checks
 self._register_default_health_checks()
@@ -480,7 +490,7 @@ def register_health_check(self, name: str, check_func: Callable):
     pass
     pass
         """Register a health check function."""
-self.health_checks[name] = check_func
+self.health_checks[name]=check_func
 
 def start_monitoring(self) -> None:
 
@@ -488,8 +498,8 @@ def start_monitoring(self) -> None:
     pass
     pass
         """Start health monitoring."""
-self.running = True
-self.monitoring_thread = threading.Thread(target=self._monitoring_worker, daemon=True)
+self.running=True
+self.monitoring_thread=threading.Thread(target=self._monitoring_worker, daemon=True)
         self.monitoring_thread.start()
 
 def _monitoring_worker(self):
@@ -501,12 +511,12 @@ def _monitoring_worker(self):
         while self.running:
             try:
                 for name, check_func in self.health_checks.items():
-                    start_time = time.time()
+                    start_time=time.time()
                     try:
-result = check_func()
-                        response_time = time.time() - start_time
+result=check_func()
+                        response_time=time.time() - start_time
 
-health_check = HealthCheck(
+health_check=HealthCheck(
                             component=name,
 status="healthy" if result else "unhealthy",
 timestamp=datetime.now(),
@@ -514,8 +524,8 @@ timestamp=datetime.now(),
 details=result if isinstance(result, dict) else {}
 
                     except Exception as e:
-response_time = time.time() - start_time
-                        health_check = HealthCheck(
+response_time=time.time() - start_time
+                        health_check=HealthCheck(
                             component=name,
 status="unhealthy",
 timestamp=datetime.now(),
@@ -523,7 +533,7 @@ timestamp=datetime.now(),
 error=str(e)
 
 
-self.health_status[name] = health_check
+self.health_status[name]=health_check
 
 time.sleep(self.monitoring_interval)
 
@@ -549,7 +559,7 @@ def _check_memory_health(self) -> Dict[str, Any]:
     pass
     pass
         """Check memory health."""
-memory = psutil.virtual_memory()
+memory=psutil.virtual_memory()
         return {
 'total': memory.total,
 'available': memory.available,
@@ -574,7 +584,7 @@ def _check_disk_health(self) -> Dict[str, Any]:
     pass
     pass
         """Check disk health."""
-disk = psutil.disk_usage('/')
+disk=psutil.disk_usage('/')
         return {
 'total': disk.total,
 'used': disk.used,
@@ -599,8 +609,8 @@ def _check_capital_controls_health(self) -> Dict[str, Any]:
     pass
         """Check capital controls health."""
         try:
-capital_controls = get_capital_controls()
-            status = get_capital_status()
+capital_controls=get_capital_controls()
+            status=get_capital_status()
             return {
 'total_capital': status.get('total_capital', 0),
                 'current_capital': status.get('current_capital', 0),
@@ -616,8 +626,8 @@ def _check_risk_manager_health(self) -> Dict[str, Any]:
     pass
         """Check risk manager health."""
         try:
-risk_manager = get_enhanced_risk_manager()
-            summary = get_risk_summary()
+risk_manager=get_enhanced_risk_manager()
+            summary=get_risk_summary()
             return {
 'total_risk_checks': summary.get('total_risk_checks', 0),
                 'risk_violations': summary.get('risk_violations', 0),
@@ -633,8 +643,8 @@ def _check_risk_guard_health(self) -> Dict[str, Any]:
     pass
         """Check risk guard health."""
         try:
-risk_guard = get_risk_guard()
-            status = get_risk_status()
+risk_guard=get_risk_guard()
+            status=get_risk_status()
             return {
 'circuit_breaker_state': status.get('circuit_breaker_state', 'unknown'),
                 'trading_allowed': status.get('trading_allowed', False)
@@ -649,7 +659,7 @@ def _check_vecu_health(self) -> Dict[str, Any]:
     pass
         """Check VECU health."""
         try:
-vecu = get_vecu_core()
+vecu=get_vecu_core()
             return {
 'status': 'operational',
 'last_update': datetime.now().isoformat()
@@ -664,7 +674,7 @@ def _check_ferris_rde_health(self) -> Dict[str, Any]:
     pass
         """Check Ferris RDE health."""
         try:
-ferris = get_ferris_rde()
+ferris=get_ferris_rde()
             return {
 'status': 'operational',
 'last_update': datetime.now().isoformat()
@@ -679,8 +689,8 @@ def _check_api_manager_health(self) -> Dict[str, Any]:
     pass
         """Check API manager health."""
         try:
-api_manager = get_secure_api_manager()
-            stats = api_manager.get_api_statistics()
+api_manager=get_secure_api_manager()
+            stats=api_manager.get_api_statistics()
             return {
 'total_requests': stats.get('total_requests', 0),
                 'successful_requests': stats.get('successful_requests', 0),
@@ -706,8 +716,8 @@ def get_overall_health(self) -> str:
         if not self.health_status:
             return "unknown"
 
-unhealthy_count = sum(1 for check in self.health_status.values() if check.status == "unhealthy")
-        total_count = len(self.health_status)
+unhealthy_count=sum(1 for check in self.health_status.values() if check.status == "unhealthy")
+        total_count=len(self.health_status)
 
         if unhealthy_count == 0:
             return "healthy"
@@ -728,10 +738,10 @@ def __init__(self, config: Dict[str, Any]) -> None:
     pass
     pass
         """Initialize alert manager."""
-self.config = config
-self.alerts: List[Alert] = []
-self.alert_handlers: Dict[str, Callable] = {}
-self.slack_webhook_url = config.get('slack_webhook_url')
+self.config=config
+self.alerts: List[Alert]=[]
+self.alert_handlers: Dict[str, Callable]={}
+self.slack_webhook_url=config.get('slack_webhook_url')
 
         # Register alert handlers
 self._register_alert_handlers()
@@ -751,7 +761,7 @@ def register_alert_handler(self, name: str, handler: Callable):
     pass
     pass
         """Register an alert handler."""
-self.alert_handlers[name] = handler
+self.alert_handlers[name]=handler
 
 def create_alert(
 
@@ -761,10 +771,10 @@ severity: AlertSeverity,
 title: str,
 message: str,
 component: str,
-metadata: Optional[Dict[str, Any]] = None
+metadata: Optional[Dict[str, Any]]=None
 ) -> Alert:
 """Create a new alert."""
-alert = Alert(
+alert=Alert(
             id=str(uuid.uuid4()),
             severity=severity,
 title=title,
@@ -792,14 +802,14 @@ return
 
         try:
             # Create Slack message
-color_map = {
+color_map={
 AlertSeverity.INFO: "#36a64",
 AlertSeverity.WARNING: "#ffa500",
 AlertSeverity.ERROR: "#ff0000",
 AlertSeverity.CRITICAL: "#8b0000"
 }
 
-slack_message = {
+slack_message={
 "attachments": [{
 "color": color_map.get(alert.severity, "#36a64"),
                     "title": alert.title,
@@ -827,7 +837,7 @@ slack_message = {
 
             # Add metadata if present
             if alert.metadata:
-metadata_text = "\n".join([f"{k}: {v}" for k, v in alert.metadata.items()])
+metadata_text="\n".join([f"{k}: {v}" for k, v in alert.metadata.items()])
                 slack_message["attachments"][0]["fields"].append({]]
                     "title": "Details",
 "value": metadata_text,
@@ -863,9 +873,9 @@ def acknowledge_alert(self, alert_id: str, acknowledged_by: str):
         """Acknowledge an alert."""
         for alert in self.alerts:
             if alert.id == alert_id:
-alert.acknowledged = True
-alert.acknowledged_by = acknowledged_by
-alert.acknowledged_at = datetime.now()
+alert.acknowledged=True
+alert.acknowledged_by=acknowledged_by
+alert.acknowledged_at=datetime.now()
                 break
 
 
@@ -883,26 +893,26 @@ Provides enterprise-grade observability including:
 - Integration with all Schwabot core systems
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+def __init__(self, config: Optional[Dict[str, Any]]=None) -> None:
 
 
     pass
     pass
         """Initialize Ops and Observability system."""
-self.config = config or {}
+self.config=config or {}
 
         # Initialize components
-self.metrics = PrometheusMetrics()
-        self.logger = StructuredLogger(self.config)
-        self.health_monitor = HealthMonitor(self.config)
-        self.alert_manager = AlertManager(self.config)
+self.metrics=PrometheusMetrics()
+        self.logger=StructuredLogger(self.config)
+        self.health_monitor=HealthMonitor(self.config)
+        self.alert_manager=AlertManager(self.config)
 
         # Start services
 self._start_services()
 
         # Performance tracking
-self.start_time = time.time()
-        self.total_operations = 0
+self.start_time=time.time()
+        self.total_operations=0
 
 safe_safe_print("🔍 Ops and Observability initialized")
 
@@ -913,7 +923,7 @@ def _start_services(self) -> None:
     pass
         """Start observability services."""
         # Start Prometheus metrics server
-metrics_port = self.config.get('prometheus_port', 8000)
+metrics_port=self.config.get('prometheus_port', 8000)
         try:
 start_http_server(metrics_port)
             safe_safe_print(f"✅ Prometheus metrics server started on port {metrics_port}")
@@ -930,9 +940,9 @@ def log_operation(
         self,
 operation: str,
 component: str,
-level: LogLevel = LogLevel.INFO,
-duration: Optional[float] = None,
-success: Optional[bool] = None,
+level: LogLevel=LogLevel.INFO,
+duration: Optional[float]=None,
+success: Optional[bool]=None,
 **kwargs
 ) -> None:
 """Log an operation with metrics."""
@@ -1003,12 +1013,12 @@ api_type: str,
 endpoint: str,
 status_code: int,
 latency: float,
-error_type: Optional[str] = None
+error_type: Optional[str]=None
 ) -> None:
 """Record API request metrics."""
         try:
             # Update API metrics
-status = "success" if status_code < 400 else "error"
+status="success" if status_code < 400 else "error"
 self.metrics.api_requests_total.labels(api_type=api_type, endpoint=endpoint, status=status).inc()
             self.metrics.api_latency.labels(api_type=api_type, endpoint=endpoint).observe(latency)
 
@@ -1102,15 +1112,15 @@ def update_system_metrics(self) -> None:
         """Update system metrics."""
         try:
             # Memory metrics
-memory = psutil.virtual_memory()
+memory=psutil.virtual_memory()
             self.metrics.memory_usage_bytes.set(memory.used)
 
             # CPU metrics
-cpu_percent = psutil.cpu_percent(interval=1)
+cpu_percent=psutil.cpu_percent(interval=1)
             self.metrics.cpu_usage_percent.set(cpu_percent)
 
             # GC metrics
-gc_stats = gc.get_stats()
+gc_stats=gc.get_stats()
             for stat in gc_stats:
 self.metrics.gc_collections.labels(generation=stat['generation']).inc()
                 self.metrics.gc_time_seconds.labels(generation=stat['generation']).observe(stat['collections_duration'])
@@ -1130,27 +1140,27 @@ def _update_core_system_metrics(self) -> None:
         """Update core system metrics."""
         try:
             # Capital controls metrics
-capital_status = get_capital_status()
+capital_status=get_capital_status()
             self.metrics.portfolio_value.set(capital_status.get('current_capital', 0))
             self.metrics.portfolio_pnl.set(capital_status.get('total_pnl', 0))
             self.metrics.drawdown.set(capital_status.get('current_drawdown', 0) * 100)
 
             # Risk manager metrics
-risk_summary = get_risk_summary()
+risk_summary=get_risk_summary()
             if risk_summary.get('latest_metrics'):
-                metrics = risk_summary['latest_metrics']
+                metrics=risk_summary['latest_metrics']
 self.metrics.var_95.set(metrics.get('var_95', 0) * 100)
                 self.metrics.var_99.set(metrics.get('var_99', 0) * 100)
                 self.metrics.portfolio_volatility.set(metrics.get('volatility', 0))
 
             # Risk guard metrics
-risk_status = get_risk_status()
-            circuit_breaker_state = 1 if risk_status.get('circuit_breaker_state') == 'open' else 0
+risk_status=get_risk_status()
+            circuit_breaker_state=1 if risk_status.get('circuit_breaker_state') == 'open' else 0
             self.metrics.circuit_breaker_state.set(circuit_breaker_state)
 
             # API manager metrics
-api_manager = get_secure_api_manager()
-            api_stats = api_manager.get_api_statistics()
+api_manager=get_secure_api_manager()
+            api_stats=api_manager.get_api_statistics()
             # API metrics are updated in record_api_request
 
         except Exception as e:
@@ -1163,8 +1173,8 @@ def get_health_endpoint(self) -> Dict[str, Any]:
     pass
         """Get health endpoint data."""
         try:
-overall_health = self.health_monitor.get_overall_health()
-            health_status = self.health_monitor.get_health_status()
+overall_health=self.health_monitor.get_overall_health()
+            health_status=self.health_monitor.get_health_status()
 
             return {
 'status': overall_health,
@@ -1224,7 +1234,7 @@ def get_observability_summary(self) -> Dict[str, Any]:
 
 
 # Global Ops and Observability instance
-ops_observability = OpsObservability()
+ops_observability=OpsObservability()
 
 
 # Convenience functions for external access
@@ -1242,9 +1252,9 @@ def log_operation(
 
     operation: str,
 component: str,
-level: LogLevel = LogLevel.INFO,
-duration: Optional[float] = None,
-success: Optional[bool] = None,
+level: LogLevel=LogLevel.INFO,
+duration: Optional[float]=None,
+success: Optional[bool]=None,
 **kwargs
 ) -> None:
 """Log an operation."""
@@ -1260,7 +1270,7 @@ def record_trade(asset: str, side: str, pnl: float, latency: float, success: boo
 ops_observability.record_trade(asset, side, pnl, latency, success)
 
 
-def record_api_request(api_type: str, endpoint: str, status_code: int, latency: float, error_type: Optional[str] = None) -> None:
+def record_api_request(api_type: str, endpoint: str, status_code: int, latency: float, error_type: Optional[str]=None) -> None:
 
 
     pass
@@ -1322,7 +1332,7 @@ if __name__ == "__main__":
     # Test Ops and Observability
 safe_print("🔍 Testing Ops and Observability...")
 
-ops = get_ops_observability()
+ops=get_ops_observability()
 
     # Test operation logging
 log_operation(
@@ -1359,9 +1369,9 @@ matrix_size=100
 ops.update_system_metrics()
 
     # Get health endpoint
-health = get_health_endpoint()
+health=get_health_endpoint()
     safe_print(f"✅ Health status: {health['status']}")
 
     # Get observability summary
-summary = get_observability_summary()
+summary=get_observability_summary()
     safe_print(f"✅ Observability summary: {summary}")

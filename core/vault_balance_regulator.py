@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Dict, List, Optional, Tuple
+from enum import Enum
+from dataclasses import dataclass
+import time
+import logging
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Vault Balance Regulator - Asset Allocation & Risk Management.
 
@@ -65,12 +78,6 @@ Windows CLI compatible with comprehensive error handling.
 """
 
 
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Dict, List, Optional, Tuple
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -78,8 +85,8 @@ logger = logging.getLogger(__name__)
 
 class Asset(Enum):
 
-
     """Supported assets for vault management."""
+
 
 BTC = "BTC"
 USDC = "USDC"
@@ -89,8 +96,8 @@ ETH = "ETH"
 
 class RebalanceAction(Enum):
 
-
     """Rebalance action types."""
+
 
 BUY = "buy"
 SELL = "sell"
@@ -101,8 +108,8 @@ EMERGENCY_CONVERT = "emergency_convert"
 @dataclass
 class VaultBalance:
 
-
     """Vault balance information."""
+
 
 asset: Asset
 balance: float                     # Current balance
@@ -116,8 +123,8 @@ rebalance_urgency: float           # Urgency of rebalance [0, 1]
 @dataclass
 class RebalanceSignal:
 
-
     """Rebalance signal information."""
+
 
 asset: Asset
 action: RebalanceAction
@@ -131,8 +138,8 @@ threshold_triggered: bool          # Whether threshold was triggered
 @dataclass
 class VaultState:
 
-
     """Overall vault state."""
+
 
 total_value_usd: float             # Total vault value in USD
 balance_entropy: float             # Balance distribution entropy
@@ -144,15 +151,16 @@ rebalance_frequency: float         # Rebalances per hour
 
 class VaultBalanceRegulator:
 
-
     """Regulates vault balances and asset allocation."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize vault balance regulator."""
+
+
 self.vault_balances: Dict[Asset, VaultBalance] = {}
 self.rebalance_history: List[RebalanceSignal] = []
 self.balance_history: Dict[Asset, List[float]] = {]
@@ -191,13 +199,13 @@ def _initialize_vault_balances(self) -> None:
         """Initialize vault balance tracking."""
         for asset in Asset:
 self.vault_balances[asset] = VaultBalance(]
-                asset=asset,
-balance=0.0,
-target_allocation=self.target_allocations[asset],
-actual_allocation=0.0,
-imbalance_delta=0.0,
-last_rebalance_time=0.0,
-rebalance_urgency=0.0,
+                asset = asset,
+balance = 0.0,
+target_allocation = self.target_allocations[asset],
+actual_allocation = 0.0,
+imbalance_delta = 0.0,
+last_rebalance_time = 0.0,
+rebalance_urgency = 0.0,
 
 
 def update_balance(self, asset: Asset, new_balance: float) -> None:
@@ -252,15 +260,14 @@ return
 vault.imbalance_delta = self.calculate_imbalance_delta(
                     vault.target_allocation, vault.actual_allocation
 
-
                 # Calculate rebalance urgency
 vault.rebalance_urgency = unified_math.min(1.0, vault.imbalance_delta / self.imbalance_threshold)
 
         except Exception as e:
 logger.error(f"Error recalculating allocations: {e}")
 
-def calculate_imbalance_delta(self, target: float, actual: float) -> float:
 
+def calculate_imbalance_delta(self, target: float, actual: float) -> float:
 
     pass
     pass
@@ -285,6 +292,7 @@ Imbalance delta
             if actual == 0:
                 return 1.0 if target > 0 else 0.0
 
+
 ratio = target / actual
 imbalance_delta = unified_math.abs(ratio - 1.0)
 
@@ -293,6 +301,7 @@ imbalance_delta = unified_math.abs(ratio - 1.0)
         except Exception as e:
 logger.error(f"Error calculating imbalance delta: {e}")
             return 0.0
+
 
 def calculate_mean_reversion_trigger(
 
@@ -337,8 +346,8 @@ trigger = self.mean_reversion_lambda * (current_balance - mean_balance)
 logger.error(f"Error calculating mean reversion trigger: {e}")
             return 0.0
 
-def calculate_threshold_ping(self, imbalance_delta: float) -> float:
 
+def calculate_threshold_ping(self, imbalance_delta: float) -> float:
 
     pass
     pass
@@ -364,8 +373,10 @@ Threshold ping value
             return ping_value
 
         except Exception as e:
+
 logger.error(f"Error calculating threshold ping: {e}")
             return 0.0
+
 
 def generate_rebalance_signals(
 
@@ -502,8 +513,8 @@ True if rebalance was executed successfully
             if signal.action == RebalanceAction.HOLD:
                 return True
 
-vault = self.vault_balances[signal.asset]
-current_time = time.time()
+vault=self.vault_balances[signal.asset]
+current_time=time.time()
 
             # Validate rebalance
             if signal.confidence < 0.3:
@@ -515,12 +526,12 @@ logger.warning(f"Rebalance confidence too low: {signal.confidence}")
             logger.info(f"Reason: {signal.reason}")
 
             # Update vault state
-vault.last_rebalance_time = current_time
+vault.last_rebalance_time=current_time
 
             # Store in history
 self.rebalance_history.append(signal)
             if len(self.rebalance_history) > self.max_history:
-                self.rebalance_history = self.rebalance_history[-100:]
+                self.rebalance_history=self.rebalance_history[-100:]
 
             return True
 
@@ -542,39 +553,39 @@ Current vault state
 """
         try:
             # Calculate total value
-total_value = sum(vault.balance for vault in self.vault_balances.values())
+total_value=sum(vault.balance for vault in self.vault_balances.values())
 
             # Calculate balance entropy
             if total_value > 0:
-allocations = [vault.actual_allocation for vault in self.vault_balances.values()]
-                allocations = [a for a in allocations if a > 0]  # Remove zero allocations
+allocations=[vault.actual_allocation for vault in self.vault_balances.values()]
+                allocations=[a for a in allocations if a > 0]  # Remove zero allocations
 
                 if allocations:
-entropy = -sum(a * unified_math.unified_math.log(a) for a in allocations)
+entropy=-sum(a * unified_math.unified_math.log(a) for a in allocations)
                     # Normalize by max possible entropy
-max_entropy = unified_math.unified_math.log(len(allocations))
-                    balance_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+max_entropy=unified_math.unified_math.log(len(allocations))
+                    balance_entropy=entropy / max_entropy if max_entropy > 0 else 0.0
                 else:
-balance_entropy = 0.0
+balance_entropy=0.0
             else:
-balance_entropy = 0.0
+balance_entropy=0.0
 
             # Calculate risk level (based on imbalances)
-            max_imbalance = unified_math.max(vault.imbalance_delta for vault in self.vault_balances.values())
-            risk_level = unified_math.min(1.0, max_imbalance / self.emergency_threshold)
+            max_imbalance=unified_math.max(vault.imbalance_delta for vault in self.vault_balances.values())
+            risk_level=unified_math.min(1.0, max_imbalance / self.emergency_threshold)
 
             # Calculate stability score (inverse of risk)
-            stability_score = 1.0 - risk_level
+            stability_score=1.0 - risk_level
 
             # Calculate rebalance frequency
-recent_rebalances = [
+recent_rebalances=[
 r for r in self.rebalance_history
                 if time.time() - r.confidence < 3600  # Last hour
             ]
-rebalance_frequency = len(recent_rebalances)
+rebalance_frequency=len(recent_rebalances)
 
             # Last rebalance time
-last_rebalance_time = (
+last_rebalance_time=(
                 unified_math.max(vault.last_rebalance_time for vault in self.vault_balances.values())
                 if any(vault.last_rebalance_time > 0 for vault in self.vault_balances.values())
                 else 0.0
@@ -612,7 +623,7 @@ True if update was successful
 """
         try:
             # Validate allocations sum to 1.0
-total_allocation = sum(new_targets.values())
+total_allocation=sum(new_targets.values())
             if unified_math.abs(total_allocation - 1.0) > 0.01:
                 logger.error(f"Target allocations must sum to 1.0, got {total_allocation}")
                 return False
@@ -629,12 +640,12 @@ logger.error(f"Allocation for {asset.value} exceeds maximum: {allocation}")
                 return False
 
             # Update targets
-self.target_allocations = new_targets.copy()
+self.target_allocations=new_targets.copy()
 
             # Update vault balance targets
             for asset, allocation in new_targets.items():
                 if asset in self.vault_balances:
-self.vault_balances[asset].target_allocation = allocation
+self.vault_balances[asset].target_allocation=allocation
 
             # Recalculate imbalances
 self._recalculate_allocations()
@@ -652,7 +663,7 @@ def get_regulator_summary(self) -> Dict:
     pass
     pass
         """Get vault balance regulator summary."""
-vault_state = self.calculate_vault_state()
+vault_state=self.calculate_vault_state()
 
         return {
 "total_value_usd": vault_state.total_value_usd,
@@ -687,10 +698,10 @@ def main() -> None:
 safe_print("Vault Balance Regulator Demo")
     safe_print("=" * 35)
 
-regulator = VaultBalanceRegulator()
+regulator=VaultBalanceRegulator()
 
     # Simulate vault balances
-test_balances = {
+test_balances={
 Asset.BTC: 30000.0,   # $30k BTC (should be 60% = $36k)
         Asset.USDC: 20000.0,  # $20k USDC (should be 25% = $15k)
         Asset.XRP: 5000.0,    # $5k XRP (should be 10% = $6k)
@@ -700,12 +711,12 @@ Asset.BTC: 30000.0,   # $30k BTC (should be 60% = $36k)
 safe_print("Setting initial balances:")
     for asset, balance in test_balances.items():
         regulator.update_balance(asset, balance)
-        vault = regulator.vault_balances[asset]
+        vault=regulator.vault_balances[asset]
 safe_print(f"  {asset.value}: ${balance:,.0f} (Target: {vault.target_allocation:.1%}, Actual: {vault.actual_allocation:.1%})")
 
     # Generate rebalance signals
 safe_print("\nGenerating rebalance signals:")
-    signals = regulator.generate_rebalance_signals(profit_factor=1.2, volatility_sigma=0.15)
+    signals=regulator.generate_rebalance_signals(profit_factor=1.2, volatility_sigma=0.15)
 
     for signal in signals:
 safe_print(f"  {signal.asset.value}: {signal.action.value}")
@@ -716,13 +727,13 @@ safe_print(f"  {signal.asset.value}: {signal.action.value}")
         safe_print(f"    Threshold Triggered: {signal.threshold_triggered}")
 
         # Execute rebalance
-executed = regulator.execute_rebalance(signal)
+executed=regulator.execute_rebalance(signal)
         safe_print(f"    Executed: {executed}")
         print()
 
     # Calculate vault state
 safe_print("Vault State:")
-    vault_state = regulator.calculate_vault_state()
+    vault_state=regulator.calculate_vault_state()
     safe_print(f"  Total Value: ${vault_state.total_value_usd:,.0f}")
     safe_print(f"  Balance Entropy: {vault_state.balance_entropy:.3f}")
     safe_print(f"  Risk Level: {vault_state.risk_level:.3f}")
@@ -731,19 +742,19 @@ safe_print("Vault State:")
 
     # Test target allocation update
 safe_print("\nTesting target allocation update:")
-    new_targets = {
+    new_targets={
 Asset.BTC: 0.7,     # Increase BTC to 70%
 Asset.USDC: 0.2,    # Decrease USDC to 20%
 Asset.XRP: 0.05,    # Decrease XRP to 5%
 Asset.ETH: 0.05,    # Keep ETH at 5%
 }
 
-updated = regulator.update_target_allocations(new_targets)
+updated=regulator.update_target_allocations(new_targets)
     safe_print(f"  Target update successful: {updated}")
 
     # Regulator summary
 safe_print("\nRegulator Summary:")
-    summary = regulator.get_regulator_summary()
+    summary=regulator.get_regulator_summary()
     for key, value in summary.items():
         if isinstance(value, dict):
             safe_print(f"  {key}:")

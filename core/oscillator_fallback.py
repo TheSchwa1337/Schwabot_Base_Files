@@ -35,12 +35,13 @@ def fallback_oscillator(
 
 
     t: float,
-*,
-amplitude: float = 1.0,
-frequency: float = 1.0,
-damping: float = 0.1,
-phase: float = 0.0,
+    *,
+    amplitude: float = 1.0,
+    frequency: float = 1.0,
+    damping: float = 0.1,
+    phase: float = 0.0,
 ) -> float:
+
 """Return damped cosine value x(t).
 
 Parameters
@@ -61,7 +62,7 @@ Returns
 float
 Damped oscillator value at *t*.
 """
-    if damping < 0:
+   if damping < 0:
         raise ValueError("damping must be non-negative")
     envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase

@@ -31,8 +31,9 @@ except ImportError:
     pass
 CLI_HANDLER_AVAILABLE = False
     # Fallback for CLI safety
-def safe_print(msg: str) -> None:
 
+
+def safe_print(msg: str) -> None:
 
     pass
     pass

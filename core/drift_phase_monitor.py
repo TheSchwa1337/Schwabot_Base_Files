@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Dict, Optional, Tuple
+import time
+import logging
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Drift Phase Monitor - Phase Drift Penalty Calculator.
 
@@ -68,10 +79,6 @@ Where:
 Windows CLI compatible with ASCII fallback for mathematical symbols.
 """
 
-
-import logging
-import time
-from typing import Dict, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +101,7 @@ def compute_phase_drift(
 current_timestamp: float,
 expected_cycle: float,
 ) -> float:
+
 """Compute phase drift penalty.
 
 Parameters

@@ -1,100 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Trajectory Sphere - Live Backtesting and Self-Validation Engine.
-
-This module enables Schwabot to live-trade its own simulation recursively,
-using historical ledger data and real-time market feeds to validate and
-improve its own logic through self-referential testing.
-"""
-
-
-import asyncio
-import logging
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
-from enum import Enum
-# from core.unified_math_system import unified_math  # F811: duplicate import
-
-# Import unified mathematics
-try:
-from core.unified_mathematics_config import get_unified_math
-unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-UNIFIED_MATH_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -107,30 +26,30 @@ def log_safe(logger, level: str, message: str) -> None:
     pass
         getattr(logger, level.lower())(message)
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 class ExecutionMode(Enum):
 
 
     """Execution modes for trajectory sphere."""
-LIVE = "live"              # Real-time trading
-DEMO = "demo"              # Simulation mode
-BACKTEST = "backtest"      # Historical testing
-VALIDATION = "validation"  # Self-validation mode
+LIVE="live"              # Real-time trading
+DEMO="demo"              # Simulation mode
+BACKTEST="backtest"      # Historical testing
+VALIDATION="validation"  # Self-validation mode
 
 
 class TickPhase(Enum):
 
 
     """Tick phases for compression logic."""
-COMPRESSION = "compression"    # High-pressure phase
-EXPANSION = "expansion"        # Low-pressure phase
-TRANSITION = "transition"      # Phase shift
-RESONANCE = "resonance"        # Harmonic alignment
+COMPRESSION="compression"    # High-pressure phase
+EXPANSION="expansion"        # Low-pressure phase
+TRANSITION="transition"      # Phase shift
+RESONANCE="resonance"        # Harmonic alignment
 
 
-@dataclass
+@ dataclass
 class MarketVector:
 
 
@@ -145,11 +64,11 @@ volume_xrp: float
 volume_usdc: float
 timestamp: datetime
 tick_id: int
-entropy: float = 0.0
-phase: float = 0.0
+entropy: float=0.0
+phase: float=0.0
 
 
-@dataclass
+@ dataclass
 class TickReconstruction:
 
 
@@ -164,7 +83,7 @@ profit_potential: float
 execution_confidence: float
 
 
-@dataclass
+@ dataclass
 class SimulationResult:
 
 
@@ -176,9 +95,97 @@ profit_delta: float
 execution_time: float
 phase_alignment: float
 entropy_correlation: float
-metadata: Dict[str, Any] = field(default_factory=dict)
+metadata: Dict[str, Any]=field(default_factory=dict)
 
 
+from core.unified_mathematics_config import get_unified_math
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Trajectory Sphere - Live Backtesting and Self-Validation Engine.
+
+This module enables Schwabot to live-trade its own simulation recursively,
+using historical ledger data and real-time market feeds to validate and
+improve its own logic through self-referential testing.
+"""
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+# Import unified mathematics
+try:
+unified_math=get_unified_math()
+    UNIFIED_MATH_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+UNIFIED_MATH_AVAILABLE=False
+
+# Import centralized CLI handler
+try:
 class TrajectorySphere:
 
 
@@ -192,30 +199,30 @@ Enables Schwabot to:
 - Apply mechanical timing logic to digital trading
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]]=None):
 
 
     pass
     pass
         """Initialize trajectory sphere."""
-self.config = config or {}
-self.execution_mode = ExecutionMode.DEMO
-self.current_tick_id = 0
-self.simulation_history: List[SimulationResult] = []
-self.market_memory: Dict[int, MarketVector] = {}
-self.phase_memory: Dict[int, float] = {}
-self.entropy_memory: Dict[int, float] = {}
+self.config=config or {}
+self.execution_mode=ExecutionMode.DEMO
+self.current_tick_id=0
+self.simulation_history: List[SimulationResult]=[]
+self.market_memory: Dict[int, MarketVector]={}
+self.phase_memory: Dict[int, float]={}
+self.entropy_memory: Dict[int, float]={}
 
         # Timing and compression parameters
-self.tick_phase_window = 16  # Tick phase compression window
-self.entropy_decay_rate = 0.95
-self.phase_resonance_threshold = 0.7
-self.compression_factor = 0.25
+self.tick_phase_window=16  # Tick phase compression window
+self.entropy_decay_rate=0.95
+self.phase_resonance_threshold=0.7
+self.compression_factor=0.25
 
         # Performance tracking
-self.total_simulations = 0
-self.successful_simulations = 0
-self.average_profit_delta = 0.0
+self.total_simulations=0
+self.successful_simulations=0
+self.average_profit_delta=0.0
 
 safe_safe_print("🌌 Trajectory Sphere initialized")
 
@@ -225,7 +232,7 @@ def set_execution_mode(self, mode: ExecutionMode) -> None:
     pass
     pass
         """Set execution mode."""
-self.execution_mode = mode
+self.execution_mode=mode
 safe_safe_print(f"🔄 Execution mode set to: {mode.value}")
 
 def internal_tick_reconstructor(
@@ -244,28 +251,28 @@ to digital trading, similar to how an ECU regulates combustion timing.
 """
         try:
             # Calculate phase using tick compression logic
-phase = (tick_id % self.tick_phase_window) / float(self.tick_phase_window)
+phase=(tick_id % self.tick_phase_window) / float(self.tick_phase_window)
 
             # Apply sine-based compression modulation (like ECU timing)
-            compression_factor = unified_math.unified_math.sin(2 * math.pi * phase)
+            compression_factor=unified_math.unified_math.sin(2 * math.pi * phase)
 
             # Calculate entropy field (like engine temperature affecting combustion)
-            entropy_field = self._calculate_entropy_field(tick_id, market_vector)
+            entropy_field=self._calculate_entropy_field(tick_id, market_vector)
 
             # Calculate ZPE resonance (like harmonic engine resonance)
-            zpe_resonance = self._calculate_zpe_resonance(phase, entropy_field)
+            zpe_resonance=self._calculate_zpe_resonance(phase, entropy_field)
 
             # Calculate profit potential with compression boost
-base_profit = self._calculate_base_profit(market_vector)
-            profit_boost = base_profit * (1 + self.compression_factor * compression_factor)
+base_profit=self._calculate_base_profit(market_vector)
+            profit_boost=base_profit * (1 + self.compression_factor * compression_factor)
 
             # Calculate execution confidence based on phase alignment
-execution_confidence = self._calculate_execution_confidence(
+execution_confidence=self._calculate_execution_confidence(
                 phase, entropy_field, zpe_resonance
 
 
             # Create reconstruction
-reconstruction = TickReconstruction(
+reconstruction=TickReconstruction(
                 tick_id=tick_id,
 timestamp=timestamp,
 market_vector=market_vector,
@@ -277,9 +284,9 @@ execution_confidence=execution_confidence
 
 
             # Store in memory
-self.market_memory[tick_id] = market_vector
-self.phase_memory[tick_id] = phase
-self.entropy_memory[tick_id] = entropy_field
+self.market_memory[tick_id]=market_vector
+self.phase_memory[tick_id]=phase
+self.entropy_memory[tick_id]=entropy_field
 
             return reconstruction
 
@@ -295,10 +302,10 @@ def _calculate_entropy_field(self, tick_id: int, market_vector: MarketVector) ->
         """Calculate entropy field (like engine temperature affecting combustion)."""
         try:
             # Use price volatility as entropy source
-price_volatility = unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
+price_volatility=unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
 
             # Apply exponential decay (like heat dissipation)
-            entropy = price_volatility * unified_math.exp(-tick_id / 1000.0)
+            entropy=price_volatility * unified_math.exp(-tick_id / 1000.0)
 
             # Normalize to 0-1 range
             return unified_math.min(1.0, unified_math.max(0.0, entropy))
@@ -315,11 +322,11 @@ def _calculate_zpe_resonance(self, phase: float, entropy_field: float) -> float:
         """Calculate ZPE resonance (like harmonic engine resonance)."""
         try:
             # Calculate resonance based on phase and entropy alignment
-phase_resonance = unified_math.unified_math.cos(2 * math.pi * phase)
-            entropy_resonance = unified_math.exp(-unified_math.abs(entropy_field - 0.5))
+phase_resonance=unified_math.unified_math.cos(2 * math.pi * phase)
+            entropy_resonance=unified_math.exp(-unified_math.abs(entropy_field - 0.5))
 
             # Combine resonances
-zpe_resonance = (phase_resonance + entropy_resonance) / 2.0
+zpe_resonance=(phase_resonance + entropy_resonance) / 2.0
 
             return zpe_resonance
 
@@ -335,12 +342,12 @@ def _calculate_base_profit(self, market_vector: MarketVector) -> float:
         """Calculate base profit potential."""
         try:
             # Simple profit calculation based on volume and price movement
-total_volume = (market_vector.volume_btc + market_vector.volume_eth +
+total_volume=(market_vector.volume_btc + market_vector.volume_eth +
                           market_vector.volume_xrp + market_vector.volume_usdc)
 
-price_movement = unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
+price_movement=unified_math.abs(market_vector.btc_price - market_vector.eth_price) / market_vector.btc_price
 
-base_profit = total_volume * price_movement * 0.001  # Small multiplier
+base_profit=total_volume * price_movement * 0.001  # Small multiplier
 
             return base_profit
 
@@ -359,16 +366,16 @@ zpe_resonance: float
 """Calculate execution confidence based on phase alignment."""
         try:
             # Phase alignment (like spark timing)
-            phase_alignment = 1.0 - unified_math.abs(phase - 0.5) * 2.0
+            phase_alignment=1.0 - unified_math.abs(phase - 0.5) * 2.0
 
             # Entropy stability (like engine temperature stability)
-            entropy_stability = 1.0 - unified_math.abs(entropy_field - 0.5) * 2.0
+            entropy_stability=1.0 - unified_math.abs(entropy_field - 0.5) * 2.0
 
             # ZPE resonance strength
-resonance_strength = unified_math.abs(zpe_resonance)
+resonance_strength=unified_math.abs(zpe_resonance)
 
             # Combine factors
-confidence = (phase_alignment + entropy_stability + resonance_strength) / 3.0
+confidence=(phase_alignment + entropy_stability + resonance_strength) / 3.0
 
             return unified_math.min(1.0, unified_math.max(0.0, confidence))
 
@@ -399,8 +406,8 @@ execution_confidence=0.5
 async def simulate_tick_tick(
         self,
 market_data: Dict[str, Any],
-strategy_mapper: Any = None,
-profit_tracker: Any = None
+strategy_mapper: Any=None,
+profit_tracker: Any=None
 ) -> SimulationResult:
 """
 Simulate tick-by-tick trading with self-validation.
@@ -408,40 +415,40 @@ Simulate tick-by-tick trading with self-validation.
 This is the core simulation function that enables Schwabot to
 live-trade its own simulation recursively.
 """
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Create market vector from data
-market_vector = self._create_market_vector(market_data)
+market_vector=self._create_market_vector(market_data)
 
             # Reconstruct tick
-reconstruction = self.internal_tick_reconstructor(
+reconstruction=self.internal_tick_reconstructor(
                 self.current_tick_id,
 market_vector.timestamp,
 market_vector
 
 
             # Simulate strategy execution
-simulated_profit = await self._simulate_strategy_execution(
+simulated_profit=await self._simulate_strategy_execution(
                 reconstruction, strategy_mapper
 
 
             # Get profit projection
-projected_profit = await self._get_profit_projection(
+projected_profit=await self._get_profit_projection(
                 reconstruction, profit_tracker
 
 
             # Calculate profit delta
-profit_delta = simulated_profit - projected_profit
+profit_delta=simulated_profit - projected_profit
 
             # Calculate phase alignment
-phase_alignment = self._calculate_phase_alignment(reconstruction)
+phase_alignment=self._calculate_phase_alignment(reconstruction)
 
             # Calculate entropy correlation
-entropy_correlation = self._calculate_entropy_correlation(reconstruction)
+entropy_correlation=self._calculate_entropy_correlation(reconstruction)
 
             # Create simulation result
-result = SimulationResult(
+result=SimulationResult(
                 success=True,
 simulated_profit=simulated_profit,
 projected_profit=projected_profit,
@@ -507,7 +514,7 @@ strategy_mapper: Any
         try:
             if strategy_mapper:
                 # Use actual strategy mapper if available
-strategy_result = await strategy_mapper.map_strategy_enhanced(
+strategy_result=await strategy_mapper.map_strategy_enhanced(
                     execution_packet={
 'volume': reconstruction.market_vector.volume_btc,
 'expected_profit': reconstruction.profit_potential
@@ -536,7 +543,7 @@ profit_tracker: Any
         try:
             if profit_tracker:
                 # Use actual profit tracker if available
-projection = profit_tracker.predict(reconstruction.tick_id)
+projection=profit_tracker.predict(reconstruction.tick_id)
                 return projection if projection is not None else reconstruction.profit_potential
             else:
                 # Fallback projection
@@ -554,8 +561,8 @@ def _calculate_phase_alignment(self, reconstruction: TickReconstruction) -> floa
         """Calculate phase alignment score."""
         try:
             # Phase alignment based on compression and resonance
-phase_score = 1.0 - unified_math.abs(reconstruction.phase_compression)
-            resonance_score = unified_math.abs(reconstruction.zpe_resonance)
+phase_score=1.0 - unified_math.abs(reconstruction.phase_compression)
+            resonance_score=unified_math.abs(reconstruction.zpe_resonance)
 
             return (phase_score + resonance_score) / 2.0
 
@@ -590,7 +597,7 @@ self.successful_simulations += 1
 
         # Update average profit delta
         if self.total_simulations > 0:
-self.average_profit_delta = (
+self.average_profit_delta=(
                 (self.average_profit_delta * (self.total_simulations - 1) + result.profit_delta) /
                 self.total_simulations
 
@@ -600,7 +607,7 @@ self.simulation_history.append(result)
 
         # Keep only recent history
         if len(self.simulation_history) > 1000:
-            self.simulation_history = self.simulation_history[-1000:]
+            self.simulation_history=self.simulation_history[-1000:]
 
 def get_simulation_statistics(self) -> Dict[str, Any]:
 
@@ -632,7 +639,7 @@ self.market_memory.clear()
 
 
 # Global trajectory sphere instance
-trajectory_sphere = TrajectorySphere()
+trajectory_sphere=TrajectorySphere()
 
 
 # Convenience functions for external access
@@ -672,7 +679,7 @@ if __name__ == "__main__":
 safe_print("🧪 Testing Trajectory Sphere...")
 
     # Test market data
-test_market_data = {
+test_market_data={
 'btc_price': 50000.0,
 'eth_price': 3000.0,
 'xrp_price': 0.5,
@@ -684,7 +691,7 @@ test_market_data = {
 }
 
     # Run simulation
-result = simulate_tick(test_market_data)
+result=simulate_tick(test_market_data)
     safe_print(f"✅ Simulation Result: {result.success}")
     safe_print(f"   Simulated Profit: {result.simulated_profit:.6f}")
     safe_print(f"   Projected Profit: {result.projected_profit:.6f}")
@@ -692,5 +699,5 @@ result = simulate_tick(test_market_data)
     safe_print(f"   Phase Alignment: {result.phase_alignment:.6f}")
 
     # Get statistics
-stats = get_simulation_stats()
+stats=get_simulation_stats()
     safe_print(f"✅ Statistics: {stats}")

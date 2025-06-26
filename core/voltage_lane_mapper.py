@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import queue
+import threading
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import hashlib
+import logging
+import time
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +22,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Voltage Lane Mapper - Schwabot UROS v1.0
@@ -70,51 +88,49 @@ Features:
 - Integration with hash registry
 """
 
-import json
-import time
-import logging
-import hashlib
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import threading
-import queue
 
 logger = logging.getLogger(__name__)
 
+
 class ComputeChannel(Enum):
 
-
     """Available compute channels."""
+
+
 CPU = "cpu"
 GPU = "gpu"
 TENSOR = "tensor"
 HYBRID = "hybrid"
 
+
 class VoltageLevel(Enum):
 
-
     """Voltage level categories."""
+
+
 LOW = "low"      # 0.8V - 1.2V
 MEDIUM = "medium"  # 1.2V - 2.0V
 HIGH = "high"    # 2.0V - 3.3V
 
+
 class HandoffStatus(Enum):
 
-
     """Hand-off status types."""
+
+
 PENDING = "pending"
 SUCCESS = "success"
 FAILED = "failed"
 ROLLBACK = "rollback"
 
+
 @dataclass
 class VoltageMapping:
 
-
     """Voltage mapping configuration."""
+
+
 bit_depth: int
 base_voltage: float
 calculated_voltage: float
@@ -123,11 +139,13 @@ safety_margin: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class ChannelAssignment:
 
-
     """Channel assignment result."""
+
+
 channel_id: str
 compute_channel: ComputeChannel
 voltage_level: VoltageLevel
@@ -138,11 +156,13 @@ assignment_score: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class HandoffRequest:
 
-
     """Hand-off request structure."""
+
+
 request_id: str
 source_channel: str
 target_channel: str
@@ -153,11 +173,13 @@ timestamp: datetime
 timeout: float = 5.0
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class HandoffResult:
 
-
     """Hand-off result structure."""
+
+
 request_id: str
 status: HandoffStatus
 source_channel: str
@@ -169,8 +191,8 @@ error_message: Optional[str] = None
 timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-class VoltageLaneMapper:
 
+class VoltageLaneMapper:
 
     """
 Voltage Lane Mapper for Schwabot UROS v1.0.
@@ -182,12 +204,13 @@ Mathematical Foundation:
 - Hand-off Score: score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
     """
 
-def __init__(self, config_path: str = "./config/voltage_lane_config.json"):
 
+def __init__(self, config_path: str = "./config/voltage_lane_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Voltage configuration
 self.base_voltage = 1.0  # Base voltage for calculations

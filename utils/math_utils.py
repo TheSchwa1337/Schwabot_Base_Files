@@ -69,4 +69,4 @@ def cosine_similarity(a: Sequence[float] | np.ndarray, b: Sequence[float] | np.n
     norm_b = np.linalg.norm(vec_b)
     if norm_a == 0.0 or norm_b == 0.0:
         raise ValueError("zero-norm vector cannot compute cosine similarity")
-    return float(np.dot(vec_a, vec_b) / (norm_a * norm_b)) 
+    return float(np.dot(vec_a, vec_b) / (norm_a * norm_b))

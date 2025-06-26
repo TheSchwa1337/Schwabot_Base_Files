@@ -154,8 +154,8 @@ class CoreMathLibV2:
         williams_r = np.zeros_like(high)
 
         for i in range(period - 1, len(high)):
-            highest_high = unified_math.unified_math.max(high[i - period + 1 : i + 1])
-            lowest_low = unified_math.unified_math.min(low[i - period + 1 : i + 1])
+            highest_high = unified_math.unified_math.max(high[i - period + 1: i + 1])
+            lowest_low = unified_math.unified_math.min(low[i - period + 1: i + 1])
 
             if highest_high - lowest_low == 0:
                 williams_r[i] = -50.0
@@ -186,8 +186,8 @@ class CoreMathLibV2:
         k_percent = np.zeros_like(high)
 
         for i in range(k_period - 1, len(high)):
-            highest_high = unified_math.unified_math.max(high[i - k_period + 1 : i + 1])
-            lowest_low = unified_math.unified_math.min(low[i - k_period + 1 : i + 1])
+            highest_high = unified_math.unified_math.max(high[i - k_period + 1: i + 1])
+            lowest_low = unified_math.unified_math.min(low[i - k_period + 1: i + 1])
 
             if highest_high - lowest_low == 0:
                 k_percent[i] = 50.0
@@ -199,7 +199,7 @@ class CoreMathLibV2:
         # Calculate %D as moving average of %K
         d_percent = np.zeros_like(k_percent)
         for i in range(d_period - 1, len(k_percent)):
-            d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1 : i + 1])
+            d_percent[i] = unified_math.unified_math.mean(k_percent[i - d_period + 1: i + 1])
 
         return {"k_percent": k_percent, "d_percent": d_percent}
 
@@ -216,7 +216,7 @@ class CoreMathLibV2:
         cci = np.zeros_like(typical_price)
 
         for i in range(period - 1, len(typical_price)):
-            tp_period = typical_price[i - period + 1 : i + 1]
+            tp_period = typical_price[i - period + 1: i + 1]
             sma_tp = unified_math.unified_math.mean(tp_period)
             mean_deviation = unified_math.unified_math.mean(unified_math.unified_math.abs(tp_period - sma_tp))
 
@@ -356,14 +356,14 @@ def process_waveform(
     signal: Vector, sample_rate: float = 1.0, analysis_type: str = "basic"
 ) -> Dict[str, Any]:
     """
-    
+
     Process waveform data with various analysis types.
-    
+
     Args:
         signal: Input signal data
         sample_rate: Sampling rate of the signal
         analysis_type: Type of analysis ("basic", "advanced", "spectral")
-    
+
     Returns:
         Dictionary with analysis results
     """

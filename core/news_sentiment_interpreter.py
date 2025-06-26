@@ -33,6 +33,7 @@ def interpret_news_sentiment(
 drift_biases: Sequence[float],
 event_sigmas: Sequence[float],
 ) -> float:  # noqa: D401
+
 """Return λ_news weighted sentiment activation signal.
 
 Parameters
@@ -49,15 +50,15 @@ Returns
 float
 Combined sentiment signal λ_news.
 """
-    if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):
-        raise ValueError("input sequences must share length")
+if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):
+    raise ValueError("input sequences must share length")
 
 scores = np.asarray(sentiment_scores, dtype=float)
-    biases = np.asarray(drift_biases, dtype=float)
-    sigmas = np.asarray(event_sigmas, dtype=float)
+biases = np.asarray(drift_biases, dtype=float)
+sigmas = np.asarray(event_sigmas, dtype=float)
 
 weighted_signals = scores * biases * sigmas
-    return float(np.sum(weighted_signals))
+return float(np.sum(weighted_signals))
 
 
 def weight_sentiment_events(
@@ -69,10 +70,11 @@ event_importance: float,
 decay_factor: float = 0.95,
 base_weight: float = 1.0,
 ) -> float:  # noqa: D401
+
 """Apply time-decay and importance weighting to single sentiment.
 
 Returns weighted sentiment suitable for inclusion in λ_news calculation.
 """
 importance_weight = base_weight * event_importance
 decayed_sentiment = raw_sentiment * (decay_factor ** unified_math.abs(raw_sentiment))
-    return decayed_sentiment * importance_weight
+return decayed_sentiment * importance_weight

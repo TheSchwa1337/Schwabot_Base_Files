@@ -462,7 +462,8 @@ class RecursiveGlyphMapper:
 
         # Apply resonance mode modifications
         if resonance_mode == ResonanceMode.HARMONIC:
-            mode_factor = unified_math.unified_math.cos(k * math.pi / 4) + 1j * unified_math.unified_math.sin(k * math.pi / 4)
+            mode_factor = unified_math.unified_math.cos(
+                k * math.pi / 4) + 1j * unified_math.unified_math.sin(k * math.pi / 4)
         elif resonance_mode == ResonanceMode.CHAOTIC:
             mode_factor = complex(
                 unified_math.unified_math.sin(k * 1.618) * unified_math.unified_math.cos(k * 2.718),
@@ -471,7 +472,8 @@ class RecursiveGlyphMapper:
         elif resonance_mode == ResonanceMode.FRACTAL:
             phi = (1 + unified_math.unified_math.sqrt(5)) / 2
             mode_factor = complex(
-                math.pow(phi, k % 5) * unified_math.unified_math.cos(k), math.pow(phi, k % 3) * unified_math.unified_math.sin(k)
+                math.pow(phi, k % 5) * unified_math.unified_math.cos(k), math.pow(phi, k %
+                                                                                  3) * unified_math.unified_math.sin(k)
             )
         elif resonance_mode == ResonanceMode.QUANTUM:
             mode_factor = complex(

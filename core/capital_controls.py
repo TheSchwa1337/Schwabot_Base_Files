@@ -1,4 +1,114 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.utils.windows_cli_compatibility import (, safe_format_error
+        safe_print, safe_format_error, log_safe
+
+CLI_HANDLER_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
+
+
+    pass
+    pass
+        return message
+def safe_format_error(error: Exception, context: str="") -> str:
+
+
+    pass
+    pass
+        return f"Error: {str(error)} | Context: {context}"
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
+        getattr(logger, level.lower())(message)
+
+logger=logging.getLogger(__name__)
+
+
+class PositionSizingMethod(Enum):
+
+
+    """Position sizing methods."""
+FIXED="fixed"                    # Fixed percentage of capital
+VOLATILITY_ADJUSTED="volatility_adjusted"  # Adjust based on volatility
+KELLY_CRITERION="kelly_criterion"  # Kelly Criterion optimization
+RISK_PARITY="risk_parity"        # Risk parity allocation
+MAXIMUM_DRAWDOWN="maximum_drawdown"  # Based on maximum drawdown
+
+
+class CapitalAllocationStrategy(Enum):
+
+
+    """Capital allocation strategies."""
+EQUAL_WEIGHT="equal_weight"      # Equal allocation across assets
+MARKET_CAP="market_cap"          # Weighted by market capitalization
+VOLATILITY_INVERSE="volatility_inverse"  # Inverse volatility weighting
+SHARPE_RATIO="sharpe_ratio"      # Weighted by Sharpe ratio
+CUSTOM_WEIGHTS="custom_weights"  # Custom weight configuration
+
+
+@ dataclass
+class CapitalConfig:
+
+
+    """Capital configuration settings."""
+total_capital: float=10000.0     # Total available capital in USD
+max_position_size: float=0.1     # Maximum 10% per position
+min_position_size: float=0.01    # Minimum 1% per position
+max_portfolio_risk: float=0.02   # Maximum 2% portfolio risk per trade
+target_volatility: float=0.15    # Target portfolio volatility (15%)
+    max_drawdown: float=0.20         # Maximum 20% drawdown
+rebalance_threshold: float=0.05  # 5% deviation triggers rebalancing
+correlation_threshold: float=0.7  # Maximum correlation between positions
+kelly_fraction: float=0.25       # Use 25% of Kelly Criterion
+emergency_capital_reserve: float=0.1  # Keep 10% in reserve
+
+
+@ dataclass
+class PositionSizingResult:
+
+
+    """Result of position sizing calculation."""
+asset: str
+suggested_size: float
+position_value: float
+risk_contribution: float
+sizing_method: PositionSizingMethod
+confidence_score: float
+timestamp: datetime
+metadata: Dict[str, Any]=field(default_factory=dict)
+
+
+@ dataclass
+class PortfolioState:
+
+
+    """Current portfolio state."""
+total_value: float
+total_pnl: float
+current_drawdown: float
+portfolio_volatility: float
+sharpe_ratio: float
+correlation_matrix: Dict[str, Dict[str, float]]
+position_weights: Dict[str, float]
+risk_contributions: Dict[str, float]
+timestamp: datetime
+metadata: Dict[str, Any]=field(default_factory=dict)
+from core.risk_guard import get_risk_guard, is_trading_allowed
+from core.unified_mathematics_config import get_unified_math
+from pathlib import Path
+import json
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
+import asyncio
 import math
 
 # Import safe print for Windows compatibility
@@ -12,42 +122,49 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
 """Capital Controls - Advanced Position Sizing and Portfolio Risk Management.
@@ -62,141 +179,31 @@ This module provides sophisticated capital controls including:
 """
 
 
-import asyncio
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
-from enum import Enum
-import json
-from pathlib import Path
 
 # Import unified mathematics
 try:
-from core.unified_mathematics_config import get_unified_math
-unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
+unified_math=get_unified_math()
+    UNIFIED_MATH_AVAILABLE=True
 except ImportError:
     pass
     pass
-UNIFIED_MATH_AVAILABLE = False
+UNIFIED_MATH_AVAILABLE=False
 
 # Import risk guard for integration
 try:
-from core.risk_guard import get_risk_guard, is_trading_allowed
-risk_guard = get_risk_guard()
-    RISK_GUARD_AVAILABLE = True
+risk_guard=get_risk_guard()
+    RISK_GUARD_AVAILABLE=True
 except ImportError:
     pass
     pass
-RISK_GUARD_AVAILABLE = False
+RISK_GUARD_AVAILABLE=False
 
 # Import centralized CLI handler
 try:
-from core.utils.windows_cli_compatibility import (, safe_format_error
-        safe_print, safe_format_error, log_safe
-
-CLI_HANDLER_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
 
 
-    pass
-    pass
-        return message
-def safe_format_error(error: Exception, context: str = "") -> str:
-
-
-    pass
-    pass
-        return f"Error: {str(error)} | Context: {context}"
-def log_safe(logger, level: str, message: str) -> None:
-
-
-    pass
-    pass
-        getattr(logger, level.lower())(message)
-
-logger = logging.getLogger(__name__)
-
-
-class PositionSizingMethod(Enum):
-
-
-    """Position sizing methods."""
-FIXED = "fixed"                    # Fixed percentage of capital
-VOLATILITY_ADJUSTED = "volatility_adjusted"  # Adjust based on volatility
-KELLY_CRITERION = "kelly_criterion"  # Kelly Criterion optimization
-RISK_PARITY = "risk_parity"        # Risk parity allocation
-MAXIMUM_DRAWDOWN = "maximum_drawdown"  # Based on maximum drawdown
-
-
-class CapitalAllocationStrategy(Enum):
-
-
-    """Capital allocation strategies."""
-EQUAL_WEIGHT = "equal_weight"      # Equal allocation across assets
-MARKET_CAP = "market_cap"          # Weighted by market capitalization
-VOLATILITY_INVERSE = "volatility_inverse"  # Inverse volatility weighting
-SHARPE_RATIO = "sharpe_ratio"      # Weighted by Sharpe ratio
-CUSTOM_WEIGHTS = "custom_weights"  # Custom weight configuration
-
-
-@dataclass
-class CapitalConfig:
-
-
-    """Capital configuration settings."""
-total_capital: float = 10000.0     # Total available capital in USD
-max_position_size: float = 0.1     # Maximum 10% per position
-min_position_size: float = 0.01    # Minimum 1% per position
-max_portfolio_risk: float = 0.02   # Maximum 2% portfolio risk per trade
-target_volatility: float = 0.15    # Target portfolio volatility (15%)
-    max_drawdown: float = 0.20         # Maximum 20% drawdown
-rebalance_threshold: float = 0.05  # 5% deviation triggers rebalancing
-correlation_threshold: float = 0.7  # Maximum correlation between positions
-kelly_fraction: float = 0.25       # Use 25% of Kelly Criterion
-emergency_capital_reserve: float = 0.1  # Keep 10% in reserve
-
-
-@dataclass
-class PositionSizingResult:
-
-
-    """Result of position sizing calculation."""
-asset: str
-suggested_size: float
-position_value: float
-risk_contribution: float
-sizing_method: PositionSizingMethod
-confidence_score: float
-timestamp: datetime
-metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class PortfolioState:
-
-
-    """Current portfolio state."""
-total_value: float
-total_pnl: float
-current_drawdown: float
-portfolio_volatility: float
-sharpe_ratio: float
-correlation_matrix: Dict[str, Dict[str, float]]
-position_weights: Dict[str, float]
-risk_contributions: Dict[str, float]
-timestamp: datetime
-metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
+@ dataclass
 class CapitalEvent:
 
 
@@ -207,7 +214,7 @@ description: str
 timestamp: datetime
 triggered_by: str
 action_taken: str
-metadata: Dict[str, Any] = field(default_factory=dict)
+metadata: Dict[str, Any]=field(default_factory=dict)
 
 
 class CapitalControls:
@@ -224,43 +231,43 @@ Provides sophisticated capital controls including:
 - Real-time portfolio rebalancing and risk monitoring
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]]=None):
 
 
     pass
     pass
         """Initialize capital controls."""
-self.config = config or {}
+self.config=config or {}
 
         # Capital configuration
-self.capital_config = CapitalConfig()
-        self.current_capital = self.capital_config.total_capital
-self.allocated_capital = 0.0
-self.reserved_capital = self.capital_config.total_capital * self.capital_config.emergency_capital_reserve
+self.capital_config=CapitalConfig()
+        self.current_capital=self.capital_config.total_capital
+self.allocated_capital=0.0
+self.reserved_capital=self.capital_config.total_capital * self.capital_config.emergency_capital_reserve
 
         # Portfolio tracking
-self.positions: Dict[str, Dict[str, Any]] = {}
-self.position_history: List[Dict[str, Any]] = []
-self.portfolio_history: List[PortfolioState] = []
+self.positions: Dict[str, Dict[str, Any]]={}
+self.position_history: List[Dict[str, Any]]=[]
+self.portfolio_history: List[PortfolioState]=[]
 
         # Risk metrics
-self.current_drawdown = 0.0
-self.peak_capital = self.capital_config.total_capital
-self.portfolio_volatility = 0.0
-self.correlation_matrix: Dict[str, Dict[str, float]] = {}
+self.current_drawdown=0.0
+self.peak_capital=self.capital_config.total_capital
+self.portfolio_volatility=0.0
+self.correlation_matrix: Dict[str, Dict[str, float]]={}
 
         # Performance tracking
-self.total_trades = 0
-self.winning_trades = 0
-self.losing_trades = 0
-self.average_win = 0.0
-self.average_loss = 0.0
-self.largest_win = 0.0
-self.largest_loss = 0.0
+self.total_trades=0
+self.winning_trades=0
+self.losing_trades=0
+self.average_win=0.0
+self.average_loss=0.0
+self.largest_win=0.0
+self.largest_loss=0.0
 
         # Capital events
-self.capital_events: List[CapitalEvent] = []
-self.rebalancing_events: List[Dict[str, Any]] = []
+self.capital_events: List[CapitalEvent]=[]
+self.rebalancing_events: List[Dict[str, Any]]=[]
 
 safe_safe_print("💰 Capital Controls initialized")
 
@@ -270,10 +277,10 @@ def set_capital_config(self, config: CapitalConfig) -> None:
     pass
     pass
         """Set capital configuration."""
-self.capital_config = config
-self.current_capital = config.total_capital
-self.reserved_capital = config.total_capital * config.emergency_capital_reserve
-self.peak_capital = config.total_capital
+self.capital_config=config
+self.current_capital=config.total_capital
+self.reserved_capital=config.total_capital * config.emergency_capital_reserve
+self.peak_capital=config.total_capital
 
 safe_safe_print(f"✅ Capital config updated: Total = ${config.total_capital:,.2f}")
 
@@ -286,7 +293,7 @@ current_price: float,
 volatility: float,
 expected_return: float,
 confidence: float,
-method: PositionSizingMethod = PositionSizingMethod.VOLATILITY_ADJUSTED
+method: PositionSizingMethod=PositionSizingMethod.VOLATILITY_ADJUSTED
 ) -> PositionSizingResult:
 """
 Calculate optimal position size based on various methods.
@@ -295,7 +302,7 @@ This implements sophisticated position sizing algorithms
 including Kelly Criterion, volatility adjustment, and risk parity.
 """
         try:
-available_capital = self.current_capital - self.reserved_capital - self.allocated_capital
+available_capital=self.current_capital - self.reserved_capital - self.allocated_capital
 
             if available_capital <= 0:
                 return PositionSizingResult(
@@ -309,38 +316,38 @@ timestamp=datetime.now()
 
 
             if method == PositionSizingMethod.FIXED:
-position_size = self._calculate_fixed_size(available_capital)
+position_size=self._calculate_fixed_size(available_capital)
             elif method == PositionSizingMethod.VOLATILITY_ADJUSTED:
-position_size = self._calculate_volatility_adjusted_size(
+position_size=self._calculate_volatility_adjusted_size(
                     available_capital, volatility, confidence
 
             elif method == PositionSizingMethod.KELLY_CRITERION:
-position_size = self._calculate_kelly_size(
+position_size=self._calculate_kelly_size(
                     available_capital, expected_return, volatility, confidence
 
             elif method == PositionSizingMethod.RISK_PARITY:
-position_size = self._calculate_risk_parity_size(
+position_size=self._calculate_risk_parity_size(
                     available_capital, volatility
 
             elif method == PositionSizingMethod.MAXIMUM_DRAWDOWN:
-position_size = self._calculate_drawdown_size(
+position_size=self._calculate_drawdown_size(
                     available_capital, current_price
 
             else:
-position_size = self._calculate_fixed_size(available_capital)
+position_size=self._calculate_fixed_size(available_capital)
 
             # Apply limits
-position_size = max(
+position_size=max(
                 self.capital_config.min_position_size,
 unified_math.min(position_size, self.capital_config.max_position_size)
 
 
-position_value = available_capital * position_size
-risk_contribution = self._calculate_risk_contribution(
+position_value=available_capital * position_size
+risk_contribution=self._calculate_risk_contribution(
                 asset, position_value, volatility
 
 
-result = PositionSizingResult(
+result=PositionSizingResult(
                 asset=asset,
 suggested_size=position_size,
 position_value=position_value,
@@ -389,16 +396,16 @@ confidence: float
 """Calculate volatility-adjusted position size."""
         try:
             # Base size on inverse volatility
-base_size = self.capital_config.max_position_size
+base_size=self.capital_config.max_position_size
 
             # Adjust for volatility (higher volatility = smaller position)
-            volatility_factor = 1.0 / (1.0 + volatility * 10)  # Scale volatility
+            volatility_factor=1.0 / (1.0 + volatility * 10)  # Scale volatility
 
             # Adjust for confidence
-confidence_factor = confidence
+confidence_factor=confidence
 
             # Combine factors
-adjusted_size = base_size * volatility_factor * confidence_factor
+adjusted_size=base_size * volatility_factor * confidence_factor
 
             return adjusted_size
 
@@ -421,19 +428,19 @@ confidence: float
             # where b = odds received, p = probability of win, q = probability of loss
 
             # Estimate win probability from expected return and volatility
-win_prob = 0.5 + (expected_return / (2 * volatility)) if volatility > 0 else 0.5
-            win_prob = unified_math.max(0.1, unified_math.min(0.9, win_prob))  # Clamp between 10% and 90%
+win_prob=0.5 + (expected_return / (2 * volatility)) if volatility > 0 else 0.5
+            win_prob=unified_math.max(0.1, unified_math.min(0.9, win_prob))  # Clamp between 10% and 90%
 
-loss_prob = 1.0 - win_prob
+loss_prob=1.0 - win_prob
 
             # Estimate odds (simplified)
-            odds = unified_math.abs(expected_return) if expected_return != 0 else 1.0
+            odds=unified_math.abs(expected_return) if expected_return != 0 else 1.0
 
             # Kelly fraction
-kelly_fraction = (odds * win_prob - loss_prob) / odds if odds > 0 else 0.0
+kelly_fraction=(odds * win_prob - loss_prob) / odds if odds > 0 else 0.0
 
             # Apply Kelly fraction and confidence
-kelly_size = kelly_fraction * self.capital_config.kelly_fraction * confidence
+kelly_size=kelly_fraction * self.capital_config.kelly_fraction * confidence
 
             return unified_math.max(0.0, kelly_size)
 
@@ -452,12 +459,12 @@ volatility: float
         try:
             # Risk parity: equal risk contribution
             # For single asset, size inversely proportional to volatility
-target_risk = self.capital_config.max_portfolio_risk
+target_risk=self.capital_config.max_portfolio_risk
 
             if volatility > 0:
-risk_parity_size = target_risk / volatility
+risk_parity_size=target_risk / volatility
             else:
-risk_parity_size = self.capital_config.max_position_size
+risk_parity_size=self.capital_config.max_position_size
 
             return unified_math.min(risk_parity_size, self.capital_config.max_position_size)
 
@@ -475,11 +482,11 @@ current_price: float
 """Calculate position size based on maximum drawdown."""
         try:
             # Reduce position size as drawdown increases
-drawdown_factor = 1.0 - (self.current_drawdown / self.capital_config.max_drawdown)
-            drawdown_factor = unified_math.max(0.1, drawdown_factor)  # Minimum 10%
+drawdown_factor=1.0 - (self.current_drawdown / self.capital_config.max_drawdown)
+            drawdown_factor=unified_math.max(0.1, drawdown_factor)  # Minimum 10%
 
-base_size = self.capital_config.max_position_size
-drawdown_adjusted_size = base_size * drawdown_factor
+base_size=self.capital_config.max_position_size
+drawdown_adjusted_size=base_size * drawdown_factor
 
             return drawdown_adjusted_size
 
@@ -498,7 +505,7 @@ volatility: float
 """Calculate risk contribution of position."""
         try:
             # Risk contribution = position_value * volatility
-risk_contribution = position_value * volatility
+risk_contribution=position_value * volatility
 
             return risk_contribution
 
@@ -526,47 +533,47 @@ This calculates portfolio-level metrics including:
 """
         try:
             # Update positions
-self.positions = positions
+self.positions=positions
 
             # Calculate total portfolio value
-total_value = sum(pos.get('value', 0) for pos in positions.values())
-            total_pnl = sum(pos.get('unrealized_pnl', 0) for pos in positions.values())
+total_value=sum(pos.get('value', 0) for pos in positions.values())
+            total_pnl=sum(pos.get('unrealized_pnl', 0) for pos in positions.values())
 
             # Update capital tracking
-self.current_capital = total_value
-self.allocated_capital = total_value - self.reserved_capital
+self.current_capital=total_value
+self.allocated_capital=total_value - self.reserved_capital
 
             # Calculate drawdown
             if total_value > self.peak_capital:
-self.peak_capital = total_value
+self.peak_capital=total_value
 
-self.current_drawdown = (self.peak_capital - total_value) / self.peak_capital
+self.current_drawdown=(self.peak_capital - total_value) / self.peak_capital
 
             # Calculate portfolio volatility
-self.portfolio_volatility = self._calculate_portfolio_volatility(positions, market_data)
+self.portfolio_volatility=self._calculate_portfolio_volatility(positions, market_data)
 
             # Calculate Sharpe ratio
-sharpe_ratio = self._calculate_sharpe_ratio(total_pnl, self.portfolio_volatility)
+sharpe_ratio=self._calculate_sharpe_ratio(total_pnl, self.portfolio_volatility)
 
             # Calculate correlations
-self.correlation_matrix = self._calculate_correlations(positions, market_data)
+self.correlation_matrix=self._calculate_correlations(positions, market_data)
 
             # Calculate position weights
-position_weights = {}
+position_weights={}
             for asset, pos in positions.items():
                 if total_value > 0:
-position_weights[asset] = pos.get('value', 0) / total_value
+position_weights[asset]=pos.get('value', 0) / total_value
                 else:
-position_weights[asset] = 0.0
+position_weights[asset]=0.0
 
             # Calculate risk contributions
-risk_contributions = {}
+risk_contributions={}
             for asset, pos in positions.items():
-                volatility = market_data.get(asset, {}).get('volatility', 0.0)
-                risk_contributions[asset] = pos.get('value', 0) * volatility
+                volatility=market_data.get(asset, {}).get('volatility', 0.0)
+                risk_contributions[asset]=pos.get('value', 0) * volatility
 
             # Create portfolio state
-portfolio_state = PortfolioState(
+portfolio_state=PortfolioState(
                 total_value=total_value,
 total_pnl=total_pnl,
 current_drawdown=self.current_drawdown,
@@ -588,7 +595,7 @@ self.portfolio_history.append(portfolio_state)
 
             # Keep only recent history
             if len(self.portfolio_history) > 1000:
-                self.portfolio_history = self.portfolio_history[-1000:]
+                self.portfolio_history=self.portfolio_history[-1000:]
 
 safe_safe_print(f"✅ Portfolio updated: Value = ${total_value:,.2f}, PnL = ${total_pnl:,.2f}")
             return portfolio_state
@@ -620,15 +627,15 @@ market_data: Dict[str, Any]
                 return 0.0
 
             # Simple weighted average volatility for now
-total_value = sum(pos.get('value', 0) for pos in positions.values())
+total_value=sum(pos.get('value', 0) for pos in positions.values())
 
             if total_value == 0:
                 return 0.0
 
-weighted_volatility = 0.0
+weighted_volatility=0.0
             for asset, pos in positions.items():
-                weight = pos.get('value', 0) / total_value
-                volatility = market_data.get(asset, {}).get('volatility', 0.0)
+                weight=pos.get('value', 0) / total_value
+                volatility=market_data.get(asset, {}).get('volatility', 0.0)
                 weighted_volatility += weight * volatility
 
             return weighted_volatility
@@ -648,7 +655,7 @@ def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
                 return 0.0
 
             # Assume risk-free rate of 0 for simplicity
-sharpe_ratio = total_pnl / volatility
+sharpe_ratio=total_pnl / volatility
 
             return sharpe_ratio
 
@@ -665,19 +672,19 @@ market_data: Dict[str, Any]
 ) -> Dict[str, Dict[str, float]]:
 """Calculate correlation matrix between positions."""
         try:
-correlation_matrix = {}
+correlation_matrix={}
 
-assets = list(positions.keys())
+assets=list(positions.keys())
             for i, asset1 in enumerate(assets):
-                correlation_matrix[asset1] = {}
+                correlation_matrix[asset1]={}
                 for j, asset2 in enumerate(assets):
                     if i == j:
-correlation_matrix[asset1][asset2] = 1.0
+correlation_matrix[asset1][asset2]=1.0
                     else:
                         # Simplified correlation calculation
                         # In practice, you'd use historical price data
-correlation = 0.5  # Default moderate correlation
-correlation_matrix[asset1][asset2] = correlation
+correlation=0.5  # Default moderate correlation
+correlation_matrix[asset1][asset2]=correlation
 
             return correlation_matrix
 
@@ -761,7 +768,7 @@ This analyzes the current portfolio and suggests:
 - Rebalancing urgency
 """
         try:
-rebalancing_suggestions = {
+rebalancing_suggestions={
 'rebalancing_needed': False,
 'urgency': 'low',
 'actions': [],
@@ -769,40 +776,40 @@ rebalancing_suggestions = {
 }
 
             # Check for significant deviations
-deviations = []
+deviations=[]
             for asset, weight in portfolio_state.position_weights.items():
-                target_weight = 1.0 / len(portfolio_state.position_weights) if portfolio_state.position_weights else 0.0
-                deviation = unified_math.abs(weight - target_weight)
+                target_weight=1.0 / len(portfolio_state.position_weights) if portfolio_state.position_weights else 0.0
+                deviation=unified_math.abs(weight - target_weight)
                 if deviation > self.capital_config.rebalance_threshold:
 deviations.append((asset, deviation, weight, target_weight))
 
             if deviations:
-rebalancing_suggestions['rebalancing_needed'] = True
-rebalancing_suggestions['urgency'] = 'medium' if unified_math.max(d[1] for d in deviations) > 0.1 else 'low'
-                rebalancing_suggestions['reason'] = f"Position deviations detected: {len(deviations)} positions"
+rebalancing_suggestions['rebalancing_needed']=True
+rebalancing_suggestions['urgency']='medium' if unified_math.max(d[1] for d in deviations) > 0.1 else 'low'
+                rebalancing_suggestions['reason']=f"Position deviations detected: {len(deviations)} positions"
 
                 for asset, deviation, current_weight, target_weight in deviations:
                     if current_weight > target_weight:
-action = f"Reduce {asset} from {current_weight:.2%} to {target_weight:.2%}"
+action=f"Reduce {asset} from {current_weight:.2%} to {target_weight:.2%}"
                     else:
-action = f"Increase {asset} from {current_weight:.2%} to {target_weight:.2%}"
+action=f"Increase {asset} from {current_weight:.2%} to {target_weight:.2%}"
 
 rebalancing_suggestions['actions'].append(action)
 
             # Check for high correlations
-high_correlations = []
+high_correlations=[]
             for asset1, correlations in portfolio_state.correlation_matrix.items():
                 for asset2, correlation in correlations.items():
                     if asset1 != asset2 and correlation > self.capital_config.correlation_threshold:
 high_correlations.append((asset1, asset2, correlation))
 
             if high_correlations:
-rebalancing_suggestions['rebalancing_needed'] = True
-rebalancing_suggestions['urgency'] = 'high' if rebalancing_suggestions['urgency'] != 'high' else 'high'
+rebalancing_suggestions['rebalancing_needed']=True
+rebalancing_suggestions['urgency']='high' if rebalancing_suggestions['urgency'] != 'high' else 'high'
 rebalancing_suggestions['reason'] += f"; High correlations: {len(high_correlations)} pairs"
 
                 for asset1, asset2, correlation in high_correlations[:3]:  # Limit to top 3
-action = f"Consider reducing correlation between {asset1} and {asset2} ({correlation:.2f})"
+action=f"Consider reducing correlation between {asset1} and {asset2} ({correlation:.2f})"
                     rebalancing_suggestions['actions'].append(action)
 
             if rebalancing_suggestions['rebalancing_needed']:
@@ -855,11 +862,11 @@ event_type: str,
 severity: str,
 description: str,
 triggered_by: str,
-metadata: Optional[Dict[str, Any]] = None
+metadata: Optional[Dict[str, Any]]=None
 ) -> None:
 """Record a capital control event."""
         try:
-event = CapitalEvent(
+event=CapitalEvent(
                 event_type=event_type,
 severity=severity,
 description=description,
@@ -873,7 +880,7 @@ self.capital_events.append(event)
 
             # Keep only recent events
             if len(self.capital_events) > 1000:
-                self.capital_events = self.capital_events[-1000:]
+                self.capital_events=self.capital_events[-1000:]
 
 safe_safe_print(f"💰 Capital event: {event_type} - {description}")
 
@@ -882,7 +889,7 @@ safe_safe_print(f"❌ Capital event recording failed: {safe_format_error(e, 'rec
 
 
 # Global capital controls instance
-capital_controls = CapitalControls()
+capital_controls=CapitalControls()
 
 
 # Convenience functions for external access
@@ -903,7 +910,7 @@ current_price: float,
 volatility: float,
 expected_return: float,
 confidence: float,
-method: PositionSizingMethod = PositionSizingMethod.VOLATILITY_ADJUSTED
+method: PositionSizingMethod=PositionSizingMethod.VOLATILITY_ADJUSTED
 ) -> PositionSizingResult:
 """Calculate optimal position size."""
     return capital_controls.calculate_position_size(
@@ -956,10 +963,10 @@ if __name__ == "__main__":
     # Test capital controls
 safe_print("💰 Testing Capital Controls...")
 
-controls = get_capital_controls()
+controls=get_capital_controls()
 
     # Test position sizing
-result = calculate_position_size(
+result=calculate_position_size(
         asset="BTC",
 current_price=45000.0,
 volatility=0.03,
@@ -970,26 +977,26 @@ method=PositionSizingMethod.VOLATILITY_ADJUSTED
 safe_print(f"✅ Position sizing: {result.suggested_size:.2%}")
 
     # Test portfolio state
-positions = {
+positions={
 "BTC": {"value": 5000.0, "unrealized_pnl": 250.0},
 "ETH": {"value": 3000.0, "unrealized_pnl": -100.0}
 }
-market_data = {
+market_data={
 "BTC": {"volatility": 0.03},
 "ETH": {"volatility": 0.04}
 }
 
-portfolio_state = update_portfolio_state(positions, market_data)
+portfolio_state=update_portfolio_state(positions, market_data)
     safe_print(f"✅ Portfolio value: ${portfolio_state.total_value:,.2f}")
 
     # Test portfolio limits
-limits_ok = check_portfolio_limits(portfolio_state)
+limits_ok=check_portfolio_limits(portfolio_state)
     safe_print(f"✅ Portfolio limits: {limits_ok}")
 
     # Test rebalancing suggestions
-rebalancing = suggest_rebalancing(portfolio_state)
+rebalancing=suggest_rebalancing(portfolio_state)
     safe_print(f"✅ Rebalancing needed: {rebalancing['rebalancing_needed']}")
 
     # Get status
-status = get_capital_status()
+status=get_capital_status()
     safe_print(f"✅ Capital Status: {status}")

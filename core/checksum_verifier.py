@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import zlib
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union, BinaryIO
+from dataclasses import dataclass, field
+import time
+import logging
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Checksum Verifier - Mathematical Integrity Validation for Schwabot.
 
@@ -65,13 +80,6 @@ Mathematical Foundation:
 - Custom mathematical checksums for trading data
 """
 
-import hashlib
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union, BinaryIO
-from datetime import datetime
-import zlib
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -80,8 +88,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ChecksumResult:
 
-
     """Result of checksum verification."""
+
+
 original_checksum: str
 calculated_checksum: str
 is_valid: bool
@@ -95,8 +104,9 @@ timestamp: datetime = field(default_factory=datetime.now)
 @dataclass
 class IntegrityReport:
 
-
     """Comprehensive integrity verification report."""
+
+
 total_checks: int
 valid_checks: int
 invalid_checks: int
@@ -109,7 +119,6 @@ timestamp: datetime = field(default_factory=datetime.now)
 
 class ChecksumVerifier:
 
-
     """
 Mathematical checksum verification system for Schwabot.
 
@@ -120,12 +129,14 @@ Provides multiple algorithms for different use cases:
 - Custom: Mathematical trading data validation
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize checksum verifier."""
+
+
 self.supported_algorithms = {
 'sha256': hashlib.sha256,
 'sha1': hashlib.sha1,
@@ -139,6 +150,7 @@ self.max_history = 1000
 
 logger.info("ChecksumVerifier initialized")
 
+
 def calculate_checksum(
 
 
@@ -146,6 +158,7 @@ def calculate_checksum(
 data: Union[str, bytes, List[Any]],
 algorithm: str = 'sha256'
 ) -> str:
+
 """
 Calculate checksum for data.
 

@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import time
+import threading
+from collections import defaultdict, deque
+import hashlib
+import requests
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import os
+import re
+import json
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +25,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Lantern News Intelligence Bridge - News Sentiment and Market Impact Analysis for Schwabot
@@ -67,36 +88,27 @@ Core Functionality:
 - Integration with trading pipeline
 """
 
-import logging
-import json
-import re
 # from core.unified_math_system import unified_math  # F811: duplicate import
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import os
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-import requests
-import hashlib
-from collections import defaultdict, deque
-import threading
-import time
 
 logger = logging.getLogger(__name__)
 
+
 class SentimentType(Enum):
 
-
     POSITIVE = "positive"
+
+
 NEGATIVE = "negative"
 NEUTRAL = "neutral"
 MIXED = "mixed"
 
+
 class NewsCategory(Enum):
 
-
     ECONOMIC = "economic"
+
+
 POLITICAL = "political"
 TECHNICAL = "technical"
 REGULATORY = "regulatory"
@@ -104,20 +116,24 @@ MARKET = "market"
 CRYPTO = "crypto"
 GENERAL = "general"
 
+
 class ImpactLevel(Enum):
 
-
     CRITICAL = "critical"
+
+
 HIGH = "high"
 MEDIUM = "medium"
 LOW = "low"
 MINIMAL = "minimal"
 
+
 @dataclass
 class NewsItem:
 
-
     news_id: str
+
+
 title: str
 content: str
 source: str
@@ -132,11 +148,13 @@ entities: List[str]
 confidence_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class SentimentAnalysis:
 
-
     sentiment_score: float
+
+
 sentiment_type: SentimentType
 confidence_score: float
 positive_keywords: List[str]
@@ -146,11 +164,13 @@ sentiment_breakdown: Dict[str, float]
 market_impact_prediction: float
 volatility_prediction: float
 
+
 @dataclass
 class MarketImpactPrediction:
 
-
     symbol: str
+
+
 predicted_price_change: float
 predicted_volatility_change: float
 confidence_interval: Tuple[float, float]
@@ -158,11 +178,13 @@ time_horizon_hours: int
 impact_factors: Dict[str, float]
 mathematical_indicators: Dict[str, float]
 
+
 @dataclass
 class SentimentCorrelation:
 
-
     symbol: str
+
+
 correlation_coefficient: float
 lag_hours: int
 significance_level: float
@@ -170,15 +192,17 @@ sample_size: int
 trend_direction: str
 mathematical_confidence: float
 
+
 class LanternNewsIntelligenceBridge:
 
 
 def __init__(self, config_path: str = "./config/lantern_config.json"):
 
-
     pass
     pass
         self.config_path = config_path
+
+
 self.news_sources: Dict[str, Dict[str, Any]] = {}
 self.sentiment_keywords: Dict[SentimentType, List[str]] = {}
 self.entity_recognition_patterns: List[re.Pattern] = []
@@ -193,8 +217,8 @@ self._load_configuration()
         self._start_background_processors()
         logger.info("LanternNewsIntelligenceBridge initialized")
 
-def _load_configuration(self) -> None:
 
+def _load_configuration(self) -> None:
 
     pass
     pass
@@ -203,6 +227,7 @@ def _load_configuration(self) -> None:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
+
 
 self.news_sources = config.get("news_sources", {})
                 self.sentiment_keywords = {
@@ -222,12 +247,14 @@ self._create_default_configuration()
 logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
 
-def _create_default_configuration(self) -> None:
 
+def _create_default_configuration(self) -> None:
 
     pass
     pass
         """Create default configuration."""
+
+
 self.news_sources = {
 "reuters": {
 "base_url": "https://www.reuters.com",
@@ -271,13 +298,15 @@ re.compile(r'\b[A-Z]{2,}\b'),  # Acronyms
 self._save_configuration()
         logger.info("Default configuration created")
 
-def _save_configuration(self) -> None:
 
+def _save_configuration(self) -> None:
 
     pass
     pass
         """Save current configuration to file."""
         try:
+
+
 os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             config = {
 "news_sources": self.news_sources,

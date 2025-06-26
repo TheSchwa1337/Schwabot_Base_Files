@@ -20,12 +20,12 @@ def fix_e999_syntax_errors(content: str) -> Tuple[str, int]:
     """Fix E999: SyntaxError and IndentationError."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     # Fix common patterns that cause E999 errors
     for i, line in enumerate(lines):
         # Fix: "expected 'except' or 'finally' block" - import statements after try
-        if (i > 0 and lines[i-1].strip().startswith('try:') and 
-            line.strip().startswith('import ')):
+        if (i > 0 and lines[i-1].strip().startswith('try:') and
+                line.strip().startswith('import ')):
             # Move the import before the try block
             import_line = line
             lines.pop(i)
@@ -36,14 +36,14 @@ def fix_e999_syntax_errors(content: str) -> Tuple[str, int]:
                     break
             fixed_count += 1
             break  # Re-process the file after this change
-        
+
         # Fix: "expected an indented block after 'try' statement"
-        if (i > 0 and lines[i-1].strip().startswith('try:') and 
-            line.strip().startswith('except ImportError:')):
+        if (i > 0 and lines[i-1].strip().startswith('try:') and
+                line.strip().startswith('except ImportError:')):
             # Add a pass statement after try
             lines.insert(i, '    pass')
             fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -51,18 +51,18 @@ def fix_e305_blank_lines(content: str) -> Tuple[str, int]:
     """Fix E305: expected 2 blank lines after class/function definition."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i in range(len(lines) - 1):
         # Look for class or function definitions
-        if (lines[i].strip().startswith('class ') or 
-            lines[i].strip().startswith('def ')) and ':' in lines[i]:
-            
+        if (lines[i].strip().startswith('class ') or
+                lines[i].strip().startswith('def ')) and ':' in lines[i]:
+
             # Check if there's a main block right after
             if i + 1 < len(lines) and lines[i + 1].strip() == 'if __name__ == "__main__":':
                 # Insert a blank line before the main block
                 lines.insert(i + 1, '')
                 fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -70,7 +70,7 @@ def fix_e265_block_comments(content: str) -> Tuple[str, int]:
     """Fix E265: block comment should start with '# '."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i, line in enumerate(lines):
         # Look for shebang lines that are not properly commented
         if line.startswith('#!/usr/bin/env python3') and not line.startswith('# '):
@@ -79,7 +79,7 @@ def fix_e265_block_comments(content: str) -> Tuple[str, int]:
         elif line.startswith('#!/') and not line.startswith('# '):
             lines[i] = '# ' + line
             fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -87,7 +87,7 @@ def fix_f541_fstring_placeholders(content: str) -> Tuple[str, int]:
     """Fix F541: f-string is missing placeholders."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i, line in enumerate(lines):
         # Look for f-strings without placeholders
         if "f'" in line or 'f"' in line:
@@ -96,7 +96,7 @@ def fix_f541_fstring_placeholders(content: str) -> Tuple[str, int]:
                 # Convert to regular string
                 lines[i] = line.replace("f'", "'").replace('f"', '"')
                 fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -104,7 +104,7 @@ def fix_e128_continuation_indent(content: str) -> Tuple[str, int]:
     """Fix E128: continuation line under-indented for visual indent."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i, line in enumerate(lines):
         # Look for function definitions with parameters that need proper indentation
         if 'def ' in line and '(' in line and ')' not in line:
@@ -115,7 +115,7 @@ def fix_e128_continuation_indent(content: str) -> Tuple[str, int]:
                 # Calculate proper indentation
                 base_indent = len(line) - len(line.lstrip())
                 proper_indent = base_indent + 4
-                
+
                 # Look for continuation lines
                 j = i + 1
                 while j < len(lines) and ')' not in lines[j]:
@@ -125,7 +125,7 @@ def fix_e128_continuation_indent(content: str) -> Tuple[str, int]:
                             lines[j] = ' ' * proper_indent + lines[j].lstrip()
                             fixed_count += 1
                     j += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -134,7 +134,7 @@ def fix_f811_redefinition_imports(content: str) -> Tuple[str, int]:
     lines = content.split('\n')
     fixed_count = 0
     seen_imports = set()
-    
+
     for i, line in enumerate(lines):
         # Look for import statements
         if line.strip().startswith('from ') and ' import ' in line:
@@ -145,7 +145,7 @@ def fix_f811_redefinition_imports(content: str) -> Tuple[str, int]:
                 fixed_count += 1
             else:
                 seen_imports.add(import_name)
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -153,10 +153,10 @@ def fix_f821_undefined_np(content: str) -> Tuple[str, int]:
     """Fix F821: undefined name 'np' by adding numpy import."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     # Check if numpy is already imported
     has_numpy_import = any('import numpy' in line or 'import numpy as np' in line for line in lines)
-    
+
     if not has_numpy_import and 'np.' in content:
         # Find the first import section
         import_section_end = 0
@@ -165,12 +165,12 @@ def fix_f821_undefined_np(content: str) -> Tuple[str, int]:
                 import_section_end = i + 1
             elif line.strip() and not line.strip().startswith('#') and import_section_end > 0:
                 break
-        
+
         # Add numpy import
         if import_section_end > 0:
             lines.insert(import_section_end, 'import numpy as np')
             fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -185,43 +185,43 @@ def fix_file(file_path: str) -> Dict[str, int]:
         "f811_fixed": 0,
         "f821_fixed": 0,
     }
-    
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Apply fixes in order of priority
         content, count = fix_e999_syntax_errors(content)
         stats["e999_fixed"] = count
-        
+
         content, count = fix_e305_blank_lines(content)
         stats["e305_fixed"] = count
-        
+
         content, count = fix_e265_block_comments(content)
         stats["e265_fixed"] = count
-        
+
         content, count = fix_f541_fstring_placeholders(content)
         stats["f541_fixed"] = count
-        
+
         content, count = fix_e128_continuation_indent(content)
         stats["e128_fixed"] = count
-        
+
         content, count = fix_f811_redefinition_imports(content)
         stats["f811_fixed"] = count
-        
+
         content, count = fix_f821_undefined_np(content)
         stats["f821_fixed"] = count
-        
+
         # Write back if changes were made
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             print(f"Fixed {file_path}: {stats}")
-        
+
         return stats
-        
+
     except Exception as e:
         print(f"Error fixing {file_path}: {e}")
         return stats
@@ -239,7 +239,7 @@ def main():
         "f821_fixed": 0,
         "files_processed": 0,
     }
-    
+
     # Process core directory
     core_path = Path("core")
     if core_path.exists():
@@ -250,7 +250,7 @@ def main():
                     if key in total_stats:
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
-    
+
     print(f"\nTotal critical fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"E999 (syntax/indentation): {total_stats['e999_fixed']}")
@@ -263,4 +263,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

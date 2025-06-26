@@ -120,7 +120,7 @@ class TradeDecision:
 
 class SimplifiedFerrisWheelScheduler:
     """
-    
+
     Simplified scheduler that uses the Enhanced Fitness Oracle
     for ALL decision making - no more complex signal aggregation
     """
@@ -152,7 +152,7 @@ class SimplifiedFerrisWheelScheduler:
         self, market_data_provider, max_ticks: Optional[int] = None
     ):
         """
-        
+
         Simplified tick loop that delegates ALL analysis to the Fitness Oracle
         This is much cleaner than the previous complex aggregation logic
         """
@@ -212,7 +212,7 @@ class SimplifiedFerrisWheelScheduler:
         self, market_data: Dict[str, Any]
     ) -> UnifiedFitnessScore:
         """
-        
+
         THIS IS THE KEY INTEGRATION POINT
         All complex analysis is delegated to the Fitness Oracle
         """
@@ -232,7 +232,7 @@ class SimplifiedFerrisWheelScheduler:
         self: Any, fitness_score: UnifiedFitnessScore
     ) -> TradeDecision:
         """
-        
+
         Convert fitness score to actionable trade decision
         This is much simpler than before - the Oracle did all the work
         """
@@ -378,7 +378,7 @@ class SimplifiedFerrisWheelScheduler:
 
 class UnifiedSchwabotSystem:
     """
-    
+
     Complete unified system that combines:
     - Enhanced Fitness Oracle (for analysis)
         - Simplified FerrisWheelScheduler (for execution)
@@ -550,7 +550,7 @@ async def demo_unified_system() -> Any:
 
 class IntegratedSchwabotOrchestrator(SchwabotOrchestrator):
     """
-    
+
     Enhanced version of SchwabotOrchestrator that uses the Enhanced Fitness Oracle
     for decision making instead of complex internal logic
     """

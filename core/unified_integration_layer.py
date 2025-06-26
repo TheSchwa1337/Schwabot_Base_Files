@@ -1,5 +1,109 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .anomaly_filter_comprehensive import (
+    ComprehensiveAnomalyFilter,
+SystemState,
+AnomalySignal,
+validate_system_safety,
+
+# from .deterministic_value_engine import (  # F811: duplicate import
+    DeterministicValueEngine,
+MarketState,
+DeterministicDecision,
+PhaseMode,
+StrategyType,
+AssetType,
+calculate_trading_decision,
+
+
+logger=logging.getLogger(__name__)
+
+
+@ dataclass
+class UnifiedSystemState:
+
+
+    """Complete system state combining all components."""
+
+    # Market data
+market_state: MarketState=field(default_factory=MarketState)
+    system_state: SystemState=field(default_factory=SystemState)
+
+    # Code quality
+code_enforcement_active: bool=True
+last_enforcement_run: float=0.0
+
+    # Decision tracking
+last_decision: Optional[DeterministicDecision]=None
+decision_history: List[DeterministicDecision]=field(default_factory=list)
+
+    # Anomaly tracking
+active_anomalies: List[AnomalySignal]=field(default_factory=list)
+    anomaly_history: List[AnomalySignal]=field(default_factory=list)
+
+    # Performance metrics
+total_trades: int=0
+successful_trades: int=0
+total_pnl: float=0.0
+max_drawdown: float=0.0
+uptime_percentage: float=100.0
+
+    # System health
+last_health_check: float=field(default_factory=time.time)
+    system_errors: List[str]=field(default_factory=list)
+    recovery_actions_taken: List[str]=field(default_factory=list)
+
+
+class UnifiedTradingSystem:
+
+
+    """Main unified trading system orchestrating all components."""
+
+def __init__(self) -> None:
+
+
+    pass
+    pass
+        """Initialize the unified trading system."""
+        # Core components
+self.best_practices_enforcer=BestPracticesEnforcer()
+        self.anomaly_filter=ComprehensiveAnomalyFilter()
+        self.deterministic_engine=DeterministicValueEngine()
+
+        # System state
+self.unified_state=UnifiedSystemState()
+
+        # Configuration
+self.config={
+"enforce_code_quality": True,
+"anomaly_detection_enabled": True,
+"deterministic_decisions_only": True,
+"max_position_risk": 0.10,  # 10% max risk per position
+"emergency_stop_loss": 0.20,  # 20% emergency stop
+"health_check_interval": 300,  # 5 minutes
+"code_enforcement_interval": 3600,  # 1 hour
+}
+
+        # Recovery protocols
+self.recovery_protocols={
+"market_regime_shift": self._handle_market_regime_shift,
+"data_feed_corruption": self._handle_data_feed_corruption,
+"mathematical_singularity": self._handle_mathematical_singularity,
+"execution_timing": self._handle_execution_timing,
+"portfolio_state": self._handle_portfolio_state,
+"system_error": self._handle_system_error,
+}
+
+logger.info("🚀 Unified Trading System initialized with complete protection")
+
+def process_market_tick(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+
+
+from .best_practices_enforcer import BestPracticesEnforcer, EnforcementResult
+from typing import Any, Dict, List, Optional, Tuple, Union
+import time
+import logging
+from dataclasses import dataclass, field
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,42 +114,49 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
 """Unified Integration Layer for Schwabot Trading System.
@@ -70,120 +181,16 @@ This addresses all the user's concerns about:
 ✅ Complete mathematical integration
 """
 
-from dataclasses import dataclass, field
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import our core components
-from .best_practices_enforcer import BestPracticesEnforcer, EnforcementResult
-from .anomaly_filter_comprehensive import (
-    ComprehensiveAnomalyFilter,
-SystemState,
-AnomalySignal,
-validate_system_safety,
-
-# from .deterministic_value_engine import (  # F811: duplicate import
-    DeterministicValueEngine,
-MarketState,
-DeterministicDecision,
-PhaseMode,
-StrategyType,
-AssetType,
-calculate_trading_decision,
-
-
-logger = logging.getLogger(__name__)
-
-
-@dataclass
-class UnifiedSystemState:
-
-
-    """Complete system state combining all components."""
-
-    # Market data
-market_state: MarketState = field(default_factory=MarketState)
-    system_state: SystemState = field(default_factory=SystemState)
-
-    # Code quality
-code_enforcement_active: bool = True
-last_enforcement_run: float = 0.0
-
-    # Decision tracking
-last_decision: Optional[DeterministicDecision] = None
-decision_history: List[DeterministicDecision] = field(default_factory=list)
-
-    # Anomaly tracking
-active_anomalies: List[AnomalySignal] = field(default_factory=list)
-    anomaly_history: List[AnomalySignal] = field(default_factory=list)
-
-    # Performance metrics
-total_trades: int = 0
-successful_trades: int = 0
-total_pnl: float = 0.0
-max_drawdown: float = 0.0
-uptime_percentage: float = 100.0
-
-    # System health
-last_health_check: float = field(default_factory=time.time)
-    system_errors: List[str] = field(default_factory=list)
-    recovery_actions_taken: List[str] = field(default_factory=list)
-
-
-class UnifiedTradingSystem:
-
-
-    """Main unified trading system orchestrating all components."""
-
-def __init__(self) -> None:
-
-
-    pass
-    pass
-        """Initialize the unified trading system."""
-        # Core components
-self.best_practices_enforcer = BestPracticesEnforcer()
-        self.anomaly_filter = ComprehensiveAnomalyFilter()
-        self.deterministic_engine = DeterministicValueEngine()
-
-        # System state
-self.unified_state = UnifiedSystemState()
-
-        # Configuration
-self.config = {
-"enforce_code_quality": True,
-"anomaly_detection_enabled": True,
-"deterministic_decisions_only": True,
-"max_position_risk": 0.10,  # 10% max risk per position
-"emergency_stop_loss": 0.20,  # 20% emergency stop
-"health_check_interval": 300,  # 5 minutes
-"code_enforcement_interval": 3600,  # 1 hour
-}
-
-        # Recovery protocols
-self.recovery_protocols = {
-"market_regime_shift": self._handle_market_regime_shift,
-"data_feed_corruption": self._handle_data_feed_corruption,
-"mathematical_singularity": self._handle_mathematical_singularity,
-"execution_timing": self._handle_execution_timing,
-"portfolio_state": self._handle_portfolio_state,
-"system_error": self._handle_system_error,
-}
-
-logger.info("🚀 Unified Trading System initialized with complete protection")
-
-def process_market_tick(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
-
-
     pass
     pass
         """Process a single market tick through the complete system pipeline."""
 
-start_time = time.time()
-        processing_result = {
+start_time=time.time()
+        processing_result={
 "timestamp": start_time,
 "safe_to_trade": False,
 "decision": None,
@@ -200,7 +207,7 @@ self._update_system_states(market_data)
 
             # 2. CODE QUALITY ENFORCEMENT (Periodic)
             if self._should_run_code_enforcement():
-                enforcement_result = self._run_code_enforcement()
+                enforcement_result=self._run_code_enforcement()
                 processing_result["actions_taken"].extend(]
                     [
 f"Code enforcement: {action}"
@@ -209,66 +216,66 @@ f"Code enforcement: {action}"
 
 
             # 3. COMPREHENSIVE ANOMALY DETECTION
-safe_to_execute, anomalies, recommended_actions = validate_system_safety(
+safe_to_execute, anomalies, recommended_actions=validate_system_safety(
                 self.unified_state.system_state
 
 
-self.unified_state.active_anomalies = anomalies
-processing_result["anomalies_detected"] = []
+self.unified_state.active_anomalies=anomalies
+processing_result["anomalies_detected"]=[]
 f"{a.anomaly_type.value}: {a.description}" for a in anomalies
 ]
-processing_result["safe_to_trade"] = safe_to_execute
+processing_result["safe_to_trade"]=safe_to_execute
 
             # 4. ANOMALY RECOVERY (if needed)
             if not safe_to_execute:
-recovery_actions = self._execute_recovery_protocols(anomalies)
+recovery_actions=self._execute_recovery_protocols(anomalies)
                 processing_result["actions_taken"].extend(recovery_actions)
 
                 # Re-check safety after recovery
-safe_to_execute, _, _ = validate_system_safety(
+safe_to_execute, _, _=validate_system_safety(
                     self.unified_state.system_state
 
-processing_result["safe_to_trade"] = safe_to_execute
+processing_result["safe_to_trade"]=safe_to_execute
 
             # 5. DETERMINISTIC DECISION CALCULATION (if safe)
             if safe_to_execute:
-decision = calculate_trading_decision(market_data)
-                self.unified_state.last_decision = decision
+decision=calculate_trading_decision(market_data)
+                self.unified_state.last_decision=decision
 self.unified_state.decision_history.append(decision)
-                processing_result["decision"] = self._serialize_decision(decision)
+                processing_result["decision"]=self._serialize_decision(decision)
 
                 # 6. RISK VALIDATION
-risk_acceptable = self._validate_risk_limits(decision)
+risk_acceptable=self._validate_risk_limits(decision)
                 if not risk_acceptable:
-processing_result["safe_to_trade"] = False
+processing_result["safe_to_trade"]=False
 processing_result["actions_taken"].append(]
                         "Trade blocked due to risk limits"
 
 
             # 7. SYSTEM HEALTH CHECK
             if self._should_run_health_check():
-                health_status = self._perform_health_check()
-                processing_result["system_health"] = health_status
+                health_status=self._perform_health_check()
+                processing_result["system_health"]=health_status
 
                 if health_status == "critical":
-processing_result["safe_to_trade"] = False
+processing_result["safe_to_trade"]=False
 processing_result["actions_taken"].append(]
                         "Trading halted due to critical system health"
 
 
             # 8. PERFORMANCE TRACKING
 self._update_performance_metrics()
-            processing_result["performance_metrics"] = self._get_performance_summary()
+            processing_result["performance_metrics"]=self._get_performance_summary()
 
             # 9. FINAL VALIDATION
-final_validation = self._final_safety_validation(processing_result)
+final_validation=self._final_safety_validation(processing_result)
             if not final_validation["safe"]:
-processing_result["safe_to_trade"] = False
+processing_result["safe_to_trade"]=False
 processing_result["actions_taken"].extend(]
                     final_validation["blocking_reasons"]
 
 
-processing_time = time.time() - start_time
+processing_time=time.time() - start_time
             logger.debug(
                 f"🔄 Market tick processed in {processing_time:.4f}s, safe: {processing_result['safe_to_trade']}"
 
@@ -278,11 +285,11 @@ processing_time = time.time() - start_time
         except Exception as e:
 logger.error(f"❌ Critical error in market tick processing: {e}")
             processing_result["errors"].append(str(e))
-            processing_result["safe_to_trade"] = False
-processing_result["system_health"] = "critical"
+            processing_result["safe_to_trade"]=False
+processing_result["system_health"]="critical"
 
             # Emergency recovery
-emergency_actions = self._emergency_recovery()
+emergency_actions=self._emergency_recovery()
             processing_result["actions_taken"].extend(emergency_actions)
 
             return processing_result
@@ -295,7 +302,7 @@ def _update_system_states(self, market_data: Dict[str, Any]) -> None:
         """Update both market state and system state from incoming data."""
 
         # Update MarketState for deterministic engine
-self.unified_state.market_state = MarketState(
+self.unified_state.market_state=MarketState(
             prices=market_data.get("prices", {}),
             price_deltas=market_data.get("price_deltas", {}),
             volumes=market_data.get("volumes", {}),
@@ -317,7 +324,7 @@ self.unified_state.market_state = MarketState(
 
 
         # Update SystemState for anomaly detection
-self.unified_state.system_state = SystemState(
+self.unified_state.system_state=SystemState(
             prices=market_data.get("prices", {}),
             volumes=market_data.get("volumes", {}),
             spreads=market_data.get("spreads", {}),
@@ -342,7 +349,7 @@ def _should_run_code_enforcement(self) -> bool:
         if not self.config["enforce_code_quality"]:
             return False
 
-time_since_last = time.time() - self.unified_state.last_enforcement_run
+time_since_last=time.time() - self.unified_state.last_enforcement_run
         return time_since_last > self.config["code_enforcement_interval"]
 
 def _run_code_enforcement(self) -> EnforcementResult:
@@ -353,8 +360,8 @@ def _run_code_enforcement(self) -> EnforcementResult:
         """Run code quality enforcement."""
         try:
             # Run enforcement on current module (as example)
-            result = self.best_practices_enforcer.enforce_on_file(__file__)
-            self.unified_state.last_enforcement_run = time.time()
+            result=self.best_practices_enforcer.enforce_on_file(__file__)
+            self.unified_state.last_enforcement_run=time.time()
 
             if not result.success:
 logger.warning(f"⚠️ Code enforcement issues: {result.issues_found}")
@@ -378,7 +385,7 @@ def _execute_recovery_protocols(self, anomalies: List[AnomalySignal]) -> List[st
     pass
         """Execute recovery protocols for detected anomalies."""
 
-recovery_actions = []
+recovery_actions=[]
 
         for anomaly in anomalies:
             if anomaly.severity in ["high", "critical"]:
@@ -386,8 +393,8 @@ recovery_actions = []
                 # Execute specific recovery protocol
                 if anomaly.anomaly_type.value in self.recovery_protocols:
                     try:
-protocol = self.recovery_protocols[anomaly.anomaly_type.value]
-actions = protocol(anomaly)
+protocol=self.recovery_protocols[anomaly.anomaly_type.value]
+actions=protocol(anomaly)
                         recovery_actions.extend(actions)
 
                     except Exception as e:
@@ -427,7 +434,7 @@ logger.warning(
             return False
 
         # Check for emergency stop loss trigger
-current_pnl_pct = self.unified_state.market_state.unrealized_pnl / max(
+current_pnl_pct=self.unified_state.market_state.unrealized_pnl / max(
             self.unified_state.market_state.available_capital, 1
 
         if current_pnl_pct < -self.config["emergency_stop_loss"]:
@@ -435,7 +442,7 @@ logger.warning(f"⚠️ Emergency stop loss triggered: {current_pnl_pct:.1%}")
             return False
 
         # Check strategy weight concentration
-max_strategy_weight = unified_math.max(decision.strategy_weights.values())
+max_strategy_weight=unified_math.max(decision.strategy_weights.values())
         if max_strategy_weight > 0.8:  # No single strategy > 80%
 logger.warning(
                 f"⚠️ Strategy concentration too high: {max_strategy_weight:.1%}"
@@ -450,7 +457,7 @@ def _should_run_health_check(self) -> bool:
     pass
     pass
         """Determine if health check should run."""
-time_since_last = time.time() - self.unified_state.last_health_check
+time_since_last=time.time() - self.unified_state.last_health_check
         return time_since_last > self.config["health_check_interval"]
 
 def _perform_health_check(self) -> str:
@@ -460,17 +467,17 @@ def _perform_health_check(self) -> str:
     pass
         """Perform comprehensive system health check."""
 
-health_issues = []
+health_issues=[]
 
         # Check component health
         try:
             # Test anomaly filter
-test_state = SystemState(prices={"BTC": 45000.0})
-            test_anomalies = self.anomaly_filter.detect_all_anomalies(test_state)
+test_state=SystemState(prices={"BTC": 45000.0})
+            test_anomalies=self.anomaly_filter.detect_all_anomalies(test_state)
 
             # Test deterministic engine
-test_market_data = {"prices": {"BTC": 45000.0}}
-test_decision = calculate_trading_decision(test_market_data)
+test_market_data={"prices": {"BTC": 45000.0}}
+test_decision=calculate_trading_decision(test_market_data)
 
             # Test best practices enforcer
             if self.config["enforce_code_quality"]:
@@ -492,7 +499,7 @@ health_issues.append(
 
 
         # Check recent anomaly frequency
-recent_anomalies = [
+recent_anomalies=[
 a
             for a in self.unified_state.anomaly_history
             if a.detected_at > time.time() - 3600  # Last hour
@@ -503,7 +510,7 @@ a
 
 
         # Update health check timestamp
-self.unified_state.last_health_check = time.time()
+self.unified_state.last_health_check=time.time()
 
         # Determine health status
         if len(health_issues) == 0:
@@ -522,14 +529,14 @@ def _update_performance_metrics(self) -> None:
 
         # Calculate success rate
         if self.unified_state.total_trades > 0:
-success_rate = (
+success_rate=(
                 self.unified_state.successful_trades / self.unified_state.total_trades
 
         else:
-success_rate = 0.0
+success_rate=0.0
 
         # Calculate recent uptime
-error_count_last_hour = len(
+error_count_last_hour=len(
             [
 error
                 for error in self.unified_state.system_errors[-100:]  # Recent errors
@@ -538,10 +545,10 @@ error
 ]
 
 
-uptime = max(
+uptime=max(
             0, 100 - error_count_last_hour * 2
 )  # Each error reduces uptime by 2%
-self.unified_state.uptime_percentage = uptime
+self.unified_state.uptime_percentage=uptime
 
 def _get_performance_summary(self) -> Dict[str, Any]:
 
@@ -572,10 +579,10 @@ def _final_safety_validation(
 ) -> Dict[str, Any]:
 """Final safety validation before allowing trade execution."""
 
-blocking_reasons = []
+blocking_reasons=[]
 
         # Check for critical anomalies
-critical_anomalies = [
+critical_anomalies=[
 a for a in self.unified_state.active_anomalies if a.severity == "critical"
 ]
         if critical_anomalies:
@@ -591,7 +598,7 @@ blocking_reasons.append("Critical anomalies present")
 
         # Check decision quality
         if processing_result.get("decision"):
-            decision_data = processing_result["decision"]
+            decision_data=processing_result["decision"]
             if decision_data.get("execution_confidence", 0) < 0.5:
                 blocking_reasons.append("Low execution confidence")
 
@@ -607,22 +614,22 @@ def _emergency_recovery(self) -> List[str]:
     pass
         """Emergency recovery procedures."""
 
-actions = []
+actions=[]
 
         # Clear decision history to prevent bad decisions from persisting
-self.unified_state.decision_history = self.unified_state.decision_history[-5:]
+self.unified_state.decision_history=self.unified_state.decision_history[-5:]
 actions.append("Cleared old decision history")
 
         # Reset anomaly tracking
-self.unified_state.active_anomalies = []
+self.unified_state.active_anomalies=[]
 actions.append("Reset anomaly tracking")
 
         # Force health check
-self.unified_state.last_health_check = 0
+self.unified_state.last_health_check=0
 actions.append("Forced health check reset")
 
         # Log emergency recovery
-error_msg = f"{time.time()}:EMERGENCY_RECOVERY"
+error_msg=f"{time.time()}:EMERGENCY_RECOVERY"
         self.unified_state.system_errors.append(error_msg)
 
 logger.critical("🆘 Emergency recovery procedures executed")
@@ -664,7 +671,7 @@ def _handle_market_regime_shift(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle market regime shift anomaly."""
-actions = []
+actions=[]
 
         # Reduce position sizes
 actions.append("Reduced position sizing due to regime shift")
@@ -683,7 +690,7 @@ def _handle_data_feed_corruption(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle data feed corruption."""
-actions = []
+actions=[]
 
         # Halt trading temporarily
 actions.append("Halted trading due to data corruption")
@@ -702,7 +709,7 @@ def _handle_mathematical_singularity(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle mathematical singularities."""
-actions = []
+actions=[]
 
         # Apply regularization
 actions.append("Applied mathematical regularization")
@@ -721,7 +728,7 @@ def _handle_execution_timing(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle execution timing issues."""
-actions = []
+actions=[]
 
         # Increase order timeouts
 actions.append("Increased execution timeouts")
@@ -740,7 +747,7 @@ def _handle_portfolio_state(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle portfolio state issues."""
-actions = []
+actions=[]
 
         # Reduce position sizes
 actions.append("Reduced position sizes for safety")
@@ -759,10 +766,10 @@ def _handle_system_error(self, anomaly: AnomalySignal) -> List[str]:
     pass
     pass
         """Handle general system errors."""
-actions = []
+actions=[]
 
         # Log error details
-error_msg = f"{time.time()}:SYSTEM_ERROR:{anomaly.description}"
+error_msg=f"{time.time()}:SYSTEM_ERROR:{anomaly.description}"
         self.unified_state.system_errors.append(error_msg)
         actions.append("Logged system error")
 
@@ -770,7 +777,7 @@ error_msg = f"{time.time()}:SYSTEM_ERROR:{anomaly.description}"
 actions.append("Applied conservative system settings")
 
         # Trigger health check
-self.unified_state.last_health_check = 0
+self.unified_state.last_health_check=0
 actions.append("Triggered emergency health check")
 
         return actions
@@ -798,10 +805,10 @@ safe_print("🚀 Schwabot Unified Trading System Demonstration")
     safe_print("=" * 60)
 
     # Create system
-system = create_unified_trading_system()
+system=create_unified_trading_system()
 
     # Sample market data scenarios
-scenarios = [
+scenarios=[
 {
 "name": "Normal Market Conditions",
 "data": {
@@ -862,7 +869,7 @@ scenarios = [
         safe_print("-" * 40)
 
         # Process the market tick
-result = system.process_market_tick(scenario["data"])
+result=system.process_market_tick(scenario["data"])
 
         # Display results
 safe_print(f"✅ Safe to Trade: {result['safe_to_trade']}")
@@ -879,7 +886,7 @@ safe_print(f"🛠️ Actions Taken: {len(result['actions_taken'])}")
 safe_print(f"   - {action}")
 
         if result["decision"] and result["safe_to_trade"]:
-decision = result["decision"]
+decision=result["decision"]
 safe_print("🎯 Decision Summary:")
             safe_print(f"   - Execution Confidence: {decision['execution_confidence']:.3f}")
             safe_print(f"   - Entry Score: {decision['entry_score']:.3f}")
@@ -888,7 +895,7 @@ safe_print("🎯 Decision Summary:")
             safe_print(f"   - Expected Return: {decision['expected_return']:.3f}")
 
             # Show asset allocation
-allocation = decision["asset_allocation"]
+allocation=decision["asset_allocation"]
 safe_print(
                 f"   - Asset Allocation: USDC:{allocation['USDC']:.1%} "
 f"XRP:{allocation['XRP']:.1%} BTC:{allocation['BTC']:.1%} ETH:{allocation['ETH']:.1%}"

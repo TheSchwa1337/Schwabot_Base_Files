@@ -18,7 +18,7 @@ __all__: list[str] = []
 ]
 
 
-@dataclass(slots=True)
+@ dataclass(slots=True)
 class RecursiveStrategyRouter:
 
 
@@ -26,7 +26,7 @@ class RecursiveStrategyRouter:
 
 max_depth: int = 1
 
-def route(self, packet: Dict[str, Any], depth: int = 0) -> Dict[str, Any]:
+def route(self, packet: Dict[str, Any], depth: int=0) -> Dict[str, Any]:
 
 
     pass

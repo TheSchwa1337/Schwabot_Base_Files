@@ -1,5 +1,26 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from core.real_trading_integration import get_real_trading_integration
+from core.integrated_alif_aleph_system import IntegratedAlifAlephSystem
+from core.unified_mathematics_config import get_unified_math
+from core.tick_hash_processor import TickHashProcessor
+from core.ferris_rde_core import get_ferris_rde_core
+from core.mathematical_integration_validator import MathematicalIntegrationValidator
+from core.zpe_core import ZPECore
+from core.profit_cycle_allocator import ProfitCycleAllocator
+from core.matrix_mapper import MatrixMapper, BitPhase as MatrixBitPhase
+from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
+import queue
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import json
+import time
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +32,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Demo Trading System - Schwabot UROS v1.0
@@ -57,30 +85,10 @@ Simulates live trading using all mathematical functions and integrations.
 Provides a complete demo environment for testing trading strategies without real money.
 """
 
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import hashlib
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import queue
 
 # Import core components
 try:
-from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
-from core.matrix_mapper import MatrixMapper, BitPhase as MatrixBitPhase
-from core.profit_cycle_allocator import ProfitCycleAllocator
-from core.zpe_core import ZPECore
-from core.mathematical_integration_validator import MathematicalIntegrationValidator
-from core.ferris_rde_core import get_ferris_rde_core
-from core.tick_hash_processor import TickHashProcessor
-from core.unified_mathematics_config import get_unified_math
-from core.integrated_alif_aleph_system import IntegratedAlifAlephSystem
-from core.real_trading_integration import get_real_trading_integration
 CORE_COMPONENTS_AVAILABLE = True
 except ImportError as e:
 logger.error(f"Critical core component missing: {e}")
@@ -88,11 +96,13 @@ logger.error(f"Critical core component missing: {e}")
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DemoMarketData:
 
-
     """Simulated market data for demo trading."""
+
+
 symbol: str
 price: float
 volume: float
@@ -104,11 +114,13 @@ trend_strength: float
 market_heat: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class DemoTrade:
 
-
     """Demo trade execution."""
+
+
 trade_id: str
 symbol: str
 side: str  # "buy" or "sell"
@@ -121,11 +133,13 @@ basket_id: Optional[str] = None
 profit: float = 0.0
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class DemoPortfolio:
 
-
     """Demo portfolio state."""
+
+
 total_value: float
 cash: float
 positions: Dict[str, float]
@@ -136,11 +150,13 @@ win_rate: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class DemoStrategy:
 
-
     """Demo trading strategy configuration."""
+
+
 strategy_id: str
 name: str
 symbols: List[str]
@@ -152,17 +168,19 @@ take_profit_pct: float
 enabled: bool = True
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class DemoMarketSimulator:
 
+class DemoMarketSimulator:
 
     """Simulates market data for demo trading."""
 
-def __init__(self, symbols: List[str] = None):
 
+def __init__(self, symbols: List[str] = None):
 
     pass
     pass
         self.symbols = symbols or ['BTC/USDC', 'ETH/USDC', 'ADA/USDC', 'DOT/USDC']
+
+
 self.base_prices = {
 'BTC/USDC': 50000.0,
 'ETH/USDC': 3000.0,
@@ -180,13 +198,14 @@ self.complexity = 0.6
 
 logger.info(f"Demo market simulator initialized with {len(self.symbols)} symbols")
 
-def generate_market_data(self, symbol: str) -> DemoMarketData:
 
+def generate_market_data(self, symbol: str) -> DemoMarketData:
 
     pass
     pass
         """Generate simulated market data for a symbol."""
         try:
+
             # Update price with random walk
 current_price = self.current_prices[symbol]
 volatility = self.volatility[symbol]
@@ -237,11 +256,11 @@ def get_all_market_data(self) -> Dict[str, DemoMarketData]:
     pass
     pass
         """Get market data for all symbols."""
-market_data = {}
+market_data={}
         for symbol in self.symbols:
-data = self.generate_market_data(symbol)
+data=self.generate_market_data(symbol)
             if data:
-market_data[symbol] = data
+market_data[symbol]=data
         return market_data
 
 class DemoTradingSystem:
@@ -259,29 +278,29 @@ Features:
 - Strategy backtesting
 """
 
-def __init__(self, config_path: str = "./config/demo_trading_system_config.json"):
+def __init__(self, config_path: str="./config/demo_trading_system_config.json"):
 
 
     pass
     pass
-        self.config_path = config_path
-self.config = self._load_configuration()
+        self.config_path=config_path
+self.config=self._load_configuration()
 
         # Initialize real core components
 self._initialize_core_components()
 
         # Trading state
-self.is_running: bool = False
-self.current_portfolio: Dict[str, Any] = {}
-self.trade_history: List[Dict[str, Any]] = []
-self.performance_metrics: Dict[str, Any] = {}
+self.is_running: bool=False
+self.current_portfolio: Dict[str, Any]={}
+self.trade_history: List[Dict[str, Any]]=[]
+self.performance_metrics: Dict[str, Any]={}
 
         # Market simulation
-self.market_simulator = DemoMarketSimulator(self.config.get("market_simulation", {}))
+self.market_simulator=DemoMarketSimulator(self.config.get("market_simulation", {}))
 
         # Threading
-self.executor = ThreadPoolExecutor(max_workers=4)
-        self.stop_event = threading.Event()
+self.executor=ThreadPoolExecutor(max_workers=4)
+        self.stop_event=threading.Event()
 
 logger.info("Demo Trading System initialized with real core components")
 
@@ -293,16 +312,16 @@ def _initialize_core_components(self) -> None:
         """Initialize all core components with real implementations."""
         try:
             # Initialize core components
-self.dlt_engine = DLTWaveformEngine()
-            self.matrix_mapper = MatrixMapper()
-            self.profit_allocator = ProfitCycleAllocator()
-            self.zpe_core = ZPECore()
-            self.math_validator = MathematicalIntegrationValidator()
-            self.ferris_rde = get_ferris_rde_core()
-            self.tick_processor = TickHashProcessor()
-            self.unified_math = get_unified_math()
-            self.alif_aleph_system = IntegratedAlifAlephSystem()
-            self.trading_integration = get_real_trading_integration()
+self.dlt_engine=DLTWaveformEngine()
+            self.matrix_mapper=MatrixMapper()
+            self.profit_allocator=ProfitCycleAllocator()
+            self.zpe_core=ZPECore()
+            self.math_validator=MathematicalIntegrationValidator()
+            self.ferris_rde=get_ferris_rde_core()
+            self.tick_processor=TickHashProcessor()
+            self.unified_math=get_unified_math()
+            self.alif_aleph_system=IntegratedAlifAlephSystem()
+            self.trading_integration=get_real_trading_integration()
 
 logger.info("✅ All core components initialized successfully")
 
@@ -316,7 +335,7 @@ def add_strategy(self, strategy: DemoStrategy) -> None:
     pass
     pass
         """Add a trading strategy to the demo system."""
-self.strategies[strategy.strategy_id] = strategy
+self.strategies[strategy.strategy_id]=strategy
 logger.info(f"Added strategy: {strategy.name}")
 
 def start_trading(self) -> None:
@@ -329,8 +348,8 @@ def start_trading(self) -> None:
 logger.warning("Demo trading system is already running")
             return
 
-self.is_running = True
-self.trading_thread = threading.Thread(target=self._trading_loop, daemon=True)
+self.is_running=True
+self.trading_thread=threading.Thread(target=self._trading_loop, daemon=True)
         self.trading_thread.start()
 
 logger.info("Demo trading system started")
@@ -341,7 +360,7 @@ def stop_trading(self) -> None:
     pass
     pass
         """Stop the demo trading system."""
-self.is_running = False
+self.is_running=False
         if self.trading_thread:
 self.trading_thread.join(timeout=5.0)
 
@@ -355,18 +374,18 @@ def _trading_loop(self) -> None:
         """Main trading loop."""
         while self.is_running:
             try:
-start_time = time.time()
+start_time=time.time()
 
                 # Generate market data
-market_data = self.market_simulator.get_all_market_data()
+market_data=self.market_simulator.get_all_market_data()
 
                 # Process each symbol
                 for symbol, data in market_data.items():
                     self._process_symbol(symbol, data)
 
                 # Sleep for tick interval
-elapsed = time.time() - start_time
-                sleep_time = unified_math.max(0, self.tick_interval - elapsed)
+elapsed=time.time() - start_time
+                sleep_time=unified_math.max(0, self.tick_interval - elapsed)
                 if sleep_time > 0:
 time.sleep(sleep_time)
 
@@ -382,13 +401,13 @@ def _process_symbol(self, symbol: str, market_data: DemoMarketData) -> None:
         """Process a single symbol for trading decisions."""
         try:
             # Generate waveform data from price movement
-price_history = self._get_price_history(symbol)
+price_history=self._get_price_history(symbol)
             if len(price_history) < 100:
                 return
 
             # Process waveform
             if self.dlt_engine:
-waveform_result = self.dlt_engine.process_waveform_data(
+waveform_result=self.dlt_engine.process_waveform_data(
                     name=f"{symbol}_waveform",
 x=np.array(price_history),
                     sample_rate=1.0
@@ -396,7 +415,7 @@ x=np.array(price_history),
 
                 if waveform_result.get('success'):
                     # Get tensor score
-tensor_score = waveform_result.get('tensor_score', 0.0)
+tensor_score=waveform_result.get('tensor_score', 0.0)
 
                     # Make trading decision
 self._make_trading_decision(symbol, market_data, tensor_score)
@@ -412,14 +431,14 @@ def _get_price_history(self, symbol: str) -> List[float]:
         """Get price history for a symbol."""
         # In a real implementation, this would fetch from a database
         # For demo, we'll generate synthetic price history
-base_price = self.market_simulator.base_prices.get(symbol, 100.0)
-        history = []
+base_price=self.market_simulator.base_prices.get(symbol, 100.0)
+        history=[]
 
         for i in range(100):
             # Generate price with some trend and noise
-trend = np.unified_math.sin(i * 0.1) * 0.01
-            noise = np.random.normal(0, 0.005)
-            price = base_price * (1 + trend + noise)
+trend=np.unified_math.sin(i * 0.1) * 0.01
+            noise=np.random.normal(0, 0.005)
+            price=base_price * (1 + trend + noise)
             history.append(price)
 
         return history
@@ -432,17 +451,17 @@ def _make_trading_decision(self, symbol: str, market_data: DemoMarketData, tenso
         """Make trading decision based on mathematical analysis."""
         try:
             # Determine bit phase
-bit_phase = self._determine_bit_phase(market_data)
+bit_phase=self._determine_bit_phase(market_data)
 
             # Calculate position size based on tensor score and risk
-position_size = self._calculate_position_size(tensor_score, bit_phase)
+position_size=self._calculate_position_size(tensor_score, bit_phase)
 
             if position_size > 0:
                 # Determine trade direction
                 if tensor_score > 0.3:
-side = "buy"
+side="buy"
                 elif tensor_score < -0.3:
-side = "sell"
+side="sell"
                 else:
                     return  # No trade
 
@@ -459,12 +478,12 @@ def _determine_bit_phase(self, market_data: DemoMarketData) -> int:
     pass
         """Determine optimal bit phase based on market conditions."""
         try:
-entropy_level = market_data.entropy_level
-complexity = market_data.complexity
-volatility = market_data.volatility
+entropy_level=market_data.entropy_level
+complexity=market_data.complexity
+volatility=market_data.volatility
 
             # Calculate composite score
-composite_score = (entropy_level * 0.4 + complexity * 0.3 + volatility * 100 * 0.3)
+composite_score=(entropy_level * 0.4 + complexity * 0.3 + volatility * 100 * 0.3)
 
             # Determine bit phase based on composite score
             if composite_score < 2.0:
@@ -486,25 +505,25 @@ def _calculate_position_size(self, tensor_score: float, bit_phase: int) -> float
         """Calculate position size based on tensor score and bit phase."""
         try:
             # Base position size
-base_size = self.current_capital * 0.01  # 1% of capital
+base_size=self.current_capital * 0.01  # 1% of capital
 
             # Adjust based on tensor score
-tensor_factor = unified_math.abs(tensor_score)
+tensor_factor=unified_math.abs(tensor_score)
 
             # Adjust based on bit phase
             if bit_phase == 4:
-bit_factor = 0.5  # Conservative
+bit_factor=0.5  # Conservative
             elif bit_phase == 8:
-bit_factor = 1.0  # Balanced
+bit_factor=1.0  # Balanced
             else:  # 42-bit
-bit_factor = 1.5  # Aggressive
+bit_factor=1.5  # Aggressive
 
             # Calculate final position size
-position_size = base_size * tensor_factor * bit_factor
+position_size=base_size * tensor_factor * bit_factor
 
             # Apply risk management
-max_position = self.current_capital * 0.1  # Max 10% of capital
-position_size = unified_math.min(position_size, max_position)
+max_position=self.current_capital * 0.1  # Max 10% of capital
+position_size=unified_math.min(position_size, max_position)
 
             return position_size
 
@@ -519,17 +538,17 @@ def _execute_trade(self, symbol: str, side: str, quantity: float, price: float,
 """Execute a demo trade."""
         try:
             # Generate real tick hash for the trade
-tick_hash = self.tick_processor.generate_tick_hash(
+tick_hash=self.tick_processor.generate_tick_hash(
                 price=price,
 volume=quantity * price,
 timestamp=time.time()
 
 
             # Process through Ferris RDE for 16-bit mapping
-price_mapping = self.ferris_rde.map_btc_price_16bit(price)
+price_mapping=self.ferris_rde.map_btc_price_16bit(price)
 
             # Calculate tensor score using real matrix mapping
-tensor_score = self.matrix_mapper.calculate_tensor_score(
+tensor_score=self.matrix_mapper.calculate_tensor_score(
                 price=price,
 volume=quantity * price,
 market_data={
@@ -541,13 +560,13 @@ market_data={
 
 
             # Determine bit phase using real bit phase engine
-bit_phase = self.matrix_mapper.resolve_bit_phase(
+bit_phase=self.matrix_mapper.resolve_bit_phase(
                 tick_hash,
 price_mapping.mapped_price
 
 
             # Use DLT engine for trade analysis
-dlt_analysis = self.dlt_engine.analyze_tick_for_decision(
+dlt_analysis=self.dlt_engine.analyze_tick_for_decision(
                 price=price,
 volume=quantity * price,
 tensor_score=tensor_score,
@@ -555,14 +574,14 @@ bit_phase=bit_phase
 
 
             # Calculate trade confidence using unified mathematics
-confidence = self.unified_math.execute_with_monitoring(
+confidence=self.unified_math.execute_with_monitoring(
                 "trade_confidence",
 self._calculate_trade_confidence,
 tensor_score, bit_phase, dlt_analysis
 
 
             # Execute trade through real trading integration
-trade_result = self.trading_integration.execute_trade(
+trade_result=self.trading_integration.execute_trade(
                 symbol=symbol,
 side=side,
 quantity=quantity,
@@ -576,7 +595,7 @@ confidence=confidence
 self._update_portfolio(trade_result, tensor_score, bit_phase)
 
             # Record trade with real metadata
-trade_record = {
+trade_record={
 "trade_id": trade_result.get("trade_id", f"demo_trade_{len(self.trade_history)}"),
                 "timestamp": datetime.now(),
                 "symbol": symbol,
@@ -609,16 +628,16 @@ def _calculate_trade_confidence(self, tensor_score: float, bit_phase: int, dlt_a
         """Calculate trade confidence using mathematical models."""
         try:
             # Base confidence from tensor score
-base_confidence = tensor_score
+base_confidence=tensor_score
 
             # Bit phase adjustment
-bit_phase_adjustment = unified_math.min(bit_phase / 16.0, 1.0)
+bit_phase_adjustment=unified_math.min(bit_phase / 16.0, 1.0)
 
             # DLT analysis adjustment
-dlt_score = dlt_analysis.get("waveform_score", 0.5)
+dlt_score=dlt_analysis.get("waveform_score", 0.5)
 
             # Combine using weighted average
-confidence = (
+confidence=(
                 base_confidence * 0.4 +
 bit_phase_adjustment * 0.3 +
 dlt_score * 0.3
@@ -638,7 +657,7 @@ def _update_portfolio(self, trade_result: Dict[str, Any], tensor_score: float, b
         """Update portfolio using real profit allocation logic."""
         try:
             # Use profit cycle allocator for portfolio updates
-portfolio_update = self.profit_allocator.calculate_portfolio_update(
+portfolio_update=self.profit_allocator.calculate_portfolio_update(
                 trade_result=trade_result,
 tensor_score=tensor_score,
 bit_phase=bit_phase,
@@ -662,10 +681,10 @@ def _update_performance_metrics(self, trade_result: Dict[str, Any], tensor_score
         """Update performance metrics using mathematical models."""
         try:
             # Calculate trade performance
-trade_pnl = trade_result.get("realized_pnl", 0.0)
+trade_pnl=trade_result.get("realized_pnl", 0.0)
 
             # Update metrics using unified mathematics
-self.performance_metrics = self.unified_math.execute_with_monitoring(
+self.performance_metrics=self.unified_math.execute_with_monitoring(
                 "performance_update",
 self._calculate_performance_metrics,
 trade_pnl, tensor_score, bit_phase, self.performance_metrics
@@ -683,7 +702,7 @@ def _calculate_performance_metrics(self, trade_pnl: float, tensor_score: float, 
         try:
             # Initialize metrics if not present
             if not current_metrics:
-current_metrics = {
+current_metrics={
 "total_trades": 0,
 "winning_trades": 0,
 "total_pnl": 0.0,
@@ -700,17 +719,20 @@ current_metrics["total_pnl"] += trade_pnl
 current_metrics["winning_trades"] += 1
 
             # Calculate averages
-total_trades = current_metrics["total_trades"]
-current_metrics["win_rate"] = current_metrics["winning_trades"] / total_trades
+total_trades=current_metrics["total_trades"]
+current_metrics["win_rate"]=current_metrics["winning_trades"] / total_trades
 
             # Update running averages for confidence and tensor score
-current_avg_confidence = current_metrics.get("average_confidence", 0.0)
-            current_avg_tensor = current_metrics.get("average_tensor_score", 0.0)
+current_avg_confidence=current_metrics.get("average_confidence", 0.0)
+            current_avg_tensor=current_metrics.get("average_tensor_score", 0.0)
 
             # Calculate new averages (simplified - in real implementation would use proper running average)
-            confidence = unified_math.max(0.0, unified_math.min(1.0, tensor_score))  # Use tensor score as proxy for confidence
-            current_metrics["average_confidence"] = (current_avg_confidence * (total_trades - 1) + confidence) / total_trades
-            current_metrics["average_tensor_score"] = (current_avg_tensor * (total_trades - 1) + tensor_score) / total_trades
+            confidence=unified_math.max(0.0, unified_math.min(1.0, tensor_score)
+                                        )  # Use tensor score as proxy for confidence
+            current_metrics["average_confidence"]=(
+                current_avg_confidence * (total_trades - 1) + confidence) / total_trades
+            current_metrics["average_tensor_score"]=(
+                current_avg_tensor * (total_trades - 1) + tensor_score) / total_trades
 
             return current_metrics
 
@@ -726,23 +748,23 @@ def get_portfolio_status(self) -> DemoPortfolio:
         """Get current portfolio status."""
         try:
             # Calculate current portfolio value
-portfolio_value = self.current_capital
+portfolio_value=self.current_capital
 
             # Add value of positions
             for symbol, quantity in self.positions.items():
                 if quantity > 0:
-current_price = self.market_simulator.current_prices.get(symbol, 0.0)
+current_price=self.market_simulator.current_prices.get(symbol, 0.0)
                     portfolio_value += quantity * current_price
 
             # Calculate profit
-total_profit = portfolio_value - self.initial_capital
+total_profit=portfolio_value - self.initial_capital
 
             # Calculate win rate
             if self.trades:
-profitable_trades = sum(1 for trade in self.trades if trade.profit > 0)
-                win_rate = profitable_trades / len(self.trades)
+profitable_trades=sum(1 for trade in self.trades if trade.profit > 0)
+                win_rate=profitable_trades / len(self.trades)
             else:
-win_rate = 0.0
+win_rate=0.0
 
             return DemoPortfolio(
                 total_value=portfolio_value,
@@ -769,8 +791,8 @@ def run_mathematical_validation(self) -> Dict[str, Any]:
             if not CORE_COMPONENTS_AVAILABLE:
                 return {'error': 'Core components not available'}
 
-validator = MathematicalIntegrationValidator()
-            results = validator.run_comprehensive_validation()
+validator=MathematicalIntegrationValidator()
+            results=validator.run_comprehensive_validation()
 
             # Store results
 self.mathematical_validation_results.append({
@@ -784,16 +806,16 @@ self.mathematical_validation_results.append({
 logger.error(f"Error running mathematical validation: {e}")
             return {'error': str(e)}
 
-def export_demo_results(self, output_path: str = "demo_trading_results.json") -> None:
+def export_demo_results(self, output_path: str="demo_trading_results.json") -> None:
 
 
     pass
     pass
         """Export demo trading results."""
         try:
-portfolio = self.get_portfolio_status()
+portfolio=self.get_portfolio_status()
 
-results_data = {
+results_data={
 'timestamp': datetime.now().isoformat(),
                 'initial_capital': self.initial_capital,
 'portfolio': {
@@ -854,10 +876,10 @@ def main():
 safe_print("🚀 Starting Demo Trading System...")
 
     # Create demo trading system
-demo_system = DemoTradingSystem(initial_capital=100000.0)
+demo_system=DemoTradingSystem(initial_capital=100000.0)
 
     # Add strategies
-strategy1 = create_demo_strategy(
+strategy1=create_demo_strategy(
         strategy_id="strategy_1",
 name="Conservative BTC Strategy",
 symbols=['BTC/USDC'],
@@ -865,7 +887,7 @@ initial_capital=50000.0
 
 demo_system.add_strategy(strategy1)
 
-strategy2 = create_demo_strategy(
+strategy2=create_demo_strategy(
         strategy_id="strategy_2",
 name="Multi-Asset Strategy",
 symbols=['BTC/USDC', 'ETH/USDC', 'ADA/USDC'],
@@ -885,7 +907,7 @@ safe_print("📈 Demo trading running for 60 seconds...")
 demo_system.stop_trading()
 
         # Get results
-portfolio = demo_system.get_portfolio_status()
+portfolio=demo_system.get_portfolio_status()
         safe_print("\n📊 DEMO TRADING RESULTS")
         safe_print(f"Initial Capital: ${demo_system.initial_capital:,.2f}")
         safe_print(f"Final Portfolio Value: ${portfolio.total_value:,.2f}")
@@ -895,7 +917,7 @@ portfolio = demo_system.get_portfolio_status()
 
         # Run mathematical validation
 safe_print("\n🧪 Running Mathematical Validation...")
-        validation_results = demo_system.run_mathematical_validation()
+        validation_results=demo_system.run_mathematical_validation()
         safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
 
         # Export results

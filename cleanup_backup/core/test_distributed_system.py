@@ -22,21 +22,22 @@ import numpy as np
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 def test_hardware_self_identifier():
     """Test hardware self-identifier functionality."""
     print("\n" + "="*60)
     print("Testing Hardware Self-Identifier")
     print("="*60)
-    
+
     try:
         from hardware_self_identifier import HardwareSelfIdentifier
-        
+
         # Initialize hardware identifier
         identifier = HardwareSelfIdentifier()
-        
+
         # Detect hardware capabilities
         profile = identifier.detect_hardware_capabilities()
-        
+
         print(f"✓ Hardware Profile Created:")
         print(f"  Device: {profile.device_name}")
         print(f"  Device ID: {profile.device_id}")
@@ -49,60 +50,61 @@ def test_hardware_self_identifier():
         print(f"  Max Concurrent Trades: {profile.max_concurrent_trades}")
         print(f"  Profit Calculation Rate: {profile.profit_calculation_rate:.1f}/sec")
         print(f"  Tensor Processing Capacity: {profile.tensor_processing_capacity:.1f}/sec")
-        
+
         # Register with network (simulated)
         registration = identifier.register_with_network()
-        
+
         print(f"\n✓ Network Registration:")
         print(f"  Success: {registration.success}")
         print(f"  Node ID: {registration.assigned_node_id}")
         print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
         print(f"  Sync Interval: {registration.sync_interval}s")
-        
+
         # Start performance monitoring
         identifier.start_performance_monitoring()
-        
+
         # Wait for some monitoring data
         time.sleep(5)
-        
+
         # Get performance summary
         summary = identifier.get_performance_summary()
-        
+
         print(f"\n✓ Performance Summary:")
         print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
         print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
         print(f"  Capability Adjustments: {summary.get('capability_adjustments', 0)}")
         print(f"  Monitoring Active: {summary.get('monitoring_active', False)}")
-        
+
         # Export hardware data
         identifier.export_hardware_data("test_hardware_profile.json")
         print(f"\n✓ Hardware data exported to test_hardware_profile.json")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"✗ Hardware Self-Identifier test failed: {e}")
         return False
+
 
 def test_flask_network_coordinator():
     """Test Flask network coordinator functionality."""
     print("\n" + "="*60)
     print("Testing Flask Network Coordinator")
     print("="*60)
-    
+
     try:
         from flask_network_coordinator import FlaskNetworkCoordinator
-        
+
         # Initialize coordinator
         coordinator = FlaskNetworkCoordinator(host="127.0.0.1", port=5001, debug=False)
-        
+
         # Start coordinator in background thread
         coordinator_thread = threading.Thread(target=coordinator.start, daemon=True)
         coordinator_thread.start()
-        
+
         # Wait for coordinator to start
         time.sleep(3)
-        
+
         # Test device registration
         test_device_data = {
             "device_id": "test_device_001",
@@ -116,9 +118,9 @@ def test_flask_network_coordinator():
                 "tensor_processing_capacity": 3.0
             }
         }
-        
+
         response = requests.post("http://127.0.0.1:5001/api/register", json=test_device_data)
-        
+
         if response.status_code == 200:
             result = response.json()
             print(f"✓ Device Registration Successful:")
@@ -129,7 +131,7 @@ def test_flask_network_coordinator():
         else:
             print(f"✗ Device registration failed: {response.status_code}")
             return False
-        
+
         # Test heartbeat
         heartbeat_data = {
             "device_id": "test_device_001",
@@ -140,14 +142,14 @@ def test_flask_network_coordinator():
                 "profit_contributed": 2.75
             }
         }
-        
+
         response = requests.post("http://127.0.0.1:5001/api/heartbeat", json=heartbeat_data)
-        
+
         if response.status_code == 200:
             print(f"✓ Heartbeat Successful")
         else:
             print(f"✗ Heartbeat failed: {response.status_code}")
-        
+
         # Test task creation
         task_data = {
             "task_type": "profit_calculation",
@@ -158,19 +160,19 @@ def test_flask_network_coordinator():
                 "volatility": 0.15
             }
         }
-        
+
         response = requests.post("http://127.0.0.1:5001/api/task/create", json=task_data)
-        
+
         if response.status_code == 200:
             result = response.json()
             print(f"✓ Task Creation Successful:")
             print(f"  Task ID: {result['task_id']}")
         else:
             print(f"✗ Task creation failed: {response.status_code}")
-        
+
         # Test network status
         response = requests.get("http://127.0.0.1:5001/api/network/status")
-        
+
         if response.status_code == 200:
             status = response.json()
             print(f"✓ Network Status Retrieved:")
@@ -181,28 +183,29 @@ def test_flask_network_coordinator():
             print(f"  Total Calculations: {status['statistics']['total_calculations']}")
         else:
             print(f"✗ Network status failed: {response.status_code}")
-        
+
         # Wait a bit more for background processing
         time.sleep(2)
-        
+
         return True
-        
+
     except Exception as e:
         print(f"✗ Flask Network Coordinator test failed: {e}")
         return False
+
 
 def test_universal_schwabot_client():
     """Test universal Schwabot client functionality."""
     print("\n" + "="*60)
     print("Testing Universal Schwabot Client")
     print("="*60)
-    
+
     try:
         from universal_schwabot_client import UniversalSchwabotClient, ClientMode
-        
+
         # Initialize client
         client = UniversalSchwabotClient(server_url="http://127.0.0.1:5001", mode=ClientMode.DEMO)
-        
+
         # Start client
         if client.start():
             print(f"✓ Universal Schwabot Client Started Successfully:")
@@ -211,13 +214,13 @@ def test_universal_schwabot_client():
             print(f"  Profit Allocation: {client.profit_allocation:.1%}")
             print(f"  Sync Interval: {client.sync_interval}s")
             print(f"  Client Status: {client.client_status.value}")
-            
+
             # Wait for some processing
             time.sleep(10)
-            
+
             # Get client status
             status = client.get_client_status()
-            
+
             print(f"\n✓ Client Status Retrieved:")
             print(f"  Status: {status['client_status']}")
             print(f"  Mode: {status['mode']}")
@@ -226,31 +229,32 @@ def test_universal_schwabot_client():
             print(f"  Total Tasks Completed: {status['performance']['total_tasks_completed']}")
             print(f"  Average Response Time: {status['performance']['average_response_time']:.3f}s")
             print(f"  Total Profit Contributed: ${status['total_profit_contributed']:.2f}")
-            
+
             if status['hardware_profile']:
                 print(f"  Hardware Tier: {status['hardware_profile']['hardware_tier']}")
                 print(f"  Compute Capability: {status['hardware_profile']['compute_capability']}")
                 print(f"  Overall Score: {status['hardware_profile']['overall_score']:.3f}")
-            
+
             # Stop client
             client.stop()
             print(f"\n✓ Client stopped successfully")
-            
+
             return True
         else:
             print(f"✗ Failed to start Universal Schwabot Client")
             return False
-            
+
     except Exception as e:
         print(f"✗ Universal Schwabot Client test failed: {e}")
         return False
+
 
 def test_distributed_profit_calculation():
     """Test distributed profit calculation across multiple simulated devices."""
     print("\n" + "="*60)
     print("Testing Distributed Profit Calculation")
     print("="*60)
-    
+
     try:
         # Simulate multiple devices with different hardware profiles
         devices = [
@@ -303,7 +307,7 @@ def test_distributed_profit_calculation():
                 }
             }
         ]
-        
+
         # Register all devices
         print("Registering devices with network...")
         for device in devices:
@@ -313,7 +317,7 @@ def test_distributed_profit_calculation():
                 print(f"  ✓ {device['hardware_profile']['device_name']}: {result['profit_allocation']:.1%} allocation")
             else:
                 print(f"  ✗ Failed to register {device['hardware_profile']['device_name']}")
-        
+
         # Create various tasks
         tasks = [
             {
@@ -349,7 +353,7 @@ def test_distributed_profit_calculation():
                 }
             }
         ]
-        
+
         # Submit tasks
         print("\nSubmitting tasks to network...")
         task_ids = []
@@ -361,12 +365,12 @@ def test_distributed_profit_calculation():
                 print(f"  ✓ Task created: {task['task_type']} (ID: {result['task_id']})")
             else:
                 print(f"  ✗ Failed to create task: {task['task_type']}")
-        
+
         # Simulate device processing
         print("\nSimulating device processing...")
         for device in devices:
             device_id = device['device_id']
-            
+
             # Request tasks
             for _ in range(2):  # Each device processes 2 tasks
                 response = requests.post("http://127.0.0.1:5001/api/task", json={"device_id": device_id})
@@ -374,34 +378,34 @@ def test_distributed_profit_calculation():
                     task_response = response.json()
                     if task_response.get("task_available"):
                         task_id = task_response["task_id"]
-                        
+
                         # Simulate processing time based on hardware
                         processing_time = 1.0 / device['hardware_profile']['profit_calculation_rate']
                         time.sleep(processing_time)
-                        
+
                         # Complete task with simulated result
                         result = {
                             "profit_contributed": device['hardware_profile']['overall_score'] * 0.1,
                             "processing_time": processing_time,
                             "device_capability": device['hardware_profile']['compute_capability']
                         }
-                        
+
                         complete_data = {
                             "task_id": task_id,
                             "device_id": device_id,
                             "result": result
                         }
-                        
+
                         complete_response = requests.post("http://127.0.0.1:5001/api/task/complete", json=complete_data)
                         if complete_response.status_code == 200:
                             print(f"  ✓ {device['hardware_profile']['device_name']} completed task {task_id}")
                         else:
                             print(f"  ✗ {device['hardware_profile']['device_name']} failed to complete task")
-        
+
         # Get final network status
         time.sleep(2)
         response = requests.get("http://127.0.0.1:5001/api/network/status")
-        
+
         if response.status_code == 200:
             status = response.json()
             print(f"\n✓ Final Network Status:")
@@ -410,24 +414,26 @@ def test_distributed_profit_calculation():
             print(f"  Total Profit Contributed: ${status['statistics']['total_profit_contributed']:.2f}")
             print(f"  Total Calculations: {status['statistics']['total_calculations']}")
             print(f"  Average Response Time: {status['statistics']['average_response_time']:.3f}s")
-            
+
             # Show individual device contributions
             print(f"\nDevice Contributions:")
             for device_id, device_info in status['devices'].items():
-                print(f"  {device_info['device_name']}: ${device_info['total_profit_contributed']:.2f} ({device_info['total_calculations']} calculations)")
-        
+                print(
+                    f"  {device_info['device_name']}: ${device_info['total_profit_contributed']:.2f} ({device_info['total_calculations']} calculations)")
+
         return True
-        
+
     except Exception as e:
         print(f"✗ Distributed profit calculation test failed: {e}")
         return False
+
 
 def test_hardware_scaling_demonstration():
     """Demonstrate how profit scales with hardware capabilities."""
     print("\n" + "="*60)
     print("Hardware Scaling Demonstration")
     print("="*60)
-    
+
     try:
         # Simulate different hardware configurations
         hardware_configs = [
@@ -437,13 +443,13 @@ def test_hardware_scaling_demonstration():
             {"name": "Gaming PC", "tier": "performance", "score": 0.8, "allocation": 0.75},
             {"name": "Workstation", "tier": "enterprise", "score": 0.95, "allocation": 1.0}
         ]
-        
+
         print("Hardware Scaling Analysis:")
         print("-" * 40)
-        
+
         total_profit = 0.0
         total_calculations = 0
-        
+
         for config in hardware_configs:
             # Simulate profit contribution based on hardware
             base_profit_per_calculation = 0.01  # $0.01 per calculation
@@ -451,52 +457,53 @@ def test_hardware_scaling_demonstration():
             hourly_profit = calculations_per_hour * base_profit_per_calculation * config['allocation']
             daily_profit = hourly_profit * 24
             monthly_profit = daily_profit * 30
-            
+
             total_profit += monthly_profit
             total_calculations += calculations_per_hour * 24 * 30
-            
+
             print(f"{config['name']:15} | {config['tier']:10} | Score: {config['score']:.2f} | Monthly: ${monthly_profit:.2f}")
-        
+
         print("-" * 40)
         print(f"Total Network Monthly Profit: ${total_profit:.2f}")
         print(f"Total Network Monthly Calculations: {total_calculations:,}")
         print(f"Average Profit per Calculation: ${total_profit/total_calculations:.6f}")
-        
+
         # Demonstrate the "million dollar laptop" concept
         print(f"\n💡 Million Dollar Laptop Analysis:")
         print("-" * 40)
-        
+
         # High-end gaming laptop running 24/7
         gaming_laptop_monthly = 0.8 * 100 * 0.01 * 0.75 * 24 * 30  # $432/month
         gaming_laptop_yearly = gaming_laptop_monthly * 12  # $5,184/year
-        
+
         # Time to reach $1M
         years_to_million = 1000000 / gaming_laptop_yearly
-        
+
         print(f"High-end Gaming Laptop:")
         print(f"  Monthly Profit: ${gaming_laptop_monthly:.2f}")
         print(f"  Yearly Profit: ${gaming_laptop_yearly:.2f}")
         print(f"  Years to $1M: {years_to_million:.1f} years")
-        
+
         # Network of devices
         network_monthly = total_profit
         network_yearly = network_monthly * 12
         network_years_to_million = 1000000 / network_yearly
-        
+
         print(f"\nNetwork of 5 Devices:")
         print(f"  Monthly Profit: ${network_monthly:.2f}")
         print(f"  Yearly Profit: ${network_yearly:.2f}")
         print(f"  Years to $1M: {network_years_to_million:.1f} years")
-        
+
         # Scaling with more devices
         devices_needed_for_1m_yearly = 1000000 / (network_yearly / 5)  # 5 devices in current network
         print(f"\nDevices needed for $1M/year: {devices_needed_for_1m_yearly:.0f} devices")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"✗ Hardware scaling demonstration failed: {e}")
         return False
+
 
 def main():
     """Main test function."""
@@ -504,7 +511,7 @@ def main():
     print("=" * 60)
     print("Testing Universal Hardware-Aware Profit Engine")
     print("=" * 60)
-    
+
     tests = [
         ("Hardware Self-Identifier", test_hardware_self_identifier),
         ("Flask Network Coordinator", test_flask_network_coordinator),
@@ -512,10 +519,10 @@ def main():
         ("Distributed Profit Calculation", test_distributed_profit_calculation),
         ("Hardware Scaling Demonstration", test_hardware_scaling_demonstration),
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test_name, test_func in tests:
         print(f"\n{test_name}:")
         print("-" * 40)
@@ -525,11 +532,11 @@ def main():
         else:
             print(f"✗ {test_name} FAILED")
         print()
-    
+
     print("=" * 60)
     print(f"Test Results: {passed}/{total} tests passed")
     print("=" * 60)
-    
+
     if passed == total:
         print("🎉 All tests passed! Distributed system is working correctly.")
         print("\n💡 Key Insights:")
@@ -541,9 +548,10 @@ def main():
         print("\n🚀 Ready for universal deployment!")
     else:
         print("⚠️  Some tests failed. Please check the errors above.")
-    
+
     return passed == total
+
 
 if __name__ == "__main__":
     success = main()
-    exit(0 if success else 1) 
+    exit(0 if success else 1)

@@ -30,10 +30,13 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
     cli_handler = None
@@ -85,20 +88,20 @@ class AICommand:
     parent_command_id: Optional[str] = None
     validation_required: bool = True
     execution_timeout: float = 30.0
-    
+
     def __post_init__(self):
         """Post-initialization processing."""
         if not self.command_id:
             self.command_id = self._generate_command_id()
         if not self.hash_signature:
             self.hash_signature = self._generate_hash_signature()
-    
+
     def _generate_command_id(self) -> str:
         """Generate unique command ID."""
         timestamp = int(time.time() * 1000000)
         agent_code = self.agent_type.value.upper()
         return f"{agent_code}_{timestamp}_{hash(self.payload)}"
-    
+
     def _generate_hash_signature(self) -> str:
         """Generate hash signature for command validation."""
         content = f"{self.agent_type.value}_{self.domain.value}_{json.dumps(self.payload, sort_keys=True)}"
@@ -115,7 +118,7 @@ class CommandResponse:
     timestamp: datetime
     error_message: Optional[str] = None
     recursive_children: List[str] = None
-    
+
     def __post_init__(self):
         """Post-initialization processing."""
         if self.recursive_children is None:
@@ -133,7 +136,7 @@ class ConsciousnessProfile:
     recursive_depth: int
     domain_expertise: Dict[CommandDomain, float]
     trust_level: float
-    
+
     def __post_init__(self):
         """Post-initialization processing."""
         if self.command_history is None:
@@ -145,39 +148,39 @@ class ConsciousnessProfile:
 class GPTCommandLayer:
     """
     GPT Command Layer - Simplified Version.
-    
+
     This is a simplified version for testing without circular imports.
     """
-    
+
     def __init__(self, config_path: str = "config/gpt_integration.yaml"):
         """Initialize the GPT command layer."""
         self.config_path = config_path
         self.logger = logging.getLogger("gpt_command_layer")
         self.logger.setLevel(logging.INFO)
-        
+
         # Command registry and memory
         self.command_registry: Dict[str, AICommand] = {}
         self.response_registry: Dict[str, CommandResponse] = {}
         self.consciousness_profiles: Dict[AIAgentType, ConsciousnessProfile] = {}
-        
+
         # Command processing
         self.command_queue: List[AICommand] = []
         self.processing_lock = asyncio.Lock()
         self.max_recursive_depth = 5
         self.command_timeout = 30.0
-        
+
         # Memory and persistence
         self.memory_file = "data/consciousness_memory.json"
         self.command_log_file = "data/command_execution_log.json"
-        
+
         # Initialize consciousness profiles
         self._initialize_consciousness_profiles()
-        
+
         # Load configuration
         self.config = self._load_configuration()
-        
+
         safe_safe_print("🧠 GPT Command Layer (Simplified) initialized")
-    
+
     def _initialize_consciousness_profiles(self) -> None:
         """Initialize consciousness profiles for all AI agents."""
         for agent_type in AIAgentType:
@@ -191,7 +194,7 @@ class GPTCommandLayer:
                 domain_expertise={domain: 0.5 for domain in CommandDomain},
                 trust_level=0.7,
             )
-    
+
     def _load_configuration(self) -> Dict[str, Any]:
         """Load configuration from YAML file."""
         try:
@@ -201,7 +204,7 @@ class GPTCommandLayer:
                     return yaml.safe_load(f)
         except Exception as e:
             safe_safe_print(f"⚠️ Configuration load failed: {safe_format_error(e, 'config_load')}")
-        
+
         # Default configuration
         return {
             "max_recursive_depth": 5,
@@ -215,7 +218,7 @@ class GPTCommandLayer:
                 "schwabot": 1.0,
             }
         }
-    
+
     async def submit_command(
         self,
         agent_type: AIAgentType,
@@ -240,52 +243,52 @@ class GPTCommandLayer:
                 recursive_depth=self._calculate_recursive_depth(parent_command_id),
                 parent_command_id=parent_command_id,
             )
-            
+
             # Validate command
             if not await self._validate_command(command):
                 raise ValueError("Command validation failed")
-            
+
             # Queue command
             await self._queue_command(command)
-            
+
             # Update consciousness profile
             self._update_consciousness_profile(command)
-            
+
             safe_safe_print(f"✅ Command submitted: {command.command_id}")
             return command.command_id
-            
+
         except Exception as e:
             error_msg = safe_format_error(e, "submit_command")
             safe_safe_print(f"❌ Command submission failed: {error_msg}")
             raise
-    
+
     async def _validate_command(self, command: AICommand) -> bool:
         """Validate command structure and content."""
         try:
             # Basic validation
             if not command.command_id:
                 return False
-            
+
             if not self._validate_payload(command.domain, command.payload):
                 return False
-            
+
             # Check recursive depth
             if command.recursive_depth > self.max_recursive_depth:
                 safe_safe_print(f"⚠️ Recursive depth exceeded: {command.recursive_depth}")
                 return False
-            
+
             return True
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Command validation failed: {safe_format_error(e, 'validation')}")
             return False
-    
+
     def _validate_payload(self, domain: CommandDomain, payload: Dict[str, Any]) -> bool:
         """Validate payload based on domain."""
         try:
             if not isinstance(payload, dict):
                 return False
-            
+
             # Domain-specific validation
             if domain == CommandDomain.STRATEGY:
                 return "strategy_name" in payload
@@ -295,74 +298,74 @@ class GPTCommandLayer:
                 return "matrix_id" in payload
             else:
                 return True  # Other domains are more flexible
-                
+
         except Exception:
             return False
-    
+
     def _calculate_recursive_depth(self, parent_command_id: Optional[str]) -> int:
         """Calculate recursive depth based on parent command."""
         if not parent_command_id:
             return 0
-        
+
         # Simple depth calculation
         if parent_command_id in self.command_registry:
             parent = self.command_registry[parent_command_id]
             return parent.recursive_depth + 1
-        
+
         return 1  # Default depth for unknown parent
-    
+
     def _update_consciousness_profile(self, command: AICommand) -> None:
         """Update consciousness profile with new command."""
         try:
             profile = self.consciousness_profiles[command.agent_type]
             profile.command_history.append(command.command_id)
             profile.last_sync = datetime.now()
-            
+
             # Keep history manageable
             if len(profile.command_history) > 100:
                 profile.command_history = profile.command_history[-50:]
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Profile update failed: {safe_format_error(e, 'profile_update')}")
-    
+
     async def _queue_command(self, command: AICommand) -> None:
         """Add command to processing queue."""
         try:
             self.command_registry[command.command_id] = command
             self.command_queue.append(command)
-            
+
             safe_safe_print(f"📋 Command queued: {command.command_id}")
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Command queuing failed: {safe_format_error(e, 'queue_command')}")
-    
+
     async def execute_commands(self) -> None:
         """Execute queued commands."""
         try:
             while self.command_queue:
                 command = self.command_queue.pop(0)
-                
+
                 # Execute command
                 response = await self._execute_command(command)
-                
+
                 # Store response
                 self.response_registry[command.command_id] = response
-                
+
                 # Update profile
                 self._update_profile_with_response(command, response)
-                
+
                 # Log execution
                 await self._log_execution(command, response)
-                
+
         except Exception as e:
             error_msg = safe_format_error(e, "execute_commands")
             safe_safe_print(f"❌ Command execution failed: {error_msg}")
-    
+
     async def _execute_command(self, command: AICommand) -> CommandResponse:
         """Execute a single command."""
         try:
             start_time = time.time()
-            
+
             # Simulate command execution based on domain
             if command.domain == CommandDomain.STRATEGY:
                 result = await self._handle_strategy_command(command)
@@ -370,9 +373,9 @@ class GPTCommandLayer:
                 result = await self._handle_profit_command(command)
             else:
                 result = {"status": "executed", "domain": command.domain.value}
-            
+
             execution_time = time.time() - start_time
-            
+
             return CommandResponse(
                 command_id=command.command_id,
                 success=True,
@@ -380,7 +383,7 @@ class GPTCommandLayer:
                 execution_time=execution_time,
                 timestamp=datetime.now()
             )
-            
+
         except Exception as e:
             execution_time = time.time() - start_time
             return CommandResponse(
@@ -391,7 +394,7 @@ class GPTCommandLayer:
                 timestamp=datetime.now(),
                 error_message=str(e)
             )
-    
+
     async def _handle_strategy_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle strategy domain commands."""
         strategy_name = command.payload.get("strategy_name", "unknown")
@@ -401,7 +404,7 @@ class GPTCommandLayer:
             "execution_time": time.time(),
             "result": "strategy_processed"
         }
-    
+
     async def _handle_profit_command(self, command: AICommand) -> Dict[str, Any]:
         """Handle profit domain commands."""
         target_profit = command.payload.get("target_profit", 0.0)
@@ -411,12 +414,12 @@ class GPTCommandLayer:
             "execution_time": time.time(),
             "result": "profit_optimized"
         }
-    
+
     def _update_profile_with_response(self, command: AICommand, response: CommandResponse) -> None:
         """Update consciousness profile with command response."""
         try:
             profile = self.consciousness_profiles[command.agent_type]
-            
+
             # Update success rate
             total_commands = len(profile.command_history)
             if total_commands > 0:
@@ -425,16 +428,16 @@ class GPTCommandLayer:
                     if cmd_id in self.response_registry and self.response_registry[cmd_id].success
                 )
                 profile.success_rate = successful_commands / unified_math.min(10, total_commands)
-            
+
             # Update trust level
             if response.success:
                 profile.trust_level = unified_math.min(1.0, profile.trust_level + 0.01)
             else:
                 profile.trust_level = unified_math.max(0.0, profile.trust_level - 0.02)
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ Profile response update failed: {safe_format_error(e, 'profile_response_update')}")
-    
+
     async def _log_execution(self, command: AICommand, response: CommandResponse) -> None:
         """Log command execution."""
         try:
@@ -447,21 +450,21 @@ class GPTCommandLayer:
                 "success": response.success,
                 "result": response.result
             }
-            
+
             # In a real implementation, this would write to a log file
             safe_safe_print(f"📝 Logged: {command.command_id} - {'Success' if response.success else 'Failed'}")
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Logging failed: {safe_format_error(e, 'logging')}")
-    
+
     async def get_command_status(self, command_id: str) -> Optional[CommandResponse]:
         """Get status of a specific command."""
         return self.response_registry.get(command_id)
-    
+
     async def get_consciousness_profile(self, agent_type: AIAgentType) -> Optional[ConsciousnessProfile]:
         """Get consciousness profile for a specific agent."""
         return self.consciousness_profiles.get(agent_type)
-    
+
     async def get_system_status(self) -> Dict[str, Any]:
         """Get overall system status."""
         return {
@@ -518,10 +521,10 @@ if __name__ == "__main__":
     async def test_consciousness_integration():
         """Test consciousness integration."""
         safe_safe_print("🧠 Testing Simplified GPT Command Layer...")
-        
+
         # Create command layer
         layer = GPTCommandLayer()
-        
+
         # Submit test command
         command_id = await layer.submit_command(
             agent_type=AIAgentType.GPT,
@@ -529,17 +532,17 @@ if __name__ == "__main__":
             payload={"strategy_name": "test_strategy", "parameters": {"test": True}},
             context={"test": True}
         )
-        
+
         # Execute commands
         await layer.execute_commands()
-        
+
         # Get status
         status = await layer.get_command_status(command_id)
         system_status = await layer.get_system_status()
-        
+
         safe_safe_print(f"✅ Test completed - Command: {command_id}")
         safe_safe_print(f"✅ Status: {'Success' if status and status.success else 'Failed'}")
         safe_safe_print(f"✅ System: {system_status['total_commands']} commands processed")
-    
+
     # Run test
-    asyncio.run(test_consciousness_integration()) 
+    asyncio.run(test_consciousness_integration())

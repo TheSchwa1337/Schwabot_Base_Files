@@ -36,8 +36,6 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
-
-
     """Vectorised logistic function 1 / (1 + exp(-k·x))."""
     return 1.0 / (1.0 + unified_math.exp(-k * x))
 
@@ -46,12 +44,14 @@ def ghost_swap_vector(
 
 
     market_matrix: np.ndarray,
-weights: np.ndarray,
-bias: np.ndarray,
-*,
-noise: np.ndarray | None = None,
-sigmoid_k: float = _SIGMOID_K,
+    weights: np.ndarray,
+    bias: np.ndarray,
+    *,
+    noise: np.ndarray | None = None,
+    sigmoid_k: float = _SIGMOID_K,
 ) -> np.ndarray:
+
+
 """Return ghost trade simulation matrix Φ₍ghost₎.
 
 Parameters
@@ -67,7 +67,7 @@ used.
 sigmoid_k
 Steepness parameter *k* of the logistic.  Higher ⇒ harder gate.
 """
-    if not (market_matrix.shape == weights.shape == bias.shape):
+   if not (market_matrix.shape == weights.shape == bias.shape):
         raise ValueError("market_matrix, weights and bias must share shape")
 
     # σ(W + B) term
@@ -76,7 +76,7 @@ Steepness parameter *k* of the logistic.  Higher ⇒ harder gate.
     # Core multiplication
 phi = market_matrix * activated
 
-    if noise is None:
+   if noise is None:
         return phi
 
     if noise.shape != phi.shape:

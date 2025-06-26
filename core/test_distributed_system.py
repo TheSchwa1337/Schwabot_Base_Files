@@ -9,6 +9,7 @@ including the Flask coordinator, hardware self-identifier, and universal client.
 This test shows how any device can automatically connect and contribute to profit calculations.
 """
 
+from hardware_self_identifier import HardwareSelfIdentifier
 import json
 import time
 import logging
@@ -22,8 +23,8 @@ import numpy as np
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def test_hardware_self_identifier():
 
+def test_hardware_self_identifier():
 
     pass
     pass
@@ -35,7 +36,7 @@ def test_hardware_self_identifier():
     try:
     pass
     pass
-from hardware_self_identifier import HardwareSelfIdentifier
+
 
         # Initialize hardware identifier
 identifier = HardwareSelfIdentifier()

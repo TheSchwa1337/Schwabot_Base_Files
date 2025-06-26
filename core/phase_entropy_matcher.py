@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Phase Entropy Matcher - Schwabot UROS v1.0
@@ -57,20 +69,18 @@ Determines trade priority per-basket based on entropy-aware bit analysis.
 Connects bit patterns with entropy for optimal trade routing decisions.
 """
 
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class PhaseEntropyMatch:
 
-
     """Result of phase-entropy matching."""
+
+
 bit_pattern: List[int]
 entropy: float
 phase_weight: float
@@ -78,11 +88,13 @@ basket_id: str
 priority_score: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class EntropyAnalysis:
 
-
     """Comprehensive entropy analysis result."""
+
+
 bit_sequence: List[int]
 entropy_value: float
 complexity_score: float
@@ -90,8 +102,8 @@ stability_metric: float
 pattern_confidence: float
 timestamp: datetime
 
-class PhaseEntropyMatcher:
 
+class PhaseEntropyMatcher:
 
     """
 Matcher for connecting bit patterns with entropy analysis.
@@ -103,8 +115,8 @@ Features:
 - Basket-specific routing decisions
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
@@ -113,6 +125,7 @@ def __init__(self):
 'medium': 4.0,
 'high': 6.0
 }
+
 
 self.priority_weights = {
 'entropy': 0.4,
@@ -126,8 +139,8 @@ self.entropy_history: List[EntropyAnalysis] = []
 
 logger.info("Phase Entropy Matcher initialized")
 
-def phase_weight_matrix(self, bit_pattern: List[int], entropy: float) -> float:
 
+def phase_weight_matrix(self, bit_pattern: List[int], entropy: float) -> float:
 
     pass
     pass
@@ -143,6 +156,8 @@ float: Phase weight score
 """
         try:
             if not bit_pattern:
+
+
 logger.warning("Empty bit pattern, returning 0")
                 return 0.0
 

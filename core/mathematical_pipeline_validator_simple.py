@@ -1,5 +1,114 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .type_defs import (
+        BitLevel, MatrixPhase, MatrixController,
+IdentityState, IdentityTrace, GhostLogicState, AIConsensus
+
+TYPE_DEFS_AVAILABLE=True
+except ImportError as e:
+logger.warning(f"type_defs import failed: {e}")
+    TYPE_DEFS_AVAILABLE=False
+    # Create fallback definitions
+from enum import Enum
+class BitLevel(Enum):
+
+
+        FOUR_BIT=4
+EIGHT_BIT=8
+SIXTEEN_BIT=16
+FORTY_TWO_BIT=42
+
+class MatrixPhase(Enum):
+
+
+        INITIALIZATION="INIT"
+ACCUMULATION="ACCUM"
+RESONANCE="RESON"
+DISPERSION="DISP"
+CONVERGENCE="CONV"
+FORTY_TWO_PHASE="42P"
+
+@ dataclass
+class MatrixController:
+
+
+        bit_level: BitLevel
+phase: MatrixPhase
+hash_signature: str
+timestamp: datetime=datetime.now()
+        confidence_score: float=0.0
+fallback_triggered: bool=False
+state_vector: np.ndarray=np.zeros(10)
+
+def update_state(self, new_state: np.ndarray) -> None:
+
+
+    pass
+    pass
+            if new_state.size == self.state_vector.size:
+self.state_vector=new_state
+
+try:
+from .fault_bus import FaultBus, FaultBusEvent, FaultType
+FAULT_BUS_AVAILABLE=True
+except ImportError as e:
+logger.warning(f"fault_bus import failed: {e}")
+    FAULT_BUS_AVAILABLE=False
+
+try:
+from .hash_confidence_evaluator import HashConfidenceEvaluator
+HASH_EVALUATOR_AVAILABLE=True
+except ImportError as e:
+logger.warning(f"hash_confidence_evaluator import failed: {e}")
+    HASH_EVALUATOR_AVAILABLE=False
+
+try:
+from .unified_confidence_matrix import UnifiedConfidenceMatrix
+UNIFIED_CONFIDENCE_AVAILABLE=True
+except ImportError as e:
+logger.warning(f"unified_confidence_matrix import failed: {e}")
+    UNIFIED_CONFIDENCE_AVAILABLE=False
+
+
+@ dataclass
+class PipelineValidationResult:
+
+
+    """Result of pipeline validation."""
+component_name: str
+validation_status: str  # "PASS", "WARN", "FAIL"
+confidence_score: float
+performance_metrics: Dict[str, Any]
+recommendations: List[str]
+execution_time_ms: float
+error_count: int=0
+warnings: List[str]=field(default_factory=list)
+
+
+@ dataclass
+class ComprehensiveValidationReport:
+
+
+    """Comprehensive validation report for the entire pipeline."""
+timestamp: datetime
+overall_status: str
+total_components: int
+    passed_components: int
+failed_components: int
+warning_components: int
+average_confidence: float
+total_execution_time: float
+component_results: Dict[str, PipelineValidationResult]
+import os
+import sys
+import json
+import hashlib
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import time
+import logging
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,42 +120,49 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
 """
@@ -66,123 +182,14 @@ Validates:
 This is a production-ready validation step for Schwabot UROS v1.0.
 """
 
-import asyncio
-import logging
-import time
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
-import hashlib
-import json
-import sys
-import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 # Import only core components that we know work
 try:
-from .type_defs import (
-        BitLevel, MatrixPhase, MatrixController,
-IdentityState, IdentityTrace, GhostLogicState, AIConsensus
-
-TYPE_DEFS_AVAILABLE = True
-except ImportError as e:
-logger.warning(f"type_defs import failed: {e}")
-    TYPE_DEFS_AVAILABLE = False
-    # Create fallback definitions
-from enum import Enum
-class BitLevel(Enum):
-
-
-        FOUR_BIT = 4
-EIGHT_BIT = 8
-SIXTEEN_BIT = 16
-FORTY_TWO_BIT = 42
-
-class MatrixPhase(Enum):
-
-
-        INITIALIZATION = "INIT"
-ACCUMULATION = "ACCUM"
-RESONANCE = "RESON"
-DISPERSION = "DISP"
-CONVERGENCE = "CONV"
-FORTY_TWO_PHASE = "42P"
-
-@dataclass
-class MatrixController:
-
-
-        bit_level: BitLevel
-phase: MatrixPhase
-hash_signature: str
-timestamp: datetime = datetime.now()
-        confidence_score: float = 0.0
-fallback_triggered: bool = False
-state_vector: np.ndarray = np.zeros(10)
-
-def update_state(self, new_state: np.ndarray) -> None:
-
-
-    pass
-    pass
-            if new_state.size == self.state_vector.size:
-self.state_vector = new_state
-
-try:
-from .fault_bus import FaultBus, FaultBusEvent, FaultType
-FAULT_BUS_AVAILABLE = True
-except ImportError as e:
-logger.warning(f"fault_bus import failed: {e}")
-    FAULT_BUS_AVAILABLE = False
-
-try:
-from .hash_confidence_evaluator import HashConfidenceEvaluator
-HASH_EVALUATOR_AVAILABLE = True
-except ImportError as e:
-logger.warning(f"hash_confidence_evaluator import failed: {e}")
-    HASH_EVALUATOR_AVAILABLE = False
-
-try:
-from .unified_confidence_matrix import UnifiedConfidenceMatrix
-UNIFIED_CONFIDENCE_AVAILABLE = True
-except ImportError as e:
-logger.warning(f"unified_confidence_matrix import failed: {e}")
-    UNIFIED_CONFIDENCE_AVAILABLE = False
-
-
-@dataclass
-class PipelineValidationResult:
-
-
-    """Result of pipeline validation."""
-component_name: str
-validation_status: str  # "PASS", "WARN", "FAIL"
-confidence_score: float
-performance_metrics: Dict[str, Any]
-recommendations: List[str]
-execution_time_ms: float
-error_count: int = 0
-warnings: List[str] = field(default_factory=list)
-
-
-@dataclass
-class ComprehensiveValidationReport:
-
-
-    """Comprehensive validation report for the entire pipeline."""
-timestamp: datetime
-overall_status: str
-total_components: int
-    passed_components: int
-failed_components: int
-warning_components: int
-average_confidence: float
-total_execution_time: float
-component_results: Dict[str, PipelineValidationResult]
 critical_issues: List[str]
 optimization_recommendations: List[str]
 production_readiness_score: float
@@ -203,9 +210,9 @@ def __init__(self):
     pass
     pass
         """Initialize the simplified mathematical pipeline validator."""
-self.validation_results: Dict[str, PipelineValidationResult] = {}
-self.critical_issues: List[str] = []
-self.optimization_recommendations: List[str] = []
+self.validation_results: Dict[str, PipelineValidationResult]={}
+self.critical_issues: List[str]=[]
+self.optimization_recommendations: List[str]=[]
 
         # Initialize core components for validation
 self._initialize_validation_components()
@@ -220,7 +227,7 @@ def _initialize_validation_components(self):
         """Initialize all components needed for validation."""
         try:
             # Core components that we know work
-self.components_available = {
+self.components_available={
 'type_defs': TYPE_DEFS_AVAILABLE,
 'fault_bus': FAULT_BUS_AVAILABLE,
 'hash_evaluator': HASH_EVALUATOR_AVAILABLE,
@@ -229,13 +236,13 @@ self.components_available = {
 
             # Initialize working components
             if FAULT_BUS_AVAILABLE:
-self.fault_bus = FaultBus()
+self.fault_bus=FaultBus()
 
             if HASH_EVALUATOR_AVAILABLE:
-self.hash_evaluator = HashConfidenceEvaluator()
+self.hash_evaluator=HashConfidenceEvaluator()
 
             if UNIFIED_CONFIDENCE_AVAILABLE:
-self.unified_confidence = UnifiedConfidenceMatrix()
+self.unified_confidence=UnifiedConfidenceMatrix()
 
 logger.info("Validation components initialized successfully")
 
@@ -251,10 +258,10 @@ Returns:
 Comprehensive validation report
 """
 logger.info("Starting simplified mathematical pipeline validation")
-        start_time = time.time()
+        start_time=time.time()
 
         # Define validation components and their validation functions
-validation_components = {
+validation_components={
 "type_definitions": self._validate_type_definitions,
 "matrix_controllers": self._validate_matrix_controllers,
 "fault_bus_integration": self._validate_fault_bus_integration,
@@ -268,8 +275,8 @@ validation_components = {
         for component_name, validation_func in validation_components.items():
             try:
 logger.info(f"Validating {component_name}...")
-                result = await validation_func()
-                self.validation_results[component_name] = result
+                result=await validation_func()
+                self.validation_results[component_name]=result
 
                 if result.validation_status == "FAIL":
 self.critical_issues.append(f"{component_name}: {result.recommendations}")
@@ -278,7 +285,7 @@ self.optimization_recommendations.extend(result.recommendations)
 
             except Exception as e:
 logger.error(f"Validation failed for {component_name}: {e}")
-                self.validation_results[component_name] = PipelineValidationResult(]
+                self.validation_results[component_name]=PipelineValidationResult(]
                     component_name=component_name,
 validation_status="FAIL",
 confidence_score=0.0,
@@ -290,18 +297,18 @@ error_count=1
 self.critical_issues.append(f"{component_name} validation error: {e}")
 
         # Generate comprehensive report
-total_execution_time = (time.time() - start_time) * 1000
-        report = self._generate_comprehensive_report(total_execution_time)
+total_execution_time=(time.time() - start_time) * 1000
+        report=self._generate_comprehensive_report(total_execution_time)
 
 logger.info(f"Simplified validation completed in {total_execution_time:.2f}ms")
         return report
 
 async def _validate_type_definitions(self) -> PipelineValidationResult:
         """Validate type definitions integrity."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             if not TYPE_DEFS_AVAILABLE:
@@ -318,7 +325,7 @@ execution_time_ms=(time.time() - start_time) * 1000,
 
 
             # Test BitLevel enum
-bit_levels = [BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT,
+bit_levels=[BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT,
 BitLevel.SIXTEEN_BIT, BitLevel.FORTY_TWO_BIT]
 
             for bit_level in bit_levels:
@@ -327,7 +334,7 @@ BitLevel.SIXTEEN_BIT, BitLevel.FORTY_TWO_BIT]
 recommendations.append(f"Invalid bit level value: {bit_level}")
 
             # Test MatrixPhase enum
-phases = [MatrixPhase.INITIALIZATION, MatrixPhase.ACCUMULATION,
+phases=[MatrixPhase.INITIALIZATION, MatrixPhase.ACCUMULATION,
 MatrixPhase.RESONANCE, MatrixPhase.DISPERSION,
 MatrixPhase.CONVERGENCE, MatrixPhase.FORTY_TWO_PHASE]
 
@@ -337,7 +344,7 @@ MatrixPhase.CONVERGENCE, MatrixPhase.FORTY_TWO_PHASE]
 recommendations.append(f"Invalid phase value: {phase}")
 
             # Test MatrixController creation
-controller = MatrixController(
+controller=MatrixController(
                 bit_level=BitLevel.FOUR_BIT,
 phase=MatrixPhase.INITIALIZATION,
 hash_signature="test_hash"
@@ -347,16 +354,16 @@ hash_signature="test_hash"
                 error_count += 1
 recommendations.append("MatrixController state_vector not properly initialized")
 
-confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.2))
-            validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
+confidence_score=unified_math.max(0.0, 1.0 - (error_count * 0.2))
+            validation_status="PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Type definitions validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="type_definitions",
@@ -375,10 +382,10 @@ warnings=warnings
 
 async def _validate_matrix_controllers(self) -> PipelineValidationResult:
         """Validate matrix controller integrity across all bit levels."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             if not TYPE_DEFS_AVAILABLE:
@@ -395,19 +402,19 @@ execution_time_ms=(time.time() - start_time) * 1000,
 
 
             # Test all bit levels
-bit_levels = [BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT,
+bit_levels=[BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT,
 BitLevel.SIXTEEN_BIT, BitLevel.FORTY_TWO_BIT]
 
             for bit_level in bit_levels:
                 # Test controller creation
-controller = MatrixController(
+controller=MatrixController(
                     bit_level=bit_level,
 phase=MatrixPhase.INITIALIZATION,
 hash_signature=hashlib.sha256(f"test_{bit_level.value}".encode()).hexdigest()[:16]
 
 
                 # Test state vector updates
-test_vector = np.random.random(10)  # Use 10 for all controllers
+test_vector=np.random.random(10)  # Use 10 for all controllers
                 controller.update_state(test_vector)
 
                 # Validate state vector integrity
@@ -417,21 +424,21 @@ recommendations.append(f"State vector integrity failed for {bit_level.value}-bit
 
                 # Test phase transitions
                 for phase in MatrixPhase:
-controller.phase = phase
+controller.phase=phase
                     if controller.phase != phase:
 error_count += 1
 recommendations.append(f"Phase transition failed for {bit_level.value}-bit")
 
-confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.2))
-            validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
+confidence_score=unified_math.max(0.0, 1.0 - (error_count * 0.2))
+            validation_status="PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Matrix controller validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="matrix_controllers",
@@ -450,10 +457,10 @@ warnings=warnings
 
 async def _validate_fault_bus_integration(self) -> PipelineValidationResult:
         """Validate fault bus integration."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             if not FAULT_BUS_AVAILABLE:
@@ -472,7 +479,7 @@ warnings=warnings
             # Test fault bus basic functionality
             if hasattr(self, 'fault_bus'):
                 # Test basic operations
-test_event = FaultBusEvent(
+test_event=FaultBusEvent(
                     tick=1,
 module="test_module",
 type=FaultType.THERMAL_HIGH,
@@ -490,26 +497,26 @@ self.fault_bus.update_profit_context(100.0, 1)
 self.fault_bus.update_market_signals(50000.0, 1000.0, 0.02, 0.5, 0.3)
 
                 # Test path statistics
-path_stats = self.fault_bus.get_path_statistics()
+path_stats=self.fault_bus.get_path_statistics()
 
                 if not isinstance(path_stats, dict):
                     warnings.append("Path statistics returned invalid type")
 
-confidence_score = 0.9
-validation_status = "PASS"
+confidence_score=0.9
+validation_status="PASS"
             else:
 error_count += 1
 recommendations.append("Fault bus not properly initialized")
-                confidence_score = 0.0
-validation_status = "FAIL"
+                confidence_score=0.0
+validation_status="FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Fault bus integration validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="fault_bus_integration",
@@ -528,10 +535,10 @@ warnings=warnings
 
 async def _validate_hash_confidence_system(self) -> PipelineValidationResult:
         """Validate hash confidence system."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             if not HASH_EVALUATOR_AVAILABLE:
@@ -550,7 +557,7 @@ warnings=warnings
             # Test hash confidence evaluator
             if hasattr(self, 'hash_evaluator'):
                 # Test tick event processing
-test_tick_data = {
+test_tick_data={
 'timestamp': time.time(),
                     'price': 50000.0,
 'volume': 1000.0,
@@ -560,33 +567,33 @@ test_tick_data = {
 }
 }
 
-trigger = self.hash_evaluator.process_tick_event(test_tick_data)
+trigger=self.hash_evaluator.process_tick_event(test_tick_data)
 
                 if not trigger:
 error_count += 1
 recommendations.append("Hash confidence evaluator failed to process tick event")
 
                 # Test analytics
-analytics = self.hash_evaluator.get_hash_resonance_analytics()
+analytics=self.hash_evaluator.get_hash_resonance_analytics()
 
                 if not isinstance(analytics, dict):
                     warnings.append("Hash resonance analytics returned invalid type")
 
-confidence_score = 0.9
-validation_status = "PASS"
+confidence_score=0.9
+validation_status="PASS"
             else:
 error_count += 1
 recommendations.append("Hash confidence evaluator not properly initialized")
-                confidence_score = 0.0
-validation_status = "FAIL"
+                confidence_score=0.0
+validation_status="FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Hash confidence system validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="hash_confidence_system",
@@ -605,10 +612,10 @@ warnings=warnings
 
 async def _validate_unified_confidence_matrix(self) -> PipelineValidationResult:
         """Validate unified confidence matrix."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             if not UNIFIED_CONFIDENCE_AVAILABLE:
@@ -627,14 +634,14 @@ warnings=warnings
             # Test unified confidence matrix
             if hasattr(self, 'unified_confidence'):
                 # Test confidence calculation
-test_backlog = {
+test_backlog={
 'total_trades': 100,
 'winning_trades': 60,
 'avg_profit': 500.0,
 'recent_performance': 0.7
 }
 
-result = self.unified_confidence.calculate_unified_confidence(
+result=self.unified_confidence.calculate_unified_confidence(
                     backlog_state=test_backlog,
 ferris_wheel_position=4
 
@@ -644,26 +651,26 @@ error_count += 1
 recommendations.append("Unified confidence calculation failed")
 
                 # Test performance metrics
-metrics = self.unified_confidence.get_performance_metrics()
+metrics=self.unified_confidence.get_performance_metrics()
 
                 if not isinstance(metrics, dict):
                     warnings.append("Performance metrics returned invalid type")
 
-confidence_score = 0.9
-validation_status = "PASS"
+confidence_score=0.9
+validation_status="PASS"
             else:
 error_count += 1
 recommendations.append("Unified confidence matrix not properly initialized")
-                confidence_score = 0.0
-validation_status = "FAIL"
+                confidence_score=0.0
+validation_status="FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Unified confidence matrix validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="unified_confidence_matrix",
@@ -682,14 +689,14 @@ warnings=warnings
 
 async def _validate_mathematical_coherence(self) -> PipelineValidationResult:
         """Validate mathematical coherence across all components."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             # Test basic mathematical operations
-test_data = np.random.random(10)
+test_data=np.random.random(10)
 
             # Test numpy operations
             if not np.allclose(np.sum(test_data), np.sum(test_data)):
@@ -702,27 +709,27 @@ recommendations.append("Basic numpy operations failed")
 recommendations.append("Mathematical consistency failed")
 
             # Test hash operations
-test_hash = hashlib.sha256(test_data.tobytes()).hexdigest()
+test_hash=hashlib.sha256(test_data.tobytes()).hexdigest()
             if not isinstance(test_hash, str) or len(test_hash) != 64:
                 error_count += 1
 recommendations.append("Hash operations failed")
 
             # Test time operations
-current_time = time.time()
+current_time=time.time()
             if not isinstance(current_time, float) or current_time <= 0:
                 error_count += 1
 recommendations.append("Time operations failed")
 
-confidence_score = unified_math.max(0.0, 1.0 - (error_count * 0.25))
-            validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 1 else "FAIL"
+confidence_score=unified_math.max(0.0, 1.0 - (error_count * 0.25))
+            validation_status="PASS" if error_count == 0 else "WARN" if error_count <= 1 else "FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Mathematical coherence validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="mathematical_coherence",
@@ -741,26 +748,26 @@ warnings=warnings
 
 async def _validate_production_readiness(self) -> PipelineValidationResult:
         """Validate overall production readiness."""
-start_time = time.time()
-        recommendations = []
-warnings = []
-error_count = 0
+start_time=time.time()
+        recommendations=[]
+warnings=[]
+error_count=0
 
         try:
             # Check component availability
-available_components = sum(self.components_available.values())
-            total_components = len(self.components_available)
+available_components=sum(self.components_available.values())
+            total_components=len(self.components_available)
 
             if available_components < total_components:
 warnings.append(f"Only {available_components}/{total_components} core components available")
 
             # Check if critical components are working
-critical_components = ["type_definitions", "matrix_controllers"]
-failed_critical = 0
+critical_components=["type_definitions", "matrix_controllers"]
+failed_critical=0
 
             for component in critical_components:
                 if component in self.validation_results:
-result = self.validation_results[component]
+result=self.validation_results[component]
                     if result.validation_status == "FAIL":
 failed_critical += 1
 
@@ -769,10 +776,10 @@ error_count += failed_critical
 recommendations.append(f"{failed_critical} critical components failed validation")
 
             # Check overall confidence
-total_confidence = sum(
+total_confidence=sum(
                 result.confidence_score for result in self.validation_results.values()
 
-avg_confidence = total_confidence / len(self.validation_results) if self.validation_results else 0
+avg_confidence=total_confidence / len(self.validation_results) if self.validation_results else 0
 
             if avg_confidence < 0.7:
 warnings.append(f"Low average confidence: {avg_confidence:.3f}")
@@ -782,16 +789,16 @@ warnings.append(f"Low average confidence: {avg_confidence:.3f}")
 error_count += len(self.critical_issues)
                 recommendations.extend(self.critical_issues)
 
-confidence_score = unified_math.max(0.0, avg_confidence - (error_count * 0.1))
-            validation_status = "PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
+confidence_score=unified_math.max(0.0, avg_confidence - (error_count * 0.1))
+            validation_status="PASS" if error_count == 0 else "WARN" if error_count <= 2 else "FAIL"
 
         except Exception as e:
 error_count += 1
 recommendations.append(f"Production readiness validation error: {e}")
-            confidence_score = 0.0
-validation_status = "FAIL"
+            confidence_score=0.0
+validation_status="FAIL"
 
-execution_time = (time.time() - start_time) * 1000
+execution_time=(time.time() - start_time) * 1000
 
         return PipelineValidationResult(
             component_name="production_readiness",
@@ -816,24 +823,24 @@ def _generate_comprehensive_report(self, total_execution_time: float) -> Compreh
     pass
     pass
         """Generate comprehensive validation report."""
-total_components = len(self.validation_results)
-        passed_components = sum(1 for r in self.validation_results.values() if r.validation_status == "PASS")
-        failed_components = sum(1 for r in self.validation_results.values() if r.validation_status == "FAIL")
-        warning_components = sum(1 for r in self.validation_results.values() if r.validation_status == "WARN")
+total_components=len(self.validation_results)
+        passed_components=sum(1 for r in self.validation_results.values() if r.validation_status == "PASS")
+        failed_components=sum(1 for r in self.validation_results.values() if r.validation_status == "FAIL")
+        warning_components=sum(1 for r in self.validation_results.values() if r.validation_status == "WARN")
 
-total_confidence = sum(r.confidence_score for r in self.validation_results.values())
-        average_confidence = total_confidence / total_components if total_components > 0 else 0
+total_confidence=sum(r.confidence_score for r in self.validation_results.values())
+        average_confidence=total_confidence / total_components if total_components > 0 else 0
 
         # Determine overall status
         if failed_components == 0 and warning_components == 0:
-overall_status = "PASS"
+overall_status="PASS"
         elif failed_components == 0:
-overall_status = "WARN"
+overall_status="WARN"
         else:
-overall_status = "FAIL"
+overall_status="FAIL"
 
         # Calculate production readiness score
-production_readiness_score = (
+production_readiness_score=(
             (passed_components / total_components) * 0.6 +
             (average_confidence) * 0.3 +
             (1.0 - len(self.critical_issues) / 10.0) * 0.1
@@ -858,7 +865,7 @@ production_readiness_score=production_readiness_score
 # Convenience function for running validation
 async def run_simplified_mathematical_pipeline_validation() -> ComprehensiveValidationReport:
     """Run simplified mathematical pipeline validation."""
-validator = SimplifiedMathematicalPipelineValidator()
+validator=SimplifiedMathematicalPipelineValidator()
     return await validator.run_comprehensive_validation()
 
 
@@ -867,7 +874,7 @@ if __name__ == "__main__":
     pass
     # Run validation when executed directly
 async def main():
-        report = await run_simplified_mathematical_pipeline_validation()
+        report=await run_simplified_mathematical_pipeline_validation()
 
 safe_print(f"\n{'='*60}")
         safe_print("SIMPLIFIED MATHEMATICAL PIPELINE VALIDATION REPORT")

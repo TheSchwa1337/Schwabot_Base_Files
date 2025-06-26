@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+import time
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional, Dict, Any
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +15,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Braid Pattern Engine - Mathematical Braid Pattern Recognition for Schwabot.
 
@@ -61,20 +73,18 @@ Mathematical Foundation:
 - Pattern evolution: E = Σᵢ (Pᵢ₊₁ - Pᵢ) / (n-1)
 """
 
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import List, Tuple, Optional, Dict, Any
-from dataclasses import dataclass, field
 # from core.unified_math_system import unified_math  # F811: duplicate import
-import time
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class BraidPattern:
 
-
     """Braid pattern representation."""
+
+
 pattern_id: str
 generators: List[int]
 crossings: List[int]
@@ -83,11 +93,13 @@ pattern_type: str
 signal_strength: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PatternMatch:
 
-
     """Pattern matching result."""
+
+
 pattern: BraidPattern
 similarity: float
 position: int
@@ -95,24 +107,26 @@ confidence: float
 trading_signal: str
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class BraidPatternEngine:
 
+class BraidPatternEngine:
 
     """Mathematical braid pattern recognition and analysis."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.known_patterns: Dict[str, BraidPattern] = {}
+
+
 self.pattern_history: List[PatternMatch] = []
 self.max_pattern_length = 64
 self.similarity_threshold = 0.7
 logger.info("BraidPatternEngine initialized")
 
-def register_pattern(self, pattern_id: str, generators: List[int],]
 
+def register_pattern(self, pattern_id: str, generators: List[int],]
 
                         crossings: List[int], pattern_type: str = "custom") -> BraidPattern:
 """
@@ -140,13 +154,15 @@ confidence = self._calculate_pattern_confidence(generators, crossings)
             signal_strength = self._calculate_signal_strength(generators, crossings)
 
 pattern = BraidPattern(
-                pattern_id=pattern_id,
-generators=generators,
-crossings=crossings,
-confidence=confidence,
-pattern_type=pattern_type,
-signal_strength=signal_strength,
-metadata={'registered_time': time.time()}
+                pattern_id = pattern_id,
+
+
+generators = generators,
+crossings = crossings,
+confidence = confidence,
+pattern_type = pattern_type,
+signal_strength = signal_strength,
+metadata = {'registered_time': time.time()}
 
 
 self.known_patterns[pattern_id] = pattern
@@ -159,7 +175,6 @@ logger.error(f"Error registering pattern: {e}")
             return self._create_empty_pattern()
 
 def _calculate_pattern_confidence(self, generators: List[int],]
-
 
                                      crossings: List[int]) -> float:
 """

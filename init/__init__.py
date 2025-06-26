@@ -29,6 +29,7 @@ from collections import defaultdict, deque
 
 logger = logging.getLogger(__name__)
 
+
 class InitStatus(Enum):
     PENDING = "pending"
     INITIALIZING = "initializing"
@@ -38,6 +39,7 @@ class InitStatus(Enum):
     ERROR = "error"
     SHUTDOWN = "shutdown"
 
+
 class ComponentType(Enum):
     CORE = "core"
     API = "api"
@@ -46,6 +48,7 @@ class ComponentType(Enum):
     SECURITY = "security"
     MONITORING = "monitoring"
     TRADING = "trading"
+
 
 @dataclass
 class ComponentConfig:
@@ -57,6 +60,7 @@ class ComponentConfig:
     startup_timeout: int
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class InitResult:
     component_id: str
@@ -65,6 +69,7 @@ class InitResult:
     end_time: Optional[datetime]
     error_message: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class SystemInitializer:
     def __init__(self, config_path: str = "./config/system_init_config.json"):
@@ -85,7 +90,7 @@ class SystemInitializer:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 # Load component configurations
                 for comp_config in config.get("components", []):
                     component_id = comp_config["component_id"]
@@ -98,11 +103,11 @@ class SystemInitializer:
                         startup_timeout=comp_config.get("startup_timeout", 30),
                         metadata=comp_config.get("metadata", {})
                     )
-                
+
                 logger.info(f"Loaded configuration for {len(self.component_configs)} components")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -143,7 +148,7 @@ class SystemInitializer:
                 "startup_timeout": 45
             }
         ]
-        
+
         for comp_config in default_components:
             component_id = comp_config["component_id"]
             self.component_configs[component_id] = ComponentConfig(
@@ -155,7 +160,7 @@ class SystemInitializer:
                 startup_timeout=comp_config.get("startup_timeout", 30),
                 metadata=comp_config.get("metadata", {})
             )
-        
+
         self._save_configuration()
         logger.info("Default system initialization configuration created")
 
@@ -197,30 +202,30 @@ class SystemInitializer:
             visited = set()
             temp_visited = set()
             sequence = []
-            
+
             def visit(component_id: str) -> None:
                 if component_id in temp_visited:
                     raise ValueError(f"Circular dependency detected: {component_id}")
                 if component_id in visited:
                     return
-                
+
                 temp_visited.unified_math.add(component_id)
-                
+
                 for dependency in self.dependency_graph.get(component_id, []):
                     visit(dependency)
-                
+
                 temp_visited.remove(component_id)
                 visited.unified_math.add(component_id)
                 sequence.append(component_id)
-            
+
             # Visit all components
             for component_id in self.component_configs.keys():
                 if component_id not in visited:
                     visit(component_id)
-            
+
             self.startup_sequence = sequence
             logger.info(f"Generated startup sequence: {sequence}")
-            
+
         except Exception as e:
             logger.error(f"Error generating startup sequence: {e}")
             # Fallback to alphabetical order
@@ -231,7 +236,7 @@ class SystemInitializer:
         try:
             self.init_status = InitStatus.INITIALIZING
             logger.info("Starting system initialization")
-            
+
             # Initialize components in dependency order
             for component_id in self.startup_sequence:
                 if not self._initialize_component(component_id):
@@ -241,11 +246,11 @@ class SystemInitializer:
                         return False
                     else:
                         logger.warning(f"Optional component {component_id} failed to initialize")
-            
+
             self.init_status = InitStatus.READY
             logger.info("System initialization completed successfully")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error during system initialization: {e}")
             self.init_status = InitStatus.ERROR
@@ -257,12 +262,12 @@ class SystemInitializer:
             if component_id not in self.component_configs:
                 logger.error(f"Component {component_id} not found in configuration")
                 return False
-            
+
             config = self.component_configs[component_id]
             start_time = datetime.now()
-            
+
             logger.info(f"Initializing component: {component_id}")
-            
+
             # Check dependencies
             for dependency in config.dependencies:
                 if dependency not in self.init_results:
@@ -271,12 +276,12 @@ class SystemInitializer:
                 if not self.init_results[dependency].success:
                     logger.error(f"Component {component_id} depends on {dependency} which failed to initialize")
                     return False
-            
+
             # Initialize component based on type
             success = self._initialize_component_by_type(component_id, config)
-            
+
             end_time = datetime.now()
-            
+
             # Record result
             result = InitResult(
                 component_id=component_id,
@@ -286,16 +291,16 @@ class SystemInitializer:
                 error_message=None if success else f"Component {component_id} initialization failed",
                 metadata={"component_type": config.component_type.value}
             )
-            
+
             self.init_results[component_id] = result
-            
+
             if success:
                 logger.info(f"Component {component_id} initialized successfully")
             else:
                 logger.error(f"Component {component_id} initialization failed")
-            
+
             return success
-            
+
         except Exception as e:
             logger.error(f"Error initializing component {component_id}: {e}")
             return False
@@ -320,7 +325,7 @@ class SystemInitializer:
             else:
                 logger.warning(f"Unknown component type: {config.component_type}")
                 return True  # Assume success for unknown types
-                
+
         except Exception as e:
             logger.error(f"Error in component type initialization: {e}")
             return False
@@ -416,14 +421,14 @@ class SystemInitializer:
         try:
             self.init_status = InitStatus.SHUTDOWN
             logger.info("System shutdown initiated")
-            
+
             # Shutdown components in reverse order
             for component_id in reversed(self.startup_sequence):
                 self._shutdown_component(component_id)
-            
+
             logger.info("System shutdown completed")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error during system shutdown: {e}")
             return False
@@ -443,17 +448,17 @@ class SystemInitializer:
         initialized_components = len(self.init_results)
         successful_initializations = sum(1 for result in self.init_results.values() if result.success)
         failed_initializations = initialized_components - successful_initializations
-        
+
         # Calculate initialization times
         init_times = []
         for result in self.init_results.values():
             if result.end_time:
                 duration = (result.end_time - result.start_time).total_seconds()
                 init_times.append(duration)
-        
+
         avg_init_time = unified_math.unified_math.mean(init_times) if init_times else 0.0
         max_init_time = unified_math.unified_math.max(init_times) if init_times else 0.0
-        
+
         return {
             "init_status": self.init_status.value,
             "total_components": total_components,
@@ -465,22 +470,24 @@ class SystemInitializer:
             "startup_sequence": self.startup_sequence
         }
 
+
 def main() -> None:
     """Main function for testing and demonstration."""
     initializer = SystemInitializer("./test_system_init_config.json")
-    
+
     # Initialize system
     success = initializer.initialize_system()
     safe_print(f"System initialization: {'SUCCESS' if success else 'FAILED'}")
-    
+
     # Get statistics
     stats = initializer.get_init_statistics()
     safe_print(f"Initialization Statistics: {stats}")
-    
+
     # Get component statuses
     component_statuses = initializer.get_all_component_statuses()
     for component_id, status in component_statuses.items():
         safe_print(f"Component {component_id}: {'SUCCESS' if status.success else 'FAILED'}")
+
 
 if __name__ == "__main__":
     main()

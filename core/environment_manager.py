@@ -11,6 +11,105 @@ This module provides comprehensive environment management including:
 """
 
 
+from core.utils.windows_cli_compatibility import (, safe_format_error
+        safe_print, safe_format_error, log_safe
+
+CLI_HANDLER_AVAILABLE=True
+except ImportError:
+    pass
+    pass
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
+
+
+    pass
+    pass
+        return message
+def safe_format_error(error: Exception, context: str="") -> str:
+
+
+    pass
+    pass
+        return f"Error: {str(error)} | Context: {context}"
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
+        getattr(logger, level.lower())(message)
+
+
+class EnvironmentType(Enum):
+
+
+    """Environment types."""
+DEVELOPMENT="development"
+STAGING="staging"
+CANARY="canary"
+PRODUCTION="production"
+TESTNET="testnet"
+SANDBOX="sandbox"
+
+
+class ConfigFormat(Enum):
+
+
+    """Configuration formats."""
+YAML="yaml"
+TOML="toml"
+JSON="json"
+
+
+@ dataclass
+class MathConstant:
+
+
+    """Mathematical constant with hash-based version pinning."""
+name: str
+value: Union[float, Decimal, str]
+description: str
+category: str
+version_hash: str
+precision: int=16
+rounding_mode: str="ROUND_HALF_UP"
+last_updated: datetime=field(default_factory=datetime.now)
+    metadata: Dict[str, Any]=field(default_factory=dict)
+
+
+@ dataclass
+class EnvironmentConfig:
+
+
+    """Environment configuration."""
+environment_type: EnvironmentType
+exchange_testnets: List[str]
+api_endpoints: Dict[str, str]
+database_urls: Dict[str, str]
+feature_flags: Dict[str, bool]
+math_constants: Dict[str, MathConstant]
+version_pinning: Dict[str, str]
+created_at: datetime=field(default_factory=datetime.now)
+    updated_at: datetime=field(default_factory=datetime.now)
+
+
+@ dataclass
+class VersionInfo:
+
+
+    """Version information with SemVer."""
+major: int
+minor: int
+patch: int
+prerelease: Optional[str]=None
+build: Optional[str]=None
+git_commit: Optional[str]=None
+build_date: datetime=field(default_factory=datetime.now)
+    changelog: List[str]=field(default_factory=list)
+
+
+class HashBasedVersionPinning:
+
+
 import asyncio
 import json
 import logging
@@ -47,131 +146,32 @@ from core.ferris_rde_core import get_ferris_rde
 from core.zpe_core import get_zpe_core
 from core.zpe_integration import get_zpe_integration
 from core.zpe_rotational_engine import get_zpe_rotational_engine
-CORE_SYSTEMS_AVAILABLE = True
+CORE_SYSTEMS_AVAILABLE=True
 except ImportError:
     pass
     pass
-CORE_SYSTEMS_AVAILABLE = False
+CORE_SYSTEMS_AVAILABLE=False
 
 # Import centralized CLI handler
 try:
     pass
     pass
-from core.utils.windows_cli_compatibility import (, safe_format_error
-        safe_print, safe_format_error, log_safe
-
-CLI_HANDLER_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
-
-
-    pass
-    pass
-        return message
-def safe_format_error(error: Exception, context: str = "") -> str:
-
-
-    pass
-    pass
-        return f"Error: {str(error)} | Context: {context}"
-def log_safe(logger, level: str, message: str) -> None:
-
-
-    pass
-    pass
-        getattr(logger, level.lower())(message)
-
-
-class EnvironmentType(Enum):
-
-
-    """Environment types."""
-DEVELOPMENT = "development"
-STAGING = "staging"
-CANARY = "canary"
-PRODUCTION = "production"
-TESTNET = "testnet"
-SANDBOX = "sandbox"
-
-
-class ConfigFormat(Enum):
-
-
-    """Configuration formats."""
-YAML = "yaml"
-TOML = "toml"
-JSON = "json"
-
-
-@dataclass
-class MathConstant:
-
-
-    """Mathematical constant with hash-based version pinning."""
-name: str
-value: Union[float, Decimal, str]
-description: str
-category: str
-version_hash: str
-precision: int = 16
-rounding_mode: str = "ROUND_HALF_UP"
-last_updated: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class EnvironmentConfig:
-
-
-    """Environment configuration."""
-environment_type: EnvironmentType
-exchange_testnets: List[str]
-api_endpoints: Dict[str, str]
-database_urls: Dict[str, str]
-feature_flags: Dict[str, bool]
-math_constants: Dict[str, MathConstant]
-version_pinning: Dict[str, str]
-created_at: datetime = field(default_factory=datetime.now)
-    updated_at: datetime = field(default_factory=datetime.now)
-
-
-@dataclass
-class VersionInfo:
-
-
-    """Version information with SemVer."""
-major: int
-minor: int
-patch: int
-prerelease: Optional[str] = None
-build: Optional[str] = None
-git_commit: Optional[str] = None
-build_date: datetime = field(default_factory=datetime.now)
-    changelog: List[str] = field(default_factory=list)
-
-
-class HashBasedVersionPinning:
-
-
     """Hash-based version pinning for reproducibility."""
 
-def __init__(self, config_dir: str = "config"):
+def __init__(self, config_dir: str="config"):
 
 
     pass
     pass
         """Initialize hash-based version pinning."""
-self.config_dir = Path(config_dir)
+self.config_dir=Path(config_dir)
         self.config_dir.mkdir(parents=True, exist_ok=True)
-        self.version_file = self.config_dir / "version_pinning.json"
-self.math_constants_file = self.config_dir / "math_constants.json"
+        self.version_file=self.config_dir / "version_pinning.json"
+self.math_constants_file=self.config_dir / "math_constants.json"
 
         # Load existing versions
-self.version_pins: Dict[str, str] = {}
-self.math_constants: Dict[str, MathConstant] = {}
+self.version_pins: Dict[str, str]={}
+self.math_constants: Dict[str, MathConstant]={}
 
 self._load_version_pins()
         self._load_math_constants()
@@ -189,7 +189,7 @@ def _load_version_pins(self) -> None:
     pass
             if self.version_file.exists():
                 with open(self.version_file, 'r') as f:
-                    self.version_pins = json.load(f)
+                    self.version_pins=json.load(f)
                 safe_print(f"✅ Loaded {len(self.version_pins)} version pins")
         except Exception as e:
 safe_print(f"⚠️ Version pins load failed: {safe_format_error(e, 'version_load')}")
@@ -205,10 +205,10 @@ def _load_math_constants(self) -> None:
     pass
             if self.math_constants_file.exists():
                 with open(self.math_constants_file, 'r') as f:
-                    constants_data = json.load(f)
+                    constants_data=json.load(f)
 
                 for name, data in constants_data.items():
-                    constant = MathConstant(
+                    constant=MathConstant(
                         name=name,
 value=Decimal(str(data['value'])) if isinstance(data['value'], (int, float)) else data['value'],
                         description=data['description'],
@@ -219,7 +219,7 @@ precision=data.get('precision', 16),
                         last_updated=datetime.fromisoformat(data['last_updated']),
                         metadata=data.get('metadata', {})
 
-self.math_constants[name] = constant
+self.math_constants[name]=constant
 
 safe_print(f"✅ Loaded {len(self.math_constants)} math constants")
         except Exception as e:
@@ -248,9 +248,9 @@ def _save_math_constants(self) -> None:
         try:
     pass
     pass
-constants_data = {}
+constants_data={}
             for name, constant in self.math_constants.items():
-                constants_data[name] = {]
+                constants_data[name]={]
 'value': str(constant.value),
                     'description': constant.description,
 'category': constant.category,

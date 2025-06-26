@@ -454,7 +454,7 @@ class MathLibV3:
                 # Find peaks in autocorrelation (potential cycles)
                 half_len = len(autocorr_normalized) // 2
                 cycle_strength = (
-                    unified_math.unified_math.max(autocorr_normalized[half_len + 1 :])
+                    unified_math.unified_math.max(autocorr_normalized[half_len + 1:])
                     if half_len + 1 < len(autocorr_normalized)
                     else 0
                 )

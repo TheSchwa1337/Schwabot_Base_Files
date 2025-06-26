@@ -109,14 +109,15 @@ E999_FIXES = {
     },
 }
 
+
 def fix_indentation_error(lines: List[str], line_number: int) -> List[str]:
     """Fix indentation errors by ensuring proper indentation."""
     if line_number <= 0 or line_number > len(lines):
         return lines
-    
+
     line_idx = line_number - 1
     line = lines[line_idx]
-    
+
     # Check if line should be at root level
     stripped = line.strip()
     if stripped.startswith(('def ', 'class ', 'import ', 'from ')):
@@ -126,17 +127,18 @@ def fix_indentation_error(lines: List[str], line_number: int) -> List[str]:
         # Ensure proper indentation for control structures
         if not line.startswith('    '):
             lines[line_idx] = '    ' + stripped
-    
+
     return lines
+
 
 def fix_missing_indented_block(lines: List[str], line_number: int) -> List[str]:
     """Fix missing indented blocks after try statements."""
     if line_number <= 0 or line_number >= len(lines):
         return lines
-    
+
     line_idx = line_number - 1
     line = lines[line_idx]
-    
+
     if line.strip() == 'try:':
         # Check if next line is not indented
         if line_idx + 1 < len(lines):
@@ -144,40 +146,42 @@ def fix_missing_indented_block(lines: List[str], line_number: int) -> List[str]:
             if not next_line.strip() or (not next_line.startswith('    ') and not next_line.startswith('\t')):
                 # Insert pass statement
                 lines.insert(line_idx + 1, '    pass')
-    
+
     return lines
+
 
 def fix_bracket_mismatch(lines: List[str], line_number: int, original_pattern: str, fixed_pattern: str) -> List[str]:
     """Fix bracket/parenthesis mismatches on specific lines."""
     if line_number <= 0 or line_number > len(lines):
         return lines
-    
+
     line_idx = line_number - 1
     line = lines[line_idx]
-    
+
     # Apply the fix pattern
     if re.search(original_pattern, line):
         fixed_line = re.sub(original_pattern, fixed_pattern, line)
         lines[line_idx] = fixed_line
         print(f"  Fixed line {line_number}: {line.strip()} -> {fixed_line.strip()}")
-    
+
     return lines
+
 
 def fix_file(filepath: str) -> bool:
     """Fix E999 errors in a single file using conservative line-by-line approach."""
     if filepath not in E999_FIXES:
         print(f"  No fixes defined for {filepath}")
         return False
-    
+
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        
+
         original_lines = lines.copy()
         fixes_applied = 0
-        
+
         print(f"Processing {filepath}...")
-        
+
         for line_number, fix_info in E999_FIXES[filepath].items():
             if fix_info is None:
                 # Handle special cases (indentation, missing blocks)
@@ -198,7 +202,7 @@ def fix_file(filepath: str) -> bool:
                 original_pattern, fixed_pattern = fix_info
                 lines = fix_bracket_mismatch(lines, line_number, original_pattern, fixed_pattern)
                 fixes_applied += 1
-        
+
         # Only write if changes were made
         if lines != original_lines:
             with open(filepath, 'w', encoding='utf-8') as f:
@@ -208,29 +212,31 @@ def fix_file(filepath: str) -> bool:
         else:
             print(f"  No changes needed for {filepath}")
             return False
-            
+
     except Exception as e:
         print(f"  Error fixing {filepath}: {e}")
         return False
 
+
 def main():
     """Main function to fix E999 errors line by line."""
     print("Starting conservative line-by-line E999 error fixing...")
-    
+
     fixed_count = 0
     total_files = len(E999_FIXES)
-    
+
     for filepath in E999_FIXES.keys():
         if os.path.exists(filepath):
             if fix_file(filepath):
                 fixed_count += 1
         else:
             print(f"  File not found: {filepath}")
-    
+
     print(f"\nCompleted E999 error fixing:")
     print(f"  Files processed: {total_files}")
     print(f"  Files modified: {fixed_count}")
     print("  Conservative line-by-line fixing complete!")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

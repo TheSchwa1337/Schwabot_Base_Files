@@ -3,14 +3,15 @@
 Final fix for core/__init__.py indentation issues.
 """
 
+
 def fix_core_indentation_final():
     """Fix all remaining indentation issues in core/__init__.py."""
-    
+
     file_path = "core/__init__.py"
-    
+
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    
+
     # Fix specific indentation issues
     fixed_lines = []
     for i, line in enumerate(lines):
@@ -468,14 +469,15 @@ def fix_core_indentation_final():
             print(f"  🔧 Fixed indentation at line {i+1}")
         else:
             fixed_line = line
-        
+
         fixed_lines.append(fixed_line)
-    
+
     # Write the fixed content
     with open(file_path, 'w', encoding='utf-8') as f:
         f.writelines(fixed_lines)
-    
+
     print(f"✅ Fixed final indentation issues in {file_path}")
 
+
 if __name__ == "__main__":
-    fix_core_indentation_final() 
+    fix_core_indentation_final()

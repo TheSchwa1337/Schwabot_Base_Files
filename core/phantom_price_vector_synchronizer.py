@@ -26,7 +26,7 @@ __all__: list[str] = []
 ]
 
 
-@dataclass(slots=True)
+@ dataclass(slots=True)
 class PhantomPriceSynchronizer:
 
 
@@ -37,7 +37,6 @@ beta: float = 0.5
 dt: float = 1.0
 
 def compute_zp_integral(
-
 
         self,
 velocity_series: Sequence[float],
@@ -74,7 +73,6 @@ dx = t_max / (len(integrand) - 1)
         return integral
 
 def synchronize_vectors(
-
 
         self,
 price_vectors: Sequence[Sequence[float]],

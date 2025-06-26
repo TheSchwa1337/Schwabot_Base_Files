@@ -49,10 +49,13 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
 
@@ -73,7 +76,7 @@ class DataCategory(Enum):
     MARKET_DATA = "market_data"           # Market data
     RISK_METRICS = "risk_metrics"         # Risk calculations
     PORTFOLIO_STATE = "portfolio_state"   # Portfolio state
-    ANALYSIS_RESULTS = "analysis_results" # Analysis results
+    ANALYSIS_RESULTS = "analysis_results"  # Analysis results
     SYSTEM_LOGS = "system_logs"           # System logs
     AUDIT_TRAIL = "audit_trail"           # Audit trail
     USER_SETTINGS = "user_settings"       # User interface settings
@@ -126,24 +129,24 @@ class MemoryUsage:
 
 class ReflectiveAllocator:
     """Reflective allocator for intelligent memory management."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize reflective allocator."""
         self.config = config or {}
         self.btc_hashing_interval = 3.75 * 60  # 3.75 minutes in seconds
         self.last_btc_allocation = time.time()
-        
+
         # Performance tracking
         self.total_allocations = 0
         self.successful_allocations = 0
         self.failed_allocations = 0
-        
+
         # Memory patterns
         self.allocation_patterns = defaultdict(list)
         self.access_patterns = defaultdict(list)
-        
+
         safe_safe_print("🔄 Reflective Allocator initialized")
-    
+
     def should_allocate_btc_data(self) -> bool:
         """Check if it's time to allocate BTC hashing data."""
         current_time = time.time()
@@ -151,62 +154,62 @@ class ReflectiveAllocator:
             self.last_btc_allocation = current_time
             return True
         return False
-    
-    def get_optimal_allocation_type(self, category: DataCategory, 
-                                  priority: MemoryPriority, 
-                                  data_size: int) -> MemoryAllocationType:
+
+    def get_optimal_allocation_type(self, category: DataCategory,
+                                    priority: MemoryPriority,
+                                    data_size: int) -> MemoryAllocationType:
         """Get optimal allocation type based on data characteristics."""
         try:
             # Critical data goes to long-term
             if priority == MemoryPriority.CRITICAL:
                 return MemoryAllocationType.LONG_TERM
-            
+
             # BTC hashing data goes to short-term
             if category == DataCategory.BTC_HASHING:
                 return MemoryAllocationType.SHORT_TERM
-            
+
             # Trading signals go to mid-term
             if category == DataCategory.TRADING_SIGNALS:
                 return MemoryAllocationType.MID_TERM
-            
+
             # Large data goes to long-term
             if data_size > 1024 * 1024:  # 1MB
                 return MemoryAllocationType.LONG_TERM
-            
+
             # Medium priority goes to mid-term
             if priority == MemoryPriority.MEDIUM:
                 return MemoryAllocationType.MID_TERM
-            
+
             # Low priority goes to short-term
             if priority == MemoryPriority.LOW:
                 return MemoryAllocationType.SHORT_TERM
-            
+
             # Default to mid-term
             return MemoryAllocationType.MID_TERM
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Allocation type determination failed: {safe_format_error(e, 'allocation_type')}")
             return MemoryAllocationType.MID_TERM
-    
+
     def calculate_compression_ratio(self, data: Dict[str, Any]) -> float:
         """Calculate potential compression ratio."""
         try:
             # Simple compression estimation
             data_json = json.dumps(data, separators=(',', ':'))
             original_size = len(data_json.encode())
-            
+
             # Estimate compressed size (rough approximation)
             compressed_size = original_size * 0.7  # Assume 30% compression
-            
+
             return compressed_size / original_size
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Compression calculation failed: {safe_format_error(e, 'compression')}")
             return 1.0
-    
-    def record_allocation_pattern(self, category: DataCategory, 
-                                allocation_type: MemoryAllocationType, 
-                                success: bool) -> None:
+
+    def record_allocation_pattern(self, category: DataCategory,
+                                  allocation_type: MemoryAllocationType,
+                                  success: bool) -> None:
         """Record allocation pattern for learning."""
         try:
             pattern = {
@@ -215,42 +218,42 @@ class ReflectiveAllocator:
                 'allocation_type': allocation_type.value,
                 'success': success
             }
-            
+
             self.allocation_patterns[category.value].append(pattern)
-            
+
             # Keep only recent patterns
             if len(self.allocation_patterns[category.value]) > 1000:
                 self.allocation_patterns[category.value] = \
                     self.allocation_patterns[category.value][-1000:]
-                    
+
         except Exception as e:
             safe_safe_print(f"⚠️ Pattern recording failed: {safe_format_error(e, 'pattern_record')}")
-    
+
     def get_allocation_recommendations(self) -> Dict[str, Any]:
         """Get allocation recommendations based on patterns."""
         try:
             recommendations = {}
-            
+
             for category, patterns in self.allocation_patterns.items():
                 if not patterns:
                     continue
-                
+
                 # Analyze success rates by allocation type
                 success_rates = defaultdict(list)
                 for pattern in patterns[-100:]:  # Last 100 patterns
                     allocation_type = pattern['allocation_type']
                     success_rates[allocation_type].append(pattern['success'])
-                
+
                 # Calculate success rates
                 category_recommendations = {}
                 for allocation_type, successes in success_rates.items():
                     success_rate = sum(successes) / len(successes)
                     category_recommendations[allocation_type] = success_rate
-                
+
                 recommendations[category] = category_recommendations
-            
+
             return recommendations
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Recommendation generation failed: {safe_format_error(e, 'recommendations')}")
             return {}
@@ -258,34 +261,34 @@ class ReflectiveAllocator:
 
 class MemoryAllocationManager:
     """Comprehensive memory allocation management system."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize memory allocation manager."""
         self.config = config or {}
         self.reflective_allocator = ReflectiveAllocator(config)
         self.memory_keys: Dict[str, MemoryKey] = {}
         self.allocation_configs: Dict[DataCategory, MemoryAllocationConfig] = {}
-        
+
         # Memory usage tracking
         self.memory_usage = {
             MemoryAllocationType.SHORT_TERM: {'entries': 0, 'size_bytes': 0},
             MemoryAllocationType.MID_TERM: {'entries': 0, 'size_bytes': 0},
             MemoryAllocationType.LONG_TERM: {'entries': 0, 'size_bytes': 0}
         }
-        
+
         # User interface settings
         self.ui_settings = self._load_ui_settings()
-        
+
         # Initialize default configurations
         self._initialize_default_configs()
-        
+
         # Background cleanup thread
         self.cleanup_thread = None
         self.running = False
         self._start_background_cleanup()
-        
+
         safe_safe_print("🧠 Memory Allocation Manager initialized")
-    
+
     def _load_ui_settings(self) -> Dict[str, Any]:
         """Load user interface settings."""
         try:
@@ -312,18 +315,18 @@ class MemoryAllocationManager:
                         'long_term_days': 30
                     }
                 }
-                
+
                 # Save default settings
                 settings_file.parent.mkdir(parents=True, exist_ok=True)
                 with open(settings_file, 'w') as f:
                     json.dump(default_settings, f, indent=2)
-                
+
                 return default_settings
-                
+
         except Exception as e:
             safe_safe_print(f"⚠️ UI settings load failed: {safe_format_error(e, 'ui_settings')}")
             return {}
-    
+
     def _initialize_default_configs(self) -> None:
         """Initialize default allocation configurations."""
         default_configs = {
@@ -436,12 +439,12 @@ class MemoryAllocationManager:
                 user_configurable=True
             )
         }
-        
+
         for category, config in default_configs.items():
             self.allocation_configs[category] = config
-    
-    def allocate_memory(self, data: Dict[str, Any], category: DataCategory, 
-                       priority: Optional[MemoryPriority] = None) -> Optional[str]:
+
+    def allocate_memory(self, data: Dict[str, Any], category: DataCategory,
+                        priority: Optional[MemoryPriority] = None) -> Optional[str]:
         """Allocate memory for data."""
         try:
             # Get configuration
@@ -449,29 +452,29 @@ class MemoryAllocationManager:
             if not config:
                 safe_safe_print(f"❌ No configuration for category: {category.value}")
                 return None
-            
+
             # Use provided priority or default from config
             if priority is None:
                 priority = config.priority
-            
+
             # Calculate data size
             data_json = json.dumps(data, separators=(',', ':'))
             data_size = len(data_json.encode())
-            
+
             # Get optimal allocation type
             allocation_type = self.reflective_allocator.get_optimal_allocation_type(
                 category, priority, data_size
             )
-            
+
             # Check memory limits
             if not self._check_memory_limits(allocation_type, data_size):
                 safe_safe_print(f"⚠️ Memory limit reached for {allocation_type.value}")
                 return None
-            
+
             # Generate memory key
             key_id = str(uuid.uuid4())
             compression_ratio = self.reflective_allocator.calculate_compression_ratio(data)
-            
+
             memory_key = MemoryKey(
                 key_id=key_id,
                 category=category,
@@ -484,7 +487,7 @@ class MemoryAllocationManager:
                 encryption_enabled=config.encryption_enabled,
                 metadata={'config_priority': config.priority.value}
             )
-            
+
             # Store in persistent state
             if CORE_SYSTEMS_AVAILABLE:
                 persistent_manager = get_persistent_state_manager()
@@ -493,19 +496,19 @@ class MemoryAllocationManager:
                     data_type=category.value,
                     allocation_type=allocation_type
                 )
-                
+
                 if entry_id:
                     # Store memory key
                     self.memory_keys[key_id] = memory_key
-                    
+
                     # Update memory usage
                     self._update_memory_usage(allocation_type, data_size, 1)
-                    
+
                     # Record pattern
                     self.reflective_allocator.record_allocation_pattern(
                         category, allocation_type, True
                     )
-                    
+
                     # Log operation
                     log_operation(
                         operation="memory_allocation",
@@ -517,7 +520,7 @@ class MemoryAllocationManager:
                         allocation_type=allocation_type.value,
                         data_size=data_size
                     )
-                    
+
                     safe_safe_print(f"✅ Memory allocated: {key_id[:8]}... ({category.value})")
                     return key_id
                 else:
@@ -525,27 +528,27 @@ class MemoryAllocationManager:
                     self.reflective_allocator.record_allocation_pattern(
                         category, allocation_type, False
                     )
-                    
+
                     safe_safe_print(f"❌ Persistent storage failed for {category.value}")
                     return None
             else:
                 # Fallback to in-memory storage
                 self.memory_keys[key_id] = memory_key
                 self._update_memory_usage(allocation_type, data_size, 1)
-                
+
                 safe_safe_print(f"✅ Memory allocated (in-memory): {key_id[:8]}... ({category.value})")
                 return key_id
-                
+
         except Exception as e:
             safe_safe_print(f"❌ Memory allocation failed: {safe_format_error(e, 'memory_allocate')}")
             return None
-    
+
     def _check_memory_limits(self, allocation_type: MemoryAllocationType, data_size: int) -> bool:
         """Check if memory allocation is within limits."""
         try:
             # Get UI settings limits
             limits = self.ui_settings.get('memory_limits', {})
-            
+
             if allocation_type == MemoryAllocationType.SHORT_TERM:
                 limit_mb = limits.get('short_term_mb', 100)
             elif allocation_type == MemoryAllocationType.MID_TERM:
@@ -554,30 +557,30 @@ class MemoryAllocationManager:
                 limit_mb = limits.get('long_term_mb', 1000)
             else:
                 return True  # No limit for other types
-            
+
             # Convert to bytes
             limit_bytes = limit_mb * 1024 * 1024
-            
+
             # Check current usage
             current_usage = self.memory_usage[allocation_type]['size_bytes']
-            
+
             return (current_usage + data_size) <= limit_bytes
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Memory limit check failed: {safe_format_error(e, 'memory_limit')}")
             return True  # Allow allocation on error
-    
-    def _update_memory_usage(self, allocation_type: MemoryAllocationType, 
-                           size_bytes: int, entry_count: int) -> None:
+
+    def _update_memory_usage(self, allocation_type: MemoryAllocationType,
+                             size_bytes: int, entry_count: int) -> None:
         """Update memory usage statistics."""
         try:
             usage = self.memory_usage[allocation_type]
             usage['size_bytes'] += size_bytes
             usage['entries'] += entry_count
-            
+
         except Exception as e:
             safe_safe_print(f"⚠️ Memory usage update failed: {safe_format_error(e, 'usage_update')}")
-    
+
     def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
         """Get memory key by ID."""
         memory_key = self.memory_keys.get(key_id)
@@ -585,44 +588,46 @@ class MemoryAllocationManager:
             # Update access statistics
             memory_key.access_count += 1
             memory_key.last_accessed = datetime.now()
-            
+
             # Record access pattern
             self.reflective_allocator.access_patterns[memory_key.category.value].append({
                 'timestamp': datetime.now(),
                 'key_id': key_id,
                 'allocation_type': memory_key.allocation_type.value
             })
-        
+
         return memory_key
-    
+
     def get_memory_usage(self) -> MemoryUsage:
         """Get comprehensive memory usage statistics."""
         try:
             total_entries = sum(usage['entries'] for usage in self.memory_usage.values())
             total_size_bytes = sum(usage['size_bytes'] for usage in self.memory_usage.values())
-            
+
             # Calculate usage percentages
             limits = self.ui_settings.get('memory_limits', {})
             short_term_limit = limits.get('short_term_mb', 100) * 1024 * 1024
             mid_term_limit = limits.get('mid_term_mb', 500) * 1024 * 1024
             long_term_limit = limits.get('long_term_mb', 1000) * 1024 * 1024
-            
-            short_term_usage = (self.memory_usage[MemoryAllocationType.SHORT_TERM]['size_bytes'] / short_term_limit) * 100
+
+            short_term_usage = (self.memory_usage[MemoryAllocationType.SHORT_TERM]
+                                ['size_bytes'] / short_term_limit) * 100
             mid_term_usage = (self.memory_usage[MemoryAllocationType.MID_TERM]['size_bytes'] / mid_term_limit) * 100
             long_term_usage = (self.memory_usage[MemoryAllocationType.LONG_TERM]['size_bytes'] / long_term_limit) * 100
-            
+
             # Calculate compression savings
             total_compressed_size = sum(
-                key.size_bytes * key.compression_ratio 
+                key.size_bytes * key.compression_ratio
                 for key in self.memory_keys.values()
             )
-            compression_savings = ((total_size_bytes - total_compressed_size) / total_size_bytes) * 100 if total_size_bytes > 0 else 0
-            
+            compression_savings = ((total_size_bytes - total_compressed_size) /
+                                   total_size_bytes) * 100 if total_size_bytes > 0 else 0
+
             # Get oldest and newest entries
             timestamps = [key.timestamp for key in self.memory_keys.values()]
             oldest_entry = unified_math.min(timestamps) if timestamps else datetime.now()
             newest_entry = unified_math.max(timestamps) if timestamps else datetime.now()
-            
+
             return MemoryUsage(
                 total_entries=total_entries,
                 total_size_bytes=total_size_bytes,
@@ -633,40 +638,40 @@ class MemoryAllocationManager:
                 oldest_entry=oldest_entry,
                 newest_entry=newest_entry
             )
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Memory usage calculation failed: {safe_format_error(e, 'usage_calc')}")
             return MemoryUsage(0, 0, 0.0, 0.0, 0.0, 0.0, datetime.now(), datetime.now())
-    
+
     def update_ui_settings(self, new_settings: Dict[str, Any]) -> bool:
         """Update user interface settings."""
         try:
             # Update settings
             self.ui_settings.update(new_settings)
-            
+
             # Save to file
             settings_file = Path("config/memory_allocation_settings.json")
             settings_file.parent.mkdir(parents=True, exist_ok=True)
-            
+
             with open(settings_file, 'w') as f:
                 json.dump(self.ui_settings, f, indent=2)
-            
+
             safe_safe_print("✅ UI settings updated")
             return True
-            
+
         except Exception as e:
             safe_safe_print(f"❌ UI settings update failed: {safe_format_error(e, 'ui_update')}")
             return False
-    
+
     def _start_background_cleanup(self) -> None:
         """Start background cleanup thread."""
         if self.cleanup_thread and self.cleanup_thread.is_alive():
             return
-        
+
         self.running = True
         self.cleanup_thread = threading.Thread(target=self._cleanup_worker, daemon=True)
         self.cleanup_thread.start()
-    
+
     def _cleanup_worker(self) -> None:
         """Background cleanup worker."""
         while self.running:
@@ -676,43 +681,43 @@ class MemoryAllocationManager:
             except Exception as e:
                 safe_safe_print(f"⚠️ Cleanup error: {safe_format_error(e, 'cleanup')}")
                 time.sleep(3600)
-    
+
     def _perform_cleanup(self) -> None:
         """Perform memory cleanup."""
         try:
             current_time = datetime.now()
             keys_to_remove = []
-            
+
             for key_id, memory_key in self.memory_keys.items():
                 # Check retention policy
                 retention_until = memory_key.timestamp + timedelta(days=memory_key.retention_days)
-                
+
                 if current_time > retention_until:
                     keys_to_remove.append(key_id)
-            
+
             # Remove expired keys
             for key_id in keys_to_remove:
                 memory_key = self.memory_keys.pop(key_id)
                 self._update_memory_usage(memory_key.allocation_type, -memory_key.size_bytes, -1)
-            
+
             if keys_to_remove:
                 safe_safe_print(f"🗑️ Cleaned up {len(keys_to_remove)} expired memory keys")
-                
+
         except Exception as e:
             safe_safe_print(f"❌ Cleanup failed: {safe_format_error(e, 'cleanup_perform')}")
-    
+
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
         try:
             memory_usage = self.get_memory_usage()
             recommendations = self.reflective_allocator.get_allocation_recommendations()
-            
+
             return {
                 'memory_usage': asdict(memory_usage),
                 'allocation_recommendations': recommendations,
                 'total_memory_keys': len(self.memory_keys),
                 'allocation_configs': {
-                    category.value: asdict(config) 
+                    category.value: asdict(config)
                     for category, config in self.allocation_configs.items()
                 },
                 'ui_settings': self.ui_settings,
@@ -723,7 +728,7 @@ class MemoryAllocationManager:
                     'success_rate': self.reflective_allocator.successful_allocations / unified_math.max(self.reflective_allocator.total_allocations, 1)
                 }
             }
-            
+
         except Exception as e:
             safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
             return {}
@@ -739,8 +744,8 @@ def get_memory_allocation_manager() -> MemoryAllocationManager:
     return memory_allocation_manager
 
 
-def allocate_memory(data: Dict[str, Any], category: DataCategory, 
-                   priority: Optional[MemoryPriority] = None) -> Optional[str]:
+def allocate_memory(data: Dict[str, Any], category: DataCategory,
+                    priority: Optional[MemoryPriority] = None) -> Optional[str]:
     """Allocate memory for data."""
     return memory_allocation_manager.allocate_memory(data, category, priority)
 
@@ -769,7 +774,7 @@ def get_memory_allocation_status() -> Dict[str, Any]:
 if __name__ == "__main__":
     # Test memory allocation manager
     safe_print("🧪 Testing Memory Allocation Manager...")
-    
+
     # Test BTC hashing data allocation
     btc_data = {
         'btc_price': 50000.0,
@@ -778,10 +783,10 @@ if __name__ == "__main__":
         'block_height': 800000,
         'timestamp': datetime.now().isoformat()
     }
-    
+
     key_id = allocate_memory(btc_data, DataCategory.BTC_HASHING)
     safe_print(f"✅ BTC data allocated: {key_id}")
-    
+
     # Test trading signals allocation
     trading_data = {
         'signal_type': 'buy',
@@ -789,16 +794,16 @@ if __name__ == "__main__":
         'price_target': 52000.0,
         'timestamp': datetime.now().isoformat()
     }
-    
+
     trading_key = allocate_memory(trading_data, DataCategory.TRADING_SIGNALS)
     safe_print(f"✅ Trading signal allocated: {trading_key}")
-    
+
     # Get memory usage
     usage = get_memory_usage()
     safe_print(f"✅ Memory usage: {usage.total_entries} entries, {usage.total_size_bytes} bytes")
-    
+
     # Get system status
     status = get_memory_allocation_status()
     safe_print(f"✅ System status: {status}")
-    
-    safe_print("✅ Memory Allocation Manager test completed") 
+
+    safe_print("✅ Memory Allocation Manager test completed")

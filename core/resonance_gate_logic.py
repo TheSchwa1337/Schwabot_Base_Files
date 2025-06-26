@@ -32,10 +32,11 @@ def phase_resonance_gate(
 
 
     tick: int,
-*,
-base_cycle: int = 42,
-use_mask: bool = True,
+    *,
+    base_cycle: int = 42,
+    use_mask: bool = True,
 ) -> bool:
+
 """Return ``True`` if *tick* aligns with the resonance gate.
 
 Parameters
@@ -50,7 +51,7 @@ If ``True`` the *tick* is first masked to 42 bits; this mimics the ring
 counter used in the C++/Rust back-ends and prevents 64-bit overflow
 mismatch in long-running sessions.
 """
-    if tick < 0:
+   if tick < 0:
         raise ValueError("tick must be non-negative")
     if base_cycle <= 0:
         raise ValueError("base_cycle must be positive")
@@ -58,4 +59,4 @@ mismatch in long-running sessions.
     if use_mask:
 tick &= _PHASE_MASK
 
-    return tick % base_cycle == 0
+   return tick % base_cycle == 0

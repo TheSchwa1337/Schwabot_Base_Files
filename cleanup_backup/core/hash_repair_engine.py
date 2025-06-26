@@ -133,7 +133,7 @@ class HashRepairEngine:
                 original_hash=failed_hash,
                 repaired_hash=best_repair,
                 repair_method=("similarity_based" if best_confidence > 0.7
-                              else "fallback"),
+                               else "fallback"),
                 confidence_score=best_confidence,
                 similarity_score=self._calculate_hash_similarity(
                     failed_hash, best_repair),
@@ -155,7 +155,7 @@ class HashRepairEngine:
             return failed_hash  # Return original hash if repair fails
 
     def _repair_by_similarity(self, failed_hash: str,
-                             historical_hashes: List[str]) -> Optional[str]:
+                              historical_hashes: List[str]) -> Optional[str]:
         """Repair hash by finding most similar historical hash."""
         try:
             if not historical_hashes:
@@ -183,7 +183,7 @@ class HashRepairEngine:
             return None
 
     def _repair_by_frequency(self, failed_hash: str,
-                            historical_hashes: List[str]) -> Optional[str]:
+                             historical_hashes: List[str]) -> Optional[str]:
         """Repair hash by finding most frequent similar pattern."""
         try:
             if not historical_hashes:
@@ -216,7 +216,7 @@ class HashRepairEngine:
             return None
 
     def _repair_by_interpolation(self, failed_hash: str,
-                                historical_hashes: List[str]) -> Optional[str]:
+                                 historical_hashes: List[str]) -> Optional[str]:
         """Repair hash by interpolating between similar historical hashes."""
         try:
             if len(historical_hashes) < 2:
@@ -249,7 +249,7 @@ class HashRepairEngine:
             return None
 
     def _repair_by_pattern_matching(self, failed_hash: str,
-                                   historical_hashes: List[str]) -> Optional[str]:
+                                    historical_hashes: List[str]) -> Optional[str]:
         """Repair hash by matching patterns in historical data."""
         try:
             if not historical_hashes:
@@ -341,7 +341,7 @@ class HashRepairEngine:
             return unified_math.max(len(s1), len(s2))
 
     def _interpolate_hashes(self, hash1: str, hash2: str,
-                           weight1: float, weight2: float) -> str:
+                            weight1: float, weight2: float) -> str:
         """Interpolate between two hash values based on weights."""
         try:
             if len(hash1) != len(hash2):
@@ -398,7 +398,7 @@ class HashRepairEngine:
             return []
 
     def _calculate_pattern_similarity(self, patterns1: List[str],
-                                    patterns2: List[str]) -> float:
+                                      patterns2: List[str]) -> float:
         """Calculate similarity between pattern lists."""
         try:
             if not patterns1 or not patterns2:
@@ -421,8 +421,8 @@ class HashRepairEngine:
             return 0.0
 
     def _calculate_repair_confidence(self, original_hash: str,
-                                   repaired_hash: str,
-                                   historical_hashes: List[str]) -> float:
+                                     repaired_hash: str,
+                                     historical_hashes: List[str]) -> float:
         """Calculate confidence score for repair result."""
         try:
             # Base confidence from similarity
@@ -455,7 +455,7 @@ class HashRepairEngine:
             return 0.0
 
     def _store_hash_pattern(self, hash_value: str,
-                          historical_hashes: List[str]) -> None:
+                            historical_hashes: List[str]) -> None:
         """Store hash pattern for future analysis."""
         try:
             # Create pattern entry
@@ -517,16 +517,16 @@ class HashRepairEngine:
             repair_times = [r.repair_time for r in self.repair_history]
 
             avg_confidence = (unified_math.unified_math.mean(confidence_scores)
-                             if confidence_scores else 0.0)
+                              if confidence_scores else 0.0)
             avg_similarity = (unified_math.unified_math.mean(similarity_scores)
-                             if similarity_scores else 0.0)
+                              if similarity_scores else 0.0)
             avg_repair_time = (unified_math.unified_math.mean(repair_times)
-                              if repair_times else 0.0)
+                               if repair_times else 0.0)
 
             pattern_count = sum(
                 len(patterns) for patterns in self.hash_patterns.values())
             last_repair = (self.repair_history[-1].timestamp
-                          if self.repair_history else None)
+                           if self.repair_history else None)
 
             return {
                 'total_repairs': total_repairs,
@@ -551,7 +551,7 @@ def create_hash_repair_engine() -> HashRepairEngine:
 
 
 def repair_hash_state(engine: HashRepairEngine,
-                     failed_hash: str,
-                     historical_hashes: List[str]) -> str:
+                      failed_hash: str,
+                      historical_hashes: List[str]) -> str:
     """Repair hash state using the given engine."""
     return engine.repair_hash_state(failed_hash, historical_hashes)

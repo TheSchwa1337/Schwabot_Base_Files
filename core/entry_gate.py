@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Any, Dict, Optional
+import logging
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +15,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Entry Gate - Mathematical Execution Confidence Evaluator.
 
@@ -69,9 +79,6 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-import logging
-from typing import Any, Dict, Optional
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -91,6 +98,7 @@ coherence: float,
 loop_volatility: float,
 profit_decay: float,
 ) -> float:
+
 """Calculate execution confidence scalar Ξ.
 
 Parameters
@@ -161,7 +169,7 @@ float
 """
     try:
         # 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
-        score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
+        score=harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
         # Ensure valid range
         return unified_math.max(0.0, unified_math.min(1.0, score))
@@ -176,7 +184,7 @@ def evaluate(
 
     confidence: float,
 entry_score_val: float,
-gan_filter_result: Optional[bool] = None,
+gan_filter_result: Optional[bool]=None,
 ) -> Dict[str, Any]:
 """Main entry gate evaluation logic.
 
@@ -233,7 +241,7 @@ and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
 
         # Tertiary: cooldown for low scores
         else:
-reason_parts = []
+reason_parts=[]
             if confidence <= 0.85:
 reason_parts.append(f"low confidence ({confidence:.3f})")
             if entry_score_val <= DEFER_ENTRY_SCORE_THRESHOLD:
@@ -286,7 +294,7 @@ projected_profit: float,
 """Validate that all input values are in expected ranges."""
     try:
         # Check ranges for all inputs
-checks = [
+checks=[
 0.0 <= triplet_entropy <= 1.0,
 0.0 <= theta_drift <= 1.0,
 0.0 <= coherence <= 1.0,
@@ -311,18 +319,18 @@ def main() -> None:
     pass
     """Demo function for testing entry gate logic."""
     # Test case 1: High confidence scenario
-xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
-    es = entry_score(0.88, 0.12, 0.75, 0.03)
-    result = evaluate(xi, es)
+xi=execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
+    es=entry_score(0.88, 0.12, 0.75, 0.03)
+    result=evaluate(xi, es)
 
 safe_print(f"Test 1 - Ξ: {xi:.3f}, 𝓔ₛ: {es:.3f}")
     safe_print(f"Decision: {result['action']} - {result['reason']}")
     print()
 
     # Test case 2: Moderate confidence scenario
-xi2 = execution_confidence(0.65, 0.08, 0.78, 0.15, 0.02)
-    es2 = entry_score(0.82, 0.08, 0.85, 0.025)
-    result2 = evaluate(xi2, es2)
+xi2=execution_confidence(0.65, 0.08, 0.78, 0.15, 0.02)
+    es2=entry_score(0.82, 0.08, 0.85, 0.025)
+    result2=evaluate(xi2, es2)
 
 safe_print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
     safe_print(f"Decision: {result2['action']} - {result2['reason']}")

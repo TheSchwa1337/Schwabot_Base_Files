@@ -1,4 +1,110 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from typing import (
+    Any,
+Callable,
+Dict,
+List,
+Optional,
+Tuple,
+TYPE_CHECKING,
+Union,
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+import numpy.typing as npt
+import yaml
+
+if TYPE_CHECKING:
+    pass
+
+# Set high precision for financial calculations
+getcontext().prec=18
+
+# Type definitions
+Vector=npt.NDArray[np.float64]
+Matrix=npt.NDArray[np.float64]
+
+logger=logging.getLogger(__name__)
+
+
+class ValidationLevel(Enum):
+
+
+    """Validation level enumeration."""
+
+WARNING="warning"
+ERROR="error"
+CRITICAL="critical"
+
+
+class ValidationType(Enum):
+
+
+    """Validation type enumeration."""
+
+TYPE="type"
+LENGTH="length"
+BOUNDS="bounds"
+SCHEMA="schema"
+ENTROPY="entropy"
+PERFORMANCE="performance"
+
+
+@ dataclass
+class ValidationResult:
+
+
+    """Validation result container."""
+
+valid: bool
+validation_type: ValidationType
+level: ValidationLevel
+message: str
+details: Dict[str, Any]=field(default_factory=dict)
+    execution_time: float=0.0
+timestamp: float=field(default_factory=time.time)
+
+
+@ dataclass
+class ValidationMetrics:
+
+
+    """Validation performance metrics."""
+
+total_validations: int=0
+successful_validations: int=0
+failed_validations: int=0
+average_execution_time: float=0.0
+validation_history: List[ValidationResult]=field(default_factory=list)
+
+
+class ValidationError(Exception):
+
+
+    """Custom validation error."""
+
+def __init__(self, message: str, validation_result: ValidationResult):
+
+
+    pass
+    pass
+        """TODO: document __init__."""
+super().__init__(message)
+        self.validation_result=validation_result
+
+
+class RuntimeValidator:
+
+
+    """Main runtime validation system."""
+
+import time
+import logging
+import functools
+from enum import Enum
+from decimal import getcontext
+from dataclasses import field
+from dataclasses import dataclass
 import math
 
 # Import safe print for Windows compatibility
@@ -12,42 +118,49 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
 """
@@ -70,151 +183,45 @@ Windows CLI compatible with flake8 compliance.
 """
 
 
-from dataclasses import dataclass
-from dataclasses import field
-from decimal import getcontext
-from enum import Enum
-import functools
-import logging
-import time
-from typing import (
-    Any,
-Callable,
-Dict,
-List,
-Optional,
-Tuple,
-TYPE_CHECKING,
-Union,
-
-
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
-import yaml
-
-if TYPE_CHECKING:
-    pass
-
-# Set high precision for financial calculations
-getcontext().prec = 18
-
-# Type definitions
-Vector = npt.NDArray[np.float64]
-Matrix = npt.NDArray[np.float64]
-
-logger = logging.getLogger(__name__)
-
-
-class ValidationLevel(Enum):
-
-
-    """Validation level enumeration."""
-
-WARNING = "warning"
-ERROR = "error"
-CRITICAL = "critical"
-
-
-class ValidationType(Enum):
-
-
-    """Validation type enumeration."""
-
-TYPE = "type"
-LENGTH = "length"
-BOUNDS = "bounds"
-SCHEMA = "schema"
-ENTROPY = "entropy"
-PERFORMANCE = "performance"
-
-
-@dataclass
-class ValidationResult:
-
-
-    """Validation result container."""
-
-valid: bool
-validation_type: ValidationType
-level: ValidationLevel
-message: str
-details: Dict[str, Any] = field(default_factory=dict)
-    execution_time: float = 0.0
-timestamp: float = field(default_factory=time.time)
-
-
-@dataclass
-class ValidationMetrics:
-
-
-    """Validation performance metrics."""
-
-total_validations: int = 0
-successful_validations: int = 0
-failed_validations: int = 0
-average_execution_time: float = 0.0
-validation_history: List[ValidationResult] = field(default_factory=list)
-
-
-class ValidationError(Exception):
-
-
-    """Custom validation error."""
-
-def __init__(self, message: str, validation_result: ValidationResult):
-
-
-    pass
-    pass
-        """TODO: document __init__."""
-super().__init__(message)
-        self.validation_result = validation_result
-
-
-class RuntimeValidator:
-
-
-    """Main runtime validation system."""
-
-def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+def __init__(self, config: Optional[Dict[str, Any]]=None) -> None:
 
 
     pass
     pass
         """Initialize runtime validator."""
-self.version = "1.0.0"
-self.config = config or self._default_config()
+self.version="1.0.0"
+self.config=config or self._default_config()
 
         # Validation settings
-self.enable_type_checking = self.config.get(
+self.enable_type_checking=self.config.get(
             "enable_type_checking", True
 
-self.enable_bounds_checking = self.config.get(
+self.enable_bounds_checking=self.config.get(
             "enable_bounds_checking", True
 
-self.enable_entropy_validation = self.config.get(
+self.enable_entropy_validation=self.config.get(
             "enable_entropy_validation", True
 
-self.enable_performance_monitoring = self.config.get(
+self.enable_performance_monitoring=self.config.get(
             "enable_performance_monitoring", True
 
 
         # Validation thresholds
-self.max_vector_length = self.config.get("max_vector_length", 10000)
-        self.max_matrix_size = self.config.get("max_matrix_size", 1000)
-        self.min_entropy_threshold = self.config.get(
+self.max_vector_length=self.config.get("max_vector_length", 10000)
+        self.max_matrix_size=self.config.get("max_matrix_size", 1000)
+        self.min_entropy_threshold=self.config.get(
             "min_entropy_threshold", 0.1
 
-self.max_entropy_threshold = self.config.get(
+self.max_entropy_threshold=self.config.get(
             "max_entropy_threshold", 10.0
 
-self.max_execution_time = self.config.get(
+self.max_execution_time=self.config.get(
             "max_execution_time", 1.0
 )  # seconds
 
         # Performance tracking
-self.metrics = ValidationMetrics()
-        self.validation_cache: Dict[str, ValidationResult] = {}
+self.metrics=ValidationMetrics()
+        self.validation_cache: Dict[str, ValidationResult]={}
 
 logger.info(f"RuntimeValidator v{self.version} initialized")
 
@@ -243,14 +250,14 @@ def validate_vector(
 
         self,
 vector: Any,
-expected_length: Optional[int] = None,
-min_value: Optional[float] = None,
-max_value: Optional[float] = None,
-allow_nan: bool = False,
-allow_inf: bool = False,
+expected_length: Optional[int]=None,
+min_value: Optional[float]=None,
+max_value: Optional[float]=None,
+allow_nan: bool=False,
+allow_inf: bool=False,
 ) -> ValidationResult:
 """Validate vector properties."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Type validation
@@ -268,7 +275,7 @@ execution_time=time.time() - start_time,
 
             # Convert to numpy array if needed
             if not isinstance(vector, np.ndarray):
-                vector = np.array(vector, dtype=np.float64)
+                vector=np.array(vector, dtype=np.float64)
 
             # Length validation
             if expected_length is not None and len(vector) != expected_length:
@@ -369,14 +376,14 @@ def validate_matrix(
 
         self,
 matrix: Any,
-expected_shape: Optional[Tuple[int, int]] = None,
-min_value: Optional[float] = None,
-max_value: Optional[float] = None,
-check_symmetric: bool = False,
-check_positive_definite: bool = False,
+expected_shape: Optional[Tuple[int, int]]=None,
+min_value: Optional[float]=None,
+max_value: Optional[float]=None,
+check_symmetric: bool=False,
+check_positive_definite: bool=False,
 ) -> ValidationResult:
 """Validate matrix properties."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Type validation
@@ -394,7 +401,7 @@ execution_time=time.time() - start_time,
 
             # Convert to numpy array if needed
             if not isinstance(matrix, np.ndarray):
-                matrix = np.array(matrix, dtype=np.float64)
+                matrix=np.array(matrix, dtype=np.float64)
 
             # Ensure 2D
             if matrix.ndim != 2:
@@ -491,7 +498,7 @@ execution_time=time.time() - start_time,
             # Positive definite validation
             if check_positive_definite:
                 try:
-eigenvals = unified_math.unified_math.eigenvalues(matrix)
+eigenvals=unified_math.unified_math.eigenvalues(matrix)
                     if np.any(eigenvals <= 0):
                         return ValidationResult(
                             valid=False,
@@ -548,14 +555,14 @@ message=f"Matrix validation error: {str(e)}",
 def validate_entropy(
 
 
-        self, signal: Vector, window_size: int = 100
+        self, signal: Vector, window_size: int=100
 ) -> ValidationResult:
 """Validate signal entropy properties."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Basic signal validation
-signal_result = self.validate_vector(signal)
+signal_result=self.validate_vector(signal)
             if not signal_result.valid:
                 return signal_result
 
@@ -582,27 +589,27 @@ def calculate_entropy(data: np.ndarray) -> float:
                     return 0.0
 
                 # Discretize data into bins
-hist, _ = np.histogram(data, bins=unified_math.min(20, len(data) // 5))
-                hist = hist[hist > 0]  # Remove zero bins
+hist, _=np.histogram(data, bins=unified_math.min(20, len(data) // 5))
+                hist=hist[hist > 0]  # Remove zero bins
 
                 if len(hist) == 0:
                     return 0.0
 
                 # Normalize to probabilities
-probs = hist / np.sum(hist)
+probs=hist / np.sum(hist)
 
                 # Calculate entropy
-entropy = -np.sum(probs * np.log2(probs + 1e-10))
+entropy=-np.sum(probs * np.log2(probs + 1e-10))
                 return entropy
 
             # Calculate rolling entropy
-entropies = []
+entropies=[]
             for i in range(len(signal) - window_size + 1):
-                window = signal[i : i + window_size]
-entropy = calculate_entropy(window)
+                window=signal[i: i + window_size]
+entropy=calculate_entropy(window)
                 entropies.append(entropy)
 
-entropies = np.array(entropies)
+entropies=np.array(entropies)
 
             # Validate entropy range
             if np.any(entropies < self.min_entropy_threshold):
@@ -670,17 +677,17 @@ def validate_yaml_config(
 
         self,
 config_data: Union[str, Dict[str, Any]],
-schema: Optional[Dict[str, Any]] = None,
+schema: Optional[Dict[str, Any]]=None,
 ) -> ValidationResult:
 """Validate YAML configuration."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Parse YAML if string
             if isinstance(config_data, str):
-                config = yaml.safe_load(config_data)
+                config=yaml.safe_load(config_data)
             else:
-config = config_data
+config=config_data
 
             # Basic structure validation
             if not isinstance(config, dict):
@@ -752,13 +759,13 @@ def validate_performance(
         self, func: Callable, *args, **kwargs
 ) -> ValidationResult:
 """Validate function performance."""
-start_time = time.time()
+start_time=time.time()
 
         try:
             # Execute function and measure time
-func_start = time.time()
-            result = func(*args, **kwargs)
-            func_time = time.time() - func_start
+func_start=time.time()
+            result=func(*args, **kwargs)
+            func_time=time.time() - func_start
 
             # Check execution time
             if func_time > self.max_execution_time:
@@ -808,18 +815,18 @@ execution_time=time.time() - start_time,
 
 
 # Global validator instance
-_global_validator = RuntimeValidator()
+_global_validator=RuntimeValidator()
 
 
 # Decorator functions for easy use
 def validate_vector(
 
 
-    expected_length: Optional[int] = None,
-min_value: Optional[float] = None,
-max_value: Optional[float] = None,
-allow_nan: bool = False,
-allow_inf: bool = False,
+    expected_length: Optional[int]=None,
+min_value: Optional[float]=None,
+max_value: Optional[float]=None,
+allow_nan: bool=False,
+allow_inf: bool=False,
 ):
 """Decorator to validate vector inputs."""
 
@@ -828,14 +835,14 @@ def decorator(func: Callable) -> Callable:
 
     pass
     pass
-        @functools.wraps(func)
+        @ functools.wraps(func)
 def wrapper(vector: Any, *args, **kwargs) -> Any:
 
 
     pass
     pass
             """TODO: document wrapper."""
-result = _global_validator.validate_vector(
+result=_global_validator.validate_vector(
                 vector,
 expected_length,
 min_value,
@@ -865,11 +872,11 @@ logger.warning(
 def validate_matrix(
 
 
-    expected_shape: Optional[Tuple[int, int]] = None,
-min_value: Optional[float] = None,
-max_value: Optional[float] = None,
-check_symmetric: bool = False,
-check_positive_definite: bool = False,
+    expected_shape: Optional[Tuple[int, int]]=None,
+min_value: Optional[float]=None,
+max_value: Optional[float]=None,
+check_symmetric: bool=False,
+check_positive_definite: bool=False,
 ):
 """Decorator to validate matrix inputs."""
 
@@ -878,14 +885,14 @@ def decorator(func: Callable) -> Callable:
 
     pass
     pass
-        @functools.wraps(func)
+        @ functools.wraps(func)
 def wrapper(matrix: Any, *args, **kwargs) -> Any:
 
 
     pass
     pass
             """TODO: document wrapper."""
-result = _global_validator.validate_matrix(
+result=_global_validator.validate_matrix(
                 matrix,
 expected_shape,
 min_value,
@@ -914,7 +921,7 @@ logger.warning(
     return decorator
 
 
-def validate_entropy(window_size: int = 100):
+def validate_entropy(window_size: int=100):
 
 
     pass
@@ -926,14 +933,14 @@ def decorator(func: Callable) -> Callable:
 
     pass
     pass
-        @functools.wraps(func)
+        @ functools.wraps(func)
 def wrapper(signal: Vector, *args, **kwargs) -> Any:
 
 
     pass
     pass
             """TODO: document wrapper."""
-result = _global_validator.validate_entropy(signal, window_size)
+result=_global_validator.validate_entropy(signal, window_size)
 
             if not result.valid:
                 if result.level == ValidationLevel.CRITICAL:
@@ -955,7 +962,7 @@ logger.warning(
     return decorator
 
 
-def validate_performance(max_time: Optional[float] = None):
+def validate_performance(max_time: Optional[float]=None):
 
 
     pass
@@ -967,7 +974,7 @@ def decorator(func: Callable) -> Callable:
 
     pass
     pass
-        @functools.wraps(func)
+        @ functools.wraps(func)
 def wrapper(*args, **kwargs) -> Any:
 
 
@@ -975,7 +982,7 @@ def wrapper(*args, **kwargs) -> Any:
     pass
             """TODO: document wrapper."""
 max_time or _global_validator.max_execution_time
-result = _global_validator.validate_performance(
+result=_global_validator.validate_performance(
                 func, *args, **kwargs
 
 
@@ -1014,30 +1021,30 @@ safe_print(" Runtime Validation System Test")
         safe_print("=" * 40)
 
         # Initialize validator
-validator = RuntimeValidator()
+validator=RuntimeValidator()
 
         # Test vector validation
 safe_print("1. Testing vector validation...")
-        test_vector = [1.0, 2.0, 3.0, 4.0, 5.0]
-result = validator.validate_vector(test_vector, expected_length=5)
+        test_vector=[1.0, 2.0, 3.0, 4.0, 5.0]
+result=validator.validate_vector(test_vector, expected_length=5)
         safe_print(f"   ✅ Vector validation: {result.valid} - {result.message}")
 
         # Test matrix validation
 safe_print("2. Testing matrix validation...")
-        test_matrix = [[1.0, 2.0], [3.0, 4.0]]
-result = validator.validate_matrix(test_matrix, expected_shape=(2, 2))
+        test_matrix=[[1.0, 2.0], [3.0, 4.0]]
+result=validator.validate_matrix(test_matrix, expected_shape=(2, 2))
         safe_print(f"   ✅ Matrix validation: {result.valid} - {result.message}")
 
         # Test entropy validation
 safe_print("3. Testing entropy validation...")
-        test_signal = np.random.randn(200)  # Random signal
-        result = validator.validate_entropy(test_signal, window_size=50)
+        test_signal=np.random.randn(200)  # Random signal
+        result=validator.validate_entropy(test_signal, window_size=50)
         safe_print(f"   ✅ Entropy validation: {result.valid} - {result.message}")
 
         # Test decorator usage
 safe_print("4. Testing decorator usage...")
 
-@validate_vector(expected_length=3)
+@ validate_vector(expected_length=3)
 def test_function(vector):
 
 
@@ -1047,7 +1054,7 @@ def test_function(vector):
             return sum(vector)
 
         try:
-result = test_function([1, 2, 3])
+result=test_function([1, 2, 3])
             safe_print(f"   ✅ Decorator test: {result}")
         except ValidationError as e:
 safe_print(

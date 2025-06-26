@@ -17,18 +17,18 @@ def fix_imports_after_try(content: str) -> Tuple[str, int]:
     """Fix E999: import statements after try blocks without except/finally."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     i = 0
     while i < len(lines) - 1:
         # Look for try: followed by import statements
-        if (lines[i].strip() == 'try:' and 
-            i + 1 < len(lines) and 
-            lines[i + 1].strip().startswith('import ')):
-            
+        if (lines[i].strip() == 'try:' and
+            i + 1 < len(lines) and
+                lines[i + 1].strip().startswith('import ')):
+
             # Move the import before the try block
             import_line = lines[i + 1]
             lines.pop(i + 1)
-            
+
             # Find the right place to insert (before try)
             for j in range(i, -1, -1):
                 if lines[j].strip() and not lines[j].strip().startswith('#'):
@@ -37,24 +37,24 @@ def fix_imports_after_try(content: str) -> Tuple[str, int]:
             else:
                 # If no suitable place found, insert at the beginning
                 lines.insert(0, import_line)
-            
+
             fixed_count += 1
             # Don't increment i since we need to re-check this position
-        
+
         # Look for try: followed by except ImportError: without a block
-        elif (lines[i].strip() == 'try:' and 
-              i + 1 < len(lines) and 
+        elif (lines[i].strip() == 'try:' and
+              i + 1 < len(lines) and
               lines[i + 1].strip() == 'except ImportError:' and
               i + 2 < len(lines) and
               not lines[i + 2].strip().startswith('    ')):
-            
+
             # Add a pass statement after try
             lines.insert(i + 1, '    pass')
             fixed_count += 1
             i += 1  # Skip the pass line we just added
-        
+
         i += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -62,13 +62,13 @@ def fix_missing_try_blocks(content: str) -> Tuple[str, int]:
     """Fix E999: missing indented blocks after try statements."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i in range(len(lines) - 1):
         # Look for try: followed by except ImportError: without proper indentation
-        if (lines[i].strip() == 'try:' and 
-            i + 1 < len(lines) and 
-            lines[i + 1].strip() == 'except ImportError:'):
-            
+        if (lines[i].strip() == 'try:' and
+            i + 1 < len(lines) and
+                lines[i + 1].strip() == 'except ImportError:'):
+
             # Check if there's a proper indented block after try
             has_indented_block = False
             for j in range(i + 1, len(lines)):
@@ -79,12 +79,12 @@ def fix_missing_try_blocks(content: str) -> Tuple[str, int]:
                     break
                 elif lines[j].strip() and not lines[j].strip().startswith('#'):
                     break
-            
+
             if not has_indented_block:
                 # Add a pass statement after try
                 lines.insert(i + 1, '    pass')
                 fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -92,7 +92,7 @@ def fix_unmatched_parentheses(content: str) -> Tuple[str, int]:
     """Fix E999: unmatched parentheses."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i, line in enumerate(lines):
         # Look for lines with unmatched parentheses
         if line.strip().endswith(')') and not line.strip().endswith('()'):
@@ -101,7 +101,7 @@ def fix_unmatched_parentheses(content: str) -> Tuple[str, int]:
                 # Remove the standalone closing parenthesis
                 lines[i] = ''
                 fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -109,11 +109,11 @@ def fix_unexpected_indentation(content: str) -> Tuple[str, int]:
     """Fix E999: unexpected indentation."""
     lines = content.split('\n')
     fixed_count = 0
-    
+
     for i, line in enumerate(lines):
         # Look for lines that are unexpectedly indented
-        if (line.strip() and 
-            line.startswith('    ') and 
+        if (line.strip() and
+            line.startswith('    ') and
             not line.strip().startswith('def ') and
             not line.strip().startswith('class ') and
             not line.strip().startswith('if ') and
@@ -140,20 +140,20 @@ def fix_unexpected_indentation(content: str) -> Tuple[str, int]:
             not line.strip().startswith('print(') and
             not line.strip().startswith('print ') and
             not line.strip().startswith('print') and
-            not line.strip().startswith('#')):
-            
+                not line.strip().startswith('#')):
+
             # Check if this is part of a multi-line statement
             if i > 0 and lines[i-1].strip().endswith('\\'):
                 continue
-            
+
             # Check if this is part of a function call or definition
             if i > 0 and ('(' in lines[i-1] or 'def ' in lines[i-1] or 'class ' in lines[i-1]):
                 continue
-            
+
             # Remove the unexpected indentation
             lines[i] = line.lstrip()
             fixed_count += 1
-    
+
     return '\n'.join(lines), fixed_count
 
 
@@ -165,34 +165,34 @@ def fix_file(file_path: str) -> Dict[str, int]:
         "unmatched_parentheses_fixed": 0,
         "unexpected_indentation_fixed": 0,
     }
-    
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Apply fixes in order of priority
         content, count = fix_imports_after_try(content)
         stats["imports_after_try_fixed"] = count
-        
+
         content, count = fix_missing_try_blocks(content)
         stats["missing_try_blocks_fixed"] = count
-        
+
         content, count = fix_unmatched_parentheses(content)
         stats["unmatched_parentheses_fixed"] = count
-        
+
         content, count = fix_unexpected_indentation(content)
         stats["unexpected_indentation_fixed"] = count
-        
+
         # Write back if changes were made
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             print(f"Fixed {file_path}: {stats}")
-        
+
         return stats
-        
+
     except Exception as e:
         print(f"Error fixing {file_path}: {e}")
         return stats
@@ -207,7 +207,7 @@ def main():
         "unexpected_indentation_fixed": 0,
         "files_processed": 0,
     }
-    
+
     # Process core directory
     core_path = Path("core")
     if core_path.exists():
@@ -218,7 +218,7 @@ def main():
                     if key in total_stats:
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
-    
+
     print(f"\nTotal E999 critical fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"Imports after try: {total_stats['imports_after_try_fixed']}")
@@ -228,4 +228,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

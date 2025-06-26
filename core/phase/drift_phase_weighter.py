@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-\n"""core.phase.drift_phase_weighter
-Drift-Phase Weighter
-====================
+Drift - Phase Weighter
+== == == == == == == == == ==
 
-Calculates a λ-decay drift weight that quantifies the *tension* present in the
-latest price movement and provides an entropy-gradient helper used by other
+Calculates a λ - decay drift weight that quantifies the * tension * present in the
+latest price movement and provides an entropy - gradient helper used by other
 phase modules.
 """
 
@@ -36,7 +36,7 @@ class DriftWeightReport:
 
 
 class DriftPhaseWeighter:
-    """Compute λ-decay drift weight from a price vector."""
+    """Compute λ - decay drift weight from a price vector."""
 
     def __init__(self, *, lambda_: float = 0.3) -> None:
         if not (0.0 < lambda_ <= 1.0):
@@ -44,7 +44,8 @@ class DriftPhaseWeighter:
         self.lambda_ = lambda_
 
     # ------------------------------------------------------------------
-    def calculate_drift_weight(self, prices: Sequence[float]) -> DriftWeightReport:
+    def calculate_drift_weight(
+    self, prices: Sequence[float]) -> DriftWeightReport:
         """Return drift weight for `prices`.
 
         Algorithm
@@ -62,7 +63,8 @@ class DriftPhaseWeighter:
         smoothed = np.empty_like(delta)
         smoothed[0] = delta[0]
         for i in range(1, delta.size):
-            smoothed[i] = self.lambda_ * delta[i] + (1.0 - self.lambda_) * smoothed[i - 1]
+            smoothed[i] = self.lambda_ * delta[i] + \
+                (1.0 - self.lambda_) * smoothed[i - 1]
 
         # use last 5 points (or all if shorter) for current drift weight
         tail = smoothed[-5:]
@@ -72,8 +74,10 @@ class DriftPhaseWeighter:
 
     # ------------------------------------------------------------------
     @staticmethod
-    def gradient_entropy_score(prices: Sequence[float], window: int = 10) -> float:
-        """Directional entropy gradient score for *prices*.
+    def gradient_entropy_score(
+    prices: Sequence[float],
+     window: int = 10) -> float:
+        """Directional entropy gradient score for *prices * .
 
         A simple metric: difference between entropy of the most recent `window`
         samples and the preceding `window` samples.

@@ -96,11 +96,11 @@ def initialize_components():
     """Initialize all Schwabot components."""
     global settings_manager, phantom_lag_model, meta_ghost_bridge, fallback_router
     global hash_registry_manager, tensor_harness_matrix, voltage_lane_mapper, system_orchestrator
-    
+
     try:
         # Initialize settings manager
         settings_manager = get_settings_manager()
-        
+
         # Initialize mathematical components
         if IMPORTS_SUCCESSFUL:
             phantom_lag_model = PhantomLagModel()
@@ -110,10 +110,10 @@ def initialize_components():
             tensor_harness_matrix = TensorHarnessMatrix()
             voltage_lane_mapper = VoltageLaneMapper()
             system_orchestrator = SystemIntegrationOrchestrator()
-        
+
         logger.info("All components initialized successfully")
         return True
-        
+
     except Exception as e:
         logger.error(f"Error initializing components: {e}")
         return False
@@ -122,14 +122,14 @@ def initialize_components():
 def update_real_time_data():
     """Update real-time data for dashboard."""
     global real_time_data
-    
+
     try:
         current_time = datetime.now()
-        
+
         # Update system status
         real_time_data['system_status'] = 'running'
         real_time_data['last_update'] = current_time.isoformat()
-        
+
         # Update trading data
         if settings_manager:
             real_time_data['trading_data'] = {
@@ -138,7 +138,7 @@ def update_real_time_data():
                 'position_sizing': settings_manager.trading_settings.position_sizing,
                 'risk_management': settings_manager.trading_settings.risk_management
             }
-        
+
         # Update performance metrics
         real_time_data['performance_metrics'] = {
             'total_trades': len(performance_history['timestamps']),
@@ -147,7 +147,7 @@ def update_real_time_data():
             'success_rate': performance_history['success_rate'][-1] if performance_history['success_rate'] else 0,
             'uptime_hours': (current_time - datetime.fromisoformat(performance_history['timestamps'][0])).total_seconds() / 3600 if performance_history['timestamps'] else 0
         }
-        
+
         # Update mathematical components status
         real_time_data['mathematical_components'] = {
             'phantom_lag_model': {
@@ -166,7 +166,7 @@ def update_real_time_data():
                 'success_rate': fallback_router.get_fallback_statistics().get('success_rate', 0) if fallback_router else 0
             }
         }
-        
+
     except Exception as e:
         logger.error(f"Error updating real-time data: {e}")
 
@@ -174,13 +174,13 @@ def update_real_time_data():
 def add_performance_data(portfolio_value: float, profit_loss: float, trade_count: int, success_rate: float):
     """Add new performance data point."""
     current_time = datetime.now()
-    
+
     performance_history['timestamps'].append(current_time.isoformat())
     performance_history['portfolio_value'].append(portfolio_value)
     performance_history['profit_loss'].append(profit_loss)
     performance_history['trade_count'].append(trade_count)
     performance_history['success_rate'].append(success_rate)
-    
+
     # Keep only last 1000 data points
     max_points = 1000
     if len(performance_history['timestamps']) > max_points:
@@ -200,13 +200,13 @@ def add_alert(alert_type: str, message: str, severity: str = 'info'):
         'severity': severity,
         'timestamp': datetime.now().isoformat()
     }
-    
+
     real_time_data['alerts'].append(alert)
-    
+
     # Keep only last 50 alerts
     if len(real_time_data['alerts']) > 50:
         real_time_data['alerts'] = real_time_data['alerts'][-50:]
-    
+
     # Emit to connected clients
     socketio.emit('new_alert', alert)
 
@@ -251,18 +251,18 @@ def api_update_settings():
         data = request.get_json()
         if not data:
             return jsonify({'error': 'No data provided'}), 400
-        
+
         success_count = 0
         for path, value in data.items():
             if set_setting(path, value):
                 success_count += 1
-        
+
         return jsonify({
             'success': True,
             'updated_settings': success_count,
             'total_settings': len(data)
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -277,16 +277,16 @@ def api_performance():
 def api_components():
     """Get mathematical components status."""
     components_data = {}
-    
+
     if phantom_lag_model:
         components_data['phantom_lag_model'] = phantom_lag_model.get_statistics()
-    
+
     if meta_ghost_bridge:
         components_data['meta_layer_ghost_bridge'] = meta_ghost_bridge.get_statistics()
-    
+
     if fallback_router:
         components_data['fallback_logic_router'] = fallback_router.get_fallback_statistics()
-    
+
     return jsonify(components_data)
 
 
@@ -304,11 +304,11 @@ def api_add_alert():
         alert_type = data.get('type', 'info')
         message = data.get('message', '')
         severity = data.get('severity', 'info')
-        
+
         add_alert(alert_type, message, severity)
-        
+
         return jsonify({'success': True})
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -320,17 +320,17 @@ def api_phantom_lag_analyze():
         data = request.get_json()
         if not phantom_lag_model:
             return jsonify({'error': 'Phantom Lag Model not available'}), 503
-        
+
         entry_price = data.get('entry_price', 50000.0)
         current_price = data.get('current_price', 50000.0)
         signal_hash = data.get('signal_hash', 'test_hash')
         entropy_level = data.get('entropy_level', 0.5)
         event_type = data.get('event_type', 'missed_entry')
-        
+
         analysis = phantom_lag_model.analyze_missed_opportunity(
             entry_price, current_price, signal_hash, entropy_level, event_type
         )
-        
+
         return jsonify({
             'lag_penalty': analysis.lag_penalty,
             'opportunity_cost': analysis.opportunity_cost,
@@ -339,7 +339,7 @@ def api_phantom_lag_analyze():
             'adaptation_score': analysis.adaptation_score,
             'mathematical_validity': analysis.mathematical_validity
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -350,9 +350,9 @@ def api_meta_bridge_opportunities():
     try:
         if not meta_ghost_bridge:
             return jsonify({'error': 'Meta-Layer Ghost Bridge not available'}), 503
-        
+
         opportunities = meta_ghost_bridge.get_current_opportunities()
-        
+
         return jsonify({
             'opportunities': [
                 {
@@ -368,7 +368,7 @@ def api_meta_bridge_opportunities():
                 for op in opportunities
             ]
         })
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -379,10 +379,10 @@ def api_fallback_statistics():
     try:
         if not fallback_router:
             return jsonify({'error': 'Fallback Logic Router not available'}), 503
-        
+
         stats = fallback_router.get_fallback_statistics()
         return jsonify(stats)
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -407,9 +407,9 @@ def api_system_health():
             'environment_variables': settings_manager.validate_environment_variables() if settings_manager else {},
             'configuration_summary': settings_manager.get_configuration_summary() if settings_manager else {}
         }
-        
+
         return jsonify(health_data)
-        
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -443,12 +443,12 @@ def handle_add_performance_data(data):
         profit_loss = data.get('profit_loss', 0)
         trade_count = data.get('trade_count', 0)
         success_rate = data.get('success_rate', 0)
-        
+
         add_performance_data(portfolio_value, profit_loss, trade_count, success_rate)
-        
+
         # Emit updated performance data to all clients
         socketio.emit('performance_update', performance_history)
-        
+
     except Exception as e:
         logger.error(f"Error handling performance data: {e}")
 
@@ -495,7 +495,7 @@ def create_templates():
     """Create HTML templates for the dashboard."""
     templates_dir = Path(__file__).parent / 'templates'
     templates_dir.mkdir(exist_ok=True)
-    
+
     # Base template
     base_template = '''<!DOCTYPE html>
 <html lang="en">
@@ -615,7 +615,7 @@ def create_templates():
     </script>
 </body>
 </html>'''
-    
+
     # Dashboard template
     dashboard_template = '''{% extends "base.html" %}
 {% block title %}Dashboard - Schwabot{% endblock %}
@@ -719,34 +719,34 @@ fetch('/api/performance')
     });
 </script>
 {% endblock %}'''
-    
+
     # Write templates
     (templates_dir / 'base.html').write_text(base_template)
     (templates_dir / 'dashboard.html').write_text(dashboard_template)
-    
+
     logger.info("HTML templates created successfully")
 
 
 def main():
     """Main function to run the dashboard."""
     safe_print("🧠 Starting Schwabot Web Dashboard...")
-    
+
     # Initialize components
     if not initialize_components():
         safe_print("❌ Failed to initialize components")
         return 1
-    
+
     # Create templates
     create_templates()
-    
+
     # Start background data updater
     updater_thread = threading.Thread(target=background_data_updater, daemon=True)
     updater_thread.start()
-    
+
     # Add some sample data
     add_performance_data(10000.0, 0.0, 0, 0.0)
     add_alert('system', 'Schwabot Dashboard started successfully', 'success')
-    
+
     # Get configuration
     if settings_manager:
         ui_config = settings_manager.ui_settings.web_dashboard
@@ -755,11 +755,11 @@ def main():
     else:
         host = '0.0.0.0'
         port = 8080
-    
+
     safe_print(f"✅ Dashboard starting on http://{host}:{port}")
     safe_print("📊 Access the dashboard in your web browser")
     safe_print("🔧 Use Ctrl+C to stop the server")
-    
+
     try:
         # Run the Flask app
         socketio.run(app, host=host, port=port, debug=False)
@@ -768,9 +768,9 @@ def main():
     except Exception as e:
         safe_print(f"❌ Error running dashboard: {e}")
         return 1
-    
+
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main()) 
+    sys.exit(main())

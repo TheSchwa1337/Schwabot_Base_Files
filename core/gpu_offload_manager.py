@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from numba import cuda
+import numba
+import cupy as cp
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 GPU Offload Manager - Schwabot UROS v1.0
@@ -60,18 +76,12 @@ Manages GPU acceleration for mathematical calculations including:
 - Matrix operations
 """
 
-import logging
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
 # Try to import GPU libraries
 try:
-import cupy as cp
 GPU_AVAILABLE = True
 logger.info("CuPy GPU acceleration available")
 except ImportError:
@@ -81,8 +91,6 @@ GPU_AVAILABLE = False
 logger.warning("CuPy not available, using CPU fallback")
 
 try:
-import numba
-from numba import cuda
 NUMBA_AVAILABLE = True
 logger.info("Numba GPU acceleration available")
 except ImportError:
@@ -91,11 +99,13 @@ except ImportError:
 NUMBA_AVAILABLE = False
 logger.warning("Numba not available, using CPU fallback")
 
+
 @dataclass
 class GPUOperation:
 
-
     """GPU operation result."""
+
+
 operation_name: str
 input_size: int
 execution_time_ms: float
@@ -104,11 +114,13 @@ success: bool
 result: Any
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class GPUPerformance:
 
-
     """GPU performance metrics."""
+
+
 total_operations: int
 successful_operations: int
 total_execution_time_ms: float
@@ -117,8 +129,8 @@ total_gpu_memory_used: int
 gpu_utilization: float
 timestamp: datetime
 
-class GPUOffloadManager:
 
+class GPUOffloadManager:
 
     """
 Manages GPU acceleration for mathematical calculations.
@@ -131,12 +143,14 @@ Features:
 - Performance monitoring
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         self.gpu_available = GPU_AVAILABLE or NUMBA_AVAILABLE
+
+
 self.operation_history: List[GPUOperation] = []
 self.performance_metrics: List[GPUPerformance] = []
 
@@ -151,14 +165,15 @@ self._initialize_gpu()
 
 logger.info(f"GPU Offload Manager initialized (GPU: {self.gpu_available})")
 
-def _initialize_gpu(self) -> None:
 
+def _initialize_gpu(self) -> None:
 
     pass
     pass
         """Initialize GPU resources."""
         try:
             if GPU_AVAILABLE:
+
                 # Initialize CuPy
 cp.cuda.Device(0).use()
                 logger.info("CuPy GPU initialized")

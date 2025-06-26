@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.gpt_command_layer_simple import AIAgentType, CommandDomain
+import time
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple
+from datetime import datetime, timedelta
+import os
+import logging
+import json
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Memory Hash Rotator - Epoch-Based Memory Management.
@@ -53,32 +70,25 @@ This module provides epoch-based memory key rotation to prevent collisions
 and enable clearer tracebacks by mapping memory to time-based epochs.
 """
 
-import hashlib
-import json
-import logging
-import os
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass
-import time
 
 # Import core modules
 try:
-from core.gpt_command_layer_simple import AIAgentType, CommandDomain
 #     from core.utils.windows_cli_compatibility import safe_print, safe_format_error  # F811: duplicate import
 CORE_AVAILABLE = True
 except ImportError:
     pass
     pass
 CORE_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
 
+
+def safe_print(message: str, use_emoji: bool = True) -> str:
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
 
+
+def safe_format_error(error: Exception, context: str = "") -> str:
 
     pass
     pass
@@ -88,8 +98,9 @@ def safe_format_error(error: Exception, context: str = "") -> str:
 @dataclass
 class MemoryEpoch:
 
-
     """Memory epoch for organizing memory keys by time."""
+
+
 epoch_id: str
 start_tick: int
 end_tick: int
@@ -98,17 +109,18 @@ end_time: datetime
 memory_count: int = 0
 hash_prefix: str = ""
 
-def __post_init__(self):
 
+def __post_init__(self):
 
     pass
     pass
         if not self.hash_prefix:
+
+
 self.hash_prefix = hashlib.sha256(self.epoch_id.encode()).hexdigest()[:8]
 
 
 class MemoryHashRotator:
-
 
     """
 Manages memory key rotation based on time epochs.
@@ -118,12 +130,14 @@ This class provides epoch-based memory key generation and rotation
 memory by time periods.
 """
 
-def __init__(self, epoch_size: int = 64):
 
+def __init__(self, epoch_size: int = 64):
 
     pass
     pass
         """Initialize the memory hash rotator."""
+
+
 self.logger = logging.getLogger("memory_hash_rotator")
         self.logger.setLevel(logging.INFO)
 
@@ -145,13 +159,15 @@ self._initialize_epoch(tick=0)
 
 safe_safe_print("🗝️ Memory Hash Rotator initialized")
 
-def _initialize_epoch(self, tick: int) -> None:
 
+def _initialize_epoch(self, tick: int) -> None:
 
     pass
     pass
         """Initialize a new memory epoch."""
         try:
+
+
 epoch_start = tick - (tick % self.epoch_size)
             epoch_end = epoch_start + self.epoch_size - 1
 epoch_id = f"epoch_{epoch_start}_{epoch_end}"
@@ -164,7 +180,7 @@ start_time=datetime.now(),
                 end_time=datetime.now() + timedelta(seconds=self.epoch_size * 0.1)  # Estimate
 
 
-self.epoch_history[epoch_id] = self.current_epoch
+self.epoch_history[epoch_id]=self.current_epoch
 
 safe_safe_print(f"🔄 New epoch initialized: {epoch_id} (ticks {epoch_start}-{epoch_end})")
 
@@ -178,7 +194,7 @@ def generate_memory_key(
 agent_type: AIAgentType,
 curve_id: str,
 tick: int,
-content_hash: Optional[str] = None
+content_hash: Optional[str]=None
 ) -> str:
 """
 Generate a memory key with epoch-based rotation.
@@ -198,10 +214,10 @@ Generated memory key with epoch prefix
 self._rotate_epoch(tick)
 
             # Get current epoch prefix
-epoch_prefix = self.current_epoch.hash_prefix if self.current_epoch else "default"
+epoch_prefix=self.current_epoch.hash_prefix if self.current_epoch else "default"
 
             # Generate base key components
-base_components = [
+base_components=[
 agent_type.value,
 curve_id,
 str(tick),
@@ -212,10 +228,10 @@ str(tick),
 base_components.append(content_hash)
 
             # Create base key
-base_key = "_".join(base_components)
+base_key="_".join(base_components)
 
             # Generate final memory key with epoch prefix
-memory_key = f"{epoch_prefix}_{base_key}"
+memory_key=f"{epoch_prefix}_{base_key}"
 
             # Register the key
 self._register_memory_key(memory_key, agent_type, curve_id, tick)
@@ -225,7 +241,7 @@ self.total_keys_generated += 1
             return memory_key
 
         except Exception as e:
-error_msg = safe_format_error(e, "generate_memory_key")
+error_msg=safe_format_error(e, "generate_memory_key")
             safe_safe_print(f"❌ Memory key generation failed: {error_msg}")
             # Fallback key
             return f"fallback_{agent_type.value}_{curve_id}_{tick}"
@@ -239,13 +255,14 @@ def _rotate_epoch(self, tick: int) -> None:
         try:
             if self.current_epoch:
                 # Finalize current epoch
-self.current_epoch.end_time = datetime.now()
-                self.current_epoch.memory_count = len([
+self.current_epoch.end_time=datetime.now()
+                self.current_epoch.memory_count=len([
                     key for key, data in self.memory_key_registry.items()
                     if data.get("epoch_id") == self.current_epoch.epoch_id
                 ])
 
-safe_safe_print(f"🔄 Epoch rotation: {self.current_epoch.epoch_id} completed with {self.current_epoch.memory_count} keys")
+safe_safe_print(
+    f"🔄 Epoch rotation: {self.current_epoch.epoch_id} completed with {self.current_epoch.memory_count} keys")
 
             # Initialize new epoch
 self._initialize_epoch(tick)
@@ -268,9 +285,9 @@ tick: int
 ) -> None:
 """Register a memory key for tracking."""
         try:
-epoch_id = self.current_epoch.epoch_id if self.current_epoch else "unknown"
+epoch_id=self.current_epoch.epoch_id if self.current_epoch else "unknown"
 
-self.memory_key_registry[memory_key] = {]
+self.memory_key_registry[memory_key]={]
 "agent_type": agent_type.value,
 "curve_id": curve_id,
 "tick": tick,
@@ -282,8 +299,8 @@ self.memory_key_registry[memory_key] = {]
         except Exception as e:
 safe_safe_print(f"⚠️ Memory key registration failed: {safe_format_error(e, 'key_registration')}")
 
-def _clean_old_epochs(self) -> None:
 
+def _clean_old_epochs(self) -> None:
 
     pass
     pass
@@ -298,13 +315,13 @@ sorted_epochs = sorted(
                 key=lambda x: x[1].start_time
 
 
-epochs_to_remove = len(sorted_epochs) - self.max_epochs
+epochs_to_remove=len(sorted_epochs) - self.max_epochs
             for i in range(epochs_to_remove):
-                epoch_id, epoch = sorted_epochs[i]
+                epoch_id, epoch=sorted_epochs[i]
                 del self.epoch_history[epoch_id]
 
                 # Remove associated memory keys
-keys_to_remove = [
+keys_to_remove=[
 key for key, data in self.memory_key_registry.items()
                     if data.get("epoch_id") == epoch_id
                 ]
@@ -323,12 +340,12 @@ def get_epoch_info(self, tick: int) -> Optional[Dict]:
     pass
         """Get information about the epoch for a given tick."""
         try:
-epoch_start = tick - (tick % self.epoch_size)
-            epoch_end = epoch_start + self.epoch_size - 1
-epoch_id = f"epoch_{epoch_start}_{epoch_end}"
+epoch_start=tick - (tick % self.epoch_size)
+            epoch_end=epoch_start + self.epoch_size - 1
+epoch_id=f"epoch_{epoch_start}_{epoch_end}"
 
             if epoch_id in self.epoch_history:
-epoch = self.epoch_history[epoch_id]
+epoch=self.epoch_history[epoch_id]
                 return {
 "epoch_id": epoch.epoch_id,
 "start_tick": epoch.start_tick,
@@ -369,16 +386,16 @@ def get_epoch_statistics(self) -> Dict:
     pass
         """Get statistics about epochs and memory keys."""
         try:
-current_epoch_id = self.current_epoch.epoch_id if self.current_epoch else None
+current_epoch_id=self.current_epoch.epoch_id if self.current_epoch else None
 
-epoch_stats = {}
+epoch_stats={}
             for epoch_id, epoch in self.epoch_history.items():
-                epoch_keys = [
+                epoch_keys=[
 key for key, data in self.memory_key_registry.items()
                     if data.get("epoch_id") == epoch_id
                 ]
 
-epoch_stats[epoch_id] = {]
+epoch_stats[epoch_id]={]
 "start_tick": epoch.start_tick,
 "end_tick": epoch.end_tick,
 "memory_count": len(epoch_keys),

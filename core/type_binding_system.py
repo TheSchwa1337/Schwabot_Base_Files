@@ -1,6 +1,108 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
 # Import safe print for Windows compatibility
+from typing import (
+    Any, Dict, List, Optional, Tuple, Union, TYPE_CHECKING,
+Callable, Protocol, runtime_checkable
+
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+import numpy.typing as npt
+
+if TYPE_CHECKING:
+from pathlib import Path
+from datetime import datetime
+
+# Set up logging
+logger=logging.getLogger(__name__)
+
+# =============================================================================
+# CORE TYPE DEFINITIONS - Following constraints.py pattern
+# =============================================================================
+
+# Mathematical types
+Vector=npt.NDArray[np.float64]
+Matrix=npt.NDArray[np.float64]
+Tensor=npt.NDArray[np.float64]
+
+# Financial types
+Price=float
+Volume=float
+Quantity=float
+Amount=float
+Rate=float
+Percentage=float
+Ratio=float
+Delta=float
+Offset=float
+Threshold=float
+Limit=float
+Target=float
+
+# Risk and performance types
+Entropy=float
+Correlation=float
+Volatility=float
+Momentum=float
+Profit=float
+Loss=float
+PnL=float
+ROI=float
+Risk=float
+Exposure=float
+Leverage=float
+
+# Collection types
+Waveform=List[float]
+Oscillator=List[float]
+Args=List[Any]
+Items=List[Any]
+Values=List[Any]
+Keys=List[str]
+Names=List[str]
+Symbols=List[str]
+Tickers=List[str]
+
+# Dictionary types
+Indicator=Dict[str, float]
+Signal=Dict[str, Any]
+Pattern=Dict[str, Any]
+Analysis=Dict[str, Any]
+Prediction=Dict[str, Any]
+Forecast=Dict[str, Any]
+Optimization=Dict[str, Any]
+Calibration=Dict[str, Any]
+Validation=Dict[str, Any]
+Order=Dict[str, Any]
+Trade=Dict[str, Any]
+Position=Dict[str, Any]
+Portfolio=Dict[str, Any]
+Balance=Dict[str, float]
+Data=Dict[str, Any]
+Result=Dict[str, Any]
+Config=Dict[str, Any]
+Params=Dict[str, Any]
+Kwargs=Dict[str, Any]
+
+# String types
+Period=str
+Name=str
+Id=str
+Type=str
+Status=str
+Message=str
+Description=str
+Path=str
+Url=str
+Symbol=str
+Ticker=str
+Currency=str
+Format=str
+
+# Boolean types
+import logging
+from decimal import Decimal
+from dataclasses import dataclass, field
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
 except ImportError:
@@ -11,42 +113,49 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
 """Type Binding System - Centralized Type Definitions and Validation.
@@ -78,137 +187,35 @@ Key Features:
 """
 
 
-from dataclasses import dataclass, field
-from decimal import Decimal
-import logging
-from typing import (
-    Any, Dict, List, Optional, Tuple, Union, TYPE_CHECKING,
-Callable, Protocol, runtime_checkable
-
-
-# from core.unified_math_system import unified_math  # F811: duplicate import
-import numpy.typing as npt
-
-if TYPE_CHECKING:
-from pathlib import Path
-from datetime import datetime
-
-# Set up logging
-logger = logging.getLogger(__name__)
-
-# =============================================================================
-# CORE TYPE DEFINITIONS - Following constraints.py pattern
-# =============================================================================
-
-# Mathematical types
-Vector = npt.NDArray[np.float64]
-Matrix = npt.NDArray[np.float64]
-Tensor = npt.NDArray[np.float64]
-
-# Financial types
-Price = float
-Volume = float
-Quantity = float
-Amount = float
-Rate = float
-Percentage = float
-Ratio = float
-Delta = float
-Offset = float
-Threshold = float
-Limit = float
-Target = float
-
-# Risk and performance types
-Entropy = float
-Correlation = float
-Volatility = float
-Momentum = float
-Profit = float
-Loss = float
-PnL = float
-ROI = float
-Risk = float
-Exposure = float
-Leverage = float
-
-# Collection types
-Waveform = List[float]
-Oscillator = List[float]
-Args = List[Any]
-Items = List[Any]
-Values = List[Any]
-Keys = List[str]
-Names = List[str]
-Symbols = List[str]
-Tickers = List[str]
-
-# Dictionary types
-Indicator = Dict[str, float]
-Signal = Dict[str, Any]
-Pattern = Dict[str, Any]
-Analysis = Dict[str, Any]
-Prediction = Dict[str, Any]
-Forecast = Dict[str, Any]
-Optimization = Dict[str, Any]
-Calibration = Dict[str, Any]
-Validation = Dict[str, Any]
-Order = Dict[str, Any]
-Trade = Dict[str, Any]
-Position = Dict[str, Any]
-Portfolio = Dict[str, Any]
-Balance = Dict[str, float]
-Data = Dict[str, Any]
-Result = Dict[str, Any]
-Config = Dict[str, Any]
-Params = Dict[str, Any]
-Kwargs = Dict[str, Any]
-
-# String types
-Period = str
-Name = str
-Id = str
-Type = str
-Status = str
-Message = str
-Description = str
-Path = str
-Url = str
-Symbol = str
-Ticker = str
-Currency = str
-Format = str
-
-# Boolean types
-Enabled = bool
-Active = bool
-Valid = bool
-Success = bool
-Ready = bool
-Available = bool
-Visible = bool
-Debug = bool
-Verbose = bool
+Enabled=bool
+Active=bool
+Valid=bool
+Success=bool
+Ready=bool
+Available=bool
+Visible=bool
+Debug=bool
+Verbose=bool
 
 # Integer types
-Duration = int
-Count = int
-Index = int
-Size = int
-Length = int
-Max = int
-Min = int
-Value = int
-Number = int
-Tick = int
-Step = int
-Level = int
+Duration=int
+Count=int
+Index=int
+Size=int
+Length=int
+Max=int
+Min=int
+Value=int
+Number=int
+Tick=int
+Step=int
+Level=int
 
 # =============================================================================
 # VALIDATION SCHEMAS - Following constraints.py pattern
 # =============================================================================
 
-@dataclass
+@ dataclass
 class TypeValidationError:
 
 
@@ -219,11 +226,11 @@ expected_type: str
 actual_type: str
 value: Any
 message: str
-severity: str = "error"  # 'warning', 'error', 'critical'
-remediation_suggestion: str = ""
+severity: str="error"  # 'warning', 'error', 'critical'
+remediation_suggestion: str=""
 
 
-@dataclass
+@ dataclass
 class ValidationResult:
 
 
@@ -232,7 +239,7 @@ class ValidationResult:
 valid: bool
 errors: List[TypeValidationError]
 warnings: List[str]
-execution_time: float = 0.0
+execution_time: float=0.0
 
 
 # =============================================================================
@@ -250,8 +257,8 @@ def __init__(self) -> None:
     pass
     pass
         """Initialize type binding validator."""
-self.version = "1.0.0"
-self.type_patterns = self._build_type_patterns()
+self.version="1.0.0"
+self.type_patterns=self._build_type_patterns()
         logger.info(f"TypeBindingValidator v{self.version} initialized")
 
 def _build_type_patterns(self) -> Dict[str, str]:
@@ -260,10 +267,10 @@ def _build_type_patterns(self) -> Dict[str, str]:
     pass
     pass
         """Build comprehensive type patterns."""
-patterns = {}
+patterns={}
 
         # Float patterns
-float_patterns = {
+float_patterns={
 "price": "float", "volume": "float", "quantity": "float",
 "amount": "float", "rate": "float", "percentage": "float",
 "ratio": "float", "delta": "float", "offset": "float",
@@ -275,7 +282,7 @@ float_patterns = {
 }
 
         # List patterns
-list_patterns = {
+list_patterns={
 "waveform": "List[float]", "oscillator": "List[float]",
 "args": "List[Any]", "items": "List[Any]", "values": "List[Any]",
 "keys": "List[str]", "names": "List[str]", "symbols": "List[str]",
@@ -283,7 +290,7 @@ list_patterns = {
 }
 
         # Dict patterns
-dict_patterns = {
+dict_patterns={
 "indicator": "Dict[str, float]", "signal": "Dict[str, Any]",
 "pattern": "Dict[str, Any]", "analysis": "Dict[str, Any]",
 "prediction": "Dict[str, Any]", "forecast": "Dict[str, Any]",
@@ -297,7 +304,7 @@ dict_patterns = {
 }
 
         # String patterns
-str_patterns = {
+str_patterns={
 "period": "str", "name": "str", "id": "str", "type": "str",
 "status": "str", "message": "str", "description": "str",
 "path": "str", "url": "str", "symbol": "str", "ticker": "str",
@@ -305,14 +312,14 @@ str_patterns = {
 }
 
         # Boolean patterns
-bool_patterns = {
+bool_patterns={
 "enabled": "bool", "active": "bool", "valid": "bool",
 "success": "bool", "ready": "bool", "available": "bool",
 "visible": "bool", "debug": "bool", "verbose": "bool"
 }
 
         # Integer patterns
-int_patterns = {
+int_patterns={
 "duration": "int", "count": "int", "index": "int",
 "size": "int", "length": "int", "max": "int", "min": "int",
 "value": "int", "number": "int", "tick": "int", "step": "int",
@@ -339,10 +346,10 @@ expected_type: str
 ) -> Optional[TypeValidationError]:
 """Validate a type binding."""
 import time
-start_time = time.time()
+start_time=time.time()
 
         # Get actual type
-actual_type = type(value).__name__
+actual_type=type(value).__name__
 
         # Check if types match
         if not self._types_compatible(actual_type, expected_type):
@@ -393,21 +400,21 @@ def validate_module_types(self, module_data: Dict[str, Any]) -> ValidationResult
     pass
     pass
         """Validate all types in a module."""
-start_time = time.time()
+start_time=time.time()
 
-errors = []
-warnings = []
+errors=[]
+warnings=[]
 
         for field_name, value in module_data.items():
             # Get expected type from patterns
-expected_type = self.type_patterns.get(field_name, "Any")
+expected_type=self.type_patterns.get(field_name, "Any")
 
             if expected_type != "Any":
-error = self.validate_type_binding(field_name, value, expected_type)
+error=self.validate_type_binding(field_name, value, expected_type)
                 if error:
 errors.append(error)
 
-execution_time = time.time() - start_time
+execution_time=time.time() - start_time
 
         return ValidationResult(
             valid=len(errors) == 0,
@@ -426,7 +433,7 @@ class WindowsCliCompatibilityHandler:
 
     """Handles Windows CLI compatibility for cross-platform operation."""
 
-@staticmethod
+@ staticmethod
 def is_windows_cli() -> bool:
 
 
@@ -440,8 +447,8 @@ import os
             or "powershell" in os.environ.get("PSModulePath", "").lower()
 
 
-@staticmethod
-def safe_print(message: str, use_emoji: bool = True) -> str:
+@ staticmethod
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
@@ -449,30 +456,30 @@ def safe_print(message: str, use_emoji: bool = True) -> str:
         """Safely print messages with optional emoji support."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
 import re
-message = re.sub(r"[^\w\s\-_.,!?]", "", message)
+message=re.sub(r"[^\w\s\-_.,!?]", "", message)
         return message
 
-@staticmethod
+@ staticmethod
 def log_safe(logger: Any, level: str, message: str) -> None:
 
 
     pass
     pass
         """Safely log messages with CLI compatibility."""
-safe_message = WindowsCliCompatibilityHandler.safe_print(message)
+safe_message=WindowsCliCompatibilityHandler.safe_print(message)
         if hasattr(logger, level.lower()):
             getattr(logger, level.lower())(safe_message)
 
-@staticmethod
-def safe_format_error(error: Exception, context: str = "") -> str:
+@ staticmethod
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
     pass
         """Safely format error messages for CLI compatibility."""
-error_msg = str(error)
+error_msg=str(error)
         if context:
-error_msg = f"{context}: {error_msg}"
+error_msg=f"{context}: {error_msg}"
         return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
 
 
@@ -480,7 +487,7 @@ error_msg = f"{context}: {error_msg}"
 # MATHEMATICAL TYPE SAFETY - Following constraints.py pattern
 # =============================================================================
 
-@dataclass
+@ dataclass
 class MathematicalTypeValidator:
 
 
@@ -491,8 +498,8 @@ def validate_numeric_bounds(
 
         self,
 value: Union[float, Decimal],
-min_val: Optional[float] = None,
-max_val: Optional[float] = None
+min_val: Optional[float]=None,
+max_val: Optional[float]=None
 ) -> Optional[TypeValidationError]:
 """Validate numeric bounds."""
         if min_val is not None and value < min_val:
@@ -525,7 +532,7 @@ def validate_matrix_properties(self, matrix: Matrix) -> List[TypeValidationError
     pass
     pass
         """Validate matrix properties."""
-errors = []
+errors=[]
 
         # Check for NaN values
         if np.any(np.isnan(matrix)):
@@ -559,13 +566,13 @@ remediation_suggestion="Check for overflow or division by zero"
 # =============================================================================
 
 # Global validator instance
-type_validator = TypeBindingValidator()
+type_validator=TypeBindingValidator()
 
 # Global mathematical validator
-math_validator = MathematicalTypeValidator()
+math_validator=MathematicalTypeValidator()
 
 # Global CLI handler
-cli_handler = WindowsCliCompatibilityHandler()
+cli_handler=WindowsCliCompatibilityHandler()
 
 
 # =============================================================================
@@ -582,7 +589,7 @@ def main() -> None:
 safe_print(f"[OK] TypeBindingValidator v{type_validator.version} initialized")
 
         # Test type validation
-test_data = {
+test_data={
 "price": 100.0,
 "volume": 1000.0,
 "symbol": "BTC",
@@ -590,14 +597,14 @@ test_data = {
 "count": 42
 }
 
-result = type_validator.validate_module_types(test_data)
+result=type_validator.validate_module_types(test_data)
         safe_print(f"[VALIDATION] Type validation: {'PASS' if result.valid else 'FAIL'}")
         safe_print(f"   Errors: {len(result.errors)}")
         safe_print(f"   Warnings: {len(result.warnings)}")
 
         # Test mathematical validation
-test_matrix = np.random.randn(3, 3)
-        math_errors = math_validator.validate_matrix_properties(test_matrix)
+test_matrix=np.random.randn(3, 3)
+        math_errors=math_validator.validate_matrix_properties(test_matrix)
         safe_print(f"[MATH] Mathematical validation: {'PASS' if len(math_errors) == 0 else 'FAIL'}")
         safe_print(f"   Math errors: {len(math_errors)}")
 
@@ -618,6 +625,6 @@ main()
 # =============================================================================
 
 # Backward compatibility aliases
-TypeValidator = TypeBindingValidator
-MathValidator = MathematicalTypeValidator
-CliHandler = WindowsCliCompatibilityHandler
+TypeValidator=TypeBindingValidator
+MathValidator=MathematicalTypeValidator
+CliHandler=WindowsCliCompatibilityHandler

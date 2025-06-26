@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
 
+import hashlib
 from core.unified_math_system import unified_math
 import numpy as np
 import math
@@ -38,8 +39,6 @@ __all__: list[str] = ["GhostRouter", "ghost_router"]
 
 
 def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
-
-
     """Return Hamming distance of two equal-length hex strings."""
     if len(a) != len(b):  # pad shorter one for robustness
         raise ValueError("hash strings must have equal length")
@@ -47,7 +46,6 @@ def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
 
 
 def _cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
-
 
     pass
     pass
@@ -75,7 +73,6 @@ _NEWS_OVERLAY_THRESHOLD: Final = 0.6
 
 def _hash_drift_detect(curr_hash: str, mem_hash: str) -> bool:
 
-
     pass
     pass
     """TODO: document _hash_drift_detect."""
@@ -83,7 +80,6 @@ def _hash_drift_detect(curr_hash: str, mem_hash: str) -> bool:
 
 
 def _pool_stability_check(vol_series: np.ndarray) -> bool:
-
 
     pass
     pass
@@ -94,7 +90,6 @@ def _pool_stability_check(vol_series: np.ndarray) -> bool:
 
 
 def _lantern_match(vec: np.ndarray, reference: np.ndarray) -> bool:
-
 
     pass
     pass
@@ -107,26 +102,27 @@ def _ai_consensus(
 
     hashes: Tuple[str, str, str], weights: Tuple[float, float, float]
 ) -> bool:
+
 """TODO: document _ai_consensus."""
 h1, h2, h3 = hashes
-    if not (h1 == h2 == h3):
-        return False
+if not (h1 == h2 == h3):
+    return False
 trust = sum(weights)
-    return trust >= _AI_TRUST_THRESHOLD
+return trust >= _AI_TRUST_THRESHOLD
 
 
 def _reentry_tolerance(opportunity_ts: float, now_ts: float) -> bool:
 
-
     pass
     pass
     """TODO: document _reentry_tolerance."""
+
+
 decay = unified_math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
-    return decay >= _DECAY_THRESHOLD
+return decay >= _DECAY_THRESHOLD
 
 
 def _profit_lock_sync(curr_profit: float, projected_exit: float) -> bool:
-
 
     pass
     pass
@@ -135,7 +131,6 @@ def _profit_lock_sync(curr_profit: float, projected_exit: float) -> bool:
 
 
 def _news_overlay_route(score: float) -> bool:
-
 
     pass
     pass
@@ -151,8 +146,8 @@ def _news_overlay_route(score: float) -> bool:
 @dataclass(slots=True)
 class RouterInput:
 
-
     """TODO: document RouterInput."""
+
 
 tick_hash: str
 mem_hash: str
@@ -162,9 +157,9 @@ lantern_vec: np.ndarray
 lantern_ref: np.ndarray
 ai_hashes: Tuple[str, str, str]
 ai_weights: Tuple[float, float, float] = (1.0, 1.0, 1.0)
-    opportunity_ts: float = 0.0
+opportunity_ts: float = 0.0
 now_ts: float = time.time()
-    price_now: float = 0.0
+price_now: float = 0.0
 price_pred: float = 0.0
 curr_profit: float = 0.0
 projected_exit: float = 0.0
@@ -178,43 +173,41 @@ news_score: float = 0.0  # aggregated sentiment score
 
 class GhostRouter:
 
-
     """Evaluate conditional chain; return routing decision string."""
 
+
 def route(self, data: RouterInput) -> str:  # noqa: D401
+    """Determine routing decision via multi-step drift, consensus and risk checks."""
+    # 1. Hash drift detection
+    if not _hash_drift_detect(data.tick_hash, data.mem_hash):
+        return "noop"
 
+    # 2. Pool stability + BTC dip
+    if not (_pool_stability_check(data.pool_volumes) and data.btc_dip):
+        return "noop"
 
-        """Determine routing decision via multi-step drift, consensus and risk checks."""
-        # 1. Hash drift detection
-        if not _hash_drift_detect(data.tick_hash, data.mem_hash):
-            return "noop"
+    # 3. Lantern vector match
+    if not _lantern_match(data.lantern_vec, data.lantern_ref):
+        return "noop"
 
-        # 2. Pool stability + BTC dip
-        if not (_pool_stability_check(data.pool_volumes) and data.btc_dip):
-            return "noop"
+    # 4. AI consensus chain
+    if not _ai_consensus(data.ai_hashes, data.ai_weights):
+        return "noop"
 
-        # 3. Lantern vector match
-        if not _lantern_match(data.lantern_vec, data.lantern_ref):
-            return "noop"
+    # 5. Dead-signal re-entry tolerance
+    if not _reentry_tolerance(data.opportunity_ts, data.now_ts):
+        return "noop"
 
-        # 4. AI consensus chain
-        if not _ai_consensus(data.ai_hashes, data.ai_weights):
-            return "noop"
+    # 6. Profit lock – if we are already beyond target, exit route
+    if _profit_lock_sync(data.curr_profit, data.projected_exit):
+        return "hold_usdc"
 
-        # 5. Dead-signal re-entry tolerance
-        if not _reentry_tolerance(data.opportunity_ts, data.now_ts):
-            return "noop"
+    # 7. Narrative glyph overlay – may override to defensive hold
+    if _news_overlay_route(data.news_score):
+        return "hold_usdc"
 
-        # 6. Profit lock – if we are already beyond target, exit route
-        if _profit_lock_sync(data.curr_profit, data.projected_exit):
-            return "hold_usdc"
-
-        # 7. Narrative glyph overlay – may override to defensive hold
-        if _news_overlay_route(data.news_score):
-            return "hold_usdc"
-
-        # All green
-        return "ghost_trade"
+    # All green
+    return "ghost_trade"
 
 
 # -----------------------------------------------------------------------------
@@ -223,8 +216,6 @@ def route(self, data: RouterInput) -> str:  # noqa: D401
 
 
 def ghost_router(data: RouterInput) -> str:  # noqa: D401
-
-
     """Return routing decision using :class:`GhostRouter.route`."""
     return GhostRouter().route(data)
 
@@ -232,8 +223,8 @@ def ghost_router(data: RouterInput) -> str:  # noqa: D401
 @dataclass(slots=True)
 class ExecPacket:
 
-
     """Executable order packet ⟨V_final , route , O_t , τ_t⟩ (formula 16)."""
+
 
 volume: float
 route: Literal["vault_mode", "long_mode", "short_mode", "mid_mode"]
@@ -269,46 +260,46 @@ epsilon: float = 1e-9,
 Q_max: float = 1e6,
 timestamp: float | None = None,
 ) -> ExecPacket:  # noqa: D401
+
 """Compute ghost routing decision and order size.
 
 Returns an :class:`ExecPacket` with volume, route string, price offset 0.0
 (placeholder) and hash-tag τₜ.
     """
-import hashlib
 #     from core.unified_math_system import unified_math  # F811: duplicate import
 
 delta_H = H_t - H_prev
-    # (1) Φ_t
-    phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
+# (1) Φ_t
+phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
 
-    # (3) execution velocity
-    v_exec = unified_math.unified_math.sqrt(P_res / (rho_t * phi_t + epsilon))
+# (3) execution velocity
+v_exec = unified_math.unified_math.sqrt(P_res / (rho_t * phi_t + epsilon))
 
-    # (4) volume throttle
-    V_adj = base_vol * unified_math.exp(-kappa * S_t)
+# (4) volume throttle
+V_adj = base_vol * unified_math.exp(-kappa * S_t)
 
-    # (5)(6) route weights
-    w_btc = psi * (1.0 - phi_t) * v_exec
-    w_usdc = (1.0 - psi) * phi_t * v_exec
+# (5)(6) route weights
+w_btc = psi * (1.0 - phi_t) * v_exec
+w_usdc = (1.0 - psi) * phi_t * v_exec
 
-    # (7) route decision
-    if phi_t > theta_high:
+# (7) route decision
+if phi_t > theta_high:
 route = "vault_mode"
-    elif phi_t < theta_low and delta_H < 0:
+elif phi_t < theta_low and delta_H < 0:
 route = "long_mode"
-    elif phi_t < theta_low and delta_H > 0:
+elif phi_t < theta_low and delta_H > 0:
 route = "short_mode"
-    else:
+else:
 route = "mid_mode"
 
-    # (8) final executable size
-    Q_exec = unified_math.max(0.0, unified_math.min(V_adj * (w_btc + w_usdc), Q_max))
+# (8) final executable size
+Q_exec = unified_math.max(0.0, unified_math.min(V_adj * (w_btc + w_usdc), Q_max))
 
-    # (9) hash-tag
-    if timestamp is None:
+# (9) hash-tag
+if timestamp is None:
 
 timestamp = _time.time()
-    tag_data = f"{H_t}{route}{timestamp}".encode()
-    tau_t = hashlib.sha256(tag_data).hexdigest()
+tag_data = f"{H_t}{route}{timestamp}".encode()
+tau_t = hashlib.sha256(tag_data).hexdigest()
 
-    return ExecPacket(volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t)
+return ExecPacket(volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t)

@@ -58,7 +58,7 @@ DEFAULT_INDENT_SIZE = 4
 class SchwabotConfig:
 
     """TODO: document SchwabotConfig."""
-    
+
     def __init__(self: Any) -> None:
         """TODO: document __init__."""
         self.zygot_config = {

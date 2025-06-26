@@ -83,24 +83,24 @@ class RiddleGEMMEngine:
             self.matrix_controllers[BitLevel.FOUR_BIT] = create_matrix_controller(
                 BitLevel.FOUR_BIT, MatrixPhase.INITIALIZATION
             )
-            
+
             # Initialize 8-bit controller for intermediate operations
             self.matrix_controllers[BitLevel.EIGHT_BIT] = create_matrix_controller(
                 BitLevel.EIGHT_BIT, MatrixPhase.ACCUMULATION
             )
-            
+
             # Initialize 16-bit controller for advanced operations
             self.matrix_controllers[BitLevel.SIXTEEN_BIT] = create_matrix_controller(
                 BitLevel.SIXTEEN_BIT, MatrixPhase.RESONANCE
             )
-            
+
             # Initialize 42-bit controller for quantum operations
             self.matrix_controllers[BitLevel.FORTY_TWO_BIT] = create_matrix_controller(
                 BitLevel.FORTY_TWO_BIT, MatrixPhase.FORTY_TWO_PHASE
             )
-            
+
             logger.info(f"Initialized {len(self.matrix_controllers)} matrix controllers.")
-            
+
         except Exception as e:
             logger.error(f"Failed to initialize matrix controllers: {e}")
             # Fallback: create basic controllers without advanced features
@@ -109,7 +109,7 @@ class RiddleGEMMEngine:
     def _create_fallback_controllers(self) -> None:
         """Create fallback matrix controllers if initialization fails."""
         logger.warning("Creating fallback matrix controllers...")
-        
+
         # Simple fallback controllers
         for bit_level in [BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT, BitLevel.SIXTEEN_BIT]:
             try:
@@ -122,7 +122,7 @@ class RiddleGEMMEngine:
     def register_strategy(self, name: str, vector: List[float], content_hash: str) -> None:
         """
         Register a new strategy vector and its content hash.
-        
+
         Args:
             name: The unique name for the strategy.
             vector: The list of floats representing the strategy's parameters.
@@ -134,7 +134,7 @@ class RiddleGEMMEngine:
                 f"Expected {self.vector_size}, got {len(vector)}."
             )
             return
-        
+
         self.strategy_vectors[name] = np.array(vector)
         self.strategy_hashes[name] = content_hash
         logger.debug(f"Registered strategy '{name}'.")
@@ -169,7 +169,7 @@ class RiddleGEMMEngine:
             return {}
 
         state_vector_np = np.array(current_state_vector)
-        
+
         # Apply GEMM-style transformation
         weight_matrix = self.weight_matrices.get(matrix_name, self.weight_matrices["default"])
         transformed_state = unified_math.unified_math.dot_product(weight_matrix, state_vector_np)
@@ -182,7 +182,7 @@ class RiddleGEMMEngine:
             # Calculate confidence score using the weighted sigmoid utility
             confidence = calculate_weighted_confidence(strategy_vec, transformed_state)
             scores[name] = confidence
-            
+
         return scores
 
     def _update_matrix_controllers(self, transformed_state: np.ndarray) -> None:
@@ -231,19 +231,19 @@ class RiddleGEMMEngine:
 
         best_strategy = unified_math.max(scores, key=scores.get)
         best_score = scores[best_strategy]
-        
+
         # ✨ NEW: Check for fallback triggers
         if self.ghost_state.should_trigger_fallback(best_score):
             logger.warning(f"Fallback triggered for strategy '{best_strategy}' with score {best_score:.4f}")
             return self._execute_fallback_strategy(current_state_vector)
-        
+
         logger.info(
             f"Best strategy found: '{best_strategy}' with score {best_score:.4f}"
         )
-        
+
         # ✨ NEW: Check cross-basket triggers
         self._check_cross_basket_triggers(best_strategy, best_score)
-        
+
         return best_strategy, best_score
 
     def _update_identity_state(self, current_state_vector: List[float]) -> None:
@@ -253,8 +253,8 @@ class RiddleGEMMEngine:
                 "vector_size": len(current_state_vector),
                 "vector_hash": hash(tuple(current_state_vector)),
                 "active_strategies": list(self.strategy_vectors.keys()),
-                "matrix_controllers": {level.value: controller.phase.value 
-                                     for level, controller in self.matrix_controllers.items()}
+                "matrix_controllers": {level.value: controller.phase.value
+                                       for level, controller in self.matrix_controllers.items()}
             }
 
             # Create identity state
@@ -266,7 +266,7 @@ class RiddleGEMMEngine:
 
             # Add to trace
             self.identity_trace.add_state(self.current_identity_state)
-            
+
             # Save trace to log
             save_identity_trace(self.identity_trace, "riddle_gemm_identity")
 
@@ -284,7 +284,7 @@ class RiddleGEMMEngine:
                 return fallback_strategy, fallback_score
         except Exception as e:
             logger.error(f"Fallback strategy execution failed: {e}")
-        
+
         return None, 0.0
 
     def _check_cross_basket_triggers(self, strategy_name: str, confidence: float) -> None:
@@ -316,13 +316,13 @@ class RiddleGEMMEngine:
         for name, target_hash in self.strategy_hashes.items():
             if name == strategy_name:
                 continue
-            
+
             # Calculate distance using the hash distance utility
             distance = calculate_hash_distance(source_hash, target_hash, method='hamming')
-            
+
             if distance <= self.distance_threshold:
                 related.append({"name": name, "distance": distance})
-        
+
         # Sort by distance (closest first)
         related.sort(key=lambda x: x["distance"])
         return related
@@ -351,4 +351,4 @@ class RiddleGEMMEngine:
 
     def get_identity_trace_hash(self) -> str:
         """Get current identity trace hash."""
-        return self.identity_trace.trace_hash 
+        return self.identity_trace.trace_hash

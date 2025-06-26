@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+import inspect
+from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Set
+import logging
+import json
+import sys
+import os
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Demo Connectivity Audit - Schwabot Demo Suite Analysis
@@ -63,16 +80,7 @@ This audit ensures all demo functionality is mathematically viable and
 fully integrated with the real Schwabot architecture.
 """
 
-import os
-import sys
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Set
-from dataclasses import dataclass, field
-from datetime import datetime
-from pathlib import Path
 importlib
-import inspect
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +88,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DemoModuleInfo:
 
-
     """Information about a demo module."""
+
+
 module_name: str
 file_path: str
 module_type: str  # "demo", "test", "simulator", "backtest"
@@ -97,8 +106,9 @@ priority: int  # 1=high, 2=medium, 3=low
 @dataclass
 class ConnectivityAnalysis:
 
-
     """Analysis of demo suite connectivity."""
+
+
 total_modules: int
 modules_with_real_integration: int
 modules_with_example_code: int
@@ -113,7 +123,6 @@ recommendations: List[str]
 
 class DemoConnectivityAudit:
 
-
     """
 Comprehensive audit system for demo suite connectivity.
 
@@ -124,13 +133,15 @@ Analyzes all demo/test/simulator modules to ensure they:
 - Don't contain example or placeholder code
 """
 
-def __init__(self, core_directory: str = "core"):
 
+def __init__(self, core_directory: str = "core"):
 
     pass
     pass
         self.core_directory = Path(core_directory)
         self.demo_modules: List[DemoModuleInfo] = []
+
+
 self.analysis: Optional[ConnectivityAnalysis] = None
 
         # Real Schwabot integration points
@@ -155,12 +166,14 @@ self.example_patterns = [
 
 logger.info("Demo Connectivity Audit initialized")
 
-def run_full_audit(self) -> ConnectivityAnalysis:
 
+def run_full_audit(self) -> ConnectivityAnalysis:
 
     pass
     pass
         """Run comprehensive audit of all demo modules."""
+
+
 logger.info("🔍 Starting comprehensive demo connectivity audit")
 
         # Discover all demo modules
@@ -179,12 +192,14 @@ logger.info(f"✅ Audit completed. Found {len(self.demo_modules)} demo modules")
 
         return self.analysis
 
-def _discover_demo_modules(self) -> None:
 
+def _discover_demo_modules(self) -> None:
 
     pass
     pass
         """Discover all demo/test/simulator modules in the codebase."""
+
+
 demo_modules = []
 
         # Search for demo-related files
@@ -260,27 +275,27 @@ def _analyze_single_module(self, module_info: DemoModuleInfo) -> None:
         """Analyze a single demo module."""
         try:
             with open(module_info.file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+                content=f.read()
 
             # Check for real integration points
-integration_points = []
+integration_points=[]
             for point, description in self.real_integration_points.items():
                 if point in content:
 integration_points.append(f"{point}: {description}")
 
-module_info.integration_points = integration_points
-module_info.has_real_integration = len(integration_points) > 0
+module_info.integration_points=integration_points
+module_info.has_real_integration=len(integration_points) > 0
 
             # Check for example code
-example_code_found = []
+example_code_found=[]
             for pattern in self.example_patterns:
                 if pattern in content.lower():
                     example_code_found.append(pattern)
 
-module_info.uses_example_code = len(example_code_found) > 0
+module_info.uses_example_code=len(example_code_found) > 0
 
             # Check for live system connectivity
-live_connectivity_patterns = [
+live_connectivity_patterns=[
 "real_trading_integration",
 "ferris_rde_core",
 "tick_hash_processor",
@@ -289,35 +304,35 @@ live_connectivity_patterns = [
 "live_trading"
 ]
 
-live_connections = []
+live_connections=[]
             for pattern in live_connectivity_patterns:
                 if pattern in content:
 live_connections.append(pattern)
 
-module_info.connects_to_live_system = len(live_connections) > 0
+module_info.connects_to_live_system=len(live_connections) > 0
 
             # Assess mathematical viability
-math_patterns = {
+math_patterns={
 "full": ["dlt_waveform", "unified_mathematics", "mathlib_v4", "observer_aware"],
 "partial": ["numpy", "scipy", "mathematical", "calculation"],
 "none": []
 }
 
-math_score = 0
+math_score=0
             for viability, patterns in math_patterns.items():
                 for pattern in patterns:
                     if pattern in content.lower():
                         math_score += 1
 
             if math_score >= 3:
-module_info.mathematical_viability = "full"
+module_info.mathematical_viability="full"
             elif math_score >= 1:
-module_info.mathematical_viability = "partial"
+module_info.mathematical_viability="partial"
             else:
-module_info.mathematical_viability = "none"
+module_info.mathematical_viability="none"
 
             # Determine refactoring needs
-refactoring_needs = []
+refactoring_needs=[]
             if module_info.uses_example_code:
 refactoring_needs.append("Replace example/placeholder code")
             if not module_info.has_real_integration:
@@ -327,20 +342,20 @@ refactoring_needs.append("Enable live system connectivity")
             if module_info.mathematical_viability != "full":
 refactoring_needs.append("Improve mathematical viability")
 
-module_info.refactoring_needed = refactoring_needs
+module_info.refactoring_needed=refactoring_needs
 
             # Determine priority
             if len(refactoring_needs) >= 3:
-                module_info.priority = 1  # High priority
+                module_info.priority=1  # High priority
             elif len(refactoring_needs) >= 1:
-                module_info.priority = 2  # Medium priority
+                module_info.priority=2  # Medium priority
             else:
-module_info.priority = 3  # Low priority
+module_info.priority=3  # Low priority
 
         except Exception as e:
 logger.error(f"Error analyzing {module_info.module_name}: {e}")
             module_info.refactoring_needed.append(f"Error during analysis: {e}")
-            module_info.priority = 1
+            module_info.priority=1
 
 def _generate_connectivity_analysis(self) -> ConnectivityAnalysis:
 
@@ -348,19 +363,19 @@ def _generate_connectivity_analysis(self) -> ConnectivityAnalysis:
     pass
     pass
         """Generate comprehensive connectivity analysis."""
-total_modules = len(self.demo_modules)
-        modules_with_real_integration = sum(1 for m in self.demo_modules if m.has_real_integration)
-        modules_with_example_code = sum(1 for m in self.demo_modules if m.uses_example_code)
-        modules_connecting_to_live = sum(1 for m in self.demo_modules if m.connects_to_live_system)
-        mathematically_viable_modules = sum(1 for m in self.demo_modules if m.mathematical_viability == "full")
+total_modules=len(self.demo_modules)
+        modules_with_real_integration=sum(1 for m in self.demo_modules if m.has_real_integration)
+        modules_with_example_code=sum(1 for m in self.demo_modules if m.uses_example_code)
+        modules_connecting_to_live=sum(1 for m in self.demo_modules if m.connects_to_live_system)
+        mathematically_viable_modules=sum(1 for m in self.demo_modules if m.mathematical_viability == "full")
 
         # Categorize refactoring needs by priority
-high_priority_refactors = [m.module_name for m in self.demo_modules if m.priority == 1]
-medium_priority_refactors = [m.module_name for m in self.demo_modules if m.priority == 2]
-low_priority_refactors = [m.module_name for m in self.demo_modules if m.priority == 3]
+high_priority_refactors=[m.module_name for m in self.demo_modules if m.priority == 1]
+medium_priority_refactors=[m.module_name for m in self.demo_modules if m.priority == 2]
+low_priority_refactors=[m.module_name for m in self.demo_modules if m.priority == 3]
 
         # Identify integration gaps
-integration_gaps = []
+integration_gaps=[]
         for module in self.demo_modules:
             if not module.has_real_integration:
 integration_gaps.append(f"{module.module_name}: No real integration points")
@@ -386,7 +401,7 @@ def _generate_recommendations(self) -> None:
     pass
     pass
         """Generate specific recommendations for improvement."""
-recommendations = []
+recommendations=[]
 
         # High-level recommendations
         if self.analysis.modules_with_example_code > 0:
@@ -400,7 +415,7 @@ recommendations.append("Improve mathematical viability across all modules")
 
         # Specific recommendations for high-priority modules
         for module_name in self.analysis.high_priority_refactors:
-module = next(m for m in self.demo_modules if m.module_name == module_name)
+module=next(m for m in self.demo_modules if m.module_name == module_name)
             recommendations.append(f"High priority: Refactor {module_name} - {', '.join(module.refactoring_needed)}")
 
         # Integration recommendations
@@ -409,15 +424,15 @@ recommendations.append("Ensure all demos use real BTC price hashing and 16-bit m
         recommendations.append("Implement DLT waveform integration in all demo modules")
         recommendations.append("Enable seamless demo-to-live transitions")
 
-self.analysis.recommendations = recommendations
+self.analysis.recommendations=recommendations
 
-def generate_audit_report(self, output_file: str = "demo_connectivity_audit_report.json") -> str:
+def generate_audit_report(self, output_file: str="demo_connectivity_audit_report.json") -> str:
 
 
     pass
     pass
         """Generate comprehensive audit report."""
-report = {
+report={
 "audit_timestamp": datetime.now().isoformat(),
             "summary": {
 "total_modules": self.analysis.total_modules,
@@ -511,7 +526,7 @@ def get_demo_connectivity_audit() -> DemoConnectivityAudit:
     pass
     """Get singleton instance of demo connectivity audit."""
     if not hasattr(get_demo_connectivity_audit, '_instance'):
-        get_demo_connectivity_audit._instance = DemoConnectivityAudit()
+        get_demo_connectivity_audit._instance=DemoConnectivityAudit()
     return get_demo_connectivity_audit._instance
 
 
@@ -527,14 +542,14 @@ safe_print("🔍 Starting Schwabot Demo Connectivity Audit")
     safe_print("="*50)
 
     # Run audit
-audit = get_demo_connectivity_audit()
-    analysis = audit.run_full_audit()
+audit=get_demo_connectivity_audit()
+    analysis=audit.run_full_audit()
 
     # Print summary
 audit.print_audit_summary()
 
     # Generate report
-report_file = audit.generate_audit_report()
+report_file=audit.generate_audit_report()
     safe_print(f"\n📄 Detailed report saved to: {report_file}")
 
     # Provide next steps

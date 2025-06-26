@@ -1,75 +1,82 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from hash_registry_manager import HashRegistryManager
+import traceback
+import sys
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
 except ImportError:
     pass
     pass
+
+
 def safe_print(message):
 
+    pass
+    pass
+    print(message)
 
-    pass
-    pass
-        print(message)
+
 def info(message):
 
+    pass
+    pass
+    print(f"[INFO] {message}")
 
-    pass
-    pass
-        print(f"[INFO] {message}")
+
 def warn(message):
 
+    pass
+    pass
+    print(f"[WARN] {message}")
 
-    pass
-    pass
-        print(f"[WARN] {message}")
+
 def error(message):
 
+    pass
+    pass
+    print(f"[ERROR] {message}")
 
-    pass
-    pass
-        print(f"[ERROR] {message}")
+
 def success(message):
 
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
 
-    pass
-    pass
-        print(f"[SUCCESS] {message}")
+
 def debug(message):
 
+    pass
+    pass
+    print(f"[DEBUG] {message}")
 
-    pass
-    pass
-        print(f"[DEBUG] {message}")
 
 # #!/usr/bin/env python3
 """
 Simple Import Test - Check Critical Module Imports and Runtime
 """
 
-import sys
-import traceback
 
 safe_print("Starting import and runtime test...")
 
 try:
-from hash_registry_manager import HashRegistryManager
-    safe_print("✓ HashRegistryManager import - SUCCESS")
-    mgr = HashRegistryManager()
-    safe_print("✓ HashRegistryManager instantiation - SUCCESS")
-    # Try calling a method that would be used in the integration test
-    safe_print("Testing get_hash_entry('hash_00'):")
-    entry = mgr.get_hash_entry('hash_00')
-    safe_print(f"Result: {entry}")
-    safe_print("Testing get_registry_statistics():")
-    stats = mgr.get_registry_statistics()
-    safe_print(f"Stats: {stats}")
-    safe_print("✓ HashRegistryManager runtime test - SUCCESS")
+   safe_print("✓ HashRegistryManager import - SUCCESS")
+   mgr = HashRegistryManager()
+   safe_print("✓ HashRegistryManager instantiation - SUCCESS")
+   # Try calling a method that would be used in the integration test
+   safe_print("Testing get_hash_entry('hash_00'):")
+   entry = mgr.get_hash_entry('hash_00')
+   safe_print(f"Result: {entry}")
+   safe_print("Testing get_registry_statistics():")
+   stats = mgr.get_registry_statistics()
+   safe_print(f"Stats: {stats}")
+   safe_print("✓ HashRegistryManager runtime test - SUCCESS")
 except Exception as e:
     safe_print(f"✗ HashRegistryManager runtime test - FAILED: {e}")
     traceback.print_exc()
 
-def test_import(module_name, class_name=None):
 
+def test_import(module_name, class_name=None):
 
     pass
     pass
@@ -87,8 +94,8 @@ def test_import(module_name, class_name=None):
         safe_print(f"✗ {module_name}{'.' + class_name if class_name else ''} - FAILED: {e}")
         return False
 
-def main():
 
+def main():
 
     pass
     pass
@@ -121,6 +128,7 @@ def main():
     else:
         safe_print("Some imports failed. Check the errors above.")
         return False
+
 
 if __name__ == "__main__":
     pass

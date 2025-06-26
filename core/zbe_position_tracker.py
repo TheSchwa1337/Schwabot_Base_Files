@@ -26,7 +26,7 @@ __all__: list[str] = []
 ]
 
 
-@dataclass(slots=True)
+@ dataclass(slots=True)
 class ZBEPositionTracker:
 
 
@@ -36,7 +36,6 @@ dt: float = 1.0
 evolution_rate: float = 0.1
 
 def compute_psi_n(
-
 
         self,
 z_series: Sequence[float],
@@ -79,7 +78,6 @@ psi_n = np.zeros_like(x_array, dtype=float)
 
 def evolve_position_state(
 
-
         self,
 current_state: np.ndarray,
 zalgo_derivatives: np.ndarray,
@@ -108,7 +106,6 @@ evolved_state = current_state + self.evolution_rate * evolution_term
         return evolved_state
 
 def track_position_trajectory(
-
 
         self,
 initial_state: np.ndarray,
@@ -142,7 +139,6 @@ series[unified_math.min(step, len(series) - 1)]
                     for series in zalgo_time_series
 ]
 
-
             # Compute derivatives
             if step > 0:
 zalgo_prev = np.array(
@@ -151,12 +147,12 @@ series[unified_math.min(step - 1, len(series) - 1)]
                         for series in zalgo_time_series
 ]
 
-zalgo_derivatives = (zalgo_current - zalgo_prev) / self.dt
+zalgo_derivatives=(zalgo_current - zalgo_prev) / self.dt
             else:
-zalgo_derivatives = np.zeros_like(zalgo_current)
+zalgo_derivatives=np.zeros_like(zalgo_current)
 
             # Compute glyph weights at current positions
-glyph_weights = np.array(
+glyph_weights=np.array(
                 [
 g_func(current_state[i % len(current_state)])
                     for i, g_func in enumerate(glyph_functions)
@@ -164,10 +160,10 @@ g_func(current_state[i % len(current_state)])
 
 
             # Evolve state
-current_state = self.evolve_position_state(
+current_state=self.evolve_position_state(
                 current_state, zalgo_derivatives, glyph_weights
 
-trajectory[step] = current_state
+trajectory[step]=current_state
 
         return trajectory
 
@@ -180,24 +176,24 @@ def compute_zalgo_evolution(
 
     z_series: Sequence[float],
 glyph_weights: Sequence[float],
-dt: float = 1.0,
+dt: float=1.0,
 ) -> np.ndarray:
 """Compute basic Zalgo evolution without position dependence."""
-z_array = np.asarray(z_series, dtype=float)
-    weights = np.asarray(glyph_weights, dtype=float)
+z_array=np.asarray(z_series, dtype=float)
+    weights=np.asarray(glyph_weights, dtype=float)
 
     if len(z_array) < 2:
         return np.zeros_like(weights)
 
     # Compute time derivative
-dz_dt = np.gradient(z_array, dt)
+dz_dt=np.gradient(z_array, dt)
 
     # Broadcast multiplication
     if len(dz_dt) == len(weights):
         return dz_dt * weights
     else:
         # Handle length mismatch by using mean derivative
-mean_derivative = unified_math.unified_math.mean(dz_dt)
+mean_derivative=unified_math.unified_math.mean(dz_dt)
         return mean_derivative * weights
 
 
@@ -207,11 +203,11 @@ def track_position_state(
     initial_state: Sequence[float],
 zalgo_series: Sequence[float],
 glyph_weights: Sequence[float],
-evolution_rate: float = 0.1,
+evolution_rate: float=0.1,
 ) -> np.ndarray:
 """Stateless position state tracking."""
-state = np.asarray(initial_state, dtype=float)
-    evolution = compute_zalgo_evolution(zalgo_series, glyph_weights)
+state=np.asarray(initial_state, dtype=float)
+    evolution=compute_zalgo_evolution(zalgo_series, glyph_weights)
 
     # Simple single-step evolution
     return state + evolution_rate * evolution

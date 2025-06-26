@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from .fault_bus import FaultBus
+import aiohttp
+from typing import Any, Dict, List, Optional, Tuple
+from enum import Enum
+from datetime import datetime, timedelta
+from dataclasses import dataclass, field
+from collections import defaultdict
+from abc import ABC, abstractmethod
+import os
+import logging
+import json
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
@@ -9,42 +21,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 API Bridge Manager - Multi-Source Crypto API Integration for Schwabot
@@ -63,20 +83,6 @@ Core Functionality:
 - Publishes new data onto the central FaultBus.
 """
 
-import asyncio
-import json
-import logging
-import os
-from abc import ABC, abstractmethod
-from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
-import aiohttp
-
-from .fault_bus import FaultBus
 
 logger = logging.getLogger(__name__)
 
@@ -85,8 +91,9 @@ logger = logging.getLogger(__name__)
 
 class APISource(Enum):
 
-
     """Enumeration of supported API sources."""
+
+
 COINMARKETCAP = "coinmarketcap"
 COINGECKO = "coingecko"
 
@@ -94,8 +101,9 @@ COINGECKO = "coingecko"
 @dataclass
 class CryptoData:
 
-
     """A unified data structure for cryptocurrency information."""
+
+
 symbol: str
 name: str
 price: float
@@ -114,8 +122,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class CacheEntry:
 
-
     """Represents an entry in the data cache."""
+
+
 data: CryptoData
 timestamp: datetime
 
@@ -124,38 +133,42 @@ timestamp: datetime
 
 class ApiAdapter(ABC):
 
-
     """Abstract base class for API adapters."""
 
-def __init__(self, session: aiohttp.ClientSession, api_key: Optional[str] = None):
 
+def __init__(self, session: aiohttp.ClientSession, api_key: Optional[str] = None):
 
     pass
     pass
         self.session = session
+
+
 self.api_key = api_key
+
 
 @property
 @abstractmethod
 def base_url(self) -> str:
-
 
     pass
     pass
         """The base URL for the API."""
         pass
 
+
 @abstractmethod
 async def get_crypto_data(self, symbols: List[str]) -> List[CryptoData]:
         """Fetch data for given cryptocurrency symbols."""
         pass
 
-def _safe_get(self, data: Dict, key: str, default: Any = None) -> Any:
 
+def _safe_get(self, data: Dict, key: str, default: Any = None) -> Any:
 
     pass
     pass
         """Safely retrieve a value from a nested dictionary."""
+
+
 keys = key.split('.')
         for k in keys:
             if isinstance(data, dict):
@@ -169,16 +182,16 @@ keys = key.split('.')
 
 class CoinGeckoAdapter(ApiAdapter):
 
-
     """API adapter for CoinGecko."""
+
 
 @property
 def base_url(self) -> str:
 
-
     pass
     pass
         return "https://api.coingecko.com/api/v3"
+
 
 async def get_crypto_data(self, symbols: List[str]) -> List[CryptoData]:
         # CoinGecko uses 'ids' which are often full names (e.g., 'bitcoin', 'ethereum')

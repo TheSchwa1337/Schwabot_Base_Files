@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TradingSignalMetrics:
 
-
     """Unified trading signal metrics for core analysis."""
 
     # Core entropy and drift metrics
@@ -35,7 +34,7 @@ profit_decay: float     # Profit decay rate
 harmony: float          # Harmonic balance measure
 drift_penalty: float    # Drift penalty factor
 liquidity_score: float  # Liquidity assessment
-projected_profit: float # Projected profit potential
+projected_profit: float  # Projected profit potential
 
     # Metadata
 timestamp: float = field(default_factory=time.time)
@@ -46,7 +45,6 @@ confidence_interval: Tuple[float, float] = (0.0, 1.0)
 @dataclass
 class BTCInvestmentSignals:
 
-
     """BTC-specific investment signals."""
 
     # Core BTC metrics
@@ -55,8 +53,8 @@ eta_btc: float          # Eta BTC efficiency
 xi_btc: float           # Xi BTC confidence
 price_pressure: float   # Price pressure indicator
 volume_profile: float   # Volume profile strength
-hash_correlation: float # Hash rate correlation
-network_strength: float # Network strength indicator
+hash_correlation: float  # Hash rate correlation
+network_strength: float  # Network strength indicator
 
     # Metadata
 timestamp: float = field(default_factory=time.time)
@@ -65,7 +63,6 @@ confidence_interval: Tuple[float, float] = (0.0, 1.0)
 
 
 class UnifiedSignalProcessor:
-
 
     """
 Processes and generates unified signal metrics for trading analysis.
@@ -77,15 +74,18 @@ Responsibilities:
 - Validate signal quality and consistency
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the unified signal processor."""
+
+
 self.logger = logging.getLogger(__name__)
         self.signal_history: List[Dict[str, Any]] = []
 self.max_history_size = 1000
+
 
 def calculate_trading_signals(
 
@@ -96,6 +96,8 @@ fractal_state: Optional[Dict] = None,
 collapse_state: Optional[Dict] = None,
 market_data: Optional[Dict] = None,
 ) -> TradingSignalMetrics:
+
+
 """Calculate unified trading signal metrics."""
         try:
     pass

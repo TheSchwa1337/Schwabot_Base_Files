@@ -31,7 +31,6 @@ __all__: list[str] = ["map_glyph_to_state"]
 
 def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
 
-
     pass
     pass
     """Return cosine similarity of *v* against each row of *m* (1-D array)."""
@@ -49,8 +48,9 @@ def map_glyph_to_state(
 
 
     glyph_vec: np.ndarray,
-state_matrix: np.ndarray,
+    state_matrix: np.ndarray,
 ) -> Tuple[np.ndarray, int]:
+
 """Project *glyph_vec* onto *state_matrix* and return similarities.
 
 Parameters
@@ -68,7 +68,7 @@ Tuple[np.ndarray, int]
         cosine scores, and *best_idx* is the index of the row with the highest
 similarity.  Values lie in ``[-1, 1]``.
 """
-    if glyph_vec.ndim != 1:
+   if glyph_vec.ndim != 1:
         raise ValueError("glyph_vec must be 1-D")
     if state_matrix.ndim != 2:
         raise ValueError("state_matrix must be 2-D")
@@ -76,5 +76,5 @@ similarity.  Values lie in ``[-1, 1]``.
         raise ValueError("state_matrix dim mismatch with glyph_vec length")
 
 sims = _cosine(glyph_vec, state_matrix)
-    best_idx = int(np.argmax(sims))
+   best_idx = int(np.argmax(sims))
     return sims, best_idx

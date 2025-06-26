@@ -35,8 +35,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SystemSettings:
 
-
     """System-level configuration settings."""
+
+
 name: str = "Schwabot Trading System"
 version: str = "2.0.0"
 environment: str = "production"
@@ -51,8 +52,9 @@ enable_distributed_mode: bool = True
 @dataclass
 class MathematicalSettings:
 
-
     """Mathematical components configuration."""
+
+
 phantom_lag_model: Dict[str, Any] = field(default_factory=lambda: {]]
         'enabled': True,
 'max_history_size': 1000,
@@ -82,7 +84,7 @@ fallback_logic_router: Dict[str, Any] = field(default_factory=lambda: {]]
 })
 
 
-@dataclass
+@ dataclass
 class TradingSettings:
 
 
@@ -117,7 +119,7 @@ risk_management: Dict[str, Any] = field(default_factory=lambda: {]]
 })
 
 
-@dataclass
+@ dataclass
 class ExchangeSettings:
 
 
@@ -150,7 +152,7 @@ kraken: Dict[str, Any] = field(default_factory=lambda: {]]
 })
 
 
-@dataclass
+@ dataclass
 class UISettings:
 
 
@@ -181,7 +183,7 @@ real_time_updates: Dict[str, Any] = field(default_factory=lambda: {]]
 })
 
 
-@dataclass
+@ dataclass
 class MonitoringSettings:
 
 
@@ -213,7 +215,7 @@ class ConfigurationValidator:
 
     """Validates configuration settings."""
 
-@staticmethod
+@ staticmethod
 def validate_system_settings(settings: Dict[str, Any]) -> List[str]:
 
 
@@ -239,7 +241,7 @@ errors = []
 
         return errors
 
-@staticmethod
+@ staticmethod
 def validate_trading_settings(settings: Dict[str, Any]) -> List[str]:
 
 
@@ -263,7 +265,7 @@ position_sizing = settings.get('position_sizing', {})
 
         return errors
 
-@staticmethod
+@ staticmethod
 def validate_exchange_settings(settings: Dict[str, Any]) -> List[str]:
 
 
@@ -291,7 +293,7 @@ class SettingsManager:
 
     """Central settings manager for Schwabot."""
 
-def __init__(self, config_path: str = "./config/schwabot_config.yaml"):
+def __init__(self, config_path: str="./config/schwabot_config.yaml"):
 
 
     pass

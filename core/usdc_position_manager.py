@@ -28,15 +28,14 @@ __all__: list[str] = []
 "usdc_optimal_time",
 ]
 
-# ---------------------------------------------------------------------------
-# Position management functions
-# ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
+    # Position management functions
+    # ---------------------------------------------------------------------------
 
 
-def usdc_position(
+    def usdc_position(
 
-
-    holdings: Sequence[float],
+holdings: Sequence[float],
 rates: Sequence[float],
 time_deltas: Sequence[float],
 ) -> float:  # noqa: D401
@@ -69,8 +68,7 @@ decayed_holdings = hold_arr * decay_factors
 
 def usdc_trading(
 
-
-    alpha_entry: float,
+alpha_entry: float,
 delta_buy: float,
 beta_exit: float,
 delta_sell: float,
@@ -96,8 +94,7 @@ exit_term = beta_exit * delta_sell
 
 def usdc_sigma(
 
-
-    position_gradient: Sequence[float],
+position_gradient: Sequence[float],
 t_usdc: float,
 ) -> np.ndarray:  # noqa: D401
 """Return σ_usdc(t) = ∇P_usdc(t) · unified_math.log(1 + T_usdc).
@@ -124,8 +121,7 @@ sigma_usdc = grad_arr * log_term
 
 def usdc_optimal_time(
 
-
-    sigma_series: Sequence[float],
+sigma_series: Sequence[float],
 theta_usdc: float,
 *,
 times: Sequence[float] | None = None,

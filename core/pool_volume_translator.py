@@ -31,30 +31,33 @@ _EPS: Final = 1e-9
 
 def _relative_volatility(volumes: np.ndarray[Any, Any]) -> float:
 
-
     pass
     pass
     """TODO: document _relative_volatility."""
     if volumes.size == 0:
         return 0.0
+
+
 mu = float(unified_math.unified_math.mean(volumes))
-    if mu < _EPS:
-        return 0.0
+if mu < _EPS:
+    return 0.0
 sigma = float(unified_math.unified_math.std(volumes))
-    return sigma / mu
+return sigma / mu
 
 
 def translate_news_to_pool_vector(
 
 
     sentiment: float,
-pool_volumes: np.ndarray[Any, Any],
+    pool_volumes: np.ndarray[Any, Any],
 ) -> float:
+
+
 """Return influence score in range [-1, 1].
 
 Positive score ⇒ bullish (risk-on), negative ⇒ bearish (risk-off).
     """
 sentiment_clipped = unified_math.max(unified_math.min(sentiment, _CLIP_MAX), _CLIP_MIN)
-    rel_vol = _relative_volatility(pool_volumes)
-    raw = sentiment_clipped * rel_vol
-    return unified_math.max(unified_math.min(raw, _CLIP_MAX), _CLIP_MIN)
+rel_vol = _relative_volatility(pool_volumes)
+raw = sentiment_clipped * rel_vol
+return unified_math.max(unified_math.min(raw, _CLIP_MAX), _CLIP_MIN)

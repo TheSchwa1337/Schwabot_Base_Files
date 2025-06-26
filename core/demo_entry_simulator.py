@@ -1,91 +1,15 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-import numpy as np
-import math
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""
-Demo Entry Simulator - Trade Entry Simulation with DLT Integration
-=================================================================
-
-Comprehensive trade entry simulation and testing system that integrates
-with all core Schwabot components for demo mode entry/exit testing.
-
-This system:
-- Simulates trade entries with various strategies
-- Tests entry logic across different market conditions
-- Integrates with DLT waveform for mathematical validation
-- Provides detailed entry analysis and performance metrics
-- Enables reinforcement learning from entry results
-
-Based on Schwabot's mathematical framework and DLT waveform integration.
-"""
-
-import json
-import logging
-# from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict, field
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import time
-
 from .type_defs import (
     Price, Amount, Confidence, ProfitRatio, Vector, Matrix,
 GhostSignalStrength, EntropyLevel, VolumeRatio
 
 from .mathlib_v4 import MathLibV4
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
-@dataclass
+@ dataclass
 class EntrySimulation:
 
 
@@ -104,10 +28,10 @@ entry_validation_result: Dict[str, Any]
 allocation_result: Dict[str, Any]
 success_probability: float
 dlt_waveform_score: float
-simulation_notes: List[str] = field(default_factory=list)
+simulation_notes: List[str]=field(default_factory=list)
 
 
-@dataclass
+@ dataclass
 class EntryAnalysis:
 
 
@@ -146,14 +70,14 @@ def __init__(self):
     pass
         """Initialize the demo entry simulator."""
         # Mathematical integration
-self.mathlib = MathLibV4()
+self.mathlib=MathLibV4()
 
         # Entry simulation data
-self.entry_simulations: List[EntrySimulation] = []
-self.entry_analysis: Dict[str, EntryAnalysis] = {}
+self.entry_simulations: List[EntrySimulation]=[]
+self.entry_analysis: Dict[str, EntryAnalysis]={}
 
         # Entry strategies with DLT integration
-self.entry_strategies = {
+self.entry_strategies={
 "ghost_signal": self._ghost_signal_entry,
 "volume_spike": self._volume_spike_entry,
 "entropy_low": self._entropy_low_entry,
@@ -166,7 +90,7 @@ self.entry_strategies = {
 }
 
         # Market condition generators
-self.market_conditions = {
+self.market_conditions={
 "bull_market": {"trend": 0.8, "volatility": 0.3, "volume": 1.2},
 "bear_market": {"trend": -0.8, "volatility": 0.5, "volume": 0.8},
 "sideways": {"trend": 0.1, "volatility": 0.2, "volume": 1.0},
@@ -175,11 +99,94 @@ self.market_conditions = {
 }
 
 logger.info("Demo Entry Simulator initialized with DLT integration")
+import time
+from pathlib import Path
+import hashlib
+from datetime import datetime, timedelta
+from dataclasses import dataclass, asdict, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import json
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+import numpy as np
+import math
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
 
-def simulate_entry(self, strategy_type: str, market_condition: str = "sideways",
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
 
 
-                      num_simulations: int = 100) -> EntryAnalysis:
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""
+Demo Entry Simulator - Trade Entry Simulation with DLT Integration
+=================================================================
+
+Comprehensive trade entry simulation and testing system that integrates
+with all core Schwabot components for demo mode entry/exit testing.
+
+This system:
+- Simulates trade entries with various strategies
+- Tests entry logic across different market conditions
+- Integrates with DLT waveform for mathematical validation
+- Provides detailed entry analysis and performance metrics
+- Enables reinforcement learning from entry results
+
+Based on Schwabot's mathematical framework and DLT waveform integration.
+"""
+
+# from core.unified_math_system import unified_math  # F811: duplicate import
+
+
+def simulate_entry(self, strategy_type: str, market_condition: str="sideways",
+
+
+                      num_simulations: int=100) -> EntryAnalysis:
 """
 Simulate trade entries with specified strategy and market conditions.
 
@@ -192,32 +199,32 @@ Mathematical Process:
 logger.info(f"🎯 Starting entry simulation: {strategy_type} in {market_condition} market")
 
         # Get strategy function
-strategy_func = self.entry_strategies.get(strategy_type)
+strategy_func=self.entry_strategies.get(strategy_type)
         if not strategy_func:
             raise ValueError(f"Unknown strategy type: {strategy_type}")
 
         # Get market conditions
-market_conditions = self.market_conditions.get(market_condition, self.market_conditions["sideways"])
+market_conditions=self.market_conditions.get(market_condition, self.market_conditions["sideways"])
 
-simulations = []
+simulations=[]
 
         for i in range(num_simulations):
             # Generate entry data using strategy
-entry_data = strategy_func(market_conditions, i)
+entry_data=strategy_func(market_conditions, i)
 
             # Apply DLT waveform validation
-dlt_validation = self._apply_dlt_validation(entry_data)
+dlt_validation=self._apply_dlt_validation(entry_data)
 
             # Calculate success probability with DLT integration
-success_prob = self._calculate_entry_success_probability(
+success_prob=self._calculate_entry_success_probability(
                 entry_data, dlt_validation, market_conditions
 
 
             # Calculate DLT waveform score
-dlt_score = self._calculate_dlt_waveform_score(entry_data, dlt_validation)
+dlt_score=self._calculate_dlt_waveform_score(entry_data, dlt_validation)
 
             # Create simulation
-simulation = EntrySimulation(
+simulation=EntrySimulation(
                 simulation_id=f"{strategy_type}_{market_condition}_{i + 1}",
 strategy_type=strategy_type,
 matrix_id=entry_data["matrix_id"],
@@ -242,11 +249,11 @@ simulations.append(simulation)
                 logger.info(f"Progress: {i + 1}/{num_simulations} simulations completed")
 
         # Analyze results
-analysis = self._analyze_entry_simulations(simulations, strategy_type, market_condition)
+analysis=self._analyze_entry_simulations(simulations, strategy_type, market_condition)
 
         # Store results
 self.entry_simulations.extend(simulations)
-        self.entry_analysis[f"{strategy_type}_{market_condition}"] = analysis
+        self.entry_analysis[f"{strategy_type}_{market_condition}"]=analysis
 
 logger.info(f"✅ Entry simulation completed. Success rate: {analysis.success_rate:.2%}")
 
@@ -259,7 +266,7 @@ def _generate_real_matrix_id(self, strategy_type: str, simulation_index: int) ->
     pass
         """Generate real matrix ID based on strategy and simulation."""
         # Use real matrix naming convention based on Schwabot architecture
-matrix_prefixes = {
+matrix_prefixes={
 "ghost_signal": "GSM",      # Ghost Signal Matrix
 "volume_spike": "VSM",      # Volume Spike Matrix
 "entropy_low": "ELM",       # Entropy Low Matrix
@@ -267,12 +274,12 @@ matrix_prefixes = {
 "hash_confidence": "HCM",   # Hash Confidence Matrix
 "tick_delta": "TDM",        # Tick Delta Matrix
 "matrix_weight": "MWM",     # Matrix Weight Matrix
-"combined_strategy": "CSM", # Combined Strategy Matrix
+"combined_strategy": "CSM",  # Combined Strategy Matrix
 "dlt_waveform": "DWM"       # DLT Waveform Matrix
 }
 
-prefix = matrix_prefixes.get(strategy_type, "UNK")
-        timestamp = int(time.time()) % 10000
+prefix=matrix_prefixes.get(strategy_type, "UNK")
+        timestamp=int(time.time()) % 10000
         return f"{prefix}-{simulation_index:03d}-{timestamp:04d}"
 
 def _ghost_signal_entry(self, market_conditions: Dict[str, float],]
@@ -280,19 +287,19 @@ def _ghost_signal_entry(self, market_conditions: Dict[str, float],]
 
                            simulation_index: int) -> Dict[str, Any]:
 """Generate entry data based on ghost signal strategy with DLT integration."""
-base_price = 50000.0
-trend = market_conditions["trend"]
+base_price=50000.0
+trend=market_conditions["trend"]
 
         # Generate price with trend
-price_change = np.random.normal(trend * 0.01, 0.005)
-        entry_price = base_price * (1 + price_change)
+price_change=np.random.normal(trend * 0.01, 0.005)
+        entry_price=base_price * (1 + price_change)
 
         # Generate ghost signal strength (higher in trending markets)
-        ghost_signal = np.random.uniform(0.3, 0.9) + unified_math.abs(trend) * 0.2
-        ghost_signal = unified_math.min(1.0, ghost_signal)
+        ghost_signal=np.random.uniform(0.3, 0.9) + unified_math.abs(trend) * 0.2
+        ghost_signal=unified_math.min(1.0, ghost_signal)
 
         # Apply DLT confidence adjustment
-confidence = self.mathlib.apply_dlt_confidence_adjustment(ghost_signal * 0.8 + np.random.uniform(0.1, 0.3))
+confidence=self.mathlib.apply_dlt_confidence_adjustment(ghost_signal * 0.8 + np.random.uniform(0.1, 0.3))
 
         return {
 "trade_id": f"ghost_entry_{simulation_index + 1}",
@@ -317,18 +324,18 @@ def _volume_spike_entry(self, market_conditions: Dict[str, float],]
 
                            simulation_index: int) -> Dict[str, Any]:
 """Generate entry data based on volume spike strategy."""
-base_price = 50000.0
+base_price=50000.0
 
         # Generate price
-price_change = np.random.normal(0.0, 0.01)
-        entry_price = base_price * (1 + price_change)
+price_change=np.random.normal(0.0, 0.01)
+        entry_price=base_price * (1 + price_change)
 
         # Generate volume spike
-volume_spike = np.random.uniform(1.5, 3.0) * market_conditions["volume"]
-        volume_ratio = volume_spike / 1000000
+volume_spike=np.random.uniform(1.5, 3.0) * market_conditions["volume"]
+        volume_ratio=volume_spike / 1000000
 
         # Calculate confidence based on volume spike
-confidence = unified_math.min(1.0, volume_ratio * 0.5 + np.random.uniform(0.2, 0.4))
+confidence=unified_math.min(1.0, volume_ratio * 0.5 + np.random.uniform(0.2, 0.4))
 
         return {
 "trade_id": f"volume_entry_{simulation_index + 1}",
@@ -384,8 +391,8 @@ confidence = 1.0 - entropy_level + np.random.uniform(0.1, 0.3)
 "tick_id": simulation_index
 }
 
-def _fractal_pattern_entry(self, market_conditions: Dict[str, float],]
 
+def _fractal_pattern_entry(self, market_conditions: Dict[str, float],]
 
                               simulation_index: int) -> Dict[str, Any]:
 """Generate entry data based on fractal pattern strategy."""
@@ -401,6 +408,8 @@ fractal_confidence = unified_math.abs(fractal_factor) * 5.0 + np.random.uniform(
         fractal_confidence = unified_math.min(1.0, fractal_confidence)
 
         return {
+
+
 "trade_id": f"fractal_entry_{simulation_index + 1}",
 "matrix_id": self._generate_real_matrix_id("fractal_pattern", simulation_index),
             "entry_price": entry_price,
@@ -540,7 +549,7 @@ combined_confidence = (
 (1.0 - entropy_level) * 0.3 +
             unified_math.min(volume_ratio, 1.0) * 0.3
 
-combined_confidence = unified_math.min(1.0, combined_confidence)
+combined_confidence=unified_math.min(1.0, combined_confidence)
 
         return {
 "trade_id": f"combined_entry_{simulation_index + 1}",

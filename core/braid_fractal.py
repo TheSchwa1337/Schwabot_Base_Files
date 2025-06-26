@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from dataclasses import dataclass, field
+from typing import List, Tuple, Optional, Dict, Any
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +15,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Braid Fractal - Mathematical Braid Fractal Generation for Schwabot.
 
@@ -62,53 +73,56 @@ Mathematical Foundation:
 - Fractal entropy: H = -Σ pᵢ unified_math.log(pᵢ) where pᵢ is probability of braid state i
 """
 
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import List, Tuple, Optional, Dict, Any
-from dataclasses import dataclass, field
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BraidState:
 
-
     """Braid state representation."""
+
+
 generators: List[int]  # List of generator indices
 crossings: List[int]   # List of crossing signs (+1 or -1)
     complexity: float      # Braid complexity measure
 entropy: float         # State entropy
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class FractalBraid:
 
-
     """Fractal braid structure."""
+
+
 dimension: float       # Fractal dimension
 iterations: int        # Number of iterations
 states: List[BraidState]  # List of braid states
 pattern_score: float   # Pattern recognition score
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class BraidFractal:
 
+class BraidFractal:
 
     """Mathematical braid fractal generation and analysis."""
 
-def __init__(self, max_generators: int = 8):
 
+def __init__(self, max_generators: int = 8):
 
     pass
     pass
         self.max_generators = max_generators
+
+
 self.braid_history: List[BraidState] = []
 self.fractal_cache: Dict[str, FractalBraid] = {}
 logger.info("BraidFractal initialized")
 
-def generate_braid_state(self, length: int, complexity: float = 0.5) -> BraidState:
 
+def generate_braid_state(self, length: int, complexity: float = 0.5) -> BraidState:
 
     pass
     pass
@@ -128,6 +142,8 @@ BraidState
 Generated braid state
 """
         try:
+
+
 generators = []
 crossings = []
 

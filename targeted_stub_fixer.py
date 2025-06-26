@@ -19,9 +19,9 @@ def fix_malformed_stub(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Fix the specific malformed pattern
         if '"""Stub main function."""."""' in content:
             content = content.replace(
@@ -30,22 +30,22 @@ def fix_malformed_stub(file_path: str) -> bool:
             )
             safe_print(f"✅ Fixed: {file_path}")
             return True
-        
+
         # Fix other variations of malformed patterns
         patterns_to_fix = [
             (r'"""([^"]*)\."""\."""', r'"""\1."""\n    pass\n'),
             (r'"""([^"]*)\."""\s*"""', r'"""\1."""\n    pass\n'),
             (r'"""([^"]*)\."""\s*def\s+', r'"""\1."""\n\ndef '),
         ]
-        
+
         for pattern, replacement in patterns_to_fix:
             if re.search(pattern, content):
                 content = re.sub(pattern, replacement, content)
                 safe_print(f"✅ Fixed pattern in: {file_path}")
                 return True
-        
+
         return False
-        
+
     except Exception as e:
         safe_print(f"❌ Error processing {file_path}: {e}")
         return False
@@ -55,7 +55,7 @@ def find_and_fix_stub_files():
     """Find and fix all files with malformed stub patterns."""
     safe_print("Targeted Stub Fixer")
     safe_print("=" * 50)
-    
+
     # Files we know have the malformed pattern
     known_files = [
         'utils/file_integrity_checker.py',
@@ -155,16 +155,16 @@ def find_and_fix_stub_files():
         'tests/hooks/state_manager.py',
         'standalone_multi_bit_demo.py',
     ]
-    
+
     fixed_count = 0
     processed_count = 0
-    
+
     for file_path in known_files:
         if os.path.exists(file_path):
             processed_count += 1
             if fix_malformed_stub(file_path):
                 fixed_count += 1
-    
+
     safe_print(f"\nSummary:")
     safe_print(f"  Files processed: {processed_count}")
     safe_print(f"  Files fixed: {fixed_count}")
@@ -172,4 +172,4 @@ def find_and_fix_stub_files():
 
 
 if __name__ == "__main__":
-    find_and_fix_stub_files() 
+    find_and_fix_stub_files()

@@ -47,8 +47,9 @@ logger = logging.getLogger(__name__)
 
 class ConfidenceSource(Enum):
 
-
     """Sources of confidence data."""
+
+
 BACKLOG = "backlog"
 FERRIS_WHEEL = "ferris_wheel"
 AI_CONSENSUS = "ai_consensus"
@@ -59,8 +60,9 @@ EVENT_IMPACT = "event_impact"
 @dataclass
 class ConfidenceComponent:
 
-
     """Individual confidence component with metadata."""
+
+
 source: ConfidenceSource
 value: float
 weight: float
@@ -72,8 +74,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class UnifiedConfidenceResult:
 
-
     """Result of unified confidence calculation."""
+
+
 unified_confidence: float
 components: Dict[ConfidenceSource, ConfidenceComponent]
 weights: Dict[ConfidenceSource, float]
@@ -84,15 +87,16 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 class UnifiedConfidenceMatrix:
 
-
     """Central hub for unified confidence calculations across all systems."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
 
+def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     pass
     pass
         """Initialize the unified confidence matrix."""
+
+
 self.config = config or self._default_config()
 
         # Confidence caches for each source
@@ -124,6 +128,7 @@ self.last_calculation_time = 0.0
 
 logger.info("Unified Confidence Matrix initialized")
 
+
 def calculate_unified_confidence(self,
 
 
@@ -132,6 +137,8 @@ ferris_wheel_position: Optional[int] = None,
 ai_consensus: Optional[Dict[str, float]] = None,
 matrix_controller_state: Optional[Dict[str, Any]] = None,
 event_impact: Optional[EventImpact] = None) -> UnifiedConfidenceResult:
+
+
 """Calculate unified confidence across all systems.
 
 Args:
@@ -154,61 +161,56 @@ components = {}
             if backlog_state is not None:
 backlog_confidence = self._calculate_backlog_confidence(backlog_state)
                 components[ConfidenceSource.BACKLOG] = ConfidenceComponent(]
-                    source=ConfidenceSource.BACKLOG,
-value=backlog_confidence,
-weight=self.weight_coefficients[ConfidenceSource.BACKLOG],
-timestamp=time.time(),
-                    metadata={'backlog_state': backlog_state},
-reliability=self._calculate_backlog_reliability(backlog_state)
-
+                    source = ConfidenceSource.BACKLOG,
+value = backlog_confidence,
+weight = self.weight_coefficients[ConfidenceSource.BACKLOG],
+timestamp = time.time(),
+                    metadata = {'backlog_state': backlog_state},
+reliability = self._calculate_backlog_reliability(backlog_state)
 
             # Ferris wheel confidence
             if ferris_wheel_position is not None:
 ferris_confidence = self._calculate_ferris_wheel_confidence(ferris_wheel_position)
                 components[ConfidenceSource.FERRIS_WHEEL] = ConfidenceComponent(]
-                    source=ConfidenceSource.FERRIS_WHEEL,
-value=ferris_confidence,
-weight=self.weight_coefficients[ConfidenceSource.FERRIS_WHEEL],
-timestamp=time.time(),
-                    metadata={'ferris_wheel_position': ferris_wheel_position},
-reliability=self._calculate_ferris_reliability(ferris_wheel_position)
-
+                    source = ConfidenceSource.FERRIS_WHEEL,
+value = ferris_confidence,
+weight = self.weight_coefficients[ConfidenceSource.FERRIS_WHEEL],
+timestamp = time.time(),
+                    metadata = {'ferris_wheel_position': ferris_wheel_position},
+reliability = self._calculate_ferris_reliability(ferris_wheel_position)
 
             # AI consensus confidence
             if ai_consensus is not None:
 ai_confidence = self._calculate_ai_consensus_confidence(ai_consensus)
                 components[ConfidenceSource.AI_CONSENSUS] = ConfidenceComponent(]
-                    source=ConfidenceSource.AI_CONSENSUS,
-value=ai_confidence,
-weight=self.weight_coefficients[ConfidenceSource.AI_CONSENSUS],
-timestamp=time.time(),
-                    metadata={'ai_consensus': ai_consensus},
-reliability=self._calculate_ai_reliability(ai_consensus)
-
+                    source = ConfidenceSource.AI_CONSENSUS,
+value = ai_confidence,
+weight = self.weight_coefficients[ConfidenceSource.AI_CONSENSUS],
+timestamp = time.time(),
+                    metadata = {'ai_consensus': ai_consensus},
+reliability = self._calculate_ai_reliability(ai_consensus)
 
             # Matrix controller confidence
             if matrix_controller_state is not None:
 matrix_confidence = self._calculate_matrix_controller_confidence(matrix_controller_state)
                 components[ConfidenceSource.MATRIX_CONTROLLER] = ConfidenceComponent(]
-                    source=ConfidenceSource.MATRIX_CONTROLLER,
-value=matrix_confidence,
-weight=self.weight_coefficients[ConfidenceSource.MATRIX_CONTROLLER],
-timestamp=time.time(),
-                    metadata={'matrix_controller_state': matrix_controller_state},
-reliability=self._calculate_matrix_reliability(matrix_controller_state)
-
+                    source = ConfidenceSource.MATRIX_CONTROLLER,
+value = matrix_confidence,
+weight = self.weight_coefficients[ConfidenceSource.MATRIX_CONTROLLER],
+timestamp = time.time(),
+                    metadata = {'matrix_controller_state': matrix_controller_state},
+reliability = self._calculate_matrix_reliability(matrix_controller_state)
 
             # Event impact confidence
             if event_impact is not None:
 event_confidence = self._calculate_event_impact_confidence(event_impact)
                 components[ConfidenceSource.EVENT_IMPACT] = ConfidenceComponent(]
-                    source=ConfidenceSource.EVENT_IMPACT,
-value=event_confidence,
-weight=self.weight_coefficients[ConfidenceSource.EVENT_IMPACT],
-timestamp=time.time(),
-                    metadata={'event_impact': event_impact.event_id},
-reliability=self._calculate_event_reliability(event_impact)
-
+                    source = ConfidenceSource.EVENT_IMPACT,
+value = event_confidence,
+weight = self.weight_coefficients[ConfidenceSource.EVENT_IMPACT],
+timestamp = time.time(),
+                    metadata = {'event_impact': event_impact.event_id},
+reliability = self._calculate_event_reliability(event_impact)
 
             # Calculate unified confidence
 unified_confidence = self._combine_confidence_components(components)
@@ -234,11 +236,11 @@ metadata={
             # Update performance tracking
 self.total_calculations += 1
 self.calculation_history.append(result)
-            self.last_calculation_time = time.time()
+            self.last_calculation_time=time.time()
 
             # Maintain history size
             if len(self.calculation_history) > self.config.get('max_history_size', 1000):
-                self.calculation_history = self.calculation_history[-self.config.get('max_history_size', 1000):]
+                self.calculation_history=self.calculation_history[-self.config.get('max_history_size', 1000):]
 
 logger.debug(f"Unified confidence calculated: {unified_confidence:.3f} "}
                         f"(reliability: {reliability_score:.3f})")

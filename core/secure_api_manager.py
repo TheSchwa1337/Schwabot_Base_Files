@@ -1,108 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
-import math
-
-# Import safe print for Windows compatibility
-try:
-from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    pass
-    pass
-    try:
-#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
-    except ImportError:
-    pass
-    pass
-def safe_print(message):
-
-
-    pass
-    pass
-    print(message)
-def info(message):
-
-
-    pass
-    pass
-    print(f"[INFO] {message}")
-def warn(message):
-
-
-    pass
-    pass
-    print(f"[WARN] {message}")
-def error(message):
-
-
-    pass
-    pass
-    print(f"[ERROR] {message}")
-def success(message):
-
-
-    pass
-    pass
-    print(f"[SUCCESS] {message}")
-def debug(message):
-
-
-    pass
-    pass
-    print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
-# #!/usr/bin/env python3
-"""Secure API Manager - Linux-based secure storage for Schwabot APIs.
-
-This module provides secure API management for:
-- CoinMarketCap API
-- Intrapeat triggers
-- NiceHash API (BTC pool hashing)
-- Future CCXT integration
-
-Uses Linux-based secure storage with encrypted secrets management.
-"""
-
-
-import asyncio
-import logging
-import os
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
-from enum import Enum
-import hashlib
-import hmac
-import json
-import base64
-from pathlib import Path
-
-# Import unified mathematics
-try:
-from core.unified_mathematics_config import get_unified_math
-unified_math = get_unified_math()
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    pass
-    pass
-UNIFIED_MATH_AVAILABLE = False
-
-# Import centralized CLI handler
-try:
 from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
-CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE=True
 except ImportError:
     pass
     pass
-CLI_HANDLER_AVAILABLE = False
-def safe_print(message: str, use_emoji: bool = True) -> str:
+CLI_HANDLER_AVAILABLE=False
+def safe_print(message: str, use_emoji: bool=True) -> str:
 
 
     pass
     pass
         return message
-def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str="") -> str:
 
 
     pass
@@ -115,44 +26,44 @@ def log_safe(logger, level: str, message: str) -> None:
     pass
         getattr(logger, level.lower())(message)
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 class APIType(Enum):
 
 
     """API types for different services."""
-COINMARKETCAP = "coinmarketcap"
-INTRAPEAT = "intrapeat"
-NICEHASH = "nicehash"
-CCXT = "ccxt"
+COINMARKETCAP="coinmarketcap"
+INTRAPEAT="intrapeat"
+NICEHASH="nicehash"
+CCXT="ccxt"
 
 
 class SecurityLevel(Enum):
 
 
     """Security levels for API access."""
-LOW = "low"          # Public APIs (CoinMarketCap)
-    MEDIUM = "medium"    # Semi-private APIs (Intrapeat)
-    HIGH = "high"        # Private APIs (NiceHash, CCXT)
+LOW="low"          # Public APIs (CoinMarketCap)
+    MEDIUM="medium"    # Semi-private APIs (Intrapeat)
+    HIGH="high"        # Private APIs (NiceHash, CCXT)
 
 
-@dataclass
+@ dataclass
 class APICredentials:
 
 
     """Encrypted API credentials."""
 api_type: APIType
 api_key: str
-api_secret: Optional[str] = None
-    passphrase: Optional[str] = None
-security_level: SecurityLevel = SecurityLevel.MEDIUM
-encrypted: bool = True
-last_accessed: datetime = field(default_factory=datetime.now)
-    access_count: int = 0
+api_secret: Optional[str]=None
+    passphrase: Optional[str]=None
+security_level: SecurityLevel=SecurityLevel.MEDIUM
+encrypted: bool=True
+last_accessed: datetime=field(default_factory=datetime.now)
+    access_count: int=0
 
 
-@dataclass
+@ dataclass
 class APIRequest:
 
 
@@ -165,7 +76,7 @@ timestamp: datetime
 request_id: str
 
 
-@dataclass
+@ dataclass
 class APIResponse:
 
 
@@ -187,44 +98,140 @@ Secure API Manager - Linux-based secure storage for Schwabot APIs.
 Provides secure management for:
 - CoinMarketCap API (public data)
     - Intrapeat triggers (semi-private)
+from core.unified_mathematics_config import get_unified_math
+from pathlib import Path
+import base64
+import json
+import hmac
+import hashlib
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import os
+import logging
+import asyncio
+import math
+
+# Import safe print for Windows compatibility
+try:
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+except ImportError:
+    pass
+    pass
+    try:
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
+    except ImportError:
+    pass
+    pass
+
+
+def safe_print(message):
+
+    pass
+    pass
+    print(message)
+
+
+def info(message):
+
+    pass
+    pass
+    print(f"[INFO] {message}")
+
+
+def warn(message):
+
+    pass
+    pass
+    print(f"[WARN] {message}")
+
+
+def error(message):
+
+    pass
+    pass
+    print(f"[ERROR] {message}")
+
+
+def success(message):
+
+    pass
+    pass
+    print(f"[SUCCESS] {message}")
+
+
+def debug(message):
+
+    pass
+    pass
+    print(f"[DEBUG] {message}")
+
+from core.unified_math_system import unified_math
+# #!/usr/bin/env python3
+"""Secure API Manager - Linux-based secure storage for Schwabot APIs.
+
+This module provides secure API management for:
+- CoinMarketCap API
+- Intrapeat triggers
+- NiceHash API(BTC pool hashing)
+- Future CCXT integration
+
+Uses Linux-based secure storage with encrypted secrets management.
+"""
+
+
+
+# Import unified mathematics
+try:
+unified_math = get_unified_math()
+    UNIFIED_MATH_AVAILABLE = True
+except ImportError:
+    pass
+    pass
+UNIFIED_MATH_AVAILABLE = False
+
+# Import centralized CLI handler
+try:
     - NiceHash API (private BTC pool data)
     - Future CCXT integration
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]]=None):
 
 
     pass
     pass
         """Initialize secure API manager."""
-self.config = config or {}
+self.config=config or {}
 
         # Security configuration
-self.encryption_key = self._get_encryption_key()
-        self.secure_storage_path = self._get_secure_storage_path()
-        self.max_retries = 3
-self.retry_delay = 1.0
-self.rate_limit_delay = 0.1
+self.encryption_key=self._get_encryption_key()
+        self.secure_storage_path=self._get_secure_storage_path()
+        self.max_retries=3
+self.retry_delay=1.0
+self.rate_limit_delay=0.1
 
         # API credentials storage
-self.credentials: Dict[APIType, APICredentials] = {}
-self.request_history: List[APIRequest] = []
-self.response_history: List[APIResponse] = []
+self.credentials: Dict[APIType, APICredentials]={}
+self.request_history: List[APIRequest]=[]
+self.response_history: List[APIResponse]=[]
 
         # Rate limiting
-self.rate_limits: Dict[APIType, Dict[str, float]] = {}
-self.last_requests: Dict[APIType, datetime] = {}
+self.rate_limits: Dict[APIType, Dict[str, float]]={}
+self.last_requests: Dict[APIType, datetime]={}
 
         # Connection management
-self.connection_pool = {}
-self.auto_reconnect = True
-self.reconnect_attempts = 3
+self.connection_pool={}
+self.auto_reconnect=True
+self.reconnect_attempts=3
 
         # Performance tracking
-self.total_requests = 0
-self.successful_requests = 0
-self.failed_requests = 0
-self.average_response_time = 0.0
+self.total_requests=0
+self.successful_requests=0
+self.failed_requests=0
+self.average_response_time=0.0
 
 safe_safe_print("🔐 Secure API Manager initialized")
 
@@ -236,7 +243,7 @@ def _get_encryption_key(self) -> bytes:
         """Get encryption key from secure Linux storage."""
         try:
             # Try to get key from Linux keyring or secure storage
-key_paths = [
+key_paths=[
 "/run/secrets/schwabot_api_key",
 "/etc/schwabot/api_key",
 os.path.expanduser("~/.schwabot/api_key"),
@@ -246,7 +253,7 @@ os.path.expanduser("~/.schwabot/api_key"),
             for key_path in key_paths:
                 if os.path.exists(key_path):
                     with open(key_path, 'rb') as f:
-                        key = f.read()
+                        key=f.read()
                     if len(key) >= 32:
                         safe_safe_print(f"✅ Encryption key loaded from {key_path}")
                         return key[:32]  # Use first 32 bytes
@@ -267,7 +274,7 @@ def _get_secure_storage_path(self) -> Path:
         """Get secure storage path for credentials."""
         try:
             # Try Linux secure storage locations
-secure_paths = [
+secure_paths=[
 Path("/run/secrets/schwabot"),
                 Path("/etc/schwabot/credentials"),
                 Path.home() / ".schwabot" / "credentials",
@@ -281,7 +288,7 @@ Path("/run/secrets/schwabot"),
                     return path
 
             # Fallback to local directory
-fallback_path = Path(".schwabot_credentials")
+fallback_path=Path(".schwabot_credentials")
             fallback_path.mkdir(exist_ok=True)
             safe_safe_print(f"⚠️ Using fallback storage path: {fallback_path}")
             return fallback_path
@@ -301,11 +308,11 @@ import cryptography
 from cryptography.fernet import Fernet
 
             # Create Fernet key from our encryption key
-fernet_key = base64.urlsafe_b64encode(self.encryption_key)
-            fernet = Fernet(fernet_key)
+fernet_key=base64.urlsafe_b64encode(self.encryption_key)
+            fernet=Fernet(fernet_key)
 
             # Encrypt data
-encrypted_data = fernet.encrypt(data.encode())
+encrypted_data=fernet.encrypt(data.encode())
             return base64.urlsafe_b64encode(encrypted_data).decode()
 
         except ImportError:
@@ -328,12 +335,12 @@ def decrypt_data(self, encrypted_data: str) -> str:
 #             from cryptography.fernet import Fernet  # F811: duplicate import
 
             # Create Fernet key from our encryption key
-fernet_key = base64.urlsafe_b64encode(self.encryption_key)
-            fernet = Fernet(fernet_key)
+fernet_key=base64.urlsafe_b64encode(self.encryption_key)
+            fernet=Fernet(fernet_key)
 
             # Decrypt data
-encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode())
-            decrypted_data = fernet.decrypt(encrypted_bytes)
+encrypted_bytes=base64.urlsafe_b64decode(encrypted_data.encode())
+            decrypted_data=fernet.decrypt(encrypted_bytes)
             return decrypted_data.decode()
 
         except ImportError:
@@ -351,9 +358,9 @@ def _simple_encrypt(self, data: str) -> str:
     pass
     pass
         """Simple XOR encryption (development only)."""
-        key_bytes = self.encryption_key
-data_bytes = data.encode()
-        encrypted = bytes(a ^ b for a, b in zip(data_bytes, key_bytes * (len(data_bytes) // len(key_bytes) + 1)))
+        key_bytes=self.encryption_key
+data_bytes=data.encode()
+        encrypted=bytes(a ^ b for a, b in zip(data_bytes, key_bytes * (len(data_bytes) // len(key_bytes) + 1)))
         return base64.urlsafe_b64encode(encrypted).decode()
 
 def _simple_decrypt(self, encrypted_data: str) -> str:
@@ -362,9 +369,10 @@ def _simple_decrypt(self, encrypted_data: str) -> str:
     pass
     pass
         """Simple XOR decryption (development only)."""
-        key_bytes = self.encryption_key
-encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode())
-        decrypted = bytes(a ^ b for a, b in zip(encrypted_bytes, key_bytes * (len(encrypted_bytes) // len(key_bytes) + 1)))
+        key_bytes=self.encryption_key
+encrypted_bytes=base64.urlsafe_b64decode(encrypted_data.encode())
+        decrypted=bytes(a ^ b for a, b in zip(encrypted_bytes, key_bytes *
+                        (len(encrypted_bytes) // len(key_bytes) + 1)))
         return decrypted.decode()
 
 def store_credentials(
@@ -373,9 +381,9 @@ def store_credentials(
         self,
 api_type: APIType,
 api_key: str,
-api_secret: Optional[str] = None,
-        passphrase: Optional[str] = None,
-security_level: SecurityLevel = SecurityLevel.MEDIUM
+api_secret: Optional[str]=None,
+        passphrase: Optional[str]=None,
+security_level: SecurityLevel=SecurityLevel.MEDIUM
 ) -> bool:
 """
 Store encrypted API credentials in secure storage.
@@ -385,7 +393,7 @@ but can be accessed by the system.
 """
         try:
             # Create credentials object
-credentials = APICredentials(
+credentials=APICredentials(
                 api_type=api_type,
 api_key=self.encrypt_data(api_key),
                 api_secret=self.encrypt_data(api_secret) if api_secret else None,
@@ -397,11 +405,11 @@ last_accessed=datetime.now(),
 
 
             # Store in memory
-self.credentials[api_type] = credentials
+self.credentials[api_type]=credentials
 
             # Store in secure file
-credentials_file = self.secure_storage_path / f"{api_type.value}_credentials.json"
-credentials_data = {
+credentials_file=self.secure_storage_path / f"{api_type.value}_credentials.json"
+credentials_data={
 'api_type': api_type.value,
 'api_key': credentials.api_key,
 'api_secret': credentials.api_secret,
@@ -440,17 +448,17 @@ def load_credentials(self, api_type: APIType) -> Optional[APICredentials]:
                 return self.credentials[api_type]
 
             # Load from secure file
-credentials_file = self.secure_storage_path / f"{api_type.value}_credentials.json"
+credentials_file=self.secure_storage_path / f"{api_type.value}_credentials.json"
 
             if not credentials_file.exists():
                 safe_safe_print(f"⚠️ No credentials found for {api_type.value}")
                 return None
 
             with open(credentials_file, 'r') as f:
-                credentials_data = json.load(f)
+                credentials_data=json.load(f)
 
             # Create credentials object
-credentials = APICredentials(
+credentials=APICredentials(
                 api_type=api_type,
 api_key=credentials_data['api_key'],
 api_secret=credentials_data.get('api_secret'),
@@ -462,7 +470,7 @@ last_accessed=datetime.fromisoformat(credentials_data.get('last_accessed', datet
 
 
             # Store in memory
-self.credentials[api_type] = credentials
+self.credentials[api_type]=credentials
 
 safe_safe_print(f"✅ Credentials loaded for {api_type.value}")
             return credentials
@@ -478,12 +486,12 @@ def get_decrypted_credentials(self, api_type: APIType) -> Optional[Dict[str, str
     pass
         """Get decrypted API credentials."""
         try:
-credentials = self.load_credentials(api_type)
+credentials=self.load_credentials(api_type)
             if not credentials:
                 return None
 
             # Decrypt credentials
-decrypted_credentials = {
+decrypted_credentials={
 'api_key': self.decrypt_data(credentials.api_key),
                 'api_secret': self.decrypt_data(credentials.api_secret) if credentials.api_secret else None,
                 'passphrase': self.decrypt_data(credentials.passphrase) if credentials.passphrase else None
@@ -491,7 +499,7 @@ decrypted_credentials = {
 
             # Update access count
 credentials.access_count += 1
-credentials.last_accessed = datetime.now()
+credentials.last_accessed=datetime.now()
 
 safe_safe_print(f"✅ Decrypted credentials for {api_type.value}")
             return decrypted_credentials
@@ -504,10 +512,10 @@ async def make_api_request(
         self,
 api_type: APIType,
 endpoint: str,
-method: str = "GET",
-params: Optional[Dict[str, Any]] = None,
-headers: Optional[Dict[str, str]] = None,
-retry_count: int = 0
+method: str="GET",
+params: Optional[Dict[str, Any]]=None,
+headers: Optional[Dict[str, str]]=None,
+retry_count: int=0
 ) -> Optional[APIResponse]:
 """
 Make secure API request with auto-reconnect and rate limiting.
@@ -521,18 +529,18 @@ This provides robust wrappers for CCXT, direct REST/WebSocket,
                 await asyncio.sleep(self.rate_limit_delay)
 
             # Get credentials
-credentials = self.get_decrypted_credentials(api_type)
+credentials=self.get_decrypted_credentials(api_type)
             if not credentials:
 safe_safe_print(f"❌ No credentials available for {api_type.value}")
                 return None
 
             # Prepare request
-request_id = self._generate_request_id()
-            request_headers = self._prepare_headers(api_type, credentials, headers or {})
-            request_params = params or {}
+request_id=self._generate_request_id()
+            request_headers=self._prepare_headers(api_type, credentials, headers or {})
+            request_params=params or {}
 
             # Create request object
-request = APIRequest(
+request=APIRequest(
                 endpoint=endpoint,
 method=method,
 params=request_params,
@@ -545,12 +553,12 @@ timestamp=datetime.now(),
 self.request_history.append(request)
 
             # Make request with retry logic
-start_time = time.time()
-            response = None
+start_time=time.time()
+            response=None
 
             for attempt in range(self.max_retries):
                 try:
-response = await self._execute_request(api_type, request)
+response=await self._execute_request(api_type, request)
                     if response and response.status_code < 400:
                         break
                     elif attempt < self.max_retries - 1:
@@ -562,10 +570,10 @@ safe_safe_print(f"⚠️ Request attempt {attempt + 1} failed: {safe_format_erro
 await asyncio.sleep(self.retry_delay * (2 ** attempt))
 
             # Calculate response time
-response_time = time.time() - start_time
+response_time=time.time() - start_time
 
             if response:
-response.response_time = response_time
+response.response_time=response_time
 self.response_history.append(response)
 
                 # Update statistics
@@ -597,26 +605,26 @@ def _check_rate_limit(self, api_type: APIType) -> bool:
     pass
         """Check if request is within rate limits."""
         try:
-now = datetime.now()
-            last_request = self.last_requests.get(api_type)
+now=datetime.now()
+            last_request=self.last_requests.get(api_type)
 
             if last_request:
-time_since_last = (now - last_request).total_seconds()
+time_since_last=(now - last_request).total_seconds()
 
                 # Rate limits by API type
                 if api_type == APIType.COINMARKETCAP:
-min_interval = 0.1  # 10 requests per second
+min_interval=0.1  # 10 requests per second
                 elif api_type == APIType.INTRAPEAT:
-min_interval = 0.5  # 2 requests per second
+min_interval=0.5  # 2 requests per second
                 elif api_type == APIType.NICEHASH:
-min_interval = 1.0  # 1 request per second
+min_interval=1.0  # 1 request per second
                 else:
-min_interval = 0.5
+min_interval=0.5
 
                 if time_since_last < min_interval:
                     return False
 
-self.last_requests[api_type] = now
+self.last_requests[api_type]=now
             return True
 
         except Exception as e:
@@ -633,7 +641,7 @@ base_headers: Dict[str, str]
 ) -> Dict[str, str]:
 """Prepare headers for API request."""
         try:
-headers = {
+headers={
 'User-Agent': 'Schwabot/1.0',
 'Accept': 'application/json',
 'Content-Type': 'application/json'
@@ -644,25 +652,25 @@ headers.update(base_headers)
 
             # Add API-specific headers
             if api_type == APIType.COINMARKETCAP:
-headers['X-CMC_PRO_API_KEY'] = credentials['api_key']
+headers['X-CMC_PRO_API_KEY']=credentials['api_key']
             elif api_type == APIType.INTRAPEAT:
-headers['Authorization'] = f"Bearer {credentials['api_key']}"
+headers['Authorization']=f"Bearer {credentials['api_key']}"
             elif api_type == APIType.NICEHASH:
-headers['X-Request-ID'] = self._generate_request_id()
+headers['X-Request-ID']=self._generate_request_id()
                 # NiceHash uses HMAC authentication
                 if credentials.get('api_secret'):
-                    timestamp = str(int(time.time() * 1000))
-                    nonce = self._generate_nonce()
-                    signature = self._generate_nicehash_signature(
+                    timestamp=str(int(time.time() * 1000))
+                    nonce=self._generate_nonce()
+                    signature=self._generate_nicehash_signature(
                         credentials['api_key'],
 credentials['api_secret'],
 timestamp,
 nonce
 
-headers['X-Time'] = timestamp
-headers['X-Nonce'] = nonce
-headers['X-Organization-Id'] = credentials['api_key']
-headers['X-Request-Signature'] = signature
+headers['X-Time']=timestamp
+headers['X-Nonce']=nonce
+headers['X-Organization-Id']=credentials['api_key']
+headers['X-Request-Signature']=signature
 
             return headers
 
@@ -677,24 +685,24 @@ import aiohttp
 
             # Create session if not exists
             if api_type not in self.connection_pool:
-timeout = aiohttp.ClientTimeout(total=30)
-                self.connection_pool[api_type] = aiohttp.ClientSession(timeout=timeout)
+timeout=aiohttp.ClientTimeout(total=30)
+                self.connection_pool[api_type]=aiohttp.ClientSession(timeout=timeout)
 
-session = self.connection_pool[api_type]
+session=self.connection_pool[api_type]
 
             # Make request
             if request.method.upper() == "GET":
                 async with session.get(request.endpoint, params=request.params, headers=request.headers) as response:
-                    data = await response.json()
+                    data=await response.json()
             elif request.method.upper() == "POST":
                 async with session.post(request.endpoint, json=request.params, headers=request.headers) as response:
-                    data = await response.json()
+                    data=await response.json()
             else:
 safe_safe_print(f"❌ Unsupported method: {request.method}")
                 return None
 
             # Create response object
-api_response = APIResponse(
+api_response=APIResponse(
                 status_code=response.status,
 data=data,
 headers=dict(response.headers),
@@ -738,8 +746,8 @@ nonce: str
 """Generate HMAC signature for NiceHash API."""
         try:
             # NiceHash signature format
-message = f"{api_key}\x00{timestamp}\x00{nonce}"
-signature = hmac.new(
+message=f"{api_key}\x00{timestamp}\x00{nonce}"
+signature=hmac.new(
                 api_secret.encode(),
                 message.encode(),
                 hashlib.sha256
@@ -759,7 +767,7 @@ def _update_average_response_time(self, response_time: float) -> None:
         """Update average response time."""
         try:
             if self.total_requests > 0:
-self.average_response_time = (
+self.average_response_time=(
                     (self.average_response_time * (self.total_requests - 1) + response_time) /
                     self.total_requests
 
@@ -805,7 +813,7 @@ safe_safe_print(f"⚠️ Failed to close connections: {safe_format_error(e, 'clo
 
 
 # Global secure API manager instance
-secure_api_manager = SecureAPIManager()
+secure_api_manager=SecureAPIManager()
 
 
 # Convenience functions for external access
@@ -823,9 +831,9 @@ def store_api_credentials(
 
     api_type: APIType,
 api_key: str,
-api_secret: Optional[str] = None,
-    passphrase: Optional[str] = None,
-security_level: SecurityLevel = SecurityLevel.MEDIUM
+api_secret: Optional[str]=None,
+    passphrase: Optional[str]=None,
+security_level: SecurityLevel=SecurityLevel.MEDIUM
 ) -> bool:
 """Store API credentials securely."""
     return secure_api_manager.store_credentials(api_type, api_key, api_secret, passphrase, security_level)
@@ -843,9 +851,9 @@ def load_api_credentials(api_type: APIType) -> Optional[APICredentials]:
 async def make_api_request(
     api_type: APIType,
 endpoint: str,
-method: str = "GET",
-params: Optional[Dict[str, Any]] = None,
-headers: Optional[Dict[str, str]] = None
+method: str="GET",
+params: Optional[Dict[str, Any]]=None,
+headers: Optional[Dict[str, str]]=None
 ) -> Optional[APIResponse]:
 """Make secure API request."""
     return await secure_api_manager.make_api_request(api_type, endpoint, method, params, headers)
@@ -869,7 +877,7 @@ if __name__ == "__main__":
 safe_print("🧪 Testing Secure API Manager...")
 
     # Test credential storage
-success = store_api_credentials(
+success=store_api_credentials(
         api_type=APIType.COINMARKETCAP,
 api_key="test_api_key_12345",
 security_level=SecurityLevel.LOW
@@ -877,15 +885,15 @@ security_level=SecurityLevel.LOW
 safe_print(f"✅ Credential storage: {success}")
 
     # Test credential loading
-credentials = load_api_credentials(APIType.COINMARKETCAP)
+credentials=load_api_credentials(APIType.COINMARKETCAP)
     if credentials:
 safe_print(f"✅ Credential loading: {credentials.api_type.value}")
 
     # Test decryption
-decrypted = secure_api_manager.get_decrypted_credentials(APIType.COINMARKETCAP)
+decrypted=secure_api_manager.get_decrypted_credentials(APIType.COINMARKETCAP)
     if decrypted:
 safe_print(f"✅ Credential decryption: {decrypted['api_key']}")
 
     # Get statistics
-stats = get_api_stats()
+stats=get_api_stats()
     safe_print(f"✅ API Statistics: {stats}")

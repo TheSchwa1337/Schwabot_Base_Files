@@ -1,4 +1,70 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from core.type_defs import (
+        Temperature,
+Pressure,
+ThermalConductivity,
+HeatCapacity,
+EntropyMap,
+Vector,
+Matrix,
+Image,
+ThermalState,
+
+except ImportError:  # pragma: no cover – fallback stubs
+Temperature=float  # type: ignore
+Pressure=float  # type: ignore
+ThermalConductivity=float  # type: ignore
+HeatCapacity=float  # type: ignore
+EntropyMap=np.ndarray  # type: ignore
+Vector=np.ndarray  # type: ignore
+Matrix=np.ndarray  # type: ignore
+Image=np.ndarray  # type: ignore
+ThermalState=Dict[str, Any]  # type: ignore
+
+# Configure logging
+logger=logging.getLogger(__name__)
+
+
+class ThermalMapAllocator:
+
+
+    """Implements thermal mapping with subsurface grayscale integration"""
+
+def __init__(self,
+
+
+                 thermal_conductivity: Union[float, ThermalConductivity]=0.024,
+heat_capacity: Union[float, HeatCapacity]=1005.0) -> None:
+"""
+Initialize thermal map allocator.
+
+Args:
+thermal_conductivity: Thermal conductivity in W/(m·K) (default: air)
+            heat_capacity: Heat capacity in J/(kg·K) (default: air)
+        """
+        if isinstance(thermal_conductivity, float):
+            self.thermal_conductivity=ThermalConductivity(thermal_conductivity)
+        else:
+self.thermal_conductivity=thermal_conductivity
+
+        if isinstance(heat_capacity, float):
+            self.heat_capacity=HeatCapacity(heat_capacity)
+        else:
+self.heat_capacity=heat_capacity
+
+        # Boltzmann constant
+self.k_b=1.380649e-23
+
+logger.info(f"Initialized ThermalMapAllocator with conductivity {self.thermal_conductivity}")
+
+def calculate_thermal_pressure(self, temp: Union[float, Temperature],]
+
+
+                                 volume: float, particles: int) -> Pressure:
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+import logging
+from datetime import datetime
 import numpy as np
 import math
 
@@ -13,43 +79,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Thermal Map Allocator - Schwabot Subsurface Grayscale Mapping
@@ -66,77 +139,11 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 """
 
 
-from datetime import datetime
-import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 # NOTE: core.type_defs is under construction; import only the symbols that
 # currently exist or fall back to basic typing.FallbackType aliases.
 try:
-from core.type_defs import (
-        Temperature,
-Pressure,
-ThermalConductivity,
-HeatCapacity,
-EntropyMap,
-Vector,
-Matrix,
-Image,
-ThermalState,
-
-except ImportError:  # pragma: no cover – fallback stubs
-Temperature = float  # type: ignore
-Pressure = float  # type: ignore
-ThermalConductivity = float  # type: ignore
-HeatCapacity = float  # type: ignore
-EntropyMap = np.ndarray  # type: ignore
-Vector = np.ndarray  # type: ignore
-Matrix = np.ndarray  # type: ignore
-Image = np.ndarray  # type: ignore
-ThermalState = Dict[str, Any]  # type: ignore
-
-# Configure logging
-logger = logging.getLogger(__name__)
-
-
-class ThermalMapAllocator:
-
-
-    """Implements thermal mapping with subsurface grayscale integration"""
-
-def __init__(self,
-
-
-                 thermal_conductivity: Union[float, ThermalConductivity] = 0.024,
-heat_capacity: Union[float, HeatCapacity] = 1005.0) -> None:
-"""
-Initialize thermal map allocator.
-
-Args:
-thermal_conductivity: Thermal conductivity in W/(m·K) (default: air)
-            heat_capacity: Heat capacity in J/(kg·K) (default: air)
-        """
-        if isinstance(thermal_conductivity, float):
-            self.thermal_conductivity = ThermalConductivity(thermal_conductivity)
-        else:
-self.thermal_conductivity = thermal_conductivity
-
-        if isinstance(heat_capacity, float):
-            self.heat_capacity = HeatCapacity(heat_capacity)
-        else:
-self.heat_capacity = heat_capacity
-
-        # Boltzmann constant
-self.k_b = 1.380649e-23
-
-logger.info(f"Initialized ThermalMapAllocator with conductivity {self.thermal_conductivity}")
-
-def calculate_thermal_pressure(self, temp: Union[float, Temperature],]
-
-
-                                 volume: float, particles: int) -> Pressure:
 """
 Calculate thermal pressure using ideal gas law.
 
@@ -159,11 +166,13 @@ Pressure in Pascal
 pressure_value = (particles * self.k_b * temp) / volume
         return Pressure(pressure_value)
 
+
 def compute_thermal_field(self, x: float, y: float, t: float,
 
 
                             initial_temp: Union[float, Temperature] = 300.0,
 diffusion_coeff: float = 1.0e-5) -> Temperature:
+
 """
 Compute thermal field using heat diffusion equation.
 
@@ -186,10 +195,12 @@ r_squared = x**2 + y**2
 temp_value = initial_temp * unified_math.exp(-r_squared / (4 * diffusion_coeff * t))
         return Temperature(temp_value)
 
+
 def compute_thermal_gradient(self, temp_field: Callable[[float, float, float], Temperature],]
 
-
                                x: float, y: float, t: float,
+
+
 dx: float = 1e-6, dy: float = 1e-6) -> Vector:
 """
 Compute thermal gradient vector.

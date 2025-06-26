@@ -37,8 +37,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PhantomLagEvent:
 
-
     """Represents a phantom lag event with metadata."""
+
+
 timestamp: float
 missed_price_delta: float
 entropy_level: float
@@ -53,8 +54,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class PhantomLagAnalysis:
 
-
     """Complete phantom lag analysis result."""
+
+
 lag_penalty: float
 opportunity_cost: float
 confidence_impact: float
@@ -67,8 +69,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 class PhantomLagModel:
 
-
     """Core Phantom Lag Model for opportunity cost quantification."""
+
 
 def __init__(self,
 
@@ -77,6 +79,8 @@ def __init__(self,
 decay_lambda: float = 0.01,
 min_penalty_threshold: float = 0.1,
 max_price_window: int = 100):
+
+
 """
 Initialize the Phantom Lag Model.
 
@@ -106,12 +110,15 @@ self.re_entry_success_rate = 0.0
 
 logger.info("Phantom Lag Model initialized")
 
+
 def calculate_phantom_lag_penalty(self,
 
 
                                     delta_price: float,
 entropy: float,
 max_price_ref: float = 70000.0) -> float:
+
+
 """
 Calculate phantom lag penalty using the core mathematical model.
 

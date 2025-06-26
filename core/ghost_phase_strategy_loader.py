@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-\n"""core.ghost_phase_strategy_loader
 Ghost-Phase Strategy Loader
-===========================
+== == == == == == == == == == == == == =
 
 High-level coordinator that ingests live market data, evaluates drift,
 phase state, overlay confidence and finally selects / executes a strategy.
 
-This *does not* contain broker-specific code; it returns a decision payload that
+This * does not * contain broker-specific code; it returns a decision payload that
 `execution_validator` or your exchange adapter can act on.
 
-The intent is to offer a *single* modern API (`decide`) so legacy modules (e.g.
+The intent is to offer a * single * modern API(`decide`) so legacy modules(e.g.
 `strategy_mapper`) can replace their obsolete, error-prone stubs with a simple
 call.
 """

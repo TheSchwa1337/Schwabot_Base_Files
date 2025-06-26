@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from collections import deque
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from datetime import datetime
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +17,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Entropy-Driven API Layer for Schwabot
@@ -66,12 +80,6 @@ Key Features:
 This layer acts as the bridge between Schwabot's internal logic and external AI systems.
 """
 
-import logging
-import time
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass, field
-from collections import deque
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +87,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EntropyTrigger:
 
-
     """Represents an entropy-based trigger for API actions."""
+
+
 trigger_id: str
 hash_signature: str
 entropy_threshold: float
@@ -94,8 +103,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class AIResponse:
 
-
     """Represents an AI model's response to a trading decision."""
+
+
 model_name: str
 response_hash: str
 confidence_score: float
@@ -108,8 +118,9 @@ decision_context: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class HashCommand:
 
-
     """Represents a hash-based command function."""
+
+
 command_id: str
 hash_pattern: str
 execution_function: str
@@ -121,10 +132,10 @@ executed_at: Optional[datetime] = None
 
 class EntropyAPILayer:
 
-
     """
 Entropy-driven API layer that integrates with Schwabot's mathematical framework.
 """
+
 
 def __init__(self,
 
@@ -134,6 +145,7 @@ data_layer=None,
 host: str = 'localhost',
 port: int = 5000,
 websocket_port: int = 8765):
+
 """
 Initialize the entropy API layer.
 
@@ -187,19 +199,21 @@ self.update_thread = None
 
 logger.info("🧠 Entropy API Layer initialized")
 
-def initialize_core_engines(self):
 
+def initialize_core_engines(self):
 
     pass
     pass
         """Initialize core Schwabot engines."""
         try:
+
+
 logger.info("✅ Core engines initialized (mock mode)")
         except Exception as e:
 logger.error(f"❌ Failed to initialize core engines: {e}")
 
-def calculate_entropy(self, data: Dict[str, Any]) -> float:
 
+def calculate_entropy(self, data: Dict[str, Any]) -> float:
 
     pass
     pass
@@ -213,6 +227,7 @@ Returns:
 Entropy value between 0 and 1
 """
         try:
+
             # Extract key components for entropy calculation
 price_volatility = data.get('price_volatility', 0.0)
             volume_change = data.get('volume_change', 0.0)
@@ -235,7 +250,7 @@ fault_entropy * 0.2
 
             # Update entropy history
 self.entropy_history.append(entropy)
-            self.current_entropy = entropy
+            self.current_entropy=entropy
 
             return entropy
 
@@ -261,16 +276,16 @@ Hash signature string
 import hashlib
 
             # Create signature components
-timestamp = str(int(time.time()))
-            entropy = str(self.current_entropy)
-            bit_positions = str(len(self.bit_positions))
-            active_commands = str(len(self.hash_commands))
+timestamp=str(int(time.time()))
+            entropy=str(self.current_entropy)
+            bit_positions=str(len(self.bit_positions))
+            active_commands=str(len(self.hash_commands))
 
             # Combine components
-signature_data = f"{timestamp}:{entropy}:{bit_positions}:{active_commands}"
+signature_data=f"{timestamp}:{entropy}:{bit_positions}:{active_commands}"
 
             # Generate hash
-hash_signature = hashlib.sha256(signature_data.encode()).hexdigest()[:16]
+hash_signature=hashlib.sha256(signature_data.encode()).hexdigest()[:16]
 
             return hash_signature
 
@@ -292,7 +307,7 @@ market_data: Current market data
         try:
             # Update bit positions based on market data
             for bit in range(16):
-                position_data = {
+                position_data={
 'bit_depth': bit,
 'market_value': market_data.get('price', 0.0),
                     'entropy_level': self.current_entropy,
@@ -300,7 +315,7 @@ market_data: Current market data
                     'hash_signature': self.generate_hash_signature(market_data)
                 }
 
-self.bit_positions[bit] = position_data
+self.bit_positions[bit]=position_data
 
             # Update position history
 self.position_history.append({
@@ -319,7 +334,7 @@ def register_hash_command(self,
 hash_pattern: str,
 execution_function: str,
 parameters: Dict[str, Any],
-priority: int = 1) -> bool:
+priority: int=1) -> bool:
 """
 Register a new hash-based command.
 
@@ -334,7 +349,7 @@ Returns:
 True if registration successful
 """
         try:
-command = HashCommand(
+command=HashCommand(
                 command_id=command_id,
 hash_pattern=hash_pattern,
 execution_function=execution_function,
@@ -343,7 +358,7 @@ priority=priority,
 created_at=datetime.now()
 
 
-self.hash_commands[command_id] = command
+self.hash_commands[command_id]=command
 self.command_history.append(command)
 
 logger.info(f"✅ Hash command registered: {command_id}")
@@ -368,18 +383,18 @@ Returns:
 List of execution results
 """
         try:
-results = []
+results=[]
 
             for command_id, command in self.hash_commands.items():
                 if command.executed_at is None:  # Only execute unexecuted commands
                     # Simple pattern matching (can be enhanced)
                     if command.hash_pattern in current_hash:
-result = self._execute_command_function(
+result=self._execute_command_function(
                             command.execution_function,
 command.parameters
 
 
-command.executed_at = datetime.now()
+command.executed_at=datetime.now()
                         results.append({
                             'command_id': command_id,
 'result': result,
@@ -409,7 +424,7 @@ Function result
 """
         try:
             # Map function names to actual functions
-function_map = {
+function_map={
 'update_market_signals': self._update_market_signals,
 'trigger_ai_analysis': self._trigger_ai_analysis,
 'adjust_entropy_threshold': self._adjust_entropy_threshold,
@@ -458,7 +473,7 @@ def _adjust_entropy_threshold(self, new_threshold: float, **kwargs) -> Dict[str,
     pass
     pass
         """Adjust entropy threshold."""
-self.entropy_threshold = new_threshold
+self.entropy_threshold=new_threshold
         return {
 "status": "success",
 "action": "entropy_threshold_adjusted",
@@ -510,7 +525,7 @@ def start(self):
     pass
         """Start the entropy API layer."""
         try:
-self.is_running = True
+self.is_running=True
 self.initialize_core_engines()
             logger.info("🚀 Entropy API Layer started")
         except Exception as e:
@@ -522,7 +537,7 @@ def stop(self):
     pass
     pass
         """Stop the entropy API layer."""
-self.is_running = False
+self.is_running=False
 logger.info("🛑 Entropy API Layer stopped")
 
 def get_status(self) -> Dict[str, Any]:
@@ -568,13 +583,13 @@ safe_print("Entropy API Layer Demo")
     safe_print("=" * 30)
 
     # Create entropy API layer
-entropy_layer = create_entropy_api_layer()
+entropy_layer=create_entropy_api_layer()
 
     # Start the layer
 entropy_layer.start()
 
     # Simulate some operations
-market_data = {
+market_data={
 'price': 50000.0,
 'price_volatility': 0.3,
 'volume_change': 0.1,
@@ -583,11 +598,11 @@ market_data = {
 }
 
     # Calculate entropy
-entropy = entropy_layer.calculate_entropy(market_data)
+entropy=entropy_layer.calculate_entropy(market_data)
     safe_print(f"Calculated entropy: {entropy:.3f}")
 
     # Generate hash signature
-hash_sig = entropy_layer.generate_hash_signature(market_data)
+hash_sig=entropy_layer.generate_hash_signature(market_data)
     safe_print(f"Hash signature: {hash_sig}")
 
     # Update bit positions
@@ -595,7 +610,7 @@ entropy_layer.update_16_bit_positions(market_data)
     safe_print(f"Updated {len(entropy_layer.bit_positions)} bit positions")
 
     # Register a hash command
-success = entropy_layer.register_hash_command(
+success=entropy_layer.register_hash_command(
         command_id="test_command_001",
 hash_pattern="0000",
 execution_function="update_market_signals",
@@ -605,11 +620,11 @@ priority=5
 safe_print(f"Command registration: {'Success' if success else 'Failed'}")
 
     # Execute hash commands
-results = entropy_layer.execute_hash_commands(hash_sig)
+results=entropy_layer.execute_hash_commands(hash_sig)
     safe_print(f"Executed {len(results)} commands")
 
     # Get status
-status = entropy_layer.get_status()
+status=entropy_layer.get_status()
     safe_print(f"Status: {status}")
 
     # Stop the layer

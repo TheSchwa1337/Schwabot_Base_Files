@@ -24,6 +24,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BusMessage:
     message_type: str
@@ -32,6 +33,7 @@ class BusMessage:
     source: Optional[str] = None
     destination: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = field(default_factory=dict)
+
 
 class BusCore:
     def __init__(self):
@@ -80,11 +82,14 @@ class BusCore:
         self._message_history.clear()
         logger.info("BusCore message history cleared")
 
+
 if __name__ == "__main__":
     bus = BusCore()
+
     def print_message(msg: BusMessage):
         safe_print(f"Message: {msg.message_type} from {msg.source} to {msg.destination} payload: {msg.payload}")
     bus.register_route("trade", print_message)
-    msg = BusMessage(message_type="trade", source="engine", destination="logger", payload={"trade_id": "T123", "amount": 1.5})
+    msg = BusMessage(message_type="trade", source="engine", destination="logger",
+                     payload={"trade_id": "T123", "amount": 1.5})
     bus.send(msg)
     safe_print("Message history:", bus.get_message_history("trade"))

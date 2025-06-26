@@ -121,14 +121,14 @@ class AIIntegrationBridge:
     """
     Bridge between Schwabot's entropy API layer and external AI models.
     """
-    
-    def __init__(self, 
+
+    def __init__(self,
                  entropy_api_layer=None,
                  websocket_host: str = 'localhost',
                  websocket_port: int = 8765):
         """
         Initialize the AI integration bridge.
-        
+
         Args:
             entropy_api_layer: Reference to the entropy API layer
             websocket_host: WebSocket server host
@@ -137,84 +137,84 @@ class AIIntegrationBridge:
         self.entropy_api_layer = entropy_api_layer
         self.websocket_host = websocket_host
         self.websocket_port = websocket_port
-        
+
         # AI model configurations
         self.ai_models: Dict[str, AIModelConfig] = {}
         self.model_clients: Dict[str, Any] = {}
-        
+
         # Decision tracking
         self.decision_requests: Dict[str, AIDecisionRequest] = {}
         self.decision_responses: Dict[str, List[AIDecisionResponse]] = defaultdict(list)
         self.consensus_results: Dict[str, AIConsensus] = {}
-        
+
         # Consensus tracking
         self.consensus_history: List[AIConsensus] = []
         self.model_agreement_stats: Dict[str, Dict[str, float]] = defaultdict(lambda: defaultdict(float))
-        
+
         # WebSocket connection
         self.websocket = None
         self.is_connected = False
-        
+
         # Threading
         self.is_running = False
         self.response_thread = None
-        
+
         logger.info("🧠 AI Integration Bridge initialized")
-    
+
     def configure_ai_models(self, configs: Dict[str, AIModelConfig]):
         """
         Configure AI models for integration.
-        
+
         Args:
             configs: Dictionary of AI model configurations
         """
         for model_name, config in configs.items():
             self.ai_models[model_name] = config
             self._initialize_model_client(model_name, config)
-        
+
         logger.info(f"✅ Configured {len(configs)} AI models")
-    
+
     def _initialize_model_client(self, model_name: str, config: AIModelConfig):
         """Initialize client for an AI model."""
         try:
             if model_name == 'gpt' and OPENAI_AVAILABLE:
                 openai.api_key = config.api_key
                 self.model_clients[model_name] = openai
-                
+
             elif model_name == 'claude' and ANTHROPIC_AVAILABLE:
                 self.model_clients[model_name] = anthropic.Anthropic(api_key=config.api_key)
-                
+
             elif model_name == 'gemini' and GEMINI_AVAILABLE:
                 genai.configure(api_key=config.api_key)
                 self.model_clients[model_name] = genai.GenerativeModel(config.model_id)
-                
+
             else:
                 logger.warning(f"⚠️ Model {model_name} not available or not configured")
-                
+
         except Exception as e:
             logger.error(f"❌ Failed to initialize {model_name}: {e}")
-    
-    def create_decision_request(self, 
-                              market_state: Dict[str, Any],
-                              entropy_value: float,
-                              bit_positions: Dict[int, Dict[str, Any]],
-                              decision_context: Dict[str, Any]) -> AIDecisionRequest:
+
+    def create_decision_request(self,
+                                market_state: Dict[str, Any],
+                                entropy_value: float,
+                                bit_positions: Dict[int, Dict[str, Any]],
+                                decision_context: Dict[str, Any]) -> AIDecisionRequest:
         """
         Create a decision request for AI analysis.
-        
+
         Args:
             market_state: Current market state
             entropy_value: Current entropy value
             bit_positions: 16-bit positions
             decision_context: Additional decision context
-            
+
         Returns:
             Decision request object
         """
         try:
             # Generate request ID
             request_id = f"decision_{int(time.time())}_{hashlib.md5(str(market_state).encode()).hexdigest()[:8]}"
-            
+
             # Create request data
             request_data = {
                 'market_state': market_state,
@@ -222,10 +222,10 @@ class AIIntegrationBridge:
                 'bit_positions': bit_positions,
                 'decision_context': decision_context
             }
-            
+
             # Generate hash signature
             hash_signature = self._generate_request_hash(request_data)
-            
+
             # Create request
             request = AIDecisionRequest(
                 request_id=request_id,
@@ -237,42 +237,42 @@ class AIIntegrationBridge:
                 hash_signature=hash_signature,
                 ai_models=list(self.ai_models.keys())
             )
-            
+
             # Store request
             self.decision_requests[request_id] = request
-            
+
             logger.info(f"📝 Created decision request: {request_id}")
             return request
-            
+
         except Exception as e:
             logger.error(f"❌ Error creating decision request: {e}")
             return None
-    
+
     def _generate_request_hash(self, request_data: Dict[str, Any]) -> str:
         """Generate hash for decision request."""
         try:
             state_string = json.dumps(request_data, sort_keys=True)
             timestamp = str(int(time.time()))
             state_string += timestamp
-            
+
             return hashlib.sha256(state_string.encode()).hexdigest()[:16]
-            
+
         except Exception as e:
             logger.error(f"❌ Error generating request hash: {e}")
             return "0000000000000000"
-    
+
     async def request_ai_analysis(self, decision_request: AIDecisionRequest) -> List[AIDecisionResponse]:
         """
         Request analysis from all configured AI models.
-        
+
         Args:
             decision_request: Decision request to analyze
-            
+
         Returns:
             List of AI responses
         """
         responses = []
-        
+
         try:
             # Create tasks for each AI model
             tasks = []
@@ -282,50 +282,50 @@ class AIIntegrationBridge:
                         self._query_ai_model(model_name, decision_request)
                     )
                     tasks.append(task)
-            
+
             # Wait for all responses
             if tasks:
                 model_responses = await asyncio.gather(*tasks, return_exceptions=True)
-                
+
                 for i, response in enumerate(model_responses):
                     if isinstance(response, AIDecisionResponse):
                         responses.append(response)
                         self.decision_responses[decision_request.request_id].append(response)
                     else:
                         logger.error(f"❌ AI model response error: {response}")
-            
+
             # Store responses
             if responses:
                 self.decision_responses[decision_request.request_id].extend(responses)
-                
+
                 # Generate consensus
                 consensus = self._generate_consensus(decision_request.request_id, responses)
                 if consensus:
                     self.consensus_results[decision_request.request_id] = consensus
                     self.consensus_history.append(consensus)
-            
+
             logger.info(f"🤖 Received {len(responses)} AI responses for request {decision_request.request_id}")
-            
+
         except Exception as e:
             logger.error(f"❌ Error requesting AI analysis: {e}")
-        
+
         return responses
-    
+
     async def _query_ai_model(self, model_name: str, request: AIDecisionRequest) -> AIDecisionResponse:
         """
         Query a specific AI model for analysis.
-        
+
         Args:
             model_name: Name of the AI model
             request: Decision request
-            
+
         Returns:
             AI response
         """
         try:
             # Create prompt for the AI model
             prompt = self._create_ai_prompt(request, model_name)
-            
+
             if model_name == 'gpt':
                 response = await self._query_gpt(prompt, model_name)
             elif model_name == 'claude':
@@ -334,9 +334,9 @@ class AIIntegrationBridge:
                 response = await self._query_gemini(prompt, model_name)
             else:
                 raise ValueError(f"Unknown AI model: {model_name}")
-            
+
             return response
-            
+
         except Exception as e:
             logger.error(f"❌ Error querying {model_name}: {e}")
             # Return a default response
@@ -351,7 +351,7 @@ class AIIntegrationBridge:
                 timestamp=datetime.now(),
                 response_hash='error'
             )
-    
+
     def _create_ai_prompt(self, request: AIDecisionRequest, model_name: str) -> str:
         """Create a prompt for AI analysis."""
         try:
@@ -359,7 +359,7 @@ class AIIntegrationBridge:
             entropy = request.entropy_value
             bit_positions = request.bit_positions
             market_state = request.market_state
-            
+
             # Create context string
             context = f"""
 Schwabot Trading Analysis Request
@@ -392,11 +392,11 @@ Respond in JSON format:
 }}
 """
             return context
-            
+
         except Exception as e:
             logger.error(f"❌ Error creating AI prompt: {e}")
             return "Analyze the current trading situation and provide recommendations."
-    
+
     def _format_bit_positions(self, bit_positions: Dict[int, Dict[str, Any]]) -> str:
         """Format bit positions for AI prompt."""
         try:
@@ -407,12 +407,12 @@ Respond in JSON format:
             return "\n".join(formatted)
         except Exception as e:
             return "Bit positions unavailable"
-    
+
     async def _query_gpt(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query GPT model."""
         try:
             config = self.ai_models[model_name]
-            
+
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: openai.ChatCompletion.create(
@@ -425,23 +425,23 @@ Respond in JSON format:
                     temperature=config.temperature
                 )
             )
-            
+
             # Parse response
             content = response.choices[0].message.content
             parsed_response = self._parse_ai_response(content, model_name)
-            
+
             return parsed_response
-            
+
         except Exception as e:
             logger.error(f"❌ GPT query error: {e}")
             raise
-    
+
     async def _query_claude(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query Claude model."""
         try:
             config = self.ai_models[model_name]
             client = self.model_clients[model_name]
-            
+
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: client.messages.create(
@@ -453,49 +453,49 @@ Respond in JSON format:
                     ]
                 )
             )
-            
+
             # Parse response
             content = response.content[0].text
             parsed_response = self._parse_ai_response(content, model_name)
-            
+
             return parsed_response
-            
+
         except Exception as e:
             logger.error(f"❌ Claude query error: {e}")
             raise
-    
+
     async def _query_gemini(self, prompt: str, model_name: str) -> AIDecisionResponse:
         """Query Gemini model."""
         try:
             config = self.ai_models[model_name]
             model = self.model_clients[model_name]
-            
+
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: model.generate_content(prompt)
             )
-            
+
             # Parse response
             content = response.text
             parsed_response = self._parse_ai_response(content, model_name)
-            
+
             return parsed_response
-            
+
         except Exception as e:
             logger.error(f"❌ Gemini query error: {e}")
             raise
-    
+
     def _parse_ai_response(self, content: str, model_name: str) -> AIDecisionResponse:
         """Parse AI response content."""
         try:
             # Try to extract JSON from response
             json_start = content.find('{')
             json_end = content.rfind('}') + 1
-            
+
             if json_start != -1 and json_end > json_start:
                 json_str = content[json_start:json_end]
                 parsed = json.loads(json_str)
-                
+
                 return AIDecisionResponse(
                     model_name=model_name,
                     request_id=f"response_{int(time.time())}",
@@ -520,7 +520,7 @@ Respond in JSON format:
                     timestamp=datetime.now(),
                     response_hash=hashlib.md5(content.encode()).hexdigest()[:16]
                 )
-                
+
         except Exception as e:
             logger.error(f"❌ Error parsing AI response: {e}")
             return AIDecisionResponse(
@@ -534,38 +534,38 @@ Respond in JSON format:
                 timestamp=datetime.now(),
                 response_hash='parse_error'
             )
-    
+
     def _generate_consensus(self, request_id: str, responses: List[AIDecisionResponse]) -> Optional[AIConsensus]:
         """Generate consensus from multiple AI responses."""
         try:
             if not responses:
                 return None
-            
+
             # Count actions
             action_counts = defaultdict(int)
             total_confidence = 0.0
-            
+
             for response in responses:
                 action_counts[response.recommended_action] += 1
                 total_confidence += response.confidence_score
-            
+
             # Find most common action
             consensus_action = unified_math.max(action_counts.items(), key=lambda x: x[1])[0]
-            
+
             # Calculate agreement level
             total_responses = len(responses)
             agreement_level = action_counts[consensus_action] / total_responses
-            
+
             # Calculate average confidence
             avg_confidence = total_confidence / total_responses
-            
+
             # Determine risk level
             risk_levels = [r.risk_assessment for r in responses]
             risk_counts = defaultdict(int)
             for risk in risk_levels:
                 risk_counts[risk] += 1
             consensus_risk = unified_math.max(risk_counts.items(), key=lambda x: x[1])[0]
-            
+
             # Create final recommendation
             if agreement_level >= 0.8:
                 final_recommendation = f"Strong consensus: {consensus_action}"
@@ -573,7 +573,7 @@ Respond in JSON format:
                 final_recommendation = f"Moderate consensus: {consensus_action}"
             else:
                 final_recommendation = f"Weak consensus: {consensus_action} (consider manual review)"
-            
+
             consensus = AIConsensus(
                 consensus_id=f"consensus_{request_id}",
                 request_id=request_id,
@@ -585,86 +585,86 @@ Respond in JSON format:
                 final_recommendation=final_recommendation,
                 risk_level=consensus_risk
             )
-            
+
             # Update agreement statistics
             for response in responses:
                 self.model_agreement_stats[response.model_name]['total_responses'] += 1
                 if response.recommended_action == consensus_action:
                     self.model_agreement_stats[response.model_name]['agreed_responses'] += 1
-            
+
             logger.info(f"🤝 Generated consensus: {consensus_action} (agreement: {agreement_level:.2f})")
             return consensus
-            
+
         except Exception as e:
             logger.error(f"❌ Error generating consensus: {e}")
             return None
-    
+
     async def connect_to_entropy_api(self):
         """Connect to the entropy API layer via WebSocket."""
         if not WEBSOCKETS_AVAILABLE:
             logger.warning("WebSockets not available")
             return
-        
+
         try:
             self.websocket = await websockets.connect(
                 f"ws://{self.websocket_host}:{self.websocket_port}"
             )
             self.is_connected = True
-            
+
             # Subscribe to updates
             await self.websocket.send(json.dumps({
                 'type': 'subscribe',
                 'client': 'ai_bridge'
             }))
-            
+
             logger.info("✅ Connected to entropy API layer")
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to connect to entropy API: {e}")
             self.is_connected = False
-    
+
     async def start(self):
         """Start the AI integration bridge."""
         if self.is_running:
             logger.warning("AI Integration Bridge already running")
             return
-        
+
         try:
             # Connect to entropy API
             await self.connect_to_entropy_api()
-            
+
             # Start response processing thread
             self.is_running = True
             self.response_thread = threading.Thread(target=self._response_loop, daemon=True)
             self.response_thread.start()
-            
+
             logger.info("🚀 AI Integration Bridge started")
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to start AI Integration Bridge: {e}")
             self.is_running = False
-    
+
     def stop(self):
         """Stop the AI integration bridge."""
         self.is_running = False
         if self.websocket:
             asyncio.create_task(self.websocket.close())
         logger.info("🛑 AI Integration Bridge stopped")
-    
+
     def _response_loop(self):
         """Main loop for processing responses and maintaining connection."""
         while self.is_running:
             try:
                 # Process any pending responses
                 self._process_pending_responses()
-                
+
                 # Sleep briefly
                 time.sleep(1)
-                
+
             except Exception as e:
                 logger.error(f"❌ Error in response loop: {e}")
                 time.sleep(5)  # Longer pause on error
-    
+
     def _process_pending_responses(self):
         """Process any pending AI responses."""
         try:
@@ -673,32 +673,32 @@ Respond in JSON format:
                 # This would integrate with the entropy API layer
                 # to check for new decision requests
                 pass
-            
+
         except Exception as e:
             logger.error(f"❌ Error processing responses: {e}")
-    
+
     def get_consensus_history(self, limit: int = 50) -> List[AIConsensus]:
         """Get recent consensus history."""
         return self.consensus_history[-limit:] if self.consensus_history else []
-    
+
     def get_model_agreement_stats(self) -> Dict[str, Dict[str, float]]:
         """Get agreement statistics for each model."""
         stats = {}
         for model_name, model_stats in self.model_agreement_stats.items():
             total = model_stats.get('total_responses', 0)
             agreed = model_stats.get('agreed_responses', 0)
-            
+
             if total > 0:
                 agreement_rate = agreed / total
             else:
                 agreement_rate = 0.0
-            
+
             stats[model_name] = {
                 'total_responses': total,
                 'agreed_responses': agreed,
                 'agreement_rate': agreement_rate
             }
-        
+
         return stats
 
 
@@ -706,7 +706,7 @@ Respond in JSON format:
 def create_ai_bridge(entropy_api_layer=None):
     """Create and configure an AI integration bridge."""
     bridge = AIIntegrationBridge(entropy_api_layer=entropy_api_layer)
-    
+
     # Configure AI models (replace with actual API keys)
     configs = {
         'gpt': AIModelConfig(
@@ -737,7 +737,7 @@ def create_ai_bridge(entropy_api_layer=None):
             priority=3
         )
     }
-    
+
     bridge.configure_ai_models(configs)
     return bridge
 
@@ -745,15 +745,15 @@ def create_ai_bridge(entropy_api_layer=None):
 if __name__ == "__main__":
     # Example usage
     logging.basicConfig(level=logging.INFO)
-    
+
     # Create AI bridge
     bridge = create_ai_bridge()
-    
+
     # Start the bridge
     asyncio.run(bridge.start())
-    
+
     # Keep running
     try:
         asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
-        bridge.stop() 
+        bridge.stop()

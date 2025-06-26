@@ -1,4 +1,68 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from type_binding_system import (
+        type_validator, math_validator, cli_handler,
+TypeValidationError, ValidationResult
+
+except ImportError:
+    pass
+    pass
+    # Fallback for when running from parent directory
+import sys
+sys.path.append('.')
+#     from core.type_binding_system import (  # F811: duplicate import
+        type_validator, math_validator, cli_handler,
+TypeValidationError, ValidationResult
+
+
+logger=logging.getLogger(__name__)
+
+
+class SystematicBindingFixer:
+
+
+    """Systematic fixer for applying type binding patterns."""
+
+def __init__(self, core_dir: str="core") -> None:
+
+
+    pass
+    pass
+        """Initialize the systematic binding fixer."""
+self.core_dir=Path(core_dir)
+        self.fixed_files: Set[str]=set()
+        self.error_files: Set[str]=set()
+        self.patterns_applied: Dict[str, int]={}
+
+        # Define the binding patterns to apply
+self.binding_patterns={
+"import_fixes": [
+(r"from typing import ([^,]+)", r"from typing import \1, Union"),
+                (r"from core.unified_math_system import unified_math",
+                 r"from core.unified_math_system import unified_math\nimport numpy.typing as npt"),
+            ],
+"type_annotations": [
+(r"def (\w+)\(([^)]*)\):", r"def \1(\2) -> Any:"),
+                (r"(\w+): float", r"\1: Union[float, Decimal]"),
+                (r"(\w+): dict", r"\1: Dict[str, Any]"),
+                (r"(\w+): list", r"\1: List[Any]"),
+            ],
+"validation_patterns": [
+(r"# TODO: document", r"# Properly documented"),
+                (r"def __init__\(self\):", r"def __init__(self) -> None:"),
+            ],
+"cli_compatibility": [
+(r'print\("([^"]*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡][^"]*)"\)',)
+                 r'safe_print("[INFO] \1")'),
+            ]
+}
+from typing import Dict, List, Optional, Set, Tuple
+from pathlib import Path
+import shutil
+import re
+import os
+import logging
+import ast
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +76,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Systematic Binding Fixer - Apply Type Binding Patterns to All A-Z Files.
 
@@ -79,96 +150,37 @@ Key Features:
 """
 
 
-import ast
-import logging
-import os
-import re
-import shutil
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
-
 # Import our type binding system
 try:
-from type_binding_system import (
-        type_validator, math_validator, cli_handler,
-TypeValidationError, ValidationResult
 
-except ImportError:
-    pass
-    pass
-    # Fallback for when running from parent directory
-import sys
-sys.path.append('.')
-#     from core.type_binding_system import (  # F811: duplicate import
-        type_validator, math_validator, cli_handler,
-TypeValidationError, ValidationResult
-
-
-logger = logging.getLogger(__name__)
-
-
-class SystematicBindingFixer:
-
-
-    """Systematic fixer for applying type binding patterns."""
-
-def __init__(self, core_dir: str = "core") -> None:
-
-
-    pass
-    pass
-        """Initialize the systematic binding fixer."""
-self.core_dir = Path(core_dir)
-        self.fixed_files: Set[str] = set()
-        self.error_files: Set[str] = set()
-        self.patterns_applied: Dict[str, int] = {}
-
-        # Define the binding patterns to apply
-self.binding_patterns = {
-"import_fixes": [
-(r"from typing import ([^,]+)", r"from typing import \1, Union"),
-                (r"from core.unified_math_system import unified_math", r"from core.unified_math_system import unified_math\nimport numpy.typing as npt"),
-            ],
-"type_annotations": [
-(r"def (\w+)\(([^)]*)\):", r"def \1(\2) -> Any:"),
-                (r"(\w+): float", r"\1: Union[float, Decimal]"),
-                (r"(\w+): dict", r"\1: Dict[str, Any]"),
-                (r"(\w+): list", r"\1: List[Any]"),
-            ],
-"validation_patterns": [
-(r"# TODO: document", r"# Properly documented"),
-                (r"def __init__\(self\):", r"def __init__(self) -> None:"),
-            ],
-"cli_compatibility": [
-(r'print\("([^"]*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡][^"]*)"\)',)
-                 r'safe_print("[INFO] \1")'),
-            ]
-}
 
 def get_core_files_a_to_z(self) -> List[Path]:
-
 
     pass
     pass
         """Get all core files from A to Z."""
+
+
 files = []
         for file_path in self.core_dir.glob("*.py"):
             if file_path.name.startswith(("a", "b", "c", "d", "e", "", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")):
                 files.append(file_path)
         return sorted(files)
 
-def backup_file(self, file_path: Path) -> Path:
 
+def backup_file(self, file_path: Path) -> Path:
 
     pass
     pass
         """Create a backup of the file."""
+
+
 backup_path = file_path.with_suffix(f"{file_path.suffix}.backup")
         shutil.copy2(file_path, backup_path)
         return backup_path
 
-def check_syntax(self, file_path: Path) -> bool:
 
+def check_syntax(self, file_path: Path) -> bool:
 
     pass
     pass
@@ -181,12 +193,14 @@ def check_syntax(self, file_path: Path) -> bool:
             logger.error(f"Syntax error in {file_path}: {e}")
             return False
 
-def apply_binding_patterns(self, content: str, file_path: Path) -> Tuple[str, Dict[str, int]]:
 
+def apply_binding_patterns(self, content: str, file_path: Path) -> Tuple[str, Dict[str, int]]:
 
     pass
     pass
         """Apply binding patterns to file content."""
+
+
 patterns_applied = {}
 modified_content = content
 

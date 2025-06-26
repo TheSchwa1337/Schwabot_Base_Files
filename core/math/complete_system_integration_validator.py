@@ -1,5 +1,25 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from hash_confidence_evaluator import HashConfidenceEvaluator
+from entropy_validator import EntropyValidator
+from demo_runner import DemoPipelineRunner, PipelineMode, PipelineStatus
+from dlt_waveform_engine import DLTWaveformEngine
+from profit_routing_engine import ProfitRoutingEngine
+from matrix_mapper import MatrixMapper
+from bit_resolution_engine import BitResolutionEngine
+from tensor_matcher import TensorMatcher
+from math.tensor_algebra import UnifiedTensorAlgebra, BitPhaseResult
+import queue
+import threading
+import os
+import sys
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple
+import logging
+import time
+import json
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +31,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Complete System Integration Validator - Schwabot UROS v1.0
@@ -60,38 +87,21 @@ Mathematical Pipeline:
 1. Core Mathematical Foundations → 2. UI System Integration → 3. Training & Demo Pipeline → 4. Visualizer Integration → 5. Mathlib Integration
 """
 
-import json
-import time
-import logging
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
-import sys
-import os
-import threading
-import queue
 
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from math.tensor_algebra import UnifiedTensorAlgebra, BitPhaseResult
-from tensor_matcher import TensorMatcher
-from bit_resolution_engine import BitResolutionEngine
-from matrix_mapper import MatrixMapper
-from profit_routing_engine import ProfitRoutingEngine
-from dlt_waveform_engine import DLTWaveformEngine
-from demo_runner import DemoPipelineRunner, PipelineMode, PipelineStatus
-from entropy_validator import EntropyValidator
-from hash_confidence_evaluator import HashConfidenceEvaluator
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class SystemIntegrationTestResult:
 
-
     """Result of system integration test."""
+
+
 test_name: str
 component: str
 success: bool
@@ -99,11 +109,13 @@ execution_time: float
 error_message: Optional[str] = None
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class SystemIntegrationValidationResult:
 
-
     """Result of system integration validation."""
+
+
 validation_name: str
 all_tests_passed: bool
 total_tests: int
@@ -113,8 +125,8 @@ execution_time: float
 test_results: List[SystemIntegrationTestResult]
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class CompleteSystemIntegrationValidator:
 
+class CompleteSystemIntegrationValidator:
 
     """
 Complete system integration validator for Schwabot.
@@ -127,12 +139,13 @@ Validates complete mathematical integration across:
 5. Mathlib Integration
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the complete system integration validator."""
+
         # Core mathematical components
 self.tensor_algebra = UnifiedTensorAlgebra()
         self.tensor_matcher = TensorMatcher()
@@ -151,12 +164,14 @@ self.validation_results: List[SystemIntegrationValidationResult] = []
 
 logger.info("Complete System Integration Validator initialized")
 
-def validate_core_mathematical_foundations(self) -> SystemIntegrationValidationResult:
 
+def validate_core_mathematical_foundations(self) -> SystemIntegrationValidationResult:
 
     pass
     pass
         """Validate core mathematical foundations integration."""
+
+
 test_results = []
 start_time = time.time()
 
@@ -185,13 +200,13 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 2: Matrix Basket Tensor Integration
-test_start = time.time()
-            matrix_a = np.random.random((4, 4))
-            matrix_b = np.random.random((4, 4))
-            tensor_result = self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
-            matrix_basket = self.matrix_mapper.create_matrix_basket("test_basket", 100, 45000.0)
+test_start=time.time()
+            matrix_a=np.random.random((4, 4))
+            matrix_b=np.random.random((4, 4))
+            tensor_result=self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
+            matrix_basket=self.matrix_mapper.create_matrix_basket("test_basket", 100, 45000.0)
 
-success = (
+success=(
                 tensor_result is not None and
 matrix_basket is not None and
 tensor_result.tensor_score > 0
@@ -209,11 +224,11 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 3: Profit Routing Integration
-test_start = time.time()
-            profit_result = self.tensor_algebra.calculate_profit_routing(1000.0, 950.0, 1.0)
-            delta_trade = self.profit_routing_engine.calculate_delta_trade(50000.0, 51000.0)
+test_start=time.time()
+            profit_result=self.tensor_algebra.calculate_profit_routing(1000.0, 950.0, 1.0)
+            delta_trade=self.profit_routing_engine.calculate_delta_trade(50000.0, 51000.0)
 
-success = (
+success=(
                 profit_result is not None and
 delta_trade is not None and
 profit_result.profit_rate == 50.0  # (1000 - 950) / 1.0
@@ -231,11 +246,11 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 4: Entropy Compensation Integration
-test_start = time.time()
-            entropy_result = self.tensor_algebra.calculate_entropy_compensation(1000.0, 0.1)
-            entropy_validation = self.entropy_validator.validate_entropy_level(4.0)
+test_start=time.time()
+            entropy_result=self.tensor_algebra.calculate_entropy_compensation(1000.0, 0.1)
+            entropy_validation=self.entropy_validator.validate_entropy_level(4.0)
 
-success = (
+success=(
                 entropy_result is not None and
 entropy_validation is not None and
 entropy_result.entropy_gate > 0
@@ -253,11 +268,11 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 5: Hash Memory Integration
-test_start = time.time()
-            hash_result = self.tensor_algebra.encode_hash_memory(1000.0, 50.0, bit_result)
-            hash_confidence = self.hash_evaluator.evaluate_hash_confidence("test_hash")
+test_start=time.time()
+            hash_result=self.tensor_algebra.encode_hash_memory(1000.0, 50.0, bit_result)
+            hash_confidence=self.hash_evaluator.evaluate_hash_confidence("test_hash")
 
-success = (
+success=(
                 hash_result is not None and
 hash_confidence is not None and
 len(hash_result.hash_signature) == 64  # SHA256 hex length
@@ -283,8 +298,8 @@ execution_time=0.0,
 error_message=str(e)
             ))
 
-total_time = time.time() - start_time
-        passed_tests = sum(1 for result in test_results if result.success)
+total_time=time.time() - start_time
+        passed_tests=sum(1 for result in test_results if result.success)
 
         return SystemIntegrationValidationResult(
             validation_name="Core Mathematical Foundations Integration",
@@ -302,14 +317,14 @@ def validate_ui_system_integration(self) -> SystemIntegrationValidationResult:
     pass
     pass
         """Validate UI system integration."""
-test_results = []
-start_time = time.time()
+test_results=[]
+start_time=time.time()
 
         try:
             # Test 1: Unified Interface System Integration
-test_start = time.time()
+test_start=time.time()
             # Test mathematical parameter integration
-math_params = {
+math_params={
 "alpha_weight": 0.3,
 "beta_weight": 0.5,
 "gamma_weight": 0.2,
@@ -318,13 +333,13 @@ math_params = {
 }
 
             # Update tensor algebra with UI parameters
-self.tensor_algebra.alpha_weight = math_params["alpha_weight"]
-self.tensor_algebra.beta_weight = math_params["beta_weight"]
-self.tensor_algebra.gamma_weight = math_params["gamma_weight"]
+self.tensor_algebra.alpha_weight=math_params["alpha_weight"]
+self.tensor_algebra.beta_weight=math_params["beta_weight"]
+self.tensor_algebra.gamma_weight=math_params["gamma_weight"]
 
             # Test parameter application
-bit_result = self.tensor_algebra.resolve_bit_phases("0x123456789abcde")
-            success = (
+bit_result=self.tensor_algebra.resolve_bit_phases("0x123456789abcde")
+            success=(
                 bit_result is not None and
 unified_math.abs(self.tensor_algebra.alpha_weight - 0.3) < 1e-6
 
@@ -341,9 +356,9 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 2: Enhanced Trading Dashboard Integration
-test_start = time.time()
+test_start=time.time()
             # Test real-time data integration
-market_data = {
+market_data={
 'current_profit': 1000.0,
 'previous_profit': 950.0,
 'time_delta': 1.0,
@@ -351,8 +366,8 @@ market_data = {
 'drift_magnitude': 0.1
 }
 
-unified_result = self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
-            success = (
+unified_result=self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
+            success=(
                 unified_result is not None and
 'bit_phases' in unified_result and
 'tensor_contraction' in unified_result and
@@ -371,17 +386,17 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 3: Bit Visualization Engine Integration
-test_start = time.time()
+test_start=time.time()
             # Test bit level transitions
-bit_levels = [4, 8, 16, 32, 42, 64]
-bit_results = []
+bit_levels=[4, 8, 16, 32, 42, 64]
+bit_results=[]
 
             for bit_level in bit_levels:
-strategy_id = f"0x{bit_level:016x}"
-result = self.tensor_algebra.resolve_bit_phases(strategy_id)
+strategy_id=f"0x{bit_level:016x}"
+result=self.tensor_algebra.resolve_bit_phases(strategy_id)
                 bit_results.append(result)
 
-success = (
+success=(
                 len(bit_results) == len(bit_levels) and
                 all(result is not None for result in bit_results)
 
@@ -406,8 +421,8 @@ execution_time=0.0,
 error_message=str(e)
             ))
 
-total_time = time.time() - start_time
-        passed_tests = sum(1 for result in test_results if result.success)
+total_time=time.time() - start_time
+        passed_tests=sum(1 for result in test_results if result.success)
 
         return SystemIntegrationValidationResult(
             validation_name="UI System Integration",
@@ -425,17 +440,17 @@ def validate_training_demo_pipeline_integration(self) -> SystemIntegrationValida
     pass
     pass
         """Validate training and demo pipeline integration."""
-test_results = []
-start_time = time.time()
+test_results=[]
+start_time=time.time()
 
         try:
             # Test 1: Demo Pipeline Runner Integration
-test_start = time.time()
+test_start=time.time()
             self.demo_runner.set_mode(PipelineMode.DEMO)
 
             # Test pipeline status
-status = self.demo_runner.get_pipeline_status()
-            success = (
+status=self.demo_runner.get_pipeline_status()
+            success=(
                 status is not None and
 status['mode'] == 'demo' and
 status['status'] == 'idle'
@@ -453,17 +468,17 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 2: Demo Pipeline Execution Integration
-test_start = time.time()
+test_start=time.time()
             # Test short pipeline execution
-success = self.demo_runner.start_pipeline(duration_minutes=1)
+success=self.demo_runner.start_pipeline(duration_minutes=1)
 
             if success:
                 # Monitor for 2 seconds
 time.sleep(2)
-                status = self.demo_runner.get_pipeline_status()
+                status=self.demo_runner.get_pipeline_status()
                 self.demo_runner.stop_pipeline()
 
-success = (
+success=(
                     status['status'] == 'running' or
 status['status'] == 'stopped' or
 status['tick_count'] > 0
@@ -481,10 +496,10 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 3: Mathematical Pipeline Integration
-test_start = time.time()
+test_start=time.time()
             # Test complete mathematical pipeline
-strategy_id = "0x123456789abcde"
-market_data = {
+strategy_id="0x123456789abcde"
+market_data={
 'current_profit': 1000.0,
 'previous_profit': 950.0,
 'time_delta': 1.0,
@@ -492,10 +507,10 @@ market_data = {
 'drift_magnitude': 0.1
 }
 
-unified_result = self.tensor_algebra.perform_unified_operation(strategy_id, market_data)
+unified_result=self.tensor_algebra.perform_unified_operation(strategy_id, market_data)
 
             # Test all mathematical components
-success = (
+success=(
                 unified_result is not None and
 'bit_phases' in unified_result and
 'tensor_contraction' in unified_result and
@@ -524,8 +539,8 @@ execution_time=0.0,
 error_message=str(e)
             ))
 
-total_time = time.time() - start_time
-        passed_tests = sum(1 for result in test_results if result.success)
+total_time=time.time() - start_time
+        passed_tests=sum(1 for result in test_results if result.success)
 
         return SystemIntegrationValidationResult(
             validation_name="Training & Demo Pipeline Integration",
@@ -543,26 +558,26 @@ def validate_visualizer_integration(self) -> SystemIntegrationValidationResult:
     pass
     pass
         """Validate visualizer integration."""
-test_results = []
-start_time = time.time()
+test_results=[]
+start_time=time.time()
 
         try:
             # Test 1: Mathematical Visualizer Integration
-test_start = time.time()
+test_start=time.time()
             # Test tensor data generation for visualization
-matrix_a = np.random.random((3, 3))
-            matrix_b = np.random.random((3, 3))
-            tensor_result = self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
+matrix_a=np.random.random((3, 3))
+            matrix_b=np.random.random((3, 3))
+            tensor_result=self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
 
             # Test visualization data structure
-viz_data = {
+viz_data={
 'tensor_score': tensor_result.tensor_score,
 'contraction_matrix': tensor_result.contraction_matrix.tolist(),
                 'operation_type': tensor_result.operation_type.value,
 'timestamp': tensor_result.timestamp.isoformat()
             }
 
-success = (
+success=(
                 tensor_result is not None and
 'tensor_score' in viz_data and
 'contraction_matrix' in viz_data and
@@ -581,14 +596,14 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 2: 3D Visualization Data Integration
-test_start = time.time()
+test_start=time.time()
             # Test 3D data generation
-x = np.linspace(-5, 5, 50)
-            y = np.linspace(-5, 5, 50)
-            X, Y = np.meshgrid(x, y)
-            Z = np.unified_math.sin(unified_math.unified_math.sqrt(X**2 + Y**2))
+x=np.linspace(-5, 5, 50)
+            y=np.linspace(-5, 5, 50)
+            X, Y=np.meshgrid(x, y)
+            Z=np.unified_math.sin(unified_math.unified_math.sqrt(X**2 + Y**2))
 
-viz_3d_data = {
+viz_3d_data={
 'x': X.tolist(),
                 'y': Y.tolist(),
                 'z': Z.tolist(),
@@ -600,7 +615,7 @@ viz_3d_data = {
 }
 }
 
-success = (
+success=(
                 'x' in viz_3d_data and
 'y' in viz_3d_data and
 'z' in viz_3d_data and
@@ -620,11 +635,11 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 3: Real-time Visualization Integration
-test_start = time.time()
+test_start=time.time()
             # Test real-time data updates
-real_time_data = []
+real_time_data=[]
             for i in range(5):
-                market_data = {
+                market_data={
 'current_profit': 1000.0 + i * 10,
 'previous_profit': 950.0 + i * 10,
 'time_delta': 1.0,
@@ -632,10 +647,10 @@ real_time_data = []
 'drift_magnitude': 0.1 + i * 0.01
 }
 
-result = self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
+result=self.tensor_algebra.perform_unified_operation("0x123456789abcde", market_data)
                 real_time_data.append(result)
 
-success = (
+success=(
                 len(real_time_data) == 5 and
                 all(data is not None for data in real_time_data)
 
@@ -660,8 +675,8 @@ execution_time=0.0,
 error_message=str(e)
             ))
 
-total_time = time.time() - start_time
-        passed_tests = sum(1 for result in test_results if result.success)
+total_time=time.time() - start_time
+        passed_tests=sum(1 for result in test_results if result.success)
 
         return SystemIntegrationValidationResult(
             validation_name="Visualizer Integration",
@@ -679,22 +694,22 @@ def validate_mathlib_integration(self) -> SystemIntegrationValidationResult:
     pass
     pass
         """Validate mathlib integration."""
-test_results = []
-start_time = time.time()
+test_results=[]
+start_time=time.time()
 
         try:
             # Test 1: Unified Mathematics Framework Integration
-test_start = time.time()
+test_start=time.time()
             # Test mathematical consistency across components
-strategy_ids = ["0x123456789abcde", "0xfedcba9876543210", "0xabcdef1234567890"]
-results = []
+strategy_ids=["0x123456789abcde", "0xfedcba9876543210", "0xabcdef1234567890"]
+results=[]
 
             for strategy_id in strategy_ids:
-bit_result = self.tensor_algebra.resolve_bit_phases(strategy_id)
+bit_result=self.tensor_algebra.resolve_bit_phases(strategy_id)
                 results.append(bit_result)
 
             # Test mathematical consistency
-success = (
+success=(
                 len(results) == len(strategy_ids) and
                 all(result is not None for result in results) and
                 all(0 <= result.phi_4 <= 15 for result in results) and
@@ -713,18 +728,18 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 2: Performance Optimization Integration
-test_start = time.time()
+test_start=time.time()
             # Test performance optimization
-start_time_perf = time.time()
+start_time_perf=time.time()
 
             # Perform multiple operations
             for i in range(10):
-                matrix_a = np.random.random((4, 4))
-                matrix_b = np.random.random((4, 4))
+                matrix_a=np.random.random((4, 4))
+                matrix_b=np.random.random((4, 4))
                 self.tensor_algebra.perform_tensor_contraction(matrix_a, matrix_b)
 
-perf_time = time.time() - start_time_perf
-            success = perf_time < 1.0  # Should complete in less than 1 second
+perf_time=time.time() - start_time_perf
+            success=perf_time < 1.0  # Should complete in less than 1 second
 
 test_results.append(SystemIntegrationTestResult(
                 test_name="Performance Optimization Integration",
@@ -739,14 +754,14 @@ execution_time=time.time() - test_start,
 ))
 
             # Test 3: Error Handling Integration
-test_start = time.time()
+test_start=time.time()
             # Test error handling with invalid inputs
             try:
                 # Test with invalid strategy ID
-invalid_result = self.tensor_algebra.resolve_bit_phases("invalid_id")
-                success = invalid_result is not None  # Should handle gracefully
+invalid_result=self.tensor_algebra.resolve_bit_phases("invalid_id")
+                success=invalid_result is not None  # Should handle gracefully
             except Exception:
-success = False
+success=False
 
 test_results.append(SystemIntegrationTestResult(
                 test_name="Error Handling Integration",
@@ -768,8 +783,8 @@ execution_time=0.0,
 error_message=str(e)
             ))
 
-total_time = time.time() - start_time
-        passed_tests = sum(1 for result in test_results if result.success)
+total_time=time.time() - start_time
+        passed_tests=sum(1 for result in test_results if result.success)
 
         return SystemIntegrationValidationResult(
             validation_name="Mathlib Integration",
@@ -791,7 +806,7 @@ safe_print("🧮 Running Complete System Integration Validation...")
         safe_print("=" * 60)
 
         # Run all system validations
-validations = [
+validations=[
 self.validate_core_mathematical_foundations(),
             self.validate_ui_system_integration(),
             self.validate_training_demo_pipeline_integration(),
@@ -800,15 +815,15 @@ self.validate_core_mathematical_foundations(),
         ]
 
         # Store results
-self.validation_results = validations
+self.validation_results=validations
 
         # Calculate overall statistics
-total_tests = sum(v.total_tests for v in validations)
-        total_passed = sum(v.passed_tests for v in validations)
-        total_failed = sum(v.failed_tests for v in validations)
-        total_time = sum(v.execution_time for v in validations)
+total_tests=sum(v.total_tests for v in validations)
+        total_passed=sum(v.passed_tests for v in validations)
+        total_failed=sum(v.failed_tests for v in validations)
+        total_time=sum(v.execution_time for v in validations)
 
-overall_success = all(v.all_tests_passed for v in validations)
+overall_success=all(v.all_tests_passed for v in validations)
 
         # Print results
 safe_print("\n📊 Complete System Integration Results:")
@@ -821,7 +836,7 @@ safe_print("\n📊 Complete System Integration Results:")
 
 safe_print("\n📋 System Integration Results:")
         for validation in validations:
-status = "✅ PASSED" if validation.all_tests_passed else "❌ FAILED"
+status="✅ PASSED" if validation.all_tests_passed else "❌ FAILED"
 safe_print(f"  {validation.validation_name}: {status} ({validation.passed_tests}/{validation.total_tests})")
 
         # Return comprehensive results
@@ -856,14 +871,14 @@ safe_print(f"  {validation.validation_name}: {status} ({validation.passed_tests}
 ]
 }
 
-def export_complete_validation_results(self, output_path: str = "complete_system_validation_results.json") -> None:
+def export_complete_validation_results(self, output_path: str="complete_system_validation_results.json") -> None:
 
 
     pass
     pass
         """Export complete system validation results to JSON file."""
         try:
-results = self.run_complete_system_validation()
+results=self.run_complete_system_validation()
 
             with open(output_path, 'w') as f:
                 json.dump(results, f, indent=2)
@@ -884,10 +899,10 @@ safe_print("🧮 Complete System Integration Validator - Schwabot UROS v1.0")
     safe_print("=" * 60)
 
     # Initialize validator
-validator = CompleteSystemIntegrationValidator()
+validator=CompleteSystemIntegrationValidator()
 
     # Run complete system validation
-results = validator.run_complete_system_validation()
+results=validator.run_complete_system_validation()
 
     # Export results
 validator.export_complete_validation_results()

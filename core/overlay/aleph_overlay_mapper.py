@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-\n"""core.overlay.aleph_overlay_mapper
+# -*- coding: utf-8 -*-
+"""core.overlay.aleph_overlay_mapper
 Aleph Overlay Mapper
 ====================
 
@@ -42,7 +43,7 @@ class AlephOverlayMapper:
     """Load overlay memory and perform similarity search."""
 
     def __init__(self, memory_json: str | Path) -> None:
-        self.memory_path = Path(memory_json)
+    self.memory_path = Path(memory_json)
         if not self.memory_path.exists():
             raise FileNotFoundError(self.memory_path)
         self._load_memory()
@@ -51,7 +52,7 @@ class AlephOverlayMapper:
     def _load_memory(self) -> None:
         data = json.loads(self.memory_path.read_text())
         # expect {"overlay_id": [float, float, ...], ...}
-        self._memory: Dict[str, np.ndarray] = {
+    self._memory: Dict[str, np.ndarray] = {
             key: np.asarray(vec, dtype=float) for key, vec in data.items()
         }
         if not self._memory:
@@ -81,7 +82,7 @@ class AlephOverlayMapper:
 
     # ------------------------------------------------------------------
     def overlay_confidence(self, sim: float) -> float:
-        """Convert similarity to 0–1 confidence."""
+        """Convert similarity to 0-1 confidence."""
         return (sim + 1.0) / 2.0
 
 
@@ -89,16 +90,20 @@ class AlephOverlayMapper:
 # Stand-alone functional API requested in integration docs
 # ---------------------------------------------------------------------------
 
-def map_aleph_overlay(live_price: float, memory_prices: Sequence[float], omega: Sequence[float]) -> float:
+def map_aleph_overlay(
+    live_price: float,
+    memory_prices: Sequence[float],
+    omega: Sequence[float]
+) -> float:
     """Return weighted sum of *omega* for memory prices close to *live_price*.
 
     The helper mirrors the mathematical definition::
 
-        Ψ_ALEPH(t) = Σ [ ℵ(t) · δ(P(t) − P_mem) · Ω(t) ]
+        Psi_ALEPH(t) = Sum [ A(t) * delta(P(t) - P_mem) * Omega(t) ]
 
-    with a practical interpretation — if the price difference is below a very
-    small epsilon (``1e-4``) we treat it as a *match* and accumulate the
-    associated *ω* weight.  This is a lightweight convenience wrapper useful
+    with a practical interpretation - if the price difference is below a very
+    small epsilon (1e-4) we treat it as a *match* and accumulate the
+    associated *omega* weight. This is a lightweight convenience wrapper useful
     when the full :class:`AlephOverlayMapper` class overhead is not required.
     """
     if len(memory_prices) != len(omega):
@@ -109,4 +114,4 @@ def map_aleph_overlay(live_price: float, memory_prices: Sequence[float], omega: 
     omega_arr = np.asarray(omega, dtype=float)
 
     diff = np.abs(mem_arr - live_price) < 1e-4
-    return float(np.sum(omega_arr[diff])) 
+    return float(np.sum(omega_arr[diff]))

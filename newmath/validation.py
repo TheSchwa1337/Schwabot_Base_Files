@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 def run_basic_tests() -> bool:
     """
     Run basic validation tests for the new math library.
-    
+
     Returns:
         True if all basic tests pass
     """
     try:
         safe_print("🔬 Running NewMath Basic Validation Tests...")
-        
+
         # Test tensor operations
         from . import tensor_ops
         A = np.random.random((2, 3))
@@ -34,30 +34,30 @@ def run_basic_tests() -> bool:
         result = tensor_ops.tensor_contraction(A, B)
         tensor_test = result.shape == (2, 2)
         safe_print(f"✓ Tensor contraction: {'PASS' if tensor_test else 'FAIL'}")
-        
+
         # Test profit math
         from . import profit_math
         prices = np.array([100.0, 101.5, 99.8, 102.3])
         derivatives = profit_math.profit_derivative(prices)
         profit_test = len(derivatives) == len(prices) - 1
         safe_print(f"✓ Profit derivative: {'PASS' if profit_test else 'FAIL'}")
-        
+
         # Test entropy calculations
         from . import entropy_calc
         entropy = entropy_calc.calculate_entropy(1000.0, 0.1)
         entropy_test = entropy > 0
         safe_print(f"✓ Entropy calculation: {'PASS' if entropy_test else 'FAIL'}")
-        
+
         # Test hash vectors
         from . import hash_vectors
         hash_vec = hash_vectors.generate_hash_vector(100.0, 2.5, 42)
         hash_test = len(hash_vec) == 64
         safe_print(f"✓ Hash generation: {'PASS' if hash_test else 'FAIL'}")
-        
+
         all_passed = tensor_test and profit_test and entropy_test and hash_test
         safe_print(f"🎯 Basic Tests: {'ALL PASSED' if all_passed else 'SOME FAILED'}")
         return all_passed
-        
+
     except Exception as e:
         safe_print(f"❌ Basic tests failed: {e}")
         return False
@@ -66,13 +66,13 @@ def run_basic_tests() -> bool:
 def run_full_tests() -> Dict[str, Any]:
     """
     Run comprehensive validation tests.
-    
+
     Returns:
         Dictionary with detailed test results
     """
     safe_print("🧮 Running NewMath Comprehensive Validation Suite...")
     safe_print("=" * 60)
-    
+
     start_time = time.time()
     results = {
         "total_tests": 0,
@@ -80,7 +80,7 @@ def run_full_tests() -> Dict[str, Any]:
         "failed_tests": 0,
         "test_details": []
     }
-    
+
     # Test each module
     test_modules = [
         ("Tensor Operations", _test_tensor_operations),
@@ -90,13 +90,13 @@ def run_full_tests() -> Dict[str, Any]:
         ("Matrix Utils", _test_matrix_utils),
         ("Render Engine", _test_render_engine)
     ]
-    
+
     for module_name, test_func in test_modules:
         try:
             test_start = time.time()
             module_result = test_func()
             test_time = time.time() - test_start
-            
+
             results["total_tests"] += 1
             if module_result["passed"]:
                 results["passed_tests"] += 1
@@ -104,14 +104,14 @@ def run_full_tests() -> Dict[str, Any]:
             else:
                 results["failed_tests"] += 1
                 safe_print(f"❌ {module_name}: FAILED - {module_result.get('error', 'Unknown error')}")
-            
+
             results["test_details"].append({
                 "module": module_name,
                 "passed": module_result["passed"],
                 "execution_time": test_time,
                 "details": module_result
             })
-            
+
         except Exception as e:
             results["total_tests"] += 1
             results["failed_tests"] += 1
@@ -122,7 +122,7 @@ def run_full_tests() -> Dict[str, Any]:
                 "execution_time": 0,
                 "error": str(e)
             })
-    
+
     total_time = time.time() - start_time
     success_rate = (
         (results["passed_tests"] / results["total_tests"]) * 100
@@ -318,4 +318,4 @@ def _test_render_engine() -> Dict[str, Any]:
 __all__ = [
     'run_basic_tests',
     'run_full_tests'
-] 
+]

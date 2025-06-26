@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from scipy import stats
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Dict, Any, Optional, List, Tuple
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Entropy Engine - Core Market Entropy Analysis System
@@ -65,14 +79,8 @@ Core Functionality:
 - Entropy integration with main pipeline
 """
 
-import logging
-import time
-from typing import Dict, Any, Optional, List, Tuple
-from dataclasses import dataclass
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from scipy import stats
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +88,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class EntropyCalculationResult:
 
-
     """Result of entropy calculation operation."""
+
+
 success: bool
 entropy_value: float
 calculation_time: datetime
@@ -95,8 +104,9 @@ metadata: Dict[str, Any] = None
 @dataclass
 class EntropyMetrics:
 
-
     """Comprehensive entropy metrics."""
+
+
 shannon_entropy: float
 relative_entropy: float
 conditional_entropy: float
@@ -108,15 +118,16 @@ calculation_timestamp: datetime
 
 class EntropyEngine:
 
-
     """Core entropy analysis system for Schwabot."""
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize the entropy engine."""
+
+
 self.entropy_history: List[float] = []
 self.calculation_history: List[EntropyCalculationResult] = []
 self.pattern_cache: Dict[str, Dict[str, Any]] = {}
@@ -131,13 +142,14 @@ self.entropy_thresholds = {
 
 logger.info("Entropy Engine initialized")
 
-def calculate_entropy(self, market_data: Dict[str, Any], entropy_type: str = "shannon") -> EntropyCalculationResult:
 
+def calculate_entropy(self, market_data: Dict[str, Any], entropy_type: str = "shannon") -> EntropyCalculationResult:
 
     pass
     pass
         """Calculate entropy based on market data."""
         try:
+
             # Extract price data
 prices = market_data.get('prices', [])
             volumes = market_data.get('volumes', [])
@@ -155,21 +167,21 @@ error_message="Insufficient price data"
 
             # Calculate entropy based on type
             if entropy_type == "shannon":
-entropy_value = self._calculate_shannon_entropy(prices)
+entropy_value=self._calculate_shannon_entropy(prices)
             elif entropy_type == "relative":
-entropy_value = self._calculate_relative_entropy(prices, volumes)
+entropy_value=self._calculate_relative_entropy(prices, volumes)
             elif entropy_type == "conditional":
-entropy_value = self._calculate_conditional_entropy(prices)
+entropy_value=self._calculate_conditional_entropy(prices)
             else:
-entropy_value = self._calculate_shannon_entropy(prices)
+entropy_value=self._calculate_shannon_entropy(prices)
 
             # Detect patterns
-pattern_detected = self._detect_entropy_patterns(entropy_value, prices)
+pattern_detected=self._detect_entropy_patterns(entropy_value, prices)
 
             # Calculate confidence
-confidence_score = self._calculate_entropy_confidence(prices, volumes)
+confidence_score=self._calculate_entropy_confidence(prices, volumes)
 
-result = EntropyCalculationResult(
+result=EntropyCalculationResult(
                 success=True,
 entropy_value=entropy_value,
 calculation_time=datetime.now(),
@@ -214,26 +226,26 @@ def _calculate_shannon_entropy(self, prices: List[float]) -> float:
                 return 0.0
 
             # Calculate price changes
-price_changes = np.diff(prices)
+price_changes=np.diff(prices)
 
             # Create histogram of price changes
-hist, bin_edges = np.histogram(price_changes, bins=unified_math.min(20, len(price_changes)//2))
+hist, bin_edges=np.histogram(price_changes, bins=unified_math.min(20, len(price_changes)//2))
 
             # Remove zero bins
-hist = hist[hist > 0]
+hist=hist[hist > 0]
 
             if len(hist) == 0:
                 return 0.0
 
             # Calculate probabilities
-probabilities = hist / np.sum(hist)
+probabilities=hist / np.sum(hist)
 
             # Calculate Shannon entropy
-entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
+entropy=-np.sum(probabilities * np.log2(probabilities + 1e-10))
 
             # Normalize to [0, 1]
-max_entropy = np.log2(len(probabilities))
-            normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+max_entropy=np.log2(len(probabilities))
+            normalized_entropy=entropy / max_entropy if max_entropy > 0 else 0.0
 
             return unified_math.min(1.0, normalized_entropy)
 
@@ -252,28 +264,28 @@ def _calculate_relative_entropy(self, prices: List[float], volumes: List[float])
                 return 0.0
 
             # Calculate price changes
-price_changes = np.diff(prices)
-            volume_changes = np.diff(volumes)
+price_changes=np.diff(prices)
+            volume_changes=np.diff(volumes)
 
             # Weight price changes by volume
-weighted_changes = price_changes * unified_math.unified_math.abs(volume_changes)
+weighted_changes=price_changes * unified_math.unified_math.abs(volume_changes)
 
             # Create histogram
-hist, _ = np.histogram(weighted_changes, bins=unified_math.min(15, len(weighted_changes)//2))
-            hist = hist[hist > 0]
+hist, _=np.histogram(weighted_changes, bins=unified_math.min(15, len(weighted_changes)//2))
+            hist=hist[hist > 0]
 
             if len(hist) == 0:
                 return 0.0
 
             # Calculate probabilities
-probabilities = hist / np.sum(hist)
+probabilities=hist / np.sum(hist)
 
             # Calculate relative entropy
-entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
+entropy=-np.sum(probabilities * np.log2(probabilities + 1e-10))
 
             # Normalize
-max_entropy = np.log2(len(probabilities))
-            normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+max_entropy=np.log2(len(probabilities))
+            normalized_entropy=entropy / max_entropy if max_entropy > 0 else 0.0
 
             return unified_math.min(1.0, normalized_entropy)
 
@@ -292,10 +304,10 @@ def _calculate_conditional_entropy(self, prices: List[float]) -> float:
                 return 0.0
 
             # Create conditional probabilities
-price_changes = np.diff(prices)
+price_changes=np.diff(prices)
 
             # Define states (positive, negative, zero change)
-            states = []
+            states=[]
             for change in price_changes:
                 if change > 0:
 states.append(1)
@@ -305,35 +317,35 @@ states.append(-1)
 states.append(0)
 
             # Calculate conditional probabilities
-conditional_probs = {}
+conditional_probs={}
             for i in range(len(states) - 1):
-                current_state = states[i]
-next_state = states[i + 1]
+                current_state=states[i]
+next_state=states[i + 1]
 
                 if current_state not in conditional_probs:
-conditional_probs[current_state] = {}
+conditional_probs[current_state]={}
 
                 if next_state not in conditional_probs[current_state]:
-conditional_probs[current_state][next_state] = 0
+conditional_probs[current_state][next_state]=0
 
 conditional_probs[current_state][next_state] += 1
 
             # Calculate conditional entropy
-total_entropy = 0.0
-total_transitions = 0
+total_entropy=0.0
+total_transitions=0
 
             for current_state, transitions in conditional_probs.items():
-                total_transitions_from_state = sum(transitions.values())
+                total_transitions_from_state=sum(transitions.values())
                 total_transitions += total_transitions_from_state
 
                 for next_state, count in transitions.items():
-                    prob = count / total_transitions_from_state
+                    prob=count / total_transitions_from_state
                     if prob > 0:
 total_entropy -= prob * np.log2(prob)
 
             # Normalize
-max_entropy = np.log2(3)  # 3 possible states
-            normalized_entropy = total_entropy / max_entropy if max_entropy > 0 else 0.0
+max_entropy=np.log2(3)  # 3 possible states
+            normalized_entropy=total_entropy / max_entropy if max_entropy > 0 else 0.0
 
             return unified_math.min(1.0, normalized_entropy)
 
@@ -352,18 +364,18 @@ def _detect_entropy_patterns(self, entropy_value: float, prices: List[float]) ->
                 return False
 
             # Check for trend patterns
-recent_entropy = np.array(self.entropy_history[-5:])
+recent_entropy=np.array(self.entropy_history[-5:])
 
             # Linear trend
-x = np.arange(len(recent_entropy))
-            slope = np.polyfit(x, recent_entropy, 1)[0]
+x=np.arange(len(recent_entropy))
+            slope=np.polyfit(x, recent_entropy, 1)[0]
 
             # Variance pattern
-variance = unified_math.unified_math.var(recent_entropy)
+variance=unified_math.unified_math.var(recent_entropy)
 
             # Pattern detection criteria
-trend_pattern = unified_math.abs(slope) > 0.05
-            variance_pattern = variance > 0.1
+trend_pattern=unified_math.abs(slope) > 0.05
+            variance_pattern=variance > 0.1
 
             return trend_pattern or variance_pattern
 
@@ -379,17 +391,17 @@ def _calculate_entropy_confidence(self, prices: List[float], volumes: List[float
         """Calculate confidence score for entropy calculation."""
         try:
             # Data quality factors
-data_length_factor = unified_math.min(len(prices) / 100.0, 1.0)
-            price_range_factor = min((unified_math.max(prices) - unified_math.min(prices)) / 1000.0, 1.0)
+data_length_factor=unified_math.min(len(prices) / 100.0, 1.0)
+            price_range_factor=min((unified_math.max(prices) - unified_math.min(prices)) / 1000.0, 1.0)
 
             # Volume consistency
-volume_consistency = 0.8  # Placeholder
+volume_consistency=0.8  # Placeholder
             if volumes and len(volumes) > 1:
-                volume_std = unified_math.unified_math.std(volumes)
-                volume_consistency = unified_math.max(0.0, 1.0 - volume_std / unified_math.unified_math.mean(volumes))
+                volume_std=unified_math.unified_math.std(volumes)
+                volume_consistency=unified_math.max(0.0, 1.0 - volume_std / unified_math.unified_math.mean(volumes))
 
             # Combine factors
-confidence = (data_length_factor * 0.4 +
+confidence=(data_length_factor * 0.4 +
                          price_range_factor * 0.3 +
 volume_consistency * 0.3)
 
@@ -399,7 +411,7 @@ volume_consistency * 0.3)
 logger.error(f"Entropy confidence calculation error: {e}")
             return 0.5
 
-def get_entropy_trend(self, window_size: int = 10) -> str:
+def get_entropy_trend(self, window_size: int=10) -> str:
 
 
     pass
@@ -409,11 +421,11 @@ def get_entropy_trend(self, window_size: int = 10) -> str:
             if len(self.entropy_history) < window_size:
                 return "insufficient_data"
 
-recent_entropy = np.array(self.entropy_history[-window_size:])
+recent_entropy=np.array(self.entropy_history[-window_size:])
 
             # Calculate trend
-x = np.arange(len(recent_entropy))
-            slope = np.polyfit(x, recent_entropy, 1)[0]
+x=np.arange(len(recent_entropy))
+            slope=np.polyfit(x, recent_entropy, 1)[0]
 
             if slope > 0.01:
                 return "increasing"
@@ -436,12 +448,12 @@ def get_entropy_metrics(self) -> EntropyMetrics:
             if not self.entropy_history:
                 return self._create_default_metrics()
 
-current_entropy = self.entropy_history[-1]
-trend_direction = self.get_entropy_trend()
+current_entropy=self.entropy_history[-1]
+trend_direction=self.get_entropy_trend()
 
             # Calculate volatility factor
-recent_entropy = np.array(self.entropy_history[-10:])
-            volatility_factor = unified_math.unified_math.std(recent_entropy) if len(recent_entropy) > 1 else 0.0
+recent_entropy=np.array(self.entropy_history[-10:])
+            volatility_factor=unified_math.unified_math.std(recent_entropy) if len(recent_entropy) > 1 else 0.0
 
             return EntropyMetrics(
                 shannon_entropy=current_entropy,
@@ -479,14 +491,14 @@ def get_engine_statistics(self) -> Dict[str, Any]:
     pass
     pass
         """Get entropy engine statistics."""
-total_calculations = len(self.calculation_history)
-        successful_calculations = sum(1 for result in self.calculation_history if result.success)
+total_calculations=len(self.calculation_history)
+        successful_calculations=sum(1 for result in self.calculation_history if result.success)
 
-avg_entropy = 0.0
+avg_entropy=0.0
         if self.entropy_history:
-avg_entropy = sum(self.entropy_history) / len(self.entropy_history)
+avg_entropy=sum(self.entropy_history) / len(self.entropy_history)
 
-pattern_count = sum(1 for result in self.calculation_history if result.pattern_detected)
+pattern_count=sum(1 for result in self.calculation_history if result.pattern_detected)
 
         return {
 "total_calculations": total_calculations,
@@ -506,21 +518,21 @@ def main() -> None:
     pass
     pass
     """Main function for testing entropy engine."""
-engine = EntropyEngine()
+engine=EntropyEngine()
 
     # Test entropy calculation
-test_market_data = {
+test_market_data={
 'prices': [100.0, 101.0, 99.5, 102.0, 98.5, 103.0, 97.0, 104.0],
 'volumes': [1000, 1200, 800, 1500, 700, 1800, 600, 2000]
 }
 
-result = engine.calculate_entropy(test_market_data, "shannon")
+result=engine.calculate_entropy(test_market_data, "shannon")
     safe_print(f"Entropy calculation result: {result.success}")
     safe_print(f"Entropy value: {result.entropy_value:.3f}")
     safe_print(f"Pattern detected: {result.pattern_detected}")
 
     # Get statistics
-stats = engine.get_engine_statistics()
+stats=engine.get_engine_statistics()
     safe_print(f"Engine statistics: {stats}")
 
 

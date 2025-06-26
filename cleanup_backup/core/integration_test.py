@@ -51,6 +51,7 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
+
 class TestPhase(Enum):
     """Integration test phases."""
     INITIALIZATION = "initialization"
@@ -63,6 +64,7 @@ class TestPhase(Enum):
     MATHEMATICAL_VALIDATION = "mathematical_validation"
     PERFORMANCE_TESTING = "performance_testing"
 
+
 @dataclass
 class TestResult:
     """Individual test result."""
@@ -74,6 +76,7 @@ class TestResult:
     end_time: datetime
     details: Dict[str, Any] = field(default_factory=dict)
     error_message: Optional[str] = None
+
 
 @dataclass
 class IntegrationTestResult:
@@ -90,17 +93,18 @@ class IntegrationTestResult:
     performance_metrics: Dict[str, Any] = field(default_factory=dict)
     system_health: Dict[str, Any] = field(default_factory=dict)
 
+
 class IntegrationTest:
     """
     Comprehensive integration test for Schwabot system.
-    
+
     Tests the complete pipeline:
     DLT waveform → matrix mapping → tensor scoring → profit allocation → routing
     """
-    
+
     def __init__(self, config_path: str = "./config/integration_test_config.json"):
         self.config_path = config_path
-        
+
         # Core components
         self.bit_engine = None
         self.tensor_utils = None
@@ -111,26 +115,26 @@ class IntegrationTest:
         self.demo_trading = None
         self.tensor_matcher = None
         self.bit_phase_engine = None
-        
+
         # Test state
         self.is_running = False
         self.test_results: List[TestResult] = []
         self.current_phase = None
-        
+
         # Performance tracking
         self.performance_metrics: Dict[str, Any] = {}
         self.system_health: Dict[str, Any] = {}
-        
+
         # Test data
         self.test_market_data = []
         self.test_hashes = []
         self.test_portfolios = []
-        
+
         # Load configuration
         self._load_configuration()
         self._initialize_components()
         self._generate_test_data()
-        
+
         logger.info("Integration Test initialized")
 
     def _load_configuration(self) -> None:
@@ -159,9 +163,9 @@ class IntegrationTest:
                     "max_memory_usage": 512  # MB
                 }
             }
-            
+
             logger.info("Integration test configuration loaded")
-            
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
@@ -171,7 +175,7 @@ class IntegrationTest:
             if not CORE_COMPONENTS_AVAILABLE:
                 logger.warning("Core components not available, using mock components")
                 return
-            
+
             # Initialize core components
             self.bit_engine = BitResolutionEngine()
             self.tensor_utils = TensorScoreUtils()
@@ -182,32 +186,32 @@ class IntegrationTest:
             self.demo_trading = DemoTradingSystem()
             self.tensor_matcher = TensorMatcher()
             self.bit_phase_engine = BitPhaseEngine()
-            
+
             # Setup integrations
             if self.bit_engine and self.tensor_utils:
                 self.tensor_utils.set_bit_resolution_engine(self.bit_engine)
-            
+
             if self.matrix_mapper and self.bit_engine:
                 self.bit_engine.set_matrix_mapper(self.matrix_mapper)
-            
+
             if self.profit_allocator and self.tensor_utils:
                 self.tensor_utils.set_profit_allocator(self.profit_allocator)
-            
+
             if self.dlt_engine and self.matrix_mapper:
                 self.matrix_mapper.set_dlt_waveform_engine(self.dlt_engine)
-            
+
             # Setup tensor matcher integrations
             if self.tensor_matcher and self.bit_phase_engine:
                 self.tensor_matcher.set_bit_phase_engine(self.bit_phase_engine)
-            
+
             if self.tensor_matcher and self.matrix_mapper:
                 self.tensor_matcher.set_matrix_mapper(self.matrix_mapper)
-            
+
             if self.tensor_matcher and self.profit_allocator:
                 self.tensor_matcher.set_profit_allocator(self.profit_allocator)
-            
+
             logger.info("All core components initialized for integration testing")
-            
+
         except Exception as e:
             logger.error(f"Error initializing components: {e}")
 
@@ -225,12 +229,12 @@ class IntegrationTest:
                     'volume': np.random.uniform(100, 1000)
                 }
                 self.test_market_data.append(market_data)
-            
+
             # Generate test hashes
             for i in range(50):
                 hash_value = hashlib.sha256(f"test_hash_{i}_{time.time()}".encode()).hexdigest()
                 self.test_hashes.append(hash_value)
-            
+
             # Generate test portfolios
             for i in range(10):
                 portfolio = {
@@ -243,16 +247,17 @@ class IntegrationTest:
                     }
                 }
                 self.test_portfolios.append(portfolio)
-            
-            logger.info(f"Generated test data: {len(self.test_market_data)} market data, {len(self.test_hashes)} hashes, {len(self.test_portfolios)} portfolios")
-            
+
+            logger.info(
+                f"Generated test data: {len(self.test_market_data)} market data, {len(self.test_hashes)} hashes, {len(self.test_portfolios)} portfolios")
+
         except Exception as e:
             logger.error(f"Error generating test data: {e}")
 
     def run_full_integration_test(self) -> IntegrationTestResult:
         """
         Run the complete integration test suite.
-        
+
         Returns:
         --------
         IntegrationTestResult
@@ -262,9 +267,9 @@ class IntegrationTest:
             test_id = f"integration_test_{int(time.time())}"
             start_time = datetime.now()
             overall_start_time = time.time()
-            
+
             logger.info(f"Starting full integration test: {test_id}")
-            
+
             # Test phases in order
             test_phases = [
                 TestPhase.INITIALIZATION,
@@ -277,11 +282,11 @@ class IntegrationTest:
                 TestPhase.MATHEMATICAL_VALIDATION,
                 TestPhase.PERFORMANCE_TESTING
             ]
-            
+
             for phase in test_phases:
                 self.current_phase = phase
                 logger.info(f"Running test phase: {phase.value}")
-                
+
                 # Run phase-specific tests
                 if phase == TestPhase.INITIALIZATION:
                     self._test_initialization()
@@ -301,14 +306,14 @@ class IntegrationTest:
                     self._test_mathematical_validation()
                 elif phase == TestPhase.PERFORMANCE_TESTING:
                     self._test_performance()
-            
+
             # Calculate overall results
             total_execution_time = time.time() - overall_start_time
             passed_tests = sum(1 for result in self.test_results if result.status == "passed")
             failed_tests = sum(1 for result in self.test_results if result.status == "failed")
             error_tests = sum(1 for result in self.test_results if result.status == "error")
             total_tests = len(self.test_results)
-            
+
             # Determine overall status
             if error_tests > 0:
                 overall_status = "error"
@@ -316,7 +321,7 @@ class IntegrationTest:
                 overall_status = "failed"
             else:
                 overall_status = "passed"
-            
+
             # Create integration test result
             integration_result = IntegrationTestResult(
                 test_id=test_id,
@@ -331,10 +336,10 @@ class IntegrationTest:
                 performance_metrics=self.performance_metrics,
                 system_health=self.system_health
             )
-            
+
             logger.info(f"Integration test completed: {overall_status} ({passed_tests}/{total_tests} passed)")
             return integration_result
-            
+
         except Exception as e:
             logger.error(f"Error running full integration test: {e}")
             return None
@@ -344,7 +349,7 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "system_initialization"
-            
+
             # Test component availability
             components_available = all([
                 self.bit_engine is not None,
@@ -353,16 +358,16 @@ class IntegrationTest:
                 self.profit_allocator is not None,
                 self.dlt_engine is not None
             ])
-            
+
             # Test configuration loading
             config_loaded = len(self.test_market_data) > 0 and len(self.test_hashes) > 0
-            
+
             # Test data generation
             data_generated = len(self.test_portfolios) > 0
-            
+
             execution_time = time.time() - start_time
             status = "passed" if components_available and config_loaded and data_generated else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.INITIALIZATION,
@@ -377,9 +382,9 @@ class IntegrationTest:
                     'test_data_count': len(self.test_market_data)
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in initialization test: {e}")
             self._add_error_result("system_initialization", TestPhase.INITIALIZATION, str(e))
@@ -389,11 +394,11 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "dlt_waveform_processing"
-            
+
             if not self.dlt_engine:
                 self._add_error_result(test_name, TestPhase.DLT_WAVEFORM, "DLT engine not available")
                 return
-            
+
             # Test waveform processing
             test_sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
             waveform_result = self.dlt_engine.process_waveform_data(
@@ -401,16 +406,16 @@ class IntegrationTest:
                 x=np.array(test_sequence),
                 sample_rate=1.0
             )
-            
+
             # Test entropy calculation
             entropy = self.tensor_utils.calculate_wave_entropy(test_sequence) if self.tensor_utils else 0.0
-            
+
             # Test matrix basket creation
             basket_result = self.dlt_engine.create_matrix_basket(self.test_market_data[0])
-            
+
             execution_time = time.time() - start_time
             status = "passed" if waveform_result and basket_result else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.DLT_WAVEFORM,
@@ -425,9 +430,9 @@ class IntegrationTest:
                     'entropy_value': entropy
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in DLT waveform test: {e}")
             self._add_error_result(test_name, TestPhase.DLT_WAVEFORM, str(e))
@@ -437,26 +442,26 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "matrix_mapping_operations"
-            
+
             if not self.matrix_mapper:
                 self._add_error_result(test_name, TestPhase.MATRIX_MAPPING, "Matrix mapper not available")
                 return
-            
+
             # Test hash decoding
             test_hash = self.test_hashes[0]
             basket_id = self.matrix_mapper.decode_hash_to_basket(test_hash, 0, 50000.0)
-            
+
             # Test bit phase resolution
             phase_4bit = self.matrix_mapper.resolve_bit_phase(test_hash, "4bit")
             phase_8bit = self.matrix_mapper.resolve_bit_phase(test_hash, "8bit")
             phase_42bit = self.matrix_mapper.resolve_bit_phase(test_hash, "42bit")
-            
+
             # Test tensor score calculation
             tensor_score = self.matrix_mapper.calculate_tensor_score(45000.0, 46000.0, phase_8bit)
-            
+
             execution_time = time.time() - start_time
             status = "passed" if basket_id and tensor_score is not None else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.MATRIX_MAPPING,
@@ -472,9 +477,9 @@ class IntegrationTest:
                     'tensor_score': tensor_score
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in matrix mapping test: {e}")
             self._add_error_result(test_name, TestPhase.MATRIX_MAPPING, str(e))
@@ -484,25 +489,25 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "tensor_scoring_operations"
-            
+
             if not self.tensor_utils:
                 self._add_error_result(test_name, TestPhase.TENSOR_SCORING, "Tensor utils not available")
                 return
-            
+
             # Test tensor score calculation
             market_data = self.test_market_data[0]
             tensor_score = self.tensor_utils.calculate_tensor_score(45000.0, 46000.0, 8, market_data)
-            
+
             # Test wave entropy calculation
             test_sequence = [1.0, 1.1, 0.9, 1.2, 0.8, 1.3, 0.7, 1.4]
             entropy = self.tensor_utils.calculate_wave_entropy(test_sequence)
-            
+
             # Test profit rebalancing
             rebalance_result = self.tensor_utils.rebalance_profit(1000.0, 0.25, 5.5)
-            
+
             # Test phase vector creation
             phase_vector = self.tensor_utils.create_phase_vector(42, 16, 4)
-            
+
             # Test tensor matcher
             tensor_match_result = None
             if self.tensor_matcher:
@@ -510,10 +515,11 @@ class IntegrationTest:
                 tensor_match_result = self.tensor_matcher.match_tensor(
                     test_hash, 45000.0, 46000.0, market_data
                 )
-            
+
             execution_time = time.time() - start_time
-            status = "passed" if all([tensor_score is not None, entropy > 0, rebalance_result, phase_vector]) else "failed"
-            
+            status = "passed" if all([tensor_score is not None, entropy > 0,
+                                     rebalance_result, phase_vector]) else "failed"
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.TENSOR_SCORING,
@@ -533,9 +539,9 @@ class IntegrationTest:
                     'tensor_match_strategy': tensor_match_result.strategy_type.value if tensor_match_result else None
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in tensor scoring test: {e}")
             self._add_error_result(test_name, TestPhase.TENSOR_SCORING, str(e))
@@ -545,26 +551,26 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "profit_allocation_operations"
-            
+
             if not self.profit_allocator:
                 self._add_error_result(test_name, TestPhase.PROFIT_ALLOCATION, "Profit allocator not available")
                 return
-            
+
             # Test profit allocation
             execution_packet = {
                 'profit_amount': 1000.0,
                 'market_data': self.test_market_data[0],
                 'portfolio_state': self.test_portfolios[0]
             }
-            
+
             allocation_result = self.profit_allocator.allocate(execution_packet)
-            
+
             # Test matrix integration
             matrix_metrics = self.profit_allocator.get_matrix_metrics()
-            
+
             execution_time = time.time() - start_time
             status = "passed" if allocation_result and matrix_metrics else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.PROFIT_ALLOCATION,
@@ -578,9 +584,9 @@ class IntegrationTest:
                     'allocation_amount': allocation_result.total_profit if allocation_result else 0.0
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in profit allocation test: {e}")
             self._add_error_result(test_name, TestPhase.PROFIT_ALLOCATION, str(e))
@@ -590,14 +596,14 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "demo_live_mode_switching"
-            
+
             if not self.demo_trading or not self.demo_injector:
                 self._add_error_result(test_name, TestPhase.DEMO_LIVE_SWITCHING, "Demo components not available")
                 return
-            
+
             # Test demo state injection
             demo_injected = self.demo_injector.inject_demo_state("conservative_test")
-            
+
             # Test demo trading system
             demo_trading_started = False
             try:
@@ -607,13 +613,13 @@ class IntegrationTest:
                 self.demo_trading.stop_trading()
             except Exception as e:
                 logger.warning(f"Demo trading test warning: {e}")
-            
+
             # Test mathematical validation
             validation_result = self.demo_injector.run_mathematical_validation()
-            
+
             execution_time = time.time() - start_time
             status = "passed" if demo_injected and demo_trading_started and validation_result else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.DEMO_LIVE_SWITCHING,
@@ -628,9 +634,9 @@ class IntegrationTest:
                     'validation_status': validation_result.get('overall_status', 'unknown') if validation_result else 'unknown'
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in demo/live switching test: {e}")
             self._add_error_result(test_name, TestPhase.DEMO_LIVE_SWITCHING, str(e))
@@ -640,19 +646,19 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "api_integration_testing"
-            
+
             # Simulate API integration tests
             api_available = True  # Simulated
             wallet_connected = True  # Simulated
             exchange_connected = True  # Simulated
-            
+
             # Test API endpoints (simulated)
             ticker_data = {'BTC/USDC': {'price': 50000.0, 'volume': 1000.0}}  # Simulated
             order_book = {'bids': [[50000.0, 1.0]], 'asks': [[50001.0, 1.0]]}  # Simulated
-            
+
             execution_time = time.time() - start_time
             status = "passed" if all([api_available, wallet_connected, exchange_connected]) else "failed"
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.API_INTEGRATION,
@@ -668,9 +674,9 @@ class IntegrationTest:
                     'order_book_retrieved': order_book is not None
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in API integration test: {e}")
             self._add_error_result(test_name, TestPhase.API_INTEGRATION, str(e))
@@ -680,32 +686,32 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "mathematical_validation"
-            
+
             # Test bit resolution engine
             bit_resolution_stats = None
             if self.bit_engine:
                 bit_resolution_stats = self.bit_engine.get_resolution_statistics()
-            
+
             # Test tensor score utils
             tensor_stats = None
             if self.tensor_utils:
                 tensor_stats = self.tensor_utils.get_tensor_statistics()
-            
+
             # Test matrix mapper
             matrix_stats = None
             if self.matrix_mapper:
                 matrix_stats = self.matrix_mapper.get_hash_registry_status()
-            
+
             # Test profit allocator
             profit_stats = None
             if self.profit_allocator:
                 profit_stats = self.profit_allocator.get_matrix_metrics()
-            
+
             # Test tensor matcher
             tensor_match_stats = None
             if self.tensor_matcher:
                 tensor_match_stats = self.tensor_matcher.get_match_statistics()
-            
+
             # Test bit phase engine
             bit_phase_stats = None
             if self.bit_phase_engine:
@@ -713,10 +719,11 @@ class IntegrationTest:
                     'phase_history_count': len(self.bit_phase_engine.phase_history),
                     'supported_modes': self.bit_phase_engine.supported_modes
                 }
-            
+
             execution_time = time.time() - start_time
-            status = "passed" if any([bit_resolution_stats, tensor_stats, matrix_stats, profit_stats, tensor_match_stats]) else "failed"
-            
+            status = "passed" if any([bit_resolution_stats, tensor_stats, matrix_stats,
+                                     profit_stats, tensor_match_stats]) else "failed"
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.MATHEMATICAL_VALIDATION,
@@ -733,9 +740,9 @@ class IntegrationTest:
                     'bit_phase_stats': bit_phase_stats is not None
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in mathematical validation test: {e}")
             self._add_error_result(test_name, TestPhase.MATHEMATICAL_VALIDATION, str(e))
@@ -745,33 +752,33 @@ class IntegrationTest:
         try:
             start_time = time.time()
             test_name = "performance_testing"
-            
+
             # Test execution speed
             execution_times = []
             for i in range(10):
                 test_start = time.time()
-                
+
                 # Simulate typical operation
                 if self.bit_engine and self.test_hashes:
                     hash_value = self.test_hashes[i % len(self.test_hashes)]
                     market_data = self.test_market_data[i % len(self.test_market_data)]
                     self.bit_engine.process_hash_resolution(hash_value, market_data)
-                
+
                 execution_times.append(time.time() - test_start)
-            
+
             avg_execution_time = unified_math.unified_math.mean(execution_times)
             max_execution_time = unified_math.unified_math.max(execution_times)
-            
+
             # Test memory usage (simulated)
             memory_usage = 256  # MB (simulated)
-            
+
             # Performance thresholds
             max_allowed_time = 1.0  # seconds
             max_allowed_memory = 512  # MB
-            
+
             execution_time = time.time() - start_time
             status = "passed" if avg_execution_time < max_allowed_time and memory_usage < max_allowed_memory else "failed"
-            
+
             # Store performance metrics
             self.performance_metrics = {
                 'avg_execution_time': avg_execution_time,
@@ -779,7 +786,7 @@ class IntegrationTest:
                 'memory_usage_mb': memory_usage,
                 'execution_count': len(execution_times)
             }
-            
+
             result = TestResult(
                 test_name=test_name,
                 phase=TestPhase.PERFORMANCE_TESTING,
@@ -794,9 +801,9 @@ class IntegrationTest:
                     'performance_threshold_met': avg_execution_time < max_allowed_time
                 }
             )
-            
+
             self.test_results.append(result)
-            
+
         except Exception as e:
             logger.error(f"Error in performance test: {e}")
             self._add_error_result(test_name, TestPhase.PERFORMANCE_TESTING, str(e))
@@ -843,25 +850,26 @@ class IntegrationTest:
                 'performance_metrics': integration_result.performance_metrics,
                 'system_health': integration_result.system_health
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
-            
+
             safe_print(f"✅ Integration test results exported to {output_path}")
-            
+
         except Exception as e:
             safe_print(f"❌ Error exporting integration test results: {e}")
+
 
 if __name__ == "__main__":
     # Run integration test
     safe_print("🚀 Starting Schwabot Integration Test...")
-    
+
     integration_test = IntegrationTest()
-    
+
     try:
         # Run full integration test
         result = integration_test.run_full_integration_test()
-        
+
         if result:
             safe_print(f"\n📊 INTEGRATION TEST RESULTS")
             safe_print(f"Overall Status: {result.overall_status.upper()}")
@@ -871,21 +879,21 @@ if __name__ == "__main__":
             safe_print(f"Errors: {result.error_tests}")
             safe_print(f"Success Rate: {(result.passed_tests / result.total_tests * 100):.1f}%")
             safe_print(f"Total Execution Time: {result.total_execution_time:.2f} seconds")
-            
+
             # Export results
             integration_test.export_test_results(result)
-            
+
             # Exit with appropriate code
             exit_code = 0 if result.overall_status == "passed" else 1
             safe_print(f"\n🏁 Integration test completed with exit code: {exit_code}")
-            
+
         else:
             safe_print("❌ Integration test failed to complete")
             exit(1)
-            
+
     except KeyboardInterrupt:
         safe_print("\n⏹️ Integration test interrupted by user")
         exit(1)
     except Exception as e:
         safe_print(f"❌ Integration test error: {e}")
-        exit(1) 
+        exit(1)

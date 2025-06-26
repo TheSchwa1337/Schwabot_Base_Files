@@ -32,11 +32,12 @@ try:
 from scipy.signal import welch  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
 
+
 def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
-
-
         """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
         if nperseg is None:
+
+
 nperseg = unified_math.min(256, x.size)
         window = np.hanning(nperseg)
         num_segments = x.size // nperseg
@@ -44,7 +45,7 @@ nperseg = unified_math.min(256, x.size)
             raise ValueError("nperseg larger than signal length")
         psd_acc = np.zeros(nperseg // 2 + 1)
         for i in range(num_segments):
-            seg = x[i * nperseg : (i + 1) * nperseg]
+            seg = x[i * nperseg: (i + 1) * nperseg]
             seg = seg * window
 spec = np.fft.rfft(seg)
             psd_acc += (unified_math.unified_math.abs(spec) ** 2) / (np.sum(window**2) * fs)

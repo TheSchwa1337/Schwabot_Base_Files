@@ -5,16 +5,11 @@ This placeholder exists so that imports resolve while the real
 `news_lantern_integration_api` module is under development.  Replace
 this file with an actual implementation as soon as possible.
 """
-
-
-def main() -> None:
-
-
-    pass
+    def main() -> None:
     pass
     """Stub main function."""
 
+
 if __name__ == "__main__":
-    pass
-    pass
+        pass
 main()

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+import time
+import logging
 import numpy as np
 import math
 
@@ -13,43 +18,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """BTC Data Processor - Live Market Data Integration.
 
@@ -65,11 +77,6 @@ Windows CLI compatible with comprehensive error handling.
 """
 
 
-import logging
-import time
-from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
@@ -78,8 +85,8 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BTCDataMetrics:
 
-
     """BTC market data metrics for processing."""
+
 
 price: float
 volume: float
@@ -94,8 +101,8 @@ hash_correlation: float
 @dataclass
 class VolumeAnalysis:
 
-
     """Volume analysis results."""
+
 
 density_score: float
 clustering_chi: float
@@ -105,15 +112,16 @@ spoof_probability: float
 
 class BTCDataProcessor:
 
-
     """Processes live BTC data with volume and entropy analysis."""
 
-def __init__(self) -> None:
 
+def __init__(self) -> None:
 
     pass
     pass
         """Initialize BTC data processor."""
+
+
 self.price_history: List[float] = []
 self.volume_history: List[float] = []
 self.tick_history: List[float] = []
@@ -124,6 +132,7 @@ self.max_history = 1000
 self.chi_threshold = 3.0
 self.spoof_price_threshold = 0.005  # 0.5% price movement threshold
 
+
 def process_btc_data(
 
 
@@ -133,6 +142,7 @@ volume: float,
 order_book: Optional[Dict] = None,
 network_data: Optional[Dict] = None,
 ) -> BTCDataMetrics:
+
 """Process live BTC data and calculate all metrics.
 
 Parameters
@@ -172,7 +182,7 @@ execution_pressure = self._calculate_execution_pressure(
 
 
             # Calculate hash correlation
-hash_correlation = self._calculate_hash_correlation(network_data)
+hash_correlation=self._calculate_hash_correlation(network_data)
 
             return BTCDataMetrics(
                 price=price,
@@ -218,22 +228,22 @@ Volume analysis results
                 return VolumeAnalysis(0.5, 0.0, False, 0.0)
 
             # Calculate volume clustering chi score
-recent_volumes = np.array(self.volume_history[-20:])
-            median_vol = np.median(recent_volumes)
-            stdev_vol = unified_math.unified_math.std(recent_volumes)
+recent_volumes=np.array(self.volume_history[-20:])
+            median_vol=np.median(recent_volumes)
+            stdev_vol=unified_math.unified_math.std(recent_volumes)
 
-epsilon = 1e-6
-chi_v = (current_volume - median_vol) / (stdev_vol + epsilon)
+epsilon=1e-6
+chi_v=(current_volume - median_vol) / (stdev_vol + epsilon)
 
             # Detect walls and spoofing
-wall_detected = chi_v > self.chi_threshold
-spoof_probability = 0.0
+wall_detected=chi_v > self.chi_threshold
+spoof_probability=0.0
 
             if wall_detected and unified_math.abs(price_change) < self.spoof_price_threshold:
-                spoof_probability = unified_math.min(chi_v / 10.0, 0.95)
+                spoof_probability=unified_math.min(chi_v / 10.0, 0.95)
 
             # Calculate density score
-density_score = unified_math.min(current_volume / (median_vol + epsilon), 2.0) / 2.0
+density_score=unified_math.min(current_volume / (median_vol + epsilon), 2.0) / 2.0
 
             return VolumeAnalysis(
                 density_score=density_score,
@@ -274,13 +284,13 @@ float
 Execution velocity score
 """
         try:
-epsilon = 1e-6
-density_factor = unified_math.max(market_density, 0.1)  # Prevent division by near-zero
+epsilon=1e-6
+density_factor=unified_math.max(market_density, 0.1)  # Prevent division by near-zero
 
-base_velocity = unified_math.unified_math.sqrt(target_profit / (density_factor + epsilon))
-            pressure_modifier = 1.0 + (current_pressure - 0.5) * 0.5
+base_velocity=unified_math.unified_math.sqrt(target_profit / (density_factor + epsilon))
+            pressure_modifier=1.0 + (current_pressure - 0.5) * 0.5
 
-execution_velocity = base_velocity * pressure_modifier
+execution_velocity=base_velocity * pressure_modifier
 
             # Normalize to reasonable range [0.1, 3.0]
             return unified_math.max(0.1, unified_math.min(3.0, execution_velocity))
@@ -314,13 +324,13 @@ Tuple[float, bool]
 (velocity_differential, should_delay_execution)
         """
         try:
-epsilon = 1e-6
-v_diff = (actual_velocity - expected_velocity) / ()
+epsilon=1e-6
+v_diff=(actual_velocity - expected_velocity) / ()
                 expected_velocity + epsilon
 
 
             # Trigger delay if differential exceeds threshold
-should_delay = unified_math.abs(v_diff) > 0.3
+should_delay=unified_math.abs(v_diff) > 0.3
 
             return v_diff, should_delay
 
@@ -340,9 +350,9 @@ self.price_history.append(price)
 
         # Trim histories to prevent memory growth
         if len(self.price_history) > self.max_history:
-            self.price_history = self.price_history[-500:]
-self.volume_history = self.volume_history[-500:]
-self.tick_history = self.tick_history[-500:]
+            self.price_history=self.price_history[-500:]
+self.volume_history=self.volume_history[-500:]
+self.tick_history=self.tick_history[-500:]
 
 def _calculate_tick_delta(self) -> float:
 
@@ -367,17 +377,17 @@ Formula: ρ_market = 1 - unified_math.min(vol_density, 1.0)
             return 0.5
 
         try:
-recent_volumes = self.volume_history[-10:]
-avg_volume = unified_math.unified_math.mean(recent_volumes)
+recent_volumes=self.volume_history[-10:]
+avg_volume=unified_math.unified_math.mean(recent_volumes)
 
             if avg_volume == 0:
                 return 0.5
 
-density_ratio = current_volume / avg_volume
-normalized_density = unified_math.min(density_ratio / 2.0, 1.0)
+density_ratio=current_volume / avg_volume
+normalized_density=unified_math.min(density_ratio / 2.0, 1.0)
 
             # Market density is inverse of volume density
-market_density = 1.0 - normalized_density
+market_density=1.0 - normalized_density
 
             return unified_math.max(0.0, unified_math.min(1.0, market_density))
 
@@ -398,26 +408,26 @@ Formula: H_tick = -Σ(p_i * unified_math.log(p_i))
             return 0.5
 
         try:
-recent_prices = np.array(self.price_history[-self.entropy_window:])
-            price_changes = np.diff(recent_prices)
+recent_prices=np.array(self.price_history[-self.entropy_window:])
+            price_changes=np.diff(recent_prices)
 
             if len(price_changes) == 0:
                 return 0.5
 
             # Discretize price changes into bins
-bins = 10
-hist, _ = np.histogram(price_changes, bins=bins, density=True)
+bins=10
+hist, _=np.histogram(price_changes, bins=bins, density=True)
 
             # Calculate entropy
-epsilon = 1e-10
-probabilities = hist + epsilon
-probabilities = probabilities / np.sum(probabilities)
+epsilon=1e-10
+probabilities=hist + epsilon
+probabilities=probabilities / np.sum(probabilities)
 
-entropy = -np.sum(probabilities * unified_math.unified_math.log(probabilities))
+entropy=-np.sum(probabilities * unified_math.unified_math.log(probabilities))
 
             # Normalize to [0, 1] range
-max_entropy = unified_math.unified_math.log(bins)
-            normalized_entropy = entropy / max_entropy
+max_entropy=unified_math.unified_math.log(bins)
+            normalized_entropy=entropy / max_entropy
 
             return unified_math.max(0.0, unified_math.min(1.0, normalized_entropy))
 
@@ -438,10 +448,10 @@ Formula: P_exec = √(profit_residual / ρ_market)
         """
         try:
             # Use entropy as proxy for profit residual
-profit_residual = entropy_score
-rho_market = unified_math.max(volume_density, 0.1)  # Prevent division by zero
+profit_residual=entropy_score
+rho_market=unified_math.max(volume_density, 0.1)  # Prevent division by zero
 
-execution_pressure = unified_math.unified_math.sqrt(profit_residual / rho_market)
+execution_pressure=unified_math.unified_math.sqrt(profit_residual / rho_market)
 
             # Normalize to [0, 1] range
             return unified_math.max(0.0, unified_math.min(1.0, execution_pressure))
@@ -460,17 +470,17 @@ def _calculate_hash_correlation(self, network_data: Optional[Dict]) -> float:
             return 0.5
 
         try:
-hash_rate = network_data.get('hash_rate', 0)
-            difficulty = network_data.get('difficulty', 0)
+hash_rate=network_data.get('hash_rate', 0)
+            difficulty=network_data.get('difficulty', 0)
 
             if hash_rate == 0 or difficulty == 0:
                 return 0.5
 
             # Simple correlation based on hash rate and difficulty alignment
-normalized_hash = unified_math.min(hash_rate / 5e17, 1.0)  # Normalize to ~500 EH/s
-            normalized_diff = unified_math.min(difficulty / 7e13, 1.0)  # Normalize to ~70T
+normalized_hash=unified_math.min(hash_rate / 5e17, 1.0)  # Normalize to ~500 EH/s
+            normalized_diff=unified_math.min(difficulty / 7e13, 1.0)  # Normalize to ~70T
 
-correlation = (normalized_hash + normalized_diff) / 2.0
+correlation=(normalized_hash + normalized_diff) / 2.0
 
             return unified_math.max(0.0, unified_math.min(1.0, correlation))
 
@@ -521,10 +531,10 @@ def main() -> None:
 safe_print("BTC Data Processor Demo")
     safe_print("=" * 30)
 
-processor = BTCDataProcessor()
+processor=BTCDataProcessor()
 
     # Simulate BTC data processing
-test_data = [
+test_data=[
 (50000, 1.5),
         (50050, 2.1),
         (49980, 1.8),
@@ -536,7 +546,7 @@ test_data = [
     ]
 
     for price, volume in test_data:
-metrics = processor.process_btc_data(
+metrics=processor.process_btc_data(
             price=price,
 volume=volume,
 network_data={'hash_rate': 4.5e17, 'difficulty': 6.2e13},
@@ -549,8 +559,8 @@ safe_print(f"Price: ${price:,.0f}")
         safe_print(f"  Hash Correlation: {metrics.hash_correlation:.3f}")
 
         # Test volume analysis
-price_change = 0.002 if price > 50000 else -0.002
-vol_analysis = processor.analyze_volume_clustering(volume, price_change)
+price_change=0.002 if price > 50000 else -0.002
+vol_analysis=processor.analyze_volume_clustering(volume, price_change)
 
 safe_print(f"  Volume Chi: {vol_analysis.clustering_chi:.2f}")
         safe_print(f"  Wall Detected: {vol_analysis.wall_detection}")
@@ -558,18 +568,18 @@ safe_print(f"  Volume Chi: {vol_analysis.clustering_chi:.2f}")
         print()
 
     # Test execution velocity
-velocity = processor.calculate_execution_velocity(
+velocity=processor.calculate_execution_velocity(
         target_profit=100.0, current_pressure=0.7, market_density=0.6
 
 safe_print(f"Execution Velocity: {velocity:.3f}")
 
     # Test velocity differential
-v_diff, should_delay = processor.detect_velocity_differential(1.5, 1.0)
+v_diff, should_delay=processor.detect_velocity_differential(1.5, 1.0)
     safe_print(f"Velocity Differential: {v_diff:.3f}")
     safe_print(f"Should Delay: {should_delay}")
 
     # Processing summary
-summary = processor.get_processing_summary()
+summary=processor.get_processing_summary()
     safe_print(f"\nProcessing Summary: {summary}")
 
 

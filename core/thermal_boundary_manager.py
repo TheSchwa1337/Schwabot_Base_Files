@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-\nfrom __future__ import annotations
+from core.unified_math_system import unified_math
+from core.thermal_map_allocator import ThermalMapAllocator
+from core.thermal_zone_manager import ThermalZoneManager, ThermalZone
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from typing import Any, Dict, List, Optional, Tuple, Union
+from enum import Enum
+from decimal import Decimal
+from dataclasses import dataclass, field
+import time
+import subprocess
+import psutil
+import platform
+import logging
+import glob
+import asyncio
 import math
 
 # Import safe print for Windows compatibility
@@ -12,43 +27,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Thermal Boundary Manager - Schwabot Hardware-Aware Thermal Control
@@ -69,25 +91,10 @@ Based on systematic elimination of Flake8 issues and SP 1.27-AE framework.
 """
 
 
-import asyncio
-import glob
-import logging
-import platform
-import psutil
-import subprocess
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
-
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 # Import existing thermal components
 try:
-from core.thermal_zone_manager import ThermalZoneManager, ThermalZone
-from core.thermal_map_allocator import ThermalMapAllocator
 except ImportError as e:
 logging.warning(f"Thermal components not available: {e}")
     ThermalZoneManager = None
@@ -100,8 +107,9 @@ logger = logging.getLogger(__name__)
 
 class ThermalState(Enum):
 
-
     """Thermal state enumeration for system-wide thermal conditions."""
+
+
 COOL = "cool"
 NORMAL = "normal"
 WARM = "warm"
@@ -112,8 +120,9 @@ EMERGENCY = "emergency"
 
 class HardwareType(Enum):
 
-
     """Hardware type enumeration for resource management."""
+
+
 CPU_ONLY = "cpu_only"
 GPU_AVAILABLE = "gpu_available"
 HYBRID = "hybrid"
@@ -123,8 +132,8 @@ UNKNOWN = "unknown"
 @dataclass
 class ThermalBoundary:
 
-
     """Thermal boundary configuration for different hardware states."""
+
 
 state: ThermalState
 cpu_threshold: float
@@ -140,8 +149,8 @@ emergency_procedures: List[str] = field(default_factory=list)
 @dataclass
 class HardwareProfile:
 
-
     """Hardware profile for thermal management."""
+
 
 hardware_type: HardwareType
 cpu_cores: int
@@ -154,7 +163,6 @@ low_end_hardware: bool = False
 
 class ThermalBoundaryManager:
 
-
     """
 Advanced thermal boundary manager with robust error handling and hardware scaling.
 
@@ -166,12 +174,15 @@ This manager provides:
 - Low-end hardware compatibility
 """
 
+
 def __init__(self,
 
 
                  config: Optional[Dict[str, Any]] = None,
 enable_gpu_monitoring: bool = True,
 enable_thermal_prediction: bool = True) -> None:
+
+
 """
 Initialize thermal boundary manager.
 
@@ -219,13 +230,15 @@ self._setup_monitoring()
 
 logger.info("Thermal Boundary Manager initialized successfully")
 
-def _detect_hardware(self) -> HardwareProfile:
 
+def _detect_hardware(self) -> HardwareProfile:
 
     pass
     pass
         """Detect hardware capabilities and create profile."""
         try:
+
+
 cpu_cores = psutil.cpu_count(logical=True) or 1
             total_memory = psutil.virtual_memory().total // (1024 * 1024)  # MB
 
@@ -237,7 +250,7 @@ gpu_memory = 0
                 try:
                     # Try to detect GPU using common methods
 result = subprocess.run(['nvidia-smi', '--query-gpu=memory.total', '--format=csv,noheader,nounits'],]
-                                          capture_output=True, text=True, timeout=5)
+                                          capture_output = True, text = True, timeout = 5)
                     if result.returncode == 0:
 gpu_memory = int(result.stdout.strip().split('\n')[0])
                         gpu_available = True

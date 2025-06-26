@@ -14,6 +14,7 @@ def is_stub_file(filepath):
     except:
         return False
 
+
 def analyze_errors():
     """Analyze E501 errors and find top 5 files."""."""
     file_errors = defaultdict(int)

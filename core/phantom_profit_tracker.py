@@ -21,7 +21,7 @@ __all__: list[str] = []
 "profit_summary",
 ]
 
-# Public re-exports
-ProfitTracker = _GhostProfitTracker
-register_profit = _register_profit
-profit_summary = _profit_summary
+    # Public re-exports
+    ProfitTracker = _GhostProfitTracker
+    register_profit = _register_profit
+    profit_summary = _profit_summary

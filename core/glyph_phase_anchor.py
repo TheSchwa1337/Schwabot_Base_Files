@@ -24,28 +24,30 @@ def phase_anchor_index(
 
     glyph_hash: str, *, wheel_size: int = _DEFAULT_WHEEL
 ) -> int:
+
 """Return deterministic phase index in ``[0, wheel_size)`` for *glyph_hash*."""
-    if len(glyph_hash) != 64:
+   if len(glyph_hash) != 64:
         raise ValueError("glyph_hash must be 64-char SHA-256 hex")
     first32 = glyph_hash[:8]
 idx = int(first32, 16) % wheel_size
-    return idx
+   return idx
 
 
 def glyph_active_for_tick(
 
 
     glyph_hash: str,
-tick: int,
-base_cycle: int = 42,
-wheel_size: int = _DEFAULT_WHEEL,
+    tick: int,
+    base_cycle: int = 42,
+    wheel_size: int = _DEFAULT_WHEEL,
 ) -> bool:
+
 """Return True if *glyph* is active at *tick* according to phase anchor.
 
 Active when ``tick % base_cycle`` equals the glyph's phase index modulo the
 wheel size (sub-ring).
     """
-    if tick < 0:
+   if tick < 0:
         raise ValueError("tick must be non-negative")
     phase_idx = phase_anchor_index(glyph_hash, wheel_size=wheel_size)
     return (tick % base_cycle) % wheel_size == phase_idx

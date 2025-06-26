@@ -36,8 +36,8 @@ __all__ = ["DualNumber", "dual_state_tracker"]
 @dataclass(slots=True)
 class DualNumber:
 
-
     """A first-order dual number x + ε·dx."""
+
 
 x: float  # primal value
 dx: float  # derivative w.r.t. some scalar variable
@@ -45,8 +45,9 @@ dx: float  # derivative w.r.t. some scalar variable
     # ---------------------------------------------------------------------
     # Basic arithmetic
     # ---------------------------------------------------------------------
-def __add__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
+
+def __add__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     pass
     pass
@@ -66,10 +67,11 @@ A new dual number representing the sum.
             return DualNumber(self.x + other.x, self.dx + other.dx)
         return DualNumber(self.x + float(other), self.dx)
 
+
 __radd__ = __add__
 
-def __sub__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
+def __sub__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     pass
     pass
@@ -89,8 +91,8 @@ A new dual number representing the difference.
             return DualNumber(self.x - other.x, self.dx - other.dx)
         return DualNumber(self.x - float(other), self.dx)
 
-def __rsub__(self, other: float) -> "DualNumber":
 
+def __rsub__(self, other: float) -> "DualNumber":
 
     pass
     pass
@@ -108,8 +110,8 @@ A new dual number representing the difference.
 """
         return DualNumber(float(other) - self.x, -self.dx)
 
-def __mul__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
+def __mul__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     pass
     pass
@@ -129,10 +131,10 @@ A new dual number representing the product.
             return DualNumber(
                 self.x * other.x, self.x * other.dx + self.dx * other.x
 
-other_f = float(other)
+other_f=float(other)
         return DualNumber(self.x * other_f, self.dx * other_f)
 
-__rmul__ = __mul__
+__rmul__=__mul__
 
 def __truediv__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
@@ -152,12 +154,12 @@ DualNumber
 A new dual number representing the quotient.
 """
         if isinstance(other, DualNumber):
-            denom = other.x**2
+            denom=other.x**2
             return DualNumber(
                 self.x / other.x,
 (self.dx * other.x - self.x * other.dx) / denom,
 
-other_f = float(other)
+other_f=float(other)
         return DualNumber(self.x / other_f, self.dx / other_f)
 
 def __rtruediv__(self, other: float) -> "DualNumber":
@@ -177,7 +179,7 @@ Returns
 DualNumber
 A new dual number representing the quotient.
 """
-denom = self.x**2
+denom=self.x**2
         return DualNumber(
             float(other) / self.x, (-float(other) * self.dx) / denom
 

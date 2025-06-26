@@ -10,8 +10,8 @@ import math
 @dataclass
 class PhasePacket:
 
-
     """Phase packet containing hash, echo, drift and final coefficients."""
+
 
 gamma: float  # Γ_hash coefficient
 mu: float  # μ_echo coefficient
@@ -24,6 +24,7 @@ def build_packet(
 
     hash_seq: list[int], echo_seq: list[float], drift: float
 ) -> PhasePacket:
+
 """Compute Γ, μ, ζ, Θ from last two ticks.
 
 Implements equations (1)-(10) from design note §3.2:
@@ -43,24 +44,24 @@ PhasePacket with computed coefficients
 Raises:
 ValueError: If insufficient data points
 """
-    if len(hash_seq) < 2:
+   if len(hash_seq) < 2:
         raise ValueError("Need at least 2 hash values")
     if len(echo_seq) < 1:
         raise ValueError("Need at least 1 echo value")
 
 h_now, h_prev = hash_seq[-1], hash_seq[-2]
 
-    # Γ_hash: normalized hash difference
+   # Γ_hash: normalized hash difference
 gamma = unified_math.abs(h_now - h_prev) / (2**256)
 
-    # μ_echo: mean of last 8 echo values
+   # μ_echo: mean of last 8 echo values
 recent_echoes = echo_seq[-8:] if len(echo_seq) >= 8 else echo_seq
-    mu = float(unified_math.unified_math.mean(recent_echoes))
+   mu = float(unified_math.unified_math.mean(recent_echoes))
 
     # ζ_final: combined coefficient
 zeta = mu * gamma
 
-    # Θ_drift: drift compensation
+   # Θ_drift: drift compensation
 theta = drift * (1 - zeta)
 
-    return PhasePacket(gamma, mu, zeta, theta)
+   return PhasePacket(gamma, mu, zeta, theta)

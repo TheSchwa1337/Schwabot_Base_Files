@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
+import json
+import time
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Tensor Matcher - Schwabot UROS v1.0
@@ -63,40 +79,38 @@ Core Mathematical Functions:
 - Matrix basket routing: basket = hash_to_basket(hash, bit_phase)
 """
 
-import hashlib
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 logger = logging.getLogger(__name__)
 
+
 class StrategyType(Enum):
 
-
     """Trading strategy types based on tensor matching."""
+
+
 CONSERVATIVE = "conservative"
 BALANCED = "balanced"
 AGGRESSIVE = "aggressive"
 QUANTUM = "quantum"
 
+
 class BitPhase(Enum):
 
-
     """Bit resolution phases for tensor matching."""
+
+
 FOUR_BIT = 4
 EIGHT_BIT = 8
 FORTY_TWO_BIT = 42
 
+
 @dataclass
 class TensorMatchResult:
 
-
     """Result of tensor matching operation."""
+
+
 phase_value: int
 bit_phase: BitPhase
 strategy_type: StrategyType
@@ -107,11 +121,13 @@ confidence: float
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class PhaseWeightMatrix:
 
-
     """Phase weight matrix calculation result."""
+
+
 bit_pattern: List[int]
 entropy: float
 phase_weight: float
@@ -120,8 +136,8 @@ pattern_length: int
 timestamp: datetime
 metadata: Dict[str, Any] = field(default_factory=dict)
 
-class TensorMatcher:
 
+class TensorMatcher:
 
     """
 Tensor Matcher for phase → strategy scoring and matrix basket routing.
@@ -133,12 +149,13 @@ Mathematical Foundation:
     - Matrix Basket Routing: basket = hash_to_basket(hash, bit_phase)
     """
 
-def __init__(self, config_path: str = "./config/tensor_matcher_config.json"):
 
+def __init__(self, config_path: str = "./config/tensor_matcher_config.json"):
 
     pass
     pass
         self.config_path = config_path
+
 
         # Strategy mappings
 self.strategy_mappings: Dict[str, Dict[str, Any]] = {]
@@ -253,13 +270,12 @@ phase_weight = unified_math.max(0.01, unified_math.min(10.0, phase_weight))
 
             # Create phase weight matrix result
 result = PhaseWeightMatrix(
-                bit_pattern=bit_pattern.copy(),
-                entropy=entropy,
-phase_weight=phase_weight,
-bit_score=bit_score,
-pattern_length=len(bit_pattern),
-                timestamp=datetime.now()
-
+                bit_pattern = bit_pattern.copy(),
+                entropy = entropy,
+phase_weight = phase_weight,
+bit_score = bit_score,
+pattern_length = len(bit_pattern),
+                timestamp = datetime.now()
 
             # Store in history
 self.phase_weight_history.append(result)
@@ -271,8 +287,8 @@ logger.debug(f"Phase weight: {phase_weight:.4f} (bit_score: {bit_score}, entropy
 logger.error(f"Error calculating phase weight matrix: {e}")
             return 0.0
 
-def tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
 
+def tensor_score(self, entry_price: float, current_price: float, phase: int) -> float:
 
     pass
     pass
@@ -298,6 +314,7 @@ Tensor score for trade priority
 """
         try:
             if entry_price <= 0:
+
 logger.warning("Invalid entry price, returning 0")
                 return 0.0
 
@@ -320,8 +337,8 @@ logger.debug(f"Tensor score: {result} (delta: {delta:.4f}, phase: {phase})")
 logger.error(f"Error calculating tensor score: {e}")
             return 0.0
 
-def map_phase_to_strategy(self, phase_value: int, entropy: float, volatility: float) -> StrategyType:
 
+def map_phase_to_strategy(self, phase_value: int, entropy: float, volatility: float) -> StrategyType:
 
     pass
     pass
@@ -345,6 +362,7 @@ Mapped strategy type
         try:
             # Determine bit phase type
             if phase_value < 16:
+
 bit_phase = BitPhase.FOUR_BIT
             elif phase_value < 256:
 bit_phase = BitPhase.EIGHT_BIT
@@ -369,8 +387,8 @@ logger.debug(f"Mapped phase {phase_value} to strategy: {strategy_type.value}")
 logger.error(f"Error mapping phase to strategy: {e}")
             return StrategyType.BALANCED
 
-def hash_to_basket(self, hash_value: str, bit_phase: BitPhase) -> str:
 
+def hash_to_basket(self, hash_value: str, bit_phase: BitPhase) -> str:
 
     pass
     pass
@@ -392,6 +410,7 @@ Basket ID for profit allocation
         try:
             # Use hash to generate basket ID
             if bit_phase == BitPhase.FOUR_BIT:
+
 basket_id = f"basket_4bit_{int(hash_value[0:1], 16) % 16}"
             elif bit_phase == BitPhase.EIGHT_BIT:
 basket_id = f"basket_8bit_{int(hash_value[0:2], 16) % 256}"
@@ -403,6 +422,7 @@ basket_id = f"basket_42bit_{int(hash_value[0:11], 16) % 1024}"
         except Exception as e:
 logger.error(f"Error mapping hash to basket: {e}")
             return f"basket_fallback_{int(time.time())}"
+
 
 def match_tensor(self, hash_value: str, entry_price: float, current_price: float,
 
@@ -502,16 +522,16 @@ def _calculate_confidence(self, phase_weight: float, tensor_score: float, entrop
         """Calculate confidence score for tensor match."""
         try:
             # Base confidence on phase weight stability
-weight_confidence = unified_math.min(phase_weight / 5.0, 1.0)
+weight_confidence=unified_math.min(phase_weight / 5.0, 1.0)
 
             # Tensor score confidence (absolute value)
-            tensor_confidence = unified_math.min(unified_math.abs(tensor_score), 1.0)
+            tensor_confidence=unified_math.min(unified_math.abs(tensor_score), 1.0)
 
             # Entropy confidence (normalized)
-            entropy_confidence = unified_math.min(entropy / 8.0, 1.0)
+            entropy_confidence=unified_math.min(entropy / 8.0, 1.0)
 
             # Weighted combination
-confidence = (weight_confidence * 0.4 + tensor_confidence * 0.3 + entropy_confidence * 0.3)
+confidence=(weight_confidence * 0.4 + tensor_confidence * 0.3 + entropy_confidence * 0.3)
 
             return round(confidence, 4)
 
@@ -525,7 +545,7 @@ def set_bit_phase_engine(self, bit_engine) -> None:
     pass
     pass
         """Set bit phase engine for integration."""
-self.bit_phase_engine = bit_engine
+self.bit_phase_engine=bit_engine
 logger.info("Bit phase engine integrated with tensor matcher")
 
 def set_matrix_mapper(self, matrix_mapper) -> None:
@@ -534,7 +554,7 @@ def set_matrix_mapper(self, matrix_mapper) -> None:
     pass
     pass
         """Set matrix mapper for integration."""
-self.matrix_mapper = matrix_mapper
+self.matrix_mapper=matrix_mapper
 logger.info("Matrix mapper integrated with tensor matcher")
 
 def set_profit_allocator(self, profit_allocator) -> None:
@@ -543,7 +563,7 @@ def set_profit_allocator(self, profit_allocator) -> None:
     pass
     pass
         """Set profit allocator for integration."""
-self.profit_allocator = profit_allocator
+self.profit_allocator=profit_allocator
 logger.info("Profit allocator integrated with tensor matcher")
 
 def get_match_statistics(self) -> Dict[str, Any]:
@@ -557,11 +577,11 @@ def get_match_statistics(self) -> Dict[str, Any]:
                 return {'error': 'No match history available'}
 
             # Calculate statistics
-total_matches = len(self.match_history)
-            strategy_counts = {strategy.value: 0 for strategy in StrategyType}
-bit_phase_counts = {phase.value: 0 for phase in BitPhase}
-tensor_scores = [r.tensor_score for r in self.match_history]
-phase_weights = [r.phase_weight for r in self.match_history]
+total_matches=len(self.match_history)
+            strategy_counts={strategy.value: 0 for strategy in StrategyType}
+bit_phase_counts={phase.value: 0 for phase in BitPhase}
+tensor_scores=[r.tensor_score for r in self.match_history]
+phase_weights=[r.phase_weight for r in self.match_history]
 
             for result in self.match_history:
 strategy_counts[result.strategy_type.value] += 1
@@ -581,14 +601,14 @@ bit_phase_counts[result.bit_phase.value] += 1
 logger.error(f"Error getting match statistics: {e}")
             return {'error': str(e)}
 
-def export_match_data(self, output_path: str = "tensor_match_data.json") -> None:
+def export_match_data(self, output_path: str="tensor_match_data.json") -> None:
 
 
     pass
     pass
         """Export tensor match data to file."""
         try:
-export_data = {
+export_data={
 'timestamp': datetime.now().isoformat(),
                 'total_matches': len(self.match_history),
                 'total_phase_weights': len(self.phase_weight_history),
@@ -629,27 +649,27 @@ if __name__ == "__main__":
     pass
     pass
     # Test tensor matcher
-matcher = TensorMatcher()
+matcher=TensorMatcher()
 
     # Test phase weight matrix
-bit_pattern = [1, 0, 1, 1, 0, 1, 0, 1]
-entropy = 4.5
-phase_weight = matcher.phase_weight_matrix(bit_pattern, entropy)
+bit_pattern=[1, 0, 1, 1, 0, 1, 0, 1]
+entropy=4.5
+phase_weight=matcher.phase_weight_matrix(bit_pattern, entropy)
     safe_print(f"Phase Weight: {phase_weight:.4f}")
 
     # Test tensor score
-tensor_score = matcher.tensor_score(45000.0, 46000.0, 8)
+tensor_score=matcher.tensor_score(45000.0, 46000.0, 8)
     safe_print(f"Tensor Score: {tensor_score}")
 
     # Test complete tensor matching
-test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
-market_data = {
+test_hash="a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
+market_data={
 'entropy_level': 4.5,
 'volatility': 0.03,
 'market_heat': 0.6
 }
 
-result = matcher.match_tensor(test_hash, 45000.0, 46000.0, market_data)
+result=matcher.match_tensor(test_hash, 45000.0, 46000.0, market_data)
     if result:
 safe_print("Tensor Match Result:")
         safe_print(f"  Phase: {result.phase_value}")
@@ -659,5 +679,5 @@ safe_print("Tensor Match Result:")
         safe_print(f"  Confidence: {result.confidence:.4f}")
 
     # Get statistics
-stats = matcher.get_match_statistics()
+stats=matcher.get_match_statistics()
     safe_print(f"Match Statistics: {stats}")

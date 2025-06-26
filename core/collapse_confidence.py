@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from scipy.signal import find_peaks
+from scipy import stats
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +19,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Collapse Confidence - Market Collapse Detection and Analysis.
 
@@ -66,14 +81,7 @@ Mathematical Foundation:
 - Confidence collapse prediction models
 """
 
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from scipy import stats
-from scipy.signal import find_peaks
 
 logger = logging.getLogger(__name__)
 
@@ -81,8 +89,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ConfidenceState:
 
-
     """Represents a confidence state at a point in time."""
+
+
 timestamp: datetime
 confidence_level: float  # 0.0 to 1.0
 volatility: float
@@ -96,8 +105,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class CollapseEvent:
 
-
     """Represents a detected collapse event."""
+
+
 event_id: str
 start_time: datetime
 end_time: Optional[datetime]
@@ -113,8 +123,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class CollapseAnalysis:
 
-
     """Result of collapse confidence analysis."""
+
+
 current_confidence: float
 confidence_trend: float
 collapse_risk: float
@@ -127,7 +138,6 @@ timestamp: datetime = field(default_factory=datetime.now)
 
 class CollapseConfidence:
 
-
     """
 Advanced market collapse detection and confidence analysis system.
 
@@ -138,12 +148,14 @@ Provides mathematical models for:
 - Recovery prediction
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize collapse confidence analyzer."""
+
+
 self.confidence_history: List[ConfidenceState] = []
 self.collapse_events: List[CollapseEvent] = []
 self.max_history = 10000
@@ -160,6 +172,7 @@ self.recovery_rate = 0.02
 
 logger.info("CollapseConfidence initialized")
 
+
 def update_confidence_state(
 
 
@@ -170,6 +183,7 @@ volume: float,
 price_change: float,
 liquidity_score: Optional[float] = None
 ) -> ConfidenceState:
+
 """
 Update confidence state with new market data.
 
@@ -199,9 +213,9 @@ stress_indicator = self._calculate_stress_indicator(
 
             # Use default liquidity score if not provided
             if liquidity_score is None:
-liquidity_score = self._estimate_liquidity_score(volume, volatility)
+liquidity_score=self._estimate_liquidity_score(volume, volatility)
 
-state = ConfidenceState(
+state=ConfidenceState(
                 timestamp=datetime.now(),
                 confidence_level=unified_math.max(0.0, unified_math.min(1.0, confidence_level)),
                 volatility=unified_math.max(0.0, volatility),
@@ -234,12 +248,12 @@ price_change: float
 """Calculate market stress indicator."""
         try:
             # Normalize inputs
-vol_norm = unified_math.min(1.0, volatility / 0.1)  # Normalize to 10% volatility
-            vol_norm = unified_math.min(1.0, volume / 1000000)  # Normalize to 1M volume
-            price_norm = unified_math.abs(price_change) / 0.1  # Normalize to 10% price change
+vol_norm=unified_math.min(1.0, volatility / 0.1)  # Normalize to 10% volatility
+            vol_norm=unified_math.min(1.0, volume / 1000000)  # Normalize to 1M volume
+            price_norm=unified_math.abs(price_change) / 0.1  # Normalize to 10% price change
 
             # Weighted stress calculation
-stress = (
+stress=(
                 0.3 * (1.0 - confidence) +  # Low confidence = high stress
                 0.3 * vol_norm +            # High volatility = high stress
 0.2 * vol_norm +            # High volume = moderate stress
@@ -260,10 +274,10 @@ def _estimate_liquidity_score(self, volume: float, volatility: float) -> float:
         """Estimate liquidity score from volume and volatility."""
         try:
             # Higher volume and lower volatility = higher liquidity
-volume_score = unified_math.min(1.0, volume / 1000000)  # Normalize to 1M
-            volatility_penalty = unified_math.min(1.0, volatility / 0.1)  # Normalize to 10%
+volume_score=unified_math.min(1.0, volume / 1000000)  # Normalize to 1M
+            volatility_penalty=unified_math.min(1.0, volatility / 0.1)  # Normalize to 10%
 
-liquidity = volume_score * (1.0 - volatility_penalty)
+liquidity=volume_score * (1.0 - volatility_penalty)
             return unified_math.max(0.0, unified_math.min(1.0, liquidity))
 
         except Exception as e:
@@ -287,19 +301,19 @@ List of detected collapse events
             if len(self.confidence_history) < 10:
                 return []
 
-events = []
-recent_states = self.confidence_history[-100:]  # Last 100 states
+events=[]
+recent_states=self.confidence_history[-100:]  # Last 100 states
 
             # Find periods of significant confidence decline
             for i in range(1, len(recent_states)):
-                prev_state = recent_states[i-1]
-curr_state = recent_states[i]
+                prev_state=recent_states[i-1]
+curr_state=recent_states[i]
 
                 # Check for collapse conditions
-confidence_drop = prev_state.confidence_level - curr_state.confidence_level
-volatility_spike = curr_state.volatility - prev_state.volatility
-volume_surge = curr_state.volume / unified_math.max(prev_state.volume, 1.0)
-                price_crash = curr_state.price_change
+confidence_drop=prev_state.confidence_level - curr_state.confidence_level
+volatility_spike=curr_state.volatility - prev_state.volatility
+volume_surge=curr_state.volume / unified_math.max(prev_state.volume, 1.0)
+                price_crash=curr_state.price_change
 
                 # Detect collapse event
                 if (confidence_drop > self.confidence_threshold or
@@ -308,13 +322,13 @@ volume_surge > self.volume_threshold or
 price_crash < self.price_threshold):
 
                     # Determine severity
-severity = self._determine_collapse_severity(
+severity=self._determine_collapse_severity(
                         confidence_drop, volatility_spike, volume_surge, price_crash
 
 
                     # Check if this is a new event or continuation
                     if not self._is_continuation_of_existing_event(curr_state.timestamp, events):
-                        event = CollapseEvent(
+                        event=CollapseEvent(
                             event_id=f"collapse_{len(events)}_{int(time.time())}",
                             start_time=curr_state.timestamp,
 end_time=None,
@@ -348,7 +362,7 @@ price_crash: float
 """Determine severity of collapse event."""
         try:
             # Calculate severity score
-severity_score = (
+severity_score=(
                 confidence_drop * 0.4 +
 volatility_spike * 0.3 +
 (volume_surge - 1.0) * 0.2 +
@@ -379,7 +393,7 @@ events: List[CollapseEvent]
         try:
             for event in events:
                 if event.end_time is None:  # Active event
-time_diff = (timestamp - event.start_time).total_seconds()
+time_diff=(timestamp - event.start_time).total_seconds()
                     if time_diff < 3600:  # Within 1 hour
                         return True
             return False
@@ -399,8 +413,8 @@ def _update_collapse_events(self, events: List[CollapseEvent]) -> None:
                 if event.end_time is None:  # Active event
                     # Check for recovery
                     if self._has_recovered(event.start_time):
-                        event.end_time = datetime.now()
-                        event.recovery_time = (
+                        event.end_time=datetime.now()
+                        event.recovery_time=(
                             event.end_time - event.start_time
 ).total_seconds()
 
@@ -418,7 +432,7 @@ def _has_recovered(self, collapse_start: datetime) -> bool:
         """Check if market has recovered from collapse."""
         try:
             # Get recent confidence states
-recent_states = [
+recent_states=[
 state for state in self.confidence_history
                 if state.timestamp > collapse_start
 ]
@@ -427,8 +441,8 @@ state for state in self.confidence_history
                 return False
 
             # Check if confidence has recovered
-recent_confidence = [state.confidence_level for state in recent_states[-5:]]
-avg_confidence = unified_math.unified_math.mean(recent_confidence)
+recent_confidence=[state.confidence_level for state in recent_states[-5:]]
+avg_confidence=unified_math.unified_math.mean(recent_confidence)
 
             return avg_confidence > 0.6  # Recovery threshold
 
@@ -454,25 +468,25 @@ Complete collapse analysis result
                 return self._create_empty_analysis()
 
             # Get current state
-current_state = self.confidence_history[-1]
+current_state=self.confidence_history[-1]
 
             # Calculate confidence trend
-confidence_trend = self._calculate_confidence_trend()
+confidence_trend=self._calculate_confidence_trend()
 
             # Detect collapse events
-detected_events = self.detect_collapse_events()
+detected_events=self.detect_collapse_events()
 
             # Calculate collapse risk
-collapse_risk = self._calculate_collapse_risk()
+collapse_risk=self._calculate_collapse_risk()
 
             # Determine stress level
-stress_level = self._determine_stress_level(current_state.stress_indicator)
+stress_level=self._determine_stress_level(current_state.stress_indicator)
 
             # Calculate recovery probability
-recovery_probability = self._calculate_recovery_probability()
+recovery_probability=self._calculate_recovery_probability()
 
             # Generate recommendations
-recommendations = self._generate_recommendations(
+recommendations=self._generate_recommendations(
                 current_state, collapse_risk, stress_level
 
 
@@ -500,12 +514,12 @@ def _calculate_confidence_trend(self) -> float:
             if len(self.confidence_history) < 10:
                 return 0.0
 
-recent_states = self.confidence_history[-10:]
-confidence_values = [state.confidence_level for state in recent_states]
+recent_states=self.confidence_history[-10:]
+confidence_values=[state.confidence_level for state in recent_states]
 
             # Linear regression for trend
-x = np.arange(len(confidence_values))
-            slope, _, _, _, _ = stats.linregress(x, confidence_values)
+x=np.arange(len(confidence_values))
+            slope, _, _, _, _=stats.linregress(x, confidence_values)
 
             return slope
 
@@ -523,16 +537,16 @@ def _calculate_collapse_risk(self) -> float:
             if not self.confidence_history:
                 return 0.0
 
-current_state = self.confidence_history[-1]
+current_state=self.confidence_history[-1]
 
             # Risk factors
-low_confidence_risk = 1.0 - current_state.confidence_level
-high_volatility_risk = unified_math.min(1.0, current_state.volatility / 0.1)
-            low_liquidity_risk = 1.0 - current_state.liquidity_score
-stress_risk = current_state.stress_indicator
+low_confidence_risk=1.0 - current_state.confidence_level
+high_volatility_risk=unified_math.min(1.0, current_state.volatility / 0.1)
+            low_liquidity_risk=1.0 - current_state.liquidity_score
+stress_risk=current_state.stress_indicator
 
             # Weighted risk calculation
-total_risk = (
+total_risk=(
                 0.4 * low_confidence_risk +
 0.3 * high_volatility_risk +
 0.2 * low_liquidity_risk +
@@ -577,15 +591,15 @@ def _calculate_recovery_probability(self) -> float:
             if not self.confidence_history:
                 return 0.5
 
-current_state = self.confidence_history[-1]
+current_state=self.confidence_history[-1]
 
             # Recovery factors
-confidence_factor = current_state.confidence_level
-liquidity_factor = current_state.liquidity_score
-volatility_factor = 1.0 - unified_math.min(1.0, current_state.volatility / 0.1)
+confidence_factor=current_state.confidence_level
+liquidity_factor=current_state.liquidity_score
+volatility_factor=1.0 - unified_math.min(1.0, current_state.volatility / 0.1)
 
             # Weighted recovery probability
-recovery_prob = (
+recovery_prob=(
                 0.5 * confidence_factor +
 0.3 * liquidity_factor +
 0.2 * volatility_factor
@@ -606,7 +620,7 @@ collapse_risk: float,
 stress_level: str
 ) -> List[str]:
 """Generate recommendations based on current state."""
-recommendations = []
+recommendations=[]
 
         try:
             if collapse_risk > 0.7:
@@ -659,21 +673,21 @@ def get_collapse_statistics(self) -> Dict[str, Any]:
         if not self.confidence_history:
             return {"error": "No confidence history available"}
 
-total_events = len(self.collapse_events)
-        active_events = sum(1 for event in self.collapse_events if event.end_time is None)
-        recovered_events = total_events - active_events
+total_events=len(self.collapse_events)
+        active_events=sum(1 for event in self.collapse_events if event.end_time is None)
+        recovered_events=total_events - active_events
 
         # Event severity distribution
-severity_counts = {}
+severity_counts={}
         for event in self.collapse_events:
-severity_counts[event.severity] = severity_counts.get(event.severity, 0) + 1
+severity_counts[event.severity]=severity_counts.get(event.severity, 0) + 1
 
         # Average recovery time
-recovery_times = [
+recovery_times=[
 event.recovery_time for event in self.collapse_events
             if event.recovery_time is not None
 ]
-avg_recovery_time = unified_math.unified_math.mean(recovery_times) if recovery_times else 0.0
+avg_recovery_time=unified_math.unified_math.mean(recovery_times) if recovery_times else 0.0
 
         return {
 "total_events": total_events,
@@ -694,24 +708,24 @@ def main() -> None:
     """Test function for CollapseConfidence."""
 safe_print("📉 Testing Collapse Confidence...")
 
-analyzer = CollapseConfidence()
+analyzer=CollapseConfidence()
 
     # Simulate market data
     for i in range(100):
         # Simulate normal market conditions
         if i < 80:
-confidence = 0.7 + np.random.normal(0, 0.1)
-            volatility = 0.02 + np.random.normal(0, 0.005)
-            volume = 500000 + np.random.normal(0, 100000)
-            price_change = np.random.normal(0, 0.01)
+confidence=0.7 + np.random.normal(0, 0.1)
+            volatility=0.02 + np.random.normal(0, 0.005)
+            volume=500000 + np.random.normal(0, 100000)
+            price_change=np.random.normal(0, 0.01)
         else:
             # Simulate collapse conditions
-confidence = 0.2 + np.random.normal(0, 0.1)
-            volatility = 0.08 + np.random.normal(0, 0.02)
-            volume = 2000000 + np.random.normal(0, 500000)
-            price_change = -0.05 + np.random.normal(0, 0.02)
+confidence=0.2 + np.random.normal(0, 0.1)
+            volatility=0.08 + np.random.normal(0, 0.02)
+            volume=2000000 + np.random.normal(0, 500000)
+            price_change=-0.05 + np.random.normal(0, 0.02)
 
-state = analyzer.update_confidence_state(
+state=analyzer.update_confidence_state(
             confidence_level=confidence,
 volatility=volatility,
 volume=volume,
@@ -719,7 +733,7 @@ price_change=price_change
 
 
     # Perform analysis
-analysis = analyzer.analyze_collapse_confidence()
+analysis=analyzer.analyze_collapse_confidence()
     safe_print("✅ Collapse analysis completed:")
     safe_print(f"   Current confidence: {analysis.current_confidence:.3f}")
     safe_print(f"   Confidence trend: {analysis.confidence_trend:.3f}")
@@ -730,7 +744,7 @@ analysis = analyzer.analyze_collapse_confidence()
     safe_print(f"   Recommendations: {analysis.recommendations}")
 
     # Get statistics
-stats = analyzer.get_collapse_statistics()
+stats=analyzer.get_collapse_statistics()
     safe_print(f"📊 Collapse statistics: {stats}")
 
     return 0

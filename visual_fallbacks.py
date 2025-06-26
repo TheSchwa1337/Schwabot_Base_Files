@@ -3,8 +3,10 @@ import os
 import json
 from typing import Optional
 
+
 class VisualFallback:
     """Handles visual-safe symbols for status output, with user override."""
+
     def __init__(self, use_emoji: Optional[bool] = None):
         # User config override
         config_path = os.path.expanduser("~/.schwabotrc.json")
@@ -15,7 +17,7 @@ class VisualFallback:
                     user_cfg = json.load(f)
             except Exception:
                 user_cfg = None
-        
+
         # OS detection
         system = platform.system().lower()
         self.default_to_unicode = system == "windows"
@@ -41,4 +43,4 @@ class VisualFallback:
 
     def get(self, key: str) -> str:
         """Return the symbol for a given status key."""
-        return self.symbols.get(key.upper(), "?") 
+        return self.symbols.get(key.upper(), "?")

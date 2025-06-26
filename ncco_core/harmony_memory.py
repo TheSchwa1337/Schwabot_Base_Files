@@ -51,7 +51,7 @@ class WindowsCliCompatibilityHandler:
 class HarmonyMemory:
 
     """TODO: document HarmonyMemory."""
-    
+
     def __init__(self: Any) -> None:
         """TODO: document __init__."""
         self.patterns = {}

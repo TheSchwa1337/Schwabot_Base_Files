@@ -76,9 +76,9 @@ class RecursionGuard:
 
     def __init__(self, max_depth: int = 50, threshold: float = 1e-6) -> None:
         """
-        
+
         Initialize recursion guard.
-        
+
         Args:
             max_depth: Maximum recursion depth
             threshold: Convergence threshold for stability
@@ -158,14 +158,15 @@ class MathematicalValidator:
         norm = float(unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(state) ** 2)))
         return unified_math.abs(norm - 1.0) < 1e-6
 
+
 class RecursiveIdentityFunction:
     """Implements Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ)) framework."""
 
     def __init__(self, max_depth: int = 50) -> None:
         """
-        
+
         Initialize recursive identity function.
-        
+
         Args:
             max_depth: Maximum recursion depth
         """
@@ -177,15 +178,15 @@ class RecursiveIdentityFunction:
         self, x: float, n: int, delta_t: float, transform_input: float
     ) -> float:
         """
-        
+
         Compute recursive state using Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ))
-        
+
         Args:
             x: Input value
             n: Recursion depth
             delta_t: Temporal context Δ(t)
             transform_input: Transformational input T(Φₚ)
-        
+
         Returns:
             Recursive state value
         """
@@ -224,9 +225,9 @@ class EntropyStabilizedFeedback:
 
     def __init__(self, threshold: float = 1.0) -> None:
         """
-        
+
         Initialize entropy-stabilized feedback.
-        
+
         Args:
             threshold: Entropy threshold for stabilization
         """
@@ -415,7 +416,8 @@ class UnifiedMathematicsFramework:
         """
         # Base drift field
         decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
-        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 +
+                     unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         base_field = decay * stability
 
         # Apply golden ratio scaling

@@ -27,11 +27,12 @@ def profit_feedback_delta(
 durations: Sequence[float],
 pnl: Sequence[float],
 ) -> float:  # noqa: D401
+
 """Return δ_profit_t scalar.
 
 All input sequences must share length; missing values raise ValueError.
 """
-    if not (len(zeta_trades) == len(durations) == len(pnl)):
+   if not (len(zeta_trades) == len(durations) == len(pnl)):
         raise ValueError("input sequences must share length")
     arr_zeta = np.asarray(zeta_trades, dtype=float)
     arr_tau = np.asarray(durations, dtype=float)

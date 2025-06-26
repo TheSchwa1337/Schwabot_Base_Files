@@ -51,14 +51,18 @@ try:
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_print(message: str, use_emoji: bool = True) -> str:
         return message
+
     def safe_format_error(error: Exception, context: str = "") -> str:
         return f"Error: {str(error)} | Context: {context}"
+
     def log_safe(logger, level: str, message: str) -> None:
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ProfitAllocationResult:
@@ -78,12 +82,13 @@ class ProfitAllocationResult:
     allocation_weights: Dict[str, float] = None
     hash_signature: str = ""
     metadata: Dict[str, Any] = None
-    
+
     def __post_init__(self):
         if self.metadata is None:
             self.metadata = {}
         if self.allocation_weights is None:
             self.allocation_weights = {}
+
 
 @dataclass
 class BitResolutionPhase:
@@ -96,6 +101,7 @@ class BitResolutionPhase:
     allocation_strategy: str
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class TensorAllocation:
     """Tensor-based allocation result."""
@@ -107,6 +113,7 @@ class TensorAllocation:
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass(slots=True)
 class ProfitCycleAllocator:
     """Enhanced profit cycle allocator with matrix mapper and tensor scoring integration."""
@@ -115,7 +122,7 @@ class ProfitCycleAllocator:
     zpe_core: Optional[ZPECore] = None
     matrix_mapper: Optional[MatrixMapper] = None
     dlt_waveform_engine: Optional[DLTWaveformEngine] = None
-    
+
     def __post_init__(self):
         """Initialize ZPE core and matrix mapper if available."""
         if ZPE_MODULES_AVAILABLE:
@@ -123,27 +130,27 @@ class ProfitCycleAllocator:
             safe_safe_print("🔄 Profit Cycle Allocator initialized with ZPE integration")
         else:
             safe_safe_print("⚠️ Profit Cycle Allocator initialized without ZPE integration")
-        
+
         if MATRIX_MAPPER_AVAILABLE:
             self.matrix_mapper = MatrixMapper()
             safe_safe_print("🔄 Profit Cycle Allocator initialized with Matrix Mapper integration")
         else:
             safe_safe_print("⚠️ Profit Cycle Allocator initialized without Matrix Mapper integration")
-        
+
         if DLT_WAVEFORM_AVAILABLE:
             self.dlt_waveform_engine = DLTWaveformEngine()
             safe_safe_print("🔄 Profit Cycle Allocator initialized with DLT Waveform Engine integration")
         else:
             safe_safe_print("⚠️ Profit Cycle Allocator initialized without DLT Waveform Engine integration")
-        
+
         # Initialize bit resolution phases
         self.bit_phases = self._initialize_bit_phases()
-        
+
         # Performance tracking
         self.allocation_history: List[Dict[str, Any]] = []
         self.tensor_score_history: List[float] = []
         self.hash_registry: Dict[str, Dict[str, Any]] = {}
-        
+
         # Integration setup
         self._setup_integrations()
 
@@ -203,7 +210,7 @@ class ProfitCycleAllocator:
             cycle is assumed.
         market_data
             Optional market data for ZPE and matrix calculations.
-            
+
         Returns
         -------
         ProfitAllocationResult
@@ -215,11 +222,11 @@ class ProfitCycleAllocator:
                 name: execution_packet.get("volume", 0.0)
                 for name in (cycles or ["default"])
             }
-            
+
             execution_packet = execution_packet.copy()
             execution_packet["cycle_allocation"] = allocation
             execution_packet["allocator"] = self.allocation_strategy
-            
+
             # Initialize result fields
             zpe_efficiency = 0.0
             zpe_reinjection = 0.0
@@ -230,32 +237,33 @@ class ProfitCycleAllocator:
             bit_phase = None
             allocation_weights = {}
             hash_signature = ""
-            
+
             # Generate hash signature for this allocation
             hash_signature = self._generate_allocation_hash(execution_packet, market_data)
-            
+
             # Matrix Mapper Integration
             if self.matrix_mapper and market_data:
                 try:
                     # Determine optimal bit phase
                     bit_phase = self._determine_optimal_bit_phase(market_data)
-                    
+
                     # Allocate profit using matrix mapper
                     matrix_result = self.matrix_mapper.allocate_profit(total_profit, market_data)
-                    
+
                     if matrix_result:
                         matrix_basket_id = matrix_result.basket_id
                         tensor_score = matrix_result.tensor_score
                         allocation_weights = matrix_result.allocation_weights
-                        
+
                         # Update allocation based on matrix result
                         self._adjust_allocation_with_metrics(allocation, zpe_efficiency, tensor_score, bit_phase)
-                        
-                        safe_safe_print(f"✅ Matrix allocation: basket={matrix_basket_id}, tensor_score={tensor_score:.4f}")
-                    
+
+                        safe_safe_print(
+                            f"✅ Matrix allocation: basket={matrix_basket_id}, tensor_score={tensor_score:.4f}")
+
                 except Exception as e:
                     safe_safe_print(f"⚠️ Matrix mapper integration error: {e}")
-            
+
             # DLT Waveform Integration
             if self.dlt_waveform_engine and market_data:
                 try:
@@ -267,17 +275,17 @@ class ProfitCycleAllocator:
                             x=np.array(waveform_data),
                             sample_rate=market_data.get('sample_rate', 1.0)
                         )
-                        
+
                         if waveform_result.get('success'):
                             # Integrate waveform analysis with matrix mapper
                             if self.matrix_mapper:
                                 integration_result = self.matrix_mapper.integrate_with_dlt_waveform(waveform_result)
                                 if integration_result.get('success'):
                                     safe_safe_print(f"✅ DLT waveform integration: {integration_result}")
-                        
+
                 except Exception as e:
                     safe_safe_print(f"⚠️ DLT waveform integration error: {e}")
-            
+
             # ZPE Integration
             if self.zpe_core and market_data:
                 try:
@@ -286,7 +294,7 @@ class ProfitCycleAllocator:
                     zpe_efficiency = zpe_metrics.get('efficiency', 0.0)
                     zpe_reinjection = zpe_metrics.get('reinjection', 0.0)
                     thermal_history = zpe_metrics.get('thermal_history', {})
-                    
+
                     # Adjust allocation based on ZPE efficiency
                     if zpe_efficiency > 0.7:
                         # High efficiency - increase allocation
@@ -296,15 +304,16 @@ class ProfitCycleAllocator:
                         # Low efficiency - decrease allocation
                         for cycle in allocation:
                             allocation[cycle] *= 0.8
-                    
-                    safe_safe_print(f"✅ ZPE integration: efficiency={zpe_efficiency:.4f}, reinjection={zpe_reinjection:.4f}")
-                    
+
+                    safe_safe_print(
+                        f"✅ ZPE integration: efficiency={zpe_efficiency:.4f}, reinjection={zpe_reinjection:.4f}")
+
                 except Exception as e:
                     safe_safe_print(f"⚠️ ZPE integration error: {e}")
-            
+
             # Store allocation history
             self._store_allocation_history(execution_packet, tensor_score, bit_phase)
-            
+
             # Create result
             result = ProfitAllocationResult(
                 success=True,
@@ -326,14 +335,14 @@ class ProfitCycleAllocator:
                     'zpe_available': ZPE_MODULES_AVAILABLE
                 }
             )
-            
+
             safe_safe_print(f"✅ Enhanced allocation completed: tensor_score={tensor_score:.4f}, bit_phase={bit_phase}")
             return result
-            
+
         except Exception as e:
             error_msg = safe_format_error(e, "Enhanced profit allocation")
             safe_safe_print(f"❌ Enhanced allocation failed: {error_msg}")
-            
+
             return ProfitAllocationResult(
                 success=False,
                 allocated_packet=execution_packet,
@@ -350,11 +359,11 @@ class ProfitCycleAllocator:
                 'market_data': market_data or {},
                 'timestamp': time.time()
             }
-            
+
             # Generate SHA-256 hash
             content_str = str(content)
             return hashlib.sha256(content_str.encode()).hexdigest()
-            
+
         except Exception as e:
             logger.error(f"Error generating allocation hash: {e}")
             return hashlib.sha256(str(time.time()).encode()).hexdigest()
@@ -365,10 +374,10 @@ class ProfitCycleAllocator:
             entropy_level = market_data.get('entropy_level', 4.0)
             complexity = market_data.get('complexity', 0.5)
             volatility = market_data.get('volatility', 0.5)
-            
+
             # Calculate composite score
             composite_score = (entropy_level * 0.4 + complexity * 0.3 + volatility * 0.3)
-            
+
             # Determine bit phase based on composite score
             if composite_score < 2.0:
                 return 4  # 4-bit conservative
@@ -376,7 +385,7 @@ class ProfitCycleAllocator:
                 return 8  # 8-bit balanced
             else:
                 return 42  # 42-bit quantum
-                
+
         except Exception as e:
             logger.error(f"Error determining optimal bit phase: {e}")
             return 8  # Default to 8-bit
@@ -397,10 +406,10 @@ class ProfitCycleAllocator:
             return BitPhase.EIGHT_BIT
 
     def _adjust_allocation_with_metrics(
-        self, 
-        allocation: Dict[str, float], 
-        zpe_efficiency: float, 
-        tensor_score: float, 
+        self,
+        allocation: Dict[str, float],
+        zpe_efficiency: float,
+        tensor_score: float,
         bit_phase: Optional[int]
     ) -> None:
         """Adjust allocation based on ZPE and tensor metrics."""
@@ -408,27 +417,27 @@ class ProfitCycleAllocator:
             # Calculate adjustment factor
             zpe_factor = 1.0 + (zpe_efficiency - 0.5) * 0.4  # ±20% based on ZPE efficiency
             tensor_factor = 1.0 + tensor_score * 0.3  # ±30% based on tensor score
-            
+
             # Bit phase adjustment
             bit_phase_factor = 1.0
             if bit_phase == 4:
                 bit_phase_factor = 0.8  # Conservative
             elif bit_phase == 42:
                 bit_phase_factor = 1.2  # Aggressive
-            
+
             # Combined adjustment factor
             adjustment_factor = zpe_factor * tensor_factor * bit_phase_factor
-            
+
             # Apply adjustment
             for cycle in allocation:
                 allocation[cycle] *= adjustment_factor
-            
+
             # Normalize to ensure total allocation doesn't exceed original
             total_original = sum(allocation.values())
             if total_original > 0:
                 for cycle in allocation:
                     allocation[cycle] = unified_math.max(0.0, allocation[cycle])
-                    
+
         except Exception as e:
             logger.error(f"Error adjusting allocation with metrics: {e}")
 
@@ -437,24 +446,24 @@ class ProfitCycleAllocator:
         try:
             if not self.zpe_core:
                 return {'efficiency': 0.5, 'reinjection': 0.0, 'thermal_history': {}}
-            
+
             # Extract market data
             trend_strength = market_data.get('trend_strength', 0.0)
             entry_exit_range = market_data.get('entry_exit_range', 0.0)
             liquidity_depth = market_data.get('liquidity_depth', 1.0)
             trend_change_rate = market_data.get('trend_change_rate', 0.0)
-            
+
             # Calculate ZPE work
             zpe_work = self.zpe_core.calculate_zpe_work(trend_strength, entry_exit_range)
-            
+
             # Calculate thermal efficiency
             capital_exposure = market_data.get('capital_exposure', unified_math.abs(profit_amount))
             thermal_efficiency = self.zpe_core.calculate_thermal_efficiency(profit_amount, capital_exposure)
-            
+
             # Calculate profit reinjection
             market_heat = market_data.get('market_heat', 0.5)
             profit_reinjection = self.zpe_core.calculate_profit_reinjection(profit_amount, market_heat)
-            
+
             # Get thermal history
             thermal_history = {
                 'zpe_work': zpe_work,
@@ -462,13 +471,13 @@ class ProfitCycleAllocator:
                 'profit_reinjection': profit_reinjection,
                 'timestamp': datetime.now().isoformat()
             }
-            
+
             return {
                 'efficiency': thermal_efficiency,
                 'reinjection': profit_reinjection,
                 'thermal_history': thermal_history
             }
-            
+
         except Exception as e:
             logger.error(f"Error calculating ZPE metrics: {e}")
             return {'efficiency': 0.5, 'reinjection': 0.0, 'thermal_history': {}}
@@ -483,16 +492,16 @@ class ProfitCycleAllocator:
                 'profit_amount': execution_packet.get('actual_profit', 0.0),
                 'allocation_strategy': self.allocation_strategy
             }
-            
+
             self.allocation_history.append(history_entry)
             self.tensor_score_history.append(tensor_score)
-            
+
             # Keep only recent history
             if len(self.allocation_history) > 1000:
                 self.allocation_history.pop(0)
             if len(self.tensor_score_history) > 1000:
                 self.tensor_score_history.pop(0)
-                
+
         except Exception as e:
             logger.error(f"Error storing allocation history: {e}")
 
@@ -501,10 +510,10 @@ class ProfitCycleAllocator:
         try:
             if not self.zpe_core:
                 return {'error': 'ZPE core not available'}
-            
+
             # Get thermal history from ZPE core
             thermal_history = getattr(self.zpe_core, 'thermal_history', [])
-            
+
             # Calculate average efficiency
             if thermal_history:
                 avg_efficiency = unified_math.mean([entry.get('efficiency', 0.0) for entry in thermal_history])
@@ -512,7 +521,7 @@ class ProfitCycleAllocator:
             else:
                 avg_efficiency = 0.5
                 recent_efficiency = 0.5
-            
+
             return {
                 'average_efficiency': avg_efficiency,
                 'recent_efficiency': recent_efficiency,
@@ -520,7 +529,7 @@ class ProfitCycleAllocator:
                 'agent_consensus': getattr(self.zpe_core, 'agent_consensus', {}),
                 'recursion_depth': getattr(self.zpe_core, 'recursion_depth', 0)
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting ZPE metrics: {e}")
             return {'error': str(e)}
@@ -530,17 +539,17 @@ class ProfitCycleAllocator:
         try:
             if not self.matrix_mapper:
                 return {'error': 'Matrix mapper not available'}
-            
+
             # Get hash registry status
             registry_status = self.matrix_mapper.get_hash_registry_status()
-            
+
             # Get basket performance statistics
             basket_stats = {}
             for basket_id in self.matrix_mapper.basket_registry.keys():
                 performance = self.matrix_mapper.get_basket_performance(basket_id)
                 if 'error' not in performance:
                     basket_stats[basket_id] = performance
-            
+
             return {
                 'registry_status': registry_status,
                 'basket_performance': basket_stats,
@@ -548,7 +557,7 @@ class ProfitCycleAllocator:
                 'total_tensor_routes': len(self.matrix_mapper.tensor_routes),
                 'total_profit_allocations': len(self.matrix_mapper.profit_allocations)
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting matrix metrics: {e}")
             return {'error': str(e)}
@@ -557,14 +566,14 @@ class ProfitCycleAllocator:
         """Get distribution of bit phases used in allocations."""
         try:
             distribution = {4: 0, 8: 0, 42: 0}
-            
+
             for entry in self.allocation_history:
                 bit_phase = entry.get('bit_phase')
                 if bit_phase in distribution:
                     distribution[bit_phase] += 1
-            
+
             return distribution
-            
+
         except Exception as e:
             logger.error(f"Error getting bit phase distribution: {e}")
             return {4: 0, 8: 0, 42: 0}
@@ -574,19 +583,20 @@ class ProfitCycleAllocator:
         try:
             if not self.allocation_history:
                 return {'error': 'No allocation history available'}
-            
+
             # Calculate statistics
             total_allocations = len(self.allocation_history)
-            avg_tensor_score = unified_math.unified_math.mean(self.tensor_score_history) if self.tensor_score_history else 0.0
+            avg_tensor_score = unified_math.unified_math.mean(
+                self.tensor_score_history) if self.tensor_score_history else 0.0
             total_profit = sum(entry.get('profit_amount', 0.0) for entry in self.allocation_history)
-            
+
             # Bit phase distribution
             bit_phase_dist = self._get_bit_phase_distribution()
-            
+
             # Success rate
             successful_allocations = sum(1 for entry in self.allocation_history if entry.get('tensor_score', 0.0) > 0.0)
             success_rate = successful_allocations / total_allocations if total_allocations > 0 else 0.0
-            
+
             return {
                 'total_allocations': total_allocations,
                 'average_tensor_score': avg_tensor_score,
@@ -600,7 +610,7 @@ class ProfitCycleAllocator:
                     'dlt_waveform_available': DLT_WAVEFORM_AVAILABLE
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting allocation statistics: {e}")
             return {'error': str(e)}
@@ -610,14 +620,14 @@ class ProfitCycleAllocator:
         try:
             if not self.dlt_waveform_engine:
                 return {'error': 'DLT waveform engine not available'}
-            
+
             # Process waveform data
             result = self.dlt_waveform_engine.process_waveform_data(
                 name=waveform_data.get('name', 'integration_waveform'),
                 x=np.array(waveform_data.get('data', [])),
                 sample_rate=waveform_data.get('sample_rate', 1.0)
             )
-            
+
             if result.get('success'):
                 # Integrate with matrix mapper
                 if self.matrix_mapper:
@@ -635,7 +645,7 @@ class ProfitCycleAllocator:
                     }
             else:
                 return {'error': 'Waveform processing failed'}
-                
+
         except Exception as e:
             logger.error(f"Error integrating with DLT waveform: {e}")
             return {'error': str(e)}
@@ -645,10 +655,10 @@ class ProfitCycleAllocator:
         try:
             if not self.matrix_mapper:
                 return {'error': 'Matrix mapper not available'}
-            
+
             # Allocate profit using matrix mapper
             allocation = self.matrix_mapper.allocate_profit(profit_amount, market_data)
-            
+
             if allocation:
                 return {
                     'success': True,
@@ -660,7 +670,7 @@ class ProfitCycleAllocator:
                 }
             else:
                 return {'error': 'Matrix allocation failed'}
-                
+
         except Exception as e:
             logger.error(f"Error integrating with matrix mapper: {e}")
             return {'error': str(e)}
@@ -668,7 +678,7 @@ class ProfitCycleAllocator:
     def rebalance(self, profit: float, volatility: float) -> dict:
         """
         Rebalance profit allocation based on profit and volatility.
-        
+
         Mathematical Formula:
         if profit > 0.12:
             return {"BTC": profit * 0.75, "USDC": profit * 0.25}
@@ -676,11 +686,11 @@ class ProfitCycleAllocator:
             return {"USDC": profit * 0.6, "XRP": profit * 0.4}
         else:
             return {"XRP": profit * 1.0}
-        
+
         Args:
             profit: Profit amount to rebalance
             volatility: Market volatility
-            
+
         Returns:
             dict: Asset allocation weights
         """
@@ -692,22 +702,23 @@ class ProfitCycleAllocator:
                     "USDC": profit * 0.25
                 }
                 safe_safe_print(f"🟢 High profit rebalance: BTC={allocation['BTC']:.4f}, USDC={allocation['USDC']:.4f}")
-                
+
             elif volatility > 0.3:
                 # High volatility scenario - allocate to USDC and XRP
                 allocation = {
                     "USDC": profit * 0.6,
                     "XRP": profit * 0.4
                 }
-                safe_safe_print(f"🟡 High volatility rebalance: USDC={allocation['USDC']:.4f}, XRP={allocation['XRP']:.4f}")
-                
+                safe_safe_print(
+                    f"🟡 High volatility rebalance: USDC={allocation['USDC']:.4f}, XRP={allocation['XRP']:.4f}")
+
             else:
                 # Normal scenario - allocate to XRP
                 allocation = {
                     "XRP": profit * 1.0
                 }
                 safe_safe_print(f"🔵 Normal rebalance: XRP={allocation['XRP']:.4f}")
-            
+
             # Store rebalance in history
             self.allocation_history.append({
                 'timestamp': datetime.now().isoformat(),
@@ -716,16 +727,17 @@ class ProfitCycleAllocator:
                 'volatility': volatility,
                 'allocation': allocation
             })
-            
+
             return allocation
-            
+
         except Exception as e:
             logger.error(f"Error in rebalance: {e}")
             # Default allocation on error
             return {"USDC": profit * 1.0}
 
+
 def allocate_profit_cycle(
-    execution_packet: Dict[str, Any], 
+    execution_packet: Dict[str, Any],
     cycles: Sequence[str] | None = None,
     market_data: Optional[Dict[str, Any]] = None
 ) -> ProfitAllocationResult:
@@ -733,8 +745,9 @@ def allocate_profit_cycle(
     allocator = ProfitCycleAllocator()
     return allocator.allocate(execution_packet, cycles, market_data)
 
+
 def allocate_profit_cycle_legacy(
-    execution_packet: Dict[str, Any], 
+    execution_packet: Dict[str, Any],
     cycles: Sequence[str] | None = None
 ) -> Dict[str, Any]:
     """Legacy profit cycle allocation for backward compatibility."""
@@ -748,10 +761,11 @@ def allocate_profit_cycle_legacy(
     except Exception as e:
         return {'error': str(e)}
 
+
 if __name__ == "__main__":
     # Test enhanced profit cycle allocator
     allocator = ProfitCycleAllocator()
-    
+
     # Test execution packet
     test_packet = {
         "tick": 1000,
@@ -761,7 +775,7 @@ if __name__ == "__main__":
         "profit_delta": 100.0,
         "volume": 1000.0
     }
-    
+
     # Test market data
     test_market_data = {
         "current_price": 45000.0,
@@ -775,10 +789,10 @@ if __name__ == "__main__":
         "volume_usdc": 8000.0,
         "volume_sol": 1500.0
     }
-    
+
     # Test allocation
     result = allocator.allocate(test_packet, ["cycle_1", "cycle_2"], test_market_data)
-    
+
     safe_print("Allocation Result:")
     safe_print(f"Success: {result.success}")
     safe_print(f"Matrix Basket ID: {result.matrix_basket_id}")
@@ -786,7 +800,7 @@ if __name__ == "__main__":
     safe_print(f"Bit Phase: {result.bit_phase}")
     safe_print(f"ZPE Efficiency: {result.zpe_efficiency}")
     safe_print(f"Total Profit: {result.total_profit}")
-    
+
     # Get statistics
     stats = allocator.get_allocation_statistics()
     safe_print(f"\nAllocation Statistics: {stats}")

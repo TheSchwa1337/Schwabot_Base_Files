@@ -37,11 +37,13 @@ import time
 
 logger = logging.getLogger(__name__)
 
+
 class SentimentType(Enum):
     POSITIVE = "positive"
     NEGATIVE = "negative"
     NEUTRAL = "neutral"
     MIXED = "mixed"
+
 
 class NewsCategory(Enum):
     ECONOMIC = "economic"
@@ -52,12 +54,14 @@ class NewsCategory(Enum):
     CRYPTO = "crypto"
     GENERAL = "general"
 
+
 class ImpactLevel(Enum):
     CRITICAL = "critical"
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
     MINIMAL = "minimal"
+
 
 @dataclass
 class NewsItem:
@@ -76,6 +80,7 @@ class NewsItem:
     confidence_score: float
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class SentimentAnalysis:
     sentiment_score: float
@@ -88,6 +93,7 @@ class SentimentAnalysis:
     market_impact_prediction: float
     volatility_prediction: float
 
+
 @dataclass
 class MarketImpactPrediction:
     symbol: str
@@ -98,6 +104,7 @@ class MarketImpactPrediction:
     impact_factors: Dict[str, float]
     mathematical_indicators: Dict[str, float]
 
+
 @dataclass
 class SentimentCorrelation:
     symbol: str
@@ -107,6 +114,7 @@ class SentimentCorrelation:
     sample_size: int
     trend_direction: str
     mathematical_confidence: float
+
 
 class LanternNewsIntelligenceBridge:
     def __init__(self, config_path: str = "./config/lantern_config.json"):
@@ -131,21 +139,21 @@ class LanternNewsIntelligenceBridge:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-                
+
                 self.news_sources = config.get("news_sources", {})
                 self.sentiment_keywords = {
-                    SentimentType(sentiment): keywords 
+                    SentimentType(sentiment): keywords
                     for sentiment, keywords in config.get("sentiment_keywords", {}).items()
                 }
-                
+
                 # Load entity recognition patterns
                 patterns = config.get("entity_patterns", [])
                 self.entity_recognition_patterns = [re.compile(pattern) for pattern in patterns]
-                
+
                 logger.info(f"Loaded configuration for {len(self.news_sources)} news sources")
             else:
                 self._create_default_configuration()
-                
+
         except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self._create_default_configuration()
@@ -169,7 +177,7 @@ class LanternNewsIntelligenceBridge:
                 "categories": ["crypto", "markets", "technology"]
             }
         }
-        
+
         self.sentiment_keywords = {
             SentimentType.POSITIVE: [
                 "bullish", "surge", "rally", "gain", "profit", "growth", "positive",
@@ -184,14 +192,14 @@ class LanternNewsIntelligenceBridge:
                 "development", "research", "study", "analysis", "report"
             ]
         }
-        
+
         self.entity_recognition_patterns = [
             re.compile(r'\b[A-Z]{2,}\b'),  # Acronyms
             re.compile(r'\$[A-Z]+\b'),     # Stock symbols
             re.compile(r'\b\d+\.\d+\b'),   # Numbers
             re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')  # Proper nouns
         ]
-        
+
         self._save_configuration()
         logger.info("Default configuration created")
 
@@ -202,7 +210,7 @@ class LanternNewsIntelligenceBridge:
             config = {
                 "news_sources": self.news_sources,
                 "sentiment_keywords": {
-                    sentiment.value: keywords 
+                    sentiment.value: keywords
                     for sentiment, keywords in self.sentiment_keywords.items()
                 },
                 "entity_patterns": [pattern.pattern for pattern in self.entity_recognition_patterns]
@@ -233,7 +241,7 @@ class LanternNewsIntelligenceBridge:
                     time.sleep(1)
                 except Exception as e:
                     logger.error(f"Error in news processor: {e}")
-        
+
         def correlation_processor():
             while True:
                 try:
@@ -241,13 +249,13 @@ class LanternNewsIntelligenceBridge:
                     time.sleep(300)  # Update every 5 minutes
                 except Exception as e:
                     logger.error(f"Error in correlation processor: {e}")
-        
+
         self.news_processor_thread = threading.Thread(target=news_processor, daemon=True)
         self.correlation_processor_thread = threading.Thread(target=correlation_processor, daemon=True)
-        
+
         self.news_processor_thread.start()
         self.correlation_processor_thread.start()
-        
+
         logger.info("Background processors started")
 
     def set_api_bridge(self, api_bridge: Any) -> None:
@@ -256,10 +264,10 @@ class LanternNewsIntelligenceBridge:
         logger.info("API bridge integrated with Lantern News Intelligence Bridge")
 
     def add_news_item(self, title: str, content: str, source: str, url: str,
-                     published_at: datetime, category: NewsCategory) -> str:
+                      published_at: datetime, category: NewsCategory) -> str:
         """Add a news item for processing."""
         news_id = self._generate_news_id(title, source, published_at)
-        
+
         news_data = {
             "news_id": news_id,
             "title": title,
@@ -269,7 +277,7 @@ class LanternNewsIntelligenceBridge:
             "published_at": published_at,
             "category": category
         }
-        
+
         self.processing_queue.append(news_data)
         logger.debug(f"News item queued: {news_id}")
         return news_id
@@ -284,21 +292,21 @@ class LanternNewsIntelligenceBridge:
         try:
             # Perform sentiment analysis
             sentiment_analysis = self._analyze_sentiment(
-                news_data["title"], 
+                news_data["title"],
                 news_data["content"]
             )
-            
+
             # Extract entities and keywords
             entities = self._extract_entities(news_data["title"] + " " + news_data["content"])
             keywords = self._extract_keywords(news_data["title"] + " " + news_data["content"])
-            
+
             # Determine impact level
             impact_level = self._determine_impact_level(
-                sentiment_analysis, 
-                news_data["category"], 
+                sentiment_analysis,
+                news_data["category"],
                 entities
             )
-            
+
             # Create news item
             news_item = NewsItem(
                 news_id=news_data["news_id"],
@@ -319,17 +327,17 @@ class LanternNewsIntelligenceBridge:
                     "volatility_prediction": sentiment_analysis.volatility_prediction
                 }
             )
-            
+
             # Store in cache
             self.news_cache[news_item.news_id] = news_item
-            
+
             # Update sentiment history for relevant symbols
             for entity in entities:
                 if self._is_trading_symbol(entity):
                     self._update_sentiment_history(entity, news_item)
-            
+
             logger.info(f"News item processed: {news_item.news_id} ({sentiment_analysis.sentiment_type.value})")
-            
+
         except Exception as e:
             logger.error(f"Error processing news item: {e}")
 
@@ -337,15 +345,15 @@ class LanternNewsIntelligenceBridge:
         """Analyze sentiment of news content using mathematical models."""
         # Combine title and content
         full_text = f"{title} {content}".lower()
-        
+
         # Count sentiment keywords
-        positive_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.POSITIVE] 
-                           if keyword.lower() in full_text)
-        negative_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.NEGATIVE] 
-                           if keyword.lower() in full_text)
-        neutral_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.NEUTRAL] 
-                          if keyword.lower() in full_text)
-        
+        positive_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.POSITIVE]
+                             if keyword.lower() in full_text)
+        negative_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.NEGATIVE]
+                             if keyword.lower() in full_text)
+        neutral_count = sum(1 for keyword in self.sentiment_keywords[SentimentType.NEUTRAL]
+                            if keyword.lower() in full_text)
+
         # Calculate sentiment score using mathematical formula
         total_words = len(full_text.split())
         if total_words == 0:
@@ -353,7 +361,7 @@ class LanternNewsIntelligenceBridge:
         else:
             # Normalized sentiment score between -1 and 1
             sentiment_score = (positive_count - negative_count) / (positive_count + negative_count + neutral_count + 1)
-        
+
         # Determine sentiment type
         if sentiment_score > 0.1:
             sentiment_type = SentimentType.POSITIVE
@@ -361,19 +369,19 @@ class LanternNewsIntelligenceBridge:
             sentiment_type = SentimentType.NEGATIVE
         else:
             sentiment_type = SentimentType.NEUTRAL
-        
+
         # Calculate confidence score
         total_sentiment_words = positive_count + negative_count + neutral_count
         confidence_score = unified_math.min(1.0, total_sentiment_words / 10.0)  # Normalize to 0-1
-        
+
         # Extract keywords by sentiment
-        positive_keywords = [kw for kw in self.sentiment_keywords[SentimentType.POSITIVE] 
-                           if kw.lower() in full_text]
-        negative_keywords = [kw for kw in self.sentiment_keywords[SentimentType.NEGATIVE] 
-                           if kw.lower() in full_text]
-        neutral_keywords = [kw for kw in self.sentiment_keywords[SentimentType.NEUTRAL] 
-                          if kw.lower() in full_text]
-        
+        positive_keywords = [kw for kw in self.sentiment_keywords[SentimentType.POSITIVE]
+                             if kw.lower() in full_text]
+        negative_keywords = [kw for kw in self.sentiment_keywords[SentimentType.NEGATIVE]
+                             if kw.lower() in full_text]
+        neutral_keywords = [kw for kw in self.sentiment_keywords[SentimentType.NEUTRAL]
+                            if kw.lower() in full_text]
+
         # Sentiment breakdown
         sentiment_breakdown = {
             "positive": positive_count,
@@ -381,11 +389,11 @@ class LanternNewsIntelligenceBridge:
             "neutral": neutral_count,
             "total": total_sentiment_words
         }
-        
+
         # Predict market impact using mathematical models
         market_impact_prediction = self._predict_market_impact(sentiment_score, confidence_score)
         volatility_prediction = self._predict_volatility_impact(sentiment_score, confidence_score)
-        
+
         return SentimentAnalysis(
             sentiment_score=sentiment_score,
             sentiment_type=sentiment_type,
@@ -401,11 +409,11 @@ class LanternNewsIntelligenceBridge:
     def _extract_entities(self, text: str) -> List[str]:
         """Extract entities from text using pattern matching."""
         entities = set()
-        
+
         for pattern in self.entity_recognition_patterns:
             matches = pattern.findall(text)
             entities.update(matches)
-        
+
         return list(entities)
 
     def _extract_keywords(self, text: str) -> List[str]:
@@ -413,21 +421,21 @@ class LanternNewsIntelligenceBridge:
         # Simple keyword extraction - in a real system, you'd use NLP libraries
         words = text.lower().split()
         word_freq = defaultdict(int)
-        
+
         for word in words:
             if len(word) > 3:  # Filter out short words
                 word_freq[word] += 1
-        
+
         # Return top keywords
         sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
         return [word for word, freq in sorted_words[:10]]
 
     def _determine_impact_level(self, sentiment_analysis: SentimentAnalysis,
-                              category: NewsCategory, entities: List[str]) -> ImpactLevel:
+                                category: NewsCategory, entities: List[str]) -> ImpactLevel:
         """Determine the impact level of a news item."""
         # Base impact from sentiment
         base_impact = unified_math.abs(sentiment_analysis.sentiment_score) * sentiment_analysis.confidence_score
-        
+
         # Category multiplier
         category_multipliers = {
             NewsCategory.ECONOMIC: 1.5,
@@ -438,10 +446,10 @@ class LanternNewsIntelligenceBridge:
             NewsCategory.TECHNICAL: 0.8,
             NewsCategory.GENERAL: 0.6
         }
-        
+
         multiplier = category_multipliers.get(category, 1.0)
         adjusted_impact = base_impact * multiplier
-        
+
         # Determine impact level
         if adjusted_impact > 0.8:
             return ImpactLevel.CRITICAL
@@ -459,7 +467,7 @@ class LanternNewsIntelligenceBridge:
         # Simple linear model - in a real system, you'd use more sophisticated models
         base_impact = sentiment_score * 0.05  # 5% max impact
         confidence_adjustment = confidence_score * 0.02  # Additional 2% for high confidence
-        
+
         return base_impact + confidence_adjustment
 
     def _predict_volatility_impact(self, sentiment_score: float, confidence_score: float) -> float:
@@ -467,7 +475,7 @@ class LanternNewsIntelligenceBridge:
         # Volatility increases with sentiment extremity and confidence
         sentiment_extremity = unified_math.abs(sentiment_score)
         volatility_impact = sentiment_extremity * confidence_score * 0.1
-        
+
         return volatility_impact
 
     def _is_trading_symbol(self, entity: str) -> bool:
@@ -484,26 +492,26 @@ class LanternNewsIntelligenceBridge:
             "impact_level": news_item.impact_level.value,
             "confidence_score": news_item.confidence_score
         }
-        
+
         self.sentiment_history[symbol].append(sentiment_data)
 
     def get_sentiment_analysis(self, symbol: str, hours: int = 24) -> Dict[str, Any]:
         """Get sentiment analysis for a trading symbol."""
         if symbol not in self.sentiment_history:
             return {"error": "No sentiment data available"}
-        
+
         cutoff_time = datetime.now() - timedelta(hours=hours)
         recent_sentiments = [
             data for data in self.sentiment_history[symbol]
             if data["timestamp"] >= cutoff_time
         ]
-        
+
         if not recent_sentiments:
             return {"error": "No recent sentiment data"}
-        
+
         # Calculate mathematical indicators
         sentiment_scores = [data["sentiment_score"] for data in recent_sentiments]
-        
+
         analysis = {
             "symbol": symbol,
             "time_period_hours": hours,
@@ -514,18 +522,18 @@ class LanternNewsIntelligenceBridge:
             "recent_sentiments": recent_sentiments[-10:],  # Last 10 items
             "mathematical_indicators": self._calculate_mathematical_indicators(symbol, sentiment_scores)
         }
-        
+
         return analysis
 
     def _calculate_sentiment_trend(self, sentiment_scores: List[float]) -> str:
         """Calculate sentiment trend direction."""
         if len(sentiment_scores) < 2:
             return "insufficient_data"
-        
+
         # Linear regression slope
         x = np.arange(len(sentiment_scores))
         slope = np.polyfit(x, sentiment_scores, 1)[0]
-        
+
         if slope > 0.01:
             return "increasing"
         elif slope < -0.01:
@@ -537,9 +545,9 @@ class LanternNewsIntelligenceBridge:
         """Calculate mathematical sentiment indicators."""
         if len(sentiment_scores) < 5:
             return {}
-        
+
         scores_array = np.array(sentiment_scores)
-        
+
         indicators = {
             "exponential_moving_average": self._calculate_ema(scores_array, 0.3),
             "sentiment_momentum": self._calculate_momentum(scores_array),
@@ -548,25 +556,25 @@ class LanternNewsIntelligenceBridge:
             "sentiment_skewness": self._calculate_skewness(scores_array),
             "sentiment_kurtosis": self._calculate_kurtosis(scores_array)
         }
-        
+
         return indicators
 
     def _calculate_ema(self, data: np.ndarray, alpha: float) -> float:
         """Calculate exponential moving average."""
         if len(data) == 0:
             return 0.0
-        
+
         ema = data[0]
         for value in data[1:]:
             ema = alpha * value + (1 - alpha) * ema
-        
+
         return ema
 
     def _calculate_momentum(self, data: np.ndarray) -> float:
         """Calculate momentum (rate of change)."""
         if len(data) < 2:
             return 0.0
-        
+
         return data[-1] - data[0]
 
     def _calculate_skewness(self, data: np.ndarray) -> float:
@@ -575,7 +583,7 @@ class LanternNewsIntelligenceBridge:
         std = unified_math.unified_math.std(data)
         if std == 0:
             return 0.0
-        
+
         skewness = unified_math.mean(((data - mean) / std) ** 3)
         return skewness
 
@@ -585,7 +593,7 @@ class LanternNewsIntelligenceBridge:
         std = unified_math.unified_math.std(data)
         if std == 0:
             return 0.0
-        
+
         kurtosis = unified_math.mean(((data - mean) / std) ** 4) - 3
         return kurtosis
 
@@ -601,32 +609,32 @@ class LanternNewsIntelligenceBridge:
                 impact_factors={},
                 mathematical_indicators={}
             )
-        
+
         # Aggregate sentiment scores
         sentiment_scores = [item.sentiment_score for item in news_items]
         confidence_scores = [item.confidence_score for item in news_items]
         impact_levels = [item.impact_level.value for item in news_items]
-        
+
         # Calculate weighted average sentiment
         weighted_sentiment = np.average(sentiment_scores, weights=confidence_scores)
-        
+
         # Predict price change
         base_price_change = weighted_sentiment * 0.03  # 3% max change
-        
+
         # Adjust for impact levels
         impact_multiplier = unified_math.mean([self._impact_level_multiplier(level) for level in impact_levels])
         predicted_price_change = base_price_change * impact_multiplier
-        
+
         # Predict volatility change
         sentiment_volatility = unified_math.unified_math.std(sentiment_scores)
         predicted_volatility_change = sentiment_volatility * 0.1
-        
+
         # Calculate confidence interval
         confidence_interval = (
             predicted_price_change - 0.01,
             predicted_price_change + 0.01
         )
-        
+
         # Impact factors
         impact_factors = {
             "sentiment_strength": unified_math.abs(weighted_sentiment),
@@ -634,14 +642,14 @@ class LanternNewsIntelligenceBridge:
             "news_volume": len(news_items),
             "average_confidence": unified_math.unified_math.mean(confidence_scores)
         }
-        
+
         # Mathematical indicators
         mathematical_indicators = {
             "sentiment_momentum": self._calculate_momentum(np.array(sentiment_scores)),
             "sentiment_acceleration": self._calculate_acceleration(np.array(sentiment_scores)),
             "impact_concentration": self._calculate_impact_concentration(impact_levels)
         }
-        
+
         return MarketImpactPrediction(
             symbol=symbol,
             predicted_price_change=predicted_price_change,
@@ -667,17 +675,17 @@ class LanternNewsIntelligenceBridge:
         """Calculate acceleration (second derivative)."""
         if len(data) < 3:
             return 0.0
-        
+
         # Second difference
         first_diff = np.diff(data)
         second_diff = np.diff(first_diff)
-        
+
         return unified_math.unified_math.mean(second_diff)
 
     def _calculate_impact_concentration(self, impact_levels: List[str]) -> float:
         """Calculate concentration of high-impact news."""
-        high_impact_count = sum(1 for level in impact_levels 
-                              if level in ["critical", "high"])
+        high_impact_count = sum(1 for level in impact_levels
+                                if level in ["critical", "high"])
         return high_impact_count / len(impact_levels) if impact_levels else 0.0
 
     def _update_correlations(self) -> None:
@@ -692,12 +700,12 @@ class LanternNewsIntelligenceBridge:
         sentiment_distribution = defaultdict(int)
         category_distribution = defaultdict(int)
         impact_distribution = defaultdict(int)
-        
+
         for news_item in self.news_cache.values():
             sentiment_distribution[news_item.sentiment_type.value] += 1
             category_distribution[news_item.category.value] += 1
             impact_distribution[news_item.impact_level.value] += 1
-        
+
         return {
             "total_news_items": total_news,
             "sentiment_distribution": dict(sentiment_distribution),
@@ -707,10 +715,11 @@ class LanternNewsIntelligenceBridge:
             "processing_queue_size": len(self.processing_queue)
         }
 
+
 def main() -> None:
     """Main function for testing and demonstration."""
     bridge = LanternNewsIntelligenceBridge("./test_lantern_config.json")
-    
+
     # Add some test news items
     test_news = [
         {
@@ -730,21 +739,22 @@ def main() -> None:
             "category": NewsCategory.REGULATORY
         }
     ]
-    
+
     for news in test_news:
         news_id = bridge.add_news_item(**news)
         safe_print(f"Added news item: {news_id}")
-    
+
     # Wait for processing
     time.sleep(2)
-    
+
     # Get sentiment analysis
     sentiment = bridge.get_sentiment_analysis("BTC", hours=24)
     safe_print(f"BTC Sentiment Analysis: {sentiment}")
-    
+
     # Get statistics
     stats = bridge.get_news_statistics()
     safe_print(f"News Statistics: {stats}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

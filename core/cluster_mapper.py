@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from sklearn.metrics import silhouette_score, calinski_harabasz_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, SpectralClustering
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import numpy as np
 import math
@@ -11,43 +20,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """Cluster Mapper - Mathematical Clustering for Market Data Analysis.
 
@@ -66,15 +82,7 @@ Mathematical Foundation:
 - Custom mathematical distance metrics
 """
 
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering, SpectralClustering
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import silhouette_score, calinski_harabasz_score
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +90,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ClusterPoint:
 
-
     """Represents a data point in clustering space."""
+
+
 point_id: str
 coordinates: np.ndarray
 features: Dict[str, float]
@@ -94,8 +103,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class Cluster:
 
-
     """Represents a cluster of data points."""
+
+
 cluster_id: int
 centroid: np.ndarray
 points: List[ClusterPoint]
@@ -109,8 +119,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class ClusteringResult:
 
-
     """Result of clustering analysis."""
+
+
 clusters: List[Cluster]
 unassigned_points: List[ClusterPoint]
 algorithm: str
@@ -122,7 +133,6 @@ timestamp: datetime = field(default_factory=datetime.now)
 
 class ClusterMapper:
 
-
     """
 Advanced clustering system for market data analysis.
 
@@ -133,12 +143,14 @@ Provides multiple clustering algorithms optimized for:
 - Price movement categorization
 """
 
-def __init__(self):
 
+def __init__(self):
 
     pass
     pass
         """Initialize cluster mapper."""
+
+
 self.supported_algorithms = {
 'kmeans': self._kmeans_clustering,
 'dbscan': self._dbscan_clustering,
@@ -152,6 +164,7 @@ self.max_history = 100
 
 logger.info("ClusterMapper initialized")
 
+
 def create_cluster_point(
 
 
@@ -161,6 +174,7 @@ coordinates: Union[List[float], np.ndarray],
 features: Optional[Dict[str, float]] = None,
 metadata: Optional[Dict[str, Any]] = None
 ) -> ClusterPoint:
+
 """
 Create a cluster point from data.
 
@@ -202,8 +216,8 @@ def cluster_market_data(
 
         self,
 data_points: List[ClusterPoint],
-algorithm: str = 'kmeans',
-n_clusters: int = 5,
+algorithm: str='kmeans',
+n_clusters: int=5,
 **kwargs
 ) -> ClusteringResult:
 """
@@ -225,7 +239,7 @@ Returns:
 ClusteringResult
 Clustering analysis result
 """
-start_time = time.time()
+start_time=time.time()
 
         try:
             if not data_points:
@@ -235,24 +249,24 @@ start_time = time.time()
                 raise ValueError(f"Unsupported algorithm: {algorithm}")
 
             # Extract coordinates for clustering
-coordinates = np.array([point.coordinates for point in data_points])
+coordinates=np.array([point.coordinates for point in data_points])
 
             # Perform clustering
-cluster_labels = self.supported_algorithms[algorithm](]
+cluster_labels=self.supported_algorithms[algorithm](]
                 coordinates, n_clusters, **kwargs
 
 
             # Create clusters from labels
-clusters = self._create_clusters_from_labels(
+clusters=self._create_clusters_from_labels(
                 data_points, cluster_labels, coordinates
 
 
             # Calculate quality metrics
-quality_metrics = self._calculate_quality_metrics(coordinates, cluster_labels)
+quality_metrics=self._calculate_quality_metrics(coordinates, cluster_labels)
 
-processing_time = time.time() - start_time
+processing_time=time.time() - start_time
 
-result = ClusteringResult(
+result=ClusteringResult(
                 clusters=clusters,
 unassigned_points=[],  # Will be populated if needed
 algorithm=algorithm,
@@ -289,7 +303,7 @@ n_clusters: int,
 ) -> np.ndarray:
 """Perform K-means clustering."""
         try:
-kmeans = KMeans(
+kmeans=KMeans(
                 n_clusters=n_clusters,
 random_state=42,
 n_init=10,
@@ -306,13 +320,13 @@ def _dbscan_clustering(
         self,
 coordinates: np.ndarray,
 n_clusters: int,
-eps: float = 0.5,
-min_samples: int = 5,
+eps: float=0.5,
+min_samples: int=5,
 **kwargs
 ) -> np.ndarray:
 """Perform DBSCAN clustering."""
         try:
-dbscan = DBSCAN(
+dbscan=DBSCAN(
                 eps=eps,
 min_samples=min_samples,
 **kwargs
@@ -332,7 +346,7 @@ n_clusters: int,
 ) -> np.ndarray:
 """Perform hierarchical clustering."""
         try:
-hierarchical = AgglomerativeClustering(
+hierarchical=AgglomerativeClustering(
                 n_clusters=n_clusters,
 **kwargs
 
@@ -351,7 +365,7 @@ n_clusters: int,
 ) -> np.ndarray:
 """Perform spectral clustering."""
         try:
-spectral = SpectralClustering(
+spectral=SpectralClustering(
                 n_clusters=n_clusters,
 random_state=42,
 **kwargs
@@ -390,38 +404,38 @@ labels: np.ndarray,
 coordinates: np.ndarray
 ) -> List[Cluster]:
 """Create Cluster objects from clustering labels."""
-clusters = []
+clusters=[]
 
         try:
-unique_labels = np.unique(labels)
+unique_labels=np.unique(labels)
 
             for label in unique_labels:
                 if label == -1:  # Noise points (DBSCAN)
                     continue
 
                 # Get points in this cluster
-cluster_mask = labels == label
-cluster_points = [data_points[i] for i in range(len(data_points)) if cluster_mask[i]]
-                cluster_coords = coordinates[cluster_mask]
+cluster_mask=labels == label
+cluster_points=[data_points[i] for i in range(len(data_points)) if cluster_mask[i]]
+                cluster_coords=coordinates[cluster_mask]
 
                 if len(cluster_points) == 0:
                     continue
 
                 # Calculate centroid
-centroid = unified_math.unified_math.mean(cluster_coords, axis=0)
+centroid=unified_math.unified_math.mean(cluster_coords, axis=0)
 
                 # Calculate radius (max distance from centroid)
-                distances = np.linalg.norm(cluster_coords - centroid, axis=1)
-                radius = unified_math.unified_math.max(distances) if len(distances) > 0 else 0.0
+                distances=np.linalg.norm(cluster_coords - centroid, axis=1)
+                radius=unified_math.unified_math.max(distances) if len(distances) > 0 else 0.0
 
                 # Calculate density
-density = len(cluster_points) / (np.pi * radius**2) if radius > 0 else 0.0
+density=len(cluster_points) / (np.pi * radius**2) if radius > 0 else 0.0
 
                 # Calculate confidence (based on cluster size and compactness)
-                confidence = unified_math.min(1.0, len(cluster_points) / 10.0) * (1.0 - radius / 10.0)
-                confidence = unified_math.max(0.0, confidence)
+                confidence=unified_math.min(1.0, len(cluster_points) / 10.0) * (1.0 - radius / 10.0)
+                confidence=unified_math.max(0.0, confidence)
 
-cluster = Cluster(
+cluster=Cluster(
                     cluster_id=int(label),
                     centroid=centroid,
 points=cluster_points,
@@ -448,32 +462,32 @@ labels: np.ndarray
 ) -> Dict[str, float]:
 """Calculate clustering quality metrics."""
         try:
-metrics = {}
+metrics={}
 
             # Silhouette score
             if len(np.unique(labels)) > 1:
                 try:
-metrics['silhouette_score'] = silhouette_score(coordinates, labels)
+metrics['silhouette_score']=silhouette_score(coordinates, labels)
                 except:
-metrics['silhouette_score'] = 0.0
+metrics['silhouette_score']=0.0
             else:
-metrics['silhouette_score'] = 0.0
+metrics['silhouette_score']=0.0
 
             # Calinski-Harabasz score
             if len(np.unique(labels)) > 1:
                 try:
-metrics['calinski_harabasz_score'] = calinski_harabasz_score(coordinates, labels)
+metrics['calinski_harabasz_score']=calinski_harabasz_score(coordinates, labels)
                 except:
-metrics['calinski_harabasz_score'] = 0.0
+metrics['calinski_harabasz_score']=0.0
             else:
-metrics['calinski_harabasz_score'] = 0.0
+metrics['calinski_harabasz_score']=0.0
 
             # Number of clusters
-metrics['n_clusters'] = len(np.unique(labels[labels != -1]))
+metrics['n_clusters']=len(np.unique(labels[labels != -1]))
 
             # Noise ratio (for DBSCAN)
-            noise_ratio = np.sum(labels == -1) / len(labels) if len(labels) > 0 else 0.0
-            metrics['noise_ratio'] = noise_ratio
+            noise_ratio=np.sum(labels == -1) / len(labels) if len(labels) > 0 else 0.0
+            metrics['noise_ratio']=noise_ratio
 
             return metrics
 
@@ -508,18 +522,18 @@ Pattern analysis result
 """
         try:
             # Create feature vectors for clustering
-data_points = []
+data_points=[]
 
             for i in range(len(price_data)):
                 if i < len(volume_data) and i < len(volatility_data):
                     # Create feature vector: [price_change, volume, volatility]
-price_change = price_data[i].get('change', 0.0)
-                    volume = volume_data[i]
-volatility = volatility_data[i]
+price_change=price_data[i].get('change', 0.0)
+                    volume=volume_data[i]
+volatility=volatility_data[i]
 
-coordinates = [price_change, volume, volatility]
+coordinates=[price_change, volume, volatility]
 
-point = self.create_cluster_point(
+point=self.create_cluster_point(
                         point_id=f"pattern_{i}",
 coordinates=coordinates,
 features={
@@ -554,25 +568,25 @@ def get_clustering_statistics(self) -> Dict[str, Any]:
         if not self.clustering_history:
             return {"error": "No clustering history available"}
 
-total_analyses = len(self.clustering_history)
-        total_clusters = sum(len(result.clusters) for result in self.clustering_history)
-        total_points = sum(
+total_analyses=len(self.clustering_history)
+        total_clusters=sum(len(result.clusters) for result in self.clustering_history)
+        total_points=sum(
             sum(len(cluster.points) for cluster in result.clusters)
             for result in self.clustering_history
 
 
         # Algorithm usage statistics
-algorithm_counts = {}
+algorithm_counts={}
         for result in self.clustering_history:
-algorithm_counts[result.algorithm] = algorithm_counts.get(result.algorithm, 0) + 1
+algorithm_counts[result.algorithm]=algorithm_counts.get(result.algorithm, 0) + 1
 
         # Average quality metrics
-avg_silhouette = unified_math.mean([
+avg_silhouette=unified_math.mean([
             result.quality_metrics.get('silhouette_score', 0.0)
             for result in self.clustering_history
 ])
 
-avg_processing_time = unified_math.mean([
+avg_processing_time=unified_math.mean([
             result.processing_time for result in self.clustering_history
 ])
 
@@ -595,17 +609,17 @@ def main() -> None:
     """Test function for ClusterMapper."""
 safe_print("🗺️ Testing Cluster Mapper...")
 
-mapper = ClusterMapper()
+mapper=ClusterMapper()
 
     # Create sample market data points
-data_points = []
+data_points=[]
     for i in range(100):
         # Simulate market data: [price_change, volume, volatility]
-price_change = np.random.normal(0, 1)
-        volume = np.random.uniform(1000, 10000)
-        volatility = np.random.uniform(0.01, 0.1)
+price_change=np.random.normal(0, 1)
+        volume=np.random.uniform(1000, 10000)
+        volatility=np.random.uniform(0.01, 0.1)
 
-point = mapper.create_cluster_point(
+point=mapper.create_cluster_point(
             point_id=f"market_point_{i}",
 coordinates=[price_change, volume, volatility],
 features={
@@ -617,7 +631,7 @@ features={
 data_points.append(point)
 
     # Test clustering
-result = mapper.cluster_market_data(data_points, 'kmeans', n_clusters=3)
+result=mapper.cluster_market_data(data_points, 'kmeans', n_clusters=3)
     safe_print("✅ Clustering completed:")
     safe_print(f"   Algorithm: {result.algorithm}")
     safe_print(f"   Clusters found: {len(result.clusters)}")
@@ -625,16 +639,16 @@ result = mapper.cluster_market_data(data_points, 'kmeans', n_clusters=3)
     safe_print(f"   Silhouette score: {result.quality_metrics.get('silhouette_score', 0.0):.4f}")
 
     # Test trading pattern analysis
-price_data = [{'change': np.random.normal(0, 1)} for _ in range(50)]
-    volume_data = [np.random.uniform(1000, 10000) for _ in range(50)]
-    volatility_data = [np.random.uniform(0.01, 0.1) for _ in range(50)]
+price_data=[{'change': np.random.normal(0, 1)} for _ in range(50)]
+    volume_data=[np.random.uniform(1000, 10000) for _ in range(50)]
+    volatility_data=[np.random.uniform(0.01, 0.1) for _ in range(50)]
 
-pattern_result = mapper.analyze_trading_patterns(price_data, volume_data, volatility_data)
+pattern_result=mapper.analyze_trading_patterns(price_data, volume_data, volatility_data)
     safe_print("✅ Pattern analysis completed:")
     safe_print(f"   Patterns found: {len(pattern_result.clusters)}")
 
     # Get statistics
-stats = mapper.get_clustering_statistics()
+stats=mapper.get_clustering_statistics()
     safe_print(f"📊 Clustering statistics: {stats}")
 
     return 0

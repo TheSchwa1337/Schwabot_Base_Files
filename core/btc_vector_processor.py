@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-\n"""
 BTC Vector Processor - Schwabot UROS v1.0
-========================================
+== == == == == == == == == == == == == == == == == == == ==
 
 Unified BTC processor for ghost array integration with volatility-aware signal processing.
 Provides real-time BTC/USDC analysis and strategy hash generation.

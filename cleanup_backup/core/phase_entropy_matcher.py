@@ -18,6 +18,7 @@ from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class PhaseEntropyMatch:
     """Result of phase-entropy matching."""
@@ -27,6 +28,7 @@ class PhaseEntropyMatch:
     basket_id: str
     priority_score: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class EntropyAnalysis:
@@ -38,44 +40,45 @@ class EntropyAnalysis:
     pattern_confidence: float
     timestamp: datetime
 
+
 class PhaseEntropyMatcher:
     """
     Matcher for connecting bit patterns with entropy analysis.
-    
+
     Features:
     - Phase weight matrix calculations
     - Entropy-aware bit pattern analysis
     - Trade priority scoring
     - Basket-specific routing decisions
     """
-    
+
     def __init__(self):
         self.entropy_thresholds = {
             'low': 2.0,
             'medium': 4.0,
             'high': 6.0
         }
-        
+
         self.priority_weights = {
             'entropy': 0.4,
             'bit_complexity': 0.3,
             'pattern_stability': 0.2,
             'basket_affinity': 0.1
         }
-        
+
         self.match_history: List[PhaseEntropyMatch] = []
         self.entropy_history: List[EntropyAnalysis] = []
-        
+
         logger.info("Phase Entropy Matcher initialized")
 
     def phase_weight_matrix(self, bit_pattern: List[int], entropy: float) -> float:
         """
         Calculate phase weight matrix score.
-        
+
         Args:
             bit_pattern: List of bit values
             entropy: Entropy value
-            
+
         Returns:
             float: Phase weight score
         """
@@ -83,43 +86,43 @@ class PhaseEntropyMatcher:
             if not bit_pattern:
                 logger.warning("Empty bit pattern, returning 0")
                 return 0.0
-            
+
             # Calculate bit score
             bit_score = sum(bit_pattern)
-            
+
             # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + ε)
             phase_weight = (bit_score * entropy) / (len(bit_pattern) + 1e-6)
-            
+
             logger.debug(f"Phase weight: {phase_weight:.4f} (bit_score: {bit_score}, entropy: {entropy:.4f})")
             return phase_weight
-            
+
         except Exception as e:
             logger.error(f"Error calculating phase weight matrix: {e}")
             return 0.0
 
-    def match_phase_entropy(self, bit_pattern: List[int], entropy: float, 
-                          basket_id: str, market_conditions: Dict[str, Any]) -> PhaseEntropyMatch:
+    def match_phase_entropy(self, bit_pattern: List[int], entropy: float,
+                            basket_id: str, market_conditions: Dict[str, Any]) -> PhaseEntropyMatch:
         """
         Match bit pattern with entropy for trade priority determination.
-        
+
         Args:
             bit_pattern: List of bit values
             entropy: Entropy value
             basket_id: Target basket identifier
             market_conditions: Market condition parameters
-            
+
         Returns:
             PhaseEntropyMatch: Matching result with priority score
         """
         try:
             # Calculate phase weight
             phase_weight = self.phase_weight_matrix(bit_pattern, entropy)
-            
+
             # Calculate priority score
             priority_score = self._calculate_priority_score(
                 bit_pattern, entropy, phase_weight, basket_id, market_conditions
             )
-            
+
             # Create match result
             match = PhaseEntropyMatch(
                 bit_pattern=bit_pattern,
@@ -134,13 +137,13 @@ class PhaseEntropyMatcher:
                     'entropy_category': self._categorize_entropy(entropy)
                 }
             )
-            
+
             # Store in history
             self.match_history.append(match)
-            
+
             logger.info(f"Phase-entropy match: priority={priority_score:.4f}, basket={basket_id}")
             return match
-            
+
         except Exception as e:
             logger.error(f"Error matching phase entropy: {e}")
             return PhaseEntropyMatch(
@@ -151,9 +154,9 @@ class PhaseEntropyMatcher:
                 priority_score=0.0
             )
 
-    def _calculate_priority_score(self, bit_pattern: List[int], entropy: float, 
-                                phase_weight: float, basket_id: str, 
-                                market_conditions: Dict[str, Any]) -> float:
+    def _calculate_priority_score(self, bit_pattern: List[int], entropy: float,
+                                  phase_weight: float, basket_id: str,
+                                  market_conditions: Dict[str, Any]) -> float:
         """Calculate priority score for trade routing."""
         try:
             # Calculate component scores
@@ -161,7 +164,7 @@ class PhaseEntropyMatcher:
             bit_complexity_score = self._calculate_bit_complexity_score(bit_pattern)
             pattern_stability_score = self._calculate_pattern_stability_score(bit_pattern)
             basket_affinity_score = self._calculate_basket_affinity_score(basket_id, market_conditions)
-            
+
             # Weighted combination
             priority_score = (
                 entropy_score * self.priority_weights['entropy'] +
@@ -169,10 +172,10 @@ class PhaseEntropyMatcher:
                 pattern_stability_score * self.priority_weights['pattern_stability'] +
                 basket_affinity_score * self.priority_weights['basket_affinity']
             )
-            
+
             # Normalize to [0, 1] range
             return unified_math.max(0.0, unified_math.min(1.0, priority_score))
-            
+
         except Exception as e:
             logger.error(f"Error calculating priority score: {e}")
             return 0.0
@@ -183,12 +186,12 @@ class PhaseEntropyMatcher:
             # Normalize entropy to [0, 1] range
             # Assume maximum useful entropy is around 8.0
             normalized_entropy = unified_math.min(entropy / 8.0, 1.0)
-            
+
             # Apply sigmoid-like transformation for better distribution
             score = 1.0 / (1.0 + unified_math.exp(-3.0 * (normalized_entropy - 0.5)))
-            
+
             return score
-            
+
         except Exception as e:
             logger.error(f"Error calculating entropy score: {e}")
             return 0.5
@@ -198,23 +201,23 @@ class PhaseEntropyMatcher:
         try:
             if not bit_pattern:
                 return 0.0
-            
+
             # Calculate various complexity metrics
             bit_sum = sum(bit_pattern)
             bit_variance = unified_math.unified_math.var(bit_pattern) if len(bit_pattern) > 1 else 0.0
-            bit_transitions = sum(1 for i in range(1, len(bit_pattern)) 
-                                if bit_pattern[i] != bit_pattern[i-1])
-            
+            bit_transitions = sum(1 for i in range(1, len(bit_pattern))
+                                  if bit_pattern[i] != bit_pattern[i-1])
+
             # Normalize metrics
             normalized_sum = bit_sum / (len(bit_pattern) * 2)  # Assume max value is 2
             normalized_variance = unified_math.min(bit_variance / 0.25, 1.0)  # Normalize variance
             normalized_transitions = bit_transitions / unified_math.max(len(bit_pattern) - 1, 1)
-            
+
             # Combine metrics
             complexity_score = (normalized_sum + normalized_variance + normalized_transitions) / 3.0
-            
+
             return complexity_score
-            
+
         except Exception as e:
             logger.error(f"Error calculating bit complexity score: {e}")
             return 0.5
@@ -224,25 +227,25 @@ class PhaseEntropyMatcher:
         try:
             if len(bit_pattern) < 2:
                 return 1.0  # Single bit is considered stable
-            
+
             # Calculate autocorrelation
             autocorr = np.correlate(bit_pattern, bit_pattern, mode='full')
             autocorr = autocorr[len(autocorr)//2:]
-            
+
             # Normalize autocorrelation
             if autocorr[0] > 0:
                 normalized_autocorr = autocorr / autocorr[0]
             else:
                 normalized_autocorr = autocorr
-            
+
             # Calculate stability as average autocorrelation (excluding lag 0)
             if len(normalized_autocorr) > 1:
                 stability = unified_math.unified_math.mean(normalized_autocorr[1:])
             else:
                 stability = 1.0
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, stability))
-            
+
         except Exception as e:
             logger.error(f"Error calculating pattern stability score: {e}")
             return 0.5
@@ -254,10 +257,10 @@ class PhaseEntropyMatcher:
             volatility = market_conditions.get('volatility', 0.1)
             entropy_level = market_conditions.get('entropy_level', 4.0)
             complexity = market_conditions.get('complexity', 0.5)
-            
+
             # Simple basket affinity logic based on market conditions
             # This can be enhanced with historical basket performance data
-            
+
             # Higher affinity for stable baskets in low volatility
             if volatility < 0.1:
                 base_affinity = 0.8
@@ -265,17 +268,17 @@ class PhaseEntropyMatcher:
                 base_affinity = 0.6
             else:
                 base_affinity = 0.4
-            
+
             # Adjust based on entropy level
             entropy_factor = 1.0 + (entropy_level - 4.0) * 0.1
             base_affinity *= entropy_factor
-            
+
             # Adjust based on complexity
             complexity_factor = 1.0 + (complexity - 0.5) * 0.2
             base_affinity *= complexity_factor
-            
+
             return unified_math.max(0.0, unified_math.min(1.0, base_affinity))
-            
+
         except Exception as e:
             logger.error(f"Error calculating basket affinity score: {e}")
             return 0.5
@@ -285,21 +288,21 @@ class PhaseEntropyMatcher:
         try:
             if not bit_pattern:
                 return 0.0
-            
+
             # Shannon entropy of the bit pattern
             unique_bits = set(bit_pattern)
             if len(unique_bits) == 1:
                 return 0.0  # No complexity if all bits are the same
-            
+
             # Calculate probability distribution
             total_bits = len(bit_pattern)
             probabilities = [bit_pattern.count(bit) / total_bits for bit in unique_bits]
-            
+
             # Calculate Shannon entropy
             complexity = -sum(p * math.log2(p) for p in probabilities if p > 0)
-            
+
             return complexity
-            
+
         except Exception as e:
             logger.error(f"Error calculating bit complexity: {e}")
             return 0.0
@@ -309,21 +312,21 @@ class PhaseEntropyMatcher:
         try:
             if len(bit_pattern) < 2:
                 return 1.0
-            
+
             # Calculate coefficient of variation
             mean_value = unified_math.unified_math.mean(bit_pattern)
             std_value = unified_math.unified_math.std(bit_pattern)
-            
+
             if mean_value == 0:
                 return 1.0 if std_value == 0 else 0.0
-            
+
             cv = std_value / unified_math.abs(mean_value)
-            
+
             # Convert to stability score (lower CV = higher stability)
             stability = 1.0 / (1.0 + cv)
-            
+
             return stability
-            
+
         except Exception as e:
             logger.error(f"Error calculating pattern stability: {e}")
             return 0.5
@@ -337,7 +340,7 @@ class PhaseEntropyMatcher:
                 return 'medium'
             else:
                 return 'high'
-                
+
         except Exception as e:
             logger.error(f"Error categorizing entropy: {e}")
             return 'medium'
@@ -345,24 +348,24 @@ class PhaseEntropyMatcher:
     def analyze_entropy_patterns(self, entropy_sequence: List[float]) -> Dict[str, Any]:
         """
         Analyze entropy patterns across a sequence.
-        
+
         Args:
             entropy_sequence: List of entropy values
-            
+
         Returns:
             Dict[str, Any]: Entropy pattern analysis
         """
         try:
             if not entropy_sequence:
                 return {}
-            
+
             analysis = {
                 'total_entropy_values': len(entropy_sequence),
                 'statistics': {},
                 'pattern_detection': {},
                 'category_distribution': {}
             }
-            
+
             # Calculate basic statistics
             analysis['statistics'] = {
                 'mean': unified_math.unified_math.mean(entropy_sequence),
@@ -371,15 +374,15 @@ class PhaseEntropyMatcher:
                 'max': unified_math.unified_math.max(entropy_sequence),
                 'median': np.median(entropy_sequence)
             }
-            
+
             # Detect patterns
             analysis['pattern_detection'] = self._detect_entropy_patterns(entropy_sequence)
-            
+
             # Analyze category distribution
             analysis['category_distribution'] = self._analyze_entropy_categories(entropy_sequence)
-            
+
             return analysis
-            
+
         except Exception as e:
             logger.error(f"Error analyzing entropy patterns: {e}")
             return {}
@@ -389,20 +392,20 @@ class PhaseEntropyMatcher:
         try:
             if len(entropy_sequence) < 2:
                 return {'patterns': [], 'confidence': 0.0}
-            
+
             patterns = []
-            
+
             # Check for trends
             diffs = np.diff(entropy_sequence)
             trend = unified_math.unified_math.mean(diffs)
-            
+
             if unified_math.abs(trend) > unified_math.unified_math.std(diffs) * 1.5:
                 patterns.append({
                     'type': 'trend',
                     'direction': 'increasing' if trend > 0 else 'decreasing',
                     'strength': unified_math.abs(trend) / unified_math.unified_math.std(diffs)
                 })
-            
+
             # Check for entropy clustering
             high_entropy_count = sum(1 for e in entropy_sequence if e > self.entropy_thresholds['high'])
             if high_entropy_count > len(entropy_sequence) * 0.7:
@@ -410,7 +413,7 @@ class PhaseEntropyMatcher:
                     'type': 'high_entropy_cluster',
                     'strength': high_entropy_count / len(entropy_sequence)
                 })
-            
+
             # Check for entropy stability
             entropy_std = unified_math.unified_math.std(entropy_sequence)
             if entropy_std < 0.5:
@@ -418,14 +421,14 @@ class PhaseEntropyMatcher:
                     'type': 'entropy_stability',
                     'strength': 1.0 - (entropy_std / 2.0)
                 })
-            
+
             confidence = len(patterns) / 3.0  # Simple confidence metric
-            
+
             return {
                 'patterns': patterns,
                 'confidence': unified_math.min(confidence, 1.0)
             }
-            
+
         except Exception as e:
             logger.error(f"Error detecting entropy patterns: {e}")
             return {'patterns': [], 'confidence': 0.0}
@@ -434,11 +437,11 @@ class PhaseEntropyMatcher:
         """Analyze distribution of entropy categories."""
         try:
             category_counts = {'low': 0, 'medium': 0, 'high': 0}
-            
+
             for entropy in entropy_sequence:
                 category = self._categorize_entropy(entropy)
                 category_counts[category] += 1
-            
+
             total = len(entropy_sequence)
             distribution = {
                 category: {
@@ -447,9 +450,9 @@ class PhaseEntropyMatcher:
                 }
                 for category, count in category_counts.items()
             }
-            
+
             return distribution
-            
+
         except Exception as e:
             logger.error(f"Error analyzing entropy categories: {e}")
             return {}
@@ -468,7 +471,7 @@ class PhaseEntropyMatcher:
         """Export phase-entropy match data to JSON."""
         try:
             import json
-            
+
             export_data = {
                 'timestamp': datetime.now().isoformat(),
                 'total_matches': len(self.match_history),
@@ -486,28 +489,29 @@ class PhaseEntropyMatcher:
                     for match in self.match_history[-50:]  # Last 50 matches
                 ]
             }
-            
+
             with open(output_path, 'w') as f:
                 json.dump(export_data, f, indent=2, default=str)
-            
+
             logger.info(f"Match data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting match data: {e}")
+
 
 def main():
     """Test function for Phase Entropy Matcher."""
     safe_print("🧮 Testing Phase Entropy Matcher...")
-    
+
     matcher = PhaseEntropyMatcher()
-    
+
     # Test phase weight matrix
     bit_pattern = [1, 0, 1, 1]
     entropy = 2.0
-    
+
     phase_weight = matcher.phase_weight_matrix(bit_pattern, entropy)
     safe_print(f"Phase weight: {phase_weight}")
-    
+
     # Test phase-entropy matching
     basket_id = "basket_0071"
     market_conditions = {
@@ -515,17 +519,19 @@ def main():
         'entropy_level': 5.2,
         'complexity': 0.7
     }
-    
+
     match = matcher.match_phase_entropy(bit_pattern, entropy, basket_id, market_conditions)
     safe_print(f"Priority score: {match.priority_score:.4f}")
     safe_print(f"Basket ID: {match.basket_id}")
-    
+
     # Test entropy pattern analysis
     entropy_sequence = [2.1, 3.5, 4.2, 5.8, 4.1, 3.9, 6.2, 5.1]
     analysis = matcher.analyze_entropy_patterns(entropy_sequence)
-    safe_print(f"\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
-    
+    safe_print(
+        f"\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
+
     return 0
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

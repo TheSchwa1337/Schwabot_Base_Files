@@ -8,7 +8,6 @@ import numpy as np
 
 def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:
 
-
     pass
     pass
     """Compute adaptive projection Πₓ = Σ wᵢ·Vᵢ.

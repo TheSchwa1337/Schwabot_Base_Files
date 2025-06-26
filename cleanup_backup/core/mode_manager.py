@@ -179,13 +179,13 @@ class ModeManager:
         self: Self, target_mode: OperationalMode, reason: str = ""
     ) -> bool:
         """
-        
+
         Request transition to a new operational mode.
-        
+
         Args:
             target_mode: Desired operational mode
             reason: Reason for mode transition
-        
+
         Returns:
             Boolean indicating if transition was successful
         """
@@ -371,13 +371,13 @@ class ModeManager:
         self: Self, operation: str, parameters: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        
+
         Validate if an operation can be performed in the current mode.
-        
+
         Args:
             operation: Name of the operation to validate
             parameters: Operation parameters
-        
+
         Returns:
             Dictionary with validation results
         """

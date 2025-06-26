@@ -18,12 +18,12 @@ logger = logging.getLogger(__name__)
 def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
     """
     Perform tensor contraction: T_ij = Σ_k A_ik · B_kj
-    
+
     Args:
         A: First tensor
         B: Second tensor  
         axes: Contraction axes
-        
+
     Returns:
         Contracted tensor result
     """
@@ -38,15 +38,15 @@ def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]]
 def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
     """
     Advanced bit phase tensor operations for strategy routing.
-    
+
     Mathematical Implementation:
     φ₄ = strategy_id & 0b1111
     φ₈ = (strategy_id >> 4) & 0xFF  
     φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
-    
+
     Args:
         strategy_id: Strategy identifier
-        
+
     Returns:
         Tuple of (phi_4, phi_8, phi_42) phase values
     """
@@ -63,14 +63,14 @@ def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
 def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """
     Calculate matrix basket operations for asset allocation.
-    
+
     Mathematical Implementation:
     B = W · P^T (basket = weights × prices transpose)
-    
+
     Args:
         prices: Price vector
         weights: Weight matrix
-        
+
     Returns:
         Basket allocation result
     """
@@ -86,28 +86,28 @@ def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
 def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
     """
     Calculate cosine similarity between tensors.
-    
+
     Mathematical Implementation:
     similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
-    
+
     Args:
         tensor_a: First tensor
         tensor_b: Second tensor
-        
+
     Returns:
         Similarity score [0, 1]
     """
     try:
         flat_a = tensor_a.flatten()
         flat_b = tensor_b.flatten()
-        
+
         dot_product = unified_math.unified_math.dot_product(flat_a, flat_b)
         norm_a = np.linalg.norm(flat_a)
         norm_b = np.linalg.norm(flat_b)
-        
+
         if norm_a < 1e-12 or norm_b < 1e-12:
             return 0.0
-            
+
         similarity = dot_product / (norm_a * norm_b)
         return unified_math.max(0.0, unified_math.min(1.0, similarity))
     except Exception as e:
@@ -118,10 +118,10 @@ def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
 def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Perform SVD decomposition of tensor.
-    
+
     Args:
         tensor: Input tensor
-        
+
     Returns:
         Tuple of (U, S, V) decomposition matrices
     """
@@ -131,7 +131,7 @@ def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np
             tensor_2d = tensor.reshape(tensor.shape[0], -1)
         else:
             tensor_2d = tensor
-            
+
         U, S, Vt = unified_math.unified_math.svd(tensor_2d, full_matrices=False)
         return U, S, Vt
     except Exception as e:
@@ -143,11 +143,11 @@ def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np
 def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
     """
     Normalize tensor using specified method.
-    
+
     Args:
         tensor: Input tensor
         method: Normalization method ('l2', 'l1', 'max', 'minmax')
-        
+
     Returns:
         Normalized tensor
     """
@@ -176,11 +176,11 @@ def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
 def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     """
     Perform tensor convolution operation.
-    
+
     Args:
         tensor_a: Input tensor
         kernel: Convolution kernel
-        
+
     Returns:
         Convolved tensor
     """
@@ -204,11 +204,11 @@ def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
 def advanced_tensor_transform(tensor: np.ndarray, transform_type: str = 'fft') -> np.ndarray:
     """
     Apply advanced tensor transformations.
-    
+
     Args:
         tensor: Input tensor
         transform_type: Type of transform ('fft', 'dct', 'wavelet')
-        
+
     Returns:
         Transformed tensor
     """
@@ -235,11 +235,11 @@ def advanced_tensor_transform(tensor: np.ndarray, transform_type: str = 'fft') -
 # Export main functions
 __all__ = [
     'tensor_contraction',
-    'bit_phase_operations', 
+    'bit_phase_operations',
     'matrix_basket_calc',
     'tensor_similarity',
     'tensor_decomposition',
     'tensor_normalize',
     'tensor_convolution',
     'advanced_tensor_transform'
-] 
+]

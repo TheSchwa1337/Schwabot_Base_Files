@@ -24,13 +24,13 @@ def generate_hash_vector(
 ) -> str:
     """
     Generate hash vector: H(t) = SHA256(P_t || ΔP || φ_t)
-    
+
     Args:
         price: Current price
         delta_price: Price delta
         phi_t: Phase tensor value
         hash_length: Output hash length
-        
+
     Returns:
         Hash vector string
     """
@@ -46,12 +46,12 @@ def generate_hash_vector(
 def hash_similarity_score(hash_a: str, hash_b: str, method: str = 'hamming') -> float:
     """
     Calculate similarity between two hash vectors.
-    
+
     Args:
         hash_a: First hash
         hash_b: Second hash
         method: Similarity method ('hamming', 'jaccard', 'cosine')
-        
+
     Returns:
         Similarity score [0, 1]
     """
@@ -60,7 +60,7 @@ def hash_similarity_score(hash_a: str, hash_b: str, method: str = 'hamming') -> 
             min_len = unified_math.min(len(hash_a), len(hash_b))
             hash_a = hash_a[:min_len]
             hash_b = hash_b[:min_len]
-        
+
         if method == 'hamming':
             distance = sum(c1 != c2 for c1, c2 in zip(hash_a, hash_b))
             return 1.0 - (distance / len(hash_a))
@@ -88,11 +88,11 @@ def hash_similarity_score(hash_a: str, hash_b: str, method: str = 'hamming') -> 
 def memory_encoding(data_series: np.ndarray, encoding_type: str = 'sha256') -> List[str]:
     """
     Encode data series into hash memory vectors.
-    
+
     Args:
         data_series: Data to encode
         encoding_type: Hash algorithm ('sha256', 'md5', 'blake2b')
-        
+
     Returns:
         List of hash strings
     """
@@ -100,7 +100,7 @@ def memory_encoding(data_series: np.ndarray, encoding_type: str = 'sha256') -> L
         hash_list = []
         for value in data_series:
             data_bytes = f"{value:.8f}".encode()
-            
+
             if encoding_type == 'sha256':
                 hash_obj = hashlib.sha256(data_bytes)
             elif encoding_type == 'md5':
@@ -109,9 +109,9 @@ def memory_encoding(data_series: np.ndarray, encoding_type: str = 'sha256') -> L
                 hash_obj = hashlib.blake2b(data_bytes)
             else:
                 hash_obj = hashlib.sha256(data_bytes)
-                
+
             hash_list.append(hash_obj.hexdigest())
-            
+
         return hash_list
     except Exception as e:
         logger.error(f"Memory encoding failed: {e}")
@@ -125,12 +125,12 @@ def pattern_matching(
 ) -> List[Tuple[str, float]]:
     """
     Find pattern matches in hash database.
-    
+
     Args:
         target_hash: Hash to match
         hash_database: Database of hashes
         threshold: Similarity threshold
-        
+
     Returns:
         List of (hash, similarity_score) tuples
     """
@@ -140,7 +140,7 @@ def pattern_matching(
             similarity = hash_similarity_score(target_hash, db_hash)
             if similarity >= threshold:
                 matches.append((db_hash, similarity))
-        
+
         # Sort by similarity descending
         matches.sort(key=lambda x: x[1], reverse=True)
         return matches
@@ -155,4 +155,4 @@ __all__ = [
     'hash_similarity_score',
     'memory_encoding',
     'pattern_matching'
-] 
+]

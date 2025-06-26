@@ -516,7 +516,8 @@ class PortfolioSubstitutionMatrix:
         corr_matrix = parameters.correlation_matrix
 
         # Calculate correlation-weighted risk
-        portfolio_variance = unified_math.unified_math.dot_product(weights, unified_math.unified_math.dot_product(corr_matrix, weights))
+        portfolio_variance = unified_math.unified_math.dot_product(
+            weights, unified_math.unified_math.dot_product(corr_matrix, weights))
 
         # If portfolio is too correlated, diversify
         if portfolio_variance > self.risk_limits["max_correlation_exposure"]:
@@ -724,7 +725,8 @@ class PortfolioSubstitutionMatrix:
         )
 
         # Portfolio volatility (simplified)
-        portfolio_vol = unified_math.unified_math.sqrt(unified_math.unified_math.dot_product(weights**2, volatilities**2))
+        portfolio_vol = unified_math.unified_math.sqrt(
+            unified_math.unified_math.dot_product(weights**2, volatilities**2))
 
         # Risk adjustment based on volatility
         risk_adjustment = unified_math.exp(-portfolio_vol * 5)  # Exponential penalty for high vol

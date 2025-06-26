@@ -29,8 +29,8 @@ __all__: list[str] = ["PhantomMemory", "GhostEvent", "compute_memory_recall"]
 @dataclass(slots=True)
 class GhostEvent:
 
-
     """Single ghost trigger event with timestamp and intensity."""
+
 
 timestamp: float
 zeta: float
@@ -45,37 +45,42 @@ event_type: str = "trigger"
 
 class PhantomMemory:
 
-
     """Rolling memory buffer for ghost events with decay weighting."""
 
-def __init__(self, *, max_events: int = 1000, decay_lambda: float = 0.01):
 
+def __init__(self, *, max_events: int = 1000, decay_lambda: float = 0.01):
 
     pass
     pass
         """Initialize memory with capacity and decay rate."""
+
+
 self._events: list[GhostEvent] = []
 self._max_events = max_events
 self._decay_lambda = decay_lambda
 
-def add_event(self, event: GhostEvent) -> None:
 
+def add_event(self, event: GhostEvent) -> None:
 
     pass
     pass
         """Add new ghost event to memory buffer."""
+
+
 self._events.append(event)
         if len(self._events) > self._max_events:
             # Remove oldest event
 self._events.pop(0)
 
-def compute_recall(self, current_time: float | None = None) -> float:
 
+def compute_recall(self, current_time: float | None = None) -> float:
 
     pass
     pass
         """Return M_r memory recall value with decay weighting."""
         if current_time is None:
+
+
 current_time = time.time()
 
         if not self._events:

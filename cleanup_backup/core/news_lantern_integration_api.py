@@ -9,5 +9,7 @@ this file with an actual implementation as soon as possible.
 
 def main() -> None:
     """Stub main function."""
+
+
 if __name__ == "__main__":
     main()

@@ -15,7 +15,7 @@ from .windows_cli_compatibility import (
 
 __all__ = [
     "WindowsCliCompatibilityHandler",
-    "safe_print", 
+    "safe_print",
     "safe_format_error",
     "log_safe",
     "cli_handler",

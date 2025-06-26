@@ -231,7 +231,8 @@ class DriftShellEngine:
             Drift field value
         """
         decay = unified_math.exp(-time) * np.unified_math.sin(x * y)
-        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 + unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
+        stability = (np.unified_math.cos(z) * unified_math.unified_math.sqrt(1 +
+                     unified_math.abs(x))) / (1 + 0.1 * unified_math.abs(y))
         return decay * stability
 
     def allocate_ring_drift(
@@ -299,11 +300,11 @@ class SubsurfaceGrayscaleMapper:
         for i, pattern in enumerate(hash_patterns):
             # Convert hash to numeric values
             hash_int = int(pattern[:8], 16)  # Use first 8 hex chars
-            
+
             # Map to grid coordinates
             x = (hash_int % width)
             y = ((hash_int // width) % height)
-            
+
             # Calculate entropy value
             entropy_value = (hash_int % 256) / 255.0
             entropy_map[y, x] = entropy_value
@@ -325,7 +326,7 @@ class SubsurfaceGrayscaleMapper:
         """
         if threshold is None:
             threshold = self.threshold
-            
+
         activation_matrix = (grayscale_map > threshold).astype(np.float32)
         return Matrix(activation_matrix)
 
@@ -382,22 +383,22 @@ def main() -> None:
     """
     # Initialize drift shell engine
     engine = DriftShellEngine(shell_radius=144.44)
-    
+
     # Test ring zone allocation
     drift_field = engine.allocate_ring_zone(
         ring_index=0, drift_coefficient=1.0
     )
-    
+
     # Test drift field computation
     drift_value = drift_field(10.0, 20.0, 1.0)
     safe_print(f"Drift field value: {drift_value}")
-    
+
     # Test ring depth calculation
     ring_depth = engine.get_ring_depth(
         time=1.0, price_delta=5.0, base_price=100.0
     )
     safe_print(f"Ring depth: {ring_depth}")
-    
+
     # Test quantum hash creation
     quantum_hash = engine.create_hash(
         price_state="100.50", time_slot=1.5, strategy_id="strategy_1"

@@ -56,9 +56,9 @@ class PhaseDriftHarmonizer:
 
     def __init__(self, window_size: int = 64) -> None:
         """
-        
+
         Initialize phase harmonizer.
-        
+
         Args:
             window_size: Size of the FFT window for harmonization
         """
@@ -66,18 +66,18 @@ class PhaseDriftHarmonizer:
 
     def harmonize_phases(self, phase_tensor: Tensor) -> Tensor:
         """
-        
+
         Harmonize phases using Fourier analysis.
-        
+
         Implements: psi(t) = sum_n a_n e^(i*omega_n t)
         psi_l(t) = LowPass(psi)
-        
+
         Uses windowed Fourier coefficients to determine harmonic interference
         and suppress out-of-phase tensors.
-        
+
         Args:
             phase_tensor: Input phase tensor
-        
+
         Returns:
             Harmonized phase tensor
         """
@@ -86,7 +86,7 @@ class PhaseDriftHarmonizer:
 
         # Apply low-pass filter
         low_pass_mask = np.ones_like(fft_result)
-        low_pass_mask[:, self.window_size // 2 :] = 0
+        low_pass_mask[:, self.window_size // 2:] = 0
 
         # Reconstruct harmonized signal
         harmonized_fft = fft_result * low_pass_mask
@@ -96,12 +96,12 @@ class PhaseDriftHarmonizer:
 
     def compute_phase_coherence(self, phase_array: Vector) -> float:
         """
-        
+
         Compute phase coherence across tensor dimensions.
-        
+
         Args:
             phase_array: Input phase array
-        
+
         Returns:
             Phase coherence value between 0 and 1
         """
@@ -116,18 +116,18 @@ class PhaseDriftHarmonizer:
         self, phase_tensor: Tensor, threshold: float = 0.5
     ) -> bool:
         """
-        
+
         Detect phase interference in tensor.
-        
+
         Args:
             phase_tensor: Input phase tensor
             threshold: Interference detection threshold
-        
+
         Returns:
             True if interference detected, False otherwise
         """
         coherence = self.compute_phase_coherence(phase_tensor.flatten())
-        
+
         return coherence < threshold
 
 

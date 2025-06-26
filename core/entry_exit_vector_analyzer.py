@@ -24,11 +24,12 @@ __all__ = [
 
 class EntryExitVectorAnalyzer:
 
-
     """Entry/exit vector analyzer with routing elasticity."""
+
 
 dt: float = 1.0
 elasticity_threshold: float = 0.3
+
 
 def compute_lambda_r(
 
@@ -40,6 +41,8 @@ y_positions: Sequence[float],
 price_series: Sequence[float],
 timestamps: Sequence[float],
 ) -> float:
+
+
 """Compute routing elasticity Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t.
 
 Parameters
@@ -79,16 +82,16 @@ x_array = np.asarray(x_positions, dtype=float)
 dp_dt = np.gradient(
                 prices, self.dt if len(times) <= 1 else np.gradient(times)
 
-dp_dt_sum = float(np.sum(dp_dt))
+dp_dt_sum=float(np.sum(dp_dt))
 
         # Compute routing function values Rᵢ(x, y)
-        r_values = np.array(
+        r_values=np.array(
             [r_function(x, y) for x, y in zip(x_array, y_array)]
 
-r_sum = float(np.sum(r_values))
+r_sum=float(np.sum(r_values))
 
         # Compute Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t
-        lambda_r = r_sum * dp_dt_sum
+        lambda_r=r_sum * dp_dt_sum
 
         return lambda_r
 
@@ -118,15 +121,15 @@ Computed elasticity values.
         ):
             raise ValueError("all input sequences must have same length")
 
-price_grads = np.asarray(price_gradients, dtype=float)
-        volume_grads = np.asarray(volume_gradients, dtype=float)
-        elasticity = np.asarray(elasticity_values, dtype=float)
+price_grads=np.asarray(price_gradients, dtype=float)
+        volume_grads=np.asarray(volume_gradients, dtype=float)
+        elasticity=np.asarray(elasticity_values, dtype=float)
 
         # Entry signal strength: combine gradients with elasticity
-entry_strength = (price_grads + volume_grads) * elasticity
+entry_strength=(price_grads + volume_grads) * elasticity
 
         # Apply threshold filtering
-entry_signals = np.where(
+entry_signals=np.where(
             entry_strength > self.elasticity_threshold, entry_strength, 0.0
 
 
@@ -156,23 +159,23 @@ Risk assessment factors.
                 "profit_targets and risk_factors must have same length"
 
 
-targets = np.asarray(profit_targets, dtype=float)
-        risks = np.asarray(risk_factors, dtype=float)
+targets=np.asarray(profit_targets, dtype=float)
+        risks=np.asarray(risk_factors, dtype=float)
 
         # Ensure entry_signals matches length
         if len(entry_signals) != len(targets):
             # Broadcast or truncate to match
-min_len = unified_math.min(len(entry_signals), len(targets))
-            entry_signals = entry_signals[:min_len]
-targets = targets[:min_len]
-risks = risks[:min_len]
+min_len=unified_math.min(len(entry_signals), len(targets))
+            entry_signals=entry_signals[:min_len]
+targets=targets[:min_len]
+risks=risks[:min_len]
 
         # Exit signal: inverse relationship with entry strength
         # Strong entry → delayed exit, weak entry → quick exit
-exit_urgency = risks / (entry_signals + 0.1)  # avoid division by zero
-        exit_opportunity = targets * unified_math.exp(-entry_signals)
+exit_urgency=risks / (entry_signals + 0.1)  # avoid division by zero
+        exit_opportunity=targets * unified_math.exp(-entry_signals)
 
-exit_signals = exit_urgency + exit_opportunity
+exit_signals=exit_urgency + exit_opportunity
 
         return exit_signals
 
@@ -199,34 +202,34 @@ Routing elasticity matrix.
             raise ValueError("entry and exit vectors must have same count")
 
         # Convert to numpy arrays
-entry_arrays = [np.asarray(ev, dtype=float) for ev in entry_vectors]
-        exit_arrays = [np.asarray(ev, dtype=float) for ev in exit_vectors]
+entry_arrays=[np.asarray(ev, dtype=float) for ev in entry_vectors]
+        exit_arrays=[np.asarray(ev, dtype=float) for ev in exit_vectors]
 
         # Find common length
-min_entry_len = (
+min_entry_len=(
             unified_math.min(len(arr) for arr in entry_arrays) if entry_arrays else 0
 
-min_exit_len = (
+min_exit_len=(
             unified_math.min(len(arr) for arr in exit_arrays) if exit_arrays else 0
 
-common_len = unified_math.min(min_entry_len, min_exit_len)
+common_len=unified_math.min(min_entry_len, min_exit_len)
 
         if common_len == 0:
             return np.array([]), np.array([])
 
         # Stack vectors and apply elasticity transformation
-entry_matrix = np.array([arr[:common_len] for arr in entry_arrays])
-        exit_matrix = np.array([arr[:common_len] for arr in exit_arrays])
+entry_matrix=np.array([arr[:common_len] for arr in entry_arrays])
+        exit_matrix=np.array([arr[:common_len] for arr in exit_arrays])
 
         # Apply elasticity matrix if dimensions match
         if elasticity_matrix.shape[0] == len(entry_vectors):
-            transformed_entry = elasticity_matrix @ entry_matrix
-transformed_exit = elasticity_matrix @ exit_matrix
+            transformed_entry=elasticity_matrix @ entry_matrix
+transformed_exit=elasticity_matrix @ exit_matrix
         else:
             # Fallback: apply mean elasticity
-mean_elasticity = unified_math.unified_math.mean(elasticity_matrix)
-            transformed_entry = mean_elasticity * entry_matrix
-transformed_exit = mean_elasticity * exit_matrix
+mean_elasticity=unified_math.unified_math.mean(elasticity_matrix)
+            transformed_entry=mean_elasticity * entry_matrix
+transformed_exit=mean_elasticity * exit_matrix
 
         return transformed_entry, transformed_exit
 
@@ -240,14 +243,14 @@ def compute_routing_elasticity(
     r_function: Callable[[float, float], float],
 positions: Sequence[Tuple[float, float]],
 price_series: Sequence[float],
-dt: float = 1.0,
+dt: float=1.0,
 ) -> float:
 """Compute routing elasticity Λᴿ(t) for given positions and prices."""
-    analyzer = EntryExitVectorAnalyzer(dt=dt)
+    analyzer=EntryExitVectorAnalyzer(dt=dt)
 
-x_pos = [pos[0] for pos in positions]
-y_pos = [pos[1] for pos in positions]
-timestamps = list(range(len(price_series)))
+x_pos=[pos[0] for pos in positions]
+y_pos=[pos[1] for pos in positions]
+timestamps=list(range(len(price_series)))
 
     return analyzer.compute_lambda_r(
         r_function, x_pos, y_pos, price_series, timestamps
@@ -260,18 +263,18 @@ def analyze_entry_exit_vectors(
     entry_data: Sequence[float],
 exit_data: Sequence[float],
 elasticity_values: Sequence[float],
-threshold: float = 0.3,
+threshold: float=0.3,
 ) -> Tuple[np.ndarray, np.ndarray]:
 """Analyze entry/exit vectors with elasticity threshold."""
-analyzer = EntryExitVectorAnalyzer(elasticity_threshold=threshold)
+analyzer=EntryExitVectorAnalyzer(elasticity_threshold=threshold)
 
     # Use entry data as both price and volume gradients (simplified)
-    entry_signals = analyzer.analyze_entry_signals(
+    entry_signals=analyzer.analyze_entry_signals(
         entry_data, entry_data, elasticity_values
 
 
     # Use exit data for targets and risks
-exit_signals = analyzer.analyze_exit_signals(
+exit_signals=analyzer.analyze_exit_signals(
         entry_signals, exit_data, exit_data
 
 

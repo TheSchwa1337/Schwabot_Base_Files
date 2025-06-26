@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
 try:
+from core.unified_math_system import unified_math
+from enum import Enum
+from dataclasses import dataclass
+from typing import Dict, List, Tuple, Optional
+import hashlib
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 import math
 except ImportError:
@@ -10,43 +15,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
-from core.unified_math_system import unified_math
+
+
 # #!/usr/bin/env python3
 """
 Hash Registry Core - Pure Mathematical Functions
@@ -64,25 +76,25 @@ Mathematical Functions:
 - Basket mapping logic
 """
 
-import hashlib
 # from core.unified_math_system import unified_math  # F811: duplicate import
-from typing import Dict, List, Tuple, Optional
-from dataclasses import dataclass
-from enum import Enum
+
 
 class HashRegistryStructure(Enum):
 
-
     """Hash registry structure types."""
+
+
 SIMPLIFIED = "simplified"  # 5-field structure
 EXTENDED = "extended"      # Full strategy structure
 DYNAMIC = "dynamic"        # Auto-generated structure
 
+
 @dataclass
 class HashRegistryEntry:
 
-
     """Hash registry entry with mathematical structure."""
+
+
 hash_id: str
 bit_depth: int
 tensor_route: str
@@ -91,21 +103,24 @@ priority: float
 enabled: bool
 metadata: Dict = None
 
-def __post_init__(self):
 
+def __post_init__(self):
 
     pass
     pass
         if self.metadata is None:
+
+
 self.metadata = {}
 
-class HashRegistryCore:
 
+class HashRegistryCore:
 
     """
 Pure mathematical functions for hash registry operations.
 No external dependencies - only mathematical calculations.
 """
+
 
     # Mathematical constants
 TOTAL_ENTRIES = 32
@@ -114,9 +129,9 @@ TENSOR_ROUTES = ["route_0", "route_1", "route_2", "route_3", "route_4"]
 PRIORITY_MIN = 0.1
 PRIORITY_MAX = 3.2
 
+
 @staticmethod
 def generate_hash_id(index: int) -> str:
-
 
     pass
     pass
@@ -125,13 +140,14 @@ def generate_hash_id(index: int) -> str:
             raise ValueError(f"Index must be 0-{HashRegistryCore.TOTAL_ENTRIES-1}")
         return f"hash_{index:02d}"
 
+
 @staticmethod
 def calculate_bit_depth(index: int) -> int:
-
 
     pass
     pass
         """Calculate bit depth based on index: 4, 8, or 42-bit logic."""
+
         # Mathematical pattern: index % 3 determines bit depth
 remainder = index % 3
         if remainder == 0:
@@ -141,28 +157,30 @@ remainder = index % 3
         else:
             return 42
 
+
 @staticmethod
 def calculate_tensor_route(index: int) -> str:
-
 
     pass
     pass
         """Calculate tensor route: route_0 through route_4."""
+
+
 route_index = index % len(HashRegistryCore.TENSOR_ROUTES)
         return HashRegistryCore.TENSOR_ROUTES[route_index]
 
+
 @staticmethod
 def calculate_matrix_basket_id(index: int) -> int:
-
 
     pass
     pass
         """Calculate matrix basket ID: 0-31."""
         return index % HashRegistryCore.TOTAL_ENTRIES
 
+
 @staticmethod
 def calculate_priority(index: int) -> float:
-
 
     pass
     pass
@@ -172,14 +190,15 @@ def calculate_priority(index: int) -> float:
         priority = HashRegistryCore.PRIORITY_MIN + (index * step)
         return round(priority, 1)  # Round to 1 decimal place
 
+
 @staticmethod
 def determine_bit_depth_from_hash(hash_value: str) -> int:
-
 
     pass
     pass
         """Determine bit depth from hash value using first byte analysis."""
         try:
+
             # Use first byte to determine bit depth
 first_byte = int(hash_value[0:2], 16)
 

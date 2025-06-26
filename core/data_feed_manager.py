@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Callable
+import logging
+import json
+import asyncio
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
 except ImportError:
@@ -9,42 +16,50 @@ except ImportError:
     except ImportError:
     pass
     pass
-def safe_print(message):
 
+
+def safe_print(message):
 
     pass
     pass
     print(message)
-def info(message):
 
+
+def info(message):
 
     pass
     pass
     print(f"[INFO] {message}")
-def warn(message):
 
+
+def warn(message):
 
     pass
     pass
     print(f"[WARN] {message}")
-def error(message):
 
+
+def error(message):
 
     pass
     pass
     print(f"[ERROR] {message}")
-def success(message):
 
+
+def success(message):
 
     pass
     pass
     print(f"[SUCCESS] {message}")
-def debug(message):
 
+
+def debug(message):
 
     pass
     pass
     print(f"[DEBUG] {message}")
+
+
 # #!/usr/bin/env python3
 """
 Data Feed Manager - Schwabot UROS v1.0
@@ -60,21 +75,15 @@ Features:
 - Tick data processing and forwarding
 """
 
-import asyncio
-import json
-import logging
-from typing import Any, Dict, List, Optional, Callable
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 
 logger = logging.getLogger(__name__)
 
 
 class FeedType(Enum):
 
-
     """Type of data feed."""
+
+
 WEBSOCKET = "websocket"
 REST_API = "rest_api"
 CSV_FILE = "csv_file"
@@ -84,8 +93,9 @@ DATABASE = "database"
 @dataclass
 class FeedConfig:
 
-
     """Configuration for a single data feed."""
+
+
 name: str
 feed_type: FeedType
 uri: str
@@ -98,8 +108,9 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 @dataclass
 class TickData:
 
-
     """Standardized tick data format."""
+
+
 symbol: str
 price: float
 volume: float
@@ -110,15 +121,16 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 class DataFeedManager:
 
-
     """Manages multiple data feeds and provides a unified data stream."""
 
-def __init__(self, configs: List[FeedConfig] = None):
 
+def __init__(self, configs: List[FeedConfig] = None):
 
     pass
     pass
         """Initialize the DataFeedManager."""
+
+
 self.feeds: Dict[str, FeedConfig] = {}
 self.active_tasks: Dict[str, asyncio.Task] = {}
 self.subscribers: List[Callable[[TickData], None]] = []
@@ -127,26 +139,31 @@ self.subscribers: List[Callable[[TickData], None]] = []
 self.add_feed(config)
         logger.info("DataFeedManager initialized.")
 
-def add_feed(self, config: FeedConfig):
 
+def add_feed(self, config: FeedConfig):
 
     pass
     pass
         """Add and configure a new data feed."""
         if config.name in self.feeds:
+
+
 logger.warning(f"Feed '{config.name}' already exists. Overwriting.")
         self.feeds[config.name] = config
 logger.info(f"Added data feed: {config.name} ({config.feed_type.value})")
 
-def subscribe(self, callback: Callable[[TickData], None]):
 
+def subscribe(self, callback: Callable[[TickData], None]):
 
     pass
     pass
         """Subscribe a callback function to receive tick data."""
         if callback not in self.subscribers:
+
+
 self.subscribers.append(callback)
             logger.info(f"New subscriber added: {callback.__name__}")
+
 
 async def start_all(self):
         """Start all active data feeds."""
@@ -154,6 +171,7 @@ logger.info("Starting all active data feeds...")
         for name, config in self.feeds.items():
             if config.is_active:
 await self.start_feed(name)
+
 
 async def start_feed(self, name: str):
         """Start a specific data feed."""

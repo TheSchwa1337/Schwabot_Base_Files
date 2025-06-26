@@ -264,7 +264,8 @@ class FallbackTradeControllerTest:
                     results['success'] = False
 
                 # Validate functionality level
-                functionality_diff = unified_math.abs(activation_result['functionality_level'] - test_case.expected_functionality_level)
+                functionality_diff = unified_math.abs(
+                    activation_result['functionality_level'] - test_case.expected_functionality_level)
                 if functionality_diff > 0.2:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Functionality level mismatch. Expected: {test_case.expected_functionality_level}, Got: {activation_result['functionality_level']}"
                     results['errors'].append(error_msg)
@@ -335,7 +336,8 @@ class FallbackTradeControllerTest:
                     results['success'] = False
 
                 # Validate feature consistency
-                total_features = len(functionality_result['available_features']) + len(functionality_result['disabled_features'])
+                total_features = len(functionality_result['available_features']) + \
+                    len(functionality_result['disabled_features'])
                 if total_features == 0:
                     error_msg = f"Test case {i} ({test_case.description}): No features defined"
                     results['errors'].append(error_msg)
