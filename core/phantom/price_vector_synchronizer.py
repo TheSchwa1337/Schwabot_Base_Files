@@ -4,6 +4,10 @@ from __future__ import annotations
 
 
 def ema(prices: list[float], tau: int = 12) -> float:
+
+
+    pass
+    pass
     """Calculate exponential moving average of price sequence.
 
 Compute smoothed price: Ψ_sync = EMA(price, τ)

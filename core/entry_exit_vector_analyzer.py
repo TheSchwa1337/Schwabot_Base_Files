@@ -23,12 +23,16 @@ __all__ = [
 
 
 class EntryExitVectorAnalyzer:
+
+
     """Entry/exit vector analyzer with routing elasticity."""
 
 dt: float = 1.0
 elasticity_threshold: float = 0.3
 
-    def compute_lambda_r(
+def compute_lambda_r(
+
+
         self,
 r_function: Callable[[float, float], float],
 x_positions: Sequence[float],
@@ -88,7 +92,9 @@ r_sum = float(np.sum(r_values))
 
         return lambda_r
 
-    def analyze_entry_signals(
+def analyze_entry_signals(
+
+
         self,
 price_gradients: Sequence[float],
 volume_gradients: Sequence[float],
@@ -126,7 +132,9 @@ entry_signals = np.where(
 
         return entry_signals
 
-    def analyze_exit_signals(
+def analyze_exit_signals(
+
+
         self,
 entry_signals: np.ndarray,
 profit_targets: Sequence[float],
@@ -168,7 +176,9 @@ exit_signals = exit_urgency + exit_opportunity
 
         return exit_signals
 
-    def compute_vector_flow(
+def compute_vector_flow(
+
+
         self,
 entry_vectors: Sequence[Sequence[float]],
 exit_vectors: Sequence[Sequence[float]],
@@ -225,6 +235,8 @@ transformed_exit = mean_elasticity * exit_matrix
 
 
 def compute_routing_elasticity(
+
+
     r_function: Callable[[float, float], float],
 positions: Sequence[Tuple[float, float]],
 price_series: Sequence[float],
@@ -243,6 +255,8 @@ timestamps = list(range(len(price_series)))
 
 
 def analyze_entry_exit_vectors(
+
+
     entry_data: Sequence[float],
 exit_data: Sequence[float],
 elasticity_values: Sequence[float],

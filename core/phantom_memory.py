@@ -28,6 +28,8 @@ __all__: list[str] = ["PhantomMemory", "GhostEvent", "compute_memory_recall"]
 
 @dataclass(slots=True)
 class GhostEvent:
+
+
     """Single ghost trigger event with timestamp and intensity."""
 
 timestamp: float
@@ -42,22 +44,36 @@ event_type: str = "trigger"
 
 
 class PhantomMemory:
+
+
     """Rolling memory buffer for ghost events with decay weighting."""
 
-    def __init__(self, *, max_events: int = 1000, decay_lambda: float = 0.01):
+def __init__(self, *, max_events: int = 1000, decay_lambda: float = 0.01):
+
+
+    pass
+    pass
         """Initialize memory with capacity and decay rate."""
 self._events: list[GhostEvent] = []
 self._max_events = max_events
 self._decay_lambda = decay_lambda
 
-    def add_event(self, event: GhostEvent) -> None:
+def add_event(self, event: GhostEvent) -> None:
+
+
+    pass
+    pass
         """Add new ghost event to memory buffer."""
 self._events.append(event)
         if len(self._events) > self._max_events:
             # Remove oldest event
 self._events.pop(0)
 
-    def compute_recall(self, current_time: float | None = None) -> float:
+def compute_recall(self, current_time: float | None = None) -> float:
+
+
+    pass
+    pass
         """Return M_r memory recall value with decay weighting."""
         if current_time is None:
 current_time = time.time()
@@ -73,7 +89,11 @@ decay_weight = unified_math.exp(-self._decay_lambda * dt)
 
         return recall_sum
 
-    def get_recent_events(self, window_seconds: float) -> list[GhostEvent]:
+def get_recent_events(self, window_seconds: float) -> list[GhostEvent]:
+
+
+    pass
+    pass
         """Return events from the last window_seconds."""
         if not self._events:
             return []
@@ -82,7 +102,11 @@ current_time = time.time()
         cutoff_time = current_time - window_seconds
         return [e for e in self._events if e.timestamp >= cutoff_time]
 
-    def clear_old_events(self, max_age_seconds: float) -> int:
+def clear_old_events(self, max_age_seconds: float) -> int:
+
+
+    pass
+    pass
         """Remove events older than max_age_seconds. Return count removed."""
         if not self._events:
             return 0
@@ -94,7 +118,11 @@ initial_count = len(self._events)
         return initial_count - len(self._events)
 
 @property
-    def event_count(self) -> int:
+def event_count(self) -> int:
+
+
+    pass
+    pass
         """Return current number of stored events."""
         return len(self._events)
 
@@ -105,6 +133,8 @@ initial_count = len(self._events)
 
 
 def compute_memory_recall(
+
+
     events: Sequence[GhostEvent],
 current_time: float | None = None,
 decay_lambda: float = 0.01,

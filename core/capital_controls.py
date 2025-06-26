@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    pass
+    pass
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -47,39 +79,65 @@ from pathlib import Path
 
 # Import unified mathematics
 try:
-    from core.unified_mathematics_config import get_unified_math
+    pass
+    pass
+from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 UNIFIED_MATH_AVAILABLE = False
 
 # Import risk guard for integration
 try:
-    from core.risk_guard import get_risk_guard, is_trading_allowed
+    pass
+    pass
+from core.risk_guard import get_risk_guard, is_trading_allowed
 risk_guard = get_risk_guard()
     RISK_GUARD_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 RISK_GUARD_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    pass
+    pass
+from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:
+
+
+    pass
+    pass
         return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str = "") -> str:
+
+
+    pass
+    pass
         return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
 
 
 class PositionSizingMethod(Enum):
+
+
     """Position sizing methods."""
 FIXED = "fixed"                    # Fixed percentage of capital
 VOLATILITY_ADJUSTED = "volatility_adjusted"  # Adjust based on volatility
@@ -89,6 +147,8 @@ MAXIMUM_DRAWDOWN = "maximum_drawdown"  # Based on maximum drawdown
 
 
 class CapitalAllocationStrategy(Enum):
+
+
     """Capital allocation strategies."""
 EQUAL_WEIGHT = "equal_weight"      # Equal allocation across assets
 MARKET_CAP = "market_cap"          # Weighted by market capitalization
@@ -99,6 +159,8 @@ CUSTOM_WEIGHTS = "custom_weights"  # Custom weight configuration
 
 @dataclass
 class CapitalConfig:
+
+
     """Capital configuration settings."""
 total_capital: float = 10000.0     # Total available capital in USD
 max_position_size: float = 0.1     # Maximum 10% per position
@@ -114,6 +176,8 @@ emergency_capital_reserve: float = 0.1  # Keep 10% in reserve
 
 @dataclass
 class PositionSizingResult:
+
+
     """Result of position sizing calculation."""
 asset: str
 suggested_size: float
@@ -127,6 +191,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class PortfolioState:
+
+
     """Current portfolio state."""
 total_value: float
 total_pnl: float
@@ -142,6 +208,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class CapitalEvent:
+
+
     """Capital control event."""
 event_type: str
 severity: str
@@ -153,6 +221,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class CapitalControls:
+
+
     """
 Capital Controls - Advanced position sizing and portfolio risk management.
 
@@ -164,7 +234,11 @@ Provides sophisticated capital controls including:
 - Real-time portfolio rebalancing and risk monitoring
 """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+
+    pass
+    pass
         """Initialize capital controls."""
 self.config = config or {}
 
@@ -200,7 +274,11 @@ self.rebalancing_events: List[Dict[str, Any]] = []
 
 safe_safe_print("💰 Capital Controls initialized")
 
-    def set_capital_config(self, config: CapitalConfig) -> None:
+def set_capital_config(self, config: CapitalConfig) -> None:
+
+
+    pass
+    pass
         """Set capital configuration."""
 self.capital_config = config
 self.current_capital = config.total_capital
@@ -209,7 +287,9 @@ self.peak_capital = config.total_capital
 
 safe_safe_print(f"✅ Capital config updated: Total = ${config.total_capital:,.2f}")
 
-    def calculate_position_size(
+def calculate_position_size(
+
+
         self,
 asset: str,
 current_price: float,
@@ -225,6 +305,8 @@ This implements sophisticated position sizing algorithms
 including Kelly Criterion, volatility adjustment, and risk parity.
 """
         try:
+    pass
+    pass
 available_capital = self.current_capital - self.reserved_capital - self.allocated_capital
 
             if available_capital <= 0:
@@ -300,11 +382,17 @@ confidence_score=0.0,
 timestamp=datetime.now()
 
 
-    def _calculate_fixed_size(self, available_capital: float) -> float:
+def _calculate_fixed_size(self, available_capital: float) -> float:
+
+
+    pass
+    pass
         """Calculate fixed position size."""
         return self.capital_config.max_position_size
 
-    def _calculate_volatility_adjusted_size(
+def _calculate_volatility_adjusted_size(
+
+
         self,
 available_capital: float,
 volatility: float,
@@ -312,6 +400,8 @@ confidence: float
 ) -> float:
 """Calculate volatility-adjusted position size."""
         try:
+    pass
+    pass
             # Base size on inverse volatility
 base_size = self.capital_config.max_position_size
 
@@ -330,7 +420,9 @@ adjusted_size = base_size * volatility_factor * confidence_factor
 safe_safe_print(f"❌ Volatility adjustment failed: {safe_format_error(e, 'volatility_adjustment')}")
             return self.capital_config.min_position_size
 
-    def _calculate_kelly_size(
+def _calculate_kelly_size(
+
+
         self,
 available_capital: float,
 expected_return: float,
@@ -339,6 +431,8 @@ confidence: float
 ) -> float:
 """Calculate Kelly Criterion position size."""
         try:
+    pass
+    pass
             # Kelly Criterion: f = (bp - q) / b
             # where b = odds received, p = probability of win, q = probability of loss
 
@@ -363,13 +457,17 @@ kelly_size = kelly_fraction * self.capital_config.kelly_fraction * confidence
 safe_safe_print(f"❌ Kelly calculation failed: {safe_format_error(e, 'kelly_calculation')}")
             return self.capital_config.min_position_size
 
-    def _calculate_risk_parity_size(
+def _calculate_risk_parity_size(
+
+
         self,
 available_capital: float,
 volatility: float
 ) -> float:
 """Calculate risk parity position size."""
         try:
+    pass
+    pass
             # Risk parity: equal risk contribution
             # For single asset, size inversely proportional to volatility
 target_risk = self.capital_config.max_portfolio_risk
@@ -385,13 +483,17 @@ risk_parity_size = self.capital_config.max_position_size
 safe_safe_print(f"❌ Risk parity calculation failed: {safe_format_error(e, 'risk_parity')}")
             return self.capital_config.min_position_size
 
-    def _calculate_drawdown_size(
+def _calculate_drawdown_size(
+
+
         self,
 available_capital: float,
 current_price: float
 ) -> float:
 """Calculate position size based on maximum drawdown."""
         try:
+    pass
+    pass
             # Reduce position size as drawdown increases
 drawdown_factor = 1.0 - (self.current_drawdown / self.capital_config.max_drawdown)
             drawdown_factor = unified_math.max(0.1, drawdown_factor)  # Minimum 10%
@@ -405,7 +507,9 @@ drawdown_adjusted_size = base_size * drawdown_factor
 safe_safe_print(f"❌ Drawdown calculation failed: {safe_format_error(e, 'drawdown_calculation')}")
             return self.capital_config.min_position_size
 
-    def _calculate_risk_contribution(
+def _calculate_risk_contribution(
+
+
         self,
 asset: str,
 position_value: float,
@@ -413,6 +517,8 @@ volatility: float
 ) -> float:
 """Calculate risk contribution of position."""
         try:
+    pass
+    pass
             # Risk contribution = position_value * volatility
 risk_contribution = position_value * volatility
 
@@ -422,7 +528,9 @@ risk_contribution = position_value * volatility
 safe_safe_print(f"❌ Risk contribution calculation failed: {safe_format_error(e, 'risk_contribution')}")
             return 0.0
 
-    def update_portfolio_state(
+def update_portfolio_state(
+
+
         self,
 positions: Dict[str, Dict[str, Any]],
 market_data: Dict[str, Any]
@@ -439,6 +547,8 @@ This calculates portfolio-level metrics including:
 - Risk contributions
 """
         try:
+    pass
+    pass
             # Update positions
 self.positions = positions
 
@@ -521,13 +631,17 @@ risk_contributions={},
 timestamp=datetime.now()
 
 
-    def _calculate_portfolio_volatility(
+def _calculate_portfolio_volatility(
+
+
         self,
 positions: Dict[str, Dict[str, Any]],
 market_data: Dict[str, Any]
 ) -> float:
 """Calculate portfolio volatility."""
         try:
+    pass
+    pass
             if not positions:
                 return 0.0
 
@@ -549,9 +663,15 @@ weighted_volatility = 0.0
 safe_safe_print(f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
             return 0.0
 
-    def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
+def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
+
+
+    pass
+    pass
         """Calculate Sharpe ratio."""
         try:
+    pass
+    pass
             if volatility == 0:
                 return 0.0
 
@@ -564,13 +684,17 @@ sharpe_ratio = total_pnl / volatility
 safe_safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
             return 0.0
 
-    def _calculate_correlations(
+def _calculate_correlations(
+
+
         self,
 positions: Dict[str, Dict[str, Any]],
 market_data: Dict[str, Any]
 ) -> Dict[str, Dict[str, float]]:
 """Calculate correlation matrix between positions."""
         try:
+    pass
+    pass
 correlation_matrix = {}
 
 assets = list(positions.keys())
@@ -591,7 +715,11 @@ correlation_matrix[asset1][asset2] = correlation
 safe_safe_print(f"❌ Correlation calculation failed: {safe_format_error(e, 'correlation')}")
             return {}
 
-    def check_portfolio_limits(self, portfolio_state: PortfolioState) -> bool:
+def check_portfolio_limits(self, portfolio_state: PortfolioState) -> bool:
+
+
+    pass
+    pass
         """
 Check if portfolio is within limits.
 
@@ -602,6 +730,8 @@ This checks:
 - Correlation limits
 """
         try:
+    pass
+    pass
             # Check drawdown limit
             if portfolio_state.current_drawdown > self.capital_config.max_drawdown:
 self._record_capital_event(
@@ -648,7 +778,11 @@ f"High correlation between {asset1} and {asset2}: {correlation:.2f}",
 safe_safe_print(f"❌ Portfolio limits check failed: {safe_format_error(e, 'portfolio_limits')}")
             return False
 
-    def suggest_rebalancing(self, portfolio_state: PortfolioState) -> Dict[str, Any]:
+def suggest_rebalancing(self, portfolio_state: PortfolioState) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """
 Suggest portfolio rebalancing actions.
 
@@ -659,6 +793,8 @@ This analyzes the current portfolio and suggests:
 - Rebalancing urgency
 """
         try:
+    pass
+    pass
 rebalancing_suggestions = {
 'rebalancing_needed': False,
 'urgency': 'low',
@@ -722,7 +858,11 @@ safe_safe_print(f"❌ Rebalancing suggestion failed: {safe_format_error(e, 'reba
 'reason': 'Error in analysis'
 }
 
-    def get_capital_status(self) -> Dict[str, Any]:
+def get_capital_status(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get current capital status."""
         return {
 'total_capital': self.capital_config.total_capital,
@@ -741,7 +881,9 @@ safe_safe_print(f"❌ Rebalancing suggestion failed: {safe_format_error(e, 'reba
 'largest_loss': self.largest_loss
 }
 
-    def _record_capital_event(
+def _record_capital_event(
+
+
         self,
 event_type: str,
 severity: str,
@@ -751,6 +893,8 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> None:
 """Record a capital control event."""
         try:
+    pass
+    pass
 event = CapitalEvent(
                 event_type=event_type,
 severity=severity,
@@ -779,11 +923,17 @@ capital_controls = CapitalControls()
 
 # Convenience functions for external access
 def get_capital_controls() -> CapitalControls:
+
+
+    pass
+    pass
     """Get global capital controls instance."""
     return capital_controls
 
 
 def calculate_position_size(
+
+
     asset: str,
 current_price: float,
 volatility: float,
@@ -798,6 +948,8 @@ method: PositionSizingMethod = PositionSizingMethod.VOLATILITY_ADJUSTED
 
 
 def update_portfolio_state(
+
+
     positions: Dict[str, Dict[str, Any]],
 market_data: Dict[str, Any]
 ) -> PortfolioState:
@@ -806,16 +958,28 @@ market_data: Dict[str, Any]
 
 
 def check_portfolio_limits(portfolio_state: PortfolioState) -> bool:
+
+
+    pass
+    pass
     """Check portfolio limits."""
     return capital_controls.check_portfolio_limits(portfolio_state)
 
 
 def suggest_rebalancing(portfolio_state: PortfolioState) -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Suggest portfolio rebalancing."""
     return capital_controls.suggest_rebalancing(portfolio_state)
 
 
 def get_capital_status() -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Get capital status."""
     return capital_controls.get_capital_status()
 
@@ -823,6 +987,8 @@ def get_capital_status() -> Dict[str, Any]:
 # Example usage
 
 if __name__ == "__main__":
+    pass
+    pass
     # Test capital controls
 safe_print("💰 Testing Capital Controls...")
 

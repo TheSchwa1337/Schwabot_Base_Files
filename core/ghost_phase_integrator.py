@@ -7,11 +7,11 @@ import math
 """Ghost Phase Integrator – trust-weighted phase correction logic.
 
 Implements equations (1)…(9) from the design note, returning a
-:class:`GhostPhasePacket` tuple (eq. 10).
+class:`GhostPhasePacket` tuple (eq. 10).
 
 All computations are purely functional, fully typed and NumPy-backed while
 remaining free of heavy external dependencies.  The public helper
-:func:`compute_ghost_phase_packet` is the single entry-point.
+func:`compute_ghost_phase_packet` is the single entry-point.
 """
 
 
@@ -29,6 +29,8 @@ __all__: list[str] = ["GhostPhasePacket", "compute_ghost_phase_packet"]
 
 
 def _levenshtein(a: str, b: str) -> int:  # noqa: D401
+
+
     """Return Levenshtein edit distance (simple O(n²) DP).
 
 The strings are expected to be hex-encoded hashes of identical length
@@ -50,11 +52,15 @@ sub = prev_row[j - 1] + (ch_a != ch_b)
 
 
 def _clip(x: float, lo: float, hi: float) -> float:  # noqa: D401
+
+
     """TODO: document _clip."""
     return unified_math.max(lo, unified_math.min(hi, x))
 
 
 def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
+
+
     """TODO: document _hash_to_int."""
     return int(hex_digest, 16)
 
@@ -66,6 +72,8 @@ def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
 
 @dataclass(slots=True)
 class GhostPhasePacket:
+
+
     """Output (C_t, zeta_final, H_echo, mu_echo, delta_corr)."""
 
 C_t: float
@@ -81,6 +89,8 @@ delta_corr: float
 
 
 def compute_ghost_phase_packet(
+
+
     *,
 H_t: str,
 H_echo: Sequence[str],

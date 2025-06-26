@@ -19,6 +19,8 @@ __all__: list[str] = ["phantom_exit_score"]
 
 
 def phantom_exit_score(
+
+
     *,
 lambda_trust: float,
 profit_delta: float,

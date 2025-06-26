@@ -39,6 +39,10 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 
 
 def _logistic(x: float) -> float:
+
+
+    pass
+    pass
     """Cheap logistic activation without `unified_math.exp` overflow."""
     if x >= 0:
 z = unified_math.exp(-x)
@@ -48,6 +52,8 @@ z = unified_math.exp(-x)
 
 
 def ghost_trigger(
+
+
     entropy: float,
 momentum: float,
 delta_p: float,

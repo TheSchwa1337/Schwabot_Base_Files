@@ -11,7 +11,7 @@ Schwabot's core:
 * :func:`phase_hash_gate` – deterministic hash-phase gating.
 
 The goal is to expose **one** public convenience wrapper –
-:func:`ghost_validator_pipeline` – so that legacy callers can perform
+func:`ghost_validator_pipeline` – so that legacy callers can perform
 "all-in-one" validation without having to stitch the pieces manually.
 
 References (math primer)
@@ -42,13 +42,17 @@ _BASE_CYCLE: Final = 42  # phase_hash_gate default
 
 
 class GhostPipeline:
+
+
     """Runtime container that evaluates ghost-mode pre-conditions."""
 
 entropy_threshold: float
 temp_threshold: float
 base_cycle: int
 
-    def __init__(
+def __init__(
+
+
         self,
 *,
 entropy_threshold: float = _ENTROPY_THRESHOLD,
@@ -63,7 +67,9 @@ self.base_cycle = base_cycle
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def validate(
+def validate(
+
+
         self,
 entropy: float,
 temp_current: float,
@@ -94,6 +100,8 @@ component_map = {
 
 
 def ghost_validator_pipeline(
+
+
     entropy: float,
 temp_current: float,
 temp_previous: float,

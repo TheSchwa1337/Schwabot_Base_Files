@@ -31,6 +31,10 @@ __all__ = ["wave_lattice_generator"]
 
 
 def _logspace_levels(magnitudes: np.ndarray, levels: int) -> np.ndarray:
+
+
+    pass
+    pass
     """Compute logarithmic thresholds for *levels* bins."""
 mag_nonzero = magnitudes[magnitudes > 0]
     if mag_nonzero.size == 0:
@@ -41,6 +45,8 @@ mag_nonzero = magnitudes[magnitudes > 0]
 
 
 def wave_lattice_generator(
+
+
     signal: np.ndarray,
 *,
 levels: int = 3,

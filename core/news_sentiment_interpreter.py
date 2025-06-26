@@ -27,6 +27,8 @@ __all__: list[str] = ["interpret_news_sentiment", "weight_sentiment_events"]
 
 
 def interpret_news_sentiment(
+
+
     sentiment_scores: Sequence[float],
 drift_biases: Sequence[float],
 event_sigmas: Sequence[float],
@@ -59,6 +61,8 @@ weighted_signals = scores * biases * sigmas
 
 
 def weight_sentiment_events(
+
+
     raw_sentiment: float,
 event_importance: float,
 *,

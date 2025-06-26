@@ -25,7 +25,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "build_strategy_matrix",
 "strategy_match_matrix",
 "reward_matrix",
@@ -39,6 +39,8 @@ __all__: list[str] = [
 
 
 def build_strategy_matrix(
+
+
     phi: np.ndarray, kappa: np.ndarray
 ) -> np.ndarray:  # noqa: D401
 """Return outer product S = phi[:, None] * kappa[None, :]."""
@@ -51,6 +53,10 @@ def build_strategy_matrix(
 
 
 def _find_band_idx(value: float | int, edges: Sequence[float | int]) -> int:
+
+
+    pass
+    pass
     """Return index i such that edges[i] <= value < edges[i+1]."""
     if not (len(edges) >= 2):
         raise ValueError("edges must contain at least two elements")
@@ -62,6 +68,8 @@ def _find_band_idx(value: float | int, edges: Sequence[float | int]) -> int:
 
 
 def strategy_match_matrix(
+
+
     H_t: int,
 zeta_t: float,
 hash_edges: Sequence[int],
@@ -84,6 +92,8 @@ i = _find_band_idx(H_t, hash_edges)
 
 
 def reward_matrix(
+
+
     P: np.ndarray,
 delta_G: np.ndarray,
 zeta: np.ndarray,
@@ -103,6 +113,8 @@ Arrays must share the same shape.
 
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
+
+
     """TODO: document _softmax."""
 x_shift = x - unified_math.unified_math.max(x)
     e_x = unified_math.unified_math.exp(x_shift)
@@ -110,6 +122,8 @@ x_shift = x - unified_math.unified_math.max(x)
 
 
 def dynamic_strategy_switch(
+
+
     Q: np.ndarray,
 T: np.ndarray,
 lam: np.ndarray,
@@ -127,6 +141,8 @@ lam: np.ndarray,
 
 
 def update_strategy_matrix(
+
+
     M_prev: np.ndarray,
 R: np.ndarray,
 E: np.ndarray,

@@ -32,6 +32,8 @@ _PI2: Final = 2.0 * math.pi
 
 
 def fallback_oscillator(
+
+
     t: float,
 *,
 amplitude: float = 1.0,

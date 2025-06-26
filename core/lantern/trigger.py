@@ -8,6 +8,10 @@ import math
 
 
 def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:
+
+
+    pass
+    pass
     """Calculate lantern trigger spike score.
 
 Compute spike detector: Λ = Δprice/Δt · e^(-τ/τ₀)

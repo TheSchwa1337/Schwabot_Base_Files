@@ -19,7 +19,7 @@ from typing import Sequence, List, Any
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "ProfitEchoVelocityDriver",
 "compute_volatility_burst_memory",
 "drive_profit_echo",
@@ -28,13 +28,17 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ProfitEchoVelocityDriver:
+
+
     """Profit echo velocity driver with volatility burst memory."""
 
 n_exponent: float = 2.0
 epsilon: float = 0.1
 memory_decay: float = 0.95
 
-    def compute_chi_m(
+def compute_chi_m(
+
+
         self,
 volume_deltas: Sequence[float],
 xi_values: Sequence[float],
@@ -71,7 +75,9 @@ sigma_xi_eps = 1.0 / (1.0 + unified_math.exp(-xi_epsilon))
 
         return chi_m
 
-    def compute_profit_echo_velocity(
+def compute_profit_echo_velocity(
+
+
         self,
 chi_m_values: np.ndarray,
 historical_profits: Sequence[float],
@@ -103,7 +109,9 @@ echo_velocity = float(np.sum(echo_components))
 
         return echo_velocity
 
-    def drive_memory_update(
+def drive_memory_update(
+
+
         self,
 current_memory: np.ndarray,
 new_volatility_burst: np.ndarray,
@@ -136,7 +144,9 @@ updated_memory = (
 
         return updated_memory
 
-    def compute_echo_trajectory(
+def compute_echo_trajectory(
+
+
         self,
 volume_time_series: Sequence[Sequence[float]],
 xi_time_series: Sequence[float],
@@ -202,6 +212,8 @@ trajectory[step] = echo_velocity
 
 
 def compute_volatility_burst_memory(
+
+
     volume_deltas: Sequence[float],
 xi_values: Sequence[float],
 n_exponent: float = 2.0,
@@ -213,6 +225,8 @@ epsilon: float = 0.1,
 
 
 def drive_profit_echo(
+
+
     volume_deltas: Sequence[float],
 xi_values: Sequence[float],
 profit_history: Sequence[float],
@@ -234,6 +248,8 @@ time_weights = np.ones(len(profit_history))
 
 
 def compute_profit_echo_velocity(
+
+
     profit_history: List[float],
 time_weights: List[float],
 velocity_window: int = 10
@@ -243,6 +259,8 @@ velocity_window: int = 10
 
 
 def calculate_chi_momentum(
+
+
     chi_m_values: np.ndarray[Any, Any],
 momentum_window: int = 5,
 smoothing_factor: float = 0.1
@@ -252,6 +270,8 @@ smoothing_factor: float = 0.1
 
 
 def update_memory_state(
+
+
     current_memory: np.ndarray[Any, Any],
 new_volatility_burst: np.ndarray[Any, Any],
 learning_rate: float = 0.01
@@ -261,6 +281,8 @@ learning_rate: float = 0.01
 
 
 def calculate_echo_resonance(
+
+
     profit_velocity: np.ndarray[Any, Any],
 memory_state: np.ndarray[Any, Any],
 resonance_threshold: float = 0.5
@@ -270,6 +292,8 @@ resonance_threshold: float = 0.5
 
 
 def compute_adaptive_velocity(
+
+
     profit_series: List[float],
 time_series: List[float],
 adaptive_window: int = 20

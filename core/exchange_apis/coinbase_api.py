@@ -18,9 +18,15 @@ from .base_api import ExchangeAPI
 
 
 class CoinbaseAPI(ExchangeAPI):
+
+
     """Coinbase Pro/Advanced Trade API implementation."""
 
-    def __init__(self, config: ExchangeConfig) -> None:
+def __init__(self, config: ExchangeConfig) -> None:
+
+
+    pass
+    pass
         """Initialize Coinbase API.
 
 Args:
@@ -40,7 +46,9 @@ super().__init__(config)
         # Initialize rate limiter
 self.rate_limiter = RateLimiter(config.rate_limit, 60.0)
 
-    def _sign_request(
+def _sign_request(
+
+
         self,
 method: str,
 endpoint: str,
@@ -61,6 +69,8 @@ Returns:
 Updated headers with Coinbase signature.
 """
         try:
+    pass
+    pass
 timestamp = str(int(time.time()))
 
             # Create signature string

@@ -2,6 +2,7 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
+import numpy as np
 Quantum Strategy - Schwabot UROS v1.0
 =====================================
 
@@ -16,7 +17,6 @@ Features:
 - Quantum annealing for portfolio optimization
 """
 
-from core.unified_math_system import unified_math
 from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime

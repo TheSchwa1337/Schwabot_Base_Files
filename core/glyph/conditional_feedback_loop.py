@@ -4,6 +4,10 @@ from __future__ import annotations
 
 
 def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
+
+
+    pass
+    pass
     """Apply exponential moving feedback to glyph weights.
 
 Compute feedback: g_{t+1} = β·g_t + (1-β)·ζ

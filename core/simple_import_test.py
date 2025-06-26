@@ -1,18 +1,46 @@
 # Import safe print for Windows compatibility
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 try:
+    pass
+    pass
 except ImportError:
-    def safe_print(message):
+    pass
+    pass
+def safe_print(message):
+
+
+    pass
+    pass
         print(message)
-    def info(message):
+def info(message):
+
+
+    pass
+    pass
         print(f"[INFO] {message}")
-    def warn(message):
+def warn(message):
+
+
+    pass
+    pass
         print(f"[WARN] {message}")
-    def error(message):
+def error(message):
+
+
+    pass
+    pass
         print(f"[ERROR] {message}")
-    def success(message):
+def success(message):
+
+
+    pass
+    pass
         print(f"[SUCCESS] {message}")
-    def debug(message):
+def debug(message):
+
+
+    pass
+    pass
         print(f"[DEBUG] {message}")
 
 # #!/usr/bin/env python3
@@ -26,7 +54,9 @@ import traceback
 safe_print("Starting import and runtime test...")
 
 try:
-    from hash_registry_manager import HashRegistryManager
+    pass
+    pass
+from hash_registry_manager import HashRegistryManager
     safe_print("✓ HashRegistryManager import - SUCCESS")
     mgr = HashRegistryManager()
     safe_print("✓ HashRegistryManager instantiation - SUCCESS")
@@ -43,8 +73,14 @@ except Exception as e:
     traceback.print_exc()
 
 def test_import(module_name, class_name=None):
+
+
+    pass
+    pass
     """Test importing a module and optionally a class."""
     try:
+    pass
+    pass
         if class_name:
             exec(f"from {module_name} import {class_name}")
             safe_print(f"✓ {module_name}.{class_name} - SUCCESS")
@@ -58,6 +94,10 @@ def test_import(module_name, class_name=None):
         return False
 
 def main():
+
+
+    pass
+    pass
     """Test all critical imports."""
     safe_print("Testing Critical Module Imports")
     safe_print("=" * 50)
@@ -89,5 +129,7 @@ def main():
         return False
 
 if __name__ == "__main__":
+    pass
+    pass
     success = main()
     sys.exit(0 if success else 1)

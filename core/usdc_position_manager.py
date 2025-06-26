@@ -21,7 +21,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "usdc_position",
 "usdc_trading",
 "usdc_sigma",
@@ -34,6 +34,8 @@ __all__: list[str] = [
 
 
 def usdc_position(
+
+
     holdings: Sequence[float],
 rates: Sequence[float],
 time_deltas: Sequence[float],
@@ -66,6 +68,8 @@ decayed_holdings = hold_arr * decay_factors
 
 
 def usdc_trading(
+
+
     alpha_entry: float,
 delta_buy: float,
 beta_exit: float,
@@ -91,6 +95,8 @@ exit_term = beta_exit * delta_sell
 
 
 def usdc_sigma(
+
+
     position_gradient: Sequence[float],
 t_usdc: float,
 ) -> np.ndarray:  # noqa: D401
@@ -117,6 +123,8 @@ sigma_usdc = grad_arr * log_term
 
 
 def usdc_optimal_time(
+
+
     sigma_series: Sequence[float],
 theta_usdc: float,
 *,

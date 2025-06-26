@@ -1,21 +1,53 @@
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
+    pass
+    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 # #!/usr/bin/env python3
 """Base exchange API implementation.
@@ -47,9 +79,15 @@ logger = logging.getLogger(__name__)
 
 
 class ExchangeAPI(ABC):
+
+
     """Base exchange API class."""
 
-    def __init__(self: "ExchangeAPI", config: ExchangeConfig) -> None:
+def __init__(self: "ExchangeAPI", config: ExchangeConfig) -> None:
+
+
+    pass
+    pass
         """Initialize exchange API.
 
 Args:
@@ -62,7 +100,11 @@ self.session = self._create_session()
         # Initialize CLI compatibility
 self.cli_handler = CLIHandler()
 
-    def _create_session(self: "ExchangeAPI") -> requests.Session:
+def _create_session(self: "ExchangeAPI") -> requests.Session:
+
+
+    pass
+    pass
         """Create HTTP session with retry logic.
 
 Returns:
@@ -83,7 +125,9 @@ adapter = HTTPAdapter(max_retries=retry_strategy)
 
         return session
 
-    def safe_safe_print(
+def safe_safe_print(
+
+
         self: "ExchangeAPI", message: str, force_ascii: Optional[bool] = None
 ) -> None:
 """Safe print with CLI compatibility.
@@ -97,7 +141,9 @@ force_ascii = getattr(self.config, "force_ascii_output", False)
 
 self.cli_handler.safe_print(message, force_ascii)
 
-    def safe_log(
+def safe_log(
+
+
         self: "ExchangeAPI", level: str, message: str, context: str = ""
 ) -> bool:
 """Safe logging with CLI compatibility.
@@ -112,7 +158,9 @@ True if logging was successful.
 """
         return safe_log(logger, level, message, context)
 
-    def _make_request(
+def _make_request(
+
+
         self: "ExchangeAPI",
 method: str,
 endpoint: str,
@@ -149,6 +197,8 @@ headers = self._sign_request(method, endpoint, params, data, headers)
 
         # Make request
         try:
+    pass
+    pass
 response = self.session.request(
                 method=method,
 url=url,
@@ -167,7 +217,9 @@ self.safe_log("error", error_msg)
             raise Exception(error_msg) from e
 
 @abstractmethod
-    def _sign_request(
+def _sign_request(
+
+
         self: "ExchangeAPI",
 method: str,
 endpoint: str,
@@ -188,7 +240,11 @@ Returns:
 Updated headers with signature.
 """
 
-    def get_ticker(self: "ExchangeAPI", symbol: str) -> MarketData:
+def get_ticker(self: "ExchangeAPI", symbol: str) -> MarketData:
+
+
+    pass
+    pass
         """Get ticker data for symbol.
 
 Args:
@@ -198,6 +254,8 @@ Returns:
 Market data containing ticker information.
 """
         try:
+    pass
+    pass
 endpoint = f"/products/{symbol}/ticker"
 result = self._make_request("GET", endpoint)
 
@@ -213,7 +271,11 @@ error_msg = f"Error getting ticker for {symbol}: {e}"
 self.safe_log("error", error_msg)
             raise
 
-    def get_order_book(self: "ExchangeAPI", symbol: str, level: int = 2) -> MarketData:
+def get_order_book(self: "ExchangeAPI", symbol: str, level: int = 2) -> MarketData:
+
+
+    pass
+    pass
         """Get order book for symbol.
 
 Args:
@@ -224,6 +286,8 @@ Returns:
 Market data containing order book information.
 """
         try:
+    pass
+    pass
 endpoint = f"/products/{symbol}/book"
 params = {"level": level}
 result = self._make_request("GET", endpoint, params=params)
@@ -240,7 +304,11 @@ error_msg = f"Error getting order book for {symbol}: {e}"
 self.safe_log("error", error_msg)
             raise
 
-    def place_order(self: "ExchangeAPI", order_request: OrderRequest) -> OrderResponse:
+def place_order(self: "ExchangeAPI", order_request: OrderRequest) -> OrderResponse:
+
+
+    pass
+    pass
         """Place order on exchange.
 
 Args:
@@ -250,6 +318,8 @@ Returns:
 Order response with execution details.
 """
         try:
+    pass
+    pass
             # Prepare order data
 order_data = {
 "product_id": order_request.symbol,
@@ -296,13 +366,19 @@ error_msg = f"Error placing order: {e}"
 self.safe_log("error", error_msg)
             raise
 
-    def get_balances(self: "ExchangeAPI") -> List[Balance]:
+def get_balances(self: "ExchangeAPI") -> List[Balance]:
+
+
+    pass
+    pass
         """Get account balances.
 
 Returns:
 List of balance objects.
 """
         try:
+    pass
+    pass
 endpoint = "/accounts"
 result = self._make_request("GET", endpoint, signed=True)
 

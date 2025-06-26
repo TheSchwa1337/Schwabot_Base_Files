@@ -7,6 +7,10 @@ import math
 
 
 def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
+
+
+    pass
+    pass
     """Return True when σ(ψ · ξ · ϕ) ≥ 0.5.
 
 Compute logistic gate: C_exec(t) = σ(Ψ_path · ξ_sent · ϕ_drift)

@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    pass
+    pass
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -50,31 +82,53 @@ from pathlib import Path
 
 # Import unified mathematics
 try:
-    from core.unified_mathematics_config import get_unified_math
+    pass
+    pass
+from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 UNIFIED_MATH_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    pass
+    pass
+from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:
+
+
+    pass
+    pass
         return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str = "") -> str:
+
+
+    pass
+    pass
         return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
 
 
 class APIType(Enum):
+
+
     """API types for different services."""
 COINMARKETCAP = "coinmarketcap"
 INTRAPEAT = "intrapeat"
@@ -83,6 +137,8 @@ CCXT = "ccxt"
 
 
 class SecurityLevel(Enum):
+
+
     """Security levels for API access."""
 LOW = "low"          # Public APIs (CoinMarketCap)
     MEDIUM = "medium"    # Semi-private APIs (Intrapeat)
@@ -91,6 +147,8 @@ LOW = "low"          # Public APIs (CoinMarketCap)
 
 @dataclass
 class APICredentials:
+
+
     """Encrypted API credentials."""
 api_type: APIType
 api_key: str
@@ -104,6 +162,8 @@ last_accessed: datetime = field(default_factory=datetime.now)
 
 @dataclass
 class APIRequest:
+
+
     """API request data."""
 endpoint: str
 method: str
@@ -115,6 +175,8 @@ request_id: str
 
 @dataclass
 class APIResponse:
+
+
     """API response data."""
 status_code: int
 data: Any
@@ -125,6 +187,8 @@ response_time: float
 
 
 class SecureAPIManager:
+
+
     """
 Secure API Manager - Linux-based secure storage for Schwabot APIs.
 
@@ -135,7 +199,11 @@ Provides secure management for:
     - Future CCXT integration
 """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+
+    pass
+    pass
         """Initialize secure API manager."""
 self.config = config or {}
 
@@ -168,9 +236,15 @@ self.average_response_time = 0.0
 
 safe_safe_print("🔐 Secure API Manager initialized")
 
-    def _get_encryption_key(self) -> bytes:
+def _get_encryption_key(self) -> bytes:
+
+
+    pass
+    pass
         """Get encryption key from secure Linux storage."""
         try:
+    pass
+    pass
             # Try to get key from Linux keyring or secure storage
 key_paths = [
 "/run/secrets/schwabot_api_key",
@@ -195,9 +269,15 @@ os.path.expanduser("~/.schwabot/api_key"),
 safe_safe_print(f"❌ Failed to get encryption key: {safe_format_error(e, 'encryption_key')}")
             return hashlib.sha256(b"fallback_key").digest()[:32]
 
-    def _get_secure_storage_path(self) -> Path:
+def _get_secure_storage_path(self) -> Path:
+
+
+    pass
+    pass
         """Get secure storage path for credentials."""
         try:
+    pass
+    pass
             # Try Linux secure storage locations
 secure_paths = [
 Path("/run/secrets/schwabot"),
@@ -222,11 +302,17 @@ fallback_path = Path(".schwabot_credentials")
 safe_safe_print(f"❌ Failed to get secure storage path: {safe_format_error(e, 'storage_path')}")
             return Path(".schwabot_credentials")
 
-    def encrypt_data(self, data: str) -> str:
+def encrypt_data(self, data: str) -> str:
+
+
+    pass
+    pass
         """Encrypt data using secure key."""
         try:
-            import cryptography
-            from cryptography.fernet import Fernet
+    pass
+    pass
+import cryptography
+from cryptography.fernet import Fernet
 
             # Create Fernet key from our encryption key
 fernet_key = base64.urlsafe_b64encode(self.encryption_key)
@@ -237,6 +323,8 @@ encrypted_data = fernet.encrypt(data.encode())
             return base64.urlsafe_b64encode(encrypted_data).decode()
 
         except ImportError:
+    pass
+    pass
             # Fallback: simple XOR encryption (not secure, just for development)
             safe_safe_print("⚠️ cryptography not available, using fallback encryption")
             return self._simple_encrypt(data)
@@ -244,10 +332,15 @@ encrypted_data = fernet.encrypt(data.encode())
 safe_safe_print(f"❌ Encryption failed: {safe_format_error(e, 'encrypt_data')}")
             return data
 
-    def decrypt_data(self, encrypted_data: str) -> str:
+def decrypt_data(self, encrypted_data: str) -> str:
+
+
+    pass
+    pass
         """Decrypt data using secure key."""
         try:
-            import cryptography
+    pass
+    pass
 #             from cryptography.fernet import Fernet  # F811: duplicate import
 
             # Create Fernet key from our encryption key
@@ -260,27 +353,39 @@ encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode())
             return decrypted_data.decode()
 
         except ImportError:
+    pass
+    pass
             # Fallback: simple XOR decryption
             return self._simple_decrypt(encrypted_data)
         except Exception as e:
 safe_safe_print(f"❌ Decryption failed: {safe_format_error(e, 'decrypt_data')}")
             return encrypted_data
 
-    def _simple_encrypt(self, data: str) -> str:
+def _simple_encrypt(self, data: str) -> str:
+
+
+    pass
+    pass
         """Simple XOR encryption (development only)."""
         key_bytes = self.encryption_key
 data_bytes = data.encode()
         encrypted = bytes(a ^ b for a, b in zip(data_bytes, key_bytes * (len(data_bytes) // len(key_bytes) + 1)))
         return base64.urlsafe_b64encode(encrypted).decode()
 
-    def _simple_decrypt(self, encrypted_data: str) -> str:
+def _simple_decrypt(self, encrypted_data: str) -> str:
+
+
+    pass
+    pass
         """Simple XOR decryption (development only)."""
         key_bytes = self.encryption_key
 encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode())
         decrypted = bytes(a ^ b for a, b in zip(encrypted_bytes, key_bytes * (len(encrypted_bytes) // len(key_bytes) + 1)))
         return decrypted.decode()
 
-    def store_credentials(
+def store_credentials(
+
+
         self,
 api_type: APIType,
 api_key: str,
@@ -295,6 +400,8 @@ This encrypts and stores credentials where they can't be touched
 but can be accessed by the system.
 """
         try:
+    pass
+    pass
             # Create credentials object
 credentials = APICredentials(
                 api_type=api_type,
@@ -328,6 +435,8 @@ credentials_data = {
 
             # Set secure file permissions (Linux)
             try:
+    pass
+    pass
 os.chmod(credentials_file, 0o600)  # Owner read/write only
             except Exception:
                 pass  # Windows doesn't support chmod
@@ -339,9 +448,15 @@ safe_safe_print(f"✅ Credentials stored securely for {api_type.value}")
 safe_safe_print(f"❌ Failed to store credentials: {safe_format_error(e, 'store_credentials')}")
             return False
 
-    def load_credentials(self, api_type: APIType) -> Optional[APICredentials]:
+def load_credentials(self, api_type: APIType) -> Optional[APICredentials]:
+
+
+    pass
+    pass
         """Load encrypted API credentials from secure storage."""
         try:
+    pass
+    pass
             # Check if already loaded in memory
             if api_type in self.credentials:
                 return self.credentials[api_type]
@@ -378,9 +493,15 @@ safe_safe_print(f"✅ Credentials loaded for {api_type.value}")
 safe_safe_print(f"❌ Failed to load credentials: {safe_format_error(e, 'load_credentials')}")
             return None
 
-    def get_decrypted_credentials(self, api_type: APIType) -> Optional[Dict[str, str]]:
+def get_decrypted_credentials(self, api_type: APIType) -> Optional[Dict[str, str]]:
+
+
+    pass
+    pass
         """Get decrypted API credentials."""
         try:
+    pass
+    pass
 credentials = self.load_credentials(api_type)
             if not credentials:
                 return None
@@ -419,6 +540,8 @@ This provides robust wrappers for CCXT, direct REST/WebSocket,
         with built-in retry, back-off, and rate-limit throttling.
 """
         try:
+    pass
+    pass
             # Check rate limits
             if not self._check_rate_limit(api_type):
                 await asyncio.sleep(self.rate_limit_delay)
@@ -453,6 +576,8 @@ start_time = time.time()
 
             for attempt in range(self.max_retries):
                 try:
+    pass
+    pass
 response = await self._execute_request(api_type, request)
                     if response and response.status_code < 400:
                         break
@@ -493,9 +618,15 @@ safe_safe_print(f"❌ API request failed after {self.max_retries} attempts")
 safe_safe_print(f"❌ API request failed: {safe_format_error(e, 'make_api_request')}")
             return None
 
-    def _check_rate_limit(self, api_type: APIType) -> bool:
+def _check_rate_limit(self, api_type: APIType) -> bool:
+
+
+    pass
+    pass
         """Check if request is within rate limits."""
         try:
+    pass
+    pass
 now = datetime.now()
             last_request = self.last_requests.get(api_type)
 
@@ -522,7 +653,9 @@ self.last_requests[api_type] = now
 safe_safe_print(f"⚠️ Rate limit check failed: {safe_format_error(e, 'rate_limit')}")
             return True
 
-    def _prepare_headers(
+def _prepare_headers(
+
+
         self,
 api_type: APIType,
 credentials: Dict[str, str],
@@ -530,6 +663,8 @@ base_headers: Dict[str, str]
 ) -> Dict[str, str]:
 """Prepare headers for API request."""
         try:
+    pass
+    pass
 headers = {
 'User-Agent': 'Schwabot/1.0',
 'Accept': 'application/json',
@@ -570,7 +705,9 @@ safe_safe_print(f"⚠️ Header preparation failed: {safe_format_error(e, 'prepa
 async def _execute_request(self, api_type: APIType, request: APIRequest) -> Optional[APIResponse]:
         """Execute the actual API request."""
         try:
-            import aiohttp
+    pass
+    pass
+import aiohttp
 
             # Create session if not exists
             if api_type not in self.connection_pool:
@@ -606,17 +743,26 @@ response_time=0.0  # Will be set by caller
 safe_safe_print(f"❌ Request execution failed: {safe_format_error(e, 'execute_request')}")
             return None
 
-    def _generate_request_id(self) -> str:
+def _generate_request_id(self) -> str:
+
+
+    pass
+    pass
         """Generate unique request ID."""
-        import uuid
+import uuid
         return str(uuid.uuid4())
 
-    def _generate_nonce(self) -> str:
+def _generate_nonce(self) -> str:
+
+
+    pass
+    pass
         """Generate nonce for NiceHash API."""
-        import uuid
         return str(uuid.uuid4())
 
-    def _generate_nicehash_signature(
+def _generate_nicehash_signature(
+
+
         self,
 api_key: str,
 api_secret: str,
@@ -625,6 +771,8 @@ nonce: str
 ) -> str:
 """Generate HMAC signature for NiceHash API."""
         try:
+    pass
+    pass
             # NiceHash signature format
 message = f"{api_key}\x00{timestamp}\x00{nonce}"
 signature = hmac.new(
@@ -639,9 +787,15 @@ signature = hmac.new(
 safe_safe_print(f"❌ NiceHash signature generation failed: {safe_format_error(e, 'nicehash_signature')}")
             return ""
 
-    def _update_average_response_time(self, response_time: float) -> None:
+def _update_average_response_time(self, response_time: float) -> None:
+
+
+    pass
+    pass
         """Update average response time."""
         try:
+    pass
+    pass
             if self.total_requests > 0:
 self.average_response_time = (
                     (self.average_response_time * (self.total_requests - 1) + response_time) /
@@ -650,7 +804,11 @@ self.average_response_time = (
         except Exception:
             pass
 
-    def get_api_statistics(self) -> Dict[str, Any]:
+def get_api_statistics(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get API usage statistics."""
         return {
 'total_requests': self.total_requests,
@@ -663,7 +821,11 @@ self.average_response_time = (
             'auto_reconnect': self.auto_reconnect
 }
 
-    def clear_history(self) -> None:
+def clear_history(self) -> None:
+
+
+    pass
+    pass
         """Clear request and response history."""
 self.request_history.clear()
         self.response_history.clear()
@@ -672,6 +834,8 @@ self.request_history.clear()
 async def close_connections(self) -> None:
         """Close all API connections."""
         try:
+    pass
+    pass
             for session in self.connection_pool.values():
                 await session.close()
             self.connection_pool.clear()
@@ -686,11 +850,17 @@ secure_api_manager = SecureAPIManager()
 
 # Convenience functions for external access
 def get_secure_api_manager() -> SecureAPIManager:
+
+
+    pass
+    pass
     """Get global secure API manager instance."""
     return secure_api_manager
 
 
 def store_api_credentials(
+
+
     api_type: APIType,
 api_key: str,
 api_secret: Optional[str] = None,
@@ -702,6 +872,10 @@ security_level: SecurityLevel = SecurityLevel.MEDIUM
 
 
 def load_api_credentials(api_type: APIType) -> Optional[APICredentials]:
+
+
+    pass
+    pass
     """Load API credentials from secure storage."""
     return secure_api_manager.load_credentials(api_type)
 
@@ -718,6 +892,10 @@ headers: Optional[Dict[str, str]] = None
 
 
 def get_api_stats() -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Get API usage statistics."""
     return secure_api_manager.get_api_statistics()
 
@@ -725,6 +903,8 @@ def get_api_stats() -> Dict[str, Any]:
 # Example usage
 
 if __name__ == "__main__":
+    pass
+    pass
     # Test secure API manager
 safe_print("🧪 Testing Secure API Manager...")
 

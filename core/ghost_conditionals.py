@@ -22,11 +22,17 @@ _K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: float) -> float:  # noqa: D401
+
+
     """TODO: document _sigmoid."""
     return 1.0 / (1.0 + unified_math.exp(-_K * x))
 
 
 def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
+
+
+    pass
+    pass
     """Return Γᵣ activation probability in (0, 1).
 
 Parameters

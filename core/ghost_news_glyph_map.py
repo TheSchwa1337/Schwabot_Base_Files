@@ -16,6 +16,8 @@ __all__: list[str] = ["news_to_glyph_weight"]
 
 
 def news_to_glyph_weight(
+
+
     news_vec: Sequence[float], glyph_mu: Sequence[float]
 ) -> float:
 """Return dot-product weight between news vector and glyph mean vector."""

@@ -19,13 +19,17 @@ __all__: list[str] = ["HysteresisField"]
 
 @dataclass(slots=True)
 class HysteresisField:
+
+
     """TODO: document HysteresisField."""
 
 activation_threshold: float = 0.7
 decay_threshold: float = 0.3
 _active: bool = False
 
-    def update(self, strength: float) -> bool:  # noqa: D401
+def update(self, strength: float) -> bool:  # noqa: D401
+
+
         """Update with *strength* ∈ [0,1] and return new active state."""
         if self._active:
             if strength < self.decay_threshold:

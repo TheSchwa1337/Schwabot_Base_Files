@@ -12,7 +12,7 @@ trading-loop iterations without blocking the GIL.
 Current implementation
 ----------------------
 1. ``ThermalShift`` class – exponential-moving-average (EWMA) smoothing with
-   :py:meth:`update` returning ``(is_stable, delta)``.
+py:meth:`update` returning ``(is_stable, delta)``.
 2. Stateless wrapper :func:`thermal_delta_switch`` mirroring the legacy stub
    signature requested by earlier Schwabot code.
 3. Fully typed and Flake8-clean (≤ 79-character lines).
@@ -33,6 +33,8 @@ _DEFAULT_THRESHOLD: Final = 2.5  # °C
 
 @dataclass(slots=True)
 class ThermalShift:
+
+
     """EWMA-based thermal drift detector.
 
 Parameters
@@ -51,7 +53,11 @@ _ema: float | None = field(default=None, init=False)
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def update(self, temp: float) -> Tuple[bool, float]:
+def update(self, temp: float) -> Tuple[bool, float]:
+
+
+    pass
+    pass
         """Process a new temperature reading and return stability status.
 
 Parameters
@@ -81,6 +87,8 @@ delta = unified_math.abs(temp - self._ema)
 
 
 def thermal_delta_switch(
+
+
     current: float,
 previous: float,
 *,

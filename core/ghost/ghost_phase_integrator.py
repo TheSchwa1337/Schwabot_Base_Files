@@ -9,6 +9,8 @@ import math
 
 @dataclass
 class PhasePacket:
+
+
     """Phase packet containing hash, echo, drift and final coefficients."""
 
 gamma: float  # Γ_hash coefficient
@@ -18,6 +20,8 @@ theta: float  # Θ_drift coefficient
 
 
 def build_packet(
+
+
     hash_seq: list[int], echo_seq: list[float], drift: float
 ) -> PhasePacket:
 """Compute Γ, μ, ζ, Θ from last two ticks.

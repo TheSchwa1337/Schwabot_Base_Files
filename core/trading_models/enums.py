@@ -9,6 +9,8 @@ from enum import Enum
 
 
 class ExchangeType(Enum):
+
+
     """Exchange type enumeration."""
 
 COINBASE = "coinbase"
@@ -20,6 +22,8 @@ CUSTOM = "custom"
 
 
 class OrderType(Enum):
+
+
     """Order type enumeration."""
 
 MARKET = "market"
@@ -32,6 +36,8 @@ IMMEDIATE_OR_CANCEL = "immediate_or_cancel"
 
 
 class OrderSide(Enum):
+
+
     """Order side enumeration."""
 
 BUY = "buy"
@@ -39,6 +45,8 @@ SELL = "sell"
 
 
 class OrderStatus(Enum):
+
+
     """Order status enumeration."""
 
 PENDING = "pending"
@@ -51,6 +59,8 @@ EXPIRED = "expired"
 
 
 class DataType(Enum):
+
+
     """Data type enumeration."""
 
 TICKER = "ticker"

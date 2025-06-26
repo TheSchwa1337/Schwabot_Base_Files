@@ -12,7 +12,7 @@ logic is under construction.
 from dataclasses import dataclass
 from typing import Any, Dict
 
-__all__: list[str] = [
+__all__: list[str] = []
 "RecursiveStrategyRouter",
 "route_strategy",
 ]
@@ -20,11 +20,17 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class RecursiveStrategyRouter:
+
+
     """No-op recursive router stub."""
 
 max_depth: int = 1
 
-    def route(self, packet: Dict[str, Any], depth: int = 0) -> Dict[str, Any]:
+def route(self, packet: Dict[str, Any], depth: int = 0) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Return packet unchanged, simulating routing recursion.
 
 Guards against exceeding *max_depth* to avoid runaway recursion.
@@ -36,5 +42,7 @@ Guards against exceeding *max_depth* to avoid runaway recursion.
 
 
 def route_strategy(packet: Dict[str, Any]) -> Dict[str, Any]:  # noqa: D401
+
+
     """Stateless wrapper for :py:meth:`RecursiveStrategyRouter.route`."""
     return RecursiveStrategyRouter().route(packet)

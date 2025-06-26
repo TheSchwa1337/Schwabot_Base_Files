@@ -29,6 +29,8 @@ _PHASE_MASK: int = 0x3FFFF_FFFFFF  # 42 bits set
 
 
 def phase_resonance_gate(
+
+
     tick: int,
 *,
 base_cycle: int = 42,

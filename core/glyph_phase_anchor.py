@@ -20,6 +20,8 @@ _DEFAULT_WHEEL: Final = 16
 
 
 def phase_anchor_index(
+
+
     glyph_hash: str, *, wheel_size: int = _DEFAULT_WHEEL
 ) -> int:
 """Return deterministic phase index in ``[0, wheel_size)`` for *glyph_hash*."""
@@ -31,6 +33,8 @@ idx = int(first32, 16) % wheel_size
 
 
 def glyph_active_for_tick(
+
+
     glyph_hash: str,
 tick: int,
 base_cycle: int = 42,

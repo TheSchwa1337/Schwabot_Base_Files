@@ -8,6 +8,10 @@ import math
 
 
 def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> float:
+
+
+    pass
+    pass
     """Calculate exit weight based on profit vs target.
 
 Compute exit signal: Φ_exit = sign(P - P_target) · κ_decay(t)

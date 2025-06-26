@@ -21,7 +21,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "quantize_news",
 "news_gradient",
 "news_psi",
@@ -34,6 +34,8 @@ __all__: list[str] = [
 
 
 def quantize_news(
+
+
     weights: Sequence[float],
 news_values: Sequence[Sequence[float]],
 ) -> np.ndarray:  # noqa: D401
@@ -69,6 +71,8 @@ length = len(news_arrays[0])
 
 
 def news_gradient(
+
+
     q_news: np.ndarray,
 *,
 dx: float = 1.0,
@@ -100,6 +104,8 @@ spatial_grad = np.zeros_like(grad_q)
 
 
 def news_psi(
+
+
     spatial_grad: np.ndarray,
 temporal_grad: np.ndarray,
 sigma: float,
@@ -126,6 +132,8 @@ grad_mag_sq = spatial_grad**2 + temporal_grad**2
 
 
 def news_spectral_field(q_news: np.ndarray) -> np.ndarray:  # noqa: D401
+
+
     """Return F_news = FFT(Q_news) spectral field representation.
 
 Parameters

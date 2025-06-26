@@ -1,5 +1,6 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
 """Comprehensive Mathematical Integration - Complete Flake8 Error Resolution.
 
 This script integrates all the mathematical systems we've created and fixes
@@ -198,17 +199,11 @@ class ComprehensiveMathematicalIntegrator:
         integration_test_content = '''#!/usr/bin/env python3
 """Mathematical Systems Integration Test."""
 
-import sys
-from pathlib import Path
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
 try:
-    from core.fractal_core import create_fractal_system
-    from core.matrix_fault_resolver import create_lattice_system
-    from core.profit_routing_engine import create_profit_routing_system
-    from core.glyph.recursive_glyph_mapper import create_glyph_mapping_system
     
     def test_mathematical_integration():
         """Test integration of all mathematical systems."""
@@ -319,7 +314,6 @@ except Exception as e:
 This module provides mathematical functionality for the Schwabot system.
 """
 
-import logging
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -357,9 +351,7 @@ if __name__ == "__main__":
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
-            original_content = content
-            
+
             # Fix trailing whitespace
             lines = content.split('\n')
             fixed_lines = []
@@ -375,7 +367,7 @@ if __name__ == "__main__":
             
             fixed_content = '\n'.join(fixed_lines)
             
-            if fixed_content != original_content:
+            if fixed_content != content:
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(fixed_content)
                 return True
@@ -395,8 +387,7 @@ if __name__ == "__main__":
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
-            original_content = content
+
             lines = content.split('\n')
             
             # Find import section

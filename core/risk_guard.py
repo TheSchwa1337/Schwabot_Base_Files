@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    pass
+    pass
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -45,39 +77,65 @@ from pathlib import Path
 
 # Import unified mathematics
 try:
-    from core.unified_mathematics_config import get_unified_math
+    pass
+    pass
+from core.unified_mathematics_config import get_unified_math
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 UNIFIED_MATH_AVAILABLE = False
 
 # Import fault bus for integration
 try:
-    from core.fault_bus import get_fault_bus
+    pass
+    pass
+from core.fault_bus import get_fault_bus
 fault_bus = get_fault_bus()
     FAULT_BUS_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 FAULT_BUS_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    pass
+    pass
+from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:
+
+
+    pass
+    pass
         return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str = "") -> str:
+
+
+    pass
+    pass
         return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
 
 
 class RiskLevel(Enum):
+
+
     """Risk levels for different market conditions."""
 LOW = "low"          # Normal market conditions
 MEDIUM = "medium"    # Elevated volatility
@@ -86,6 +144,8 @@ CRITICAL = "critical"  # Emergency conditions
 
 
 class CircuitBreakerState(Enum):
+
+
     """Circuit breaker states."""
 NORMAL = "normal"        # Normal operation
 WARNING = "warning"      # Warning threshold reached
@@ -95,6 +155,8 @@ RESET = "reset"          # Circuit breaker reset
 
 @dataclass
 class RiskLimits:
+
+
     """Risk limits configuration."""
 daily_loss_limit: float = 1000.0      # Maximum daily loss in USD
 single_trade_limit: float = 100.0     # Maximum single trade size in USD
@@ -106,6 +168,8 @@ position_reconciliation_interval: int = 300  # Reconciliation interval in second
 
 @dataclass
 class PositionData:
+
+
     """Position data for reconciliation."""
 asset: str
 quantity: float
@@ -119,6 +183,8 @@ reconciled: bool = False
 
 @dataclass
 class RiskEvent:
+
+
     """Risk event data."""
 event_type: str
 severity: RiskLevel
@@ -130,6 +196,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class RiskGuard:
+
+
     """
 Risk Guard - Safety and capital controls for Schwabot.
 
@@ -140,7 +208,11 @@ Provides comprehensive risk management including:
 - Manual panic button CLI
 """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+
+    pass
+    pass
         """Initialize risk guard."""
 self.config = config or {}
 
@@ -177,14 +249,24 @@ self.circuit_breaker_trips = 0
 
 safe_safe_print("🛡️ Risk Guard initialized")
 
-    def set_risk_limits(self, limits: RiskLimits) -> None:
+def set_risk_limits(self, limits: RiskLimits) -> None:
+
+
+    pass
+    pass
         """Set risk limits."""
 self.risk_limits = limits
 safe_safe_print(f"✅ Risk limits updated: Daily loss = ${limits.daily_loss_limit}")
 
-    def check_daily_loss_limit(self, trade_pnl: float) -> bool:
+def check_daily_loss_limit(self, trade_pnl: float) -> bool:
+
+
+    pass
+    pass
         """Check if trade would exceed daily loss limit."""
         try:
+    pass
+    pass
             # Check if we need to reset daily tracking
 now = datetime.now()
             if now.date() > self.daily_start_time.date():
@@ -209,9 +291,15 @@ f"Daily loss limit would be exceeded: ${new_daily_pnl:.2f}",
 safe_safe_print(f"❌ Daily loss check failed: {safe_format_error(e, 'daily_loss_check')}")
             return False
 
-    def check_single_trade_limit(self, trade_size: float) -> bool:
+def check_single_trade_limit(self, trade_size: float) -> bool:
+
+
+    pass
+    pass
         """Check if trade size exceeds single trade limit."""
         try:
+    pass
+    pass
             if trade_size > self.risk_limits.single_trade_limit:
 self._record_risk_event(
                     "single_trade_limit",
@@ -227,9 +315,15 @@ f"Single trade limit exceeded: ${trade_size:.2f}",
 safe_safe_print(f"❌ Single trade check failed: {safe_format_error(e, 'single_trade_check')}")
             return False
 
-    def check_exposure_limit(self, new_exposure: float) -> bool:
+def check_exposure_limit(self, new_exposure: float) -> bool:
+
+
+    pass
+    pass
         """Check if new exposure would exceed total exposure limit."""
         try:
+    pass
+    pass
 total_exposure = self.total_exposure + new_exposure
 
             if total_exposure > self.risk_limits.exposure_limit:
@@ -247,7 +341,9 @@ f"Exposure limit would be exceeded: ${total_exposure:.2f}",
 safe_safe_print(f"❌ Exposure check failed: {safe_format_error(e, 'exposure_check')}")
             return False
 
-    def check_circuit_breaker(
+def check_circuit_breaker(
+
+
         self,
 volatility: float,
 entropy: float,
@@ -262,6 +358,8 @@ Circuit breaker is triggered by:
 - Market anomalies
 """
         try:
+    pass
+    pass
             # Update history
 self.volatility_history.append(volatility)
             self.entropy_history.append(entropy)
@@ -307,7 +405,9 @@ self._record_circuit_breaker_event("reset", volatility, entropy)
 safe_safe_print(f"❌ Circuit breaker check failed: {safe_format_error(e, 'circuit_breaker')}")
             return False
 
-    def update_position(
+def update_position(
+
+
         self,
 asset: str,
 quantity: float,
@@ -316,6 +416,8 @@ current_price: float
 ) -> None:
 """Update position data."""
         try:
+    pass
+    pass
 unrealized_pnl = (current_price - entry_price) * quantity
 
 position = PositionData(
@@ -345,6 +447,8 @@ This ensures our internal position tracking matches
 the actual exchange balances.
 """
         try:
+    pass
+    pass
 reconciliation_results = {
 'reconciled': True,
 'discrepancies': [],
@@ -358,7 +462,7 @@ reconciliation_results = {
 discrepancy = unified_math.abs(exchange_balance - internal_balance)
 
                 if discrepancy > 0.001:  # Allow for small rounding differences
-reconciliation_results['discrepancies'].append({
+reconciliation_results['discrepancies'].append({]]
                         'asset': asset,
 'internal': internal_balance,
 'exchange': exchange_balance,
@@ -394,7 +498,11 @@ safe_safe_print("✅ Position reconciliation successful")
 safe_safe_print(f"❌ Position reconciliation failed: {safe_format_error(e, 'position_reconciliation')}")
             return {'reconciled': False, 'error': str(e)}
 
-    def trigger_panic_mode(self, reason: str = "Manual trigger") -> None:
+def trigger_panic_mode(self, reason: str = "Manual trigger") -> None:
+
+
+    pass
+    pass
         """
 Trigger panic mode - emergency stop for all trading.
 
@@ -402,6 +510,8 @@ This is the manual panic button that immediately stops
 all trading activity.
 """
         try:
+    pass
+    pass
 self.panic_mode = True
 self.panic_triggered_at = datetime.now()
 
@@ -427,9 +537,15 @@ safe_safe_print(f"🚨 PANIC MODE TRIGGERED: {reason}")
         except Exception as e:
 safe_safe_print(f"❌ Panic mode trigger failed: {safe_format_error(e, 'panic_mode')}")
 
-    def reset_panic_mode(self) -> None:
+def reset_panic_mode(self) -> None:
+
+
+    pass
+    pass
         """Reset panic mode."""
         try:
+    pass
+    pass
 self.panic_mode = False
 self.panic_triggered_at = None
 
@@ -445,7 +561,11 @@ safe_safe_print("✅ Panic mode reset")
         except Exception as e:
 safe_safe_print(f"❌ Panic mode reset failed: {safe_format_error(e, 'panic_reset')}")
 
-    def is_trading_allowed(self) -> bool:
+def is_trading_allowed(self) -> bool:
+
+
+    pass
+    pass
         """Check if trading is currently allowed."""
         return (
             not self.panic_mode and
@@ -453,7 +573,11 @@ self.circuit_breaker_state != CircuitBreakerState.TRIPPED and
 self.current_risk_level != RiskLevel.CRITICAL
 
 
-    def get_risk_status(self) -> Dict[str, Any]:
+def get_risk_status(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get current risk status."""
         return {
 'panic_mode': self.panic_mode,
@@ -470,7 +594,11 @@ self.current_risk_level != RiskLevel.CRITICAL
 'circuit_breaker_trips': self.circuit_breaker_trips
 }
 
-    def _reset_daily_tracking(self) -> None:
+def _reset_daily_tracking(self) -> None:
+
+
+    pass
+    pass
         """Reset daily tracking counters."""
 self.daily_start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         self.daily_pnl = 0.0
@@ -478,7 +606,9 @@ self.daily_trades = 0
 self.daily_volume = 0.0
 safe_safe_print("🔄 Daily tracking reset")
 
-    def _record_risk_event(
+def _record_risk_event(
+
+
         self,
 event_type: str,
 severity: RiskLevel,
@@ -488,6 +618,8 @@ metadata: Optional[Dict[str, Any]] = None
 ) -> None:
 """Record a risk event."""
         try:
+    pass
+    pass
 event = RiskEvent(
                 event_type=event_type,
 severity=severity,
@@ -510,7 +642,9 @@ safe_safe_print(f"⚠️ Risk event: {event_type} - {description}")
         except Exception as e:
 safe_safe_print(f"❌ Risk event recording failed: {safe_format_error(e, 'record_risk_event')}")
 
-    def _record_circuit_breaker_event(
+def _record_circuit_breaker_event(
+
+
         self,
 event_type: str,
 volatility: float,
@@ -518,6 +652,8 @@ entropy: float
 ) -> None:
 """Record circuit breaker event."""
         try:
+    pass
+    pass
 event = RiskEvent(
                 event_type=f"circuit_breaker_{event_type}",
 severity=RiskLevel.HIGH if event_type == "tripped" else RiskLevel.MEDIUM,
@@ -550,11 +686,19 @@ risk_guard = RiskGuard()
 
 # Convenience functions for external access
 def get_risk_guard() -> RiskGuard:
+
+
+    pass
+    pass
     """Get global risk guard instance."""
     return risk_guard
 
 
 def check_risk_limits(trade_pnl: float, trade_size: float, new_exposure: float) -> bool:
+
+
+    pass
+    pass
     """Check all risk limits for a trade."""
 guard = get_risk_guard()
 
@@ -570,30 +714,50 @@ daily_ok = guard.check_daily_loss_limit(trade_pnl)
 
 
 def check_circuit_breaker(volatility: float, entropy: float) -> bool:
+
+
+    pass
+    pass
     """Check circuit breaker conditions."""
 guard = get_risk_guard()
     return guard.check_circuit_breaker(volatility, entropy)
 
 
 def trigger_panic_mode(reason: str = "Manual trigger") -> None:
+
+
+    pass
+    pass
     """Trigger panic mode."""
 guard = get_risk_guard()
     guard.trigger_panic_mode(reason)
 
 
 def reset_panic_mode() -> None:
+
+
+    pass
+    pass
     """Reset panic mode."""
 guard = get_risk_guard()
     guard.reset_panic_mode()
 
 
 def is_trading_allowed() -> bool:
+
+
+    pass
+    pass
     """Check if trading is currently allowed."""
 guard = get_risk_guard()
     return guard.is_trading_allowed()
 
 
 def get_risk_status() -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Get current risk status."""
 guard = get_risk_guard()
     return guard.get_risk_status()
@@ -602,6 +766,8 @@ guard = get_risk_guard()
 # Example usage
 
 if __name__ == "__main__":
+    pass
+    pass
     # Test risk guard
 safe_print("🧪 Testing Risk Guard...")
 

@@ -35,6 +35,8 @@ __all__ = ["DualNumber", "dual_state_tracker"]
 
 @dataclass(slots=True)
 class DualNumber:
+
+
     """A first-order dual number x + ε·dx."""
 
 x: float  # primal value
@@ -43,7 +45,11 @@ dx: float  # derivative w.r.t. some scalar variable
     # ---------------------------------------------------------------------
     # Basic arithmetic
     # ---------------------------------------------------------------------
-    def __add__(self, other: Union["DualNumber", float]) -> "DualNumber":
+def __add__(self, other: Union["DualNumber", float]) -> "DualNumber":
+
+
+    pass
+    pass
         """Add another dual number or scalar to this dual number.
 
 Parameters
@@ -62,7 +68,11 @@ A new dual number representing the sum.
 
 __radd__ = __add__
 
-    def __sub__(self, other: Union["DualNumber", float]) -> "DualNumber":
+def __sub__(self, other: Union["DualNumber", float]) -> "DualNumber":
+
+
+    pass
+    pass
         """Subtract another dual number or scalar from this dual number.
 
 Parameters
@@ -79,7 +89,11 @@ A new dual number representing the difference.
             return DualNumber(self.x - other.x, self.dx - other.dx)
         return DualNumber(self.x - float(other), self.dx)
 
-    def __rsub__(self, other: float) -> "DualNumber":
+def __rsub__(self, other: float) -> "DualNumber":
+
+
+    pass
+    pass
         """Reverse subtraction: subtract this dual number from a scalar.
 
 Parameters
@@ -94,7 +108,11 @@ A new dual number representing the difference.
 """
         return DualNumber(float(other) - self.x, -self.dx)
 
-    def __mul__(self, other: Union["DualNumber", float]) -> "DualNumber":
+def __mul__(self, other: Union["DualNumber", float]) -> "DualNumber":
+
+
+    pass
+    pass
         """Multiply this dual number by another dual number or scalar.
 
 Parameters
@@ -116,7 +134,11 @@ other_f = float(other)
 
 __rmul__ = __mul__
 
-    def __truediv__(self, other: Union["DualNumber", float]) -> "DualNumber":
+def __truediv__(self, other: Union["DualNumber", float]) -> "DualNumber":
+
+
+    pass
+    pass
         """Divide this dual number by another dual number or scalar.
 
 Parameters
@@ -138,7 +160,11 @@ A new dual number representing the quotient.
 other_f = float(other)
         return DualNumber(self.x / other_f, self.dx / other_f)
 
-    def __rtruediv__(self, other: float) -> "DualNumber":
+def __rtruediv__(self, other: float) -> "DualNumber":
+
+
+    pass
+    pass
         """Reverse division: divide a scalar by this dual number.
 
 Parameters
@@ -159,7 +185,11 @@ denom = self.x**2
     # ------------------------------------------------------------------
     # Convenience helpers
     # ------------------------------------------------------------------
-    def as_tuple(self) -> Tuple[float, float]:
+def as_tuple(self) -> Tuple[float, float]:
+
+
+    pass
+    pass
         """Return (x, dx) tuple for downstream consumers.
 
 Returns
@@ -170,7 +200,11 @@ A tuple containing the primal value and derivative.
         return self.x, self.dx
 
     # Human-friendly representation --------------------------------------------------
-    def __repr__(self) -> str:
+def __repr__(self) -> str:
+
+
+    pass
+    pass
         """Return a string representation of the dual number.
 
 Returns
@@ -187,6 +221,10 @@ A formatted string showing the dual number values.
 
 
 def dual_state_tracker(value: float, derivative: float) -> DualNumber:
+
+
+    pass
+    pass
     """Wrap value and derivative into a DualNumber instance.
 
 Parameters

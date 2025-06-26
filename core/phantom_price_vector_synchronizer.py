@@ -19,7 +19,7 @@ from typing import Sequence, Dict, List, Any
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "PhantomPriceSynchronizer",
 "compute_phantom_velocity",
 "synchronize_price_vectors",
@@ -28,13 +28,17 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class PhantomPriceSynchronizer:
+
+
     """Phantom price vector synchronizer with velocity adjustment."""
 
 alpha: float = 1.0
 beta: float = 0.5
 dt: float = 1.0
 
-    def compute_zp_integral(
+def compute_zp_integral(
+
+
         self,
 velocity_series: Sequence[float],
 xi_series: Sequence[float],
@@ -69,7 +73,9 @@ dx = t_max / (len(integrand) - 1)
 
         return integral
 
-    def synchronize_vectors(
+def synchronize_vectors(
+
+
         self,
 price_vectors: Sequence[Sequence[float]],
 timestamps: Sequence[float],
@@ -117,6 +123,8 @@ synchronized = np.zeros(min_length, dtype=float)
 
 
 def compute_phantom_velocity(
+
+
     price_series: Sequence[float],
 dt: float = 1.0,
 ) -> np.ndarray:
@@ -128,6 +136,8 @@ prices = np.asarray(price_series, dtype=float)
 
 
 def synchronize_price_vectors(
+
+
     price_data: Dict[str, List[float]],
 synchronization_method: str = "cross_correlation",
 window_size: int = 100
@@ -137,6 +147,8 @@ window_size: int = 100
 
 
 def calculate_price_velocity(
+
+
     prices: np.ndarray[Any, Any],
 time_delta: float = 1.0
 ) -> np.ndarray[Any, Any]:
@@ -145,6 +157,8 @@ time_delta: float = 1.0
 
 
 def calculate_price_acceleration(
+
+
     velocity: np.ndarray[Any, Any],
 time_delta: float = 1.0
 ) -> np.ndarray[Any, Any]:

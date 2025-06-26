@@ -7,7 +7,13 @@ remains importable.  Replace with a clean implementation ASAP.
 
 
 def main() -> None:
+
+
+    pass
+    pass
     """Stub main function."""
 
 if __name__ == "__main__":
+    pass
+    pass
 main()

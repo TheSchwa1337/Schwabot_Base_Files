@@ -19,7 +19,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "BTCUSDCRouterRelay",
 "compute_ghost_triggers",
 "route_btc_usdc_flow",
@@ -28,12 +28,16 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class BTCUSDCRouterRelay:
+
+
     """BTC/USDC router with ghost conditional triggers."""
 
 trigger_threshold: float = 0.5
 delta_tolerance: float = 0.1
 
-    def compute_theta_g(
+def compute_theta_g(
+
+
         self,
 theta_values: Sequence[float],
 zeta_series: Sequence[float],
@@ -83,7 +87,9 @@ theta_g_total += theta_k * zeta_k_t * delta_term
 
         return theta_g_total
 
-    def route_flow_decision(
+def route_flow_decision(
+
+
         self,
 btc_flow: float,
 usdc_flow: float,
@@ -123,7 +129,9 @@ routed_usdc = usdc_flow
 
         return routed_btc, routed_usdc
 
-    def process_relay_cycle(
+def process_relay_cycle(
+
+
         self,
 btc_flows: Sequence[float],
 usdc_flows: Sequence[float],
@@ -162,7 +170,7 @@ ghost_strength = self.compute_theta_g(
 
         # Route each flow pair
         for i, (btc_flow, usdc_flow) in enumerate(zip(btc_array, usdc_array)):
-            routed_btc[i], routed_usdc[i] = self.route_flow_decision(
+            routed_btc[i], routed_usdc[i] = self.route_flow_decision(]
                 btc_flow, usdc_flow, ghost_strength
 
 
@@ -173,6 +181,8 @@ ghost_strength = self.compute_theta_g(
 
 
 def compute_ghost_triggers(
+
+
     theta_values: Sequence[float],
 zeta_series: Sequence[float],
 timestamps: Sequence[float],
@@ -187,6 +197,8 @@ delta_tolerance: float = 0.1,
 
 
 def route_btc_usdc_flow(
+
+
     btc_flow: float,
 usdc_flow: float,
 ghost_trigger_strength: float,

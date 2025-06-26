@@ -32,6 +32,8 @@ __all__ = ["FluxCompensator", "sync_flux_compensator"]
 
 @dataclass(slots=True)
 class FluxCompensator:
+
+
     """Exponential-smoothing entropy corrector.
 
 Parameters
@@ -59,7 +61,11 @@ _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=Fa
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def update(self, entropy: float) -> Tuple[bool, float]:
+def update(self, entropy: float) -> Tuple[bool, float]:
+
+
+    pass
+    pass
         """Ingest a new entropy value and return (is_valid, smoothed_entropy)."""
         smoothed = self._smooth(entropy)
         is_valid = smoothed < self.threshold * self.multiplier
@@ -68,7 +74,11 @@ _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=Fa
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
-    def _smooth(self, value: float) -> float:
+def _smooth(self, value: float) -> float:
+
+
+    pass
+    pass
         """TODO: document _smooth."""
         if self.window is not None and self.window > 1:
 self._sma_buf.append(value)
@@ -88,6 +98,10 @@ self._ema = self.alpha * value + (1.0 - self.alpha) * self._ema
 
 
 def sync_flux_compensator(entropy: float, threshold: float) -> bool:
+
+
+    pass
+    pass
     """Single-shot flux compensation check.
 
 Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for

@@ -69,7 +69,7 @@ try:
     from mathlib_v3 import MathLibV3
 
     # Spectral and filtering components
-    from mathlib from core.unified_math_system import unified_mathematical_constants
+    from core.unified_math_system import unified_mathematical_constants
     from mathlib import MathLib
     from mathlib_v2 import MathLibV2
 
@@ -176,22 +176,22 @@ class GradedProfitVector:
 
 
 # Enhanced mathematical functions for compatibility
-def unified_math.add(a, b):
+def add(a, b):
     """Addition function for backward compatibility."""
     return a + b
 
 
-def unified_math.subtract(a, b):
+def subtract(a, b):
     """Subtraction function."""
     return a - b
 
 
-def unified_math.multiply(a, b):
+def multiply(a, b):
     """Multiplication function."""
     return a * b
 
 
-def unified_math.divide(a, b):
+def divide(a, b):
     """Division function with zero check."""
     if b == 0:
         raise ValueError("Division by zero")
@@ -267,7 +267,7 @@ def main() -> None:
         )
 
         # Test basic operations
-        safe_print(f"✅ Basic ops: 5 + 3 = {unified_math.add(5, 3)}, 10 / 2 = {unified_math.divide(10, 2)}")
+        safe_print(f"✅ Basic ops: 5 + 3 = {add(5, 3)}, 10 / 2 = {divide(10, 2)}")
 
         safe_print(
             "🎉 Mathematical library integration test completed successfully!"

@@ -30,6 +30,8 @@ __all__: list[str] = ["zpe_psi", "zpe_phi", "zpe_xi", "zpe_g"]
 
 
 def zpe_psi(
+
+
     amplitudes: Sequence[float],
 frequencies: Sequence[float],
 phases: Sequence[float],
@@ -62,6 +64,8 @@ sine_terms = a_arr * np.unified_math.sin(w_arr * t + p_arr)
 
 
 def zpe_phi(
+
+
     psi_div: float,
 psi_time_deriv: float,
 lambda_zpe: float,
@@ -81,6 +85,8 @@ ZPE coupling constant λ_zpe.
 
 
 def zpe_xi(
+
+
     phi_values: Sequence[float],
 *,
 domain_width: float = 1.0,
@@ -108,6 +114,8 @@ integral = float(np.trapz(phi_arr, dx=domain_width / (len(phi_arr) - 1)))
 
 
 def zpe_g(
+
+
     phi_zpe: float,
 xi_zpe: float,
 grad_phi_magnitude: float,

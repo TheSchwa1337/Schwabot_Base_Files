@@ -12,7 +12,7 @@ or a small set of channel weights.
 
 Current implementation (lightweight, no ML deps):
 1. The BTC state space is represented by a feature matrix ``S`` of shape
-   ``(n_channels, dim)`` – e.g. 4×128 for [price-delta, volume-delta, RSI,
+   ``(n_channels, dim)`` – e.g. 4×128 for [price-delta, volume-delta, RSI,)
    on-chain sentiment].  The dimensionality *dim* must match the glyph vector
    produced by :func:`glyph_news_parser.parse_news_to_glyph`.
 2. Computes cosine similarity between the glyph vector and each channel row of
@@ -30,6 +30,10 @@ __all__: list[str] = ["map_glyph_to_state"]
 
 
 def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
+
+
+    pass
+    pass
     """Return cosine similarity of *v* against each row of *m* (1-D array)."""
     dot = m @ v  # (n,) vector
     v_norm = np.linalg.norm(v)
@@ -42,6 +46,8 @@ def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
 
 
 def map_glyph_to_state(
+
+
     glyph_vec: np.ndarray,
 state_matrix: np.ndarray,
 ) -> Tuple[np.ndarray, int]:

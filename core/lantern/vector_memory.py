@@ -8,12 +8,20 @@ import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
-    from sklearn.decomposition import PCA
+    pass
+    pass
+from sklearn.decomposition import PCA
 except ImportError:
+    pass
+    pass
 PCA = None
 
 
 def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:
+
+
+    pass
+    pass
     """Compute rolling PCA on vector history.
 
 Calculate principal axes for last N vectors to maintain
@@ -33,6 +41,8 @@ Returns identity matrix if sklearn not available
         return np.eye(n_components)
 
     try:
+    pass
+    pass
         # Take last 256 vectors or all if fewer
 recent_vecs = vecs[-256:] if len(vecs) > 256 else vecs
         X = np.array(recent_vecs)

@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
+    pass
+    pass
 #         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -55,6 +87,8 @@ DEFER_ENTRY_SCORE_THRESHOLD = 0.70
 
 
 def execution_confidence(
+
+
     triplet_entropy: float,
 theta_drift: float,
 coherence: float,
@@ -85,6 +119,8 @@ float
 <0.85: Defer/cooldown
 """
     try:
+    pass
+    pass
         # Ξ = (T · Δθ) + (ε × σ_f) + τ_p
         confidence = (
             (triplet_entropy * theta_drift)
@@ -101,6 +137,8 @@ float
 
 
 def entry_score(
+
+
     harmony: float,
 drift_penalty: float,
 liquidity_score: float,
@@ -128,6 +166,8 @@ float
 <0.70: Suppress/cooldown
 """
     try:
+    pass
+    pass
         # 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
         score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
@@ -140,6 +180,8 @@ float
 
 
 def evaluate(
+
+
     confidence: float,
 entry_score_val: float,
 gan_filter_result: Optional[bool] = None,
@@ -165,6 +207,8 @@ Decision dictionary with:
 - reason: Human-readable explanation
 """
     try:
+    pass
+    pass
         # Primary gate: both confidence and entry score must pass
         if (
             confidence > MIN_CONFIDENCE_THRESHOLD
@@ -223,6 +267,10 @@ logger.error(f"Error in entry gate evaluation: {e}")
 
 
 def get_thresholds() -> Dict[str, float]:
+
+
+    pass
+    pass
     """Get current threshold values for monitoring/tuning."""
     return {
 "min_confidence": MIN_CONFIDENCE_THRESHOLD,
@@ -233,6 +281,8 @@ def get_thresholds() -> Dict[str, float]:
 
 # Quick validation function for testing
 def validate_inputs(
+
+
     triplet_entropy: float,
 theta_drift: float,
 coherence: float,
@@ -245,6 +295,8 @@ projected_profit: float,
 ) -> bool:
 """Validate that all input values are in expected ranges."""
     try:
+    pass
+    pass
         # Check ranges for all inputs
 checks = [
 0.0 <= triplet_entropy <= 1.0,
@@ -265,6 +317,10 @@ checks = [
 
 
 def main() -> None:
+
+
+    pass
+    pass
     """Demo function for testing entry gate logic."""
     # Test case 1: High confidence scenario
 xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
@@ -285,4 +341,6 @@ safe_print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
 
 
 if __name__ == "__main__":
+    pass
+    pass
 main()

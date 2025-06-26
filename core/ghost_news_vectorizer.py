@@ -17,6 +17,8 @@ __all__: list[str] = ["vectorize_news"]
 
 
 def vectorize_news(
+
+
     theta: np.ndarray, phi_news: Sequence[float]
 ) -> np.ndarray:  # noqa: D401
 """Return V_n vector = theta @ phi_news (gradient-like projection)."""

@@ -15,7 +15,7 @@ from .ghost_profit_tracker import (
 )  # rename to avoid export clash
 from .ghost_profit_tracker import register_profit as _register_profit
 
-__all__: list[str] = [
+__all__: list[str] = []
 "ProfitTracker",
 "register_profit",
 "profit_summary",

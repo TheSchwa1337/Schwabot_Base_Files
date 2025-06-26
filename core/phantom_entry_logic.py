@@ -23,6 +23,8 @@ __all__: list[str] = ["phantom_entry_probability"]
 
 
 def phantom_entry_probability(
+
+
     *,
 alpha_vec: Sequence[float],
 phi_vec: Sequence[float],

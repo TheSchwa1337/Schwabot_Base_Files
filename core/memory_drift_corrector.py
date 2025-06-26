@@ -27,6 +27,8 @@ _THRESHOLD: Final = 0.5  # drift score ≥ threshold ⇒ relink
 
 
 def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
+
+
     """TODO: document _hamming_dist."""
     if len(a) != len(b):
         raise ValueError("hash strings must share length")
@@ -34,6 +36,10 @@ def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
 
 
 def _softmax2(x: float, y: float) -> float:
+
+
+    pass
+    pass
     """TODO: document _softmax2."""
 ex = unified_math.unified_math.exp(x)
     ey = unified_math.unified_math.exp(y)
@@ -41,6 +47,8 @@ ex = unified_math.unified_math.exp(x)
 
 
 def drift_score(
+
+
     prev_hash: str,
 curr_hash: str,
 price_delta_pct: float,
@@ -53,6 +61,8 @@ p_norm = unified_math.abs(price_delta_pct) / _PRICE_SCALE
 
 
 def relink_required(
+
+
     score: float, threshold: float = _THRESHOLD
 ) -> bool:  # noqa: D401
 """TODO: document relink_required."""

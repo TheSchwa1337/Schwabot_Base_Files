@@ -8,7 +8,13 @@ this file with an actual implementation as soon as possible.
 
 
 def main() -> None:
+
+
+    pass
+    pass
     """Stub main function."""
 
 if __name__ == "__main__":
+    pass
+    pass
 main()

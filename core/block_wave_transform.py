@@ -22,16 +22,22 @@ from typing import Tuple
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
+    pass
+    pass
     # SciPy gives us a proper DCT-II.
-    from scipy.fftpack import dct  # type: ignore
+from scipy.fftpack import dct  # type: ignore
 
-    def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+
+
         """TODO: document _dct_block."""
         return dct(arr, type=2, norm="ortho")
 
 except ModuleNotFoundError:  # pragma: no cover – keep pure-NumPy fallback
 
-    def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
+
+
         """Fallback: approximate DCT-II via real FFT symmetry trick."""
 n = arr.shape[-1]
 extended = np.concatenate([arr, arr[..., ::-1]], axis=-1)
@@ -43,6 +49,10 @@ __all__ = ["define_block_wave_transform"]
 
 
 def _shannon_entropy(block: np.ndarray) -> float:
+
+
+    pass
+    pass
     """Compute Shannon entropy of a 1-D vector (base-2)."""
     hist, _ = np.histogram(block, bins=32, density=True)
     # Filter zero probabilities to avoid log2(0).
@@ -51,6 +61,8 @@ def _shannon_entropy(block: np.ndarray) -> float:
 
 
 def define_block_wave_transform(
+
+
     signal: np.ndarray, block_size: int
 ) -> Tuple[np.ndarray, np.ndarray]:
 """Apply a block-wise DCT transform and return entropy per block.

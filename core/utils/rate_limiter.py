@@ -11,9 +11,15 @@ from typing import Deque
 
 
 class RateLimiter:
+
+
     """Rate limiter for API requests."""
 
-    def __init__(self, max_requests: int, time_window: float = 60.0) -> None:
+def __init__(self, max_requests: int, time_window: float = 60.0) -> None:
+
+
+    pass
+    pass
         """Initialize rate limiter.
 
 Args:
@@ -24,7 +30,11 @@ self.max_requests = max_requests
 self.time_window = time_window
 self.requests: Deque[float] = deque()
 
-    def can_make_request(self) -> bool:
+def can_make_request(self) -> bool:
+
+
+    pass
+    pass
         """Check if a request can be made without exceeding rate limit.
 
 Returns:
@@ -39,11 +49,19 @@ self.requests.popleft()
         # Check if we can make another request
         return len(self.requests) < self.max_requests
 
-    def record_request(self) -> None:
+def record_request(self) -> None:
+
+
+    pass
+    pass
         """Record that a request was made."""
 self.requests.append(time.time())
 
-    def wait_if_needed(self) -> None:
+def wait_if_needed(self) -> None:
+
+
+    pass
+    pass
         """Wait if necessary to respect rate limits."""
         while not self.can_make_request():
             time.sleep(0.1)  # Small delay to avoid busy waiting

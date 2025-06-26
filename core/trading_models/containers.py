@@ -19,6 +19,8 @@ from .enums import OrderType
 
 @dataclass
 class ExchangeConfig:
+
+
     """Exchange configuration container."""
 
 exchange_type: ExchangeType
@@ -35,6 +37,8 @@ retry_delay: float = 1.0
 
 @dataclass
 class OrderRequest:
+
+
     """Order request container."""
 
 symbol: str
@@ -50,6 +54,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class OrderResponse:
+
+
     """Order response container."""
 
 order_id: str
@@ -70,6 +76,8 @@ created_at: float = field(default_factory=time.time)
 
 @dataclass
 class MarketData:
+
+
     """Market data container."""
 
 symbol: str
@@ -81,6 +89,8 @@ data: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class Balance:
+
+
     """Balance container."""
 
 currency: str
@@ -92,6 +102,8 @@ timestamp: float = field(default_factory=time.time)
 
 @dataclass
 class PerformanceMetrics:
+
+
     """Performance metrics for BTC integration."""
 
 total_orders: int

@@ -21,7 +21,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "btc_vector",
 "btc_eta",
 "btc_xi",
@@ -34,6 +34,8 @@ __all__: list[str] = [
 
 
 def btc_vector(
+
+
     exit_prices: Sequence[float],
 entry_prices: Sequence[float],
 volume_weights: Sequence[float],
@@ -64,6 +66,8 @@ weighted_diffs = price_diffs * vol_arr
 
 
 def btc_eta(
+
+
     price_delta: float,
 time_delta: float,
 volumes: Sequence[float],
@@ -89,6 +93,8 @@ vol_sum = float(np.sum(volumes))
 
 
 def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
+
+
     """Return Ξ_btc(t) = tanh(V_btc · η_btc).
 
 Parameters
@@ -103,6 +109,8 @@ product = v_btc * eta_btc
 
 
 def btc_spectral_aggregate(
+
+
     xi_series: Sequence[float],
 peak_frequency: float,
 *,

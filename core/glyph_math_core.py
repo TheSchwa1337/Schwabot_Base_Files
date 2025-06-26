@@ -21,7 +21,7 @@ from typing import Callable, Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "glyph_determinant",
 "glyph_matrix",
 "glyph_psi",
@@ -34,6 +34,8 @@ __all__: list[str] = [
 
 
 def glyph_determinant(
+
+
     func: Callable[[float, float], float],
 x: float,
 y: float,
@@ -72,6 +74,8 @@ hessian_det = f_xx * f_yy - f_xy * f_xy
 
 
 def glyph_matrix(
+
+
     glyph_values: Sequence[float],
 weights: Sequence[float],
 ) -> float:  # noqa: D401
@@ -94,6 +98,8 @@ g_array = np.asarray(glyph_values, dtype=float)
 
 
 def glyph_psi(m_glyph: float, g_glyph: float) -> float:  # noqa: D401
+
+
     """Return ψ_glyph = σ(M_glyph) · tanh(G_glyph).
 
 Parameters
@@ -113,6 +119,8 @@ tanh_g = np.tanh(g_glyph)
 
 
 def glyph_tensor(
+
+
     psi_gradient: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
 """Return Θ_glyph = ∇ψ_glyph ⊗ ∇ψ_glyph^T outer product tensor.

@@ -29,10 +29,14 @@ from typing import Tuple, Dict, Any
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
-    from scipy.signal import welch  # type: ignore
+    pass
+    pass
+from scipy.signal import welch  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
 
-    def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
+def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
+
+
         """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
         if nperseg is None:
 nperseg = unified_math.min(256, x.size)
@@ -55,6 +59,10 @@ __all__ = ["validate_entropy_envelope"]
 
 
 def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
+
+
+    pass
+    pass
     """Compute spectral entropy (base-2) of a 1-D real signal."""
     freqs, psd = welch(signal, fs=fs)
     psd_norm = psd / np.sum(psd)
@@ -63,6 +71,8 @@ def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
 
 
 def validate_entropy_envelope(
+
+
     signal: np.ndarray,
 *,
 fs: float = 1.0,
@@ -102,6 +112,10 @@ Tuple[bool, float]
 # • ✅ Dynamic threshold adaptation based on rolling statistics
 
 def _permutation_entropy(signal: np.ndarray, order: int = 3) -> float:
+
+
+    pass
+    pass
     """Compute permutation entropy of a signal.
 
 Parameters
@@ -120,7 +134,7 @@ Permutation entropy value
         return 0.0
 
     # Generate all possible permutations
-    from itertools import permutations
+from itertools import permutations
 all_permutations = list(permutations(range(order)))
     permutation_counts = {perm: 0 for perm in all_permutations}
 
@@ -148,6 +162,10 @@ entropy -= p * np.log2(p)
 
 
 def _jensen_shannon_divergence(p: np.ndarray, q: np.ndarray) -> float:
+
+
+    pass
+    pass
     """Compute Jensen-Shannon divergence between two distributions.
 
 Parameters
@@ -176,9 +194,15 @@ kl_pm = np.sum(p * np.log2(p / m + 1e-10))
 
 
 class AdaptiveEntropyValidator:
+
+
     """Entropy validator with dynamic threshold adaptation."""
 
-    def __init__(self, window_size: int = 100):
+def __init__(self, window_size: int = 100):
+
+
+    pass
+    pass
         """Initialize adaptive validator.
 
 Parameters
@@ -191,7 +215,11 @@ self.entropy_history = []
 self.permutation_entropy_history = []
 self.reference_distribution = None
 
-    def update_reference_distribution(self, signal: np.ndarray) -> None:
+def update_reference_distribution(self, signal: np.ndarray) -> None:
+
+
+    pass
+    pass
         """Update reference distribution for Jensen-Shannon divergence.
 
 Parameters
@@ -202,7 +230,9 @@ Signal to use as reference
 freqs, psd = welch(signal, fs=1.0)
         self.reference_distribution = psd / np.sum(psd)
 
-    def validate_adaptive(
+def validate_adaptive(
+
+
         self,
 signal: np.ndarray,
 *,

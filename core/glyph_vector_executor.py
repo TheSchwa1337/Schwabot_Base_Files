@@ -28,6 +28,8 @@ __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 
 @dataclass(slots=True)
 class GlyphInstruction:
+
+
     """Executable instruction derived from glyph vector processing."""
 
 action: str  # "buy", "sell", "hold", "wait"
@@ -42,6 +44,8 @@ glyph_signature: str
 
 
 def execute_glyph_vectors(
+
+
     omega_weights: Sequence[float],
 glyph_vectors: Sequence[Sequence[float]],
 zeta_weightings: Sequence[float],

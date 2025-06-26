@@ -19,7 +19,7 @@ from typing import Callable, Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "ZBEPositionTracker",
 "compute_zalgo_evolution",
 "track_position_state",
@@ -28,12 +28,16 @@ __all__: list[str] = [
 
 @dataclass(slots=True)
 class ZBEPositionTracker:
+
+
     """Zero-Based Evolution position tracker."""
 
 dt: float = 1.0
 evolution_rate: float = 0.1
 
-    def compute_psi_n(
+def compute_psi_n(
+
+
         self,
 z_series: Sequence[float],
 g_functions: Sequence[Callable[[float], float]],
@@ -73,7 +77,9 @@ psi_n = np.zeros_like(x_array, dtype=float)
 
         return psi_n
 
-    def evolve_position_state(
+def evolve_position_state(
+
+
         self,
 current_state: np.ndarray,
 zalgo_derivatives: np.ndarray,
@@ -101,7 +107,9 @@ evolved_state = current_state + self.evolution_rate * evolution_term
 
         return evolved_state
 
-    def track_position_trajectory(
+def track_position_trajectory(
+
+
         self,
 initial_state: np.ndarray,
 zalgo_time_series: Sequence[Sequence[float]],
@@ -168,6 +176,8 @@ trajectory[step] = current_state
 
 
 def compute_zalgo_evolution(
+
+
     z_series: Sequence[float],
 glyph_weights: Sequence[float],
 dt: float = 1.0,
@@ -192,6 +202,8 @@ mean_derivative = unified_math.unified_math.mean(dz_dt)
 
 
 def track_position_state(
+
+
     initial_state: Sequence[float],
 zalgo_series: Sequence[float],
 glyph_weights: Sequence[float],

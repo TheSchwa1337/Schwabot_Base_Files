@@ -5,17 +5,16 @@
 
 # Applies enhanced Windows CLI compatibility to all mathematical validation
 # and integration systems, ensuring bulletproof operation across all Windows
-# CLI environments with robust emoji and Unicode handling.
+# image.png environments with robust emoji and Unicode handling.
 # """
 
 import logging
 import os
-from pathlib import Path
 import re
 import shutil
 import sys
-from typing import Any, Dict, List, Tuple
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from typing import Any, Dict, Tuple
+from utils.safe_print import safe_print
 from core.unified_math_system import unified_math
 
 # Setup logging
@@ -309,7 +308,7 @@ except ImportError:
 
     def create_mathematical_validator_with_cli_safety(self) -> str:
         """Create an enhanced mathematical validator with bulletproof CLI safety."""
-        validator_content = '''#!/usr/bin/env python3
+        validator_content = ('''#!/usr/bin/env python3
 """
 CLI-Safe Mathematical Integration Validator - Schwabot Framework
 ==============================================================
@@ -472,8 +471,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-'''
-        )
+''')
 
         # Write the CLI-safe validator
         output_file = "cli_safe_mathematical_validator.py"

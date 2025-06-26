@@ -7,6 +7,10 @@ import numpy as np
 
 
 def allocate(phi: float, alphas: list[float]) -> np.ndarray:
+
+
+    pass
+    pass
     """Split entry weight across baskets proportionally.
 
 Compute allocation: alloc_i = α_i·Φ / Σα

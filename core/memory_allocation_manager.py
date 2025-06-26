@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    pass
+    pass
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -52,31 +84,53 @@ from collections import defaultdict, deque
 
 # Import core systems
 try:
-    from core.ops_observability import log_operation, LogLevel
-    from core.persistent_state_manager import get_persistent_state_manager, MemoryAllocationType
-    from core.demo_memory_core import get_demo_memory_core, MemoryType
-    from core.exchange_plumbing import ExchangeType
+    pass
+    pass
+from core.ops_observability import log_operation, LogLevel
+from core.persistent_state_manager import get_persistent_state_manager, MemoryAllocationType
+from core.demo_memory_core import get_demo_memory_core, MemoryType
+from core.exchange_plumbing import ExchangeType
 CORE_SYSTEMS_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CORE_SYSTEMS_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    pass
+    pass
+from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:
+
+
+    pass
+    pass
         return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str = "") -> str:
+
+
+    pass
+    pass
         return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
         getattr(logger, level.lower())(message)
 
 
 class MemoryPriority(Enum):
+
+
     """Memory priority levels."""
 CRITICAL = "critical"      # System critical data
 HIGH = "high"             # Important trading data
@@ -86,6 +140,8 @@ ARCHIVE = "archive"       # Historical data
 
 
 class DataCategory(Enum):
+
+
     """Data categories for allocation."""
 BTC_HASHING = "btc_hashing"           # 3.75 minute BTC data
 TRADING_SIGNALS = "trading_signals"   # Trading signals
@@ -100,6 +156,8 @@ USER_SETTINGS = "user_settings"       # User interface settings
 
 @dataclass
 class MemoryKey:
+
+
     """Memory key with allocation metadata."""
 key_id: str
 category: DataCategory
@@ -117,6 +175,8 @@ last_accessed: datetime = field(default_factory=datetime.now)
 
 @dataclass
 class MemoryAllocationConfig:
+
+
     """Memory allocation configuration."""
 category: DataCategory
 priority: MemoryPriority
@@ -132,6 +192,8 @@ user_configurable: bool = True
 
 @dataclass
 class MemoryUsage:
+
+
     """Memory usage statistics."""
 total_entries: int
 total_size_bytes: int
@@ -144,9 +206,15 @@ newest_entry: datetime
 
 
 class ReflectiveAllocator:
+
+
     """Reflective allocator for intelligent memory management."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+
+
+    pass
+    pass
         """Initialize reflective allocator."""
 self.config = config or {}
 self.btc_hashing_interval = 3.75 * 60  # 3.75 minutes in seconds
@@ -163,7 +231,11 @@ self.allocation_patterns = defaultdict(list)
 
 safe_safe_print("🔄 Reflective Allocator initialized")
 
-    def should_allocate_btc_data(self) -> bool:
+def should_allocate_btc_data(self) -> bool:
+
+
+    pass
+    pass
         """Check if it's time to allocate BTC hashing data."""
 current_time = time.time()
         if current_time - self.last_btc_allocation >= self.btc_hashing_interval:
@@ -171,11 +243,15 @@ self.last_btc_allocation = current_time
             return True
         return False
 
-    def get_optimal_allocation_type(self, category: DataCategory,
+def get_optimal_allocation_type(self, category: DataCategory,
+
+
                                   priority: MemoryPriority,
 data_size: int) -> MemoryAllocationType:
 """Get optimal allocation type based on data characteristics."""
         try:
+    pass
+    pass
             # Critical data goes to long-term
             if priority == MemoryPriority.CRITICAL:
                 return MemoryAllocationType.LONG_TERM
@@ -207,9 +283,15 @@ data_size: int) -> MemoryAllocationType:
 safe_safe_print(f"❌ Allocation type determination failed: {safe_format_error(e, 'allocation_type')}")
             return MemoryAllocationType.MID_TERM
 
-    def calculate_compression_ratio(self, data: Dict[str, Any]) -> float:
+def calculate_compression_ratio(self, data: Dict[str, Any]) -> float:
+
+
+    pass
+    pass
         """Calculate potential compression ratio."""
         try:
+    pass
+    pass
             # Simple compression estimation
 data_json = json.dumps(data, separators=(',', ':'))
             original_size = len(data_json.encode())
@@ -223,11 +305,15 @@ data_json = json.dumps(data, separators=(',', ':'))
 safe_safe_print(f"⚠️ Compression calculation failed: {safe_format_error(e, 'compression')}")
             return 1.0
 
-    def record_allocation_pattern(self, category: DataCategory,
+def record_allocation_pattern(self, category: DataCategory,
+
+
                                 allocation_type: MemoryAllocationType,
 success: bool) -> None:
 """Record allocation pattern for learning."""
         try:
+    pass
+    pass
 pattern = {
 'timestamp': datetime.now(),
                 'category': category.value,
@@ -245,9 +331,15 @@ self.allocation_patterns[category.value].append(pattern)
         except Exception as e:
 safe_safe_print(f"⚠️ Pattern recording failed: {safe_format_error(e, 'pattern_record')}")
 
-    def get_allocation_recommendations(self) -> Dict[str, Any]:
+def get_allocation_recommendations(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get allocation recommendations based on patterns."""
         try:
+    pass
+    pass
 recommendations = {}
 
             for category, patterns in self.allocation_patterns.items():
@@ -276,9 +368,15 @@ safe_safe_print(f"❌ Recommendation generation failed: {safe_format_error(e, 'r
 
 
 class MemoryAllocationManager:
+
+
     """Comprehensive memory allocation management system."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+
+
+    pass
+    pass
         """Initialize memory allocation manager."""
 self.config = config or {}
 self.reflective_allocator = ReflectiveAllocator(config)
@@ -305,9 +403,15 @@ self._start_background_cleanup()
 
 safe_safe_print("🧠 Memory Allocation Manager initialized")
 
-    def _load_ui_settings(self) -> Dict[str, Any]:
+def _load_ui_settings(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Load user interface settings."""
         try:
+    pass
+    pass
 settings_file = Path("config/memory_allocation_settings.json")
             if settings_file.exists():
                 with open(settings_file, 'r') as f:
@@ -343,7 +447,11 @@ settings_file.parent.mkdir(parents=True, exist_ok=True)
 safe_safe_print(f"⚠️ UI settings load failed: {safe_format_error(e, 'ui_settings')}")
             return {}
 
-    def _initialize_default_configs(self) -> None:
+def _initialize_default_configs(self) -> None:
+
+
+    pass
+    pass
         """Initialize default allocation configurations."""
 default_configs = {
 DataCategory.BTC_HASHING: MemoryAllocationConfig(
@@ -459,10 +567,14 @@ user_configurable=True
         for category, config in default_configs.items():
             self.allocation_configs[category] = config
 
-    def allocate_memory(self, data: Dict[str, Any], category: DataCategory,
+def allocate_memory(self, data: Dict[str, Any], category: DataCategory,]
+
+
                        priority: Optional[MemoryPriority] = None) -> Optional[str]:
 """Allocate memory for data."""
         try:
+    pass
+    pass
             # Get configuration
 config = self.allocation_configs.get(category)
             if not config:
@@ -559,9 +671,15 @@ safe_safe_print(f"✅ Memory allocated (in-memory): {key_id[:8]}... ({category.v
 safe_safe_print(f"❌ Memory allocation failed: {safe_format_error(e, 'memory_allocate')}")
             return None
 
-    def _check_memory_limits(self, allocation_type: MemoryAllocationType, data_size: int) -> bool:
+def _check_memory_limits(self, allocation_type: MemoryAllocationType, data_size: int) -> bool:
+
+
+    pass
+    pass
         """Check if memory allocation is within limits."""
         try:
+    pass
+    pass
             # Get UI settings limits
 limits = self.ui_settings.get('memory_limits', {})
 
@@ -586,10 +704,14 @@ current_usage = self.memory_usage[allocation_type]['size_bytes']
 safe_safe_print(f"⚠️ Memory limit check failed: {safe_format_error(e, 'memory_limit')}")
             return True  # Allow allocation on error
 
-    def _update_memory_usage(self, allocation_type: MemoryAllocationType,
+def _update_memory_usage(self, allocation_type: MemoryAllocationType,
+
+
                            size_bytes: int, entry_count: int) -> None:
 """Update memory usage statistics."""
         try:
+    pass
+    pass
 usage = self.memory_usage[allocation_type]
 usage['size_bytes'] += size_bytes
 usage['entries'] += entry_count
@@ -597,7 +719,11 @@ usage['entries'] += entry_count
         except Exception as e:
 safe_safe_print(f"⚠️ Memory usage update failed: {safe_format_error(e, 'usage_update')}")
 
-    def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
+def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
+
+
+    pass
+    pass
         """Get memory key by ID."""
 memory_key = self.memory_keys.get(key_id)
         if memory_key:
@@ -606,7 +732,7 @@ memory_key.access_count += 1
 memory_key.last_accessed = datetime.now()
 
             # Record access pattern
-self.reflective_allocator.access_patterns[memory_key.category.value].append({
+self.reflective_allocator.access_patterns[memory_key.category.value].append({]]
                 'timestamp': datetime.now(),
                 'key_id': key_id,
 'allocation_type': memory_key.allocation_type.value
@@ -614,9 +740,15 @@ self.reflective_allocator.access_patterns[memory_key.category.value].append({
 
         return memory_key
 
-    def get_memory_usage(self) -> MemoryUsage:
+def get_memory_usage(self) -> MemoryUsage:
+
+
+    pass
+    pass
         """Get comprehensive memory usage statistics."""
         try:
+    pass
+    pass
 total_entries = sum(usage['entries'] for usage in self.memory_usage.values())
             total_size_bytes = sum(usage['size_bytes'] for usage in self.memory_usage.values())
 
@@ -657,9 +789,15 @@ newest_entry=newest_entry
 safe_safe_print(f"❌ Memory usage calculation failed: {safe_format_error(e, 'usage_calc')}")
             return MemoryUsage(0, 0, 0.0, 0.0, 0.0, 0.0, datetime.now(), datetime.now())
 
-    def update_ui_settings(self, new_settings: Dict[str, Any]) -> bool:
+def update_ui_settings(self, new_settings: Dict[str, Any]) -> bool:
+
+
+    pass
+    pass
         """Update user interface settings."""
         try:
+    pass
+    pass
             # Update settings
 self.ui_settings.update(new_settings)
 
@@ -677,7 +815,11 @@ safe_safe_print("✅ UI settings updated")
 safe_safe_print(f"❌ UI settings update failed: {safe_format_error(e, 'ui_update')}")
             return False
 
-    def _start_background_cleanup(self) -> None:
+def _start_background_cleanup(self) -> None:
+
+
+    pass
+    pass
         """Start background cleanup thread."""
         if self.cleanup_thread and self.cleanup_thread.is_alive():
             return
@@ -686,19 +828,31 @@ self.running = True
 self.cleanup_thread = threading.Thread(target=self._cleanup_worker, daemon=True)
         self.cleanup_thread.start()
 
-    def _cleanup_worker(self) -> None:
+def _cleanup_worker(self) -> None:
+
+
+    pass
+    pass
         """Background cleanup worker."""
         while self.running:
             try:
+    pass
+    pass
 self._perform_cleanup()
                 time.sleep(3600)  # Run every hour
             except Exception as e:
 safe_safe_print(f"⚠️ Cleanup error: {safe_format_error(e, 'cleanup')}")
                 time.sleep(3600)
 
-    def _perform_cleanup(self) -> None:
+def _perform_cleanup(self) -> None:
+
+
+    pass
+    pass
         """Perform memory cleanup."""
         try:
+    pass
+    pass
 current_time = datetime.now()
             keys_to_remove = []
 
@@ -720,9 +874,15 @@ safe_safe_print(f"🗑️ Cleaned up {len(keys_to_remove)} expired memory keys")
         except Exception as e:
 safe_safe_print(f"❌ Cleanup failed: {safe_format_error(e, 'cleanup_perform')}")
 
-    def get_system_status(self) -> Dict[str, Any]:
+def get_system_status(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get comprehensive system status."""
         try:
+    pass
+    pass
 memory_usage = self.get_memory_usage()
             recommendations = self.reflective_allocator.get_allocation_recommendations()
 
@@ -754,32 +914,54 @@ memory_allocation_manager = MemoryAllocationManager()
 
 # Convenience functions for external access
 def get_memory_allocation_manager() -> MemoryAllocationManager:
+
+
+    pass
+    pass
     """Get global memory allocation manager instance."""
     return memory_allocation_manager
 
 
-def allocate_memory(data: Dict[str, Any], category: DataCategory,
+def allocate_memory(data: Dict[str, Any], category: DataCategory,]
+
+
                    priority: Optional[MemoryPriority] = None) -> Optional[str]:
 """Allocate memory for data."""
     return memory_allocation_manager.allocate_memory(data, category, priority)
 
 
 def get_memory_key(key_id: str) -> Optional[MemoryKey]:
+
+
+    pass
+    pass
     """Get memory key by ID."""
     return memory_allocation_manager.get_memory_key(key_id)
 
 
 def get_memory_usage() -> MemoryUsage:
+
+
+    pass
+    pass
     """Get memory usage statistics."""
     return memory_allocation_manager.get_memory_usage()
 
 
 def update_ui_settings(new_settings: Dict[str, Any]) -> bool:
+
+
+    pass
+    pass
     """Update user interface settings."""
     return memory_allocation_manager.update_ui_settings(new_settings)
 
 
 def get_memory_allocation_status() -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Get memory allocation system status."""
     return memory_allocation_manager.get_system_status()
 
@@ -787,6 +969,8 @@ def get_memory_allocation_status() -> Dict[str, Any]:
 # Example usage
 
 if __name__ == "__main__":
+    pass
+    pass
     # Test memory allocation manager
 safe_print("🧪 Testing Memory Allocation Manager...")
 

@@ -3,22 +3,54 @@ import math
 
 # Import safe print for Windows compatibility
 try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
+    pass
+    pass
+from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
+    pass
+    pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+    pass
+    pass
+#         from core.utils.windows_cli_compatibility import safe_print, safe_format_error, info, warn, error, success, debug  # F811: duplicate import
     except ImportError:
+    pass
+    pass
 def safe_print(message):
+
+
+    pass
+    pass
     print(message)
 def info(message):
+
+
+    pass
+    pass
     print(f"[INFO] {message}")
 def warn(message):
+
+
+    pass
+    pass
     print(f"[WARN] {message}")
 def error(message):
+
+
+    pass
+    pass
     print(f"[ERROR] {message}")
 def success(message):
+
+
+    pass
+    pass
     print(f"[SUCCESS] {message}")
 def debug(message):
+
+
+    pass
+    pass
     print(f"[DEBUG] {message}")
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
@@ -40,7 +72,9 @@ from enum import Enum
 
 # Import ZPE Mathematical Framework
 try:
-    from core.zpe_core import ZPECore
+    pass
+    pass
+from core.zpe_core import ZPECore
 ZPE_MODULES_AVAILABLE = True
 except ImportError as e:
 logging.warning(f"ZPE modules not available: {e}")
@@ -48,23 +82,41 @@ logging.warning(f"ZPE modules not available: {e}")
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    pass
+    pass
+from core.utils.windows_cli_compatibility import (, safe_format_error
         safe_print, safe_format_error, log_safe
 
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
+    pass
+    pass
 CLI_HANDLER_AVAILABLE = False
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:
+
+
+    pass
+    pass
         return message
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def safe_format_error(error: Exception, context: str = "") -> str:
+
+
+    pass
+    pass
         return f"Error: {str(error)} | Context: {context}"
-    def log_safe(logger, level: str, message: str) -> None:
+def log_safe(logger, level: str, message: str) -> None:
+
+
+    pass
+    pass
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
 
 
 class TradingMode(Enum):
+
+
     """Available trading modes."""
 ZPE_RECURSIVE = "zpe_recursive"      # Rotational velocity for bull runs
 REACTIVE_TASKING = "reactive_tasking"  # Proven methods for instability
@@ -73,6 +125,8 @@ EMERGENCY_FALLBACK = "emergency_fallback"  # Last resort
 
 
 class MarketCondition(Enum):
+
+
     """Market condition classifications."""
 BULL_RUN = "bull_run"              # Strong uptrend, use ZPE
 BEAR_MARKET = "bear_market"        # Downtrend, use reactive
@@ -84,6 +138,8 @@ CRISIS = "crisis"                  # Emergency, use fallback
 
 @dataclass
 class ModeSelectionCriteria:
+
+
     """Criteria for mode selection."""
 market_condition: MarketCondition
 volatility_score: float  # 0.0 to 1.0
@@ -97,6 +153,8 @@ emergency_triggered: bool = False
 
 @dataclass
 class ModeSelectionResult:
+
+
     """Result of mode selection."""
 selected_mode: TradingMode
 confidence_score: float
@@ -108,6 +166,8 @@ mode_weights: Dict[TradingMode, float] = field(default_factory=dict)
 
 @dataclass
 class PortfolioAsset:
+
+
     """Portfolio asset for retroactive tasking."""
 symbol: str
 current_value: float
@@ -119,6 +179,8 @@ can_retroactive_task: bool = True
 
 
 class ZPEHybridModeSelector:
+
+
     """
 Hybrid Mode Selector for dynamic ZPE/Reactive mode selection.
 
@@ -131,7 +193,11 @@ Implements intelligent mode selection based on:
 - 488 and 42-bit phase logic
 """
 
-    def __init__(self):
+def __init__(self):
+
+
+    pass
+    pass
         """Initialize the hybrid mode selector."""
 self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
 
@@ -163,13 +229,15 @@ self.portfolio_assets: Dict[str, PortfolioAsset] = {}
 self.retroactive_task_history: List[Dict] = []
 
         # Performance tracking
-self.mode_performance_history: Dict[TradingMode, List[float]] = {
+self.mode_performance_history: Dict[TradingMode, List[float]] = {]
 mode: [] for mode in TradingMode
 }
 
 safe_safe_print("🔄 ZPE Hybrid Mode Selector initialized")
 
-    def select_mode(
+def select_mode(
+
+
         self,
 market_data: Dict[str, Any],
 portfolio_data: Optional[Dict[str, Any]] = None,
@@ -187,6 +255,8 @@ Returns:
 ModeSelectionResult with selected mode and reasoning
 """
         try:
+    pass
+    pass
             # Analyze market conditions
 market_condition = self._analyze_market_condition(market_data)
 
@@ -238,9 +308,15 @@ reasoning=["Emergency fallback due to selection error"],
 market_condition=MarketCondition.CRISIS
 
 
-    def _analyze_market_condition(self, market_data: Dict[str, Any]) -> MarketCondition:
+def _analyze_market_condition(self, market_data: Dict[str, Any]) -> MarketCondition:
+
+
+    pass
+    pass
         """Analyze current market condition."""
         try:
+    pass
+    pass
 trend_strength = market_data.get('trend_strength', 0.0)
             volatility = market_data.get('volatility', 0.5)
             price_change = market_data.get('price_change_24h', 0.0)
@@ -272,7 +348,9 @@ trend_strength = market_data.get('trend_strength', 0.0)
 safe_safe_print(f"⚠️ Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
             return MarketCondition.SIDEWAYS
 
-    def _calculate_selection_criteria(
+def _calculate_selection_criteria(
+
+
         self,
 market_data: Dict[str, Any],
 market_condition: MarketCondition,
@@ -280,6 +358,8 @@ timeframe: str
 ) -> ModeSelectionCriteria:
 """Calculate mode selection criteria."""
         try:
+    pass
+    pass
 volatility_score = market_data.get('volatility', 0.5)
             trend_strength = market_data.get('trend_strength', 0.0)
             profit_performance = market_data.get('profit_performance', 0.0)
@@ -314,9 +394,15 @@ timeframe=timeframe,
 profit_performance=0.0
 
 
-    def _update_phase_logic(self, market_data: Dict[str, Any]) -> None:
+def _update_phase_logic(self, market_data: Dict[str, Any]) -> None:
+
+
+    pass
+    pass
         """Update 488 and 42-bit phase logic."""
         try:
+    pass
+    pass
             # Simple phase switching logic based on market conditions
 current_time = time.time()
 
@@ -340,7 +426,9 @@ self.phase_switch_counter += 1
         except Exception as e:
 safe_safe_print(f"⚠️ Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
 
-    def _select_mode_by_criteria(
+def _select_mode_by_criteria(
+
+
         self,
 criteria: ModeSelectionCriteria
 ) -> Tuple[TradingMode, float, List[str]]:
@@ -349,6 +437,8 @@ reasoning = []
 mode_scores = {}
 
         try:
+    pass
+    pass
             # Emergency fallback check
             if criteria.emergency_triggered:
 reasoning.append("Emergency conditions detected")
@@ -403,7 +493,11 @@ reasoning.append(f"Selected {best_mode.value} with score {best_score:.3f}")
 safe_safe_print(f"⚠️ Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
             return TradingMode.EMERGENCY_FALLBACK, 1.0, ["Emergency fallback due to selection error"]
 
-    def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
+def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
+
+
+    pass
+    pass
         """Calculate ZPE mode score."""
 score = 0.0
 
@@ -437,7 +531,11 @@ score += 0.1
 
         return unified_math.min(1.0, score)
 
-    def _calculate_reactive_score(self, criteria: ModeSelectionCriteria) -> float:
+def _calculate_reactive_score(self, criteria: ModeSelectionCriteria) -> float:
+
+
+    pass
+    pass
         """Calculate reactive mode score."""
 score = 0.0
 
@@ -471,7 +569,11 @@ score += 0.2
 
         return unified_math.min(1.0, score)
 
-    def _calculate_hybrid_score(self, criteria: ModeSelectionCriteria) -> float:
+def _calculate_hybrid_score(self, criteria: ModeSelectionCriteria) -> float:
+
+
+    pass
+    pass
         """Calculate hybrid mode score."""
         # Hybrid is good for mixed conditions
 score = 0.3  # Base score
@@ -494,7 +596,9 @@ score += 0.1
 
         return unified_math.min(1.0, score)
 
-    def _calculate_mode_weights(
+def _calculate_mode_weights(
+
+
         self,
 criteria: ModeSelectionCriteria,
 selected_mode: TradingMode
@@ -525,14 +629,20 @@ weights[selected_mode] = 1.0
 
         return weights
 
-    def _update_portfolio_assets(self, portfolio_data: Dict[str, Any]) -> None:
+def _update_portfolio_assets(self, portfolio_data: Dict[str, Any]) -> None:
+
+
+    pass
+    pass
         """Update portfolio assets for retroactive tasking."""
         try:
+    pass
+    pass
 assets = portfolio_data.get('assets', {})
 
             for symbol, asset_data in assets.items():
                 if symbol not in self.portfolio_assets:
-self.portfolio_assets[symbol] = PortfolioAsset(
+self.portfolio_assets[symbol] = PortfolioAsset(]
                         symbol=symbol,
 current_value=asset_data.get('value', 0.0),
                         allocation_percentage=asset_data.get('allocation', 0.0),
@@ -551,7 +661,11 @@ asset.current_value = asset_data.get('value', asset.current_value)
         except Exception as e:
 safe_safe_print(f"⚠️ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
 
-    def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
+def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
+
+
+    pass
+    pass
         """Get portfolio assets that can be retroactively tasked."""
 candidates = []
 
@@ -567,7 +681,9 @@ candidates.append(asset)
         candidates.sort(key=lambda x: x.profit_performance)
         return candidates
 
-    def record_mode_performance(
+def record_mode_performance(
+
+
         self,
 mode: TradingMode,
 performance: float,
@@ -575,6 +691,8 @@ market_condition: MarketCondition
 ) -> None:
 """Record performance for mode selection learning."""
         try:
+    pass
+    pass
             if mode not in self.mode_performance_history:
 self.mode_performance_history[mode] = []
 
@@ -587,9 +705,15 @@ self.mode_performance_history[mode].append(performance)
         except Exception as e:
 safe_safe_print(f"⚠️ Performance recording failed: {safe_format_error(e, 'performance_recording')}")
 
-    def get_mode_statistics(self) -> Dict[str, Any]:
+def get_mode_statistics(self) -> Dict[str, Any]:
+
+
+    pass
+    pass
         """Get mode selection statistics."""
         try:
+    pass
+    pass
 stats = {
 'total_selections': sum(len(perf) for perf in self.mode_performance_history.values()),
                 'mode_performance': {},
@@ -602,7 +726,7 @@ stats = {
 
             for mode, performance_list in self.mode_performance_history.items():
                 if performance_list:
-stats['mode_performance'][mode.value] = {
+stats['mode_performance'][mode.value] = {]
 'count': len(performance_list),
                         'average': sum(performance_list) / len(performance_list),
                         'recent': performance_list[-10:] if len(performance_list) >= 10 else performance_list
@@ -621,6 +745,8 @@ hybrid_mode_selector = ZPEHybridModeSelector()
 
 # Convenience functions for external access
 def select_trading_mode(
+
+
     market_data: Dict[str, Any],
 portfolio_data: Optional[Dict[str, Any]] = None,
 timeframe: str = "daily"
@@ -630,16 +756,28 @@ timeframe: str = "daily"
 
 
 def get_retroactive_candidates() -> List[PortfolioAsset]:
+
+
+    pass
+    pass
     """Get retroactive tasking candidates."""
     return hybrid_mode_selector.get_retroactive_tasking_candidates()
 
 
 def record_performance(mode: TradingMode, performance: float, market_condition: MarketCondition) -> None:
+
+
+    pass
+    pass
     """Record mode performance."""
 hybrid_mode_selector.record_mode_performance(mode, performance, market_condition)
 
 
 def get_mode_stats() -> Dict[str, Any]:
+
+
+    pass
+    pass
     """Get mode selection statistics."""
     return hybrid_mode_selector.get_mode_statistics()
 
@@ -647,6 +785,8 @@ def get_mode_stats() -> Dict[str, Any]:
 # Example usage
 
 if __name__ == "__main__":
+    pass
+    pass
     # Test mode selection
 test_market_data = {
 'trend_strength': 0.8,

@@ -8,6 +8,10 @@ import math
 
 
 def check_rank(matrix: np.ndarray, eps: int = 0) -> None:
+
+
+    pass
+    pass
     """Check matrix rank consistency and raise if drift exceeds threshold.
 
 Verify rank stability: δ = rank(A) – rank(A·Aᵀ)

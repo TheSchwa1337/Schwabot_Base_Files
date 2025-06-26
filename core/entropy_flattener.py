@@ -18,7 +18,7 @@ from typing import Sequence
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
-__all__: list[str] = [
+__all__: list[str] = []
 "entropy_flatten",
 "compute_second_derivative",
 "adaptive_smooth",
@@ -30,6 +30,8 @@ __all__: list[str] = [
 
 
 def compute_second_derivative(
+
+
     signal: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
 """Return second derivative ∂²S/∂t² using finite differences.
@@ -48,6 +50,8 @@ second_deriv = np.gradient(first_deriv)
 
 
 def _softmax(x: np.ndarray) -> np.ndarray:  # noqa: D401
+
+
     """Numerically stable softmax implementation."""
 x_shifted = x - unified_math.unified_math.max(x)
     exp_x = unified_math.unified_math.exp(x_shifted)
@@ -55,6 +59,8 @@ x_shifted = x - unified_math.unified_math.max(x)
 
 
 def entropy_flatten(
+
+
     signal: Sequence[float],
 price_sigma: float,
 *,
@@ -88,6 +94,8 @@ smoothed = _softmax(flatten_term)
 
 
 def adaptive_smooth(
+
+
     current_value: float,
 smoothed_value: float,
 entropy_coeff: float,
