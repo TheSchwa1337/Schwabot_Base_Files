@@ -21,6 +21,7 @@ from utils.math_utils import cosine_similarity
 __all__ = [
     "OverlayMatch",
     "AlephOverlayMapper",
+    "map_aleph_overlay",
 ]
 
 
@@ -81,4 +82,31 @@ class AlephOverlayMapper:
     # ------------------------------------------------------------------
     def overlay_confidence(self, sim: float) -> float:
         """Convert similarity to 0–1 confidence."""
-        return (sim + 1.0) / 2.0 
+        return (sim + 1.0) / 2.0
+
+
+# ---------------------------------------------------------------------------
+# Stand-alone functional API requested in integration docs
+# ---------------------------------------------------------------------------
+
+def map_aleph_overlay(live_price: float, memory_prices: Sequence[float], omega: Sequence[float]) -> float:
+    """Return weighted sum of *omega* for memory prices close to *live_price*.
+
+    The helper mirrors the mathematical definition::
+
+        Ψ_ALEPH(t) = Σ [ ℵ(t) · δ(P(t) − P_mem) · Ω(t) ]
+
+    with a practical interpretation — if the price difference is below a very
+    small epsilon (``1e-4``) we treat it as a *match* and accumulate the
+    associated *ω* weight.  This is a lightweight convenience wrapper useful
+    when the full :class:`AlephOverlayMapper` class overhead is not required.
+    """
+    if len(memory_prices) != len(omega):
+        raise ValueError("memory_prices and omega must have equal length")
+    import numpy as np
+
+    mem_arr = np.asarray(memory_prices, dtype=float)
+    omega_arr = np.asarray(omega, dtype=float)
+
+    diff = np.abs(mem_arr - live_price) < 1e-4
+    return float(np.sum(omega_arr[diff])) 

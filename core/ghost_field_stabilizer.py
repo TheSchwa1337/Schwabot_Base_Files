@@ -36,6 +36,7 @@ import numpy as np
 __all__ = [
     "StabilityReport",
     "GhostFieldStabilizer",
+    "is_sfs_state",
 ]
 
 
@@ -118,4 +119,28 @@ class GhostFieldStabilizer:
         # Filter zeros to avoid log problems
         hist = hist[hist > 0]
         entropy = -np.sum(hist * np.log2(hist))
-        return float(entropy) 
+        return float(entropy)
+
+
+# ---------------------------------------------------------------------
+# Functional helper (kept outside the class for quick procedural access)
+# ---------------------------------------------------------------------
+
+def is_sfs_state(signal: np.ndarray, eps: int = 3, threshold: float = 0.02) -> bool:  # noqa: D401,E501
+    """Return ``True`` if signal derivative magnitude < *threshold*.
+
+    This mirrors the formula::
+
+        |Δ_ε ψ(t)| < τ  →  Stable Field State (SFS)
+
+    where ``Δ_ε ψ(t)`` is approximated by the finite difference over *eps*
+    samples. It is a convenience wrapper around the core
+    :class:`GhostFieldStabilizer` logic for scenarios where a full report is
+    not required.
+    """
+    if eps <= 0:
+        raise ValueError("eps must be positive")
+    if signal.size < eps + 1:
+        raise ValueError("signal length must be >= eps + 1")
+    delta = (signal[-1] - signal[-1 - eps]) / eps
+    return abs(delta) < threshold 

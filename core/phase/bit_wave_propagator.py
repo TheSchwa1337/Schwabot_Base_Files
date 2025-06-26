@@ -20,6 +20,7 @@ __all__ = [
     "PhaseVector",
     "generate_transition_matrix",
     "allocate_phase_vector",
+    "inject_harmonic",
 ]
 
 
@@ -75,4 +76,42 @@ def allocate_phase_vector(bit_depth: int, signal: Sequence[float]) -> PhaseVecto
     # scale 0-1 then to integer range
     sig_norm = (sig - sig.min()) / (sig.ptp() or 1.0)
     vec = np.round(sig_norm * rng_max).astype(int)
-    return PhaseVector(bit_depth, vec) 
+    return PhaseVector(bit_depth, vec)
+
+
+# ---------------------------------------------------------------------------
+# New API requested by integration docs
+# ---------------------------------------------------------------------------
+
+def inject_harmonic(bit_level: int, t: float, phi: float, duration: float) -> float:
+    """Return harmonic injection value based on bit-level amplitude.
+
+    Parameters
+    ----------
+    bit_level
+        Discrete bit level (e.g., 4, 8, 16). Acts as a scalar amplitude.
+    t
+        Current time index (0 ≤ *t* ≤ *duration*).
+    phi
+        Instantaneous signal value (continuous amplitude).
+    duration
+        Total window length (period) for the harmonic cycle.
+
+    Notes
+    -----
+    Implements the formula::
+
+        Φ_bit(t) = bit_level · φ(t) · sin(π t / duration)
+
+    The function is intentionally side-effect free and NumPy-accelerated so
+    it can be vectorised if required. Input validation is minimal but
+    sufficient for prod-level robustness in the surrounding code-base.
+    """
+    if bit_level <= 0:
+        raise ValueError("bit_level must be positive")
+    if duration <= 0:
+        raise ValueError("duration must be positive")
+    # use numpy for sin so that the function can accept numpy arrays too
+    import numpy as np  # local import to avoid polluting module globals
+
+    return float(bit_level * phi * np.sin(np.pi * t / duration)) 

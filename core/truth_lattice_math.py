@@ -35,6 +35,7 @@ __all__ = [
     "ConsensusResult",
     "collapse_score",
     "is_consensus_reached",
+    "collapse_truth_lattice",
 ]
 
 
@@ -108,4 +109,17 @@ def is_consensus_reached(
     """
     score = collapse_score(signals, omega, weights=weights)
     reached = score >= threshold
-    return ConsensusResult(score, threshold, reached, None if weights is None else _to_ndarray(list(weights))) 
+    return ConsensusResult(score, threshold, reached, None if weights is None else _to_ndarray(list(weights)))
+
+
+# -------------------------------------------------------------------------
+# Backward-compat convenience requested by integration docs
+# -------------------------------------------------------------------------
+
+def collapse_truth_lattice(inputs: Sequence[float] | np.ndarray, omega: float) -> float:  # noqa: D401,E501
+    """Legacy alias delegating to :func:`collapse_score` for backward-compat."""
+    return collapse_score(inputs, omega)
+
+
+# Export alias
+__all__.append("collapse_truth_lattice") 
