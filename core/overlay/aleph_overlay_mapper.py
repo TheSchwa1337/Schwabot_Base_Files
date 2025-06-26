@@ -1,0 +1,84 @@
+"""core.overlay.aleph_overlay_mapper
+Aleph Overlay Mapper
+====================
+
+Matches live price signature against a stored *Aleph* memory bank and returns
+the best overlay together with a confidence score derived from cosine
+similarity.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, Sequence
+
+import json
+import numpy as np
+
+from utils.math_utils import cosine_similarity
+
+__all__ = [
+    "OverlayMatch",
+    "AlephOverlayMapper",
+]
+
+
+@dataclass(slots=True)
+class OverlayMatch:
+    overlay_id: str
+    similarity: float  # in [-1, 1]
+    overlay_vector: np.ndarray
+
+    def as_dict(self) -> Dict[str, str | float]:
+        return {
+            "overlay_id": self.overlay_id,
+            "similarity": self.similarity,
+        }
+
+
+class AlephOverlayMapper:
+    """Load overlay memory and perform similarity search."""
+
+    def __init__(self, memory_json: str | Path) -> None:
+        self.memory_path = Path(memory_json)
+        if not self.memory_path.exists():
+            raise FileNotFoundError(self.memory_path)
+        self._load_memory()
+
+    # ------------------------------------------------------------------
+    def _load_memory(self) -> None:
+        data = json.loads(self.memory_path.read_text())
+        # expect {"overlay_id": [float, float, ...], ...}
+        self._memory: Dict[str, np.ndarray] = {
+            key: np.asarray(vec, dtype=float) for key, vec in data.items()
+        }
+        if not self._memory:
+            raise ValueError("Aleph memory is empty")
+
+    # ------------------------------------------------------------------
+    def map_overlay(self, live_vector: Sequence[float]) -> OverlayMatch:
+        """Return best matching overlay for *live_vector*."""
+        live = np.asarray(live_vector, dtype=float)
+        best_id = None
+        best_sim = -2.0  # less than minimum possible
+        best_vec: np.ndarray | None = None
+        for overlay_id, vec in self._memory.items():
+            # pad / truncate to match length
+            if vec.size != live.size:
+                min_len = min(vec.size, live.size)
+                sim = cosine_similarity(vec[:min_len], live[:min_len])
+            else:
+                sim = cosine_similarity(vec, live)
+            if sim > best_sim:
+                best_sim = sim
+                best_id = overlay_id
+                best_vec = vec
+        if best_id is None or best_vec is None:
+            raise RuntimeError("no overlays found, memory may be empty")
+        return OverlayMatch(best_id, best_sim, best_vec)
+
+    # ------------------------------------------------------------------
+    def overlay_confidence(self, sim: float) -> float:
+        """Convert similarity to 0–1 confidence."""
+        return (sim + 1.0) / 2.0 

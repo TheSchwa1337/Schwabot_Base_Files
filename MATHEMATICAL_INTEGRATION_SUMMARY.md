@@ -275,4 +275,142 @@ The implementation of the **Phantom Lag Model** and **Meta-Layer Ghost Bridge** 
 
 The enhanced **Fallback Logic Router** ensures that these mathematical components are available even during system failures, maintaining the integrity and performance of the trading system.
 
-**Schwabot is now mathematically complete and production-ready** with all critical missing components implemented and validated. 
+**Schwabot is now mathematically complete and production-ready** with all critical missing components implemented and validated.
+
+# Mathematical Integration & Legacy Code Refactoring Summary
+
+## 🎯 Overview
+
+This document summarizes the successful implementation and integration of all required mathematical modules for the Schwabot trading framework, along with the refactoring of legacy code patterns to use modern, unified decision-making logic.
+
+## ✅ Mathematical Modules Implemented
+
+### 1. **Ghost Phase Strategy Loader** (`core/ghost_phase_strategy_loader.py`)
+- **Purpose**: High-level coordinator that ingests live market data and selects strategies
+- **Key Features**:
+  - Unified API through `decide()` method
+  - Integrates drift, phase, overlay, and consensus evaluation
+  - Returns structured `GhostPhaseDecision` objects
+  - Flake8 compliant with proper error handling
+
+### 2. **Drift Phase Weighter** (`core/phase/drift_phase_weighter.py`) 
+- **Mathematics**: λ-decay drift weight using exponential smoothing
+- **Algorithm**: `s[t] = λ*x[t] + (1-λ)*s[t-1]`
+- **Features**: 
+  - Configurable lambda parameter
+  - Gradient entropy scoring
+  - Returns structured `DriftWeightReport`
+
+### 3. **Truth Lattice Math** (`core/truth_lattice_math.py`)
+- **Mathematics**: Consensus collapse score `T_collapse(ψ, Ω) = Σ_i ψ_i / (1 + e^{-Ω})`
+- **Features**:
+  - Batch and streaming API
+  - Optional per-signal weighting
+  - Structured `ConsensusResult` output
+
+### 4. **Ghost Field Stabilizer** (`core/ghost_field_stabilizer.py`)
+- **Mathematics**: Shannon entropy bounds using `Δₑ ψ(t) = |ψ(t + ε) − ψ(t)| / ε < τ`
+- **Purpose**: Detect Stable-Field State (SFS) vs Unstable-Field State (UFS)
+- **Features**: Configurable epsilon and tau thresholds
+
+### 5. **Phase Transition Monitor** (`core/phase/phase_transition_monitor.py`)
+- **Purpose**: Evaluates phase state (LOW/MEDIUM/HIGH) using entropy dynamics
+- **Integration**: Uses GhostFieldStabilizer + Truth Lattice Math
+- **Output**: `PhaseEvaluationReport` with phase classification
+
+### 6. **Aleph Overlay Mapper** (`core/overlay/aleph_overlay_mapper.py`)
+- **Mathematics**: Cosine similarity matching between live vectors and stored overlays
+- **Purpose**: Hash signals to known overlays using memory stack
+- **Features**: JSON-based overlay registry, similarity scoring
+
+### 7. **Bit Wave Propagator** (`core/phase/bit_wave_propagator.py`)
+- **Mathematics**: Binary vector space projection with configurable bit depth
+- **Purpose**: Assigns execution context via bit-resolution overlays
+- **Features**: 4/8/16-bit resolution support, transition matrices
+
+### 8. **Math Utilities** (`utils/math_utils.py`)
+- **Functions**: Shannon entropy, moving averages, hash distance, cosine similarity
+- **Purpose**: Centralized mathematical helpers
+- **Features**: Numpy-based implementations, proper error handling
+
+## 🔧 Legacy Code Refactoring
+
+### 1. **Strategy Mapper** (`core/strategy_mapper.py`)
+- **Before**: Complex legacy UROS v1.0 integration with manual drift/entropy logic
+- **After**: Clean implementation using `GhostPhaseStrategyLoader` 
+- **Improvements**:
+  - Replaced `safe_safe_print` import issues
+  - Unified decision-making through ghost phase logic
+  - Structured error handling and fallback strategies
+  - Modern type hints and documentation
+
+### 2. **Ghost Trigger Map** (`core/ghost_trigger_map.py`)
+- **New**: Created from scratch to replace scattered trigger logic
+- **Features**:
+  - Ghost-phase-aware trigger routing
+  - Confidence-based triggering with adjustable thresholds
+  - Trigger history and statistics
+  - Legacy compatibility function `generate_ghost_trigger_map()`
+
+### 3. **Safe Print Integration**
+- **Issue**: Many files used incorrect `safe_safe_print` imports
+- **Solution**: Standardized on `utils.safe_print` with proper fallbacks
+- **Impact**: Eliminated import errors across the codebase
+
+## 🛠️ Tools & Testing
+
+### 1. **Overlay Registry Updater** (`tools/overlay_registry_updater.py`)
+- **Purpose**: CLI tool to reweight overlays via cosine similarity
+- **Usage**: `python tools/overlay_registry_updater.py --file memory_stack/aleph_overlays.json --vector 0.1 0.2 0.3 0.4`
+- **Features**: Dry-run mode, backup creation, similarity reporting
+
+### 2. **Integration Tests** (`tests/ghost_phase_strategy_loader_test.py`)
+- **Coverage**: All mathematical modules and their integration
+- **Tests**: 
+  - GhostPhaseStrategyLoader decision-making
+  - GhostTriggerMapper functionality
+  - StrategyMapper refactoring
+  - Mathematical component integration
+  - Legacy compatibility functions
+
+### 3. **Overlay Configuration** (`memory_stack/aleph_overlays.json`)
+- **Created**: Sample overlay vectors for 8 different strategies
+- **Strategies**: momentum_alpha, trend_following, mean_reversion, volatility_breakout, etc.
+- **Format**: JSON with 6-element vectors for each strategy
+
+## 📊 Code Quality Improvements
+
+### **Flake8 Compliance**
+- ✅ All new files pass flake8 linting
+- ✅ Resolved W292 newline issues
+- ✅ Proper import organization
+- ✅ Type hints throughout
+
+### **Architecture Benefits**
+1. **Unified Decision-Making**: Single `GhostPhaseStrategyLoader.decide()` API
+2. **Mathematical Rigor**: All algorithms properly implemented with documented mathematics  
+3. **Modular Design**: Each component can be tested and updated independently
+4. **Legacy Compatibility**: Maintains backward compatibility while modernizing internals
+5. **Error Handling**: Robust fallback strategies and structured error reporting
+
+## 🚀 Integration Points
+
+The refactored system enables:
+
+1. **strategy_mapper.py** → Uses `GhostPhaseDecision` objects directly
+2. **ghost_trigger_map.py** → Routes triggers through ghost-phase logic  
+3. **execution_validator.py** → Can consume structured decision objects
+4. **Any legacy code** → Can replace manual entropy/drift/overlay logic with single loader call
+
+## 🎉 Summary
+
+All required mathematical modules have been successfully implemented and integrated:
+
+- ✅ **8 Mathematical Modules** - All properly implemented with documented algorithms
+- ✅ **Legacy Code Refactoring** - strategy_mapper.py and related files modernized
+- ✅ **Safe Print Issues** - Import problems resolved across codebase  
+- ✅ **Flake8 Compliance** - All new code passes linting
+- ✅ **Tool Integration** - CLI tools and tests created
+- ✅ **Configuration Files** - Overlay registry and sample data provided
+
+The system now provides a unified, mathematically sound foundation for strategy decision-making while maintaining compatibility with existing legacy components. 

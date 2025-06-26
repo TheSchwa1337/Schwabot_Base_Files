@@ -95,7 +95,8 @@ from .mathematical_pipeline_validator_simple import SimplifiedMathematicalPipeli
 
 # AI and strategy components
 from .gpt_command_layer import GPTCommandLayer
-# from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer  # F811: duplicate import
+# from .gpt_command_layer_simple import GPTCommandLayer as SimpleGPTCommandLayer  
+# F811: duplicate import
 from .strategy_mapper import StrategyMapper
 
 # Memory and execution components
@@ -245,8 +246,7 @@ from .constants import (
     MATRIX_CONDITION_LIMIT, THERMAL_CONDUCTIVITY_BTC, QUANTUM_ENTROPY_SCALE,
     REDUCED_PLANCK, FERRIS_PRIMARY_CYCLE, DEFAULT_TIMEOUT, MAX_RETRY_ATTEMPTS,
     DEFAULT_BATCH_SIZE, KELLY_SHARPE_COMPOSITE, FRACTAL_THERMAL_RATIO,
-    VECTORIZATION_THRESHOLD, PARALLEL_PROCESSING_THRESHOLD,
-    WindowsCliCompatibilityHandler
+    VECTORIZATION_THRESHOLD, PARALLEL_PROCESSING_THRESHOLD
 )
 
 
@@ -456,127 +456,127 @@ def check_system_health() -> Dict[str, Any]:
 
 __all__ = [
     # Core components
-"MultiBitBTCProcessor", "ProfitRoutingEngine", "HashRegistry", "HashEntry", "HashType", "HashStatus",
-"StrategyLoader", "StrategyConfig", "LoaderResult", "OpsObservability", "MetricData", "MetricType",
-"RegulatoryCompliance", "ComplianceReport", "ComplianceType", "RiskGuard", "RiskEvent", "RiskLevel",
-"SecureAPIManager", "ExchangePlumbing", "PersistentStateManager", "EnvironmentManager",
-"MemoryAllocationManager", "PrecisionPerformanceManager", "LongHorizonSimulation", "ThermalBoundaryManager",
+    "MultiBitBTCProcessor", "ProfitRoutingEngine", "HashRegistry", "HashEntry", "HashType", "HashStatus",
+    "StrategyLoader", "StrategyConfig", "LoaderResult", "OpsObservability", "MetricData", "MetricType",
+    "RegulatoryCompliance", "ComplianceReport", "ComplianceType", "RiskGuard", "RiskEvent", "RiskLevel",
+    "SecureAPIManager", "ExchangePlumbing", "PersistentStateManager", "EnvironmentManager",
+    "MemoryAllocationManager", "PrecisionPerformanceManager", "LongHorizonSimulation", "ThermalBoundaryManager",
 
     # Type definitions
-"BitLevel", "MatrixPhase", "MatrixController", "MatrixControllerType", "Vector", "Matrix", "Tensor",
-"Price", "Volume", "Quantity", "Amount", "Temperature", "Pressure", "ThermalConductivity", "HeatCapacity",
-"WarpFactor", "LightSpeed", "Distance", "Time",
+    "BitLevel", "MatrixPhase", "MatrixController", "MatrixControllerType", "Vector", "Matrix", "Tensor",
+    "Price", "Volume", "Quantity", "Amount", "Temperature", "Pressure", "ThermalConductivity", "HeatCapacity",
+    "WarpFactor", "LightSpeed", "Distance", "Time",
 
     # Typing schemas
-"FaultLog", "FaultEvent", "RecoveryStrategy", "StrategyHash", "AIStrategyResponse",
-"MathematicalOperation", "VectorOperation", "MatrixOperation", "TradingSignal",
-"SystemState", "PerformanceMetrics", "parse_ai_response", "create_fault_log", "validate_mathematical_operation",
+    "FaultLog", "FaultEvent", "RecoveryStrategy", "StrategyHash", "AIStrategyResponse",
+    "MathematicalOperation", "VectorOperation", "MatrixOperation", "TradingSignal",
+    "SystemState", "PerformanceMetrics", "parse_ai_response", "create_fault_log", "validate_mathematical_operation",
 
     # Fault handling
-"FaultBus", "FaultBusEvent", "FaultType",
+    "FaultBus", "FaultBusEvent", "FaultType",
 
     # Mathematical components
-"MathematicalPipelineValidator", "SimplifiedMathematicalPipelineValidator",
+    "MathematicalPipelineValidator", "SimplifiedMathematicalPipelineValidator",
 
     # AI and strategy components
-"GPTCommandLayer", "SimpleGPTCommandLayer", "StrategyMapper",
+    "GPTCommandLayer", "SimpleGPTCommandLayer", "StrategyMapper",
 
     # Memory and execution components
-"AICommandSequencer", "ExecutionValidator",
+    "AICommandSequencer", "ExecutionValidator",
 
     # Risk and compliance components
-"EnhancedRiskManager", "CapitalControls",
+    "EnhancedRiskManager", "CapitalControls",
 
     # Performance and optimization
-"PrecisionPerformanceManager", "AutoScaler",
+    "PrecisionPerformanceManager", "AutoScaler",
 
     # Thermal and hardware management
-"ThermalBoundaryManager", "GPUFlashEngine",
+    "ThermalBoundaryManager", "GPUFlashEngine",
 
     # Advanced mathematical frameworks
-"ZPECore", "ZPEIntegration", "ZPERotationalEngine", "ZPEHybridModeSelector",
+    "ZPECore", "ZPEIntegration", "ZPERotationalEngine", "ZPEHybridModeSelector",
 
     # Vector and matrix operations
-"UnifiedConfidenceMatrix", "HashConfidenceEvaluator", "VectorValidator", "MatrixAllocator",
+    "UnifiedConfidenceMatrix", "HashConfidenceEvaluator", "VectorValidator", "MatrixAllocator",
 
     # Event and communication systems
-"BusCore", "EventBus", "TradeEvent", "BusEvent", "EchoSnapshot",
+    "BusCore", "EventBus", "TradeEvent", "BusEvent", "EchoSnapshot",
 
     # Advanced engines
-"FutureCorridorEngine", "EnhancedFractalCore", "HashTriggerEngine", "EntropyEngine", "AltitudeGenerator",
+    "FutureCorridorEngine", "EnhancedFractalCore", "HashTriggerEngine", "EntropyEngine", "AltitudeGenerator",
 
     # Hash trigger mapping system
-"HashTriggerMapper", "HashTriggerMapping", "GhostStrategyIntegrator", "EnhancedStrategyDecision",
+    "HashTriggerMapper", "HashTriggerMapping", "GhostStrategyIntegrator", "EnhancedStrategyDecision",
 
     # API and integration
-"APIGateway", "APIBridgeManager", "ColdbaseBridge", "ProphetConnector",
+    "APIGateway", "APIBridgeManager", "ColdbaseBridge", "ProphetConnector",
 
     # Orchestration and management
-"MainOrchestrator", "MasterOrchestrator", "SettingsController",
+    "MainOrchestrator", "MasterOrchestrator", "SettingsController",
 
     # Data and analysis
-"DataIntegrationLayer", "LineRenderEngine", "TrajectorySphere",
+    "DataIntegrationLayer", "LineRenderEngine", "TrajectorySphere",
 
     # Error handling and validation
-"ErrorHandler", "safe_execute", "ErrorHandlingPipeline", "ImportResolver", "BestPracticesEnforcer",
+    "ErrorHandler", "safe_execute", "ErrorHandlingPipeline", "ImportResolver", "BestPracticesEnforcer",
 
     # State and mode management
-"StateTracker", "ModeManager", "DriftPhaseMonitor",
+    "StateTracker", "ModeManager", "DriftPhaseMonitor",
 
     # Windows compatibility
-"EnhancedWindowsCliCompatibilityHandler",
+    "EnhancedWindowsCliCompatibilityHandler",
 
     # Phase engine components
-"BasketPhaseMap",
+    "BasketPhaseMap",
 
     # Advanced components
-"IntegratedAlifAlephSystem", "MemoryAgentGhostMetaEngine", "LanternNewsIntelligenceBridge", "AdvancedTestHarness",
+    "IntegratedAlifAlephSystem", "MemoryAgentGhostMetaEngine", "LanternNewsIntelligenceBridge", "AdvancedTestHarness",
 
     # Ghost and advanced logic
-"GhostArchitectureBTCProfitHando", "GhostStrategyHandler", "compute_ghost_route",
+    "GhostArchitectureBTCProfitHando", "GhostStrategyHandler", "compute_ghost_route",
 
     # Volume and tick management
-"VolumeTickRouter", "TickBacklogRouter", "TickCycleValidator",
+    "VolumeTickRouter", "TickBacklogRouter", "TickCycleValidator",
 
     # Event matrix and impact
-"EventMatrixIntegrationBridge", "EventImpactMapper",
+    "EventMatrixIntegrationBridge", "EventImpactMapper",
 
     # Advanced mathematical operations
-"AdvancedMathematicalCore", "RiddleGEMM", "AltitudeAdjustmentMath", "AnomalyFilterComprehensive",
+    "AdvancedMathematicalCore", "RiddleGEMM", "AltitudeAdjustmentMath", "AnomalyFilterComprehensive",
 
     # Demo and testing components
-"DemoBacktestRunner", "DemoEntrySimulator", "DemoIntegrationSystem", "DemoMemoryCore",
+    "DemoBacktestRunner", "DemoEntrySimulator", "DemoIntegrationSystem", "DemoMemoryCore",
 
     # Unified interfaces
-"SchwabotUnifiedInterfaceSystem",
+    "SchwabotUnifiedInterfaceSystem",
 
     # Post-failure recovery
-"PostFailureRecoveryIntelligenceLoop",
+    "PostFailureRecoveryIntelligenceLoop",
 
     # Temporal corrections
-"TemporalExecutionCorrectionLayer",
+    "TemporalExecutionCorrectionLayer",
 
     # Profit and strategy management
-"ProfitCycleAllocator",
+    "ProfitCycleAllocator",
 
     # Memory and vector operations
-"LanternVectorMemory",
+    "LanternVectorMemory",
 
     # Unified mathematics
-"UnifiedMathematicsConfig",
+    "UnifiedMathematicsConfig",
 
     # UI Bridge components (Low-risk phase)
     "UIStateBridge", "VisualIntegrationBridge", "UIIntegrationBridge", "UIBridgeIntegrationManager",
 
     # Type binding system
-"TypeBindingValidator", "WindowsCliCompatibilityHandler", "cli_handler",
+    "TypeBindingValidator", "WindowsCliCompatibilityHandler", "cli_handler",
 
     # Utility functions
-"safe_print", "safe_format_error", "log_safe",
+    "safe_print", "safe_format_error", "log_safe",
 
     # System functions
-"initialize_core_system", "check_system_health",
+    "initialize_core_system", "check_system_health",
 
     # Version information
-"__version__", "__author__", "__description__"
+    "__version__", "__author__", "__description__"
 ]
