@@ -161,7 +161,7 @@ class EntropyAPILayer:
         self.is_running = False
         self.update_thread = None
 
-        logger.info("🧠 Entropy API Layer initialized")
+        logger.info("\\u1f9e0 Entropy API Layer initialized")
 
     def initialize_core_engines(self):
         """Initialize core Schwabot engines."""
@@ -178,10 +178,10 @@ class EntropyAPILayer:
             self.riddle_engine = RiddleGEMMEngine(vector_size=10)
             self.temporal_corrector = TemporalExecutionCorrectionLayer()
 
-            logger.info("✅ Core engines initialized")
+            logger.info("\\u2705 Core engines initialized")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize core engines: {e}")
+            logger.error(f"\\u274c Failed to initialize core engines: {e}")
 
     def calculate_entropy(self, data: Dict[str, Any]) -> float:
         """
@@ -217,7 +217,7 @@ class EntropyAPILayer:
             return unified_math.min(unified_math.max(entropy, 0.0), 1.0)
 
         except Exception as e:
-            logger.error(f"❌ Error calculating entropy: {e}")
+            logger.error(f"\\u274c Error calculating entropy: {e}")
             return 0.0
 
     def generate_hash_signature(self, data: Dict[str, Any]) -> str:
@@ -244,7 +244,7 @@ class EntropyAPILayer:
             return hash_signature[:16]  # Return first 16 characters
 
         except Exception as e:
-            logger.error(f"❌ Error generating hash signature: {e}")
+            logger.error(f"\\u274c Error generating hash signature: {e}")
             return "0000000000000000"
 
     def update_16_bit_positions(self, market_data: Dict[str, Any]):
@@ -285,7 +285,7 @@ class EntropyAPILayer:
             })
 
         except Exception as e:
-            logger.error(f"❌ Error updating 16-bit positions: {e}")
+            logger.error(f"\\u274c Error updating 16-bit positions: {e}")
 
     def register_hash_command(self,
                               command_id: str,
@@ -317,12 +317,12 @@ class EntropyAPILayer:
             )
 
             self.hash_commands[command_id] = command
-            logger.info(f"✅ Registered hash command: {command_id}")
+            logger.info(f"\\u2705 Registered hash command: {command_id}")
 
             return True
 
         except Exception as e:
-            logger.error(f"❌ Error registering hash command: {e}")
+            logger.error(f"\\u274c Error registering hash command: {e}")
             return False
 
     def execute_hash_commands(self, current_hash: str) -> List[Dict[str, Any]]:
@@ -366,13 +366,13 @@ class EntropyAPILayer:
                         'executed_at': command.executed_at.isoformat()
                     })
 
-                    logger.info(f"✅ Executed hash command: {command.command_id}")
+                    logger.info(f"\\u2705 Executed hash command: {command.command_id}")
 
                 except Exception as e:
-                    logger.error(f"❌ Error executing command {command.command_id}: {e}")
+                    logger.error(f"\\u274c Error executing command {command.command_id}: {e}")
 
         except Exception as e:
-            logger.error(f"❌ Error executing hash commands: {e}")
+            logger.error(f"\\u274c Error executing hash commands: {e}")
 
         return executed_commands
 
@@ -400,11 +400,11 @@ class EntropyAPILayer:
             if function_name in function_map:
                 return function_map[function_name](**parameters)
             else:
-                logger.warning(f"⚠️ Unknown function: {function_name}")
+                logger.warning(f"\\u26a0\\ufe0f Unknown function: {function_name}")
                 return None
 
         except Exception as e:
-            logger.error(f"❌ Error executing function {function_name}: {e}")
+            logger.error(f"\\u274c Error executing function {function_name}: {e}")
             return None
 
     def _update_market_signals(self, **kwargs) -> Dict[str, Any]:
@@ -519,7 +519,7 @@ class EntropyAPILayer:
             return state
 
         except Exception as e:
-            logger.error(f"❌ Error getting market state: {e}")
+            logger.error(f"\\u274c Error getting market state: {e}")
             return {'error': str(e)}
 
     def create_flask_app(self) -> Flask:
@@ -670,15 +670,15 @@ class EntropyAPILayer:
                 except websockets.exceptions.ConnectionClosed:
                     pass
                 except Exception as e:
-                    logger.error(f"❌ WebSocket error: {e}")
+                    logger.error(f"\\u274c WebSocket error: {e}")
 
             self.websocket_server = await websockets.serve(
                 handler, self.host, self.websocket_port
             )
-            logger.info(f"🌐 WebSocket server started on ws://{self.host}:{self.websocket_port}")
+            logger.info(f"\\u1f310 WebSocket server started on ws://{self.host}:{self.websocket_port}")
 
         except Exception as e:
-            logger.error(f"❌ Failed to start WebSocket server: {e}")
+            logger.error(f"\\u274c Failed to start WebSocket server: {e}")
 
     async def _handle_websocket_message(self, websocket, data):
         """Handle incoming WebSocket messages."""
@@ -726,7 +726,7 @@ class EntropyAPILayer:
                 })
 
         except Exception as e:
-            logger.error(f"❌ Error handling WebSocket message: {e}")
+            logger.error(f"\\u274c Error handling WebSocket message: {e}")
 
     def start(self):
         """Start the entropy API layer."""
@@ -750,16 +750,16 @@ class EntropyAPILayer:
             self.update_thread = threading.Thread(target=self._update_loop, daemon=True)
             self.update_thread.start()
 
-            logger.info("🚀 Entropy API Layer started")
+            logger.info("\\u1f680 Entropy API Layer started")
 
         except Exception as e:
-            logger.error(f"❌ Failed to start Entropy API Layer: {e}")
+            logger.error(f"\\u274c Failed to start Entropy API Layer: {e}")
             self.is_running = False
 
     def stop(self):
         """Stop the entropy API layer."""
         self.is_running = False
-        logger.info("🛑 Entropy API Layer stopped")
+        logger.info("\\u1f6d1 Entropy API Layer stopped")
 
     def _update_loop(self):
         """Main update loop for entropy calculations and command execution."""
@@ -795,7 +795,7 @@ class EntropyAPILayer:
                 time.sleep(3.75)  # 3.75 minutes (225 seconds)
 
             except Exception as e:
-                logger.error(f"❌ Error in update loop: {e}")
+                logger.error(f"\\u274c Error in update loop: {e}")
                 time.sleep(1)  # Brief pause on error
 
 

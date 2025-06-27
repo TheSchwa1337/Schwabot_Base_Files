@@ -234,3 +234,5 @@ def safe_import(
     """Safely import classes from a module with fallback support."""
     resolver = ImportResolver()
     return resolver.safe_import(module_name, class_names, fallback_factory)
+
+"""

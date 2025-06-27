@@ -122,3 +122,5 @@ type_patterns.update(str_patterns)
 type_patterns.update(bool_patterns)
 type_patterns.update(int_patterns)
 # SCHWABOT_DYNAMIC_EXPANSION_END
+
+"""

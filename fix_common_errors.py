@@ -90,7 +90,7 @@ def main():
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
 
-    print(f"\nTotal fixes applied:")
+    print(f"\\nTotal fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"W291 (trailing whitespace): {total_stats['w291_fixed']}")
     print(f"W292 (no newline at end): {total_stats['w292_fixed']}")

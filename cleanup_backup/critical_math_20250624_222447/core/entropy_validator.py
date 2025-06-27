@@ -4,7 +4,7 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entropy-based signal validator.
 
-This module exposes :func:`validate_entropy_envelope` – a helper that checks
+This module exposes :func:`validate_entropy_envelope` \\u2013 a helper that checks
 whether a signal (vector) lies inside an acceptable Shannon- or spectral-entropy
 band.  GAN filters and anomaly detectors will use this as a quick-reject gate
 before engaging heavier models.
@@ -28,7 +28,7 @@ from core.unified_math_system import unified_math
 
 try:
     from scipy.signal import welch  # type: ignore
-except ModuleNotFoundError:  # pragma: no cover – pure-NumPy fallback
+except ModuleNotFoundError:  # pragma: no cover \\u2013 pure-NumPy fallback
 
     def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401
         """Rudimentary Welch PSD replacement (Hann + overlap=0)."""
@@ -95,9 +95,9 @@ def validate_entropy_envelope(
 # -----------------------------------------------------------------------------
 # DONE: future improvements implemented
 # -----------------------------------------------------------------------------
-# • ✅ Add permutation entropy
-# • ✅ Add Jensen–Shannon divergence to a reference distribution
-# • ✅ Dynamic threshold adaptation based on rolling statistics
+# \\u2022 \\u2705 Add permutation entropy
+# \\u2022 \\u2705 Add Jensen\\u2013Shannon divergence to a reference distribution
+# \\u2022 \\u2705 Dynamic threshold adaptation based on rolling statistics
 
 def _permutation_entropy(signal: np.ndarray, order: int = 3) -> float:
     """Compute permutation entropy of a signal.
@@ -292,3 +292,5 @@ class AdaptiveEntropyValidator:
                 "permutation_std": unified_math.unified_math.std(self.permutation_entropy_history) if self.permutation_entropy_history else 0.0,
             }
         }
+
+"""

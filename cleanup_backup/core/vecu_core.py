@@ -147,17 +147,17 @@ class VECUCore:
         self.injection_history: List[PWMInjectionData] = []
         self.feedback_history: List[VECUFeedbackData] = []
 
-        safe_safe_print("⚡ VECU Core initialized")
+        safe_safe_print("\\u26a1 VECU Core initialized")
 
     def set_mode(self, mode: VECUMode) -> None:
         """Set VECU operation mode."""
         self.mode = mode
-        safe_safe_print(f"🔄 VECU mode set to: {mode.value}")
+        safe_safe_print(f"\\u1f504 VECU mode set to: {mode.value}")
 
     def set_pwm_mode(self, pwm_mode: PWMMode) -> None:
         """Set PWM modulation mode."""
         self.pwm_mode = pwm_mode
-        safe_safe_print(f"🔄 PWM mode set to: {pwm_mode.value}")
+        safe_safe_print(f"\\u1f504 PWM mode set to: {pwm_mode.value}")
 
     def vecu_timing_sync(
         self,
@@ -209,12 +209,12 @@ class VECUCore:
             if len(self.timing_history) > 1000:
                 self.timing_history = self.timing_history[-1000:]
 
-            safe_safe_print(f"✅ VECU timing sync: Amplification = {profit_amplification:.6f}")
+            safe_safe_print(f"\\u2705 VECU timing sync: Amplification = {profit_amplification:.6f}")
 
             return timing_data
 
         except Exception as e:
-            safe_safe_print(f"❌ VECU timing sync failed: {safe_format_error(e, 'vecu_timing_sync')}")
+            safe_safe_print(f"\\u274c VECU timing sync failed: {safe_format_error(e, 'vecu_timing_sync')}")
             return self._create_fallback_timing_data(tick_id, rpm_equivalent, entropy_level)
 
     def pwm_profit_injection(
@@ -268,12 +268,12 @@ class VECUCore:
             if len(self.injection_history) > 1000:
                 self.injection_history = self.injection_history[-1000:]
 
-            safe_safe_print(f"✅ PWM injection: Voltage = {profit_voltage:.6f}, Duty = {duty_cycle:.3f}")
+            safe_safe_print(f"\\u2705 PWM injection: Voltage = {profit_voltage:.6f}, Duty = {duty_cycle:.3f}")
 
             return injection_data
 
         except Exception as e:
-            safe_safe_print(f"❌ PWM injection failed: {safe_format_error(e, 'pwm_injection')}")
+            safe_safe_print(f"\\u274c PWM injection failed: {safe_format_error(e, 'pwm_injection')}")
             return self._create_fallback_injection_data(current_phase, profit_potential, market_volatility)
 
     def vecu_feedback_loop(
@@ -328,12 +328,12 @@ class VECUCore:
             # Update performance statistics
             self._update_performance_statistics(feedback_data)
 
-            safe_safe_print(f"✅ VECU feedback: Error = {error_delta:.6f}, Correction = {correction_vector:.6f}")
+            safe_safe_print(f"\\u2705 VECU feedback: Error = {error_delta:.6f}, Correction = {correction_vector:.6f}")
 
             return feedback_data
 
         except Exception as e:
-            safe_safe_print(f"❌ VECU feedback failed: {safe_format_error(e, 'vecu_feedback')}")
+            safe_safe_print(f"\\u274c VECU feedback failed: {safe_format_error(e, 'vecu_feedback')}")
             return self._create_fallback_feedback_data(predicted_profit, actual_profit, previous_phase)
 
     def _calculate_resonance_score(
@@ -359,7 +359,7 @@ class VECUCore:
             return unified_math.min(1.0, unified_math.max(0.0, resonance_score))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Resonance calculation failed: {safe_format_error(e, 'resonance_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Resonance calculation failed: {safe_format_error(e, 'resonance_calculation')}")
             return 0.5
 
     def _calculate_modulation_factor(
@@ -385,7 +385,7 @@ class VECUCore:
             return unified_math.min(1.0, unified_math.max(0.0, modulation_factor))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Modulation calculation failed: {safe_format_error(e, 'modulation_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Modulation calculation failed: {safe_format_error(e, 'modulation_calculation')}")
             return 0.5
 
     def _calculate_resonance_correction(
@@ -407,7 +407,7 @@ class VECUCore:
             return max(-0.1, unified_math.min(0.1, total_correction))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Resonance correction failed: {safe_format_error(e, 'resonance_correction')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Resonance correction failed: {safe_format_error(e, 'resonance_correction')}")
             return 0.0
 
     def _update_performance_statistics(self, feedback_data: VECUFeedbackData) -> None:
@@ -495,7 +495,7 @@ class VECUCore:
         self.timing_history.clear()
         self.injection_history.clear()
         self.feedback_history.clear()
-        safe_safe_print("🗑️ VECU history cleared")
+        safe_safe_print("\\u1f5d1\\ufe0f VECU history cleared")
 
 
 # Global VECU core instance
@@ -531,7 +531,7 @@ def get_vecu_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test VECU core
-    safe_print("🧪 Testing VECU Core...")
+    safe_print("\\u1f9ea Testing VECU Core...")
 
     # Test timing synchronization
     timing_data = vecu_timing_sync(
@@ -539,7 +539,7 @@ if __name__ == "__main__":
         rpm_equivalent=0.8,
         entropy_level=0.6
     )
-    safe_print(f"✅ Timing Sync: Amplification = {timing_data.profit_amplification:.6f}")
+    safe_print(f"\\u2705 Timing Sync: Amplification = {timing_data.profit_amplification:.6f}")
 
     # Test PWM injection
     injection_data = pwm_profit_injection(
@@ -547,7 +547,7 @@ if __name__ == "__main__":
         profit_potential=100.0,
         market_volatility=0.3
     )
-    safe_print(f"✅ PWM Injection: Voltage = {injection_data.profit_voltage:.6f}")
+    safe_print(f"\\u2705 PWM Injection: Voltage = {injection_data.profit_voltage:.6f}")
 
     # Test feedback loop
     feedback_data = vecu_feedback_loop(
@@ -556,8 +556,8 @@ if __name__ == "__main__":
         previous_phase=0.3,
         timing_data=timing_data
     )
-    safe_print(f"✅ Feedback Loop: Error = {feedback_data.error_delta:.6f}")
+    safe_print(f"\\u2705 Feedback Loop: Error = {feedback_data.error_delta:.6f}")
 
     # Get statistics
     stats = get_vecu_stats()
-    safe_print(f"✅ VECU Statistics: {stats}")
+    safe_print(f"\\u2705 VECU Statistics: {stats}")

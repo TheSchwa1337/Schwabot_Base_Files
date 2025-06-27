@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Hold Logic Test - Schwabot Framework.
@@ -85,11 +85,11 @@ class TickHoldLogicTest:
             )
         ]
 
-        logger.info("⏱️ Tick Hold Logic Test initialized")
+        logger.info("\\u23f1\\ufe0f Tick Hold Logic Test initialized")
 
     def test_long_hold_strategy_validation(self) -> Dict[str, Any]:
         """Test long-hold strategy validation."""
-        logger.info("📈 Testing long-hold strategy validation")
+        logger.info("\\u1f4c8 Testing long-hold strategy validation")
 
         results = {
             'test_name': 'long_hold_strategy_validation',
@@ -138,15 +138,15 @@ class TickHoldLogicTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Long-hold strategy validation test passed")
+            logger.info("\\u2705 Long-hold strategy validation test passed")
         else:
-            logger.error(f"❌ Long-hold strategy validation test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Long-hold strategy validation test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_temporary_volume_park_logic(self) -> Dict[str, Any]:
         """Test temporary volume park logic."""
-        logger.info("📊 Testing temporary volume park logic")
+        logger.info("\\u1f4ca Testing temporary volume park logic")
 
         results = {
             'test_name': 'temporary_volume_park_logic',
@@ -194,15 +194,15 @@ class TickHoldLogicTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Temporary volume park logic test passed")
+            logger.info("\\u2705 Temporary volume park logic test passed")
         else:
-            logger.error(f"❌ Temporary volume park logic test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Temporary volume park logic test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_rebuy_decision_windows(self) -> Dict[str, Any]:
         """Test rebuy decision windows across 3-12 tick delays."""
-        logger.info("🔄 Testing rebuy decision windows")
+        logger.info("\\u1f504 Testing rebuy decision windows")
 
         results = {
             'test_name': 'rebuy_decision_windows',
@@ -253,15 +253,15 @@ class TickHoldLogicTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Rebuy decision windows test passed")
+            logger.info("\\u2705 Rebuy decision windows test passed")
         else:
-            logger.error(f"❌ Rebuy decision windows test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Rebuy decision windows test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_hold_confidence_calculations(self) -> Dict[str, Any]:
         """Test hold confidence calculations."""
-        logger.info("🎯 Testing hold confidence calculations")
+        logger.info("\\u1f3af Testing hold confidence calculations")
 
         results = {
             'test_name': 'hold_confidence_calculations',
@@ -314,15 +314,15 @@ class TickHoldLogicTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Hold confidence calculations test passed")
+            logger.info("\\u2705 Hold confidence calculations test passed")
         else:
-            logger.error(f"❌ Hold confidence calculations test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Hold confidence calculations test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_tick_sequence_integrity(self) -> Dict[str, Any]:
         """Test tick sequence integrity during holds."""
-        logger.info("🔢 Testing tick sequence integrity")
+        logger.info("\\u1f522 Testing tick sequence integrity")
 
         results = {
             'test_name': 'tick_sequence_integrity',
@@ -382,9 +382,9 @@ class TickHoldLogicTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Tick sequence integrity test passed")
+            logger.info("\\u2705 Tick sequence integrity test passed")
         else:
-            logger.error(f"❌ Tick sequence integrity test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Tick sequence integrity test failed: {len(results['errors'])} errors")
 
         return results
 
@@ -487,7 +487,7 @@ class TickHoldLogicTest:
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive tick hold logic test."""
-        logger.info("🚀 Running comprehensive tick hold logic test")
+        logger.info("\\u1f680 Running comprehensive tick hold logic test")
 
         start_time = time.time()
 
@@ -524,9 +524,9 @@ class TickHoldLogicTest:
         }
 
         if all_passed:
-            logger.info(f"✅ Comprehensive tick hold logic test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive tick hold logic test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"❌ Comprehensive tick hold logic test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive tick hold logic test failed with {total_errors} errors")
 
         return comprehensive_result
 
@@ -559,17 +559,19 @@ if __name__ == "__main__":
 
     # Print results
     safe_print("\n" + "="*60)
-    safe_print("⏱️ TICK HOLD LOGIC TEST RESULTS")
+    safe_print("\\u23f1\\ufe0f TICK HOLD LOGIC TEST RESULTS")
     safe_print("="*60)
 
-    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
 
     if 'test_components' in result:
-        safe_print("\nComponent Results:")
+        safe_print("\\nComponent Results:")
         for component, component_result in result['test_components'].items():
-            status = "✅ PASS" if component_result['success'] else "❌ FAIL"
+            status = "\\u2705 PASS" if component_result['success'] else "\\u274c FAIL"
             safe_print(f"  {component}: {status}")
 
     safe_print("="*60)
+
+"""

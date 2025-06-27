@@ -408,7 +408,7 @@ def create_feature_vector(
     Parameters
     ----------
     confidence : float
-        Execution confidence (Ξ)
+        Execution confidence (\\u039e)
     theta_drift : float
         Braid angle drift
     coherence : float
@@ -452,7 +452,7 @@ def main() -> None:
     modes = [GAN_MODE_AUTOENCODER, GAN_MODE_DISCRIMINATOR, GAN_MODE_HYBRID, GAN_MODE_ADAPTIVE]
 
     for mode in modes:
-        safe_print(f"\nTesting {mode} mode:")
+        safe_print(f"\\nTesting {mode} mode:")
         filter_instance = GANAnomalyFilter(stub_mode=mode)
 
         # Create test feature vectors
@@ -470,7 +470,7 @@ def main() -> None:
             )
 
     # Test realistic mode with performance tracking
-    safe_print(f"\nRealistic Mode Performance Test:")
+    safe_print(f"\\nRealistic Mode Performance Test:")
     realistic_filter = GANAnomalyFilter(stub_mode=GAN_MODE_ADAPTIVE)
 
     # Generate multiple predictions
@@ -485,7 +485,7 @@ def main() -> None:
     safe_print(f"  Average score: {stats['average_validity_score']:.3f}")
 
     # Test feature vector creation
-    safe_print(f"\nFeature Vector Test:")
+    safe_print(f"\\nFeature Vector Test:")
     feature_vec = create_feature_vector(1.2, 0.1, 0.9, 0.2, 0.8, 0.1, 0.9, 0.03)
     safe_print(f"  Feature vector: {feature_vec}")
     safe_print(f"  Vector length: {len(feature_vec)}")

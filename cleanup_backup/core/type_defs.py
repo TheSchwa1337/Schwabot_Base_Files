@@ -90,12 +90,12 @@ TickerData = Dict[str, Union[Price, Volume, datetime]]
 # Thermal parameters
 Temperature = NewType("Temperature", float)  # Kelvin
 Pressure = NewType("Pressure", float)  # Pascal
-ThermalConductivity = NewType("ThermalConductivity", float)  # W/(m·K)
-HeatCapacity = NewType("HeatCapacity", float)  # J/(kg·K)
+ThermalConductivity = NewType("ThermalConductivity", float)  # W/(m\\u00b7K)
+HeatCapacity = NewType("HeatCapacity", float)  # J/(kg\\u00b7K)
 
 # Thermal field functions
 ThermalField = Callable[[float, float], Temperature]  # T(x, t)
-ThermalGradient = Callable[[float, float], Vector]  # ∇T(x, t)
+ThermalGradient = Callable[[float, float], Vector]  # \\u2207T(x, t)
 
 
 # Thermal system state
@@ -163,7 +163,7 @@ EnergyLevel = NewType("EnergyLevel", float)  # Energy level in eV
 Entropy = NewType("Entropy", float)  # Entropy in bits
 
 # Quantum functions
-WaveFunction = Callable[[float], complex]  # Wave function ψ(x)
+WaveFunction = Callable[[float], complex]  # Wave function \\u03c8(x)
 EnergyOperator = Callable[[QuantumState], EnergyLevel]  # Energy operator
 
 # Recursion types
@@ -578,7 +578,7 @@ class FortyTwoBitController(MatrixController):
 
 
 # =====================================
-# RECURSIVE IDENTITY TRACKING (Ψ(t))
+# RECURSIVE IDENTITY TRACKING (\\u03a8(t))
 # =====================================
 
 @dataclass
@@ -827,3 +827,5 @@ def hash_state(
 def save_identity_trace(trace: IdentityTrace, log_name: str = "identity_trace") -> None:
     """Save identity trace to log."""
     logger.info(f"{log_name}: {trace.trace_hash} - {len(trace.identity_states)} states")
+
+"""

@@ -285,16 +285,16 @@ def fix_syntax_errors(file_path: str) -> bool:
             content = '{' * (close_brace - open_brace) + content
 
         # Fix 2: Missing colons after function/class definitions
-        content = re.sub(r'def\\s+\\w+\\s*\\([^)]*\\)\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'class\\s+\\w+\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'if\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'elif\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'else\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'for\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'while\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'try\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'except\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'finally\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'def\\\s+\\\w+\\\s*\\([^)]*\\)\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'class\\\s+\\\w+\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'if\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'elif\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'else\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'for\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'while\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'try\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'except\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'finally\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
 
         # Fix 3: Invalid indentation
         lines = content.split('\\n')
@@ -342,7 +342,7 @@ def fix_syntax_errors(file_path: str) -> bool:
 def main():
     """Run syntax fixes on all Python files."""
 
-    print("🔧 Phase 1: Fixing Critical Syntax Errors...")
+    print("\\u1f527 Phase 1: Fixing Critical Syntax Errors...")
 
     # Focus on core directories first
     core_dirs = ['core', 'mathlib', 'tools', 'api', 'engine']
@@ -356,9 +356,9 @@ def main():
                 total_count += 1
                 if fix_syntax_errors(str(py_file)):
                     fixed_count += 1
-                    print(f"✅ Fixed: {py_file}")
+                    print(f"\\u2705 Fixed: {py_file}")
 
-    print(f"\\n📊 Results:")
+    print(f"\\\n\\u1f4ca Results:")
     print(f"   Files processed: {total_count}")
     print(f"   Files fixed: {fixed_count}")
     print(f"   Success rate: {fixed_count/total_count*100:.1f}%")
@@ -467,7 +467,7 @@ def fix_import_errors(file_path: str) -> bool:
 def main():
     """Run import fixes on all Python files."""
 
-    print("📦 Phase 2: Fixing Import Dependencies...")
+    print("\\u1f4e6 Phase 2: Fixing Import Dependencies...")
 
     # Focus on core directories first
     core_dirs = ['core', 'mathlib', 'tools', 'api', 'engine']
@@ -481,9 +481,9 @@ def main():
                 total_count += 1
                 if fix_import_errors(str(py_file)):
                     fixed_count += 1
-                    print(f"✅ Fixed: {py_file}")
+                    print(f"\\u2705 Fixed: {py_file}")
 
-    print(f"\\n📊 Results:")
+    print(f"\\\n\\u1f4ca Results:")
     print(f"   Files processed: {total_count}")
     print(f"   Files fixed: {fixed_count}")
     print(f"   Success rate: {fixed_count/total_count*100:.1f}%")
@@ -551,7 +551,7 @@ def get_status():
     """Get system status."""
     return jsonify({
         "status": "running",
-        "version": "1.0.0",
+        "version": "1.0_0",
         "components": {
             "flask_api": "active",
             "gpu_engine": "active",
@@ -591,7 +591,7 @@ def execute_trade():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0_0.0', port=5000, debug=True)
 '''
 
     with open(api_dir / "flask_app.py", "w") as f:
@@ -632,7 +632,7 @@ def gateway_health():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0_0.0', port=5001, debug=True)
 '''
 
     gateway_dir = Path("gateway")
@@ -866,25 +866,25 @@ if __name__ == '__main__':
 def main():
     """Create all missing critical components."""
 
-    print("🏗️ Phase 3: Creating Missing Critical Components...")
+    print("\\u1f3d7\\ufe0f Phase 3: Creating Missing Critical Components...")
 
     # Create Flask API
-    print("📡 Creating Flask API components...")
+    print("\\u1f4e1 Creating Flask API components...")
     create_flask_api()
 
     # Create GPU/CPU Engine
-    print("⚡ Creating GPU/CPU Engine components...")
+    print("\\u26a1 Creating GPU/CPU Engine components...")
     create_gpu_cpu_engine()
 
     # Create CCXT Integration
-    print("💱 Creating CCXT Integration components...")
+    print("\\u1f4b1 Creating CCXT Integration components...")
     create_ccxt_integration()
 
     # Create BTC Hashing Engine
-    print("🔗 Creating BTC Hashing Engine components...")
+    print("\\u1f517 Creating BTC Hashing Engine components...")
     create_btc_hashing_engine()
 
-    print("✅ All critical components created!")
+    print("\\u2705 All critical components created!")
 
 if __name__ == "__main__":
     main()
@@ -909,7 +909,7 @@ from pathlib import Path
 def main():
     """Run phase {phase} fixes."""
     
-    print(f"🔧 Phase {phase}: Running fixes...")
+    print(f"\\u1f527 Phase {phase}: Running fixes...")
     print("TODO: Implement phase {phase} specific fixes")
 
 if __name__ == "__main__":
@@ -967,28 +967,28 @@ if __name__ == "__main__":
         """Print the resolution plan in a formatted way."""
         
         print("\n" + "="*80)
-        print("🎯 SYSTEMATIC ERROR RESOLUTION PLAN")
+        print("\\u1f3af SYSTEMATIC ERROR RESOLUTION PLAN")
         print("="*80)
         
         # Current Status
         status = plan["current_status"]
-        print(f"\n📊 CURRENT STATUS:")
+        print(f"\\n\\u1f4ca CURRENT STATUS:")
         print(f"   Total files: {status['total_files']}")
-        print(f"   ✅ Working: {status['working_files']} ({status['working_files']/status['total_files']*100:.1f}%)")
-        print(f"   🔧 Stubs: {status['stub_files']}")
-        print(f"   ❌ Broken: {status['broken_files']}")
-        print(f"   📄 Empty: {status['empty_files']}")
+        print(f"   \\u2705 Working: {status['working_files']} ({status['working_files']/status['total_files']*100:.1f}%)")
+        print(f"   \\u1f527 Stubs: {status['stub_files']}")
+        print(f"   \\u274c Broken: {status['broken_files']}")
+        print(f"   \\u1f4c4 Empty: {status['empty_files']}")
         
         # Target Architecture
-        print(f"\n🏗️ TARGET ARCHITECTURE:")
+        print(f"\\n\\u1f3d7\\ufe0f TARGET ARCHITECTURE:")
         for component, details in plan["target_architecture"].items():
-            status_icon = "✅" if details["current_status"] == "COMPLETE" else "❌"
+            status_icon = "\\u2705" if details["current_status"] == "COMPLETE" else "\\u274c"
             print(f"   {status_icon} {component.upper()}: {details['description']}")
             print(f"      Priority: {details['priority']}")
             print(f"      Status: {details['current_status']}")
         
         # Resolution Phases
-        print(f"\n📋 RESOLUTION PHASES:")
+        print(f"\\n\\u1f4cb RESOLUTION PHASES:")
         for phase in plan["resolution_phases"]:
             print(f"   Phase {phase['phase']}: {phase['name']}")
             print(f"      Description: {phase['description']}")
@@ -996,12 +996,12 @@ if __name__ == "__main__":
             print(f"      Estimated Time: {phase['estimated_time']}")
         
         # Recommendations
-        print(f"\n💡 RECOMMENDATIONS:")
+        print(f"\\n\\u1f4a1 RECOMMENDATIONS:")
         recs = plan["recommendations"]
         for category, items in recs.items():
             print(f"   {category.upper()}:")
             for item in items:
-                print(f"     • {item}")
+                print(f"     \\u2022 {item}")
         
         print("\n" + "="*80)
 
@@ -1016,7 +1016,7 @@ def main():
     with open("resolution_plan.json", "w") as f:
         json.dump(plan, f, indent=2, default=str)
     
-    print(f"\n📄 Resolution plan saved to: resolution_plan.json")
+    print(f"\\n\\u1f4c4 Resolution plan saved to: resolution_plan.json")
     
     # Create fix scripts for each phase
     for phase in plan["resolution_phases"]:
@@ -1026,7 +1026,8 @@ def main():
         with open(script_filename, "w") as f:
             f.write(script_content)
         
-        print(f"📝 Created fix script: {script_filename}")
+        print(f"\\u1f4dd Created fix script: {script_filename}")
 
 if __name__ == "__main__":
     main() 
+'''

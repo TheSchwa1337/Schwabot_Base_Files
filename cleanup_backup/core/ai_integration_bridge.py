@@ -159,7 +159,7 @@ class AIIntegrationBridge:
         self.is_running = False
         self.response_thread = None
 
-        logger.info("🧠 AI Integration Bridge initialized")
+        logger.info("\\u1f9e0 AI Integration Bridge initialized")
 
     def configure_ai_models(self, configs: Dict[str, AIModelConfig]):
         """
@@ -172,7 +172,7 @@ class AIIntegrationBridge:
             self.ai_models[model_name] = config
             self._initialize_model_client(model_name, config)
 
-        logger.info(f"✅ Configured {len(configs)} AI models")
+        logger.info(f"\\u2705 Configured {len(configs)} AI models")
 
     def _initialize_model_client(self, model_name: str, config: AIModelConfig):
         """Initialize client for an AI model."""
@@ -189,10 +189,10 @@ class AIIntegrationBridge:
                 self.model_clients[model_name] = genai.GenerativeModel(config.model_id)
 
             else:
-                logger.warning(f"⚠️ Model {model_name} not available or not configured")
+                logger.warning(f"\\u26a0\\ufe0f Model {model_name} not available or not configured")
 
         except Exception as e:
-            logger.error(f"❌ Failed to initialize {model_name}: {e}")
+            logger.error(f"\\u274c Failed to initialize {model_name}: {e}")
 
     def create_decision_request(self,
                                 market_state: Dict[str, Any],
@@ -241,11 +241,11 @@ class AIIntegrationBridge:
             # Store request
             self.decision_requests[request_id] = request
 
-            logger.info(f"📝 Created decision request: {request_id}")
+            logger.info(f"\\u1f4dd Created decision request: {request_id}")
             return request
 
         except Exception as e:
-            logger.error(f"❌ Error creating decision request: {e}")
+            logger.error(f"\\u274c Error creating decision request: {e}")
             return None
 
     def _generate_request_hash(self, request_data: Dict[str, Any]) -> str:
@@ -258,7 +258,7 @@ class AIIntegrationBridge:
             return hashlib.sha256(state_string.encode()).hexdigest()[:16]
 
         except Exception as e:
-            logger.error(f"❌ Error generating request hash: {e}")
+            logger.error(f"\\u274c Error generating request hash: {e}")
             return "0000000000000000"
 
     async def request_ai_analysis(self, decision_request: AIDecisionRequest) -> List[AIDecisionResponse]:
@@ -292,7 +292,7 @@ class AIIntegrationBridge:
                         responses.append(response)
                         self.decision_responses[decision_request.request_id].append(response)
                     else:
-                        logger.error(f"❌ AI model response error: {response}")
+                        logger.error(f"\\u274c AI model response error: {response}")
 
             # Store responses
             if responses:
@@ -304,10 +304,10 @@ class AIIntegrationBridge:
                     self.consensus_results[decision_request.request_id] = consensus
                     self.consensus_history.append(consensus)
 
-            logger.info(f"🤖 Received {len(responses)} AI responses for request {decision_request.request_id}")
+            logger.info(f"\\u1f916 Received {len(responses)} AI responses for request {decision_request.request_id}")
 
         except Exception as e:
-            logger.error(f"❌ Error requesting AI analysis: {e}")
+            logger.error(f"\\u274c Error requesting AI analysis: {e}")
 
         return responses
 
@@ -338,7 +338,7 @@ class AIIntegrationBridge:
             return response
 
         except Exception as e:
-            logger.error(f"❌ Error querying {model_name}: {e}")
+            logger.error(f"\\u274c Error querying {model_name}: {e}")
             # Return a default response
             return AIDecisionResponse(
                 model_name=model_name,
@@ -394,7 +394,7 @@ Respond in JSON format:
             return context
 
         except Exception as e:
-            logger.error(f"❌ Error creating AI prompt: {e}")
+            logger.error(f"\\u274c Error creating AI prompt: {e}")
             return "Analyze the current trading situation and provide recommendations."
 
     def _format_bit_positions(self, bit_positions: Dict[int, Dict[str, Any]]) -> str:
@@ -433,7 +433,7 @@ Respond in JSON format:
             return parsed_response
 
         except Exception as e:
-            logger.error(f"❌ GPT query error: {e}")
+            logger.error(f"\\u274c GPT query error: {e}")
             raise
 
     async def _query_claude(self, prompt: str, model_name: str) -> AIDecisionResponse:
@@ -461,7 +461,7 @@ Respond in JSON format:
             return parsed_response
 
         except Exception as e:
-            logger.error(f"❌ Claude query error: {e}")
+            logger.error(f"\\u274c Claude query error: {e}")
             raise
 
     async def _query_gemini(self, prompt: str, model_name: str) -> AIDecisionResponse:
@@ -482,7 +482,7 @@ Respond in JSON format:
             return parsed_response
 
         except Exception as e:
-            logger.error(f"❌ Gemini query error: {e}")
+            logger.error(f"\\u274c Gemini query error: {e}")
             raise
 
     def _parse_ai_response(self, content: str, model_name: str) -> AIDecisionResponse:
@@ -522,7 +522,7 @@ Respond in JSON format:
                 )
 
         except Exception as e:
-            logger.error(f"❌ Error parsing AI response: {e}")
+            logger.error(f"\\u274c Error parsing AI response: {e}")
             return AIDecisionResponse(
                 model_name=model_name,
                 request_id=f"response_{int(time.time())}",
@@ -592,11 +592,11 @@ Respond in JSON format:
                 if response.recommended_action == consensus_action:
                     self.model_agreement_stats[response.model_name]['agreed_responses'] += 1
 
-            logger.info(f"🤝 Generated consensus: {consensus_action} (agreement: {agreement_level:.2f})")
+            logger.info(f"\\u1f91d Generated consensus: {consensus_action} (agreement: {agreement_level:.2f})")
             return consensus
 
         except Exception as e:
-            logger.error(f"❌ Error generating consensus: {e}")
+            logger.error(f"\\u274c Error generating consensus: {e}")
             return None
 
     async def connect_to_entropy_api(self):
@@ -617,10 +617,10 @@ Respond in JSON format:
                 'client': 'ai_bridge'
             }))
 
-            logger.info("✅ Connected to entropy API layer")
+            logger.info("\\u2705 Connected to entropy API layer")
 
         except Exception as e:
-            logger.error(f"❌ Failed to connect to entropy API: {e}")
+            logger.error(f"\\u274c Failed to connect to entropy API: {e}")
             self.is_connected = False
 
     async def start(self):
@@ -638,10 +638,10 @@ Respond in JSON format:
             self.response_thread = threading.Thread(target=self._response_loop, daemon=True)
             self.response_thread.start()
 
-            logger.info("🚀 AI Integration Bridge started")
+            logger.info("\\u1f680 AI Integration Bridge started")
 
         except Exception as e:
-            logger.error(f"❌ Failed to start AI Integration Bridge: {e}")
+            logger.error(f"\\u274c Failed to start AI Integration Bridge: {e}")
             self.is_running = False
 
     def stop(self):
@@ -649,7 +649,7 @@ Respond in JSON format:
         self.is_running = False
         if self.websocket:
             asyncio.create_task(self.websocket.close())
-        logger.info("🛑 AI Integration Bridge stopped")
+        logger.info("\\u1f6d1 AI Integration Bridge stopped")
 
     def _response_loop(self):
         """Main loop for processing responses and maintaining connection."""
@@ -662,7 +662,7 @@ Respond in JSON format:
                 time.sleep(1)
 
             except Exception as e:
-                logger.error(f"❌ Error in response loop: {e}")
+                logger.error(f"\\u274c Error in response loop: {e}")
                 time.sleep(5)  # Longer pause on error
 
     def _process_pending_responses(self):
@@ -675,7 +675,7 @@ Respond in JSON format:
                 pass
 
         except Exception as e:
-            logger.error(f"❌ Error processing responses: {e}")
+            logger.error(f"\\u274c Error processing responses: {e}")
 
     def get_consensus_history(self, limit: int = 50) -> List[AIConsensus]:
         """Get recent consensus history."""
@@ -757,3 +757,5 @@ if __name__ == "__main__":
         asyncio.get_event_loop().run_forever()
     except KeyboardInterrupt:
         bridge.stop()
+
+"""

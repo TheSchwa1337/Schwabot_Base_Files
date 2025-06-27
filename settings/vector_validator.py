@@ -551,8 +551,8 @@ if __name__ == "__main__":
     safe_print("Validation Result:")
     print(json.dumps(asdict(result), indent=2))
 
-    safe_print("\nValidation Statistics:")
+    safe_print("\\nValidation Statistics:")
     print(json.dumps(validator.get_validation_statistics(), indent=2))
 
-    safe_print("\nPerformance Metrics:")
+    safe_print("\\nPerformance Metrics:")
     print(json.dumps(validator.get_performance_metrics(), indent=2))

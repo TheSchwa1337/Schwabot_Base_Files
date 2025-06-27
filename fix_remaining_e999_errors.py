@@ -37,29 +37,29 @@ def fix_mismatched_brackets_parentheses(content):
 
         # Fix specific function call patterns
         # Pattern: func([...)] -> func([...])
-        line = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\s*\(\s*\[([^\]]*)\s*\)\s*\)', r'\1([\2])', line)
+        line = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\\s*\(\\s*\[([^\]]*)\\s*\)\\s*\)', r'\1([\2])', line)
 
         # Pattern: func(...[...)] -> func(...[...])
-        line = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*\[[^)]*)\s*\)\s*\)', r'\1(\2)', line)
+        line = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\\s*\(([^)]*\[[^)]*)\\s*\)\\s*\)', r'\1(\2)', line)
 
         # Fix type annotation patterns
         # Pattern: List[Type)] -> List[Type]
-        line = re.sub(r'(List|Tuple|Dict|Set|Optional|Union)\s*\[\s*([^\]]*)\s*\)\s*', r'\1[\2]', line)
+        line = re.sub(r'(List|Tuple|Dict|Set|Optional|Union)\\s*\[\\s*([^\]]*)\\s*\)\\s*', r'\1[\2]', line)
 
         # Pattern: List[Type]] -> List[Type]
-        line = re.sub(r'(List|Tuple|Dict|Set|Optional|Union)\s*\[\s*([^\]]*)\s*\]\s*\]', r'\1[\2]', line)
+        line = re.sub(r'(List|Tuple|Dict|Set|Optional|Union)\\s*\[\\s*([^\]]*)\\s*\]\\s*\]', r'\1[\2]', line)
 
         # Remove trailing unmatched brackets/parentheses
-        line = re.sub(r'\)\s*\]\s*$', ')', line)
-        line = re.sub(r'\]\s*\)\s*$', ']', line)
-        line = re.sub(r'\)\s*\}\s*$', ')', line)
-        line = re.sub(r'\}\s*\)\s*$', '}', line)
+        line = re.sub(r'\)\\s*\]\\s*$', ')', line)
+        line = re.sub(r'\]\\s*\)\\s*$', ']', line)
+        line = re.sub(r'\)\\s*\}\\s*$', ')', line)
+        line = re.sub(r'\}\\s*\)\\s*$', '}', line)
 
         # Remove leading unmatched brackets/parentheses
-        line = re.sub(r'^\s*\[\s*\)', '', line)
-        line = re.sub(r'^\s*\(\s*\]', '', line)
-        line = re.sub(r'^\s*\{\s*\)', '', line)
-        line = re.sub(r'^\s*\(\s*\}', '', line)
+        line = re.sub(r'^\\s*\[\\s*\)', '', line)
+        line = re.sub(r'^\\s*\(\\s*\]', '', line)
+        line = re.sub(r'^\\s*\{\\s*\)', '', line)
+        line = re.sub(r'^\\s*\(\\s*\}', '', line)
 
         fixed_lines.append(line)
 
@@ -202,9 +202,11 @@ def main():
         else:
             print(f"File not found: {filepath}")
 
-    print(f"\nFixed {fixed_count} files")
+    print(f"\\nFixed {fixed_count} files")
     print("Remaining E999 error fixing complete!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

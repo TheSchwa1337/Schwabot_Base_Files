@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 def test_optimization_engine() -> Dict[str, Any]:
     """Test the optimization engine functionality."""
-    logger.info("🧪 Testing Optimization Engine...")
+    logger.info("\\u1f9ea Testing Optimization Engine...")
 
     try:
         from core.optimization_engine import (
@@ -104,7 +104,7 @@ def test_optimization_engine() -> Dict[str, Any]:
 
 def test_system_initialization() -> Dict[str, Any]:
     """Test system initialization and validation."""
-    logger.info("🧪 Testing System Initialization...")
+    logger.info("\\u1f9ea Testing System Initialization...")
 
     try:
         from core.main import SchwabotEngine
@@ -143,7 +143,7 @@ def test_system_initialization() -> Dict[str, Any]:
 
 def test_mathematical_pipeline() -> Dict[str, Any]:
     """Test mathematical pipeline connectivity."""
-    logger.info("🧪 Testing Mathematical Pipeline...")
+    logger.info("\\u1f9ea Testing Mathematical Pipeline...")
 
     try:
         from core.portfolio_router import create_portfolio_router
@@ -202,7 +202,7 @@ def test_mathematical_pipeline() -> Dict[str, Any]:
 
 def test_performance_baseline() -> Dict[str, Any]:
     """Test performance baseline for critical operations."""
-    logger.info("🧪 Testing Performance Baseline...")
+    logger.info("\\u1f9ea Testing Performance Baseline...")
 
     try:
         from core.portfolio_router import create_portfolio_router
@@ -261,7 +261,7 @@ def test_performance_baseline() -> Dict[str, Any]:
 
 def test_code_quality() -> Dict[str, Any]:
     """Test code quality and configuration."""
-    logger.info("🧪 Testing Code Quality...")
+    logger.info("\\u1f9ea Testing Code Quality...")
 
     try:
         import subprocess
@@ -327,7 +327,7 @@ def test_code_quality() -> Dict[str, Any]:
 
 def test_integration_connectivity() -> Dict[str, Any]:
     """Test integration connectivity between all components."""
-    logger.info("🧪 Testing Integration Connectivity...")
+    logger.info("\\u1f9ea Testing Integration Connectivity...")
 
     try:
         # Test all critical imports
@@ -411,7 +411,7 @@ def test_integration_connectivity() -> Dict[str, Any]:
 
 def run_all_tests() -> Dict[str, Any]:
     """Run all tests and return comprehensive results."""
-    logger.info("🚀 Starting Enhanced System Test Suite...")
+    logger.info("\\u1f680 Starting Enhanced System Test Suite...")
 
     test_results = {
         'timestamp': datetime.now().isoformat(),
@@ -434,11 +434,11 @@ def run_all_tests() -> Dict[str, Any]:
             result = test_func()
             test_results['tests'][test_name] = result
             if result.get('success', False):
-                logger.info(f"✅ {test_name} test passed")
+                logger.info(f"\\u2705 {test_name} test passed")
             else:
-                logger.error(f"❌ {test_name} test failed: {result.get('error', 'Unknown error')}")
+                logger.error(f"\\u274c {test_name} test failed: {result.get('error', 'Unknown error')}")
         except Exception as e:
-            logger.error(f"❌ {test_name} test crashed: {e}")
+            logger.error(f"\\u274c {test_name} test crashed: {e}")
             test_results['tests'][test_name] = {'success': False, 'error': str(e)}
 
     # Calculate overall success
@@ -454,11 +454,11 @@ def run_all_tests() -> Dict[str, Any]:
     }
 
     # Print summary
-    logger.info(f"\n📊 Test Summary:")
+    logger.info(f"\\n\\u1f4ca Test Summary:")
     logger.info(f"Total Tests: {total_tests}")
     logger.info(f"Successful: {successful_tests}")
     logger.info(f"Success Rate: {overall_success_rate:.1%}")
-    logger.info(f"All Tests Passed: {'✅' if overall_success_rate == 1.0 else '❌'}")
+    logger.info(f"All Tests Passed: {'\\u2705' if overall_success_rate == 1.0 else '\\u274c'}")
 
     return test_results
 
@@ -466,15 +466,15 @@ def run_all_tests() -> Dict[str, Any]:
 def print_detailed_results(results: Dict[str, Any]) -> None:
     """Print detailed test results."""
     safe_print("\n" + "="*80)
-    safe_print("📋 DETAILED TEST RESULTS")
+    safe_print("\\u1f4cb DETAILED TEST RESULTS")
     safe_print("="*80)
 
     for test_name, result in results['tests'].items():
-        safe_print(f"\n🧪 {test_name.upper().replace('_', ' ')}")
+        safe_print(f"\\n\\u1f9ea {test_name.upper().replace('_', ' ')}")
         safe_print("-" * 50)
 
         if result.get('success', False):
-            safe_print("✅ Test PASSED")
+            safe_print("\\u2705 Test PASSED")
 
             # Print specific metrics for each test
             if test_name == 'optimization_engine':
@@ -491,37 +491,37 @@ def print_detailed_results(results: Dict[str, Any]) -> None:
 
             elif test_name == 'performance_baseline':
                 safe_print(f"  Average Latency: {result.get('average_latency_ms', 0):.2f}ms")
-                safe_print(f"  Latency Acceptable: {'✅' if result.get('latency_acceptable', False) else '❌'}")
-                safe_print(f"  Latency Stable: {'✅' if result.get('latency_stable', False) else '❌'}")
+                safe_print(f"  Latency Acceptable: {'\\u2705' if result.get('latency_acceptable', False) else '\\u274c'}")
+                safe_print(f"  Latency Stable: {'\\u2705' if result.get('latency_stable', False) else '\\u274c'}")
 
             elif test_name == 'code_quality':
-                safe_print(f"  Flake8 Working: {'✅' if result.get('flake8_working', False) else '❌'}")
-                safe_print(f"  Black Working: {'✅' if result.get('black_working', False) else '❌'}")
-                safe_print(f"  Isort Working: {'✅' if result.get('isort_working', False) else '❌'}")
+                safe_print(f"  Flake8 Working: {'\\u2705' if result.get('flake8_working', False) else '\\u274c'}")
+                safe_print(f"  Black Working: {'\\u2705' if result.get('black_working', False) else '\\u274c'}")
+                safe_print(f"  Isort Working: {'\\u2705' if result.get('isort_working', False) else '\\u274c'}")
 
             elif test_name == 'integration_connectivity':
-                safe_print(f"  All Modules Importable: {'✅' if result.get('all_modules_importable', False) else '❌'}")
+                safe_print(f"  All Modules Importable: {'\\u2705' if result.get('all_modules_importable', False) else '\\u274c'}")
                 safe_print(
-                    f"  All Components Creatable: {'✅' if result.get('all_components_creatable', False) else '❌'}")
+                    f"  All Components Creatable: {'\\u2705' if result.get('all_components_creatable', False) else '\\u274c'}")
 
         else:
-            safe_print("❌ Test FAILED")
+            safe_print("\\u274c Test FAILED")
             safe_print(f"  Error: {result.get('error', 'Unknown error')}")
 
     safe_print(f"\n" + "="*80)
-    safe_print("📊 OVERALL SUMMARY")
+    safe_print("\\u1f4ca OVERALL SUMMARY")
     safe_print("="*80)
     summary = results['summary']
     safe_print(f"Total Tests: {summary['total_tests']}")
     safe_print(f"Successful: {summary['successful_tests']}")
     safe_print(f"Success Rate: {summary['success_rate']:.1%}")
-    safe_print(f"All Tests Passed: {'✅' if summary['all_tests_passed'] else '❌'}")
+    safe_print(f"All Tests Passed: {'\\u2705' if summary['all_tests_passed'] else '\\u274c'}")
 
     if summary['all_tests_passed']:
-        safe_print("\n🎉 CONGRATULATIONS! All tests passed. Schwabot is ready for production!")
+        safe_print("\\n\\u1f389 CONGRATULATIONS! All tests passed. Schwabot is ready for production!")
     else:
         safe_print(
-            f"\n⚠️  {summary['total_tests'] - summary['successful_tests']} test(s) failed. Please review and fix issues.")
+            f"\\n\\u26a0\\ufe0f  {summary['total_tests'] - summary['successful_tests']} test(s) failed. Please review and fix issues.")
 
 
 if __name__ == "__main__":
@@ -539,8 +539,8 @@ if __name__ == "__main__":
             sys.exit(1)
 
     except KeyboardInterrupt:
-        safe_print("\n🛑 Test suite interrupted by user")
+        safe_print("\\n\\u1f6d1 Test suite interrupted by user")
         sys.exit(1)
     except Exception as e:
-        safe_print(f"\n❌ Test suite crashed: {e}")
+        safe_print(f"\\n\\u274c Test suite crashed: {e}")
         sys.exit(1)

@@ -69,7 +69,7 @@ class HashRegistryIntegrationTester:
 
     def run_complete_integration_test(self) -> Dict[str, Any]:
         """Run complete integration test suite."""
-        safe_print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
+        safe_print("\\u1f9ee Hash Registry Integration Test - Schwabot UROS v1.0")
         safe_print("=" * 60)
 
         test_suites = [
@@ -88,17 +88,17 @@ class HashRegistryIntegrationTester:
         ]
 
         for test_name, test_func in test_suites:
-            safe_print(f"\n🔍 Running {test_name}...")
+            safe_print(f"\\n\\u1f50d Running {test_name}...")
             try:
                 result = test_func()
                 self.test_results[test_name] = result
-                status = "✅ PASSED" if result.get('success', False) else "❌ FAILED"
+                status = "\\u2705 PASSED" if result.get('success', False) else "\\u274c FAILED"
                 safe_print(f"  {test_name}: {status}")
                 if not result.get('success', False):
                     safe_print(f"    Error: {result.get('error', 'Unknown error')}")
             except Exception as e:
                 self.test_results[test_name] = {'success': False, 'error': str(e)}
-                safe_print(f"  {test_name}: ❌ FAILED")
+                safe_print(f"  {test_name}: \\u274c FAILED")
                 safe_print(f"    Exception: {e}")
 
         # Calculate overall results
@@ -108,8 +108,8 @@ class HashRegistryIntegrationTester:
 
         overall_success = failed_tests == 0
 
-        safe_print(f"\n📊 Integration Test Results:")
-        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"\\n\\u1f4ca Integration Test Results:")
+        safe_print(f"  Overall Success: {'\\u2705 PASSED' if overall_success else '\\u274c FAILED'}")
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {passed_tests}")
         safe_print(f"  Failed: {failed_tests}")
@@ -533,7 +533,7 @@ class HashRegistryIntegrationTester:
 
 def main():
     """Main function for hash registry integration testing."""
-    safe_print("🧮 Hash Registry Integration Test - Schwabot UROS v1.0")
+    safe_print("\\u1f9ee Hash Registry Integration Test - Schwabot UROS v1.0")
     safe_print("=" * 60)
 
     # Initialize tester
@@ -546,9 +546,9 @@ def main():
     tester.export_test_results()
 
     # Print detailed results
-    safe_print(f"\n📋 Detailed Test Results:")
+    safe_print(f"\\n\\u1f4cb Detailed Test Results:")
     for test_name, result in results['test_results'].items():
-        status = "✅ PASSED" if result.get('success', False) else "❌ FAILED"
+        status = "\\u2705 PASSED" if result.get('success', False) else "\\u274c FAILED"
         safe_print(f"  {test_name}: {status}")
         if result.get('metadata'):
             for key, value in result['metadata'].items():

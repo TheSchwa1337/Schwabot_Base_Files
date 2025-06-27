@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""btc_usdc_router_relay – BTC/USDC routing with ghost conditional triggers.
+"""btc_usdc_router_relay \\u2013 BTC/USDC routing with ghost conditional triggers.
 
 Implements the ghost conditional trigger logic:
-    Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ)
+    \\u0398\\u1d33(t) = \\u03a3 \\u03b8\\u2096 * \\u03b6\\u2096(t) * \\u03b4(t \\u2212 \\u03c4\\u2096)
 
 This module handles routing between BTC and USDC flows with conditional
 trigger detection for the ghost protocol.
@@ -38,18 +38,18 @@ class BTCUSDCRouterRelay:
         timestamps: Sequence[float],
         trigger_times: Sequence[float],
     ) -> float:
-        """Compute Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ).
+        """Compute \\u0398\\u1d33(t) = \\u03a3 \\u03b8\\u2096 * \\u03b6\\u2096(t) * \\u03b4(t \\u2212 \\u03c4\\u2096).
 
         Parameters
         ----------
         theta_values
-            Theta coefficients θₖ.
+            Theta coefficients \\u03b8\\u2096.
         zeta_series
-            Zeta time series ζₖ(t).
+            Zeta time series \\u03b6\\u2096(t).
         timestamps
             Time points t.
         trigger_times
-            Trigger times τₖ.
+            Trigger times \\u03c4\\u2096.
         """
         if len(theta_values) != len(trigger_times):
             raise ValueError(
@@ -63,7 +63,7 @@ class BTCUSDCRouterRelay:
 
         theta_g_total = 0.0
 
-        # Sum over all k: θₖ * ζₖ(t) * δ(t − τₖ)
+        # Sum over all k: \\u03b8\\u2096 * \\u03b6\\u2096(t) * \\u03b4(t \\u2212 \\u03c4\\u2096)
         for k, (theta_k, tau_k) in enumerate(zip(theta_array, triggers)):
             # Find zeta value at trigger time (interpolate if needed)
             if len(zeta_array) == len(times):
@@ -73,7 +73,7 @@ class BTCUSDCRouterRelay:
                 idx = unified_math.min(k, len(zeta_array) - 1)
                 zeta_k_t = zeta_array[idx]
 
-            # Dirac delta approximation: δ(t − τₖ) ≈ 1 if |t - τₖ| < tolerance
+            # Dirac delta approximation: \\u03b4(t \\u2212 \\u03c4\\u2096) \\u2248 1 if |t - \\u03c4\\u2096| < tolerance
             for t in times:
                 if unified_math.abs(t - tau_k) < self.delta_tolerance:
                     delta_term = 1.0 / self.delta_tolerance  # normalized
@@ -96,7 +96,7 @@ class BTCUSDCRouterRelay:
         usdc_flow
             Current USDC flow rate.
         ghost_trigger_strength
-            Computed Θᴳ(t) trigger strength.
+            Computed \\u0398\\u1d33(t) trigger strength.
 
         Returns
         -------
@@ -177,7 +177,7 @@ def compute_ghost_triggers(
     trigger_times: Sequence[float],
     delta_tolerance: float = 0.1,
 ) -> float:  # noqa: D401
-    """Compute ghost conditional triggers Θᴳ(t)."""
+    """Compute ghost conditional triggers \\u0398\\u1d33(t)."""
     relay = BTCUSDCRouterRelay(delta_tolerance=delta_tolerance)
     return relay.compute_theta_g(
         theta_values, zeta_series, timestamps, trigger_times
@@ -195,3 +195,5 @@ def route_btc_usdc_flow(
     return relay.route_flow_decision(
         btc_flow, usdc_flow, ghost_trigger_strength
     )
+
+"""

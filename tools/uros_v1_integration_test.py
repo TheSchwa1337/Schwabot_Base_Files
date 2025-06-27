@@ -59,7 +59,7 @@ try:
     from core.utils.windows_cli_compatibility import safe_print, safe_format_error
     MODULES_AVAILABLE = True
 except ImportError as e:
-    safe_print(f"⚠️ Some modules not available: {e}")
+    safe_print(f"\\u26a0\\ufe0f Some modules not available: {e}")
     MODULES_AVAILABLE = False
 
 # Configure logging
@@ -87,7 +87,7 @@ class UROSv1IntegrationTest:
         # Initialize all core components
         self._initialize_components()
 
-        safe_print("🚀 Schwabot UROS v1.0 Integration Test Initialized")
+        safe_print("\\u1f680 Schwabot UROS v1.0 Integration Test Initialized")
 
     def _initialize_components(self):
         """Initialize all core components."""
@@ -116,16 +116,16 @@ class UROSv1IntegrationTest:
             # Initialize fault bus
             self.fault_bus = FaultBus()
 
-            safe_print("✅ All core components initialized successfully")
+            safe_print("\\u2705 All core components initialized successfully")
 
         except Exception as e:
-            safe_print(f"❌ Component initialization failed: {safe_format_error(e, 'initialization')}")
+            safe_print(f"\\u274c Component initialization failed: {safe_format_error(e, 'initialization')}")
             raise
 
     async def run_complete_integration_test(self):
         """Run the complete integration test."""
         safe_print("\n" + "="*80)
-        safe_print("🧠 SCHWABOT UROS v1.0 COMPLETE INTEGRATION TEST")
+        safe_print("\\u1f9e0 SCHWABOT UROS v1.0 COMPLETE INTEGRATION TEST")
         safe_print("="*80)
 
         try:
@@ -163,12 +163,12 @@ class UROSv1IntegrationTest:
             await self._generate_final_report()
 
         except Exception as e:
-            safe_print(f"❌ Integration test failed: {safe_format_error(e, 'integration_test')}")
+            safe_print(f"\\u274c Integration test failed: {safe_format_error(e, 'integration_test')}")
             raise
 
     async def _test_prophet_integration(self):
         """Test Prophet curve setup and alignment."""
-        safe_print("\n🔮 TEST 1: Prophet Integration")
+        safe_print("\\n\\u1f52e TEST 1: Prophet Integration")
         safe_print("-" * 50)
 
         try:
@@ -218,15 +218,15 @@ class UROSv1IntegrationTest:
             self.test_results['curve_alignment'] = alignment.alignment_score
 
             safe_print(
-                f"✅ Prophet integration: Alpha={alpha_score.alpha_value:.4f}, Alignment={alignment.alignment_score:.3f}")
+                f"\\u2705 Prophet integration: Alpha={alpha_score.alpha_value:.4f}, Alignment={alignment.alignment_score:.3f}")
 
         except Exception as e:
-            safe_print(f"❌ Prophet integration test failed: {safe_format_error(e, 'prophet_test')}")
+            safe_print(f"\\u274c Prophet integration test failed: {safe_format_error(e, 'prophet_test')}")
             self.test_results['prophet_curve_added'] = False
 
     async def _test_multi_agent_commands(self):
         """Test multi-agent command processing."""
-        safe_print("\n🤖 TEST 2: Multi-Agent Command Processing")
+        safe_print("\\n\\u1f916 TEST 2: Multi-Agent Command Processing")
         safe_print("-" * 50)
 
         try:
@@ -260,14 +260,14 @@ class UROSv1IntegrationTest:
                 self.test_results[f'command_{command.command_id}_processed'] = response.success
 
             safe_print(
-                f"✅ Multi-agent processing: {len([r for r in responses if r.success])}/{len(responses)} successful")
+                f"\\u2705 Multi-agent processing: {len([r for r in responses if r.success])}/{len(responses)} successful")
 
         except Exception as e:
-            safe_print(f"❌ Multi-agent command test failed: {safe_format_error(e, 'multi_agent_test')}")
+            safe_print(f"\\u274c Multi-agent command test failed: {safe_format_error(e, 'multi_agent_test')}")
 
     async def _test_command_sequencing(self):
         """Test command sequencing and memory tracking."""
-        safe_print("\n🧠 TEST 3: Command Sequencing and Memory Tracking")
+        safe_print("\\n\\u1f9e0 TEST 3: Command Sequencing and Memory Tracking")
         safe_print("-" * 50)
 
         try:
@@ -317,14 +317,14 @@ class UROSv1IntegrationTest:
             metrics = self.ai_sequencer.get_performance_metrics()
             self.test_results['sequencer_metrics'] = metrics
 
-            safe_print(f"✅ Command sequencing: Sequence={sequence.sequence_id}, Updated={success}")
+            safe_print(f"\\u2705 Command sequencing: Sequence={sequence.sequence_id}, Updated={success}")
 
         except Exception as e:
-            safe_print(f"❌ Command sequencing test failed: {safe_format_error(e, 'sequencing_test')}")
+            safe_print(f"\\u274c Command sequencing test failed: {safe_format_error(e, 'sequencing_test')}")
 
     async def _test_memory_management(self):
         """Test memory key allocation and clustering."""
-        safe_print("\n🔑 TEST 4: Memory Key Allocation and Clustering")
+        safe_print("\\n\\u1f511 TEST 4: Memory Key Allocation and Clustering")
         safe_print("-" * 50)
 
         try:
@@ -370,14 +370,14 @@ class UROSv1IntegrationTest:
             metrics = self.memory_allocator.get_performance_metrics()
             self.test_results['memory_metrics'] = metrics
 
-            safe_print(f"✅ Memory management: {len(memory_keys)} keys, {links_created} links created")
+            safe_print(f"\\u2705 Memory management: {len(memory_keys)} keys, {links_created} links created")
 
         except Exception as e:
-            safe_print(f"❌ Memory management test failed: {safe_format_error(e, 'memory_test')}")
+            safe_print(f"\\u274c Memory management test failed: {safe_format_error(e, 'memory_test')}")
 
     async def _test_execution_validation(self):
         """Test execution validation and cost analysis."""
-        safe_print("\n✅ TEST 5: Execution Validation and Cost Analysis")
+        safe_print("\\n\\u2705 TEST 5: Execution Validation and Cost Analysis")
         safe_print("-" * 50)
 
         try:
@@ -430,14 +430,14 @@ class UROSv1IntegrationTest:
             self.test_results['validation_metrics'] = metrics
 
             safe_print(
-                f"✅ Execution validation: Cost={execution_cost.total_cost:.2f}, Status={execution_validation.validation_status.value}")
+                f"\\u2705 Execution validation: Cost={execution_cost.total_cost:.2f}, Status={execution_validation.validation_status.value}")
 
         except Exception as e:
-            safe_print(f"❌ Execution validation test failed: {safe_format_error(e, 'validation_test')}")
+            safe_print(f"\\u274c Execution validation test failed: {safe_format_error(e, 'validation_test')}")
 
     async def _test_hash_registry(self):
         """Test hash registry integration."""
-        safe_print("\n🔗 TEST 6: Hash Registry Integration")
+        safe_print("\\n\\u1f517 TEST 6: Hash Registry Integration")
         safe_print("-" * 50)
 
         try:
@@ -475,14 +475,14 @@ class UROSv1IntegrationTest:
             metrics = self.hash_registry.get_performance_metrics()
             self.test_results['hash_registry_metrics'] = metrics
 
-            safe_print(f"✅ Hash registry: {len(hash_entries)} entries, {updates_successful} updates successful")
+            safe_print(f"\\u2705 Hash registry: {len(hash_entries)} entries, {updates_successful} updates successful")
 
         except Exception as e:
-            safe_print(f"❌ Hash registry test failed: {safe_format_error(e, 'hash_test')}")
+            safe_print(f"\\u274c Hash registry test failed: {safe_format_error(e, 'hash_test')}")
 
     async def _test_api_gateway(self):
         """Test API gateway functionality."""
-        safe_print("\n🌐 TEST 7: API Gateway Functionality")
+        safe_print("\\n\\u1f310 TEST 7: API Gateway Functionality")
         safe_print("-" * 50)
 
         try:
@@ -526,14 +526,14 @@ class UROSv1IntegrationTest:
             self.test_results['api_responses'] = api_responses
             self.test_results['api_gateway_functional'] = len(api_responses) == 3
 
-            safe_print(f"✅ API gateway: {len(api_responses)} endpoints tested successfully")
+            safe_print(f"\\u2705 API gateway: {len(api_responses)} endpoints tested successfully")
 
         except Exception as e:
-            safe_print(f"❌ API gateway test failed: {safe_format_error(e, 'api_test')}")
+            safe_print(f"\\u274c API gateway test failed: {safe_format_error(e, 'api_test')}")
 
     async def _test_recursive_execution_cycle(self):
         """Test complete recursive execution cycle."""
-        safe_print("\n🔄 TEST 8: Complete Recursive Execution Cycle")
+        safe_print("\\n\\u1f504 TEST 8: Complete Recursive Execution Cycle")
         safe_print("-" * 50)
 
         try:
@@ -541,7 +541,7 @@ class UROSv1IntegrationTest:
             cycle_results = []
 
             for cycle in range(3):
-                safe_print(f"  🔄 Cycle {cycle + 1}/3")
+                safe_print(f"  \\u1f504 Cycle {cycle + 1}/3")
 
                 # 1. AI agent generates command
                 command = AICommand(
@@ -617,14 +617,14 @@ class UROSv1IntegrationTest:
             self.test_results['recursive_cycles'] = cycle_results
             self.test_results['recursive_execution_successful'] = len(cycle_results) == 3
 
-            safe_print(f"✅ Recursive execution: {len(cycle_results)} cycles completed successfully")
+            safe_print(f"\\u2705 Recursive execution: {len(cycle_results)} cycles completed successfully")
 
         except Exception as e:
-            safe_print(f"❌ Recursive execution test failed: {safe_format_error(e, 'recursive_test')}")
+            safe_print(f"\\u274c Recursive execution test failed: {safe_format_error(e, 'recursive_test')}")
 
     async def _test_fault_handling(self):
         """Test fault handling and recovery."""
-        safe_print("\n🛡️ TEST 9: Fault Handling and Recovery")
+        safe_print("\\n\\u1f6e1\\ufe0f TEST 9: Fault Handling and Recovery")
         safe_print("-" * 50)
 
         try:
@@ -707,14 +707,14 @@ class UROSv1IntegrationTest:
             )
 
             safe_print(
-                f"✅ Fault handling: {len([s for s in fault_scenarios if s.get('handled', False)])}/{len(fault_scenarios)} scenarios handled")
+                f"\\u2705 Fault handling: {len([s for s in fault_scenarios if s.get('handled', False)])}/{len(fault_scenarios)} scenarios handled")
 
         except Exception as e:
-            safe_print(f"❌ Fault handling test failed: {safe_format_error(e, 'fault_test')}")
+            safe_print(f"\\u274c Fault handling test failed: {safe_format_error(e, 'fault_test')}")
 
     async def _test_performance_analysis(self):
         """Test performance metrics and analysis."""
-        safe_print("\n📊 TEST 10: Performance Metrics and Analysis")
+        safe_print("\\n\\u1f4ca TEST 10: Performance Metrics and Analysis")
         safe_print("-" * 50)
 
         try:
@@ -760,15 +760,15 @@ class UROSv1IntegrationTest:
             performance_metrics['overall'] = overall_performance
             self.test_results['performance_metrics'] = performance_metrics
 
-            safe_print(f"✅ Performance analysis: Success rate={success_rate:.2%}, Total commands={total_commands}")
+            safe_print(f"\\u2705 Performance analysis: Success rate={success_rate:.2%}, Total commands={total_commands}")
 
         except Exception as e:
-            safe_print(f"❌ Performance analysis test failed: {safe_format_error(e, 'performance_test')}")
+            safe_print(f"\\u274c Performance analysis test failed: {safe_format_error(e, 'performance_test')}")
 
     async def _generate_final_report(self):
         """Generate final integration test report."""
         safe_print("\n" + "="*80)
-        safe_print("📋 SCHWABOT UROS v1.0 INTEGRATION TEST REPORT")
+        safe_print("\\u1f4cb SCHWABOT UROS v1.0 INTEGRATION TEST REPORT")
         safe_print("="*80)
 
         # Calculate test duration
@@ -809,21 +809,21 @@ class UROSv1IntegrationTest:
         try:
             with open(report_file, 'w') as f:
                 json.dump(report, f, indent=2)
-            safe_print(f"📄 Detailed report saved to: {report_file}")
+            safe_print(f"\\u1f4c4 Detailed report saved to: {report_file}")
         except Exception as e:
-            safe_print(f"⚠️ Failed to save report: {safe_format_error(e, 'report_save')}")
+            safe_print(f"\\u26a0\\ufe0f Failed to save report: {safe_format_error(e, 'report_save')}")
 
         # Display summary
-        safe_print("\n📊 TEST SUMMARY:")
+        safe_print("\\n\\u1f4ca TEST SUMMARY:")
         safe_print(f"   Duration: {test_duration}")
         safe_print(f"   Success Rate: {successful_tests}/{total_tests} ({successful_tests/max(total_tests, 1):.1%})")
         safe_print(
             f"   Components Active: {sum(report['component_status'].values())}/{len(report['component_status'])}")
 
         if successful_tests == total_tests:
-            safe_print("\n🎉 ALL TESTS PASSED! Schwabot UROS v1.0 is fully operational!")
+            safe_print("\\n\\u1f389 ALL TESTS PASSED! Schwabot UROS v1.0 is fully operational!")
         else:
-            safe_print(f"\n⚠️ {total_tests - successful_tests} tests failed. Review detailed report for issues.")
+            safe_print(f"\\n\\u26a0\\ufe0f {total_tests - successful_tests} tests failed. Review detailed report for issues.")
 
         safe_print("\n" + "="*80)
 
@@ -831,7 +831,7 @@ class UROSv1IntegrationTest:
 async def main():
     """Main function to run the integration test."""
     if not MODULES_AVAILABLE:
-        safe_print("❌ Required modules not available. Cannot run integration test.")
+        safe_print("\\u274c Required modules not available. Cannot run integration test.")
         return
 
     try:
@@ -840,10 +840,12 @@ async def main():
         await integration_test.run_complete_integration_test()
 
     except Exception as e:
-        safe_print(f"❌ Integration test failed: {safe_format_error(e, 'main')}")
+        safe_print(f"\\u274c Integration test failed: {safe_format_error(e, 'main')}")
         raise
 
 
 if __name__ == "__main__":
     # Run the integration test
     asyncio.run(main())
+
+"""

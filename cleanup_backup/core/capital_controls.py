@@ -182,7 +182,7 @@ class CapitalControls:
         self.capital_events: List[CapitalEvent] = []
         self.rebalancing_events: List[Dict[str, Any]] = []
 
-        safe_safe_print("💰 Capital Controls initialized")
+        safe_safe_print("\\u1f4b0 Capital Controls initialized")
 
     def set_capital_config(self, config: CapitalConfig) -> None:
         """Set capital configuration."""
@@ -191,7 +191,7 @@ class CapitalControls:
         self.reserved_capital = config.total_capital * config.emergency_capital_reserve
         self.peak_capital = config.total_capital
 
-        safe_safe_print(f"✅ Capital config updated: Total = ${config.total_capital:,.2f}")
+        safe_safe_print(f"\\u2705 Capital config updated: Total = ${config.total_capital:,.2f}")
 
     def calculate_position_size(
         self,
@@ -269,11 +269,11 @@ class CapitalControls:
                 }
             )
 
-            safe_safe_print(f"✅ Position size calculated for {asset}: {position_size:.2%}")
+            safe_safe_print(f"\\u2705 Position size calculated for {asset}: {position_size:.2%}")
             return result
 
         except Exception as e:
-            safe_safe_print(f"❌ Position sizing failed: {safe_format_error(e, 'position_sizing')}")
+            safe_safe_print(f"\\u274c Position sizing failed: {safe_format_error(e, 'position_sizing')}")
             return PositionSizingResult(
                 asset=asset,
                 suggested_size=0.0,
@@ -311,7 +311,7 @@ class CapitalControls:
             return adjusted_size
 
         except Exception as e:
-            safe_safe_print(f"❌ Volatility adjustment failed: {safe_format_error(e, 'volatility_adjustment')}")
+            safe_safe_print(f"\\u274c Volatility adjustment failed: {safe_format_error(e, 'volatility_adjustment')}")
             return self.capital_config.min_position_size
 
     def _calculate_kelly_size(
@@ -344,7 +344,7 @@ class CapitalControls:
             return unified_math.max(0.0, kelly_size)
 
         except Exception as e:
-            safe_safe_print(f"❌ Kelly calculation failed: {safe_format_error(e, 'kelly_calculation')}")
+            safe_safe_print(f"\\u274c Kelly calculation failed: {safe_format_error(e, 'kelly_calculation')}")
             return self.capital_config.min_position_size
 
     def _calculate_risk_parity_size(
@@ -366,7 +366,7 @@ class CapitalControls:
             return unified_math.min(risk_parity_size, self.capital_config.max_position_size)
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk parity calculation failed: {safe_format_error(e, 'risk_parity')}")
+            safe_safe_print(f"\\u274c Risk parity calculation failed: {safe_format_error(e, 'risk_parity')}")
             return self.capital_config.min_position_size
 
     def _calculate_drawdown_size(
@@ -386,7 +386,7 @@ class CapitalControls:
             return drawdown_adjusted_size
 
         except Exception as e:
-            safe_safe_print(f"❌ Drawdown calculation failed: {safe_format_error(e, 'drawdown_calculation')}")
+            safe_safe_print(f"\\u274c Drawdown calculation failed: {safe_format_error(e, 'drawdown_calculation')}")
             return self.capital_config.min_position_size
 
     def _calculate_risk_contribution(
@@ -403,7 +403,7 @@ class CapitalControls:
             return risk_contribution
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk contribution calculation failed: {safe_format_error(e, 'risk_contribution')}")
+            safe_safe_print(f"\\u274c Risk contribution calculation failed: {safe_format_error(e, 'risk_contribution')}")
             return 0.0
 
     def update_portfolio_state(
@@ -488,11 +488,11 @@ class CapitalControls:
             if len(self.portfolio_history) > 1000:
                 self.portfolio_history = self.portfolio_history[-1000:]
 
-            safe_safe_print(f"✅ Portfolio updated: Value = ${total_value:,.2f}, PnL = ${total_pnl:,.2f}")
+            safe_safe_print(f"\\u2705 Portfolio updated: Value = ${total_value:,.2f}, PnL = ${total_pnl:,.2f}")
             return portfolio_state
 
         except Exception as e:
-            safe_safe_print(f"❌ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
+            safe_safe_print(f"\\u274c Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
             return PortfolioState(
                 total_value=0.0,
                 total_pnl=0.0,
@@ -531,7 +531,7 @@ class CapitalControls:
 
         except Exception as e:
             safe_safe_print(
-                f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
+                f"\\u274c Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
             return 0.0
 
     def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
@@ -546,7 +546,7 @@ class CapitalControls:
             return sharpe_ratio
 
         except Exception as e:
-            safe_safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
+            safe_safe_print(f"\\u274c Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
             return 0.0
 
     def _calculate_correlations(
@@ -573,7 +573,7 @@ class CapitalControls:
             return correlation_matrix
 
         except Exception as e:
-            safe_safe_print(f"❌ Correlation calculation failed: {safe_format_error(e, 'correlation')}")
+            safe_safe_print(f"\\u274c Correlation calculation failed: {safe_format_error(e, 'correlation')}")
             return {}
 
     def check_portfolio_limits(self, portfolio_state: PortfolioState) -> bool:
@@ -630,7 +630,7 @@ class CapitalControls:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Portfolio limits check failed: {safe_format_error(e, 'portfolio_limits')}")
+            safe_safe_print(f"\\u274c Portfolio limits check failed: {safe_format_error(e, 'portfolio_limits')}")
             return False
 
     def suggest_rebalancing(self, portfolio_state: PortfolioState) -> Dict[str, Any]:
@@ -700,7 +700,7 @@ class CapitalControls:
             return rebalancing_suggestions
 
         except Exception as e:
-            safe_safe_print(f"❌ Rebalancing suggestion failed: {safe_format_error(e, 'rebalancing_suggestion')}")
+            safe_safe_print(f"\\u274c Rebalancing suggestion failed: {safe_format_error(e, 'rebalancing_suggestion')}")
             return {
                 'rebalancing_needed': False,
                 'urgency': 'low',
@@ -753,10 +753,10 @@ class CapitalControls:
             if len(self.capital_events) > 1000:
                 self.capital_events = self.capital_events[-1000:]
 
-            safe_safe_print(f"💰 Capital event: {event_type} - {description}")
+            safe_safe_print(f"\\u1f4b0 Capital event: {event_type} - {description}")
 
         except Exception as e:
-            safe_safe_print(f"❌ Capital event recording failed: {safe_format_error(e, 'record_capital_event')}")
+            safe_safe_print(f"\\u274c Capital event recording failed: {safe_format_error(e, 'record_capital_event')}")
 
 
 # Global capital controls instance
@@ -809,7 +809,7 @@ def get_capital_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test capital controls
-    safe_print("💰 Testing Capital Controls...")
+    safe_print("\\u1f4b0 Testing Capital Controls...")
 
     controls = get_capital_controls()
 
@@ -822,7 +822,7 @@ if __name__ == "__main__":
         confidence=0.7,
         method=PositionSizingMethod.VOLATILITY_ADJUSTED
     )
-    safe_print(f"✅ Position sizing: {result.suggested_size:.2%}")
+    safe_print(f"\\u2705 Position sizing: {result.suggested_size:.2%}")
 
     # Test portfolio state
     positions = {
@@ -835,16 +835,18 @@ if __name__ == "__main__":
     }
 
     portfolio_state = update_portfolio_state(positions, market_data)
-    safe_print(f"✅ Portfolio value: ${portfolio_state.total_value:,.2f}")
+    safe_print(f"\\u2705 Portfolio value: ${portfolio_state.total_value:,.2f}")
 
     # Test portfolio limits
     limits_ok = check_portfolio_limits(portfolio_state)
-    safe_print(f"✅ Portfolio limits: {limits_ok}")
+    safe_print(f"\\u2705 Portfolio limits: {limits_ok}")
 
     # Test rebalancing suggestions
     rebalancing = suggest_rebalancing(portfolio_state)
-    safe_print(f"✅ Rebalancing needed: {rebalancing['rebalancing_needed']}")
+    safe_print(f"\\u2705 Rebalancing needed: {rebalancing['rebalancing_needed']}")
 
     # Get status
     status = get_capital_status()
-    safe_print(f"✅ Capital Status: {status}")
+    safe_print(f"\\u2705 Capital Status: {status}")
+
+"""

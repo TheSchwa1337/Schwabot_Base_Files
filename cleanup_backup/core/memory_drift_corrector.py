@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Memory-drift corrector – detect glyph hash drift and decide re-link.
+"""Memory-drift corrector \\u2013 detect glyph hash drift and decide re-link.
 
-Implements ΔΞ_mem logic from the design doc.  Given the *previous* profitable
+Implements \\u0394\\u039e_mem logic from the design doc.  Given the *previous* profitable
 glyph hash and the *current* glyph hash (plus optional price delta), returns a
 scalar **drift score** in [0, 1] where values close to 1 indicate strong drift
 (i.e. hashes are dissimilar and price context changed).
@@ -21,15 +21,15 @@ __all__: list[str] = ["drift_score", "relink_required"]
 
 _MAX_HASH_BITS: Final = 256  # SHA-256
 _HAMMING_SCALE: Final = 1.0 / _MAX_HASH_BITS
-_PRICE_SCALE: Final = 0.02  # normalise 2% price move → weight 1.0
-_THRESHOLD: Final = 0.5  # drift score ≥ threshold ⇒ relink
+_PRICE_SCALE: Final = 0.02  # normalise 2% price move \\u2192 weight 1.0
+_THRESHOLD: Final = 0.5  # drift score \\u2265 threshold \\u21d2 relink
 
 
 def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
     """TODO: document _hamming_dist."""
     if len(a) != len(b):
         raise ValueError("hash strings must share length")
-    return sum(ch1 != ch2 for ch1, ch2 in zip(a, b)) * 4  # hex→bits (×4)
+    return sum(ch1 != ch2 for ch1, ch2 in zip(a, b)) * 4  # hex\\u2192bits (\\u00d74)
 
 
 def _softmax2(x: float, y: float) -> float:

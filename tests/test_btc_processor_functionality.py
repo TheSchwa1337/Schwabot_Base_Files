@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
@@ -195,15 +195,15 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
     def test_mathematical_formula_validation(self):
         """Test mathematical formula implementations."""
-        # Test entropy formula: E = -Σ(pᵢ × log₂(pᵢ))
+        # Test entropy formula: E = -\\u03a3(p\\u1d62 \\u00d7 log\\u2082(p\\u1d62))
         test_probabilities = [0.25, 0.25, 0.25, 0.25]
-        expected_entropy = 2.0  # log₂(4) = 2
+        expected_entropy = 2.0  # log\\u2082(4) = 2
 
         calculated_entropy = self.processor._calculate_entropy_formula(test_probabilities)
 
         self.assertAlmostEqual(calculated_entropy, expected_entropy, places=3)
 
-        # Test drift formula: D = Σ(Δpᵢ × wᵢ) / Σ(wᵢ)
+        # Test drift formula: D = \\u03a3(\\u0394p\\u1d62 \\u00d7 w\\u1d62) / \\u03a3(w\\u1d62)
         price_changes = [0.1, 0.2, 0.15, 0.25]
         weights = [1.0, 1.0, 1.0, 1.0]
         expected_drift = 0.175  # (0.1 + 0.2 + 0.15 + 0.25) / 4
@@ -334,7 +334,7 @@ class TestBTCProcessorFunctionality(unittest.TestCase):
 
 def run_performance_benchmark():
     """Run comprehensive performance benchmark."""
-    safe_print("🚀 Running BTC Processor Performance Benchmark...")
+    safe_print("\\u1f680 Running BTC Processor Performance Benchmark...")
 
     # Create test instance
     processor = MultiBitBTCProcessor()
@@ -374,7 +374,7 @@ def run_performance_benchmark():
         }
 
     # Print results
-    safe_print("\n📊 Performance Benchmark Results:")
+    safe_print("\\n\\u1f4ca Performance Benchmark Results:")
     safe_print("=" * 60)
     safe_print(f"{'Size':<10} {'Time (s)':<12} {'Memory (MB)':<15} {'Throughput':<15}")
     safe_print("-" * 60)
@@ -388,19 +388,19 @@ def run_performance_benchmark():
 
 def main():
     """Main test execution function."""
-    safe_print("🧪 BTC Processor Functionality Tests")
+    safe_print("\\u1f9ea BTC Processor Functionality Tests")
     safe_print("=" * 50)
 
     # Run unit tests
-    safe_print("\n1. Running Unit Tests...")
+    safe_print("\\n1. Running Unit Tests...")
     unittest.main(argv=[''], exit=False, verbosity=2)
 
     # Run performance benchmark
-    safe_print("\n2. Running Performance Benchmark...")
+    safe_print("\\n2. Running Performance Benchmark...")
     benchmark_results = run_performance_benchmark()
 
     # Generate test report
-    safe_print("\n3. Generating Test Report...")
+    safe_print("\\n3. Generating Test Report...")
     report = {
         "test_timestamp": datetime.now().isoformat(),
         "benchmark_results": benchmark_results,
@@ -419,11 +419,11 @@ def main():
     try:
         with open(report_path, 'w') as f:
             json.dump(report, f, indent=2)
-        safe_print(f"✅ Test report saved to {report_path}")
+        safe_print(f"\\u2705 Test report saved to {report_path}")
     except Exception as e:
-        safe_print(f"⚠️  Could not save test report: {e}")
+        safe_print(f"\\u26a0\\ufe0f  Could not save test report: {e}")
 
-    safe_print("\n🎉 BTC Processor functionality tests completed!")
+    safe_print("\\n\\u1f389 BTC Processor functionality tests completed!")
 
 
 if __name__ == "__main__":

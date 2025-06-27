@@ -40,7 +40,7 @@ try:
     from core.profit_routing_engine import ProfitRoutingEngine
     from core.altitude_adjustment_math import AltitudeAdjustmentMath
 except ImportError as e:
-    safe_print(f"❌ Critical import error: {e}")
+    safe_print(f"\\u274c Critical import error: {e}")
     safe_print("Please run the automated syntax fixer to resolve import issues.")
     sys.exit(1)
 
@@ -99,7 +99,7 @@ class SchwabotEngine:
     def initialize_system(self) -> bool:
         """Initialize all system components."""
         try:
-            logger.info("🚀 Initializing Schwabot system...")
+            logger.info("\\u1f680 Initializing Schwabot system...")
             self.start_time = datetime.now()
 
             # Initialize support components first
@@ -110,21 +110,21 @@ class SchwabotEngine:
 
             # Validate system integrity
             if not self._validate_system_integrity():
-                logger.error("❌ System integrity validation failed")
+                logger.error("\\u274c System integrity validation failed")
                 return False
 
             # Run startup checks
             if not self._run_startup_checks():
-                logger.error("❌ Startup checks failed")
+                logger.error("\\u274c Startup checks failed")
                 return False
 
             self.status.initialized = True
-            logger.info("✅ Schwabot system initialized successfully")
+            logger.info("\\u2705 Schwabot system initialized successfully")
 
             return True
 
         except Exception as e:
-            logger.error(f"❌ System initialization failed: {e}")
+            logger.error(f"\\u274c System initialization failed: {e}")
             return False
 
     def _initialize_support_components(self) -> None:
@@ -150,7 +150,7 @@ class SchwabotEngine:
             # Hash repair engine
             self.hash_repair = create_hash_repair_engine()
 
-            logger.info("✅ Support components initialized")
+            logger.info("\\u2705 Support components initialized")
 
         except Exception as e:
             logger.error(f"Error initializing support components: {e}")
@@ -189,7 +189,7 @@ class SchwabotEngine:
             self.altitude_math = AltitudeAdjustmentMath()
             self.status.components_ready['altitude_math'] = True
 
-            logger.info("✅ Core components initialized")
+            logger.info("\\u2705 Core components initialized")
 
         except Exception as e:
             logger.error(f"Error initializing core components: {e}")
@@ -220,7 +220,7 @@ class SchwabotEngine:
                 logger.error("Performance baseline test failed")
                 return False
 
-            logger.info("✅ System integrity validated")
+            logger.info("\\u2705 System integrity validated")
             return True
 
         except Exception as e:
@@ -275,11 +275,11 @@ class SchwabotEngine:
 
             # Check if system is ready for execution
             if self.state_tracker.is_ready_for_execution():
-                logger.info("✅ System ready for execution")
+                logger.info("\\u2705 System ready for execution")
             else:
-                logger.warning("⚠️ System not yet ready for execution")
+                logger.warning("\\u26a0\\ufe0f System not yet ready for execution")
 
-            logger.info("✅ Pipeline connectivity test passed")
+            logger.info("\\u2705 Pipeline connectivity test passed")
             return True
 
         except Exception as e:
@@ -331,7 +331,7 @@ class SchwabotEngine:
                 if not self.debug_mode:
                     return False
 
-            logger.info(f"✅ Performance baseline test passed: {latency:.2f}ms")
+            logger.info(f"\\u2705 Performance baseline test passed: {latency:.2f}ms")
             return True
 
         except Exception as e:
@@ -367,7 +367,7 @@ class SchwabotEngine:
                     f"Optimization engine check failed: {opt_stats['error']}")
                 return False
 
-            logger.info("✅ Startup checks passed")
+            logger.info("\\u2705 Startup checks passed")
             return True
 
         except Exception as e:
@@ -377,11 +377,11 @@ class SchwabotEngine:
     def start_live_trading(self) -> None:
         """Start live trading mode."""
         if not self.status.initialized:
-            logger.error("❌ Cannot start live trading: system not initialized")
+            logger.error("\\u274c Cannot start live trading: system not initialized")
             return
 
         if self.live_mode:
-            logger.info("🚀 Starting live trading mode...")
+            logger.info("\\u1f680 Starting live trading mode...")
             self.status.live_mode = True
 
             try:
@@ -396,7 +396,7 @@ class SchwabotEngine:
 
     async def _trading_loop(self) -> None:
         """Main trading loop for live mode."""
-        logger.info("🔄 Starting trading loop...")
+        logger.info("\\u1f504 Starting trading loop...")
 
         while self.running:
             try:
@@ -506,7 +506,7 @@ class SchwabotEngine:
     def _shutdown(self) -> None:
         """Shutdown system gracefully."""
         try:
-            logger.info("🔄 Shutting down Schwabot system...")
+            logger.info("\\u1f504 Shutting down Schwabot system...")
 
             # Stop trading
             self.status.live_mode = False
@@ -518,7 +518,7 @@ class SchwabotEngine:
             if self.quantum_core:
                 self.quantum_core.shutdown()
 
-            logger.info("✅ Schwabot system shutdown complete")
+            logger.info("\\u2705 Schwabot system shutdown complete")
 
         except Exception as e:
             logger.error(f"Shutdown error: {e}")
@@ -574,7 +574,7 @@ def main() -> None:
 
         if args.status:
             # Show status only
-            safe_print("📊 Schwabot System Status:")
+            safe_print("\\u1f4ca Schwabot System Status:")
             safe_print("Initialized: False")
             safe_print("Live Mode: False")
             safe_print("Components: Not loaded")
@@ -582,17 +582,17 @@ def main() -> None:
 
         # Initialize system
         if not engine.initialize_system():
-            logger.error("❌ System initialization failed")
+            logger.error("\\u274c System initialization failed")
             sys.exit(1)
 
         if args.validate_only:
             # Validation only mode
-            safe_print("✅ System validation completed successfully")
+            safe_print("\\u2705 System validation completed successfully")
             return
 
         # Show system status
         status = engine.get_system_status()
-        safe_print("📊 Schwabot System Status:")
+        safe_print("\\u1f4ca Schwabot System Status:")
         safe_print(f"Initialized: {status['initialized']}")
         safe_print(f"Live Mode: {status['live_mode']}")
         components_ready_count = sum(status['components_ready'].values())
@@ -605,20 +605,22 @@ def main() -> None:
             engine.start_live_trading()
         else:
             # Interactive mode
-            safe_print("\n🎯 Schwabot ready for interactive mode")
+            safe_print("\\n\\u1f3af Schwabot ready for interactive mode")
             safe_print("Press Ctrl+C to exit")
 
             try:
                 while True:
                     time.sleep(1)
             except KeyboardInterrupt:
-                safe_print("\n🛑 Shutting down...")
+                safe_print("\\n\\u1f6d1 Shutting down...")
                 engine._shutdown()
 
     except Exception as e:
-        logger.error(f"❌ Fatal error: {e}")
+        logger.error(f"\\u274c Fatal error: {e}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -61,7 +61,7 @@ class SystemValidator:
 
     def run_all_validations(self) -> Dict[str, Any]:
         """Run all validation checks."""
-        logger.info("🧠 Starting comprehensive Schwabot system validation...")
+        logger.info("\\u1f9e0 Starting comprehensive Schwabot system validation...")
 
         validation_suites = [
             self.validate_code_quality,
@@ -1002,7 +1002,7 @@ class SystemValidator:
     def print_summary(self):
         """Print validation summary."""
         safe_print("\n" + "="*60)
-        safe_print("🧠 SCHWABOT SYSTEM VALIDATION SUMMARY")
+        safe_print("\\u1f9e0 SCHWABOT SYSTEM VALIDATION SUMMARY")
         safe_print("="*60)
 
         safe_print(f"Overall Status: {self.results['overall_status'].upper()}")
@@ -1015,7 +1015,7 @@ class SystemValidator:
             success_rate = self.results['passed_checks'] / self.results['total_checks'] * 100
             safe_print(f"Success Rate: {success_rate:.1f}%")
 
-        safe_print("\nDetailed Results:")
+        safe_print("\\nDetailed Results:")
         safe_print("-" * 40)
 
         for suite_name, suite_result in self.results['checks'].items():
@@ -1023,19 +1023,19 @@ class SystemValidator:
             total = suite_result.get('total_checks', 0)
             passed = suite_result.get('passed_checks', 0)
 
-            status_icon = "✅" if status == 'passed' else "⚠️" if status == 'warning' else "❌"
+            status_icon = "\\u2705" if status == 'passed' else "\\u26a0\\ufe0f" if status == 'warning' else "\\u274c"
             safe_print(f"{status_icon} {suite_name}: {passed}/{total} passed")
 
             # Show failed checks
             checks = suite_result.get('checks', [])
             failed_checks = [check for check in checks if check.get('status') == 'failed']
             for check in failed_checks[:3]:  # Show first 3 failures
-                safe_print(f"   ❌ {check['name']}: {check.get('details', 'Unknown error')}")
+                safe_print(f"   \\u274c {check['name']}: {check.get('details', 'Unknown error')}")
 
 
 def main():
     """Main validation function."""
-    safe_print("🧠 Schwabot Comprehensive System Validation")
+    safe_print("\\u1f9e0 Schwabot Comprehensive System Validation")
     safe_print("=" * 50)
 
     validator = SystemValidator()
@@ -1049,13 +1049,13 @@ def main():
 
     # Return exit code
     if results['overall_status'] in ['excellent', 'good']:
-        safe_print("\n✅ System validation completed successfully!")
+        safe_print("\\n\\u2705 System validation completed successfully!")
         return 0
     elif results['overall_status'] == 'acceptable':
-        safe_print("\n⚠️ System validation completed with warnings")
+        safe_print("\\n\\u26a0\\ufe0f System validation completed with warnings")
         return 1
     else:
-        safe_print("\n❌ System validation failed")
+        safe_print("\\n\\u274c System validation failed")
         return 1
 
 

@@ -114,7 +114,7 @@ class UnifiedMathematics:
         # Initialize mathematical libraries
         self._initialize_libraries()
 
-        safe_safe_print("🔢 Unified Mathematics System initialized")
+        safe_safe_print("\\u1f522 Unified Mathematics System initialized")
 
     def _initialize_libraries(self) -> None:
         """Initialize mathematical libraries with proper configuration."""
@@ -138,10 +138,10 @@ class UnifiedMathematics:
                 except ImportError:
                     pass  # MKL not available
 
-            safe_safe_print("✅ Mathematical libraries configured")
+            safe_safe_print("\\u2705 Mathematical libraries configured")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Library initialization warning: {safe_format_error(e, 'library_init')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Library initialization warning: {safe_format_error(e, 'library_init')}")
 
     def execute_with_monitoring(
         self,
@@ -170,7 +170,7 @@ class UnifiedMathematics:
             cache_key = self._generate_cache_key(operation_name, args, kwargs)
             if self.config.enable_caching and cache_key in self.cache:
                 result = self.cache[cache_key]
-                safe_safe_print(f"✅ {operation_name}: Cached result used")
+                safe_safe_print(f"\\u2705 {operation_name}: Cached result used")
             else:
                 # Execute operation
                 result = operation_func(*args, **kwargs)
@@ -187,10 +187,10 @@ class UnifiedMathematics:
 
             # Check performance thresholds
             if execution_time > self.config.max_execution_time:
-                safe_safe_print(f"⚠️ {operation_name}: Slow execution ({execution_time:.3f}s)")
+                safe_safe_print(f"\\u26a0\\ufe0f {operation_name}: Slow execution ({execution_time:.3f}s)")
 
             if memory_usage > self.config.max_memory_usage:
-                safe_safe_print(f"⚠️ {operation_name}: High memory usage ({memory_usage:.2f}MB)")
+                safe_safe_print(f"\\u26a0\\ufe0f {operation_name}: High memory usage ({memory_usage:.2f}MB)")
 
             self.total_operations += 1
             return result
@@ -198,7 +198,7 @@ class UnifiedMathematics:
         except Exception as e:
             self.error_count += 1
             error_msg = safe_format_error(e, operation_name)
-            safe_safe_print(f"❌ {operation_name} failed: {error_msg}")
+            safe_safe_print(f"\\u274c {operation_name} failed: {error_msg}")
 
             if self.config.enable_error_handling:
                 return self._handle_math_error(operation_name, e, args, kwargs)
@@ -467,14 +467,14 @@ class UnifiedMathematics:
     def clear_cache(self) -> None:
         """Clear operation cache."""
         self.cache.clear()
-        safe_safe_print("🗑️ Mathematics cache cleared")
+        safe_safe_print("\\u1f5d1\\ufe0f Mathematics cache cleared")
 
     def reset_statistics(self) -> None:
         """Reset performance statistics."""
         self.performance_stats.clear()
         self.error_count = 0
         self.total_operations = 0
-        safe_safe_print("📊 Performance statistics reset")
+        safe_safe_print("\\u1f4ca Performance statistics reset")
 
 
 # Global unified mathematics instance
@@ -491,7 +491,7 @@ def configure_math(config: MathConfig) -> None:
     """Configure global mathematics settings."""
     global unified_math
     unified_math = UnifiedMathematics(config)
-    safe_safe_print("🔧 Mathematics system reconfigured")
+    safe_safe_print("\\u1f527 Mathematics system reconfigured")
 
 
 def get_math_stats() -> Dict[str, Any]:
@@ -502,27 +502,29 @@ def get_math_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test unified mathematics system
-    safe_print("🧪 Testing Unified Mathematics System...")
+    safe_print("\\u1f9ea Testing Unified Mathematics System...")
 
     # Test ZPE calculations
     zpe_work = unified_math.calculate_zpe_work(0.8, 0.05)
-    safe_print(f"✅ ZPE Work: {zpe_work}")
+    safe_print(f"\\u2705 ZPE Work: {zpe_work}")
 
     torque = unified_math.calculate_rotational_torque(0.7, 0.3)
-    safe_print(f"✅ Torque: {torque}")
+    safe_print(f"\\u2705 Torque: {torque}")
 
     efficiency = unified_math.calculate_thermal_efficiency(100.0, 1000.0)
-    safe_print(f"✅ Efficiency: {efficiency}")
+    safe_print(f"\\u2705 Efficiency: {efficiency}")
 
     # Test reactive calculations
     market_data = {'volatility': 0.8, 'trend_strength': -0.4, 'profit_performance': -0.1}
     reactive_score = unified_math.calculate_reactive_score(market_data)
-    safe_print(f"✅ Reactive Score: {reactive_score}")
+    safe_print(f"\\u2705 Reactive Score: {reactive_score}")
 
     # Test hybrid calculations
     hybrid_result = unified_math.calculate_hybrid_blend(0.7, 0.8, market_data)
-    safe_print(f"✅ Hybrid Result: {hybrid_result}")
+    safe_print(f"\\u2705 Hybrid Result: {hybrid_result}")
 
     # Get statistics
     stats = unified_math.get_performance_statistics()
-    safe_print(f"✅ Performance Stats: {stats}")
+    safe_print(f"\\u2705 Performance Stats: {stats}")
+
+"""

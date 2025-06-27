@@ -105,7 +105,7 @@ class FlaskNetworkCoordinator:
     Manages distributed network of devices for coordinated profit calculations.
     """
 
-    def __init__(self, host: str = "0.0.0.0", port: int = 5000, debug: bool = False):
+    def __init__(self, host: str = "0.0_0.0", port: int = 5000, debug: bool = False):
         self.host = host
         self.port = port
         self.debug = debug
@@ -483,7 +483,7 @@ class FlaskNetworkCoordinator:
         </head>
         <body>
             <div class="header">
-                <h1>🚀 Schwabot Network Coordinator</h1>
+                <h1>\\u1f680 Schwabot Network Coordinator</h1>
                 <p>Distributed Profit Calculation Network</p>
             </div>
             
@@ -635,13 +635,13 @@ def main():
     """Main function for testing Flask network coordinator."""
     try:
         # Initialize coordinator
-        coordinator = FlaskNetworkCoordinator(host="0.0.0.0", port=5000, debug=True)
+        coordinator = FlaskNetworkCoordinator(host="0.0_0.0", port=5000, debug=True)
 
         # Start coordinator
         coordinator.start()
 
     except KeyboardInterrupt:
-        safe_print("\nShutting down...")
+        safe_print("\\nShutting down...")
         coordinator.stop()
     except Exception as e:
         logger.error(f"Error in main: {e}")

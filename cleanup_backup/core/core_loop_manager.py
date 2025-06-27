@@ -85,7 +85,7 @@ class CoreLoopManager:
     def initialize_components(self) -> bool:
         """Initialize all required components."""
         try:
-            logger.info("🔧 Initializing core components...")
+            logger.info("\\u1f527 Initializing core components...")
 
             # Setup component registry with all required components
             self._setup_component_registry()
@@ -105,7 +105,7 @@ class CoreLoopManager:
                     self.profit_allocator
                 )
 
-            logger.info("✅ Core components initialized successfully")
+            logger.info("\\u2705 Core components initialized successfully")
             return True
 
         except Exception as e:
@@ -187,10 +187,10 @@ class CoreLoopManager:
     def start_execution_loop(self) -> None:
         """Start the main execution loop."""
         if not self.initialize_components():
-            logger.error("❌ Cannot start execution loop: component initialization failed")
+            logger.error("\\u274c Cannot start execution loop: component initialization failed")
             return
 
-        logger.info("🚀 Starting core execution loop...")
+        logger.info("\\u1f680 Starting core execution loop...")
         self.running = True
 
         try:
@@ -390,14 +390,14 @@ class CoreLoopManager:
 
     def stop_execution_loop(self) -> None:
         """Stop the execution loop."""
-        logger.info("🛑 Stopping core execution loop...")
+        logger.info("\\u1f6d1 Stopping core execution loop...")
         self.running = False
 
         # Shutdown components
         if self.component_registry:
             self.component_registry.shutdown_all_components()
 
-        logger.info("✅ Core execution loop stopped")
+        logger.info("\\u2705 Core execution loop stopped")
 
     def get_execution_status(self) -> Dict[str, Any]:
         """Get current execution status."""
@@ -490,3 +490,5 @@ def run_core_loop(manager: Optional[CoreLoopManager] = None) -> None:
         logger.info("Core loop interrupted")
     finally:
         manager.stop_execution_loop()
+
+"""

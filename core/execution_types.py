@@ -4,7 +4,7 @@ from typing import Literal
 
 
 @dataclass
-class ExecutionDecision:
+class Placeholder: pass
     allow: bool
     strategy_id: str
     phase_state: str
@@ -14,3 +14,5 @@ class ExecutionDecision:
 
 
 TradeAction = Literal["buy", "sell", "hold"]
+
+

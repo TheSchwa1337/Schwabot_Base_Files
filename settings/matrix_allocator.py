@@ -632,8 +632,8 @@ if __name__ == "__main__":
     safe_print("Allocation Result:")
     print(json.dumps(asdict(result), indent=2))
 
-    safe_print("\nBasket Performance:")
+    safe_print("\\nBasket Performance:")
     safe_print(json.dumps(allocator.get_basket_performance("test_basket"), indent=2))
 
-    safe_print("\nAllocation Statistics:")
+    safe_print("\\nAllocation Statistics:")
     print(json.dumps(allocator.get_allocation_statistics(), indent=2))

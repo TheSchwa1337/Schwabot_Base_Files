@@ -73,7 +73,7 @@ class GhostStrategyIntegrationDemo:
 
     def demonstrate_ghost_array_processing(self):
         """Demonstrate ghost array processing capabilities."""
-        print("🔱 Ghost Array Processing Demonstration")
+        print("\\u1f531 Ghost Array Processing Demonstration")
         print("=" * 50)
 
         # Generate test signals
@@ -81,51 +81,51 @@ class GhostStrategyIntegrationDemo:
 
         # Build ghost array
         ghost_array = build_ghost_array(signals)
-        print(f"✅ Built ghost array: shape={ghost_array.shape}")
+        print(f"\\u2705 Built ghost array: shape={ghost_array.shape}")
 
         # Validate array
         if validate_ghost_array(ghost_array):
-            print("✅ Ghost array validation passed")
+            print("\\u2705 Ghost array validation passed")
         else:
-            print("❌ Ghost array validation failed")
+            print("\\u274c Ghost array validation failed")
             return
 
         # Extract volatility window
         volatility = extract_volatility_window(ghost_array)
-        print(f"📊 Rolling volatility (5-period): {volatility:.4f}")
+        print(f"\\u1f4ca Rolling volatility (5-period): {volatility:.4f}")
 
         # Create BTC vector
         btc_vector = BTCVector(ghost_array)
         signal_data = btc_vector.to_signal()
 
-        print(f"📈 Mean price: ${signal_data['mean_price']:,.2f}")
-        print(f"📊 Momentum: {signal_data['momentum']:.2f}")
-        print(f"🎯 Confidence: {signal_data['confidence']:.2f}")
-        print(f"📊 Signal count: {signal_data['signal_count']:.0f}")
+        print(f"\\u1f4c8 Mean price: ${signal_data['mean_price']:,.2f}")
+        print(f"\\u1f4ca Momentum: {signal_data['momentum']:.2f}")
+        print(f"\\u1f3af Confidence: {signal_data['confidence']:.2f}")
+        print(f"\\u1f4ca Signal count: {signal_data['signal_count']:.0f}")
 
         return signals
 
     def demonstrate_strategy_engine(self, signals: List[GhostSignal]):
         """Demonstrate the complete strategy engine."""
-        print("\n🎯 Ghost Strategy Engine Demonstration")
+        print("\\n\\u1f3af Ghost Strategy Engine Demonstration")
         print("=" * 50)
 
         # Process signals through strategy engine
         result = self.engine.process_ghost_signals(signals)
 
-        print(f"🔐 Strategy Hash: {result['strategy_hash'][:16]}...")
-        print(f"🎯 Action: {result['action']}")
-        print(f"📊 Confidence: {result['confidence']:.2f}")
-        print(f"✅ Execution Ready: {result['execution_ready']}")
+        print(f"\\u1f510 Strategy Hash: {result['strategy_hash'][:16]}...")
+        print(f"\\u1f3af Action: {result['action']}")
+        print(f"\\u1f4ca Confidence: {result['confidence']:.2f}")
+        print(f"\\u2705 Execution Ready: {result['execution_ready']}")
 
         # Show conditions
-        print("\n📋 Strategy Conditions:")
+        print("\\n\\u1f4cb Strategy Conditions:")
         for condition, value in result['conditions'].items():
-            status = "✅" if value else "❌"
+            status = "\\u2705" if value else "\\u274c"
             print(f"  {status} {condition}: {value}")
 
         # Show signal data
-        print(f"\n📊 Signal Data:")
+        print(f"\\n\\u1f4ca Signal Data:")
         for key, value in result['signal_data'].items():
             if isinstance(value, float):
                 print(f"  {key}: {value:.4f}")
@@ -136,7 +136,7 @@ class GhostStrategyIntegrationDemo:
 
     def demonstrate_volatility_scenarios(self):
         """Demonstrate different volatility scenarios."""
-        print("\n🌊 Volatility Scenarios Demonstration")
+        print("\\n\\u1f30a Volatility Scenarios Demonstration")
         print("=" * 50)
 
         scenarios = {
@@ -161,7 +161,7 @@ class GhostStrategyIntegrationDemo:
         base_time = int(time.time())
 
         for scenario_name, params in scenarios.items():
-            print(f"\n📊 {scenario_name}:")
+            print(f"\\n\\u1f4ca {scenario_name}:")
 
             # Generate scenario signals
             signals = []
@@ -181,21 +181,21 @@ class GhostStrategyIntegrationDemo:
             # Process through engine
             result = self.engine.process_ghost_signals(signals)
 
-            print(f"  🎯 Action: {result['action']}")
-            print(f"  📊 Confidence: {result['confidence']:.2f}")
-            print(f"  📈 Volatility: {result['signal_data']['volatility']:.2f}")
-            print(f"  ✅ Ready: {result['execution_ready']}")
+            print(f"  \\u1f3af Action: {result['action']}")
+            print(f"  \\u1f4ca Confidence: {result['confidence']:.2f}")
+            print(f"  \\u1f4c8 Volatility: {result['signal_data']['volatility']:.2f}")
+            print(f"  \\u2705 Ready: {result['execution_ready']}")
 
     def demonstrate_real_time_processing(self):
         """Demonstrate real-time signal processing."""
-        print("\n⚡ Real-Time Processing Demonstration")
+        print("\\n\\u26a1 Real-Time Processing Demonstration")
         print("=" * 50)
 
         # Simulate real-time signal stream
         base_price = 50000.0
         base_time = int(time.time())
 
-        print("📡 Processing real-time signals...")
+        print("\\u1f4e1 Processing real-time signals...")
 
         for i in range(8):
             # Simulate new signal arrival
@@ -229,14 +229,14 @@ class GhostStrategyIntegrationDemo:
         final_signals = self.engine.btc_processor.ghost_signals
         result = self.engine.process_ghost_signals(final_signals)
 
-        print(f"\n🎯 Final Strategy Decision:")
+        print(f"\\n\\u1f3af Final Strategy Decision:")
         print(f"  Action: {result['action']}")
         print(f"  Confidence: {result['confidence']:.2f}")
         print(f"  Execution Ready: {result['execution_ready']}")
 
     def run_complete_demo(self):
         """Run the complete integration demonstration."""
-        print("🔱 Ghost Strategy Integration Demo - Schwabot UROS v1.0")
+        print("\\u1f531 Ghost Strategy Integration Demo - Schwabot UROS v1.0")
         print("=" * 70)
         print("This demo shows how the ghost strategy engine integrates with")
         print("the main trading system for BTC/USDC volatility-aware decisions.\n")
@@ -256,15 +256,15 @@ class GhostStrategyIntegrationDemo:
 
             # Summary
             print("\n" + "=" * 70)
-            print("✅ Ghost Strategy Integration Demo Complete!")
+            print("\\u2705 Ghost Strategy Integration Demo Complete!")
             print("=" * 70)
             print("Key Features Demonstrated:")
-            print("  🔱 Type-safe ghost signal processing")
-            print("  📊 Real-time volatility analysis")
-            print("  🎯 Hash-based strategy selection")
-            print("  ⚡ Dynamic confidence calculation")
-            print("  🌊 Multi-scenario volatility handling")
-            print("  📈 BTC vector momentum analysis")
+            print("  \\u1f531 Type-safe ghost signal processing")
+            print("  \\u1f4ca Real-time volatility analysis")
+            print("  \\u1f3af Hash-based strategy selection")
+            print("  \\u26a1 Dynamic confidence calculation")
+            print("  \\u1f30a Multi-scenario volatility handling")
+            print("  \\u1f4c8 BTC vector momentum analysis")
 
             # Save demo results
             demo_results = {
@@ -276,10 +276,10 @@ class GhostStrategyIntegrationDemo:
             with open("ghost_strategy_demo_results.json", "w") as f:
                 json.dump(demo_results, f, indent=2, default=str)
 
-            print(f"\n📁 Demo results saved to: ghost_strategy_demo_results.json")
+            print(f"\\n\\u1f4c1 Demo results saved to: ghost_strategy_demo_results.json")
 
         except Exception as e:
-            print(f"❌ Demo failed: {e}")
+            print(f"\\u274c Demo failed: {e}")
             import traceback
             traceback.print_exc()
 

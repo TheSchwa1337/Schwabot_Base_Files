@@ -88,7 +88,7 @@ class MathematicalCleanupExecutor:
 
     def create_backup(self):
         """Create backup of critical mathematical components."""
-        logger.info("🔒 Creating backup of critical mathematical components...")
+        logger.info("\\u1f512 Creating backup of critical mathematical components...")
 
         backup_path = self.backup_dir / f"critical_math_{self.timestamp}"
         backup_path.mkdir(parents=True, exist_ok=True)
@@ -105,16 +105,16 @@ class MathematicalCleanupExecutor:
                     dest_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(source_path, dest_path)
                     backed_up_files.append(str(file_pattern))
-                    logger.info(f"✅ Backed up: {file_pattern}")
+                    logger.info(f"\\u2705 Backed up: {file_pattern}")
 
                 elif source_path.is_dir():
                     # Backup entire directory
                     dest_path = backup_path / file_pattern
                     shutil.copytree(source_path, dest_path, dirs_exist_ok=True)
                     backed_up_files.append(str(file_pattern))
-                    logger.info(f"✅ Backed up directory: {file_pattern}")
+                    logger.info(f"\\u2705 Backed up directory: {file_pattern}")
             else:
-                logger.warning(f"⚠️  Not found (skipping): {file_pattern}")
+                logger.warning(f"\\u26a0\\ufe0f  Not found (skipping): {file_pattern}")
 
         # Save backup manifest
         manifest = {
@@ -126,12 +126,12 @@ class MathematicalCleanupExecutor:
         with open(backup_path / "backup_manifest.json", "w") as f:
             json.dump(manifest, f, indent=2)
 
-        logger.info(f"✅ Backup completed. Files saved to: {backup_path}")
+        logger.info(f"\\u2705 Backup completed. Files saved to: {backup_path}")
         return backup_path
 
     def remove_test_files(self, dry_run=False):
         """Remove test-related stub files."""
-        logger.info("🗑️  Removing test-related stub files...")
+        logger.info("\\u1f5d1\\ufe0f  Removing test-related stub files...")
 
         removed_files = []
 
@@ -150,9 +150,9 @@ class MathematicalCleanupExecutor:
                                     test_file.unlink()
                                 removed_files.append(str(test_file.relative_to(self.project_root)))
                                 logger.info(
-                                    f"🗑️  {'[DRY RUN] Would remove' if dry_run else 'Removed'}: {test_file.relative_to(self.project_root)}")
+                                    f"\\u1f5d1\\ufe0f  {'[DRY RUN] Would remove' if dry_run else 'Removed'}: {test_file.relative_to(self.project_root)}")
                     except Exception as e:
-                        logger.error(f"❌ Error processing {test_file}: {e}")
+                        logger.error(f"\\u274c Error processing {test_file}: {e}")
 
         # Remove test directories if empty or contain only stubs
         for test_dir in ["tests/hooks/", "schwabot/tests/"]:
@@ -162,17 +162,17 @@ class MathematicalCleanupExecutor:
                     if not dry_run:
                         shutil.rmtree(test_path)
                     logger.info(
-                        f"🗑️  {'[DRY RUN] Would remove directory' if dry_run else 'Removed directory'}: {test_dir}")
+                        f"\\u1f5d1\\ufe0f  {'[DRY RUN] Would remove directory' if dry_run else 'Removed directory'}: {test_dir}")
                 except Exception as e:
-                    logger.error(f"❌ Error removing directory {test_dir}: {e}")
+                    logger.error(f"\\u274c Error removing directory {test_dir}: {e}")
 
         logger.info(
-            f"✅ Test file removal completed. {'Would remove' if dry_run else 'Removed'} {len(removed_files)} files.")
+            f"\\u2705 Test file removal completed. {'Would remove' if dry_run else 'Removed'} {len(removed_files)} files.")
         return removed_files
 
     def remove_non_critical_stubs(self, dry_run=False):
         """Remove non-critical stub directories."""
-        logger.info("🗑️  Removing non-critical stub directories...")
+        logger.info("\\u1f5d1\\ufe0f  Removing non-critical stub directories...")
 
         removed_directories = []
 
@@ -201,20 +201,20 @@ class MathematicalCleanupExecutor:
                             shutil.rmtree(full_path)
                         removed_directories.append(dir_path)
                         logger.info(
-                            f"🗑️  {'[DRY RUN] Would remove' if dry_run else 'Removed'} directory: {dir_path} ({stub_count}/{total_files} stub files)")
+                            f"\\u1f5d1\\ufe0f  {'[DRY RUN] Would remove' if dry_run else 'Removed'} directory: {dir_path} ({stub_count}/{total_files} stub files)")
                     except Exception as e:
-                        logger.error(f"❌ Error removing directory {dir_path}: {e}")
+                        logger.error(f"\\u274c Error removing directory {dir_path}: {e}")
                 else:
                     logger.info(
-                        f"⚠️  Preserved directory {dir_path} - contains non-stub files ({stub_count}/{total_files} stubs)")
+                        f"\\u26a0\\ufe0f  Preserved directory {dir_path} - contains non-stub files ({stub_count}/{total_files} stubs)")
 
         logger.info(
-            f"✅ Non-critical directory removal completed. {'Would remove' if dry_run else 'Removed'} {len(removed_directories)} directories.")
+            f"\\u2705 Non-critical directory removal completed. {'Would remove' if dry_run else 'Removed'} {len(removed_directories)} directories.")
         return removed_directories
 
     def identify_problematic_stubs(self):
         """Identify stub files causing syntax errors."""
-        logger.info("🔍 Identifying problematic stub files...")
+        logger.info("\\u1f50d Identifying problematic stub files...")
 
         problematic_files = []
 
@@ -229,12 +229,12 @@ class MathematicalCleanupExecutor:
                     # Check for unterminated triple quotes or other syntax issues
                     if content.count('"""') % 2 != 0 or content.count("'''") % 2 != 0:
                         problematic_files.append(py_file.relative_to(self.project_root))
-                        logger.warning(f"⚠️  Problematic stub: {py_file.relative_to(self.project_root)}")
+                        logger.warning(f"\\u26a0\\ufe0f  Problematic stub: {py_file.relative_to(self.project_root)}")
 
             except Exception as e:
-                logger.error(f"❌ Error reading {py_file}: {e}")
+                logger.error(f"\\u274c Error reading {py_file}: {e}")
 
-        logger.info(f"🔍 Found {len(problematic_files)} problematic stub files.")
+        logger.info(f"\\u1f50d Found {len(problematic_files)} problematic stub files.")
         return problematic_files
 
     def generate_cleanup_report(self, backup_path, removed_files, removed_directories, problematic_files):
@@ -264,12 +264,12 @@ class MathematicalCleanupExecutor:
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
 
-        logger.info(f"📊 Cleanup report saved to: {report_file}")
+        logger.info(f"\\u1f4ca Cleanup report saved to: {report_file}")
         return report
 
     def execute_full_cleanup(self, dry_run=False, backup_only=False, remove_tests_only=False):
         """Execute the complete cleanup process."""
-        logger.info("🚀 Starting Schwabot Mathematical Cleanup...")
+        logger.info("\\u1f680 Starting Schwabot Mathematical Cleanup...")
         logger.info(f"Project root: {self.project_root}")
         logger.info(f"Dry run mode: {dry_run}")
 
@@ -278,14 +278,14 @@ class MathematicalCleanupExecutor:
             backup_path = self.create_backup()
 
             if backup_only:
-                logger.info("✅ Backup-only mode completed.")
+                logger.info("\\u2705 Backup-only mode completed.")
                 return
 
             # Step 2: Remove test files
             removed_files = self.remove_test_files(dry_run=dry_run)
 
             if remove_tests_only:
-                logger.info("✅ Test removal mode completed.")
+                logger.info("\\u2705 Test removal mode completed.")
                 return
 
             # Step 3: Remove non-critical stub directories
@@ -297,15 +297,15 @@ class MathematicalCleanupExecutor:
             # Step 5: Generate report
             report = self.generate_cleanup_report(backup_path, removed_files, removed_directories, problematic_files)
 
-            logger.info("✅ Mathematical cleanup completed successfully!")
+            logger.info("\\u2705 Mathematical cleanup completed successfully!")
             logger.info(
-                f"📊 Summary: Backed up {len(self.critical_math_files)} critical files, removed {len(removed_files)} test files, removed {len(removed_directories)} directories")
+                f"\\u1f4ca Summary: Backed up {len(self.critical_math_files)} critical files, removed {len(removed_files)} test files, removed {len(removed_directories)} directories")
 
             if problematic_files:
-                logger.warning(f"⚠️  {len(problematic_files)} problematic stub files remain - manual review required")
+                logger.warning(f"\\u26a0\\ufe0f  {len(problematic_files)} problematic stub files remain - manual review required")
 
         except Exception as e:
-            logger.error(f"❌ Cleanup failed: {e}")
+            logger.error(f"\\u274c Cleanup failed: {e}")
             raise
 
 

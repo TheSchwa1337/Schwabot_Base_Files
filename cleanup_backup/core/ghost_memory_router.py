@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 #!/usr/bin/env python3
-"""ghost_memory_router – placeholder stub.
+"""ghost_memory_router \\u2013 placeholder stub.
 
 Stores and retrieves ghost trigger memory cycles for AI echo input.  This
 minimal implementation just provides in-memory storage so modules that rely

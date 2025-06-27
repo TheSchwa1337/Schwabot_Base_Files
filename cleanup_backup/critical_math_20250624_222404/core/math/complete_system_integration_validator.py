@@ -18,7 +18,7 @@ Comprehensive validation of all mathematical foundations across the entire Schwa
 Tests complete integration from core components to UI systems, visualizers, and training pipelines.
 
 Mathematical Pipeline:
-1. Core Mathematical Foundations → 2. UI System Integration → 3. Training & Demo Pipeline → 4. Visualizer Integration → 5. Mathlib Integration
+1. Core Mathematical Foundations \\u2192 2. UI System Integration \\u2192 3. Training & Demo Pipeline \\u2192 4. Visualizer Integration \\u2192 5. Mathlib Integration
 """
 
 import json
@@ -708,7 +708,7 @@ class CompleteSystemIntegrationValidator:
 
     def run_complete_system_validation(self) -> Dict[str, Any]:
         """Run complete system integration validation."""
-        safe_print("🧮 Running Complete System Integration Validation...")
+        safe_print("\\u1f9ee Running Complete System Integration Validation...")
         safe_print("=" * 60)
 
         # Run all system validations
@@ -732,17 +732,17 @@ class CompleteSystemIntegrationValidator:
         overall_success = all(v.all_tests_passed for v in validations)
 
         # Print results
-        safe_print(f"\n📊 Complete System Integration Results:")
-        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"\\n\\u1f4ca Complete System Integration Results:")
+        safe_print(f"  Overall Success: {'\\u2705 PASSED' if overall_success else '\\u274c FAILED'}")
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {total_passed}")
         safe_print(f"  Failed: {total_failed}")
         safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
         safe_print(f"  Total Execution Time: {total_time:.2f}s")
 
-        safe_print(f"\n📋 System Integration Results:")
+        safe_print(f"\\n\\u1f4cb System Integration Results:")
         for validation in validations:
-            status = "✅ PASSED" if validation.all_tests_passed else "❌ FAILED"
+            status = "\\u2705 PASSED" if validation.all_tests_passed else "\\u274c FAILED"
             safe_print(f"  {validation.validation_name}: {status} ({validation.passed_tests}/{validation.total_tests})")
 
         # Return comprehensive results
@@ -793,7 +793,7 @@ class CompleteSystemIntegrationValidator:
 
 def main():
     """Main function for complete system integration validation."""
-    safe_print("🧮 Complete System Integration Validator - Schwabot UROS v1.0")
+    safe_print("\\u1f9ee Complete System Integration Validator - Schwabot UROS v1.0")
     safe_print("=" * 60)
 
     # Initialize validator
@@ -811,3 +811,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

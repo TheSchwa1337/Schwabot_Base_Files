@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Vector-state mapper – align news glyph vectors with live BTC state space.
+"""Vector-state mapper \\u2013 align news glyph vectors with live BTC state space.
 
 The purpose of this component is to project a *glyph vector* (semantic signal
 extracted from news) onto a *market state matrix* so that downstream routers
@@ -11,7 +11,7 @@ or a small set of channel weights.
 
 Current implementation (lightweight, no ML deps):
 1. The BTC state space is represented by a feature matrix ``S`` of shape
-   ``(n_channels, dim)`` – e.g. 4×128 for [price-delta, volume-delta, RSI,
+   ``(n_channels, dim)`` \\u2013 e.g. 4\\u00d7128 for [price-delta, volume-delta, RSI,
    on-chain sentiment].  The dimensionality *dim* must match the glyph vector
    produced by :func:`glyph_news_parser.parse_news_to_glyph`.
 2. Computes cosine similarity between the glyph vector and each channel row of
@@ -34,7 +34,7 @@ def _cosine(v: np.ndarray, m: np.ndarray) -> np.ndarray:
     v_norm = np.linalg.norm(v)
     m_norm = np.linalg.norm(m, axis=1)
     denom = v_norm * m_norm
-    # Prevent division by zero – if a norm is zero, similarity is 0
+    # Prevent division by zero \\u2013 if a norm is zero, similarity is 0
     with np.errstate(divide="ignore", invalid="ignore"):
         sim = np.where(denom == 0, 0.0, dot / denom)
     return sim.astype(float)
@@ -49,7 +49,7 @@ def map_glyph_to_state(
     Parameters
     ----------
     glyph_vec
-        1-D NumPy array of length *dim* – L2-normalised.
+        1-D NumPy array of length *dim* \\u2013 L2-normalised.
     state_matrix
         2-D NumPy array of shape ``(n_channels, dim)`` representing live BTC
         feature channels.  Must share the trailing dimension with *glyph_vec*.
@@ -71,3 +71,5 @@ def map_glyph_to_state(
     sims = _cosine(glyph_vec, state_matrix)
     best_idx = int(np.argmax(sims))
     return sims, best_idx
+
+"""

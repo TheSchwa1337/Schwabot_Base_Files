@@ -57,19 +57,19 @@ class Dual:
 
     Dual number for automatic differentiation
 
-    A dual number is of the form: a + b*ε where ε² = 0
+    A dual number is of the form: a + b*\\u03b5 where \\u03b5\\u00b2 = 0
     Used for forward-mode automatic differentiation.
 
     Mathematical operations:
-    (a + b*ε) + (c + d*ε) = (a + c) + (b + d)*ε
-    (a + b*ε) * (c + d*ε) = ac + (ad + bc)*ε
+    (a + b*\\u03b5) + (c + d*\\u03b5) = (a + c) + (b + d)*\\u03b5
+    (a + b*\\u03b5) * (c + d*\\u03b5) = ac + (ad + bc)*\\u03b5
     """
 
     val: float  # Real part (function value)
     eps: float  # Dual part (derivative)
 
     def __add__(self, other: Union[Dual, float]) -> Dual:
-        """Addition: (a + b*ε) + (c + d*ε) = (a + c) + (b + d)*ε."""
+        """Addition: (a + b*\\u03b5) + (c + d*\\u03b5) = (a + c) + (b + d)*\\u03b5."""
         if isinstance(other, Dual):
             return Dual(self.val + other.val, self.eps + other.eps)
         else:
@@ -80,7 +80,7 @@ class Dual:
         return self.__add__(other)
 
     def __sub__(self, other: Union[Dual, float]) -> Dual:
-        """Subtraction: (a + b*ε) - (c + d*ε) = (a - c) + (b - d)*ε."""
+        """Subtraction: (a + b*\\u03b5) - (c + d*\\u03b5) = (a - c) + (b - d)*\\u03b5."""
         if isinstance(other, Dual):
             return Dual(self.val - other.val, self.eps - other.eps)
         else:
@@ -91,7 +91,7 @@ class Dual:
         return Dual(other - self.val, -self.eps)
 
     def __mul__(self, other: Union[Dual, float]) -> Dual:
-        """Multiplication: (a + b*ε) * (c + d*ε) = ac + (ad + bc)*ε."""
+        """Multiplication: (a + b*\\u03b5) * (c + d*\\u03b5) = ac + (ad + bc)*\\u03b5."""
         if isinstance(other, Dual):
             return Dual(
                 self.val * other.val,
@@ -105,7 +105,7 @@ class Dual:
         return self.__mul__(other)
 
     def __truediv__(self, other: Union[Dual, float]) -> Dual:
-        """Division: (a + b*ε) / (c + d*ε) = (a/c) + (bc - ad)/c²*ε."""
+        """Division: (a + b*\\u03b5) / (c + d*\\u03b5) = (a/c) + (bc - ad)/c\\u00b2*\\u03b5."""
         if isinstance(other, Dual):
             val = self.val / other.val
             eps = (self.eps * other.val - self.val * other.eps) / (other.val**2)
@@ -120,7 +120,7 @@ class Dual:
         return Dual(val, eps)
 
     def __pow__(self, n: float) -> Dual:
-        """Power: (a + b*ε)^n = a^n + n*a^(n-1)*b*ε."""
+        """Power: (a + b*\\u03b5)^n = a^n + n*a^(n-1)*b*\\u03b5."""
         if self.val == 0 and n <= 0:
             raise ValueError("Cannot raise zero to non-positive power")
 
@@ -129,7 +129,7 @@ class Dual:
         return Dual(val, eps)
 
     def __neg__(self) -> Dual:
-        """Negation: -(a + b*ε) = -a + (-b)*ε."""
+        """Negation: -(a + b*\\u03b5) = -a + (-b)*\\u03b5."""
         return Dual(-self.val, -self.eps)
 
     def __abs__(self) -> Dual:
@@ -140,33 +140,33 @@ class Dual:
             return Dual(-self.val, -self.eps)
 
     def unified_math.sin(self) -> Dual:
-        """Sine: unified_math.sin(a + b*ε) = unified_math.sin(a) + unified_math.cos(a)*b*ε."""
+        """Sine: unified_math.sin(a + b*\\u03b5) = unified_math.sin(a) + unified_math.cos(a)*b*\\u03b5."""
         return Dual(unified_math.unified_math.sin(self.val), unified_math.unified_math.cos(self.val) * self.eps)
 
     def unified_math.cos(self) -> Dual:
-        """Cosine: unified_math.cos(a + b*ε) = unified_math.cos(a) - unified_math.sin(a)*b*ε."""
+        """Cosine: unified_math.cos(a + b*\\u03b5) = unified_math.cos(a) - unified_math.sin(a)*b*\\u03b5."""
         return Dual(unified_math.unified_math.cos(self.val), -unified_math.unified_math.sin(self.val) * self.eps)
 
     def unified_math.exp(self) -> Dual:
-        """Exponential: unified_math.exp(a + b*ε) = unified_math.exp(a) + unified_math.exp(a)*b*ε."""
+        """Exponential: unified_math.exp(a + b*\\u03b5) = unified_math.exp(a) + unified_math.exp(a)*b*\\u03b5."""
         exp_val = unified_math.unified_math.exp(self.val)
         return Dual(exp_val, exp_val * self.eps)
 
     def unified_math.log(self) -> Dual:
-        """Natural logarithm: unified_math.log(a + b*ε) = unified_math.log(a) + (b/a)*ε."""
+        """Natural logarithm: unified_math.log(a + b*\\u03b5) = unified_math.log(a) + (b/a)*\\u03b5."""
         if self.val <= 0:
             raise ValueError("Cannot take log of non-positive number")
         return Dual(unified_math.unified_math.log(self.val), self.eps / self.val)
 
     def unified_math.sqrt(self) -> Dual:
-        """Square root: unified_math.sqrt(a + b*ε) = unified_math.sqrt(a) + (b/(2*unified_math.sqrt(a)))*ε."""
+        """Square root: unified_math.sqrt(a + b*\\u03b5) = unified_math.sqrt(a) + (b/(2*unified_math.sqrt(a)))*\\u03b5."""
         if self.val < 0:
             raise ValueError("Cannot take sqrt of negative number")
         sqrt_val = unified_math.unified_math.sqrt(self.val)
         return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
     def tanh(self) -> Dual:
-        """Hyperbolic tangent: tanh(a + b*ε) = tanh(a) + sech²(a)*b*ε."""
+        """Hyperbolic tangent: tanh(a + b*\\u03b5) = tanh(a) + sech\\u00b2(a)*b*\\u03b5."""
         tanh_val = math.tanh(self.val)
         sech_squared = 1 - tanh_val**2
         return Dual(tanh_val, sech_squared * self.eps)
@@ -177,7 +177,7 @@ class MathLibV3:
 
     def __init__(self):
         """TODO: document __init__."""
-        self.version = "3.0.0"
+        self.version = "3.0_0"
         self.initialized = True
         self.ai_models_loaded = False
         logger.info(f"MathLibV3 v{self.version} initialized with auto-diff support")
@@ -229,13 +229,13 @@ class MathLibV3:
 
         Kelly criterion with automatic risk adjustment
 
-        Formula: f* = μ / σ² (optimal)
+        Formula: f* = \\u03bc / \\u03c3\\u00b2 (optimal)
         Risk-adjusted: f = unified_math.min(f* * risk_tolerance, max_allocation)
 
         Args:
             mu: Expected return
             sigma_squared: Variance of returns
-            risk_tolerance: Risk adjustment factor (0 < tolerance ≤ 1)
+            risk_tolerance: Risk adjustment factor (0 < tolerance \\u2264 1)
 
         Returns:
             Dictionary with optimal allocation and risk metrics
@@ -281,7 +281,7 @@ class MathLibV3:
         Conditional Value at Risk (CVaR) calculation
 
         CVaR is the expected loss given that the loss exceeds VaR
-        Formula: CVaR_α = E[X | X ≤ VaR_α]
+        Formula: CVaR_\\u03b1 = E[X | X \\u2264 VaR_\\u03b1]
 
         Args:
             returns: Array of returns
@@ -389,7 +389,7 @@ class MathLibV3:
             Risk metrics
         """
         try:
-            # Portfolio variance: w^T * Σ * w
+            # Portfolio variance: w^T * \\u03a3 * w
             portfolio_variance = (
                 portfolio_weights.T @ covariance_matrix @ portfolio_weights
             )
@@ -466,7 +466,7 @@ class MathLibV3:
             y_diff = np.diff(time_series)
 
             if len(y_lag) > 0 and unified_math.unified_math.var(y_lag) > 0:
-                # Simple regression: Δy_t = α + β*y_{t-1} + ε_t
+                # Simple regression: \\u0394y_t = \\u03b1 + \\u03b2*y_{t-1} + \\u03b5_t
                 X = np.column_stack([np.ones(len(y_lag)), y_lag])
                 coeffs = np.linalg.lstsq(X, y_diff, rcond=None)[0]
                 mean_reversion_coeff = coeffs[1] if len(coeffs) > 1 else 0
@@ -711,17 +711,17 @@ def main() -> None:
     safe_print(f"Kelly result: {kelly_result}")
 
     # Test dual numbers
-    safe_print("\nTesting dual number automatic differentiation...")
+    safe_print("\\nTesting dual number automatic differentiation...")
 
     def test_function(x: Dual) -> Dual:
-        """Evaluate f(x) = x² + 2x + 1 as a Dual-friendly demo."""
-        return x * x + 2 * x + 1  # f(x) = x² + 2x + 1, f'(x) = 2x + 2
+        """Evaluate f(x) = x\\u00b2 + 2x + 1 as a Dual-friendly demo."""
+        return x * x + 2 * x + 1  # f(x) = x\\u00b2 + 2x + 1, f'(x) = 2x + 2
 
     val, grad_val = lib_v3.compute_dual_gradient(test_function, 3.0)
     safe_print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")
 
     # Test CVaR
-    safe_print("\nTesting CVaR...")
+    safe_print("\\nTesting CVaR...")
     test_returns = np.random.normal(0.05, 0.2, 1000)  # Simulate returns
     cvar_result = lib_v3.cvar_calculation(test_returns, 0.95)
     safe_print(f"CVaR (95%): {cvar_result}")

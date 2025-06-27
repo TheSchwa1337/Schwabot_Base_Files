@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 """Test Registry - Central Test Management for Schwabot.
 
@@ -36,6 +36,33 @@ import sys
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+
+# Import safe print for Windows compatibility
+try:
+    from core.utils.windows_cli_compatibility import (
+        safe_print, info, warn, error, success, debug
+    )
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    
+    def safe_print(message):
+        print(message)
+    
+    def info(message):
+        print(f"[INFO] {message}")
+    
+    def warn(message):
+        print(f"[WARN] {message}")
+    
+    def error(message):
+        print(f"[ERROR] {message}")
+    
+    def success(message):
+        print(f"[SUCCESS] {message}")
+    
+    def debug(message):
+        print(f"[DEBUG] {message}")
 
 # Import all test modules
 from tests.test_profit_vector_calibration import test_profit_vector_calibration
@@ -193,7 +220,7 @@ class TestRegistry:
             TestMode.COMPREHENSIVE: list(self.test_modules.keys())
         }
 
-        logger.info("🧪 Test Registry initialized with all critical test components")
+        logger.info("\\u1f9ea Test Registry initialized with all critical test components")
 
     def _test_hash_confidence_evaluator(self) -> Dict[str, Any]:
         """Test hash confidence evaluator functionality."""
@@ -449,7 +476,7 @@ class TestRegistry:
 
     def run_individual_test(self, test_name: str) -> TestResult:
         """Run an individual test by name."""
-        logger.info(f"🧪 Running individual test: {test_name}")
+        logger.info(f"\\u1f9ea Running individual test: {test_name}")
 
         if test_name not in self.test_modules:
             error_msg = f"Test '{test_name}' not found in registry"
@@ -492,7 +519,7 @@ class TestRegistry:
 
     def run_test_suite(self, mode: TestMode) -> Dict[str, Any]:
         """Run a test suite based on execution mode."""
-        logger.info(f"🧪 Running test suite: {mode.value}")
+        logger.info(f"\\u1f9ea Running test suite: {mode.value}")
 
         if mode not in self.test_suites:
             error_msg = f"Test mode '{mode.value}' not supported"
@@ -509,7 +536,7 @@ class TestRegistry:
         total_start_time = time.time()
 
         for test_name in test_names:
-            logger.info(f"🧪 Running test: {test_name}")
+            logger.info(f"\\u1f9ea Running test: {test_name}")
             result = self.run_individual_test(test_name)
             results[test_name] = result
 
@@ -531,9 +558,9 @@ class TestRegistry:
         }
 
         if all_passed:
-            logger.info(f"✅ Test suite '{mode.value}' passed in {total_execution_time:.3f}s")
+            logger.info(f"\\u2705 Test suite '{mode.value}' passed in {total_execution_time:.3f}s")
         else:
-            logger.error(f"❌ Test suite '{mode.value}' failed with {total_errors} errors")
+            logger.error(f"\\u274c Test suite '{mode.value}' failed with {total_errors} errors")
 
         return suite_result
 
@@ -592,7 +619,7 @@ class TestRegistry:
 
     def validate_test_integrity(self) -> Dict[str, Any]:
         """Validate test integrity and dependencies."""
-        logger.info("🔍 Validating test integrity")
+        logger.info("\\u1f50d Validating test integrity")
 
         validation_result = {
             'success': True,
@@ -637,9 +664,9 @@ class TestRegistry:
         }
 
         if validation_result['success']:
-            logger.info("✅ Test integrity validation passed")
+            logger.info("\\u2705 Test integrity validation passed")
         else:
-            logger.error(f"❌ Test integrity validation failed: {len(validation_result['errors'])} errors")
+            logger.error(f"\\u274c Test integrity validation failed: {len(validation_result['errors'])} errors")
 
         return validation_result
 
@@ -686,11 +713,11 @@ def validate_tests() -> Dict[str, Any]:
 def print_test_results(results: Dict[str, Any]) -> None:
     """Print test results in a formatted way."""
     safe_print("\n" + "="*80)
-    safe_print("🧪 SCHWABOT TEST REGISTRY RESULTS")
+    safe_print("\\u1f9ea SCHWABOT TEST REGISTRY RESULTS")
     safe_print("="*80)
 
     safe_print(f"Test Mode: {results.get('mode', 'unknown')}")
-    safe_print(f"Overall Success: {'✅ PASS' if results.get('success', False) else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if results.get('success', False) else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {results.get('execution_time', 0.0):.3f}s")
     safe_print(f"Total Errors: {results.get('total_errors', 0)}")
     safe_print(f"Tests Run: {results.get('tests_run', 0)}")
@@ -698,9 +725,9 @@ def print_test_results(results: Dict[str, Any]) -> None:
     safe_print(f"Tests Failed: {results.get('tests_failed', 0)}")
 
     if 'results' in results:
-        safe_print("\nIndividual Test Results:")
+        safe_print("\\nIndividual Test Results:")
         for test_name, test_result in results['results'].items():
-            status = "✅ PASS" if test_result.success else "❌ FAIL"
+            status = "\\u2705 PASS" if test_result.success else "\\u274c FAIL"
             safe_print(f"  {test_name}: {status} ({test_result.execution_time:.3f}s, {test_result.total_errors} errors)")
 
     safe_print("="*80)
@@ -728,34 +755,34 @@ if __name__ == "__main__":
             print_test_results(results)
         elif command == 'list':
             tests = list_tests()
-            safe_print("\nAvailable Tests:")
+            safe_print("\\nAvailable Tests:")
             for test_name, test_info in tests['tests'].items():
-                critical = "🔴" if test_info['critical'] else "🟢"
+                critical = "\\u1f534" if test_info['critical'] else "\\u1f7e2"
                 safe_print(f"  {critical} {test_name}: {test_info['description']}")
         elif command == 'stats':
             stats = get_test_stats()
-            safe_print(f"\nTest Statistics:")
+            safe_print(f"\\nTest Statistics:")
             safe_print(f"  Total Tests: {stats['total_tests']}")
             safe_print(f"  Critical Tests: {stats['critical_tests']}")
             safe_print(f"  Categories: {stats['test_categories']}")
         elif command == 'validate':
             validation = validate_tests()
-            safe_print(f"\nTest Validation: {'✅ PASS' if validation['success'] else '❌ FAIL'}")
+            safe_print(f"\\nTest Validation: {'\\u2705 PASS' if validation['success'] else '\\u274c FAIL'}")
             if validation['errors']:
                 safe_print("Errors:")
                 for error in validation['errors']:
-                    safe_print(f"  ❌ {error}")
+                    safe_print(f"  \\u274c {error}")
             if validation['warnings']:
                 safe_print("Warnings:")
                 for warning in validation['warnings']:
-                    safe_print(f"  ⚠️ {warning}")
+                    safe_print(f"  \\u26a0\\ufe0f {warning}")
         elif command in ['profit_vector_calibration', 'matrix_mapping_validation',
                          'entry_exit_sequence_integrity', 'legacy_backlog_hydrator',
                          'sfs_trigger_positioning', 'fallback_trade_controller',
                          'tick_hold_logic', 'api_price_entry_feedback', 'trade_chain_timeline_replay']:
             result = run_specific_test(command)
-            safe_print(f"\nTest Result for {command}:")
-            safe_print(f"  Success: {'✅ PASS' if result.success else '❌ FAIL'}")
+            safe_print(f"\\nTest Result for {command}:")
+            safe_print(f"  Success: {'\\u2705 PASS' if result.success else '\\u274c FAIL'}")
             safe_print(f"  Execution Time: {result.execution_time:.3f}s")
             safe_print(f"  Errors: {result.total_errors}")
             if result.error_message:
@@ -767,3 +794,5 @@ if __name__ == "__main__":
         # Default: run comprehensive test
         results = run_all_tests()
         print_test_results(results)
+
+"""

@@ -90,21 +90,21 @@ except ImportError as e:
 
         def __init__(self):
             """TODO: document __init__."""
-            self.version = "1.0.0-fallback"
+            self.version = "1.0_0-fallback"
 
     class MathLibV2:
         """TODO: document MathLibV2."""
 
         def __init__(self):
             """TODO: document __init__."""
-            self.version = "2.0.0-fallback"
+            self.version = "2.0_0-fallback"
 
     class MathLibV3:
         """TODO: document MathLibV3."""
 
         def __init__(self):
             """TODO: document __init__."""
-            self.version = "3.0.0-fallback"
+            self.version = "3.0_0-fallback"
 
     class Dual:
         """TODO: document Dual."""
@@ -201,7 +201,7 @@ def divide(a, b):
 
 
 # Package metadata
-__version__ = "3.0.0"
+__version__ = "3.0_0"
 __author__ = "Schwabot Mathematical Framework"
 __description__ = "Unified mathematical library with AI-enhanced capabilities"
 
@@ -240,43 +240,43 @@ def main() -> None:
     """Main function for testing mathematical library integration."""
     try:
         safe_print(
-            f"🧮 Mathematical Library Package v{__version__} - Integration Test"
+            f"\\u1f9ee Mathematical Library Package v{__version__} - Integration Test"
         )
 
         # Test MathLib V1
         math_v1 = MathLib()
-        safe_print(f"✅ MathLib V1: {math_v1.version}")
+        safe_print(f"\\u2705 MathLib V1: {math_v1.version}")
 
         # Test MathLib V2
         math_v2 = MathLibV2()
-        safe_print(f"✅ MathLib V2: {math_v2.version}")
+        safe_print(f"\\u2705 MathLib V2: {math_v2.version}")
 
         # Test MathLib V3
         math_v3 = MathLibV3()
-        safe_print(f"✅ MathLib V3: {math_v3.version}")
+        safe_print(f"\\u2705 MathLib V3: {math_v3.version}")
 
         # Test Dual numbers
         x = Dual(2.0, 1.0)
-        y = x * x + 3 * x + 1  # f(x) = x² + 3x + 1, f'(x) = 2x + 3
-        safe_print(f"✅ Dual numbers: f(2) = {y.val}, f'(2) = {y.eps}")
+        y = x * x + 3 * x + 1  # f(x) = x\\u00b2 + 3x + 1, f'(x) = 2x + 3
+        safe_print(f"\\u2705 Dual numbers: f(2) = {y.val}, f'(2) = {y.eps}")
 
         # Test GradedProfitVector
         profits = [100, 150, -50, 200]
         grades = ["A", "B", "C", "A"]
         vector = GradedProfitVector(profits, grades=grades)
         safe_print(
-            f"✅ Profit vector: Total={vector.total_profit()}, Grade={vector.average_grade()}"
+            f"\\u2705 Profit vector: Total={vector.total_profit()}, Grade={vector.average_grade()}"
         )
 
         # Test basic operations
-        safe_print(f"✅ Basic ops: 5 + 3 = {add(5, 3)}, 10 / 2 = {divide(10, 2)}")
+        safe_print(f"\\u2705 Basic ops: 5 + 3 = {add(5, 3)}, 10 / 2 = {divide(10, 2)}")
 
         safe_print(
-            "🎉 Mathematical library integration test completed successfully!"
+            "\\u1f389 Mathematical library integration test completed successfully!"
         )
 
     except Exception as e:
-        safe_print(f"❌ Integration test failed: {e}")
+        safe_print(f"\\u274c Integration test failed: {e}")
         return False
 
     return True

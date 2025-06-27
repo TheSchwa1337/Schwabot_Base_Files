@@ -1,1 +1,1 @@
-ÿþprint('Creating targeted error fixer...')
+\\ufffd\\ufffdprint('Creating targeted error fixer...')

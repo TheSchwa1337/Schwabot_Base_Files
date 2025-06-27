@@ -56,22 +56,22 @@ class RiddleGEMMEngine:
             "default": np.identity(vector_size)
         }
 
-        # ✨ NEW: Matrix Controllers for different bit levels
+        # \\u2728 NEW: Matrix Controllers for different bit levels
         self.matrix_controllers: Dict[BitLevel, MatrixControllerType] = {}
         self._initialize_matrix_controllers()
 
-        # ✨ NEW: Identity tracking system
+        # \\u2728 NEW: Identity tracking system
         self.identity_trace = IdentityTrace()
         self.current_identity_state: Optional[IdentityState] = None
 
-        # ✨ NEW: Ghost logic and fallback systems
+        # \\u2728 NEW: Ghost logic and fallback systems
         self.ghost_state = GhostLogicState()
         self.fallback_systems: Dict[str, FallbackSystem] = {}
 
-        # ✨ NEW: AI consensus system
+        # \\u2728 NEW: AI consensus system
         self.ai_consensus = AIConsensus()
 
-        # ✨ NEW: Cross-basket triggers
+        # \\u2728 NEW: Cross-basket triggers
         self.cross_basket_triggers: List[CrossBasketTrigger] = []
 
         logger.info(f"RiddleGEMMEngine initialized with vector size {vector_size}.")
@@ -174,7 +174,7 @@ class RiddleGEMMEngine:
         weight_matrix = self.weight_matrices.get(matrix_name, self.weight_matrices["default"])
         transformed_state = unified_math.unified_math.dot_product(weight_matrix, state_vector_np)
 
-        # ✨ NEW: Update matrix controllers with transformed state
+        # \\u2728 NEW: Update matrix controllers with transformed state
         self._update_matrix_controllers(transformed_state)
 
         scores = {}
@@ -222,7 +222,7 @@ class RiddleGEMMEngine:
             A tuple containing the name of the best strategy and its score,
             or (None, 0.0) if no strategies are registered.
         """
-        # ✨ NEW: Update identity tracking
+        # \\u2728 NEW: Update identity tracking
         self._update_identity_state(current_state_vector)
 
         scores = self.score_strategies(current_state_vector, matrix_name)
@@ -232,7 +232,7 @@ class RiddleGEMMEngine:
         best_strategy = unified_math.max(scores, key=scores.get)
         best_score = scores[best_strategy]
 
-        # ✨ NEW: Check for fallback triggers
+        # \\u2728 NEW: Check for fallback triggers
         if self.ghost_state.should_trigger_fallback(best_score):
             logger.warning(f"Fallback triggered for strategy '{best_strategy}' with score {best_score:.4f}")
             return self._execute_fallback_strategy(current_state_vector)
@@ -241,7 +241,7 @@ class RiddleGEMMEngine:
             f"Best strategy found: '{best_strategy}' with score {best_score:.4f}"
         )
 
-        # ✨ NEW: Check cross-basket triggers
+        # \\u2728 NEW: Check cross-basket triggers
         self._check_cross_basket_triggers(best_strategy, best_score)
 
         return best_strategy, best_score
@@ -327,7 +327,7 @@ class RiddleGEMMEngine:
         related.sort(key=lambda x: x["distance"])
         return related
 
-    # ✨ NEW: Matrix controller access methods
+    # \\u2728 NEW: Matrix controller access methods
     def get_matrix_controller(self, bit_level: BitLevel) -> Optional[MatrixControllerType]:
         """Get matrix controller for specific bit level."""
         return self.matrix_controllers.get(bit_level)

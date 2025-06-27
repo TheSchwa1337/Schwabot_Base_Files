@@ -7,8 +7,8 @@ implementing entry and exit signal generation based on tick entropy, signal
 entropy, volume surface analysis, and drift mapping.
 
 Mathematical Foundation:
-- Entry: ∆V(t) = ∆tick / ∆entropy
-- Exit: P_{exit} = βk - ψδ + ∆βv
+- Entry: \\u2206V(t) = \\u2206tick / \\u2206entropy
+- Exit: P_{exit} = \\u03b2k - \\u03c8\\u03b4 + \\u2206\\u03b2v
 - Profit corridor navigation with entropy pressure analysis
 - Adaptive signal response mechanisms
 """
@@ -33,7 +33,7 @@ class EntrySignal:
 
     signal_type: str  # 'buy', 'sell', 'hold'
     confidence: float  # 0.0 to 1.0
-    entry_vector: float  # ∆V(t) = ∆tick / ∆entropy
+    entry_vector: float  # \\u2206V(t) = \\u2206tick / \\u2206entropy
     tick_hash: str
     signal_entropy: float
     timestamp: datetime = field(default_factory=datetime.now)
@@ -46,7 +46,7 @@ class ExitSignal:
 
     signal_type: str  # 'exit', 'hold', 'partial'
     confidence: float  # 0.0 to 1.0
-    exit_vector: float  # P_{exit} = βk - ψδ + ∆βv
+    exit_vector: float  # P_{exit} = \\u03b2k - \\u03c8\\u03b4 + \\u2206\\u03b2v
     volume_surface: Dict[str, float]
     drift_map: Dict[str, float]
     timestamp: datetime = field(default_factory=datetime.now)
@@ -90,7 +90,7 @@ class EntryExitVector:
 
     @memoize
     def calculate_entry_vector(self, tick_hash: str, signal_entropy: float) -> EntrySignal:
-        """Calculate entry vector: ∆V(t) = ∆tick / ∆entropy.
+        """Calculate entry vector: \\u2206V(t) = \\u2206tick / \\u2206entropy.
 
         Args:
             tick_hash: Current tick hash for analysis
@@ -100,17 +100,17 @@ class EntryExitVector:
             EntrySignal with confidence and metadata
         """
         try:
-            # Calculate tick velocity (∆tick)
+            # Calculate tick velocity (\\u2206tick)
             tick_velocity = self._calculate_tick_velocity(tick_hash)
 
-            # Calculate entropy change (∆entropy)
+            # Calculate entropy change (\\u2206entropy)
             entropy_change = self._calculate_entropy_change(signal_entropy)
 
             # Prevent division by zero
             if unified_math.abs(entropy_change) < 1e-10:
                 entropy_change = 1e-10
 
-            # Calculate entry vector: ∆V(t) = ∆tick / ∆entropy
+            # Calculate entry vector: \\u2206V(t) = \\u2206tick / \\u2206entropy
             entry_vector = tick_velocity / entropy_change
 
             # Normalize entry vector to reasonable range
@@ -157,7 +157,7 @@ class EntryExitVector:
     @memoize
     def calculate_exit_vector(self, volume_surface: Dict[str, float],
                               drift_map: Dict[str, float]) -> ExitSignal:
-        """Calculate exit vector: P_{exit} = βk - ψδ + ∆βv.
+        """Calculate exit vector: P_{exit} = \\u03b2k - \\u03c8\\u03b4 + \\u2206\\u03b2v.
 
         Args:
             volume_surface: Volume surface data for analysis
@@ -172,7 +172,7 @@ class EntryExitVector:
             psi_delta = drift_map.get('psi_delta', 0.0)
             delta_beta_v = drift_map.get('delta_beta_v', 0.0)
 
-            # Calculate exit vector: P_{exit} = βk - ψδ + ∆βv
+            # Calculate exit vector: P_{exit} = \\u03b2k - \\u03c8\\u03b4 + \\u2206\\u03b2v
             exit_vector = beta_k - psi_delta + delta_beta_v
 
             # Normalize exit vector

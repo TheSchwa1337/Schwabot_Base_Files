@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
 import math
 # #!/usr/bin/env python3
-"""Ghost profit tracker – recursive Π(t) accumulator.
+"""Ghost profit tracker - recursive \\u03a0(t) accumulator."""
 
 Tracks realised profit deltas during ghost-mode cycles and provides
-summaries for feedback loops (memory reinforcement, drift compensation,
-etc.).  The implementation is intentionally small – no persistence layer or
-DB – it runs in-memory and can be serialised by the caller if necessary.
-"""
+summaries for feedback loops (memory reinforcement, drift compensation,)
+etc..  The implementation is intentionally small - no persistence layer or
+DB - it runs in-memory and can be serialised by the caller if necessary.
+""""""
 
 
 from dataclasses import dataclass
@@ -31,13 +31,12 @@ def _safe_float(x: float | int) -> float:
     pass
     pass
     return float(x)
-    except Exception as exc:  # pragma: no cover – defensive
+    except Exception as exc:  # pragma: no cover - defensive
         raise ValueError("profit value must be numeric") from exc
 
 
 @dataclass(slots=True)
-class ProfitTracker:
-
+class Placeholder: pass
     """In-memory list of profit deltas and helper stats."""
 
 
@@ -65,7 +64,8 @@ def unified_math.mean(self) -> float:
     pass
     pass
     """TODO: document mean."""
-    return float(unified_math.unified_math.mean(self._profits)) if self._profits else 0.0
+    return float(unified_math.unified_math.mean())
+        self._profits if self._profits else 0.0
 
 
 def variance(self) -> float:
@@ -73,7 +73,8 @@ def variance(self) -> float:
     pass
     pass
     """TODO: document variance."""
-    return float(unified_math.unified_math.var(self._profits)) if self._profits else 0.0
+    return float(unified_math.unified_math.var())
+        self._profits if self._profits else 0.0
 
 
 def summary(self) -> Tuple[float, float, float]:
@@ -101,3 +102,7 @@ _tracker.unified_math.add(delta)
 def profit_summary() -> Tuple[float, float, float]:  # noqa: D401
     """Return global tracker summary (total, mean, variance)."""
     return _tracker.summary()
+
+
+
+"""

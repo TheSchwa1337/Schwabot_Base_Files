@@ -3,7 +3,7 @@ from __future__ import annotations
 from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""lantern_trigger_validator – Real validation implementation.
+"""lantern_trigger_validator \\u2013 Real validation implementation.
 
 Validates spike/dip signals against historical Ferris Wheel & Lantern timing.
 Implements real validation using historical data patterns and statistical analysis.
@@ -307,3 +307,5 @@ def validate_lantern_trigger(
 ) -> bool:
     """Stateless helper around :py:meth:`LanternTriggerValidator.validate`."""
     return LanternTriggerValidator().validate(trigger_packet)
+
+"""

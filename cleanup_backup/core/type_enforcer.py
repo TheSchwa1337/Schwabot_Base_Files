@@ -292,3 +292,5 @@ def enforce_types_in_directory(directory: str) -> Dict[str, int]:
                 total_stats[key] += stats[key]
 
     return total_stats
+
+"""

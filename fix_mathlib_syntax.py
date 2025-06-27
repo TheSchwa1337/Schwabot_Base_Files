@@ -13,10 +13,10 @@ def fix_mathlib_syntax():
     file_path = "mathlib/__init__.py"
 
     if not os.path.exists(file_path):
-        print(f"❌ File not found: {file_path}")
+        print(f"\\u274c File not found: {file_path}")
         return
 
-    print(f"🔧 Fixing critical syntax errors in {file_path}")
+    print(f"\\u1f527 Fixing critical syntax errors in {file_path}")
 
     # Read the file
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -53,22 +53,24 @@ def fix_mathlib_syntax():
         backup_path = f"{file_path}.backup"
         with open(backup_path, 'w', encoding='utf-8') as f:
             f.write(original_content)
-        print(f"💾 Backup created: {backup_path}")
+        print(f"\\u1f4be Backup created: {backup_path}")
 
         # Write the fixed content
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"✅ Fixed syntax errors in {file_path}")
+        print(f"\\u2705 Fixed syntax errors in {file_path}")
 
         # Show what was fixed
-        print("\n🔧 Fixed the following syntax errors:")
+        print("\\n\\u1f527 Fixed the following syntax errors:")
         print("1. Invalid import: 'from mathlib from core.unified_math_system' -> 'from core.unified_math_system'")
         print("2. Invalid function definitions: 'def unified_math.add()' -> 'def add()'")
         print("3. Invalid function calls: 'unified_math.add()' -> 'add()'")
 
     else:
-        print("ℹ️ No syntax errors found to fix")
+        print("\\u2139\\ufe0f No syntax errors found to fix")
 
 
 if __name__ == "__main__":
     fix_mathlib_syntax()
+
+"""

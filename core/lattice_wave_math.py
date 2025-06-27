@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
 import math
 # #!/usr/bin/env python3
-"""Spectral lattice generator for quantised wave analysis.
+"""Spectral lattice generator for quantised wave analysis."""
 
 The purpose of :func:`wave_lattice_generator` is to project an input signal
 onto an FFT basis, quantise the spectrum into a *lattice grid* and return
@@ -15,12 +15,12 @@ look-ups instead of costly continuous interpolation.
 Current implementation
 ----------------------
 1. Performs an FFT (or rFFT for real input).
-2. Splits the spectrum's absolute magnitude into *levels* logarithmic bins.
+2. Splits the spectrum's absolute magnitude into *levels* logarithmic bins.'
 3. Quantises each bin into an integer cell on a 2-D lattice *(level, index)*.
 
 This is intentionally lightweight.  Later extensions can add wavelet tiling or
 non-uniform lattices.
-"""
+""""""
 
 
 from typing import Tuple
@@ -45,16 +45,16 @@ mag_nonzero = magnitudes[magnitudes > 0]
     return np.logspace(np.log10(mag_min), np.log10(mag_max), num=levels + 1)
 
 
-def wave_lattice_generator(
+def wave_lattice_generator()
 
 
     signal: np.ndarray,
 *,
 levels: int = 3,
-) -> Tuple[np.ndarray, np.ndarray]:
+ -> Tuple[np.ndarray, np.ndarray]:
 
 
-"""Project *signal* onto a logarithmic spectral lattice.
+"""Project *signal* onto a logarithmic spectral lattice."""
 
 Parameters
 ----------
@@ -68,22 +68,22 @@ Returns
 Tuple[np.ndarray, np.ndarray]
 ``(lattice, freqs)`` where *lattice* is an integer matrix of shape
         ``(levels, n_bins)`` holding quantised magnitude tier indices (0 / 1),
-        and *freqs* is the 1-D array of FFT frequency bins (Hz units with
-        normalised sampling of 1.0).
-"""
+        and *freqs* is the 1-D array of FFT frequency bins (Hz units with)
+        normalised sampling of 1.0.
+""""""
     if signal.ndim != 1:
         raise ValueError("signal must be 1-D")
     if levels < 1:
-        raise ValueError("levels must be ≥ 1")
+        raise ValueError("levels must be >= 1")
 
-    # Compute FFT spectrum (real input ⇒ rfft).
+    # Compute FFT spectrum (real input \\u21d2 rfft).
     spectrum = np.fft.rfft(signal)
-    freqs = np.fft.rfftfreq(
+    freqs = np.fft.rfftfreq()
         signal.size, d=1.0
-)  # assume unit sampling interval
+  # assume unit sampling interval
 magnitudes = unified_math.unified_math.abs(spectrum)
 
-    # Build lattice grid: levels × n_bins boolean/int matrix.
+    # Build lattice grid: levels * n_bins boolean/int matrix.
 thresholds = _logspace_levels(magnitudes, levels)
     lattice = np.zeros((levels, magnitudes.size), dtype=int)
 
@@ -94,3 +94,7 @@ mask = (magnitudes >= lo) & (magnitudes < hi)
         lattice[lvl, mask] = 1
 
     return lattice, freqs
+
+
+
+"""

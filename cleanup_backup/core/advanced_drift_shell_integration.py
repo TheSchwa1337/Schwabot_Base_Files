@@ -97,8 +97,8 @@ class GrayscaleDriftTensorCore:
 
         Allocate ring drift across concentric tensor rings.
 
-        Uses Ψ∞ constant for allocation:
-        Ψ∞ * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index²)
+        Uses \\u03a8\\u221e constant for allocation:
+        \\u03a8\\u221e * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index\\u00b2)
 
         Args:
             layer_index: Index of the layer
@@ -150,7 +150,7 @@ class AdvancedTensorMemoryFeedback:
         """
         Record tensor in history stack with metadata.
 
-        Implements: T_i = f(T_{i-1}, Δ_entropy_{i-1})
+        Implements: T_i = f(T_{i-1}, \\u0394_entropy_{i-1})
 
         Args:
             tensor: Current tensor state
@@ -450,7 +450,7 @@ def main() -> None:
     # Create test data
     current_tensor = np.random.rand(8, 8)
     hash_patterns = ["a1b2c3d4", "e5f6g7h8", "i9j0k1l2"]
-    quantum_state = np.array([0.70710678, 0.70710678])  # |+⟩ state
+    quantum_state = np.array([0.70710678, 0.70710678])  # |+\\u27e9 state
     metadata = {"weight": 1.0, "source": "test"}
 
     # Test integration
@@ -470,7 +470,7 @@ def main() -> None:
 
     # Test system statistics
     stats = integration.get_system_statistics()
-    safe_print(f"\nSystem Statistics: {stats}")
+    safe_print(f"\\nSystem Statistics: {stats}")
 
     # Test cleanup
     removed_count = integration.cleanup_old_data(max_age_hours=1.0)

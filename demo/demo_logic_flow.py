@@ -223,7 +223,7 @@ class DemoLogicFlow:
     async def execute_logic_flow(self, flow: LogicFlow, input_data: Dict[str, Any] = None) -> Dict[str, Any]:
         """Execute a complete logic flow"""
 
-        safe_print(f"🚀 Starting logic flow: {flow.flow_id} ({flow.flow_type})")
+        safe_print(f"\\u1f680 Starting logic flow: {flow.flow_id} ({flow.flow_type})")
 
         flow.status = FlowStatus.IN_PROGRESS
         current_data = input_data or {}
@@ -232,7 +232,7 @@ class DemoLogicFlow:
             for i, step in enumerate(flow.steps):
                 flow.current_step_index = i
 
-                safe_print(f"  📋 Executing step {i+1}/{len(flow.steps)}: {step.value}")
+                safe_print(f"  \\u1f4cb Executing step {i+1}/{len(flow.steps)}: {step.value}")
 
                 # Execute step
                 step_result = await self._execute_flow_step(step, current_data, flow)
@@ -245,7 +245,7 @@ class DemoLogicFlow:
                 if step_result.status == FlowStatus.FAILED:
                     flow.status = FlowStatus.FAILED
                     flow.end_time = datetime.now()
-                    safe_print(f"  ❌ Flow failed at step {step.value}: {step_result.error_message}")
+                    safe_print(f"  \\u274c Flow failed at step {step.value}: {step_result.error_message}")
                     break
 
                 # Add delay between steps for realistic simulation
@@ -255,12 +255,12 @@ class DemoLogicFlow:
             if flow.status != FlowStatus.FAILED:
                 flow.status = FlowStatus.COMPLETED
                 flow.end_time = datetime.now()
-                safe_print(f"  ✅ Flow completed successfully")
+                safe_print(f"  \\u2705 Flow completed successfully")
 
         except Exception as e:
             flow.status = FlowStatus.FAILED
             flow.end_time = datetime.now()
-            safe_print(f"  ❌ Flow execution error: {e}")
+            safe_print(f"  \\u274c Flow execution error: {e}")
 
         # Move to completed flows
         self.completed_flows.append(flow)
@@ -705,12 +705,12 @@ class DemoLogicFlow:
     async def run_complete_demo_cycle(self, num_cycles: int = 3) -> Dict[str, Any]:
         """Run a complete demo cycle with entry, exit, and reinforcement learning flows"""
 
-        safe_print(f"🚀 Starting complete demo cycle: {num_cycles} cycles")
+        safe_print(f"\\u1f680 Starting complete demo cycle: {num_cycles} cycles")
 
         cycle_results = []
 
         for cycle in range(num_cycles):
-            safe_print(f"\n📋 Cycle {cycle + 1}/{num_cycles}")
+            safe_print(f"\\n\\u1f4cb Cycle {cycle + 1}/{num_cycles}")
 
             # Entry flow
             entry_flow = self.create_logic_flow("entry", {"cycle": cycle})
@@ -737,10 +737,10 @@ class DemoLogicFlow:
         # Generate comprehensive report
         report = self.generate_flow_report(cycle_results)
 
-        safe_print(f"\n📊 Demo cycle completed: {num_cycles} cycles")
+        safe_print(f"\\n\\u1f4ca Demo cycle completed: {num_cycles} cycles")
         safe_print(
-            f"📈 Success rate: {self.flow_performance['successful_flows'] / self.flow_performance['total_flows']:.2%}")
-        safe_print(f"⏱️ Average flow time: {self.flow_performance['average_flow_time']:.2f}s")
+            f"\\u1f4c8 Success rate: {self.flow_performance['successful_flows'] / self.flow_performance['total_flows']:.2%}")
+        safe_print(f"\\u23f1\\ufe0f Average flow time: {self.flow_performance['average_flow_time']:.2f}s")
 
         return report
 
@@ -801,5 +801,7 @@ if __name__ == "__main__":
 
     # Print report
     report = logic_flow.generate_flow_report()
-    safe_print("\n📊 Flow Report:")
+    safe_print("\\n\\u1f4ca Flow Report:")
     print(json.dumps(report, indent=2, default=str))
+
+"""

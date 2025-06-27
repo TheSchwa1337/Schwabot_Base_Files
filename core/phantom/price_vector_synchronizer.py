@@ -7,9 +7,9 @@ def ema(prices: list[float], tau: int = 12) -> float:
 
     pass
     pass
-    """Calculate exponential moving average of price sequence.
+    """Calculate exponential moving average of price sequence."""
 
-Compute smoothed price: Ψ_sync = EMA(price, τ)
+Compute smoothed price: \\u03a8_sync = EMA(price, tau)
 
 Args:
 prices: List of price values (chronological order)
@@ -20,7 +20,7 @@ Latest EMA value
 
 Raises:
 ValueError: If prices list is empty
-"""
+""""""
     if not prices:
         raise ValueError("empty price list")
 
@@ -29,6 +29,11 @@ alpha = 2 / (tau + 1)
 ema_val = prices[0]
 
 for price in prices[1:]:
+    pass
 ema_val = alpha * price + (1 - alpha) * ema_val
 
 return ema_val
+
+
+
+"""

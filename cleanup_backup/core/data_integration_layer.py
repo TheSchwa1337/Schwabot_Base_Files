@@ -102,13 +102,13 @@ class DataIntegrationLayer:
                     # Test connection
                     exchange.load_markets()
                     self.exchanges[exchange_name] = exchange
-                    logger.info(f"✅ Connected to {exchange_name}")
+                    logger.info(f"\\u2705 Connected to {exchange_name}")
 
                 except Exception as e:
-                    logger.warning(f"❌ Failed to connect to {exchange_name}: {e}")
+                    logger.warning(f"\\u274c Failed to connect to {exchange_name}: {e}")
 
         if not self.exchanges:
-            logger.warning("⚠️ No exchanges available. Using mock data.")
+            logger.warning("\\u26a0\\ufe0f No exchanges available. Using mock data.")
 
     async def start_data_feed(self) -> None:
         """Start the continuous data feed."""
@@ -117,7 +117,7 @@ class DataIntegrationLayer:
             return
 
         self.is_running = True
-        logger.info("🚀 Starting data integration feed...")
+        logger.info("\\u1f680 Starting data integration feed...")
 
         try:
             while self.is_running:
@@ -125,13 +125,13 @@ class DataIntegrationLayer:
                 await asyncio.sleep(self.update_interval)
 
         except Exception as e:
-            logger.error(f"❌ Data feed error: {e}")
+            logger.error(f"\\u274c Data feed error: {e}")
             self.is_running = False
 
     async def stop_data_feed(self) -> None:
         """Stop the data feed."""
         self.is_running = False
-        logger.info("🛑 Stopping data integration feed...")
+        logger.info("\\u1f6d1 Stopping data integration feed...")
 
     async def _update_market_data(self) -> None:
         """Update market data from all sources."""
@@ -160,10 +160,10 @@ class DataIntegrationLayer:
             if len(self.market_history) > self.max_history_size:
                 self.market_history = self.market_history[-self.max_history_size:]
 
-            logger.debug(f"📊 Updated market data for {len(new_data)} symbols")
+            logger.debug(f"\\u1f4ca Updated market data for {len(new_data)} symbols")
 
         except Exception as e:
-            logger.error(f"❌ Error updating market data: {e}")
+            logger.error(f"\\u274c Error updating market data: {e}")
 
     async def _fetch_from_exchanges(self, symbol: str) -> Optional[CryptoDataPoint]:
         """Fetch data for a symbol from available exchanges."""
@@ -379,10 +379,10 @@ class DataIntegrationLayer:
             with open(filename, 'w') as f:
                 json.dump(export_data, f, indent=2)
 
-            logger.info(f"📁 Market data exported to {filename}")
+            logger.info(f"\\u1f4c1 Market data exported to {filename}")
 
         except Exception as e:
-            logger.error(f"❌ Error exporting data: {e}")
+            logger.error(f"\\u274c Error exporting data: {e}")
 
 
 # WebSocket server for real-time data broadcasting
@@ -411,12 +411,12 @@ class DataWebSocketServer:
                     self.clients.remove(websocket)
 
             self.server = await websockets.serve(handler, self.host, self.port)
-            logger.info(f"🌐 WebSocket server started on ws://{self.host}:{self.port}")
+            logger.info(f"\\u1f310 WebSocket server started on ws://{self.host}:{self.port}")
 
         except ImportError:
             logger.warning("WebSockets not available. Install with: pip install websockets")
         except Exception as e:
-            logger.error(f"❌ Failed to start WebSocket server: {e}")
+            logger.error(f"\\u274c Failed to start WebSocket server: {e}")
 
     async def broadcast_data(self, data: Dict[str, Any]):
         """Broadcast data to all connected clients."""
@@ -431,7 +431,7 @@ class DataWebSocketServer:
                 return_exceptions=True
             )
         except Exception as e:
-            logger.error(f"❌ Error broadcasting data: {e}")
+            logger.error(f"\\u274c Error broadcasting data: {e}")
 
 
 # Example usage and testing
@@ -450,7 +450,7 @@ async def main():
 
     # Print current data
     current_data = data_layer.get_current_data()
-    safe_print("📊 Current Market Data:")
+    safe_print("\\u1f4ca Current Market Data:")
     print(json.dumps(current_data, indent=2))
 
     # Export data

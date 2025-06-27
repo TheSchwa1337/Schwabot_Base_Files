@@ -59,34 +59,34 @@ except ImportError:
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """TODO: document safe_emoji_print."""
             emoji_mapping = {
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🚨": "[ALERT]",
-                "🎉": "[COMPLETE]",
-                "🔄": "[PROCESSING]",
-                "⏳": "[WAITING]",
-                "⭐": "[STAR]",
-                "🚀": "[LAUNCH]",
-                "🔧": "[TOOLS]",
-                "🛠️": "[REPAIR]",
-                "⚡": "[FAST]",
-                "🔍": "[SEARCH]",
-                "🎯": "[TARGET]",
-                "🔥": "[HOT]",
-                "❄️": "[COOL]",
-                "📊": "[DATA]",
-                "📈": "[PROFIT]",
-                "📉": "[LOSS]",
-                "💰": "[MONEY]",
-                "🧪": "[TEST]",
-                "⚖️": "[BALANCE]",
-                "🌡️": "[TEMP]",
-                "🔬": "[ANALYZE]",
-                "🎛️": "[CONTROL]",
-                "🔗": "[CONNECT]",
-                "🌐": "[NETWORK]",
-                "⚙️": "[CONFIG]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u23f3": "[WAITING]",
+                "\\u2b50": "[STAR]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u1f527": "[TOOLS]",
+                "\\u1f6e0\\ufe0f": "[REPAIR]",
+                "\\u26a1": "[FAST]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f525": "[HOT]",
+                "\\u2744\\ufe0f": "[COOL]",
+                "\\u1f4ca": "[DATA]",
+                "\\u1f4c8": "[PROFIT]",
+                "\\u1f4c9": "[LOSS]",
+                "\\u1f4b0": "[MONEY]",
+                "\\u1f9ea": "[TEST]",
+                "\\u2696\\ufe0f": "[BALANCE]",
+                "\\u1f321\\ufe0f": "[TEMP]",
+                "\\u1f52c": "[ANALYZE]",
+                "\\u1f39b\\ufe0f": "[CONTROL]",
+                "\\u1f517": "[CONNECT]",
+                "\\u1f310": "[NETWORK]",
+                "\\u2699\\ufe0f": "[CONFIG]",
             }
             if force_ascii:
                 for emoji, replacement in emoji_mapping.items():
@@ -393,32 +393,32 @@ class IntegrationOrchestrator:
                 )
                 return True
 
-            self.safe_safe_print("🚀 Starting Schwabot Integration Orchestrator")
+            self.safe_safe_print("\\u1f680 Starting Schwabot Integration Orchestrator")
             self.start_time = datetime.now()
 
             # Get configuration
             config = self.config_manager.get_config()
             self.mode = IntegrationMode(config.system.environment.value)
 
-            self.safe_safe_print(f"⚙️ Mode: {self.mode.value}")
+            self.safe_safe_print(f"\\u2699\\ufe0f Mode: {self.mode.value}")
             self.safe_safe_print(
-                f"🔧 Components to initialize: {len(self.components)}"
+                f"\\u1f527 Components to initialize: {len(self.components)}"
             )
 
             # Initialize components in dependency order
             initialization_order = self._get_initialization_order()
             self.safe_safe_print(
-                f"📋 Initialization order: {', '.join(initialization_order)}"
+                f"\\u1f4cb Initialization order: {', '.join(initialization_order)}"
             )
 
             success_count = 0
             for component_name in initialization_order:
                 if self._initialize_component(component_name):
                     success_count += 1
-                    self.safe_safe_print(f"✅ {component_name} initialized")
+                    self.safe_safe_print(f"\\u2705 {component_name} initialized")
                 else:
                     self.safe_safe_print(
-                        f"❌ {component_name} failed to initialize"
+                        f"\\u274c {component_name} failed to initialize"
                     )
 
             # Start monitoring
@@ -426,7 +426,7 @@ class IntegrationOrchestrator:
 
             self.is_running = True
 
-            self.safe_safe_print(f"🎉 Integration orchestrator started")
+            self.safe_safe_print(f"\\u1f389 Integration orchestrator started")
             self.safe_safe_print(
                 f"   Successfully initialized: "
                 f"{success_count}/{len(self.components)} components"
@@ -440,7 +440,7 @@ class IntegrationOrchestrator:
         except Exception as e:
             error_msg = f"Error starting integration orchestrator: {e}"
             self.safe_log("error", error_msg)
-            self.safe_safe_print(f"❌ {error_msg}")
+            self.safe_safe_print(f"\\u274c {error_msg}")
             return False
 
     def _get_initialization_order(self) -> List[str]:
@@ -931,7 +931,7 @@ class IntegrationOrchestrator:
             if not self.is_running:
                 return True
 
-            self.safe_safe_print("🛑 Shutting down Integration Orchestrator")
+            self.safe_safe_print("\\u1f6d1 Shutting down Integration Orchestrator")
 
             self.is_running = False
 
@@ -944,7 +944,7 @@ class IntegrationOrchestrator:
                 for component in self.components.values():
                     component.status = ComponentStatus.SHUTDOWN
 
-            self.safe_safe_print("✅ Integration Orchestrator shutdown complete")
+            self.safe_safe_print("\\u2705 Integration Orchestrator shutdown complete")
             return True
 
         except Exception as e:
@@ -1064,22 +1064,22 @@ def main() -> None:
     centralized configuration management.
     """
     try:
-        safe_print("🚀 Integration Orchestrator Test")
+        safe_print("\\u1f680 Integration Orchestrator Test")
         safe_print("=" * 50)
 
         # Initialize orchestrator
-        safe_print("🔧 Initializing Integration Orchestrator...")
+        safe_print("\\u1f527 Initializing Integration Orchestrator...")
         orchestrator = get_integration_orchestrator()
 
         # Start integration
-        safe_print("\n🎯 Starting system integration...")
+        safe_print("\\n\\u1f3af Starting system integration...")
         success = orchestrator.start_integration()
 
         if success:
-            safe_print("✅ Integration started successfully")
+            safe_print("\\u2705 Integration started successfully")
 
             # Get system status
-            safe_print("\n📊 System Status:")
+            safe_print("\\n\\u1f4ca System Status:")
             status = orchestrator.get_system_status()
 
             safe_print(f"   Mode: {status['orchestrator']['mode']}")
@@ -1089,57 +1089,57 @@ def main() -> None:
             )
 
             # Show component details
-            safe_print("\n🔍 Component Status:")
+            safe_print("\\n\\u1f50d Component Status:")
             for name, info in status["components"].items():
                 status_emoji = (
-                    "✅"
+                    "\\u2705"
                     if info["status"] == "running"
-                    else "❌" if info["status"] == "error" else "⏳"
+                    else "\\u274c" if info["status"] == "error" else "\\u23f3"
                 )
                 safe_print(f"   {status_emoji} {name}: {info['status']}")
 
             # Test component access
-            safe_print("\n🧪 Testing Component Access:")
+            safe_print("\\n\\u1f9ea Testing Component Access:")
             mathlib_v1 = orchestrator.get_component("mathlib_v1")
             if mathlib_v1:
-                safe_print("   ✅ MathLib V1 accessible")
+                safe_print("   \\u2705 MathLib V1 accessible")
             else:
-                safe_print("   ❌ MathLib V1 not accessible")
+                safe_print("   \\u274c MathLib V1 not accessible")
 
             gan_filter = orchestrator.get_component("gan_filter")
             if gan_filter:
-                safe_print("   ✅ GAN Filter accessible")
+                safe_print("   \\u2705 GAN Filter accessible")
             else:
                 safe_print(
-                    "   ⚠️ GAN Filter not accessible (may be disabled or PyTorch unavailable)"
+                    "   \\u26a0\\ufe0f GAN Filter not accessible (may be disabled or PyTorch unavailable)"
                 )
 
             # Test configuration integration
-            safe_print("\n⚙️ Testing Configuration Integration:")
+            safe_print("\\n\\u2699\\ufe0f Testing Configuration Integration:")
             config_manager = orchestrator.config_manager
             config = config_manager.get_config()
             safe_print(f"   GAN enabled: {config.advanced.gan_enabled}")
             safe_print(f"   GAN batch size: {config.advanced.gan_batch_size}")
 
             # Simulate configuration change
-            safe_print("\n🔄 Testing Configuration Hot-Reload:")
+            safe_print("\\n\\u1f504 Testing Configuration Hot-Reload:")
             config_manager.update_config("advanced", "gan_batch_size", 128)
             updated_config = config_manager.get_config()
             safe_print(
                 f"   Updated GAN batch size: {updated_config.advanced.gan_batch_size}"
             )
 
-            safe_print("\n🎉 Integration Orchestrator test completed successfully!")
+            safe_print("\\n\\u1f389 Integration Orchestrator test completed successfully!")
 
             # Shutdown
-            safe_print("\n🛑 Shutting down...")
+            safe_print("\\n\\u1f6d1 Shutting down...")
             orchestrator.shutdown()
 
         else:
-            safe_print("❌ Integration failed to start")
+            safe_print("\\u274c Integration failed to start")
 
     except Exception as e:
-        safe_print(f"❌ Integration Orchestrator test failed: {e}")
+        safe_print(f"\\u274c Integration Orchestrator test failed: {e}")
         import traceback
 
         traceback.print_exc()

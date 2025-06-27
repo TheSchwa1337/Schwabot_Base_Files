@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""News sentiment interpreter – converts news into activation signals.
+"""News sentiment interpreter \\u2013 converts news into activation signals.
 
 Implements the formula:
-    λ_news = Σ(sentiment_score · drift_bias · σ_event)
+    \\u03bb_news = \\u03a3(sentiment_score \\u00b7 drift_bias \\u00b7 \\u03c3_event)
 
 This module processes financial news streams and converts them into weighted
 sentiment signals that can influence ghost router decisions and strategy
@@ -29,7 +29,7 @@ def interpret_news_sentiment(
     drift_biases: Sequence[float],
     event_sigmas: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return λ_news weighted sentiment activation signal.
+    """Return \\u03bb_news weighted sentiment activation signal.
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ def interpret_news_sentiment(
     Returns
     -------
     float
-        Combined sentiment signal λ_news.
+        Combined sentiment signal \\u03bb_news.
     """
     if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):
         raise ValueError("input sequences must share length")
@@ -65,7 +65,7 @@ def weight_sentiment_events(
 ) -> float:  # noqa: D401
     """Apply time-decay and importance weighting to single sentiment.
 
-    Returns weighted sentiment suitable for inclusion in λ_news calculation.
+    Returns weighted sentiment suitable for inclusion in \\u03bb_news calculation.
     """
     importance_weight = base_weight * event_importance
     decayed_sentiment = raw_sentiment * (decay_factor ** unified_math.abs(raw_sentiment))

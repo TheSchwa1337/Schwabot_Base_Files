@@ -33,11 +33,11 @@ class Flake8Fixer:
         self.fixed_files = []
         self.error_files = []
         self.patterns = {
-            'duplicate_pass': r'^\s*pass\s*\n\s*pass\s*$',
-            'empty_try': r'^\s*try:\s*\n\s*pass\s*$',
-            'empty_function': r'^\s*def\s+\w+.*:\s*\n\s*pass\s*$',
-            'unexpected_indent': r'^\s{2,}[^\s#].*$',
-            'missing_indent': r'^\s*[a-zA-Z_]\w*\s*=\s*[^#\n]*$'
+            'duplicate_pass': r'^\\s*pass\\s*\\n\\s*pass\\s*$',
+            'empty_try': r'^\\s*try:\\s*\\n\\s*pass\\s*$',
+            'empty_function': r'^\\s*def\\s+\\w+.*:\\s*\\n\\s*pass\\s*$',
+            'unexpected_indent': r'^\\s{2,}[^\\s#].*$',
+            'missing_indent': r'^\\s*[a-zA-Z_]\\w*\\s*=\\s*[^#\\n]*$'
         }
 
     def find_python_files(self) -> List[Path]:
@@ -55,7 +55,7 @@ class Flake8Fixer:
                 compile(f.read(), str(file_path), 'exec')
             return True
         except (SyntaxError, UnicodeDecodeError) as e:
-            print(f"❌ Syntax error in {file_path}: {e}")
+            print(f"\\u274c Syntax error in {file_path}: {e}")
             return False
 
     def fix_common_issues(self, file_path: Path, dry_run: bool = False) -> bool:
@@ -68,13 +68,13 @@ class Flake8Fixer:
             fixed = False
 
             # Fix 1: Remove duplicate pass statements
-            content = re.sub(r'^\s*pass\s*\n\s*pass\s*$', '    pass', content, flags=re.MULTILINE)
+            content = re.sub(r'^\\s*pass\\s*\\n\\s*pass\\s*$', '    pass', content, flags=re.MULTILINE)
 
             # Fix 2: Fix empty try blocks
-            content = re.sub(r'^\s*try:\s*\n\s*pass\s*$', '    try:\n        pass', content, flags=re.MULTILINE)
+            content = re.sub(r'^\\s*try:\\s*\\n\\s*pass\\s*$', '    try:\\n        pass', content, flags=re.MULTILINE)
 
             # Fix 3: Fix empty function definitions
-            content = re.sub(r'^\s*def\s+(\w+.*):\s*\n\s*pass\s*$', r'    def \1:\n        pass', content, flags=re.MULTILINE)
+            content = re.sub(r'^\\s*def\\s+(\\w+.*):\\s*\\n\\s*pass\\s*$', r'    def \1:\\n        pass', content, flags=re.MULTILINE)
 
             # Fix 4: Fix indentation issues
             lines = content.split('\n')
@@ -114,15 +114,15 @@ class Flake8Fixer:
                 if not dry_run:
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(content)
-                    print(f"✅ Fixed {file_path}")
+                    print(f"\\u2705 Fixed {file_path}")
                 else:
-                    print(f"🔧 Would fix {file_path}")
+                    print(f"\\u1f527 Would fix {file_path}")
                 fixed = True
 
             return fixed
 
         except Exception as e:
-            print(f"❌ Error fixing {file_path}: {e}")
+            print(f"\\u274c Error fixing {file_path}: {e}")
             return False
 
     def fix_specific_file(self, file_path: Path, dry_run: bool = False) -> bool:
@@ -137,13 +137,13 @@ class Flake8Fixer:
             # Fix common patterns
             patterns_to_fix = [
                 # Remove duplicate pass statements
-                (r'^\s*pass\s*\n\s*pass\s*$', '    pass'),
+                (r'^\\s*pass\\s*\\n\\s*pass\\s*$', '    pass'),
                 # Fix empty try blocks
-                (r'^\s*try:\s*\n\s*pass\s*$', '    try:\n        pass'),
+                (r'^\\s*try:\\s*\\n\\s*pass\\s*$', '    try:\\n        pass'),
                 # Fix empty function definitions
-                (r'^\s*def\s+(\w+.*):\s*\n\s*pass\s*$', r'    def \1:\n        pass'),
+                (r'^\\s*def\\s+(\\w+.*):\\s*\\n\\s*pass\\s*$', r'    def \1:\\n        pass'),
                 # Fix empty class definitions
-                (r'^\s*class\s+(\w+.*):\s*\n\s*pass\s*$', r'    class \1:\n        pass'),
+                (r'^\\s*class\\s+(\\w+.*):\\s*\\n\\s*pass\\s*$', r'    class \1:\\n        pass'),
             ]
 
             for pattern, replacement in patterns_to_fix:
@@ -200,15 +200,15 @@ class Flake8Fixer:
                 if not dry_run:
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(content)
-                    print(f"✅ Fixed {file_path}")
+                    print(f"\\u2705 Fixed {file_path}")
                 else:
-                    print(f"🔧 Would fix {file_path}")
+                    print(f"\\u1f527 Would fix {file_path}")
                 fixed = True
 
             return fixed
 
         except Exception as e:
-            print(f"❌ Error fixing {file_path}: {e}")
+            print(f"\\u274c Error fixing {file_path}: {e}")
             return False
 
     def run_fixes(self, dry_run: bool = False, specific_file: Optional[str] = None) -> Dict[str, int]:
@@ -225,7 +225,7 @@ class Flake8Fixer:
         else:
             files_to_check = self.find_python_files()
 
-        print(f"🔍 Checking {len(files_to_check)} Python files...")
+        print(f"\\u1f50d Checking {len(files_to_check)} Python files...")
 
         for file_path in files_to_check:
             stats['total_files'] += 1
@@ -242,7 +242,7 @@ class Flake8Fixer:
                     stats['fixed_files'] += 1
                     self.fixed_files.append(file_path)
             except Exception as e:
-                print(f"❌ Error processing {file_path}: {e}")
+                print(f"\\u274c Error processing {file_path}: {e}")
                 stats['error_files'] += 1
                 self.error_files.append(file_path)
 
@@ -251,7 +251,7 @@ class Flake8Fixer:
     def generate_report(self, stats: Dict[str, int]) -> None:
         """Generate a comprehensive report."""
         print("\n" + "="*60)
-        print("📊 FLAKE8 FIXES REPORT")
+        print("\\u1f4ca FLAKE8 FIXES REPORT")
         print("="*60)
         print(f"Total files checked: {stats['total_files']}")
         print(f"Files fixed: {stats['fixed_files']}")
@@ -259,12 +259,12 @@ class Flake8Fixer:
         print(f"Syntax errors: {stats['syntax_errors']}")
         
         if self.fixed_files:
-            print(f"\n✅ Fixed files:")
+            print(f"\\n\\u2705 Fixed files:")
             for file_path in self.fixed_files:
                 print(f"   - {file_path}")
         
         if self.error_files:
-            print(f"\n❌ Files with errors:")
+            print(f"\\n\\u274c Files with errors:")
             for file_path in self.error_files:
                 print(f"   - {file_path}")
 
@@ -284,18 +284,19 @@ def main():
     fixer = Flake8Fixer(args.root_dir)
     
     if args.dry_run:
-        print("🔍 DRY RUN MODE - No changes will be made")
+        print("\\u1f50d DRY RUN MODE - No changes will be made")
     
     stats = fixer.run_fixes(dry_run=args.dry_run, specific_file=args.file)
     fixer.generate_report(stats)
     
     if stats['error_files'] > 0:
-        print(f"\n⚠️  {stats['error_files']} files still have issues that need manual attention")
+        print(f"\\n\\u26a0\\ufe0f  {stats['error_files']} files still have issues that need manual attention")
         return 1
     
-    print(f"\n🎉 Successfully processed {stats['total_files']} files!")
+    print(f"\\n\\u1f389 Successfully processed {stats['total_files']} files!")
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main()) 
+"""

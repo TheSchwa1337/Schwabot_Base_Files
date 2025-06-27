@@ -51,34 +51,34 @@ def test_emoji_fallback_directly():
 
     # Direct emoji to ASIC mapping
     EMOJI_TO_ASIC = {
-        "✅": "[SUCCESS]",
-        "❌": "[ERROR]",
-        "⚠️": "[WARNING]",
-        "🚨": "[ALERT]",
-        "🎉": "[COMPLETE]",
-        "🔄": "[PROCESSING]",
-        "⏳": "[WAITING]",
-        "⭐": "[STAR]",
-        "🚀": "[LAUNCH]",
-        "🔧": "[TOOLS]",
-        "🛠️": "[REPAIR]",
-        "⚡": "[FAST]",
-        "🔍": "[SEARCH]",
-        "🎯": "[TARGET]",
-        "🔥": "[HOT]",
-        "❄️": "[COOL]",
-        "📊": "[DATA]",
-        "📈": "[PROFIT]",
-        "📉": "[LOSS]",
-        "💰": "[MONEY]",
-        "🧪": "[TEST]",
-        "⚖️": "[BALANCE]",
-        "🌡️": "[TEMP]",
-        "🔬": "[ANALYZE]",
-        "🎡": "[FERRIS]",
-        "⚛️": "[QUANTUM]",
-        "🌀": "[SPIRAL]",
-        "🔮": "[CRYSTAL]",
+        "\\u2705": "[SUCCESS]",
+        "\\u274c": "[ERROR]",
+        "\\u26a0\\ufe0f": "[WARNING]",
+        "\\u1f6a8": "[ALERT]",
+        "\\u1f389": "[COMPLETE]",
+        "\\u1f504": "[PROCESSING]",
+        "\\u23f3": "[WAITING]",
+        "\\u2b50": "[STAR]",
+        "\\u1f680": "[LAUNCH]",
+        "\\u1f527": "[TOOLS]",
+        "\\u1f6e0\\ufe0f": "[REPAIR]",
+        "\\u26a1": "[FAST]",
+        "\\u1f50d": "[SEARCH]",
+        "\\u1f3af": "[TARGET]",
+        "\\u1f525": "[HOT]",
+        "\\u2744\\ufe0f": "[COOL]",
+        "\\u1f4ca": "[DATA]",
+        "\\u1f4c8": "[PROFIT]",
+        "\\u1f4c9": "[LOSS]",
+        "\\u1f4b0": "[MONEY]",
+        "\\u1f9ea": "[TEST]",
+        "\\u2696\\ufe0f": "[BALANCE]",
+        "\\u1f321\\ufe0f": "[TEMP]",
+        "\\u1f52c": "[ANALYZE]",
+        "\\u1f3a1": "[FERRIS]",
+        "\\u269b\\ufe0f": "[QUANTUM]",
+        "\\u1f300": "[SPIRAL]",
+        "\\u1f52e": "[CRYSTAL]",
     }
 
     def safe_emoji_convert(message):
@@ -97,11 +97,11 @@ def test_emoji_fallback_directly():
 
     # Test messages with emojis
     test_messages = [
-        "🚀 Launching mathematical validation system",
-        "✅ Core integration test passed",
-        "📊 Processing financial data with 🎯 precision",
-        "🎡 Ferris wheel temporal analysis: ⚛️ quantum coupling detected",
-        "⚠️ Warning: 🔥 High volatility detected in 📈 profit calculations",
+        "\\u1f680 Launching mathematical validation system",
+        "\\u2705 Core integration test passed",
+        "\\u1f4ca Processing financial data with \\u1f3af precision",
+        "\\u1f3a1 Ferris wheel temporal analysis: \\u269b\\ufe0f quantum coupling detected",
+        "\\u26a0\\ufe0f Warning: \\u1f525 High volatility detected in \\u1f4c8 profit calculations",
     ]
 
     try:
@@ -111,7 +111,7 @@ def test_emoji_fallback_directly():
             safe_print(f"  {i}. Original: {repr(msg)}")
             safe_print(f"     Safe:     {safe_msg}")
 
-        safe_print("\n[SUCCESS] Direct emoji fallback testing completed")
+        safe_print("\\n[SUCCESS] Direct emoji fallback testing completed")
         return True
 
     except Exception as e:
@@ -161,10 +161,10 @@ def test_encoding_safety():
     # Test various problematic characters
     test_strings = [
         "Basic ASCII text",
-        "Unicode symbols: α β γ δ ε → ← ↑ ↓",
-        "Mathematical: ∞ φ π σ ≤ ≥ ≠ ≈",
-        "Special chars: åÅæÆøØ ñÑ üÜ",
-        "Emojis: 🚀 ✅ 📊 🎯 ⚛️",
+        "Unicode symbols: \\u03b1 \\u03b2 \\u03b3 \\u03b4 \\u03b5 \\u2192 \\u2190 \\u2191 \\u2193",
+        "Mathematical: \\u221e \\u03c6 \\u03c0 \\u03c3 \\u2264 \\u2265 \\u2260 \\u2248",
+        "Special chars: \\u00e5\\u00c5\\u00e6\\u00c6\\u00f8\\u00d8 \\u00f1\\u00d1 \\u00fc\\u00dc",
+        "Emojis: \\u1f680 \\u2705 \\u1f4ca \\u1f3af \\u269b\\ufe0f",
     ]
 
     try:
@@ -176,7 +176,7 @@ def test_encoding_safety():
             else:
                 safe_print(f"     Status: [FAILED] all encodings failed")
 
-        safe_print("\n[SUCCESS] Encoding safety testing completed")
+        safe_print("\\n[SUCCESS] Encoding safety testing completed")
         return True
 
     except Exception as e:
@@ -200,17 +200,17 @@ def test_enhanced_cli_handler():
 
         # Test environment detection
         env_info = get_cli_info()
-        safe_print("\nEnvironment Detection Results:")
+        safe_print("\\nEnvironment Detection Results:")
         for key, value in env_info.items():
             safe_print(f"  {key}: {value}")
 
         # Test emoji conversion
-        safe_print("\nTesting emoji conversion:")
+        safe_print("\\nTesting emoji conversion:")
         test_messages = [
-            "🚀 Launch sequence initiated",
-            "✅ All systems operational",
-            "🎯 Target acquired: 📊 Mathematical integration",
-            "🎡 Ferris wheel analysis: ⚛️ Quantum state synchronized",
+            "\\u1f680 Launch sequence initiated",
+            "\\u2705 All systems operational",
+            "\\u1f3af Target acquired: \\u1f4ca Mathematical integration",
+            "\\u1f3a1 Ferris wheel analysis: \\u269b\\ufe0f Quantum state synchronized",
         ]
 
         for msg in test_messages:
@@ -220,7 +220,7 @@ def test_enhanced_cli_handler():
         compat_results = (
             EnhancedWindowsCliCompatibilityHandler.test_cli_compatibility()
         )
-        safe_print(f"\nCompatibility Test Results:")
+        safe_print(f"\\nCompatibility Test Results:")
         safe_print(
             f"  Overall Compatibility: {compat_results['overall_compatibility']}"
         )
@@ -229,7 +229,7 @@ def test_enhanced_cli_handler():
                 status = "[PASS]" if result else "[FAIL]"
                 safe_print(f"  {test}: {status}")
 
-        safe_print("\n[SUCCESS] Enhanced CLI handler testing completed")
+        safe_print("\\n[SUCCESS] Enhanced CLI handler testing completed")
         return True
 
     except ImportError as e:
@@ -319,7 +319,7 @@ def test_mathematical_integration_safety():
             safe_log_fallback(f"[ERROR] MathCore testing failed: {e}")
 
         safe_print(
-            "\n[SUCCESS] Mathematical integration CLI safety testing completed"
+            "\\n[SUCCESS] Mathematical integration CLI safety testing completed"
         )
         return True
 
@@ -374,13 +374,13 @@ def create_cli_safe_function_example():
     test_data = list(range(100))
     result = cli_safe_function_example(test_data)
 
-    safe_print(f"\n[SUCCESS] CLI-safe function example completed: {result}")
+    safe_print(f"\\n[SUCCESS] CLI-safe function example completed: {result}")
     return result
 
 
 def run_comprehensive_cli_test():
     """Run comprehensive CLI compatibility testing."""
-    safe_print("🎯 BULLETPROOF CLI COMPATIBILITY DEMONSTRATION")
+    safe_print("\\u1f3af BULLETPROOF CLI COMPATIBILITY DEMONSTRATION")
     safe_print("   Schwabot SP 1.27-AE Framework")
     safe_print("   Enhanced Windows CLI handling with ASIC emoji strategy")
     safe_print("=" * 70)
@@ -407,25 +407,25 @@ def run_comprehensive_cli_test():
         status = "[PASS]" if result else "[FAIL]"
         safe_print(f"  {test_name.replace('_', ' ').title()}: {status}")
 
-    safe_print(f"\nOverall Success Rate: {success_rate:.1f}% ({passed}/{total})")
+    safe_print(f"\\nOverall Success Rate: {success_rate:.1f}% ({passed}/{total})")
 
     if success_rate == 100:
-        safe_print("\n[COMPLETE] EXCELLENT! All CLI compatibility tests passed!")
+        safe_print("\\n[COMPLETE] EXCELLENT! All CLI compatibility tests passed!")
         safe_print(
             "Your mathematical validation systems are bulletproof across all Windows environments."
         )
     elif success_rate >= 80:
-        safe_print("\n[COMPLETE] GOOD! Most CLI compatibility tests passed.")
+        safe_print("\\n[COMPLETE] GOOD! Most CLI compatibility tests passed.")
         safe_print("Minor issues detected but system is functional with fallbacks.")
     else:
         safe_print(
-            "\n[COMPLETE] PARTIAL SUCCESS! Some CLI compatibility issues detected."
+            "\\n[COMPLETE] PARTIAL SUCCESS! Some CLI compatibility issues detected."
         )
         safe_print(
             "Enhanced fallback strategies are in place for robust operation."
         )
 
-    safe_print("\nKey Features Demonstrated:")
+    safe_print("\\nKey Features Demonstrated:")
     safe_print("  - ASIC emoji strategy with automatic fallbacks")
     safe_print("  - Robust encoding handling across all Windows CLI environments")
     safe_print("  - Bulletproof error handling for Unicode and emoji issues")
@@ -444,3 +444,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

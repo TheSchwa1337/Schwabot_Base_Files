@@ -196,8 +196,8 @@ class LanternNewsIntelligenceBridge:
         self.entity_recognition_patterns = [
             re.compile(r'\b[A-Z]{2,}\b'),  # Acronyms
             re.compile(r'\$[A-Z]+\b'),     # Stock symbols
-            re.compile(r'\b\d+\.\d+\b'),   # Numbers
-            re.compile(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b')  # Proper nouns
+            re.compile(r'\b\\d+\.\\d+\b'),   # Numbers
+            re.compile(r'\b[A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*\b')  # Proper nouns
         ]
 
         self._save_configuration()
@@ -758,3 +758,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

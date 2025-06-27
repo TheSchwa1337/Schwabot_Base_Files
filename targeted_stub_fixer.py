@@ -26,28 +26,28 @@ def fix_malformed_stub(file_path: str) -> bool:
         if '"""Stub main function."""."""' in content:
             content = content.replace(
                 '"""Stub main function."""."""',
-                '"""Stub main function."""\n    pass\n'
+                '"""Stub main function."""\\n    pass\n'
             )
-            safe_print(f"✅ Fixed: {file_path}")
+            safe_print(f"\\u2705 Fixed: {file_path}")
             return True
 
         # Fix other variations of malformed patterns
         patterns_to_fix = [
-            (r'"""([^"]*)\."""\."""', r'"""\1."""\n    pass\n'),
-            (r'"""([^"]*)\."""\s*"""', r'"""\1."""\n    pass\n'),
-            (r'"""([^"]*)\."""\s*def\s+', r'"""\1."""\n\ndef '),
+            (r'"""([^"]*)\."""\."""', r'"""\1."""\\n    pass\n'),
+            (r'"""([^"]*)\."""\\s*"""', r'"""\1."""\\n    pass\n'),
+            (r'"""([^"]*)\."""\\s*def\\s+', r'"""\1."""\\n\\ndef '),
         ]
 
         for pattern, replacement in patterns_to_fix:
             if re.search(pattern, content):
                 content = re.sub(pattern, replacement, content)
-                safe_print(f"✅ Fixed pattern in: {file_path}")
+                safe_print(f"\\u2705 Fixed pattern in: {file_path}")
                 return True
 
         return False
 
     except Exception as e:
-        safe_print(f"❌ Error processing {file_path}: {e}")
+        safe_print(f"\\u274c Error processing {file_path}: {e}")
         return False
 
 
@@ -165,10 +165,10 @@ def find_and_fix_stub_files():
             if fix_malformed_stub(file_path):
                 fixed_count += 1
 
-    safe_print(f"\nSummary:")
+    safe_print(f"\\nSummary:")
     safe_print(f"  Files processed: {processed_count}")
     safe_print(f"  Files fixed: {fixed_count}")
-    safe_print("\nTargeted stub fixing completed!")
+    safe_print("\\nTargeted stub fixing completed!")
 
 
 if __name__ == "__main__":

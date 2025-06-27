@@ -47,3 +47,5 @@ class RateLimiter:
         """Wait if necessary to respect rate limits."""
         while not self.can_make_request():
             time.sleep(0.1)  # Small delay to avoid busy waiting
+
+"""

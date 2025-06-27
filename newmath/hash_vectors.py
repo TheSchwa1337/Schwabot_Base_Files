@@ -23,7 +23,7 @@ def generate_hash_vector(
         hash_length: int = 64
 ) -> str:
     """
-    Generate hash vector: H(t) = SHA256(P_t || ΔP || φ_t)
+    Generate hash vector: H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
 
     Args:
         price: Current price

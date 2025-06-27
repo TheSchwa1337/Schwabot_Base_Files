@@ -44,7 +44,7 @@ class GhostSignal:
 
 
 # Type alias for ghost array with proper typing
-GhostArray = NDArray[np.float64]  # shape: (N, 4) → price, vol, conf, time
+GhostArray = NDArray[np.float64]  # shape: (N, 4) \\u2192 price, vol, conf, time
 
 
 @dataclass
@@ -350,11 +350,11 @@ def test_ghost_signal_creation():
             assert 0.0 <= signal.confidence <= 1.0
             assert signal.volatility >= 0.0
 
-        print(f"✅ Created {len(test_signals)} valid ghost signals")
+        print(f"\\u2705 Created {len(test_signals)} valid ghost signals")
         return {"status": "PASS", "signal_count": len(test_signals)}
 
     except Exception as e:
-        print(f"❌ Ghost signal creation failed: {e}")
+        print(f"\\u274c Ghost signal creation failed: {e}")
         return {"status": "FAIL", "error": str(e)}
 
 
@@ -388,7 +388,7 @@ def test_ghost_array_construction():
         assert isinstance(volatility, float)
         assert volatility >= 0.0
 
-        print(f"✅ Ghost array constructed successfully: shape={ghost_array.shape}")
+        print(f"\\u2705 Ghost array constructed successfully: shape={ghost_array.shape}")
         return {
             "status": "PASS",
             "shape": ghost_array.shape,
@@ -396,7 +396,7 @@ def test_ghost_array_construction():
         }
 
     except Exception as e:
-        print(f"❌ Ghost array construction failed: {e}")
+        print(f"\\u274c Ghost array construction failed: {e}")
         return {"status": "FAIL", "error": str(e)}
 
 
@@ -440,7 +440,7 @@ def test_btc_vector_processing():
         assert "volatility_mean" in stats
         assert "signal_count" in stats
 
-        print(f"✅ BTC vector processing successful: hash={strategy_hash[:8]}...")
+        print(f"\\u2705 BTC vector processing successful: hash={strategy_hash[:8]}...")
         return {
             "status": "PASS",
             "strategy_hash": strategy_hash,
@@ -449,7 +449,7 @@ def test_btc_vector_processing():
         }
 
     except Exception as e:
-        print(f"❌ BTC vector processing failed: {e}")
+        print(f"\\u274c BTC vector processing failed: {e}")
         return {"status": "FAIL", "error": str(e)}
 
 
@@ -511,7 +511,7 @@ def test_ghost_strategy_engine():
         stats = engine.get_processor_statistics()
         assert "signal_count" in stats
 
-        print(f"✅ Ghost strategy engine successful: action={result['action']}")
+        print(f"\\u2705 Ghost strategy engine successful: action={result['action']}")
         return {
             "status": "PASS",
             "result": result,
@@ -519,7 +519,7 @@ def test_ghost_strategy_engine():
         }
 
     except Exception as e:
-        print(f"❌ Ghost strategy engine failed: {e}")
+        print(f"\\u274c Ghost strategy engine failed: {e}")
         return {"status": "FAIL", "error": str(e)}
 
 
@@ -574,14 +574,14 @@ def test_volatility_scenarios():
             }
         }
 
-        print(f"✅ Volatility scenarios tested successfully")
+        print(f"\\u2705 Volatility scenarios tested successfully")
         return {
             "status": "PASS",
             "scenarios": results
         }
 
     except Exception as e:
-        print(f"❌ Volatility scenarios failed: {e}")
+        print(f"\\u274c Volatility scenarios failed: {e}")
         return {"status": "FAIL", "error": str(e)}
 
 
@@ -603,7 +603,7 @@ def main():
     failed = 0
 
     for test_name, test_func in tests:
-        print(f"\nRunning: {test_name}")
+        print(f"\\nRunning: {test_name}")
         start_time = time.time()
 
         result = test_func()
@@ -615,10 +615,10 @@ def main():
         }
 
         if result["status"] == "PASS":
-            print(f"✅ {test_name}: PASSED ({execution_time:.2f}s)")
+            print(f"\\u2705 {test_name}: PASSED ({execution_time:.2f}s)")
             passed += 1
         else:
-            print(f"❌ {test_name}: FAILED ({execution_time:.2f}s)")
+            print(f"\\u274c {test_name}: FAILED ({execution_time:.2f}s)")
             failed += 1
 
     # Summary
@@ -629,20 +629,20 @@ def main():
     print("Ghost Strategy Engine Test Summary")
     print("=" * 60)
     print(f"Total Tests: {total_tests}")
-    print(f"✅ Passed: {passed}")
-    print(f"❌ Failed: {failed}")
+    print(f"\\u2705 Passed: {passed}")
+    print(f"\\u274c Failed: {failed}")
     print(f"Success Rate: {success_rate:.1f}%")
 
     if failed == 0:
-        print("✅ Ghost Strategy Engine is ready for integration!")
+        print("\\u2705 Ghost Strategy Engine is ready for integration!")
     else:
-        print("⚠️ Ghost Strategy Engine needs fixes")
+        print("\\u26a0\\ufe0f Ghost Strategy Engine needs fixes")
 
     # Save results
     with open("ghost_engine_standalone_test_results.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 
-    print(f"\nResults saved to: ghost_engine_standalone_test_results.json")
+    print(f"\\nResults saved to: ghost_engine_standalone_test_results.json")
 
     return {
         "overall_status": "READY" if failed == 0 else "PARTIAL",
@@ -656,3 +656,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

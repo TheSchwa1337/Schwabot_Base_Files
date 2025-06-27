@@ -80,8 +80,8 @@ class BestPracticesEnforcer:
                         "Replace scattered try/except ImportError with " "safe_import"
                     ),
                     pattern=(
-                        r"try:\s*import\s+(\w+).*?except\s+ImportError:.*?"
-                        r"(\w+\s*=\s*None)"
+                        r"try:\\s*import\\s+(\\w+).*?except\\s+ImportError:.*?"
+                        r"(\\w+\\s*=\\s*None)"
                     ),
                     replacement=(
                         r"from core.import_resolver import safe_import\n"
@@ -94,7 +94,7 @@ class BestPracticesEnforcer:
                 CodePattern(
                     name="bare_except_blocks",
                     description=("Replace bare except with error_handler.safe_execute"),
-                    pattern=r"try:\s*(.*?)\s*except:",
+                    pattern=r"try:\\s*(.*?)\\s*except:",
                     replacement=(
                         r"from core.error_handler import safe_execute\n"
                         r"result = safe_execute(lambda: \1, "
@@ -106,7 +106,7 @@ class BestPracticesEnforcer:
                 CodePattern(
                     name="missing_type_annotations",
                     description="Add type annotations to function parameters",
-                    pattern=r"def\s+(\w+)\s*\(([^)]*)\)\s*:",
+                    pattern=r"def\\s+(\\w+)\\s*\(([^)]*)\)\\s*:",
                     replacement=r"def \1(\2) -> Any:",
                     severity="MEDIUM",
                     category="type_annotations",
@@ -115,8 +115,8 @@ class BestPracticesEnforcer:
                     name="windows_cli_unsafe_print",
                     description="Replace print with Windows CLI-safe version",
                     pattern=(
-                        r'print\s*\(\s*["\']([^"\']*[🔧✅❌🟠🟡🟢📝🎯📊🎉⚠️💡])'
-                        r'[^"\']*["\']\s*\)'
+                        r'print\\s*\(\\s*["\']([^"\']*[\\u1f527\\u2705\\u274c\\u1f7e0\\u1f7e1\\u1f7e2\\u1f4dd\\u1f3af\\u1f4ca\\u1f389\\u26a0\\ufe0f\\u1f4a1])'
+                        r'[^"\']*["\']\\s*\)'
                     ),
                     replacement=(
                         r"from core.windows_cli_compatibility import "
@@ -132,13 +132,13 @@ class BestPracticesEnforcer:
                         "Ensure mathematical functions have proper type " "annotations"
                     ),
                     pattern=(
-                        r"def\s+("
+                        r"def\\s+("
                         r"calculate|compute|process|analyze|evaluate|"
                         r"estimate|predict|forecast|simulate|"
                         r"optimize|minimize|maximize"
-                        r")\s*\("
+                        r")\\s*\("
                         r"([^)]*)"
-                        r"\)\s*:"
+                        r"\)\\s*:"
                     ),
                     replacement=(r"def \1(\2) -> Union[float, Dict[str, Any]]:"),
                     severity="MEDIUM",
@@ -292,10 +292,10 @@ hook = PreCommitHook()
 success = hook.run_pre_commit_check(sys.argv[1:])
 
 if not success:
-    print('❌ Pre-commit check failed!')
+    print('\\u274c Pre-commit check failed!')
     sys.exit(1)
 else:
-    print('✅ Pre-commit check passed!')
+    print('\\u2705 Pre-commit check passed!')
 " $STAGED_FILES
 fi
 """
@@ -341,3 +341,5 @@ def run_pre_commit_check(staged_files: List[str]) -> bool:
     """Run pre-commit check on staged files."""
     hook = PreCommitHook()
     return hook.run_pre_commit_check(staged_files)
+
+"""

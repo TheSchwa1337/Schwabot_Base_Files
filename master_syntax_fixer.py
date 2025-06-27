@@ -28,7 +28,7 @@ class MasterSyntaxFixer:
         # Fix the specific pattern: """Stub main function."""."""
         content = content.replace(
             '"""Stub main function."""."""',
-            '"""Stub main function."""\n    pass\n'
+            '"""Stub main function."""\\n    pass\n'
         )
 
         # Fix other malformed patterns
@@ -43,34 +43,34 @@ class MasterSyntaxFixer:
     def fix_unicode_characters(self, content: str) -> str:
         """Replace Unicode characters with ASCII equivalents."""
         unicode_replacements = {
-            '∇': 'del',  # nabla
-            '∈': 'in',   # element of
-            '≤': '<=',   # less than or equal
-            '≥': '>=',   # greater than or equal
-            '⇒': '=>',   # implies
-            '∫': 'int',  # integral
-            '∂': 'd',    # partial derivative
-            '·': '.',    # middle dot
-            '–': '-',    # en dash
-            '₍': '(',    # subscript left parenthesis
-            '₎': ')',    # subscript right parenthesis
-            '♦': '',     # diamond (remove)
-            '×': 'x',    # multiplication
-            'Δ': 'd',    # delta
-            'Σ': 'sum',  # sigma
-            'π': 'pi',   # pi
-            'σ': 'sigma',  # sigma
-            'λ': 'lambda',  # lambda
-            'μ': 'mu',   # mu
-            'α': 'alpha',  # alpha
-            'β': 'beta',  # beta
-            'γ': 'gamma',  # gamma
-            'δ': 'delta',  # delta
-            'ε': 'epsilon',  # epsilon
-            'θ': 'theta',  # theta
-            'φ': 'phi',  # phi
-            'ψ': 'psi',  # psi
-            'ω': 'omega',  # omega
+            '\\u2207': 'del',  # nabla
+            '\\u2208': 'in',   # element of
+            '\\u2264': '<=',   # less than or equal
+            '\\u2265': '>=',   # greater than or equal
+            '\\u21d2': '=>',   # implies
+            '\\u222b': 'int',  # integral
+            '\\u2202': 'd',    # partial derivative
+            '\\u00b7': '.',    # middle dot
+            '\\u2013': '-',    # en dash
+            '\\u208d': '(',    # subscript left parenthesis
+            '\\u208e': ')',    # subscript right parenthesis
+            '\\u2666': '',     # diamond (remove)
+            '\\u00d7': 'x',    # multiplication
+            '\\u0394': 'd',    # delta
+            '\\u03a3': 'sum',  # sigma
+            '\\u03c0': 'pi',   # pi
+            '\\u03c3': 'sigma',  # sigma
+            '\\u03bb': 'lambda',  # lambda
+            '\\u03bc': 'mu',   # mu
+            '\\u03b1': 'alpha',  # alpha
+            '\\u03b2': 'beta',  # beta
+            '\\u03b3': 'gamma',  # gamma
+            '\\u03b4': 'delta',  # delta
+            '\\u03b5': 'epsilon',  # epsilon
+            '\\u03b8': 'theta',  # theta
+            '\\u03c6': 'phi',  # phi
+            '\\u03c8': 'psi',  # psi
+            '\\u03c9': 'omega',  # omega
         }
 
         for unicode_char, ascii_replacement in unicode_replacements.items():
@@ -84,28 +84,28 @@ class MasterSyntaxFixer:
         """Fix unterminated triple-quoted strings."""
         # Fix pattern: """text without closing
         content = re.sub(
-            r'"""([^"]*)\n\s*"""\s*def\s+',
-            r'"""\1"""\n\ndef ',
+            r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+            r'"""\1"""\\n\\ndef ',
             content
         )
 
         # Fix pattern: """text at end of line
         content = re.sub(
-            r'"""([^"]*)\n\s*def\s+',
-            r'"""\1"""\n\ndef ',
+            r'"""([^"]*)\\n\\s*def\\s+',
+            r'"""\1"""\\n\\ndef ',
             content
         )
 
         # Fix pattern: """text without closing at end
         content = re.sub(
-            r'"""([^"]*)\n\s*if\s+__name__',
-            r'"""\1"""\n\nif __name__',
+            r'"""([^"]*)\\n\\s*if\\s+__name__',
+            r'"""\1"""\\n\\nif __name__',
             content
         )
 
         # Fix pattern: """text without closing at end
         content = re.sub(
-            r'"""([^"]*)\n\s*"""\s*"""',
+            r'"""([^"]*)\\n\\s*"""\\s*"""',
             r'"""\1"""\n',
             content
         )
@@ -116,14 +116,14 @@ class MasterSyntaxFixer:
         """Fix invalid syntax patterns."""
         # Fix stray periods after function definitions
         content = re.sub(
-            r'def\s+(\w+)\s*\([^)]*\)\s*:\s*\.',
+            r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
             r'def \1(\2):',
             content
         )
 
         # Fix invalid decimal literals
         content = re.sub(
-            r'(\d+)\.(\d+)\.(\d+)',
+            r'(\\d+)\.(\\d+)\.(\\d+)',
             r'\1.\2_\3',  # Replace with underscore
             content
         )
@@ -137,8 +137,8 @@ class MasterSyntaxFixer:
 
         # Fix malformed function definitions
         content = re.sub(
-            r'def\s+(\w+)\s*\([^)]*\)\s*:\s*"""([^"]*)"""\s*"""',
-            r'def \1(\2):\n    """\3"""',
+            r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*"""([^"]*)"""\\s*"""',
+            r'def \1(\2):\\n    """\3"""',
             content
         )
 
@@ -184,7 +184,7 @@ class MasterSyntaxFixer:
 
                     if self.fix_file(file_path):
                         self.fix_stats['errors_fixed'] += 1
-                        safe_print(f"✅ Fixed: {file_path}")
+                        safe_print(f"\\u2705 Fixed: {file_path}")
 
     def run_comprehensive_fix(self) -> None:
         """Run the complete fix process."""
@@ -195,13 +195,13 @@ class MasterSyntaxFixer:
         self.process_all_files()
 
         # Summary
-        safe_print(f"\nSummary:")
+        safe_print(f"\\nSummary:")
         safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
         safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
         safe_print(f"  Unicode fixes: {self.fix_stats['unicode_fixes']}")
         safe_print(f"  Docstring fixes: {self.fix_stats['docstring_fixes']}")
         safe_print(f"  Syntax fixes: {self.fix_stats['syntax_fixes']}")
-        safe_print("\nComprehensive syntax fixing completed!")
+        safe_print("\\nComprehensive syntax fixing completed!")
 
 
 def main():

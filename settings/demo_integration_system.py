@@ -690,5 +690,7 @@ if __name__ == "__main__":
     safe_print("Backtest Result:")
     print(json.dumps(asdict(result), indent=2))
 
-    safe_print("\nDemo Statistics:")
+    safe_print("\\nDemo Statistics:")
     print(json.dumps(demo_system.get_demo_statistics(), indent=2))
+
+"""

@@ -111,7 +111,7 @@ def reweight_overlays(
 
 def print_similarity_report(similarities: Dict[str, float]) -> None:
     """Print a report of similarity scores."""
-    safe_print("\n📊 Similarity Report:")
+    safe_print("\\n\\u1f4ca Similarity Report:")
     safe_print("=" * 50)
 
     # Sort by similarity score (descending)
@@ -121,13 +121,13 @@ def print_similarity_report(similarities: Dict[str, float]) -> None:
         # Format similarity with color coding (conceptual)
         sim_str = f"{similarity:+.4f}"
         if similarity > 0.5:
-            status = "🟢 HIGH"
+            status = "\\u1f7e2 HIGH"
         elif similarity > 0.0:
-            status = "🟡 MEDIUM"
+            status = "\\u1f7e1 MEDIUM"
         elif similarity > -0.5:
-            status = "🟠 LOW"
+            status = "\\u1f7e0 LOW"
         else:
-            status = "🔴 VERY LOW"
+            status = "\\u1f534 VERY LOW"
 
         safe_print(f"  {overlay_id:20} : {sim_str:8} ({status})")
 
@@ -181,7 +181,7 @@ Examples:
     args = parser.parse_args()
 
     try:
-        safe_print("🔄 Overlay Registry Updater")
+        safe_print("\\u1f504 Overlay Registry Updater")
         safe_print("=" * 40)
 
         # Load registry
@@ -197,15 +197,15 @@ Examples:
         print_similarity_report(similarities)
 
         if args.report_only:
-            safe_print("\n📋 Report-only mode: no changes made")
+            safe_print("\\n\\u1f4cb Report-only mode: no changes made")
             return
 
         # Reweight overlays
-        safe_print(f"\nReweighting with strength: {args.strength}")
+        safe_print(f"\\nReweighting with strength: {args.strength}")
         updated_registry = reweight_overlays(registry, similarities, args.strength)
 
         if args.dry_run:
-            safe_print("\n🔍 Dry-run mode: showing sample changes")
+            safe_print("\\n\\u1f50d Dry-run mode: showing sample changes")
             # Show first few changes as example
             for i, (overlay_id, original_vector) in enumerate(registry.items()):
                 if i >= 3:  # Show first 3 only
@@ -217,10 +217,10 @@ Examples:
         else:
             # Save updated registry
             save_overlay_registry(args.file, updated_registry)
-            safe_print("✅ Registry updated successfully")
+            safe_print("\\u2705 Registry updated successfully")
 
     except Exception as e:
-        safe_print(f"❌ Error: {e}")
+        safe_print(f"\\u274c Error: {e}")
         sys.exit(1)
 
 

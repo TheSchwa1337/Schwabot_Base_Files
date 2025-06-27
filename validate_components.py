@@ -18,49 +18,49 @@ def test_imports():
 
     try:
         from core.phantom_lag_model import PhantomLagModel
-        safe_print("✅ Phantom Lag Model imported successfully")
+        safe_print("\\u2705 Phantom Lag Model imported successfully")
 
         # Test basic instantiation
         model = PhantomLagModel()
-        safe_print("✅ Phantom Lag Model instantiated successfully")
+        safe_print("\\u2705 Phantom Lag Model instantiated successfully")
 
         # Test basic calculation
         penalty = model.calculate_phantom_lag_penalty(1000.0, 0.3, 70000.0)
-        safe_print(f"✅ Phantom Lag penalty calculation: {penalty:.6f}")
+        safe_print(f"\\u2705 Phantom Lag penalty calculation: {penalty:.6f}")
 
     except Exception as e:
-        safe_print(f"❌ Phantom Lag Model import failed: {e}")
+        safe_print(f"\\u274c Phantom Lag Model import failed: {e}")
         traceback.print_exc()
         return False
 
     try:
         from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-        safe_print("✅ Meta-Layer Ghost Bridge imported successfully")
+        safe_print("\\u2705 Meta-Layer Ghost Bridge imported successfully")
 
         # Test basic instantiation
         bridge = MetaLayerGhostBridge()
-        safe_print("✅ Meta-Layer Ghost Bridge instantiated successfully")
+        safe_print("\\u2705 Meta-Layer Ghost Bridge instantiated successfully")
 
         # Test basic functionality
         import time
         ghost_price = bridge.update_exchange_data("test", "BTC/USD", 50000.0, 1000.0, time.time())
-        safe_print(f"✅ Ghost price calculation: {ghost_price:.2f}")
+        safe_print(f"\\u2705 Ghost price calculation: {ghost_price:.2f}")
 
     except Exception as e:
-        safe_print(f"❌ Meta-Layer Ghost Bridge import failed: {e}")
+        safe_print(f"\\u274c Meta-Layer Ghost Bridge import failed: {e}")
         traceback.print_exc()
         return False
 
     try:
         from core.fallback_logic_router import FallbackLogicRouter
-        safe_print("✅ Fallback Logic Router imported successfully")
+        safe_print("\\u2705 Fallback Logic Router imported successfully")
 
         # Test basic instantiation
         router = FallbackLogicRouter()
-        safe_print("✅ Fallback Logic Router instantiated successfully")
+        safe_print("\\u2705 Fallback Logic Router instantiated successfully")
 
     except Exception as e:
-        safe_print(f"❌ Fallback Logic Router import failed: {e}")
+        safe_print(f"\\u274c Fallback Logic Router import failed: {e}")
         traceback.print_exc()
         return False
 
@@ -69,7 +69,7 @@ def test_imports():
 
 def test_basic_functionality():
     """Test basic functionality of the components."""
-    safe_print("\nTesting basic functionality...")
+    safe_print("\\nTesting basic functionality...")
 
     try:
         from core.phantom_lag_model import PhantomLagModel
@@ -113,14 +113,14 @@ def test_basic_functionality():
         return True
 
     except Exception as e:
-        safe_print(f"❌ Basic functionality test failed: {e}")
+        safe_print(f"\\u274c Basic functionality test failed: {e}")
         traceback.print_exc()
         return False
 
 
 def main():
     """Main validation function."""
-    safe_print("🧠 Schwabot Mathematical Components Validation")
+    safe_print("\\u1f9e0 Schwabot Mathematical Components Validation")
     safe_print("=" * 50)
 
     # Test imports
@@ -131,15 +131,17 @@ def main():
         functionality_ok = test_basic_functionality()
 
         if functionality_ok:
-            safe_print("\n✅ All components validated successfully!")
+            safe_print("\\n\\u2705 All components validated successfully!")
             return 0
         else:
-            safe_print("\n❌ Basic functionality tests failed")
+            safe_print("\\n\\u274c Basic functionality tests failed")
             return 1
     else:
-        safe_print("\n❌ Import tests failed")
+        safe_print("\\n\\u274c Import tests failed")
         return 1
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+"""

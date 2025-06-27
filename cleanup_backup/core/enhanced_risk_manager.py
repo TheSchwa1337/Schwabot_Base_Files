@@ -194,7 +194,7 @@ class EnhancedRiskManager:
         self.monitoring_active = True
         self.alert_thresholds_breached = 0
 
-        safe_safe_print("🎯 Enhanced Risk Manager initialized")
+        safe_safe_print("\\u1f3af Enhanced Risk Manager initialized")
 
     def calculate_risk_metrics(
         self,
@@ -269,11 +269,11 @@ class EnhancedRiskManager:
             if len(self.risk_metrics_history) > 1000:
                 self.risk_metrics_history = self.risk_metrics_history[-1000:]
 
-            safe_safe_print(f"✅ Risk metrics calculated: VaR(95%) = {var_95:.2%}")
+            safe_safe_print(f"\\u2705 Risk metrics calculated: VaR(95%) = {var_95:.2%}")
             return risk_metrics
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk metrics calculation failed: {safe_format_error(e, 'risk_metrics')}")
+            safe_safe_print(f"\\u274c Risk metrics calculation failed: {safe_format_error(e, 'risk_metrics')}")
             return RiskMetrics()
 
     def _calculate_var_cvar(
@@ -294,19 +294,19 @@ class EnhancedRiskManager:
             # Calculate portfolio volatility
             portfolio_vol = self._calculate_portfolio_volatility(positions, market_data)
 
-            # Parametric VaR: VaR = z * σ * √t
+            # Parametric VaR: VaR = z * \\u03c3 * \\u221at
             # For daily VaR, t = 1
             z_score = self._get_z_score(confidence_level)
             var = z_score * portfolio_vol * total_value
 
             # CVaR (Expected Shortfall) = E[X|X>VaR]
-            # Simplified: CVaR ≈ VaR * 1.25 for normal distribution
+            # Simplified: CVaR \\u2248 VaR * 1.25 for normal distribution
             cvar = var * 1.25
 
             return var, cvar
 
         except Exception as e:
-            safe_safe_print(f"❌ VaR/CVaR calculation failed: {safe_format_error(e, 'var_cvar')}")
+            safe_safe_print(f"\\u274c VaR/CVaR calculation failed: {safe_format_error(e, 'var_cvar')}")
             return 0.0, 0.0
 
     def _get_z_score(self, confidence_level: float) -> float:
@@ -341,7 +341,7 @@ class EnhancedRiskManager:
 
         except Exception as e:
             safe_safe_print(
-                f"❌ Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
+                f"\\u274c Portfolio volatility calculation failed: {safe_format_error(e, 'portfolio_volatility')}")
             return 0.0
 
     def _calculate_portfolio_beta(
@@ -365,7 +365,7 @@ class EnhancedRiskManager:
             return weighted_beta
 
         except Exception as e:
-            safe_safe_print(f"❌ Portfolio beta calculation failed: {safe_format_error(e, 'portfolio_beta')}")
+            safe_safe_print(f"\\u274c Portfolio beta calculation failed: {safe_format_error(e, 'portfolio_beta')}")
             return 1.0
 
     def _calculate_sharpe_ratio(self, total_pnl: float, volatility: float) -> float:
@@ -380,7 +380,7 @@ class EnhancedRiskManager:
             return sharpe_ratio
 
         except Exception as e:
-            safe_safe_print(f"❌ Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
+            safe_safe_print(f"\\u274c Sharpe ratio calculation failed: {safe_format_error(e, 'sharpe_ratio')}")
             return 0.0
 
     def _calculate_max_drawdown(self, historical_data: Optional[List[Dict[str, Any]]]) -> float:
@@ -408,7 +408,7 @@ class EnhancedRiskManager:
             return max_drawdown
 
         except Exception as e:
-            safe_safe_print(f"❌ Max drawdown calculation failed: {safe_format_error(e, 'max_drawdown')}")
+            safe_safe_print(f"\\u274c Max drawdown calculation failed: {safe_format_error(e, 'max_drawdown')}")
             return 0.0
 
     def _calculate_correlation_risk(
@@ -439,7 +439,7 @@ class EnhancedRiskManager:
                 return 0.0
 
         except Exception as e:
-            safe_safe_print(f"❌ Correlation risk calculation failed: {safe_format_error(e, 'correlation_risk')}")
+            safe_safe_print(f"\\u274c Correlation risk calculation failed: {safe_format_error(e, 'correlation_risk')}")
             return 0.0
 
     def _calculate_concentration_risk(
@@ -461,7 +461,7 @@ class EnhancedRiskManager:
             return hhi
 
         except Exception as e:
-            safe_safe_print(f"❌ Concentration risk calculation failed: {safe_format_error(e, 'concentration_risk')}")
+            safe_safe_print(f"\\u274c Concentration risk calculation failed: {safe_format_error(e, 'concentration_risk')}")
             return 0.0
 
     def run_stress_test(
@@ -549,11 +549,11 @@ class EnhancedRiskManager:
             self.stress_test_results.append(result)
             self.stress_tests_run += 1
 
-            safe_safe_print(f"✅ Stress test completed: {scenario.value} - Loss = ${portfolio_loss:,.2f}")
+            safe_safe_print(f"\\u2705 Stress test completed: {scenario.value} - Loss = ${portfolio_loss:,.2f}")
             return result
 
         except Exception as e:
-            safe_safe_print(f"❌ Stress test failed: {safe_format_error(e, 'stress_test')}")
+            safe_safe_print(f"\\u274c Stress test failed: {safe_format_error(e, 'stress_test')}")
             return StressTestResult(
                 scenario=scenario,
                 portfolio_loss=0.0,
@@ -586,7 +586,7 @@ class EnhancedRiskManager:
             return unified_math.abs(total_loss)
 
         except Exception as e:
-            safe_safe_print(f"❌ Market crash shock failed: {safe_format_error(e, 'market_crash_shock')}")
+            safe_safe_print(f"\\u274c Market crash shock failed: {safe_format_error(e, 'market_crash_shock')}")
             return 0.0
 
     def _apply_volatility_spike_shock(
@@ -609,7 +609,7 @@ class EnhancedRiskManager:
             return total_loss
 
         except Exception as e:
-            safe_safe_print(f"❌ Volatility spike shock failed: {safe_format_error(e, 'volatility_spike_shock')}")
+            safe_safe_print(f"\\u274c Volatility spike shock failed: {safe_format_error(e, 'volatility_spike_shock')}")
             return 0.0
 
     def _apply_correlation_breakdown_shock(
@@ -628,7 +628,7 @@ class EnhancedRiskManager:
 
         except Exception as e:
             safe_safe_print(
-                f"❌ Correlation breakdown shock failed: {safe_format_error(e, 'correlation_breakdown_shock')}")
+                f"\\u274c Correlation breakdown shock failed: {safe_format_error(e, 'correlation_breakdown_shock')}")
             return 0.0
 
     def _apply_liquidity_crisis_shock(
@@ -646,7 +646,7 @@ class EnhancedRiskManager:
             return liquidity_loss
 
         except Exception as e:
-            safe_safe_print(f"❌ Liquidity crisis shock failed: {safe_format_error(e, 'liquidity_crisis_shock')}")
+            safe_safe_print(f"\\u274c Liquidity crisis shock failed: {safe_format_error(e, 'liquidity_crisis_shock')}")
             return 0.0
 
     def _apply_interest_rate_shock(
@@ -664,7 +664,7 @@ class EnhancedRiskManager:
             return interest_rate_loss
 
         except Exception as e:
-            safe_safe_print(f"❌ Interest rate shock failed: {safe_format_error(e, 'interest_rate_shock')}")
+            safe_safe_print(f"\\u274c Interest rate shock failed: {safe_format_error(e, 'interest_rate_shock')}")
             return 0.0
 
     def _apply_custom_shock(
@@ -688,7 +688,7 @@ class EnhancedRiskManager:
             return unified_math.abs(total_loss)
 
         except Exception as e:
-            safe_safe_print(f"❌ Custom shock failed: {safe_format_error(e, 'custom_shock')}")
+            safe_safe_print(f"\\u274c Custom shock failed: {safe_format_error(e, 'custom_shock')}")
             return 0.0
 
     def _estimate_recovery_time(self, portfolio_loss: float, total_value: float) -> float:
@@ -710,7 +710,7 @@ class EnhancedRiskManager:
                 return 60.0  # 60 days
 
         except Exception as e:
-            safe_safe_print(f"❌ Recovery time estimation failed: {safe_format_error(e, 'recovery_time')}")
+            safe_safe_print(f"\\u274c Recovery time estimation failed: {safe_format_error(e, 'recovery_time')}")
             return 30.0
 
     def _determine_risk_level(self, portfolio_loss: float, total_value: float) -> str:
@@ -731,7 +731,7 @@ class EnhancedRiskManager:
                 return "critical"
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk level determination failed: {safe_format_error(e, 'risk_level')}")
+            safe_safe_print(f"\\u274c Risk level determination failed: {safe_format_error(e, 'risk_level')}")
             return "unknown"
 
     def check_risk_alerts(self, risk_metrics: RiskMetrics) -> List[RiskAlert]:
@@ -789,7 +789,7 @@ class EnhancedRiskManager:
             return alerts
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk alerts check failed: {safe_format_error(e, 'risk_alerts')}")
+            safe_safe_print(f"\\u274c Risk alerts check failed: {safe_format_error(e, 'risk_alerts')}")
             return []
 
     def get_risk_summary(self) -> Dict[str, Any]:
@@ -848,7 +848,7 @@ def get_risk_summary() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test enhanced risk manager
-    safe_print("🎯 Testing Enhanced Risk Manager...")
+    safe_print("\\u1f3af Testing Enhanced Risk Manager...")
 
     manager = get_enhanced_risk_manager()
 
@@ -868,18 +868,18 @@ if __name__ == "__main__":
     }
 
     risk_metrics = calculate_risk_metrics(portfolio_data, market_data)
-    safe_print(f"✅ Risk metrics: VaR(95%) = {risk_metrics.var_95:.2%}")
+    safe_print(f"\\u2705 Risk metrics: VaR(95%) = {risk_metrics.var_95:.2%}")
 
     # Test stress test
     stress_result = run_stress_test(
         portfolio_data, market_data, StressTestScenario.MARKET_CRASH
     )
-    safe_print(f"✅ Stress test: Loss = ${stress_result.portfolio_loss:,.2f}")
+    safe_print(f"\\u2705 Stress test: Loss = ${stress_result.portfolio_loss:,.2f}")
 
     # Test risk alerts
     alerts = check_risk_alerts(risk_metrics)
-    safe_print(f"✅ Risk alerts: {len(alerts)} alerts")
+    safe_print(f"\\u2705 Risk alerts: {len(alerts)} alerts")
 
     # Get summary
     summary = get_risk_summary()
-    safe_print(f"✅ Risk Summary: {summary}")
+    safe_print(f"\\u2705 Risk Summary: {summary}")

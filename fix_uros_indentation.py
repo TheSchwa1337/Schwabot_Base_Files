@@ -11,7 +11,7 @@ def fix_uros_indentation():
 
     file_path = "tools/uros_v1_integration_test.py"
 
-    print(f"🔧 Fixing E999 indentation error in {file_path}")
+    print(f"\\u1f527 Fixing E999 indentation error in {file_path}")
 
     # Read the file
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -33,7 +33,7 @@ def fix_uros_indentation():
                                      'ExecutionValidator', 'simulate_execution_cost'))):
             # Remove the leading spaces to fix indentation
             fixed_line = line.lstrip()
-            print(f"  🔧 Fixed indentation: '{line.strip()}' -> '{fixed_line}'")
+            print(f"  \\u1f527 Fixed indentation: '{line.strip()}' -> '{fixed_line}'")
         else:
             fixed_line = line
 
@@ -47,16 +47,18 @@ def fix_uros_indentation():
         backup_path = f"{file_path}.backup"
         with open(backup_path, 'w', encoding='utf-8') as f:
             f.write(original_content)
-        print(f"💾 Backup created: {backup_path}")
+        print(f"\\u1f4be Backup created: {backup_path}")
 
         # Write the fixed content
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"✅ Fixed indentation error in {file_path}")
+        print(f"\\u2705 Fixed indentation error in {file_path}")
 
     else:
-        print("ℹ️ No indentation errors found to fix")
+        print("\\u2139\\ufe0f No indentation errors found to fix")
 
 
 if __name__ == "__main__":
     fix_uros_indentation()
+
+"""

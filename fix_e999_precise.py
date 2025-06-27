@@ -187,7 +187,7 @@ def main():
         else:
             print(f"  File not found: {filepath}")
 
-    print(f"\nCompleted precise E999 error fixing:")
+    print(f"\\nCompleted precise E999 error fixing:")
     print(f"  Files processed: {total_files}")
     print(f"  Files modified: {fixed_count}")
     print("  Precise fixing complete!")

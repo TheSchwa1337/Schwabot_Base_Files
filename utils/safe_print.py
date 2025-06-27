@@ -93,11 +93,13 @@ def test_safe_print():
     safe_math("2 + 2 = 4")
 
     # Test Unicode/emoji
-    safe_print("🚀 Rocket emoji test")
-    safe_print("Unicode: café, naïve, résumé")
+    safe_print("\\u1f680 Rocket emoji test")
+    safe_print("Unicode: caf\\u00e9, na\\u00efve, r\\u00e9sum\\u00e9")
 
     print("Safe print test completed!")
 
 
 if __name__ == "__main__":
     test_safe_print()
+
+"""

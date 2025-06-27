@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Flux compensator – entropy drift corrector.
+"""Flux compensator \\u2013 entropy drift corrector.
 
 A *flux compensator* is a lightweight corrective layer that smooths noisy
 entropy (or variance) readings and provides a boolean gate indicating whether
@@ -11,9 +11,9 @@ mini-Kalman corrector but with negligible computational overhead.
 
 Implemented now
 ---------------
-1. ``FluxCompensator`` class with exponential–moving-average (EMA) tracking.
+1. ``FluxCompensator`` class with exponential\\u2013moving-average (EMA) tracking.
 2. Stateless helper ``sync_flux_compensator`` for one-off checks.
-3. Fully-typed & Flake8-clean ≤ 79-char lines.
+3. Fully-typed & Flake8-clean \\u2264 79-char lines.
 
 Advanced Jacobian/KF tuning can be layered later.
 """
@@ -39,12 +39,12 @@ class FluxCompensator:
         Base entropy threshold.  When the *smoothed* entropy exceeds
         ``threshold * multiplier`` the validator flags *False*.
     alpha
-        Smoothing factor for EMA – between 0 and 1.  Higher = faster reaction.
+        Smoothing factor for EMA \\u2013 between 0 and 1.  Higher = faster reaction.
     window
         Optional fixed window for simple moving average (SMA) if you prefer
         deterministic lag.  If ``window`` is ``None`` the class uses EMA.
     multiplier
-        Safety margin.  A value of 0.9 ⇒ allow 10 % slack under threshold.
+        Safety margin.  A value of 0.9 \\u21d2 allow 10 % slack under threshold.
     """
 
     threshold: float = 5.0
@@ -82,7 +82,7 @@ class FluxCompensator:
 
 
 # -----------------------------------------------------------------------------
-# Stateless convenience wrapper – mirrors historical stub signature
+# Stateless convenience wrapper \\u2013 mirrors historical stub signature
 # -----------------------------------------------------------------------------
 
 

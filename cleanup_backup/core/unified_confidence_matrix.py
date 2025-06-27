@@ -9,14 +9,14 @@ This module serves as the central hub connecting all confidence-related systems:
 - Event impact with confidence calculations
 
 Mathematical Foundation:
-C_unified = α × C_backlog + β × C_ferris + γ × C_ai + δ × C_matrix
+C_unified = \\u03b1 \\u00d7 C_backlog + \\u03b2 \\u00d7 C_ferris + \\u03b3 \\u00d7 C_ai + \\u03b4 \\u00d7 C_matrix
 
 Where:
 - C_backlog = Confidence from historical backlog data
 - C_ferris = Confidence from Ferris wheel cycle position
 - C_ai = Confidence from AI consensus
 - C_matrix = Confidence from matrix controller state
-- α, β, γ, δ = Weight coefficients (α + β + γ + δ = 1.0)
+- \\u03b1, \\u03b2, \\u03b3, \\u03b4 = Weight coefficients (\\u03b1 + \\u03b2 + \\u03b3 + \\u03b4 = 1.0)
 
 Flake8 compliant with comprehensive type hints and error handling.
 """
@@ -591,3 +591,5 @@ def calculate_unified_confidence(backlog_state: Optional[Dict[str, Any]] = None,
 def get_confidence_performance_metrics() -> Dict[str, Any]:
     """Global function to get confidence performance metrics."""
     return unified_confidence_matrix.get_performance_metrics()
+
+"""

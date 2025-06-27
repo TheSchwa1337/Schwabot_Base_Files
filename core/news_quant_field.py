@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
 import math
 # #!/usr/bin/env python3
-"""News quantization field – weighted news processing and spectral analysis.
+"""News quantization field - weighted news processing and spectral analysis."""
 
 Implements the formulas:
-Q_news(t) = Σ_i W_i·N_i(t)
-    ∇Q = (∂Q/∂x, ∂Q/∂t)
-    Ψ_news = exp(−∇Q² / σ²)
-    F_news = FFT(Q_news) → Spectral Field
+Q_news(t) = \\u03a3_i W_i.N_i(t)
+    gradientQ = (partialQ/partialx, partialQ/partialt)
+    \\u03a8_news = exp(-gradientQ**2 / sigma**2)
+    F_news = FFT(Q_news) -> Spectral Field
 
 This module processes financial news streams into quantized fields with
 gradient analysis and frequency domain representations.
-"""
+""""""
 
 
 from typing import Sequence
@@ -26,19 +26,19 @@ __all__: list[str] = []
 "news_gradient",
 "news_psi",
 "news_spectral_field",
-]
+
 
     # ---------------------------------------------------------------------------
     # Core quantization
     # ---------------------------------------------------------------------------
 
 
-    def quantize_news(
+    def quantize_news()
 
 weights: Sequence[float],
 news_values: Sequence[Sequence[float]],
-) -> np.ndarray:  # noqa: D401
-"""Return Q_news(t) = Σ_i W_i·N_i(t) weighted news quantization.
+ -> np.ndarray:  # noqa: D401
+"""Return Q_news(t) = \\u03a3_i W_i.N_i(t) weighted news quantization."""
 
 Parameters
 ----------
@@ -46,7 +46,7 @@ weights
 Weighting factors W_i for each news source.
 news_values
 Sequence of news time series N_i(t), each as array-like.
-    """
+    """"""
     if len(weights) != len(news_values):
         raise ValueError("weights and news_values must have same length")
 
@@ -61,7 +61,7 @@ length = len(news_arrays[0])
     if not all(len(n) == length for n in news_arrays):
         raise ValueError("all news series must have same length")
 
-    # Weighted sum: Σ_i W_i·N_i(t)
+    # Weighted sum: \\u03a3_i W_i.N_i(t)
     q_news = np.zeros(length, dtype=float)
     for i, n_array in enumerate(news_arrays):
         q_news += w_array[i] * n_array
@@ -69,14 +69,14 @@ length = len(news_arrays[0])
     return q_news
 
 
-def news_gradient(
+def news_gradient()
 
 q_news: np.ndarray,
 *,
 dx: float = 1.0,
 dt: float = 1.0,
-) -> tuple[np.ndarray, np.ndarray]:  # noqa: D401
-"""Return ∇Q = (∂Q/∂x, ∂Q/∂t) using numpy.gradient.
+ -> tuple[np.ndarray, np.ndarray]:  # noqa: D401
+"""Return gradientQ = (partialQ/partialx, partialQ/partialt) using numpy.gradient."""
 
 Parameters
 ----------
@@ -86,7 +86,7 @@ Quantized news field Q_news(t).
 Spatial step size (for spatial derivative).
     dt
 Temporal step size.
-"""
+""""""
     if len(q_news) < 2:
         return np.array([0.0]), np.array([0.0])
 
@@ -101,28 +101,28 @@ spatial_grad = np.zeros_like(grad_q)
     return spatial_grad, temporal_grad
 
 
-def news_psi(
+def news_psi()
 
 spatial_grad: np.ndarray,
 temporal_grad: np.ndarray,
 sigma: float,
-) -> np.ndarray:  # noqa: D401
-"""Return Ψ_news = exp(−∇Q² / σ²) Gaussian-weighted field.
+ -> np.ndarray:  # noqa: D401
+"""Return \\u03a8_news = exp(-gradientQ**2 / sigma**2) Gaussian-weighted field."""
 
 Parameters
 ----------
 spatial_grad, temporal_grad
-Spatial and temporal components of ∇Q.
+Spatial and temporal components of gradientQ.
 sigma
 Gaussian spread parameter.
-"""
+""""""
     if sigma <= 0:
         raise ValueError("sigma must be positive")
 
-    # Compute gradient magnitude squared: |∇Q|²
+    # Compute gradient magnitude squared: |gradientQ|**2
 grad_mag_sq = spatial_grad**2 + temporal_grad**2
 
-    # Gaussian weighting: exp(−|∇Q|² / σ²)
+    # Gaussian weighting: exp(-|gradientQ|**2 / sigma**2)
     psi_news = unified_math.exp(-grad_mag_sq / (sigma**2))
 
     return psi_news
@@ -131,13 +131,13 @@ grad_mag_sq = spatial_grad**2 + temporal_grad**2
 def news_spectral_field(q_news: np.ndarray) -> np.ndarray:  # noqa: D401
 
 
-    """Return F_news = FFT(Q_news) spectral field representation.
+    """Return F_news = FFT(Q_news) spectral field representation."""
 
 Parameters
 ----------
 q_news
 Time-domain quantized news field.
-"""
+""""""
     if len(q_news) == 0:
         return np.array([], dtype=complex)
 
@@ -145,3 +145,5 @@ Time-domain quantized news field.
 f_news = np.fft.fft(q_news)
 
     return f_news
+
+

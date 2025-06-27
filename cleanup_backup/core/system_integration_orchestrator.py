@@ -9,9 +9,9 @@ System-wide integration orchestrator that connects all components with proper
 safety requirements and hand-off mechanisms for optimal profit routing.
 
 Mathematical Foundation:
-- System Integration Score: S = Σ(component_score * weight) / Σ(weight)
+- System Integration Score: S = \\u03a3(component_score * weight) / \\u03a3(weight)
 - Hand-off Safety: safety_score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
-- Profit Optimization: profit_total = Σ(profit_score * routing_efficiency * drift_stability)
+- Profit Optimization: profit_total = \\u03a3(profit_score * routing_efficiency * drift_stability)
 - System Stability: stability = (1 - error_rate) * (1 - drift_magnitude) * voltage_efficiency
 
 Features:
@@ -113,9 +113,9 @@ class SystemIntegrationOrchestrator:
     System Integration Orchestrator for Schwabot UROS v1.0.
 
     Mathematical Foundation:
-    - Integration Score: S = Σ(component_score * weight) / Σ(weight)
+    - Integration Score: S = \\u03a3(component_score * weight) / \\u03a3(weight)
     - Hand-off Safety: safety_score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
-    - Profit Optimization: profit_total = Σ(profit_score * routing_efficiency * drift_stability)
+    - Profit Optimization: profit_total = \\u03a3(profit_score * routing_efficiency * drift_stability)
     - System Stability: stability = (1 - error_rate) * (1 - drift_magnitude) * voltage_efficiency
     """
 

@@ -41,7 +41,7 @@ class PackageBuilder:
         self.build_dir = self.project_root / "build"
         self.dist_dir = self.project_root / "dist"
         self.package_name = "schwabot"
-        self.version = "2.0.0"
+        self.version = "2.0_0"
 
         # Create build directories
         self.build_dir.mkdir(exist_ok=True)
@@ -51,14 +51,14 @@ class PackageBuilder:
         self.current_platform = platform.system().lower()
         self.current_arch = platform.machine().lower()
 
-        print(f"🔧 Building Schwabot v{self.version}")
-        print(f"📊 Platform: {self.current_platform} ({self.current_arch})")
-        print(f"📁 Build directory: {self.build_dir}")
-        print(f"📦 Dist directory: {self.dist_dir}")
+        print(f"\\u1f527 Building Schwabot v{self.version}")
+        print(f"\\u1f4ca Platform: {self.current_platform} ({self.current_arch})")
+        print(f"\\u1f4c1 Build directory: {self.build_dir}")
+        print(f"\\u1f4e6 Dist directory: {self.dist_dir}")
 
     def clean_build(self) -> None:
         """Clean build directories."""
-        print("🧹 Cleaning build directories...")
+        print("\\u1f9f9 Cleaning build directories...")
 
         # Clean build artifacts
         for pattern in ["*.pyc", "*.pyo", "__pycache__", "*.egg-info"]:
@@ -78,11 +78,11 @@ class PackageBuilder:
         self.build_dir.mkdir(exist_ok=True)
         self.dist_dir.mkdir(exist_ok=True)
 
-        print("✅ Build directories cleaned")
+        print("\\u2705 Build directories cleaned")
 
     def build_python_packages(self) -> None:
         """Build Python wheel and source distribution."""
-        print("🐍 Building Python packages...")
+        print("\\u1f40d Building Python packages...")
 
         try:
             # Build wheel and source distribution
@@ -92,15 +92,15 @@ class PackageBuilder:
                 "--outdir", str(self.dist_dir)
             ], check=True, cwd=self.project_root)
 
-            print("✅ Python packages built successfully")
+            print("\\u2705 Python packages built successfully")
 
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed to build Python packages: {e}")
+            print(f"\\u274c Failed to build Python packages: {e}")
             raise
 
     def build_linux_packages(self) -> None:
         """Build Linux packages (.deb, .rpm, AppImage)."""
-        print("🐧 Building Linux packages...")
+        print("\\u1f427 Building Linux packages...")
 
         # Build .deb package
         self._build_deb_package()
@@ -111,11 +111,11 @@ class PackageBuilder:
         # Build AppImage
         self._build_appimage()
 
-        print("✅ Linux packages built successfully")
+        print("\\u2705 Linux packages built successfully")
 
     def _build_deb_package(self) -> None:
         """Build Debian package."""
-        print("  📦 Building .deb package...")
+        print("  \\u1f4e6 Building .deb package...")
 
         try:
             # Create debian directory structure
@@ -144,14 +144,14 @@ Description: Hardware-scale-aware economic kernel for federated trading devices
                 str(self.dist_dir / f"{self.package_name}-{self.version}.deb")
             ], check=True)
 
-            print("    ✅ .deb package built")
+            print("    \\u2705 .deb package built")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"    ⚠️ Could not build .deb package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .deb package: {e}")
 
     def _build_rpm_package(self) -> None:
         """Build RPM package."""
-        print("  📦 Building .rpm package...")
+        print("  \\u1f4e6 Building .rpm package...")
 
         try:
             # Create RPM spec file
@@ -189,14 +189,14 @@ python3 -m pip uninstall -y {self.package_name}
                 str(spec_file)
             ], check=True)
 
-            print("    ✅ .rpm package built")
+            print("    \\u2705 .rpm package built")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"    ⚠️ Could not build .rpm package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .rpm package: {e}")
 
     def _build_appimage(self) -> None:
         """Build AppImage package."""
-        print("  📦 Building AppImage...")
+        print("  \\u1f4e6 Building AppImage...")
 
         try:
             # Create AppDir structure
@@ -233,14 +233,14 @@ Categories=Office;Finance;
                 str(self.dist_dir / f"{self.package_name}-{self.version}-x86_64.AppImage")
             ], check=True)
 
-            print("    ✅ AppImage built")
+            print("    \\u2705 AppImage built")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"    ⚠️ Could not build AppImage: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build AppImage: {e}")
 
     def build_windows_packages(self) -> None:
         """Build Windows packages (.exe, .msi)."""
-        print("🪟 Building Windows packages...")
+        print("\\u1fa9f Building Windows packages...")
 
         # Build executable
         self._build_windows_exe()
@@ -251,11 +251,11 @@ Categories=Office;Finance;
         # Build portable package
         self._build_windows_portable()
 
-        print("✅ Windows packages built successfully")
+        print("\\u2705 Windows packages built successfully")
 
     def _build_windows_exe(self) -> None:
         """Build Windows executable using PyInstaller."""
-        print("  📦 Building .exe package...")
+        print("  \\u1f4e6 Building .exe package...")
 
         try:
             # Install PyInstaller if not available
@@ -275,14 +275,14 @@ Categories=Office;Finance;
                 str(self.project_root / "run_schwabot.py")
             ], check=True)
 
-            print("    ✅ .exe package built")
+            print("    \\u2705 .exe package built")
 
         except subprocess.CalledProcessError as e:
-            print(f"    ⚠️ Could not build .exe package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .exe package: {e}")
 
     def _build_windows_msi(self) -> None:
         """Build Windows MSI installer."""
-        print("  📦 Building .msi package...")
+        print("  \\u1f4e6 Building .msi package...")
 
         try:
             # Install cx_Freeze if not available
@@ -325,14 +325,14 @@ setup(
             for msi_file in self.build_dir.rglob("*.msi"):
                 shutil.move(msi_file, self.dist_dir / msi_file.name)
 
-            print("    ✅ .msi package built")
+            print("    \\u2705 .msi package built")
 
         except subprocess.CalledProcessError as e:
-            print(f"    ⚠️ Could not build .msi package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .msi package: {e}")
 
     def _build_windows_portable(self) -> None:
         """Build Windows portable package."""
-        print("  📦 Building portable package...")
+        print("  \\u1f4e6 Building portable package...")
 
         try:
             # Create portable directory
@@ -372,14 +372,14 @@ pause
             # Clean up directory
             shutil.rmtree(portable_dir)
 
-            print("    ✅ Portable package built")
+            print("    \\u2705 Portable package built")
 
         except Exception as e:
-            print(f"    ⚠️ Could not build portable package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build portable package: {e}")
 
     def build_macos_packages(self) -> None:
         """Build macOS packages (.dmg, .pkg, App bundle)."""
-        print("🍎 Building macOS packages...")
+        print("\\u1f34e Building macOS packages...")
 
         # Build App bundle
         self._build_macos_app()
@@ -390,11 +390,11 @@ pause
         # Build PKG installer
         self._build_macos_pkg()
 
-        print("✅ macOS packages built successfully")
+        print("\\u2705 macOS packages built successfully")
 
     def _build_macos_app(self) -> None:
         """Build macOS App bundle."""
-        print("  📦 Building .app bundle...")
+        print("  \\u1f4e6 Building .app bundle...")
 
         try:
             # Install py2app if not available
@@ -422,7 +422,7 @@ OPTIONS = {{
         'CFBundleIdentifier': "com.schwabot.trading",
         'CFBundleVersion': "{self.version}",
         'CFBundleShortVersionString': "{self.version}",
-        'NSHumanReadableCopyright': u"Copyright © 2024, Schwabot Development Team, All Rights Reserved"
+        'NSHumanReadableCopyright': u"Copyright \\u00a9 2024, Schwabot Development Team, All Rights Reserved"
     }}
 }}
 
@@ -447,14 +447,14 @@ setup(
             if app_bundle.exists():
                 shutil.move(app_bundle, self.dist_dir / f"{self.package_name}.app")
 
-            print("    ✅ .app bundle built")
+            print("    \\u2705 .app bundle built")
 
         except subprocess.CalledProcessError as e:
-            print(f"    ⚠️ Could not build .app bundle: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .app bundle: {e}")
 
     def _build_macos_dmg(self) -> None:
         """Build macOS DMG package."""
-        print("  📦 Building .dmg package...")
+        print("  \\u1f4e6 Building .dmg package...")
 
         try:
             # Create DMG using hdiutil
@@ -469,16 +469,16 @@ setup(
                     str(dmg_path)
                 ], check=True)
 
-                print("    ✅ .dmg package built")
+                print("    \\u2705 .dmg package built")
             else:
-                print("    ⚠️ App bundle not found, skipping DMG")
+                print("    \\u26a0\\ufe0f App bundle not found, skipping DMG")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"    ⚠️ Could not build .dmg package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .dmg package: {e}")
 
     def _build_macos_pkg(self) -> None:
         """Build macOS PKG installer."""
-        print("  📦 Building .pkg package...")
+        print("  \\u1f4e6 Building .pkg package...")
 
         try:
             # Install pkgbuild if available
@@ -492,16 +492,16 @@ setup(
                     str(pkg_path)
                 ], check=True)
 
-                print("    ✅ .pkg package built")
+                print("    \\u2705 .pkg package built")
             else:
-                print("    ⚠️ App bundle not found, skipping PKG")
+                print("    \\u26a0\\ufe0f App bundle not found, skipping PKG")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"    ⚠️ Could not build .pkg package: {e}")
+            print(f"    \\u26a0\\ufe0f Could not build .pkg package: {e}")
 
     def build_docker_image(self) -> None:
         """Build Docker image."""
-        print("🐳 Building Docker image...")
+        print("\\u1f433 Building Docker image...")
 
         try:
             # Create Dockerfile
@@ -546,14 +546,14 @@ CMD ["python", "run_schwabot.py"]
                 "-t", f"{self.package_name}:latest", "."
             ], check=True, cwd=self.project_root)
 
-            print("✅ Docker image built successfully")
+            print("\\u2705 Docker image built successfully")
 
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
-            print(f"❌ Could not build Docker image: {e}")
+            print(f"\\u274c Could not build Docker image: {e}")
 
     def create_installer_scripts(self) -> None:
         """Create platform-specific installer scripts."""
-        print("📜 Creating installer scripts...")
+        print("\\u1f4dc Creating installer scripts...")
 
         # Linux installer script
         linux_installer = self.dist_dir / "install_linux.sh"
@@ -630,11 +630,11 @@ echo "Run 'schwabot' to start the system"
 """)
         macos_installer.chmod(0o755)
 
-        print("✅ Installer scripts created")
+        print("\\u2705 Installer scripts created")
 
     def generate_package_summary(self) -> None:
         """Generate a summary of all built packages."""
-        print("📋 Generating package summary...")
+        print("\\u1f4cb Generating package summary...")
 
         packages = []
 
@@ -663,7 +663,7 @@ echo "Run 'schwabot' to start the system"
         summary_file.write_text(json.dumps(summary, indent=2))
 
         # Print summary
-        print(f"\n📦 Package Summary:")
+        print(f"\\n\\u1f4e6 Package Summary:")
         print(f"   Project: {self.package_name} v{self.version}")
         print(f"   Total packages: {len(packages)}")
         print(f"   Build directory: {self.dist_dir}")
@@ -672,7 +672,7 @@ echo "Run 'schwabot' to start the system"
             size_mb = package["size"] / (1024 * 1024)
             print(f"   - {package['name']} ({size_mb:.1f} MB)")
 
-        print(f"\n✅ Package summary generated: {summary_file}")
+        print(f"\\n\\u2705 Package summary generated: {summary_file}")
 
 
 def main():
@@ -716,11 +716,11 @@ def main():
         # Generate summary
         builder.generate_package_summary()
 
-        print("\n🎉 All packages built successfully!")
-        print(f"📁 Check the '{builder.dist_dir}' directory for all packages")
+        print("\\n\\u1f389 All packages built successfully!")
+        print(f"\\u1f4c1 Check the '{builder.dist_dir}' directory for all packages")
 
     except Exception as e:
-        print(f"\n❌ Build failed: {e}")
+        print(f"\\n\\u274c Build failed: {e}")
         sys.exit(1)
 
 

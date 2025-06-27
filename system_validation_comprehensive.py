@@ -85,12 +85,12 @@ class ComprehensiveSystemValidator:
         }
 
         self.start_time = time.time()
-        safe_print("🚀 Comprehensive System Validation Started")
+        safe_print("\\u1f680 Comprehensive System Validation Started")
         safe_print("=" * 60)
 
     def validate_mathematical_functions(self) -> Dict[str, Any]:
         """Validate all mathematical functions and their completeness."""
-        safe_print("\n🔢 Validating Mathematical Functions...")
+        safe_print("\\n\\u1f522 Validating Mathematical Functions...")
 
         results = {
             'ghost_trigger_functions': {},
@@ -171,19 +171,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ Mathematical Functions Validation: PASS")
+            safe_print("  \\u2705 Mathematical Functions Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ Mathematical Functions Validation: FAIL - {e}")
+            safe_print(f"  \\u274c Mathematical Functions Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def validate_api_integration(self) -> Dict[str, Any]:
         """Validate API integration for CoinMarketCap and CoinGecko."""
-        safe_print("\n🌐 Validating API Integration...")
+        safe_print("\\n\\u1f310 Validating API Integration...")
 
         results = {
             'coinmarketcap': {},
@@ -244,19 +244,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ API Integration Validation: PASS")
+            safe_print("  \\u2705 API Integration Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ API Integration Validation: FAIL - {e}")
+            safe_print(f"  \\u274c API Integration Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def validate_user_interface(self) -> Dict[str, Any]:
         """Validate user interface functionality and control panels."""
-        safe_print("\n🖥️  Validating User Interface...")
+        safe_print("\\n\\u1f5a5\\ufe0f  Validating User Interface...")
 
         results = {
             'configuration_loading': {},
@@ -337,19 +337,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ User Interface Validation: PASS")
+            safe_print("  \\u2705 User Interface Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ User Interface Validation: FAIL - {e}")
+            safe_print(f"  \\u274c User Interface Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def validate_code_quality(self) -> Dict[str, Any]:
         """Validate code quality and linting compliance."""
-        safe_print("\n🔍 Validating Code Quality...")
+        safe_print("\\n\\u1f50d Validating Code Quality...")
 
         results = {
             'flake8_compliance': {},
@@ -455,19 +455,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ Code Quality Validation: PASS")
+            safe_print("  \\u2705 Code Quality Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ Code Quality Validation: FAIL - {e}")
+            safe_print(f"  \\u274c Code Quality Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def validate_performance(self) -> Dict[str, Any]:
         """Validate performance and timing analysis."""
-        safe_print("\n⚡ Validating Performance...")
+        safe_print("\\n\\u26a1 Validating Performance...")
 
         results = {
             'mathematical_performance': {},
@@ -534,19 +534,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ Performance Validation: PASS")
+            safe_print("  \\u2705 Performance Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ Performance Validation: FAIL - {e}")
+            safe_print(f"  \\u274c Performance Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def validate_security(self) -> Dict[str, Any]:
         """Validate security and secret management."""
-        safe_print("\n🔒 Validating Security...")
+        safe_print("\\n\\u1f512 Validating Security...")
 
         results = {
             'secret_management': {},
@@ -622,19 +622,19 @@ class ComprehensiveSystemValidator:
             }
 
             results['status'] = 'PASS'
-            safe_print("  ✅ Security Validation: PASS")
+            safe_print("  \\u2705 Security Validation: PASS")
 
         except Exception as e:
             results['status'] = 'FAIL'
             results['error'] = str(e)
-            safe_print(f"  ❌ Security Validation: FAIL - {e}")
+            safe_print(f"  \\u274c Security Validation: FAIL - {e}")
             traceback.print_exc()
 
         return results
 
     def run_comprehensive_validation(self) -> Dict[str, Any]:
         """Run comprehensive system validation."""
-        safe_print("\n🚀 Starting Comprehensive System Validation...")
+        safe_print("\\n\\u1f680 Starting Comprehensive System Validation...")
         safe_print("=" * 60)
 
         # Run all validation tests
@@ -673,19 +673,19 @@ class ComprehensiveSystemValidator:
     def _print_summary(self):
         """Print validation summary."""
         safe_print("\n" + "=" * 60)
-        safe_print("📊 COMPREHENSIVE SYSTEM VALIDATION SUMMARY")
+        safe_print("\\u1f4ca COMPREHENSIVE SYSTEM VALIDATION SUMMARY")
         safe_print("=" * 60)
 
         # Overall status
         status_emoji = {
-            'PASS': '✅',
-            'FAIL': '❌',
-            'WARN': '⚠️',
-            'PENDING': '⏳'
+            'PASS': '\\u2705',
+            'FAIL': '\\u274c',
+            'WARN': '\\u26a0\\ufe0f',
+            'PENDING': '\\u23f3'
         }
 
-        overall_emoji = status_emoji.get(self.results['overall_status'], '❓')
-        safe_print(f"\n{overall_emoji} Overall Status: {self.results['overall_status']}")
+        overall_emoji = status_emoji.get(self.results['overall_status'], '\\u2753')
+        safe_print(f"\\n{overall_emoji} Overall Status: {self.results['overall_status']}")
 
         # Individual component statuses
         components = [
@@ -699,19 +699,19 @@ class ComprehensiveSystemValidator:
 
         for name, key in components:
             status = self.results[key]['status']
-            emoji = status_emoji.get(status, '❓')
+            emoji = status_emoji.get(status, '\\u2753')
             safe_print(f"{emoji} {name}: {status}")
 
         # Timing information
-        safe_print(f"\n⏱️  Total Validation Time: {self.results['validation_time']:.2f} seconds")
+        safe_print(f"\\n\\u23f1\\ufe0f  Total Validation Time: {self.results['validation_time']:.2f} seconds")
 
         # Detailed results
-        safe_print("\n📋 DETAILED RESULTS:")
+        safe_print("\\n\\u1f4cb DETAILED RESULTS:")
         safe_print("-" * 40)
 
         for name, key in components:
             result = self.results[key]
-            safe_print(f"\n{name}:")
+            safe_print(f"\\n{name}:")
 
             if 'error' in result:
                 safe_print(f"  Error: {result['error']}")
@@ -733,40 +733,40 @@ class ComprehensiveSystemValidator:
         safe_print("\n" + "=" * 60)
 
         # Answer user questions
-        safe_print("\n❓ ANSWERS TO USER QUESTIONS:")
+        safe_print("\\n\\u2753 ANSWERS TO USER QUESTIONS:")
         safe_print("-" * 40)
 
         # Question 1: User interface verification
         ui_status = self.results['user_interface']['status']
-        safe_print(f"1. ✅ User Interface Levels Verified: {ui_status == 'PASS'}")
+        safe_print(f"1. \\u2705 User Interface Levels Verified: {ui_status == 'PASS'}")
 
         # Question 2: JSON configuration integration
         config_status = self.results['user_interface'].get('configuration_loading', {}).get('status', 'UNKNOWN')
-        safe_print(f"2. ✅ JSON Configuration Integration: {config_status == 'PASS'}")
+        safe_print(f"2. \\u2705 JSON Configuration Integration: {config_status == 'PASS'}")
 
         # Question 3: Mathematical panel integration
         math_panel_status = self.results['user_interface'].get('mathematical_panel', {}).get('status', 'UNKNOWN')
-        safe_print(f"3. ✅ Mathematical Panel Integration: {math_panel_status == 'PASS'}")
+        safe_print(f"3. \\u2705 Mathematical Panel Integration: {math_panel_status == 'PASS'}")
 
         # Question 4: API integration
         api_status = self.results['api_integration']['status']
-        safe_print(f"4. ✅ API Integration (CoinMarketCap/CoinGecko): {api_status == 'PASS'}")
+        safe_print(f"4. \\u2705 API Integration (CoinMarketCap/CoinGecko): {api_status == 'PASS'}")
 
         # Question 5: Performance and timing
         perf_status = self.results['performance']['status']
-        safe_print(f"5. ✅ Performance & Timing Analysis: {perf_status == 'PASS'}")
+        safe_print(f"5. \\u2705 Performance & Timing Analysis: {perf_status == 'PASS'}")
 
         # Question 6: System robustness
         code_quality_status = self.results['code_quality']['status']
-        safe_print(f"6. ✅ System Robustness: {code_quality_status == 'PASS'}")
+        safe_print(f"6. \\u2705 System Robustness: {code_quality_status == 'PASS'}")
 
         # Question 7: Pipeline routing
         math_status = self.results['mathematical_functions']['status']
-        safe_print(f"7. ✅ Pipeline Routing: {math_status == 'PASS'}")
+        safe_print(f"7. \\u2705 Pipeline Routing: {math_status == 'PASS'}")
 
         # Question 8: Timing error correction
         timing_status = self.results['performance'].get('timing_analysis', {}).get('status', 'UNKNOWN')
-        safe_print(f"8. ✅ Timing Error Correction: {timing_status == 'PASS'}")
+        safe_print(f"8. \\u2705 Timing Error Correction: {timing_status == 'PASS'}")
 
         safe_print("\n" + "=" * 60)
 
@@ -781,21 +781,21 @@ def main():
         with open('system_validation_results.json', 'w') as f:
             json.dump(results, f, indent=2, default=str)
 
-        safe_print(f"\n💾 Results saved to: system_validation_results.json")
+        safe_print(f"\\n\\u1f4be Results saved to: system_validation_results.json")
 
         # Exit with appropriate code
         if results['overall_status'] == 'PASS':
-            safe_print("\n🎉 All validations passed! System is ready for production.")
+            safe_print("\\n\\u1f389 All validations passed! System is ready for production.")
             sys.exit(0)
         elif results['overall_status'] == 'WARN':
-            safe_print("\n⚠️  Some validations have warnings. Review results before production.")
+            safe_print("\\n\\u26a0\\ufe0f  Some validations have warnings. Review results before production.")
             sys.exit(1)
         else:
-            safe_print("\n❌ Some validations failed. Please fix issues before production.")
+            safe_print("\\n\\u274c Some validations failed. Please fix issues before production.")
             sys.exit(1)
 
     except Exception as e:
-        safe_print(f"\n💥 Validation failed with error: {e}")
+        safe_print(f"\\n\\u1f4a5 Validation failed with error: {e}")
         traceback.print_exc()
         sys.exit(1)
 

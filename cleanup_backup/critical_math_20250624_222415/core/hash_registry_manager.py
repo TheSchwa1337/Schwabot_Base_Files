@@ -508,7 +508,7 @@ class HashRegistryManager:
 
 def main():
     """Main function for hash registry manager testing."""
-    safe_print("🗄️ Hash Registry Manager - Schwabot UROS v1.0")
+    safe_print("\\u1f5c4\\ufe0f Hash Registry Manager - Schwabot UROS v1.0")
     safe_print("=" * 50)
 
     # Initialize manager
@@ -543,7 +543,7 @@ def main():
     # Export summary
     manager.export_registry_summary()
 
-    safe_print("✅ Hash Registry Manager test completed")
+    safe_print("\\u2705 Hash Registry Manager test completed")
 
 
 if __name__ == "__main__":

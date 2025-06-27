@@ -57,81 +57,81 @@ class StrategicFlake8Fixer:
             # Pattern 1: Unmatched brackets in field definitions
             FixPattern(
                 name="field_bracket_fix",
-                pattern=r'field\(default_factory=lambda:\s*\{\]',
+                pattern=r'field\(default_factory=lambda:\\s*\{\]',
                 replacement='field(default_factory=lambda: {})',
                 description="Fix unmatched brackets in dataclass field definitions",
                 mathematical_context="dataclass configuration",
-                validation_regex=r'field\(default_factory=lambda:\s*\{\s*\}\)'
+                validation_regex=r'field\(default_factory=lambda:\\s*\{\\s*\}\)'
             ),
             
             # Pattern 2: Unmatched brackets in list definitions
             FixPattern(
                 name="list_bracket_fix",
-                pattern=r'field\(default_factory=lambda:\s*\[\]',
+                pattern=r'field\(default_factory=lambda:\\s*\[\]',
                 replacement='field(default_factory=lambda: [])',
                 description="Fix unmatched brackets in list field definitions",
                 mathematical_context="dataclass configuration",
-                validation_regex=r'field\(default_factory=lambda:\s*\[\s*\]\)'
+                validation_regex=r'field\(default_factory=lambda:\\s*\[\\s*\]\)'
             ),
             
             # Pattern 3: Missing closing parentheses in function calls
             FixPattern(
                 name="function_paren_fix",
-                pattern=r'(\w+\([^)]*)\n\s*(\w+\s*=)',
-                replacement=r'\1)\n        \2',
+                pattern=r'(\\w+\([^)]*)\\n\\s*(\\w+\\s*=)',
+                replacement=r'\1)\\n        \2',
                 description="Fix missing closing parentheses in function calls",
                 mathematical_context="function definitions",
-                validation_regex=r'\w+\([^)]*\)\n\s*\w+\s*='
+                validation_regex=r'\\w+\([^)]*\)\\n\\s*\\w+\\s*='
             ),
             
             # Pattern 4: Unmatched brackets in dictionary definitions
             FixPattern(
                 name="dict_bracket_fix",
-                pattern=r'(\w+:\s*Dict\[[^\]]*)\n\s*(\w+\s*=)',
-                replacement=r'\1]\n        \2',
+                pattern=r'(\\w+:\\s*Dict\[[^\]]*)\\n\\s*(\\w+\\s*=)',
+                replacement=r'\1]\\n        \2',
                 description="Fix unmatched brackets in type annotations",
                 mathematical_context="type annotations",
-                validation_regex=r'\w+:\s*Dict\[[^\]]*\]\n\s*\w+\s*='
+                validation_regex=r'\\w+:\\s*Dict\[[^\]]*\]\\n\\s*\\w+\\s*='
             ),
             
             # Pattern 5: Missing indented blocks after control structures
             FixPattern(
                 name="missing_indent_fix",
-                pattern=r'^(try|if|for|while|def|class):\s*\n\s*([a-zA-Z_]\w*\s*=)',
-                replacement=r'\1:\n        \2',
+                pattern=r'^(try|if|for|while|def|class):\\s*\\n\\s*([a-zA-Z_]\\w*\\s*=)',
+                replacement=r'\1:\\n        \2',
                 description="Fix missing indented blocks after control structures",
                 mathematical_context="control flow",
-                validation_regex=r'^(try|if|for|while|def|class):\s*\n\s+[a-zA-Z_]\w*\s*='
+                validation_regex=r'^(try|if|for|while|def|class):\\s*\\n\\s+[a-zA-Z_]\\w*\\s*='
             ),
             
             # Pattern 6: Return statements outside functions
             FixPattern(
                 name="return_outside_function_fix",
-                pattern=r'^(?!\s*def\s+.*\n)(\s*return\s+.*)$',
+                pattern=r'^(?!\\s*def\\s+.*\\n)(\\s*return\\s+.*)$',
                 replacement=r'    \1',
                 description="Fix return statements outside function definitions",
                 mathematical_context="function logic",
-                validation_regex=r'^\s+return\s+.*$'
+                validation_regex=r'^\\s+return\\s+.*$'
             ),
             
             # Pattern 7: Duplicate pass statements
             FixPattern(
                 name="duplicate_pass_fix",
-                pattern=r'^\s*pass\s*\n\s*pass\s*$',
+                pattern=r'^\\s*pass\\s*\\n\\s*pass\\s*$',
                 replacement='        pass',
                 description="Remove duplicate pass statements",
                 mathematical_context="function bodies",
-                validation_regex=r'^\s+pass\s*$'
+                validation_regex=r'^\\s+pass\\s*$'
             ),
             
             # Pattern 8: Empty try blocks
             FixPattern(
                 name="empty_try_fix",
-                pattern=r'^\s*try:\s*\n\s*pass\s*$',
-                replacement='        try:\n            pass',
+                pattern=r'^\\s*try:\\s*\\n\\s*pass\\s*$',
+                replacement='        try:\\n            pass',
                 description="Fix empty try blocks",
                 mathematical_context="error handling",
-                validation_regex=r'^\s+try:\s*\n\s+pass\s*$'
+                validation_regex=r'^\\s+try:\\s*\\n\\s+pass\\s*$'
             ),
             
             # Pattern 9: Unterminated triple-quoted strings
@@ -147,11 +147,11 @@ class StrategicFlake8Fixer:
             # Pattern 10: Missing except/finally blocks
             FixPattern(
                 name="missing_except_fix",
-                pattern=r'^\s*try:\s*\n\s*[^e].*\n(?!\s*except|\s*finally)',
-                replacement=r'\g<0>\n        except Exception as e:\n            pass',
+                pattern=r'^\\s*try:\\s*\\n\\s*[^e].*\\n(?!\\s*except|\\s*finally)',
+                replacement=r'\g<0>\\n        except Exception as e:\\n            pass',
                 description="Add missing except blocks",
                 mathematical_context="error handling",
-                validation_regex=r'^\s*try:\s*\n\s*[^e].*\n\s+except'
+                validation_regex=r'^\\s*try:\\s*\\n\\s*[^e].*\\n\\s+except'
             )
         ]
 
@@ -185,7 +185,7 @@ class StrategicFlake8Fixer:
             
             return context
         except Exception as e:
-            print(f"❌ Error analyzing {file_path}: {e}")
+            print(f"\\u274c Error analyzing {file_path}: {e}")
             return {}
 
     def apply_strategic_fixes(self, file_path: Path, dry_run: bool = False) -> Dict[str, Any]:
@@ -198,7 +198,7 @@ class StrategicFlake8Fixer:
             applied_fixes = []
             context = self.analyze_file_context(file_path)
             
-            print(f"🔍 Analyzing {file_path.name}...")
+            print(f"\\u1f50d Analyzing {file_path.name}...")
             print(f"   Mathematical content: {context.get('has_mathematical_content', False)}")
             print(f"   Dataclasses: {context.get('has_dataclasses', False)}")
             print(f"   Type annotations: {context.get('has_type_annotations', False)}")
@@ -215,16 +215,16 @@ class StrategicFlake8Fixer:
                             'description': pattern.description,
                             'mathematical_context': pattern.mathematical_context
                         })
-                        print(f"   ✅ Applied: {pattern.description}")
+                        print(f"   \\u2705 Applied: {pattern.description}")
             
             # Validate fixes
             if applied_fixes and not dry_run:
                 validation_errors = self._validate_fixes(content, applied_fixes)
                 if validation_errors:
-                    print(f"   ⚠️  Validation warnings: {validation_errors}")
+                    print(f"   \\u26a0\\ufe0f  Validation warnings: {validation_errors}")
                     # Revert if critical errors
                     if any('critical' in error for error in validation_errors):
-                        print(f"   ❌ Reverting due to critical errors")
+                        print(f"   \\u274c Reverting due to critical errors")
                         content = original_content
                         applied_fixes = []
             
@@ -232,7 +232,7 @@ class StrategicFlake8Fixer:
             if content != original_content and not dry_run:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
-                print(f"   💾 Saved changes")
+                print(f"   \\u1f4be Saved changes")
             
             return {
                 'file_path': file_path,
@@ -242,7 +242,7 @@ class StrategicFlake8Fixer:
             }
             
         except Exception as e:
-            print(f"❌ Error fixing {file_path}: {e}")
+            print(f"\\u274c Error fixing {file_path}: {e}")
             return {
                 'file_path': file_path,
                 'error': str(e),
@@ -301,12 +301,12 @@ class StrategicFlake8Fixer:
             'details': []
         }
         
-        print(f"🎯 Fixing {len(file_list)} critical files...")
+        print(f"\\u1f3af Fixing {len(file_list)} critical files...")
         
         for file_path_str in file_list:
             file_path = Path(file_path_str)
             if not file_path.exists():
-                print(f"❌ File not found: {file_path}")
+                print(f"\\u274c File not found: {file_path}")
                 results['error_files'] += 1
                 continue
             
@@ -325,7 +325,7 @@ class StrategicFlake8Fixer:
     def generate_strategic_report(self, results: Dict[str, Any]) -> None:
         """Generate strategic report."""
         print("\n" + "="*70)
-        print("🎯 STRATEGIC FLAKE8 FIXES REPORT")
+        print("\\u1f3af STRATEGIC FLAKE8 FIXES REPORT")
         print("="*70)
         print(f"Total files processed: {results['total_files']}")
         print(f"Files successfully fixed: {results['fixed_files']}")
@@ -333,14 +333,14 @@ class StrategicFlake8Fixer:
         print(f"Files with errors: {results['error_files']}")
         
         if results['details']:
-            print(f"\n📋 Detailed Results:")
+            print(f"\\n\\u1f4cb Detailed Results:")
             for detail in results['details']:
                 if detail.get('modified'):
-                    print(f"   ✅ {detail['file_path'].name}")
+                    print(f"   \\u2705 {detail['file_path'].name}")
                     for fix in detail.get('applied_fixes', []):
                         print(f"      - {fix['description']} ({fix['mathematical_context']})")
                 elif detail.get('error'):
-                    print(f"   ❌ {detail['file_path'].name}: {detail['error']}")
+                    print(f"   \\u274c {detail['file_path'].name}: {detail['error']}")
 
 
 def main():
@@ -358,21 +358,21 @@ def main():
     fixer = StrategicFlake8Fixer()
     
     if args.dry_run:
-        print("🔍 DRY RUN MODE - No changes will be made")
+        print("\\u1f50d DRY RUN MODE - No changes will be made")
     
     if args.file:
         # Fix single file
         file_path = Path(args.file)
         if not file_path.exists():
-            print(f"❌ File not found: {file_path}")
+            print(f"\\u274c File not found: {file_path}")
             return 1
         
         result = fixer.apply_strategic_fixes(file_path, args.dry_run)
         if result.get('error'):
-            print(f"❌ Error: {result['error']}")
+            print(f"\\u274c Error: {result['error']}")
             return 1
         
-        print(f"\n🎉 File {file_path.name} processed successfully!")
+        print(f"\\n\\u1f389 File {file_path.name} processed successfully!")
         return 0
     
     elif args.critical_files:
@@ -381,16 +381,17 @@ def main():
         fixer.generate_strategic_report(results)
         
         if results['error_files'] > 0:
-            print(f"\n⚠️  {results['error_files']} files had errors")
+            print(f"\\n\\u26a0\\ufe0f  {results['error_files']} files had errors")
             return 1
         
-        print(f"\n🎉 Successfully processed {results['total_files']} files!")
+        print(f"\\n\\u1f389 Successfully processed {results['total_files']} files!")
         return 0
     
     else:
-        print("❌ Please specify --file or --critical-files")
+        print("\\u274c Please specify --file or --critical-files")
         return 1
 
 
 if __name__ == "__main__":
     sys.exit(main()) 
+"""

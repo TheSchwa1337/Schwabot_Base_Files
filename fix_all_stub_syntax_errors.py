@@ -22,7 +22,7 @@ def fix_stub_file_syntax(file_path: str) -> bool:
         # Fix pattern: """Stub main function."""."""
         content = re.sub(
             r'"""Stub main function\."""\."""',
-            '"""Stub main function."""\n    pass\n',
+            '"""Stub main function."""\\n    pass\n',
             content
         )
 
@@ -36,14 +36,14 @@ def fix_stub_file_syntax(file_path: str) -> bool:
         # Fix unterminated triple-quoted strings
         # Look for patterns like: """text without closing
         content = re.sub(
-            r'"""([^"]*)\n\s*"""\s*def\s+',
-            r'"""\1"""\n\ndef ',
+            r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+            r'"""\1"""\\n\\ndef ',
             content
         )
 
         # Fix stray periods after function definitions
         content = re.sub(
-            r'def\s+(\w+)\s*\([^)]*\)\s*:\s*\.',
+            r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
             r'def \1(\2):',
             content
         )
@@ -88,7 +88,7 @@ def find_and_fix_all_stub_files():
 
 def verify_fixes():
     """Verify that the fixes worked by checking for remaining syntax errors."""
-    safe_print("\nVerifying fixes...")
+    safe_print("\\nVerifying fixes...")
 
     # Check for remaining malformed patterns
     remaining_errors = []
@@ -120,7 +120,7 @@ def verify_fixes():
         if len(remaining_errors) > 10:
             safe_print(f"  ... and {len(remaining_errors) - 10} more")
     else:
-        safe_print("✅ All syntax errors appear to be fixed!")
+        safe_print("\\u2705 All syntax errors appear to be fixed!")
 
 
 def main():
@@ -130,13 +130,15 @@ def main():
     # Fix all stub files
     fixed_count = find_and_fix_all_stub_files()
 
-    safe_print(f"\nFixed {fixed_count} files with syntax errors")
+    safe_print(f"\\nFixed {fixed_count} files with syntax errors")
 
     # Verify the fixes
     verify_fixes()
 
-    safe_print("\nStub syntax error fixing completed!")
+    safe_print("\\nStub syntax error fixing completed!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

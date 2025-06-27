@@ -159,12 +159,12 @@ class RiskGuard:
         self.risk_violations = 0
         self.circuit_breaker_trips = 0
 
-        safe_safe_print("🛡️ Risk Guard initialized")
+        safe_safe_print("\\u1f6e1\\ufe0f Risk Guard initialized")
 
     def set_risk_limits(self, limits: RiskLimits) -> None:
         """Set risk limits."""
         self.risk_limits = limits
-        safe_safe_print(f"✅ Risk limits updated: Daily loss = ${limits.daily_loss_limit}")
+        safe_safe_print(f"\\u2705 Risk limits updated: Daily loss = ${limits.daily_loss_limit}")
 
     def check_daily_loss_limit(self, trade_pnl: float) -> bool:
         """Check if trade would exceed daily loss limit."""
@@ -190,7 +190,7 @@ class RiskGuard:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Daily loss check failed: {safe_format_error(e, 'daily_loss_check')}")
+            safe_safe_print(f"\\u274c Daily loss check failed: {safe_format_error(e, 'daily_loss_check')}")
             return False
 
     def check_single_trade_limit(self, trade_size: float) -> bool:
@@ -208,7 +208,7 @@ class RiskGuard:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Single trade check failed: {safe_format_error(e, 'single_trade_check')}")
+            safe_safe_print(f"\\u274c Single trade check failed: {safe_format_error(e, 'single_trade_check')}")
             return False
 
     def check_exposure_limit(self, new_exposure: float) -> bool:
@@ -228,7 +228,7 @@ class RiskGuard:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Exposure check failed: {safe_format_error(e, 'exposure_check')}")
+            safe_safe_print(f"\\u274c Exposure check failed: {safe_format_error(e, 'exposure_check')}")
             return False
 
     def check_circuit_breaker(
@@ -288,7 +288,7 @@ class RiskGuard:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Circuit breaker check failed: {safe_format_error(e, 'circuit_breaker')}")
+            safe_safe_print(f"\\u274c Circuit breaker check failed: {safe_format_error(e, 'circuit_breaker')}")
             return False
 
     def update_position(
@@ -317,10 +317,10 @@ class RiskGuard:
             self.total_exposure = sum(unified_math.abs(pos.quantity * pos.current_price)
                                       for pos in self.positions.values())
 
-            safe_safe_print(f"✅ Position updated: {asset} = ${unrealized_pnl:.2f}")
+            safe_safe_print(f"\\u2705 Position updated: {asset} = ${unrealized_pnl:.2f}")
 
         except Exception as e:
-            safe_safe_print(f"❌ Position update failed: {safe_format_error(e, 'update_position')}")
+            safe_safe_print(f"\\u274c Position update failed: {safe_format_error(e, 'update_position')}")
 
     async def reconcile_positions(self, exchange_balances: Dict[str, float]) -> Dict[str, Any]:
         """
@@ -370,14 +370,14 @@ class RiskGuard:
             if reconciliation_results['discrepancies']:
                 reconciliation_results['reconciled'] = False
                 safe_safe_print(
-                    f"⚠️ Position reconciliation found {len(reconciliation_results['discrepancies'])} discrepancies")
+                    f"\\u26a0\\ufe0f Position reconciliation found {len(reconciliation_results['discrepancies'])} discrepancies")
             else:
-                safe_safe_print("✅ Position reconciliation successful")
+                safe_safe_print("\\u2705 Position reconciliation successful")
 
             return reconciliation_results
 
         except Exception as e:
-            safe_safe_print(f"❌ Position reconciliation failed: {safe_format_error(e, 'position_reconciliation')}")
+            safe_safe_print(f"\\u274c Position reconciliation failed: {safe_format_error(e, 'position_reconciliation')}")
             return {'reconciled': False, 'error': str(e)}
 
     def trigger_panic_mode(self, reason: str = "Manual trigger") -> None:
@@ -407,11 +407,11 @@ class RiskGuard:
                     context="risk_guard"
                 )
 
-            safe_safe_print(f"🚨 PANIC MODE TRIGGERED: {reason}")
-            safe_safe_print("🛑 All trading activity stopped")
+            safe_safe_print(f"\\u1f6a8 PANIC MODE TRIGGERED: {reason}")
+            safe_safe_print("\\u1f6d1 All trading activity stopped")
 
         except Exception as e:
-            safe_safe_print(f"❌ Panic mode trigger failed: {safe_format_error(e, 'panic_mode')}")
+            safe_safe_print(f"\\u274c Panic mode trigger failed: {safe_format_error(e, 'panic_mode')}")
 
     def reset_panic_mode(self) -> None:
         """Reset panic mode."""
@@ -426,10 +426,10 @@ class RiskGuard:
                 "manual_reset"
             )
 
-            safe_safe_print("✅ Panic mode reset")
+            safe_safe_print("\\u2705 Panic mode reset")
 
         except Exception as e:
-            safe_safe_print(f"❌ Panic mode reset failed: {safe_format_error(e, 'panic_reset')}")
+            safe_safe_print(f"\\u274c Panic mode reset failed: {safe_format_error(e, 'panic_reset')}")
 
     def is_trading_allowed(self) -> bool:
         """Check if trading is currently allowed."""
@@ -462,7 +462,7 @@ class RiskGuard:
         self.daily_pnl = 0.0
         self.daily_trades = 0
         self.daily_volume = 0.0
-        safe_safe_print("🔄 Daily tracking reset")
+        safe_safe_print("\\u1f504 Daily tracking reset")
 
     def _record_risk_event(
         self,
@@ -491,10 +491,10 @@ class RiskGuard:
             if len(self.risk_events) > 1000:
                 self.risk_events = self.risk_events[-1000:]
 
-            safe_safe_print(f"⚠️ Risk event: {event_type} - {description}")
+            safe_safe_print(f"\\u26a0\\ufe0f Risk event: {event_type} - {description}")
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk event recording failed: {safe_format_error(e, 'record_risk_event')}")
+            safe_safe_print(f"\\u274c Risk event recording failed: {safe_format_error(e, 'record_risk_event')}")
 
     def _record_circuit_breaker_event(
         self,
@@ -524,11 +524,11 @@ class RiskGuard:
             if len(self.circuit_breaker_events) > 100:
                 self.circuit_breaker_events = self.circuit_breaker_events[-100:]
 
-            safe_safe_print(f"⚡ Circuit breaker {event_type}: volatility={volatility:.4f}, entropy={entropy:.4f}")
+            safe_safe_print(f"\\u26a1 Circuit breaker {event_type}: volatility={volatility:.4f}, entropy={entropy:.4f}")
 
         except Exception as e:
             safe_safe_print(
-                f"❌ Circuit breaker event recording failed: {safe_format_error(e, 'record_circuit_breaker')}")
+                f"\\u274c Circuit breaker event recording failed: {safe_format_error(e, 'record_circuit_breaker')}")
 
 
 # Global risk guard instance
@@ -589,26 +589,26 @@ def get_risk_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test risk guard
-    safe_print("🧪 Testing Risk Guard...")
+    safe_print("\\u1f9ea Testing Risk Guard...")
 
     guard = get_risk_guard()
 
     # Test risk limits
     trade_ok = check_risk_limits(trade_pnl=-50.0, trade_size=75.0, new_exposure=1000.0)
-    safe_print(f"✅ Risk limit check: {trade_ok}")
+    safe_print(f"\\u2705 Risk limit check: {trade_ok}")
 
     # Test circuit breaker
     circuit_ok = check_circuit_breaker(volatility=0.03, entropy=0.6)
-    safe_print(f"✅ Circuit breaker check: {circuit_ok}")
+    safe_print(f"\\u2705 Circuit breaker check: {circuit_ok}")
 
     # Test panic mode
     trigger_panic_mode("Test trigger")
-    safe_print(f"✅ Panic mode: {guard.panic_mode}")
+    safe_print(f"\\u2705 Panic mode: {guard.panic_mode}")
 
     # Reset panic mode
     reset_panic_mode()
-    safe_print(f"✅ Panic mode reset: {not guard.panic_mode}")
+    safe_print(f"\\u2705 Panic mode reset: {not guard.panic_mode}")
 
     # Get status
     status = get_risk_status()
-    safe_print(f"✅ Risk Status: {status}")
+    safe_print(f"\\u2705 Risk Status: {status}")

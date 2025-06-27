@@ -141,12 +141,12 @@ class TrajectorySphere:
         self.successful_simulations = 0
         self.average_profit_delta = 0.0
 
-        safe_safe_print("🌌 Trajectory Sphere initialized")
+        safe_safe_print("\\u1f30c Trajectory Sphere initialized")
 
     def set_execution_mode(self, mode: ExecutionMode) -> None:
         """Set execution mode."""
         self.execution_mode = mode
-        safe_safe_print(f"🔄 Execution mode set to: {mode.value}")
+        safe_safe_print(f"\\u1f504 Execution mode set to: {mode.value}")
 
     def internal_tick_reconstructor(
         self,
@@ -202,7 +202,7 @@ class TrajectorySphere:
             return reconstruction
 
         except Exception as e:
-            safe_safe_print(f"❌ Tick reconstruction failed: {safe_format_error(e, 'tick_reconstruction')}")
+            safe_safe_print(f"\\u274c Tick reconstruction failed: {safe_format_error(e, 'tick_reconstruction')}")
             return self._create_fallback_reconstruction(tick_id, timestamp, market_vector)
 
     def _calculate_entropy_field(self, tick_id: int, market_vector: MarketVector) -> float:
@@ -219,7 +219,7 @@ class TrajectorySphere:
             return unified_math.min(1.0, unified_math.max(0.0, entropy))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Entropy calculation failed: {safe_format_error(e, 'entropy_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Entropy calculation failed: {safe_format_error(e, 'entropy_calculation')}")
             return 0.5
 
     def _calculate_zpe_resonance(self, phase: float, entropy_field: float) -> float:
@@ -235,7 +235,7 @@ class TrajectorySphere:
             return zpe_resonance
 
         except Exception as e:
-            safe_safe_print(f"⚠️ ZPE resonance calculation failed: {safe_format_error(e, 'zpe_resonance')}")
+            safe_safe_print(f"\\u26a0\\ufe0f ZPE resonance calculation failed: {safe_format_error(e, 'zpe_resonance')}")
             return 0.0
 
     def _calculate_base_profit(self, market_vector: MarketVector) -> float:
@@ -253,7 +253,7 @@ class TrajectorySphere:
             return base_profit
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Base profit calculation failed: {safe_format_error(e, 'base_profit')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Base profit calculation failed: {safe_format_error(e, 'base_profit')}")
             return 0.0
 
     def _calculate_execution_confidence(
@@ -280,7 +280,7 @@ class TrajectorySphere:
 
         except Exception as e:
             safe_safe_print(
-                f"⚠️ Execution confidence calculation failed: {safe_format_error(e, 'execution_confidence')}")
+                f"\\u26a0\\ufe0f Execution confidence calculation failed: {safe_format_error(e, 'execution_confidence')}")
             return 0.5
 
     def _create_fallback_reconstruction(
@@ -368,12 +368,12 @@ class TrajectorySphere:
             # Increment tick ID
             self.current_tick_id += 1
 
-            safe_safe_print(f"✅ Tick simulation completed: Profit Delta = {profit_delta:.6f}")
+            safe_safe_print(f"\\u2705 Tick simulation completed: Profit Delta = {profit_delta:.6f}")
 
             return result
 
         except Exception as e:
-            safe_safe_print(f"❌ Tick simulation failed: {safe_format_error(e, 'tick_simulation')}")
+            safe_safe_print(f"\\u274c Tick simulation failed: {safe_format_error(e, 'tick_simulation')}")
             return SimulationResult(
                 success=False,
                 simulated_profit=0.0,
@@ -425,7 +425,7 @@ class TrajectorySphere:
                 return reconstruction.profit_potential * reconstruction.execution_confidence
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Strategy execution simulation failed: {safe_format_error(e, 'strategy_simulation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Strategy execution simulation failed: {safe_format_error(e, 'strategy_simulation')}")
             return reconstruction.profit_potential * 0.5
 
     async def _get_profit_projection(
@@ -444,7 +444,7 @@ class TrajectorySphere:
                 return reconstruction.profit_potential * 0.8
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Profit projection failed: {safe_format_error(e, 'profit_projection')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Profit projection failed: {safe_format_error(e, 'profit_projection')}")
             return reconstruction.profit_potential * 0.8
 
     def _calculate_phase_alignment(self, reconstruction: TickReconstruction) -> float:
@@ -457,7 +457,7 @@ class TrajectorySphere:
             return (phase_score + resonance_score) / 2.0
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Phase alignment calculation failed: {safe_format_error(e, 'phase_alignment')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Phase alignment calculation failed: {safe_format_error(e, 'phase_alignment')}")
             return 0.5
 
     def _calculate_entropy_correlation(self, reconstruction: TickReconstruction) -> float:
@@ -467,7 +467,7 @@ class TrajectorySphere:
             return 1.0 - unified_math.abs(reconstruction.entropy_field - 0.5) * 2.0
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Entropy correlation calculation failed: {safe_format_error(e, 'entropy_correlation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Entropy correlation calculation failed: {safe_format_error(e, 'entropy_correlation')}")
             return 0.5
 
     def _update_simulation_statistics(self, result: SimulationResult) -> None:
@@ -509,7 +509,7 @@ class TrajectorySphere:
         self.phase_memory.clear()
         self.entropy_memory.clear()
         self.simulation_history.clear()
-        safe_safe_print("🗑️ Trajectory Sphere memory cleared")
+        safe_safe_print("\\u1f5d1\\ufe0f Trajectory Sphere memory cleared")
 
 
 # Global trajectory sphere instance
@@ -535,7 +535,7 @@ def get_simulation_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test trajectory sphere
-    safe_print("🧪 Testing Trajectory Sphere...")
+    safe_print("\\u1f9ea Testing Trajectory Sphere...")
 
     # Test market data
     test_market_data = {
@@ -551,7 +551,7 @@ if __name__ == "__main__":
 
     # Run simulation
     result = simulate_tick(test_market_data)
-    safe_print(f"✅ Simulation Result: {result.success}")
+    safe_print(f"\\u2705 Simulation Result: {result.success}")
     safe_print(f"   Simulated Profit: {result.simulated_profit:.6f}")
     safe_print(f"   Projected Profit: {result.projected_profit:.6f}")
     safe_print(f"   Profit Delta: {result.profit_delta:.6f}")
@@ -559,4 +559,6 @@ if __name__ == "__main__":
 
     # Get statistics
     stats = get_simulation_stats()
-    safe_print(f"✅ Statistics: {stats}")
+    safe_print(f"\\u2705 Statistics: {stats}")
+
+"""

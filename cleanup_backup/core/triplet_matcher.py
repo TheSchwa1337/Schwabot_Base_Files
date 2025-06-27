@@ -457,7 +457,7 @@ class TripletMatcher:
 
     def __init__(self) -> None:
         """Initialize triplet matcher."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.vector_matcher = VectorTripletMatcher()
         self.sequence_detector = MathematicalSequenceDetector()
         self.thermal_analyzer = ThermalSignatureAnalyzer()
@@ -562,7 +562,7 @@ def main() -> None:
     """Demo of triplet matcher system."""
     try:
         matcher = TripletMatcher()
-        safe_print(f"✅ TripletMatcher v{matcher.version} initialized")
+        safe_print(f"\\u2705 TripletMatcher v{matcher.version} initialized")
 
         # Test triplets
         test_triplets = [
@@ -573,7 +573,7 @@ def main() -> None:
             (42.5, 39.8, 37.1),  # Custom pattern
         ]
 
-        safe_print(f"🔍 Testing {len(test_triplets)} triplet patterns:")
+        safe_print(f"\\u1f50d Testing {len(test_triplets)} triplet patterns:")
 
         for i, triplet in enumerate(test_triplets):
             result = matcher.match_triplet(triplet)
@@ -583,7 +583,7 @@ def main() -> None:
                 thermal_info = result["thermal_analysis"]
 
                 safe_print(f"   Triplet {i + 1}: {triplet}")
-                safe_print(f"      Match: {'✅' if match_info['found_match'] else '❌'}")
+                safe_print(f"      Match: {'\\u2705' if match_info['found_match'] else '\\u274c'}")
                 if match_info["found_match"]:
                     safe_print(f"      Pattern: {match_info['pattern_type']}")
                     safe_print(f"      Similarity: {match_info['similarity_score']:.3f}")
@@ -593,7 +593,7 @@ def main() -> None:
                 )
 
         # Test sequence analysis
-        safe_print(f"\n📊 Sequence Analysis:")
+        safe_print(f"\\n\\u1f4ca Sequence Analysis:")
         test_sequence = [100.0, 105.0, 110.0, 115.0, 120.0, 125.0]
         sequence_result = matcher.analyze_sequence(test_sequence)
 
@@ -604,10 +604,10 @@ def main() -> None:
             safe_print(f"   Dominant pattern: {summary['dominant_pattern_type']}")
             safe_print(f"   Avg similarity: {summary['average_similarity_score']:.3f}")
 
-        safe_print("🎉 Triplet matcher demo completed!")
+        safe_print("\\u1f389 Triplet matcher demo completed!")
 
     except Exception as e:
-        safe_print(f"❌ Demo failed: {e}")
+        safe_print(f"\\u274c Demo failed: {e}")
 
 
 if __name__ == "__main__":

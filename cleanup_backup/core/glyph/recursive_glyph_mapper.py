@@ -3,7 +3,7 @@ from core.unified_math_system import unified_math
 """Recursive Glyph Mapper - Symbolic Logic for AI Strategy Interpretation.
 
 Implements the core mathematical framework for:
-- Ψ(i,j) = Σ^Ω κ(G_ij) over eigenpath resonance
+- \\u03a8(i,j) = \\u03a3^\\u03a9 \\u03ba(G_ij) over eigenpath resonance
 - Layered symbolic logic for AI interpretation of strategy flows
 - Recursive glyph mapping with eigenvalue decomposition
 - Strategy flow interpretation through symbolic mathematics
@@ -151,7 +151,7 @@ class RecursiveGlyphMapper:
         omega_bound: int = 10,
         resonance_mode: ResonanceMode = ResonanceMode.HARMONIC,
     ) -> EigenpathResonance:
-        """Calculate Ψ(i,j) = Σ^Ω κ(G_ij) over eigenpath resonance."""
+        """Calculate \\u03a8(i,j) = \\u03a3^\\u03a9 \\u03ba(G_ij) over eigenpath resonance."""
         path_id = f"path_{start_position}_{end_position}_{omega_bound}"
 
         # Check cache first
@@ -182,7 +182,7 @@ class RecursiveGlyphMapper:
             glyph = self._find_glyph_by_id(glyph_id)
 
             if glyph:
-                # Calculate κ(G_ij) for this glyph
+                # Calculate \\u03ba(G_ij) for this glyph
                 kappa_value = self._calculate_kappa_function(glyph, k, resonance_mode)
 
                 eigenvalues.append(glyph.eigenvalue)
@@ -456,7 +456,7 @@ class RecursiveGlyphMapper:
     def _calculate_kappa_function(
         self, glyph: Glyph, k: int, resonance_mode: ResonanceMode
     ) -> complex:
-        """Calculate κ(G_ij) function for eigenpath resonance."""
+        """Calculate \\u03ba(G_ij) function for eigenpath resonance."""
         # Base kappa value
         base_kappa = glyph.resonance_coefficient * glyph.symbolic_value
 

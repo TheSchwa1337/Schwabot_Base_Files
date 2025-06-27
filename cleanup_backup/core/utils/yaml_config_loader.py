@@ -130,7 +130,7 @@ class YAMLConfigLoader:
         self.fallback_configs["demo_config.yaml"] = {
             "demo_system": {
                 "name": "Schwabot Demo System",
-                "version": "1.0.0",
+                "version": "1.0_0",
                 "description": "Comprehensive demo system for Schwabot trading platform",
                 "enabled": True
             },
@@ -492,3 +492,5 @@ if __name__ == "__main__":
     # Test validation
     is_valid = validate_settings()
     safe_print("All configurations valid:", is_valid)
+
+"""

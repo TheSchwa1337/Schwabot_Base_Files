@@ -6,9 +6,9 @@ from core.unified_math_system import unified_math
 
 
 def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
-    """Return True when σ(ψ · ξ · ϕ) ≥ 0.5.
+    """Return True when \\u03c3(\\u03c8 \\u00b7 \\u03be \\u00b7 \\u03d5) \\u2265 0.5.
 
-    Compute logistic gate: C_exec(t) = σ(Ψ_path · ξ_sent · ϕ_drift)
+    Compute logistic gate: C_exec(t) = \\u03c3(\\u03a8_path \\u00b7 \\u03be_sent \\u00b7 \\u03d5_drift)
 
     Args:
         psi: Path coefficient (0-1)
@@ -22,3 +22,5 @@ def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
     # Steep logistic centered at 0.5
     sigma = 1 / (1 + unified_math.exp(-12 * (z - 0.5)))
     return bool(sigma >= 0.5)
+
+"""

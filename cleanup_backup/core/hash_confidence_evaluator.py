@@ -6,7 +6,7 @@ This module implements the core hash confidence evaluation system that drives
 entry/exit tick logic using SHA256-based hash resonance models.
 
 Mathematical Foundation:
-H(t) = SHA256(D_t) → H_n → must trigger: T(n), C, or backfill E(entry_data)
+H(t) = SHA256(D_t) \\u2192 H_n \\u2192 must trigger: T(n), C, or backfill E(entry_data)
 
 Where:
 - H(t) = Hash function at time t

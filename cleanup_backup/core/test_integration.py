@@ -36,11 +36,11 @@ def test_voltage_lane_mapper():
         assignment = mapper.assign_channel_for_voltage(voltage_mapping, priority=2.0)
         safe_print(f"  Channel assignment: {assignment.channel_id} (score: {assignment.assignment_score:.3f})")
 
-        safe_print("✓ Voltage Lane Mapper test passed")
+        safe_print("\\u2713 Voltage Lane Mapper test passed")
         return True
 
     except Exception as e:
-        safe_print(f"✗ Voltage Lane Mapper test failed: {e}")
+        safe_print(f"\\u2717 Voltage Lane Mapper test failed: {e}")
         return False
 
 
@@ -67,11 +67,11 @@ def test_tensor_path_router():
             for route in routes:
                 safe_print(f"  Route: {route.tensor_path} (score: {route.routing_score:.3f})")
 
-        safe_print("✓ Tensor Path Router test passed")
+        safe_print("\\u2713 Tensor Path Router test passed")
         return True
 
     except Exception as e:
-        safe_print(f"✗ Tensor Path Router test failed: {e}")
+        safe_print(f"\\u2717 Tensor Path Router test failed: {e}")
         return False
 
 
@@ -105,11 +105,11 @@ def test_tensor_harness_matrix():
             for route in routes:
                 safe_print(f"  Route: {route.tensor_path} (profit_score: {route.profit_score:.3f})")
 
-        safe_print("✓ Tensor Harness Matrix test passed")
+        safe_print("\\u2713 Tensor Harness Matrix test passed")
         return True
 
     except Exception as e:
-        safe_print(f"✗ Tensor Harness Matrix test failed: {e}")
+        safe_print(f"\\u2717 Tensor Harness Matrix test failed: {e}")
         return False
 
 
@@ -132,11 +132,11 @@ def test_hash_registry_manager():
         stats = manager.get_registry_statistics()
         safe_print(f"  Registry statistics: {len(stats.get('entries', []))} entries")
 
-        safe_print("✓ Hash Registry Manager test passed")
+        safe_print("\\u2713 Hash Registry Manager test passed")
         return True
 
     except Exception as e:
-        safe_print(f"✗ Hash Registry Manager test failed: {e}")
+        safe_print(f"\\u2717 Hash Registry Manager test failed: {e}")
         return False
 
 
@@ -157,7 +157,7 @@ def main():
     total = len(tests)
 
     for test_name, test_func in tests:
-        safe_print(f"\n{test_name}:")
+        safe_print(f"\\n{test_name}:")
         safe_print("-" * 40)
         if test_func():
             passed += 1
@@ -168,9 +168,9 @@ def main():
     safe_print("=" * 60)
 
     if passed == total:
-        safe_print("🎉 All integration tests passed! System is ready.")
+        safe_print("\\u1f389 All integration tests passed! System is ready.")
     else:
-        safe_print("⚠️  Some tests failed. Please check the errors above.")
+        safe_print("\\u26a0\\ufe0f  Some tests failed. Please check the errors above.")
 
     return passed == total
 
@@ -178,3 +178,5 @@ def main():
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
+
+"""

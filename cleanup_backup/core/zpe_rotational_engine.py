@@ -50,9 +50,9 @@ class ZPERotationalEngine:
     Schwabot's ZPE Rotational Engine - The Saw Blade of Profit
 
     Implements the mathematical framework for:
-    1. ZPE Work Core (W = F · d = ΔP)
-    2. Rotational Vectorization (τ = I · α)
-    3. Thermal Integrity Differential (η = W_out / Q_in)
+    1. ZPE Work Core (W = F \\u00b7 d = \\u0394P)
+    2. Rotational Vectorization (\\u03c4 = I \\u00b7 \\u03b1)
+    3. Thermal Integrity Differential (\\u03b7 = W_out / Q_in)
     4. Elastic Resonance Profit Function
     5. Multi-Vector Trade Alignment
     6. Recursive Cycle Depth
@@ -95,13 +95,13 @@ class ZPERotationalEngine:
 
     def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> float:
         """
-        ZPE Work Core: W = F · d = ΔP
+        ZPE Work Core: W = F \\u00b7 d = \\u0394P
 
         Where:
         - W: Work Schwabot performs (profit vector potential)
-        - F: Force of trend momentum (ΔPrice / ΔTime)
+        - F: Force of trend momentum (\\u0394Price / \\u0394Time)
         - d: Displacement in trade phase space (entry-exit delta)
-        - ΔP: Profit differential between vector anchor states
+        - \\u0394P: Profit differential between vector anchor states
         """
         market_force = self._calculate_market_force(trend_strength)
         work = market_force * entry_exit_range
@@ -111,27 +111,27 @@ class ZPERotationalEngine:
 
     def calculate_rotational_torque(self, liquidity_depth: float, trend_change_rate: float) -> float:
         """
-        Rotational Vectorization: τ = I · α
+        Rotational Vectorization: \\u03c4 = I \\u00b7 \\u03b1
 
         Where:
-        - τ: Torque applied to profit wheel (rotational force)
+        - \\u03c4: Torque applied to profit wheel (rotational force)
         - I: Market inertia (resistance from liquidity walls, spread delay)
-        - α: Angular acceleration (rate of directional bias change)
+        - \\u03b1: Angular acceleration (rate of directional bias change)
         """
         inertia = self._calculate_market_inertia(liquidity_depth)
         angular_acceleration = self._calculate_angular_acceleration(trend_change_rate)
         torque = inertia * angular_acceleration
 
         self.rotational_state.torque = torque
-        logger.debug(f"Rotational Torque: {torque:.6f} (inertia: {inertia:.6f}, α: {angular_acceleration:.6f})")
+        logger.debug(f"Rotational Torque: {torque:.6f} (inertia: {inertia:.6f}, \\u03b1: {angular_acceleration:.6f})")
         return torque
 
     def calculate_thermal_efficiency(self, profit_generated: float, capital_exposure: float) -> float:
         """
-        Thermal Integrity Differential: η = W_out / Q_in
+        Thermal Integrity Differential: \\u03b7 = W_out / Q_in
 
         Where:
-        - η: Efficiency of Schwabot's thermal core (profit extraction vs capital exposure)
+        - \\u03b7: Efficiency of Schwabot's thermal core (profit extraction vs capital exposure)
         - W_out: Profit generated
         - Q_in: Capital allocated + trade gas/fee loss
         """
@@ -155,12 +155,12 @@ class ZPERotationalEngine:
 
     def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
         """
-        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
+        Elastic Resonance Profit Function: \\u1d4d4(t) = \\u222b\\u2080\\u1d57 P'(t) \\u00b7 unified_math.sin(\\u03c9t + \\u03c6) dt
 
         Where:
         - P'(t): Derivative of price motion (volatility)
-        - ω: Frequency of resonance (news + tick + AI consensus phase)
-        - φ: Phase offset to Schwabot core cycle
+        - \\u03c9: Frequency of resonance (news + tick + AI consensus phase)
+        - \\u03c6: Phase offset to Schwabot core cycle
         """
         # Numerical integration over time window
         dt = 0.001  # Small time step
@@ -179,10 +179,10 @@ class ZPERotationalEngine:
 
     def calculate_multi_vector_alignment(self, strategy_vectors: Dict[str, ZPEVector], weights: Dict[str, float]) -> ZPEVector:
         """
-        Multi-Vector Trade Alignment: V⃗_total = Σ_i w_i · V⃗_i
+        Multi-Vector Trade Alignment: V\\u20d7_total = \\u03a3_i w_i \\u00b7 V\\u20d7_i
 
         Where:
-        - V⃗_i: Strategy vector for each asset (BTC, ETH, XRP, USDC)
+        - V\\u20d7_i: Strategy vector for each asset (BTC, ETH, XRP, USDC)
         - w_i: Dynamic weights from AI consensus, market memory, and agent feedback
         """
         total_magnitude = 0.0
@@ -218,12 +218,12 @@ class ZPERotationalEngine:
 
     def update_recursive_cycle_depth(self, tick_interval: float, price_trigger: float) -> int:
         """
-        Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
+        Recursive Cycle Depth: R\\u2099 = f(R\\u2099\\u208b\\u2081, \\u0394t, P\\u2099)
 
         Where:
-        - Rₙ: Recursion state at tick n
-        - Δt: Tick interval (cycle memory gap)
-        - Pₙ: Price or strategy trigger at tick n
+        - R\\u2099: Recursion state at tick n
+        - \\u0394t: Tick interval (cycle memory gap)
+        - P\\u2099: Price or strategy trigger at tick n
         """
         # Calculate recursion depth based on memory frames
         memory_frame = {
@@ -274,15 +274,15 @@ class ZPERotationalEngine:
 
     def calculate_temporal_fault_correction(self, expected_phase: float, actual_phase: float) -> float:
         """
-        Temporal Fault-Bus Diff Correction: Δφ_fault = φ_actual - φ_expected
+        Temporal Fault-Bus Diff Correction: \\u0394\\u03c6_fault = \\u03c6_actual - \\u03c6_expected
 
         Where:
-        - φ_expected: Predicted phase state by matrix logic
-        - φ_actual: Observed entry/exit behavior
+        - \\u03c6_expected: Predicted phase state by matrix logic
+        - \\u03c6_actual: Observed entry/exit behavior
         """
         phase_difference = actual_phase - expected_phase
 
-        # Normalize phase difference to [-π, π]
+        # Normalize phase difference to [-\\u03c0, \\u03c0]
         while phase_difference > math.pi:
             phase_difference -= 2 * math.pi
         while phase_difference < -math.pi:
@@ -294,11 +294,11 @@ class ZPERotationalEngine:
 
     def map_news_lantern_signals(self, news_density: float, sentiment_delta: float) -> float:
         """
-        News / Lantern API Signal Mapping: Lₜ = g(nₜ, ΔSₜ)
+        News / Lantern API Signal Mapping: L\\u209c = g(n\\u209c, \\u0394S\\u209c)
 
         Where:
-        - nₜ: Normalized news density over interval
-        - ΔSₜ: Sentiment delta from baseline
+        - n\\u209c: Normalized news density over interval
+        - \\u0394S\\u209c: Sentiment delta from baseline
         """
         # Normalize inputs
         normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
@@ -313,12 +313,12 @@ class ZPERotationalEngine:
 
     def calculate_profit_reinjection(self, profit_delta: float, market_heat: float) -> float:
         """
-        Profit Loop Reinjection: Π(t) = Π₀ + Σ(ΔΠᵢ · αᵢ)
+        Profit Loop Reinjection: \\u03a0(t) = \\u03a0\\u2080 + \\u03a3(\\u0394\\u03a0\\u1d62 \\u00b7 \\u03b1\\u1d62)
 
         Where:
-        - Π(t): Cumulative portfolio gain
-        - ΔΠᵢ: Profit delta from each trade i
-        - αᵢ: Reinjection coefficient (0.0–1.0) based on market heat
+        - \\u03a0(t): Cumulative portfolio gain
+        - \\u0394\\u03a0\\u1d62: Profit delta from each trade i
+        - \\u03b1\\u1d62: Reinjection coefficient (0.0\\u20131.0) based on market heat
         """
         # Calculate reinjection coefficient based on market heat
         reinjection_coefficient = self._calculate_reinjection_coefficient(market_heat)
@@ -336,7 +336,7 @@ class ZPERotationalEngine:
 
         This is where Schwabot becomes the wheel - spinning into profit, not pinging against it.
         """
-        logger.info("🔄 Spinning ZPE Profit Wheel...")
+        logger.info("\\u1f504 Spinning ZPE Profit Wheel...")
 
         # Extract market data
         trend_strength = market_data.get('trend_strength', 0.0)
@@ -373,7 +373,7 @@ class ZPERotationalEngine:
         }
 
         logger.info(
-            f"🎯 ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {(zpe_work + elastic_resonance + lantern_signal) / 3.0:.6f})")
+            f"\\u1f3af ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {(zpe_work + elastic_resonance + lantern_signal) / 3.0:.6f})")
         return result
 
     def _calculate_market_force(self, trend_strength: float) -> float:
@@ -409,7 +409,7 @@ class ZPERotationalEngine:
 
 def main():
     """Test the ZPE Rotational Engine."""
-    safe_print("🧠 Testing Schwabot ZPE Rotational Engine")
+    safe_print("\\u1f9e0 Testing Schwabot ZPE Rotational Engine")
     safe_print("=" * 50)
 
     # Initialize engine
@@ -437,8 +437,10 @@ def main():
     safe_print(f"Should Spin: {result['should_spin']}")
     safe_print(f"Recursion Depth: {result['recursion_depth']}")
 
-    safe_print("\n🎉 ZPE Rotational Engine test complete!")
+    safe_print("\\n\\u1f389 ZPE Rotational Engine test complete!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

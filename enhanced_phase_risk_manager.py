@@ -20,12 +20,12 @@ testing framework with sophisticated handling for:
 10. API Integration Layer
 
 Mathematical Foundation:
-- Phase Risk Score: PRS = Σ(w_i * ΔP_i * V_i * E_i) / Σ(w_i)
+- Phase Risk Score: PRS = \\u03a3(w_i * \\u0394P_i * V_i * E_i) / \\u03a3(w_i)
 - Volume Differential: VD = |V_current - V_historical| / V_historical
 - Cross-Bitmap Correlation: CBC = corr(Bitmap_i, Bitmap_j) * phase_weight
-- Successive Trade Risk: STR = Σ(risk_i * decay_factor^i) / Σ(decay_factor^i)
-- DLT Waveform Score: DWS = Σ(freq_i * magnitude_i * phase_coherence_i)
-- Tesseract Mapping: TM = Σ(glyph_i * intensity_i * coordinate_weight_i)
+- Successive Trade Risk: STR = \\u03a3(risk_i * decay_factor^i) / \\u03a3(decay_factor^i)
+- DLT Waveform Score: DWS = \\u03a3(freq_i * magnitude_i * phase_coherence_i)
+- Tesseract Mapping: TM = \\u03a3(glyph_i * intensity_i * coordinate_weight_i)
 """
 
 import logging
@@ -193,11 +193,11 @@ class EnhancedPhaseRiskManager:
         Calculate comprehensive phase risk score.
 
         Mathematical Formula:
-        PRS = Σ(w_i * ΔP_i * V_i * E_i) / Σ(w_i)
+        PRS = \\u03a3(w_i * \\u0394P_i * V_i * E_i) / \\u03a3(w_i)
 
         Where:
         - w_i: Weight for each component
-        - ΔP_i: Price change magnitude
+        - \\u0394P_i: Price change magnitude
         - V_i: Volume factor
         - E_i: Entropy factor
         """
@@ -377,7 +377,7 @@ class EnhancedPhaseRiskManager:
         Assess risk for successive trades.
 
         Mathematical Formula:
-        STR = Σ(risk_i * decay_factor^i) / Σ(decay_factor^i)
+        STR = \\u03a3(risk_i * decay_factor^i) / \\u03a3(decay_factor^i)
 
         Where:
         - risk_i: Risk of trade i
@@ -536,7 +536,7 @@ class EnhancedPhaseRiskManager:
         Integrate DLT waveform data for enhanced risk assessment.
 
         Mathematical Formula:
-        DWS = Σ(freq_i * magnitude_i * phase_coherence_i)
+        DWS = \\u03a3(freq_i * magnitude_i * phase_coherence_i)
         """
         try:
             frequencies = waveform_data.get('frequencies', [])
@@ -598,7 +598,7 @@ class EnhancedPhaseRiskManager:
         Integrate Tesseract visualization data.
 
         Mathematical Formula:
-        TM = Σ(glyph_i * intensity_i * coordinate_weight_i)
+        TM = \\u03a3(glyph_i * intensity_i * coordinate_weight_i)
         """
         try:
             frame_id = tesseract_data.get('frame_id', 'unknown')
@@ -930,7 +930,7 @@ def create_enhanced_phase_risk_manager() -> EnhancedPhaseRiskManager:
 
 if __name__ == "__main__":
     # Test the enhanced phase risk manager
-    safe_print("🧮 Testing Enhanced Phase Risk Manager...")
+    safe_print("\\u1f9ee Testing Enhanced Phase Risk Manager...")
 
     manager = EnhancedPhaseRiskManager()
 
@@ -952,7 +952,7 @@ if __name__ == "__main__":
     # Get comprehensive risk assessment
     assessment = manager.get_comprehensive_risk_assessment(market_data, trade_history)
 
-    safe_print("\n📊 Risk Assessment Results:")
+    safe_print("\\n\\u1f4ca Risk Assessment Results:")
     safe_print(f"Risk Level: {assessment['risk_level']}")
     safe_print(f"Total Risk Score: {assessment['total_risk_score']:.3f}")
     safe_print(f"Phase Risk Score: {assessment['phase_risk_metrics'].phase_risk_score:.3f}")
@@ -961,8 +961,8 @@ if __name__ == "__main__":
     safe_print(f"Successive Trade Risk: {assessment['phase_risk_metrics'].successive_trade_risk:.3f}")
     safe_print(f"Entry/Exit Confidence: {assessment['phase_risk_metrics'].entry_exit_confidence:.3f}")
 
-    safe_print("\n💡 Recommendations:")
+    safe_print("\\n\\u1f4a1 Recommendations:")
     for rec in assessment['recommendations']:
         safe_print(f"  - {rec}")
 
-    safe_print("\n✅ Enhanced Phase Risk Manager test completed!")
+    safe_print("\\n\\u2705 Enhanced Phase Risk Manager test completed!")

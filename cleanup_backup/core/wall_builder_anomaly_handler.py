@@ -107,7 +107,7 @@ class TickHashProcessor:
         self.pattern_window_size = 100
         self.frequency_decay_factor = 0.95
 
-        logger.info("🔢 Tick Hash Processor initialized")
+        logger.info("\\u1f522 Tick Hash Processor initialized")
 
     def get_frequency(self, tick_hash: str) -> float:
         """Calculate hash frequency based on recent history."""
@@ -196,7 +196,7 @@ class VolumeAnalyzer:
         self.baseline_volumes: Dict[str, float] = {}
         self.pressure_metrics: Dict[str, float] = {}
 
-        logger.info("📊 Volume Analyzer initialized")
+        logger.info("\\u1f4ca Volume Analyzer initialized")
 
     def analyze_volume_pressure(
         self, volume: float, price: float, exchange: str
@@ -299,7 +299,7 @@ class WallDetector:
             "price_proximity_threshold": 0.001,  # 0.1% price proximity
         }
 
-        logger.info("🧱 Wall Detector initialized")
+        logger.info("\\u1f9f1 Wall Detector initialized")
 
     def detect_wall_type(
         self, order_book: Dict[str, Any], current_price: float
@@ -387,7 +387,7 @@ class WallBuilderAnomalyHandler:
             "average_response_time": 0.0,
         }
 
-        logger.info("🏗️ Wall Builder Anomaly Handler initialized")
+        logger.info("\\u1f3d7\\ufe0f Wall Builder Anomaly Handler initialized")
 
     def handle_wall_event(
         self,
@@ -456,7 +456,7 @@ class WallBuilderAnomalyHandler:
             }
 
         except Exception as e:
-            logger.error(f"❌ Wall event handling failed: {e}")
+            logger.error(f"\\u274c Wall event handling failed: {e}")
             return self._create_fallback_response(wall_type, wall_size, tick_hash)
 
     def _handle_buy_wall(self, wall_event: WallEvent) -> Dict[str, Any]:
@@ -741,7 +741,7 @@ class WallBuilderAnomalyHandler:
     def set_processing_mode(self, mode: ProcessingMode) -> None:
         """Set the processing mode for CPU/GPU load balancing."""
         self.processing_mode = mode
-        logger.info(f"🔧 Processing mode set to: {mode.value}")
+        logger.info(f"\\u1f527 Processing mode set to: {mode.value}")
 
 
 # Factory functions
@@ -777,7 +777,7 @@ if __name__ == "__main__":
         exchange="binance",
     )
 
-    print(f"🏗️ Wall Builder Response:")
+    print(f"\\u1f3d7\\ufe0f Wall Builder Response:")
     print(f"   Action: {buy_wall_response['recommended_action']}")
     print(f"   Confidence: {buy_wall_response['confidence_score']:.3f}")
     print(f"   Processing Time: {buy_wall_response['processing_time']:.4f}s")

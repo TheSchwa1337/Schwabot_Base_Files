@@ -107,11 +107,11 @@ class SystemIntegrationTester:
 
                 if result.success:
                     safe_print(
-                        f"✅ {result.test_name}: PASSED ({result.execution_time:.3f}s)"
+                        f"\\u2705 {result.test_name}: PASSED ({result.execution_time:.3f}s)"
                     )
                 else:
                     safe_print(
-                        f"❌ {result.test_name}: FAILED - {result.error_message}"
+                        f"\\u274c {result.test_name}: FAILED - {result.error_message}"
                     )
 
             except Exception as e:
@@ -122,7 +122,7 @@ class SystemIntegrationTester:
                     error_message=f"Test execution error: {str(e)}",
                 )
                 self.results.append(error_result)
-                safe_print(f"🚨 {test_method.__name__}: CRITICAL ERROR - {str(e)}")
+                safe_print(f"\\u1f6a8 {test_method.__name__}: CRITICAL ERROR - {str(e)}")
 
         return self.generate_final_report()
 
@@ -248,13 +248,13 @@ class SystemIntegrationTester:
             # Test automatic differentiation
             def test_func(x):
                 """TODO: document test_func."""
-                return x * x * x + 2 * x + 1  # f(x) = x³ + 2x + 1
+                return x * x * x + 2 * x + 1  # f(x) = x\\u00b3 + 2x + 1
 
             x = Dual(2.0, 1.0)
             result = test_func(x)
             expected_derivative = (
                 3 * (2.0**2) + 2
-            )  # f'(x) = 3x² + 2, f'(2) = 14
+            )  # f'(x) = 3x\\u00b2 + 2, f'(2) = 14
 
             # Test Kelly criterion
             kelly_result = kelly_fraction(0.1, 0.04)  # 10% return, 4% variance
@@ -672,10 +672,10 @@ class SystemIntegrationTester:
                     WindowsCliCompatibilityHandler
 
                 test_messages = [
-                    "🧮 Mathematical operations test",
-                    "⚡ Performance test complete",
-                    "🎯 Target achieved successfully",
-                    "🚨 Alert: System warning",
+                    "\\u1f9ee Mathematical operations test",
+                    "\\u26a1 Performance test complete",
+                    "\\u1f3af Target achieved successfully",
+                    "\\u1f6a8 Alert: System warning",
                 ]
 
                 converted_messages = []
@@ -690,7 +690,7 @@ class SystemIntegrationTester:
 
                 try:
                     WindowsCliCompatibilityHandler.log_safe(
-                        logger, "info", "🧮 Test log message"
+                        logger, "info", "\\u1f9ee Test log message"
                     )
                     logging_test = True
                 except Exception:
@@ -908,14 +908,14 @@ class SystemIntegrationTester:
 
 def main() -> None:
     """Run comprehensive system integration test."""
-    safe_print("🔬 Starting Comprehensive System Integration Test")
+    safe_print("\\u1f52c Starting Comprehensive System Integration Test")
     safe_print("=" * 60)
 
     tester = SystemIntegrationTester()
     report = tester.run_all_tests()
 
     safe_print("\n" + "=" * 60)
-    safe_print("📊 INTEGRATION TEST SUMMARY")
+    safe_print("\\u1f4ca INTEGRATION TEST SUMMARY")
     safe_print("=" * 60)
 
     summary = report["integration_summary"]
@@ -927,15 +927,15 @@ def main() -> None:
     safe_print(f"Execution Time: {summary['total_execution_time']:.2f}s")
 
     if summary["overall_status"] == "PASS":
-        safe_print("\n🎉 INTEGRATION TEST PASSED!")
+        safe_print("\\n\\u1f389 INTEGRATION TEST PASSED!")
     else:
-        safe_print("\n⚠️ INTEGRATION ISSUES DETECTED")
+        safe_print("\\n\\u26a0\\ufe0f INTEGRATION ISSUES DETECTED")
 
-    safe_print("\n📋 RECOMMENDATIONS:")
+    safe_print("\\n\\u1f4cb RECOMMENDATIONS:")
     for i, rec in enumerate(report["recommendations"], 1):
         safe_print(f"  {i}. {rec}")
 
-    safe_print("\n🚀 NEXT STEPS:")
+    safe_print("\\n\\u1f680 NEXT STEPS:")
     for i, step in enumerate(report["next_steps"], 1):
         safe_print(f"  {i}. {step}")
 
@@ -944,7 +944,7 @@ def main() -> None:
     with open(report_file, "w") as f:
         json.dump(report, f, indent=2)
 
-    safe_print(f"\n📄 Detailed report saved to: {report_file}")
+    safe_print(f"\\n\\u1f4c4 Detailed report saved to: {report_file}")
 
     return report
 

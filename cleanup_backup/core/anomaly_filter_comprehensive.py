@@ -105,7 +105,7 @@ class ComprehensiveAnomalyFilter:
             "margin_cushion": 0.20,  # 20% margin cushion required
         }
 
-        logger.info("🛡️ Comprehensive Anomaly Filter initialized")
+        logger.info("\\u1f6e1\\ufe0f Comprehensive Anomaly Filter initialized")
 
     def detect_all_anomalies(self, current_state: SystemState) -> List[AnomalySignal]:
         """Run comprehensive anomaly detection across all systems."""
@@ -152,13 +152,13 @@ class ComprehensiveAnomalyFilter:
 
             detection_time = time.time() - start_time
             logger.debug(
-                f"🔍 Anomaly detection completed in {detection_time:.4f}s, found {len(all_anomalies)} anomalies"
+                f"\\u1f50d Anomaly detection completed in {detection_time:.4f}s, found {len(all_anomalies)} anomalies"
             )
 
             return all_anomalies
 
         except Exception as e:
-            logger.error(f"❌ Anomaly detection failed: {e}")
+            logger.error(f"\\u274c Anomaly detection failed: {e}")
             # Return critical system anomaly
             return [
                 AnomalySignal(
@@ -291,7 +291,7 @@ class MarketRegimeDetector:
                         )
 
             except Exception as e:
-                logger.warning(f"⚠️ Regime detection failed for {symbol}: {e}")
+                logger.warning(f"\\u26a0\\ufe0f Regime detection failed for {symbol}: {e}")
 
         return anomalies
 
@@ -651,6 +651,8 @@ if __name__ == "__main__":
         test_state
     )
 
-    safe_print(f"✅ Safe to execute: {safe_to_execute}")
-    safe_print(f"🔍 Anomalies detected: {len(detected_anomalies)}")
-    safe_print(f"📋 Recommended actions: {len(recommended_actions)}")
+    safe_print(f"\\u2705 Safe to execute: {safe_to_execute}")
+    safe_print(f"\\u1f50d Anomalies detected: {len(detected_anomalies)}")
+    safe_print(f"\\u1f4cb Recommended actions: {len(recommended_actions)}")
+
+"""

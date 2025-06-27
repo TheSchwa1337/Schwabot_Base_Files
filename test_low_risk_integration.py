@@ -116,7 +116,7 @@ def test_individual_bridges():
 
 def test_integration_manager():
     """Test the integration manager."""
-    safe_safe_print("\nTesting Integration Manager...")
+    safe_safe_print("\\nTesting Integration Manager...")
 
     try:
         from ui_bridge_integration_manager import get_ui_bridge_integration_manager
@@ -158,7 +158,7 @@ def test_integration_manager():
 
 def test_data_flow():
     """Test data flow between bridges."""
-    safe_safe_print("\nTesting Data Flow...")
+    safe_safe_print("\\nTesting Data Flow...")
 
     try:
         from ui_bridge_integration_manager import get_ui_bridge_integration_manager
@@ -188,7 +188,7 @@ def test_data_flow():
 
 def test_error_handling():
     """Test error handling and recovery."""
-    safe_safe_print("\nTesting Error Handling...")
+    safe_safe_print("\\nTesting Error Handling...")
 
     try:
         from ui_state_bridge import get_ui_state_bridge
@@ -223,7 +223,7 @@ def test_error_handling():
 
 def test_performance():
     """Test performance metrics."""
-    safe_safe_print("\nTesting Performance...")
+    safe_safe_print("\\nTesting Performance...")
 
     try:
         from ui_bridge_integration_manager import get_ui_bridge_integration_manager
@@ -287,3 +287,5 @@ def main():
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
+
+"""

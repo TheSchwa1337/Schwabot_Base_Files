@@ -12,13 +12,13 @@ Mathematical background
 -----------------------
 A dual number is a two-component object
 
-    x = x + ε·x′    with ε² = 0
+    x = x + \\u03b5\\u00b7x\\u2032    with \\u03b5\\u00b2 = 0
 
 Under first-order Taylor expansion rules we have
 
-    f(x) = f(x) + ε·f′(x)
+    f(x) = f(x) + \\u03b5\\u00b7f\\u2032(x)
 
-so the ε coefficient carries the derivative automatically through algebraic
+so the \\u03b5 coefficient carries the derivative automatically through algebraic
 operations. For now we only expose addition, subtraction, multiplication and
 division which are enough for most Schwabot analytic filters.
 
@@ -35,7 +35,7 @@ __all__ = ["DualNumber", "dual_state_tracker"]
 
 @dataclass(slots=True)
 class DualNumber:
-    """A first-order dual number x + ε·dx."""
+    """A first-order dual number x + \\u03b5\\u00b7dx."""
 
     x: float  # primal value
     dx: float  # derivative w.r.t. some scalar variable
@@ -106,7 +106,7 @@ class DualNumber:
 
 
 # -----------------------------------------------------------------------------
-# Public helper – minimal wrapper requested by Flake8 stub reports
+# Public helper \\u2013 minimal wrapper requested by Flake8 stub reports
 # -----------------------------------------------------------------------------
 
 
@@ -123,6 +123,8 @@ def dual_state_tracker(value: float, derivative: float) -> DualNumber:
     Returns
     -------
     DualNumber
-        x + ε·dx dual-number form.
+        x + \\u03b5\\u00b7dx dual-number form.
     """
     return DualNumber(x=float(value), dx=float(derivative))
+
+"""

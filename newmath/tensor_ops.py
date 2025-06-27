@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
     """
-    Perform tensor contraction: T_ij = Σ_k A_ik · B_kj
+    Perform tensor contraction: T_ij = \\u03a3_k A_ik \\u00b7 B_kj
 
     Args:
         A: First tensor
@@ -40,9 +40,9 @@ def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
     Advanced bit phase tensor operations for strategy routing.
 
     Mathematical Implementation:
-    φ₄ = strategy_id & 0b1111
-    φ₈ = (strategy_id >> 4) & 0xFF  
-    φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
+    \\u03c6\\u2084 = strategy_id & 0b1111
+    \\u03c6\\u2088 = (strategy_id >> 4) & 0xFF  
+    \\u03c6\\u2084\\u2082 = (strategy_id >> 12) & 0x3FFFFFFFFFF
 
     Args:
         strategy_id: Strategy identifier
@@ -65,7 +65,7 @@ def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
     Calculate matrix basket operations for asset allocation.
 
     Mathematical Implementation:
-    B = W · P^T (basket = weights × prices transpose)
+    B = W \\u00b7 P^T (basket = weights \\u00d7 prices transpose)
 
     Args:
         prices: Price vector
@@ -88,7 +88,7 @@ def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
     Calculate cosine similarity between tensors.
 
     Mathematical Implementation:
-    similarity = unified_math.cos(θ) = (A·B) / (||A|| ||B||)
+    similarity = unified_math.cos(\\u03b8) = (A\\u00b7B) / (||A|| ||B||)
 
     Args:
         tensor_a: First tensor

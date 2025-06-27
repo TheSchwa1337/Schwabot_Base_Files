@@ -477,7 +477,7 @@ class TensorRouter:
 
 def main():
     """Test function for Tensor Router."""
-    safe_print("🧮 Testing Tensor Router...")
+    safe_print("\\u1f9ee Testing Tensor Router...")
 
     router = TensorRouter()
 
@@ -505,7 +505,7 @@ def main():
     tensor_sequence = [0.1, 0.2, 0.15, 0.3, 0.25, 0.4, 0.35, 0.5]
     analysis = router.analyze_tensor_patterns(tensor_sequence)
     safe_print(
-        f"\nPattern analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
+        f"\\nPattern analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
 
     return 0
 

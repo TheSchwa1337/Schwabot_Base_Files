@@ -15,8 +15,8 @@ Provides dynamic basket loading, recursive trigger functionality, and seamless i
 
 Mathematical Foundation:
 - Basket ID Resolution: basket_id = matrix_basket_id from hash registry
-- Bit Depth Mapping: 4-bit, 8-bit, 42-bit → BitPhase enum
-- Tensor Route Assignment: route_0 to route_4 → tensor operations
+- Bit Depth Mapping: 4-bit, 8-bit, 42-bit \\u2192 BitPhase enum
+- Tensor Route Assignment: route_0 to route_4 \\u2192 tensor operations
 - Priority-Based Loading: 0.1 to 3.2 priority system
 - Enabled/Disabled State Management
 """
@@ -695,14 +695,14 @@ class MatrixBasketLoader:
 
 def main():
     """Main function for matrix basket loader testing."""
-    safe_print("📦 Matrix Basket Loader - Schwabot UROS v1.0")
+    safe_print("\\u1f4e6 Matrix Basket Loader - Schwabot UROS v1.0")
     safe_print("=" * 50)
 
     # Initialize loader
     loader = MatrixBasketLoader()
 
     # Test loading by bit depth
-    safe_print("\n🔍 Testing bit depth loading...")
+    safe_print("\\n\\u1f50d Testing bit depth loading...")
     results_4bit = loader.load_baskets_by_bit_depth(4)
     results_8bit = loader.load_baskets_by_bit_depth(8)
     results_42bit = loader.load_baskets_by_bit_depth(42)
@@ -712,17 +712,17 @@ def main():
     safe_print(f"42-bit baskets loaded: {len(results_42bit)}")
 
     # Test loading by route
-    safe_print("\n🛣️ Testing route loading...")
+    safe_print("\\n\\u1f6e3\\ufe0f Testing route loading...")
     results_route_0 = loader.load_baskets_by_route("route_0")
     safe_print(f"Route 0 baskets loaded: {len(results_route_0)}")
 
     # Test priority range loading
-    safe_print("\n⚖️ Testing priority range loading...")
+    safe_print("\\n\\u2696\\ufe0f Testing priority range loading...")
     results_high_priority = loader.load_baskets_by_priority_range(2.0, 3.2)
     safe_print(f"High priority baskets loaded: {len(results_high_priority)}")
 
     # Test individual basket loading
-    safe_print("\n🎯 Testing individual basket loading...")
+    safe_print("\\n\\u1f3af Testing individual basket loading...")
     result = loader.load_basket_from_registry("hash_10")
     if result.success:
         safe_print(f"Successfully loaded basket: {result.basket_id}")
@@ -731,13 +731,15 @@ def main():
 
     # Get statistics
     stats = loader.get_loader_statistics()
-    safe_print(f"\n📊 Loader statistics: {stats}")
+    safe_print(f"\\n\\u1f4ca Loader statistics: {stats}")
 
     # Export summary
     loader.export_loader_summary()
 
-    safe_print("\n✅ Matrix Basket Loader test completed")
+    safe_print("\\n\\u2705 Matrix Basket Loader test completed")
 
 
 if __name__ == "__main__":
     main()
+
+"""

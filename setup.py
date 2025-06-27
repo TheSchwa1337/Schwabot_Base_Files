@@ -33,7 +33,7 @@ def read_requirements(filename):
 # Package configuration
 PACKAGE_CONFIG = {
     "name": "schwabot",
-    "version": "2.0.0",
+    "version": "2.0_0",
     "description": "Hardware-scale-aware economic kernel for federated trading devices",
     "long_description": long_description,
     "long_description_content_type": "text/markdown",
@@ -88,40 +88,40 @@ PACKAGE_CONFIG = {
     "install_requires": read_requirements("requirements.txt"),
     "extras_require": {
         "dev": [
-            "pytest>=6.2.0",
-            "pytest-asyncio>=0.15.0",
-            "pytest-cov>=2.12.0",
-            "flake8>=3.9.0",
-            "black>=21.0.0",
-            "isort>=5.9.0",
+            "pytest>=6.2_0",
+            "pytest-asyncio>=0.15_0",
+            "pytest-cov>=2.12_0",
+            "flake8>=3.9_0",
+            "black>=21.0_0",
+            "isort>=5.9_0",
             "mypy>=0.910",
-            "pre-commit>=2.15.0",
+            "pre-commit>=2.15_0",
         ],
         "gpu": [
-            "torch>=1.9.0",
-            "tensorflow>=2.6.0",
-            "cupy-cuda11x>=9.0.0",
+            "torch>=1.9_0",
+            "tensorflow>=2.6_0",
+            "cupy-cuda11x>=9.0_0",
         ],
         "ml": [
-            "scikit-learn>=1.0.0",
-            "statsmodels>=0.13.0",
-            "sympy>=1.9.0",
-            "numba>=0.56.0",
-            "cython>=0.29.0",
+            "scikit-learn>=1.0_0",
+            "statsmodels>=0.13_0",
+            "sympy>=1.9_0",
+            "numba>=0.56_0",
+            "cython>=0.29_0",
         ],
         "monitoring": [
-            "prometheus-client>=0.11.0",
-            "grafana-api>=1.0.0",
-            "sentry-sdk>=1.3.0",
-            "rollbar>=0.16.0",
+            "prometheus-client>=0.11_0",
+            "grafana-api>=1.0_0",
+            "sentry-sdk>=1.3_0",
+            "rollbar>=0.16_0",
         ],
         "database": [
-            "sqlalchemy>=1.4.0",
-            "redis>=3.5.0",
+            "sqlalchemy>=1.4_0",
+            "redis>=3.5_0",
         ],
         "visualization": [
-            "plotly>=5.0.0",
-            "bokeh>=2.3.0",
+            "plotly>=5.0_0",
+            "bokeh>=2.3_0",
         ]
     },
     "entry_points": {
@@ -161,3 +161,5 @@ PACKAGE_CONFIG = {
 
 if __name__ == "__main__":
     setup(**PACKAGE_CONFIG)
+
+"""

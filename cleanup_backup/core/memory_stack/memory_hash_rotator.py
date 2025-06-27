@@ -77,7 +77,7 @@ class MemoryHashRotator:
         # Initialize first epoch
         self._initialize_epoch(tick=0)
 
-        safe_safe_print("🗝️ Memory Hash Rotator initialized")
+        safe_safe_print("\\u1f5dd\\ufe0f Memory Hash Rotator initialized")
 
     def _initialize_epoch(self, tick: int) -> None:
         """Initialize a new memory epoch."""
@@ -96,10 +96,10 @@ class MemoryHashRotator:
 
             self.epoch_history[epoch_id] = self.current_epoch
 
-            safe_safe_print(f"🔄 New epoch initialized: {epoch_id} (ticks {epoch_start}-{epoch_end})")
+            safe_safe_print(f"\\u1f504 New epoch initialized: {epoch_id} (ticks {epoch_start}-{epoch_end})")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Epoch initialization failed: {safe_format_error(e, 'epoch_init')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Epoch initialization failed: {safe_format_error(e, 'epoch_init')}")
 
     def generate_memory_key(
         self,
@@ -154,7 +154,7 @@ class MemoryHashRotator:
 
         except Exception as e:
             error_msg = safe_format_error(e, "generate_memory_key")
-            safe_safe_print(f"❌ Memory key generation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Memory key generation failed: {error_msg}")
             # Fallback key
             return f"fallback_{agent_type.value}_{curve_id}_{tick}"
 
@@ -170,7 +170,7 @@ class MemoryHashRotator:
                 ])
 
                 safe_safe_print(
-                    f"🔄 Epoch rotation: {self.current_epoch.epoch_id} completed with {self.current_epoch.memory_count} keys")
+                    f"\\u1f504 Epoch rotation: {self.current_epoch.epoch_id} completed with {self.current_epoch.memory_count} keys")
 
             # Initialize new epoch
             self._initialize_epoch(tick)
@@ -180,7 +180,7 @@ class MemoryHashRotator:
             self._clean_old_epochs()
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Epoch rotation failed: {safe_format_error(e, 'epoch_rotation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Epoch rotation failed: {safe_format_error(e, 'epoch_rotation')}")
 
     def _register_memory_key(
         self,
@@ -203,7 +203,7 @@ class MemoryHashRotator:
             }
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory key registration failed: {safe_format_error(e, 'key_registration')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory key registration failed: {safe_format_error(e, 'key_registration')}")
 
     def _clean_old_epochs(self) -> None:
         """Clean old epochs to prevent memory bloat."""
@@ -230,10 +230,10 @@ class MemoryHashRotator:
                 for key in keys_to_remove:
                     del self.memory_key_registry[key]
 
-                safe_safe_print(f"🧹 Cleaned epoch: {epoch_id} with {len(keys_to_remove)} keys")
+                safe_safe_print(f"\\u1f9f9 Cleaned epoch: {epoch_id} with {len(keys_to_remove)} keys")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Epoch cleanup failed: {safe_format_error(e, 'epoch_cleanup')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Epoch cleanup failed: {safe_format_error(e, 'epoch_cleanup')}")
 
     def get_epoch_info(self, tick: int) -> Optional[Dict]:
         """Get information about the epoch for a given tick."""
@@ -258,7 +258,7 @@ class MemoryHashRotator:
             return None
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Epoch info retrieval failed: {safe_format_error(e, 'epoch_info')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Epoch info retrieval failed: {safe_format_error(e, 'epoch_info')}")
             return None
 
     def get_memory_key_info(self, memory_key: str) -> Optional[Dict]:
@@ -270,7 +270,7 @@ class MemoryHashRotator:
             return None
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory key info retrieval failed: {safe_format_error(e, 'key_info')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory key info retrieval failed: {safe_format_error(e, 'key_info')}")
             return None
 
     def get_epoch_statistics(self) -> Dict:
@@ -303,7 +303,7 @@ class MemoryHashRotator:
             }
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Statistics calculation failed: {safe_format_error(e, 'statistics')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Statistics calculation failed: {safe_format_error(e, 'statistics')}")
             return {}
 
     def export_epoch_data(self, file_path: str) -> bool:
@@ -329,11 +329,11 @@ class MemoryHashRotator:
             with open(file_path, 'w') as f:
                 json.dump(export_data, f, indent=2)
 
-            safe_safe_print(f"💾 Epoch data exported to {file_path}")
+            safe_safe_print(f"\\u1f4be Epoch data exported to {file_path}")
             return True
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Epoch data export failed: {safe_format_error(e, 'epoch_export')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Epoch data export failed: {safe_format_error(e, 'epoch_export')}")
             return False
 
     def validate_memory_key(self, memory_key: str) -> bool:
@@ -357,7 +357,7 @@ class MemoryHashRotator:
             return True
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory key validation failed: {safe_format_error(e, 'key_validation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory key validation failed: {safe_format_error(e, 'key_validation')}")
             return False
 
 
@@ -389,7 +389,7 @@ def get_epoch_statistics() -> Dict:
 if __name__ == "__main__":
     async def test_memory_rotator():
         """Test memory hash rotator."""
-        safe_safe_print("🗝️ Testing Memory Hash Rotator...")
+        safe_safe_print("\\u1f5dd\\ufe0f Testing Memory Hash Rotator...")
 
         # Test key generation
         test_agents = [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]
@@ -405,7 +405,7 @@ if __name__ == "__main__":
 
             # Test epoch rotation
             if i == 50:
-                safe_safe_print("🔄 Testing epoch rotation...")
+                safe_safe_print("\\u1f504 Testing epoch rotation...")
 
         # Get statistics
         stats = get_epoch_statistics()
@@ -416,8 +416,10 @@ if __name__ == "__main__":
         is_valid = memory_rotator.validate_memory_key(valid_key)
         safe_safe_print(f"Key validation: {is_valid}")
 
-        safe_safe_print("✅ Memory Hash Rotator test completed")
+        safe_safe_print("\\u2705 Memory Hash Rotator test completed")
 
     # Run test
     import asyncio
     asyncio.run(test_memory_rotator())
+
+"""

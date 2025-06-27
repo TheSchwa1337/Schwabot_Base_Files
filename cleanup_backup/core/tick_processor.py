@@ -153,7 +153,7 @@ class TickProcessor:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize tick processor."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Processing queues and buffers
@@ -680,7 +680,7 @@ class TickProcessor:
 def main() -> None:
     """Main function for testing tick processor."""
     try:
-        safe_print("📊 Tick Processor Test")
+        safe_print("\\u1f4ca Tick Processor Test")
         safe_print("=" * 40)
 
         # Initialize tick processor
@@ -714,21 +714,21 @@ def main() -> None:
         for tick_data in test_ticks:
             tick = processor.process_tick(tick_data)
             if tick:
-                safe_print(f"✅ Processed tick: {tick.symbol} @ {tick.price:.2f}")
+                safe_print(f"\\u2705 Processed tick: {tick.symbol} @ {tick.price:.2f}")
             else:
-                safe_print(f"❌ Rejected tick: {tick_data['symbol']}")
+                safe_print(f"\\u274c Rejected tick: {tick_data['symbol']}")
 
         # Get performance metrics
         metrics = processor.get_performance_metrics()
         safe_print(
-            f"✅ Performance: {metrics['total_ticks_processed']} processed, "
+            f"\\u2705 Performance: {metrics['total_ticks_processed']} processed, "
             f"{metrics['total_ticks_rejected']} rejected"
         )
 
-        safe_print("\n🎉 Tick processor test completed successfully!")
+        safe_print("\\n\\u1f389 Tick processor test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Tick processor test failed: {e}")
+        safe_print(f"\\u274c Tick processor test failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -736,3 +736,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

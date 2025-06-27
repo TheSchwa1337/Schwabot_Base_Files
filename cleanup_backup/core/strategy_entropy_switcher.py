@@ -9,10 +9,10 @@ This module switches trading strategies dynamically based on entropy flow,
 hash correlation, and performance metrics over multiple tick windows.
 
 Mathematical Foundation:
-- Entropy-based switch signal: S_switch = softmax(∇E_state)
+- Entropy-based switch signal: S_switch = softmax(\\u2207E_state)
 - Strategy confidence entropy: C_s = 1/(1 + e^(-k(E_good - E_bad)))
-- State change resistance: R_state = tanh(Δ_performance) * (1 - σ(Δ_vol))
-- Strategy fitness score: F_s = Σ(performance_i * entropy_weight_i)
+- State change resistance: R_state = tanh(\\u0394_performance) * (1 - \\u03c3(\\u0394_vol))
+- Strategy fitness score: F_s = \\u03a3(performance_i * entropy_weight_i)
 
 Windows CLI compatible with comprehensive error handling.
 """
@@ -110,7 +110,7 @@ class StrategyEntropySwitcher:
         """Calculate entropy gradient for switch signal.
 
         Mathematical Formula:
-        ∇E_state = (E_current - E_mean) / σ_E
+        \\u2207E_state = (E_current - E_mean) / \\u03c3_E
 
         Parameters
         ----------
@@ -185,7 +185,7 @@ class StrategyEntropySwitcher:
         """Calculate resistance to state change.
 
         Mathematical Formula:
-        R_state = tanh(Δ_performance) * (1 - σ(Δ_vol))
+        R_state = tanh(\\u0394_performance) * (1 - \\u03c3(\\u0394_vol))
 
         Parameters
         ----------
@@ -224,7 +224,7 @@ class StrategyEntropySwitcher:
         """Calculate strategy fitness score.
 
         Mathematical Formula:
-        F_s = Σ(performance_i * entropy_weight_i) / n
+        F_s = \\u03a3(performance_i * entropy_weight_i) / n
 
         Parameters
         ----------
@@ -540,8 +540,8 @@ def main() -> None:
 
     safe_print("Simulating strategy switching:")
     for i, (entropy, performance, volume_delta) in enumerate(test_scenarios):
-        safe_print(f"\nScenario {i+1}:")
-        safe_print(f"  Entropy: {entropy:.1f}, Performance: {performance:.1f}, Volume Δ: {volume_delta:.1f}")
+        safe_print(f"\\nScenario {i+1}:")
+        safe_print(f"  Entropy: {entropy:.1f}, Performance: {performance:.1f}, Volume \\u0394: {volume_delta:.1f}")
 
         # Update performance
         switcher.update_performance(performance)
@@ -563,18 +563,18 @@ def main() -> None:
         # Execute switch if recommended
         if switch_signal.should_switch:
             switched = switcher.execute_strategy_switch(switch_signal)
-            safe_print("  → Switch Executed: {switched}")
+            safe_print("  \\u2192 Switch Executed: {switched}")
 
         time.sleep(0.1)  # Small delay for realistic timing
 
     # Strategy info
-    safe_print("\nCurrent Strategy Info:")
+    safe_print("\\nCurrent Strategy Info:")
     strategy_info = switcher.get_current_strategy_info()
     for key, value in strategy_info.items():
         safe_print(f"  {key}: {value}")
 
     # Switcher summary
-    safe_print("\nSwitcher Summary:")
+    safe_print("\\nSwitcher Summary:")
     summary = switcher.get_switcher_summary()
     for key, value in summary.items():
         safe_print(f"  {key}: {value}")

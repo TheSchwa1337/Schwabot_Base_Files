@@ -43,7 +43,7 @@ class MathLib:
 
     def __init__(self) -> None:
         """Initialize the mathematical library."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.epsilon = 1e-12
         logger.info(f"MathLib v{self.version} initialized")
 
@@ -135,3 +135,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

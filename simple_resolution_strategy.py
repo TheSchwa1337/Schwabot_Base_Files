@@ -189,28 +189,28 @@ def print_resolution_plan(plan):
     """Print the resolution plan in a formatted way."""
 
     print("\n" + "="*80)
-    print("🎯 SYSTEMATIC ERROR RESOLUTION PLAN")
+    print("\\u1f3af SYSTEMATIC ERROR RESOLUTION PLAN")
     print("="*80)
 
     # Current Status
     status = plan["current_status"]
-    print(f"\n📊 CURRENT STATUS:")
+    print(f"\\n\\u1f4ca CURRENT STATUS:")
     print(f"   Total files: {status['total_files']}")
-    print(f"   ✅ Working: {status['working_files']} ({status['working_files']/status['total_files']*100:.1f}%)")
-    print(f"   🔧 Stubs: {status['stub_files']}")
-    print(f"   ❌ Broken: {status['broken_files']}")
-    print(f"   📄 Empty: {status['empty_files']}")
+    print(f"   \\u2705 Working: {status['working_files']} ({status['working_files']/status['total_files']*100:.1f}%)")
+    print(f"   \\u1f527 Stubs: {status['stub_files']}")
+    print(f"   \\u274c Broken: {status['broken_files']}")
+    print(f"   \\u1f4c4 Empty: {status['empty_files']}")
 
     # Target Architecture
-    print(f"\n🏗️ TARGET ARCHITECTURE:")
+    print(f"\\n\\u1f3d7\\ufe0f TARGET ARCHITECTURE:")
     for component, details in plan["target_architecture"].items():
-        status_icon = "✅" if details["current_status"] == "COMPLETE" else "❌"
+        status_icon = "\\u2705" if details["current_status"] == "COMPLETE" else "\\u274c"
         print(f"   {status_icon} {component.upper()}: {details['description']}")
         print(f"      Priority: {details['priority']}")
         print(f"      Status: {details['current_status']}")
 
     # Resolution Phases
-    print(f"\n📋 RESOLUTION PHASES:")
+    print(f"\\n\\u1f4cb RESOLUTION PHASES:")
     for phase in plan["resolution_phases"]:
         print(f"   Phase {phase['phase']}: {phase['name']}")
         print(f"      Description: {phase['description']}")
@@ -218,12 +218,12 @@ def print_resolution_plan(plan):
         print(f"      Estimated Time: {phase['estimated_time']}")
 
     # Recommendations
-    print(f"\n💡 RECOMMENDATIONS:")
+    print(f"\\n\\u1f4a1 RECOMMENDATIONS:")
     recs = plan["recommendations"]
     for category, items in recs.items():
         print(f"   {category.upper()}:")
         for item in items:
-            print(f"     • {item}")
+            print(f"     \\u2022 {item}")
 
     print("\n" + "="*80)
 
@@ -279,16 +279,16 @@ def fix_syntax_errors(file_path: str) -> bool:
             content = '{' * (close_brace - open_brace) + content
         
         # Fix 2: Missing colons after function/class definitions
-        content = re.sub(r'def\\s+\\w+\\s*\\([^)]*\\)\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'class\\s+\\w+\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'if\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'elif\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'else\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'for\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'while\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'try\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'except\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'finally\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'def\\\s+\\\w+\\\s*\\([^)]*\\)\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'class\\\s+\\\w+\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'if\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'elif\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'else\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'for\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'while\\\s+[^:]+$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'try\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'except\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'finally\\\s*$', r'\\g<0>:', content, flags=re.MULTILINE)
         
         # Only write if content changed
         if content != original_content:
@@ -305,7 +305,7 @@ def fix_syntax_errors(file_path: str) -> bool:
 def main():
     """Run syntax fixes on all Python files."""
     
-    print("🔧 Phase 1: Fixing Critical Syntax Errors...")
+    print("\\u1f527 Phase 1: Fixing Critical Syntax Errors...")
     
     # Focus on core directories first
     core_dirs = ['core', 'mathlib', 'tools', 'api', 'engine']
@@ -319,9 +319,9 @@ def main():
                 total_count += 1
                 if fix_syntax_errors(str(py_file)):
                     fixed_count += 1
-                    print(f"✅ Fixed: {py_file}")
+                    print(f"\\u2705 Fixed: {py_file}")
     
-    print(f"\n📊 Results:")
+    print(f"\\n\\u1f4ca Results:")
     print(f"   Files processed: {total_count}")
     print(f"   Files fixed: {fixed_count}")
     print(f"   Success rate: {fixed_count/total_count*100:.1f}%")
@@ -333,7 +333,7 @@ if __name__ == "__main__":
     with open("phase_1_fix.py", "w") as f:
         f.write(script_content)
 
-    print("📝 Created: phase_1_fix.py")
+    print("\\u1f4dd Created: phase_1_fix.py")
 
 
 def create_phase_2_script():
@@ -428,7 +428,7 @@ def fix_import_errors(file_path: str) -> bool:
 def main():
     """Run import fixes on all Python files."""
     
-    print("📦 Phase 2: Fixing Import Dependencies...")
+    print("\\u1f4e6 Phase 2: Fixing Import Dependencies...")
     
     # Focus on core directories first
     core_dirs = ['core', 'mathlib', 'tools', 'api', 'engine']
@@ -442,9 +442,9 @@ def main():
                 total_count += 1
                 if fix_import_errors(str(py_file)):
                     fixed_count += 1
-                    print(f"✅ Fixed: {py_file}")
+                    print(f"\\u2705 Fixed: {py_file}")
     
-    print(f"\n📊 Results:")
+    print(f"\\n\\u1f4ca Results:")
     print(f"   Files processed: {total_count}")
     print(f"   Files fixed: {fixed_count}")
     print(f"   Success rate: {fixed_count/total_count*100:.1f}%")
@@ -456,13 +456,13 @@ if __name__ == "__main__":
     with open("phase_2_fix.py", "w") as f:
         f.write(script_content)
 
-    print("📝 Created: phase_2_fix.py")
+    print("\\u1f4dd Created: phase_2_fix.py")
 
 
 def main():
     """Generate and display the systematic error resolution plan."""
 
-    print("🎯 Generating Systematic Error Resolution Strategy...")
+    print("\\u1f3af Generating Systematic Error Resolution Strategy...")
 
     plan = generate_resolution_plan()
     print_resolution_plan(plan)
@@ -471,13 +471,13 @@ def main():
     with open("resolution_plan.json", "w") as f:
         json.dump(plan, f, indent=2, default=str)
 
-    print(f"\n📄 Resolution plan saved to: resolution_plan.json")
+    print(f"\\n\\u1f4c4 Resolution plan saved to: resolution_plan.json")
 
     # Create fix scripts
     create_phase_1_script()
     create_phase_2_script()
 
-    print(f"\n🚀 NEXT STEPS:")
+    print(f"\\n\\u1f680 NEXT STEPS:")
     print(f"   1. Run: python phase_1_fix.py")
     print(f"   2. Run: python phase_2_fix.py")
     print(f"   3. Check results with: flake8 core/ mathlib/ tools/")
@@ -486,3 +486,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

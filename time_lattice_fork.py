@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Time-lattice fork – placeholder implementation.
+"""Time-lattice fork \\u2013 placeholder implementation.
 
 This stub keeps the package importable until the real time-lattice
 fork logic is written. Replace with full implementation when ready.
@@ -13,3 +13,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

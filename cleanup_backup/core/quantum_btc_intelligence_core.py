@@ -9,10 +9,10 @@ This module orchestrates quantum state, hash health, and reflex scoring with
 drift correction, reflex strategy updates, and multivector stability enforcement.
 
 Mathematical Foundation:
-- Unified reflex score: R_unified = Σ(tick_delta_i * entropy_surge_i)
+- Unified reflex score: R_unified = \\u03a3(tick_delta_i * entropy_surge_i)
 - Hash health score: H_health = hash_rate * difficulty_correlation
-- Quantum state vector: |ψ⟩ = α|0⟩ + β|1⟩ (superposition)
-- Drift correction: δ_correction = -k * drift_magnitude
+- Quantum state vector: |\\u03c8\\u27e9 = \\u03b1|0\\u27e9 + \\u03b2|1\\u27e9 (superposition)
+- Drift correction: \\u03b4_correction = -k * drift_magnitude
 
 Windows CLI compatible with comprehensive error handling.
 """
@@ -40,8 +40,8 @@ class QuantumState(Enum):
 @dataclass
 class QuantumVector:
     """Quantum state vector representation."""
-    alpha: complex                      # |0⟩ amplitude
-    beta: complex                      # |1⟩ amplitude
+    alpha: complex                      # |0\\u27e9 amplitude
+    beta: complex                      # |1\\u27e9 amplitude
     phase: float                       # Global phase
     coherence: float                   # Coherence measure
     entanglement_strength: float       # Entanglement degree
@@ -102,7 +102,7 @@ class QuantumBTCIntelligenceCore:
         """Compute quantum state vector from market conditions.
 
         Mathematical Formula:
-        |ψ⟩ = α|0⟩ + β|1⟩ where |α|² + |β|² = 1
+        |\\u03c8\\u27e9 = \\u03b1|0\\u27e9 + \\u03b2|1\\u27e9 where |\\u03b1|\\u00b2 + |\\u03b2|\\u00b2 = 1
 
         Parameters
         ----------
@@ -246,7 +246,7 @@ class QuantumBTCIntelligenceCore:
         """Compute unified reflex score from multiple components.
 
         Mathematical Formula:
-        R_unified = w₁*Σ(tick_δᵢ*entropy_ᵢ) + w₂*H_health + w₃*drift_correction
+        R_unified = w\\u2081*\\u03a3(tick_\\u03b4\\u1d62*entropy_\\u1d62) + w\\u2082*H_health + w\\u2083*drift_correction
 
         Parameters
         ----------
@@ -328,7 +328,7 @@ class QuantumBTCIntelligenceCore:
         """Apply drift correction with feedback control.
 
         Mathematical Formula:
-        δ_correction = -k * drift_magnitude * correction_strength
+        \\u03b4_correction = -k * drift_magnitude * correction_strength
 
         Parameters
         ----------
@@ -491,7 +491,7 @@ def main() -> None:
     safe_print(f"  State Type: {state_type.value}")
 
     # Test hash health calculation
-    safe_print(f"\nTesting Hash Health Calculation:")
+    safe_print(f"\\nTesting Hash Health Calculation:")
     hash_metrics = core.calculate_hash_health_score(
         current_hash_rate=4.5e17,
         current_difficulty=6.8e13,
@@ -505,7 +505,7 @@ def main() -> None:
     safe_print(f"  Mining Pressure: {hash_metrics.mining_pressure:.3f}")
 
     # Test unified reflex score
-    safe_print(f"\nTesting Unified Reflex Score:")
+    safe_print(f"\\nTesting Unified Reflex Score:")
     tick_deltas = [0.1, 0.15, 0.08, 0.12, 0.09]
     entropy_surges = [0.6, 0.8, 0.5, 0.7, 0.6]
 
@@ -523,7 +523,7 @@ def main() -> None:
     safe_print(f"  Unified Score: {reflex_components.unified_score:.3f}")
 
     # Test drift correction
-    safe_print(f"\nTesting Drift Correction:")
+    safe_print(f"\\nTesting Drift Correction:")
     drift_correction = core.apply_drift_correction(
         current_drift=0.3,
         correction_strength=1.2
@@ -531,7 +531,7 @@ def main() -> None:
     safe_print(f"  Drift Correction: {drift_correction:.3f}")
 
     # Test multivector stability
-    safe_print(f"\nTesting Multivector Stability:")
+    safe_print(f"\\nTesting Multivector Stability:")
     test_vectors = [
         np.array([1, 2, 3, 4, 5]),
         np.array([1.1, 2.1, 2.9, 4.1, 4.9]),
@@ -544,8 +544,10 @@ def main() -> None:
 
     # Core summary
     summary = core.get_intelligence_summary()
-    safe_print(f"\nIntelligence Core Summary: {summary}")
+    safe_print(f"\\nIntelligence Core Summary: {summary}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

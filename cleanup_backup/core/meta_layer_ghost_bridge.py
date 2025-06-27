@@ -9,13 +9,13 @@ echo memory state across ghost layers. It enables Schwabot to retain awareness
 of non-trade intelligence and bridge memory between time intervals.
 
 Mathematical Foundation:
-Ψ_m = f(Σ_t (H_t · ΔV_t) × α^(t-t₀))
+\\u03a8_m = f(\\u03a3_t (H_t \\u00b7 \\u0394V_t) \\u00d7 \\u03b1^(t-t\\u2080))
 
 Where:
 - H_t = Signal hash at tick t
-- ΔV_t = Change in vector state (price, volume, entropy)
-- α = Decay factor (how fast older hashes lose relevance)
-- t₀ = current tick
+- \\u0394V_t = Change in vector state (price, volume, entropy)
+- \\u03b1 = Decay factor (how fast older hashes lose relevance)
+- t\\u2080 = current tick
 
 This becomes the meta-ghost anchor that triggers cross-layer adjustments
 and informs profit_handoff.py to route future trades recursively.
@@ -605,3 +605,5 @@ def get_meta_ghost_vector(symbol: str = None) -> float:
     """
     bridge = MetaLayerGhostBridge()
     return bridge.get_meta_vector(symbol)
+
+"""

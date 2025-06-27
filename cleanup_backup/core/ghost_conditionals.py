@@ -4,7 +4,7 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ghost-conditional helpers.
 
-Implements the routing activation Γᵣ = σ(Δₜ · Ξ_ghost).
+Implements the routing activation \\u0393\\u1d63 = \\u03c3(\\u0394\\u209c \\u00b7 \\u039e_ghost).
 A lightweight logistic gate converts the continuous product of *delta_t*
 (seconds since last activation) and *xi_ghost* (scalar 0-1 intensity) into a
 probability.  Down-stream the router can compare this value against a policy
@@ -26,7 +26,7 @@ def _sigmoid(x: float) -> float:  # noqa: D401
 
 
 def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
-    """Return Γᵣ activation probability in (0, 1).
+    """Return \\u0393\\u1d63 activation probability in (0, 1).
 
     Parameters
     ----------
@@ -36,3 +36,5 @@ def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
         Scalar intensity of current ghost signal, expected in [0, 1].
     """
     return _sigmoid(delta_t * xi_ghost)
+
+"""

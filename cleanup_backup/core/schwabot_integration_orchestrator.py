@@ -113,7 +113,7 @@ class SchwabotIntegrationOrchestrator:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize orchestrator."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Component management
@@ -499,7 +499,7 @@ class SchwabotIntegrationOrchestrator:
             # Fallback: return None so orchestrator marks as ERROR
             return None
 
-        except Exception as exc:  # pragma: no cover – robust error capture
+        except Exception as exc:  # pragma: no cover \\u2013 robust error capture
             logger.error(
                 "Error creating component instance for %s: %s", component_name, exc
             )
@@ -653,3 +653,5 @@ class SchwabotIntegrationOrchestrator:
             pass
         except Exception as e:
             logger.error(f"Error updating performance metrics: {e}")
+
+"""

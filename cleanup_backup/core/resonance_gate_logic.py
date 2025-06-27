@@ -3,7 +3,7 @@ from __future__ import annotations
 #!/usr/bin/env python3
 """Phase-resonance gate logic.
 
-This helper exposes a single function – :func:`phase_resonance_gate`.  It acts
+This helper exposes a single function \\u2013 :func:`phase_resonance_gate`.  It acts
 as a deterministic *tick filter*: only ticks that align with a given harmonic
 cycle (the *base_cycle*) and, optionally, a **42-bit phase mask** are allowed to
 pass.  Schwabot uses this to trigger strategy rotations on specific harmonic
@@ -17,14 +17,14 @@ condition is simply
     n mod C == 0
 
 To cope with very-long sequences Schwabot employs a 42-bit ring counter; the
-mask ``0x3ffffffffff`` (2^42-1) limits the counter and avoids Python int → float
+mask ``0x3ffffffffff`` (2^42-1) limits the counter and avoids Python int \\u2192 float
 precision loss when we later pass the phase index into NumPy code.
 """
 
 
 __all__ = ["phase_resonance_gate"]
 
-# 42-bit mask (2**42 ­- 1)
+# 42-bit mask (2**42 \\u00ad- 1)
 _PHASE_MASK: int = 0x3FFFF_FFFFFF  # 42 bits set
 
 
@@ -41,7 +41,7 @@ def phase_resonance_gate(
     tick
         Monotonic tick counter (non-negative integer).
     base_cycle
-        Fundamental cycle length **C**.  Default **42** – Schwabot's universal
+        Fundamental cycle length **C**.  Default **42** \\u2013 Schwabot's universal
         harmonic constant.
     use_mask
         If ``True`` the *tick* is first masked to 42 bits; this mimics the ring

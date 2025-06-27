@@ -51,7 +51,7 @@ class CoreMathLibV2:
 
     def __init__(self) -> None:
         """Initialize the enhanced mathematical library."""
-        self.version = "2.0.0"
+        self.version = "2.0_0"
         self.initialized = True
         logger.info(f"CoreMathLibV2 v{self.version} initialized")
 
@@ -428,7 +428,7 @@ def main() -> None:
     """Demo of CoreMathLibV2 capabilities."""
     try:
         mathlib = CoreMathLibV2()
-        safe_print(f"✅ CoreMathLibV2 v{mathlib.version} initialized")
+        safe_print(f"\\u2705 CoreMathLibV2 v{mathlib.version} initialized")
 
         # Demo data
         prices = np.array([100, 102, 98, 105, 103, 107, 104, 108, 106, 110])
@@ -438,20 +438,20 @@ def main() -> None:
 
         # Test VWAP
         vwap = mathlib.calculate_vwap(prices, volumes)
-        safe_print(f"📊 VWAP: {vwap[-1]:.2f}")
+        safe_print(f"\\u1f4ca VWAP: {vwap[-1]:.2f}")
 
         # Test RSI
         rsi = mathlib.calculate_rsi(prices)
-        safe_print(f"📈 RSI: {rsi[-1]:.2f}")
+        safe_print(f"\\u1f4c8 RSI: {rsi[-1]:.2f}")
 
         # Test statistical analysis
         stats = mathlib.advanced_statistical_analysis(prices)
-        safe_print(f"📊 Mean: {stats['mean']:.2f}, Std: {stats['std']:.2f}")
+        safe_print(f"\\u1f4ca Mean: {stats['mean']:.2f}, Std: {stats['std']:.2f}")
 
-        safe_print("🎉 CoreMathLibV2 demo completed!")
+        safe_print("\\u1f389 CoreMathLibV2 demo completed!")
 
     except Exception as e:
-        safe_print(f"❌ Demo failed: {e}")
+        safe_print(f"\\u274c Demo failed: {e}")
 
 
 if __name__ == "__main__":

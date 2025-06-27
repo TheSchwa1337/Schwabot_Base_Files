@@ -421,7 +421,7 @@ class FallbackLogicRouter:
             delta_price = context.get('delta_price', 0.0) if context else 0.0
             entropy = context.get('entropy', 0.5) if context else 0.5
 
-            # Basic calculation: L(Δp, 𝓔) = e^(-𝓔) × (Δp / P_max)
+            # Basic calculation: L(\\u0394p, \\u1d4d4) = e^(-\\u1d4d4) \\u00d7 (\\u0394p / P_max)
             max_price_ref = 70000.0
             normalized_delta = unified_math.max(0.0, delta_price / max_price_ref)
             entropy_decay = unified_math.exp(-entropy)

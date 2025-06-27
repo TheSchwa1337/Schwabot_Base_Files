@@ -678,7 +678,7 @@ def main():
 
         # Register with network
         registration = identifier.register_with_network()
-        safe_print(f"\nNetwork Registration:")
+        safe_print(f"\\nNetwork Registration:")
         safe_print(f"  Success: {registration.success}")
         safe_print(f"  Node ID: {registration.assigned_node_id}")
         safe_print(f"  Profit Allocation: {registration.profit_allocation:.1%}")
@@ -692,7 +692,7 @@ def main():
 
         # Get performance summary
         summary = identifier.get_performance_summary()
-        safe_print(f"\nPerformance Summary:")
+        safe_print(f"\\nPerformance Summary:")
         safe_print(f"  CPU Usage: {summary.get('performance_metrics', {}).get('cpu_usage_avg', 0):.1f}%")
         safe_print(f"  Memory Usage: {summary.get('performance_metrics', {}).get('memory_usage_avg', 0):.1f}%")
         safe_print(f"  Adjustments: {summary.get('capability_adjustments', 0)}")
@@ -706,3 +706,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

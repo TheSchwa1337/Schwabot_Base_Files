@@ -47,7 +47,7 @@ def analyze_errors():
         reverse=True,
     )[:5]
 
-    safe_print("📊 E501 Error Analysis")
+    safe_print("\\u1f4ca E501 Error Analysis")
     safe_print("=" * 50)
     safe_print(
         "Total unique files with errors: "
@@ -62,12 +62,12 @@ def analyze_errors():
         f"{len(set(stub_files))}"
     )
 
-    safe_print(f"\n🏆 TOP 5 FILES WITH MOST E501 ERRORS:")
+    safe_print(f"\\n\\u1f3c6 TOP 5 FILES WITH MOST E501 ERRORS:")
     safe_print("-" * 50)
     for i, (filepath, count) in enumerate(top_5, 1):
         safe_print(f"{i}. {filepath}: {count} errors")
 
-    safe_print(f"\n📋 TOTAL ERRORS BY CATEGORY:")
+    safe_print(f"\\n\\u1f4cb TOTAL ERRORS BY CATEGORY:")
     real_error_count = sum(file_errors[f] for f in set(real_files))
     stub_error_count = sum(file_errors[f] for f in set(stub_files))
 
@@ -84,3 +84,5 @@ def analyze_errors():
 
 if __name__ == "__main__":
     analyze_errors()
+
+"""

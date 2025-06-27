@@ -7,8 +7,8 @@ randomized matrix allocation, dynamic portfolio substitutions, and heatmap
 drift analysis for optimal asset allocation.
 
 Mathematical Foundation:
-- Heatmap Drift: H = ∂f/∂p × τt
-- USDC Conversion Trigger: ∆USDC = p(t+1) - σ_{∆}
+- Heatmap Drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
+- USDC Conversion Trigger: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}
 - Randomized matrix allocation with dynamic weight optimization
 - Asset priority routing based on timeband analysis
 """
@@ -60,7 +60,7 @@ class HeatmapData:
     """Represents heatmap data for portfolio analysis."""
 
     asset: str
-    heatmap_value: float  # H = ∂f/∂p × τt
+    heatmap_value: float  # H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
     timeband: str  # Time period classification
     drift_direction: str  # 'up', 'down', 'stable'
     timestamp: datetime = field(default_factory=datetime.now)
@@ -468,18 +468,18 @@ class PortfolioRouter:
             return []
 
     def _calculate_heatmap_drift(self, market_conditions: Dict[str, Any]) -> Dict[str, float]:
-        """Calculate heatmap drift: H = ∂f/∂p × τt."""
+        """Calculate heatmap drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t."""
         try:
             heatmap_drift = {}
 
             for asset, profile in self.asset_matrix.items():
-                # Calculate partial derivative ∂f/∂p (simplified as weight change)
+                # Calculate partial derivative \\u2202f/\\u2202p (simplified as weight change)
                 weight_change = profile.target_weight - profile.weight
 
-                # Calculate time factor τt (time since last update)
+                # Calculate time factor \\u03c4t (time since last update)
                 time_factor = (datetime.now() - profile.last_update).total_seconds() / 3600.0
 
-                # Calculate heatmap drift: H = ∂f/∂p × τt
+                # Calculate heatmap drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
                 heatmap_value = weight_change * time_factor
 
                 heatmap_drift[asset] = heatmap_value
@@ -505,7 +505,7 @@ class PortfolioRouter:
             return {}
 
     def _check_usdc_conversion_trigger(self, market_conditions: Dict[str, Any]) -> Dict[str, Any]:
-        """Check USDC conversion trigger: ∆USDC = p(t+1) - σ_{∆}."""
+        """Check USDC conversion trigger: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}."""
         try:
             if 'USDC' not in self.asset_matrix:
                 return {'triggered': False, 'reason': 'USDC not in portfolio'}
@@ -517,10 +517,10 @@ class PortfolioRouter:
             # Simplified prediction based on current drift
             future_usdc_weight = current_usdc_weight + usdc_profile.target_weight - current_usdc_weight
 
-            # Calculate volatility threshold σ_{∆}
+            # Calculate volatility threshold \\u03c3_{\\u2206}
             volatility_threshold = market_conditions.get('volatility', 0.1) * 0.5
 
-            # Check trigger condition: ∆USDC = p(t+1) - σ_{∆}
+            # Check trigger condition: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}
             usdc_change = future_usdc_weight - volatility_threshold
 
             triggered = unified_math.abs(usdc_change) > self.rebalance_threshold

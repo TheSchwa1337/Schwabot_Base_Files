@@ -662,7 +662,7 @@ def main():
                     status = client.get_client_status()
                     safe_print(f"Status: {status['client_status']}, CPU: {status['performance']['cpu_usage']:.1f}%")
             except KeyboardInterrupt:
-                safe_print("\nShutting down...")
+                safe_print("\\nShutting down...")
                 client.stop()
         else:
             safe_print("Failed to start Universal Schwabot Client")
@@ -673,3 +673,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

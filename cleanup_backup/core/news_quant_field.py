@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""News quantization field – weighted news processing and spectral analysis.
+"""News quantization field \\u2013 weighted news processing and spectral analysis.
 
 Implements the formulas:
-    Q_news(t) = Σ_i W_i·N_i(t)
-    ∇Q = (∂Q/∂x, ∂Q/∂t)
-    Ψ_news = exp(−∇Q² / σ²)
-    F_news = FFT(Q_news) → Spectral Field
+    Q_news(t) = \\u03a3_i W_i\\u00b7N_i(t)
+    \\u2207Q = (\\u2202Q/\\u2202x, \\u2202Q/\\u2202t)
+    \\u03a8_news = exp(\\u2212\\u2207Q\\u00b2 / \\u03c3\\u00b2)
+    F_news = FFT(Q_news) \\u2192 Spectral Field
 
 This module processes financial news streams into quantized fields with
 gradient analysis and frequency domain representations.
@@ -35,7 +35,7 @@ def quantize_news(
     weights: Sequence[float],
     news_values: Sequence[Sequence[float]],
 ) -> np.ndarray:  # noqa: D401
-    """Return Q_news(t) = Σ_i W_i·N_i(t) weighted news quantization.
+    """Return Q_news(t) = \\u03a3_i W_i\\u00b7N_i(t) weighted news quantization.
 
     Parameters
     ----------
@@ -58,7 +58,7 @@ def quantize_news(
     if not all(len(n) == length for n in news_arrays):
         raise ValueError("all news series must have same length")
 
-    # Weighted sum: Σ_i W_i·N_i(t)
+    # Weighted sum: \\u03a3_i W_i\\u00b7N_i(t)
     q_news = np.zeros(length, dtype=float)
     for i, n_array in enumerate(news_arrays):
         q_news += w_array[i] * n_array
@@ -72,7 +72,7 @@ def news_gradient(
     dx: float = 1.0,
     dt: float = 1.0,
 ) -> tuple[np.ndarray, np.ndarray]:  # noqa: D401
-    """Return ∇Q = (∂Q/∂x, ∂Q/∂t) using numpy.gradient.
+    """Return \\u2207Q = (\\u2202Q/\\u2202x, \\u2202Q/\\u2202t) using numpy.gradient.
 
     Parameters
     ----------
@@ -102,22 +102,22 @@ def news_psi(
     temporal_grad: np.ndarray,
     sigma: float,
 ) -> np.ndarray:  # noqa: D401
-    """Return Ψ_news = exp(−∇Q² / σ²) Gaussian-weighted field.
+    """Return \\u03a8_news = exp(\\u2212\\u2207Q\\u00b2 / \\u03c3\\u00b2) Gaussian-weighted field.
 
     Parameters
     ----------
     spatial_grad, temporal_grad
-        Spatial and temporal components of ∇Q.
+        Spatial and temporal components of \\u2207Q.
     sigma
         Gaussian spread parameter.
     """
     if sigma <= 0:
         raise ValueError("sigma must be positive")
 
-    # Compute gradient magnitude squared: |∇Q|²
+    # Compute gradient magnitude squared: |\\u2207Q|\\u00b2
     grad_mag_sq = spatial_grad**2 + temporal_grad**2
 
-    # Gaussian weighting: exp(−|∇Q|² / σ²)
+    # Gaussian weighting: exp(\\u2212|\\u2207Q|\\u00b2 / \\u03c3\\u00b2)
     psi_news = unified_math.exp(-grad_mag_sq / (sigma**2))
 
     return psi_news

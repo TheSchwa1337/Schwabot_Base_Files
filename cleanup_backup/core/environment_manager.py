@@ -143,7 +143,7 @@ class HashBasedVersionPinning:
         self._load_version_pins()
         self._load_math_constants()
 
-        safe_print("🔗 Hash-Based Version Pinning initialized")
+        safe_print("\\u1f517 Hash-Based Version Pinning initialized")
 
     def _load_version_pins(self) -> None:
         """Load version pins from file."""
@@ -151,9 +151,9 @@ class HashBasedVersionPinning:
             if self.version_file.exists():
                 with open(self.version_file, 'r') as f:
                     self.version_pins = json.load(f)
-                safe_print(f"✅ Loaded {len(self.version_pins)} version pins")
+                safe_print(f"\\u2705 Loaded {len(self.version_pins)} version pins")
         except Exception as e:
-            safe_print(f"⚠️ Version pins load failed: {safe_format_error(e, 'version_load')}")
+            safe_print(f"\\u26a0\\ufe0f Version pins load failed: {safe_format_error(e, 'version_load')}")
 
     def _load_math_constants(self) -> None:
         """Load math constants from file."""
@@ -176,9 +176,9 @@ class HashBasedVersionPinning:
                     )
                     self.math_constants[name] = constant
 
-                safe_print(f"✅ Loaded {len(self.math_constants)} math constants")
+                safe_print(f"\\u2705 Loaded {len(self.math_constants)} math constants")
         except Exception as e:
-            safe_print(f"⚠️ Math constants load failed: {safe_format_error(e, 'constants_load')}")
+            safe_print(f"\\u26a0\\ufe0f Math constants load failed: {safe_format_error(e, 'constants_load')}")
 
     def _save_version_pins(self) -> None:
         """Save version pins to file."""
@@ -186,7 +186,7 @@ class HashBasedVersionPinning:
             with open(self.version_file, 'w') as f:
                 json.dump(self.version_pins, f, indent=2)
         except Exception as e:
-            safe_print(f"❌ Version pins save failed: {safe_format_error(e, 'version_save')}")
+            safe_print(f"\\u274c Version pins save failed: {safe_format_error(e, 'version_save')}")
 
     def _save_math_constants(self) -> None:
         """Save math constants to file."""
@@ -207,7 +207,7 @@ class HashBasedVersionPinning:
             with open(self.math_constants_file, 'w') as f:
                 json.dump(constants_data, f, indent=2)
         except Exception as e:
-            safe_print(f"❌ Math constants save failed: {safe_format_error(e, 'constants_save')}")
+            safe_print(f"\\u274c Math constants save failed: {safe_format_error(e, 'constants_save')}")
 
     def pin_math_constant(self, name: str, value: Union[float, Decimal, str],
                           description: str, category: str) -> str:
@@ -234,11 +234,11 @@ class HashBasedVersionPinning:
             self._save_math_constants()
             self._save_version_pins()
 
-            safe_print(f"✅ Math constant pinned: {name} = {value} (hash: {version_hash})")
+            safe_print(f"\\u2705 Math constant pinned: {name} = {value} (hash: {version_hash})")
             return version_hash
 
         except Exception as e:
-            safe_print(f"❌ Math constant pinning failed: {safe_format_error(e, 'constant_pin')}")
+            safe_print(f"\\u274c Math constant pinning failed: {safe_format_error(e, 'constant_pin')}")
             return ""
 
     def get_math_constant(self, name: str) -> Optional[MathConstant]:
@@ -279,7 +279,7 @@ class SemVerManager:
         self._load_version()
         self._load_changelog()
 
-        safe_print("🏷️ SemVer Manager initialized")
+        safe_print("\\u1f3f7\\ufe0f SemVer Manager initialized")
 
     def _load_version(self) -> None:
         """Load version from file."""
@@ -299,9 +299,9 @@ class SemVerManager:
                     changelog=version_data.get('changelog', [])
                 )
 
-                safe_print(f"✅ Loaded version: {self.get_version_string()}")
+                safe_print(f"\\u2705 Loaded version: {self.get_version_string()}")
         except Exception as e:
-            safe_print(f"⚠️ Version load failed: {safe_format_error(e, 'version_load')}")
+            safe_print(f"\\u26a0\\ufe0f Version load failed: {safe_format_error(e, 'version_load')}")
 
     def _load_changelog(self) -> None:
         """Load changelog from file."""
@@ -310,7 +310,7 @@ class SemVerManager:
                 with open(self.changelog_file, 'r') as f:
                     self.changelog = f.readlines()
         except Exception as e:
-            safe_print(f"⚠️ Changelog load failed: {safe_format_error(e, 'changelog_load')}")
+            safe_print(f"\\u26a0\\ufe0f Changelog load failed: {safe_format_error(e, 'changelog_load')}")
 
     def _save_version(self) -> None:
         """Save version to file."""
@@ -329,7 +329,7 @@ class SemVerManager:
             with open(self.version_file, 'w') as f:
                 json.dump(version_data, f, indent=2)
         except Exception as e:
-            safe_print(f"❌ Version save failed: {safe_format_error(e, 'version_save')}")
+            safe_print(f"\\u274c Version save failed: {safe_format_error(e, 'version_save')}")
 
     def _save_changelog(self) -> None:
         """Save changelog to file."""
@@ -337,7 +337,7 @@ class SemVerManager:
             with open(self.changelog_file, 'w') as f:
                 f.writelines(self.changelog)
         except Exception as e:
-            safe_print(f"❌ Changelog save failed: {safe_format_error(e, 'changelog_save')}")
+            safe_print(f"\\u274c Changelog save failed: {safe_format_error(e, 'changelog_save')}")
 
     def get_version_string(self) -> str:
         """Get version as string."""
@@ -358,7 +358,7 @@ class SemVerManager:
         self.current_version.build_date = datetime.now()
 
         # Add changelog entry
-        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Breaking Changes\n- {changelog_entry}\n\n"
+        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\\n\\n### Breaking Changes\\n- {changelog_entry}\\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
 
@@ -366,7 +366,7 @@ class SemVerManager:
         self._save_version()
         self._save_changelog()
 
-        safe_print(f"✅ Bumped to major version: {self.get_version_string()}")
+        safe_print(f"\\u2705 Bumped to major version: {self.get_version_string()}")
         return self.get_version_string()
 
     def bump_minor(self, changelog_entry: str) -> str:
@@ -378,7 +378,7 @@ class SemVerManager:
         self.current_version.build_date = datetime.now()
 
         # Add changelog entry
-        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Features\n- {changelog_entry}\n\n"
+        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\\n\\n### Features\\n- {changelog_entry}\\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
 
@@ -386,7 +386,7 @@ class SemVerManager:
         self._save_version()
         self._save_changelog()
 
-        safe_print(f"✅ Bumped to minor version: {self.get_version_string()}")
+        safe_print(f"\\u2705 Bumped to minor version: {self.get_version_string()}")
         return self.get_version_string()
 
     def bump_patch(self, changelog_entry: str) -> str:
@@ -397,7 +397,7 @@ class SemVerManager:
         self.current_version.build_date = datetime.now()
 
         # Add changelog entry
-        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\n\n### Bug Fixes\n- {changelog_entry}\n\n"
+        entry = f"## [{self.get_version_string()}] - {datetime.now().strftime('%Y-%m-%d')}\\n\\n### Bug Fixes\\n- {changelog_entry}\\n\n"
         self.changelog.insert(0, entry)
         self.current_version.changelog.append(changelog_entry)
 
@@ -405,7 +405,7 @@ class SemVerManager:
         self._save_version()
         self._save_changelog()
 
-        safe_print(f"✅ Bumped to patch version: {self.get_version_string()}")
+        safe_print(f"\\u2705 Bumped to patch version: {self.get_version_string()}")
         return self.get_version_string()
 
     def get_git_commit(self) -> Optional[str]:
@@ -440,7 +440,7 @@ class CanaryEnvironmentManager:
         self._load_canary_config()
         self._initialize_testnets()
 
-        safe_print("🦅 Canary Environment Manager initialized")
+        safe_print("\\u1f985 Canary Environment Manager initialized")
 
     def _load_canary_config(self) -> None:
         """Load canary configuration."""
@@ -452,9 +452,9 @@ class CanaryEnvironmentManager:
                 self.exchange_testnets = self.canary_config.get('exchange_testnets', {})
                 self.feature_flags = self.canary_config.get('feature_flags', {})
 
-                safe_print("✅ Canary configuration loaded")
+                safe_print("\\u2705 Canary configuration loaded")
         except Exception as e:
-            safe_print(f"⚠️ Canary config load failed: {safe_format_error(e, 'canary_load')}")
+            safe_print(f"\\u26a0\\ufe0f Canary config load failed: {safe_format_error(e, 'canary_load')}")
 
     def _save_canary_config(self) -> None:
         """Save canary configuration."""
@@ -468,7 +468,7 @@ class CanaryEnvironmentManager:
             with open(self.canary_config_file, 'w') as f:
                 yaml.dump(config_data, f, default_flow_style=False, indent=2)
         except Exception as e:
-            safe_print(f"❌ Canary config save failed: {safe_format_error(e, 'canary_save')}")
+            safe_print(f"\\u274c Canary config save failed: {safe_format_error(e, 'canary_save')}")
 
     def _initialize_testnets(self) -> None:
         """Initialize exchange testnets."""
@@ -512,13 +512,13 @@ class CanaryEnvironmentManager:
             if exchange in self.exchange_testnets:
                 self.exchange_testnets[exchange]['enabled'] = True
                 self._save_canary_config()
-                safe_print(f"✅ Enabled testnet: {exchange}")
+                safe_print(f"\\u2705 Enabled testnet: {exchange}")
                 return True
             else:
-                safe_print(f"❌ Unknown testnet: {exchange}")
+                safe_print(f"\\u274c Unknown testnet: {exchange}")
                 return False
         except Exception as e:
-            safe_print(f"❌ Enable testnet failed: {safe_format_error(e, 'enable_testnet')}")
+            safe_print(f"\\u274c Enable testnet failed: {safe_format_error(e, 'enable_testnet')}")
             return False
 
     def disable_testnet(self, exchange: str) -> bool:
@@ -527,13 +527,13 @@ class CanaryEnvironmentManager:
             if exchange in self.exchange_testnets:
                 self.exchange_testnets[exchange]['enabled'] = False
                 self._save_canary_config()
-                safe_print(f"✅ Disabled testnet: {exchange}")
+                safe_print(f"\\u2705 Disabled testnet: {exchange}")
                 return True
             else:
-                safe_print(f"❌ Unknown testnet: {exchange}")
+                safe_print(f"\\u274c Unknown testnet: {exchange}")
                 return False
         except Exception as e:
-            safe_print(f"❌ Disable testnet failed: {safe_format_error(e, 'disable_testnet')}")
+            safe_print(f"\\u274c Disable testnet failed: {safe_format_error(e, 'disable_testnet')}")
             return False
 
     def get_enabled_testnets(self) -> List[str]:
@@ -549,7 +549,7 @@ class CanaryEnvironmentManager:
         """Set feature flag."""
         self.feature_flags[feature] = enabled
         self._save_canary_config()
-        safe_print(f"✅ Feature flag set: {feature} = {enabled}")
+        safe_print(f"\\u2705 Feature flag set: {feature} = {enabled}")
 
     def is_feature_enabled(self, feature: str) -> bool:
         """Check if feature is enabled."""
@@ -588,7 +588,7 @@ class EnvironmentManager:
         # Initialize mathematical constants
         self._initialize_math_constants()
 
-        safe_print("🌍 Environment Manager initialized")
+        safe_print("\\u1f30d Environment Manager initialized")
 
     def _initialize_math_constants(self) -> None:
         """Initialize mathematical constants with hash-based pinning."""
@@ -668,15 +668,15 @@ class EnvironmentManager:
                 category="memory_allocation"
             )
 
-            safe_print("✅ Mathematical constants initialized with hash-based pinning")
+            safe_print("\\u2705 Mathematical constants initialized with hash-based pinning")
 
         except Exception as e:
-            safe_print(f"❌ Math constants initialization failed: {safe_format_error(e, 'math_init')}")
+            safe_print(f"\\u274c Math constants initialization failed: {safe_format_error(e, 'math_init')}")
 
     def set_environment(self, environment_type: EnvironmentType) -> None:
         """Set current environment."""
         self.current_environment = environment_type
-        safe_print(f"✅ Environment set to: {environment_type.value}")
+        safe_print(f"\\u2705 Environment set to: {environment_type.value}")
 
     def get_environment(self) -> EnvironmentType:
         """Get current environment."""
@@ -738,7 +738,7 @@ class EnvironmentManager:
             )
 
         except Exception as e:
-            safe_print(f"❌ Environment config failed: {safe_format_error(e, 'env_config')}")
+            safe_print(f"\\u274c Environment config failed: {safe_format_error(e, 'env_config')}")
             return EnvironmentConfig(
                 environment_type=self.current_environment,
                 exchange_testnets=[],
@@ -765,11 +765,11 @@ class EnvironmentManager:
                 with open(config_file, 'w') as f:
                     json.dump(asdict(config), f, indent=2, default=str)
 
-            safe_print(f"✅ Environment config saved: {config_file}")
+            safe_print(f"\\u2705 Environment config saved: {config_file}")
             return True
 
         except Exception as e:
-            safe_print(f"❌ Config save failed: {safe_format_error(e, 'config_save')}")
+            safe_print(f"\\u274c Config save failed: {safe_format_error(e, 'config_save')}")
             return False
 
     def load_config(self, config_file: str) -> bool:
@@ -777,7 +777,7 @@ class EnvironmentManager:
         try:
             config_path = Path(config_file)
             if not config_path.exists():
-                safe_print(f"❌ Config file not found: {config_file}")
+                safe_print(f"\\u274c Config file not found: {config_file}")
                 return False
 
             with open(config_path, 'r') as f:
@@ -788,7 +788,7 @@ class EnvironmentManager:
                 elif config_path.suffix == '.json':
                     config_data = json.load(f)
                 else:
-                    safe_print(f"❌ Unsupported config format: {config_path.suffix}")
+                    safe_print(f"\\u274c Unsupported config format: {config_path.suffix}")
                     return False
 
             # Apply configuration
@@ -802,11 +802,11 @@ class EnvironmentManager:
             for feature, enabled in config_data.get('feature_flags', {}).items():
                 self.canary_manager.set_feature_flag(feature, enabled)
 
-            safe_print(f"✅ Environment config loaded: {config_file}")
+            safe_print(f"\\u2705 Environment config loaded: {config_file}")
             return True
 
         except Exception as e:
-            safe_print(f"❌ Config load failed: {safe_format_error(e, 'config_load')}")
+            safe_print(f"\\u274c Config load failed: {safe_format_error(e, 'config_load')}")
             return False
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -826,7 +826,7 @@ class EnvironmentManager:
             }
 
         except Exception as e:
-            safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
+            safe_print(f"\\u274c Status generation failed: {safe_format_error(e, 'status')}")
             return {}
 
 
@@ -895,7 +895,7 @@ def bump_version(version_type: str, changelog_entry: str) -> str:
     elif version_type == 'patch':
         return environment_manager.semver_manager.bump_patch(changelog_entry)
     else:
-        safe_print(f"❌ Unknown version type: {version_type}")
+        safe_print(f"\\u274c Unknown version type: {version_type}")
         return ""
 
 
@@ -932,32 +932,34 @@ def get_environment_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test environment manager
-    print("🧪 Testing Environment Manager...")
+    print("\\u1f9ea Testing Environment Manager...")
 
     # Set environment
     set_environment(EnvironmentType.CANARY)
-    print(f"✅ Environment set: {get_environment().value}")
+    print(f"\\u2705 Environment set: {get_environment().value}")
 
     # Enable testnets
     enable_testnet('binance')
     enable_testnet('coinbase')
-    print(f"✅ Enabled testnets: {environment_manager.canary_manager.get_enabled_testnets()}")
+    print(f"\\u2705 Enabled testnets: {environment_manager.canary_manager.get_enabled_testnets()}")
 
     # Set feature flags
     set_feature_flag('advanced_risk_controls', True)
     set_feature_flag('real_time_monitoring', True)
-    print(f"✅ Feature flags: {environment_manager.canary_manager.get_all_feature_flags()}")
+    print(f"\\u2705 Feature flags: {environment_manager.canary_manager.get_all_feature_flags()}")
 
     # Get math constant
     zpe_constant = get_math_constant('zpe_resonance_frequency')
     if zpe_constant:
-        print(f"✅ Math constant: {zpe_constant.name} = {zpe_constant.value}")
+        print(f"\\u2705 Math constant: {zpe_constant.name} = {zpe_constant.value}")
 
     # Save config
     save_config(ConfigFormat.YAML)
 
     # Get status
     status = get_environment_status()
-    print(f"✅ Environment status: {status}")
+    print(f"\\u2705 Environment status: {status}")
 
-    print("✅ Environment Manager test completed")
+    print("\\u2705 Environment Manager test completed")
+
+"""

@@ -10,11 +10,11 @@ with the bit resolution and matrix systems. This module contains all core
 mathematical functions for tensor operations and profit routing.
 
 Core Mathematical Functions:
-- Tensor scoring: T = Σᵢ wᵢ * fᵢ(bit_phase, market_data)
-- Wave entropy calculation: H = -Σᵢ pᵢ * log₂(pᵢ)
+- Tensor scoring: T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
+- Wave entropy calculation: H = -\\u03a3\\u1d62 p\\u1d62 * log\\u2082(p\\u1d62)
 - Profit basket rebalancing: R = f(profit, volatility, entropy)
 - DLT-phase vector routing: V = sync_tick_to_phase(tick, total_ticks)
-- Matrix tensor operations: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
+- Matrix tensor operations: M = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
 """
 
 import hashlib
@@ -79,11 +79,11 @@ class TensorScoreUtils:
     Tensor Score Utilities for mathematical operations and valuations.
 
     Mathematical Foundation:
-    - Tensor Scoring: T = Σᵢ wᵢ * fᵢ(bit_phase, market_data)
-    - Wave Entropy: H = -Σᵢ pᵢ * log₂(pᵢ)
+    - Tensor Scoring: T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
+    - Wave Entropy: H = -\\u03a3\\u1d62 p\\u1d62 * log\\u2082(p\\u1d62)
     - Profit Rebalancing: R = f(profit, volatility, entropy)
     - DLT Phase Routing: V = sync_tick_to_phase(tick, total_ticks)
-    - Matrix Operations: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
+    - Matrix Operations: M = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
     """
 
     def __init__(self, config_path: str = "./config/tensor_score_config.json"):
@@ -150,7 +150,7 @@ class TensorScoreUtils:
         Calculate tensor score for trade priority.
 
         Mathematical Formula:
-        T = Σᵢ wᵢ * fᵢ(bit_phase, market_data)
+        T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
 
         Parameters:
         -----------
@@ -208,7 +208,7 @@ class TensorScoreUtils:
         Calculate wave entropy from sequence data.
 
         Mathematical Formula:
-        H = -Σᵢ pᵢ * log₂(pᵢ)
+        H = -\\u03a3\\u1d62 p\\u1d62 * log\\u2082(p\\u1d62)
 
         Parameters:
         -----------
@@ -381,7 +381,7 @@ class TensorScoreUtils:
         Calculate matrix tensor operation.
 
         Mathematical Formula:
-        M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
+        M = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
 
         Parameters:
         -----------
@@ -400,7 +400,7 @@ class TensorScoreUtils:
             if matrix.shape[0] != len(vector) or matrix.shape[1] != len(vector):
                 raise ValueError("Matrix and vector dimensions must be compatible")
 
-            # Calculate matrix tensor: M = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
+            # Calculate matrix tensor: M = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
             result = 0.0
             for i in range(len(vector)):
                 for j in range(len(vector)):
@@ -674,3 +674,5 @@ if __name__ == "__main__":
     # Get statistics
     stats = utils.get_tensor_statistics()
     safe_print(f"Tensor Statistics: {stats}")
+
+"""

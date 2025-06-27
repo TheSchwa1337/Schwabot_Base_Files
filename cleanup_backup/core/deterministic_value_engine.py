@@ -11,13 +11,13 @@ the three critical questions:
 3. WHAT KIND of move should be made? (Strategy determinism)
 
 It integrates with the randomized matrix system for portfolio substitution
-(USDC ↔ XRP ↔ BTC ↔ ETH) and handles 4-bit/8-bit/42-bit phase switching
+(USDC \\u2194 XRP \\u2194 BTC \\u2194 ETH) and handles 4-bit/8-bit/42-bit phase switching
 with mathematical precision and fault tolerance.
 
 Mathematical Foundation:
-- Execution Confidence: Ξ = (T·Δθ) + (ε·σ_f) + τ_p
-- Entry Score: Es = H(1-Dp)LP̂
-- Strategy Selection: S = argmax(Σ_i w_i · R_i)
+- Execution Confidence: \\u039e = (T\\u00b7\\u0394\\u03b8) + (\\u03b5\\u00b7\\u03c3_f) + \\u03c4_p
+- Entry Score: Es = H(1-Dp)LP\\u0302
+- Strategy Selection: S = argmax(\\u03a3_i w_i \\u00b7 R_i)
 - Portfolio Allocation: A = M_phase @ [USDC, XRP, BTC, ETH]
 """
 
@@ -119,7 +119,7 @@ class DeterministicDecision:
     asset_allocation: Dict[AssetType, float]  # portfolio allocation
 
     # Supporting metrics
-    execution_confidence: float  # Ξ
+    execution_confidence: float  # \\u039e
     entry_score: float  # Es
     phase_mode: PhaseMode
     expected_return: float
@@ -183,7 +183,7 @@ class DeterministicValueEngine:
         self.decision_history: List[DeterministicDecision] = []
         self.performance_tracker: Dict[str, List[float]] = {}
 
-        logger.info("🎯 Deterministic Value Engine initialized")
+        logger.info("\\u1f3af Deterministic Value Engine initialized")
 
     def calculate_deterministic_decision(
         self, market_state: MarketState
@@ -201,7 +201,7 @@ class DeterministicValueEngine:
             # 3. WHAT KIND - Calculate strategy weights
             strategy_weights = self._calculate_strategy_determinism(market_state)
 
-            # 4. Calculate execution confidence (Ξ)
+            # 4. Calculate execution confidence (\\u039e)
             execution_confidence = self._calculate_execution_confidence(market_state)
 
             # 5. Calculate entry score (Es)
@@ -258,13 +258,13 @@ class DeterministicValueEngine:
 
             calculation_time = time.time() - start_time
             logger.debug(
-                f"🎯 Deterministic decision calculated in {calculation_time:.4f}s"
+                f"\\u1f3af Deterministic decision calculated in {calculation_time:.4f}s"
             )
 
             return decision
 
         except Exception as e:
-            logger.error(f"❌ Deterministic calculation failed: {e}")
+            logger.error(f"\\u274c Deterministic calculation failed: {e}")
             # Return safe fallback decision
             return self._create_fallback_decision(market_state)
 
@@ -378,7 +378,7 @@ class DeterministicValueEngine:
                     strategy_scores[strategy_type] = np.clip(score, 0.0, 1.0)
                 except Exception as e:
                     logger.warning(
-                        f"⚠️ Strategy scoring failed for {strategy_type}: {e}"
+                        f"\\u26a0\\ufe0f Strategy scoring failed for {strategy_type}: {e}"
                     )
                     strategy_scores[strategy_type] = 0.0
             else:
@@ -396,9 +396,9 @@ class DeterministicValueEngine:
         return strategy_scores
 
     def _calculate_execution_confidence(self, market_state: MarketState) -> float:
-        """Calculate execution confidence scalar: Ξ = (T·Δθ) + (ε·σ_f) + τ_p"""
+        """Calculate execution confidence scalar: \\u039e = (T\\u00b7\\u0394\\u03b8) + (\\u03b5\\u00b7\\u03c3_f) + \\u03c4_p"""
 
-        # T·Δθ - Triplet entropy * braid angle drift
+        # T\\u00b7\\u0394\\u03b8 - Triplet entropy * braid angle drift
         T_entropy = (
             unified_math.unified_math.mean(list(market_state.entropy_levels.values()))
             if market_state.entropy_levels
@@ -407,7 +407,7 @@ class DeterministicValueEngine:
         delta_theta = market_state.phase_drift
         T_delta_theta_term = T_entropy * delta_theta
 
-        # ε·σ_f - Coherence * standard deviation of fractal loops
+        # \\u03b5\\u00b7\\u03c3_f - Coherence * standard deviation of fractal loops
         epsilon = market_state.phase_coherence
         sigma_f = (
             unified_math.unified_math.std(list(market_state.price_deltas.values()))
@@ -416,7 +416,7 @@ class DeterministicValueEngine:
         )
         epsilon_sigma_term = epsilon * sigma_f
 
-        # τ_p - Profit-time modifier
+        # \\u03c4_p - Profit-time modifier
         time_factor = min(
             (time.time() - market_state.last_trade_time) / 3600, 1.0
         )  # Hours
@@ -435,7 +435,7 @@ class DeterministicValueEngine:
         return xi
 
     def _calculate_entry_score(self, market_state: MarketState) -> float:
-        """Calculate entry score: Es = H(1-Dp)LP̂"""
+        """Calculate entry score: Es = H(1-Dp)LP\\u0302"""
 
         # H - Tick harmony
         harmony = market_state.tick_harmony
@@ -447,7 +447,7 @@ class DeterministicValueEngine:
         volumes = list(market_state.volumes.values())
         liquidity = unified_math.min(unified_math.unified_math.mean(volumes) / 1000000, 1.0) if volumes else 0.5
 
-        # P̂ - Projected profit
+        # P\\u0302 - Projected profit
         price_changes = list(market_state.price_deltas.values())
         projected_profit = (
             unified_math.mean([unified_math.abs(pc) for pc in price_changes]) if price_changes else 0.01
@@ -958,7 +958,7 @@ if __name__ == "__main__":
 
     decision = calculate_trading_decision(sample_market_data)
 
-    safe_print(f"🎯 Deterministic Decision:")
+    safe_print(f"\\u1f3af Deterministic Decision:")
     safe_print(f"   Timing Score: {decision.timing_score:.3f}")
     safe_print(f"   Conditional Score: {decision.conditional_score:.3f}")
     safe_print(f"   Execution Confidence: {decision.execution_confidence:.3f}")

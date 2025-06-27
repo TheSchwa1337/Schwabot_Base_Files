@@ -551,10 +551,10 @@ class DemoTradingSystem:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
 
-            safe_print(f"✅ Demo results exported to {output_path}")
+            safe_print(f"\\u2705 Demo results exported to {output_path}")
 
         except Exception as e:
-            safe_print(f"❌ Error exporting demo results: {e}")
+            safe_print(f"\\u274c Error exporting demo results: {e}")
 
 
 def create_demo_strategy(strategy_id: str, name: str, symbols: List[str],
@@ -574,7 +574,7 @@ def create_demo_strategy(strategy_id: str, name: str, symbols: List[str],
 
 def main():
     """Main function to run demo trading system."""
-    safe_print("🚀 Starting Demo Trading System...")
+    safe_print("\\u1f680 Starting Demo Trading System...")
 
     # Create demo trading system
     demo_system = DemoTradingSystem(initial_capital=100000.0)
@@ -601,7 +601,7 @@ def main():
 
     try:
         # Run for 60 seconds
-        safe_print("📈 Demo trading running for 60 seconds...")
+        safe_print("\\u1f4c8 Demo trading running for 60 seconds...")
         time.sleep(60)
 
         # Stop trading
@@ -609,7 +609,7 @@ def main():
 
         # Get results
         portfolio = demo_system.get_portfolio_status()
-        safe_print(f"\n📊 DEMO TRADING RESULTS")
+        safe_print(f"\\n\\u1f4ca DEMO TRADING RESULTS")
         safe_print(f"Initial Capital: ${demo_system.initial_capital:,.2f}")
         safe_print(f"Final Portfolio Value: ${portfolio.total_value:,.2f}")
         safe_print(f"Total Profit: ${portfolio.total_profit:,.2f}")
@@ -617,7 +617,7 @@ def main():
         safe_print(f"Win Rate: {portfolio.win_rate:.2%}")
 
         # Run mathematical validation
-        safe_print("\n🧪 Running Mathematical Validation...")
+        safe_print("\\n\\u1f9ea Running Mathematical Validation...")
         validation_results = demo_system.run_mathematical_validation()
         safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
 
@@ -625,7 +625,7 @@ def main():
         demo_system.export_demo_results()
 
     except KeyboardInterrupt:
-        safe_print("\n⏹️ Demo trading stopped by user")
+        safe_print("\\n\\u23f9\\ufe0f Demo trading stopped by user")
         demo_system.stop_trading()
 
     return 0
@@ -633,3 +633,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

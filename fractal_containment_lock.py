@@ -3,7 +3,7 @@ from core.unified_math_system import unified_math
 """Fractal Containment Lock - Multi-Dimensional Profit Mapping.
 
 Implements the core mathematical framework for:
-- M(x,y,z) = ∭ P(t,x,y,z) dxdydz
+- M(x,y,z) = \\u222d P(t,x,y,z) dxdydz
 - Multi-dimensional profit visualization and tracking
 - Recursive bag growth across time bands
 - Fractal containment for profit isolation and security
@@ -219,7 +219,7 @@ class FractalContainmentLock:
         integration_bounds: Optional[Tuple[Tuple[float, float], Tuple[float, float], Tuple[float, float]]] = None,
         time_filter: Optional[TimeBand] = None
     ) -> IntegrationResult:
-        """Calculate M(x,y,z) = ∭ P(t,x,y,z) dxdydz over specified bounds."""
+        """Calculate M(x,y,z) = \\u222d P(t,x,y,z) dxdydz over specified bounds."""
         if integration_bounds is None:
             integration_bounds = (self.x_bounds, self.y_bounds, self.z_bounds)
 

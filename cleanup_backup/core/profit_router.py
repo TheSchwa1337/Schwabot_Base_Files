@@ -5,13 +5,13 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Profit Router - Randomized Portfolio Substitution Matrix.
 
-This module implements the profit routing matrix (ℙᵣ) with randomized
+This module implements the profit routing matrix (\\u2119\\u1d63) with randomized
 substitution capabilities for USDC/XRP/BTC/ETH allocation across 4-bit,
 8-bit, and 42-bit phases. Supports dynamic asset swapping based on
 market conditions and portfolio management strategies.
 
 Mathematical Foundation:
-ℙᵣ[phase][asset] = allocation_weight
+\\u2119\\u1d63[phase][asset] = allocation_weight
 Randomized substitution allows any asset to be replaced with alternatives
 based on volume, liquidity, correlation, and volatility metrics.
 
@@ -462,13 +462,13 @@ def main() -> None:
 
     for phase in [4, 8, 42]:
         allocations = route_profit(test_profit, phase)
-        safe_print(f"\nPhase {phase}-bit allocation:")
+        safe_print(f"\\nPhase {phase}-bit allocation:")
         for asset, amount in allocations.items():
             percentage = (amount / test_profit) * 100
             safe_print(f"  {asset}: ${amount:.2f} ({percentage:.1f}%)")
 
     # Test randomized matrix
-    safe_print(f"\nRandomized Matrix Test:")
+    safe_print(f"\\nRandomized Matrix Test:")
     randomized_matrix, metadata = create_randomized_matrix(
         BASE_ALLOCATION_MATRIX, substitution_seed=12345
     )
@@ -485,12 +485,12 @@ def main() -> None:
         profit = 500.0 + i * 100
         allocations = router.route(profit, phase)
         safe_print(
-            f"\nRouter allocation {i+1} (phase {phase}): ${sum(allocations.values()):.2f}"
+            f"\\nRouter allocation {i+1} (phase {phase}): ${sum(allocations.values()):.2f}"
         )
 
     # Get summary
     summary = router.get_allocation_summary()
-    safe_print(f"\nRouter Summary:")
+    safe_print(f"\\nRouter Summary:")
     safe_print(f"Total routed: ${summary['total_profit_routed']:.2f}")
     safe_print(f"Average percentages: {summary['average_percentages']}")
 

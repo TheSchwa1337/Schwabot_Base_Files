@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # #!/usr/bin/env python3
-"""Lantern hash echo – H_L = hash(Ξₜ) · e^−τ."""
+"""Lantern hash echo - H_L = hash(\\u039e\\u209c) . e^-tau."""
 
 from __future__ import annotations
 
@@ -20,3 +20,5 @@ def lantern_hash_echo(xi_t: str, tau: float) -> float:  # noqa: D401
     digest = hashlib.sha256(xi_t.encode()).digest()[:4]
     val = int.from_bytes(digest, "big") * _MOD
     return val * unified_math.exp(-tau)
+
+

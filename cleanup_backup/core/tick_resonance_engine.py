@@ -5,16 +5,16 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Tick Resonance Engine - Harmony Score Calculator.
 
-This module computes harmony scores (𝓗) that measure how well tick timing
+This module computes harmony scores (\\u1d4d7) that measure how well tick timing
 aligns with expected phase gates (4-bit, 8-bit, 42-bit). The harmony score
 feeds into the entropy-weighted entry score calculation.
 
 Mathematical Foundation:
-𝓗 = exp(-mean(|tick_i - φ_target|)^2)
+\\u1d4d7 = exp(-mean(|tick_i - \\u03c6_target|)^2)
 
 Where:
 - tick_i: Time deltas between consecutive ticks
-- φ_target: Target phase timing for current bit depth
+- \\u03c6_target: Target phase timing for current bit depth
 - Result in [0, 1] where 1 = perfect harmony
 
 Windows CLI compatible with ASCII fallback for special characters.
@@ -305,7 +305,7 @@ def validate_tick_deltas(tick_deltas: np.ndarray) -> bool:
         if len(tick_deltas) < MIN_TICKS_REQUIRED:
             return False
 
-        # Check for reasonable timing values (1μs to 10s)
+        # Check for reasonable timing values (1\\u03bcs to 10s)
         if np.any(tick_deltas <= 0) or np.any(tick_deltas > 10.0):
             return False
 

@@ -77,7 +77,7 @@ class TrustFeedbackUpdater:
         # Load configuration
         self.config = self._load_configuration()
 
-        safe_safe_print("🧠 Trust Feedback Updater initialized")
+        safe_safe_print("\\u1f9e0 Trust Feedback Updater initialized")
 
     def _initialize_agent_performance(self) -> None:
         """Initialize performance tracking for all agents."""
@@ -95,7 +95,7 @@ class TrustFeedbackUpdater:
                 with open(self.config_path, 'r') as f:
                     return yaml.safe_load(f)
         except Exception as e:
-            safe_safe_print(f"⚠️ Configuration load failed: {safe_format_error(e, 'config_load')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Configuration load failed: {safe_format_error(e, 'config_load')}")
 
         # Default configuration
         return {
@@ -127,7 +127,7 @@ class TrustFeedbackUpdater:
             if current_tick % self.trust_update_interval != 0:
                 return {agent: perf.trust_score for agent, perf in self.agent_performance.items()}
 
-            safe_safe_print(f"🔄 Updating trust scores at tick {current_tick}")
+            safe_safe_print(f"\\u1f504 Updating trust scores at tick {current_tick}")
 
             # Load recent feedback data
             feedback_data = self._load_feedback_data()
@@ -153,7 +153,7 @@ class TrustFeedbackUpdater:
 
         except Exception as e:
             error_msg = safe_format_error(e, "update_trust_scores")
-            safe_safe_print(f"❌ Trust score update failed: {error_msg}")
+            safe_safe_print(f"\\u274c Trust score update failed: {error_msg}")
             return {agent: perf.trust_score for agent, perf in self.agent_performance.items()}
 
     def _load_feedback_data(self) -> List[Dict]:
@@ -163,7 +163,7 @@ class TrustFeedbackUpdater:
                 with open(self.feedback_log_path, 'r') as f:
                     return json.load(f)
         except Exception as e:
-            safe_safe_print(f"⚠️ Feedback data load failed: {safe_format_error(e, 'feedback_load')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Feedback data load failed: {safe_format_error(e, 'feedback_load')}")
 
         return []
 
@@ -217,11 +217,11 @@ class TrustFeedbackUpdater:
                 performance.recent_performance = performance.recent_performance[-self.performance_window:]
 
             safe_safe_print(
-                f"   {agent_type.value}: {successful_commands}/{total_commands} success, α={average_alpha:.3f}, drift={average_drift:.3f}")
+                f"   {agent_type.value}: {successful_commands}/{total_commands} success, \\u03b1={average_alpha:.3f}, drift={average_drift:.3f}")
 
         except Exception as e:
             safe_safe_print(
-                f"⚠️ Performance analysis failed for {agent_type.value}: {safe_format_error(e, 'performance_analysis')}")
+                f"\\u26a0\\ufe0f Performance analysis failed for {agent_type.value}: {safe_format_error(e, 'performance_analysis')}")
 
     def _calculate_trust_score(self, performance: AgentPerformance) -> float:
         """Calculate new trust score based on performance metrics."""
@@ -261,7 +261,7 @@ class TrustFeedbackUpdater:
             return final_score
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Trust score calculation failed: {safe_format_error(e, 'trust_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Trust score calculation failed: {safe_format_error(e, 'trust_calculation')}")
             return performance.trust_score
 
     def _save_updated_config(self, updated_scores: Dict[AIAgentType, float]) -> None:
@@ -282,10 +282,10 @@ class TrustFeedbackUpdater:
             with open(self.config_path, 'w') as f:
                 yaml.dump(config, f, default_flow_style=False)
 
-            safe_safe_print(f"💾 Updated trust scores saved to {self.config_path}")
+            safe_safe_print(f"\\u1f4be Updated trust scores saved to {self.config_path}")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Configuration save failed: {safe_format_error(e, 'config_save')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Configuration save failed: {safe_format_error(e, 'config_save')}")
 
     def get_agent_trust_score(self, agent_type: AIAgentType) -> float:
         """Get current trust score for an agent."""
@@ -338,7 +338,7 @@ class TrustFeedbackUpdater:
                 json.dump(feedback_data, f, indent=2)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Feedback logging failed: {safe_format_error(e, 'feedback_logging')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Feedback logging failed: {safe_format_error(e, 'feedback_logging')}")
 
 
 # Global instance for easy access
@@ -368,7 +368,7 @@ def log_command_feedback(
 if __name__ == "__main__":
     async def test_trust_updater():
         """Test trust feedback updater."""
-        safe_safe_print("🧠 Testing Trust Feedback Updater...")
+        safe_safe_print("\\u1f9e0 Testing Trust Feedback Updater...")
 
         # Create some test feedback
         test_agents = [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]
@@ -390,7 +390,7 @@ if __name__ == "__main__":
         # Get performance summary
         summary = trust_updater.get_performance_summary()
 
-        safe_safe_print("✅ Trust Feedback Updater test completed")
+        safe_safe_print("\\u2705 Trust Feedback Updater test completed")
         safe_safe_print(f"Updated scores: {updated_scores}")
         safe_safe_print(f"Performance summary: {summary}")
 

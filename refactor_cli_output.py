@@ -181,7 +181,7 @@ class CLIRefactor:
         """Replace print statements containing Unicode with safe_print calls."""
 
         # Pattern to match print statements
-        print_pattern = r'print\s*\((.*?)\)'
+        print_pattern = r'print\\s*\((.*?)\)'
 
         def replace_print(match):
             args_str = match.group(1)
@@ -290,3 +290,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+"""

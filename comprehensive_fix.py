@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 def calculate_entropy(volume: float, delta: float, base: str = 'natural') -> float:
     """
-    Calculate entropy: E(t) = unified_math.log(V + 1) / (1 + |δ|)
+    Calculate entropy: E(t) = unified_math.log(V + 1) / (1 + |\\u03b4|)
     
     Args:
         volume: Trading volume
@@ -108,7 +108,7 @@ def delta_compensation(price_deltas: np.ndarray, compensation_factor: float = 1.
     Apply delta compensation to price movements.
     
     Mathematical Implementation:
-    compensated_delta = δ * (1 + C * E(δ))
+    compensated_delta = \\u03b4 * (1 + C * E(\\u03b4))
     
     Args:
         price_deltas: Price delta series
@@ -318,3 +318,5 @@ __all__ = [
 if __name__ == "__main__":
     fix_entropy_calc()
     safe_print("Fixed entropy_calc.py with proper indentation")
+
+"""

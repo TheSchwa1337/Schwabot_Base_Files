@@ -26,24 +26,24 @@ if str(MAIN_CORE_PATH) not in sys.path:
 
 def test_multi_bit_btc_processor():
     """Test the Multi-Bit BTC processor functionality."""
-    print("🧪 Testing Multi-Bit BTC Processor")
+    print("\\u1f9ea Testing Multi-Bit BTC Processor")
     print("=" * 50)
 
     try:
         # Import the processor
         from multi_bit_btc_processor import MultiBitBTCProcessor, BitLevel
 
-        print("✅ Successfully imported MultiBitBTCProcessor")
+        print("\\u2705 Successfully imported MultiBitBTCProcessor")
 
         # Initialize processor
         processor = MultiBitBTCProcessor()
-        print("✅ Successfully initialized processor")
+        print("\\u2705 Successfully initialized processor")
 
         # Test data processing
         base_price = 50000.0
         base_volume = 1000.0
 
-        print("📊 Processing test data...")
+        print("\\u1f4ca Processing test data...")
 
         # Process data at different bit levels
         for i in range(10):
@@ -57,63 +57,63 @@ def test_multi_bit_btc_processor():
             for bit_level in BitLevel:
                 try:
                     data_point = processor.process_btc_data(price, volume, bit_level)
-                    print(f"  ✅ Processed {bit_level.value}-bit data: price=${price:.2f}, vol={volume:.2f}")
+                    print(f"  \\u2705 Processed {bit_level.value}-bit data: price=${price:.2f}, vol={volume:.2f}")
                 except Exception as e:
-                    print(f"  ❌ Failed to process {bit_level.value}-bit data: {e}")
+                    print(f"  \\u274c Failed to process {bit_level.value}-bit data: {e}")
 
         # Test bit level analysis
-        print("\n📈 Testing bit level analysis...")
+        print("\\n\\u1f4c8 Testing bit level analysis...")
         for bit_level in BitLevel:
             try:
                 analysis = processor.analyze_bit_level(bit_level)
                 if analysis:
-                    print(f"  ✅ {bit_level.value}-bit analysis: confidence={analysis.confidence_score:.3f}")
+                    print(f"  \\u2705 {bit_level.value}-bit analysis: confidence={analysis.confidence_score:.3f}")
                 else:
-                    print(f"  ⚠️ No data for {bit_level.value}-bit analysis")
+                    print(f"  \\u26a0\\ufe0f No data for {bit_level.value}-bit analysis")
             except Exception as e:
-                print(f"  ❌ Failed {bit_level.value}-bit analysis: {e}")
+                print(f"  \\u274c Failed {bit_level.value}-bit analysis: {e}")
 
         # Test cross-bit correlations
-        print("\n🔗 Testing cross-bit correlations...")
+        print("\\n\\u1f517 Testing cross-bit correlations...")
         try:
             correlations = processor.analyze_cross_bit_correlations()
-            print(f"  ✅ Found {len(correlations)} cross-bit correlations")
+            print(f"  \\u2705 Found {len(correlations)} cross-bit correlations")
         except Exception as e:
-            print(f"  ❌ Failed cross-bit correlations: {e}")
+            print(f"  \\u274c Failed cross-bit correlations: {e}")
 
         # Test optimization
-        print("\n🎯 Testing bit level optimization...")
+        print("\\n\\u1f3af Testing bit level optimization...")
         try:
             optimal_level = processor.optimize_bit_level_selection()
-            print(f"  ✅ Optimal bit level: {optimal_level.value}-bit")
+            print(f"  \\u2705 Optimal bit level: {optimal_level.value}-bit")
         except Exception as e:
-            print(f"  ❌ Failed optimization: {e}")
+            print(f"  \\u274c Failed optimization: {e}")
 
         # Test statistics
-        print("\n📊 Testing statistics...")
+        print("\\n\\u1f4ca Testing statistics...")
         try:
             stats = processor.get_btc_statistics()
-            print(f"  ✅ Statistics: {stats['total_data_points']} data points, {stats['total_errors']} errors")
+            print(f"  \\u2705 Statistics: {stats['total_data_points']} data points, {stats['total_errors']} errors")
         except Exception as e:
-            print(f"  ❌ Failed statistics: {e}")
+            print(f"  \\u274c Failed statistics: {e}")
 
         # Test trading signals
-        print("\n📡 Testing trading signals...")
+        print("\\n\\u1f4e1 Testing trading signals...")
         try:
             signals = processor.get_trading_signals()
-            print(f"  ✅ Generated {len(signals)} trading signals")
+            print(f"  \\u2705 Generated {len(signals)} trading signals")
         except Exception as e:
-            print(f"  ❌ Failed trading signals: {e}")
+            print(f"  \\u274c Failed trading signals: {e}")
 
-        print("\n🎉 Multi-Bit BTC Processor test completed successfully!")
+        print("\\n\\u1f389 Multi-Bit BTC Processor test completed successfully!")
         return True
 
     except ImportError as e:
-        print(f"❌ Import error: {e}")
+        print(f"\\u274c Import error: {e}")
         print("This might be due to missing dependencies or path issues.")
         return False
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"\\u274c Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -121,36 +121,36 @@ def test_multi_bit_btc_processor():
 
 def test_unified_math_system():
     """Test the unified math system."""
-    print("\n🧮 Testing Unified Math System")
+    print("\\n\\u1f9ee Testing Unified Math System")
     print("=" * 50)
 
     try:
         from core.unified_math_system import unified_math
 
-        print("✅ Successfully imported unified math system")
+        print("\\u2705 Successfully imported unified math system")
 
         # Test basic operations
         test_data = np.array([1, 2, 3, 4, 5])
 
         # Test mean
         mean_result = unified_math.mean(test_data)
-        print(f"  ✅ Mean calculation: {mean_result}")
+        print(f"  \\u2705 Mean calculation: {mean_result}")
 
         # Test std
         std_result = unified_math.std(test_data)
-        print(f"  ✅ Std calculation: {std_result}")
+        print(f"  \\u2705 Std calculation: {std_result}")
 
         # Test correlation
         data1 = np.array([1, 2, 3, 4, 5])
         data2 = np.array([2, 4, 6, 8, 10])
         corr_result = unified_math.correlation(data1, data2)
-        print(f"  ✅ Correlation calculation: {corr_result}")
+        print(f"  \\u2705 Correlation calculation: {corr_result}")
 
-        print("🎉 Unified Math System test completed successfully!")
+        print("\\u1f389 Unified Math System test completed successfully!")
         return True
 
     except Exception as e:
-        print(f"❌ Unified math test failed: {e}")
+        print(f"\\u274c Unified math test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -158,7 +158,7 @@ def test_unified_math_system():
 
 def main():
     """Main test execution."""
-    print("🧬 Multi-Bit BTC Processor Integration Test - Schwabot UROS v1.0")
+    print("\\u1f9ec Multi-Bit BTC Processor Integration Test - Schwabot UROS v1.0")
     print("=" * 70)
 
     # Test unified math system first
@@ -169,19 +169,21 @@ def main():
 
     # Summary
     print("\n" + "=" * 70)
-    print("📋 Test Summary")
+    print("\\u1f4cb Test Summary")
     print("=" * 70)
-    print(f"Unified Math System: {'✅ PASS' if math_success else '❌ FAIL'}")
-    print(f"Multi-Bit BTC Processor: {'✅ PASS' if processor_success else '❌ FAIL'}")
+    print(f"Unified Math System: {'\\u2705 PASS' if math_success else '\\u274c FAIL'}")
+    print(f"Multi-Bit BTC Processor: {'\\u2705 PASS' if processor_success else '\\u274c FAIL'}")
 
     if math_success and processor_success:
-        print("\n🎉 All tests passed! The circular import issue has been resolved.")
+        print("\\n\\u1f389 All tests passed! The circular import issue has been resolved.")
         print("The Multi-Bit BTC processor is now ready for integration.")
     else:
-        print("\n⚠️ Some tests failed. Please check the error messages above.")
+        print("\\n\\u26a0\\ufe0f Some tests failed. Please check the error messages above.")
 
     return math_success and processor_success
 
 
 if __name__ == "__main__":
     main()
+
+"""

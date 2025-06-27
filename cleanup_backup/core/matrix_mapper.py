@@ -106,9 +106,9 @@ class MatrixMapper:
     Mathematical Foundation:
     - Hash Decoding: basket_id = int(hash[4:8], 16) % 1024
     - Bit Resolution: phase = int(hash[0:n], 16) % 2^n where n = bit_depth
-    - Tensor Scoring: T = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
-    - Basket Matching: similarity = Σᵢ |h₁ᵢ - h₂ᵢ| / len(hash)
-    - Profit Routing: P = Σᵢ wᵢ * Tᵢ * Rᵢ where R is resonance score
+    - Tensor Scoring: T = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
+    - Basket Matching: similarity = \\u03a3\\u1d62 |h\\u2081\\u1d62 - h\\u2082\\u1d62| / len(hash)
+    - Profit Routing: P = \\u03a3\\u1d62 w\\u1d62 * T\\u1d62 * R\\u1d62 where R is resonance score
     """
 
     def __init__(self, config_path: str = "./config/matrix_mapper_config.json"):
@@ -935,3 +935,5 @@ if __name__ == "__main__":
     # Get status
     status = mapper.get_hash_registry_status()
     safe_print(f"Hash registry status: {status}")
+
+"""

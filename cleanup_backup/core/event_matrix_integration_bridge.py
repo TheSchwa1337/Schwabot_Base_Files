@@ -135,7 +135,7 @@ class EventMatrixIntegrationBridge:
             'excluded_tags': self.config.get('excluded_tags', ['spam', 'test'])
         }
 
-        logger.info("🌉 Event-Matrix Integration Bridge initialized")
+        logger.info("\\u1f309 Event-Matrix Integration Bridge initialized")
 
     def process_event_with_matrix_impact(self,
                                          event_data: Dict[str, Any],

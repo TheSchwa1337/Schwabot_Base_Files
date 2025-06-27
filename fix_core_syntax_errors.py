@@ -143,14 +143,14 @@ def fix_continuation_line_indentation(content):
 def fix_unmatched_parentheses(content):
     """Fix unmatched parentheses and brackets."""
     # Fix specific patterns we've seen
-    content = re.sub(r'\(\s*\]', '()', content)  # (] -> ()
-    content = re.sub(r'\[\s*\)', '[]', content)  # [) -> []
-    content = re.sub(r'{\s*\]', '{}', content)   # {] -> {}
-    content = re.sub(r'\[\s*}', '[]', content)   # [} -> []
+    content = re.sub(r'\(\\s*\]', '()', content)  # (] -> ()
+    content = re.sub(r'\[\\s*\)', '[]', content)  # [) -> []
+    content = re.sub(r'{\\s*\]', '{}', content)   # {] -> {}
+    content = re.sub(r'\[\\s*}', '[]', content)   # [} -> []
 
     # Fix specific patterns we've seen
-    content = re.sub(r'\[\s*\]\s*\)', '[]', content)  # []) -> []
-    content = re.sub(r'\(\s*\[\s*\]', '()', content)  # ([]) -> ()
+    content = re.sub(r'\[\\s*\]\\s*\)', '[]', content)  # []) -> []
+    content = re.sub(r'\(\\s*\[\\s*\]', '()', content)  # ([]) -> ()
 
     return content
 
@@ -166,11 +166,11 @@ def fix_specific_file_patterns(filepath, content):
 
     if 'data_provider.py' in filepath:
         # Fix the closing parenthesis issue
-        content = re.sub(r'\(\s*\[.*?\]\s*\)', '[]', content)
+        content = re.sub(r'\(\\s*\[.*?\]\\s*\)', '[]', content)
 
     if 'dormant_engine.py' in filepath:
         # Fix the closing parenthesis issue
-        content = re.sub(r'\(\s*\[.*?\]\s*\)', '[]', content)
+        content = re.sub(r'\(\\s*\[.*?\]\\s*\)', '[]', content)
 
     return content
 
@@ -402,7 +402,7 @@ def main():
         else:
             print(f"File not found: {filepath}")
 
-    print(f"\nFixed {fixed_count} files")
+    print(f"\\nFixed {fixed_count} files")
     print("Core syntax error fixing complete!")
 
 

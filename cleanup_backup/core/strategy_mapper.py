@@ -110,7 +110,7 @@ class StrategyMapper:
         self.average_alpha_score = 0.0
         self.zpe_spin_count = 0
 
-        safe_safe_print("🗺️ Strategy Mapper initialized with UROS v1.0 and ZPE integration")
+        safe_safe_print("\\u1f5fa\\ufe0f Strategy Mapper initialized with UROS v1.0 and ZPE integration")
 
     async def map_strategy_enhanced(
         self,
@@ -207,12 +207,12 @@ class StrategyMapper:
 
                     if zpe_should_spin:
                         self.zpe_spin_count += 1
-                        safe_safe_print(f"🔄 ZPE Spin Decision: SPIN (score: {zpe_spin_score:.6f})")
+                        safe_safe_print(f"\\u1f504 ZPE Spin Decision: SPIN (score: {zpe_spin_score:.6f})")
                     else:
-                        safe_safe_print(f"⏸️ ZPE Spin Decision: HOLD (score: {zpe_spin_score:.6f})")
+                        safe_safe_print(f"\\u23f8\\ufe0f ZPE Spin Decision: HOLD (score: {zpe_spin_score:.6f})")
 
                 except Exception as e:
-                    safe_safe_print(f"⚠️ ZPE integration failed: {safe_format_error(e, 'zpe_integration')}")
+                    safe_safe_print(f"\\u26a0\\ufe0f ZPE integration failed: {safe_format_error(e, 'zpe_integration')}")
 
             # Calculate alpha score if Prophet curve available
             alpha_score = 0.0
@@ -238,7 +238,7 @@ class StrategyMapper:
                             memory_key_obj.profit_delta = actual_profit
 
                 except Exception as e:
-                    safe_safe_print(f"⚠️ Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
+                    safe_safe_print(f"\\u26a0\\ufe0f Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
 
             # Validate execution
             validation_score = 0.0
@@ -273,7 +273,7 @@ class StrategyMapper:
                     recommendations = execution_validation.recommendations
 
                 except Exception as e:
-                    safe_safe_print(f"⚠️ Execution validation failed: {safe_format_error(e, 'execution_validation')}")
+                    safe_safe_print(f"\\u26a0\\ufe0f Execution validation failed: {safe_format_error(e, 'execution_validation')}")
 
             # Update command sequence result
             if sequence and self.sequencer:
@@ -295,7 +295,7 @@ class StrategyMapper:
                     )
 
                 except Exception as e:
-                    safe_safe_print(f"⚠️ Command sequence update failed: {safe_format_error(e, 'sequence_update')}")
+                    safe_safe_print(f"\\u26a0\\ufe0f Command sequence update failed: {safe_format_error(e, 'sequence_update')}")
 
             # Update performance metrics
             self.total_mappings += 1
@@ -303,7 +303,7 @@ class StrategyMapper:
             self._update_average_alpha(alpha_score)
 
             safe_safe_print(
-                f"🗺️ Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}, ZPE Work: {zpe_work:.6f}")
+                f"\\u1f5fa\\ufe0f Strategy mapped successfully - Alpha: {alpha_score:.4f}, Validation: {validation_score:.3f}, ZPE Work: {zpe_work:.6f}")
 
             return StrategyMappingResult(
                 success=True,
@@ -327,7 +327,7 @@ class StrategyMapper:
 
         except Exception as e:
             error_msg = safe_format_error(e, "strategy_mapping")
-            safe_safe_print(f"❌ Strategy mapping failed: {error_msg}")
+            safe_safe_print(f"\\u274c Strategy mapping failed: {error_msg}")
 
             return StrategyMappingResult(
                 success=False,
@@ -466,3 +466,5 @@ async def map_strategy_enhanced(
     return await mapper.map_strategy_enhanced(
         execution_packet, agent_type, prophet_curve_id, market_data
     )
+
+"""

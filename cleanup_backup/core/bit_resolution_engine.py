@@ -5,7 +5,7 @@ from core.unified_math_system import unified_math
 Bit Resolution Engine - Schwabot UROS v1.0
 ==========================================
 
-Implements 4/8/42-bit hash → strategy resolution logic with full integration
+Implements 4/8/42-bit hash \\u2192 strategy resolution logic with full integration
 to the mathematical pipeline, tensor scoring, and basket allocation system.
 
 Core Mathematical Functions:
@@ -72,12 +72,12 @@ class StrategyMapping:
 
 class BitResolutionEngine:
     """
-    Bit Resolution Engine for hash → strategy resolution logic.
+    Bit Resolution Engine for hash \\u2192 strategy resolution logic.
 
     Mathematical Foundation:
     - Bit Resolution: phase = int(hash[0:n], 16) % 2^n where n = bit_depth
     - Strategy Mapping: strategy = f(bit_phase, entropy, volatility)
-    - Tensor Scoring: T = Σᵢ wᵢ * fᵢ(bit_phase, market_data)
+    - Tensor Scoring: T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
     - Hash Basket Routing: basket = hash_to_basket(hash, bit_phase)
     """
 
@@ -246,7 +246,7 @@ class BitResolutionEngine:
         Calculate tensor score for trade priority.
 
         Mathematical Formula:
-        T = Σᵢ wᵢ * fᵢ(bit_phase, market_data)
+        T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
 
         Parameters:
         -----------

@@ -12,7 +12,7 @@ import glob
 def fix_f811_redefinitions():
     """Fix F811 redefinition errors in Python files"""
 
-    print("🔧 Fixing F811 redefinition of unused imports")
+    print("\\u1f527 Fixing F811 redefinition of unused imports")
 
     # Get all Python files
     python_files = []
@@ -23,7 +23,7 @@ def fix_f811_redefinitions():
     total_fixed = 0
 
     for file_path in python_files:
-        print(f"\n📁 Processing: {file_path}")
+        print(f"\\n\\u1f4c1 Processing: {file_path}")
 
         # Read the file
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -48,7 +48,7 @@ def fix_f811_redefinitions():
                 if import_name:
                     if import_name in seen_imports:
                         # This is a redefinition - skip this line
-                        print(f"  🔧 Removed F811 redefinition at line {line_num}: {line.strip()}")
+                        print(f"  \\u1f527 Removed F811 redefinition at line {line_num}: {line.strip()}")
                         file_fixes += 1
                         continue
                     else:
@@ -70,12 +70,12 @@ def fix_f811_redefinitions():
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
 
-            print(f"  ✅ Fixed {file_fixes} F811 redefinition errors in {file_path}")
+            print(f"  \\u2705 Fixed {file_fixes} F811 redefinition errors in {file_path}")
             total_fixed += file_fixes
         else:
-            print(f"  ℹ️ No F811 errors found in {file_path}")
+            print(f"  \\u2139\\ufe0f No F811 errors found in {file_path}")
 
-    print(f"\n🎉 Total F811 fixes applied: {total_fixed}")
+    print(f"\\n\\u1f389 Total F811 fixes applied: {total_fixed}")
     return total_fixed
 
 

@@ -249,7 +249,7 @@ class PortfolioSubstitutionMatrix:
             "max_volatility_weighted_exposure": 0.5,
         }
 
-        logger.info("📊 Portfolio Substitution Matrix initialized")
+        logger.info("\\u1f4ca Portfolio Substitution Matrix initialized")
 
     def calculate_substitution(
         self,
@@ -335,13 +335,13 @@ class PortfolioSubstitutionMatrix:
 
             calculation_time = time.time() - start_time
             logger.debug(
-                f"📊 Portfolio substitution calculated in {calculation_time:.4f}s"
+                f"\\u1f4ca Portfolio substitution calculated in {calculation_time:.4f}s"
             )
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Portfolio substitution calculation failed: {e}")
+            logger.error(f"\\u274c Portfolio substitution calculation failed: {e}")
             return self._create_fallback_substitution(
                 parameters, phase_mode, rebalance_reason
             )
@@ -980,7 +980,7 @@ def execute_portfolio_substitution(
             asset_type = AssetType(asset_str)
             current_allocation_typed[asset_type] = amount
         except ValueError:
-            logger.warning(f"⚠️ Unknown asset type: {asset_str}")
+            logger.warning(f"\\u26a0\\ufe0f Unknown asset type: {asset_str}")
 
     # Create parameters
     parameters = SubstitutionParameters(
@@ -1031,7 +1031,7 @@ if __name__ == "__main__":
         },
     )
 
-    safe_print(f"📊 Portfolio Substitution Result:")
+    safe_print(f"\\u1f4ca Portfolio Substitution Result:")
     safe_print(f"   Strategy: {result['strategy_used']}")
     safe_print(f"   Confidence: {result['confidence_score']:.3f}")
     safe_print(f"   Expected Return: {result['expected_return']:.3f}")

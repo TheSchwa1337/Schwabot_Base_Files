@@ -12,7 +12,7 @@ Mathematical Foundation:
 - Market altitude = 1 - unified_math.min(volume_density, 1.0)
 - STAM zones: Stratified Atmospheric Market zones
 - Velocity-altitude paradox: v_correction = altitude * volatility_factor
-- Autonomic reflex scoring: R_auto = Σ(drift_i * pressure_i)
+- Autonomic reflex scoring: R_auto = \\u03a3(drift_i * pressure_i)
 
 Windows CLI compatible with comprehensive error handling.
 """
@@ -155,7 +155,7 @@ class AltitudeAdjustmentEngine:
         """Calculate velocity-altitude paradox state.
 
         Mathematical Formula:
-        paradox_factor = velocity² / (altitude + ε)
+        paradox_factor = velocity\\u00b2 / (altitude + \\u03b5)
         correction_vector = altitude * volatility_factor * pressure_modifier
 
         Parameters
@@ -217,7 +217,7 @@ class AltitudeAdjustmentEngine:
         """Calculate autonomic reflex score.
 
         Mathematical Formula:
-        R_auto = Σ(drift_i * pressure_i) * entropy_modifier
+        R_auto = \\u03a3(drift_i * pressure_i) * entropy_modifier
 
         Parameters
         ----------
@@ -264,7 +264,7 @@ class AltitudeAdjustmentEngine:
         """Calculate pressure gradient at given altitude.
 
         Mathematical Formula:
-        gradient = -dP/dh = -ρ * g * exp(-h/H)
+        gradient = -dP/dh = -\\u03c1 * g * exp(-h/H)
         Simplified: gradient = exp(-altitude * 5) * altitude_factor
         """
         try:
@@ -467,7 +467,7 @@ def main() -> None:
     ]
 
     for name, vol_density, volatility, liquidity, velocity, pressure in scenarios:
-        safe_print(f"\n{name}:")
+        safe_print(f"\\n{name}:")
         safe_print(f"  Volume Density: {vol_density:.1f}")
         safe_print(f"  Volatility: {volatility:.1f}")
         safe_print(f"  Liquidity: {liquidity:.1f}")
@@ -487,13 +487,13 @@ def main() -> None:
             entropy_level=0.7,
         )
 
-        safe_print(f"  → Altitude: {metrics.altitude:.3f}")
-        safe_print(f"  → STAM Zone: {metrics.stam_zone.value}")
-        safe_print(f"  → Velocity Correction: {metrics.velocity_correction:.3f}")
-        safe_print(f"  → Pressure Gradient: {metrics.pressure_gradient:.3f}")
-        safe_print(f"  → Autonomic Reflex: {metrics.autonomic_reflex:.3f}")
-        safe_print(f"  → Stability Index: {metrics.stability_index:.3f}")
-        safe_print(f"  → Strategy: {metrics.recommended_strategy}")
+        safe_print(f"  \\u2192 Altitude: {metrics.altitude:.3f}")
+        safe_print(f"  \\u2192 STAM Zone: {metrics.stam_zone.value}")
+        safe_print(f"  \\u2192 Velocity Correction: {metrics.velocity_correction:.3f}")
+        safe_print(f"  \\u2192 Pressure Gradient: {metrics.pressure_gradient:.3f}")
+        safe_print(f"  \\u2192 Autonomic Reflex: {metrics.autonomic_reflex:.3f}")
+        safe_print(f"  \\u2192 Stability Index: {metrics.stability_index:.3f}")
+        safe_print(f"  \\u2192 Strategy: {metrics.recommended_strategy}")
 
     # Test velocity-altitude paradox
     safe_print("\n" + "=" * 35)
@@ -511,7 +511,7 @@ def main() -> None:
 
     # Engine summary
     summary = engine.get_altitude_summary()
-    safe_print(f"\nEngine Summary: {summary}")
+    safe_print(f"\\nEngine Summary: {summary}")
 
 
 if __name__ == "__main__":

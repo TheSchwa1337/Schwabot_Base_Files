@@ -47,16 +47,16 @@ def fix_syntax_errors(file_path: str) -> bool:
             content = '{' * (close_brace - open_brace) + content
 
         # Fix 2: Missing colons after function/class definitions
-        content = re.sub(r'def\s+\w+\s*\([^)]*\)\s*$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'class\s+\w+\s*$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'if\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'elif\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'else\s*$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'for\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'while\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'try\s*$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'except\s*$', r'\g<0>:', content, flags=re.MULTILINE)
-        content = re.sub(r'finally\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'def\\s+\\w+\\s*\([^)]*\)\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'class\\s+\\w+\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'if\\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'elif\\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'else\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'for\\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'while\\s+[^:]+$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'try\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'except\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
+        content = re.sub(r'finally\\s*$', r'\g<0>:', content, flags=re.MULTILINE)
 
         # Only write if content changed
         if content != original_content:
@@ -74,7 +74,7 @@ def fix_syntax_errors(file_path: str) -> bool:
 def main():
     """Run syntax fixes on all Python files."""
 
-    print("🔧 Phase 1: Fixing Critical Syntax Errors...")
+    print("\\u1f527 Phase 1: Fixing Critical Syntax Errors...")
 
     # Focus on core directories first
     core_dirs = ['core', 'mathlib', 'tools', 'api', 'engine']
@@ -88,9 +88,9 @@ def main():
                 total_count += 1
                 if fix_syntax_errors(str(py_file)):
                     fixed_count += 1
-                    print(f"✅ Fixed: {py_file}")
+                    print(f"\\u2705 Fixed: {py_file}")
 
-    print(f"\n📊 Results:")
+    print(f"\\n\\u1f4ca Results:")
     print(f"   Files processed: {total_count}")
     print(f"   Files fixed: {fixed_count}")
     print(f"   Success rate: {fixed_count/total_count*100:.1f}%")

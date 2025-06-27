@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Ghost profit tracker – recursive Π(t) accumulator.
+"""Ghost profit tracker \\u2013 recursive \\u03a0(t) accumulator.
 
 Tracks realised profit deltas during ghost-mode cycles and provides
 summaries for feedback loops (memory reinforcement, drift compensation,
-etc.).  The implementation is intentionally small – no persistence layer or
-DB – it runs in-memory and can be serialised by the caller if necessary.
+etc.).  The implementation is intentionally small \\u2013 no persistence layer or
+DB \\u2013 it runs in-memory and can be serialised by the caller if necessary.
 """
 
 
@@ -24,7 +24,7 @@ def _safe_float(x: float | int) -> float:
     """TODO: document _safe_float."""
     try:
         return float(x)
-    except Exception as exc:  # pragma: no cover – defensive
+    except Exception as exc:  # pragma: no cover \\u2013 defensive
         raise ValueError("profit value must be numeric") from exc
 
 
@@ -73,3 +73,5 @@ def register_profit(delta: float) -> None:  # noqa: D401
 def profit_summary() -> Tuple[float, float, float]:  # noqa: D401
     """Return global tracker summary (total, mean, variance)."""
     return _tracker.summary()
+
+"""

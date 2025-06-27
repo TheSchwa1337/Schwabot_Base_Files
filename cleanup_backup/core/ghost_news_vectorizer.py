@@ -4,7 +4,7 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Vectorise news with weighting matrix.
 
-V_n = ∇·(Θ · φ(news))
+V_n = \\u2207\\u00b7(\\u0398 \\u00b7 \\u03c6(news))
 """
 
 
@@ -23,3 +23,5 @@ def vectorize_news(
     if theta.shape[1] != phi.size:
         raise ValueError("theta column dim mismatch with phi_news length")
     return theta @ phi
+
+"""

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Oscillator fallback – damped harmonic pulse generator.
+"""Oscillator fallback \\u2013 damped harmonic pulse generator.
 
-This helper provides a mathematically–stable fallback oscillator that produces
+This helper provides a mathematically\\u2013stable fallback oscillator that produces
 bounded amplitude even if upstream signal generators become unstable.  Ferris
 wheel and GAN-entropy modules can call this in *safe-mode* to keep phase timers
 alive without injecting unbounded energy into the system.
@@ -13,12 +13,12 @@ Mathematics
 ~~~~~~~~~~
 Damped harmonic oscillator (underdamped case):
 
-    x(t) = A · e^(−γ t) · unified_math.cos(2π f t + φ)
+    x(t) = A \\u00b7 e^(\\u2212\\u03b3 t) \\u00b7 unified_math.cos(2\\u03c0 f t + \\u03c6)
 
-where 0 < γ < ∞ is the damping coefficient.
+where 0 < \\u03b3 < \\u221e is the damping coefficient.
 
-The implementation is intentionally minimal – no dynamic state, no numerical
-integrator – just the closed-form expression that guarantees ‖x(t)‖ ≤ A.
+The implementation is intentionally minimal \\u2013 no dynamic state, no numerical
+integrator \\u2013 just the closed-form expression that guarantees \\u2016x(t)\\u2016 \\u2264 A.
 """
 
 
@@ -49,9 +49,9 @@ def fallback_oscillator(
     frequency
         Frequency ``f`` in Hz.  Defaults to **1.0**.
     damping
-        Damping coefficient ``γ``.  **0.0** ⇒ no damping.  Must be ≥ 0.
+        Damping coefficient ``\\u03b3``.  **0.0** \\u21d2 no damping.  Must be \\u2265 0.
     phase
-        Phase offset ``φ`` in radians.
+        Phase offset ``\\u03c6`` in radians.
 
     Returns
     -------

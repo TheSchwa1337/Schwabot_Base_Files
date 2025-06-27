@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""BTC vector aggregator – volume-weighted price analysis and FFT filtering.
+"""BTC vector aggregator \\u2013 volume-weighted price analysis and FFT filtering.
 
 Implements the formulas:
-    V_btc = Σ_i^n [p_exit(i) − p_entry(i)]·w_vol(i)
-    η_btc = Δp / Δt · Σ_j vol(j)
-    Ξ_btc(t) = tanh(V_btc · η_btc)
-    A_btc = FFT(Ξ_btc(t)) · filter(f_peak)
+    V_btc = \\u03a3_i^n [p_exit(i) \\u2212 p_entry(i)]\\u00b7w_vol(i)
+    \\u03b7_btc = \\u0394p / \\u0394t \\u00b7 \\u03a3_j vol(j)
+    \\u039e_btc(t) = tanh(V_btc \\u00b7 \\u03b7_btc)
+    A_btc = FFT(\\u039e_btc(t)) \\u00b7 filter(f_peak)
 
 This module aggregates BTC price movements with volume weighting and applies
 spectral filtering for enhanced signal quality.
@@ -36,7 +36,7 @@ def btc_vector(
     entry_prices: Sequence[float],
     volume_weights: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return V_btc = Σ_i^n [p_exit(i) − p_entry(i)]·w_vol(i).
+    """Return V_btc = \\u03a3_i^n [p_exit(i) \\u2212 p_entry(i)]\\u00b7w_vol(i).
 
     Parameters
     ----------
@@ -66,14 +66,14 @@ def btc_eta(
     time_delta: float,
     volumes: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return η_btc = Δp / Δt · Σ_j vol(j).
+    """Return \\u03b7_btc = \\u0394p / \\u0394t \\u00b7 \\u03a3_j vol(j).
 
     Parameters
     ----------
     price_delta
-        Price change Δp over the time period.
+        Price change \\u0394p over the time period.
     time_delta
-        Time period Δt (must be > 0).
+        Time period \\u0394t (must be > 0).
     volumes
         Volume series vol(j) to sum.
     """
@@ -87,7 +87,7 @@ def btc_eta(
 
 
 def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
-    """Return Ξ_btc(t) = tanh(V_btc · η_btc).
+    """Return \\u039e_btc(t) = tanh(V_btc \\u00b7 \\u03b7_btc).
 
     Parameters
     ----------
@@ -106,12 +106,12 @@ def btc_spectral_aggregate(
     *,
     filter_width: float = 1.0,
 ) -> np.ndarray:  # noqa: D401
-    """Return A_btc = FFT(Ξ_btc(t)) · filter(f_peak).
+    """Return A_btc = FFT(\\u039e_btc(t)) \\u00b7 filter(f_peak).
 
     Parameters
     ----------
     xi_series
-        Time series of Ξ_btc(t) values.
+        Time series of \\u039e_btc(t) values.
     peak_frequency
         Target frequency f_peak for filtering.
     filter_width

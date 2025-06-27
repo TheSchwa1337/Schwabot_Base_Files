@@ -434,4 +434,5 @@ class TestFractalSync(unittest.TestCase):
 if __name__ == '__main__':
     # Run tests
     unittest.main(verbosity=2)
-\n# -*- coding: utf-8 -*-\n
+\\n# -*- coding: utf-8 -*-\\n
+"""

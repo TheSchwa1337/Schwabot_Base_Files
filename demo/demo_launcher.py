@@ -226,7 +226,7 @@ class SchwabotDemoLauncher:
     async def run_comprehensive_demo(self, config: DemoConfiguration) -> DemoResult:
         """Run a comprehensive demo with all components"""
 
-        safe_print(f"🚀 Starting comprehensive demo: {config.demo_id}")
+        safe_print(f"\\u1f680 Starting comprehensive demo: {config.demo_id}")
         safe_print(f"Components: {config.components}")
         safe_print(f"Duration: {config.duration} seconds")
         safe_print(f"Trades: {config.num_trades}")
@@ -237,39 +237,39 @@ class SchwabotDemoLauncher:
 
         try:
             # 1. Initialize all components
-            safe_print("\n📋 Initializing components...")
+            safe_print("\\n\\u1f4cb Initializing components...")
             await self._initialize_components(config.components)
 
             # 2. Run backtest scenarios
-            safe_print("\n📊 Running backtest scenarios...")
+            safe_print("\\n\\u1f4ca Running backtest scenarios...")
             if "backtest_runner" in config.components:
                 backtest_result = await self._run_backtest_scenarios(config)
                 component_results["backtest_runner"] = backtest_result
 
             # 3. Run trade sequences
-            safe_print("\n💰 Running trade sequences...")
+            safe_print("\\n\\u1f4b0 Running trade sequences...")
             if "trade_sequence" in config.components:
                 trade_result = await self._run_trade_sequences(config)
                 component_results["trade_sequence"] = trade_result
 
             # 4. Run logic flows
-            safe_print("\n🔄 Running logic flows...")
+            safe_print("\\n\\u1f504 Running logic flows...")
             if "logic_flow" in config.components:
                 logic_result = await self._run_logic_flows(config)
                 component_results["logic_flow"] = logic_result
 
             # 5. Run integration system
-            safe_print("\n🔗 Running integration system...")
+            safe_print("\\n\\u1f517 Running integration system...")
             if "integration_system" in config.components:
                 integration_result = await self._run_integration_system(config)
                 component_results["integration_system"] = integration_result
 
             # 6. Collect performance metrics
-            safe_print("\n📈 Collecting performance metrics...")
+            safe_print("\\n\\u1f4c8 Collecting performance metrics...")
             performance_metrics = await self._collect_performance_metrics(config)
 
             # 7. Generate recommendations
-            safe_print("\n💡 Generating recommendations...")
+            safe_print("\\n\\u1f4a1 Generating recommendations...")
             recommendations = self._generate_recommendations(component_results, performance_metrics)
 
             # Calculate demo results
@@ -303,7 +303,7 @@ class SchwabotDemoLauncher:
             # Save data
             self._save_demo_data()
 
-            safe_print(f"\n✅ Demo completed successfully!")
+            safe_print(f"\\n\\u2705 Demo completed successfully!")
             safe_print(f"Duration: {result.duration:.2f} seconds")
             safe_print(f"Total trades: {total_trades}")
             safe_print(f"Success rate: {success_rate:.2%}")
@@ -312,7 +312,7 @@ class SchwabotDemoLauncher:
             return result
 
         except Exception as e:
-            safe_print(f"\n❌ Demo failed: {e}")
+            safe_print(f"\\n\\u274c Demo failed: {e}")
 
             # Create failed result
             result = DemoResult(
@@ -566,20 +566,20 @@ def main():
     )
 
     # Run demo
-    safe_print("🚀 Starting Schwabot Demo Launcher")
+    safe_print("\\u1f680 Starting Schwabot Demo Launcher")
     safe_print("=" * 50)
 
     result = asyncio.run(launcher.run_comprehensive_demo(config))
 
     # Print summary
     safe_print("\n" + "=" * 50)
-    safe_print("📊 Demo Summary")
+    safe_print("\\u1f4ca Demo Summary")
     safe_print("=" * 50)
 
     summary = launcher.get_demo_summary()
     print(json.dumps(summary, indent=2, default=str))
 
-    safe_print("\n✅ Demo launcher completed!")
+    safe_print("\\n\\u2705 Demo launcher completed!")
 
 
 if __name__ == "__main__":

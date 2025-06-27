@@ -131,7 +131,7 @@ from typing import Any, Dict, List, Optional, Union
 logger = logging.getLogger(__name__)
 
 # Version information
-__version__ = "0.5.1"
+__version__ = "0.5_1"
 __author__ = "Schwabot Development Team"
 __description__ = "Advanced AI-Powered Trading System"
 

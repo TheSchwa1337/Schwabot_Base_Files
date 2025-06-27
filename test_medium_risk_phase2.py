@@ -2,7 +2,7 @@ from .visual_fallbacks import VisualFallback
 from utils.safe_print import safe_print, info, warn, error, success, debug
 #!/usr/bin/env python3
 """
-Medium-Risk Phase II Integration Test – Schwabot UROS v1.0
+Medium-Risk Phase II Integration Test \\u2013 Schwabot UROS v1.0
 =========================================================
 
 This script mirrors the core/test_medium_risk_phase_ii.py integration test but
@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 
 # ---------------------------------------------------------------------------
-# Path setup – add ./core to import path so `import core.xxx` works regardless
+# Path setup \\u2013 add ./core to import path so `import core.xxx` works regardless
 # of where the test is executed from.
 # ---------------------------------------------------------------------------
 REPO_ROOT = Path(__file__).resolve().parent
@@ -29,7 +29,7 @@ CORE_PATH = REPO_ROOT / "core"
 if str(CORE_PATH) not in sys.path:
     sys.path.insert(0, str(CORE_PATH))
 
-# Configure logging – keep exactly the same format as the original test.
+# Configure logging \\u2013 keep exactly the same format as the original test.
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -60,7 +60,7 @@ class MediumRiskPhase2Tester:
     # ---------------------------------------------------------------------
     # Individual component tests (trade execution, strategy engine, etc).
     # The logic is exactly the same as in core/test_medium_risk_phase_ii.py but
-    # with absolute imports (i.e. `import core.trade_executor …`).
+    # with absolute imports (i.e. `import core.trade_executor \\u2026`).
     # ---------------------------------------------------------------------
 
     def test_trade_execution_engine(self) -> TestResult:  # noqa: C901 (complexity)
@@ -71,7 +71,7 @@ class MediumRiskPhase2Tester:
                 from core.simulate_trade import (  # type: ignore
                     TradeSimulator,
                 )
-                logger.info("✅ Trade execution components imported successfully")
+                logger.info("\\u2705 Trade execution components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Trade Execution Engine",
@@ -106,7 +106,7 @@ class MediumRiskPhase2Tester:
                 execution_time=time.time() - start,
                 error_message="Trade status not EXECUTED",
             )
-        except Exception as e:  # pragma: no cover – generic safety net
+        except Exception as e:  # pragma: no cover \\u2013 generic safety net
             return TestResult(
                 component="Trade Execution Engine",
                 status="FAIL",
@@ -120,7 +120,7 @@ class MediumRiskPhase2Tester:
         try:
             try:
                 from core.strategy_logic import StrategyLogic  # noqa: F401
-                logger.info("✅ Strategy execution components imported successfully")
+                logger.info("\\u2705 Strategy execution components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Strategy Execution Engine",
@@ -159,7 +159,7 @@ class MediumRiskPhase2Tester:
         try:
             try:
                 from core.phase_engine import PhaseEngine  # noqa: F401
-                logger.info("✅ Phase engine components imported successfully")
+                logger.info("\\u2705 Phase engine components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Phase Engine",
@@ -204,7 +204,7 @@ class MediumRiskPhase2Tester:
         try:
             try:
                 from core.portfolio_substitution_matrix import PortfolioSubstitutionMatrix  # noqa: F401
-                logger.info("✅ Portfolio substitution components imported successfully")
+                logger.info("\\u2705 Portfolio substitution components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Portfolio Substitution Matrix",
@@ -247,7 +247,7 @@ class MediumRiskPhase2Tester:
         try:
             try:
                 from core.deterministic_value_engine import DeterministicValueEngine, MarketState, AssetType  # noqa: F401
-                logger.info("✅ Deterministic value components imported successfully")
+                logger.info("\\u2705 Deterministic value components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Deterministic Value Engine",
@@ -294,7 +294,7 @@ class MediumRiskPhase2Tester:
                 from core.unified_mathematical_trading_controller import (
                     UnifiedMathematicalTradingController,
                 )
-                logger.info("✅ Unified trading components imported successfully")
+                logger.info("\\u2705 Unified trading components imported successfully")
             except Exception as e:
                 return TestResult(
                     component="Unified Mathematical Trading Controller",
@@ -336,7 +336,7 @@ class MediumRiskPhase2Tester:
             )
 
     # ------------------------------------------------------------------
-    # Test-runner orchestration – identical summary logic to original.
+    # Test-runner orchestration \\u2013 identical summary logic to original.
     # ------------------------------------------------------------------
 
     def run_all_tests(self) -> Dict[str, Any]:
@@ -423,7 +423,7 @@ def main():
     with open("medium_risk_phase_ii_results.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 
-    print(f"\n{visual.get('SAVE')} Results saved to: medium_risk_phase_ii_results.json")
+    print(f"\\n{visual.get('SAVE')} Results saved to: medium_risk_phase_ii_results.json")
     print(f"{visual.get(results['overall_status'])} Overall Status: {results['overall_status']}")
 
     if results['overall_status'] == "READY":

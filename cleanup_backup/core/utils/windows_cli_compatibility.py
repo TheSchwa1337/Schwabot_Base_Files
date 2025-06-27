@@ -237,20 +237,20 @@ def log_safe(logger_instance, level: str, message: str) -> None:
 if __name__ == "__main__":
     # Test the compatibility handler
     test_messages = [
-        "🚀 Launching Schwabot system...",
-        "✅ System initialized successfully",
-        "❌ Error occurred during startup",
-        "⚠️ Warning: High memory usage detected",
-        "📊 Processing data with α, β, γ parameters",
-        "🎯 Target profit: $1000 → $1500",
-        "🔥 Hot market conditions detected",
-        "⚡ Fast execution mode enabled",
-        "🔧 Tools loaded successfully",
-        "📈 Profit trend: ↑ 15%",
-        "💰 Money flow: ∀ x ∈ ℝ",
-        "🧮 Calculation: ∑(i=1 to n) x_i",
-        "🔬 Analysis: μ = 0.5, σ = 0.1",
-        "⚖️ Balance: φ = 1.618033988749895",
+        "\\u1f680 Launching Schwabot system...",
+        "\\u2705 System initialized successfully",
+        "\\u274c Error occurred during startup",
+        "\\u26a0\\ufe0f Warning: High memory usage detected",
+        "\\u1f4ca Processing data with \\u03b1, \\u03b2, \\u03b3 parameters",
+        "\\u1f3af Target profit: $1000 \\u2192 $1500",
+        "\\u1f525 Hot market conditions detected",
+        "\\u26a1 Fast execution mode enabled",
+        "\\u1f527 Tools loaded successfully",
+        "\\u1f4c8 Profit trend: \\u2191 15%",
+        "\\u1f4b0 Money flow: \\u2200 x \\u2208 \\u211d",
+        "\\u1f9ee Calculation: \\u2211(i=1 to n) x_i",
+        "\\u1f52c Analysis: \\u03bc = 0.5, \\u03c3 = 0.1",
+        "\\u2696\\ufe0f Balance: \\u03c6 = 1.618033988749895",
     ]
 
     safe_print("Testing Windows CLI Compatibility Handler")
@@ -264,6 +264,8 @@ if __name__ == "__main__":
 
     # Test environment detection
     env_info = cli_handler.get_environment_info()
-    safe_print("\nEnvironment Information:")
+    safe_print("\\nEnvironment Information:")
     for key, value in env_info.items():
         safe_print(f"  {key}: {value}")
+
+"""

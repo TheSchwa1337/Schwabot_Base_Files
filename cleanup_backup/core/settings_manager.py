@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class SystemSettings:
     """System-level configuration settings."""
     name: str = "Schwabot Trading System"
-    version: str = "2.0.0"
+    version: str = "2.0_0"
     environment: str = "production"
     debug_mode: bool = False
     log_level: str = "INFO"
@@ -147,7 +147,7 @@ class UISettings:
     """User interface configuration settings."""
     web_dashboard: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'host': "0.0.0.0",
+        'host': "0.0_0.0",
         'port': 8080,
         'enable_ssl': False,
         'ssl_cert_path': "",
@@ -156,7 +156,7 @@ class UISettings:
 
     api_server: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'host': "0.0.0.0",
+        'host': "0.0_0.0",
         'port': 8081,
         'enable_authentication': True,
         'api_key_header': "X-API-Key",
@@ -607,3 +607,5 @@ def get_setting(path: str, default: Any = None) -> Any:
 def set_setting(path: str, value: Any) -> bool:
     """Set a setting value by path."""
     return get_settings_manager().set_setting(path, value)
+
+"""

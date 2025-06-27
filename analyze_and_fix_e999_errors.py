@@ -84,22 +84,22 @@ class E999ErrorAnalyzer:
 
             # Fix pattern: """text without closing
             content = re.sub(
-                r'"""([^"]*)\n\s*"""\s*def\s+',
-                r'"""\1"""\n\ndef ',
+                r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+                r'"""\1"""\\n\\ndef ',
                 content
             )
 
             # Fix pattern: """text at end of line
             content = re.sub(
-                r'"""([^"]*)\n\s*def\s+',
-                r'"""\1"""\n\ndef ',
+                r'"""([^"]*)\\n\\s*def\\s+',
+                r'"""\1"""\\n\\ndef ',
                 content
             )
 
             # Fix pattern: """text without closing at end
             content = re.sub(
-                r'"""([^"]*)\n\s*if\s+__name__',
-                r'"""\1"""\n\nif __name__',
+                r'"""([^"]*)\\n\\s*if\\s+__name__',
+                r'"""\1"""\\n\\nif __name__',
                 content
             )
 
@@ -125,7 +125,7 @@ class E999ErrorAnalyzer:
             # Fix pattern: """Stub main function."""."""
             content = re.sub(
                 r'"""Stub main function\."""\."""',
-                '"""Stub main function."""\n    pass\n',
+                '"""Stub main function."""\\n    pass\n',
                 content
             )
 
@@ -138,7 +138,7 @@ class E999ErrorAnalyzer:
 
             # Fix pattern: """text without proper closing
             content = re.sub(
-                r'"""([^"]*)\n\s*"""\s*"""',
+                r'"""([^"]*)\\n\\s*"""\\s*"""',
                 r'"""\1"""\n',
                 content
             )
@@ -164,18 +164,18 @@ class E999ErrorAnalyzer:
 
             # Replace Unicode characters with ASCII equivalents
             unicode_replacements = {
-                '∇': 'del',  # nabla
-                '∈': 'in',   # element of
-                '≤': '<=',   # less than or equal
-                '≥': '>=',   # greater than or equal
-                '⇒': '=>',   # implies
-                '∫': 'int',  # integral
-                '∂': 'd',    # partial derivative
-                '·': '.',    # middle dot
-                '–': '-',    # en dash
-                '₍': '(',    # subscript left parenthesis
-                '₎': ')',    # subscript right parenthesis
-                '♦': '',     # diamond (remove)
+                '\\u2207': 'del',  # nabla
+                '\\u2208': 'in',   # element of
+                '\\u2264': '<=',   # less than or equal
+                '\\u2265': '>=',   # greater than or equal
+                '\\u21d2': '=>',   # implies
+                '\\u222b': 'int',  # integral
+                '\\u2202': 'd',    # partial derivative
+                '\\u00b7': '.',    # middle dot
+                '\\u2013': '-',    # en dash
+                '\\u208d': '(',    # subscript left parenthesis
+                '\\u208e': ')',    # subscript right parenthesis
+                '\\u2666': '',     # diamond (remove)
             }
 
             for unicode_char, ascii_replacement in unicode_replacements.items():
@@ -202,14 +202,14 @@ class E999ErrorAnalyzer:
 
             # Fix stray periods after function definitions
             content = re.sub(
-                r'def\s+(\w+)\s*\([^)]*\)\s*:\s*\.',
+                r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
                 r'def \1(\2):',
                 content
             )
 
             # Fix invalid decimal literals
             content = re.sub(
-                r'(\d+)\.(\d+)\.(\d+)',
+                r'(\\d+)\.(\\d+)\.(\\d+)',
                 r'\1.\2_\3',  # Replace with underscore
                 content
             )
@@ -237,7 +237,7 @@ class E999ErrorAnalyzer:
         safe_print("Applying fixes...")
 
         for category, errors in categories.items():
-            safe_print(f"\nFixing {category} ({len(errors)} errors):")
+            safe_print(f"\\nFixing {category} ({len(errors)} errors):")
 
             for error in errors:
                 file_path = self.extract_file_path(error)
@@ -257,21 +257,21 @@ class E999ErrorAnalyzer:
 
                 if fixed:
                     self.fix_stats['errors_fixed'] += 1
-                    safe_print(f"  ✅ Fixed: {file_path}")
+                    safe_print(f"  \\u2705 Fixed: {file_path}")
 
                 self.fix_stats['files_processed'] += 1
 
     def verify_fixes(self) -> int:
         """Verify that fixes worked by running Flake8 again."""
-        safe_print("\nVerifying fixes...")
+        safe_print("\\nVerifying fixes...")
 
         remaining_errors = self.run_flake8_analysis()
         remaining_count = len(remaining_errors)
 
         if remaining_count == 0:
-            safe_print("✅ All E999 syntax errors have been fixed!")
+            safe_print("\\u2705 All E999 syntax errors have been fixed!")
         else:
-            safe_print(f"⚠️  Still found {remaining_count} E999 syntax errors")
+            safe_print(f"\\u26a0\\ufe0f  Still found {remaining_count} E999 syntax errors")
             safe_print("First few remaining errors:")
             for error in remaining_errors[:5]:
                 safe_print(f"  {error}")
@@ -289,26 +289,26 @@ class E999ErrorAnalyzer:
         safe_print(f"Found {len(errors)} E999 syntax errors")
 
         if not errors:
-            safe_print("✅ No E999 errors found!")
+            safe_print("\\u2705 No E999 errors found!")
             return
 
         # Step 2: Categorize errors
-        safe_print("\nStep 2: Categorizing errors...")
+        safe_print("\\nStep 2: Categorizing errors...")
         categories = self.categorize_errors(errors)
 
         for category, error_list in categories.items():
             safe_print(f"  {category}: {len(error_list)} errors")
 
         # Step 3: Apply fixes
-        safe_print("\nStep 3: Applying fixes...")
+        safe_print("\\nStep 3: Applying fixes...")
         self.apply_fixes(categories)
 
         # Step 4: Verify fixes
-        safe_print("\nStep 4: Verifying fixes...")
+        safe_print("\\nStep 4: Verifying fixes...")
         remaining_count = self.verify_fixes()
 
         # Summary
-        safe_print(f"\nSummary:")
+        safe_print(f"\\nSummary:")
         safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
         safe_print(f"  Errors fixed: {self.fix_stats['errors_fixed']}")
         safe_print(f"  Remaining errors: {remaining_count}")

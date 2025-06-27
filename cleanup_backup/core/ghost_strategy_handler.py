@@ -136,7 +136,7 @@ class GhostStrategyHandler:
         # Initialize ghost patterns
         self._initialize_ghost_patterns()
 
-        logger.info("👻 Ghost Strategy Handler initialized")
+        logger.info("\\u1f47b Ghost Strategy Handler initialized")
 
     def detect_ghost_entry(self, market_data: Dict[str, Any],
                            conventional_signals: Dict[str, Any]) -> Optional[GhostEntry]:

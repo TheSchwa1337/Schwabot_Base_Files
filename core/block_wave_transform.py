@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
 # #!/usr/bin/env python3
-"""Block-wise wave transform utilities.
+"""Block-wise wave transform utilities."""
 
 This module provides a minimal, working implementation of
-define_block_wave_transform – a helper that will be used by Schwabot's
+define_block_wave_transform - a helper that will be used by Schwabot's'
 signal-compression and GAN-preprocessing stack.
 
-The routine currently supports a block-wise DCT-II (via scipy.fftpack if
-available, else falls back to NumPy's FFT) and returns the transformed signal
+The routine currently supports a block-wise DCT-II (via scipy.fftpack if)
+available, else falls back to NumPy's FFT and returns the transformed signal'
 along with per-block Shannon entropy. The advanced lattice / entropy gates can
 be layered on top later, but this is more than enough to satisfy imports and
 pass Flake8.
-"""
+""""""
 
 
 from typing import Tuple
@@ -33,7 +33,7 @@ def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
     return dct(arr, type=2, norm="ortho")
 
 
-except ModuleNotFoundError:  # pragma: no cover – keep pure-NumPy fallback
+except ModuleNotFoundError:  # pragma: no cover - keep pure-NumPy fallback
 
 
 def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
@@ -60,14 +60,14 @@ def _shannon_entropy(block: np.ndarray) -> float:
     return float(-np.sum(p * np.log2(p)))
 
 
-def define_block_wave_transform(
+def define_block_wave_transform()
 
 
     signal: np.ndarray, block_size: int
-) -> Tuple[np.ndarray, np.ndarray]:
+ -> Tuple[np.ndarray, np.ndarray]:
 
 
-"""Apply a block-wise DCT transform and return entropy per block.
+"""Apply a block-wise DCT transform and return entropy per block."""
 
 Parameters
 ----------
@@ -82,7 +82,7 @@ Tuple[np.ndarray, np.ndarray]
 (transformed, entropy) where transformed is the concatenated DCT
         coefficients and entropy is a vector of Shannon entropies for each
 block.
-"""
+""""""
    if signal.ndim != 1:
         raise ValueError("signal must be 1-D")
     if signal.size % block_size != 0:
@@ -99,3 +99,7 @@ entropies = np.apply_along_axis(_shannon_entropy, 1, transformed_blocks)
 
    # Flatten transformed back to 1-D for convenience.
    return transformed_blocks.ravel(), entropies
+
+
+
+"""

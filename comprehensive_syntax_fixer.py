@@ -19,7 +19,7 @@ def fix_malformed_stub_docstrings(content: str) -> str:
     # Fix pattern: """Stub main function."""."""
     content = re.sub(
         r'"""Stub main function\."""\."""',
-        '"""Stub main function."""\n    pass\n',
+        '"""Stub main function."""\\n    pass\n',
         content
     )
 
@@ -36,17 +36,17 @@ def fix_malformed_stub_docstrings(content: str) -> str:
 def fix_unicode_characters(content: str) -> str:
     """Replace Unicode characters with ASCII equivalents."""
     unicode_replacements = {
-        '∇': 'del',  # nabla
-        '∈': 'in',   # element of
-        '≤': '<=',   # less than or equal
-        '≥': '>=',   # greater than or equal
-        '⇒': '=>',   # implies
-        '∫': 'int',  # integral
-        '∂': 'd',    # partial derivative
-        '·': '.',    # middle dot
-        '–': '-',    # en dash
-        '₍': '(',    # subscript left parenthesis
-        '₎': ')',    # subscript right parenthesis
+        '\\u2207': 'del',  # nabla
+        '\\u2208': 'in',   # element of
+        '\\u2264': '<=',   # less than or equal
+        '\\u2265': '>=',   # greater than or equal
+        '\\u21d2': '=>',   # implies
+        '\\u222b': 'int',  # integral
+        '\\u2202': 'd',    # partial derivative
+        '\\u00b7': '.',    # middle dot
+        '\\u2013': '-',    # en dash
+        '\\u208d': '(',    # subscript left parenthesis
+        '\\u208e': ')',    # subscript right parenthesis
     }
 
     for unicode_char, ascii_replacement in unicode_replacements.items():
@@ -59,15 +59,15 @@ def fix_unterminated_strings(content: str) -> str:
     """Fix unterminated triple-quoted strings."""
     # Fix pattern: """text without closing
     content = re.sub(
-        r'"""([^"]*)\n\s*"""\s*def\s+',
-        r'"""\1"""\n\ndef ',
+        r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+        r'"""\1"""\\n\\ndef ',
         content
     )
 
     # Fix pattern: """text at end of line
     content = re.sub(
-        r'"""([^"]*)\n\s*def\s+',
-        r'"""\1"""\n\ndef ',
+        r'"""([^"]*)\\n\\s*def\\s+',
+        r'"""\1"""\\n\\ndef ',
         content
     )
 
@@ -78,14 +78,14 @@ def fix_invalid_syntax(content: str) -> str:
     """Fix various invalid syntax patterns."""
     # Fix stray periods after function definitions
     content = re.sub(
-        r'def\s+(\w+)\s*\([^)]*\)\s*:\s*\.',
+        r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
         r'def \1(\2):',
         content
     )
 
     # Fix invalid decimal literals
     content = re.sub(
-        r'(\d+)\.(\d+)\.(\d+)',
+        r'(\\d+)\.(\\d+)\.(\\d+)',
         r'\1.\2_\3',  # Replace with underscore
         content
     )
@@ -148,7 +148,7 @@ def find_and_fix_all_files():
 
 def verify_fixes():
     """Verify that the fixes worked."""
-    safe_print("\nVerifying fixes...")
+    safe_print("\\nVerifying fixes...")
 
     # Run a quick Flake8 check to see remaining errors
     import subprocess
@@ -161,10 +161,10 @@ def verify_fixes():
         )
 
         if result.returncode == 0:
-            safe_print("✅ No E999 syntax errors found!")
+            safe_print("\\u2705 No E999 syntax errors found!")
         else:
             error_count = len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
-            safe_print(f"⚠️  Still found {error_count} E999 syntax errors")
+            safe_print(f"\\u26a0\\ufe0f  Still found {error_count} E999 syntax errors")
             safe_print("First few errors:")
             for line in result.stdout.strip().split('\n')[:5]:
                 safe_print(f"  {line}")
@@ -181,12 +181,12 @@ def main():
     # Fix all files
     fixed_count = find_and_fix_all_files()
 
-    safe_print(f"\nFixed {fixed_count} files with syntax errors")
+    safe_print(f"\\nFixed {fixed_count} files with syntax errors")
 
     # Verify the fixes
     verify_fixes()
 
-    safe_print("\nComprehensive syntax fixing completed!")
+    safe_print("\\nComprehensive syntax fixing completed!")
 
 
 if __name__ == "__main__":

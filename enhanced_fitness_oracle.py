@@ -3,18 +3,18 @@ from __future__ import annotations
 from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Enhanced Fitness Oracle – minimal functional implementation.
+"""Enhanced Fitness Oracle \\u2013 minimal functional implementation.
 
 This replaces the previous stub so that modules importing
 ``from enhanced_fitness_oracle import EnhancedFitnessOracle, UnifiedFitnessScore``
 work without raising runtime errors (and pass Flake-8 / mypy).
 
-The implementation is intentionally lightweight – it does **NOT** perform the
+The implementation is intentionally lightweight \\u2013 it does **NOT** perform the
 full fractal/machine-learning analysis you may add later.  It provides:
 
-* `UnifiedFitnessScore` – dataclass with all attributes used by
+* `UnifiedFitnessScore` \\u2013 dataclass with all attributes used by
   ``schwabot_unified_system.py``.
-* `EnhancedFitnessOracle` – async-friendly class exposing
+* `EnhancedFitnessOracle` \\u2013 async-friendly class exposing
   ``capture_market_snapshot`` and ``calculate_unified_fitness``.
 * A tiny CLI test when the module is executed directly.
 
@@ -33,7 +33,7 @@ from typing import Any, Dict, List, Optional
 from core.unified_math_system import unified_math
 
 # ---------------------------------------------------------------------------
-# Logging setup – honour parent log-level but stay silent by default
+# Logging setup \\u2013 honour parent log-level but stay silent by default
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 if not logger.handlers:
@@ -56,7 +56,7 @@ class UnifiedFitnessScore:
     overall_fitness: float = 0.0  # Scalar [-1, 1]
     action: str = "HOLD"  # {HOLD, BUY, SELL, STRONG_BUY, STRONG_SELL}
     position_size: float = 0.0  # Lot size or percentage of equity
-    confidence: float = 0.0  # 0‒1 confidence score
+    confidence: float = 0.0  # 0\\u20121 confidence score
 
     # Extra diagnostics (optional)
     dominant_factors: Dict[str, float] = field(default_factory=dict)
@@ -94,8 +94,8 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
                         self.config = yaml.safe_load(fh) or {}
                 else:  # Assume JSON
                     self.config = json.loads(self.config_path.read_text())
-            except Exception as exc:  # pragma: no cover – config is optional
-                logger.warning("⚠️  Failed to read oracle config: %s", exc)
+            except Exception as exc:  # pragma: no cover \\u2013 config is optional
+                logger.warning("\\u26a0\\ufe0f  Failed to read oracle config: %s", exc)
 
         self.current_regime: str = "neutral"
 
@@ -103,7 +103,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         self.market_history: List[Dict[str, Any]] = []
         self.fitness_history: List[UnifiedFitnessScore] = []
 
-        logger.info("EnhancedFitnessOracle initialised – config entries: %s", len(self.config))
+        logger.info("EnhancedFitnessOracle initialised \\u2013 config entries: %s", len(self.config))
 
     # ------------------------------------------------------------------
     # Public async helpers expected by the scheduler
@@ -115,7 +115,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         The *real* implementation would run FFTs, GAN filters, etc.  Here we just
         compute a few descriptive stats so downstream code has something sane.
         """
-        await asyncio.sleep(0)  # Yield control – keeps async scheduling honest
+        await asyncio.sleep(0)  # Yield control \\u2013 keeps async scheduling honest
 
         price_series = np.asarray(market_data.get("price_series", []), dtype=float)
         volume_series = np.asarray(market_data.get("volume_series", []), dtype=float)
@@ -199,11 +199,11 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
 
 
 # ---------------------------------------------------------------------------
-# CLI test harness – allows `python enhanced_fitness_oracle.py` quick check
+# CLI test harness \\u2013 allows `python enhanced_fitness_oracle.py` quick check
 # ---------------------------------------------------------------------------
 
 
-def _demo() -> None:  # pragma: no cover – manual smoke-test
+def _demo() -> None:  # pragma: no cover \\u2013 manual smoke-test
     import random
 
     oracle = EnhancedFitnessOracle()
@@ -217,8 +217,10 @@ def _demo() -> None:  # pragma: no cover – manual smoke-test
 
     snapshot = asyncio.run(oracle.capture_market_snapshot(dummy_market))
     fitness = oracle.calculate_unified_fitness(snapshot)
-    safe_print("UnifiedFitnessScore →", fitness)
+    safe_print("UnifiedFitnessScore \\u2192", fitness)
 
 
 if __name__ == "__main__":  # pragma: no cover
     _demo()
+
+"""

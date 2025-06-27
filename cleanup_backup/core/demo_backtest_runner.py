@@ -193,7 +193,7 @@ class DemoBacktestRunner:
 
     def run_backtest(self, config: BacktestConfig) -> BacktestResult:
         """Run a comprehensive backtest based on configuration"""
-        safe_print(f"🚀 Starting backtest: {config.backtest_id}")
+        safe_print(f"\\u1f680 Starting backtest: {config.backtest_id}")
         safe_print(f"Strategies: {config.strategy_types}")
         safe_print(f"Market Conditions: {config.market_conditions}")
         safe_print(f"Trades per strategy: {config.num_trades_per_strategy}")
@@ -325,7 +325,7 @@ class DemoBacktestRunner:
         if config.save_detailed_results:
             self._save_backtest_results()
 
-        safe_print(f"✅ Backtest completed!")
+        safe_print(f"\\u2705 Backtest completed!")
         safe_print(f"Success Rate: {success_rate:.2%}")
         safe_print(f"Total Profit: {total_profit:.2f}")
         safe_print(f"Execution Time: {result.execution_time:.2f}s")
@@ -362,7 +362,7 @@ class DemoBacktestRunner:
 
     def run_comprehensive_backtest(self, num_trades_per_strategy: int = 50) -> Dict[str, Any]:
         """Run comprehensive backtest across all strategies and market conditions"""
-        safe_print("🚀 Starting comprehensive backtest...")
+        safe_print("\\u1f680 Starting comprehensive backtest...")
 
         # Create comprehensive config
         config = self.create_backtest_config(
@@ -490,32 +490,32 @@ class DemoBacktestRunner:
         for strategy_type, perf in analysis["strategy_analysis"].items():
             report += f"### {strategy_type.replace('_', ' ').title()}\n"
             report += f"- Average Success Rate: {perf['avg_success_rate']:.2%}\n"
-            report += f"- Average Profit: ${perf['avg_profit']:.2f}\n\n"
+            report += f"- Average Profit: ${perf['avg_profit']:.2f}\\n\n"
 
         # Add matrix performance
-        report += "## Matrix Performance\n\n"
+        report += "## Matrix Performance\\n\n"
         for matrix_id, perf in result.matrix_performance.items():
             report += f"### {matrix_id}\n"
             report += f"- Success Rate: {perf['success_rate']:.2%}\n"
             report += f"- Total Trades: {perf['trades']}\n"
-            report += f"- Total Profit: ${perf['profit']:.2f}\n\n"
+            report += f"- Total Profit: ${perf['profit']:.2f}\\n\n"
 
         # Add market condition performance
-        report += "## Market Condition Performance\n\n"
+        report += "## Market Condition Performance\\n\n"
         for market_condition, perf in result.market_condition_performance.items():
             report += f"### {market_condition.replace('_', ' ').title()}\n"
             report += f"- Success Rate: {perf['success_rate']:.2%}\n"
             report += f"- Total Trades: {perf['trades']}\n"
-            report += f"- Total Profit: ${perf['profit']:.2f}\n\n"
+            report += f"- Total Profit: ${perf['profit']:.2f}\\n\n"
 
         # Add recommendations
-        report += "## Recommendations\n\n"
+        report += "## Recommendations\\n\n"
         for recommendation in analysis["recommendations"]:
             report += f"- {recommendation}\n"
 
         # Add reinforcement learning analysis
         if result.reinforcement_learning_updates:
-            report += "\n## Reinforcement Learning Analysis\n\n"
+            report += "\\n## Reinforcement Learning Analysis\\n\n"
             report += f"- Known Bad Vectors: {result.reinforcement_learning_updates.get('known_bad_vectors', 0)}\n"
             report += f"- Matrix Weights Updated: {len(result.reinforcement_learning_updates.get('matrix_weights', {}))}\n"
 
@@ -523,7 +523,7 @@ class DemoBacktestRunner:
         with open(filepath, 'w') as f:
             f.write(report)
 
-        safe_print(f"📊 Backtest report saved to {filepath}")
+        safe_print(f"\\u1f4ca Backtest report saved to {filepath}")
 
         return filepath
 
@@ -541,7 +541,7 @@ class DemoBacktestRunner:
             with open(results_file, 'w') as f:
                 json.dump(data, f, indent=2, default=str)
 
-            safe_print("💾 Backtest results saved successfully")
+            safe_print("\\u1f4be Backtest results saved successfully")
 
         except Exception as e:
             safe_print(f"Error saving backtest results: {e}")

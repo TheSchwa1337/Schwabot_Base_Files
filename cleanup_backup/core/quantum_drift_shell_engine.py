@@ -332,8 +332,8 @@ class QuantumDriftShellEngine:
         Returns:
             Wave function value
         """
-        # Simple wave function: ψ(x) = Σ_n c_n φ_n(x)
-        # where φ_n(x) = unified_math.exp(i * n * x) / unified_math.sqrt(2π)
+        # Simple wave function: \\u03c8(x) = \\u03a3_n c_n \\u03c6_n(x)
+        # where \\u03c6_n(x) = unified_math.exp(i * n * x) / unified_math.sqrt(2\\u03c0)
         wave_value = 0j
         for n, coefficient in enumerate(quantum_state):
             basis_function = unified_math.unified_math.exp(1j * n * x) / unified_math.unified_math.sqrt(2 * np.pi)
@@ -410,7 +410,7 @@ class QuantumDriftShellEngine:
         """
         Compute quantum entropy of state.
 
-        Implements: S = -Tr(ρ log ρ)
+        Implements: S = -Tr(\\u03c1 log \\u03c1)
 
         Args:
             quantum_state: Quantum state
@@ -418,14 +418,14 @@ class QuantumDriftShellEngine:
         Returns:
             Quantum entropy value
         """
-        # Compute density matrix ρ = |ψ⟩⟨ψ|
+        # Compute density matrix \\u03c1 = |\\u03c8\\u27e9\\u27e8\\u03c8|
         density_matrix = np.outer(quantum_state, np.conj(quantum_state))
 
         # Compute eigenvalues
         eigenvalues = unified_math.unified_math.eigenvalues(density_matrix)
         eigenvalues = np.real(eigenvalues)  # Ensure real values
 
-        # Compute entropy: S = -Σ λ_i unified_math.log(λ_i)
+        # Compute entropy: S = -\\u03a3 \\u03bb_i unified_math.log(\\u03bb_i)
         entropy = 0.0
         for eigenvalue in eigenvalues:
             if eigenvalue > 0:

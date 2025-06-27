@@ -144,7 +144,7 @@ class RiskMonitor:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize risk monitor."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Risk thresholds
@@ -803,7 +803,7 @@ class RiskMonitor:
                 "IMMEDIATE: Review risk parameters and system status",
             )
 
-            logger.critical("🚨 EMERGENCY STOP TRIGGERED - Trading suspended")
+            logger.critical("\\u1f6a8 EMERGENCY STOP TRIGGERED - Trading suspended")
 
             # Here you would integrate with the trading system to stop all activities
             # self.trading_system.emergency_stop()
@@ -938,7 +938,7 @@ class RiskMonitor:
 def main() -> None:
     """Main function for testing risk monitor."""
     try:
-        safe_print("🔍 Risk Monitor Test")
+        safe_print("\\u1f50d Risk Monitor Test")
         safe_print("=" * 40)
 
         # Initialize risk monitor
@@ -978,27 +978,27 @@ def main() -> None:
 
         # Get risk status
         status = risk_monitor.get_current_risk_status()
-        safe_print(f"✅ Risk Monitor initialized: {status['status']}")
-        safe_print(f"✅ Portfolio value: ${status['portfolio_value']:,.2f}")
+        safe_print(f"\\u2705 Risk Monitor initialized: {status['status']}")
+        safe_print(f"\\u2705 Portfolio value: ${status['portfolio_value']:,.2f}")
         safe_print(
-            f"✅ Overall risk score: {status['risk_metrics']['overall_risk_score']:.3f}"
+            f"\\u2705 Overall risk score: {status['risk_metrics']['overall_risk_score']:.3f}"
         )
 
         # Start monitoring
         risk_monitor.start_monitoring()
-        safe_print("✅ Risk monitoring started")
+        safe_print("\\u2705 Risk monitoring started")
 
         # Simulate some time
         time.sleep(0.5)
 
         # Stop monitoring
         risk_monitor.stop_monitoring()
-        safe_print("✅ Risk monitoring stopped")
+        safe_print("\\u2705 Risk monitoring stopped")
 
-        safe_print("\n🎉 Risk Monitor test completed successfully!")
+        safe_print("\\n\\u1f389 Risk Monitor test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Risk Monitor test failed: {e}")
+        safe_print(f"\\u274c Risk Monitor test failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -1006,3 +1006,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -3,7 +3,7 @@ from core.unified_math_system import unified_math
 """Quantum Drift Shell Engine - Thermal Drift Shell Implementation.
 
 Implements the core mathematical framework for:
-- ΔT(t) = ∇·q / (ρ·c_p) with conditional variance
+- \\u0394T(t) = \\u2207\\u00b7q / (\\u03c1\\u00b7c_p) with conditional variance
 - Asset stability regulation under long-hold and fallback logic
 - Thermal gradient analysis for market drift detection
 """
@@ -37,7 +37,7 @@ class ThermalState:
 
     temperature: float
     heat_flux: np.ndarray  # q vector
-    density: float  # ρ
+    density: float  # \\u03c1
     specific_heat: float  # c_p
     timestamp: float
     position: Tuple[float, float, float]
@@ -72,7 +72,7 @@ class QuantumDriftShellEngine:
         self.fallback_threshold = 0.05
 
         # Physical constants (normalized for financial modeling)
-        self.base_density = 1.0  # ρ base
+        self.base_density = 1.0  # \\u03c1 base
         self.base_specific_heat = 1.0  # c_p base
 
     def initialize_thermal_grid(self, market_data: Optional[Dict[str, Any]] = None) -> None:
@@ -117,19 +117,19 @@ class QuantumDriftShellEngine:
         time_delta: float = 1.0,
         drift_mode: DriftMode = DriftMode.ADAPTIVE
     ) -> DriftAnalysisResult:
-        """Calculate ΔT(t) = ∇·q / (ρ·c_p) with conditional variance."""
+        """Calculate \\u0394T(t) = \\u2207\\u00b7q / (\\u03c1\\u00b7c_p) with conditional variance."""
         if target_position not in self.thermal_grid:
             raise ValueError(f"Position {target_position} not in thermal grid")
 
         thermal_state = self.thermal_grid[target_position]
 
-        # Calculate heat flux divergence (∇·q)
+        # Calculate heat flux divergence (\\u2207\\u00b7q)
         divergence = self._calculate_heat_flux_divergence(target_position)
 
         # Calculate thermal diffusivity factor
         diffusivity_factor = thermal_state.density * thermal_state.specific_heat
 
-        # Core thermal drift equation: ΔT(t) = ∇·q / (ρ·c_p)
+        # Core thermal drift equation: \\u0394T(t) = \\u2207\\u00b7q / (\\u03c1\\u00b7c_p)
         base_temperature_change = divergence / diffusivity_factor
 
         # Apply conditional variance based on drift mode
@@ -258,7 +258,7 @@ class QuantumDriftShellEngine:
         self,
         position: Tuple[int, int, int]
     ) -> float:
-        """Calculate divergence of heat flux vector (∇·q)."""
+        """Calculate divergence of heat flux vector (\\u2207\\u00b7q)."""
         x, y, z = position
         x_res, y_res, z_res = self.grid_resolution
 
@@ -479,3 +479,5 @@ def analyze_market_thermal_drift(
         results.append(result)
 
     return results
+
+"""

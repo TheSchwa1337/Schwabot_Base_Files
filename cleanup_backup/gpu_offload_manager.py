@@ -665,7 +665,7 @@ class GPUOffloadManager:
 
 def main():
     """Test function for GPU Offload Manager."""
-    safe_print("🧮 Testing GPU Offload Manager...")
+    safe_print("\\u1f9ee Testing GPU Offload Manager...")
 
     manager = GPUOffloadManager()
 
@@ -688,7 +688,7 @@ def main():
 
     # Get performance metrics
     performance = manager.get_performance_metrics()
-    safe_print(f"\nGPU Performance:")
+    safe_print(f"\\nGPU Performance:")
     safe_print(f"Total operations: {performance.total_operations}")
     safe_print(f"Successful operations: {performance.successful_operations}")
     safe_print(f"Average execution time: {performance.average_execution_time_ms:.2f}ms")
@@ -699,3 +699,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

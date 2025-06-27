@@ -464,13 +464,13 @@ if __name__ == "__main__":
     tick_summary = allocator.get_tick_map_summary()
     allocation_summary = allocator.get_allocation_summary()
 
-    safe_print(f"\nTick Map Summary:")
+    safe_print(f"\\nTick Map Summary:")
     safe_print(f"Current Tick: {tick_summary['current_tick_id']}")
     safe_print(f"Thermal Load: {tick_summary['thermal_load']:.3f}")
     safe_print(f"Entropy Level: {tick_summary['entropy_level']:.3f}")
     safe_print(f"Active Matrices: {tick_summary['active_matrices']}")
 
-    safe_print(f"\nAllocation Summary:")
+    safe_print(f"\\nAllocation Summary:")
     safe_print(f"Total Allocations: {allocation_summary['total_allocations']}")
     safe_print(f"Execution Modes: {allocation_summary['execution_modes']}")
     safe_print(f"Average Confidence: {allocation_summary['average_confidence']:.3f}")

@@ -26,7 +26,7 @@ class MathLib:
 
     def __init__(self):
         """Initialize the MathLib component."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.initialized = True
         logger.info(f"MathLib v{self.version} initialized")
 
@@ -87,3 +87,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

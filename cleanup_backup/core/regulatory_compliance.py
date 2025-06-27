@@ -178,7 +178,7 @@ class ComplianceDatabase:
         # Initialize database
         self._initialize_database()
 
-        safe_safe_print("🗄️ Compliance Database initialized")
+        safe_safe_print("\\u1f5c4\\ufe0f Compliance Database initialized")
 
     def _initialize_database(self) -> None:
         """Initialize database tables."""
@@ -267,10 +267,10 @@ class ComplianceDatabase:
                 cursor.execute("CREATE INDEX IF NOT EXISTS idx_compliance_reports_type ON compliance_reports(report_type)")
 
                 conn.commit()
-                safe_safe_print("✅ Compliance database tables created")
+                safe_safe_print("\\u2705 Compliance database tables created")
 
         except Exception as e:
-            safe_safe_print(f"❌ Database initialization failed: {safe_format_error(e, 'db_init')}")
+            safe_safe_print(f"\\u274c Database initialization failed: {safe_format_error(e, 'db_init')}")
 
     @contextmanager
     def get_cursor(self) -> Any:
@@ -314,11 +314,11 @@ class ComplianceDatabase:
                     json.dumps(log_entry.compliance_metadata)
                 ))
 
-            safe_safe_print(f"✅ Order routing log stored: {log_entry.log_id[:8]}...")
+            safe_safe_print(f"\\u2705 Order routing log stored: {log_entry.log_id[:8]}...")
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Order routing log storage failed: {safe_format_error(e, 'order_log')}")
+            safe_safe_print(f"\\u274c Order routing log storage failed: {safe_format_error(e, 'order_log')}")
             return False
 
     def store_kyc_record(self, kyc_record: KYCRecord) -> bool:
@@ -345,11 +345,11 @@ class ComplianceDatabase:
                     kyc_record.updated_at.isoformat()
                 ))
 
-            safe_safe_print(f"✅ KYC record stored: {kyc_record.kyc_id[:8]}...")
+            safe_safe_print(f"\\u2705 KYC record stored: {kyc_record.kyc_id[:8]}...")
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ KYC record storage failed: {safe_format_error(e, 'kyc_store')}")
+            safe_safe_print(f"\\u274c KYC record storage failed: {safe_format_error(e, 'kyc_store')}")
             return False
 
     def store_aml_record(self, aml_record: AMLRecord) -> bool:
@@ -375,11 +375,11 @@ class ComplianceDatabase:
                     aml_record.compliance_notes
                 ))
 
-            safe_safe_print(f"✅ AML record stored: {aml_record.aml_id[:8]}...")
+            safe_safe_print(f"\\u2705 AML record stored: {aml_record.aml_id[:8]}...")
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ AML record storage failed: {safe_format_error(e, 'aml_store')}")
+            safe_safe_print(f"\\u274c AML record storage failed: {safe_format_error(e, 'aml_store')}")
             return False
 
     def get_order_routing_logs(self, client_id: Optional[str] = None,
@@ -432,7 +432,7 @@ class ComplianceDatabase:
                 return logs
 
         except Exception as e:
-            safe_safe_print(f"❌ Order routing logs retrieval failed: {safe_format_error(e, 'order_logs')}")
+            safe_safe_print(f"\\u274c Order routing logs retrieval failed: {safe_format_error(e, 'order_logs')}")
             return []
 
     def get_kyc_record(self, client_id: str) -> Optional[KYCRecord]:
@@ -460,7 +460,7 @@ class ComplianceDatabase:
                 return None
 
         except Exception as e:
-            safe_safe_print(f"❌ KYC record retrieval failed: {safe_format_error(e, 'kyc_get')}")
+            safe_safe_print(f"\\u274c KYC record retrieval failed: {safe_format_error(e, 'kyc_get')}")
             return None
 
     def get_aml_records(self, client_id: Optional[str] = None,
@@ -505,7 +505,7 @@ class ComplianceDatabase:
                 return records
 
         except Exception as e:
-            safe_safe_print(f"❌ AML records retrieval failed: {safe_format_error(e, 'aml_get')}")
+            safe_safe_print(f"\\u274c AML records retrieval failed: {safe_format_error(e, 'aml_get')}")
             return []
 
 
@@ -524,7 +524,7 @@ class KYCAMLProcessor:
             'critical': 0.95
         }
 
-        safe_safe_print("🔍 KYC/AML Processor initialized")
+        safe_safe_print("\\u1f50d KYC/AML Processor initialized")
 
     def process_kyc_verification(self, client_id: str, client_name: str,
                                  client_type: str, documents: List[str]) -> KYCRecord:
@@ -556,11 +556,11 @@ class KYCAMLProcessor:
             # Store record
             self.compliance_db.store_kyc_record(kyc_record)
 
-            safe_safe_print(f"✅ KYC verification processed: {client_id}")
+            safe_safe_print(f"\\u2705 KYC verification processed: {client_id}")
             return kyc_record
 
         except Exception as e:
-            safe_safe_print(f"❌ KYC verification failed: {safe_format_error(e, 'kyc_verify')}")
+            safe_safe_print(f"\\u274c KYC verification failed: {safe_format_error(e, 'kyc_verify')}")
             raise
 
     def process_aml_check(self, client_id: str, transaction_id: str,
@@ -600,11 +600,11 @@ class KYCAMLProcessor:
             # Store record
             self.compliance_db.store_aml_record(aml_record)
 
-            safe_safe_print(f"✅ AML check processed: {transaction_id} (risk: {risk_score:.2f})")
+            safe_safe_print(f"\\u2705 AML check processed: {transaction_id} (risk: {risk_score:.2f})")
             return aml_record
 
         except Exception as e:
-            safe_safe_print(f"❌ AML check failed: {safe_format_error(e, 'aml_check')}")
+            safe_safe_print(f"\\u274c AML check failed: {safe_format_error(e, 'aml_check')}")
             raise
 
     def _calculate_kyc_risk_level(self, client_type: str, documents: List[str]) -> RiskLevel:
@@ -632,7 +632,7 @@ class KYCAMLProcessor:
                 return RiskLevel.CRITICAL
 
         except Exception as e:
-            safe_safe_print(f"⚠️ KYC risk calculation failed: {safe_format_error(e, 'kyc_risk')}")
+            safe_safe_print(f"\\u26a0\\ufe0f KYC risk calculation failed: {safe_format_error(e, 'kyc_risk')}")
             return RiskLevel.MEDIUM
 
     def _calculate_aml_risk_score(self, amount: float, currency: str,
@@ -660,7 +660,7 @@ class KYCAMLProcessor:
             return unified_math.min(1.0, final_risk)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ AML risk calculation failed: {safe_format_error(e, 'aml_risk')}")
+            safe_safe_print(f"\\u26a0\\ufe0f AML risk calculation failed: {safe_format_error(e, 'aml_risk')}")
             return 0.5
 
     def _identify_risk_factors(self, amount: float, currency: str,
@@ -692,7 +692,7 @@ class KYCAMLProcessor:
             return risk_factors
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Risk factor identification failed: {safe_format_error(e, 'risk_factors')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Risk factor identification failed: {safe_format_error(e, 'risk_factors')}")
             return ["calculation_error"]
 
 
@@ -703,7 +703,7 @@ class ComplianceReporter:
         """Initialize compliance reporter."""
         self.compliance_db = compliance_db
 
-        safe_safe_print("📊 Compliance Reporter initialized")
+        safe_safe_print("\\u1f4ca Compliance Reporter initialized")
 
     def generate_compliance_report(self, report_type: ComplianceType,
                                    period_start: datetime,
@@ -769,11 +769,11 @@ class ComplianceReporter:
                 report_data=report_data
             )
 
-            safe_safe_print(f"✅ Compliance report generated: {report_type.value}")
+            safe_safe_print(f"\\u2705 Compliance report generated: {report_type.value}")
             return report
 
         except Exception as e:
-            safe_safe_print(f"❌ Compliance report generation failed: {safe_format_error(e, 'compliance_report')}")
+            safe_safe_print(f"\\u274c Compliance report generation failed: {safe_format_error(e, 'compliance_report')}")
             raise
 
     def _count_routing_types(self, order_logs: List[OrderRoutingLog]) -> Dict[str, int]:
@@ -805,7 +805,7 @@ class ComplianceReporter:
                 'overall_compliance': best_execution_orders / unified_math.max(total_orders, 1) > 0.95
             }
         except Exception as e:
-            safe_safe_print(f"⚠️ MiFID compliance check failed: {safe_format_error(e, 'mifid_check')}")
+            safe_safe_print(f"\\u26a0\\ufe0f MiFID compliance check failed: {safe_format_error(e, 'mifid_check')}")
             return {'overall_compliance': False}
 
     def _check_sec_compliance(self, order_logs: List[OrderRoutingLog]) -> Dict[str, Any]:
@@ -821,7 +821,7 @@ class ComplianceReporter:
                 'overall_compliance': best_execution_orders / unified_math.max(total_orders, 1) > 0.95
             }
         except Exception as e:
-            safe_safe_print(f"⚠️ SEC compliance check failed: {safe_format_error(e, 'sec_check')}")
+            safe_safe_print(f"\\u26a0\\ufe0f SEC compliance check failed: {safe_format_error(e, 'sec_check')}")
             return {'overall_compliance': False}
 
     def _calculate_kyc_completion_rate(self) -> float:
@@ -830,7 +830,7 @@ class ComplianceReporter:
             # This would need actual KYC data
             return 0.95  # Placeholder
         except Exception as e:
-            safe_safe_print(f"⚠️ KYC completion rate calculation failed: {safe_format_error(e, 'kyc_rate')}")
+            safe_safe_print(f"\\u26a0\\ufe0f KYC completion rate calculation failed: {safe_format_error(e, 'kyc_rate')}")
             return 0.0
 
     def _calculate_aml_effectiveness(self, aml_records: List[AMLRecord]) -> float:
@@ -844,7 +844,7 @@ class ComplianceReporter:
 
             return suspicious_detected / unified_math.max(total_high_risk, 1)
         except Exception as e:
-            safe_safe_print(f"⚠️ AML effectiveness calculation failed: {safe_format_error(e, 'aml_effectiveness')}")
+            safe_safe_print(f"\\u26a0\\ufe0f AML effectiveness calculation failed: {safe_format_error(e, 'aml_effectiveness')}")
             return 0.0
 
 
@@ -878,7 +878,7 @@ class RegulatoryCompliance:
         self.total_kyc_processed = 0
         self.total_aml_checks = 0
 
-        safe_safe_print("⚖️ Regulatory Compliance initialized")
+        safe_safe_print("\\u2696\\ufe0f Regulatory Compliance initialized")
 
     def log_order_routing(self, order_request: OrderRequest, order_response: OrderResponse,
                           routing_type: OrderRoutingType, destination: str,
@@ -930,7 +930,7 @@ class RegulatoryCompliance:
             return success
 
         except Exception as e:
-            safe_safe_print(f"❌ Order routing log failed: {safe_format_error(e, 'order_routing_log')}")
+            safe_safe_print(f"\\u274c Order routing log failed: {safe_format_error(e, 'order_routing_log')}")
             return False
 
     def process_kyc_verification(self, client_id: str, client_name: str,
@@ -948,7 +948,7 @@ class RegulatoryCompliance:
             return kyc_record
 
         except Exception as e:
-            safe_safe_print(f"❌ KYC verification failed: {safe_format_error(e, 'kyc_verify')}")
+            safe_safe_print(f"\\u274c KYC verification failed: {safe_format_error(e, 'kyc_verify')}")
             return None
 
     def process_aml_check(self, client_id: str, transaction_id: str,
@@ -966,7 +966,7 @@ class RegulatoryCompliance:
             return aml_record
 
         except Exception as e:
-            safe_safe_print(f"❌ AML check failed: {safe_format_error(e, 'aml_check')}")
+            safe_safe_print(f"\\u274c AML check failed: {safe_format_error(e, 'aml_check')}")
             return None
 
     def generate_compliance_report(self, report_type: ComplianceType,
@@ -975,7 +975,7 @@ class RegulatoryCompliance:
         """Generate compliance report."""
         try:
             if report_type not in self.config.compliance_types:
-                safe_safe_print(f"⚠️ Compliance type not enabled: {report_type.value}")
+                safe_safe_print(f"\\u26a0\\ufe0f Compliance type not enabled: {report_type.value}")
                 return None
 
             report = self.compliance_reporter.generate_compliance_report(
@@ -985,7 +985,7 @@ class RegulatoryCompliance:
             return report
 
         except Exception as e:
-            safe_safe_print(f"❌ Compliance report generation failed: {safe_format_error(e, 'compliance_report')}")
+            safe_safe_print(f"\\u274c Compliance report generation failed: {safe_format_error(e, 'compliance_report')}")
             return None
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -1004,7 +1004,7 @@ class RegulatoryCompliance:
             }
 
         except Exception as e:
-            safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
+            safe_safe_print(f"\\u274c Status generation failed: {safe_format_error(e, 'status')}")
             return {}
 
 
@@ -1054,7 +1054,7 @@ def get_compliance_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test regulatory compliance
-    safe_print("🧪 Testing Regulatory Compliance...")
+    safe_print("\\u1f9ea Testing Regulatory Compliance...")
 
     # Test KYC verification
     kyc_record = process_kyc_verification(
@@ -1063,7 +1063,7 @@ if __name__ == "__main__":
         client_type="individual",
         documents=["passport", "utility_bill"]
     )
-    safe_print(f"✅ KYC verification: {kyc_record.verification_status if kyc_record else 'skipped'}")
+    safe_print(f"\\u2705 KYC verification: {kyc_record.verification_status if kyc_record else 'skipped'}")
 
     # Test AML check
     aml_record = process_aml_check(
@@ -1073,7 +1073,7 @@ if __name__ == "__main__":
         amount=5000.0,
         currency="USD"
     )
-    safe_print(f"✅ AML check: {aml_record.risk_score if aml_record else 'skipped'}")
+    safe_print(f"\\u2705 AML check: {aml_record.risk_score if aml_record else 'skipped'}")
 
     # Test compliance report
     period_start = datetime.now() - timedelta(days=30)
@@ -1084,10 +1084,10 @@ if __name__ == "__main__":
         period_start,
         period_end
     )
-    safe_print(f"✅ Compliance report: {report.report_type.value if report else 'failed'}")
+    safe_print(f"\\u2705 Compliance report: {report.report_type.value if report else 'failed'}")
 
     # Get status
     status = get_compliance_status()
-    safe_print(f"✅ Compliance status: {status}")
+    safe_print(f"\\u2705 Compliance status: {status}")
 
-    safe_print("✅ Regulatory Compliance test completed")
+    safe_print("\\u2705 Regulatory Compliance test completed")

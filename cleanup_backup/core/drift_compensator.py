@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Drift compensator – positional drift correction vector.
+"""Drift compensator \\u2013 positional drift correction vector.
 
 Implements the equation:
 
-    Ξ_drift = Δt · (Ξ_now − Ξ_expected)
+    \\u039e_drift = \\u0394t \\u00b7 (\\u039e_now \\u2212 \\u039e_expected)
 
 Used when ghost logic misses an entry window but the opportunity is still
 valid.  Returns a vector that can be added to the next trade signal to adjust
@@ -24,7 +24,7 @@ def compute_drift_vector(
     expected: np.ndarray,
     delta_t: float,
 ) -> np.ndarray:
-    """Return drift compensation vector Ξ_drift.
+    """Return drift compensation vector \\u039e_drift.
 
     Parameters
     ----------

@@ -2,19 +2,19 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Ghost trigger – stealth-mode activation predicate.
+"""Ghost trigger \\u2013 stealth-mode activation predicate.
 
-This micro-module exposes a *single* public helper – :func:`ghost_trigger` –
+This micro-module exposes a *single* public helper \\u2013 :func:`ghost_trigger` \\u2013
 that evaluates whether Schwabot should enter *ghost mode* based on three
 continuous signals:
 
-* ``entropy``   – instantaneous entropy estimate (from GAN filter).
-* ``momentum``  – projection of price momentum onto the latent vector.
-* ``delta_p``   – delta between expected and realised profit.
+* ``entropy``   \\u2013 instantaneous entropy estimate (from GAN filter).
+* ``momentum``  \\u2013 projection of price momentum onto the latent vector.
+* ``delta_p``   \\u2013 delta between expected and realised profit.
 
 The reference equation in the design doc is:
 
-    Γ₍ghost₎(t, Pₘ, Δₛ) = Λₛ(t) · exp(−η · |Δₛ − Δ₀|)
+    \\u0393\\u208dghost\\u208e(t, P\\u2098, \\u0394\\u209b) = \\u039b\\u209b(t) \\u00b7 exp(\\u2212\\u03b7 \\u00b7 |\\u0394\\u209b \\u2212 \\u0394\\u2080|)
 
 The current implementation simplifies this to a logistic gate so we stay
 CPU-light inside tight loops.  All parameters have sane defaults but can be
@@ -31,9 +31,9 @@ __all__: list[str] = ["ghost_trigger"]
 # Tunable constants
 # -----------------------------------------------------------------------------
 
-_BASE_DELTA: Final = 0.0  # Δ₀ in the docstring
-_DAMPING: Final = 0.75  # η in the docstring – larger ⇒ stricter gate
-_MOMENTUM_SCALE: Final = 1.0  # scales Λₛ(t) before logistic
+_BASE_DELTA: Final = 0.0  # \\u0394\\u2080 in the docstring
+_DAMPING: Final = 0.75  # \\u03b7 in the docstring \\u2013 larger \\u21d2 stricter gate
+_MOMENTUM_SCALE: Final = 1.0  # scales \\u039b\\u209b(t) before logistic
 _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 
 
@@ -61,15 +61,15 @@ def ghost_trigger(
     Parameters
     ----------
     entropy
-        Instantaneous entropy metric (higher ⇒ noisier market).
+        Instantaneous entropy metric (higher \\u21d2 noisier market).
     momentum
-        Projected momentum value ``Pₘ``.
+        Projected momentum value ``P\\u2098``.
     delta_p
-        Profit delta ``Δₛ`` (expected ‑ realised).
+        Profit delta ``\\u0394\\u209b`` (expected \\u2011 realised).
     eta
-        Dampening coefficient **η**.
+        Dampening coefficient **\\u03b7**.
     delta0
-        Baseline delta **Δ₀**.
+        Baseline delta **\\u0394\\u2080**.
     momentum_scale
         Scaling applied to momentum before gating.
     threshold
@@ -82,3 +82,5 @@ def ghost_trigger(
     # Normalise through logistic to keep range (0,1)
     score = _logistic(raw_score)
     return score > threshold
+
+"""

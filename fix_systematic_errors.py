@@ -243,7 +243,7 @@ def main():
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
 
-    print(f"\nTotal systematic fixes applied:")
+    print(f"\\nTotal systematic fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"E704 (multiple statements): {total_stats['e704_fixed']}")
     print(f"E265 (block comments): {total_stats['e265_fixed']}")
@@ -256,3 +256,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

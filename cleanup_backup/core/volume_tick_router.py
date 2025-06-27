@@ -6,14 +6,14 @@ This module implements dynamic volume pressure logic for matching volume shifts
 with API-triggered price deltas.
 
 Mathematical Foundation:
-C = σ·(𝓗∩𝓥) + θ·F_ai
+C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
 
 Where:
 - C = Volume confidence score
-- σ = Volume sensitivity factor
-- 𝓗 = Hash intersection component
-- 𝓥 = Volume pressure component
-- θ = AI feedback weight
+- \\u03c3 = Volume sensitivity factor
+- \\u1d4d7 = Hash intersection component
+- \\u1d4e5 = Volume pressure component
+- \\u03b8 = AI feedback weight
 - F_ai = AI feedback factor
 
 Key Features:
@@ -133,7 +133,7 @@ class VolumeTickRouter:
         self.volume_spike_threshold = self.config.get('volume_spike_threshold', 2.0)
         self.price_delta_threshold = self.config.get('price_delta_threshold', 0.01)
 
-        logger.info("📊 Volume Tick Router initialized")
+        logger.info("\\u1f4ca Volume Tick Router initialized")
 
     def process_volume_event(self, volume_data: Dict[str, Any],
                              price_data: Optional[Dict[str, Any]] = None,
@@ -172,7 +172,7 @@ class VolumeTickRouter:
                 if price_delta:
                     self.price_deltas.append(price_delta)
 
-            # Calculate volume confidence: C = σ·(𝓗∩𝓥) + θ·F_ai
+            # Calculate volume confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
             volume_confidence = self._calculate_volume_confidence(
                 current_volume, volume_shift, price_delta, ai_feedback
             )
@@ -339,21 +339,21 @@ class VolumeTickRouter:
                                      volume_shift: Optional[VolumeShift],
                                      price_delta: Optional[PriceDelta],
                                      ai_feedback: Optional[Dict[str, Any]]) -> VolumeConfidence:
-        """Calculate volume confidence: C = σ·(𝓗∩𝓥) + θ·F_ai."""
+        """Calculate volume confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai."""
         try:
-            # Calculate volume sensitivity factor: σ
+            # Calculate volume sensitivity factor: \\u03c3
             volume_sensitivity = self._calculate_volume_sensitivity(current_volume)
 
-            # Calculate hash intersection: 𝓗∩𝓥
+            # Calculate hash intersection: \\u1d4d7\\u2229\\u1d4e5
             hash_intersection = self._calculate_hash_intersection(volume_shift, price_delta)
 
-            # Calculate volume pressure: 𝓥
+            # Calculate volume pressure: \\u1d4e5
             volume_pressure = self._calculate_volume_pressure(current_volume, volume_shift)
 
             # Calculate AI feedback: F_ai
             ai_feedback_factor = self._calculate_ai_feedback(ai_feedback)
 
-            # Calculate confidence: C = σ·(𝓗∩𝓥) + θ·F_ai
+            # Calculate confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
             hash_volume_component = self.volume_sensitivity * (hash_intersection + volume_pressure) / 2.0
             ai_component = self.ai_feedback_weight * ai_feedback_factor
             confidence_score = hash_volume_component + ai_component
@@ -384,7 +384,7 @@ class VolumeTickRouter:
             return self._create_fallback_confidence()
 
     def _calculate_volume_sensitivity(self, current_volume: float) -> float:
-        """Calculate volume sensitivity factor: σ."""
+        """Calculate volume sensitivity factor: \\u03c3."""
         try:
             if not self.volume_history:
                 return self.volume_sensitivity
@@ -415,7 +415,7 @@ class VolumeTickRouter:
 
     def _calculate_hash_intersection(self, volume_shift: Optional[VolumeShift],
                                      price_delta: Optional[PriceDelta]) -> float:
-        """Calculate hash intersection: 𝓗∩𝓥."""
+        """Calculate hash intersection: \\u1d4d7\\u2229\\u1d4e5."""
         try:
             if not volume_shift or not price_delta:
                 return 0.5  # Neutral value when no intersection possible
@@ -462,7 +462,7 @@ class VolumeTickRouter:
 
     def _calculate_volume_pressure(self, current_volume: float,
                                    volume_shift: Optional[VolumeShift]) -> float:
-        """Calculate volume pressure: 𝓥."""
+        """Calculate volume pressure: \\u1d4e5."""
         try:
             if not self.volume_history:
                 return 0.5

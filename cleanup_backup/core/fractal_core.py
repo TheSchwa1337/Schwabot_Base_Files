@@ -3,9 +3,9 @@ from core.unified_math_system import unified_math
 """Fractal Core - Grayscale Collapse and Recursive Hash Structures.
 
 Implements the core mathematical framework for:
-- Sigmoid-weighted summation collapse: C(t) = ∑ C_i / (1 + e^(-Ωt))
+- Sigmoid-weighted summation collapse: C(t) = \\u2211 C_i / (1 + e^(-\\u03a9t))
 - State collapse probability in recursive hash structures
-- Golden ratio fractal command weighting: F(n) = F(n-1) × Φ
+- Golden ratio fractal command weighting: F(n) = F(n-1) \\u00d7 \\u03a6
 """
 
 import hashlib
@@ -80,7 +80,7 @@ class FractalCore:
     def grayscale_collapse(self, target_time: float) -> GrayscaleCollapseResult:
         """Perform grayscale collapse using sigmoid-weighted summation.
 
-        C(t) = ∑ C_i / (1 + e^(-Ωt))
+        C(t) = \\u2211 C_i / (1 + e^(-\\u03a9t))
         """
         if not self.active_states:
             return GrayscaleCollapseResult(
@@ -126,7 +126,7 @@ class FractalCore:
     def calculate_fractal_command_weight(self, depth: int) -> float:
         """Calculate fractal command weight using golden ratio.
 
-        F(n) = F(n-1) × Φ, where Φ = golden ratio
+        F(n) = F(n-1) \\u00d7 \\u03a6, where \\u03a6 = golden ratio
         """
         if depth in self.fractal_weights:
             return self.fractal_weights[depth]
@@ -316,3 +316,5 @@ def calculate_grayscale_collapse(
         core.add_fractal_state(state_id, weight, timestamp)
 
     return core.grayscale_collapse(target_time)
+
+"""

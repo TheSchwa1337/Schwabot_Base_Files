@@ -105,26 +105,26 @@ class WindowsCliCompatibilityHandler:
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             # ASIC (ASCII) emoji mapping for Windows compatibility
             emoji_mapping = {
-                "🚨": "[ALERT]",
-                "⚠️": "[WARNING]",
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "🔄": "[PROCESSING]",
-                "🎯": "[TARGET]",
-                "🧮": "[MATH]",
-                "📊": "[STATS]",
-                "🔬": "[TEST]",
-                "⚡": "[FAST]",
-                "🛡️": "[SECURE]",
-                "🔧": "[TOOL]",
-                "📡": "[SIGNAL]",
-                "🎪": "[FERRIS]",
-                "🌀": "[CYCLE]",
-                "💰": "[PROFIT]",
-                "🎲": "[RANDOM]",
-                "📈": "[TREND]",
-                "🔍": "[SEARCH]",
-                "💎": "[QUALITY]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f9ee": "[MATH]",
+                "\\u1f4ca": "[STATS]",
+                "\\u1f52c": "[TEST]",
+                "\\u26a1": "[FAST]",
+                "\\u1f6e1\\ufe0f": "[SECURE]",
+                "\\u1f527": "[TOOL]",
+                "\\u1f4e1": "[SIGNAL]",
+                "\\u1f3aa": "[FERRIS]",
+                "\\u1f300": "[CYCLE]",
+                "\\u1f4b0": "[PROFIT]",
+                "\\u1f3b2": "[RANDOM]",
+                "\\u1f4c8": "[TREND]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f48e": "[QUALITY]",
             }
             for emoji, marker in emoji_mapping.items():
                 message = message.replace(emoji, marker)
@@ -146,9 +146,9 @@ class WindowsCliCompatibilityHandler:
     def format_error_with_fallback(error: Exception, context: str = "") -> str:
         """Format error with ASIC fallback for Windows CLI."""
         error_msg = (
-            f"🚨 ERROR in {context}: {str(error)}"
+            f"\\u1f6a8 ERROR in {context}: {str(error)}"
             if context
-            else f"🚨 ERROR: {str(error)}"
+            else f"\\u1f6a8 ERROR: {str(error)}"
         )
         return WindowsCliCompatibilityHandler.safe_print(error_msg)
 
@@ -376,7 +376,7 @@ class MathematicalPathwayValidator:
             dual_x = Dual(3.0, 1.0)
             dual_result = (
                 dual_x * dual_x + 2 * dual_x + 1
-            )  # f(x) = x² + 2x + 1
+            )  # f(x) = x\\u00b2 + 2x + 1
 
             # Test Kelly criterion
             kelly_result = kelly_fraction(0.1, 0.04)  # 10% return, 4% variance
@@ -588,7 +588,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         cls.cli_handler.log_safe(
             logger,
             "info",
-            "🔬 Starting Mathematical Trading System Integration Tests",
+            "\\u1f52c Starting Mathematical Trading System Integration Tests",
         )
 
     def test_001_flake8_compliance_validation(self):
@@ -596,7 +596,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "📊 Testing Flake8 compliance validation",
+            "\\u1f4ca Testing Flake8 compliance validation",
         )
 
         # Check core mathematical files exist and are importable
@@ -651,7 +651,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "🧮 Testing mathematical pathway validation",
+            "\\u1f9ee Testing mathematical pathway validation",
         )
 
         # Validate mathlib versions
@@ -691,15 +691,15 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "🛡️ Testing Windows CLI emoji handling",
+            "\\u1f6e1\\ufe0f Testing Windows CLI emoji handling",
         )
 
         test_messages = [
-            "🚨 Critical error in trading system",
-            "✅ Mathematical validation successful",
-            "🔄 Processing Ferris wheel cycle",
-            "💰 Profit routing optimized",
-            "🎯 Target allocation reached",
+            "\\u1f6a8 Critical error in trading system",
+            "\\u2705 Mathematical validation successful",
+            "\\u1f504 Processing Ferris wheel cycle",
+            "\\u1f4b0 Profit routing optimized",
+            "\\u1f3af Target allocation reached",
         ]
 
         emoji_handling_results = {}
@@ -737,7 +737,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
     def test_004_ferris_wheel_timing_validation(self):
         """Test Ferris wheel timing logic and trigger sequences."""
         self.cli_handler.log_safe(
-            logger, "info", "🎪 Testing Ferris wheel timing validation"
+            logger, "info", "\\u1f3aa Testing Ferris wheel timing validation"
         )
 
         # Test cycle timing
@@ -813,7 +813,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
     def test_005_dual_path_error_handling(self):
         """Test dual-path error handling architecture."""
         self.cli_handler.log_safe(
-            logger, "info", "🔧 Testing dual-path error handling"
+            logger, "info", "\\u1f527 Testing dual-path error handling"
         )
 
         error_handling_results = {}
@@ -847,7 +847,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         try:
             if self.cli_handler.is_windows_cli():
                 # Simulate emoji display error
-                test_emoji = "🚨💰🎯"
+                test_emoji = "\\u1f6a8\\u1f4b0\\u1f3af"
                 safe_emoji = self.cli_handler.safe_print(test_emoji)
 
                 error_handling_results["emoji_fallback"] = {
@@ -879,7 +879,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "⚡ Testing performance benchmarking",
+            "\\u26a1 Testing performance benchmarking",
         )
 
         performance_results = {}
@@ -953,7 +953,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "🌀 Testing ghost data recovery integration",
+            "\\u1f300 Testing ghost data recovery integration",
         )
 
         ghost_results = self.pathway_validator.validate_ghost_recovery_system()
@@ -975,7 +975,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         self.cli_handler.log_safe(
             logger,
             "info",
-            "📋 Testing YAML configuration management",
+            "\\u1f4cb Testing YAML configuration management",
         )
 
         config_results = {
@@ -1014,7 +1014,7 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
         cls.cli_handler.log_safe(
             logger,
             "info",
-            "📊 Generating comprehensive test integration report",
+            "\\u1f4ca Generating comprehensive test integration report",
         )
 
         # Generate comprehensive report
@@ -1044,15 +1044,15 @@ class MathematicalIntegrationTestSuite(unittest.TestCase):
 
         # Print summary
         safe_print("\n" + "=" * 80)
-        safe_print("🧮 MATHEMATICAL TRADING SYSTEM INTEGRATION TEST SUMMARY")
+        safe_print("\\u1f9ee MATHEMATICAL TRADING SYSTEM INTEGRATION TEST SUMMARY")
         safe_print("=" * 80)
 
         for category, results in cls.test_results.items():
-            status = "✅ PASSED" if isinstance(results, dict) else "❌ FAILED"
+            status = "\\u2705 PASSED" if isinstance(results, dict) else "\\u274c FAILED"
             safe_print(f"{status} {category}")
 
-        safe_print("\n💎 All mathematical pathways validated successfully!")
-        safe_print("🚀 System ready for production integration!")
+        safe_print("\\n\\u1f48e All mathematical pathways validated successfully!")
+        safe_print("\\u1f680 System ready for production integration!")
         safe_print("=" * 80)
 
 
@@ -1064,7 +1064,7 @@ def main():
     cli_handler.log_safe(
         logger,
         "info",
-        "🎯 Starting Schwabot Mathematical Trading System Integration Tests",
+        "\\u1f3af Starting Schwabot Mathematical Trading System Integration Tests",
     )
 
     # Create test suite
@@ -1083,3 +1083,5 @@ def main():
 if __name__ == "__main__":
     exit_code = main()
     sys.exit(exit_code)
+
+"""

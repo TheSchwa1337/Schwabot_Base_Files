@@ -21,12 +21,12 @@ Key Features:
 - Windows CLI compatibility with emoji fallbacks
 
 Mathematical Foundations:
-- Generator: G(z) = σ(W₂ · ReLU(W₁z + b₁) + b₂)
-- Discriminator: D(x) = σ(W₄ · LeakyReLU(W₃x + b₃) + b₄)
+- Generator: G(z) = \\u03c3(W\\u2082 \\u00b7 ReLU(W\\u2081z + b\\u2081) + b\\u2082)
+- Discriminator: D(x) = \\u03c3(W\\u2084 \\u00b7 LeakyReLU(W\\u2083x + b\\u2083) + b\\u2084)
 - BCE Loss: L_D = -[log D(x) + unified_math.log(1 - D(G(z)))]
 - Wasserstein Loss: L_D = D(x) - D(G(z))
-- Gradient Penalty: L_GP = λ·(||∇_x̂ D(x̂)||₂ - 1)²
-- Entropy Calibration: ΔH = H(x) - H(G(z))
+- Gradient Penalty: L_GP = \\u03bb\\u00b7(||\\u2207_x\\u0302 D(x\\u0302)||\\u2082 - 1)\\u00b2
+- Entropy Calibration: \\u0394H = H(x) - H(G(z))
 
 Integration Points:
 - mathematical_optimization_bridge.py: Performance optimization
@@ -87,34 +87,34 @@ except ImportError:
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """TODO: document safe_emoji_print."""
             emoji_mapping = {
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🚨": "[ALERT]",
-                "🎉": "[COMPLETE]",
-                "🔄": "[PROCESSING]",
-                "⏳": "[WAITING]",
-                "⭐": "[STAR]",
-                "🚀": "[LAUNCH]",
-                "🔧": "[TOOLS]",
-                "🛠️": "[REPAIR]",
-                "⚡": "[FAST]",
-                "🔍": "[SEARCH]",
-                "🎯": "[TARGET]",
-                "🔥": "[HOT]",
-                "❄️": "[COOL]",
-                "📊": "[DATA]",
-                "📈": "[PROFIT]",
-                "📉": "[LOSS]",
-                "💰": "[MONEY]",
-                "🧪": "[TEST]",
-                "⚖️": "[BALANCE]",
-                "🌡️": "[TEMP]",
-                "🔬": "[ANALYZE]",
-                "🧮": "[CALC]",
-                "📐": "[MATH]",
-                "🔢": "[NUMBERS]",
-                "∞": "[INFINITY]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u23f3": "[WAITING]",
+                "\\u2b50": "[STAR]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u1f527": "[TOOLS]",
+                "\\u1f6e0\\ufe0f": "[REPAIR]",
+                "\\u26a1": "[FAST]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f525": "[HOT]",
+                "\\u2744\\ufe0f": "[COOL]",
+                "\\u1f4ca": "[DATA]",
+                "\\u1f4c8": "[PROFIT]",
+                "\\u1f4c9": "[LOSS]",
+                "\\u1f4b0": "[MONEY]",
+                "\\u1f9ea": "[TEST]",
+                "\\u2696\\ufe0f": "[BALANCE]",
+                "\\u1f321\\ufe0f": "[TEMP]",
+                "\\u1f52c": "[ANALYZE]",
+                "\\u1f9ee": "[CALC]",
+                "\\u1f4d0": "[MATH]",
+                "\\u1f522": "[NUMBERS]",
+                "\\u221e": "[INFINITY]",
             }
             if force_ascii:
                 for emoji, replacement in emoji_mapping.items():
@@ -202,10 +202,10 @@ class EntropyGenerator(nn.Module if TORCH_AVAILABLE else object):
     Entropy Generator Neural Network
 
     Generates synthetic entropy signals from random noise using the mathematical
-    framework: G(z) = σ(W₂ · ReLU(W₁z + b₁) + b₂)
+    framework: G(z) = \\u03c3(W\\u2082 \\u00b7 ReLU(W\\u2081z + b\\u2081) + b\\u2082)
 
     Architecture:
-    - Input: Random noise vector z ∈ ℝⁿ
+    - Input: Random noise vector z \\u2208 \\u211d\\u207f
     - Hidden: ReLU activation with configurable dimensions
     - Output: Synthetic signal with tanh activation for bounded output
     """
@@ -289,10 +289,10 @@ class EntropyDiscriminator(nn.Module if TORCH_AVAILABLE else object):
     Entropy Discriminator Neural Network
 
     Discriminates between real and synthetic entropy signals using the mathematical
-    framework: D(x) = σ(W₄ · LeakyReLU(W₃x + b₃) + b₄)
+    framework: D(x) = \\u03c3(W\\u2084 \\u00b7 LeakyReLU(W\\u2083x + b\\u2083) + b\\u2084)
 
     Architecture:
-    - Input: Signal vector x ∈ ℝᵐ
+    - Input: Signal vector x \\u2208 \\u211d\\u1d50
     - Hidden: LeakyReLU activation for better gradient flow
     - Output: Probability score [0, 1] for real vs fake classification
     """
@@ -438,7 +438,7 @@ class EntropyGAN:
         """
         Compute Shannon entropy of signal
 
-        H(x) = -Σ p_i log₂(p_i)
+        H(x) = -\\u03a3 p_i log\\u2082(p_i)
 
         Args:
             signal: Input signal tensor
@@ -472,8 +472,8 @@ class EntropyGAN:
         """
         Compute gradient penalty for WGAN-GP
 
-        L_GP = λ·(||∇_x̂ D(x̂)||₂ - 1)²
-        where x̂ = εx + (1-ε)G(z), ε ~ U[0,1]
+        L_GP = \\u03bb\\u00b7(||\\u2207_x\\u0302 D(x\\u0302)||\\u2082 - 1)\\u00b2
+        where x\\u0302 = \\u03b5x + (1-\\u03b5)G(z), \\u03b5 ~ U[0,1]
 
         Args:
             real_data: Real data batch
@@ -656,7 +656,7 @@ class EntropyGAN:
                 epochs = epochs or self.config.epochs
                 batch_size = batch_size or self.config.batch_size
 
-                self.safe_safe_print(f"🚀 Starting Entropy GAN training")
+                self.safe_safe_print(f"\\u1f680 Starting Entropy GAN training")
                 self.safe_safe_print(f"   Mode: {self.config.mode.value}")
                 self.safe_safe_print(f"   Epochs: {epochs}")
                 self.safe_safe_print(f"   Batch size: {batch_size}")
@@ -686,7 +686,7 @@ class EntropyGAN:
                         # Progress reporting
                         if epoch % 100 == 0:
                             self.safe_safe_print(
-                                f"📊 Epoch {epoch}: "
+                                f"\\u1f4ca Epoch {epoch}: "
                                 f"D_loss={metrics.discriminator_loss:.4f}, "
                                 f"G_loss={metrics.generator_loss:.4f}, "
                                 f"Real_acc={metrics.real_accuracy:.3f}, "
@@ -705,7 +705,7 @@ class EntropyGAN:
                 total_time = time.time() - training_start_time
 
                 self.safe_safe_print(
-                    f"🎉 Training completed in {total_time:.2f} seconds"
+                    f"\\u1f389 Training completed in {total_time:.2f} seconds"
                 )
                 return metrics_history
 
@@ -953,11 +953,11 @@ def main() -> None:
     try:
         if not TORCH_AVAILABLE:
             safe_print(
-                "❌ PyTorch not available - cannot run Entropy GAN Filter test"
+                "\\u274c PyTorch not available - cannot run Entropy GAN Filter test"
             )
             return
 
-        safe_print("🚀 Entropy GAN Filter Test")
+        safe_print("\\u1f680 Entropy GAN Filter Test")
         safe_print("=" * 50)
 
         # Configuration
@@ -974,24 +974,24 @@ def main() -> None:
 
         filter_config = FilterConfig(threshold=0.5, mode=FilterMode.THRESHOLD)
 
-        safe_print(f"📊 Configuration:")
+        safe_print(f"\\u1f4ca Configuration:")
         safe_print(f"   Signal dimension: {gan_config.signal_dim}")
         safe_print(f"   Batch size: {gan_config.batch_size}")
         safe_print(f"   Training epochs: {gan_config.epochs}")
         safe_print(f"   GAN mode: {gan_config.mode.value}")
 
         # Initialize GAN
-        safe_print("\n🔧 Initializing Entropy GAN...")
+        safe_print("\\n\\u1f527 Initializing Entropy GAN...")
         entropy_gan = EntropyGAN(gan_config)
 
         # Create signal provider
-        safe_print("📡 Creating signal provider...")
+        safe_print("\\u1f4e1 Creating signal provider...")
         signal_provider = create_entropy_signal_provider(
             gan_config.signal_dim, 0.1
         )
 
         # Train GAN
-        safe_print("\n🎓 Training Entropy GAN...")
+        safe_print("\\n\\u1f393 Training Entropy GAN...")
         training_metrics = entropy_gan.train_entropy_gan(
             real_data_fn=signal_provider,
             epochs=gan_config.epochs,
@@ -1000,14 +1000,14 @@ def main() -> None:
 
         if training_metrics:
             final_metrics = training_metrics[-1]
-            safe_print(f"✅ Training completed:")
+            safe_print(f"\\u2705 Training completed:")
             safe_print(f"   Final G loss: {final_metrics.generator_loss:.4f}")
             safe_print(f"   Final D loss: {final_metrics.discriminator_loss:.4f}")
             safe_print(f"   Real accuracy: {final_metrics.real_accuracy:.3f}")
             safe_print(f"   Fake accuracy: {final_metrics.fake_accuracy:.3f}")
 
         # Test filtering
-        safe_print("\n🔍 Testing GAN filtering...")
+        safe_print("\\n\\u1f50d Testing GAN filtering...")
         gan_filter = GanFilter(entropy_gan.discriminator, filter_config)
 
         # Generate test signals
@@ -1026,14 +1026,14 @@ def main() -> None:
         safe_print(f"     Signals filtered: {stats.get('signals_filtered', 0)}")
 
         # Test batch filtering
-        safe_print("\n📦 Testing batch filtering...")
+        safe_print("\\n\\u1f4e6 Testing batch filtering...")
         batch_filtered = gan_filter.batch_filter(signal_provider, 50)
         safe_print(f"   Batch filtered to {batch_filtered.size(0)} signals")
 
-        safe_print("\n🎉 Entropy GAN Filter test completed successfully!")
+        safe_print("\\n\\u1f389 Entropy GAN Filter test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Entropy GAN Filter test failed: {e}")
+        safe_print(f"\\u274c Entropy GAN Filter test failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -1041,3 +1041,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -10,7 +10,7 @@ This *tiny* module exists so that high-level scripts can simply do::
 without worrying about the internal package layout.
 
 The actual implementation lives in
-``core.schwabot_integration_orchestrator.SchwabotIntegrationOrchestrator`` –
+``core.schwabot_integration_orchestrator.SchwabotIntegrationOrchestrator`` \\u2013
 we just import it and re-export under the traditional name expected by older
 call-sites.
 """

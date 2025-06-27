@@ -10,9 +10,9 @@ def allocate(phi: float, alphas: list[float]) -> np.ndarray:
 
     pass
     pass
-    """Split entry weight across baskets proportionally.
+    """Split entry weight across baskets proportionally."""
 
-Compute allocation: alloc_i = α_i·Φ / Σα
+Compute allocation: alloc_i = alpha_i.\\u03a6 / \\u03a3alpha
 
 Args:
 phi: Total entry signal strength
@@ -23,7 +23,7 @@ Per-basket allocation array that sums to |phi|
 
 Raises:
 ValueError: If alphas sum to zero
-"""
+""""""
     if not alphas:
         return np.array([])
 
@@ -35,3 +35,7 @@ a = np.array(alphas, dtype=float)
         raise ValueError("Alpha coefficients sum to zero")
 
     return phi * (a / alpha_sum)
+
+
+
+"""

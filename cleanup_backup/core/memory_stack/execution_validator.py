@@ -8,10 +8,10 @@ This module simulates execution costs, validates drift, and provides execution
 validation for Schwabot's recursive execution system.
 
 Mathematical Foundation:
-- Execution Cost: C = Σ(base_cost + complexity_factor + market_impact)
-- Drift Validation: Δt_drift = T_executed - T_expected
+- Execution Cost: C = \\u03a3(base_cost + complexity_factor + market_impact)
+- Drift Validation: \\u0394t_drift = T_executed - T_expected
 - Cost Efficiency: E = profit_delta / execution_cost
-- Validation Score: V = α * confidence * (1 - drift_factor)
+- Validation Score: V = \\u03b1 * confidence * (1 - drift_factor)
 """
 
 import json
@@ -187,7 +187,7 @@ class ExecutionValidator:
         # Load existing validations
         self._load_validations()
 
-        safe_safe_print("✅ Execution Validator initialized - Cost simulation active")
+        safe_safe_print("\\u2705 Execution Validator initialized - Cost simulation active")
 
     def _load_validations(self) -> None:
         """Load existing validations from file."""
@@ -246,11 +246,11 @@ class ExecutionValidator:
                     self.execution_validations[execution_validation.validation_id] = execution_validation
 
                 safe_safe_print(
-                    f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
+                    f"\\u2705 Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
 
         except Exception as e:
             error_msg = safe_format_error(e, "load_validations")
-            safe_safe_print(f"⚠️ Failed to load validations: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to load validations: {error_msg}")
 
     def _save_validations(self) -> None:
         """Save validations to file."""
@@ -295,7 +295,7 @@ class ExecutionValidator:
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_validations")
-            safe_safe_print(f"⚠️ Failed to save validations: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to save validations: {error_msg}")
 
     def simulate_execution_cost(
         self,
@@ -367,12 +367,12 @@ class ExecutionValidator:
             # Store execution cost
             self.execution_costs[cost_id] = execution_cost
 
-            safe_safe_print(f"💰 Execution cost simulated: {total_cost:.2f} for {command_id}")
+            safe_safe_print(f"\\u1f4b0 Execution cost simulated: {total_cost:.2f} for {command_id}")
             return execution_cost
 
         except Exception as e:
             error_msg = safe_format_error(e, "simulate_execution_cost")
-            safe_safe_print(f"❌ Execution cost simulation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Execution cost simulation failed: {error_msg}")
 
             # Return safe fallback cost
             return ExecutionCost(
@@ -452,12 +452,12 @@ class ExecutionValidator:
             # Store drift validation
             self.drift_validations[validation_id] = drift_validation
 
-            safe_safe_print(f"⏱️ Drift validation: {drift_magnitude:.2f}s ({drift_level.value})")
+            safe_safe_print(f"\\u23f1\\ufe0f Drift validation: {drift_magnitude:.2f}s ({drift_level.value})")
             return drift_validation
 
         except Exception as e:
             error_msg = safe_format_error(e, "validate_drift")
-            safe_safe_print(f"❌ Drift validation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Drift validation failed: {error_msg}")
 
             # Return safe fallback validation
             return DriftValidation(
@@ -553,12 +553,12 @@ class ExecutionValidator:
             # Save to file
             self._save_validations()
 
-            safe_safe_print(f"✅ Execution validation: {validation_status.value} (Score: {overall_score:.3f})")
+            safe_safe_print(f"\\u2705 Execution validation: {validation_status.value} (Score: {overall_score:.3f})")
             return execution_validation
 
         except Exception as e:
             error_msg = safe_format_error(e, "validate_execution")
-            safe_safe_print(f"❌ Execution validation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Execution validation failed: {error_msg}")
 
             # Return safe fallback validation
             return ExecutionValidation(
@@ -747,10 +747,10 @@ class ExecutionValidator:
                 del self.execution_validations[validation_id]
 
             safe_safe_print(
-                f"🧹 Cleaned up {len(old_costs)} old costs, {len(old_drifts)} old drifts, {len(old_validations)} old validations")
+                f"\\u1f9f9 Cleaned up {len(old_costs)} old costs, {len(old_drifts)} old drifts, {len(old_validations)} old validations")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cleanup failed: {safe_format_error(e, 'cleanup')}")
 
 
 # Global instance for easy access
@@ -793,7 +793,7 @@ def validate_execution(
 # Example usage
 if __name__ == "__main__":
     # Test execution validator functionality
-    safe_safe_print("✅ Testing Execution Validator...")
+    safe_safe_print("\\u2705 Testing Execution Validator...")
 
     # Simulate execution cost
     test_payload = {"strategy": "test", "parameters": {"test": True}}
@@ -830,4 +830,6 @@ if __name__ == "__main__":
     # Get performance metrics
     metrics = execution_validator.get_performance_metrics()
 
-    safe_safe_print(f"✅ Test completed - Status: {execution_validation.validation_status.value}, Metrics: {metrics}")
+    safe_safe_print(f"\\u2705 Test completed - Status: {execution_validation.validation_status.value}, Metrics: {metrics}")
+
+"""

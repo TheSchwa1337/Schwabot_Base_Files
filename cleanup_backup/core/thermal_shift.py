@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Thermal delta switch – minimal thermal drift detector.
+"""Thermal delta switch \\u2013 minimal thermal drift detector.
 
 This helper flags sudden temperature jumps (*thermal shifts*) above a preset
 threshold.  It is intentionally lightweight so it can execute inside tight
@@ -10,11 +10,11 @@ trading-loop iterations without blocking the GIL.
 
 Current implementation
 ----------------------
-1. ``ThermalShift`` class – exponential-moving-average (EWMA) smoothing with
+1. ``ThermalShift`` class \\u2013 exponential-moving-average (EWMA) smoothing with
    :py:meth:`update` returning ``(is_stable, delta)``.
 2. Stateless wrapper :func:`thermal_delta_switch`` mirroring the legacy stub
    signature requested by earlier Schwabot code.
-3. Fully typed and Flake8-clean (≤ 79-character lines).
+3. Fully typed and Flake8-clean (\\u2264 79-character lines).
 
 Future versions may include adaptive hysteresis or GPU-calibrated drift maps.
 """
@@ -27,7 +27,7 @@ from typing import Final, Tuple
 __all__ = ["ThermalShift", "thermal_delta_switch"]
 
 _DEFAULT_ALPHA: Final = 0.2
-_DEFAULT_THRESHOLD: Final = 2.5  # °C
+_DEFAULT_THRESHOLD: Final = 2.5  # \\u00b0C
 
 
 @dataclass(slots=True)
@@ -37,7 +37,7 @@ class ThermalShift:
     Parameters
     ----------
     threshold
-        Absolute temperature delta (°C) that triggers an *unstable* flag.
+        Absolute temperature delta (\\u00b0C) that triggers an *unstable* flag.
     alpha
         EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
     """
@@ -56,7 +56,7 @@ class ThermalShift:
         Parameters
         ----------
         temp
-            Current temperature reading (°C).
+            Current temperature reading (\\u00b0C).
 
         Returns
         -------
@@ -75,7 +75,7 @@ class ThermalShift:
 
 
 # -----------------------------------------------------------------------------
-# Stateless helper – mirrors historical stub signature
+# Stateless helper \\u2013 mirrors historical stub signature
 # -----------------------------------------------------------------------------
 
 
@@ -90,11 +90,11 @@ def thermal_delta_switch(
     Parameters
     ----------
     current
-        Current temperature reading (°C).
+        Current temperature reading (\\u00b0C).
     previous
-        Previous or baseline temperature reading (°C).
+        Previous or baseline temperature reading (\\u00b0C).
     threshold
-        Allowed delta before declaring instability.  Defaults to 2.5 °C.
+        Allowed delta before declaring instability.  Defaults to 2.5 \\u00b0C.
     """
     delta = unified_math.abs(current - previous)
     return delta < threshold

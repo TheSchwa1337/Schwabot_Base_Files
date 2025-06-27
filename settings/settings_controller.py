@@ -470,5 +470,5 @@ if __name__ == "__main__":
     print(json.dumps(controller.get_optimized_parameters(), indent=2))
 
     # Print performance metrics
-    safe_print("\nPerformance Metrics:")
+    safe_print("\\nPerformance Metrics:")
     print(json.dumps(controller.get_performance_metrics(), indent=2))

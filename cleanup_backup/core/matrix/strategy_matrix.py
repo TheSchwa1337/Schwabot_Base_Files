@@ -6,7 +6,7 @@ from core.unified_math_system import unified_math
 
 
 def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:
-    """Compute adaptive projection Πₓ = Σ wᵢ·Vᵢ.
+    """Compute adaptive projection \\u03a0\\u2093 = \\u03a3 w\\u1d62\\u00b7V\\u1d62.
 
     Perform vectorized dot product for weighted vector combination
     supporting both static and dynamic weight updates.
@@ -28,3 +28,5 @@ def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:
         )
 
     return np.tensordot(weights, vectors, axes=1)
+
+"""

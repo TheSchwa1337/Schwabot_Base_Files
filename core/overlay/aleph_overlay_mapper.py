@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""core.overlay.aleph_overlay_mapper
+"""core.overlay.aleph_overlay_mapper"""
 Aleph Overlay Mapper
 ====================
 
 Matches live price signature against a stored *Aleph* memory bank and returns
 the best overlay together with a confidence score derived from cosine
 similarity.
-"""
+""""""
 
 from __future__ import annotations
 
@@ -19,32 +19,32 @@ import numpy as np
 
 from utils.math_utils import cosine_similarity
 
-__all__ = [
+__all__ = []
     "OverlayMatch",
     "AlephOverlayMapper",
     "map_aleph_overlay",
-]
+
 
 
 @dataclass(slots=True)
-class OverlayMatch:
+class Placeholder: pass
     overlay_id: str
     similarity: float  # in [-1, 1]
     overlay_vector: np.ndarray
 
     def as_dict(self) -> Dict[str, str | float]:
-        return {
+        return {}
             "overlay_id": self.overlay_id,
             "similarity": self.similarity,
-        }
+        
 
 
-class AlephOverlayMapper:
+class Placeholder: pass
     """Load overlay memory and perform similarity search."""
 
     def __init__(self, memory_json: str | Path) -> None:
     self.memory_path = Path(memory_json)
-        if not self.memory_path.exists():
+       if not self.memory_path.exists():
             raise FileNotFoundError(self.memory_path)
         self._load_memory()
 
@@ -52,10 +52,10 @@ class AlephOverlayMapper:
     def _load_memory(self) -> None:
         data = json.loads(self.memory_path.read_text())
         # expect {"overlay_id": [float, float, ...], ...}
-    self._memory: Dict[str, np.ndarray] = {
-            key: np.asarray(vec, dtype=float) for key, vec in data.items()
-        }
-        if not self._memory:
+    self._memory: Dict[str, np.ndarray] = {}
+        key: np.asarray(vec, dtype=float) for key, vec in data.items()
+    
+       if not self._memory:
             raise ValueError("Aleph memory is empty")
 
     # ------------------------------------------------------------------
@@ -90,12 +90,12 @@ class AlephOverlayMapper:
 # Stand-alone functional API requested in integration docs
 # ---------------------------------------------------------------------------
 
-def map_aleph_overlay(
+def map_aleph_overlay()
     live_price: float,
     memory_prices: Sequence[float],
     omega: Sequence[float]
-) -> float:
-    """Return weighted sum of *omega* for memory prices close to *live_price*.
+ -> float:
+    """Return weighted sum of *omega* for memory prices close to *live_price*."""
 
     The helper mirrors the mathematical definition::
 
@@ -105,7 +105,7 @@ def map_aleph_overlay(
     small epsilon (1e-4) we treat it as a *match* and accumulate the
     associated *omega* weight. This is a lightweight convenience wrapper useful
     when the full :class:`AlephOverlayMapper` class overhead is not required.
-    """
+    """"""
     if len(memory_prices) != len(omega):
         raise ValueError("memory_prices and omega must have equal length")
     import numpy as np
@@ -115,3 +115,7 @@ def map_aleph_overlay(
 
     diff = np.abs(mem_arr - live_price) < 1e-4
     return float(np.sum(omega_arr[diff]))
+
+
+
+"""

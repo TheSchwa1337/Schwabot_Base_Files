@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\n# Import safe print for Windows compatibility
+# -*- coding: utf-8 -*-\\n# Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
@@ -29,13 +29,13 @@ except ImportError:
     unified_math = None
 
 # #!/usr/bin/env python3
-"""
+""""""
 Execution Validator - Ghost-Based Logic Path Validation
 ======================================================
 
 Checks execution conforms to ghost-based logic paths.
 Provides validation for trade execution against expected ghost patterns.
-"""
+""""""
 
 import json
 import logging
@@ -53,12 +53,12 @@ from core.execution_types import TradeAction, ExecutionDecision
 
 # Import centralized CLI handler
 try:
-    from core.utils.windows_cli_compatibility import (
+    from core.utils.windows_cli_compatibility import ()
         WindowsCliCompatibilityHandler,
         safe_format_error,
         log_safe,
         cli_handler
-    )
+    
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
@@ -101,7 +101,7 @@ class CostType(Enum):
 
 
 @dataclass
-class ExecutionCost:
+class Placeholder: pass
     """Execution cost structure."""
     cost_id: str
     command_id: str
@@ -122,7 +122,7 @@ class ExecutionCost:
 
 
 @dataclass
-class DriftValidation:
+class Placeholder: pass
     """Drift validation structure."""
     validation_id: str
     command_id: str
@@ -142,7 +142,7 @@ class DriftValidation:
 
 
 @dataclass
-class ExecutionValidation:
+class Placeholder: pass
     """Represents execution validation result."""
     validation_id: str
     trade_data: Dict[str, Any]
@@ -158,7 +158,7 @@ class ExecutionValidation:
 
 
 @dataclass
-class GhostLogicPath:
+class Placeholder: pass
     """Represents a ghost logic path for validation."""
     path_id: str
     expected_sequence: List[str]
@@ -169,60 +169,62 @@ class GhostLogicPath:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-class ExecutionValidator:
-    """
+class Placeholder: pass
+    """"""
     Execution Validator for Ghost-Based Logic Paths.
 
     This validator ensures that trade executions conform to expected
     ghost-based logic paths and detects deviations from expected patterns.
-    """
+    """"""
 
-    def __init__(self, overlay_json: str = "memory_stack/aleph_overlays.json") -> None:
+    def __init__()
+            self,
+            overlay_json: str = "memory_stack/aleph_overlays.json" -> None:
         """Initialize the execution validator."""
     self.loader = GhostPhaseStrategyLoader(overlay_json)
     self.decision_log = []
     self.validation_file = "memory_stack/execution_validations.json"
-        safe_print("🛡️ ExecutionValidator initialized.")
+    safe_print("\\u1f6e1\\ufe0f ExecutionValidator initialized.")
 
-        # Validation storage
+    # Validation storage
     self.execution_costs: Dict[str, ExecutionCost] = {}
     self.drift_validations: Dict[str, DriftValidation] = {}
     self.execution_validations: Dict[str, ExecutionValidation] = {}
 
-        # Configuration parameters
+    # Configuration parameters
     self.base_cost_threshold = 10.0
     self.complexity_factor = 0.1
     self.market_impact_factor = 0.05
     self.network_cost_factor = 0.02
     self.computational_cost_factor = 0.03
 
-        # Drift thresholds
-    self.drift_thresholds = {
-            DriftLevel.NONE: 0.0,
-            DriftLevel.MINOR: 1.0,
-            DriftLevel.MODERATE: 3.0,
-            DriftLevel.MAJOR: 5.0,
-            DriftLevel.CRITICAL: 10.0
-        }
+    # Drift thresholds
+    self.drift_thresholds = {}
+        DriftLevel.NONE: 0.0,
+        DriftLevel.MINOR: 1.0,
+        DriftLevel.MODERATE: 3.0,
+        DriftLevel.MAJOR: 5.0,
+        DriftLevel.CRITICAL: 10.0
+    
 
-        # Validation thresholds
+    # Validation thresholds
     self.approval_threshold = 0.7
     self.conditional_threshold = 0.5
     self.rejection_threshold = 0.3
 
-        # Performance tracking
+    # Performance tracking
     self.total_validations = 0
     self.successful_validations = 0
     self.validation_success_rate = 0.0
 
-        # Validation parameters
+    # Validation parameters
     self.default_confidence_threshold = 0.7
     self.default_drift_tolerance = 0.3
     self.hash_similarity_threshold = 0.8
     self.sequence_match_threshold = 0.6
 
-        # CLI compatibility
-        if CLI_HANDLER_AVAILABLE:
+    # CLI compatibility
+    if CLI_HANDLER_AVAILABLE:
         self.cli_handler = WindowsCliCompatibilityHandler()
         else:
             self.cli_handler = None
@@ -230,7 +232,7 @@ class ExecutionValidator:
         # Load existing validations
             self._load_validations()
 
-        safe_print("✅ Execution Validator initialized - Cost simulation active")
+        safe_print("\\u2705 Execution Validator initialized - Cost simulation active")
 
     def _load_validations(self) -> None:
         """Load existing validations from file."""
@@ -241,7 +243,7 @@ class ExecutionValidator:
 
                 # Load execution costs
                 for cost_data in validation_data.get('execution_costs', []):
-                    execution_cost = ExecutionCost(
+                    execution_cost = ExecutionCost()
                         cost_id=cost_data['cost_id'],
                         command_id=cost_data['command_id'],
                         base_cost=cost_data['base_cost'],
@@ -251,30 +253,39 @@ class ExecutionValidator:
                         computational_cost=cost_data['computational_cost'],
                         total_cost=cost_data['total_cost'],
                         cost_efficiency=cost_data['cost_efficiency'],
-                        timestamp=datetime.fromisoformat(cost_data['timestamp']),
-                        metadata=cost_data.get('metadata', {})
-                    )
+                        timestamp=datetime.fromisoformat()
+                            cost_data['timestamp'],
+                        metadata=cost_data.get()
+                            'metadata',
+                            {}
                     self.execution_costs[execution_cost.cost_id] = execution_cost
 
                 # Load drift validations
                 for drift_data in validation_data.get('drift_validations', []):
-                    drift_validation = DriftValidation(
+                    drift_validation = DriftValidation()
                         validation_id=drift_data['validation_id'],
                         command_id=drift_data['command_id'],
-                        expected_time=datetime.fromisoformat(drift_data['expected_time']),
-                        actual_time=datetime.fromisoformat(drift_data['actual_time']),
+                        expected_time=datetime.fromisoformat()
+                            drift_data['expected_time'],
+                        actual_time=datetime.fromisoformat()
+                            drift_data['actual_time'],
                         drift_magnitude=drift_data['drift_magnitude'],
-                        drift_level=DriftLevel(drift_data['drift_level']),
+                        drift_level=DriftLevel()
+                            drift_data['drift_level'],
                         drift_factor=drift_data['drift_factor'],
                         validation_score=drift_data['validation_score'],
-                        recommendations=drift_data.get('recommendations', []),
-                        metadata=drift_data.get('metadata', {})
-                    )
-                        self.drift_validations[drift_validation.validation_id] = drift_validation
+                        recommendations=drift_data.get()
+                            'recommendations',
+                            [],
+                        metadata=drift_data.get()
+                            'metadata',
+                            {}
+                    self.drift_validations[drift_validation.validation_id] = drift_validation
 
                 # Load execution validations
-                for exec_data in validation_data.get('execution_validations', []):
-                    execution_validation = ExecutionValidation(
+                for exec_data in validation_data.get()
+                        'execution_validations', []:
+                    execution_validation = ExecutionValidation()
                         validation_id=exec_data['validation_id'],
                         trade_data=exec_data['trade_data'],
                         expected_hash=exec_data['expected_hash'],
@@ -283,25 +294,35 @@ class ExecutionValidator:
                         is_valid=exec_data['is_valid'],
                         drift_magnitude=exec_data['drift_magnitude'],
                         confidence_level=exec_data['confidence_level'],
-                        timestamp=datetime.fromisoformat(exec_data['timestamp']),
-                        validation_details=exec_data.get('validation_details', {}),
-                        metadata=exec_data.get('metadata', {})
-                    )
-                            self.execution_validations[execution_validation.validation_id] = execution_validation
+                        timestamp=datetime.fromisoformat()
+                            exec_data['timestamp'],
+                        validation_details=exec_data.get()
+                            'validation_details',
+                            {},
+                        metadata=exec_data.get()
+                            'metadata',
+                            {}
+                    self.execution_validations[execution_validation.validation_id] = execution_validation
 
-            safe_print(
-                f"✅ Loaded {len(self.execution_costs)} costs, {len(self.drift_validations)} drift validations, {len(self.execution_validations)} execution validations")
+            safe_print()
+                f"\\u2705 Loaded {"}
+                    len()
+                        self.execution_costs} costs, {
+                    len()
+                        self.drift_validations} drift validations, {
+                    len()
+                        self.execution_validations execution validations""
 
         except Exception as e:
             error_msg = safe_format_error(e, "load_validations")
-            safe_print(f"⚠️ Failed to load validations: {error_msg}")
+            safe_print(f"\\u26a0\\ufe0f Failed to load validations: {error_msg}")
 
     def _save_validations(self) -> None:
         """Save validations to file."""
         try:
             os.makedirs(os.path.dirname(self.validation_file), exist_ok=True)
 
-            validation_data = {
+            validation_data = {}
                 'execution_costs': [],
                 'drift_validations': [],
                 'execution_validations': [],
@@ -309,7 +330,7 @@ class ExecutionValidator:
                 'total_costs': len(self.execution_costs),
                 'total_drift_validations': len(self.drift_validations),
                 'total_execution_validations': len(self.execution_validations)
-            }
+            
 
             # Save execution costs
             for cost in self.execution_costs.values():
@@ -332,17 +353,18 @@ class ExecutionValidator:
                 validation_data['validation_status'] = ValidationStatus.APPROVED.value if validation.is_valid else ValidationStatus.REJECTED.value
                 validation_data['execution_cost_id'] = validation.execution_cost.cost_id if validation.execution_cost else None
                 validation_data['drift_validation_id'] = validation.drift_validation.validation_id if validation.drift_validation else None
-                validation_data['execution_validations'].append(validation_data)
+                validation_data['execution_validations'].append()
+                    validation_data
 
             with open(self.validation_file, 'w') as f:
                 json.dump(validation_data, f, indent=2)
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_validations")
-            safe_print(f"⚠️ Failed to save validations: {error_msg}")
+            safe_print(f"\\u26a0\\ufe0f Failed to save validations: {error_msg}")
 
     def simulate_execution_cost(self, trade: Dict[str, Any]) -> float:
-        """
+        """"""
         Simulate execution cost for trade validation.
 
         Args:
@@ -350,7 +372,7 @@ class ExecutionValidator:
 
         Returns:
         Simulated execution cost
-        """
+        """"""
         try:
             # Base cost
             base_cost = 0.001  # 0.1% base cost
@@ -383,37 +405,42 @@ class ExecutionValidator:
         except Exception:
             return 0.001
 
-    def validate(self, prices: Sequence[float], live_vector: Sequence[float], raw_signals: Sequence[float], proposed_action: TradeAction) -> ExecutionDecision:
-        """
+    def validate()
+            self,
+            prices: Sequence[float],
+            live_vector: Sequence[float],
+            raw_signals: Sequence[float],
+            proposed_action: TradeAction -> ExecutionDecision:
+        """"""
         Validates whether the proposed action is suitable under current phase logic.
-        """
+        """"""
         decision = self.loader.decide(prices, live_vector, raw_signals)
 
         phase = decision.phase_report.phase_state.name.lower()
         consensus = decision.consensus
         similarity = decision.overlay_match.similarity
 
-        action_allowed = self._evaluate_action(phase, consensus, similarity, proposed_action)
+        action_allowed = self._evaluate_action()
+            phase, consensus, similarity, proposed_action
 
-        exec_decision = ExecutionDecision(
+        exec_decision = ExecutionDecision()
             allow=action_allowed,
             strategy_id=decision.strategy_id,
             phase_state=phase,
             consensus=consensus,
             overlay_confidence=similarity,
             recommendation="Proceed" if action_allowed else "Hold due to phase conflict"
-        )
         # Log for feedback learning
     self._log_decision(exec_decision, proposed_action)
-        return exec_decision
+    return exec_decision
 
-    def _evaluate_action(
+    def _evaluate_action()
         self,
         phase: str,
         consensus: bool,
         similarity: float,
         action: TradeAction
-    ) -> bool:
+     -> bool:
         # Example logic (adjust thresholds as needed)
         if phase == "high" and action == "buy":
             return False
@@ -423,24 +450,27 @@ class ExecutionValidator:
             return False
         return True
 
-    def _log_decision(self, exec_decision: ExecutionDecision, action: TradeAction):
-        entry = {
+    def _log_decision()
+            self,
+            exec_decision: ExecutionDecision,
+            action: TradeAction:
+        entry = {}
             "timestamp": datetime.now().isoformat(),
             "action": action,
             "allowed": exec_decision.allow,
             "phase": exec_decision.phase_state,
             "similarity": exec_decision.overlay_confidence,
             "consensus": exec_decision.consensus
-        }
+        
     self.decision_log.append(entry)
-        if len(self.decision_log) > 1000:
+    if len(self.decision_log) > 1000:
         self.decision_log = self.decision_log[-1000:]
         # Optionally, persist to disk or external system
         # with open("execution_decision_log.json", "w") as f:
         #     json.dump(self.decision_log, f, indent=2)
 
     def _generate_trade_hash(self, trade: Dict[str, Any]) -> str:
-        """
+        """"""
         Generate hash from trade data.
 
         Args:
@@ -448,20 +478,25 @@ class ExecutionValidator:
 
         Returns:
         Hash string
-        """
+        """"""
         try:
             # Extract key trade parameters
-            trade_params = {
+            trade_params = {}
                 'price': trade.get('price', 0.0),
                 'quantity': trade.get('quantity', 0.0),
                 'side': trade.get('side', 'unknown'),
                 'timestamp': trade.get('timestamp', ''),
                 'symbol': trade.get('symbol', ''),
                 'order_type': trade.get('order_type', 'market')
-            }
+            
 
             # Create hash input string
-            hash_input = f"{trade_params['price']}_{trade_params['quantity']}_{trade_params['side']}_{trade_params['symbol']}_{trade_params['order_type']}"
+            hash_input = f"{"}
+                trade_params['price']}_{
+                trade_params['quantity']}_{
+                trade_params['side']}_{
+                trade_params['symbol']}_{
+                    trade_params['order_type']""
 
             # Generate hash
             hash_result = hashlib.sha256(hash_input.encode()).hexdigest()
@@ -471,8 +506,9 @@ class ExecutionValidator:
             logger.error(f"Trade hash generation failed: {e}")
             return "0000000000000000"
 
-    def _calculate_validation_score(self, trade: Dict[str, Any], expected_hash: str, actual_hash: str) -> float:
-        """
+    def _calculate_validation_score()
+            self, trade: Dict[str, Any], expected_hash: str, actual_hash: str -> float:
+        """"""
         Calculate validation score based on multiple factors.
 
         Args:
@@ -482,12 +518,13 @@ class ExecutionValidator:
 
         Returns:
         Validation score (0.0 to 1.0)
-        """
+        """"""
         try:
             scores = []
 
             # Hash similarity score
-            hash_similarity = self._calculate_hash_similarity(expected_hash, actual_hash)
+            hash_similarity = self._calculate_hash_similarity()
+                expected_hash, actual_hash
             scores.append(hash_similarity * 0.4)  # 40% weight
 
             # Trade parameter consistency score
@@ -510,14 +547,19 @@ class ExecutionValidator:
             logger.error(f"Validation score calculation failed: {e}")
             return 0.5
 
-    def _calculate_hash_similarity(self, expected_hash: str, actual_hash: str) -> float:
+    def _calculate_hash_similarity()
+            self,
+            expected_hash: str,
+            actual_hash: str -> float:
         """Calculate similarity between expected and actual hashes."""
         try:
             if len(expected_hash) != len(actual_hash):
                 return 0.0
 
             # Calculate Hamming distance
-            distance = sum(c1 != c2 for c1, c2 in zip(expected_hash, actual_hash))
+            distance = sum()
+                c1 != c2 for c1, c2 in zip()
+                    expected_hash, actual_hash
             max_distance = len(expected_hash)
 
             # Convert to similarity score
@@ -560,7 +602,8 @@ class ExecutionValidator:
             else:
                 consistency_scores.append(0.0)
 
-            return float(np.mean(consistency_scores)) if consistency_scores else 0.0
+            return float(np.mean(consistency_scores))
+                          if consistency_scores else 0.0
 
         except Exception:
             return 0.5
@@ -612,8 +655,11 @@ class ExecutionValidator:
         except Exception:
             return 0.5
 
-    def _calculate_drift_magnitude(self, expected_hash: str, actual_hash: str) -> float:
-        """
+    def _calculate_drift_magnitude()
+            self,
+            expected_hash: str,
+            actual_hash: str -> float:
+        """"""
         Calculate drift magnitude between expected and actual hashes.
 
         Args:
@@ -622,10 +668,11 @@ class ExecutionValidator:
 
         Returns:
         Drift magnitude (0.0 to 1.0)
-        """
+        """"""
         try:
             # Use hash similarity to calculate drift
-            similarity = self._calculate_hash_similarity(expected_hash, actual_hash)
+            similarity = self._calculate_hash_similarity()
+                expected_hash, actual_hash
             drift = 1.0 - similarity
 
             return float(drift)
@@ -633,8 +680,9 @@ class ExecutionValidator:
         except Exception:
             return 0.5
 
-    def _calculate_confidence_level(self, trade: Dict[str, Any], validation_score: float) -> float:
-        """
+    def _calculate_confidence_level()
+            self, trade: Dict[str, Any], validation_score: float -> float:
+        """"""
         Calculate confidence level for validation result.
 
         Args:
@@ -643,7 +691,7 @@ class ExecutionValidator:
 
         Returns:
         Confidence level (0.0 to 1.0)
-        """
+        """"""
         try:
             confidence_factors = []
 
@@ -659,8 +707,13 @@ class ExecutionValidator:
             confidence_factors.append(market_confidence)
 
             # Calculate weighted confidence
-            weights = [0.5, 0.3, 0.2]  # Validation score, trade quality, market confidence
-            confidence = sum(factor * weight for factor, weight in zip(confidence_factors, weights))
+            # Validation score, trade quality, market confidence
+            weights = [0.5, 0.3, 0.2]
+            confidence = sum()
+                factor * weight for factor,
+                weight in zip()
+                    confidence_factors,
+                    weights
 
             return float(confidence)
 
@@ -720,54 +773,62 @@ class ExecutionValidator:
         except Exception:
             return 0.5
 
-    def _get_score_components(self, trade: Dict[str, Any], expected_hash: str, actual_hash: str) -> Dict[str, float]:
+    def _get_score_components(self,)
+                              trade: Dict[str,]
+                                          Any,
+                              expected_hash: str,
+                              actual_hash: str -> Dict[str,]
+                                                        float:
         """Get individual score components for detailed analysis."""
         try:
-            return {
-                'hash_similarity': self._calculate_hash_similarity(expected_hash, actual_hash),
+            return {}
+                'hash_similarity': self._calculate_hash_similarity()
+                    expected_hash,
+                    actual_hash,
                 'parameter_consistency': self._calculate_parameter_consistency(trade),
                 'timing_consistency': self._calculate_timing_consistency(trade),
                 'market_alignment': self._calculate_market_alignment(trade)
-            }
         except Exception:
-            return {
+            return {}
                 'hash_similarity': 0.0,
                 'parameter_consistency': 0.0,
                 'timing_consistency': 0.0,
                 'market_alignment': 0.0
-            }
+            
 
-    def _analyze_drift(self, expected_hash: str, actual_hash: str) -> Dict[str, Any]:
+    def _analyze_drift(self, expected_hash: str,)
+                       actual_hash: str -> Dict[str, Any]:
         """Analyze drift between expected and actual hashes."""
         try:
-            drift_magnitude = self._calculate_drift_magnitude(expected_hash, actual_hash)
+            drift_magnitude = self._calculate_drift_magnitude()
+                expected_hash, actual_hash
 
-            return {
+            return {}
                 'magnitude': drift_magnitude,
                 'severity': 'low' if drift_magnitude < 0.2 else 'medium' if drift_magnitude < 0.5 else 'high',
                 'tolerance_exceeded': drift_magnitude > self.default_drift_tolerance
-            }
         except Exception:
-            return {
+            return {}
                 'magnitude': 0.5,
                 'severity': 'medium',
                 'tolerance_exceeded': True
-            }
+            
 
-    def _get_confidence_factors(self, trade: Dict[str, Any], validation_score: float) -> Dict[str, float]:
+    def _get_confidence_factors()
+            self, trade: Dict[str, Any], validation_score: float -> Dict[str, float]:
         """Get confidence factors for validation result."""
         try:
-            return {
+            return {}
                 'validation_score': validation_score,
                 'trade_quality': self._assess_trade_quality(trade),
                 'market_confidence': self._assess_market_confidence(trade)
-            }
+            
         except Exception:
-            return {
+            return {}
                 'validation_score': validation_score,
                 'trade_quality': 0.5,
                 'market_confidence': 0.5
-            }
+            
 
     def _generate_validation_id(self, trade: Dict[str, Any]) -> str:
         """Generate unique validation ID."""
@@ -778,8 +839,11 @@ class ExecutionValidator:
         except Exception:
             return f"val_{int(time.time())}"
 
-    def validate_drift(self, expected_sequence: List[str], actual_sequence: List[str]) -> bool:
-        """
+    def validate_drift()
+            self,
+            expected_sequence: List[str],
+            actual_sequence: List[str] -> bool:
+        """"""
         Validate drift in execution sequence.
 
         Args:
@@ -788,13 +852,17 @@ class ExecutionValidator:
 
         Returns:
         True if drift is within tolerance
-        """
+        """"""
         try:
             if len(expected_sequence) != len(actual_sequence):
                 return False
 
             # Calculate sequence similarity
-            matches = sum(1 for exp, act in zip(expected_sequence, actual_sequence) if exp == act)
+            matches = sum()
+                1 for exp,
+                act in zip()
+                    expected_sequence,
+                    actual_sequence if exp == act
             similarity = matches / len(expected_sequence)
 
             return similarity >= self.sequence_match_threshold
@@ -802,8 +870,9 @@ class ExecutionValidator:
         except Exception:
             return False
 
-    def validate_execution(self, trade: Dict[str, Any], expected_pattern: Dict[str, Any]) -> bool:
-        """
+    def validate_execution()
+            self, trade: Dict[str, Any], expected_pattern: Dict[str, Any] -> bool:
+        """"""
         Validate execution against expected pattern.
 
         Args:
@@ -812,17 +881,19 @@ class ExecutionValidator:
 
         Returns:
         True if execution matches pattern
-        """
+        """"""
         try:
             # Check price pattern
             expected_price = expected_pattern.get('price', 0.0)
             actual_price = trade.get('price', 0.0)
-            price_match = abs(actual_price - expected_price) / max(expected_price, 1e-8) < 0.05  # 5% tolerance
+            price_match = abs(actual_price - expected_price) / \
+                max(expected_price, 1e-8) < 0.05  # 5% tolerance
 
             # Check timing pattern
             expected_time = expected_pattern.get('execution_time', 0.0)
             actual_time = trade.get('execution_time', 0.0)
-            time_match = abs(actual_time - expected_time) < 2.0  # 2 second tolerance
+            time_match = abs(actual_time -)
+                             expected_time < 2.0  # 2 second tolerance
 
             # Check quantity pattern
             expected_quantity = expected_pattern.get('quantity', 0.0)
@@ -838,23 +909,23 @@ class ExecutionValidator:
     def get_validation_statistics(self) -> Dict[str, Any]:
         """Get validation execution statistics."""
         try:
-            return {
+            return {}
                 "total_validations": self.total_validations,
                 "successful_validations": self.successful_validations,
                 "success_rate": self.validation_success_rate,
                 "average_validation_score": np.mean([v.validation_score for v in self.execution_validations.values()]) if self.execution_validations else 0.0,
                 "average_drift_magnitude": np.mean([v.drift_magnitude for v in self.execution_validations.values()]) if self.execution_validations else 0.0,
                 "average_confidence_level": np.mean([v.confidence_level for v in self.execution_validations.values()]) if self.execution_validations else 0.0
-            }
+            
         except Exception:
-            return {
+            return {}
                 "total_validations": 0,
                 "successful_validations": 0,
                 "success_rate": 0.0,
                 "average_validation_score": 0.0,
                 "average_drift_magnitude": 0.0,
                 "average_confidence_level": 0.0
-            }
+            
 
 
 # Global instance for easy access
@@ -862,9 +933,14 @@ execution_validator = ExecutionValidator()
 
 
 # Convenience functions for external access
-def validate_execution(prices: Sequence[float], live_vector: Sequence[float], raw_signals: Sequence[float], proposed_action: TradeAction) -> ExecutionDecision:
+def validate_execution()
+        prices: Sequence[float],
+        live_vector: Sequence[float],
+        raw_signals: Sequence[float],
+        proposed_action: TradeAction -> ExecutionDecision:
     """Convenience function to validate trade execution."""
-    return execution_validator.validate(prices, live_vector, raw_signals, proposed_action)
+    return execution_validator.validate()
+        prices, live_vector, raw_signals, proposed_action
 
 
 def simulate_execution_cost(trade: Dict[str, Any]) -> float:
@@ -882,14 +958,18 @@ if __name__ == "__main__":
 
     # Test validation with different actions
     for action in ["buy", "sell", "hold"]:
-        safe_print(f"\nTesting action: {action}")
+        safe_print(f"\\nTesting action: {action}")
 
         # Validate execution
-        decision = validator.validate(test_prices, test_live_vector, test_raw_signals, action)
+        decision = validator.validate()
+            test_prices,
+            test_live_vector,
+            test_raw_signals,
+            action
         safe_print(f"Validation result: {decision}")
 
     # Test execution cost simulation
-    test_trade = {
+    test_trade = {}
         'trade_id': 'test_001',
         'price': 50000.0,
         'quantity': 0.1,
@@ -899,11 +979,15 @@ if __name__ == "__main__":
         'execution_time': 0.5,
         'timestamp': '2024-01-01T12:00:00Z',
         'market_data': {'volatility': 0.15}
-    }
+    
 
     cost = validator.simulate_execution_cost(test_trade)
     safe_print(f"Execution cost: {cost:.4f}")
 
     # Print statistics
     stats = validator.get_validation_statistics()
-    safe_print(f"\nValidator Statistics: {stats}")
+    safe_print(f"\\nValidator Statistics: {stats}")
+
+
+
+"""

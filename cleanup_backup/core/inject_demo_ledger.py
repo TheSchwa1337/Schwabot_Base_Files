@@ -91,7 +91,7 @@ class DemoLedgerInjector:
     Demo ledger state injector for backtesting and simulation.
 
     Mathematical Foundation:
-    - Portfolio Evolution: P(t+1) = P(t) + Σ(trades * price_changes)
+    - Portfolio Evolution: P(t+1) = P(t) + \\u03a3(trades * price_changes)
     - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Performance Tracking: total_return = (final_value - initial_value) / initial_value
     - Scenario Generation: scenario_params = f(market_conditions, risk_profile)
@@ -821,17 +821,17 @@ if __name__ == "__main__":
     scenarios = ["conservative", "balanced", "aggressive"]
 
     for scenario in scenarios:
-        safe_print(f"\n🧪 Testing {scenario} scenario...")
+        safe_print(f"\\n\\u1f9ea Testing {scenario} scenario...")
         success = injector.inject_demo_state(scenario)
-        safe_print(f"✅ {scenario} scenario: {'SUCCESS' if success else 'FAILED'}")
+        safe_print(f"\\u2705 {scenario} scenario: {'SUCCESS' if success else 'FAILED'}")
 
     # Get available scenarios
     available = injector.get_available_scenarios()
-    safe_print(f"\n📋 Available scenarios: {available}")
+    safe_print(f"\\n\\u1f4cb Available scenarios: {available}")
 
     # Load demo state
     demo_state = injector.load_demo_state("balanced")
     if demo_state:
-        safe_print(f"📊 Loaded demo state: {demo_state.scenario.value}")
+        safe_print(f"\\u1f4ca Loaded demo state: {demo_state.scenario.value}")
         safe_print(f"   Total return: {demo_state.performance_metrics.get('total_return', 0):.2%}")
         safe_print(f"   Total trades: {demo_state.performance_metrics.get('total_trades', 0)}")

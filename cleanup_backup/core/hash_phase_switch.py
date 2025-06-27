@@ -10,9 +10,9 @@ cycle.  When the phase is **0** the gate opens.
 
 Current implementation
 ----------------------
-• One public function :func:`phase_hash_gate`.
-• SHA-256 hashing – cryptographically strong yet std-lib only.
-• Fully typed, <= 79-char lines, Flake8-clean.
+\\u2022 One public function :func:`phase_hash_gate`.
+\\u2022 SHA-256 hashing \\u2013 cryptographically strong yet std-lib only.
+\\u2022 Fully typed, <= 79-char lines, Flake8-clean.
 """
 
 
@@ -52,8 +52,8 @@ def phase_hash_gate(
 
     Notes
     -----
-    • Uses SHA-256; swapping to Blake2 or SHA-3 later will not change the API.
-    • Gate condition is simply ``hash(tick) mod base_cycle == 0``.
+    \\u2022 Uses SHA-256; swapping to Blake2 or SHA-3 later will not change the API.
+    \\u2022 Gate condition is simply ``hash(tick) mod base_cycle == 0``.
     """
     if tick < 0:
         raise ValueError("tick must be non-negative")
@@ -63,3 +63,5 @@ def phase_hash_gate(
     hashed = _hash_int(tick, salt=salt)
     phase = hashed % base_cycle
     return phase == 0
+
+"""

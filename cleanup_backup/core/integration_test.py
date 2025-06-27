@@ -6,7 +6,7 @@ Integration Test - Schwabot UROS v1.0
 ====================================
 
 Comprehensive end-to-end integration test covering the full pipeline:
-DLT waveform → matrix mapping → tensor scoring → profit allocation → routing
+DLT waveform \\u2192 matrix mapping \\u2192 tensor scoring \\u2192 profit allocation \\u2192 routing
 
 Includes demo/live switching and API/wallet hooks for complete system validation.
 
@@ -99,7 +99,7 @@ class IntegrationTest:
     Comprehensive integration test for Schwabot system.
 
     Tests the complete pipeline:
-    DLT waveform → matrix mapping → tensor scoring → profit allocation → routing
+    DLT waveform \\u2192 matrix mapping \\u2192 tensor scoring \\u2192 profit allocation \\u2192 routing
     """
 
     def __init__(self, config_path: str = "./config/integration_test_config.json"):
@@ -854,15 +854,15 @@ class IntegrationTest:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
 
-            safe_print(f"✅ Integration test results exported to {output_path}")
+            safe_print(f"\\u2705 Integration test results exported to {output_path}")
 
         except Exception as e:
-            safe_print(f"❌ Error exporting integration test results: {e}")
+            safe_print(f"\\u274c Error exporting integration test results: {e}")
 
 
 if __name__ == "__main__":
     # Run integration test
-    safe_print("🚀 Starting Schwabot Integration Test...")
+    safe_print("\\u1f680 Starting Schwabot Integration Test...")
 
     integration_test = IntegrationTest()
 
@@ -871,7 +871,7 @@ if __name__ == "__main__":
         result = integration_test.run_full_integration_test()
 
         if result:
-            safe_print(f"\n📊 INTEGRATION TEST RESULTS")
+            safe_print(f"\\n\\u1f4ca INTEGRATION TEST RESULTS")
             safe_print(f"Overall Status: {result.overall_status.upper()}")
             safe_print(f"Total Tests: {result.total_tests}")
             safe_print(f"Passed: {result.passed_tests}")
@@ -885,15 +885,17 @@ if __name__ == "__main__":
 
             # Exit with appropriate code
             exit_code = 0 if result.overall_status == "passed" else 1
-            safe_print(f"\n🏁 Integration test completed with exit code: {exit_code}")
+            safe_print(f"\\n\\u1f3c1 Integration test completed with exit code: {exit_code}")
 
         else:
-            safe_print("❌ Integration test failed to complete")
+            safe_print("\\u274c Integration test failed to complete")
             exit(1)
 
     except KeyboardInterrupt:
-        safe_print("\n⏹️ Integration test interrupted by user")
+        safe_print("\\n\\u23f9\\ufe0f Integration test interrupted by user")
         exit(1)
     except Exception as e:
-        safe_print(f"❌ Integration test error: {e}")
+        safe_print(f"\\u274c Integration test error: {e}")
         exit(1)
+
+"""

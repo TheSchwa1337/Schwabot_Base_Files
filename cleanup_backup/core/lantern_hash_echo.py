@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lantern hash echo – H_L = hash(Ξₜ) · e^−τ."""
+"""Lantern hash echo \\u2013 H_L = hash(\\u039e\\u209c) \\u00b7 e^\\u2212\\u03c4."""
 
 from __future__ import annotations
 

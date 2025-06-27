@@ -11,14 +11,14 @@ using named tuples instead of temporary variables.
 
 Mathematical Foundation:
 - T: Triplet entropy from cursor patterns
-- Δθ: Braid angle drift from geometric analysis
-- ε: Fractal coherence from pattern matching
-- σ_f: Loop sum volatility from collapse engine
-- τ_p: Profit-time decay modifier
-- 𝓗: Tick harmony alignment score
-- 𝓓ₚ: Phase drift penalty
-- 𝓛: Liquidity depth score
-- P̂: Projected profit ratio
+- \\u0394\\u03b8: Braid angle drift from geometric analysis
+- \\u03b5: Fractal coherence from pattern matching
+- \\u03c3_f: Loop sum volatility from collapse engine
+- \\u03c4_p: Profit-time decay modifier
+- \\u1d4d7: Tick harmony alignment score
+- \\u1d4d3\\u209a: Phase drift penalty
+- \\u1d4db: Liquidity depth score
+- P\\u0302: Projected profit ratio
 
 Windows CLI compatible with proper error handling.
 """
@@ -39,14 +39,14 @@ class TradingSignalMetrics(NamedTuple):
     """Consolidated trading signal metrics."""
 
     triplet_entropy: float  # T - Information rate from patterns
-    theta_drift: float  # Δθ - Braid angle drift
-    coherence: float  # ε - Fractal coherence score
-    loop_volatility: float  # σ_f - Loop sum volatility
-    profit_decay: float  # τ_p - Time-weighted profit modifier
-    harmony: float  # 𝓗 - Tick harmony alignment
-    drift_penalty: float  # 𝓓ₚ - Phase drift penalty
-    liquidity_score: float  # 𝓛 - Normalized liquidity depth
-    projected_profit: float  # P̂ - Expected profit ratio
+    theta_drift: float  # \\u0394\\u03b8 - Braid angle drift
+    coherence: float  # \\u03b5 - Fractal coherence score
+    loop_volatility: float  # \\u03c3_f - Loop sum volatility
+    profit_decay: float  # \\u03c4_p - Time-weighted profit modifier
+    harmony: float  # \\u1d4d7 - Tick harmony alignment
+    drift_penalty: float  # \\u1d4d3\\u209a - Phase drift penalty
+    liquidity_score: float  # \\u1d4db - Normalized liquidity depth
+    projected_profit: float  # P\\u0302 - Expected profit ratio
     timestamp: float  # Collection timestamp
 
 
@@ -84,11 +84,11 @@ class SignalCollector:
         Parameters
         ----------
         cursor_state : Dict, optional
-            State from cursor engine (contains Δθ, T)
+            State from cursor engine (contains \\u0394\\u03b8, T)
         fractal_state : Dict, optional
-            State from fractal engine (contains ε)
+            State from fractal engine (contains \\u03b5)
         collapse_state : Dict, optional
-            State from collapse engine (contains σ_f)
+            State from collapse engine (contains \\u03c3_f)
         market_data : Dict, optional
             Current market data for liquidity and profit calculations
 
@@ -98,7 +98,7 @@ class SignalCollector:
             Consolidated signal metrics
         """
         try:
-            # Extract cursor signals (T, Δθ)
+            # Extract cursor signals (T, \\u0394\\u03b8)
             if cursor_state:
                 triplet_entropy = cursor_state.get("triplet_entropy", 0.0)
                 theta_drift = cursor_state.get("braid_angle_drift", 0.0)
@@ -106,13 +106,13 @@ class SignalCollector:
                 triplet_entropy = 0.0
                 theta_drift = 0.0
 
-            # Extract fractal signals (ε)
+            # Extract fractal signals (\\u03b5)
             if fractal_state:
                 coherence = fractal_state.get("coherence_score", 0.0)
             else:
                 coherence = 0.0
 
-            # Extract collapse signals (σ_f, τ_p)
+            # Extract collapse signals (\\u03c3_f, \\u03c4_p)
             if collapse_state:
                 loop_volatility = collapse_state.get("loop_sum_volatility", 0.0)
                 profit_decay = collapse_state.get("profit_time_decay", 0.0)
@@ -572,7 +572,7 @@ def main() -> None:
     safe_print(f"  Liquidity Score: {core_signals.liquidity_score:.3f}")
     safe_print(f"  Projected Profit: {core_signals.projected_profit:.3f}")
 
-    safe_print(f"\nBTC Investment Signals:")
+    safe_print(f"\\nBTC Investment Signals:")
     safe_print(f"  V_BTC: {btc_signals.v_btc:.3f}")
     safe_print(f"  Eta_BTC: {btc_signals.eta_btc:.3f}")
     safe_print(f"  Xi_BTC: {btc_signals.xi_btc:.3f}")
@@ -580,8 +580,10 @@ def main() -> None:
 
     # Get summary
     summary = signal_collector.get_signal_summary()
-    safe_print(f"\nSignal Summary: {summary}")
+    safe_print(f"\\nSignal Summary: {summary}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

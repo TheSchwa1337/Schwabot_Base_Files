@@ -13,7 +13,7 @@ Mathematical Foundation:
 scale_factor = base_scale * (1 + confidence_multiplier + profit_multiplier)
 
 Where:
-- confidence_multiplier = unified_math.max(0, (Ξ - threshold) * confidence_weight)
+- confidence_multiplier = unified_math.max(0, (\\u039e - threshold) * confidence_weight)
 - profit_multiplier = projected_profit * profit_weight
 - Result is clamped to [min_scale, max_scale] range
 
@@ -56,9 +56,9 @@ def scale_position(
     Parameters
     ----------
     confidence : float
-        Execution confidence scalar (Ξ)
+        Execution confidence scalar (\\u039e)
     projected_profit : float
-        Expected profit ratio (P̂)
+        Expected profit ratio (P\\u0302)
     base_scale : float, optional
         Base scaling factor
     min_scale : float, optional
@@ -555,14 +555,14 @@ def main() -> None:
             base_pos, confidence, profit, account_bal
         )
 
-        safe_print(f"\n{description}:")
+        safe_print(f"\\n{description}:")
         safe_print(f"  Confidence: {confidence:.2f}, Profit: {profit:.3f}")
         safe_print(f"  Scale factor: {scale_factor:.2f}")
         safe_print(f"  Position size: ${position_size:.2f}")
         safe_print(f"  Risk %: {details['risk_percentage']:.2f}%")
 
     # Test auto scaler class
-    safe_print("\nAuto Scaler Class Test:")
+    safe_print("\\nAuto Scaler Class Test:")
     scaler = AutoScaler()
 
     # Simulate some trades
@@ -579,7 +579,7 @@ def main() -> None:
 
     # Get performance summary
     summary = scaler.get_performance_summary()
-    safe_print("\nPerformance Summary:")
+    safe_print("\\nPerformance Summary:")
     safe_print(f"  Total trades: {summary.get('total_trades', 0)}")
     safe_print(f"  Mean return: {summary.get('mean_return', 0):.4f}")
     safe_print(f"  Sharpe ratio: {summary.get('sharpe_ratio', 0):.2f}")
@@ -587,3 +587,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

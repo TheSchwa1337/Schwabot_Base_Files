@@ -347,7 +347,7 @@ class BitPhaseEngine:
 
 def main():
     """Test function for Bit Phase Engine."""
-    safe_print("🧮 Testing Bit Phase Engine...")
+    safe_print("\\u1f9ee Testing Bit Phase Engine...")
 
     engine = BitPhaseEngine()
 
@@ -355,7 +355,7 @@ def main():
     test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
 
     # Test different modes
-    safe_print(f"\nTesting hash: {test_hash[:16]}...")
+    safe_print(f"\\nTesting hash: {test_hash[:16]}...")
 
     for mode in engine.supported_modes:
         phase = engine.resolve_bit_phase(test_hash, mode)
@@ -369,12 +369,12 @@ def main():
     }
 
     optimal_phase, optimal_mode = engine.get_optimal_phase(test_hash, market_conditions)
-    safe_print(f"\nOptimal phase: {optimal_phase} (mode: {optimal_mode})")
+    safe_print(f"\\nOptimal phase: {optimal_phase} (mode: {optimal_mode})")
 
     # Test pattern analysis
     hash_sequence = [test_hash] * 10  # Simple test
     analysis = engine.analyze_phase_patterns(hash_sequence)
-    safe_print(f"\nPattern analysis: {len(analysis.get('phase_statistics', {}))} modes analyzed")
+    safe_print(f"\\nPattern analysis: {len(analysis.get('phase_statistics', {}))} modes analyzed")
 
     return 0
 

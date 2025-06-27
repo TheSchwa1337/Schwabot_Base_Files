@@ -80,7 +80,7 @@ class CommandDensityAnalyzer:
         self.clusters_detected = 0
         self.warnings_generated = 0
 
-        safe_safe_print("📊 Command Density Analyzer initialized")
+        safe_safe_print("\\u1f4ca Command Density Analyzer initialized")
 
     def analyze_command(
         self,
@@ -119,7 +119,7 @@ class CommandDensityAnalyzer:
 
         except Exception as e:
             error_msg = safe_format_error(e, "analyze_command")
-            safe_safe_print(f"❌ Command analysis failed: {error_msg}")
+            safe_safe_print(f"\\u274c Command analysis failed: {error_msg}")
             return None
 
     def _clean_old_commands(self, current_tick: int) -> None:
@@ -166,7 +166,7 @@ class CommandDensityAnalyzer:
             return new_cluster
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cluster creation failed: {safe_format_error(e, 'cluster_creation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cluster creation failed: {safe_format_error(e, 'cluster_creation')}")
             return None
 
     def _is_command_in_cluster(
@@ -198,7 +198,7 @@ class CommandDensityAnalyzer:
             return False
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cluster membership check failed: {safe_format_error(e, 'cluster_check')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cluster membership check failed: {safe_format_error(e, 'cluster_check')}")
             return False
 
     def _compute_command_hash(self, command: Dict) -> str:
@@ -216,7 +216,7 @@ class CommandDensityAnalyzer:
             return hashlib.sha256(hash_string.encode()).hexdigest()[:16]
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Hash computation failed: {safe_format_error(e, 'hash_computation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Hash computation failed: {safe_format_error(e, 'hash_computation')}")
             return hashlib.sha256(str(command).encode()).hexdigest()[:16]
 
     def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
@@ -238,7 +238,7 @@ class CommandDensityAnalyzer:
             return similarity
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity_calc')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Similarity calculation failed: {safe_format_error(e, 'similarity_calc')}")
             return 0.0
 
     def _calculate_cluster_similarity(self, cluster: CommandCluster) -> float:
@@ -258,7 +258,7 @@ class CommandDensityAnalyzer:
             return unified_math.unified_math.mean(similarities) if similarities else 1.0
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cluster similarity calculation failed: {safe_format_error(e, 'cluster_similarity')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cluster similarity calculation failed: {safe_format_error(e, 'cluster_similarity')}")
             return 1.0
 
     def _generate_density_warning(
@@ -295,12 +295,12 @@ class CommandDensityAnalyzer:
                 self.fault_bus.push(fault_event)
 
             safe_safe_print(
-                f"⚠️ Density warning: {cluster.agent_count} agents, {len(cluster.commands)} commands in {cluster.domain.value}")
+                f"\\u26a0\\ufe0f Density warning: {cluster.agent_count} agents, {len(cluster.commands)} commands in {cluster.domain.value}")
 
             return warning
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Warning generation failed: {safe_format_error(e, 'warning_generation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Warning generation failed: {safe_format_error(e, 'warning_generation')}")
             return {}
 
     def _calculate_warning_severity(self, cluster: CommandCluster) -> float:
@@ -320,7 +320,7 @@ class CommandDensityAnalyzer:
             return np.clip(severity, 0.0, 1.0)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Severity calculation failed: {safe_format_error(e, 'severity_calc')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Severity calculation failed: {safe_format_error(e, 'severity_calc')}")
             return 0.5
 
     def _generate_recommendation(self, cluster: CommandCluster) -> str:
@@ -336,7 +336,7 @@ class CommandDensityAnalyzer:
                 return "Monitor command patterns for emerging density issues"
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Recommendation generation failed: {safe_format_error(e, 'recommendation_gen')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Recommendation generation failed: {safe_format_error(e, 'recommendation_gen')}")
             return "Review command patterns"
 
     def get_density_metrics(self) -> Dict:
@@ -352,7 +352,7 @@ class CommandDensityAnalyzer:
                 "max_cluster_size": max([len(c.commands) for c in self.command_clusters.values()]) if self.command_clusters else 0
             }
         except Exception as e:
-            safe_safe_print(f"⚠️ Metrics calculation failed: {safe_format_error(e, 'metrics_calc')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Metrics calculation failed: {safe_format_error(e, 'metrics_calc')}")
             return {}
 
     def get_active_clusters(self) -> List[Dict]:
@@ -371,7 +371,7 @@ class CommandDensityAnalyzer:
                 })
             return clusters_info
         except Exception as e:
-            safe_safe_print(f"⚠️ Cluster info retrieval failed: {safe_format_error(e, 'cluster_info')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cluster info retrieval failed: {safe_format_error(e, 'cluster_info')}")
             return []
 
     def clear_old_clusters(self, current_tick: int) -> None:
@@ -387,10 +387,10 @@ class CommandDensityAnalyzer:
                 del self.command_clusters[cluster_id]
 
             if old_clusters:
-                safe_safe_print(f"🧹 Cleared {len(old_clusters)} old clusters")
+                safe_safe_print(f"\\u1f9f9 Cleared {len(old_clusters)} old clusters")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cluster cleanup failed: {safe_format_error(e, 'cluster_cleanup')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cluster cleanup failed: {safe_format_error(e, 'cluster_cleanup')}")
 
 
 # Global instance for easy access
@@ -418,7 +418,7 @@ def get_density_metrics() -> Dict:
 if __name__ == "__main__":
     async def test_density_analyzer():
         """Test command density analyzer."""
-        safe_safe_print("📊 Testing Command Density Analyzer...")
+        safe_safe_print("\\u1f4ca Testing Command Density Analyzer...")
 
         # Create test commands
         test_commands = [
@@ -455,10 +455,12 @@ if __name__ == "__main__":
         metrics = get_density_metrics()
         clusters = density_analyzer.get_active_clusters()
 
-        safe_safe_print("✅ Command Density Analyzer test completed")
+        safe_safe_print("\\u2705 Command Density Analyzer test completed")
         safe_safe_print(f"Metrics: {metrics}")
         safe_safe_print(f"Active clusters: {len(clusters)}")
 
     # Run test
     import asyncio
     asyncio.run(test_density_analyzer())
+
+"""

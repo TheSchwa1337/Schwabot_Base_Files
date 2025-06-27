@@ -170,17 +170,17 @@ def start_background_tasks():
 def print_startup_banner():
     """Print Schwabot startup banner."""
     banner = """
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                                                              ║
-    ║                    🧠 SCHWABOT TRADING SYSTEM                ║
-    ║                                                              ║
-    ║              Hardware-Scale-Aware Economic Kernel            ║
-    ║                                                              ║
-    ║  Mathematical Foundation: Phantom Lag Model, Ghost Bridge    ║
-    ║  Real-time Trading: Multi-exchange with Arbitrage Detection  ║
-    ║  Distributed Architecture: Federated Device Support          ║
-    ║                                                              ║
-    ╚══════════════════════════════════════════════════════════════╝
+    \\u2554\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2557
+    \\u2551                                                              \\u2551
+    \\u2551                    \\u1f9e0 SCHWABOT TRADING SYSTEM                \\u2551
+    \\u2551                                                              \\u2551
+    \\u2551              Hardware-Scale-Aware Economic Kernel            \\u2551
+    \\u2551                                                              \\u2551
+    \\u2551  Mathematical Foundation: Phantom Lag Model, Ghost Bridge    \\u2551
+    \\u2551  Real-time Trading: Multi-exchange with Arbitrage Detection  \\u2551
+    \\u2551  Distributed Architecture: Federated Device Support          \\u2551
+    \\u2551                                                              \\u2551
+    \\u255a\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u2550\\u255d
     """
     print(banner)
 
@@ -191,7 +191,7 @@ def print_system_info():
         settings = components['settings_manager']
         config_summary = settings.get_configuration_summary()
 
-        safe_print("\n📊 System Configuration:")
+        safe_print("\\n\\u1f4ca System Configuration:")
         safe_print(f"   Environment: {config_summary.get('environment', 'unknown')}")
         safe_print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
         safe_print(f"   Log Level: {config_summary.get('log_level', 'INFO')}")
@@ -236,17 +236,17 @@ def main():
         # Get configuration
         settings_manager = components['settings_manager']
         ui_config = settings_manager.ui_settings.web_dashboard
-        host = ui_config.get('host', '0.0.0.0')
+        host = ui_config.get('host', '0.0_0.0')
         port = ui_config.get('port', 8080)
 
         # Setup signal handlers for graceful shutdown
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-        safe_print(f"\n✅ Schwabot starting on http://{host}:{port}")
-        safe_print("📊 Access the dashboard in your web browser")
-        safe_print("🔧 Use Ctrl+C to stop the server gracefully")
-        safe_print("\n🚀 System Status: RUNNING")
+        safe_print(f"\\n\\u2705 Schwabot starting on http://{host}:{port}")
+        safe_print("\\u1f4ca Access the dashboard in your web browser")
+        safe_print("\\u1f527 Use Ctrl+C to stop the server gracefully")
+        safe_print("\\n\\u1f680 System Status: RUNNING")
 
         # Start the Flask app
         socketio.run(
@@ -277,10 +277,12 @@ def main():
                 logger.error(f"Error cleaning up {name}: {e}")
 
         logger.info("Schwabot shutdown complete")
-        safe_print("\n⏹️ Schwabot stopped gracefully")
+        safe_print("\\n\\u23f9\\ufe0f Schwabot stopped gracefully")
 
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+"""

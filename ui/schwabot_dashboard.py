@@ -503,10 +503,10 @@ def create_templates():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Schwabot Dashboard{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1_3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0_0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0_1/socket.io.js"></script>
     <style>
         .sidebar { min-height: 100vh; background-color: #2c3e50; }
         .sidebar .nav-link { color: #ecf0f1; }
@@ -525,7 +525,7 @@ def create_templates():
             <!-- Sidebar -->
             <nav class="col-md-2 sidebar">
                 <div class="p-3">
-                    <h4 class="text-white">🧠 Schwabot</h4>
+                    <h4 class="text-white">\\u1f9e0 Schwabot</h4>
                     <hr class="text-white">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -569,7 +569,7 @@ def create_templates():
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1_3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Initialize Socket.IO
         const socket = io();
@@ -729,11 +729,11 @@ fetch('/api/performance')
 
 def main():
     """Main function to run the dashboard."""
-    safe_print("🧠 Starting Schwabot Web Dashboard...")
+    safe_print("\\u1f9e0 Starting Schwabot Web Dashboard...")
 
     # Initialize components
     if not initialize_components():
-        safe_print("❌ Failed to initialize components")
+        safe_print("\\u274c Failed to initialize components")
         return 1
 
     # Create templates
@@ -750,23 +750,23 @@ def main():
     # Get configuration
     if settings_manager:
         ui_config = settings_manager.ui_settings.web_dashboard
-        host = ui_config.get('host', '0.0.0.0')
+        host = ui_config.get('host', '0.0_0.0')
         port = ui_config.get('port', 8080)
     else:
-        host = '0.0.0.0'
+        host = '0.0_0.0'
         port = 8080
 
-    safe_print(f"✅ Dashboard starting on http://{host}:{port}")
-    safe_print("📊 Access the dashboard in your web browser")
-    safe_print("🔧 Use Ctrl+C to stop the server")
+    safe_print(f"\\u2705 Dashboard starting on http://{host}:{port}")
+    safe_print("\\u1f4ca Access the dashboard in your web browser")
+    safe_print("\\u1f527 Use Ctrl+C to stop the server")
 
     try:
         # Run the Flask app
         socketio.run(app, host=host, port=port, debug=False)
     except KeyboardInterrupt:
-        safe_print("\n⏹️ Dashboard stopped by user")
+        safe_print("\\n\\u23f9\\ufe0f Dashboard stopped by user")
     except Exception as e:
-        safe_print(f"❌ Error running dashboard: {e}")
+        safe_print(f"\\u274c Error running dashboard: {e}")
         return 1
 
     return 0
@@ -774,3 +774,5 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+"""

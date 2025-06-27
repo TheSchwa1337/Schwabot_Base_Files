@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tests/__init__.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""tests/__init__.py \\u2014 TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package
 remains importable.  Replace with a clean implementation ASAP.
@@ -18,8 +18,8 @@ logging.basicConfig(
 )
 
 # Test framework version
-__version__ = "0.5.0"
-__test_framework_version__ = "1.0.0"
+__version__ = "0.5_0"
+__test_framework_version__ = "1.0_0"
 
 # Test configuration
 TEST_CONFIG = {
@@ -446,4 +446,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-\n# -*- coding: utf-8 -*-\n
+\\n# -*- coding: utf-8 -*-\\n

@@ -46,7 +46,7 @@ class SimplifiedBTCIntegration:
         Args:
             config: Integration configuration.
         """
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Initialize CLI compatibility handler
@@ -438,3 +438,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -1,4 +1,4 @@
-"""News→sentiment vectoriser for ghost routing."""
+"""News\\u2192sentiment vectoriser for ghost routing."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math
@@ -16,10 +16,10 @@ _W: np.ndarray = np.random.randn(512) * 0.03  # Will be learned later
 
 
 def sentiment_lambda(corpus: list[str]) -> float:
-    """Return λ_sent ∈ [-1,1] for latest news headline batch.
+    """Return \\u03bb_sent \\u2208 [-1,1] for latest news headline batch.
 
     Compute sentiment using TF-IDF vectorization:
-    λ_sentiment = tanh(W·TF-IDF(tokens))
+    \\u03bb_sentiment = tanh(W\\u00b7TF-IDF(tokens))
 
     Args:
         corpus: List of news headlines/text
@@ -54,3 +54,5 @@ def sentiment_lambda(corpus: list[str]) -> float:
     except Exception:
         # Fallback for edge cases
         return 0.0
+
+"""

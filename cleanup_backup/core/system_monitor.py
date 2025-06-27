@@ -135,7 +135,7 @@ class SystemMonitor:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize system monitor."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Monitoring state

@@ -109,7 +109,7 @@ def main():
             stats = fix_file(file_path)
             total_fixed += stats["imports_moved"]
 
-    print(f"\nTotal imports moved: {total_fixed}")
+    print(f"\\nTotal imports moved: {total_fixed}")
 
 
 if __name__ == "__main__":

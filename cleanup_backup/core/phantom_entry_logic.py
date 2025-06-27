@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Phantom entry logic – compute entry probability Pₑ.
+"""Phantom entry logic \\u2013 compute entry probability P\\u2091.
 
 Formula implemented:
 
-    Pₑ = Σ_i (ζ_i · τ_i) · exp(−λ_entry · t)
+    P\\u2091 = \\u03a3_i (\\u03b6_i \\u00b7 \\u03c4_i) \\u00b7 exp(\\u2212\\u03bb_entry \\u00b7 t)
 
 The summation is a dot-product between *zeta* and *tau* vectors (same length).
 """
@@ -32,10 +32,10 @@ def phantom_entry_probability(
     t: float = 0.0,
     mu_threshold: float = 0.5,
 ) -> float:
-    """Return entry probability P_entry ∈ [0, 1].
+    """Return entry probability P_entry \\u2208 [0, 1].
 
     Implements the specification:
-        P_entry = tanh( Σ α_i Φ_i(x,t) ) · exp(−λ·t)
+        P_entry = tanh( \\u03a3 \\u03b1_i \\u03a6_i(x,t) ) \\u00b7 exp(\\u2212\\u03bb\\u00b7t)
     and applies validation gates using *zeta_final*, *mu_echo* and
     the current *price_now* relative to the *profit_band* limits.
     """

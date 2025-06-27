@@ -8,11 +8,14 @@ import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 
-def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> float:
-    """Calculate exit weight based on profit vs target.
+def exit_weight()
+        p_profit: float,
+        p_target: float,
+        half_life_sec: int = 900 -> float:
+    """Calculate exit weight based on profit vs target."""
 
-    Compute exit signal: Φ_exit = sign(P - P_target) · κ_decay(t)
-    where κ_decay(t) = exp(-t/τ)
+    Compute exit signal: \\u03a6_exit = sign(P - P_target) . kappa_decay(t)
+    where kappa_decay(t) = exp(-t/tau)
 
     Args:
         p_profit: Current profit level
@@ -20,8 +23,8 @@ def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> f
         half_life_sec: Decay half-life in seconds (default 15min)
 
     Returns:
-        Exit weight (0→hold, 1→full close)
-    """
+        Exit weight (0->hold, 1->full close)
+    """"""
     # Exponential decay factor
     kappa = unified_math.exp(-time.time() / half_life_sec)
 
@@ -31,3 +34,7 @@ def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> f
 
 # Module exports
 __all__ = ["exit_weight"]
+
+
+
+"""

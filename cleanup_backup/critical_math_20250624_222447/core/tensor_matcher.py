@@ -5,12 +5,12 @@ from core.unified_math_system import unified_math
 Tensor Matcher - Schwabot UROS v1.0
 ==================================
 
-Connects phase → strategy scoring with tensor operations and matrix basket routing.
+Connects phase \\u2192 strategy scoring with tensor operations and matrix basket routing.
 Implements the core mathematical functions for phase-weighted matrix calculations
 and tensor score resolution for trade priority determination.
 
 Core Mathematical Functions:
-- Phase weight matrix: phase_weight = (bit_score * entropy) / (len(bits) + ε)
+- Phase weight matrix: phase_weight = (bit_score * entropy) / (len(bits) + \\u03b5)
 - Tensor score calculation: T = (current - entry) / entry * (phase + 1)
 - Strategy mapping: strategy = f(bit_phase, entropy, volatility)
 - Matrix basket routing: basket = hash_to_basket(hash, bit_phase)
@@ -72,10 +72,10 @@ class PhaseWeightMatrix:
 
 class TensorMatcher:
     """
-    Tensor Matcher for phase → strategy scoring and matrix basket routing.
+    Tensor Matcher for phase \\u2192 strategy scoring and matrix basket routing.
 
     Mathematical Foundation:
-    - Phase Weight Matrix: phase_weight = (bit_score * entropy) / (len(bits) + ε)
+    - Phase Weight Matrix: phase_weight = (bit_score * entropy) / (len(bits) + \\u03b5)
     - Tensor Scoring: T = (current - entry) / entry * (phase + 1)
     - Strategy Mapping: strategy = f(bit_phase, entropy, volatility)
     - Matrix Basket Routing: basket = hash_to_basket(hash, bit_phase)
@@ -158,7 +158,7 @@ class TensorMatcher:
         Calculate phase weight matrix score.
 
         Mathematical Formula:
-        phase_weight = (bit_score * entropy) / (len(bits) + ε)
+        phase_weight = (bit_score * entropy) / (len(bits) + \\u03b5)
 
         Parameters:
         -----------
@@ -180,7 +180,7 @@ class TensorMatcher:
             # Calculate bit score
             bit_score = sum(bit_pattern)
 
-            # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + ε)
+            # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + \\u03b5)
             epsilon = 1e-6  # Small constant to avoid division by zero
             phase_weight = (bit_score * entropy) / (len(bit_pattern) + epsilon)
 
@@ -558,3 +558,5 @@ if __name__ == "__main__":
     # Get statistics
     stats = matcher.get_match_statistics()
     safe_print(f"Match Statistics: {stats}")
+
+"""

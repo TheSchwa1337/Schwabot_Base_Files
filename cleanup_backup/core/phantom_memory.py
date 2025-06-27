@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Phantom memory – decay-corrected ghost state recall.
+"""Phantom memory \\u2013 decay-corrected ghost state recall.
 
 Implements the memory formula:
-    M_r = Σ ζ_i ∘ t_i where Ξ ∈ Σ(ghost_log)
+    M_r = \\u03a3 \\u03b6_i \\u2218 t_i where \\u039e \\u2208 \\u03a3(ghost_log)
 
 This module maintains a rolling window of ghost events with exponential decay
 weighting to preserve the most relevant historical triggers while allowing

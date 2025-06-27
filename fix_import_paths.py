@@ -56,7 +56,7 @@ except ImportError:
 
 def main():
     """Main function to fix all import paths."""
-    print("🔧 Fixing Import Paths in Schwabot Core Files")
+    print("\\u1f527 Fixing Import Paths in Schwabot Core Files")
     print("=" * 50)
 
     # Get all Python files in core directory
@@ -70,8 +70,8 @@ def main():
         if fix_import_paths_in_file(file_path):
             fixed_count += 1
 
-    print(f"\n✅ Fixed {fixed_count} files")
-    print("🎉 Import path fixing completed!")
+    print(f"\\n\\u2705 Fixed {fixed_count} files")
+    print("\\u1f389 Import path fixing completed!")
 
 
 if __name__ == "__main__":

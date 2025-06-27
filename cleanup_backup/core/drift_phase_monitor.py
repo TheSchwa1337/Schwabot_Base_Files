@@ -5,12 +5,12 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Drift Phase Monitor - Phase Drift Penalty Calculator.
 
-This module computes phase drift penalties (𝓓ₚ) that measure timing
+This module computes phase drift penalties (\\u1d4d3\\u209a) that measure timing
 deviations from expected phase cycles. The drift penalty feeds into
 the entropy-weighted entry score calculation.
 
 Mathematical Foundation:
-𝓓ₚ = ((now - t_entry) % T_expected) / T_expected
+\\u1d4d3\\u209a = ((now - t_entry) % T_expected) / T_expected
 
 Where:
 - now: Current timestamp
@@ -405,8 +405,10 @@ def main() -> None:
 
     # Test multi-phase analysis
     multi_drift = compute_multi_phase_drift(current_time - 0.1, current_time)
-    safe_print(f"\nMulti-phase drift: {multi_drift}")
+    safe_print(f"\\nMulti-phase drift: {multi_drift}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

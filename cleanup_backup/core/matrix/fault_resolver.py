@@ -8,8 +8,8 @@ from core.unified_math_system import unified_math
 def check_rank(matrix: np.ndarray, eps: int = 0) -> None:
     """Check matrix rank consistency and raise if drift exceeds threshold.
 
-    Verify rank stability: δ = rank(A) – rank(A·Aᵀ)
-    Raise ValueError if |δ| > eps
+    Verify rank stability: \\u03b4 = rank(A) \\u2013 rank(A\\u00b7A\\u1d40)
+    Raise ValueError if |\\u03b4| > eps
 
     Args:
         matrix: Input matrix to check
@@ -24,3 +24,5 @@ def check_rank(matrix: np.ndarray, eps: int = 0) -> None:
     drift = unified_math.abs(r1 - r2)
     if drift > eps:
         raise ValueError(f"Rank drift {r1}->{r2} = {drift} > {eps}")
+
+"""

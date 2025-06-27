@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 #!/usr/bin/env python3
-"""Glyph phase anchor – map glyph hash to Ferris wheel tick phase.
+"""Glyph phase anchor \\u2013 map glyph hash to Ferris wheel tick phase.
 
 Given the 42-tick Ferris wheel used in Schwabot, we often quantise down to
 smaller sub-rings (default 16) for glyph anchoring.  The mapping is deterministic:
@@ -45,3 +45,5 @@ def glyph_active_for_tick(
         raise ValueError("tick must be non-negative")
     phase_idx = phase_anchor_index(glyph_hash, wheel_size=wheel_size)
     return (tick % base_cycle) % wheel_size == phase_idx
+
+"""

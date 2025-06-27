@@ -83,7 +83,7 @@ class TradeSimulator:
 
     Mathematical Foundation:
     - Trade Impact: impact = quantity * price * direction
-    - Portfolio Value: total = cash + Σ(positions * current_prices)
+    - Portfolio Value: total = cash + \\u03a3(positions * current_prices)
     - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Strategy Scoring: score = tensor_score * bit_phase * market_conditions
     """

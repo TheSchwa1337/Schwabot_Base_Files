@@ -26,11 +26,11 @@ Key Features:
 - Windows CLI compatibility with emoji fallbacks
 
 Mathematical Foundations:
-- GEMM: C = α * A * B + β * C (General Matrix Multiply)
-- SYMM: C = α * A * B + β * C (Symmetric Matrix Multiply)
-- TRMM: B = α * A * B (Triangular Matrix Multiply)
-- SYRK: C = α * A * A^T + β * C (Symmetric Rank-K Update)
-- GER: A = A + α * x * y^T (Rank-1 Update)
+- GEMM: C = \\u03b1 * A * B + \\u03b2 * C (General Matrix Multiply)
+- SYMM: C = \\u03b1 * A * B + \\u03b2 * C (Symmetric Matrix Multiply)
+- TRMM: B = \\u03b1 * A * B (Triangular Matrix Multiply)
+- SYRK: C = \\u03b1 * A * A^T + \\u03b2 * C (Symmetric Rank-K Update)
+- GER: A = A + \\u03b1 * x * y^T (Rank-1 Update)
 
 Performance Optimizations:
 - Block matrix multiplication for cache efficiency
@@ -80,46 +80,46 @@ except ImportError:
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """Fallback emoji-safe print function."""
             emoji_mapping = {
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🚨": "[ALERT]",
-                "🎉": "[COMPLETE]",
-                "🔄": "[PROCESSING]",
-                "⏳": "[WAITING]",
-                "⭐": "[STAR]",
-                "🚀": "[LAUNCH]",
-                "🔧": "[TOOLS]",
-                "🛠️": "[REPAIR]",
-                "⚡": "[FAST]",
-                "🔍": "[SEARCH]",
-                "🎯": "[TARGET]",
-                "🔥": "[HOT]",
-                "❄️": "[COOL]",
-                "📊": "[DATA]",
-                "📈": "[PROFIT]",
-                "📉": "[LOSS]",
-                "💰": "[MONEY]",
-                "🧪": "[TEST]",
-                "⚖️": "[BALANCE]",
-                "️": "[TEMP]",
-                "🔬": "[ANALYZE]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u23f3": "[WAITING]",
+                "\\u2b50": "[STAR]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u1f527": "[TOOLS]",
+                "\\u1f6e0\\ufe0f": "[REPAIR]",
+                "\\u26a1": "[FAST]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f525": "[HOT]",
+                "\\u2744\\ufe0f": "[COOL]",
+                "\\u1f4ca": "[DATA]",
+                "\\u1f4c8": "[PROFIT]",
+                "\\u1f4c9": "[LOSS]",
+                "\\u1f4b0": "[MONEY]",
+                "\\u1f9ea": "[TEST]",
+                "\\u2696\\ufe0f": "[BALANCE]",
+                "\\ufe0f": "[TEMP]",
+                "\\u1f52c": "[ANALYZE]",
                 "": "[SYSTEM]",
-                "️": "[COMPUTER]",
-                "📱": "[MOBILE]",
-                "🌐": "[NETWORK]",
-                "🔒": "[SECURE]",
-                "🔓": "[UNLOCK]",
-                "🔑": "[KEY]",
-                "🛡️": "[SHIELD]",
-                "🧮": "[CALC]",
-                "📐": "[MATH]",
-                "🔢": "[NUMBERS]",
-                "∞": "[INFINITY]",
-                "φ": "[PHI]",
-                "π": "[PI]",
-                "∑": "[SUM]",
-                "∫": "[INTEGRAL]",
+                "\\ufe0f": "[COMPUTER]",
+                "\\u1f4f1": "[MOBILE]",
+                "\\u1f310": "[NETWORK]",
+                "\\u1f512": "[SECURE]",
+                "\\u1f513": "[UNLOCK]",
+                "\\u1f511": "[KEY]",
+                "\\u1f6e1\\ufe0f": "[SHIELD]",
+                "\\u1f9ee": "[CALC]",
+                "\\u1f4d0": "[MATH]",
+                "\\u1f522": "[NUMBERS]",
+                "\\u221e": "[INFINITY]",
+                "\\u03c6": "[PHI]",
+                "\\u03c0": "[PI]",
+                "\\u2211": "[SUM]",
+                "\\u222b": "[INTEGRAL]",
             }
 
             if force_ascii:
@@ -250,7 +250,7 @@ class RittleGEMM:
         Args:
             config: Configuration dictionary for optimization settings
         """
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Initialize CLI compatibility handler
@@ -432,7 +432,7 @@ class RittleGEMM:
         optimization_level: OptimizationLevel = OptimizationLevel.STANDARD,
     ) -> OperationResult:
         """
-        General Matrix Multiply: C = α * op(A) * op(B) + β * C
+        General Matrix Multiply: C = \\u03b1 * op(A) * op(B) + \\u03b2 * C
 
         This is the core matrix multiplication operation optimized for
         performance.
@@ -1341,14 +1341,14 @@ def main() -> None:
         rittle = RittleGEMM()
 
         # Use CLI-safe print for all output
-        rittle.safe_safe_print("🚀 Rittle GEMM Performance Test")
+        rittle.safe_safe_print("\\u1f680 Rittle GEMM Performance Test")
         rittle.safe_safe_print("=" * 50)
 
         # Test matrices of various sizes
         test_sizes = [50, 100, 200, 500]
 
         for size in test_sizes:
-            rittle.safe_safe_print(f"\n📊 Testing {size}x{size} matrices...")
+            rittle.safe_safe_print(f"\\n\\u1f4ca Testing {size}x{size} matrices...")
 
             # Create test matrices
             A = np.random.rand(size, size)
@@ -1368,15 +1368,15 @@ def main() -> None:
                 result = rittle.gemm(A, B, optimization_level=level)
                 if result.success:
                     rittle.safe_safe_print(
-                        f"    ✅ GEMM completed in {result.execution_time:.6f}s"
+                        f"    \\u2705 GEMM completed in {result.execution_time:.6f}s"
                     )
-                    rittle.safe_safe_print(f"    📈 FLOPs: {result.flops:,}")
+                    rittle.safe_safe_print(f"    \\u1f4c8 FLOPs: {result.flops:,}")
                     rittle.safe_safe_print(
-                        f"    💾 Memory: {result.memory_used:,} bytes"
+                        f"    \\u1f4be Memory: {result.memory_used:,} bytes"
                     )
                 else:
                     rittle.safe_safe_print(
-                        f"    ❌ GEMM failed: {result.error_message}"
+                        f"    \\u274c GEMM failed: {result.error_message}"
                     )
 
             # Test matrix decomposition
@@ -1385,9 +1385,9 @@ def main() -> None:
                 P, L, U = rittle.lu_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_safe_print(f"    ✅ LU decomposition completed")
+                rittle.safe_safe_print(f"    \\u2705 LU decomposition completed")
             except Exception as e:
-                rittle.safe_safe_print(f"    ❌ LU decomposition failed: {e}")
+                rittle.safe_safe_print(f"    \\u274c LU decomposition failed: {e}")
 
             # Test eigenvalue decomposition
             rittle.safe_safe_print(f"  Testing eigenvalue decomposition...")
@@ -1395,15 +1395,15 @@ def main() -> None:
                 eigenvalues, eigenvectors = rittle.eigenvalue_decomposition(
                     A, OptimizationLevel.STANDARD
                 )
-                rittle.safe_safe_print(f"    ✅ Eigenvalue decomposition completed")
+                rittle.safe_safe_print(f"    \\u2705 Eigenvalue decomposition completed")
             except Exception as e:
                 rittle.safe_safe_print(
-                    f"    ❌ Eigenvalue decomposition failed: {e}"
+                    f"    \\u274c Eigenvalue decomposition failed: {e}"
                 )
 
         # Get performance summary
         summary = rittle.get_performance_summary()
-        rittle.safe_safe_print(f"\n📊 Performance Summary:")
+        rittle.safe_safe_print(f"\\n\\u1f4ca Performance Summary:")
         rittle.safe_safe_print(f"   Total operations: {summary.total_operations}")
         rittle.safe_safe_print(f"   Total FLOPs: {summary.total_flops:,}")
         rittle.safe_safe_print(
@@ -1415,12 +1415,12 @@ def main() -> None:
         rittle.safe_safe_print(f"   Cache hit rate: {summary.cache_hit_rate:.2%}")
         rittle.safe_safe_print(f"   Throughput: {summary.throughput:.2f} ops/sec")
 
-        rittle.safe_safe_print("\n🎉 Rittle GEMM test completed successfully!")
+        rittle.safe_safe_print("\\n\\u1f389 Rittle GEMM test completed successfully!")
 
     except Exception as e:
         # Use CLI-safe error reporting
         rittle = RittleGEMM()  # Create instance for safe printing
-        rittle.safe_safe_print(f"❌ Rittle GEMM test failed: {e}")
+        rittle.safe_safe_print(f"\\u274c Rittle GEMM test failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -1428,3 +1428,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

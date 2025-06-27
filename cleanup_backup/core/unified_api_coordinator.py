@@ -188,7 +188,7 @@ class UnifiedAPICoordinator:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize API coordinator."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Exchange configurations
@@ -655,7 +655,7 @@ class UnifiedAPICoordinator:
 async def main() -> None:
     """Main function for testing API coordinator."""
     try:
-        safe_print("🌐 Unified API Coordinator Test")
+        safe_print("\\u1f310 Unified API Coordinator Test")
         safe_print("=" * 40)
 
         # Initialize API coordinator
@@ -666,33 +666,33 @@ async def main() -> None:
         safe_print("Testing Coinbase ticker...")
         ticker = await coordinator.get_ticker("coinbase", "BTC-USD")
         if ticker:
-            safe_print(f"✅ BTC-USD Price: ${ticker.get('price', 'N/A')}")
+            safe_print(f"\\u2705 BTC-USD Price: ${ticker.get('price', 'N/A')}")
         else:
-            safe_print("❌ Failed to get ticker")
+            safe_print("\\u274c Failed to get ticker")
 
         # Test order book
         safe_print("Testing order book...")
         order_book = await coordinator.get_order_book("coinbase", "BTC-USD")
         if order_book:
             safe_print(
-                f"✅ Order book retrieved: {len(order_book.get('bids', []))} bids, "
+                f"\\u2705 Order book retrieved: {len(order_book.get('bids', []))} bids, "
                 f"{len(order_book.get('asks', []))} asks"
             )
         else:
-            safe_print("❌ Failed to get order book")
+            safe_print("\\u274c Failed to get order book")
 
         # Get performance metrics
         metrics = coordinator.get_performance_metrics()
         safe_print(
-            f"✅ Performance: {metrics['successful_requests']} successful, "
+            f"\\u2705 Performance: {metrics['successful_requests']} successful, "
             f"{metrics['failed_requests']} failed"
         )
 
         await coordinator.stop()
-        safe_print("\n🎉 API coordinator test completed successfully!")
+        safe_print("\\n\\u1f389 API coordinator test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ API coordinator test failed: {e}")
+        safe_print(f"\\u274c API coordinator test failed: {e}")
         import traceback
 
         traceback.print_exc()

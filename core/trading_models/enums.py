@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
-"""Trading enums for Schwabot BTC integration.
+# -*- coding: utf-8 -*-\\n# #!/usr/bin/env python3
+"""Trading enums for Schwabot BTC integration."""
 
 This module contains all enumeration types used for trading operations,
 order management, and exchange communication.
-"""
+""""""
 
 from enum import Enum
 
@@ -65,3 +65,7 @@ class DataType(Enum):
     BALANCE = "balance"
     ORDERS = "orders"
     POSITIONS = "positions"
+
+
+
+"""

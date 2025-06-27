@@ -27,42 +27,42 @@ class ComprehensiveStubFixer:
             # Primary pattern: """Stub main function."""."""
             (
                 r'"""Stub main function\."""\."""',
-                '"""Stub main function."""\n    pass\n'
+                '"""Stub main function."""\\n    pass\n'
             ),
             # General pattern: """text."""."""
             (
                 r'"""([^"]*)\."""\."""',
-                r'"""\1."""\n    pass\n'
+                r'"""\1."""\\n    pass\n'
             ),
             # Pattern with extra quotes: """text.""" """
             (
-                r'"""([^"]*)\."""\s*"""',
-                r'"""\1."""\n    pass\n'
+                r'"""([^"]*)\."""\\s*"""',
+                r'"""\1."""\\n    pass\n'
             ),
             # Pattern with function definition: """text.""" def
             (
-                r'"""([^"]*)\."""\s*def\s+',
-                r'"""\1."""\n\ndef '
+                r'"""([^"]*)\."""\\s*def\\s+',
+                r'"""\1."""\\n\\ndef '
             ),
             # Pattern with if __name__: """text.""" if __name__
             (
-                r'"""([^"]*)\."""\s*if\s+__name__',
-                r'"""\1."""\n\nif __name__'
+                r'"""([^"]*)\."""\\s*if\\s+__name__',
+                r'"""\1."""\\n\\nif __name__'
             ),
             # Pattern with class definition: """text.""" class
             (
-                r'"""([^"]*)\."""\s*class\s+',
-                r'"""\1."""\n\nclass '
+                r'"""([^"]*)\."""\\s*class\\s+',
+                r'"""\1."""\\n\\nclass '
             ),
             # Pattern with import: """text.""" import
             (
-                r'"""([^"]*)\."""\s*import\s+',
-                r'"""\1."""\n\nimport '
+                r'"""([^"]*)\."""\\s*import\\s+',
+                r'"""\1."""\\n\\nimport '
             ),
             # Pattern with from import: """text.""" from
             (
-                r'"""([^"]*)\."""\s*from\s+',
-                r'"""\1."""\n\nfrom '
+                r'"""([^"]*)\."""\\s*from\\s+',
+                r'"""\1."""\\n\\nfrom '
             ),
         ]
 
@@ -95,14 +95,14 @@ class ComprehensiveStubFixer:
                     f.write(fixed_content)
 
                 self.fix_stats['patterns_fixed'] += patterns_fixed
-                safe_print(f"✅ Fixed {patterns_fixed} patterns in: {file_path}")
+                safe_print(f"\\u2705 Fixed {patterns_fixed} patterns in: {file_path}")
                 return True
 
             return False
 
         except Exception as e:
             self.fix_stats['errors_encountered'] += 1
-            safe_print(f"❌ Error processing {file_path}: {e}")
+            safe_print(f"\\u274c Error processing {file_path}: {e}")
             return False
 
     def find_and_fix_all_stub_files(self) -> None:
@@ -149,7 +149,7 @@ class ComprehensiveStubFixer:
 
             except Exception as e:
                 self.fix_stats['errors_encountered'] += 1
-                safe_print(f"❌ Error reading {file_path}: {e}")
+                safe_print(f"\\u274c Error reading {file_path}: {e}")
 
         self.print_summary()
 
@@ -282,17 +282,17 @@ class ComprehensiveStubFixer:
         print()
 
         if self.fix_stats['files_fixed'] > 0:
-            safe_print("🎉 Phase 1 Progress:")
-            safe_print(f"   ✅ Fixed {self.fix_stats['files_fixed']} files")
-            safe_print(f"   ✅ Fixed {self.fix_stats['patterns_fixed']} patterns")
-            safe_print(f"   📊 Estimated E999 errors eliminated: {self.fix_stats['files_fixed'] * 1.2:.0f}")
+            safe_print("\\u1f389 Phase 1 Progress:")
+            safe_print(f"   \\u2705 Fixed {self.fix_stats['files_fixed']} files")
+            safe_print(f"   \\u2705 Fixed {self.fix_stats['patterns_fixed']} patterns")
+            safe_print(f"   \\u1f4ca Estimated E999 errors eliminated: {self.fix_stats['files_fixed'] * 1.2:.0f}")
             print()
             safe_print("Next steps:")
             safe_print("1. Run: flake8 . --select=E9 --max-line-length=79")
             safe_print("2. Check remaining E999 errors")
             safe_print("3. Proceed to Phase 2 (Unicode characters)")
         else:
-            safe_print("⚠️  No files were fixed. This could mean:")
+            safe_print("\\u26a0\\ufe0f  No files were fixed. This could mean:")
             safe_print("   - Files were already fixed")
             safe_print("   - Different patterns need to be addressed")
             safe_print("   - Need to run comprehensive search")
@@ -322,3 +322,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

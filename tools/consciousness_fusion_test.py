@@ -33,7 +33,7 @@ try:
     CONSCIOUSNESS_SYSTEM_AVAILABLE = True
 except ImportError as e:
     CONSCIOUSNESS_SYSTEM_AVAILABLE = False
-    safe_print(f"⚠️ Consciousness system not available: {e}")
+    safe_print(f"\\u26a0\\ufe0f Consciousness system not available: {e}")
 
 
 class ConsciousnessFusionTester:
@@ -42,7 +42,7 @@ class ConsciousnessFusionTester:
     def __init__(self):
         """Initialize the tester."""
         self.gpt_layer = GPTCommandLayer() if CONSCIOUSNESS_SYSTEM_AVAILABLE else None
-        self.api_gateway = SchwabotAPIGateway(host="127.0.0.1", port=8001) if CONSCIOUSNESS_SYSTEM_AVAILABLE else None
+        self.api_gateway = SchwabotAPIGateway(host="127.0_0.1", port=8001) if CONSCIOUSNESS_SYSTEM_AVAILABLE else None
         self.hash_registry = HashRegistry() if CONSCIOUSNESS_SYSTEM_AVAILABLE else None
 
         self.test_results = []
@@ -50,10 +50,10 @@ class ConsciousnessFusionTester:
 
     async def test_basic_command_submission(self):
         """Test basic command submission from different AI agents."""
-        safe_print("🧠 Testing basic command submission...")
+        safe_print("\\u1f9e0 Testing basic command submission...")
 
         if not self.gpt_layer:
-            safe_print("⚠️ GPT command layer not available")
+            safe_print("\\u26a0\\ufe0f GPT command layer not available")
             return False
 
         try:
@@ -69,7 +69,7 @@ class ConsciousnessFusionTester:
                 priority=CommandPriority.HIGH,
             )
             self.command_history.append(("gpt", gpt_command_id))
-            safe_print(f"✅ GPT command submitted: {gpt_command_id}")
+            safe_print(f"\\u2705 GPT command submitted: {gpt_command_id}")
 
             # Test Claude command
             claude_command_id = await submit_claude_command(
@@ -83,7 +83,7 @@ class ConsciousnessFusionTester:
                 priority=CommandPriority.MEDIUM,
             )
             self.command_history.append(("claude", claude_command_id))
-            safe_print(f"✅ Claude command submitted: {claude_command_id}")
+            safe_print(f"\\u2705 Claude command submitted: {claude_command_id}")
 
             # Test R1 command
             r1_command_id = await submit_r1_command(
@@ -97,20 +97,20 @@ class ConsciousnessFusionTester:
                 priority=CommandPriority.LOW,
             )
             self.command_history.append(("r1", r1_command_id))
-            safe_print(f"✅ R1 command submitted: {r1_command_id}")
+            safe_print(f"\\u2705 R1 command submitted: {r1_command_id}")
 
             return True
 
         except Exception as e:
-            safe_print(f"❌ Basic command submission failed: {safe_format_error(e, 'basic_submission')}")
+            safe_print(f"\\u274c Basic command submission failed: {safe_format_error(e, 'basic_submission')}")
             return False
 
     async def test_recursive_command_execution(self):
         """Test recursive command execution with parent-child relationships."""
-        safe_print("🔄 Testing recursive command execution...")
+        safe_print("\\u1f504 Testing recursive command execution...")
 
         if not self.gpt_layer:
-            safe_print("⚠️ GPT command layer not available")
+            safe_print("\\u26a0\\ufe0f GPT command layer not available")
             return False
 
         try:
@@ -141,21 +141,21 @@ class ConsciousnessFusionTester:
                     parent_command_id=parent_command_id,
                 )
                 child_commands.append(child_command_id)
-                safe_print(f"✅ Child command {i+1} submitted: {child_command_id}")
+                safe_print(f"\\u2705 Child command {i+1} submitted: {child_command_id}")
 
             self.command_history.extend([("gpt", parent_command_id)] + [("gpt", cid) for cid in child_commands])
             return True
 
         except Exception as e:
-            safe_print(f"❌ Recursive command execution failed: {safe_format_error(e, 'recursive_execution')}")
+            safe_print(f"\\u274c Recursive command execution failed: {safe_format_error(e, 'recursive_execution')}")
             return False
 
     async def test_hash_registry_integration(self):
         """Test hash registry integration and pattern detection."""
-        safe_print("📚 Testing hash registry integration...")
+        safe_print("\\u1f4da Testing hash registry integration...")
 
         if not self.hash_registry:
-            safe_print("⚠️ Hash registry not available")
+            safe_print("\\u26a0\\ufe0f Hash registry not available")
             return False
 
         try:
@@ -176,7 +176,7 @@ class ConsciousnessFusionTester:
                     confidence_score=0.7 + (i * 0.05),
                 )
                 hash_entries.append(hash_id)
-                safe_print(f"✅ Hash registered: {hash_id}")
+                safe_print(f"\\u2705 Hash registered: {hash_id}")
 
             # Update hash statuses
             for i, hash_id in enumerate(hash_entries):
@@ -191,24 +191,24 @@ class ConsciousnessFusionTester:
                     error_message=error_message,
                     execution_time=1.0 + (i * 0.5),
                 )
-                safe_print(f"✅ Hash status updated: {hash_id} -> {status.value}")
+                safe_print(f"\\u2705 Hash status updated: {hash_id} -> {status.value}")
 
             # Get registry stats
             stats = await self.hash_registry.get_registry_stats()
-            safe_print(f"📊 Registry stats: {stats}")
+            safe_print(f"\\u1f4ca Registry stats: {stats}")
 
             return True
 
         except Exception as e:
-            safe_print(f"❌ Hash registry integration failed: {safe_format_error(e, 'hash_registry')}")
+            safe_print(f"\\u274c Hash registry integration failed: {safe_format_error(e, 'hash_registry')}")
             return False
 
     async def test_consciousness_profiles(self):
         """Test consciousness profile management and learning."""
-        safe_print("🧠 Testing consciousness profiles...")
+        safe_print("\\u1f9e0 Testing consciousness profiles...")
 
         if not self.gpt_layer:
-            safe_print("⚠️ GPT command layer not available")
+            safe_print("\\u26a0\\ufe0f GPT command layer not available")
             return False
 
         try:
@@ -216,7 +216,7 @@ class ConsciousnessFusionTester:
             for agent_type in [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]:
                 profile = await self.gpt_layer.get_consciousness_profile(agent_type)
                 if profile:
-                    safe_print(f"📊 {agent_type.value.upper()} Profile:")
+                    safe_print(f"\\u1f4ca {agent_type.value.upper()} Profile:")
                     safe_print(f"   Trust Level: {profile.trust_level:.3f}")
                     safe_print(f"   Success Rate: {profile.success_rate:.3f}")
                     safe_print(f"   Recursive Depth: {profile.recursive_depth}")
@@ -229,21 +229,21 @@ class ConsciousnessFusionTester:
             return True
 
         except Exception as e:
-            safe_print(f"❌ Consciousness profiles test failed: {safe_format_error(e, 'consciousness_profiles')}")
+            safe_print(f"\\u274c Consciousness profiles test failed: {safe_format_error(e, 'consciousness_profiles')}")
             return False
 
     async def test_api_gateway_functionality(self):
         """Test API gateway functionality."""
-        safe_print("🌐 Testing API gateway functionality...")
+        safe_print("\\u1f310 Testing API gateway functionality...")
 
         if not self.api_gateway:
-            safe_print("⚠️ API gateway not available")
+            safe_print("\\u26a0\\ufe0f API gateway not available")
             return False
 
         try:
             # Get system status
             status = await self.api_gateway.get_system_status()
-            safe_print(f"📊 System Status: {status}")
+            safe_print(f"\\u1f4ca System Status: {status}")
 
             # Test command submission via API
             command_id = await self.api_gateway.gpt_layer.submit_command(
@@ -253,25 +253,25 @@ class ConsciousnessFusionTester:
                 context={"test": "api_gateway"},
                 priority=CommandPriority.LOW,
             )
-            safe_print(f"✅ API command submitted: {command_id}")
+            safe_print(f"\\u2705 API command submitted: {command_id}")
 
             # Get command status
             response = await self.api_gateway.gpt_layer.get_command_status(command_id)
             if response:
-                safe_print(f"📊 Command response: {response.result}")
+                safe_print(f"\\u1f4ca Command response: {response.result}")
 
             return True
 
         except Exception as e:
-            safe_print(f"❌ API gateway test failed: {safe_format_error(e, 'api_gateway')}")
+            safe_print(f"\\u274c API gateway test failed: {safe_format_error(e, 'api_gateway')}")
             return False
 
     async def test_pattern_detection(self):
         """Test pattern detection and analysis."""
-        safe_print("🔍 Testing pattern detection...")
+        safe_print("\\u1f50d Testing pattern detection...")
 
         if not self.hash_registry:
-            safe_print("⚠️ Hash registry not available")
+            safe_print("\\u26a0\\ufe0f Hash registry not available")
             return False
 
         try:
@@ -305,10 +305,10 @@ class ConsciousnessFusionTester:
 
             # Get patterns
             patterns = await self.hash_registry.get_patterns()
-            safe_print(f"🔍 Found {len(patterns)} patterns")
+            safe_print(f"\\u1f50d Found {len(patterns)} patterns")
 
             for pattern in patterns[:3]:  # Show first 3 patterns
-                safe_print(f"📊 Pattern: {pattern.pattern_id}")
+                safe_print(f"\\u1f4ca Pattern: {pattern.pattern_id}")
                 safe_print(f"   Type: {pattern.pattern_type}")
                 safe_print(f"   Frequency: {pattern.frequency}")
                 safe_print(f"   Success Rate: {pattern.success_rate:.3f}")
@@ -317,15 +317,15 @@ class ConsciousnessFusionTester:
             return True
 
         except Exception as e:
-            safe_print(f"❌ Pattern detection test failed: {safe_format_error(e, 'pattern_detection')}")
+            safe_print(f"\\u274c Pattern detection test failed: {safe_format_error(e, 'pattern_detection')}")
             return False
 
     async def test_error_handling_and_recovery(self):
         """Test error handling and recovery mechanisms."""
-        safe_print("🛡️ Testing error handling and recovery...")
+        safe_print("\\u1f6e1\\ufe0f Testing error handling and recovery...")
 
         if not self.gpt_layer:
-            safe_print("⚠️ GPT command layer not available")
+            safe_print("\\u26a0\\ufe0f GPT command layer not available")
             return False
 
         try:
@@ -336,9 +336,9 @@ class ConsciousnessFusionTester:
                     payload={},  # Missing required fields
                     context={"test": "error_handling"},
                 )
-                safe_print(f"⚠️ Invalid command was accepted: {invalid_command_id}")
+                safe_print(f"\\u26a0\\ufe0f Invalid command was accepted: {invalid_command_id}")
             except Exception as e:
-                safe_print(f"✅ Invalid command properly rejected: {safe_format_error(e, 'invalid_command')}")
+                safe_print(f"\\u2705 Invalid command properly rejected: {safe_format_error(e, 'invalid_command')}")
 
             # Submit command with low confidence (should be validated)
             low_confidence_command_id = await submit_gpt_command(
@@ -354,20 +354,20 @@ class ConsciousnessFusionTester:
             # Check if command was processed
             response = await self.gpt_layer.get_command_status(low_confidence_command_id)
             if response:
-                safe_print(f"✅ Low confidence command processed: {response.success}")
+                safe_print(f"\\u2705 Low confidence command processed: {response.success}")
 
             return True
 
         except Exception as e:
-            safe_print(f"❌ Error handling test failed: {safe_format_error(e, 'error_handling')}")
+            safe_print(f"\\u274c Error handling test failed: {safe_format_error(e, 'error_handling')}")
             return False
 
     async def test_memory_synchronization(self):
         """Test memory synchronization across consciousness entities."""
-        safe_print("🔄 Testing memory synchronization...")
+        safe_print("\\u1f504 Testing memory synchronization...")
 
         if not self.gpt_layer:
-            safe_print("⚠️ GPT command layer not available")
+            safe_print("\\u26a0\\ufe0f GPT command layer not available")
             return False
 
         try:
@@ -384,41 +384,41 @@ class ConsciousnessFusionTester:
                     priority=CommandPriority.MEDIUM,
                 )
                 commands.append(command_id)
-                safe_print(f"✅ {agent.value.upper()} memory command: {command_id}")
+                safe_print(f"\\u2705 {agent.value.upper()} memory command: {command_id}")
 
             # Sync consciousness profiles
             await self.gpt_layer._sync_consciousness_profiles()
-            safe_print("✅ Consciousness profiles synchronized")
+            safe_print("\\u2705 Consciousness profiles synchronized")
 
             # Get memory data
             memory_data = self.gpt_layer._get_memory_data()
-            safe_print(f"📊 Memory data: {len(memory_data.get('profiles', {}))} profiles")
+            safe_print(f"\\u1f4ca Memory data: {len(memory_data.get('profiles', {}))} profiles")
 
             return True
 
         except Exception as e:
-            safe_print(f"❌ Memory synchronization test failed: {safe_format_error(e, 'memory_sync')}")
+            safe_print(f"\\u274c Memory synchronization test failed: {safe_format_error(e, 'memory_sync')}")
             return False
 
     async def run_comprehensive_test(self):
         """Run comprehensive consciousness fusion test."""
         safe_print("=" * 80)
-        safe_print("🧠 CONSCIOUSNESS FUSION COMPREHENSIVE TEST")
+        safe_print("\\u1f9e0 CONSCIOUSNESS FUSION COMPREHENSIVE TEST")
         safe_print("=" * 80)
 
         if not CONSCIOUSNESS_SYSTEM_AVAILABLE:
-            safe_print("❌ Consciousness system not available - cannot run tests")
+            safe_print("\\u274c Consciousness system not available - cannot run tests")
             return False
 
         # Start command execution
         if self.gpt_layer:
             execution_task = asyncio.create_task(self.gpt_layer.execute_commands())
-            safe_print("🚀 Command execution started")
+            safe_print("\\u1f680 Command execution started")
 
         # Start cleanup tasks
         if self.hash_registry:
             await self.hash_registry.start_cleanup_task()
-            safe_print("🧹 Hash registry cleanup started")
+            safe_print("\\u1f9f9 Hash registry cleanup started")
 
         tests = [
             ("Basic Command Submission", self.test_basic_command_submission),
@@ -435,15 +435,15 @@ class ConsciousnessFusionTester:
         total = len(tests)
 
         for test_name, test_func in tests:
-            safe_print(f"\n🧪 Running: {test_name}")
+            safe_print(f"\\n\\u1f9ea Running: {test_name}")
             try:
                 if await test_func():
-                    safe_print(f"  ✅ PASSED: {test_name}")
+                    safe_print(f"  \\u2705 PASSED: {test_name}")
                     passed += 1
                 else:
-                    safe_print(f"  ❌ FAILED: {test_name}")
+                    safe_print(f"  \\u274c FAILED: {test_name}")
             except Exception as e:
-                safe_print(f"  ❌ ERROR: {test_name} - {safe_format_error(e, test_name)}")
+                safe_print(f"  \\u274c ERROR: {test_name} - {safe_format_error(e, test_name)}")
 
         # Stop background tasks
         if self.hash_registry:
@@ -457,20 +457,20 @@ class ConsciousnessFusionTester:
                 pass
 
         # Final summary
-        safe_print(f"\n📊 Test Results: {passed}/{total} passed")
+        safe_print(f"\\n\\u1f4ca Test Results: {passed}/{total} passed")
 
         if passed == total:
-            safe_print("🎉 ALL TESTS PASSED!")
-            safe_print("🧠 Consciousness fusion system is working correctly!")
-            safe_print("🌐 AI consciousness entities can now interact with Schwabot!")
+            safe_print("\\u1f389 ALL TESTS PASSED!")
+            safe_print("\\u1f9e0 Consciousness fusion system is working correctly!")
+            safe_print("\\u1f310 AI consciousness entities can now interact with Schwabot!")
         else:
-            safe_print("⚠️ SOME TESTS FAILED")
+            safe_print("\\u26a0\\ufe0f SOME TESTS FAILED")
             safe_print("Review the errors above and fix issues.")
 
         # Show command history
-        safe_print(f"\n📋 Command History ({len(self.command_history)} commands):")
+        safe_print(f"\\n\\u1f4cb Command History ({len(self.command_history)} commands):")
         for agent, command_id in self.command_history:
-            safe_print(f"  • {agent.upper()}: {command_id}")
+            safe_print(f"  \\u2022 {agent.upper()}: {command_id}")
 
         return passed == total
 
@@ -481,12 +481,12 @@ async def main():
     test_success = await tester.run_comprehensive_test()
 
     if test_success:
-        safe_print("\n🚀 CONSCIOUSNESS FUSION SYSTEM READY")
+        safe_print("\\n\\u1f680 CONSCIOUSNESS FUSION SYSTEM READY")
         safe_print("You can now:")
-        safe_print("  • Submit commands via API: http://localhost:8000/docs")
-        safe_print("  • Use WebSocket: ws://localhost:8000/ws")
-        safe_print("  • Monitor hash registry: data/hash_registry.json")
-        safe_print("  • View consciousness memory: data/consciousness_memory.json")
+        safe_print("  \\u2022 Submit commands via API: http://localhost:8000/docs")
+        safe_print("  \\u2022 Use WebSocket: ws://localhost:8000/ws")
+        safe_print("  \\u2022 Monitor hash registry: data/hash_registry.json")
+        safe_print("  \\u2022 View consciousness memory: data/consciousness_memory.json")
 
     return test_success
 

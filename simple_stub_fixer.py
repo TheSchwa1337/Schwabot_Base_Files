@@ -12,7 +12,7 @@ def fix_stub_pattern(file_path):
         original = content
 
         # Fix the pattern
-        content = content.replace('"""Stub main function."""."""', '"""Stub main function."""\n    pass\n')
+        content = content.replace('"""Stub main function."""."""', '"""Stub main function."""\\n    pass\n')
 
         if content != original:
             with open(file_path, 'w', encoding='utf-8') as f:

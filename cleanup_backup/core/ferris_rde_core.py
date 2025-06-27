@@ -171,7 +171,7 @@ class FerrisRDECore:
         self.basket_history: List[MatrixBasketData] = []
         self.wall_history: List[TradeWallData] = []
 
-        safe_safe_print("🎡 Ferris RDE Core initialized")
+        safe_safe_print("\\u1f3a1 Ferris RDE Core initialized")
 
     def update_ferris_wheel(self, delta_time: float = 0.1) -> FerrisWheelData:
         """
@@ -221,12 +221,12 @@ class FerrisRDECore:
             if len(self.wheel_history) > 1000:
                 self.wheel_history = self.wheel_history[-1000:]
 
-            safe_safe_print(f"✅ Ferris wheel: Phase = {phase.value}, Height = {height:.3f}")
+            safe_safe_print(f"\\u2705 Ferris wheel: Phase = {phase.value}, Height = {height:.3f}")
 
             return wheel_data
 
         except Exception as e:
-            safe_safe_print(f"❌ Ferris wheel update failed: {safe_format_error(e, 'ferris_wheel_update')}")
+            safe_safe_print(f"\\u274c Ferris wheel update failed: {safe_format_error(e, 'ferris_wheel_update')}")
             return self._create_fallback_wheel_data()
 
     def map_btc_price_16bit(self, btc_price: float) -> PriceMappingData:
@@ -284,12 +284,12 @@ class FerrisRDECore:
             if len(self.sequence_history) > 100:
                 self.sequence_history = self.sequence_history[-100:]
 
-            safe_safe_print(f"✅ Price mapping: {btc_price:.2f} → {mapped_price} (16-bit), Triggered = {is_triggered}")
+            safe_safe_print(f"\\u2705 Price mapping: {btc_price:.2f} \\u2192 {mapped_price} (16-bit), Triggered = {is_triggered}")
 
             return price_data
 
         except Exception as e:
-            safe_safe_print(f"❌ Price mapping failed: {safe_format_error(e, 'price_mapping')}")
+            safe_safe_print(f"\\u274c Price mapping failed: {safe_format_error(e, 'price_mapping')}")
             return self._create_fallback_price_data(btc_price)
 
     def create_matrix_basket(self, market_data: Dict[str, Any]) -> MatrixBasketData:
@@ -350,12 +350,12 @@ class FerrisRDECore:
             if len(self.basket_history) > 1000:
                 self.basket_history = self.basket_history[-1000:]
 
-            safe_safe_print(f"✅ Matrix basket: {basket_id}, Resonance = {resonance_score:.3f}")
+            safe_safe_print(f"\\u2705 Matrix basket: {basket_id}, Resonance = {resonance_score:.3f}")
 
             return basket_data
 
         except Exception as e:
-            safe_safe_print(f"❌ Matrix basket creation failed: {safe_format_error(e, 'matrix_basket')}")
+            safe_safe_print(f"\\u274c Matrix basket creation failed: {safe_format_error(e, 'matrix_basket')}")
             return self._create_fallback_basket_data()
 
     def formulate_trade_walls(
@@ -431,12 +431,12 @@ class FerrisRDECore:
                 self.wall_history = self.wall_history[-1000:]
 
             safe_safe_print(
-                f"✅ Trade walls: Buy confidence = {buy_confidence:.3f}, Sell confidence = {sell_confidence:.3f}")
+                f"\\u2705 Trade walls: Buy confidence = {buy_confidence:.3f}, Sell confidence = {sell_confidence:.3f}")
 
             return buy_wall, sell_wall
 
         except Exception as e:
-            safe_safe_print(f"❌ Trade wall formulation failed: {safe_format_error(e, 'trade_walls')}")
+            safe_safe_print(f"\\u274c Trade wall formulation failed: {safe_format_error(e, 'trade_walls')}")
             return self._create_fallback_wall_data("buy"), self._create_fallback_wall_data("sell")
 
     def integrate_with_vecu(
@@ -453,7 +453,7 @@ class FerrisRDECore:
         """
         try:
             if not VECU_AVAILABLE:
-                safe_safe_print("⚠️ VECU not available for integration")
+                safe_safe_print("\\u26a0\\ufe0f VECU not available for integration")
                 return {}
 
             # Calculate RPM equivalent from Ferris wheel
@@ -493,12 +493,12 @@ class FerrisRDECore:
                 'integration_timestamp': datetime.now().isoformat()
             }
 
-            safe_safe_print(f"✅ VECU integration: Amplification = {timing_data.profit_amplification:.6f}")
+            safe_safe_print(f"\\u2705 VECU integration: Amplification = {timing_data.profit_amplification:.6f}")
 
             return integration_result
 
         except Exception as e:
-            safe_safe_print(f"❌ VECU integration failed: {safe_format_error(e, 'vecu_integration')}")
+            safe_safe_print(f"\\u274c VECU integration failed: {safe_format_error(e, 'vecu_integration')}")
             return {}
 
     def _generate_hash_sequence(self, btc_price: float, mapped_price: int) -> str:
@@ -517,7 +517,7 @@ class FerrisRDECore:
             return hash_hex[:self.hash_sequence_length]
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Hash sequence generation failed: {safe_format_error(e, 'hash_sequence')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Hash sequence generation failed: {safe_format_error(e, 'hash_sequence')}")
             return "fallback_hash_seq"
 
     def _calculate_modulation_factor(self, market_data: Dict[str, Any]) -> float:
@@ -538,7 +538,7 @@ class FerrisRDECore:
             return unified_math.min(1.0, unified_math.max(0.0, modulation_factor))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Modulation factor calculation failed: {safe_format_error(e, 'modulation_factor')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Modulation factor calculation failed: {safe_format_error(e, 'modulation_factor')}")
             return 0.5
 
     def _calculate_basket_resonance(
@@ -563,7 +563,7 @@ class FerrisRDECore:
             return unified_math.min(1.0, unified_math.max(0.0, resonance_score))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Basket resonance calculation failed: {safe_format_error(e, 'basket_resonance')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Basket resonance calculation failed: {safe_format_error(e, 'basket_resonance')}")
             return 0.5
 
     def _calculate_wall_variants(
@@ -602,7 +602,7 @@ class FerrisRDECore:
             return variants
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Wall variants calculation failed: {safe_format_error(e, 'wall_variants')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Wall variants calculation failed: {safe_format_error(e, 'wall_variants')}")
             return {}
 
     def _calculate_wall_confidence(
@@ -634,7 +634,7 @@ class FerrisRDECore:
             return unified_math.min(1.0, unified_math.max(0.0, confidence))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Wall confidence calculation failed: {safe_format_error(e, 'wall_confidence')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Wall confidence calculation failed: {safe_format_error(e, 'wall_confidence')}")
             return 0.5
 
     def _backtest_wall(
@@ -679,7 +679,7 @@ class FerrisRDECore:
             return backtest_result
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Wall backtesting failed: {safe_format_error(e, 'wall_backtest')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Wall backtesting failed: {safe_format_error(e, 'wall_backtest')}")
             return {'error': str(e)}
 
     def _create_fallback_wheel_data(self) -> FerrisWheelData:
@@ -751,7 +751,7 @@ class FerrisRDECore:
         self.basket_history.clear()
         self.wall_history.clear()
         self.sequence_history.clear()
-        safe_safe_print("🗑️ Ferris RDE history cleared")
+        safe_safe_print("\\u1f5d1\\ufe0f Ferris RDE history cleared")
 
 
 # Global Ferris RDE core instance
@@ -797,7 +797,7 @@ def get_ferris_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test Ferris RDE core
-    safe_print("🧪 Testing Ferris RDE Core...")
+    safe_print("\\u1f9ea Testing Ferris RDE Core...")
 
     # Test market data
     test_market_data = {
@@ -812,26 +812,26 @@ if __name__ == "__main__":
 
     # Update Ferris wheel
     wheel_data = update_ferris_wheel()
-    safe_print(f"✅ Ferris wheel: Phase = {wheel_data.phase.value}, Height = {wheel_data.height:.3f}")
+    safe_print(f"\\u2705 Ferris wheel: Phase = {wheel_data.phase.value}, Height = {wheel_data.height:.3f}")
 
     # Map BTC price
     price_data = map_btc_price_16bit(test_market_data['btc_price'])
-    safe_print(f"✅ Price mapping: {price_data.btc_price:.2f} → {price_data.mapped_price} (16-bit)")
+    safe_print(f"\\u2705 Price mapping: {price_data.btc_price:.2f} \\u2192 {price_data.mapped_price} (16-bit)")
 
     # Create matrix basket
     basket_data = create_matrix_basket(test_market_data)
-    safe_print(f"✅ Matrix basket: {basket_data.basket_id}, Resonance = {basket_data.resonance_score:.3f}")
+    safe_print(f"\\u2705 Matrix basket: {basket_data.basket_id}, Resonance = {basket_data.resonance_score:.3f}")
 
     # Formulate trade walls
     buy_wall, sell_wall = formulate_trade_walls(test_market_data, basket_data)
     safe_print(
-        f"✅ Trade walls: Buy confidence = {buy_wall.confidence_score:.3f}, Sell confidence = {sell_wall.confidence_score:.3f}")
+        f"\\u2705 Trade walls: Buy confidence = {buy_wall.confidence_score:.3f}, Sell confidence = {sell_wall.confidence_score:.3f}")
 
     # Integrate with VECU
     integration_result = integrate_with_vecu(wheel_data, price_data, basket_data)
     if integration_result:
-        safe_print(f"✅ VECU integration: Amplification = {integration_result.get('vecu_amplification', 0.0):.6f}")
+        safe_print(f"\\u2705 VECU integration: Amplification = {integration_result.get('vecu_amplification', 0.0):.6f}")
 
     # Get statistics
     stats = get_ferris_stats()
-    safe_print(f"✅ Ferris RDE Statistics: {stats}")
+    safe_print(f"\\u2705 Ferris RDE Statistics: {stats}")

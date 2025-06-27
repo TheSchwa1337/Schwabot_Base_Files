@@ -21,12 +21,12 @@ def safe_print(message):
 
 def test_hybrid_strategy_mapper_simple():
     """Test hybrid strategy mapper without complex imports."""
-    safe_print("🧪 Testing Hybrid Strategy Mapper (Simple)...")
+    safe_print("\\u1f9ea Testing Hybrid Strategy Mapper (Simple)...")
 
     try:
         # Test imports work
         from core.strategy_mapper import StrategyMapper
-        safe_print("✅ StrategyMapper imported successfully")
+        safe_print("\\u2705 StrategyMapper imported successfully")
 
         # Test 1: Basic initialization
         mapper = StrategyMapper(
@@ -34,7 +34,7 @@ def test_hybrid_strategy_mapper_simple():
             enable_legacy=True,
             default_to_legacy=False
         )
-        safe_print("✅ Hybrid mapper initialized")
+        safe_print("\\u2705 Hybrid mapper initialized")
 
         # Test 2: Simple data
         prices = [50000, 51000, 50500, 52000, 53000]
@@ -49,7 +49,7 @@ def test_hybrid_strategy_mapper_simple():
         assert result_ghost.success, f"Ghost Phase should succeed, got: {result_ghost}"
         assert isinstance(result_ghost.strategy_id, str), "Strategy ID must be string"
         assert len(result_ghost.strategy_id) > 0, "Strategy ID must not be empty"
-        safe_print(f"✅ Ghost Phase Strategy: {result_ghost.strategy_id}")
+        safe_print(f"\\u2705 Ghost Phase Strategy: {result_ghost.strategy_id}")
 
         # Test 4: Legacy path
         execution_packet = {
@@ -66,13 +66,13 @@ def test_hybrid_strategy_mapper_simple():
         assert result_legacy.success, f"Legacy should succeed, got: {result_legacy}"
         assert isinstance(result_legacy.strategy_id, str), "Strategy ID must be string"
         assert len(result_legacy.strategy_id) > 0, "Strategy ID must not be empty"
-        safe_print(f"✅ Legacy Strategy: {result_legacy.strategy_id}")
+        safe_print(f"\\u2705 Legacy Strategy: {result_legacy.strategy_id}")
 
         # Test 5: Performance stats
         stats = mapper.get_performance_stats()
         assert "total_mappings" in stats, "Should have performance stats"
         assert stats["total_mappings"] > 0, "Should have recorded mappings"
-        safe_print(f"✅ Performance: {stats['total_mappings']} mappings, {stats['success_rate']:.2f} success rate")
+        safe_print(f"\\u2705 Performance: {stats['total_mappings']} mappings, {stats['success_rate']:.2f} success rate")
 
         # Test 6: Auto-detection
         # Modern packet (no legacy indicators) should use Ghost Phase
@@ -80,13 +80,13 @@ def test_hybrid_strategy_mapper_simple():
             prices, live_vector, raw_signals, None, None
         )
         assert result_auto.success, "Auto-detection should succeed"
-        safe_print(f"✅ Auto-detection: {result_auto.strategy_id}")
+        safe_print(f"\\u2705 Auto-detection: {result_auto.strategy_id}")
 
-        safe_print("🎉 All hybrid strategy mapper tests passed!")
+        safe_print("\\u1f389 All hybrid strategy mapper tests passed!")
         return True
 
     except Exception as e:
-        safe_print(f"❌ Test failed: {e}")
+        safe_print(f"\\u274c Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -94,7 +94,7 @@ def test_hybrid_strategy_mapper_simple():
 
 def test_legacy_compatibility():
     """Test legacy compatibility functions."""
-    safe_print("\n# -*- coding: utf-8 -*-\n🧪 Testing Legacy Compatibility...")
+    safe_print("\\n# -*- coding: utf-8 -*-\\n\\u1f9ea Testing Legacy Compatibility...")
 
     try:
         from core.strategy_mapper import map_strategy
@@ -109,12 +109,12 @@ def test_legacy_compatibility():
         result = map_strategy(execution_packet)
         assert isinstance(result, dict), "Legacy function should return dict"
         assert "mapped_at" in result, "Should have mapping timestamp"
-        safe_print(f"✅ Legacy map_strategy: {result.get('strategy_id', 'N/A')}")
+        safe_print(f"\\u2705 Legacy map_strategy: {result.get('strategy_id', 'N/A')}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Legacy compatibility test failed: {e}")
+        safe_print(f"\\u274c Legacy compatibility test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -122,7 +122,7 @@ def test_legacy_compatibility():
 
 def main():
     """Run simple hybrid tests."""
-    safe_print("🚀 Hybrid Strategy Mapper Simple Tests")
+    safe_print("\\u1f680 Hybrid Strategy Mapper Simple Tests")
     safe_print("=" * 50)
 
     tests = [
@@ -139,13 +139,13 @@ def main():
         safe_print("")  # Add spacing
 
     safe_print("=" * 50)
-    safe_print(f"📊 Test Results: {passed}/{total} tests passed")
+    safe_print(f"\\u1f4ca Test Results: {passed}/{total} tests passed")
 
     if passed == total:
-        safe_print("🎉 All hybrid tests passed! System is working correctly.")
+        safe_print("\\u1f389 All hybrid tests passed! System is working correctly.")
         return True
     else:
-        safe_print("❌ Some tests failed.")
+        safe_print("\\u274c Some tests failed.")
         return False
 
 

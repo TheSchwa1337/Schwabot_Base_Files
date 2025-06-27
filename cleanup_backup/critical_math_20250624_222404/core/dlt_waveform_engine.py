@@ -106,10 +106,10 @@ class DLTWaveformEngine:
 
     Mathematical Foundation:
     - DLT: W(t, f) = sum_{n=0}^{N-1} x[n] * exp(-j*2*pi*f*n*t/N)
-    - Quantum State: |ψ⟩ = Σᵢ αᵢ|i⟩ where |i⟩ are basis states
-    - Tensor Score: T = Σᵢⱼ wᵢⱼ * xᵢ * xⱼ
-    - Fractal Resonance: R = |FFT(x)|² * exp(-λ|t|)
-    - Hash-Basket Matching: similarity = Σᵢ |h₁ᵢ - h₂ᵢ| / len(hash)
+    - Quantum State: |\\u03c8\\u27e9 = \\u03a3\\u1d62 \\u03b1\\u1d62|i\\u27e9 where |i\\u27e9 are basis states
+    - Tensor Score: T = \\u03a3\\u1d62\\u2c7c w\\u1d62\\u2c7c * x\\u1d62 * x\\u2c7c
+    - Fractal Resonance: R = |FFT(x)|\\u00b2 * exp(-\\u03bb|t|)
+    - Hash-Basket Matching: similarity = \\u03a3\\u1d62 |h\\u2081\\u1d62 - h\\u2082\\u1d62| / len(hash)
     """
 
     def __init__(self, history_size: int = 1000):

@@ -7,8 +7,8 @@ entropy pressure and tick drift into strategy trigger vectors for
 optimal trading decisions.
 
 Mathematical Foundation:
-- Hash Drift: h'(t) = ∂χ/∂t
-- Phase Shift: ∆P = unified_math.sin(tφ) - σ
+- Hash Drift: h'(t) = \\u2202\\u03c7/\\u2202t
+- Phase Shift: \\u2206P = unified_math.sin(t\\u03c6) - \\u03c3
 - Entropy decay analysis and echo trigger vector scoring
 - Strategy trigger vector generation from tick data
 """
@@ -34,8 +34,8 @@ class TickPhase:
 
     tick_hash: str
     phase_coherence: float  # 0.0 to 1.0
-    hash_drift: float  # h'(t) = ∂χ/∂t
-    phase_shift: float  # ∆P = unified_math.sin(tφ) - σ
+    hash_drift: float  # h'(t) = \\u2202\\u03c7/\\u2202t
+    phase_shift: float  # \\u2206P = unified_math.sin(t\\u03c6) - \\u03c3
     entropy_pressure: float
     echo_score: float
     timestamp: datetime = field(default_factory=datetime.now)
@@ -105,10 +105,10 @@ class TickHashInterpreter:
             # Calculate entropy pressure
             entropy_pressure = self._calculate_entropy_pressure(tick_data)
 
-            # Calculate hash drift: h'(t) = ∂χ/∂t
+            # Calculate hash drift: h'(t) = \\u2202\\u03c7/\\u2202t
             hash_drift = self._calculate_hash_drift(tick_hash)
 
-            # Calculate phase shift: ∆P = unified_math.sin(tφ) - σ
+            # Calculate phase shift: \\u2206P = unified_math.sin(t\\u03c6) - \\u03c3
             phase_shift = self._calculate_phase_shift(tick_data)
 
             # Calculate phase coherence
@@ -186,7 +186,7 @@ class TickHashInterpreter:
             time_points = np.arange(len(recent_entropy))
             entropy_array = np.array(recent_entropy)
 
-            # Fit exponential decay: E(t) = E₀ * e^(-λt)
+            # Fit exponential decay: E(t) = E\\u2080 * e^(-\\u03bbt)
             try:
                 # Use log-linear fit for decay rate
                 # Add small constant to avoid unified_math.log(0)
@@ -195,7 +195,7 @@ class TickHashInterpreter:
             except:
                 decay_rate = 0.0
 
-            # Calculate half-life: t₁/₂ = ln(2) / λ
+            # Calculate half-life: t\\u2081/\\u2082 = ln(2) / \\u03bb
             half_life = unified_math.unified_math.log(2) / unified_math.max(decay_rate, 1e-10)
 
             # Calculate stability score based on entropy variance
@@ -376,7 +376,7 @@ class TickHashInterpreter:
             return 0.0
 
     def _calculate_hash_drift(self, tick_hash: str) -> float:
-        """Calculate hash drift: h'(t) = ∂χ/∂t."""
+        """Calculate hash drift: h'(t) = \\u2202\\u03c7/\\u2202t."""
         try:
             # Extract numerical components from hash
             hash_nums = [int(c, 16) for c in tick_hash[:16] if c.isalnum()]
@@ -407,24 +407,24 @@ class TickHashInterpreter:
             return 0.0
 
     def _calculate_phase_shift(self, tick_data: Dict[str, Any]) -> float:
-        """Calculate phase shift: ∆P = unified_math.sin(tφ) - σ."""
+        """Calculate phase shift: \\u2206P = unified_math.sin(t\\u03c6) - \\u03c3."""
         try:
             # Extract time and volatility components
             timestamp = tick_data.get('timestamp', datetime.now().timestamp())
             price = tick_data.get('price', 0.0)
             volume = tick_data.get('volume', 0.0)
 
-            # Calculate time factor φ
-            time_factor = timestamp % (2 * math.pi)  # Normalize to [0, 2π]
+            # Calculate time factor \\u03c6
+            time_factor = timestamp % (2 * math.pi)  # Normalize to [0, 2\\u03c0]
 
-            # Calculate volatility σ
+            # Calculate volatility \\u03c3
             if len(self.tick_history) >= 2:
                 prev_price = self.tick_history[-1].get('price', price)
                 volatility = unified_math.abs(price - prev_price) / unified_math.max(prev_price, 1.0)
             else:
                 volatility = 0.01  # Default volatility
 
-            # Calculate phase shift: ∆P = unified_math.sin(tφ) - σ
+            # Calculate phase shift: \\u2206P = unified_math.sin(t\\u03c6) - \\u03c3
             phase_shift = unified_math.unified_math.sin(time_factor) - volatility
 
             return phase_shift
@@ -593,3 +593,5 @@ class TickHashInterpreter:
 def create_tick_hash_interpreter() -> TickHashInterpreter:
     """Create and return a new TickHashInterpreter instance."""
     return TickHashInterpreter()
+
+"""

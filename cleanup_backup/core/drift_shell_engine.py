@@ -113,7 +113,7 @@ class DriftShellEngine:
 
         Allocate ring zone using radial partitioning.
 
-        Implements: R_n = 2πr/n where n ∈ Z+, r = shell_radius
+        Implements: R_n = 2\\u03c0r/n where n \\u2208 Z+, r = shell_radius
 
         This models harmonic drift sectors as equidistant radial logic zones.
 
@@ -151,7 +151,7 @@ class DriftShellEngine:
 
         Calculate dynamic ring depth using momentum-triggered scaling.
 
-        Implements: D_i = f(t) · log₂(1 + |ΔP_t|/P_{t-1})
+        Implements: D_i = f(t) \\u00b7 log\\u2082(1 + |\\u0394P_t|/P_{t-1})
 
         Handles momentum-triggered scaling for dynamic ring-depth mapping.
 
@@ -204,7 +204,7 @@ class DriftShellEngine:
         """
         Validate and compute current cycle time slot.
 
-        Implements: τ_n = mod(t, Δt) where Δt = 3.75 min
+        Implements: \\u03c4_n = mod(t, \\u0394t) where \\u0394t = 3.75 min
 
         for Ferris logic cycle slots.
 
@@ -241,7 +241,7 @@ class DriftShellEngine:
         """
         Allocate ring drift across concentric tensor rings.
 
-        Uses Ψ∞ constant for allocation: Ψ∞ * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index²)
+        Uses \\u03a8\\u221e constant for allocation: \\u03a8\\u221e * unified_math.sin(layer_index * entropy_gradient) / (1 + layer_index\\u00b2)
 
         Args:
             layer_index: Index of the layer

@@ -695,7 +695,7 @@ class OpsObservability:
         self.start_time = time.time()
         self.total_operations = 0
 
-        safe_safe_print("🔍 Ops and Observability initialized")
+        safe_safe_print("\\u1f50d Ops and Observability initialized")
 
     def _start_services(self) -> None:
         """Start observability services."""
@@ -703,13 +703,13 @@ class OpsObservability:
         metrics_port = self.config.get('prometheus_port', 8000)
         try:
             start_http_server(metrics_port)
-            safe_safe_print(f"✅ Prometheus metrics server started on port {metrics_port}")
+            safe_safe_print(f"\\u2705 Prometheus metrics server started on port {metrics_port}")
         except Exception as e:
-            safe_safe_print(f"❌ Prometheus server failed: {safe_format_error(e, 'prometheus_start')}")
+            safe_safe_print(f"\\u274c Prometheus server failed: {safe_format_error(e, 'prometheus_start')}")
 
         # Start health monitoring
         self.health_monitor.start_monitoring()
-        safe_safe_print("✅ Health monitoring started")
+        safe_safe_print("\\u2705 Health monitoring started")
 
     def log_operation(
         self,
@@ -746,7 +746,7 @@ class OpsObservability:
             self.total_operations += 1
 
         except Exception as e:
-            safe_safe_print(f"❌ Operation logging failed: {safe_format_error(e, 'operation_logging')}")
+            safe_safe_print(f"\\u274c Operation logging failed: {safe_format_error(e, 'operation_logging')}")
 
     def record_trade(
         self,
@@ -776,7 +776,7 @@ class OpsObservability:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Trade recording failed: {safe_format_error(e, 'trade_recording')}")
+            safe_safe_print(f"\\u274c Trade recording failed: {safe_format_error(e, 'trade_recording')}")
 
     def record_api_request(
         self,
@@ -810,7 +810,7 @@ class OpsObservability:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ API recording failed: {safe_format_error(e, 'api_recording')}")
+            safe_safe_print(f"\\u274c API recording failed: {safe_format_error(e, 'api_recording')}")
 
     def record_risk_violation(
         self,
@@ -842,7 +842,7 @@ class OpsObservability:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Risk violation recording failed: {safe_format_error(e, 'risk_violation_recording')}")
+            safe_safe_print(f"\\u274c Risk violation recording failed: {safe_format_error(e, 'risk_violation_recording')}")
 
     def record_math_operation(
         self,
@@ -869,7 +869,7 @@ class OpsObservability:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Math operation recording failed: {safe_format_error(e, 'math_recording')}")
+            safe_safe_print(f"\\u274c Math operation recording failed: {safe_format_error(e, 'math_recording')}")
 
     def update_system_metrics(self) -> None:
         """Update system metrics."""
@@ -893,7 +893,7 @@ class OpsObservability:
                 self._update_core_system_metrics()
 
         except Exception as e:
-            safe_safe_print(f"❌ System metrics update failed: {safe_format_error(e, 'system_metrics')}")
+            safe_safe_print(f"\\u274c System metrics update failed: {safe_format_error(e, 'system_metrics')}")
 
     def _update_core_system_metrics(self) -> None:
         """Update core system metrics."""
@@ -923,7 +923,7 @@ class OpsObservability:
             # API metrics are updated in record_api_request
 
         except Exception as e:
-            safe_safe_print(f"❌ Core system metrics update failed: {safe_format_error(e, 'core_metrics')}")
+            safe_safe_print(f"\\u274c Core system metrics update failed: {safe_format_error(e, 'core_metrics')}")
 
     def get_health_endpoint(self) -> Dict[str, Any]:
         """Get health endpoint data."""
@@ -935,7 +935,7 @@ class OpsObservability:
                 'status': overall_health,
                 'timestamp': datetime.now().isoformat(),
                 'uptime': time.time() - self.start_time,
-                'version': '1.0.0',
+                'version': '1.0_0',
                 'components': {
                     name: {
                         'status': check.status,
@@ -949,7 +949,7 @@ class OpsObservability:
             }
 
         except Exception as e:
-            safe_safe_print(f"❌ Health endpoint failed: {safe_format_error(e, 'health_endpoint')}")
+            safe_safe_print(f"\\u274c Health endpoint failed: {safe_format_error(e, 'health_endpoint')}")
             return {
                 'status': 'error',
                 'timestamp': datetime.now().isoformat(),
@@ -961,7 +961,7 @@ class OpsObservability:
         try:
             return generate_latest()
         except Exception as e:
-            safe_safe_print(f"❌ Metrics endpoint failed: {safe_format_error(e, 'metrics_endpoint')}")
+            safe_safe_print(f"\\u274c Metrics endpoint failed: {safe_format_error(e, 'metrics_endpoint')}")
             return ""
 
     def get_observability_summary(self) -> Dict[str, Any]:
@@ -1040,7 +1040,7 @@ def get_observability_summary() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test Ops and Observability
-    safe_print("🔍 Testing Ops and Observability...")
+    safe_print("\\u1f50d Testing Ops and Observability...")
 
     ops = get_ops_observability()
 
@@ -1080,8 +1080,10 @@ if __name__ == "__main__":
 
     # Get health endpoint
     health = get_health_endpoint()
-    safe_print(f"✅ Health status: {health['status']}")
+    safe_print(f"\\u2705 Health status: {health['status']}")
 
     # Get observability summary
     summary = get_observability_summary()
-    safe_print(f"✅ Observability summary: {summary}")
+    safe_print(f"\\u2705 Observability summary: {summary}")
+
+"""

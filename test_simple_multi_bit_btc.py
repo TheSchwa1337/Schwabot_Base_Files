@@ -351,19 +351,19 @@ class MultiBitBTCProcessor:
 
 def test_multi_bit_btc_processor():
     """Test the Multi-Bit BTC processor functionality."""
-    print("🧪 Testing Multi-Bit BTC Processor (Standalone)")
+    print("\\u1f9ea Testing Multi-Bit BTC Processor (Standalone)")
     print("=" * 60)
 
     try:
         # Initialize processor
         processor = MultiBitBTCProcessor()
-        print("✅ Successfully initialized processor")
+        print("\\u2705 Successfully initialized processor")
 
         # Test data processing
         base_price = 50000.0
         base_volume = 1000.0
 
-        print("📊 Processing test data...")
+        print("\\u1f4ca Processing test data...")
 
         # Process data at different bit levels
         for i in range(10):
@@ -377,39 +377,39 @@ def test_multi_bit_btc_processor():
             for bit_level in BitLevel:
                 try:
                     data_point = processor.process_btc_data(price, volume, bit_level)
-                    print(f"  ✅ Processed {bit_level.value}-bit data: price=${price:.2f}, vol={volume:.2f}")
+                    print(f"  \\u2705 Processed {bit_level.value}-bit data: price=${price:.2f}, vol={volume:.2f}")
                 except Exception as e:
-                    print(f"  ❌ Failed to process {bit_level.value}-bit data: {e}")
+                    print(f"  \\u274c Failed to process {bit_level.value}-bit data: {e}")
 
         # Test bit level analysis
-        print("\n📈 Testing bit level analysis...")
+        print("\\n\\u1f4c8 Testing bit level analysis...")
         for bit_level in BitLevel:
             try:
                 analysis = processor.analyze_bit_level(bit_level)
                 if analysis:
-                    print(f"  ✅ {bit_level.value}-bit analysis: confidence={analysis.confidence_score:.3f}")
+                    print(f"  \\u2705 {bit_level.value}-bit analysis: confidence={analysis.confidence_score:.3f}")
                     print(f"     Price mean: ${analysis.price_stats['mean']:.2f}")
                     print(f"     Volume mean: {analysis.volume_stats['mean']:.2f}")
                     print(f"     Bitplane entropy: {analysis.bitplane_entropy:.4f}")
                 else:
-                    print(f"  ⚠️ No data for {bit_level.value}-bit analysis")
+                    print(f"  \\u26a0\\ufe0f No data for {bit_level.value}-bit analysis")
             except Exception as e:
-                print(f"  ❌ Failed {bit_level.value}-bit analysis: {e}")
+                print(f"  \\u274c Failed {bit_level.value}-bit analysis: {e}")
 
         # Test statistics
-        print("\n📊 Testing statistics...")
+        print("\\n\\u1f4ca Testing statistics...")
         try:
             stats = processor.get_btc_statistics()
-            print(f"  ✅ Statistics: {stats['total_data_points']} data points, {stats['total_errors']} errors")
+            print(f"  \\u2705 Statistics: {stats['total_data_points']} data points, {stats['total_errors']} errors")
             print(f"     Error rate: {stats['error_rate']:.4f}")
         except Exception as e:
-            print(f"  ❌ Failed statistics: {e}")
+            print(f"  \\u274c Failed statistics: {e}")
 
-        print("\n🎉 Multi-Bit BTC Processor test completed successfully!")
+        print("\\n\\u1f389 Multi-Bit BTC Processor test completed successfully!")
         return True
 
     except Exception as e:
-        print(f"❌ Test failed: {e}")
+        print(f"\\u274c Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -417,24 +417,26 @@ def test_multi_bit_btc_processor():
 
 def main():
     """Main test execution."""
-    print("🧬 Simple Multi-Bit BTC Processor Test - Schwabot UROS v1.0")
+    print("\\u1f9ec Simple Multi-Bit BTC Processor Test - Schwabot UROS v1.0")
     print("=" * 70)
 
     success = test_multi_bit_btc_processor()
 
     print("\n" + "=" * 70)
-    print("📋 Test Summary")
+    print("\\u1f4cb Test Summary")
     print("=" * 70)
-    print(f"Multi-Bit BTC Processor: {'✅ PASS' if success else '❌ FAIL'}")
+    print(f"Multi-Bit BTC Processor: {'\\u2705 PASS' if success else '\\u274c FAIL'}")
 
     if success:
-        print("\n🎉 Test passed! The Multi-Bit BTC processor is working correctly.")
+        print("\\n\\u1f389 Test passed! The Multi-Bit BTC processor is working correctly.")
         print("The circular import issue has been resolved.")
     else:
-        print("\n⚠️ Test failed. Please check the error messages above.")
+        print("\\n\\u26a0\\ufe0f Test failed. Please check the error messages above.")
 
     return success
 
 
 if __name__ == "__main__":
     main()
+
+"""

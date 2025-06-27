@@ -2,19 +2,19 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Ghost router – conditional trade core.
+"""Ghost router \\u2013 conditional trade core.
 
 This module wires together the **seven primary conditionals** outlined in the
 high-level design note (hash-drift, pool stability, lantern vector match, AI
 consensus, re-entry tolerance, profit-lock sync, narrative glyph overlay).
 
-The implementation is *deliberately lightweight* – each conditional is a pure
+The implementation is *deliberately lightweight* \\u2013 each conditional is a pure
 function that returns a boolean.  :class:`GhostRouter` evaluates them in the
 canonical order and emits one of three routes:
 
-* ``"ghost_trade"``  – enter a stealth trade (BTC long or USDC exit).
-* ``"hold_usdc"``    – defensive hold triggered by news overlay.
-* ``"noop"``         – no action / wait.
+* ``"ghost_trade"``  \\u2013 enter a stealth trade (BTC long or USDC exit).
+* ``"hold_usdc"``    \\u2013 defensive hold triggered by news overlay.
+* ``"noop"``         \\u2013 no action / wait.
 
 Only NumPy + std-lib are required, keeping the stub dependency-free beyond
 what Schwabot already ships.
@@ -52,16 +52,16 @@ def _cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
 
 
 # -----------------------------------------------------------------------------
-# Conditionals – each returns bool
+# Conditionals \\u2013 each returns bool
 # -----------------------------------------------------------------------------
 
-_HASH_EPS: Final = 8  # ≤ 8 differing hex chars → similar hash
+_HASH_EPS: Final = 8  # \\u2264 8 differing hex chars \\u2192 similar hash
 _POOL_STAB_EPS: Final = 0.1
 _VECTOR_COS_THRESHOLD: Final = 0.97
 _AI_TRUST_THRESHOLD: Final = 0.9
-_DECAY_LAMBDA: Final = 0.001  # smaller ⇒ longer forgiveness window
+_DECAY_LAMBDA: Final = 0.001  # smaller \\u21d2 longer forgiveness window
 _DECAY_THRESHOLD: Final = 0.5
-_PROFIT_LOCK_EPS: Final = 0.0  # > projected_exit + ε
+_PROFIT_LOCK_EPS: Final = 0.0  # > projected_exit + \\u03b5
 _NEWS_OVERLAY_THRESHOLD: Final = 0.6
 
 
@@ -165,11 +165,11 @@ class GhostRouter:
         if not _reentry_tolerance(data.opportunity_ts, data.now_ts):
             return "noop"
 
-        # 6. Profit lock – if we are already beyond target, exit route
+        # 6. Profit lock \\u2013 if we are already beyond target, exit route
         if _profit_lock_sync(data.curr_profit, data.projected_exit):
             return "hold_usdc"
 
-        # 7. Narrative glyph overlay – may override to defensive hold
+        # 7. Narrative glyph overlay \\u2013 may override to defensive hold
         if _news_overlay_route(data.news_score):
             return "hold_usdc"
 
@@ -189,7 +189,7 @@ def ghost_router(data: RouterInput) -> str:  # noqa: D401
 
 @dataclass(slots=True)
 class ExecPacket:
-    """Executable order packet ⟨V_final , route , O_t , τ_t⟩ (formula 16)."""
+    """Executable order packet \\u27e8V_final , route , O_t , \\u03c4_t\\u27e9 (formula 16)."""
 
     volume: float
     route: Literal["vault_mode", "long_mode", "short_mode", "mid_mode"]
@@ -198,7 +198,7 @@ class ExecPacket:
 
 
 # ------------------------------------------------------------------
-# High-level helper – implement equations (1) … (8)
+# High-level helper \\u2013 implement equations (1) \\u2026 (8)
 # ------------------------------------------------------------------
 
 
@@ -226,13 +226,13 @@ def compute_ghost_route(
     """Compute ghost routing decision and order size.
 
     Returns an :class:`ExecPacket` with volume, route string, price offset 0.0
-    (placeholder) and hash-tag τₜ.
+    (placeholder) and hash-tag \\u03c4\\u209c.
     """
     import hashlib
     from core.unified_math_system import unified_math
 
     delta_H = H_t - H_prev
-    # (1) Φ_t
+    # (1) \\u03a6_t
     phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
 
     # (3) execution velocity

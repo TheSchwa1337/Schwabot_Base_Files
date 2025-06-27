@@ -124,12 +124,12 @@ class DemoMemoryCore:
         self.auto_cleanup = True
         self.cleanup_interval = 1000  # Cleanup every 1000 entries
 
-        safe_safe_print("🧠 Demo Memory Core initialized")
+        safe_safe_print("\\u1f9e0 Demo Memory Core initialized")
 
     def set_simulation_mode(self, mode: SimulationMode) -> None:
         """Set simulation mode."""
         self.simulation_mode = mode
-        safe_safe_print(f"🔄 Simulation mode set to: {mode.value}")
+        safe_safe_print(f"\\u1f504 Simulation mode set to: {mode.value}")
 
     def store_memory_entry(
         self,
@@ -190,11 +190,11 @@ class DemoMemoryCore:
             if self.auto_cleanup and self.total_entries % self.cleanup_interval == 0:
                 self._cleanup_memory()
 
-            safe_safe_print(f"✅ Memory entry stored: {hash_id[:8]}...")
+            safe_safe_print(f"\\u2705 Memory entry stored: {hash_id[:8]}...")
             return hash_id
 
         except Exception as e:
-            safe_safe_print(f"❌ Memory storage failed: {safe_format_error(e, 'memory_storage')}")
+            safe_safe_print(f"\\u274c Memory storage failed: {safe_format_error(e, 'memory_storage')}")
             return ""
 
     def retrieve_memory_entry(
@@ -231,7 +231,7 @@ class DemoMemoryCore:
             return None
 
         except Exception as e:
-            safe_safe_print(f"❌ Memory retrieval failed: {safe_format_error(e, 'memory_retrieval')}")
+            safe_safe_print(f"\\u274c Memory retrieval failed: {safe_format_error(e, 'memory_retrieval')}")
             return None
 
     def _generate_hash_id(self, tick_id: int, timestamp: datetime, market_data: Dict[str, Any]) -> str:
@@ -247,7 +247,7 @@ class DemoMemoryCore:
             return hash_object.hexdigest()
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Hash generation failed: {safe_format_error(e, 'hash_generation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Hash generation failed: {safe_format_error(e, 'hash_generation')}")
             return f"fallback_{tick_id}_{int(time.time())}"
 
     def _calculate_confidence_score(
@@ -278,7 +278,7 @@ class DemoMemoryCore:
             return unified_math.min(1.0, unified_math.max(0.0, confidence))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Confidence calculation failed: {safe_format_error(e, 'confidence_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Confidence calculation failed: {safe_format_error(e, 'confidence_calculation')}")
             return 0.5
 
     def _find_similar_memory(
@@ -330,7 +330,7 @@ class DemoMemoryCore:
                 return None
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Similarity search failed: {safe_format_error(e, 'similarity_search')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Similarity search failed: {safe_format_error(e, 'similarity_search')}")
             return None
 
     def _calculate_similarity_score(
@@ -371,7 +371,7 @@ class DemoMemoryCore:
             return score / unified_math.max(total_factors, 1)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Similarity calculation failed: {safe_format_error(e, 'similarity_calculation')}")
             return 0.0
 
     def _cleanup_memory(self) -> None:
@@ -397,10 +397,10 @@ class DemoMemoryCore:
                 del self.memory.lantern_memory[hash_id]
 
             safe_safe_print(
-                f"🗑️ Memory cleanup completed: {len(low_confidence_entries)} long-term, {len(old_lantern_entries)} lantern entries removed")
+                f"\\u1f5d1\\ufe0f Memory cleanup completed: {len(low_confidence_entries)} long-term, {len(old_lantern_entries)} lantern entries removed")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory cleanup failed: {safe_format_error(e, 'memory_cleanup')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory cleanup failed: {safe_format_error(e, 'memory_cleanup')}")
 
     def get_memory_statistics(self) -> Dict[str, Any]:
         """Get memory statistics."""
@@ -425,7 +425,7 @@ class DemoMemoryCore:
                 self.memory.mid_term_memory.clear()
                 self.memory.long_term_memory.clear()
                 self.memory.lantern_memory.clear()
-                safe_safe_print("🗑️ All memory cleared")
+                safe_safe_print("\\u1f5d1\\ufe0f All memory cleared")
             else:
                 # Clear specific memory type
                 if memory_type == MemoryType.SHORT_TERM:
@@ -436,10 +436,10 @@ class DemoMemoryCore:
                     self.memory.long_term_memory.clear()
                 elif memory_type == MemoryType.LANTERN:
                     self.memory.lantern_memory.clear()
-                safe_safe_print(f"🗑️ {memory_type.value} memory cleared")
+                safe_safe_print(f"\\u1f5d1\\ufe0f {memory_type.value} memory cleared")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory clear failed: {safe_format_error(e, 'memory_clear')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory clear failed: {safe_format_error(e, 'memory_clear')}")
 
 
 # Global demo memory core instance
@@ -491,7 +491,7 @@ def get_memory_stats() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test demo memory core
-    safe_print("🧪 Testing Demo Memory Core...")
+    safe_print("\\u1f9ea Testing Demo Memory Core...")
 
     # Test market data
     test_market_data = {
@@ -524,7 +524,7 @@ if __name__ == "__main__":
         memory_type=MemoryType.SHORT_TERM
     )
 
-    safe_print(f"✅ Memory entry stored: {hash_id}")
+    safe_print(f"\\u2705 Memory entry stored: {hash_id}")
 
     # Retrieve memory entry
     retrieved_entry = retrieve_memory_entry(
@@ -533,10 +533,12 @@ if __name__ == "__main__":
     )
 
     if retrieved_entry:
-        safe_print(f"✅ Memory entry retrieved: {retrieved_entry.hash_id[:8]}...")
+        safe_print(f"\\u2705 Memory entry retrieved: {retrieved_entry.hash_id[:8]}...")
         safe_print(f"   Profit Result: {retrieved_entry.profit_result}")
         safe_print(f"   Confidence Score: {retrieved_entry.confidence_score:.3f}")
 
     # Get statistics
     stats = get_memory_stats()
-    safe_print(f"✅ Memory Statistics: {stats}")
+    safe_print(f"\\u2705 Memory Statistics: {stats}")
+
+"""

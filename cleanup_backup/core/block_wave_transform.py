@@ -5,7 +5,7 @@ from core.unified_math_system import unified_math
 """Block-wise wave transform utilities.
 
 This module provides a minimal, working implementation of
-define_block_wave_transform – a helper that will be used by Schwabot's
+define_block_wave_transform \\u2013 a helper that will be used by Schwabot's
 signal-compression and GAN-preprocessing stack.
 
 The routine currently supports a block-wise DCT-II (via scipy.fftpack if
@@ -28,7 +28,7 @@ try:
         """TODO: document _dct_block."""
         return dct(arr, type=2, norm="ortho")
 
-except ModuleNotFoundError:  # pragma: no cover – keep pure-NumPy fallback
+except ModuleNotFoundError:  # pragma: no cover \\u2013 keep pure-NumPy fallback
 
     def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
         """Fallback: approximate DCT-II via real FFT symmetry trick."""
@@ -84,3 +84,5 @@ def define_block_wave_transform(
 
     # Flatten transformed back to 1-D for convenience.
     return transformed_blocks.ravel(), entropies
+
+"""

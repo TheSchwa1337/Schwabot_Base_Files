@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Ghost memory – lightweight hash store for profitable trade snapshots.
+"""Ghost memory \\u2013 lightweight hash store for profitable trade snapshots.
 
 Purpose
 -------
@@ -13,8 +13,8 @@ hash-drift comparison.
 Design goals
 ~~~~~~~~~~~~
 1. **O(1) look-ups** by keeping the *most recent* profitable hash at `self.last`.
-2. **Memory-bounded** – default ring buffer length of 1 000 entries.
-3. **Pure-Python + std-lib only** – no heavy DB, avoids extra deps.
+2. **Memory-bounded** \\u2013 default ring buffer length of 1 000 entries.
+3. **Pure-Python + std-lib only** \\u2013 no heavy DB, avoids extra deps.
 """
 
 
@@ -64,7 +64,7 @@ class GhostMemory:
 
 
 # -----------------------------------------------------------------------------
-# Module-level singleton & functional helpers – mirrors legacy stubs
+# Module-level singleton & functional helpers \\u2013 mirrors legacy stubs
 # -----------------------------------------------------------------------------
 
 _memory = GhostMemory()

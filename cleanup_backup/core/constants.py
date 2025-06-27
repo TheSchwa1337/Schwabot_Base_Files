@@ -23,8 +23,8 @@ from core.unified_math_system import unified_math
 
 # Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
-FIBONACCI_SCALING = 1.272019649514069  # φ^(1/2) for fractal scaling
-INVERSE_PSI = 0.618033988749895  # 1/φ for counter-rotation
+FIBONACCI_SCALING = 1.272019649514069  # \\u03c6^(1/2) for fractal scaling
+INVERSE_PSI = 0.618033988749895  # 1/\\u03c6 for counter-rotation
 
 # Configuration directories
 CONFIG_DIR = Path(__file__).parent / "config"
@@ -95,7 +95,7 @@ class WindowsCliCompatibilityHandler:
             # Strip emojis for Windows CLI compatibility
             import re
 
-            message = re.sub(r"[^\w\s\-_.,!?]", "", message)
+            message = re.sub(r"[^\\w\\s\-_.,!?]", "", message)
         return message
 
     @staticmethod
@@ -126,3 +126,5 @@ FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 # Performance optimization constants
 VECTORIZATION_THRESHOLD = 1000  # Use vectorized ops above this size
 PARALLEL_PROCESSING_THRESHOLD = 10000  # Use parallel processing above this
+
+"""

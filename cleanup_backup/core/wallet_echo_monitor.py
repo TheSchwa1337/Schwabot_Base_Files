@@ -104,9 +104,9 @@ class WalletEchoMonitor:
     Wallet echo monitor for live fund tracking.
 
     Mathematical Foundation:
-    - Balance Tracking: B(t) = B(t-1) + Σᵢ Tᵢ where Tᵢ are transactions
-    - Flow Analysis: F = Σᵢ (incoming_i - outgoing_i) / time_period
-    - Portfolio Value: V = Σᵢ balance_i * price_i
+    - Balance Tracking: B(t) = B(t-1) + \\u03a3\\u1d62 T\\u1d62 where T\\u1d62 are transactions
+    - Flow Analysis: F = \\u03a3\\u1d62 (incoming_i - outgoing_i) / time_period
+    - Portfolio Value: V = \\u03a3\\u1d62 balance_i * price_i
     - Transaction Pattern: P = frequency * average_amount * volatility
     """
 
@@ -422,7 +422,7 @@ class WalletEchoMonitor:
             return {
                 "balance": balance,
                 "usd_value": usd_value,
-                "change_24h": uniform(-0.1, 0.1),  # ±10% change
+                "change_24h": uniform(-0.1, 0.1),  # \\u00b110% change
                 "transaction_count": wallet_address.metadata.get("transaction_count", 0)
             }
 
@@ -659,19 +659,19 @@ class WalletEchoMonitor:
 
 def main():
     """Test function for Wallet Echo Monitor."""
-    safe_print("🔄 Testing Wallet Echo Monitor...")
+    safe_print("\\u1f504 Testing Wallet Echo Monitor...")
 
     # Initialize monitor
     monitor = WalletEchoMonitor()
 
     # Add some test wallet addresses
-    safe_print("📊 Adding test wallet addresses...")
+    safe_print("\\u1f4ca Adding test wallet addresses...")
     monitor.add_wallet_address("test_btc_address", WalletType.BTC, "Test BTC Wallet")
     monitor.add_wallet_address("test_usdc_address", WalletType.USDC, "Test USDC Wallet")
     monitor.add_wallet_address("test_xrp_address", WalletType.XRP, "Test XRP Wallet")
 
     # Simulate monitoring (run for a short time)
-    safe_print("🔍 Simulating wallet monitoring...")
+    safe_print("\\u1f50d Simulating wallet monitoring...")
 
     async def test_monitoring():
         # Start monitoring
@@ -694,7 +694,7 @@ def main():
 
     # Get statistics
     stats = monitor.get_wallet_statistics()
-    safe_print(f"\n📊 Wallet Statistics:")
+    safe_print(f"\\n\\u1f4ca Wallet Statistics:")
     safe_print(f"  Active Wallets: {stats.get('active_wallets', 0)}")
     safe_print(f"  Total Balance USD: ${stats.get('total_balance_usd', 0):,.2f}")
     safe_print(f"  Total Transactions: {stats.get('total_transactions', 0)}")
@@ -703,7 +703,7 @@ def main():
 
     # Get wallet balances
     balances = monitor.get_wallet_balances()
-    safe_print(f"\n💰 Wallet Balances:")
+    safe_print(f"\\n\\u1f4b0 Wallet Balances:")
     for addr, balance in balances.items():
         safe_print(f"  {balance.wallet_type.value}: {balance.balance:.4f} (${balance.usd_value:,.2f})")
 

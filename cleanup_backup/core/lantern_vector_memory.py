@@ -136,9 +136,9 @@ class LanternMemory:
         self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
 
         if ZPE_MODULES_AVAILABLE:
-            safe_safe_print("🔄 Lantern Memory initialized with ZPE integration")
+            safe_safe_print("\\u1f504 Lantern Memory initialized with ZPE integration")
         else:
-            safe_safe_print("⚠️ Lantern Memory initialized without ZPE integration")
+            safe_safe_print("\\u26a0\\ufe0f Lantern Memory initialized without ZPE integration")
 
     def load(self) -> bool:
         """Load memory state."""
@@ -192,7 +192,7 @@ class LanternMemory:
                     })
 
                 except Exception as e:
-                    safe_safe_print(f"⚠️ ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
+                    safe_safe_print(f"\\u26a0\\ufe0f ZPE calculation failed: {safe_format_error(e, 'zpe_calculation')}")
                     entry.metadata['zpe_integration'] = False
                     entry.metadata['zpe_error'] = str(e)
 
@@ -206,7 +206,7 @@ class LanternMemory:
             return entry
 
         except Exception as e:
-            safe_safe_print(f"❌ Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
+            safe_safe_print(f"\\u274c Failed to add memory entry: {safe_format_error(e, 'add_memory_entry')}")
             return None
 
     def get_memory_analysis(self, n_components: int = 4) -> LanternMemoryResult:
@@ -246,7 +246,7 @@ class LanternMemory:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Memory analysis failed: {safe_format_error(e, 'memory_analysis')}")
+            safe_safe_print(f"\\u274c Memory analysis failed: {safe_format_error(e, 'memory_analysis')}")
             return LanternMemoryResult(
                 success=False,
                 memory_entries=self.memory_entries,
@@ -291,7 +291,7 @@ class LanternMemory:
     def clear_memory(self) -> None:
         """Clear all memory entries."""
         self.memory_entries.clear()
-        safe_safe_print("🗑️ Lantern Memory cleared")
+        safe_safe_print("\\u1f5d1\\ufe0f Lantern Memory cleared")
 
     def get_recent_entries(self, count: int = 10) -> List[LanternMemoryEntry]:
         """Get recent memory entries."""

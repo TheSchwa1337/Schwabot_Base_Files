@@ -7,7 +7,7 @@ Temporal Execution Correction Layer - Schwabot UROS v1.0
 
 Handles drift correction in misaligned trade timing or faulty backtests.
 Features:
-- Drift Deviation Estimation: Δt = t_ideal - t_executed
+- Drift Deviation Estimation: \\u0394t = t_ideal - t_executed
 - Kalman Filter-like Correction: x_t = x_{t-1} + K_t(z_t - x_{t-1})
 - Execution timing optimization and synchronization
 - Integration with fault_bus.py and backtest_runner.py

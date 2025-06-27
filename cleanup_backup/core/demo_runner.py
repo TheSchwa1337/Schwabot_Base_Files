@@ -6,7 +6,7 @@ Demo Pipeline Runner - Schwabot UROS v1.0
 ========================================
 
 Executes the complete Schwabot pipeline:
-DLT waveform + tick input → hash phase → strategy execution → profit output
+DLT waveform + tick input \\u2192 hash phase \\u2192 strategy execution \\u2192 profit output
 
 Features:
 - Complete pipeline execution simulation
@@ -103,7 +103,7 @@ class DemoPipelineRunner:
     - Hash Generation: H(t) = hash(tick_data + timestamp)
     - Bit Phase Resolution: P(t) = resolve_bit_phase(H(t), mode)
     - Strategy Decision: S(t) = f(tensor_score, bit_phase, market_conditions)
-    - Portfolio Update: P(t+1) = P(t) + Σ(trades * impacts)
+    - Portfolio Update: P(t+1) = P(t) + \\u03a3(trades * impacts)
     """
 
     def __init__(self, config_path: str = "./config/demo_runner_config.json"):
@@ -744,26 +744,26 @@ if __name__ == "__main__":
     runner.set_mode(PipelineMode.DEMO)
 
     # Start pipeline for 2 minutes
-    safe_print("🚀 Starting demo pipeline...")
+    safe_print("\\u1f680 Starting demo pipeline...")
     success = runner.start_pipeline(duration_minutes=2)
 
     if success:
-        safe_print("✅ Pipeline started successfully")
+        safe_print("\\u2705 Pipeline started successfully")
 
         # Monitor for 10 seconds
         for i in range(10):
             time.sleep(1)
             status = runner.get_pipeline_status()
             safe_print(
-                f"📊 Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
+                f"\\u1f4ca Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
 
         # Stop pipeline
-        safe_print("⏹️ Stopping pipeline...")
+        safe_print("\\u23f9\\ufe0f Stopping pipeline...")
         runner.stop_pipeline()
 
         # Final status
         final_status = runner.get_pipeline_status()
-        safe_print(f"🏁 Final Status: {final_status['status']}")
-        safe_print(f"📈 Performance: {final_status['performance_metrics']}")
+        safe_print(f"\\u1f3c1 Final Status: {final_status['status']}")
+        safe_print(f"\\u1f4c8 Performance: {final_status['performance_metrics']}")
     else:
-        safe_print("❌ Failed to start pipeline")
+        safe_print("\\u274c Failed to start pipeline")

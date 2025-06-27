@@ -30,7 +30,7 @@ class SchwabotInstaller:
     def __init__(self):
         """Initialize the installer."""
         self.project_name = "Schwabot"
-        self.version = "2.0.0"
+        self.version = "2.0_0"
         self.install_dir = Path.home() / ".schwabot"
         self.config_dir = self.install_dir / "config"
         self.logs_dir = self.install_dir / "logs"
@@ -44,9 +44,9 @@ class SchwabotInstaller:
         self.installation_log = []
         self.errors = []
 
-        safe_print(f"🚀 {self.project_name} v{self.version} Installer")
-        safe_print(f"📊 Platform: {self.platform} ({self.arch})")
-        safe_print(f"📁 Install directory: {self.install_dir}")
+        safe_print(f"\\u1f680 {self.project_name} v{self.version} Installer")
+        safe_print(f"\\u1f4ca Platform: {self.platform} ({self.arch})")
+        safe_print(f"\\u1f4c1 Install directory: {self.install_dir}")
         safe_print("=" * 60)
 
     def unified_math.log(self, message: str, level: str = "INFO") -> None:
@@ -64,10 +64,10 @@ class SchwabotInstaller:
         python_version = sys.version_info
         if python_version < (3, 8):
             self.unified_math.log(
-                f"❌ Python 3.8+ required, found {python_version.major}.{python_version.minor}", "ERROR")
+                f"\\u274c Python 3.8+ required, found {python_version.major}.{python_version.minor}", "ERROR")
             return False
 
-        self.unified_math.log(f"✅ Python {python_version.major}.{python_version.minor}.{python_version.micro}")
+        self.unified_math.log(f"\\u2705 Python {python_version.major}.{python_version.minor}.{python_version.micro}")
 
         # Check available memory
         try:
@@ -75,30 +75,30 @@ class SchwabotInstaller:
             memory = psutil.virtual_memory()
             memory_gb = memory.total / (1024**3)
             if memory_gb < 4:
-                self.unified_math.log(f"⚠️  Recommended: 4GB+ RAM, found {memory_gb:.1f}GB", "WARNING")
+                self.unified_math.log(f"\\u26a0\\ufe0f  Recommended: 4GB+ RAM, found {memory_gb:.1f}GB", "WARNING")
             else:
-                self.unified_math.log(f"✅ Memory: {memory_gb:.1f}GB")
+                self.unified_math.log(f"\\u2705 Memory: {memory_gb:.1f}GB")
         except ImportError:
-            self.log("⚠️  Could not check memory (psutil not available)", "WARNING")
+            self.log("\\u26a0\\ufe0f  Could not check memory (psutil not available)", "WARNING")
 
         # Check disk space
         try:
             disk_usage = shutil.disk_usage(self.install_dir.parent)
             disk_gb = disk_usage.free / (1024**3)
             if disk_gb < 10:
-                self.unified_math.log(f"❌ Need 10GB+ free space, found {disk_gb:.1f}GB", "ERROR")
+                self.unified_math.log(f"\\u274c Need 10GB+ free space, found {disk_gb:.1f}GB", "ERROR")
                 return False
             else:
-                self.unified_math.log(f"✅ Disk space: {disk_gb:.1f}GB available")
+                self.unified_math.log(f"\\u2705 Disk space: {disk_gb:.1f}GB available")
         except Exception as e:
-            self.unified_math.log(f"⚠️  Could not check disk space: {e}", "WARNING")
+            self.unified_math.log(f"\\u26a0\\ufe0f  Could not check disk space: {e}", "WARNING")
 
         # Check network connectivity
         try:
             urllib.request.urlopen("https://pypi.org", timeout=5)
-            self.log("✅ Network connectivity")
+            self.log("\\u2705 Network connectivity")
         except Exception:
-            self.log("⚠️  Network connectivity issues detected", "WARNING")
+            self.log("\\u26a0\\ufe0f  Network connectivity issues detected", "WARNING")
 
         return True
 
@@ -119,12 +119,12 @@ class SchwabotInstaller:
 
             for directory in directories:
                 directory.mkdir(parents=True, exist_ok=True)
-                self.unified_math.log(f"✅ Created: {directory}")
+                self.unified_math.log(f"\\u2705 Created: {directory}")
 
             return True
 
         except Exception as e:
-            self.unified_math.log(f"❌ Failed to create directories: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Failed to create directories: {e}", "ERROR")
             self.errors.append(f"Directory creation failed: {e}")
             return False
 
@@ -138,13 +138,13 @@ class SchwabotInstaller:
                 subprocess.run([
                     sys.executable, "-m", "pip", "install", package_path
                 ], check=True)
-                self.unified_math.log(f"✅ Installed from: {package_path}")
+                self.unified_math.log(f"\\u2705 Installed from: {package_path}")
             else:
                 # Install from PyPI (if available)
                 subprocess.run([
                     sys.executable, "-m", "pip", "install", "schwabot"
                 ], check=True)
-                self.log("✅ Installed from PyPI")
+                self.log("\\u2705 Installed from PyPI")
 
             # Verify installation
             result = subprocess.run([
@@ -152,14 +152,14 @@ class SchwabotInstaller:
             ], capture_output=True, text=True)
 
             if result.returncode == 0:
-                self.log("✅ Package verification successful")
+                self.log("\\u2705 Package verification successful")
                 return True
             else:
-                self.log("❌ Package verification failed", "ERROR")
+                self.log("\\u274c Package verification failed", "ERROR")
                 return False
 
         except subprocess.CalledProcessError as e:
-            self.unified_math.log(f"❌ Installation failed: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Installation failed: {e}", "ERROR")
             self.errors.append(f"Package installation failed: {e}")
             return False
 
@@ -169,7 +169,7 @@ class SchwabotInstaller:
 
         try:
             if not Path(package_path).exists():
-                self.unified_math.log(f"❌ Package not found: {package_path}", "ERROR")
+                self.unified_math.log(f"\\u274c Package not found: {package_path}", "ERROR")
                 return False
 
             if self.platform == "linux":
@@ -179,11 +179,11 @@ class SchwabotInstaller:
             elif self.platform == "darwin":
                 return self._install_macos_package(package_path)
             else:
-                self.unified_math.log(f"❌ Unsupported platform: {self.platform}", "ERROR")
+                self.unified_math.log(f"\\u274c Unsupported platform: {self.platform}", "ERROR")
                 return False
 
         except Exception as e:
-            self.unified_math.log(f"❌ Platform installation failed: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Platform installation failed: {e}", "ERROR")
             self.errors.append(f"Platform installation failed: {e}")
             return False
 
@@ -195,21 +195,21 @@ class SchwabotInstaller:
             # Install .deb package
             subprocess.run(["sudo", "dpkg", "-i", str(package_path)], check=True)
             subprocess.run(["sudo", "apt-get", "install", "-f"], check=True)
-            self.log("✅ Debian package installed")
+            self.log("\\u2705 Debian package installed")
 
         elif package_path.suffix == ".rpm":
             # Install .rpm package
             subprocess.run(["sudo", "rpm", "-i", str(package_path)], check=True)
-            self.log("✅ RPM package installed")
+            self.log("\\u2705 RPM package installed")
 
         elif "AppImage" in package_path.name:
             # Make AppImage executable and copy to bin
             subprocess.run(["chmod", "+x", str(package_path)], check=True)
             shutil.copy2(package_path, self.install_dir / "bin" / "schwabot")
-            self.log("✅ AppImage installed")
+            self.log("\\u2705 AppImage installed")
 
         else:
-            self.unified_math.log(f"❌ Unsupported Linux package: {package_path.suffix}", "ERROR")
+            self.unified_math.log(f"\\u274c Unsupported Linux package: {package_path.suffix}", "ERROR")
             return False
 
         return True
@@ -221,21 +221,21 @@ class SchwabotInstaller:
         if package_path.suffix == ".exe":
             # Copy executable to bin directory
             shutil.copy2(package_path, self.install_dir / "bin" / "schwabot.exe")
-            self.log("✅ Windows executable installed")
+            self.log("\\u2705 Windows executable installed")
 
         elif package_path.suffix == ".msi":
             # Install MSI package
             subprocess.run(["msiexec", "/i", str(package_path), "/quiet"], check=True)
-            self.log("✅ MSI package installed")
+            self.log("\\u2705 MSI package installed")
 
         elif package_path.suffix == ".zip":
             # Extract portable package
             with zipfile.ZipFile(package_path, 'r') as zip_ref:
                 zip_ref.extractall(self.install_dir / "portable")
-            self.log("✅ Portable package extracted")
+            self.log("\\u2705 Portable package extracted")
 
         else:
-            self.unified_math.log(f"❌ Unsupported Windows package: {package_path.suffix}", "ERROR")
+            self.unified_math.log(f"\\u274c Unsupported Windows package: {package_path.suffix}", "ERROR")
             return False
 
         return True
@@ -247,7 +247,7 @@ class SchwabotInstaller:
         if package_path.suffix == ".app":
             # Copy app bundle to Applications
             shutil.copytree(package_path, Path("/Applications") / package_path.name)
-            self.log("✅ macOS app bundle installed")
+            self.log("\\u2705 macOS app bundle installed")
 
         elif package_path.suffix == ".dmg":
             # Mount and install DMG
@@ -257,9 +257,9 @@ class SchwabotInstaller:
                 app_path = Path(mount_point) / f"{self.project_name}.app"
                 if app_path.exists():
                     shutil.copytree(app_path, Path("/Applications") / f"{self.project_name}.app")
-                    self.log("✅ DMG package installed")
+                    self.log("\\u2705 DMG package installed")
                 else:
-                    self.log("❌ App bundle not found in DMG", "ERROR")
+                    self.log("\\u274c App bundle not found in DMG", "ERROR")
                     return False
             finally:
                 subprocess.run(["hdiutil", "detach", mount_point])
@@ -267,10 +267,10 @@ class SchwabotInstaller:
         elif package_path.suffix == ".pkg":
             # Install PKG package
             subprocess.run(["sudo", "installer", "-pkg", str(package_path), "-target", "/"], check=True)
-            self.log("✅ PKG package installed")
+            self.log("\\u2705 PKG package installed")
 
         else:
-            self.unified_math.log(f"❌ Unsupported macOS package: {package_path.suffix}", "ERROR")
+            self.unified_math.log(f"\\u274c Unsupported macOS package: {package_path.suffix}", "ERROR")
             return False
 
         return True
@@ -321,7 +321,7 @@ class SchwabotInstaller:
             with open(config_file, 'w') as f:
                 yaml.dump(config, f, default_flow_style=False, indent=2)
 
-            self.unified_math.log(f"✅ Configuration created: {config_file}")
+            self.unified_math.log(f"\\u2705 Configuration created: {config_file}")
 
             # Create environment file
             env_file = self.install_dir / ".env"
@@ -336,12 +336,12 @@ SCHWABOT_LOGS_PATH={self.logs_dir}
             with open(env_file, 'w') as f:
                 f.write(env_content)
 
-            self.unified_math.log(f"✅ Environment file created: {env_file}")
+            self.unified_math.log(f"\\u2705 Environment file created: {env_file}")
 
             return True
 
         except Exception as e:
-            self.unified_math.log(f"❌ Configuration setup failed: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Configuration setup failed: {e}", "ERROR")
             self.errors.append(f"Configuration setup failed: {e}")
             return False
 
@@ -383,7 +383,7 @@ exec python -m schwabot.dashboard "$@"
                 # Create batch files
                 script_content = f"""@echo off
 REM Schwabot Launcher Script
-set SCHWABOT_CONFIG_PATH={self.config_dir}\\schwabot_config.yaml
+set SCHWABOT_CONFIG_PATH={self.config_dir}\\\schwabot_config.yaml
 set SCHWABOT_INSTALL_PATH={self.install_dir}
 
 cd /d "%SCHWABOT_INSTALL_PATH%"
@@ -396,7 +396,7 @@ python -m schwabot %*
                 # Create dashboard batch file
                 dashboard_script = f"""@echo off
 REM Schwabot Dashboard Launcher
-set SCHWABOT_CONFIG_PATH={self.config_dir}\\schwabot_config.yaml
+set SCHWABOT_CONFIG_PATH={self.config_dir}\\\schwabot_config.yaml
 set SCHWABOT_INSTALL_PATH={self.install_dir}
 
 cd /d "%SCHWABOT_INSTALL_PATH%"
@@ -406,11 +406,11 @@ python -m schwabot.dashboard %*
                 with open(dashboard_path, 'w') as f:
                     f.write(dashboard_script)
 
-            self.log("✅ Launcher scripts created")
+            self.log("\\u2705 Launcher scripts created")
             return True
 
         except Exception as e:
-            self.unified_math.log(f"❌ Launcher script creation failed: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Launcher script creation failed: {e}", "ERROR")
             self.errors.append(f"Launcher script creation failed: {e}")
             return False
 
@@ -435,7 +435,7 @@ Categories=Office;Finance;
                 with open(desktop_file, 'w') as f:
                     f.write(desktop_entry)
 
-                self.log("✅ Desktop entry created")
+                self.log("\\u2705 Desktop entry created")
 
             elif self.platform == "windows":
                 # Create Start Menu shortcut
@@ -453,16 +453,16 @@ Categories=Office;Finance;
                 shortcut.WorkingDirectory = str(self.install_dir)
                 shortcut.save()
 
-                self.log("✅ Start Menu shortcut created")
+                self.log("\\u2705 Start Menu shortcut created")
 
             elif self.platform == "darwin":
                 # macOS app bundle already handles this
-                self.log("✅ Desktop integration handled by app bundle")
+                self.log("\\u2705 Desktop integration handled by app bundle")
 
             return True
 
         except Exception as e:
-            self.unified_math.log(f"⚠️  Desktop integration setup failed: {e}", "WARNING")
+            self.unified_math.log(f"\\u26a0\\ufe0f  Desktop integration setup failed: {e}", "WARNING")
             # Not critical, continue installation
             return True
 
@@ -477,24 +477,24 @@ Categories=Office;Finance;
             ], capture_output=True, text=True)
 
             if result.returncode != 0:
-                self.log("❌ Package import test failed", "ERROR")
+                self.log("\\u274c Package import test failed", "ERROR")
                 return False
 
-            self.log("✅ Package import test passed")
+            self.log("\\u2705 Package import test passed")
 
             # Test configuration
             config_file = self.config_dir / "schwabot_config.yaml"
             if not config_file.exists():
-                self.log("❌ Configuration file not found", "ERROR")
+                self.log("\\u274c Configuration file not found", "ERROR")
                 return False
 
-            self.log("✅ Configuration file found")
+            self.log("\\u2705 Configuration file found")
 
             # Test launcher scripts
             if self.platform in ["linux", "darwin"]:
                 launcher = self.install_dir / "bin" / "schwabot"
                 if not launcher.exists():
-                    self.log("❌ Launcher script not found", "ERROR")
+                    self.log("\\u274c Launcher script not found", "ERROR")
                     return False
 
                 # Test launcher
@@ -503,15 +503,15 @@ Categories=Office;Finance;
                 ], capture_output=True, text=True, timeout=10)
 
                 if result.returncode != 0:
-                    self.log("❌ Launcher script test failed", "ERROR")
+                    self.log("\\u274c Launcher script test failed", "ERROR")
                     return False
 
-                self.log("✅ Launcher script test passed")
+                self.log("\\u2705 Launcher script test passed")
 
             return True
 
         except Exception as e:
-            self.unified_math.log(f"❌ Installation validation failed: {e}", "ERROR")
+            self.unified_math.log(f"\\u274c Installation validation failed: {e}", "ERROR")
             self.errors.append(f"Installation validation failed: {e}")
             return False
 
@@ -565,11 +565,11 @@ pause
                 with open(uninstaller_path, 'w') as f:
                     f.write(uninstall_script)
 
-            self.log("✅ Uninstaller created")
+            self.log("\\u2705 Uninstaller created")
             return True
 
         except Exception as e:
-            self.unified_math.log(f"⚠️  Uninstaller creation failed: {e}", "WARNING")
+            self.unified_math.log(f"\\u26a0\\ufe0f  Uninstaller creation failed: {e}", "WARNING")
             return True  # Not critical
 
     def save_installation_log(self) -> None:
@@ -578,27 +578,27 @@ pause
         with open(log_file, 'w') as f:
             f.write("\n".join(self.installation_log))
 
-        self.unified_math.log(f"📋 Installation log saved: {log_file}")
+        self.unified_math.log(f"\\u1f4cb Installation log saved: {log_file}")
 
     def print_summary(self) -> None:
         """Print installation summary."""
         safe_print("\n" + "=" * 60)
-        safe_print("🎉 INSTALLATION SUMMARY")
+        safe_print("\\u1f389 INSTALLATION SUMMARY")
         safe_print("=" * 60)
 
-        safe_print(f"✅ {self.project_name} v{self.version} installed successfully!")
-        safe_print(f"📁 Installation directory: {self.install_dir}")
-        safe_print(f"⚙️  Configuration: {self.config_dir}/schwabot_config.yaml")
-        safe_print(f"📊 Logs directory: {self.logs_dir}")
+        safe_print(f"\\u2705 {self.project_name} v{self.version} installed successfully!")
+        safe_print(f"\\u1f4c1 Installation directory: {self.install_dir}")
+        safe_print(f"\\u2699\\ufe0f  Configuration: {self.config_dir}/schwabot_config.yaml")
+        safe_print(f"\\u1f4ca Logs directory: {self.logs_dir}")
 
         if self.platform in ["linux", "darwin"]:
-            safe_print(f"🚀 Launcher: {self.install_dir}/bin/schwabot")
-            safe_print(f"🌐 Dashboard: {self.install_dir}/bin/schwabot-dashboard")
+            safe_print(f"\\u1f680 Launcher: {self.install_dir}/bin/schwabot")
+            safe_print(f"\\u1f310 Dashboard: {self.install_dir}/bin/schwabot-dashboard")
         elif self.platform == "windows":
-            safe_print(f"🚀 Launcher: {self.install_dir}/bin/schwabot.bat")
-            safe_print(f"🌐 Dashboard: {self.install_dir}/bin/schwabot-dashboard.bat")
+            safe_print(f"\\u1f680 Launcher: {self.install_dir}/bin/schwabot.bat")
+            safe_print(f"\\u1f310 Dashboard: {self.install_dir}/bin/schwabot-dashboard.bat")
 
-        safe_print("\n📋 Quick Start:")
+        safe_print("\\n\\u1f4cb Quick Start:")
         safe_print("1. Configure your trading settings:")
         safe_print(f"   nano {self.config_dir}/schwabot_config.yaml")
         safe_print("2. Start Schwabot:")
@@ -609,12 +609,12 @@ pause
         safe_print("3. Access web dashboard: http://localhost:8080")
 
         if self.errors:
-            safe_print(f"\n⚠️  Warnings ({len(self.errors)}):")
+            safe_print(f"\\n\\u26a0\\ufe0f  Warnings ({len(self.errors)}):")
             for error in self.errors:
                 safe_print(f"   - {error}")
 
-        safe_print(f"\n📚 Documentation: {self.install_dir}/docs/")
-        safe_print("🔧 Support: Check documentation or community forums")
+        safe_print(f"\\n\\u1f4da Documentation: {self.install_dir}/docs/")
+        safe_print("\\u1f527 Support: Check documentation or community forums")
         safe_print("=" * 60)
 
 
@@ -640,33 +640,33 @@ def main():
     try:
         # Check system requirements
         if not installer.check_system_requirements():
-            safe_print("❌ System requirements not met. Installation aborted.")
+            safe_print("\\u274c System requirements not met. Installation aborted.")
             sys.exit(1)
 
         # Create directories
         if not installer.create_directories():
-            safe_print("❌ Failed to create installation directories.")
+            safe_print("\\u274c Failed to create installation directories.")
             sys.exit(1)
 
         # Install Python package
         if not installer.install_python_package(args.package):
-            safe_print("❌ Failed to install Python package.")
+            safe_print("\\u274c Failed to install Python package.")
             sys.exit(1)
 
         # Install platform package if provided
         if args.platform_package:
             if not installer.install_platform_package(args.platform_package):
-                safe_print("❌ Failed to install platform package.")
+                safe_print("\\u274c Failed to install platform package.")
                 sys.exit(1)
 
         # Setup configuration
         if not installer.setup_configuration():
-            safe_print("❌ Failed to setup configuration.")
+            safe_print("\\u274c Failed to setup configuration.")
             sys.exit(1)
 
         # Create launcher scripts
         if not installer.setup_launcher_scripts():
-            safe_print("❌ Failed to create launcher scripts.")
+            safe_print("\\u274c Failed to create launcher scripts.")
             sys.exit(1)
 
         # Setup desktop integration
@@ -675,7 +675,7 @@ def main():
         # Validate installation
         if not args.skip_validation:
             if not installer.validate_installation():
-                safe_print("❌ Installation validation failed.")
+                safe_print("\\u274c Installation validation failed.")
                 sys.exit(1)
 
         # Create uninstaller
@@ -688,10 +688,10 @@ def main():
         installer.print_summary()
 
     except KeyboardInterrupt:
-        safe_print("\n❌ Installation cancelled by user.")
+        safe_print("\\n\\u274c Installation cancelled by user.")
         sys.exit(1)
     except Exception as e:
-        safe_print(f"\n❌ Installation failed: {e}")
+        safe_print(f"\\n\\u274c Installation failed: {e}")
         installer.save_installation_log()
         sys.exit(1)
 

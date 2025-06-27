@@ -33,13 +33,13 @@ def count_errors():
                 else:
                     real_errors.append(line)
 
-    safe_print(f"📊 E501 Error Analysis:")
+    safe_print(f"\\u1f4ca E501 Error Analysis:")
     safe_print(f"   Total errors: {len(real_errors) + len(stub_errors)}")
     safe_print(f"   Real code errors: {len(real_errors)}")
     safe_print(f"   Stub file errors: {len(stub_errors)}")
 
     if real_errors:
-        safe_print(f"\n🔍 First 10 real code errors:")
+        safe_print(f"\\n\\u1f50d First 10 real code errors:")
         for error in real_errors[:10]:
             safe_print(f"   {error}")
         if len(real_errors) > 10:
@@ -47,3 +47,5 @@ def count_errors():
 
 if __name__ == "__main__":
     count_errors()
+
+"""

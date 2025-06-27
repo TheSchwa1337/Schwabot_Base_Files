@@ -1,7 +1,7 @@
 """utils.math_utils
 Utility math helpers that are referenced across multiple Schwabot modules.
 
-This is *not* a full scientific-computing layer—just light-weight helpers that
+This is *not* a full scientific-computing layer\\u2014just light-weight helpers that
 keep external dependencies to a minimum while staying Flake8 / mypy compliant.
 """
 
@@ -70,3 +70,5 @@ def cosine_similarity(a: Sequence[float] | np.ndarray, b: Sequence[float] | np.n
     if norm_a == 0.0 or norm_b == 0.0:
         raise ValueError("zero-norm vector cannot compute cosine similarity")
     return float(np.dot(vec_a, vec_b) / (norm_a * norm_b))
+
+"""

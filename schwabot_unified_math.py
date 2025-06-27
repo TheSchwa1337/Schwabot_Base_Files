@@ -148,19 +148,19 @@ class MathematicalValidator:
             state: State vector as a NumPy array.
 
         Returns:
-            True if `state` is a NumPy array that is L2-normalised (‖ψ‖ ≈ 1).
+            True if `state` is a NumPy array that is L2-normalised (\\u2016\\u03c8\\u2016 \\u2248 1).
         """
 
         if not isinstance(state, np.ndarray):
             return False
 
-        # Normalise check ‖ψ‖ = 1
+        # Normalise check \\u2016\\u03c8\\u2016 = 1
         norm = float(unified_math.unified_math.sqrt(np.sum(unified_math.unified_math.abs(state) ** 2)))
         return unified_math.abs(norm - 1.0) < 1e-6
 
 
 class RecursiveIdentityFunction:
-    """Implements Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ)) framework."""
+    """Implements \\u03a8\\u2099(x) = f(\\u03a8\\u2099\\u208b\\u2081(x), \\u0394(t), T(\\u03a6\\u209a)) framework."""
 
     def __init__(self, max_depth: int = 50) -> None:
         """
@@ -179,13 +179,13 @@ class RecursiveIdentityFunction:
     ) -> float:
         """
 
-        Compute recursive state using Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ))
+        Compute recursive state using \\u03a8\\u2099(x) = f(\\u03a8\\u2099\\u208b\\u2081(x), \\u0394(t), T(\\u03a6\\u209a))
 
         Args:
             x: Input value
             n: Recursion depth
-            delta_t: Temporal context Δ(t)
-            transform_input: Transformational input T(Φₚ)
+            delta_t: Temporal context \\u0394(t)
+            transform_input: Transformational input T(\\u03a6\\u209a)
 
         Returns:
             Recursive state value
@@ -197,7 +197,7 @@ class RecursiveIdentityFunction:
         if n == 1:
             return self._base_transform(x, delta_t, transform_input)
 
-        # Recursive case: Ψₙ(x) = f(Ψₙ₋₁(x), Δ(t), T(Φₚ))
+        # Recursive case: \\u03a8\\u2099(x) = f(\\u03a8\\u2099\\u208b\\u2081(x), \\u0394(t), T(\\u03a6\\u209a))
         previous_state = self.compute_recursive_state(
             x, n - 1, delta_t, transform_input
         )
@@ -240,7 +240,7 @@ class EntropyStabilizedFeedback:
         """
         Compute entropy-stabilized feedback.
 
-        Implements: Eₙ = min(∂Ψₙ/∂x + ∂Ψₙ/∂t, S_threshold)
+        Implements: E\\u2099 = min(\\u2202\\u03a8\\u2099/\\u2202x + \\u2202\\u03a8\\u2099/\\u2202t, S_threshold)
 
         Args:
             current_state: Current state value
@@ -314,11 +314,11 @@ class InformationDensityMap:
         """
         Compute information density integral.
 
-        Implements: Iₙ = ∫(Ψₙ(x) · Φ(x,t)) dx
+        Implements: I\\u2099 = \\u222b(\\u03a8\\u2099(x) \\u00b7 \\u03a6(x,t)) dx
 
         Args:
-            recursive_state: Recursive state function Ψₙ(x)
-            context_potential: Contextual potential function Φ(x,t)
+            recursive_state: Recursive state function \\u03a8\\u2099(x)
+            context_potential: Contextual potential function \\u03a6(x,t)
             time: Current time
 
         Returns:
@@ -495,7 +495,7 @@ class UnifiedMathematicsFramework:
         The hash is used throughout the framework as a stable identifier for
         numeric tensors, vectors, matrices or arbitrary strings.  Numerical
         inputs are serialised via their real/imag parts to keep the hash
-        invariant w.r.t. NumPy’s dtype.
+        invariant w.r.t. NumPy\\u2019s dtype.
 
         Args:
             data:  Input payload to hash.  Accepts str or NumPy array types.
@@ -515,7 +515,7 @@ class UnifiedMathematicsFramework:
                 + np.array2string(np.imag(data), precision=12, separator=',')
             )
         else:
-            # Fallback – rely on Python's str()
+            # Fallback \\u2013 rely on Python's str()
             combined_data = str(data)
 
         if time_slot is not None:

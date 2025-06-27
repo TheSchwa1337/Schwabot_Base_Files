@@ -9,9 +9,9 @@ Implements the core mathematical framework for Schwabot as a Zero-Point Energy
 profit engine that spins with the economy's vectorized chart.
 
 Key Mathematical Functions:
-1. ZPE Work Core (W = F · d = ΔP)
-2. Rotational Vectorization (τ = I · α)
-3. Thermal Integrity Differential (η = W_out / Q_in)
+1. ZPE Work Core (W = F \\u00b7 d = \\u0394P)
+2. Rotational Vectorization (\\u03c4 = I \\u00b7 \\u03b1)
+3. Thermal Integrity Differential (\\u03b7 = W_out / Q_in)
 4. Elastic Resonance Profit Function
 5. Multi-Vector Trade Alignment
 6. Recursive Cycle Depth
@@ -42,13 +42,13 @@ class ZPECore:
 
     def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> float:
         """
-        ZPE Work Core: W = F · d = ΔP
+        ZPE Work Core: W = F \\u00b7 d = \\u0394P
 
         Where:
         - W: Work Schwabot performs (profit vector potential)
-        - F: Force of trend momentum (ΔPrice / ΔTime)
+        - F: Force of trend momentum (\\u0394Price / \\u0394Time)
         - d: Displacement in trade phase space (entry-exit delta)
-        - ΔP: Profit differential between vector anchor states
+        - \\u0394P: Profit differential between vector anchor states
         """
         market_force = math.tanh(trend_strength)  # Bounded between -1 and 1
         work = market_force * entry_exit_range
@@ -57,12 +57,12 @@ class ZPECore:
 
     def calculate_rotational_torque(self, liquidity_depth: float, trend_change_rate: float) -> float:
         """
-        Rotational Vectorization: τ = I · α
+        Rotational Vectorization: \\u03c4 = I \\u00b7 \\u03b1
 
         Where:
-        - τ: Torque applied to profit wheel (rotational force)
+        - \\u03c4: Torque applied to profit wheel (rotational force)
         - I: Market inertia (resistance from liquidity walls, spread delay)
-        - α: Angular acceleration (rate of directional bias change)
+        - \\u03b1: Angular acceleration (rate of directional bias change)
         """
         inertia = 1.0 / (1.0 + liquidity_depth)  # Higher liquidity = lower inertia
         angular_acceleration = math.atan(trend_change_rate)  # Bounded acceleration
@@ -72,10 +72,10 @@ class ZPECore:
 
     def calculate_thermal_efficiency(self, profit_generated: float, capital_exposure: float) -> float:
         """
-        Thermal Integrity Differential: η = W_out / Q_in
+        Thermal Integrity Differential: \\u03b7 = W_out / Q_in
 
         Where:
-        - η: Efficiency of Schwabot's thermal core
+        - \\u03b7: Efficiency of Schwabot's thermal core
         - W_out: Profit generated
         - Q_in: Capital allocated + trade gas/fee loss
         """
@@ -88,7 +88,7 @@ class ZPECore:
 
     def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
         """
-        Elastic Resonance Profit Function: 𝓔(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
+        Elastic Resonance Profit Function: \\u1d4d4(t) = \\u222b\\u2080\\u1d57 P'(t) \\u00b7 unified_math.sin(\\u03c9t + \\u03c6) dt
         """
         dt = 0.001
         t_values = np.arange(0, time_window, dt)
@@ -99,7 +99,7 @@ class ZPECore:
 
     def calculate_multi_vector_alignment(self, strategy_vectors: Dict[str, Dict], weights: Dict[str, float]) -> Dict:
         """
-        Multi-Vector Trade Alignment: V⃗_total = Σ_i w_i · V⃗_i
+        Multi-Vector Trade Alignment: V\\u20d7_total = \\u03a3_i w_i \\u00b7 V\\u20d7_i
         """
         total_magnitude = sum(weights.get(asset, 0.0) * vector.get('magnitude', 0.0)
                               for asset, vector in strategy_vectors.items())
@@ -116,7 +116,7 @@ class ZPECore:
 
     def update_recursive_cycle_depth(self, tick_interval: float, price_trigger: float) -> int:
         """
-        Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
+        Recursive Cycle Depth: R\\u2099 = f(R\\u2099\\u208b\\u2081, \\u0394t, P\\u2099)
         """
         # Simple complexity calculation based on price trigger variance
         complexity = unified_math.min(16.0, 1.0 + unified_math.abs(price_trigger) * 10.0)
@@ -137,10 +137,10 @@ class ZPECore:
 
     def calculate_temporal_fault_correction(self, expected_phase: float, actual_phase: float) -> float:
         """
-        Temporal Fault-Bus Diff Correction: Δφ_fault = φ_actual - φ_expected
+        Temporal Fault-Bus Diff Correction: \\u0394\\u03c6_fault = \\u03c6_actual - \\u03c6_expected
         """
         phase_difference = actual_phase - expected_phase
-        # Normalize to [-π, π]
+        # Normalize to [-\\u03c0, \\u03c0]
         while phase_difference > math.pi:
             phase_difference -= 2 * math.pi
         while phase_difference < -math.pi:
@@ -150,7 +150,7 @@ class ZPECore:
 
     def map_news_lantern_signals(self, news_density: float, sentiment_delta: float) -> float:
         """
-        News / Lantern API Signal Mapping: Lₜ = g(nₜ, ΔSₜ)
+        News / Lantern API Signal Mapping: L\\u209c = g(n\\u209c, \\u0394S\\u209c)
         """
         normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
         normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))
@@ -160,7 +160,7 @@ class ZPECore:
 
     def calculate_profit_reinjection(self, profit_delta: float, market_heat: float) -> float:
         """
-        Profit Loop Reinjection: Π(t) = Π₀ + Σ(ΔΠᵢ · αᵢ)
+        Profit Loop Reinjection: \\u03a0(t) = \\u03a0\\u2080 + \\u03a3(\\u0394\\u03a0\\u1d62 \\u00b7 \\u03b1\\u1d62)
         """
         reinjection_coefficient = unified_math.min(1.0, unified_math.max(0.0, market_heat))
         reinjected_profit = profit_delta * reinjection_coefficient
@@ -171,7 +171,7 @@ class ZPECore:
         """
         Main ZPE Profit Wheel function - where Schwabot becomes the wheel.
         """
-        logger.info("🔄 Spinning ZPE Profit Wheel...")
+        logger.info("\\u1f504 Spinning ZPE Profit Wheel...")
 
         # Extract market data
         trend_strength = market_data.get('trend_strength', 0.0)
@@ -204,13 +204,13 @@ class ZPECore:
             'agent_consensus': self.agent_consensus.copy()
         }
 
-        logger.info(f"🎯 ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
+        logger.info(f"\\u1f3af ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
         return result
 
 
 def main():
     """Test the ZPE Core."""
-    safe_print("🧠 Testing Schwabot ZPE Core")
+    safe_print("\\u1f9e0 Testing Schwabot ZPE Core")
     safe_print("=" * 40)
 
     engine = ZPECore()
@@ -235,8 +235,10 @@ def main():
     safe_print(f"Should Spin: {result['should_spin']}")
     safe_print(f"Recursion Depth: {result['recursion_depth']}")
 
-    safe_print("\n🎉 ZPE Core test complete!")
+    safe_print("\\n\\u1f389 ZPE Core test complete!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

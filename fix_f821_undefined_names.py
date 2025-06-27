@@ -12,7 +12,7 @@ import glob
 def fix_f821_undefined_names():
     """Fix F821 undefined name errors in Python files"""
 
-    print("🔧 Fixing F821 undefined name errors")
+    print("\\u1f527 Fixing F821 undefined name errors")
 
     # Get all Python files
     python_files = []
@@ -23,7 +23,7 @@ def fix_f821_undefined_names():
     total_fixed = 0
 
     for file_path in python_files:
-        print(f"\n📁 Processing: {file_path}")
+        print(f"\\n\\u1f4c1 Processing: {file_path}")
 
         # Read the file
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -35,14 +35,14 @@ def fix_f821_undefined_names():
         # Fix 1: Add missing safe_format_error import
         if 'safe_format_error' in content and 'from core.utils.windows_cli_compatibility import' in content:
             # Check if safe_format_error is already imported
-            if 'safe_format_error' not in re.findall(r'from core\.utils\.windows_cli_compatibility import ([^,\n]+)', content):
+            if 'safe_format_error' not in re.findall(r'from core\.utils\.windows_cli_compatibility import ([^,\\n]+)', content):
                 # Add safe_format_error to existing import
                 content = re.sub(
-                    r'(from core\.utils\.windows_cli_compatibility import [^,\n]+)',
+                    r'(from core\.utils\.windows_cli_compatibility import [^,\\n]+)',
                     r'\1, safe_format_error',
                     content
                 )
-                print(f"  🔧 Added safe_format_error to import")
+                print(f"  \\u1f527 Added safe_format_error to import")
                 file_fixes += 1
 
         # Fix 2: Fix original_content variable reference
@@ -62,7 +62,7 @@ def fix_f821_undefined_names():
                         # Replace with 'content' since that's usually what we want
                         fixed_line = line.replace('original_content', 'content')
                         if fixed_line != line:
-                            print(f"  🔧 Fixed original_content reference at line {i+1}")
+                            print(f"  \\u1f527 Fixed original_content reference at line {i+1}")
                             file_fixes += 1
                         line = fixed_line
 
@@ -79,7 +79,7 @@ def fix_f821_undefined_names():
             if import_section_end >= 0:
                 lines.insert(import_section_end, 'import numpy as np')
                 content = '\n'.join(lines)
-                print(f"  🔧 Added numpy import")
+                print(f"  \\u1f527 Added numpy import")
                 file_fixes += 1
 
         # Check if changes were made
@@ -93,12 +93,12 @@ def fix_f821_undefined_names():
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
 
-            print(f"  ✅ Fixed {file_fixes} F821 undefined name errors in {file_path}")
+            print(f"  \\u2705 Fixed {file_fixes} F821 undefined name errors in {file_path}")
             total_fixed += file_fixes
         else:
-            print(f"  ℹ️ No F821 errors found in {file_path}")
+            print(f"  \\u2139\\ufe0f No F821 errors found in {file_path}")
 
-    print(f"\n🎉 Total F821 fixes applied: {total_fixed}")
+    print(f"\\n\\u1f389 Total F821 fixes applied: {total_fixed}")
     return total_fixed
 
 

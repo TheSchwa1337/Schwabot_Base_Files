@@ -16,7 +16,7 @@ Tests the complete mathematical pipeline from bit phase resolution to
 hash memory encoding, ensuring all components integrate seamlessly.
 
 Mathematical Pipeline:
-1. Bit Phase Resolution → 2. Tensor Contraction → 3. Profit Routing → 4. Entropy Compensation → 5. Hash Memory
+1. Bit Phase Resolution \\u2192 2. Tensor Contraction \\u2192 3. Profit Routing \\u2192 4. Entropy Compensation \\u2192 5. Hash Memory
 """
 
 import json
@@ -64,11 +64,11 @@ class MathematicalIntegrationValidator:
     Mathematical integration validator for Schwabot system.
 
     Validates the complete mathematical pipeline:
-    1. Bit Phase Resolution (φ₄, φ₈, φ₄₂)
-    2. Matrix Basket Tensor Algebra (Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ)
+    1. Bit Phase Resolution (\\u03c6\\u2084, \\u03c6\\u2088, \\u03c6\\u2084\\u2082)
+    2. Matrix Basket Tensor Algebra (T\\u1d62\\u2c7c = \\u03a3\\u2096 A\\u1d62\\u2096 \\u00b7 B\\u2096\\u2c7c)
     3. Profit Routing Differential Calculus (dP/dt)
-    4. Entropy Compensation and Drift Dynamics (E(t) = unified_math.log(V + 1) / (1 + δ))
-    5. Hash Memory Vector Encoding (H(t) = SHA256(P_t || ΔP || φ_t))
+    4. Entropy Compensation and Drift Dynamics (E(t) = unified_math.log(V + 1) / (1 + \\u03b4))
+    5. Hash Memory Vector Encoding (H(t) = SHA256(P_t || \\u0394P || \\u03c6_t))
     """
 
     def __init__(self):
@@ -314,7 +314,7 @@ class MathematicalIntegrationValidator:
 
             # Test 3: Differential calculus validation
             test_start = time.time()
-            # Test dP/dt = (P_t - P_t-1) / Δt
+            # Test dP/dt = (P_t - P_t-1) / \\u0394t
             P_t = 1000.0
             P_t_minus_1 = 950.0
             delta_t = 1.0
@@ -384,7 +384,7 @@ class MathematicalIntegrationValidator:
 
             # Test 2: Entropy gate formula validation
             test_start = time.time()
-            # Test E(t) = unified_math.log(V + 1) / (1 + δ)
+            # Test E(t) = unified_math.log(V + 1) / (1 + \\u03b4)
             V = 1000.0
             delta = 0.1
             expected_gate = unified_math.unified_math.log(V + 1) / (1 + delta)
@@ -474,7 +474,7 @@ class MathematicalIntegrationValidator:
 
             # Test 2: Hash memory formula validation
             test_start = time.time()
-            # Test H(t) = SHA256(P_t || ΔP || φ_t)
+            # Test H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
             P_t = 1000.0
             delta_P = 50.0
             phi_t = bit_result.cycle_score
@@ -655,7 +655,7 @@ class MathematicalIntegrationValidator:
 
     def run_complete_validation(self) -> Dict[str, Any]:
         """Run complete mathematical validation."""
-        safe_print("🧮 Running Complete Mathematical Integration Validation...")
+        safe_print("\\u1f9ee Running Complete Mathematical Integration Validation...")
 
         # Run all pipeline validations
         pipelines = [
@@ -679,17 +679,17 @@ class MathematicalIntegrationValidator:
         overall_success = all(p.all_tests_passed for p in pipelines)
 
         # Print results
-        safe_print(f"\n📊 Validation Results:")
-        safe_print(f"  Overall Success: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+        safe_print(f"\\n\\u1f4ca Validation Results:")
+        safe_print(f"  Overall Success: {'\\u2705 PASSED' if overall_success else '\\u274c FAILED'}")
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {total_passed}")
         safe_print(f"  Failed: {total_failed}")
         safe_print(f"  Success Rate: {(total_passed/total_tests)*100:.1f}%")
         safe_print(f"  Total Execution Time: {total_time:.2f}s")
 
-        safe_print(f"\n📋 Pipeline Results:")
+        safe_print(f"\\n\\u1f4cb Pipeline Results:")
         for pipeline in pipelines:
-            status = "✅ PASSED" if pipeline.all_tests_passed else "❌ FAILED"
+            status = "\\u2705 PASSED" if pipeline.all_tests_passed else "\\u274c FAILED"
             safe_print(f"  {pipeline.pipeline_name}: {status} ({pipeline.passed_tests}/{pipeline.total_tests})")
 
         # Return comprehensive results
@@ -739,7 +739,7 @@ class MathematicalIntegrationValidator:
 
 def main():
     """Main function for mathematical integration validation."""
-    safe_print("🧮 Mathematical Integration Validator - Schwabot UROS v1.0")
+    safe_print("\\u1f9ee Mathematical Integration Validator - Schwabot UROS v1.0")
     safe_print("=" * 60)
 
     # Initialize validator

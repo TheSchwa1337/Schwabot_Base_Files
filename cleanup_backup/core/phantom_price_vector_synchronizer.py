@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""phantom_price_vector_synchronizer – phantom velocity adjustment and sync.
+"""phantom_price_vector_synchronizer \\u2013 phantom velocity adjustment and sync.
 
 Implements the phantom price vector synchronization logic:
-    Zₚ(t) = ∫₀ᵗ [α·Vₚ(t') − β·Ξₚ(t')] dt'
+    Z\\u209a(t) = \\u222b\\u2080\\u1d57 [\\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')] dt'
 
 This module synchronizes phantom price vectors across market data streams
 for ghost protocol integration.
@@ -38,14 +38,14 @@ class PhantomPriceSynchronizer:
         xi_series: Sequence[float],
         t_max: float,
     ) -> float:
-        """Compute Zₚ(t) = ∫₀ᵗ [α·Vₚ(t') − β·Ξₚ(t')] dt'.
+        """Compute Z\\u209a(t) = \\u222b\\u2080\\u1d57 [\\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')] dt'.
 
         Parameters
         ----------
         velocity_series
-            Phantom velocity Vₚ(t') time series.
+            Phantom velocity V\\u209a(t') time series.
         xi_series
-            Xi phantom values Ξₚ(t') time series.
+            Xi phantom values \\u039e\\u209a(t') time series.
         t_max
             Upper integration limit.
         """
@@ -55,7 +55,7 @@ class PhantomPriceSynchronizer:
         v_array = np.asarray(velocity_series, dtype=float)
         xi_array = np.asarray(xi_series, dtype=float)
 
-        # Compute integrand: α·Vₚ(t') − β·Ξₚ(t')
+        # Compute integrand: \\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')
         integrand = self.alpha * v_array - self.beta * xi_array
 
         # Trapezoidal integration from 0 to t_max
@@ -148,3 +148,5 @@ def calculate_price_acceleration(
 ) -> np.ndarray[Any, Any]:
     """Calculate price acceleration from velocity."""
     # ... existing code ...
+
+"""

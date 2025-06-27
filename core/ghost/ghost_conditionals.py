@@ -8,9 +8,9 @@ import math
 
 
 def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
-    """Return True when σ(ψ · ξ · ϕ) ≥ 0.5.
+    """Return True when sigma(psi . xi . \\u03d5) >= 0.5."""
 
-    Compute logistic gate: C_exec(t) = σ(Ψ_path · ξ_sent · ϕ_drift)
+    Compute logistic gate: C_exec(t) = sigma(\\u03a8_path . xi_sent . \\u03d5_drift)
 
     Args:
         psi: Path coefficient (0-1)
@@ -19,7 +19,7 @@ def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
 
     Returns:
         Boolean gate decision for ghost router execution
-    """
+    """"""
     z: float = psi * xi_sent * phi_drift
     # Steep logistic centered at 0.5
     sigma = 1 / (1 + unified_math.exp(-12 * (z - 0.5)))
@@ -28,3 +28,7 @@ def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:
 
 # Module exports
 __all__ = ["exec_gate"]
+
+
+
+"""

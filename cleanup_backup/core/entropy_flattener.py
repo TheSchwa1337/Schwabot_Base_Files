@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Entropy flattener – smooths strategy response during uncertain conditions.
+"""Entropy flattener \\u2013 smooths strategy response during uncertain conditions.
 
 Implements the formula:
-    η(t) = softmax(−|∂²S(t)/∂t²| · 1/σ_price)
+    \\u03b7(t) = softmax(\\u2212|\\u2202\\u00b2S(t)/\\u2202t\\u00b2| \\u00b7 1/\\u03c3_price)
 
 This module detects when strategy signals are experiencing high second-derivative
 volatility and applies entropy-based smoothing to prevent erratic switching.
@@ -30,7 +30,7 @@ __all__: list[str] = [
 def compute_second_derivative(
     signal: Sequence[float],
 ) -> np.ndarray:  # noqa: D401
-    """Return second derivative ∂²S/∂t² using finite differences.
+    """Return second derivative \\u2202\\u00b2S/\\u2202t\\u00b2 using finite differences.
 
     Input signal must have at least 3 points for meaningful computation.
     """
@@ -58,14 +58,14 @@ def entropy_flatten(
     *,
     epsilon: float = 1e-9,
 ) -> float:  # noqa: D401
-    """Return η(t) entropy flattening coefficient ∈ [0, 1].
+    """Return \\u03b7(t) entropy flattening coefficient \\u2208 [0, 1].
 
     Parameters
     ----------
     signal
         Time series of strategy values S(t).
     price_sigma
-        Current price volatility σ_price.
+        Current price volatility \\u03c3_price.
     epsilon
         Small constant to prevent division by zero.
     """
@@ -76,7 +76,7 @@ def entropy_flatten(
     if len(second_deriv) == 0:
         return 0.0
 
-    # Compute flattening term: -|∂²S/∂t²| / σ_price
+    # Compute flattening term: -|\\u2202\\u00b2S/\\u2202t\\u00b2| / \\u03c3_price
     abs_second_deriv = unified_math.unified_math.abs(second_deriv)
     flatten_term = -abs_second_deriv / unified_math.max(price_sigma, epsilon)
 
@@ -95,8 +95,10 @@ def adaptive_smooth(
     """Apply entropy-weighted smoothing between current and smoothed values.
 
     Returns:
-        (1 - α·η) · current + α·η · smoothed
-    where η is the entropy coefficient and α controls smoothing strength.
+        (1 - \\u03b1\\u00b7\\u03b7) \\u00b7 current + \\u03b1\\u00b7\\u03b7 \\u00b7 smoothed
+    where \\u03b7 is the entropy coefficient and \\u03b1 controls smoothing strength.
     """
     weight = alpha * entropy_coeff
     return (1.0 - weight) * current_value + weight * smoothed_value
+
+"""

@@ -86,10 +86,10 @@ class BacktestInjector:
     Backtest injector for historical trading simulation.
 
     Mathematical Foundation:
-    - Waveform Entropy: H = -Σᵢ pᵢ * log₂(pᵢ) where pᵢ is price probability
+    - Waveform Entropy: H = -\\u03a3\\u1d62 p\\u1d62 * log\\u2082(p\\u1d62) where p\\u1d62 is price probability
     - Profit Vector: P = {short: profit * 0.3, mid: profit * 0.5, long: profit * 0.8}
     - Cycle Detection: C = f(price_momentum, volume_trend, entropy_threshold)
-    - Rebalance Score: R = Σᵢ wᵢ * Pᵢ * (1 + entropy_bonus)
+    - Rebalance Score: R = \\u03a3\\u1d62 w\\u1d62 * P\\u1d62 * (1 + entropy_bonus)
     """
 
     def __init__(self, config_path: str = "./config/backtest_config.json"):
@@ -331,7 +331,7 @@ class BacktestInjector:
         Calculate waveform entropy.
 
         Mathematical Formula:
-        H = -Σᵢ pᵢ * log₂(pᵢ) where pᵢ is the probability of price state i
+        H = -\\u03a3\\u1d62 p\\u1d62 * log\\u2082(p\\u1d62) where p\\u1d62 is the probability of price state i
         """
         try:
             # Create price state probabilities
@@ -402,7 +402,7 @@ class BacktestInjector:
         Calculate rebalance score.
 
         Mathematical Formula:
-        R = Σᵢ wᵢ * Pᵢ * (1 + entropy_bonus)
+        R = \\u03a3\\u1d62 w\\u1d62 * P\\u1d62 * (1 + entropy_bonus)
         """
         try:
             # Weights for different profit components
@@ -684,7 +684,7 @@ class BacktestInjector:
 
 def main():
     """Test function for Backtest Injector."""
-    safe_print("🔄 Testing Backtest Injector...")
+    safe_print("\\u1f504 Testing Backtest Injector...")
 
     # Initialize injector
     injector = BacktestInjector()
@@ -693,21 +693,21 @@ def main():
     start_date = datetime(2023, 1, 1)
     end_date = datetime(2023, 12, 31)
 
-    safe_print("📊 Injecting historical data...")
+    safe_print("\\u1f4ca Injecting historical data...")
     historical_data = injector.inject_historical_data(start_date, end_date)
 
-    safe_print(f"✅ Injected {len(historical_data)} data points")
+    safe_print(f"\\u2705 Injected {len(historical_data)} data points")
 
     # Analyze trading cycles
-    safe_print("\n📈 Analyzing trading cycles...")
+    safe_print("\\n\\u1f4c8 Analyzing trading cycles...")
     cycles = injector.analyze_trading_cycles()
 
-    safe_print(f"✅ Analyzed {len(cycles)} trading cycles")
+    safe_print(f"\\u2705 Analyzed {len(cycles)} trading cycles")
 
     # Print sample cycle
     if cycles:
         sample_cycle = cycles[0]
-        safe_print(f"\n📊 Sample Cycle:")
+        safe_print(f"\\n\\u1f4ca Sample Cycle:")
         safe_print(f"  ID: {sample_cycle.cycle_id}")
         safe_print(f"  Type: {sample_cycle.cycle_type.value}")
         safe_print(f"  Duration: {sample_cycle.duration_days} days")
@@ -717,7 +717,7 @@ def main():
 
     # Get statistics
     stats = injector.get_backtest_statistics()
-    safe_print(f"\n📊 Backtest Statistics:")
+    safe_print(f"\\n\\u1f4ca Backtest Statistics:")
     safe_print(f"  Total Cycles: {stats.get('total_cycles', 0)}")
     safe_print(f"  Success Rate: {stats.get('success_rate', 0):.2%}")
     safe_print(f"  Average Return: {stats.get('average_return', 0):.2%}")
@@ -732,3 +732,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

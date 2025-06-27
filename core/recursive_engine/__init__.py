@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\n# #!/usr/bin/env python3
+# -*- coding: utf-8 -*-\\n# #!/usr/bin/env python3
 """__init__.py"""
 
 
@@ -14,3 +14,5 @@ if __name__ == "__main__":
     pass
     pass
 main()
+
+

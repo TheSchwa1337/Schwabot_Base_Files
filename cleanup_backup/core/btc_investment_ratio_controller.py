@@ -11,9 +11,9 @@ signal processing. Integrates all mathematical components into coherent
 trading logic.
 
 Mathematical Foundation:
-- Execution Confidence: Ξ = (T · Δθ) + (ε × σ_f) + τ_p
-- Entry Score: 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
-- BTC Investment Ratio: R_btc = f(Ξ, 𝓔ₛ, Xi_btc, network_strength)
+- Execution Confidence: \\u039e = (T \\u00b7 \\u0394\\u03b8) + (\\u03b5 \\u00d7 \\u03c3_f) + \\u03c4_p
+- Entry Score: \\u1d4d4\\u209b = \\u1d4d7 \\u00d7 (1 \\u2212 \\u1d4d3\\u209a) \\u00d7 \\u1d4db \\u00d7 P\\u0302
+- BTC Investment Ratio: R_btc = f(\\u039e, \\u1d4d4\\u209b, Xi_btc, network_strength)
 
 Logical Sequencing:
 1. Collect unified signals from all engines
@@ -151,10 +151,10 @@ class BTCInvestmentRatioController:
                 network_data,
             )
 
-            # Step 2: Calculate execution confidence (Ξ)
+            # Step 2: Calculate execution confidence (\\u039e)
             execution_confidence = self._calculate_execution_confidence(core_signals)
 
-            # Step 3: Calculate entry score (𝓔ₛ)
+            # Step 3: Calculate entry score (\\u1d4d4\\u209b)
             entry_score = self._calculate_entry_score(core_signals)
 
             # Step 4: Evaluate BTC-specific metrics
@@ -220,7 +220,7 @@ class BTCInvestmentRatioController:
             return self._create_error_result(str(e))
 
     def _calculate_execution_confidence(self, signals: TradingSignalMetrics) -> float:
-        """Calculate execution confidence scalar Ξ."""
+        """Calculate execution confidence scalar \\u039e."""
         try:
             from core.entry_gate import execution_confidence
 
@@ -241,7 +241,7 @@ class BTCInvestmentRatioController:
             )
 
     def _calculate_entry_score(self, signals: TradingSignalMetrics) -> float:
-        """Calculate entropy-weighted entry score 𝓔ₛ."""
+        """Calculate entropy-weighted entry score \\u1d4d4\\u209b."""
         try:
             from core.entry_gate import entry_score
 
@@ -604,7 +604,7 @@ def main() -> None:
     safe_print(f"Execution Priority: {result.execution_priority}")
     safe_print(f"Reasoning: {result.reasoning}")
 
-    safe_print("\nKey Signal Breakdown:")
+    safe_print("\\nKey Signal Breakdown:")
     breakdown = result.signal_breakdown
     safe_print(f"  Execution Confidence: {breakdown.get('execution_confidence', 0):.3f}")
     safe_print(f"  Entry Score: {breakdown.get('entry_score', 0):.3f}")
@@ -636,14 +636,14 @@ def main() -> None:
             network_data=mock_network_data,
         )
 
-        safe_print(f"\n{scenario_name}:")
+        safe_print(f"\\n{scenario_name}:")
         safe_print(f"  Decision: {result.decision.value}")
         safe_print(f"  BTC Allocation: {result.btc_allocation_ratio:.1%}")
         safe_print(f"  Risk: {result.risk_level.value}")
 
     # Performance summary
     summary = controller.get_performance_summary()
-    safe_print(f"\nPerformance Summary: {summary}")
+    safe_print(f"\\nPerformance Summary: {summary}")
 
 
 if __name__ == "__main__":

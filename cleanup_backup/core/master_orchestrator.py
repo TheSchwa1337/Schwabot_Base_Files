@@ -23,7 +23,7 @@ class MasterOrchestrator:
     def __init__(self):
         """Initialize the master orchestrator."""
         self.initialized = True
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.components = {}
         self.execution_history = []
         logger.info(f"MasterOrchestrator v{self.version} initialized")

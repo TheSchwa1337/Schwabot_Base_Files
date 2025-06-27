@@ -69,34 +69,34 @@ except ImportError:
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """TODO: document safe_emoji_print."""
             emoji_mapping = {
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🚨": "[ALERT]",
-                "🎉": "[COMPLETE]",
-                "🔄": "[PROCESSING]",
-                "⏳": "[WAITING]",
-                "⭐": "[STAR]",
-                "🚀": "[LAUNCH]",
-                "🔧": "[TOOLS]",
-                "🛠️": "[REPAIR]",
-                "⚡": "[FAST]",
-                "🔍": "[SEARCH]",
-                "🎯": "[TARGET]",
-                "🔥": "[HOT]",
-                "❄️": "[COOL]",
-                "📊": "[DATA]",
-                "📈": "[PROFIT]",
-                "📉": "[LOSS]",
-                "💰": "[MONEY]",
-                "🧪": "[TEST]",
-                "⚖️": "[BALANCE]",
-                "🌡️": "[TEMP]",
-                "🔬": "[ANALYZE]",
-                "⚙️": "[SETTINGS]",
-                "🔒": "[SECURE]",
-                "🗂️": "[CONFIG]",
-                "🔑": "[KEY]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u23f3": "[WAITING]",
+                "\\u2b50": "[STAR]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u1f527": "[TOOLS]",
+                "\\u1f6e0\\ufe0f": "[REPAIR]",
+                "\\u26a1": "[FAST]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f525": "[HOT]",
+                "\\u2744\\ufe0f": "[COOL]",
+                "\\u1f4ca": "[DATA]",
+                "\\u1f4c8": "[PROFIT]",
+                "\\u1f4c9": "[LOSS]",
+                "\\u1f4b0": "[MONEY]",
+                "\\u1f9ea": "[TEST]",
+                "\\u2696\\ufe0f": "[BALANCE]",
+                "\\u1f321\\ufe0f": "[TEMP]",
+                "\\u1f52c": "[ANALYZE]",
+                "\\u2699\\ufe0f": "[SETTINGS]",
+                "\\u1f512": "[SECURE]",
+                "\\u1f5c2\\ufe0f": "[CONFIG]",
+                "\\u1f511": "[KEY]",
             }
             if force_ascii:
                 for emoji, replacement in emoji_mapping.items():
@@ -299,7 +299,7 @@ class SchwaConfig:
     integration: IntegrationConfig = field(default_factory=IntegrationConfig)
 
     # Metadata
-    version: str = "1.0.0"
+    version: str = "1.0_0"
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     source: ConfigSource = ConfigSource.FILE
@@ -456,7 +456,7 @@ class ConfigManager:
         except Exception as e:
             error_msg = f"Error loading configuration: {e}"
             self.safe_log("error", error_msg)
-            self.safe_safe_print(f"⚠️ {error_msg}")
+            self.safe_safe_print(f"\\u26a0\\ufe0f {error_msg}")
 
     def _update_config_from_dict(self, config_data: Dict[str, Any]) -> None:
         """Update configuration from dictionary"""
@@ -862,23 +862,23 @@ def main() -> None:
     CLI-safe output and comprehensive error handling.
     """
     try:
-        safe_print("🚀 Schwabot Configuration Management Test")
+        safe_print("\\u1f680 Schwabot Configuration Management Test")
         safe_print("=" * 50)
 
         # Initialize configuration manager
-        safe_print("⚙️ Initializing configuration manager...")
+        safe_print("\\u2699\\ufe0f Initializing configuration manager...")
         config_manager = get_config_manager()
 
         # Get current configuration
         config = config_manager.get_config()
-        safe_print(f"✅ Configuration loaded:")
+        safe_print(f"\\u2705 Configuration loaded:")
         safe_print(f"   Environment: {config.system.environment.value}")
         safe_print(f"   Version: {config.version}")
         safe_print(f"   Debug mode: {config.system.debug}")
         safe_print(f"   Default exchange: {config.trading.default_exchange}")
 
         # Validate configuration
-        safe_print("\n🔍 Validating configuration...")
+        safe_print("\\n\\u1f50d Validating configuration...")
         validation = config_manager.validate_configuration()
         safe_print(f"   Status: {validation['status']}")
 
@@ -893,35 +893,35 @@ def main() -> None:
                 safe_print(f"     - {warning}")
 
         # Test configuration update
-        safe_print("\n🔧 Testing configuration update...")
+        safe_print("\\n\\u1f527 Testing configuration update...")
         success = config_manager.update_config("system", "log_level", "DEBUG")
         if success:
-            safe_print("✅ Configuration updated successfully")
+            safe_print("\\u2705 Configuration updated successfully")
             updated_config = config_manager.get_config()
             safe_print(f"   New log level: {updated_config.system.log_level}")
         else:
-            safe_print("❌ Configuration update failed")
+            safe_print("\\u274c Configuration update failed")
 
         # Test configuration export
-        safe_print("\n📤 Testing configuration export...")
+        safe_print("\\n\\u1f4e4 Testing configuration export...")
         yaml_export = config_manager.export_config("yaml")
         if yaml_export:
-            safe_print(f"✅ Configuration exported ({len(yaml_export)} characters)")
+            safe_print(f"\\u2705 Configuration exported ({len(yaml_export)} characters)")
         else:
-            safe_print("❌ Configuration export failed")
+            safe_print("\\u274c Configuration export failed")
 
         # Test configuration save
-        safe_print("\n💾 Testing configuration save...")
+        safe_print("\\n\\u1f4be Testing configuration save...")
         save_success = config_manager.save_configuration()
         if save_success:
-            safe_print("✅ Configuration saved successfully")
+            safe_print("\\u2705 Configuration saved successfully")
         else:
-            safe_print("❌ Configuration save failed")
+            safe_print("\\u274c Configuration save failed")
 
-        safe_print("\n🎉 Configuration management test completed successfully!")
+        safe_print("\\n\\u1f389 Configuration management test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Configuration management test failed: {e}")
+        safe_print(f"\\u274c Configuration management test failed: {e}")
         import traceback
 
         traceback.print_exc()

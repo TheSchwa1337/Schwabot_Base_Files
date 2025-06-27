@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def profit_derivative(prices: np.ndarray, timestamps: Optional[np.ndarray] = None) -> np.ndarray:
     """
-    Calculate profit derivative: dP/dt = (P_t - P_{t-1}) / Δt
+    Calculate profit derivative: dP/dt = (P_t - P_{t-1}) / \\u0394t
 
     Args:
         prices: Price series
@@ -47,7 +47,7 @@ def should_execute_trade(dP_dt: float, lambda_threshold: float, confidence: floa
     Advanced trade execution logic with confidence weighting.
 
     Mathematical Implementation:
-    execute = (dP/dt * confidence) > λ_threshold
+    execute = (dP/dt * confidence) > \\u03bb_threshold
 
     Args:
         dP_dt: Profit derivative

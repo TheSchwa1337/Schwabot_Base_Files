@@ -9,10 +9,10 @@ Voltage lane mapping system for bit depth to voltage to channel assignment.
 Provides safe hand-off mechanisms and mathematical integrity for compute channel routing.
 
 Mathematical Foundation:
-- Bit Depth → Voltage Mapping: V(bit_depth) = base_voltage * (2^(bit_depth/8))
+- Bit Depth \\u2192 Voltage Mapping: V(bit_depth) = base_voltage * (2^(bit_depth/8))
 - Channel Assignment: channel_id = (voltage_level % num_channels) + 1
 - Safety Thresholds: max_voltage = 3.3V, min_voltage = 0.8V
-- Hand-off Validation: ΔV < threshold && latency < max_latency
+- Hand-off Validation: \\u0394V < threshold && latency < max_latency
 
 Features:
 - CPU/GPU/Tensor channel assignment
@@ -122,7 +122,7 @@ class VoltageLaneMapper:
     Mathematical Foundation:
     - Voltage Calculation: V(bit_depth) = base_voltage * (2^(bit_depth/8))
     - Channel Assignment: channel_id = (voltage_level % num_channels) + 1
-    - Safety Validation: ΔV < threshold && latency < max_latency
+    - Safety Validation: \\u0394V < threshold && latency < max_latency
     - Hand-off Score: score = (1 - voltage_delta/max_delta) * (1 - latency/max_latency)
     """
 
@@ -400,7 +400,7 @@ class VoltageLaneMapper:
             # Queue for processing
             self.handoff_queue.put(request)
 
-            logger.info(f"Hand-off request {request_id} queued: {source_channel} → {target_channel}")
+            logger.info(f"Hand-off request {request_id} queued: {source_channel} \\u2192 {target_channel}")
 
             return request_id
 
@@ -503,7 +503,7 @@ class VoltageLaneMapper:
             )
 
             logger.info(
-                f"Hand-off {request.request_id} successful: {request.source_channel} → {request.target_channel}")
+                f"Hand-off {request.request_id} successful: {request.source_channel} \\u2192 {request.target_channel}")
 
             return result
 
@@ -671,3 +671,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

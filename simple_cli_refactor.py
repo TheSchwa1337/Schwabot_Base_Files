@@ -52,26 +52,26 @@ class SimpleCLIRefactor:
         # Common Unicode patterns found in the codebase
         self.unicode_patterns = [
             # Emojis and symbols
-            r'[🚀📈📉💰⚡🔥❄💡🎯🎪🎭🎨🎵🎮🏆🥇🥈🥉]',
-            r'[🔗🔒🔓🔐🔑🔨🔩🔪🔫🔬🔭🔮🔯🔰🔱🔲🔳🔴🔵🔶🔷🔸🔹🔺🔻🔼🔽]',
-            r'[⚔🛡⚓🎪🎭🎨🎵🎮🏆🥇🥈🥉]',
+            r'[\\u1f680\\u1f4c8\\u1f4c9\\u1f4b0\\u26a1\\u1f525\\u2744\\u1f4a1\\u1f3af\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3b5\\u1f3ae\\u1f3c6\\u1f947\\u1f948\\u1f949]',
+            r'[\\u1f517\\u1f512\\u1f513\\u1f510\\u1f511\\u1f528\\u1f529\\u1f52a\\u1f52b\\u1f52c\\u1f52d\\u1f52e\\u1f52f\\u1f530\\u1f531\\u1f532\\u1f533\\u1f534\\u1f535\\u1f536\\u1f537\\u1f538\\u1f539\\u1f53a\\u1f53b\\u1f53c\\u1f53d]',
+            r'[\\u2694\\u1f6e1\\u2693\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3b5\\u1f3ae\\u1f3c6\\u1f947\\u1f948\\u1f949]',
 
             # Mathematical symbols
-            r'[±×÷≤≥≠≈∞∑∏∫∂∇∆]',
-            r'[αβγδεζηθικλμνξοπρστυφχψω]',
-            r'[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]',
+            r'[\\u00b1\\u00d7\\u00f7\\u2264\\u2265\\u2260\\u2248\\u221e\\u2211\\u220f\\u222b\\u2202\\u2207\\u2206]',
+            r'[\\u03b1\\u03b2\\u03b3\\u03b4\\u03b5\\u03b6\\u03b7\\u03b8\\u03b9\\u03ba\\u03bb\\u03bc\\u03bd\\u03be\\u03bf\\u03c0\\u03c1\\u03c3\\u03c4\\u03c5\\u03c6\\u03c7\\u03c8\\u03c9]',
+            r'[\\u0391\\u0392\\u0393\\u0394\\u0395\\u0396\\u0397\\u0398\\u0399\\u039a\\u039b\\u039c\\u039d\\u039e\\u039f\\u03a0\\u03a1\\u03a3\\u03a4\\u03a5\\u03a6\\u03a7\\u03a8\\u03a9]',
 
             # Arrows and navigation
-            r'[→←↑↓⇒⇐⇑⇓]',
+            r'[\\u2192\\u2190\\u2191\\u2193\\u21d2\\u21d0\\u21d1\\u21d3]',
 
             # Currency symbols
-            r'[€£¥₹₿]',
+            r'[\\u20ac\\u00a3\\u00a5\\u20b9\\u20bf]',
 
             # Status indicators
-            r'[✓✗⚠ℹ]',
+            r'[\\u2713\\u2717\\u26a0\\u2139]',
 
             # Common Unicode characters
-            r'[–—""''…•◦▪▫▬▭▮▯▰▱▲△▼▽◀◁▶▷◆◇●○◐◑◒◓◔◕◖◗◘◙◚◛◜◝◞◟◠◡◢◣◤◥◦◧◨◩◪◫◬◭◮◯]',
+            r'[\\u2013\\u2014""''\\u2026\\u2022\\u25e6\\u25aa\\u25ab\\u25ac\\u25ad\\u25ae\\u25af\\u25b0\\u25b1\\u25b2\\u25b3\\u25bc\\u25bd\\u25c0\\u25c1\\u25b6\\u25b7\\u25c6\\u25c7\\u25cf\\u25cb\\u25d0\\u25d1\\u25d2\\u25d3\\u25d4\\u25d5\\u25d6\\u25d7\\u25d8\\u25d9\\u25da\\u25db\\u25dc\\u25dd\\u25de\\u25df\\u25e0\\u25e1\\u25e2\\u25e3\\u25e4\\u25e5\\u25e6\\u25e7\\u25e8\\u25e9\\u25ea\\u25eb\\u25ec\\u25ed\\u25ee\\u25ef]',
         ]
 
         # Combined Unicode pattern
@@ -117,7 +117,7 @@ class SimpleCLIRefactor:
             has_safe_print_import = 'from utils.safe_print' in content or 'import utils.safe_print' in content
 
             # Find print statements with Unicode content
-            print_pattern = r'print\s*\((.*?)\)'
+            print_pattern = r'print\\s*\((.*?)\)'
 
             def replace_print(match):
                 args_str = match.group(1)
@@ -175,7 +175,7 @@ class SimpleCLIRefactor:
                 content = f.read()
 
             unicode_prints = []
-            print_pattern = r'print\s*\((.*?)\)'
+            print_pattern = r'print\\s*\((.*?)\)'
 
             for match in re.finditer(print_pattern, content, flags=re.DOTALL):
                 args_str = match.group(1)
@@ -255,3 +255,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+"""

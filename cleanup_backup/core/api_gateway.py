@@ -88,7 +88,7 @@ try:
     GPT_LAYER_AVAILABLE = True
 except ImportError:
     GPT_LAYER_AVAILABLE = False
-    safe_safe_print("⚠️ GPT command layer not available")
+    safe_safe_print("\\u26a0\\ufe0f GPT command layer not available")
 
 # Import core Schwabot modules
 try:
@@ -100,7 +100,7 @@ try:
     SCHWABOT_CORE_AVAILABLE = True
 except ImportError:
     SCHWABOT_CORE_AVAILABLE = False
-    safe_safe_print("⚠️ Schwabot core modules not available")
+    safe_safe_print("\\u26a0\\ufe0f Schwabot core modules not available")
 
 
 # Pydantic models for API requests/responses
@@ -162,7 +162,7 @@ class SchwabotAPIGateway:
     entities to interact with Schwabot's recursive execution system.
     """
 
-    def __init__(self, host: str = "0.0.0.0", port: int = 8000):
+    def __init__(self, host: str = "0.0_0.0", port: int = 8000):
         """Initialize the API gateway."""
         self.host = host
         self.port = port
@@ -192,7 +192,7 @@ class SchwabotAPIGateway:
             self._setup_routes()
         else:
             self.app = None
-            safe_safe_print("⚠️ FastAPI not available - API gateway disabled")
+            safe_safe_print("\\u26a0\\ufe0f FastAPI not available - API gateway disabled")
 
         # Initialize core components
         self.gpt_layer = GPTCommandLayer() if GPT_LAYER_AVAILABLE else None
@@ -209,7 +209,7 @@ class SchwabotAPIGateway:
         # Command execution task
         self.execution_task = None
 
-        safe_safe_print("🌐 Schwabot API Gateway initialized")
+        safe_safe_print("\\u1f310 Schwabot API Gateway initialized")
 
     def _setup_routes(self):
         """Setup API routes."""
@@ -285,7 +285,7 @@ class SchwabotAPIGateway:
 
             except Exception as e:
                 error_msg = safe_format_error(e, "submit_command")
-                safe_safe_print(f"❌ Command submission error: {error_msg}")
+                safe_safe_print(f"\\u274c Command submission error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Get command status
@@ -313,7 +313,7 @@ class SchwabotAPIGateway:
                 raise
             except Exception as e:
                 error_msg = safe_format_error(e, "get_command_status")
-                safe_safe_print(f"❌ Command status error: {error_msg}")
+                safe_safe_print(f"\\u274c Command status error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Get consciousness profile
@@ -348,7 +348,7 @@ class SchwabotAPIGateway:
                 raise
             except Exception as e:
                 error_msg = safe_format_error(e, "get_consciousness_profile")
-                safe_safe_print(f"❌ Consciousness profile error: {error_msg}")
+                safe_safe_print(f"\\u274c Consciousness profile error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Strategy endpoints
@@ -364,7 +364,7 @@ class SchwabotAPIGateway:
 
             except Exception as e:
                 error_msg = safe_format_error(e, "list_strategies")
-                safe_safe_print(f"❌ Strategy list error: {error_msg}")
+                safe_safe_print(f"\\u274c Strategy list error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         @self.app.post("/strategy/execute")
@@ -385,7 +385,7 @@ class SchwabotAPIGateway:
                 raise
             except Exception as e:
                 error_msg = safe_format_error(e, "execute_strategy")
-                safe_safe_print(f"❌ Strategy execution error: {error_msg}")
+                safe_safe_print(f"\\u274c Strategy execution error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Profit endpoints
@@ -406,7 +406,7 @@ class SchwabotAPIGateway:
 
             except Exception as e:
                 error_msg = safe_format_error(e, "allocate_profit")
-                safe_safe_print(f"❌ Profit allocation error: {error_msg}")
+                safe_safe_print(f"\\u274c Profit allocation error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Matrix endpoints
@@ -427,7 +427,7 @@ class SchwabotAPIGateway:
 
             except Exception as e:
                 error_msg = safe_format_error(e, "generate_matrix")
-                safe_safe_print(f"❌ Matrix generation error: {error_msg}")
+                safe_safe_print(f"\\u274c Matrix generation error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # Hash endpoints
@@ -448,7 +448,7 @@ class SchwabotAPIGateway:
 
             except Exception as e:
                 error_msg = safe_format_error(e, "evaluate_hash")
-                safe_safe_print(f"❌ Hash evaluation error: {error_msg}")
+                safe_safe_print(f"\\u274c Hash evaluation error: {error_msg}")
                 raise HTTPException(status_code=500, detail=error_msg)
 
         # WebSocket endpoint
@@ -464,7 +464,7 @@ class SchwabotAPIGateway:
         async with self.connection_lock:
             self.active_connections.append(websocket)
 
-        safe_safe_print(f"🌐 WebSocket connection established - Total: {len(self.active_connections)}")
+        safe_safe_print(f"\\u1f310 WebSocket connection established - Total: {len(self.active_connections)}")
 
         try:
             while True:
@@ -479,10 +479,10 @@ class SchwabotAPIGateway:
                 await websocket.send_text(json.dumps(response))
 
         except WebSocketDisconnect:
-            safe_safe_print("🌐 WebSocket connection disconnected")
+            safe_safe_print("\\u1f310 WebSocket connection disconnected")
         except Exception as e:
             error_msg = safe_format_error(e, "websocket_connection")
-            safe_safe_print(f"❌ WebSocket error: {error_msg}")
+            safe_safe_print(f"\\u274c WebSocket error: {error_msg}")
         finally:
             async with self.connection_lock:
                 if websocket in self.active_connections:
@@ -559,7 +559,7 @@ class SchwabotAPIGateway:
             try:
                 await connection.send_text(message_json)
             except Exception as e:
-                safe_safe_print(f"⚠️ WebSocket broadcast error: {safe_format_error(e, 'broadcast')}")
+                safe_safe_print(f"\\u26a0\\ufe0f WebSocket broadcast error: {safe_format_error(e, 'broadcast')}")
                 disconnected.append(connection)
 
         # Remove disconnected connections
@@ -572,16 +572,16 @@ class SchwabotAPIGateway:
     async def start_command_execution(self):
         """Start command execution loop."""
         if not self.gpt_layer:
-            safe_safe_print("⚠️ GPT command layer not available - skipping execution")
+            safe_safe_print("\\u26a0\\ufe0f GPT command layer not available - skipping execution")
             return
 
-        safe_safe_print("🚀 Starting command execution loop")
+        safe_safe_print("\\u1f680 Starting command execution loop")
         self.execution_task = asyncio.create_task(self.gpt_layer.execute_commands())
 
     async def stop_command_execution(self):
         """Stop command execution loop."""
         if self.execution_task:
-            safe_safe_print("🛑 Stopping command execution loop")
+            safe_safe_print("\\u1f6d1 Stopping command execution loop")
             self.execution_task.cancel()
             try:
                 await self.execution_task
@@ -591,7 +591,7 @@ class SchwabotAPIGateway:
     async def start_server(self):
         """Start the API server."""
         if not self.app:
-            safe_safe_print("❌ FastAPI not available - cannot start server")
+            safe_safe_print("\\u274c FastAPI not available - cannot start server")
             return
 
         # Start command execution
@@ -606,15 +606,15 @@ class SchwabotAPIGateway:
         )
         server = uvicorn.Server(config)
 
-        safe_safe_print(f"🌐 Starting Schwabot API Gateway on {self.host}:{self.port}")
-        safe_safe_print("📚 API Documentation: http://localhost:8000/docs")
-        safe_safe_print("🔌 WebSocket endpoint: ws://localhost:8000/ws")
+        safe_safe_print(f"\\u1f310 Starting Schwabot API Gateway on {self.host}:{self.port}")
+        safe_safe_print("\\u1f4da API Documentation: http://localhost:8000/docs")
+        safe_safe_print("\\u1f50c WebSocket endpoint: ws://localhost:8000/ws")
 
         await server.serve()
 
     async def shutdown(self):
         """Shutdown the API gateway."""
-        safe_safe_print("🛑 Shutting down Schwabot API Gateway")
+        safe_safe_print("\\u1f6d1 Shutting down Schwabot API Gateway")
 
         # Stop command execution
         await self.stop_command_execution()
@@ -634,7 +634,7 @@ api_gateway = SchwabotAPIGateway()
 
 
 # Convenience functions for external access
-async def start_api_gateway(host: str = "0.0.0.0", port: int = 8000):
+async def start_api_gateway(host: str = "0.0_0.0", port: int = 8000):
     """Start the Schwabot API gateway."""
     global api_gateway
     api_gateway = SchwabotAPIGateway(host=host, port=port)
@@ -677,10 +677,10 @@ async def get_system_status_via_api() -> Dict[str, Any]:
 if __name__ == "__main__":
     async def test_api_gateway():
         """Test API gateway functionality."""
-        safe_safe_print("🌐 Testing API gateway...")
+        safe_safe_print("\\u1f310 Testing API gateway...")
 
         # Create API gateway
-        gateway = SchwabotAPIGateway(host="127.0.0.1", port=8000)
+        gateway = SchwabotAPIGateway(host="127.0_0.1", port=8000)
 
         # Start command execution
         await gateway.start_command_execution()
@@ -697,10 +697,12 @@ if __name__ == "__main__":
                 context={"api_test": True}
             )
 
-            safe_safe_print(f"✅ Test command submitted via API: {command_id}")
+            safe_safe_print(f"\\u2705 Test command submitted via API: {command_id}")
 
         # Start server
         await gateway.start_server()
 
     # Run test
     asyncio.run(test_api_gateway())
+
+"""

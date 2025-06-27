@@ -59,12 +59,12 @@ class ZPEIntegration:
             )
 
             self.integration_status['strategy_mapper'] = True
-            logger.info("✅ ZPE integrated with strategy_mapper")
+            logger.info("\\u2705 ZPE integrated with strategy_mapper")
 
             return strategy_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE strategy_mapper integration failed: {e}")
+            logger.error(f"\\u274c ZPE strategy_mapper integration failed: {e}")
             return strategy_data
 
     def integrate_with_profit_cycle_allocator(self, profit_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -90,12 +90,12 @@ class ZPEIntegration:
             profit_data['total_profit'] = profit_generated + reinjected_profit
 
             self.integration_status['profit_cycle_allocator'] = True
-            logger.info("✅ ZPE integrated with profit_cycle_allocator")
+            logger.info("\\u2705 ZPE integrated with profit_cycle_allocator")
 
             return profit_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE profit_cycle_allocator integration failed: {e}")
+            logger.error(f"\\u274c ZPE profit_cycle_allocator integration failed: {e}")
             return profit_data
 
     def integrate_with_fractal_core(self, fractal_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -121,12 +121,12 @@ class ZPEIntegration:
             fractal_data['zpe_angular_velocity'] = torque / fractal_data.get('inertia', 1.0)
 
             self.integration_status['fractal_core'] = True
-            logger.info("✅ ZPE integrated with fractal_core")
+            logger.info("\\u2705 ZPE integrated with fractal_core")
 
             return fractal_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE fractal_core integration failed: {e}")
+            logger.error(f"\\u274c ZPE fractal_core integration failed: {e}")
             return fractal_data
 
     def integrate_with_lantern_memory(self, lantern_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -155,12 +155,12 @@ class ZPEIntegration:
             lantern_data['zpe_signal_strength'] = (lantern_signal + resonance) / 2.0
 
             self.integration_status['lantern_memory'] = True
-            logger.info("✅ ZPE integrated with lantern_memory")
+            logger.info("\\u2705 ZPE integrated with lantern_memory")
 
             return lantern_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE lantern_memory integration failed: {e}")
+            logger.error(f"\\u274c ZPE lantern_memory integration failed: {e}")
             return lantern_data
 
     def integrate_with_fault_bus(self, fault_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -186,12 +186,12 @@ class ZPEIntegration:
             fault_data['zpe_agent_consensus'] = self.zpe_core.agent_consensus.copy()
 
             self.integration_status['fault_bus'] = True
-            logger.info("✅ ZPE integrated with fault_bus")
+            logger.info("\\u2705 ZPE integrated with fault_bus")
 
             return fault_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE fault_bus integration failed: {e}")
+            logger.error(f"\\u274c ZPE fault_bus integration failed: {e}")
             return fault_data
 
     def integrate_with_hash_registry(self, hash_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -207,12 +207,12 @@ class ZPEIntegration:
             hash_data['zpe_thermal_efficiency'] = self.zpe_core.thermal_history[-1]['efficiency'] if self.zpe_core.thermal_history else 0.0
 
             self.integration_status['hash_registry'] = True
-            logger.info("✅ ZPE integrated with hash_registry")
+            logger.info("\\u2705 ZPE integrated with hash_registry")
 
             return hash_data
 
         except Exception as e:
-            logger.error(f"❌ ZPE hash_registry integration failed: {e}")
+            logger.error(f"\\u274c ZPE hash_registry integration failed: {e}")
             return hash_data
 
     def spin_complete_system(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -221,7 +221,7 @@ class ZPEIntegration:
 
         This is where Schwabot becomes the wheel - spinning into profit, not pinging against it.
         """
-        logger.info("🔄 Spinning Complete ZPE System...")
+        logger.info("\\u1f504 Spinning Complete ZPE System...")
 
         # Spin the ZPE profit wheel
         zpe_result = self.zpe_core.spin_profit_wheel(market_data)
@@ -248,7 +248,7 @@ class ZPEIntegration:
             'timestamp': datetime.now()
         }
 
-        logger.info(f"🎯 Complete System Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
+        logger.info(f"\\u1f3af Complete System Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
         return integrated_data
 
     def get_integration_status(self) -> Dict[str, bool]:
@@ -259,12 +259,12 @@ class ZPEIntegration:
         """Reset all integration status flags."""
         for key in self.integration_status:
             self.integration_status[key] = False
-        logger.info("🔄 ZPE integration status reset")
+        logger.info("\\u1f504 ZPE integration status reset")
 
 
 def main():
     """Test the ZPE Integration Layer."""
-    safe_print("🧠 Testing Schwabot ZPE Integration Layer")
+    safe_print("\\u1f9e0 Testing Schwabot ZPE Integration Layer")
     safe_print("=" * 50)
 
     integration = ZPEIntegration()
@@ -301,7 +301,7 @@ def main():
     safe_print(f"System Should Spin: {result['system_spin_decision']['should_spin']}")
     safe_print(f"Integration Status: {result['system_spin_decision']['integration_status']}")
 
-    safe_print("\n🎉 ZPE Integration Layer test complete!")
+    safe_print("\\n\\u1f389 ZPE Integration Layer test complete!")
 
 
 if __name__ == "__main__":

@@ -145,7 +145,7 @@ class ReflectiveAllocator:
         self.allocation_patterns = defaultdict(list)
         self.access_patterns = defaultdict(list)
 
-        safe_safe_print("🔄 Reflective Allocator initialized")
+        safe_safe_print("\\u1f504 Reflective Allocator initialized")
 
     def should_allocate_btc_data(self) -> bool:
         """Check if it's time to allocate BTC hashing data."""
@@ -188,7 +188,7 @@ class ReflectiveAllocator:
             return MemoryAllocationType.MID_TERM
 
         except Exception as e:
-            safe_safe_print(f"❌ Allocation type determination failed: {safe_format_error(e, 'allocation_type')}")
+            safe_safe_print(f"\\u274c Allocation type determination failed: {safe_format_error(e, 'allocation_type')}")
             return MemoryAllocationType.MID_TERM
 
     def calculate_compression_ratio(self, data: Dict[str, Any]) -> float:
@@ -204,7 +204,7 @@ class ReflectiveAllocator:
             return compressed_size / original_size
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Compression calculation failed: {safe_format_error(e, 'compression')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Compression calculation failed: {safe_format_error(e, 'compression')}")
             return 1.0
 
     def record_allocation_pattern(self, category: DataCategory,
@@ -227,7 +227,7 @@ class ReflectiveAllocator:
                     self.allocation_patterns[category.value][-1000:]
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Pattern recording failed: {safe_format_error(e, 'pattern_record')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Pattern recording failed: {safe_format_error(e, 'pattern_record')}")
 
     def get_allocation_recommendations(self) -> Dict[str, Any]:
         """Get allocation recommendations based on patterns."""
@@ -255,7 +255,7 @@ class ReflectiveAllocator:
             return recommendations
 
         except Exception as e:
-            safe_safe_print(f"❌ Recommendation generation failed: {safe_format_error(e, 'recommendations')}")
+            safe_safe_print(f"\\u274c Recommendation generation failed: {safe_format_error(e, 'recommendations')}")
             return {}
 
 
@@ -287,7 +287,7 @@ class MemoryAllocationManager:
         self.running = False
         self._start_background_cleanup()
 
-        safe_safe_print("🧠 Memory Allocation Manager initialized")
+        safe_safe_print("\\u1f9e0 Memory Allocation Manager initialized")
 
     def _load_ui_settings(self) -> Dict[str, Any]:
         """Load user interface settings."""
@@ -324,7 +324,7 @@ class MemoryAllocationManager:
                 return default_settings
 
         except Exception as e:
-            safe_safe_print(f"⚠️ UI settings load failed: {safe_format_error(e, 'ui_settings')}")
+            safe_safe_print(f"\\u26a0\\ufe0f UI settings load failed: {safe_format_error(e, 'ui_settings')}")
             return {}
 
     def _initialize_default_configs(self) -> None:
@@ -450,7 +450,7 @@ class MemoryAllocationManager:
             # Get configuration
             config = self.allocation_configs.get(category)
             if not config:
-                safe_safe_print(f"❌ No configuration for category: {category.value}")
+                safe_safe_print(f"\\u274c No configuration for category: {category.value}")
                 return None
 
             # Use provided priority or default from config
@@ -468,7 +468,7 @@ class MemoryAllocationManager:
 
             # Check memory limits
             if not self._check_memory_limits(allocation_type, data_size):
-                safe_safe_print(f"⚠️ Memory limit reached for {allocation_type.value}")
+                safe_safe_print(f"\\u26a0\\ufe0f Memory limit reached for {allocation_type.value}")
                 return None
 
             # Generate memory key
@@ -521,7 +521,7 @@ class MemoryAllocationManager:
                         data_size=data_size
                     )
 
-                    safe_safe_print(f"✅ Memory allocated: {key_id[:8]}... ({category.value})")
+                    safe_safe_print(f"\\u2705 Memory allocated: {key_id[:8]}... ({category.value})")
                     return key_id
                 else:
                     # Record failed pattern
@@ -529,18 +529,18 @@ class MemoryAllocationManager:
                         category, allocation_type, False
                     )
 
-                    safe_safe_print(f"❌ Persistent storage failed for {category.value}")
+                    safe_safe_print(f"\\u274c Persistent storage failed for {category.value}")
                     return None
             else:
                 # Fallback to in-memory storage
                 self.memory_keys[key_id] = memory_key
                 self._update_memory_usage(allocation_type, data_size, 1)
 
-                safe_safe_print(f"✅ Memory allocated (in-memory): {key_id[:8]}... ({category.value})")
+                safe_safe_print(f"\\u2705 Memory allocated (in-memory): {key_id[:8]}... ({category.value})")
                 return key_id
 
         except Exception as e:
-            safe_safe_print(f"❌ Memory allocation failed: {safe_format_error(e, 'memory_allocate')}")
+            safe_safe_print(f"\\u274c Memory allocation failed: {safe_format_error(e, 'memory_allocate')}")
             return None
 
     def _check_memory_limits(self, allocation_type: MemoryAllocationType, data_size: int) -> bool:
@@ -567,7 +567,7 @@ class MemoryAllocationManager:
             return (current_usage + data_size) <= limit_bytes
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory limit check failed: {safe_format_error(e, 'memory_limit')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory limit check failed: {safe_format_error(e, 'memory_limit')}")
             return True  # Allow allocation on error
 
     def _update_memory_usage(self, allocation_type: MemoryAllocationType,
@@ -579,7 +579,7 @@ class MemoryAllocationManager:
             usage['entries'] += entry_count
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory usage update failed: {safe_format_error(e, 'usage_update')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory usage update failed: {safe_format_error(e, 'usage_update')}")
 
     def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
         """Get memory key by ID."""
@@ -640,7 +640,7 @@ class MemoryAllocationManager:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Memory usage calculation failed: {safe_format_error(e, 'usage_calc')}")
+            safe_safe_print(f"\\u274c Memory usage calculation failed: {safe_format_error(e, 'usage_calc')}")
             return MemoryUsage(0, 0, 0.0, 0.0, 0.0, 0.0, datetime.now(), datetime.now())
 
     def update_ui_settings(self, new_settings: Dict[str, Any]) -> bool:
@@ -656,11 +656,11 @@ class MemoryAllocationManager:
             with open(settings_file, 'w') as f:
                 json.dump(self.ui_settings, f, indent=2)
 
-            safe_safe_print("✅ UI settings updated")
+            safe_safe_print("\\u2705 UI settings updated")
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ UI settings update failed: {safe_format_error(e, 'ui_update')}")
+            safe_safe_print(f"\\u274c UI settings update failed: {safe_format_error(e, 'ui_update')}")
             return False
 
     def _start_background_cleanup(self) -> None:
@@ -679,7 +679,7 @@ class MemoryAllocationManager:
                 self._perform_cleanup()
                 time.sleep(3600)  # Run every hour
             except Exception as e:
-                safe_safe_print(f"⚠️ Cleanup error: {safe_format_error(e, 'cleanup')}")
+                safe_safe_print(f"\\u26a0\\ufe0f Cleanup error: {safe_format_error(e, 'cleanup')}")
                 time.sleep(3600)
 
     def _perform_cleanup(self) -> None:
@@ -701,10 +701,10 @@ class MemoryAllocationManager:
                 self._update_memory_usage(memory_key.allocation_type, -memory_key.size_bytes, -1)
 
             if keys_to_remove:
-                safe_safe_print(f"🗑️ Cleaned up {len(keys_to_remove)} expired memory keys")
+                safe_safe_print(f"\\u1f5d1\\ufe0f Cleaned up {len(keys_to_remove)} expired memory keys")
 
         except Exception as e:
-            safe_safe_print(f"❌ Cleanup failed: {safe_format_error(e, 'cleanup_perform')}")
+            safe_safe_print(f"\\u274c Cleanup failed: {safe_format_error(e, 'cleanup_perform')}")
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
@@ -730,7 +730,7 @@ class MemoryAllocationManager:
             }
 
         except Exception as e:
-            safe_safe_print(f"❌ Status generation failed: {safe_format_error(e, 'status')}")
+            safe_safe_print(f"\\u274c Status generation failed: {safe_format_error(e, 'status')}")
             return {}
 
 
@@ -773,7 +773,7 @@ def get_memory_allocation_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test memory allocation manager
-    safe_print("🧪 Testing Memory Allocation Manager...")
+    safe_print("\\u1f9ea Testing Memory Allocation Manager...")
 
     # Test BTC hashing data allocation
     btc_data = {
@@ -785,7 +785,7 @@ if __name__ == "__main__":
     }
 
     key_id = allocate_memory(btc_data, DataCategory.BTC_HASHING)
-    safe_print(f"✅ BTC data allocated: {key_id}")
+    safe_print(f"\\u2705 BTC data allocated: {key_id}")
 
     # Test trading signals allocation
     trading_data = {
@@ -796,14 +796,14 @@ if __name__ == "__main__":
     }
 
     trading_key = allocate_memory(trading_data, DataCategory.TRADING_SIGNALS)
-    safe_print(f"✅ Trading signal allocated: {trading_key}")
+    safe_print(f"\\u2705 Trading signal allocated: {trading_key}")
 
     # Get memory usage
     usage = get_memory_usage()
-    safe_print(f"✅ Memory usage: {usage.total_entries} entries, {usage.total_size_bytes} bytes")
+    safe_print(f"\\u2705 Memory usage: {usage.total_entries} entries, {usage.total_size_bytes} bytes")
 
     # Get system status
     status = get_memory_allocation_status()
-    safe_print(f"✅ System status: {status}")
+    safe_print(f"\\u2705 System status: {status}")
 
-    safe_print("✅ Memory Allocation Manager test completed")
+    safe_print("\\u2705 Memory Allocation Manager test completed")

@@ -3,7 +3,7 @@ from core.unified_math_system import unified_math
 """Matrix Fault Resolver - Lattice Integration and Quantum Correlation.
 
 Implements the core mathematical framework for:
-- Tensor network |φ⟩ ⊗ |ψ⟩ with recursive entanglement score
+- Tensor network |\\u03c6\\u27e9 \\u2297 |\\u03c8\\u27e9 with recursive entanglement score
 - Quantum correlation, nodal echo tracking, and entropic balancing
 - Multi-dimensional fault resolution using lattice structures
 """
@@ -119,7 +119,7 @@ class MatrixFaultResolver:
     def tensor_product_states(
         self, state_a: QuantumState, state_b: QuantumState
     ) -> QuantumState:
-        """Calculate tensor product |φ⟩ ⊗ |ψ⟩ of two quantum states."""
+        """Calculate tensor product |\\u03c6\\u27e9 \\u2297 |\\u03c8\\u27e9 of two quantum states."""
         # Tensor product of state vectors
         product_vector = np.kron(state_a.state_vector, state_b.state_vector)
 
@@ -136,7 +136,7 @@ class MatrixFaultResolver:
             state_vector=product_vector,
             phase=combined_phase,
             entanglement_score=entanglement_score,
-            node_id=f"{state_a.node_id}⊗{state_b.node_id}",
+            node_id=f"{state_a.node_id}\\u2297{state_b.node_id}",
             timestamp=unified_math.max(state_a.timestamp, state_b.timestamp),
         )
 
@@ -557,3 +557,5 @@ def create_lattice_system(
     resolver = MatrixFaultResolver(dimensions)
     resolver.initialize_lattice()
     return resolver
+
+"""

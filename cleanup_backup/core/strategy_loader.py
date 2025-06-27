@@ -63,46 +63,46 @@ except ImportError:
         def safe_emoji_print(message: str, force_ascii: bool = False) -> str:
             """Fallback emoji-safe print function."""
             emoji_mapping = {
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🚨": "[ALERT]",
-                "🎉": "[COMPLETE]",
-                "🔄": "[PROCESSING]",
-                "⏳": "[WAITING]",
-                "⭐": "[STAR]",
-                "🚀": "[LAUNCH]",
-                "🔧": "[TOOLS]",
-                "🛠️": "[REPAIR]",
-                "⚡": "[FAST]",
-                "🔍": "[SEARCH]",
-                "🎯": "[TARGET]",
-                "🔥": "[HOT]",
-                "❄️": "[COOL]",
-                "📊": "[DATA]",
-                "📈": "[PROFIT]",
-                "📉": "[LOSS]",
-                "💰": "[MONEY]",
-                "🧪": "[TEST]",
-                "⚖️": "[BALANCE]",
-                "️": "[TEMP]",
-                "🔬": "[ANALYZE]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u23f3": "[WAITING]",
+                "\\u2b50": "[STAR]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u1f527": "[TOOLS]",
+                "\\u1f6e0\\ufe0f": "[REPAIR]",
+                "\\u26a1": "[FAST]",
+                "\\u1f50d": "[SEARCH]",
+                "\\u1f3af": "[TARGET]",
+                "\\u1f525": "[HOT]",
+                "\\u2744\\ufe0f": "[COOL]",
+                "\\u1f4ca": "[DATA]",
+                "\\u1f4c8": "[PROFIT]",
+                "\\u1f4c9": "[LOSS]",
+                "\\u1f4b0": "[MONEY]",
+                "\\u1f9ea": "[TEST]",
+                "\\u2696\\ufe0f": "[BALANCE]",
+                "\\ufe0f": "[TEMP]",
+                "\\u1f52c": "[ANALYZE]",
                 "": "[SYSTEM]",
-                "️": "[COMPUTER]",
-                "📱": "[MOBILE]",
-                "🌐": "[NETWORK]",
-                "🔒": "[SECURE]",
-                "🔓": "[UNLOCK]",
-                "🔑": "[KEY]",
-                "🛡️": "[SHIELD]",
-                "🧮": "[CALC]",
-                "📐": "[MATH]",
-                "🔢": "[NUMBERS]",
-                "∞": "[INFINITY]",
-                "φ": "[PHI]",
-                "π": "[PI]",
-                "∑": "[SUM]",
-                "∫": "[INTEGRAL]",
+                "\\ufe0f": "[COMPUTER]",
+                "\\u1f4f1": "[MOBILE]",
+                "\\u1f310": "[NETWORK]",
+                "\\u1f512": "[SECURE]",
+                "\\u1f513": "[UNLOCK]",
+                "\\u1f511": "[KEY]",
+                "\\u1f6e1\\ufe0f": "[SHIELD]",
+                "\\u1f9ee": "[CALC]",
+                "\\u1f4d0": "[MATH]",
+                "\\u1f522": "[NUMBERS]",
+                "\\u221e": "[INFINITY]",
+                "\\u03c6": "[PHI]",
+                "\\u03c0": "[PI]",
+                "\\u2211": "[SUM]",
+                "\\u222b": "[INTEGRAL]",
             }
 
             if force_ascii:
@@ -308,7 +308,7 @@ class StrategyValidator:
 
         except Exception as e:
             error_msg = f"Error in strategy validation: {e}"
-            self.cli_handler.safe_safe_print(f"❌ {error_msg}")
+            self.cli_handler.safe_safe_print(f"\\u274c {error_msg}")
             return {
                 "syntax_valid": False,
                 "dependencies_valid": False,
@@ -466,7 +466,7 @@ class StrategyLoader:
         Args:
             config: Loader configuration
         """
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Initialize CLI compatibility handler
@@ -593,7 +593,7 @@ class StrategyLoader:
 
             # Check if strategy is already loaded
             if strategy_path in self.loaded_strategies:
-                self.safe_safe_print(f"⚠️ Strategy {strategy_path} already loaded")
+                self.safe_safe_print(f"\\u26a0\\ufe0f Strategy {strategy_path} already loaded")
                 return LoaderResult(
                     success=True,
                     strategy_instance=self.loaded_strategies[strategy_path],
@@ -750,7 +750,7 @@ class StrategyLoader:
             # This would integrate with your database system
             # For now, return a placeholder implementation
             self.safe_safe_print(
-                f"🔄 Loading strategy {strategy_id} from database..."
+                f"\\u1f504 Loading strategy {strategy_id} from database..."
             )
 
             return LoaderResult(
@@ -780,7 +780,7 @@ class StrategyLoader:
         try:
             # This would integrate with your API system
             # For now, return a placeholder implementation
-            self.safe_safe_print(f"🔄 Loading strategy from API: {api_endpoint}")
+            self.safe_safe_print(f"\\u1f504 Loading strategy from API: {api_endpoint}")
 
             return LoaderResult(
                 success=False, error_message="API loading not yet implemented"
@@ -807,7 +807,7 @@ class StrategyLoader:
         try:
             # This would integrate with your plugin system
             # For now, return a placeholder implementation
-            self.safe_safe_print(f"🔄 Loading strategy plugin: {plugin_name}")
+            self.safe_safe_print(f"\\u1f504 Loading strategy plugin: {plugin_name}")
 
             return LoaderResult(
                 success=False,
@@ -840,7 +840,7 @@ class StrategyLoader:
             if config is None:
                 config = StrategyConfig(
                     name=Path(file_path).stem,
-                    version="1.0.0",
+                    version="1.0_0",
                     strategy_type=StrategyType.CUSTOM,
                     description="Auto-generated strategy configuration",
                     author="System",
@@ -852,7 +852,7 @@ class StrategyLoader:
             # Return default configuration on error
             return StrategyConfig(
                 name=Path(file_path).stem,
-                version="1.0.0",
+                version="1.0_0",
                 strategy_type=StrategyType.CUSTOM,
                 description="Default strategy configuration",
                 author="System",
@@ -885,7 +885,7 @@ class StrategyLoader:
             # Parse configuration (simplified)
             config_dict = {
                 "name": "Unknown",
-                "version": "1.0.0",
+                "version": "1.0_0",
                 "strategy_type": StrategyType.CUSTOM,
                 "description": "No description",
                 "author": "Unknown",
@@ -1047,7 +1047,7 @@ class StrategyLoader:
         """
         try:
             if strategy_name not in self.loaded_strategies:
-                self.safe_safe_print(f"⚠️ Strategy {strategy_name} not loaded")
+                self.safe_safe_print(f"\\u26a0\\ufe0f Strategy {strategy_name} not loaded")
                 return False
 
             # Get strategy instance
@@ -1055,7 +1055,7 @@ class StrategyLoader:
 
             # Stop strategy if running
             if strategy_instance.status == StrategyStatus.ACTIVE:
-                self.safe_safe_print(f"🔄 Stopping strategy {strategy_name}...")
+                self.safe_safe_print(f"\\u1f504 Stopping strategy {strategy_name}...")
                 # This would integrate with your strategy execution system
 
             # Remove from loaded strategies
@@ -1067,7 +1067,7 @@ class StrategyLoader:
                     del self.strategy_cache[strategy_name]
 
             self.safe_safe_print(
-                f"✅ Strategy {strategy_name} unloaded successfully"
+                f"\\u2705 Strategy {strategy_name} unloaded successfully"
             )
             self.safe_log("info", f"Strategy {strategy_name} unloaded")
 
@@ -1103,7 +1103,7 @@ class StrategyLoader:
 
             # Reload strategy (this would need the original path)
             # For now, return success
-            self.safe_safe_print(f"🚀 Strategy {strategy_name} reloaded")
+            self.safe_safe_print(f"\\u1f680 Strategy {strategy_name} reloaded")
 
             return LoaderResult(
                 success=True, strategy_instance=current_strategy
@@ -1257,15 +1257,15 @@ def main() -> None:
         loader = StrategyLoader()
 
         # Use CLI-safe print for all output
-        loader.safe_safe_print("🚀 Strategy Loader Test")
+        loader.safe_safe_print("\\u1f680 Strategy Loader Test")
         loader.safe_safe_print("=" * 50)
 
         # Test strategy loading
-        loader.safe_safe_print("\n📊 Testing strategy loading...")
+        loader.safe_safe_print("\\n\\u1f4ca Testing strategy loading...")
 
         # Create a simple test strategy
         test_strategy_code = """
-# config: name=TestStrategy, version=1.0.0, description=Test strategy, author=System
+# config: name=TestStrategy, version=1.0_0, description=Test strategy, author=System
 
 from core.unified_math_system import unified_math
 
@@ -1294,19 +1294,19 @@ class TestStrategy:
             result = loader.load_strategy(temp_file)
 
             if result.success:
-                loader.safe_safe_print(f"    ✅ Strategy loaded successfully")
-                loader.safe_safe_print(f"    📊 Load time: {result.load_time:.6f}s")
+                loader.safe_safe_print(f"    \\u2705 Strategy loaded successfully")
+                loader.safe_safe_print(f"    \\u1f4ca Load time: {result.load_time:.6f}s")
                 loader.safe_safe_print(
-                    f"    📊 Strategy name: {result.strategy_instance.config.name}"
+                    f"    \\u1f4ca Strategy name: {result.strategy_instance.config.name}"
                 )
             else:
                 loader.safe_safe_print(
-                    f"    ❌ Strategy loading failed: {result.error_message}"
+                    f"    \\u274c Strategy loading failed: {result.error_message}"
                 )
 
             # Test performance summary
             summary = loader.get_performance_summary()
-            loader.safe_safe_print(f"\n📊 Performance Summary:")
+            loader.safe_safe_print(f"\\n\\u1f4ca Performance Summary:")
             loader.safe_safe_print(f"   Total loads: {summary['total_loads']}")
             loader.safe_safe_print(
                 f"   Success rate: {summary['success_rate']:.2%}"
@@ -1324,12 +1324,12 @@ class TestStrategy:
 
             os.unlink(temp_file)
 
-        loader.safe_safe_print("\n🎉 Strategy Loader test completed successfully!")
+        loader.safe_safe_print("\\n\\u1f389 Strategy Loader test completed successfully!")
 
     except Exception as e:
         # Use CLI-safe error reporting
         loader = StrategyLoader()  # Create instance for safe printing
-        loader.safe_safe_print(f"❌ Strategy Loader test failed: {e}")
+        loader.safe_safe_print(f"\\u274c Strategy Loader test failed: {e}")
         import traceback
 
         traceback.print_exc()

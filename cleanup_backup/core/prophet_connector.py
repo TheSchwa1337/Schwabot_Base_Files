@@ -9,10 +9,10 @@ and Schwabot's recursive execution system. It handles curve mapping, alpha
 score calculations, and profit alignment validation.
 
 Mathematical Foundation:
-- Alpha Score: α = (P_actual - P_expected) / ΔT
-- Curve Alignment: ρ = |W(t_entry) / A|
-- Drift Detection: Δt_drift = T_executed - T_expected
-- Profit Correlation: C = Σ(α_i * w_i) / Σ(w_i)
+- Alpha Score: \\u03b1 = (P_actual - P_expected) / \\u0394T
+- Curve Alignment: \\u03c1 = |W(t_entry) / A|
+- Drift Detection: \\u0394t_drift = T_executed - T_expected
+- Profit Correlation: C = \\u03a3(\\u03b1_i * w_i) / \\u03a3(w_i)
 """
 
 import json
@@ -170,7 +170,7 @@ class ProphetConnector:
         # Load existing curves
         self._load_curve_map()
 
-        safe_safe_print("🔮 Prophet Connector initialized - Curve alignment engine active")
+        safe_safe_print("\\u1f52e Prophet Connector initialized - Curve alignment engine active")
 
     def _load_curve_map(self) -> None:
         """Load curve map from file."""
@@ -193,11 +193,11 @@ class ProphetConnector:
                     )
                     self.curves[curve.curve_id] = curve
 
-                safe_safe_print(f"📊 Loaded {len(self.curves)} Prophet curves")
+                safe_safe_print(f"\\u1f4ca Loaded {len(self.curves)} Prophet curves")
 
         except Exception as e:
             error_msg = safe_format_error(e, "load_curve_map")
-            safe_safe_print(f"⚠️ Failed to load curve map: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to load curve map: {error_msg}")
 
     def _save_curve_map(self) -> None:
         """Save curve map to file."""
@@ -229,7 +229,7 @@ class ProphetConnector:
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_curve_map")
-            safe_safe_print(f"⚠️ Failed to save curve map: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to save curve map: {error_msg}")
 
     def add_curve(self, curve: ProphetCurve) -> bool:
         """Add a new Prophet curve."""
@@ -237,12 +237,12 @@ class ProphetConnector:
             self.curves[curve.curve_id] = curve
             self._save_curve_map()
 
-            safe_safe_print(f"📈 Added Prophet curve: {curve.curve_id}")
+            safe_safe_print(f"\\u1f4c8 Added Prophet curve: {curve.curve_id}")
             return True
 
         except Exception as e:
             error_msg = safe_format_error(e, "add_curve")
-            safe_safe_print(f"❌ Failed to add curve: {error_msg}")
+            safe_safe_print(f"\\u274c Failed to add curve: {error_msg}")
             return False
 
     def get_curve(self, curve_id: str) -> Optional[ProphetCurve]:
@@ -266,7 +266,7 @@ class ProphetConnector:
         timestamp: Optional[datetime] = None
     ) -> AlphaScore:
         """
-        Compute alpha score: α = (P_actual - P_expected) / ΔT
+        Compute alpha score: \\u03b1 = (P_actual - P_expected) / \\u0394T
 
         Args:
             p_actual: Actual profit achieved
@@ -329,12 +329,12 @@ class ProphetConnector:
             # Update average alpha score
             self._update_average_alpha()
 
-            safe_safe_print(f"🔮 Alpha score: {alpha_value:.4f} ({alignment_status.value})")
+            safe_safe_print(f"\\u1f52e Alpha score: {alpha_value:.4f} ({alignment_status.value})")
             return alpha_score
 
         except Exception as e:
             error_msg = safe_format_error(e, "compute_alpha_score")
-            safe_safe_print(f"❌ Alpha calculation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Alpha calculation failed: {error_msg}")
 
             # Return safe fallback
             return AlphaScore(
@@ -444,12 +444,12 @@ class ProphetConnector:
             # Update average alignment score
             self._update_average_alignment()
 
-            safe_safe_print(f"📊 Curve alignment: {alignment_score:.3f} ({status.value})")
+            safe_safe_print(f"\\u1f4ca Curve alignment: {alignment_score:.3f} ({status.value})")
             return alignment
 
         except Exception as e:
             error_msg = safe_format_error(e, "analyze_curve_alignment")
-            safe_safe_print(f"❌ Curve alignment analysis failed: {error_msg}")
+            safe_safe_print(f"\\u274c Curve alignment analysis failed: {error_msg}")
             return self._create_unknown_alignment(curve_id)
 
     def _find_nearest_data_point(self, curve: ProphetCurve, target_time: datetime) -> Optional[Dict[str, Any]]:
@@ -540,7 +540,7 @@ class ProphetConnector:
             return unified_math.max(0.0, unified_math.min(1.0, resonance))
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Resonance calculation failed: {safe_format_error(e, 'resonance')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Resonance calculation failed: {safe_format_error(e, 'resonance')}")
             return 0.5
 
     def _calculate_drift_magnitude(self, curve: ProphetCurve, current_time: datetime,
@@ -559,7 +559,7 @@ class ProphetConnector:
             return drift_magnitude
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Drift calculation failed: {safe_format_error(e, 'drift')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Drift calculation failed: {safe_format_error(e, 'drift')}")
             return 0.5
 
     def _determine_alignment_status(self, alignment_score: float, resonance_strength: float,
@@ -681,7 +681,7 @@ def analyze_curve_alignment(
 # Example usage
 if __name__ == "__main__":
     # Test Prophet connector functionality
-    safe_safe_print("🔮 Testing Prophet Connector...")
+    safe_safe_print("\\u1f52e Testing Prophet Connector...")
 
     # Create test curve
     test_curve = ProphetCurve(
@@ -720,4 +720,4 @@ if __name__ == "__main__":
         current_time=datetime.now()
     )
 
-    safe_safe_print(f"✅ Test completed - Alpha: {alpha.alpha_value:.4f}, Alignment: {alignment.alignment_score:.3f}")
+    safe_safe_print(f"\\u2705 Test completed - Alpha: {alpha.alpha_value:.4f}, Alignment: {alignment.alignment_score:.3f}")

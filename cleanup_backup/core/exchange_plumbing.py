@@ -254,7 +254,7 @@ class EncryptedSecretsManager:
         # Load secrets from .env
         self._load_env_secrets()
 
-        safe_safe_print("🔐 Encrypted Secrets Manager initialized")
+        safe_safe_print("\\u1f510 Encrypted Secrets Manager initialized")
 
     def _get_encryption_key(self) -> str:
         """Get encryption key from environment or generate."""
@@ -276,9 +276,9 @@ class EncryptedSecretsManager:
                         if line and not line.startswith('#') and '=' in line:
                             key, value = line.split('=', 1)
                             os.environ[key] = value
-                safe_safe_print("✅ Environment secrets loaded")
+                safe_safe_print("\\u2705 Environment secrets loaded")
         except Exception as e:
-            safe_safe_print(f"⚠️ Environment secrets load failed: {safe_format_error(e, 'env_load')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Environment secrets load failed: {safe_format_error(e, 'env_load')}")
 
     def _encrypt_value(self, value: str) -> str:
         """Encrypt a value."""
@@ -344,7 +344,7 @@ class EncryptedSecretsManager:
             return None
 
         except Exception as e:
-            safe_safe_print(f"❌ Failed to get credentials for {exchange.value}: {safe_format_error(e, 'credentials')}")
+            safe_safe_print(f"\\u274c Failed to get credentials for {exchange.value}: {safe_format_error(e, 'credentials')}")
             return None
 
     def _get_aws_secrets(self, exchange: ExchangeType) -> Optional[ExchangeCredentials]:
@@ -370,7 +370,7 @@ class EncryptedSecretsManager:
             )
 
         except Exception as e:
-            safe_safe_print(f"⚠️ AWS Secrets failed for {exchange.value}: {safe_format_error(e, 'aws_secrets')}")
+            safe_safe_print(f"\\u26a0\\ufe0f AWS Secrets failed for {exchange.value}: {safe_format_error(e, 'aws_secrets')}")
             return None
 
     def store_exchange_credentials(self, credentials: ExchangeCredentials, encrypt: bool = True) -> bool:
@@ -398,11 +398,11 @@ class EncryptedSecretsManager:
             # Update .env file
             self._update_env_file(env_prefix, api_key, api_secret, passphrase, credentials.sandbox)
 
-            safe_safe_print(f"✅ Credentials stored for {credentials.exchange.value}")
+            safe_safe_print(f"\\u2705 Credentials stored for {credentials.exchange.value}")
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Failed to store credentials: {safe_format_error(e, 'store_credentials')}")
+            safe_safe_print(f"\\u274c Failed to store credentials: {safe_format_error(e, 'store_credentials')}")
             return False
 
     def _update_env_file(self, prefix: str, api_key: str, api_secret: str,
@@ -447,7 +447,7 @@ class EncryptedSecretsManager:
                 f.writelines(new_lines)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ .env update failed: {safe_format_error(e, 'env_update')}")
+            safe_safe_print(f"\\u26a0\\ufe0f .env update failed: {safe_format_error(e, 'env_update')}")
 
 
 class ExchangeConnection:
@@ -483,19 +483,19 @@ class ExchangeConnection:
         self.reconciliation_thread = None
         self.running = False
 
-        safe_safe_print(f"🔗 Exchange connection initialized for {config.exchange.value}")
+        safe_safe_print(f"\\u1f517 Exchange connection initialized for {config.exchange.value}")
 
     async def connect(self) -> bool:
         """Connect to exchange."""
         try:
             if not CCXT_AVAILABLE:
-                safe_safe_print("❌ CCXT not available")
+                safe_safe_print("\\u274c CCXT not available")
                 return False
 
             # Get credentials
             credentials = self.secrets_manager.get_exchange_credentials(self.config.exchange)
             if not credentials:
-                safe_safe_print(f"❌ No credentials for {self.config.exchange.value}")
+                safe_safe_print(f"\\u274c No credentials for {self.config.exchange.value}")
                 return False
 
             # Create exchange instance
@@ -526,12 +526,12 @@ class ExchangeConnection:
             if self.config.position_reconciliation_interval > 0:
                 self._start_reconciliation()
 
-            safe_safe_print(f"✅ Connected to {self.config.exchange.value}")
+            safe_safe_print(f"\\u2705 Connected to {self.config.exchange.value}")
             return True
 
         except Exception as e:
             self.connection_state = ConnectionState.ERROR
-            safe_safe_print(f"❌ Connection failed: {safe_format_error(e, 'exchange_connect')}")
+            safe_safe_print(f"\\u274c Connection failed: {safe_format_error(e, 'exchange_connect')}")
             return False
 
     async def disconnect(self) -> None:
@@ -546,16 +546,16 @@ class ExchangeConnection:
                 await self.exchange.close()
 
             self.connection_state = ConnectionState.DISCONNECTED
-            safe_safe_print(f"🔌 Disconnected from {self.config.exchange.value}")
+            safe_safe_print(f"\\u1f50c Disconnected from {self.config.exchange.value}")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Disconnect error: {safe_format_error(e, 'exchange_disconnect')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Disconnect error: {safe_format_error(e, 'exchange_disconnect')}")
 
     async def place_order(self, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place order on exchange."""
         try:
             if not self.exchange or self.connection_state != ConnectionState.CONNECTED:
-                safe_safe_print("❌ Exchange not connected")
+                safe_safe_print("\\u274c Exchange not connected")
                 return None
 
             # Check rate limits
@@ -569,7 +569,7 @@ class ExchangeConnection:
             if CORE_SYSTEMS_AVAILABLE:
                 risk_guard = get_risk_guard()
                 if not risk_guard.is_trading_allowed():
-                    safe_safe_print("❌ Trading blocked by risk guard")
+                    safe_safe_print("\\u274c Trading blocked by risk guard")
                     return None
 
             # Place actual order
@@ -625,7 +625,7 @@ class ExchangeConnection:
                 exchange_timestamp=datetime.fromtimestamp(response['timestamp'] / 1000)
             )
 
-            safe_safe_print(f"✅ Order placed: {order_response.order_id}")
+            safe_safe_print(f"\\u2705 Order placed: {order_response.order_id}")
             return order_response
 
         except Exception as e:
@@ -641,7 +641,7 @@ class ExchangeConnection:
                     error_type="exception"
                 )
 
-            safe_safe_print(f"❌ Order failed: {safe_format_error(e, 'place_order')}")
+            safe_safe_print(f"\\u274c Order failed: {safe_format_error(e, 'place_order')}")
             return None
 
     async def _simulate_order(self, order_request: OrderRequest) -> OrderResponse:
@@ -671,7 +671,7 @@ class ExchangeConnection:
             )
 
         except Exception as e:
-            safe_safe_print(f"❌ Paper trade simulation failed: {safe_format_error(e, 'paper_trade')}")
+            safe_safe_print(f"\\u274c Paper trade simulation failed: {safe_format_error(e, 'paper_trade')}")
             raise
 
     async def get_balances(self) -> List[Balance]:
@@ -710,7 +710,7 @@ class ExchangeConnection:
             return balances
 
         except Exception as e:
-            safe_safe_print(f"❌ Balance fetch failed: {safe_format_error(e, 'get_balances')}")
+            safe_safe_print(f"\\u274c Balance fetch failed: {safe_format_error(e, 'get_balances')}")
             return []
 
     async def get_positions(self) -> List[Position]:
@@ -752,7 +752,7 @@ class ExchangeConnection:
             return positions
 
         except Exception as e:
-            safe_safe_print(f"❌ Position fetch failed: {safe_format_error(e, 'get_positions')}")
+            safe_safe_print(f"\\u274c Position fetch failed: {safe_format_error(e, 'get_positions')}")
             return []
 
     def _start_websocket(self) -> None:
@@ -769,7 +769,7 @@ class ExchangeConnection:
             try:
                 asyncio.run(self._websocket_loop())
             except Exception as e:
-                safe_safe_print(f"⚠️ Websocket error: {safe_format_error(e, 'websocket')}")
+                safe_safe_print(f"\\u26a0\\ufe0f Websocket error: {safe_format_error(e, 'websocket')}")
                 time.sleep(self.reconnect_delay)
 
     async def _websocket_loop(self) -> None:
@@ -810,12 +810,12 @@ class ExchangeConnection:
                     except json.JSONDecodeError:
                         continue
                     except Exception as e:
-                        safe_safe_print(f"⚠️ Websocket message error: {safe_format_error(e, 'ws_message')}")
+                        safe_safe_print(f"\\u26a0\\ufe0f Websocket message error: {safe_format_error(e, 'ws_message')}")
 
         except ConnectionClosed:
-            safe_safe_print("🔌 Websocket connection closed")
+            safe_safe_print("\\u1f50c Websocket connection closed")
         except WebSocketException as e:
-            safe_safe_print(f"⚠️ Websocket error: {safe_format_error(e, 'websocket')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Websocket error: {safe_format_error(e, 'websocket')}")
         finally:
             self.websocket = None
             self.connection_state = ConnectionState.DISCONNECTED
@@ -837,7 +837,7 @@ class ExchangeConnection:
             self.last_heartbeat = time.time()
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Message handling error: {safe_format_error(e, 'ws_handle')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Message handling error: {safe_format_error(e, 'ws_handle')}")
 
     async def _handle_ticker_update(self, data: Dict[str, Any]) -> None:
         """Handle ticker update."""
@@ -869,7 +869,7 @@ class ExchangeConnection:
                 asyncio.run(self._reconcile_positions())
                 time.sleep(self.config.position_reconciliation_interval)
             except Exception as e:
-                safe_safe_print(f"⚠️ Reconciliation error: {safe_format_error(e, 'reconciliation')}")
+                safe_safe_print(f"\\u26a0\\ufe0f Reconciliation error: {safe_format_error(e, 'reconciliation')}")
                 time.sleep(60)  # Wait 1 minute on error
 
     async def _reconcile_positions(self) -> None:
@@ -883,12 +883,12 @@ class ExchangeConnection:
                 local_pos = self.positions.get(pos.symbol)
                 if not local_pos or unified_math.abs(local_pos.size - pos.size) > 0.0001:
                     safe_safe_print(
-                        f"⚠️ Position mismatch for {pos.symbol}: local={local_pos.size if local_pos else 0}, exchange={pos.size}")
+                        f"\\u26a0\\ufe0f Position mismatch for {pos.symbol}: local={local_pos.size if local_pos else 0}, exchange={pos.size}")
 
             self.last_reconciliation = time.time()
 
         except Exception as e:
-            safe_safe_print(f"❌ Position reconciliation failed: {safe_format_error(e, 'reconcile')}")
+            safe_safe_print(f"\\u274c Position reconciliation failed: {safe_format_error(e, 'reconcile')}")
 
     def get_connection_status(self) -> Dict[str, Any]:
         """Get connection status."""
@@ -934,17 +934,17 @@ class ExchangePlumbing:
         self.successful_orders = 0
         self.failed_orders = 0
 
-        safe_safe_print("🔗 Exchange Plumbing initialized")
+        safe_safe_print("\\u1f517 Exchange Plumbing initialized")
 
     def add_exchange(self, exchange_config: ExchangeConfig) -> bool:
         """Add exchange connection."""
         try:
             connection = ExchangeConnection(exchange_config, self.secrets_manager)
             self.connections[exchange_config.exchange] = connection
-            safe_safe_print(f"✅ Exchange added: {exchange_config.exchange.value}")
+            safe_safe_print(f"\\u2705 Exchange added: {exchange_config.exchange.value}")
             return True
         except Exception as e:
-            safe_safe_print(f"❌ Failed to add exchange: {safe_format_error(e, 'add_exchange')}")
+            safe_safe_print(f"\\u274c Failed to add exchange: {safe_format_error(e, 'add_exchange')}")
             return False
 
     async def connect_all(self) -> bool:
@@ -955,11 +955,11 @@ class ExchangePlumbing:
                 if await connection.connect():
                     success_count += 1
 
-            safe_safe_print(f"✅ Connected to {success_count}/{len(self.connections)} exchanges")
+            safe_safe_print(f"\\u2705 Connected to {success_count}/{len(self.connections)} exchanges")
             return success_count > 0
 
         except Exception as e:
-            safe_safe_print(f"❌ Connection failed: {safe_format_error(e, 'connect_all')}")
+            safe_safe_print(f"\\u274c Connection failed: {safe_format_error(e, 'connect_all')}")
             return False
 
     async def disconnect_all(self) -> None:
@@ -967,33 +967,33 @@ class ExchangePlumbing:
         try:
             for connection in self.connections.values():
                 await connection.disconnect()
-            safe_safe_print("🔌 Disconnected from all exchanges")
+            safe_safe_print("\\u1f50c Disconnected from all exchanges")
         except Exception as e:
-            safe_safe_print(f"⚠️ Disconnect error: {safe_format_error(e, 'disconnect_all')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Disconnect error: {safe_format_error(e, 'disconnect_all')}")
 
     async def place_order(self, exchange: ExchangeType, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place order on specific exchange."""
         try:
             if self.panic_mode:
-                safe_safe_print("❌ Trading blocked - panic mode active")
+                safe_safe_print("\\u274c Trading blocked - panic mode active")
                 return None
 
             connection = self.connections.get(exchange)
             if not connection:
-                safe_safe_print(f"❌ Exchange {exchange.value} not connected")
+                safe_safe_print(f"\\u274c Exchange {exchange.value} not connected")
                 return None
 
             # Check risk limits
             if CORE_SYSTEMS_AVAILABLE:
                 risk_guard = get_risk_guard()
                 if not risk_guard.is_trading_allowed():
-                    safe_safe_print("❌ Trading blocked by risk guard")
+                    safe_safe_print("\\u274c Trading blocked by risk guard")
                     return None
 
                 # Check capital controls
                 capital_controls = get_capital_controls()
                 if not capital_controls.check_portfolio_limits():
-                    safe_safe_print("❌ Trading blocked by capital controls")
+                    safe_safe_print("\\u274c Trading blocked by capital controls")
                     return None
 
             # Place order
@@ -1010,7 +1010,7 @@ class ExchangePlumbing:
 
         except Exception as e:
             self.failed_orders += 1
-            safe_safe_print(f"❌ Order failed: {safe_format_error(e, 'place_order')}")
+            safe_safe_print(f"\\u274c Order failed: {safe_format_error(e, 'place_order')}")
             return None
 
     async def get_all_balances(self) -> Dict[ExchangeType, List[Balance]]:
@@ -1021,7 +1021,7 @@ class ExchangePlumbing:
                 balances[exchange] = await connection.get_balances()
             return balances
         except Exception as e:
-            safe_safe_print(f"❌ Balance fetch failed: {safe_format_error(e, 'get_balances')}")
+            safe_safe_print(f"\\u274c Balance fetch failed: {safe_format_error(e, 'get_balances')}")
             return {}
 
     async def get_all_positions(self) -> Dict[ExchangeType, List[Position]]:
@@ -1032,14 +1032,14 @@ class ExchangePlumbing:
                 positions[exchange] = await connection.get_positions()
             return positions
         except Exception as e:
-            safe_safe_print(f"❌ Position fetch failed: {safe_format_error(e, 'get_positions')}")
+            safe_safe_print(f"\\u274c Position fetch failed: {safe_format_error(e, 'get_positions')}")
             return {}
 
     def activate_panic_button(self) -> None:
         """Activate panic button to stop all trading."""
         try:
             self.panic_mode = True
-            safe_safe_print("🚨 PANIC BUTTON ACTIVATED - ALL TRADING STOPPED")
+            safe_safe_print("\\u1f6a8 PANIC BUTTON ACTIVATED - ALL TRADING STOPPED")
 
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
@@ -1052,13 +1052,13 @@ class ExchangePlumbing:
                 )
 
         except Exception as e:
-            safe_safe_print(f"❌ Panic button failed: {safe_format_error(e, 'panic_button')}")
+            safe_safe_print(f"\\u274c Panic button failed: {safe_format_error(e, 'panic_button')}")
 
     def deactivate_panic_button(self) -> None:
         """Deactivate panic button."""
         try:
             self.panic_mode = False
-            safe_safe_print("✅ Panic button deactivated - trading resumed")
+            safe_safe_print("\\u2705 Panic button deactivated - trading resumed")
 
             # Log operation
             if CORE_SYSTEMS_AVAILABLE:
@@ -1071,7 +1071,7 @@ class ExchangePlumbing:
                 )
 
         except Exception as e:
-            safe_safe_print(f"❌ Panic button deactivation failed: {safe_format_error(e, 'panic_deactivate')}")
+            safe_safe_print(f"\\u274c Panic button deactivation failed: {safe_format_error(e, 'panic_deactivate')}")
 
     def get_status(self) -> Dict[str, Any]:
         """Get system status."""
@@ -1132,7 +1132,7 @@ def get_exchange_status() -> Dict[str, Any]:
 # Example usage
 if __name__ == "__main__":
     # Test exchange plumbing
-    safe_print("🧪 Testing Exchange Plumbing...")
+    safe_print("\\u1f9ea Testing Exchange Plumbing...")
 
     # Create exchange config
     config = ExchangeConfig(
@@ -1148,7 +1148,7 @@ if __name__ == "__main__":
 
     # Add exchange
     success = exchange_plumbing.add_exchange(config)
-    safe_print(f"✅ Exchange added: {success}")
+    safe_print(f"\\u2705 Exchange added: {success}")
 
     # Test order
     order_request = OrderRequest(
@@ -1159,4 +1159,4 @@ if __name__ == "__main__":
     )
 
     # This would be async in real usage
-    safe_print("✅ Exchange Plumbing test completed")
+    safe_print("\\u2705 Exchange Plumbing test completed")

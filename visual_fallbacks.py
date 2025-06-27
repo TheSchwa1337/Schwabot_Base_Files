@@ -30,15 +30,15 @@ class VisualFallback:
             self.use_emoji = not self.default_to_unicode
 
         self.symbols = {
-            "PASS": "✅" if self.use_emoji else "✔️",
-            "FAIL": "❌" if self.use_emoji else "✖️",
-            "SKIP": "⚠️" if self.use_emoji else "‼️",
-            "READY": "🟢" if self.use_emoji else "●",
-            "PARTIAL": "🟡" if self.use_emoji else "◐",
-            "NOT_READY": "🔴" if self.use_emoji else "■",
-            "ERROR": "💥" if self.use_emoji else "!!",
-            "INFO": "ℹ️" if self.use_emoji else "i",
-            "SAVE": "💾" if self.use_emoji else "[S]",
+            "PASS": "\\u2705" if self.use_emoji else "\\u2714\\ufe0f",
+            "FAIL": "\\u274c" if self.use_emoji else "\\u2716\\ufe0f",
+            "SKIP": "\\u26a0\\ufe0f" if self.use_emoji else "\\u203c\\ufe0f",
+            "READY": "\\u1f7e2" if self.use_emoji else "\\u25cf",
+            "PARTIAL": "\\u1f7e1" if self.use_emoji else "\\u25d0",
+            "NOT_READY": "\\u1f534" if self.use_emoji else "\\u25a0",
+            "ERROR": "\\u1f4a5" if self.use_emoji else "!!",
+            "INFO": "\\u2139\\ufe0f" if self.use_emoji else "i",
+            "SAVE": "\\u1f4be" if self.use_emoji else "[S]",
         }
 
     def get(self, key: str) -> str:

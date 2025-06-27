@@ -248,54 +248,54 @@ class FutureAnnotationsFixer:
 
 def main():
     """Main function to run the future annotations fixer."""
-    print("🔧 Future Annotations Placement Fixer")
+    print("\\u1f527 Future Annotations Placement Fixer")
     print("=" * 50)
 
     # Initialize fixer
     fixer = FutureAnnotationsFixer()
 
     # Scan codebase
-    print("🔍 Scanning codebase for files with future imports...")
+    print("\\u1f50d Scanning codebase for files with future imports...")
     scan_results = fixer.scan_codebase()
 
-    print(f"📊 Scan Results:")
+    print(f"\\u1f4ca Scan Results:")
     print(f"  - Total Python files: {len(scan_results['total_files'])}")
     print(f"  - Files with future imports: {len(scan_results['files_with_future_imports'])}")
     print(f"  - Files with placement issues: {len(scan_results['files_with_issues'])}")
 
     if not scan_results['files_with_issues']:
-        print("✅ No files with placement issues found!")
+        print("\\u2705 No files with placement issues found!")
         return
 
     # Show files that need fixing
-    print("\n📝 Files that need fixing:")
+    print("\\n\\u1f4dd Files that need fixing:")
     for file_path in scan_results['files_with_issues']:
         print(f"  - {file_path}")
 
     # Ask for confirmation
-    response = input("\n❓ Proceed with fixing these files? (y/N): ").strip().lower()
+    response = input("\\n\\u2753 Proceed with fixing these files? (y/N): ").strip().lower()
     if response not in ['y', 'yes']:
-        print("❌ Operation cancelled.")
+        print("\\u274c Operation cancelled.")
         return
 
     # Fix files
-    print("\n🔧 Fixing files...")
+    print("\\n\\u1f527 Fixing files...")
     fix_results = fixer.fix_all_files()
 
-    print(f"📊 Fix Results:")
+    print(f"\\u1f4ca Fix Results:")
     print(f"  - Files fixed: {fix_results['total_fixed']}")
     print(f"  - Files failed: {fix_results['total_failed']}")
 
     # Validate fixes
-    print("\n✅ Validating fixes...")
+    print("\\n\\u2705 Validating fixes...")
     validation_results = fixer.validate_fixes()
 
-    print(f"📊 Validation Results:")
+    print(f"\\u1f4ca Validation Results:")
     print(f"  - Successfully validated: {len(validation_results['validated_files'])}")
     print(f"  - Still problematic: {len(validation_results['still_problematic'])}")
 
     if validation_results['still_problematic']:
-        print("\n⚠️ Files still with issues:")
+        print("\\n\\u26a0\\ufe0f Files still with issues:")
         for file_path in validation_results['still_problematic']:
             print(f"  - {file_path}")
 
@@ -307,8 +307,8 @@ def main():
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n📄 Report saved to: {report_file}")
-    print("\n🎉 Future annotations placement fix completed!")
+    print(f"\\n\\u1f4c4 Report saved to: {report_file}")
+    print("\\n\\u1f389 Future annotations placement fix completed!")
 
 
 if __name__ == "__main__":

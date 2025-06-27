@@ -88,7 +88,7 @@ def safe_delta_calculation(
 ) -> float:
     """Enhanced delta calculation with numerical stability.
 
-    Implements: δ = (P_now - P_prev) / unified_math.max(P_prev, ε)
+    Implements: \\u03b4 = (P_now - P_prev) / unified_math.max(P_prev, \\u03b5)
     """
     return (price_now - price_prev) / unified_math.max(unified_math.abs(price_prev), epsilon)
 
@@ -98,7 +98,7 @@ def normalized_delta_tanh(
 ) -> float:
     """Normalized delta bounded between -1 and 1 using tanh.
 
-    Implements: tanh(scaling_factor * δ)
+    Implements: tanh(scaling_factor * \\u03b4)
     """
     delta = safe_delta_calculation(price_now, price_prev)
     return np.tanh(scaling_factor * delta)
@@ -107,7 +107,7 @@ def normalized_delta_tanh(
 def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
     """Improved slope angle calculation using atan2 for better quadrant handling.
 
-    Implements: θ = arctan2(gain_vector, tick_duration)
+    Implements: \\u03b8 = arctan2(gain_vector, tick_duration)
     """
     return np.arctan2(gain_vector, tick_duration)
 
@@ -120,7 +120,7 @@ def slope_angle_improved(gain_vector: Vector, tick_duration: float) -> Vector:
 def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float:
     """Numerically stable Shannon entropy calculation.
 
-    Implements: H = -Σ p_i * log₂(p_i + ε)
+    Implements: H = -\\u03a3 p_i * log\\u2082(p_i + \\u03b5)
     """
     prob_vector = np.clip(prob_vector, epsilon, 1.0)
     prob_vector = prob_vector / np.sum(prob_vector)  # Normalize
@@ -130,7 +130,7 @@ def shannon_entropy_stable(prob_vector: Vector, epsilon: float = 1e-10) -> float
 def kl_divergence_stable(p: Vector, q: Vector, epsilon: float = 1e-10) -> float:
     """Kullback-Leibler divergence with numerical stability.
 
-    Implements: KL(P||Q) = Σ p_i * unified_math.log(p_i / q_i)
+    Implements: KL(P||Q) = \\u03a3 p_i * unified_math.log(p_i / q_i)
     """
     p = np.clip(p, epsilon, 1.0)
     q = np.clip(q, epsilon, 1.0)
@@ -164,7 +164,7 @@ def stable_activation_matrix(
 ) -> Vector:
     """Regularized matrix activation with gradient clipping.
 
-    Implements: tanh(clip(input @ (W + λI)))
+    Implements: tanh(clip(input @ (W + \\u03bbI)))
     """
     # L2 regularization
     regularized_weights = weight_matrix + lambda_reg * np.eye(weight_matrix.shape[0])
@@ -183,7 +183,7 @@ def optimized_einsum_chunked(
 ) -> Tensor:
     """Memory-efficient einsum operation with chunking.
 
-    Implements: C_ijl = Σ_k A_ijk * B_ikl (chunked)
+    Implements: C_ijl = \\u03a3_k A_ijk * B_ikl (chunked)
     """
     result_shape = (a.shape[0], a.shape[1], b.shape[2])
     result = np.zeros(result_shape)
@@ -254,7 +254,7 @@ def enhanced_thermal_dynamics(
 def adaptive_gaussian_kernel(time_delta: Vector, volatility: float) -> Vector:
     """Adaptive Gaussian kernel with volatility-based bandwidth.
 
-    Implements: K(t) = exp(-0.5*(t/σ)²) / (σ√(2π))
+    Implements: K(t) = exp(-0.5*(t/\\u03c3)\\u00b2) / (\\u03c3\\u221a(2\\u03c0))
     """
     # Dynamic sigma based on market conditions
     sigma = unified_math.unified_math.sqrt(1 + volatility) * 0.5
@@ -348,7 +348,7 @@ def quantum_signal_normalization(
 ) -> Dict[str, Any]:
     """Quantum state normalization with phase and entropy calculation.
 
-    Implements: |ψ⟩ = ψ / ||ψ||, P = |ψ|², S = -Σ P_i log₂(P_i)
+    Implements: |\\u03c8\\u27e9 = \\u03c8 / ||\\u03c8||, P = |\\u03c8|\\u00b2, S = -\\u03a3 P_i log\\u2082(P_i)
     """
     # Complex amplitudes if phase provided
     if phase_vector is not None:
@@ -381,7 +381,7 @@ def quantum_signal_normalization(
 def quantum_fidelity(state1: QuantumState, state2: QuantumState) -> float:
     """Quantum fidelity measure between two states.
 
-    Implements: F = |⟨ψ₁|ψ₂⟩|²
+    Implements: F = |\\u27e8\\u03c8\\u2081|\\u03c8\\u2082\\u27e9|\\u00b2
     """
     overlap = np.vdot(state1, state2)
     return unified_math.unified_math.abs(overlap) ** 2

@@ -78,7 +78,7 @@ class ModeManager:
 
     def __init__(self) -> None:
         """Initialize the mode management system."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.current_mode = OperationalMode.SAFE_MODE
         self.previous_mode: Optional[OperationalMode] = None
         self.transition_history = []
@@ -425,20 +425,20 @@ def main() -> None:
     """Demo of mode management system."""
     try:
         mode_manager = ModeManager()
-        safe_print(f"✅ ModeManager v{mode_manager.version} initialized")
-        safe_print(f"🔧 Current mode: {mode_manager.get_current_mode().value}")
+        safe_print(f"\\u2705 ModeManager v{mode_manager.version} initialized")
+        safe_print(f"\\u1f527 Current mode: {mode_manager.get_current_mode().value}")
 
         # Test mode transition
         success = mode_manager.request_mode_transition(
             OperationalMode.OPTIMIZATION_MODE, "testing"
         )
         safe_print(
-            f"📈 Transition to optimization mode: {'✅' if success else '❌'}"
+            f"\\u1f4c8 Transition to optimization mode: {'\\u2705' if success else '\\u274c'}"
         )
 
         # Test feature check
         ai_enabled = mode_manager.is_feature_enabled("ai_features")
-        safe_print(f"🤖 AI features enabled: {'✅' if ai_enabled else '❌'}")
+        safe_print(f"\\u1f916 AI features enabled: {'\\u2705' if ai_enabled else '\\u274c'}")
 
         # Test operation validation
         test_params = {"position_size": 0.8, "leverage": 1.2}
@@ -446,17 +446,17 @@ def main() -> None:
             "trade_execution", test_params
         )
         safe_print(
-            f"⚖️  Operation allowed: {'✅' if validation['allowed'] else '❌'}"
+            f"\\u2696\\ufe0f  Operation allowed: {'\\u2705' if validation['allowed'] else '\\u274c'}"
         )
 
         # Get statistics
         stats = mode_manager.get_mode_statistics()
-        safe_print(f"📊 Total transitions: {stats['total_transitions']}")
+        safe_print(f"\\u1f4ca Total transitions: {stats['total_transitions']}")
 
-        safe_print("🎉 Mode management demo completed!")
+        safe_print("\\u1f389 Mode management demo completed!")
 
     except Exception as e:
-        safe_print(f"❌ Demo failed: {e}")
+        safe_print(f"\\u274c Demo failed: {e}")
 
 
 if __name__ == "__main__":

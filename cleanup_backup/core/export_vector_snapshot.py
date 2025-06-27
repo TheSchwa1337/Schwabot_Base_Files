@@ -117,7 +117,7 @@ class VectorStateExporter:
     Mathematical Foundation:
     - Waveform Analysis: FFT decomposition and entropy calculation
     - Tensor Scoring: T = (current - entry) / entry * (phase + 1)
-    - Profit Vectorization: P = Σ(allocations * weights * performance)
+    - Profit Vectorization: P = \\u03a3(allocations * weights * performance)
     - Basket Mapping: B = hash_to_basket(hash, bit_phase)
     - State Compression: S = compress(data, format, compression_level)
     """
@@ -764,7 +764,7 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.DLT_WAVEFORM, dlt_data, ExportFormat.JSON, compress=False
     )
-    safe_print(f"✅ DLT Waveform exported to: {export_path}")
+    safe_print(f"\\u2705 DLT Waveform exported to: {export_path}")
 
     # Test tensor scoring export
     tensor_data = {
@@ -778,7 +778,7 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.TENSOR_SCORING, tensor_data, ExportFormat.JSON, compress=True
     )
-    safe_print(f"✅ Tensor Scoring exported to: {export_path}")
+    safe_print(f"\\u2705 Tensor Scoring exported to: {export_path}")
 
     # Test complete state export
     complete_data = {
@@ -790,11 +790,13 @@ if __name__ == "__main__":
     export_path = exporter.export_vector_snapshot(
         SnapshotType.COMPLETE_STATE, complete_data, ExportFormat.PICKLE, compress=False
     )
-    safe_print(f"✅ Complete State exported to: {export_path}")
+    safe_print(f"\\u2705 Complete State exported to: {export_path}")
 
     # Get export history
     history = exporter.get_export_history()
-    safe_print(f"📊 Export History: {len(history)} exports")
+    safe_print(f"\\u1f4ca Export History: {len(history)} exports")
 
     for export in history[-3:]:  # Last 3 exports
         safe_print(f"  - {export['type']}: {export['file_path']} ({export['file_size']} bytes)")
+
+"""

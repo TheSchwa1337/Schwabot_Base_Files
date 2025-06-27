@@ -8,7 +8,7 @@ from core.unified_math_system import unified_math
 def allocate(phi: float, alphas: list[float]) -> np.ndarray:
     """Split entry weight across baskets proportionally.
 
-    Compute allocation: alloc_i = α_i·Φ / Σα
+    Compute allocation: alloc_i = \\u03b1_i\\u00b7\\u03a6 / \\u03a3\\u03b1
 
     Args:
         phi: Total entry signal strength
@@ -30,3 +30,5 @@ def allocate(phi: float, alphas: list[float]) -> np.ndarray:
         raise ValueError("Alpha coefficients sum to zero")
 
     return phi * (a / alpha_sum)
+
+"""

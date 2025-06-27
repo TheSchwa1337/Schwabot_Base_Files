@@ -38,7 +38,7 @@ try:
         Image,
         ThermalState,
     )
-except ImportError:  # pragma: no cover – fallback stubs
+except ImportError:  # pragma: no cover \\u2013 fallback stubs
     Temperature = float  # type: ignore
     Pressure = float  # type: ignore
     ThermalConductivity = float  # type: ignore
@@ -63,8 +63,8 @@ class ThermalMapAllocator:
         Initialize thermal map allocator.
 
         Args:
-            thermal_conductivity: Thermal conductivity in W/(m·K) (default: air)
-            heat_capacity: Heat capacity in J/(kg·K) (default: air)
+            thermal_conductivity: Thermal conductivity in W/(m\\u00b7K) (default: air)
+            heat_capacity: Heat capacity in J/(kg\\u00b7K) (default: air)
         """
         if isinstance(thermal_conductivity, float):
             self.thermal_conductivity = ThermalConductivity(thermal_conductivity)
@@ -111,7 +111,7 @@ class ThermalMapAllocator:
         """
         Compute thermal field using heat diffusion equation.
 
-        Implements: ∂T/∂t = α∇²T where α is thermal diffusivity
+        Implements: \\u2202T/\\u2202t = \\u03b1\\u2207\\u00b2T where \\u03b1 is thermal diffusivity
 
         Args:
             x, y: Spatial coordinates
@@ -143,7 +143,7 @@ class ThermalMapAllocator:
             dx, dy: Small increments for numerical differentiation
 
         Returns:
-            Thermal gradient vector [∂T/∂x, ∂T/∂y]
+            Thermal gradient vector [\\u2202T/\\u2202x, \\u2202T/\\u2202y]
         """
         # Numerical gradient calculation
         temp_center = temp_field(x, y, t)
@@ -303,7 +303,7 @@ class SubsurfaceGrayscaleMapper:
         Establish grayscale node activation thresholds.
 
         Activation = {
-            1 if G(x,y) > μ + kσ
+            1 if G(x,y) > \\u03bc + k\\u03c3
             0 otherwise
         }
 
@@ -389,3 +389,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -81,8 +81,8 @@ class QuantumConfig:
 class ThermalConfig:
     """Configuration for thermal operations."""
 
-    thermal_conductivity: float = 0.024  # W/(m·K) - air
-    heat_capacity: float = 1005.0  # J/(kg·K) - air
+    thermal_conductivity: float = 0.024  # W/(m\\u00b7K) - air
+    heat_capacity: float = 1005.0  # J/(kg\\u00b7K) - air
     boltzmann_constant: float = 1.380649e-23
     enable_thermal_pressure: bool = True
     enable_thermal_gradients: bool = True
@@ -540,3 +540,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

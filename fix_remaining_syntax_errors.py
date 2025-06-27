@@ -44,14 +44,14 @@ def fix_import_after_try_pattern(content):
 def fix_unmatched_parentheses(content):
     """Fix unmatched parentheses and brackets."""
     # Fix common patterns
-    content = re.sub(r'\(\s*\]', '()', content)  # (] -> ()
-    content = re.sub(r'\[\s*\)', '[]', content)  # [) -> []
-    content = re.sub(r'{\s*\]', '{}', content)   # {] -> {}
-    content = re.sub(r'\[\s*}', '[]', content)   # [} -> []
+    content = re.sub(r'\(\\s*\]', '()', content)  # (] -> ()
+    content = re.sub(r'\[\\s*\)', '[]', content)  # [) -> []
+    content = re.sub(r'{\\s*\]', '{}', content)   # {] -> {}
+    content = re.sub(r'\[\\s*}', '[]', content)   # [} -> []
 
     # Fix specific patterns we've seen
-    content = re.sub(r'\[\s*\]\s*\)', '[]', content)  # []) -> []
-    content = re.sub(r'\(\s*\[\s*\]', '()', content)  # ([]) -> ()
+    content = re.sub(r'\[\\s*\]\\s*\)', '[]', content)  # []) -> []
+    content = re.sub(r'\(\\s*\[\\s*\]', '()', content)  # ([]) -> ()
 
     return content
 
@@ -120,11 +120,11 @@ def fix_specific_file_patterns(filepath, content):
     # Fix specific files with known issues
     if 'typing_schemas.py' in filepath:
         # Fix the import hashlib issue
-        content = re.sub(r'^\s*import hashlib\s*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r'^\\s*import hashlib\\s*$', '', content, flags=re.MULTILINE)
 
     if 'memory_key_allocator.py' in filepath:
         # Fix the logger issue
-        content = re.sub(r'^\s*logger = logging\.getLogger\(__name__\)\s*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r'^\\s*logger = logging\.getLogger\(__name__\)\\s*$', '', content, flags=re.MULTILINE)
 
     return content
 
@@ -178,9 +178,11 @@ def main():
             print(f"Fixed: {filepath}")
             fixed_count += 1
 
-    print(f"\nFixed {fixed_count} files")
+    print(f"\\nFixed {fixed_count} files")
     print("Syntax error fixing complete!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

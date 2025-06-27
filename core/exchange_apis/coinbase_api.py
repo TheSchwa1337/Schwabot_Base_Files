@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # #!/usr/bin/env python3
-"""Coinbase Pro/Advanced Trade API implementation.
+"""Coinbase Pro/Advanced Trade API implementation."""
 
 This module provides Coinbase-specific API functionality with proper
 authentication and error handling.
-"""
+""""""
 
 import base64
 import hashlib
@@ -22,11 +22,11 @@ class CoinbaseAPI(ExchangeAPI):
     """Coinbase Pro/Advanced Trade API implementation."""
 
     def __init__(self, config: ExchangeConfig) -> None:
-        """Initialize Coinbase API.
+        """Initialize Coinbase API."""
 
         Args:
             config: Exchange configuration.
-        """
+        """"""
         # Set Coinbase-specific defaults
         if not config.base_url:
             if config.sandbox:
@@ -37,16 +37,16 @@ class CoinbaseAPI(ExchangeAPI):
         super().__init__(config)
 
         # Initialize rate limiter
-                    self.rate_limiter = RateLimiter(config.rate_limit, 60.0)
+        self.rate_limiter = RateLimiter(config.rate_limit, 60.0)
 
-    def _sign_request(
+    def _sign_request()
         self,
         method: str,
         endpoint: str,
         params: Optional[Dict[str, Any]] = None,
         data: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, str]:
-        """Sign request for Coinbase API.
+     -> Dict[str, str]:
+        """Sign request for Coinbase API."""
 
         Args:
             method: HTTP method.
@@ -56,7 +56,7 @@ class CoinbaseAPI(ExchangeAPI):
 
         Returns:
             Updated headers with Coinbase signature.
-        """
+        """"""
         try:
             timestamp = str(int(time.time()))
 
@@ -67,27 +67,27 @@ class CoinbaseAPI(ExchangeAPI):
                 signature_string += json.dumps(data, separators=(",", ":"))
 
             # Create signature
-            signature = hmac.new(
+            signature = hmac.new()
                 base64.b64decode(self.config.api_secret),
                 signature_string.encode("utf-8"),
                 hashlib.sha256,
-            ).digest()
+            .digest()
 
             signature_b64 = base64.b64encode(signature).decode("utf-8")
 
             # Update headers
-            headers = {
+            headers = {}
                 "CB-ACCESS-KEY": self.config.api_key,
                 "CB-ACCESS-SIGN": signature_b64,
                 "CB-ACCESS-TIMESTAMP": timestamp,
                 "Content-Type": "application/json",
-            }
+            
 
             return headers
 
         except Exception as e:
             error_msg = f"Error signing Coinbase request: {e}"
-                            self.safe_log("error", error_msg)
+            self.safe_log("error", error_msg)
             raise
 
     def get_balance(self):
@@ -95,22 +95,22 @@ class CoinbaseAPI(ExchangeAPI):
         # Implementation would go here
     pass
 
-    def get_market_data(self, symbol: str):
+def get_market_data(self, symbol: str):
         """Get market data for symbol."""
         # Implementation would go here
     pass
 
-    def place_order(self, order):
+def place_order(self, order):
         """Place order."""
         # Implementation would go here
     pass
 
-    def cancel_order(self, order_id: str) -> bool:
+def cancel_order(self, order_id: str) -> bool:
         """Cancel order."""
         # Implementation would go here
     pass
 
-    def get_order_status(self, order_id: str):
+def get_order_status(self, order_id: str):
         """Get order status."""
         # Implementation would go here
     pass
@@ -118,3 +118,5 @@ class CoinbaseAPI(ExchangeAPI):
 
 # Module exports
 __all__ = ["CoinbaseAPI"]
+
+

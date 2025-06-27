@@ -23,7 +23,7 @@ Usage:
 """
 
 # Version information
-__version__ = "1.0.0"
+__version__ = "1.0_0"
 __author__ = "Schwabot Development Team"
 __license__ = "Proprietary"
 

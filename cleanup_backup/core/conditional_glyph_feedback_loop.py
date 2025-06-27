@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""conditional_glyph_feedback_loop – news flow scalar feedback implementation.
+"""conditional_glyph_feedback_loop \\u2013 news flow scalar feedback implementation.
 
 Implements the news flow scalar feedback logic:
-    ∇Φ(t, x) = γ·∂²φ/∂x² − λ·φ
+    \\u2207\\u03a6(t, x) = \\u03b3\\u00b7\\u2202\\u00b2\\u03c6/\\u2202x\\u00b2 \\u2212 \\u03bb\\u00b7\\u03c6
 
 This module handles conditional glyph feedback loops for news integration
 into the ghost trading system.
@@ -37,16 +37,16 @@ class ConditionalGlyphFeedback:
         phi_func: Callable[[float], float],
         x: float,
     ) -> float:
-        """Compute ∇Φ(t, x) = γ·∂²φ/∂x² − λ·φ.
+        """Compute \\u2207\\u03a6(t, x) = \\u03b3\\u00b7\\u2202\\u00b2\\u03c6/\\u2202x\\u00b2 \\u2212 \\u03bb\\u00b7\\u03c6.
 
         Parameters
         ----------
         phi_func
-            Function φ(x) to compute derivatives of.
+            Function \\u03c6(x) to compute derivatives of.
         x
             Position to evaluate at.
         """
-        # Compute φ(x)
+        # Compute \\u03c6(x)
         phi_x = phi_func(x)
 
         # Compute second derivative using finite differences
@@ -54,12 +54,12 @@ class ConditionalGlyphFeedback:
         phi_minus = phi_func(x - self.dx)
         phi_center = phi_func(x)
 
-        # Second derivative: ∂²φ/∂x² ≈ (φ(x+h) - 2φ(x) + φ(x-h)) / h²
+        # Second derivative: \\u2202\\u00b2\\u03c6/\\u2202x\\u00b2 \\u2248 (\\u03c6(x+h) - 2\\u03c6(x) + \\u03c6(x-h)) / h\\u00b2
         second_derivative = (phi_plus - 2 * phi_center + phi_minus) / (
             self.dx**2
         )
 
-        # Apply formula: γ·∂²φ/∂x² − λ·φ
+        # Apply formula: \\u03b3\\u00b7\\u2202\\u00b2\\u03c6/\\u2202x\\u00b2 \\u2212 \\u03bb\\u00b7\\u03c6
         nabla_phi = self.gamma * second_derivative - self.lambda_param * phi_x
 
         return nabla_phi

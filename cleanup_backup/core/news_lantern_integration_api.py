@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""news_lantern_integration_api – temporary stub.
+"""news_lantern_integration_api \\u2013 temporary stub.
 
 This placeholder exists so that imports resolve while the real
 `news_lantern_integration_api` module is under development.  Replace
@@ -13,3 +13,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

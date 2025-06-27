@@ -36,7 +36,7 @@ def safe_print(message):
 
 def test_mathematical_functions():
     """Test mathematical functions and their completeness."""
-    safe_print("\n🔢 Testing Mathematical Functions...")
+    safe_print("\\n\\u1f522 Testing Mathematical Functions...")
 
     try:
         # Test basic mathematical operations
@@ -44,30 +44,30 @@ def test_mathematical_functions():
 
         # Test phase probability pathway
         pathway = np.cumsum(test_phases)
-        safe_print(f"  ✅ Phase Probability Pathway: {pathway.shape}")
+        safe_print(f"  \\u2705 Phase Probability Pathway: {pathway.shape}")
 
         # Test grayscale phase mapping
         grayscale_map = (test_phases * 255).astype(int)
-        safe_print(f"  ✅ Grayscale Phase Mapping: {grayscale_map.shape}")
+        safe_print(f"  \\u2705 Grayscale Phase Mapping: {grayscale_map.shape}")
 
         # Test ghost trigger generation
         ghost_triggers = test_phases[test_phases > 0.5]
-        safe_print(f"  ✅ Ghost Trigger Generation: {len(ghost_triggers)} triggers")
+        safe_print(f"  \\u2705 Ghost Trigger Generation: {len(ghost_triggers)} triggers")
 
         # Test bit phase allocation
         bit_allocation = np.array([int(p * 8) for p in test_phases])
-        safe_print(f"  ✅ Bit Phase Allocation: {bit_allocation.shape}")
+        safe_print(f"  \\u2705 Bit Phase Allocation: {bit_allocation.shape}")
 
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ Mathematical Functions Test Failed: {e}")
+        safe_print(f"  \\u274c Mathematical Functions Test Failed: {e}")
         return False
 
 
 def test_api_integration():
     """Test API integration for CoinMarketCap and CoinGecko."""
-    safe_print("\n🌐 Testing API Integration...")
+    safe_print("\\n\\u1f310 Testing API Integration...")
 
     try:
         # Test API configuration structure
@@ -84,7 +84,7 @@ def test_api_integration():
             }
         }
 
-        safe_print(f"  ✅ API Configuration: {len(api_config)} APIs configured")
+        safe_print(f"  \\u2705 API Configuration: {len(api_config)} APIs configured")
 
         # Test secret management structure
         secret_manager = {
@@ -94,7 +94,7 @@ def test_api_integration():
             }
         }
 
-        safe_print(f"  ✅ Secret Management: {len(secret_manager['api_keys'])} keys managed")
+        safe_print(f"  \\u2705 Secret Management: {len(secret_manager['api_keys'])} keys managed")
 
         # Test rate limiting logic
         rate_limiter = {
@@ -102,18 +102,18 @@ def test_api_integration():
             'coingecko': {'requests_per_minute': 50, 'current_requests': 0}
         }
 
-        safe_print(f"  ✅ Rate Limiting: {len(rate_limiter)} APIs rate limited")
+        safe_print(f"  \\u2705 Rate Limiting: {len(rate_limiter)} APIs rate limited")
 
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ API Integration Test Failed: {e}")
+        safe_print(f"  \\u274c API Integration Test Failed: {e}")
         return False
 
 
 def test_user_interface():
     """Test user interface functionality and control panels."""
-    safe_print("\n🖥️  Testing User Interface...")
+    safe_print("\\n\\u1f5a5\\ufe0f  Testing User Interface...")
 
     try:
         # Test configuration loading
@@ -146,19 +146,19 @@ def test_user_interface():
         with open(config_file, 'r') as f:
             loaded_config = json.load(f)
 
-        safe_print(f"  ✅ Configuration Loading: {len(loaded_config)} sections loaded")
+        safe_print(f"  \\u2705 Configuration Loading: {len(loaded_config)} sections loaded")
 
         # Test mathematical panel integration
         threshold = loaded_config['mathematical_settings']['ghost_trigger_threshold']
         test_phases = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
         ghost_triggers = test_phases[test_phases > threshold]
 
-        safe_print(f"  ✅ Mathematical Panel: {len(ghost_triggers)} triggers with threshold {threshold}")
+        safe_print(f"  \\u2705 Mathematical Panel: {len(ghost_triggers)} triggers with threshold {threshold}")
 
         # Test API control panel
         api_config = loaded_config['api_settings']
         safe_print(
-            f"  ✅ API Control Panel: {api_config['coinmarketcap_enabled']} CoinMarketCap, {api_config['coingecko_enabled']} CoinGecko")
+            f"  \\u2705 API Control Panel: {api_config['coinmarketcap_enabled']} CoinMarketCap, {api_config['coingecko_enabled']} CoinGecko")
 
         # Clean up test file
         config_file.unlink()
@@ -166,13 +166,13 @@ def test_user_interface():
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ User Interface Test Failed: {e}")
+        safe_print(f"  \\u274c User Interface Test Failed: {e}")
         return False
 
 
 def test_performance():
     """Test performance and timing analysis."""
-    safe_print("\n⚡ Testing Performance...")
+    safe_print("\\n\\u26a1 Testing Performance...")
 
     try:
         # Test large dataset processing
@@ -189,7 +189,7 @@ def test_performance():
 
         math_time = time.time() - start_time
 
-        safe_print(f"  ✅ Mathematical Performance: {math_time:.3f}s for {large_dataset.shape}")
+        safe_print(f"  \\u2705 Mathematical Performance: {math_time:.3f}s for {large_dataset.shape}")
 
         # Test rate limiting performance
         start_time = time.time()
@@ -199,7 +199,7 @@ def test_performance():
 
         api_time = time.time() - start_time
 
-        safe_print(f"  ✅ API Performance: {api_time:.3f}s for 10 requests")
+        safe_print(f"  \\u2705 API Performance: {api_time:.3f}s for 10 requests")
 
         # Test timing analysis
         test_signal = np.random.rand(100)
@@ -210,18 +210,18 @@ def test_performance():
 
         filter_time = time.time() - start_time
 
-        safe_print(f"  ✅ Timing Analysis: {filter_time:.3f}s for {len(test_signal)} samples")
+        safe_print(f"  \\u2705 Timing Analysis: {filter_time:.3f}s for {len(test_signal)} samples")
 
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ Performance Test Failed: {e}")
+        safe_print(f"  \\u274c Performance Test Failed: {e}")
         return False
 
 
 def test_code_quality():
     """Test code quality and system robustness."""
-    safe_print("\n🔍 Testing Code Quality...")
+    safe_print("\\n\\u1f50d Testing Code Quality...")
 
     try:
         # Test import analysis
@@ -244,7 +244,7 @@ def test_code_quality():
             if os.path.exists(module_path):
                 existing_modules.append(module)
 
-        safe_print(f"  ✅ Import Analysis: {len(existing_modules)}/{len(critical_modules)} modules found")
+        safe_print(f"  \\u2705 Import Analysis: {len(existing_modules)}/{len(critical_modules)} modules found")
 
         # Test syntax check
         python_files = [
@@ -265,31 +265,31 @@ def test_code_quality():
                 except SyntaxError:
                     pass
 
-        safe_print(f"  ✅ Syntax Check: {len(valid_files)}/{len(python_files)} files valid")
+        safe_print(f"  \\u2705 Syntax Check: {len(valid_files)}/{len(python_files)} files valid")
 
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ Code Quality Test Failed: {e}")
+        safe_print(f"  \\u274c Code Quality Test Failed: {e}")
         return False
 
 
 def test_security():
     """Test security and secret management."""
-    safe_print("\n🔒 Testing Security...")
+    safe_print("\\n\\u1f512 Testing Security...")
 
     try:
         # Test secret management
         test_secret = "test_secret_value"
         secret_hash = hash(test_secret) % 1000000  # Simple hash for demo
 
-        safe_print(f"  ✅ Secret Management: Secret hashed to {secret_hash}")
+        safe_print(f"  \\u2705 Secret Management: Secret hashed to {secret_hash}")
 
         # Test API key handling
         api_key = "test_api_key_12345"
         masked_key = api_key[:4] + "***" + api_key[-4:]
 
-        safe_print(f"  ✅ API Key Handling: {masked_key}")
+        safe_print(f"  \\u2705 API Key Handling: {masked_key}")
 
         # Test configuration security
         config_data = {
@@ -306,18 +306,18 @@ def test_security():
         config_str = json.dumps(config_data, indent=2)
         sensitive_data_hidden = '***HIDDEN***' in config_str
 
-        safe_print(f"  ✅ Configuration Security: Sensitive data hidden = {sensitive_data_hidden}")
+        safe_print(f"  \\u2705 Configuration Security: Sensitive data hidden = {sensitive_data_hidden}")
 
         return True
 
     except Exception as e:
-        safe_print(f"  ❌ Security Test Failed: {e}")
+        safe_print(f"  \\u274c Security Test Failed: {e}")
         return False
 
 
 def main():
     """Main function to run comprehensive system test."""
-    safe_print("🚀 Comprehensive System Test for Schwabot")
+    safe_print("\\u1f680 Comprehensive System Test for Schwabot")
     safe_print("=" * 60)
 
     start_time = time.time()
@@ -337,7 +337,7 @@ def main():
         try:
             results[test_name] = test_func()
         except Exception as e:
-            safe_print(f"❌ {test_name} test failed with exception: {e}")
+            safe_print(f"\\u274c {test_name} test failed with exception: {e}")
             results[test_name] = False
 
     # Calculate overall status
@@ -347,68 +347,68 @@ def main():
 
     # Print summary
     safe_print("\n" + "=" * 60)
-    safe_print("📊 COMPREHENSIVE SYSTEM TEST SUMMARY")
+    safe_print("\\u1f4ca COMPREHENSIVE SYSTEM TEST SUMMARY")
     safe_print("=" * 60)
 
-    safe_print(f"\n{overall_status} Overall Status: {passed_tests}/{total_tests} tests passed")
+    safe_print(f"\\n{overall_status} Overall Status: {passed_tests}/{total_tests} tests passed")
 
     for test_name, result in results.items():
-        status_emoji = "✅" if result else "❌"
+        status_emoji = "\\u2705" if result else "\\u274c"
         safe_print(f"{status_emoji} {test_name}: {'PASS' if result else 'FAIL'}")
 
     # Answer user questions
-    safe_print("\n❓ ANSWERS TO USER QUESTIONS:")
+    safe_print("\\n\\u2753 ANSWERS TO USER QUESTIONS:")
     safe_print("-" * 40)
 
     # Question 1: User interface verification
     ui_status = results.get("User Interface", False)
-    safe_print(f"1. ✅ User Interface Levels Verified: {ui_status}")
+    safe_print(f"1. \\u2705 User Interface Levels Verified: {ui_status}")
 
     # Question 2: JSON configuration integration
     config_status = results.get("User Interface", False)
-    safe_print(f"2. ✅ JSON Configuration Integration: {config_status}")
+    safe_print(f"2. \\u2705 JSON Configuration Integration: {config_status}")
 
     # Question 3: Mathematical panel integration
     math_status = results.get("Mathematical Functions", False)
-    safe_print(f"3. ✅ Mathematical Panel Integration: {math_status}")
+    safe_print(f"3. \\u2705 Mathematical Panel Integration: {math_status}")
 
     # Question 4: API integration
     api_status = results.get("API Integration", False)
-    safe_print(f"4. ✅ API Integration (CoinMarketCap/CoinGecko): {api_status}")
+    safe_print(f"4. \\u2705 API Integration (CoinMarketCap/CoinGecko): {api_status}")
 
     # Question 5: Performance and timing
     perf_status = results.get("Performance", False)
-    safe_print(f"5. ✅ Performance & Timing Analysis: {perf_status}")
+    safe_print(f"5. \\u2705 Performance & Timing Analysis: {perf_status}")
 
     # Question 6: System robustness
     code_quality_status = results.get("Code Quality", False)
-    safe_print(f"6. ✅ System Robustness: {code_quality_status}")
+    safe_print(f"6. \\u2705 System Robustness: {code_quality_status}")
 
     # Question 7: Pipeline routing
     pipeline_status = results.get("Mathematical Functions", False)
-    safe_print(f"7. ✅ Pipeline Routing: {pipeline_status}")
+    safe_print(f"7. \\u2705 Pipeline Routing: {pipeline_status}")
 
     # Question 8: Timing error correction
     timing_status = results.get("Performance", False)
-    safe_print(f"8. ✅ Timing Error Correction: {timing_status}")
+    safe_print(f"8. \\u2705 Timing Error Correction: {timing_status}")
 
     # Timing information
     total_time = time.time() - start_time
-    safe_print(f"\n⏱️  Total Test Time: {total_time:.2f} seconds")
+    safe_print(f"\\n\\u23f1\\ufe0f  Total Test Time: {total_time:.2f} seconds")
 
     safe_print("\n" + "=" * 60)
 
     # Final recommendation
     if overall_status == "PASS":
-        safe_print("\n🎉 All tests passed! System is ready for production.")
-        safe_print("✅ All user questions have been answered positively.")
-        safe_print("✅ Mathematical functions are complete and functional.")
-        safe_print("✅ API integration is properly configured.")
-        safe_print("✅ User interface provides unified control.")
-        safe_print("✅ System is robust and secure.")
+        safe_print("\\n\\u1f389 All tests passed! System is ready for production.")
+        safe_print("\\u2705 All user questions have been answered positively.")
+        safe_print("\\u2705 Mathematical functions are complete and functional.")
+        safe_print("\\u2705 API integration is properly configured.")
+        safe_print("\\u2705 User interface provides unified control.")
+        safe_print("\\u2705 System is robust and secure.")
     else:
-        safe_print("\n⚠️  Some tests failed. Please review the results.")
-        safe_print("❌ Some user questions may need attention.")
+        safe_print("\\n\\u26a0\\ufe0f  Some tests failed. Please review the results.")
+        safe_print("\\u274c Some user questions may need attention.")
 
     return overall_status == "PASS"
 
@@ -418,5 +418,5 @@ if __name__ == "__main__":
         success = main()
         sys.exit(0 if success else 1)
     except Exception as e:
-        safe_print(f"\n💥 Test failed with error: {e}")
+        safe_print(f"\\n\\u1f4a5 Test failed with error: {e}")
         sys.exit(1)

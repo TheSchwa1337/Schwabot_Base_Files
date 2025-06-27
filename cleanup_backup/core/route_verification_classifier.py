@@ -661,10 +661,12 @@ def main() -> None:
 
     # Get summary
     summary = manager.get_route_summary()
-    safe_print(f"\nRoute Manager Summary: {summary}")
+    safe_print(f"\\nRoute Manager Summary: {summary}")
 
     safe_print("Route Verification Classifier test completed successfully")
 
 
 if __name__ == "__main__":
     main()
+
+"""

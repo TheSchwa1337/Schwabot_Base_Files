@@ -48,15 +48,15 @@ class WindowsCliCompatibilityHandler:
         """Print message safely with Windows CLI compatibility."""
         if platform.system() == "Windows":
             emoji_mapping = {
-                "🚀": "[LAUNCH]",
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "⚠️": "[WARNING]",
-                "🔧": "[PROCESSING]",
-                "📊": "[INFO]",
-                "🎉": "[COMPLETE]",
-                "🔍": "[CHECKING]",
-                "⚡": "[FAST]",
+                "\\u1f680": "[LAUNCH]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u1f527": "[PROCESSING]",
+                "\\u1f4ca": "[INFO]",
+                "\\u1f389": "[COMPLETE]",
+                "\\u1f50d": "[CHECKING]",
+                "\\u26a1": "[FAST]",
             }
             for emoji, replacement in emoji_mapping.items():
                 message = message.replace(emoji, replacement)
@@ -79,12 +79,12 @@ def check_dependencies() -> bool:
             missing_files.append(file)
 
     if missing_files:
-        safe_print(cli_handler.safe_print("❌ Missing required files:"))
+        safe_print(cli_handler.safe_print("\\u274c Missing required files:"))
         for file in missing_files:
             safe_print(f"  - {file}")
         return False
 
-    safe_print(cli_handler.safe_print("✅ All required files found"))
+    safe_print(cli_handler.safe_print("\\u2705 All required files found"))
     return True
 
 
@@ -92,11 +92,11 @@ def run_architecture_fix(dry_run: bool = False) -> bool:
     """Run the comprehensive architecture fix."""
     cli_handler = WindowsCliCompatibilityHandler()
 
-    safe_print(cli_handler.safe_print("🚀 Starting Comprehensive Architecture Fix"))
+    safe_print(cli_handler.safe_print("\\u1f680 Starting Comprehensive Architecture Fix"))
     safe_print("=" * 60)
 
     # Step 1: Run the architecture fixer
-    safe_print(cli_handler.safe_print("🔧 Step 1: Running architecture fixer..."))
+    safe_print(cli_handler.safe_print("\\u1f527 Step 1: Running architecture fixer..."))
 
     cmd = [sys.executable, "windows_cli_compliant_architecture_fixer.py"]
     if dry_run:
@@ -107,28 +107,28 @@ def run_architecture_fix(dry_run: bool = False) -> bool:
             cmd, capture_output=True, text=True, timeout=300
         )
         if result.returncode == 0:
-            safe_print(cli_handler.safe_print("✅ Architecture fixer completed"))
+            safe_print(cli_handler.safe_print("\\u2705 Architecture fixer completed"))
         else:
             safe_print(
                 cli_handler.safe_print(
-                    f"⚠️ Architecture fixer warnings: {result.stderr}"
+                    f"\\u26a0\\ufe0f Architecture fixer warnings: {result.stderr}"
                 )
             )
     except subprocess.TimeoutExpired:
-        safe_print(cli_handler.safe_print("⚠️ Architecture fixer timed out"))
+        safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Architecture fixer timed out"))
     except FileNotFoundError:
-        safe_print(cli_handler.safe_print("❌ Architecture fixer script not found"))
+        safe_print(cli_handler.safe_print("\\u274c Architecture fixer script not found"))
         return False
     except Exception as e:
         safe_print(
-            cli_handler.safe_print(f"❌ Error running architecture fixer: {e}")
+            cli_handler.safe_print(f"\\u274c Error running architecture fixer: {e}")
         )
         return False
 
     # Step 2: Run the comprehensive integration
     safe_print(
         cli_handler.safe_print(
-            "🔧 Step 2: Running comprehensive integration..."
+            "\\u1f527 Step 2: Running comprehensive integration..."
         )
     )
 
@@ -143,26 +143,26 @@ def run_architecture_fix(dry_run: bool = False) -> bool:
         if result.returncode == 0:
             safe_print(
                 cli_handler.safe_print(
-                    "✅ Comprehensive integration completed"
+                    "\\u2705 Comprehensive integration completed"
                 )
             )
         else:
             safe_print(
                 cli_handler.safe_print(
-                    f"⚠️ Integration warnings: {result.stderr}"
+                    f"\\u26a0\\ufe0f Integration warnings: {result.stderr}"
                 )
             )
     except subprocess.TimeoutExpired:
-        safe_print(cli_handler.safe_print("⚠️ Integration timed out"))
+        safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Integration timed out"))
     except FileNotFoundError:
-        safe_print(cli_handler.safe_print("❌ Integration script not found"))
+        safe_print(cli_handler.safe_print("\\u274c Integration script not found"))
         return False
     except Exception as e:
-        safe_print(cli_handler.safe_print(f"❌ Error running integration: {e}"))
+        safe_print(cli_handler.safe_print(f"\\u274c Error running integration: {e}"))
         return False
 
     # Step 3: Run flake8 fixes if available
-    safe_print(cli_handler.safe_print("🔧 Step 3: Running flake8 fixes..."))
+    safe_print(cli_handler.safe_print("\\u1f527 Step 3: Running flake8 fixes..."))
 
     if os.path.exists("master_flake8_comprehensive_fixer.py"):
         cmd = [sys.executable, "master_flake8_comprehensive_fixer.py"]
@@ -172,24 +172,24 @@ def run_architecture_fix(dry_run: bool = False) -> bool:
                 cmd, capture_output=True, text=True, timeout=600
             )
             if result.returncode == 0:
-                safe_print(cli_handler.safe_print("✅ Flake8 fixes completed"))
+                safe_print(cli_handler.safe_print("\\u2705 Flake8 fixes completed"))
             else:
                 safe_print(
                     cli_handler.safe_print(
-                        f"⚠️ Flake8 fixer warnings: {result.stderr}"
+                        f"\\u26a0\\ufe0f Flake8 fixer warnings: {result.stderr}"
                     )
                 )
         except subprocess.TimeoutExpired:
-            safe_print(cli_handler.safe_print("⚠️ Flake8 fixer timed out"))
+            safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Flake8 fixer timed out"))
         except Exception as e:
             safe_print(
-                cli_handler.safe_print(f"❌ Error running flake8 fixer: {e}")
+                cli_handler.safe_print(f"\\u274c Error running flake8 fixer: {e}")
             )
     else:
-        safe_print(cli_handler.safe_print("📊 Flake8 fixer not found, skipping"))
+        safe_print(cli_handler.safe_print("\\u1f4ca Flake8 fixer not found, skipping"))
 
     safe_print(
-        cli_handler.safe_print("🎉 Comprehensive architecture fix complete!")
+        cli_handler.safe_print("\\u1f389 Comprehensive architecture fix complete!")
     )
     return True
 
@@ -204,13 +204,13 @@ def main() -> None:
     if dry_run:
         safe_print(
             cli_handler.safe_print(
-                "🔍 DRY RUN MODE - No files will be modified"
+                "\\u1f50d DRY RUN MODE - No files will be modified"
             )
         )
 
     # Check dependencies
     if not check_dependencies():
-        safe_print(cli_handler.safe_print("❌ Dependency check failed"))
+        safe_print(cli_handler.safe_print("\\u274c Dependency check failed"))
         sys.exit(1)
 
     # Run the fix
@@ -219,19 +219,21 @@ def main() -> None:
     if success:
         safe_print(
             cli_handler.safe_print(
-                "🌟 All architecture fixes applied successfully!"
+                "\\u1f31f All architecture fixes applied successfully!"
             )
         )
         safe_print(
             cli_handler.safe_print(
-                "📊 Check the generated reports for details"
+                "\\u1f4ca Check the generated reports for details"
             )
         )
         sys.exit(0)
     else:
-        safe_print(cli_handler.safe_print("❌ Architecture fix failed"))
+        safe_print(cli_handler.safe_print("\\u274c Architecture fix failed"))
         sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
+
+"""

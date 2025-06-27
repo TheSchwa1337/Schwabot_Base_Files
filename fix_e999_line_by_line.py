@@ -232,7 +232,7 @@ def main():
         else:
             print(f"  File not found: {filepath}")
 
-    print(f"\nCompleted E999 error fixing:")
+    print(f"\\nCompleted E999 error fixing:")
     print(f"  Files processed: {total_files}")
     print(f"  Files modified: {fixed_count}")
     print("  Conservative line-by-line fixing complete!")
@@ -240,3 +240,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

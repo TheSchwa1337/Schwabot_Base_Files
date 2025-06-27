@@ -198,9 +198,11 @@ def main():
                 files_modified += 1
                 safe_print(f"Modified: {py_file}")
 
-    safe_print(f"\nProcessed {files_processed} files")
+    safe_print(f"\\nProcessed {files_processed} files")
     safe_print(f"Modified {files_modified} files")
 
 
 if __name__ == "__main__":
     main()
+
+"""

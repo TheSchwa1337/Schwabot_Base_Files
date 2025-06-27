@@ -497,9 +497,11 @@ if __name__ == "__main__":
 
     # Get performance summary
     summary = validator.get_performance_summary()
-    safe_print(f"\nPerformance Summary:")
+    safe_print(f"\\nPerformance Summary:")
     safe_print(f"Total Vectors: {summary['total_vectors']}")
     safe_print(f"Success Rate: {summary['overall_success_rate']:.2%}")
     safe_print(f"Matrix Weights: {summary['matrix_weights']}")
 
     safe_print("Vector validator test completed!")
+
+"""

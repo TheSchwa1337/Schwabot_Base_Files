@@ -16,11 +16,11 @@ Integration Points:
 - 4-bit/8-bit/42-bit phase logic (adaptive complexity handling)
 
 This addresses all the user's concerns about:
-✅ Filter anomaly perspectives and exposures
-✅ Deterministic value calculations
-✅ Error handling for swing scenarios
-✅ Portfolio management with substitution
-✅ Complete mathematical integration
+\\u2705 Filter anomaly perspectives and exposures
+\\u2705 Deterministic value calculations
+\\u2705 Error handling for swing scenarios
+\\u2705 Portfolio management with substitution
+\\u2705 Complete mathematical integration
 """
 
 from dataclasses import dataclass, field
@@ -118,7 +118,7 @@ class UnifiedTradingSystem:
             "system_error": self._handle_system_error,
         }
 
-        logger.info("🚀 Unified Trading System initialized with complete protection")
+        logger.info("\\u1f680 Unified Trading System initialized with complete protection")
 
     def process_market_tick(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process a single market tick through the complete system pipeline."""
@@ -211,13 +211,13 @@ class UnifiedTradingSystem:
 
             processing_time = time.time() - start_time
             logger.debug(
-                f"🔄 Market tick processed in {processing_time:.4f}s, safe: {processing_result['safe_to_trade']}"
+                f"\\u1f504 Market tick processed in {processing_time:.4f}s, safe: {processing_result['safe_to_trade']}"
             )
 
             return processing_result
 
         except Exception as e:
-            logger.error(f"❌ Critical error in market tick processing: {e}")
+            logger.error(f"\\u274c Critical error in market tick processing: {e}")
             processing_result["errors"].append(str(e))
             processing_result["safe_to_trade"] = False
             processing_result["system_health"] = "critical"
@@ -286,12 +286,12 @@ class UnifiedTradingSystem:
             self.unified_state.last_enforcement_run = time.time()
 
             if not result.success:
-                logger.warning(f"⚠️ Code enforcement issues: {result.issues_found}")
+                logger.warning(f"\\u26a0\\ufe0f Code enforcement issues: {result.issues_found}")
 
             return result
 
         except Exception as e:
-            logger.error(f"❌ Code enforcement failed: {e}")
+            logger.error(f"\\u274c Code enforcement failed: {e}")
             # Return a safe result
             return EnforcementResult(
                 file_path=__file__,
@@ -317,7 +317,7 @@ class UnifiedTradingSystem:
 
                     except Exception as e:
                         logger.error(
-                            f"❌ Recovery protocol failed for {anomaly.anomaly_type.value}: {e}"
+                            f"\\u274c Recovery protocol failed for {anomaly.anomaly_type.value}: {e}"
                         )
                         recovery_actions.append(f"Recovery protocol failed: {str(e)}")
 
@@ -336,14 +336,14 @@ class UnifiedTradingSystem:
         # Check position size limit
         if decision.position_size > self.config["max_position_risk"]:
             logger.warning(
-                f"⚠️ Position size {decision.position_size:.3f} exceeds limit {self.config['max_position_risk']}"
+                f"\\u26a0\\ufe0f Position size {decision.position_size:.3f} exceeds limit {self.config['max_position_risk']}"
             )
             return False
 
         # Check execution confidence minimum
         if decision.execution_confidence < 0.3:
             logger.warning(
-                f"⚠️ Execution confidence {decision.execution_confidence:.3f} too low"
+                f"\\u26a0\\ufe0f Execution confidence {decision.execution_confidence:.3f} too low"
             )
             return False
 
@@ -352,14 +352,14 @@ class UnifiedTradingSystem:
             self.unified_state.market_state.available_capital, 1
         )
         if current_pnl_pct < -self.config["emergency_stop_loss"]:
-            logger.warning(f"⚠️ Emergency stop loss triggered: {current_pnl_pct:.1%}")
+            logger.warning(f"\\u26a0\\ufe0f Emergency stop loss triggered: {current_pnl_pct:.1%}")
             return False
 
         # Check strategy weight concentration
         max_strategy_weight = unified_math.max(decision.strategy_weights.values())
         if max_strategy_weight > 0.8:  # No single strategy > 80%
             logger.warning(
-                f"⚠️ Strategy concentration too high: {max_strategy_weight:.1%}"
+                f"\\u26a0\\ufe0f Strategy concentration too high: {max_strategy_weight:.1%}"
             )
             return False
 
@@ -524,7 +524,7 @@ class UnifiedTradingSystem:
         error_msg = f"{time.time()}:EMERGENCY_RECOVERY"
         self.unified_state.system_errors.append(error_msg)
 
-        logger.critical("🆘 Emergency recovery procedures executed")
+        logger.critical("\\u1f198 Emergency recovery procedures executed")
 
         return actions
 
@@ -657,7 +657,7 @@ def create_unified_trading_system() -> UnifiedTradingSystem:
 def demonstrate_complete_system() -> None:
     """Demonstrate the complete unified system in action."""
 
-    safe_print("🚀 Schwabot Unified Trading System Demonstration")
+    safe_print("\\u1f680 Schwabot Unified Trading System Demonstration")
     safe_print("=" * 60)
 
     # Create system
@@ -721,29 +721,29 @@ def demonstrate_complete_system() -> None:
 
     # Process each scenario
     for i, scenario in enumerate(scenarios, 1):
-        safe_print(f"\n📊 Scenario {i}: {scenario['name']}")
+        safe_print(f"\\n\\u1f4ca Scenario {i}: {scenario['name']}")
         safe_print("-" * 40)
 
         # Process the market tick
         result = system.process_market_tick(scenario["data"])
 
         # Display results
-        safe_print(f"✅ Safe to Trade: {result['safe_to_trade']}")
-        safe_print(f"🎯 System Health: {result['system_health']}")
-        safe_print(f"🔍 Anomalies Detected: {len(result['anomalies_detected'])}")
+        safe_print(f"\\u2705 Safe to Trade: {result['safe_to_trade']}")
+        safe_print(f"\\u1f3af System Health: {result['system_health']}")
+        safe_print(f"\\u1f50d Anomalies Detected: {len(result['anomalies_detected'])}")
 
         if result["anomalies_detected"]:
             for anomaly in result["anomalies_detected"][:3]:  # Show first 3
                 safe_print(f"   - {anomaly}")
 
-        safe_print(f"🛠️ Actions Taken: {len(result['actions_taken'])}")
+        safe_print(f"\\u1f6e0\\ufe0f Actions Taken: {len(result['actions_taken'])}")
         if result["actions_taken"]:
             for action in result["actions_taken"][:3]:  # Show first 3
                 safe_print(f"   - {action}")
 
         if result["decision"] and result["safe_to_trade"]:
             decision = result["decision"]
-            safe_print(f"🎯 Decision Summary:")
+            safe_print(f"\\u1f3af Decision Summary:")
             safe_print(f"   - Execution Confidence: {decision['execution_confidence']:.3f}")
             safe_print(f"   - Entry Score: {decision['entry_score']:.3f}")
             safe_print(f"   - Phase Mode: {decision['phase_mode']}-bit")
@@ -757,7 +757,7 @@ def demonstrate_complete_system() -> None:
                 f"XRP:{allocation['XRP']:.1%} BTC:{allocation['BTC']:.1%} ETH:{allocation['ETH']:.1%}"
             )
 
-        safe_print(f"⚡ Performance: {result['performance_metrics']}")
+        safe_print(f"\\u26a1 Performance: {result['performance_metrics']}")
 
 
 if __name__ == "__main__":

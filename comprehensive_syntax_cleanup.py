@@ -30,7 +30,7 @@ class SyntaxCleaner:
         # Fix the specific pattern: """Stub main function."""."""
         content = content.replace(
             '"""Stub main function."""."""',
-            '"""Stub main function."""\n    pass\n'
+            '"""Stub main function."""\\n    pass\n'
         )
 
         # Fix other malformed patterns
@@ -45,18 +45,18 @@ class SyntaxCleaner:
     def fix_unicode_characters(self, content: str) -> str:
         """Replace Unicode characters with ASCII equivalents."""
         unicode_replacements = {
-            '∇': 'del',  # nabla
-            '∈': 'in',   # element of
-            '≤': '<=',   # less than or equal
-            '≥': '>=',   # greater than or equal
-            '⇒': '=>',   # implies
-            '∫': 'int',  # integral
-            '∂': 'd',    # partial derivative
-            '·': '.',    # middle dot
-            '–': '-',    # en dash
-            '₍': '(',    # subscript left parenthesis
-            '₎': ')',    # subscript right parenthesis
-            '♦': '',     # diamond (remove)
+            '\\u2207': 'del',  # nabla
+            '\\u2208': 'in',   # element of
+            '\\u2264': '<=',   # less than or equal
+            '\\u2265': '>=',   # greater than or equal
+            '\\u21d2': '=>',   # implies
+            '\\u222b': 'int',  # integral
+            '\\u2202': 'd',    # partial derivative
+            '\\u00b7': '.',    # middle dot
+            '\\u2013': '-',    # en dash
+            '\\u208d': '(',    # subscript left parenthesis
+            '\\u208e': ')',    # subscript right parenthesis
+            '\\u2666': '',     # diamond (remove)
         }
 
         for unicode_char, ascii_replacement in unicode_replacements.items():
@@ -68,22 +68,22 @@ class SyntaxCleaner:
         """Fix unterminated triple-quoted strings."""
         # Fix pattern: """text without closing
         content = re.sub(
-            r'"""([^"]*)\n\s*"""\s*def\s+',
-            r'"""\1"""\n\ndef ',
+            r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+            r'"""\1"""\\n\\ndef ',
             content
         )
 
         # Fix pattern: """text at end of line
         content = re.sub(
-            r'"""([^"]*)\n\s*def\s+',
-            r'"""\1"""\n\ndef ',
+            r'"""([^"]*)\\n\\s*def\\s+',
+            r'"""\1"""\\n\\ndef ',
             content
         )
 
         # Fix pattern: """text without closing at end
         content = re.sub(
-            r'"""([^"]*)\n\s*if\s+__name__',
-            r'"""\1"""\n\nif __name__',
+            r'"""([^"]*)\\n\\s*if\\s+__name__',
+            r'"""\1"""\\n\\nif __name__',
             content
         )
 
@@ -93,14 +93,14 @@ class SyntaxCleaner:
         """Fix invalid syntax patterns."""
         # Fix stray periods after function definitions
         content = re.sub(
-            r'def\s+(\w+)\s*\([^)]*\)\s*:\s*\.',
+            r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
             r'def \1(\2):',
             content
         )
 
         # Fix invalid decimal literals
         content = re.sub(
-            r'(\d+)\.(\d+)\.(\d+)',
+            r'(\\d+)\.(\\d+)\.(\\d+)',
             r'\1.\2_\3',  # Replace with underscore
             content
         )
@@ -154,7 +154,7 @@ class SyntaxCleaner:
 
                     if self.fix_file(file_path):
                         self.fix_stats['errors_fixed'] += 1
-                        safe_print(f"✅ Fixed: {file_path}")
+                        safe_print(f"\\u2705 Fixed: {file_path}")
 
     def run_cleanup(self) -> None:
         """Run the complete cleanup process."""
@@ -165,10 +165,10 @@ class SyntaxCleaner:
         self.process_all_files()
 
         # Summary
-        safe_print(f"\nSummary:")
+        safe_print(f"\\nSummary:")
         safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
         safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
-        safe_print("\nCleanup completed!")
+        safe_print("\\nCleanup completed!")
 
 
 def main():
@@ -179,3 +179,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

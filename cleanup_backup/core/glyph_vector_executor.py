@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Glyph vector executor – executes strategic moves from glyph instructions.
+"""Glyph vector executor \\u2013 executes strategic moves from glyph instructions.
 
 Implements the formula:
-    G_out = Σ ω_i · G_i_vector[t] · ζ_weighting[t]
+    G_out = \\u03a3 \\u03c9_i \\u00b7 G_i_vector[t] \\u00b7 \\u03b6_weighting[t]
 
 This module takes weighted glyph vectors and converts them into executable
 trade instructions that can be consumed by the routing layer.
@@ -52,11 +52,11 @@ def execute_glyph_vectors(
     Parameters
     ----------
     omega_weights
-        Weighting coefficients ω_i for each glyph vector.
+        Weighting coefficients \\u03c9_i for each glyph vector.
     glyph_vectors
         Sequence of glyph state vectors G_i_vector[t].
     zeta_weightings
-        Time-varying weights ζ_weighting[t] for each vector.
+        Time-varying weights \\u03b6_weighting[t] for each vector.
     action_threshold
         Minimum confidence required to generate non-hold action.
     volume_scale
@@ -77,7 +77,7 @@ def execute_glyph_vectors(
     omega = np.asarray(omega_weights, dtype=float)
     zeta = np.asarray(zeta_weightings, dtype=float)
 
-    # Compute weighted sum: Σ ω_i · G_i · ζ_i
+    # Compute weighted sum: \\u03a3 \\u03c9_i \\u00b7 G_i \\u00b7 \\u03b6_i
     weighted_sum = np.zeros_like(glyph_vectors[0], dtype=float)
     for i, g_vec in enumerate(glyph_vectors):
         g_array = np.asarray(g_vec, dtype=float)
@@ -111,3 +111,5 @@ def execute_glyph_vectors(
     signature = f"glyph_{vector_hash & 0xFFFF:04x}"
 
     return GlyphInstruction(action, volume, confidence, signature)
+
+"""

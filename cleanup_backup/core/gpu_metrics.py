@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""gpu_metrics.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""gpu_metrics.py \\u2014 TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package
 remains importable.  Replace with a clean implementation ASAP.
@@ -13,3 +13,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

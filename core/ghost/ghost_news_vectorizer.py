@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\n"""News→sentiment vectoriser for ghost routing."""
+# -*- coding: utf-8 -*-\n"""News->sentiment vectoriser for ghost routing."""
 
 from __future__ import annotations
 from core.unified_math_system import unified_math
@@ -7,6 +7,7 @@ import math
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
+    pass
 from sklearn.feature_extraction.text import TfidfVectorizer
 except ImportError:
     pass
@@ -23,10 +24,10 @@ def sentiment_lambda(corpus: list[str]) -> float:
 
     pass
     pass
-    """Return λ_sent ∈ [-1,1] for latest news headline batch.
+    """Return lambda_sent in [-1,1] for latest news headline batch."""
 
 Compute sentiment using TF-IDF vectorization:
-λ_sentiment = tanh(W·TF-IDF(tokens))
+lambda_sentiment = tanh(W.TF-IDF(tokens))
 
 Args:
 corpus: List of news headlines/text
@@ -36,7 +37,7 @@ Sentiment coefficient between -1 and 1
 
 Note:
 Returns 0.0 if sklearn not available or corpus empty
-"""
+""""""
     global _VEC, _W
 
     if not corpus or TfidfVectorizer is None:
@@ -44,6 +45,7 @@ Returns 0.0 if sklearn not available or corpus empty
 
     # Initialize vectorizer on first use
     if _VEC is None:
+    pass
 
 
 _VEC = TfidfVectorizer(max_features=512, stop_words="english")
@@ -63,3 +65,7 @@ tfidf_matrix = _VEC.fit_transform(corpus)
     except Exception:
         # Fallback for edge cases
         return 0.0
+
+
+
+"""

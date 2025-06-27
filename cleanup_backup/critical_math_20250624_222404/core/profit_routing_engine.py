@@ -8,7 +8,7 @@ Profit Routing Engine - Schwabot UROS v1.0
 Central logic handler for profit destination allocation among BTC, USDC, ETH, XRP.
 Features:
 - Profit Delta Vector: P = (P_BTC, P_USDC, P_XRP, ...)
-- Weighted Strategy Entropy Matrix: M_ij = unified_math.log(P_i / P_j + ε)
+- Weighted Strategy Entropy Matrix: M_ij = unified_math.log(P_i / P_j + \\u03b5)
 - Dynamic Rebalancing Logic using eigenvector centrality
 - Markov transition probabilities for zone rotation
 - Integration with strategy_mapper.py and profit_cycle_allocator.py
@@ -342,7 +342,7 @@ class ProfitRoutingEngine:
                     p_i = profit_deltas.get(asset_i, 0.0)
                     p_j = profit_deltas.get(asset_j, 0.0)
 
-                    # M_ij = unified_math.log(P_i / P_j + ε)
+                    # M_ij = unified_math.log(P_i / P_j + \\u03b5)
                     epsilon = 1e-10
                     if unified_math.abs(p_j) < epsilon:
                         entropy_matrix[i, j] = 0.0

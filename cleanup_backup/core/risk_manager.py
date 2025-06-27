@@ -131,7 +131,7 @@ class RiskManager:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize risk manager."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Risk strategy
@@ -407,7 +407,7 @@ class RiskManager:
 def main() -> None:
     """Main function for testing risk manager."""
     try:
-        safe_print("🔍 Risk Manager Test")
+        safe_print("\\u1f50d Risk Manager Test")
         safe_print("=" * 40)
 
         # Initialize risk manager
@@ -457,12 +457,12 @@ def main() -> None:
 
         # Update risk budget
         risk_budget = risk_manager.update_risk_budget(portfolio_data)
-        safe_print(f"✅ Risk budget updated: {risk_budget}")
+        safe_print(f"\\u2705 Risk budget updated: {risk_budget}")
 
-        safe_print("\n🎉 Risk Manager test completed successfully!")
+        safe_print("\\n\\u1f389 Risk Manager test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Risk Manager test failed: {e}")
+        safe_print(f"\\u274c Risk Manager test failed: {e}")
         import traceback
 
         traceback.print_exc()
@@ -470,3 +470,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

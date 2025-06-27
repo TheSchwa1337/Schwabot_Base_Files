@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 #!/usr/bin/env python3
-"""Ghost pipeline – stealth-mode validator & orchestrator.
+"""Ghost pipeline \\u2013 stealth-mode validator & orchestrator.
 
 This module glues together the *stealth* helpers that were recently added to
 Schwabot's core:
 
-* :func:`flux_compensator.sync_flux_compensator` – entropy drift guard.
-* :func:`thermal_shift.thermal_delta_switch` – temperature drift guard.
-* :func:`phase_hash_gate` – deterministic hash-phase gating.
+* :func:`flux_compensator.sync_flux_compensator` \\u2013 entropy drift guard.
+* :func:`thermal_shift.thermal_delta_switch` \\u2013 temperature drift guard.
+* :func:`phase_hash_gate` \\u2013 deterministic hash-phase gating.
 
-The goal is to expose **one** public convenience wrapper –
-:func:`ghost_validator_pipeline` – so that legacy callers can perform
+The goal is to expose **one** public convenience wrapper \\u2013
+:func:`ghost_validator_pipeline` \\u2013 so that legacy callers can perform
 "all-in-one" validation without having to stitch the pieces manually.
 
 References (math primer)
 ------------------------
-See the design doc in chat (Γ_ghost, Φ_ghost, ζ etc.).  The current Python
-implementation intentionally keeps the maths simple – mostly logical gating –
+See the design doc in chat (\\u0393_ghost, \\u03a6_ghost, \\u03b6 etc.).  The current Python
+implementation intentionally keeps the maths simple \\u2013 mostly logical gating \\u2013
 so that we avoid heavy computational cost inside tight trading loops.  The API
 surface is stable and future-proof: each component can be swapped for a more
 sophisticated version without changing the public signature.
@@ -37,7 +37,7 @@ __all__: list[str] = ["GhostPipeline", "ghost_validator_pipeline"]
 # -----------------------------------------------------------------------------
 
 _ENTROPY_THRESHOLD: Final = 5.0  # same default as FluxCompensator.threshold
-_TEMP_THRESHOLD: Final = 2.5  # °C – mirrors ThermalShift default
+_TEMP_THRESHOLD: Final = 2.5  # \\u00b0C \\u2013 mirrors ThermalShift default
 _BASE_CYCLE: Final = 42  # phase_hash_gate default
 
 
@@ -89,7 +89,7 @@ class GhostPipeline:
 
 
 # -----------------------------------------------------------------------------
-# Legacy functional wrapper – mirrors historical stub signature
+# Legacy functional wrapper \\u2013 mirrors historical stub signature
 # -----------------------------------------------------------------------------
 
 
@@ -117,3 +117,5 @@ def ghost_validator_pipeline(
         entropy, temp_current, temp_previous, tick, salt=salt
     )
     return result
+
+"""

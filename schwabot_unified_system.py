@@ -39,7 +39,7 @@ try:
         EnhancedFitnessOracle,
         UnifiedFitnessScore,
     )
-except ImportError:  # pragma: no cover – fallback stub for tests
+except ImportError:  # pragma: no cover \\u2013 fallback stub for tests
     # Fallback to a local config-stub version so the module still imports
     from config.enhanced_fitness_config import (  # type: ignore
         EnhancedFitnessOracle,
@@ -69,12 +69,12 @@ class WindowsCliCompatibilityHandler:
         """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
-                "🚨": "[ALERT]",
-                "⚠️": "[WARNING]",
-                "✅": "[SUCCESS]",
-                "❌": "[ERROR]",
-                "🔄": "[PROCESSING]",
-                "🎯": "[TARGET]",
+                "\\u1f6a8": "[ALERT]",
+                "\\u26a0\\ufe0f": "[WARNING]",
+                "\\u2705": "[SUCCESS]",
+                "\\u274c": "[ERROR]",
+                "\\u1f504": "[PROCESSING]",
+                "\\u1f3af": "[TARGET]",
             }
             for emoji, marker in emoji_mapping.items():
                 message = message.replace(emoji, marker)
@@ -132,7 +132,7 @@ class SimplifiedFerrisWheelScheduler:
     ):
         """TODO: document __init__."""
         self.fitness_oracle = fitness_oracle
-        # Avoid mutable default argument – initialise lazily
+        # Avoid mutable default argument \\u2013 initialise lazily
         self.symbols = symbols or ["BTC/USDT", "ETH/USDT"]
         self.tick_count = 0
         self.active_positions = {}
@@ -285,7 +285,7 @@ class SimplifiedFerrisWheelScheduler:
             self.active_positions[decision.symbol] = new_position
 
             logger.info(
-                f"🟢 {decision.action}: {decision.symbol} | "
+                f"\\u1f7e2 {decision.action}: {decision.symbol} | "
                 f"Size: {decision.position_size:.2f} | "
                 f"Total Position: {new_position:.2f} | "
                 f"Confidence: {decision.confidence:.3f}"
@@ -303,7 +303,7 @@ class SimplifiedFerrisWheelScheduler:
                 self.active_positions[decision.symbol] = new_position
 
             logger.info(
-                f"🔴 {decision.action}: {decision.symbol} | "
+                f"\\u1f534 {decision.action}: {decision.symbol} | "
                 f"Reduction: {reduction:.2f} | "
                 f"Remaining Position: {new_position:.2f} | "
                 f"Confidence: {decision.confidence:.3f}"
@@ -327,11 +327,11 @@ class SimplifiedFerrisWheelScheduler:
 
         # Log special conditions
         if fitness_score.profit_tier_detected:
-            logger.warning("🎯 PROFIT TIER DETECTED - High opportunity!")
+            logger.warning("\\u1f3af PROFIT TIER DETECTED - High opportunity!")
 
         if fitness_score.loop_warning:
             logger.warning(
-                "⚠️ RECURSIVE LOOP WARNING - \
+                "\\u26a0\\ufe0f RECURSIVE LOOP WARNING - \
                 Pattern repetition detected!"
             )
 

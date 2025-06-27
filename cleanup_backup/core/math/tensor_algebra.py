@@ -16,11 +16,11 @@ Core Mathematical Components:
 5. Hash Memory Vector Encoding
 
 Mathematical Foundation:
-- Bit Phase Selectors: φ₄ = (strategy_id & 0b1111), φ₈ = (strategy_id >> 4) & 0b11111111, φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
-- Matrix Basket Contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
-- Profit Routing: dP/dt = (P_t - P_t-1) / Δt
-- Entropy Gate: E(t) = unified_math.log(V + 1) / (1 + δ)
-- Hash Memory: H(t) = SHA256(P_t || ΔP || φ_t)
+- Bit Phase Selectors: \\u03c6\\u2084 = (strategy_id & 0b1111), \\u03c6\\u2088 = (strategy_id >> 4) & 0b11111111, \\u03c6\\u2084\\u2082 = (strategy_id >> 12) & 0x3FFFFFFFFFF
+- Matrix Basket Contraction: T\\u1d62\\u2c7c = \\u03a3\\u2096 A\\u1d62\\u2096 \\u00b7 B\\u2096\\u2c7c
+- Profit Routing: dP/dt = (P_t - P_t-1) / \\u0394t
+- Entropy Gate: E(t) = unified_math.log(V + 1) / (1 + \\u03b4)
+- Hash Memory: H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
 """
 
 import json
@@ -113,20 +113,20 @@ class UnifiedTensorAlgebra:
     Unified tensor algebra for Schwabot mathematical integration.
 
     Mathematical Foundation:
-    - Bit Phase Selectors: φ₄ = (strategy_id & 0b1111), φ₈ = (strategy_id >> 4) & 0b11111111, φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
-    - Matrix Basket Contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
-    - Profit Routing: dP/dt = (P_t - P_t-1) / Δt
-    - Entropy Gate: E(t) = unified_math.log(V + 1) / (1 + δ)
-    - Hash Memory: H(t) = SHA256(P_t || ΔP || φ_t)
+    - Bit Phase Selectors: \\u03c6\\u2084 = (strategy_id & 0b1111), \\u03c6\\u2088 = (strategy_id >> 4) & 0b11111111, \\u03c6\\u2084\\u2082 = (strategy_id >> 12) & 0x3FFFFFFFFFF
+    - Matrix Basket Contraction: T\\u1d62\\u2c7c = \\u03a3\\u2096 A\\u1d62\\u2096 \\u00b7 B\\u2096\\u2c7c
+    - Profit Routing: dP/dt = (P_t - P_t-1) / \\u0394t
+    - Entropy Gate: E(t) = unified_math.log(V + 1) / (1 + \\u03b4)
+    - Hash Memory: H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
     """
 
     def __init__(self, config_path: str = "./config/tensor_algebra_config.json"):
         self.config_path = config_path
 
         # Mathematical constants and weights
-        self.alpha_weight = 0.3  # Weight for φ₄
-        self.beta_weight = 0.5   # Weight for φ₈
-        self.gamma_weight = 0.2  # Weight for φ₄₂
+        self.alpha_weight = 0.3  # Weight for \\u03c6\\u2084
+        self.beta_weight = 0.5   # Weight for \\u03c6\\u2088
+        self.gamma_weight = 0.2  # Weight for \\u03c6\\u2084\\u2082
 
         # Entropy compensation parameters
         self.entropy_decay_rate = 0.001
@@ -193,10 +193,10 @@ class UnifiedTensorAlgebra:
         Resolve bit phases using phase-based bit algebra.
 
         Mathematical Formula:
-        φ₄ = (strategy_id & 0b1111)
-        φ₈ = (strategy_id >> 4) & 0b11111111
-        φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
-        cycle_score = α * φ₄ + β * φ₈ + γ * φ₄₂
+        \\u03c6\\u2084 = (strategy_id & 0b1111)
+        \\u03c6\\u2088 = (strategy_id >> 4) & 0b11111111
+        \\u03c6\\u2084\\u2082 = (strategy_id >> 12) & 0x3FFFFFFFFFF
+        cycle_score = \\u03b1 * \\u03c6\\u2084 + \\u03b2 * \\u03c6\\u2088 + \\u03b3 * \\u03c6\\u2084\\u2082
 
         Parameters:
         -----------
@@ -220,7 +220,7 @@ class UnifiedTensorAlgebra:
             phi_8 = (strategy_int >> 4) & 0b11111111
             phi_42 = (strategy_int >> 12) & 0x3FFFFFFFFFF
 
-            # Calculate cycle score: cycle_score = α * φ₄ + β * φ₈ + γ * φ₄₂
+            # Calculate cycle score: cycle_score = \\u03b1 * \\u03c6\\u2084 + \\u03b2 * \\u03c6\\u2088 + \\u03b3 * \\u03c6\\u2084\\u2082
             cycle_score = (
                 self.alpha_weight * phi_4 +
                 self.beta_weight * phi_8 +
@@ -244,7 +244,7 @@ class UnifiedTensorAlgebra:
             # Store result
             self.bit_phase_results.append(result)
 
-            logger.debug(f"Bit phase resolution: φ₄={phi_4}, φ₈={phi_8}, φ₄₂={phi_42}, score={cycle_score:.4f}")
+            logger.debug(f"Bit phase resolution: \\u03c6\\u2084={phi_4}, \\u03c6\\u2088={phi_8}, \\u03c6\\u2084\\u2082={phi_42}, score={cycle_score:.4f}")
             return result
 
         except Exception as e:
@@ -260,7 +260,7 @@ class UnifiedTensorAlgebra:
         Perform matrix basket tensor contraction.
 
         Mathematical Formula:
-        Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
+        T\\u1d62\\u2c7c = \\u03a3\\u2096 A\\u1d62\\u2096 \\u00b7 B\\u2096\\u2c7c
 
         Parameters:
         -----------
@@ -281,7 +281,7 @@ class UnifiedTensorAlgebra:
             if matrix_a.shape[1] != matrix_b.shape[0]:
                 raise ValueError(f"Matrix dimensions incompatible: {matrix_a.shape} vs {matrix_b.shape}")
 
-            # Perform tensor contraction: Tᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ
+            # Perform tensor contraction: T\\u1d62\\u2c7c = \\u03a3\\u2096 A\\u1d62\\u2096 \\u00b7 B\\u2096\\u2c7c
             contraction_matrix = unified_math.unified_math.dot_product(matrix_a, matrix_b)
 
             # Calculate tensor score as normalized sum
@@ -326,8 +326,8 @@ class UnifiedTensorAlgebra:
         Calculate profit routing using differential calculus.
 
         Mathematical Formula:
-        dP/dt = (P_t - P_t-1) / Δt
-        if dP/dt > λ_threshold:
+        dP/dt = (P_t - P_t-1) / \\u0394t
+        if dP/dt > \\u03bb_threshold:
             execute_trade()
 
         Parameters:
@@ -337,9 +337,9 @@ class UnifiedTensorAlgebra:
         profit_previous : float
             Previous profit P_t-1
         time_delta : float
-            Time delta Δt
+            Time delta \\u0394t
         threshold : float
-            Threshold λ_threshold for trade execution
+            Threshold \\u03bb_threshold for trade execution
 
         Returns:
         --------
@@ -347,7 +347,7 @@ class UnifiedTensorAlgebra:
             Profit routing result
         """
         try:
-            # Calculate profit rate: dP/dt = (P_t - P_t-1) / Δt
+            # Calculate profit rate: dP/dt = (P_t - P_t-1) / \\u0394t
             if time_delta > 0:
                 profit_rate = (profit_current - profit_previous) / time_delta
             else:
@@ -394,7 +394,7 @@ class UnifiedTensorAlgebra:
         Calculate entropy compensation and drift dynamics.
 
         Mathematical Formula:
-        E(t) = unified_math.log(V + 1) / (1 + δ)
+        E(t) = unified_math.log(V + 1) / (1 + \\u03b4)
         Trigger = P_gain / E(t)
 
         Parameters:
@@ -402,7 +402,7 @@ class UnifiedTensorAlgebra:
         volume : float
             Volume V
         drift_magnitude : float
-            Drift magnitude δ
+            Drift magnitude \\u03b4
         delta_factor : float
             Delta factor for compensation
 
@@ -412,7 +412,7 @@ class UnifiedTensorAlgebra:
             Entropy compensation result
         """
         try:
-            # Calculate entropy gate: E(t) = unified_math.log(V + 1) / (1 + δ)
+            # Calculate entropy gate: E(t) = unified_math.log(V + 1) / (1 + \\u03b4)
             entropy_gate = unified_math.unified_math.log(volume + 1) / (1 + drift_magnitude)
 
             # Calculate compensation factor
@@ -455,7 +455,7 @@ class UnifiedTensorAlgebra:
         Encode hash memory vector.
 
         Mathematical Formula:
-        H(t) = SHA256(P_t || ΔP || φ_t)
+        H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
         score = sim(H(t), known_hash_set)
 
         Parameters:
@@ -463,9 +463,9 @@ class UnifiedTensorAlgebra:
         profit_current : float
             Current profit P_t
         profit_delta : float
-            Profit delta ΔP
+            Profit delta \\u0394P
         bit_phase_result : BitPhaseResult
-            Bit phase result φ_t
+            Bit phase result \\u03c6_t
 
         Returns:
         --------
@@ -473,7 +473,7 @@ class UnifiedTensorAlgebra:
             Hash memory encoding result
         """
         try:
-            # Create hash input: H(t) = SHA256(P_t || ΔP || φ_t)
+            # Create hash input: H(t) = SHA256(P_t || \\u0394P || \\u03c6_t)
             hash_input = f"{profit_current:.8f}||{profit_delta:.8f}||{bit_phase_result.cycle_score:.8f}"
             hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()
 
@@ -682,22 +682,22 @@ class UnifiedTensorAlgebra:
 
 def main():
     """Test function for Unified Tensor Algebra."""
-    safe_print("🧮 Testing Unified Tensor Algebra...")
+    safe_print("\\u1f9ee Testing Unified Tensor Algebra...")
 
     # Initialize algebra
     algebra = UnifiedTensorAlgebra()
 
     # Test bit phase resolution
-    safe_print("\n📊 Testing Bit Phase Resolution...")
+    safe_print("\\n\\u1f4ca Testing Bit Phase Resolution...")
     strategy_id = "0x123456789abcdef"
     bit_result = algebra.resolve_bit_phases(strategy_id)
-    safe_print(f"  φ₄: {bit_result.phi_4}")
-    safe_print(f"  φ₈: {bit_result.phi_8}")
-    safe_print(f"  φ₄₂: {bit_result.phi_42}")
+    safe_print(f"  \\u03c6\\u2084: {bit_result.phi_4}")
+    safe_print(f"  \\u03c6\\u2088: {bit_result.phi_8}")
+    safe_print(f"  \\u03c6\\u2084\\u2082: {bit_result.phi_42}")
     safe_print(f"  Cycle Score: {bit_result.cycle_score:.4f}")
 
     # Test tensor contraction
-    safe_print("\n🔗 Testing Tensor Contraction...")
+    safe_print("\\n\\u1f517 Testing Tensor Contraction...")
     matrix_a = np.random.random((3, 3))
     matrix_b = np.random.random((3, 3))
     tensor_result = algebra.perform_tensor_contraction(matrix_a, matrix_b)
@@ -705,26 +705,26 @@ def main():
     safe_print(f"  Operation Type: {tensor_result.operation_type.value}")
 
     # Test profit routing
-    safe_print("\n💰 Testing Profit Routing...")
+    safe_print("\\n\\u1f4b0 Testing Profit Routing...")
     profit_result = algebra.calculate_profit_routing(1000.0, 950.0, 1.0)
     safe_print(f"  Profit Rate: {profit_result.profit_rate:.6f}")
     safe_print(f"  Execution Trigger: {profit_result.execution_trigger}")
 
     # Test entropy compensation
-    safe_print("\n🌊 Testing Entropy Compensation...")
+    safe_print("\\n\\u1f30a Testing Entropy Compensation...")
     entropy_result = algebra.calculate_entropy_compensation(1000.0, 0.1)
     safe_print(f"  Entropy Gate: {entropy_result.entropy_gate:.4f}")
     safe_print(f"  Adaptive Trigger: {entropy_result.adaptive_trigger}")
 
     # Test hash memory encoding
-    safe_print("\n🔐 Testing Hash Memory Encoding...")
+    safe_print("\\n\\u1f510 Testing Hash Memory Encoding...")
     hash_result = algebra.encode_hash_memory(1000.0, 50.0, bit_result)
     safe_print(f"  Hash Signature: {hash_result.hash_signature[:16]}...")
     safe_print(f"  Similarity Score: {hash_result.similarity_score:.4f}")
     safe_print(f"  Memory Activation: {hash_result.memory_activation}")
 
     # Test unified operation
-    safe_print("\n🔄 Testing Unified Operation...")
+    safe_print("\\n\\u1f504 Testing Unified Operation...")
     market_data = {
         'current_profit': 1000.0,
         'previous_profit': 950.0,
@@ -738,7 +738,7 @@ def main():
 
     # Get statistics
     stats = algebra.get_mathematical_statistics()
-    safe_print(f"\n📈 Mathematical Statistics:")
+    safe_print(f"\\n\\u1f4c8 Mathematical Statistics:")
     safe_print(f"  Total Operations: {stats['total_operations']}")
     safe_print(f"  Average Cycle Score: {stats['average_cycle_score']:.4f}")
     safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")
@@ -752,3 +752,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

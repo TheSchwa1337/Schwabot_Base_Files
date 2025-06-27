@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lantern trigger – Lₜ = σ(Δ_price) · ∂ᵢτ_k."""
+"""Lantern trigger \\u2013 L\\u209c = \\u03c3(\\u0394_price) \\u00b7 \\u2202\\u1d62\\u03c4_k."""
 
 from __future__ import annotations
 

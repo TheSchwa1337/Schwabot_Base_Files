@@ -51,25 +51,25 @@ def fix_mismatched_brackets_in_types(content):
 def fix_unmatched_brackets(content):
     """Fix unmatched or misplaced parentheses/brackets in lines."""
     # Fix common patterns: ( ... ] -> ( ... ) and similar
-    content = re.sub(r'\(\s*\]', '()', content)
-    content = re.sub(r'\[\s*\)', '[]', content)
-    content = re.sub(r'{\s*\]', '{}', content)
-    content = re.sub(r'\[\s*}', '[]', content)
+    content = re.sub(r'\(\\s*\]', '()', content)
+    content = re.sub(r'\[\\s*\)', '[]', content)
+    content = re.sub(r'{\\s*\]', '{}', content)
+    content = re.sub(r'\[\\s*}', '[]', content)
     # Fix specific patterns: []) -> []
-    content = re.sub(r'\[\s*\]\s*\)', '[]', content)
-    content = re.sub(r'\(\s*\[\s*\]', '()', content)
+    content = re.sub(r'\[\\s*\]\\s*\)', '[]', content)
+    content = re.sub(r'\(\\s*\[\\s*\]', '()', content)
     # Fix lines where a closing bracket is used instead of a parenthesis
-    content = re.sub(r'\(([^\n\)]*)\]', r'(\1)', content)
-    content = re.sub(r'\[([^\n\]]*)\)', r'[\1]', content)
+    content = re.sub(r'\(([^\\n\)]*)\]', r'(\1)', content)
+    content = re.sub(r'\[([^\\n\]]*)\)', r'[\1]', content)
     # Remove unmatched closing brackets at line ends
-    content = re.sub(r'\)\s*\]$', ')', content)
-    content = re.sub(r'\]\s*\)$', ']', content)
+    content = re.sub(r'\)\\s*\]$', ')', content)
+    content = re.sub(r'\]\\s*\)$', ']', content)
     # Remove unmatched closing brackets at line starts
-    content = re.sub(r'^\]\s*', '', content, flags=re.MULTILINE)
-    content = re.sub(r'^\)\s*', '', content, flags=re.MULTILINE)
+    content = re.sub(r'^\]\\s*', '', content, flags=re.MULTILINE)
+    content = re.sub(r'^\)\\s*', '', content, flags=re.MULTILINE)
     # Remove unmatched opening brackets at line ends
-    content = re.sub(r'\(\s*$', '', content)
-    content = re.sub(r'\[\s*$', '', content)
+    content = re.sub(r'\(\\s*$', '', content)
+    content = re.sub(r'\[\\s*$', '', content)
     return content
 
 
@@ -133,9 +133,9 @@ def normalize_indentation(content):
 def fix_generator_expression_parentheses(content):
     """Fix generator expression parentheses issue."""
     # Fix the specific pattern in common.py
-    content = re.sub(r'for\s+([^:]+)\s+in\s+([^:]+)\s+if\s+([^:]+):', r'for \1 in (\2 for \2 in \2 if \3):', content)
+    content = re.sub(r'for\\s+([^:]+)\\s+in\\s+([^:]+)\\s+if\\s+([^:]+):', r'for \1 in (\2 for \2 in \2 if \3):', content)
     # More general fix for generator expressions
-    content = re.sub(r'for\s+([^:]+)\s+in\s+([^:]+)\s+if\s+([^:]+):', r'for \1 in (\2 if \3):', content)
+    content = re.sub(r'for\\s+([^:]+)\\s+in\\s+([^:]+)\\s+if\\s+([^:]+):', r'for \1 in (\2 if \3):', content)
     return content
 
 
@@ -208,9 +208,11 @@ def main():
                 fixed_count += 1
         else:
             print(f"File not found: {filepath}")
-    print(f"\nFixed {fixed_count} files")
+    print(f"\\nFixed {fixed_count} files")
     print("Core E999 error fixing complete!")
 
 
 if __name__ == "__main__":
     main()
+
+"""

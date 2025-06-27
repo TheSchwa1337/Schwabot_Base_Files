@@ -184,12 +184,12 @@ class TickCycleValidator:
 
     def _handle_phase_transition(self, validation: TickValidation, new_phase: TickPhase) -> None:
         """Handle tick phase transition."""
-        logger.info(f"Phase transition: {self.current_phase} → {new_phase.value}")
+        logger.info(f"Phase transition: {self.current_phase} \\u2192 {new_phase.value}")
 
         # Validate transition is allowed
         if not self._is_valid_phase_transition(self.current_phase, new_phase.value):
             validation.issues.append(
-                f"Invalid phase transition: {self.current_phase} → {new_phase.value}"
+                f"Invalid phase transition: {self.current_phase} \\u2192 {new_phase.value}"
             )
             validation.recommendations.append("Review phase transition logic")
 
@@ -427,3 +427,5 @@ def validate_tick_cycle(validator: TickCycleValidator,
                         portfolio_shift: Optional[Dict[str, Any]]) -> TickValidation:
     """Convenience function for tick cycle validation."""
     return validator.validate_tick_cycle(tick_phase, state_valid, portfolio_shift)
+
+"""

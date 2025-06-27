@@ -84,7 +84,7 @@ class SchwabotruntimeValidator:
         start_time = time.time()
         result = ValidationResult()
 
-        safe_print("🔍 Starting Schwabot Runtime Validation...")
+        safe_print("\\u1f50d Starting Schwabot Runtime Validation...")
         safe_print("=" * 50)
 
         try:
@@ -147,22 +147,22 @@ class SchwabotruntimeValidator:
                     source = f.read()
                 ast.parse(source)
 
-                safe_print(f"  ✅ {file_path}")
+                safe_print(f"  \\u2705 {file_path}")
 
             except py_compile.PyCompileError as e:
                 error_msg = str(e)
                 result.syntax_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
             except SyntaxError as e:
                 error_msg = f"Syntax error at line {e.lineno}: {e.msg}"
                 result.syntax_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
             except Exception as e:
                 error_msg = f"Compilation error: {str(e)}"
                 result.syntax_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
     def _check_flake8_compliance(self, result: ValidationResult) -> None:
         """Check Flake8 compliance for critical files."""
@@ -184,7 +184,7 @@ class SchwabotruntimeValidator:
             )
 
             if process.returncode == 0:
-                safe_print("  ✅ All files pass Flake8 compliance")
+                safe_print("  \\u2705 All files pass Flake8 compliance")
             else:
                 # Parse flake8 output
                 for line in process.stdout.strip().split('\n'):
@@ -194,19 +194,19 @@ class SchwabotruntimeValidator:
                             file_path = parts[0]
                             error_details = ':'.join(parts[1:])
                             result.flake8_errors.append((file_path, error_details))
-                            safe_print(f"  ❌ {file_path}: {error_details}")
+                            safe_print(f"  \\u274c {file_path}: {error_details}")
 
         except subprocess.TimeoutExpired:
             result.flake8_errors.append(("flake8", "Timeout during execution"))
-            safe_print("  ❌ Flake8 check timed out")
+            safe_print("  \\u274c Flake8 check timed out")
 
         except FileNotFoundError:
             result.flake8_errors.append(("flake8", "Flake8 not installed"))
-            safe_print("  ⚠️  Flake8 not found - install with: pip install flake8")
+            safe_print("  \\u26a0\\ufe0f  Flake8 not found - install with: pip install flake8")
 
         except Exception as e:
             result.flake8_errors.append(("flake8", str(e)))
-            safe_print(f"  ❌ Flake8 error: {e}")
+            safe_print(f"  \\u274c Flake8 error: {e}")
 
     def _check_import_resolution(self, result: ValidationResult) -> None:
         """Check that all imports can be resolved."""
@@ -230,12 +230,12 @@ class SchwabotruntimeValidator:
                         if node.module:
                             self._verify_import(node.module, file_path, result)
 
-                safe_print(f"  ✅ {file_path}")
+                safe_print(f"  \\u2705 {file_path}")
 
             except Exception as e:
                 error_msg = f"Import check failed: {str(e)}"
                 result.import_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
     def _verify_import(self, module_name: str, file_path: str, result: ValidationResult) -> None:
         """Verify a single import can be resolved."""
@@ -284,14 +284,14 @@ class SchwabotruntimeValidator:
                 if missing_functions:
                     error_msg = f"Missing required functions: {', '.join(missing_functions)}"
                     result.import_errors.append((file_path, error_msg))
-                    safe_print(f"  ❌ {file_path}: {error_msg}")
+                    safe_print(f"  \\u274c {file_path}: {error_msg}")
                 else:
-                    safe_print(f"  ✅ {file_path}: All required functions present")
+                    safe_print(f"  \\u2705 {file_path}: All required functions present")
 
             except Exception as e:
                 error_msg = f"Function integrity check failed: {str(e)}"
                 result.import_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
     def _check_type_annotations(self, result: ValidationResult) -> None:
         """Check type annotation coverage."""
@@ -335,19 +335,19 @@ class SchwabotruntimeValidator:
                     if annotation_coverage < 0.8:  # Require 80% coverage
                         error_msg = f"Low type annotation coverage: {annotation_coverage:.1%}"
                         result.type_errors.append((file_path, error_msg))
-                        safe_print(f"  ⚠️  {file_path}: {error_msg}")
+                        safe_print(f"  \\u26a0\\ufe0f  {file_path}: {error_msg}")
                     else:
-                        safe_print(f"  ✅ {file_path}: {annotation_coverage:.1%} type coverage")
+                        safe_print(f"  \\u2705 {file_path}: {annotation_coverage:.1%} type coverage")
 
             except Exception as e:
                 error_msg = f"Type annotation check failed: {str(e)}"
                 result.type_errors.append((file_path, error_msg))
-                safe_print(f"  ❌ {file_path}: {error_msg}")
+                safe_print(f"  \\u274c {file_path}: {error_msg}")
 
     def _print_validation_summary(self, result: ValidationResult) -> None:
         """Print comprehensive validation summary."""
         safe_print("\n" + "=" * 50)
-        safe_print("🔍 VALIDATION SUMMARY")
+        safe_print("\\u1f50d VALIDATION SUMMARY")
         safe_print("=" * 50)
 
         safe_print(f"Files Checked: {result.critical_files_checked}")
@@ -355,31 +355,31 @@ class SchwabotruntimeValidator:
         safe_print(f"Total Errors: {result.total_errors}")
 
         if result.syntax_errors:
-            safe_print(f"\n❌ SYNTAX ERRORS ({len(result.syntax_errors)}):")
+            safe_print(f"\\n\\u274c SYNTAX ERRORS ({len(result.syntax_errors)}):")
             for file_path, error in result.syntax_errors:
                 safe_print(f"  {file_path}: {error}")
 
         if result.flake8_errors:
-            safe_print(f"\n❌ FLAKE8 ERRORS ({len(result.flake8_errors)}):")
+            safe_print(f"\\n\\u274c FLAKE8 ERRORS ({len(result.flake8_errors)}):")
             for file_path, error in result.flake8_errors:
                 safe_print(f"  {file_path}: {error}")
 
         if result.import_errors:
-            safe_print(f"\n❌ IMPORT ERRORS ({len(result.import_errors)}):")
+            safe_print(f"\\n\\u274c IMPORT ERRORS ({len(result.import_errors)}):")
             for file_path, error in result.import_errors:
                 safe_print(f"  {file_path}: {error}")
 
         if result.type_errors:
-            safe_print(f"\n⚠️  TYPE ANNOTATION WARNINGS ({len(result.type_errors)}):")
+            safe_print(f"\\n\\u26a0\\ufe0f  TYPE ANNOTATION WARNINGS ({len(result.type_errors)}):")
             for file_path, error in result.type_errors:
                 safe_print(f"  {file_path}: {error}")
 
         safe_print("\n" + "=" * 50)
         if result.passed:
-            safe_print("✅ VALIDATION PASSED - SYSTEM READY FOR EXECUTION")
+            safe_print("\\u2705 VALIDATION PASSED - SYSTEM READY FOR EXECUTION")
         else:
-            safe_print("❌ VALIDATION FAILED - FIX ERRORS BEFORE RUNTIME")
-            safe_print("\n🛠️  RECOMMENDED ACTIONS:")
+            safe_print("\\u274c VALIDATION FAILED - FIX ERRORS BEFORE RUNTIME")
+            safe_print("\\n\\u1f6e0\\ufe0f  RECOMMENDED ACTIONS:")
             safe_print("1. Fix syntax errors first")
             safe_print("2. Run: black core/ && flake8 core/")
             safe_print("3. Check import paths and dependencies")
@@ -404,14 +404,14 @@ class SchwabotruntimeValidator:
             )
 
             if result.returncode != 0:
-                safe_print("⚠️  Flake8 errors detected. Fix before runtime.")
+                safe_print("\\u26a0\\ufe0f  Flake8 errors detected. Fix before runtime.")
                 print(result.stdout)
                 return True
 
             return False
 
         except Exception as e:
-            safe_print(f"⚠️  Could not run Flake8 check: {e}")
+            safe_print(f"\\u26a0\\ufe0f  Could not run Flake8 check: {e}")
             return False
 
     def create_validation_report(self, result: ValidationResult) -> str:
@@ -444,26 +444,26 @@ Generated: {timestamp}
 
         for file_path in self.critical_files:
             if Path(file_path).exists():
-                report += f"- ✅ {file_path}\n"
+                report += f"- \\u2705 {file_path}\n"
             else:
-                report += f"- ❌ {file_path} (missing)\n"
+                report += f"- \\u274c {file_path} (missing)\n"
 
         if result.syntax_errors:
-            report += f"\n## Syntax Errors ({len(result.syntax_errors)})\n"
+            report += f"\\n## Syntax Errors ({len(result.syntax_errors)})\n"
             for file_path, error in result.syntax_errors:
                 report += f"- {file_path}: {error}\n"
 
         if result.flake8_errors:
-            report += f"\n## Flake8 Errors ({len(result.flake8_errors)})\n"
+            report += f"\\n## Flake8 Errors ({len(result.flake8_errors)})\n"
             for file_path, error in result.flake8_errors:
                 report += f"- {file_path}: {error}\n"
 
         if result.import_errors:
-            report += f"\n## Import Errors ({len(result.import_errors)})\n"
+            report += f"\\n## Import Errors ({len(result.import_errors)})\n"
             for file_path, error in result.import_errors:
                 report += f"- {file_path}: {error}\n"
 
-        report += "\n## Recommendations\n"
+        report += "\\n## Recommendations\n"
         if result.passed:
             report += "- System is ready for production deployment\n"
             report += "- All critical files pass validation\n"
@@ -482,7 +482,7 @@ def main() -> None:
 
     # Check for runtime halt conditions
     if validator.check_flake8_runtime_halt():
-        safe_print("🛑 Runtime halted due to Flake8 violations")
+        safe_print("\\u1f6d1 Runtime halted due to Flake8 violations")
         sys.exit(1)
 
     # Run full validation
@@ -499,9 +499,9 @@ def main() -> None:
         Path("logs").mkdir(exist_ok=True)
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report)
-        safe_print(f"\n📄 Validation report saved to: {report_file}")
+        safe_print(f"\\n\\u1f4c4 Validation report saved to: {report_file}")
     except Exception as e:
-        safe_print(f"⚠️  Could not save report: {e}")
+        safe_print(f"\\u26a0\\ufe0f  Could not save report: {e}")
 
     # Exit with appropriate code
     sys.exit(0 if result.passed else 1)

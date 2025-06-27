@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
 
 from core.unified_math_system import unified_math
 import numpy as np
 import math
 # #!/usr/bin/env python3
-"""Pool-volume translator – link news sentiment to USDC pool behaviour.
+"""Pool-volume translator - link news sentiment to USDC pool behaviour."""
 
-Implements Ω_pool_vector from the design notes.  We derive a *scalar influence
-score* that quantifies how strongly a news‐sentiment signal should steer the
+Implements \\u03a9_pool_vector from the design notes.  We derive a *scalar influence
+score* that quantifies how strongly a news\\u2010sentiment signal should steer the
 pool allocation gate.  The current heuristic is:
 
-influence = sentiment * (σ_pool / μ_pool)  (clipped to [-1, 1])
+influence = sentiment * (sigma_pool / mu_pool)  (clipped to [-1, 1])
 
 where
-• *sentiment* ∈ [−1, 1] comes from glyph sentiment analysis.
-• σ_pool / μ_pool is the *relative volatility* of recent USDC volume.
-"""
+\\u2022 *sentiment* in [-1, 1] comes from glyph sentiment analysis.
+\\u2022 sigma_pool / mu_pool is the *relative volatility* of recent USDC volume.
+""""""
 
 
 from typing import Final, Any
@@ -45,19 +45,23 @@ sigma = float(unified_math.unified_math.std(volumes))
 return sigma / mu
 
 
-def translate_news_to_pool_vector(
+def translate_news_to_pool_vector()
 
 
     sentiment: float,
     pool_volumes: np.ndarray[Any, Any],
-) -> float:
+ -> float:
 
+"""Return influence score in range [-1, 1]."""
 
-"""Return influence score in range [-1, 1].
-
-Positive score ⇒ bullish (risk-on), negative ⇒ bearish (risk-off).
-    """
-sentiment_clipped = unified_math.max(unified_math.min(sentiment, _CLIP_MAX), _CLIP_MIN)
+Positive score \\u21d2 bullish (risk-on), negative \\u21d2 bearish (risk-off).
+    """"""
+sentiment_clipped = unified_math.max()
+    unified_math.min(sentiment, _CLIP_MAX, _CLIP_MIN)
 rel_vol = _relative_volatility(pool_volumes)
 raw = sentiment_clipped * rel_vol
 return unified_math.max(unified_math.min(raw, _CLIP_MAX), _CLIP_MIN)
+
+
+
+"""

@@ -9,9 +9,9 @@ This module processes live BTC data, integrates volume, tick, and hash logic
 for execution velocity calculations from live market volume and signal entropy.
 
 Mathematical Foundation:
-- Volume density triggers: ρ_market = 1 - unified_math.min(vol_density, 1.0)
-- Tick entropy analysis: H_tick = -Σ(p_i * unified_math.log(p_i))
-- Execution pressure derivation: P_exec = √(profit_residual / ρ_market)
+- Volume density triggers: \\u03c1_market = 1 - unified_math.min(vol_density, 1.0)
+- Tick entropy analysis: H_tick = -\\u03a3(p_i * unified_math.log(p_i))
+- Execution pressure derivation: P_exec = \\u221a(profit_residual / \\u03c1_market)
 
 Windows CLI compatible with comprehensive error handling.
 """
@@ -137,7 +137,7 @@ class BTCDataProcessor:
         """Analyze volume for clustering and spoof detection.
 
         Mathematical Formula:
-        χ_v = (volume_tick - median_n) / (stdev_n + ε)
+        \\u03c7_v = (volume_tick - median_n) / (stdev_n + \\u03b5)
 
         Parameters
         ----------
@@ -193,7 +193,7 @@ class BTCDataProcessor:
         """Calculate execution velocity from market conditions.
 
         Mathematical Formula:
-        V_exec = √(target_profit / (market_density + ε)) * pressure_modifier
+        V_exec = \\u221a(target_profit / (market_density + \\u03b5)) * pressure_modifier
 
         Parameters
         ----------
@@ -233,7 +233,7 @@ class BTCDataProcessor:
         """Detect velocity differential and determine if delay needed.
 
         Mathematical Formula:
-        V_diff = (v_actual - v_expected) / (v_expected + ε)
+        V_diff = (v_actual - v_expected) / (v_expected + \\u03b5)
 
         Parameters
         ----------
@@ -283,7 +283,7 @@ class BTCDataProcessor:
     def _calculate_volume_density(self, current_volume: float) -> float:
         """Calculate volume density score.
 
-        Formula: ρ_market = 1 - unified_math.min(vol_density, 1.0)
+        Formula: \\u03c1_market = 1 - unified_math.min(vol_density, 1.0)
         """
         if len(self.volume_history) < 5:
             return 0.5
@@ -310,7 +310,7 @@ class BTCDataProcessor:
     def _calculate_tick_entropy(self) -> float:
         """Calculate tick entropy score.
 
-        Formula: H_tick = -Σ(p_i * unified_math.log(p_i))
+        Formula: H_tick = -\\u03a3(p_i * unified_math.log(p_i))
         """
         if len(self.price_history) < self.entropy_window:
             return 0.5
@@ -350,7 +350,7 @@ class BTCDataProcessor:
     ) -> float:
         """Calculate execution pressure.
 
-        Formula: P_exec = √(profit_residual / ρ_market)
+        Formula: P_exec = \\u221a(profit_residual / \\u03c1_market)
         """
         try:
             # Use entropy as proxy for profit residual
@@ -470,7 +470,7 @@ def main() -> None:
 
     # Processing summary
     summary = processor.get_processing_summary()
-    safe_print(f"\nProcessing Summary: {summary}")
+    safe_print(f"\\nProcessing Summary: {summary}")
 
 
 if __name__ == "__main__":

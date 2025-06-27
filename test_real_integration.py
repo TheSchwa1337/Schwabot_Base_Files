@@ -74,7 +74,7 @@ def test_real_data_sources():
 
 def test_trading_system_connectivity():
     """Test connectivity with trading system components."""
-    safe_safe_print("\nTesting Trading System Connectivity...")
+    safe_safe_print("\\nTesting Trading System Connectivity...")
 
     try:
         # Test profit tracker import
@@ -108,7 +108,7 @@ def test_trading_system_connectivity():
 
 def test_error_handling_and_recovery():
     """Test error handling and recovery mechanisms."""
-    safe_safe_print("\nTesting Error Handling and Recovery...")
+    safe_safe_print("\\nTesting Error Handling and Recovery...")
 
     try:
         from core import get_ui_bridge_integration_manager
@@ -143,7 +143,7 @@ def test_error_handling_and_recovery():
 
 def test_performance_under_load():
     """Test performance under load conditions."""
-    safe_safe_print("\nTesting Performance Under Load...")
+    safe_safe_print("\\nTesting Performance Under Load...")
 
     try:
         from core import get_ui_bridge_integration_manager
@@ -189,7 +189,7 @@ def test_performance_under_load():
 
 def test_system_startup_integration():
     """Test integration with system startup."""
-    safe_safe_print("\nTesting System Startup Integration...")
+    safe_safe_print("\\nTesting System Startup Integration...")
 
     try:
         # Test core system initialization
@@ -231,7 +231,7 @@ def test_system_startup_integration():
 
 def test_data_flow_verification():
     """Test that data flows correctly through the system."""
-    safe_safe_print("\nTesting Data Flow Verification...")
+    safe_safe_print("\\nTesting Data Flow Verification...")
 
     try:
         from core import get_ui_bridge_integration_manager
@@ -295,11 +295,11 @@ def main():
     safe_safe_print(f"Test Results: {passed}/{total} tests passed")
 
     if passed == total:
-        safe_safe_print("🎉 All tests passed! Real integration is working correctly.")
-        safe_safe_print("✅ Low-risk phase is complete and ready for medium-risk integration.")
+        safe_safe_print("\\u1f389 All tests passed! Real integration is working correctly.")
+        safe_safe_print("\\u2705 Low-risk phase is complete and ready for medium-risk integration.")
         return True
     else:
-        safe_safe_print("⚠️  Some tests failed. Please check the implementation before proceeding.")
+        safe_safe_print("\\u26a0\\ufe0f  Some tests failed. Please check the implementation before proceeding.")
         return False
 
 

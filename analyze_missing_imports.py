@@ -169,7 +169,7 @@ class ImportAnalyzer:
             report.append("FILES WITH MISSING IMPORTS:")
             report.append("-" * 40)
             for file_path, missing_list in analysis['missing_imports'].items():
-                report.append(f"\n{file_path}:")
+                report.append(f"\\n{file_path}:")
                 for missing in missing_list:
                     report.append(f"  Line {missing['line']}: {missing['type']} {missing['path']}")
             report.append("")
@@ -226,7 +226,7 @@ def main():
     with open('import_analysis.json', 'w') as f:
         json.dump(analysis, f, indent=2)
 
-    print(f"\nDetailed analysis saved to: import_analysis.json")
+    print(f"\\nDetailed analysis saved to: import_analysis.json")
 
     # Save report to file
     with open('missing_imports_report.txt', 'w') as f:
@@ -237,3 +237,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

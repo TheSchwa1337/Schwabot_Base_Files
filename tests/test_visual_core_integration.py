@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_visual_core_integration.py — TEMPORARY STUB GENERATED AUTOMATICALLY.
+"""test_visual_core_integration.py \\u2014 TEMPORARY STUB GENERATED AUTOMATICALLY.
 
 The original file failed to parse; a stub was generated so the package
 remains importable.  Replace with a clean implementation ASAP.
@@ -13,4 +13,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-\n# -*- coding: utf-8 -*-\n
+\\n# -*- coding: utf-8 -*-\\n
+"""

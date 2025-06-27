@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""profit_echo_velocity_driver – volatility burst memory for profit echo.
+"""profit_echo_velocity_driver \\u2013 volatility burst memory for profit echo.
 
 Implements the volatility burst memory logic:
-    χₘ(t, v) = |ΔV|ⁿ · σ(Ξ·ε)
+    \\u03c7\\u2098(t, v) = |\\u0394V|\\u207f \\u00b7 \\u03c3(\\u039e\\u00b7\\u03b5)
 
 This module drives profit echo calculations using volatility burst memory
 patterns for enhanced ghost protocol performance.
@@ -38,16 +38,16 @@ class ProfitEchoVelocityDriver:
         xi_values: Sequence[float],
         epsilon_scaling: float,
     ) -> np.ndarray:
-        """Compute χₘ(t, v) = |ΔV|ⁿ * σ(Ξ*ε).
+        """Compute \\u03c7\\u2098(t, v) = |\\u0394V|\\u207f * \\u03c3(\\u039e*\\u03b5).
 
         Parameters
         ----------
         volume_deltas
-            Volume change values ΔV.
+            Volume change values \\u0394V.
         xi_values
-            Xi parameter values Ξ.
+            Xi parameter values \\u039e.
         epsilon_scaling
-            Epsilon scaling factor ε.
+            Epsilon scaling factor \\u03b5.
         """
         delta_v = np.asarray(volume_deltas, dtype=float)
         xi = np.asarray(xi_values, dtype=float)
@@ -57,14 +57,14 @@ class ProfitEchoVelocityDriver:
         delta_v = delta_v[:min_len]
         xi = xi[:min_len]
 
-        # Compute |ΔV|ⁿ
+        # Compute |\\u0394V|\\u207f
         abs_delta_v_n = unified_math.unified_math.power(unified_math.unified_math.abs(delta_v), self.n_exponent)
 
-        # Compute σ(Ξ*ε) - sigmoid of xi * epsilon
+        # Compute \\u03c3(\\u039e*\\u03b5) - sigmoid of xi * epsilon
         xi_epsilon = xi * epsilon_scaling
         sigma_xi_eps = 1.0 / (1.0 + unified_math.exp(-xi_epsilon))
 
-        # Compute χₘ(t, v) = |ΔV|ⁿ * σ(Ξ*ε)
+        # Compute \\u03c7\\u2098(t, v) = |\\u0394V|\\u207f * \\u03c3(\\u039e*\\u03b5)
         chi_m = abs_delta_v_n * sigma_xi_eps
 
         return chi_m
@@ -80,7 +80,7 @@ class ProfitEchoVelocityDriver:
         Parameters
         ----------
         chi_m_values
-            Computed χₘ values from compute_chi_m.
+            Computed \\u03c7\\u2098 values from compute_chi_m.
         historical_profits
             Historical profit values for echo calculation.
         time_weights
@@ -205,7 +205,7 @@ def compute_volatility_burst_memory(
     n_exponent: float = 2.0,
     epsilon: float = 0.1,
 ) -> np.ndarray:  # noqa: D401
-    """Compute volatility burst memory χₘ(t, v)."""
+    """Compute volatility burst memory \\u03c7\\u2098(t, v)."""
     driver = ProfitEchoVelocityDriver(n_exponent=n_exponent, epsilon=epsilon)
     return driver.compute_chi_m(volume_deltas, xi_values, epsilon)
 

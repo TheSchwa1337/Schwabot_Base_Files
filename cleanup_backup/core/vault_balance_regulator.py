@@ -9,10 +9,10 @@ This module handles vault balance regulation, asset conversion logic,
 and fallback mechanisms for overflow and density rebalancing.
 
 Mathematical Foundation:
-- Vault imbalance delta: Δ_vault = |B_target/B_actual - 1|
-- Mean reversion trigger: φ(t) = λ * (B_actual - B_mean)
-- Threshold ping logic: ζ(t) = ReLU(Δ_vault - δ)
-- Rebalance vector: R_vec = D_p * vault_ratio(profit, σ_x)
+- Vault imbalance delta: \\u0394_vault = |B_target/B_actual - 1|
+- Mean reversion trigger: \\u03c6(t) = \\u03bb * (B_actual - B_mean)
+- Threshold ping logic: \\u03b6(t) = ReLU(\\u0394_vault - \\u03b4)
+- Rebalance vector: R_vec = D_p * vault_ratio(profit, \\u03c3_x)
 
 Windows CLI compatible with comprehensive error handling.
 """
@@ -188,7 +188,7 @@ class VaultBalanceRegulator:
         """Calculate vault imbalance delta.
 
         Mathematical Formula:
-        Δ_vault = |B_target/B_actual - 1|
+        \\u0394_vault = |B_target/B_actual - 1|
 
         Parameters
         ----------
@@ -223,7 +223,7 @@ class VaultBalanceRegulator:
         """Calculate mean reversion trigger.
 
         Mathematical Formula:
-        φ(t) = λ * (B_actual - B_mean)
+        \\u03c6(t) = \\u03bb * (B_actual - B_mean)
 
         Parameters
         ----------
@@ -260,7 +260,7 @@ class VaultBalanceRegulator:
         """Calculate threshold ping logic.
 
         Mathematical Formula:
-        ζ(t) = ReLU(Δ_vault - δ)
+        \\u03b6(t) = ReLU(\\u0394_vault - \\u03b4)
 
         Parameters
         ----------
@@ -598,7 +598,7 @@ def main() -> None:
             f"  {asset.value}: ${balance:,.0f} (Target: {vault.target_allocation:.1%}, Actual: {vault.actual_allocation:.1%})")
 
     # Generate rebalance signals
-    safe_print(f"\nGenerating rebalance signals:")
+    safe_print(f"\\nGenerating rebalance signals:")
     signals = regulator.generate_rebalance_signals(profit_factor=1.2, volatility_sigma=0.15)
 
     for signal in signals:
@@ -624,7 +624,7 @@ def main() -> None:
     safe_print(f"  Rebalance Frequency: {vault_state.rebalance_frequency:.1f}/hour")
 
     # Test target allocation update
-    safe_print(f"\nTesting target allocation update:")
+    safe_print(f"\\nTesting target allocation update:")
     new_targets = {
         Asset.BTC: 0.7,     # Increase BTC to 70%
         Asset.USDC: 0.2,    # Decrease USDC to 20%
@@ -636,7 +636,7 @@ def main() -> None:
     safe_print(f"  Target update successful: {updated}")
 
     # Regulator summary
-    safe_print(f"\nRegulator Summary:")
+    safe_print(f"\\nRegulator Summary:")
     summary = regulator.get_regulator_summary()
     for key, value in summary.items():
         if isinstance(value, dict):
@@ -649,3 +649,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

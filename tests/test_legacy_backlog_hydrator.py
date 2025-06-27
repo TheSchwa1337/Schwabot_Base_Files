@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Legacy Backlog Hydrator Test - Schwabot Framework.
@@ -164,11 +164,11 @@ class LegacyBacklogHydratorTest:
             )
         ]
 
-        logger.info("📚 Legacy Backlog Hydrator Test initialized")
+        logger.info("\\u1f4da Legacy Backlog Hydrator Test initialized")
 
     def test_historical_trade_loading(self) -> Dict[str, Any]:
         """Test historical trade data loading and parsing."""
-        logger.info("📥 Testing historical trade data loading")
+        logger.info("\\u1f4e5 Testing historical trade data loading")
 
         results = {
             'test_name': 'historical_trade_loading',
@@ -232,15 +232,15 @@ class LegacyBacklogHydratorTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Historical trade data loading test passed")
+            logger.info("\\u2705 Historical trade data loading test passed")
         else:
-            logger.error(f"❌ Historical trade data loading test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Historical trade data loading test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_trade_backlog_integrity(self) -> Dict[str, Any]:
         """Test trade backlog integrity and consistency."""
-        logger.info("🔍 Testing trade backlog integrity")
+        logger.info("\\u1f50d Testing trade backlog integrity")
 
         results = {
             'test_name': 'trade_backlog_integrity',
@@ -299,15 +299,15 @@ class LegacyBacklogHydratorTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Trade backlog integrity test passed")
+            logger.info("\\u2705 Trade backlog integrity test passed")
         else:
-            logger.error(f"❌ Trade backlog integrity test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Trade backlog integrity test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_loss_trade_identification(self) -> Dict[str, Any]:
         """Test loss trade identification and reanalysis."""
-        logger.info("📉 Testing loss trade identification")
+        logger.info("\\u1f4c9 Testing loss trade identification")
 
         results = {
             'test_name': 'loss_trade_identification',
@@ -363,15 +363,15 @@ class LegacyBacklogHydratorTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Loss trade identification test passed")
+            logger.info("\\u2705 Loss trade identification test passed")
         else:
-            logger.error(f"❌ Loss trade identification test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Loss trade identification test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_backtest_data_reconstruction(self) -> Dict[str, Any]:
         """Test backtest data reconstruction."""
-        logger.info("🔄 Testing backtest data reconstruction")
+        logger.info("\\u1f504 Testing backtest data reconstruction")
 
         results = {
             'test_name': 'backtest_data_reconstruction',
@@ -428,15 +428,15 @@ class LegacyBacklogHydratorTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Backtest data reconstruction test passed")
+            logger.info("\\u2705 Backtest data reconstruction test passed")
         else:
-            logger.error(f"❌ Backtest data reconstruction test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Backtest data reconstruction test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_historical_pattern_recognition(self) -> Dict[str, Any]:
         """Test historical pattern recognition."""
-        logger.info("🔍 Testing historical pattern recognition")
+        logger.info("\\u1f50d Testing historical pattern recognition")
 
         results = {
             'test_name': 'historical_pattern_recognition',
@@ -518,15 +518,15 @@ class LegacyBacklogHydratorTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Historical pattern recognition test passed")
+            logger.info("\\u2705 Historical pattern recognition test passed")
         else:
-            logger.error(f"❌ Historical pattern recognition test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Historical pattern recognition test failed: {len(results['errors'])} errors")
 
         return results
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive legacy backlog hydration test."""
-        logger.info("🚀 Running comprehensive legacy backlog hydration test")
+        logger.info("\\u1f680 Running comprehensive legacy backlog hydration test")
 
         start_time = time.time()
 
@@ -563,9 +563,9 @@ class LegacyBacklogHydratorTest:
         }
 
         if all_passed:
-            logger.info(f"✅ Comprehensive legacy backlog hydration test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive legacy backlog hydration test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"❌ Comprehensive legacy backlog hydration test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive legacy backlog hydration test failed with {total_errors} errors")
 
         return comprehensive_result
 
@@ -598,17 +598,19 @@ if __name__ == "__main__":
 
     # Print results
     safe_print("\n" + "="*60)
-    safe_print("📚 LEGACY BACKLOG HYDRATOR TEST RESULTS")
+    safe_print("\\u1f4da LEGACY BACKLOG HYDRATOR TEST RESULTS")
     safe_print("="*60)
 
-    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
 
     if 'test_components' in result:
-        safe_print("\nComponent Results:")
+        safe_print("\\nComponent Results:")
         for component, component_result in result['test_components'].items():
-            status = "✅ PASS" if component_result['success'] else "❌ FAIL"
+            status = "\\u2705 PASS" if component_result['success'] else "\\u274c FAIL"
             safe_print(f"  {component}: {status}")
 
     safe_print("="*60)
+
+"""

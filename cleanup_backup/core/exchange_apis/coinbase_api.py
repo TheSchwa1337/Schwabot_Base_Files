@@ -97,3 +97,5 @@ class CoinbaseAPI(ExchangeAPI):
             error_msg = f"Error signing Coinbase request: {e}"
             self.safe_log("error", error_msg)
             raise
+
+"""

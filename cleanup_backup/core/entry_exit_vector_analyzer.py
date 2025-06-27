@@ -4,7 +4,7 @@ from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Entry/exit vector analyzer with routing elasticity.
 
-This module implements Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t routing elasticity
+This module implements \\u039b\\u1d3f(t) = R\\u1d62(x, y) \\u00b7 \\u03a3 \\u2202P/\\u2202t routing elasticity
 for entry/exit signal analysis in Schwabot's mathematical trading framework.
 """
 
@@ -34,12 +34,12 @@ class EntryExitVectorAnalyzer:
         price_series: Sequence[float],
         timestamps: Sequence[float],
     ) -> float:
-        """Compute routing elasticity Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t.
+        """Compute routing elasticity \\u039b\\u1d3f(t) = R\\u1d62(x, y) \\u00b7 \\u03a3 \\u2202P/\\u2202t.
 
         Parameters
         ----------
         r_function
-            Routing function Rᵢ(x, y).
+            Routing function R\\u1d62(x, y).
         x_positions
             X-coordinate positions.
         y_positions
@@ -52,7 +52,7 @@ class EntryExitVectorAnalyzer:
         Returns
         -------
         float
-            Routing elasticity value Λᴿ(t).
+            Routing elasticity value \\u039b\\u1d3f(t).
         """
         if len(x_positions) != len(y_positions):
             raise ValueError("x_positions and y_positions must have same length")
@@ -66,7 +66,7 @@ class EntryExitVectorAnalyzer:
         prices = np.asarray(price_series, dtype=float)
         times = np.asarray(timestamps, dtype=float)
 
-        # Compute price derivatives Σ ∂P/∂t
+        # Compute price derivatives \\u03a3 \\u2202P/\\u2202t
         if len(prices) < 2:
             dp_dt_sum = 0.0
         else:
@@ -75,13 +75,13 @@ class EntryExitVectorAnalyzer:
             )
             dp_dt_sum = float(np.sum(dp_dt))
 
-        # Compute routing function values Rᵢ(x, y)
+        # Compute routing function values R\\u1d62(x, y)
         r_values = np.array(
             [r_function(x, y) for x, y in zip(x_array, y_array)]
         )
         r_sum = float(np.sum(r_values))
 
-        # Compute Λᴿ(t) = Rᵢ(x, y) · Σ ∂P/∂t
+        # Compute \\u039b\\u1d3f(t) = R\\u1d62(x, y) \\u00b7 \\u03a3 \\u2202P/\\u2202t
         lambda_r = r_sum * dp_dt_sum
 
         return lambda_r
@@ -158,7 +158,7 @@ class EntryExitVectorAnalyzer:
             risks = risks[:min_len]
 
         # Exit signal: inverse relationship with entry strength
-        # Strong entry → delayed exit, weak entry → quick exit
+        # Strong entry \\u2192 delayed exit, weak entry \\u2192 quick exit
         exit_urgency = risks / (entry_signals + 0.1)  # avoid division by zero
         exit_opportunity = targets * unified_math.exp(-entry_signals)
 
@@ -228,7 +228,7 @@ def compute_routing_elasticity(
     price_series: Sequence[float],
     dt: float = 1.0,
 ) -> float:
-    """Compute routing elasticity Λᴿ(t) for given positions and prices."""
+    """Compute routing elasticity \\u039b\\u1d3f(t) for given positions and prices."""
     analyzer = EntryExitVectorAnalyzer(dt=dt)
 
     x_pos = [pos[0] for pos in positions]
@@ -260,3 +260,5 @@ def analyze_entry_exit_vectors(
     )
 
     return entry_signals, exit_signals
+
+"""

@@ -27,12 +27,12 @@ from utils.safe_print import safe_print
 
 def test_ghost_phase_strategy_loader():
     """Test basic GhostPhaseStrategyLoader functionality."""
-    safe_print("🧪 Testing GhostPhaseStrategyLoader...")
+    safe_print("\\u1f9ea Testing GhostPhaseStrategyLoader...")
 
     # Use the overlay file we created
     overlay_path = "memory_stack/aleph_overlays.json"
     if not Path(overlay_path).exists():
-        safe_print(f"❌ Overlay file not found: {overlay_path}")
+        safe_print(f"\\u274c Overlay file not found: {overlay_path}")
         return False
 
     try:
@@ -53,22 +53,22 @@ def test_ghost_phase_strategy_loader():
         assert len(decision.strategy_id) > 0, "Strategy ID must not be empty"
         assert isinstance(decision.consensus, bool), "Consensus must be boolean"
 
-        safe_print(f"✅ Strategy ID: {decision.strategy_id}")
-        safe_print(f"✅ Phase: {decision.phase_report.phase_state.name}")
-        safe_print(f"✅ Consensus: {decision.consensus}")
-        safe_print(f"✅ Overlay: {decision.overlay_match.overlay_id}")
-        safe_print(f"✅ Similarity: {decision.overlay_match.similarity:.3f}")
+        safe_print(f"\\u2705 Strategy ID: {decision.strategy_id}")
+        safe_print(f"\\u2705 Phase: {decision.phase_report.phase_state.name}")
+        safe_print(f"\\u2705 Consensus: {decision.consensus}")
+        safe_print(f"\\u2705 Overlay: {decision.overlay_match.overlay_id}")
+        safe_print(f"\\u2705 Similarity: {decision.overlay_match.similarity:.3f}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Test failed: {e}")
+        safe_print(f"\\u274c Test failed: {e}")
         return False
 
 
 def test_ghost_trigger_mapper():
     """Test GhostTriggerMapper functionality."""
-    safe_print("\n# -*- coding: utf-8 -*-\n🧪 Testing GhostTriggerMapper...")
+    safe_print("\\n# -*- coding: utf-8 -*-\\n\\u1f9ea Testing GhostTriggerMapper...")
 
     try:
         # Initialize mapper
@@ -91,20 +91,20 @@ def test_ghost_trigger_mapper():
         assert isinstance(result.confidence, float), "Confidence must be float"
         assert 0.0 <= result.confidence <= 1.0, "Confidence must be in [0,1]"
 
-        safe_print(f"✅ Triggered: {result.triggered}")
-        safe_print(f"✅ Strategy: {result.strategy_id}")
-        safe_print(f"✅ Confidence: {result.confidence:.3f}")
+        safe_print(f"\\u2705 Triggered: {result.triggered}")
+        safe_print(f"\\u2705 Strategy: {result.strategy_id}")
+        safe_print(f"\\u2705 Confidence: {result.confidence:.3f}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Test failed: {e}")
+        safe_print(f"\\u274c Test failed: {e}")
         return False
 
 
 def test_strategy_mapper():
     """Test modern StrategyMapper functionality."""
-    safe_print("\n🧪 Testing StrategyMapper...")
+    safe_print("\\n\\u1f9ea Testing StrategyMapper...")
 
     try:
         # Initialize mapper
@@ -123,20 +123,20 @@ def test_strategy_mapper():
         assert isinstance(result.strategy_id, str), "Strategy ID must be string"
         assert len(result.recommendations) >= 0, "Recommendations must be list"
 
-        safe_print(f"✅ Success: {result.success}")
-        safe_print(f"✅ Strategy: {result.strategy_id}")
-        safe_print(f"✅ Recommendations: {len(result.recommendations)}")
+        safe_print(f"\\u2705 Success: {result.success}")
+        safe_print(f"\\u2705 Strategy: {result.strategy_id}")
+        safe_print(f"\\u2705 Recommendations: {len(result.recommendations)}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Test failed: {e}")
+        safe_print(f"\\u274c Test failed: {e}")
         return False
 
 
 def test_ghost_trigger_map_legacy():
     """Test legacy ghost trigger map function."""
-    safe_print("\n🧪 Testing generate_ghost_trigger_map...")
+    safe_print("\\n\\u1f9ea Testing generate_ghost_trigger_map...")
 
     try:
         # Generate trigger map
@@ -151,20 +151,20 @@ def test_ghost_trigger_map_legacy():
         assert "strategy_mapping" in trigger_map, "Must have strategy_mapping"
         assert trigger_map["trigger_type"] == "ghost_phase", "Must be ghost_phase type"
 
-        safe_print(f"✅ Trigger type: {trigger_map['trigger_type']}")
-        safe_print(f"✅ Parameters: {trigger_map['parameters']}")
-        safe_print(f"✅ Strategy mappings: {len(trigger_map['strategy_mapping'])}")
+        safe_print(f"\\u2705 Trigger type: {trigger_map['trigger_type']}")
+        safe_print(f"\\u2705 Parameters: {trigger_map['parameters']}")
+        safe_print(f"\\u2705 Strategy mappings: {len(trigger_map['strategy_mapping'])}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Test failed: {e}")
+        safe_print(f"\\u274c Test failed: {e}")
         return False
 
 
 def test_mathematical_integration():
     """Test integration of all mathematical components."""
-    safe_print("\n🧪 Testing mathematical component integration...")
+    safe_print("\\n\\u1f9ea Testing mathematical component integration...")
 
     try:
         # Test that all mathematical modules can be imported and used together
@@ -183,13 +183,13 @@ def test_mathematical_integration():
         weighter = DriftPhaseWeighter(lambda_=0.4)
         drift_report = weighter.calculate_drift_weight(prices)
         assert isinstance(drift_report.drift_weight, float)
-        safe_print("✅ DriftPhaseWeighter working")
+        safe_print("\\u2705 DriftPhaseWeighter working")
 
         # 2. Ghost Field Stabilizer
         stabilizer = GhostFieldStabilizer()
         stability = stabilizer.check_stability(prices)
         assert isinstance(stability.is_stable, bool)
-        safe_print("✅ GhostFieldStabilizer working")
+        safe_print("\\u2705 GhostFieldStabilizer working")
 
         # 3. Truth Lattice Math
         signals = [0.6, 0.4, 0.7, 0.5]
@@ -197,7 +197,7 @@ def test_mathematical_integration():
         consensus = is_consensus_reached(signals, omega=1.0)
         assert isinstance(score, float)
         assert isinstance(consensus.reached, bool)
-        safe_print("✅ TruthLatticeMath working")
+        safe_print("\\u2705 TruthLatticeMath working")
 
         # 4. Math Utils
         entropy = calculate_entropy(prices)
@@ -206,30 +206,30 @@ def test_mathematical_integration():
         similarity = cosine_similarity(vec_a, vec_b)
         assert isinstance(entropy, float)
         assert isinstance(similarity, float)
-        safe_print("✅ MathUtils working")
+        safe_print("\\u2705 MathUtils working")
 
         # 5. Bit Wave Propagator
         phase_vector = allocate_phase_vector(8, signals)
         assert phase_vector.bit_depth == 8
-        safe_print("✅ BitWavePropagator working")
+        safe_print("\\u2705 BitWavePropagator working")
 
-        safe_print("✅ All mathematical components integrated successfully")
+        safe_print("\\u2705 All mathematical components integrated successfully")
         return True
 
     except Exception as e:
-        safe_print(f"❌ Mathematical integration test failed: {e}")
+        safe_print(f"\\u274c Mathematical integration test failed: {e}")
         return False
 
 
 def test_hybrid_strategy_mapper():
     """Test hybrid strategy mapper with both Ghost Phase and legacy paths."""
-    safe_print("\n🧪 Testing Hybrid Strategy Mapper...")
+    safe_print("\\n\\u1f9ea Testing Hybrid Strategy Mapper...")
 
     try:
         from core.strategy_mapper import StrategyMapper
 
         # Test 1: Ghost Phase Path
-        safe_print("  📊 Testing Ghost Phase path...")
+        safe_print("  \\u1f4ca Testing Ghost Phase path...")
         mapper_ghost = StrategyMapper(
             enable_ghost_phase=True,
             enable_legacy=False,
@@ -248,10 +248,10 @@ def test_hybrid_strategy_mapper():
         assert result_ghost.ghost_decision is not None, "Should have ghost decision"
         assert isinstance(result_ghost.strategy_id, str), "Strategy ID must be string"
         assert len(result_ghost.recommendations) > 0, "Should have recommendations"
-        safe_print(f"    ✅ Ghost Phase: {result_ghost.strategy_id}")
+        safe_print(f"    \\u2705 Ghost Phase: {result_ghost.strategy_id}")
 
         # Test 2: Legacy Path
-        safe_print("  📊 Testing Legacy path...")
+        safe_print("  \\u1f4ca Testing Legacy path...")
         mapper_legacy = StrategyMapper(
             enable_ghost_phase=False,
             enable_legacy=True,
@@ -272,10 +272,10 @@ def test_hybrid_strategy_mapper():
         assert result_legacy.success, "Legacy path should succeed"
         assert result_legacy.mapped_strategy is not None, "Should have mapped strategy"
         assert isinstance(result_legacy.strategy_id, str), "Strategy ID must be string"
-        safe_print(f"    ✅ Legacy: {result_legacy.strategy_id}")
+        safe_print(f"    \\u2705 Legacy: {result_legacy.strategy_id}")
 
         # Test 3: Hybrid Auto-Detection
-        safe_print("  📊 Testing Hybrid auto-detection...")
+        safe_print("  \\u1f4ca Testing Hybrid auto-detection...")
         mapper_hybrid = StrategyMapper(
             enable_ghost_phase=True,
             enable_legacy=True,
@@ -287,7 +287,7 @@ def test_hybrid_strategy_mapper():
             prices, live_vector, raw_signals, None, None  # No explicit override
         )
         assert "ghost_phase" in result_auto_ghost.metadata.get("path", "")
-        safe_print(f"    ✅ Auto-detection Ghost: {result_auto_ghost.strategy_id}")
+        safe_print(f"    \\u2705 Auto-detection Ghost: {result_auto_ghost.strategy_id}")
 
         # Legacy packet should use legacy path
         legacy_packet = {"agent_type": "SCHWABOT", "alpha_score": 0.5}
@@ -295,7 +295,7 @@ def test_hybrid_strategy_mapper():
             prices, live_vector, raw_signals, legacy_packet, None
         )
         assert "legacy" in result_auto_legacy.metadata.get("path", "")
-        safe_print(f"    ✅ Auto-detection Legacy: {result_auto_legacy.strategy_id}")
+        safe_print(f"    \\u2705 Auto-detection Legacy: {result_auto_legacy.strategy_id}")
 
         # Test 4: Performance Statistics
         stats = mapper_hybrid.get_performance_stats()
@@ -303,18 +303,18 @@ def test_hybrid_strategy_mapper():
         assert "ghost_decisions" in stats, "Should track ghost decisions"
         assert "legacy_mappings" in stats, "Should track legacy mappings"
         safe_print(
-            f"    ✅ Stats: {stats['total_mappings']} total, {stats['ghost_decisions']} ghost, {stats['legacy_mappings']} legacy")
+            f"    \\u2705 Stats: {stats['total_mappings']} total, {stats['ghost_decisions']} ghost, {stats['legacy_mappings']} legacy")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Hybrid test failed: {e}")
+        safe_print(f"\\u274c Hybrid test failed: {e}")
         return False
 
 
 def test_legacy_compatibility_functions():
     """Test legacy compatibility functions work correctly."""
-    safe_print("\n🧪 Testing Legacy Compatibility Functions...")
+    safe_print("\\n\\u1f9ea Testing Legacy Compatibility Functions...")
 
     try:
         from core.strategy_mapper import map_strategy, map_strategy_enhanced
@@ -329,7 +329,7 @@ def test_legacy_compatibility_functions():
         mapped_result = map_strategy(execution_packet)
         assert isinstance(mapped_result, dict), "Legacy function should return dict"
         assert "mapped_at" in mapped_result, "Should have mapping timestamp"
-        safe_print(f"    ✅ Legacy map_strategy: {mapped_result.get('strategy_id', 'unknown')}")
+        safe_print(f"    \\u2705 Legacy map_strategy: {mapped_result.get('strategy_id', 'unknown')}")
 
         # Test enhanced async function
         import asyncio
@@ -345,18 +345,18 @@ def test_legacy_compatibility_functions():
             return enhanced_result
 
         enhanced_result = asyncio.run(test_async())
-        safe_print(f"    ✅ Enhanced async: {enhanced_result.strategy_id}")
+        safe_print(f"    \\u2705 Enhanced async: {enhanced_result.strategy_id}")
 
         return True
 
     except Exception as e:
-        safe_print(f"❌ Legacy compatibility test failed: {e}")
+        safe_print(f"\\u274c Legacy compatibility test failed: {e}")
         return False
 
 
 def main():
     """Run all integration tests."""
-    safe_print("🚀 Ghost Phase Strategy Loader Integration Tests")
+    safe_print("\\u1f680 Ghost Phase Strategy Loader Integration Tests")
     safe_print("=" * 60)
 
     tests = [
@@ -377,13 +377,13 @@ def main():
             passed += 1
 
     safe_print("\n" + "=" * 60)
-    safe_print(f"📊 Test Results: {passed}/{total} tests passed")
+    safe_print(f"\\u1f4ca Test Results: {passed}/{total} tests passed")
 
     if passed == total:
-        safe_print("🎉 All tests passed! Hybrid mathematical integration is working correctly.")
+        safe_print("\\u1f389 All tests passed! Hybrid mathematical integration is working correctly.")
         return True
     else:
-        safe_print("❌ Some tests failed. Please check the implementation.")
+        safe_print("\\u274c Some tests failed. Please check the implementation.")
         return False
 
 

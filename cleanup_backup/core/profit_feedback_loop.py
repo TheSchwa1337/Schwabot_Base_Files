@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Profit feedback loop – reinforcement signal δ_profit_t.
+"""Profit feedback loop \\u2013 reinforcement signal \\u03b4_profit_t.
 
 Implements the summation:
-    δ_profit_t = Σ ( ζ_i · τ_i · PnL_i )
-where ζ_i is trade-phase weighting, τ_i trade duration (seconds) and PnL_i the
+    \\u03b4_profit_t = \\u03a3 ( \\u03b6_i \\u00b7 \\u03c4_i \\u00b7 PnL_i )
+where \\u03b6_i is trade-phase weighting, \\u03c4_i trade duration (seconds) and PnL_i the
 profit/loss of trade *i*.
 """
 
@@ -23,7 +23,7 @@ def profit_feedback_delta(
     durations: Sequence[float],
     pnl: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return δ_profit_t scalar.
+    """Return \\u03b4_profit_t scalar.
 
     All input sequences must share length; missing values raise ValueError.
     """

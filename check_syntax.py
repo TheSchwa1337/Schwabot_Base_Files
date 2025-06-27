@@ -31,14 +31,16 @@ def check_syntax_errors():
     print(f"Files without syntax errors: {total_files - len(syntax_errors)}")
 
     if syntax_errors:
-        print("\nFiles with syntax errors:")
+        print("\\nFiles with syntax errors:")
         for file_path, error in syntax_errors:
             print(f"  {file_path}: {error}")
     else:
-        print("\n🎉 All Python files have valid syntax!")
+        print("\\n\\u1f389 All Python files have valid syntax!")
 
     return len(syntax_errors)
 
 
 if __name__ == "__main__":
     check_syntax_errors()
+
+"""

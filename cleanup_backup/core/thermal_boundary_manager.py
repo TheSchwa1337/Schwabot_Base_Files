@@ -718,8 +718,8 @@ class ThermalBoundaryManager:
             temp_deltas = [recent_temps[i+1] - recent_temps[i] for i in range(len(recent_temps)-1)]
 
             max_delta = unified_math.max(unified_math.abs(d) for d in temp_deltas)
-            if max_delta > 10:  # More than 10°C change
-                logger.warning(f"Rapid temperature change detected: {max_delta}°C")
+            if max_delta > 10:  # More than 10\\u00b0C change
+                logger.warning(f"Rapid temperature change detected: {max_delta}\\u00b0C")
                 await self._trigger_thermal_alert("rapid_temperature_change", max_delta)
 
             # Check for sustained high temperature

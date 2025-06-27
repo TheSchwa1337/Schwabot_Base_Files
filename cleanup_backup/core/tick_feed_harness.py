@@ -86,7 +86,7 @@ class TickFeedHarness:
 
     Mathematical Foundation:
     - Bit Phase Resolution: bit_4 = strategy_id & 0b1111, bit_8 = strategy_id & 0b11111111, bit_42 = strategy_id & 0x3FFFFFFFFFF
-    - Tensor Scoring: T = (delta²) * entropy * multiplier
+    - Tensor Scoring: T = (delta\\u00b2) * entropy * multiplier
     - Profit Zone Allocation: P = {short: profit if bit_4 % 3 == 0, mid: profit * 0.65 if bit_8 % 5 == 0, long: profit * 1.1 if bit_42 % 7 == 0}
     - Rebalance Scoring: R = (P_short + P_mid + P_long) / (1 + entropy_gate)
     """
@@ -428,7 +428,7 @@ class TickFeedHarness:
         Calculate tensor profit score.
 
         Mathematical Formula:
-        T = (delta²) * entropy * multiplier
+        T = (delta\\u00b2) * entropy * multiplier
 
         Parameters:
         -----------
@@ -502,21 +502,21 @@ class TickFeedHarness:
 
 def main():
     """Test function for Tick Feed Harness."""
-    safe_print("🔄 Testing Tick Feed Harness...")
+    safe_print("\\u1f504 Testing Tick Feed Harness...")
 
     # Initialize harness in demo mode
     harness = TickFeedHarness(mode=FeedMode.DEMO)
 
     # Simulate ticks
-    safe_print("📊 Simulating 32 ticks...")
+    safe_print("\\u1f4ca Simulating 32 ticks...")
     ticks = harness.simulate_ticks(32)
 
-    safe_print(f"✅ Generated {len(ticks)} ticks")
+    safe_print(f"\\u2705 Generated {len(ticks)} ticks")
 
     # Print sample tick
     if ticks:
         sample_tick = ticks[0]
-        safe_print(f"\n📈 Sample Tick:")
+        safe_print(f"\\n\\u1f4c8 Sample Tick:")
         safe_print(f"  Asset: {sample_tick.asset}")
         safe_print(f"  Price: ${sample_tick.price:.2f}")
         safe_print(f"  Volume: {sample_tick.volume:.0f}")
@@ -528,7 +528,7 @@ def main():
 
     # Get statistics
     stats = harness.get_feed_statistics()
-    safe_print(f"\n📊 Feed Statistics:")
+    safe_print(f"\\n\\u1f4ca Feed Statistics:")
     safe_print(f"  Total Ticks: {stats['total_ticks']}")
     safe_print(f"  Rebalance Triggers: {stats['rebalance_triggers']}")
     safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")

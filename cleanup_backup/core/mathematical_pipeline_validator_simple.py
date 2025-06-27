@@ -792,7 +792,7 @@ if __name__ == "__main__":
     async def main():
         report = await run_simplified_mathematical_pipeline_validation()
 
-        safe_print(f"\n{'='*60}")
+        safe_print(f"\\n{'='*60}")
         safe_print(f"SIMPLIFIED MATHEMATICAL PIPELINE VALIDATION REPORT")
         safe_print(f"{'='*60}")
         safe_print(f"Timestamp: {report.timestamp}")
@@ -800,21 +800,23 @@ if __name__ == "__main__":
         safe_print(f"Production Readiness Score: {report.production_readiness_score:.3f}")
         safe_print(f"Average Confidence: {report.average_confidence:.3f}")
         safe_print(f"Total Execution Time: {report.total_execution_time:.2f}ms")
-        safe_print(f"\nComponent Results:")
+        safe_print(f"\\nComponent Results:")
         safe_print(f"  Passed: {report.passed_components}")
         safe_print(f"  Failed: {report.failed_components}")
         safe_print(f"  Warnings: {report.warning_components}")
 
         if report.critical_issues:
-            safe_print(f"\nCritical Issues:")
+            safe_print(f"\\nCritical Issues:")
             for issue in report.critical_issues:
                 safe_print(f"  ERROR: {issue}")
 
         if report.optimization_recommendations:
-            safe_print(f"\nOptimization Recommendations:")
+            safe_print(f"\\nOptimization Recommendations:")
             for rec in report.optimization_recommendations:
                 safe_print(f"  WARNING: {rec}")
 
-        safe_print(f"\n{'='*60}")
+        safe_print(f"\\n{'='*60}")
 
     asyncio.run(main())
+
+"""

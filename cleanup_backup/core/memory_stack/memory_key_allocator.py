@@ -8,10 +8,10 @@ This module generates symbolic or hash-based memory keys and links them to
 hash, matrix, curve, and profit data for Schwabot's recursive memory system.
 
 Mathematical Foundation:
-- Memory Key: MK = f(agent, hash, tick, α, matrix_id)
-- Hash Similarity: S = Σ(1 for a==b in zip(h1, h2)) / len(h1)
+- Memory Key: MK = f(agent, hash, tick, \\u03b1, matrix_id)
+- Hash Similarity: S = \\u03a3(1 for a==b in zip(h1, h2)) / len(h1)
 - Symbolic Key: SK = AgentType + Domain + Date + HashSuffix
-- Link Strength: L = α * confidence * time_decay
+- Link Strength: L = \\u03b1 * confidence * time_decay
 """
 
 import json
@@ -162,7 +162,7 @@ class MemoryKeyAllocator:
         # Load existing memory
         self._load_memory_keys()
 
-        safe_safe_print("🔑 Memory Key Allocator initialized - Symbolic memory active")
+        safe_safe_print("\\u1f511 Memory Key Allocator initialized - Symbolic memory active")
 
     def _load_memory_keys(self) -> None:
         """Load existing memory keys from file."""
@@ -221,11 +221,11 @@ class MemoryKeyAllocator:
                     self.memory_clusters[memory_cluster.cluster_id] = memory_cluster
 
                 safe_safe_print(
-                    f"🔑 Loaded {len(self.memory_keys)} memory keys, {len(self.memory_links)} links, {len(self.memory_clusters)} clusters")
+                    f"\\u1f511 Loaded {len(self.memory_keys)} memory keys, {len(self.memory_links)} links, {len(self.memory_clusters)} clusters")
 
         except Exception as e:
             error_msg = safe_format_error(e, "load_memory_keys")
-            safe_safe_print(f"⚠️ Failed to load memory keys: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to load memory keys: {error_msg}")
 
     def _save_memory_keys(self) -> None:
         """Save memory keys to file."""
@@ -268,7 +268,7 @@ class MemoryKeyAllocator:
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_memory_keys")
-            safe_safe_print(f"⚠️ Failed to save memory keys: {error_msg}")
+            safe_safe_print(f"\\u26a0\\ufe0f Failed to save memory keys: {error_msg}")
 
     def allocate_memory_key(
         self,
@@ -342,12 +342,12 @@ class MemoryKeyAllocator:
             # Save to file
             self._save_memory_keys()
 
-            safe_safe_print(f"🔑 Memory key allocated: {key_id} ({key_type.value})")
+            safe_safe_print(f"\\u1f511 Memory key allocated: {key_id} ({key_type.value})")
             return memory_key
 
         except Exception as e:
             error_msg = safe_format_error(e, "allocate_memory_key")
-            safe_safe_print(f"❌ Memory key allocation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Memory key allocation failed: {error_msg}")
 
             # Return safe fallback key
             return MemoryKey(
@@ -387,7 +387,7 @@ class MemoryKeyAllocator:
         try:
             # Validate keys exist
             if source_key not in self.memory_keys or target_key not in self.memory_keys:
-                safe_safe_print(f"⚠️ Invalid memory keys for link: {source_key} -> {target_key}")
+                safe_safe_print(f"\\u26a0\\ufe0f Invalid memory keys for link: {source_key} -> {target_key}")
                 return None
 
             # Generate link ID
@@ -419,12 +419,12 @@ class MemoryKeyAllocator:
             # Save to file
             self._save_memory_keys()
 
-            safe_safe_print(f"🔗 Memory link created: {link_id} ({strength.value})")
+            safe_safe_print(f"\\u1f517 Memory link created: {link_id} ({strength.value})")
             return memory_link
 
         except Exception as e:
             error_msg = safe_format_error(e, "create_memory_link")
-            safe_safe_print(f"❌ Memory link creation failed: {error_msg}")
+            safe_safe_print(f"\\u274c Memory link creation failed: {error_msg}")
             return None
 
     def find_similar_keys(
@@ -469,7 +469,7 @@ class MemoryKeyAllocator:
 
         except Exception as e:
             error_msg = safe_format_error(e, "find_similar_keys")
-            safe_safe_print(f"❌ Similar key search failed: {error_msg}")
+            safe_safe_print(f"\\u274c Similar key search failed: {error_msg}")
             return []
 
     def get_memory_cluster(self, key_id: str) -> Optional[MemoryCluster]:
@@ -543,7 +543,7 @@ class MemoryKeyAllocator:
             return similarity
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Similarity calculation failed: {safe_format_error(e, 'similarity')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Similarity calculation failed: {safe_format_error(e, 'similarity')}")
             return 0.0
 
     def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
@@ -559,7 +559,7 @@ class MemoryKeyAllocator:
             return similarity
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Hash similarity calculation failed: {safe_format_error(e, 'hash_similarity')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Hash similarity calculation failed: {safe_format_error(e, 'hash_similarity')}")
             return 0.0
 
     def _determine_link_strength(self, alpha_correlation: float, confidence: float) -> LinkStrength:
@@ -587,7 +587,7 @@ class MemoryKeyAllocator:
             return unified_math.max(0.1, decay_factor)  # Minimum decay of 0.1
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Time decay calculation failed: {safe_format_error(e, 'time_decay')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Time decay calculation failed: {safe_format_error(e, 'time_decay')}")
             return 1.0
 
     def _attempt_clustering(self, new_key: MemoryKey) -> None:
@@ -613,7 +613,7 @@ class MemoryKeyAllocator:
                 # Add to existing cluster
                 best_cluster.memory_keys.append(new_key.key_id)
                 best_cluster.last_updated = datetime.now()
-                safe_safe_print(f"🔗 Added key {new_key.key_id} to cluster {best_cluster.cluster_id}")
+                safe_safe_print(f"\\u1f517 Added key {new_key.key_id} to cluster {best_cluster.cluster_id}")
             else:
                 # Create new cluster
                 cluster_id = f"CLUSTER_{new_key.agent_type}_{new_key.domain}_{int(time.time())}"
@@ -626,10 +626,10 @@ class MemoryKeyAllocator:
                 )
                 self.memory_clusters[cluster_id] = new_cluster
                 self.total_clusters_formed += 1
-                safe_safe_print(f"🔗 Created new cluster {cluster_id} for key {new_key.key_id}")
+                safe_safe_print(f"\\u1f517 Created new cluster {cluster_id} for key {new_key.key_id}")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Clustering failed: {safe_format_error(e, 'clustering')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Clustering failed: {safe_format_error(e, 'clustering')}")
 
     def get_memory_key(self, key_id: str) -> Optional[MemoryKey]:
         """Get memory key by ID."""
@@ -685,10 +685,10 @@ class MemoryKeyAllocator:
                 del self.memory_clusters[cluster_id]
 
             safe_safe_print(
-                f"🧹 Cleaned up {len(old_keys)} old keys, {len(old_links)} old links, {len(empty_clusters)} empty clusters")
+                f"\\u1f9f9 Cleaned up {len(old_keys)} old keys, {len(old_links)} old links, {len(empty_clusters)} empty clusters")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Cleanup failed: {safe_format_error(e, 'cleanup')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Cleanup failed: {safe_format_error(e, 'cleanup')}")
 
 
 # Global instance for easy access
@@ -742,7 +742,7 @@ def find_similar_memory_keys(
 # Example usage
 if __name__ == "__main__":
     # Test memory key allocator functionality
-    safe_safe_print("🔑 Testing Memory Key Allocator...")
+    safe_safe_print("\\u1f511 Testing Memory Key Allocator...")
 
     # Allocate test memory keys
     key1 = allocate_memory_key(
@@ -780,4 +780,4 @@ if __name__ == "__main__":
     # Get performance metrics
     metrics = memory_key_allocator.get_performance_metrics()
 
-    safe_safe_print(f"✅ Test completed - Keys: {len(similar_keys)} similar, Metrics: {metrics}")
+    safe_safe_print(f"\\u2705 Test completed - Keys: {len(similar_keys)} similar, Metrics: {metrics}")

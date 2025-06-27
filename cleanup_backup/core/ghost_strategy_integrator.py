@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
-"""Ghost Strategy Integrator – Unified pipeline integration for Schwabot.
+"""Ghost Strategy Integrator \\u2013 Unified pipeline integration for Schwabot.
 
 This module provides the class-based architecture that integrates all ghost
 mathematical components into Schwabot's strategy trigger pipeline following
 the Ferris Wheel activation cycle:
 
-    Hash Tick Check → Phase Sync → Glyph/Trigger Mapping → Execution
+    Hash Tick Check \\u2192 Phase Sync \\u2192 Glyph/Trigger Mapping \\u2192 Execution
 
 All modules are hard-linked and follow the standard data flow from core vectors
 (BTC price, USDC flow, chart patterns) downstream to strategy_mapper,
@@ -495,3 +495,5 @@ class GhostStrategyIntegrator:
             "hash_registry_size": len(self.trigger_pipeline.ferris_wheel.hash_registry),
             "strategy_matrix_shape": self.trigger_pipeline.strategy_matrix.shape,
         }
+
+"""

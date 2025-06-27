@@ -50,7 +50,7 @@ def main():
     for py_file in py_files:
         if fix_e305_in_file(str(py_file)):
             total_fixed += 1
-    print(f"\nE305 blank line fixes applied to {total_fixed} files.")
+    print(f"\\nE305 blank line fixes applied to {total_fixed} files.")
 
 
 if __name__ == "__main__":

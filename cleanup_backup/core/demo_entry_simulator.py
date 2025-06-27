@@ -100,7 +100,7 @@ class DemoEntrySimulator:
     def simulate_entry(self, strategy_type: str, market_condition: str = "sideways",
                        num_simulations: int = 100) -> EntryAnalysis:
         """Simulate trade entries with specified strategy and market conditions"""
-        safe_print(f"🎯 Starting entry simulation: {strategy_type} in {market_condition} market")
+        safe_print(f"\\u1f3af Starting entry simulation: {strategy_type} in {market_condition} market")
 
         # Get strategy function
         strategy_func = self.entry_strategies.get(strategy_type)
@@ -158,7 +158,7 @@ class DemoEntrySimulator:
         self.entry_simulations.extend(simulations)
         self.entry_analysis[f"{strategy_type}_{market_condition}"] = analysis
 
-        safe_print(f"✅ Entry simulation completed. Success rate: {analysis.success_rate:.2%}")
+        safe_print(f"\\u2705 Entry simulation completed. Success rate: {analysis.success_rate:.2%}")
 
         return analysis
 
@@ -526,7 +526,7 @@ class DemoEntrySimulator:
 
     def run_comprehensive_entry_test(self, num_simulations: int = 50) -> Dict[str, Any]:
         """Run comprehensive entry testing across all strategies and market conditions"""
-        safe_print("🚀 Starting comprehensive entry testing...")
+        safe_print("\\u1f680 Starting comprehensive entry testing...")
 
         results = {}
 
@@ -547,7 +547,7 @@ class DemoEntrySimulator:
         # Generate comprehensive summary
         summary = self._generate_comprehensive_summary(results)
 
-        safe_print("✅ Comprehensive entry testing completed!")
+        safe_print("\\u2705 Comprehensive entry testing completed!")
 
         return summary
 
@@ -618,7 +618,7 @@ class DemoEntrySimulator:
             with open(filepath, 'w') as f:
                 json.dump(data, f, indent=2, default=str)
 
-            safe_print(f"💾 Entry analysis saved to {filepath}")
+            safe_print(f"\\u1f4be Entry analysis saved to {filepath}")
 
         except Exception as e:
             safe_print(f"Error saving entry analysis: {e}")
@@ -650,7 +650,7 @@ if __name__ == "__main__":
     # Test comprehensive analysis
     comprehensive_results = simulator.run_comprehensive_entry_test(num_simulations=10)
 
-    safe_print(f"\nComprehensive Results:")
+    safe_print(f"\\nComprehensive Results:")
     safe_print(f"Best Strategies: {comprehensive_results['best_strategies']}")
     safe_print(f"Overall Performance: {comprehensive_results['overall_performance']}")
 
@@ -658,3 +658,5 @@ if __name__ == "__main__":
     simulator.save_entry_analysis()
 
     safe_print("Demo entry simulator test completed!")
+
+"""

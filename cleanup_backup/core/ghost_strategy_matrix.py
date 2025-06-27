@@ -6,16 +6,16 @@ from core.unified_math_system import unified_math
 
 This module now provides a complete set of helpers that implement the
 mathematical specification outlined in the design note.  They are intentionally
-kept *stateless* – callers supply previous-tick matrices / vectors and receive
+kept *stateless* \\u2013 callers supply previous-tick matrices / vectors and receive
 updated ones.
 
 Public API
 ----------
-1. build_strategy_matrix           – basic outer-product helper.
-2. strategy_match_matrix           – binary match map M[i,j].
-3. reward_matrix                   – profit-weighted reinforcement scores.
-4. dynamic_strategy_switch         – arg-max selection via softmax.
-5. update_strategy_matrix          – echo-band & volatility adaptation.
+1. build_strategy_matrix           \\u2013 basic outer-product helper.
+2. strategy_match_matrix           \\u2013 binary match map M[i,j].
+3. reward_matrix                   \\u2013 profit-weighted reinforcement scores.
+4. dynamic_strategy_switch         \\u2013 arg-max selection via softmax.
+5. update_strategy_matrix          \\u2013 echo-band & volatility adaptation.
 """
 
 
@@ -44,7 +44,7 @@ def build_strategy_matrix(
 
 
 # ---------------------------------------------------------------------------
-# (1) Strategy match mapping – binary matrix M
+# (1) Strategy match mapping \\u2013 binary matrix M
 # ---------------------------------------------------------------------------
 
 
@@ -96,7 +96,7 @@ def reward_matrix(
 
 
 # ---------------------------------------------------------------------------
-# (3) Dynamic strategy switching – softmax & argmax
+# (3) Dynamic strategy switching \\u2013 softmax & argmax
 # ---------------------------------------------------------------------------
 
 
@@ -134,7 +134,7 @@ def update_strategy_matrix(
     sigma: np.ndarray | None = None,
     eta_noise: np.ndarray | None = None,
 ) -> np.ndarray:  # noqa: D401
-    """Return updated matrix according to ΔM formulation.
+    """Return updated matrix according to \\u0394M formulation.
 
     Parameters
     ----------
@@ -145,13 +145,13 @@ def update_strategy_matrix(
     beta
         Volatility gain coefficient.
     sigma, eta_noise
-        Optional volatility σ_ij and noise η arrays. If omitted zeros are used.
+        Optional volatility \\u03c3_ij and noise \\u03b7 arrays. If omitted zeros are used.
     """
     if not (M_prev.shape == R.shape == E.shape):
         raise ValueError("M_prev, R, E must share shape")
 
     # Echo-band reinforcement
-    alpha = 1.0 / (1.0 + unified_math.exp(-E))  # logistic scaling α(E_i)
+    alpha = 1.0 / (1.0 + unified_math.exp(-E))  # logistic scaling \\u03b1(E_i)
     delta_M = alpha * (R - gamma * M_prev)
     M_new = M_prev + delta_M
 

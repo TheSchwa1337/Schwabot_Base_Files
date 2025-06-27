@@ -30,10 +30,10 @@ def test_complete_integration():
         from ghost_signal import GhostSignal, GhostSignalProcessor
         from ghost_strategy_integration import GhostStrategyIntegrator, EnhancedStrategyDecision
 
-        print("✓ All modules imported successfully")
+        print("\\u2713 All modules imported successfully")
 
         # Test 1: HashTriggerMapper functionality
-        print("\n1. Testing HashTriggerMapper...")
+        print("\\n1. Testing HashTriggerMapper...")
         mapper = HashTriggerMapper()
 
         # Test different hash patterns
@@ -52,10 +52,10 @@ def test_complete_integration():
             print(f"  {hash_trigger} -> {actual_pattern} (expected: {expected_pattern})")
             assert actual_pattern == expected_pattern, f"Pattern mismatch for {hash_trigger}"
 
-        print("✓ HashTriggerMapper pattern detection working correctly")
+        print("\\u2713 HashTriggerMapper pattern detection working correctly")
 
         # Test 2: GhostSignal functionality
-        print("\n2. Testing GhostSignal...")
+        print("\\n2. Testing GhostSignal...")
         processor = GhostSignalProcessor()
 
         # Create mock BTCVector
@@ -91,10 +91,10 @@ def test_complete_integration():
             assert hasattr(signal, 'phase_state'), "Signal missing phase_state"
             assert hasattr(signal, 'suggested_pathway'), "Signal missing suggested_pathway"
 
-        print("✓ GhostSignal processing working correctly")
+        print("\\u2713 GhostSignal processing working correctly")
 
         # Test 3: GhostStrategyIntegration functionality
-        print("\n3. Testing GhostStrategyIntegration...")
+        print("\\n3. Testing GhostStrategyIntegration...")
         integrator = GhostStrategyIntegrator()
 
         # Test enhanced decision making
@@ -116,10 +116,10 @@ def test_complete_integration():
             assert hasattr(decision, 'combined_score'), "Decision missing combined_score"
             assert 0.0 <= decision.combined_score <= 1.0, "Invalid combined score"
 
-        print("✓ GhostStrategyIntegration working correctly")
+        print("\\u2713 GhostStrategyIntegration working correctly")
 
         # Test 4: Integration statistics
-        print("\n4. Testing Integration Statistics...")
+        print("\\n4. Testing Integration Statistics...")
 
         # Get mapper statistics
         mapper_stats = mapper.get_mapping_statistics()
@@ -136,17 +136,17 @@ def test_complete_integration():
         print(f"  Integrator: {integrator_stats['total_decisions']} decisions")
         assert integrator_stats['total_decisions'] > 0, "No decisions found"
 
-        print("✓ All statistics working correctly")
+        print("\\u2713 All statistics working correctly")
 
         # Test 5: Error handling
-        print("\n5. Testing Error Handling...")
+        print("\\n5. Testing Error Handling...")
 
         # Test with invalid data
         try:
             invalid_mapping = mapper.map_hash_trigger("")
-            print("  ✓ Empty hash trigger handled gracefully")
+            print("  \\u2713 Empty hash trigger handled gracefully")
         except Exception as e:
-            print(f"  ✓ Error handling working: {e}")
+            print(f"  \\u2713 Error handling working: {e}")
 
         # Test with None data
         try:
@@ -155,14 +155,14 @@ def test_complete_integration():
                 entropy=0.5,
                 timestamp=time.time()
             )
-            print("  ✓ None BTCVector handled gracefully")
+            print("  \\u2713 None BTCVector handled gracefully")
         except Exception as e:
-            print(f"  ✓ Error handling working: {e}")
+            print(f"  \\u2713 Error handling working: {e}")
 
-        print("✓ Error handling working correctly")
+        print("\\u2713 Error handling working correctly")
 
         # Test 6: Performance validation
-        print("\n6. Testing Performance...")
+        print("\\n6. Testing Performance...")
 
         start_time = time.time()
         for i in range(10):
@@ -179,10 +179,10 @@ def test_complete_integration():
         print(f"  Average decision time: {avg_time:.4f}s")
         assert avg_time < 1.0, "Decision making too slow"
 
-        print("✓ Performance acceptable")
+        print("\\u2713 Performance acceptable")
 
         # Test 7: Data consistency
-        print("\n7. Testing Data Consistency...")
+        print("\\n7. Testing Data Consistency...")
 
         # Verify that mappings are consistent
         for hash_trigger, _ in test_hashes:
@@ -192,25 +192,25 @@ def test_complete_integration():
             assert mapping1.strategy_pathway == mapping2.strategy_pathway, "Inconsistent pathway"
             assert mapping1.pattern_type == mapping2.pattern_type, "Inconsistent pattern type"
 
-        print("✓ Data consistency verified")
+        print("\\u2713 Data consistency verified")
 
         # Final summary
         print("\n" + "=" * 60)
         print("INTEGRATION TEST RESULTS")
         print("=" * 60)
-        print("✓ HashTriggerMapper: PASSED")
-        print("✓ GhostSignal: PASSED")
-        print("✓ GhostStrategyIntegration: PASSED")
-        print("✓ Error Handling: PASSED")
-        print("✓ Performance: PASSED")
-        print("✓ Data Consistency: PASSED")
-        print("\n🎉 ALL TESTS PASSED! 🎉")
-        print("\nThe hash trigger mapping system is fully integrated and working correctly.")
+        print("\\u2713 HashTriggerMapper: PASSED")
+        print("\\u2713 GhostSignal: PASSED")
+        print("\\u2713 GhostStrategyIntegration: PASSED")
+        print("\\u2713 Error Handling: PASSED")
+        print("\\u2713 Performance: PASSED")
+        print("\\u2713 Data Consistency: PASSED")
+        print("\\n\\u1f389 ALL TESTS PASSED! \\u1f389")
+        print("\\nThe hash trigger mapping system is fully integrated and working correctly.")
 
         return True
 
     except Exception as e:
-        print(f"\n❌ TEST FAILED: {e}")
+        print(f"\\n\\u274c TEST FAILED: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -218,34 +218,34 @@ def test_complete_integration():
 
 def test_unicode_compatibility():
     """Test Unicode/emoji compatibility for Windows CLI."""
-    print("\nTesting Unicode/Emoji Compatibility...")
+    print("\\nTesting Unicode/Emoji Compatibility...")
 
     try:
         # Test various Unicode characters
         test_strings = [
-            "🚀 Ghost Signal",
-            "⚡ Hash Trigger",
-            "🎯 Strategy",
-            "📊 Statistics",
-            "✅ Success",
-            "⚠️ Warning",
-            "❌ Error"
+            "\\u1f680 Ghost Signal",
+            "\\u26a1 Hash Trigger",
+            "\\u1f3af Strategy",
+            "\\u1f4ca Statistics",
+            "\\u2705 Success",
+            "\\u26a0\\ufe0f Warning",
+            "\\u274c Error"
         ]
 
         for test_string in test_strings:
             print(f"  Testing: {test_string}")
             # If we can print it without error, it's working
-            print(f"    ✓ {test_string} displayed correctly")
+            print(f"    \\u2713 {test_string} displayed correctly")
 
-        print("✓ Unicode/emoji compatibility working")
+        print("\\u2713 Unicode/emoji compatibility working")
         return True
 
     except UnicodeEncodeError as e:
-        print(f"⚠️ Unicode encoding issue: {e}")
+        print(f"\\u26a0\\ufe0f Unicode encoding issue: {e}")
         print("This is expected on some Windows systems")
         return True  # Not a failure, just a limitation
     except Exception as e:
-        print(f"❌ Unicode test failed: {e}")
+        print(f"\\u274c Unicode test failed: {e}")
         return False
 
 
@@ -266,22 +266,24 @@ def main():
     print("=" * 60)
 
     if integration_success and unicode_success:
-        print("🎉 ALL TESTS PASSED! 🎉")
-        print("\nThe hash trigger mapping system is ready for production use.")
-        print("\nKey Features Validated:")
-        print("  • Hash pattern detection and mapping")
-        print("  • Ghost signal processing and analysis")
-        print("  • Enhanced strategy decision making")
-        print("  • Multi-factor integration logic")
-        print("  • Error handling and fallback mechanisms")
-        print("  • Performance optimization")
-        print("  • Unicode/emoji CLI compatibility")
+        print("\\u1f389 ALL TESTS PASSED! \\u1f389")
+        print("\\nThe hash trigger mapping system is ready for production use.")
+        print("\\nKey Features Validated:")
+        print("  \\u2022 Hash pattern detection and mapping")
+        print("  \\u2022 Ghost signal processing and analysis")
+        print("  \\u2022 Enhanced strategy decision making")
+        print("  \\u2022 Multi-factor integration logic")
+        print("  \\u2022 Error handling and fallback mechanisms")
+        print("  \\u2022 Performance optimization")
+        print("  \\u2022 Unicode/emoji CLI compatibility")
         return 0
     else:
-        print("❌ SOME TESTS FAILED")
-        print("\nPlease review the errors above and fix any issues.")
+        print("\\u274c SOME TESTS FAILED")
+        print("\\nPlease review the errors above and fix any issues.")
         return 1
 
 
 if __name__ == "__main__":
     exit(main())
+
+"""

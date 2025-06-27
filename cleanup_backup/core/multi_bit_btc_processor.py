@@ -143,13 +143,13 @@ class MultiBitBTCProcessor:
 
     Entry Assumptions:
     - BTC vector state must be normalized (0.0 to 1.0 range)
-    - XRP cycle delta must be within ±0.5 range
+    - XRP cycle delta must be within \\u00b10.5 range
     - Market volatility must be > 0.1 for signal generation
     - Volume data must be recent (< 5 minutes old)
     - Price data must have sufficient precision (4 decimal places)
 
     Output Guarantees:
-    - Expected USDC profit delta: ±5% of input position size
+    - Expected USDC profit delta: \\u00b15% of input position size
     - Signal confidence: 0.0 to 1.0 with 0.8+ for high-confidence signals
     - Processing latency: < 100ms for real-time operations
     - Memory usage: < 50MB per processing cycle
@@ -640,7 +640,7 @@ class MultiBitBTCProcessor:
                     "price_precision_adequate": self._check_price_precision(price_data)
                 },
                 output_guarantees={
-                    "expected_profit_delta": "±5% of position size",
+                    "expected_profit_delta": "\\u00b15% of position size",
                     "signal_confidence_bounds": "0.0 to 1.0",
                     "processing_latency": "< 100ms",
                     "memory_usage": "< 50MB",
@@ -715,7 +715,7 @@ class MultiBitBTCProcessor:
 
         # Validate XRP cycle delta bounds
         if unified_math.abs(xrp_cycle_delta) > self.max_cycle_delta:
-            errors.append(f"XRP cycle delta {xrp_cycle_delta} exceeds bounds ±{self.max_cycle_delta}")
+            errors.append(f"XRP cycle delta {xrp_cycle_delta} exceeds bounds \\u00b1{self.max_cycle_delta}")
 
         # Validate market volatility threshold
         if market_volatility <= self.min_volatility:
@@ -768,23 +768,23 @@ class MultiBitBTCProcessor:
 
         # Check processing latency
         if execution_time < 0.1:  # 100ms
-            evidence.append(f"Processing latency: {execution_time:.3f}s (< 100ms ✓)")
+            evidence.append(f"Processing latency: {execution_time:.3f}s (< 100ms \\u2713)")
         else:
-            evidence.append(f"Processing latency: {execution_time:.3f}s (> 100ms ⚠)")
+            evidence.append(f"Processing latency: {execution_time:.3f}s (> 100ms \\u26a0)")
 
         # Check signal confidence bounds
         confidence = result.get("confidence", 0.0)
         if 0.0 <= confidence <= 1.0:
-            evidence.append(f"Signal confidence: {confidence:.3f} (within bounds ✓)")
+            evidence.append(f"Signal confidence: {confidence:.3f} (within bounds \\u2713)")
         else:
-            evidence.append(f"Signal confidence: {confidence:.3f} (outside bounds ⚠)")
+            evidence.append(f"Signal confidence: {confidence:.3f} (outside bounds \\u26a0)")
 
         # Check memory usage (simulated)
         memory_usage = result.get("memory_usage", 0.0)
         if memory_usage < 50.0:  # 50MB
-            evidence.append(f"Memory usage: {memory_usage:.1f}MB (< 50MB ✓)")
+            evidence.append(f"Memory usage: {memory_usage:.1f}MB (< 50MB \\u2713)")
         else:
-            evidence.append(f"Memory usage: {memory_usage:.1f}MB (> 50MB ⚠)")
+            evidence.append(f"Memory usage: {memory_usage:.1f}MB (> 50MB \\u26a0)")
 
         return {"evidence": evidence}
 

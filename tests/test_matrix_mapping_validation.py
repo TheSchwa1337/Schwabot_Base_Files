@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Matrix Mapping Validation Test - Schwabot Framework.
@@ -13,7 +13,7 @@ Key Validations:
 - Bit-depth phase transitions and logic integrity
 - Hash pattern matching and validation
 - Matrix overlay operations and consistency
-- Recursive identity tracking (Ψ(t))
+- Recursive identity tracking (\\u03a8(t))
 - Cross-basket trigger validation
 - Ghost shadow support and resonance modulation
 """
@@ -133,11 +133,11 @@ class MatrixMappingValidationTest:
             )
         ]
 
-        logger.info("🧮 Matrix Mapping Validation Test initialized")
+        logger.info("\\u1f9ee Matrix Mapping Validation Test initialized")
 
     def test_matrix_controller_initialization(self) -> Dict[str, Any]:
         """Test matrix controller initialization and state management."""
-        logger.info("🔧 Testing matrix controller initialization")
+        logger.info("\\u1f527 Testing matrix controller initialization")
 
         results = {
             'test_name': 'matrix_controller_initialization',
@@ -181,15 +181,15 @@ class MatrixMappingValidationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Matrix controller initialization test passed")
+            logger.info("\\u2705 Matrix controller initialization test passed")
         else:
-            logger.error(f"❌ Matrix controller initialization test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Matrix controller initialization test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_bit_depth_phase_transitions(self) -> Dict[str, Any]:
         """Test bit-depth phase transitions and logic integrity."""
-        logger.info("🔄 Testing bit-depth phase transitions")
+        logger.info("\\u1f504 Testing bit-depth phase transitions")
 
         results = {
             'test_name': 'bit_depth_phase_transitions',
@@ -237,15 +237,15 @@ class MatrixMappingValidationTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Bit-depth phase transitions test passed")
+            logger.info("\\u2705 Bit-depth phase transitions test passed")
         else:
-            logger.error(f"❌ Bit-depth phase transitions test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Bit-depth phase transitions test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_hash_pattern_matching(self) -> Dict[str, Any]:
         """Test hash pattern matching and validation."""
-        logger.info("🔍 Testing hash pattern matching")
+        logger.info("\\u1f50d Testing hash pattern matching")
 
         results = {
             'test_name': 'hash_pattern_matching',
@@ -290,15 +290,15 @@ class MatrixMappingValidationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Hash pattern matching test passed")
+            logger.info("\\u2705 Hash pattern matching test passed")
         else:
-            logger.error(f"❌ Hash pattern matching test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Hash pattern matching test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_matrix_overlay_operations(self) -> Dict[str, Any]:
         """Test matrix overlay operations and consistency."""
-        logger.info("📊 Testing matrix overlay operations")
+        logger.info("\\u1f4ca Testing matrix overlay operations")
 
         results = {
             'test_name': 'matrix_overlay_operations',
@@ -365,15 +365,15 @@ class MatrixMappingValidationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Matrix overlay operations test passed")
+            logger.info("\\u2705 Matrix overlay operations test passed")
         else:
-            logger.error(f"❌ Matrix overlay operations test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Matrix overlay operations test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_recursive_identity_tracking(self) -> Dict[str, Any]:
-        """Test recursive identity tracking (Ψ(t))."""
-        logger.info("🔄 Testing recursive identity tracking")
+        """Test recursive identity tracking (\\u03a8(t))."""
+        logger.info("\\u1f504 Testing recursive identity tracking")
 
         results = {
             'test_name': 'recursive_identity_tracking',
@@ -437,15 +437,15 @@ class MatrixMappingValidationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Recursive identity tracking test passed")
+            logger.info("\\u2705 Recursive identity tracking test passed")
         else:
-            logger.error(f"❌ Recursive identity tracking test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Recursive identity tracking test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_cross_basket_triggers(self) -> Dict[str, Any]:
         """Test cross-basket trigger validation."""
-        logger.info("🔄 Testing cross-basket triggers")
+        logger.info("\\u1f504 Testing cross-basket triggers")
 
         results = {
             'test_name': 'cross_basket_triggers',
@@ -527,15 +527,15 @@ class MatrixMappingValidationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Cross-basket triggers test passed")
+            logger.info("\\u2705 Cross-basket triggers test passed")
         else:
-            logger.error(f"❌ Cross-basket triggers test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Cross-basket triggers test failed: {len(results['errors'])} errors")
 
         return results
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive matrix mapping validation test."""
-        logger.info("🚀 Running comprehensive matrix mapping validation test")
+        logger.info("\\u1f680 Running comprehensive matrix mapping validation test")
 
         start_time = time.time()
 
@@ -574,9 +574,9 @@ class MatrixMappingValidationTest:
         }
 
         if all_passed:
-            logger.info(f"✅ Comprehensive matrix mapping validation test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive matrix mapping validation test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"❌ Comprehensive matrix mapping validation test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive matrix mapping validation test failed with {total_errors} errors")
 
         return comprehensive_result
 
@@ -609,17 +609,17 @@ if __name__ == "__main__":
 
     # Print results
     safe_print("\n" + "="*60)
-    safe_print("🧮 MATRIX MAPPING VALIDATION TEST RESULTS")
+    safe_print("\\u1f9ee MATRIX MAPPING VALIDATION TEST RESULTS")
     safe_print("="*60)
 
-    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
 
     if 'test_components' in result:
-        safe_print("\nComponent Results:")
+        safe_print("\\nComponent Results:")
         for component, component_result in result['test_components'].items():
-            status = "✅ PASS" if component_result['success'] else "❌ FAIL"
+            status = "\\u2705 PASS" if component_result['success'] else "\\u274c FAIL"
             safe_print(f"  {component}: {status}")
 
     safe_print("="*60)

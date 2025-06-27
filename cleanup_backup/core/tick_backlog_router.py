@@ -6,14 +6,14 @@ This module implements the complete tick-linked backlog logic that ensures
 API outputs and internal tick memory are persistently matched.
 
 Mathematical Foundation:
-℘(t) = μ·Σ[T(i)×P(i)] + ∇²(T)
+\\u2118(t) = \\u03bc\\u00b7\\u03a3[T(i)\\u00d7P(i)] + \\u2207\\u00b2(T)
 
 Where:
-- ℘(t) = Backlog profit at time t
-- μ = Memory persistence factor
+- \\u2118(t) = Backlog profit at time t
+- \\u03bc = Memory persistence factor
 - T(i) = Tick data at index i
 - P(i) = Profit factor at index i
-- ∇²(T) = Second derivative of tick data (acceleration)
+- \\u2207\\u00b2(T) = Second derivative of tick data (acceleration)
 
 Key Features:
 - Persistent tick memory management
@@ -120,7 +120,7 @@ class TickBacklogRouter:
         self.backlog_file_path = self.config.get('backlog_file_path', 'data/backlog_hash_state.json')
         self._ensure_data_directory()
 
-        logger.info("🔄 Tick Backlog Router initialized")
+        logger.info("\\u1f504 Tick Backlog Router initialized")
 
     def process_tick_data(self, tick_data: Dict[str, Any],
                           api_response: Optional[Dict[str, Any]] = None) -> BacklogProfit:
@@ -140,7 +140,7 @@ class TickBacklogRouter:
             # Store in memory
             self.tick_memory.append(tick_entry)
 
-            # Calculate profit: ℘(t) = μ·Σ[T(i)×P(i)] + ∇²(T)
+            # Calculate profit: \\u2118(t) = \\u03bc\\u00b7\\u03a3[T(i)\\u00d7P(i)] + \\u2207\\u00b2(T)
             backlog_profit = self._calculate_backlog_profit(tick_entry)
 
             # Update API sync status
@@ -296,7 +296,7 @@ class TickBacklogRouter:
             )
 
     def _calculate_backlog_profit(self, tick_entry: TickMemoryEntry) -> BacklogProfit:
-        """Calculate backlog profit: ℘(t) = μ·Σ[T(i)×P(i)] + ∇²(T)."""
+        """Calculate backlog profit: \\u2118(t) = \\u03bc\\u00b7\\u03a3[T(i)\\u00d7P(i)] + \\u2207\\u00b2(T)."""
         try:
             # Get recent memory entries for calculation
             recent_entries = list(self.tick_memory)[-50:]  # Last 50 entries
@@ -304,20 +304,20 @@ class TickBacklogRouter:
             if not recent_entries:
                 return self._create_fallback_profit()
 
-            # Calculate tick profit sum: Σ[T(i)×P(i)]
+            # Calculate tick profit sum: \\u03a3[T(i)\\u00d7P(i)]
             tick_profit_sum = 0.0
             for entry in recent_entries:
                 tick_value = self._extract_tick_value(entry)
                 profit_factor = entry.profit_factor
                 tick_profit_sum += tick_value * profit_factor
 
-            # Calculate acceleration component: ∇²(T)
+            # Calculate acceleration component: \\u2207\\u00b2(T)
             acceleration_component = self._calculate_tick_acceleration(recent_entries)
 
-            # Apply memory persistence factor: μ·Σ[T(i)×P(i)]
+            # Apply memory persistence factor: \\u03bc\\u00b7\\u03a3[T(i)\\u00d7P(i)]
             memory_persisted_sum = self.memory_persistence_factor * tick_profit_sum
 
-            # Total profit: ℘(t) = μ·Σ[T(i)×P(i)] + ∇²(T)
+            # Total profit: \\u2118(t) = \\u03bc\\u00b7\\u03a3[T(i)\\u00d7P(i)] + \\u2207\\u00b2(T)
             total_profit = memory_persisted_sum + acceleration_component
 
             # Calculate API sync score
@@ -384,7 +384,7 @@ class TickBacklogRouter:
             return 0.0
 
     def _calculate_tick_acceleration(self, entries: List[TickMemoryEntry]) -> float:
-        """Calculate tick acceleration: ∇²(T)."""
+        """Calculate tick acceleration: \\u2207\\u00b2(T)."""
         try:
             if len(entries) < 3:
                 return 0.0
@@ -396,7 +396,7 @@ class TickBacklogRouter:
                 return 0.0
 
             # Calculate second derivative (acceleration)
-            # ∇²(T) ≈ T[i+2] - 2*T[i+1] + T[i]
+            # \\u2207\\u00b2(T) \\u2248 T[i+2] - 2*T[i+1] + T[i]
             accelerations = []
             for i in range(len(tick_values) - 2):
                 acceleration = tick_values[i+2] - 2*tick_values[i+1] + tick_values[i]
@@ -630,3 +630,5 @@ def get_backlog_analytics() -> Dict[str, Any]:
 def validate_api_consistency(api_name: str, api_data: Dict[str, Any]) -> bool:
     """Global function to validate API consistency."""
     return tick_backlog_router.validate_api_consistency(api_name, api_data)
+
+"""

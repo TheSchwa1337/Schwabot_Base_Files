@@ -520,26 +520,26 @@ class MathematicalIntegrationValidator:
 
     def run_comprehensive_validation(self) -> Dict[str, Any]:
         """Run comprehensive mathematical validation across all modules."""
-        safe_print("🧪 Starting Comprehensive Mathematical Validation...")
+        safe_print("\\u1f9ea Starting Comprehensive Mathematical Validation...")
 
         start_time = time.time()
         all_results = []
 
         # Test individual module functions
-        safe_print("\n📊 Testing DLT Waveform Engine Functions...")
+        safe_print("\\n\\u1f4ca Testing DLT Waveform Engine Functions...")
         dlt_results = self.test_dlt_waveform_functions()
         all_results.extend(dlt_results)
 
-        safe_print("\n📊 Testing Matrix Mapper Functions...")
+        safe_print("\\n\\u1f4ca Testing Matrix Mapper Functions...")
         matrix_results = self.test_matrix_mapper_functions()
         all_results.extend(matrix_results)
 
-        safe_print("\n📊 Testing Profit Cycle Allocator Functions...")
+        safe_print("\\n\\u1f4ca Testing Profit Cycle Allocator Functions...")
         profit_results = self.test_profit_cycle_allocator_functions()
         all_results.extend(profit_results)
 
         # Test cross-module integration
-        safe_print("\n🔄 Testing Cross-Module Integration...")
+        safe_print("\\n\\u1f504 Testing Cross-Module Integration...")
         integration_result = self.test_cross_module_integration()
         self.integration_results.append(integration_result)
 
@@ -566,7 +566,7 @@ class MathematicalIntegrationValidator:
         }
 
         # Print results
-        safe_print(f"\n📈 VALIDATION SUMMARY")
+        safe_print(f"\\n\\u1f4c8 VALIDATION SUMMARY")
         safe_print(f"Total Tests: {total_tests}")
         safe_print(f"Successful: {successful_tests}")
         safe_print(f"Failed: {failed_tests}")
@@ -614,10 +614,10 @@ class MathematicalIntegrationValidator:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
 
-            safe_print(f"✅ Results exported to {output_path}")
+            safe_print(f"\\u2705 Results exported to {output_path}")
 
         except Exception as e:
-            safe_print(f"❌ Error exporting results: {e}")
+            safe_print(f"\\u274c Error exporting results: {e}")
 
 
 def main():
@@ -636,3 +636,5 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+
+"""

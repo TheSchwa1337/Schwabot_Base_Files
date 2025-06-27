@@ -715,10 +715,10 @@ class DemoStateInjector:
             with open(output_path, 'w') as f:
                 json.dump(results_data, f, indent=2, default=str)
 
-            safe_print(f"✅ Demo test results exported to {output_path}")
+            safe_print(f"\\u2705 Demo test results exported to {output_path}")
 
         except Exception as e:
-            safe_print(f"❌ Error exporting test results: {e}")
+            safe_print(f"\\u274c Error exporting test results: {e}")
 
 
 if __name__ == "__main__":
@@ -726,25 +726,25 @@ if __name__ == "__main__":
     injector = DemoStateInjector()
 
     # Test conservative strategy
-    safe_print("🧪 Testing Conservative Strategy...")
+    safe_print("\\u1f9ea Testing Conservative Strategy...")
     injector.start_state_injection("conservative_test")
 
     try:
         # Run for 60 seconds
-        safe_print("📈 Demo state injection running for 60 seconds...")
+        safe_print("\\u1f4c8 Demo state injection running for 60 seconds...")
         time.sleep(60)
 
         # Stop injection
         injector.stop_state_injection()
 
         # Run mathematical validation
-        safe_print("\n🧪 Running Mathematical Validation...")
+        safe_print("\\n\\u1f9ea Running Mathematical Validation...")
         validation_results = injector.run_mathematical_validation()
         safe_print(f"Validation Status: {validation_results.get('overall_status', 'UNKNOWN')}")
 
         # Get test results
         test_results = injector.get_test_results()
-        safe_print(f"\n📊 TEST RESULTS")
+        safe_print(f"\\n\\u1f4ca TEST RESULTS")
         safe_print(f"Portfolio Snapshots: {test_results.get('portfolio_history_count', 0)}")
         safe_print(f"Rebalance Events: {test_results.get('rebalance_history_count', 0)}")
         safe_print(f"Validation Tests: {test_results.get('validation_results_count', 0)}")
@@ -753,7 +753,7 @@ if __name__ == "__main__":
         injector.export_test_results()
 
     except KeyboardInterrupt:
-        safe_print("\n⏹️ Demo state injection stopped by user")
+        safe_print("\\n\\u23f9\\ufe0f Demo state injection stopped by user")
         injector.stop_state_injection()
 
-    safe_print("✅ Demo state injector test completed")
+    safe_print("\\u2705 Demo state injector test completed")

@@ -466,7 +466,7 @@ class AssetSubstitutionMatrix:
 
 def main():
     """Test function for Asset Substitution Matrix."""
-    safe_print("🔄 Testing Asset Substitution Matrix...")
+    safe_print("\\u1f504 Testing Asset Substitution Matrix...")
 
     # Initialize matrix
     matrix = AssetSubstitutionMatrix()
@@ -474,13 +474,13 @@ def main():
     # Test asset substitutions
     test_assets = ["BTC", "XRP", "ETH", "SOL"]
 
-    safe_print("\n📊 Testing Asset Substitutions:")
+    safe_print("\\n\\u1f4ca Testing Asset Substitutions:")
     for asset in test_assets:
         substitute = matrix.get_substitute_asset(asset, SubstitutionTrigger.VOLATILITY_EXCEEDED)
         safe_print(f"  {asset} -> {substitute}")
 
     # Test portfolio rebalancing
-    safe_print("\n💰 Testing Portfolio Rebalancing:")
+    safe_print("\\n\\u1f4b0 Testing Portfolio Rebalancing:")
     live_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=False)
     demo_allocation = matrix.rebalance_portfolio(10000.0, demo_mode=True)
 
@@ -489,7 +489,7 @@ def main():
 
     # Get statistics
     stats = matrix.get_substitution_statistics()
-    safe_print(f"\n📈 Substitution Statistics:")
+    safe_print(f"\\n\\u1f4c8 Substitution Statistics:")
     safe_print(f"  Total Substitutions: {stats['total_substitutions']}")
     safe_print(f"  Current Substitutions: {stats['current_substitutions']}")
 

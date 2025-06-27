@@ -138,7 +138,7 @@ class StrategyLogic:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize strategy logic."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Strategy registry
@@ -618,7 +618,7 @@ class StrategyLogic:
 def main() -> None:
     """Main function for testing strategy logic."""
     try:
-        safe_print("🎯 Strategy Logic Test")
+        safe_print("\\u1f3af Strategy Logic Test")
         safe_print("=" * 40)
 
         # Initialize strategy logic
@@ -633,7 +633,7 @@ def main() -> None:
 
         # Process market data
         signals = strategy_logic.process_market_data(market_data)
-        safe_print(f"✅ Generated {len(signals)} signals")
+        safe_print(f"\\u2705 Generated {len(signals)} signals")
 
         # Display signals
         for i, signal in enumerate(signals):
@@ -644,12 +644,12 @@ def main() -> None:
 
         # Get system status
         status = strategy_logic.get_system_status()
-        safe_print(f"✅ System status: {status['enabled_strategies']} strategies enabled")
+        safe_print(f"\\u2705 System status: {status['enabled_strategies']} strategies enabled")
 
-        safe_print("\n🎉 Strategy logic test completed successfully!")
+        safe_print("\\n\\u1f389 Strategy logic test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Strategy logic test failed: {e}")
+        safe_print(f"\\u274c Strategy logic test failed: {e}")
         import traceback
 
         traceback.print_exc()

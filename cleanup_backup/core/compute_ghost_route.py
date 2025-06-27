@@ -12,3 +12,5 @@ from typing import Any
 def compute_ghost_route(*args: Any, **kwargs: Any) -> None:
     """Compute ghost route for the given arguments."""
     pass
+
+"""

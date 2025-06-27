@@ -40,15 +40,15 @@ def configure_logging(
     Parameters
     ----------
     name:
-        Logger name – typically ``__name__``.
+        Logger name \\u2013 typically ``__name__``.
     level:
         Text or numeric log-level (e.g. ``"DEBUG"`` or ``logging.DEBUG``).
     fmt, datefmt:
         Custom ``logging.basicConfig`` format strings.  If omitted, we supply
-        Schwabot’s default format.
+        Schwabot\\u2019s default format.
     **basic_cfg:
         Any extra keyword arguments are forwarded to
-        ``logging.basicConfig`` allowing colour handlers, file handlers, …
+        ``logging.basicConfig`` allowing colour handlers, file handlers, \\u2026
     """
     if isinstance(level, str):
         numeric_level = getattr(logging, level.upper(), logging.INFO)
@@ -56,7 +56,7 @@ def configure_logging(
         numeric_level = int(level)
 
     if not logging.getLogger().handlers:
-        # Root not configured yet – set it up
+        # Root not configured yet \\u2013 set it up
         logging.basicConfig(
             level=numeric_level,
             format=fmt
@@ -65,7 +65,7 @@ def configure_logging(
             **basic_cfg,
         )
     else:
-        # Root already configured – just adjust level if asked
+        # Root already configured \\u2013 just adjust level if asked
         logging.getLogger().setLevel(numeric_level)
 
     return logging.getLogger(name or __name__)
@@ -78,3 +78,5 @@ def set_level(level: str | int) -> None:
         root.setLevel(getattr(logging, level.upper(), logging.INFO))
     else:
         root.setLevel(int(level))
+
+"""

@@ -309,7 +309,7 @@ class ErrorSanitizer:
             logger.error(
                 f"{sanitized_error.sanitized_message}\n"
                 f"Recovery attempted: {sanitized_error.recovery_attempted}\n"
-                f"Traceback:\n{sanitized_error.traceback_formatted}"
+                f"Traceback:\\n{sanitized_error.traceback_formatted}"
             )
 
     def get_error_statistics(self) -> Dict[str, Any]:
@@ -376,3 +376,5 @@ def safe_execute_with_recovery(func: Callable, *args, **kwargs) -> Any:
     """Execute function with mathematical error recovery."""
     sanitizer = ErrorSanitizer(SanitizationLevel.MATHEMATICAL)
     return sanitizer.catch(func, *args, **kwargs)
+
+"""

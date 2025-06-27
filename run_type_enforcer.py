@@ -20,7 +20,7 @@ try:
     from type_enforcer import type_enforcer
 
     safe_print(
-        "🔧 Applying type annotations to eliminate MEDIUM priority issues..."
+        "\\u1f527 Applying type annotations to eliminate MEDIUM priority issues..."
     )
 
     # Apply type annotations to all Python files
@@ -37,16 +37,16 @@ try:
                 for key in total_stats:
                     total_stats[key] += stats[key]
             except Exception as e:
-                safe_print(f"⚠️ Error processing {py_file}: {e}")
+                safe_print(f"\\u26a0\\ufe0f Error processing {py_file}: {e}")
 
-    safe_print("✅ Type annotation enforcement complete!")
-    safe_print(f"📊 Statistics:")
+    safe_print("\\u2705 Type annotation enforcement complete!")
+    safe_print(f"\\u1f4ca Statistics:")
     safe_print(f"   - Functions fixed: {total_stats['functions_fixed']}")
     safe_print(f"   - Parameters fixed: {total_stats['parameters_fixed']}")
     safe_print(f"   - Return types fixed: {total_stats['returns_fixed']}")
 
     # Run compliance check to see results
-    safe_print("\n🔧 Running compliance check to verify results...")
+    safe_print("\\n\\u1f527 Running compliance check to verify results...")
 
     from compliance_check import main as compliance_check
 
@@ -61,20 +61,20 @@ try:
             if severity in issue_counts:
                 issue_counts[severity] += 1
 
-    safe_print("📊 Final Issue Counts:")
-    safe_print(f"   🟠 HIGH issues: {issue_counts['HIGH']}")
-    safe_print(f"   🟡 MEDIUM issues: {issue_counts['MEDIUM']}")
-    safe_print(f"   🟢 LOW issues: {issue_counts['LOW']}")
-    safe_print(f"   ❌ CRITICAL issues: {issue_counts['CRITICAL']}")
+    safe_print("\\u1f4ca Final Issue Counts:")
+    safe_print(f"   \\u1f7e0 HIGH issues: {issue_counts['HIGH']}")
+    safe_print(f"   \\u1f7e1 MEDIUM issues: {issue_counts['MEDIUM']}")
+    safe_print(f"   \\u1f7e2 LOW issues: {issue_counts['LOW']}")
+    safe_print(f"   \\u274c CRITICAL issues: {issue_counts['CRITICAL']}")
 
     if issue_counts["HIGH"] == 0 and issue_counts["MEDIUM"] == 0:
-        safe_print("\n🎉 SUCCESS: All HIGH and MEDIUM issues resolved!")
+        safe_print("\\n\\u1f389 SUCCESS: All HIGH and MEDIUM issues resolved!")
         safe_print("   Your codebase is now flake8-compliant for critical issues.")
     else:
-        safe_print("\n⚠️ Some issues remain - review the results above.")
+        safe_print("\\n\\u26a0\\ufe0f Some issues remain - review the results above.")
 
 except Exception as e:
-    safe_print(f"❌ Error: {e}")
+    safe_print(f"\\u274c Error: {e}")
     import traceback
 
     traceback.print_exc()

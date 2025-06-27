@@ -1,37 +1,51 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python3
-"""Profit Vector Calibration Test - Schwabot Framework.
+"""Test suite for profit vector calibration functionality.
 
-This test validates the accuracy of profit calculations and ensures the
-non-relativistic, profit-focused trading logic works correctly. It tests
-the core profit vector calculations that drive the Ferris wheel matrix
-operations and profit routing decisions.
-
-Key Validations:
-- Profit calculation accuracy with high precision decimals
-- Vector efficiency calculations
-- Thermal index integration
-- Profit memory storage and retrieval
-- Ghost signal detection accuracy
-- Ferris wheel cycle integration
+Tests the calibration of profit vectors with various mathematical operations
+and validation of results.
 """
 
 import unittest
 import logging
 import time
-from core.unified_math_system import unified_math
-from decimal import Decimal, getcontext
 from typing import Dict, Any, List
-from dataclasses import dataclass
+from decimal import Decimal
 
-# Import core components
-from core.unified_mathematical_trading_controller import UnifiedMathematicalTradingController
-from core.ghost_profit_tracker import register_profit, profit_summary
-from core.ferris_wheel_engine import FerrisWheelEngine
+# Import core modules
+from core.unified_math_system import unified_math
+from core.profit_vector_calibration import (
+    ProfitVectorCalibrator,
+    CalibrationResult,
+    VectorCalibrationConfig
+)
 
-# Set high precision for financial calculations
-getcontext().prec = 28
+# Import safe print for Windows compatibility
+try:
+    from core.utils.windows_cli_compatibility import (
+        safe_print, info, warn, error, success, debug
+    )
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    
+    def safe_print(message):
+        print(message)
+    
+    def info(message):
+        print(f"[INFO] {message}")
+    
+    def warn(message):
+        print(f"[WARN] {message}")
+    
+    def error(message):
+        print(f"[ERROR] {message}")
+    
+    def success(message):
+        print(f"[SUCCESS] {message}")
+    
+    def debug(message):
+        print(f"[DEBUG] {message}")
 
 logger = logging.getLogger(__name__)
 
@@ -111,11 +125,11 @@ class ProfitVectorCalibrationTest:
             )
         ]
 
-        logger.info("💰 Profit Vector Calibration Test initialized")
+        logger.info("\\u1f4b0 Profit Vector Calibration Test initialized")
 
     def test_profit_calculation_accuracy(self) -> Dict[str, Any]:
         """Test profit calculation accuracy with high precision."""
-        logger.info("🧮 Testing profit calculation accuracy")
+        logger.info("\\u1f9ee Testing profit calculation accuracy")
 
         results = {
             'test_name': 'profit_calculation_accuracy',
@@ -185,15 +199,15 @@ class ProfitVectorCalibrationTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Profit calculation accuracy test passed")
+            logger.info("\\u2705 Profit calculation accuracy test passed")
         else:
-            logger.error(f"❌ Profit calculation accuracy test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Profit calculation accuracy test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_profit_memory_integration(self) -> Dict[str, Any]:
         """Test profit memory storage and retrieval."""
-        logger.info("💾 Testing profit memory integration")
+        logger.info("\\u1f4be Testing profit memory integration")
 
         results = {
             'test_name': 'profit_memory_integration',
@@ -259,15 +273,15 @@ class ProfitVectorCalibrationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Profit memory integration test passed")
+            logger.info("\\u2705 Profit memory integration test passed")
         else:
-            logger.error(f"❌ Profit memory integration test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Profit memory integration test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_ferris_wheel_integration(self) -> Dict[str, Any]:
         """Test Ferris wheel cycle integration."""
-        logger.info("🎡 Testing Ferris wheel integration")
+        logger.info("\\u1f3a1 Testing Ferris wheel integration")
 
         results = {
             'test_name': 'ferris_wheel_integration',
@@ -318,15 +332,15 @@ class ProfitVectorCalibrationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Ferris wheel integration test passed")
+            logger.info("\\u2705 Ferris wheel integration test passed")
         else:
-            logger.error(f"❌ Ferris wheel integration test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Ferris wheel integration test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_ghost_signal_detection(self) -> Dict[str, Any]:
         """Test ghost signal detection accuracy."""
-        logger.info("👻 Testing ghost signal detection")
+        logger.info("\\u1f47b Testing ghost signal detection")
 
         results = {
             'test_name': 'ghost_signal_detection',
@@ -388,15 +402,15 @@ class ProfitVectorCalibrationTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Ghost signal detection test passed")
+            logger.info("\\u2705 Ghost signal detection test passed")
         else:
-            logger.error(f"❌ Ghost signal detection test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Ghost signal detection test failed: {len(results['errors'])} errors")
 
         return results
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive profit vector calibration test."""
-        logger.info("🚀 Running comprehensive profit vector calibration test")
+        logger.info("\\u1f680 Running comprehensive profit vector calibration test")
 
         start_time = time.time()
 
@@ -431,9 +445,9 @@ class ProfitVectorCalibrationTest:
         }
 
         if all_passed:
-            logger.info(f"✅ Comprehensive profit vector calibration test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive profit vector calibration test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"❌ Comprehensive profit vector calibration test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive profit vector calibration test failed with {total_errors} errors")
 
         return comprehensive_result
 
@@ -466,17 +480,19 @@ if __name__ == "__main__":
 
     # Print results
     safe_print("\n" + "="*60)
-    safe_print("💰 PROFIT VECTOR CALIBRATION TEST RESULTS")
+    safe_print("\\u1f4b0 PROFIT VECTOR CALIBRATION TEST RESULTS")
     safe_print("="*60)
 
-    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
 
     if 'test_components' in result:
-        safe_print("\nComponent Results:")
+        safe_print("\\nComponent Results:")
         for component, component_result in result['test_components'].items():
-            status = "✅ PASS" if component_result['success'] else "❌ FAIL"
+            status = "\\u2705 PASS" if component_result['success'] else "\\u274c FAIL"
             safe_print(f"  {component}: {status}")
 
     safe_print("="*60)
+
+"""

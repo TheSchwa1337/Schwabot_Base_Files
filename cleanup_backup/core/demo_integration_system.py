@@ -194,15 +194,15 @@ class DemoIntegrationSystem:
 
         if mode == "backtest":
             self.is_backtest_mode = True
-            safe_print("🔄 Starting Demo Backtest Mode")
+            safe_print("\\u1f504 Starting Demo Backtest Mode")
         elif mode == "simulation":
             self.is_simulation_mode = True
-            safe_print("🎮 Starting Demo Simulation Mode")
+            safe_print("\\u1f3ae Starting Demo Simulation Mode")
         elif mode == "reinforcement":
             self.is_reinforcement_mode = True
-            safe_print("🧠 Starting Demo Reinforcement Learning Mode")
+            safe_print("\\u1f9e0 Starting Demo Reinforcement Learning Mode")
         else:
-            safe_print("🎯 Starting Demo Mode")
+            safe_print("\\u1f3af Starting Demo Mode")
 
         # Update settings controller for demo mode
         self.settings_controller.fault_settings.experimental_mode = True
@@ -222,7 +222,7 @@ class DemoIntegrationSystem:
         # Reset settings controller
         self.settings_controller.fault_settings.experimental_mode = False
 
-        safe_print("✅ Demo mode stopped. Results saved.")
+        safe_print("\\u2705 Demo mode stopped. Results saved.")
 
         return True
 
@@ -384,7 +384,7 @@ class DemoIntegrationSystem:
     def run_backtest(self, strategy_config: Dict[str, Any],
                      num_trades: int = 100) -> Dict[str, Any]:
         """Run a comprehensive backtest"""
-        safe_print(f"🔄 Starting backtest with {num_trades} trades...")
+        safe_print(f"\\u1f504 Starting backtest with {num_trades} trades...")
 
         # Start backtest mode
         self.start_demo_mode("backtest")
@@ -409,7 +409,7 @@ class DemoIntegrationSystem:
         # Analyze results
         analysis = self._analyze_backtest_results(backtest_results)
 
-        safe_print(f"✅ Backtest completed. Success rate: {analysis['success_rate']:.2%}")
+        safe_print(f"\\u2705 Backtest completed. Success rate: {analysis['success_rate']:.2%}")
 
         return analysis
 
@@ -525,7 +525,7 @@ class DemoIntegrationSystem:
             with open(summary_file, 'w') as f:
                 json.dump(self.get_demo_summary(), f, indent=2, default=str)
 
-            safe_print("💾 Demo data saved successfully")
+            safe_print("\\u1f4be Demo data saved successfully")
 
         except Exception as e:
             safe_print(f"Error saving demo data: {e}")
@@ -583,14 +583,14 @@ if __name__ == "__main__":
 
     backtest_analysis = demo_system.run_backtest(strategy_config, num_trades=10)
 
-    safe_print(f"\nBacktest Results:")
+    safe_print(f"\\nBacktest Results:")
     safe_print(f"Success Rate: {backtest_analysis['success_rate']:.2%}")
     safe_print(f"Total Profit: {backtest_analysis['total_profit']:.2f}")
     safe_print(f"Average Profit: {backtest_analysis['average_profit']:.2f}")
 
     # Get demo summary
     summary = demo_system.get_demo_summary()
-    safe_print(f"\nDemo Summary:")
+    safe_print(f"\\nDemo Summary:")
     safe_print(f"Total Demo Trades: {summary['total_demo_trades']}")
     safe_print(f"Demo Performance: {summary['demo_performance']}")
 

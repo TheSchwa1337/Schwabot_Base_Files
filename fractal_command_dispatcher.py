@@ -3,7 +3,7 @@ from core.unified_math_system import unified_math
 """Fractal Command Dispatcher - Golden Ratio Trust-Based Strategy Execution.
 
 Implements the core mathematical framework for:
-- F(n) = F(n-1) × Φ, where Φ = golden ratio
+- F(n) = F(n-1) \\u00d7 \\u03a6, where \\u03a6 = golden ratio
 - Predictive trust assignment to recursive strategies
 - Historical match analysis for command prioritization
 """
@@ -280,13 +280,13 @@ class FractalCommandDispatcher:
         self.fractal_weights_cache[0] = 1.0
 
         for n in range(1, self.max_fractal_depth + 1):
-            # F(n) = F(n-1) × Φ
+            # F(n) = F(n-1) \\u00d7 \\u03a6
             self.fractal_weights_cache[n] = (
                 self.fractal_weights_cache[n-1] * PHI
             )
 
     def _calculate_fractal_weight(self, depth: int) -> float:
-        """Calculate fractal weight F(n) = F(n-1) × Φ."""
+        """Calculate fractal weight F(n) = F(n-1) \\u00d7 \\u03a6."""
         if depth in self.fractal_weights_cache:
             return self.fractal_weights_cache[depth]
 
@@ -363,7 +363,7 @@ class FractalCommandDispatcher:
         # Performance-based adjustment
         if profile.total_executions > 0:
             success_rate = profile.successful_executions / profile.total_executions
-            performance_adjustment = (success_rate - 0.5) * 0.4  # ±0.2 max adjustment
+            performance_adjustment = (success_rate - 0.5) * 0.4  # \\u00b10.2 max adjustment
         else:
             performance_adjustment = 0.0
 

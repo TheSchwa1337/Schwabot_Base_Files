@@ -161,7 +161,7 @@ class SpectralTransform:
         """
         Calculate spectral entropy as measure of signal complexity
 
-        Implements: H = -Σ p_i * log_base(p_i) where p_i = |X(f)|² / Σ|X(f)|²
+        Implements: H = -\\u03a3 p_i * log_base(p_i) where p_i = |X(f)|\\u00b2 / \\u03a3|X(f)|\\u00b2
 
         Args:
             time_series: Input signal

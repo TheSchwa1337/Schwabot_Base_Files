@@ -90,7 +90,7 @@ class PhaseEntropyMatcher:
             # Calculate bit score
             bit_score = sum(bit_pattern)
 
-            # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + ε)
+            # Calculate phase weight using the formula: (sum(bits) * entropy) / (len(bits) + \\u03b5)
             phase_weight = (bit_score * entropy) / (len(bit_pattern) + 1e-6)
 
             logger.debug(f"Phase weight: {phase_weight:.4f} (bit_score: {bit_score}, entropy: {entropy:.4f})")
@@ -501,7 +501,7 @@ class PhaseEntropyMatcher:
 
 def main():
     """Test function for Phase Entropy Matcher."""
-    safe_print("🧮 Testing Phase Entropy Matcher...")
+    safe_print("\\u1f9ee Testing Phase Entropy Matcher...")
 
     matcher = PhaseEntropyMatcher()
 
@@ -528,7 +528,7 @@ def main():
     entropy_sequence = [2.1, 3.5, 4.2, 5.8, 4.1, 3.9, 6.2, 5.1]
     analysis = matcher.analyze_entropy_patterns(entropy_sequence)
     safe_print(
-        f"\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
+        f"\\nEntropy analysis: {len(analysis.get('pattern_detection', {}).get('patterns', []))} patterns detected")
 
     return 0
 

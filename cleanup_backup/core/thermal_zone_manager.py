@@ -331,7 +331,7 @@ class ThermalZoneManager:
 
     def __init__(self) -> None:
         """Initialize thermal zone manager."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.zones: Dict[str, ThermalZone] = {}
         self.thermal_history: Dict[str, List[ThermalSnapshot]] = {}
         self.alerts: List[ThermalAlert] = []
@@ -665,7 +665,7 @@ def main() -> None:
     """Demo of thermal zone manager system."""
     try:
         manager = ThermalZoneManager()
-        safe_print(f"✅ ThermalZoneManager v{manager.version} initialized")
+        safe_print(f"\\u2705 ThermalZoneManager v{manager.version} initialized")
 
         # Create test thermal zones
         btc_zone = manager.create_thermal_zone("BTC_Trading", 1.0, 2.5, "trading")
@@ -674,13 +674,13 @@ def main() -> None:
             "Mathematical_Core", 0.5, 1.5, "computation"
         )
 
-        safe_print(f"🌡️  Created thermal zones:")
+        safe_print(f"\\u1f321\\ufe0f  Created thermal zones:")
         safe_print(f"   BTC Zone: {btc_zone}")
         safe_print(f"   ETH Zone: {eth_zone}")
         safe_print(f"   Math Zone: {math_zone}")
 
         # Simulate thermal updates
-        safe_print(f"\n📊 Simulating thermal updates:")
+        safe_print(f"\\n\\u1f4ca Simulating thermal updates:")
 
         # Normal operation
         result1 = manager.update_zone_temperature(btc_zone, 1.2, 0.5, 0.3)
@@ -707,7 +707,7 @@ def main() -> None:
         btc_status = manager.get_zone_status(btc_zone)
         if btc_status["status"] == "success":
             thermal_status = btc_status["thermal_status"]
-            safe_print(f"\n🎯 BTC Zone Status:")
+            safe_print(f"\\n\\u1f3af BTC Zone Status:")
             safe_print(f"   Current temp: {thermal_status['current_temperature']:.3f}")
             safe_print(f"   Threshold: {thermal_status['thermal_threshold']:.3f}")
             safe_print(f"   Recent alerts: {len(btc_status['recent_alerts'])}")
@@ -715,17 +715,19 @@ def main() -> None:
         # System overview
         overview = manager.get_system_overview()
         system_status = overview["system_status"]
-        safe_print(f"\n📈 System Overview:")
+        safe_print(f"\\n\\u1f4c8 System Overview:")
         safe_print(f"   Total zones: {system_status['total_zones']}")
         safe_print(f"   Hot zones: {system_status['hot_zones']}")
         safe_print(f"   System efficiency: {system_status['system_efficiency']:.3f}")
         safe_print(f"   Avg temperature: {system_status['average_temperature']:.3f}")
 
-        safe_print("🎉 Thermal zone manager demo completed!")
+        safe_print("\\u1f389 Thermal zone manager demo completed!")
 
     except Exception as e:
-        safe_print(f"❌ Demo failed: {e}")
+        safe_print(f"\\u274c Demo failed: {e}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

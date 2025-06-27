@@ -9,9 +9,9 @@ Phase-drift-safe tensor routing system with integration to tick feed harness,
 voltage lane mapper, and tensor path router for optimal profit routing.
 
 Mathematical Foundation:
-- Phase Drift Detection: Δφ = |φ_current - φ_previous| / φ_previous
+- Phase Drift Detection: \\u0394\\u03c6 = |\\u03c6_current - \\u03c6_previous| / \\u03c6_previous
 - Tensor Routing: T_route = f(hash_prefix, bit_depth, voltage_level, profit_sensor)
-- Drift Compensation: φ_compensated = φ_current * (1 + drift_correction_factor)
+- Drift Compensation: \\u03c6_compensated = \\u03c6_current * (1 + drift_correction_factor)
 - Profit Optimization: profit_score = (tensor_score * voltage_efficiency * drift_stability)
 
 Features:
@@ -116,8 +116,8 @@ class TensorHarnessMatrix:
     Tensor Harness Matrix for Schwabot UROS v1.0.
 
     Mathematical Foundation:
-    - Phase Drift: Δφ = |φ_current - φ_previous| / φ_previous
-    - Drift Compensation: φ_compensated = φ_current * (1 + drift_correction_factor)
+    - Phase Drift: \\u0394\\u03c6 = |\\u03c6_current - \\u03c6_previous| / \\u03c6_previous
+    - Drift Compensation: \\u03c6_compensated = \\u03c6_current * (1 + drift_correction_factor)
     - Tensor Routing: T_route = f(hash_prefix, bit_depth, voltage_level, profit_sensor)
     - Profit Score: profit_score = (tensor_score * voltage_efficiency * drift_stability)
     """
@@ -228,7 +228,7 @@ class TensorHarnessMatrix:
         Measure phase drift for hash prefix.
 
         Mathematical Formula:
-        Δφ = |φ_current - φ_previous| / φ_previous
+        \\u0394\\u03c6 = |\\u03c6_current - \\u03c6_previous| / \\u03c6_previous
 
         Parameters:
         -----------

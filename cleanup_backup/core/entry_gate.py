@@ -10,13 +10,13 @@ a trading opportunity should be executed, deferred, or rejected based on
 unified confidence metrics and entropy-weighted entry scores.
 
 Key Functions:
-- execution_confidence(): Computes Ξ scalar from fractal state
-- entry_score(): Computes 𝓔ₛ from harmony, drift, liquidity, profit
+- execution_confidence(): Computes \\u039e scalar from fractal state
+- entry_score(): Computes \\u1d4d4\\u209b from harmony, drift, liquidity, profit
 - evaluate(): Main gate logic for trade execution decisions
 
 Mathematical Foundation:
-Ξ = (T · Δθ) + (ε × σ_f) + τ_p
-𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
+\\u039e = (T \\u00b7 \\u0394\\u03b8) + (\\u03b5 \\u00d7 \\u03c3_f) + \\u03c4_p
+\\u1d4d4\\u209b = \\u1d4d7 \\u00d7 (1 \\u2212 \\u1d4d3\\u209a) \\u00d7 \\u1d4db \\u00d7 P\\u0302
 
 Windows CLI compatible with flake8 compliance.
 """
@@ -42,31 +42,31 @@ def execution_confidence(
     loop_volatility: float,
     profit_decay: float,
 ) -> float:
-    """Calculate execution confidence scalar Ξ.
+    """Calculate execution confidence scalar \\u039e.
 
     Parameters
     ----------
     triplet_entropy : float
         T - Information rate from triplet patterns (0-1)
     theta_drift : float
-        Δθ - Normalized braid angle drift (0-1)
+        \\u0394\\u03b8 - Normalized braid angle drift (0-1)
     coherence : float
-        ε - Fractal coherence score (0-1)
+        \\u03b5 - Fractal coherence score (0-1)
     loop_volatility : float
-        σ_f - Standard deviation of loop sums (0-1)
+        \\u03c3_f - Standard deviation of loop sums (0-1)
     profit_decay : float
-        τ_p - Time-weighted profit modifier (0-0.3)
+        \\u03c4_p - Time-weighted profit modifier (0-0.3)
 
     Returns
     -------
     float
-        Ξ - Execution confidence scalar
+        \\u039e - Execution confidence scalar
         >1.15: Execute immediately
         0.85-1.15: Route to GAN filter
         <0.85: Defer/cooldown
     """
     try:
-        # Ξ = (T · Δθ) + (ε × σ_f) + τ_p
+        # \\u039e = (T \\u00b7 \\u0394\\u03b8) + (\\u03b5 \\u00d7 \\u03c3_f) + \\u03c4_p
         confidence = (
             (triplet_entropy * theta_drift)
             + (coherence * loop_volatility)
@@ -87,29 +87,29 @@ def entry_score(
     liquidity_score: float,
     projected_profit: float,
 ) -> float:
-    """Calculate entropy-weighted entry score 𝓔ₛ.
+    """Calculate entropy-weighted entry score \\u1d4d4\\u209b.
 
     Parameters
     ----------
     harmony : float
-        𝓗 - Tick harmony alignment score (0-1)
+        \\u1d4d7 - Tick harmony alignment score (0-1)
     drift_penalty : float
-        𝓓ₚ - Phase drift penalty (0-1)
+        \\u1d4d3\\u209a - Phase drift penalty (0-1)
     liquidity_score : float
-        𝓛 - Normalized liquidity depth score (0-1)
+        \\u1d4db - Normalized liquidity depth score (0-1)
     projected_profit : float
-        P̂ - Expected profit ratio (0-1)
+        P\\u0302 - Expected profit ratio (0-1)
 
     Returns
     -------
     float
-        𝓔ₛ - Entry score
+        \\u1d4d4\\u209b - Entry score
         >0.90: Execute
         0.70-0.90: Route to GAN review
         <0.70: Suppress/cooldown
     """
     try:
-        # 𝓔ₛ = 𝓗 × (1 − 𝓓ₚ) × 𝓛 × P̂
+        # \\u1d4d4\\u209b = \\u1d4d7 \\u00d7 (1 \\u2212 \\u1d4d3\\u209a) \\u00d7 \\u1d4db \\u00d7 P\\u0302
         score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
         # Ensure valid range
@@ -130,9 +130,9 @@ def evaluate(
     Parameters
     ----------
     confidence : float
-        Ξ - Execution confidence scalar
+        \\u039e - Execution confidence scalar
     entry_score_val : float
-        𝓔ₛ - Entropy-weighted entry score
+        \\u1d4d4\\u209b - Entropy-weighted entry score
     gan_filter_result : bool, optional
         Result from GAN anomaly filter (if available)
 
@@ -252,7 +252,7 @@ def main() -> None:
     es = entry_score(0.88, 0.12, 0.75, 0.03)
     result = evaluate(xi, es)
 
-    safe_print(f"Test 1 - Ξ: {xi:.3f}, 𝓔ₛ: {es:.3f}")
+    safe_print(f"Test 1 - \\u039e: {xi:.3f}, \\u1d4d4\\u209b: {es:.3f}")
     safe_print(f"Decision: {result['action']} - {result['reason']}")
     print()
 
@@ -261,9 +261,11 @@ def main() -> None:
     es2 = entry_score(0.82, 0.08, 0.85, 0.025)
     result2 = evaluate(xi2, es2)
 
-    safe_print(f"Test 2 - Ξ: {xi2:.3f}, 𝓔ₛ: {es2:.3f}")
+    safe_print(f"Test 2 - \\u039e: {xi2:.3f}, \\u1d4d4\\u209b: {es2:.3f}")
     safe_print(f"Decision: {result2['action']} - {result2['reason']}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

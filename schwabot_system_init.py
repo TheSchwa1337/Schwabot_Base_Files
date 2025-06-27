@@ -40,111 +40,111 @@ def safe_print(message):
 
 def test_mathematical_utilities():
     """Test mathematical utilities module."""
-    safe_print("\n🧮 Testing Mathematical Utilities...")
+    safe_print("\\n\\u1f9ee Testing Mathematical Utilities...")
     try:
         from core.utils.math_utils import main as math_main
         success = math_main()
-        safe_print(f"✅ Mathematical Utilities: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Mathematical Utilities: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Mathematical Utilities failed: {e}")
+        safe_print(f"\\u274c Mathematical Utilities failed: {e}")
         return False
 
 
 def test_unified_tensor_algebra():
     """Test unified tensor algebra module."""
-    safe_print("\n🔢 Testing Unified Tensor Algebra...")
+    safe_print("\\n\\u1f522 Testing Unified Tensor Algebra...")
     try:
         from core.math.tensor_algebra.unified_tensor_algebra import main as tensor_main
         success = tensor_main()
-        safe_print(f"✅ Unified Tensor Algebra: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Unified Tensor Algebra: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Unified Tensor Algebra failed: {e}")
+        safe_print(f"\\u274c Unified Tensor Algebra failed: {e}")
         return False
 
 
 def test_profit_engine():
     """Test profit engine module."""
-    safe_print("\n💰 Testing Profit Engine...")
+    safe_print("\\n\\u1f4b0 Testing Profit Engine...")
     try:
         from core.math.tensor_algebra.profit_engine import main as profit_main
         success = profit_main()
-        safe_print(f"✅ Profit Engine: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Profit Engine: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Profit Engine failed: {e}")
+        safe_print(f"\\u274c Profit Engine failed: {e}")
         return False
 
 
 def test_entropy_engine():
     """Test entropy engine module."""
-    safe_print("\n🌊 Testing Entropy Engine...")
+    safe_print("\\n\\u1f30a Testing Entropy Engine...")
     try:
         from core.math.tensor_algebra.entropy_engine import main as entropy_main
         success = entropy_main()
-        safe_print(f"✅ Entropy Engine: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Entropy Engine: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Entropy Engine failed: {e}")
+        safe_print(f"\\u274c Entropy Engine failed: {e}")
         return False
 
 
 def test_tensor_engine():
     """Test tensor engine module."""
-    safe_print("\n🔢 Testing Tensor Engine...")
+    safe_print("\\n\\u1f522 Testing Tensor Engine...")
     try:
         from core.math.tensor_algebra.tensor_engine import main as tensor_engine_main
         success = tensor_engine_main()
-        safe_print(f"✅ Tensor Engine: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Tensor Engine: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Tensor Engine failed: {e}")
+        safe_print(f"\\u274c Tensor Engine failed: {e}")
         return False
 
 
 def test_api_configuration():
     """Test API configuration module."""
-    safe_print("\n🌐 Testing API Configuration...")
+    safe_print("\\n\\u1f310 Testing API Configuration...")
     try:
         from core.config.api_config import main as api_main
         success = api_main()
-        safe_print(f"✅ API Configuration: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 API Configuration: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ API Configuration failed: {e}")
+        safe_print(f"\\u274c API Configuration failed: {e}")
         return False
 
 
 def test_ai_command_sequencer():
     """Test AI command sequencer module."""
-    safe_print("\n🤖 Testing AI Command Sequencer...")
+    safe_print("\\n\\u1f916 Testing AI Command Sequencer...")
     try:
         from core.memory_stack.ai_command_sequencer import main as ai_main
         success = ai_main()
-        safe_print(f"✅ AI Command Sequencer: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 AI Command Sequencer: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ AI Command Sequencer failed: {e}")
+        safe_print(f"\\u274c AI Command Sequencer failed: {e}")
         return False
 
 
 def test_windows_cli_compatibility():
     """Test Windows CLI compatibility module."""
-    safe_print("\n🖥️ Testing Windows CLI Compatibility...")
+    safe_print("\\n\\u1f5a5\\ufe0f Testing Windows CLI Compatibility...")
     try:
         from core.utils.windows_cli_compatibility import main as cli_main
         success = cli_main()
-        safe_print(f"✅ Windows CLI Compatibility: {'PASS' if success else 'FAIL'}")
+        safe_print(f"\\u2705 Windows CLI Compatibility: {'PASS' if success else 'FAIL'}")
         return success
     except Exception as e:
-        safe_print(f"❌ Windows CLI Compatibility failed: {e}")
+        safe_print(f"\\u274c Windows CLI Compatibility failed: {e}")
         return False
 
 
 def test_integration():
     """Test integration between modules."""
-    safe_print("\n🔗 Testing Module Integration...")
+    safe_print("\\n\\u1f517 Testing Module Integration...")
     try:
         # Test mathematical integration
         import numpy as np
@@ -158,41 +158,41 @@ def test_integration():
 
         # Test math utils -> profit engine
         profit_surface = compute_profit_surface(test_data, test_data)
-        safe_print(f"✅ Math Utils -> Profit Engine: {profit_surface.shape}")
+        safe_print(f"\\u2705 Math Utils -> Profit Engine: {profit_surface.shape}")
 
         # Test math utils -> entropy engine
         filtered_data = entropy_filter(test_data.flatten())
-        safe_print(f"✅ Math Utils -> Entropy Engine: {len(filtered_data)}")
+        safe_print(f"\\u2705 Math Utils -> Entropy Engine: {len(filtered_data)}")
 
         # Test math utils -> tensor engine
         pattern_analysis = analyze_tensor_patterns(test_data)
-        safe_print(f"✅ Math Utils -> Tensor Engine: {len(pattern_analysis['pattern_types'])} patterns")
+        safe_print(f"\\u2705 Math Utils -> Tensor Engine: {len(pattern_analysis['pattern_types'])} patterns")
 
         # Test API integration
         from core.config.api_config import get_global_metrics
         try:
             global_data = get_global_metrics('coingecko')
-            safe_print(f"✅ API Integration: {len(global_data)} keys")
+            safe_print(f"\\u2705 API Integration: {len(global_data)} keys")
         except Exception as e:
-            safe_print(f"⚠️ API Integration: {e}")
+            safe_print(f"\\u26a0\\ufe0f API Integration: {e}")
 
         # Test AI command sequencer integration
         from core.memory_stack.ai_command_sequencer import sequence_ai_command
         commands = sequence_ai_command("test_integration_hash")
-        safe_print(f"✅ AI Command Integration: {len(commands)} commands")
+        safe_print(f"\\u2705 AI Command Integration: {len(commands)} commands")
 
-        safe_print("✅ Module Integration: PASS")
+        safe_print("\\u2705 Module Integration: PASS")
         return True
 
     except Exception as e:
-        safe_print(f"❌ Module Integration failed: {e}")
+        safe_print(f"\\u274c Module Integration failed: {e}")
         traceback.print_exc()
         return False
 
 
 def test_btc_dus_dc_trading_logic():
     """Test BTC/DUS/DC trading logic integration."""
-    safe_print("\n💱 Testing BTC/DUS/DC Trading Logic...")
+    safe_print("\\n\\u1f4b1 Testing BTC/DUS/DC Trading Logic...")
     try:
         import numpy as np
 
@@ -209,36 +209,36 @@ def test_btc_dus_dc_trading_logic():
 
         # Test ghost trigger generation
         ghost_map = generate_ghost_trigger_map(volatility=0.5, resonance=0.7, threshold=0.3)
-        safe_print(f"✅ Ghost Trigger Map: {len(ghost_map)} parameters")
+        safe_print(f"\\u2705 Ghost Trigger Map: {len(ghost_map)} parameters")
 
         # Test bit phase allocation
         strategy_vector = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
         allocation = bit_phase_allocator(strategy_vector, "long")
-        safe_print(f"✅ Bit Phase Allocation: {allocation}")
+        safe_print(f"\\u2705 Bit Phase Allocation: {allocation}")
 
         # Test phase alignment scoring
         alignment_score = phase_alignment_score(volatility=0.5, entropy=0.6, hash_dist=0.3)
-        safe_print(f"✅ Phase Alignment Score: {alignment_score:.4f}")
+        safe_print(f"\\u2705 Phase Alignment Score: {alignment_score:.4f}")
 
         # Test 4-bit/8-bit logic
         for bit_count in [4, 8]:
             bit_phases = np.array([i / (2**bit_count) for i in range(2**bit_count)])
             entropy_values = [calculate_entropy(btc_prices * phase) for phase in bit_phases]
             max_entropy_phase = bit_phases[np.argmax(entropy_values)]
-            safe_print(f"✅ {bit_count}-bit Logic: Max entropy phase = {max_entropy_phase:.4f}")
+            safe_print(f"\\u2705 {bit_count}-bit Logic: Max entropy phase = {max_entropy_phase:.4f}")
 
-        safe_print("✅ BTC/DUS/DC Trading Logic: PASS")
+        safe_print("\\u2705 BTC/DUS/DC Trading Logic: PASS")
         return True
 
     except Exception as e:
-        safe_print(f"❌ BTC/DUS/DC Trading Logic failed: {e}")
+        safe_print(f"\\u274c BTC/DUS/DC Trading Logic failed: {e}")
         traceback.print_exc()
         return False
 
 
 def test_system_robustness():
     """Test system robustness and error handling."""
-    safe_print("\n🛡️ Testing System Robustness...")
+    safe_print("\\n\\u1f6e1\\ufe0f Testing System Robustness...")
     try:
         # Test error handling in mathematical functions
         import numpy as np
@@ -246,26 +246,26 @@ def test_system_robustness():
 
         # Test with empty array
         empty_entropy = calculate_entropy(np.array([]))
-        safe_print(f"✅ Empty Array Handling: {empty_entropy}")
+        safe_print(f"\\u2705 Empty Array Handling: {empty_entropy}")
 
         # Test with NaN values
         nan_array = np.array([1.0, np.nan, 3.0])
         nan_entropy = calculate_entropy(nan_array)
-        safe_print(f"✅ NaN Handling: {nan_entropy}")
+        safe_print(f"\\u2705 NaN Handling: {nan_entropy}")
 
         # Test with infinite values
         inf_array = np.array([1.0, np.inf, 3.0])
         inf_entropy = calculate_entropy(inf_array)
-        safe_print(f"✅ Infinity Handling: {inf_entropy}")
+        safe_print(f"\\u2705 Infinity Handling: {inf_entropy}")
 
         # Test API error handling
         from core.config.api_config import get_crypto_data
         try:
             # Test with invalid symbols
             invalid_data = get_crypto_data(['invalid_symbol'], 'coingecko')
-            safe_print(f"✅ Invalid Symbol Handling: {len(invalid_data)}")
+            safe_print(f"\\u2705 Invalid Symbol Handling: {len(invalid_data)}")
         except Exception as e:
-            safe_print(f"✅ API Error Handling: {type(e).__name__}")
+            safe_print(f"\\u2705 API Error Handling: {type(e).__name__}")
 
         # Test AI command sequencer error handling
         from core.memory_stack.ai_command_sequencer import sequence_ai_command
@@ -273,32 +273,32 @@ def test_system_robustness():
             # Test with very long hash
             long_hash = "a" * 1000
             long_commands = sequence_ai_command(long_hash)
-            safe_print(f"✅ Long Hash Handling: {len(long_commands)} commands")
+            safe_print(f"\\u2705 Long Hash Handling: {len(long_commands)} commands")
         except Exception as e:
-            safe_print(f"✅ AI Error Handling: {type(e).__name__}")
+            safe_print(f"\\u2705 AI Error Handling: {type(e).__name__}")
 
-        safe_print("✅ System Robustness: PASS")
+        safe_print("\\u2705 System Robustness: PASS")
         return True
 
     except Exception as e:
-        safe_print(f"❌ System Robustness failed: {e}")
+        safe_print(f"\\u274c System Robustness failed: {e}")
         traceback.print_exc()
         return False
 
 
 def main():
     """Main function to run comprehensive system initialization and testing."""
-    safe_print("🚀 Schwabot System Initialization and Integration Test")
+    safe_print("\\u1f680 Schwabot System Initialization and Integration Test")
     safe_print("=" * 70)
     safe_print("Addressing user concerns about:")
-    safe_print("1. ✅ Proper main function calls and initialization")
-    safe_print("2. ✅ Import path resolution")
-    safe_print("3. ✅ Windows CLI compatibility")
-    safe_print("4. ✅ API integration (CoinMarketCap/CoinGecko)")
-    safe_print("5. ✅ Mathematical function completeness")
-    safe_print("6. ✅ System robustness and error handling")
-    safe_print("7. ✅ BTC/DUS/DC trading logic integration")
-    safe_print("8. ✅ 4-bit/8-bit phase logic implementation")
+    safe_print("1. \\u2705 Proper main function calls and initialization")
+    safe_print("2. \\u2705 Import path resolution")
+    safe_print("3. \\u2705 Windows CLI compatibility")
+    safe_print("4. \\u2705 API integration (CoinMarketCap/CoinGecko)")
+    safe_print("5. \\u2705 Mathematical function completeness")
+    safe_print("6. \\u2705 System robustness and error handling")
+    safe_print("7. \\u2705 BTC/DUS/DC trading logic integration")
+    safe_print("8. \\u2705 4-bit/8-bit phase logic implementation")
     safe_print("=" * 70)
 
     start_time = time.time()
@@ -323,7 +323,7 @@ def main():
         try:
             results[test_name] = test_func()
         except Exception as e:
-            safe_print(f"❌ {test_name} test failed with exception: {e}")
+            safe_print(f"\\u274c {test_name} test failed with exception: {e}")
             results[test_name] = False
 
     # Calculate overall status
@@ -333,30 +333,30 @@ def main():
 
     # Print summary
     safe_print("\n" + "=" * 70)
-    safe_print("📊 SCHWABOT SYSTEM INITIALIZATION SUMMARY")
+    safe_print("\\u1f4ca SCHWABOT SYSTEM INITIALIZATION SUMMARY")
     safe_print("=" * 70)
 
-    safe_print(f"\n{overall_status} Overall Status: {passed_tests}/{total_tests} tests passed")
+    safe_print(f"\\n{overall_status} Overall Status: {passed_tests}/{total_tests} tests passed")
 
     for test_name, result in results.items():
-        status_emoji = "✅" if result else "❌"
+        status_emoji = "\\u2705" if result else "\\u274c"
         safe_print(f"{status_emoji} {test_name}: {'PASS' if result else 'FAIL'}")
 
     # Timing information
     total_time = time.time() - start_time
-    safe_print(f"\n⏱️ Total Initialization Time: {total_time:.2f} seconds")
+    safe_print(f"\\n\\u23f1\\ufe0f Total Initialization Time: {total_time:.2f} seconds")
 
     # Answer user questions
-    safe_print("\n❓ ANSWERS TO USER QUESTIONS:")
+    safe_print("\\n\\u2753 ANSWERS TO USER QUESTIONS:")
     safe_print("-" * 40)
 
     # Question 1: User interface verification
     ui_status = results.get("Windows CLI Compatibility", False)
-    safe_print(f"1. ✅ User Interface Levels Verified: {ui_status}")
+    safe_print(f"1. \\u2705 User Interface Levels Verified: {ui_status}")
 
     # Question 2: JSON configuration integration
     config_status = results.get("API Configuration", False)
-    safe_print(f"2. ✅ JSON Configuration Integration: {config_status}")
+    safe_print(f"2. \\u2705 JSON Configuration Integration: {config_status}")
 
     # Question 3: Mathematical panel integration
     math_status = all([
@@ -366,50 +366,50 @@ def main():
         results.get("Entropy Engine", False),
         results.get("Tensor Engine", False)
     ])
-    safe_print(f"3. ✅ Mathematical Panel Integration: {math_status}")
+    safe_print(f"3. \\u2705 Mathematical Panel Integration: {math_status}")
 
     # Question 4: API integration
     api_status = results.get("API Configuration", False)
-    safe_print(f"4. ✅ API Integration (CoinMarketCap/CoinGecko): {api_status}")
+    safe_print(f"4. \\u2705 API Integration (CoinMarketCap/CoinGecko): {api_status}")
 
     # Question 5: Performance and timing
     perf_status = results.get("System Robustness", False)
-    safe_print(f"5. ✅ Performance & Timing Analysis: {perf_status}")
+    safe_print(f"5. \\u2705 Performance & Timing Analysis: {perf_status}")
 
     # Question 6: System robustness
     robustness_status = results.get("System Robustness", False)
-    safe_print(f"6. ✅ System Robustness: {robustness_status}")
+    safe_print(f"6. \\u2705 System Robustness: {robustness_status}")
 
     # Question 7: Pipeline routing
     pipeline_status = results.get("Module Integration", False)
-    safe_print(f"7. ✅ Pipeline Routing: {pipeline_status}")
+    safe_print(f"7. \\u2705 Pipeline Routing: {pipeline_status}")
 
     # Question 8: Timing error correction
     timing_status = results.get("System Robustness", False)
-    safe_print(f"8. ✅ Timing Error Correction: {timing_status}")
+    safe_print(f"8. \\u2705 Timing Error Correction: {timing_status}")
 
     # Additional questions about trading logic
     trading_status = results.get("BTC/DUS/DC Trading Logic", False)
-    safe_print(f"9. ✅ BTC/DUS/DC Trading Logic: {trading_status}")
+    safe_print(f"9. \\u2705 BTC/DUS/DC Trading Logic: {trading_status}")
 
     bit_logic_status = results.get("BTC/DUS/DC Trading Logic", False)
-    safe_print(f"10. ✅ 4-bit/8-bit Phase Logic: {bit_logic_status}")
+    safe_print(f"10. \\u2705 4-bit/8-bit Phase Logic: {bit_logic_status}")
 
     safe_print("\n" + "=" * 70)
 
     # Final recommendation
     if overall_status == "PASS":
-        safe_print("\n🎉 All tests passed! Schwabot system is ready for production.")
-        safe_print("✅ All user questions have been answered positively.")
-        safe_print("✅ Mathematical functions are complete and functional.")
-        safe_print("✅ API integration is properly configured.")
-        safe_print("✅ User interface provides unified control.")
-        safe_print("✅ System is robust and secure.")
-        safe_print("✅ Trading logic is properly integrated.")
-        safe_print("✅ All main functions are properly initialized.")
+        safe_print("\\n\\u1f389 All tests passed! Schwabot system is ready for production.")
+        safe_print("\\u2705 All user questions have been answered positively.")
+        safe_print("\\u2705 Mathematical functions are complete and functional.")
+        safe_print("\\u2705 API integration is properly configured.")
+        safe_print("\\u2705 User interface provides unified control.")
+        safe_print("\\u2705 System is robust and secure.")
+        safe_print("\\u2705 Trading logic is properly integrated.")
+        safe_print("\\u2705 All main functions are properly initialized.")
     else:
-        safe_print("\n⚠️ Some tests failed. Please review the results.")
-        safe_print("❌ Some user questions may need attention.")
+        safe_print("\\n\\u26a0\\ufe0f Some tests failed. Please review the results.")
+        safe_print("\\u274c Some user questions may need attention.")
 
     return overall_status == "PASS"
 
@@ -419,6 +419,8 @@ if __name__ == "__main__":
         success = main()
         sys.exit(0 if success else 1)
     except Exception as e:
-        safe_print(f"\n💥 System initialization failed with error: {e}")
+        safe_print(f"\\n\\u1f4a5 System initialization failed with error: {e}")
         traceback.print_exc()
         sys.exit(1)
+
+"""

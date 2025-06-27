@@ -99,24 +99,24 @@ except ImportError:
     # Pattern replacements for emoji safety
     EMOJI_REPLACEMENTS = [
         (
-            r'print\s*\(\s*["\']([^"\']*['
-            r'🚀🎯✅❌⚠️🔍📊🎉🔄⚡🧪🛠️⚖️🔧📈🔥❄️⭐🚨🎡🌀🔮🌌'
-            r'🧬⚛️🔬⚗️🧮📐🔢💻🖥️📱🌐🔒🔓🔑🛡️💰💎🎰🏦💳💹🔀🔁↩️💥💡🎪🎭🎨🏗️🗂️📦]'
+            r'print\\s*\(\\s*["\']([^"\']*['
+            r'\\u1f680\\u1f3af\\u2705\\u274c\\u26a0\\ufe0f\\u1f50d\\u1f4ca\\u1f389\\u1f504\\u26a1\\u1f9ea\\u1f6e0\\ufe0f\\u2696\\ufe0f\\u1f527\\u1f4c8\\u1f525\\u2744\\ufe0f\\u2b50\\u1f6a8\\u1f3a1\\u1f300\\u1f52e\\u1f30c'
+            r'\\u1f9ec\\u269b\\ufe0f\\u1f52c\\u2697\\ufe0f\\u1f9ee\\u1f4d0\\u1f522\\u1f4bb\\u1f5a5\\ufe0f\\u1f4f1\\u1f310\\u1f512\\u1f513\\u1f511\\u1f6e1\\ufe0f\\u1f4b0\\u1f48e\\u1f3b0\\u1f3e6\\u1f4b3\\u1f4b9\\u1f500\\u1f501\\u21a9\\ufe0f\\u1f4a5\\u1f4a1\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3d7\\ufe0f\\u1f5c2\\ufe0f\\u1f4e6]'
             r'[^"\']*)["\']',
             r'safe_safe_print(r"\1"',
         ),
         (
-            r'logger\.(info|warning|error|debug|critical)\s*\(\s*["\']('
+            r'logger\.(info|warning|error|debug|critical)\\s*\(\\s*["\']('
             r'[^"\']*['
-            r'🚀🎯✅❌⚠️🔍📊🎉🔄⚡🧪🛠️⚖️🔧📈🔥❄️⭐🚨🎡🌀🔮🌌'
-            r'🧬⚛️🔬⚗️🧮📐🔢💻🖥️📱🌐🔒🔓🔑🛡️💰💎🎰🏦💳💹🔀🔁↩️💥💡🎪🎭🎨🏗️🗂️📦]'
+            r'\\u1f680\\u1f3af\\u2705\\u274c\\u26a0\\ufe0f\\u1f50d\\u1f4ca\\u1f389\\u1f504\\u26a1\\u1f9ea\\u1f6e0\\ufe0f\\u2696\\ufe0f\\u1f527\\u1f4c8\\u1f525\\u2744\\ufe0f\\u2b50\\u1f6a8\\u1f3a1\\u1f300\\u1f52e\\u1f30c'
+            r'\\u1f9ec\\u269b\\ufe0f\\u1f52c\\u2697\\ufe0f\\u1f9ee\\u1f4d0\\u1f522\\u1f4bb\\u1f5a5\\ufe0f\\u1f4f1\\u1f310\\u1f512\\u1f513\\u1f511\\u1f6e1\\ufe0f\\u1f4b0\\u1f48e\\u1f3b0\\u1f3e6\\u1f4b3\\u1f4b9\\u1f500\\u1f501\\u21a9\\ufe0f\\u1f4a5\\u1f4a1\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3d7\\ufe0f\\u1f5c2\\ufe0f\\u1f4e6]'
             r'[^"\']*)["\']',
             r'safe_log(logger, "\1", r"\2"',
         ),
         (
             r'f["\']([^"\']*['
-            r'🚀🎯✅❌⚠️🔍📊🎉🔄⚡🧪🛠️⚖️🔧📈🔥❄️⭐🚨🎡🌀🔮🌌'
-            r'🧬⚛️🔬⚗️🧮📐🔢💻🖥️📱🌐🔒🔓🔑🛡️💰💎🎰🏦💳💹🔀🔁↩️💥💡🎪🎭🎨🏗️🗂️📦]'
+            r'\\u1f680\\u1f3af\\u2705\\u274c\\u26a0\\ufe0f\\u1f50d\\u1f4ca\\u1f389\\u1f504\\u26a1\\u1f9ea\\u1f6e0\\ufe0f\\u2696\\ufe0f\\u1f527\\u1f4c8\\u1f525\\u2744\\ufe0f\\u2b50\\u1f6a8\\u1f3a1\\u1f300\\u1f52e\\u1f30c'
+            r'\\u1f9ec\\u269b\\ufe0f\\u1f52c\\u2697\\ufe0f\\u1f9ee\\u1f4d0\\u1f522\\u1f4bb\\u1f5a5\\ufe0f\\u1f4f1\\u1f310\\u1f512\\u1f513\\u1f511\\u1f6e1\\ufe0f\\u1f4b0\\u1f48e\\u1f3b0\\u1f3e6\\u1f4b3\\u1f4b9\\u1f500\\u1f501\\u21a9\\ufe0f\\u1f4a5\\u1f4a1\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3d7\\ufe0f\\u1f5c2\\ufe0f\\u1f4e6]'
             r'[^"\']*)["\']',
             r'EnhancedWindowsCliCompatibilityHandler.safe_emoji_safe_print(f"\1")',
         ),
@@ -147,7 +147,7 @@ except ImportError:
             return content
 
         # Find appropriate insertion point
-        import_pattern = r"^(import\s+\w+|from\s+\w+\s+import\s+.*?)$"
+        import_pattern = r"^(import\\s+\\w+|from\\s+\\w+\\s+import\\s+.*?)$"
         import_matches = list(
             re.finditer(import_pattern, content, re.MULTILINE)
         )
@@ -191,10 +191,10 @@ except ImportError:
         """Add @cli_safe decorators to main functions"""
         # Find main functions that should be decorated
         main_function_patterns = [
-            r"(def\s+main\s*\([^)]*\)\s*:)",
-            r"(def\s+run_\w+\s*\([^)]*\)\s*:)",
-            r"(def\s+validate_\w+\s*\([^)]*\)\s*:)",
-            r"(def\s+demonstrate_\w+\s*\([^)]*\)\s*:)",
+            r"(def\\s+main\\s*\([^)]*\)\\s*:)",
+            r"(def\\s+run_\\w+\\s*\([^)]*\)\\s*:)",
+            r"(def\\s+validate_\\w+\\s*\([^)]*\)\\s*:)",
+            r"(def\\s+demonstrate_\\w+\\s*\([^)]*\)\\s*:)",
         ]
 
         modified_content = content
@@ -207,7 +207,7 @@ except ImportError:
                 lines_before = modified_content[: match.start()].split("\n")
                 if any("@cli_safe" in line for line in lines_before[-3:]):
                     return function_def
-                return f"@cli_safe\n    {function_def}"
+                return f"@cli_safe\\n    {function_def}"
 
             modified_content = re.sub(pattern, add_decorator, modified_content)
 
@@ -217,7 +217,7 @@ except ImportError:
         """Enhance logging calls with CLI-safe alternatives"""
         # Replace logger calls with safe_log calls
         logger_pattern = (
-            r"logger\.(info|warning|error|debug|critical)\s*\(\s*([^)]+)\s*\)"
+            r"logger\.(info|warning|error|debug|critical)\\s*\(\\s*([^)]+)\\s*\)"
         )
 
         def replace_logger_call(match):
@@ -428,11 +428,11 @@ def run_cli_safe_validation() -> Dict[str, Any]:
     total = len(tests)
     success_rate = (passed / total) * 100
     reporter = get_safe_reporter()
-    safe_print("\n[DATA] Validation Results:")
+    safe_print("\\n[DATA] Validation Results:")
     for test_name, result in tests.items():
         safe_print(reporter(test_name, result))
     safe_print(
-        f"\n[COMPLETE] Success Rate: {success_rate:.1f}% ({passed}/{total})"
+        f"\\n[COMPLETE] Success Rate: {success_rate:.1f}% ({passed}/{total})"
     )
     if success_rate >= 90:
         safe_print("[SUCCESS] System fully operational - ready for production!")
@@ -485,7 +485,7 @@ if __name__ == "__main__":
 def main():
     """Main application function"""
     if CLI_HANDLER_AVAILABLE:
-        safe_print("🚀 Enhanced CLI Compatibility Application Starting...")
+        safe_print("\\u1f680 Enhanced CLI Compatibility Application Starting...")
         safe_print(
             "   Applying bulletproof Windows CLI handling to mathematical "
             "systems"
@@ -511,12 +511,12 @@ def main():
     # Report results
     safe_print("\n" + "=" * 70)
     if CLI_HANDLER_AVAILABLE:
-        safe_print("🎉 CLI Compatibility Application Complete!")
+        safe_print("\\u1f389 CLI Compatibility Application Complete!")
     else:
         safe_print("[COMPLETE] CLI Compatibility Application Complete!")
     safe_print("=" * 70)
 
-    safe_print(f"📊 Processing Results:")
+    safe_print(f"\\u1f4ca Processing Results:")
     safe_print(
         f"   Files Processed: {results['success_count']}/"
         f"{results['total_files']}"
@@ -525,15 +525,15 @@ def main():
     safe_print(f"   Errors: {results['error_count']}")
 
     if results["errors"]:
-        safe_print("\n❌ Errors encountered:")
+        safe_print("\\n\\u274c Errors encountered:")
         for error in results["errors"]:
             safe_print(f"   {error['file']}: {error['error']}")
 
-    safe_print(f"\n✅ Created CLI-safe validator: {cli_validator}")
+    safe_print(f"\\n\\u2705 Created CLI-safe validator: {cli_validator}")
 
     if results["success_rate"] >= 90:
         safe_print(
-            "\n🎉 EXCELLENT! All mathematical systems now have bulletproof "
+            "\\n\\u1f389 EXCELLENT! All mathematical systems now have bulletproof "
             "CLI compatibility!"
         )
         safe_print(
@@ -541,7 +541,7 @@ def main():
             "Windows environments."
         )
     else:
-        safe_print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
+        safe_print("\\n\\u26a0\\ufe0f PARTIAL SUCCESS: Some files may need manual review.")
         safe_print("   Check the error log for specific issues.")
 
     safe_print("=" * 70)
@@ -550,3 +550,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -435,7 +435,7 @@ class TimeAwareEMA:
         Initialize EMA filter
 
         Args:
-            alpha: Base smoothing factor (0 < α < 1)
+            alpha: Base smoothing factor (0 < \\u03b1 < 1)
             initial_value: Initial EMA value
         """
         self.alpha = alpha
@@ -449,8 +449,8 @@ class TimeAwareEMA:
         """
         Update EMA with time-aware smoothing
 
-        Formula: s_t = α_eff * x_t + (1 - α_eff) * s_{t-1}
-        where α_eff = 1 - exp(-α * Δt)
+        Formula: s_t = \\u03b1_eff * x_t + (1 - \\u03b1_eff) * s_{t-1}
+        where \\u03b1_eff = 1 - exp(-\\u03b1 * \\u0394t)
 
         Args:
             new_value: New observation
@@ -578,7 +578,7 @@ def main() -> None:
     safe_print(f"Final Kalman state: {kf.state.x}")
 
     # Test EMA
-    safe_print("\nTesting Time-Aware EMA...")
+    safe_print("\\nTesting Time-Aware EMA...")
     ema = TimeAwareEMA(alpha=0.3)
 
     for i in range(10):

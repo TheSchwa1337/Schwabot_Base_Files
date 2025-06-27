@@ -9,9 +9,9 @@ Tensor path routing system for hash prefix to basket to tensor path mapping.
 Provides integration with voltage lane mapper and hash registry for optimal routing.
 
 Mathematical Foundation:
-- Hash Prefix → Basket Mapping: basket_id = hash_prefix % total_baskets
+- Hash Prefix \\u2192 Basket Mapping: basket_id = hash_prefix % total_baskets
 - Tensor Path Generation: tensor_path = f"{asset_from}_{asset_to}_{strategy_type}_{basket_id}"
-- Voltage Lane Integration: voltage_level = f(bit_depth) → compute_channel
+- Voltage Lane Integration: voltage_level = f(bit_depth) \\u2192 compute_channel
 - Routing Score: score = (priority * voltage_compatibility * basket_availability)
 
 Features:
@@ -116,9 +116,9 @@ class TensorPathRouter:
     Tensor Path Router for Schwabot UROS v1.0.
 
     Mathematical Foundation:
-    - Hash Prefix → Basket: basket_id = hash_prefix % total_baskets
+    - Hash Prefix \\u2192 Basket: basket_id = hash_prefix % total_baskets
     - Tensor Path: tensor_path = f"{asset_from}_{asset_to}_{strategy_type}_{basket_id}"
-    - Voltage Integration: voltage_level = f(bit_depth) → compute_channel
+    - Voltage Integration: voltage_level = f(bit_depth) \\u2192 compute_channel
     - Routing Score: score = (priority * voltage_compatibility * basket_availability)
     """
 
@@ -415,7 +415,7 @@ class TensorPathRouter:
                 routing_time=time.time() - start_time
             )
 
-            logger.info(f"Routing {request.request_id} successful: {mapping.hash_prefix} → {mapping.tensor_path}")
+            logger.info(f"Routing {request.request_id} successful: {mapping.hash_prefix} \\u2192 {mapping.tensor_path}")
 
             return result
 
@@ -693,3 +693,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

@@ -298,7 +298,7 @@ class UnifiedMathematicalTradingController:
 
     def __init__(self: UnifiedMathematicalTradingController) -> None:
         """Initialize unified trading controller."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.constraints = MathematicalConstraints()
         self.safe_decimal = SafeDecimalHandler()
         self.ghost_detector = GhostSwapDetector()
@@ -504,7 +504,7 @@ def main() -> None:
     try:
         controller = UnifiedMathematicalTradingController()
         safe_print(
-            "✅ UnifiedMathematicalTradingController v{} initialized".format(
+            "\\u2705 UnifiedMathematicalTradingController v{} initialized".format(
                 controller.version
             )
         )
@@ -544,20 +544,20 @@ def main() -> None:
         for signal in demo_signals:
             result = controller.process_trade_signal(signal)
             safe_print(
-                f"📊 Processed {signal['asset']} signal: "
+                f"\\u1f4ca Processed {signal['asset']} signal: "
                 f"Profit ${result.get('profit', 0):.2f}, "
                 f"Efficiency {result.get('efficiency', 0):.3f}"
             )
 
         # Get optimal allocation
         allocation = controller.get_optimal_allocation(10000.0, 0.15)
-        safe_print(f"💰 Optimal allocation status: {allocation['status']}")
+        safe_print(f"\\u1f4b0 Optimal allocation status: {allocation['status']}")
         if allocation["status"] == "success":
-            safe_print(f"📈 Total allocated: ${allocation['allocated_capital']:.2f}")
+            safe_print(f"\\u1f4c8 Total allocated: ${allocation['allocated_capital']:.2f}")
 
         # System status
         status = controller.get_system_status()
-        safe_print("🎯 System Status:")
+        safe_print("\\u1f3af System Status:")
         safe_print(f"   Vectors: {status['total_vectors']}")
         safe_print(f"   Cycles: {status['active_cycles']}")
         safe_print(f"   Ghost signals: {status['ghost_signals']}")
@@ -565,11 +565,13 @@ def main() -> None:
         safe_print(f"   Tracked profit total: ${status['tracked_profit_total']:.2f}")
         safe_print(f"   Avg efficiency: {status['average_efficiency']:.3f}")
 
-        safe_print("🎉 Unified mathematical trading controller demo completed!")
+        safe_print("\\u1f389 Unified mathematical trading controller demo completed!")
 
     except Exception as e:
-        safe_print(f"❌ Demo failed: {e}")
+        safe_print(f"\\u274c Demo failed: {e}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

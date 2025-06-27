@@ -3,7 +3,7 @@
 
 # core/type_patterns.py
 # SCHWABOT_DYNAMIC_EXPANSION_START
-float_patterns = {
+float_patterns = {}
     "price": "float",
     "volume": "float",
     "quantity": "float",
@@ -27,9 +27,9 @@ float_patterns = {
     "risk": "float",
     "exposure": "float",
     "leverage": "float",
-}
 
-list_patterns = {
+
+list_patterns = {}
     "waveform": "List[float]",
     "oscillator": "List[float]",
     "args": "List[Any]",
@@ -39,9 +39,9 @@ list_patterns = {
     "names": "List[str]",
     "symbols": "List[str]",
     "tickers": "List[str]",
-}
 
-dict_patterns = {
+
+dict_patterns = {}
     "indicator": "Dict[str, float]",
     "signal": "Dict[str, Any]",
     "pattern": "Dict[str, Any]",
@@ -61,15 +61,15 @@ dict_patterns = {
     "config": "Dict[str, Any]",
     "params": "Dict[str, Any]",
     "kwargs": "Dict[str, Any]",
-}
 
-datetime_patterns = {
+
+datetime_patterns = {}
     "timestamp": "datetime",
     "time": "datetime",
     "date": "datetime",
-}
 
-str_patterns = {
+
+str_patterns = {}
     "period": "str",
     "name": "str",
     "id": "str",
@@ -83,9 +83,9 @@ str_patterns = {
     "ticker": "str",
     "currency": "str",
     "format": "str",
-}
 
-bool_patterns = {
+
+bool_patterns = {}
     "enabled": "bool",
     "active": "bool",
     "valid": "bool",
@@ -95,9 +95,9 @@ bool_patterns = {
     "visible": "bool",
     "debug": "bool",
     "verbose": "bool",
-}
 
-int_patterns = {
+
+int_patterns = {}
     "duration": "int",
     "count": "int",
     "index": "int",
@@ -110,7 +110,7 @@ int_patterns = {
     "tick": "int",
     "step": "int",
     "level": "int",
-}
+
 
 # Merge all patterns
 
@@ -123,3 +123,7 @@ type_patterns.update(str_patterns)
 type_patterns.update(bool_patterns)
 type_patterns.update(int_patterns)
 # SCHWABOT_DYNAMIC_EXPANSION_END
+
+
+
+"""

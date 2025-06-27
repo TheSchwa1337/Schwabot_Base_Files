@@ -584,11 +584,11 @@ class MathematicalIntegrationTester:
 
 def main():
     """Main test execution function."""
-    safe_print("🧠 Schwabot Mathematical Integration Test Suite")
+    safe_print("\\u1f9e0 Schwabot Mathematical Integration Test Suite")
     safe_print("=" * 50)
 
     if not IMPORTS_SUCCESSFUL:
-        safe_print("❌ Failed to import required components")
+        safe_print("\\u274c Failed to import required components")
         safe_print("Please ensure all mathematical components are available")
         return 1
 
@@ -597,39 +597,41 @@ def main():
     results = tester.run_all_tests()
 
     # Display results
-    safe_print(f"\n📊 Test Results Summary:")
+    safe_print(f"\\n\\u1f4ca Test Results Summary:")
     safe_print(f"Total Tests: {results['total_tests']}")
     safe_print(f"Passed Tests: {results['passed_tests']}")
     safe_print(f"Success Rate: {results['success_rate']:.2%}")
     safe_print(f"Execution Time: {results['execution_time']:.2f} seconds")
 
     # Display detailed results
-    safe_print(f"\n📋 Detailed Results:")
+    safe_print(f"\\n\\u1f4cb Detailed Results:")
     for suite_name, suite_results in results['test_suites'].items():
         if isinstance(suite_results, dict) and 'tests' in suite_results:
             passed = suite_results['passed']
             total = suite_results['total']
             success_rate = passed / total if total > 0 else 0.0
 
-            status = "✅" if success_rate >= 0.8 else "⚠️" if success_rate >= 0.5 else "❌"
+            status = "\\u2705" if success_rate >= 0.8 else "\\u26a0\\ufe0f" if success_rate >= 0.5 else "\\u274c"
             safe_print(f"{status} {suite_name}: {passed}/{total} ({success_rate:.1%})")
 
             # Show failed tests
             failed_tests = [test for test in suite_results['tests'] if not test.get('passed', False)]
             for test in failed_tests[:3]:  # Show first 3 failures
-                safe_print(f"   ❌ {test['name']}: {test.get('error', 'Unknown error')}")
+                safe_print(f"   \\u274c {test['name']}: {test.get('error', 'Unknown error')}")
 
     # Return exit code
     if results['success_rate'] >= 0.8:
-        safe_print(f"\n✅ All tests completed successfully!")
+        safe_print(f"\\n\\u2705 All tests completed successfully!")
         return 0
     elif results['success_rate'] >= 0.5:
-        safe_print(f"\n⚠️ Tests completed with warnings")
+        safe_print(f"\\n\\u26a0\\ufe0f Tests completed with warnings")
         return 1
     else:
-        safe_print(f"\n❌ Tests failed")
+        safe_print(f"\\n\\u274c Tests failed")
         return 1
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+"""

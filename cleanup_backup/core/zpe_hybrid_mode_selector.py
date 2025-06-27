@@ -151,7 +151,7 @@ class ZPEHybridModeSelector:
             mode: [] for mode in TradingMode
         }
 
-        safe_safe_print("🔄 ZPE Hybrid Mode Selector initialized")
+        safe_safe_print("\\u1f504 ZPE Hybrid Mode Selector initialized")
 
     def select_mode(
         self,
@@ -206,14 +206,14 @@ class ZPEHybridModeSelector:
                 }
             )
 
-            safe_safe_print(f"🎯 Mode Selected: {selected_mode.value} (confidence: {confidence:.3f})")
+            safe_safe_print(f"\\u1f3af Mode Selected: {selected_mode.value} (confidence: {confidence:.3f})")
             safe_safe_print(f"   Market Condition: {market_condition.value}")
             safe_safe_print(f"   Reasoning: {', '.join(reasoning[:2])}")
 
             return result
 
         except Exception as e:
-            safe_safe_print(f"❌ Mode selection failed: {safe_format_error(e, 'mode_selection')}")
+            safe_safe_print(f"\\u274c Mode selection failed: {safe_format_error(e, 'mode_selection')}")
             # Emergency fallback
             return ModeSelectionResult(
                 selected_mode=TradingMode.EMERGENCY_FALLBACK,
@@ -253,7 +253,7 @@ class ZPEHybridModeSelector:
             return MarketCondition.SIDEWAYS
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Market condition analysis failed: {safe_format_error(e, 'market_analysis')}")
             return MarketCondition.SIDEWAYS
 
     def _calculate_selection_criteria(
@@ -289,7 +289,7 @@ class ZPEHybridModeSelector:
             )
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Criteria calculation failed: {safe_format_error(e, 'criteria_calculation')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Criteria calculation failed: {safe_format_error(e, 'criteria_calculation')}")
             return ModeSelectionCriteria(
                 market_condition=MarketCondition.SIDEWAYS,
                 volatility_score=0.5,
@@ -322,7 +322,7 @@ class ZPEHybridModeSelector:
                 self.phase_switch_counter += 1
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Phase logic update failed: {safe_format_error(e, 'phase_logic')}")
 
     def _select_mode_by_criteria(
         self,
@@ -384,7 +384,7 @@ class ZPEHybridModeSelector:
             return best_mode, best_score, reasoning
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Mode selection failed: {safe_format_error(e, 'mode_selection_logic')}")
             return TradingMode.EMERGENCY_FALLBACK, 1.0, ["Emergency fallback due to selection error"]
 
     def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
@@ -533,7 +533,7 @@ class ZPEHybridModeSelector:
                     asset.volatility = asset_data.get('volatility', asset.volatility)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Portfolio update failed: {safe_format_error(e, 'portfolio_update')}")
 
     def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
         """Get portfolio assets that can be retroactively tasked."""
@@ -569,7 +569,7 @@ class ZPEHybridModeSelector:
                 self.mode_performance_history[mode] = self.mode_performance_history[mode][-100:]
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Performance recording failed: {safe_format_error(e, 'performance_recording')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Performance recording failed: {safe_format_error(e, 'performance_recording')}")
 
     def get_mode_statistics(self) -> Dict[str, Any]:
         """Get mode selection statistics."""
@@ -595,7 +595,7 @@ class ZPEHybridModeSelector:
             return stats
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Statistics calculation failed: {safe_format_error(e, 'statistics')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Statistics calculation failed: {safe_format_error(e, 'statistics')}")
             return {}
 
 

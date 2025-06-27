@@ -9,14 +9,14 @@ from missed signals, non-entry, or delayed exits. It enables Schwabot to
 "feel" the pain of not acting and adjust accordingly.
 
 Mathematical Foundation:
-L(Δp, 𝓔) = e^(-𝓔) × (Δp / P_max)
+L(\\u0394p, \\u1d4d4) = e^(-\\u1d4d4) \\u00d7 (\\u0394p / P_max)
 
 Where:
-- Δp = Missed price delta (e.g., price continued rising after early exit)
-- 𝓔 = Entropy of the ghost state (confidence decay)
+- \\u0394p = Missed price delta (e.g., price continued rising after early exit)
+- \\u1d4d4 = Entropy of the ghost state (confidence decay)
 - P_max = Max recent price range (normalizer)
 
-This function returns a phantom lag penalty between 0–1. A high penalty
+This function returns a phantom lag penalty between 0\\u20131. A high penalty
 implies Schwabot missed a major opportunity it should adapt for.
 """
 
@@ -112,7 +112,7 @@ class PhantomLagModel:
             float: Lag penalty between 0 and 1
         """
         try:
-            # Core mathematical model: L(Δp, 𝓔) = e^(-𝓔) × (Δp / P_max)
+            # Core mathematical model: L(\\u0394p, \\u1d4d4) = e^(-\\u1d4d4) \\u00d7 (\\u0394p / P_max)
             if max_price_ref <= 0:
                 max_price_ref = 70000.0  # Default BTC price reference
 
@@ -442,3 +442,5 @@ def phantom_lag_penalty(delta_price: float,
     """
     model = PhantomLagModel()
     return model.calculate_phantom_lag_penalty(delta_price, entropy, max_price_ref)
+
+"""

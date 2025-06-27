@@ -83,7 +83,7 @@ class EventImpactMapper:
         self.total_impact_vectors_generated = 0
         self.last_cleanup_time = time.time()
 
-        logger.info("🎯 Event Impact Mapper initialized")
+        logger.info("\\u1f3af Event Impact Mapper initialized")
 
     def process_external_event(self, event_data: Dict[str, Any]) -> Optional[EventImpact]:
         """Process an external event and generate impact vector.

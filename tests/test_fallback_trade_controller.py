@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Fallback Trade Controller Test - Schwabot Framework.
@@ -109,11 +109,11 @@ class FallbackTradeControllerTest:
             )
         ]
 
-        logger.info("🛡️ Fallback Trade Controller Test initialized")
+        logger.info("\\u1f6e1\\ufe0f Fallback Trade Controller Test initialized")
 
     def test_fallback_system_initialization(self) -> Dict[str, Any]:
         """Test fallback system initialization and state management."""
-        logger.info("🔧 Testing fallback system initialization")
+        logger.info("\\u1f527 Testing fallback system initialization")
 
         results = {
             'test_name': 'fallback_system_initialization',
@@ -175,15 +175,15 @@ class FallbackTradeControllerTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Fallback system initialization test passed")
+            logger.info("\\u2705 Fallback system initialization test passed")
         else:
-            logger.error(f"❌ Fallback system initialization test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Fallback system initialization test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_primary_system_failure_detection(self) -> Dict[str, Any]:
         """Test primary system failure detection."""
-        logger.info("🔍 Testing primary system failure detection")
+        logger.info("\\u1f50d Testing primary system failure detection")
 
         results = {
             'test_name': 'primary_system_failure_detection',
@@ -235,15 +235,15 @@ class FallbackTradeControllerTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Primary system failure detection test passed")
+            logger.info("\\u2705 Primary system failure detection test passed")
         else:
-            logger.error(f"❌ Primary system failure detection test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Primary system failure detection test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_fallback_mode_activation(self) -> Dict[str, Any]:
         """Test fallback mode activation and deactivation."""
-        logger.info("🔄 Testing fallback mode activation")
+        logger.info("\\u1f504 Testing fallback mode activation")
 
         results = {
             'test_name': 'fallback_mode_activation',
@@ -295,15 +295,15 @@ class FallbackTradeControllerTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Fallback mode activation test passed")
+            logger.info("\\u2705 Fallback mode activation test passed")
         else:
-            logger.error(f"❌ Fallback mode activation test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Fallback mode activation test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_reduced_functionality_validation(self) -> Dict[str, Any]:
         """Test reduced functionality validation."""
-        logger.info("⚡ Testing reduced functionality validation")
+        logger.info("\\u26a1 Testing reduced functionality validation")
 
         results = {
             'test_name': 'reduced_functionality_validation',
@@ -360,15 +360,15 @@ class FallbackTradeControllerTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ Reduced functionality validation test passed")
+            logger.info("\\u2705 Reduced functionality validation test passed")
         else:
-            logger.error(f"❌ Reduced functionality validation test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Reduced functionality validation test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_system_recovery_procedures(self) -> Dict[str, Any]:
         """Test system recovery procedures."""
-        logger.info("🔄 Testing system recovery procedures")
+        logger.info("\\u1f504 Testing system recovery procedures")
 
         results = {
             'test_name': 'system_recovery_procedures',
@@ -423,15 +423,15 @@ class FallbackTradeControllerTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("✅ System recovery procedures test passed")
+            logger.info("\\u2705 System recovery procedures test passed")
         else:
-            logger.error(f"❌ System recovery procedures test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c System recovery procedures test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_emergency_stop_mechanisms(self) -> Dict[str, Any]:
         """Test emergency stop mechanisms."""
-        logger.info("🛑 Testing emergency stop mechanisms")
+        logger.info("\\u1f6d1 Testing emergency stop mechanisms")
 
         results = {
             'test_name': 'emergency_stop_mechanisms',
@@ -509,9 +509,9 @@ class FallbackTradeControllerTest:
             results['success'] = False
 
         if results['success']:
-            logger.info("✅ Emergency stop mechanisms test passed")
+            logger.info("\\u2705 Emergency stop mechanisms test passed")
         else:
-            logger.error(f"❌ Emergency stop mechanisms test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Emergency stop mechanisms test failed: {len(results['errors'])} errors")
 
         return results
 
@@ -629,7 +629,7 @@ class FallbackTradeControllerTest:
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
         """Run comprehensive fallback trade controller test."""
-        logger.info("🚀 Running comprehensive fallback trade controller test")
+        logger.info("\\u1f680 Running comprehensive fallback trade controller test")
 
         start_time = time.time()
 
@@ -668,9 +668,9 @@ class FallbackTradeControllerTest:
         }
 
         if all_passed:
-            logger.info(f"✅ Comprehensive fallback trade controller test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive fallback trade controller test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"❌ Comprehensive fallback trade controller test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive fallback trade controller test failed with {total_errors} errors")
 
         return comprehensive_result
 
@@ -703,17 +703,17 @@ if __name__ == "__main__":
 
     # Print results
     safe_print("\n" + "="*60)
-    safe_print("🛡️ FALLBACK TRADE CONTROLLER TEST RESULTS")
+    safe_print("\\u1f6e1\\ufe0f FALLBACK TRADE CONTROLLER TEST RESULTS")
     safe_print("="*60)
 
-    safe_print(f"Overall Success: {'✅ PASS' if result['success'] else '❌ FAIL'}")
+    safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
     safe_print(f"Execution Time: {result['execution_time']:.3f}s")
     safe_print(f"Total Errors: {result['total_errors']}")
 
     if 'test_components' in result:
-        safe_print("\nComponent Results:")
+        safe_print("\\nComponent Results:")
         for component, component_result in result['test_components'].items():
-            status = "✅ PASS" if component_result['success'] else "❌ FAIL"
+            status = "\\u2705 PASS" if component_result['success'] else "\\u274c FAIL"
             safe_print(f"  {component}: {status}")
 
     safe_print("="*60)

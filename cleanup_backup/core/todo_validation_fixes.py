@@ -115,7 +115,7 @@ class RuntimeValidator:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize runtime validator."""
-        self.version = "1.0.0"
+        self.version = "1.0_0"
         self.config = config or self._default_config()
 
         # Validation settings
@@ -883,19 +883,19 @@ def main() -> None:
         safe_print("1. Testing vector validation...")
         test_vector = [1.0, 2.0, 3.0, 4.0, 5.0]
         result = validator.validate_vector(test_vector, expected_length=5)
-        safe_print(f"   ✅ Vector validation: {result.valid} - {result.message}")
+        safe_print(f"   \\u2705 Vector validation: {result.valid} - {result.message}")
 
         # Test matrix validation
         safe_print("2. Testing matrix validation...")
         test_matrix = [[1.0, 2.0], [3.0, 4.0]]
         result = validator.validate_matrix(test_matrix, expected_shape=(2, 2))
-        safe_print(f"   ✅ Matrix validation: {result.valid} - {result.message}")
+        safe_print(f"   \\u2705 Matrix validation: {result.valid} - {result.message}")
 
         # Test entropy validation
         safe_print("3. Testing entropy validation...")
         test_signal = np.random.randn(200)  # Random signal
         result = validator.validate_entropy(test_signal, window_size=50)
-        safe_print(f"   ✅ Entropy validation: {result.valid} - {result.message}")
+        safe_print(f"   \\u2705 Entropy validation: {result.valid} - {result.message}")
 
         # Test decorator usage
         safe_print("4. Testing decorator usage...")
@@ -907,17 +907,17 @@ def main() -> None:
 
         try:
             result = test_function([1, 2, 3])
-            safe_print(f"   ✅ Decorator test: {result}")
+            safe_print(f"   \\u2705 Decorator test: {result}")
         except ValidationError as e:
             safe_print(
-                "   ❌ Decorator test failed: "
+                "   \\u274c Decorator test failed: "
                 f"{e}"
             )
 
-        safe_print("\n Runtime validation system test completed successfully!")
+        safe_print("\\n Runtime validation system test completed successfully!")
 
     except Exception as e:
-        safe_print(f"❌ Runtime validation system test failed: {e}")
+        safe_print(f"\\u274c Runtime validation system test failed: {e}")
         import traceback
 
         traceback.print_exc()

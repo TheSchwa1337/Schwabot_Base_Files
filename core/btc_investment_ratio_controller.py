@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-\nfrom __future__ import annotations
-from core.unified_signal_metrics import (
+# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
+from core.unified_signal_metrics import ()
     BTCInvestmentSignals,
 TradingSignalMetrics,
 collect_unified_signals,
@@ -34,9 +34,7 @@ VERY_HIGH="very_high"
 
 
 @ dataclass
-class InvestmentRatioResult:
-
-
+class Placeholder: pass
     """Result of investment ratio analysis."""
 
 decision: InvestmentDecision
@@ -51,9 +49,7 @@ timestamp: float
 
 
 @ dataclass
-class BTCInvestmentRatioController:
-
-
+class Placeholder: pass
     """Main controller for BTC investment ratio decisions."""
 
     # Configuration parameters
@@ -71,7 +67,7 @@ decision_history: List[InvestmentRatioResult]=field(default_factory=list)
     last_decision_time: float=0.0
 cooldown_period: float=60.0  # Minimum seconds between decisions
 
-def analyze_investment_ratio(
+def analyze_investment_ratio()
 
 
         self,
@@ -82,8 +78,8 @@ market_data: Optional[Dict]=None,
 btc_data: Optional[Dict]=None,
 volume_data: Optional[Dict]=None,
 network_data: Optional[Dict]=None,
-) -> InvestmentRatioResult:
-"""Analyze BTC investment ratio based on all available signals.
+ -> InvestmentRatioResult:
+"""Analyze BTC investment ratio based on all available signals."""
 
 Parameters
 ----------
@@ -103,20 +99,22 @@ from enum import Enum
 from dataclasses import dataclass, field
 import time
 import logging
+logger = logging.getLogger(__name__)
 import math
 
 # Import safe print for Windows compatibility
 try:
+    pass
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
     pass
     pass
     try:
-#         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug  # F811: duplicate import
+# from core.utils.windows_cli_compatibility import safe_print, info, warn,
+# error, success, debug  # F811: duplicate import
     except ImportError:
     pass
     pass
-
 
 def safe_print(message):
 
@@ -161,28 +159,28 @@ def debug(message):
 
 from core.unified_math_system import unified_math
 # #!/usr/bin/env python3
-"""BTC Investment Ratio Controller - Logical Sequencing for BTC Trading.
+"""BTC Investment Ratio Controller - Logical Sequencing for BTC Trading."""
 
 This module implements the logical sequencing for BTC investment ratio decisions
-based on price analysis, hash correlation, network strength, and multi-bit
+based on price analysis, hash correlation, network strength, and multi - bit
 signal processing. Integrates all mathematical components into coherent
 trading logic.
 
 Mathematical Foundation:
-- Execution Confidence: Ξ=(T · Δθ) + (ε × σ_f) + τ_p
-- Entry Score: 𝓔ₛ=𝓗 ×(1 − 𝓓ₚ) × 𝓛 × P̂
-- BTC Investment Ratio: R_btc=f(Ξ, 𝓔ₛ, Xi_btc, network_strength)
+- Execution Confidence: \\u039e=(T . deltatheta) + (epsilon * sigma_f) + tau_p
+- Entry Score: \\u1d4d4\\u209b=\\u1d4d7 *(1 - \\u1d4d3\\u209a) * \\u1d4db * P\\u0302
+- BTC Investment Ratio: R_btc=f(\\u039e, \\u1d4d4\\u209b, Xi_btc, network_strength)
 
 Logical Sequencing:
 1. Collect unified signals from all engines
 2. Calculate execution confidence and entry scores
-3. Evaluate BTC-specific metrics(hash, network, volume)
-4. Determine investment ratio based on multi-factor analysis
+3. Evaluate BTC - specific metrics(hash, network, volume)
+4. Determine investment ratio based on multi - factor analysis
 5. Apply risk management and position sizing
-6. Route profits according to phase-based allocation
+6. Route profits according to phase - based allocation
 
 Windows CLI compatible with comprehensive error handling.
-"""
+""""""
 
 
 
@@ -196,8 +194,9 @@ Returns
 -------
 InvestmentRatioResult
 Complete investment ratio analysis
-"""
+""""""
         try:
+    pass
 current_time=time.time()
 
             # Check cooldown period
@@ -205,7 +204,7 @@ current_time=time.time()
                 return self._create_no_action_result("Cooldown period active")
 
             # Step 1: Collect unified signals
-core_signals, btc_signals=collect_unified_signals(
+core_signals, btc_signals=collect_unified_signals()
                 cursor_state,
 fractal_state,
 collapse_state,
@@ -215,42 +214,43 @@ volume_data,
 network_data,
 
 
-            # Step 2: Calculate execution confidence (Ξ)
-            execution_confidence=self._calculate_execution_confidence(core_signals)
+            # Step 2: Calculate execution confidence (\\u039e)
+            execution_confidence=self._calculate_execution_confidence()
+                core_signals
 
-            # Step 3: Calculate entry score (𝓔ₛ)
+            # Step 3: Calculate entry score (\\u1d4d4\\u209b)
             entry_score=self._calculate_entry_score(core_signals)
 
             # Step 4: Evaluate BTC-specific metrics
 btc_strength=self._evaluate_btc_strength(btc_signals)
 
             # Step 5: Determine investment decision
-decision, reasoning=self._determine_investment_decision(
+decision, reasoning=self._determine_investment_decision()
                 execution_confidence, entry_score, btc_strength, btc_signals
 
 
             # Step 6: Calculate allocation ratio
-btc_allocation=self._calculate_btc_allocation_ratio(
+btc_allocation=self._calculate_btc_allocation_ratio()
                 execution_confidence, entry_score, btc_strength, btc_signals
 
 
             # Step 7: Determine position sizing
-position_multiplier=self._calculate_position_multiplier(
+position_multiplier=self._calculate_position_multiplier()
                 execution_confidence, entry_score, btc_strength
 
 
             # Step 8: Assess risk level
-risk_level=self._assess_risk_level(
+risk_level=self._assess_risk_level()
                 core_signals, btc_signals, execution_confidence
 
 
             # Step 9: Set execution priority
-execution_priority=self._determine_execution_priority(
+execution_priority=self._determine_execution_priority()
                 decision, execution_confidence, entry_score
 
 
             # Step 10: Create result
-result=InvestmentRatioResult(
+result=InvestmentRatioResult()
                 decision=decision,
 confidence=execution_confidence,
 btc_allocation_ratio=btc_allocation,
@@ -258,9 +258,9 @@ position_size_multiplier=position_multiplier,
 risk_level=risk_level,
 execution_priority=execution_priority,
 reasoning=reasoning,
-signal_breakdown=self._create_signal_breakdown(
+signal_breakdown=self._create_signal_breakdown()
                     core_signals, btc_signals, execution_confidence, entry_score
-),
+,
 timestamp=current_time,
 
 
@@ -271,7 +271,7 @@ self.decision_history.append(result)
 
 self.last_decision_time=current_time
 
-logger.info(
+logger.info()
                 f"Investment decision: {decision.value}, "
 f"BTC allocation: {btc_allocation:.2%}, "
 f"confidence: {execution_confidence:.3f}"
@@ -283,16 +283,18 @@ f"confidence: {execution_confidence:.3f}"
 logger.error(f"Error in investment ratio analysis: {e}")
             return self._create_error_result(str(e))
 
-def _calculate_execution_confidence(self, signals: TradingSignalMetrics) -> float:
+def _calculate_execution_confidence()
+    self, signals: TradingSignalMetrics -> float:
 
 
     pass
     pass
-        """Calculate execution confidence scalar Ξ."""
+        """Calculate execution confidence scalar \\u039e."""
         try:
+    pass
 from core.entry_gate import execution_confidence
 
-            return execution_confidence(
+            return execution_confidence()
                 signals.triplet_entropy,
 signals.theta_drift,
 signals.coherence,
@@ -302,7 +304,7 @@ signals.profit_decay,
         except Exception as e:
 logger.warning(f"Error calculating execution confidence: {e}")
             # Fallback calculation
-            return (
+            return ()
                 (signals.triplet_entropy * signals.theta_drift)
                 + (signals.coherence * signals.loop_volatility)
                 + signals.profit_decay
@@ -313,11 +315,12 @@ def _calculate_entry_score(self, signals: TradingSignalMetrics) -> float:
 
     pass
     pass
-        """Calculate entropy-weighted entry score 𝓔ₛ."""
+        """Calculate entropy-weighted entry score \\u1d4d4\\u209b."""
         try:
+    pass
 from core.entry_gate import entry_score
 
-            return entry_score(
+            return entry_score()
                 signals.harmony,
 signals.drift_penalty,
 signals.liquidity_score,
@@ -326,7 +329,7 @@ signals.projected_profit,
         except Exception as e:
 logger.warning(f"Error calculating entry score: {e}")
             # Fallback calculation
-            return (
+            return ()
                 signals.harmony
 * (1.0 - signals.drift_penalty)
                 * signals.liquidity_score
@@ -340,7 +343,7 @@ def _evaluate_btc_strength(self, btc_signals: BTCInvestmentSignals) -> float:
     pass
         """Evaluate overall BTC strength from network and price metrics."""
         # Weighted combination of BTC-specific signals
-strength=(
+strength=()
             btc_signals.xi_btc * 0.30  # BTC confidence
 + btc_signals.network_strength * 0.25  # Network health
 + btc_signals.hash_correlation * 0.20  # Hash rate correlation
@@ -350,7 +353,7 @@ strength=(
 
         return unified_math.max(0.0, unified_math.min(1.0, strength))
 
-def _determine_investment_decision(
+def _determine_investment_decision()
 
 
         self,
@@ -358,7 +361,7 @@ execution_confidence: float,
 entry_score: float,
 btc_strength: float,
 btc_signals: BTCInvestmentSignals,
-) -> Tuple[InvestmentDecision, str]:
+ -> Tuple[InvestmentDecision, str]:
 """Determine investment decision based on all factors."""
 
         # Primary gates
@@ -369,45 +372,46 @@ strong_network=btc_signals.network_strength > self.network_strength_threshold
 
         # Decision logic with reasoning
         if high_confidence and high_entry and strong_btc and strong_network:
-            return InvestmentDecision.STRONG_BUY, (
-                f"All signals positive: confidence={execution_confidence:.3f}, "
+            return InvestmentDecision.STRONG_BUY, ()
+                f"All signals positive: confidence={"}
+    execution_confidence:.3f, ""
 f"entry={entry_score:.3f}, BTC strength={btc_strength:.3f}"
 
 
         elif high_confidence and high_entry and (strong_btc or strong_network):
-            return InvestmentDecision.BUY, (
+            return InvestmentDecision.BUY, ()
                 "Strong core signals with good BTC metrics: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
         elif (high_confidence or high_entry) and btc_strength > 0.5:
-            return InvestmentDecision.HOLD, (
+            return InvestmentDecision.HOLD, ()
                 "Mixed signals suggest holding: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
-        elif (
+        elif ()
             execution_confidence < self.confidence_threshold_low
 or entry_score < self.entry_score_threshold_low
-):
+:
             if btc_strength < 0.3:
-                return InvestmentDecision.STRONG_SELL, (
+                return InvestmentDecision.STRONG_SELL, ()
                     "Weak signals across all metrics: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
             else:
-                return InvestmentDecision.SELL, (
+                return InvestmentDecision.SELL, ()
                     "Low confidence/entry but BTC showing some strength: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
         else:
-            return InvestmentDecision.NO_ACTION, (
+            return InvestmentDecision.NO_ACTION, ()
                 "Insufficient signal strength for clear decision: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
-def _calculate_btc_allocation_ratio(
+def _calculate_btc_allocation_ratio()
 
 
         self,
@@ -415,11 +419,11 @@ execution_confidence: float,
 entry_score: float,
 btc_strength: float,
 btc_signals: BTCInvestmentSignals,
-) -> float:
+ -> float:
 """Calculate recommended BTC allocation ratio."""
 
         # Base allocation from signal strength
-base_allocation=(
+base_allocation=()
             execution_confidence * 0.30
 + entry_score * 0.25
 + btc_strength * 0.25
@@ -427,8 +431,9 @@ base_allocation=(
 
 
         # Apply bounds
-allocation=max(
-            self.min_btc_allocation, unified_math.min(self.max_btc_allocation, base_allocation)
+allocation=max()
+            self.min_btc_allocation, unified_math.min()
+                self.max_btc_allocation, base_allocation
 
 
         # Adjust based on risk factors
@@ -439,27 +444,33 @@ allocation *= 1.2
 
         # Network strength adjustment
         if btc_signals.network_strength < 0.4:
+    pass
 allocation *= 0.7  # Reduce if network is weak
 
         # Final bounds check
-        return unified_math.max(self.min_btc_allocation, unified_math.min(self.max_btc_allocation, allocation))
+        return unified_math.max()
+    self.min_btc_allocation,
+    unified_math.min()
+        self.max_btc_allocation,
+         allocation
 
-def _calculate_position_multiplier(
+def _calculate_position_multiplier()
 
 
         self,
 execution_confidence: float,
 entry_score: float,
 btc_strength: float,
-) -> float:
+ -> float:
 """Calculate position size multiplier."""
         try:
+    pass
 from core.auto_scaler import scale_position
 
             # Use projected profit from entry score as proxy
 projected_profit=entry_score * 0.05  # Scale to reasonable profit range
 
-            return scale_position(
+            return scale_position()
                 execution_confidence,
 projected_profit,
 base_scale=1.0,
@@ -472,14 +483,14 @@ logger.warning(f"Error calculating position multiplier: {e}")
 multiplier=1.0 + (execution_confidence - 1.0) * 0.5 + btc_strength * 0.3
             return unified_math.max(0.1, unified_math.min(3.0, multiplier))
 
-def _assess_risk_level(
+def _assess_risk_level()
 
 
         self,
 core_signals: TradingSignalMetrics,
 btc_signals: BTCInvestmentSignals,
 execution_confidence: float,
-) -> RiskLevel:
+ -> RiskLevel:
 """Assess overall risk level."""
 
         # Risk factors
@@ -489,7 +500,7 @@ network_risk=1.0 - btc_signals.network_strength
 confidence_risk=unified_math.max(0, 1.0 - execution_confidence)
 
         # Combined risk score
-risk_score=(
+risk_score=()
             volatility_risk * 0.30
 + liquidity_risk * 0.25
 + network_risk * 0.25
@@ -508,14 +519,14 @@ risk_score=(
         else:
             return RiskLevel.VERY_HIGH
 
-def _determine_execution_priority(
+def _determine_execution_priority()
 
 
         self,
 decision: InvestmentDecision,
 execution_confidence: float,
 entry_score: float,
-) -> int:
+ -> int:
 """Determine execution priority (1=highest, 5=lowest)."""
 
         if decision == InvestmentDecision.STRONG_BUY:
@@ -533,7 +544,7 @@ entry_score: float,
         else:
             return 5
 
-def _create_signal_breakdown(
+def _create_signal_breakdown()
 
 
         self,
@@ -541,9 +552,9 @@ core_signals: TradingSignalMetrics,
 btc_signals: BTCInvestmentSignals,
 execution_confidence: float,
 entry_score: float,
-) -> Dict[str, float]:
+ -> Dict[str, float]:
 """Create detailed signal breakdown for analysis."""
-        return {
+        return {}
 "execution_confidence": execution_confidence,
 "entry_score": entry_score,
 "triplet_entropy": core_signals.triplet_entropy,
@@ -561,7 +572,7 @@ entry_score: float,
 "volume_profile": btc_signals.volume_profile,
 "hash_correlation": btc_signals.hash_correlation,
 "network_strength": btc_signals.network_strength,
-}
+
 
 def _create_no_action_result(self, reason: str) -> InvestmentRatioResult:
 
@@ -569,7 +580,7 @@ def _create_no_action_result(self, reason: str) -> InvestmentRatioResult:
     pass
     pass
         """Create a no-action result."""
-        return InvestmentRatioResult(
+        return InvestmentRatioResult()
             decision=InvestmentDecision.NO_ACTION,
 confidence=0.0,
 btc_allocation_ratio=0.5,  # Neutral allocation
@@ -587,7 +598,7 @@ def _create_error_result(self, error_msg: str) -> InvestmentRatioResult:
     pass
     pass
         """Create an error result."""
-        return InvestmentRatioResult(
+        return InvestmentRatioResult()
             decision=InvestmentDecision.NO_ACTION,
 confidence=0.0,
 btc_allocation_ratio=self.min_btc_allocation,
@@ -620,25 +631,27 @@ recent_decisions=self.decision_history[-50:]  # Last 50 decisions
 
 decision_counts={}
         for result in recent_decisions:
+    pass
 decision=result.decision.value
 decision_counts[decision]=decision_counts.get(decision, 0) + 1
 
 avg_confidence=unified_math.mean([r.confidence for r in recent_decisions])
-        avg_btc_allocation=unified_math.mean([r.btc_allocation_ratio for r in recent_decisions])
+        avg_btc_allocation=unified_math.mean()
+            [r.btc_allocation_ratio for r in recent_decisions]
 
-        return {
+        return {}
 "total_decisions": len(recent_decisions),
             "decision_distribution": decision_counts,
 "average_confidence": avg_confidence,
 "average_btc_allocation": avg_btc_allocation,
-"risk_level_distribution": {
+"risk_level_distribution": {}
 level.value: sum(1 for r in recent_decisions if r.risk_level == level)
                 for level in RiskLevel
-},
-"latest_decision": (
+,
+"latest_decision": ()
                 recent_decisions[-1].decision.value if recent_decisions else None
-),
-}
+,
+
 
 
 def main() -> None:
@@ -653,31 +666,31 @@ safe_print("BTC Investment Ratio Controller Demo")
 controller=BTCInvestmentRatioController()
 
     # Mock comprehensive data
-mock_cursor_state={
+mock_cursor_state={}
 "triplet_entropy": 0.82,
 "braid_angle_drift": 0.15,
-}
 
-mock_fractal_state={
+
+mock_fractal_state={}
 "coherence_score": 0.91,
-}
 
-mock_collapse_state={
+
+mock_collapse_state={}
 "loop_sum_volatility": 0.12,
 "profit_time_decay": 0.04,
-}
 
-mock_market_data={
+
+mock_market_data={}
 "tick_deltas": [0.11, 0.13, 0.12, 0.125, 0.14],
 "target_phase": 0.125,
-"order_book": {
+"order_book": {}
 "bids": [[52000, 2.5], [51950, 3.0]],
 "asks": [[52050, 2.0], [52100, 2.8]],
-},
+,
 "recent_prices": [52000, 52025, 51975, 52050, 52100],
-}
 
-mock_btc_data={
+
+mock_btc_data={}
 "exit_prices": [52100, 52200, 52150],
 "entry_prices": [52000, 52050, 52075],
 "volume_weights": [1.2, 1.8, 1.0],
@@ -685,17 +698,17 @@ mock_btc_data={
 "time_delta": 60.0,
 "normalized_price_change": 0.003,
 "volatility_measure": 0.018,
-}
 
-mock_network_data={
+
+mock_network_data={}
 "hash_rate": 4.5e17,  # 450 EH/s
 "difficulty": 6.2e13,
 "price": 52000,
 "mempool_size": 80000,
-}
+
 
     # Analyze investment ratio
-result=controller.analyze_investment_ratio(
+result=controller.analyze_investment_ratio()
         cursor_state=mock_cursor_state,
 fractal_state=mock_fractal_state,
 collapse_state=mock_collapse_state,
@@ -712,30 +725,38 @@ safe_print(f"Investment Decision: {result.decision.value}")
     safe_print(f"Execution Priority: {result.execution_priority}")
     safe_print(f"Reasoning: {result.reasoning}")
 
-safe_print("\nKey Signal Breakdown:")
+safe_print("\\nKey Signal Breakdown:")
     breakdown=result.signal_breakdown
-safe_print(f"  Execution Confidence: {breakdown.get('execution_confidence', 0):.3f}")
+safe_print()
+    f"  Execution Confidence: {"}
+        breakdown.get()
+            'execution_confidence',
+             0:.3f""
     safe_print(f"  Entry Score: {breakdown.get('entry_score', 0):.3f}")
     safe_print(f"  BTC Xi: {breakdown.get('xi_btc', 0):.3f}")
-    safe_print(f"  Network Strength: {breakdown.get('network_strength', 0):.3f}")
+    safe_print()
+    f"  Network Strength: {"}
+        breakdown.get()
+            'network_strength',
+             0:.3f""
     safe_print(f"  Price Pressure: {breakdown.get('price_pressure', 0):.3f}")
 
     # Test multiple scenarios
 safe_print("\n" + "=" * 50)
     safe_print("Testing Multiple Scenarios:")
 
-scenarios=[
+scenarios=[]
 ("Bull Market", {"triplet_entropy": 0.95, "coherence_score": 0.88}),
         ("Bear Market", {"triplet_entropy": 0.35, "coherence_score": 0.42}),
         ("Sideways", {"triplet_entropy": 0.65, "coherence_score": 0.70}),
-    ]
+
 
     for scenario_name, overrides in scenarios:
         # Apply overrides
 test_cursor={**mock_cursor_state, **overrides}
 test_fractal={**mock_fractal_state, **overrides}
 
-result=controller.analyze_investment_ratio(
+result=controller.analyze_investment_ratio()
             cursor_state=test_cursor,
 fractal_state=test_fractal,
 collapse_state=mock_collapse_state,
@@ -744,17 +765,19 @@ btc_data=mock_btc_data,
 network_data=mock_network_data,
 
 
-safe_print(f"\n{scenario_name}:")
+safe_print(f"\\n{scenario_name}:")
         safe_print(f"  Decision: {result.decision.value}")
         safe_print(f"  BTC Allocation: {result.btc_allocation_ratio:.1%}")
         safe_print(f"  Risk: {result.risk_level.value}")
 
     # Performance summary
 summary=controller.get_performance_summary()
-    safe_print(f"\nPerformance Summary: {summary}")
+    safe_print(f"\\nPerformance Summary: {summary}")
 
 
 if __name__ == "__main__":
     pass
     pass
 main()
+
+

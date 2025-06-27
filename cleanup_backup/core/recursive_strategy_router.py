@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 #!/usr/bin/env python3
-"""recursive_strategy_router – placeholder router stub.
+"""recursive_strategy_router \\u2013 placeholder router stub.
 
 Handles fallback/branch strategy routing for Ghost phase outputs.  Current
 implementation is a no-op that keeps the import graph intact while real

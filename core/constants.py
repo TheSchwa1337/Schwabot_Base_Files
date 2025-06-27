@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-\nfrom core.unified_math_system import unified_math
+# -*- coding: utf-8 -*-\\nfrom core.unified_math_system import unified_math
 import re
 import math
 # #!/usr/bin/env python3
-"""Constants - Core System Constants and Configuration.
+"""Constants - Core System Constants and Configuration."""
 
 ==================================================
 
@@ -14,7 +14,7 @@ used throughout the Schwabot trading system. Includes Windows CLI compatibility
 
 handlers for cross-platform operation.
 
-"""
+""""""
 
 import os
 from pathlib import Path
@@ -25,8 +25,8 @@ from typing import Any
 
 # Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
-FIBONACCI_SCALING = 1.272019649514069  # φ^(1/2) for fractal scaling
-INVERSE_PSI = 0.618033988749895  # 1/φ for counter-rotation
+FIBONACCI_SCALING = 1.272019649514069  # phi^(1/2) for fractal scaling
+INVERSE_PSI = 0.618033988749895  # 1/phi for counter-rotation
 
 # Configuration directories
 CONFIG_DIR = Path(__file__).parent / "config"
@@ -79,17 +79,16 @@ FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 # Windows CLI compatibility handler
 
 
-class WindowsCliCompatibilityHandler:
-
+class Placeholder: pass
     """Handles Windows CLI compatibility for cross-platform operation."""
 
 
 @staticmethod
 def is_windows_cli() -> bool:
     """Check if running in Windows CLI environment."""
-    return (platform.system() == "Windows" and 
-            ("cmd" in os.environ.get("COMSPEC", "").lower() or 
-             "powershell" in os.environ.get("PSModulePath", "").lower()))
+    return (platform.system() == "Windows" and)
+            ("cmd" in os.environ.get("COMSPEC", "").lower() or)
+             "powershell" in os.environ.get("PSModulePath", "".lower())
 
 
 @staticmethod
@@ -97,7 +96,7 @@ def safe_print(message: str, use_emoji: bool = True) -> str:
     """Safely print messages with optional emoji support."""
     if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
         # Strip emojis for Windows CLI compatibility
-        message = re.sub(r"[^\w\s\-_.,!?)]", "", message)
+        message = re.sub(r"[^\\w\\s\-_.,!?]", "", message)
     return message
 
 
@@ -115,7 +114,8 @@ def safe_format_error(error: Exception, context: str = "") -> str:
     error_msg = str(error)
     if context:
         error_msg = f"{context}: {error_msg}"
-    return WindowsCliCompatibilityHandler.safe_print(error_msg, use_emoji=False)
+    return WindowsCliCompatibilityHandler.safe_print()
+        error_msg, use_emoji=False
 
 
 # Shared constants across the Schwabot code-base
@@ -130,3 +130,7 @@ FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 # Performance optimization constants
 VECTORIZATION_THRESHOLD = 1000  # Use vectorized ops above this size
 PARALLEL_PROCESSING_THRESHOLD = 10000  # Use parallel processing above this
+
+
+
+"""

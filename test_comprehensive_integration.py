@@ -100,12 +100,12 @@ class ComprehensiveIntegrationTester:
         try:
             # Test various Unicode/emoji scenarios
             test_cases = [
-                ("Basic emoji", "🚀📈💰"),
-                ("Mathematical symbols", "αβγ ±×÷ ≤≥≠"),
-                ("Currency symbols", "€£¥₹₿"),
-                ("Status indicators", "✓✗⚠ℹ"),
-                ("Arrows", "→←↑↓⇒⇐⇑⇓"),
-                ("Mixed content", "Profit: $1,234.56 📈 Success! ✅"),
+                ("Basic emoji", "\\u1f680\\u1f4c8\\u1f4b0"),
+                ("Mathematical symbols", "\\u03b1\\u03b2\\u03b3 \\u00b1\\u00d7\\u00f7 \\u2264\\u2265\\u2260"),
+                ("Currency symbols", "\\u20ac\\u00a3\\u00a5\\u20b9\\u20bf"),
+                ("Status indicators", "\\u2713\\u2717\\u26a0\\u2139"),
+                ("Arrows", "\\u2192\\u2190\\u2191\\u2193\\u21d2\\u21d0\\u21d1\\u21d3"),
+                ("Mixed content", "Profit: $1,234.56 \\u1f4c8 Success! \\u2705"),
             ]
 
             for case_name, test_text in test_cases:
@@ -431,7 +431,7 @@ class ComprehensiveIntegrationTester:
         success(f"Integration tests complete: {passed}/{total} passed, {failed} failed")
 
         if failed == 0:
-            success("All integration tests passed! 🎉")
+            success("All integration tests passed! \\u1f389")
         else:
             warn(f"{failed} tests failed. Check results for details.")
 

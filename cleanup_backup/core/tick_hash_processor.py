@@ -9,9 +9,9 @@ This module processes tick-based hash signatures for pattern recognition,
 frequency analysis, and entropy-based anomaly detection in real-time trading.
 
 Mathematical Foundation:
-- Tick variance entropy: E_tick = -Σ(p_i * unified_math.log(p_i))
-- Levenshtein drift correction: δ_hash = L(h_1, h_2) * e^(-γt)
-- Recursive trigger gate: ψ_tick = Θ(Δ_volume) * χ(η_momentum)
+- Tick variance entropy: E_tick = -\\u03a3(p_i * unified_math.log(p_i))
+- Levenshtein drift correction: \\u03b4_hash = L(h_1, h_2) * e^(-\\u03b3t)
+- Recursive trigger gate: \\u03c8_tick = \\u0398(\\u0394_volume) * \\u03c7(\\u03b7_momentum)
 - Hash frequency analysis: f_hash = FFT(hash_sequence)
 
 Windows CLI compatible with comprehensive error handling.
@@ -131,7 +131,7 @@ class TickHashProcessor:
         """Calculate tick variance entropy from hash sequence.
 
         Mathematical Formula:
-        E_tick = -Σ(p_i * unified_math.log(p_i))
+        E_tick = -\\u03a3(p_i * unified_math.log(p_i))
 
         Parameters
         ----------
@@ -184,7 +184,7 @@ class TickHashProcessor:
         """Calculate Levenshtein drift correction.
 
         Mathematical Formula:
-        δ_hash = L(h_1, h_2) * e^(-γt)
+        \\u03b4_hash = L(h_1, h_2) * e^(-\\u03b3t)
 
         Parameters
         ----------
@@ -251,7 +251,7 @@ class TickHashProcessor:
         """Evaluate recursive trigger gate status.
 
         Mathematical Formula:
-        ψ_tick = Θ(Δ_volume) * χ(η_momentum)
+        \\u03c8_tick = \\u0398(\\u0394_volume) * \\u03c7(\\u03b7_momentum)
 
         Parameters
         ----------
@@ -520,7 +520,7 @@ def main() -> None:
     if processor.hash_history:
         latest_hash = processor.hash_history[-1]['hash']
 
-        safe_print(f"\nAnalyzing hash: {latest_hash}")
+        safe_print(f"\\nAnalyzing hash: {latest_hash}")
         metrics = processor.analyze_tick_hash(
             latest_hash,
             volume_delta=0.3,
@@ -535,7 +535,7 @@ def main() -> None:
         safe_print(f"  Confidence Level: {metrics.confidence_level:.3f}")
 
     # Pattern detection
-    safe_print(f"\nPattern Detection:")
+    safe_print(f"\\nPattern Detection:")
     pattern_analysis = processor.detect_hash_patterns()
     safe_print(f"  Pattern Strength: {pattern_analysis.pattern_strength:.3f}")
     safe_print(f"  Recurring Sequences: {len(pattern_analysis.recurring_sequences)}")
@@ -544,8 +544,10 @@ def main() -> None:
 
     # Processor summary
     summary = processor.get_processor_summary()
-    safe_print(f"\nProcessor Summary: {summary}")
+    safe_print(f"\\nProcessor Summary: {summary}")
 
 
 if __name__ == "__main__":
     main()
+
+"""

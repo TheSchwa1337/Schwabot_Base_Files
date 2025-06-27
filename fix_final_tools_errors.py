@@ -11,7 +11,7 @@ import re
 def fix_final_tools_errors():
     """Fix the final minor errors in tools files."""
 
-    print("🔧 Fixing final minor errors in tools directory")
+    print("\\u1f527 Fixing final minor errors in tools directory")
 
     # Fix uros_v1_integration_test.py
     file_path = "tools/uros_v1_integration_test.py"
@@ -30,17 +30,17 @@ def fix_final_tools_errors():
         if i == 773 and 'if isinstance(result, bool) and result)' in line:
             # Add proper indentation
             fixed_line = ' ' * 28 + 'if isinstance(result, bool) and result)'
-            print(f"  🔧 Fixed E128 indentation at line {i+1}")
+            print(f"  \\u1f527 Fixed E128 indentation at line {i+1}")
         # Fix line 776: if isinstance(result, bool))
         elif i == 775 and 'if isinstance(result, bool))' in line:
             # Add proper indentation
             fixed_line = ' ' * 24 + 'if isinstance(result, bool))'
-            print(f"  🔧 Fixed E128 indentation at line {i+1}")
+            print(f"  \\u1f527 Fixed E128 indentation at line {i+1}")
         # Fix F541: f-string missing placeholders
-        elif 'safe_print(f"\\n📊 TEST SUMMARY:")' in line:
+        elif 'safe_print(f"\\\n\\u1f4ca TEST SUMMARY:")' in line:
             # Remove f-string since no placeholders
-            fixed_line = line.replace('f"\\n📊 TEST SUMMARY:"', '"\\n📊 TEST SUMMARY:"')
-            print(f"  🔧 Fixed F541 f-string at line {i+1}")
+            fixed_line = line.replace('f"\\\n\\u1f4ca TEST SUMMARY:"', '"\\\n\\u1f4ca TEST SUMMARY:"')
+            print(f"  \\u1f527 Fixed F541 f-string at line {i+1}")
         else:
             fixed_line = line
 
@@ -59,10 +59,12 @@ def fix_final_tools_errors():
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
 
-        print(f"✅ Fixed final errors in {file_path}")
+        print(f"\\u2705 Fixed final errors in {file_path}")
     else:
-        print(f"ℹ️ No final errors found in {file_path}")
+        print(f"\\u2139\\ufe0f No final errors found in {file_path}")
 
 
 if __name__ == "__main__":
     fix_final_tools_errors()
+
+"""

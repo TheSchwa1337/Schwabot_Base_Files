@@ -11,10 +11,10 @@ def test_import(module_name):
     try:
         safe_print(f"Testing import of {module_name}...")
         __import__(module_name)
-        safe_print(f"✅ {module_name} imported successfully")
+        safe_print(f"\\u2705 {module_name} imported successfully")
         return True
     except Exception as e:
-        safe_print(f"❌ {module_name} import failed: {e}")
+        safe_print(f"\\u274c {module_name} import failed: {e}")
         traceback.print_exc()
         return False
 
@@ -46,3 +46,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""

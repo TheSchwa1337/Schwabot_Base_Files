@@ -219,7 +219,7 @@ def main():
                         total_stats[key] += stats[key]
                 total_stats["files_processed"] += 1
 
-    print(f"\nTotal E999 critical fixes applied:")
+    print(f"\\nTotal E999 critical fixes applied:")
     print(f"Files processed: {total_stats['files_processed']}")
     print(f"Imports after try: {total_stats['imports_after_try_fixed']}")
     print(f"Missing try blocks: {total_stats['missing_try_blocks_fixed']}")

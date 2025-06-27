@@ -54,7 +54,7 @@ try:
     SCHWABOT_CORE_AVAILABLE = True
 except ImportError:
     SCHWABOT_CORE_AVAILABLE = False
-    safe_safe_print("⚠️ Schwabot core modules not available")
+    safe_safe_print("\\u26a0\\ufe0f Schwabot core modules not available")
 
 
 class AIAgentType(Enum):
@@ -203,7 +203,7 @@ class GPTCommandLayer:
         # Load configuration
         self.config = self._load_configuration()
 
-        safe_safe_print("🧠 GPT Command Layer initialized - Consciousness bridge active")
+        safe_safe_print("\\u1f9e0 GPT Command Layer initialized - Consciousness bridge active")
 
     def _initialize_consciousness_profiles(self) -> None:
         """Initialize consciousness profiles for all AI agents."""
@@ -227,7 +227,7 @@ class GPTCommandLayer:
                 with open(self.config_path, 'r') as f:
                     return yaml.safe_load(f)
         except Exception as e:
-            safe_safe_print(f"⚠️ Configuration load failed: {safe_format_error(e, 'config_load')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Configuration load failed: {safe_format_error(e, 'config_load')}")
 
         # Default configuration
         return {
@@ -294,12 +294,12 @@ class GPTCommandLayer:
             # Queue for execution
             await self._queue_command(command)
 
-            safe_safe_print(f"🧠 Command submitted: {command.command_id} from {agent_type.value}")
+            safe_safe_print(f"\\u1f9e0 Command submitted: {command.command_id} from {agent_type.value}")
             return command.command_id
 
         except Exception as e:
             error_msg = safe_format_error(e, f"submit_command_{agent_type.value}")
-            safe_safe_print(f"❌ Command submission failed: {error_msg}")
+            safe_safe_print(f"\\u274c Command submission failed: {error_msg}")
 
             # Report to fault bus
             if self.fault_bus:
@@ -320,30 +320,30 @@ class GPTCommandLayer:
         try:
             # Check recursive depth
             if command.recursive_depth > self.max_recursive_depth:
-                safe_safe_print(f"⚠️ Recursive depth exceeded: {command.recursive_depth}")
+                safe_safe_print(f"\\u26a0\\ufe0f Recursive depth exceeded: {command.recursive_depth}")
                 return False
 
             # Check consciousness profile trust level
             profile = self.consciousness_profiles[command.agent_type]
             if profile.trust_level < self.config.get("trust_thresholds", {}).get(command.agent_type.value, 0.5):
-                safe_safe_print(f"⚠️ Trust level too low: {profile.trust_level}")
+                safe_safe_print(f"\\u26a0\\ufe0f Trust level too low: {profile.trust_level}")
                 return False
 
             # Validate domain expertise
             domain_expertise = profile.domain_expertise.get(command.domain, 0.0)
             if domain_expertise < 0.3:  # Minimum expertise threshold
-                safe_safe_print(f"⚠️ Domain expertise too low: {domain_expertise}")
+                safe_safe_print(f"\\u26a0\\ufe0f Domain expertise too low: {domain_expertise}")
                 return False
 
             # Validate payload structure
             if not self._validate_payload(command.domain, command.payload):
-                safe_safe_print(f"⚠️ Payload validation failed for domain: {command.domain.value}")
+                safe_safe_print(f"\\u26a0\\ufe0f Payload validation failed for domain: {command.domain.value}")
                 return False
 
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Command validation error: {safe_format_error(e, 'command_validation')}")
+            safe_safe_print(f"\\u274c Command validation error: {safe_format_error(e, 'command_validation')}")
             return False
 
     def _validate_payload(self, domain: CommandDomain, payload: Dict[str, Any]) -> bool:
@@ -369,7 +369,7 @@ class GPTCommandLayer:
             return True
 
         except Exception as e:
-            safe_safe_print(f"❌ Payload validation error: {safe_format_error(e, 'payload_validation')}")
+            safe_safe_print(f"\\u274c Payload validation error: {safe_format_error(e, 'payload_validation')}")
             return False
 
     def _calculate_recursive_depth(self, parent_command_id: Optional[str]) -> int:
@@ -431,14 +431,14 @@ class GPTCommandLayer:
                     await self._log_execution(command, response)
 
                     safe_safe_print(
-                        f"🧠 Command executed: {command.command_id} - {'✅ Success' if response.success else '❌ Failed'}")
+                        f"\\u1f9e0 Command executed: {command.command_id} - {'\\u2705 Success' if response.success else '\\u274c Failed'}")
 
                 # Wait before next execution cycle
                 await asyncio.sleep(0.1)
 
             except Exception as e:
                 error_msg = safe_format_error(e, "execute_commands")
-                safe_safe_print(f"❌ Command execution error: {error_msg}")
+                safe_safe_print(f"\\u274c Command execution error: {error_msg}")
                 await asyncio.sleep(1.0)
 
     async def _execute_command(self, command: AICommand) -> CommandResponse:
@@ -722,7 +722,7 @@ class GPTCommandLayer:
                 f.write(json.dumps(log_entry) + '\n')
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Logging failed: {safe_format_error(e, 'execution_logging')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Logging failed: {safe_format_error(e, 'execution_logging')}")
 
     def _get_memory_data(self) -> Dict[str, Any]:
         """Get memory data from consciousness profiles."""
@@ -748,7 +748,7 @@ class GPTCommandLayer:
                             setattr(profile, key, value)
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Memory write failed: {safe_format_error(e, 'memory_write')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Memory write failed: {safe_format_error(e, 'memory_write')}")
 
     async def _sync_consciousness_profiles(self) -> None:
         """Synchronize consciousness profiles."""
@@ -760,10 +760,10 @@ class GPTCommandLayer:
             with open(self.memory_file, 'w') as f:
                 json.dump(memory_data, f, indent=2, default=str)
 
-            safe_safe_print("🧠 Consciousness profiles synchronized")
+            safe_safe_print("\\u1f9e0 Consciousness profiles synchronized")
 
         except Exception as e:
-            safe_safe_print(f"⚠️ Profile sync failed: {safe_format_error(e, 'profile_sync')}")
+            safe_safe_print(f"\\u26a0\\ufe0f Profile sync failed: {safe_format_error(e, 'profile_sync')}")
 
     async def get_command_status(self, command_id: str) -> Optional[CommandResponse]:
         """Get status of a specific command."""
@@ -843,7 +843,7 @@ async def submit_r1_command(
 if __name__ == "__main__":
     async def test_consciousness_integration():
         """Test consciousness integration."""
-        safe_safe_print("🧠 Testing consciousness integration...")
+        safe_safe_print("\\u1f9e0 Testing consciousness integration...")
 
         # Submit test commands
         command_id = await submit_gpt_command(
@@ -856,7 +856,7 @@ if __name__ == "__main__":
             context={"test": True}
         )
 
-        safe_safe_print(f"✅ Test command submitted: {command_id}")
+        safe_safe_print(f"\\u2705 Test command submitted: {command_id}")
 
         # Start command execution
         await gpt_command_layer.execute_commands()

@@ -494,7 +494,7 @@ class DemoTradeSequence:
     def run_trade_sequence(self, num_trades: int = 10, strategy: str = "moderate") -> Dict[str, Any]:
         """Run a complete trade sequence simulation"""
 
-        safe_print(f"🚀 Starting trade sequence: {num_trades} trades with {strategy} strategy")
+        safe_print(f"\\u1f680 Starting trade sequence: {num_trades} trades with {strategy} strategy")
 
         # Generate market data
         market_data = self.generate_market_data(num_trades * 10)  # More data than trades
@@ -526,7 +526,7 @@ class DemoTradeSequence:
                     positions_opened += 1
                     trades_executed += 1
 
-                    safe_print(f"✅ Opened position {position.position_id} at ${entry_execution.price:.2f}")
+                    safe_print(f"\\u2705 Opened position {position.position_id} at ${entry_execution.price:.2f}")
 
             # Update existing positions
             for position_id in list(self.active_positions.keys()):
@@ -538,13 +538,13 @@ class DemoTradeSequence:
                     exit_execution = self.close_position(position_id, market_tick["price"], exit_reason)
 
                     pnl = exit_execution.price - position.entry_price
-                    safe_print(f"🔚 Closed position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
+                    safe_print(f"\\u1f51a Closed position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
 
         # Close any remaining positions
         for position_id in list(self.active_positions.keys()):
             exit_execution = self.close_position(position_id, market_data[-1]["price"], "end_of_simulation")
             pnl = exit_execution.price - self.active_positions[position_id].entry_price
-            safe_print(f"🔚 Closed remaining position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
+            safe_print(f"\\u1f51a Closed remaining position {position_id} at ${exit_execution.price:.2f} (PnL: ${pnl:.2f})")
 
         # Save trade data
         self._save_trade_data()
@@ -552,9 +552,9 @@ class DemoTradeSequence:
         # Generate report
         report = self.generate_trade_report()
 
-        safe_print(f"📊 Trade sequence completed: {trades_executed} trades, {positions_opened} positions opened")
-        safe_print(f"💰 Total profit: ${self.performance_metrics['total_profit']:.2f}")
-        safe_print(f"📈 Win rate: {self.performance_metrics['win_rate']:.2%}")
+        safe_print(f"\\u1f4ca Trade sequence completed: {trades_executed} trades, {positions_opened} positions opened")
+        safe_print(f"\\u1f4b0 Total profit: ${self.performance_metrics['total_profit']:.2f}")
+        safe_print(f"\\u1f4c8 Win rate: {self.performance_metrics['win_rate']:.2%}")
 
         return report
 
@@ -628,5 +628,5 @@ if __name__ == "__main__":
     report = trade_sequence.run_trade_sequence(num_trades=5, strategy="moderate")
 
     # Print report
-    safe_print("\n📊 Trade Report:")
+    safe_print("\\n\\u1f4ca Trade Report:")
     print(json.dumps(report, indent=2, default=str))

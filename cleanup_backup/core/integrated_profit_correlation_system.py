@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Integrated profit correlation system — TEMPORARY STUB.
+"""Integrated profit correlation system \\u2014 TEMPORARY STUB.
 
 The original file failed to parse; a stub was generated so the package
 remains importable.  Replace with a clean implementation ASAP.
@@ -13,3 +13,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+"""

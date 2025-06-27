@@ -63,16 +63,16 @@ def wave_lattice_generator(
     if signal.ndim != 1:
         raise ValueError("signal must be 1-D")
     if levels < 1:
-        raise ValueError("levels must be ≥ 1")
+        raise ValueError("levels must be \\u2265 1")
 
-    # Compute FFT spectrum (real input ⇒ rfft).
+    # Compute FFT spectrum (real input \\u21d2 rfft).
     spectrum = np.fft.rfft(signal)
     freqs = np.fft.rfftfreq(
         signal.size, d=1.0
     )  # assume unit sampling interval
     magnitudes = unified_math.unified_math.abs(spectrum)
 
-    # Build lattice grid: levels × n_bins boolean/int matrix.
+    # Build lattice grid: levels \\u00d7 n_bins boolean/int matrix.
     thresholds = _logspace_levels(magnitudes, levels)
     lattice = np.zeros((levels, magnitudes.size), dtype=int)
 
@@ -83,3 +83,5 @@ def wave_lattice_generator(
         lattice[lvl, mask] = 1
 
     return lattice, freqs
+
+"""
