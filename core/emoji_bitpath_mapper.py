@@ -557,5 +557,5 @@ Key features:
 - Navigation path confidence calculation
 """
 
- 
- 
+
+
