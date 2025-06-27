@@ -1,12 +1,27 @@
-# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-from core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+
+from __future__ import annotations
 import numpy as np
-# #!/usr/bin/env python3
-"""Vectorise news with weighting matrix."""
+
+
+# """Vectorise news with weighting matrix."""
 
 V_n = gradient.(\\u0398 . phi(news))
 """"""
+"""
+"""
 
 
 from typing import Sequence
@@ -20,15 +35,20 @@ def vectorize_news()
 
 
     theta: np.ndarray, phi_news: Sequence[float]
- -> np.ndarray:  # noqa: D401
+    -> np.ndarray:  # noqa: D401
 
 
-"""Return V_n vector = theta @ phi_news (gradient-like projection)."""
-  phi = np.asarray(phi_news, dtype=float)
-   if theta.shape[1] != phi.size:
+"""Return V_n vector = theta @ phi_news (gradient - like projection)."""
+"""
+"""
+    phi = np.asarray(phi_news, dtype = float)
+    if theta.shape[1] != phi.size:
         raise ValueError("theta column dim mismatch with phi_news length")
     return theta @ phi
 
 
 
+"""
+"""
+"""
 """

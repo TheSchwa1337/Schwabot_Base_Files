@@ -1,7 +1,22 @@
+# -*- coding: utf - 8 -*-
 """Profit cycle allocator for basket distribution."""
+"""
+"""
+"""
+"""
+"""Profit cycle allocator for basket distribution."""
+# -*- coding: utf - 8 -*-
+
+"""
+"""
+"""
+"""
+"""Profit cycle allocator for basket distribution."""
+"""Profit cycle allocator for basket distribution."""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
 from __future__ import annotations
-from core.unified_math_system import unified_math
 from core.unified_math_system import unified_math
 
 
@@ -12,15 +27,19 @@ def allocate(phi: float, alphas: list[float]) -> np.ndarray:
 
     Args:
         phi: Total entry signal strength
-        alphas: Per-basket allocation coefficients
+        alphas: Per - basket allocation coefficients
 
     Returns:
-        Per-basket allocation array that sums to |phi|
+        Per - basket allocation array that sums to |phi|
 
     Raises:
         ValueError: If alphas sum to zero
     """
-    if not alphas:
+
+
+"""
+"""
+   if not alphas:
         return np.array([])
 
     a = np.array(alphas, dtype=float)
@@ -31,4 +50,7 @@ def allocate(phi: float, alphas: list[float]) -> np.ndarray:
 
     return phi * (a / alpha_sum)
 
+"""
+"""
+"""
 """

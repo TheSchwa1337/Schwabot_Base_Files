@@ -1,4 +1,25 @@
-#!/usr/bin/env python3
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Dict, List, Any, Tuple
+import json
+import logging
+import os
+import subprocess
+import sys
+import time
+import traceback
+
+import numpy as np
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
+"""
+"""
+"""
+"""
 """
 Comprehensive System Validation for Schwabot
 ===========================================
@@ -17,22 +38,16 @@ Answers to User Questions:
 2. Have we integrated all settings for JSON configuration?
 3. Does our UI effectively port mathematics into a unified panel?
 4. Is API correctly integrated across the entire system?
-5. Are we addressing sequences, I/O timings, GPU timings, thermal functionalities?
-6. Do we have a robust enough system with no errors under scrutiny/stress?
+5. Are we addressing sequences, I / O timings, GPU timings, thermal functionalities?
+6. Do we have a robust enough system with no errors under scrutiny / stress?
 7. Are all pipelines visually routed correctly?
 8. Will we have timing errors or drift that can be corrected?
 """
+"""
+"""
+"""
+"""
 
-import os
-import sys
-import time
-import json
-import logging
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Tuple
-import numpy as np
-import traceback
 
 # Add core directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
@@ -60,7 +75,14 @@ except ImportError as e:
 
 
 class ComprehensiveSystemValidator:
+
     """
+"""
+
+
+"""
+"""
+"""
     Comprehensive system validator for Schwabot.
 
     Validates all aspects of the system including:
@@ -71,9 +93,17 @@ class ComprehensiveSystemValidator:
     - Performance
     - Security
     """
+"""
+"""
+"""
+"""
 
     def __init__(self):
         """Initialize the comprehensive validator."""
+"""
+"""
+"""
+"""
         self.results = {
             'mathematical_functions': {},
             'api_integration': {},
@@ -89,7 +119,12 @@ class ComprehensiveSystemValidator:
         safe_print("=" * 60)
 
     def validate_mathematical_functions(self) -> Dict[str, Any]:
+
         """Validate all mathematical functions and their completeness."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f522 Validating Mathematical Functions...")
 
         results = {
@@ -103,10 +138,10 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test Ghost Trigger Functions
+# Test Ghost Trigger Functions
             safe_print("  Testing Ghost Trigger Functions...")
 
-            # Test phase probability pathway
+# Test phase probability pathway
             test_phases = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
             pathway = calculate_phase_probability_pathway(test_phases)
             results['ghost_trigger_functions']['phase_probability_pathway'] = {
@@ -114,32 +149,32 @@ class ComprehensiveSystemValidator:
                 'result_shape': pathway.shape if hasattr(pathway, 'shape') else 'scalar'
             }
 
-            # Test grayscale phase mapping
+# Test grayscale phase mapping
             grayscale_map = create_grayscale_phase_map(test_phases)
             results['ghost_trigger_functions']['grayscale_phase_mapping'] = {
                 'status': 'PASS',
                 'result_shape': grayscale_map.shape if hasattr(grayscale_map, 'shape') else 'scalar'
             }
 
-            # Test ghost trigger generation
-            ghost_triggers = generate_ghost_triggers(test_phases, threshold=0.5)
+# Test ghost trigger generation
+            ghost_triggers = generate_ghost_triggers(test_phases, threshold = 0.5)
             results['ghost_trigger_functions']['ghost_trigger_generation'] = {
                 'status': 'PASS',
                 'trigger_count': len(ghost_triggers) if isinstance(ghost_triggers, (list, np.ndarray)) else 1
             }
 
-            # Test bit phase allocation
-            bit_allocation = allocate_bit_phases(test_phases, num_bits=8)
+# Test bit phase allocation
+            bit_allocation = allocate_bit_phases(test_phases, num_bits = 8)
             results['ghost_trigger_functions']['bit_phase_allocation'] = {
                 'status': 'PASS',
                 'allocation_shape': bit_allocation.shape if hasattr(bit_allocation, 'shape') else 'scalar'
             }
 
-            # Test Profit Engine
+# Test Profit Engine
             safe_print("  Testing Profit Engine...")
             profit_engine = ProfitEngine()
 
-            # Test profit surface computation
+# Test profit surface computation
             price_map = np.random.rand(10, 10) * 100
             hold_map = np.random.rand(10, 10) * 10
             profit_surface = profit_engine.compute_profit_surface(price_map, hold_map)
@@ -148,7 +183,7 @@ class ComprehensiveSystemValidator:
                 'surface_shape': profit_surface.shape
             }
 
-            # Test entropy engine
+# Test entropy engine
             safe_print("  Testing Entropy Engine...")
             entropy_engine = EntropyEngine()
 
@@ -159,7 +194,7 @@ class ComprehensiveSystemValidator:
                 'filtered_shape': filtered_signal.shape
             }
 
-            # Test tensor engine
+# Test tensor engine
             safe_print("  Testing Tensor Engine...")
             tensor_engine = TensorEngine()
 
@@ -182,7 +217,12 @@ class ComprehensiveSystemValidator:
         return results
 
     def validate_api_integration(self) -> Dict[str, Any]:
+
         """Validate API integration for CoinMarketCap and CoinGecko."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f310 Validating API Integration...")
 
         results = {
@@ -194,7 +234,7 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test API configuration
+# Test API configuration
             safe_print("  Testing API Configuration...")
             config = APIConfig()
             results['configuration'] = {
@@ -203,7 +243,7 @@ class ComprehensiveSystemValidator:
                 'coingecko_rate_limit': config.coingecko_rate_limit
             }
 
-            # Test secret management
+# Test secret management
             safe_print("  Testing Secret Management...")
             secret_manager = APISecretManager()
             results['secret_management'] = {
@@ -211,7 +251,7 @@ class ComprehensiveSystemValidator:
                 'secrets_loaded': len(secret_manager._secrets_cache)
             }
 
-            # Test API manager
+# Test API manager
             safe_print("  Testing API Manager...")
             api_manager = APIManager(config)
             results['api_manager'] = {
@@ -220,7 +260,7 @@ class ComprehensiveSystemValidator:
                 'coingecko_available': True  # No API key required
             }
 
-            # Test CoinGecko integration (no API key required)
+# Test CoinGecko integration (no API key required)
             safe_print("  Testing CoinGecko Integration...")
             try:
                 global_data = api_manager.get_global_metrics('coingecko')
@@ -234,7 +274,7 @@ class ComprehensiveSystemValidator:
                     'error': str(e)
                 }
 
-            # Test rate limiting
+# Test rate limiting
             safe_print("  Testing Rate Limiting...")
             rate_limiter = APIRateLimiter(30)
             rate_limiter.record_request()
@@ -255,7 +295,12 @@ class ComprehensiveSystemValidator:
         return results
 
     def validate_user_interface(self) -> Dict[str, Any]:
+
         """Validate user interface functionality and control panels."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f5a5\\ufe0f  Validating User Interface...")
 
         results = {
@@ -267,10 +312,10 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test configuration loading
+# Test configuration loading
             safe_print("  Testing Configuration Loading...")
 
-            # Create test configuration
+# Create test configuration
             test_config = {
                 'api_settings': {
                     'coinmarketcap_enabled': True,
@@ -292,10 +337,10 @@ class ComprehensiveSystemValidator:
                 }
             }
 
-            # Test JSON configuration handling
+# Test JSON configuration handling
             config_file = Path('test_config.json')
             with open(config_file, 'w') as f:
-                json.dump(test_config, f, indent=2)
+                json.dump(test_config, f, indent = 2)
 
             with open(config_file, 'r') as f:
                 loaded_config = json.load(f)
@@ -307,17 +352,17 @@ class ComprehensiveSystemValidator:
                 'mathematical_settings_present': 'mathematical_settings' in loaded_config
             }
 
-            # Clean up test file
+# Clean up test file
             config_file.unlink()
 
-            # Test mathematical panel integration
+# Test mathematical panel integration
             safe_print("  Testing Mathematical Panel Integration...")
 
-            # Test that mathematical functions can be controlled via configuration
+# Test that mathematical functions can be controlled via configuration
             test_phases = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
             threshold = loaded_config['mathematical_settings']['ghost_trigger_threshold']
 
-            ghost_triggers = generate_ghost_triggers(test_phases, threshold=threshold)
+            ghost_triggers = generate_ghost_triggers(test_phases, threshold = threshold)
 
             results['mathematical_panel'] = {
                 'status': 'PASS',
@@ -325,7 +370,7 @@ class ComprehensiveSystemValidator:
                 'ghost_triggers_generated': len(ghost_triggers) if isinstance(ghost_triggers, (list, np.ndarray)) else 1
             }
 
-            # Test API control panel
+# Test API control panel
             safe_print("  Testing API Control Panel...")
 
             api_config = loaded_config['api_settings']
@@ -348,7 +393,12 @@ class ComprehensiveSystemValidator:
         return results
 
     def validate_code_quality(self) -> Dict[str, Any]:
+
         """Validate code quality and linting compliance."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f50d Validating Code Quality...")
 
         results = {
@@ -360,21 +410,21 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test Flake8 compliance
+# Test Flake8 compliance
             safe_print("  Testing Flake8 Compliance...")
 
-            # Check if flake8 is available
+# Check if flake8 is available
             try:
                 result = subprocess.run(['flake8', '--version'],
-                                        capture_output=True, text=True, timeout=10)
+                                        capture_output = True, text = True, timeout = 10)
                 flake8_available = result.returncode == 0
             except (subprocess.TimeoutExpired, FileNotFoundError):
                 flake8_available = False
 
             if flake8_available:
-                # Run flake8 on core directory
-                result = subprocess.run(['flake8', 'core/', '--max-line-length=100'],
-                                        capture_output=True, text=True, timeout=30)
+# Run flake8 on core directory
+                result = subprocess.run(['flake8', 'core/', '--max - line - length = 100'],
+                                        capture_output = True, text = True, timeout = 30)
 
                 if result.returncode == 0:
                     results['flake8_compliance'] = {
@@ -383,7 +433,7 @@ class ComprehensiveSystemValidator:
                         'warnings': 0
                     }
                 else:
-                    # Parse flake8 output
+# Parse flake8 output
                     lines = result.stdout.strip().split('\n')
                     error_count = len([line for line in lines if line.strip()])
 
@@ -398,10 +448,10 @@ class ComprehensiveSystemValidator:
                     'reason': 'Flake8 not available'
                 }
 
-            # Test import analysis
+# Test import analysis
             safe_print("  Testing Import Analysis...")
 
-            # Test that all critical modules can be imported
+# Test that all critical modules can be imported
             critical_modules = [
                 'core.utils.math_utils',
                 'core.math.tensor_algebra.unified_tensor_algebra',
@@ -427,16 +477,16 @@ class ComprehensiveSystemValidator:
                 'import_errors': import_errors
             }
 
-            # Test syntax check
+# Test syntax check
             safe_print("  Testing Syntax Check...")
 
-            # Test that Python can compile the main modules
+# Test that Python can compile the main modules
             python_files = [
-                'core/utils/math_utils.py',
-                'core/math/tensor_algebra/profit_engine.py',
-                'core/math/tensor_algebra/entropy_engine.py',
-                'core/math/tensor_algebra/tensor_engine.py',
-                'core/config/api_config.py'
+                'core / utils / math_utils.py',
+                'core / math / tensor_algebra / profit_engine.py',
+                'core / math / tensor_algebra / entropy_engine.py',
+                'core / math / tensor_algebra / tensor_engine.py',
+                'core / config / api_config.py'
             ]
 
             syntax_errors = []
@@ -466,7 +516,12 @@ class ComprehensiveSystemValidator:
         return results
 
     def validate_performance(self) -> Dict[str, Any]:
+
         """Validate performance and timing analysis."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u26a1 Validating Performance...")
 
         results = {
@@ -478,14 +533,14 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test mathematical performance
+# Test mathematical performance
             safe_print("  Testing Mathematical Performance...")
 
-            # Test large dataset processing
+# Test large dataset processing
             large_dataset = np.random.rand(1000, 1000)
             start_time = time.time()
 
-            # Test tensor operations
+# Test tensor operations
             tensor_engine = TensorEngine()
             pattern_analysis = tensor_engine.analyze_tensor_patterns(large_dataset)
 
@@ -497,10 +552,10 @@ class ComprehensiveSystemValidator:
                 'dataset_size': large_dataset.shape
             }
 
-            # Test API performance
+# Test API performance
             safe_print("  Testing API Performance...")
 
-            # Test rate limiting performance
+# Test rate limiting performance
             rate_limiter = APIRateLimiter(30)
             start_time = time.time()
 
@@ -516,10 +571,10 @@ class ComprehensiveSystemValidator:
                 'requests_processed': 10
             }
 
-            # Test timing analysis
+# Test timing analysis
             safe_print("  Testing Timing Analysis...")
 
-            # Test that timing functions work correctly
+# Test that timing functions work correctly
             test_signal = np.random.rand(100)
             entropy_engine = EntropyEngine()
 
@@ -545,7 +600,12 @@ class ComprehensiveSystemValidator:
         return results
 
     def validate_security(self) -> Dict[str, Any]:
+
         """Validate security and secret management."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f512 Validating Security...")
 
         results = {
@@ -556,19 +616,19 @@ class ComprehensiveSystemValidator:
         }
 
         try:
-            # Test secret management
+# Test secret management
             safe_print("  Testing Secret Management...")
 
             secret_manager = APISecretManager()
 
-            # Test secret storage and retrieval
+# Test secret storage and retrieval
             test_key = "test_secret_key"
             test_value = "test_secret_value"
 
             secret_manager.set_secret(test_key, test_value)
             retrieved_value = secret_manager.get_secret(test_key)
 
-            # Clean up test secret
+# Clean up test secret
             secret_manager.remove_secret(test_key)
 
             results['secret_management'] = {
@@ -577,14 +637,14 @@ class ComprehensiveSystemValidator:
                 'secret_retrieval': retrieved_value is not None
             }
 
-            # Test API key handling
+# Test API key handling
             safe_print("  Testing API Key Handling...")
 
-            # Test that API keys are not exposed in logs
+# Test that API keys are not exposed in logs
             api_config = APIConfig()
             secret_manager.set_secret('coinmarketcap_api_key', 'test_api_key')
 
-            # Check that the secret is stored but not exposed
+# Check that the secret is stored but not exposed
             has_secret = secret_manager.has_secret('coinmarketcap_api_key')
             secret_value = secret_manager.get_secret('coinmarketcap_api_key')
 
@@ -595,13 +655,13 @@ class ComprehensiveSystemValidator:
                 'secret_not_exposed': 'test_api_key' not in str(api_config)
             }
 
-            # Clean up test secret
+# Clean up test secret
             secret_manager.remove_secret('coinmarketcap_api_key')
 
-            # Test configuration security
+# Test configuration security
             safe_print("  Testing Configuration Security...")
 
-            # Test that sensitive data is not in plain text
+# Test that sensitive data is not in plain text
             config_data = {
                 'api_keys': {
                     'coinmarketcap': '***HIDDEN***',
@@ -613,7 +673,7 @@ class ComprehensiveSystemValidator:
                 }
             }
 
-            config_str = json.dumps(config_data, indent=2)
+            config_str = json.dumps(config_data, indent = 2)
 
             results['configuration_security'] = {
                 'status': 'PASS',
@@ -633,11 +693,16 @@ class ComprehensiveSystemValidator:
         return results
 
     def run_comprehensive_validation(self) -> Dict[str, Any]:
+
         """Run comprehensive system validation."""
+"""
+"""
+"""
+"""
         safe_print("\\n\\u1f680 Starting Comprehensive System Validation...")
         safe_print("=" * 60)
 
-        # Run all validation tests
+# Run all validation tests
         self.results['mathematical_functions'] = self.validate_mathematical_functions()
         self.results['api_integration'] = self.validate_api_integration()
         self.results['user_interface'] = self.validate_user_interface()
@@ -645,7 +710,7 @@ class ComprehensiveSystemValidator:
         self.results['performance'] = self.validate_performance()
         self.results['security'] = self.validate_security()
 
-        # Determine overall status
+# Determine overall status
         all_statuses = [
             self.results['mathematical_functions']['status'],
             self.results['api_integration']['status'],
@@ -662,21 +727,26 @@ class ComprehensiveSystemValidator:
         else:
             self.results['overall_status'] = 'WARN'
 
-        # Add timing information
+# Add timing information
         self.results['validation_time'] = time.time() - self.start_time
 
-        # Print summary
+# Print summary
         self._print_summary()
 
         return self.results
 
     def _print_summary(self):
+
         """Print validation summary."""
+"""
+"""
+"""
+"""
         safe_print("\n" + "=" * 60)
         safe_print("\\u1f4ca COMPREHENSIVE SYSTEM VALIDATION SUMMARY")
         safe_print("=" * 60)
 
-        # Overall status
+# Overall status
         status_emoji = {
             'PASS': '\\u2705',
             'FAIL': '\\u274c',
@@ -687,7 +757,7 @@ class ComprehensiveSystemValidator:
         overall_emoji = status_emoji.get(self.results['overall_status'], '\\u2753')
         safe_print(f"\\n{overall_emoji} Overall Status: {self.results['overall_status']}")
 
-        # Individual component statuses
+# Individual component statuses
         components = [
             ('Mathematical Functions', 'mathematical_functions'),
             ('API Integration', 'api_integration'),
@@ -702,10 +772,10 @@ class ComprehensiveSystemValidator:
             emoji = status_emoji.get(status, '\\u2753')
             safe_print(f"{emoji} {name}: {status}")
 
-        # Timing information
+# Timing information
         safe_print(f"\\n\\u23f1\\ufe0f  Total Validation Time: {self.results['validation_time']:.2f} seconds")
 
-        # Detailed results
+# Detailed results
         safe_print("\\n\\u1f4cb DETAILED RESULTS:")
         safe_print("-" * 40)
 
@@ -716,7 +786,7 @@ class ComprehensiveSystemValidator:
             if 'error' in result:
                 safe_print(f"  Error: {result['error']}")
 
-            # Print key metrics for each component
+# Print key metrics for each component
             if key == 'mathematical_functions':
                 if 'ghost_trigger_functions' in result:
                     safe_print(
@@ -732,39 +802,39 @@ class ComprehensiveSystemValidator:
 
         safe_print("\n" + "=" * 60)
 
-        # Answer user questions
+# Answer user questions
         safe_print("\\n\\u2753 ANSWERS TO USER QUESTIONS:")
         safe_print("-" * 40)
 
-        # Question 1: User interface verification
+# Question 1: User interface verification
         ui_status = self.results['user_interface']['status']
         safe_print(f"1. \\u2705 User Interface Levels Verified: {ui_status == 'PASS'}")
 
-        # Question 2: JSON configuration integration
+# Question 2: JSON configuration integration
         config_status = self.results['user_interface'].get('configuration_loading', {}).get('status', 'UNKNOWN')
         safe_print(f"2. \\u2705 JSON Configuration Integration: {config_status == 'PASS'}")
 
-        # Question 3: Mathematical panel integration
+# Question 3: Mathematical panel integration
         math_panel_status = self.results['user_interface'].get('mathematical_panel', {}).get('status', 'UNKNOWN')
         safe_print(f"3. \\u2705 Mathematical Panel Integration: {math_panel_status == 'PASS'}")
 
-        # Question 4: API integration
+# Question 4: API integration
         api_status = self.results['api_integration']['status']
-        safe_print(f"4. \\u2705 API Integration (CoinMarketCap/CoinGecko): {api_status == 'PASS'}")
+        safe_print(f"4. \\u2705 API Integration (CoinMarketCap / CoinGecko): {api_status == 'PASS'}")
 
-        # Question 5: Performance and timing
+# Question 5: Performance and timing
         perf_status = self.results['performance']['status']
         safe_print(f"5. \\u2705 Performance & Timing Analysis: {perf_status == 'PASS'}")
 
-        # Question 6: System robustness
+# Question 6: System robustness
         code_quality_status = self.results['code_quality']['status']
         safe_print(f"6. \\u2705 System Robustness: {code_quality_status == 'PASS'}")
 
-        # Question 7: Pipeline routing
+# Question 7: Pipeline routing
         math_status = self.results['mathematical_functions']['status']
         safe_print(f"7. \\u2705 Pipeline Routing: {math_status == 'PASS'}")
 
-        # Question 8: Timing error correction
+# Question 8: Timing error correction
         timing_status = self.results['performance'].get('timing_analysis', {}).get('status', 'UNKNOWN')
         safe_print(f"8. \\u2705 Timing Error Correction: {timing_status == 'PASS'}")
 
@@ -772,18 +842,23 @@ class ComprehensiveSystemValidator:
 
 
 def main():
+
     """Main function to run comprehensive validation."""
+"""
+"""
+"""
+"""
     try:
         validator = ComprehensiveSystemValidator()
         results = validator.run_comprehensive_validation()
 
-        # Save results to file
+# Save results to file
         with open('system_validation_results.json', 'w') as f:
-            json.dump(results, f, indent=2, default=str)
+            json.dump(results, f, indent = 2, default = str)
 
         safe_print(f"\\n\\u1f4be Results saved to: system_validation_results.json")
 
-        # Exit with appropriate code
+# Exit with appropriate code
         if results['overall_status'] == 'PASS':
             safe_print("\\n\\u1f389 All validations passed! System is ready for production.")
             sys.exit(0)

@@ -1,9 +1,22 @@
+# -*- coding: utf - 8 -*-
 """Lantern trigger for spike detection."""
+"""
+"""
+"""
+"""
+"""Lantern trigger for spike detection."""
+# -*- coding: utf - 8 -*-
 
+"""
+"""
+"""
+"""
+"""Lantern trigger for spike detection."""
+"""Lantern trigger for spike detection."""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
-from core.unified_math_system import unified_math
 import time
-from core.unified_math_system import unified_math
 
 
 def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:
@@ -19,9 +32,16 @@ def lantern_trigger(dp: float, dt: float, tau0: float = 300.0) -> float:
     Returns:
         Lantern spike score in [0,\\u221e)
     """
-    if dt <= 0:
+
+
+"""
+"""
+   if dt <= 0:
         return 0.0
 
     return (dp / dt) * unified_math.exp(-time.time() / tau0)
 
+"""
+"""
+"""
 """

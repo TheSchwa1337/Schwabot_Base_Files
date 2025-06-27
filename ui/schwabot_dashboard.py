@@ -1,33 +1,48 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
+from pathlib import Path
+from typing import Dict, Any, List, Optional
+import asyncio
+import json
+import logging
+import os
+import sys
+import time
+
+import threading
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Schwabot Web Dashboard - Comprehensive Trading System Interface
 ==============================================================
 
-This module provides a complete web-based dashboard for Schwabot, including:
-- Real-time trading monitoring
+This module provides a complete web - based dashboard for Schwabot, including:
+- Real - time trading monitoring
 - Configuration management
 - Mathematical component visualization
 - Performance metrics
 - System health monitoring
 - Settings interface
 """
+"""
+"""
 
-import os
-import sys
-import json
-import logging
-import asyncio
-import threading
-import time
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
-from pathlib import Path
 
 # Flask imports
-from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
-from flask_socketio import SocketIO, emit
-from flask_cors import CORS
 
 # Add core to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -53,10 +68,10 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'schwabot-dashboard-secret-key-2024'
+app.config['SECRET_KEY'] = 'schwabot - dashboard - secret - key - 2024'
 app.config['DEBUG'] = True
 
-# Initialize SocketIO for real-time updates
+# Initialize SocketIO for real - time updates
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Enable CORS
@@ -72,7 +87,7 @@ tensor_harness_matrix = None
 voltage_lane_mapper = None
 system_orchestrator = None
 
-# Real-time data storage
+# Real - time data storage
 real_time_data = {
     'system_status': 'initializing',
     'trading_data': {},
@@ -94,14 +109,18 @@ performance_history = {
 
 def initialize_components():
     """Initialize all Schwabot components."""
-    global settings_manager, phantom_lag_model, meta_ghost_bridge, fallback_router
+
+
+"""
+"""
+   global settings_manager, phantom_lag_model, meta_ghost_bridge, fallback_router
     global hash_registry_manager, tensor_harness_matrix, voltage_lane_mapper, system_orchestrator
 
     try:
-        # Initialize settings manager
+    # Initialize settings manager
         settings_manager = get_settings_manager()
 
-        # Initialize mathematical components
+# Initialize mathematical components
         if IMPORTS_SUCCESSFUL:
             phantom_lag_model = PhantomLagModel()
             meta_ghost_bridge = MetaLayerGhostBridge()
@@ -120,17 +139,21 @@ def initialize_components():
 
 
 def update_real_time_data():
-    """Update real-time data for dashboard."""
-    global real_time_data
+    """Update real - time data for dashboard."""
+
+
+"""
+"""
+   global real_time_data
 
     try:
         current_time = datetime.now()
 
-        # Update system status
+# Update system status
         real_time_data['system_status'] = 'running'
         real_time_data['last_update'] = current_time.isoformat()
 
-        # Update trading data
+# Update trading data
         if settings_manager:
             real_time_data['trading_data'] = {
                 'default_symbol': settings_manager.trading_settings.default_symbol,
@@ -139,7 +162,7 @@ def update_real_time_data():
                 'risk_management': settings_manager.trading_settings.risk_management
             }
 
-        # Update performance metrics
+# Update performance metrics
         real_time_data['performance_metrics'] = {
             'total_trades': len(performance_history['timestamps']),
             'current_portfolio_value': performance_history['portfolio_value'][-1] if performance_history['portfolio_value'] else 0,
@@ -148,7 +171,7 @@ def update_real_time_data():
             'uptime_hours': (current_time - datetime.fromisoformat(performance_history['timestamps'][0])).total_seconds() / 3600 if performance_history['timestamps'] else 0
         }
 
-        # Update mathematical components status
+# Update mathematical components status
         real_time_data['mathematical_components'] = {
             'phantom_lag_model': {
                 'status': 'active' if phantom_lag_model else 'inactive',
@@ -168,12 +191,16 @@ def update_real_time_data():
         }
 
     except Exception as e:
-        logger.error(f"Error updating real-time data: {e}")
+        logger.error(f"Error updating real - time data: {e}")
 
 
 def add_performance_data(portfolio_value: float, profit_loss: float, trade_count: int, success_rate: float):
     """Add new performance data point."""
-    current_time = datetime.now()
+
+
+"""
+"""
+   current_time = datetime.now()
 
     performance_history['timestamps'].append(current_time.isoformat())
     performance_history['portfolio_value'].append(portfolio_value)
@@ -181,7 +208,7 @@ def add_performance_data(portfolio_value: float, profit_loss: float, trade_count
     performance_history['trade_count'].append(trade_count)
     performance_history['success_rate'].append(success_rate)
 
-    # Keep only last 1000 data points
+# Keep only last 1000 data points
     max_points = 1000
     if len(performance_history['timestamps']) > max_points:
         performance_history['timestamps'] = performance_history['timestamps'][-max_points:]
@@ -193,7 +220,11 @@ def add_performance_data(portfolio_value: float, profit_loss: float, trade_count
 
 def add_alert(alert_type: str, message: str, severity: str = 'info'):
     """Add a new alert."""
-    alert = {
+
+
+"""
+"""
+   alert = {
         'id': len(real_time_data['alerts']) + 1,
         'type': alert_type,
         'message': message,
@@ -203,17 +234,21 @@ def add_alert(alert_type: str, message: str, severity: str = 'info'):
 
     real_time_data['alerts'].append(alert)
 
-    # Keep only last 50 alerts
+# Keep only last 50 alerts
     if len(real_time_data['alerts']) > 50:
         real_time_data['alerts'] = real_time_data['alerts'][-50:]
 
-    # Emit to connected clients
+# Emit to connected clients
     socketio.emit('new_alert', alert)
 
 
 def background_data_updater():
-    """Background thread for updating real-time data."""
-    while True:
+    """Background thread for updating real - time data."""
+
+
+"""
+"""
+   while True:
         try:
             update_real_time_data()
             time.sleep(1)  # Update every second
@@ -227,27 +262,43 @@ def background_data_updater():
 @app.route('/')
 def dashboard():
     """Main dashboard page."""
-    return render_template('dashboard.html')
 
 
-@app.route('/api/status')
+"""
+"""
+   return render_template('dashboard.html')
+
+
+@app.route('/api / status')
 def api_status():
     """Get system status."""
-    return jsonify(real_time_data)
 
 
-@app.route('/api/settings')
+"""
+"""
+   return jsonify(real_time_data)
+
+
+@app.route('/api / settings')
 def api_settings():
     """Get current settings."""
-    if settings_manager:
+
+
+"""
+"""
+   if settings_manager:
         return jsonify(settings_manager.get_ui_settings())
     return jsonify({'error': 'Settings manager not available'})
 
 
-@app.route('/api/settings', methods=['POST'])
+@app.route('/api / settings', methods=['POST'])
 def api_update_settings():
     """Update settings."""
-    try:
+
+
+"""
+"""
+   try:
         data = request.get_json()
         if not data:
             return jsonify({'error': 'No data provided'}), 400
@@ -267,16 +318,24 @@ def api_update_settings():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/performance')
+@app.route('/api / performance')
 def api_performance():
     """Get performance data."""
-    return jsonify(performance_history)
 
 
-@app.route('/api/components')
+"""
+"""
+   return jsonify(performance_history)
+
+
+@app.route('/api / components')
 def api_components():
     """Get mathematical components status."""
-    components_data = {}
+
+
+"""
+"""
+   components_data = {}
 
     if phantom_lag_model:
         components_data['phantom_lag_model'] = phantom_lag_model.get_statistics()
@@ -290,16 +349,24 @@ def api_components():
     return jsonify(components_data)
 
 
-@app.route('/api/alerts')
+@app.route('/api / alerts')
 def api_alerts():
     """Get current alerts."""
-    return jsonify(real_time_data['alerts'])
 
 
-@app.route('/api/alerts', methods=['POST'])
+"""
+"""
+   return jsonify(real_time_data['alerts'])
+
+
+@app.route('/api / alerts', methods=['POST'])
 def api_add_alert():
     """Add a new alert."""
-    try:
+
+
+"""
+"""
+   try:
         data = request.get_json()
         alert_type = data.get('type', 'info')
         message = data.get('message', '')
@@ -313,10 +380,14 @@ def api_add_alert():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/phantom-lag/analyze', methods=['POST'])
+@app.route('/api / phantom - lag / analyze', methods=['POST'])
 def api_phantom_lag_analyze():
     """Analyze missed opportunity using Phantom Lag Model."""
-    try:
+
+
+"""
+"""
+   try:
         data = request.get_json()
         if not phantom_lag_model:
             return jsonify({'error': 'Phantom Lag Model not available'}), 503
@@ -344,12 +415,16 @@ def api_phantom_lag_analyze():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/meta-bridge/opportunities')
+@app.route('/api / meta - bridge / opportunities')
 def api_meta_bridge_opportunities():
     """Get current bridge opportunities."""
-    try:
+
+
+"""
+"""
+   try:
         if not meta_ghost_bridge:
-            return jsonify({'error': 'Meta-Layer Ghost Bridge not available'}), 503
+            return jsonify({'error': 'Meta - Layer Ghost Bridge not available'}), 503
 
         opportunities = meta_ghost_bridge.get_current_opportunities()
 
@@ -373,10 +448,14 @@ def api_meta_bridge_opportunities():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/fallback/statistics')
+@app.route('/api / fallback / statistics')
 def api_fallback_statistics():
     """Get fallback logic statistics."""
-    try:
+
+
+"""
+"""
+   try:
         if not fallback_router:
             return jsonify({'error': 'Fallback Logic Router not available'}), 503
 
@@ -387,10 +466,14 @@ def api_fallback_statistics():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/system/health')
+@app.route('/api / system / health')
 def api_system_health():
     """Get system health status."""
-    try:
+
+
+"""
+"""
+   try:
         health_data = {
             'status': real_time_data['system_status'],
             'uptime': real_time_data['performance_metrics'].get('uptime_hours', 0),
@@ -419,26 +502,42 @@ def api_system_health():
 @socketio.on('connect')
 def handle_connect():
     """Handle client connection."""
-    logger.info(f"Client connected: {request.sid}")
+
+
+"""
+"""
+   logger.info(f"Client connected: {request.sid}")
     emit('status', {'message': 'Connected to Schwabot Dashboard'})
 
 
 @socketio.on('disconnect')
 def handle_disconnect():
     """Handle client disconnection."""
-    logger.info(f"Client disconnected: {request.sid}")
+
+
+"""
+"""
+   logger.info(f"Client disconnected: {request.sid}")
 
 
 @socketio.on('request_update')
 def handle_request_update():
-    """Handle real-time update request."""
-    emit('real_time_data', real_time_data)
+    """Handle real - time update request."""
+
+
+"""
+"""
+   emit('real_time_data', real_time_data)
 
 
 @socketio.on('add_performance_data')
 def handle_add_performance_data(data):
     """Handle adding performance data."""
-    try:
+
+
+"""
+"""
+   try:
         portfolio_value = data.get('portfolio_value', 0)
         profit_loss = data.get('profit_loss', 0)
         trade_count = data.get('trade_count', 0)
@@ -446,7 +545,7 @@ def handle_add_performance_data(data):
 
         add_performance_data(portfolio_value, profit_loss, trade_count, success_rate)
 
-        # Emit updated performance data to all clients
+# Emit updated performance data to all clients
         socketio.emit('performance_update', performance_history)
 
     except Exception as e:
@@ -458,157 +557,185 @@ def handle_add_performance_data(data):
 @app.route('/dashboard')
 def dashboard_page():
     """Dashboard page."""
-    return render_template('dashboard.html')
+
+
+"""
+"""
+   return render_template('dashboard.html')
 
 
 @app.route('/settings')
 def settings_page():
     """Settings page."""
-    return render_template('settings.html')
+
+
+"""
+"""
+   return render_template('settings.html')
 
 
 @app.route('/components')
 def components_page():
     """Mathematical components page."""
-    return render_template('components.html')
+
+
+"""
+"""
+   return render_template('components.html')
 
 
 @app.route('/performance')
 def performance_page():
     """Performance monitoring page."""
-    return render_template('performance.html')
+
+
+"""
+"""
+   return render_template('performance.html')
 
 
 @app.route('/alerts')
 def alerts_page():
     """Alerts page."""
-    return render_template('alerts.html')
+
+
+"""
+"""
+   return render_template('alerts.html')
 
 
 @app.route('/health')
 def health_page():
     """System health page."""
-    return render_template('health.html')
+
+
+"""
+"""
+   return render_template('health.html')
 
 
 def create_templates():
     """Create HTML templates for the dashboard."""
-    templates_dir = Path(__file__).parent / 'templates'
+
+
+"""
+"""
+   templates_dir = Path(__file__).parent / 'templates'
     templates_dir.mkdir(exist_ok=True)
 
-    # Base template
+# Base template
     base_template = '''<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF - 8">
+    <meta name="viewport" content="width = device - width, initial - scale = 1.0">
     <title>{% block title %}Schwabot Dashboard{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1_3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0_0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0_1/socket.io.js"></script>
+    <link href="https://cdn.jsdelivr.net / npm / bootstrap@5.1_3 / dist / css / bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com / ajax / libs / font - awesome / 6.0_0 / css / all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net / npm / chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com / ajax / libs / socket.io / 4.0_1 / socket.io.js"></script>
     <style>
-        .sidebar { min-height: 100vh; background-color: #2c3e50; }
-        .sidebar .nav-link { color: #ecf0f1; }
-        .sidebar .nav-link:hover { background-color: #34495e; }
-        .main-content { padding: 20px; }
-        .status-card { border-left: 4px solid #3498db; }
-        .status-card.success { border-left-color: #27ae60; }
-        .status-card.warning { border-left-color: #f39c12; }
-        .status-card.danger { border-left-color: #e74c3c; }
-        .metric-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .sidebar { min - height: 100vh; background - color:  #2c3e50; }
+        .sidebar .nav - link { color:  #ecf0f1; }
+        .sidebar .nav - link:hover { background - color:  #34495e; }
+        .main - content { padding: 20px; }
+        .status - card { border - left: 4px solid  #3498db; }
+        .status - card.success { border - left - color:  #27ae60; }
+        .status - card.warning { border - left - color:  #f39c12; }
+        .status - card.danger { border - left - color:  #e74c3c; }
+        .metric - card { background: linear - gradient(135deg,  #667eea 0%, #764ba2 100%); color: white; }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container - fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-2 sidebar">
-                <div class="p-3">
-                    <h4 class="text-white">\\u1f9e0 Schwabot</h4>
-                    <hr class="text-white">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/dashboard">
-                                <i class="fas fa-tachometer-alt"></i> Dashboard
+            <nav class="col - md - 2 sidebar">
+                <div class="p - 3">
+                    <h4 class="text - white">\\u1f9e0 Schwabot</h4>
+                    <hr class="text - white">
+                    <ul class="nav flex - column">
+                        <li class="nav - item">
+                            <a class="nav - link" href="/dashboard">
+                                <i class="fas fa - tachometer - alt"></i> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/performance">
-                                <i class="fas fa-chart-line"></i> Performance
+                        <li class="nav - item">
+                            <a class="nav - link" href="/performance">
+                                <i class="fas fa - chart - line"></i> Performance
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/components">
-                                <i class="fas fa-cogs"></i> Components
+                        <li class="nav - item">
+                            <a class="nav - link" href="/components">
+                                <i class="fas fa - cogs"></i> Components
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/settings">
-                                <i class="fas fa-cog"></i> Settings
+                        <li class="nav - item">
+                            <a class="nav - link" href="/settings">
+                                <i class="fas fa - cog"></i> Settings
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/alerts">
-                                <i class="fas fa-bell"></i> Alerts
+                        <li class="nav - item">
+                            <a class="nav - link" href="/alerts">
+                                <i class="fas fa - bell"></i> Alerts
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/health">
-                                <i class="fas fa-heartbeat"></i> Health
+                        <li class="nav - item">
+                            <a class="nav - link" href="/health">
+                                <i class="fas fa - heartbeat"></i> Health
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
-            
+
             <!-- Main Content -->
-            <main class="col-md-10 main-content">
+            <main class="col - md - 10 main - content">
                 {% block content %}{% endblock %}
             </main>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1_3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net / npm / bootstrap@5.1_3 / dist / js / bootstrap.bundle.min.js"></script>
     <script>
         // Initialize Socket.IO
         const socket = io();
-        
+
         socket.on('connect', function() {
             console.log('Connected to Schwabot Dashboard');
         });
-        
+
         socket.on('real_time_data', function(data) {
             updateDashboard(data);
         });
-        
+
         socket.on('new_alert', function(alert) {
             showAlert(alert);
         });
-        
+
         function updateDashboard(data) {
             // Update system status
-            document.getElementById('system-status').textContent = data.system_status;
-            
+            document.getElementById('system - status').textContent = data.system_status;
+
             // Update performance metrics
             const metrics = data.performance_metrics;
-            document.getElementById('total-trades').textContent = metrics.total_trades;
-            document.getElementById('portfolio-value').textContent = '$' + metrics.current_portfolio_value.toFixed(2);
-            document.getElementById('profit-loss').textContent = '$' + metrics.total_profit_loss.toFixed(2);
-            document.getElementById('success-rate').textContent = (metrics.success_rate * 100).toFixed(1) + '%';
+            document.getElementById('total - trades').textContent = metrics.total_trades;
+            document.getElementById('portfolio - value').textContent = '$' + metrics.current_portfolio_value.toFixed(2);
+            document.getElementById('profit - loss').textContent = '$' + metrics.total_profit_loss.toFixed(2);
+            document.getElementById('success - rate').textContent = (metrics.success_rate * 100).toFixed(1) + '%';
         }
-        
+
         function showAlert(alert) {
             const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${alert.severity} alert-dismissible fade show`;
+            alertDiv.className = `alert alert-${alert.severity} alert - dismissible fade show`;
             alertDiv.innerHTML = `
                 <strong>${alert.type}:</strong> ${alert.message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn - close" data - bs - dismiss="alert"></button>
             `;
-            document.getElementById('alerts-container').appendChild(alertDiv);
+            document.getElementById('alerts - container').appendChild(alertDiv);
         }
-        
-        // Request real-time updates
+
+        // Request real - time updates
         setInterval(function() {
             socket.emit('request_update');
         }, 1000);
@@ -616,70 +743,70 @@ def create_templates():
 </body>
 </html>'''
 
-    # Dashboard template
+# Dashboard template
     dashboard_template = '''{% extends "base.html" %}
 {% block title %}Dashboard - Schwabot{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-12">
-        <h1><i class="fas fa-tachometer-alt"></i> Schwabot Dashboard</h1>
-        <p class="text-muted">Real-time trading system monitoring</p>
+    <div class="col - 12">
+        <h1><i class="fas fa - tachometer - alt"></i> Schwabot Dashboard</h1>
+        <p class="text - muted">Real - time trading system monitoring</p>
     </div>
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">System Status</h5>
-                <h3 id="system-status">Initializing...</h3>
+<div class="row mb - 4">
+    <div class="col - md - 3">
+        <div class="card metric - card">
+            <div class="card - body">
+                <h5 class="card - title">System Status</h5>
+                <h3 id="system - status">Initializing...</h3>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Total Trades</h5>
-                <h3 id="total-trades">0</h3>
+    <div class="col - md - 3">
+        <div class="card metric - card">
+            <div class="card - body">
+                <h5 class="card - title">Total Trades</h5>
+                <h3 id="total - trades">0</h3>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Portfolio Value</h5>
-                <h3 id="portfolio-value">$0.00</h3>
+    <div class="col - md - 3">
+        <div class="card metric - card">
+            <div class="card - body">
+                <h5 class="card - title">Portfolio Value</h5>
+                <h3 id="portfolio - value">$0.00</h3>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Success Rate</h5>
-                <h3 id="success-rate">0%</h3>
+    <div class="col - md - 3">
+        <div class="card metric - card">
+            <div class="card - body">
+                <h5 class="card - title">Success Rate</h5>
+                <h3 id="success - rate">0%</h3>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col - md - 8">
         <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-chart-line"></i> Performance Chart</h5>
+            <div class="card - header">
+                <h5><i class="fas fa - chart - line"></i> Performance Chart</h5>
             </div>
-            <div class="card-body">
+            <div class="card - body">
                 <canvas id="performanceChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col - md - 4">
         <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-bell"></i> Recent Alerts</h5>
+            <div class="card - header">
+                <h5><i class="fas fa - bell"></i> Recent Alerts</h5>
             </div>
-            <div class="card-body" id="alerts-container">
-                <p class="text-muted">No alerts at the moment</p>
+            <div class="card - body" id="alerts - container">
+                <p class="text - muted">No alerts at the moment</p>
             </div>
         </div>
     </div>
@@ -710,7 +837,7 @@ const performanceChart = new Chart(ctx, {
 });
 
 // Update chart with real data
-fetch('/api/performance')
+fetch('/api / performance')
     .then(response => response.json())
     .then(data => {
         performanceChart.data.labels = data.timestamps.slice(-20);
@@ -720,7 +847,7 @@ fetch('/api/performance')
 </script>
 {% endblock %}'''
 
-    # Write templates
+# Write templates
     (templates_dir / 'base.html').write_text(base_template)
     (templates_dir / 'dashboard.html').write_text(dashboard_template)
 
@@ -729,25 +856,29 @@ fetch('/api/performance')
 
 def main():
     """Main function to run the dashboard."""
-    safe_print("\\u1f9e0 Starting Schwabot Web Dashboard...")
 
-    # Initialize components
+
+"""
+"""
+   safe_print("\\u1f9e0 Starting Schwabot Web Dashboard...")
+
+# Initialize components
     if not initialize_components():
         safe_print("\\u274c Failed to initialize components")
         return 1
 
-    # Create templates
+# Create templates
     create_templates()
 
-    # Start background data updater
-    updater_thread = threading.Thread(target=background_data_updater, daemon=True)
+# Start background data updater
+    updater_thread = threading.Thread(target=background_data_updater, daemon = True)
     updater_thread.start()
 
-    # Add some sample data
+# Add some sample data
     add_performance_data(10000.0, 0.0, 0, 0.0)
     add_alert('system', 'Schwabot Dashboard started successfully', 'success')
 
-    # Get configuration
+# Get configuration
     if settings_manager:
         ui_config = settings_manager.ui_settings.web_dashboard
         host = ui_config.get('host', '0.0_0.0')
@@ -758,11 +889,11 @@ def main():
 
     safe_print(f"\\u2705 Dashboard starting on http://{host}:{port}")
     safe_print("\\u1f4ca Access the dashboard in your web browser")
-    safe_print("\\u1f527 Use Ctrl+C to stop the server")
+    safe_print("\\u1f527 Use Ctrl + C to stop the server")
 
     try:
-        # Run the Flask app
-        socketio.run(app, host=host, port=port, debug=False)
+    # Run the Flask app
+        socketio.run(app, host=host, port = port, debug = False)
     except KeyboardInterrupt:
         safe_print("\\n\\u23f9\\ufe0f Dashboard stopped by user")
     except Exception as e:
@@ -775,4 +906,7 @@ def main():
 if __name__ == "__main__":
     sys.exit(main())
 
+"""
+"""
+"""
 """

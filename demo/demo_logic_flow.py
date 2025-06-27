@@ -1,11 +1,27 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
 Schwabot Demo Logic Flow Module
-===============================
+== == == == == == == == == == == == == == == =
 
 Routes from entry logic to allocator and manages the complete trade flow pipeline.
 Provides comprehensive logic flow management with integration to all demo components.
+"""
+"""
 """
 
 import json
@@ -28,7 +44,10 @@ from demo.demo_trade_sequence import get_demo_trade_sequence
 
 
 class FlowStep(Enum):
+
     """Flow step enumeration"""
+"""
+"""
     MARKET_ANALYSIS = "market_analysis"
     OVERLAY_APPLICATION = "overlay_application"
     VECTOR_VALIDATION = "vector_validation"
@@ -42,7 +61,10 @@ class FlowStep(Enum):
 
 
 class FlowStatus(Enum):
+
     """Flow status enumeration"""
+"""
+"""
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -52,7 +74,10 @@ class FlowStatus(Enum):
 
 @dataclass
 class FlowStepResult:
+
     """Result of a flow step execution"""
+"""
+"""
     step: FlowStep
     status: FlowStatus
     start_time: datetime
@@ -66,7 +91,10 @@ class FlowStepResult:
 
 @dataclass
 class LogicFlow:
+
     """Complete logic flow definition"""
+"""
+"""
     flow_id: str
     flow_type: str  # "entry", "exit", "reinforcement_learning"
     steps: List[FlowStep]
@@ -79,20 +107,24 @@ class LogicFlow:
 
 
 class DemoLogicFlow:
+
     """Comprehensive demo logic flow handler"""
+"""
+"""
 
     def __init__(self):
+
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
         self.matrix_allocator = get_matrix_allocator()
         self.trade_sequence = get_demo_trade_sequence()
 
-        # Flow management
+# Flow management
         self.active_flows: Dict[str, LogicFlow] = {}
         self.completed_flows: List[LogicFlow] = []
         self.flow_history: Dict[str, List[LogicFlow]] = {}
 
-        # Performance tracking
+# Performance tracking
         self.flow_performance = {
             "total_flows": 0,
             "successful_flows": 0,
@@ -101,28 +133,31 @@ class DemoLogicFlow:
             "step_performance": {}
         }
 
-        # Load configuration
+# Load configuration
         self.load_logic_configuration()
 
-        # Initialize directories
+# Initialize directories
         self._initialize_directories()
 
-        # Load existing data
+# Load existing data
         self._load_flow_data()
 
     def load_logic_configuration(self):
+
         """Load logic flow configuration from YAML files"""
+"""
+"""
         try:
-            # Load demo backtest matrix configuration
-            matrix_config_path = Path("demo/demo_backtest_matrix.yaml")
+# Load demo backtest matrix configuration
+            matrix_config_path = Path("demo / demo_backtest_matrix.yaml")
             if matrix_config_path.exists():
                 with open(matrix_config_path, 'r') as f:
                     self.matrix_config = yaml.safe_load(f)
             else:
                 self.matrix_config = {}
 
-            # Load demo backtest mode configuration
-            backtest_config_path = Path("settings/demo_backtest_mode.yaml")
+# Load demo backtest mode configuration
+            backtest_config_path = Path("settings / demo_backtest_mode.yaml")
             if backtest_config_path.exists():
                 with open(backtest_config_path, 'r') as f:
                     self.backtest_config = yaml.safe_load(f)
@@ -135,50 +170,62 @@ class DemoLogicFlow:
             self.backtest_config = {}
 
     def _initialize_directories(self):
+
         """Initialize logic flow directories"""
+"""
+"""
         flow_dirs = [
-            "demo/logic_flows/",
-            "demo/flow_results/",
-            "demo/flow_configs/",
-            "demo/flow_reports/"
+            "demo / logic_flows/",
+            "demo / flow_results/",
+            "demo / flow_configs/",
+            "demo / flow_reports/"
         ]
 
         for dir_path in flow_dirs:
-            Path(dir_path).mkdir(parents=True, exist_ok=True)
+            Path(dir_path).mkdir(parents = True, exist_ok = True)
 
     def _load_flow_data(self):
+
         """Load existing flow data from files"""
+"""
+"""
         try:
-            # Load completed flows
-            flows_file = Path("demo/logic_flows/completed_flows.json")
+# Load completed flows
+            flows_file = Path("demo / logic_flows / completed_flows.json")
             if flows_file.exists():
                 with open(flows_file, 'r') as f:
                     flows_data = json.load(f)
                     self.completed_flows = [LogicFlow(**flow) for flow in flows_data]
 
-            # Update performance metrics
+# Update performance metrics
             self._update_flow_performance()
 
         except Exception as e:
             safe_print(f"Warning: Could not load flow data: {e}")
 
     def _save_flow_data(self):
+
         """Save flow data to files"""
+"""
+"""
         try:
-            # Save completed flows
+# Save completed flows
             flows_data = [asdict(flow) for flow in self.completed_flows]
-            with open("demo/logic_flows/completed_flows.json", 'w') as f:
-                json.dump(flows_data, f, indent=2, default=str)
+            with open("demo / logic_flows / completed_flows.json", 'w') as f:
+                json.dump(flows_data, f, indent = 2, default = str)
 
         except Exception as e:
             safe_print(f"Error saving flow data: {e}")
 
     def create_logic_flow(self, flow_type: str, metadata: Dict[str, Any] = None) -> LogicFlow:
+
         """Create a new logic flow based on type"""
+"""
+"""
 
         flow_id = f"flow_{flow_type}_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(flow_type) % 1000}"
 
-        # Define steps based on flow type
+# Define steps based on flow type
         if flow_type == "entry":
             steps = [
                 FlowStep.MARKET_ANALYSIS,
@@ -206,15 +253,15 @@ class DemoLogicFlow:
             raise ValueError(f"Unknown flow type: {flow_type}")
 
         flow = LogicFlow(
-            flow_id=flow_id,
-            flow_type=flow_type,
-            steps=steps,
-            current_step_index=0,
-            status=FlowStatus.PENDING,
-            start_time=datetime.now(),
-            end_time=None,
+            flow_id = flow_id,
+            flow_type = flow_type,
+            steps = steps,
+            current_step_index = 0,
+            status = FlowStatus.PENDING,
+            start_time = datetime.now(),
+            end_time = None,
             results=[],
-            metadata=metadata or {}
+            metadata = metadata or {}
         )
 
         self.active_flows[flow_id] = flow
@@ -222,6 +269,8 @@ class DemoLogicFlow:
 
     async def execute_logic_flow(self, flow: LogicFlow, input_data: Dict[str, Any] = None) -> Dict[str, Any]:
         """Execute a complete logic flow"""
+"""
+"""
 
         safe_print(f"\\u1f680 Starting logic flow: {flow.flow_id} ({flow.flow_type})")
 
@@ -232,26 +281,26 @@ class DemoLogicFlow:
             for i, step in enumerate(flow.steps):
                 flow.current_step_index = i
 
-                safe_print(f"  \\u1f4cb Executing step {i+1}/{len(flow.steps)}: {step.value}")
+                safe_print(f"  \\u1f4cb Executing step {i + 1}/{len(flow.steps)}: {step.value}")
 
-                # Execute step
+# Execute step
                 step_result = await self._execute_flow_step(step, current_data, flow)
                 flow.results.append(step_result)
 
-                # Update current data with step output
+# Update current data with step output
                 current_data.update(step_result.output_data)
 
-                # Check if step failed
+# Check if step failed
                 if step_result.status == FlowStatus.FAILED:
                     flow.status = FlowStatus.FAILED
                     flow.end_time = datetime.now()
                     safe_print(f"  \\u274c Flow failed at step {step.value}: {step_result.error_message}")
                     break
 
-                # Add delay between steps for realistic simulation
+# Add delay between steps for realistic simulation
                 await asyncio.sleep(0.1)
 
-            # Mark flow as completed if all steps succeeded
+# Mark flow as completed if all steps succeeded
             if flow.status != FlowStatus.FAILED:
                 flow.status = FlowStatus.COMPLETED
                 flow.end_time = datetime.now()
@@ -262,15 +311,15 @@ class DemoLogicFlow:
             flow.end_time = datetime.now()
             safe_print(f"  \\u274c Flow execution error: {e}")
 
-        # Move to completed flows
+# Move to completed flows
         self.completed_flows.append(flow)
         if flow.flow_id in self.active_flows:
             del self.active_flows[flow.flow_id]
 
-        # Update performance metrics
+# Update performance metrics
         self._update_flow_performance()
 
-        # Save flow data
+# Save flow data
         self._save_flow_data()
 
         return {
@@ -283,6 +332,8 @@ class DemoLogicFlow:
 
     async def _execute_flow_step(self, step: FlowStep, input_data: Dict[str, Any], flow: LogicFlow) -> FlowStepResult:
         """Execute a single flow step"""
+"""
+"""
 
         start_time = datetime.now()
         step_start = time.time()
@@ -323,24 +374,26 @@ class DemoLogicFlow:
         execution_time = time.time() - step_start
 
         return FlowStepResult(
-            step=step,
-            status=status,
-            start_time=start_time,
-            end_time=end_time,
-            input_data=input_data,
-            output_data=output_data,
-            error_message=error_message,
-            execution_time=execution_time,
+            step = step,
+            status = status,
+            start_time = start_time,
+            end_time = end_time,
+            input_data = input_data,
+            output_data = output_data,
+            error_message = error_message,
+            execution_time = execution_time,
             metadata={}
         )
 
     async def _execute_market_analysis(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute market analysis step"""
+"""
+"""
 
-        # Simulate market data analysis
+# Simulate market data analysis
         market_data = self.trade_sequence.generate_market_data(10)
 
-        # Extract key metrics
+# Extract key metrics
         prices = [tick["price"] for tick in market_data]
         volumes = [tick["volume"] for tick in market_data]
 
@@ -366,15 +419,17 @@ class DemoLogicFlow:
 
     async def _execute_overlay_application(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute overlay application step"""
+"""
+"""
 
         market_analysis = input_data.get("market_analysis", {})
         market_state = market_analysis.get("market_state", {})
         technical_indicators = market_analysis.get("technical_indicators", {})
 
-        # Apply overlays based on market conditions
+# Apply overlays based on market conditions
         overlays = []
 
-        # Momentum overlay
+# Momentum overlay
         if market_state.get("price_momentum", 0) > 0.02:
             overlays.append({
                 "type": "momentum_based",
@@ -383,7 +438,7 @@ class DemoLogicFlow:
                 "conditions_met": ["price_momentum", "volume_trend"]
             })
 
-        # Reversal overlay
+# Reversal overlay
         if technical_indicators.get("rsi", 50) > 70:
             overlays.append({
                 "type": "reversal_based",
@@ -392,7 +447,7 @@ class DemoLogicFlow:
                 "conditions_met": ["rsi_overbought"]
             })
 
-        # Breakout overlay
+# Breakout overlay
         if technical_indicators.get("volume_spike", 1.0) > 2.0:
             overlays.append({
                 "type": "breakout_based",
@@ -401,7 +456,7 @@ class DemoLogicFlow:
                 "conditions_met": ["volume_spike"]
             })
 
-        # Fractal overlay (simulated)
+# Fractal overlay (simulated)
         if np.random.random() > 0.7:
             overlays.append({
                 "type": "fractal_based",
@@ -414,12 +469,14 @@ class DemoLogicFlow:
 
     async def _execute_vector_validation(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute vector validation step"""
+"""
+"""
 
         overlay_signals = input_data.get("overlay_signals", [])
 
         validation_results = []
         for overlay in overlay_signals:
-            # Simulate vector validation
+# Simulate vector validation
             validation_result = self.vector_validator.validate_signal({
                 "signal_type": "entry",
                 "strategy": "demo",
@@ -436,7 +493,7 @@ class DemoLogicFlow:
                 "valid": validation_result.get("valid", False)
             })
 
-        # Filter valid signals
+# Filter valid signals
         valid_signals = [result for result in validation_results if result["valid"]]
 
         return {
@@ -446,12 +503,14 @@ class DemoLogicFlow:
 
     async def _execute_matrix_allocation(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute matrix allocation step"""
+"""
+"""
 
         validated_vectors = input_data.get("validated_vectors", [])
 
         allocation_decisions = []
         for vector in validated_vectors:
-            # Simulate matrix allocation
+# Simulate matrix allocation
             allocation_decision = self.matrix_allocator.allocate_signal({
                 "signal_type": "entry",
                 "strategy": "demo",
@@ -468,7 +527,7 @@ class DemoLogicFlow:
                 "allocated": allocation_decision.get("allocated", False)
             })
 
-        # Filter allocated signals
+# Filter allocated signals
         allocated_signals = [decision for decision in allocation_decisions if decision["allocated"]]
 
         return {
@@ -478,20 +537,22 @@ class DemoLogicFlow:
 
     async def _execute_trade_execution(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute trade execution step"""
+"""
+"""
 
         allocated_signals = input_data.get("allocated_signals", [])
 
         execution_results = []
         for signal in allocated_signals:
-            # Create and execute trade signal
+# Create and execute trade signal
             trade_signal = self.trade_sequence.create_trade_signal(
                 signal_type="entry",
                 strategy="demo",
-                overlay=signal["vector"]["overlay"]["type"],
-                price=50000.0,
-                volume=1000.0,
-                confidence=signal["vector"]["overlay"]["confidence"],
-                metadata=signal
+                overlay = signal["vector"]["overlay"]["type"],
+                price = 50000.0,
+                volume = 1000.0,
+                confidence = signal["vector"]["overlay"]["confidence"],
+                metadata = signal
             )
 
             execution = self.trade_sequence.execute_trade_signal(trade_signal)
@@ -510,13 +571,15 @@ class DemoLogicFlow:
 
     async def _execute_position_monitoring(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute position monitoring step"""
+"""
+"""
 
-        # Get active positions
+# Get active positions
         active_positions = list(self.trade_sequence.active_positions.values())
 
         monitoring_results = []
         for position in active_positions:
-            # Update position with current market data
+# Update position with current market data
             current_price = 50000.0 + np.random.normal(0, 1000)  # Simulate price movement
             updated_position = self.trade_sequence.update_position(position.position_id, current_price)
 
@@ -535,6 +598,8 @@ class DemoLogicFlow:
 
     async def _execute_exit_decision(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute exit decision step"""
+"""
+"""
 
         monitoring_results = input_data.get("monitoring_results", [])
 
@@ -542,26 +607,28 @@ class DemoLogicFlow:
         for result in monitoring_results:
             position = result["position"]
 
-            # Apply exit overlays
+# Apply exit overlays
             exit_overlays = []
 
-            # Profit target overlay
-            if result["unrealized_pnl"] > 0 and result["unrealized_pnl"] / (position.entry_price * position.position_size) > 0.15:
+# Profit target overlay
+            if result["unrealized_pnl"] > 0 and result["unrealized_pnl"] / \
+                (position.entry_price * position.position_size) > 0.15:
                 exit_overlays.append({
                     "type": "profit_target",
                     "confidence": 0.9,
                     "reason": "profit_target_reached"
                 })
 
-            # Stop loss overlay
-            if result["unrealized_pnl"] < 0 and unified_math.abs(result["unrealized_pnl"]) / (position.entry_price * position.position_size) > 0.05:
+# Stop loss overlay
+            if result["unrealized_pnl"] < 0 and unified_math.abs(
+                result["unrealized_pnl"]) / (position.entry_price * position.position_size) > 0.05:
                 exit_overlays.append({
                     "type": "stop_loss",
                     "confidence": 1.0,
                     "reason": "stop_loss_triggered"
                 })
 
-            # Time-based overlay
+# Time - based overlay
             if result["time_in_trade"] > 1800:  # 30 minutes
                 exit_overlays.append({
                     "type": "time_based",
@@ -583,6 +650,8 @@ class DemoLogicFlow:
 
     async def _execute_position_closure(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute position closure step"""
+"""
+"""
 
         positions_to_exit = input_data.get("positions_to_exit", [])
 
@@ -590,7 +659,7 @@ class DemoLogicFlow:
         for decision in positions_to_exit:
             position = decision["position"]
 
-            # Close position
+# Close position
             exit_execution = self.trade_sequence.close_position(
                 position.position_id,
                 position.current_price,
@@ -611,11 +680,13 @@ class DemoLogicFlow:
 
     async def _execute_performance_recording(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute performance recording step"""
+"""
+"""
 
-        # Get performance metrics
+# Get performance metrics
         performance_metrics = self.trade_sequence.performance_metrics
 
-        # Record performance data
+# Record performance data
         performance_data = {
             "timestamp": datetime.now().isoformat(),
             "metrics": performance_metrics,
@@ -632,11 +703,13 @@ class DemoLogicFlow:
 
     async def _execute_reinforcement_learning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute reinforcement learning step"""
+"""
+"""
 
         performance_data = input_data.get("performance_data", {})
         metrics = performance_data.get("metrics", {})
 
-        # Simulate reinforcement learning updates
+# Simulate reinforcement learning updates
         learning_updates = {
             "win_rate_improvement": np.random.uniform(-0.1, 0.1),
             "profit_factor_adjustment": np.random.uniform(-0.2, 0.2),
@@ -651,7 +724,7 @@ class DemoLogicFlow:
             }
         }
 
-        # Update settings controller with learning results
+# Update settings controller with learning results
         self.settings_controller.record_backtest_success({
             "win_rate": metrics.get("win_rate", 0.0),
             "total_profit": metrics.get("total_profit", 0.0),
@@ -664,7 +737,10 @@ class DemoLogicFlow:
         }
 
     def _update_flow_performance(self):
+
         """Update flow performance metrics"""
+"""
+"""
 
         if not self.completed_flows:
             return
@@ -674,13 +750,13 @@ class DemoLogicFlow:
             [f for f in self.completed_flows if f.status == FlowStatus.COMPLETED])
         self.flow_performance["failed_flows"] = len([f for f in self.completed_flows if f.status == FlowStatus.FAILED])
 
-        # Calculate average flow time
+# Calculate average flow time
         completed_flows = [f for f in self.completed_flows if f.end_time]
         if completed_flows:
             flow_times = [(f.end_time - f.start_time).total_seconds() for f in completed_flows]
             self.flow_performance["average_flow_time"] = unified_math.unified_math.mean(flow_times)
 
-        # Calculate step performance
+# Calculate step performance
         step_performance = {}
         for flow in self.completed_flows:
             for result in flow.results:
@@ -704,6 +780,8 @@ class DemoLogicFlow:
 
     async def run_complete_demo_cycle(self, num_cycles: int = 3) -> Dict[str, Any]:
         """Run a complete demo cycle with entry, exit, and reinforcement learning flows"""
+"""
+"""
 
         safe_print(f"\\u1f680 Starting complete demo cycle: {num_cycles} cycles")
 
@@ -712,18 +790,18 @@ class DemoLogicFlow:
         for cycle in range(num_cycles):
             safe_print(f"\\n\\u1f4cb Cycle {cycle + 1}/{num_cycles}")
 
-            # Entry flow
+# Entry flow
             entry_flow = self.create_logic_flow("entry", {"cycle": cycle})
             entry_result = await self.execute_logic_flow(entry_flow)
 
-            # Wait for some positions to develop
+# Wait for some positions to develop
             await asyncio.sleep(2.0)
 
-            # Exit flow
+# Exit flow
             exit_flow = self.create_logic_flow("exit", {"cycle": cycle})
             exit_result = await self.execute_logic_flow(exit_flow)
 
-            # Reinforcement learning flow
+# Reinforcement learning flow
             rl_flow = self.create_logic_flow("reinforcement_learning", {"cycle": cycle})
             rl_result = await self.execute_logic_flow(rl_flow)
 
@@ -734,7 +812,7 @@ class DemoLogicFlow:
                 "rl_result": rl_result
             })
 
-        # Generate comprehensive report
+# Generate comprehensive report
         report = self.generate_flow_report(cycle_results)
 
         safe_print(f"\\n\\u1f4ca Demo cycle completed: {num_cycles} cycles")
@@ -745,7 +823,10 @@ class DemoLogicFlow:
         return report
 
     def generate_flow_report(self, cycle_results: List[Dict[str, Any]] = None) -> Dict[str, Any]:
+
         """Generate comprehensive flow report"""
+"""
+"""
 
         report = {
             "timestamp": datetime.now().isoformat(),
@@ -764,7 +845,10 @@ class DemoLogicFlow:
         return report
 
     def _generate_flow_recommendations(self) -> List[str]:
+
         """Generate flow optimization recommendations"""
+"""
+"""
 
         recommendations = []
         step_performance = self.flow_performance.get("step_performance", {})
@@ -785,7 +869,10 @@ class DemoLogicFlow:
 
 
 def get_demo_logic_flow() -> DemoLogicFlow:
+
     """Get singleton instance of demo logic flow"""
+"""
+"""
     if not hasattr(get_demo_logic_flow, '_instance'):
         get_demo_logic_flow._instance = DemoLogicFlow()
     return get_demo_logic_flow._instance
@@ -793,15 +880,18 @@ def get_demo_logic_flow() -> DemoLogicFlow:
 
 # Example usage
 if __name__ == "__main__":
-    # Create demo logic flow
+# Create demo logic flow
     logic_flow = get_demo_logic_flow()
 
-    # Run a complete demo cycle
-    asyncio.run(logic_flow.run_complete_demo_cycle(num_cycles=2))
+# Run a complete demo cycle
+    asyncio.run(logic_flow.run_complete_demo_cycle(num_cycles = 2))
 
-    # Print report
+# Print report
     report = logic_flow.generate_flow_report()
     safe_print("\\n\\u1f4ca Flow Report:")
-    print(json.dumps(report, indent=2, default=str))
+    print(json.dumps(report, indent = 2, default = str))
 
+"""
+"""
+"""
 """

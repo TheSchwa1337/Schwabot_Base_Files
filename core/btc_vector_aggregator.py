@@ -1,11 +1,21 @@
-# -*- coding: utf-8 -*-
-from __future__ import annotations
+# -*- coding: utf - 8 -*-
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-
 
-from core.unified_math_system import unified_math
-import numpy as np
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from __future__ import annotations
 import math
-# #!/usr/bin/env python3
-"""BTC vector aggregator - volume-weighted price analysis and FFT filtering."""
+
+
+# """BTC vector aggregator - volume - weighted price analysis and FFT filtering."""
 
 Implements the formulas:
 V_btc = \\u03a3_i^n [p_exit(i) - p_entry(i)].w_vol(i)
@@ -16,6 +26,8 @@ V_btc = \\u03a3_i^n [p_exit(i) - p_entry(i)].w_vol(i)
 This module aggregates BTC price movements with volume weighting and applies
 spectral filtering for enhanced signal quality.
 """"""
+"""
+"""
 
 
 from typing import Sequence
@@ -35,11 +47,14 @@ __all__: list[str] = []
 
 
 def btc_vector()
+
     exit_prices: Sequence[float],
     entry_prices: Sequence[float],
     volume_weights: Sequence[float],
- -> float:  # noqa: D401
+    -> float:  # noqa: D401
     """Return V_btc = \\u03a3_i^n [p_exit(i) - p_entry(i)].w_vol(i)."""
+"""
+"""
 
     Parameters
     ----------
@@ -50,14 +65,16 @@ def btc_vector()
     volume_weights
         Volume weights w_vol(i) for each trade.
     """"""
+"""
+"""
     if not (len(exit_prices) == len(entry_prices) == len(volume_weights)):
         raise ValueError("all input sequences must have same length")
 
-    exit_arr = np.asarray(exit_prices, dtype=float)
-    entry_arr = np.asarray(entry_prices, dtype=float)
-    vol_arr = np.asarray(volume_weights, dtype=float)
+    exit_arr = np.asarray(exit_prices, dtype = float)
+    entry_arr = np.asarray(entry_prices, dtype = float)
+    vol_arr = np.asarray(volume_weights, dtype = float)
 
-    # Compute price differences weighted by volume
+# Compute price differences weighted by volume
     price_diffs = exit_arr - entry_arr
     weighted_diffs = price_diffs * vol_arr
 
@@ -65,11 +82,14 @@ def btc_vector()
 
 
 def btc_eta()
+
     price_delta: float,
     time_delta: float,
     volumes: Sequence[float],
- -> float:  # noqa: D401
+    -> float:  # noqa: D401
     """Return eta_btc = deltap / deltat . \\u03a3_j vol(j)."""
+"""
+"""
 
     Parameters
     ----------
@@ -80,6 +100,8 @@ def btc_eta()
     volumes
         Volume series vol(j) to sum.
     """"""
+"""
+"""
     if time_delta <= 0:
         raise ValueError("time_delta must be positive")
 
@@ -90,7 +112,10 @@ def btc_eta()
 
 
 def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
+
     """Return \\u039e_btc(t) = tanh(V_btc . eta_btc)."""
+"""
+"""
 
     Parameters
     ----------
@@ -99,17 +124,22 @@ def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
     eta_btc
         Eta value from btc_eta().
     """"""
+"""
+"""
     product = v_btc * eta_btc
     return float(np.tanh(product))
 
 
 def btc_spectral_aggregate()
+
     xi_series: Sequence[float],
     peak_frequency: float,
     *,
     filter_width: float = 1.0,
- -> np.ndarray:  # noqa: D401
+    -> np.ndarray:  # noqa: D401
     """Return A_btc = FFT(\\u039e_btc(t)) . filter(f_peak)."""
+"""
+"""
 
     Parameters
     ----------
@@ -120,23 +150,25 @@ def btc_spectral_aggregate()
     filter_width
         Width of the frequency filter around f_peak.
     """"""
-    xi_arr = np.asarray(xi_series, dtype=float)
+"""
+"""
+    xi_arr = np.asarray(xi_series, dtype = float)
 
     if len(xi_arr) == 0:
-        return np.array([], dtype=complex)
+        return np.array([], dtype = complex)
 
-    # Compute FFT
+# Compute FFT
     xi_fft = np.fft.fft(xi_arr)
 
-    # Create frequency array
+# Create frequency array
     n = len(xi_arr)
     freqs = np.fft.fftfreq(n)
 
-    # Create Gaussian filter centered at peak_frequency
+# Create Gaussian filter centered at peak_frequency
     filter_mask = unified_math.exp(-((freqs - peak_frequency)))
-                                   ** 2 / (2 * filter_width**2)
+                                    ** 2 / (2 * filter_width**2)
 
-    # Apply filter
+# Apply filter
     filtered_fft = xi_fft * filter_mask
 
     return filtered_fft

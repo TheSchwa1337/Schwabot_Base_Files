@@ -1,26 +1,40 @@
-# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-from core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+from __future__ import annotations
 import math
-# #!/usr/bin/env python3
-"""Oscillator fallback - damped harmonic pulse generator."""
 
-This helper provides a mathematically-stable fallback oscillator that produces
+
+# """Oscillator fallback - damped harmonic pulse generator."""
+
+This helper provides a mathematically - stable fallback oscillator that produces
 bounded amplitude even if upstream signal generators become unstable.  Ferris
-wheel and GAN-entropy modules can call this in *safe-mode* to keep phase timers
+wheel and GAN - entropy modules can call this in *safe - mode * to keep phase timers
 alive without injecting unbounded energy into the system.
 
 Mathematics
 ~~~~~~~~~~
-Damped harmonic oscillator (underdamped case):
+Damped harmonic oscillator(underdamped case):
 
-x(t) = A . e^(-gamma t) . unified_math.cos(2pi f t + phi)
+x(t) = A . e ^ (-gamma t) . unified_math.cos(2pi f t + phi)
 
 where 0 < gamma < infinity is the damping coefficient.
 
 The implementation is intentionally minimal - no dynamic state, no numerical
-integrator - just the closed-form expression that guarantees \\u2016x(t)\\u2016 <= A.
+integrator - just the closed - form expression that guarantees \\u2016x(t)\\u2016 <= A.
 """"""
+"""
+"""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -40,14 +54,16 @@ def fallback_oscillator()
     frequency: float = 1.0,
     damping: float = 0.1,
     phase: float = 0.0,
- -> float:
+    -> float:
 
 """Return damped cosine value x(t)."""
+"""
+"""
 
 Parameters
 ----------
 t
-Time (seconds) or dimension-less tick.
+Time (seconds) or dimension - less tick.
     amplitude
 Initial amplitude ``A``.  Defaults to **1.0**.
 frequency
@@ -62,8 +78,10 @@ Returns
 float
 Damped oscillator value at *t*.
 """"""
-   if damping < 0:
-        raise ValueError("damping must be non-negative")
+"""
+"""
+    if damping < 0:
+        raise ValueError("damping must be non - negative")
     envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
     return amplitude * envelope * unified_math.unified_math.cos(angle)

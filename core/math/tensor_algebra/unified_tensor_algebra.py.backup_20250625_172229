@@ -60,7 +60,8 @@ class UnifiedTensorAlgebra:
         """
         try:
             if a.shape != b.shape:
-                raise ValueError("Tensors must have the same shape for dot product")
+                raise ValueError(
+                    "Tensors must have the same shape for dot product")
 
             # Element-wise multiplication and sum
             result = np.sum(a * b)
@@ -118,10 +119,12 @@ class UnifiedTensorAlgebra:
                     for j in range(tensor.shape[1]):
                         # Calculate local entropy using neighborhood
                         neighborhood = self._get_neighborhood(tensor, i, j)
-                        entropy_values[i, j] = self._calculate_local_entropy(neighborhood)
+                        entropy_values[i, j] = self._calculate_local_entropy(
+                            neighborhood)
                 else:
                     neighborhood = self._get_neighborhood_1d(tensor, i)
-                    entropy_values[i] = self._calculate_local_entropy(neighborhood)
+                    entropy_values[i] = self._calculate_local_entropy(
+                        neighborhood)
 
             # Calculate gradient
             gradient = np.gradient(entropy_values)
@@ -174,7 +177,8 @@ class UnifiedTensorAlgebra:
                 return (tensor - min_val) / (max_val - min_val)
 
             else:
-                logger.warning(f"Unknown normalization method: {method}, using L2")
+                logger.warning(
+                    f"Unknown normalization method: {method}, using L2")
                 return self.tensor_normalize(tensor, 'l2')
 
         except Exception as e:
@@ -198,7 +202,8 @@ class UnifiedTensorAlgebra:
             y_flat = y.flatten()
 
             if len(x_flat) != len(y_flat):
-                raise ValueError("Tensors must have the same number of elements")
+                raise ValueError(
+                    "Tensors must have the same number of elements")
 
             # Calculate correlation
             correlation = np.corrcoef(x_flat, y_flat)[0, 1]
@@ -209,7 +214,11 @@ class UnifiedTensorAlgebra:
             logger.error(f"Tensor correlation calculation failed: {e}")
             return 0.0
 
-    def tensor_distance(self, a: NDArray, b: NDArray, metric: str = 'euclidean') -> float:
+    def tensor_distance(
+        self,
+        a: NDArray,
+        b: NDArray,
+            metric: str = 'euclidean') -> float:
         """
         Calculate distance between two tensors.
 
@@ -223,7 +232,8 @@ class UnifiedTensorAlgebra:
         """
         try:
             if a.shape != b.shape:
-                raise ValueError("Tensors must have the same shape for distance calculation")
+                raise ValueError(
+                    "Tensors must have the same shape for distance calculation")
 
             if metric == 'euclidean':
                 return float(np.linalg.norm(a - b))
@@ -244,14 +254,19 @@ class UnifiedTensorAlgebra:
                 return float(1.0 - cosine_similarity)
 
             else:
-                logger.warning(f"Unknown distance metric: {metric}, using euclidean")
+                logger.warning(
+                    f"Unknown distance metric: {metric}, using euclidean")
                 return self.tensor_distance(a, b, 'euclidean')
 
         except Exception as e:
             logger.error(f"Tensor distance calculation failed: {e}")
             return float('inf')
 
-    def tensor_similarity(self, a: NDArray, b: NDArray, method: str = 'cosine') -> float:
+    def tensor_similarity(
+        self,
+        a: NDArray,
+        b: NDArray,
+            method: str = 'cosine') -> float:
         """
         Calculate similarity between two tensors.
 
@@ -265,7 +280,8 @@ class UnifiedTensorAlgebra:
         """
         try:
             if a.shape != b.shape:
-                raise ValueError("Tensors must have the same shape for similarity calculation")
+                raise ValueError(
+                    "Tensors must have the same shape for similarity calculation")
 
             if method == 'cosine':
                 # Cosine similarity
@@ -293,14 +309,19 @@ class UnifiedTensorAlgebra:
                 return float(intersection / union)
 
             else:
-                logger.warning(f"Unknown similarity method: {method}, using cosine")
+                logger.warning(
+                    f"Unknown similarity method: {method}, using cosine")
                 return self.tensor_similarity(a, b, 'cosine')
 
         except Exception as e:
             logger.error(f"Tensor similarity calculation failed: {e}")
             return 0.0
 
-    def tensor_convolution(self, tensor: NDArray, kernel: NDArray, mode: str = 'same') -> NDArray:
+    def tensor_convolution(
+            self,
+            tensor: NDArray,
+            kernel: NDArray,
+            mode: str = 'same') -> NDArray:
         """
         Perform tensor convolution with kernel.
 
@@ -493,7 +514,12 @@ class UnifiedTensorAlgebra:
             logger.error(f"Tensor PCA failed: {e}")
             return tensor
 
-    def _get_neighborhood(self, tensor: NDArray, i: int, j: int, radius: int = 1) -> NDArray:
+    def _get_neighborhood(
+            self,
+            tensor: NDArray,
+            i: int,
+            j: int,
+            radius: int = 1) -> NDArray:
         """Get neighborhood around tensor position."""
         try:
             start_i = max(0, i - radius)
@@ -505,7 +531,11 @@ class UnifiedTensorAlgebra:
         except Exception:
             return np.array([tensor[i, j]])
 
-    def _get_neighborhood_1d(self, tensor: NDArray, i: int, radius: int = 1) -> NDArray:
+    def _get_neighborhood_1d(
+            self,
+            tensor: NDArray,
+            i: int,
+            radius: int = 1) -> NDArray:
         """Get neighborhood around 1D tensor position."""
         try:
             start_i = max(0, i - radius)
@@ -568,7 +598,10 @@ def tensor_correlation(x: NDArray, y: NDArray) -> float:
     return unified_tensor_algebra.tensor_correlation(x, y)
 
 
-def tensor_distance(a: NDArray, b: NDArray, metric: str = 'euclidean') -> float:
+def tensor_distance(
+    a: NDArray,
+    b: NDArray,
+        metric: str = 'euclidean') -> float:
     """Convenience function for tensor distance."""
     return unified_tensor_algebra.tensor_distance(a, b, metric)
 
@@ -578,7 +611,10 @@ def tensor_similarity(a: NDArray, b: NDArray, method: str = 'cosine') -> float:
     return unified_tensor_algebra.tensor_similarity(a, b, method)
 
 
-def tensor_convolution(tensor: NDArray, kernel: NDArray, mode: str = 'same') -> NDArray:
+def tensor_convolution(
+        tensor: NDArray,
+        kernel: NDArray,
+        mode: str = 'same') -> NDArray:
     """Convenience function for tensor convolution."""
     return unified_tensor_algebra.tensor_convolution(tensor, kernel, mode)
 
@@ -686,10 +722,12 @@ if __name__ == "__main__":
 
             # SVD
             U, S, V = unified_tensor_algebra.tensor_svd(tensor_a)
-            safe_print(f"✅ SVD - U shape: {U.shape}, S shape: {S.shape}, V shape: {V.shape}")
+            safe_print(
+                f"✅ SVD - U shape: {U.shape}, S shape: {S.shape}, V shape: {V.shape}")
 
             # PCA
-            pca_result = unified_tensor_algebra.tensor_pca(tensor_a, n_components=2)
+            pca_result = unified_tensor_algebra.tensor_pca(
+                tensor_a, n_components=2)
             safe_print(f"✅ PCA Result Shape: {pca_result.shape}")
 
             safe_print("\n🎉 Tensor Algebra tests completed successfully!")

@@ -17,19 +17,47 @@ Key Features:
 
 from __future__ import annotations
 from .constants import (
-    PSI_INFINITY, FIBONACCI_SCALING, INVERSE_PSI, CONFIG_DIR, DATA_DIR, LOG_DIR,
-    KELLY_SAFETY_FACTOR, SHARPE_TARGET, MAX_POSITION_SIZE, MIN_POSITION_SIZE,
-    SAMPLE_RATE, NYQUIST_FREQUENCY, BUTTERWORTH_ORDER, FRACTAL_DIMENSION_LIMIT,
-    PATTERN_SIMILARITY_THRESHOLD, RECURSIVE_DEPTH_LIMIT, THERMAL_DECAY_RATE,
-    ENTROPY_THRESHOLD, VOID_WELL_DEPTH, LATENCY_THRESHOLD_MS, MAX_ERROR_STACK_SIZE,
-    ERROR_DECAY_FACTOR, FERRIS_HARMONIC_RATIOS, TEMPORAL_COMPRESSION_FACTOR,
-    SVD_TOLERANCE, EIGENVALUE_THRESHOLD, EPSILON_FLOAT64, MEMORY_CHUNK_SIZE,
-    MATRIX_CONDITION_LIMIT, THERMAL_CONDUCTIVITY_BTC, QUANTUM_ENTROPY_SCALE,
-    REDUCED_PLANCK, FERRIS_PRIMARY_CYCLE, DEFAULT_TIMEOUT, MAX_RETRY_ATTEMPTS,
-    DEFAULT_BATCH_SIZE, KELLY_SHARPE_COMPOSITE, FRACTAL_THERMAL_RATIO,
-    VECTORIZATION_THRESHOLD, PARALLEL_PROCESSING_THRESHOLD,
-    WindowsCliCompatibilityHandler
-)
+    PSI_INFINITY,
+    FIBONACCI_SCALING,
+    INVERSE_PSI,
+    CONFIG_DIR,
+    DATA_DIR,
+    LOG_DIR,
+    KELLY_SAFETY_FACTOR,
+    SHARPE_TARGET,
+    MAX_POSITION_SIZE,
+    MIN_POSITION_SIZE,
+    SAMPLE_RATE,
+    NYQUIST_FREQUENCY,
+    BUTTERWORTH_ORDER,
+    FRACTAL_DIMENSION_LIMIT,
+    PATTERN_SIMILARITY_THRESHOLD,
+    RECURSIVE_DEPTH_LIMIT,
+    THERMAL_DECAY_RATE,
+    ENTROPY_THRESHOLD,
+    VOID_WELL_DEPTH,
+    LATENCY_THRESHOLD_MS,
+    MAX_ERROR_STACK_SIZE,
+    ERROR_DECAY_FACTOR,
+    FERRIS_HARMONIC_RATIOS,
+    TEMPORAL_COMPRESSION_FACTOR,
+    SVD_TOLERANCE,
+    EIGENVALUE_THRESHOLD,
+    EPSILON_FLOAT64,
+    MEMORY_CHUNK_SIZE,
+    MATRIX_CONDITION_LIMIT,
+    THERMAL_CONDUCTIVITY_BTC,
+    QUANTUM_ENTROPY_SCALE,
+    REDUCED_PLANCK,
+    FERRIS_PRIMARY_CYCLE,
+    DEFAULT_TIMEOUT,
+    MAX_RETRY_ATTEMPTS,
+    DEFAULT_BATCH_SIZE,
+    KELLY_SHARPE_COMPOSITE,
+    FRACTAL_THERMAL_RATIO,
+    VECTORIZATION_THRESHOLD,
+    PARALLEL_PROCESSING_THRESHOLD,
+    WindowsCliCompatibilityHandler)
 from .type_binding_system import TypeBindingValidator, WindowsCliCompatibilityHandler, cli_handler
 from .ui_bridge_integration_manager import UIBridgeIntegrationManager, get_ui_bridge_integration_manager
 from .ui_integration_bridge import UIIntegrationBridge, get_ui_integration_bridge
@@ -166,7 +194,8 @@ __description__ = "Advanced AI-Powered Trading System"
 
 # Type definitions
 
-# Unified mathematical system (imported after basic components to avoid circular imports)
+# Unified mathematical system (imported after basic components to avoid
+# circular imports)
 try:
     from .unified_math_system import UnifiedMathSystem, unified_math, MathResult, MathOperation
 except ImportError:
@@ -307,18 +336,29 @@ def initialize_core_system() -> Dict[str, Any]:
                     "timestamp": datetime.now().isoformat()
                 }
                 initialization_status["modules"].append(module_result)
-                initialization_status["errors"].append(f"Module {module_name}: {e}")
+                initialization_status["errors"].append(
+                    f"Module {module_name}: {e}")
 
         # Initialize core components
         core_components = [
-            ("unified_mathematical_trading_controller", "UnifiedMathematicalTradingController",
+            ("unified_mathematical_trading_controller",
+             "UnifiedMathematicalTradingController",
              "Unified mathematical trading controller"),
-            ("ghost_profit_tracker", "ProfitTracker", "Ghost profit tracking system"),
-            ("state_tracker", "StateTracker", "System state tracking"),
-            ("dual_state_tracker", "DualStateTracker", "Dual state tracking system"),
-            ("core_loop_manager", "CoreLoopManager", "Core loop management"),
-            ("ui_bridge_integration_manager", "UIBridgeIntegrationManager", "UI Bridge Integration Manager")
-        ]
+            ("ghost_profit_tracker",
+             "ProfitTracker",
+             "Ghost profit tracking system"),
+            ("state_tracker",
+             "StateTracker",
+             "System state tracking"),
+            ("dual_state_tracker",
+             "DualStateTracker",
+             "Dual state tracking system"),
+            ("core_loop_manager",
+             "CoreLoopManager",
+             "Core loop management"),
+            ("ui_bridge_integration_manager",
+             "UIBridgeIntegrationManager",
+             "UI Bridge Integration Manager")]
 
         for component_name, class_name, description in core_components:
             try:
@@ -340,13 +380,17 @@ def initialize_core_system() -> Dict[str, Any]:
                     "timestamp": datetime.now().isoformat()
                 }
                 initialization_status["components"].append(component_result)
-                initialization_status["errors"].append(f"Component {component_name}: {e}")
+                initialization_status["errors"].append(
+                    f"Component {component_name}: {e}")
 
         # Determine overall status
-        successful_modules = sum(1 for m in initialization_status["modules"] if m["status"] == "success")
-        successful_components = sum(1 for c in initialization_status["components"] if c["status"] == "success")
+        successful_modules = sum(
+            1 for m in initialization_status["modules"] if m["status"] == "success")
+        successful_components = sum(
+            1 for c in initialization_status["components"] if c["status"] == "success")
 
-        if successful_modules == len(core_modules) and successful_components == len(core_components):
+        if successful_modules == len(
+                core_modules) and successful_components == len(core_components):
             initialization_status["status"] = "success"
         elif successful_modules > len(core_modules) // 2:
             initialization_status["status"] = "partial"
@@ -361,7 +405,9 @@ def initialize_core_system() -> Dict[str, Any]:
             "error_count": len(initialization_status["errors"])
         }
 
-        logger.info(f"Core system initialization: {initialization_status['status']}")
+        logger.info(
+            f"Core system initialization: {
+                initialization_status['status']}")
         return initialization_status
 
     except Exception as e:
@@ -408,14 +454,16 @@ def check_system_health() -> Dict[str, Any]:
                 if is_healthy:
                     healthy_components += 1
                 else:
-                    health_status["warnings"].append(f"Component {component_name} is unhealthy")
+                    health_status["warnings"].append(
+                        f"Component {component_name} is unhealthy")
             except Exception as e:
                 health_status["components"][component_name] = {
                     "status": "error",
                     "error": str(e),
                     "timestamp": datetime.now().isoformat()
                 }
-                health_status["errors"].append(f"Component {component_name}: {e}")
+                health_status["errors"].append(
+                    f"Component {component_name}: {e}")
 
         # Determine overall health
         if healthy_components == total_components:
@@ -434,7 +482,8 @@ def check_system_health() -> Dict[str, Any]:
         }
 
         logger.info(
-            f"System health check: {health_status['overall_health']} ({healthy_components}/{total_components} components healthy)")
+            f"System health check: {
+                health_status['overall_health']} ({healthy_components}/{total_components} components healthy)")
         return health_status
 
     except Exception as e:

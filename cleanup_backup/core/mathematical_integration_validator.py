@@ -1,23 +1,36 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass, field
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, List, Any, Optional, Tuple
+import hashlib
+import json
+import logging
+import time
+import yaml
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Mathematical Integration Validator - Schwabot UROS v1.0
 ======================================================
 
 Validates mathematical consistency and integration across all trading system modules.
-Tests mathematical functions, their implementations, and cross-module integration.
+Tests mathematical functions, their implementations, and cross - module integration.
+"""
+"""
 """
 
-import yaml
-import json
-import time
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
-from datetime import datetime
-from core.unified_math_system import unified_math
-import hashlib
 
 # Import core components
 try:
@@ -35,7 +48,12 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class MathematicalTestResult:
+
     """Result of a mathematical function test."""
+
+
+"""
+"""
     function_name: str
     module: str
     test_name: str
@@ -49,7 +67,12 @@ class MathematicalTestResult:
 
 @dataclass
 class IntegrationTestResult:
+
     """Result of an integration test."""
+
+
+"""
+"""
     test_name: str
     success: bool
     component_results: List[MathematicalTestResult]
@@ -60,26 +83,34 @@ class IntegrationTestResult:
 
 
 class MathematicalIntegrationValidator:
+
     """
+"""
+
+
+"""
     Validates mathematical consistency and integration across the trading system.
 
     Tests:
     - Individual mathematical function correctness
-    - Cross-module mathematical consistency
+    - Cross - module mathematical consistency
     - Integration pipeline functionality
     - Performance benchmarks
     - Error handling and edge cases
     """
+"""
+"""
 
-    def __init__(self, config_path: str = "config/mathematical_functions_registry.yaml"):
+    def __init__(self, config_path: str = "config / mathematical_functions_registry.yaml"):
+
         self.config_path = config_path
         self.test_results: List[MathematicalTestResult] = []
         self.integration_results: List[IntegrationTestResult] = []
 
-        # Load mathematical functions registry
+# Load mathematical functions registry
         self.functions_registry = self._load_functions_registry()
 
-        # Initialize core components for testing
+# Initialize core components for testing
         self.dlt_engine = None
         self.matrix_mapper = None
         self.profit_allocator = None
@@ -92,6 +123,8 @@ class MathematicalIntegrationValidator:
 
     def _load_functions_registry(self) -> Dict[str, Any]:
         """Load mathematical functions registry from YAML."""
+"""
+"""
         try:
             with open(self.config_path, 'r') as f:
                 return yaml.safe_load(f)
@@ -100,7 +133,10 @@ class MathematicalIntegrationValidator:
             return {}
 
     def _initialize_components(self) -> None:
+
         """Initialize core components for testing."""
+"""
+"""
         try:
             self.dlt_engine = DLTWaveformEngine()
             self.matrix_mapper = MatrixMapper()
@@ -111,31 +147,34 @@ class MathematicalIntegrationValidator:
             logger.error(f"Error initializing components: {e}")
 
     def test_dlt_waveform_functions(self) -> List[MathematicalTestResult]:
+
         """Test DLT waveform engine mathematical functions."""
+"""
+"""
         results = []
 
         if not self.dlt_engine:
             return results
 
-        # Test dlt_waveform function
+# Test dlt_waveform function
         start_time = time.time()
         try:
-            # Test with t=0
+# Test with t = 0
             result_0 = self.dlt_engine.dlt_waveform(0.0, 0.006)
             expected_0 = 0.0
-            success_0 = unified_math.abs(result_0 - expected_0) < 1e-10
+            success_0 = unified_math.abs(result_0 - expected_0) < 1e - 10
 
             results.append(MathematicalTestResult(
                 function_name="dlt_waveform",
                 module="core.dlt_waveform_engine",
-                test_name="t=0_test",
-                success=success_0,
-                expected_value=expected_0,
-                actual_value=result_0,
+                test_name="t = 0_test",
+                success = success_0,
+                expected_value = expected_0,
+                actual_value = result_0,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
-            # Test with t=1
+# Test with t = 1
             result_1 = self.dlt_engine.dlt_waveform(1.0, 0.006)
             expected_range = [-1.0, 1.0]
             success_1 = expected_range[0] <= result_1 <= expected_range[1]
@@ -143,10 +182,10 @@ class MathematicalIntegrationValidator:
             results.append(MathematicalTestResult(
                 function_name="dlt_waveform",
                 module="core.dlt_waveform_engine",
-                test_name="t=1_range_test",
-                success=success_1,
-                expected_value=expected_range,
-                actual_value=result_1,
+                test_name="t = 1_range_test",
+                success = success_1,
+                expected_value = expected_range,
+                actual_value = result_1,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -155,14 +194,14 @@ class MathematicalIntegrationValidator:
                 function_name="dlt_waveform",
                 module="core.dlt_waveform_engine",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
-        # Test wave_entropy function
+# Test wave_entropy function
         start_time = time.time()
         try:
             test_seq = [1.0, 0.0, 1.0, 0.0]
@@ -174,9 +213,9 @@ class MathematicalIntegrationValidator:
                 function_name="wave_entropy",
                 module="core.dlt_waveform_engine",
                 test_name="entropy_range_test",
-                success=success,
-                expected_value=expected_range,
-                actual_value=entropy,
+                success = success,
+                expected_value = expected_range,
+                actual_value = entropy,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -185,14 +224,14 @@ class MathematicalIntegrationValidator:
                 function_name="wave_entropy",
                 module="core.dlt_waveform_engine",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
-        # Test resolve_bit_phase function
+# Test resolve_bit_phase function
         start_time = time.time()
         try:
             test_hash = "a1b2c3d4"
@@ -204,9 +243,9 @@ class MathematicalIntegrationValidator:
                 function_name="resolve_bit_phase",
                 module="core.dlt_waveform_engine",
                 test_name="4bit_range_test",
-                success=success_4bit,
-                expected_value=expected_range_4bit,
-                actual_value=phase_4bit,
+                success = success_4bit,
+                expected_value = expected_range_4bit,
+                actual_value = phase_4bit,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -215,14 +254,14 @@ class MathematicalIntegrationValidator:
                 function_name="resolve_bit_phase",
                 module="core.dlt_waveform_engine",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
-        # Test tensor_score function
+# Test tensor_score function
         start_time = time.time()
         try:
             entry_price = 100.0
@@ -236,9 +275,9 @@ class MathematicalIntegrationValidator:
                 function_name="tensor_score",
                 module="core.dlt_waveform_engine",
                 test_name="positive_profit_test",
-                success=success,
-                expected_value=expected,
-                actual_value=tensor_score,
+                success = success,
+                expected_value = expected,
+                actual_value = tensor_score,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -247,23 +286,26 @@ class MathematicalIntegrationValidator:
                 function_name="tensor_score",
                 module="core.dlt_waveform_engine",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
         return results
 
     def test_matrix_mapper_functions(self) -> List[MathematicalTestResult]:
+
         """Test matrix mapper mathematical functions."""
+"""
+"""
         results = []
 
         if not self.matrix_mapper:
             return results
 
-        # Test decode_hash_to_basket function
+# Test decode_hash_to_basket function
         start_time = time.time()
         try:
             test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
@@ -274,9 +316,9 @@ class MathematicalIntegrationValidator:
                 function_name="decode_hash_to_basket",
                 module="core.matrix_mapper",
                 test_name="valid_hash_test",
-                success=success,
+                success = success,
                 expected_value="basket_*",
-                actual_value=basket_id,
+                actual_value = basket_id,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -285,14 +327,14 @@ class MathematicalIntegrationValidator:
                 function_name="decode_hash_to_basket",
                 module="core.matrix_mapper",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
-        # Test calculate_tensor_score function
+# Test calculate_tensor_score function
         start_time = time.time()
         try:
             entry_price = 44000.0
@@ -306,9 +348,9 @@ class MathematicalIntegrationValidator:
                 function_name="calculate_tensor_score",
                 module="core.matrix_mapper",
                 test_name="positive_profit_range_test",
-                success=success,
-                expected_value=expected_range,
-                actual_value=tensor_score,
+                success = success,
+                expected_value = expected_range,
+                actual_value = tensor_score,
                 execution_time_ms=(time.time() - start_time) * 1000
             ))
 
@@ -317,23 +359,26 @@ class MathematicalIntegrationValidator:
                 function_name="calculate_tensor_score",
                 module="core.matrix_mapper",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
         return results
 
     def test_profit_cycle_allocator_functions(self) -> List[MathematicalTestResult]:
+
         """Test profit cycle allocator mathematical functions."""
+"""
+"""
         results = []
 
         if not self.profit_allocator:
             return results
 
-        # Test allocate function
+# Test allocate function
         start_time = time.time()
         try:
             execution_packet = {
@@ -351,9 +396,9 @@ class MathematicalIntegrationValidator:
             }
 
             allocation_result = self.profit_allocator.allocate(
-                execution_packet=execution_packet,
+                execution_packet = execution_packet,
                 cycles=['cycle1', 'cycle2', 'cycle3'],
-                market_data=market_data
+                market_data = market_data
             )
 
             success = allocation_result.success and hasattr(allocation_result, 'tensor_score')
@@ -362,7 +407,7 @@ class MathematicalIntegrationValidator:
                 function_name="allocate",
                 module="core.profit_cycle_allocator",
                 test_name="basic_allocation_test",
-                success=success,
+                success = success,
                 expected_value="successful_allocation",
                 actual_value="success" if success else "failed",
                 execution_time_ms=(time.time() - start_time) * 1000,
@@ -374,39 +419,42 @@ class MathematicalIntegrationValidator:
                 function_name="allocate",
                 module="core.profit_cycle_allocator",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
+                actual_value = str(e),
                 execution_time_ms=(time.time() - start_time) * 1000,
-                error_message=str(e)
+                error_message = str(e)
             ))
 
         return results
 
     def test_cross_module_integration(self) -> IntegrationTestResult:
+
         """Test integration between different modules."""
+"""
+"""
         start_time = time.time()
         component_results = []
         error_count = 0
         warning_count = 0
 
         try:
-            # Test DLT -> Matrix Mapper integration
+# Test DLT -> Matrix Mapper integration
             if self.dlt_engine and self.matrix_mapper:
-                # Create waveform data
+# Create waveform data
                 t = np.linspace(0, 10, 1000)
                 waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * \
                     np.unified_math.sin(2 * np.pi * 0.5 * t)
 
-                # Process waveform
+# Process waveform
                 waveform_result = self.dlt_engine.process_waveform_data(
                     name="integration_test",
-                    x=waveform_data,
-                    sample_rate=1.0
+                    x = waveform_data,
+                    sample_rate = 1.0
                 )
 
                 if waveform_result.get('success'):
-                    # Test matrix mapper integration
+# Test matrix mapper integration
                     integration_result = self.matrix_mapper.integrate_with_dlt_waveform(waveform_result)
 
                     success = integration_result.get('success', False)
@@ -417,10 +465,10 @@ class MathematicalIntegrationValidator:
                         function_name="dlt_matrix_integration",
                         module="integration",
                         test_name="waveform_to_matrix_integration",
-                        success=success,
-                        expected_value=True,
-                        actual_value=success,
-                        execution_time_ms=0.0
+                        success = success,
+                        expected_value = True,
+                        actual_value = success,
+                        execution_time_ms = 0.0
                     ))
                 else:
                     error_count += 1
@@ -428,14 +476,14 @@ class MathematicalIntegrationValidator:
                         function_name="dlt_matrix_integration",
                         module="integration",
                         test_name="waveform_processing_failed",
-                        success=False,
-                        expected_value=True,
-                        actual_value=False,
-                        execution_time_ms=0.0,
+                        success = False,
+                        expected_value = True,
+                        actual_value = False,
+                        execution_time_ms = 0.0,
                         error_message="Waveform processing failed"
                     ))
 
-            # Test Matrix Mapper -> Profit Allocator integration
+# Test Matrix Mapper -> Profit Allocator integration
             if self.matrix_mapper and self.profit_allocator:
                 market_data = {
                     'price': 50000.0, 'volatility': 0.05, 'entropy_level': 4.2, 'complexity': 0.6
@@ -453,15 +501,15 @@ class MathematicalIntegrationValidator:
                     function_name="matrix_profit_integration",
                     module="integration",
                     test_name="matrix_to_profit_integration",
-                    success=success,
-                    expected_value=True,
-                    actual_value=success,
-                    execution_time_ms=0.0
+                    success = success,
+                    expected_value = True,
+                    actual_value = success,
+                    execution_time_ms = 0.0
                 ))
 
-            # Test complete pipeline integration
+# Test complete pipeline integration
             if all([self.dlt_engine, self.matrix_mapper, self.profit_allocator]):
-                # Test complete pipeline
+# Test complete pipeline
                 execution_packet = {
                     'volume': 1000.0,
                     'actual_profit': 500.0,
@@ -476,10 +524,10 @@ class MathematicalIntegrationValidator:
                     'trend_change_rate': 0.01, 'market_heat': 0.4, 'capital_exposure': 10000.0
                 }
 
-                # Run complete pipeline
+# Run complete pipeline
                 allocation_result = self.profit_allocator.allocate(
-                    execution_packet=execution_packet,
-                    market_data=market_data
+                    execution_packet = execution_packet,
+                    market_data = market_data
                 )
 
                 pipeline_success = allocation_result.success
@@ -490,10 +538,10 @@ class MathematicalIntegrationValidator:
                     function_name="complete_pipeline",
                     module="integration",
                     test_name="complete_pipeline_integration",
-                    success=pipeline_success,
-                    expected_value=True,
-                    actual_value=pipeline_success,
-                    execution_time_ms=0.0
+                    success = pipeline_success,
+                    expected_value = True,
+                    actual_value = pipeline_success,
+                    execution_time_ms = 0.0
                 ))
 
         except Exception as e:
@@ -502,30 +550,33 @@ class MathematicalIntegrationValidator:
                 function_name="cross_module_integration",
                 module="integration",
                 test_name="exception_test",
-                success=False,
+                success = False,
                 expected_value="No exception",
-                actual_value=str(e),
-                execution_time_ms=0.0,
-                error_message=str(e)
+                actual_value = str(e),
+                execution_time_ms = 0.0,
+                error_message = str(e)
             ))
 
         return IntegrationTestResult(
             test_name="cross_module_integration",
-            success=error_count == 0,
-            component_results=component_results,
+            success = error_count == 0,
+            component_results = component_results,
             total_execution_time_ms=(time.time() - start_time) * 1000,
-            error_count=error_count,
-            warning_count=warning_count
+            error_count = error_count,
+            warning_count = warning_count
         )
 
     def run_comprehensive_validation(self) -> Dict[str, Any]:
+
         """Run comprehensive mathematical validation across all modules."""
+"""
+"""
         safe_print("\\u1f9ea Starting Comprehensive Mathematical Validation...")
 
         start_time = time.time()
         all_results = []
 
-        # Test individual module functions
+# Test individual module functions
         safe_print("\\n\\u1f4ca Testing DLT Waveform Engine Functions...")
         dlt_results = self.test_dlt_waveform_functions()
         all_results.extend(dlt_results)
@@ -538,21 +589,21 @@ class MathematicalIntegrationValidator:
         profit_results = self.test_profit_cycle_allocator_functions()
         all_results.extend(profit_results)
 
-        # Test cross-module integration
-        safe_print("\\n\\u1f504 Testing Cross-Module Integration...")
+# Test cross - module integration
+        safe_print("\\n\\u1f504 Testing Cross - Module Integration...")
         integration_result = self.test_cross_module_integration()
         self.integration_results.append(integration_result)
 
-        # Calculate statistics
+# Calculate statistics
         total_tests = len(all_results)
         successful_tests = sum(1 for r in all_results if r.success)
         failed_tests = total_tests - successful_tests
         success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
 
-        # Calculate average execution time
+# Calculate average execution time
         avg_execution_time = unified_math.mean([r.execution_time_ms for r in all_results]) if all_results else 0.0
 
-        # Generate summary
+# Generate summary
         summary = {
             'total_tests': total_tests,
             'successful_tests': successful_tests,
@@ -565,7 +616,7 @@ class MathematicalIntegrationValidator:
             'overall_status': 'PASS' if success_rate >= 0.95 else 'WARN' if success_rate >= 0.90 else 'FAIL'
         }
 
-        # Print results
+# Print results
         safe_print(f"\\n\\u1f4c8 VALIDATION SUMMARY")
         safe_print(f"Total Tests: {total_tests}")
         safe_print(f"Successful: {successful_tests}")
@@ -574,13 +625,16 @@ class MathematicalIntegrationValidator:
         safe_print(f"Average Execution Time: {avg_execution_time:.2f}ms")
         safe_print(f"Overall Status: {summary['overall_status']}")
 
-        # Store results
+# Store results
         self.test_results = all_results
 
         return summary
 
     def export_results(self, output_path: str = "mathematical_validation_results.json") -> None:
+
         """Export validation results to JSON file."""
+"""
+"""
         try:
             results_data = {
                 'timestamp': datetime.now().isoformat(),
@@ -612,7 +666,7 @@ class MathematicalIntegrationValidator:
             }
 
             with open(output_path, 'w') as f:
-                json.dump(results_data, f, indent=2, default=str)
+                json.dump(results_data, f, indent = 2, default = str)
 
             safe_print(f"\\u2705 Results exported to {output_path}")
 
@@ -621,20 +675,26 @@ class MathematicalIntegrationValidator:
 
 
 def main():
+
     """Main function to run mathematical validation."""
+"""
+"""
     validator = MathematicalIntegrationValidator()
 
-    # Run comprehensive validation
+# Run comprehensive validation
     summary = validator.run_comprehensive_validation()
 
-    # Export results
+# Export results
     validator.export_results()
 
-    # Return exit code based on success rate
+# Return exit code based on success rate
     return 0 if summary['success_rate'] >= 0.95 else 1
 
 
 if __name__ == "__main__":
     exit(main())
 
+"""
+"""
+"""
 """

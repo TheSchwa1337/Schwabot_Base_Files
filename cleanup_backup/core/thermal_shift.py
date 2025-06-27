@@ -1,22 +1,29 @@
+# -*- coding: utf - 8 -*-
+"""Thermal delta switch \\u2013 minimal thermal drift detector.
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Thermal delta switch \\u2013 minimal thermal drift detector.
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
 
 This helper flags sudden temperature jumps (*thermal shifts*) above a preset
 threshold.  It is intentionally lightweight so it can execute inside tight
-trading-loop iterations without blocking the GIL.
+trading - loop iterations without blocking the GIL.
 
 Current implementation
 ----------------------
-1. ``ThermalShift`` class \\u2013 exponential-moving-average (EWMA) smoothing with
-   :py:meth:`update` returning ``(is_stable, delta)``.
+1. ``ThermalShift`` class \\u2013 exponential - moving - average (EWMA) smoothing with
+    :py:meth:`update` returning ``(is_stable, delta)``.
 2. Stateless wrapper :func:`thermal_delta_switch`` mirroring the legacy stub
-   signature requested by earlier Schwabot code.
-3. Fully typed and Flake8-clean (\\u2264 79-character lines).
+    signature requested by earlier Schwabot code.
+3. Fully typed and Flake8 - clean (\\u2264 79 - character lines).
 
-Future versions may include adaptive hysteresis or GPU-calibrated drift maps.
+Future versions may include adaptive hysteresis or GPU - calibrated drift maps.
+"""
+"""
 """
 
 
@@ -30,9 +37,10 @@ _DEFAULT_ALPHA: Final = 0.2
 _DEFAULT_THRESHOLD: Final = 2.5  # \\u00b0C
 
 
-@dataclass(slots=True)
+@dataclass(slots = True)
 class ThermalShift:
-    """EWMA-based thermal drift detector.
+
+    """EWMA - based thermal drift detector.
 
     Parameters
     ----------
@@ -41,16 +49,19 @@ class ThermalShift:
     alpha
         EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
     """
+"""
+"""
 
     threshold: float = _DEFAULT_THRESHOLD
     alpha: float = _DEFAULT_ALPHA
 
-    _ema: float | None = field(default=None, init=False)
+    _ema: float | None = field(default = None, init = False)
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Public API
+# ------------------------------------------------------------------
     def update(self, temp: float) -> Tuple[bool, float]:
+
         """Process a new temperature reading and return stability status.
 
         Parameters
@@ -64,6 +75,8 @@ class ThermalShift:
             ``(is_stable, delta)``, where *delta* is the absolute
             temperature change with respect to the EWMA baseline.
         """
+"""
+"""
         if self._ema is None:
             self._ema = temp
         else:
@@ -80,6 +93,7 @@ class ThermalShift:
 
 
 def thermal_delta_switch(
+
     current: float,
     previous: float,
     *,
@@ -96,5 +110,7 @@ def thermal_delta_switch(
     threshold
         Allowed delta before declaring instability.  Defaults to 2.5 \\u00b0C.
     """
+"""
+"""
     delta = unified_math.abs(current - previous)
     return delta < threshold

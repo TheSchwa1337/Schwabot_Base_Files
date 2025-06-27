@@ -1,6 +1,22 @@
-# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any, List, Optional
+import json
+import logging
+import time
+import unittest
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Legacy Backlog Hydrator Test - Schwabot Framework.
 
 This test validates historical trade data rehydration and ensures backtesting
@@ -15,22 +31,21 @@ Key Validations:
 - Historical pattern recognition
 - Trade memory persistence and retrieval
 """
+"""
+"""
 
-import unittest
-import logging
-import time
-import json
-from core.unified_math_system import unified_math
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class HistoricalTrade:
+
     """Represents a historical trade for testing."""
+
+
+"""
+"""
     trade_id: str
     asset: str
     entry_price: float
@@ -45,7 +60,12 @@ class HistoricalTrade:
 
 @dataclass
 class BacklogTestCase:
+
     """Test case for legacy backlog hydration."""
+
+
+"""
+"""
     test_name: str
     historical_trades: List[HistoricalTrade]
     expected_hydrated_count: int
@@ -55,11 +75,18 @@ class BacklogTestCase:
 
 
 class LegacyBacklogHydratorTest:
+
     """Comprehensive legacy backlog hydration testing."""
+
+
+"""
+"""
 
     def __init__(self):
         """Initialize the legacy backlog hydrator test."""
-        # Create test historical trades
+"""
+"""
+# Create test historical trades
         base_time = datetime.now() - timedelta(days=30)
 
         self.test_cases = [
@@ -167,7 +194,10 @@ class LegacyBacklogHydratorTest:
         logger.info("\\u1f4da Legacy Backlog Hydrator Test initialized")
 
     def test_historical_trade_loading(self) -> Dict[str, Any]:
+
         """Test historical trade data loading and parsing."""
+"""
+"""
         logger.info("\\u1f4e5 Testing historical trade data loading")
 
         results = {
@@ -179,45 +209,45 @@ class LegacyBacklogHydratorTest:
 
         for i, test_case in enumerate(self.test_cases):
             try:
-                # Simulate loading historical trades
+# Simulate loading historical trades
                 loaded_trades = test_case.historical_trades
 
-                # Validate trade count
+# Validate trade count
                 if len(loaded_trades) != test_case.expected_hydrated_count:
                     error_msg = f"Test case {i} ({test_case.description}): Trade count mismatch. Expected: {test_case.expected_hydrated_count}, Got: {len(loaded_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate trade properties
+# Validate trade properties
                 for j, trade in enumerate(loaded_trades):
-                    # Validate required fields
+# Validate required fields
                     required_fields = ['trade_id', 'asset', 'entry_price', 'exit_price',
-                                       'volume', 'entry_time', 'exit_time', 'profit_loss']
+                                        'volume', 'entry_time', 'exit_time', 'profit_loss']
                     for field in required_fields:
                         if not hasattr(trade, field):
                             error_msg = f"Test case {i}, Trade {j}: Missing required field '{field}'"
                             results['errors'].append(error_msg)
                             results['success'] = False
 
-                    # Validate price relationships
+# Validate price relationships
                     if trade.entry_price <= 0 or trade.exit_price <= 0:
                         error_msg = f"Test case {i}, Trade {j}: Invalid prices. Entry: {trade.entry_price}, Exit: {trade.exit_price}"
                         results['errors'].append(error_msg)
                         results['success'] = False
 
-                    # Validate volume
+# Validate volume
                     if trade.volume <= 0:
                         error_msg = f"Test case {i}, Trade {j}: Invalid volume: {trade.volume}"
                         results['errors'].append(error_msg)
                         results['success'] = False
 
-                    # Validate time sequence
+# Validate time sequence
                     if trade.entry_time >= trade.exit_time:
                         error_msg = f"Test case {i}, Trade {j}: Invalid time sequence. Entry: {trade.entry_time}, Exit: {trade.exit_time}"
                         results['errors'].append(error_msg)
                         results['success'] = False
 
-                # Store test case results
+# Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'loaded_trades': len(loaded_trades),
@@ -239,7 +269,10 @@ class LegacyBacklogHydratorTest:
         return results
 
     def test_trade_backlog_integrity(self) -> Dict[str, Any]:
+
         """Test trade backlog integrity and consistency."""
+"""
+"""
         logger.info("\\u1f50d Testing trade backlog integrity")
 
         results = {
@@ -250,12 +283,12 @@ class LegacyBacklogHydratorTest:
         }
 
         try:
-            # Test backlog integrity across all test cases
+# Test backlog integrity across all test cases
             all_trades = []
             for test_case in self.test_cases:
                 all_trades.extend(test_case.historical_trades)
 
-            # Validate trade ID uniqueness
+# Validate trade ID uniqueness
             trade_ids = [trade.trade_id for trade in all_trades]
             unique_ids = set(trade_ids)
 
@@ -264,23 +297,23 @@ class LegacyBacklogHydratorTest:
                 results['errors'].append(error_msg)
                 results['success'] = False
 
-            # Validate profit/loss calculations
+# Validate profit / loss calculations
             for i, trade in enumerate(all_trades):
                 calculated_pl = (trade.exit_price - trade.entry_price) * trade.volume
                 if unified_math.abs(calculated_pl - trade.profit_loss) > 0.01:  # Allow small rounding differences
-                    error_msg = f"Trade {i}: Profit/loss calculation mismatch. Expected: {calculated_pl}, Got: {trade.profit_loss}"
+                    error_msg = f"Trade {i}: Profit / loss calculation mismatch. Expected: {calculated_pl}, Got: {trade.profit_loss}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate chronological order
-            sorted_trades = sorted(all_trades, key=lambda t: t.entry_time)
+# Validate chronological order
+            sorted_trades = sorted(all_trades, key = lambda t: t.entry_time)
             for i in range(1, len(sorted_trades)):
-                if sorted_trades[i].entry_time < sorted_trades[i-1].entry_time:
+                if sorted_trades[i].entry_time < sorted_trades[i - 1].entry_time:
                     error_msg = f"Trade sequence {i}: Chronological order violation"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate asset distribution
+# Validate asset distribution
             asset_counts = {}
             for trade in all_trades:
                 asset_counts[trade.asset] = asset_counts.get(trade.asset, 0) + 1
@@ -306,7 +339,10 @@ class LegacyBacklogHydratorTest:
         return results
 
     def test_loss_trade_identification(self) -> Dict[str, Any]:
+
         """Test loss trade identification and reanalysis."""
+"""
+"""
         logger.info("\\u1f4c9 Testing loss trade identification")
 
         results = {
@@ -318,23 +354,23 @@ class LegacyBacklogHydratorTest:
 
         for i, test_case in enumerate(self.test_cases):
             try:
-                # Identify loss trades
+# Identify loss trades
                 loss_trades = [trade for trade in test_case.historical_trades if trade.profit_loss < 0]
                 profit_trades = [trade for trade in test_case.historical_trades if trade.profit_loss >= 0]
 
-                # Validate loss trade count
+# Validate loss trade count
                 if len(loss_trades) != test_case.expected_loss_trades:
                     error_msg = f"Test case {i} ({test_case.description}): Loss trade count mismatch. Expected: {test_case.expected_loss_trades}, Got: {len(loss_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate profit trade count
+# Validate profit trade count
                 if len(profit_trades) != test_case.expected_profit_trades:
                     error_msg = f"Test case {i} ({test_case.description}): Profit trade count mismatch. Expected: {test_case.expected_profit_trades}, Got: {len(profit_trades)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Analyze loss trade patterns
+# Analyze loss trade patterns
                 loss_analysis = {}
                 if loss_trades:
                     loss_analysis = {
@@ -345,7 +381,7 @@ class LegacyBacklogHydratorTest:
                         'loss_trade_volatility': unified_math.mean([trade.market_conditions.get('volatility', 0.0) for trade in loss_trades])
                     }
 
-                # Store test case results
+# Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'loss_trades_found': len(loss_trades),
@@ -370,7 +406,10 @@ class LegacyBacklogHydratorTest:
         return results
 
     def test_backtest_data_reconstruction(self) -> Dict[str, Any]:
+
         """Test backtest data reconstruction."""
+"""
+"""
         logger.info("\\u1f504 Testing backtest data reconstruction")
 
         results = {
@@ -381,9 +420,9 @@ class LegacyBacklogHydratorTest:
         }
 
         try:
-            # Test backtest data reconstruction for each test case
+# Test backtest data reconstruction for each test case
             for i, test_case in enumerate(self.test_cases):
-                # Simulate backtest data reconstruction
+# Simulate backtest data reconstruction
                 reconstructed_data = {
                     'trades': test_case.historical_trades,
                     'start_time': unified_math.min(trade.entry_time for trade in test_case.historical_trades),
@@ -395,7 +434,7 @@ class LegacyBacklogHydratorTest:
                     'strategies_used': list(set(trade.strategy for trade in test_case.historical_trades))
                 }
 
-                # Validate reconstructed data
+# Validate reconstructed data
                 if reconstructed_data['total_trades'] != test_case.expected_hydrated_count:
                     error_msg = f"Test case {i}: Reconstructed trade count mismatch"
                     results['errors'].append(error_msg)
@@ -411,7 +450,7 @@ class LegacyBacklogHydratorTest:
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store reconstruction results
+# Store reconstruction results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'reconstructed_trades': reconstructed_data['total_trades'],
@@ -435,7 +474,10 @@ class LegacyBacklogHydratorTest:
         return results
 
     def test_historical_pattern_recognition(self) -> Dict[str, Any]:
+
         """Test historical pattern recognition."""
+"""
+"""
         logger.info("\\u1f50d Testing historical pattern recognition")
 
         results = {
@@ -446,12 +488,12 @@ class LegacyBacklogHydratorTest:
         }
 
         try:
-            # Analyze patterns across all test cases
+# Analyze patterns across all test cases
             all_trades = []
             for test_case in self.test_cases:
                 all_trades.extend(test_case.historical_trades)
 
-            # Pattern analysis
+# Pattern analysis
             patterns = {
                 'asset_performance': {},
                 'strategy_performance': {},
@@ -459,21 +501,21 @@ class LegacyBacklogHydratorTest:
                 'volatility_impact': {}
             }
 
-            # Asset performance patterns
+# Asset performance patterns
             for trade in all_trades:
                 if trade.asset not in patterns['asset_performance']:
                     patterns['asset_performance'][trade.asset] = {'trades': [], 'total_pl': 0.0}
                 patterns['asset_performance'][trade.asset]['trades'].append(trade)
                 patterns['asset_performance'][trade.asset]['total_pl'] += trade.profit_loss
 
-            # Strategy performance patterns
+# Strategy performance patterns
             for trade in all_trades:
                 if trade.strategy not in patterns['strategy_performance']:
                     patterns['strategy_performance'][trade.strategy] = {'trades': [], 'total_pl': 0.0}
                 patterns['strategy_performance'][trade.strategy]['trades'].append(trade)
                 patterns['strategy_performance'][trade.strategy]['total_pl'] += trade.profit_loss
 
-            # Time-based patterns (hour of day)
+# Time - based patterns (hour of day)
             for trade in all_trades:
                 hour = trade.entry_time.hour
                 if hour not in patterns['time_based_patterns']:
@@ -481,7 +523,7 @@ class LegacyBacklogHydratorTest:
                 patterns['time_based_patterns'][hour]['trades'].append(trade)
                 patterns['time_based_patterns'][hour]['total_pl'] += trade.profit_loss
 
-            # Volatility impact patterns
+# Volatility impact patterns
             high_vol_trades = [t for t in all_trades if t.market_conditions.get('volatility', 0.0) > 0.15]
             low_vol_trades = [t for t in all_trades if t.market_conditions.get('volatility', 0.0) <= 0.15]
 
@@ -492,7 +534,7 @@ class LegacyBacklogHydratorTest:
                 'low_vol_avg_pl': unified_math.mean([t.profit_loss for t in low_vol_trades]) if low_vol_trades else 0.0
             }
 
-            # Validate pattern recognition
+# Validate pattern recognition
             if not patterns['asset_performance']:
                 error_msg = "No asset performance patterns detected"
                 results['errors'].append(error_msg)
@@ -525,12 +567,15 @@ class LegacyBacklogHydratorTest:
         return results
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
+
         """Run comprehensive legacy backlog hydration test."""
+"""
+"""
         logger.info("\\u1f680 Running comprehensive legacy backlog hydration test")
 
         start_time = time.time()
 
-        # Run all test components
+# Run all test components
         test_results = {
             'historical_trade_loading': self.test_historical_trade_loading(),
             'trade_backlog_integrity': self.test_trade_backlog_integrity(),
@@ -539,10 +584,10 @@ class LegacyBacklogHydratorTest:
             'historical_pattern_recognition': self.test_historical_pattern_recognition()
         }
 
-        # Determine overall success
+# Determine overall success
         all_passed = all(result['success'] for result in test_results.values())
 
-        # Calculate total errors
+# Calculate total errors
         total_errors = sum(len(result.get('errors', [])) for result in test_results.values())
 
         execution_time = time.time() - start_time
@@ -572,7 +617,10 @@ class LegacyBacklogHydratorTest:
 
 # Global test function for registry
 def test_legacy_backlog_hydrator() -> Dict[str, Any]:
+
     """Main test function for legacy backlog hydration."""
+"""
+"""
     try:
         test_suite = LegacyBacklogHydratorTest()
         return test_suite.run_comprehensive_test()
@@ -587,16 +635,16 @@ def test_legacy_backlog_hydrator() -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Set up logging
+# Set up logging
     logging.basicConfig(
-        level=logging.INFO,
+        level = logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
-    # Run test
+# Run test
     result = test_legacy_backlog_hydrator()
 
-    # Print results
+# Print results
     safe_print("\n" + "="*60)
     safe_print("\\u1f4da LEGACY BACKLOG HYDRATOR TEST RESULTS")
     safe_print("="*60)
@@ -613,4 +661,7 @@ if __name__ == "__main__":
 
     safe_print("="*60)
 
+"""
+"""
+"""
 """

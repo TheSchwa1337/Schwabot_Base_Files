@@ -1,8 +1,24 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
 Schwabot Settings Controller
 Manages mathematical flow parameters and reinforcement learning from backtest failures
+"""
+"""
 """
 
 import json
@@ -17,13 +33,16 @@ import threading
 import time
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level = logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class MathematicalFlowParams:
+
     """Mathematical flow parameters for trading algorithms"""
+"""
+"""
     entropy_threshold: float = 0.75
     fractal_dimension: float = 1.5
     quantum_drift_factor: float = 0.25
@@ -38,7 +57,10 @@ class MathematicalFlowParams:
 
 @dataclass
 class ReinforcementLearningParams:
+
     """Reinforcement learning parameters from backtest failures"""
+"""
+"""
     learning_rate: float = 0.01
     failure_penalty_weight: float = 0.5
     success_reward_weight: float = 1.0
@@ -53,7 +75,10 @@ class ReinforcementLearningParams:
 
 @dataclass
 class DemoBacktestParams:
+
     """Demo backtesting parameters"""
+"""
+"""
     enabled: bool = True
     simulation_duration: int = 3600  # seconds
     tick_interval: float = 3.75
@@ -69,45 +94,52 @@ class DemoBacktestParams:
 
 
 class SettingsController:
+
     """Main settings controller for Schwabot"""
+"""
+"""
 
     def __init__(self, config_dir: str = "settings"):
-        self.config_dir = Path(config_dir)
-        self.config_dir.mkdir(exist_ok=True)
 
-        # Initialize parameters
+        self.config_dir = Path(config_dir)
+        self.config_dir.mkdir(exist_ok = True)
+
+# Initialize parameters
         self.math_params = MathematicalFlowParams()
         self.rl_params = ReinforcementLearningParams()
         self.demo_params = DemoBacktestParams()
 
-        # State tracking
+# State tracking
         self.last_update = datetime.now()
         self.update_count = 0
         self.failure_history = []
         self.success_history = []
 
-        # Threading
+# Threading
         self.lock = threading.RLock()
         self.running = False
         self.update_thread = None
 
-        # Load existing configuration
+# Load existing configuration
         self.load_configuration()
 
-        # Start background updates
+# Start background updates
         self.start_background_updates()
 
     def load_configuration(self) -> None:
+
         """Load configuration from YAML and JSON files"""
+"""
+"""
         try:
-            # Load demo backtest configuration
+# Load demo backtest configuration
             demo_config_path = self.config_dir / "demo_backtest_mode.yaml"
             if demo_config_path.exists():
                 with open(demo_config_path, 'r') as f:
                     demo_config = yaml.safe_load(f)
                     self.demo_params = DemoBacktestParams(**demo_config.get('demo_params', {}))
 
-            # Load vector settings
+# Load vector settings
             vector_config_path = self.config_dir / "vector_settings_experiment.yaml"
             if vector_config_path.exists():
                 with open(vector_config_path, 'r') as f:
@@ -117,7 +149,7 @@ class SettingsController:
                     rl_config = vector_config.get('reinforcement_learning', {})
                     self.rl_params = ReinforcementLearningParams(**rl_config)
 
-            # Load known bad vectors
+# Load known bad vectors
             bad_vectors_path = self.config_dir / "known_bad_vector_map.json"
             if bad_vectors_path.exists():
                 with open(bad_vectors_path, 'r') as f:
@@ -132,29 +164,32 @@ class SettingsController:
             self.create_default_configuration()
 
     def save_configuration(self) -> None:
+
         """Save current configuration to files"""
+"""
+"""
         try:
             with self.lock:
-                # Save demo backtest configuration
+# Save demo backtest configuration
                 demo_config = {
                     'demo_params': asdict(self.demo_params),
                     'last_updated': datetime.now().isoformat()
                 }
                 with open(self.config_dir / "demo_backtest_mode.yaml", 'w') as f:
-                    yaml.dump(demo_config, f, default_flow_style=False)
+                    yaml.dump(demo_config, f, default_flow_style = False)
 
-                # Save vector settings
+# Save vector settings
                 vector_config = {
                     'mathematical_flow': asdict(self.math_params),
                     'reinforcement_learning': asdict(self.rl_params),
                     'last_updated': datetime.now().isoformat()
                 }
                 with open(self.config_dir / "vector_settings_experiment.yaml", 'w') as f:
-                    yaml.dump(vector_config, f, default_flow_style=False)
+                    yaml.dump(vector_config, f, default_flow_style = False)
 
-                # Save known bad vectors
+# Save known bad vectors
                 with open(self.config_dir / "known_bad_vector_map.json", 'w') as f:
-                    json.dump(self.known_bad_vectors, f, indent=2)
+                    json.dump(self.known_bad_vectors, f, indent = 2)
 
                 logger.info("Configuration saved successfully")
 
@@ -162,11 +197,17 @@ class SettingsController:
             logger.error(f"Error saving configuration: {e}")
 
     def create_default_configuration(self) -> None:
+
         """Create default configuration files"""
+"""
+"""
         self.save_configuration()
 
     def update_mathematical_flow(self, **kwargs) -> None:
+
         """Update mathematical flow parameters"""
+"""
+"""
         with self.lock:
             for key, value in kwargs.items():
                 if hasattr(self.math_params, key):
@@ -176,7 +217,10 @@ class SettingsController:
             self.save_configuration()
 
     def update_reinforcement_learning(self, **kwargs) -> None:
+
         """Update reinforcement learning parameters"""
+"""
+"""
         with self.lock:
             for key, value in kwargs.items():
                 if hasattr(self.rl_params, key):
@@ -186,7 +230,10 @@ class SettingsController:
             self.save_configuration()
 
     def update_demo_backtest(self, **kwargs) -> None:
+
         """Update demo backtest parameters"""
+"""
+"""
         with self.lock:
             for key, value in kwargs.items():
                 if hasattr(self.demo_params, key):
@@ -196,80 +243,95 @@ class SettingsController:
             self.save_configuration()
 
     def record_backtest_failure(self, failure_data: Dict[str, Any]) -> None:
+
         """Record a backtest failure for reinforcement learning"""
+"""
+"""
         with self.lock:
             failure_data['timestamp'] = datetime.now().isoformat()
             failure_data['update_count'] = self.update_count
             self.failure_history.append(failure_data)
 
-            # Keep only recent failures
+# Keep only recent failures
             if len(self.failure_history) > self.rl_params.memory_size:
                 self.failure_history = self.failure_history[-self.rl_params.memory_size:]
 
-            # Update parameters based on failure
+# Update parameters based on failure
             self._apply_failure_learning(failure_data)
 
             logger.info(f"Recorded backtest failure: {failure_data.get('reason', 'Unknown')}")
 
     def record_backtest_success(self, success_data: Dict[str, Any]) -> None:
+
         """Record a backtest success for reinforcement learning"""
+"""
+"""
         with self.lock:
             success_data['timestamp'] = datetime.now().isoformat()
             success_data['update_count'] = self.update_count
             self.success_history.append(success_data)
 
-            # Keep only recent successes
+# Keep only recent successes
             if len(self.success_history) > self.rl_params.memory_size:
                 self.success_history = self.success_history[-self.rl_params.memory_size:]
 
-            # Update parameters based on success
+# Update parameters based on success
             self._apply_success_learning(success_data)
 
             logger.info(f"Recorded backtest success: {success_data.get('profit', 0):.2f}")
 
     def _apply_failure_learning(self, failure_data: Dict[str, Any]) -> None:
+
         """Apply learning from failure to adjust parameters"""
+"""
+"""
         failure_reason = failure_data.get('reason', '')
 
         if 'entropy' in failure_reason.lower():
-            # Reduce entropy threshold
+# Reduce entropy threshold
             new_threshold = self.math_params.entropy_threshold * (1 - self.rl_params.failure_penalty_weight * 0.1)
             self.math_params.entropy_threshold = unified_math.max(0.1, new_threshold)
 
         elif 'confidence' in failure_reason.lower():
-            # Increase confidence requirements
+# Increase confidence requirements
             new_confidence = self.math_params.vector_confidence_min * (1 + self.rl_params.failure_penalty_weight * 0.1)
             self.math_params.vector_confidence_min = unified_math.min(0.95, new_confidence)
 
         elif 'volume' in failure_reason.lower():
-            # Adjust volume delta threshold
+# Adjust volume delta threshold
             new_threshold = self.math_params.volume_delta_threshold * (1 + self.rl_params.failure_penalty_weight * 0.1)
             self.math_params.volume_delta_threshold = unified_math.min(0.5, new_threshold)
 
-        # Adaptive learning rate adjustment
+# Adaptive learning rate adjustment
         if self.rl_params.adaptive_learning:
             self.rl_params.learning_rate *= 0.99  # Gradually reduce learning rate
 
     def _apply_success_learning(self, success_data: Dict[str, Any]) -> None:
+
         """Apply learning from success to adjust parameters"""
+"""
+"""
         profit = success_data.get('profit', 0)
         strategy_used = success_data.get('strategy', '')
 
         if profit > 0:
-            # Reinforce successful parameters
+# Reinforce successful parameters
             if 'entropy' in strategy_used.lower():
-                # Slightly increase entropy threshold
+# Slightly increase entropy threshold
                 new_threshold = self.math_params.entropy_threshold * (1 + self.rl_params.success_reward_weight * 0.05)
                 self.math_params.entropy_threshold = unified_math.min(0.95, new_threshold)
 
             elif 'confidence' in strategy_used.lower():
-                # Slightly decrease confidence requirements
+# Slightly decrease confidence requirements
                 new_confidence = self.math_params.vector_confidence_min * \
                     (1 - self.rl_params.success_reward_weight * 0.05)
                 self.math_params.vector_confidence_min = unified_math.max(0.3, new_confidence)
 
     def get_optimized_parameters(self) -> Dict[str, Any]:
+
         """Get current optimized parameters"""
+"""
+"""
         with self.lock:
             return {
                 'mathematical_flow': asdict(self.math_params),
@@ -285,7 +347,10 @@ class SettingsController:
             }
 
     def add_known_bad_vector(self, vector_hash: str, reason: str, parameters: Dict[str, Any]) -> None:
+
         """Add a known bad vector to avoid in future"""
+"""
+"""
         with self.lock:
             self.known_bad_vectors[vector_hash] = {
                 'reason': reason,
@@ -296,45 +361,63 @@ class SettingsController:
             self.save_configuration()
 
     def is_known_bad_vector(self, vector_hash: str) -> bool:
+
         """Check if a vector is known to be bad"""
+"""
+"""
         return vector_hash in self.known_bad_vectors
 
     def get_vector_avoidance_count(self, vector_hash: str) -> int:
+
         """Get how many times a bad vector was avoided"""
+"""
+"""
         if vector_hash in self.known_bad_vectors:
             return self.known_bad_vectors[vector_hash].get('avoid_count', 0)
         return 0
 
     def increment_avoidance_count(self, vector_hash: str) -> None:
+
         """Increment the avoidance count for a bad vector"""
+"""
+"""
         if vector_hash in self.known_bad_vectors:
             self.known_bad_vectors[vector_hash]['avoid_count'] += 1
             self.save_configuration()
 
     def start_background_updates(self) -> None:
+
         """Start background parameter update thread"""
+"""
+"""
         if not self.running:
             self.running = True
-            self.update_thread = threading.Thread(target=self._background_update_loop, daemon=True)
+            self.update_thread = threading.Thread(target = self._background_update_loop, daemon = True)
             self.update_thread.start()
             logger.info("Background parameter updates started")
 
     def stop_background_updates(self) -> None:
+
         """Stop background parameter updates"""
+"""
+"""
         self.running = False
         if self.update_thread:
-            self.update_thread.join(timeout=5)
+            self.update_thread.join(timeout = 5)
         logger.info("Background parameter updates stopped")
 
     def _background_update_loop(self) -> None:
+
         """Background loop for parameter updates"""
+"""
+"""
         while self.running:
             try:
                 with self.lock:
                     self.update_count += 1
                     self.last_update = datetime.now()
 
-                    # Periodic parameter optimization
+# Periodic parameter optimization
                     if self.update_count % self.rl_params.update_frequency == 0:
                         self._optimize_parameters()
 
@@ -345,38 +428,44 @@ class SettingsController:
                 time.sleep(5)
 
     def _optimize_parameters(self) -> None:
+
         """Periodically optimize parameters based on performance"""
+"""
+"""
         if len(self.failure_history) == 0 and len(self.success_history) == 0:
             return
 
-        # Calculate success rate
+# Calculate success rate
         total_tests = len(self.failure_history) + len(self.success_history)
         success_rate = len(self.success_history) / total_tests
 
-        # Adjust exploration rate based on performance
+# Adjust exploration rate based on performance
         if success_rate < 0.3:
-            # Increase exploration for poor performance
+# Increase exploration for poor performance
             self.rl_params.exploration_rate = unified_math.min(0.5, self.rl_params.exploration_rate * 1.1)
         elif success_rate > 0.7:
-            # Decrease exploration for good performance
+# Decrease exploration for good performance
             self.rl_params.exploration_rate = unified_math.max(0.05, self.rl_params.exploration_rate * 0.9)
 
-        # Adjust learning rate based on convergence
+# Adjust learning rate based on convergence
         if self.update_count > self.rl_params.max_iterations:
             self.rl_params.learning_rate *= 0.95
 
         logger.info(f"Parameter optimization completed - Success rate: {success_rate:.2f}")
 
     def get_performance_metrics(self) -> Dict[str, Any]:
+
         """Get comprehensive performance metrics"""
+"""
+"""
         with self.lock:
             total_tests = len(self.failure_history) + len(self.success_history)
             success_rate = len(self.success_history) / unified_math.max(1, total_tests)
 
             recent_failures = [f for f in self.failure_history
-                               if datetime.fromisoformat(f['timestamp']) > datetime.now() - timedelta(hours=24)]
+                                if datetime.fromisoformat(f['timestamp']) > datetime.now() - timedelta(hours = 24)]
             recent_successes = [s for s in self.success_history
-                                if datetime.fromisoformat(s['timestamp']) > datetime.now() - timedelta(hours=24)]
+                                if datetime.fromisoformat(s['timestamp']) > datetime.now() - timedelta(hours = 24)]
 
             return {
                 'overall_success_rate': success_rate,
@@ -389,7 +478,10 @@ class SettingsController:
             }
 
     def reset_learning(self) -> None:
+
         """Reset all learning history"""
+"""
+"""
         with self.lock:
             self.failure_history.clear()
             self.success_history.clear()
@@ -399,7 +491,10 @@ class SettingsController:
             logger.info("Learning history reset")
 
     def export_configuration(self, filepath: str) -> None:
+
         """Export current configuration to a file"""
+"""
+"""
         config_data = {
             'mathematical_flow': asdict(self.math_params),
             'reinforcement_learning': asdict(self.rl_params),
@@ -410,12 +505,15 @@ class SettingsController:
         }
 
         with open(filepath, 'w') as f:
-            json.dump(config_data, f, indent=2)
+            json.dump(config_data, f, indent = 2)
 
         logger.info(f"Configuration exported to {filepath}")
 
     def import_configuration(self, filepath: str) -> None:
+
         """Import configuration from a file"""
+"""
+"""
         with open(filepath, 'r') as f:
             config_data = json.load(f)
 
@@ -438,37 +536,40 @@ settings_controller = SettingsController()
 
 
 def get_settings_controller() -> SettingsController:
+
     """Get the global settings controller instance"""
+"""
+"""
     return settings_controller
 
 
 if __name__ == "__main__":
-    # Test the settings controller
+# Test the settings controller
     controller = SettingsController()
 
-    # Test parameter updates
-    controller.update_mathematical_flow(entropy_threshold=0.8, fractal_dimension=1.6)
-    controller.update_reinforcement_learning(learning_rate=0.02, exploration_rate=0.15)
-    controller.update_demo_backtest(enabled=True, simulation_duration=7200)
+# Test parameter updates
+    controller.update_mathematical_flow(entropy_threshold = 0.8, fractal_dimension = 1.6)
+    controller.update_reinforcement_learning(learning_rate = 0.02, exploration_rate = 0.15)
+    controller.update_demo_backtest(enabled = True, simulation_duration = 7200)
 
-    # Test failure recording
+# Test failure recording
     controller.record_backtest_failure({
         'reason': 'entropy_threshold_too_high',
         'loss': -150.0,
         'strategy': 'entropy_based'
     })
 
-    # Test success recording
+# Test success recording
     controller.record_backtest_success({
         'profit': 250.0,
         'strategy': 'confidence_based',
         'duration': 1800
     })
 
-    # Print current configuration
+# Print current configuration
     safe_print("Current Configuration:")
-    print(json.dumps(controller.get_optimized_parameters(), indent=2))
+    print(json.dumps(controller.get_optimized_parameters(), indent = 2))
 
-    # Print performance metrics
+# Print performance metrics
     safe_print("\\nPerformance Metrics:")
-    print(json.dumps(controller.get_performance_metrics(), indent=2))
+    print(json.dumps(controller.get_performance_metrics(), indent = 2))

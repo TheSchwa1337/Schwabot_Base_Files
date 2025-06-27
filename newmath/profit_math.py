@@ -1,11 +1,25 @@
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+
+from core.unified_math_system import unified_math
 NEWMATH PROFIT MATHEMATICS
-=========================
+== == == == == == == == == == == == =
 
 Advanced profit calculation and trading mathematics for Schwabot.
 Clean implementation for profit derivatives, momentum, and risk.
+"""
+"""
 """
 
 from core.unified_math_system import unified_math
@@ -16,8 +30,11 @@ logger = logging.getLogger(__name__)
 
 
 def profit_derivative(prices: np.ndarray, timestamps: Optional[np.ndarray] = None) -> np.ndarray:
+
     """
-    Calculate profit derivative: dP/dt = (P_t - P_{t-1}) / \\u0394t
+"""
+"""
+    Calculate profit derivative: dP / dt = (P_t - P_{t - 1}) / \\u0394t
 
     Args:
         prices: Price series
@@ -26,15 +43,17 @@ def profit_derivative(prices: np.ndarray, timestamps: Optional[np.ndarray] = Non
     Returns:
         Profit derivative series
     """
+"""
+"""
     try:
         if timestamps is None:
-            timestamps = np.arange(len(prices), dtype=np.float64)
+            timestamps = np.arange(len(prices), dtype = np.float64)
 
         dp = np.diff(prices)
         dt = np.diff(timestamps)
 
-        # Avoid division by zero
-        dt = np.where(dt == 0, 1e-8, dt)
+# Avoid division by zero
+        dt = np.where(dt == 0, 1e - 8, dt)
 
         return dp / dt
     except Exception as e:
@@ -43,11 +62,14 @@ def profit_derivative(prices: np.ndarray, timestamps: Optional[np.ndarray] = Non
 
 
 def should_execute_trade(dP_dt: float, lambda_threshold: float, confidence: float = 1.0) -> bool:
+
     """
+"""
+"""
     Advanced trade execution logic with confidence weighting.
 
     Mathematical Implementation:
-    execute = (dP/dt * confidence) > \\u03bb_threshold
+    execute = (dP / dt * confidence) > \\u03bb_threshold
 
     Args:
         dP_dt: Profit derivative
@@ -57,6 +79,8 @@ def should_execute_trade(dP_dt: float, lambda_threshold: float, confidence: floa
     Returns:
         Boolean trade execution decision
     """
+"""
+"""
     try:
         weighted_derivative = float(dP_dt) * unified_math.max(0.0, unified_math.min(1.0, confidence))
         return weighted_derivative > float(lambda_threshold)
@@ -66,7 +90,10 @@ def should_execute_trade(dP_dt: float, lambda_threshold: float, confidence: floa
 
 
 def profit_momentum(prices: np.ndarray, window: int = 10, method: str = 'sma') -> np.ndarray:
+
     """
+"""
+"""
     Calculate profit momentum using various moving average methods.
 
     Args:
@@ -77,6 +104,8 @@ def profit_momentum(prices: np.ndarray, window: int = 10, method: str = 'sma') -
     Returns:
         Momentum series
     """
+"""
+"""
     try:
         if len(prices) < window:
             return np.zeros_like(prices)
@@ -91,7 +120,7 @@ def profit_momentum(prices: np.ndarray, window: int = 10, method: str = 'sma') -
             momentum[0] = prices[0]
             for i in range(1, len(prices)):
                 momentum[i] = (alpha * prices[i] +
-                               (1 - alpha) * momentum[i - 1])
+                                (1 - alpha) * momentum[i - 1])
         elif method == 'wma':  # Weighted Moving Average
             weights = np.arange(1, window + 1)
             weights = weights / np.sum(weights)
@@ -107,8 +136,11 @@ def profit_momentum(prices: np.ndarray, window: int = 10, method: str = 'sma') -
 
 
 def risk_calculation(prices: np.ndarray, returns: Optional[np.ndarray] = None,
-                     method: str = 'volatility') -> float:
+
+                        method: str = 'volatility') -> float:
     """
+"""
+"""
     Calculate various risk metrics.
 
     Args:
@@ -119,6 +151,8 @@ def risk_calculation(prices: np.ndarray, returns: Optional[np.ndarray] = None,
     Returns:
         Risk metric value
     """
+"""
+"""
     try:
         if returns is None:
             returns = np.diff(prices) / prices[:-1]
@@ -130,7 +164,7 @@ def risk_calculation(prices: np.ndarray, returns: Optional[np.ndarray] = None,
         elif method == 'sharpe':  # Sharpe ratio approximation
             mean_return = unified_math.unified_math.mean(returns)
             std_return = unified_math.unified_math.std(returns)
-            return mean_return / std_return if std_return > 1e-12 else 0.0
+            return mean_return / std_return if std_return > 1e - 12 else 0.0
         elif method == 'drawdown':  # Maximum drawdown
             cumulative = np.cumprod(1 + returns)
             running_max = np.maximum.accumulate(cumulative)
@@ -144,8 +178,11 @@ def risk_calculation(prices: np.ndarray, returns: Optional[np.ndarray] = None,
 
 
 def profit_optimization(prices: np.ndarray, weights: np.ndarray,
+
                         constraints: Optional[dict] = None) -> Tuple[np.ndarray, float]:
     """
+"""
+"""
     Optimize profit allocation across assets.
 
     Args:
@@ -156,25 +193,27 @@ def profit_optimization(prices: np.ndarray, weights: np.ndarray,
     Returns:
         Tuple of (optimal_weights, expected_profit)
     """
+"""
+"""
     try:
         if prices.ndim == 1:
             prices = prices.reshape(1, -1)
 
-        # Calculate returns
-        returns = np.diff(prices, axis=1) / prices[:, :-1]
-        mean_returns = unified_math.unified_math.mean(returns, axis=1)
+# Calculate returns
+        returns = np.diff(prices, axis = 1) / prices[:, :-1]
+        mean_returns = unified_math.unified_math.mean(returns, axis = 1)
 
-        # Simple optimization: weight by return/risk ratio
-        volatilities = unified_math.unified_math.std(returns, axis=1)
-        volatilities = np.where(volatilities < 1e-12, 1e-12, volatilities)
+# Simple optimization: weight by return / risk ratio
+        volatilities = unified_math.unified_math.std(returns, axis = 1)
+        volatilities = np.where(volatilities < 1e - 12, 1e - 12, volatilities)
 
-        # Risk-adjusted returns
+# Risk - adjusted returns
         risk_adjusted = mean_returns / volatilities
 
-        # Normalize weights
+# Normalize weights
         optimal_weights = risk_adjusted / np.sum(unified_math.unified_math.abs(risk_adjusted))
 
-        # Apply constraints if provided
+# Apply constraints if provided
         if constraints:
             min_weight = constraints.get('min_weight', -np.inf)
             max_weight = constraints.get('max_weight', np.inf)
@@ -190,8 +229,11 @@ def profit_optimization(prices: np.ndarray, weights: np.ndarray,
 
 
 def profit_forecasting(prices: np.ndarray, horizon: int = 5,
-                       method: str = 'linear') -> np.ndarray:
+
+                        method: str = 'linear') -> np.ndarray:
     """
+"""
+"""
     Forecast future profits using various methods.
 
     Args:
@@ -202,36 +244,38 @@ def profit_forecasting(prices: np.ndarray, horizon: int = 5,
     Returns:
         Forecasted price series
     """
+"""
+"""
     try:
         if len(prices) < 2:
             return np.full(horizon, prices[-1] if len(prices) > 0 else 0.0)
 
         if method == 'linear':
-            # Linear trend extrapolation
+# Linear trend extrapolation
             x = np.arange(len(prices))
             coeffs = np.polyfit(x, prices, 1)
             future_x = np.arange(len(prices), len(prices) + horizon)
             forecast = np.polyval(coeffs, future_x)
         elif method == 'exponential':
-            # Exponential smoothing
+# Exponential smoothing
             alpha = 0.3
             smoothed = np.zeros_like(prices)
             smoothed[0] = prices[0]
             for i in range(1, len(prices)):
                 smoothed[i] = (alpha * prices[i] +
-                               (1 - alpha) * smoothed[i - 1])
+                                (1 - alpha) * smoothed[i - 1])
 
-            # Extrapolate trend
+# Extrapolate trend
             trend = smoothed[-1] - smoothed[-2] if len(smoothed) > 1 else 0
             forecast = np.array([smoothed[-1] + trend * i
-                                 for i in range(1, horizon + 1)])
+                                    for i in range(1, horizon + 1)])
         elif method == 'seasonal':
-            # Simple seasonal decomposition
+# Simple seasonal decomposition
             if len(prices) >= 12:
                 seasonal_length = unified_math.min(12, len(prices) // 2)
                 seasonal_pattern = prices[-seasonal_length:]
                 forecast = np.tile(seasonal_pattern,
-                                   (horizon // seasonal_length) + 1)[:horizon]
+                                    (horizon // seasonal_length) + 1)[:horizon]
             else:
                 forecast = np.full(horizon, unified_math.unified_math.mean(prices))
         else:
@@ -244,34 +288,39 @@ def profit_forecasting(prices: np.ndarray, horizon: int = 5,
 
 
 def trading_signals(prices: np.ndarray, fast_window: int = 12,
+
                     slow_window: int = 26, signal_window: int = 9) -> dict:
     """
-    Generate trading signals using MACD-like indicators.
+"""
+"""
+    Generate trading signals using MACD - like indicators.
 
     Args:
         prices: Price series
         fast_window: Fast EMA window
-        slow_window: Slow EMA window  
+        slow_window: Slow EMA window
         signal_window: Signal line window
 
     Returns:
         Dictionary with signal data
     """
+"""
+"""
     try:
-        # Calculate EMAs
+# Calculate EMAs
         fast_ema = profit_momentum(prices, fast_window, 'ema')
         slow_ema = profit_momentum(prices, slow_window, 'ema')
 
-        # MACD line
+# MACD line
         macd_line = fast_ema - slow_ema
 
-        # Signal line
+# Signal line
         signal_line = profit_momentum(macd_line, signal_window, 'ema')
 
-        # Histogram
+# Histogram
         histogram = macd_line - signal_line
 
-        # Generate buy/sell signals
+# Generate buy / sell signals
         signals = np.zeros_like(prices)
         for i in range(1, len(histogram)):
             if histogram[i] > 0 and histogram[i - 1] <= 0:

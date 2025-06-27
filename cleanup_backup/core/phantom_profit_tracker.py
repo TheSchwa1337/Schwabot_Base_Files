@@ -1,11 +1,23 @@
+# -*- coding: utf - 8 -*-
+"""phantom_profit_tracker \\u2013 thin wrapper around ghost_profit_tracker.
+"""phantom_profit_tracker \\u2013 thin wrapper around ghost_profit_tracker.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-#!/usr/bin/env python3
 """phantom_profit_tracker \\u2013 thin wrapper around ghost_profit_tracker.
+"""phantom_profit_tracker \\u2013 thin wrapper around ghost_profit_tracker.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+
+
+
 
 Some legacy modules reference *phantom_profit_tracker*.  Internally we simply
 delegate to :pymod:`core.ghost_profit_tracker` so there is a single source of
 truth.
+"""
+"""
 """
 
 
@@ -21,7 +33,7 @@ __all__: list[str] = [
     "profit_summary",
 ]
 
-# Public re-exports
+# Public re - exports
 ProfitTracker = _GhostProfitTracker
 register_profit = _register_profit
 profit_summary = _profit_summary

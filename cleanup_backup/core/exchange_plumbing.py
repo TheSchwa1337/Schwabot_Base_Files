@@ -1,41 +1,53 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass, field, asdict
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
+from websockets.exceptions import ConnectionClosed, WebSocketException
+import aiohttp
+import asyncio
+import base64
+import hashlib
+import hmac
+import json
+import logging
+import os
+import time
+import uuid
+import websockets
+
+import queue
+import threading
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Exchange Plumbing - Comprehensive CCXT Integration with Robust Features.
 
-This module provides enterprise-grade exchange connectivity including:
-- CCXT wrappers with robust retry/back-off
-- Built-in rate-limit throttling
-- Auto-reconnect on websocket drops
+This module provides enterprise - grade exchange connectivity including:
+- CCXT wrappers with robust retry / back - off
+- Built - in rate - limit throttling
+- Auto - reconnect on websocket drops
 - Encrypted secrets management (.env + Vault / AWS Secrets)
-- Paper-trade / sandbox switch to avoid "fat-finger" orders
+- Paper - trade / sandbox switch to avoid "fat - finger" orders
 - Position reconciliation against exchange balances
 - Manual "panic button" CLI
 - Integration with all Schwabot core systems
 """
+"""
+"""
 
-
-import asyncio
-import json
-import logging
-import time
-import uuid
-from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional, Tuple, Union, Callable
-from datetime import datetime, timedelta
-from enum import Enum
-import threading
-import queue
-import os
-import hashlib
-import hmac
-import base64
-from pathlib import Path
-import aiohttp
-import websockets
-from websockets.exceptions import ConnectionClosed, WebSocketException
 
 # Try to import CCXT
 try:
@@ -74,17 +86,25 @@ except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
     def safe_print(message: str, use_emoji: bool = True) -> str:
+
         return message
 
     def safe_format_error(error: Exception, context: str = "") -> str:
+
         return f"Error: {str(error)} | Context: {context}"
 
     def log_safe(logger, level: str, message: str) -> None:
+
         getattr(logger, level.lower())(message)
 
 
 class ExchangeType(Enum):
+
     """Supported exchange types."""
+
+
+"""
+"""
     BINANCE = "binance"
     COINBASE = "coinbase"
     KRAKEN = "kraken"
@@ -96,7 +116,12 @@ class ExchangeType(Enum):
 
 
 class ConnectionState(Enum):
+
     """Connection state."""
+
+
+"""
+"""
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
     CONNECTED = "connected"
@@ -105,7 +130,12 @@ class ConnectionState(Enum):
 
 
 class OrderType(Enum):
+
     """Order types."""
+
+
+"""
+"""
     MARKET = "market"
     LIMIT = "limit"
     STOP = "stop"
@@ -113,14 +143,24 @@ class OrderType(Enum):
 
 
 class OrderSide(Enum):
+
     """Order sides."""
+
+
+"""
+"""
     BUY = "buy"
     SELL = "sell"
 
 
 @dataclass
 class ExchangeCredentials:
+
     """Exchange credentials with encryption."""
+
+
+"""
+"""
     exchange: ExchangeType
     api_key: str
     api_secret: str
@@ -132,7 +172,12 @@ class ExchangeCredentials:
 
 @dataclass
 class ExchangeConfig:
+
     """Exchange configuration."""
+
+
+"""
+"""
     exchange: ExchangeType
     credentials: ExchangeCredentials
     rate_limit: int = 100  # requests per minute
@@ -148,7 +193,12 @@ class ExchangeConfig:
 
 @dataclass
 class OrderRequest:
+
     """Order request."""
+
+
+"""
+"""
     symbol: str
     side: OrderSide
     order_type: OrderType
@@ -161,7 +211,12 @@ class OrderRequest:
 
 @dataclass
 class OrderResponse:
+
     """Order response."""
+
+
+"""
+"""
     order_id: str
     symbol: str
     side: OrderSide
@@ -179,7 +234,12 @@ class OrderResponse:
 
 @dataclass
 class Balance:
+
     """Account balance."""
+
+
+"""
+"""
     currency: str
     free: float
     used: float
@@ -189,7 +249,12 @@ class Balance:
 
 @dataclass
 class Position:
+
     """Trading position."""
+
+
+"""
+"""
     symbol: str
     side: OrderSide
     size: float
@@ -202,7 +267,12 @@ class Position:
 
 @dataclass
 class MarketData:
+
     """Market data."""
+
+
+"""
+"""
     symbol: str
     bid: float
     ask: float
@@ -212,68 +282,96 @@ class MarketData:
 
 
 class RateLimiter:
+
     """Rate limiter for exchange requests."""
+
+
+"""
+"""
 
     def __init__(self, max_requests: int, time_window: float = 60.0):
         """Initialize rate limiter."""
+"""
+"""
         self.max_requests = max_requests
         self.time_window = time_window
         self.requests = []
         self.lock = threading.Lock()
 
     def can_make_request(self) -> bool:
+
         """Check if request can be made."""
+"""
+"""
         with self.lock:
             now = time.time()
-            # Remove old requests
+# Remove old requests
             self.requests = [req_time for req_time in self.requests
-                             if now - req_time < self.time_window]
+                                if now - req_time < self.time_window]
             return len(self.requests) < self.max_requests
 
     def record_request(self) -> None:
+
         """Record a request."""
+"""
+"""
         with self.lock:
             self.requests.append(time.time())
 
     def wait_if_needed(self) -> None:
+
         """Wait if necessary to respect rate limits."""
+"""
+"""
         while not self.can_make_request():
             time.sleep(0.1)
 
 
 class EncryptedSecretsManager:
+
     """Encrypted secrets management with .env and AWS Secrets Manager support."""
+"""
+"""
 
     def __init__(self, config: Dict[str, Any]):
+
         """Initialize secrets manager."""
+"""
+"""
         self.config = config
         self.encryption_key = self._get_encryption_key()
         self.env_file = Path(".env")
         self.secrets_cache: Dict[str, Dict[str, str]] = {}
 
-        # Load secrets from .env
+# Load secrets from .env
         self._load_env_secrets()
 
         safe_safe_print("\\u1f510 Encrypted Secrets Manager initialized")
 
     def _get_encryption_key(self) -> str:
+
         """Get encryption key from environment or generate."""
+"""
+"""
         key = os.getenv("SCHWABOT_ENCRYPTION_KEY")
         if not key:
-            # Generate a key based on system info
+# Generate a key based on system info
             system_info = f"{os.getenv('USERNAME', '')}{os.getenv('COMPUTERNAME', '')}"
             key = hashlib.sha256(system_info.encode()).hexdigest()[:32]
             os.environ["SCHWABOT_ENCRYPTION_KEY"] = key
         return key
 
     def _load_env_secrets(self) -> None:
+
         """Load secrets from .env file."""
+"""
+"""
         try:
             if self.env_file.exists():
                 with open(self.env_file, 'r') as f:
                     for line in f:
                         line = line.strip()
-                        if line and not line.startswith('#') and '=' in line:
+                        if line and not line.startswith('  #') and '=' in line:
                             key, value = line.split('=', 1)
                             os.environ[key] = value
                 safe_safe_print("\\u2705 Environment secrets loaded")
@@ -281,39 +379,48 @@ class EncryptedSecretsManager:
             safe_safe_print(f"\\u26a0\\ufe0f Environment secrets load failed: {safe_format_error(e, 'env_load')}")
 
     def _encrypt_value(self, value: str) -> str:
+
         """Encrypt a value."""
+"""
+"""
         try:
             import cryptography.fernet
             from cryptography.fernet import Fernet
 
-            # Create Fernet key from our encryption key
+# Create Fernet key from our encryption key
             fernet_key = base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
             fernet = Fernet(fernet_key)
 
             return fernet.encrypt(value.encode()).decode()
         except ImportError:
-            # Fallback to simple encryption
+# Fallback to simple encryption
             return base64.b64encode(value.encode()).decode()
 
     def _decrypt_value(self, encrypted_value: str) -> str:
+
         """Decrypt a value."""
+"""
+"""
         try:
             import cryptography.fernet
             from cryptography.fernet import Fernet
 
-            # Create Fernet key from our encryption key
+# Create Fernet key from our encryption key
             fernet_key = base64.urlsafe_b64encode(self.encryption_key.encode()[:32].ljust(32, b'0'))
             fernet = Fernet(fernet_key)
 
             return fernet.decrypt(encrypted_value.encode()).decode()
         except ImportError:
-            # Fallback to simple decryption
+# Fallback to simple decryption
             return base64.b64decode(encrypted_value.encode()).decode()
 
     def get_exchange_credentials(self, exchange: ExchangeType) -> Optional[ExchangeCredentials]:
+
         """Get exchange credentials."""
+"""
+"""
         try:
-            # Try environment variables first
+# Try environment variables first
             env_prefix = f"SCHWABOT_{exchange.value.upper()}"
             api_key = os.getenv(f"{env_prefix}_API_KEY")
             api_secret = os.getenv(f"{env_prefix}_API_SECRET")
@@ -321,7 +428,7 @@ class EncryptedSecretsManager:
             sandbox = os.getenv(f"{env_prefix}_SANDBOX", "true").lower() == "true"
 
             if api_key and api_secret:
-                # Decrypt if needed
+# Decrypt if needed
                 if api_key.startswith("ENC:"):
                     api_key = self._decrypt_value(api_key[4:])
                 if api_secret.startswith("ENC:"):
@@ -330,14 +437,14 @@ class EncryptedSecretsManager:
                     passphrase = self._decrypt_value(passphrase[4:])
 
                 return ExchangeCredentials(
-                    exchange=exchange,
-                    api_key=api_key,
-                    api_secret=api_secret,
-                    passphrase=passphrase,
-                    sandbox=sandbox
+                    exchange = exchange,
+                    api_key = api_key,
+                    api_secret = api_secret,
+                    passphrase = passphrase,
+                    sandbox = sandbox
                 )
 
-            # Try AWS Secrets Manager if available
+# Try AWS Secrets Manager if available
             if AWS_SECRETS_AVAILABLE:
                 return self._get_aws_secrets(exchange)
 
@@ -348,25 +455,28 @@ class EncryptedSecretsManager:
             return None
 
     def _get_aws_secrets(self, exchange: ExchangeType) -> Optional[ExchangeCredentials]:
+
         """Get secrets from AWS Secrets Manager."""
+"""
+"""
         try:
             secret_name = f"schwabot/{exchange.value}/credentials"
 
             session = boto3.session.Session()
             client = session.client(
                 service_name='secretsmanager',
-                region_name=os.getenv('AWS_REGION', 'us-east-1')
+                region_name = os.getenv('AWS_REGION', 'us - east - 1')
             )
 
-            response = client.get_secret_value(SecretId=secret_name)
+            response = client.get_secret_value(SecretId = secret_name)
             secret_data = json.loads(response['SecretString'])
 
             return ExchangeCredentials(
-                exchange=exchange,
-                api_key=secret_data['api_key'],
-                api_secret=secret_data['api_secret'],
-                passphrase=secret_data.get('passphrase'),
-                sandbox=secret_data.get('sandbox', True)
+                exchange = exchange,
+                api_key = secret_data['api_key'],
+                api_secret = secret_data['api_secret'],
+                passphrase = secret_data.get('passphrase'),
+                sandbox = secret_data.get('sandbox', True)
             )
 
         except Exception as e:
@@ -374,7 +484,10 @@ class EncryptedSecretsManager:
             return None
 
     def store_exchange_credentials(self, credentials: ExchangeCredentials, encrypt: bool = True) -> bool:
+
         """Store exchange credentials."""
+"""
+"""
         try:
             env_prefix = f"SCHWABOT_{credentials.exchange.value.upper()}"
 
@@ -388,14 +501,14 @@ class EncryptedSecretsManager:
                 if passphrase:
                     passphrase = f"ENC:{self._encrypt_value(passphrase)}"
 
-            # Update environment
+# Update environment
             os.environ[f"{env_prefix}_API_KEY"] = api_key
             os.environ[f"{env_prefix}_API_SECRET"] = api_secret
             if passphrase:
                 os.environ[f"{env_prefix}_PASSPHRASE"] = passphrase
             os.environ[f"{env_prefix}_SANDBOX"] = str(credentials.sandbox).lower()
 
-            # Update .env file
+# Update .env file
             self._update_env_file(env_prefix, api_key, api_secret, passphrase, credentials.sandbox)
 
             safe_safe_print(f"\\u2705 Credentials stored for {credentials.exchange.value}")
@@ -406,16 +519,19 @@ class EncryptedSecretsManager:
             return False
 
     def _update_env_file(self, prefix: str, api_key: str, api_secret: str,
-                         passphrase: Optional[str], sandbox: bool) -> None:
+
+                            passphrase: Optional[str], sandbox: bool) -> None:
         """Update .env file with new credentials."""
+"""
+"""
         try:
-            # Read existing .env
+# Read existing .env
             env_lines = []
             if self.env_file.exists():
                 with open(self.env_file, 'r') as f:
                     env_lines = f.readlines()
 
-            # Update or add credentials
+# Update or add credentials
             new_lines = []
             updated = {
                 f"{prefix}_API_KEY": api_key,
@@ -425,10 +541,10 @@ class EncryptedSecretsManager:
             if passphrase:
                 updated[f"{prefix}_PASSPHRASE"] = passphrase
 
-            # Process existing lines
+# Process existing lines
             for line in env_lines:
                 line = line.strip()
-                if line and not line.startswith('#') and '=' in line:
+                if line and not line.startswith('  #') and '=' in line:
                     key = line.split('=', 1)[0]
                     if key in updated:
                         new_lines.append(f"{key}={updated[key]}\n")
@@ -438,11 +554,11 @@ class EncryptedSecretsManager:
                 else:
                     new_lines.append(line + '\n')
 
-            # Add new credentials
+# Add new credentials
             for key, value in updated.items():
                 new_lines.append(f"{key}={value}\n")
 
-            # Write back to .env
+# Write back to .env
             with open(self.env_file, 'w') as f:
                 f.writelines(new_lines)
 
@@ -451,10 +567,16 @@ class EncryptedSecretsManager:
 
 
 class ExchangeConnection:
+
     """Individual exchange connection with robust features."""
+"""
+"""
 
     def __init__(self, config: ExchangeConfig, secrets_manager: EncryptedSecretsManager):
+
         """Initialize exchange connection."""
+"""
+"""
         self.config = config
         self.secrets_manager = secrets_manager
         self.exchange = None
@@ -466,18 +588,18 @@ class ExchangeConnection:
         self.max_reconnect_attempts = 5
         self.reconnect_delay = 1.0
 
-        # Performance tracking
+# Performance tracking
         self.total_requests = 0
         self.successful_requests = 0
         self.failed_requests = 0
         self.average_response_time = 0.0
 
-        # Position tracking
+# Position tracking
         self.positions: Dict[str, Position] = {}
         self.balances: Dict[str, Balance] = {}
         self.last_reconciliation = time.time()
 
-        # Threading
+# Threading
         self.lock = threading.RLock()
         self.websocket_thread = None
         self.reconciliation_thread = None
@@ -487,18 +609,20 @@ class ExchangeConnection:
 
     async def connect(self) -> bool:
         """Connect to exchange."""
+"""
+"""
         try:
             if not CCXT_AVAILABLE:
                 safe_safe_print("\\u274c CCXT not available")
                 return False
 
-            # Get credentials
+# Get credentials
             credentials = self.secrets_manager.get_exchange_credentials(self.config.exchange)
             if not credentials:
                 safe_safe_print(f"\\u274c No credentials for {self.config.exchange.value}")
                 return False
 
-            # Create exchange instance
+# Create exchange instance
             exchange_class = getattr(ccxt_async, self.config.exchange.value)
             self.exchange = exchange_class({
                 'apiKey': credentials.api_key,
@@ -513,13 +637,13 @@ class ExchangeConnection:
                 }
             })
 
-            # Test connection
+# Test connection
             await self.exchange.load_markets()
             self.connection_state = ConnectionState.CONNECTED
             self.last_heartbeat = time.time()
             self.reconnect_attempts = 0
 
-            # Start background tasks
+# Start background tasks
             if self.config.enable_websocket:
                 self._start_websocket()
 
@@ -536,6 +660,8 @@ class ExchangeConnection:
 
     async def disconnect(self) -> None:
         """Disconnect from exchange."""
+"""
+"""
         try:
             self.running = False
 
@@ -553,26 +679,28 @@ class ExchangeConnection:
 
     async def place_order(self, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place order on exchange."""
+"""
+"""
         try:
             if not self.exchange or self.connection_state != ConnectionState.CONNECTED:
                 safe_safe_print("\\u274c Exchange not connected")
                 return None
 
-            # Check rate limits
+# Check rate limits
             self.rate_limiter.wait_if_needed()
 
-            # Check paper trade mode
+# Check paper trade mode
             if self.config.paper_trade:
                 return await self._simulate_order(order_request)
 
-            # Check risk limits
+# Check risk limits
             if CORE_SYSTEMS_AVAILABLE:
                 risk_guard = get_risk_guard()
                 if not risk_guard.is_trading_allowed():
                     safe_safe_print("\\u274c Trading blocked by risk guard")
                     return None
 
-            # Place actual order
+# Place actual order
             start_time = time.time()
 
             order_params = {
@@ -592,7 +720,7 @@ class ExchangeConnection:
             response = await self.exchange.create_order(**order_params)
             duration = time.time() - start_time
 
-            # Update metrics
+# Update metrics
             self.total_requests += 1
             self.successful_requests += 1
             self.average_response_time = (
@@ -600,29 +728,29 @@ class ExchangeConnection:
                 self.total_requests
             )
 
-            # Record API request
+# Record API request
             if CORE_SYSTEMS_AVAILABLE:
                 record_api_request(
-                    api_type=self.config.exchange.value,
+                    api_type = self.config.exchange.value,
                     endpoint="/order",
-                    status_code=200,
-                    latency=duration
+                    status_code = 200,
+                    latency = duration
                 )
 
-            # Create order response
+# Create order response
             order_response = OrderResponse(
-                order_id=response['id'],
-                symbol=response['symbol'],
-                side=OrderSide(response['side']),
-                order_type=OrderType(response['type']),
-                amount=response['amount'],
-                price=response.get('price'),
-                status=response['status'],
-                filled_amount=response.get('filled', 0.0),
-                remaining_amount=response.get('remaining', 0.0),
-                average_price=response.get('average'),
-                fees=response.get('fee', {}),
-                exchange_timestamp=datetime.fromtimestamp(response['timestamp'] / 1000)
+                order_id = response['id'],
+                symbol = response['symbol'],
+                side = OrderSide(response['side']),
+                order_type = OrderType(response['type']),
+                amount = response['amount'],
+                price = response.get('price'),
+                status = response['status'],
+                filled_amount = response.get('filled', 0.0),
+                remaining_amount = response.get('remaining', 0.0),
+                average_price = response.get('average'),
+                fees = response.get('fee', {}),
+                exchange_timestamp = datetime.fromtimestamp(response['timestamp'] / 1000)
             )
 
             safe_safe_print(f"\\u2705 Order placed: {order_response.order_id}")
@@ -631,13 +759,13 @@ class ExchangeConnection:
         except Exception as e:
             self.failed_requests += 1
 
-            # Record API error
+# Record API error
             if CORE_SYSTEMS_AVAILABLE:
                 record_api_request(
-                    api_type=self.config.exchange.value,
+                    api_type = self.config.exchange.value,
                     endpoint="/order",
-                    status_code=500,
-                    latency=time.time() - start_time,
+                    status_code = 500,
+                    latency = time.time() - start_time,
                     error_type="exception"
                 )
 
@@ -646,27 +774,29 @@ class ExchangeConnection:
 
     async def _simulate_order(self, order_request: OrderRequest) -> OrderResponse:
         """Simulate order in paper trade mode."""
+"""
+"""
         try:
-            # Simulate order processing time
+# Simulate order processing time
             await asyncio.sleep(0.1)
 
-            # Generate fake order ID
+# Generate fake order ID
             order_id = f"PAPER_{int(time.time() * 1000)}"
 
-            # Simulate market price
+# Simulate market price
             current_price = order_request.price or 50000.0  # Default BTC price
 
             return OrderResponse(
-                order_id=order_id,
-                symbol=order_request.symbol,
-                side=order_request.side,
-                order_type=order_request.order_type,
-                amount=order_request.amount,
-                price=current_price,
+                order_id = order_id,
+                symbol = order_request.symbol,
+                side = order_request.side,
+                order_type = order_request.order_type,
+                amount = order_request.amount,
+                price = current_price,
                 status="closed",
-                filled_amount=order_request.amount,
-                remaining_amount=0.0,
-                average_price=current_price,
+                filled_amount = order_request.amount,
+                remaining_amount = 0.0,
+                average_price = current_price,
                 fees={"BTC": 0.001}  # Simulated fee
             )
 
@@ -676,6 +806,8 @@ class ExchangeConnection:
 
     async def get_balances(self) -> List[Balance]:
         """Get account balances."""
+"""
+"""
         try:
             if not self.exchange:
                 return []
@@ -690,21 +822,21 @@ class ExchangeConnection:
             for currency, balance_data in response['total'].items():
                 if balance_data > 0:
                     balance = Balance(
-                        currency=currency,
-                        free=response['free'].get(currency, 0.0),
-                        used=response['used'].get(currency, 0.0),
-                        total=balance_data
+                        currency = currency,
+                        free = response['free'].get(currency, 0.0),
+                        used = response['used'].get(currency, 0.0),
+                        total = balance_data
                     )
                     balances.append(balance)
                     self.balances[currency] = balance
 
-            # Record API request
+# Record API request
             if CORE_SYSTEMS_AVAILABLE:
                 record_api_request(
-                    api_type=self.config.exchange.value,
+                    api_type = self.config.exchange.value,
                     endpoint="/balance",
-                    status_code=200,
-                    latency=duration
+                    status_code = 200,
+                    latency = duration
                 )
 
             return balances
@@ -715,6 +847,8 @@ class ExchangeConnection:
 
     async def get_positions(self) -> List[Position]:
         """Get current positions."""
+"""
+"""
         try:
             if not self.exchange:
                 return []
@@ -729,24 +863,24 @@ class ExchangeConnection:
             for pos_data in response:
                 if pos_data['size'] > 0:
                     position = Position(
-                        symbol=pos_data['symbol'],
-                        side=OrderSide(pos_data['side']),
-                        size=pos_data['size'],
-                        entry_price=pos_data['entryPrice'],
-                        current_price=pos_data['markPrice'],
-                        unrealized_pnl=pos_data['unrealizedPnl'],
-                        realized_pnl=pos_data.get('realizedPnl', 0.0)
+                        symbol = pos_data['symbol'],
+                        side = OrderSide(pos_data['side']),
+                        size = pos_data['size'],
+                        entry_price = pos_data['entryPrice'],
+                        current_price = pos_data['markPrice'],
+                        unrealized_pnl = pos_data['unrealizedPnl'],
+                        realized_pnl = pos_data.get('realizedPnl', 0.0)
                     )
                     positions.append(position)
                     self.positions[pos_data['symbol']] = position
 
-            # Record API request
+# Record API request
             if CORE_SYSTEMS_AVAILABLE:
                 record_api_request(
-                    api_type=self.config.exchange.value,
+                    api_type = self.config.exchange.value,
                     endpoint="/positions",
-                    status_code=200,
-                    latency=duration
+                    status_code = 200,
+                    latency = duration
                 )
 
             return positions
@@ -756,15 +890,21 @@ class ExchangeConnection:
             return []
 
     def _start_websocket(self) -> None:
+
         """Start websocket connection."""
+"""
+"""
         if self.websocket_thread and self.websocket_thread.is_alive():
             return
 
-        self.websocket_thread = threading.Thread(target=self._websocket_worker, daemon=True)
+        self.websocket_thread = threading.Thread(target = self._websocket_worker, daemon = True)
         self.websocket_thread.start()
 
     def _websocket_worker(self) -> None:
+
         """Websocket worker thread."""
+"""
+"""
         while self.running:
             try:
                 asyncio.run(self._websocket_loop())
@@ -774,8 +914,10 @@ class ExchangeConnection:
 
     async def _websocket_loop(self) -> None:
         """Websocket connection loop."""
+"""
+"""
         try:
-            # Get websocket URL
+# Get websocket URL
             if not self.exchange:
                 return
 
@@ -787,7 +929,7 @@ class ExchangeConnection:
                 self.websocket = websocket
                 self.connection_state = ConnectionState.CONNECTED
 
-                # Subscribe to relevant channels
+# Subscribe to relevant channels
                 subscribe_message = {
                     "method": "SUBSCRIBE",
                     "params": [
@@ -799,7 +941,7 @@ class ExchangeConnection:
                 }
                 await websocket.send(json.dumps(subscribe_message))
 
-                # Listen for messages
+# Listen for messages
                 async for message in websocket:
                     if not self.running:
                         break
@@ -822,8 +964,10 @@ class ExchangeConnection:
 
     async def _handle_websocket_message(self, data: Dict[str, Any]) -> None:
         """Handle websocket message."""
+"""
+"""
         try:
-            # Handle different message types
+# Handle different message types
             if 'e' in data:  # Binance format
                 event_type = data['e']
                 if event_type == '24hrTicker':
@@ -833,7 +977,7 @@ class ExchangeConnection:
                 elif event_type == 'trade':
                     await self._handle_trade_update(data)
 
-            # Update heartbeat
+# Update heartbeat
             self.last_heartbeat = time.time()
 
         except Exception as e:
@@ -841,29 +985,50 @@ class ExchangeConnection:
 
     async def _handle_ticker_update(self, data: Dict[str, Any]) -> None:
         """Handle ticker update."""
-        # Process ticker data
-        pass
+"""
+"""
+# Process ticker data
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
+    pass
 
     async def _handle_depth_update(self, data: Dict[str, Any]) -> None:
         """Handle depth update."""
-        # Process order book data
-        pass
+"""
+"""
+# Process order book data
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
+    pass
 
     async def _handle_trade_update(self, data: Dict[str, Any]) -> None:
         """Handle trade update."""
-        # Process trade data
-        pass
+"""
+"""
+# Process trade data
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
+    pass
 
     def _start_reconciliation(self) -> None:
+
         """Start position reconciliation."""
+"""
+"""
         if self.reconciliation_thread and self.reconciliation_thread.is_alive():
             return
 
-        self.reconciliation_thread = threading.Thread(target=self._reconciliation_worker, daemon=True)
+        self.reconciliation_thread = threading.Thread(target = self._reconciliation_worker, daemon = True)
         self.reconciliation_thread.start()
 
     def _reconciliation_worker(self) -> None:
+
         """Position reconciliation worker."""
+"""
+"""
         while self.running:
             try:
                 asyncio.run(self._reconcile_positions())
@@ -874,11 +1039,13 @@ class ExchangeConnection:
 
     async def _reconcile_positions(self) -> None:
         """Reconcile positions with exchange."""
+"""
+"""
         try:
-            # Get current positions from exchange
+# Get current positions from exchange
             exchange_positions = await self.get_positions()
 
-            # Compare with local positions
+# Compare with local positions
             for pos in exchange_positions:
                 local_pos = self.positions.get(pos.symbol)
                 if not local_pos or unified_math.abs(local_pos.size - pos.size) > 0.0001:
@@ -891,7 +1058,10 @@ class ExchangeConnection:
             safe_safe_print(f"\\u274c Position reconciliation failed: {safe_format_error(e, 'reconcile')}")
 
     def get_connection_status(self) -> Dict[str, Any]:
+
         """Get connection status."""
+"""
+"""
         return {
             'exchange': self.config.exchange.value,
             'state': self.connection_state.value,
@@ -908,28 +1078,36 @@ class ExchangeConnection:
 
 
 class ExchangePlumbing:
+
     """
+"""
+"""
     Exchange Plumbing - Comprehensive exchange connectivity system.
 
-    Provides enterprise-grade exchange connectivity including:
-    - CCXT wrappers with robust retry/back-off
-    - Built-in rate-limit throttling
-    - Auto-reconnect on websocket drops
+    Provides enterprise - grade exchange connectivity including:
+    - CCXT wrappers with robust retry / back - off
+    - Built - in rate - limit throttling
+    - Auto - reconnect on websocket drops
     - Encrypted secrets management
-    - Paper-trade / sandbox switch
+    - Paper - trade / sandbox switch
     - Position reconciliation
     - Manual panic button
     """
+"""
+"""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
+
         """Initialize exchange plumbing."""
+"""
+"""
         self.config = config or {}
         self.secrets_manager = EncryptedSecretsManager(self.config)
         self.connections: Dict[ExchangeType, ExchangeConnection] = {}
         self.panic_mode = False
         self.panic_button_enabled = True
 
-        # Performance tracking
+# Performance tracking
         self.total_orders = 0
         self.successful_orders = 0
         self.failed_orders = 0
@@ -937,7 +1115,10 @@ class ExchangePlumbing:
         safe_safe_print("\\u1f517 Exchange Plumbing initialized")
 
     def add_exchange(self, exchange_config: ExchangeConfig) -> bool:
+
         """Add exchange connection."""
+"""
+"""
         try:
             connection = ExchangeConnection(exchange_config, self.secrets_manager)
             self.connections[exchange_config.exchange] = connection
@@ -949,6 +1130,8 @@ class ExchangePlumbing:
 
     async def connect_all(self) -> bool:
         """Connect to all exchanges."""
+"""
+"""
         try:
             success_count = 0
             for connection in self.connections.values():
@@ -964,6 +1147,8 @@ class ExchangePlumbing:
 
     async def disconnect_all(self) -> None:
         """Disconnect from all exchanges."""
+"""
+"""
         try:
             for connection in self.connections.values():
                 await connection.disconnect()
@@ -973,6 +1158,8 @@ class ExchangePlumbing:
 
     async def place_order(self, exchange: ExchangeType, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place order on specific exchange."""
+"""
+"""
         try:
             if self.panic_mode:
                 safe_safe_print("\\u274c Trading blocked - panic mode active")
@@ -983,23 +1170,23 @@ class ExchangePlumbing:
                 safe_safe_print(f"\\u274c Exchange {exchange.value} not connected")
                 return None
 
-            # Check risk limits
+# Check risk limits
             if CORE_SYSTEMS_AVAILABLE:
                 risk_guard = get_risk_guard()
                 if not risk_guard.is_trading_allowed():
                     safe_safe_print("\\u274c Trading blocked by risk guard")
                     return None
 
-                # Check capital controls
+# Check capital controls
                 capital_controls = get_capital_controls()
                 if not capital_controls.check_portfolio_limits():
                     safe_safe_print("\\u274c Trading blocked by capital controls")
                     return None
 
-            # Place order
+# Place order
             response = await connection.place_order(order_request)
 
-            # Update metrics
+# Update metrics
             self.total_orders += 1
             if response:
                 self.successful_orders += 1
@@ -1015,6 +1202,8 @@ class ExchangePlumbing:
 
     async def get_all_balances(self) -> Dict[ExchangeType, List[Balance]]:
         """Get balances from all exchanges."""
+"""
+"""
         try:
             balances = {}
             for exchange, connection in self.connections.items():
@@ -1026,6 +1215,8 @@ class ExchangePlumbing:
 
     async def get_all_positions(self) -> Dict[ExchangeType, List[Position]]:
         """Get positions from all exchanges."""
+"""
+"""
         try:
             positions = {}
             for exchange, connection in self.connections.items():
@@ -1036,45 +1227,54 @@ class ExchangePlumbing:
             return {}
 
     def activate_panic_button(self) -> None:
+
         """Activate panic button to stop all trading."""
+"""
+"""
         try:
             self.panic_mode = True
             safe_safe_print("\\u1f6a8 PANIC BUTTON ACTIVATED - ALL TRADING STOPPED")
 
-            # Log operation
+# Log operation
             if CORE_SYSTEMS_AVAILABLE:
                 log_operation(
                     operation="panic_button_activated",
                     component="exchange_plumbing",
-                    level=LogLevel.CRITICAL,
-                    success=True,
-                    panic_mode=True
+                    level = LogLevel.CRITICAL,
+                    success = True,
+                    panic_mode = True
                 )
 
         except Exception as e:
             safe_safe_print(f"\\u274c Panic button failed: {safe_format_error(e, 'panic_button')}")
 
     def deactivate_panic_button(self) -> None:
+
         """Deactivate panic button."""
+"""
+"""
         try:
             self.panic_mode = False
             safe_safe_print("\\u2705 Panic button deactivated - trading resumed")
 
-            # Log operation
+# Log operation
             if CORE_SYSTEMS_AVAILABLE:
                 log_operation(
                     operation="panic_button_deactivated",
                     component="exchange_plumbing",
-                    level=LogLevel.INFO,
-                    success=True,
-                    panic_mode=False
+                    level = LogLevel.INFO,
+                    success = True,
+                    panic_mode = False
                 )
 
         except Exception as e:
             safe_safe_print(f"\\u274c Panic button deactivation failed: {safe_format_error(e, 'panic_deactivate')}")
 
     def get_status(self) -> Dict[str, Any]:
+
         """Get system status."""
+"""
+"""
         return {
             'panic_mode': self.panic_mode,
             'panic_button_enabled': self.panic_button_enabled,
@@ -1095,68 +1295,86 @@ exchange_plumbing = ExchangePlumbing()
 
 # Convenience functions for external access
 def get_exchange_plumbing() -> ExchangePlumbing:
+
     """Get global exchange plumbing instance."""
+"""
+"""
     return exchange_plumbing
 
 
 async def place_order(exchange: ExchangeType, order_request: OrderRequest) -> Optional[OrderResponse]:
     """Place order using global exchange plumbing."""
+"""
+"""
     return await exchange_plumbing.place_order(exchange, order_request)
 
 
 async def get_all_balances() -> Dict[ExchangeType, List[Balance]]:
     """Get all balances using global exchange plumbing."""
+"""
+"""
     return await exchange_plumbing.get_all_balances()
 
 
 async def get_all_positions() -> Dict[ExchangeType, List[Position]]:
     """Get all positions using global exchange plumbing."""
+"""
+"""
     return await exchange_plumbing.get_all_positions()
 
 
 def activate_panic_button() -> None:
+
     """Activate panic button."""
+"""
+"""
     exchange_plumbing.activate_panic_button()
 
 
 def deactivate_panic_button() -> None:
+
     """Deactivate panic button."""
+"""
+"""
     exchange_plumbing.deactivate_panic_button()
 
 
 def get_exchange_status() -> Dict[str, Any]:
+
     """Get exchange status."""
+"""
+"""
     return exchange_plumbing.get_status()
 
 
 # Example usage
 if __name__ == "__main__":
-    # Test exchange plumbing
+# Test exchange plumbing
     safe_print("\\u1f9ea Testing Exchange Plumbing...")
 
-    # Create exchange config
+# Create exchange config
     config = ExchangeConfig(
-        exchange=ExchangeType.BINANCE,
-        credentials=ExchangeCredentials(
-            exchange=ExchangeType.BINANCE,
+        exchange = ExchangeType.BINANCE,
+        credentials = ExchangeCredentials(
+            exchange = ExchangeType.BINANCE,
             api_key="test_key",
             api_secret="test_secret",
-            sandbox=True
+            sandbox = True
         ),
-        paper_trade=True
+        paper_trade = True
     )
 
-    # Add exchange
+# Add exchange
     success = exchange_plumbing.add_exchange(config)
     safe_print(f"\\u2705 Exchange added: {success}")
 
-    # Test order
+# Test order
     order_request = OrderRequest(
-        symbol="BTC/USDT",
-        side=OrderSide.BUY,
-        order_type=OrderType.MARKET,
-        amount=0.001
+        symbol="BTC / USDT",
+        side = OrderSide.BUY,
+        order_type = OrderType.MARKET,
+        amount = 0.001
     )
 
-    # This would be async in real usage
+# This would be async in real usage
     safe_print("\\u2705 Exchange Plumbing test completed")

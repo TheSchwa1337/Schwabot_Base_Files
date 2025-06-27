@@ -123,14 +123,18 @@ class AIStrategyResponse:
             self.strategy_hash = self._generate_hash()
 
         # Ensure confidence is bounded
-        self.confidence_score = _safe_math_max(0.0, _safe_math_min(1.0, self.confidence_score))
+        self.confidence_score = _safe_math_max(
+            0.0, _safe_math_min(1.0, self.confidence_score))
 
         # Ensure layer depth is positive
         self.layer_depth = _safe_math_max(1, self.layer_depth)
 
     def _generate_hash(self) -> str:
         """Generate hash signature for the strategy."""
-        content = f"{self.ai_source}_{self.recommended_action}_{self.timestamp.isoformat()}"
+        content = f"{
+            self.ai_source}_{
+            self.recommended_action}_{
+            self.timestamp.isoformat()}"
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
@@ -143,14 +147,16 @@ class MathematicalOperation:
     """Base mathematical operation with entry assumptions and output guarantees."""
     operation_id: str
     operation_type: str
-    entry_assumptions: Dict[str, Any]  # BTC vector state, XRP cycle delta, etc.
+    # BTC vector state, XRP cycle delta, etc.
+    entry_assumptions: Dict[str, Any]
     output_guarantees: Dict[str, Any]  # Expected USDC profit delta, etc.
     timestamp: datetime
     execution_time: float
     success: bool
     result: Optional[Any] = None
     error_message: Optional[str] = None
-    confidence_interval: Tuple[float, float] = field(default_factory=lambda: (0.0, 1.0))
+    confidence_interval: Tuple[float, float] = field(
+        default_factory=lambda: (0.0, 1.0))
     supporting_evidence: List[str] = field(default_factory=list)
 
 

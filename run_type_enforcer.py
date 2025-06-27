@@ -1,5 +1,17 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+import sys
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Run Type Enforcer - Apply Type Annotations.
 
 ==========================================
@@ -9,9 +21,11 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 Simple script to run the type enforcer and eliminate MEDIUM priority flake8 issues.
 
 """
+"""
+"""
+"""
+"""
 
-from pathlib import Path
-import sys
 
 # Add core to path
 sys.path.insert(0, str(Path(__file__).parent / "core"))
@@ -23,7 +37,7 @@ try:
         "\\u1f527 Applying type annotations to eliminate MEDIUM priority issues..."
     )
 
-    # Apply type annotations to all Python files
+# Apply type annotations to all Python files
     total_stats = {
         "functions_fixed": 0,
         "parameters_fixed": 0,
@@ -45,14 +59,14 @@ try:
     safe_print(f"   - Parameters fixed: {total_stats['parameters_fixed']}")
     safe_print(f"   - Return types fixed: {total_stats['returns_fixed']}")
 
-    # Run compliance check to see results
+# Run compliance check to see results
     safe_print("\\n\\u1f527 Running compliance check to verify results...")
 
     from compliance_check import main as compliance_check
 
     results = compliance_check()
 
-    # Count issues by severity
+# Count issues by severity
     issue_counts = {"HIGH": 0, "MEDIUM": 0, "LOW": 0, "CRITICAL": 0}
 
     for result in results:
@@ -69,7 +83,7 @@ try:
 
     if issue_counts["HIGH"] == 0 and issue_counts["MEDIUM"] == 0:
         safe_print("\\n\\u1f389 SUCCESS: All HIGH and MEDIUM issues resolved!")
-        safe_print("   Your codebase is now flake8-compliant for critical issues.")
+        safe_print("   Your codebase is now flake8 - compliant for critical issues.")
     else:
         safe_print("\\n\\u26a0\\ufe0f Some issues remain - review the results above.")
 

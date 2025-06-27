@@ -1,8 +1,20 @@
+# -*- coding: utf - 8 -*-
+"""Phantom memory \\u2013 decay - corrected ghost state recall.
+"""Phantom memory \\u2013 decay - corrected ghost state recall.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
+"""Phantom memory \\u2013 decay - corrected ghost state recall.
+"""Phantom memory \\u2013 decay - corrected ghost state recall.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""Phantom memory \\u2013 decay-corrected ghost state recall.
+
+
+
+
+
 
 Implements the memory formula:
     M_r = \\u03a3 \\u03b6_i \\u2218 t_i where \\u039e \\u2208 \\u03a3(ghost_log)
@@ -10,6 +22,8 @@ Implements the memory formula:
 This module maintains a rolling window of ghost events with exponential decay
 weighting to preserve the most relevant historical triggers while allowing
 older signals to fade naturally.
+"""
+"""
 """
 
 
@@ -25,9 +39,12 @@ __all__: list[str] = ["PhantomMemory", "GhostEvent", "compute_memory_recall"]
 # ---------------------------------------------------------------------------
 
 
-@dataclass(slots=True)
+@dataclass(slots = True)
 class GhostEvent:
+
     """Single ghost trigger event with timestamp and intensity."""
+"""
+"""
 
     timestamp: float
     zeta: float
@@ -41,23 +58,35 @@ class GhostEvent:
 
 
 class PhantomMemory:
+
     """Rolling memory buffer for ghost events with decay weighting."""
+"""
+"""
 
     def __init__(self, *, max_events: int = 1000, decay_lambda: float = 0.01):
+
         """Initialize memory with capacity and decay rate."""
+"""
+"""
         self._events: list[GhostEvent] = []
         self._max_events = max_events
         self._decay_lambda = decay_lambda
 
     def add_event(self, event: GhostEvent) -> None:
+
         """Add new ghost event to memory buffer."""
+"""
+"""
         self._events.append(event)
         if len(self._events) > self._max_events:
-            # Remove oldest event
+# Remove oldest event
             self._events.pop(0)
 
     def compute_recall(self, current_time: float | None = None) -> float:
+
         """Return M_r memory recall value with decay weighting."""
+"""
+"""
         if current_time is None:
             current_time = time.time()
 
@@ -73,7 +102,10 @@ class PhantomMemory:
         return recall_sum
 
     def get_recent_events(self, window_seconds: float) -> list[GhostEvent]:
+
         """Return events from the last window_seconds."""
+"""
+"""
         if not self._events:
             return []
 
@@ -82,7 +114,10 @@ class PhantomMemory:
         return [e for e in self._events if e.timestamp >= cutoff_time]
 
     def clear_old_events(self, max_age_seconds: float) -> int:
+
         """Remove events older than max_age_seconds. Return count removed."""
+"""
+"""
         if not self._events:
             return 0
 
@@ -94,7 +129,10 @@ class PhantomMemory:
 
     @property
     def event_count(self) -> int:
+
         """Return current number of stored events."""
+"""
+"""
         return len(self._events)
 
 
@@ -104,6 +142,7 @@ class PhantomMemory:
 
 
 def compute_memory_recall(
+
     events: Sequence[GhostEvent],
     current_time: float | None = None,
     decay_lambda: float = 0.01,
@@ -119,6 +158,8 @@ def compute_memory_recall(
     decay_lambda
         Exponential decay rate (larger = faster decay).
     """
+"""
+"""
     if current_time is None:
         current_time = time.time()
 

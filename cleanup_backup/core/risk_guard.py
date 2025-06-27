@@ -1,28 +1,37 @@
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
+from pathlib import Path
+import json
+from enum import Enum
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
+from dataclasses import dataclass, field
+import time
+import logging
+import asyncio
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Risk Guard - Safety and Capital Controls for Schwabot.
 
 This module provides comprehensive risk management including:
-- Global daily-loss, single-trade, and exposure caps
-- Circuit-breaker tied to abnormal entropy/volatility spikes
+- Global daily - loss, single - trade, and exposure caps
+- Circuit - breaker tied to abnormal entropy / volatility spikes
 - Position reconciliation against exchange balances
 - Manual panic button CLI
 - Integration with Fault Bus for automated safety
 """
+"""
+"""
 
-
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
-from datetime import datetime, timedelta
-from enum import Enum
-import json
-from pathlib import Path
 
 # Import unified mathematics
 try:
@@ -50,47 +59,70 @@ except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
     def safe_print(message: str, use_emoji: bool = True) -> str:
+
         return message
 
     def safe_format_error(error: Exception, context: str = "") -> str:
+
         return f"Error: {str(error)} | Context: {context}"
 
     def log_safe(logger, level: str, message: str) -> None:
+
         getattr(logger, level.lower())(message)
 
 logger = logging.getLogger(__name__)
 
 
 class RiskLevel(Enum):
+
     """Risk levels for different market conditions."""
-    LOW = "low"          # Normal market conditions
-    MEDIUM = "medium"    # Elevated volatility
-    HIGH = "high"        # High risk conditions
+
+
+"""
+"""
+    LOW = "low"  # Normal market conditions
+    MEDIUM = "medium"  # Elevated volatility
+    HIGH = "high"  # High risk conditions
     CRITICAL = "critical"  # Emergency conditions
 
 
 class CircuitBreakerState(Enum):
+
     """Circuit breaker states."""
-    NORMAL = "normal"        # Normal operation
-    WARNING = "warning"      # Warning threshold reached
-    TRIPPED = "tripped"      # Circuit breaker activated
-    RESET = "reset"          # Circuit breaker reset
+
+
+"""
+"""
+    NORMAL = "normal"  # Normal operation
+    WARNING = "warning"  # Warning threshold reached
+    TRIPPED = "tripped"  # Circuit breaker activated
+    RESET = "reset"  # Circuit breaker reset
 
 
 @dataclass
 class RiskLimits:
+
     """Risk limits configuration."""
-    daily_loss_limit: float = 1000.0      # Maximum daily loss in USD
-    single_trade_limit: float = 100.0     # Maximum single trade size in USD
-    exposure_limit: float = 5000.0        # Maximum total exposure in USD
-    volatility_threshold: float = 0.05    # Volatility threshold for circuit breaker
-    entropy_threshold: float = 0.8        # Entropy threshold for circuit breaker
+
+
+"""
+"""
+    daily_loss_limit: float = 1000.0  # Maximum daily loss in USD
+    single_trade_limit: float = 100.0  # Maximum single trade size in USD
+    exposure_limit: float = 5000.0  # Maximum total exposure in USD
+    volatility_threshold: float = 0.05  # Volatility threshold for circuit breaker
+    entropy_threshold: float = 0.8  # Entropy threshold for circuit breaker
     position_reconciliation_interval: int = 300  # Reconciliation interval in seconds
 
 
 @dataclass
 class PositionData:
+
     """Position data for reconciliation."""
+
+
+"""
+"""
     asset: str
     quantity: float
     entry_price: float
@@ -103,7 +135,12 @@ class PositionData:
 
 @dataclass
 class RiskEvent:
+
     """Risk event data."""
+
+
+"""
+"""
     event_type: str
     severity: RiskLevel
     description: str
@@ -114,47 +151,56 @@ class RiskEvent:
 
 
 class RiskGuard:
+
     """
+"""
+
+
+"""
     Risk Guard - Safety and capital controls for Schwabot.
 
     Provides comprehensive risk management including:
-    - Global daily-loss, single-trade, and exposure caps
-    - Circuit-breaker tied to abnormal entropy/volatility spikes
+    - Global daily - loss, single - trade, and exposure caps
+    - Circuit - breaker tied to abnormal entropy / volatility spikes
     - Position reconciliation against exchange balances
     - Manual panic button CLI
     """
+"""
+"""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize risk guard."""
+"""
+"""
         self.config = config or {}
 
-        # Risk limits
+# Risk limits
         self.risk_limits = RiskLimits()
         self.current_risk_level = RiskLevel.LOW
         self.circuit_breaker_state = CircuitBreakerState.NORMAL
 
-        # Daily tracking
+# Daily tracking
         self.daily_start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         self.daily_pnl = 0.0
         self.daily_trades = 0
         self.daily_volume = 0.0
 
-        # Position tracking
+# Position tracking
         self.positions: Dict[str, PositionData] = {}
         self.total_exposure = 0.0
         self.last_reconciliation = datetime.now()
 
-        # Circuit breaker tracking
+# Circuit breaker tracking
         self.volatility_history: List[float] = []
         self.entropy_history: List[float] = []
         self.circuit_breaker_events: List[RiskEvent] = []
 
-        # Risk events
+# Risk events
         self.risk_events: List[RiskEvent] = []
         self.panic_mode = False
         self.panic_triggered_at: Optional[datetime] = None
 
-        # Performance tracking
+# Performance tracking
         self.total_risk_checks = 0
         self.risk_violations = 0
         self.circuit_breaker_trips = 0
@@ -162,22 +208,28 @@ class RiskGuard:
         safe_safe_print("\\u1f6e1\\ufe0f Risk Guard initialized")
 
     def set_risk_limits(self, limits: RiskLimits) -> None:
+
         """Set risk limits."""
+"""
+"""
         self.risk_limits = limits
         safe_safe_print(f"\\u2705 Risk limits updated: Daily loss = ${limits.daily_loss_limit}")
 
     def check_daily_loss_limit(self, trade_pnl: float) -> bool:
+
         """Check if trade would exceed daily loss limit."""
+"""
+"""
         try:
-            # Check if we need to reset daily tracking
+# Check if we need to reset daily tracking
             now = datetime.now()
             if now.date() > self.daily_start_time.date():
                 self._reset_daily_tracking()
 
-            # Calculate new daily PnL
+# Calculate new daily PnL
             new_daily_pnl = self.daily_pnl + trade_pnl
 
-            # Check limit
+# Check limit
             if new_daily_pnl < -self.risk_limits.daily_loss_limit:
                 self._record_risk_event(
                     "daily_loss_limit",
@@ -194,7 +246,10 @@ class RiskGuard:
             return False
 
     def check_single_trade_limit(self, trade_size: float) -> bool:
+
         """Check if trade size exceeds single trade limit."""
+"""
+"""
         try:
             if trade_size > self.risk_limits.single_trade_limit:
                 self._record_risk_event(
@@ -212,7 +267,10 @@ class RiskGuard:
             return False
 
     def check_exposure_limit(self, new_exposure: float) -> bool:
+
         """Check if new exposure would exceed total exposure limit."""
+"""
+"""
         try:
             total_exposure = self.total_exposure + new_exposure
 
@@ -232,12 +290,15 @@ class RiskGuard:
             return False
 
     def check_circuit_breaker(
+
         self,
         volatility: float,
         entropy: float,
         market_data: Optional[Dict[str, Any]] = None
     ) -> bool:
         """
+"""
+"""
         Check circuit breaker conditions.
 
         Circuit breaker is triggered by:
@@ -245,30 +306,32 @@ class RiskGuard:
         - Abnormal entropy levels
         - Market anomalies
         """
+"""
+"""
         try:
-            # Update history
+# Update history
             self.volatility_history.append(volatility)
             self.entropy_history.append(entropy)
 
-            # Keep only recent history
+# Keep only recent history
             if len(self.volatility_history) > 100:
                 self.volatility_history = self.volatility_history[-100:]
             if len(self.entropy_history) > 100:
                 self.entropy_history = self.entropy_history[-100:]
 
-            # Check volatility threshold
+# Check volatility threshold
             volatility_triggered = volatility > self.risk_limits.volatility_threshold
 
-            # Check entropy threshold
+# Check entropy threshold
             entropy_triggered = entropy > self.risk_limits.entropy_threshold
 
-            # Check for volatility spikes (sudden large increases)
+# Check for volatility spikes (sudden large increases)
             volatility_spike = False
             if len(self.volatility_history) >= 2:
                 volatility_change = unified_math.abs(volatility - self.volatility_history[-2])
                 volatility_spike = volatility_change > (self.risk_limits.volatility_threshold * 0.5)
 
-            # Determine circuit breaker state
+# Determine circuit breaker state
             if volatility_triggered or entropy_triggered or volatility_spike:
                 if self.circuit_breaker_state == CircuitBreakerState.NORMAL:
                     self.circuit_breaker_state = CircuitBreakerState.WARNING
@@ -281,7 +344,7 @@ class RiskGuard:
                     return False
 
             elif self.circuit_breaker_state != CircuitBreakerState.NORMAL:
-                # Reset circuit breaker if conditions normalize
+# Reset circuit breaker if conditions normalize
                 self.circuit_breaker_state = CircuitBreakerState.NORMAL
                 self._record_circuit_breaker_event("reset", volatility, entropy)
 
@@ -292,6 +355,7 @@ class RiskGuard:
             return False
 
     def update_position(
+
         self,
         asset: str,
         quantity: float,
@@ -299,23 +363,25 @@ class RiskGuard:
         current_price: float
     ) -> None:
         """Update position data."""
+"""
+"""
         try:
             unrealized_pnl = (current_price - entry_price) * quantity
 
             position = PositionData(
-                asset=asset,
-                quantity=quantity,
-                entry_price=entry_price,
-                current_price=current_price,
-                unrealized_pnl=unrealized_pnl,
-                timestamp=datetime.now()
+                asset = asset,
+                quantity = quantity,
+                entry_price = entry_price,
+                current_price = current_price,
+                unrealized_pnl = unrealized_pnl,
+                timestamp = datetime.now()
             )
 
             self.positions[asset] = position
 
-            # Update total exposure
+# Update total exposure
             self.total_exposure = sum(unified_math.abs(pos.quantity * pos.current_price)
-                                      for pos in self.positions.values())
+                                        for pos in self.positions.values())
 
             safe_safe_print(f"\\u2705 Position updated: {asset} = ${unrealized_pnl:.2f}")
 
@@ -324,11 +390,15 @@ class RiskGuard:
 
     async def reconcile_positions(self, exchange_balances: Dict[str, float]) -> Dict[str, Any]:
         """
+"""
+"""
         Reconcile positions against exchange balances.
 
         This ensures our internal position tracking matches
         the actual exchange balances.
         """
+"""
+"""
         try:
             reconciliation_results = {
                 'reconciled': True,
@@ -351,7 +421,7 @@ class RiskGuard:
                     })
                     reconciliation_results['total_discrepancy'] += discrepancy
 
-                    # Mark position as unreconciled
+# Mark position as unreconciled
                     position.exchange_balance = exchange_balance
                     position.reconciled = False
 
@@ -381,12 +451,17 @@ class RiskGuard:
             return {'reconciled': False, 'error': str(e)}
 
     def trigger_panic_mode(self, reason: str = "Manual trigger") -> None:
+
         """
+"""
+"""
         Trigger panic mode - emergency stop for all trading.
 
         This is the manual panic button that immediately stops
         all trading activity.
         """
+"""
+"""
         try:
             self.panic_mode = True
             self.panic_triggered_at = datetime.now()
@@ -398,12 +473,12 @@ class RiskGuard:
                 "manual_trigger"
             )
 
-            # Notify fault bus if available
+# Notify fault bus if available
             if FAULT_BUS_AVAILABLE:
                 fault_bus.record_fault(
                     fault_type="risk_guard_panic",
                     severity="critical",
-                    description=f"Panic mode triggered: {reason}",
+                    description = f"Panic mode triggered: {reason}",
                     context="risk_guard"
                 )
 
@@ -414,7 +489,10 @@ class RiskGuard:
             safe_safe_print(f"\\u274c Panic mode trigger failed: {safe_format_error(e, 'panic_mode')}")
 
     def reset_panic_mode(self) -> None:
+
         """Reset panic mode."""
+"""
+"""
         try:
             self.panic_mode = False
             self.panic_triggered_at = None
@@ -432,7 +510,10 @@ class RiskGuard:
             safe_safe_print(f"\\u274c Panic mode reset failed: {safe_format_error(e, 'panic_reset')}")
 
     def is_trading_allowed(self) -> bool:
+
         """Check if trading is currently allowed."""
+"""
+"""
         return (
             not self.panic_mode and
             self.circuit_breaker_state != CircuitBreakerState.TRIPPED and
@@ -440,7 +521,10 @@ class RiskGuard:
         )
 
     def get_risk_status(self) -> Dict[str, Any]:
+
         """Get current risk status."""
+"""
+"""
         return {
             'panic_mode': self.panic_mode,
             'panic_triggered_at': self.panic_triggered_at.isoformat() if self.panic_triggered_at else None,
@@ -457,14 +541,18 @@ class RiskGuard:
         }
 
     def _reset_daily_tracking(self) -> None:
+
         """Reset daily tracking counters."""
-        self.daily_start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+"""
+"""
+        self.daily_start_time = datetime.now().replace(hour = 0, minute = 0, second = 0, microsecond = 0)
         self.daily_pnl = 0.0
         self.daily_trades = 0
         self.daily_volume = 0.0
         safe_safe_print("\\u1f504 Daily tracking reset")
 
     def _record_risk_event(
+
         self,
         event_type: str,
         severity: RiskLevel,
@@ -473,21 +561,23 @@ class RiskGuard:
         metadata: Optional[Dict[str, Any]] = None
     ) -> None:
         """Record a risk event."""
+"""
+"""
         try:
             event = RiskEvent(
-                event_type=event_type,
-                severity=severity,
-                description=description,
-                timestamp=datetime.now(),
-                triggered_by=triggered_by,
+                event_type = event_type,
+                severity = severity,
+                description = description,
+                timestamp = datetime.now(),
+                triggered_by = triggered_by,
                 action_taken="logged",
-                metadata=metadata or {}
+                metadata = metadata or {}
             )
 
             self.risk_events.append(event)
             self.risk_violations += 1
 
-            # Keep only recent events
+# Keep only recent events
             if len(self.risk_events) > 1000:
                 self.risk_events = self.risk_events[-1000:]
 
@@ -497,18 +587,21 @@ class RiskGuard:
             safe_safe_print(f"\\u274c Risk event recording failed: {safe_format_error(e, 'record_risk_event')}")
 
     def _record_circuit_breaker_event(
+
         self,
         event_type: str,
         volatility: float,
         entropy: float
     ) -> None:
         """Record circuit breaker event."""
+"""
+"""
         try:
             event = RiskEvent(
-                event_type=f"circuit_breaker_{event_type}",
-                severity=RiskLevel.HIGH if event_type == "tripped" else RiskLevel.MEDIUM,
-                description=f"Circuit breaker {event_type}: volatility={volatility:.4f}, entropy={entropy:.4f}",
-                timestamp=datetime.now(),
+                event_type = f"circuit_breaker_{event_type}",
+                severity = RiskLevel.HIGH if event_type == "tripped" else RiskLevel.MEDIUM,
+                description = f"Circuit breaker {event_type}: volatility={volatility:.4f}, entropy={entropy:.4f}",
+                timestamp = datetime.now(),
                 triggered_by="circuit_breaker",
                 action_taken="circuit_breaker_activation" if event_type == "tripped" else "monitoring",
                 metadata={
@@ -520,7 +613,7 @@ class RiskGuard:
 
             self.circuit_breaker_events.append(event)
 
-            # Keep only recent events
+# Keep only recent events
             if len(self.circuit_breaker_events) > 100:
                 self.circuit_breaker_events = self.circuit_breaker_events[-100:]
 
@@ -537,18 +630,24 @@ risk_guard = RiskGuard()
 
 # Convenience functions for external access
 def get_risk_guard() -> RiskGuard:
+
     """Get global risk guard instance."""
+"""
+"""
     return risk_guard
 
 
 def check_risk_limits(trade_pnl: float, trade_size: float, new_exposure: float) -> bool:
+
     """Check all risk limits for a trade."""
+"""
+"""
     guard = get_risk_guard()
 
-    # Update tracking
+# Update tracking
     guard.total_risk_checks += 1
 
-    # Check all limits
+# Check all limits
     daily_ok = guard.check_daily_loss_limit(trade_pnl)
     trade_ok = guard.check_single_trade_limit(trade_size)
     exposure_ok = guard.check_exposure_limit(new_exposure)
@@ -557,58 +656,73 @@ def check_risk_limits(trade_pnl: float, trade_size: float, new_exposure: float) 
 
 
 def check_circuit_breaker(volatility: float, entropy: float) -> bool:
+
     """Check circuit breaker conditions."""
+"""
+"""
     guard = get_risk_guard()
     return guard.check_circuit_breaker(volatility, entropy)
 
 
 def trigger_panic_mode(reason: str = "Manual trigger") -> None:
+
     """Trigger panic mode."""
+"""
+"""
     guard = get_risk_guard()
     guard.trigger_panic_mode(reason)
 
 
 def reset_panic_mode() -> None:
+
     """Reset panic mode."""
+"""
+"""
     guard = get_risk_guard()
     guard.reset_panic_mode()
 
 
 def is_trading_allowed() -> bool:
+
     """Check if trading is currently allowed."""
+"""
+"""
     guard = get_risk_guard()
     return guard.is_trading_allowed()
 
 
 def get_risk_status() -> Dict[str, Any]:
+
     """Get current risk status."""
+"""
+"""
     guard = get_risk_guard()
     return guard.get_risk_status()
 
 
 # Example usage
 if __name__ == "__main__":
-    # Test risk guard
+# Test risk guard
     safe_print("\\u1f9ea Testing Risk Guard...")
 
     guard = get_risk_guard()
 
-    # Test risk limits
-    trade_ok = check_risk_limits(trade_pnl=-50.0, trade_size=75.0, new_exposure=1000.0)
+# Test risk limits
+    trade_ok = check_risk_limits(trade_pnl=-50.0, trade_size = 75.0, new_exposure = 1000.0)
     safe_print(f"\\u2705 Risk limit check: {trade_ok}")
 
-    # Test circuit breaker
-    circuit_ok = check_circuit_breaker(volatility=0.03, entropy=0.6)
+# Test circuit breaker
+    circuit_ok = check_circuit_breaker(volatility = 0.03, entropy = 0.6)
     safe_print(f"\\u2705 Circuit breaker check: {circuit_ok}")
 
-    # Test panic mode
+# Test panic mode
     trigger_panic_mode("Test trigger")
     safe_print(f"\\u2705 Panic mode: {guard.panic_mode}")
 
-    # Reset panic mode
+# Reset panic mode
     reset_panic_mode()
     safe_print(f"\\u2705 Panic mode reset: {not guard.panic_mode}")
 
-    # Get status
+# Get status
     status = get_risk_status()
     safe_print(f"\\u2705 Risk Status: {status}")

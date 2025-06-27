@@ -1,6 +1,21 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any
+import logging
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 NEWMATH VALIDATION
 =================
@@ -8,26 +23,30 @@ NEWMATH VALIDATION
 Comprehensive validation and testing framework for the new math library.
 Clean implementation for testing all mathematical components.
 """
+"""
+"""
 
-from core.unified_math_system import unified_math
-import time
-from typing import Dict, Any
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 def run_basic_tests() -> bool:
     """
+"""
+
+
+"""
     Run basic validation tests for the new math library.
 
     Returns:
         True if all basic tests pass
     """
-    try:
+"""
+"""
+   try:
         safe_print("\\u1f52c Running NewMath Basic Validation Tests...")
 
-        # Test tensor operations
+# Test tensor operations
         from . import tensor_ops
         A = np.random.random((2, 3))
         B = np.random.random((3, 2))
@@ -35,20 +54,20 @@ def run_basic_tests() -> bool:
         tensor_test = result.shape == (2, 2)
         safe_print(f"\\u2713 Tensor contraction: {'PASS' if tensor_test else 'FAIL'}")
 
-        # Test profit math
+# Test profit math
         from . import profit_math
         prices = np.array([100.0, 101.5, 99.8, 102.3])
         derivatives = profit_math.profit_derivative(prices)
         profit_test = len(derivatives) == len(prices) - 1
         safe_print(f"\\u2713 Profit derivative: {'PASS' if profit_test else 'FAIL'}")
 
-        # Test entropy calculations
+# Test entropy calculations
         from . import entropy_calc
         entropy = entropy_calc.calculate_entropy(1000.0, 0.1)
         entropy_test = entropy > 0
         safe_print(f"\\u2713 Entropy calculation: {'PASS' if entropy_test else 'FAIL'}")
 
-        # Test hash vectors
+# Test hash vectors
         from . import hash_vectors
         hash_vec = hash_vectors.generate_hash_vector(100.0, 2.5, 42)
         hash_test = len(hash_vec) == 64
@@ -65,12 +84,18 @@ def run_basic_tests() -> bool:
 
 def run_full_tests() -> Dict[str, Any]:
     """
+"""
+
+
+"""
     Run comprehensive validation tests.
 
     Returns:
         Dictionary with detailed test results
     """
-    safe_print("\\u1f9ee Running NewMath Comprehensive Validation Suite...")
+"""
+"""
+   safe_print("\\u1f9ee Running NewMath Comprehensive Validation Suite...")
     safe_print("=" * 60)
 
     start_time = time.time()
@@ -81,7 +106,7 @@ def run_full_tests() -> Dict[str, Any]:
         "test_details": []
     }
 
-    # Test each module
+# Test each module
     test_modules = [
         ("Tensor Operations", _test_tensor_operations),
         ("Profit Mathematics", _test_profit_math),
@@ -145,20 +170,24 @@ def run_full_tests() -> Dict[str, Any]:
 
 def _test_tensor_operations() -> Dict[str, Any]:
     """Test tensor operations module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import tensor_ops
 
-        # Test tensor contraction
+# Test tensor contraction
         A = np.random.random((3, 4))
         B = np.random.random((4, 5))
         result = tensor_ops.tensor_contraction(A, B)
         contraction_ok = result.shape == (3, 5)
 
-        # Test bit phase operations
+# Test bit phase operations
         phi_4, phi_8, phi_42 = tensor_ops.bit_phase_operations(0x12345)
         bit_phase_ok = all(isinstance(x, int) for x in [phi_4, phi_8, phi_42])
 
-        # Test similarity
+# Test similarity
         tensor_a = np.random.random((2, 3))
         tensor_b = np.random.random((2, 3))
         similarity = tensor_ops.tensor_similarity(tensor_a, tensor_b)
@@ -178,19 +207,23 @@ def _test_tensor_operations() -> Dict[str, Any]:
 
 def _test_profit_math() -> Dict[str, Any]:
     """Test profit mathematics module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import profit_math
 
-        # Test profit derivative
+# Test profit derivative
         prices = np.array([100.0, 101.5, 99.8, 102.3, 98.7])
         derivatives = profit_math.profit_derivative(prices)
         derivative_ok = len(derivatives) == len(prices) - 1
 
-        # Test trade execution logic
+# Test trade execution logic
         should_trade = profit_math.should_execute_trade(2.5, 2.0)
         trade_logic_ok = should_trade is True
 
-        # Test momentum calculation
+# Test momentum calculation
         momentum = profit_math.profit_momentum(prices, window=3)
         momentum_ok = len(momentum) == len(prices)
 
@@ -208,18 +241,22 @@ def _test_profit_math() -> Dict[str, Any]:
 
 def _test_entropy_calc() -> Dict[str, Any]:
     """Test entropy calculations module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import entropy_calc
 
-        # Test basic entropy
+# Test basic entropy
         entropy = entropy_calc.calculate_entropy(1000.0, 0.1)
         entropy_ok = entropy > 0
 
-        # Test entropy trigger
+# Test entropy trigger
         trigger = entropy_calc.entropy_trigger(50.0, entropy)
         trigger_ok = isinstance(trigger, float)
 
-        # Test volume entropy
+# Test volume entropy
         volumes = np.array([1000, 1200, 800, 1500])
         prices = np.array([100, 101, 99, 102])
         vol_entropy = entropy_calc.volume_entropy(volumes, prices)
@@ -239,20 +276,24 @@ def _test_entropy_calc() -> Dict[str, Any]:
 
 def _test_hash_vectors() -> Dict[str, Any]:
     """Test hash vectors module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import hash_vectors
 
-        # Test hash generation
+# Test hash generation
         hash_vec = hash_vectors.generate_hash_vector(100.0, 2.5, 42)
         hash_gen_ok = len(hash_vec) == 64
 
-        # Test similarity
+# Test similarity
         hash_a = "abc123"
         hash_b = "abc456"
         similarity = hash_vectors.hash_similarity_score(hash_a, hash_b)
         similarity_ok = 0.0 <= similarity <= 1.0
 
-        # Test memory encoding
+# Test memory encoding
         data = np.array([1.0, 2.0, 3.0])
         encoded = hash_vectors.memory_encoding(data)
         encoding_ok = len(encoded) == len(data)
@@ -271,16 +312,20 @@ def _test_hash_vectors() -> Dict[str, Any]:
 
 def _test_matrix_utils() -> Dict[str, Any]:
     """Test matrix utilities module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import matrix_utils
 
-        # Test safe multiplication
+# Test safe multiplication
         A = np.random.random((3, 4))
         B = np.random.random((4, 2))
         result, info = matrix_utils.safe_matrix_multiply(A, B)
         multiply_ok = info["success"] and result.shape == (3, 2)
 
-        # Test condition check
+# Test condition check
         matrix = np.random.random((3, 3))
         condition = matrix_utils.condition_check(matrix)
         condition_ok = "shape" in condition
@@ -294,15 +339,19 @@ def _test_matrix_utils() -> Dict[str, Any]:
 
 def _test_render_engine() -> Dict[str, Any]:
     """Test render engine module."""
-    try:
+
+
+"""
+"""
+   try:
         from . import render_engine
 
-        # Test price line rendering
+# Test price line rendering
         prices = [100.0, 101.5, 99.8, 102.3]
         price_result = render_engine.render_price_line(prices)
         price_ok = "points" in price_result and len(price_result["points"]) == len(prices)
 
-        # Test function plotting
+# Test function plotting
         func_values = [np.unified_math.sin(x / 10) for x in range(20)]
         func_result = render_engine.plot_function(func_values)
         func_ok = "points" in func_result

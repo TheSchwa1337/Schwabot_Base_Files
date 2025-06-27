@@ -1,8 +1,20 @@
+# -*- coding: utf - 8 -*-
+"""BTC vector aggregator \\u2013 volume - weighted price analysis and FFT filtering.
+"""BTC vector aggregator \\u2013 volume - weighted price analysis and FFT filtering.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
+"""BTC vector aggregator \\u2013 volume - weighted price analysis and FFT filtering.
+"""BTC vector aggregator \\u2013 volume - weighted price analysis and FFT filtering.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""BTC vector aggregator \\u2013 volume-weighted price analysis and FFT filtering.
+
+
+
+
+
 
 Implements the formulas:
     V_btc = \\u03a3_i^n [p_exit(i) \\u2212 p_entry(i)]\\u00b7w_vol(i)
@@ -12,6 +24,8 @@ Implements the formulas:
 
 This module aggregates BTC price movements with volume weighting and applies
 spectral filtering for enhanced signal quality.
+"""
+"""
 """
 
 
@@ -32,6 +46,7 @@ __all__: list[str] = [
 
 
 def btc_vector(
+
     exit_prices: Sequence[float],
     entry_prices: Sequence[float],
     volume_weights: Sequence[float],
@@ -47,14 +62,16 @@ def btc_vector(
     volume_weights
         Volume weights w_vol(i) for each trade.
     """
+"""
+"""
     if not (len(exit_prices) == len(entry_prices) == len(volume_weights)):
         raise ValueError("all input sequences must have same length")
 
-    exit_arr = np.asarray(exit_prices, dtype=float)
-    entry_arr = np.asarray(entry_prices, dtype=float)
-    vol_arr = np.asarray(volume_weights, dtype=float)
+    exit_arr = np.asarray(exit_prices, dtype = float)
+    entry_arr = np.asarray(entry_prices, dtype = float)
+    vol_arr = np.asarray(volume_weights, dtype = float)
 
-    # Compute price differences weighted by volume
+# Compute price differences weighted by volume
     price_diffs = exit_arr - entry_arr
     weighted_diffs = price_diffs * vol_arr
 
@@ -62,6 +79,7 @@ def btc_vector(
 
 
 def btc_eta(
+
     price_delta: float,
     time_delta: float,
     volumes: Sequence[float],
@@ -77,6 +95,8 @@ def btc_eta(
     volumes
         Volume series vol(j) to sum.
     """
+"""
+"""
     if time_delta <= 0:
         raise ValueError("time_delta must be positive")
 
@@ -87,6 +107,7 @@ def btc_eta(
 
 
 def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
+
     """Return \\u039e_btc(t) = tanh(V_btc \\u00b7 \\u03b7_btc).
 
     Parameters
@@ -96,11 +117,14 @@ def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
     eta_btc
         Eta value from btc_eta().
     """
+"""
+"""
     product = v_btc * eta_btc
     return float(np.tanh(product))
 
 
 def btc_spectral_aggregate(
+
     xi_series: Sequence[float],
     peak_frequency: float,
     *,
@@ -117,22 +141,24 @@ def btc_spectral_aggregate(
     filter_width
         Width of the frequency filter around f_peak.
     """
-    xi_arr = np.asarray(xi_series, dtype=float)
+"""
+"""
+    xi_arr = np.asarray(xi_series, dtype = float)
 
     if len(xi_arr) == 0:
-        return np.array([], dtype=complex)
+        return np.array([], dtype = complex)
 
-    # Compute FFT
+# Compute FFT
     xi_fft = np.fft.fft(xi_arr)
 
-    # Create frequency array
+# Create frequency array
     n = len(xi_arr)
     freqs = np.fft.fftfreq(n)
 
-    # Create Gaussian filter centered at peak_frequency
+# Create Gaussian filter centered at peak_frequency
     filter_mask = unified_math.exp(-((freqs - peak_frequency) ** 2) / (2 * filter_width**2))
 
-    # Apply filter
+# Apply filter
     filtered_fft = xi_fft * filter_mask
 
     return filtered_fft

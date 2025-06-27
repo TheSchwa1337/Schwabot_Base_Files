@@ -1,5 +1,16 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Comprehensive flake8 fixer for Schwabot core directory.
 
 This script systematically fixes:
@@ -7,31 +18,39 @@ This script systematically fixes:
 - E501: Break long lines intelligently
 - E128: Fix continuation line indentation
 """
-
-from pathlib import Path
+"""
+"""
+"""
+"""
 
 
 def fix_docstring_periods_advanced(content: str) -> str:
     """Advanced docstring period fixing."""."""
-    # More sophisticated pattern to catch docstring first lines
+"""
+
+
+"""
+"""
+"""
+# More sophisticated pattern to catch docstring first lines
     lines = content.split("\n")
     fixed_lines = []
 
     for i, line in enumerate(lines):
-        # Look for docstring patterns
+# Look for docstring patterns
         if '"""' in line:
-            # Check if this is a docstring first line
+# Check if this is a docstring first line
             if line.strip().startswith('"""') and not line.strip().endswith(
                 '"""'
             ):
-                # This is a multi-line docstring start
+# This is a multi - line docstring start
                 if not line.strip().endswith("."):
-                    # Add period before closing quotes
+# Add period before closing quotes
                     line = line.rstrip() + "." + line[line.rfind('"""') :]
             elif line.strip().startswith('"""') and line.strip().endswith(
                 '"""'
             ):
-                # Single line docstring
+# Single line docstring
                 content_part = line.strip()[3:-3].strip()
                 if content_part and not content_part.endswith("."):
                     line = line.replace(content_part, content_part + ".")
@@ -43,18 +62,22 @@ def fix_docstring_periods_advanced(content: str) -> str:
 
 def fix_long_lines_advanced(content: str) -> str:
     """Advanced long line fixing."""."""
+"""
+"""
+"""
+"""
     lines = content.split("\n")
     fixed_lines = []
 
     for line in lines:
         if len(line) > 79:
-            # Try to break at logical points
+# Try to break at logical points
             if (
                 "(" in line
                 and ")" in line
                 and line.count("(") == line.count(")")
             ):
-                # Function call - break at commas
+# Function call - break at commas
                 indent = len(line) - len(line.lstrip())
                 if "," in line:
                     parts = line.split(",")
@@ -69,12 +92,12 @@ def fix_long_lines_advanced(content: str) -> str:
                         fixed_lines.append(new_line)
                         continue
 
-            # Try to break long strings
+# Try to break long strings
             if 'f"' in line or "f'" in line:
-                # F-string - try to break at logical points
+# F - string - try to break at logical points
                 pass  # Keep as is for now
 
-            # Try to break long assignments
+# Try to break long assignments
             if " = " in line and len(line) > 79:
                 indent = len(line) - len(line.lstrip())
                 equal_pos = line.find(" = ")
@@ -93,6 +116,10 @@ def fix_long_lines_advanced(content: str) -> str:
 
 def fix_continuation_indentation_advanced(content: str) -> str:
     """Advanced continuation line indentation fixing."""."""
+"""
+"""
+"""
+"""
     lines = content.split("\n")
     fixed_lines = []
 
@@ -101,7 +128,7 @@ def fix_continuation_indentation_advanced(content: str) -> str:
             prev_line = lines[i - 1]
             current_indent = len(line) - len(line.lstrip())
 
-            # Check for continuation lines
+# Check for continuation lines
             if (
                 (
                     line.strip().startswith("(")
@@ -117,14 +144,14 @@ def fix_continuation_indentation_advanced(content: str) -> str:
                 )
             ):
 
-                # This should be indented properly
+# This should be indented properly
                 base_indent = len(prev_line) - len(prev_line.lstrip())
                 expected_indent = base_indent + 4
 
                 if current_indent < expected_indent:
                     line = " " * expected_indent + line.lstrip()
 
-            # Check for parameter continuation
+# Check for parameter continuation
             elif line.strip().startswith(",") and prev_line.rstrip().endswith(
                 ","
             ):
@@ -140,20 +167,24 @@ def fix_continuation_indentation_advanced(content: str) -> str:
 
 def process_file_advanced(file_path: Path) -> bool:
     """Process a single file with advanced fixes."""."""
+"""
+"""
+"""
+"""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf - 8") as f:
             content = f.read()
 
         original_content = content
 
-        # Apply advanced fixes
+# Apply advanced fixes
         content = fix_docstring_periods_advanced(content)
         content = fix_long_lines_advanced(content)
         content = fix_continuation_indentation_advanced(content)
 
-        # Write back if changed
+# Write back if changed
         if content != original_content:
-            with open(file_path, "w", encoding="utf-8") as f:
+            with open(file_path, "w", encoding="utf - 8") as f:
                 f.write(content)
             return True
 
@@ -165,6 +196,10 @@ def process_file_advanced(file_path: Path) -> bool:
 
 def main():
     """Main function to process core directory."""."""
+"""
+"""
+"""
+"""
     core_dir = Path("core")
 
     if not core_dir.exists():
@@ -174,14 +209,14 @@ def main():
     files_processed = 0
     files_modified = 0
 
-    # Process files in order of likely issues
+# Process files in order of likely issues
     priority_files = [
         "simplified_btc_integration.py",
         "unified_mathematical_trading_controller.py",
         "integration_orchestrator.py",
     ]
 
-    # Process priority files first
+# Process priority files first
     for filename in priority_files:
         file_path = core_dir / filename
         if file_path.exists():
@@ -190,7 +225,7 @@ def main():
                 files_modified += 1
                 safe_print(f"Modified: {file_path}")
 
-    # Process remaining files
+# Process remaining files
     for py_file in core_dir.rglob("*.py"):
         if py_file.name not in priority_files:
             files_processed += 1
@@ -205,4 +240,9 @@ def main():
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
+"""
+"""
 """

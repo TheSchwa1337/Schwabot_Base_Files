@@ -1,31 +1,42 @@
-# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
+# -*- coding: utf - 8 -*-
+from __future__ import annotations
 
-# #!/usr/bin/env python3
-""""""
-Entropy Engine - Advanced Entropy-Based Signal Processing
-========================================================
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+from scipy.signal import find_peaks, savgol_filter
+from scipy.spatial.distance import pdist, squareform
+from scipy.stats import entropy
+from typing import List, Tuple, Optional, Union, Dict, Any
+import logging
+import warnings
 
-Provides advanced entropy-based signal processing, wave detection,
+from numpy.typing import NDArray
+import numpy as np
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-\\n# """"""
+"""
+"""
+Entropy Engine - Advanced Entropy - Based Signal Processing
+== == == == == == == == == == == == == == == == == == == == == == == == == == == ==
+
+Provides advanced entropy - based signal processing, wave detection,
 and pattern analysis for the Schwabot trading system.
 
 Core Functions:
-- entropy_filter: Apply entropy-based filtering to signals
+- entropy_filter: Apply entropy - based filtering to signals
 - calculate_dynamic_entropy: Calculate dynamic entropy over time
 - entropy_wave_detection: Detect entropy waves and patterns
 - entropy_pattern_analysis: Analyze entropy patterns
-- entropy_based_clustering: Perform entropy-based clustering
+- entropy_based_clustering: Perform entropy - based clustering
 """"""
+"""
+"""
 
-
-import numpy as np
-from numpy.typing import NDArray
-from typing import List, Tuple, Optional, Union, Dict, Any
-import logging
-from scipy.stats import entropy
-from scipy.signal import find_peaks, savgol_filter
-from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
-from scipy.spatial.distance import pdist, squareform
-import warnings
 
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -33,23 +44,45 @@ warnings.filterwarnings('ignore', category=RuntimeWarning)
 logger = logging.getLogger(__name__)
 
 
-class Placeholder: pass
+class Placeholder:
+
+    """[BRAIN] Placeholder class for recursive profit mapping"""
+
+
+"""
+"""
+    pass
     """"""
+"""
+"""
+
+
 Advanced Entropy Engine for Schwabot Trading System.
 
-This engine provides comprehensive entropy-based signal processing
+This engine provides comprehensive entropy - based signal processing
 and pattern analysis capabilities.
 """"""
+"""
+"""
 
 
 def __init__(self):
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
+
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         """Initialize the entropy engine."""
+"""
+"""
 
 
-self.epsilon = 1e-8  # Small value to prevent division by zero
+self.epsilon = 1e - 8  # Small value to prevent division by zero
 self.min_entropy_threshold = 0.1  # Minimum entropy threshold
 self.max_entropy_threshold = 0.9  # Maximum entropy threshold
 self.wave_detection_sensitivity = 0.5  # Wave detection sensitivity
@@ -58,11 +91,22 @@ logger.info("Entropy Engine initialized")
 
 
 def entropy_filter(self, signal: NDArray, threshold: float = 0.5) -> NDArray:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
+
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         """"""
-Apply entropy-based filtering to signal.
+"""
+"""
+
+
+Apply entropy - based filtering to signal.
 
 Args:
 signal: Input signal array
@@ -71,29 +115,34 @@ threshold: Entropy threshold for filtering
 Returns:
 Filtered signal array
 """"""
+"""
+"""
         try:
             if len(signal) == 0:
                 return signal.copy()
 
-            # Calculate local entropy for each point
+# Calculate local entropy for each point
 filtered_signal = np.zeros_like(signal)
             window_size = min(10, len(signal) // 4)
 
             for i in range(len(signal)):
-                # Define local window
+# Define local window
 start_idx = max(0, i - window_size // 2)
                 end_idx = min(len(signal), i + window_size // 2 + 1)
                 local_window = signal[start_idx:end_idx]
 
-                # Calculate local entropy
+# Calculate local entropy
 local_entropy = self._calculate_local_entropy(local_window)
 
-                # Apply filtering based on entropy threshold
+# Apply filtering based on entropy threshold
                 if local_entropy > threshold:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 filtered_signal[i] = signal[i]
                 else:
-                    # Apply smoothing for low entropy regions
+# Apply smoothing for low entropy regions
 filtered_signal[i] = np.mean(local_window)
 
             return filtered_signal
@@ -105,9 +154,17 @@ logger.error(f"Entropy filtering failed: {e}")
 def calculate_dynamic_entropy(self, signal: NDArray, window: int = 20) -> float:
 
 
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         """"""
+"""
+"""
 Calculate dynamic entropy over a sliding window.
 
 Args:
@@ -117,11 +174,13 @@ window: Window size for entropy calculation
 Returns:
 Dynamic entropy value
 """"""
+"""
+"""
         try:
             if len(signal) < window:
                 return self._calculate_local_entropy(signal)
 
-            # Calculate entropy for the most recent window
+# Calculate entropy for the most recent window
 recent_window = signal[-window:]
             return self._calculate_local_entropy(recent_window)
 
@@ -132,8 +191,10 @@ logger.error(f"Dynamic entropy calculation failed: {e}")
 def entropy_wave_detection(self, signal: NDArray,)
 
 
-                             min_peak_distance: int = 5 -> Dict[str, Any]:
+                                min_peak_distance: int = 5 -> Dict[str, Any]:
 """"""
+"""
+"""
 Detect entropy waves and patterns in signal.
 
 Args:
@@ -143,6 +204,8 @@ min_peak_distance: Minimum distance between peaks
 Returns:
 Dictionary containing wave detection results
 """"""
+"""
+"""
         try:
             if len(signal) < 10:
                 return {}
@@ -153,7 +216,7 @@ Dictionary containing wave detection results
 'wave_amplitude': 0.0
 
 
-            # Calculate entropy series
+# Calculate entropy series
 entropy_series = []
 window_size = min(10, len(signal) // 4)
 
@@ -166,15 +229,15 @@ local_entropy = self._calculate_local_entropy(local_window)
 
 entropy_series = np.array(entropy_series)
 
-            # Detect peaks and troughs
-peaks, _ = find_peaks(entropy_series, distance=min_peak_distance)
-            troughs, _ = find_peaks(-entropy_series, distance=min_peak_distance)
+# Detect peaks and troughs
+peaks, _ = find_peaks(entropy_series, distance = min_peak_distance)
+            troughs, _ = find_peaks(-entropy_series, distance = min_peak_distance)
 
-            # Calculate wave statistics
+# Calculate wave statistics
 wave_count = len(peaks)
             wave_frequency = wave_count / len(signal) if len(signal) > 0 else 0.0
 
-            # Calculate average wave amplitude
+# Calculate average wave amplitude
             if len(peaks) > 0:
                 peak_values = entropy_series[peaks]
 wave_amplitude = float(np.mean(peak_values))
@@ -188,7 +251,7 @@ wave_amplitude = 0.0
 'wave_frequency': wave_frequency,
 'wave_amplitude': wave_amplitude,
 'entropy_series': entropy_series.tolist()
-            
+
 
         except Exception as e:
 logger.error(f"Entropy wave detection failed: {e}")
@@ -204,8 +267,10 @@ logger.error(f"Entropy wave detection failed: {e}")
 def entropy_pattern_analysis(self, signal: NDArray,)
 
 
-                               pattern_length: int = 10 -> Dict[str, Any]:
+                                pattern_length: int = 10 -> Dict[str, Any]:
 """"""
+"""
+"""
 Analyze entropy patterns in signal.
 
 Args:
@@ -215,6 +280,8 @@ pattern_length: Length of patterns to analyze
 Returns:
 Dictionary containing pattern analysis results
 """"""
+"""
+"""
         try:
             if len(signal) < pattern_length:
                 return {}
@@ -224,7 +291,7 @@ Dictionary containing pattern analysis results
 'pattern_stability': 0.0
 
 
-            # Extract patterns
+# Extract patterns
 patterns = []
             for i in range(len(signal) - pattern_length + 1):
                 pattern = signal[i:i + pattern_length]
@@ -238,19 +305,25 @@ patterns.append(pattern)
 'pattern_stability': 0.0
 
 
-            # Calculate entropy for each pattern
+# Calculate entropy for each pattern
 pattern_entropies = []
             for pattern in patterns:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 pattern_entropy = self._calculate_local_entropy(pattern)
                 pattern_entropies.append(pattern_entropy)
 
 pattern_entropies = np.array(pattern_entropies)
 
-            # Classify patterns based on entropy
+# Classify patterns based on entropy
 pattern_types = []
             for entropy_val in pattern_entropies:
                 if entropy_val < 0.3:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 pattern_types.append('low_entropy')
                 elif entropy_val < 0.7:
@@ -258,15 +331,15 @@ pattern_types.append('medium_entropy')
                 else:
 pattern_types.append('high_entropy')
 
-            # Calculate pattern frequencies
+# Calculate pattern frequencies
 pattern_frequencies = {}
             for pattern_type in set(pattern_types):
                 pattern_frequencies[pattern_type] = pattern_types.count(pattern_type) / len(pattern_types)
 
-            # Find dominant pattern
-dominant_pattern = max(pattern_frequencies, key=pattern_frequencies.get) if pattern_frequencies else None
+# Find dominant pattern
+dominant_pattern = max(pattern_frequencies, key = pattern_frequencies.get) if pattern_frequencies else None
 
-            # Calculate pattern stability (inverse of entropy variance)
+# Calculate pattern stability (inverse of entropy variance)
             pattern_stability = 1.0 / (1.0 + np.var(pattern_entropies))
 
             return {}
@@ -275,7 +348,7 @@ dominant_pattern = max(pattern_frequencies, key=pattern_frequencies.get) if patt
 'dominant_pattern': dominant_pattern,
 'pattern_stability': float(pattern_stability),
                 'pattern_entropies': pattern_entropies.tolist()
-            
+
 
         except Exception as e:
 logger.error(f"Entropy pattern analysis failed: {e}")
@@ -292,7 +365,9 @@ def entropy_based_clustering(self, signals: List[NDArray,])
 
                                 n_clusters: int = 3 -> Dict[str, Any]:
 """"""
-Perform entropy-based clustering of signals.
+"""
+"""
+Perform entropy - based clustering of signals.
 
 Args:
 signals: List of signal arrays
@@ -301,6 +376,8 @@ n_clusters: Number of clusters to create
 Returns:
 Dictionary containing clustering results
 """"""
+"""
+"""
         try:
             if not signals or len(signals) < n_clusters:
                 return {}
@@ -310,7 +387,7 @@ Dictionary containing clustering results
 'cluster_entropies': []
 
 
-            # Calculate entropy for each signal
+# Calculate entropy for each signal
 signal_entropies = []
             for signal in signals:
                 if len(signal) > 0:
@@ -321,16 +398,16 @@ signal_entropies.append(0.0)
 
 signal_entropies = np.array(signal_entropies)
 
-            # Perform hierarchical clustering
+# Perform hierarchical clustering
             if len(signal_entropies) > 1:
-                # Calculate distance matrix
+# Calculate distance matrix
 distances = pdist(signal_entropies.reshape(-1, 1))
                 linkage_matrix = linkage(distances, method='ward')
 
-                # Perform clustering
+# Perform clustering
 cluster_labels = fcluster(linkage_matrix, n_clusters, criterion='maxclust')
 
-                # Calculate cluster centers
+# Calculate cluster centers
 cluster_centers = []
                 for i in range(1, n_clusters + 1):
                     cluster_mask = cluster_labels == i
@@ -340,15 +417,15 @@ cluster_centers = []
                     else:
 cluster_centers.append(0.0)
 
-                # Group signals by cluster
+# Group signals by cluster
 clusters = [[] for _ in range(n_clusters)]
                 for i, label in enumerate(cluster_labels):
-                    cluster_idx = label - 1  # Convert to 0-based indexing
+                    cluster_idx = label - 1  # Convert to 0 - based indexing
                     if cluster_idx < len(clusters):
                         clusters[cluster_idx].append(signals[i])
 
             else:
-                # Single signal case
+# Single signal case
 cluster_labels = np.array([1])
                 cluster_centers = [float(signal_entropies[0])]
                 clusters = [signals]
@@ -358,10 +435,10 @@ cluster_labels = np.array([1])
 'cluster_centers': cluster_centers,
 'cluster_labels': cluster_labels.tolist(),
                 'cluster_entropies': signal_entropies.tolist()
-            
+
 
         except Exception as e:
-logger.error(f"Entropy-based clustering failed: {e}")
+logger.error(f"Entropy - based clustering failed: {e}")
             return {}
 'clusters': [],
 'cluster_centers': [],
@@ -372,8 +449,10 @@ logger.error(f"Entropy-based clustering failed: {e}")
 def calculate_entropy_gradient(self, signal: NDArray,)
 
 
-                                 window_size: int = 10 -> NDArray:
+                                    window_size: int = 10 -> NDArray:
 """"""
+"""
+"""
 Calculate entropy gradient over signal.
 
 Args:
@@ -383,11 +462,13 @@ window_size: Window size for local entropy calculation
 Returns:
 Entropy gradient array
 """"""
+"""
+"""
         try:
             if len(signal) < window_size:
                 return np.zeros_like(signal)
 
-            # Calculate local entropy for each point
+# Calculate local entropy for each point
 entropy_values = np.zeros(len(signal))
 
             for i in range(len(signal)):
@@ -396,7 +477,7 @@ entropy_values = np.zeros(len(signal))
                 local_window = signal[start_idx:end_idx]
 entropy_values[i] = self._calculate_local_entropy(local_window)
 
-            # Calculate gradient
+# Calculate gradient
 gradient = np.gradient(entropy_values)
 
             return gradient
@@ -410,6 +491,8 @@ def detect_entropy_regime_changes(self, signal: NDArray,)
 
                                     threshold: float = 0.1 -> List[int]:
 """"""
+"""
+"""
 Detect regime changes in entropy patterns.
 
 Args:
@@ -419,22 +502,27 @@ threshold: Threshold for regime change detection
 Returns:
 List of regime change indices
 """"""
+"""
+"""
         try:
             if len(signal) < 20:
                 return []
 
-            # Calculate entropy gradient
+# Calculate entropy gradient
 gradient = self.calculate_entropy_gradient(signal)
 
-            # Find points where gradient exceeds threshold
+# Find points where gradient exceeds threshold
 regime_changes = []
 
             for i in range(1, len(gradient)):
                 if abs(gradient[i]) > threshold:
                     regime_changes.append(i)
 
-            # Remove consecutive changes (keep only the first)
+# Remove consecutive changes (keep only the first)
             if regime_changes:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 filtered_changes = [regime_changes[0]]
                 for change in regime_changes[1:]:
@@ -451,14 +539,22 @@ logger.error(f"Entropy regime change detection failed: {e}")
 def _calculate_local_entropy(self, data: NDArray) -> float:
 
 
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         """Calculate local entropy of data array."""
+"""
+"""
         try:
             if len(data) == 0:
                 return 0.0
 
-            # Normalize data to probability distribution
+# Normalize data to probability distribution
 data_norm = data - np.min(data)
             if np.sum(data_norm) == 0:
                 return 0.0
@@ -469,12 +565,15 @@ prob_dist = data_norm / np.sum(data_norm)
             if len(prob_dist) == 0:
                 return 0.0
 
-            # Calculate entropy
+# Calculate entropy
 entropy_val = entropy(prob_dist)
 
-            # Normalize to [0, 1] range
+# Normalize to [0, 1] range
 max_entropy = np.log(len(prob_dist))
             if max_entropy > 0:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 normalized_entropy = entropy_val / max_entropy
             else:
@@ -493,143 +592,204 @@ entropy_engine = EntropyEngine()
 def entropy_filter(signal: NDArray, threshold: float = 0.5) -> NDArray:
 
 
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
     """Convenience function for entropy filtering."""
+"""
+"""
     return entropy_engine.entropy_filter(signal, threshold)
 
 
 def calculate_dynamic_entropy(signal: NDArray, window: int = 20) -> float:
 
 
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
     """Convenience function for dynamic entropy calculation."""
+"""
+"""
     return entropy_engine.calculate_dynamic_entropy(signal, window)
 
 
 def entropy_wave_detection(signal: NDArray,)
 
 
-                         min_peak_distance: int = 5 -> Dict[str, Any]:
+                            min_peak_distance: int = 5 -> Dict[str, Any]:
 """Convenience function for entropy wave detection."""
+"""
+"""
     return entropy_engine.entropy_wave_detection(signal, min_peak_distance)
 
 
 def entropy_pattern_analysis(signal: NDArray,)
 
 
-                           pattern_length: int = 10 -> Dict[str, Any]:
+                            pattern_length: int = 10 -> Dict[str, Any]:
 """Convenience function for entropy pattern analysis."""
+"""
+"""
     return entropy_engine.entropy_pattern_analysis(signal, pattern_length)
 
 
 def entropy_based_clustering(signals: List[NDArray,])
 
 
-                           n_clusters: int = 3 -> Dict[str, Any]:
-"""Convenience function for entropy-based clustering."""
+                            n_clusters: int = 3 -> Dict[str, Any]:
+"""Convenience function for entropy - based clustering."""
+"""
+"""
     return entropy_engine.entropy_based_clustering(signals, n_clusters)
 
 
 if __name__ == "__main__":
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
-    # Test the entropy engine
+# Test the entropy engine
 import numpy as np
 
-    # Import safe print for Windows compatibility
+# Import safe print for Windows compatibility
     try:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 from ...utils.windows_cli_compatibility import safe_print
     except ImportError:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         try:
 #             from core.utils.windows_cli_compatibility import safe_print  # F811: duplicate import
         except ImportError:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 
 def safe_print(message):
 
 
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
                 print(message)
 
 def placeholder(): pass
+
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
         """Main function to test entropy engine and ensure proper initialization."""
+"""
+"""
         try:
+    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""
+"""
     pass
 safe_print("\\u1f30a Testing Entropy Engine")
             safe_print("=" * 40)
 
-            # Create test signals
+# Create test signals
 signal1 = np.random.rand(100)
-            signal2 = np.sin(np.linspace(0, 4*np.pi, 100)) + 0.1 * np.random.rand(100)
+            signal2 = np.sin(np.linspace(0, 4 * np.pi, 100)) + 0.1 * np.random.rand(100)
             signal3 = np.random.rand(100) * 0.1 + 0.5  # Low entropy signal
 
 safe_print(f"Signal 1 (Random): {signal1.shape}")
             safe_print(f"Signal 2 (Sine + Noise): {signal2.shape}")
             safe_print(f"Signal 3 (Low Entropy): {signal3.shape}")
 
-            # Test entropy filtering
+# Test entropy filtering
 safe_print("\\n\\u1f50d Testing Entropy Filtering:")
-            filtered_signal = entropy_filter(signal1, threshold=0.5)
+            filtered_signal = entropy_filter(signal1, threshold = 0.5)
             safe_print(f"\\u2705 Filtered Signal Range: [{np.min(filtered_signal):.4f}, {np.max(filtered_signal):.4f}]")
 
-            # Test dynamic entropy
+# Test dynamic entropy
 safe_print("\\n\\u26a1 Testing Dynamic Entropy:")
-            dynamic_entropy = calculate_dynamic_entropy(signal1, window=20)
+            dynamic_entropy = calculate_dynamic_entropy(signal1, window = 20)
             safe_print(f"\\u2705 Dynamic Entropy: {dynamic_entropy:.4f}")
 
-            # Test wave detection
+# Test wave detection
 safe_print("\\n\\u1f30a Testing Wave Detection:")
-            wave_results = entropy_wave_detection(signal2, min_peak_distance=5)
+            wave_results = entropy_wave_detection(signal2, min_peak_distance = 5)
             safe_print(f"\\u2705 Wave Count: {wave_results['wave_count']}")
             safe_print(f"\\u2705 Wave Frequency: {wave_results['wave_frequency']:.4f}")
             safe_print(f"\\u2705 Wave Amplitude: {wave_results['wave_amplitude']:.4f}")
 
-            # Test pattern analysis
+# Test pattern analysis
 safe_print("\\n\\u1f4ca Testing Pattern Analysis:")
-            pattern_results = entropy_pattern_analysis(signal1, pattern_length=10)
+            pattern_results = entropy_pattern_analysis(signal1, pattern_length = 10)
             safe_print(f"\\u2705 Dominant Pattern: {pattern_results['dominant_pattern']}")
             safe_print(f"\\u2705 Pattern Stability: {pattern_results['pattern_stability']:.4f}")
             safe_print(f"\\u2705 Pattern Frequencies: {pattern_results['pattern_frequencies']}")
 
-            # Test clustering
+# Test clustering
 safe_print("\\n\\u1f3af Testing Clustering:")
             signals = [signal1, signal2, signal3]
-clustering_results = entropy_based_clustering(signals, n_clusters=3)
+clustering_results = entropy_based_clustering(signals, n_clusters = 3)
             safe_print(f"\\u2705 Cluster Centers: {clustering_results['cluster_centers']}")
             safe_print(f"\\u2705 Cluster Labels: {clustering_results['cluster_labels']}")
 
-            # Test advanced entropy engine features
+# Test advanced entropy engine features
 safe_print("\\n\\u1f52c Testing Advanced Features:")
 
-            # Test entropy gradient
-gradient = entropy_engine.calculate_entropy_gradient(signal1, window_size=10)
+# Test entropy gradient
+gradient = entropy_engine.calculate_entropy_gradient(signal1, window_size = 10)
             safe_print(f"\\u2705 Entropy Gradient Shape: {gradient.shape}")
             safe_print(f"\\u2705 Gradient Range: [{np.min(gradient):.4f}, {np.max(gradient):.4f}]")
 
-            # Test regime change detection
-regime_changes = entropy_engine.detect_entropy_regime_changes(signal1, threshold=0.1)
+# Test regime change detection
+regime_changes = entropy_engine.detect_entropy_regime_changes(signal1, threshold = 0.1)
             safe_print(f"\\u2705 Regime Changes: {regime_changes}")
 
-            # Test local entropy calculation
+# Test local entropy calculation
 local_entropy = entropy_engine._calculate_local_entropy(signal1[:10])
             safe_print(f"\\u2705 Local Entropy: {local_entropy:.4f}")
 
-            # Test multiple signal processing
+# Test multiple signal processing
 safe_print("\\n\\u1f504 Testing Multiple Signal Processing:")
             all_signals = [signal1, signal2, signal3]
             for i, signal in enumerate(all_signals):
-                entropy_val = calculate_dynamic_entropy(signal, window=20)
-                filtered = entropy_filter(signal, threshold=0.5)
-                safe_print(f"\\u2705 Signal {i+1}: Entropy={entropy_val:.4f}, Filtered Range=[{np.min(filtered):.4f}, {np.max(filtered):.4f}]")
+                entropy_val = calculate_dynamic_entropy(signal, window = 20)
+                filtered = entropy_filter(signal, threshold = 0.5)
+                safe_print(f"\\u2705 Signal {i + 1}: Entropy={entropy_val:.4f}, Filtered Range=[{np.min(filtered):.4f}, {np.max(filtered):.4f}]")
 
 safe_print("\\n\\u1f389 Entropy Engine tests completed successfully!")
             return True
@@ -640,9 +800,16 @@ import traceback
 traceback.print_exc()
             return False
 
-    # Run main function
+# Run main function
 success = main()
 import sys
+
+# Import core mathematical modules
+from core.unified_math_system import unified_math
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+from core.dual_error_handler import PhaseState, SickType, SickState
+
 sys.exit(0 if success else 1)
 
 

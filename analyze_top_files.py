@@ -1,4 +1,22 @@
-#!/usr/bin/env python3
+"""Analyze top 5 files with most E501 errors."""."""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""Analyze top 5 files with most E501 errors."""."""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""Analyze top 5 files with most E501 errors."""."""
 """Analyze top 5 files with most E501 errors."""."""
 
 from collections import defaultdict
@@ -7,8 +25,14 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 
 def is_stub_file(filepath):
     """Check if file is a stub."""."""
+"""
+
+
+"""
+"""
+"""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, 'r', encoding='utf - 8') as f:
             first_line = f.readline().strip()
             return "TEMPORARY STUB GENERATED AUTOMATICALLY" in first_line
     except:
@@ -16,7 +40,12 @@ def is_stub_file(filepath):
 
 
 def analyze_errors():
+
     """Analyze E501 errors and find top 5 files."""."""
+"""
+"""
+"""
+"""
     file_errors = defaultdict(int)
     real_files = []
     stub_files = []
@@ -27,19 +56,19 @@ def analyze_errors():
             if not line or not line.startswith('.'):
                 continue
 
-            # Extract file path
+# Extract file path
             parts = line.split(':')
             if len(parts) >= 2:
                 filepath = parts[0]
                 file_errors[filepath] += 1
 
-                # Categorize as real or stub
+# Categorize as real or stub
                 if is_stub_file(filepath):
                     stub_files.append(filepath)
                 else:
                     real_files.append(filepath)
 
-    # Get top 5 real files with most errors
+# Get top 5 real files with most errors
     real_file_counts = {f: file_errors[f] for f in set(real_files)}
     top_5 = sorted(
         real_file_counts.items(),
@@ -85,4 +114,8 @@ def analyze_errors():
 if __name__ == "__main__":
     analyze_errors()
 
+"""
+"""
+"""
+"""
 """

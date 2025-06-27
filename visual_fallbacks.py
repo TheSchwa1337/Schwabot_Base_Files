@@ -1,14 +1,31 @@
-import platform
-import os
-import json
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
 from typing import Optional
+import json
+import os
+import platform
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
 
 
 class VisualFallback:
-    """Handles visual-safe symbols for status output, with user override."""
 
-    def __init__(self, use_emoji: Optional[bool] = None):
-        # User config override
+    """Handles visual - safe symbols for status output, with user override."""
+
+
+"""
+"""
+"""
+"""
+
+   def __init__(self, use_emoji: Optional[bool] = None):
+
+    # User config override
         config_path = os.path.expanduser("~/.schwabotrc.json")
         user_cfg = None
         if os.path.exists(config_path):
@@ -18,10 +35,10 @@ class VisualFallback:
             except Exception:
                 user_cfg = None
 
-        # OS detection
+# OS detection
         system = platform.system().lower()
         self.default_to_unicode = system == "windows"
-        # User config takes precedence
+# User config takes precedence
         if user_cfg and "visual_mode" in user_cfg:
             self.use_emoji = user_cfg["visual_mode"].lower() == "emoji"
         elif use_emoji is not None:
@@ -43,4 +60,8 @@ class VisualFallback:
 
     def get(self, key: str) -> str:
         """Return the symbol for a given status key."""
-        return self.symbols.get(key.upper(), "?")
+"""
+"""
+"""
+"""
+   return self.symbols.get(key.upper(), "?")

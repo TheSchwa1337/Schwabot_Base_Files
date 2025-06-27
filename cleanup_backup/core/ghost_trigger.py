@@ -1,10 +1,22 @@
+# -*- coding: utf - 8 -*-
+"""Ghost trigger \\u2013 stealth - mode activation predicate.
+"""Ghost trigger \\u2013 stealth - mode activation predicate.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""Ghost trigger \\u2013 stealth-mode activation predicate.
+"""Ghost trigger \\u2013 stealth - mode activation predicate.
+"""Ghost trigger \\u2013 stealth - mode activation predicate.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
-This micro-module exposes a *single* public helper \\u2013 :func:`ghost_trigger` \\u2013
+from core.unified_math_system import unified_math
+
+
+
+
+
+
+This micro - module exposes a *single* public helper \\u2013 :func:`ghost_trigger` \\u2013
 that evaluates whether Schwabot should enter *ghost mode* based on three
 continuous signals:
 
@@ -17,8 +29,10 @@ The reference equation in the design doc is:
     \\u0393\\u208dghost\\u208e(t, P\\u2098, \\u0394\\u209b) = \\u039b\\u209b(t) \\u00b7 exp(\\u2212\\u03b7 \\u00b7 |\\u0394\\u209b \\u2212 \\u0394\\u2080|)
 
 The current implementation simplifies this to a logistic gate so we stay
-CPU-light inside tight loops.  All parameters have sane defaults but can be
+CPU - light inside tight loops.  All parameters have sane defaults but can be
 overridden by callers.
+"""
+"""
 """
 
 
@@ -38,7 +52,10 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 
 
 def _logistic(x: float) -> float:
+
     """Cheap logistic activation without `unified_math.exp` overflow."""
+"""
+"""
     if x >= 0:
         z = unified_math.exp(-x)
         return 1.0 / (1.0 + z)
@@ -47,6 +64,7 @@ def _logistic(x: float) -> float:
 
 
 def ghost_trigger(
+
     entropy: float,
     momentum: float,
     delta_p: float,
@@ -75,12 +93,17 @@ def ghost_trigger(
     threshold
         Logistic output threshold above which mode triggers.
     """
-    # Core formula (simplified logistic gate)
+"""
+"""
+# Core formula (simplified logistic gate)
     delta_term = unified_math.exp(-eta * unified_math.abs(delta_p - delta0))
     raw_score = entropy * (momentum * momentum_scale) * delta_term
 
-    # Normalise through logistic to keep range (0,1)
+# Normalise through logistic to keep range (0,1)
     score = _logistic(raw_score)
     return score > threshold
 
+"""
+"""
+"""
 """

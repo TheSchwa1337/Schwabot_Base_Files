@@ -1,20 +1,34 @@
-#!/usr/bin/env python3
+from dataclasses import dataclass
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import List, Dict, Any, Optional
+import hashlib
+import json
+import sys
+import time
+
+from numpy.typing import NDArray
+import numpy as np
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
+"""
+"""
+"""
+"""
 """
 Standalone Ghost Strategy Engine Test - Schwabot UROS v1.0
 ========================================================
 
 Completely standalone test with embedded ghost engine code to avoid import issues.
 """
-
-import sys
-import time
-import json
-import hashlib
-import numpy as np
-from pathlib import Path
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
-from numpy.typing import NDArray
+"""
+"""
+"""
+"""
 
 
 # ============================================================================
@@ -23,7 +37,14 @@ from numpy.typing import NDArray
 
 @dataclass
 class GhostSignal:
-    """Individual ghost signal entry with volatility-aware pricing."""
+
+    """Individual ghost signal entry with volatility - aware pricing."""
+
+
+"""
+"""
+"""
+"""
     asset: str
     price: float
     volatility: float
@@ -32,14 +53,18 @@ class GhostSignal:
 
     def __post_init__(self):
         """Validate and normalize signal data."""
+"""
+"""
+"""
+"""
         self.price = float(self.price)
         self.volatility = float(self.volatility)
         self.confidence = float(self.confidence)
         self.timestamp = float(self.timestamp)
 
-        # Ensure confidence is bounded
+# Ensure confidence is bounded
         self.confidence = max(0.0, min(1.0, self.confidence))
-        # Ensure volatility is non-negative
+# Ensure volatility is non - negative
         self.volatility = max(0.0, self.volatility)
 
 
@@ -49,11 +74,22 @@ GhostArray = NDArray[np.float64]  # shape: (N, 4) \\u2192 price, vol, conf, time
 
 @dataclass
 class BTCVector:
+
     """BTC processor vector with ghost array integration."""
+
+
+"""
+"""
+"""
+"""
     ghost_array: GhostArray
 
     def __post_init__(self):
         """Validate ghost array shape and extract components."""
+"""
+"""
+"""
+"""
         if self.ghost_array.shape[1] != 4:
             raise ValueError("GhostArray must have shape (N, 4)")
 
@@ -64,30 +100,55 @@ class BTCVector:
 
     @property
     def volatility_window(self) -> float:
+
         """Extract rolling volatility over last 5 entries."""
+"""
+"""
+"""
+"""
         if len(self.prices) < 5:
             return 0.0
         return float(np.std(self.prices[-5:]))
 
     @property
     def momentum(self) -> float:
+
         """Calculate price momentum from differences."""
+"""
+"""
+"""
+"""
         if len(self.prices) < 2:
             return 0.0
         return float(np.mean(np.diff(self.prices)))
 
     @property
     def mean_price(self) -> float:
+
         """Calculate mean price across ghost array."""
+"""
+"""
+"""
+"""
         return float(np.mean(self.prices))
 
     @property
     def mean_confidence(self) -> float:
+
         """Calculate mean confidence across ghost array."""
+"""
+"""
+"""
+"""
         return float(np.mean(self.confidences))
 
     def to_signal(self) -> Dict[str, float]:
+
         """Convert to unified signal format."""
+"""
+"""
+"""
+"""
         return {
             "volatility": self.volatility_window,
             "momentum": self.momentum,
@@ -98,41 +159,56 @@ class BTCVector:
 
 
 def build_ghost_array(signals: List[GhostSignal]) -> GhostArray:
+
     """Convert list of ghost signals to numpy array."""
+"""
+"""
+"""
+"""
     if not signals:
-        return np.zeros((0, 4), dtype=np.float64)
+        return np.zeros((0, 4), dtype = np.float64)
 
     array_data = [
         [s.price, s.volatility, s.confidence, s.timestamp]
         for s in signals
     ]
-    return np.array(array_data, dtype=np.float64)
+    return np.array(array_data, dtype = np.float64)
 
 
 def extract_volatility_window(ghost_array: GhostArray, window_size: int = 5) -> float:
+
     """Extract rolling volatility from ghost array."""
+"""
+"""
+"""
+"""
     if ghost_array.shape[0] < window_size:
         return 0.0
 
-    prices = ghost_array[:, 0]  # BTC/USDC prices
+    prices = ghost_array[:, 0]  # BTC / USDC prices
     return float(np.std(prices[-window_size:]))
 
 
 def validate_ghost_array(ghost_array: GhostArray) -> bool:
+
     """Validate ghost array structure and data."""
+"""
+"""
+"""
+"""
     if ghost_array.ndim != 2 or ghost_array.shape[1] != 4:
         return False
 
-    # Check for valid numeric data
+# Check for valid numeric data
     if not np.all(np.isfinite(ghost_array)):
         return False
 
-    # Check for reasonable price ranges (BTC typically 10k-100k)
+# Check for reasonable price ranges (BTC typically 10k - 100k)
     prices = ghost_array[:, 0]
     if np.any(prices < 1000) or np.any(prices > 1000000):
         return False
 
-    # Check for reasonable confidence ranges
+# Check for reasonable confidence ranges
     confidences = ghost_array[:, 2]
     if np.any(confidences < 0) or np.any(confidences > 1):
         return False
@@ -141,25 +217,46 @@ def validate_ghost_array(ghost_array: GhostArray) -> bool:
 
 
 class BTCVectorProcessor:
+
     """Unified BTC processor with ghost array integration."""
+"""
+"""
+"""
+"""
 
     def __init__(self, volatility_window_size: int = 5):
+
         self.volatility_window_size = volatility_window_size
         self.ghost_signals: List[GhostSignal] = []
         self.btc_vector: Optional[BTCVector] = None
 
     def add_ghost_signal(self, signal: GhostSignal) -> None:
+
         """Add a new ghost signal to the processor."""
+"""
+"""
+"""
+"""
         self.ghost_signals.append(signal)
         self._update_btc_vector()
 
     def add_ghost_signals(self, signals: List[GhostSignal]) -> None:
+
         """Add multiple ghost signals at once."""
+"""
+"""
+"""
+"""
         self.ghost_signals.extend(signals)
         self._update_btc_vector()
 
     def _update_btc_vector(self) -> None:
+
         """Update the BTC vector from current ghost signals."""
+"""
+"""
+"""
+"""
         if not self.ghost_signals:
             self.btc_vector = None
             return
@@ -171,14 +268,24 @@ class BTCVectorProcessor:
             raise ValueError("Invalid ghost array generated")
 
     def get_current_signal(self) -> Optional[Dict[str, float]]:
+
         """Get current unified signal from BTC vector."""
+"""
+"""
+"""
+"""
         if self.btc_vector is None:
             return None
         return self.btc_vector.to_signal()
 
     def generate_strategy_hash(self, signal_data: Dict[str, float]) -> str:
+
         """Generate deterministic strategy hash from signal data."""
-        # Create hash input from volatility and momentum
+"""
+"""
+"""
+"""
+# Create hash input from volatility and momentum
         volatility = signal_data.get("volatility", 0.0)
         momentum = signal_data.get("momentum", 0.0)
         confidence = signal_data.get("confidence", 0.0)
@@ -187,7 +294,12 @@ class BTCVectorProcessor:
         return hashlib.sha256(hash_input.encode()).hexdigest()
 
     def analyze_strategy_conditions(self, signal_data: Dict[str, float]) -> Dict[str, bool]:
+
         """Analyze strategy conditions based on signal data."""
+"""
+"""
+"""
+"""
         volatility = signal_data.get("volatility", 0.0)
         momentum = signal_data.get("momentum", 0.0)
         confidence = signal_data.get("confidence", 0.0)
@@ -200,7 +312,12 @@ class BTCVectorProcessor:
         }
 
     def get_signal_statistics(self) -> Dict[str, float]:
+
         """Get comprehensive signal statistics."""
+"""
+"""
+"""
+"""
         if self.btc_vector is None:
             return {}
 
@@ -224,9 +341,15 @@ class BTCVectorProcessor:
 
 
 class GhostStrategyEngine:
+
     """Ghost strategy engine with BTC vector integration."""
+"""
+"""
+"""
+"""
 
     def __init__(self):
+
         self.btc_processor = BTCVectorProcessor()
         self.strategy_thresholds = {
             "volatility_threshold": 0.05,
@@ -236,25 +359,30 @@ class GhostStrategyEngine:
         }
 
     def process_ghost_signals(self, signals: List[GhostSignal]) -> Dict[str, any]:
+
         """Process ghost signals and generate strategy decision."""
-        # Add signals to processor
+"""
+"""
+"""
+"""
+# Add signals to processor
         self.btc_processor.add_ghost_signals(signals)
 
-        # Get current signal
+# Get current signal
         signal_data = self.btc_processor.get_current_signal()
         if signal_data is None:
             return {"error": "No signal data available"}
 
-        # Generate strategy hash
+# Generate strategy hash
         strategy_hash = self.btc_processor.generate_strategy_hash(signal_data)
 
-        # Analyze conditions
+# Analyze conditions
         conditions = self.btc_processor.analyze_strategy_conditions(signal_data)
 
-        # Determine action based on hash and conditions
+# Determine action based on hash and conditions
         action = self._determine_action(strategy_hash, conditions, signal_data)
 
-        # Calculate execution confidence
+# Calculate execution confidence
         execution_confidence = self._calculate_execution_confidence(
             conditions, signal_data
         )
@@ -271,9 +399,14 @@ class GhostStrategyEngine:
         }
 
     def _determine_action(self, strategy_hash: str, conditions: Dict[str, bool],
-                          signal_data: Dict[str, float]) -> str:
+
+                            signal_data: Dict[str, float]) -> str:
         """Determine trading action based on strategy hash and conditions."""
-        # Hash-based strategy selection
+"""
+"""
+"""
+"""
+# Hash - based strategy selection
         if strategy_hash.startswith("00a1"):
             return "LONG_HOLD_BTC"
         elif strategy_hash.startswith("004f"):
@@ -283,7 +416,7 @@ class GhostStrategyEngine:
         elif strategy_hash.startswith("00c3"):
             return "VOLATILITY_EXIT"
 
-        # Condition-based fallback
+# Condition - based fallback
         if conditions["high_volatility"] and conditions["positive_momentum"]:
             return "MOMENTUM_LONG"
         elif conditions["high_volatility"] and not conditions["positive_momentum"]:
@@ -294,15 +427,20 @@ class GhostStrategyEngine:
             return "NEUTRAL_HOLD"
 
     def _calculate_execution_confidence(self, conditions: Dict[str, bool],
+
                                         signal_data: Dict[str, float]) -> float:
         """Calculate execution confidence based on conditions and signal data."""
+"""
+"""
+"""
+"""
         confidence_factors = []
 
-        # Base confidence from signal data
+# Base confidence from signal data
         base_confidence = signal_data.get("confidence", 0.0)
         confidence_factors.append(base_confidence)
 
-        # Condition bonuses
+# Condition bonuses
         if conditions["high_confidence"]:
             confidence_factors.append(0.2)
         if conditions["sufficient_signals"]:
@@ -312,12 +450,17 @@ class GhostStrategyEngine:
         if conditions["positive_momentum"]:
             confidence_factors.append(0.1)
 
-        # Calculate weighted average
+# Calculate weighted average
         total_confidence = sum(confidence_factors)
         return min(1.0, total_confidence)
 
     def get_processor_statistics(self) -> Dict[str, float]:
+
         """Get comprehensive processor statistics."""
+"""
+"""
+"""
+"""
         return self.btc_processor.get_signal_statistics()
 
 
@@ -326,23 +469,28 @@ class GhostStrategyEngine:
 # ============================================================================
 
 def test_ghost_signal_creation():
+
     """Test ghost signal creation and validation."""
+"""
+"""
+"""
+"""
     print("Testing GhostSignal creation and validation...")
 
     try:
-        # Create test signals
+# Create test signals
         test_signals = [
             GhostSignal(
                 asset="BTC",
-                price=50000.0 + i * 150,
-                volatility=0.02 + i * 0.001,
-                confidence=0.85,
-                timestamp=1620000000 + i * 60
+                price = 50000.0 + i * 150,
+                volatility = 0.02 + i * 0.001,
+                confidence = 0.85,
+                timestamp = 1620000000 + i * 60
             )
             for i in range(10)
         ]
 
-        # Validate signals
+# Validate signals
         for signal in test_signals:
             assert isinstance(signal.price, float)
             assert isinstance(signal.volatility, float)
@@ -359,31 +507,36 @@ def test_ghost_signal_creation():
 
 
 def test_ghost_array_construction():
+
     """Test ghost array construction and validation."""
+"""
+"""
+"""
+"""
     print("Testing ghost array construction...")
 
     try:
-        # Create test signals
+# Create test signals
         test_signals = [
             GhostSignal(
                 asset="BTC",
-                price=50000.0 + i * 100,
-                volatility=0.02 + i * 0.002,
-                confidence=0.8 + i * 0.02,
-                timestamp=1620000000 + i * 60
+                price = 50000.0 + i * 100,
+                volatility = 0.02 + i * 0.002,
+                confidence = 0.8 + i * 0.02,
+                timestamp = 1620000000 + i * 60
             )
             for i in range(8)
         ]
 
-        # Build ghost array
+# Build ghost array
         ghost_array = build_ghost_array(test_signals)
 
-        # Validate array
+# Validate array
         assert ghost_array.shape == (8, 4)
         assert ghost_array.dtype == np.float64
         assert validate_ghost_array(ghost_array)
 
-        # Test volatility extraction
+# Test volatility extraction
         volatility = extract_volatility_window(ghost_array)
         assert isinstance(volatility, float)
         assert volatility >= 0.0
@@ -401,28 +554,33 @@ def test_ghost_array_construction():
 
 
 def test_btc_vector_processing():
+
     """Test BTC vector processing and signal generation."""
+"""
+"""
+"""
+"""
     print("Testing BTC vector processing...")
 
     try:
-        # Create processor
+# Create processor
         processor = BTCVectorProcessor()
 
-        # Add test signals
+# Add test signals
         test_signals = [
             GhostSignal(
                 asset="BTC",
-                price=50000.0 + i * 200,
-                volatility=0.03 + i * 0.001,
-                confidence=0.85 + i * 0.01,
-                timestamp=1620000000 + i * 120
+                price = 50000.0 + i * 200,
+                volatility = 0.03 + i * 0.001,
+                confidence = 0.85 + i * 0.01,
+                timestamp = 1620000000 + i * 120
             )
             for i in range(10)
         ]
 
         processor.add_ghost_signals(test_signals)
 
-        # Get current signal
+# Get current signal
         signal_data = processor.get_current_signal()
         assert signal_data is not None
         assert "volatility" in signal_data
@@ -430,11 +588,11 @@ def test_btc_vector_processing():
         assert "mean_price" in signal_data
         assert "confidence" in signal_data
 
-        # Generate strategy hash
+# Generate strategy hash
         strategy_hash = processor.generate_strategy_hash(signal_data)
         assert len(strategy_hash) == 64  # SHA256 hex length
 
-        # Get statistics
+# Get statistics
         stats = processor.get_signal_statistics()
         assert "price_mean" in stats
         assert "volatility_mean" in stats
@@ -454,41 +612,46 @@ def test_btc_vector_processing():
 
 
 def test_ghost_strategy_engine():
+
     """Test complete ghost strategy engine."""
+"""
+"""
+"""
+"""
     print("Testing ghost strategy engine...")
 
     try:
-        # Create engine
+# Create engine
         engine = GhostStrategyEngine()
 
-        # Create realistic test signals
+# Create realistic test signals
         base_price = 50000.0
         test_signals = []
 
         for i in range(15):
-            # Simulate price movement with some volatility
+# Simulate price movement with some volatility
             price_change = (i % 3 - 1) * 300  # Oscillating pattern
             price = base_price + price_change + i * 50
 
-            # Simulate volatility clustering
+# Simulate volatility clustering
             volatility = 0.02 + (i % 5) * 0.01
 
-            # Simulate confidence based on signal consistency
+# Simulate confidence based on signal consistency
             confidence = 0.7 + (i % 4) * 0.1
 
             signal = GhostSignal(
                 asset="BTC",
-                price=price,
-                volatility=volatility,
-                confidence=confidence,
-                timestamp=1620000000 + i * 180
+                price = price,
+                volatility = volatility,
+                confidence = confidence,
+                timestamp = 1620000000 + i * 180
             )
             test_signals.append(signal)
 
-        # Process signals
+# Process signals
         result = engine.process_ghost_signals(test_signals)
 
-        # Validate result structure
+# Validate result structure
         required_keys = [
             "strategy_hash", "action", "confidence",
             "conditions", "signal_data", "execution_ready"
@@ -496,7 +659,7 @@ def test_ghost_strategy_engine():
         for key in required_keys:
             assert key in result
 
-        # Validate action types
+# Validate action types
         valid_actions = [
             "LONG_HOLD_BTC", "SHORT_EXIT_BTC", "NEUTRAL_HOLD",
             "VOLATILITY_EXIT", "MOMENTUM_LONG", "VOLATILITY_SHORT",
@@ -504,10 +667,10 @@ def test_ghost_strategy_engine():
         ]
         assert result["action"] in valid_actions
 
-        # Validate confidence range
+# Validate confidence range
         assert 0.0 <= result["confidence"] <= 1.0
 
-        # Get processor statistics
+# Get processor statistics
         stats = engine.get_processor_statistics()
         assert "signal_count" in stats
 
@@ -524,38 +687,43 @@ def test_ghost_strategy_engine():
 
 
 def test_volatility_scenarios():
+
     """Test different volatility scenarios."""
+"""
+"""
+"""
+"""
     print("Testing volatility scenarios...")
 
     try:
         base_price = 50000.0
         base_time = 1620000000
 
-        # Low volatility scenario
+# Low volatility scenario
         low_vol_signals = []
         for i in range(10):
             signal = GhostSignal(
                 asset="BTC",
-                price=base_price + i * 10,  # Small price changes
-                volatility=0.01,  # Low volatility
-                confidence=0.9,
-                timestamp=base_time + i * 60
+                price = base_price + i * 10,  # Small price changes
+                volatility = 0.01,  # Low volatility
+                confidence = 0.9,
+                timestamp = base_time + i * 60
             )
             low_vol_signals.append(signal)
 
-        # High volatility scenario
+# High volatility scenario
         high_vol_signals = []
         for i in range(10):
             signal = GhostSignal(
                 asset="BTC",
-                price=base_price + (i % 3 - 1) * 1000,  # Large swings
-                volatility=0.08,  # High volatility
-                confidence=0.6,
-                timestamp=base_time + i * 60
+                price = base_price + (i % 3 - 1) * 1000,  # Large swings
+                volatility = 0.08,  # High volatility
+                confidence = 0.6,
+                timestamp = base_time + i * 60
             )
             high_vol_signals.append(signal)
 
-        # Test scenarios
+# Test scenarios
         engine = GhostStrategyEngine()
 
         low_result = engine.process_ghost_signals(low_vol_signals)
@@ -586,7 +754,12 @@ def test_volatility_scenarios():
 
 
 def main():
+
     """Main test execution."""
+"""
+"""
+"""
+"""
     print("Standalone Ghost Strategy Engine Test - Schwabot UROS v1.0")
     print("=" * 60)
 
@@ -621,7 +794,7 @@ def main():
             print(f"\\u274c {test_name}: FAILED ({execution_time:.2f}s)")
             failed += 1
 
-    # Summary
+# Summary
     total_tests = len(tests)
     success_rate = (passed / total_tests) * 100 if total_tests > 0 else 0
 
@@ -638,9 +811,9 @@ def main():
     else:
         print("\\u26a0\\ufe0f Ghost Strategy Engine needs fixes")
 
-    # Save results
+# Save results
     with open("ghost_engine_standalone_test_results.json", "w") as f:
-        json.dump(results, f, indent=2, default=str)
+        json.dump(results, f, indent = 2, default = str)
 
     print(f"\\nResults saved to: ghost_engine_standalone_test_results.json")
 
@@ -657,4 +830,9 @@ def main():
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
+"""
+"""
 """

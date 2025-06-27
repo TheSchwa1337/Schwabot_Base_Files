@@ -1,13 +1,25 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Any, Dict, Optional
+import logging
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Entry Gate - Mathematical Execution Confidence Evaluator.
 
 This module provides the core mathematical gates that determine whether
 a trading opportunity should be executed, deferred, or rejected based on
-unified confidence metrics and entropy-weighted entry scores.
+unified confidence metrics and entropy - weighted entry scores.
 
 Key Functions:
 - execution_confidence(): Computes \\u039e scalar from fractal state
@@ -20,12 +32,9 @@ Mathematical Foundation:
 
 Windows CLI compatible with flake8 compliance.
 """
+"""
+"""
 
-
-import logging
-from typing import Any, Dict, Optional
-
-from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +45,7 @@ DEFER_ENTRY_SCORE_THRESHOLD = 0.70
 
 
 def execution_confidence(
+
     triplet_entropy: float,
     theta_drift: float,
     coherence: float,
@@ -47,33 +57,37 @@ def execution_confidence(
     Parameters
     ----------
     triplet_entropy : float
-        T - Information rate from triplet patterns (0-1)
+        T - Information rate from triplet patterns (0 - 1)
     theta_drift : float
-        \\u0394\\u03b8 - Normalized braid angle drift (0-1)
+        \\u0394\\u03b8 - Normalized braid angle drift (0 - 1)
     coherence : float
-        \\u03b5 - Fractal coherence score (0-1)
+        \\u03b5 - Fractal coherence score (0 - 1)
     loop_volatility : float
-        \\u03c3_f - Standard deviation of loop sums (0-1)
+        \\u03c3_f - Standard deviation of loop sums (0 - 1)
     profit_decay : float
-        \\u03c4_p - Time-weighted profit modifier (0-0.3)
+        \\u03c4_p - Time - weighted profit modifier (0 - 0.3)
 
     Returns
     -------
     float
         \\u039e - Execution confidence scalar
         >1.15: Execute immediately
-        0.85-1.15: Route to GAN filter
-        <0.85: Defer/cooldown
+        0.85 - 1.15: Route to GAN filter
+        <0.85: Defer / cooldown
     """
-    try:
-        # \\u039e = (T \\u00b7 \\u0394\\u03b8) + (\\u03b5 \\u00d7 \\u03c3_f) + \\u03c4_p
+
+
+"""
+"""
+   try:
+    # \\u039e = (T \\u00b7 \\u0394\\u03b8) + (\\u03b5 \\u00d7 \\u03c3_f) + \\u03c4_p
         confidence = (
             (triplet_entropy * theta_drift)
             + (coherence * loop_volatility)
             + profit_decay
         )
 
-        # Ensure reasonable bounds
+# Ensure reasonable bounds
         return unified_math.max(0.0, unified_math.min(3.0, confidence))
 
     except (ValueError, TypeError) as e:
@@ -82,37 +96,42 @@ def execution_confidence(
 
 
 def entry_score(
+
     harmony: float,
     drift_penalty: float,
     liquidity_score: float,
     projected_profit: float,
 ) -> float:
-    """Calculate entropy-weighted entry score \\u1d4d4\\u209b.
+    """Calculate entropy - weighted entry score \\u1d4d4\\u209b.
 
     Parameters
     ----------
     harmony : float
-        \\u1d4d7 - Tick harmony alignment score (0-1)
+        \\u1d4d7 - Tick harmony alignment score (0 - 1)
     drift_penalty : float
-        \\u1d4d3\\u209a - Phase drift penalty (0-1)
+        \\u1d4d3\\u209a - Phase drift penalty (0 - 1)
     liquidity_score : float
-        \\u1d4db - Normalized liquidity depth score (0-1)
+        \\u1d4db - Normalized liquidity depth score (0 - 1)
     projected_profit : float
-        P\\u0302 - Expected profit ratio (0-1)
+        P\\u0302 - Expected profit ratio (0 - 1)
 
     Returns
     -------
     float
         \\u1d4d4\\u209b - Entry score
         >0.90: Execute
-        0.70-0.90: Route to GAN review
-        <0.70: Suppress/cooldown
+        0.70 - 0.90: Route to GAN review
+        <0.70: Suppress / cooldown
     """
-    try:
-        # \\u1d4d4\\u209b = \\u1d4d7 \\u00d7 (1 \\u2212 \\u1d4d3\\u209a) \\u00d7 \\u1d4db \\u00d7 P\\u0302
+
+
+"""
+"""
+   try:
+    # \\u1d4d4\\u209b = \\u1d4d7 \\u00d7 (1 \\u2212 \\u1d4d3\\u209a) \\u00d7 \\u1d4db \\u00d7 P\\u0302
         score = harmony * (1.0 - drift_penalty) * liquidity_score * projected_profit
 
-        # Ensure valid range
+# Ensure valid range
         return unified_math.max(0.0, unified_math.min(1.0, score))
 
     except (ValueError, TypeError) as e:
@@ -121,6 +140,7 @@ def entry_score(
 
 
 def evaluate(
+
     confidence: float,
     entry_score_val: float,
     gan_filter_result: Optional[bool] = None,
@@ -132,7 +152,7 @@ def evaluate(
     confidence : float
         \\u039e - Execution confidence scalar
     entry_score_val : float
-        \\u1d4d4\\u209b - Entropy-weighted entry score
+        \\u1d4d4\\u209b - Entropy - weighted entry score
     gan_filter_result : bool, optional
         Result from GAN anomaly filter (if available)
 
@@ -143,16 +163,20 @@ def evaluate(
         - action: "execute", "defer", "gan_review", "cooldown"
         - confidence: Confidence value
         - entry_score: Entry score value
-        - reason: Human-readable explanation
+        - reason: Human - readable explanation
     """
-    try:
-        # Primary gate: both confidence and entry score must pass
+
+
+"""
+"""
+   try:
+    # Primary gate: both confidence and entry score must pass
         if (
             confidence > MIN_CONFIDENCE_THRESHOLD
             and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
         ):
 
-            # Check GAN filter if available
+    # Check GAN filter if available
             if gan_filter_result is False:
                 return {
                     "action": "defer",
@@ -168,7 +192,7 @@ def evaluate(
                 "reason": "High confidence and entry score",
             }
 
-        # Secondary gate: route to GAN review if entry score in middle band
+# Secondary gate: route to GAN review if entry score in middle band
         elif confidence > 0.85 and entry_score_val > DEFER_ENTRY_SCORE_THRESHOLD:
 
             return {
@@ -178,7 +202,7 @@ def evaluate(
                 "reason": "Moderate scores - route to GAN filter",
             }
 
-        # Tertiary: cooldown for low scores
+# Tertiary: cooldown for low scores
         else:
             reason_parts = []
             if confidence <= 0.85:
@@ -204,8 +228,12 @@ def evaluate(
 
 
 def get_thresholds() -> Dict[str, float]:
-    """Get current threshold values for monitoring/tuning."""
-    return {
+    """Get current threshold values for monitoring / tuning."""
+
+
+"""
+"""
+   return {
         "min_confidence": MIN_CONFIDENCE_THRESHOLD,
         "min_entry_score": MIN_ENTRY_SCORE_THRESHOLD,
         "defer_entry_score": DEFER_ENTRY_SCORE_THRESHOLD,
@@ -214,6 +242,7 @@ def get_thresholds() -> Dict[str, float]:
 
 # Quick validation function for testing
 def validate_inputs(
+
     triplet_entropy: float,
     theta_drift: float,
     coherence: float,
@@ -225,8 +254,12 @@ def validate_inputs(
     projected_profit: float,
 ) -> bool:
     """Validate that all input values are in expected ranges."""
-    try:
-        # Check ranges for all inputs
+
+
+"""
+"""
+   try:
+    # Check ranges for all inputs
         checks = [
             0.0 <= triplet_entropy <= 1.0,
             0.0 <= theta_drift <= 1.0,
@@ -247,8 +280,12 @@ def validate_inputs(
 
 def main() -> None:
     """Demo function for testing entry gate logic."""
-    # Test case 1: High confidence scenario
-    xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
+
+
+"""
+"""
+# Test case 1: High confidence scenario
+   xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
     es = entry_score(0.88, 0.12, 0.75, 0.03)
     result = evaluate(xi, es)
 
@@ -256,7 +293,7 @@ def main() -> None:
     safe_print(f"Decision: {result['action']} - {result['reason']}")
     print()
 
-    # Test case 2: Moderate confidence scenario
+# Test case 2: Moderate confidence scenario
     xi2 = execution_confidence(0.65, 0.08, 0.78, 0.15, 0.02)
     es2 = entry_score(0.82, 0.08, 0.85, 0.025)
     result2 = evaluate(xi2, es2)
@@ -268,4 +305,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
 """

@@ -1,8 +1,24 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
 Schwabot Vector Validator
-Validates mathematical vectors and provides real-time validation feedback
+Validates mathematical vectors and provides real - time validation feedback
+"""
+"""
 """
 
 import json
@@ -20,13 +36,16 @@ from core.unified_math_system import unified_math
 from collections import defaultdict
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level = logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class VectorValidationResult:
+
     """Result of vector validation"""
+"""
+"""
     is_valid: bool
     confidence_score: float
     validation_errors: List[str]
@@ -39,7 +58,10 @@ class VectorValidationResult:
 
 @dataclass
 class VectorMetrics:
+
     """Mathematical metrics for vector validation"""
+"""
+"""
     entropy_score: float
     fractal_dimension: float
     quantum_coherence: float
@@ -51,30 +73,37 @@ class VectorMetrics:
 
 
 class VectorValidator:
-    """Comprehensive vector validation system"""
 
-    def __init__(self, settings_controller=None):
+    """Comprehensive vector validation system"""
+"""
+"""
+
+    def __init__(self, settings_controller = None):
+
         self.settings_controller = settings_controller
         self.validation_history = []
         self.performance_metrics = defaultdict(list)
         self.validation_rules = self._load_validation_rules()
 
-        # Threading
+# Threading
         self.lock = threading.RLock()
         self.running = False
         self.validation_thread = None
 
-        # Statistics
+# Statistics
         self.total_validations = 0
         self.successful_validations = 0
         self.failed_validations = 0
         self.last_validation = None
 
-        # Start background validation monitoring
+# Start background validation monitoring
         self.start_background_monitoring()
 
     def _load_validation_rules(self) -> Dict[str, Any]:
+
         """Load validation rules from configuration"""
+"""
+"""
         return {
             'entropy_threshold': 0.75,
             'fractal_dimension_range': (1.0, 2.0),
@@ -89,107 +118,112 @@ class VectorValidator:
         }
 
     def validate_vector(self, vector_data: Dict[str, Any], context: str = "general") -> VectorValidationResult:
+
         """Validate a mathematical vector"""
+"""
+"""
         start_time = time.time()
 
         try:
-            # Generate vector hash
+# Generate vector hash
             vector_hash = self._generate_vector_hash(vector_data)
 
-            # Check if vector is known to be bad
+# Check if vector is known to be bad
             if self.settings_controller and self.settings_controller.is_known_bad_vector(vector_hash):
                 self.settings_controller.increment_avoidance_count(vector_hash)
                 return VectorValidationResult(
-                    is_valid=False,
-                    confidence_score=0.0,
+                    is_valid = False,
+                    confidence_score = 0.0,
                     validation_errors=[
                         f"Vector is known to be bad: {self.settings_controller.known_bad_vectors[vector_hash]['reason']}"],
                     warnings=[],
                     recommendations=["Avoid this vector configuration"],
-                    timestamp=datetime.now().isoformat(),
-                    vector_hash=vector_hash,
-                    validation_duration=time.time() - start_time
+                    timestamp = datetime.now().isoformat(),
+                    vector_hash = vector_hash,
+                    validation_duration = time.time() - start_time
                 )
 
-            # Calculate vector metrics
+# Calculate vector metrics
             metrics = self._calculate_vector_metrics(vector_data)
 
-            # Perform validation checks
+# Perform validation checks
             validation_errors = []
             warnings = []
             recommendations = []
 
-            # Entropy validation
+# Entropy validation
             if metrics.entropy_score < self.validation_rules['entropy_threshold']:
                 validation_errors.append(
                     f"Entropy score too low: {metrics.entropy_score:.3f} < {self.validation_rules['entropy_threshold']}")
             elif metrics.entropy_score > 0.95:
                 warnings.append(f"Entropy score very high: {metrics.entropy_score:.3f} - may indicate instability")
 
-            # Fractal dimension validation
-            if not (self.validation_rules['fractal_dimension_range'][0] <= metrics.fractal_dimension <= self.validation_rules['fractal_dimension_range'][1]):
+# Fractal dimension validation
+            if not (self.validation_rules['fractal_dimension_range'][0] <=
+                    metrics.fractal_dimension <= self.validation_rules['fractal_dimension_range'][1]):
                 validation_errors.append(f"Fractal dimension out of range: {metrics.fractal_dimension:.3f}")
 
-            # Quantum coherence validation
+# Quantum coherence validation
             if metrics.quantum_coherence < self.validation_rules['quantum_coherence_min']:
                 validation_errors.append(
                     f"Quantum coherence too low: {metrics.quantum_coherence:.3f} < {self.validation_rules['quantum_coherence_min']}")
 
-            # Vector magnitude validation
-            if not (self.validation_rules['vector_magnitude_range'][0] <= metrics.vector_magnitude <= self.validation_rules['vector_magnitude_range'][1]):
+# Vector magnitude validation
+            if not (self.validation_rules['vector_magnitude_range'][0] <=
+                    metrics.vector_magnitude <= self.validation_rules['vector_magnitude_range'][1]):
                 validation_errors.append(f"Vector magnitude out of range: {metrics.vector_magnitude:.3f}")
 
-            # Angular momentum validation
+# Angular momentum validation
             if metrics.angular_momentum < self.validation_rules['angular_momentum_threshold']:
                 warnings.append(
                     f"Angular momentum low: {metrics.angular_momentum:.3f} < {self.validation_rules['angular_momentum_threshold']}")
 
-            # Phase alignment validation
+# Phase alignment validation
             if metrics.phase_alignment < self.validation_rules['phase_alignment_min']:
                 validation_errors.append(
                     f"Phase alignment too low: {metrics.phase_alignment:.3f} < {self.validation_rules['phase_alignment_min']}")
 
-            # Stability index validation
+# Stability index validation
             if metrics.stability_index < self.validation_rules['stability_index_min']:
                 validation_errors.append(
                     f"Stability index too low: {metrics.stability_index:.3f} < {self.validation_rules['stability_index_min']}")
 
-            # Convergence rate validation
+# Convergence rate validation
             if metrics.convergence_rate < self.validation_rules['convergence_rate_min']:
                 warnings.append(
                     f"Convergence rate low: {metrics.convergence_rate:.3f} < {self.validation_rules['convergence_rate_min']}")
 
-            # Generate recommendations
+# Generate recommendations
             recommendations = self._generate_recommendations(metrics, validation_errors, warnings)
 
-            # Calculate confidence score
+# Calculate confidence score
             confidence_score = self._calculate_confidence_score(metrics, validation_errors, warnings)
 
-            # Determine if vector is valid
+# Determine if vector is valid
             is_valid = (len(validation_errors) <= self.validation_rules['max_validation_errors'] and
                         confidence_score >= self.validation_rules['confidence_threshold'])
 
-            # Create validation result
+# Create validation result
             result = VectorValidationResult(
-                is_valid=is_valid,
-                confidence_score=confidence_score,
-                validation_errors=validation_errors,
-                warnings=warnings,
-                recommendations=recommendations,
-                timestamp=datetime.now().isoformat(),
-                vector_hash=vector_hash,
-                validation_duration=time.time() - start_time
+                is_valid = is_valid,
+                confidence_score = confidence_score,
+                validation_errors = validation_errors,
+                warnings = warnings,
+                recommendations = recommendations,
+                timestamp = datetime.now().isoformat(),
+                vector_hash = vector_hash,
+                validation_duration = time.time() - start_time
             )
 
-            # Record validation
+# Record validation
             self._record_validation(result, context)
 
-            # Update settings controller if validation failed
+# Update settings controller if validation failed
             if not is_valid and self.settings_controller:
                 self.settings_controller.add_known_bad_vector(
-                    vector_hash=vector_hash,
+                    vector_hash = vector_hash,
                     reason="validation_failed",
-                    parameters=vector_data
+                    parameters = vector_data
                 )
 
             return result
@@ -197,57 +231,63 @@ class VectorValidator:
         except Exception as e:
             logger.error(f"Error during vector validation: {e}")
             return VectorValidationResult(
-                is_valid=False,
-                confidence_score=0.0,
+                is_valid = False,
+                confidence_score = 0.0,
                 validation_errors=[f"Validation error: {str(e)}"],
                 warnings=[],
                 recommendations=["Check vector data format"],
-                timestamp=datetime.now().isoformat(),
+                timestamp = datetime.now().isoformat(),
                 vector_hash="error",
-                validation_duration=time.time() - start_time
+                validation_duration = time.time() - start_time
             )
 
     def _generate_vector_hash(self, vector_data: Dict[str, Any]) -> str:
+
         """Generate a hash for the vector data"""
-        # Create a deterministic string representation
-        data_str = json.dumps(vector_data, sort_keys=True)
+"""
+"""
+# Create a deterministic string representation
+        data_str = json.dumps(vector_data, sort_keys = True)
         return hashlib.sha256(data_str.encode()).hexdigest()[:16]
 
     def _calculate_vector_metrics(self, vector_data: Dict[str, Any]) -> VectorMetrics:
+
         """Calculate mathematical metrics for the vector"""
+"""
+"""
         try:
-            # Extract vector components
+# Extract vector components
             components = vector_data.get('components', [])
             if not components:
                 components = [vector_data.get('value', 0.0)]
 
-            # Convert to numpy array
-            vector = np.array(components, dtype=float)
+# Convert to numpy array
+            vector = np.array(components, dtype = float)
 
-            # Calculate entropy score
+# Calculate entropy score
             if len(vector) > 1:
-                # Shannon entropy of normalized vector
+# Shannon entropy of normalized vector
                 normalized = unified_math.unified_math.abs(
-                    vector) / (np.sum(unified_math.unified_math.abs(vector)) + 1e-10)
-                entropy_score = -np.sum(normalized * np.log2(normalized + 1e-10))
+                    vector) / (np.sum(unified_math.unified_math.abs(vector)) + 1e - 10)
+                entropy_score = -np.sum(normalized * np.log2(normalized + 1e - 10))
                 entropy_score = unified_math.min(1.0, entropy_score / np.log2(len(vector)))
             else:
                 entropy_score = 0.0
 
-            # Calculate fractal dimension (approximation)
+# Calculate fractal dimension (approximation)
             if len(vector) > 2:
-                # Box-counting dimension approximation
+# Box - counting dimension approximation
                 ranges = unified_math.unified_math.max(vector) - unified_math.unified_math.min(vector)
                 if ranges > 0:
                     fractal_dimension = 1.0 + \
-                        unified_math.unified_math.log(len(vector)) / unified_math.unified_math.log(ranges + 1e-10)
+                        unified_math.unified_math.log(len(vector)) / unified_math.unified_math.log(ranges + 1e - 10)
                     fractal_dimension = unified_math.max(1.0, unified_math.min(2.0, fractal_dimension))
                 else:
                     fractal_dimension = 1.0
             else:
                 fractal_dimension = 1.0
 
-            # Calculate quantum coherence (phase consistency)
+# Calculate quantum coherence (phase consistency)
             if len(vector) > 1:
                 phases = np.angle(vector + 1j * np.random.rand(len(vector)) * 0.1)
                 phase_diff = np.diff(phases)
@@ -256,96 +296,99 @@ class VectorValidator:
             else:
                 quantum_coherence = 1.0
 
-            # Calculate vector magnitude
+# Calculate vector magnitude
             vector_magnitude = np.linalg.norm(vector)
 
-            # Calculate angular momentum (cross product approximation)
+# Calculate angular momentum (cross product approximation)
             if len(vector) >= 3:
                 angular_momentum = unified_math.unified_math.abs(np.cross(vector[:3], vector[1:4]))[0]
-                angular_momentum = unified_math.min(1.0, angular_momentum / (vector_magnitude + 1e-10))
+                angular_momentum = unified_math.min(1.0, angular_momentum / (vector_magnitude + 1e - 10))
             else:
                 angular_momentum = 0.0
 
-            # Calculate phase alignment
+# Calculate phase alignment
             if len(vector) > 1:
                 real_parts = np.real(vector)
                 imag_parts = np.imag(vector) if np.iscomplexobj(vector) else np.zeros_like(vector)
                 phase_alignment = unified_math.unified_math.abs(
-                    np.sum(real_parts) + 1j * np.sum(imag_parts)) / (np.sum(unified_math.unified_math.abs(vector)) + 1e-10)
+                    np.sum(real_parts) + 1j * np.sum(imag_parts)) / (np.sum(unified_math.unified_math.abs(vector)) + 1e - 10)
             else:
                 phase_alignment = 1.0
 
-            # Calculate stability index
+# Calculate stability index
             if len(vector) > 1:
                 stability_index = 1.0 - \
                     unified_math.unified_math.std(
-                        vector) / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e-10)
+                        vector) / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e - 10)
                 stability_index = unified_math.max(0.0, unified_math.min(1.0, stability_index))
             else:
                 stability_index = 1.0
 
-            # Calculate convergence rate
+# Calculate convergence rate
             if len(vector) > 2:
-                convergence_rate = unified_math.unified_math.abs(np.diff(vector, n=2)).mean(
-                ) / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e-10)
+                convergence_rate = unified_math.unified_math.abs(np.diff(vector, n = 2)).mean(
+                ) / (unified_math.unified_math.mean(unified_math.unified_math.abs(vector)) + 1e - 10)
                 convergence_rate = unified_math.max(0.0, unified_math.min(1.0, convergence_rate))
             else:
                 convergence_rate = 0.0
 
             return VectorMetrics(
-                entropy_score=entropy_score,
-                fractal_dimension=fractal_dimension,
-                quantum_coherence=quantum_coherence,
-                vector_magnitude=vector_magnitude,
-                angular_momentum=angular_momentum,
-                phase_alignment=phase_alignment,
-                stability_index=stability_index,
-                convergence_rate=convergence_rate
+                entropy_score = entropy_score,
+                fractal_dimension = fractal_dimension,
+                quantum_coherence = quantum_coherence,
+                vector_magnitude = vector_magnitude,
+                angular_momentum = angular_momentum,
+                phase_alignment = phase_alignment,
+                stability_index = stability_index,
+                convergence_rate = convergence_rate
             )
 
         except Exception as e:
             logger.error(f"Error calculating vector metrics: {e}")
-            # Return default metrics
+# Return default metrics
             return VectorMetrics(
-                entropy_score=0.0,
-                fractal_dimension=1.0,
-                quantum_coherence=0.0,
-                vector_magnitude=0.0,
-                angular_momentum=0.0,
-                phase_alignment=0.0,
-                stability_index=0.0,
-                convergence_rate=0.0
+                entropy_score = 0.0,
+                fractal_dimension = 1.0,
+                quantum_coherence = 0.0,
+                vector_magnitude = 0.0,
+                angular_momentum = 0.0,
+                phase_alignment = 0.0,
+                stability_index = 0.0,
+                convergence_rate = 0.0
             )
 
     def _generate_recommendations(self, metrics: VectorMetrics, errors: List[str], warnings: List[str]) -> List[str]:
+
         """Generate recommendations based on validation results"""
+"""
+"""
         recommendations = []
 
-        # Entropy recommendations
+# Entropy recommendations
         if metrics.entropy_score < 0.5:
             recommendations.append("Increase vector complexity to improve entropy")
         elif metrics.entropy_score > 0.9:
             recommendations.append("Consider reducing vector complexity for stability")
 
-        # Fractal dimension recommendations
+# Fractal dimension recommendations
         if metrics.fractal_dimension < 1.2:
             recommendations.append("Add more dimensional components")
         elif metrics.fractal_dimension > 1.8:
             recommendations.append("Consider simplifying vector structure")
 
-        # Quantum coherence recommendations
+# Quantum coherence recommendations
         if metrics.quantum_coherence < 0.5:
             recommendations.append("Improve phase consistency across components")
 
-        # Stability recommendations
+# Stability recommendations
         if metrics.stability_index < 0.7:
             recommendations.append("Reduce vector variability for better stability")
 
-        # Convergence recommendations
+# Convergence recommendations
         if metrics.convergence_rate < 0.1:
             recommendations.append("Optimize for faster convergence")
 
-        # General recommendations
+# General recommendations
         if len(errors) > 0:
             recommendations.append("Address validation errors before proceeding")
 
@@ -355,8 +398,11 @@ class VectorValidator:
         return recommendations
 
     def _calculate_confidence_score(self, metrics: VectorMetrics, errors: List[str], warnings: List[str]) -> float:
+
         """Calculate confidence score based on metrics and validation results"""
-        # Base score from metrics
+"""
+"""
+# Base score from metrics
         base_score = (
             metrics.entropy_score * 0.2 +
             unified_math.min(1.0, metrics.fractal_dimension / 2.0) * 0.15 +
@@ -368,17 +414,20 @@ class VectorValidator:
             unified_math.min(1.0, metrics.convergence_rate * 10) * 0.05
         )
 
-        # Penalties for errors and warnings
+# Penalties for errors and warnings
         error_penalty = len(errors) * 0.1
         warning_penalty = len(warnings) * 0.05
 
-        # Final score
+# Final score
         confidence_score = unified_math.max(0.0, unified_math.min(1.0, base_score - error_penalty - warning_penalty))
 
         return confidence_score
 
     def _record_validation(self, result: VectorValidationResult, context: str) -> None:
+
         """Record validation result for analysis"""
+"""
+"""
         with self.lock:
             self.validation_history.append({
                 'result': asdict(result),
@@ -386,11 +435,11 @@ class VectorValidator:
                 'timestamp': datetime.now().isoformat()
             })
 
-            # Keep only recent history
+# Keep only recent history
             if len(self.validation_history) > 1000:
                 self.validation_history = self.validation_history[-1000:]
 
-            # Update statistics
+# Update statistics
             self.total_validations += 1
             if result.is_valid:
                 self.successful_validations += 1
@@ -400,7 +449,10 @@ class VectorValidator:
             self.last_validation = result
 
     def get_validation_statistics(self) -> Dict[str, Any]:
+
         """Get validation statistics"""
+"""
+"""
         with self.lock:
             if self.total_validations == 0:
                 return {
@@ -413,7 +465,7 @@ class VectorValidator:
 
             success_rate = self.successful_validations / self.total_validations
 
-            # Calculate average confidence from recent validations
+# Calculate average confidence from recent validations
             recent_results = [v['result']['confidence_score'] for v in self.validation_history[-100:]]
             average_confidence = unified_math.unified_math.mean(recent_results) if recent_results else 0.0
 
@@ -428,9 +480,12 @@ class VectorValidator:
             }
 
     def get_performance_metrics(self) -> Dict[str, Any]:
+
         """Get performance metrics for the validator"""
+"""
+"""
         with self.lock:
-            # Calculate validation performance over time
+# Calculate validation performance over time
             recent_validations = self.validation_history[-100:]
 
             if not recent_validations:
@@ -441,11 +496,11 @@ class VectorValidator:
                     'warning_distribution': {}
                 }
 
-            # Calculate average validation time
+# Calculate average validation time
             validation_times = [v['result']['validation_duration'] for v in recent_validations]
             average_validation_time = unified_math.unified_math.mean(validation_times)
 
-            # Calculate error and warning distributions
+# Calculate error and warning distributions
             error_distribution = defaultdict(int)
             warning_distribution = defaultdict(int)
 
@@ -466,29 +521,38 @@ class VectorValidator:
             }
 
     def start_background_monitoring(self) -> None:
+
         """Start background validation monitoring"""
+"""
+"""
         if not self.running:
             self.running = True
-            self.validation_thread = threading.Thread(target=self._background_monitoring_loop, daemon=True)
+            self.validation_thread = threading.Thread(target = self._background_monitoring_loop, daemon = True)
             self.validation_thread.start()
             logger.info("Background validation monitoring started")
 
     def stop_background_monitoring(self) -> None:
+
         """Stop background validation monitoring"""
+"""
+"""
         self.running = False
         if self.validation_thread:
-            self.validation_thread.join(timeout=5)
+            self.validation_thread.join(timeout = 5)
         logger.info("Background validation monitoring stopped")
 
     def _background_monitoring_loop(self) -> None:
+
         """Background loop for validation monitoring"""
+"""
+"""
         while self.running:
             try:
-                # Update performance metrics
+# Update performance metrics
                 self.performance_metrics['validation_stats'].append(self.get_validation_statistics())
                 self.performance_metrics['performance_metrics'].append(self.get_performance_metrics())
 
-                # Keep only recent metrics
+# Keep only recent metrics
                 if len(self.performance_metrics['validation_stats']) > 100:
                     self.performance_metrics['validation_stats'] = self.performance_metrics['validation_stats'][-100:]
                 if len(self.performance_metrics['performance_metrics']) > 100:
@@ -501,7 +565,10 @@ class VectorValidator:
                 time.sleep(30)
 
     def export_validation_history(self, filepath: str) -> None:
+
         """Export validation history to a file"""
+"""
+"""
         with self.lock:
             export_data = {
                 'validation_history': self.validation_history,
@@ -511,12 +578,15 @@ class VectorValidator:
             }
 
             with open(filepath, 'w') as f:
-                json.dump(export_data, f, indent=2)
+                json.dump(export_data, f, indent = 2)
 
             logger.info(f"Validation history exported to {filepath}")
 
     def clear_validation_history(self) -> None:
+
         """Clear validation history"""
+"""
+"""
         with self.lock:
             self.validation_history.clear()
             self.performance_metrics.clear()
@@ -532,15 +602,18 @@ vector_validator = VectorValidator()
 
 
 def get_vector_validator() -> VectorValidator:
+
     """Get the global vector validator instance"""
+"""
+"""
     return vector_validator
 
 
 if __name__ == "__main__":
-    # Test the vector validator
+# Test the vector validator
     validator = VectorValidator()
 
-    # Test vector validation
+# Test vector validation
     test_vector = {
         'components': [1.0, 2.0, 3.0, 4.0, 5.0],
         'type': 'test_vector'
@@ -549,10 +622,10 @@ if __name__ == "__main__":
     result = validator.validate_vector(test_vector, "test_context")
 
     safe_print("Validation Result:")
-    print(json.dumps(asdict(result), indent=2))
+    print(json.dumps(asdict(result), indent = 2))
 
     safe_print("\\nValidation Statistics:")
-    print(json.dumps(validator.get_validation_statistics(), indent=2))
+    print(json.dumps(validator.get_validation_statistics(), indent = 2))
 
     safe_print("\\nPerformance Metrics:")
-    print(json.dumps(validator.get_performance_metrics(), indent=2))
+    print(json.dumps(validator.get_performance_metrics(), indent = 2))

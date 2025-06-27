@@ -1,6 +1,8 @@
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Portfolio Router - Randomized Matrix Allocation and Dynamic Portfolio Substitutions.
+"""Portfolio Router - Randomized Matrix Allocation and Dynamic Portfolio Substitutions.
+"""Portfolio Router - Randomized Matrix Allocation and Dynamic Portfolio Substitutions.
+"""Portfolio Router - Randomized Matrix Allocation and Dynamic Portfolio Substitutions.
+
 
 This module provides portfolio routing logic for Schwabot, implementing
 randomized matrix allocation, dynamic portfolio substitutions, and heatmap
@@ -8,11 +10,14 @@ drift analysis for optimal asset allocation.
 
 Mathematical Foundation:
 - Heatmap Drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
-- USDC Conversion Trigger: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}
+- USDC Conversion Trigger: \\u2206USDC = p(t + 1) - \\u03c3_{\\u2206}
 - Randomized matrix allocation with dynamic weight optimization
 - Asset priority routing based on timeband analysis
 """
+"""
+"""
 
+from core.unified_math_system import unified_math
 import logging
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
@@ -30,20 +35,26 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class AssetProfile:
+
     """Represents an asset profile with allocation data."""
+"""
+"""
 
     symbol: str
     weight: float  # Current weight in portfolio
     target_weight: float  # Target weight
     volatility: float  # Asset volatility
     correlation: float  # Correlation with portfolio
-    last_update: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    last_update: datetime = field(default_factory = datetime.now)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class PortfolioShift:
+
     """Represents a portfolio shift recommendation."""
+"""
+"""
 
     asset: str
     current_weight: float
@@ -51,51 +62,63 @@ class PortfolioShift:
     shift_amount: float
     confidence: float
     priority: int  # 1 = highest priority
-    timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    timestamp: datetime = field(default_factory = datetime.now)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class HeatmapData:
+
     """Represents heatmap data for portfolio analysis."""
+"""
+"""
 
     asset: str
     heatmap_value: float  # H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
     timeband: str  # Time period classification
     drift_direction: str  # 'up', 'down', 'stable'
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field(default_factory = datetime.now)
 
 
 class PortfolioRouter:
+
     """Portfolio routing with randomized matrix allocation."""
+"""
+"""
 
     def __init__(self) -> None:
+
         """Initialize the portfolio router."""
+"""
+"""
         self.asset_matrix: Dict[str, AssetProfile] = {}
         self.heatmap_history: List[HeatmapData] = []
         self.shift_history: List[PortfolioShift] = []
 
-        # Configuration parameters
+# Configuration parameters
         self.rebalance_threshold = 0.05  # 5% threshold for rebalancing
         self.max_assets = 10  # Maximum number of assets
         self.volatility_target = 0.15  # Target portfolio volatility
         self.correlation_threshold = 0.7  # Maximum correlation threshold
 
-        # Timeband definitions
+# Timeband definitions
         self.timebands = {
-            'ultra_short': timedelta(minutes=5),
-            'short': timedelta(minutes=30),
-            'medium': timedelta(hours=2),
-            'long': timedelta(hours=24)
+            'ultra_short': timedelta(minutes = 5),
+            'short': timedelta(minutes = 30),
+            'medium': timedelta(hours = 2),
+            'long': timedelta(hours = 24)
         }
 
-        # Initialize default assets
+# Initialize default assets
         self._initialize_default_assets()
 
         logger.info("PortfolioRouter initialized")
 
     def _initialize_default_assets(self) -> None:
+
         """Initialize default asset profiles."""
+"""
+"""
         default_assets = {
             'USDC': {'weight': 0.3, 'volatility': 0.01, 'correlation': 0.0},
             'BTC': {'weight': 0.25, 'volatility': 0.25, 'correlation': 0.8},
@@ -106,40 +129,43 @@ class PortfolioRouter:
 
         for symbol, data in default_assets.items():
             self.asset_matrix[symbol] = AssetProfile(
-                symbol=symbol,
-                weight=data['weight'],
-                target_weight=data['weight'],
-                volatility=data['volatility'],
-                correlation=data['correlation']
+                symbol = symbol,
+                weight = data['weight'],
+                target_weight = data['weight'],
+                volatility = data['volatility'],
+                correlation = data['correlation']
             )
 
     @memoize
     def generate_random_matrix_weights(self) -> Dict[str, float]:
+
         """Generate randomized matrix weights for portfolio allocation.
 
         Returns:
             Dictionary of asset symbols to weights
         """
+"""
+"""
         try:
-            # Get current assets
+# Get current assets
             assets = list(self.asset_matrix.keys())
             if not assets:
                 return {}
 
-            # Generate random weights using Dirichlet distribution
-            # This ensures weights sum to 1.0
+# Generate random weights using Dirichlet distribution
+# This ensures weights sum to 1.0
             alpha = np.ones(len(assets)) * 0.5  # Concentration parameter
             random_weights = np.random.dirichlet(alpha)
 
-            # Create weight dictionary
+# Create weight dictionary
             weight_dict = {}
             for i, asset in enumerate(assets):
                 weight_dict[asset] = float(random_weights[i])
 
-            # Apply volatility constraints
+# Apply volatility constraints
             weight_dict = self._apply_volatility_constraints(weight_dict)
 
-            # Normalize weights
+# Normalize weights
             total_weight = sum(weight_dict.values())
             if total_weight > 0:
                 weight_dict = {k: v / total_weight for k, v in weight_dict.items()}
@@ -153,6 +179,7 @@ class PortfolioRouter:
             return {}
 
     def route_asset_priority(self, basket: List[str], timeband: str) -> List[str]:
+
         """Route asset priority based on basket and timeband.
 
         Args:
@@ -162,25 +189,27 @@ class PortfolioRouter:
         Returns:
             Ordered list of assets by priority
         """
+"""
+"""
         try:
             if not basket:
                 return []
 
-            # Calculate priority scores for each asset
+# Calculate priority scores for each asset
             priority_scores = {}
             for asset in basket:
                 if asset in self.asset_matrix:
                     profile = self.asset_matrix[asset]
 
-                    # Calculate priority score based on multiple factors
+# Calculate priority score based on multiple factors
                     volatility_score = 1.0 / (1.0 + profile.volatility)
                     correlation_score = 1.0 - unified_math.abs(profile.correlation)
                     weight_score = profile.weight
 
-                    # Timeband-specific adjustments
+# Timeband - specific adjustments
                     timeband_multiplier = self._get_timeband_multiplier(timeband)
 
-                    # Combined priority score
+# Combined priority score
                     priority_score = (
                         volatility_score * 0.3 +
                         correlation_score * 0.3 +
@@ -189,11 +218,11 @@ class PortfolioRouter:
 
                     priority_scores[asset] = priority_score
 
-            # Sort assets by priority score (descending)
+# Sort assets by priority score (descending)
             sorted_assets = sorted(
                 priority_scores.keys(),
-                key=lambda x: priority_scores[x],
-                reverse=True
+                key = lambda x: priority_scores[x],
+                reverse = True
             )
 
             logger.debug(f"Asset priority for {timeband}: {sorted_assets}")
@@ -205,6 +234,7 @@ class PortfolioRouter:
             return basket
 
     def calculate_portfolio_shift(self, market_conditions: Dict[str, Any]) -> Dict[str, Any]:
+
         """Calculate optimal portfolio rebalancing based on market conditions.
 
         Args:
@@ -213,34 +243,36 @@ class PortfolioRouter:
         Returns:
             Dictionary with portfolio shift recommendations
         """
+"""
+"""
         try:
-            # Extract market conditions
+# Extract market conditions
             overall_volatility = market_conditions.get('volatility', 0.1)
             risk_tolerance = market_conditions.get('risk_tolerance', 0.5)
             correlation_matrix = market_conditions.get('correlations', {})
 
-            # Calculate optimal weights using volatility-adjusted allocation
+# Calculate optimal weights using volatility - adjusted allocation
             optimal_weights = self._calculate_optimal_weights(
                 overall_volatility, risk_tolerance, correlation_matrix
             )
 
-            # Calculate current drift from optimal
+# Calculate current drift from optimal
             current_weights = {asset: profile.weight for asset, profile in self.asset_matrix.items()}
             drift_vector = self._calculate_drift_vector(current_weights, optimal_weights)
 
-            # Determine if rebalancing is needed
+# Determine if rebalancing is needed
             total_drift = unified_math.unified_math.sqrt(sum(d**2 for d in drift_vector.values()))
             rebalance_needed = total_drift > self.rebalance_threshold
 
-            # Generate shift recommendations
+# Generate shift recommendations
             shifts = []
             if rebalance_needed:
                 shifts = self._generate_shift_recommendations(drift_vector, optimal_weights)
 
-            # Calculate heatmap drift
+# Calculate heatmap drift
             heatmap_drift = self._calculate_heatmap_drift(market_conditions)
 
-            # Check USDC conversion trigger
+# Check USDC conversion trigger
             usdc_conversion = self._check_usdc_conversion_trigger(market_conditions)
 
             result = {
@@ -254,7 +286,7 @@ class PortfolioRouter:
                 'timestamp': datetime.now().isoformat()
             }
 
-            # Store shift history
+# Store shift history
             self.shift_history.extend(shifts)
 
             logger.info(f"Portfolio shift calculated: {len(shifts)} shifts recommended")
@@ -266,6 +298,7 @@ class PortfolioRouter:
             return {'error': str(e)}
 
     def update_asset_profile(self, symbol: str, **kwargs) -> bool:
+
         """Update asset profile with new data.
 
         Args:
@@ -275,18 +308,20 @@ class PortfolioRouter:
         Returns:
             True if update successful, False otherwise
         """
+"""
+"""
         try:
             if symbol not in self.asset_matrix:
-                # Create new asset profile
+# Create new asset profile
                 self.asset_matrix[symbol] = AssetProfile(
-                    symbol=symbol,
-                    weight=kwargs.get('weight', 0.0),
-                    target_weight=kwargs.get('target_weight', 0.0),
-                    volatility=kwargs.get('volatility', 0.2),
-                    correlation=kwargs.get('correlation', 0.5)
+                    symbol = symbol,
+                    weight = kwargs.get('weight', 0.0),
+                    target_weight = kwargs.get('target_weight', 0.0),
+                    volatility = kwargs.get('volatility', 0.2),
+                    correlation = kwargs.get('correlation', 0.5)
                 )
             else:
-                # Update existing profile
+# Update existing profile
                 profile = self.asset_matrix[symbol]
                 for key, value in kwargs.items():
                     if hasattr(profile, key):
@@ -300,7 +335,8 @@ class PortfolioRouter:
             logger.error(f"Error updating asset profile for {symbol}: {e}")
             return False
 
-    def get_activity_level(self, asset: str, time_window: timedelta = timedelta(hours=1)) -> float:
+    def get_activity_level(self, asset: str, time_window: timedelta = timedelta(hours = 1)) -> float:
+
         """Calculate activity level for an asset based on recent shifts.
 
         Args:
@@ -310,16 +346,18 @@ class PortfolioRouter:
         Returns:
             Activity level score (0.0 to 1.0)
         """
+"""
+"""
         try:
             cutoff_time = datetime.now() - time_window
 
-            # Count recent shifts for this asset
+# Count recent shifts for this asset
             recent_shifts = [
                 shift for shift in self.shift_history
                 if shift.asset == asset and shift.timestamp > cutoff_time
             ]
 
-            # Calculate activity level based on shift frequency and magnitude
+# Calculate activity level based on shift frequency and magnitude
             if recent_shifts:
                 frequency_score = unified_math.min(len(recent_shifts) / 10.0, 1.0)
                 magnitude_score = unified_math.mean([unified_math.abs(shift.shift_amount) for shift in recent_shifts])
@@ -334,16 +372,19 @@ class PortfolioRouter:
             return 0.0
 
     def _apply_volatility_constraints(self, weights: Dict[str, float]) -> Dict[str, float]:
+
         """Apply volatility constraints to weights."""
+"""
+"""
         try:
             constrained_weights = weights.copy()
 
-            # Reduce weights for high volatility assets
+# Reduce weights for high volatility assets
             for asset, weight in weights.items():
                 if asset in self.asset_matrix:
                     volatility = self.asset_matrix[asset].volatility
                     if volatility > self.volatility_target:
-                        # Reduce weight for high volatility assets
+# Reduce weight for high volatility assets
                         reduction_factor = self.volatility_target / volatility
                         constrained_weights[asset] = weight * reduction_factor
 
@@ -354,10 +395,13 @@ class PortfolioRouter:
             return weights
 
     def _get_timeband_multiplier(self, timeband: str) -> float:
-        """Get timeband-specific multiplier for priority calculation."""
+
+        """Get timeband - specific multiplier for priority calculation."""
+"""
+"""
         try:
             multipliers = {
-                'ultra_short': 1.2,  # Higher priority for ultra-short term
+                'ultra_short': 1.2,  # Higher priority for ultra - short term
                 'short': 1.1,
                 'medium': 1.0,
                 'long': 0.9  # Lower priority for long term
@@ -370,11 +414,14 @@ class PortfolioRouter:
             return 1.0
 
     def _calculate_optimal_weights(self, overall_volatility: float,
-                                   risk_tolerance: float,
-                                   correlation_matrix: Dict[str, float]) -> Dict[str, float]:
-        """Calculate optimal weights using volatility-adjusted allocation."""
+
+                                    risk_tolerance: float,
+                                    correlation_matrix: Dict[str, float]) -> Dict[str, float]:
+        """Calculate optimal weights using volatility - adjusted allocation."""
+"""
+"""
         try:
-            # Use inverse volatility weighting as base
+# Use inverse volatility weighting as base
             inverse_volatilities = {}
             for asset, profile in self.asset_matrix.items():
                 if profile.volatility > 0:
@@ -382,23 +429,23 @@ class PortfolioRouter:
                 else:
                     inverse_volatilities[asset] = 1.0
 
-            # Normalize inverse volatilities
+# Normalize inverse volatilities
             total_inverse = sum(inverse_volatilities.values())
             if total_inverse > 0:
                 base_weights = {k: v / total_inverse for k, v in inverse_volatilities.items()}
             else:
                 base_weights = {asset: 1.0 / len(self.asset_matrix) for asset in self.asset_matrix.keys()}
 
-            # Adjust for risk tolerance
+# Adjust for risk tolerance
             risk_adjusted_weights = {}
             for asset, weight in base_weights.items():
                 if asset in self.asset_matrix:
                     volatility = self.asset_matrix[asset].volatility
-                    # Reduce weight for high volatility assets if risk tolerance is low
+# Reduce weight for high volatility assets if risk tolerance is low
                     risk_factor = 1.0 - (volatility * (1.0 - risk_tolerance))
                     risk_adjusted_weights[asset] = weight * unified_math.max(0.1, risk_factor)
 
-            # Normalize final weights
+# Normalize final weights
             total_weight = sum(risk_adjusted_weights.values())
             if total_weight > 0:
                 optimal_weights = {k: v / total_weight for k, v in risk_adjusted_weights.items()}
@@ -412,12 +459,15 @@ class PortfolioRouter:
             return {asset: 1.0 / len(self.asset_matrix) for asset in self.asset_matrix.keys()}
 
     def _calculate_drift_vector(self, current_weights: Dict[str, float],
+
                                 optimal_weights: Dict[str, float]) -> Dict[str, float]:
         """Calculate drift vector between current and optimal weights."""
+"""
+"""
         try:
             drift_vector = {}
 
-            # Calculate drift for each asset
+# Calculate drift for each asset
             for asset in set(current_weights.keys()) | set(optimal_weights.keys()):
                 current = current_weights.get(asset, 0.0)
                 optimal = optimal_weights.get(asset, 0.0)
@@ -430,8 +480,11 @@ class PortfolioRouter:
             return {}
 
     def _generate_shift_recommendations(self, drift_vector: Dict[str, float],
+
                                         optimal_weights: Dict[str, float]) -> List[PortfolioShift]:
         """Generate shift recommendations based on drift vector."""
+"""
+"""
         try:
             shifts = []
 
@@ -440,26 +493,26 @@ class PortfolioRouter:
                     current_weight = self.asset_matrix.get(asset, AssetProfile(asset, 0.0, 0.0, 0.2, 0.5)).weight
                     target_weight = optimal_weights.get(asset, current_weight)
 
-                    # Calculate confidence based on drift magnitude
+# Calculate confidence based on drift magnitude
                     confidence = unified_math.min(unified_math.abs(drift) * 2.0, 1.0)
 
-                    # Determine priority based on drift magnitude
+# Determine priority based on drift magnitude
                     priority = int(10 * (1.0 - unified_math.abs(drift)))  # Higher drift = lower priority number
 
                     shift = PortfolioShift(
-                        asset=asset,
-                        current_weight=current_weight,
-                        target_weight=target_weight,
-                        shift_amount=drift,
-                        confidence=confidence,
-                        priority=priority,
+                        asset = asset,
+                        current_weight = current_weight,
+                        target_weight = target_weight,
+                        shift_amount = drift,
+                        confidence = confidence,
+                        priority = priority,
                         metadata={'drift_magnitude': unified_math.abs(drift)}
                     )
 
                     shifts.append(shift)
 
-            # Sort by priority (ascending)
-            shifts.sort(key=lambda x: x.priority)
+# Sort by priority (ascending)
+            shifts.sort(key = lambda x: x.priority)
 
             return shifts
 
@@ -468,33 +521,36 @@ class PortfolioRouter:
             return []
 
     def _calculate_heatmap_drift(self, market_conditions: Dict[str, Any]) -> Dict[str, float]:
+
         """Calculate heatmap drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t."""
+"""
+"""
         try:
             heatmap_drift = {}
 
             for asset, profile in self.asset_matrix.items():
-                # Calculate partial derivative \\u2202f/\\u2202p (simplified as weight change)
+# Calculate partial derivative \\u2202f/\\u2202p (simplified as weight change)
                 weight_change = profile.target_weight - profile.weight
 
-                # Calculate time factor \\u03c4t (time since last update)
+# Calculate time factor \\u03c4t (time since last update)
                 time_factor = (datetime.now() - profile.last_update).total_seconds() / 3600.0
 
-                # Calculate heatmap drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
+# Calculate heatmap drift: H = \\u2202f/\\u2202p \\u00d7 \\u03c4t
                 heatmap_value = weight_change * time_factor
 
                 heatmap_drift[asset] = heatmap_value
 
-                # Store heatmap data
+# Store heatmap data
                 heatmap_data = HeatmapData(
-                    asset=asset,
-                    heatmap_value=heatmap_value,
-                    timeband=self._classify_timeband(time_factor),
+                    asset = asset,
+                    heatmap_value = heatmap_value,
+                    timeband = self._classify_timeband(time_factor),
                     drift_direction='up' if heatmap_value > 0 else 'down' if heatmap_value < 0 else 'stable'
                 )
 
                 self.heatmap_history.append(heatmap_data)
 
-            # Keep only recent heatmap history
+# Keep only recent heatmap history
             if len(self.heatmap_history) > 1000:
                 self.heatmap_history = self.heatmap_history[-1000:]
 
@@ -505,7 +561,10 @@ class PortfolioRouter:
             return {}
 
     def _check_usdc_conversion_trigger(self, market_conditions: Dict[str, Any]) -> Dict[str, Any]:
-        """Check USDC conversion trigger: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}."""
+
+        """Check USDC conversion trigger: \\u2206USDC = p(t + 1) - \\u03c3_{\\u2206}."""
+"""
+"""
         try:
             if 'USDC' not in self.asset_matrix:
                 return {'triggered': False, 'reason': 'USDC not in portfolio'}
@@ -513,14 +572,14 @@ class PortfolioRouter:
             usdc_profile = self.asset_matrix['USDC']
             current_usdc_weight = usdc_profile.weight
 
-            # Predict future USDC weight p(t+1)
-            # Simplified prediction based on current drift
+# Predict future USDC weight p(t + 1)
+# Simplified prediction based on current drift
             future_usdc_weight = current_usdc_weight + usdc_profile.target_weight - current_usdc_weight
 
-            # Calculate volatility threshold \\u03c3_{\\u2206}
+# Calculate volatility threshold \\u03c3_{\\u2206}
             volatility_threshold = market_conditions.get('volatility', 0.1) * 0.5
 
-            # Check trigger condition: \\u2206USDC = p(t+1) - \\u03c3_{\\u2206}
+# Check trigger condition: \\u2206USDC = p(t + 1) - \\u03c3_{\\u2206}
             usdc_change = future_usdc_weight - volatility_threshold
 
             triggered = unified_math.abs(usdc_change) > self.rebalance_threshold
@@ -539,7 +598,10 @@ class PortfolioRouter:
             return {'triggered': False, 'error': str(e)}
 
     def _classify_timeband(self, time_factor: float) -> str:
+
         """Classify time factor into timeband."""
+"""
+"""
         try:
             if time_factor <= 0.083:  # 5 minutes
                 return 'ultra_short'
@@ -555,12 +617,15 @@ class PortfolioRouter:
             return 'medium'
 
     def get_portfolio_statistics(self) -> Dict[str, Any]:
+
         """Get portfolio statistics and performance metrics."""
+"""
+"""
         try:
             total_assets = len(self.asset_matrix)
             total_weight = sum(profile.weight for profile in self.asset_matrix.values())
 
-            # Calculate portfolio volatility
+# Calculate portfolio volatility
             portfolio_volatility = 0.0
             if total_weight > 0:
                 weighted_volatility = sum(
@@ -569,7 +634,7 @@ class PortfolioRouter:
                 )
                 portfolio_volatility = weighted_volatility / total_weight
 
-            # Calculate average correlation
+# Calculate average correlation
             avg_correlation = unified_math.mean([
                 profile.correlation for profile in self.asset_matrix.values()
             ])
@@ -584,7 +649,7 @@ class PortfolioRouter:
                 'volatility_target': self.volatility_target,
                 'correlation_threshold': self.correlation_threshold,
                 'recent_shifts': len([s for s in self.shift_history
-                                      if s.timestamp > datetime.now() - timedelta(hours=1)])
+                                        if s.timestamp > datetime.now() - timedelta(hours = 1)])
             }
 
         except Exception as e:
@@ -594,5 +659,8 @@ class PortfolioRouter:
 
 # Convenience function
 def create_portfolio_router() -> PortfolioRouter:
+
     """Create and return a new PortfolioRouter instance."""
+"""
+"""
     return PortfolioRouter()

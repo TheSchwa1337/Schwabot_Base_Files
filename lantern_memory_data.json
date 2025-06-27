@@ -1,0 +1,113 @@
+{
+  "trigger_glyphs": {
+    "💰": {
+      "bit_state": "00",
+      "sha_signature": "c8ec8f320bc89df2252c8f0c99ff2d661d4517c14d471f94eae9102dac59b2c0",
+      "profit_tier": "T4",
+      "entropy_vector": 0.75,
+      "trust_score": 0.5,
+      "lantern_key": "c8ec8f320bc89df2",
+      "recursive_trigger": false
+    },
+    "📈": {
+      "bit_state": "00",
+      "sha_signature": "de871aba047508be318e5c57994615e95c80dcdcf13dc7e319386a5f113497ba",
+      "profit_tier": "T3",
+      "entropy_vector": 0.78125,
+      "trust_score": 0.5,
+      "lantern_key": "de871aba047508be",
+      "recursive_trigger": false
+    },
+    "⚠️": {
+      "bit_state": "00",
+      "sha_signature": "3ba5d49357d54dc938f914d08775e8f60bf943fdd0b572749efc97ae573f68e9",
+      "profit_tier": "T2",
+      "entropy_vector": 0.765625,
+      "trust_score": 0.5,
+      "lantern_key": "3ba5d49357d54dc9",
+      "recursive_trigger": false
+    },
+    "🧠": {
+      "bit_state": "00",
+      "sha_signature": "ce68521c06186972dd18d66222cba510400be08a0fd949ad57988811e0d1a750",
+      "profit_tier": "T4",
+      "entropy_vector": 0.71875,
+      "trust_score": 0.5,
+      "lantern_key": "ce68521c06186972",
+      "recursive_trigger": false
+    }
+  },
+  "lantern_memory": {
+    "c8ec8f320bc89df2": {
+      "memory_type": "profit_sequence",
+      "symbol": "💰",
+      "sha_hash": "c8ec8f320bc89df2252c8f0c99ff2d661d4517c14d471f94eae9102dac59b2c0",
+      "profit_value": 0.15,
+      "trigger_map": "00",
+      "time_stamp": 1750988048.630584,
+      "cycle_index": 1,
+      "entropy_score": 0.75,
+      "trust_level": 0.5,
+      "recursive_count": 2
+    },
+    "de871aba047508be": {
+      "memory_type": "profit_sequence",
+      "symbol": "📈",
+      "sha_hash": "de871aba047508be318e5c57994615e95c80dcdcf13dc7e319386a5f113497ba",
+      "profit_value": 0.08,
+      "trigger_map": "00",
+      "time_stamp": 1750988048.6315842,
+      "cycle_index": 2,
+      "entropy_score": 0.78125,
+      "trust_level": 0.5,
+      "recursive_count": 2
+    },
+    "3ba5d49357d54dc9": {
+      "memory_type": "profit_sequence",
+      "symbol": "⚠️",
+      "sha_hash": "3ba5d49357d54dc938f914d08775e8f60bf943fdd0b572749efc97ae573f68e9",
+      "profit_value": 0.02,
+      "trigger_map": "00",
+      "time_stamp": 1750988048.632582,
+      "cycle_index": 3,
+      "entropy_score": 0.765625,
+      "trust_level": 0.5,
+      "recursive_count": 2
+    },
+    "ce68521c06186972": {
+      "memory_type": "profit_sequence",
+      "symbol": "🧠",
+      "sha_hash": "ce68521c06186972dd18d66222cba510400be08a0fd949ad57988811e0d1a750",
+      "profit_value": 0.2,
+      "trigger_map": "00",
+      "time_stamp": 1750988048.632582,
+      "cycle_index": 4,
+      "entropy_score": 0.71875,
+      "trust_level": 0.5,
+      "recursive_count": 2
+    }
+  },
+  "recursive_loops": {
+    "8dae2ea6edf9b423": [
+      "💰",
+      "📈",
+      "🧠"
+    ],
+    "8f7b620b91949e58": [
+      "⚡",
+      "🎯",
+      "🔄"
+    ],
+    "4d1ad6459ce697d2": [
+      "📈",
+      "💰",
+      "⭐"
+    ]
+  },
+  "statistics": {
+    "total_glyphs": 4,
+    "total_memory_entries": 4,
+    "total_recursive_loops": 3,
+    "cycle_counter": 4
+  }
+}

@@ -1,20 +1,41 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+import os
+import re
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Selective Syntax Fixer - Target Critical Files First.
 
 This script systematically fixes E999 syntax errors in critical files
 using the established patterns, prioritizing core functionality.
 """
-
-import os
-import re
-from pathlib import Path
+"""
+"""
+"""
+"""
 
 
 class SelectiveSyntaxFixer:
+
     """Selective syntax error fixer for critical files."""
 
+
+"""
+"""
+"""
+"""
+
     def __init__(self):
+
         self.fix_stats = {
             'files_processed': 0,
             'errors_fixed': 0,
@@ -23,48 +44,56 @@ class SelectiveSyntaxFixer:
             'syntax_fixes': 0
         }
 
-        # Priority files to fix first (core functionality)
+# Priority files to fix first (core functionality)
         self.priority_files = [
-            'core/advanced_mathematical_core.py',
-            'core/filters.py',
-            'core/flux_compensator.py',
-            'core/ghost_phase_integrator.py',
-            'core/ghost_pipeline.py',
-            'core/ghost_profit_tracker.py',
-            'core/ghost_memory.py',
-            'core/ghost_memory_router.py',
-            'core/ghost_meta_layer_engine.py',
-            'core/ghost_news_glyph_map.py',
-            'core/ghost_news_vectorizer.py',
-            'core/ghost_decay.py',
-            'core/ghost_hash_decoder.py',
-            'core/integration_orchestrator.py',
-            'core/klein_bottle_integrator.py',
-            'core/lantern/lexicon_engine.py',
-            'core/lantern/profit_story_engine.py',
-            'core/lantern/story_parser.py',
-            'core/lantern/word_fitness_tracker.py',
-            'core/matrix/operations.py',
-            'core/matrix/transformations.py',
-            'core/phantom/memory_state.py',
-            'core/phantom/state_manager.py',
-            'core/profit/calculator.py',
-            'core/profit/optimizer.py',
-            'core/glyph/processor.py',
-            'core/glyph/pattern_recognition.py',
+            'core / advanced_mathematical_core.py',
+            'core / filters.py',
+            'core / flux_compensator.py',
+            'core / ghost_phase_integrator.py',
+            'core / ghost_pipeline.py',
+            'core / ghost_profit_tracker.py',
+            'core / ghost_memory.py',
+            'core / ghost_memory_router.py',
+            'core / ghost_meta_layer_engine.py',
+            'core / ghost_news_glyph_map.py',
+            'core / ghost_news_vectorizer.py',
+            'core / ghost_decay.py',
+            'core / ghost_hash_decoder.py',
+            'core / integration_orchestrator.py',
+            'core / klein_bottle_integrator.py',
+            'core / lantern / lexicon_engine.py',
+            'core / lantern / profit_story_engine.py',
+            'core / lantern / story_parser.py',
+            'core / lantern / word_fitness_tracker.py',
+            'core / matrix / operations.py',
+            'core / matrix / transformations.py',
+            'core / phantom / memory_state.py',
+            'core / phantom / state_manager.py',
+            'core / profit / calculator.py',
+            'core / profit / optimizer.py',
+            'core / glyph / processor.py',
+            'core / glyph / pattern_recognition.py',
         ]
 
     def fix_stub_docstrings(self, content: str) -> str:
         """Fix malformed stub docstrings."""
-        # Fix the specific pattern: """Stub main function."""."""
-        if '"""Stub main function."""."""' in content:
+"""
+"""
+"""
+"""
+# Fix the specific pattern: """Stub main function."""
+"""
+"""
+"""
+"""
+        if '"""Stub main function."""' in content:
             content = content.replace(
-                '"""Stub main function."""."""',
+                '"""Stub main function."""',
                 '"""Stub main function."""\\n    pass\n'
             )
             self.fix_stats['docstring_fixes'] += 1
 
-        # Fix other malformed patterns
+# Fix other malformed patterns
         content = re.sub(
             r'"""([^"]*)\."""\."""',
             r'"""\1."""',
@@ -74,27 +103,32 @@ class SelectiveSyntaxFixer:
         return content
 
     def fix_unicode_characters(self, content: str) -> str:
+
         """Replace Unicode characters with ASCII equivalents."""
+"""
+"""
+"""
+"""
         unicode_replacements = {
             '\\u2207': 'del',  # nabla
-            '\\u2208': 'in',   # element of
-            '\\u2264': '<=',   # less than or equal
-            '\\u2265': '>=',   # greater than or equal
-            '\\u21d2': '=>',   # implies
+            '\\u2208': 'in',  # element of
+            '\\u2264': '<=',  # less than or equal
+            '\\u2265': '>=',  # greater than or equal
+            '\\u21d2': '=>',  # implies
             '\\u222b': 'int',  # integral
-            '\\u2202': 'd',    # partial derivative
-            '\\u00b7': '.',    # middle dot
-            '\\u2013': '-',    # en dash
-            '\\u208d': '(',    # subscript left parenthesis
-            '\\u208e': ')',    # subscript right parenthesis
-            '\\u2666': '',     # diamond (remove)
-            '\\u00d7': 'x',    # multiplication
-            '\\u0394': 'd',    # delta
+            '\\u2202': 'd',  # partial derivative
+            '\\u00b7': '.',  # middle dot
+            '\\u2013': '-',  # en dash
+            '\\u208d': '(',  # subscript left parenthesis
+            '\\u208e': ')',  # subscript right parenthesis
+            '\\u2666': '',  # diamond (remove)
+            '\\u00d7': 'x',  # multiplication
+            '\\u0394': 'd',  # delta
             '\\u03a3': 'sum',  # sigma
-            '\\u03c0': 'pi',   # pi
+            '\\u03c0': 'pi',  # pi
             '\\u03c3': 'sigma',  # sigma
             '\\u03bb': 'lambda',  # lambda
-            '\\u03bc': 'mu',   # mu
+            '\\u03bc': 'mu',  # mu
             '\\u03b1': 'alpha',  # alpha
             '\\u03b2': 'beta',  # beta
             '\\u03b3': 'gamma',  # gamma
@@ -114,29 +148,34 @@ class SelectiveSyntaxFixer:
         return content
 
     def fix_unterminated_strings(self, content: str) -> str:
-        """Fix unterminated triple-quoted strings."""
-        # Fix pattern: """text without closing
+
+        """Fix unterminated triple - quoted strings."""
+"""
+"""
+"""
+"""
+# Fix pattern: """text without closing
         content = re.sub(
-            r'"""([^"]*)\\n\\s*"""\\s*def\\s+',
+            r'"""([^"]*)\\n\\s*"""\\s * def\\s+',
             r'"""\1"""\\n\\ndef ',
             content
         )
 
-        # Fix pattern: """text at end of line
+# Fix pattern: """text at end of line
         content = re.sub(
-            r'"""([^"]*)\\n\\s*def\\s+',
+            r'"""([^"]*)\\n\\s * def\\s+',
             r'"""\1"""\\n\\ndef ',
             content
         )
 
-        # Fix pattern: """text without closing at end
+# Fix pattern: """text without closing at end
         content = re.sub(
-            r'"""([^"]*)\\n\\s*if\\s+__name__',
+            r'"""([^"]*)\\n\\s * if\\s + __name__',
             r'"""\1"""\\n\\nif __name__',
             content
         )
 
-        # Fix pattern: """text without closing at end
+# Fix pattern: """text without closing at end
         content = re.sub(
             r'"""([^"]*)\\n\\s*"""\\s*"""',
             r'"""\1"""\n',
@@ -146,29 +185,34 @@ class SelectiveSyntaxFixer:
         return content
 
     def fix_invalid_syntax(self, content: str) -> str:
+
         """Fix invalid syntax patterns."""
-        # Fix stray periods after function definitions
+"""
+"""
+"""
+"""
+# Fix stray periods after function definitions
         content = re.sub(
             r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*\.',
             r'def \1(\2):',
             content
         )
 
-        # Fix invalid decimal literals
+# Fix invalid decimal literals
         content = re.sub(
             r'(\\d+)\.(\\d+)\.(\\d+)',
             r'\1.\2_\3',  # Replace with underscore
             content
         )
 
-        # Fix unterminated string literals
+# Fix unterminated string literals
         content = re.sub(
             r'(["\'])([^"\']*)\n',
             r'\1\2\1\n',
             content
         )
 
-        # Fix malformed function definitions
+# Fix malformed function definitions
         content = re.sub(
             r'def\\s+(\\w+)\\s*\([^)]*\)\\s*:\\s*"""([^"]*)"""\\s*"""',
             r'def \1(\2):\\n    """\3"""',
@@ -178,24 +222,29 @@ class SelectiveSyntaxFixer:
         return content
 
     def fix_file(self, file_path: str) -> bool:
+
         """Fix all syntax errors in a single file."""
+"""
+"""
+"""
+"""
         try:
             if not os.path.exists(file_path):
                 return False
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
             original_content = content
 
-            # Apply all fixes
+# Apply all fixes
             content = self.fix_stub_docstrings(content)
             content = self.fix_unicode_characters(content)
             content = self.fix_unterminated_strings(content)
             content = self.fix_invalid_syntax(content)
 
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, 'w', encoding='utf - 8') as f:
                     f.write(content)
                 return True
 
@@ -206,7 +255,12 @@ class SelectiveSyntaxFixer:
             return False
 
     def fix_priority_files(self) -> None:
+
         """Fix priority files first."""
+"""
+"""
+"""
+"""
         safe_print("Fixing priority files...")
         safe_print("=" * 50)
 
@@ -217,11 +271,16 @@ class SelectiveSyntaxFixer:
             self.fix_stats['files_processed'] += 1
 
     def find_and_fix_stub_files(self) -> None:
+
         """Find and fix all stub files with the common pattern."""
+"""
+"""
+"""
+"""
         safe_print("\\nFinding and fixing stub files...")
         safe_print("=" * 50)
 
-        stub_pattern = '"""Stub main function."""."""'
+        stub_pattern = '"""Stub main function."""'
         fixed_count = 0
 
         for root, dirs, files in os.walk('.'):
@@ -232,7 +291,7 @@ class SelectiveSyntaxFixer:
                     file_path = os.path.join(root, file)
 
                     try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
+                        with open(file_path, 'r', encoding='utf - 8') as f:
                             content = f.read()
 
                         if stub_pattern in content:
@@ -246,17 +305,22 @@ class SelectiveSyntaxFixer:
         safe_print(f"Fixed {fixed_count} stub files")
 
     def run_selective_fix(self) -> None:
+
         """Run the selective fix process."""
+"""
+"""
+"""
+"""
         safe_print("Selective Syntax Fixer - Critical Files First")
         safe_print("=" * 60)
 
-        # Step 1: Fix priority files
+# Step 1: Fix priority files
         self.fix_priority_files()
 
-        # Step 2: Fix stub files
+# Step 2: Fix stub files
         self.find_and_fix_stub_files()
 
-        # Summary
+# Summary
         safe_print(f"\\nSummary:")
         safe_print(f"  Files processed: {self.fix_stats['files_processed']}")
         safe_print(f"  Files with fixes: {self.fix_stats['errors_fixed']}")
@@ -267,7 +331,12 @@ class SelectiveSyntaxFixer:
 
 
 def main():
+
     """Main function."""
+"""
+"""
+"""
+"""
     fixer = SelectiveSyntaxFixer()
     fixer.run_selective_fix()
 
@@ -275,4 +344,9 @@ def main():
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
+"""
+"""
 """

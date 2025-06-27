@@ -1,6 +1,26 @@
-#!/usr/bin/env python3
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import List, Dict, Any, Optional
+import argparse
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import yaml
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
 """
-Schwabot Cross-Platform Package Builder
+"""
+"""
+"""
+"""
+Schwabot Cross - Platform Package Builder
 ======================================
 
 This script builds Schwabot packages for multiple platforms:
@@ -15,17 +35,11 @@ Usage:
     python build_packages.py --platform windows --format exe
     python build_packages.py --platform macos --format dmg
 """
+"""
+"""
+"""
+"""
 
-import os
-import sys
-import platform
-import subprocess
-import argparse
-import shutil
-from pathlib import Path
-from typing import List, Dict, Any, Optional
-import json
-import yaml
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -33,21 +47,32 @@ sys.path.insert(0, str(project_root))
 
 
 class PackageBuilder:
-    """Cross-platform package builder for Schwabot."""
+
+    """Cross - platform package builder for Schwabot."""
+
+
+"""
+"""
+"""
+"""
 
     def __init__(self):
         """Initialize the package builder."""
+"""
+"""
+"""
+"""
         self.project_root = Path(__file__).parent
         self.build_dir = self.project_root / "build"
         self.dist_dir = self.project_root / "dist"
         self.package_name = "schwabot"
         self.version = "2.0_0"
 
-        # Create build directories
+# Create build directories
         self.build_dir.mkdir(exist_ok=True)
         self.dist_dir.mkdir(exist_ok=True)
 
-        # Platform detection
+# Platform detection
         self.current_platform = platform.system().lower()
         self.current_arch = platform.machine().lower()
 
@@ -57,40 +82,50 @@ class PackageBuilder:
         print(f"\\u1f4e6 Dist directory: {self.dist_dir}")
 
     def clean_build(self) -> None:
+
         """Clean build directories."""
+"""
+"""
+"""
+"""
         print("\\u1f9f9 Cleaning build directories...")
 
-        # Clean build artifacts
-        for pattern in ["*.pyc", "*.pyo", "__pycache__", "*.egg-info"]:
+# Clean build artifacts
+        for pattern in ["*.pyc", "*.pyo", "__pycache__", "*.egg - info"]:
             for path in self.project_root.rglob(pattern):
                 if path.is_dir():
-                    shutil.rmtree(path, ignore_errors=True)
+                    shutil.rmtree(path, ignore_errors = True)
                 else:
-                    path.unlink(missing_ok=True)
+                    path.unlink(missing_ok = True)
 
-        # Clean build and dist directories
+# Clean build and dist directories
         if self.build_dir.exists():
             shutil.rmtree(self.build_dir)
         if self.dist_dir.exists():
             shutil.rmtree(self.dist_dir)
 
-        # Recreate directories
-        self.build_dir.mkdir(exist_ok=True)
-        self.dist_dir.mkdir(exist_ok=True)
+# Recreate directories
+        self.build_dir.mkdir(exist_ok = True)
+        self.dist_dir.mkdir(exist_ok = True)
 
         print("\\u2705 Build directories cleaned")
 
     def build_python_packages(self) -> None:
+
         """Build Python wheel and source distribution."""
+"""
+"""
+"""
+"""
         print("\\u1f40d Building Python packages...")
 
         try:
-            # Build wheel and source distribution
+# Build wheel and source distribution
             subprocess.run([
                 sys.executable, "-m", "build",
                 "--wheel", "--sdist",
                 "--outdir", str(self.dist_dir)
-            ], check=True, cwd=self.project_root)
+            ], check = True, cwd = self.project_root)
 
             print("\\u2705 Python packages built successfully")
 
@@ -99,50 +134,64 @@ class PackageBuilder:
             raise
 
     def build_linux_packages(self) -> None:
+
         """Build Linux packages (.deb, .rpm, AppImage)."""
+"""
+"""
+"""
+"""
         print("\\u1f427 Building Linux packages...")
 
-        # Build .deb package
+# Build .deb package
         self._build_deb_package()
 
-        # Build .rpm package
+# Build .rpm package
         self._build_rpm_package()
 
-        # Build AppImage
+# Build AppImage
         self._build_appimage()
 
         print("\\u2705 Linux packages built successfully")
 
     def _build_deb_package(self) -> None:
+
         """Build Debian package."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .deb package...")
 
         try:
-            # Create debian directory structure
+# Create debian directory structure
             deb_dir = self.build_dir / "deb"
-            deb_dir.mkdir(exist_ok=True)
+            deb_dir.mkdir(exist_ok = True)
 
-            # Create control file
+# Create control file
             control_content = f"""Package: {self.package_name}
 Version: {self.version}
 Section: utils
 Priority: optional
 Architecture: all
-Depends: python3 (>= 3.8), python3-pip
+Depends: python3 (>= 3.8), python3 - pip
 Maintainer: Schwabot Development Team <dev@schwabot.ai>
-Description: Hardware-scale-aware economic kernel for federated trading devices
- Schwabot is a comprehensive trading system with mathematical precision,
- supporting multiple exchanges and real-time monitoring.
+Description: Hardware - scale - aware economic kernel for federated trading devices
+    Schwabot is a comprehensive trading system with mathematical precision,
+    supporting multiple exchanges and real - time monitoring.
+"""
+"""
+"""
+"""
 """
 
             control_file = deb_dir / "control"
             control_file.write_text(control_content)
 
-            # Build .deb package
+# Build .deb package
             subprocess.run([
-                "dpkg-deb", "--build", str(deb_dir),
+                "dpkg - deb", "--build", str(deb_dir),
                 str(self.dist_dir / f"{self.package_name}-{self.version}.deb")
-            ], check=True)
+            ], check = True)
 
             print("    \\u2705 .deb package built")
 
@@ -150,28 +199,33 @@ Description: Hardware-scale-aware economic kernel for federated trading devices
             print(f"    \\u26a0\\ufe0f Could not build .deb package: {e}")
 
     def _build_rpm_package(self) -> None:
+
         """Build RPM package."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .rpm package...")
 
         try:
-            # Create RPM spec file
+# Create RPM spec file
             spec_content = f"""Name: {self.package_name}
 Version: {self.version}
 Release: 1
-Summary: Hardware-scale-aware economic kernel for federated trading devices
+Summary: Hardware - scale - aware economic kernel for federated trading devices
 License: MIT
-URL: https://github.com/schwabot/schwabot
+URL: https://github.com / schwabot / schwabot
 BuildArch: noarch
 Requires: python3 >= 3.8
 
 %description
 Schwabot is a comprehensive trading system with mathematical precision,
-supporting multiple exchanges and real-time monitoring.
+supporting multiple exchanges and real - time monitoring.
 
 %files
 %defattr(-,root,root,-)
-/usr/bin/schwabot
-/usr/lib/python3*/site-packages/schwabot*
+/usr / bin / schwabot
+/usr / lib / python3*/site - packages / schwabot*
 
 %post
 python3 -m pip install --upgrade pip
@@ -179,15 +233,19 @@ python3 -m pip install --upgrade pip
 %preun
 python3 -m pip uninstall -y {self.package_name}
 """
+"""
+"""
+"""
+"""
 
             spec_file = self.build_dir / f"{self.package_name}.spec"
             spec_file.write_text(spec_content)
 
-            # Build RPM package
+# Build RPM package
             subprocess.run([
                 "rpmbuild", "-bb", "--define", f"_rpmdir {self.dist_dir}",
                 str(spec_file)
-            ], check=True)
+            ], check = True)
 
             print("    \\u2705 .rpm package built")
 
@@ -195,43 +253,56 @@ python3 -m pip uninstall -y {self.package_name}
             print(f"    \\u26a0\\ufe0f Could not build .rpm package: {e}")
 
     def _build_appimage(self) -> None:
+
         """Build AppImage package."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building AppImage...")
 
         try:
-            # Create AppDir structure
+# Create AppDir structure
             appdir = self.build_dir / "AppDir"
-            appdir.mkdir(exist_ok=True)
+            appdir.mkdir(exist_ok = True)
 
-            # Create AppRun script
-            apprun_content = """#!/bin/bash
+# Create AppRun script
+            apprun_content = """  #!/bin / bash
 cd "$(dirname "$0")"
-exec python3 usr/bin/schwabot "$@"
+exec python3 usr / bin / schwabot "$@"
+"""
+"""
+"""
+"""
 """
 
             apprun_file = appdir / "AppRun"
             apprun_file.write_text(apprun_content)
             apprun_file.chmod(0o755)
 
-            # Create .desktop file
+# Create .desktop file
             desktop_content = f"""[Desktop Entry]
-Name=Schwabot
-Comment=Hardware-scale-aware economic kernel for federated trading devices
-Exec=schwabot
-Icon=schwabot
-Terminal=true
-Type=Application
-Categories=Office;Finance;
+Name = Schwabot
+Comment = Hardware - scale - aware economic kernel for federated trading devices
+Exec = schwabot
+Icon = schwabot
+Terminal = true
+Type = Application
+Categories = Office;Finance;
+"""
+"""
+"""
+"""
 """
 
             desktop_file = appdir / f"{self.package_name}.desktop"
             desktop_file.write_text(desktop_content)
 
-            # Build AppImage
+# Build AppImage
             subprocess.run([
                 "appimagetool", str(appdir),
                 str(self.dist_dir / f"{self.package_name}-{self.version}-x86_64.AppImage")
-            ], check=True)
+            ], check = True)
 
             print("    \\u2705 AppImage built")
 
@@ -239,31 +310,41 @@ Categories=Office;Finance;
             print(f"    \\u26a0\\ufe0f Could not build AppImage: {e}")
 
     def build_windows_packages(self) -> None:
+
         """Build Windows packages (.exe, .msi)."""
+"""
+"""
+"""
+"""
         print("\\u1fa9f Building Windows packages...")
 
-        # Build executable
+# Build executable
         self._build_windows_exe()
 
-        # Build MSI installer
+# Build MSI installer
         self._build_windows_msi()
 
-        # Build portable package
+# Build portable package
         self._build_windows_portable()
 
         print("\\u2705 Windows packages built successfully")
 
     def _build_windows_exe(self) -> None:
+
         """Build Windows executable using PyInstaller."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .exe package...")
 
         try:
-            # Install PyInstaller if not available
+# Install PyInstaller if not available
             subprocess.run([
                 sys.executable, "-m", "pip", "install", "pyinstaller"
-            ], check=True)
+            ], check = True)
 
-            # Build executable
+# Build executable
             subprocess.run([
                 sys.executable, "-m", "PyInstaller",
                 "--onefile",
@@ -273,7 +354,7 @@ Categories=Office;Finance;
                 "--workpath", str(self.build_dir / "pyinstaller"),
                 "--specpath", str(self.build_dir / "pyinstaller"),
                 str(self.project_root / "run_schwabot.py")
-            ], check=True)
+            ], check = True)
 
             print("    \\u2705 .exe package built")
 
@@ -281,23 +362,28 @@ Categories=Office;Finance;
             print(f"    \\u26a0\\ufe0f Could not build .exe package: {e}")
 
     def _build_windows_msi(self) -> None:
+
         """Build Windows MSI installer."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .msi package...")
 
         try:
-            # Install cx_Freeze if not available
+# Install cx_Freeze if not available
             subprocess.run([
                 sys.executable, "-m", "pip", "install", "cx_Freeze"
-            ], check=True)
+            ], check = True)
 
-            # Create setup script for cx_Freeze
+# Create setup script for cx_Freeze
             setup_cx_content = f"""from cx_Freeze import setup, Executable
 import sys
 
 build_exe_options = {{
     "packages": ["core", "ui", "config", "utils"],
     "excludes": ["tkinter", "test"],
-    "include_files": ["config/", "ui/templates/", "ui/static/"]
+    "include_files": ["config/", "ui / templates/", "ui / static/"]
 }}
 
 base = None
@@ -307,21 +393,25 @@ if sys.platform == "win32":
 setup(
     name="{self.package_name}",
     version="{self.version}",
-    description="Hardware-scale-aware economic kernel",
+    description="Hardware - scale - aware economic kernel",
     options={{"build_exe": build_exe_options}},
-    executables=[Executable("run_schwabot.py", base=base)]
+    executables=[Executable("run_schwabot.py", base = base)]
 )
+"""
+"""
+"""
+"""
 """
 
             setup_cx_file = self.build_dir / "setup_cx.py"
             setup_cx_file.write_text(setup_cx_content)
 
-            # Build MSI
+# Build MSI
             subprocess.run([
                 sys.executable, str(setup_cx_file), "bdist_msi"
-            ], check=True, cwd=self.build_dir)
+            ], check = True, cwd = self.build_dir)
 
-            # Move MSI to dist directory
+# Move MSI to dist directory
             for msi_file in self.build_dir.rglob("*.msi"):
                 shutil.move(msi_file, self.dist_dir / msi_file.name)
 
@@ -331,37 +421,46 @@ setup(
             print(f"    \\u26a0\\ufe0f Could not build .msi package: {e}")
 
     def _build_windows_portable(self) -> None:
+
         """Build Windows portable package."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building portable package...")
 
         try:
-            # Create portable directory
+# Create portable directory
             portable_dir = self.dist_dir / f"{self.package_name}-{self.version}-portable"
-            portable_dir.mkdir(exist_ok=True)
+            portable_dir.mkdir(exist_ok = True)
 
-            # Copy Python files
+# Copy Python files
             for pattern in ["*.py", "*.yaml", "*.yml", "*.json", "*.md"]:
                 for file_path in self.project_root.glob(pattern):
                     if file_path.is_file():
                         shutil.copy2(file_path, portable_dir)
 
-            # Copy directories
+# Copy directories
             for dir_name in ["core", "ui", "config", "utils", "mathlib", "ncco_core"]:
                 src_dir = self.project_root / dir_name
                 if src_dir.exists():
-                    shutil.copytree(src_dir, portable_dir / dir_name, dirs_exist_ok=True)
+                    shutil.copytree(src_dir, portable_dir / dir_name, dirs_exist_ok = True)
 
-            # Create batch file for Windows
+# Create batch file for Windows
             batch_content = """@echo off
 echo Starting Schwabot Trading System...
 python run_schwabot.py
 pause
 """
+"""
+"""
+"""
+"""
 
             batch_file = portable_dir / "start_schwabot.bat"
             batch_file.write_text(batch_content)
 
-            # Create ZIP archive
+# Create ZIP archive
             shutil.make_archive(
                 str(portable_dir),
                 'zip',
@@ -369,7 +468,7 @@ pause
                 portable_dir.name
             )
 
-            # Clean up directory
+# Clean up directory
             shutil.rmtree(portable_dir)
 
             print("    \\u2705 Portable package built")
@@ -378,47 +477,57 @@ pause
             print(f"    \\u26a0\\ufe0f Could not build portable package: {e}")
 
     def build_macos_packages(self) -> None:
+
         """Build macOS packages (.dmg, .pkg, App bundle)."""
+"""
+"""
+"""
+"""
         print("\\u1f34e Building macOS packages...")
 
-        # Build App bundle
+# Build App bundle
         self._build_macos_app()
 
-        # Build DMG
+# Build DMG
         self._build_macos_dmg()
 
-        # Build PKG installer
+# Build PKG installer
         self._build_macos_pkg()
 
         print("\\u2705 macOS packages built successfully")
 
     def _build_macos_app(self) -> None:
+
         """Build macOS App bundle."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .app bundle...")
 
         try:
-            # Install py2app if not available
+# Install py2app if not available
             subprocess.run([
                 sys.executable, "-m", "pip", "install", "py2app"
-            ], check=True)
+            ], check = True)
 
-            # Create setup script for py2app
+# Create setup script for py2app
             setup_py2app_content = f"""from setuptools import setup
 
 APP = ['run_schwabot.py']
 DATA_FILES = [
-    ('config', ['config/schwabot_config.yaml']),
-    ('ui/templates', ['ui/templates/base.html', 'ui/templates/dashboard.html']),
-    ('ui/static', ['ui/static/']),
+    ('config', ['config / schwabot_config.yaml']),
+    ('ui / templates', ['ui / templates / base.html', 'ui / templates / dashboard.html']),
+    ('ui / static', ['ui / static/']),
 ]
 OPTIONS = {{
     'argv_emulation': True,
     'packages': ['core', 'ui', 'config', 'utils'],
-    'iconfile': 'ui/static/icon.icns',
+    'iconfile': 'ui / static / icon.icns',
     'plist': {{
         'CFBundleName': 'Schwabot',
         'CFBundleDisplayName': 'Schwabot Trading System',
-        'CFBundleGetInfoString': "Hardware-scale-aware economic kernel",
+        'CFBundleGetInfoString': "Hardware - scale - aware economic kernel",
         'CFBundleIdentifier': "com.schwabot.trading",
         'CFBundleVersion': "{self.version}",
         'CFBundleShortVersionString': "{self.version}",
@@ -427,22 +536,26 @@ OPTIONS = {{
 }}
 
 setup(
-    app=APP,
-    data_files=DATA_FILES,
+    app = APP,
+    data_files = DATA_FILES,
     options={{'py2app': OPTIONS}},
     setup_requires=['py2app'],
 )
+"""
+"""
+"""
+"""
 """
 
             setup_py2app_file = self.build_dir / "setup_py2app.py"
             setup_py2app_file.write_text(setup_py2app_content)
 
-            # Build App bundle
+# Build App bundle
             subprocess.run([
                 sys.executable, str(setup_py2app_file), "py2app"
-            ], check=True, cwd=self.build_dir)
+            ], check = True, cwd = self.build_dir)
 
-            # Move App bundle to dist directory
+# Move App bundle to dist directory
             app_bundle = self.build_dir / "dist" / f"{self.package_name}.app"
             if app_bundle.exists():
                 shutil.move(app_bundle, self.dist_dir / f"{self.package_name}.app")
@@ -453,11 +566,16 @@ setup(
             print(f"    \\u26a0\\ufe0f Could not build .app bundle: {e}")
 
     def _build_macos_dmg(self) -> None:
+
         """Build macOS DMG package."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .dmg package...")
 
         try:
-            # Create DMG using hdiutil
+# Create DMG using hdiutil
             app_path = self.dist_dir / f"{self.package_name}.app"
             dmg_path = self.dist_dir / f"{self.package_name}-{self.version}.dmg"
 
@@ -467,7 +585,7 @@ setup(
                     "-srcfolder", str(app_path),
                     "-ov", "-format", "UDZO",
                     str(dmg_path)
-                ], check=True)
+                ], check = True)
 
                 print("    \\u2705 .dmg package built")
             else:
@@ -477,20 +595,25 @@ setup(
             print(f"    \\u26a0\\ufe0f Could not build .dmg package: {e}")
 
     def _build_macos_pkg(self) -> None:
+
         """Build macOS PKG installer."""
+"""
+"""
+"""
+"""
         print("  \\u1f4e6 Building .pkg package...")
 
         try:
-            # Install pkgbuild if available
+# Install pkgbuild if available
             app_path = self.dist_dir / f"{self.package_name}.app"
             pkg_path = self.dist_dir / f"{self.package_name}-{self.version}.pkg"
 
             if app_path.exists():
                 subprocess.run([
                     "pkgbuild", "--component", str(app_path),
-                    "--install-location", "/Applications",
+                    "--install - location", "/Applications",
                     str(pkg_path)
-                ], check=True)
+                ], check = True)
 
                 print("    \\u2705 .pkg package built")
             else:
@@ -500,29 +623,34 @@ setup(
             print(f"    \\u26a0\\ufe0f Could not build .pkg package: {e}")
 
     def build_docker_image(self) -> None:
+
         """Build Docker image."""
+"""
+"""
+"""
+"""
         print("\\u1f433 Building Docker image...")
 
         try:
-            # Create Dockerfile
-            dockerfile_content = f"""FROM python:3.9-slim
+# Create Dockerfile
+            dockerfile_content = f"""FROM python:3.9 - slim
 
 # Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED = 1
+ENV PYTHONDONTWRITEBYTECODE = 1
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \\
+RUN apt - get update && apt - get install -y \\
     gcc \\
     g++ \\
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var / lib / apt / lists/*
 
 # Set work directory
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no - cache - dir -r requirements.txt
 
 # Copy project files
 COPY . .
@@ -536,15 +664,19 @@ EXPOSE 8080 8081 8082
 # Set default command
 CMD ["python", "run_schwabot.py"]
 """
+"""
+"""
+"""
+"""
 
             dockerfile_path = self.project_root / "Dockerfile"
             dockerfile_path.write_text(dockerfile_content)
 
-            # Build Docker image
+# Build Docker image
             subprocess.run([
                 "docker", "build", "-t", f"{self.package_name}:{self.version}",
                 "-t", f"{self.package_name}:latest", "."
-            ], check=True, cwd=self.project_root)
+            ], check = True, cwd = self.project_root)
 
             print("\\u2705 Docker image built successfully")
 
@@ -552,25 +684,30 @@ CMD ["python", "run_schwabot.py"]
             print(f"\\u274c Could not build Docker image: {e}")
 
     def create_installer_scripts(self) -> None:
-        """Create platform-specific installer scripts."""
+
+        """Create platform - specific installer scripts."""
+"""
+"""
+"""
+"""
         print("\\u1f4dc Creating installer scripts...")
 
-        # Linux installer script
+# Linux installer script
         linux_installer = self.dist_dir / "install_linux.sh"
-        linux_installer.write_text("""#!/bin/bash
+        linux_installer.write_text("""  #!/bin / bash
 echo "Installing Schwabot on Linux..."
 
 # Detect package manager
-if command -v apt-get &> /dev/null; then
+if command -v apt - get &> /dev / null; then
     echo "Using apt package manager"
-    sudo apt-get update
-    sudo apt-get install -y python3 python3-pip
-elif command -v yum &> /dev/null; then
+    sudo apt - get update
+    sudo apt - get install -y python3 python3 - pip
+elif command -v yum &> /dev / null; then
     echo "Using yum package manager"
-    sudo yum install -y python3 python3-pip
-elif command -v dnf &> /dev/null; then
+    sudo yum install -y python3 python3 - pip
+elif command -v dnf &> /dev / null; then
     echo "Using dnf package manager"
-    sudo dnf install -y python3 python3-pip
+    sudo dnf install -y python3 python3 - pip
 else
     echo "No supported package manager found"
     exit 1
@@ -584,7 +721,7 @@ echo "Run 'schwabot' to start the system"
 """)
         linux_installer.chmod(0o755)
 
-        # Windows installer script
+# Windows installer script
         windows_installer = self.dist_dir / "install_windows.bat"
         windows_installer.write_text("""@echo off
 echo Installing Schwabot on Windows...
@@ -605,19 +742,19 @@ echo Run 'schwabot' to start the system
 pause
 """)
 
-        # macOS installer script
+# macOS installer script
         macos_installer = self.dist_dir / "install_macos.sh"
-        macos_installer.write_text("""#!/bin/bash
+        macos_installer.write_text("""  #!/bin / bash
 echo "Installing Schwabot on macOS..."
 
 # Check if Homebrew is installed
-if ! command -v brew &> /dev/null; then
+if ! command -v brew &> /dev / null; then
     echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin / bash -c "$(curl -fsSL https://raw.githubusercontent.com / Homebrew / install / HEAD / install.sh)"
 fi
 
 # Install Python if not already installed
-if ! command -v python3 &> /dev/null; then
+if ! command -v python3 &> /dev / null; then
     echo "Installing Python..."
     brew install python
 fi
@@ -633,12 +770,17 @@ echo "Run 'schwabot' to start the system"
         print("\\u2705 Installer scripts created")
 
     def generate_package_summary(self) -> None:
+
         """Generate a summary of all built packages."""
+"""
+"""
+"""
+"""
         print("\\u1f4cb Generating package summary...")
 
         packages = []
 
-        # List all files in dist directory
+# List all files in dist directory
         for file_path in self.dist_dir.rglob("*"):
             if file_path.is_file():
                 packages.append({
@@ -648,7 +790,7 @@ echo "Run 'schwabot' to start the system"
                     "path": str(file_path.relative_to(self.dist_dir))
                 })
 
-        # Create summary file
+# Create summary file
         summary = {
             "project": self.package_name,
             "version": self.version,
@@ -660,9 +802,9 @@ echo "Run 'schwabot' to start the system"
         }
 
         summary_file = self.dist_dir / "package_summary.json"
-        summary_file.write_text(json.dumps(summary, indent=2))
+        summary_file.write_text(json.dumps(summary, indent = 2))
 
-        # Print summary
+# Print summary
         print(f"\\n\\u1f4e6 Package Summary:")
         print(f"   Project: {self.package_name} v{self.version}")
         print(f"   Total packages: {len(packages)}")
@@ -676,7 +818,12 @@ echo "Run 'schwabot' to start the system"
 
 
 def main():
+
     """Main entry point."""
+"""
+"""
+"""
+"""
     parser = argparse.ArgumentParser(description="Build Schwabot packages for multiple platforms")
     parser.add_argument("--platform", choices=["all", "linux", "windows", "macos", "python"],
                         default="python", help="Target platform(s)")
@@ -693,10 +840,10 @@ def main():
         if args.clean:
             builder.clean_build()
 
-        # Build Python packages (always)
+# Build Python packages (always)
         builder.build_python_packages()
 
-        # Build platform-specific packages
+# Build platform - specific packages
         if args.platform in ["all", "linux"]:
             builder.build_linux_packages()
 
@@ -706,14 +853,14 @@ def main():
         if args.platform in ["all", "macos"]:
             builder.build_macos_packages()
 
-        # Build Docker image if requested
+# Build Docker image if requested
         if args.docker:
             builder.build_docker_image()
 
-        # Create installer scripts
+# Create installer scripts
         builder.create_installer_scripts()
 
-        # Generate summary
+# Generate summary
         builder.generate_package_summary()
 
         print("\\n\\u1f389 All packages built successfully!")

@@ -1,9 +1,11 @@
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+"""Volume Tick Router - Dynamic Volume Pressure Logic.
 """Volume Tick Router - Dynamic Volume Pressure Logic.
 
+from core.unified_math_system import unified_math
+
+
 This module implements dynamic volume pressure logic for matching volume shifts
-with API-triggered price deltas.
+with API - triggered price deltas.
 
 Mathematical Foundation:
 C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
@@ -18,13 +20,15 @@ Where:
 
 Key Features:
 - Dynamic volume pressure calculation
-- API-triggered price delta matching
+- API - triggered price delta matching
 - Volume shift detection and analysis
-- Hash-volume intersection logic
+- Hash - volume intersection logic
 - AI feedback integration
 - Volume confidence scoring
 
 Flake8 compliant with comprehensive type hints and error handling.
+"""
+"""
 """
 
 import logging
@@ -41,7 +45,10 @@ logger = logging.getLogger(__name__)
 
 
 class VolumePressureType(Enum):
+
     """Volume pressure types."""
+"""
+"""
     NORMAL = "normal"
     SPIKE = "spike"
     DROP = "drop"
@@ -50,7 +57,10 @@ class VolumePressureType(Enum):
 
 
 class VolumeConfidenceLevel(Enum):
+
     """Volume confidence levels."""
+"""
+"""
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -59,7 +69,10 @@ class VolumeConfidenceLevel(Enum):
 
 @dataclass
 class VolumeShift:
+
     """Represents a volume shift event."""
+"""
+"""
     timestamp: float
     volume_before: float
     volume_after: float
@@ -67,12 +80,15 @@ class VolumeShift:
     change_percentage: float
     pressure_type: VolumePressureType
     hash_value: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class PriceDelta:
+
     """Represents a price delta event."""
+"""
+"""
     timestamp: float
     price_before: float
     price_after: float
@@ -80,12 +96,15 @@ class PriceDelta:
     change_percentage: float
     volume_at_change: float
     api_triggered: bool
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class VolumeConfidence:
+
     """Represents volume confidence calculation."""
+"""
+"""
     timestamp: float
     confidence_score: float
     volume_sensitivity: float
@@ -93,41 +112,50 @@ class VolumeConfidence:
     volume_pressure: float
     ai_feedback: float
     confidence_level: VolumeConfidenceLevel
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class VolumeMatch:
-    """Represents a volume-price match."""
+
+    """Represents a volume - price match."""
+"""
+"""
     timestamp: float
     volume_shift: VolumeShift
     price_delta: PriceDelta
     match_confidence: float
     correlation_score: float
     api_consistency: bool
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 class VolumeTickRouter:
+
     """Core volume tick router with dynamic pressure logic."""
+"""
+"""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
+
         """Initialize the volume tick router."""
+"""
+"""
         self.config = config or self._default_config()
 
-        # Volume tracking
-        self.volume_history: deque = deque(maxlen=self.config.get('max_volume_history', 1000))
-        self.price_history: deque = deque(maxlen=self.config.get('max_price_history', 1000))
-        self.volume_shifts: deque = deque(maxlen=self.config.get('max_volume_shifts', 500))
-        self.price_deltas: deque = deque(maxlen=self.config.get('max_price_deltas', 500))
-        self.volume_matches: deque = deque(maxlen=self.config.get('max_volume_matches', 200))
+# Volume tracking
+        self.volume_history: deque = deque(maxlen = self.config.get('max_volume_history', 1000))
+        self.price_history: deque = deque(maxlen = self.config.get('max_price_history', 1000))
+        self.volume_shifts: deque = deque(maxlen = self.config.get('max_volume_shifts', 500))
+        self.price_deltas: deque = deque(maxlen = self.config.get('max_price_deltas', 500))
+        self.volume_matches: deque = deque(maxlen = self.config.get('max_volume_matches', 200))
 
-        # Performance tracking
+# Performance tracking
         self.total_volume_events = 0
         self.total_price_events = 0
         self.total_matches = 0
 
-        # Configuration parameters
+# Configuration parameters
         self.volume_sensitivity = self.config.get('volume_sensitivity', 0.8)
         self.ai_feedback_weight = self.config.get('ai_feedback_weight', 0.3)
         self.volume_spike_threshold = self.config.get('volume_spike_threshold', 2.0)
@@ -136,8 +164,9 @@ class VolumeTickRouter:
         logger.info("\\u1f4ca Volume Tick Router initialized")
 
     def process_volume_event(self, volume_data: Dict[str, Any],
-                             price_data: Optional[Dict[str, Any]] = None,
-                             ai_feedback: Optional[Dict[str, Any]] = None) -> VolumeConfidence:
+
+                                price_data: Optional[Dict[str, Any]] = None,
+                                ai_feedback: Optional[Dict[str, Any]] = None) -> VolumeConfidence:
         """Process volume event and calculate confidence.
 
         Args:
@@ -148,23 +177,25 @@ class VolumeTickRouter:
         Returns:
             VolumeConfidence with calculation results
         """
+"""
+"""
         try:
-            # Extract volume data
+# Extract volume data
             current_volume = volume_data.get('volume', 0.0)
             timestamp = volume_data.get('timestamp', time.time())
 
-            # Store in history
+# Store in history
             self.volume_history.append({
                 'volume': current_volume,
                 'timestamp': timestamp
             })
 
-            # Detect volume shift
+# Detect volume shift
             volume_shift = self._detect_volume_shift(current_volume, timestamp)
             if volume_shift:
                 self.volume_shifts.append(volume_shift)
 
-            # Process price data if available
+# Process price data if available
             price_delta = None
             if price_data:
                 current_price = price_data.get('price', 0.0)
@@ -172,25 +203,25 @@ class VolumeTickRouter:
                 if price_delta:
                     self.price_deltas.append(price_delta)
 
-            # Calculate volume confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
+# Calculate volume confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
             volume_confidence = self._calculate_volume_confidence(
                 current_volume, volume_shift, price_delta, ai_feedback
             )
 
-            # Attempt volume-price matching
+# Attempt volume - price matching
             if volume_shift and price_delta:
                 volume_match = self._match_volume_price(volume_shift, price_delta)
                 if volume_match:
                     self.volume_matches.append(volume_match)
                     self.total_matches += 1
 
-            # Update performance tracking
+# Update performance tracking
             self.total_volume_events += 1
             if price_data:
                 self.total_price_events += 1
 
             logger.debug(f"Processed volume event: confidence={volume_confidence.confidence_score:.3f}, "
-                         f"level={volume_confidence.confidence_level.value}")
+                            f"level={volume_confidence.confidence_level.value}")
 
             return volume_confidence
 
@@ -199,7 +230,10 @@ class VolumeTickRouter:
             return self._create_fallback_confidence()
 
     def get_volume_analytics(self) -> Dict[str, Any]:
+
         """Get volume analytics and performance metrics."""
+"""
+"""
         try:
             if not self.volume_history:
                 return {
@@ -211,17 +245,17 @@ class VolumeTickRouter:
                     'ai_feedback_weight': self.ai_feedback_weight
                 }
 
-            # Calculate statistics
+# Calculate statistics
             recent_volumes = [entry['volume'] for entry in list(self.volume_history)[-100:]]
             recent_prices = [entry['price'] for entry in list(self.price_history)[-100:]] if self.price_history else []
 
-            # Volume shift statistics
+# Volume shift statistics
             volume_shift_types = [shift.pressure_type.value for shift in self.volume_shifts]
             shift_type_counts = {}
             for shift_type in VolumePressureType:
                 shift_type_counts[shift_type.value] = volume_shift_types.count(shift_type.value)
 
-            # Match statistics
+# Match statistics
             match_confidences = [match.match_confidence for match in self.volume_matches]
             correlation_scores = [match.correlation_score for match in self.volume_matches]
 
@@ -247,41 +281,44 @@ class VolumeTickRouter:
             return {}
 
     def _detect_volume_shift(self, current_volume: float, timestamp: float) -> Optional[VolumeShift]:
+
         """Detect volume shift from current volume."""
+"""
+"""
         try:
             if len(self.volume_history) < 2:
                 return None
 
-            # Get previous volume
+# Get previous volume
             previous_entry = self.volume_history[-1]
             previous_volume = previous_entry['volume']
 
             if previous_volume <= 0:
                 return None
 
-            # Calculate volume change
+# Calculate volume change
             volume_change = current_volume - previous_volume
             change_percentage = (volume_change / previous_volume) * 100
 
-            # Determine if significant shift occurred
+# Determine if significant shift occurred
             if unified_math.abs(change_percentage) < 10:  # Less than 10% change
                 return None
 
-            # Determine pressure type
+# Determine pressure type
             pressure_type = self._determine_pressure_type(change_percentage)
 
-            # Generate hash for volume shift
+# Generate hash for volume shift
             hash_input = f"{previous_volume:.6f}|{current_volume:.6f}|{timestamp:.3f}"
             hash_value = hashlib.sha256(hash_input.encode()).hexdigest()
 
             return VolumeShift(
-                timestamp=timestamp,
-                volume_before=previous_volume,
-                volume_after=current_volume,
-                volume_change=volume_change,
-                change_percentage=change_percentage,
-                pressure_type=pressure_type,
-                hash_value=hash_value,
+                timestamp = timestamp,
+                volume_before = previous_volume,
+                volume_after = current_volume,
+                volume_change = volume_change,
+                change_percentage = change_percentage,
+                pressure_type = pressure_type,
+                hash_value = hash_value,
                 metadata={
                     'detection_method': 'threshold_based',
                     'threshold_used': 10.0
@@ -293,38 +330,41 @@ class VolumeTickRouter:
             return None
 
     def _detect_price_delta(self, current_price: float, current_volume: float,
+
                             timestamp: float) -> Optional[PriceDelta]:
         """Detect price delta from current price."""
+"""
+"""
         try:
             if len(self.price_history) < 2:
                 return None
 
-            # Get previous price
+# Get previous price
             previous_entry = self.price_history[-1]
             previous_price = previous_entry['price']
 
             if previous_price <= 0:
                 return None
 
-            # Calculate price change
+# Calculate price change
             price_change = current_price - previous_price
             change_percentage = (price_change / previous_price) * 100
 
-            # Determine if significant delta occurred
+# Determine if significant delta occurred
             if unified_math.abs(change_percentage) < self.price_delta_threshold * 100:
                 return None
 
-            # Check if API triggered (simplified logic)
+# Check if API triggered (simplified logic)
             api_triggered = self._check_api_trigger(timestamp)
 
             return PriceDelta(
-                timestamp=timestamp,
-                price_before=previous_price,
-                price_after=current_price,
-                price_change=price_change,
-                change_percentage=change_percentage,
-                volume_at_change=current_volume,
-                api_triggered=api_triggered,
+                timestamp = timestamp,
+                price_before = previous_price,
+                price_after = current_price,
+                price_change = price_change,
+                change_percentage = change_percentage,
+                volume_at_change = current_volume,
+                api_triggered = api_triggered,
                 metadata={
                     'detection_method': 'threshold_based',
                     'threshold_used': self.price_delta_threshold
@@ -336,42 +376,45 @@ class VolumeTickRouter:
             return None
 
     def _calculate_volume_confidence(self, current_volume: float,
-                                     volume_shift: Optional[VolumeShift],
-                                     price_delta: Optional[PriceDelta],
-                                     ai_feedback: Optional[Dict[str, Any]]) -> VolumeConfidence:
+
+                                        volume_shift: Optional[VolumeShift],
+                                        price_delta: Optional[PriceDelta],
+                                        ai_feedback: Optional[Dict[str, Any]]) -> VolumeConfidence:
         """Calculate volume confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai."""
+"""
+"""
         try:
-            # Calculate volume sensitivity factor: \\u03c3
+# Calculate volume sensitivity factor: \\u03c3
             volume_sensitivity = self._calculate_volume_sensitivity(current_volume)
 
-            # Calculate hash intersection: \\u1d4d7\\u2229\\u1d4e5
+# Calculate hash intersection: \\u1d4d7\\u2229\\u1d4e5
             hash_intersection = self._calculate_hash_intersection(volume_shift, price_delta)
 
-            # Calculate volume pressure: \\u1d4e5
+# Calculate volume pressure: \\u1d4e5
             volume_pressure = self._calculate_volume_pressure(current_volume, volume_shift)
 
-            # Calculate AI feedback: F_ai
+# Calculate AI feedback: F_ai
             ai_feedback_factor = self._calculate_ai_feedback(ai_feedback)
 
-            # Calculate confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
+# Calculate confidence: C = \\u03c3\\u00b7(\\u1d4d7\\u2229\\u1d4e5) + \\u03b8\\u00b7F_ai
             hash_volume_component = self.volume_sensitivity * (hash_intersection + volume_pressure) / 2.0
             ai_component = self.ai_feedback_weight * ai_feedback_factor
             confidence_score = hash_volume_component + ai_component
 
-            # Normalize to [0, 1] range
+# Normalize to [0, 1] range
             confidence_score = unified_math.max(0.0, unified_math.min(1.0, confidence_score))
 
-            # Determine confidence level
+# Determine confidence level
             confidence_level = self._determine_confidence_level(confidence_score)
 
             return VolumeConfidence(
-                timestamp=time.time(),
-                confidence_score=confidence_score,
-                volume_sensitivity=volume_sensitivity,
-                hash_intersection=hash_intersection,
-                volume_pressure=volume_pressure,
-                ai_feedback=ai_feedback_factor,
-                confidence_level=confidence_level,
+                timestamp = time.time(),
+                confidence_score = confidence_score,
+                volume_sensitivity = volume_sensitivity,
+                hash_intersection = hash_intersection,
+                volume_pressure = volume_pressure,
+                ai_feedback = ai_feedback_factor,
+                confidence_level = confidence_level,
                 metadata={
                     'volume_shift_detected': volume_shift is not None,
                     'price_delta_detected': price_delta is not None,
@@ -384,25 +427,28 @@ class VolumeTickRouter:
             return self._create_fallback_confidence()
 
     def _calculate_volume_sensitivity(self, current_volume: float) -> float:
+
         """Calculate volume sensitivity factor: \\u03c3."""
+"""
+"""
         try:
             if not self.volume_history:
                 return self.volume_sensitivity
 
-            # Calculate volume volatility
+# Calculate volume volatility
             recent_volumes = [entry['volume'] for entry in list(self.volume_history)[-20:]]
             recent_volumes.append(current_volume)
 
             if len(recent_volumes) < 2:
                 return self.volume_sensitivity
 
-            # Calculate coefficient of variation
+# Calculate coefficient of variation
             mean_volume = unified_math.unified_math.mean(recent_volumes)
             std_volume = unified_math.unified_math.std(recent_volumes)
 
             if mean_volume > 0:
                 cv = std_volume / mean_volume
-                # Higher volatility = higher sensitivity
+# Higher volatility = higher sensitivity
                 sensitivity = unified_math.min(1.0, self.volume_sensitivity * (1.0 + cv))
             else:
                 sensitivity = self.volume_sensitivity
@@ -414,25 +460,28 @@ class VolumeTickRouter:
             return self.volume_sensitivity
 
     def _calculate_hash_intersection(self, volume_shift: Optional[VolumeShift],
-                                     price_delta: Optional[PriceDelta]) -> float:
+
+                                        price_delta: Optional[PriceDelta]) -> float:
         """Calculate hash intersection: \\u1d4d7\\u2229\\u1d4e5."""
+"""
+"""
         try:
             if not volume_shift or not price_delta:
                 return 0.5  # Neutral value when no intersection possible
 
-            # Compare hash values for similarity
+# Compare hash values for similarity
             volume_hash = volume_shift.hash_value
             price_hash = hashlib.sha256(
                 f"{price_delta.price_before:.8f}|{price_delta.price_after:.8f}|{price_delta.timestamp:.3f}".encode()).hexdigest()
 
-            # Calculate hash similarity (Hamming distance)
+# Calculate hash similarity (Hamming distance)
             similarity = self._calculate_hash_similarity(volume_hash, price_hash)
 
-            # Time proximity factor
+# Time proximity factor
             time_diff = unified_math.abs(volume_shift.timestamp - price_delta.timestamp)
             time_factor = unified_math.max(0.0, 1.0 - time_diff / 60.0)  # Decay over 60 seconds
 
-            # Combined intersection score
+# Combined intersection score
             intersection = similarity * time_factor
 
             return intersection
@@ -442,15 +491,18 @@ class VolumeTickRouter:
             return 0.5
 
     def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
+
         """Calculate similarity between two hash values."""
+"""
+"""
         try:
             if len(hash1) != len(hash2):
                 return 0.0
 
-            # Calculate Hamming distance
+# Calculate Hamming distance
             hamming_distance = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
 
-            # Convert to similarity (0 = identical, 1 = completely different)
+# Convert to similarity (0 = identical, 1 = completely different)
             max_distance = len(hash1)
             similarity = 1.0 - (hamming_distance / max_distance)
 
@@ -461,28 +513,31 @@ class VolumeTickRouter:
             return 0.0
 
     def _calculate_volume_pressure(self, current_volume: float,
-                                   volume_shift: Optional[VolumeShift]) -> float:
+
+                                    volume_shift: Optional[VolumeShift]) -> float:
         """Calculate volume pressure: \\u1d4e5."""
+"""
+"""
         try:
             if not self.volume_history:
                 return 0.5
 
-            # Base pressure from current volume
+# Base pressure from current volume
             recent_volumes = [entry['volume'] for entry in list(self.volume_history)[-10:]]
             recent_volumes.append(current_volume)
 
             if len(recent_volumes) < 2:
                 return 0.5
 
-            # Calculate volume momentum
+# Calculate volume momentum
             volume_momentum = (current_volume - recent_volumes[0]) / unified_math.max(recent_volumes[0], 1.0)
 
-            # Adjust for volume shift if present
+# Adjust for volume shift if present
             if volume_shift:
                 shift_factor = unified_math.abs(volume_shift.change_percentage) / 100.0
                 volume_momentum *= (1.0 + shift_factor)
 
-            # Normalize to [0, 1] range
+# Normalize to [0, 1] range
             pressure = unified_math.max(0.0, unified_math.min(1.0, (volume_momentum + 1.0) / 2.0))
 
             return pressure
@@ -492,19 +547,22 @@ class VolumeTickRouter:
             return 0.5
 
     def _calculate_ai_feedback(self, ai_feedback: Optional[Dict[str, Any]]) -> float:
+
         """Calculate AI feedback factor: F_ai."""
+"""
+"""
         try:
             if not ai_feedback:
                 return 0.5  # Neutral value when no AI feedback
 
-            # Extract confidence from AI feedback
+# Extract confidence from AI feedback
             confidence = ai_feedback.get('confidence', 0.5)
 
-            # Extract volume-related signals
+# Extract volume - related signals
             volume_signal = ai_feedback.get('volume_signal', 0.5)
             price_signal = ai_feedback.get('price_signal', 0.5)
 
-            # Combined AI feedback factor
+# Combined AI feedback factor
             ai_factor = (confidence + volume_signal + price_signal) / 3.0
 
             return unified_math.max(0.0, unified_math.min(1.0, ai_factor))
@@ -514,42 +572,45 @@ class VolumeTickRouter:
             return 0.5
 
     def _match_volume_price(self, volume_shift: VolumeShift,
+
                             price_delta: PriceDelta) -> Optional[VolumeMatch]:
         """Match volume shift with price delta."""
+"""
+"""
         try:
-            # Calculate time correlation
+# Calculate time correlation
             time_diff = unified_math.abs(volume_shift.timestamp - price_delta.timestamp)
-            time_correlation = unified_math.max(0.0, 1.0 - time_diff / 30.0)  # 30-second window
+            time_correlation = unified_math.max(0.0, 1.0 - time_diff / 30.0)  # 30 - second window
 
-            # Calculate magnitude correlation
+# Calculate magnitude correlation
             volume_magnitude = unified_math.abs(volume_shift.change_percentage)
             price_magnitude = unified_math.abs(price_delta.change_percentage)
 
-            # Normalize magnitudes
+# Normalize magnitudes
             max_volume_magnitude = 100.0  # 100% volume change
-            max_price_magnitude = 10.0    # 10% price change
+            max_price_magnitude = 10.0  # 10% price change
 
             normalized_volume = unified_math.min(volume_magnitude / max_volume_magnitude, 1.0)
             normalized_price = unified_math.min(price_magnitude / max_price_magnitude, 1.0)
 
             magnitude_correlation = 1.0 - unified_math.abs(normalized_volume - normalized_price)
 
-            # Calculate overall match confidence
+# Calculate overall match confidence
             match_confidence = (time_correlation + magnitude_correlation) / 2.0
 
-            # Calculate correlation score
+# Calculate correlation score
             correlation_score = self._calculate_correlation_score(volume_shift, price_delta)
 
-            # Check API consistency
+# Check API consistency
             api_consistency = price_delta.api_triggered and match_confidence > 0.7
 
             return VolumeMatch(
-                timestamp=time.time(),
-                volume_shift=volume_shift,
-                price_delta=price_delta,
-                match_confidence=match_confidence,
-                correlation_score=correlation_score,
-                api_consistency=api_consistency,
+                timestamp = time.time(),
+                volume_shift = volume_shift,
+                price_delta = price_delta,
+                match_confidence = match_confidence,
+                correlation_score = correlation_score,
+                api_consistency = api_consistency,
                 metadata={
                     'time_correlation': time_correlation,
                     'magnitude_correlation': magnitude_correlation,
@@ -562,20 +623,23 @@ class VolumeTickRouter:
             return None
 
     def _calculate_correlation_score(self, volume_shift: VolumeShift,
-                                     price_delta: PriceDelta) -> float:
+
+                                        price_delta: PriceDelta) -> float:
         """Calculate correlation score between volume shift and price delta."""
+"""
+"""
         try:
-            # Direction correlation
+# Direction correlation
             volume_direction = 1.0 if volume_shift.volume_change > 0 else -1.0
             price_direction = 1.0 if price_delta.price_change > 0 else -1.0
 
             direction_correlation = 1.0 if volume_direction == price_direction else 0.0
 
-            # Magnitude correlation
+# Magnitude correlation
             volume_magnitude = unified_math.abs(volume_shift.change_percentage)
             price_magnitude = unified_math.abs(price_delta.change_percentage)
 
-            # Normalize and compare
+# Normalize and compare
             max_volume = 100.0
             max_price = 10.0
 
@@ -584,7 +648,7 @@ class VolumeTickRouter:
 
             magnitude_correlation = 1.0 - unified_math.abs(normalized_volume - normalized_price)
 
-            # Combined correlation score
+# Combined correlation score
             correlation_score = (direction_correlation + magnitude_correlation) / 2.0
 
             return unified_math.max(0.0, unified_math.min(1.0, correlation_score))
@@ -594,7 +658,10 @@ class VolumeTickRouter:
             return 0.0
 
     def _determine_pressure_type(self, change_percentage: float) -> VolumePressureType:
+
         """Determine volume pressure type based on change percentage."""
+"""
+"""
         try:
             abs_change = unified_math.abs(change_percentage)
 
@@ -612,14 +679,17 @@ class VolumeTickRouter:
             return VolumePressureType.NORMAL
 
     def _check_api_trigger(self, timestamp: float) -> bool:
+
         """Check if price delta was API triggered."""
+"""
+"""
         try:
-            # Simplified logic - in real implementation, this would check API logs
-            # For now, assume API triggered if within recent time window
+# Simplified logic - in real implementation, this would check API logs
+# For now, assume API triggered if within recent time window
             current_time = time.time()
             time_diff = current_time - timestamp
 
-            # Assume API triggered if within last 5 seconds
+# Assume API triggered if within last 5 seconds
             return time_diff < 5.0
 
         except Exception as e:
@@ -627,7 +697,10 @@ class VolumeTickRouter:
             return False
 
     def _determine_confidence_level(self, confidence_score: float) -> VolumeConfidenceLevel:
+
         """Determine confidence level from score."""
+"""
+"""
         if confidence_score >= 0.9:
             return VolumeConfidenceLevel.CRITICAL
         elif confidence_score >= 0.7:
@@ -638,19 +711,25 @@ class VolumeTickRouter:
             return VolumeConfidenceLevel.LOW
 
     def _create_fallback_confidence(self) -> VolumeConfidence:
+
         """Create fallback confidence calculation."""
+"""
+"""
         return VolumeConfidence(
-            timestamp=time.time(),
-            confidence_score=0.5,
-            volume_sensitivity=self.volume_sensitivity,
-            hash_intersection=0.5,
-            volume_pressure=0.5,
-            ai_feedback=0.5,
-            confidence_level=VolumeConfidenceLevel.MEDIUM
+            timestamp = time.time(),
+            confidence_score = 0.5,
+            volume_sensitivity = self.volume_sensitivity,
+            hash_intersection = 0.5,
+            volume_pressure = 0.5,
+            ai_feedback = 0.5,
+            confidence_level = VolumeConfidenceLevel.MEDIUM
         )
 
     def _default_config(self) -> Dict[str, Any]:
+
         """Get default configuration."""
+"""
+"""
         return {
             'max_volume_history': 1000,
             'max_price_history': 1000,
@@ -669,12 +748,18 @@ volume_tick_router = VolumeTickRouter()
 
 
 def process_volume_event(volume_data: Dict[str, Any],
-                         price_data: Optional[Dict[str, Any]] = None,
-                         ai_feedback: Optional[Dict[str, Any]] = None) -> VolumeConfidence:
+
+                            price_data: Optional[Dict[str, Any]] = None,
+                            ai_feedback: Optional[Dict[str, Any]] = None) -> VolumeConfidence:
     """Global function to process volume event."""
+"""
+"""
     return volume_tick_router.process_volume_event(volume_data, price_data, ai_feedback)
 
 
 def get_volume_analytics() -> Dict[str, Any]:
+
     """Global function to get volume analytics."""
+"""
+"""
     return volume_tick_router.get_volume_analytics()

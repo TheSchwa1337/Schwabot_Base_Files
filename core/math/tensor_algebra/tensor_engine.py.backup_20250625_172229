@@ -50,7 +50,8 @@ class TensorEngine:
 
         logger.info("Tensor Engine initialized")
 
-    def create_tensor_space(self, data: NDArray, dimensions: Tuple[int, ...]) -> NDArray:
+    def create_tensor_space(self, data: NDArray,
+                            dimensions: Tuple[int, ...]) -> NDArray:
         """
         Create multi-dimensional tensor space from data.
 
@@ -200,7 +201,8 @@ class TensorEngine:
                     eigenvals = np.linalg.eigvals(tensor)
                     eigenvals = eigenvals[np.abs(eigenvals) > self.epsilon]
                     if len(eigenvals) > 0:
-                        stats['condition_number'] = float(np.max(np.abs(eigenvals)) / np.min(np.abs(eigenvals)))
+                        stats['condition_number'] = float(
+                            np.max(np.abs(eigenvals)) / np.min(np.abs(eigenvals)))
                 except Exception:
                     stats['condition_number'] = 0.0
 
@@ -377,7 +379,8 @@ class TensorEngine:
                 n_features = len(flattened) // n_samples
 
                 if n_features > 0:
-                    reshaped = flattened[:n_samples * n_features].reshape(n_samples, n_features)
+                    reshaped = flattened[:n_samples *
+                                         n_features].reshape(n_samples, n_features)
 
                     # Apply PCA
                     pca = PCA(n_components=min(target_dimensions, n_features))
@@ -465,8 +468,13 @@ class TensorEngine:
             block_variances = []
 
             for i in range(0, tensor.shape[0] - block_size + 1, block_size):
-                for j in range(0, tensor.shape[1] - block_size + 1, block_size):
-                    block = tensor[i:i+block_size, j:j+block_size]
+                for j in range(
+                        0,
+                        tensor.shape[1] -
+                        block_size +
+                        1,
+                        block_size):
+                    block = tensor[i:i + block_size, j:j + block_size]
                     block_variances.append(np.var(block))
 
             if block_variances:
@@ -483,17 +491,26 @@ class TensorEngine:
         """Calculate correlation-based match score."""
         try:
             # Normalize both tensors
-            tensor_norm = (tensor - np.mean(tensor)) / (np.std(tensor) + self.epsilon)
-            pattern_norm = (pattern - np.mean(pattern)) / (np.std(pattern) + self.epsilon)
+            tensor_norm = (tensor - np.mean(tensor)) / \
+                (np.std(tensor) + self.epsilon)
+            pattern_norm = (pattern - np.mean(pattern)) / \
+                (np.std(pattern) + self.epsilon)
 
             # Calculate correlation
-            correlation = np.corrcoef(tensor_norm.flatten(), pattern_norm.flatten())[0, 1]
+            correlation = np.corrcoef(
+                tensor_norm.flatten(),
+                pattern_norm.flatten())[
+                0,
+                1]
             return float(correlation) if not np.isnan(correlation) else 0.0
 
         except Exception:
             return 0.0
 
-    def _sliding_window_match(self, tensor: NDArray, pattern: NDArray) -> float:
+    def _sliding_window_match(
+            self,
+            tensor: NDArray,
+            pattern: NDArray) -> float:
         """Calculate sliding window match score."""
         try:
             if len(tensor) < len(pattern):
@@ -502,7 +519,7 @@ class TensorEngine:
             max_correlation = 0.0
 
             for i in range(len(tensor) - len(pattern) + 1):
-                window = tensor[i:i+len(pattern)]
+                window = tensor[i:i + len(pattern)]
                 correlation = np.corrcoef(window, pattern)[0, 1]
                 if not np.isnan(correlation):
                     max_correlation = max(max_correlation, correlation)
@@ -540,7 +557,8 @@ def tensor_pattern_matching(tensor: NDArray, pattern: NDArray,
     return tensor_engine.tensor_pattern_matching(tensor, pattern, threshold)
 
 
-def tensor_clustering(tensors: List[NDArray], n_clusters: int = 3) -> Dict[str, Any]:
+def tensor_clustering(tensors: List[NDArray],
+                      n_clusters: int = 3) -> Dict[str, Any]:
     """Convenience function for tensor clustering."""
     return tensor_engine.tensor_clustering(tensors, n_clusters)
 
@@ -548,7 +566,8 @@ def tensor_clustering(tensors: List[NDArray], n_clusters: int = 3) -> Dict[str, 
 def tensor_dimensionality_reduction(tensor: NDArray,
                                     target_dimensions: int = 2) -> NDArray:
     """Convenience function for tensor dimensionality reduction."""
-    return tensor_engine.tensor_dimensionality_reduction(tensor, target_dimensions)
+    return tensor_engine.tensor_dimensionality_reduction(
+        tensor, target_dimensions)
 
 
 if __name__ == "__main__":
@@ -589,9 +608,13 @@ if __name__ == "__main__":
             safe_print("\n📊 Testing Pattern Analysis:")
             pattern_results = analyze_tensor_patterns(tensor1)
             safe_print(f"✅ Pattern Types: {pattern_results['pattern_types']}")
-            safe_print(f"✅ Dominant Pattern: {pattern_results['dominant_pattern']}")
+            safe_print(
+                f"✅ Dominant Pattern: {
+                    pattern_results['dominant_pattern']}")
             safe_print(f"✅ Sparsity: {pattern_results['sparsity']:.4f}")
-            safe_print(f"✅ Symmetry Score: {pattern_results['symmetry_score']:.4f}")
+            safe_print(
+                f"✅ Symmetry Score: {
+                    pattern_results['symmetry_score']:.4f}")
 
             # Test statistics computation
             safe_print("\n📈 Testing Statistics Computation:")
@@ -603,7 +626,8 @@ if __name__ == "__main__":
 
             # Test pattern matching
             safe_print("\n🎯 Testing Pattern Matching:")
-            match_results = tensor_pattern_matching(tensor1, tensor2, threshold=0.5)
+            match_results = tensor_pattern_matching(
+                tensor1, tensor2, threshold=0.5)
             safe_print(f"✅ Match Score: {match_results['match_score']:.4f}")
             safe_print(f"✅ Pattern Found: {match_results['pattern_found']}")
 
@@ -611,35 +635,45 @@ if __name__ == "__main__":
             safe_print("\n🎯 Testing Clustering:")
             tensors = [tensor1, tensor2, tensor3]
             clustering_results = tensor_clustering(tensors, n_clusters=2)
-            safe_print(f"✅ Cluster Labels: {clustering_results['cluster_labels']}")
+            safe_print(
+                f"✅ Cluster Labels: {
+                    clustering_results['cluster_labels']}")
             safe_print(f"✅ Inertia: {clustering_results['inertia']:.4f}")
 
             # Test dimensionality reduction
             safe_print("\n📉 Testing Dimensionality Reduction:")
-            reduced = tensor_dimensionality_reduction(tensor3, target_dimensions=2)
+            reduced = tensor_dimensionality_reduction(
+                tensor3, target_dimensions=2)
             safe_print(f"✅ Reduced Shape: {reduced.shape}")
 
             # Test advanced tensor engine features
             safe_print("\n🔬 Testing Advanced Features:")
 
             # Test tensor similarity
-            similarity_cosine = tensor_engine.tensor_similarity(tensor1, tensor2, method='cosine')
-            similarity_euclidean = tensor_engine.tensor_similarity(tensor1, tensor2, method='euclidean')
-            similarity_correlation = tensor_engine.tensor_similarity(tensor1, tensor2, method='correlation')
+            similarity_cosine = tensor_engine.tensor_similarity(
+                tensor1, tensor2, method='cosine')
+            similarity_euclidean = tensor_engine.tensor_similarity(
+                tensor1, tensor2, method='euclidean')
+            similarity_correlation = tensor_engine.tensor_similarity(
+                tensor1, tensor2, method='correlation')
             safe_print(f"✅ Cosine Similarity: {similarity_cosine:.4f}")
             safe_print(f"✅ Euclidean Similarity: {similarity_euclidean:.4f}")
-            safe_print(f"✅ Correlation Similarity: {similarity_correlation:.4f}")
+            safe_print(
+                f"✅ Correlation Similarity: {
+                    similarity_correlation:.4f}")
 
             # Test block score calculation
             block_score = tensor_engine._calculate_block_score(tensor1)
             safe_print(f"✅ Block Score: {block_score:.4f}")
 
             # Test correlation matching
-            correlation_match = tensor_engine._correlation_match(tensor1, tensor2)
+            correlation_match = tensor_engine._correlation_match(
+                tensor1, tensor2)
             safe_print(f"✅ Correlation Match: {correlation_match:.4f}")
 
             # Test sliding window matching
-            sliding_match = tensor_engine._sliding_window_match(tensor1.flatten(), tensor2.flatten())
+            sliding_match = tensor_engine._sliding_window_match(
+                tensor1.flatten(), tensor2.flatten())
             safe_print(f"✅ Sliding Window Match: {sliding_match:.4f}")
 
             # Test multiple tensor operations
@@ -649,7 +683,13 @@ if __name__ == "__main__":
                 pattern_analysis = analyze_tensor_patterns(tensor)
                 stats = compute_tensor_statistics(tensor)
                 safe_print(
-                    f"✅ Tensor {i+1}: Patterns={len(pattern_analysis['pattern_types'])}, Mean={stats['mean']:.4f}, Rank={stats['rank']}")
+                    f"✅ Tensor {
+                        i +
+                        1}: Patterns={
+                        len(
+                            pattern_analysis['pattern_types'])}, Mean={
+                        stats['mean']:.4f}, Rank={
+                        stats['rank']}")
 
             safe_print("\n🎉 Tensor Engine tests completed successfully!")
             return True

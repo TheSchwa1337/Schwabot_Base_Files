@@ -1,9 +1,15 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """
-API Bridge Manager - Multi-Source Crypto API Integration for Schwabot
-=====================================================================
+"""
+"""
+"""
+"""
+"""
+
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+API Bridge Manager - Multi - Source Crypto API Integration for Schwabot
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 This module implements a comprehensive API bridge manager for Schwabot, providing
 unified access to multiple crypto data sources including Coin Market Cap and
@@ -11,12 +17,14 @@ Coin Gecko. It handles rate limiting, error recovery, data normalization, and
 integration with the mathematical pipeline.
 
 Core Functionality:
-- Multi-source API integration (Coin Market Cap, Coin Gecko)
+- Multi - source API integration(Coin Market Cap, Coin Gecko)
 - Rate limiting and request management
 - Data normalization and validation
 - Error handling and recovery
 - Integration with mathematical pipeline
 - Caching and performance optimization
+"""
+"""
 """
 
 import logging
@@ -39,12 +47,14 @@ logger = logging.getLogger(__name__)
 
 
 class APISource(Enum):
+
     COINMARKETCAP = "coinmarketcap"
     COINGECKO = "coingecko"
     ALTERNATIVE = "alternative"
 
 
 class DataType(Enum):
+
     PRICE = "price"
     MARKET_CAP = "market_cap"
     VOLUME = "volume"
@@ -55,6 +65,7 @@ class DataType(Enum):
 
 
 class RequestStatus(Enum):
+
     PENDING = "pending"
     SUCCESS = "success"
     FAILED = "failed"
@@ -63,6 +74,7 @@ class RequestStatus(Enum):
 
 @dataclass
 class APIRequest:
+
     request_id: str
     source: APISource
     endpoint: str
@@ -77,6 +89,7 @@ class APIRequest:
 
 @dataclass
 class CryptoData:
+
     symbol: str
     name: str
     price: float
@@ -91,11 +104,12 @@ class CryptoData:
     source: APISource
     timestamp: datetime
     confidence_score: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class RateLimitInfo:
+
     source: APISource
     requests_per_minute: int
     requests_per_hour: int
@@ -103,18 +117,20 @@ class RateLimitInfo:
     current_minute_count: int = 0
     current_hour_count: int = 0
     current_day_count: int = 0
-    last_reset_minute: datetime = field(default_factory=datetime.now)
-    last_reset_hour: datetime = field(default_factory=datetime.now)
-    last_reset_day: datetime = field(default_factory=datetime.now)
+    last_reset_minute: datetime = field(default_factory = datetime.now)
+    last_reset_hour: datetime = field(default_factory = datetime.now)
+    last_reset_day: datetime = field(default_factory = datetime.now)
 
 
 class APIBridgeManager:
-    def __init__(self, config_path: str = "./config/api_config.json"):
+
+    def __init__(self, config_path: str = "./config / api_config.json"):
+
         self.config_path = config_path
         self.api_keys: Dict[APISource, str] = {}
         self.base_urls: Dict[APISource, str] = {}
         self.rate_limits: Dict[APISource, RateLimitInfo] = {}
-        self.request_queue: deque = deque(maxlen=10000)
+        self.request_queue: deque = deque(maxlen = 10000)
         self.response_cache: Dict[str, Tuple[Any, datetime]] = {}
         self.data_cache: Dict[str, CryptoData] = {}
         self.request_history: List[APIRequest] = []
@@ -126,20 +142,23 @@ class APIBridgeManager:
         logger.info("APIBridgeManager initialized")
 
     def _load_configuration(self) -> None:
+
         """Load API configuration from file."""
+"""
+"""
         try:
             if os.path.exists(self.config_path):
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
 
-                # Load API keys
+# Load API keys
                 api_keys = config.get("api_keys", {})
                 self.api_keys = {
                     APISource(source): key
                     for source, key in api_keys.items()
                 }
 
-                # Load base URLs
+# Load base URLs
                 base_urls = config.get("base_urls", {})
                 self.base_urls = {
                     APISource(source): url
@@ -155,24 +174,30 @@ class APIBridgeManager:
             self._create_default_configuration()
 
     def _create_default_configuration(self) -> None:
+
         """Create default API configuration."""
+"""
+"""
         self.api_keys = {
             APISource.COINMARKETCAP: "",  # User needs to add their API key
-            APISource.COINGECKO: "",      # CoinGecko is free, no API key needed
+            APISource.COINGECKO: "",  # CoinGecko is free, no API key needed
         }
 
         self.base_urls = {
-            APISource.COINMARKETCAP: "https://pro-api.coinmarketcap.com/v1",
-            APISource.COINGECKO: "https://api.coingecko.com/api/v3",
+            APISource.COINMARKETCAP: "https://pro - api.coinmarketcap.com / v1",
+            APISource.COINGECKO: "https://api.coingecko.com / api / v3",
         }
 
         self._save_configuration()
         logger.info("Default API configuration created")
 
     def _save_configuration(self) -> None:
+
         """Save current configuration to file."""
+"""
+"""
         try:
-            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
+            os.makedirs(os.path.dirname(self.config_path), exist_ok = True)
             config = {
                 "api_keys": {
                     source.value: key
@@ -184,30 +209,37 @@ class APIBridgeManager:
                 }
             }
             with open(self.config_path, 'w') as f:
-                json.dump(config, f, indent=2)
+                json.dump(config, f, indent = 2)
         except Exception as e:
             logger.error(f"Error saving configuration: {e}")
 
     def _initialize_rate_limits(self) -> None:
+
         """Initialize rate limit information for each API source."""
+"""
+"""
         self.rate_limits = {
             APISource.COINMARKETCAP: RateLimitInfo(
-                source=APISource.COINMARKETCAP,
-                requests_per_minute=30,
-                requests_per_hour=1000,
-                requests_per_day=10000
+                source = APISource.COINMARKETCAP,
+                requests_per_minute = 30,
+                requests_per_hour = 1000,
+                requests_per_day = 10000
             ),
             APISource.COINGECKO: RateLimitInfo(
-                source=APISource.COINGECKO,
-                requests_per_minute=50,
-                requests_per_hour=1000,
-                requests_per_day=10000
+                source = APISource.COINGECKO,
+                requests_per_minute = 50,
+                requests_per_hour = 1000,
+                requests_per_day = 10000
             )
         }
 
     def _start_background_processors(self) -> None:
+
         """Start background processing threads."""
+"""
+"""
         def request_processor():
+
             while True:
                 try:
                     if self.request_queue:
@@ -218,6 +250,7 @@ class APIBridgeManager:
                     logger.error(f"Error in request processor: {e}")
 
         def cache_cleaner():
+
             while True:
                 try:
                     self._clean_expired_cache()
@@ -225,8 +258,8 @@ class APIBridgeManager:
                 except Exception as e:
                     logger.error(f"Error in cache cleaner: {e}")
 
-        self.request_processor_thread = threading.Thread(target=request_processor, daemon=True)
-        self.cache_cleaner_thread = threading.Thread(target=cache_cleaner, daemon=True)
+        self.request_processor_thread = threading.Thread(target = request_processor, daemon = True)
+        self.cache_cleaner_thread = threading.Thread(target = cache_cleaner, daemon = True)
 
         self.request_processor_thread.start()
         self.cache_cleaner_thread.start()
@@ -234,16 +267,19 @@ class APIBridgeManager:
         logger.info("Background processors started")
 
     def _process_request(self, request: APIRequest) -> None:
+
         """Process an API request."""
+"""
+"""
         try:
-            # Check rate limits
+# Check rate limits
             if not self._check_rate_limit(request.source):
                 request.status = RequestStatus.RATE_LIMITED
                 request.error_message = "Rate limit exceeded"
                 self._handle_failed_request(request)
                 return
 
-            # Make the API call
+# Make the API call
             response_data = self._make_api_call(request)
 
             if response_data:
@@ -261,14 +297,17 @@ class APIBridgeManager:
             self._handle_failed_request(request)
 
     def _check_rate_limit(self, source: APISource) -> bool:
+
         """Check if we can make a request to the API source."""
+"""
+"""
         if source not in self.rate_limits:
             return True
 
         rate_limit = self.rate_limits[source]
         now = datetime.now()
 
-        # Reset counters if needed
+# Reset counters if needed
         if (now - rate_limit.last_reset_minute).seconds >= 60:
             rate_limit.current_minute_count = 0
             rate_limit.last_reset_minute = now
@@ -281,13 +320,13 @@ class APIBridgeManager:
             rate_limit.current_day_count = 0
             rate_limit.last_reset_day = now
 
-        # Check limits
+# Check limits
         if (rate_limit.current_minute_count >= rate_limit.requests_per_minute or
             rate_limit.current_hour_count >= rate_limit.requests_per_hour or
                 rate_limit.current_day_count >= rate_limit.requests_per_day):
             return False
 
-        # Increment counters
+# Increment counters
         rate_limit.current_minute_count += 1
         rate_limit.current_hour_count += 1
         rate_limit.current_day_count += 1
@@ -295,7 +334,10 @@ class APIBridgeManager:
         return True
 
     def _make_api_call(self, request: APIRequest) -> Optional[Dict[str, Any]]:
+
         """Make an actual API call."""
+"""
+"""
         try:
             if request.source == APISource.COINMARKETCAP:
                 return self._call_coinmarketcap(request)
@@ -310,16 +352,19 @@ class APIBridgeManager:
             return None
 
     def _call_coinmarketcap(self, request: APIRequest) -> Optional[Dict[str, Any]]:
+
         """Make a Coin Market Cap API call."""
+"""
+"""
         try:
             headers = {
-                'X-CMC_PRO_API_KEY': self.api_keys[APISource.COINMARKETCAP],
-                'Accept': 'application/json'
+                'X - CMC_PRO_API_KEY': self.api_keys[APISource.COINMARKETCAP],
+                'Accept': 'application / json'
             }
 
             url = f"{self.base_urls[APISource.COINMARKETCAP]}/{request.endpoint}"
 
-            response = requests.get(url, headers=headers, params=request.parameters, timeout=30)
+            response = requests.get(url, headers = headers, params = request.parameters, timeout = 30)
 
             if response.status_code == 200:
                 return response.json()
@@ -332,11 +377,14 @@ class APIBridgeManager:
             return None
 
     def _call_coingecko(self, request: APIRequest) -> Optional[Dict[str, Any]]:
+
         """Make a CoinGecko API call."""
+"""
+"""
         try:
             url = f"{self.base_urls[APISource.COINGECKO]}/{request.endpoint}"
 
-            response = requests.get(url, params=request.parameters, timeout=30)
+            response = requests.get(url, params = request.parameters, timeout = 30)
 
             if response.status_code == 200:
                 return response.json()
@@ -349,26 +397,32 @@ class APIBridgeManager:
             return None
 
     def _handle_successful_request(self, request: APIRequest) -> None:
+
         """Handle a successful API request."""
-        # Cache the response
+"""
+"""
+# Cache the response
         cache_key = self._generate_cache_key(request)
         self.response_cache[cache_key] = (request.response_data, datetime.now())
 
-        # Process the data
+# Process the data
         if request.response_data:
             self._process_response_data(request)
 
-        # Update request history
+# Update request history
         self.request_history.append(request)
 
         logger.debug(f"Successful API request: {request.request_id}")
 
     def _handle_failed_request(self, request: APIRequest) -> None:
+
         """Handle a failed API request."""
+"""
+"""
         if request.retry_count < request.max_retries:
             request.retry_count += 1
             request.status = RequestStatus.PENDING
-            # Re-queue for retry with exponential backoff
+# Re - queue for retry with exponential backoff
             time.sleep(2 ** request.retry_count)
             self.request_queue.append(request)
         else:
@@ -376,7 +430,10 @@ class APIBridgeManager:
             logger.error(f"API request failed after {request.max_retries} retries: {request.error_message}")
 
     def _process_response_data(self, request: APIRequest) -> None:
+
         """Process response data and convert to CryptoData objects."""
+"""
+"""
         if not request.response_data:
             return
 
@@ -390,28 +447,31 @@ class APIBridgeManager:
             logger.error(f"Error processing response data: {e}")
 
     def _process_coinmarketcap_data(self, data: Dict[str, Any]) -> None:
+
         """Process Coin Market Cap response data."""
+"""
+"""
         if 'data' not in data:
             return
 
         for item in data['data']:
             try:
                 crypto_data = CryptoData(
-                    symbol=item.get('symbol', ''),
-                    name=item.get('name', ''),
-                    price=float(item.get('quote', {}).get('USD', {}).get('price', 0)),
-                    market_cap=float(item.get('quote', {}).get('USD', {}).get('market_cap', 0)),
-                    volume_24h=float(item.get('quote', {}).get('USD', {}).get('volume_24h', 0)),
-                    circulating_supply=float(item.get('circulating_supply', 0)),
-                    total_supply=float(item.get('total_supply', 0)),
-                    max_supply=float(item.get('max_supply', 0)) if item.get('max_supply') else None,
-                    rank=int(item.get('cmc_rank', 0)),
-                    price_change_24h=float(item.get('quote', {}).get('USD', {}).get('volume_change_24h', 0)),
-                    price_change_percentage_24h=float(item.get('quote', {}).get(
+                    symbol = item.get('symbol', ''),
+                    name = item.get('name', ''),
+                    price = float(item.get('quote', {}).get('USD', {}).get('price', 0)),
+                    market_cap = float(item.get('quote', {}).get('USD', {}).get('market_cap', 0)),
+                    volume_24h = float(item.get('quote', {}).get('USD', {}).get('volume_24h', 0)),
+                    circulating_supply = float(item.get('circulating_supply', 0)),
+                    total_supply = float(item.get('total_supply', 0)),
+                    max_supply = float(item.get('max_supply', 0)) if item.get('max_supply') else None,
+                    rank = int(item.get('cmc_rank', 0)),
+                    price_change_24h = float(item.get('quote', {}).get('USD', {}).get('volume_change_24h', 0)),
+                    price_change_percentage_24h = float(item.get('quote', {}).get(
                         'USD', {}).get('percent_change_24h', 0)),
-                    source=APISource.COINMARKETCAP,
-                    timestamp=datetime.now(),
-                    confidence_score=0.95
+                    source = APISource.COINMARKETCAP,
+                    timestamp = datetime.now(),
+                    confidence_score = 0.95
                 )
 
                 self.data_cache[crypto_data.symbol] = crypto_data
@@ -420,7 +480,10 @@ class APIBridgeManager:
                 logger.error(f"Error processing Coin Market Cap item: {e}")
 
     def _process_coingecko_data(self, data: Dict[str, Any]) -> None:
+
         """Process CoinGecko response data."""
+"""
+"""
         if isinstance(data, list):
             items = data
         elif isinstance(data, dict) and 'data' in data:
@@ -431,20 +494,20 @@ class APIBridgeManager:
         for item in items:
             try:
                 crypto_data = CryptoData(
-                    symbol=item.get('symbol', '').upper(),
-                    name=item.get('name', ''),
-                    price=float(item.get('current_price', 0)),
-                    market_cap=float(item.get('market_cap', 0)),
-                    volume_24h=float(item.get('total_volume', 0)),
-                    circulating_supply=float(item.get('circulating_supply', 0)),
-                    total_supply=float(item.get('total_supply', 0)),
-                    max_supply=float(item.get('max_supply', 0)) if item.get('max_supply') else None,
-                    rank=int(item.get('market_cap_rank', 0)),
-                    price_change_24h=float(item.get('price_change_24h', 0)),
-                    price_change_percentage_24h=float(item.get('price_change_percentage_24h', 0)),
-                    source=APISource.COINGECKO,
-                    timestamp=datetime.now(),
-                    confidence_score=0.90
+                    symbol = item.get('symbol', '').upper(),
+                    name = item.get('name', ''),
+                    price = float(item.get('current_price', 0)),
+                    market_cap = float(item.get('market_cap', 0)),
+                    volume_24h = float(item.get('total_volume', 0)),
+                    circulating_supply = float(item.get('circulating_supply', 0)),
+                    total_supply = float(item.get('total_supply', 0)),
+                    max_supply = float(item.get('max_supply', 0)) if item.get('max_supply') else None,
+                    rank = int(item.get('market_cap_rank', 0)),
+                    price_change_24h = float(item.get('price_change_24h', 0)),
+                    price_change_percentage_24h = float(item.get('price_change_percentage_24h', 0)),
+                    source = APISource.COINGECKO,
+                    timestamp = datetime.now(),
+                    confidence_score = 0.90
                 )
 
                 self.data_cache[crypto_data.symbol] = crypto_data
@@ -453,12 +516,18 @@ class APIBridgeManager:
                 logger.error(f"Error processing CoinGecko item: {e}")
 
     def _generate_cache_key(self, request: APIRequest) -> str:
+
         """Generate a cache key for a request."""
-        key_data = f"{request.source.value}_{request.endpoint}_{json.dumps(request.parameters, sort_keys=True)}"
+"""
+"""
+        key_data = f"{request.source.value}_{request.endpoint}_{json.dumps(request.parameters, sort_keys = True)}"
         return hashlib.md5(key_data.encode()).hexdigest()
 
     def _clean_expired_cache(self) -> None:
+
         """Clean expired cache entries."""
+"""
+"""
         now = datetime.now()
         expired_keys = []
 
@@ -473,14 +542,17 @@ class APIBridgeManager:
             logger.debug(f"Cleaned {len(expired_keys)} expired cache entries")
 
     def get_crypto_data(self, symbol: str, source: Optional[APISource] = None) -> Optional[CryptoData]:
+
         """Get crypto data for a symbol."""
-        # Check cache first
+"""
+"""
+# Check cache first
         if symbol in self.data_cache:
             data = self.data_cache[symbol]
             if (datetime.now() - data.timestamp).seconds < 300:  # 5 minutes
                 return data
 
-        # Make API request if not in cache or expired
+# Make API request if not in cache or expired
         if source:
             sources = [source]
         else:
@@ -492,33 +564,39 @@ class APIBridgeManager:
             elif api_source == APISource.COINGECKO:
                 self._request_coingecko_data(symbol)
 
-        # Return cached data if available
+# Return cached data if available
         return self.data_cache.get(symbol)
 
     def _request_coinmarketcap_data(self, symbol: str) -> None:
+
         """Request data from Coin Market Cap."""
+"""
+"""
         request_id = f"cmc_{symbol}_{int(time.time())}"
 
         request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINMARKETCAP,
-            endpoint="cryptocurrency/quotes/latest",
+            request_id = request_id,
+            source = APISource.COINMARKETCAP,
+            endpoint="cryptocurrency / quotes / latest",
             parameters={"symbol": symbol},
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
+            timestamp = datetime.now(),
+            status = RequestStatus.PENDING
         )
 
         self.request_queue.append(request)
         self.active_requests[request_id] = request
 
     def _request_coingecko_data(self, symbol: str) -> None:
+
         """Request data from CoinGecko."""
+"""
+"""
         request_id = f"cg_{symbol}_{int(time.time())}"
 
         request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINGECKO,
-            endpoint="simple/price",
+            request_id = request_id,
+            source = APISource.COINGECKO,
+            endpoint="simple / price",
             parameters={
                 "ids": symbol.lower(),
                 "vs_currencies": "usd",
@@ -527,15 +605,18 @@ class APIBridgeManager:
                 "include_24hr_change": "true",
                 "include_last_updated_at": "true"
             },
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
+            timestamp = datetime.now(),
+            status = RequestStatus.PENDING
         )
 
         self.request_queue.append(request)
         self.active_requests[request_id] = request
 
     def get_multiple_crypto_data(self, symbols: List[str]) -> Dict[str, CryptoData]:
+
         """Get crypto data for multiple symbols."""
+"""
+"""
         results = {}
 
         for symbol in symbols:
@@ -546,14 +627,17 @@ class APIBridgeManager:
         return results
 
     def get_top_cryptocurrencies(self, limit: int = 100) -> List[CryptoData]:
+
         """Get top cryptocurrencies by market cap."""
-        # Request from CoinGecko (free and reliable)
+"""
+"""
+# Request from CoinGecko (free and reliable)
         request_id = f"top_{int(time.time())}"
 
         request = APIRequest(
-            request_id=request_id,
-            source=APISource.COINGECKO,
-            endpoint="coins/markets",
+            request_id = request_id,
+            source = APISource.COINGECKO,
+            endpoint="coins / markets",
             parameters={
                 "vs_currency": "usd",
                 "order": "market_cap_desc",
@@ -561,18 +645,21 @@ class APIBridgeManager:
                 "page": "1",
                 "sparkline": "false"
             },
-            timestamp=datetime.now(),
-            status=RequestStatus.PENDING
+            timestamp = datetime.now(),
+            status = RequestStatus.PENDING
         )
 
         self.request_queue.append(request)
         self.active_requests[request_id] = request
 
-        # Return cached data if available
+# Return cached data if available
         return list(self.data_cache.values())
 
     def get_api_statistics(self) -> Dict[str, Any]:
+
         """Get comprehensive API statistics."""
+"""
+"""
         total_requests = len(self.request_history)
         successful_requests = len([r for r in self.request_history if r.status == RequestStatus.SUCCESS])
         failed_requests = len([r for r in self.request_history if r.status == RequestStatus.FAILED])
@@ -600,20 +687,23 @@ class APIBridgeManager:
 
 
 def main() -> None:
+
     """Main function for testing and demonstration."""
+"""
+"""
     bridge = APIBridgeManager("./test_api_config.json")
 
-    # Test getting crypto data
+# Test getting crypto data
     btc_data = bridge.get_crypto_data("BTC")
     if btc_data:
         safe_print(f"BTC Data: {btc_data}")
 
-    # Test getting multiple symbols
+# Test getting multiple symbols
     symbols = ["BTC", "ETH", "ADA"]
     multi_data = bridge.get_multiple_crypto_data(symbols)
     safe_print(f"Multiple symbols data: {len(multi_data)} items")
 
-    # Get statistics
+# Get statistics
     stats = bridge.get_api_statistics()
     safe_print(f"API Statistics: {stats}")
 

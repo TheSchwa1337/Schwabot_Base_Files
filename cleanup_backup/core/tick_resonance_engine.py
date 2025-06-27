@@ -1,13 +1,17 @@
+# -*- coding: utf - 8 -*-
+"""Tick Resonance Engine - Harmony Score Calculator.
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Tick Resonance Engine - Harmony Score Calculator.
+# -*- coding: utf - 8 -*-
 
-This module computes harmony scores (\\u1d4d7) that measure how well tick timing
-aligns with expected phase gates (4-bit, 8-bit, 42-bit). The harmony score
-feeds into the entropy-weighted entry score calculation.
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+This module computes harmony scores(\\u1d4d7) that measure how well tick timing
+aligns with expected phase gates (4 - bit, 8 - bit, 42 - bit). The harmony score
+feeds into the entropy - weighted entry score calculation.
 
 Mathematical Foundation:
 \\u1d4d7 = exp(-mean(|tick_i - \\u03c6_target|)^2)
@@ -18,6 +22,8 @@ Where:
 - Result in [0, 1] where 1 = perfect harmony
 
 Windows CLI compatible with ASCII fallback for special characters.
+"""
+"""
 """
 
 
@@ -31,9 +37,9 @@ logger = logging.getLogger(__name__)
 
 # Phase target timings (in seconds)
 PHASE_TARGETS = {
-    4: 0.25,  # 4-bit: 250ms target
-    8: 0.125,  # 8-bit: 125ms target
-    42: 0.024,  # 42-bit: ~24ms target (high frequency)
+    4: 0.25,  # 4 - bit: 250ms target
+    8: 0.125,  # 8 - bit: 125ms target
+    42: 0.024,  # 42 - bit: ~24ms target (high frequency)
 }
 
 # Harmony calculation parameters
@@ -42,6 +48,7 @@ MIN_TICKS_REQUIRED = 3  # Minimum ticks needed for calculation
 
 
 def compute_harmony_vector(
+
     tick_deltas: np.ndarray,
     target_phase: float,
     window_size: int = HARMONY_WINDOW_SIZE,
@@ -62,24 +69,26 @@ def compute_harmony_vector(
     float
         Harmony score in [0, 1] where 1 = perfect alignment
     """
+"""
+"""
     try:
         if len(tick_deltas) < MIN_TICKS_REQUIRED:
             logger.debug(f"Insufficient ticks for harmony: {len(tick_deltas)}")
             return 0.0
 
-        # Use most recent window
+# Use most recent window
         recent_deltas = tick_deltas[-window_size:]
 
-        # Calculate absolute deviations from target
+# Calculate absolute deviations from target
         deviations = unified_math.unified_math.abs(recent_deltas - target_phase)
 
-        # Compute mean squared deviation
+# Compute mean squared deviation
         mean_sq_deviation = unified_math.unified_math.mean(deviations**2)
 
-        # Convert to harmony score using exponential decay
+# Convert to harmony score using exponential decay
         harmony = float(unified_math.exp(-mean_sq_deviation))
 
-        # Ensure valid range
+# Ensure valid range
         return unified_math.max(0.0, unified_math.min(1.0, harmony))
 
     except Exception as e:
@@ -88,6 +97,7 @@ def compute_harmony_vector(
 
 
 def get_phase_target(bit_depth: int) -> float:
+
     """Get target timing for specified bit depth.
 
     Parameters
@@ -100,10 +110,13 @@ def get_phase_target(bit_depth: int) -> float:
     float
         Target timing in seconds
     """
-    return PHASE_TARGETS.get(bit_depth, PHASE_TARGETS[8])  # Default to 8-bit
+"""
+"""
+    return PHASE_TARGETS.get(bit_depth, PHASE_TARGETS[8])  # Default to 8 - bit
 
 
 def analyze_tick_pattern(
+
     tick_deltas: np.ndarray,
     bit_depth: int = 8,
 ) -> Tuple[float, dict]:
@@ -119,14 +132,16 @@ def analyze_tick_pattern(
     Returns
     -------
     Tuple[float, dict]
-        - Harmony score (0-1)
+        - Harmony score (0 - 1)
         - Diagnostic information dictionary
     """
+"""
+"""
     try:
         target = get_phase_target(bit_depth)
         harmony = compute_harmony_vector(tick_deltas, target)
 
-        # Calculate diagnostic metrics
+# Calculate diagnostic metrics
         if len(tick_deltas) >= MIN_TICKS_REQUIRED:
             recent_deltas = tick_deltas[-HARMONY_WINDOW_SIZE:]
             mean_delta = float(unified_math.unified_math.mean(recent_deltas))
@@ -155,6 +170,7 @@ def analyze_tick_pattern(
 
 
 def compute_multi_phase_harmony(
+
     tick_deltas: np.ndarray,
     phases: Optional[List[int]] = None,
 ) -> dict:
@@ -172,6 +188,8 @@ def compute_multi_phase_harmony(
     dict
         Dictionary mapping bit depth to harmony score
     """
+"""
+"""
     if phases is None:
         phases = [4, 8, 42]
 
@@ -189,6 +207,7 @@ def compute_multi_phase_harmony(
 
 
 def get_optimal_phase(tick_deltas: np.ndarray) -> Tuple[int, float]:
+
     """Determine optimal phase depth based on harmony scores.
 
     Parameters
@@ -202,14 +221,16 @@ def get_optimal_phase(tick_deltas: np.ndarray) -> Tuple[int, float]:
         - Optimal bit depth
         - Harmony score for optimal phase
     """
+"""
+"""
     try:
         harmonies = compute_multi_phase_harmony(tick_deltas)
 
         if not harmonies:
             return 8, 0.0  # Default fallback
 
-        # Find phase with highest harmony
-        optimal_phase = unified_math.max(harmonies.items(), key=lambda x: x[1])
+# Find phase with highest harmony
+        optimal_phase = unified_math.max(harmonies.items(), key = lambda x: x[1])
         return optimal_phase[0], optimal_phase[1]
 
     except Exception as e:
@@ -218,9 +239,13 @@ def get_optimal_phase(tick_deltas: np.ndarray) -> Tuple[int, float]:
 
 
 class TickResonanceEngine:
+
     """Main class for tick resonance analysis."""
+"""
+"""
 
     def __init__(self, default_bit_depth: int = 8):
+
         """Initialize tick resonance engine.
 
         Parameters
@@ -228,12 +253,15 @@ class TickResonanceEngine:
         default_bit_depth : int, optional
             Default phase bit depth to use
         """
+"""
+"""
         self.default_bit_depth = default_bit_depth
         self.tick_history: List[float] = []
         self.last_harmony = 0.0
         self.last_diagnostics: dict = {}
 
     def update_tick(self, timestamp: float) -> None:
+
         """Update with new tick timestamp.
 
         Parameters
@@ -241,13 +269,16 @@ class TickResonanceEngine:
         timestamp : float
             Tick timestamp in seconds
         """
+"""
+"""
         self.tick_history.append(timestamp)
 
-        # Keep reasonable history size
+# Keep reasonable history size
         if len(self.tick_history) > 100:
             self.tick_history = self.tick_history[-50:]
 
     def get_current_harmony(self, bit_depth: Optional[int] = None) -> float:
+
         """Get current harmony score.
 
         Parameters
@@ -260,32 +291,41 @@ class TickResonanceEngine:
         float
             Current harmony score
         """
+"""
+"""
         if len(self.tick_history) < 2:
             return 0.0
 
-        # Calculate time deltas
+# Calculate time deltas
         deltas = np.diff(self.tick_history)
 
-        # Use specified or default bit depth
+# Use specified or default bit depth
         depth = bit_depth or self.default_bit_depth
 
-        # Compute and cache harmony
+# Compute and cache harmony
         self.last_harmony, self.last_diagnostics = analyze_tick_pattern(deltas, depth)
 
         return self.last_harmony
 
     def get_diagnostics(self) -> dict:
+
         """Get latest diagnostic information."""
+"""
+"""
         return self.last_diagnostics.copy()
 
     def reset(self) -> None:
+
         """Reset tick history and cached values."""
+"""
+"""
         self.tick_history.clear()
         self.last_harmony = 0.0
         self.last_diagnostics = {}
 
 
 def validate_tick_deltas(tick_deltas: np.ndarray) -> bool:
+
     """Validate tick delta array for harmony calculation.
 
     Parameters
@@ -298,6 +338,8 @@ def validate_tick_deltas(tick_deltas: np.ndarray) -> bool:
     bool
         True if valid for harmony calculation
     """
+"""
+"""
     try:
         if not isinstance(tick_deltas, np.ndarray):
             return False
@@ -305,11 +347,11 @@ def validate_tick_deltas(tick_deltas: np.ndarray) -> bool:
         if len(tick_deltas) < MIN_TICKS_REQUIRED:
             return False
 
-        # Check for reasonable timing values (1\\u03bcs to 10s)
+# Check for reasonable timing values (1\\u03bcs to 10s)
         if np.any(tick_deltas <= 0) or np.any(tick_deltas > 10.0):
             return False
 
-        # Check for NaN or infinite values
+# Check for NaN or infinite values
         if not np.all(np.isfinite(tick_deltas)):
             return False
 
@@ -320,21 +362,24 @@ def validate_tick_deltas(tick_deltas: np.ndarray) -> bool:
 
 
 def main() -> None:
+
     """Demo function for testing tick resonance engine."""
-    # Create test tick pattern
-    target_delta = 0.125  # 8-bit target
+"""
+"""
+# Create test tick pattern
+    target_delta = 0.125  # 8 - bit target
     num_ticks = 30
 
-    # Perfect pattern
+# Perfect pattern
     perfect_deltas = np.full(num_ticks, target_delta)
     harmony_perfect = compute_harmony_vector(perfect_deltas, target_delta)
 
-    # Noisy pattern
+# Noisy pattern
     noise = np.random.normal(0, 0.01, num_ticks)  # 10ms noise
     noisy_deltas = perfect_deltas + noise
     harmony_noisy = compute_harmony_vector(noisy_deltas, target_delta)
 
-    # Random pattern
+# Random pattern
     random_deltas = np.random.uniform(0.05, 0.3, num_ticks)
     harmony_random = compute_harmony_vector(random_deltas, target_delta)
 
@@ -345,10 +390,10 @@ def main() -> None:
     safe_print(f"Random pattern harmony:  {harmony_random:.3f}")
     print()
 
-    # Test engine class
+# Test engine class
     engine = TickResonanceEngine()
 
-    # Simulate tick stream
+# Simulate tick stream
     base_time = 1000.0
     for i in range(20):
         tick_time = base_time + i * (target_delta + np.random.normal(0, 0.005))

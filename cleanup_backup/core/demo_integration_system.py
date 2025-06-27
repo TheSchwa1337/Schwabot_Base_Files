@@ -1,5 +1,31 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from .matrix_allocator import get_matrix_allocator
+from .settings_controller import get_settings_controller
+from .vector_validator import get_vector_validator
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple
+import hashlib
+import json
+import time
+import yaml
+
+import threading
+
 from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Schwabot Demo Integration System
 ===============================
@@ -9,31 +35,23 @@ and reinforcement learning across all core Schwabot components.
 
 This system:
 - Integrates with all core components for demo mode
-- Provides backtesting harness for trade entry/exit simulation
+- Provides backtesting harness for trade entry / exit simulation
 - Enables reinforcement learning from demo results
 - Hooks into settings controller for demo configuration
 - Manages demo data collection and analysis
 """
-
-import json
-import yaml
-from core.unified_math_system import unified_math
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import threading
-import time
-
-from .settings_controller import get_settings_controller
-from .vector_validator import get_vector_validator
-from .matrix_allocator import get_matrix_allocator
+"""
+"""
 
 
 @dataclass
 class DemoTrade:
+
     """Represents a demo trade for backtesting"""
+
+
+"""
+"""
     trade_id: str
     matrix_id: str
     entry_price: float
@@ -52,7 +70,12 @@ class DemoTrade:
 
 @dataclass
 class DemoResult:
+
     """Result of a demo trade execution"""
+
+
+"""
+"""
     trade_id: str
     success: bool
     profit_loss: float
@@ -65,28 +88,34 @@ class DemoResult:
 
 
 class DemoIntegrationSystem:
+
     """Comprehensive demo integration system"""
 
+
+"""
+"""
+
     def __init__(self):
+
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
         self.matrix_allocator = get_matrix_allocator()
 
-        # Demo configuration
+# Demo configuration
         self.demo_config = self._load_demo_config()
 
-        # Demo data storage
+# Demo data storage
         self.demo_trades: List[DemoTrade] = []
         self.demo_results: List[DemoResult] = []
         self.backtest_history: Dict[str, List[DemoTrade]] = {}
 
-        # Demo mode flags
+# Demo mode flags
         self.is_demo_mode = False
         self.is_backtest_mode = False
         self.is_simulation_mode = False
         self.is_reinforcement_mode = False
 
-        # Demo performance tracking
+# Demo performance tracking
         self.demo_performance = {
             "total_trades": 0,
             "successful_trades": 0,
@@ -97,26 +126,28 @@ class DemoIntegrationSystem:
             "strategy_performance": {}
         }
 
-        # Initialize demo directories
+# Initialize demo directories
         self._initialize_demo_directories()
 
-        # Load existing demo data
+# Load existing demo data
         self._load_demo_data()
 
     def _load_demo_config(self) -> Dict[str, Any]:
         """Load demo configuration from settings"""
+"""
+"""
         try:
-            demo_config_path = Path("settings/demo_backtest_mode.yaml")
+            demo_config_path = Path("settings / demo_backtest_mode.yaml")
             if demo_config_path.exists():
                 with open(demo_config_path, 'r') as f:
                     return yaml.safe_load(f)
         except Exception as e:
             safe_print(f"Warning: Could not load demo config: {e}")
 
-        # Default demo configuration
+# Default demo configuration
         return {
             "mode": "demo",
-            "backtest_path": "./tests/demo_backlog/",
+            "backtest_path": "./tests / demo_backlog/",
             "reinforce_bad_vectors": True,
             "log_ghost_trades": True,
             "matrix_overlay": "full",
@@ -128,43 +159,52 @@ class DemoIntegrationSystem:
         }
 
     def _initialize_demo_directories(self):
-        """Initialize demo-related directories"""
+
+        """Initialize demo - related directories"""
+"""
+"""
         demo_dirs = [
-            "tests/demo_backlog/",
-            "tests/demo_results/",
-            "tests/demo_data/",
-            "tests/demo_configs/",
-            "tests/demo_analysis/"
+            "tests / demo_backlog/",
+            "tests / demo_results/",
+            "tests / demo_data/",
+            "tests / demo_configs/",
+            "tests / demo_analysis/"
         ]
 
         for dir_path in demo_dirs:
-            Path(dir_path).mkdir(parents=True, exist_ok=True)
+            Path(dir_path).mkdir(parents = True, exist_ok = True)
 
     def _load_demo_data(self):
+
         """Load existing demo data from files"""
+"""
+"""
         try:
-            # Load demo trades
-            trades_file = Path("tests/demo_data/demo_trades.json")
+# Load demo trades
+            trades_file = Path("tests / demo_data / demo_trades.json")
             if trades_file.exists():
                 with open(trades_file, 'r') as f:
                     trades_data = json.load(f)
                     self.demo_trades = [DemoTrade(**trade) for trade in trades_data]
 
-            # Load demo results
-            results_file = Path("tests/demo_data/demo_results.json")
+# Load demo results
+            results_file = Path("tests / demo_data / demo_results.json")
             if results_file.exists():
                 with open(results_file, 'r') as f:
                     results_data = json.load(f)
                     self.demo_results = [DemoResult(**result) for result in results_data]
 
-            # Update performance metrics
+# Update performance metrics
             self._update_demo_performance()
 
         except Exception as e:
             safe_print(f"Warning: Could not load demo data: {e}")
 
     def _update_demo_performance(self):
+
         """Update demo performance metrics"""
+"""
+"""
         if not self.demo_trades:
             return
 
@@ -174,7 +214,7 @@ class DemoIntegrationSystem:
         self.demo_performance["total_profit"] = sum(t.profit_loss for t in self.demo_trades)
         self.demo_performance["average_confidence"] = unified_math.mean([t.confidence for t in self.demo_trades])
 
-        # Update matrix performance
+# Update matrix performance
         matrix_perf = {}
         for trade in self.demo_trades:
             matrix_id = trade.matrix_id
@@ -189,7 +229,10 @@ class DemoIntegrationSystem:
         self.demo_performance["matrix_performance"] = matrix_perf
 
     def start_demo_mode(self, mode: str = "demo"):
+
         """Start demo mode with specified configuration"""
+"""
+"""
         self.is_demo_mode = True
 
         if mode == "backtest":
@@ -204,22 +247,25 @@ class DemoIntegrationSystem:
         else:
             safe_print("\\u1f3af Starting Demo Mode")
 
-        # Update settings controller for demo mode
+# Update settings controller for demo mode
         self.settings_controller.fault_settings.experimental_mode = True
 
         return True
 
     def stop_demo_mode(self):
+
         """Stop demo mode and save results"""
+"""
+"""
         self.is_demo_mode = False
         self.is_backtest_mode = False
         self.is_simulation_mode = False
         self.is_reinforcement_mode = False
 
-        # Save demo data
+# Save demo data
         self._save_demo_data()
 
-        # Reset settings controller
+# Reset settings controller
         self.settings_controller.fault_settings.experimental_mode = False
 
         safe_print("\\u2705 Demo mode stopped. Results saved.")
@@ -227,61 +273,67 @@ class DemoIntegrationSystem:
         return True
 
     def execute_demo_trade(self, trade_data: Dict[str, Any]) -> DemoResult:
+
         """Execute a demo trade with full integration"""
+"""
+"""
         start_time = time.time()
 
-        # Create demo trade
+# Create demo trade
         demo_trade = self._create_demo_trade(trade_data)
 
-        # Validate vector
+# Validate vector
         vector_validation = self.vector_validator.validate_vector(trade_data)
 
-        # Allocate to matrix
+# Allocate to matrix
         allocation = self.matrix_allocator.allocate_vector(trade_data)
 
-        # Simulate trade execution
+# Simulate trade execution
         trade_result = self._simulate_trade_execution(demo_trade, vector_validation, allocation)
 
-        # Update demo trade with result
+# Update demo trade with result
         demo_trade.success = trade_result["success"]
         demo_trade.profit_loss = trade_result["profit_loss"]
         demo_trade.failure_reason = trade_result.get("failure_reason")
 
-        # Create demo result
+# Create demo result
         demo_result = DemoResult(
-            trade_id=demo_trade.trade_id,
-            success=demo_trade.success,
-            profit_loss=demo_trade.profit_loss,
-            confidence_score=vector_validation.confidence_score,
-            execution_time=time.time() - start_time,
-            matrix_performance=self.matrix_allocator.get_matrix_status(allocation.matrix_id),
-            vector_validation_result=asdict(vector_validation),
-            allocation_result=asdict(allocation),
-            reinforcement_learning_update=self._get_reinforcement_update(demo_trade, vector_validation)
+            trade_id = demo_trade.trade_id,
+            success = demo_trade.success,
+            profit_loss = demo_trade.profit_loss,
+            confidence_score = vector_validation.confidence_score,
+            execution_time = time.time() - start_time,
+            matrix_performance = self.matrix_allocator.get_matrix_status(allocation.matrix_id),
+            vector_validation_result = asdict(vector_validation),
+            allocation_result = asdict(allocation),
+            reinforcement_learning_update = self._get_reinforcement_update(demo_trade, vector_validation)
         )
 
-        # Add to collections
+# Add to collections
         self.demo_trades.append(demo_trade)
         self.demo_results.append(demo_result)
 
-        # Update performance
+# Update performance
         self._update_demo_performance()
 
-        # Apply reinforcement learning if enabled
+# Apply reinforcement learning if enabled
         if self.demo_config.get("enable_reinforcement_learning", True):
             self._apply_reinforcement_learning(demo_trade, demo_result)
 
         return demo_result
 
     def _create_demo_trade(self, trade_data: Dict[str, Any]) -> DemoTrade:
+
         """Create a demo trade from input data"""
+"""
+"""
         trade_id = trade_data.get("trade_id", f"demo_{len(self.demo_trades) + 1}")
 
-        # Generate vector hash
+# Generate vector hash
         hash_input = f"{trade_data.get('matrix_id', '')}{trade_data.get('entry_price', 0)}{trade_data.get('tick_id', 0)}"
         vector_hash = hashlib.sha256(hash_input.encode()).hexdigest()
 
-        # Determine demo mode
+# Determine demo mode
         if self.is_backtest_mode:
             demo_mode = "backtest"
         elif self.is_simulation_mode:
@@ -292,40 +344,43 @@ class DemoIntegrationSystem:
             demo_mode = "demo"
 
         return DemoTrade(
-            trade_id=trade_id,
-            matrix_id=trade_data.get("matrix_id", "SFS8-A5"),
-            entry_price=trade_data.get("entry_price", 0.0),
-            exit_price=trade_data.get("exit_price", 0.0),
-            entry_time=datetime.fromisoformat(trade_data.get("entry_time", datetime.now().isoformat())),
-            exit_time=datetime.fromisoformat(trade_data.get("exit_time", datetime.now().isoformat())),
-            success=False,  # Will be updated after execution
-            profit_loss=0.0,  # Will be updated after execution
-            confidence=trade_data.get("confidence", 0.5),
-            vector_hash=vector_hash,
-            demo_mode=demo_mode,
-            strategy_type=trade_data.get("strategy_type", "default"),
+            trade_id = trade_id,
+            matrix_id = trade_data.get("matrix_id", "SFS8 - A5"),
+            entry_price = trade_data.get("entry_price", 0.0),
+            exit_price = trade_data.get("exit_price", 0.0),
+            entry_time = datetime.fromisoformat(trade_data.get("entry_time", datetime.now().isoformat())),
+            exit_time = datetime.fromisoformat(trade_data.get("exit_time", datetime.now().isoformat())),
+            success = False,  # Will be updated after execution
+            profit_loss = 0.0,  # Will be updated after execution
+            confidence = trade_data.get("confidence", 0.5),
+            vector_hash = vector_hash,
+            demo_mode = demo_mode,
+            strategy_type = trade_data.get("strategy_type", "default"),
             reinforcement_notes=[]
         )
 
     def _simulate_trade_execution(self, demo_trade: DemoTrade,
-                                  vector_validation: Any, allocation: Any) -> Dict[str, Any]:
+
+                                    vector_validation: Any, allocation: Any) -> Dict[str, Any]:
         """Simulate trade execution based on validation and allocation"""
-        # Determine success probability based on confidence and allocation
+"""
+"""
+# Determine success probability based on confidence and allocation
         success_prob = vector_validation.confidence_score * allocation.allocation_confidence
 
-        # Add some randomness for realistic simulation
+# Add some randomness for realistic simulation
         success_prob += np.random.normal(0, 0.1)
         success_prob = unified_math.max(0.0, unified_math.min(1.0, success_prob))
 
-        # Determine success
+# Determine success
         success = np.random.random() < success_prob
 
-        # Calculate profit/loss
+# Calculate profit / loss
         if success:
-            # Successful trade - positive profit
+# Successful trade - positive profit
             profit_loss = np.random.uniform(0.001, 0.05) * demo_trade.entry_price
         else:
-            # Failed trade - negative profit
+# Failed trade - negative profit
             profit_loss = -np.random.uniform(0.001, 0.03) * demo_trade.entry_price
 
         result = {
@@ -340,8 +395,11 @@ class DemoIntegrationSystem:
         return result
 
     def _get_reinforcement_update(self, demo_trade: DemoTrade,
-                                  vector_validation: Any) -> Dict[str, Any]:
+
+                                    vector_validation: Any) -> Dict[str, Any]:
         """Get reinforcement learning update data"""
+"""
+"""
         return {
             "vector_hash": demo_trade.vector_hash,
             "matrix_id": demo_trade.matrix_id,
@@ -352,13 +410,16 @@ class DemoIntegrationSystem:
         }
 
     def _apply_reinforcement_learning(self, demo_trade: DemoTrade, demo_result: DemoResult):
+
         """Apply reinforcement learning from demo trade"""
-        # Update matrix weights
+"""
+"""
+# Update matrix weights
         self.settings_controller.update_matrix_weights(
             demo_trade.matrix_id, demo_trade.success
         )
 
-        # Add to bad vectors if failed
+# Add to bad vectors if failed
         if not demo_trade.success and demo_trade.failure_reason:
             self.settings_controller.add_bad_vector(
                 demo_trade.vector_hash,
@@ -368,7 +429,7 @@ class DemoIntegrationSystem:
                 demo_result.confidence_score
             )
 
-        # Update vector validator
+# Update vector validator
         vector_data = {
             "vector_id": demo_trade.trade_id,
             "matrix_id": demo_trade.matrix_id,
@@ -378,35 +439,38 @@ class DemoIntegrationSystem:
             "failure_type": demo_trade.failure_reason
         }
 
-        # This will update the learning data in vector validator
+# This will update the learning data in vector validator
         self.vector_validator.validate_vector(vector_data)
 
     def run_backtest(self, strategy_config: Dict[str, Any],
-                     num_trades: int = 100) -> Dict[str, Any]:
+
+                        num_trades: int = 100) -> Dict[str, Any]:
         """Run a comprehensive backtest"""
+"""
+"""
         safe_print(f"\\u1f504 Starting backtest with {num_trades} trades...")
 
-        # Start backtest mode
+# Start backtest mode
         self.start_demo_mode("backtest")
 
         backtest_results = []
 
         for i in range(num_trades):
-            # Generate trade data based on strategy
+# Generate trade data based on strategy
             trade_data = self._generate_backtest_trade(strategy_config, i)
 
-            # Execute demo trade
+# Execute demo trade
             result = self.execute_demo_trade(trade_data)
             backtest_results.append(result)
 
-            # Progress update
+# Progress update
             if (i + 1) % 10 == 0:
                 safe_print(f"Progress: {i + 1}/{num_trades} trades completed")
 
-        # Stop demo mode
+# Stop demo mode
         self.stop_demo_mode()
 
-        # Analyze results
+# Analyze results
         analysis = self._analyze_backtest_results(backtest_results)
 
         safe_print(f"\\u2705 Backtest completed. Success rate: {analysis['success_rate']:.2%}")
@@ -414,21 +478,24 @@ class DemoIntegrationSystem:
         return analysis
 
     def _generate_backtest_trade(self, strategy_config: Dict[str, Any],
-                                 trade_index: int) -> Dict[str, Any]:
+
+                                    trade_index: int) -> Dict[str, Any]:
         """Generate trade data for backtesting"""
-        # Base trade data
+"""
+"""
+# Base trade data
         base_price = strategy_config.get("base_price", 50000.0)
         price_volatility = strategy_config.get("price_volatility", 0.02)
 
-        # Generate price movement
+# Generate price movement
         price_change = np.random.normal(0, price_volatility)
         entry_price = base_price * (1 + price_change)
         exit_price = entry_price * (1 + np.random.normal(0, 0.01))
 
-        # Generate trade data
+# Generate trade data
         trade_data = {
             "trade_id": f"backtest_{trade_index + 1}",
-            "matrix_id": strategy_config.get("matrix_id", "SFS8-A5"),
+            "matrix_id": strategy_config.get("matrix_id", "SFS8 - A5"),
             "entry_price": entry_price,
             "exit_price": exit_price,
             "entry_time": datetime.now().isoformat(),
@@ -447,7 +514,10 @@ class DemoIntegrationSystem:
         return trade_data
 
     def _analyze_backtest_results(self, results: List[DemoResult]) -> Dict[str, Any]:
+
         """Analyze backtest results"""
+"""
+"""
         if not results:
             return {"error": "No results to analyze"}
 
@@ -459,7 +529,7 @@ class DemoIntegrationSystem:
         avg_profit = total_profit / total_trades
         avg_confidence = unified_math.mean([r.confidence_score for r in results])
 
-        # Matrix performance analysis
+# Matrix performance analysis
         matrix_performance = {}
         for result in results:
             matrix_id = result.allocation_result["matrix_id"]
@@ -471,7 +541,7 @@ class DemoIntegrationSystem:
                 matrix_performance[matrix_id]["successes"] += 1
             matrix_performance[matrix_id]["profit"] += result.profit_loss
 
-        # Calculate success rates for each matrix
+# Calculate success rates for each matrix
         for matrix_id, perf in matrix_performance.items():
             perf["success_rate"] = perf["successes"] / perf["trades"]
             perf["avg_profit"] = perf["profit"] / perf["trades"]
@@ -488,7 +558,10 @@ class DemoIntegrationSystem:
         }
 
     def get_demo_summary(self) -> Dict[str, Any]:
+
         """Get comprehensive demo summary"""
+"""
+"""
         return {
             "demo_config": self.demo_config,
             "demo_performance": self.demo_performance,
@@ -508,22 +581,25 @@ class DemoIntegrationSystem:
         }
 
     def _save_demo_data(self):
+
         """Save demo data to files"""
+"""
+"""
         try:
-            # Save demo trades
-            trades_file = Path("tests/demo_data/demo_trades.json")
+# Save demo trades
+            trades_file = Path("tests / demo_data / demo_trades.json")
             with open(trades_file, 'w') as f:
-                json.dump([asdict(trade) for trade in self.demo_trades], f, indent=2, default=str)
+                json.dump([asdict(trade) for trade in self.demo_trades], f, indent = 2, default = str)
 
-            # Save demo results
-            results_file = Path("tests/demo_data/demo_results.json")
+# Save demo results
+            results_file = Path("tests / demo_data / demo_results.json")
             with open(results_file, 'w') as f:
-                json.dump([asdict(result) for result in self.demo_results], f, indent=2, default=str)
+                json.dump([asdict(result) for result in self.demo_results], f, indent = 2, default = str)
 
-            # Save demo summary
-            summary_file = Path("tests/demo_data/demo_summary.json")
+# Save demo summary
+            summary_file = Path("tests / demo_data / demo_summary.json")
             with open(summary_file, 'w') as f:
-                json.dump(self.get_demo_summary(), f, indent=2, default=str)
+                json.dump(self.get_demo_summary(), f, indent = 2, default = str)
 
             safe_print("\\u1f4be Demo data saved successfully")
 
@@ -536,23 +612,26 @@ demo_integration_system = DemoIntegrationSystem()
 
 
 def get_demo_integration_system() -> DemoIntegrationSystem:
+
     """Get the global demo integration system instance"""
+"""
+"""
     return demo_integration_system
 
 
 if __name__ == "__main__":
-    # Test the demo integration system
+# Test the demo integration system
     demo_system = DemoIntegrationSystem()
 
     safe_print("=== Schwabot Demo Integration System Test ===")
 
-    # Test demo mode
+# Test demo mode
     demo_system.start_demo_mode("backtest")
 
-    # Test trade execution
+# Test trade execution
     test_trade_data = {
         "trade_id": "test_demo_001",
-        "matrix_id": "SFS8-A5",
+        "matrix_id": "SFS8 - A5",
         "entry_price": 50000.0,
         "exit_price": 50100.0,
         "entry_time": datetime.now().isoformat(),
@@ -569,32 +648,32 @@ if __name__ == "__main__":
 
     safe_print(f"Demo Trade ID: {result.trade_id}")
     safe_print(f"Success: {result.success}")
-    safe_print(f"Profit/Loss: {result.profit_loss:.2f}")
+    safe_print(f"Profit / Loss: {result.profit_loss:.2f}")
     safe_print(f"Confidence: {result.confidence_score:.3f}")
     safe_print(f"Execution Time: {result.execution_time:.3f}s")
 
-    # Test backtest
+# Test backtest
     strategy_config = {
         "base_price": 50000.0,
         "price_volatility": 0.02,
-        "matrix_id": "SFS8-A5",
+        "matrix_id": "SFS8 - A5",
         "strategy_type": "test_backtest"
     }
 
-    backtest_analysis = demo_system.run_backtest(strategy_config, num_trades=10)
+    backtest_analysis = demo_system.run_backtest(strategy_config, num_trades = 10)
 
     safe_print(f"\\nBacktest Results:")
     safe_print(f"Success Rate: {backtest_analysis['success_rate']:.2%}")
     safe_print(f"Total Profit: {backtest_analysis['total_profit']:.2f}")
     safe_print(f"Average Profit: {backtest_analysis['average_profit']:.2f}")
 
-    # Get demo summary
+# Get demo summary
     summary = demo_system.get_demo_summary()
     safe_print(f"\\nDemo Summary:")
     safe_print(f"Total Demo Trades: {summary['total_demo_trades']}")
     safe_print(f"Demo Performance: {summary['demo_performance']}")
 
-    # Stop demo mode
+# Stop demo mode
     demo_system.stop_demo_mode()
 
     safe_print("Demo integration system test completed!")

@@ -1,38 +1,53 @@
-# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any, List, Optional
+import logging
+import time
+import unittest
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """API Price Entry Feedback Test - Schwabot Framework.
 
 This test validates that external API feedback (CCXT, Coinbase, Binance, etc.)
-is properly respected in trade logic and decision-making. It ensures the system
-can integrate real-time price data and volume information from multiple sources
+is properly respected in trade logic and decision - making. It ensures the system
+can integrate real - time price data and volume information from multiple sources
 to make informed trading decisions.
 
 Key Validations:
 - CCXT API integration and data validation
 - Coinbase API price feedback processing
-- Multi-source API consensus validation
+- Multi - source API consensus validation
 - Price discrepancy detection and handling
 - Volume data integration and validation
 - API rate limiting and error handling
-- Real-time data synchronization
-- Cross-exchange arbitrage detection
+- Real - time data synchronization
+- Cross - exchange arbitrage detection
+"""
+"""
 """
 
-import unittest
-import logging
-import time
-from core.unified_math_system import unified_math
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class APITestCase:
+
     """Test case for API price entry feedback."""
+
+
+"""
+"""
     test_name: str
     api_source: str
     price_data: Dict[str, float]
@@ -43,23 +58,30 @@ class APITestCase:
 
 
 class APIPriceEntryFeedbackTest:
+
     """Comprehensive API price entry feedback testing."""
+
+
+"""
+"""
 
     def __init__(self):
         """Initialize the API price entry feedback test."""
+"""
+"""
         self.test_cases = [
             APITestCase(
                 test_name="ccxt_consensus_high_confidence",
                 api_source="ccxt",
                 price_data={
-                    'BTC/USDT': 50000.0,
-                    'ETH/USDT': 3000.0,
-                    'XRP/USDT': 0.50
+                    'BTC / USDT': 50000.0,
+                    'ETH / USDT': 3000.0,
+                    'XRP / USDT': 0.50
                 },
                 volume_data={
-                    'BTC/USDT': 1000000.0,
-                    'ETH/USDT': 500000.0,
-                    'XRP/USDT': 200000.0
+                    'BTC / USDT': 1000000.0,
+                    'ETH / USDT': 500000.0,
+                    'XRP / USDT': 200000.0
                 },
                 expected_consensus=True,
                 expected_confidence=0.85,
@@ -69,14 +91,14 @@ class APIPriceEntryFeedbackTest:
                 test_name="coinbase_price_discrepancy",
                 api_source="coinbase",
                 price_data={
-                    'BTC-USD': 50100.0,
-                    'ETH-USD': 3010.0,
-                    'XRP-USD': 0.51
+                    'BTC - USD': 50100.0,
+                    'ETH - USD': 3010.0,
+                    'XRP - USD': 0.51
                 },
                 volume_data={
-                    'BTC-USD': 950000.0,
-                    'ETH-USD': 480000.0,
-                    'XRP-USD': 180000.0
+                    'BTC - USD': 950000.0,
+                    'ETH - USD': 480000.0,
+                    'XRP - USD': 180000.0
                 },
                 expected_consensus=False,
                 expected_confidence=0.65,
@@ -114,14 +136,17 @@ class APIPriceEntryFeedbackTest:
                 },
                 expected_consensus=True,
                 expected_confidence=0.90,
-                description="Multi-source arbitrage detection"
+                description="Multi - source arbitrage detection"
             )
         ]
 
         logger.info("\\u1f50c API Price Entry Feedback Test initialized")
 
     def test_ccxt_api_integration(self) -> Dict[str, Any]:
+
         """Test CCXT API integration and data validation."""
+"""
+"""
         logger.info("\\u1f517 Testing CCXT API integration")
 
         results = {
@@ -132,10 +157,10 @@ class APIPriceEntryFeedbackTest:
         }
 
         try:
-            # Simulate CCXT API integration
+# Simulate CCXT API integration
             ccxt_data = self._simulate_ccxt_api_call()
 
-            # Validate API response structure
+# Validate API response structure
             required_fields = ['prices', 'volumes', 'timestamps', 'exchange_info']
             for field in required_fields:
                 if field not in ccxt_data:
@@ -143,7 +168,7 @@ class APIPriceEntryFeedbackTest:
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate price data
+# Validate price data
             prices = ccxt_data.get('prices', {})
             if not prices:
                 error_msg = "No price data received from CCXT API"
@@ -156,7 +181,7 @@ class APIPriceEntryFeedbackTest:
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate volume data
+# Validate volume data
             volumes = ccxt_data.get('volumes', {})
             if not volumes:
                 error_msg = "No volume data received from CCXT API"
@@ -169,7 +194,7 @@ class APIPriceEntryFeedbackTest:
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate timestamps
+# Validate timestamps
             timestamps = ccxt_data.get('timestamps', {})
             current_time = time.time()
             for symbol, timestamp in timestamps.items():
@@ -198,7 +223,10 @@ class APIPriceEntryFeedbackTest:
         return results
 
     def test_coinbase_api_feedback(self) -> Dict[str, Any]:
+
         """Test Coinbase API price feedback processing."""
+"""
+"""
         logger.info("\\u1fa99 Testing Coinbase API feedback")
 
         results = {
@@ -213,28 +241,28 @@ class APIPriceEntryFeedbackTest:
                 continue
 
             try:
-                # Simulate Coinbase API feedback processing
+# Simulate Coinbase API feedback processing
                 feedback_result = self._simulate_coinbase_feedback(test_case)
 
-                # Validate feedback processing
+# Validate feedback processing
                 if not isinstance(feedback_result['processed'], bool):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid processing result type"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate price accuracy
+# Validate price accuracy
                 if not (0.0 <= feedback_result['price_accuracy'] <= 1.0):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid price accuracy. Expected [0.0, 1.0], Got: {feedback_result['price_accuracy']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate volume reliability
+# Validate volume reliability
                 if not (0.0 <= feedback_result['volume_reliability'] <= 1.0):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid volume reliability. Expected [0.0, 1.0], Got: {feedback_result['volume_reliability']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store test case results
+# Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'processed': feedback_result['processed'],
@@ -257,8 +285,11 @@ class APIPriceEntryFeedbackTest:
         return results
 
     def test_multi_source_consensus(self) -> Dict[str, Any]:
-        """Test multi-source API consensus validation."""
-        logger.info("\\u1f504 Testing multi-source API consensus")
+
+        """Test multi - source API consensus validation."""
+"""
+"""
+        logger.info("\\u1f504 Testing multi - source API consensus")
 
         results = {
             'test_name': 'multi_source_consensus',
@@ -272,29 +303,29 @@ class APIPriceEntryFeedbackTest:
                 continue
 
             try:
-                # Simulate multi-source consensus
+# Simulate multi - source consensus
                 consensus_result = self._simulate_multi_source_consensus(test_case)
 
-                # Validate consensus result
+# Validate consensus result
                 if consensus_result['consensus_reached'] != test_case.expected_consensus:
                     error_msg = f"Test case {i} ({test_case.description}): Consensus mismatch. Expected: {test_case.expected_consensus}, Got: {consensus_result['consensus_reached']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate confidence level
+# Validate confidence level
                 confidence_diff = unified_math.abs(consensus_result['confidence'] - test_case.expected_confidence)
                 if confidence_diff > 0.2:  # Allow reasonable tolerance
                     error_msg = f"Test case {i} ({test_case.description}): Confidence mismatch. Expected: {test_case.expected_confidence}, Got: {consensus_result['confidence']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate arbitrage detection
+# Validate arbitrage detection
                 if not isinstance(consensus_result['arbitrage_opportunities'], list):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid arbitrage opportunities type"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store test case results
+# Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'expected_consensus': test_case.expected_consensus,
@@ -311,14 +342,17 @@ class APIPriceEntryFeedbackTest:
                 results['success'] = False
 
         if results['success']:
-            logger.info("\\u2705 Multi-source API consensus test passed")
+            logger.info("\\u2705 Multi - source API consensus test passed")
         else:
-            logger.error(f"\\u274c Multi-source API consensus test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Multi - source API consensus test failed: {len(results['errors'])} errors")
 
         return results
 
     def test_price_discrepancy_detection(self) -> Dict[str, Any]:
+
         """Test price discrepancy detection and handling."""
+"""
+"""
         logger.info("\\u1f50d Testing price discrepancy detection")
 
         results = {
@@ -329,7 +363,7 @@ class APIPriceEntryFeedbackTest:
         }
 
         try:
-            # Test price discrepancy scenarios
+# Test price discrepancy scenarios
             discrepancy_scenarios = [
                 {
                     'scenario': 'small_discrepancy',
@@ -352,25 +386,25 @@ class APIPriceEntryFeedbackTest:
             ]
 
             for i, scenario in enumerate(discrepancy_scenarios):
-                # Detect price discrepancy
+# Detect price discrepancy
                 discrepancy_result = self._detect_price_discrepancy(
                     scenario['prices'],
                     scenario['threshold']
                 )
 
-                # Validate detection
+# Validate detection
                 if discrepancy_result['discrepancy_detected'] != scenario['expected_detected']:
                     error_msg = f"Scenario {i} ({scenario['scenario']}): Discrepancy detection mismatch. Expected: {scenario['expected_detected']}, Got: {discrepancy_result['discrepancy_detected']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate discrepancy magnitude
+# Validate discrepancy magnitude
                 if not (0.0 <= discrepancy_result['max_discrepancy'] <= 1.0):
                     error_msg = f"Scenario {i} ({scenario['scenario']}): Invalid discrepancy magnitude. Expected [0.0, 1.0], Got: {discrepancy_result['max_discrepancy']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store scenario results
+# Store scenario results
                 results['details'][f'scenario_{i}'] = {
                     'scenario': scenario['scenario'],
                     'expected_detected': scenario['expected_detected'],
@@ -392,7 +426,10 @@ class APIPriceEntryFeedbackTest:
         return results
 
     def test_volume_data_integration(self) -> Dict[str, Any]:
+
         """Test volume data integration and validation."""
+"""
+"""
         logger.info("\\u1f4ca Testing volume data integration")
 
         results = {
@@ -404,28 +441,28 @@ class APIPriceEntryFeedbackTest:
 
         for i, test_case in enumerate(self.test_cases):
             try:
-                # Simulate volume data integration
+# Simulate volume data integration
                 volume_result = self._simulate_volume_integration(test_case)
 
-                # Validate volume processing
+# Validate volume processing
                 if not isinstance(volume_result['processed'], bool):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid volume processing result"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate volume reliability
+# Validate volume reliability
                 if not (0.0 <= volume_result['reliability'] <= 1.0):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid volume reliability. Expected [0.0, 1.0], Got: {volume_result['reliability']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate volume trends
+# Validate volume trends
                 if not isinstance(volume_result['trend'], str):
                     error_msg = f"Test case {i} ({test_case.description}): Invalid volume trend type"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store test case results
+# Store test case results
                 results['details'][f'test_case_{i}'] = {
                     'description': test_case.description,
                     'processed': volume_result['processed'],
@@ -448,7 +485,10 @@ class APIPriceEntryFeedbackTest:
         return results
 
     def test_api_rate_limiting(self) -> Dict[str, Any]:
+
         """Test API rate limiting and error handling."""
+"""
+"""
         logger.info("\\u23f1\\ufe0f Testing API rate limiting")
 
         results = {
@@ -459,7 +499,7 @@ class APIPriceEntryFeedbackTest:
         }
 
         try:
-            # Test rate limiting scenarios
+# Test rate limiting scenarios
             rate_limit_scenarios = [
                 {
                     'api': 'ccxt',
@@ -479,22 +519,22 @@ class APIPriceEntryFeedbackTest:
             ]
 
             for i, scenario in enumerate(rate_limit_scenarios):
-                # Simulate rate limiting
+# Simulate rate limiting
                 rate_limit_result = self._simulate_rate_limiting(scenario)
 
-                # Validate throttling
+# Validate throttling
                 if rate_limit_result['throttled'] != scenario['expected_throttled']:
                     error_msg = f"Scenario {i} ({scenario['api']}): Rate limiting mismatch. Expected: {scenario['expected_throttled']}, Got: {rate_limit_result['throttled']}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Validate retry logic
+# Validate retry logic
                 if not isinstance(rate_limit_result['retry_after'], (int, float)):
                     error_msg = f"Scenario {i} ({scenario['api']}): Invalid retry after time"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-                # Store scenario results
+# Store scenario results
                 results['details'][f'scenario_{i}'] = {
                     'api': scenario['api'],
                     'requests_per_minute': scenario['requests_per_minute'],
@@ -516,24 +556,27 @@ class APIPriceEntryFeedbackTest:
         return results
 
     def _simulate_ccxt_api_call(self) -> Dict[str, Any]:
+
         """Simulate CCXT API call."""
+"""
+"""
         current_time = time.time()
 
         return {
             'prices': {
-                'BTC/USDT': 50000.0 + np.random.normal(0, 100.0),
-                'ETH/USDT': 3000.0 + np.random.normal(0, 10.0),
-                'XRP/USDT': 0.50 + np.random.normal(0, 0.01)
+                'BTC / USDT': 50000.0 + np.random.normal(0, 100.0),
+                'ETH / USDT': 3000.0 + np.random.normal(0, 10.0),
+                'XRP / USDT': 0.50 + np.random.normal(0, 0.01)
             },
             'volumes': {
-                'BTC/USDT': 1000000.0 + np.random.normal(0, 50000.0),
-                'ETH/USDT': 500000.0 + np.random.normal(0, 25000.0),
-                'XRP/USDT': 200000.0 + np.random.normal(0, 10000.0)
+                'BTC / USDT': 1000000.0 + np.random.normal(0, 50000.0),
+                'ETH / USDT': 500000.0 + np.random.normal(0, 25000.0),
+                'XRP / USDT': 200000.0 + np.random.normal(0, 10000.0)
             },
             'timestamps': {
-                'BTC/USDT': current_time,
-                'ETH/USDT': current_time,
-                'XRP/USDT': current_time
+                'BTC / USDT': current_time,
+                'ETH / USDT': current_time,
+                'XRP / USDT': current_time
             },
             'exchange_info': {
                 'name': 'CCXT',
@@ -543,14 +586,17 @@ class APIPriceEntryFeedbackTest:
         }
 
     def _simulate_coinbase_feedback(self, test_case: APITestCase) -> Dict[str, Any]:
+
         """Simulate Coinbase API feedback processing."""
-        # Calculate price accuracy based on data quality
+"""
+"""
+# Calculate price accuracy based on data quality
         price_accuracy = 0.9 if test_case.expected_consensus else 0.7
 
-        # Calculate volume reliability
+# Calculate volume reliability
         volume_reliability = 0.85 if test_case.expected_consensus else 0.6
 
-        # Calculate overall feedback quality
+# Calculate overall feedback quality
         feedback_quality = (price_accuracy + volume_reliability) / 2.0
 
         return {
@@ -561,8 +607,11 @@ class APIPriceEntryFeedbackTest:
         }
 
     def _simulate_multi_source_consensus(self, test_case: APITestCase) -> Dict[str, Any]:
-        """Simulate multi-source API consensus."""
-        # Calculate consensus based on price agreement
+
+        """Simulate multi - source API consensus."""
+"""
+"""
+# Calculate consensus based on price agreement
         prices = test_case.price_data
         if isinstance(prices, dict) and 'BTC' in prices:
             btc_prices = prices['BTC']
@@ -578,7 +627,7 @@ class APIPriceEntryFeedbackTest:
             consensus_reached = test_case.expected_consensus
             confidence = test_case.expected_confidence
 
-        # Detect arbitrage opportunities
+# Detect arbitrage opportunities
         arbitrage_opportunities = []
         if isinstance(prices, dict) and 'BTC' in prices:
             btc_prices = prices['BTC']
@@ -588,8 +637,8 @@ class APIPriceEntryFeedbackTest:
                 if max_price - min_price > 100.0:  # Significant price difference
                     arbitrage_opportunities.append({
                         'asset': 'BTC',
-                        'buy_exchange': unified_math.min(btc_prices, key=btc_prices.get),
-                        'sell_exchange': unified_math.max(btc_prices, key=btc_prices.get),
+                        'buy_exchange': unified_math.min(btc_prices, key = btc_prices.get),
+                        'sell_exchange': unified_math.max(btc_prices, key = btc_prices.get),
                         'potential_profit': max_price - min_price
                     })
 
@@ -600,11 +649,14 @@ class APIPriceEntryFeedbackTest:
         }
 
     def _detect_price_discrepancy(self, prices: Dict[str, float], threshold: float) -> Dict[str, Any]:
+
         """Detect price discrepancy across exchanges."""
+"""
+"""
         price_values = list(prices.values())
         mean_price = unified_math.unified_math.mean(price_values)
 
-        # Calculate maximum discrepancy
+# Calculate maximum discrepancy
         max_discrepancy = 0.0
         affected_exchanges = []
 
@@ -625,10 +677,13 @@ class APIPriceEntryFeedbackTest:
         }
 
     def _simulate_volume_integration(self, test_case: APITestCase) -> Dict[str, Any]:
+
         """Simulate volume data integration."""
+"""
+"""
         volumes = test_case.volume_data
 
-        # Calculate volume reliability
+# Calculate volume reliability
         if isinstance(volumes, dict) and 'BTC' in volumes:
             btc_volume = volumes['BTC']
             if isinstance(btc_volume, dict):
@@ -640,7 +695,7 @@ class APIPriceEntryFeedbackTest:
         else:
             reliability = 0.8
 
-        # Detect volume spikes
+# Detect volume spikes
         spike_detected = False
         if isinstance(volumes, dict) and 'BTC' in volumes:
             btc_volume = volumes['BTC']
@@ -649,7 +704,7 @@ class APIPriceEntryFeedbackTest:
                 max_volume = unified_math.max(btc_volume.values())
                 spike_detected = max_volume > avg_volume * 1.5  # 50% increase
 
-        # Determine volume trend
+# Determine volume trend
         trend = "stable"
         if spike_detected:
             trend = "increasing"
@@ -664,21 +719,24 @@ class APIPriceEntryFeedbackTest:
         }
 
     def _simulate_rate_limiting(self, scenario: Dict[str, Any]) -> Dict[str, Any]:
+
         """Simulate API rate limiting."""
+"""
+"""
         api = scenario['api']
         requests_per_minute = scenario['requests_per_minute']
 
-        # Define rate limits
+# Define rate limits
         rate_limits = {
             'ccxt': 100,
             'coinbase': 100,
             'binance': 1200
         }
 
-        # Check if throttled
+# Check if throttled
         throttled = requests_per_minute > rate_limits.get(api, 100)
 
-        # Calculate retry time
+# Calculate retry time
         retry_after = 60 if throttled else 0
 
         return {
@@ -687,12 +745,15 @@ class APIPriceEntryFeedbackTest:
         }
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
+
         """Run comprehensive API price entry feedback test."""
+"""
+"""
         logger.info("\\u1f680 Running comprehensive API price entry feedback test")
 
         start_time = time.time()
 
-        # Run all test components
+# Run all test components
         test_results = {
             'ccxt_integration': self.test_ccxt_api_integration(),
             'coinbase_feedback': self.test_coinbase_api_feedback(),
@@ -702,10 +763,10 @@ class APIPriceEntryFeedbackTest:
             'rate_limiting': self.test_api_rate_limiting()
         }
 
-        # Determine overall success
+# Determine overall success
         all_passed = all(result['success'] for result in test_results.values())
 
-        # Calculate total errors
+# Calculate total errors
         total_errors = sum(len(result.get('errors', [])) for result in test_results.values())
 
         execution_time = time.time() - start_time
@@ -736,7 +797,10 @@ class APIPriceEntryFeedbackTest:
 
 # Global test function for registry
 def test_api_price_entry_feedback() -> Dict[str, Any]:
+
     """Main test function for API price entry feedback."""
+"""
+"""
     try:
         test_suite = APIPriceEntryFeedbackTest()
         return test_suite.run_comprehensive_test()
@@ -751,16 +815,16 @@ def test_api_price_entry_feedback() -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Set up logging
+# Set up logging
     logging.basicConfig(
-        level=logging.INFO,
+        level = logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
-    # Run test
+# Run test
     result = test_api_price_entry_feedback()
 
-    # Print results
+# Print results
     safe_print("\n" + "="*60)
     safe_print("\\u1f50c API PRICE ENTRY FEEDBACK TEST RESULTS")
     safe_print("="*60)
@@ -777,4 +841,7 @@ if __name__ == "__main__":
 
     safe_print("="*60)
 
+"""
+"""
+"""
 """

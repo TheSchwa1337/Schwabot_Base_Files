@@ -1,7 +1,31 @@
-#!/usr/bin/env python3
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+
 Fix F811 redefinition of unused imports
 This script removes duplicate import statements that are redefined later in the same file.
+"""
+"""
+"""
+"""
 """
 
 import re
@@ -11,10 +35,14 @@ import glob
 
 def fix_f811_redefinitions():
     """Fix F811 redefinition errors in Python files"""
+"""
+"""
+"""
+"""
 
     print("\\u1f527 Fixing F811 redefinition of unused imports")
 
-    # Get all Python files
+# Get all Python files
     python_files = []
     for directory in ["tools", "mathlib", "core", "config", "init"]:
         if os.path.exists(directory):
@@ -25,14 +53,14 @@ def fix_f811_redefinitions():
     for file_path in python_files:
         print(f"\\n\\u1f4c1 Processing: {file_path}")
 
-        # Read the file
-        with open(file_path, 'r', encoding='utf-8') as f:
+# Read the file
+        with open(file_path, 'r', encoding='utf - 8') as f:
             content = f.read()
 
         original_content = content
         file_fixes = 0
 
-        # Split into lines and process
+# Split into lines and process
         lines = content.split('\n')
         fixed_lines = []
         seen_imports = {}  # Track import name -> line number
@@ -40,34 +68,34 @@ def fix_f811_redefinitions():
         for i, line in enumerate(lines):
             line_num = i + 1
 
-            # Check for import statements
+# Check for import statements
             if line.strip().startswith(('from ', 'import ')):
-                # Extract the import name
+# Extract the import name
                 import_name = extract_import_name(line)
 
                 if import_name:
                     if import_name in seen_imports:
-                        # This is a redefinition - skip this line
+# This is a redefinition - skip this line
                         print(f"  \\u1f527 Removed F811 redefinition at line {line_num}: {line.strip()}")
                         file_fixes += 1
                         continue
                     else:
-                        # First time seeing this import
+# First time seeing this import
                         seen_imports[import_name] = line_num
 
             fixed_lines.append(line)
 
         content = '\n'.join(fixed_lines)
 
-        # Check if changes were made
+# Check if changes were made
         if content != original_content:
-            # Backup the original file
+# Backup the original file
             backup_path = f"{file_path}.backup"
-            with open(backup_path, 'w', encoding='utf-8') as f:
+            with open(backup_path, 'w', encoding='utf - 8') as f:
                 f.write(original_content)
 
-            # Write the fixed content
-            with open(file_path, 'w', encoding='utf-8') as f:
+# Write the fixed content
+            with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(content)
 
             print(f"  \\u2705 Fixed {file_fixes} F811 redefinition errors in {file_path}")
@@ -81,26 +109,30 @@ def fix_f811_redefinitions():
 
 def extract_import_name(line):
     """Extract the main import name from an import statement"""
+"""
+"""
+"""
+"""
     line = line.strip()
 
-    # Handle 'from x import y' statements
+# Handle 'from x import y' statements
     if line.startswith('from '):
-        # Extract the last part after 'import'
+# Extract the last part after 'import'
         if ' import ' in line:
             import_part = line.split(' import ')[-1].strip()
-            # Get the first import name (before comma or space)
+# Get the first import name (before comma or space)
             first_import = import_part.split(',')[0].strip()
-            # Remove any 'as' alias
+# Remove any 'as' alias
             if ' as ' in first_import:
                 first_import = first_import.split(' as ')[0].strip()
             return first_import
 
-    # Handle 'import x' statements
+# Handle 'import x' statements
     elif line.startswith('import '):
         import_part = line[7:].strip()  # Remove 'import '
-        # Get the first import name (before comma or space)
+# Get the first import name (before comma or space)
         first_import = import_part.split(',')[0].strip()
-        # Remove any 'as' alias
+# Remove any 'as' alias
         if ' as ' in first_import:
             first_import = first_import.split(' as ')[0].strip()
         return first_import

@@ -1,8 +1,26 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass
+from decimal import getcontext
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Any, Dict, List
+import importlib
+import json
+import sys
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Comprehensive System Integration Test - Schwabot Mathematical Framework.
 
 =====================================================================
@@ -21,7 +39,7 @@ Test Categories:
 
 2. Module Compatibility Verification
 
-3. Cross-Component Integration Testing
+3. Cross - Component Integration Testing
 
 4. Performance Validation
 
@@ -36,16 +54,11 @@ Test Categories:
 Goal: 100% working integration with zero conflicts.
 
 """
+"""
+"""
+"""
+"""
 
-
-from dataclasses import dataclass
-from decimal import getcontext
-import importlib
-import json
-from pathlib import Path
-import sys
-import time
-from typing import Any, Dict, List
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -58,7 +71,14 @@ sys.path.insert(0, str(base_path / "core"))
 
 @dataclass
 class IntegrationTestResult:
+
     """Result container for integration tests."""
+
+
+"""
+"""
+"""
+"""
 
     test_name: str
     success: bool
@@ -69,6 +89,10 @@ class IntegrationTestResult:
 
     def __post_init__(self):
         """TODO: document __post_init__."""
+"""
+"""
+"""
+"""
         if self.warnings is None:
             self.warnings = []
         if self.details is None:
@@ -76,17 +100,33 @@ class IntegrationTestResult:
 
 
 class SystemIntegrationTester:
+
     """Comprehensive system integration tester."""
+
+
+"""
+"""
+"""
+"""
 
     def __init__(self):
         """TODO: document __init__."""
+"""
+"""
+"""
+"""
         self.results = []
         self.start_time = time.time()
         self.import_map = {}
         self.conflict_log = []
 
     def run_all_tests(self) -> Dict[str, Any]:
+
         """Run all integration tests."""
+"""
+"""
+"""
+"""
         test_methods = [
             self.test_mathlib_imports,
             self.test_core_component_imports,
@@ -116,10 +156,10 @@ class SystemIntegrationTester:
 
             except Exception as e:
                 error_result = IntegrationTestResult(
-                    test_name=test_method.__name__,
-                    success=False,
-                    execution_time=0.0,
-                    error_message=f"Test execution error: {str(e)}",
+                    test_name = test_method.__name__,
+                    success = False,
+                    execution_time = 0.0,
+                    error_message = f"Test execution error: {str(e)}",
                 )
                 self.results.append(error_result)
                 safe_print(f"\\u1f6a8 {test_method.__name__}: CRITICAL ERROR - {str(e)}")
@@ -127,11 +167,16 @@ class SystemIntegrationTester:
         return self.generate_final_report()
 
     def test_mathlib_imports(self) -> IntegrationTestResult:
+
         """Test mathematical library import compatibility."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
-            # Test mathlib package structure
+# Test mathlib package structure
             from mathlib import add
             from mathlib import Dual
             from mathlib import GradedProfitVector
@@ -139,16 +184,16 @@ class SystemIntegrationTester:
             from mathlib import MathLibV2
             from mathlib import MathLibV3
 
-            # Test instantiation
+# Test instantiation
             math_v1 = MathLib()
             math_v2 = MathLibV2()
             math_v3 = MathLibV3()
 
-            # Test dual numbers
+# Test dual numbers
             x = Dual(2.0, 1.0)
             result = x * x + x
 
-            # Test profit vector
+# Test profit vector
             profit_vector = GradedProfitVector([100, 200, -50])
 
             details = {
@@ -162,21 +207,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Mathematical Library Imports",
-                success=True,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = True,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Mathematical Library Imports",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_core_component_imports(self) -> IntegrationTestResult:
+
         """Test core component import compatibility."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         components_to_test = [
@@ -198,13 +248,13 @@ class SystemIntegrationTester:
 
         for module_name, class_name in components_to_test:
             try:
-                # Import module
+# Import module
                 module = importlib.import_module(f"core.{module_name}")
 
-                # Check if main class exists
+# Check if main class exists
                 if hasattr(module, class_name):
                     main_class = getattr(module, class_name)
-                    # Try to instantiate
+# Try to instantiate
                     main_class()
                     successful_imports.append(f"{module_name}.{class_name}")
                 else:
@@ -225,14 +275,19 @@ class SystemIntegrationTester:
 
         return IntegrationTestResult(
             test_name="Core Component Imports",
-            success=success,
-            execution_time=time.time() - start_time,
+            success = success,
+            execution_time = time.time() - start_time,
             error_message="; ".join(failed_imports) if failed_imports else "",
-            details=details,
+            details = details,
         )
 
     def test_mathematical_operations(self) -> IntegrationTestResult:
+
         """Test mathematical operation accuracy and compatibility."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -245,9 +300,14 @@ class SystemIntegrationTester:
 
             MathLibV3()
 
-            # Test automatic differentiation
+# Test automatic differentiation
             def test_func(x):
+
                 """TODO: document test_func."""
+"""
+"""
+"""
+"""
                 return x * x * x + 2 * x + 1  # f(x) = x\\u00b3 + 2x + 1
 
             x = Dual(2.0, 1.0)
@@ -256,21 +316,21 @@ class SystemIntegrationTester:
                 3 * (2.0**2) + 2
             )  # f'(x) = 3x\\u00b2 + 2, f'(2) = 14
 
-            # Test Kelly criterion
+# Test Kelly criterion
             kelly_result = kelly_fraction(0.1, 0.04)  # 10% return, 4% variance
 
-            # Test CVaR calculation
+# Test CVaR calculation
             returns = np.array(
                 [-0.05, -0.02, 0.01, 0.03, 0.05, 0.08, -0.01, 0.02]
             )
             cvar_result = cvar(returns, 0.95)
 
-            # Accuracy checks
+# Accuracy checks
             accuracy_tests = {
                 "dual_derivative_accuracy": abs(
                     result.eps - expected_derivative
                 )
-                < 1e-10,
+                < 1e - 10,
                 "kelly_in_range": 0 <= kelly_result <= 1,
                 "cvar_negative": cvar_result <= 0,
             }
@@ -288,21 +348,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Mathematical Operations",
-                success=all_accurate,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = all_accurate,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Mathematical Operations",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_cross_component_integration(self) -> IntegrationTestResult:
+
         """Test integration between different components."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -311,12 +376,12 @@ class SystemIntegrationTester:
             from core.unified_mathematical_trading_controller import \
                 UnifiedMathematicalTradingController
 
-            # Initialize components
+# Initialize components
             controller = UnifiedMathematicalTradingController()
             thermal_manager = ThermalZoneManager()
             triplet_matcher = TripletMatcher()
 
-            # Test cross-component data flow
+# Test cross - component data flow
             signal_data = {
                 "asset": "BTC",
                 "entry_price": 26000.0,
@@ -327,19 +392,19 @@ class SystemIntegrationTester:
                 "strategy": "integration_test",
             }
 
-            # Process through controller
+# Process through controller
             controller_result = controller.process_trade_signal(signal_data)
 
-            # Create thermal zone
+# Create thermal zone
             thermal_zone_id = thermal_manager.create_thermal_zone(
                 "Integration_Test_Zone", 1.0, 2.0, "test"
             )
 
-            # Test triplet matching
+# Test triplet matching
             test_triplet = (100.0, 110.0, 121.0)
             triplet_result = triplet_matcher.match_triplet(test_triplet)
 
-            # Integration success criteria
+# Integration success criteria
             integration_checks = {
                 "controller_processing": controller_result.get("status")
                 == "success",
@@ -358,22 +423,27 @@ class SystemIntegrationTester:
             }
 
             return IntegrationTestResult(
-                test_name="Cross-Component Integration",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                test_name="Cross - Component Integration",
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
-                test_name="Cross-Component Integration",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                test_name="Cross - Component Integration",
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_thermal_systems(self) -> IntegrationTestResult:
+
         """Test thermal management systems."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -381,7 +451,7 @@ class SystemIntegrationTester:
 
             manager = ThermalZoneManager()
 
-            # Create test zones
+# Create test zones
             btc_zone = manager.create_thermal_zone(
                 "BTC_Test", 1.0, 2.5, "trading"
             )
@@ -389,7 +459,7 @@ class SystemIntegrationTester:
                 "ETH_Test", 0.8, 2.0, "trading"
             )
 
-            # Test thermal updates
+# Test thermal updates
             btc_result = manager.update_zone_temperature(
                 btc_zone, 1.5, 0.4, 0.2
             )
@@ -397,7 +467,7 @@ class SystemIntegrationTester:
                 eth_zone, 1.2, 0.3, 0.1
             )
 
-            # Get system overview
+# Get system overview
             overview = manager.get_system_overview()
 
             thermal_tests = {
@@ -420,21 +490,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Thermal Systems",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Thermal Systems",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_unified_controller(self) -> IntegrationTestResult:
+
         """Test unified mathematical trading controller."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -443,7 +518,7 @@ class SystemIntegrationTester:
 
             controller = UnifiedMathematicalTradingController()
 
-            # Test signal processing
+# Test signal processing
             test_signals = [
                 {
                     "asset": "BTC",
@@ -470,10 +545,10 @@ class SystemIntegrationTester:
                 result = controller.process_trade_signal(signal)
                 signal_results.append(result)
 
-            # Test optimal allocation
+# Test optimal allocation
             allocation = controller.get_optimal_allocation(10000.0, 0.15)
 
-            # Test system status
+# Test system status
             status = controller.get_system_status()
 
             controller_tests = {
@@ -496,21 +571,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Unified Controller",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Unified Controller",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_constraints_system(self) -> IntegrationTestResult:
+
         """Test constraint validation system."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -520,7 +600,7 @@ class SystemIntegrationTester:
 
             validator = ConstraintValidator()
 
-            # Test trading constraints
+# Test trading constraints
             trading_params = {
                 "position_size": 0.8,
                 "leverage": 1.5,
@@ -534,12 +614,12 @@ class SystemIntegrationTester:
                 trading_params
             )
 
-            # Test mathematical constraints
+# Test mathematical constraints
             test_matrix = np.random.randn(5, 5)
             math_params = {
                 "matrix": test_matrix,
                 "iterations": 500,
-                "tolerance": 1e-8,
+                "tolerance": 1e - 8,
                 "gradient_norm": 10.5,
             }
 
@@ -572,21 +652,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Constraints System",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Constraints System",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_performance_benchmarks(self) -> IntegrationTestResult:
+
         """Test system performance benchmarks."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -597,10 +682,10 @@ class SystemIntegrationTester:
 
             math_lib = MathLibV3()
 
-            # Performance tests
+# Performance tests
             performance_results = {}
 
-            # Test dual number operations
+# Test dual number operations
             dual_start = time.time()
             for _ in range(1000):
                 x = Dual(2.0, 1.0)
@@ -609,7 +694,7 @@ class SystemIntegrationTester:
                 time.time() - dual_start
             )
 
-            # Test mathematical calculations
+# Test mathematical calculations
             calc_start = time.time()
             test_data = np.random.randn(100)  # Smaller dataset for testing
             for _ in range(10):  # Fewer iterations for testing
@@ -623,7 +708,7 @@ class SystemIntegrationTester:
                 time.time() - calc_start
             )
 
-            # Performance criteria (in seconds)
+# Performance criteria (in seconds)
             performance_criteria = {
                 "dual_ops_acceptable": performance_results[
                     "dual_ops_1000_iterations"
@@ -644,21 +729,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Performance Benchmarks",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Performance Benchmarks",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_windows_cli_compatibility(self) -> IntegrationTestResult:
+
         """Test Windows CLI compatibility."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -666,7 +756,7 @@ class SystemIntegrationTester:
 
             is_windows = platform.system() == "Windows"
 
-            # Test emoji handling - try to import the handler
+# Test emoji handling - try to import the handler
             try:
                 from core.enhanced_windows_cli_compatibility import \
                     WindowsCliCompatibilityHandler
@@ -683,7 +773,7 @@ class SystemIntegrationTester:
                     converted = WindowsCliCompatibilityHandler.safe_print(msg)
                     converted_messages.append(converted)
 
-                # Test logging compatibility
+# Test logging compatibility
                 import logging
 
                 logger = logging.getLogger("test_logger")
@@ -707,7 +797,7 @@ class SystemIntegrationTester:
                 handler_available = True
 
             except ImportError:
-                # Fallback if handler not available
+# Fallback if handler not available
                 cli_tests = {
                     "emoji_conversion": True,  # Pass if handler not available
                     "logging_compatibility": True,
@@ -729,21 +819,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Windows CLI Compatibility",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Windows CLI Compatibility",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def test_error_handling_systems(self) -> IntegrationTestResult:
+
         """Test error handling and recovery systems."""
+"""
+"""
+"""
+"""
         start_time = time.time()
 
         try:
@@ -754,7 +849,7 @@ class SystemIntegrationTester:
 
             error_tests = {}
 
-            # Test division by zero handling
+# Test division by zero handling
             try:
                 result = unified_math.divide(10, 0)
                 error_tests["division_by_zero"] = (
@@ -765,7 +860,7 @@ class SystemIntegrationTester:
             except Exception:
                 error_tests["division_by_zero"] = False  # Wrong exception type
 
-            # Test invalid Kelly fraction inputs
+# Test invalid Kelly fraction inputs
             try:
                 kelly_result = kelly_fraction(0.1, 0.0)  # Zero variance
                 error_tests["kelly_zero_variance"] = (
@@ -774,7 +869,7 @@ class SystemIntegrationTester:
             except Exception:
                 error_tests["kelly_zero_variance"] = False
 
-            # Test controller with invalid signal data
+# Test controller with invalid signal data
             controller = UnifiedMathematicalTradingController()
             invalid_signal = {
                 "asset": "INVALID",
@@ -797,21 +892,26 @@ class SystemIntegrationTester:
 
             return IntegrationTestResult(
                 test_name="Error Handling Systems",
-                success=success,
-                execution_time=time.time() - start_time,
-                details=details,
+                success = success,
+                execution_time = time.time() - start_time,
+                details = details,
             )
 
         except Exception as e:
             return IntegrationTestResult(
                 test_name="Error Handling Systems",
-                success=False,
-                execution_time=time.time() - start_time,
-                error_message=str(e),
+                success = False,
+                execution_time = time.time() - start_time,
+                error_message = str(e),
             )
 
     def generate_final_report(self) -> Dict[str, Any]:
+
         """Generate comprehensive final integration report."""
+"""
+"""
+"""
+"""
         total_tests = len(self.results)
         successful_tests = sum(1 for r in self.results if r.success)
         success_rate = successful_tests / total_tests if total_tests > 0 else 0
@@ -845,7 +945,12 @@ class SystemIntegrationTester:
         return report
 
     def generate_recommendations(self) -> List[str]:
+
         """Generate recommendations based on test results."""
+"""
+"""
+"""
+"""
         recommendations = []
 
         failed_tests = [r for r in self.results if not r.success]
@@ -857,12 +962,12 @@ class SystemIntegrationTester:
 
         if any("performance" in r.test_name.lower() for r in failed_tests):
             recommendations.append(
-                "Optimize performance-critical mathematical operations"
+                "Optimize performance - critical mathematical operations"
             )
 
         if any("integration" in r.test_name.lower() for r in failed_tests):
             recommendations.append(
-                "Resolve cross-component integration issues"
+                "Resolve cross - component integration issues"
             )
 
         if any("error" in r.test_name.lower() for r in failed_tests):
@@ -878,7 +983,12 @@ class SystemIntegrationTester:
         return recommendations
 
     def generate_next_steps(self) -> List[str]:
+
         """Generate next steps for system improvement."""
+"""
+"""
+"""
+"""
         success_rate = sum(1 for r in self.results if r.success) / len(
             self.results
         )
@@ -887,7 +997,7 @@ class SystemIntegrationTester:
             return [
                 "Run extended stress testing with large datasets",
                 "Implement comprehensive logging and monitoring",
-                "Add automated integration testing to CI/CD pipeline",
+                "Add automated integration testing to CI / CD pipeline",
                 "Document integration patterns for future development",
             ]
         elif success_rate >= 0.7:
@@ -907,7 +1017,12 @@ class SystemIntegrationTester:
 
 
 def main() -> None:
+
     """Run comprehensive system integration test."""
+"""
+"""
+"""
+"""
     safe_print("\\u1f52c Starting Comprehensive System Integration Test")
     safe_print("=" * 60)
 
@@ -939,10 +1054,10 @@ def main() -> None:
     for i, step in enumerate(report["next_steps"], 1):
         safe_print(f"  {i}. {step}")
 
-    # Save detailed report
+# Save detailed report
     report_file = f"integration_test_report_{int(time.time())}.json"
     with open(report_file, "w") as f:
-        json.dump(report, f, indent=2)
+        json.dump(report, f, indent = 2)
 
     safe_print(f"\\n\\u1f4c4 Detailed report saved to: {report_file}")
 

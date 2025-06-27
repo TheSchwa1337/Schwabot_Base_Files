@@ -1,6 +1,25 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+import hashlib
+from enum import Enum
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Any, Union
+from datetime import datetime, timedelta
+import time
+import os
+import logging
+import json
+from dual_unicore_handler import DualUnicoreHandler
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Prophet Connector - Curve Alignment and Alpha Score Engine.
 
@@ -14,17 +33,9 @@ Mathematical Foundation:
 - Drift Detection: \\u0394t_drift = T_executed - T_expected
 - Profit Correlation: C = \\u03a3(\\u03b1_i * w_i) / \\u03a3(w_i)
 """
+"""
+"""
 
-import json
-import logging
-import os
-import time
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Any, Union
-from dataclasses import dataclass, field
-from enum import Enum
-from core.unified_math_system import unified_math
-import hashlib
 
 # Import centralized CLI handler
 try:
@@ -40,12 +51,15 @@ except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
     def safe_print(message: str, use_emoji: bool = True) -> str:
+
         return message
 
     def safe_format_error(error: Exception, context: str = "") -> str:
+
         return f"Error: {str(error)} | Context: {context}"
 
     def log_safe(logger, level: str, message: str) -> None:
+
         getattr(logger, level.lower())(message)
     cli_handler = None
 
@@ -53,7 +67,12 @@ logger = logging.getLogger(__name__)
 
 
 class CurveType(Enum):
+
     """Enumeration of Prophet curve types."""
+
+
+"""
+"""
     BTC_PRICE = "btc_price"
     BTC_VOLUME = "btc_volume"
     BTC_VOLATILITY = "btc_volatility"
@@ -63,7 +82,12 @@ class CurveType(Enum):
 
 
 class AlignmentStatus(Enum):
+
     """Enumeration of curve alignment statuses."""
+
+
+"""
+"""
     PERFECT = "perfect"
     STRONG = "strong"
     MODERATE = "moderate"
@@ -74,7 +98,12 @@ class AlignmentStatus(Enum):
 
 @dataclass
 class ProphetCurve:
+
     """Prophet curve data structure."""
+
+
+"""
+"""
     curve_id: str
     curve_type: CurveType
     asset: str
@@ -86,7 +115,9 @@ class ProphetCurve:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """Post-initialization processing."""
+        """Post - initialization processing."""
+"""
+"""
         if not self.data_points:
             self.data_points = []
         if not self.metadata:
@@ -95,7 +126,12 @@ class ProphetCurve:
 
 @dataclass
 class AlphaScore:
+
     """Alpha score calculation result."""
+
+
+"""
+"""
     alpha_value: float
     p_actual: float
     p_expected: float
@@ -109,7 +145,12 @@ class AlphaScore:
 
 @dataclass
 class CurveAlignment:
+
     """Curve alignment analysis result."""
+
+
+"""
+"""
     curve_id: str
     alignment_score: float
     resonance_strength: float
@@ -122,7 +163,12 @@ class CurveAlignment:
 
 @dataclass
 class AlphaSignal:
+
     """Alpha signal data."""
+
+
+"""
+"""
     alpha_id: str
     alpha_value: float
     confidence: float
@@ -131,49 +177,63 @@ class AlphaSignal:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """Post-initialization processing."""
-        # ... existing code ...
+        """Post - initialization processing."""
+"""
+"""
+# ... existing code ...
 
 
 class ProphetConnector:
+
     """
+"""
+
+
+"""
     Prophet Connector - Curve Alignment and Alpha Score Engine.
 
     This class manages the interface between Prophet model outputs and
     Schwabot's recursive execution system.
     """
+"""
+"""
 
-    def __init__(self, curve_map_file: str = "prophet/curve_map.json"):
+    def __init__(self, curve_map_file: str = "prophet / curve_map.json"):
         """Initialize the Prophet connector."""
+"""
+"""
         self.curve_map_file = curve_map_file
         self.logger = logging.getLogger("prophet_connector")
         self.logger.setLevel(logging.INFO)
 
-        # Curve storage and management
+# Curve storage and management
         self.curves: Dict[str, ProphetCurve] = {}
         self.curve_cache: Dict[str, Dict[str, Any]] = {}
         self.alpha_history: List[AlphaScore] = []
         self.alignment_history: List[CurveAlignment] = []
 
-        # Configuration parameters
+# Configuration parameters
         self.alpha_threshold = 0.02  # Minimum alpha for positive alignment
-        self.drift_threshold = 3.0   # Maximum drift in ticks
+        self.drift_threshold = 3.0  # Maximum drift in ticks
         self.resonance_threshold = 0.8  # Minimum resonance for strong alignment
         self.cache_ttl = 300  # 5 minutes cache TTL
 
-        # Performance tracking
+# Performance tracking
         self.total_alpha_calculations = 0
         self.total_curve_alignments = 0
         self.average_alpha_score = 0.0
         self.average_alignment_score = 0.0
 
-        # Load existing curves
+# Load existing curves
         self._load_curve_map()
 
         safe_safe_print("\\u1f52e Prophet Connector initialized - Curve alignment engine active")
 
     def _load_curve_map(self) -> None:
+
         """Load curve map from file."""
+"""
+"""
         try:
             if os.path.exists(self.curve_map_file):
                 with open(self.curve_map_file, 'r') as f:
@@ -181,15 +241,15 @@ class ProphetConnector:
 
                 for curve_info in curve_data.get('curves', []):
                     curve = ProphetCurve(
-                        curve_id=curve_info['curve_id'],
-                        curve_type=CurveType(curve_info['curve_type']),
-                        asset=curve_info['asset'],
-                        timeframe=curve_info['timeframe'],
-                        start_time=datetime.fromisoformat(curve_info['start_time']),
-                        end_time=datetime.fromisoformat(curve_info['end_time']),
-                        data_points=curve_info.get('data_points', []),
-                        confidence_score=curve_info.get('confidence_score', 0.5),
-                        metadata=curve_info.get('metadata', {})
+                        curve_id = curve_info['curve_id'],
+                        curve_type = CurveType(curve_info['curve_type']),
+                        asset = curve_info['asset'],
+                        timeframe = curve_info['timeframe'],
+                        start_time = datetime.fromisoformat(curve_info['start_time']),
+                        end_time = datetime.fromisoformat(curve_info['end_time']),
+                        data_points = curve_info.get('data_points', []),
+                        confidence_score = curve_info.get('confidence_score', 0.5),
+                        metadata = curve_info.get('metadata', {})
                     )
                     self.curves[curve.curve_id] = curve
 
@@ -200,9 +260,12 @@ class ProphetConnector:
             safe_safe_print(f"\\u26a0\\ufe0f Failed to load curve map: {error_msg}")
 
     def _save_curve_map(self) -> None:
+
         """Save curve map to file."""
+"""
+"""
         try:
-            os.makedirs(os.path.dirname(self.curve_map_file), exist_ok=True)
+            os.makedirs(os.path.dirname(self.curve_map_file), exist_ok = True)
 
             curve_data = {
                 'curves': [],
@@ -225,14 +288,17 @@ class ProphetConnector:
                 curve_data['curves'].append(curve_info)
 
             with open(self.curve_map_file, 'w') as f:
-                json.dump(curve_data, f, indent=2)
+                json.dump(curve_data, f, indent = 2)
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_curve_map")
             safe_safe_print(f"\\u26a0\\ufe0f Failed to save curve map: {error_msg}")
 
     def add_curve(self, curve: ProphetCurve) -> bool:
+
         """Add a new Prophet curve."""
+"""
+"""
         try:
             self.curves[curve.curve_id] = curve
             self._save_curve_map()
@@ -246,18 +312,28 @@ class ProphetConnector:
             return False
 
     def get_curve(self, curve_id: str) -> Optional[ProphetCurve]:
+
         """Get a Prophet curve by ID."""
+"""
+"""
         return self.curves.get(curve_id)
 
     def get_curves_by_type(self, curve_type: CurveType) -> List[ProphetCurve]:
+
         """Get all curves of a specific type."""
+"""
+"""
         return [curve for curve in self.curves.values() if curve.curve_type == curve_type]
 
     def get_curves_by_asset(self, asset: str) -> List[ProphetCurve]:
+
         """Get all curves for a specific asset."""
+"""
+"""
         return [curve for curve in self.curves.values() if curve.asset == asset]
 
     def compute_alpha_score(
+
         self,
         p_actual: float,
         p_expected: float,
@@ -266,6 +342,8 @@ class ProphetConnector:
         timestamp: Optional[datetime] = None
     ) -> AlphaScore:
         """
+"""
+"""
         Compute alpha score: \\u03b1 = (P_actual - P_expected) / \\u0394T
 
         Args:
@@ -278,17 +356,19 @@ class ProphetConnector:
         Returns:
             AlphaScore object with calculation results
         """
+"""
+"""
         try:
             if timestamp is None:
                 timestamp = datetime.now()
 
-            # Calculate alpha score
+# Calculate alpha score
             if delta_t > 0:
                 alpha_value = (p_actual - p_expected) / delta_t
             else:
                 alpha_value = 0.0
 
-            # Determine alignment status
+# Determine alignment status
             if unified_math.abs(alpha_value) < 0.01:
                 alignment_status = AlignmentStatus.PERFECT
             elif alpha_value > self.alpha_threshold:
@@ -300,33 +380,33 @@ class ProphetConnector:
             else:
                 alignment_status = AlignmentStatus.MISALIGNED
 
-            # Calculate confidence based on curve confidence and alpha magnitude
+# Calculate confidence based on curve confidence and alpha magnitude
             curve = self.get_curve(curve_id)
             curve_confidence = curve.confidence_score if curve else 0.5
             alpha_confidence = unified_math.min(1.0, unified_math.abs(alpha_value) * 10)  # Scale alpha to confidence
             confidence = (curve_confidence + alpha_confidence) / 2.0
 
-            # Create alpha score object
+# Create alpha score object
             alpha_score = AlphaScore(
-                alpha_value=alpha_value,
-                p_actual=p_actual,
-                p_expected=p_expected,
-                delta_t=delta_t,
-                curve_id=curve_id,
-                timestamp=timestamp,
-                confidence=confidence,
-                alignment_status=alignment_status,
+                alpha_value = alpha_value,
+                p_actual = p_actual,
+                p_expected = p_expected,
+                delta_t = delta_t,
+                curve_id = curve_id,
+                timestamp = timestamp,
+                confidence = confidence,
+                alignment_status = alignment_status,
                 metadata={
                     'curve_type': curve.curve_type.value if curve else 'unknown',
                     'asset': curve.asset if curve else 'unknown'
                 }
             )
 
-            # Store in history
+# Store in history
             self.alpha_history.append(alpha_score)
             self.total_alpha_calculations += 1
 
-            # Update average alpha score
+# Update average alpha score
             self._update_average_alpha()
 
             safe_safe_print(f"\\u1f52e Alpha score: {alpha_value:.4f} ({alignment_status.value})")
@@ -336,19 +416,20 @@ class ProphetConnector:
             error_msg = safe_format_error(e, "compute_alpha_score")
             safe_safe_print(f"\\u274c Alpha calculation failed: {error_msg}")
 
-            # Return safe fallback
+# Return safe fallback
             return AlphaScore(
-                alpha_value=0.0,
-                p_actual=p_actual,
-                p_expected=p_expected,
-                delta_t=delta_t,
-                curve_id=curve_id,
-                timestamp=timestamp or datetime.now(),
-                confidence=0.0,
-                alignment_status=AlignmentStatus.UNKNOWN
+                alpha_value = 0.0,
+                p_actual = p_actual,
+                p_expected = p_expected,
+                delta_t = delta_t,
+                curve_id = curve_id,
+                timestamp = timestamp or datetime.now(),
+                confidence = 0.0,
+                alignment_status = AlignmentStatus.UNKNOWN
             )
 
     def analyze_curve_alignment(
+
         self,
         curve_id: str,
         current_price: float,
@@ -357,6 +438,8 @@ class ProphetConnector:
         market_data: Optional[Dict[str, Any]] = None
     ) -> CurveAlignment:
         """
+"""
+"""
         Analyze curve alignment for current market conditions.
 
         Args:
@@ -369,17 +452,19 @@ class ProphetConnector:
         Returns:
             CurveAlignment object with analysis results
         """
+"""
+"""
         try:
             curve = self.get_curve(curve_id)
             if not curve:
                 return self._create_unknown_alignment(curve_id)
 
-            # Find nearest data point in curve
+# Find nearest data point in curve
             nearest_point = self._find_nearest_data_point(curve, current_time)
             if not nearest_point:
                 return self._create_unknown_alignment(curve_id)
 
-            # Calculate alignment metrics
+# Calculate alignment metrics
             price_alignment = self._calculate_price_alignment(
                 current_price, nearest_point.get('price', 0.0)
             )
@@ -392,42 +477,42 @@ class ProphetConnector:
                 current_time, nearest_point.get('timestamp', current_time)
             )
 
-            # Calculate overall alignment score
+# Calculate overall alignment score
             alignment_score = (
                 price_alignment * 0.5 +
                 volume_alignment * 0.3 +
                 timing_alignment * 0.2
             )
 
-            # Calculate resonance strength (waveform alignment)
+# Calculate resonance strength (waveform alignment)
             resonance_strength = self._calculate_resonance_strength(
                 curve, current_time, market_data
             )
 
-            # Calculate drift magnitude
+# Calculate drift magnitude
             drift_magnitude = self._calculate_drift_magnitude(
                 curve, current_time, nearest_point
             )
 
-            # Determine alignment status
+# Determine alignment status
             status = self._determine_alignment_status(
                 alignment_score, resonance_strength, drift_magnitude
             )
 
-            # Generate recommendations
+# Generate recommendations
             recommendations = self._generate_alignment_recommendations(
                 alignment_score, resonance_strength, drift_magnitude, status
             )
 
-            # Create alignment object
+# Create alignment object
             alignment = CurveAlignment(
-                curve_id=curve_id,
-                alignment_score=alignment_score,
-                resonance_strength=resonance_strength,
-                drift_magnitude=drift_magnitude,
-                timing_offset=timing_alignment,
-                status=status,
-                recommendations=recommendations,
+                curve_id = curve_id,
+                alignment_score = alignment_score,
+                resonance_strength = resonance_strength,
+                drift_magnitude = drift_magnitude,
+                timing_offset = timing_alignment,
+                status = status,
+                recommendations = recommendations,
                 metadata={
                     'curve_type': curve.curve_type.value,
                     'asset': curve.asset,
@@ -437,11 +522,11 @@ class ProphetConnector:
                 }
             )
 
-            # Store in history
+# Store in history
             self.alignment_history.append(alignment)
             self.total_curve_alignments += 1
 
-            # Update average alignment score
+# Update average alignment score
             self._update_average_alignment()
 
             safe_safe_print(f"\\u1f4ca Curve alignment: {alignment_score:.3f} ({status.value})")
@@ -453,14 +538,17 @@ class ProphetConnector:
             return self._create_unknown_alignment(curve_id)
 
     def _find_nearest_data_point(self, curve: ProphetCurve, target_time: datetime) -> Optional[Dict[str, Any]]:
+
         """Find the nearest data point in a curve to the target time."""
+"""
+"""
         if not curve.data_points:
             return None
 
-        # Convert target time to timestamp
+# Convert target time to timestamp
         target_timestamp = target_time.timestamp()
 
-        # Find nearest point
+# Find nearest point
         nearest_point = None
         min_distance = float('inf')
 
@@ -475,66 +563,78 @@ class ProphetConnector:
         return nearest_point
 
     def _calculate_price_alignment(self, current_price: float, expected_price: float) -> float:
+
         """Calculate price alignment score."""
+"""
+"""
         if expected_price == 0:
             return 0.5
 
-        # Calculate percentage difference
+# Calculate percentage difference
         price_diff = unified_math.abs(current_price - expected_price) / expected_price
 
-        # Convert to alignment score (0 = perfect alignment, 1 = no alignment)
+# Convert to alignment score (0 = perfect alignment, 1 = no alignment)
         alignment = unified_math.max(0.0, unified_math.min(1.0, 1.0 - price_diff))
 
         return alignment
 
     def _calculate_volume_alignment(self, current_volume: float, expected_volume: float) -> float:
+
         """Calculate volume alignment score."""
+"""
+"""
         if expected_volume == 0:
             return 0.5
 
-        # Calculate percentage difference
+# Calculate percentage difference
         volume_diff = unified_math.abs(current_volume - expected_volume) / expected_volume
 
-        # Convert to alignment score
+# Convert to alignment score
         alignment = unified_math.max(0.0, unified_math.min(1.0, 1.0 - volume_diff))
 
         return alignment
 
     def _calculate_timing_alignment(self, current_time: datetime, expected_time: datetime) -> float:
+
         """Calculate timing alignment score."""
+"""
+"""
         time_diff = abs((current_time - expected_time).total_seconds())
 
-        # Convert to alignment score (decay over time)
+# Convert to alignment score (decay over time)
         alignment = unified_math.max(0.0, unified_math.min(1.0, 1.0 - (time_diff / 3600)))  # Decay over 1 hour
 
         return alignment
 
     def _calculate_resonance_strength(self, curve: ProphetCurve, current_time: datetime,
-                                      market_data: Optional[Dict[str, Any]]) -> float:
+
+                                        market_data: Optional[Dict[str, Any]]) -> float:
         """Calculate resonance strength (waveform alignment)."""
+"""
+"""
         try:
-            # Get recent data points for resonance calculation
+# Get recent data points for resonance calculation
             recent_points = curve.data_points[-10:] if len(curve.data_points) >= 10 else curve.data_points
 
             if not recent_points:
                 return 0.5
 
-            # Calculate waveform characteristics
+# Calculate waveform characteristics
             prices = [point.get('price', 0.0) for point in recent_points]
             volumes = [point.get('volume', 0.0) for point in recent_points]
 
             if not prices or not volumes:
                 return 0.5
 
-            # Calculate price volatility
+# Calculate price volatility
             price_volatility = unified_math.unified_math.std(
                 prices) / unified_math.unified_math.mean(prices) if unified_math.unified_math.mean(prices) > 0 else 0.0
 
-            # Calculate volume stability
+# Calculate volume stability
             volume_stability = 1.0 - (unified_math.unified_math.std(volumes) /
-                                      unified_math.unified_math.mean(volumes)) if unified_math.unified_math.mean(volumes) > 0 else 0.0
+                                        unified_math.unified_math.mean(volumes)) if unified_math.unified_math.mean(volumes) > 0 else 0.0
 
-            # Calculate resonance as combination of stability metrics
+# Calculate resonance as combination of stability metrics
             resonance = (volume_stability * 0.6 + (1.0 - price_volatility) * 0.4)
 
             return unified_math.max(0.0, unified_math.min(1.0, resonance))
@@ -544,16 +644,19 @@ class ProphetConnector:
             return 0.5
 
     def _calculate_drift_magnitude(self, curve: ProphetCurve, current_time: datetime,
-                                   nearest_point: Dict[str, Any]) -> float:
+
+                                    nearest_point: Dict[str, Any]) -> float:
         """Calculate drift magnitude from expected timing."""
+"""
+"""
         try:
             expected_timestamp = nearest_point.get('timestamp', current_time.timestamp())
             current_timestamp = current_time.timestamp()
 
-            # Calculate drift in seconds
+# Calculate drift in seconds
             drift_seconds = unified_math.abs(current_timestamp - expected_timestamp)
 
-            # Convert to normalized drift magnitude (0 = no drift, 1 = high drift)
+# Convert to normalized drift magnitude (0 = no drift, 1 = high drift)
             drift_magnitude = unified_math.min(1.0, drift_seconds / 3600)  # Normalize to 1 hour
 
             return drift_magnitude
@@ -563,9 +666,12 @@ class ProphetConnector:
             return 0.5
 
     def _determine_alignment_status(self, alignment_score: float, resonance_strength: float,
+
                                     drift_magnitude: float) -> AlignmentStatus:
         """Determine overall alignment status."""
-        # Weighted combination of factors
+"""
+"""
+# Weighted combination of factors
         overall_score = (
             alignment_score * 0.4 +
             resonance_strength * 0.4 +
@@ -584,8 +690,11 @@ class ProphetConnector:
             return AlignmentStatus.MISALIGNED
 
     def _generate_alignment_recommendations(self, alignment_score: float, resonance_strength: float,
+
                                             drift_magnitude: float, status: AlignmentStatus) -> List[str]:
         """Generate recommendations based on alignment analysis."""
+"""
+"""
         recommendations = []
 
         if alignment_score < 0.5:
@@ -606,30 +715,42 @@ class ProphetConnector:
         return recommendations
 
     def _create_unknown_alignment(self, curve_id: str) -> CurveAlignment:
+
         """Create unknown alignment result."""
+"""
+"""
         return CurveAlignment(
-            curve_id=curve_id,
-            alignment_score=0.0,
-            resonance_strength=0.0,
-            drift_magnitude=0.0,
-            timing_offset=0.0,
-            status=AlignmentStatus.UNKNOWN,
+            curve_id = curve_id,
+            alignment_score = 0.0,
+            resonance_strength = 0.0,
+            drift_magnitude = 0.0,
+            timing_offset = 0.0,
+            status = AlignmentStatus.UNKNOWN,
             recommendations=["Unable to analyze curve alignment"]
         )
 
     def _update_average_alpha(self) -> None:
+
         """Update average alpha score."""
+"""
+"""
         if self.alpha_history:
             self.average_alpha_score = unified_math.mean([alpha.alpha_value for alpha in self.alpha_history[-100:]])
 
     def _update_average_alignment(self) -> None:
+
         """Update average alignment score."""
+"""
+"""
         if self.alignment_history:
             self.average_alignment_score = unified_math.mean(
                 [align.alignment_score for align in self.alignment_history[-100:]])
 
     def get_performance_metrics(self) -> Dict[str, Any]:
+
         """Get performance metrics."""
+"""
+"""
         return {
             'total_alpha_calculations': self.total_alpha_calculations,
             'total_curve_alignments': self.total_curve_alignments,
@@ -641,7 +762,10 @@ class ProphetConnector:
         }
 
     def cleanup_old_data(self, max_history: int = 1000) -> None:
+
         """Clean up old alpha and alignment history."""
+"""
+"""
         if len(self.alpha_history) > max_history:
             self.alpha_history = self.alpha_history[-max_history:]
 
@@ -655,6 +779,7 @@ prophet_connector = ProphetConnector()
 
 # Convenience functions for external access
 def compute_alpha_score(
+
     p_actual: float,
     p_expected: float,
     delta_t: float,
@@ -662,10 +787,13 @@ def compute_alpha_score(
     timestamp: Optional[datetime] = None
 ) -> AlphaScore:
     """Compute alpha score using global Prophet connector."""
+"""
+"""
     return prophet_connector.compute_alpha_score(p_actual, p_expected, delta_t, curve_id, timestamp)
 
 
 def analyze_curve_alignment(
+
     curve_id: str,
     current_price: float,
     current_volume: float,
@@ -673,6 +801,8 @@ def analyze_curve_alignment(
     market_data: Optional[Dict[str, Any]] = None
 ) -> CurveAlignment:
     """Analyze curve alignment using global Prophet connector."""
+"""
+"""
     return prophet_connector.analyze_curve_alignment(
         curve_id, current_price, current_volume, current_time, market_data
     )
@@ -680,17 +810,17 @@ def analyze_curve_alignment(
 
 # Example usage
 if __name__ == "__main__":
-    # Test Prophet connector functionality
+# Test Prophet connector functionality
     safe_safe_print("\\u1f52e Testing Prophet Connector...")
 
-    # Create test curve
+# Create test curve
     test_curve = ProphetCurve(
         curve_id="test_btc_curve",
-        curve_type=CurveType.BTC_PRICE,
+        curve_type = CurveType.BTC_PRICE,
         asset="BTC",
         timeframe="1h",
-        start_time=datetime.now() - timedelta(hours=24),
-        end_time=datetime.now() + timedelta(hours=24),
+        start_time = datetime.now() - timedelta(hours = 24),
+        end_time = datetime.now() + timedelta(hours = 24),
         data_points=[
             {
                 'timestamp': time.time(),
@@ -698,26 +828,26 @@ if __name__ == "__main__":
                 'volume': 1000.0
             }
         ],
-        confidence_score=0.8
+        confidence_score = 0.8
     )
 
-    # Add curve
+# Add curve
     prophet_connector.add_curve(test_curve)
 
-    # Test alpha calculation
+# Test alpha calculation
     alpha = compute_alpha_score(
-        p_actual=0.05,
-        p_expected=0.03,
-        delta_t=3600.0,
+        p_actual = 0.05,
+        p_expected = 0.03,
+        delta_t = 3600.0,
         curve_id="test_btc_curve"
     )
 
-    # Test curve alignment
+# Test curve alignment
     alignment = analyze_curve_alignment(
         curve_id="test_btc_curve",
-        current_price=50000.0,
-        current_volume=1000.0,
-        current_time=datetime.now()
+        current_price = 50000.0,
+        current_volume = 1000.0,
+        current_time = datetime.now()
     )
 
     safe_safe_print(f"\\u2705 Test completed - Alpha: {alpha.alpha_value:.4f}, Alignment: {alignment.alignment_score:.3f}")

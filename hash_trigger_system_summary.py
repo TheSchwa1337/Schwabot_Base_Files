@@ -1,4 +1,17 @@
-#!/usr/bin/env python3
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any
+import sys
+import time
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
+"""
+"""
+"""
+"""
 """
 Hash Trigger Mapping System - Complete Integration Summary
 ========================================================
@@ -6,16 +19,17 @@ Hash Trigger Mapping System - Complete Integration Summary
 This script provides a comprehensive demonstration of the complete
 hash trigger mapping system that integrates:
 
-1. HashTriggerMapper - Enhanced hash-to-strategy mapping
-2. GhostSignal - Multi-factor signal processing
+1. HashTriggerMapper - Enhanced hash - to - strategy mapping
+2. GhostSignal - Multi - factor signal processing
 3. GhostStrategyIntegration - Unified decision making
 
-All components are type-safe, Unicode/emoji compatible, and production-ready.
+All components are type - safe, Unicode / emoji compatible, and production - ready.
+"""
+"""
+"""
+"""
 """
 
-import sys
-import time
-from typing import Dict, Any
 
 # Add core to path
 sys.path.append('core')
@@ -23,22 +37,28 @@ sys.path.append('core')
 
 def demonstrate_hash_trigger_mapper():
     """Demonstrate HashTriggerMapper functionality."""
-    print("\\u1f527 HashTriggerMapper Demonstration")
-    print("=" * 50)
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\u1f527 HashTriggerMapper Demonstration")
+  print("=" * 50)
+
+   try:
         from hash_trigger_mapper import HashTriggerMapper
 
         mapper = HashTriggerMapper()
 
-        # Test various hash patterns
+# Test various hash patterns
         test_cases = [
-            ("000000", "Critical pattern - should be aggressive/defensive"),
-            ("123456", "Sequential pattern - should be momentum/adaptive"),
-            ("a1b2c3", "Patterned sequence - should be momentum/adaptive"),
-            ("111111", "Repeating pattern - should be cautious/defensive"),
-            ("abcdef", "Sequential pattern - should be momentum/adaptive"),
-            ("random1", "Random pattern - should be adaptive/monitor")
+            ("000000", "Critical pattern - should be aggressive / defensive"),
+            ("123456", "Sequential pattern - should be momentum / adaptive"),
+            ("a1b2c3", "Patterned sequence - should be momentum / adaptive"),
+            ("111111", "Repeating pattern - should be cautious / defensive"),
+            ("abcdef", "Sequential pattern - should be momentum / adaptive"),
+            ("random1", "Random pattern - should be adaptive / monitor")
         ]
 
         for hash_trigger, description in test_cases:
@@ -46,7 +66,7 @@ def demonstrate_hash_trigger_mapper():
             print(f"  {hash_trigger}: {mapping.strategy_pathway} ({mapping.pattern_type.value})")
             print(f"    Confidence: {mapping.confidence_level}, Score: {mapping.mapping_score:.4f}")
 
-        # Get statistics
+# Get statistics
         stats = mapper.get_mapping_statistics()
         print(f"\\n\\u1f4ca Mapper Statistics:")
         print(f"  Total mappings: {stats['total_mappings']}")
@@ -61,24 +81,32 @@ def demonstrate_hash_trigger_mapper():
 
 def demonstrate_ghost_signal():
     """Demonstrate GhostSignal functionality."""
-    print("\\n\\u1f47b GhostSignal Demonstration")
-    print("=" * 50)
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\n\\u1f47b GhostSignal Demonstration")
+  print("=" * 50)
+
+   try:
         from ghost_signal import GhostSignalProcessor
 
         processor = GhostSignalProcessor()
 
-        # Create mock BTCVector
+# Create mock BTCVector
         class MockBTCVector:
-            def __init__(self, price=50000.0, volatility=0.025, momentum=0.003):
+
+            def __init__(self, price=50000.0, volatility=0.025, momentum = 0.003):
+
                 self.price = price
                 self.volatility = volatility
                 self.momentum = momentum
                 self.mean_price = price
                 self.hash_trigger = "a1b2c3"
 
-        # Test different market conditions
+# Test different market conditions
         scenarios = [
             {"name": "Low Risk Market", "entropy": 0.2, "volatility": 0.01, "momentum": 0.001},
             {"name": "Medium Risk Market", "entropy": 0.5, "volatility": 0.025, "momentum": 0.003},
@@ -103,7 +131,7 @@ def demonstrate_ghost_signal():
             print(f"    Resonance: {signal.resonance_score:.4f}")
             print(f"    Risk Level: {signal.risk_level}")
 
-        # Get statistics
+# Get statistics
         stats = processor.get_signal_statistics()
         print(f"\\n\\u1f4ca Signal Statistics:")
         print(f"  Total signals: {stats['total_signals']}")
@@ -118,24 +146,32 @@ def demonstrate_ghost_signal():
 
 def demonstrate_integration():
     """Demonstrate GhostStrategyIntegration functionality."""
-    print("\\n\\u1f504 GhostStrategyIntegration Demonstration")
-    print("=" * 50)
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\n\\u1f504 GhostStrategyIntegration Demonstration")
+  print("=" * 50)
+
+   try:
         from ghost_strategy_integration import GhostStrategyIntegrator
 
         integrator = GhostStrategyIntegrator()
 
-        # Create mock BTCVector
+# Create mock BTCVector
         class MockBTCVector:
-            def __init__(self, price=50000.0, volatility=0.025, momentum=0.003):
+
+            def __init__(self, price=50000.0, volatility=0.025, momentum = 0.003):
+
                 self.price = price
                 self.volatility = volatility
                 self.momentum = momentum
                 self.mean_price = price
                 self.hash_trigger = "a1b2c3"
 
-        # Test different scenarios
+# Test different scenarios
         scenarios = [
             {"name": "Conservative Trading", "entropy": 0.2, "volatility": 0.01, "momentum": 0.001},
             {"name": "Balanced Trading", "entropy": 0.5, "volatility": 0.025, "momentum": 0.003},
@@ -161,7 +197,7 @@ def demonstrate_integration():
             print(f"    Combined Score: {decision.combined_score:.4f}")
             print(f"    Integration Mode: {decision.integration_mode}")
 
-        # Get statistics
+# Get statistics
         stats = integrator.get_integration_statistics()
         print(f"\\n\\u1f4ca Integration Statistics:")
         print(f"  Total decisions: {stats['total_decisions']}")
@@ -176,17 +212,23 @@ def demonstrate_integration():
 
 
 def demonstrate_unicode_compatibility():
-    """Demonstrate Unicode/emoji compatibility."""
-    print("\\n\\u1f310 Unicode/Emoji Compatibility Test")
-    print("=" * 50)
+    """Demonstrate Unicode / emoji compatibility."""
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\n\\u1f310 Unicode / Emoji Compatibility Test")
+  print("=" * 50)
+
+   try:
         # Test various Unicode characters and emojis
         test_strings = [
             "\\u1f680 Ghost Signal System",
             "\\u26a1 Hash Trigger Mapping",
             "\\u1f3af Strategy Integration",
-            "\\u1f4ca Real-time Analytics",
+            "\\u1f4ca Real - time Analytics",
             "\\u2705 Success Indicators",
             "\\u26a0\\ufe0f Warning Messages",
             "\\u274c Error Handling",
@@ -198,7 +240,7 @@ def demonstrate_unicode_compatibility():
         for test_string in test_strings:
             print(f"  \\u2713 {test_string}")
 
-        print("\\n\\u2705 All Unicode/emoji characters displayed correctly")
+        print("\\n\\u2705 All Unicode / emoji characters displayed correctly")
         return True
 
     except UnicodeEncodeError as e:
@@ -212,21 +254,27 @@ def demonstrate_unicode_compatibility():
 
 def demonstrate_error_handling():
     """Demonstrate robust error handling."""
-    print("\\n\\u1f6e1\\ufe0f Error Handling Demonstration")
-    print("=" * 50)
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\n\\u1f6e1\\ufe0f Error Handling Demonstration")
+  print("=" * 50)
+
+   try:
         from hash_trigger_mapper import HashTriggerMapper
         from ghost_strategy_integration import GhostStrategyIntegrator
 
         mapper = HashTriggerMapper()
         integrator = GhostStrategyIntegrator()
 
-        # Test edge cases
+# Test edge cases
         edge_cases = [
             ("Empty string", ""),
             ("Very long string", "a" * 1000),
-            ("Special characters", "!@#$%^&*()"),
+            ("Special characters", "!@  #$%^&*()"),
             ("Numbers only", "123456789"),
             ("Mixed case", "AbCdEfGhIj")
         ]
@@ -248,17 +296,23 @@ def demonstrate_error_handling():
 
 def main():
     """Run complete system demonstration."""
-    print("\\u1f3af Hash Trigger Mapping System - Complete Integration")
-    print("=" * 60)
-    print("This demonstration showcases the complete integration of:")
-    print("  \\u2022 HashTriggerMapper - Enhanced hash-to-strategy mapping")
-    print("  \\u2022 GhostSignal - Multi-factor signal processing")
+
+
+"""
+"""
+"""
+"""
+ print("\\u1f3af Hash Trigger Mapping System - Complete Integration")
+  print("=" * 60)
+   print("This demonstration showcases the complete integration of:")
+    print("  \\u2022 HashTriggerMapper - Enhanced hash - to - strategy mapping")
+    print("  \\u2022 GhostSignal - Multi - factor signal processing")
     print("  \\u2022 GhostStrategyIntegration - Unified decision making")
-    print("  \\u2022 Unicode/emoji compatibility for Windows CLI")
+    print("  \\u2022 Unicode / emoji compatibility for Windows CLI")
     print("  \\u2022 Robust error handling and fallback mechanisms")
     print("=" * 60)
 
-    # Run all demonstrations
+# Run all demonstrations
     results = []
 
     results.append(("HashTriggerMapper", demonstrate_hash_trigger_mapper()))
@@ -267,7 +321,7 @@ def main():
     results.append(("Unicode Compatibility", demonstrate_unicode_compatibility()))
     results.append(("Error Handling", demonstrate_error_handling()))
 
-    # Summary
+# Summary
     print("\n" + "=" * 60)
     print("\\u1f3af SYSTEM INTEGRATION SUMMARY")
     print("=" * 60)
@@ -282,11 +336,11 @@ def main():
     print("\n" + "=" * 60)
     if all_passed:
         print("\\u1f389 ALL COMPONENTS INTEGRATED SUCCESSFULLY! \\u1f389")
-        print("\\nThe hash trigger mapping system is production-ready with:")
-        print("  \\u2713 Type-safe mathematical operations")
-        print("  \\u2713 Unicode/emoji CLI compatibility")
+        print("\\nThe hash trigger mapping system is production - ready with:")
+        print("  \\u2713 Type - safe mathematical operations")
+        print("  \\u2713 Unicode / emoji CLI compatibility")
         print("  \\u2713 Comprehensive error handling")
-        print("  \\u2713 Multi-factor decision logic")
+        print("  \\u2713 Multi - factor decision logic")
         print("  \\u2713 Performance optimization")
         print("  \\u2713 Integration with existing systems")
         print("\\n\\u1f680 Ready for deployment in the Schwabot trading system!")

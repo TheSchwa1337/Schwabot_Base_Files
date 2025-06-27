@@ -1,15 +1,23 @@
-#!/usr/bin/env python3
 """Trading enums for Schwabot BTC integration.
+"""Trading enums for Schwabot BTC integration.
+"""Trading enums for Schwabot BTC integration.
+"""Trading enums for Schwabot BTC integration.
+
 
 This module contains all enumeration types used for trading operations,
 order management, and exchange communication.
+"""
+"""
 """
 
 from enum import Enum
 
 
 class ExchangeType(Enum):
+
     """Exchange type enumeration."""
+"""
+"""
 
     COINBASE = "coinbase"
     BINANCE = "binance"
@@ -20,7 +28,10 @@ class ExchangeType(Enum):
 
 
 class OrderType(Enum):
+
     """Order type enumeration."""
+"""
+"""
 
     MARKET = "market"
     LIMIT = "limit"
@@ -32,14 +43,20 @@ class OrderType(Enum):
 
 
 class OrderSide(Enum):
+
     """Order side enumeration."""
+"""
+"""
 
     BUY = "buy"
     SELL = "sell"
 
 
 class OrderStatus(Enum):
+
     """Order status enumeration."""
+"""
+"""
 
     PENDING = "pending"
     OPEN = "open"
@@ -51,7 +68,10 @@ class OrderStatus(Enum):
 
 
 class DataType(Enum):
+
     """Data type enumeration."""
+"""
+"""
 
     TICKER = "ticker"
     ORDER_BOOK = "order_book"
@@ -61,4 +81,7 @@ class DataType(Enum):
     ORDERS = "orders"
     POSITIONS = "positions"
 
+"""
+"""
+"""
 """

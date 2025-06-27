@@ -104,7 +104,7 @@ def exponential_smoothing(arr: NDArray, alpha: float = 0.1) -> NDArray:
         result[0] = arr[0]
 
         for i in range(1, len(arr)):
-            result[i] = alpha * arr[i] + (1 - alpha) * result[i-1]
+            result[i] = alpha * arr[i] + (1 - alpha) * result[i - 1]
 
         return result
     except Exception:
@@ -339,7 +339,10 @@ def calculate_weighted_confidence(scores: NDArray, weights: NDArray) -> float:
         return 0.0
 
 
-def calculate_true_range(high: NDArray, low: NDArray, close: NDArray) -> NDArray:
+def calculate_true_range(
+        high: NDArray,
+        low: NDArray,
+        close: NDArray) -> NDArray:
     """
     Calculate True Range for volatility measurement.
 
@@ -368,7 +371,11 @@ def calculate_true_range(high: NDArray, low: NDArray, close: NDArray) -> NDArray
         return np.zeros_like(high)
 
 
-def calculate_atr(high: NDArray, low: NDArray, close: NDArray, period: int = 14) -> float:
+def calculate_atr(
+        high: NDArray,
+        low: NDArray,
+        close: NDArray,
+        period: int = 14) -> float:
     """
     Calculate Average True Range.
 
@@ -465,7 +472,9 @@ def apply_lag_compensation_curve(signal: NDArray, lag: float) -> NDArray:
         return signal.copy()
 
 
-def calculate_temporal_confidence_merge(signals: List[NDArray], weights: NDArray) -> NDArray:
+def calculate_temporal_confidence_merge(
+        signals: List[NDArray],
+        weights: NDArray) -> NDArray:
     """
     Merge multiple temporal signals with confidence weighting.
 
@@ -562,7 +571,10 @@ def wavelet_decompose(signal: NDArray, level: int = 3) -> List[NDArray]:
         return [signal.copy()]
 
 
-def calculate_recursive_multiplier(base: float, depth: int, factor: float = 0.8) -> float:
+def calculate_recursive_multiplier(
+        base: float,
+        depth: int,
+        factor: float = 0.8) -> float:
     """
     Calculate recursive multiplier for nested calculations.
 
@@ -584,7 +596,10 @@ def calculate_recursive_multiplier(base: float, depth: int, factor: float = 0.8)
         return base
 
 
-def calculate_recursive_growth_factor(initial: float, growth_rate: float, periods: int) -> float:
+def calculate_recursive_growth_factor(
+        initial: float,
+        growth_rate: float,
+        periods: int) -> float:
     """
     Calculate recursive growth factor.
 
@@ -603,7 +618,9 @@ def calculate_recursive_growth_factor(initial: float, growth_rate: float, period
         return initial
 
 
-def calculate_allocation_efficiency(allocations: NDArray, targets: NDArray) -> float:
+def calculate_allocation_efficiency(
+        allocations: NDArray,
+        targets: NDArray) -> float:
     """
     Calculate allocation efficiency score.
 
@@ -627,7 +644,9 @@ def calculate_allocation_efficiency(allocations: NDArray, targets: NDArray) -> f
         return 0.0
 
 
-def apply_allocation_strategy(weights: NDArray, strategy: str = 'equal') -> NDArray:
+def apply_allocation_strategy(
+        weights: NDArray,
+        strategy: str = 'equal') -> NDArray:
     """
     Apply allocation strategy to weights.
 
@@ -659,7 +678,10 @@ def apply_allocation_strategy(weights: NDArray, strategy: str = 'equal') -> NDAr
         return np.ones(len(weights)) / len(weights)
 
 
-def safe_decimal_operation(a: float, b: float, operation: str = 'add') -> float:
+def safe_decimal_operation(
+    a: float,
+    b: float,
+        operation: str = 'add') -> float:
     """
     Perform safe decimal operations with error handling.
 
@@ -686,7 +708,8 @@ def safe_decimal_operation(a: float, b: float, operation: str = 'add') -> float:
         return 0.0
 
 
-def validate_spatial_dimensions(array: NDArray, expected_dims: Tuple[int, ...]) -> bool:
+def validate_spatial_dimensions(
+        array: NDArray, expected_dims: Tuple[int, ...]) -> bool:
     """
     Validate array dimensions match expected spatial dimensions.
 
@@ -703,7 +726,8 @@ def validate_spatial_dimensions(array: NDArray, expected_dims: Tuple[int, ...]) 
         return False
 
 
-def create_spatial_grid(dimensions: Tuple[int, ...], spacing: float = 1.0) -> NDArray:
+def create_spatial_grid(
+        dimensions: Tuple[int, ...], spacing: float = 1.0) -> NDArray:
     """
     Create spatial grid with specified dimensions.
 
@@ -792,7 +816,8 @@ def greyscale_phase_map(input_hash: str, phase_array: NDArray) -> float:
         return 0.5
 
 
-def generate_ghost_trigger_map(volatility: float, resonance: float, threshold: float) -> Dict[str, Any]:
+def generate_ghost_trigger_map(
+        volatility: float, resonance: float, threshold: float) -> Dict[str, Any]:
     """
     Constructs live trade triggers based on filtered ghost entropy and BTC vector match.
 
@@ -813,7 +838,8 @@ def generate_ghost_trigger_map(volatility: float, resonance: float, threshold: f
         # Calculate confidence scores
         volatility_confidence = min(volatility / threshold, 1.0)
         resonance_confidence = min(resonance / threshold, 1.0)
-        combined_confidence = (volatility_confidence + resonance_confidence) / 2
+        combined_confidence = (volatility_confidence +
+                               resonance_confidence) / 2
 
         return {
             'volatility_trigger': bool(volatility_trigger),
@@ -868,7 +894,10 @@ def bit_phase_allocator(strategy_vector: NDArray, hold_type: str) -> str:
         return "error"
 
 
-def phase_alignment_score(volatility: float, entropy: float, hash_dist: float) -> float:
+def phase_alignment_score(
+        volatility: float,
+        entropy: float,
+        hash_dist: float) -> float:
     """
     Calculates resonance score across live vs memory hash paths.
 
@@ -894,7 +923,8 @@ def phase_alignment_score(volatility: float, entropy: float, hash_dist: float) -
         return 0.5
 
 
-def tensor_hash_overlay(signal_tensor: NDArray, ghost_map: Dict[str, Any]) -> NDArray:
+def tensor_hash_overlay(signal_tensor: NDArray,
+                        ghost_map: Dict[str, Any]) -> NDArray:
     """
     Projects tensor signal data over ghost-layer resonance hash trigger system.
 
@@ -978,7 +1008,8 @@ def resonance_derivative(ghost_stream: NDArray, entropy_slope: float) -> float:
         return 0.0
 
 
-def entry_exit_vector(path_map: NDArray, profit_expectancy: float) -> Tuple[int, int]:
+def entry_exit_vector(
+        path_map: NDArray, profit_expectancy: float) -> Tuple[int, int]:
     """
     Estimates ideal entry/exit ticks based on profit target and volatility.
 
@@ -1173,7 +1204,7 @@ def main():
     except Exception as e:
         try:
             safe_print(f"❌ Mathematical utilities test failed: {e}")
-        except:
+        except BaseException:
             print(f"Mathematical utilities test failed: {e}")
         return False
 

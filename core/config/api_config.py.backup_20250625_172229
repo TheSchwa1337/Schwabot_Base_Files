@@ -313,12 +313,17 @@ class CoinGeckoClient(APIClient):
         super().__init__(config, secret_manager)
         self.rate_limiter = APIRateLimiter(config.coingecko_rate_limit)
 
-    def get_crypto_prices(self, ids: List[str], vs_currencies: List[str] = None) -> Dict[str, Any]:
+    def get_crypto_prices(
+            self, ids: List[str], vs_currencies: List[str] = None) -> Dict[str, Any]:
         """Get cryptocurrency prices."""
         if vs_currencies is None:
             vs_currencies = ['usd']
 
-        cache_key = f"cg_prices_{','.join(sorted(ids))}_{','.join(sorted(vs_currencies))}"
+        cache_key = f"cg_prices_{
+            ','.join(
+                sorted(ids))}_{
+            ','.join(
+                sorted(vs_currencies))}"
         cached = self._get_cached_response(cache_key)
         if cached:
             return cached
@@ -337,7 +342,8 @@ class CoinGeckoClient(APIClient):
         self._cache_response(cache_key, response)
         return response
 
-    def get_market_data(self, ids: List[str], vs_currency: str = 'usd') -> Dict[str, Any]:
+    def get_market_data(
+            self, ids: List[str], vs_currency: str = 'usd') -> Dict[str, Any]:
         """Get market data for cryptocurrencies."""
         cache_key = f"cg_market_{','.join(sorted(ids))}_{vs_currency}"
         cached = self._get_cached_response(cache_key)
@@ -386,16 +392,19 @@ class APIManager:
         """Initialize API manager."""
         self.config = config or APIConfig()
         self.secret_manager = APISecretManager()
-        self.coinmarketcap = CoinMarketCapClient(self.config, self.secret_manager)
+        self.coinmarketcap = CoinMarketCapClient(
+            self.config, self.secret_manager)
         self.coingecko = CoinGeckoClient(self.config, self.secret_manager)
 
     def setup_api_keys(self, coinmarketcap_key: str = None):
         """Setup API keys."""
         if coinmarketcap_key:
-            self.secret_manager.set_secret('coinmarketcap_api_key', coinmarketcap_key)
+            self.secret_manager.set_secret(
+                'coinmarketcap_api_key', coinmarketcap_key)
             logger.info("CoinMarketCap API key configured")
 
-    def get_crypto_data(self, symbols: List[str], source: str = 'coingecko') -> Dict[str, Any]:
+    def get_crypto_data(
+            self, symbols: List[str], source: str = 'coingecko') -> Dict[str, Any]:
         """Get cryptocurrency data from specified source."""
         try:
             if source.lower() == 'coinmarketcap':
@@ -445,7 +454,8 @@ def setup_api_keys(coinmarketcap_key: str = None):
     api_manager.setup_api_keys(coinmarketcap_key)
 
 
-def get_crypto_data(symbols: List[str], source: str = 'coingecko') -> Dict[str, Any]:
+def get_crypto_data(symbols: List[str],
+                    source: str = 'coingecko') -> Dict[str, Any]:
     """Get cryptocurrency data."""
     return api_manager.get_crypto_data(symbols, source)
 
@@ -482,15 +492,20 @@ if __name__ == "__main__":
             # Test configuration
             safe_print("\n⚙️ Testing API Configuration:")
             config = APIConfig()
-            safe_print(f"✅ CoinMarketCap Rate Limit: {config.coinmarketcap_rate_limit}")
-            safe_print(f"✅ CoinGecko Rate Limit: {config.coingecko_rate_limit}")
+            safe_print(
+                f"✅ CoinMarketCap Rate Limit: {
+                    config.coinmarketcap_rate_limit}")
+            safe_print(
+                f"✅ CoinGecko Rate Limit: {
+                    config.coingecko_rate_limit}")
             safe_print(f"✅ Retry Attempts: {config.retry_attempts}")
             safe_print(f"✅ Cache Duration: {config.cache_duration}")
 
             # Test secret manager
             safe_print("\n🔐 Testing Secret Management:")
             secret_manager = APISecretManager()
-            safe_print(f"✅ Secrets loaded: {len(secret_manager._secrets_cache)}")
+            safe_print(
+                f"✅ Secrets loaded: {len(secret_manager._secrets_cache)}")
 
             # Test secret operations
             test_key = "test_api_key"
@@ -508,12 +523,15 @@ if __name__ == "__main__":
             # Test rate limiter
             safe_print("\n⏱️ Testing Rate Limiting:")
             rate_limiter = APIRateLimiter(30)
-            safe_print(f"✅ Initial Can Make Request: {rate_limiter.can_make_request()}")
+            safe_print(
+                f"✅ Initial Can Make Request: {
+                    rate_limiter.can_make_request()}")
 
             # Test multiple requests
             for i in range(5):
                 rate_limiter.record_request()
-            safe_print(f"✅ After 5 Requests - Can Make Request: {rate_limiter.can_make_request()}")
+            safe_print(
+                f"✅ After 5 Requests - Can Make Request: {rate_limiter.can_make_request()}")
 
             wait_time = rate_limiter.get_wait_time()
             safe_print(f"✅ Wait Time: {wait_time:.2f} seconds")
@@ -530,8 +548,11 @@ if __name__ == "__main__":
                 safe_print(f"✅ Global data keys: {list(global_data.keys())}")
 
                 # Test crypto prices
-                crypto_data = manager.get_crypto_data(['bitcoin', 'ethereum'], 'coingecko')
-                safe_print(f"✅ Crypto data retrieved: {len(crypto_data)} entries")
+                crypto_data = manager.get_crypto_data(
+                    ['bitcoin', 'ethereum'], 'coingecko')
+                safe_print(
+                    f"✅ Crypto data retrieved: {
+                        len(crypto_data)} entries")
 
             except Exception as e:
                 safe_print(f"⚠️ CoinGecko test failed: {e}")
@@ -541,11 +562,15 @@ if __name__ == "__main__":
             try:
                 # Test without API key
                 if not secret_manager.has_secret('coinmarketcap_api_key'):
-                    safe_print("⚠️ CoinMarketCap API key not configured - skipping tests")
+                    safe_print(
+                        "⚠️ CoinMarketCap API key not configured - skipping tests")
                 else:
                     # Test with API key
-                    cmc_data = manager.get_crypto_data(['BTC', 'ETH'], 'coinmarketcap')
-                    safe_print(f"✅ CoinMarketCap data retrieved: {len(cmc_data)} entries")
+                    cmc_data = manager.get_crypto_data(
+                        ['BTC', 'ETH'], 'coinmarketcap')
+                    safe_print(
+                        f"✅ CoinMarketCap data retrieved: {
+                            len(cmc_data)} entries")
             except Exception as e:
                 safe_print(f"⚠️ CoinMarketCap test failed: {e}")
 

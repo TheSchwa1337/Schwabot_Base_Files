@@ -168,7 +168,7 @@ class DualNumber:
         """
         return self.x, self.dx
 
-    # Human-friendly representation --------------------------------------------------
+    # Human-friendly representation ------------------------------------------
     def __repr__(self) -> str:
         """Return a string representation of the dual number.
 

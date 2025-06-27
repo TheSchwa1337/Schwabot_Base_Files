@@ -1,22 +1,36 @@
+# -*- coding: utf - 8 -*-
+"""Ghost swap vector \\u2013 trade simulation projection.
+"""Ghost swap vector \\u2013 trade simulation projection.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Ghost swap vector \\u2013 trade simulation projection.
+"""Ghost swap vector \\u2013 trade simulation projection.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 Implements the \\u03a6\\u208dghost\\u208e matrix from the Ghost design doc:
 
     \\u03a6\\u208dghost\\u208e = M(t) \\u00b7 \\u03c3(W + B) + \\u03a8_noise
 
 where
-\\u2022 ``M(t)``   \\u2013 market-state transformation matrix (time varying).
+\\u2022 ``M(t)``   \\u2013 market - state transformation matrix (time varying).
 \\u2022 ``W`` / ``B`` \\u2013 learned weight & bias arrays (same shape).
-\\u2022 ``\\u03c3``       \\u2013 element-wise sigmoid.
+\\u2022 ``\\u03c3``       \\u2013 element - wise sigmoid.
 \\u2022 ``\\u03a8_noise`` \\u2013 optional additive noise (same shape as the sigmoid output).
 
 The helper is intentionally simple \\u2013 it does *no* learning, gradient updates
 or fancy broadcasting.  All arrays must have the same shape so we avoid silent
 numpy broadcasting errors.
+"""
+"""
 """
 
 
@@ -34,11 +48,15 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 
 
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
+
     """Vectorised logistic function 1 / (1 + exp(-k\\u00b7x))."""
+"""
+"""
     return 1.0 / (1.0 + unified_math.exp(-k * x))
 
 
 def ghost_swap_vector(
+
     market_matrix: np.ndarray,
     weights: np.ndarray,
     bias: np.ndarray,
@@ -51,7 +69,7 @@ def ghost_swap_vector(
     Parameters
     ----------
     market_matrix
-        ``M(t)`` \\u2013 current market state features (2-D array).
+        ``M(t)`` \\u2013 current market state features (2 - D array).
     weights, bias
         Learned parameters (same shape as ``market_matrix``).  No broadcasting
         is applied \\u2013 exact shape match is required.
@@ -61,13 +79,15 @@ def ghost_swap_vector(
     sigmoid_k
         Steepness parameter *k* of the logistic.  Higher \\u21d2 harder gate.
     """
+"""
+"""
     if not (market_matrix.shape == weights.shape == bias.shape):
         raise ValueError("market_matrix, weights and bias must share shape")
 
-    # \\u03c3(W + B) term
-    activated = _sigmoid(weights + bias, k=sigmoid_k)
+# \\u03c3(W + B) term
+    activated = _sigmoid(weights + bias, k = sigmoid_k)
 
-    # Core multiplication
+# Core multiplication
     phi = market_matrix * activated
 
     if noise is None:
@@ -77,4 +97,7 @@ def ghost_swap_vector(
         raise ValueError("noise must match output shape")
     return phi + noise
 
+"""
+"""
+"""
 """

@@ -1,19 +1,36 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any
+import json
+import logging
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
+"""
+"""
 """
 DLT Matrix Profit Integration Test - Schwabot UROS v1.0
 =====================================================
 
 Comprehensive integration test for the complete trading system pipeline.
 """
+"""
+"""
+"""
+"""
 
-import json
-import time
-from core.unified_math_system import unified_math
-from datetime import datetime
-from typing import Dict, Any
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,27 +50,33 @@ except ImportError as e:
 
 def test_component_initialization():
     """Test initialization of all components."""
-    safe_print("\\n\\u1f9ea Testing Component Initialization...")
 
-    results = {}
 
-    try:
+"""
+"""
+"""
+"""
+ safe_print("\\n\\u1f9ea Testing Component Initialization...")
+
+  results = {}
+
+   try:
         # Test DLT Waveform Engine
         dlt_engine = DLTWaveformEngine()
         results['dlt_engine'] = {'status': 'success', 'gpu_available': dlt_engine.gpu_available}
         safe_print(f"\\u2705 DLT Waveform Engine: GPU={dlt_engine.gpu_available}")
 
-        # Test Matrix Mapper
+# Test Matrix Mapper
         matrix_mapper = MatrixMapper()
         results['matrix_mapper'] = {'status': 'success', 'hash_registry_size': len(matrix_mapper.hash_registry)}
         safe_print(f"\\u2705 Matrix Mapper: Hash Registry={len(matrix_mapper.hash_registry)}")
 
-        # Test Profit Cycle Allocator
+# Test Profit Cycle Allocator
         profit_allocator = ProfitCycleAllocator()
         results['profit_allocator'] = {'status': 'success', 'strategy': profit_allocator.allocation_strategy}
         safe_print(f"\\u2705 Profit Cycle Allocator: Strategy={profit_allocator.allocation_strategy}")
 
-        # Test ZPE Core
+# Test ZPE Core
         zpe_core = ZPECore()
         results['zpe_core'] = {'status': 'success', 'recursion_depth': zpe_core.recursion_depth}
         safe_print(f"\\u2705 ZPE Core: Recursion Depth={zpe_core.recursion_depth}")
@@ -67,19 +90,25 @@ def test_component_initialization():
 
 def test_dlt_waveform_processing():
     """Test DLT waveform processing with quantum integration."""
-    safe_print("\\n\\u1f30a Testing DLT Waveform Processing...")
 
-    results = {}
 
-    try:
+"""
+"""
+"""
+"""
+ safe_print("\\n\\u1f30a Testing DLT Waveform Processing...")
+
+  results = {}
+
+   try:
         dlt_engine = DLTWaveformEngine()
 
-        # Generate test waveform data
+# Generate test waveform data
         t = np.linspace(0, 10, 1000)
         waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * \
             np.unified_math.sin(2 * np.pi * 0.5 * t) + 0.1 * np.random.randn(len(t))
 
-        # Test waveform processing
+# Test waveform processing
         waveform_result = dlt_engine.process_waveform_data(
             name="test_waveform",
             x=waveform_data,
@@ -92,7 +121,7 @@ def test_dlt_waveform_processing():
         }
         safe_print(f"\\u2705 Waveform Processing: Success={waveform_result.get('success', False)}")
 
-        # Test matrix basket creation
+# Test matrix basket creation
         market_data = {
             'price': 50000.0, 'volatility': 0.05, 'entropy_level': 4.2, 'complexity': 0.6,
             'assets': ['BTC', 'ETH', 'ADA', 'DOT', 'SOL']
@@ -113,21 +142,27 @@ def test_dlt_waveform_processing():
 
 
 def test_matrix_mapper_functionality():
-    """Test matrix mapper functionality with hash-basket matching."""
-    safe_print("\\n\\u1f517 Testing Matrix Mapper Functionality...")
+    """Test matrix mapper functionality with hash - basket matching."""
 
-    results = {}
 
-    try:
+"""
+"""
+"""
+"""
+ safe_print("\\n\\u1f517 Testing Matrix Mapper Functionality...")
+
+  results = {}
+
+   try:
         matrix_mapper = MatrixMapper()
 
-        # Test hash decoding
+# Test hash decoding
         test_hash = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
         basket_id = matrix_mapper.decode_hash_to_basket(test_hash, 100, 50000.0)
         results['hash_decoding'] = {'basket_id': basket_id, 'status': 'success'}
         safe_print(f"\\u2705 Hash Decoding: Basket ID={basket_id}")
 
-        # Test profit allocation
+# Test profit allocation
         market_data = {
             'price': 50000.0, 'volatility': 0.05, 'entropy_level': 4.2, 'complexity': 0.6
         }
@@ -148,11 +183,17 @@ def test_matrix_mapper_functionality():
 
 def test_profit_cycle_allocation():
     """Test profit cycle allocation with tensor scoring."""
-    safe_print("\\n\\u1f4b0 Testing Profit Cycle Allocation...")
 
-    results = {}
 
-    try:
+"""
+"""
+"""
+"""
+ safe_print("\\n\\u1f4b0 Testing Profit Cycle Allocation...")
+
+  results = {}
+
+   try:
         # Create test execution packet
         execution_packet = {
             'volume': 1000.0,
@@ -168,7 +209,7 @@ def test_profit_cycle_allocation():
             'trend_change_rate': 0.01, 'market_heat': 0.4, 'capital_exposure': 10000.0
         }
 
-        # Test allocation
+# Test allocation
         allocation_result = allocate_profit_cycle(
             execution_packet=execution_packet,
             cycles=['cycle1', 'cycle2', 'cycle3'],
@@ -193,11 +234,17 @@ def test_profit_cycle_allocation():
 
 def test_complete_pipeline_integration():
     """Test complete pipeline integration from waveform to profit allocation."""
-    safe_print("\\n\\u1f504 Testing Complete Pipeline Integration...")
 
-    results = {}
 
-    try:
+"""
+"""
+"""
+"""
+ safe_print("\\n\\u1f504 Testing Complete Pipeline Integration...")
+
+  results = {}
+
+   try:
         # Step 1: Process waveform data
         dlt_engine = DLTWaveformEngine()
         t = np.linspace(0, 10, 1000)
@@ -216,7 +263,7 @@ def test_complete_pipeline_integration():
         }
         safe_print(f"\\u2705 Step 1 - Waveform Processing: Tensor Score={waveform_result.get('tensor_score', 0.0):.4f}")
 
-        # Step 2: Create matrix basket
+# Step 2: Create matrix basket
         market_data = {
             'price': 50000.0, 'volatility': 0.05, 'entropy_level': 4.2, 'complexity': 0.6,
             'assets': ['BTC', 'ETH', 'ADA', 'DOT', 'SOL']
@@ -229,7 +276,7 @@ def test_complete_pipeline_integration():
         }
         safe_print(f"\\u2705 Step 2 - Matrix Basket: ID={basket.basket_id}, Resonance={basket.resonance_score:.4f}")
 
-        # Step 3: Allocate profit
+# Step 3: Allocate profit
         execution_packet = {
             'volume': 1000.0,
             'actual_profit': 500.0,
@@ -251,11 +298,11 @@ def test_complete_pipeline_integration():
         safe_print(
             f"\\u2705 Step 3 - Profit Allocation: Success={allocation_result.success}, Tensor Score={allocation_result.tensor_score:.4f}")
 
-        # Verify pipeline success
+# Verify pipeline success
         pipeline_success = (
-            waveform_result.get('success', False) and
-            basket.basket_id and
-            allocation_result.success
+            waveform_result.get('success', False)
+            and basket.basket_id
+            and allocation_result.success
         )
 
         results['pipeline_integration'] = {
@@ -273,14 +320,20 @@ def test_complete_pipeline_integration():
 
 def main():
     """Main function to run the integration tests."""
-    safe_print("DLT Matrix Profit Integration Test - Schwabot UROS v1.0")
-    safe_print("=" * 60)
 
-    if not CORE_COMPONENTS_AVAILABLE:
+
+"""
+"""
+"""
+"""
+ safe_print("DLT Matrix Profit Integration Test - Schwabot UROS v1.0")
+  safe_print("=" * 60)
+
+   if not CORE_COMPONENTS_AVAILABLE:
         safe_print("\\u274c Core components not available - skipping tests")
         return 1
 
-    # Run tests
+# Run tests
     test_functions = [
         ('component_initialization', test_component_initialization),
         ('dlt_waveform_processing', test_dlt_waveform_processing),
@@ -294,7 +347,7 @@ def main():
 
     for test_name, test_func in test_functions:
         try:
-            safe_print(f"\\n{'='*20} {test_name.upper()} {'='*20}")
+            safe_print(f"\\n{'=' * 20} {test_name.upper()} {'=' * 20}")
             result = test_func()
             all_results[test_name] = result
 
@@ -308,7 +361,7 @@ def main():
             safe_print(f"\\u274c {test_name} failed with exception: {e}")
             all_results[test_name] = {'error': str(e)}
 
-    # Summary
+# Summary
     total_tests = len(test_functions)
     success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
 
@@ -320,7 +373,7 @@ def main():
     safe_print(f"Success Rate: {success_rate:.2%}")
     safe_print(f"Overall Status: {'PASS' if success_rate >= 0.8 else 'FAIL'}")
 
-    # Save results
+# Save results
     try:
         with open("dlt_matrix_profit_integration_results.json", 'w') as f:
             json.dump(all_results, f, indent=2, default=str)

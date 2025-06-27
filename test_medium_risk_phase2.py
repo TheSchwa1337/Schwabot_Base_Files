@@ -1,24 +1,42 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from .visual_fallbacks import VisualFallback
+from dataclasses import dataclass
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import json
+import logging
+import sys
+import time
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """
-Medium-Risk Phase II Integration Test \\u2013 Schwabot UROS v1.0
+"""
+"""
+"""
+"""
+Medium - Risk Phase II Integration Test \\u2013 Schwabot UROS v1.0
 =========================================================
 
-This script mirrors the core/test_medium_risk_phase_ii.py integration test but
+This script mirrors the core / test_medium_risk_phase_ii.py integration test but
 is designed to run from the repository root.  It prepends the *core* package to
 sys.path and uses absolute imports so that the test can be executed directly
 with `python test_medium_risk_phase2.py` while still exercising the same
 components.
 """
+"""
+"""
+"""
+"""
 
-import sys
-import time
-import logging
-import json
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-from dataclasses import dataclass
 
 # ---------------------------------------------------------------------------
 # Path setup \\u2013 add ./core to import path so `import core.xxx` works regardless
@@ -42,9 +60,16 @@ visual = VisualFallback()
 
 @dataclass
 class TestResult:
+
     """Lightweight container for each individual component test."""
 
-    component: str
+
+"""
+"""
+"""
+"""
+
+   component: str
     status: str  # PASS, FAIL, SKIP
     details: str
     execution_time: float
@@ -52,18 +77,27 @@ class TestResult:
 
 
 class MediumRiskPhase2Tester:
-    """Runs the full Medium-Risk Phase II test suite."""
 
-    def __init__(self) -> None:
+    """Runs the full Medium - Risk Phase II test suite."""
+
+
+"""
+"""
+"""
+"""
+
+   def __init__(self) -> None:
+
         self.test_results: List[TestResult] = []
 
-    # ---------------------------------------------------------------------
-    # Individual component tests (trade execution, strategy engine, etc).
-    # The logic is exactly the same as in core/test_medium_risk_phase_ii.py but
-    # with absolute imports (i.e. `import core.trade_executor \\u2026`).
-    # ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Individual component tests (trade execution, strategy engine, etc).
+# The logic is exactly the same as in core / test_medium_risk_phase_ii.py but
+# with absolute imports (i.e. `import core.trade_executor \\u2026`).
+# ---------------------------------------------------------------------
 
     def test_trade_execution_engine(self) -> TestResult:  # noqa: C901 (complexity)
+
         start = time.time()
         try:
             try:
@@ -116,6 +150,7 @@ class MediumRiskPhase2Tester:
             )
 
     def test_strategy_execution_engine(self) -> TestResult:  # noqa: C901
+
         start = time.time()
         try:
             try:
@@ -155,6 +190,7 @@ class MediumRiskPhase2Tester:
             )
 
     def test_phase_engine(self) -> TestResult:  # noqa: C901
+
         start = time.time()
         try:
             try:
@@ -200,6 +236,7 @@ class MediumRiskPhase2Tester:
             )
 
     def test_portfolio_substitution_matrix(self) -> TestResult:  # noqa: C901
+
         start = time.time()
         try:
             try:
@@ -243,6 +280,7 @@ class MediumRiskPhase2Tester:
             )
 
     def test_deterministic_value_engine(self) -> TestResult:  # noqa: C901
+
         start = time.time()
         try:
             try:
@@ -288,6 +326,7 @@ class MediumRiskPhase2Tester:
             )
 
     def test_unified_mathematical_trading_controller(self) -> TestResult:  # noqa: C901
+
         start = time.time()
         try:
             try:
@@ -335,103 +374,113 @@ class MediumRiskPhase2Tester:
                 error_message=str(e),
             )
 
-    # ------------------------------------------------------------------
-    # Test-runner orchestration \\u2013 identical summary logic to original.
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Test - runner orchestration \\u2013 identical summary logic to original.
+# ------------------------------------------------------------------
 
     def run_all_tests(self) -> Dict[str, Any]:
-        """Run all medium-risk Phase II tests."""
-        logger.info(f"{visual.get('INFO')} Starting Medium-Risk Phase II Integration Tests")
-        logger.info("=" * 60)
+        """Run all medium - risk Phase II tests."""
+"""
+"""
+"""
+"""
+   logger.info(f"{visual.get('INFO')} Starting Medium - Risk Phase II Integration Tests")
+    logger.info("=" * 60)
 
-        # Run individual tests
-        tests = [
-            self.test_trade_execution_engine,
-            self.test_strategy_execution_engine,
-            self.test_phase_engine,
-            self.test_portfolio_substitution_matrix,
-            self.test_deterministic_value_engine,
-            self.test_unified_mathematical_trading_controller
-        ]
+# Run individual tests
+    tests = [
+        self.test_trade_execution_engine,
+        self.test_strategy_execution_engine,
+        self.test_phase_engine,
+        self.test_portfolio_substitution_matrix,
+        self.test_deterministic_value_engine,
+        self.test_unified_mathematical_trading_controller
+    ]
 
-        for test in tests:
-            result = test()
-            self.test_results.append(result)
+    for test in tests:
+        result = test()
+        self.test_results.append(result)
 
-            # Log result
-            status_emoji = visual.get(result.status)
-            logger.info(f"{status_emoji} {result.component}: {result.status}")
-            if result.details:
-                logger.info(f"   Details: {result.details}")
-            if result.error_message:
-                logger.warning(f"   Error: {result.error_message}")
+# Log result
+        status_emoji = visual.get(result.status)
+        logger.info(f"{status_emoji} {result.component}: {result.status}")
+        if result.details:
+            logger.info(f"   Details: {result.details}")
+        if result.error_message:
+            logger.warning(f"   Error: {result.error_message}")
 
-        # Calculate summary
-        total_tests = len(self.test_results)
-        passed_tests = len([r for r in self.test_results if r.status == "PASS"])
-        failed_tests = len([r for r in self.test_results if r.status == "FAIL"])
-        skipped_tests = len([r for r in self.test_results if r.status == "SKIP"])
+# Calculate summary
+    total_tests = len(self.test_results)
+    passed_tests = len([r for r in self.test_results if r.status == "PASS"])
+    failed_tests = len([r for r in self.test_results if r.status == "FAIL"])
+    skipped_tests = len([r for r in self.test_results if r.status == "SKIP"])
 
-        # Print summary
-        logger.info("=" * 60)
-        logger.info(f"{visual.get('INFO')} Medium-Risk Phase II Test Summary")
-        logger.info("=" * 60)
-        logger.info(f"Total Tests: {total_tests}")
-        logger.info(f"{visual.get('PASS')} Passed: {passed_tests}")
-        logger.info(f"{visual.get('FAIL')} Failed: {failed_tests}")
-        logger.info(f"{visual.get('SKIP')} Skipped: {skipped_tests}")
-        logger.info(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+# Print summary
+    logger.info("=" * 60)
+    logger.info(f"{visual.get('INFO')} Medium - Risk Phase II Test Summary")
+    logger.info("=" * 60)
+    logger.info(f"Total Tests: {total_tests}")
+    logger.info(f"{visual.get('PASS')} Passed: {passed_tests}")
+    logger.info(f"{visual.get('FAIL')} Failed: {failed_tests}")
+    logger.info(f"{visual.get('SKIP')} Skipped: {skipped_tests}")
+    logger.info(f"Success Rate: {(passed_tests / total_tests) * 100:.1f}%")
 
-        # Determine overall status
-        if failed_tests == 0:
-            overall_status = "READY"
-            logger.info(f"{visual.get('READY')} All medium-risk components are ready for Phase II!")
-        elif passed_tests > 0:
-            overall_status = "PARTIAL"
-            logger.info(f"{visual.get('PARTIAL')} Some medium-risk components need implementation")
-        else:
-            overall_status = "NOT_READY"
-            logger.warning(f"{visual.get('NOT_READY')} Medium-risk components need significant work")
+# Determine overall status
+    if failed_tests == 0:
+        overall_status = "READY"
+        logger.info(f"{visual.get('READY')} All medium - risk components are ready for Phase II!")
+    elif passed_tests > 0:
+        overall_status = "PARTIAL"
+        logger.info(f"{visual.get('PARTIAL')} Some medium - risk components need implementation")
+    else:
+        overall_status = "NOT_READY"
+        logger.warning(f"{visual.get('NOT_READY')} Medium - risk components need significant work")
 
-        return {
-            "overall_status": overall_status,
-            "total_tests": total_tests,
-            "passed_tests": passed_tests,
-            "failed_tests": failed_tests,
-            "skipped_tests": skipped_tests,
-            "success_rate": (passed_tests/total_tests)*100,
-            "test_results": [vars(r) for r in self.test_results]
-        }
+    return {
+        "overall_status": overall_status,
+        "total_tests": total_tests,
+        "passed_tests": passed_tests,
+        "failed_tests": failed_tests,
+        "skipped_tests": skipped_tests,
+        "success_rate": (passed_tests / total_tests) * 100,
+        "test_results": [vars(r) for r in self.test_results]
+    }
 
 
 # ---------------------------------------------------------------------------
-# CLI entry-point
+# CLI entry - point
 # ---------------------------------------------------------------------------
 
 def main():
-    """Main function for medium-risk Phase II testing."""
-    print(f"{visual.get('INFO')} Medium-Risk Phase II Integration Test - Schwabot UROS v1.0")
+    """Main function for medium - risk Phase II testing."""
+
+
+"""
+"""
+"""
+"""
+   print(f"{visual.get('INFO')} Medium - Risk Phase II Integration Test - Schwabot UROS v1.0")
     print("=" * 70)
 
-    # Initialize tester
+# Initialize tester
     tester = MediumRiskPhase2Tester()
 
-    # Run all tests
+# Run all tests
     results = tester.run_all_tests()
 
-    # Save results
+# Save results
     with open("medium_risk_phase_ii_results.json", "w") as f:
-        json.dump(results, f, indent=2, default=str)
+        json.dump(results, f, indent=2, default = str)
 
     print(f"\\n{visual.get('SAVE')} Results saved to: medium_risk_phase_ii_results.json")
     print(f"{visual.get(results['overall_status'])} Overall Status: {results['overall_status']}")
 
     if results['overall_status'] == "READY":
-        print(f"{visual.get('READY')} Medium-Risk Phase II is ready for deployment!")
+        print(f"{visual.get('READY')} Medium - Risk Phase II is ready for deployment!")
     elif results['overall_status'] == "PARTIAL":
-        print(f"{visual.get('PARTIAL')} Medium-Risk Phase II needs some implementation work")
+        print(f"{visual.get('PARTIAL')} Medium - Risk Phase II needs some implementation work")
     else:
-        print(f"{visual.get('NOT_READY')} Medium-Risk Phase II needs significant development")
+        print(f"{visual.get('NOT_READY')} Medium - Risk Phase II needs significant development")
 
 
 if __name__ == "__main__":

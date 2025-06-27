@@ -1,21 +1,35 @@
+# -*- coding: utf - 8 -*-
+"""Flux compensator \\u2013 entropy drift corrector.
+"""Flux compensator \\u2013 entropy drift corrector.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Flux compensator \\u2013 entropy drift corrector.
+"""Flux compensator \\u2013 entropy drift corrector.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 A *flux compensator* is a lightweight corrective layer that smooths noisy
 entropy (or variance) readings and provides a boolean gate indicating whether
 an input sample is still inside acceptable drift bounds.  Think of it as a
-mini-Kalman corrector but with negligible computational overhead.
+mini - Kalman corrector but with negligible computational overhead.
 
 Implemented now
 ---------------
-1. ``FluxCompensator`` class with exponential\\u2013moving-average (EMA) tracking.
-2. Stateless helper ``sync_flux_compensator`` for one-off checks.
-3. Fully-typed & Flake8-clean \\u2264 79-char lines.
+1. ``FluxCompensator`` class with exponential\\u2013moving - average (EMA) tracking.
+2. Stateless helper ``sync_flux_compensator`` for one - off checks.
+3. Fully - typed & Flake8 - clean \\u2264 79 - char lines.
 
-Advanced Jacobian/KF tuning can be layered later.
+Advanced Jacobian / KF tuning can be layered later.
+"""
+"""
 """
 
 
@@ -29,9 +43,10 @@ from core.unified_math_system import unified_math
 __all__ = ["FluxCompensator", "sync_flux_compensator"]
 
 
-@dataclass(slots=True)
+@dataclass(slots = True)
 class FluxCompensator:
-    """Exponential-smoothing entropy corrector.
+
+    """Exponential - smoothing entropy corrector.
 
     Parameters
     ----------
@@ -46,34 +61,42 @@ class FluxCompensator:
     multiplier
         Safety margin.  A value of 0.9 \\u21d2 allow 10 % slack under threshold.
     """
+"""
+"""
 
     threshold: float = 5.0
     alpha: float = 0.3
     window: int | None = None
     multiplier: float = 0.9
 
-    _sma_buf: Deque[float] = field(default_factory=lambda: deque(maxlen=10), init=False)
-    _ema: float | None = field(default=None, init=False)
+    _sma_buf: Deque[float] = field(default_factory = lambda: deque(maxlen = 10), init = False)
+    _ema: float | None = field(default = None, init = False)
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Public API
+# ------------------------------------------------------------------
     def update(self, entropy: float) -> Tuple[bool, float]:
+
         """Ingest a new entropy value and return (is_valid, smoothed_entropy)."""
+"""
+"""
         smoothed = self._smooth(entropy)
         is_valid = smoothed < self.threshold * self.multiplier
         return is_valid, smoothed
 
-    # ------------------------------------------------------------------
-    # Internal helpers
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Internal helpers
+# ------------------------------------------------------------------
     def _smooth(self, value: float) -> float:
+
         """TODO: document _smooth."""
+"""
+"""
         if self.window is not None and self.window > 1:
             self._sma_buf.append(value)
             smoothed = float(unified_math.unified_math.mean(self._sma_buf))
             return smoothed
-        # EMA path
+# EMA path
         if self._ema is None:
             self._ema = value
         else:
@@ -87,9 +110,12 @@ class FluxCompensator:
 
 
 def sync_flux_compensator(entropy: float, threshold: float) -> bool:
-    """Single-shot flux compensation check.
+
+    """Single - shot flux compensation check.
 
     Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for
     quick gating where persistent history is not necessary.
     """
+"""
+"""
     return entropy < threshold * 0.9

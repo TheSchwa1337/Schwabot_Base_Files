@@ -7,16 +7,20 @@ def clean_null_bytes(fix: bool = True) -> list[str]:
     Parameters
     ----------
     fix
-        If ``True`` replace ``\x00`` with an empty byte string in-place.
+        If ``True`` replace ``\x00`` with an empty byte string in - place.
 
     Returns
     -------
     list[str]
         Paths that were cleaned (or that contain null bytes if *fix* is False).
     """
-    root = pathlib.Path(".")
-    cleaned: list[str] = []
-    for py in root.rglob("*.py"):
+
+
+"""
+"""
+ root = pathlib.Path(".")
+  cleaned: list[str] = []
+   for py in root.rglob("*.py"):
         try:
             content = py.read_bytes()
         except Exception:

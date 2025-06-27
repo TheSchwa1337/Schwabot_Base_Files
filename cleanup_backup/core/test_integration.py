@@ -1,16 +1,28 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+import logging
+import time
+import os
+import sys
+from dual_unicore_handler import DualUnicoreHandler
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Integration Test Script - Schwabot UROS v1.0
 ==========================================
 
 Simple test script to validate the integration of all components.
 """
+"""
+"""
 
-import sys
-import os
-import time
-import logging
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -19,19 +31,23 @@ logger = logging.getLogger(__name__)
 
 def test_voltage_lane_mapper():
     """Test voltage lane mapper."""
-    try:
+
+
+"""
+"""
+   try:
         from voltage_lane_mapper import VoltageLaneMapper
 
         safe_print("Testing Voltage Lane Mapper...")
         mapper = VoltageLaneMapper()
 
-        # Test voltage calculations
+# Test voltage calculations
         for bit_depth in [4, 8, 42]:
             voltage_mapping = mapper.calculate_voltage_for_bit_depth(bit_depth)
             safe_print(
                 f"  Bit depth {bit_depth}: {voltage_mapping.calculated_voltage:.3f}V ({voltage_mapping.voltage_level.value})")
 
-        # Test channel assignment
+# Test channel assignment
         voltage_mapping = mapper.calculate_voltage_for_bit_depth(8)
         assignment = mapper.assign_channel_for_voltage(voltage_mapping, priority=2.0)
         safe_print(f"  Channel assignment: {assignment.channel_id} (score: {assignment.assignment_score:.3f})")
@@ -46,22 +62,25 @@ def test_voltage_lane_mapper():
 
 def test_tensor_path_router():
     """Test tensor path router."""
-    try:
+
+"""
+"""
+   try:
         from tensor_path_router import TensorPathRouter
 
         safe_print("Testing Tensor Path Router...")
         router = TensorPathRouter()
 
-        # Test routing
+# Test routing
         test_prefixes = ["hash_00", "hash_15", "hash_31"]
         for prefix in test_prefixes:
-            request_id = router.route_hash_prefix(prefix, bit_depth=8, priority=2.0)
+            request_id = router.route_hash_prefix(prefix, bit_depth= 8, priority = 2.0)
             safe_print(f"  Routing request: {request_id} for {prefix}")
 
-        # Wait for processing
+# Wait for processing
         time.sleep(1)
 
-        # Check results
+# Check results
         for prefix in test_prefixes:
             routes = router.get_routes_by_hash_prefix(prefix)
             for route in routes:
@@ -77,29 +96,32 @@ def test_tensor_path_router():
 
 def test_tensor_harness_matrix():
     """Test tensor harness matrix."""
-    try:
+
+"""
+"""
+   try:
         from tensor_harness_matrix import TensorHarnessMatrix, TensorMode
 
         safe_print("Testing Tensor Harness Matrix...")
         harness = TensorHarnessMatrix()
 
-        # Test tensor routing
+# Test tensor routing
         test_prefixes = ["hash_00", "hash_15", "hash_31"]
         profit_sensor_data = {"profit_rate": 0.75, "volatility": 0.25, "volume": 0.8}
 
         for prefix in test_prefixes:
             request_id = harness.route_tensor_with_drift_compensation(
                 prefix,
-                bit_depth=8,
-                mode=TensorMode.DEMO,
-                profit_sensor_data=profit_sensor_data
+                bit_depth= 8,
+                mode= TensorMode.DEMO,
+                profit_sensor_data= profit_sensor_data
             )
             safe_print(f"  Tensor harness request: {request_id} for {prefix}")
 
-        # Wait for processing
+# Wait for processing
         time.sleep(1)
 
-        # Check results
+# Check results
         for prefix in test_prefixes:
             routes = harness.get_routes_by_hash_prefix(prefix)
             for route in routes:
@@ -115,20 +137,23 @@ def test_tensor_harness_matrix():
 
 def test_hash_registry_manager():
     """Test hash registry manager."""
-    try:
+
+"""
+"""
+   try:
         from hash_registry_manager import HashRegistryManager
 
         safe_print("Testing Hash Registry Manager...")
         manager = HashRegistryManager()
 
-        # Test hash resolution
+# Test hash resolution
         test_prefixes = ["hash_00", "hash_15", "hash_31"]
         for prefix in test_prefixes:
             entry = manager.get_hash_entry(prefix)
             if entry:
                 safe_print(f"  {prefix}: bit_depth={entry.bit_depth}, priority={entry.priority}")
 
-        # Test statistics
+# Test statistics
         stats = manager.get_registry_statistics()
         safe_print(f"  Registry statistics: {len(stats.get('entries', []))} entries")
 
@@ -142,7 +167,10 @@ def test_hash_registry_manager():
 
 def main():
     """Main test function."""
-    safe_print("=" * 60)
+
+"""
+"""
+   safe_print("=" * 60)
     safe_print("Schwabot UROS v1.0 - Integration Test")
     safe_print("=" * 60)
 
@@ -179,4 +207,7 @@ if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
 
+"""
+"""
+"""
 """

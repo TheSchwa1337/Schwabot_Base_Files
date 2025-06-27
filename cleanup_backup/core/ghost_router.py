@@ -1,12 +1,24 @@
+# -*- coding: utf - 8 -*-
+"""Ghost router \\u2013 conditional trade core.
+"""Ghost router \\u2013 conditional trade core.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Ghost router \\u2013 conditional trade core.
+"""Ghost router \\u2013 conditional trade core.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 This module wires together the **seven primary conditionals** outlined in the
-high-level design note (hash-drift, pool stability, lantern vector match, AI
-consensus, re-entry tolerance, profit-lock sync, narrative glyph overlay).
+high - level design note (hash - drift, pool stability, lantern vector match, AI
+consensus, re - entry tolerance, profit - lock sync, narrative glyph overlay).
 
 The implementation is *deliberately lightweight* \\u2013 each conditional is a pure
 function that returns a boolean.  :class:`GhostRouter` evaluates them in the
@@ -16,8 +28,10 @@ canonical order and emits one of three routes:
 * ``"hold_usdc"``    \\u2013 defensive hold triggered by news overlay.
 * ``"noop"``         \\u2013 no action / wait.
 
-Only NumPy + std-lib are required, keeping the stub dependency-free beyond
+Only NumPy + std - lib are required, keeping the stub dependency - free beyond
 what Schwabot already ships.
+"""
+"""
 """
 
 
@@ -36,14 +50,20 @@ __all__: list[str] = ["GhostRouter", "ghost_router"]
 
 
 def _hamming_dist(a: str, b: str) -> int:  # noqa: D401
-    """Return Hamming distance of two equal-length hex strings."""
+
+    """Return Hamming distance of two equal - length hex strings."""
+"""
+"""
     if len(a) != len(b):  # pad shorter one for robustness
         raise ValueError("hash strings must have equal length")
     return sum(ch1 != ch2 for ch1, ch2 in zip(a, b))
 
 
 def _cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
+
     """TODO: document _cosine_similarity."""
+"""
+"""
     if v1.shape != v2.shape:
         raise ValueError("vectors must share shape for cosine similarity")
     dot = float(unified_math.unified_math.dot_product(v1, v2))
@@ -66,26 +86,38 @@ _NEWS_OVERLAY_THRESHOLD: Final = 0.6
 
 
 def _hash_drift_detect(curr_hash: str, mem_hash: str) -> bool:
+
     """TODO: document _hash_drift_detect."""
+"""
+"""
     return _hamming_dist(curr_hash, mem_hash) <= _HASH_EPS
 
 
 def _pool_stability_check(vol_series: np.ndarray) -> bool:
+
     """TODO: document _pool_stability_check."""
+"""
+"""
     if vol_series.size == 0:
         return False
     return float(unified_math.unified_math.std(vol_series) / unified_math.unified_math.mean(vol_series)) < _POOL_STAB_EPS
 
 
 def _lantern_match(vec: np.ndarray, reference: np.ndarray) -> bool:
+
     """TODO: document _lantern_match."""
+"""
+"""
     return _cosine_similarity(vec, reference) >= _VECTOR_COS_THRESHOLD
 
 
 def _ai_consensus(
+
     hashes: Tuple[str, str, str], weights: Tuple[float, float, float]
 ) -> bool:
     """TODO: document _ai_consensus."""
+"""
+"""
     h1, h2, h3 = hashes
     if not (h1 == h2 == h3):
         return False
@@ -94,18 +126,27 @@ def _ai_consensus(
 
 
 def _reentry_tolerance(opportunity_ts: float, now_ts: float) -> bool:
+
     """TODO: document _reentry_tolerance."""
+"""
+"""
     decay = unified_math.exp(-_DECAY_LAMBDA * (now_ts - opportunity_ts))
     return decay >= _DECAY_THRESHOLD
 
 
 def _profit_lock_sync(curr_profit: float, projected_exit: float) -> bool:
+
     """TODO: document _profit_lock_sync."""
+"""
+"""
     return curr_profit > projected_exit + _PROFIT_LOCK_EPS
 
 
 def _news_overlay_route(score: float) -> bool:
+
     """Return True if bearish news requires USDC hold."""
+"""
+"""
     return score > _NEWS_OVERLAY_THRESHOLD
 
 
@@ -114,9 +155,12 @@ def _news_overlay_route(score: float) -> bool:
 # -----------------------------------------------------------------------------
 
 
-@dataclass(slots=True)
+@dataclass(slots = True)
 class RouterInput:
+
     """TODO: document RouterInput."""
+"""
+"""
 
     tick_hash: str
     mem_hash: str
@@ -141,39 +185,45 @@ class RouterInput:
 
 
 class GhostRouter:
+
     """Evaluate conditional chain; return routing decision string."""
+"""
+"""
 
     def route(self, data: RouterInput) -> str:  # noqa: D401
-        """Determine routing decision via multi-step drift, consensus and risk checks."""
-        # 1. Hash drift detection
+
+        """Determine routing decision via multi - step drift, consensus and risk checks."""
+"""
+"""
+# 1. Hash drift detection
         if not _hash_drift_detect(data.tick_hash, data.mem_hash):
             return "noop"
 
-        # 2. Pool stability + BTC dip
+# 2. Pool stability + BTC dip
         if not (_pool_stability_check(data.pool_volumes) and data.btc_dip):
             return "noop"
 
-        # 3. Lantern vector match
+# 3. Lantern vector match
         if not _lantern_match(data.lantern_vec, data.lantern_ref):
             return "noop"
 
-        # 4. AI consensus chain
+# 4. AI consensus chain
         if not _ai_consensus(data.ai_hashes, data.ai_weights):
             return "noop"
 
-        # 5. Dead-signal re-entry tolerance
+# 5. Dead - signal re - entry tolerance
         if not _reentry_tolerance(data.opportunity_ts, data.now_ts):
             return "noop"
 
-        # 6. Profit lock \\u2013 if we are already beyond target, exit route
+# 6. Profit lock \\u2013 if we are already beyond target, exit route
         if _profit_lock_sync(data.curr_profit, data.projected_exit):
             return "hold_usdc"
 
-        # 7. Narrative glyph overlay \\u2013 may override to defensive hold
+# 7. Narrative glyph overlay \\u2013 may override to defensive hold
         if _news_overlay_route(data.news_score):
             return "hold_usdc"
 
-        # All green
+# All green
         return "ghost_trade"
 
 
@@ -183,13 +233,19 @@ class GhostRouter:
 
 
 def ghost_router(data: RouterInput) -> str:  # noqa: D401
+
     """Return routing decision using :class:`GhostRouter.route`."""
+"""
+"""
     return GhostRouter().route(data)
 
 
-@dataclass(slots=True)
+@dataclass(slots = True)
 class ExecPacket:
+
     """Executable order packet \\u27e8V_final , route , O_t , \\u03c4_t\\u27e9 (formula 16)."""
+"""
+"""
 
     volume: float
     route: Literal["vault_mode", "long_mode", "short_mode", "mid_mode"]
@@ -198,11 +254,12 @@ class ExecPacket:
 
 
 # ------------------------------------------------------------------
-# High-level helper \\u2013 implement equations (1) \\u2026 (8)
+# High - level helper \\u2013 implement equations (1) \\u2026 (8)
 # ------------------------------------------------------------------
 
 
 def compute_ghost_route(
+
     *,
     H_t: int,
     H_prev: int,
@@ -219,33 +276,35 @@ def compute_ghost_route(
     beta2: float = 0.5,
     beta3: float = 0.3,
     kappa: float = 0.01,
-    epsilon: float = 1e-9,
+    epsilon: float = 1e - 9,
     Q_max: float = 1e6,
     timestamp: float | None = None,
 ) -> ExecPacket:  # noqa: D401
     """Compute ghost routing decision and order size.
 
     Returns an :class:`ExecPacket` with volume, route string, price offset 0.0
-    (placeholder) and hash-tag \\u03c4\\u209c.
+    (placeholder) and hash - tag \\u03c4\\u209c.
     """
+"""
+"""
     import hashlib
     from core.unified_math_system import unified_math
 
     delta_H = H_t - H_prev
-    # (1) \\u03a6_t
+# (1) \\u03a6_t
     phi_t = 1.0 / (1.0 + unified_math.exp(-(beta1 * E_t - beta2 * unified_math.abs(delta_H) + beta3 * D_t)))
 
-    # (3) execution velocity
+# (3) execution velocity
     v_exec = unified_math.unified_math.sqrt(P_res / (rho_t * phi_t + epsilon))
 
-    # (4) volume throttle
+# (4) volume throttle
     V_adj = base_vol * unified_math.exp(-kappa * S_t)
 
-    # (5)(6) route weights
+# (5)(6) route weights
     w_btc = psi * (1.0 - phi_t) * v_exec
     w_usdc = (1.0 - psi) * phi_t * v_exec
 
-    # (7) route decision
+# (7) route decision
     if phi_t > theta_high:
         route = "vault_mode"
     elif phi_t < theta_low and delta_H < 0:
@@ -255,10 +314,10 @@ def compute_ghost_route(
     else:
         route = "mid_mode"
 
-    # (8) final executable size
+# (8) final executable size
     Q_exec = unified_math.max(0.0, unified_math.min(V_adj * (w_btc + w_usdc), Q_max))
 
-    # (9) hash-tag
+# (9) hash - tag
     if timestamp is None:
         import time as _time
 
@@ -266,4 +325,4 @@ def compute_ghost_route(
     tag_data = f"{H_t}{route}{timestamp}".encode()
     tau_t = hashlib.sha256(tag_data).hexdigest()
 
-    return ExecPacket(volume=Q_exec, route=route, price_offset=0.0, hash_tag=tau_t)
+    return ExecPacket(volume = Q_exec, route = route, price_offset = 0.0, hash_tag = tau_t)

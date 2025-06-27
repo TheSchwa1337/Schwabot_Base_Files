@@ -79,7 +79,8 @@ class MemoryKeyAllocator:
         """Initialize the memory key allocator."""
         self.memory_keys: Dict[str, MemoryKey] = {}
         self.strategy_allocations: Dict[str, StrategyAllocation] = {}
-        self.key_type_allocations: Dict[KeyType, List[str]] = {key_type: [] for key_type in KeyType}
+        self.key_type_allocations: Dict[KeyType, List[str]] = {
+            key_type: [] for key_type in KeyType}
 
         # Allocation parameters
         self.max_keys_per_strategy = 5
@@ -119,14 +120,17 @@ class MemoryKeyAllocator:
             # Allocate memory keys
             allocated_keys = []
             for key_type in key_types:
-                memory_key = self._create_memory_key(strategy, key_type, strategy_hash)
+                memory_key = self._create_memory_key(
+                    strategy, key_type, strategy_hash)
                 if memory_key:
                     allocated_keys.append(memory_key)
                     self.memory_keys[memory_key.key_id] = memory_key
-                    self.key_type_allocations[key_type].append(memory_key.key_id)
+                    self.key_type_allocations[key_type].append(
+                        memory_key.key_id)
 
             # Calculate allocation score
-            allocation_score = self._calculate_allocation_score(allocated_keys, strategy_hash)
+            allocation_score = self._calculate_allocation_score(
+                allocated_keys, strategy_hash)
 
             # Create strategy allocation
             allocation = StrategyAllocation(
@@ -146,7 +150,8 @@ class MemoryKeyAllocator:
             self.allocation_success_rate = self.successful_allocations / self.total_allocations
 
             execution_time = time.time() - start_time
-            logger.info(f"Allocation completed in {execution_time:.3f}s - Score: {allocation_score:.3f}")
+            logger.info(
+                f"Allocation completed in {execution_time:.3f}s - Score: {allocation_score:.3f}")
 
             return allocation.allocation_id
 
@@ -175,7 +180,10 @@ class MemoryKeyAllocator:
             logger.error(f"Strategy hash generation failed: {e}")
             return "0000000000000000"
 
-    def _determine_key_types(self, strategy: str, strategy_hash: str) -> List[KeyType]:
+    def _determine_key_types(
+            self,
+            strategy: str,
+            strategy_hash: str) -> List[KeyType]:
         """
         Determine appropriate key types for strategy.
 
@@ -273,7 +281,10 @@ class MemoryKeyAllocator:
         try:
             # Use circular statistics for phase
             angles = 2 * np.pi * hash_array / 256
-            mean_angle = np.arctan2(np.mean(np.sin(angles)), np.mean(np.cos(angles)))
+            mean_angle = np.arctan2(
+                np.mean(
+                    np.sin(angles)), np.mean(
+                    np.cos(angles)))
 
             # Normalize to [0, 2π]
             phase = (mean_angle + 2 * np.pi) % (2 * np.pi)
@@ -281,7 +292,11 @@ class MemoryKeyAllocator:
         except Exception:
             return 0.5
 
-    def _create_memory_key(self, strategy: str, key_type: KeyType, strategy_hash: str) -> Optional[MemoryKey]:
+    def _create_memory_key(
+            self,
+            strategy: str,
+            key_type: KeyType,
+            strategy_hash: str) -> Optional[MemoryKey]:
         """
         Create a memory key for strategy and key type.
 
@@ -295,10 +310,12 @@ class MemoryKeyAllocator:
         """
         try:
             # Generate key-specific hash
-            key_hash = self._generate_key_hash(strategy, key_type, strategy_hash)
+            key_hash = self._generate_key_hash(
+                strategy, key_type, strategy_hash)
 
             # Calculate confidence score
-            confidence_score = self._calculate_key_confidence(strategy, key_type, key_hash)
+            confidence_score = self._calculate_key_confidence(
+                strategy, key_type, key_hash)
 
             # Only create key if confidence is sufficient
             if confidence_score < self.key_confidence_threshold:
@@ -306,7 +323,9 @@ class MemoryKeyAllocator:
 
             # Create memory key
             memory_key = MemoryKey(
-                key_id=self._generate_key_id(strategy, key_type),
+                key_id=self._generate_key_id(
+                    strategy,
+                    key_type),
                 strategy_name=strategy,
                 key_type=key_type,
                 hash_signature=key_hash,
@@ -315,9 +334,7 @@ class MemoryKeyAllocator:
                 last_accessed=datetime.now(),
                 metadata={
                     'strategy_hash': strategy_hash,
-                    'key_type_characteristics': self._get_key_type_characteristics(key_type)
-                }
-            )
+                    'key_type_characteristics': self._get_key_type_characteristics(key_type)})
 
             return memory_key
 
@@ -325,7 +342,11 @@ class MemoryKeyAllocator:
             logger.error(f"Memory key creation failed: {e}")
             return None
 
-    def _generate_key_hash(self, strategy: str, key_type: KeyType, strategy_hash: str) -> str:
+    def _generate_key_hash(
+            self,
+            strategy: str,
+            key_type: KeyType,
+            strategy_hash: str) -> str:
         """Generate hash for specific key type."""
         try:
             hash_input = f"{strategy}_{key_type.value}_{strategy_hash}"
@@ -334,17 +355,23 @@ class MemoryKeyAllocator:
         except Exception:
             return "0000000000000000"
 
-    def _calculate_key_confidence(self, strategy: str, key_type: KeyType, key_hash: str) -> float:
+    def _calculate_key_confidence(
+            self,
+            strategy: str,
+            key_type: KeyType,
+            key_hash: str) -> float:
         """Calculate confidence score for memory key."""
         try:
             confidence_factors = []
 
             # Strategy complexity factor
-            strategy_complexity = len(strategy) / 100.0  # Normalize by expected max length
+            # Normalize by expected max length
+            strategy_complexity = len(strategy) / 100.0
             confidence_factors.append(min(strategy_complexity, 1.0))
 
             # Key type relevance factor
-            key_relevance = self._calculate_key_type_relevance(strategy, key_type)
+            key_relevance = self._calculate_key_type_relevance(
+                strategy, key_type)
             confidence_factors.append(key_relevance)
 
             # Hash quality factor
@@ -352,15 +379,21 @@ class MemoryKeyAllocator:
             confidence_factors.append(hash_quality)
 
             # Calculate weighted confidence
-            weights = [0.3, 0.4, 0.3]  # Strategy complexity, key relevance, hash quality
-            confidence = sum(factor * weight for factor, weight in zip(confidence_factors, weights))
+            # Strategy complexity, key relevance, hash quality
+            weights = [0.3, 0.4, 0.3]
+            confidence = sum(
+                factor * weight for factor,
+                weight in zip(
+                    confidence_factors,
+                    weights))
 
             return float(confidence)
 
         except Exception:
             return 0.5
 
-    def _calculate_key_type_relevance(self, strategy: str, key_type: KeyType) -> float:
+    def _calculate_key_type_relevance(
+            self, strategy: str, key_type: KeyType) -> float:
         """Calculate relevance of key type to strategy."""
         try:
             strategy_lower = strategy.lower()
@@ -421,7 +454,8 @@ class MemoryKeyAllocator:
         except Exception:
             return 0.5
 
-    def _get_key_type_characteristics(self, key_type: KeyType) -> Dict[str, Any]:
+    def _get_key_type_characteristics(
+            self, key_type: KeyType) -> Dict[str, Any]:
         """Get characteristics for key type."""
         try:
             characteristics = {
@@ -492,14 +526,18 @@ class MemoryKeyAllocator:
         except Exception:
             return {}
 
-    def _calculate_allocation_score(self, allocated_keys: List[MemoryKey], strategy_hash: str) -> float:
+    def _calculate_allocation_score(
+            self,
+            allocated_keys: List[MemoryKey],
+            strategy_hash: str) -> float:
         """Calculate overall allocation score."""
         try:
             if not allocated_keys:
                 return 0.0
 
             # Calculate average confidence
-            avg_confidence = np.mean([key.confidence_score for key in allocated_keys])
+            avg_confidence = np.mean(
+                [key.confidence_score for key in allocated_keys])
 
             # Calculate key diversity
             key_types = [key.key_type for key in allocated_keys]
@@ -550,7 +588,8 @@ class MemoryKeyAllocator:
         except Exception:
             return None
 
-    def get_strategy_allocation(self, allocation_id: str) -> Optional[StrategyAllocation]:
+    def get_strategy_allocation(
+            self, allocation_id: str) -> Optional[StrategyAllocation]:
         """Get strategy allocation by ID."""
         return self.strategy_allocations.get(allocation_id)
 
@@ -558,11 +597,13 @@ class MemoryKeyAllocator:
         """Get all memory keys of a specific type."""
         try:
             key_ids = self.key_type_allocations.get(key_type, [])
-            return [self.memory_keys[key_id] for key_id in key_ids if key_id in self.memory_keys]
+            return [self.memory_keys[key_id]
+                    for key_id in key_ids if key_id in self.memory_keys]
         except Exception:
             return []
 
-    def update_key_performance(self, key_id: str, performance_metrics: Dict[str, float]) -> bool:
+    def update_key_performance(
+            self, key_id: str, performance_metrics: Dict[str, float]) -> bool:
         """Update performance metrics for a memory key."""
         try:
             memory_key = self.memory_keys.get(key_id)
@@ -583,7 +624,8 @@ class MemoryKeyAllocator:
             expired_keys = []
 
             for key_id, memory_key in self.memory_keys.items():
-                days_since_allocation = (cutoff_time - memory_key.allocation_timestamp).days
+                days_since_allocation = (
+                    cutoff_time - memory_key.allocation_timestamp).days
                 if days_since_allocation > self.key_expiry_days:
                     expired_keys.append(key_id)
 
@@ -601,7 +643,9 @@ class MemoryKeyAllocator:
                 del self.strategy_allocations[alloc_id]
 
             logger.info(
-                f"Cleaned up {len(expired_keys)} expired keys and {len(expired_allocations)} expired allocations")
+                f"Cleaned up {
+                    len(expired_keys)} expired keys and {
+                    len(expired_allocations)} expired allocations")
             return len(expired_keys)
 
         except Exception as e:
@@ -673,7 +717,8 @@ if __name__ == "__main__":
             safe_print(f"Allocation score: {allocation.allocation_score:.3f}")
 
             for key in allocation.allocated_keys:
-                safe_print(f"  - {key.key_type.value}: {key.confidence_score:.3f}")
+                safe_print(
+                    f"  - {key.key_type.value}: {key.confidence_score:.3f}")
 
     # Print statistics
     stats = allocator.get_allocation_statistics()

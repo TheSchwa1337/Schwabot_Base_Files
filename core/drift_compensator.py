@@ -1,9 +1,22 @@
-# -*- coding: utf-8 -*-\\nfrom __future__ import annotations
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-from core.unified_math_system import unified_math
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+
+from __future__ import annotations
 import numpy as np
-# #!/usr/bin/env python3
-"""Drift compensator - positional drift correction vector."""
+
+
+# """Drift compensator - positional drift correction vector."""
 
 Implements the equation:
 
@@ -11,8 +24,10 @@ Implements the equation:
 
 Used when ghost logic misses an entry window but the opportunity is still
 valid.  Returns a vector that can be added to the next trade signal to adjust
-for lag-induced error.
+for lag - induced error.
 """"""
+"""
+"""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -26,20 +41,24 @@ def compute_drift_vector()
     current: np.ndarray,
     expected: np.ndarray,
     delta_t: float,
- -> np.ndarray:
+    -> np.ndarray:
 
 """Return drift compensation vector \\u039e_drift."""
+"""
+"""
 
 Parameters
 ----------
 current, expected
-1-D NumPy arrays of identical shape representing current and expected
+1 - D NumPy arrays of identical shape representing current and expected
 state vectors.
 delta_t
-Time lag in **seconds** (or ticks).  Must be non-negative.
+Time lag in **seconds** (or ticks).  Must be non - negative.
     """"""
-   if delta_t < 0:
-        raise ValueError("delta_t must be non-negative")
+"""
+"""
+    if delta_t < 0:
+        raise ValueError("delta_t must be non - negative")
     if current.shape != expected.shape:
         raise ValueError("current and expected must share shape")
 

@@ -1,13 +1,20 @@
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""Fractal Command Dispatcher - Golden Ratio Trust-Based Strategy Execution.
+"""Fractal Command Dispatcher - Golden Ratio Trust - Based Strategy Execution.
+"""Fractal Command Dispatcher - Golden Ratio Trust - Based Strategy Execution.
+"""Fractal Command Dispatcher - Golden Ratio Trust - Based Strategy Execution.
+"""Fractal Command Dispatcher - Golden Ratio Trust - Based Strategy Execution.
+
 
 Implements the core mathematical framework for:
-- F(n) = F(n-1) \\u00d7 \\u03a6, where \\u03a6 = golden ratio
+- F(n) = F(n - 1) \\u00d7 \\u03a6, where \\u03a6 = golden ratio
 - Predictive trust assignment to recursive strategies
 - Historical match analysis for command prioritization
 """
+"""
+"""
+"""
+"""
 
+from core.unified_math_system import unified_math
 from core.unified_math_system import unified_math
 import time
 import hashlib
@@ -27,7 +34,12 @@ logger = logging.getLogger(__name__)
 
 
 class CommandPriority(Enum):
+
     """Command priority levels."""
+"""
+"""
+"""
+"""
     CRITICAL = "CRITICAL"
     HIGH = "HIGH"
     MEDIUM = "MEDIUM"
@@ -36,7 +48,12 @@ class CommandPriority(Enum):
 
 
 class TrustLevel(Enum):
+
     """Trust levels for strategy evaluation."""
+"""
+"""
+"""
+"""
     UNTRUSTED = "UNTRUSTED"
     LOW_TRUST = "LOW_TRUST"
     MEDIUM_TRUST = "MEDIUM_TRUST"
@@ -46,7 +63,12 @@ class TrustLevel(Enum):
 
 @dataclass
 class CommandRecord:
+
     """Record of a command execution."""
+"""
+"""
+"""
+"""
 
     command_id: str
     strategy_id: str
@@ -61,7 +83,12 @@ class CommandRecord:
 
 @dataclass
 class StrategyProfile:
+
     """Profile of a trading strategy."""
+"""
+"""
+"""
+"""
 
     strategy_id: str
     total_executions: int
@@ -70,13 +97,18 @@ class StrategyProfile:
     average_execution_time: float
     trust_level: TrustLevel
     fractal_depth: int
-    historical_pattern_matches: List[str] = field(default_factory=list)
+    historical_pattern_matches: List[str] = field(default_factory = list)
     last_execution: float = 0.0
 
 
 @dataclass
 class DispatchResult:
+
     """Result of command dispatch operation."""
+"""
+"""
+"""
+"""
 
     dispatch_id: str
     command_executed: str
@@ -90,10 +122,20 @@ class DispatchResult:
 
 
 class FractalCommandDispatcher:
+
     """Core fractal command dispatcher with golden ratio weighting."""
+"""
+"""
+"""
+"""
 
     def __init__(self, max_fractal_depth: int = 20) -> None:
+
         """Initialize fractal command dispatcher."""
+"""
+"""
+"""
+"""
         self.max_fractal_depth = max_fractal_depth
         self.strategy_profiles: Dict[str, StrategyProfile] = {}
         self.command_history: List[CommandRecord] = []
@@ -102,33 +144,39 @@ class FractalCommandDispatcher:
         self.trust_decay_factor = 0.95
         self.historical_match_threshold = 0.7
 
-        # Pre-calculate fractal weights up to max depth
+# Pre - calculate fractal weights up to max depth
         self._precompute_fractal_weights()
 
     def register_strategy(
+
         self,
         strategy_id: str,
         initial_trust: TrustLevel = TrustLevel.MEDIUM_TRUST
     ) -> None:
         """Register a new trading strategy."""
+"""
+"""
+"""
+"""
         if strategy_id in self.strategy_profiles:
             logger.warning(f"Strategy {strategy_id} already registered")
             return
 
         profile = StrategyProfile(
-            strategy_id=strategy_id,
-            total_executions=0,
-            successful_executions=0,
-            total_profit=Decimal('0.0'),
-            average_execution_time=0.0,
-            trust_level=initial_trust,
-            fractal_depth=1
+            strategy_id = strategy_id,
+            total_executions = 0,
+            successful_executions = 0,
+            total_profit = Decimal('0.0'),
+            average_execution_time = 0.0,
+            trust_level = initial_trust,
+            fractal_depth = 1
         )
 
         self.strategy_profiles[strategy_id] = profile
         logger.info(f"Registered strategy: {strategy_id}")
 
     def dispatch_command(
+
         self,
         command_id: str,
         command_function: Callable,
@@ -138,12 +186,16 @@ class FractalCommandDispatcher:
         strategy_preference: Optional[str] = None
     ) -> DispatchResult:
         """Dispatch command with fractal weighting and trust evaluation."""
+"""
+"""
+"""
+"""
         if command_kwargs is None:
             command_kwargs = {}
 
         start_time = time.time()
 
-        # Select optimal strategy
+# Select optimal strategy
         selected_strategy = self._select_optimal_strategy(
             command_id, priority, strategy_preference
         )
@@ -153,13 +205,13 @@ class FractalCommandDispatcher:
 
         strategy_profile = self.strategy_profiles[selected_strategy]
 
-        # Calculate fractal weight for this execution
+# Calculate fractal weight for this execution
         fractal_weight = self._calculate_fractal_weight(strategy_profile.fractal_depth)
 
-        # Calculate current trust score
+# Calculate current trust score
         trust_score = self._calculate_trust_score(selected_strategy, command_id)
 
-        # Execute command with fractal weighting
+# Execute command with fractal weighting
         execution_result = self._execute_command_with_weighting(
             command_function, command_args, command_kwargs,
             fractal_weight, trust_score
@@ -167,40 +219,40 @@ class FractalCommandDispatcher:
 
         execution_time = time.time() - start_time
 
-        # Record command execution
+# Record command execution
         command_record = CommandRecord(
-            command_id=command_id,
-            strategy_id=selected_strategy,
-            fractal_weight=fractal_weight,
-            trust_score=trust_score,
-            execution_time=execution_time,
-            success=execution_result["success"],
-            profit_generated=execution_result.get("profit", Decimal('0.0')),
-            timestamp=time.time(),
-            historical_matches=self._count_historical_matches(command_id, selected_strategy)
+            command_id = command_id,
+            strategy_id = selected_strategy,
+            fractal_weight = fractal_weight,
+            trust_score = trust_score,
+            execution_time = execution_time,
+            success = execution_result["success"],
+            profit_generated = execution_result.get("profit", Decimal('0.0')),
+            timestamp = time.time(),
+            historical_matches = self._count_historical_matches(command_id, selected_strategy)
         )
 
         self.command_history.append(command_record)
 
-        # Update strategy profile
+# Update strategy profile
         self._update_strategy_profile(selected_strategy, command_record)
 
-        # Calculate confidence level
+# Calculate confidence level
         confidence_level = self._calculate_dispatch_confidence(
             fractal_weight, trust_score, execution_result["success"]
         )
 
-        # Create dispatch result
+# Create dispatch result
         dispatch_result = DispatchResult(
-            dispatch_id=f"dispatch_{len(self.dispatch_history)}_{int(time.time())}",
-            command_executed=command_id,
-            strategy_used=selected_strategy,
-            fractal_weight_applied=fractal_weight,
-            trust_score_final=trust_score,
-            execution_success=execution_result["success"],
-            profit_impact=execution_result.get("profit", Decimal('0.0')),
-            dispatch_time=execution_time,
-            confidence_level=confidence_level
+            dispatch_id = f"dispatch_{len(self.dispatch_history)}_{int(time.time())}",
+            command_executed = command_id,
+            strategy_used = selected_strategy,
+            fractal_weight_applied = fractal_weight,
+            trust_score_final = trust_score,
+            execution_success = execution_result["success"],
+            profit_impact = execution_result.get("profit", Decimal('0.0')),
+            dispatch_time = execution_time,
+            confidence_level = confidence_level
         )
 
         self.dispatch_history.append(dispatch_result)
@@ -208,19 +260,24 @@ class FractalCommandDispatcher:
         return dispatch_result
 
     def analyze_strategy_performance(self, strategy_id: str) -> Dict[str, Any]:
+
         """Analyze performance of a specific strategy."""
+"""
+"""
+"""
+"""
         if strategy_id not in self.strategy_profiles:
             raise ValueError(f"Strategy {strategy_id} not found")
 
         profile = self.strategy_profiles[strategy_id]
 
-        # Calculate performance metrics
+# Calculate performance metrics
         success_rate = (
             profile.successful_executions / profile.total_executions
             if profile.total_executions > 0 else 0.0
         )
 
-        # Calculate recent performance (last 10 executions)
+# Calculate recent performance (last 10 executions)
         recent_commands = [
             cmd for cmd in self.command_history[-50:]
             if cmd.strategy_id == strategy_id
@@ -231,13 +288,13 @@ class FractalCommandDispatcher:
             if recent_commands else 0.0
         )
 
-        # Calculate average fractal weight used
+# Calculate average fractal weight used
         avg_fractal_weight = (
             sum(cmd.fractal_weight for cmd in recent_commands) / len(recent_commands)
             if recent_commands else 0.0
         )
 
-        # Calculate trust evolution
+# Calculate trust evolution
         trust_evolution = self._calculate_trust_evolution(strategy_id)
 
         return {
@@ -255,11 +312,16 @@ class FractalCommandDispatcher:
         }
 
     def optimize_fractal_depths(self) -> Dict[str, int]:
+
         """Optimize fractal depths for all strategies based on performance."""
+"""
+"""
+"""
+"""
         optimization_results = {}
 
         for strategy_id, profile in self.strategy_profiles.items():
-            # Calculate optimal depth based on performance
+# Calculate optimal depth based on performance
             optimal_depth = self._calculate_optimal_fractal_depth(strategy_id)
 
             if optimal_depth != profile.fractal_depth:
@@ -276,21 +338,31 @@ class FractalCommandDispatcher:
         return optimization_results
 
     def _precompute_fractal_weights(self) -> None:
-        """Pre-compute fractal weights using golden ratio."""
+
+        """Pre - compute fractal weights using golden ratio."""
+"""
+"""
+"""
+"""
         self.fractal_weights_cache[0] = 1.0
 
         for n in range(1, self.max_fractal_depth + 1):
-            # F(n) = F(n-1) \\u00d7 \\u03a6
+# F(n) = F(n - 1) \\u00d7 \\u03a6
             self.fractal_weights_cache[n] = (
-                self.fractal_weights_cache[n-1] * PHI
+                self.fractal_weights_cache[n - 1] * PHI
             )
 
     def _calculate_fractal_weight(self, depth: int) -> float:
-        """Calculate fractal weight F(n) = F(n-1) \\u00d7 \\u03a6."""
+
+        """Calculate fractal weight F(n) = F(n - 1) \\u00d7 \\u03a6."""
+"""
+"""
+"""
+"""
         if depth in self.fractal_weights_cache:
             return self.fractal_weights_cache[depth]
 
-        # Calculate if not cached
+# Calculate if not cached
         if depth <= 0:
             weight = 1.0
         else:
@@ -300,12 +372,17 @@ class FractalCommandDispatcher:
         return weight
 
     def _select_optimal_strategy(
+
         self,
         command_id: str,
         priority: CommandPriority,
         strategy_preference: Optional[str]
     ) -> Optional[str]:
         """Select optimal strategy based on trust and fractal weighting."""
+"""
+"""
+"""
+"""
         if strategy_preference and strategy_preference in self.strategy_profiles:
             return strategy_preference
 
@@ -316,11 +393,11 @@ class FractalCommandDispatcher:
         best_score = -1.0
 
         for strategy_id, profile in self.strategy_profiles.items():
-            # Calculate selection score
+# Calculate selection score
             trust_score = self._calculate_trust_score(strategy_id, command_id)
             fractal_weight = self._calculate_fractal_weight(profile.fractal_depth)
 
-            # Priority influence
+# Priority influence
             priority_multiplier = {
                 CommandPriority.CRITICAL: 2.0,
                 CommandPriority.HIGH: 1.5,
@@ -329,11 +406,11 @@ class FractalCommandDispatcher:
                 CommandPriority.BACKGROUND: 0.5
             }[priority]
 
-            # Historical match bonus
+# Historical match bonus
             historical_matches = self._count_historical_matches(command_id, strategy_id)
             match_bonus = unified_math.min(0.5, historical_matches * 0.1)
 
-            # Combined selection score
+# Combined selection score
             selection_score = (
                 trust_score * fractal_weight * priority_multiplier + match_bonus
             )
@@ -345,13 +422,18 @@ class FractalCommandDispatcher:
         return best_strategy
 
     def _calculate_trust_score(self, strategy_id: str, command_id: str) -> float:
+
         """Calculate current trust score for strategy."""
+"""
+"""
+"""
+"""
         if strategy_id not in self.strategy_profiles:
             return 0.0
 
         profile = self.strategy_profiles[strategy_id]
 
-        # Base trust from trust level
+# Base trust from trust level
         base_trust = {
             TrustLevel.UNTRUSTED: 0.1,
             TrustLevel.LOW_TRUST: 0.3,
@@ -360,18 +442,18 @@ class FractalCommandDispatcher:
             TrustLevel.VERIFIED: 1.0
         }[profile.trust_level]
 
-        # Performance-based adjustment
+# Performance - based adjustment
         if profile.total_executions > 0:
             success_rate = profile.successful_executions / profile.total_executions
             performance_adjustment = (success_rate - 0.5) * 0.4  # \\u00b10.2 max adjustment
         else:
             performance_adjustment = 0.0
 
-        # Time decay (trust degrades over time if not used)
+# Time decay (trust degrades over time if not used)
         time_since_last = time.time() - profile.last_execution
         time_decay = unified_math.exp(-time_since_last / 86400) * 0.1  # Daily decay
 
-        # Historical pattern matching bonus
+# Historical pattern matching bonus
         pattern_bonus = unified_math.min(0.2, len(profile.historical_pattern_matches) * 0.02)
 
         final_trust = base_trust + performance_adjustment - time_decay + pattern_bonus
@@ -379,6 +461,7 @@ class FractalCommandDispatcher:
         return unified_math.max(0.0, unified_math.min(1.0, final_trust))
 
     def _execute_command_with_weighting(
+
         self,
         command_function: Callable,
         command_args: Tuple,
@@ -387,18 +470,22 @@ class FractalCommandDispatcher:
         trust_score: float
     ) -> Dict[str, Any]:
         """Execute command with fractal weighting applied."""
+"""
+"""
+"""
+"""
         try:
-            # Apply fractal weighting to execution parameters
+# Apply fractal weighting to execution parameters
             weighted_kwargs = command_kwargs.copy()
 
-            # Apply weighting to numerical parameters
+# Apply weighting to numerical parameters
             for key, value in weighted_kwargs.items():
                 if isinstance(value, (int, float, Decimal)):
-                    # Apply fractal weight with trust modulation
+# Apply fractal weight with trust modulation
                     weight_factor = fractal_weight * trust_score
                     weighted_kwargs[key] = value * weight_factor
 
-            # Execute the command
+# Execute the command
             result = command_function(*command_args, **weighted_kwargs)
 
             return {
@@ -416,47 +503,57 @@ class FractalCommandDispatcher:
             }
 
     def _update_strategy_profile(
+
         self,
         strategy_id: str,
         command_record: CommandRecord
     ) -> None:
         """Update strategy profile based on command execution."""
+"""
+"""
+"""
+"""
         profile = self.strategy_profiles[strategy_id]
 
-        # Update execution counts
+# Update execution counts
         profile.total_executions += 1
         if command_record.success:
             profile.successful_executions += 1
 
-        # Update profit tracking
+# Update profit tracking
         profile.total_profit += command_record.profit_generated
 
-        # Update average execution time
+# Update average execution time
         profile.average_execution_time = (
             (profile.average_execution_time * (profile.total_executions - 1) +
-             command_record.execution_time) / profile.total_executions
+                command_record.execution_time) / profile.total_executions
         )
 
-        # Update trust level based on recent performance
+# Update trust level based on recent performance
         self._update_trust_level(strategy_id)
 
-        # Update fractal depth based on performance
+# Update fractal depth based on performance
         self._update_fractal_depth(strategy_id)
 
-        # Update last execution time
+# Update last execution time
         profile.last_execution = command_record.timestamp
 
-        # Update historical pattern matches
+# Update historical pattern matches
         self._update_historical_patterns(strategy_id, command_record.command_id)
 
     def _count_historical_matches(self, command_id: str, strategy_id: str) -> int:
-        """Count historical pattern matches for command-strategy combination."""
-        # Create pattern hash for this combination
+
+        """Count historical pattern matches for command - strategy combination."""
+"""
+"""
+"""
+"""
+# Create pattern hash for this combination
         pattern_hash = hashlib.sha256(
             f"{command_id}_{strategy_id}".encode()
         ).hexdigest()[:16]
 
-        # Count occurrences in recent history
+# Count occurrences in recent history
         recent_commands = self.command_history[-100:]  # Last 100 commands
         matches = sum(
             1 for cmd in recent_commands
@@ -466,19 +563,24 @@ class FractalCommandDispatcher:
         return matches
 
     def _calculate_dispatch_confidence(
+
         self,
         fractal_weight: float,
         trust_score: float,
         execution_success: bool
     ) -> float:
         """Calculate confidence level for dispatch result."""
-        # Base confidence from trust score
+"""
+"""
+"""
+"""
+# Base confidence from trust score
         base_confidence = trust_score
 
-        # Fractal weight influence (normalized)
+# Fractal weight influence (normalized)
         weight_factor = unified_math.min(1.0, fractal_weight / 10.0)
 
-        # Success bonus/penalty
+# Success bonus / penalty
         success_factor = 1.2 if execution_success else 0.8
 
         confidence = base_confidence * weight_factor * success_factor
@@ -486,7 +588,12 @@ class FractalCommandDispatcher:
         return unified_math.max(0.0, unified_math.min(1.0, confidence))
 
     def _calculate_trust_evolution(self, strategy_id: str) -> List[float]:
+
         """Calculate trust evolution over recent executions."""
+"""
+"""
+"""
+"""
         strategy_commands = [
             cmd for cmd in self.command_history[-50:]
             if cmd.strategy_id == strategy_id
@@ -494,9 +601,9 @@ class FractalCommandDispatcher:
 
         trust_evolution = []
         for i, cmd in enumerate(strategy_commands):
-            # Recalculate trust at each point
+# Recalculate trust at each point
             partial_success_rate = (
-                sum(1 for c in strategy_commands[:i+1] if c.success) / (i + 1)
+                sum(1 for c in strategy_commands[:i + 1] if c.success) / (i + 1)
             )
             trust_at_point = 0.5 + (partial_success_rate - 0.5) * 0.4
             trust_evolution.append(unified_math.max(0.0, unified_math.min(1.0, trust_at_point)))
@@ -504,7 +611,12 @@ class FractalCommandDispatcher:
         return trust_evolution
 
     def _calculate_optimal_fractal_depth(self, strategy_id: str) -> int:
+
         """Calculate optimal fractal depth based on performance."""
+"""
+"""
+"""
+"""
         profile = self.strategy_profiles[strategy_id]
 
         if profile.total_executions < 10:
@@ -512,7 +624,7 @@ class FractalCommandDispatcher:
 
         success_rate = profile.successful_executions / profile.total_executions
 
-        # Higher success rate = deeper fractal depth
+# Higher success rate = deeper fractal depth
         if success_rate > 0.8:
             optimal_depth = unified_math.min(self.max_fractal_depth, profile.fractal_depth + 2)
         elif success_rate > 0.6:
@@ -527,22 +639,32 @@ class FractalCommandDispatcher:
         return optimal_depth
 
     def _estimate_improvement(
+
         self,
         strategy_id: str,
         old_depth: int,
         new_depth: int
     ) -> float:
         """Estimate performance improvement from depth change."""
+"""
+"""
+"""
+"""
         old_weight = self._calculate_fractal_weight(old_depth)
         new_weight = self._calculate_fractal_weight(new_depth)
 
-        # Simple improvement estimate based on weight ratio
+# Simple improvement estimate based on weight ratio
         improvement = (new_weight - old_weight) / old_weight
 
         return improvement
 
     def _update_trust_level(self, strategy_id: str) -> None:
+
         """Update trust level based on recent performance."""
+"""
+"""
+"""
+"""
         profile = self.strategy_profiles[strategy_id]
 
         if profile.total_executions < 5:
@@ -550,7 +672,7 @@ class FractalCommandDispatcher:
 
         success_rate = profile.successful_executions / profile.total_executions
 
-        # Update trust level based on success rate
+# Update trust level based on success rate
         if success_rate >= 0.9:
             profile.trust_level = TrustLevel.VERIFIED
         elif success_rate >= 0.7:
@@ -563,10 +685,15 @@ class FractalCommandDispatcher:
             profile.trust_level = TrustLevel.UNTRUSTED
 
     def _update_fractal_depth(self, strategy_id: str) -> None:
+
         """Update fractal depth based on performance trends."""
+"""
+"""
+"""
+"""
         profile = self.strategy_profiles[strategy_id]
 
-        # Get recent commands for this strategy
+# Get recent commands for this strategy
         recent_commands = [
             cmd for cmd in self.command_history[-20:]
             if cmd.strategy_id == strategy_id
@@ -575,17 +702,22 @@ class FractalCommandDispatcher:
         if len(recent_commands) < 5:
             return
 
-        # Calculate recent success rate
+# Calculate recent success rate
         recent_success_rate = sum(1 for cmd in recent_commands if cmd.success) / len(recent_commands)
 
-        # Adjust depth based on recent performance
+# Adjust depth based on recent performance
         if recent_success_rate > 0.8 and profile.fractal_depth < self.max_fractal_depth:
             profile.fractal_depth += 1
         elif recent_success_rate < 0.3 and profile.fractal_depth > 1:
             profile.fractal_depth -= 1
 
     def _update_historical_patterns(self, strategy_id: str, command_id: str) -> None:
+
         """Update historical pattern matches."""
+"""
+"""
+"""
+"""
         profile = self.strategy_profiles[strategy_id]
 
         pattern_id = f"{command_id}_{strategy_id}"
@@ -593,12 +725,17 @@ class FractalCommandDispatcher:
         if pattern_id not in profile.historical_pattern_matches:
             profile.historical_pattern_matches.append(pattern_id)
 
-            # Keep only recent patterns (last 50)
+# Keep only recent patterns (last 50)
             if len(profile.historical_pattern_matches) > 50:
                 profile.historical_pattern_matches = profile.historical_pattern_matches[-50:]
 
     def _extract_profit_from_result(self, result: Any) -> Decimal:
+
         """Extract profit value from command execution result."""
+"""
+"""
+"""
+"""
         if isinstance(result, dict):
             profit_keys = ["profit", "pnl", "return", "gain"]
             for key in profit_keys:
@@ -613,12 +750,22 @@ class FractalCommandDispatcher:
 
 # Convenience functions
 def create_fractal_dispatcher(max_depth: int = 15) -> FractalCommandDispatcher:
+
     """Create and initialize fractal command dispatcher."""
+"""
+"""
+"""
+"""
     return FractalCommandDispatcher(max_depth)
 
 
 def register_default_strategies(dispatcher: FractalCommandDispatcher) -> None:
+
     """Register default trading strategies."""
+"""
+"""
+"""
+"""
     default_strategies = [
         ("momentum_strategy", TrustLevel.MEDIUM_TRUST),
         ("mean_reversion_strategy", TrustLevel.MEDIUM_TRUST),

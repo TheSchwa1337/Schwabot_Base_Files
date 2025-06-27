@@ -1,8 +1,23 @@
+# -*- coding: utf - 8 -*-
 """Price vector synchronizer with EMA smoothing."""
+"""
+"""
+"""
+"""
+"""Price vector synchronizer with EMA smoothing."""
+# -*- coding: utf - 8 -*-
+
+"""
+"""
+"""
+"""
+"""Price vector synchronizer with EMA smoothing."""
+"""Price vector synchronizer with EMA smoothing."""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 from __future__ import annotations
-
-
 def ema(prices: list[float], tau: int = 12) -> float:
     """Calculate exponential moving average of price sequence.
 
@@ -18,7 +33,11 @@ def ema(prices: list[float], tau: int = 12) -> float:
     Raises:
         ValueError: If prices list is empty
     """
-    if not prices:
+
+
+"""
+"""
+   if not prices:
         raise ValueError("empty price list")
 
     alpha = 2 / (tau + 1)
@@ -29,4 +48,7 @@ def ema(prices: list[float], tau: int = 12) -> float:
 
     return ema_val
 
+"""
+"""
+"""
 """

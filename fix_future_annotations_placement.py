@@ -1,13 +1,28 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from __future__ import annotations
+
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from datetime import datetime
-import shutil
-from typing import List, Dict, Tuple, Optional
+from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
-import sys
-import re
+from typing import List, Dict, Tuple, Optional
 import os
+import re
+import shutil
+import sys
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 This script scans the entire codebase for misplaced 'from __future__ import annotations'
 
-#!/usr/bin/env python3
+"""
+"""
+"""
+"""
 """
 Fix Future Annotations Placement - Comprehensive Codebase Scanner
 ================================================================
@@ -26,13 +41,27 @@ This script will:
 4. Preserve all other code and imports
 5. Provide a comprehensive report of changes made
 """
+"""
+"""
+"""
+"""
 
 
 class FutureAnnotationsFixer:
     """Comprehensive fixer for misplaced future annotations imports."""
 
+
+"""
+"""
+"""
+"""
+
     def __init__(self, root_dir: str = "."):
         """Initialize the fixer with root directory."""
+"""
+"""
+"""
+"""
         self.root_dir = Path(root_dir)
         self.files_scanned = 0
         self.files_fixed = 0
@@ -41,13 +70,17 @@ class FutureAnnotationsFixer:
 
     def scan_codebase(self) -> Dict[str, List[str]]:
         """Scan the entire codebase for Python files with future imports."""
+"""
+"""
+"""
+"""
         python_files = []
 
-        # Find all Python files
+# Find all Python files
         for root, dirs, files in os.walk(self.root_dir):
-            # Skip common directories that shouldn't be modified
+# Skip common directories that shouldn't be modified
             dirs[:] = [d for d in dirs if not d.startswith('.') and
-                       d not in ['__pycache__', 'node_modules', 'venv', 'env', '.git']]
+                        d not in ['__pycache__', 'node_modules', 'venv', 'env', '.git']]
 
             for file in files:
                 if file.endswith('.py'):
@@ -56,20 +89,20 @@ class FutureAnnotationsFixer:
 
         self.files_scanned = len(python_files)
 
-        # Analyze each file
+# Analyze each file
         files_with_future_imports = []
         files_with_issues = []
 
         for file_path in python_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, 'r', encoding='utf - 8') as f:
                     content = f.read()
 
-                # Check if file has future import
+# Check if file has future import
                 if 'from __future__ import annotations' in content:
                     files_with_future_imports.append(file_path)
 
-                    # Check if it's properly placed
+# Check if it's properly placed
                     if not self._is_future_import_properly_placed(content):
                         files_with_issues.append(file_path)
 
@@ -86,9 +119,13 @@ class FutureAnnotationsFixer:
 
     def _is_future_import_properly_placed(self, content: str) -> bool:
         """Check if future import is properly placed at the top."""
+"""
+"""
+"""
+"""
         lines = content.split('\n')
 
-        # Find the line with future import
+# Find the line with future import
         future_import_line = -1
         for i, line in enumerate(lines):
             if 'from __future__ import annotations' in line.strip():
@@ -98,29 +135,33 @@ class FutureAnnotationsFixer:
         if future_import_line == -1:
             return True  # No future import found
 
-        # Check if there's any non-comment, non-empty code before it
+# Check if there's any non - comment, non - empty code before it
         for i in range(future_import_line):
             line = lines[i].strip()
-            if line and not line.startswith('#') and not line.startswith('"""') and not line.startswith("'''"):
+            if line and not line.startswith('  #') and not line.startswith('"""') and not line.startswith("'''"):
                 return False
 
         return True
 
     def fix_file(self, file_path: str) -> bool:
         """Fix a single file by moving future import to the top."""
+"""
+"""
+"""
+"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
-            # Create backup
+# Create backup
             backup_path = f"{file_path}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
             shutil.copy2(file_path, backup_path)
 
-            # Fix the content
+# Fix the content
             fixed_content = self._fix_content(content)
 
-            # Write back
-            with open(file_path, 'w', encoding='utf-8') as f:
+# Write back
+            with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(fixed_content)
 
             self.fix_log.append({
@@ -137,9 +178,13 @@ class FutureAnnotationsFixer:
 
     def _fix_content(self, content: str) -> str:
         """Fix the content by moving future import to the top."""
+"""
+"""
+"""
+"""
         lines = content.split('\n')
 
-        # Find and remove the future import line
+# Find and remove the future import line
         future_import_line = None
         future_import_content = None
 
@@ -152,21 +197,21 @@ class FutureAnnotationsFixer:
         if future_import_line is None:
             return content  # No future import found
 
-        # Remove the future import from its current position
+# Remove the future import from its current position
         lines.pop(future_import_line)
 
-        # Find the first non-comment, non-empty line
+# Find the first non - comment, non - empty line
         first_content_line = 0
         for i, line in enumerate(lines):
             stripped = line.strip()
-            if stripped and not stripped.startswith('#') and not stripped.startswith('"""') and not stripped.startswith("'''"):
+            if stripped and not stripped.startswith('  #') and not stripped.startswith('"""') and not stripped.startswith("'''"):
                 first_content_line = i
                 break
 
-        # Insert future import at the very top
+# Insert future import at the very top
         lines.insert(0, future_import_content)
 
-        # Add a blank line after future import if needed
+# Add a blank line after future import if needed
         if len(lines) > 1 and lines[1].strip():
             lines.insert(1, '')
 
@@ -174,6 +219,10 @@ class FutureAnnotationsFixer:
 
     def fix_all_files(self) -> Dict[str, int]:
         """Fix all files with issues."""
+"""
+"""
+"""
+"""
         results = {
             'total_scanned': self.files_scanned,
             'total_with_issues': len(self.files_with_issues),
@@ -192,6 +241,10 @@ class FutureAnnotationsFixer:
 
     def generate_report(self) -> str:
         """Generate a comprehensive report of the fixing process."""
+"""
+"""
+"""
+"""
         report = []
         report.append("=" * 60)
         report.append("FUTURE ANNOTATIONS PLACEMENT FIX REPORT")
@@ -224,6 +277,10 @@ class FutureAnnotationsFixer:
 
     def validate_fixes(self) -> Dict[str, List[str]]:
         """Validate that all fixes were applied correctly."""
+"""
+"""
+"""
+"""
         validation_results = {
             'validated_files': [],
             'still_problematic': []
@@ -231,7 +288,7 @@ class FutureAnnotationsFixer:
 
         for file_path in self.files_with_issues:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, 'r', encoding='utf - 8') as f:
                     content = f.read()
 
                 if self._is_future_import_properly_placed(content):
@@ -248,13 +305,17 @@ class FutureAnnotationsFixer:
 
 def main():
     """Main function to run the future annotations fixer."""
+"""
+"""
+"""
+"""
     print("\\u1f527 Future Annotations Placement Fixer")
     print("=" * 50)
 
-    # Initialize fixer
+# Initialize fixer
     fixer = FutureAnnotationsFixer()
 
-    # Scan codebase
+# Scan codebase
     print("\\u1f50d Scanning codebase for files with future imports...")
     scan_results = fixer.scan_codebase()
 
@@ -267,18 +328,18 @@ def main():
         print("\\u2705 No files with placement issues found!")
         return
 
-    # Show files that need fixing
+# Show files that need fixing
     print("\\n\\u1f4dd Files that need fixing:")
     for file_path in scan_results['files_with_issues']:
         print(f"  - {file_path}")
 
-    # Ask for confirmation
-    response = input("\\n\\u2753 Proceed with fixing these files? (y/N): ").strip().lower()
+# Ask for confirmation
+    response = input("\\n\\u2753 Proceed with fixing these files? (y / N): ").strip().lower()
     if response not in ['y', 'yes']:
         print("\\u274c Operation cancelled.")
         return
 
-    # Fix files
+# Fix files
     print("\\n\\u1f527 Fixing files...")
     fix_results = fixer.fix_all_files()
 
@@ -286,7 +347,7 @@ def main():
     print(f"  - Files fixed: {fix_results['total_fixed']}")
     print(f"  - Files failed: {fix_results['total_failed']}")
 
-    # Validate fixes
+# Validate fixes
     print("\\n\\u2705 Validating fixes...")
     validation_results = fixer.validate_fixes()
 
@@ -299,12 +360,12 @@ def main():
         for file_path in validation_results['still_problematic']:
             print(f"  - {file_path}")
 
-    # Generate report
+# Generate report
     report = fixer.generate_report()
 
-    # Save report
+# Save report
     report_file = f"future_annotations_fix_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    with open(report_file, 'w', encoding='utf-8') as f:
+    with open(report_file, 'w', encoding='utf - 8') as f:
         f.write(report)
 
     print(f"\\n\\u1f4c4 Report saved to: {report_file}")

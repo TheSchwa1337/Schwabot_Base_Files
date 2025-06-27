@@ -1,6 +1,23 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass, field
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, List, Any, Optional, Tuple, Union
+import logging
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 GPU Offload Manager - Schwabot UROS v1.0
 =======================================
@@ -11,13 +28,9 @@ Manages GPU acceleration for mathematical calculations including:
 - Wave entropy computations
 - Matrix operations
 """
+"""
+"""
 
-import logging
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime
-from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +55,12 @@ except ImportError:
 
 @dataclass
 class GPUOperation:
+
     """GPU operation result."""
+
+
+"""
+"""
     operation_name: str
     input_size: int
     execution_time_ms: float
@@ -54,7 +72,12 @@ class GPUOperation:
 
 @dataclass
 class GPUPerformance:
+
     """GPU performance metrics."""
+
+
+"""
+"""
     total_operations: int
     successful_operations: int
     total_execution_time_ms: float
@@ -65,7 +88,12 @@ class GPUPerformance:
 
 
 class GPUOffloadManager:
+
     """
+"""
+
+
+"""
     Manages GPU acceleration for mathematical calculations.
 
     Features:
@@ -75,18 +103,21 @@ class GPUOffloadManager:
     - Matrix operations
     - Performance monitoring
     """
+"""
+"""
 
     def __init__(self):
+
         self.gpu_available = GPU_AVAILABLE or NUMBA_AVAILABLE
         self.operation_history: List[GPUOperation] = []
         self.performance_metrics: List[GPUPerformance] = []
 
-        # GPU configuration
+# GPU configuration
         self.max_gpu_memory = 1024 * 1024 * 1024  # 1GB default
         self.batch_size = 1000
         self.enable_async = True
 
-        # Initialize GPU if available
+# Initialize GPU if available
         if self.gpu_available:
             self._initialize_gpu()
 
@@ -94,14 +125,16 @@ class GPUOffloadManager:
 
     def _initialize_gpu(self) -> None:
         """Initialize GPU resources."""
+"""
+"""
         try:
             if GPU_AVAILABLE:
-                # Initialize CuPy
+# Initialize CuPy
                 cp.cuda.Device(0).use()
                 logger.info("CuPy GPU initialized")
 
             if NUMBA_AVAILABLE:
-                # Initialize Numba CUDA
+# Initialize Numba CUDA
                 logger.info("Numba CUDA available")
 
         except Exception as e:
@@ -109,7 +142,10 @@ class GPUOffloadManager:
             self.gpu_available = False
 
     def resolve_bit_phase_gpu(self, hash_strings: List[str], mode: str = "8bit") -> List[int]:
+
         """
+"""
+"""
         Resolve bit phases from hash strings using GPU acceleration.
 
         Args:
@@ -119,14 +155,16 @@ class GPUOffloadManager:
         Returns:
             List[int]: Resolved bit phases
         """
+"""
+"""
         start_time = time.time()
 
         try:
             if not self.gpu_available or len(hash_strings) < self.batch_size:
-                # Fallback to CPU
+# Fallback to CPU
                 return self._resolve_bit_phase_cpu(hash_strings, mode)
 
-            # GPU processing
+# GPU processing
             if GPU_AVAILABLE:
                 return self._resolve_bit_phase_cupy(hash_strings, mode)
             elif NUMBA_AVAILABLE:
@@ -142,12 +180,15 @@ class GPUOffloadManager:
             self._record_operation("resolve_bit_phase_gpu", len(hash_strings), execution_time, True)
 
     def _resolve_bit_phase_cupy(self, hash_strings: List[str], mode: str) -> List[int]:
+
         """Resolve bit phases using CuPy GPU acceleration."""
+"""
+"""
         try:
-            # Convert hash strings to GPU arrays
+# Convert hash strings to GPU arrays
             hash_array = cp.array([hash_str.encode() for hash_str in hash_strings])
 
-            # Extract relevant segments based on mode
+# Extract relevant segments based on mode
             if mode == "4bit":
                 segments = hash_array[:, 0:1]
                 max_val = 16
@@ -161,11 +202,11 @@ class GPUOffloadManager:
                 segments = hash_array[:, 0:2]
                 max_val = 256
 
-            # Convert hex strings to integers on GPU
+# Convert hex strings to integers on GPU
             hex_strings = cp.char.decode(segments)
             phase_values = cp.array([int(h.decode(), 16) % max_val for h in hex_strings])
 
-            # Transfer result back to CPU
+# Transfer result back to CPU
             return cp.asnumpy(phase_values).tolist()
 
         except Exception as e:
@@ -173,10 +214,13 @@ class GPUOffloadManager:
             return self._resolve_bit_phase_cpu(hash_strings, mode)
 
     def _resolve_bit_phase_numba(self, hash_strings: List[str], mode: str) -> List[int]:
+
         """Resolve bit phases using Numba GPU acceleration."""
+"""
+"""
         try:
-            # For Numba, we'll use a simpler approach
-            # Convert to numpy arrays and process in batches
+# For Numba, we'll use a simpler approach
+# Convert to numpy arrays and process in batches
             results = []
 
             for i in range(0, len(hash_strings), self.batch_size):
@@ -191,7 +235,10 @@ class GPUOffloadManager:
             return self._resolve_bit_phase_cpu(hash_strings, mode)
 
     def _resolve_bit_phase_cpu(self, hash_strings: List[str], mode: str) -> List[int]:
+
         """Resolve bit phases using CPU (fallback)."""
+"""
+"""
         try:
             results = []
 
@@ -214,8 +261,11 @@ class GPUOffloadManager:
             return [0] * len(hash_strings)
 
     def tensor_score_gpu(self, entry_prices: List[float], current_prices: List[float],
-                         phases: List[int]) -> List[float]:
+
+                            phases: List[int]) -> List[float]:
         """
+"""
+"""
         Calculate tensor scores using GPU acceleration.
 
         Args:
@@ -226,14 +276,16 @@ class GPUOffloadManager:
         Returns:
             List[float]: Tensor scores
         """
+"""
+"""
         start_time = time.time()
 
         try:
             if not self.gpu_available or len(entry_prices) < self.batch_size:
-                # Fallback to CPU
+# Fallback to CPU
                 return self._tensor_score_cpu(entry_prices, current_prices, phases)
 
-            # GPU processing
+# GPU processing
             if GPU_AVAILABLE:
                 return self._tensor_score_cupy(entry_prices, current_prices, phases)
             elif NUMBA_AVAILABLE:
@@ -249,24 +301,27 @@ class GPUOffloadManager:
             self._record_operation("tensor_score_gpu", len(entry_prices), execution_time, True)
 
     def _tensor_score_cupy(self, entry_prices: List[float], current_prices: List[float],
-                           phases: List[int]) -> List[float]:
-        """Calculate tensor scores using CuPy GPU acceleration."""
-        try:
-            # Convert to GPU arrays
-            entry_gpu = cp.array(entry_prices, dtype=cp.float32)
-            current_gpu = cp.array(current_prices, dtype=cp.float32)
-            phases_gpu = cp.array(phases, dtype=cp.float32)
 
-            # Calculate deltas
+                            phases: List[int]) -> List[float]:
+        """Calculate tensor scores using CuPy GPU acceleration."""
+"""
+"""
+        try:
+# Convert to GPU arrays
+            entry_gpu = cp.array(entry_prices, dtype = cp.float32)
+            current_gpu = cp.array(current_prices, dtype = cp.float32)
+            phases_gpu = cp.array(phases, dtype = cp.float32)
+
+# Calculate deltas
             deltas = (current_gpu - entry_gpu) / entry_gpu
 
-            # Apply phase multiplier
+# Apply phase multiplier
             tensor_scores = deltas * (phases_gpu + 1)
 
-            # Round to 4 decimal places
+# Round to 4 decimal places
             tensor_scores = cp.round(tensor_scores, 4)
 
-            # Transfer result back to CPU
+# Transfer result back to CPU
             return cp.asnumpy(tensor_scores).tolist()
 
         except Exception as e:
@@ -274,10 +329,13 @@ class GPUOffloadManager:
             return self._tensor_score_cpu(entry_prices, current_prices, phases)
 
     def _tensor_score_numba(self, entry_prices: List[float], current_prices: List[float],
+
                             phases: List[int]) -> List[float]:
         """Calculate tensor scores using Numba GPU acceleration."""
+"""
+"""
         try:
-            # For Numba, we'll use a simpler approach
+# For Numba, we'll use a simpler approach
             return self._tensor_score_cpu(entry_prices, current_prices, phases)
 
         except Exception as e:
@@ -285,8 +343,11 @@ class GPUOffloadManager:
             return self._tensor_score_cpu(entry_prices, current_prices, phases)
 
     def _tensor_score_cpu(self, entry_prices: List[float], current_prices: List[float],
-                          phases: List[int]) -> List[float]:
+
+                            phases: List[int]) -> List[float]:
         """Calculate tensor scores using CPU (fallback)."""
+"""
+"""
         try:
             results = []
 
@@ -306,7 +367,10 @@ class GPUOffloadManager:
             return [0.0] * len(entry_prices)
 
     def wave_entropy_gpu(self, sequences: List[List[float]]) -> List[float]:
+
         """
+"""
+"""
         Calculate wave entropy using GPU acceleration.
 
         Args:
@@ -315,14 +379,16 @@ class GPUOffloadManager:
         Returns:
             List[float]: Entropy values
         """
+"""
+"""
         start_time = time.time()
 
         try:
             if not self.gpu_available or len(sequences) < self.batch_size:
-                # Fallback to CPU
+# Fallback to CPU
                 return self._wave_entropy_cpu(sequences)
 
-            # GPU processing
+# GPU processing
             if GPU_AVAILABLE:
                 return self._wave_entropy_cupy(sequences)
             elif NUMBA_AVAILABLE:
@@ -338,33 +404,36 @@ class GPUOffloadManager:
             self._record_operation("wave_entropy_gpu", len(sequences), execution_time, True)
 
     def _wave_entropy_cupy(self, sequences: List[List[float]]) -> List[float]:
+
         """Calculate wave entropy using CuPy GPU acceleration."""
+"""
+"""
         try:
             results = []
 
             for seq in sequences:
-                # Convert sequence to GPU array
-                seq_gpu = cp.array(seq, dtype=cp.float32)
+# Convert sequence to GPU array
+                seq_gpu = cp.array(seq, dtype = cp.float32)
 
-                # Calculate FFT
+# Calculate FFT
                 fft_gpu = cp.fft.fft(seq_gpu)
 
-                # Calculate power spectrum
+# Calculate power spectrum
                 power_gpu = cp.unified_math.abs(fft_gpu) ** 2
 
-                # Normalize
+# Normalize
                 total_power = cp.sum(power_gpu)
                 if total_power > 0:
                     normalized_gpu = power_gpu / total_power
                 else:
                     normalized_gpu = cp.zeros_like(power_gpu)
 
-                # Calculate entropy
-                # Add small epsilon to avoid unified_math.log(0)
-                epsilon = 1e-9
+# Calculate entropy
+# Add small epsilon to avoid unified_math.log(0)
+                epsilon = 1e - 9
                 entropy_gpu = -cp.sum(normalized_gpu * cp.log2(normalized_gpu + epsilon))
 
-                # Transfer result back to CPU
+# Transfer result back to CPU
                 results.append(float(cp.asnumpy(entropy_gpu)))
 
             return results
@@ -374,9 +443,12 @@ class GPUOffloadManager:
             return self._wave_entropy_cpu(sequences)
 
     def _wave_entropy_numba(self, sequences: List[List[float]]) -> List[float]:
+
         """Calculate wave entropy using Numba GPU acceleration."""
+"""
+"""
         try:
-            # For Numba, we'll use a simpler approach
+# For Numba, we'll use a simpler approach
             return self._wave_entropy_cpu(sequences)
 
         except Exception as e:
@@ -384,26 +456,29 @@ class GPUOffloadManager:
             return self._wave_entropy_cpu(sequences)
 
     def _wave_entropy_cpu(self, sequences: List[List[float]]) -> List[float]:
+
         """Calculate wave entropy using CPU (fallback)."""
+"""
+"""
         try:
             results = []
 
             for seq in sequences:
-                # Calculate FFT
+# Calculate FFT
                 fft = np.fft.fft(seq)
 
-                # Calculate power spectrum
+# Calculate power spectrum
                 power = unified_math.unified_math.abs(fft) ** 2
 
-                # Normalize
+# Normalize
                 total_power = np.sum(power)
                 if total_power > 0:
                     normalized = power / total_power
                 else:
                     normalized = np.zeros_like(power)
 
-                # Calculate entropy
-                epsilon = 1e-9
+# Calculate entropy
+                epsilon = 1e - 9
                 entropy = -np.sum(normalized * np.log2(normalized + epsilon))
 
                 results.append(float(entropy))
@@ -415,7 +490,10 @@ class GPUOffloadManager:
             return [0.0] * len(sequences)
 
     def matrix_operation_gpu(self, matrices: List[np.ndarray], operation: str) -> List[np.ndarray]:
+
         """
+"""
+"""
         Perform matrix operations using GPU acceleration.
 
         Args:
@@ -425,14 +503,16 @@ class GPUOffloadManager:
         Returns:
             List[np.ndarray]: Operation results
         """
+"""
+"""
         start_time = time.time()
 
         try:
             if not self.gpu_available or len(matrices) < self.batch_size:
-                # Fallback to CPU
+# Fallback to CPU
                 return self._matrix_operation_cpu(matrices, operation)
 
-            # GPU processing
+# GPU processing
             if GPU_AVAILABLE:
                 return self._matrix_operation_cupy(matrices, operation)
             elif NUMBA_AVAILABLE:
@@ -448,15 +528,18 @@ class GPUOffloadManager:
             self._record_operation(f"matrix_operation_gpu_{operation}", len(matrices), execution_time, True)
 
     def _matrix_operation_cupy(self, matrices: List[np.ndarray], operation: str) -> List[np.ndarray]:
+
         """Perform matrix operations using CuPy GPU acceleration."""
+"""
+"""
         try:
             results = []
 
             for matrix in matrices:
-                # Convert to GPU array
-                matrix_gpu = cp.array(matrix, dtype=cp.float32)
+# Convert to GPU array
+                matrix_gpu = cp.array(matrix, dtype = cp.float32)
 
-                # Perform operation
+# Perform operation
                 if operation == "multiply":
                     result_gpu = cp.dot(matrix_gpu, matrix_gpu)
                 elif operation == "inverse":
@@ -469,7 +552,7 @@ class GPUOffloadManager:
                 else:
                     result_gpu = matrix_gpu  # Default to identity operation
 
-                # Transfer result back to CPU
+# Transfer result back to CPU
                 results.append(cp.asnumpy(result_gpu))
 
             return results
@@ -479,9 +562,12 @@ class GPUOffloadManager:
             return self._matrix_operation_cpu(matrices, operation)
 
     def _matrix_operation_numba(self, matrices: List[np.ndarray], operation: str) -> List[np.ndarray]:
+
         """Perform matrix operations using Numba GPU acceleration."""
+"""
+"""
         try:
-            # For Numba, we'll use a simpler approach
+# For Numba, we'll use a simpler approach
             return self._matrix_operation_cpu(matrices, operation)
 
         except Exception as e:
@@ -489,12 +575,15 @@ class GPUOffloadManager:
             return self._matrix_operation_cpu(matrices, operation)
 
     def _matrix_operation_cpu(self, matrices: List[np.ndarray], operation: str) -> List[np.ndarray]:
+
         """Perform matrix operations using CPU (fallback)."""
+"""
+"""
         try:
             results = []
 
             for matrix in matrices:
-                # Perform operation
+# Perform operation
                 if operation == "multiply":
                     result = unified_math.unified_math.dot_product(matrix, matrix)
                 elif operation == "inverse":
@@ -515,23 +604,26 @@ class GPUOffloadManager:
             return matrices
 
     def _record_operation(self, operation_name: str, input_size: int, execution_time_ms: float, success: bool) -> None:
+
         """Record GPU operation for performance tracking."""
+"""
+"""
         try:
-            # Implement real GPU memory tracking
+# Implement real GPU memory tracking
             gpu_memory_used = self._get_gpu_memory_usage()
 
             operation = GPUOperation(
-                operation_name=operation_name,
-                input_size=input_size,
-                execution_time_ms=execution_time_ms,
-                gpu_memory_used=gpu_memory_used,  # DONE: Implemented memory tracking
-                success=success,
-                result=None
+                operation_name = operation_name,
+                input_size = input_size,
+                execution_time_ms = execution_time_ms,
+                gpu_memory_used = gpu_memory_used,  # DONE: Implemented memory tracking
+                success = success,
+                result = None
             )
 
             self.operation_history.append(operation)
 
-            # Keep only recent operations
+# Keep only recent operations
             if len(self.operation_history) > 1000:
                 self.operation_history = self.operation_history[-500:]
 
@@ -539,18 +631,21 @@ class GPUOffloadManager:
             logger.error(f"Error recording operation: {e}")
 
     def _get_gpu_memory_usage(self) -> int:
+
         """Get current GPU memory usage in bytes."""
+"""
+"""
         try:
             if not self.gpu_available:
                 return 0
 
             if GPU_AVAILABLE:
-                # Use CuPy to get GPU memory info
+# Use CuPy to get GPU memory info
                 import cupy as cp
                 mem_info = cp.cuda.runtime.memGetInfo()
                 return int(mem_info[1] - mem_info[0])  # Total - Free = Used
             elif NUMBA_AVAILABLE:
-                # For Numba, estimate based on recent operations
+# For Numba, estimate based on recent operations
                 if hasattr(self, '_estimated_gpu_memory'):
                     return self._estimated_gpu_memory
                 else:
@@ -564,17 +659,20 @@ class GPUOffloadManager:
             return 0
 
     def get_performance_metrics(self) -> GPUPerformance:
+
         """Get GPU performance metrics."""
+"""
+"""
         try:
             if not self.operation_history:
                 return GPUPerformance(
-                    total_operations=0,
-                    successful_operations=0,
-                    total_execution_time_ms=0.0,
-                    average_execution_time_ms=0.0,
-                    total_gpu_memory_used=0,
-                    gpu_utilization=0.0,
-                    timestamp=datetime.now()
+                    total_operations = 0,
+                    successful_operations = 0,
+                    total_execution_time_ms = 0.0,
+                    average_execution_time_ms = 0.0,
+                    total_gpu_memory_used = 0,
+                    gpu_utilization = 0.0,
+                    timestamp = datetime.now()
                 )
 
             total_operations = len(self.operation_history)
@@ -583,23 +681,23 @@ class GPUOffloadManager:
             average_execution_time = total_execution_time / total_operations if total_operations > 0 else 0.0
             total_gpu_memory = sum(op.gpu_memory_used for op in self.operation_history)
 
-            # Calculate GPU utilization (simplified)
+# Calculate GPU utilization (simplified)
             gpu_utilization = unified_math.min(1.0, total_execution_time /
-                                               (total_operations * 100))  # Assume 100ms is full utilization
+                                                (total_operations * 100))  # Assume 100ms is full utilization
 
             performance = GPUPerformance(
-                total_operations=total_operations,
-                successful_operations=successful_operations,
-                total_execution_time_ms=total_execution_time,
-                average_execution_time_ms=average_execution_time,
-                total_gpu_memory_used=total_gpu_memory,
-                gpu_utilization=gpu_utilization,
-                timestamp=datetime.now()
+                total_operations = total_operations,
+                successful_operations = successful_operations,
+                total_execution_time_ms = total_execution_time,
+                average_execution_time_ms = average_execution_time,
+                total_gpu_memory_used = total_gpu_memory,
+                gpu_utilization = gpu_utilization,
+                timestamp = datetime.now()
             )
 
             self.performance_metrics.append(performance)
 
-            # Keep only recent metrics
+# Keep only recent metrics
             if len(self.performance_metrics) > 100:
                 self.performance_metrics = self.performance_metrics[-50:]
 
@@ -608,23 +706,29 @@ class GPUOffloadManager:
         except Exception as e:
             logger.error(f"Error getting performance metrics: {e}")
             return GPUPerformance(
-                total_operations=0,
-                successful_operations=0,
-                total_execution_time_ms=0.0,
-                average_execution_time_ms=0.0,
-                total_gpu_memory_used=0,
-                gpu_utilization=0.0,
-                timestamp=datetime.now()
+                total_operations = 0,
+                successful_operations = 0,
+                total_execution_time_ms = 0.0,
+                average_execution_time_ms = 0.0,
+                total_gpu_memory_used = 0,
+                gpu_utilization = 0.0,
+                timestamp = datetime.now()
             )
 
     def clear_history(self) -> None:
+
         """Clear operation and performance history."""
+"""
+"""
         self.operation_history.clear()
         self.performance_metrics.clear()
         logger.info("GPU operation history cleared")
 
     def export_performance_data(self, output_path: str = "gpu_performance_data.json") -> None:
+
         """Export GPU performance data to JSON."""
+"""
+"""
         try:
             import json
 
@@ -655,7 +759,7 @@ class GPUOffloadManager:
             }
 
             with open(output_path, 'w') as f:
-                json.dump(export_data, f, indent=2, default=str)
+                json.dump(export_data, f, indent = 2, default = str)
 
             logger.info(f"GPU performance data exported to {output_path}")
 
@@ -664,29 +768,32 @@ class GPUOffloadManager:
 
 
 def main():
+
     """Test function for GPU Offload Manager."""
+"""
+"""
     safe_print("\\u1f9ee Testing GPU Offload Manager...")
 
     manager = GPUOffloadManager()
 
-    # Test bit phase resolution
+# Test bit phase resolution
     hash_strings = ["a1b2c3d4e5f6", "7890abcdef12", "345678901234"] * 100
     phases = manager.resolve_bit_phase_gpu(hash_strings, "8bit")
     safe_print(f"Resolved {len(phases)} bit phases")
 
-    # Test tensor score calculation
+# Test tensor score calculation
     entry_prices = [100.0] * 300
     current_prices = [110.0] * 300
     phases = [8] * 300
     tensor_scores = manager.tensor_score_gpu(entry_prices, current_prices, phases)
     safe_print(f"Calculated {len(tensor_scores)} tensor scores")
 
-    # Test wave entropy calculation
+# Test wave entropy calculation
     sequences = [[1.0, 0.0, 1.0, 0.0]] * 300
     entropies = manager.wave_entropy_gpu(sequences)
     safe_print(f"Calculated {len(entropies)} entropy values")
 
-    # Get performance metrics
+# Get performance metrics
     performance = manager.get_performance_metrics()
     safe_print(f"\\nGPU Performance:")
     safe_print(f"Total operations: {performance.total_operations}")
@@ -700,4 +807,7 @@ def main():
 if __name__ == "__main__":
     exit(main())
 
+"""
+"""
+"""
 """

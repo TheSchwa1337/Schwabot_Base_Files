@@ -1,26 +1,41 @@
-# -*- coding: utf-8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""Entry/Exit Sequence Integrity Test - Schwabot Framework.
-
-This test validates time-tick logic and ensures the non-relativistic entry/exit
-mechanisms work correctly based on predetermined market conditions.
-"""
-
-import unittest
-import logging
-import time
-from core.unified_math_system import unified_math
-from typing import Dict, Any, List, Optional
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 from dataclasses import dataclass
 from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any, List, Optional
+import logging
+import time
+import unittest
+
+from core.unified_math_system import unified_math
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""Entry / Exit Sequence Integrity Test - Schwabot Framework.
+
+This test validates time - tick logic and ensures the non - relativistic entry / exit
+mechanisms work correctly based on predetermined market conditions.
+"""
+"""
+"""
+
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class EntryExitTestCase:
-    """Test case for entry/exit sequence integrity."""
+
+    """Test case for entry / exit sequence integrity."""
+
+
+"""
+"""
     test_name: str
     tick_hash: str
     signal_entropy: float
@@ -30,10 +45,17 @@ class EntryExitTestCase:
 
 
 class EntryExitSequenceIntegrityTest:
-    """Comprehensive entry/exit sequence integrity testing."""
+
+    """Comprehensive entry / exit sequence integrity testing."""
+
+
+"""
+"""
 
     def __init__(self):
-        """Initialize the entry/exit sequence integrity test."""
+        """Initialize the entry / exit sequence integrity test."""
+"""
+"""
         self.test_cases = [
             EntryExitTestCase(
                 test_name="strong_buy_signal",
@@ -53,10 +75,13 @@ class EntryExitSequenceIntegrityTest:
             )
         ]
 
-        logger.info("\\u23f1\\ufe0f Entry/Exit Sequence Integrity Test initialized")
+        logger.info("\\u23f1\\ufe0f Entry / Exit Sequence Integrity Test initialized")
 
     def test_entry_vector_calculation(self) -> Dict[str, Any]:
+
         """Test entry vector calculation."""
+"""
+"""
         logger.info("\\u1f4c8 Testing entry vector calculation")
 
         results = {
@@ -68,11 +93,11 @@ class EntryExitSequenceIntegrityTest:
 
         for i, test_case in enumerate(self.test_cases):
             try:
-                # Simulate entry vector calculation
+# Simulate entry vector calculation
                 entry_vector = test_case.signal_entropy * 2.0  # Simplified calculation
                 confidence = 1.0 - test_case.signal_entropy  # Lower entropy = higher confidence
 
-                # Validate confidence range
+# Validate confidence range
                 min_confidence, max_confidence = test_case.expected_confidence_range
                 if not (min_confidence <= confidence <= max_confidence):
                     error_msg = f"Test case {i}: Confidence out of range. Expected [{min_confidence}, {max_confidence}], Got: {confidence}"
@@ -99,8 +124,11 @@ class EntryExitSequenceIntegrityTest:
         return results
 
     def test_time_tick_logic_integrity(self) -> Dict[str, Any]:
-        """Test time-tick logic integrity."""
-        logger.info("\\u23f0 Testing time-tick logic integrity")
+
+        """Test time - tick logic integrity."""
+"""
+"""
+        logger.info("\\u23f0 Testing time - tick logic integrity")
 
         results = {
             'test_name': 'time_tick_logic_integrity',
@@ -110,7 +138,7 @@ class EntryExitSequenceIntegrityTest:
         }
 
         try:
-            # Test time-tick consistency
+# Test time - tick consistency
             test_ticks = ["tick1", "tick2", "tick3", "tick4", "tick5"]
             timestamps = []
 
@@ -118,15 +146,15 @@ class EntryExitSequenceIntegrityTest:
                 timestamp = time.time() + i
                 timestamps.append(timestamp)
 
-                # Validate tick hash format
+# Validate tick hash format
                 if len(tick) != 4:
                     error_msg = f"Tick {i}: Invalid hash length. Expected 4, got {len(tick)}"
                     results['errors'].append(error_msg)
                     results['success'] = False
 
-            # Validate timestamp sequence
+# Validate timestamp sequence
             for i in range(1, len(timestamps)):
-                if timestamps[i] <= timestamps[i-1]:
+                if timestamps[i] <= timestamps[i - 1]:
                     error_msg = f"Tick sequence {i}: Timestamp not increasing"
                     results['errors'].append(error_msg)
                     results['success'] = False
@@ -138,32 +166,35 @@ class EntryExitSequenceIntegrityTest:
             }
 
         except Exception as e:
-            results['errors'].append(f"Time-tick logic integrity test failed: {str(e)}")
+            results['errors'].append(f"Time - tick logic integrity test failed: {str(e)}")
             results['success'] = False
 
         if results['success']:
-            logger.info("\\u2705 Time-tick logic integrity test passed")
+            logger.info("\\u2705 Time - tick logic integrity test passed")
         else:
-            logger.error(f"\\u274c Time-tick logic integrity test failed: {len(results['errors'])} errors")
+            logger.error(f"\\u274c Time - tick logic integrity test failed: {len(results['errors'])} errors")
 
         return results
 
     def run_comprehensive_test(self) -> Dict[str, Any]:
-        """Run comprehensive entry/exit sequence integrity test."""
-        logger.info("\\u1f680 Running comprehensive entry/exit sequence integrity test")
+
+        """Run comprehensive entry / exit sequence integrity test."""
+"""
+"""
+        logger.info("\\u1f680 Running comprehensive entry / exit sequence integrity test")
 
         start_time = time.time()
 
-        # Run all test components
+# Run all test components
         test_results = {
             'entry_vector_calculation': self.test_entry_vector_calculation(),
             'time_tick_logic': self.test_time_tick_logic_integrity()
         }
 
-        # Determine overall success
+# Determine overall success
         all_passed = all(result['success'] for result in test_results.values())
 
-        # Calculate total errors
+# Calculate total errors
         total_errors = sum(len(result.get('errors', [])) for result in test_results.values())
 
         execution_time = time.time() - start_time
@@ -177,21 +208,24 @@ class EntryExitSequenceIntegrityTest:
         }
 
         if all_passed:
-            logger.info(f"\\u2705 Comprehensive entry/exit sequence integrity test passed in {execution_time:.3f}s")
+            logger.info(f"\\u2705 Comprehensive entry / exit sequence integrity test passed in {execution_time:.3f}s")
         else:
-            logger.error(f"\\u274c Comprehensive entry/exit sequence integrity test failed with {total_errors} errors")
+            logger.error(f"\\u274c Comprehensive entry / exit sequence integrity test failed with {total_errors} errors")
 
         return comprehensive_result
 
 
 # Global test function for registry
 def test_entry_exit_sequence_integrity() -> Dict[str, Any]:
-    """Main test function for entry/exit sequence integrity."""
+
+    """Main test function for entry / exit sequence integrity."""
+"""
+"""
     try:
         test_suite = EntryExitSequenceIntegrityTest()
         return test_suite.run_comprehensive_test()
     except Exception as e:
-        logger.error(f"Entry/exit sequence integrity test failed: {e}")
+        logger.error(f"Entry / exit sequence integrity test failed: {e}")
         return {
             'success': False,
             'test_name': 'entry_exit_sequence_integrity',
@@ -201,18 +235,18 @@ def test_entry_exit_sequence_integrity() -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Set up logging
+# Set up logging
     logging.basicConfig(
-        level=logging.INFO,
+        level = logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
-    # Run test
+# Run test
     result = test_entry_exit_sequence_integrity()
 
-    # Print results
+# Print results
     safe_print("\n" + "="*60)
-    safe_print("\\u23f1\\ufe0f ENTRY/EXIT SEQUENCE INTEGRITY TEST RESULTS")
+    safe_print("\\u23f1\\ufe0f ENTRY / EXIT SEQUENCE INTEGRITY TEST RESULTS")
     safe_print("="*60)
 
     safe_print(f"Overall Success: {'\\u2705 PASS' if result['success'] else '\\u274c FAIL'}")
@@ -221,4 +255,7 @@ if __name__ == "__main__":
 
     safe_print("="*60)
 
+"""
+"""
+"""
 """

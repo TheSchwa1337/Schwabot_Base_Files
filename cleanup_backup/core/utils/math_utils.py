@@ -1,15 +1,30 @@
-from core.unified_math_system import unified_math
-"""
-core/utils/math_utils.py
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from decimal import Decimal, getcontext
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Any, Dict, Tuple, List, Optional
 
-Shared mathematical/statistical utility functions for Schwabot engines.
+import numpy.typing as npt
+
+from core.unified_math_system import unified_math
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
+"""
+core / utils / math_utils.py
+
+Shared mathematical / statistical utility functions for Schwabot engines.
 Centralizes reusable logic for profit routing, analytics, and other modules.
 """
+"""
+"""
 
-from core.unified_math_system import unified_math
-import numpy.typing as npt
-from typing import Any, Dict, Tuple, List, Optional
-from decimal import Decimal, getcontext
 
 # Set high precision for financial calculations
 getcontext().prec = 28
@@ -20,8 +35,12 @@ Matrix = npt.NDArray[np.float64]
 
 def calculate_entropy(data: np.ndarray) -> float:
     """Calculate Shannon entropy of a 1D array."""
-    data = np.array(data)
-    data = data + 1e-10  # Avoid zeros
+
+
+"""
+"""
+   data = np.array(data)
+    data = data + 1e - 10  # Avoid zeros
     probabilities = data / np.sum(data)
     probabilities = probabilities[probabilities > 0]
     return -np.sum(probabilities * np.log2(probabilities))
@@ -29,21 +48,33 @@ def calculate_entropy(data: np.ndarray) -> float:
 
 def calculate_correlation(x: np.ndarray, y: np.ndarray) -> float:
     """Calculate Pearson correlation coefficient between two arrays."""
-    if len(x) != len(y) or len(x) < 2:
+
+
+"""
+"""
+   if len(x) != len(y) or len(x) < 2:
         return 0.0
     return float(unified_math.unified_math.correlation(x, y)[0, 1])
 
 
 def moving_average(data: np.ndarray, window: int = 5) -> np.ndarray:
     """Calculate simple moving average."""
-    if len(data) < window:
+
+
+"""
+"""
+   if len(data) < window:
         return data
     return np.convolve(data, np.ones(window) / window, mode="valid")
 
 
 def exponential_smoothing(data: np.ndarray, alpha: float = 0.3) -> np.ndarray:
     """Calculate exponential smoothing."""
-    result = np.zeros_like(data)
+
+
+"""
+"""
+   result = np.zeros_like(data)
     result[0] = data[0]
     for i in range(1, len(data)):
         result[i] = alpha * data[i] + (1 - alpha) * result[i - 1]
@@ -52,7 +83,11 @@ def exponential_smoothing(data: np.ndarray, alpha: float = 0.3) -> np.ndarray:
 
 def calculate_true_range(high: Vector, low: Vector, close: Vector) -> Vector:
     """Calculate True Range for ATR."""
-    if len(high) != len(low) or len(low) != len(close) or len(high) < 2:
+
+
+"""
+"""
+   if len(high) != len(low) or len(low) != len(close) or len(high) < 2:
         return np.zeros_like(high)
     prev_close = np.roll(close, 1)
     prev_close[0] = close[0]
@@ -64,7 +99,11 @@ def calculate_true_range(high: Vector, low: Vector, close: Vector) -> Vector:
 
 def calculate_atr(high: Vector, low: Vector, close: Vector, period: int = 14) -> Vector:
     """Calculate Average True Range (ATR)."""
-    true_range = calculate_true_range(high, low, close)
+
+
+"""
+"""
+   true_range = calculate_true_range(high, low, close)
     if len(true_range) < period:
         return np.full_like(true_range, unified_math.unified_math.mean(true_range))
     atr = np.zeros_like(true_range)
@@ -77,7 +116,11 @@ def calculate_atr(high: Vector, low: Vector, close: Vector, period: int = 14) ->
 
 def calculate_rsi(prices: Vector, period: int = 14) -> Vector:
     """Calculate Relative Strength Index (RSI)."""
-    if len(prices) < period + 1:
+
+
+"""
+"""
+   if len(prices) < period + 1:
         return np.full_like(prices, 50.0)
     deltas = np.diff(prices)
     gains = np.where(deltas > 0, deltas, 0)
@@ -100,7 +143,11 @@ def calculate_rsi(prices: Vector, period: int = 14) -> Vector:
 
 def calculate_williams_r(high: Vector, low: Vector, close: Vector, period: int = 14) -> Vector:
     """Calculate Williams %R indicator."""
-    if len(high) < period:
+
+
+"""
+"""
+   if len(high) < period:
         return np.zeros_like(high)
     williams_r = np.zeros_like(high)
     for i in range(period - 1, len(high)):
@@ -116,10 +163,15 @@ def calculate_williams_r(high: Vector, low: Vector, close: Vector, period: int =
 
 
 def calculate_stochastic(
+
     high: Vector, low: Vector, close: Vector, k_period: int = 14, d_period: int = 3
 ) -> Dict[str, Vector]:
     """Calculate Stochastic Oscillator (%K and %D)."""
-    if len(high) < k_period:
+
+
+"""
+"""
+   if len(high) < k_period:
         return {
             "k_percent": np.zeros_like(high),
             "d_percent": np.zeros_like(high),
@@ -144,7 +196,11 @@ def calculate_stochastic(
 
 def calculate_gradient(data: np.ndarray) -> np.ndarray:
     """Calculate gradient of a 2D or 3D array using finite differences."""
-    if data.ndim == 2:
+
+
+"""
+"""
+   if data.ndim == 2:
         grad_y, grad_x = np.gradient(data)
         return unified_math.unified_math.sqrt(grad_x**2 + grad_y**2)
     elif data.ndim == 3:
@@ -156,7 +212,11 @@ def calculate_gradient(data: np.ndarray) -> np.ndarray:
 
 def calculate_centroid(data: np.ndarray) -> Tuple[float, ...]:
     """Calculate centroid (center of mass) of a 2D or 3D array."""
-    if data.ndim == 2:
+
+
+"""
+"""
+   if data.ndim == 2:
         y_coords, x_coords = np.meshgrid(
             np.arange(data.shape[0]), np.arange(data.shape[1]), indexing='ij'
         )
@@ -186,19 +246,28 @@ def calculate_centroid(data: np.ndarray) -> Tuple[float, ...]:
 
 def calculate_distance_score(pos_a: Tuple[float, ...], pos_b: Tuple[float, ...]) -> float:
     """Calculate Euclidean distance between two positions."""
-    if len(pos_a) != len(pos_b):
+
+
+"""
+"""
+   if len(pos_a) != len(pos_b):
         raise ValueError("Positions must have the same dimensionality")
     return unified_math.unified_math.sqrt(sum((a - b) ** 2 for a, b in zip(pos_a, pos_b)))
 
 
 def calculate_recursive_multiplier(
+
     base_value: float,
     depth: int,
     decay_factor: float = 0.95,
     max_depth: int = 10
 ) -> float:
     """Calculate recursive multiplier based on depth and decay factor."""
-    if depth <= 0:
+
+
+"""
+"""
+   if depth <= 0:
         return base_value
     if depth > max_depth:
         depth = max_depth
@@ -206,26 +275,31 @@ def calculate_recursive_multiplier(
 
 
 def calculate_allocation_efficiency(
+
     volume_deltas: List[Tuple[str, float]],
     target_distribution: Optional[Dict[str, float]] = None
 ) -> float:
     """Calculate allocation efficiency based on volume distribution."""
-    if not volume_deltas:
+
+
+"""
+"""
+   if not volume_deltas:
         return 0.0
 
     total_volume = sum(unified_math.abs(delta) for _, delta in volume_deltas)
     if total_volume == 0:
         return 0.0
 
-    # Calculate distribution uniformity
+# Calculate distribution uniformity
     volumes = [unified_math.abs(delta) for _, delta in volume_deltas]
     mean_volume = unified_math.unified_math.mean(volumes)
     variance = unified_math.unified_math.var(volumes)
 
-    # Efficiency is inversely proportional to variance (more uniform = higher efficiency)
-    efficiency = 1.0 / (1.0 + variance / (mean_volume ** 2 + 1e-10))
+# Efficiency is inversely proportional to variance (more uniform = higher efficiency)
+    efficiency = 1.0 / (1.0 + variance / (mean_volume ** 2 + 1e - 10))
 
-    # If target distribution is provided, calculate alignment
+# If target distribution is provided, calculate alignment
     if target_distribution:
         alignment_score = 0.0
         for volume_id, delta in volume_deltas:
@@ -240,12 +314,17 @@ def calculate_allocation_efficiency(
 
 
 def calculate_recursive_growth_factor(
+
     profit_history: List[float],
     window: int = 10,
     growth_threshold: float = 0.1
 ) -> float:
     """Calculate recursive growth factor based on profit history."""
-    if len(profit_history) < 2:
+
+
+"""
+"""
+   if len(profit_history) < 2:
         return 1.0
 
     recent_profits = profit_history[-window:] if len(profit_history) >= window else profit_history
@@ -253,32 +332,37 @@ def calculate_recursive_growth_factor(
     if len(recent_profits) < 2:
         return 1.0
 
-    # Calculate growth rate
+# Calculate growth rate
     growth_rates = []
     for i in range(1, len(recent_profits)):
-        if recent_profits[i-1] != 0:
-            rate = (recent_profits[i] - recent_profits[i-1]) / unified_math.abs(recent_profits[i-1])
+        if recent_profits[i - 1] != 0:
+            rate = (recent_profits[i] - recent_profits[i - 1]) / unified_math.abs(recent_profits[i - 1])
             growth_rates.append(rate)
 
     if not growth_rates:
         return 1.0
 
-    # Calculate average growth rate
+# Calculate average growth rate
     avg_growth = unified_math.unified_math.mean(growth_rates)
 
-    # Apply sigmoid transformation to get growth factor
+# Apply sigmoid transformation to get growth factor
     growth_factor = 1.0 / (1.0 + unified_math.exp(-avg_growth / growth_threshold))
 
     return np.clip(growth_factor, 0.5, 2.0)
 
 
 def apply_allocation_strategy(
+
     base_value: Decimal,
     strategy: str,
     parameters: Optional[Dict[str, Any]] = None
 ) -> Decimal:
     """Apply different allocation strategies to a base value."""
-    if parameters is None:
+
+
+"""
+"""
+   if parameters is None:
         parameters = {}
 
     base_float = float(base_value)
@@ -301,7 +385,7 @@ def apply_allocation_strategy(
         return Decimal(str(1.0 / (1.0 + unified_math.exp(-steepness * (base_float - midpoint)))))
 
     elif strategy.upper() == "FRACTAL":
-        # Fractal scaling based on self-similarity
+    # Fractal scaling based on self - similarity
         scale_factor = parameters.get("scale_factor", 1.618)  # Golden ratio
         iterations = parameters.get("iterations", 3)
         result = base_float
@@ -310,13 +394,17 @@ def apply_allocation_strategy(
         return Decimal(str(result))
 
     else:
-        # Default to linear
+    # Default to linear
         return base_value
 
 
 def safe_decimal_operation(operation: str, *args, **kwargs) -> Decimal:
     """Safely perform decimal operations with error handling."""
-    try:
+
+
+"""
+"""
+   try:
         if operation == "add":
             return sum(Decimal(str(arg)) for arg in args)
         elif operation == "multiply":
@@ -334,13 +422,17 @@ def safe_decimal_operation(operation: str, *args, **kwargs) -> Decimal:
         else:
             raise ValueError(f"Unknown operation: {operation}")
     except (ValueError, TypeError, ZeroDivisionError) as e:
-        # Return safe default value
+    # Return safe default value
         return Decimal("0.0")
 
 
 def validate_spatial_dimensions(dimensions: Tuple[int, ...]) -> bool:
     """Validate spatial dimensions for 3D operations."""
-    if not isinstance(dimensions, tuple):
+
+
+"""
+"""
+   if not isinstance(dimensions, tuple):
         return False
     if len(dimensions) not in [2, 3]:
         return False
@@ -349,51 +441,67 @@ def validate_spatial_dimensions(dimensions: Tuple[int, ...]) -> bool:
 
 def create_spatial_grid(dimensions: Tuple[int, ...], fill_value: float = 0.0) -> np.ndarray:
     """Create a spatial grid with specified dimensions."""
-    if not validate_spatial_dimensions(dimensions):
+
+
+"""
+"""
+   if not validate_spatial_dimensions(dimensions):
         raise ValueError(f"Invalid dimensions: {dimensions}")
     return np.full(dimensions, fill_value, dtype=np.float64)
 
 
 # ==============================================================================
-# MATH UTILITIES FOR CORE ENGINES (DLT, RIDDLE, MULTI-BIT, TEMPORAL)
+# MATH UTILITIES FOR CORE ENGINES (DLT, RIDDLE, MULTI - BIT, TEMPORAL)
 # ==============================================================================
 
 # --- For dlt_waveform_engine.py ---
 
 def calculate_tick_acceleration(
+
     velocities: Vector, delta_times: Vector
 ) -> Optional[Vector]:
     """Calculate tick acceleration from velocities and time deltas."""
-    if len(velocities) < 2 or len(velocities) != len(delta_times):
+
+
+"""
+"""
+   if len(velocities) < 2 or len(velocities) != len(delta_times):
         return None
 
     prev_velocities = np.roll(velocities, 1)
     prev_velocities[0] = velocities[0]  # Avoid wraparound
 
     acceleration = np.zeros_like(velocities)
-    valid_mask = delta_times > 1e-10
+    valid_mask = delta_times > 1e - 10
 
     acceleration[valid_mask] = (velocities[valid_mask] - prev_velocities[valid_mask]) / delta_times[valid_mask]
     return acceleration
 
 
 def waveform_pattern_match(
+
     live_wave: Vector, reference_wave: Vector, threshold: float = 0.85
 ) -> Tuple[bool, float]:
     """
+"""
+
+
+"""
     Perform a pattern match between a live waveform and a reference.
-    Uses normalized cross-correlation. Returns (match_found, confidence_score).
+    Uses normalized cross - correlation. Returns (match_found, confidence_score).
     """
-    if len(live_wave) == 0 or len(reference_wave) == 0:
+"""
+"""
+   if len(live_wave) == 0 or len(reference_wave) == 0:
         return False, 0.0
 
-    # Normalize for scale-invariance
+# Normalize for scale - invariance
     live_norm = (live_wave - unified_math.unified_math.mean(live_wave)) / \
-        (unified_math.unified_math.std(live_wave) + 1e-10)
+        (unified_math.unified_math.std(live_wave) + 1e - 10)
     ref_norm = (reference_wave - unified_math.unified_math.mean(reference_wave)) / \
-        (unified_math.unified_math.std(reference_wave) + 1e-10)
+        (unified_math.unified_math.std(reference_wave) + 1e - 10)
 
-    # Pad shorter waveform to match length
+# Pad shorter waveform to match length
     if len(live_norm) < len(ref_norm):
         pad_width = len(ref_norm) - len(live_norm)
         live_norm = np.pad(live_norm, (0, pad_width), 'constant')
@@ -414,7 +522,11 @@ def waveform_pattern_match(
 
 def calculate_hash_distance(hash1_hex: str, hash2_hex: str, method: str = 'hamming') -> float:
     """Calculate distance between two hex hashes (Hamming or Cosine)."""
-    try:
+
+
+"""
+"""
+   try:
         bin1 = bin(int(hash1_hex, 16))[2:].zfill(256)
         bin2 = bin(int(hash2_hex, 16))[2:].zfill(256)
 
@@ -431,7 +543,7 @@ def calculate_hash_distance(hash1_hex: str, hash2_hex: str, method: str = 'hammi
             if norm1 == 0 or norm2 == 0:
                 return 1.0  # Max distance if one vector is zero
 
-            # Cosine similarity is between -1 and 1, distance is 1 - similarity
+# Cosine similarity is between -1 and 1, distance is 1 - similarity
             return 1.0 - (dot_product / (norm1 * norm2))
 
         else:
@@ -443,11 +555,15 @@ def calculate_hash_distance(hash1_hex: str, hash2_hex: str, method: str = 'hammi
 
 def calculate_weighted_confidence(strategy_vector: Vector, state_vector: Vector) -> float:
     """Calculate a weighted confidence score using a sigmoid function."""
-    if len(strategy_vector) != len(state_vector):
+
+
+"""
+"""
+   if len(strategy_vector) != len(state_vector):
         raise ValueError("Strategy and state vectors must have the same length.")
 
     dot_product = unified_math.unified_math.dot_product(strategy_vector, state_vector)
-    # Sigmoid function to scale output between 0 and 1
+# Sigmoid function to scale output between 0 and 1
     confidence = 1 / (1 + unified_math.exp(-dot_product))
     return float(confidence)
 
@@ -456,15 +572,19 @@ def calculate_weighted_confidence(strategy_vector: Vector, state_vector: Vector)
 
 def wavelet_decompose(data: Vector, level: int = 3) -> List[Vector]:
     """Perform a simple Haar wavelet decomposition."""
-    if len(data) < 2**level:
+
+
+"""
+"""
+   if len(data) < 2**level:
         return [data]  # Not enough data for decomposition
 
     coeffs = [data]
     for i in range(level):
         current_data = coeffs[-1]
-        # Approximation (low-pass filter)
+# Approximation (low - pass filter)
         approximation = (current_data[0::2] + current_data[1::2]) / 2
-        # Detail (high-pass filter)
+# Detail (high - pass filter)
         detail = (current_data[0::2] - current_data[1::2]) / 2
 
         if i == 0:
@@ -477,7 +597,11 @@ def wavelet_decompose(data: Vector, level: int = 3) -> List[Vector]:
 
 def calculate_temporal_confidence_merge(scores: List[float], weights: List[float]) -> float:
     """Merge scores from different timeframes using weighted average."""
-    if len(scores) != len(weights) or not scores:
+
+
+"""
+"""
+   if len(scores) != len(weights) or not scores:
         return 0.0
 
     weighted_sum = unified_math.unified_math.dot_product(scores, weights)
@@ -493,11 +617,19 @@ def calculate_temporal_confidence_merge(scores: List[float], weights: List[float
 
 def calculate_execution_lag(ideal_time: float, actual_time: float) -> float:
     """Calculate execution lag."""
-    return actual_time - ideal_time
+
+
+"""
+"""
+   return actual_time - ideal_time
 
 
 def apply_lag_compensation_curve(value: float, lag: float, sensitivity: float = 0.1) -> float:
     """Apply a simple compensation curve based on execution lag."""
-    # Simple linear compensation model
-    compensation = lag * sensitivity
+
+
+"""
+"""
+# Simple linear compensation model
+   compensation = lag * sensitivity
     return value - compensation

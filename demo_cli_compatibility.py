@@ -1,5 +1,18 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+import os
+import platform
+import sys
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """CLI Compatibility Demo - Bulletproof Windows Handling.
 
 ====================================================
@@ -11,17 +24,23 @@ Simple demonstration of bulletproof CLI compatibility for Windows
 showing emoji fallbacks and robust error handling.
 
 """
-
-import os
-import platform
-import sys
+"""
+"""
+"""
+"""
 
 
 def safe_print_with_fallback(message):
     """Print with automatic emoji fallback for Windows CLI."""
-    emoji_map = {
-        "\\u2705": "[SUCCESS]",
-        "\\u274c": "[ERROR]",
+
+
+"""
+"""
+"""
+"""
+ emoji_map = {
+      "\\u2705": "[SUCCESS]",
+      "\\u274c": "[ERROR]",
         "\\u26a0\\ufe0f": "[WARNING]",
         "\\u1f680": "[LAUNCH]",
         "\\u1f3af": "[TARGET]",
@@ -35,15 +54,15 @@ def safe_print_with_fallback(message):
         "\\u269b\\ufe0f": "[QUANTUM]",
         "\\u1f300": "[SPIRAL]",
         "\\u1f4b0": "[MONEY]",
-    }
+      }
 
-    # Check if we're in Windows CLI environment
-    is_windows_cli = platform.system() == "Windows" and (
-        "cmd" in os.environ.get("COMSPEC", "").lower()
+# Check if we're in Windows CLI environment
+  is_windows_cli = platform.system() == "Windows" and (
+       "cmd" in os.environ.get("COMSPEC", "").lower()
         or "PSModulePath" in os.environ
-    )
+       )
 
-    if is_windows_cli:
+   if is_windows_cli:
         safe_message = message
         for emoji, asic in emoji_map.items():
             safe_message = safe_message.replace(emoji, asic)
@@ -66,16 +85,22 @@ def safe_print_with_fallback(message):
 
 def demonstrate_cli_compatibility():
     """Demonstrate CLI compatibility features."""
-    safe_print_with_fallback("\\u1f680 BULLETPROOF CLI COMPATIBILITY DEMONSTRATION")
-    safe_print_with_fallback("=" * 60)
 
-    # Environment detection
-    safe_print_with_fallback(f"\\u1f50d System: {platform.system()}")
+
+"""
+"""
+"""
+"""
+ safe_print_with_fallback("\\u1f680 BULLETPROOF CLI COMPATIBILITY DEMONSTRATION")
+  safe_print_with_fallback("=" * 60)
+
+# Environment detection
+   safe_print_with_fallback(f"\\u1f50d System: {platform.system()}")
     safe_print_with_fallback(f"\\u1f4ca Platform: {platform.platform()}")
     safe_print_with_fallback(f"\\u26a1 Python: {platform.python_version()}")
     safe_print_with_fallback(f"\\u1f3af Encoding: {sys.stdout.encoding}")
 
-    # PowerShell detection
+# PowerShell detection
     powershell_detected = "PSModulePath" in os.environ
     cmd_detected = "cmd" in os.environ.get("COMSPEC", "").lower()
 
@@ -84,7 +109,7 @@ def demonstrate_cli_compatibility():
 
     safe_print_with_fallback("\\n\\u1f4c8 EMOJI FALLBACK TESTING:")
 
-    # Test various emoji scenarios
+# Test various emoji scenarios
     test_cases = [
         "\\u2705 Mathematical integration test PASSED",
         "\\u1f3af Target acquired: Advanced trading algorithms",
@@ -105,7 +130,7 @@ def demonstrate_cli_compatibility():
 
         safe_print_with_fallback("\\u2705 NumPy imported successfully")
 
-        # Test mathematical operations with CLI safety
+# Test mathematical operations with CLI safety
         data = np.random.normal(0, 1, 100)
         mean_val = unified_math.unified_math.mean(data)
         std_val = unified_math.unified_math.std(data)
@@ -139,7 +164,7 @@ def demonstrate_cli_compatibility():
             math_core = MathCore()
             safe_print_with_fallback("\\u2705 MathCore initialized successfully")
 
-            # Test with sample data
+# Test with sample data
             test_result = math_core.process(
                 {
                     "price_data": [50000, 50100, 49900, 50200],
@@ -167,7 +192,7 @@ def demonstrate_cli_compatibility():
     safe_print_with_fallback("\\n\\u1f389 RESULTS SUMMARY:")
     safe_print_with_fallback("\\u2705 Emoji to ASIC conversion: WORKING")
     safe_print_with_fallback("\\u2705 Unicode fallback handling: WORKING")
-    safe_print_with_fallback("\\u2705 Error-resistant output: WORKING")
+    safe_print_with_fallback("\\u2705 Error - resistant output: WORKING")
     safe_print_with_fallback("\\u2705 Mathematical validation safety: WORKING")
     safe_print_with_fallback("\\u2705 Windows CLI compatibility: BULLETPROOF")
 

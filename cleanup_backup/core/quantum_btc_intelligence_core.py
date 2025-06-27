@@ -1,8 +1,21 @@
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
+from typing import Dict, List, Optional, Tuple, Any
+from enum import Enum
+from dataclasses import dataclass, field
+import time
+import logging
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Quantum BTC Intelligence Core - Unified Reflex & Hash Management.
 
 This module orchestrates quantum state, hash health, and reflex scoring with
@@ -11,89 +24,111 @@ drift correction, reflex strategy updates, and multivector stability enforcement
 Mathematical Foundation:
 - Unified reflex score: R_unified = \\u03a3(tick_delta_i * entropy_surge_i)
 - Hash health score: H_health = hash_rate * difficulty_correlation
-- Quantum state vector: |\\u03c8\\u27e9 = \\u03b1|0\\u27e9 + \\u03b2|1\\u27e9 (superposition)
+- Quantum state vector: |\\u03c8\\u27e9 = \\u03b1 | 0\\u27e9 + \\u03b2 | 1\\u27e9 (superposition)
 - Drift correction: \\u03b4_correction = -k * drift_magnitude
 
 Windows CLI compatible with comprehensive error handling.
 """
+"""
+"""
 
-
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any
-
-from core.unified_math_system import unified_math
 
 logger = logging.getLogger(__name__)
 
 
 class QuantumState(Enum):
+
     """Quantum state enumeration."""
-    SUPERPOSITION = "superposition"      # Mixed state
-    ENTANGLED = "entangled"             # Correlated assets
-    COLLAPSED = "collapsed"             # Definite state
-    DECOHERENT = "decoherent"          # Lost coherence
+
+
+"""
+"""
+    SUPERPOSITION = "superposition"  # Mixed state
+    ENTANGLED = "entangled"  # Correlated assets
+    COLLAPSED = "collapsed"  # Definite state
+    DECOHERENT = "decoherent"  # Lost coherence
 
 
 @dataclass
 class QuantumVector:
+
     """Quantum state vector representation."""
-    alpha: complex                      # |0\\u27e9 amplitude
-    beta: complex                      # |1\\u27e9 amplitude
-    phase: float                       # Global phase
-    coherence: float                   # Coherence measure
-    entanglement_strength: float       # Entanglement degree
+
+
+"""
+"""
+    alpha: complex  # |0\\u27e9 amplitude
+    beta: complex  # |1\\u27e9 amplitude
+    phase: float  # Global phase
+    coherence: float  # Coherence measure
+    entanglement_strength: float  # Entanglement degree
 
 
 @dataclass
 class HashHealthMetrics:
+
     """BTC hash health metrics."""
-    hash_rate: float                   # Current hash rate (EH/s)
-    difficulty: float                  # Network difficulty
-    correlation_score: float           # Hash-price correlation
-    network_stability: float           # Network stability index
-    mining_pressure: float             # Mining pressure indicator
+
+
+"""
+"""
+    hash_rate: float  # Current hash rate (EH / s)
+    difficulty: float  # Network difficulty
+    correlation_score: float  # Hash - price correlation
+    network_stability: float  # Network stability index
+    mining_pressure: float  # Mining pressure indicator
 
 
 @dataclass
 class ReflexScoreComponents:
+
     """Reflex score component breakdown."""
-    tick_delta_component: float        # Tick timing component
-    entropy_surge_component: float     # Entropy surge component
-    hash_health_component: float       # Hash health component
+
+
+"""
+"""
+    tick_delta_component: float  # Tick timing component
+    entropy_surge_component: float  # Entropy surge component
+    hash_health_component: float  # Hash health component
     drift_correction_component: float  # Drift correction component
-    unified_score: float              # Final unified score
+    unified_score: float  # Final unified score
 
 
 class QuantumBTCIntelligenceCore:
-    """Quantum-inspired BTC intelligence with hash health and reflex scoring."""
+
+    """Quantum - inspired BTC intelligence with hash health and reflex scoring."""
+
+
+"""
+"""
 
     def __init__(self) -> None:
         """Initialize quantum BTC intelligence core."""
+"""
+"""
         self.quantum_history: List[QuantumVector] = []
         self.hash_history: List[HashHealthMetrics] = []
         self.reflex_history: List[float] = []
         self.drift_corrections: List[float] = []
         self.max_history = 100
 
-        # Quantum parameters
+# Quantum parameters
         self.decoherence_rate = 0.05
         self.entanglement_threshold = 0.7
         self.collapse_threshold = 0.9
 
-        # Hash health parameters
-        self.target_hash_rate = 5e17  # ~500 EH/s target
+# Hash health parameters
+        self.target_hash_rate = 5e17  # ~500 EH / s target
         self.target_difficulty = 7e13  # ~70T target
 
-        # Reflex scoring weights
+# Reflex scoring weights
         self.tick_weight = 0.3
         self.entropy_weight = 0.25
         self.hash_weight = 0.25
         self.drift_weight = 0.2
 
     def compute_quantum_state(
+
         self,
         market_probability: float,
         correlation_strength: float,
@@ -102,7 +137,7 @@ class QuantumBTCIntelligenceCore:
         """Compute quantum state vector from market conditions.
 
         Mathematical Formula:
-        |\\u03c8\\u27e9 = \\u03b1|0\\u27e9 + \\u03b2|1\\u27e9 where |\\u03b1|\\u00b2 + |\\u03b2|\\u00b2 = 1
+        |\\u03c8\\u27e9 = \\u03b1 | 0\\u27e9 + \\u03b2 | 1\\u27e9 where |\\u03b1|\\u00b2 + |\\u03b2|\\u00b2 = 1
 
         Parameters
         ----------
@@ -118,32 +153,34 @@ class QuantumBTCIntelligenceCore:
         QuantumVector
             Quantum state vector
         """
+"""
+"""
         try:
-            # Calculate amplitudes
+# Calculate amplitudes
             p = unified_math.max(0.0, unified_math.min(1.0, market_probability))
             alpha = unified_math.unified_math.sqrt(
-                1 - p) * unified_math.unified_math.exp(1j * np.random.uniform(0, 2*np.pi))
-            beta = unified_math.unified_math.sqrt(p) * unified_math.unified_math.exp(1j * np.random.uniform(0, 2*np.pi))
+                1 - p) * unified_math.unified_math.exp(1j * np.random.uniform(0, 2 * np.pi))
+            beta = unified_math.unified_math.sqrt(p) * unified_math.unified_math.exp(1j * np.random.uniform(0, 2 * np.pi))
 
-            # Global phase
+# Global phase
             phase = np.angle(alpha * np.conj(beta))
 
-            # Coherence calculation (affected by noise)
+# Coherence calculation (affected by noise)
             base_coherence = unified_math.abs(alpha * np.conj(beta))
             coherence = base_coherence * (1 - external_noise)
 
-            # Entanglement strength
+# Entanglement strength
             entanglement_strength = correlation_strength * coherence
 
             quantum_vector = QuantumVector(
-                alpha=alpha,
-                beta=beta,
-                phase=phase,
-                coherence=coherence,
-                entanglement_strength=entanglement_strength,
+                alpha = alpha,
+                beta = beta,
+                phase = phase,
+                coherence = coherence,
+                entanglement_strength = entanglement_strength,
             )
 
-            # Update history
+# Update history
             self.quantum_history.append(quantum_vector)
             if len(self.quantum_history) > self.max_history:
                 self.quantum_history = self.quantum_history[-50:]
@@ -155,7 +192,10 @@ class QuantumBTCIntelligenceCore:
             return self._create_default_quantum_vector()
 
     def determine_quantum_state_type(self, quantum_vector: QuantumVector) -> QuantumState:
+
         """Determine quantum state type from vector properties."""
+"""
+"""
         try:
             coherence = quantum_vector.coherence
             entanglement = quantum_vector.entanglement_strength
@@ -174,6 +214,7 @@ class QuantumBTCIntelligenceCore:
             return QuantumState.SUPERPOSITION
 
     def calculate_hash_health_score(
+
         self,
         current_hash_rate: float,
         current_difficulty: float,
@@ -182,12 +223,12 @@ class QuantumBTCIntelligenceCore:
         """Calculate BTC hash health metrics.
 
         Mathematical Formula:
-        H_health = (hash_rate/target) * (difficulty/target) * correlation
+        H_health = (hash_rate / target) * (difficulty / target) * correlation
 
         Parameters
         ----------
         current_hash_rate : float
-            Current network hash rate (H/s)
+            Current network hash rate (H / s)
         current_difficulty : float
             Current network difficulty
         price_correlation : float
@@ -198,34 +239,36 @@ class QuantumBTCIntelligenceCore:
         HashHealthMetrics
             Complete hash health metrics
         """
+"""
+"""
         try:
-            # Normalize hash rate and difficulty
+# Normalize hash rate and difficulty
             hash_ratio = current_hash_rate / self.target_hash_rate
             difficulty_ratio = current_difficulty / self.target_difficulty
 
-            # Calculate correlation score
+# Calculate correlation score
             correlation_score = price_correlation * (hash_ratio + difficulty_ratio) / 2
 
-            # Network stability (based on hash rate consistency)
+# Network stability (based on hash rate consistency)
             if len(self.hash_history) > 5:
                 recent_hash_rates = [h.hash_rate for h in self.hash_history[-5:]]
                 hash_variance = unified_math.unified_math.var(recent_hash_rates)
-                network_stability = unified_math.max(0.0, 1.0 - hash_variance / (current_hash_rate + 1e-10))
+                network_stability = unified_math.max(0.0, 1.0 - hash_variance / (current_hash_rate + 1e - 10))
             else:
                 network_stability = 0.5
 
-            # Mining pressure (inverse of hash rate growth)
+# Mining pressure (inverse of hash rate growth)
             mining_pressure = unified_math.min(1.0, 2.0 - hash_ratio)
 
             hash_metrics = HashHealthMetrics(
-                hash_rate=current_hash_rate,
-                difficulty=current_difficulty,
-                correlation_score=correlation_score,
-                network_stability=network_stability,
-                mining_pressure=mining_pressure,
+                hash_rate = current_hash_rate,
+                difficulty = current_difficulty,
+                correlation_score = correlation_score,
+                network_stability = network_stability,
+                mining_pressure = mining_pressure,
             )
 
-            # Update history
+# Update history
             self.hash_history.append(hash_metrics)
             if len(self.hash_history) > self.max_history:
                 self.hash_history = self.hash_history[-50:]
@@ -237,6 +280,7 @@ class QuantumBTCIntelligenceCore:
             return self._create_default_hash_metrics()
 
     def compute_unified_reflex_score(
+
         self,
         tick_deltas: List[float],
         entropy_surges: List[float],
@@ -246,7 +290,7 @@ class QuantumBTCIntelligenceCore:
         """Compute unified reflex score from multiple components.
 
         Mathematical Formula:
-        R_unified = w\\u2081*\\u03a3(tick_\\u03b4\\u1d62*entropy_\\u1d62) + w\\u2082*H_health + w\\u2083*drift_correction
+        R_unified = w\\u2081*\\u03a3(tick_\\u03b4\\u1d62 * entropy_\\u1d62) + w\\u2082 * H_health + w\\u2083 * drift_correction
 
         Parameters
         ----------
@@ -264,8 +308,10 @@ class QuantumBTCIntelligenceCore:
         ReflexScoreComponents
             Complete reflex score breakdown
         """
+"""
+"""
         try:
-            # Tick delta component
+# Tick delta component
             if tick_deltas and entropy_surges:
                 min_length = unified_math.min(len(tick_deltas), len(entropy_surges))
                 tick_array = np.array(tick_deltas[:min_length])
@@ -274,23 +320,23 @@ class QuantumBTCIntelligenceCore:
             else:
                 tick_delta_component = 0.0
 
-            # Entropy surge component (average of recent surges)
+# Entropy surge component (average of recent surges)
             if entropy_surges:
                 entropy_surge_component = unified_math.unified_math.mean(entropy_surges)
             else:
                 entropy_surge_component = 0.0
 
-            # Hash health component
+# Hash health component
             hash_health_component = (
                 hash_health.correlation_score * 0.4 +
                 hash_health.network_stability * 0.3 +
                 (1.0 - hash_health.mining_pressure) * 0.3
             )
 
-            # Drift correction component (negative feedback)
+# Drift correction component (negative feedback)
             drift_correction_component = -unified_math.abs(drift_magnitude) * 0.5
 
-            # Calculate unified score
+# Calculate unified score
             unified_score = (
                 self.tick_weight * tick_delta_component +
                 self.entropy_weight * entropy_surge_component +
@@ -298,18 +344,18 @@ class QuantumBTCIntelligenceCore:
                 self.drift_weight * drift_correction_component
             )
 
-            # Normalize to [0, 1] range
+# Normalize to [0, 1] range
             unified_score = unified_math.max(0.0, unified_math.min(1.0, (unified_score + 1.0) / 2.0))
 
             reflex_components = ReflexScoreComponents(
-                tick_delta_component=tick_delta_component,
-                entropy_surge_component=entropy_surge_component,
-                hash_health_component=hash_health_component,
-                drift_correction_component=drift_correction_component,
-                unified_score=unified_score,
+                tick_delta_component = tick_delta_component,
+                entropy_surge_component = entropy_surge_component,
+                hash_health_component = hash_health_component,
+                drift_correction_component = drift_correction_component,
+                unified_score = unified_score,
             )
 
-            # Update history
+# Update history
             self.reflex_history.append(unified_score)
             if len(self.reflex_history) > self.max_history:
                 self.reflex_history = self.reflex_history[-50:]
@@ -321,6 +367,7 @@ class QuantumBTCIntelligenceCore:
             return self._create_default_reflex_components()
 
     def apply_drift_correction(
+
         self,
         current_drift: float,
         correction_strength: float = 1.0,
@@ -342,20 +389,22 @@ class QuantumBTCIntelligenceCore:
         float
             Drift correction value
         """
+"""
+"""
         try:
-            # Proportional correction (negative feedback)
+# Proportional correction (negative feedback)
             correction = -current_drift * correction_strength
 
-            # Add derivative term based on drift history
+# Add derivative term based on drift history
             if len(self.drift_corrections) > 1:
                 drift_rate = current_drift - self.drift_corrections[-1]
                 correction -= drift_rate * 0.1  # Derivative term
 
-            # Limit correction magnitude
+# Limit correction magnitude
             max_correction = 0.5
             correction = max(-max_correction, unified_math.min(max_correction, correction))
 
-            # Update history
+# Update history
             self.drift_corrections.append(correction)
             if len(self.drift_corrections) > self.max_history:
                 self.drift_corrections = self.drift_corrections[-50:]
@@ -367,6 +416,7 @@ class QuantumBTCIntelligenceCore:
             return 0.0
 
     def enforce_multivector_stability(
+
         self,
         vectors: List[np.ndarray],
         stability_threshold: float = 0.8,
@@ -385,11 +435,13 @@ class QuantumBTCIntelligenceCore:
         Tuple[bool, float]
             (is_stable, stability_score)
         """
+"""
+"""
         try:
             if not vectors:
                 return False, 0.0
 
-            # Calculate pairwise correlations
+# Calculate pairwise correlations
             correlations = []
             for i in range(len(vectors)):
                 for j in range(i + 1, len(vectors)):
@@ -400,7 +452,7 @@ class QuantumBTCIntelligenceCore:
             if not correlations:
                 return False, 0.0
 
-            # Stability score is average correlation
+# Stability score is average correlation
             stability_score = unified_math.unified_math.mean(correlations)
             is_stable = stability_score >= stability_threshold
 
@@ -411,45 +463,60 @@ class QuantumBTCIntelligenceCore:
             return False, 0.0
 
     def _create_default_quantum_vector(self) -> QuantumVector:
+
         """Create default quantum vector for error cases."""
+"""
+"""
         return QuantumVector(
-            alpha=complex(1/unified_math.unified_math.sqrt(2), 0),
-            beta=complex(1/unified_math.unified_math.sqrt(2), 0),
-            phase=0.0,
-            coherence=0.5,
-            entanglement_strength=0.0,
+            alpha = complex(1 / unified_math.unified_math.sqrt(2), 0),
+            beta = complex(1 / unified_math.unified_math.sqrt(2), 0),
+            phase = 0.0,
+            coherence = 0.5,
+            entanglement_strength = 0.0,
         )
 
     def _create_default_hash_metrics(self) -> HashHealthMetrics:
+
         """Create default hash metrics for error cases."""
+"""
+"""
         return HashHealthMetrics(
-            hash_rate=self.target_hash_rate,
-            difficulty=self.target_difficulty,
-            correlation_score=0.5,
-            network_stability=0.5,
-            mining_pressure=0.5,
+            hash_rate = self.target_hash_rate,
+            difficulty = self.target_difficulty,
+            correlation_score = 0.5,
+            network_stability = 0.5,
+            mining_pressure = 0.5,
         )
 
     def _create_default_reflex_components(self) -> ReflexScoreComponents:
+
         """Create default reflex components for error cases."""
+"""
+"""
         return ReflexScoreComponents(
-            tick_delta_component=0.0,
-            entropy_surge_component=0.0,
-            hash_health_component=0.5,
-            drift_correction_component=0.0,
-            unified_score=0.5,
+            tick_delta_component = 0.0,
+            entropy_surge_component = 0.0,
+            hash_health_component = 0.5,
+            drift_correction_component = 0.0,
+            unified_score = 0.5,
         )
 
     def _calculate_quantum_entanglement(
+
         self,
         vectors: List[np.ndarray[Any, Any]],
         entanglement_type: str = "linear"
     ) -> float:
         """Calculate quantum entanglement between vectors."""
-        # ... existing code ...
+"""
+"""
+# ... existing code ...
 
     def get_intelligence_summary(self) -> Dict[str, Any]:
+
         """Get intelligence summary."""
+"""
+"""
         return {
             "quantum_history_size": len(self.quantum_history),
             "hash_history_size": len(self.hash_history),
@@ -468,18 +535,21 @@ class QuantumBTCIntelligenceCore:
 
 
 def main() -> None:
+
     """Demo function for testing quantum BTC intelligence core."""
+"""
+"""
     safe_print("Quantum BTC Intelligence Core Demo")
     safe_print("=" * 40)
 
     core = QuantumBTCIntelligenceCore()
 
-    # Test quantum state computation
+# Test quantum state computation
     safe_print("Testing Quantum State Computation:")
     quantum_vector = core.compute_quantum_state(
-        market_probability=0.7,
-        correlation_strength=0.8,
-        external_noise=0.1
+        market_probability = 0.7,
+        correlation_strength = 0.8,
+        external_noise = 0.1
     )
 
     state_type = core.determine_quantum_state_type(quantum_vector)
@@ -490,30 +560,30 @@ def main() -> None:
     safe_print(f"  Entanglement: {quantum_vector.entanglement_strength:.3f}")
     safe_print(f"  State Type: {state_type.value}")
 
-    # Test hash health calculation
+# Test hash health calculation
     safe_print(f"\\nTesting Hash Health Calculation:")
     hash_metrics = core.calculate_hash_health_score(
-        current_hash_rate=4.5e17,
-        current_difficulty=6.8e13,
-        price_correlation=0.6
+        current_hash_rate = 4.5e17,
+        current_difficulty = 6.8e13,
+        price_correlation = 0.6
     )
 
-    safe_print(f"  Hash Rate: {hash_metrics.hash_rate:.2e} H/s")
+    safe_print(f"  Hash Rate: {hash_metrics.hash_rate:.2e} H / s")
     safe_print(f"  Difficulty: {hash_metrics.difficulty:.2e}")
     safe_print(f"  Correlation Score: {hash_metrics.correlation_score:.3f}")
     safe_print(f"  Network Stability: {hash_metrics.network_stability:.3f}")
     safe_print(f"  Mining Pressure: {hash_metrics.mining_pressure:.3f}")
 
-    # Test unified reflex score
+# Test unified reflex score
     safe_print(f"\\nTesting Unified Reflex Score:")
     tick_deltas = [0.1, 0.15, 0.08, 0.12, 0.09]
     entropy_surges = [0.6, 0.8, 0.5, 0.7, 0.6]
 
     reflex_components = core.compute_unified_reflex_score(
-        tick_deltas=tick_deltas,
-        entropy_surges=entropy_surges,
-        hash_health=hash_metrics,
-        drift_magnitude=0.2
+        tick_deltas = tick_deltas,
+        entropy_surges = entropy_surges,
+        hash_health = hash_metrics,
+        drift_magnitude = 0.2
     )
 
     safe_print(f"  Tick Delta Component: {reflex_components.tick_delta_component:.3f}")
@@ -522,15 +592,15 @@ def main() -> None:
     safe_print(f"  Drift Correction Component: {reflex_components.drift_correction_component:.3f}")
     safe_print(f"  Unified Score: {reflex_components.unified_score:.3f}")
 
-    # Test drift correction
+# Test drift correction
     safe_print(f"\\nTesting Drift Correction:")
     drift_correction = core.apply_drift_correction(
-        current_drift=0.3,
-        correction_strength=1.2
+        current_drift = 0.3,
+        correction_strength = 1.2
     )
     safe_print(f"  Drift Correction: {drift_correction:.3f}")
 
-    # Test multivector stability
+# Test multivector stability
     safe_print(f"\\nTesting Multivector Stability:")
     test_vectors = [
         np.array([1, 2, 3, 4, 5]),
@@ -542,7 +612,7 @@ def main() -> None:
     safe_print(f"  Is Stable: {is_stable}")
     safe_print(f"  Stability Score: {stability_score:.3f}")
 
-    # Core summary
+# Core summary
     summary = core.get_intelligence_summary()
     safe_print(f"\\nIntelligence Core Summary: {summary}")
 
@@ -550,4 +620,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
 """

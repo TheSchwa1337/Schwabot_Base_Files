@@ -1,22 +1,37 @@
-#!/usr/bin/env python3
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Dict, Any, List
+import json
+import sys
+import time
+
+from utils.safe_print import safe_print, info, warn, error, success, debug, safe_math, safe_risk
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
+"""
+"""
+"""
+"""
 """
 Comprehensive Integration Test
 
 This test verifies that all refactored components work together properly:
-- CLI output safety (Unicode/emoji handling)
+- CLI output safety (Unicode / emoji handling)
 - Unified mathematical system
 - Medium risk and hash risk integration
 - Core pipeline integration
 - Windows compatibility
 """
+"""
+"""
+"""
+"""
 
-from utils.safe_print import safe_print, info, warn, error, success, debug, safe_math, safe_risk
-import sys
-import json
-import time
-from pathlib import Path
-from typing import Dict, Any, List
-from datetime import datetime
 
 # Add project root to path
 REPO_ROOT = Path(__file__).parent
@@ -40,6 +55,12 @@ except ImportError as e:
 class ComprehensiveIntegrationTester:
     """Comprehensive integration tester for all refactored components."""
 
+
+"""
+"""
+"""
+"""
+
     def __init__(self):
         self.test_results = {
             'timestamp': datetime.now().isoformat(),
@@ -52,7 +73,7 @@ class ComprehensiveIntegrationTester:
             }
         }
 
-        # Initialize components
+# Initialize components
         self.hash_registry_manager = None
         self.enhanced_phase_risk_manager = None
         self.pipeline_integration_manager = None
@@ -63,22 +84,26 @@ class ComprehensiveIntegrationTester:
 
     def _initialize_components(self):
         """Initialize all core components."""
+"""
+"""
+"""
+"""
         try:
             info("Initializing core components...")
 
-            # Initialize hash registry manager
+# Initialize hash registry manager
             self.hash_registry_manager = HashRegistryManager()
             success("Hash Registry Manager initialized")
 
-            # Initialize enhanced phase risk manager
+# Initialize enhanced phase risk manager
             self.enhanced_phase_risk_manager = EnhancedPhaseRiskManager()
             success("Enhanced Phase Risk Manager initialized")
 
-            # Initialize pipeline integration manager
+# Initialize pipeline integration manager
             self.pipeline_integration_manager = PipelineIntegrationManager()
             success("Pipeline Integration Manager initialized")
 
-            # Initialize medium risk tester
+# Initialize medium risk tester
             self.medium_risk_tester = MediumRiskPhaseIITester()
             success("Medium Risk Phase II Tester initialized")
 
@@ -87,7 +112,11 @@ class ComprehensiveIntegrationTester:
             self.test_results['summary']['errors'].append(f"Initialization error: {e}")
 
     def test_cli_safety(self) -> Dict[str, Any]:
-        """Test CLI output safety with Unicode/emoji handling."""
+        """Test CLI output safety with Unicode / emoji handling."""
+"""
+"""
+"""
+"""
         info("Testing CLI output safety...")
 
         test_name = "cli_safety"
@@ -98,7 +127,7 @@ class ComprehensiveIntegrationTester:
         }
 
         try:
-            # Test various Unicode/emoji scenarios
+# Test various Unicode / emoji scenarios
             test_cases = [
                 ("Basic emoji", "\\u1f680\\u1f4c8\\u1f4b0"),
                 ("Mathematical symbols", "\\u03b1\\u03b2\\u03b3 \\u00b1\\u00d7\\u00f7 \\u2264\\u2265\\u2260"),
@@ -110,14 +139,14 @@ class ComprehensiveIntegrationTester:
 
             for case_name, test_text in test_cases:
                 try:
-                    # Test safe_print
+# Test safe_print
                     safe_print(f"Testing: {case_name} - {test_text}")
                     test_result['details'].append(f"{case_name}: OK")
                 except Exception as e:
                     test_result['details'].append(f"{case_name}: FAILED - {e}")
                     test_result['status'] = 'failed'
 
-            # Test specialized safe functions
+# Test specialized safe functions
             safe_math("Test calculation", 42.0)
             safe_risk("MEDIUM", "Test risk level")
 
@@ -138,6 +167,10 @@ class ComprehensiveIntegrationTester:
 
     def test_unified_math_system(self) -> Dict[str, Any]:
         """Test unified mathematical system."""
+"""
+"""
+"""
+"""
         info("Testing unified mathematical system...")
 
         test_name = "unified_math"
@@ -153,7 +186,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Unified math system not available")
                 return test_result
 
-            # Test basic arithmetic
+# Test basic arithmetic
             add_result = unified_math.add(5, 3)
             if add_result.success and add_result.value == 8:
                 test_result['details'].append("Addition: OK")
@@ -161,7 +194,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Addition: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test mathematical functions
+# Test mathematical functions
             sqrt_result = unified_math.sqrt(16)
             if sqrt_result.success and sqrt_result.value == 4:
                 test_result['details'].append("Square root: OK")
@@ -169,7 +202,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Square root: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test trading-specific functions
+# Test trading - specific functions
             prices = [100, 105, 110, 108, 115]
             returns_result = unified_math.calculate_returns(prices)
             if returns_result.success:
@@ -178,7 +211,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Returns calculation: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test error handling
+# Test error handling
             div_result = unified_math.divide(10, 0)
             if not div_result.success and "Division by zero" in div_result.error_message:
                 test_result['details'].append("Error handling: OK")
@@ -186,7 +219,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Error handling: FAILED")
                 test_result['status'] = 'failed'
 
-            # Get system statistics
+# Get system statistics
             stats = unified_math.get_statistics()
             test_result['math_stats'] = stats
 
@@ -207,6 +240,10 @@ class ComprehensiveIntegrationTester:
 
     def test_hash_registry_integration(self) -> Dict[str, Any]:
         """Test hash registry integration."""
+"""
+"""
+"""
+"""
         info("Testing hash registry integration...")
 
         test_name = "hash_registry"
@@ -222,10 +259,10 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Hash registry manager not available")
                 return test_result
 
-            # Test hash entry creation
+# Test hash entry creation
             test_hash = "test_hash_123"
             success = self.hash_registry_manager.register_hash_entry(
-                hash_id=test_hash,
+                hash_id = test_hash,
                 hash_value="abc123",
                 hash_type="test",
                 metadata={"test": True}
@@ -237,7 +274,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Hash entry creation: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test hash entry retrieval
+# Test hash entry retrieval
             entry = self.hash_registry_manager.get_hash_entry(test_hash)
             if entry and entry.hash_id == test_hash:
                 test_result['details'].append("Hash entry retrieval: OK")
@@ -245,7 +282,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Hash entry retrieval: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test hash registry statistics
+# Test hash registry statistics
             stats = self.hash_registry_manager.get_registry_stats()
             test_result['hash_stats'] = stats
 
@@ -266,6 +303,10 @@ class ComprehensiveIntegrationTester:
 
     def test_medium_risk_integration(self) -> Dict[str, Any]:
         """Test medium risk phase II integration."""
+"""
+"""
+"""
+"""
         info("Testing medium risk phase II integration...")
 
         test_name = "medium_risk"
@@ -281,7 +322,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Enhanced phase risk manager not available")
                 return test_result
 
-            # Test phase risk initialization
+# Test phase risk initialization
             init_result = self.enhanced_phase_risk_manager.initialize_phase_risk()
             if init_result:
                 test_result['details'].append("Phase risk initialization: OK")
@@ -289,7 +330,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Phase risk initialization: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test risk calculation
+# Test risk calculation
             risk_data = {
                 'price': 50000.0,
                 'volume': 1000.0,
@@ -305,7 +346,7 @@ class ComprehensiveIntegrationTester:
                 test_result['details'].append("Risk calculation: FAILED")
                 test_result['status'] = 'failed'
 
-            # Test pipeline integration
+# Test pipeline integration
             if self.pipeline_integration_manager:
                 pipeline_result = self.pipeline_integration_manager.test_integration()
                 test_result['pipeline_result'] = pipeline_result
@@ -328,6 +369,10 @@ class ComprehensiveIntegrationTester:
 
     def test_core_pipeline_integration(self) -> Dict[str, Any]:
         """Test core pipeline integration."""
+"""
+"""
+"""
+"""
         info("Testing core pipeline integration...")
 
         test_name = "core_pipeline"
@@ -338,7 +383,7 @@ class ComprehensiveIntegrationTester:
         }
 
         try:
-            # Test that all components can work together
+# Test that all components can work together
             components = {
                 'unified_math': UNIFIED_SYSTEM_AVAILABLE,
                 'hash_registry': self.hash_registry_manager is not None,
@@ -354,9 +399,9 @@ class ComprehensiveIntegrationTester:
                     test_result['details'].append(f"{component_name}: Not available")
                     test_result['status'] = 'failed'
 
-            # Test cross-component communication
+# Test cross - component communication
             if all(components.values()):
-                # Test math -> hash registry integration
+# Test math -> hash registry integration
                 math_result = unified_math.calculate_returns([100, 105, 110])
                 if math_result.success:
                     test_result['details'].append("Math -> Hash integration: OK")
@@ -364,10 +409,10 @@ class ComprehensiveIntegrationTester:
                     test_result['details'].append("Math -> Hash integration: FAILED")
                     test_result['status'] = 'failed'
 
-                # Test hash registry -> risk integration
+# Test hash registry -> risk integration
                 test_hash = "integration_test_hash"
                 self.hash_registry_manager.register_hash_entry(
-                    hash_id=test_hash,
+                    hash_id = test_hash,
                     hash_value="integration_test",
                     hash_type="test"
                 )
@@ -390,6 +435,10 @@ class ComprehensiveIntegrationTester:
 
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all comprehensive integration tests."""
+"""
+"""
+"""
+"""
         info("Starting comprehensive integration tests...")
 
         test_functions = [
@@ -423,7 +472,7 @@ class ComprehensiveIntegrationTester:
                 self.test_results['summary']['failed'] += 1
                 self.test_results['summary']['errors'].append(f"{test_name}: {e}")
 
-        # Generate summary
+# Generate summary
         total = self.test_results['summary']['total_tests']
         passed = self.test_results['summary']['passed']
         failed = self.test_results['summary']['failed']
@@ -439,9 +488,13 @@ class ComprehensiveIntegrationTester:
 
     def export_results(self, output_path: str = "comprehensive_integration_results.json") -> None:
         """Export test results to JSON file."""
+"""
+"""
+"""
+"""
         try:
             with open(output_path, 'w') as f:
-                json.dump(self.test_results, f, indent=2, default=str)
+                json.dump(self.test_results, f, indent = 2, default = str)
 
             success(f"Results exported to: {output_path}")
 
@@ -451,16 +504,20 @@ class ComprehensiveIntegrationTester:
 
 def main():
     """Main entry point."""
+"""
+"""
+"""
+"""
     info("Starting Comprehensive Integration Test Suite")
     info("=" * 50)
 
     tester = ComprehensiveIntegrationTester()
     results = tester.run_all_tests()
 
-    # Export results
+# Export results
     tester.export_results()
 
-    # Print summary
+# Print summary
     info("=" * 50)
     info("TEST SUMMARY")
     info("=" * 50)
@@ -475,7 +532,7 @@ def main():
         for error_msg in summary['errors']:
             error(f"  - {error_msg}")
 
-    # Exit with appropriate code
+# Exit with appropriate code
     if summary['failed'] == 0:
         success("All tests passed! Integration successful.")
         sys.exit(0)

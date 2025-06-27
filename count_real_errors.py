@@ -1,12 +1,31 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+
 from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Count real vs stub E501 errors."""."""
+"""
+"""
+"""
+"""
 
 
 def is_stub_file(filepath):
+
     """Check if file is a stub by reading first line."""."""
+"""
+"""
+"""
+"""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, 'r', encoding='utf - 8') as f:
             first_line = f.readline().strip()
             return "TEMPORARY STUB GENERATED AUTOMATICALLY" in first_line
     except:
@@ -15,6 +34,12 @@ def is_stub_file(filepath):
 
 def count_errors():
     """Count real vs stub E501 errors."""."""
+"""
+
+
+"""
+"""
+"""
     real_errors = []
     stub_errors = []
 
@@ -24,7 +49,7 @@ def count_errors():
             if not line or not line.startswith('.'):
                 continue
 
-            # Extract file path from error line
+# Extract file path from error line
             parts = line.split(':')
             if len(parts) >= 2:
                 filepath = parts[0]
@@ -48,4 +73,9 @@ def count_errors():
 if __name__ == "__main__":
     count_errors()
 
+"""
+"""
+"""
+"""
+"""
 """

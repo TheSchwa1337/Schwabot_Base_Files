@@ -1,24 +1,47 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+import json
+import sys
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
+"""
+"""
 """
 Simple Test Script - Schwabot UROS v1.0
 ======================================
 
 Simple test to verify the mathematical integration system works.
 """
-
-import sys
-import time
-import json
-from datetime import datetime
+"""
+"""
+"""
+"""
 
 
 def test_imports():
     """Test if all required modules can be imported."""
-    safe_print("\\u1f50d Testing imports...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  safe_print("\\u1f50d Testing imports...")
+
+   try:
         from core.unified_math_system import unified_math
         safe_print("\\u2705 NumPy imported successfully")
     except ImportError as e:
@@ -58,21 +81,27 @@ def test_imports():
 
 def test_basic_functions():
     """Test basic mathematical functions."""
-    safe_print("\\n\\u1f9ee Testing basic mathematical functions...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  safe_print("\\n\\u1f9ee Testing basic mathematical functions...")
+
+   try:
         from core.dlt_waveform_engine import DLTWaveformEngine
 
-        # Test DLT waveform function
+# Test DLT waveform function
         dlt_engine = DLTWaveformEngine()
         waveform_result = dlt_engine.dlt_waveform(1.0, 0.006)
         safe_print(f"\\u2705 DLT waveform function: {waveform_result}")
 
-        # Test wave entropy function
+# Test wave entropy function
         entropy_result = dlt_engine.wave_entropy([1.0, 0.0, 1.0, 0.0])
         safe_print(f"\\u2705 Wave entropy function: {entropy_result}")
 
-        # Test tensor score function
+# Test tensor score function
         tensor_result = dlt_engine.tensor_score(100.0, 110.0, 8)
         safe_print(f"\\u2705 Tensor score function: {tensor_result}")
 
@@ -85,19 +114,25 @@ def test_basic_functions():
 
 def test_matrix_mapper():
     """Test matrix mapper functions."""
-    safe_print("\\n\\u1f517 Testing matrix mapper functions...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  safe_print("\\n\\u1f517 Testing matrix mapper functions...")
+
+   try:
         from core.matrix_mapper import MatrixMapper
 
         matrix_mapper = MatrixMapper()
 
-        # Test hash decoding
+# Test hash decoding
         test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
         basket_id = matrix_mapper.decode_hash_to_basket(test_hash, 100, 45000.0)
         safe_print(f"\\u2705 Hash decoding: {basket_id}")
 
-        # Test tensor score calculation
+# Test tensor score calculation
         tensor_score = matrix_mapper.calculate_tensor_score(44000.0, 45000.0, 8)
         safe_print(f"\\u2705 Matrix tensor score: {tensor_score}")
 
@@ -110,14 +145,20 @@ def test_matrix_mapper():
 
 def test_profit_allocator():
     """Test profit cycle allocator."""
-    safe_print("\\n\\u1f4b0 Testing profit cycle allocator...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  safe_print("\\n\\u1f4b0 Testing profit cycle allocator...")
+
+   try:
         from core.profit_cycle_allocator import ProfitCycleAllocator
 
         profit_allocator = ProfitCycleAllocator()
 
-        # Test allocation
+# Test allocation
         execution_packet = {
             'volume': 1000.0,
             'actual_profit': 500.0,
@@ -151,31 +192,37 @@ def test_profit_allocator():
 
 def test_integration():
     """Test basic integration between components."""
-    safe_print("\\n\\u1f504 Testing basic integration...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  safe_print("\\n\\u1f504 Testing basic integration...")
+
+   try:
         from core.dlt_waveform_engine import DLTWaveformEngine
         from core.matrix_mapper import MatrixMapper
         from core.profit_cycle_allocator import ProfitCycleAllocator
 
-        # Initialize components
+# Initialize components
         dlt_engine = DLTWaveformEngine()
         matrix_mapper = MatrixMapper()
         profit_allocator = ProfitCycleAllocator()
 
-        # Setup integrations
+# Setup integrations
         matrix_mapper.set_dlt_waveform_engine(dlt_engine)
         matrix_mapper.set_profit_cycle_allocator(profit_allocator)
 
         safe_print("\\u2705 Component integration setup successful")
 
-        # Test basic workflow
-        # 1. Generate waveform data
+# Test basic workflow
+# 1. Generate waveform data
         from core.unified_math_system import unified_math
         t = np.linspace(0, 10, 1000)
         waveform_data = np.unified_math.sin(2 * np.pi * 0.1 * t) + 0.3 * np.unified_math.sin(2 * np.pi * 0.5 * t)
 
-        # 2. Process waveform
+# 2. Process waveform
         waveform_result = dlt_engine.process_waveform_data(
             name="integration_test",
             x=waveform_data,
@@ -185,7 +232,7 @@ def test_integration():
         if waveform_result.get('success'):
             safe_print("\\u2705 Waveform processing successful")
 
-            # 3. Test matrix integration
+# 3. Test matrix integration
             integration_result = matrix_mapper.integrate_with_dlt_waveform(waveform_result)
             if integration_result.get('success'):
                 safe_print("\\u2705 Matrix integration successful")
@@ -203,11 +250,17 @@ def test_integration():
 
 def main():
     """Main test function."""
-    safe_print("\\u1f680 SCHWABOT UROS v1.0 - SIMPLE INTEGRATION TEST")
-    safe_print("="*60)
+
+
+"""
+"""
+"""
+"""
+  safe_print("\\u1f680 SCHWABOT UROS v1.0 - SIMPLE INTEGRATION TEST")
+   safe_print("=" * 60)
     safe_print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # Run tests
+# Run tests
     tests = [
         ("Import Test", test_imports),
         ("Basic Functions Test", test_basic_functions),
@@ -221,7 +274,7 @@ def main():
     successful_tests = 0
 
     for test_name, test_func in tests:
-        safe_print(f"\\n{'='*20} {test_name} {'='*20}")
+        safe_print(f"\\n{'=' * 20} {test_name} {'=' * 20}")
         try:
             success = test_func()
             results[test_name] = {'success': success, 'error': None}
@@ -234,12 +287,12 @@ def main():
             results[test_name] = {'success': False, 'error': str(e)}
             safe_print(f"\\u274c {test_name}: FAIL - {e}")
 
-    # Generate summary
+# Generate summary
     success_rate = successful_tests / total_tests if total_tests > 0 else 0.0
 
-    safe_print(f"\\n{'='*60}")
+    safe_print(f"\\n{'=' * 60}")
     safe_print("\\u1f4ca TEST SUMMARY")
-    safe_print(f"{'='*60}")
+    safe_print(f"{'=' * 60}")
     safe_print(f"Total Tests: {total_tests}")
     safe_print(f"Successful: {successful_tests}")
     safe_print(f"Failed: {total_tests - successful_tests}")
@@ -255,7 +308,7 @@ def main():
         overall_status = "FAIL"
         safe_print(f"Overall Status: {overall_status} \\u274c")
 
-    # Export results
+# Export results
     try:
         report = {
             'timestamp': datetime.now().isoformat(),
@@ -268,14 +321,14 @@ def main():
         }
 
         with open("simple_test_results.json", 'w') as f:
-            json.dump(report, f, indent=2, default=str)
+            json.dump(report, f, indent=2, default = str)
 
         safe_print(f"\\n\\u2705 Results exported to simple_test_results.json")
 
     except Exception as e:
         safe_print(f"\\n\\u274c Error exporting results: {e}")
 
-    # Return exit code
+# Return exit code
     if overall_status == "PASS":
         safe_print("\\n\\u1f389 All tests passed! System is working correctly.")
         return 0

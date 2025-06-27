@@ -1,11 +1,25 @@
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+
+from core.unified_math_system import unified_math
 NEWMATH TENSOR OPERATIONS
-========================
+== == == == == == == == == == == ==
 
 Advanced tensor algebra operations for Schwabot trading mathematics.
 Clean implementation without legacy dependencies.
+"""
+"""
 """
 
 from core.unified_math_system import unified_math
@@ -16,32 +30,40 @@ logger = logging.getLogger(__name__)
 
 
 def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
+
     """
+"""
+"""
     Perform tensor contraction: T_ij = \\u03a3_k A_ik \\u00b7 B_kj
 
     Args:
         A: First tensor
-        B: Second tensor  
+        B: Second tensor
         axes: Contraction axes
 
     Returns:
         Contracted tensor result
     """
+"""
+"""
     try:
-        return np.tensordot(A, B, axes=axes)
+        return np.tensordot(A, B, axes = axes)
     except Exception as e:
         logger.error(f"Tensor contraction failed: {e}")
-        # Safe fallback
-        return np.zeros((A.shape[0], B.shape[-1]), dtype=np.float64)
+# Safe fallback
+        return np.zeros((A.shape[0], B.shape[-1]), dtype = np.float64)
 
 
 def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
+
     """
+"""
+"""
     Advanced bit phase tensor operations for strategy routing.
 
     Mathematical Implementation:
     \\u03c6\\u2084 = strategy_id & 0b1111
-    \\u03c6\\u2088 = (strategy_id >> 4) & 0xFF  
+    \\u03c6\\u2088 = (strategy_id >> 4) & 0xFF
     \\u03c6\\u2084\\u2082 = (strategy_id >> 12) & 0x3FFFFFFFFFF
 
     Args:
@@ -50,6 +72,8 @@ def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
     Returns:
         Tuple of (phi_4, phi_8, phi_42) phase values
     """
+"""
+"""
     try:
         phi_4 = strategy_id & 0b1111
         phi_8 = (strategy_id >> 4) & 0xFF
@@ -61,7 +85,10 @@ def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
 
 
 def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
+
     """
+"""
+"""
     Calculate matrix basket operations for asset allocation.
 
     Mathematical Implementation:
@@ -74,6 +101,8 @@ def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
     Returns:
         Basket allocation result
     """
+"""
+"""
     try:
         if prices.ndim == 1:
             prices = prices.reshape(-1, 1)
@@ -84,7 +113,10 @@ def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
 
 
 def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
+
     """
+"""
+"""
     Calculate cosine similarity between tensors.
 
     Mathematical Implementation:
@@ -97,6 +129,8 @@ def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
     Returns:
         Similarity score [0, 1]
     """
+"""
+"""
     try:
         flat_a = tensor_a.flatten()
         flat_b = tensor_b.flatten()
@@ -105,7 +139,7 @@ def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
         norm_a = np.linalg.norm(flat_a)
         norm_b = np.linalg.norm(flat_b)
 
-        if norm_a < 1e-12 or norm_b < 1e-12:
+        if norm_a < 1e - 12 or norm_b < 1e - 12:
             return 0.0
 
         similarity = dot_product / (norm_a * norm_b)
@@ -116,7 +150,10 @@ def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
 
 
 def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+
     """
+"""
+"""
     Perform SVD decomposition of tensor.
 
     Args:
@@ -125,14 +162,16 @@ def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np
     Returns:
         Tuple of (U, S, V) decomposition matrices
     """
+"""
+"""
     try:
-        # Ensure 2D for SVD
+# Ensure 2D for SVD
         if tensor.ndim > 2:
             tensor_2d = tensor.reshape(tensor.shape[0], -1)
         else:
             tensor_2d = tensor
 
-        U, S, Vt = unified_math.unified_math.svd(tensor_2d, full_matrices=False)
+        U, S, Vt = unified_math.unified_math.svd(tensor_2d, full_matrices = False)
         return U, S, Vt
     except Exception as e:
         logger.error(f"Tensor decomposition failed: {e}")
@@ -141,7 +180,10 @@ def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np
 
 
 def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
+
     """
+"""
+"""
     Normalize tensor using specified method.
 
     Args:
@@ -151,19 +193,21 @@ def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
     Returns:
         Normalized tensor
     """
+"""
+"""
     try:
         if method == 'l2':
             norm = np.linalg.norm(tensor)
-            return tensor / norm if norm > 1e-12 else tensor
+            return tensor / norm if norm > 1e - 12 else tensor
         elif method == 'l1':
             norm = np.sum(unified_math.unified_math.abs(tensor))
-            return tensor / norm if norm > 1e-12 else tensor
+            return tensor / norm if norm > 1e - 12 else tensor
         elif method == 'max':
             max_val = unified_math.unified_math.max(unified_math.unified_math.abs(tensor))
-            return tensor / max_val if max_val > 1e-12 else tensor
+            return tensor / max_val if max_val > 1e - 12 else tensor
         elif method == 'minmax':
             min_val, max_val = unified_math.unified_math.min(tensor), unified_math.unified_math.max(tensor)
-            if max_val - min_val > 1e-12:
+            if max_val - min_val > 1e - 12:
                 return (tensor - min_val) / (max_val - min_val)
             return tensor
         else:
@@ -174,7 +218,10 @@ def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
 
 
 def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+
     """
+"""
+"""
     Perform tensor convolution operation.
 
     Args:
@@ -184,15 +231,17 @@ def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
     Returns:
         Convolved tensor
     """
+"""
+"""
     try:
         if tensor_a.ndim == 1 and kernel.ndim == 1:
             return np.convolve(tensor_a, kernel, mode='same')
         elif tensor_a.ndim == 2 and kernel.ndim == 2:
-            # 2D convolution using correlation
+# 2D convolution using correlation
             from scipy.signal import correlate2d
             return correlate2d(tensor_a, kernel, mode='same')
         else:
-            # Fallback to element-wise multiplication
+# Fallback to element - wise multiplication
             min_shape = np.minimum(tensor_a.shape, kernel.shape)
             result = tensor_a[:min_shape[0]] * kernel[:min_shape[0]]
             return result
@@ -202,7 +251,10 @@ def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
 
 
 def advanced_tensor_transform(tensor: np.ndarray, transform_type: str = 'fft') -> np.ndarray:
+
     """
+"""
+"""
     Apply advanced tensor transformations.
 
     Args:
@@ -212,14 +264,16 @@ def advanced_tensor_transform(tensor: np.ndarray, transform_type: str = 'fft') -
     Returns:
         Transformed tensor
     """
+"""
+"""
     try:
         if transform_type == 'fft':
             return np.fft.fft(tensor, axis=-1).real
         elif transform_type == 'dct':
-            # Discrete cosine transform approximation
+# Discrete cosine transform approximation
             return np.unified_math.cos(np.pi * tensor / (2 * unified_math.unified_math.max(tensor))) if unified_math.unified_math.max(tensor) > 0 else tensor
         elif transform_type == 'wavelet':
-            # Simple Haar wavelet approximation
+# Simple Haar wavelet approximation
             if tensor.ndim == 1 and len(tensor) > 1:
                 avg = (tensor[::2] + tensor[1::2]) / 2
                 diff = (tensor[::2] - tensor[1::2]) / 2

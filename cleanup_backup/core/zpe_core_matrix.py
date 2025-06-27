@@ -1,8 +1,20 @@
+# -*- coding: utf - 8 -*-
+"""ZPE core matrix \\u2013 zero - point energy field calculations and wave mechanics.
+"""ZPE core matrix \\u2013 zero - point energy field calculations and wave mechanics.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
+"""ZPE core matrix \\u2013 zero - point energy field calculations and wave mechanics.
+"""ZPE core matrix \\u2013 zero - point energy field calculations and wave mechanics.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""ZPE core matrix \\u2013 zero-point energy field calculations and wave mechanics.
+
+
+
+
+
 
 Implements the formulas:
     \\u03a6_zpe(x, t) = \\u2207\\u00b7\\u03a8_zpe(x, t) + \\u03bb_zpe\\u00b7(\\u2202\\u03a8/\\u2202t)
@@ -10,8 +22,10 @@ Implements the formulas:
     \\u039e_zpe = \\u222b_\\u03a9 \\u03a6_zpe(x, t) dx
     G_zpe = e^(\\u2212\\u03b2\\u00b7|\\u2207\\u03a6_zpe|\\u00b2) \\u00b7 tanh(\\u03a6_zpe/\\u039e_zpe)
 
-This module provides quantum-inspired field calculations for enhanced
+This module provides quantum - inspired field calculations for enhanced
 market state analysis and phase transition detection.
+"""
+"""
 """
 
 
@@ -28,6 +42,7 @@ __all__: list[str] = ["zpe_psi", "zpe_phi", "zpe_xi", "zpe_g"]
 
 
 def zpe_psi(
+
     amplitudes: Sequence[float],
     frequencies: Sequence[float],
     phases: Sequence[float],
@@ -46,20 +61,23 @@ def zpe_psi(
     t
         Time parameter.
     """
+"""
+"""
     if not (len(amplitudes) == len(frequencies) == len(phases)):
         raise ValueError("amplitudes, frequencies, and phases must have same length")
 
-    a_arr = np.asarray(amplitudes, dtype=float)
-    w_arr = np.asarray(frequencies, dtype=float)
-    p_arr = np.asarray(phases, dtype=float)
+    a_arr = np.asarray(amplitudes, dtype = float)
+    w_arr = np.asarray(frequencies, dtype = float)
+    p_arr = np.asarray(phases, dtype = float)
 
-    # Compute sum of sinusoidal modes
+# Compute sum of sinusoidal modes
     sine_terms = a_arr * np.unified_math.sin(w_arr * t + p_arr)
 
     return float(np.sum(sine_terms))
 
 
 def zpe_phi(
+
     psi_div: float,
     psi_time_deriv: float,
     lambda_zpe: float,
@@ -75,10 +93,13 @@ def zpe_phi(
     lambda_zpe
         ZPE coupling constant \\u03bb_zpe.
     """
+"""
+"""
     return psi_div + lambda_zpe * psi_time_deriv
 
 
 def zpe_xi(
+
     phi_values: Sequence[float],
     *,
     domain_width: float = 1.0,
@@ -92,26 +113,29 @@ def zpe_xi(
     domain_width
         Width of integration domain \\u03a9.
     """
-    phi_arr = np.asarray(phi_values, dtype=float)
+"""
+"""
+    phi_arr = np.asarray(phi_values, dtype = float)
 
     if len(phi_arr) == 0:
         return 0.0
     elif len(phi_arr) == 1:
         return float(phi_arr[0] * domain_width)
 
-    # Trapezoidal integration
-    integral = float(np.trapz(phi_arr, dx=domain_width / (len(phi_arr) - 1)))
+# Trapezoidal integration
+    integral = float(np.trapz(phi_arr, dx = domain_width / (len(phi_arr) - 1)))
 
     return integral
 
 
 def zpe_g(
+
     phi_zpe: float,
     xi_zpe: float,
     grad_phi_magnitude: float,
     beta: float,
     *,
-    epsilon: float = 1e-10,
+    epsilon: float = 1e - 10,
 ) -> float:  # noqa: D401
     """Return G_zpe = e^(\\u2212\\u03b2\\u00b7|\\u2207\\u03a6_zpe|\\u00b2) \\u00b7 tanh(\\u03a6_zpe/\\u039e_zpe).
 
@@ -128,10 +152,12 @@ def zpe_g(
     epsilon
         Small constant to prevent division by zero.
     """
-    # Exponential term: e^(\\u2212\\u03b2\\u00b7|\\u2207\\u03a6_zpe|\\u00b2)
+"""
+"""
+# Exponential term: e^(\\u2212\\u03b2\\u00b7|\\u2207\\u03a6_zpe|\\u00b2)
     exp_term = unified_math.exp(-beta * (grad_phi_magnitude**2))
 
-    # Tanh term: tanh(\\u03a6_zpe/\\u039e_zpe)
+# Tanh term: tanh(\\u03a6_zpe/\\u039e_zpe)
     if unified_math.abs(xi_zpe) < epsilon:
         tanh_term = math.tanh(phi_zpe / epsilon)
     else:

@@ -1,14 +1,28 @@
+# -*- coding: utf - 8 -*-
+"""Phantom entry logic \\u2013 compute entry probability P\\u2091.
+"""Phantom entry logic \\u2013 compute entry probability P\\u2091.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Phantom entry logic \\u2013 compute entry probability P\\u2091.
+"""Phantom entry logic \\u2013 compute entry probability P\\u2091.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 Formula implemented:
 
     P\\u2091 = \\u03a3_i (\\u03b6_i \\u00b7 \\u03c4_i) \\u00b7 exp(\\u2212\\u03bb_entry \\u00b7 t)
 
-The summation is a dot-product between *zeta* and *tau* vectors (same length).
+The summation is a dot - product between *zeta* and *tau* vectors (same length).
+"""
+"""
 """
 
 
@@ -21,6 +35,7 @@ __all__: list[str] = ["phantom_entry_probability"]
 
 
 def phantom_entry_probability(
+
     *,
     alpha_vec: Sequence[float],
     phi_vec: Sequence[float],
@@ -39,16 +54,18 @@ def phantom_entry_probability(
     and applies validation gates using *zeta_final*, *mu_echo* and
     the current *price_now* relative to the *profit_band* limits.
     """
-    alpha = np.asarray(alpha_vec, dtype=float)
-    phi = np.asarray(phi_vec, dtype=float)
+"""
+"""
+    alpha = np.asarray(alpha_vec, dtype = float)
+    phi = np.asarray(phi_vec, dtype = float)
     if alpha.shape != phi.shape:
         raise ValueError("alpha_vec and phi_vec must share shape")
 
-    # Core activation term
+# Core activation term
     activation = math.tanh(float(unified_math.unified_math.dot_product(alpha, phi)))
     base_prob = activation * unified_math.exp(-lambda_entry * t)
 
-    # Validation gates
+# Validation gates
     in_band = price_now <= profit_band[0] or price_now >= profit_band[1]
     if zeta_final <= 0.0 or mu_echo < mu_threshold or not in_band:
         return 0.0

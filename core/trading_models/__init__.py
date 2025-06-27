@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-\\n# #!/usr/bin/env python3
-"""Trading models package for Schwabot BTC integration."""
-
-This package contains all data models, enums, and containers used
-for trading operations and exchange communication.
-    """"""
-
+# -*- coding: utf - 8 -*-\\n# """Trading models package for Schwabot BTC integration."""
+"""
+"""
+"""
+"""
+# -*- coding: utf - 8 -*-\\n# """Trading models package for Schwabot BTC integration."""
 from .containers import Balance
 from .containers import ExchangeConfig
 from .containers import MarketData
@@ -17,20 +16,25 @@ from .enums import OrderSide
 from .enums import OrderStatus
 from .enums import OrderType
 
+
+This package contains all data models, enums, and containers used
+for trading operations and exchange communication.
+""""""
+"""
+"""
+
+
 __all__ = []
-    # Enums
-    "ExchangeType",
-    "OrderType",
-    "OrderSide",
-    "OrderStatus",
-    "DataType",
-    # Containers
-    "ExchangeConfig",
-    "OrderRequest",
-    "OrderResponse",
-    "MarketData",
-    "Balance",
-    "PerformanceMetrics",
-
-
-
+# Enums
+"ExchangeType",
+"OrderType",
+"OrderSide",
+"OrderStatus",
+"DataType",
+# Containers
+"ExchangeConfig",
+"OrderRequest",
+"OrderResponse",
+"MarketData",
+"Balance",
+"PerformanceMetrics",

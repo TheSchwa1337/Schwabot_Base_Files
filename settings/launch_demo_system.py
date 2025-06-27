@@ -1,22 +1,36 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime
 from demo_integration_system import get_demo_integration_system
+from dual_unicore_handler import DualUnicoreHandler
 from matrix_allocator import get_matrix_allocator
-from vector_validator import get_vector_validator
+from pathlib import Path
 from settings_controller import get_settings_controller
-from utils.safe_print import safe_print, info, warn, error, success, debug
-#!/usr/bin/env python3
-"""
-Schwabot Demo System Launcher
-Comprehensive command-line interface for demo backtesting and system management
-"""
-
+from typing import Dict, List, Any, Optional
+from vector_validator import get_vector_validator
 import argparse
 import json
-import yaml
 import sys
 import time
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Any, Optional
+import yaml
+
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
+"""
+Schwabot Demo System Launcher
+Comprehensive command - line interface for demo backtesting and system management
+"""
+"""
+"""
+
 
 # Add settings directory to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -25,22 +39,30 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 
 class DemoSystemLauncher:
+
     """Comprehensive demo system launcher"""
 
+
+"""
+"""
+
     def __init__(self):
+
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
         self.matrix_allocator = get_matrix_allocator()
         self.demo_system = get_demo_integration_system()
 
-        # Available scenarios
+# Available scenarios
         self.scenarios = ["conservative", "moderate", "aggressive"]
 
-        # Available optimization strategies
+# Available optimization strategies
         self.optimization_strategies = ["risk_parity", "max_sharpe", "equal_weight", "performance_weighted"]
 
     def run_backtest(self, scenario: str = "moderate", duration: int = None) -> None:
         """Run a complete backtest"""
+"""
+"""
         safe_print(f"\\u1f680 Starting backtest with scenario: {scenario}")
         safe_print(f"\\u23f1\\ufe0f  Duration: {duration or 'default'} seconds")
         safe_print("-" * 50)
@@ -52,11 +74,14 @@ class DemoSystemLauncher:
         safe_print(f"\\u2705 Backtest completed in {end_time - start_time:.2f} seconds")
         safe_print("-" * 50)
 
-        # Display results
+# Display results
         self._display_backtest_results(result)
 
     def _display_backtest_results(self, result) -> None:
+
         """Display backtest results"""
+"""
+"""
         safe_print("\\u1f4ca BACKTEST RESULTS")
         safe_print("=" * 50)
         safe_print(f"Session ID: {result.session_id}")
@@ -85,7 +110,10 @@ class DemoSystemLauncher:
             print()
 
     def test_vector_validation(self, vector_data: Dict[str, Any]) -> None:
+
         """Test vector validation"""
+"""
+"""
         safe_print("\\u1f50d Testing Vector Validation")
         safe_print("-" * 30)
 
@@ -115,14 +143,17 @@ class DemoSystemLauncher:
             print()
 
     def test_matrix_allocation(self, basket_id: str = "test_basket") -> None:
+
         """Test matrix allocation"""
+"""
+"""
         safe_print("\\u1f4ca Testing Matrix Allocation")
         safe_print("-" * 30)
 
-        # Create test basket
+# Create test basket
         self.matrix_allocator.create_matrix_basket(basket_id, 10000.0, 0.2, 0.1)
 
-        # Add test matrices
+# Add test matrices
         test_matrices = [
             {
                 'matrix_id': 'test_matrix_1',
@@ -156,7 +187,7 @@ class DemoSystemLauncher:
         for matrix_data in test_matrices:
             self.matrix_allocator.add_matrix_to_basket(basket_id, matrix_data)
 
-        # Test optimization
+# Test optimization
         for strategy in self.optimization_strategies:
             safe_print(f"Testing {strategy} optimization...")
             result = self.matrix_allocator.optimize_allocation(basket_id, strategy)
@@ -170,11 +201,14 @@ class DemoSystemLauncher:
         print()
 
     def show_system_status(self) -> None:
+
         """Show system status"""
+"""
+"""
         safe_print("\\u1f527 SYSTEM STATUS")
         safe_print("=" * 50)
 
-        # Settings Controller Status
+# Settings Controller Status
         safe_print("\\u1f4cb SETTINGS CONTROLLER")
         safe_print("-" * 25)
         settings_stats = self.settings_controller.get_performance_metrics()
@@ -185,7 +219,7 @@ class DemoSystemLauncher:
         safe_print(f"Known Bad Vectors: {settings_stats['known_bad_vectors']}")
         print()
 
-        # Vector Validator Status
+# Vector Validator Status
         safe_print("\\u1f50d VECTOR VALIDATOR")
         safe_print("-" * 20)
         validator_stats = self.vector_validator.get_validation_statistics()
@@ -194,7 +228,7 @@ class DemoSystemLauncher:
         safe_print(f"Average Confidence: {validator_stats['average_confidence']:.3f}")
         print()
 
-        # Matrix Allocator Status
+# Matrix Allocator Status
         safe_print("\\u1f4ca MATRIX ALLOCATOR")
         safe_print("-" * 22)
         allocator_stats = self.matrix_allocator.get_allocation_statistics()
@@ -204,7 +238,7 @@ class DemoSystemLauncher:
         safe_print(f"Average Expected Return: {allocator_stats['average_expected_return']:.3f}")
         print()
 
-        # Demo System Status
+# Demo System Status
         safe_print("\\u1f3ae DEMO SYSTEM")
         safe_print("-" * 15)
         demo_stats = self.demo_system.get_demo_statistics()
@@ -216,11 +250,14 @@ class DemoSystemLauncher:
         print()
 
     def show_configuration(self) -> None:
+
         """Show current configuration"""
+"""
+"""
         safe_print("\\u2699\\ufe0f  CURRENT CONFIGURATION")
         safe_print("=" * 50)
 
-        # Mathematical Flow Parameters
+# Mathematical Flow Parameters
         safe_print("\\u1f9ee MATHEMATICAL FLOW PARAMETERS")
         safe_print("-" * 35)
         math_params = self.settings_controller.math_params
@@ -236,7 +273,7 @@ class DemoSystemLauncher:
         safe_print(f"Backlog Retention Cycles: {math_params.backlog_retention_cycles}")
         print()
 
-        # Reinforcement Learning Parameters
+# Reinforcement Learning Parameters
         safe_print("\\u1f916 REINFORCEMENT LEARNING PARAMETERS")
         safe_print("-" * 40)
         rl_params = self.settings_controller.rl_params
@@ -252,7 +289,7 @@ class DemoSystemLauncher:
         safe_print(f"Adaptive Learning: {rl_params.adaptive_learning}")
         print()
 
-        # Demo Backtest Parameters
+# Demo Backtest Parameters
         safe_print("\\u1f3ae DEMO BACKTEST PARAMETERS")
         safe_print("-" * 30)
         demo_params = self.settings_controller.demo_params
@@ -271,7 +308,10 @@ class DemoSystemLauncher:
         print()
 
     def update_parameter(self, param_type: str, param_name: str, value: Any) -> None:
+
         """Update a parameter"""
+"""
+"""
         safe_print(f"\\u1f527 Updating {param_type} parameter: {param_name} = {value}")
 
         try:
@@ -291,7 +331,10 @@ class DemoSystemLauncher:
             safe_print(f"\\u274c Error updating parameter: {e}")
 
     def export_data(self, export_type: str, filepath: str) -> None:
+
         """Export system data"""
+"""
+"""
         safe_print(f"\\u1f4e4 Exporting {export_type} data to {filepath}")
 
         try:
@@ -313,11 +356,14 @@ class DemoSystemLauncher:
             safe_print(f"\\u274c Error exporting data: {e}")
 
     def run_quick_test(self) -> None:
+
         """Run a quick comprehensive test"""
+"""
+"""
         safe_print("\\u26a1 Running Quick Comprehensive Test")
         safe_print("=" * 50)
 
-        # Test vector validation
+# Test vector validation
         safe_print("1. Testing Vector Validation...")
         test_vector = {
             'components': [1.0, 2.0, 3.0, 4.0, 5.0],
@@ -325,18 +371,21 @@ class DemoSystemLauncher:
         }
         self.test_vector_validation(test_vector)
 
-        # Test matrix allocation
+# Test matrix allocation
         safe_print("2. Testing Matrix Allocation...")
         self.test_matrix_allocation("quick_test_basket")
 
-        # Run quick backtest
+# Run quick backtest
         safe_print("3. Running Quick Backtest...")
-        self.run_backtest("moderate", duration=60)  # 1 minute
+        self.run_backtest("moderate", duration = 60)  # 1 minute
 
         safe_print("\\u2705 Quick test completed!")
 
     def show_help(self) -> None:
+
         """Show help information"""
+"""
+"""
         safe_print("\\u1f3ae SCHWABOT DEMO SYSTEM LAUNCHER")
         safe_print("=" * 50)
         print()
@@ -346,9 +395,9 @@ class DemoSystemLauncher:
         safe_print("    scenarios: conservative, moderate, aggressive")
         safe_print("    duration: seconds (optional)")
         print()
-        safe_print("  test-vector                     - Test vector validation")
-        safe_print("  test-allocation                 - Test matrix allocation")
-        safe_print("  quick-test                      - Run quick comprehensive test")
+        safe_print("  test - vector                     - Test vector validation")
+        safe_print("  test - allocation                 - Test matrix allocation")
+        safe_print("  quick - test                      - Run quick comprehensive test")
         print()
         safe_print("  status                          - Show system status")
         safe_print("  config                          - Show current configuration")
@@ -365,11 +414,14 @@ class DemoSystemLauncher:
         safe_print("  python launch_demo_system.py backtest moderate 300")
         safe_print("  python launch_demo_system.py update mathematical_flow entropy_threshold 0.8")
         safe_print("  python launch_demo_system.py export demo demo_data.json")
-        safe_print("  python launch_demo_system.py quick-test")
+        safe_print("  python launch_demo_system.py quick - test")
 
 
 def main():
+
     """Main function"""
+"""
+"""
     parser = argparse.ArgumentParser(description="Schwabot Demo System Launcher")
     parser.add_argument("command", nargs="?", default="help", help="Command to execute")
     parser.add_argument("args", nargs="*", help="Command arguments")
@@ -384,17 +436,17 @@ def main():
             duration = int(args.args[1]) if len(args.args) > 1 else None
             launcher.run_backtest(scenario, duration)
 
-        elif args.command == "test-vector":
+        elif args.command == "test - vector":
             test_vector = {
                 'components': [1.0, 2.0, 3.0, 4.0, 5.0],
                 'type': 'test_vector'
             }
             launcher.test_vector_validation(test_vector)
 
-        elif args.command == "test-allocation":
+        elif args.command == "test - allocation":
             launcher.test_matrix_allocation()
 
-        elif args.command == "quick-test":
+        elif args.command == "quick - test":
             launcher.run_quick_test()
 
         elif args.command == "status":
@@ -409,7 +461,7 @@ def main():
                 param_name = args.args[1]
                 value = args.args[2]
 
-                # Convert value to appropriate type
+# Convert value to appropriate type
                 try:
                     if value.lower() in ['true', 'false']:
                         value = value.lower() == 'true'

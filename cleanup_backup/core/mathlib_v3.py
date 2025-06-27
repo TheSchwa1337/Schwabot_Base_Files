@@ -1,45 +1,54 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass
+from decimal import getcontext
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Any, Callable, Dict, Tuple, Union
+import logging
+
+import numpy.typing as npt
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
-"""Mathematical Library V3 - AI-Infused Multi-Dimensional Profit Lattice with Automatic Differentiation.
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""Mathematical Library V3 - AI - Infused Multi - Dimensional Profit Lattice with Automatic Differentiation.
 
 =====================================================================================================
 
 
 
-Advanced mathematical library with AI integration, dual-number automatic differentiation,
+Advanced mathematical library with AI integration, dual - number automatic differentiation,
 
-and multi-dimensional profit optimization for Schwabot framework.
+and multi - dimensional profit optimization for Schwabot framework.
 
 
 
 New capabilities:
 
-- Dual-number automatic differentiation for gradient computation
+- Dual - number automatic differentiation for gradient computation
 
 - Kelly criterion optimization with automatic risk adjustment
 
 - Advanced matrix operations with automatic gradient tracking
 
-- AI-enhanced profit lattice optimization
+- AI - enhanced profit lattice optimization
 
 
 
-Based on SxN-Math specifications and Windows-compatible architecture.
+Based on SxN - Math specifications and Windows - compatible architecture.
 
 """
+"""
+"""
 
-
-from dataclasses import dataclass
-from decimal import getcontext
-import logging
-from core.unified_math_system import unified_math
-from typing import Any, Callable, Dict, Tuple, Union
-
-from core.unified_math_system import unified_math
-import numpy.typing as npt
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -53,45 +62,66 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Dual:
+
     """
+"""
+
+
+"""
 
     Dual number for automatic differentiation
 
     A dual number is of the form: a + b*\\u03b5 where \\u03b5\\u00b2 = 0
-    Used for forward-mode automatic differentiation.
+    Used for forward - mode automatic differentiation.
 
     Mathematical operations:
     (a + b*\\u03b5) + (c + d*\\u03b5) = (a + c) + (b + d)*\\u03b5
     (a + b*\\u03b5) * (c + d*\\u03b5) = ac + (ad + bc)*\\u03b5
     """
+"""
+"""
 
     val: float  # Real part (function value)
     eps: float  # Dual part (derivative)
 
     def __add__(self, other: Union[Dual, float]) -> Dual:
         """Addition: (a + b*\\u03b5) + (c + d*\\u03b5) = (a + c) + (b + d)*\\u03b5."""
+"""
+"""
         if isinstance(other, Dual):
             return Dual(self.val + other.val, self.eps + other.eps)
         else:
             return Dual(self.val + other, self.eps)
 
     def __radd__(self, other: float) -> Dual:
+
         """Right addition for commutativity."""
+"""
+"""
         return self.__add__(other)
 
     def __sub__(self, other: Union[Dual, float]) -> Dual:
+
         """Subtraction: (a + b*\\u03b5) - (c + d*\\u03b5) = (a - c) + (b - d)*\\u03b5."""
+"""
+"""
         if isinstance(other, Dual):
             return Dual(self.val - other.val, self.eps - other.eps)
         else:
             return Dual(self.val - other, self.eps)
 
     def __rsub__(self, other: float) -> Dual:
+
         """Right subtraction."""
+"""
+"""
         return Dual(other - self.val, -self.eps)
 
     def __mul__(self, other: Union[Dual, float]) -> Dual:
+
         """Multiplication: (a + b*\\u03b5) * (c + d*\\u03b5) = ac + (ad + bc)*\\u03b5."""
+"""
+"""
         if isinstance(other, Dual):
             return Dual(
                 self.val * other.val,
@@ -101,11 +131,17 @@ class Dual:
             return Dual(self.val * other, self.eps * other)
 
     def __rmul__(self, other: float) -> Dual:
+
         """Right multiplication for commutativity."""
+"""
+"""
         return self.__mul__(other)
 
     def __truediv__(self, other: Union[Dual, float]) -> Dual:
-        """Division: (a + b*\\u03b5) / (c + d*\\u03b5) = (a/c) + (bc - ad)/c\\u00b2*\\u03b5."""
+
+        """Division: (a + b*\\u03b5) / (c + d*\\u03b5) = (a / c) + (bc - ad)/c\\u00b2*\\u03b5."""
+"""
+"""
         if isinstance(other, Dual):
             val = self.val / other.val
             eps = (self.eps * other.val - self.val * other.eps) / (other.val**2)
@@ -114,76 +150,115 @@ class Dual:
             return Dual(self.val / other, self.eps / other)
 
     def __rtruediv__(self, other: float) -> Dual:
+
         """Right division."""
+"""
+"""
         val = other / self.val
         eps = -other * self.eps / (self.val**2)
         return Dual(val, eps)
 
     def __pow__(self, n: float) -> Dual:
-        """Power: (a + b*\\u03b5)^n = a^n + n*a^(n-1)*b*\\u03b5."""
+
+        """Power: (a + b*\\u03b5)^n = a^n + n * a^(n - 1)*b*\\u03b5."""
+"""
+"""
         if self.val == 0 and n <= 0:
-            raise ValueError("Cannot raise zero to non-positive power")
+            raise ValueError("Cannot raise zero to non - positive power")
 
         val = self.val**n
         eps = n * (self.val ** (n - 1)) * self.eps
         return Dual(val, eps)
 
     def __neg__(self) -> Dual:
+
         """Negation: -(a + b*\\u03b5) = -a + (-b)*\\u03b5."""
+"""
+"""
         return Dual(-self.val, -self.eps)
 
     def __abs__(self) -> Dual:
-        """Absolute value with sub-gradient."""
+
+        """Absolute value with sub - gradient."""
+"""
+"""
         if self.val >= 0:
             return Dual(self.val, self.eps)
         else:
             return Dual(-self.val, -self.eps)
 
     def unified_math.sin(self) -> Dual:
+
         """Sine: unified_math.sin(a + b*\\u03b5) = unified_math.sin(a) + unified_math.cos(a)*b*\\u03b5."""
+"""
+"""
         return Dual(unified_math.unified_math.sin(self.val), unified_math.unified_math.cos(self.val) * self.eps)
 
     def unified_math.cos(self) -> Dual:
+
         """Cosine: unified_math.cos(a + b*\\u03b5) = unified_math.cos(a) - unified_math.sin(a)*b*\\u03b5."""
+"""
+"""
         return Dual(unified_math.unified_math.cos(self.val), -unified_math.unified_math.sin(self.val) * self.eps)
 
     def unified_math.exp(self) -> Dual:
+
         """Exponential: unified_math.exp(a + b*\\u03b5) = unified_math.exp(a) + unified_math.exp(a)*b*\\u03b5."""
+"""
+"""
         exp_val = unified_math.unified_math.exp(self.val)
         return Dual(exp_val, exp_val * self.eps)
 
     def unified_math.log(self) -> Dual:
-        """Natural logarithm: unified_math.log(a + b*\\u03b5) = unified_math.log(a) + (b/a)*\\u03b5."""
+
+        """Natural logarithm: unified_math.log(a + b*\\u03b5) = unified_math.log(a) + (b / a)*\\u03b5."""
+"""
+"""
         if self.val <= 0:
-            raise ValueError("Cannot take log of non-positive number")
+            raise ValueError("Cannot take log of non - positive number")
         return Dual(unified_math.unified_math.log(self.val), self.eps / self.val)
 
     def unified_math.sqrt(self) -> Dual:
-        """Square root: unified_math.sqrt(a + b*\\u03b5) = unified_math.sqrt(a) + (b/(2*unified_math.sqrt(a)))*\\u03b5."""
+
+        """Square root: unified_math.sqrt(a + b*\\u03b5) = unified_math.sqrt(a) + (b/(2 * unified_math.sqrt(a)))*\\u03b5."""
+"""
+"""
         if self.val < 0:
             raise ValueError("Cannot take sqrt of negative number")
         sqrt_val = unified_math.unified_math.sqrt(self.val)
         return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
     def tanh(self) -> Dual:
+
         """Hyperbolic tangent: tanh(a + b*\\u03b5) = tanh(a) + sech\\u00b2(a)*b*\\u03b5."""
+"""
+"""
         tanh_val = math.tanh(self.val)
         sech_squared = 1 - tanh_val**2
         return Dual(tanh_val, sech_squared * self.eps)
 
 
 class MathLibV3:
-    """AI-infused mathematical library class with automatic differentiation."""
+
+    """AI - infused mathematical library class with automatic differentiation."""
+"""
+"""
 
     def __init__(self):
+
         """TODO: document __init__."""
+"""
+"""
         self.version = "3.0_0"
         self.initialized = True
         self.ai_models_loaded = False
-        logger.info(f"MathLibV3 v{self.version} initialized with auto-diff support")
+        logger.info(f"MathLibV3 v{self.version} initialized with auto - diff support")
 
     def ai_calculate(self, operation: str, *args, **kwargs) -> Any:
-        """AI-enhanced calculation method with automatic differentiation support."""
+
+        """AI - enhanced calculation method with automatic differentiation support."""
+"""
+"""
         try:
             ai_operations = {
                 "optimize_profit_lattice": self.optimize_profit_lattice,
@@ -223,14 +298,17 @@ class MathLibV3:
             }
 
     def kelly_criterion_risk_adjusted(
+
         self, mu: float, sigma_squared: float, risk_tolerance: float = 0.25
     ) -> Dict[str, float]:
         """
+"""
+"""
 
         Kelly criterion with automatic risk adjustment
 
         Formula: f* = \\u03bc / \\u03c3\\u00b2 (optimal)
-        Risk-adjusted: f = unified_math.min(f* * risk_tolerance, max_allocation)
+        Risk - adjusted: f = unified_math.min(f* * risk_tolerance, max_allocation)
 
         Args:
             mu: Expected return
@@ -240,6 +318,8 @@ class MathLibV3:
         Returns:
             Dictionary with optimal allocation and risk metrics
         """
+"""
+"""
         try:
             if sigma_squared <= 0:
                 return {
@@ -248,17 +328,17 @@ class MathLibV3:
                     "error": "Invalid variance",
                 }
 
-            # Optimal Kelly fraction
+# Optimal Kelly fraction
             kelly_optimal = mu / sigma_squared
 
-            # Risk-adjusted allocation
+# Risk - adjusted allocation
             kelly_adjusted = unified_math.min(kelly_optimal * risk_tolerance, 1.0)
             kelly_adjusted = unified_math.max(kelly_adjusted, 0.0)  # No negative allocations
 
-            # Sharpe ratio approximation
+# Sharpe ratio approximation
             sharpe_ratio = mu / unified_math.unified_math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
 
-            # Expected utility (Kelly criterion maximizes log utility)
+# Expected utility (Kelly criterion maximizes log utility)
             expected_utility = mu * kelly_adjusted - 0.5 * sigma_squared * (
                 kelly_adjusted**2
             )
@@ -276,7 +356,10 @@ class MathLibV3:
             return {"error": str(e)}
 
     def cvar_calculation(self, returns: Vector, alpha: float = 0.95) -> float:
+
         """
+"""
+"""
 
         Conditional Value at Risk (CVaR) calculation
 
@@ -290,14 +373,16 @@ class MathLibV3:
         Returns:
             CVaR value
         """
+"""
+"""
         try:
             if len(returns) == 0:
                 return 0.0
 
-            # Sort returns (losses are negative)
+# Sort returns (losses are negative)
             sorted_returns = np.sort(returns)
 
-            # Find VaR (Value at Risk)
+# Find VaR (Value at Risk)
             var_index = int((1 - alpha) * len(sorted_returns))
             var_value = (
                 sorted_returns[var_index]
@@ -305,7 +390,7 @@ class MathLibV3:
                 else sorted_returns[-1]
             )
 
-            # Calculate CVaR (mean of returns below VaR)
+# Calculate CVaR (mean of returns below VaR)
             tail_returns = sorted_returns[sorted_returns <= var_value]
             cvar = unified_math.unified_math.mean(tail_returns) if len(tail_returns) > 0 else var_value
 
@@ -316,49 +401,54 @@ class MathLibV3:
             return 0.0
 
     def optimize_profit_lattice(
+
         self, market_data: Vector, risk_tolerance: float = 0.1
     ) -> Dict[str, Any]:
         """
+"""
+"""
 
-        AI-enhanced multi-dimensional profit optimization using gradient descent approach
+        AI - enhanced multi - dimensional profit optimization using gradient descent approach
 
         Args:
-            market_data: Historical price/return data
+            market_data: Historical price / return data
             risk_tolerance: Risk tolerance parameter
 
         Returns:
             Optimization results with allocation and metrics
         """
+"""
+"""
         try:
             if len(market_data) < 2:
                 return {"error": "Insufficient data for optimization"}
 
-            # Calculate returns
-            returns = np.diff(market_data) / (market_data[:-1] + 1e-10)
+# Calculate returns
+            returns = np.diff(market_data) / (market_data[:-1] + 1e - 10)
 
-            # Basic statistics
+# Basic statistics
             mean_return = unified_math.unified_math.mean(returns)
             volatility = unified_math.unified_math.std(returns)
 
-            # Multi-dimensional optimization
+# Multi - dimensional optimization
             optimal_allocation = min(
                 1.0,
                 max(
                     0.1,
-                    mean_return / (volatility + 1e-10) * (1 - risk_tolerance),
+                    mean_return / (volatility + 1e - 10) * (1 - risk_tolerance),
                 ),
             )
 
-            # Sharpe ratio
-            sharpe_ratio = mean_return / (volatility + 1e-10)
+# Sharpe ratio
+            sharpe_ratio = mean_return / (volatility + 1e - 10)
 
-            # Maximum drawdown calculation
+# Maximum drawdown calculation
             cumulative = np.cumprod(1 + returns)
             running_max = np.maximum.accumulate(cumulative)
             drawdowns = (cumulative - running_max) / running_max
             max_drawdown = unified_math.unified_math.min(drawdowns)
 
-            # CVaR calculation
+# CVaR calculation
             cvar_95 = self.cvar_calculation(returns, 0.95)
 
             return {
@@ -376,10 +466,13 @@ class MathLibV3:
             return {"error": str(e)}
 
     def ai_risk_assessment(
+
         self, portfolio_weights: Vector, covariance_matrix: Matrix
     ) -> Dict[str, float]:
         """
-        AI-powered risk assessment with automatic differentiation
+"""
+"""
+        AI - powered risk assessment with automatic differentiation
 
         Args:
             portfolio_weights: Asset allocation weights
@@ -388,17 +481,19 @@ class MathLibV3:
         Returns:
             Risk metrics
         """
+"""
+"""
         try:
-            # Portfolio variance: w^T * \\u03a3 * w
+# Portfolio variance: w^T * \\u03a3 * w
             portfolio_variance = (
                 portfolio_weights.T @ covariance_matrix @ portfolio_weights
             )
             portfolio_volatility = unified_math.unified_math.sqrt(portfolio_variance)
 
-            # Risk concentration (Herfindahl index)
+# Risk concentration (Herfindahl index)
             concentration = np.sum(portfolio_weights**2)
 
-            # Diversification ratio
+# Diversification ratio
             weighted_volatilities = np.sum(
                 portfolio_weights * unified_math.unified_math.sqrt(np.diag(covariance_matrix))
             )
@@ -420,7 +515,10 @@ class MathLibV3:
             return {"error": str(e)}
 
     def detect_patterns_enhanced(self, time_series: Vector) -> Dict[str, Any]:
+
         """
+"""
+"""
         Enhanced pattern detection in time series with AI elements
 
         Args:
@@ -429,21 +527,23 @@ class MathLibV3:
         Returns:
             Pattern analysis results
         """
+"""
+"""
         try:
             if len(time_series) < 10:
                 return {"error": "Insufficient data for pattern detection"}
 
-            # Trend analysis
+# Trend analysis
             trends = np.diff(time_series)
             increasing_trend = np.sum(trends > 0) / len(trends)
 
-            # Volatility clustering (GARCH-like behavior)
+# Volatility clustering (GARCH - like behavior)
             squared_returns = trends**2
             volatility_autocorr = unified_math.correlation(
                 squared_returns[:-1], squared_returns[1:]
             )[0, 1]
 
-            # Detect cycles using autocorrelation
+# Detect cycles using autocorrelation
             if len(time_series) > 20:
                 autocorr = np.correlate(time_series, time_series, mode="full")
                 autocorr_max = unified_math.unified_math.max(autocorr)
@@ -451,7 +551,7 @@ class MathLibV3:
                     autocorr / autocorr_max if autocorr_max > 0 else autocorr
                 )
 
-                # Find peaks in autocorrelation (potential cycles)
+# Find peaks in autocorrelation (potential cycles)
                 half_len = len(autocorr_normalized) // 2
                 cycle_strength = (
                     unified_math.unified_math.max(autocorr_normalized[half_len + 1:])
@@ -461,14 +561,14 @@ class MathLibV3:
             else:
                 cycle_strength = 0
 
-            # Mean reversion test (Augmented Dickey-Fuller approximation)
+# Mean reversion test (Augmented Dickey - Fuller approximation)
             y_lag = time_series[:-1]
             y_diff = np.diff(time_series)
 
             if len(y_lag) > 0 and unified_math.unified_math.var(y_lag) > 0:
-                # Simple regression: \\u0394y_t = \\u03b1 + \\u03b2*y_{t-1} + \\u03b5_t
+# Simple regression: \\u0394y_t = \\u03b1 + \\u03b2 * y_{t - 1} + \\u03b5_t
                 X = np.column_stack([np.ones(len(y_lag)), y_lag])
-                coeffs = np.linalg.lstsq(X, y_diff, rcond=None)[0]
+                coeffs = np.linalg.lstsq(X, y_diff, rcond = None)[0]
                 mean_reversion_coeff = coeffs[1] if len(coeffs) > 1 else 0
             else:
                 mean_reversion_coeff = 0
@@ -479,7 +579,7 @@ class MathLibV3:
                 "cycle_strength": cycle_strength,
                 "mean_reversion_coefficient": mean_reversion_coeff,
                 "pattern_complexity": unified_math.unified_math.std(time_series)
-                / (unified_math.unified_math.mean(unified_math.unified_math.abs(time_series)) + 1e-10),
+                / (unified_math.unified_math.mean(unified_math.unified_math.abs(time_series)) + 1e - 10),
             }
 
         except Exception as e:
@@ -487,9 +587,12 @@ class MathLibV3:
             return {"error": str(e)}
 
     def predict_market_movement(
+
         self, historical_data: Vector, forecast_horizon: int = 5
     ) -> Dict[str, Any]:
         """
+"""
+"""
         Simple market prediction using time series analysis
 
         Args:
@@ -499,28 +602,30 @@ class MathLibV3:
         Returns:
             Prediction results
         """
+"""
+"""
         try:
             if len(historical_data) < 10:
                 return {"error": "Insufficient data for prediction"}
 
-            # Simple exponential smoothing for trend
+# Simple exponential smoothing for trend
             alpha = 0.3
             smoothed = [historical_data[0]]
 
             for i in range(1, len(historical_data)):
                 smoothed.append(alpha * historical_data[i] + (1 - alpha) * smoothed[-1])
 
-            # Linear trend estimation
+# Linear trend estimation
             x = np.arange(len(historical_data))
             trend_coeffs = np.polyfit(x, historical_data, 1)
 
-            # Forecast
+# Forecast
             future_x = np.arange(
                 len(historical_data), len(historical_data) + forecast_horizon
             )
             trend_forecast = np.polyval(trend_coeffs, future_x)
 
-            # Prediction confidence based on historical volatility
+# Prediction confidence based on historical volatility
             volatility = unified_math.unified_math.std(np.diff(historical_data))
             confidence_intervals = {
                 "lower_95": trend_forecast - 1.96 * volatility,
@@ -543,10 +648,13 @@ class MathLibV3:
             return {"error": str(e)}
 
     def compute_dual_gradient(
+
         self, func: Callable[[Dual], Dual], x: float
     ) -> Tuple[float, float]:
         """
-        Compute gradient using dual numbers (forward-mode automatic differentiation)
+"""
+"""
+        Compute gradient using dual numbers (forward - mode automatic differentiation)
 
         Args:
             func: Function to differentiate (takes Dual, returns Dual)
@@ -555,11 +663,13 @@ class MathLibV3:
         Returns:
             (function_value, derivative_value)
         """
+"""
+"""
         try:
-            # Create dual number with derivative seed
+# Create dual number with derivative seed
             dual_x = Dual(x, 1.0)
 
-            # Evaluate function
+# Evaluate function
             result = func(dual_x)
 
             return result.val, result.eps
@@ -569,7 +679,10 @@ class MathLibV3:
             return 0.0, 0.0
 
     def compute_jacobian(self, func: Callable[[Vector], Vector], x: Vector) -> Matrix:
+
         """
+"""
+"""
         Compute Jacobian matrix using automatic differentiation
 
         Args:
@@ -579,25 +692,27 @@ class MathLibV3:
         Returns:
             Jacobian matrix
         """
+"""
+"""
         try:
             n = len(x)
 
-            # Test function output dimension
+# Test function output dimension
             test_output = func(x)
             m = len(test_output)
 
-            # Initialize Jacobian
+# Initialize Jacobian
             jacobian = np.zeros((m, n))
 
-            # Compute each column of Jacobian
+# Compute each column of Jacobian
             for i in range(n):
-                # Create dual vector with i-th unit vector as derivative
+# Create dual vector with i - th unit vector as derivative
                 dual_x = [Dual(x[j], 1.0 if j == i else 0.0) for j in range(n)]
 
-                # Evaluate function
+# Evaluate function
                 dual_output = func(dual_x)
 
-                # Extract derivative column
+# Extract derivative column
                 for j in range(m):
                     jacobian[j, i] = (
                         dual_output[j].eps if hasattr(dual_output[j], "eps") else 0.0
@@ -610,14 +725,17 @@ class MathLibV3:
             return np.zeros((1, len(x)))
 
     def gradient_descent_optimization(
+
         self,
         objective: Callable[[Vector], float],
         initial_x: Vector,
         learning_rate: float = 0.01,
         max_iterations: int = 1000,
-        tolerance: float = 1e-6,
+        tolerance: float = 1e - 6,
     ) -> Dict[str, Any]:
         """
+"""
+"""
         Gradient descent optimization using automatic differentiation
 
         Args:
@@ -630,25 +748,27 @@ class MathLibV3:
         Returns:
             Optimization results
         """
+"""
+"""
         try:
             x = initial_x.copy()
             history = []
 
             for iteration in range(max_iterations):
-                # Compute gradient using finite differences (simplified)
+# Compute gradient using finite differences (simplified)
                 gradient = np.zeros_like(x)
                 f_x = objective(x)
-                epsilon = 1e-8
+                epsilon = 1e - 8
 
                 for i in range(len(x)):
                     x_plus = x.copy()
                     x_plus[i] += epsilon
                     gradient[i] = (objective(x_plus) - f_x) / epsilon
 
-                # Update parameters
+# Update parameters
                 x_new = x - learning_rate * gradient
 
-                # Check convergence
+# Check convergence
                 if np.linalg.norm(x_new - x) < tolerance:
                     break
 
@@ -676,51 +796,69 @@ class MathLibV3:
 
 # Convenience functions for external API
 def grad(func: Callable[[Dual], Dual], x: float) -> float:
+
     """Compute gradient using the MathLibV3 wrapper."""
+"""
+"""
     lib = MathLibV3()
     _, derivative = lib.compute_dual_gradient(func, x)
     return derivative
 
 
 def jacobian(func: Callable[[Vector], Vector], x: Vector) -> Matrix:
+
     """Compute Jacobian matrix using the MathLibV3 wrapper."""
+"""
+"""
     lib = MathLibV3()
     return lib.compute_jacobian(func, x)
 
 
 def kelly_fraction(mu: float, sigma_squared: float) -> float:
+
     """Calculate Kelly criterion fraction."""
+"""
+"""
     lib = MathLibV3()
     result = lib.kelly_criterion_risk_adjusted(mu, sigma_squared)
     return result.get("kelly_fraction", 0.0)
 
 
 def cvar(returns: Vector, alpha: float = 0.95) -> float:
+
     """Calculate conditional value at risk (CVaR)."""
+"""
+"""
     lib = MathLibV3()
     return lib.cvar_calculation(returns, alpha)
 
 
 def main() -> None:
+
     """Test and demonstration function."""
+"""
+"""
     lib_v3 = MathLibV3()
 
-    # Test Kelly criterion
+# Test Kelly criterion
     safe_print("Testing Kelly criterion...")
     kelly_result = lib_v3.kelly_criterion_risk_adjusted(0.1, 0.04, 0.25)
     safe_print(f"Kelly result: {kelly_result}")
 
-    # Test dual numbers
+# Test dual numbers
     safe_print("\\nTesting dual number automatic differentiation...")
 
     def test_function(x: Dual) -> Dual:
-        """Evaluate f(x) = x\\u00b2 + 2x + 1 as a Dual-friendly demo."""
+
+        """Evaluate f(x) = x\\u00b2 + 2x + 1 as a Dual - friendly demo."""
+"""
+"""
         return x * x + 2 * x + 1  # f(x) = x\\u00b2 + 2x + 1, f'(x) = 2x + 2
 
     val, grad_val = lib_v3.compute_dual_gradient(test_function, 3.0)
     safe_print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")
 
-    # Test CVaR
+# Test CVaR
     safe_print("\\nTesting CVaR...")
     test_returns = np.random.normal(0.05, 0.2, 1000)  # Simulate returns
     cvar_result = lib_v3.cvar_calculation(test_returns, 0.95)

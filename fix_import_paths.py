@@ -1,10 +1,34 @@
-#!/usr/bin/env python3
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+
 Fix Import Paths Script
-======================
+== == == == == == == == == == ==
 
 This script fixes all the incorrect import paths in the Schwabot core files.
 It replaces 'from utils.safe_print import' with the correct import paths.
+"""
+"""
+"""
+"""
 """
 
 import os
@@ -14,18 +38,22 @@ from pathlib import Path
 
 def fix_import_paths_in_file(file_path):
     """Fix import paths in a single file."""
+"""
+"""
+"""
+"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf - 8') as f:
             content = f.read()
 
-        # Check if file has the problematic import
+# Check if file has the problematic import
         if 'from utils.safe_print import' in content:
             print(f"Fixing: {file_path}")
 
-            # Replace the problematic import with correct import
+# Replace the problematic import with correct import
             new_content = re.sub(
-                r'from utils\.safe_print import safe_print, info, warn, error, success, debug',
-                '''# Import safe print for Windows compatibility
+                r'from utils\\.safe_print import safe_print, info, warn, error, success, debug',
+                '''  # Import safe print for Windows compatibility
 try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 except ImportError:
@@ -41,8 +69,8 @@ except ImportError:
                 content
             )
 
-            # Write the fixed content back
-            with open(file_path, 'w', encoding='utf-8') as f:
+# Write the fixed content back
+            with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(new_content)
 
             return True
@@ -56,10 +84,14 @@ except ImportError:
 
 def main():
     """Main function to fix all import paths."""
+"""
+"""
+"""
+"""
     print("\\u1f527 Fixing Import Paths in Schwabot Core Files")
     print("=" * 50)
 
-    # Get all Python files in core directory
+# Get all Python files in core directory
     core_dir = Path("core")
     python_files = list(core_dir.rglob("*.py"))
 

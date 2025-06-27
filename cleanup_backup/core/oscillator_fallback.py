@@ -1,12 +1,24 @@
+# -*- coding: utf - 8 -*-
+"""Oscillator fallback \\u2013 damped harmonic pulse generator.
+"""Oscillator fallback \\u2013 damped harmonic pulse generator.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """Oscillator fallback \\u2013 damped harmonic pulse generator.
+"""Oscillator fallback \\u2013 damped harmonic pulse generator.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 This helper provides a mathematically\\u2013stable fallback oscillator that produces
 bounded amplitude even if upstream signal generators become unstable.  Ferris
-wheel and GAN-entropy modules can call this in *safe-mode* to keep phase timers
+wheel and GAN - entropy modules can call this in *safe - mode* to keep phase timers
 alive without injecting unbounded energy into the system.
 
 Mathematics
@@ -18,7 +30,9 @@ Damped harmonic oscillator (underdamped case):
 where 0 < \\u03b3 < \\u221e is the damping coefficient.
 
 The implementation is intentionally minimal \\u2013 no dynamic state, no numerical
-integrator \\u2013 just the closed-form expression that guarantees \\u2016x(t)\\u2016 \\u2264 A.
+integrator \\u2013 just the closed - form expression that guarantees \\u2016x(t)\\u2016 \\u2264 A.
+"""
+"""
 """
 
 
@@ -31,6 +45,7 @@ _PI2: Final = 2.0 * math.pi
 
 
 def fallback_oscillator(
+
     t: float,
     *,
     amplitude: float = 1.0,
@@ -43,7 +58,7 @@ def fallback_oscillator(
     Parameters
     ----------
     t
-        Time (seconds) or dimension-less tick.
+        Time (seconds) or dimension - less tick.
     amplitude
         Initial amplitude ``A``.  Defaults to **1.0**.
     frequency
@@ -58,8 +73,10 @@ def fallback_oscillator(
     float
         Damped oscillator value at *t*.
     """
+"""
+"""
     if damping < 0:
-        raise ValueError("damping must be non-negative")
+        raise ValueError("damping must be non - negative")
     envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
     return amplitude * envelope * unified_math.unified_math.cos(angle)

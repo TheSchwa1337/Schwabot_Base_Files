@@ -1,31 +1,44 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass, field, asdict
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Any, Union
+import asyncio
+import hashlib
+import json
+import logging
+import os
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 AI Command Sequencer - Recursive Memory Tracking System.
 
-This module logs, tags, timestamps, and sequences all AI-originating commands
+This module logs, tags, timestamps, and sequences all AI - originating commands
 for Schwabot's recursive execution system. It provides the foundation for
-memory-based learning and command validation.
+memory - based learning and command validation.
 
 Mathematical Foundation:
 - Command Hash: H = SHA256(agent + domain + payload + timestamp)
 - Memory Key: MK = f(agent, hash, tick, \\u03b1, matrix_id)
 - Drift Vector: \\u0394t_drift = T_executed - T_expected
-- Recursive Trust: R_n = \\u03bb\\u00b7R_{n-1} + (1-\\u03bb)\\u00b7\\u03b1_n
+- Recursive Trust: R_n = \\u03bb\\u00b7R_{n - 1} + (1-\\u03bb)\\u00b7\\u03b1_n
+"""
+"""
 """
 
-import asyncio
-import json
-import logging
-import os
-import time
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple, Any, Union
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-import hashlib
-from core.unified_math_system import unified_math
 
 # Import centralized CLI handler
 try:
@@ -41,12 +54,15 @@ except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
     def safe_print(message: str, use_emoji: bool = True) -> str:
+
         return message
 
     def safe_format_error(error: Exception, context: str = "") -> str:
+
         return f"Error: {str(error)} | Context: {context}"
 
     def log_safe(logger, level: str, message: str) -> None:
+
         getattr(logger, level.lower())(message)
     cli_handler = None
 
@@ -64,7 +80,12 @@ logger = logging.getLogger(__name__)
 
 
 class CommandStatus(Enum):
+
     """Enumeration of command statuses."""
+
+
+"""
+"""
     RECEIVED = "received"
     VALIDATED = "validated"
     EXECUTING = "executing"
@@ -74,7 +95,12 @@ class CommandStatus(Enum):
 
 
 class DriftSeverity(Enum):
+
     """Enumeration of drift severity levels."""
+
+
+"""
+"""
     NONE = "none"
     MINOR = "minor"
     MODERATE = "moderate"
@@ -84,7 +110,12 @@ class DriftSeverity(Enum):
 
 @dataclass
 class CommandSequence:
+
     """Command sequence tracking structure."""
+
+
+"""
+"""
     sequence_id: str
     command_id: str
     agent_type: str
@@ -106,14 +137,21 @@ class CommandSequence:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
-        """Post-initialization processing."""
+        """Post - initialization processing."""
+"""
+"""
         if not self.metadata:
             self.metadata = {}
 
 
 @dataclass
 class AgentPerformance:
+
     """Agent performance tracking."""
+
+
+"""
+"""
     agent_type: str
     total_commands: int = 0
     successful_commands: int = 0
@@ -125,31 +163,42 @@ class AgentPerformance:
     performance_history: List[Dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self):
-        """Post-initialization processing."""
+        """Post - initialization processing."""
+"""
+"""
         if not self.performance_history:
             self.performance_history = []
 
 
 class AICommandSequencer:
+
     """
+"""
+
+
+"""
     AI Command Sequencer - Recursive Memory Tracking System.
 
     This class manages the logging, sequencing, and memory tracking of all
-    AI-originating commands in Schwabot's recursive execution system.
+    AI - originating commands in Schwabot's recursive execution system.
     """
+"""
+"""
 
-    def __init__(self, log_file: str = "memory_stack/command_feedback_log.json"):
+    def __init__(self, log_file: str = "memory_stack / command_feedback_log.json"):
         """Initialize the AI command sequencer."""
+"""
+"""
         self.log_file = log_file
         self.logger = logging.getLogger("ai_command_sequencer")
         self.logger.setLevel(logging.INFO)
 
-        # Command tracking
+# Command tracking
         self.command_sequences: Dict[str, CommandSequence] = {}
         self.agent_performance: Dict[str, AgentPerformance] = {}
         self.sequence_history: List[CommandSequence] = []
 
-        # Configuration parameters
+# Configuration parameters
         self.max_history_size = 10000
         self.drift_thresholds = {
             DriftSeverity.NONE: 0.0,
@@ -161,26 +210,32 @@ class AICommandSequencer:
         self.trust_decay_factor = 0.95
         self.alpha_weight = 0.3
 
-        # Performance tracking
+# Performance tracking
         self.total_commands_processed = 0
         self.total_drift_detected = 0
         self.average_sequence_time = 0.0
 
-        # Initialize agent performance tracking
+# Initialize agent performance tracking
         self._initialize_agent_performance()
 
-        # Load existing log
+# Load existing log
         self._load_command_log()
 
         safe_safe_print("\\u1f9e0 AI Command Sequencer initialized - Memory tracking active")
 
     def _initialize_agent_performance(self) -> None:
+
         """Initialize performance tracking for all AI agents."""
+"""
+"""
         for agent_type in ["gpt", "claude", "r1", "gemini", "schwabot"]:
-            self.agent_performance[agent_type] = AgentPerformance(agent_type=agent_type)
+            self.agent_performance[agent_type] = AgentPerformance(agent_type = agent_type)
 
     def _load_command_log(self) -> None:
+
         """Load existing command log from file."""
+"""
+"""
         try:
             if os.path.exists(self.log_file):
                 with open(self.log_file, 'r') as f:
@@ -188,25 +243,25 @@ class AICommandSequencer:
 
                 for entry in log_data.get('sequences', []):
                     sequence = CommandSequence(
-                        sequence_id=entry['sequence_id'],
-                        command_id=entry['command_id'],
-                        agent_type=entry['agent_type'],
-                        domain=entry['domain'],
-                        hash_signature=entry['hash_signature'],
-                        memory_key=entry['memory_key'],
-                        tick=entry['tick'],
-                        timestamp=datetime.fromisoformat(entry['timestamp']),
-                        status=CommandStatus(entry['status']),
-                        drift_magnitude=entry.get('drift_magnitude', 0.0),
-                        drift_severity=DriftSeverity(entry.get('drift_severity', 'none')),
-                        alpha_score=entry.get('alpha_score', 0.0),
-                        prophet_alignment=entry.get('prophet_alignment', 0.0),
-                        execution_time=entry.get('execution_time', 0.0),
-                        profit_delta=entry.get('profit_delta', 0.0),
-                        matrix_id=entry.get('matrix_id'),
-                        lantern_triggered=entry.get('lantern_triggered', False),
-                        fault_detected=entry.get('fault_detected', False),
-                        metadata=entry.get('metadata', {})
+                        sequence_id = entry['sequence_id'],
+                        command_id = entry['command_id'],
+                        agent_type = entry['agent_type'],
+                        domain = entry['domain'],
+                        hash_signature = entry['hash_signature'],
+                        memory_key = entry['memory_key'],
+                        tick = entry['tick'],
+                        timestamp = datetime.fromisoformat(entry['timestamp']),
+                        status = CommandStatus(entry['status']),
+                        drift_magnitude = entry.get('drift_magnitude', 0.0),
+                        drift_severity = DriftSeverity(entry.get('drift_severity', 'none')),
+                        alpha_score = entry.get('alpha_score', 0.0),
+                        prophet_alignment = entry.get('prophet_alignment', 0.0),
+                        execution_time = entry.get('execution_time', 0.0),
+                        profit_delta = entry.get('profit_delta', 0.0),
+                        matrix_id = entry.get('matrix_id'),
+                        lantern_triggered = entry.get('lantern_triggered', False),
+                        fault_detected = entry.get('fault_detected', False),
+                        metadata = entry.get('metadata', {})
                     )
                     self.command_sequences[sequence.sequence_id] = sequence
                     self.sequence_history.append(sequence)
@@ -218,9 +273,12 @@ class AICommandSequencer:
             safe_safe_print(f"\\u26a0\\ufe0f Failed to load command log: {error_msg}")
 
     def _save_command_log(self) -> None:
+
         """Save command log to file."""
+"""
+"""
         try:
-            os.makedirs(os.path.dirname(self.log_file), exist_ok=True)
+            os.makedirs(os.path.dirname(self.log_file), exist_ok = True)
 
             log_data = {
                 'sequences': [],
@@ -241,7 +299,7 @@ class AICommandSequencer:
                 log_data['sequences'].append(sequence_data)
 
             with open(self.log_file, 'w') as f:
-                json.dump(log_data, f, indent=2)
+                json.dump(log_data, f, indent = 2)
 
         except Exception as e:
             error_msg = safe_format_error(e, "save_command_log")
@@ -255,6 +313,8 @@ class AICommandSequencer:
         market_data: Optional[Dict[str, Any]] = None
     ) -> CommandSequence:
         """
+"""
+"""
         Sequence an AI command with full tracking and validation.
 
         Args:
@@ -266,38 +326,40 @@ class AICommandSequencer:
         Returns:
             CommandSequence object with full tracking data
         """
+"""
+"""
         try:
             start_time = time.time()
 
-            # Generate sequence ID
+# Generate sequence ID
             sequence_id = self._generate_sequence_id(command, tick)
 
-            # Generate memory key
+# Generate memory key
             memory_key = self._generate_memory_key(command, tick)
 
-            # Calculate drift magnitude
+# Calculate drift magnitude
             drift_magnitude = self._calculate_drift_magnitude(command, tick)
             drift_severity = self._determine_drift_severity(drift_magnitude)
 
-            # Initialize alpha score
+# Initialize alpha score
             alpha_score = 0.0
             prophet_alignment = 0.0
 
-            # Create command sequence
+# Create command sequence
             sequence = CommandSequence(
-                sequence_id=sequence_id,
-                command_id=command.command_id,
-                agent_type=command.agent_type.value,
-                domain=command.domain.value,
-                hash_signature=command.hash_signature,
-                memory_key=memory_key,
-                tick=tick,
-                timestamp=datetime.now(),
-                status=CommandStatus.RECEIVED,
-                drift_magnitude=drift_magnitude,
-                drift_severity=drift_severity,
-                alpha_score=alpha_score,
-                prophet_alignment=prophet_alignment,
+                sequence_id = sequence_id,
+                command_id = command.command_id,
+                agent_type = command.agent_type.value,
+                domain = command.domain.value,
+                hash_signature = command.hash_signature,
+                memory_key = memory_key,
+                tick = tick,
+                timestamp = datetime.now(),
+                status = CommandStatus.RECEIVED,
+                drift_magnitude = drift_magnitude,
+                drift_severity = drift_severity,
+                alpha_score = alpha_score,
+                prophet_alignment = prophet_alignment,
                 metadata={
                     'payload': command.payload,
                     'context': command.context,
@@ -306,38 +368,38 @@ class AICommandSequencer:
                 }
             )
 
-            # Store sequence
+# Store sequence
             self.command_sequences[sequence_id] = sequence
             self.sequence_history.append(sequence)
 
-            # Update agent performance
+# Update agent performance
             self._update_agent_performance(command.agent_type.value, sequence)
 
-            # Register in hash registry if available
+# Register in hash registry if available
             if GPT_LAYER_AVAILABLE:
                 try:
                     await register_hash_entry(
                         hash_type="command",
-                        agent_type=command.agent_type.value,
-                        domain=command.domain.value,
-                        payload=command.payload,
-                        context=command.context,
-                        command_id=command.command_id,
-                        confidence_score=command.recursive_depth
+                        agent_type = command.agent_type.value,
+                        domain = command.domain.value,
+                        payload = command.payload,
+                        context = command.context,
+                        command_id = command.command_id,
+                        confidence_score = command.recursive_depth
                     )
                 except Exception as e:
                     safe_safe_print(f"\\u26a0\\ufe0f Hash registry registration failed: {safe_format_error(e, 'hash_registry')}")
 
-            # Calculate execution time
+# Calculate execution time
             execution_time = time.time() - start_time
             sequence.execution_time = execution_time
 
-            # Update performance metrics
+# Update performance metrics
             self.total_commands_processed += 1
             if drift_magnitude > 0:
                 self.total_drift_detected += 1
 
-            # Save to log
+# Save to log
             self._save_command_log()
 
             safe_safe_print(f"\\u1f9e0 Command sequenced: {sequence_id} from {command.agent_type.value}")
@@ -347,17 +409,17 @@ class AICommandSequencer:
             error_msg = safe_format_error(e, "sequence_command")
             safe_safe_print(f"\\u274c Command sequencing failed: {error_msg}")
 
-            # Return safe fallback sequence
+# Return safe fallback sequence
             return CommandSequence(
-                sequence_id=f"fallback_{int(time.time())}",
-                command_id=command.command_id,
-                agent_type=command.agent_type.value,
-                domain=command.domain.value,
-                hash_signature=command.hash_signature,
+                sequence_id = f"fallback_{int(time.time())}",
+                command_id = command.command_id,
+                agent_type = command.agent_type.value,
+                domain = command.domain.value,
+                hash_signature = command.hash_signature,
                 memory_key="fallback",
-                tick=tick,
-                timestamp=datetime.now(),
-                status=CommandStatus.FAILED,
+                tick = tick,
+                timestamp = datetime.now(),
+                status = CommandStatus.FAILED,
                 metadata={'error': error_msg}
             )
 
@@ -370,6 +432,8 @@ class AICommandSequencer:
         market_data: Optional[Dict[str, Any]] = None
     ) -> bool:
         """
+"""
+"""
         Update command sequence with execution results.
 
         Args:
@@ -382,69 +446,71 @@ class AICommandSequencer:
         Returns:
             True if update successful
         """
+"""
+"""
         try:
             sequence = self.command_sequences.get(sequence_id)
             if not sequence:
                 safe_safe_print(f"\\u26a0\\ufe0f Sequence not found: {sequence_id}")
                 return False
 
-            # Update status
+# Update status
             if response.success:
                 sequence.status = CommandStatus.COMPLETED
             else:
                 sequence.status = CommandStatus.FAILED
 
-            # Update execution time
+# Update execution time
             sequence.execution_time = response.execution_time
             sequence.profit_delta = profit_delta
 
-            # Calculate alpha score if Prophet curve available
+# Calculate alpha score if Prophet curve available
             if prophet_curve_id and GPT_LAYER_AVAILABLE:
                 try:
-                    # Get expected profit from command context
+# Get expected profit from command context
                     expected_profit = sequence.metadata.get('payload', {}).get('target_profit', 0.0)
 
-                    # Calculate alpha score
+# Calculate alpha score
                     alpha_score = compute_alpha_score(
-                        p_actual=profit_delta,
-                        p_expected=expected_profit,
-                        delta_t=sequence.execution_time,
-                        curve_id=prophet_curve_id
+                        p_actual = profit_delta,
+                        p_expected = expected_profit,
+                        delta_t = sequence.execution_time,
+                        curve_id = prophet_curve_id
                     )
 
                     sequence.alpha_score = alpha_score.alpha_value
 
-                    # Analyze curve alignment if market data available
+# Analyze curve alignment if market data available
                     if market_data:
                         alignment = analyze_curve_alignment(
-                            curve_id=prophet_curve_id,
-                            current_price=market_data.get('price', 0.0),
-                            current_volume=market_data.get('volume', 0.0),
-                            current_time=datetime.now(),
-                            market_data=market_data
+                            curve_id = prophet_curve_id,
+                            current_price = market_data.get('price', 0.0),
+                            current_volume = market_data.get('volume', 0.0),
+                            current_time = datetime.now(),
+                            market_data = market_data
                         )
                         sequence.prophet_alignment = alignment.alignment_score
 
                 except Exception as e:
                     safe_safe_print(f"\\u26a0\\ufe0f Alpha calculation failed: {safe_format_error(e, 'alpha_calculation')}")
 
-            # Update hash registry status
+# Update hash registry status
             if GPT_LAYER_AVAILABLE:
                 try:
                     await update_hash_status(
-                        hash_id=sequence.hash_signature,
+                        hash_id = sequence.hash_signature,
                         status="completed" if response.success else "failed",
-                        result=response.result,
-                        error_message=response.error_message,
-                        execution_time=response.execution_time
+                        result = response.result,
+                        error_message = response.error_message,
+                        execution_time = response.execution_time
                     )
                 except Exception as e:
                     safe_safe_print(f"\\u26a0\\ufe0f Hash registry update failed: {safe_format_error(e, 'hash_update')}")
 
-            # Update agent performance
+# Update agent performance
             self._update_agent_performance_with_result(sequence, response, profit_delta)
 
-            # Save to log
+# Save to log
             self._save_command_log()
 
             safe_safe_print(f"\\u2705 Command result updated: {sequence_id} - {'Success' if response.success else 'Failed'}")
@@ -456,24 +522,33 @@ class AICommandSequencer:
             return False
 
     def _generate_sequence_id(self, command: AICommand, tick: int) -> str:
+
         """Generate unique sequence ID."""
+"""
+"""
         timestamp = int(time.time() * 1000000)
         agent_code = command.agent_type.value.upper()
         return f"SEQ_{agent_code}_{tick}_{timestamp}_{hash(command.payload)}"
 
     def _generate_memory_key(self, command: AICommand, tick: int) -> str:
+
         """Generate memory key for command."""
-        # Format: AgentType + Domain + Tick + Hash
+"""
+"""
+# Format: AgentType + Domain + Tick + Hash
         agent_code = command.agent_type.value.upper()
         domain_code = command.domain.value.upper()
         hash_suffix = command.hash_signature[:8]
         return f"{agent_code}{domain_code}_{tick}_{hash_suffix}"
 
     def _calculate_drift_magnitude(self, command: AICommand, tick: int) -> float:
+
         """Calculate drift magnitude from expected timing."""
+"""
+"""
         try:
-            # This would typically compare against expected tick timing
-            # For now, use a simple heuristic based on command complexity
+# This would typically compare against expected tick timing
+# For now, use a simple heuristic based on command complexity
             complexity_factor = len(command.payload) * 0.1
             base_drift = np.random.normal(0, 0.5)  # Simulated drift
             return unified_math.max(0.0, unified_math.abs(base_drift + complexity_factor))
@@ -483,22 +558,28 @@ class AICommandSequencer:
             return 0.0
 
     def _determine_drift_severity(self, drift_magnitude: float) -> DriftSeverity:
+
         """Determine drift severity based on magnitude."""
-        for severity, threshold in sorted(self.drift_thresholds.items(), key=lambda x: x[1], reverse=True):
+"""
+"""
+        for severity, threshold in sorted(self.drift_thresholds.items(), key = lambda x: x[1], reverse = True):
             if drift_magnitude >= threshold:
                 return severity
         return DriftSeverity.NONE
 
     def _update_agent_performance(self, agent_type: str, sequence: CommandSequence) -> None:
+
         """Update agent performance tracking."""
+"""
+"""
         if agent_type not in self.agent_performance:
-            self.agent_performance[agent_type] = AgentPerformance(agent_type=agent_type)
+            self.agent_performance[agent_type] = AgentPerformance(agent_type = agent_type)
 
         performance = self.agent_performance[agent_type]
         performance.total_commands += 1
         performance.last_command_time = sequence.timestamp
 
-        # Update performance history
+# Update performance history
         performance.performance_history.append({
             'timestamp': sequence.timestamp.isoformat(),
             'sequence_id': sequence.sequence_id,
@@ -506,13 +587,16 @@ class AICommandSequencer:
             'status': sequence.status.value
         })
 
-        # Keep history manageable
+# Keep history manageable
         if len(performance.performance_history) > 100:
             performance.performance_history = performance.performance_history[-50:]
 
     def _update_agent_performance_with_result(self, sequence: CommandSequence,
-                                              response: CommandResponse, profit_delta: float) -> None:
+
+                                                response: CommandResponse, profit_delta: float) -> None:
         """Update agent performance with execution results."""
+"""
+"""
         agent_type = sequence.agent_type
         if agent_type not in self.agent_performance:
             return
@@ -524,7 +608,7 @@ class AICommandSequencer:
         else:
             performance.failed_commands += 1
 
-        # Update average alpha score
+# Update average alpha score
         if sequence.alpha_score != 0:
             current_avg = performance.average_alpha_score
             total_commands = performance.total_commands
@@ -532,14 +616,14 @@ class AICommandSequencer:
                 (current_avg * (total_commands - 1) + sequence.alpha_score) / total_commands
             )
 
-        # Update average execution time
+# Update average execution time
         current_avg_time = performance.average_execution_time
         total_commands = performance.total_commands
         performance.average_execution_time = (
             (current_avg_time * (total_commands - 1) + sequence.execution_time) / total_commands
         )
 
-        # Update trust score using recursive trust formula
+# Update trust score using recursive trust formula
         if sequence.alpha_score != 0:
             lambda_factor = self.trust_decay_factor
             alpha_factor = self.alpha_weight
@@ -550,23 +634,38 @@ class AICommandSequencer:
             performance.trust_score = unified_math.max(0.0, unified_math.min(1.0, performance.trust_score))
 
     def get_agent_performance(self, agent_type: str) -> Optional[AgentPerformance]:
+
         """Get performance metrics for a specific agent."""
+"""
+"""
         return self.agent_performance.get(agent_type)
 
     def get_recent_sequences(self, limit: int = 100) -> List[CommandSequence]:
+
         """Get recent command sequences."""
+"""
+"""
         return self.sequence_history[-limit:] if self.sequence_history else []
 
     def get_sequences_by_agent(self, agent_type: str) -> List[CommandSequence]:
+
         """Get all sequences for a specific agent."""
+"""
+"""
         return [seq for seq in self.sequence_history if seq.agent_type == agent_type]
 
     def get_sequences_by_status(self, status: CommandStatus) -> List[CommandSequence]:
+
         """Get all sequences with a specific status."""
+"""
+"""
         return [seq for seq in self.sequence_history if seq.status == status]
 
     def get_drift_analysis(self) -> Dict[str, Any]:
+
         """Get drift analysis statistics."""
+"""
+"""
         if not self.sequence_history:
             return {}
 
@@ -584,7 +683,10 @@ class AICommandSequencer:
         }
 
     def get_performance_metrics(self) -> Dict[str, Any]:
+
         """Get overall performance metrics."""
+"""
+"""
         return {
             'total_commands_processed': self.total_commands_processed,
             'total_drift_detected': self.total_drift_detected,
@@ -602,12 +704,15 @@ class AICommandSequencer:
         }
 
     def cleanup_old_data(self, max_sequences: int = 5000) -> None:
+
         """Clean up old sequence data."""
+"""
+"""
         if len(self.sequence_history) > max_sequences:
-            # Keep most recent sequences
+# Keep most recent sequences
             self.sequence_history = self.sequence_history[-max_sequences:]
 
-            # Update command_sequences dict
+# Update command_sequences dict
             self.command_sequences = {
                 seq.sequence_id: seq for seq in self.sequence_history
             }
@@ -627,6 +732,8 @@ async def sequence_ai_command(
     market_data: Optional[Dict[str, Any]] = None
 ) -> CommandSequence:
     """Sequence an AI command using global sequencer."""
+"""
+"""
     return await ai_command_sequencer.sequence_command(command, tick, prophet_curve_id, market_data)
 
 
@@ -638,6 +745,8 @@ async def update_command_sequence_result(
     market_data: Optional[Dict[str, Any]] = None
 ) -> bool:
     """Update command sequence result using global sequencer."""
+"""
+"""
     return await ai_command_sequencer.update_command_result(
         sequence_id, response, profit_delta, prophet_curve_id, market_data
     )
@@ -647,16 +756,18 @@ async def update_command_sequence_result(
 if __name__ == "__main__":
     async def test_command_sequencer():
         """Test command sequencer functionality."""
+"""
+"""
         safe_safe_print("\\u1f9e0 Testing AI Command Sequencer...")
 
-        # Create test command
+# Create test command
         test_command = AICommand(
             command_id="test_cmd_001",
-            agent_type=AIAgentType.GPT,
-            domain=CommandDomain.STRATEGY,
-            priority=CommandPriority.MEDIUM,
+            agent_type = AIAgentType.GPT,
+            domain = CommandDomain.STRATEGY,
+            priority = CommandPriority.MEDIUM,
             hash_signature="test_hash_123",
-            timestamp=datetime.now(),
+            timestamp = datetime.now(),
             payload={
                 "strategy_name": "test_strategy",
                 "parameters": {"test": True},
@@ -665,29 +776,29 @@ if __name__ == "__main__":
             context={"test": True}
         )
 
-        # Sequence command
-        sequence = await sequence_ai_command(test_command, tick=1000)
+# Sequence command
+        sequence = await sequence_ai_command(test_command, tick = 1000)
 
-        # Create test response
+# Create test response
         test_response = CommandResponse(
-            command_id=test_command.command_id,
-            success=True,
+            command_id = test_command.command_id,
+            success = True,
             result={"profit": 50.0},
-            execution_time=1.5,
-            timestamp=datetime.now()
+            execution_time = 1.5,
+            timestamp = datetime.now()
         )
 
-        # Update result
+# Update result
         success = await update_command_sequence_result(
             sequence.sequence_id,
             test_response,
-            profit_delta=50.0
+            profit_delta = 50.0
         )
 
-        # Get performance metrics
+# Get performance metrics
         metrics = ai_command_sequencer.get_performance_metrics()
 
         safe_safe_print(f"\\u2705 Test completed - Success: {success}, Metrics: {metrics}")
 
-    # Run test
+# Run test
     asyncio.run(test_command_sequencer())

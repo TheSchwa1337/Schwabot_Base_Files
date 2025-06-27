@@ -1,35 +1,53 @@
-from core.math.tensor_algebra import UnifiedTensorAlgebra
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, List, Any, Optional
+import json
+import logging
+import os
+import sys
+import time
+
 from core.bit_resolution_engine import BitResolutionEngine
-from core.tensor_matcher import TensorMatcher
-from core.matrix_mapper import MatrixMapper, BitPhase
-from core.matrix_basket_loader import MatrixBasketLoader, BasketLoadTrigger
 from core.hash_registry_manager import HashRegistryManager, HashRegistryEntry
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from core.math.tensor_algebra import UnifiedTensorAlgebra
+from core.matrix_basket_loader import MatrixBasketLoader, BasketLoadTrigger
+from core.matrix_mapper import MatrixMapper, BitPhase
+from core.tensor_matcher import TensorMatcher
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
+"""
+"""
 """
 Hash Registry Integration Test - Schwabot UROS v1.0
 ==================================================
 
-Comprehensive integration test for the 32-entry hash registry scaffold system.
+Comprehensive integration test for the 32 - entry hash registry scaffold system.
 Tests all components: hash registry manager, matrix basket loader, and integration points.
 
 Mathematical Foundation:
-- 4-bit to 42-bit range logic validation
+- 4 - bit to 42 - bit range logic validation
 - Hash ID naming structure (hash_00 to hash_31)
-- Basket IDs (0-31) mapping validation
+- Basket IDs (0 - 31) mapping validation
 - Route logic (route_0 to route_4) validation
 - Bit prioritization (0.1 to 3.2) validation
-- Enabled/disabled switch validation
+- Enabled / disabled switch validation
+"""
+"""
+"""
+"""
 """
 
-import json
-import time
-import logging
-import sys
-import os
-from typing import Dict, List, Any, Optional
-from datetime import datetime
 
 # Add core directory to path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -41,23 +59,38 @@ logger = logging.getLogger(__name__)
 
 
 class HashRegistryIntegrationTester:
+
     """
+"""
+
+
+"""
+"""
+"""
     Comprehensive integration tester for hash registry system.
 
-    Tests all aspects of the 32-entry scaffold:
+    Tests all aspects of the 32 - entry scaffold:
     - Hash registry structure validation
     - Matrix basket loading functionality
     - Integration with core components
     - Mathematical foundation validation
     - Performance and reliability testing
     """
+"""
+"""
+"""
+"""
 
     def __init__(self):
         """Initialize integration tester."""
+"""
+"""
+"""
+"""
         self.test_results = {}
         self.start_time = time.time()
 
-        # Initialize components
+# Initialize components
         self.hash_registry_manager = HashRegistryManager()
         self.matrix_basket_loader = MatrixBasketLoader(self.hash_registry_manager)
         self.matrix_mapper = MatrixMapper()
@@ -68,7 +101,12 @@ class HashRegistryIntegrationTester:
         logger.info("Hash Registry Integration Tester initialized")
 
     def run_complete_integration_test(self) -> Dict[str, Any]:
+
         """Run complete integration test suite."""
+"""
+"""
+"""
+"""
         safe_print("\\u1f9ee Hash Registry Integration Test - Schwabot UROS v1.0")
         safe_print("=" * 60)
 
@@ -79,7 +117,7 @@ class HashRegistryIntegrationTester:
             ("Basket ID Mapping", self.test_basket_id_mapping),
             ("Route Logic Validation", self.test_route_logic_validation),
             ("Bit Prioritization", self.test_bit_prioritization),
-            ("Enabled/Disabled Switch", self.test_enabled_disabled_switch),
+            ("Enabled / Disabled Switch", self.test_enabled_disabled_switch),
             ("Matrix Basket Loading", self.test_matrix_basket_loading),
             ("Core Component Integration", self.test_core_component_integration),
             ("Mathematical Foundation", self.test_mathematical_foundation),
@@ -101,7 +139,7 @@ class HashRegistryIntegrationTester:
                 safe_print(f"  {test_name}: \\u274c FAILED")
                 safe_print(f"    Exception: {e}")
 
-        # Calculate overall results
+# Calculate overall results
         total_tests = len(test_suites)
         passed_tests = sum(1 for result in self.test_results.values() if result.get('success', False))
         failed_tests = total_tests - passed_tests
@@ -113,7 +151,7 @@ class HashRegistryIntegrationTester:
         safe_print(f"  Total Tests: {total_tests}")
         safe_print(f"  Passed: {passed_tests}")
         safe_print(f"  Failed: {failed_tests}")
-        safe_print(f"  Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+        safe_print(f"  Success Rate: {(passed_tests / total_tests)*100:.1f}%")
         safe_print(f"  Total Execution Time: {time.time() - self.start_time:.2f}s")
 
         return {
@@ -121,26 +159,31 @@ class HashRegistryIntegrationTester:
             "total_tests": total_tests,
             "passed_tests": passed_tests,
             "failed_tests": failed_tests,
-            "success_rate": (passed_tests/total_tests)*100 if total_tests > 0 else 0,
+            "success_rate": (passed_tests / total_tests)*100 if total_tests > 0 else 0,
             "execution_time": time.time() - self.start_time,
             "test_results": self.test_results
         }
 
     def test_hash_registry_structure(self) -> Dict[str, Any]:
+
         """Test hash registry structure validation."""
+"""
+"""
+"""
+"""
         try:
-            # Check total entries
+# Check total entries
             total_entries = len(self.hash_registry_manager.hash_entries)
             if total_entries != 32:
                 return {'success': False, 'error': f'Expected 32 entries, got {total_entries}'}
 
-            # Check hash ID format
+# Check hash ID format
             for i in range(32):
                 expected_hash_id = f"hash_{i:02d}"
                 if expected_hash_id not in self.hash_registry_manager.hash_entries:
                     return {'success': False, 'error': f'Missing hash ID: {expected_hash_id}'}
 
-            # Check required fields
+# Check required fields
             required_fields = ['bit_depth', 'tensor_route', 'matrix_basket_id', 'priority', 'enabled']
             for hash_id, entry in self.hash_registry_manager.hash_entries.items():
                 for field in required_fields:
@@ -153,7 +196,12 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_bit_depth_range_logic(self) -> Dict[str, Any]:
-        """Test 4-bit to 42-bit range logic."""
+
+        """Test 4 - bit to 42 - bit range logic."""
+"""
+"""
+"""
+"""
         try:
             bit_depths = set()
             for entry in self.hash_registry_manager.hash_entries.values():
@@ -163,12 +211,12 @@ class HashRegistryIntegrationTester:
             if bit_depths != expected_depths:
                 return {'success': False, 'error': f'Expected bit depths {expected_depths}, got {bit_depths}'}
 
-            # Test bit depth distribution
+# Test bit depth distribution
             depth_counts = {}
             for entry in self.hash_registry_manager.hash_entries.values():
                 depth_counts[entry.bit_depth] = depth_counts.get(entry.bit_depth, 0) + 1
 
-            # Validate reasonable distribution (should have some of each)
+# Validate reasonable distribution (should have some of each)
             for depth in expected_depths:
                 if depth_counts.get(depth, 0) == 0:
                     return {'success': False, 'error': f'No entries with bit depth {depth}'}
@@ -183,9 +231,14 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_hash_id_naming_structure(self) -> Dict[str, Any]:
+
         """Test hash ID naming structure (hash_00 to hash_31)."""
+"""
+"""
+"""
+"""
         try:
-            # Test all hash IDs from 00 to 31
+# Test all hash IDs from 00 to 31
             for i in range(32):
                 expected_hash_id = f"hash_{i:02d}"
                 entry = self.hash_registry_manager.get_hash_entry(expected_hash_id)
@@ -202,18 +255,23 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_basket_id_mapping(self) -> Dict[str, Any]:
-        """Test basket ID mapping (0-31)."""
+
+        """Test basket ID mapping (0 - 31)."""
+"""
+"""
+"""
+"""
         try:
             basket_ids = set()
             for entry in self.hash_registry_manager.hash_entries.values():
                 basket_ids.unified_math.add(entry.matrix_basket_id)
 
-            # Check all basket IDs from 0 to 31
+# Check all basket IDs from 0 to 31
             expected_basket_ids = set(range(32))
             if basket_ids != expected_basket_ids:
                 return {'success': False, 'error': f'Expected basket IDs {expected_basket_ids}, got {basket_ids}'}
 
-            # Test basket ID uniqueness
+# Test basket ID uniqueness
             if len(basket_ids) != 32:
                 return {'success': False, 'error': f'Duplicate basket IDs found: {len(basket_ids)} unique IDs'}
 
@@ -223,7 +281,12 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_route_logic_validation(self) -> Dict[str, Any]:
+
         """Test route logic (route_0 to route_4)."""
+"""
+"""
+"""
+"""
         try:
             routes = set()
             for entry in self.hash_registry_manager.hash_entries.values():
@@ -233,12 +296,12 @@ class HashRegistryIntegrationTester:
             if routes != expected_routes:
                 return {'success': False, 'error': f'Expected routes {expected_routes}, got {routes}'}
 
-            # Test route distribution
+# Test route distribution
             route_counts = {}
             for entry in self.hash_registry_manager.hash_entries.values():
                 route_counts[entry.tensor_route] = route_counts.get(entry.tensor_route, 0) + 1
 
-            # Validate reasonable distribution
+# Validate reasonable distribution
             for route in expected_routes:
                 if route_counts.get(route, 0) == 0:
                     return {'success': False, 'error': f'No entries with route {route}'}
@@ -253,24 +316,29 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_bit_prioritization(self) -> Dict[str, Any]:
+
         """Test bit prioritization (0.1 to 3.2)."""
+"""
+"""
+"""
+"""
         try:
             priorities = []
             for entry in self.hash_registry_manager.hash_entries.values():
                 priorities.append(entry.priority)
 
-            # Check priority range
+# Check priority range
             min_priority = unified_math.min(priorities)
             max_priority = unified_math.max(priorities)
 
             if min_priority < 0.1 or max_priority > 3.2:
                 return {'success': False, 'error': f'Priority out of range: min={min_priority}, max={max_priority}'}
 
-            # Check priority uniqueness (should be unique for each entry)
+# Check priority uniqueness (should be unique for each entry)
             if len(set(priorities)) != len(priorities):
                 return {'success': False, 'error': 'Duplicate priorities found'}
 
-            # Check priority progression (should be increasing)
+# Check priority progression (should be increasing)
             sorted_priorities = sorted(priorities)
             if sorted_priorities != priorities:
                 return {'success': False, 'error': 'Priorities not in ascending order'}
@@ -286,7 +354,12 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_enabled_disabled_switch(self) -> Dict[str, Any]:
-        """Test enabled/disabled switch functionality."""
+
+        """Test enabled / disabled switch functionality."""
+"""
+"""
+"""
+"""
         try:
             enabled_count = 0
             disabled_count = 0
@@ -297,11 +370,11 @@ class HashRegistryIntegrationTester:
                 else:
                     disabled_count += 1
 
-            # Test enable/disable functionality
+# Test enable / disable functionality
             test_hash_id = "hash_00"
             original_enabled = self.hash_registry_manager.get_hash_entry(test_hash_id).enabled
 
-            # Test disable
+# Test disable
             success = self.hash_registry_manager.disable_entry(test_hash_id)
             if not success:
                 return {'success': False, 'error': 'Failed to disable entry'}
@@ -310,7 +383,7 @@ class HashRegistryIntegrationTester:
             if disabled_entry.enabled:
                 return {'success': False, 'error': 'Entry still enabled after disable'}
 
-            # Test enable
+# Test enable
             success = self.hash_registry_manager.enable_entry(test_hash_id)
             if not success:
                 return {'success': False, 'error': 'Failed to enable entry'}
@@ -319,7 +392,7 @@ class HashRegistryIntegrationTester:
             if not enabled_entry.enabled:
                 return {'success': False, 'error': 'Entry still disabled after enable'}
 
-            # Restore original state
+# Restore original state
             if not original_enabled:
                 self.hash_registry_manager.disable_entry(test_hash_id)
 
@@ -334,9 +407,14 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_matrix_basket_loading(self) -> Dict[str, Any]:
+
         """Test matrix basket loading functionality."""
+"""
+"""
+"""
+"""
         try:
-            # Test loading by bit depth
+# Test loading by bit depth
             results_4bit = self.matrix_basket_loader.load_baskets_by_bit_depth(4)
             results_8bit = self.matrix_basket_loader.load_baskets_by_bit_depth(8)
             results_42bit = self.matrix_basket_loader.load_baskets_by_bit_depth(42)
@@ -344,22 +422,22 @@ class HashRegistryIntegrationTester:
             if not results_4bit or not results_8bit or not results_42bit:
                 return {'success': False, 'error': 'Failed to load baskets by bit depth'}
 
-            # Test loading by route
+# Test loading by route
             results_route_0 = self.matrix_basket_loader.load_baskets_by_route("route_0")
             if not results_route_0:
                 return {'success': False, 'error': 'Failed to load baskets by route'}
 
-            # Test individual basket loading
+# Test individual basket loading
             result = self.matrix_basket_loader.load_basket_from_registry("hash_10")
             if not result.success:
                 return {'success': False, 'error': f'Failed to load individual basket: {result.error_message}'}
 
-            # Test basket properties
+# Test basket properties
             basket = result.basket
             if not basket:
                 return {'success': False, 'error': 'Basket object is None'}
 
-            if basket.bit_phase.value != 42:  # hash_10 should be 42-bit
+            if basket.bit_phase.value != 42:  # hash_10 should be 42 - bit
                 return {'success': False, 'error': f'Wrong bit depth: expected 42, got {basket.bit_phase.value}'}
 
             return {
@@ -375,22 +453,27 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_core_component_integration(self) -> Dict[str, Any]:
+
         """Test integration with core components."""
+"""
+"""
+"""
+"""
         try:
-            # Test matrix mapper integration
+# Test matrix mapper integration
             self.hash_registry_manager.integrate_with_matrix_mapper(self.matrix_mapper)
 
-            # Test hash resolution
+# Test hash resolution
             test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
             basket_id = self.hash_registry_manager.resolve_hash_to_basket(test_hash)
             if not basket_id:
                 return {'success': False, 'error': 'Failed to resolve hash to basket'}
 
-            # Test tensor matcher integration
+# Test tensor matcher integration
             self.tensor_matcher.set_bit_phase_engine(self.bit_resolution_engine)
             self.tensor_matcher.set_matrix_mapper(self.matrix_mapper)
 
-            # Test bit resolution engine integration
+# Test bit resolution engine integration
             bit_result = self.bit_resolution_engine.resolve_bit_phase(test_hash, "auto")
             if not bit_result:
                 return {'success': False, 'error': 'Failed to resolve bit phase'}
@@ -407,23 +490,28 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_mathematical_foundation(self) -> Dict[str, Any]:
+
         """Test mathematical foundation validation."""
+"""
+"""
+"""
+"""
         try:
-            # Test tensor algebra integration
+# Test tensor algebra integration
             strategy_id = "0x123456789abcdef"
             bit_result = self.tensor_algebra.resolve_bit_phases(strategy_id)
             if not bit_result:
                 return {'success': False, 'error': 'Failed to resolve bit phases'}
 
-            # Test bit phase calculations
+# Test bit phase calculations
             if not (0 <= bit_result.phi_4 <= 15):
-                return {'success': False, 'error': f'Invalid 4-bit phase: {bit_result.phi_4}'}
+                return {'success': False, 'error': f'Invalid 4 - bit phase: {bit_result.phi_4}'}
             if not (0 <= bit_result.phi_8 <= 255):
-                return {'success': False, 'error': f'Invalid 8-bit phase: {bit_result.phi_8}'}
+                return {'success': False, 'error': f'Invalid 8 - bit phase: {bit_result.phi_8}'}
             if not (0 <= bit_result.phi_42 <= 0x3FFFFFFFFFF):
-                return {'success': False, 'error': f'Invalid 42-bit phase: {bit_result.phi_42}'}
+                return {'success': False, 'error': f'Invalid 42 - bit phase: {bit_result.phi_42}'}
 
-            # Test tensor contraction
+# Test tensor contraction
             from core.unified_math_system import unified_math
             matrix_a = np.random.random((4, 4))
             matrix_b = np.random.random((4, 4))
@@ -442,18 +530,23 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_performance(self) -> Dict[str, Any]:
+
         """Test performance characteristics."""
+"""
+"""
+"""
+"""
         try:
             start_time = time.time()
 
-            # Test bulk loading performance
+# Test bulk loading performance
             all_results = self.matrix_basket_loader.load_all_enabled_baskets()
             bulk_load_time = time.time() - start_time
 
             if bulk_load_time > 5.0:  # Should complete within 5 seconds
                 return {'success': False, 'error': f'Bulk loading too slow: {bulk_load_time:.2f}s'}
 
-            # Test individual loading performance
+# Test individual loading performance
             start_time = time.time()
             for i in range(10):
                 result = self.matrix_basket_loader.load_basket_from_registry(f"hash_{i:02d}")
@@ -478,30 +571,35 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def test_reliability(self) -> Dict[str, Any]:
+
         """Test reliability and error handling."""
+"""
+"""
+"""
+"""
         try:
-            # Test with invalid hash IDs
-            invalid_hash_ids = ["hash_99", "invalid_hash", "hash_32", "hash_-1"]
+# Test with invalid hash IDs
+            invalid_hash_ids = ["hash_99", "invalid_hash", "hash_32", "hash_ - 1"]
             for invalid_id in invalid_hash_ids:
                 entry = self.hash_registry_manager.get_hash_entry(invalid_id)
                 if entry is not None:
                     return {'success': False, 'error': f'Should not find entry for invalid ID: {invalid_id}'}
 
-            # Test with invalid bit depths
+# Test with invalid bit depths
             invalid_bit_depths = [0, 1, 2, 3, 5, 6, 7, 9, 10, 41, 43, 100]
             for invalid_depth in invalid_bit_depths:
                 entries = self.hash_registry_manager.get_entries_by_bit_depth(invalid_depth)
                 if entries:
                     return {'success': False, 'error': f'Should not find entries for invalid bit depth: {invalid_depth}'}
 
-            # Test with invalid routes
-            invalid_routes = ["route_5", "route_10", "invalid_route", "route_-1"]
+# Test with invalid routes
+            invalid_routes = ["route_5", "route_10", "invalid_route", "route_ - 1"]
             for invalid_route in invalid_routes:
                 entries = self.hash_registry_manager.get_entries_by_route(invalid_route)
                 if entries:
                     return {'success': False, 'error': f'Should not find entries for invalid route: {invalid_route}'}
 
-            # Test error handling in basket loading
+# Test error handling in basket loading
             result = self.matrix_basket_loader.load_basket_from_registry("invalid_hash")
             if result.success:
                 return {'success': False, 'error': 'Should not successfully load invalid hash'}
@@ -518,12 +616,17 @@ class HashRegistryIntegrationTester:
             return {'success': False, 'error': str(e)}
 
     def export_test_results(self, output_path: str = "hash_registry_integration_test_results.json") -> None:
+
         """Export test results to JSON file."""
+"""
+"""
+"""
+"""
         try:
             results = self.run_complete_integration_test()
 
             with open(output_path, 'w') as f:
-                json.dump(results, f, indent=2)
+                json.dump(results, f, indent = 2)
 
             logger.info(f"Integration test results exported to {output_path}")
 
@@ -532,20 +635,25 @@ class HashRegistryIntegrationTester:
 
 
 def main():
+
     """Main function for hash registry integration testing."""
+"""
+"""
+"""
+"""
     safe_print("\\u1f9ee Hash Registry Integration Test - Schwabot UROS v1.0")
     safe_print("=" * 60)
 
-    # Initialize tester
+# Initialize tester
     tester = HashRegistryIntegrationTester()
 
-    # Run complete integration test
+# Run complete integration test
     results = tester.run_complete_integration_test()
 
-    # Export results
+# Export results
     tester.export_test_results()
 
-    # Print detailed results
+# Print detailed results
     safe_print(f"\\n\\u1f4cb Detailed Test Results:")
     for test_name, result in results['test_results'].items():
         status = "\\u2705 PASSED" if result.get('success', False) else "\\u274c FAILED"
@@ -554,7 +662,7 @@ def main():
             for key, value in result['metadata'].items():
                 safe_print(f"    {key}: {value}")
 
-    # Return exit code
+# Return exit code
     return 0 if results['overall_success'] else 1
 
 

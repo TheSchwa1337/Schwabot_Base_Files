@@ -1,6 +1,21 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from datetime import datetime
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, List, Any
+import logging
+import sys
+import time
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Enhanced System Test Suite - Validate All Strategic Enhancements.
 
 This script tests all the strategic enhancements implemented in Schwabot:
@@ -10,13 +25,11 @@ This script tests all the strategic enhancements implemented in Schwabot:
 - Code quality improvements
 - Integration connectivity
 """
+"""
+"""
+"""
+"""
 
-import sys
-import time
-import logging
-from typing import Dict, List, Any
-from datetime import datetime
-from core.unified_math_system import unified_math
 
 # Configure logging
 logging.basicConfig(
@@ -28,34 +41,41 @@ logger = logging.getLogger(__name__)
 
 def test_optimization_engine() -> Dict[str, Any]:
     """Test the optimization engine functionality."""
-    logger.info("\\u1f9ea Testing Optimization Engine...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing Optimization Engine...")
+
+   try:
         from core.optimization_engine import (
             get_optimization_engine, memoize, compress_data,
             temporal_smoothing, optimize_hash_operations, fft_preprocess_signal
         )
 
-        # Get optimization engine
+# Get optimization engine
         engine = get_optimization_engine()
 
-        # Test memoization
+# Test memoization
         @memoize
         def expensive_calculation(x: float, y: float) -> float:
+
             time.sleep(0.01)  # Simulate expensive operation
             return x * y + np.unified_math.sin(x) * np.unified_math.cos(y)
 
-        # First call (cache miss)
+# First call (cache miss)
         start_time = time.time()
         result1 = expensive_calculation(1.5, 2.3)
         first_call_time = time.time() - start_time
 
-        # Second call (cache hit)
+# Second call (cache hit)
         start_time = time.time()
         result2 = expensive_calculation(1.5, 2.3)
         second_call_time = time.time() - start_time
 
-        # Test compression
+# Test compression
         test_data = {
             'prices': np.random.random(1000).tolist(),
             'volumes': np.random.random(1000).tolist(),
@@ -64,11 +84,11 @@ def test_optimization_engine() -> Dict[str, Any]:
 
         compressed_data, compression_ratio = compress_data(test_data)
 
-        # Test temporal smoothing
-        noisy_signal = np.random.random(100) + 0.1 * np.unified_math.sin(np.linspace(0, 4*np.pi, 100))
+# Test temporal smoothing
+        noisy_signal = np.random.random(100) + 0.1 * np.unified_math.sin(np.linspace(0, 4 * np.pi, 100))
         smoothed_signal = temporal_smoothing(noisy_signal, window_size=5)
 
-        # Test hash optimization
+# Test hash optimization
         hash_value = "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
         historical_hashes = [
             "abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
@@ -78,11 +98,11 @@ def test_optimization_engine() -> Dict[str, Any]:
 
         hash_optimization = optimize_hash_operations(hash_value, historical_hashes)
 
-        # Test FFT preprocessing
-        signal = np.random.random(256) + 0.1 * np.unified_math.sin(np.linspace(0, 8*np.pi, 256))
+# Test FFT preprocessing
+        signal = np.random.random(256) + 0.1 * np.unified_math.sin(np.linspace(0, 8 * np.pi, 256))
         fft_data = fft_preprocess_signal(signal)
 
-        # Get statistics
+# Get statistics
         stats = engine.get_optimization_statistics()
 
         return {
@@ -104,21 +124,27 @@ def test_optimization_engine() -> Dict[str, Any]:
 
 def test_system_initialization() -> Dict[str, Any]:
     """Test system initialization and validation."""
-    logger.info("\\u1f9ea Testing System Initialization...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing System Initialization...")
+
+   try:
         from core.main import SchwabotEngine
 
-        # Test initialization in debug mode
+# Test initialization in debug mode
         engine = SchwabotEngine(debug_mode=True)
 
-        # Test system initialization
+# Test system initialization
         start_time = time.time()
         success = engine.initialize_system()
         initialization_time = time.time() - start_time
 
         if success:
-            # Get system status
+        # Get system status
             status = engine.get_system_status()
 
             return {
@@ -143,37 +169,43 @@ def test_system_initialization() -> Dict[str, Any]:
 
 def test_mathematical_pipeline() -> Dict[str, Any]:
     """Test mathematical pipeline connectivity."""
-    logger.info("\\u1f9ea Testing Mathematical Pipeline...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing Mathematical Pipeline...")
+
+   try:
         from core.portfolio_router import create_portfolio_router
         from core.tick_hash_interpreter import create_tick_hash_interpreter
         from core.entry_exit_vector import create_entry_exit_vector
         from core.state_validation_router import create_state_validation_router
 
-        # Create components
+# Create components
         portfolio_router = create_portfolio_router()
         tick_interpreter = create_tick_hash_interpreter()
         entry_exit_vector = create_entry_exit_vector()
         state_validator = create_state_validation_router()
 
-        # Test data flow
+# Test data flow
         test_data = {
             'price': 50000.0,
             'volume': 1000.0,
             'timestamp': datetime.now().timestamp()
         }
 
-        # Test portfolio router
+# Test portfolio router
         portfolio_shift = portfolio_router.calculate_portfolio_shift({'volatility': 0.1})
 
-        # Test tick interpreter
+# Test tick interpreter
         tick_phase = tick_interpreter.process_tick_data(test_data)
 
-        # Test entry exit vector
+# Test entry exit vector
         entry_signal = entry_exit_vector.calculate_entry_trigger(test_data)
 
-        # Test state validation
+# Test state validation
         quantum_state = {'tick_hash': 'test123', 'phase_coherence': 0.8}
         altitude_metrics = {'reflex_score': 0.7, 'altitude_score': 0.6}
         visual_pipeline = {'tick_hash': 'test123', 'phase_coherence': 0.8}
@@ -202,27 +234,33 @@ def test_mathematical_pipeline() -> Dict[str, Any]:
 
 def test_performance_baseline() -> Dict[str, Any]:
     """Test performance baseline for critical operations."""
-    logger.info("\\u1f9ea Testing Performance Baseline...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing Performance Baseline...")
+
+   try:
         from core.portfolio_router import create_portfolio_router
         from core.tick_hash_interpreter import create_tick_hash_interpreter
         from core.entry_exit_vector import create_entry_exit_vector
         from core.state_validation_router import create_state_validation_router
 
-        # Create components
+# Create components
         portfolio_router = create_portfolio_router()
         tick_interpreter = create_tick_hash_interpreter()
         entry_exit_vector = create_entry_exit_vector()
         state_validator = create_state_validation_router()
 
-        # Test tick-to-trade latency
+# Test tick - to - trade latency
         start_time = time.time()
 
-        # Simulate full pipeline execution
+# Simulate full pipeline execution
         test_data = {'price': 50000, 'volume': 1000, 'timestamp': time.time()}
 
-        # Execute pipeline
+# Execute pipeline
         portfolio_shift = portfolio_router.calculate_portfolio_shift({'volatility': 0.1})
         tick_phase = tick_interpreter.process_tick_data(test_data)
         entry_signal = entry_exit_vector.calculate_entry_trigger(test_data)
@@ -231,7 +269,7 @@ def test_performance_baseline() -> Dict[str, Any]:
         end_time = time.time()
         latency = (end_time - start_time) * 1000  # Convert to milliseconds
 
-        # Test multiple iterations for average
+# Test multiple iterations for average
         latencies = []
         for _ in range(10):
             start_time = time.time()
@@ -261,13 +299,19 @@ def test_performance_baseline() -> Dict[str, Any]:
 
 def test_code_quality() -> Dict[str, Any]:
     """Test code quality and configuration."""
-    logger.info("\\u1f9ea Testing Code Quality...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing Code Quality...")
+
+   try:
         import subprocess
         import os
 
-        # Test if flake8 configuration is working
+# Test if flake8 configuration is working
         try:
             result = subprocess.run(
                 ['flake8', 'core/', '--count', '--statistics'],
@@ -279,7 +323,7 @@ def test_code_quality() -> Dict[str, Any]:
         except Exception:
             flake8_working = False
 
-        # Test if black configuration is working
+# Test if black configuration is working
         try:
             result = subprocess.run(
                 ['black', '--check', 'core/'],
@@ -291,10 +335,10 @@ def test_code_quality() -> Dict[str, Any]:
         except Exception:
             black_working = False
 
-        # Test if isort configuration is working
+# Test if isort configuration is working
         try:
             result = subprocess.run(
-                ['isort', '--check-only', 'core/'],
+                ['isort', '--check - only', 'core/'],
                 capture_output=True,
                 text=True,
                 timeout=30
@@ -303,12 +347,12 @@ def test_code_quality() -> Dict[str, Any]:
         except Exception:
             isort_working = False
 
-        # Check if configuration files exist
+# Check if configuration files exist
         config_files = {
             '.flake8': os.path.exists('.flake8'),
             'pyproject.toml': os.path.exists('pyproject.toml'),
-            'core/main.py': os.path.exists('core/main.py'),
-            'core/optimization_engine.py': os.path.exists('core/optimization_engine.py')
+            'core / main.py': os.path.exists('core / main.py'),
+            'core / optimization_engine.py': os.path.exists('core / optimization_engine.py')
         }
 
         return {
@@ -327,9 +371,15 @@ def test_code_quality() -> Dict[str, Any]:
 
 def test_integration_connectivity() -> Dict[str, Any]:
     """Test integration connectivity between all components."""
-    logger.info("\\u1f9ea Testing Integration Connectivity...")
 
-    try:
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f9ea Testing Integration Connectivity...")
+
+   try:
         # Test all critical imports
         critical_modules = [
             'core.portfolio_router',
@@ -351,7 +401,7 @@ def test_integration_connectivity() -> Dict[str, Any]:
                 import_results[module_name] = False
                 logger.warning(f"Module {module_name} not importable: {e}")
 
-        # Test component creation
+# Test component creation
         component_tests = {}
 
         try:
@@ -411,14 +461,20 @@ def test_integration_connectivity() -> Dict[str, Any]:
 
 def run_all_tests() -> Dict[str, Any]:
     """Run all tests and return comprehensive results."""
-    logger.info("\\u1f680 Starting Enhanced System Test Suite...")
 
-    test_results = {
+
+"""
+"""
+"""
+"""
+  logger.info("\\u1f680 Starting Enhanced System Test Suite...")
+
+   test_results = {
         'timestamp': datetime.now().isoformat(),
         'tests': {}
     }
 
-    # Run all tests
+# Run all tests
     tests = [
         ('optimization_engine', test_optimization_engine),
         ('system_initialization', test_system_initialization),
@@ -441,7 +497,7 @@ def run_all_tests() -> Dict[str, Any]:
             logger.error(f"\\u274c {test_name} test crashed: {e}")
             test_results['tests'][test_name] = {'success': False, 'error': str(e)}
 
-    # Calculate overall success
+# Calculate overall success
     successful_tests = sum(1 for result in test_results['tests'].values() if result.get('success', False))
     total_tests = len(test_results['tests'])
     overall_success_rate = successful_tests / total_tests if total_tests > 0 else 0
@@ -453,7 +509,7 @@ def run_all_tests() -> Dict[str, Any]:
         'all_tests_passed': overall_success_rate == 1.0
     }
 
-    # Print summary
+# Print summary
     logger.info(f"\\n\\u1f4ca Test Summary:")
     logger.info(f"Total Tests: {total_tests}")
     logger.info(f"Successful: {successful_tests}")
@@ -465,9 +521,15 @@ def run_all_tests() -> Dict[str, Any]:
 
 def print_detailed_results(results: Dict[str, Any]) -> None:
     """Print detailed test results."""
-    safe_print("\n" + "="*80)
-    safe_print("\\u1f4cb DETAILED TEST RESULTS")
-    safe_print("="*80)
+
+
+"""
+"""
+"""
+"""
+  safe_print("\n" + "="*80)
+   safe_print("\\u1f4cb DETAILED TEST RESULTS")
+    safe_print("=" * 80)
 
     for test_name, result in results['tests'].items():
         safe_print(f"\\n\\u1f9ea {test_name.upper().replace('_', ' ')}")
@@ -476,7 +538,7 @@ def print_detailed_results(results: Dict[str, Any]) -> None:
         if result.get('success', False):
             safe_print("\\u2705 Test PASSED")
 
-            # Print specific metrics for each test
+# Print specific metrics for each test
             if test_name == 'optimization_engine':
                 safe_print(f"  Cache Hit Rate: {result.get('cache_hit_rate', 0):.1%}")
                 safe_print(f"  Average Response Time: {result.get('average_response_time_ms', 0):.2f}ms")
@@ -491,7 +553,11 @@ def print_detailed_results(results: Dict[str, Any]) -> None:
 
             elif test_name == 'performance_baseline':
                 safe_print(f"  Average Latency: {result.get('average_latency_ms', 0):.2f}ms")
-                safe_print(f"  Latency Acceptable: {'\\u2705' if result.get('latency_acceptable', False) else '\\u274c'}")
+                safe_print(
+                    f"  Latency Acceptable: {
+                        '\\u2705' if result.get(
+                            'latency_acceptable',
+                            False) else '\\u274c'}")
                 safe_print(f"  Latency Stable: {'\\u2705' if result.get('latency_stable', False) else '\\u274c'}")
 
             elif test_name == 'code_quality':
@@ -500,7 +566,11 @@ def print_detailed_results(results: Dict[str, Any]) -> None:
                 safe_print(f"  Isort Working: {'\\u2705' if result.get('isort_working', False) else '\\u274c'}")
 
             elif test_name == 'integration_connectivity':
-                safe_print(f"  All Modules Importable: {'\\u2705' if result.get('all_modules_importable', False) else '\\u274c'}")
+                safe_print(
+                    f"  All Modules Importable: {
+                        '\\u2705' if result.get(
+                            'all_modules_importable',
+                            False) else '\\u274c'}")
                 safe_print(
                     f"  All Components Creatable: {'\\u2705' if result.get('all_components_creatable', False) else '\\u274c'}")
 
@@ -508,9 +578,9 @@ def print_detailed_results(results: Dict[str, Any]) -> None:
             safe_print("\\u274c Test FAILED")
             safe_print(f"  Error: {result.get('error', 'Unknown error')}")
 
-    safe_print(f"\n" + "="*80)
+    safe_print(f"\n" + "=" * 80)
     safe_print("\\u1f4ca OVERALL SUMMARY")
-    safe_print("="*80)
+    safe_print("=" * 80)
     summary = results['summary']
     safe_print(f"Total Tests: {summary['total_tests']}")
     safe_print(f"Successful: {summary['successful_tests']}")
@@ -529,10 +599,10 @@ if __name__ == "__main__":
         # Run all tests
         results = run_all_tests()
 
-        # Print detailed results
+# Print detailed results
         print_detailed_results(results)
 
-        # Exit with appropriate code
+# Exit with appropriate code
         if results['summary']['all_tests_passed']:
             sys.exit(0)
         else:

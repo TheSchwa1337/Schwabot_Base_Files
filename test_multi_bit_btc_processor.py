@@ -1,16 +1,31 @@
-#!/usr/bin/env python3
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+import os
+import sys
+
+import numpy as np
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
 """
-Test Multi-Bit BTC Processor - Schwabot UROS v1.0
+"""
+"""
+"""
+"""
+Test Multi - Bit BTC Processor - Schwabot UROS v1.0
 ================================================
 
-Test script to verify the Multi-Bit BTC processor works correctly
+Test script to verify the Multi - Bit BTC processor works correctly
 after fixing the circular import issues.
 """
+"""
+"""
+"""
+"""
 
-import sys
-import os
-import numpy as np
-from pathlib import Path
 
 # Add the cleanup_backup directory to the path
 REPO_ROOT = Path(__file__).resolve().parent
@@ -25,27 +40,33 @@ if str(MAIN_CORE_PATH) not in sys.path:
 
 
 def test_multi_bit_btc_processor():
-    """Test the Multi-Bit BTC processor functionality."""
-    print("\\u1f9ea Testing Multi-Bit BTC Processor")
-    print("=" * 50)
+    """Test the Multi - Bit BTC processor functionality."""
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\u1f9ea Testing Multi - Bit BTC Processor")
+  print("=" * 50)
+
+   try:
         # Import the processor
         from multi_bit_btc_processor import MultiBitBTCProcessor, BitLevel
 
         print("\\u2705 Successfully imported MultiBitBTCProcessor")
 
-        # Initialize processor
+# Initialize processor
         processor = MultiBitBTCProcessor()
         print("\\u2705 Successfully initialized processor")
 
-        # Test data processing
+# Test data processing
         base_price = 50000.0
         base_volume = 1000.0
 
         print("\\u1f4ca Processing test data...")
 
-        # Process data at different bit levels
+# Process data at different bit levels
         for i in range(10):
             price_change = np.random.normal(0, 100)
             volume_change = np.random.normal(0, 100)
@@ -53,7 +74,7 @@ def test_multi_bit_btc_processor():
             price = base_price + price_change
             volume = base_volume + volume_change
 
-            # Process at different bit levels
+# Process at different bit levels
             for bit_level in BitLevel:
                 try:
                     data_point = processor.process_btc_data(price, volume, bit_level)
@@ -61,7 +82,7 @@ def test_multi_bit_btc_processor():
                 except Exception as e:
                     print(f"  \\u274c Failed to process {bit_level.value}-bit data: {e}")
 
-        # Test bit level analysis
+# Test bit level analysis
         print("\\n\\u1f4c8 Testing bit level analysis...")
         for bit_level in BitLevel:
             try:
@@ -73,15 +94,15 @@ def test_multi_bit_btc_processor():
             except Exception as e:
                 print(f"  \\u274c Failed {bit_level.value}-bit analysis: {e}")
 
-        # Test cross-bit correlations
-        print("\\n\\u1f517 Testing cross-bit correlations...")
+# Test cross - bit correlations
+        print("\\n\\u1f517 Testing cross - bit correlations...")
         try:
             correlations = processor.analyze_cross_bit_correlations()
-            print(f"  \\u2705 Found {len(correlations)} cross-bit correlations")
+            print(f"  \\u2705 Found {len(correlations)} cross - bit correlations")
         except Exception as e:
-            print(f"  \\u274c Failed cross-bit correlations: {e}")
+            print(f"  \\u274c Failed cross - bit correlations: {e}")
 
-        # Test optimization
+# Test optimization
         print("\\n\\u1f3af Testing bit level optimization...")
         try:
             optimal_level = processor.optimize_bit_level_selection()
@@ -89,7 +110,7 @@ def test_multi_bit_btc_processor():
         except Exception as e:
             print(f"  \\u274c Failed optimization: {e}")
 
-        # Test statistics
+# Test statistics
         print("\\n\\u1f4ca Testing statistics...")
         try:
             stats = processor.get_btc_statistics()
@@ -97,7 +118,7 @@ def test_multi_bit_btc_processor():
         except Exception as e:
             print(f"  \\u274c Failed statistics: {e}")
 
-        # Test trading signals
+# Test trading signals
         print("\\n\\u1f4e1 Testing trading signals...")
         try:
             signals = processor.get_trading_signals()
@@ -105,7 +126,7 @@ def test_multi_bit_btc_processor():
         except Exception as e:
             print(f"  \\u274c Failed trading signals: {e}")
 
-        print("\\n\\u1f389 Multi-Bit BTC Processor test completed successfully!")
+        print("\\n\\u1f389 Multi - Bit BTC Processor test completed successfully!")
         return True
 
     except ImportError as e:
@@ -121,26 +142,32 @@ def test_multi_bit_btc_processor():
 
 def test_unified_math_system():
     """Test the unified math system."""
-    print("\\n\\u1f9ee Testing Unified Math System")
-    print("=" * 50)
 
-    try:
+
+"""
+"""
+"""
+"""
+ print("\\n\\u1f9ee Testing Unified Math System")
+  print("=" * 50)
+
+   try:
         from core.unified_math_system import unified_math
 
         print("\\u2705 Successfully imported unified math system")
 
-        # Test basic operations
+# Test basic operations
         test_data = np.array([1, 2, 3, 4, 5])
 
-        # Test mean
+# Test mean
         mean_result = unified_math.mean(test_data)
         print(f"  \\u2705 Mean calculation: {mean_result}")
 
-        # Test std
+# Test std
         std_result = unified_math.std(test_data)
         print(f"  \\u2705 Std calculation: {std_result}")
 
-        # Test correlation
+# Test correlation
         data1 = np.array([1, 2, 3, 4, 5])
         data2 = np.array([2, 4, 6, 8, 10])
         corr_result = unified_math.correlation(data1, data2)
@@ -158,25 +185,31 @@ def test_unified_math_system():
 
 def main():
     """Main test execution."""
-    print("\\u1f9ec Multi-Bit BTC Processor Integration Test - Schwabot UROS v1.0")
-    print("=" * 70)
 
-    # Test unified math system first
-    math_success = test_unified_math_system()
 
-    # Test multi-bit BTC processor
+"""
+"""
+"""
+"""
+ print("\\u1f9ec Multi - Bit BTC Processor Integration Test - Schwabot UROS v1.0")
+  print("=" * 70)
+
+# Test unified math system first
+   math_success = test_unified_math_system()
+
+# Test multi - bit BTC processor
     processor_success = test_multi_bit_btc_processor()
 
-    # Summary
+# Summary
     print("\n" + "=" * 70)
     print("\\u1f4cb Test Summary")
     print("=" * 70)
     print(f"Unified Math System: {'\\u2705 PASS' if math_success else '\\u274c FAIL'}")
-    print(f"Multi-Bit BTC Processor: {'\\u2705 PASS' if processor_success else '\\u274c FAIL'}")
+    print(f"Multi - Bit BTC Processor: {'\\u2705 PASS' if processor_success else '\\u274c FAIL'}")
 
     if math_success and processor_success:
         print("\\n\\u1f389 All tests passed! The circular import issue has been resolved.")
-        print("The Multi-Bit BTC processor is now ready for integration.")
+        print("The Multi - Bit BTC processor is now ready for integration.")
     else:
         print("\\n\\u26a0\\ufe0f Some tests failed. Please check the error messages above.")
 
@@ -186,4 +219,9 @@ def main():
 if __name__ == "__main__":
     main()
 
+"""
+"""
+"""
+"""
+"""
 """

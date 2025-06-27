@@ -1,39 +1,51 @@
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import asyncio
+import json
+import logging
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
 """Enhanced Fitness Oracle \\u2013 minimal functional implementation.
 
 This replaces the previous stub so that modules importing
 ``from enhanced_fitness_oracle import EnhancedFitnessOracle, UnifiedFitnessScore``
-work without raising runtime errors (and pass Flake-8 / mypy).
+work without raising runtime errors (and pass Flake - 8 / mypy).
 
 The implementation is intentionally lightweight \\u2013 it does **NOT** perform the
-full fractal/machine-learning analysis you may add later.  It provides:
+full fractal / machine - learning analysis you may add later.  It provides:
 
 * `UnifiedFitnessScore` \\u2013 dataclass with all attributes used by
-  ``schwabot_unified_system.py``.
-* `EnhancedFitnessOracle` \\u2013 async-friendly class exposing
-  ``capture_market_snapshot`` and ``calculate_unified_fitness``.
+    ``schwabot_unified_system.py``.
+* `EnhancedFitnessOracle` \\u2013 async - friendly class exposing
+    ``capture_market_snapshot`` and ``calculate_unified_fitness``.
 * A tiny CLI test when the module is executed directly.
 
-Replace / extend the heuristic logic with your production-grade models when
+Replace / extend the heuristic logic with your production - grade models when
 ready; the public surface should remain stable.
 """
+"""
+"""
+"""
+"""
 
-import asyncio
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-import json
-import logging
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-from core.unified_math_system import unified_math
 
 # ---------------------------------------------------------------------------
-# Logging setup \\u2013 honour parent log-level but stay silent by default
+# Logging setup \\u2013 honour parent log - level but stay silent by default
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 if not logger.handlers:
@@ -46,11 +58,18 @@ if not logger.handlers:
 
 @dataclass
 class UnifiedFitnessScore:
+
     """Lightweight container for the oracle's output.
 
     Fields mirror those accessed inside *schwabot_unified_system.py* so that
     downstream code does not need to change when the oracle logic is upgraded.
     """
+
+
+"""
+"""
+"""
+"""
 
     timestamp: datetime = field(default_factory=datetime.utcnow)
     overall_fitness: float = 0.0  # Scalar [-1, 1]
@@ -58,13 +77,13 @@ class UnifiedFitnessScore:
     position_size: float = 0.0  # Lot size or percentage of equity
     confidence: float = 0.0  # 0\\u20121 confidence score
 
-    # Extra diagnostics (optional)
+# Extra diagnostics (optional)
     dominant_factors: Dict[str, float] = field(default_factory=dict)
     profit_tier_detected: bool = False
     loop_warning: bool = False
     market_regime: str = "neutral"
 
-    # Trade-management helpers
+# Trade - management helpers
     stop_loss: Optional[float] = None
     take_profit: Optional[float] = None
     max_hold_time: Optional[timedelta] = None
@@ -75,14 +94,25 @@ class UnifiedFitnessScore:
 # ---------------------------------------------------------------------------
 
 
-class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
-    """Very thin placeholder for the full-fat oracle.
+class EnhancedFitnessOracle:  # pylint: disable = too - few - public - methods
+
+    """Very thin placeholder for the full - fat oracle.
 
     The goal is *dependency satisfaction*, not production trading accuracy.
     """
 
+
+"""
+"""
+"""
+"""
+
     def __init__(self, config_path: str | Path | None = None) -> None:  # noqa: D401
-        """Load configuration (JSON or YAML) and warm-up state."""
+        """Load configuration (JSON or YAML) and warm - up state."""
+"""
+"""
+"""
+"""
         self.config_path = Path(config_path) if config_path else None
         self.config: Dict[str, Any] = {}
         if self.config_path and self.config_path.exists():
@@ -90,7 +120,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
                 if self.config_path.suffix.lower() in {".yml", ".yaml"}:
                     import yaml  # Lazy import to avoid hard dep
 
-                    with self.config_path.open("r", encoding="utf-8") as fh:
+                    with self.config_path.open("r", encoding="utf - 8") as fh:
                         self.config = yaml.safe_load(fh) or {}
                 else:  # Assume JSON
                     self.config = json.loads(self.config_path.read_text())
@@ -99,15 +129,15 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
 
         self.current_regime: str = "neutral"
 
-        # Rolling history for optional dashboard
+# Rolling history for optional dashboard
         self.market_history: List[Dict[str, Any]] = []
         self.fitness_history: List[UnifiedFitnessScore] = []
 
         logger.info("EnhancedFitnessOracle initialised \\u2013 config entries: %s", len(self.config))
 
-    # ------------------------------------------------------------------
-    # Public async helpers expected by the scheduler
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
+# Public async helpers expected by the scheduler
+# ------------------------------------------------------------------
 
     async def capture_market_snapshot(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """Pretend to analyse `market_data` and return an enriched snapshot.
@@ -115,46 +145,55 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         The *real* implementation would run FFTs, GAN filters, etc.  Here we just
         compute a few descriptive stats so downstream code has something sane.
         """
+"""
+"""
+"""
+"""
         await asyncio.sleep(0)  # Yield control \\u2013 keeps async scheduling honest
 
-        price_series = np.asarray(market_data.get("price_series", []), dtype=float)
-        volume_series = np.asarray(market_data.get("volume_series", []), dtype=float)
+        price_series = np.asarray(market_data.get("price_series", []), dtype = float)
+        volume_series = np.asarray(market_data.get("volume_series", []), dtype = float)
 
         snapshot = {
             "timestamp": market_data.get("timestamp", datetime.utcnow()),
             "mean_price": float(price_series.mean()) if price_series.size else None,
-            "price_std": float(price_series.unified_math.std(ddof=1)) if price_series.size else None,
+            "price_std": float(price_series.unified_math.std(ddof = 1)) if price_series.size else None,
             "mean_volume": float(volume_series.mean()) if volume_series.size else None,
-            "volume_std": float(volume_series.unified_math.std(ddof=1)) if volume_series.size else None,
+            "volume_std": float(volume_series.unified_math.std(ddof = 1)) if volume_series.size else None,
             "last_price": market_data.get("price"),
             "last_volume": market_data.get("volume"),
         }
 
-        # Keep history for simple regime heuristics
+# Keep history for simple regime heuristics
         self.market_history.append(snapshot)
         if len(self.market_history) > 5000:  # Safety bound
             self.market_history.pop(0)
 
-        # Update market regime (toy logic)
+# Update market regime (toy logic)
         price_std = snapshot["price_std"] or 0.0
         self.current_regime = "high_volatility" if price_std > 3 else "normal"
 
         return snapshot
 
-    # ------------------------------------------------------------------
+# ------------------------------------------------------------------
 
     def calculate_unified_fitness(self, snapshot: Dict[str, Any]) -> UnifiedFitnessScore:  # noqa: D401
+
         """Return a toy *fitness* score based on snapshot stats.
 
         Positive values favour *BUY*, negatives favour *SELL*.  Magnitude informs
         action strength.
         """
+"""
+"""
+"""
+"""
         price_std = snapshot.get("price_std") or 0.0
         last_price = snapshot.get("last_price") or 0.0
         mean_price = snapshot.get("mean_price") or last_price
 
-        # Very naive momentum estimator: deviation from mean / std
-        if price_std > 1e-6:
+# Very naive momentum estimator: deviation from mean / std
+        if price_std > 1e - 6:
             z_score = (last_price - mean_price) / price_std
         else:
             z_score = 0.0
@@ -162,7 +201,7 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         overall_fitness = float(np.tanh(z_score))  # Map to (-1, 1)
         confidence = float(unified_math.abs(overall_fitness))
 
-        # Map fitness to discrete action
+# Map fitness to discrete action
         if overall_fitness > 0.7:
             action = "STRONG_BUY"
         elif overall_fitness > 0.2:
@@ -177,18 +216,18 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
         position_size = unified_math.max(0.0, confidence) * 1.0  # Placeholder sizing logic
 
         fitness = UnifiedFitnessScore(
-            timestamp=datetime.utcnow(),
-            overall_fitness=overall_fitness,
-            action=action,
-            position_size=position_size,
-            confidence=confidence,
+            timestamp = datetime.utcnow(),
+            overall_fitness = overall_fitness,
+            action = action,
+            position_size = position_size,
+            confidence = confidence,
             dominant_factors={"z_score": z_score},
-            profit_tier_detected=confidence > 0.8,
-            loop_warning=False,
-            market_regime=self.current_regime,
-            stop_loss=None,
-            take_profit=None,
-            max_hold_time=timedelta(minutes=30),
+            profit_tier_detected = confidence > 0.8,
+            loop_warning = False,
+            market_regime = self.current_regime,
+            stop_loss = None,
+            take_profit = None,
+            max_hold_time = timedelta(minutes = 30),
         )
 
         self.fitness_history.append(fitness)
@@ -203,7 +242,8 @@ class EnhancedFitnessOracle:  # pylint: disable=too-few-public-methods
 # ---------------------------------------------------------------------------
 
 
-def _demo() -> None:  # pragma: no cover \\u2013 manual smoke-test
+def _demo() -> None:  # pragma: no cover \\u2013 manual smoke - test
+
     import random
 
     oracle = EnhancedFitnessOracle()
@@ -223,4 +263,9 @@ def _demo() -> None:  # pragma: no cover \\u2013 manual smoke-test
 if __name__ == "__main__":  # pragma: no cover
     _demo()
 
+"""
+"""
+"""
+"""
+"""
 """

@@ -1,12 +1,27 @@
+# -*- coding: utf - 8 -*-
 """Conditional glyph feedback loop with exponential smoothing."""
+"""
+"""
+"""
+"""
+"""Conditional glyph feedback loop with exponential smoothing."""
+# -*- coding: utf - 8 -*-
+# from __future__ import annotations  # FIXME: Unused import
 
-from __future__ import annotations
+"""
+"""
+"""
+"""
+"""Conditional glyph feedback loop with exponential smoothing."""
+"""Conditional glyph feedback loop with exponential smoothing."""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
 
 def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
     """Apply exponential moving feedback to glyph weights.
 
-    Compute feedback: g_{t+1} = \\u03b2\\u00b7g_t + (1-\\u03b2)\\u00b7\\u03b6
+    Compute feedback: g_{t + 1} = \\u03b2\\u00b7g_t + (1-\\u03b2)\\u00b7\\u03b6
 
     Args:
         g_prev: Previous glyph weight
@@ -16,6 +31,13 @@ def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
     Returns:
         Updated glyph weight with feedback applied
     """
-    return beta * g_prev + (1 - beta) * zeta
 
+
+"""
+"""
+return beta * g_prev + (1 - beta) * zeta
+
+"""
+"""
+"""
 """

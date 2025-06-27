@@ -1,8 +1,20 @@
+# -*- coding: utf - 8 -*-
+"""USDC position manager \\u2013 exponential decay and position optimization.
+"""USDC position manager \\u2013 exponential decay and position optimization.
+# -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-from core.unified_math_system import unified_math
-#!/usr/bin/env python3
 """USDC position manager \\u2013 exponential decay and position optimization.
+"""USDC position manager \\u2013 exponential decay and position optimization.
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
 
 Implements the formulas:
     P_usdc(t) = \\u03a3_holdings\\u00b7e^(\\u2212r\\u00b7\\u0394t)
@@ -10,8 +22,10 @@ Implements the formulas:
     \\u03c3_usdc(t) = \\u2207P_usdc(t) \\u00b7 unified_math.log(1 + T_usdc)
     \\u03a8_usdc = argmax_t(\\u03c3_usdc(t) > \\u03b8_usdc)
 
-This module manages USDC positions with time-decay modeling and optimal
-timing detection for entry/exit decisions.
+This module manages USDC positions with time - decay modeling and optimal
+timing detection for entry / exit decisions.
+"""
+"""
 """
 
 
@@ -32,6 +46,7 @@ __all__: list[str] = [
 
 
 def usdc_position(
+
     holdings: Sequence[float],
     rates: Sequence[float],
     time_deltas: Sequence[float],
@@ -47,23 +62,26 @@ def usdc_position(
     time_deltas
         Time deltas \\u0394t since each holding was acquired.
     """
+"""
+"""
     if not (len(holdings) == len(rates) == len(time_deltas)):
         raise ValueError("all input sequences must have same length")
 
-    hold_arr = np.asarray(holdings, dtype=float)
-    rate_arr = np.asarray(rates, dtype=float)
-    dt_arr = np.asarray(time_deltas, dtype=float)
+    hold_arr = np.asarray(holdings, dtype = float)
+    rate_arr = np.asarray(rates, dtype = float)
+    dt_arr = np.asarray(time_deltas, dtype = float)
 
-    # Exponential decay: e^(\\u2212r\\u00b7\\u0394t)
+# Exponential decay: e^(\\u2212r\\u00b7\\u0394t)
     decay_factors = unified_math.exp(-rate_arr * dt_arr)
 
-    # Sum of decayed holdings
+# Sum of decayed holdings
     decayed_holdings = hold_arr * decay_factors
 
     return float(np.sum(decayed_holdings))
 
 
 def usdc_trading(
+
     alpha_entry: float,
     delta_buy: float,
     beta_exit: float,
@@ -82,6 +100,8 @@ def usdc_trading(
     delta_sell
         Sell signal magnitude \\u03b4_sell.
     """
+"""
+"""
     entry_term = alpha_entry * delta_buy
     exit_term = beta_exit * delta_sell
 
@@ -89,6 +109,7 @@ def usdc_trading(
 
 
 def usdc_sigma(
+
     position_gradient: Sequence[float],
     t_usdc: float,
 ) -> np.ndarray:  # noqa: D401
@@ -101,11 +122,13 @@ def usdc_sigma(
     t_usdc
         Trading signal T_usdc from usdc_trading().
     """
-    grad_arr = np.asarray(position_gradient, dtype=float)
+"""
+"""
+    grad_arr = np.asarray(position_gradient, dtype = float)
 
-    # Compute unified_math.log(1 + T_usdc), handling negative values safely
+# Compute unified_math.log(1 + T_usdc), handling negative values safely
     if t_usdc <= -1:
-        log_term = unified_math.unified_math.log(1e-10)  # Avoid unified_math.log(0) or unified_math.log(negative)
+        log_term = unified_math.unified_math.log(1e - 10)  # Avoid unified_math.log(0) or unified_math.log(negative)
     else:
         log_term = unified_math.unified_math.log(1 + t_usdc)
 
@@ -115,6 +138,7 @@ def usdc_sigma(
 
 
 def usdc_optimal_time(
+
     sigma_series: Sequence[float],
     theta_usdc: float,
     *,
@@ -136,19 +160,21 @@ def usdc_optimal_time(
     int
         Index of optimal time when condition is maximally satisfied.
     """
-    sigma_arr = np.asarray(sigma_series, dtype=float)
+"""
+"""
+    sigma_arr = np.asarray(sigma_series, dtype = float)
 
     if len(sigma_arr) == 0:
         return 0
 
-    # Find indices where \\u03c3_usdc(t) > \\u03b8_usdc
+# Find indices where \\u03c3_usdc(t) > \\u03b8_usdc
     above_threshold = sigma_arr > theta_usdc
 
     if not np.any(above_threshold):
-        # If no values above threshold, return index of maximum value
+# If no values above threshold, return index of maximum value
         return int(np.argmax(sigma_arr))
 
-    # Among values above threshold, find the maximum
+# Among values above threshold, find the maximum
     valid_indices = np.where(above_threshold)[0]
     valid_values = sigma_arr[valid_indices]
     max_idx_in_valid = np.argmax(valid_values)

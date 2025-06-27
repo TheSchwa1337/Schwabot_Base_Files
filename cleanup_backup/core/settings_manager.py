@@ -1,40 +1,55 @@
-#!/usr/bin/env python3
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+import time
+import threading
+from datetime import datetime
+from pathlib import Path
+from dataclasses import dataclass, field, asdict
+from typing import Dict, Any, Optional, List, Union
+import logging
+import json
+import yaml
+import os
+from dual_unicore_handler import DualUnicoreHandler
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# -*- coding: utf - 8 -*-
+"""
+"""
 """
 Settings Manager - Central Configuration Management for Schwabot
 ================================================================
 
 This module provides comprehensive configuration management for the entire
-Schwabot system, including validation, hot-reloading, and UI integration.
+Schwabot system, including validation, hot - reloading, and UI integration.
 
 Features:
 - YAML configuration loading and validation
 - Environment variable substitution
-- Hot-reload capability
+- Hot - reload capability
 - Configuration validation
 - UI settings interface
 - Default value management
-- Configuration export/import
+- Configuration export / import
+"""
+"""
 """
 
-import os
-import yaml
-import json
-import logging
-from typing import Dict, Any, Optional, List, Union
-from dataclasses import dataclass, field, asdict
-from pathlib import Path
-from datetime import datetime
-import threading
-import time
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class SystemSettings:
-    """System-level configuration settings."""
+
+    """System - level configuration settings."""
+
+
+"""
+"""
     name: str = "Schwabot Trading System"
     version: str = "2.0_0"
     environment: str = "production"
@@ -48,7 +63,12 @@ class SystemSettings:
 
 @dataclass
 class MathematicalSettings:
+
     """Mathematical components configuration."""
+
+
+"""
+"""
     phantom_lag_model: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
         'max_history_size': 1000,
@@ -80,10 +100,15 @@ class MathematicalSettings:
 
 @dataclass
 class TradingSettings:
+
     """Trading configuration settings."""
-    default_symbol: str = "BTC/USD"
+
+
+"""
+"""
+    default_symbol: str = "BTC / USD"
     supported_symbols: List[str] = field(default_factory=lambda: [
-        "BTC/USD", "ETH/USD", "ADA/USD", "DOT/USD", "LINK/USD"
+        "BTC / USD", "ETH / USD", "ADA / USD", "DOT / USD", "LINK / USD"
     ])
 
     position_sizing: Dict[str, Any] = field(default_factory=lambda: {
@@ -113,7 +138,12 @@ class TradingSettings:
 
 @dataclass
 class ExchangeSettings:
+
     """Exchange configuration settings."""
+
+
+"""
+"""
     binance: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
         'api_key': "${BINANCE_API_KEY}",
@@ -144,7 +174,12 @@ class ExchangeSettings:
 
 @dataclass
 class UISettings:
+
     """User interface configuration settings."""
+
+
+"""
+"""
     web_dashboard: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
         'host': "0.0_0.0",
@@ -159,7 +194,7 @@ class UISettings:
         'host': "0.0_0.0",
         'port': 8081,
         'enable_authentication': True,
-        'api_key_header': "X-API-Key",
+        'api_key_header': "X - API - Key",
         'rate_limit_requests_per_minute': 100
     })
 
@@ -173,7 +208,12 @@ class UISettings:
 
 @dataclass
 class MonitoringSettings:
+
     """Monitoring and alerting configuration."""
+
+
+"""
+"""
     performance_metrics: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
         'collection_interval_seconds': 60,
@@ -189,7 +229,7 @@ class MonitoringSettings:
 
     logging: Dict[str, Any] = field(default_factory=lambda: {
         'enabled': True,
-        'log_file_path': "./logs/schwabot.log",
+        'log_file_path': "./logs / schwabot.log",
         'max_file_size_mb': 100,
         'backup_count': 10,
         'enable_structured_logging': True
@@ -197,11 +237,18 @@ class MonitoringSettings:
 
 
 class ConfigurationValidator:
+
     """Validates configuration settings."""
+
+
+"""
+"""
 
     @staticmethod
     def validate_system_settings(settings: Dict[str, Any]) -> List[str]:
         """Validate system settings."""
+"""
+"""
         errors = []
 
         if not isinstance(settings.get('name'), str):
@@ -223,7 +270,10 @@ class ConfigurationValidator:
 
     @staticmethod
     def validate_trading_settings(settings: Dict[str, Any]) -> List[str]:
+
         """Validate trading settings."""
+"""
+"""
         errors = []
 
         if not isinstance(settings.get('default_symbol'), str):
@@ -243,7 +293,10 @@ class ConfigurationValidator:
 
     @staticmethod
     def validate_exchange_settings(settings: Dict[str, Any]) -> List[str]:
+
         """Validate exchange settings."""
+"""
+"""
         errors = []
 
         for exchange_name, exchange_config in settings.items():
@@ -261,17 +314,23 @@ class ConfigurationValidator:
 
 
 class SettingsManager:
-    """Central settings manager for Schwabot."""
 
-    def __init__(self, config_path: str = "./config/schwabot_config.yaml"):
+    """Central settings manager for Schwabot."""
+"""
+"""
+
+    def __init__(self, config_path: str = "./config / schwabot_config.yaml"):
+
         """Initialize the settings manager."""
+"""
+"""
         self.config_path = Path(config_path)
         self.config_data: Dict[str, Any] = {}
         self.last_modified: float = 0
         self.observers: List[callable] = []
         self._lock = threading.RLock()
 
-        # Initialize default settings
+# Initialize default settings
         self.system_settings = SystemSettings()
         self.mathematical_settings = MathematicalSettings()
         self.trading_settings = TradingSettings()
@@ -279,45 +338,48 @@ class SettingsManager:
         self.ui_settings = UISettings()
         self.monitoring_settings = MonitoringSettings()
 
-        # Load configuration
+# Load configuration
         self.load_configuration()
 
-        # Setup file watcher for hot-reload
+# Setup file watcher for hot - reload
         self._setup_file_watcher()
 
         logger.info("Settings Manager initialized")
 
     def load_configuration(self) -> bool:
+
         """Load configuration from file."""
+"""
+"""
         try:
             if not self.config_path.exists():
                 logger.warning(f"Configuration file not found: {self.config_path}")
                 self._create_default_configuration()
                 return True
 
-            # Check if file has been modified
+# Check if file has been modified
             current_mtime = self.config_path.stat().st_mtime
             if current_mtime <= self.last_modified:
                 return True
 
-            with open(self.config_path, 'r', encoding='utf-8') as f:
+            with open(self.config_path, 'r', encoding='utf - 8') as f:
                 self.config_data = yaml.safe_load(f)
 
-            # Substitute environment variables
+# Substitute environment variables
             self._substitute_environment_variables()
 
-            # Validate configuration
+# Validate configuration
             validation_errors = self._validate_configuration()
             if validation_errors:
                 logger.error(f"Configuration validation errors: {validation_errors}")
                 return False
 
-            # Update settings objects
+# Update settings objects
             self._update_settings_objects()
 
             self.last_modified = current_mtime
 
-            # Notify observers
+# Notify observers
             self._notify_observers()
 
             logger.info("Configuration loaded successfully")
@@ -328,9 +390,12 @@ class SettingsManager:
             return False
 
     def _create_default_configuration(self) -> None:
+
         """Create default configuration file."""
+"""
+"""
         try:
-            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+            self.config_path.parent.mkdir(parents = True, exist_ok = True)
 
             default_config = {
                 'system': asdict(self.system_settings),
@@ -341,8 +406,8 @@ class SettingsManager:
                 'monitoring': asdict(self.monitoring_settings)
             }
 
-            with open(self.config_path, 'w', encoding='utf-8') as f:
-                yaml.dump(default_config, f, default_flow_style=False, indent=2)
+            with open(self.config_path, 'w', encoding='utf - 8') as f:
+                yaml.dump(default_config, f, default_flow_style = False, indent = 2)
 
             logger.info(f"Default configuration created: {self.config_path}")
 
@@ -350,8 +415,12 @@ class SettingsManager:
             logger.error(f"Error creating default configuration: {e}")
 
     def _substitute_environment_variables(self) -> None:
+
         """Substitute environment variables in configuration."""
+"""
+"""
         def substitute_recursive(obj: Any) -> Any:
+
             if isinstance(obj, dict):
                 return {k: substitute_recursive(v) for k, v in obj.items()}
             elif isinstance(obj, list):
@@ -365,61 +434,67 @@ class SettingsManager:
         self.config_data = substitute_recursive(self.config_data)
 
     def _validate_configuration(self) -> List[str]:
+
         """Validate the entire configuration."""
+"""
+"""
         errors = []
 
         if not self.config_data:
             errors.append("Configuration data is empty")
             return errors
 
-        # Validate system settings
+# Validate system settings
         system_settings = self.config_data.get('system', {})
         errors.extend(ConfigurationValidator.validate_system_settings(system_settings))
 
-        # Validate trading settings
+# Validate trading settings
         trading_settings = self.config_data.get('trading', {})
         errors.extend(ConfigurationValidator.validate_trading_settings(trading_settings))
 
-        # Validate exchange settings
+# Validate exchange settings
         exchange_settings = self.config_data.get('exchanges', {})
         errors.extend(ConfigurationValidator.validate_exchange_settings(exchange_settings))
 
         return errors
 
     def _update_settings_objects(self) -> None:
+
         """Update settings objects from configuration data."""
+"""
+"""
         try:
-            # Update system settings
+# Update system settings
             if 'system' in self.config_data:
                 for key, value in self.config_data['system'].items():
                     if hasattr(self.system_settings, key):
                         setattr(self.system_settings, key, value)
 
-            # Update mathematical settings
+# Update mathematical settings
             if 'mathematical_components' in self.config_data:
                 for key, value in self.config_data['mathematical_components'].items():
                     if hasattr(self.mathematical_settings, key):
                         setattr(self.mathematical_settings, key, value)
 
-            # Update trading settings
+# Update trading settings
             if 'trading' in self.config_data:
                 for key, value in self.config_data['trading'].items():
                     if hasattr(self.trading_settings, key):
                         setattr(self.trading_settings, key, value)
 
-            # Update exchange settings
+# Update exchange settings
             if 'exchanges' in self.config_data:
                 for key, value in self.config_data['exchanges'].items():
                     if hasattr(self.exchange_settings, key):
                         setattr(self.exchange_settings, key, value)
 
-            # Update UI settings
+# Update UI settings
             if 'user_interface' in self.config_data:
                 for key, value in self.config_data['user_interface'].items():
                     if hasattr(self.ui_settings, key):
                         setattr(self.ui_settings, key, value)
 
-            # Update monitoring settings
+# Update monitoring settings
             if 'monitoring' in self.config_data:
                 for key, value in self.config_data['monitoring'].items():
                     if hasattr(self.monitoring_settings, key):
@@ -429,29 +504,41 @@ class SettingsManager:
             logger.error(f"Error updating settings objects: {e}")
 
     def _setup_file_watcher(self) -> None:
-        """Setup file watcher for hot-reload."""
+
+        """Setup file watcher for hot - reload."""
+"""
+"""
         try:
             self.observer = Observer()
             event_handler = ConfigFileHandler(self)
-            self.observer.schedule(event_handler, str(self.config_path.parent), recursive=False)
+            self.observer.schedule(event_handler, str(self.config_path.parent), recursive = False)
             self.observer.start()
             logger.info("Configuration file watcher started")
         except Exception as e:
             logger.error(f"Error setting up file watcher: {e}")
 
     def add_observer(self, callback: callable) -> None:
+
         """Add configuration change observer."""
+"""
+"""
         with self._lock:
             self.observers.append(callback)
 
     def remove_observer(self, callback: callable) -> None:
+
         """Remove configuration change observer."""
+"""
+"""
         with self._lock:
             if callback in self.observers:
                 self.observers.remove(callback)
 
     def _notify_observers(self) -> None:
+
         """Notify all observers of configuration changes."""
+"""
+"""
         with self._lock:
             for observer in self.observers:
                 try:
@@ -460,7 +547,10 @@ class SettingsManager:
                     logger.error(f"Error notifying observer: {e}")
 
     def get_setting(self, path: str, default: Any = None) -> Any:
+
         """Get a setting value by path (e.g., 'system.debug_mode')."""
+"""
+"""
         try:
             keys = path.split('.')
             value = self.config_data
@@ -477,21 +567,24 @@ class SettingsManager:
             return default
 
     def set_setting(self, path: str, value: Any) -> bool:
+
         """Set a setting value by path."""
+"""
+"""
         try:
             keys = path.split('.')
             config = self.config_data
 
-            # Navigate to the parent of the target key
+# Navigate to the parent of the target key
             for key in keys[:-1]:
                 if key not in config:
                     config[key] = {}
                 config = config[key]
 
-            # Set the value
+# Set the value
             config[keys[-1]] = value
 
-            # Save configuration
+# Save configuration
             return self.save_configuration()
 
         except Exception as e:
@@ -499,10 +592,13 @@ class SettingsManager:
             return False
 
     def save_configuration(self) -> bool:
+
         """Save current configuration to file."""
+"""
+"""
         try:
-            with open(self.config_path, 'w', encoding='utf-8') as f:
-                yaml.dump(self.config_data, f, default_flow_style=False, indent=2)
+            with open(self.config_path, 'w', encoding='utf - 8') as f:
+                yaml.dump(self.config_data, f, default_flow_style = False, indent = 2)
 
             logger.info("Configuration saved successfully")
             return True
@@ -512,12 +608,15 @@ class SettingsManager:
             return False
 
     def export_configuration(self, format: str = 'yaml') -> str:
+
         """Export configuration in specified format."""
+"""
+"""
         try:
             if format.lower() == 'json':
-                return json.dumps(self.config_data, indent=2)
+                return json.dumps(self.config_data, indent = 2)
             elif format.lower() == 'yaml':
-                return yaml.dump(self.config_data, default_flow_style=False, indent=2)
+                return yaml.dump(self.config_data, default_flow_style = False, indent = 2)
             else:
                 raise ValueError(f"Unsupported format: {format}")
 
@@ -526,7 +625,10 @@ class SettingsManager:
             return ""
 
     def get_ui_settings(self) -> Dict[str, Any]:
+
         """Get settings formatted for UI consumption."""
+"""
+"""
         try:
             return {
                 'system': asdict(self.system_settings),
@@ -542,7 +644,10 @@ class SettingsManager:
             return {}
 
     def validate_environment_variables(self) -> Dict[str, bool]:
+
         """Validate that required environment variables are set."""
+"""
+"""
         required_vars = self.config_data.get('environment_variables', {}).get('required', [])
         validation_results = {}
 
@@ -552,7 +657,10 @@ class SettingsManager:
         return validation_results
 
     def get_configuration_summary(self) -> Dict[str, Any]:
+
         """Get a summary of the current configuration."""
+"""
+"""
         try:
             return {
                 'config_file': str(self.config_path),
@@ -575,13 +683,20 @@ class SettingsManager:
 
 
 class ConfigFileHandler(FileSystemEventHandler):
+
     """File system event handler for configuration changes."""
+"""
+"""
 
     def __init__(self, settings_manager: SettingsManager):
+
         self.settings_manager = settings_manager
 
     def on_modified(self, event):
+
         """Handle file modification events."""
+"""
+"""
         if not event.is_directory and event.src_path == str(self.settings_manager.config_path):
             logger.info("Configuration file modified, reloading...")
             self.settings_manager.load_configuration()
@@ -592,7 +707,10 @@ _settings_manager: Optional[SettingsManager] = None
 
 
 def get_settings_manager() -> SettingsManager:
+
     """Get the global settings manager instance."""
+"""
+"""
     global _settings_manager
     if _settings_manager is None:
         _settings_manager = SettingsManager()
@@ -600,12 +718,21 @@ def get_settings_manager() -> SettingsManager:
 
 
 def get_setting(path: str, default: Any = None) -> Any:
+
     """Get a setting value by path."""
+"""
+"""
     return get_settings_manager().get_setting(path, default)
 
 
 def set_setting(path: str, value: Any) -> bool:
+
     """Set a setting value by path."""
+"""
+"""
     return get_settings_manager().set_setting(path, value)
 
+"""
+"""
+"""
 """

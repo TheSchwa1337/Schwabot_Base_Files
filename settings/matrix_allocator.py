@@ -1,8 +1,24 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
 """
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+"""
+
+from core.unified_math_system import unified_math
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
 Schwabot Matrix Allocator
-Manages matrix basket allocation and provides real-time optimization
+Manages matrix basket allocation and provides real - time optimization
+"""
+"""
 """
 
 import json
@@ -19,13 +35,16 @@ from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level = logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class MatrixAllocation:
+
     """Matrix allocation configuration"""
+"""
+"""
     matrix_id: str
     allocation_percentage: float
     priority: int
@@ -39,7 +58,10 @@ class MatrixAllocation:
 
 @dataclass
 class AllocationResult:
+
     """Result of matrix allocation"""
+"""
+"""
     success: bool
     allocated_matrices: List[MatrixAllocation]
     total_allocation: float
@@ -53,7 +75,10 @@ class AllocationResult:
 
 @dataclass
 class MatrixBasket:
+
     """Matrix basket configuration"""
+"""
+"""
     basket_id: str
     matrices: List[MatrixAllocation]
     total_capacity: float
@@ -65,46 +90,53 @@ class MatrixBasket:
 
 
 class MatrixAllocator:
-    """Comprehensive matrix allocation system"""
 
-    def __init__(self, settings_controller=None, vector_validator=None):
+    """Comprehensive matrix allocation system"""
+"""
+"""
+
+    def __init__(self, settings_controller = None, vector_validator = None):
+
         self.settings_controller = settings_controller
         self.vector_validator = vector_validator
         self.matrix_baskets = {}
         self.allocation_history = []
         self.performance_metrics = defaultdict(list)
 
-        # Threading
+# Threading
         self.lock = threading.RLock()
         self.running = False
         self.allocation_thread = None
 
-        # Statistics
+# Statistics
         self.total_allocations = 0
         self.successful_allocations = 0
         self.failed_allocations = 0
         self.last_allocation = None
 
-        # Performance tracking
-        self.performance_window = deque(maxlen=1000)
+# Performance tracking
+        self.performance_window = deque(maxlen = 1000)
         self.risk_metrics = defaultdict(list)
 
-        # Start background allocation monitoring
+# Start background allocation monitoring
         self.start_background_monitoring()
 
     def create_matrix_basket(self, basket_id: str, total_capacity: float,
-                             risk_budget: float, return_target: float) -> MatrixBasket:
+
+                                risk_budget: float, return_target: float) -> MatrixBasket:
         """Create a new matrix basket"""
+"""
+"""
         with self.lock:
             basket = MatrixBasket(
-                basket_id=basket_id,
+                basket_id = basket_id,
                 matrices=[],
-                total_capacity=total_capacity,
-                used_capacity=0.0,
-                risk_budget=risk_budget,
-                return_target=return_target,
-                rebalance_frequency=100,  # Rebalance every 100 allocations
-                last_rebalance=datetime.now().isoformat()
+                total_capacity = total_capacity,
+                used_capacity = 0.0,
+                risk_budget = risk_budget,
+                return_target = return_target,
+                rebalance_frequency = 100,  # Rebalance every 100 allocations
+                last_rebalance = datetime.now().isoformat()
             )
 
             self.matrix_baskets[basket_id] = basket
@@ -112,7 +144,10 @@ class MatrixAllocator:
             return basket
 
     def add_matrix_to_basket(self, basket_id: str, matrix_data: Dict[str, Any]) -> bool:
+
         """Add a matrix to a basket"""
+"""
+"""
         with self.lock:
             if basket_id not in self.matrix_baskets:
                 logger.error(f"Basket {basket_id} not found")
@@ -120,7 +155,7 @@ class MatrixAllocator:
 
             basket = self.matrix_baskets[basket_id]
 
-            # Validate matrix data
+# Validate matrix data
             if self.vector_validator:
                 validation_result = self.vector_validator.validate_vector(matrix_data, f"basket_{basket_id}")
                 if not validation_result.is_valid:
@@ -128,17 +163,17 @@ class MatrixAllocator:
                         f"Matrix validation failed for basket {basket_id}: {validation_result.validation_errors}")
                     return False
 
-            # Create matrix allocation
+# Create matrix allocation
             matrix_allocation = MatrixAllocation(
-                matrix_id=matrix_data.get('matrix_id', f"matrix_{len(basket.matrices)}"),
-                allocation_percentage=matrix_data.get('allocation_percentage', 0.0),
-                priority=matrix_data.get('priority', 1),
-                risk_level=matrix_data.get('risk_level', 0.5),
-                expected_return=matrix_data.get('expected_return', 0.0),
-                volatility=matrix_data.get('volatility', 0.1),
-                correlation_factor=matrix_data.get('correlation_factor', 0.0),
-                last_updated=datetime.now().isoformat(),
-                performance_score=matrix_data.get('performance_score', 0.0)
+                matrix_id = matrix_data.get('matrix_id', f"matrix_{len(basket.matrices)}"),
+                allocation_percentage = matrix_data.get('allocation_percentage', 0.0),
+                priority = matrix_data.get('priority', 1),
+                risk_level = matrix_data.get('risk_level', 0.5),
+                expected_return = matrix_data.get('expected_return', 0.0),
+                volatility = matrix_data.get('volatility', 0.1),
+                correlation_factor = matrix_data.get('correlation_factor', 0.0),
+                last_updated = datetime.now().isoformat(),
+                performance_score = matrix_data.get('performance_score', 0.0)
             )
 
             basket.matrices.append(matrix_allocation)
@@ -146,40 +181,43 @@ class MatrixAllocator:
             return True
 
     def optimize_allocation(self, basket_id: str, optimization_strategy: str = "risk_parity") -> AllocationResult:
+
         """Optimize matrix allocation for a basket"""
+"""
+"""
         start_time = time.time()
 
         try:
             with self.lock:
                 if basket_id not in self.matrix_baskets:
                     return AllocationResult(
-                        success=False,
+                        success = False,
                         allocated_matrices=[],
-                        total_allocation=0.0,
-                        risk_score=0.0,
-                        expected_return=0.0,
-                        diversification_score=0.0,
+                        total_allocation = 0.0,
+                        risk_score = 0.0,
+                        expected_return = 0.0,
+                        diversification_score = 0.0,
                         recommendations=["Basket not found"],
-                        timestamp=datetime.now().isoformat(),
-                        allocation_duration=time.time() - start_time
+                        timestamp = datetime.now().isoformat(),
+                        allocation_duration = time.time() - start_time
                     )
 
                 basket = self.matrix_baskets[basket_id]
 
                 if not basket.matrices:
                     return AllocationResult(
-                        success=False,
+                        success = False,
                         allocated_matrices=[],
-                        total_allocation=0.0,
-                        risk_score=0.0,
-                        expected_return=0.0,
-                        diversification_score=0.0,
+                        total_allocation = 0.0,
+                        risk_score = 0.0,
+                        expected_return = 0.0,
+                        diversification_score = 0.0,
                         recommendations=["No matrices in basket"],
-                        timestamp=datetime.now().isoformat(),
-                        allocation_duration=time.time() - start_time
+                        timestamp = datetime.now().isoformat(),
+                        allocation_duration = time.time() - start_time
                     )
 
-                # Apply optimization strategy
+# Apply optimization strategy
                 if optimization_strategy == "risk_parity":
                     optimized_matrices = self._risk_parity_optimization(basket)
                 elif optimization_strategy == "max_sharpe":
@@ -191,36 +229,36 @@ class MatrixAllocator:
                 else:
                     optimized_matrices = self._risk_parity_optimization(basket)
 
-                # Calculate allocation metrics
+# Calculate allocation metrics
                 total_allocation = sum(m.allocation_percentage for m in optimized_matrices)
                 risk_score = self._calculate_portfolio_risk(optimized_matrices)
                 expected_return = self._calculate_expected_return(optimized_matrices)
                 diversification_score = self._calculate_diversification_score(optimized_matrices)
 
-                # Generate recommendations
+# Generate recommendations
                 recommendations = self._generate_allocation_recommendations(
                     optimized_matrices, risk_score, expected_return, diversification_score
                 )
 
-                # Update basket
+# Update basket
                 basket.matrices = optimized_matrices
                 basket.used_capacity = total_allocation
                 basket.last_rebalance = datetime.now().isoformat()
 
-                # Create result
+# Create result
                 result = AllocationResult(
-                    success=True,
-                    allocated_matrices=optimized_matrices,
-                    total_allocation=total_allocation,
-                    risk_score=risk_score,
-                    expected_return=expected_return,
-                    diversification_score=diversification_score,
-                    recommendations=recommendations,
-                    timestamp=datetime.now().isoformat(),
-                    allocation_duration=time.time() - start_time
+                    success = True,
+                    allocated_matrices = optimized_matrices,
+                    total_allocation = total_allocation,
+                    risk_score = risk_score,
+                    expected_return = expected_return,
+                    diversification_score = diversification_score,
+                    recommendations = recommendations,
+                    timestamp = datetime.now().isoformat(),
+                    allocation_duration = time.time() - start_time
                 )
 
-                # Record allocation
+# Record allocation
                 self._record_allocation(result, basket_id)
 
                 return result
@@ -228,29 +266,32 @@ class MatrixAllocator:
         except Exception as e:
             logger.error(f"Error during allocation optimization: {e}")
             return AllocationResult(
-                success=False,
+                success = False,
                 allocated_matrices=[],
-                total_allocation=0.0,
-                risk_score=0.0,
-                expected_return=0.0,
-                diversification_score=0.0,
+                total_allocation = 0.0,
+                risk_score = 0.0,
+                expected_return = 0.0,
+                diversification_score = 0.0,
                 recommendations=[f"Optimization error: {str(e)}"],
-                timestamp=datetime.now().isoformat(),
-                allocation_duration=time.time() - start_time
+                timestamp = datetime.now().isoformat(),
+                allocation_duration = time.time() - start_time
             )
 
     def _risk_parity_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:
+
         """Risk parity optimization"""
+"""
+"""
         matrices = basket.matrices.copy()
 
         if not matrices:
             return matrices
 
-        # Calculate risk contributions
+# Calculate risk contributions
         total_risk = sum(m.risk_level * m.allocation_percentage for m in matrices)
 
         if total_risk > 0:
-            # Equalize risk contributions
+# Equalize risk contributions
             target_risk_contribution = total_risk / len(matrices)
 
             for matrix in matrices:
@@ -259,7 +300,7 @@ class MatrixAllocator:
                 else:
                     matrix.allocation_percentage = 0.0
 
-        # Normalize allocations
+# Normalize allocations
         total_allocation = sum(m.allocation_percentage for m in matrices)
         if total_allocation > 0:
             for matrix in matrices:
@@ -268,28 +309,31 @@ class MatrixAllocator:
         return matrices
 
     def _max_sharpe_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:
+
         """Maximum Sharpe ratio optimization"""
+"""
+"""
         matrices = basket.matrices.copy()
 
         if not matrices:
             return matrices
 
-        # Calculate Sharpe ratios
+# Calculate Sharpe ratios
         for matrix in matrices:
             if matrix.volatility > 0:
-                sharpe_ratio = (matrix.expected_return - 0.02) / matrix.volatility  # Assuming 2% risk-free rate
+                sharpe_ratio = (matrix.expected_return - 0.02) / matrix.volatility  # Assuming 2% risk - free rate
                 matrix.performance_score = unified_math.max(0.0, sharpe_ratio)
             else:
                 matrix.performance_score = 0.0
 
-        # Weight by Sharpe ratio
+# Weight by Sharpe ratio
         total_score = sum(m.performance_score for m in matrices)
 
         if total_score > 0:
             for matrix in matrices:
                 matrix.allocation_percentage = matrix.performance_score / total_score
         else:
-            # Equal weight if no positive Sharpe ratios
+# Equal weight if no positive Sharpe ratios
             equal_weight = 1.0 / len(matrices)
             for matrix in matrices:
                 matrix.allocation_percentage = equal_weight
@@ -297,7 +341,10 @@ class MatrixAllocator:
         return matrices
 
     def _equal_weight_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:
+
         """Equal weight optimization"""
+"""
+"""
         matrices = basket.matrices.copy()
 
         if not matrices:
@@ -310,20 +357,23 @@ class MatrixAllocator:
         return matrices
 
     def _performance_weighted_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:
-        """Performance-weighted optimization"""
+
+        """Performance - weighted optimization"""
+"""
+"""
         matrices = basket.matrices.copy()
 
         if not matrices:
             return matrices
 
-        # Use performance scores as weights
+# Use performance scores as weights
         total_performance = sum(m.performance_score for m in matrices)
 
         if total_performance > 0:
             for matrix in matrices:
                 matrix.allocation_percentage = matrix.performance_score / total_performance
         else:
-            # Equal weight if no performance data
+# Equal weight if no performance data
             equal_weight = 1.0 / len(matrices)
             for matrix in matrices:
                 matrix.allocation_percentage = equal_weight
@@ -331,7 +381,10 @@ class MatrixAllocator:
         return matrices
 
     def _calculate_portfolio_risk(self, matrices: List[MatrixAllocation]) -> float:
-        """Calculate portfolio risk using variance-covariance matrix"""
+
+        """Calculate portfolio risk using variance - covariance matrix"""
+"""
+"""
         if not matrices:
             return 0.0
 
@@ -339,79 +392,91 @@ class MatrixAllocator:
         weights = np.array([m.allocation_percentage for m in matrices])
         volatilities = np.array([m.volatility for m in matrices])
 
-        # Create correlation matrix (simplified)
+# Create correlation matrix (simplified)
         correlation_matrix = np.eye(n)
         for i, matrix_i in enumerate(matrices):
             for j, matrix_j in enumerate(matrices):
                 if i != j:
                     correlation_matrix[i, j] = matrix_i.correlation_factor
 
-        # Calculate portfolio variance
+# Calculate portfolio variance
         portfolio_variance = unified_math.unified_math.dot_product(weights.T, unified_math.unified_math.dot_product(
             correlation_matrix * np.outer(volatilities, volatilities), weights))
 
         return unified_math.unified_math.sqrt(portfolio_variance)
 
     def _calculate_expected_return(self, matrices: List[MatrixAllocation]) -> float:
-        """Calculate expected portfolio return"""
+
+        """Calculate expected portfolio return """
+"""
+"""
         if not matrices:
             return 0.0
 
         return sum(m.allocation_percentage * m.expected_return for m in matrices)
 
     def _calculate_diversification_score(self, matrices: List[MatrixAllocation]) -> float:
+
         """Calculate diversification score"""
+"""
+"""
         if len(matrices) <= 1:
             return 0.0
 
-        # Calculate Herfindahl-Hirschman Index (HHI)
+# Calculate Herfindahl - Hirschman Index (HHI)
         weights = [m.allocation_percentage for m in matrices]
         hhi = sum(w * w for w in weights)
 
-        # Convert to diversification score (1 - normalized HHI)
+# Convert to diversification score (1 - normalized HHI)
         max_hhi = 1.0  # Maximum HHI for equal weights
         diversification_score = 1.0 - (hhi / max_hhi)
 
         return unified_math.max(0.0, unified_math.min(1.0, diversification_score))
 
     def _generate_allocation_recommendations(self, matrices: List[MatrixAllocation],
-                                             risk_score: float, expected_return: float,
-                                             diversification_score: float) -> List[str]:
+
+                                                risk_score: float, expected_return: float,
+                                                diversification_score: float) -> List[str]:
         """Generate allocation recommendations"""
+"""
+"""
         recommendations = []
 
-        # Risk recommendations
+# Risk recommendations
         if risk_score > 0.3:
             recommendations.append("Consider reducing portfolio risk through diversification")
         elif risk_score < 0.1:
             recommendations.append("Portfolio risk is very low - consider increasing exposure")
 
-        # Return recommendations
+# Return recommendations
         if expected_return < 0.05:
             recommendations.append("Expected return is low - review matrix selection")
         elif expected_return > 0.2:
             recommendations.append("High expected return - verify risk assumptions")
 
-        # Diversification recommendations
+# Diversification recommendations
         if diversification_score < 0.5:
             recommendations.append("Low diversification - consider adding more matrices")
         elif diversification_score > 0.9:
             recommendations.append("High diversification - consider consolidating positions")
 
-        # Concentration recommendations
+# Concentration recommendations
         max_allocation = unified_math.max(m.allocation_percentage for m in matrices) if matrices else 0.0
         if max_allocation > 0.4:
             recommendations.append("High concentration in single matrix - consider rebalancing")
 
-        # Performance recommendations
+# Performance recommendations
         low_performance_matrices = [m for m in matrices if m.performance_score < 0.3]
         if low_performance_matrices:
-            recommendations.append(f"Consider replacing {len(low_performance_matrices)} low-performance matrices")
+            recommendations.append(f"Consider replacing {len(low_performance_matrices)} low - performance matrices")
 
         return recommendations
 
     def _record_allocation(self, result: AllocationResult, basket_id: str) -> None:
+
         """Record allocation result for analysis"""
+"""
+"""
         with self.lock:
             self.allocation_history.append({
                 'result': asdict(result),
@@ -419,11 +484,11 @@ class MatrixAllocator:
                 'timestamp': datetime.now().isoformat()
             })
 
-            # Keep only recent history
+# Keep only recent history
             if len(self.allocation_history) > 1000:
                 self.allocation_history = self.allocation_history[-1000:]
 
-            # Update statistics
+# Update statistics
             self.total_allocations += 1
             if result.success:
                 self.successful_allocations += 1
@@ -432,7 +497,7 @@ class MatrixAllocator:
 
             self.last_allocation = result
 
-            # Update performance metrics
+# Update performance metrics
             if result.success:
                 self.performance_window.append({
                     'risk_score': result.risk_score,
@@ -442,7 +507,10 @@ class MatrixAllocator:
                 })
 
     def get_allocation_statistics(self) -> Dict[str, Any]:
+
         """Get allocation statistics"""
+"""
+"""
         with self.lock:
             if self.total_allocations == 0:
                 return {
@@ -457,7 +525,7 @@ class MatrixAllocator:
 
             success_rate = self.successful_allocations / self.total_allocations
 
-            # Calculate averages from recent allocations
+# Calculate averages from recent allocations
             if self.performance_window:
                 avg_risk = unified_math.mean([p['risk_score'] for p in self.performance_window])
                 avg_return = unified_math.mean([p['expected_return'] for p in self.performance_window])
@@ -478,14 +546,17 @@ class MatrixAllocator:
             }
 
     def get_basket_performance(self, basket_id: str) -> Dict[str, Any]:
+
         """Get performance metrics for a specific basket"""
+"""
+"""
         with self.lock:
             if basket_id not in self.matrix_baskets:
                 return {'error': 'Basket not found'}
 
             basket = self.matrix_baskets[basket_id]
 
-            # Calculate basket metrics
+# Calculate basket metrics
             total_allocation = sum(m.allocation_percentage for m in basket.matrices)
             risk_score = self._calculate_portfolio_risk(basket.matrices)
             expected_return = self._calculate_expected_return(basket.matrices)
@@ -505,28 +576,37 @@ class MatrixAllocator:
             }
 
     def start_background_monitoring(self) -> None:
+
         """Start background allocation monitoring"""
+"""
+"""
         if not self.running:
             self.running = True
-            self.allocation_thread = threading.Thread(target=self._background_monitoring_loop, daemon=True)
+            self.allocation_thread = threading.Thread(target = self._background_monitoring_loop, daemon = True)
             self.allocation_thread.start()
             logger.info("Background allocation monitoring started")
 
     def stop_background_monitoring(self) -> None:
+
         """Stop background allocation monitoring"""
+"""
+"""
         self.running = False
         if self.allocation_thread:
-            self.allocation_thread.join(timeout=5)
+            self.allocation_thread.join(timeout = 5)
         logger.info("Background allocation monitoring stopped")
 
     def _background_monitoring_loop(self) -> None:
+
         """Background loop for allocation monitoring"""
+"""
+"""
         while self.running:
             try:
-                # Update performance metrics
+# Update performance metrics
                 self.performance_metrics['allocation_stats'].append(self.get_allocation_statistics())
 
-                # Auto-rebalance baskets
+# Auto - rebalance baskets
                 for basket_id, basket in self.matrix_baskets.items():
                     allocation_count = len([a for a in self.allocation_history
                                             if a['basket_id'] == basket_id])
@@ -534,7 +614,7 @@ class MatrixAllocator:
                     if allocation_count % basket.rebalance_frequency == 0:
                         self.optimize_allocation(basket_id, "risk_parity")
 
-                # Keep only recent metrics
+# Keep only recent metrics
                 if len(self.performance_metrics['allocation_stats']) > 100:
                     self.performance_metrics['allocation_stats'] = self.performance_metrics['allocation_stats'][-100:]
 
@@ -545,7 +625,10 @@ class MatrixAllocator:
                 time.sleep(60)
 
     def export_allocation_data(self, filepath: str) -> None:
+
         """Export allocation data to a file"""
+"""
+"""
         with self.lock:
             export_data = {
                 'matrix_baskets': {bid: asdict(basket) for bid, basket in self.matrix_baskets.items()},
@@ -556,12 +639,15 @@ class MatrixAllocator:
             }
 
             with open(filepath, 'w') as f:
-                json.dump(export_data, f, indent=2)
+                json.dump(export_data, f, indent = 2)
 
             logger.info(f"Allocation data exported to {filepath}")
 
     def clear_allocation_history(self) -> None:
+
         """Clear allocation history"""
+"""
+"""
         with self.lock:
             self.allocation_history.clear()
             self.performance_metrics.clear()
@@ -578,18 +664,21 @@ matrix_allocator = MatrixAllocator()
 
 
 def get_matrix_allocator() -> MatrixAllocator:
+
     """Get the global matrix allocator instance"""
+"""
+"""
     return matrix_allocator
 
 
 if __name__ == "__main__":
-    # Test the matrix allocator
+# Test the matrix allocator
     allocator = MatrixAllocator()
 
-    # Create a test basket
+# Create a test basket
     basket = allocator.create_matrix_basket("test_basket", 10000.0, 0.2, 0.1)
 
-    # Add test matrices
+# Add test matrices
     test_matrices = [
         {
             'matrix_id': 'matrix_1',
@@ -626,14 +715,14 @@ if __name__ == "__main__":
     for matrix_data in test_matrices:
         allocator.add_matrix_to_basket("test_basket", matrix_data)
 
-    # Test optimization
+# Test optimization
     result = allocator.optimize_allocation("test_basket", "risk_parity")
 
     safe_print("Allocation Result:")
-    print(json.dumps(asdict(result), indent=2))
+    print(json.dumps(asdict(result), indent = 2))
 
     safe_print("\\nBasket Performance:")
-    safe_print(json.dumps(allocator.get_basket_performance("test_basket"), indent=2))
+    safe_print(json.dumps(allocator.get_basket_performance("test_basket"), indent = 2))
 
     safe_print("\\nAllocation Statistics:")
-    print(json.dumps(allocator.get_allocation_statistics(), indent=2))
+    print(json.dumps(allocator.get_allocation_statistics(), indent = 2))

@@ -1,6 +1,31 @@
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from dual_unicore_handler import DualUnicoreHandler
+from enum import Enum
+from typing import Dict, List, Any, Optional, Tuple, Union
+import asyncio
+import hashlib
+import json
+import logging
+import time
+
+import queue
+import threading
+
 from core.unified_math_system import unified_math
-#!/usr/bin/env python3
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+"""
+"""
 """
 Demo Pipeline Runner - Schwabot UROS v1.0
 ========================================
@@ -10,32 +35,26 @@ DLT waveform + tick input \\u2192 hash phase \\u2192 strategy execution \\u2192 
 
 Features:
 - Complete pipeline execution simulation
-- Real-time tick processing
+- Real - time tick processing
 - Strategy decision making
 - Portfolio management
 - Performance tracking
-- Demo/live mode switching
+- Demo / live mode switching
+"""
+"""
 """
 
-import time
-import json
-import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from core.unified_math_system import unified_math
-import hashlib
-import asyncio
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import queue
 
 logger = logging.getLogger(__name__)
 
 
 class PipelineMode(Enum):
+
     """Pipeline execution modes."""
+
+
+"""
+"""
     DEMO = "demo"
     LIVE = "live"
     BACKTEST = "backtest"
@@ -43,7 +62,12 @@ class PipelineMode(Enum):
 
 
 class PipelineStatus(Enum):
+
     """Pipeline execution status."""
+
+
+"""
+"""
     IDLE = "idle"
     RUNNING = "running"
     PAUSED = "paused"
@@ -53,7 +77,12 @@ class PipelineStatus(Enum):
 
 @dataclass
 class TickEvent:
+
     """Tick event data."""
+
+
+"""
+"""
     timestamp: datetime
     asset: str
     price: float
@@ -66,7 +95,12 @@ class TickEvent:
 
 @dataclass
 class StrategyDecision:
+
     """Strategy decision result."""
+
+
+"""
+"""
     timestamp: datetime
     asset: str
     decision: str  # "buy", "sell", "hold", "rebalance"
@@ -81,7 +115,12 @@ class StrategyDecision:
 
 @dataclass
 class PipelineResult:
+
     """Pipeline execution result."""
+
+
+"""
+"""
     execution_id: str
     start_time: datetime
     end_time: datetime
@@ -95,7 +134,12 @@ class PipelineResult:
 
 
 class DemoPipelineRunner:
+
     """
+"""
+
+
+"""
     Demo pipeline runner for complete Schwabot execution.
 
     Mathematical Foundation:
@@ -103,18 +147,21 @@ class DemoPipelineRunner:
     - Hash Generation: H(t) = hash(tick_data + timestamp)
     - Bit Phase Resolution: P(t) = resolve_bit_phase(H(t), mode)
     - Strategy Decision: S(t) = f(tensor_score, bit_phase, market_conditions)
-    - Portfolio Update: P(t+1) = P(t) + \\u03a3(trades * impacts)
+    - Portfolio Update: P(t + 1) = P(t) + \\u03a3(trades * impacts)
     """
+"""
+"""
 
-    def __init__(self, config_path: str = "./config/demo_runner_config.json"):
+    def __init__(self, config_path: str = "./config / demo_runner_config.json"):
+
         self.config_path = config_path
 
-        # Pipeline state
+# Pipeline state
         self.mode: PipelineMode = PipelineMode.DEMO
         self.status: PipelineStatus = PipelineStatus.IDLE
         self.is_running: bool = False
 
-        # Execution tracking
+# Execution tracking
         self.execution_id: str = ""
         self.start_time: datetime = None
         self.end_time: datetime = None
@@ -122,13 +169,13 @@ class DemoPipelineRunner:
         self.decision_count: int = 0
         self.trade_count: int = 0
 
-        # Data storage
+# Data storage
         self.tick_history: List[TickEvent] = []
         self.decision_history: List[StrategyDecision] = []
         self.trade_history: List[Dict[str, Any]] = []
         self.performance_metrics: Dict[str, Any] = {}
 
-        # Integration with core components
+# Integration with core components
         self.dlt_engine = None
         self.tensor_matcher = None
         self.bit_phase_engine = None
@@ -138,23 +185,25 @@ class DemoPipelineRunner:
         self.demo_injector = None
         self.vector_exporter = None
 
-        # Execution queues
+# Execution queues
         self.tick_queue = queue.Queue()
         self.decision_queue = queue.Queue()
         self.trade_queue = queue.Queue()
 
-        # Threading
+# Threading
         self.executor = ThreadPoolExecutor(max_workers=4)
         self.stop_event = threading.Event()
 
-        # Load configuration
+# Load configuration
         self._load_configuration()
         logger.info("Demo Pipeline Runner initialized")
 
     def _load_configuration(self) -> None:
         """Load demo runner configuration."""
+"""
+"""
         try:
-            # Default configuration
+# Default configuration
             config = {
                 "pipeline_settings": {
                     "default_mode": "demo",
@@ -182,12 +231,18 @@ class DemoPipelineRunner:
             logger.error(f"Error loading configuration: {e}")
 
     def set_mode(self, mode: PipelineMode) -> None:
+
         """Set pipeline execution mode."""
+"""
+"""
         self.mode = mode
         logger.info(f"Pipeline mode set to: {mode.value}")
 
     def start_pipeline(self, duration_minutes: int = 60) -> bool:
+
         """
+"""
+"""
         Start the demo pipeline execution.
 
         Parameters:
@@ -200,30 +255,32 @@ class DemoPipelineRunner:
         bool
             True if pipeline started successfully
         """
+"""
+"""
         try:
             if self.is_running:
                 logger.warning("Pipeline is already running")
                 return False
 
-            # Initialize execution
+# Initialize execution
             self.execution_id = f"pipeline_{int(time.time())}"
             self.start_time = datetime.now()
-            self.end_time = self.start_time + timedelta(minutes=duration_minutes)
+            self.end_time = self.start_time + timedelta(minutes = duration_minutes)
             self.status = PipelineStatus.RUNNING
             self.is_running = True
             self.stop_event.clear()
 
-            # Reset counters
+# Reset counters
             self.tick_count = 0
             self.decision_count = 0
             self.trade_count = 0
 
-            # Clear history
+# Clear history
             self.tick_history.clear()
             self.decision_history.clear()
             self.trade_history.clear()
 
-            # Start execution threads
+# Start execution threads
             self._start_execution_threads()
 
             logger.info(f"Pipeline started: {self.execution_id} (duration: {duration_minutes} minutes)")
@@ -235,7 +292,10 @@ class DemoPipelineRunner:
             return False
 
     def stop_pipeline(self) -> bool:
+
         """
+"""
+"""
         Stop the demo pipeline execution.
 
         Returns:
@@ -243,24 +303,26 @@ class DemoPipelineRunner:
         bool
             True if pipeline stopped successfully
         """
+"""
+"""
         try:
             if not self.is_running:
                 logger.warning("Pipeline is not running")
                 return False
 
-            # Signal stop
+# Signal stop
             self.stop_event.set()
             self.is_running = False
             self.status = PipelineStatus.STOPPED
             self.end_time = datetime.now()
 
-            # Wait for threads to finish
-            self.executor.shutdown(wait=True)
+# Wait for threads to finish
+            self.executor.shutdown(wait = True)
 
-            # Calculate final metrics
+# Calculate final metrics
             self._calculate_final_metrics()
 
-            # Export results
+# Export results
             self._export_pipeline_results()
 
             logger.info(f"Pipeline stopped: {self.execution_id}")
@@ -271,18 +333,21 @@ class DemoPipelineRunner:
             return False
 
     def _start_execution_threads(self) -> None:
+
         """Start pipeline execution threads."""
+"""
+"""
         try:
-            # Start tick generation thread
+# Start tick generation thread
             self.executor.submit(self._tick_generation_loop)
 
-            # Start decision processing thread
+# Start decision processing thread
             self.executor.submit(self._decision_processing_loop)
 
-            # Start trade execution thread
+# Start trade execution thread
             self.executor.submit(self._trade_execution_loop)
 
-            # Start monitoring thread
+# Start monitoring thread
             self.executor.submit(self._monitoring_loop)
 
             logger.info("Pipeline execution threads started")
@@ -291,7 +356,10 @@ class DemoPipelineRunner:
             logger.error(f"Error starting execution threads: {e}")
 
     def _tick_generation_loop(self) -> None:
+
         """Generate tick events for processing."""
+"""
+"""
         try:
             assets = ["BTC", "ETH", "USDC", "XRP", "SOL"]
             base_prices = [50000.0, 3000.0, 1.0, 0.5, 100.0]
@@ -299,29 +367,29 @@ class DemoPipelineRunner:
             while self.is_running and not self.stop_event.is_set():
                 current_time = datetime.now()
 
-                # Check if execution time exceeded
+# Check if execution time exceeded
                 if current_time >= self.end_time:
                     logger.info("Pipeline execution time exceeded")
                     break
 
-                # Generate tick for each asset
+# Generate tick for each asset
                 for i, asset in enumerate(assets):
                     if self.stop_event.is_set():
                         break
 
-                    # Generate price movement
+# Generate price movement
                     base_price = base_prices[i]
                     if asset == "USDC":
                         price = 1.0  # Stable
                     else:
-                        # Random walk with trend
+# Random walk with trend
                         volatility = 0.02
                         trend = 0.001
                         price_change = np.random.normal(trend, volatility)
                         price = base_price * (1 + price_change)
                         base_prices[i] = price
 
-                    # Generate market data
+# Generate market data
                     market_data = {
                         'entropy_level': np.random.uniform(2.0, 8.0),
                         'volatility': np.random.uniform(0.01, 0.1),
@@ -330,33 +398,33 @@ class DemoPipelineRunner:
                         'volume': np.random.uniform(100, 1000)
                     }
 
-                    # Generate hash
+# Generate hash
                     hash_input = f"{asset}_{current_time.isoformat()}_{price}_{market_data['volume']}"
                     hash_value = hashlib.sha256(hash_input.encode()).hexdigest()
 
-                    # Calculate bit phases
+# Calculate bit phases
                     bit_phases = {
                         '4bit': int(hash_value[0:1], 16) % 16,
                         '8bit': int(hash_value[0:2], 16) % 256,
                         '42bit': int(hash_value[0:11], 16) % 4398046511104
                     }
 
-                    # Create tick event
+# Create tick event
                     tick_event = TickEvent(
-                        timestamp=current_time,
-                        asset=asset,
-                        price=price,
-                        volume=market_data['volume'],
-                        market_data=market_data,
-                        hash_value=hash_value,
-                        bit_phases=bit_phases
+                        timestamp = current_time,
+                        asset = asset,
+                        price = price,
+                        volume = market_data['volume'],
+                        market_data = market_data,
+                        hash_value = hash_value,
+                        bit_phases = bit_phases
                     )
 
-                    # Add to queue
+# Add to queue
                     self.tick_queue.put(tick_event)
                     self.tick_count += 1
 
-                # Wait for next tick
+# Wait for next tick
                 time.sleep(1.0)  # 1 second intervals
 
         except Exception as e:
@@ -364,22 +432,25 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.ERROR
 
     def _decision_processing_loop(self) -> None:
+
         """Process tick events and make strategy decisions."""
+"""
+"""
         try:
             while self.is_running and not self.stop_event.is_set():
                 try:
-                    # Get tick from queue (non-blocking)
-                    tick_event = self.tick_queue.get(timeout=1.0)
+# Get tick from queue (non - blocking)
+                    tick_event = self.tick_queue.get(timeout = 1.0)
 
-                    # Process tick through pipeline
+# Process tick through pipeline
                     decision = self._process_tick(tick_event)
 
                     if decision:
-                        # Add to decision queue
+# Add to decision queue
                         self.decision_queue.put(decision)
                         self.decision_count += 1
 
-                    # Store tick in history
+# Store tick in history
                     self.tick_history.append(tick_event)
 
                 except queue.Empty:
@@ -392,27 +463,30 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.ERROR
 
     def _process_tick(self, tick_event: TickEvent) -> Optional[StrategyDecision]:
+
         """Process a single tick event through the pipeline."""
+"""
+"""
         try:
-            # Step 1: DLT Waveform Processing
+# Step 1: DLT Waveform Processing
             if self.dlt_engine:
                 waveform_result = self.dlt_engine.process_waveform_data(
-                    name=f"{tick_event.asset}_waveform",
-                    x=np.array([tick_event.price]),
-                    sample_rate=1.0
+                    name = f"{tick_event.asset}_waveform",
+                    x = np.array([tick_event.price]),
+                    sample_rate = 1.0
                 )
 
-            # Step 2: Bit Phase Resolution
-            bit_phase = tick_event.bit_phases['8bit']  # Use 8-bit for decision making
+# Step 2: Bit Phase Resolution
+            bit_phase = tick_event.bit_phases['8bit']  # Use 8 - bit for decision making
 
-            # Step 3: Tensor Scoring
+# Step 3: Tensor Scoring
             tensor_score = 0.0
             if self.tensor_matcher:
-                # Get previous price for comparison
+# Get previous price for comparison
                 prev_price = tick_event.price * 0.99  # Simulate previous price
                 tensor_score = self.tensor_matcher.tensor_score(prev_price, tick_event.price, bit_phase)
 
-            # Step 4: Strategy Decision
+# Step 4: Strategy Decision
             decision = self._make_strategy_decision(tick_event, tensor_score, bit_phase)
 
             return decision
@@ -422,9 +496,12 @@ class DemoPipelineRunner:
             return None
 
     def _make_strategy_decision(self, tick_event: TickEvent, tensor_score: float, bit_phase: int) -> StrategyDecision:
+
         """Make strategy decision based on tick data and tensor score."""
+"""
+"""
         try:
-            # Determine decision based on tensor score
+# Determine decision based on tensor score
             if tensor_score > 0.02:
                 decision = "buy"
                 confidence = unified_math.min(unified_math.abs(tensor_score) * 10, 1.0)
@@ -435,25 +512,25 @@ class DemoPipelineRunner:
                 decision = "hold"
                 confidence = 0.5
 
-            # Calculate quantity (simplified)
+# Calculate quantity (simplified)
             quantity = 0.0
             if decision in ["buy", "sell"]:
                 quantity = 1000.0 / tick_event.price  # $1000 position
 
-            # Generate basket ID
+# Generate basket ID
             basket_id = f"basket_8bit_{bit_phase}"
 
-            # Create strategy decision
+# Create strategy decision
             strategy_decision = StrategyDecision(
-                timestamp=tick_event.timestamp,
-                asset=tick_event.asset,
-                decision=decision,
-                confidence=confidence,
-                tensor_score=tensor_score,
-                bit_phase=bit_phase,
-                basket_id=basket_id,
-                quantity=quantity,
-                price=tick_event.price,
+                timestamp = tick_event.timestamp,
+                asset = tick_event.asset,
+                decision = decision,
+                confidence = confidence,
+                tensor_score = tensor_score,
+                bit_phase = bit_phase,
+                basket_id = basket_id,
+                quantity = quantity,
+                price = tick_event.price,
                 metadata={
                     'hash_value': tick_event.hash_value,
                     'market_data': tick_event.market_data
@@ -467,23 +544,26 @@ class DemoPipelineRunner:
             return None
 
     def _trade_execution_loop(self) -> None:
+
         """Execute trades based on strategy decisions."""
+"""
+"""
         try:
             while self.is_running and not self.stop_event.is_set():
                 try:
-                    # Get decision from queue (non-blocking)
-                    decision = self.decision_queue.get(timeout=1.0)
+# Get decision from queue (non - blocking)
+                    decision = self.decision_queue.get(timeout = 1.0)
 
-                    # Execute trade
+# Execute trade
                     if decision.decision in ["buy", "sell"]:
                         trade_result = self._execute_trade(decision)
 
                         if trade_result:
-                            # Add to trade queue
+# Add to trade queue
                             self.trade_queue.put(trade_result)
                             self.trade_count += 1
 
-                    # Store decision in history
+# Store decision in history
                     self.decision_history.append(decision)
 
                 except queue.Empty:
@@ -496,10 +576,13 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.ERROR
 
     def _execute_trade(self, decision: StrategyDecision) -> Optional[Dict[str, Any]]:
+
         """Execute a trade based on strategy decision."""
+"""
+"""
         try:
             if self.trade_simulator:
-                # Create strategy bucket
+# Create strategy bucket
                 strategy_bucket = {
                     'asset': decision.asset,
                     'strategy_id': 'demo_strategy',
@@ -510,7 +593,7 @@ class DemoPipelineRunner:
                     'market_data': decision.metadata.get('market_data', {})
                 }
 
-                # Simulate trade
+# Simulate trade
                 trade_result = self.trade_simulator.simulate_trade(strategy_bucket, self.mode.value.upper())
 
                 if trade_result and trade_result.status.value == "executed":
@@ -533,27 +616,30 @@ class DemoPipelineRunner:
             return None
 
     def _monitoring_loop(self) -> None:
+
         """Monitor pipeline execution and performance."""
+"""
+"""
         try:
             last_save_time = datetime.now()
 
             while self.is_running and not self.stop_event.is_set():
                 current_time = datetime.now()
 
-                # Check if execution time exceeded
+# Check if execution time exceeded
                 if current_time >= self.end_time:
                     logger.info("Pipeline execution time exceeded")
                     break
 
-                # Auto-save every 5 minutes
+# Auto - save every 5 minutes
                 if (current_time - last_save_time).total_seconds() > 300:  # 5 minutes
                     self._save_pipeline_state()
                     last_save_time = current_time
 
-                # Update performance metrics
+# Update performance metrics
                 self._update_performance_metrics()
 
-                # Wait before next check
+# Wait before next check
                 time.sleep(10.0)  # Check every 10 seconds
 
         except Exception as e:
@@ -561,7 +647,10 @@ class DemoPipelineRunner:
             self.status = PipelineStatus.ERROR
 
     def _update_performance_metrics(self) -> None:
-        """Update real-time performance metrics."""
+
+        """Update real - time performance metrics."""
+"""
+"""
         try:
             current_time = datetime.now()
             execution_time = (current_time - self.start_time).total_seconds() if self.start_time else 0
@@ -582,14 +671,17 @@ class DemoPipelineRunner:
             logger.error(f"Error updating performance metrics: {e}")
 
     def _calculate_final_metrics(self) -> None:
+
         """Calculate final pipeline metrics."""
+"""
+"""
         try:
             if not self.start_time or not self.end_time:
                 return
 
             total_time = (self.end_time - self.start_time).total_seconds()
 
-            # Calculate final metrics
+# Calculate final metrics
             final_metrics = {
                 'total_execution_time_seconds': total_time,
                 'total_ticks_processed': self.tick_count,
@@ -610,7 +702,10 @@ class DemoPipelineRunner:
             logger.error(f"Error calculating final metrics: {e}")
 
     def _save_pipeline_state(self) -> None:
+
         """Save current pipeline state."""
+"""
+"""
         try:
             state_data = {
                 'execution_id': self.execution_id,
@@ -623,10 +718,10 @@ class DemoPipelineRunner:
                 'performance_metrics': self.performance_metrics
             }
 
-            # Save to file
+# Save to file
             filename = f"pipeline_state_{self.execution_id}.json"
             with open(filename, 'w') as f:
-                json.dump(state_data, f, indent=2, default=str)
+                json.dump(state_data, f, indent = 2, default = str)
 
             logger.info(f"Pipeline state saved: {filename}")
 
@@ -634,18 +729,21 @@ class DemoPipelineRunner:
             logger.error(f"Error saving pipeline state: {e}")
 
     def _export_pipeline_results(self) -> None:
+
         """Export final pipeline results."""
+"""
+"""
         try:
-            # Create pipeline result
+# Create pipeline result
             result = PipelineResult(
-                execution_id=self.execution_id,
-                start_time=self.start_time,
-                end_time=self.end_time,
-                status=self.status,
-                total_ticks=self.tick_count,
-                total_decisions=self.decision_count,
-                total_trades=self.trade_count,
-                performance_metrics=self.performance_metrics,
+                execution_id = self.execution_id,
+                start_time = self.start_time,
+                end_time = self.end_time,
+                status = self.status,
+                total_ticks = self.tick_count,
+                total_decisions = self.decision_count,
+                total_trades = self.trade_count,
+                performance_metrics = self.performance_metrics,
                 metadata={
                     'mode': self.mode.value,
                     'tick_history_count': len(self.tick_history),
@@ -654,7 +752,7 @@ class DemoPipelineRunner:
                 }
             )
 
-            # Export using vector exporter
+# Export using vector exporter
             if self.vector_exporter:
                 export_data = {
                     'execution_id': result.execution_id,
@@ -669,10 +767,10 @@ class DemoPipelineRunner:
                 }
 
                 self.vector_exporter.export_vector_snapshot(
-                    snapshot_type=self.vector_exporter.SnapshotType.COMPLETE_STATE,
-                    data=export_data,
-                    export_format=self.vector_exporter.ExportFormat.JSON,
-                    compress=True
+                    snapshot_type = self.vector_exporter.SnapshotType.COMPLETE_STATE,
+                    data = export_data,
+                    export_format = self.vector_exporter.ExportFormat.JSON,
+                    compress = True
                 )
 
             logger.info(f"Pipeline results exported for execution: {self.execution_id}")
@@ -681,7 +779,10 @@ class DemoPipelineRunner:
             logger.error(f"Error exporting pipeline results: {e}")
 
     def get_pipeline_status(self) -> Dict[str, Any]:
+
         """Get current pipeline status."""
+"""
+"""
         return {
             'execution_id': self.execution_id,
             'mode': self.mode.value,
@@ -696,72 +797,96 @@ class DemoPipelineRunner:
         }
 
     def set_dlt_engine(self, dlt_engine) -> None:
+
         """Set DLT engine for integration."""
+"""
+"""
         self.dlt_engine = dlt_engine
         logger.info("DLT engine integrated with demo runner")
 
     def set_tensor_matcher(self, tensor_matcher) -> None:
+
         """Set tensor matcher for integration."""
+"""
+"""
         self.tensor_matcher = tensor_matcher
         logger.info("Tensor matcher integrated with demo runner")
 
     def set_bit_phase_engine(self, bit_engine) -> None:
+
         """Set bit phase engine for integration."""
+"""
+"""
         self.bit_phase_engine = bit_engine
         logger.info("Bit phase engine integrated with demo runner")
 
     def set_matrix_mapper(self, matrix_mapper) -> None:
+
         """Set matrix mapper for integration."""
+"""
+"""
         self.matrix_mapper = matrix_mapper
         logger.info("Matrix mapper integrated with demo runner")
 
     def set_profit_allocator(self, profit_allocator) -> None:
+
         """Set profit allocator for integration."""
+"""
+"""
         self.profit_allocator = profit_allocator
         logger.info("Profit allocator integrated with demo runner")
 
     def set_trade_simulator(self, trade_simulator) -> None:
+
         """Set trade simulator for integration."""
+"""
+"""
         self.trade_simulator = trade_simulator
         logger.info("Trade simulator integrated with demo runner")
 
     def set_demo_injector(self, demo_injector) -> None:
+
         """Set demo injector for integration."""
+"""
+"""
         self.demo_injector = demo_injector
         logger.info("Demo injector integrated with demo runner")
 
     def set_vector_exporter(self, vector_exporter) -> None:
+
         """Set vector exporter for integration."""
+"""
+"""
         self.vector_exporter = vector_exporter
         logger.info("Vector exporter integrated with demo runner")
 
 
 if __name__ == "__main__":
-    # Test demo pipeline runner
+# Test demo pipeline runner
     runner = DemoPipelineRunner()
 
-    # Set to demo mode
+# Set to demo mode
     runner.set_mode(PipelineMode.DEMO)
 
-    # Start pipeline for 2 minutes
+# Start pipeline for 2 minutes
     safe_print("\\u1f680 Starting demo pipeline...")
-    success = runner.start_pipeline(duration_minutes=2)
+    success = runner.start_pipeline(duration_minutes = 2)
 
     if success:
         safe_print("\\u2705 Pipeline started successfully")
 
-        # Monitor for 10 seconds
+# Monitor for 10 seconds
         for i in range(10):
             time.sleep(1)
             status = runner.get_pipeline_status()
             safe_print(
                 f"\\u1f4ca Status: {status['status']} | Ticks: {status['tick_count']} | Decisions: {status['decision_count']} | Trades: {status['trade_count']}")
 
-        # Stop pipeline
+# Stop pipeline
         safe_print("\\u23f9\\ufe0f Stopping pipeline...")
         runner.stop_pipeline()
 
-        # Final status
+# Final status
         final_status = runner.get_pipeline_status()
         safe_print(f"\\u1f3c1 Final Status: {final_status['status']}")
         safe_print(f"\\u1f4c8 Performance: {final_status['performance_metrics']}")

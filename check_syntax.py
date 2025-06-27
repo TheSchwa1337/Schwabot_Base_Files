@@ -1,18 +1,23 @@
-#!/usr/bin/env python3
+from pathlib import Path
 import os
 import py_compile
 import sys
-from pathlib import Path
 
 
 def check_syntax_errors():
     """Check all Python files for syntax errors and count them."""
+
+
+"""
+"""
+"""
+"""
     syntax_errors = []
     total_files = 0
 
-    # Walk through all Python files
+# Walk through all Python files
     for root, dirs, files in os.walk('.'):
-        # Skip __pycache__ and other common directories
+# Skip __pycache__ and other common directories
         dirs[:] = [d for d in dirs if d not in ['__pycache__', '.git', 'build', 'dist', 'venv', 'env']]
 
         for file in files:
@@ -43,4 +48,8 @@ def check_syntax_errors():
 if __name__ == "__main__":
     check_syntax_errors()
 
+"""
+"""
+"""
+"""
 """

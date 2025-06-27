@@ -1,0 +1,57 @@
+{
+  "mappings": {
+    "💰": {
+      "sha256_hash": "d50cec9dd11ce4a72a68a6ff8e0d2548ce72a212d2cb3365ff009eaacb8f9168",
+      "asic_code": "PT",
+      "bit_map": "10011101",
+      "mathematical_placeholder": "P = ∇·Φ(hash) / Δt",
+      "fallback_hex": "u+1f4b0"
+    },
+    "🔥": {
+      "sha256_hash": "ed8d830565bfcc5cb5b15e7deef7b6d07645d06597c8d17c7bdd49ad6f0e310a",
+      "asic_code": "VH",
+      "bit_map": "00000101",
+      "mathematical_placeholder": "V = σ²(hash) * λ(t)",
+      "fallback_hex": "u+1f525"
+    },
+    "📈": {
+      "sha256_hash": "b5ad1dfd999453bb2a807378b7f817c3a62f5305d24dccdfc991d6a052841c74",
+      "asic_code": "UC",
+      "bit_map": "11111101",
+      "mathematical_placeholder": "U = ∫₀ᵗ ∂P/∂τ dτ",
+      "fallback_hex": "u+1f4c8"
+    },
+    "🧠": {
+      "sha256_hash": "bf0e823c81b87c5de79676155debf20a29b52d6d7eb7e77deda73a56d0afbaaa",
+      "asic_code": "ALT",
+      "bit_map": "00111100",
+      "mathematical_placeholder": "AI = Σ wᵢ * φ(hashᵢ)",
+      "fallback_hex": "u+1f9e0"
+    },
+    "⚡": {
+      "sha256_hash": "af0c5dab01d88837d7b9ccb4350b9bdd9afdac518db840665e7f06060ca40ce6",
+      "asic_code": "FE",
+      "bit_map": "10101011",
+      "mathematical_placeholder": "P = f(hash, t)",
+      "fallback_hex": "u+26a1"
+    },
+    "🎯": {
+      "sha256_hash": "aada6251513584259e4f27fc7e81d7d0bee6ca21dbadd9fdceb53492442780c6",
+      "asic_code": "TH",
+      "bit_map": "01010001",
+      "mathematical_placeholder": "T = argmax(P(hash, t))",
+      "fallback_hex": "u+1f3af"
+    }
+  },
+  "statistics": {
+    "total_mappings": 6,
+    "asic_code_distribution": {
+      "PT": 1,
+      "VH": 1,
+      "UC": 1,
+      "ALT": 1,
+      "FE": 1,
+      "TH": 1
+    }
+  }
+}
