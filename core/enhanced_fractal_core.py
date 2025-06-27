@@ -317,7 +317,7 @@ metadata = {}
 
 # Store pattern
 self.fractal_patterns[pattern_id] = pattern
-self.pattern_cache[pattern_id = {]}
+self.pattern_cache[pattern_id= {]}
 'data_shape': data.shape,
 'pattern_type': pattern_type
 
@@ -347,7 +347,7 @@ logger.info()
 logger.error(f"Fractal analysis error: {e}")
 #             return FractalAnalysisResult()
                 success = False,
-pattern_id="",
+pattern_id = "",
 analysis_time = datetime.now(),
                 fractal_dimension = 0.0,
 self_similarity = 0.0,
@@ -379,11 +379,11 @@ def _calculate_fractal_dimension(self, data: np.ndarray) -> float:
 
 # Convert to binary (threshold - based)
             threshold = unified_math.unified_math.mean(data)
-            binary_data=(data > threshold).astype(int)
+            binary_data = (data > threshold).astype(int)
 
 # Box - counting algorithm
-sizes=[]
-counts=[]
+sizes = []
+counts = []
 
             for size in range(1, unified_math.min(binary_data.shape) // 2):
                 if size == 0:

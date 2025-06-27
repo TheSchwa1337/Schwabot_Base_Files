@@ -382,7 +382,7 @@ timestamp: float | None = None,
 """"""
 """"""
 
-Returns an : class: `ExecPacket` with volume, route string, price offset 0.0
+Returns an: class: `ExecPacket` with volume, route string, price offset 0.0
 (placeholder) and hash - tag tau\\u209c.
     """"""
 """"""

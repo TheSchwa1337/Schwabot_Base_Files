@@ -36,8 +36,8 @@ def feedback(g_prev: float, zeta: float, beta: float = 0.9) -> float:
 """
 """
 return beta * g_prev + (1 - beta) * zeta
+"""
+"""
+"""
+"""
 
-"""
-"""
-"""
-"""

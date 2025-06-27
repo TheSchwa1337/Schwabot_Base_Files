@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-""""""
+"""
 Advanced Test Harness for Schwabot Core System
 
 This module provides comprehensive testing capabilities for the Schwabot trading system,
 including mathematical operations, performance benchmarks, and integration testing.
-""""""
+"""
 
 from __future__ import annotations
 
@@ -264,5 +264,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

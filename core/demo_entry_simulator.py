@@ -299,7 +299,11 @@ Based on Schwabot's mathematical framework and DLT waveform integration.'
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 
-def simulate_entry(self, strategy_type: str, market_condition: str = "sideways",):
+def simulate_entry(
+    self,
+    strategy_type: str,
+    market_condition: str = "sideways",
+    ):
 
                         num_simulations: int = 100 -> EntryAnalysis:
 

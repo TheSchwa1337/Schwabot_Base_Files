@@ -40,8 +40,8 @@ def entry_score(
 """
 """
 return (w_btc * dp_norm) - (w_usdc * sigma_vol)
+"""
+"""
+"""
+"""
 
-"""
-"""
-"""
-"""

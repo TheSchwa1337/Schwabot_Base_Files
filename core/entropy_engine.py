@@ -273,7 +273,6 @@ def calculate_entropy(self,):
 """"""
         try:
 
-
         except Exception as e:
             pass
 

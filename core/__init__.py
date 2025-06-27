@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-""""""
+"""
 Schwabot Core Module - Central Integration Hub
-===============================================
+=============================================
 
 Provides unified access to all core Schwabot components with proper
 type safety and error handling. This module serves as the main entry
@@ -13,13 +13,13 @@ Key Features:
 - Comprehensive error handling
 - System health monitoring
 - Performance optimization
-""""""
+"""
 
 from __future__ import annotations
 
 from .advanced_test_harness import AdvancedTestHarness
 from .advanced_mathematical_core import AdvancedMathematicalCore
-from .altitude_adjustment_math import AltitudeAdjustmentMath
+from .altitude_adjustment_math import AltitudeAdjustmentEngine
 from .altitude_generator import AltitudeGenerator
 from .anomaly_filter_comprehensive import AnomalyFilterComprehensive
 from .api_bridge_manager import APIBridgeManager
@@ -190,11 +190,15 @@ __description__ = "Advanced AI-Powered Trading System"
 # Unified mathematical system (imported after basic components to avoid circular imports)
 try:
     from .unified_math_system import UnifiedMathSystem, unified_math, MathResult, MathOperation
-except Exception as e:
-    pass
-
 except ImportError:
     # Fallback if unified math system is not available
+    UnifiedMathSystem = None
+    unified_math = None
+    MathResult = None
+    MathOperation = None
+except Exception as e:
+    # Handle other exceptions during import
+    logger.warning(f"Error importing unified math system: {e}")
     UnifiedMathSystem = None
     unified_math = None
     MathResult = None
@@ -488,7 +492,7 @@ __all__ = [
     "EventMatrixIntegrationBridge", "EventImpactMapper",
 
     # Advanced mathematical operations
-    "AdvancedMathematicalCore", "RiddleGEMM", "AltitudeAdjustmentMath", "AnomalyFilterComprehensive",
+    "AdvancedMathematicalCore", "RiddleGEMM", "AltitudeAdjustmentEngine", "AnomalyFilterComprehensive",
 
     # Demo and testing components
     "DemoBacktestRunner", "DemoEntrySimulator", "DemoIntegrationSystem", "DemoMemoryCore",

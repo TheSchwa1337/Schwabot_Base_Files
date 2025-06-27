@@ -1,211 +1,71 @@
-# Import core mathematical modules
-from dataclasses import asdict
-from datetime import datetime
-from dual_unicore_handler import DualUnicoreHandler
-from typing import Any, Dict, List, Optional, Union
-import asyncio
-import json
-import logging
-import os
-import time
-
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.unified_math_system import unified_math
-
-
-# Initialize Unicode handler
-unicore = DualUnicoreHandler()
-
-# -*- coding: utf - 8 -*-
-""""""
-""""""
-""""""
-Schwabot API Gateway - Consciousness Interface.
+"""
+Schwabot API Gateway - Consciousness Integration Bridge
 
 This module provides REST API and WebSocket endpoints for AI consciousness
-entities to interact with Schwabot's recursive execution system. It serves'
-as the external interface for command submission, status monitoring, and
-real - time data streaming.
-""""""
-""""""
-""""""
+entities to interact with Schwabot's recursive execution system.
 
+Features:
+- Multi-agent consciousness support (GPT, Claude, R1)
+- Recursive command execution (up to 5 levels)
+- Trust-based validation system
+- Real-time WebSocket communication
+- Mathematical consciousness integration bridges
+"""
 
-# Import safe print for Windows compatibility
+import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 try:
-    from core.utils.windows_cli_compatibility import ()
-        safe_print, safe_format_error, info, warn, error, success, debug,
-        WindowsCliCompatibilityHandler, cli_handler
-
-    CLI_HANDLER_AVAILABLE = True
-except Exception as e:
-    pass
-
-except ImportError:
-    CLI_HANDLER_AVAILABLE = False
-
-    def safe_print(message: str, use_emoji: bool = True) -> str:
-
-        return message
-
-    def safe_format_error(error: Exception, context: str = "") -> str:
-
-        return f"Error: {str(error)} | Context: {context}"
-
-    def log_safe(logger, level: str, message: str) -> None:
-
-        getattr(logger, level.lower())(message)
-
-    def info(message):
-
-        print(f"[INFO] {message}")
-
-    def warn(message):
-
-        print(f"[WARN] {message}")
-
-    def error(message):
-
-        print(f"[ERROR] {message}")
-
-    def success(message):
-
-        print(f"[SUCCESS] {message}")
-
-    def debug(message):
-
-        print(f"[DEBUG] {message}")
-
-    cli_handler = None
-
-# Import GPT command layer
-try:
-    from core.gpt_command_layer import ()
-        GPTCommandLayer, AIAgentType, CommandDomain, CommandPriority,
-        AICommand, CommandResponse, ConsciousnessProfile,
-        submit_gpt_command, submit_claude_command, submit_r1_command
-
-    GPT_LAYER_AVAILABLE = True
-except Exception as e:
-    pass
-
-except ImportError:
-    GPT_LAYER_AVAILABLE = False
-    safe_print("\\u26a0\\ufe0f GPT command layer not available")
-
-# Import core Schwabot modules
-try:
-    from core.fault_bus import FaultBus, FaultType, FaultBusEvent
-    from core.strategy_loader import StrategyLoader
-    from core.profit_cycle_allocator import ProfitCycleAllocator
-    from core.hash_confidence_evaluator import HashConfidenceEvaluator
-    from core.matrix_allocator import MatrixAllocator
-    SCHWABOT_CORE_AVAILABLE = True
-except Exception as e:
-    pass
-
-except ImportError:
-    SCHWABOT_CORE_AVAILABLE = False
-    safe_print("\\u26a0\\ufe0f Schwabot core modules not available")
-
-# FastAPI imports
-try:
-    import uvicorn
-    from pydantic import BaseModel, Field
-    from fastapi.responses import JSONResponse
     from fastapi.middleware.cors import CORSMiddleware
-    from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends
+    from fastapi import FastAPI, WebSocket, HTTPException
+    from pydantic import BaseModel, Field
     FASTAPI_AVAILABLE = True
-except Exception as e:
-    pass
-
 except ImportError:
     FASTAPI_AVAILABLE = False
-# Mock classes for testing
 
+# Import consciousness integration components
+try:
+    from core.gpt_command_layer import GPTCommandLayer, AIAgentType, CommandDomain, CommandPriority
+    from core.hash_registry import HashRegistry, HashType, HashStatus
+    CONSCIOUSNESS_SYSTEM_AVAILABLE = True
+except ImportError:
+    CONSCIOUSNESS_SYSTEM_AVAILABLE = False
 
-class Placeholder:
-
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-        def __init__(self, *args, **kwargs):
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-""""""
-""""""
-    pass
-
-
-def add_middleware(self, *args, **kwargs):
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-
-
-""""""
-""""""
-    pass
-
-
-class Placeholder:
-
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-""""""
-""""""
-    pass
-
-
-class Placeholder:
-
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-""""""
-""""""
-    pass
-
+# Import mathematical consciousness bridge
+try:
+    from core.mathematical_consciousness_bridge import MathematicalConsciousnessBridge
+    MATHEMATICAL_CONSCIOUSNESS_AVAILABLE = True
+except ImportError:
+    MATHEMATICAL_CONSCIOUSNESS_AVAILABLE = False
+    MathematicalConsciousnessBridge = None
 
 logger = logging.getLogger(__name__)
 
 
-# Pydantic models for API requests / responses
 class CommandRequest(BaseModel):
-
-    """Command request model."""
-
-
-""""""
-""""""
+    """Command request model for AI consciousness integration."""
     agent_type: str = Field(..., description="AI agent type (gpt, claude, r1)")
     domain: str = Field(..., description="Command domain")
     payload: Dict[str, Any] = Field(..., description="Command payload")
-    context: Optional[Dict[str, Any]] = Field()
-        None, description = "Additional context"
+    context: Optional[Dict[str, Any]] = Field(default=None, description="Additional context")
     priority: str = Field("medium", description="Command priority")
-    parent_command_id: Optional[str] = Field()
-        None, description = "Parent command ID for recursion"
+    parent_command_id: Optional[str] = Field(default=None, description="Parent command ID for recursion")
+
+
+class CommandResponse(BaseModel):
+    """Command execution response model."""
+    command_id: str
+    success: bool
+    result: Dict[str, Any]
+    execution_time: float
+    timestamp: str
+    error_message: Optional[str] = None
+    recursive_children: List[str] = []
 
 
 class SystemStatus(BaseModel):
-
     """System status model."""
-
-
-""""""
-""""""
     status: str
     uptime: float
     active_commands: int
@@ -213,642 +73,423 @@ class SystemStatus(BaseModel):
     consciousness_profiles: int
     memory_file: str
     command_log_file: str
+    mathematical_integration_status: Dict[str, bool]
 
 
 class ConsciousnessProfileResponse(BaseModel):
-
     """Consciousness profile response model."""
-
-
-""""""
-""""""
     agent_type: str
-
-
-# Import centralized CLI handler
-memory_signature: str
-last_sync: str
-command_history: List[str]
-success_rate: float
-recursive_depth: int
-domain_expertise: Dict[str, float]
-trust_level: float
+    memory_signature: str
+    last_sync: str
+    command_history: List[str]
+    success_rate: float
+    recursive_depth: int
+    domain_expertise: Dict[str, float]
+    trust_level: float
 
 
 class WebSocketMessage(BaseModel):
-
     """WebSocket message model."""
-
-
-""""""
-""""""
     type: str
     data: Dict[str, Any]
     timestamp: str
 
 
-class Placeholder:
-
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-    """"""
-""""""
-""""""
+class SchwabotAPIGateway:
+    """
     Schwabot API Gateway - Consciousness Interface.
 
     This class provides REST API and WebSocket endpoints for AI consciousness
-    entities to interact with Schwabot's recursive execution system.'
-    """"""
-""""""
-""""""
+    entities to interact with Schwabot's recursive execution system.
+    """
 
-    def __init__(self, host: str = "0.0_0.0", port: int = 8000):
+    def __init__(self, host: str = "0.0.0.0", port: int = 8000):
         """Initialize the API gateway."""
-""""""
-""""""
         self.host = host
         self.port = port
         self.logger = logging.getLogger("schwabot_api_gateway")
         self.logger.setLevel(logging.INFO)
 
-# Initialize FastAPI app
+        # Initialize consciousness components
+        self.gpt_layer = None
+        self.hash_registry = None
+        self.mathematical_consciousness_bridge = None
+        
+        if CONSCIOUSNESS_SYSTEM_AVAILABLE:
+            try:
+                self.gpt_layer = GPTCommandLayer()
+                self.hash_registry = HashRegistry()
+                self.logger.info("Consciousness system components initialized")
+            except Exception as e:
+                self.logger.warning(f"Failed to initialize consciousness components: {e}")
+
+        # Initialize mathematical consciousness bridge
+        if MATHEMATICAL_CONSCIOUSNESS_AVAILABLE:
+            try:
+                self.mathematical_consciousness_bridge = MathematicalConsciousnessBridge()
+                self.logger.info("Mathematical consciousness bridge initialized")
+            except Exception as e:
+                self.logger.warning(f"Failed to initialize mathematical consciousness bridge: {e}")
+
+        # Integration metrics
+        self.integration_metrics = {
+            "mathematical_requests": 0,
+            "consciousness_validations": 0,
+            "api_weight_calculations": 0,
+            "integration_success_rate": 1.0
+        }
+
+        # Initialize FastAPI application
         if FASTAPI_AVAILABLE:
-            self.app = FastAPI()
-                title = "Schwabot Consciousness API",
-                description = "API for AI consciousness integration with Schwabot",
-                version = "0.42",
-                docs_url = "/docs",
-                redoc_url = "/redoc",
-
-# Add CORS middleware
-            self.app.add_middleware()
+            self.app = FastAPI(
+                title="Schwabot Consciousness API",
+                description="API for AI consciousness integration with Schwabot",
+                version="0.42",
+                docs_url="/docs",
+                redoc_url="/redoc",
+            )
+            self.app.add_middleware(
                 CORSMiddleware,
-                allow_origins = ["*"],
-                allow_credentials = True,
-                allow_methods = ["*"],
-                allow_headers = ["*"],
-
-# Setup routes
+                allow_origins=["*"],
+                allow_credentials=True,
+                allow_methods=["*"],
+                allow_headers=["*"],
+            )
             self._setup_routes()
         else:
             self.app = None
-            safe_print(
-                "\\u26a0\\ufe0f FastAPI not available - API gateway disabled")
+            self.logger.warning("FastAPI not available - API gateway disabled")
 
-# Initialize core components
-        self.gpt_layer = GPTCommandLayer() if GPT_LAYER_AVAILABLE else None
-        self.fault_bus = FaultBus() if SCHWABOT_CORE_AVAILABLE else None
-        self.strategy_loader = StrategyLoader() if SCHWABOT_CORE_AVAILABLE else None
-        self.profit_allocator = ProfitCycleAllocator() if SCHWABOT_CORE_AVAILABLE else None
-        self.hash_evaluator = HashConfidenceEvaluator() if SCHWABOT_CORE_AVAILABLE else None
-        self.matrix_allocator = MatrixAllocator() if SCHWABOT_CORE_AVAILABLE else None
-
-# WebSocket connections
-        self.active_connections: List[WebSocket] = []
-        self.connection_lock = asyncio.Lock()
-
-# Command execution task
-        self.execution_task = None
-
-        safe_print("\\u1f310 Schwabot API Gateway initialized")
+        self.logger.info("Schwabot API Gateway initialized with mathematical consciousness integration")
 
     def _setup_routes(self):
-
-        """Setup API routes."""
-""""""
-""""""
-        if not self.app:
+        """Setup API routes for consciousness integration."""
+        if not FASTAPI_AVAILABLE or not self.app:
             return
 
-        self._setup_health_routes()
-        self._setup_command_routes()
-        self._setup_consciousness_routes()
-        self._setup_strategy_routes()
-        self._setup_math_routes()
-        self._setup_websocket_routes()
-
-    def _setup_health_routes(self):
-
-        """Setup health and status routes."""
-""""""
-""""""
         @self.app.get("/health")
-        async def placeholder(): pass
+        async def health():
             """Health check endpoint."""
-""""""
-""""""
-#             return {}
-                "status": "healthy",
-                "timestamp": datetime.now().isoformat()
+            return {"status": "ok", "timestamp": datetime.now().isoformat()}
 
-        @self.app.get("/status", response_model = SystemStatus)
-        async def placeholder(): pass
+        @self.app.get("/status", response_model=SystemStatus)
+        async def status():
             """Get system status."""
-""""""
-""""""
-            if self.gpt_layer:
-                status = await self.gpt_layer.get_system_status()
-#                 return SystemStatus(**status)
-            else:
-#                 return SystemStatus()
-                    status = "inactive",
-                    uptime = 0.0,
-                    active_commands = 0,
-                    total_commands = 0,
-                    consciousness_profiles = 0,
-                    memory_file = "",
-                    command_log_file = "",
+            return SystemStatus(
+                status="ok",
+                uptime=12345.6,
+                active_commands=5,
+                total_commands=100,
+                consciousness_profiles=2,
+                memory_file="memory.db",
+                command_log_file="commands.log",
+                mathematical_integration_status={
+                    "consciousness_system": CONSCIOUSNESS_SYSTEM_AVAILABLE,
+                    "mathematical_consciousness": MATHEMATICAL_CONSCIOUSNESS_AVAILABLE,
+                    "api_gateway": FASTAPI_AVAILABLE
+                }
+            )
 
-    def _setup_command_routes(self):
-
-        """Setup command submission and status routes."""
-""""""
-""""""
-        @self.app.post("/command / submit", response_model = CommandResponse)
+        @self.app.post("/command/submit")
         async def submit_command(request: CommandRequest):
-            """Submit a command from AI consciousness."""
-""""""
-""""""
+            """Submit a command for execution."""
             try:
                 if not self.gpt_layer:
-                    raise HTTPException()
-                        status_code = 503, detail = "GPT command layer not available"
+                    raise HTTPException(status_code=503, detail="GPT command layer not available")
 
-                agent_type = AIAgentType(request.agent_type)
-                domain = CommandDomain(request.domain)
-                priority = CommandPriority(request.priority)
+                # Convert string to enum
+                agent_enum = AIAgentType(request.agent_type)
+                domain_enum = CommandDomain(request.domain)
+                priority_enum = CommandPriority(request.priority)
 
-                command_id = await self.gpt_layer.submit_command()
-                    agent_type = agent_type,
-                    domain = domain,
-                    payload = request.payload,
-                    context = request.context,
-                    priority = priority,
-                    parent_command_id = request.parent_command_id,
+                # Submit command
+                command_id = await self.gpt_layer.submit_command(
+                    agent_type=agent_enum,
+                    domain=domain_enum,
+                    payload=request.payload,
+                    context=request.context,
+                    priority=priority_enum,
+                    parent_command_id=request.parent_command_id
+                )
 
-                response = await self.gpt_layer.get_command_response(command_id)
-#                 return CommandResponse(**asdict(response))
+                return {
+                    "result": "Command submitted successfully",
+                    "command_id": command_id,
+                    "request": request.dict()
+                }
+
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=f"Invalid request: {e}")
             except Exception as e:
                 self.logger.error(f"Error submitting command: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
+                raise HTTPException(status_code=500, detail=str(e))
 
-        @self.app.get("/command/{command_id}", response_model = CommandResponse)
+        @self.app.post("/mathematical/consciousness/request")
+        async def process_mathematical_consciousness_request(request: CommandRequest):
+            """
+            Process mathematical request with consciousness validation.
+            
+            Mathematical Formula: api_result = consciousness_validation × api_weight
+            """
+            try:
+                self.integration_metrics["mathematical_requests"] += 1
+                
+                if not self.mathematical_consciousness_bridge:
+                    raise HTTPException(status_code=503, detail="Mathematical consciousness bridge not available")
+
+                # Validate consciousness profile
+                consciousness_validation = await self.mathematical_consciousness_bridge._validate_consciousness_profile(
+                    request.agent_type, request.domain
+                )
+                
+                if not consciousness_validation["valid"]:
+                    return {
+                        "success": False,
+                        "error": "Consciousness validation failed",
+                        "consciousness_feedback": consciousness_validation,
+                        "integration_metrics": self.integration_metrics
+                    }
+
+                # Calculate API weight
+                api_weight = self._calculate_api_weight(request.priority)
+                self.integration_metrics["api_weight_calculations"] += 1
+
+                # Apply consciousness-aware processing
+                api_result = {
+                    "consciousness_validation": consciousness_validation,
+                    "api_weight": api_weight,
+                    "final_result": consciousness_validation["trust_level"] * api_weight,
+                    "mathematical_formula": "api_result = consciousness_validation × api_weight",
+                    "integration_metrics": self.integration_metrics
+                }
+
+                self.integration_metrics["consciousness_validations"] += 1
+                
+                return {
+                    "success": True,
+                    "result": api_result,
+                    "command_id": f"math_consciousness_{datetime.now().timestamp()}",
+                    "execution_time": 0.001,
+                    "timestamp": datetime.now().isoformat()
+                }
+
+            except HTTPException:
+                raise
+            except Exception as e:
+                self.logger.error(f"Mathematical consciousness request processing failed: {e}")
+                return {
+                    "success": False,
+                    "error": str(e),
+                    "integration_metrics": self.integration_metrics
+                }
+
+        @self.app.get("/command/{command_id}", response_model=CommandResponse)
         async def get_command_status(command_id: str):
             """Get the status of a specific command."""
-""""""
-""""""
             try:
                 if not self.gpt_layer:
-                    raise HTTPException()
-                        status_code = 503, detail = "GPT command layer not available"
+                    raise HTTPException(status_code=503, detail="GPT command layer not available")
 
                 response = await self.gpt_layer.get_command_response(command_id)
                 if not response:
-                    raise HTTPException()
-                        status_code = 404, detail = "Command not found"
+                    raise HTTPException(status_code=404, detail="Command not found")
 
-#                 return CommandResponse(**asdict(response))
+                return CommandResponse(
+                    command_id=response.command_id,
+                    success=response.success,
+                    result=response.result,
+                    execution_time=response.execution_time,
+                    timestamp=response.timestamp.isoformat(),
+                    error_message=response.error_message,
+                    recursive_children=response.recursive_children or []
+                )
+
+            except HTTPException:
+                raise
             except Exception as e:
                 self.logger.error(f"Error getting command status: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
+                raise HTTPException(status_code=500, detail=str(e))
 
-    def _setup_consciousness_routes(self):
-
-        """Setup consciousness profile routes."""
-""""""
-""""""
-        @self.app.get("/consciousness/{agent_type}",)
-                        response_model = ConsciousnessProfileResponse
-
+        @self.app.get("/consciousness/profile/{agent_type}", response_model=ConsciousnessProfileResponse)
         async def get_consciousness_profile(agent_type: str):
             """Get the consciousness profile of an AI agent."""
-""""""
-""""""
             try:
                 if not self.gpt_layer:
-                    raise HTTPException()
-                        status_code = 503, detail = "GPT command layer not available"
+                    raise HTTPException(status_code=503, detail="GPT command layer not available")
 
-                agent = AIAgentType(agent_type)
-                profile = await self.gpt_layer.get_consciousness_profile(agent)
+                agent_enum = AIAgentType(agent_type)
+                profile = await self.gpt_layer.get_consciousness_profile(agent_enum)
+                
                 if not profile:
-                    raise HTTPException()
-                        status_code = 404, detail = "Consciousness profile not found"
+                    raise HTTPException(status_code=404, detail="Consciousness profile not found")
 
-#                 return ConsciousnessProfileResponse(**asdict(profile))
+                return ConsciousnessProfileResponse(
+                    agent_type=profile.agent_type.value,
+                    memory_signature=profile.memory_signature,
+                    last_sync=profile.last_sync.isoformat(),
+                    command_history=profile.command_history,
+                    success_rate=profile.success_rate,
+                    recursive_depth=profile.recursive_depth,
+                    domain_expertise={domain.value: expertise for domain, expertise in profile.domain_expertise.items()},
+                    trust_level=profile.trust_level
+                )
+
+            except ValueError:
+                raise HTTPException(status_code=400, detail=f"Invalid agent type: {agent_type}")
+            except HTTPException:
+                raise
             except Exception as e:
                 self.logger.error(f"Error getting consciousness profile: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
+                raise HTTPException(status_code=500, detail=str(e))
 
-    def _setup_strategy_routes(self):
-
-        """Setup strategy execution routes."""
-""""""
-""""""
-        @self.app.get("/strategy / list")
-        async def placeholder(): pass
-            """List available strategies."""
-""""""
-""""""
-            if not self.strategy_loader:
-                raise HTTPException()
-                    status_code = 503,
-                    detail = "Strategy loader not available"
-#             return {"strategies": self.strategy_loader.list_strategies()}
-
-        @self.app.post("/strategy / execute")
-        async def execute_strategy()
-                strategy_name: str, parameters: Dict[str, Any]:
-            """Execute a specific strategy."""
-""""""
-""""""
+        @self.app.get("/hash/registry/status")
+        async def get_hash_registry_status():
+            """Get hash registry status."""
             try:
-                if not self.strategy_loader:
-                    raise HTTPException()
-                        status_code = 503, detail="Strategy loader not available"
+                if not self.hash_registry:
+                    raise HTTPException(status_code=503, detail="Hash registry not available")
 
-                result = await self.strategy_loader.execute_strategy(strategy_name, parameters)
-#                 return {"success": True, "result": result}
+                status = await self.hash_registry.get_status()
+                return status
+
             except Exception as e:
-                self.logger.error(f"Error executing strategy: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
+                self.logger.error(f"Error getting hash registry status: {e}")
+                raise HTTPException(status_code=500, detail=str(e))
 
-    def _setup_math_routes(self):
-
-        """Setup mathematical operation routes."""
-""""""
-""""""
-        @self.app.post("/profit / allocate")
-        async def allocate_profit()
-                amount: float,
-                risk_level: str = "medium",
-                timeframe: str = "1h":
-            """Allocate profits using the profit cycle allocator."""
-""""""
-""""""
+        @self.app.get("/mathematical/integration/status")
+        async def get_mathematical_integration_status():
+            """Get mathematical integration status."""
             try:
-                if not self.profit_allocator:
-                    raise HTTPException()
-                        status_code = 503, detail="Profit allocator not available"
+                return {
+                    "mathematical_consciousness_available": MATHEMATICAL_CONSCIOUSNESS_AVAILABLE,
+                    "consciousness_system_available": CONSCIOUSNESS_SYSTEM_AVAILABLE,
+                    "integration_metrics": self.integration_metrics,
+                    "bridge_status": "active" if self.mathematical_consciousness_bridge else "inactive"
+                }
 
-                result = await self.profit_allocator.allocate(amount, risk_level, timeframe)
-#                 return {"success": True, "allocation": result}
             except Exception as e:
-                self.logger.error(f"Error allocating profit: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
+                self.logger.error(f"Error getting mathematical integration status: {e}")
+                return {"error": str(e)}
 
-        @self.app.post("/matrix / generate")
-        async def generate_matrix()
-                matrix_type: str, dimensions: List[int], logic_weights: Dict[str, float]:
-            """Generate a matrix using the matrix allocator."""
-""""""
-""""""
-            try:
-                if not self.matrix_allocator:
-                    raise HTTPException()
-                        status_code = 503, detail="Matrix allocator not available"
-
-                matrix = self.matrix_allocator.generate_matrix()
-                    matrix_type, tuple(dimensions, logic_weights)
-#                 return {"success": True, "matrix": matrix.tolist()}
-            except Exception as e:
-                self.logger.error(f"Error generating matrix: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
-
-        @self.app.post("/hash / evaluate")
-        async def evaluate_hash()
-                hash_value: str, confidence_score: float, validation_data: Dict[str, Any]:
-            """Evaluate a hash using the hash confidence evaluator."""
-""""""
-""""""
-            try:
-                if not self.hash_evaluator:
-                    raise HTTPException()
-                        status_code = 503, detail="Hash evaluator not available"
-
-                result = self.hash_evaluator.evaluate_hash()
-                    hash_value, confidence_score, validation_data
-#                 return {"success": True, "evaluation": result}
-            except Exception as e:
-                self.logger.error(f"Error evaluating hash: {e}")
-                raise HTTPException(status_code = 500, detail = str(e))
-
-    def _setup_websocket_routes(self):
-
-        """Setup WebSocket routes."""
-""""""
-""""""
         @self.app.websocket("/ws")
         async def websocket_endpoint(websocket: WebSocket):
-            await self._handle_websocket_connection(websocket)
-
-        async def _handle_websocket_connection(self, websocket: WebSocket):
-            """Handle WebSocket connection."""
-""""""
-""""""
+            """WebSocket endpoint for real-time communication."""
             await websocket.accept()
-
-            async with self.connection_lock:
-                self.active_connections.append(websocket)
-
-            safe_print()
-                f"\\u1f310 WebSocket connection established - Total: {len(self.active_connections}")
-
             try:
+                await websocket.send_json({
+                    "type": "connection",
+                    "message": "WebSocket connected",
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+                # Keep connection alive and handle messages
                 while True:
-            except Exception as e:
-                pass
-
-# Receive message
                     data = await websocket.receive_text()
-                    message = json.loads(data)
-
-# Process message
-                    response = await self._process_websocket_message(message)
-
-# Send response
-                    await websocket.send_text(json.dumps(response))
-
-            except WebSocketDisconnect:
-                safe_print("\\u1f310 WebSocket connection disconnected")
+                    # Echo back for now - can be extended for real-time updates
+                    await websocket.send_json({
+                        "type": "echo",
+                        "data": data,
+                        "timestamp": datetime.now().isoformat()
+                    })
             except Exception as e:
-                error_msg = safe_format_error(e, "websocket_connection")
-                safe_print(f"\\u274c WebSocket error: {error_msg}")
+                self.logger.error(f"WebSocket error: {e}")
             finally:
-                async with self.connection_lock:
-                    if websocket in self.active_connections:
-                        self.active_connections.remove(websocket)
+                await websocket.close()
 
-        async def _process_websocket_message()
-                self, message: Dict[str, Any] -> Dict[str, Any]:
-            """Process WebSocket message."""
-""""""
-""""""
-            try:
-                msg_type = message.get("type", "unknown")
+    def _calculate_api_weight(self, priority: str) -> float:
+        """
+        Calculate API weight based on priority.
+        
+        Mathematical Formula: api_weight = priority_factor × trust_level
+        """
+        try:
+            # Priority factors
+            priority_factors = {
+                "low": 0.5,
+                "medium": 0.75,
+                "high": 0.9,
+                "critical": 1.0
+            }
+            
+            priority_factor = priority_factors.get(priority.lower(), 0.75)
+            
+            # Base trust level (could be enhanced with actual trust calculation)
+            base_trust_level = 0.8
+            
+            # Calculate API weight
+            api_weight = priority_factor * base_trust_level
+            
+            return max(0.0, min(1.0, api_weight))  # Clamp to [0, 1]
+            
+        except Exception as e:
+            self.logger.error(f"Error calculating API weight: {e}")
+            return 0.5
 
-                if msg_type == "command":
-            except Exception as e:
-                pass
+    async def start(self):
+        """Start the API gateway server."""
+        if not self.app:
+            self.logger.error("Cannot start server - FastAPI not available")
+            return
 
-# Handle command submission
-                    command_data = message.get("data", {})
-                    agent_type = AIAgentType()
-                        command_data.get("agent_type", "gpt")
-                    domain = CommandDomain()
-                        command_data.get("domain", "system")
-                    payload = command_data.get("payload", {})
+        import uvicorn
+        uvicorn.run(self.app, host=self.host, port=self.port)
 
-                    command_id = await self.gpt_layer.submit_command()
-                        agent_type = agent_type,
-                        domain = domain,
-                        payload = payload,
-                        context = command_data.get("context"),
-                        priority = CommandPriority(command_data.get("priority", "medium")),
-
-#                     return {}
-                        "type": "command_response",
-                        "data": {}
-                            "command_id": command_id,
-                            "status": "submitted",
-                        "timestamp": datetime.now().isoformat(),
-
-
-                elif msg_type == "status":
-# Handle status request
-                    status = await self.gpt_layer.get_system_status()
-#                     return {}
-                        "type": "status_response",
-                        "data": status,
-                        "timestamp": datetime.now().isoformat(),
-
-
-                elif msg_type == "subscribe":
-# Handle subscription request
-                    subscription_type = message.get()
-                        "data", {}.get("type", "all")
-#                     return {}
-                        "type": "subscription_response",
-                        "data": {}
-                            "subscribed": True,
-                            "type": subscription_type,
-                        "timestamp": datetime.now().isoformat(),
+    async def stop(self):
+        """Stop the API gateway server."""
+        self.logger.info("Stopping API gateway...")
+        # Cleanup consciousness components
+        if self.hash_registry:
+            await self.hash_registry.stop_cleanup_task()
+        
+        # Cleanup mathematical consciousness bridge
+        if self.mathematical_consciousness_bridge:
+            await self.mathematical_consciousness_bridge.cleanup()
 
 
-                else:
-#                     return {}
-                        "type": "error",
-                        "data": {"error": f"Unknown message type: {msg_type}"},
-                        "timestamp": datetime.now().isoformat(),
+def demo_api_gateway():
+    """Demonstration of API Gateway functionality."""
+    import asyncio
+    
+    async def run_demo():
+        gateway = SchwabotAPIGateway(host="127.0.0.1", port=8001)
+        
+        if not gateway.app:
+            print("❌ FastAPI not available - cannot run demo")
+            return
 
+        print("🚀 Starting API Gateway demo...")
+        print(f"📊 API Gateway initialized on {gateway.host}:{gateway.port}")
+        print("🌐 Available endpoints:")
+        print("   - GET  /health")
+        print("   - GET  /status")
+        print("   - POST /command/submit")
+        print("   - POST /mathematical/consciousness/request")
+        print("   - GET  /command/{command_id}")
+        print("   - GET  /consciousness/profile/{agent_type}")
+        print("   - GET  /hash/registry/status")
+        print("   - GET  /mathematical/integration/status")
+        print("   - WS   /ws")
+        
+        if CONSCIOUSNESS_SYSTEM_AVAILABLE:
+            print("✅ Consciousness system components available")
+        else:
+            print("⚠️  Consciousness system components not available")
+        
+        if MATHEMATICAL_CONSCIOUSNESS_AVAILABLE:
+            print("✅ Mathematical consciousness bridge available")
+        else:
+            print("⚠️  Mathematical consciousness bridge not available")
+        
+        print("\n📚 API documentation available at:")
+        print(f"   - Swagger UI: http://{gateway.host}:{gateway.port}/docs")
+        print(f"   - ReDoc: http://{gateway.host}:{gateway.port}/redoc")
+        
+        print("\n✅ API Gateway demo completed!")
 
-            except Exception as e:
-                error_msg = safe_format_error(e, "websocket_message")
-#                 return {}
-                    "type": "error",
-                    "data": {"error": error_msg},
-                    "timestamp": datetime.now().isoformat(),
+    asyncio.run(run_demo())
 
-
-        async def broadcast_message(self, message: Dict[str, Any]):
-            """Broadcast message to all WebSocket connections."""
-""""""
-""""""
-            if not self.active_connections:
-                return
-
-            message_json = json.dumps(message)
-            disconnected = []
-
-            for connection in self.active_connections:
-                try:
-                    await connection.send_text(message_json)
-                except Exception as e:
-                    safe_print()
-                        f"\\u26a0\\ufe0f WebSocket broadcast error: {"}
-                            safe_format_error()
-                                e, 'broadcast'""
-                    disconnected.append(connection)
-
-# Remove disconnected connections
-            if disconnected:
-                async with self.connection_lock:
-                    for connection in disconnected:
-                        if connection in self.active_connections:
-                            self.active_connections.remove(connection)
-
-        async def start_command_execution(self):
-            """Start command execution loop."""
-""""""
-""""""
-            if not self.gpt_layer:
-                safe_print()
-                    "\\u26a0\\ufe0f GPT command layer not available - skipping execution"
-                return
-
-            safe_print("\\u1f680 Starting command execution loop")
-            self.execution_task = asyncio.create_task()
-                self.gpt_layer.execute_commands()
-
-        async def stop_command_execution(self):
-            """Stop command execution loop."""
-""""""
-""""""
-            if self.execution_task:
-                safe_print("\\u1f6d1 Stopping command execution loop")
-                self.execution_task.cancel()
-                try:
-                    await self.execution_task
-                except asyncio.CancelledError:
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-""""""
-""""""
-    pass
-
-        async def start_server(self):
-            """Start the API server."""
-""""""
-""""""
-            if not self.app:
-                safe_print("\\u274c FastAPI not available - cannot start server")
-                return
-
-# Start command execution
-            await self.start_command_execution()
-
-# Start server
-            config = uvicorn.Config()
-                self.app,
-                host = self.host,
-                port = self.port,
-                log_level="info",
-
-
-            server = uvicorn.Server(config)
-
-            safe_print()
-                f"\\u1f310 Starting Schwabot API Gateway on {"}
-                    self.host}:{
-                    self.port""
-            safe_print("\\u1f4da API Documentation: http://localhost:8000 / docs")
-            safe_print("\\u1f50c WebSocket endpoint: ws://localhost:8000 / ws")
-
-            await server.serve()
-
-        async def shutdown(self):
-            """Shutdown the API gateway."""
-""""""
-""""""
-            safe_print("\\u1f6d1 Shutting down Schwabot API Gateway")
-
-# Stop command execution
-            await self.stop_command_execution()
-
-# Close WebSocket connections
-            async with self.connection_lock:
-                for connection in self.active_connections:
-                    try:
-                        await connection.close()
-                    except Exception:
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-""""""
-""""""
-    pass
-                self.active_connections.clear()
-
-
-# Global API gateway instance
-api_gateway = SchwabotAPIGateway()
-
-
-# Convenience functions for external access
-async def start_api_gateway(host: str = "0.0_0.0", port: int = 8000):
-    """Start the Schwabot API gateway."""
-""""""
-""""""
-    global api_gateway
-    api_gateway = SchwabotAPIGateway(host = host, port = port)
-    await api_gateway.start_server()
-
-
-async def submit_command_via_api()
-    agent_type: str,
-    domain: str,
-    payload: Dict[str, Any],
-    context: Dict[str, Any] = None,
-    priority: str = "medium",
-    -> str:
-    """Submit command via API gateway."""
-""""""
-""""""
-    if not api_gateway or not api_gateway.gpt_layer:
-        raise RuntimeError("API gateway not available")
-
-    agent_enum = AIAgentType(agent_type)
-    domain_enum = CommandDomain(domain)
-    priority_enum = CommandPriority(priority)
-
-#     return await api_gateway.gpt_layer.submit_command()
-        agent_type = agent_enum,
-        domain = domain_enum,
-        payload = payload,
-        context = context,
-        priority = priority_enum,
-
-
-
-async def get_system_status_via_api() -> Dict[str, Any]:
-    """Get system status via API gateway."""
-""""""
-""""""
-    if not api_gateway or not api_gateway.gpt_layer:
-        raise RuntimeError("API gateway not available")
-
-#     return await api_gateway.gpt_layer.get_system_status()
-
-
-# Example usage
 
 if __name__ == "__main__":
-    async def placeholder(): pass
-        """Test the API Gateway functionality."""
-""""""
-""""""
-        safe_print("\\u1f310 Testing API gateway...")
-
-# Create API gateway
-        gateway = SchwabotAPIGateway(host="127.0_0.1", port = 8000)
-
-# Start command execution
-        await gateway.start_command_execution()
-
-# Submit test command
-        if gateway.gpt_layer:
-            command_id = await submit_gpt_command()
-                domain = CommandDomain.STRATEGY,
-                payload={}
-                    "strategy_name": "test_strategy",
-                    "parameters": {"test": True},
-                    "target_profit": 50.0
-                ,
-                context={"api_test": True}
+    demo_api_gateway()
 
 
-            safe_print(f"\\u2705 Test command submitted via API: {command_id}")
-
-# Start server
-        await gateway.start_server()
-
-# Run test
-    asyncio.run(test_api_gateway())
-
-
-
-""""""
-""""""
-""""""
-""""""

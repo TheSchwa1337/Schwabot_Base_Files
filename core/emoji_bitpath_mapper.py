@@ -2,33 +2,22 @@
 """"""
 """"""
 # -*- coding: utf - 8 -*-
+
+""""""
+""""""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+
 from __future__ import annotations
-
-""""""
-""""""
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-
-
 Emoji Bit - Path Mapper - Unicode Symbol Portal System
 
 Maps emoji / sigil portal paths to recursion - safe profit entry points with 2 - bit phase logic.
 Handles Unicode normalization and provides fallback validators for symbol collision prevention.
 """"""
 
-import os
-import unicodedata
-import hashlib
-from typing import Dict, Any, List, Optional, Union
-from dataclasses import dataclass
-from enum import Enum
 
 # Import core mathematical modules
-from core.unified_math_system import unified_math
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.profit_tier_sequencer import TierAction, SymbolZone
 
 
 class EmojiPortalType(Enum):
@@ -78,10 +67,10 @@ class EmojiBitPathMapper:
     def __init__(self):
         """Initialize emoji bit - path mapper with Unicode safety."""
         self.bit_sequencer = BitSequence(
-            phase = BitPhase.BIT_2,
-            short_term_logic = True,
-            mid_term_logic = True,
-            long_term_logic = True
+            phase=BitPhase.BIT_2,
+            short_term_logic=True,
+            mid_term_logic=True,
+            long_term_logic=True
         )
 
 # Portal registry for all emoji mappings
@@ -99,139 +88,139 @@ class EmojiBitPathMapper:
     def _initialize_standard_portals(self):
         """Initialize standard emoji portals for profit navigation."""
         standard_portals = [
-# Green zone portals (safe entry)
+            # Green zone portals (safe entry)
             EmojiPortal(
                 emoji="🟢",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.ENTRY_PORTAL,
-                bit_path = BitPathState.PATH_00,
-                tier_action = TierAction.TRADE_ENTRY,
-                symbol_zone = SymbolZone.GREEN_ZONE,
+                portal_type=EmojiPortalType.ENTRY_PORTAL,
+                bit_path=BitPathState.PATH_00,
+                tier_action=TierAction.TRADE_ENTRY,
+                symbol_zone=SymbolZone.GREEN_ZONE,
                 hash_signature="",
-                priority = 1,
-                fallback_safe = True
+                priority=1,
+                fallback_safe=True
             ),
             EmojiPortal(
                 emoji="✅",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.ENTRY_PORTAL,
-                bit_path = BitPathState.PATH_00,
-                tier_action = TierAction.TRADE_ENTRY,
-                symbol_zone = SymbolZone.GREEN_ZONE,
+                portal_type=EmojiPortalType.ENTRY_PORTAL,
+                bit_path=BitPathState.PATH_00,
+                tier_action=TierAction.TRADE_ENTRY,
+                symbol_zone=SymbolZone.GREEN_ZONE,
                 hash_signature="",
-                priority = 2,
-                fallback_safe = True
+                priority=2,
+                fallback_safe=True
             ),
 
-# Red zone portals (risky but high volume)
+            # Red zone portals (risky but high volume)
             EmojiPortal(
                 emoji="🔴",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.ENTRY_PORTAL,
-                bit_path = BitPathState.PATH_01,
-                tier_action = TierAction.FLIP,
-                symbol_zone = SymbolZone.RED_ZONE,
+                portal_type=EmojiPortalType.ENTRY_PORTAL,
+                bit_path=BitPathState.PATH_01,
+                tier_action=TierAction.FLIP,
+                symbol_zone=SymbolZone.RED_ZONE,
                 hash_signature="",
-                priority = 3,
-                fallback_safe = False
+                priority=3,
+                fallback_safe=False
             ),
             EmojiPortal(
                 emoji="⚠️",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.ENTRY_PORTAL,
-                bit_path = BitPathState.PATH_01,
-                tier_action = TierAction.FLIP,
-                symbol_zone = SymbolZone.RED_ZONE,
+                portal_type=EmojiPortalType.ENTRY_PORTAL,
+                bit_path=BitPathState.PATH_01,
+                tier_action=TierAction.FLIP,
+                symbol_zone=SymbolZone.RED_ZONE,
                 hash_signature="",
-                priority = 4,
-                fallback_safe = False
+                priority=4,
+                fallback_safe=False
             ),
 
-# Yellow zone portals (mid - range)
+            # Yellow zone portals (mid - range)
             EmojiPortal(
                 emoji="🟡",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.ENTRY_PORTAL,
-                bit_path = BitPathState.PATH_00,
-                tier_action = TierAction.MID_HOLD,
-                symbol_zone = SymbolZone.YELLOW_ZONE,
+                portal_type=EmojiPortalType.ENTRY_PORTAL,
+                bit_path=BitPathState.PATH_00,
+                tier_action=TierAction.MID_HOLD,
+                symbol_zone=SymbolZone.YELLOW_ZONE,
                 hash_signature="",
-                priority = 5,
-                fallback_safe = True
+                priority=5,
+                fallback_safe=True
             ),
 
-# Vault portals (profit storage)
+            # Vault portals (profit storage)
             EmojiPortal(
                 emoji="🟣",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.VAULT_PORTAL,
-                bit_path = BitPathState.PATH_10,
-                tier_action = TierAction.VAULT,
-                symbol_zone = SymbolZone.PURPLE_ZONE,
+                portal_type=EmojiPortalType.VAULT_PORTAL,
+                bit_path=BitPathState.PATH_10,
+                tier_action=TierAction.VAULT,
+                symbol_zone=SymbolZone.PURPLE_ZONE,
                 hash_signature="",
-                priority = 6,
-                fallback_safe = True
+                priority=6,
+                fallback_safe=True
             ),
             EmojiPortal(
                 emoji="💎",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.VAULT_PORTAL,
-                bit_path = BitPathState.PATH_10,
-                tier_action = TierAction.VAULT,
-                symbol_zone = SymbolZone.PURPLE_ZONE,
+                portal_type=EmojiPortalType.VAULT_PORTAL,
+                bit_path=BitPathState.PATH_10,
+                tier_action=TierAction.VAULT,
+                symbol_zone=SymbolZone.PURPLE_ZONE,
                 hash_signature="",
-                priority = 7,
-                fallback_safe = True
+                priority=7,
+                fallback_safe=True
             ),
 
-# Fallback portals (emergency)
+            # Fallback portals (emergency)
             EmojiPortal(
                 emoji="⚫",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.FALLBACK_PORTAL,
-                bit_path = BitPathState.PATH_11,
-                tier_action = TierAction.FAILBACK,
-                symbol_zone = SymbolZone.BLACK_ZONE,
+                portal_type=EmojiPortalType.FALLBACK_PORTAL,
+                bit_path=BitPathState.PATH_11,
+                tier_action=TierAction.FAILBACK,
+                symbol_zone=SymbolZone.BLACK_ZONE,
                 hash_signature="",
-                priority = 8,
-                fallback_safe = True
+                priority=8,
+                fallback_safe=True
             ),
             EmojiPortal(
                 emoji="🔒",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.FALLBACK_PORTAL,
-                bit_path = BitPathState.PATH_11,
-                tier_action = TierAction.FAILBACK,
-                symbol_zone = SymbolZone.BLACK_ZONE,
+                portal_type=EmojiPortalType.FALLBACK_PORTAL,
+                bit_path=BitPathState.PATH_11,
+                tier_action=TierAction.FAILBACK,
+                symbol_zone=SymbolZone.BLACK_ZONE,
                 hash_signature="",
-                priority = 9,
-                fallback_safe = True
+                priority=9,
+                fallback_safe=True
             ),
 
-# Ghost portals (phantom triggers)
+            # Ghost portals (phantom triggers)
             EmojiPortal(
                 emoji="👻",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.GHOST_PORTAL,
-                bit_path = BitPathState.PATH_01,
-                tier_action = TierAction.FLIP,
-                symbol_zone = SymbolZone.RED_ZONE,
+                portal_type=EmojiPortalType.GHOST_PORTAL,
+                bit_path=BitPathState.PATH_01,
+                tier_action=TierAction.FLIP,
+                symbol_zone=SymbolZone.RED_ZONE,
                 hash_signature="",
-                priority = 10,
-                fallback_safe = False
+                priority=10,
+                fallback_safe=False
             ),
 
-# Exit portals
+            # Exit portals
             EmojiPortal(
                 emoji="🚪",
                 normalized_emoji="",
-                portal_type = EmojiPortalType.EXIT_PORTAL,
-                bit_path = BitPathState.PATH_00,
-                tier_action = TierAction.TRADE_ENTRY,  # Exit is treated as reverse entry
-                symbol_zone = SymbolZone.GREEN_ZONE,
+                portal_type=EmojiPortalType.EXIT_PORTAL,
+                bit_path=BitPathState.PATH_00,
+                tier_action=TierAction.TRADE_ENTRY,  # Exit is treated as reverse entry
+                symbol_zone=SymbolZone.GREEN_ZONE,
                 hash_signature="",
-                priority = 11,
-                fallback_safe = True
+                priority=11,
+                fallback_safe=True
             )
         ]
 
@@ -279,7 +268,7 @@ class EmojiBitPathMapper:
 
             return normalized
         except Exception:
-# Ultimate fallback to safe ASCII
+            # Ultimate fallback to safe ASCII
             return self._create_ascii_fallback(symbol)
 
     def _patch_windows_unicode(self, symbol: str) -> str:
@@ -381,14 +370,15 @@ class EmojiBitPathMapper:
             return None
 
 # Calculate route confidence based on compatibility
-        confidence = self._calculate_route_confidence(target_portal, phase_state, profit_tier)
+        confidence = self._calculate_route_confidence(
+            target_portal, phase_state, profit_tier)
 
         route = PortalRoute(
-            source_emoji = source_emoji,
-            target_portal = target_portal,
-            phase_state = phase_state,
-            profit_tier = profit_tier,
-            route_confidence = confidence
+            source_emoji=source_emoji,
+            target_portal=target_portal,
+            phase_state=phase_state,
+            profit_tier=profit_tier,
+            route_confidence=confidence
         )
 
 # Cache route for fast future access
@@ -457,19 +447,21 @@ class EmojiBitPathMapper:
                 pass
 
 # Calculate confidence contribution
-                    confidence_weight = 1.0 / len(emoji_sequence)
-                    total_confidence += confidence_weight
-                    valid_portals += 1
+                confidence_weight = 1.0 / len(emoji_sequence)
+                total_confidence += confidence_weight
+                valid_portals += 1
 
 # Check for fallback triggers
-                    if not portal.fallback_safe:
-                        navigation_result['fallback_triggered'] = True
+                if not portal.fallback_safe:
+                    navigation_result['fallback_triggered'] = True
                 else:
-                    navigation_result['errors'].append(f"Invalid emoji at position {i}: {emoji}")
+                    navigation_result['errors'].append(
+                        f"Invalid emoji at position {i}: {emoji}")
                     navigation_result['path_valid'] = False
 
             except Exception as e:
-                navigation_result['errors'].append(f"Error processing emoji {emoji}: {str(e)}")
+                navigation_result['errors'].append(
+                    f"Error processing emoji {emoji}: {str(e)}")
                 navigation_result['path_valid'] = False
 
         navigation_result['total_confidence'] = total_confidence
@@ -484,7 +476,8 @@ class EmojiBitPathMapper:
     def get_fallback_portal(self) -> EmojiPortal:
         """Get emergency fallback portal."""
 # Return black zone fallback portal
-        return self.portal_registry.get("⚫", self.portal_registry.get("[BLACK]"))
+        return self.portal_registry.get(
+            "⚫", self.portal_registry.get("[BLACK]"))
 
     def validate_portal_integrity(self) -> Dict[str, Any]:
         """Validate integrity of all registered portals."""
@@ -571,6 +564,3 @@ Key features:
 - Portal integrity validation
 - Navigation path confidence calculation
 """"""
-
-
-

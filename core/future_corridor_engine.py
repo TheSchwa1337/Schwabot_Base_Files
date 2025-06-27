@@ -265,7 +265,11 @@ class Placeholder:
 """"""
 
 
-def __init__(self, profit_amplitude: float = 1.0, tick_frequency: float = 0.1,):
+def __init__(
+    self,
+    profit_amplitude: float = 1.0,
+    tick_frequency: float = 0.1,
+    ):
 
                     decay_rate: float = 0.5, async_threshold: float = 0.5:
 

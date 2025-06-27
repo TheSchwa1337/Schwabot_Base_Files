@@ -23,7 +23,7 @@ This module provides a minimal, working implementation of
 define_block_wave_transform - a helper that will be used by Schwabot's'
 signal - compression and GAN - preprocessing stack.
 
-The routine currently supports a block - wise DCT - II (via scipy.fftpack if)
+The routine currently supports a block - wise DCT - II (via scipy.fftpack if )
 available, else falls back to NumPy's FFT and returns the transformed signal'
 along with per - block Shannon entropy. The advanced lattice / entropy gates can
 be layered on top later, but this is more than enough to satisfy imports and
@@ -100,6 +100,7 @@ hist, _ = np.histogram(block, bins=32, density=True)
 
 
 def define_block_wave_transform():
+
 
 signal: np.ndarray, block_size: int
     -> Tuple[np.ndarray, np.ndarray]:

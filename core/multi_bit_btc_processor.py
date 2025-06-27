@@ -137,32 +137,32 @@ class MultiBitBTCProcessor:
         self.btc_data: Dict[BitLevel, List[BTCDataPoint]] = {
             level: [] for level in BitLevel
         }
-        
+
         self.bit_level_analyses: Dict[BitLevel, BitLevelAnalysis] = {}
         self.cross_bit_correlations: List[CrossBitCorrelation] = []
         self.processing_history: List[Dict[str, Any]] = []
 
-        # Processing parameters
+# Processing parameters
         self.max_data_points_per_level = 10000
         self.correlation_threshold = 0.7
         self.confidence_threshold = 0.8
         self.optimization_enabled = True
 
-        # Performance tracking
+# Performance tracking
         self.processing_times: Dict[BitLevel, List[float]] = {
             level: [] for level in BitLevel
         }
-        
+
         self.error_counts: Dict[BitLevel, int] = {
             level: 0 for level in BitLevel
         }
 
-        # Gray code state tracking
+# Gray code state tracking
         self.gray_code_states: Dict[BitLevel, int] = {
             level: 0 for level in BitLevel
         }
 
-        # Validation thresholds
+# Validation thresholds
         self.min_volatility = 0.1
         self.max_cycle_delta = 0.5
         self.max_data_age = 300  # 5 minutes in seconds
@@ -176,18 +176,18 @@ class MultiBitBTCProcessor:
         start_time = time.time()
 
         try:
-            # Generate hash signature
+# Generate hash signature
             hash_input = f"{price}_{volume}_{bit_level.value}_{int(time.time())}"
             hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
 
-            # Bitplane decomposition: B_i(t) = BTC_t >> i mod 2
+# Bitplane decomposition: B_i(t) = BTC_t >> i mod 2
             price_int = int(price * 100)
             bitplane_encoding = np.array(
                 [(price_int >> i) & 1 for i in range(bit_level.value)], 
                 dtype=np.uint8
             )
 
-            # Gray code sequencing for smooth logic state transitions
+# Gray code sequencing for smooth logic state transitions
             gray_code_state = self._compute_gray_code(price_int, bit_level)
             self.gray_code_states[bit_level] = gray_code_state
 
@@ -328,17 +328,17 @@ class MultiBitBTCProcessor:
         """Count Gray code state transitions."""
         if len(data_points) < 2:
             return 0
-        
+
         transitions = 0
         for i in range(1, len(data_points)):
             if data_points[i].gray_code_state != data_points[i-1].gray_code_state:
                 transitions += 1
-        
+
         return transitions
 
     def _calculate_confidence_score(self, price_stats: Dict[str, float],
-                                volume_stats: Dict[str, float],
-                                data_count: int,
+        volume_stats: Dict[str, float],
+        data_count: int,
                                 bitplane_entropy: float) -> float:
         """Calculate confidence score for analysis."""
         # Base confidence on data quality

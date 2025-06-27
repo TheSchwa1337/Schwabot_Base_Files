@@ -1,7 +1,4 @@
-# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-# -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
+# -*- coding: utf-8 -*-
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from typing import Any
@@ -14,30 +11,19 @@ import re
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
-# """Constants - Core System Constants and Configuration."""
-""""""
-""""""
-
-== == == == == == == == == == == == == == == == == == == == == == == == ==
-
+"""
+Constants - Core System Constants and Configuration
+==================================================
 
 Defines all mathematical constants, thresholds, and configuration values
-
 used throughout the Schwabot trading system. Includes Windows CLI compatibility
-
-handlers for cross - platform operation.
-
-""""""
-""""""
-""""""
-
-
-# from core.unified_math_system import unified_math  # F811: duplicate import
+handlers for cross-platform operation.
+"""
 
 # Mathematical constants for advanced calculations
 PSI_INFINITY = 1.618033988749895  # Golden ratio for allocation
-FIBONACCI_SCALING = 1.272019649514069  # phi^(1 / 2) for fractal scaling
-INVERSE_PSI = 0.618033988749895  # 1 / phi for counter - rotation
+FIBONACCI_SCALING = 1.272019649514069  # phi^(1/2) for fractal scaling
+INVERSE_PSI = 0.618033988749895  # 1/phi for counter-rotation
 
 # Configuration directories
 CONFIG_DIR = Path(__file__).parent / "config"
@@ -63,7 +49,7 @@ RECURSIVE_DEPTH_LIMIT = 100  # Maximum recursion depth
 # Thermal and entropy constants
 THERMAL_DECAY_RATE = 0.95  # Thermal state decay rate
 ENTROPY_THRESHOLD = 0.5  # Entropy threshold for state changes
-VOID_WELL_DEPTH = 0.1  # Void - well analysis depth
+VOID_WELL_DEPTH = 0.1  # Void-well analysis depth
 
 # Performance and latency thresholds
 LATENCY_THRESHOLD_MS = 100.0  # Latency warning threshold
@@ -90,86 +76,49 @@ FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 # Windows CLI compatibility handler
 
 
-class Placeholder:
+class WindowsCliCompatibilityHandler:
+    """Handles Windows CLI compatibility for cross-platform operation."""
 
-    """[BRAIN] Placeholder class for recursive profit mapping"""
+    @staticmethod
+    def is_windows_cli() -> bool:
+        """Check if running in Windows CLI environment."""
+        return (platform.system() == "Windows" and
+                ("cmd" in os.environ.get("COMSPEC", "").lower() or
+                 "powershell" in os.environ.get("PSModulePath", "").lower()))
 
+    @staticmethod
+    def safe_print(message: str, use_emoji: bool = True) -> str:
+        """Safely print messages with optional emoji support."""
+        if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
+            # Strip emojis for Windows CLI compatibility
+            message = re.sub(r"[^\w\s\-_.,!?]", "", message)
+        return message
 
-""""""
-""""""
-pass
-    """Handles Windows CLI compatibility for cross - platform operation."""
-""""""
-""""""
+    @staticmethod
+    def log_safe(logger: Any, level: str, message: str) -> None:
+        """Safely log messages with CLI compatibility."""
+        safe_message = WindowsCliCompatibilityHandler.safe_print(message)
+        if hasattr(logger, level.lower()):
+            getattr(logger, level.lower())(safe_message)
 
-
-@staticmethod
-def is_windows_cli() -> bool:
-    """Check if running in Windows CLI environment."""
-
-
-""""""
-""""""
-#     return (platform.system() == "Windows" and )
-        ("cmd" in os.environ.get("COMSPEC", "").lower() or )
-        "powershell" in os.environ.get("PSModulePath", "".lower())
-
-
-@staticmethod
-def safe_print(message: str, use_emoji: bool = True) -> str:
-    """Safely print messages with optional emoji support."""
-
-
-""""""
-""""""
-if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
-    # Strip emojis for Windows CLI compatibility
-        message = re.sub(r"[^\\w\\s\-_.,!?]", "", message)
-#     return message
+    @staticmethod
+    def safe_format_error(error: Exception, context: str = "") -> str:
+        """Safely format error messages for CLI compatibility."""
+        error_msg = str(error)
+        if context:
+            error_msg = f"{context}: {error_msg}"
+        return WindowsCliCompatibilityHandler.safe_print(
+            error_msg, use_emoji=False)
 
 
-@staticmethod
-def log_safe(logger: Any, level: str, message: str) -> None:
-    """Safely log messages with CLI compatibility."""
-
-
-""""""
-""""""
-safe_message = WindowsCliCompatibilityHandler.safe_print(message)
-    if hasattr(logger, level.lower()):
-        getattr(logger, level.lower())(safe_message)
-
-
-@staticmethod
-def safe_format_error(error: Exception, context: str = "") -> str:
-    """Safely format error messages for CLI compatibility."""
-
-
-""""""
-""""""
-error_msg = str(error)
-    if context:
-        error_msg = f"{context}: {error_msg}"
-#     return WindowsCliCompatibilityHandler.safe_print()
-    error_msg, use_emoji = False
-
-
-# Shared constants across the Schwabot code - base
+# Shared constants across the Schwabot code-base
 DEFAULT_TIMEOUT = 30.0  # Default timeout in seconds
 MAX_RETRY_ATTEMPTS = 3  # Maximum retry attempts
 DEFAULT_BATCH_SIZE = 1000  # Default batch processing size
 
 # Composite constants for advanced calculations
-# KELLY_SHARPE_COMPOSITE = KELLY_SAFETY_FACTOR * SHARPE_TARGET /
-# unified_math.unified_math.sqrt(2)
 FRACTAL_THERMAL_RATIO = FRACTAL_DIMENSION_LIMIT * THERMAL_DECAY_RATE
 
 # Performance optimization constants
 VECTORIZATION_THRESHOLD = 1000  # Use vectorized ops above this size
 PARALLEL_PROCESSING_THRESHOLD = 10000  # Use parallel processing above this
-
-
-""""""
-""""""
-""""""
-""""""

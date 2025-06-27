@@ -29,12 +29,12 @@ def compute_ghost_route(*args: Any, **kwargs: Any) -> None:
 
 """"""
 """"""
-    pass
-    """Compute ghost route for the given arguments."""
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""Compute ghost route for the given arguments."""
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
+pass
 
 
 """"""

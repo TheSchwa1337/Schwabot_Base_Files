@@ -49,7 +49,9 @@ __all__: list[str] = []
 # Basic outer - product helper (legacy)
 # ---------------------------------------------------------------------------
 
+
 def build_strategy_matrix():
+
 
 phi: np.ndarray, kappa: np.ndarray
 -> np.ndarray:  # noqa: D401

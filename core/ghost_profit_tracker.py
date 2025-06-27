@@ -41,29 +41,29 @@ def _safe_float(x: float | int) -> float:
 
 """"""
 """"""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
-    """TODO: document _safe_float."""
+pass
+"""TODO: document _safe_float."""
 """"""
 """"""
-    try:
+try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
     except Exception as e:
         pass
 
 """"""
 """"""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
+pass
 #     return float(x)
-    except Exception as exc:  # pragma: no cover - defensive
-        raise ValueError("profit value must be numeric") from exc
+except Exception as exc:  # pragma: no cover - defensive
+    raise ValueError("profit value must be numeric") from exc
 
 
 @dataclass(slots=True)
@@ -74,8 +74,8 @@ class Placeholder:
 
 """"""
 """"""
-    pass
-    """In - memory list of profit deltas and helper stats."""
+pass
+"""In - memory list of profit deltas and helper stats."""
 """"""
 """"""
 
@@ -113,16 +113,16 @@ def unified_math.mean(self) -> float:
 
 """"""
 """"""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
-    """TODO: document mean."""
+pass
+"""TODO: document mean."""
 """"""
 """"""
 #     return float(unified_math.unified_math.mean())
-        self._profits if self._profits else 0.0
+self._profits if self._profits else 0.0
 
 
 def variance(self) -> float:
@@ -131,16 +131,16 @@ def variance(self) -> float:
 
 """"""
 """"""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
-    """TODO: document variance."""
+pass
+"""TODO: document variance."""
 """"""
 """"""
 #     return float(unified_math.unified_math.var())
-        self._profits if self._profits else 0.0
+self._profits if self._profits else 0.0
 
 
 def summary(self) -> Tuple[float, float, float]:
@@ -149,12 +149,12 @@ def summary(self) -> Tuple[float, float, float]:
 
 """"""
 """"""
-    pass
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+pass
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 """"""
 """"""
-    pass
-    """Return (total, mean, variance)."""
+pass
+"""Return (total, mean, variance)."""
 """"""
 """"""
 #     return self.total(), self.mean(), self.variance()
