@@ -1,30 +1,31 @@
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
+# -*- coding: utf-8 -*-
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
 """
 
 
-Script to fix all E305 errors(expected 2 blank lines after class or function definition) in the core directory.
-"""
-"""
-"""
-"""
+Script to fix all E305 errors(expected 2 blank lines after class or function definition) in the core directory."""
+""""""
+""""""
+""""""
+""""""
 """
 
 import os
@@ -36,16 +37,16 @@ def fix_e305_in_file(filepath):
     with open(filepath, 'r', encoding='utf - 8') as f:
         lines = f.readlines()
 
-    new_lines = []
+new_lines = []
     i = 0
     changed = False
     while i < len(lines):
         line = lines[i]
         new_lines.append(line)
 # Check for function or class definition
-        if re.match(r'^(def |class )', line.strip()):
+if re.match(r'^(def |class )', line.strip()):
 # Count following blank lines
-            j = i + 1
+j = i + 1
             blank_count = 0
             while j < len(lines) and lines[j].strip() == '':
                 blank_count += 1
@@ -62,7 +63,7 @@ def fix_e305_in_file(filepath):
         i += 1
     if changed:
         with open(filepath, 'w', encoding='utf - 8') as f:
-            f.writelines(new_lines)
+            f.writelines(new_lines)"""
         print(f"Fixed: {filepath}")
     return changed
 

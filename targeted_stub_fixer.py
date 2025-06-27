@@ -12,65 +12,65 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
-"""Targeted Stub Fixer - Fix Malformed Stub Docstrings.
+"""Targeted Stub Fixer - Fix Malformed Stub Docstrings."
 
-This script specifically targets the malformed stub pattern:
+This script specifically targets the malformed stub pattern:"""
 \"\"\"Stub main function.\"\"\".\"\"\"
 
 And replaces it with the correct pattern:
 \"\"\"Stub main function.\"\"\"
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-    pass
-"""
-"""
-"""
-"""
+pass"""
+""""""
+""""""
+""""""
+""""""
 """
 
 
-def fix_malformed_stub(file_path: str) -> bool:
+def fix_malformed_stub(file_path: str) -> bool:"""
     """Fix malformed stub docstring in a single file."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    try:
         with open(file_path, 'r', encoding='utf - 8') as f:
             content = f.read()
 
-        original_content = content
+original_content = content
 
-# Fix the specific malformed pattern
-        if '"""Stub main function."""' in content:
-            content = content.replace(
-                '"""Stub main function."""',
+# Fix the specific malformed pattern"""
+if '"""Stub main function."""' in content:
+            content = content.replace("""
+                '"""Stub main function."""',"""
                 '"""Stub main function."""\\n    pass\n'
-            )
-            safe_print(f"\\u2705 Fixed: {file_path}")
+)"""
+safe_print(f"\\u2705 Fixed: {file_path}")
             return True
 
 # Fix other variations of malformed patterns
-        patterns_to_fix = [
-            (r'"""([^"]*)\."""\."""', r'"""\1."""\\n    pass\n'),
-            (r'"""([^"]*)\."""\\s*"""', r'"""\1."""\\n    pass\n'),
-            (r'"""([^"]*)\."""\\s * def\\s+', r'"""\1."""\\n\\ndef '),
+patterns_to_fix = [
+            (r'"""([^"]*)\."""\."""', r'"""\1."""\\n    pass\n'),"""
+            (r'"""([^"]*)\."""\\s*"""', r'"""\1."""\\n    pass\n'),"""
+            (r'"""([^"]*)\."""\\s * def\\s+', r'"""\1."""\\n\\ndef '),"
         ]
 
-        for pattern, replacement in patterns_to_fix:
+for pattern, replacement in patterns_to_fix:
             if re.search(pattern, content):
-                content = re.sub(pattern, replacement, content)
+                content = re.sub(pattern, replacement, content)"""
                 safe_print(f"\\u2705 Fixed pattern in: {file_path}")
                 return True
 
-        return False
+return False
 
-    except Exception as e:
+except Exception as e:
         safe_print(f"\\u274c Error processing {file_path}: {e}")
         return False
 
@@ -78,16 +78,16 @@ def fix_malformed_stub(file_path: str) -> bool:
 def find_and_fix_stub_files():
     """Find and fix all files with malformed stub patterns."""
 
-
 """
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
    safe_print("Targeted Stub Fixer")
     safe_print("=" * 50)
 
 # Files we know have the malformed pattern
-    known_files = [
+known_files = [
         'utils / file_integrity_checker.py',
         'unified_schwabot_integration_core.py',
         'ui / enhanced_visual_architecture.py',
@@ -186,16 +186,16 @@ def find_and_fix_stub_files():
         'standalone_multi_bit_demo.py',
     ]
 
-    fixed_count = 0
+fixed_count = 0
     processed_count = 0
 
-    for file_path in known_files:
+for file_path in known_files:
         if os.path.exists(file_path):
             processed_count += 1
             if fix_malformed_stub(file_path):
                 fixed_count += 1
 
-    safe_print(f"\\nSummary:")
+safe_print(f"\\nSummary:")
     safe_print(f"  Files processed: {processed_count}")
     safe_print(f"  Files fixed: {fixed_count}")
     safe_print("\\nTargeted stub fixing completed!")

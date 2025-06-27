@@ -1,11 +1,11 @@
 # -*- coding: utf - 8 -*-
-"""Ghost - conditional helpers.
-"""Ghost - conditional helpers.
+"""Ghost - conditional helpers."""
+"""Ghost - conditional helpers."
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
-
-"""Ghost - conditional helpers.
-"""Ghost - conditional helpers.
+"""
+"""Ghost - conditional helpers."""
+"""Ghost - conditional helpers."
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -14,16 +14,16 @@ Implements the routing activation \\u0393\\u1d63 = \\u03c3(\\u0394\\u209c \\u00b
 A lightweight logistic gate converts the continuous product of *delta_t*
 (seconds since last activation) and *xi_ghost* (scalar 0 - 1 intensity) into a
 probability.  Down - stream the router can compare this value against a policy
-threshold.
-"""
-"""
+threshold."""
+""""""
+""""""
 """
 
 
 from core.unified_math_system import unified_math
 from core.unified_math_system import unified_math
 from typing import Final
-
+"""
 __all__: list[str] = ["ghost_route_activation"]
 
 _K: Final = 1.0  # logistic steepness
@@ -31,28 +31,31 @@ _K: Final = 1.0  # logistic steepness
 
 def _sigmoid(x: float) -> float:  # noqa: D401
 
-    """TODO: document _sigmoid."""
+"""TODO: document _sigmoid.""""""
+""""""
 """
+return 1.0 / (1.0 + unified_math.exp(-_K * x))
+
+
+def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:"""
+    """Function implementation pending."""
+pass
 """
-    return 1.0 / (1.0 + unified_math.exp(-_K * x))
+"""Return \\u0393\\u1d63 activation probability in (0, 1)."
 
-
-def ghost_route_activation(delta_t: float, xi_ghost: float) -> float:
-
-    """Return \\u0393\\u1d63 activation probability in (0, 1).
-
-    Parameters
-    ----------
-    delta_t
-        Time delta since last ghost evaluation (seconds).
+Parameters
+----------
+delta_t
+Time delta since last ghost evaluation (seconds).
     xi_ghost
-        Scalar intensity of current ghost signal, expected in [0, 1].
-    """
+Scalar intensity of current ghost signal, expected in [0, 1]."""
+    """"""
+""""""
 """
+return _sigmoid(delta_t * xi_ghost)
 """
-    return _sigmoid(delta_t * xi_ghost)
-
-"""
-"""
+""""""
+""""""
+""""""
 """
 """

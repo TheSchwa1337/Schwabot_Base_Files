@@ -1,25 +1,26 @@
-"""Trading enums for Schwabot BTC integration.
-"""Trading enums for Schwabot BTC integration.
-"""Trading enums for Schwabot BTC integration.
-"""Trading enums for Schwabot BTC integration.
+# -*- coding: utf-8 -*-
+"""Trading enums for Schwabot BTC integration."""
+"""Trading enums for Schwabot BTC integration."""
+"""Trading enums for Schwabot BTC integration."""
+"""Trading enums for Schwabot BTC integration."
 
 
 This module contains all enumeration types used for trading operations,
-order management, and exchange communication.
-"""
-"""
+order management, and exchange communication."""
+""""""
+""""""
 """
 
 from enum import Enum
 
 
 class ExchangeType(Enum):
-
-    """Exchange type enumeration."""
+"""
+"""Exchange type enumeration.""""""
+""""""
 """
 """
-
-    COINBASE = "coinbase"
+COINBASE = "coinbase"
     BINANCE = "binance"
     KRAKEN = "kraken"
     GEMINI = "gemini"
@@ -29,11 +30,11 @@ class ExchangeType(Enum):
 
 class OrderType(Enum):
 
-    """Order type enumeration."""
+"""Order type enumeration.""""""
+""""""
 """
 """
-
-    MARKET = "market"
+MARKET = "market"
     LIMIT = "limit"
     STOP = "stop"
     STOP_LIMIT = "stop_limit"
@@ -44,21 +45,21 @@ class OrderType(Enum):
 
 class OrderSide(Enum):
 
-    """Order side enumeration."""
+"""Order side enumeration.""""""
+""""""
 """
 """
-
-    BUY = "buy"
+BUY = "buy"
     SELL = "sell"
 
 
 class OrderStatus(Enum):
 
-    """Order status enumeration."""
+"""Order status enumeration.""""""
+""""""
 """
 """
-
-    PENDING = "pending"
+PENDING = "pending"
     OPEN = "open"
     FILLED = "filled"
     PARTIALLY_FILLED = "partially_filled"
@@ -69,11 +70,11 @@ class OrderStatus(Enum):
 
 class DataType(Enum):
 
-    """Data type enumeration."""
+"""Data type enumeration.""""""
+""""""
 """
 """
-
-    TICKER = "ticker"
+TICKER = "ticker"
     ORDER_BOOK = "order_book"
     TRADES = "trades"
     CANDLES = "candles"
@@ -81,7 +82,8 @@ class DataType(Enum):
     ORDERS = "orders"
     POSITIONS = "positions"
 
-"""
-"""
+""""""
+""""""
+""""""
 """
 """

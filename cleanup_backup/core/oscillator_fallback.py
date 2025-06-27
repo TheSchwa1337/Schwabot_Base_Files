@@ -1,11 +1,11 @@
 # -*- coding: utf - 8 -*-
-"""Oscillator fallback \\u2013 damped harmonic pulse generator.
-"""Oscillator fallback \\u2013 damped harmonic pulse generator.
+"""Oscillator fallback \\u2013 damped harmonic pulse generator."""
+"""Oscillator fallback \\u2013 damped harmonic pulse generator."
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
-
-"""Oscillator fallback \\u2013 damped harmonic pulse generator.
-"""Oscillator fallback \\u2013 damped harmonic pulse generator.
+"""
+"""Oscillator fallback \\u2013 damped harmonic pulse generator."""
+"""Oscillator fallback \\u2013 damped harmonic pulse generator."
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -25,58 +25,58 @@ Mathematics
 ~~~~~~~~~~
 Damped harmonic oscillator (underdamped case):
 
-    x(t) = A \\u00b7 e^(\\u2212\\u03b3 t) \\u00b7 unified_math.cos(2\\u03c0 f t + \\u03c6)
+x(t) = A \\u00b7 exp(\\u2212\\u03b3 t) \\u00b7 unified_math.cos(2\\u03c0 f t + \\u03c6)
 
 where 0 < \\u03b3 < \\u221e is the damping coefficient.
 
 The implementation is intentionally minimal \\u2013 no dynamic state, no numerical
-integrator \\u2013 just the closed - form expression that guarantees \\u2016x(t)\\u2016 \\u2264 A.
-"""
-"""
+integrator \\u2013 just the closed - form expression that guarantees \\u2016x(t)\\u2016 \\u2264 A."""
+""""""
+""""""
 """
 
 
 from core.unified_math_system import unified_math
 from typing import Final
-
+"""
 __all__ = ["fallback_oscillator"]
 
 _PI2: Final = 2.0 * math.pi
 
 
-def fallback_oscillator(
+def fallback_oscillator()
 
-    t: float,
+t: float,
     *,
     amplitude: float = 1.0,
     frequency: float = 1.0,
     damping: float = 0.1,
     phase: float = 0.0,
 ) -> float:
-    """Return damped cosine value x(t).
+    """Return damped cosine value x(t)."
 
-    Parameters
-    ----------
-    t
-        Time (seconds) or dimension - less tick.
+Parameters
+----------
+t
+Time (seconds) or dimension - less tick.
     amplitude
-        Initial amplitude ``A``.  Defaults to **1.0**.
-    frequency
-        Frequency ``f`` in Hz.  Defaults to **1.0**.
-    damping
-        Damping coefficient ``\\u03b3``.  **0.0** \\u21d2 no damping.  Must be \\u2265 0.
-    phase
-        Phase offset ``\\u03c6`` in radians.
+Initial amplitude ``A``.  Defaults to **1.0**.
+frequency
+Frequency ``f`` in Hz.  Defaults to **1.0**.
+damping
+Damping coefficient ``\\u03b3``.  **0.0** \\u21d2 no damping.  Must be \\u2265 0.
+phase
+Phase offset ``\\u03c6`` in radians.
 
-    Returns
-    -------
-    float
-        Damped oscillator value at *t*.
-    """
+Returns
+-------
+float
+Damped oscillator value at *t*."""
+""""""
+""""""
 """
-"""
-    if damping < 0:
-        raise ValueError("damping must be non - negative")
+if damping < 0:"""
+raise ValueError("damping must be non - negative")
     envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
     return amplitude * envelope * unified_math.unified_math.cos(angle)

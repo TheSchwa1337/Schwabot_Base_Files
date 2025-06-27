@@ -1,8 +1,9 @@
-"""
-"""
-"""
-"""
-"""
+# -*- coding: utf-8 -*-
+""""""
+""""""
+""""""
+""""""
+""""""
 """
 
 from core.unified_math_system import unified_math
@@ -18,9 +19,9 @@ Core Mathematical Functions:
 - Bit phase resolution: hash[0:n] % 2^n where n = bit_depth
 - Strategy mapping: strategy_id = hash_to_strategy(bit_phase, entropy)
 - Tensor activation: tensor_score = f(bit_phase, market_entropy, volatility)
-- Hash basket routing: basket_id = hash_to_basket(hash_value, bit_phase)
-"""
-"""
+- Hash basket routing: basket_id = hash_to_basket(hash_value, bit_phase)"""
+""""""
+""""""
 """
 
 import hashlib
@@ -37,21 +38,21 @@ logger = logging.getLogger(__name__)
 
 
 class BitPhase(Enum):
-
-    """Bit resolution phases for strategy mapping."""
 """
+"""Bit resolution phases for strategy mapping.""""""
+""""""
 """
-    FOUR_BIT = 4
+FOUR_BIT = 4
     EIGHT_BIT = 8
     FORTY_TWO_BIT = 42
 
 
 class StrategyType(Enum):
-
-    """Trading strategy types based on bit resolution."""
 """
-"""
-    CONSERVATIVE = "conservative"
+"""Trading strategy types based on bit resolution.""""""
+""""""
+""""""
+CONSERVATIVE = "conservative"
     BALANCED = "balanced"
     AGGRESSIVE = "aggressive"
     QUANTUM = "quantum"
@@ -60,86 +61,90 @@ class StrategyType(Enum):
 @dataclass
 class BitResolutionResult:
 
-    """Result of bit resolution process."""
+"""Result of bit resolution process.""""""
+""""""
 """
-"""
-    hash_value: str
-    bit_phase: BitPhase
-    phase_value: int
-    strategy_type: StrategyType
-    tensor_score: float
-    basket_id: str
-    entropy_level: float
-    timestamp: datetime
-    metadata: Dict[str, Any] = field(default_factory = dict)
+hash_value: str
+bit_phase: BitPhase
+phase_value: int
+strategy_type: StrategyType
+tensor_score: float
+basket_id: str
+entropy_level: float
+timestamp: datetime
+metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
 class StrategyMapping:
-
-    """Strategy mapping configuration."""
 """
+"""Strategy mapping configuration.""""""
+""""""
 """
-    strategy_id: str
-    bit_phase: BitPhase
-    strategy_type: StrategyType
-    risk_tolerance: float
-    position_size_multiplier: float
-    rebalance_threshold: float
-    tensor_weights: Dict[str, float]
+strategy_id: str
+bit_phase: BitPhase
+strategy_type: StrategyType
+risk_tolerance: float
+position_size_multiplier: float
+rebalance_threshold: float
+tensor_weights: Dict[str, float]
     metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 class BitResolutionEngine:
-
-    """
 """
+""""""
+""""""
 """
-    Bit Resolution Engine for hash \\u2192 strategy resolution logic.
+Bit Resolution Engine for hash \\u2192 strategy resolution logic.
 
-    Mathematical Foundation:
+Mathematical Foundation:
     - Bit Resolution: phase = int(hash[0:n], 16) % 2^n where n = bit_depth
     - Strategy Mapping: strategy = f(bit_phase, entropy, volatility)
     - Tensor Scoring: T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
-    - Hash Basket Routing: basket = hash_to_basket(hash, bit_phase)
-    """
+    - Hash Basket Routing: basket = hash_to_basket(hash, bit_phase)"""
+    """"""
+""""""
 """
 """
+def __init__(self, config_path: str = "./config / bit_resolution_config.json"):
+    """Function implementation pending."""
+pass
 
-    def __init__(self, config_path: str = "./config / bit_resolution_config.json"):
-
-        self.config_path = config_path
+self.config_path = config_path
 
 # Strategy mappings
-        self.strategy_mappings: Dict[str, StrategyMapping] = {}
+self.strategy_mappings: Dict[str, StrategyMapping] = {}
         self.bit_phase_limits = {
             BitPhase.FOUR_BIT: 16,
             BitPhase.EIGHT_BIT: 256,
             BitPhase.FORTY_TWO_BIT: 4398046511104  # 2^42
-        }
 
 # Performance tracking
-        self.resolution_history: List[BitResolutionResult] = []
+self.resolution_history: List[BitResolutionResult] = []
         self.hash_cache: Dict[str, BitResolutionResult] = {}
 
 # Integration with other components
-        self.matrix_mapper = None
+self.matrix_mapper = None
         self.profit_allocator = None
         self.dlt_engine = None
 
 # Load configuration
-        self._load_configuration()
-        self._initialize_strategy_mappings()
+self._load_configuration()
+        self._initialize_strategy_mappings()"""
         logger.info("Bit Resolution Engine initialized")
 
-    def _load_configuration(self) -> None:
-
-        """Load bit resolution configuration."""
+def _load_configuration(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Load bit resolution configuration.""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # Default configuration
-            config = {
+config = {"""
                 "bit_phases": {
                     "4bit": {"max_value": 16, "strategy_type": "conservative"},
                     "8bit": {"max_value": 256, "strategy_type": "balanced"},
@@ -156,22 +161,23 @@ class BitResolutionEngine:
                     "entropy": 0.3,
                     "volatility": 0.2,
                     "market_heat": 0.1
-                }
-            }
 
-            logger.info("Bit resolution configuration loaded")
+logger.info("Bit resolution configuration loaded")
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error loading configuration: {e}")
 
-    def _initialize_strategy_mappings(self) -> None:
-
-        """Initialize strategy mappings for each bit phase."""
+def _initialize_strategy_mappings(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Initialize strategy mappings for each bit phase.""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # 4 - bit conservative strategies
-            for i in range(16):
+for i in range(16):"""
                 strategy_id = f"conservative_4bit_{i}"
                 self.strategy_mappings[strategy_id] = StrategyMapping(
                     strategy_id = strategy_id,
@@ -184,7 +190,7 @@ class BitResolutionEngine:
                 )
 
 # 8 - bit balanced strategies
-            for i in range(256):
+for i in range(256):
                 strategy_id = f"balanced_8bit_{i}"
                 self.strategy_mappings[strategy_id] = StrategyMapping(
                     strategy_id = strategy_id,
@@ -209,37 +215,39 @@ class BitResolutionEngine:
                     tensor_weights={"bit_phase": 0.3, "entropy": 0.4, "volatility": 0.2, "market_heat": 0.1}
                 )
 
-            logger.info(f"Initialized {len(self.strategy_mappings)} strategy mappings")
+logger.info(f"Initialized {len(self.strategy_mappings)} strategy mappings")
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error initializing strategy mappings: {e}")
 
-    def resolve_bit_phase(self, hash_value: str, mode: str = "auto") -> int:
-
-        """
+def resolve_bit_phase(self, hash_value: str, mode: str = "auto") -> int:
+    """Function implementation pending."""
+pass
 """
+""""""
+""""""
 """
-        Resolve bit phase from hash value.
+Resolve bit phase from hash value.
 
-        Mathematical Formula:
+Mathematical Formula:
         phase = int(hash[0:n], 16) % 2^n where n = bit_depth
 
-        Parameters:
+Parameters:
         -----------
-        hash_value : str
-            Hash value to resolve
-        mode : str
-            Bit resolution mode ("4bit", "8bit", "42bit", "auto")
+hash_value : str
+Hash value to resolve
+mode : str"""
+Bit resolution mode ("4bit", "8bit", "42bit", "auto")
 
-        Returns:
+Returns:
         --------
-        int
-            Resolved bit phase value
-        """
+int
+Resolved bit phase value
+""""""
+""""""
 """
-"""
-        try:
-            if mode == "4bit":
+try:"""
+if mode == "4bit":
                 return int(hash_value[0:1], 16) % 16
             elif mode == "8bit":
                 return int(hash_value[0:2], 16) % 256
@@ -247,88 +255,90 @@ class BitResolutionEngine:
                 return int(hash_value[0:11], 16) % 4398046511104
             elif mode == "auto":
 # Auto - detect based on hash characteristics
-                first_byte = int(hash_value[0:2], 16)
+first_byte = int(hash_value[0:2], 16)
                 if first_byte < 85:  # 0 - 84
-                    return int(hash_value[0:1], 16) % 16
+return int(hash_value[0:1], 16) % 16
                 elif first_byte < 170:  # 85 - 169
-                    return int(hash_value[0:2], 16) % 256
+return int(hash_value[0:2], 16) % 256
                 else:  # 170 - 255
-                    return int(hash_value[0:11], 16) % 4398046511104
+return int(hash_value[0:11], 16) % 4398046511104
             else:
                 raise ValueError(f"Invalid mode: {mode}")
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error resolving bit phase: {e}")
             return 0
 
-    def determine_bit_phase_type(self, hash_value: str) -> BitPhase:
-
-        """Determine bit phase type from hash value."""
+def determine_bit_phase_type(self, hash_value: str) -> BitPhase:
+    """Function implementation pending."""
+pass
 """
+"""Determine bit phase type from hash value.""""""
+""""""
 """
-        try:
+try:
             first_byte = int(hash_value[0:2], 16)
 
-            if first_byte < 85:  # 0 - 84
-                return BitPhase.FOUR_BIT
-            elif first_byte < 170:  # 85 - 169
-                return BitPhase.EIGHT_BIT
-            else:  # 170 - 255
-                return BitPhase.FORTY_TWO_BIT
+if first_byte < 85:  # 0 - 84
+return BitPhase.FOUR_BIT
+elif first_byte < 170:  # 85 - 169
+return BitPhase.EIGHT_BIT
+else:  # 170 - 255
+return BitPhase.FORTY_TWO_BIT
 
-        except Exception as e:
-            logger.error(f"Error determining bit phase type: {e}")
+except Exception as e:"""
+logger.error(f"Error determining bit phase type: {e}")
             return BitPhase.EIGHT_BIT
 
-    def calculate_tensor_score(self, entry_price: float, current_price: float, phase: int,
+def calculate_tensor_score(self, entry_price: float, current_price: float, phase: int,)
 
-                                market_data: Dict[str, Any]) -> float:
-        """
+market_data: Dict[str, Any]) -> float:
+        """"""
+""""""
 """
-"""
-        Calculate tensor score for trade priority.
+Calculate tensor score for trade priority.
 
-        Mathematical Formula:
+Mathematical Formula:
         T = \\u03a3\\u1d62 w\\u1d62 * f\\u1d62(bit_phase, market_data)
 
-        Parameters:
+Parameters:
         -----------
-        entry_price : float
-            Entry price for the trade
-        current_price : float
-            Current market price
-        phase : int
-            Bit phase value
-        market_data : Dict[str, Any]
+entry_price : float
+Entry price for the trade
+current_price : float
+Current market price
+phase : int
+Bit phase value
+market_data : Dict[str, Any]
             Market data including entropy, volatility, etc.
 
-        Returns:
+Returns:
         --------
-        float
-            Tensor score for trade priority
-        """
+float
+Tensor score for trade priority"""
+""""""
+""""""
 """
-"""
-        try:
+try:
             if entry_price <= 0:
                 return 0.0
 
 # Calculate price delta
-            delta = (current_price - entry_price) / entry_price
+delta = (current_price - entry_price) / entry_price
 
 # Get market metrics
-            entropy = market_data.get('entropy_level', 4.0)
+entropy = market_data.get('entropy_level', 4.0)
             volatility = market_data.get('volatility', 0.02)
             market_heat = market_data.get('market_heat', 0.5)
 
 # Calculate tensor components
-            bit_phase_component = delta * (phase + 1)
+bit_phase_component = delta * (phase + 1)
             entropy_component = entropy * 0.1
             volatility_component = volatility * 100
             market_heat_component = market_heat * 0.5
 
-# Weighted tensor score
-            weights = {"bit_phase": 0.4, "entropy": 0.3, "volatility": 0.2, "market_heat": 0.1}
+# Weighted tensor score"""
+weights = {"bit_phase": 0.4, "entropy": 0.3, "volatility": 0.2, "market_heat": 0.1}
             tensor_score = (
                 weights["bit_phase"] * bit_phase_component +
                 weights["entropy"] * entropy_component +
@@ -337,45 +347,48 @@ class BitResolutionEngine:
             )
 
 # Normalize to reasonable range
-            tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
+tensor_score = max(-1.0, unified_math.min(1.0, tensor_score))
 
-            return round(tensor_score, 4)
+return round(tensor_score, 4)
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error calculating tensor score: {e}")
             return 0.0
 
-    def hash_to_strategy(self, hash_value: str, market_data: Dict[str, Any]) -> StrategyMapping:
-
-        """
+def hash_to_strategy(self, hash_value: str, market_data: Dict[str, Any]) -> StrategyMapping:
+    """Function implementation pending."""
+pass
 """
+""""""
+""""""
 """
-        Map hash to strategy using bit resolution.
+Map hash to strategy using bit resolution.
 
-        Parameters:
+Parameters:
         -----------
-        hash_value : str
-            Hash value to map
-        market_data : Dict[str, Any]
+hash_value : str
+Hash value to map
+market_data : Dict[str, Any]
             Market data for strategy selection
 
-        Returns:
+Returns:
         --------
-        StrategyMapping
-            Mapped strategy configuration
-        """
+StrategyMapping
+Mapped strategy configuration"""
+""""""
+""""""
 """
-"""
-        try:
+try:
+    pass  # TODO: Implement try block
 # Determine bit phase
-            bit_phase = self.determine_bit_phase_type(hash_value)
+bit_phase = self.determine_bit_phase_type(hash_value)"""
             phase_value = self.resolve_bit_phase(hash_value, bit_phase.name.lower().replace("_", ""))
 
 # Determine strategy type based on bit phase and market conditions
-            entropy = market_data.get('entropy_level', 4.0)
+entropy = market_data.get('entropy_level', 4.0)
             volatility = market_data.get('volatility', 0.02)
 
-            if bit_phase == BitPhase.FOUR_BIT:
+if bit_phase == BitPhase.FOUR_BIT:
                 strategy_type = StrategyType.CONSERVATIVE
             elif bit_phase == BitPhase.EIGHT_BIT:
                 if entropy > 6.0 or volatility > 0.05:
@@ -383,104 +396,108 @@ class BitResolutionEngine:
                 else:
                     strategy_type = StrategyType.BALANCED
             else:  # 42 - bit
-                strategy_type = StrategyType.QUANTUM
+strategy_type = StrategyType.QUANTUM
 
 # Find matching strategy
-            strategy_id = f"{strategy_type.value}_{bit_phase.value}bit_{phase_value}"
+strategy_id = f"{strategy_type.value}_{bit_phase.value}bit_{phase_value}"
 
-            if strategy_id in self.strategy_mappings:
+if strategy_id in self.strategy_mappings:
                 return self.strategy_mappings[strategy_id]
             else:
 # Return default strategy for this bit phase
-                default_id = f"{strategy_type.value}_{bit_phase.value}bit_0"
+default_id = f"{strategy_type.value}_{bit_phase.value}bit_0"
                 return self.strategy_mappings.get(default_id, self._create_default_strategy(bit_phase))
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error mapping hash to strategy: {e}")
             return self._create_default_strategy(BitPhase.EIGHT_BIT)
 
-    def hash_to_basket(self, hash_value: str, bit_phase: BitPhase) -> str:
-
-        """
+def hash_to_basket(self, hash_value: str, bit_phase: BitPhase) -> str:
+    """Function implementation pending."""
+pass
 """
+""""""
+""""""
 """
-        Map hash to basket ID for profit allocation.
+Map hash to basket ID for profit allocation.
 
-        Parameters:
+Parameters:
         -----------
-        hash_value : str
-            Hash value to map
-        bit_phase : BitPhase
-            Bit resolution phase
+hash_value : str
+Hash value to map
+bit_phase : BitPhase
+Bit resolution phase
 
-        Returns:
+Returns:
         --------
-        str
-            Basket ID for profit allocation
-        """
+str
+Basket ID for profit allocation"""
+""""""
+""""""
 """
-"""
-        try:
-# Use hash to generate basket ID
-            phase_value = self.resolve_bit_phase(hash_value, bit_phase.name.lower().replace("_", ""))
+try:
+    pass  # TODO: Implement try block
+# Use hash to generate basket ID"""
+phase_value = self.resolve_bit_phase(hash_value, bit_phase.name.lower().replace("_", ""))
 
 # Create basket ID based on bit phase and hash
-            basket_id = f"basket_{bit_phase.value}bit_{phase_value}_{hash_value[:8]}"
+basket_id = f"basket_{bit_phase.value}bit_{phase_value}_{hash_value[:8]}"
 
-            return basket_id
+return basket_id
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error mapping hash to basket: {e}")
             return f"basket_fallback_{int(time.time())}"
 
-    def process_hash_resolution(self, hash_value: str, market_data: Dict[str, Any],
+def process_hash_resolution(self, hash_value: str, market_data: Dict[str, Any],)
 
-                                entry_price: float = None, current_price: float = None) -> BitResolutionResult:
-        """
+entry_price: float = None, current_price: float = None) -> BitResolutionResult:
+        """"""
+""""""
 """
-"""
-        Process complete hash resolution with strategy mapping and tensor scoring.
+Process complete hash resolution with strategy mapping and tensor scoring.
 
-        Parameters:
+Parameters:
         -----------
-        hash_value : str
-            Hash value to process
-        market_data : Dict[str, Any]
+hash_value : str
+Hash value to process
+market_data : Dict[str, Any]
             Market data for analysis
-        entry_price : float, optional
+entry_price : float, optional
             Entry price for tensor scoring
-        current_price : float, optional
+current_price : float, optional
             Current price for tensor scoring
 
-        Returns:
+Returns:
         --------
-        BitResolutionResult
-            Complete resolution result
-        """
+BitResolutionResult
+Complete resolution result"""
+""""""
+""""""
 """
-"""
-        try:
+try:
+    pass  # TODO: Implement try block
 # Check cache first
-            if hash_value in self.hash_cache:
+if hash_value in self.hash_cache:
                 return self.hash_cache[hash_value]
 
 # Determine bit phase
-            bit_phase = self.determine_bit_phase_type(hash_value)
+bit_phase = self.determine_bit_phase_type(hash_value)"""
             phase_value = self.resolve_bit_phase(hash_value, bit_phase.name.lower().replace("_", ""))
 
 # Map to strategy
-            strategy = self.hash_to_strategy(hash_value, market_data)
+strategy = self.hash_to_strategy(hash_value, market_data)
 
 # Calculate tensor score
-            tensor_score = 0.0
+tensor_score = 0.0
             if entry_price and current_price:
                 tensor_score = self.calculate_tensor_score(entry_price, current_price, phase_value, market_data)
 
 # Map to basket
-            basket_id = self.hash_to_basket(hash_value, bit_phase)
+basket_id = self.hash_to_basket(hash_value, bit_phase)
 
 # Create result
-            result = BitResolutionResult(
+result = BitResolutionResult(
                 hash_value = hash_value,
                 bit_phase = bit_phase,
                 phase_value = phase_value,
@@ -493,56 +510,63 @@ class BitResolutionEngine:
                     'strategy_id': strategy.strategy_id,
                     'risk_tolerance': strategy.risk_tolerance,
                     'position_multiplier': strategy.position_size_multiplier
-                }
-            )
+)
 
 # Cache result
-            self.hash_cache[hash_value] = result
+self.hash_cache[hash_value] = result
             self.resolution_history.append(result)
 
 # Limit cache size
-            if len(self.hash_cache) > 10000:
+if len(self.hash_cache) > 10000:
                 oldest_key = next(iter(self.hash_cache))
                 del self.hash_cache[oldest_key]
 
-            logger.info(
+logger.info(
                 f"Processed hash resolution: {bit_phase.value}-bit, phase={phase_value}, tensor={tensor_score:.4f}")
             return result
 
-        except Exception as e:
+except Exception as e:
             logger.error(f"Error processing hash resolution: {e}")
             return None
 
-    def set_matrix_mapper(self, matrix_mapper) -> None:
-
-        """Set matrix mapper for integration."""
+def set_matrix_mapper(self, matrix_mapper) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Set matrix mapper for integration.""""""
+""""""
 """
-        self.matrix_mapper = matrix_mapper
+self.matrix_mapper = matrix_mapper"""
         logger.info("Matrix mapper integrated with bit resolution engine")
 
-    def set_profit_allocator(self, profit_allocator) -> None:
-
-        """Set profit allocator for integration."""
+def set_profit_allocator(self, profit_allocator) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Set profit allocator for integration.""""""
+""""""
 """
-        self.profit_allocator = profit_allocator
+self.profit_allocator = profit_allocator"""
         logger.info("Profit allocator integrated with bit resolution engine")
 
-    def set_dlt_engine(self, dlt_engine) -> None:
-
-        """Set DLT engine for integration."""
+def set_dlt_engine(self, dlt_engine) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Set DLT engine for integration.""""""
+""""""
 """
-        self.dlt_engine = dlt_engine
+self.dlt_engine = dlt_engine"""
         logger.info("DLT engine integrated with bit resolution engine")
 
-    def _create_default_strategy(self, bit_phase: BitPhase) -> StrategyMapping:
-
-        """Create default strategy for bit phase."""
+def _create_default_strategy(self, bit_phase: BitPhase) -> StrategyMapping:
+    """Function implementation pending."""
+pass
 """
+"""Create default strategy for bit phase.""""""
+""""""
 """
-        return StrategyMapping(
+return StrategyMapping("""
             strategy_id = f"default_{bit_phase.value}bit",
             bit_phase = bit_phase,
             strategy_type = StrategyType.BALANCED,
@@ -552,56 +576,56 @@ class BitResolutionEngine:
             tensor_weights={"bit_phase": 0.4, "entropy": 0.3, "volatility": 0.2, "market_heat": 0.1}
         )
 
-    def get_resolution_statistics(self) -> Dict[str, Any]:
-
-        """Get bit resolution statistics."""
+def get_resolution_statistics(self) -> Dict[str, Any]:
+    """Function implementation pending."""
+pass
 """
+"""Get bit resolution statistics.""""""
+""""""
 """
-        try:
+try:
             if not self.resolution_history:
                 return {'error': 'No resolution history available'}
 
 # Calculate statistics
-            total_resolutions = len(self.resolution_history)
+total_resolutions = len(self.resolution_history)
             bit_phase_counts = {4: 0, 8: 0, 42: 0}
             strategy_counts = {strategy.value: 0 for strategy in StrategyType}
             tensor_scores = [r.tensor_score for r in self.resolution_history if r.tensor_score != 0]
 
-            for result in self.resolution_history:
+for result in self.resolution_history:
                 bit_phase_counts[result.bit_phase.value] += 1
                 strategy_counts[result.strategy_type.value] += 1
 
-            return {
+return {
                 'total_resolutions': total_resolutions,
                 'bit_phase_distribution': bit_phase_counts,
                 'strategy_distribution': strategy_counts,
                 'average_tensor_score': unified_math.unified_math.mean(tensor_scores) if tensor_scores else 0.0,
                 'tensor_score_std': unified_math.unified_math.std(tensor_scores) if tensor_scores else 0.0,
                 'cache_size': len(self.hash_cache)
-            }
 
-        except Exception as e:
-            logger.error(f"Error getting resolution statistics: {e}")
+except Exception as e:"""
+logger.error(f"Error getting resolution statistics: {e}")
             return {'error': str(e)}
 
 
 if __name__ == "__main__":
 # Test bit resolution engine
-    engine = BitResolutionEngine()
+engine = BitResolutionEngine()
 
 # Test hash resolution
-    test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
+test_hash = "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
     market_data = {
         'entropy_level': 4.5,
         'volatility': 0.03,
         'market_heat': 0.6
-    }
 
-    result = engine.process_hash_resolution(test_hash, market_data, 45000.0, 46000.0)
+result = engine.process_hash_resolution(test_hash, market_data, 45000.0, 46000.0)
     safe_print(f"Bit Resolution Result: {result.bit_phase.value}-bit, phase={result.phase_value}")
     safe_print(f"Strategy: {result.strategy_type.value}, Tensor Score: {result.tensor_score:.4f}")
     safe_print(f"Basket ID: {result.basket_id}")
 
 # Get statistics
-    stats = engine.get_resolution_statistics()
+stats = engine.get_resolution_statistics()
     safe_print(f"Resolution Statistics: {stats}")

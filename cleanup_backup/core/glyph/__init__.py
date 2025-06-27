@@ -1,24 +1,26 @@
-"""Glyph feedback and conditional processing."""
-"""
-"""
-"""
-"""
-"""Glyph feedback and conditional processing."""
-"""
-"""
-"""
-"""
-"""Glyph feedback and conditional processing."""
+# -*- coding: utf-8 -*-
+"""Glyph feedback and conditional processing.""""""
+""""""
+""""""
+""""""
+""""""
+"""Glyph feedback and conditional processing.""""""
+""""""
+""""""
+""""""
+""""""
+"""Glyph feedback and conditional processing.""""""
 """Glyph feedback and conditional processing."""
 
 # from .conditional_feedback_loop import feedback  # FIXME: Unused import
 
 
-__all__ = [
+__all__ = ["""
     "feedback",
 ]
 
-"""
-"""
+""""""
+""""""
+""""""
 """
 """

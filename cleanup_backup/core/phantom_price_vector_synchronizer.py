@@ -14,19 +14,19 @@ from core.unified_math_system import unified_math
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
-"""phantom_price_vector_synchronizer \\u2013 phantom velocity adjustment and sync.
+"""phantom_price_vector_synchronizer \\u2013 phantom velocity adjustment and sync."
 
 Implements the phantom price vector synchronization logic:
     Z\\u209a(t) = \\u222b\\u2080\\u1d57 [\\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')] dt'
 
 This module synchronizes phantom price vectors across market data streams
-for ghost protocol integration.
-"""
-"""
+for ghost protocol integration."""
+""""""
+""""""
 """
 
 
-__all__: list[str] = [
+__all__: list[str] = ["""
     "PhantomPriceSynchronizer",
     "compute_phantom_velocity",
     "synchronize_price_vectors",
@@ -36,76 +36,76 @@ __all__: list[str] = [
 @dataclass(slots=True)
 class PhantomPriceSynchronizer:
 
-    """Phantom price vector synchronizer with velocity adjustment."""
-
+"""Phantom price vector synchronizer with velocity adjustment."""
 
 """
+""""""
 """
 
-    alpha: float = 1.0
+alpha: float = 1.0
     beta: float = 0.5
     dt: float = 1.0
 
-    def compute_zp_integral(
+def compute_zp_integral()
 
-        self,
+self,
         velocity_series: Sequence[float],
         xi_series: Sequence[float],
         t_max: float,
-    ) -> float:
-        """Compute Z\\u209a(t) = \\u222b\\u2080\\u1d57 [\\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')] dt'.
+    ) -> float:"""
+"""Compute Z\\u209a(t) = \\u222b\\u2080\\u1d57 [\\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')] dt'.'"
 
-        Parameters
-        ----------
-        velocity_series
-            Phantom velocity V\\u209a(t') time series.
+Parameters
+----------
+velocity_series
+Phantom velocity V\\u209a(t') time series.'
         xi_series
-            Xi phantom values \\u039e\\u209a(t') time series.
+Xi phantom values \\u039e\\u209a(t') time series.'
         t_max
-            Upper integration limit.
-        """
+Upper integration limit."""
+""""""
+""""""
 """
-"""
-        if len(velocity_series) != len(xi_series):
+if len(velocity_series) != len(xi_series):"""
             raise ValueError("velocity and xi series must have same length")
 
-        v_array = np.asarray(velocity_series, dtype=float)
+v_array = np.asarray(velocity_series, dtype=float)
         xi_array = np.asarray(xi_series, dtype=float)
 
 # Compute integrand: \\u03b1\\u00b7V\\u209a(t') \\u2212 \\u03b2\\u00b7\\u039e\\u209a(t')
         integrand = self.alpha * v_array - self.beta * xi_array
 
 # Trapezoidal integration from 0 to t_max
-        if len(integrand) < 2:
+if len(integrand) < 2:
             return 0.0
 
-        dx = t_max / (len(integrand) - 1)
+dx = t_max / (len(integrand) - 1)
         integral = float(np.trapz(integrand, dx=dx))
 
-        return integral
+return integral
 
-    def synchronize_vectors(
+def synchronize_vectors()
 
-        self,
+self,
         price_vectors: Sequence[Sequence[float]],
         timestamps: Sequence[float],
     ) -> np.ndarray:
-        """Synchronize multiple phantom price vectors.
+        """Synchronize multiple phantom price vectors."
 
-        Parameters
-        ----------
-        price_vectors
-            Sequence of price vector time series.
-        timestamps
-            Corresponding timestamps for synchronization.
-        """
+Parameters
+----------
+price_vectors
+Sequence of price vector time series.
+timestamps
+Corresponding timestamps for synchronization."""
+""""""
+""""""
 """
-"""
-        if not price_vectors:
+if not price_vectors:
             return np.array([])
 
 # Convert to numpy arrays
-        vectors = [np.asarray(pv, dtype = float) for pv in price_vectors]
+vectors = [np.asarray(pv, dtype = float) for pv in price_vectors]
 
 # Compute phantom velocities (simple finite difference)
         phantom_velocities = []
@@ -117,71 +117,72 @@ class PhantomPriceSynchronizer:
                 phantom_velocities.append(velocity)
 
 # Synchronize using weighted average
-        if not phantom_velocities:
+if not phantom_velocities:
             return np.array([])
 
 # Find minimum length for synchronization
-        min_length = unified_math.min(len(pv) for pv in phantom_velocities)
+min_length = unified_math.min(len(pv) for pv in phantom_velocities)
 
-        synchronized = np.zeros(min_length, dtype = float)
+synchronized = np.zeros(min_length, dtype = float)
         for i, pv in enumerate(phantom_velocities):
             weight = 1.0 / (1.0 + i)  # Decreasing weights
             synchronized += weight * pv[:min_length]
 
-        return synchronized
+return synchronized
 
 
 # Functional helpers
 
 
-def compute_phantom_velocity(
+def compute_phantom_velocity()
 
-    price_series: Sequence[float],
+price_series: Sequence[float],
     dt: float = 1.0,
-) -> np.ndarray:
-    """Compute phantom velocity from price series using gradient."""
+) -> np.ndarray:"""
+"""Compute phantom velocity from price series using gradient.""""""
+""""""
 """
-"""
-    prices = np.asarray(price_series, dtype = float)
+prices = np.asarray(price_series, dtype = float)
     if len(prices) < 2:
         return np.array([0.0])
     return np.gradient(prices, dt)
 
 
-def synchronize_price_vectors(
+def synchronize_price_vectors()
 
-    price_data: Dict[str, List[float]],
+price_data: Dict[str, List[float]],"""
     synchronization_method: str = "cross_correlation",
     window_size: int = 100
 ) -> np.ndarray[Any, Any]:
-    """Synchronize price vectors using specified method."""
-"""
+    """Synchronize price vectors using specified method.""""""
+""""""
 """
 # ... existing code ...
 
 
-def calculate_price_velocity(
+def calculate_price_velocity()
 
-    prices: np.ndarray[Any, Any],
+prices: np.ndarray[Any, Any],
     time_delta: float = 1.0
-) -> np.ndarray[Any, Any]:
-    """Calculate price velocity using gradient."""
-"""
+) -> np.ndarray[Any, Any]:"""
+    """Calculate price velocity using gradient.""""""
+""""""
 """
 # ... existing code ...
 
 
-def calculate_price_acceleration(
+def calculate_price_acceleration()
 
-    velocity: np.ndarray[Any, Any],
+velocity: np.ndarray[Any, Any],
     time_delta: float = 1.0
-) -> np.ndarray[Any, Any]:
-    """Calculate price acceleration from velocity."""
-"""
+) -> np.ndarray[Any, Any]:"""
+    """Calculate price acceleration from velocity.""""""
+""""""
 """
 # ... existing code ...
-
 """
-"""
+""""""
+""""""
+""""""
 """
 """

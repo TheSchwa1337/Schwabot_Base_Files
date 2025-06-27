@@ -8,13 +8,13 @@ import time
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
-"""Simple Hybrid Strategy Mapper Test
+"""Simple Hybrid Strategy Mapper Test"
 ====================================
 
 Standalone test for hybrid strategy mapper to validate both
-Ghost Phase and legacy UROS / ZPE paths work correctly.
-"""
-"""
+Ghost Phase and legacy UROS / ZPE paths work correctly."""
+""""""
+""""""
 """
 
 
@@ -22,70 +22,69 @@ Ghost Phase and legacy UROS / ZPE paths work correctly.
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-def safe_print(message):
+def safe_print(message):"""
     """Safe print function for testing."""
 
-
 """
+""""""
 """
   print(message)
 
 
-def test_hybrid_strategy_mapper_simple():
+def test_hybrid_strategy_mapper_simple():"""
     """Test hybrid strategy mapper without complex imports."""
 
-
 """
-"""
+""""""
+""""""
   safe_print("\\u1f9ea Testing Hybrid Strategy Mapper (Simple)...")
 
    try:
         # Test imports work
-        from core.strategy_mapper import StrategyMapper
-        safe_print("\\u2705 StrategyMapper imported successfully")
+from core.strategy_mapper import StrategyMapper
+safe_print("\\u2705 StrategyMapper imported successfully")
 
 # Test 1: Basic initialization
-        mapper = StrategyMapper(
+mapper = StrategyMapper(
             enable_ghost_phase=True,
             enable_legacy=True,
             default_to_legacy=False
         )
-        safe_print("\\u2705 Hybrid mapper initialized")
+safe_print("\\u2705 Hybrid mapper initialized")
 
 # Test 2: Simple data
-        prices = [50000, 51000, 50500, 52000, 53000]
+prices = [50000, 51000, 50500, 52000, 53000]
         live_vector = [0.8, 0.2, 0.6, 0.4, 0.9, 0.1]
         raw_signals = [0.7, 0.3, 0.6, 0.8, 0.4]
 
 # Test 3: Ghost Phase path
-        result_ghost = mapper.map_strategy(
+result_ghost = mapper.map_strategy(
             prices, live_vector, raw_signals, use_legacy=False
         )
 
-        assert result_ghost.success, f"Ghost Phase should succeed, got: {result_ghost}"
+assert result_ghost.success, f"Ghost Phase should succeed, got: {result_ghost}"
         assert isinstance(result_ghost.strategy_id, str), "Strategy ID must be string"
         assert len(result_ghost.strategy_id) > 0, "Strategy ID must not be empty"
         safe_print(f"\\u2705 Ghost Phase Strategy: {result_ghost.strategy_id}")
 
 # Test 4: Legacy path
-        execution_packet = {
+execution_packet = {
             "strategy_type": "momentum",
             "prices": prices,
             "signals": raw_signals,
             "timestamp": time.time(),
-        }
 
-        result_legacy = mapper.map_strategy(
+result_legacy = mapper.map_strategy(
             prices, live_vector, raw_signals, execution_packet, use_legacy=True
         )
 
-        assert result_legacy.success, f"Legacy should succeed, got: {result_legacy}"
+assert result_legacy.success, f"Legacy should succeed, got: {result_legacy}"
         assert isinstance(result_legacy.strategy_id, str), "Strategy ID must be string"
         assert len(result_legacy.strategy_id) > 0, "Strategy ID must not be empty"
         safe_print(f"\\u2705 Legacy Strategy: {result_legacy.strategy_id}")
 
 # Test 5: Performance stats
-        stats = mapper.get_performance_stats()
+stats = mapper.get_performance_stats()
         assert "total_mappings" in stats, "Should have performance stats"
         assert stats["total_mappings"] > 0, "Should have recorded mappings"
         safe_print(f"\\u2705 Performance: {stats['total_mappings']} mappings, {stats['success_rate']:.2f} success rate")
@@ -95,80 +94,79 @@ def test_hybrid_strategy_mapper_simple():
         result_auto = mapper.map_strategy(
             prices, live_vector, raw_signals, None, None
         )
-        assert result_auto.success, "Auto - detection should succeed"
+assert result_auto.success, "Auto - detection should succeed"
         safe_print(f"\\u2705 Auto - detection: {result_auto.strategy_id}")
 
-        safe_print("\\u1f389 All hybrid strategy mapper tests passed!")
+safe_print("\\u1f389 All hybrid strategy mapper tests passed!")
         return True
 
-    except Exception as e:
+except Exception as e:
         safe_print(f"\\u274c Test failed: {e}")
         import traceback
-        traceback.print_exc()
+traceback.print_exc()
         return False
 
 
 def test_legacy_compatibility():
     """Test legacy compatibility functions."""
 
-
 """
-"""
+""""""
+""""""
   safe_print("\\n  # -*- coding: utf - 8 -*-\\n\\u1f9ea Testing Legacy Compatibility...")
 
    try:
         from core.strategy_mapper import map_strategy
 
 # Test legacy function
-        execution_packet = {
+execution_packet = {
             "strategy_type": "momentum",
             "prices": [50000, 51000, 50500, 52000],
             "signals": [0.7, 0.3, 0.6, 0.8],
-        }
 
-        result = map_strategy(execution_packet)
+result = map_strategy(execution_packet)
         assert isinstance(result, dict), "Legacy function should return dict"
         assert "mapped_at" in result, "Should have mapping timestamp"
         safe_print(f"\\u2705 Legacy map_strategy: {result.get('strategy_id', 'N / A')}")
 
-        return True
+return True
 
-    except Exception as e:
+except Exception as e:
         safe_print(f"\\u274c Legacy compatibility test failed: {e}")
         import traceback
-        traceback.print_exc()
+traceback.print_exc()
         return False
 
 
 def main():
     """Run simple hybrid tests."""
 
-
 """
-"""
+""""""
+""""""
   safe_print("\\u1f680 Hybrid Strategy Mapper Simple Tests")
    safe_print("=" * 50)
 
-    tests = [
+tests = [
         test_hybrid_strategy_mapper_simple,
         test_legacy_compatibility,
     ]
 
-    passed = 0
+passed = 0
     total = len(tests)
 
-    for test in tests:
+for test in tests:
         if test():
             passed += 1
         safe_print("")  # Add spacing
 
-    safe_print("=" * 50)
+safe_print("=" * 50)
     safe_print(f"\\u1f4ca Test Results: {passed}/{total} tests passed")
 
-    if passed == total:
+if passed == total:
         safe_print("\\u1f389 All hybrid tests passed! System is working correctly.")
         return True
-    else:
+else:
         safe_print("\\u274c Some tests failed.")
         return False
 

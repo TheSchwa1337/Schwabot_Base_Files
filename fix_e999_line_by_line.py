@@ -8,23 +8,23 @@ import re
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 """
 Conservative line - by - line fixer for E999 errors.
-Only fixes the specific lines flagged by flake8 to avoid breaking working code.
-"""
-"""
-"""
-"""
+Only fixes the specific lines flagged by flake8 to avoid breaking working code."""
+""""""
+""""""
+""""""
+""""""
 """
 
 
 # Specific E999 errors from flake8 output with line numbers and fixes
 E999_FIXES = {
-    # File: line_number -> (original_pattern, fixed_pattern)
+    # File: line_number -> (original_pattern, fixed_pattern)"""
     "core / adaptive_trainer.py": {
         229: (r"data: Optional\[Dict\[str, Any\)\) = None\]", r"data: Optional[Dict[str, Any]] = None"),
     },
@@ -121,106 +121,105 @@ E999_FIXES = {
     "core / utilities.py": {
         69: None,  # Indentation error - will be handled separately
     },
-}
 
 
 def fix_indentation_error(lines: List[str], line_number: int) -> List[str]:
     """Fix indentation errors by ensuring proper indentation."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    if line_number <= 0 or line_number > len(lines):
         return lines
 
-    line_idx = line_number - 1
+line_idx = line_number - 1
     line = lines[line_idx]
 
 # Check if line should be at root level
-    stripped = line.strip()
+stripped = line.strip()
     if stripped.startswith(('def ', 'class ', 'import ', 'from ')):
     # Fix unexpected unindent by removing leading spaces
-        lines[line_idx] = stripped
+lines[line_idx] = stripped
     elif stripped.startswith(('try:', 'if ', 'elif ', 'else:', 'except', 'finally:')):
     # Ensure proper indentation for control structures
-        if not line.startswith('    '):
+if not line.startswith('    '):
             lines[line_idx] = '    ' + stripped
 
-    return lines
+return lines
 
 
-def fix_missing_indented_block(lines: List[str], line_number: int) -> List[str]:
+def fix_missing_indented_block(lines: List[str], line_number: int) -> List[str]:"""
     """Fix missing indented blocks after try statements."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    if line_number <= 0 or line_number >= len(lines):
         return lines
 
-    line_idx = line_number - 1
+line_idx = line_number - 1
     line = lines[line_idx]
 
-    if line.strip() == 'try:':
+if line.strip() == 'try:':
     # Check if next line is not indented
-        if line_idx + 1 < len(lines):
+if line_idx + 1 < len(lines):
             next_line = lines[line_idx + 1]
             if not next_line.strip() or (not next_line.startswith('    ') and not next_line.startswith('\t')):
     # Insert pass statement
-                lines.insert(line_idx + 1, '    pass')
+lines.insert(line_idx + 1, '    pass')
 
-    return lines
+return lines
 
 
-def fix_bracket_mismatch(lines: List[str], line_number: int, original_pattern: str, fixed_pattern: str) -> List[str]:
+def fix_bracket_mismatch(lines: List[str], line_number: int, original_pattern: str, fixed_pattern: str) -> List[str]:"""
     """Fix bracket / parenthesis mismatches on specific lines."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    if line_number <= 0 or line_number > len(lines):
         return lines
 
-    line_idx = line_number - 1
+line_idx = line_number - 1
     line = lines[line_idx]
 
 # Apply the fix pattern
-    if re.search(original_pattern, line):
+if re.search(original_pattern, line):
         fixed_line = re.sub(original_pattern, fixed_pattern, line)
-        lines[line_idx] = fixed_line
+        lines[line_idx] = fixed_line"""
         print(f"  Fixed line {line_number}: {line.strip()} -> {fixed_line.strip()}")
 
-    return lines
+return lines
 
 
 def fix_file(filepath: str) -> bool:
     """Fix E999 errors in a single file using conservative line - by - line approach."""
 
-
 """
+""""""
+""""""
+""""""
 """
-"""
-"""
-   if filepath not in E999_FIXES:
-        print(f"  No fixes defined for {filepath}")
+   if filepath not in E999_FIXES:"""
+print(f"  No fixes defined for {filepath}")
         return False
 
-    try:
+try:
         with open(filepath, 'r', encoding='utf - 8') as f:
             lines = f.readlines()
 
-        original_lines = lines.copy()
+original_lines = lines.copy()
         fixes_applied = 0
 
-        print(f"Processing {filepath}...")
+print(f"Processing {filepath}...")
 
-        for line_number, fix_info in E999_FIXES[filepath].items():
+for line_number, fix_info in E999_FIXES[filepath].items():
             if fix_info is None:
     # Handle special cases (indentation, missing blocks)
                 if line_number == 64 and filepath == "core / config.py":
@@ -237,21 +236,21 @@ def fix_file(filepath: str) -> bool:
                     fixes_applied += 1
             else:
     # Handle bracket / parenthesis mismatches
-                original_pattern, fixed_pattern = fix_info
+original_pattern, fixed_pattern = fix_info
                 lines = fix_bracket_mismatch(lines, line_number, original_pattern, fixed_pattern)
                 fixes_applied += 1
 
 # Only write if changes were made
-        if lines != original_lines:
+if lines != original_lines:
             with open(filepath, 'w', encoding='utf - 8') as f:
                 f.writelines(lines)
             print(f"  Applied {fixes_applied} fixes to {filepath}")
             return True
-        else:
+else:
             print(f"  No changes needed for {filepath}")
             return False
 
-    except Exception as e:
+except Exception as e:
         print(f"  Error fixing {filepath}: {e}")
         return False
 
@@ -259,24 +258,24 @@ def fix_file(filepath: str) -> bool:
 def main():
     """Main function to fix E999 errors line by line."""
 
-
 """
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
    print("Starting conservative line - by - line E999 error fixing...")
 
-    fixed_count = 0
+fixed_count = 0
     total_files = len(E999_FIXES)
 
-    for filepath in E999_FIXES.keys():
+for filepath in E999_FIXES.keys():
         if os.path.exists(filepath):
             if fix_file(filepath):
                 fixed_count += 1
         else:
             print(f"  File not found: {filepath}")
 
-    print(f"\\nCompleted E999 error fixing:")
+print(f"\\nCompleted E999 error fixing:")
     print(f"  Files processed: {total_files}")
     print(f"  Files modified: {fixed_count}")
     print("  Conservative line - by - line fixing complete!")
@@ -285,9 +284,10 @@ def main():
 if __name__ == "__main__":
     main()
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
+""""""
 """
 """

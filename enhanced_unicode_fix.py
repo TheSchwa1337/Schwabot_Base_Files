@@ -10,29 +10,29 @@ import re
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 """
 Enhanced Unicode Character Fix Script
 
 This script fixes the remaining E999 errors caused by Unicode characters
-that weren't caught by the initial fix script.
-"""
-"""
-"""
-"""
+that weren't caught by the initial fix script."""'
+""""""
+""""""
+""""""
+""""""
 """
 
 
-def fix_enhanced_unicode_characters(content: str) -> str:
+def fix_enhanced_unicode_characters(content: str) -> str:"""
     """Fix additional Unicode characters that cause syntax errors."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
 # Extended Unicode character replacements
    extended_unicode_replacements = {
@@ -40,10 +40,10 @@ def fix_enhanced_unicode_characters(content: str) -> str:
         '\\u00b7': '.',  # Middle dot (U + 00B7)
         '\\u2013': '-',  # En dash (U + 2013)
         '\\u2014': '-',  # Em dash (U + 2014)
-        '\\u2026': '...',  # Horizontal ellipsis (U + 2026)
-        '\\u2032': "'",  # Prime (U + 2032)
-        '\\u2033': '"',  # Double prime (U + 2033)
-        '\\u2034': '"',  # Triple prime (U + 2034)
+        '\\u2026': '...',  # Horizontal ellipsis (U + 2026)"""
+        '\\u2032': "'",  # Prime (U + 2032)'
+        '\\u2033': '"',  # Double prime (U + 2033)"
+        '\\u2034': '"',  # Triple prime (U + 2034)"
         '\\u2030': '/1000',  # Per mille (U + 2030)
         '\\u2031': '/10000',  # Per ten thousand (U + 2031)
         '\\u203d': '?!',  # Interrobang (U + 203D)
@@ -100,7 +100,7 @@ def fix_enhanced_unicode_characters(content: str) -> str:
         '\\u2213': '+/-',  # Minus - or - plus sign (U + 2213)
         '\\u2214': '+',  # Dot plus (U + 2214)
         '\\u2215': '/',  # Division slash (U + 2215)
-        '\\u2216': '\\',  # Set minus (U + 2216)
+        '\\u2216': '\\',  # Set minus (U + 2216)'
         '\\u2217': '*',  # Asterisk operator (U + 2217)
         '\\u2218': 'o',  # Ring operator (U + 2218)
         '\\u2219': '.',  # Bullet operator (U + 2219)
@@ -341,29 +341,28 @@ def fix_enhanced_unicode_characters(content: str) -> str:
         '\\u22fd': 'contains_with_overbar',  # Contains with overbar (U + 22FD)
         '\\u22fe': 'small_contains_with_overbar',  # Small contains with overbar (U + 22FE)
         '\\u22ff': 'z_notation_bag_membership',  # Z notation bag membership (U + 22FF)
-    }
 
 # Apply replacements
-    for unicode_char, replacement in extended_unicode_replacements.items():
+for unicode_char, replacement in extended_unicode_replacements.items():
         content = content.replace(unicode_char, replacement)
 
-    return content
+return content
 
 
 def fix_bracket_mismatches(content: str) -> str:
     """Fix unmatched brackets and parentheses."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    lines = content.split('\n')
     fixed_lines = []
 
-    for line in lines:
+for line in lines:
     # Count brackets and parentheses
-        open_brackets = line.count('[')
+open_brackets = line.count('[')
         close_brackets = line.count(']')
         open_parens = line.count('(')
         close_parens = line.count(')')
@@ -371,36 +370,36 @@ def fix_bracket_mismatches(content: str) -> str:
         close_braces = line.count('}')
 
 # Fix mismatches by adding missing closing brackets / parentheses
-        if open_brackets > close_brackets:
+if open_brackets > close_brackets:
             line = line + ']' * (open_brackets - close_brackets)
         elif close_brackets > open_brackets:
     # Remove extra closing brackets
-            line = line.replace(']', '', close_brackets - open_brackets)
+line = line.replace(']', '', close_brackets - open_brackets)
 
-        if open_parens > close_parens:
+if open_parens > close_parens:
             line = line + ')' * (open_parens - close_parens)
         elif close_parens > open_parens:
     # Remove extra closing parentheses
-            line = line.replace(')', '', close_parens - open_parens)
+line = line.replace(')', '', close_parens - open_parens)
 
-        if open_braces > close_braces:
+if open_braces > close_braces:
             line = line + '}' * (open_braces - close_braces)
         elif close_braces > open_braces:
     # Remove extra closing braces
-            line = line.replace('}', '', close_braces - open_braces)
+line = line.replace('}', '', close_braces - open_braces)
 
-        fixed_lines.append(line)
+fixed_lines.append(line)
 
-    return '\n'.join(fixed_lines)
+return '\n'.join(fixed_lines)
 
 
-def fix_invalid_syntax_patterns(content: str) -> str:
+def fix_invalid_syntax_patterns(content: str) -> str:"""
     """Fix common invalid syntax patterns."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
 # Fix common patterns that cause syntax errors
    patterns = [
@@ -411,77 +410,77 @@ def fix_invalid_syntax_patterns(content: str) -> str:
         (r'class\\s+\\w+\\s*:\\s*$', 'class Placeholder: pass'),
     ]
 
-    for pattern, replacement in patterns:
+for pattern, replacement in patterns:
         content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
 
-    return content
+return content
 
 
-def fix_enhanced_unicode_string_errors(file_path: str) -> Tuple[bool, List[str]]:
+def fix_enhanced_unicode_string_errors(file_path: str) -> Tuple[bool, List[str]]:"""
     """Fix enhanced Unicode character and string literal errors in a file."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    try:
         with open(file_path, 'r', encoding='utf - 8') as f:
             content = f.read()
 
-        original_content = content
+original_content = content
         changes_made = []
 
 # Apply enhanced fixes
-        content = fix_enhanced_unicode_characters(content)
-        if content != original_content:
+content = fix_enhanced_unicode_characters(content)
+        if content != original_content:"""
             changes_made.append("Fixed enhanced Unicode characters")
             original_content = content
 
-        content = fix_bracket_mismatches(content)
+content = fix_bracket_mismatches(content)
         if content != original_content:
             changes_made.append("Fixed bracket mismatches")
             original_content = content
 
-        content = fix_invalid_syntax_patterns(content)
+content = fix_invalid_syntax_patterns(content)
         if content != original_content:
             changes_made.append("Fixed invalid syntax patterns")
             original_content = content
 
 # Only write if content changed
-        if changes_made:
+if changes_made:
             with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(content)
             return True, changes_made
 
-        return False, ["No changes needed"]
+return False, ["No changes needed"]
 
-    except Exception as e:
+except Exception as e:
         return False, [f"Error processing file: {str(e)}"]
 
 
 def main():
     """Main function to fix enhanced Unicode and string literal errors."""
 
-
 """
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
    print("\\u1f527 Starting Enhanced Unicode Character and String Literal Fix...")
     print("=" * 70)
 
 # Get all Python files in core directory
-    core_files = glob.glob('core/**/*.py', recursive=True)
+core_files = glob.glob('core/**/*.py', recursive=True)
 
-    fixed_files = []
+fixed_files = []
     error_files = []
 
-    for file_path in core_files:
+for file_path in core_files:
         print(f"Processing: {file_path}")
         success, messages = fix_enhanced_unicode_string_errors(file_path)
 
-        if success:
+if success:
             fixed_files.append(file_path)
             print(f"  \\u2705 Fixed: {', '.join(messages)}")
         else:
@@ -491,35 +490,36 @@ def main():
             else:
                 print(f"  \\u23ed\\ufe0f  Skipped: {messages[0]}")
 
-    print("\n" + "=" * 70)
+print("\n" + "=" * 70)
     print("\\u1f4ca ENHANCED UNICODE / STRING FIX SUMMARY")
     print("=" * 70)
     print(f"Files Processed: {len(core_files)}")
     print(f"Files Fixed: {len(fixed_files)}")
     print(f"Files with Errors: {len(error_files)}")
 
-    if fixed_files:
+if fixed_files:
         print(f"\\n\\u2705 Successfully Fixed Files:")
         for file_path in fixed_files[:10]:  # Show first 10
             print(f"  - {file_path}")
         if len(fixed_files) > 10:
             print(f"  ... and {len(fixed_files) - 10} more")
 
-    if error_files:
+if error_files:
         print(f"\\n\\u274c Files with Processing Errors:")
         for file_path, error_msg in error_files[:5]:  # Show first 5
             print(f"  - {file_path}: {error_msg}")
         if len(error_files) > 5:
             print(f"  ... and {len(error_files) - 5} more")
 
-    print(f"\\n\\u1f389 Enhanced Unicode / String fix complete!")
+print(f"\\n\\u1f389 Enhanced Unicode / String fix complete!")
     print(f"Next: Run 'flake8 core/ --count --select = E999' to verify improvements")
 
 if __name__ == "__main__":
     main()
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
+""""""
 """
 """

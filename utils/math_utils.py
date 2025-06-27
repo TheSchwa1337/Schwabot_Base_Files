@@ -5,14 +5,14 @@ from __future__ import annotations
 Utility math helpers that are referenced across multiple Schwabot modules.
 
 This is *not* a full scientific-computing layer—just light-weight helpers that
-keep external dependencies to a minimum while staying Flake8/mypy compliant.
+keep external dependencies to a minimum while staying Flake8/mypy compliant."""
 """
 
 from hashlib import blake2b
 from typing import Iterable, Sequence
 import numpy as np
 
-__all__ = [
+__all__ = ["""
     "calculate_entropy",
     "moving_average",
     "hash_distance",
@@ -21,13 +21,13 @@ __all__ = [
 
 
 def calculate_entropy(values: Sequence[float] | np.ndarray) -> float:
-    """Return Shannon entropy of *values*.
-
-    If *values* are continuous, a histogram with `bins="auto"` is used; for
+    """Return Shannon entropy of *values*."
+"""
+If *values* are continuous, a histogram with `bins="auto"` is used; for
     categorical data (integers / hashes) the unique counts are considered.
     """
-    arr = np.asarray(values, dtype=float).ravel()
-    if arr.size == 0:
+arr = np.asarray(values, dtype=float).ravel()
+    if arr.size == 0:"""
         raise ValueError("values must be non-empty")
     hist, _ = np.histogram(arr, bins="auto", density=True)
     hist = hist[hist > 0.0]
@@ -35,12 +35,12 @@ def calculate_entropy(values: Sequence[float] | np.ndarray) -> float:
 
 
 def moving_average(series: Sequence[float] | np.ndarray, window: int) -> np.ndarray:
-    """Simple centered moving average.
+    """Simple centered moving average."
 
-    Returns an array of the same length as *series* where edge values are
-    padded by replicating edge-nearest results.
-    """
-    if window <= 0:
+Returns an array of the same length as *series* where edge values are
+padded by replicating edge-nearest results."""
+"""
+if window <= 0:"""
         raise ValueError("window must be positive")
     x = np.asarray(series, dtype=float)
     kernel = np.ones(window, dtype=float) / window
@@ -50,20 +50,20 @@ def moving_average(series: Sequence[float] | np.ndarray, window: int) -> np.ndar
 
 def hash_distance(a: str, b: str, *, digest_bits: int = 64) -> int:
     """Return XOR Hamming distance between blake2b digests of *a* and *b*."""
-    h_a = blake2b(a.encode(), digest_size=digest_bits // 8).digest()
-    h_b = blake2b(b.encode(), digest_size=digest_bits // 8).digest()
+h_a = blake2b(a.encode(), digest_size=digest_bits // 8).digest()
+    h_b = blake2b(b.encode(), digest_size=digest_bits // 8).digest()"""
     xor_bytes = int.from_bytes(h_a, "big") ^ int.from_bytes(h_b, "big")
     return xor_bytes.bit_count()
 
 
 def cosine_similarity(a: Sequence[float] | np.ndarray, b: Sequence[float] | np.ndarray) -> float:
-    """Return cosine similarity between two equal-length vectors.
+    """Return cosine similarity between two equal-length vectors."
 
-    The value is in the range ``[-1, 1]`` where ``1`` means identical direction.
+The value is in the range ``[-1, 1]`` where ``1`` means identical direction."""
     """
-    vec_a = np.asarray(a, dtype=float)
+vec_a = np.asarray(a, dtype=float)
     vec_b = np.asarray(b, dtype=float)
-    if vec_a.shape != vec_b.shape:
+    if vec_a.shape != vec_b.shape:"""
         raise ValueError("vectors must have the same shape")
     norm_a = np.linalg.norm(vec_a)
     norm_b = np.linalg.norm(vec_b)

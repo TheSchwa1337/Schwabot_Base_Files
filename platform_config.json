@@ -1,0 +1,11 @@
+{
+  "platform": {
+    "os": "Windows",
+    "arch": "64bit",
+    "python_version": "3.12.10"
+  },
+  "mathematical_precision": "float64",
+  "encoding": "utf-8",
+  "path_separator": "\\",
+  "line_endings": "crlf"
+}

@@ -32,31 +32,31 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
-"""Persistent State Manager - Durable Storage and Audit Trail System.
+"""Persistent State Manager - Durable Storage and Audit Trail System."
 
 This module provides enterprise - grade persistent state management including:
 - Move in - memory Demo Memory Core to durable store (PostgreSQL / TimescaleDB)
 - Append - only trade / quote ledger for post - mortem replay
 - Cryptographic hash chain on logs (tamper evidence)
 - Memory allocation management with short / mid / long - term storage
-- Integration with all Schwabot core systems
-"""
-"""
+- Integration with all Schwabot core systems"""
+""""""
+""""""
 """
 
 
 # Try to import PostgreSQL
 try:
     import psycopg2
-    import psycopg2.extras
-    POSTGRES_AVAILABLE = True
+import psycopg2.extras
+POSTGRES_AVAILABLE = True
 except ImportError:
     POSTGRES_AVAILABLE = False
 
 # Try to import TimescaleDB
 try:
     import psycopg2
-    TIMESCALE_AVAILABLE = POSTGRES_AVAILABLE
+TIMESCALE_AVAILABLE = POSTGRES_AVAILABLE
 except ImportError:
     TIMESCALE_AVAILABLE = False
 
@@ -74,31 +74,37 @@ try:
     from core.utils.windows_cli_compatibility import (
         safe_print, safe_format_error, log_safe
     )
-    CLI_HANDLER_AVAILABLE = True
+CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+def safe_print(message: str, use_emoji: bool = True) -> str:"""
+    """Function implementation pending."""
+pass
 
-        return message
+return message
+"""
+def safe_format_error(error: Exception, context: str = "") -> str:
+    """Function implementation pending."""
+pass
+"""
+return f"Error: {str(error)} | Context: {context}"
 
-    def safe_format_error(error: Exception, context: str = "") -> str:
+def log_safe(logger, level: str, message: str) -> None:
+    """Function implementation pending."""
+pass
 
-        return f"Error: {str(error)} | Context: {context}"
-
-    def log_safe(logger, level: str, message: str) -> None:
-
-        getattr(logger, level.lower())(message)
+getattr(logger, level.lower())(message)
 
 
 class StorageType(Enum):
-
-    """Storage types."""
-
+"""
+"""Storage types."""
 
 """
-"""
-    SQLITE = "sqlite"
+""""""
+""""""
+SQLITE = "sqlite"
     POSTGRESQL = "postgresql"
     TIMESCALEDB = "timescaledb"
     HYBRID = "hybrid"
@@ -106,12 +112,12 @@ class StorageType(Enum):
 
 class MemoryAllocationType(Enum):
 
-    """Memory allocation types."""
-
+"""Memory allocation types."""
 
 """
-"""
-    SHORT_TERM = "short_term"  # 3.75 minute BTC hashing data
+""""""
+""""""
+SHORT_TERM = "short_term"  # 3.75 minute BTC hashing data
     MID_TERM = "mid_term"  # Daily trading data
     LONG_TERM = "long_term"  # Weekly / monthly analysis
     AUDIT_TRAIL = "audit_trail"  # Cryptographic hash chain
@@ -121,15 +127,15 @@ class MemoryAllocationType(Enum):
 @dataclass
 class MemoryAllocation:
 
-    """Memory allocation configuration."""
-
+"""Memory allocation configuration."""
 
 """
+""""""
 """
-    allocation_type: MemoryAllocationType
-    max_entries: int
-    retention_days: int
-    compression_enabled: bool = True
+allocation_type: MemoryAllocationType
+max_entries: int
+retention_days: int
+compression_enabled: bool = True
     encryption_enabled: bool = True
     auto_cleanup: bool = True
     priority: int = 1  # Higher number = higher priority
@@ -137,107 +143,111 @@ class MemoryAllocation:
 
 @dataclass
 class AuditEntry:
-
-    """Audit trail entry with cryptographic hash."""
-
+"""
+"""Audit trail entry with cryptographic hash."""
 
 """
+""""""
 """
-    entry_id: str
-    timestamp: datetime
-    operation: str
-    component: str
-    data_hash: str
-    previous_hash: str
-    current_hash: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+entry_id: str
+timestamp: datetime
+operation: str
+component: str
+data_hash: str
+previous_hash: str
+current_hash: str
+metadata: Dict[str, Any] = field(default_factory=dict)
     signature: Optional[str] = None
 
 
 @dataclass
 class TradeLedgerEntry:
-
-    """Append - only trade ledger entry."""
-
+"""
+"""Append - only trade ledger entry."""
 
 """
+""""""
 """
-    ledger_id: str
-    timestamp: datetime
-    exchange: str
-    symbol: str
-    side: str
-    order_type: str
-    amount: float
-    price: Optional[float]
+ledger_id: str
+timestamp: datetime
+exchange: str
+symbol: str
+side: str
+order_type: str
+amount: float
+price: Optional[float]
     fees: Dict[str, float]
     status: str
-    order_id: str
-    trade_hash: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+order_id: str
+trade_hash: str
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class MemoryEntry:
-
-    """Persistent memory entry."""
-
+"""
+"""Persistent memory entry."""
 
 """
+""""""
 """
-    entry_id: str
-    allocation_type: MemoryAllocationType
-    timestamp: datetime
-    data_type: str
-    data_hash: str
-    data_size: int
-    compressed: bool
-    encrypted: bool
-    retention_until: datetime
-    metadata: Dict[str, Any] = field(default_factory=dict)
+entry_id: str
+allocation_type: MemoryAllocationType
+timestamp: datetime
+data_type: str
+data_hash: str
+data_size: int
+compressed: bool
+encrypted: bool
+retention_until: datetime
+metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class CryptographicHashChain:
-
-    """Cryptographic hash chain for tamper evidence."""
-
+"""
+"""Cryptographic hash chain for tamper evidence."""
 
 """
-"""
-
-    def __init__(self, chain_id: str = "schwabot_audit_chain"):
-        """Initialize hash chain."""
+""""""
 """
 """
-        self.chain_id = chain_id
+def __init__(self, chain_id: str = "schwabot_audit_chain"):
+        """Initialize hash chain.""""""
+""""""
+"""
+self.chain_id = chain_id"""
         self.chain_file = Path(f"data/{chain_id}.json")
         self.chain_data: List[AuditEntry] = []
         self.last_hash = self._generate_genesis_hash()
 
 # Load existing chain
-        self._load_chain()
+self._load_chain()
 
-        safe_safe_print("\\u1f517 Cryptographic Hash Chain initialized")
+safe_safe_print("\\u1f517 Cryptographic Hash Chain initialized")
 
-    def _generate_genesis_hash(self) -> str:
-
-        """Generate genesis hash."""
+def _generate_genesis_hash(self) -> str:
+    """Function implementation pending."""
+pass
 """
-"""
-        genesis_data = f"{self.chain_id}_genesis_{int(time.time())}"
+"""Generate genesis hash.""""""
+""""""
+""""""
+genesis_data = f"{self.chain_id}_genesis_{int(time.time())}"
         return hashlib.sha256(genesis_data.encode()).hexdigest()
 
-    def _load_chain(self) -> None:
-
-        """Load existing hash chain."""
+def _load_chain(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Load existing hash chain.""""""
+""""""
 """
-        try:
+try:
             if self.chain_file.exists():
                 with open(self.chain_file, 'r') as f:
                     chain_json = json.load(f)
 
-                for entry_data in chain_json.get('entries', []):
+for entry_data in chain_json.get('entries', []):
                     entry = AuditEntry(
                         entry_id = entry_data['entry_id'],
                         timestamp = datetime.fromisoformat(entry_data['timestamp']),
@@ -249,36 +259,39 @@ class CryptographicHashChain:
                         metadata = entry_data.get('metadata', {}),
                         signature = entry_data.get('signature')
                     )
-                    self.chain_data.append(entry)
+self.chain_data.append(entry)
 
-                if self.chain_data:
+if self.chain_data:
                     self.last_hash = self.chain_data[-1].current_hash
+"""
+safe_safe_print(f"\\u2705 Loaded {len(self.chain_data)} audit entries")
 
-                safe_safe_print(f"\\u2705 Loaded {len(self.chain_data)} audit entries")
-
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u26a0\\ufe0f Chain load failed: {safe_format_error(e, 'chain_load')}")
 
-    def add_entry(self, operation: str, component: str, data: Dict[str, Any]) -> str:
-
-        """Add entry to hash chain."""
+def add_entry(self, operation: str, component: str, data: Dict[str, Any]) -> str:
+    """Function implementation pending."""
+pass
 """
+"""Add entry to hash chain.""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # Generate data hash
-            data_json = json.dumps(data, sort_keys = True, default = str)
+data_json = json.dumps(data, sort_keys = True, default = str)
             data_hash = hashlib.sha256(data_json.encode()).hexdigest()
 
 # Create entry
-            entry_id = str(uuid.uuid4())
+entry_id = str(uuid.uuid4())
             timestamp = datetime.now()
 
 # Calculate current hash
-            current_hash = hashlib.sha256(
+current_hash = hashlib.sha256("""
                 f"{self.last_hash}:{entry_id}:{data_hash}".encode()
             ).hexdigest()
 
-            entry = AuditEntry(
+entry = AuditEntry(
                 entry_id = entry_id,
                 timestamp = timestamp,
                 operation = operation,
@@ -290,56 +303,60 @@ class CryptographicHashChain:
             )
 
 # Add to chain
-            self.chain_data.append(entry)
+self.chain_data.append(entry)
             self.last_hash = current_hash
 
 # Save chain
-            self._save_chain()
+self._save_chain()
 
-            safe_safe_print(f"\\u2705 Audit entry added: {entry_id[:8]}...")
+safe_safe_print(f"\\u2705 Audit entry added: {entry_id[:8]}...")
             return entry_id
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Audit entry failed: {safe_format_error(e, 'audit_entry')}")
             return ""
 
-    def _save_chain(self) -> None:
-
-        """Save hash chain to file."""
+def _save_chain(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Save hash chain to file.""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # Ensure directory exists
-            self.chain_file.parent.mkdir(parents = True, exist_ok = True)
+self.chain_file.parent.mkdir(parents = True, exist_ok = True)
 
-            chain_json = {
+chain_json = {
                 'chain_id': self.chain_id,
                 'genesis_hash': self._generate_genesis_hash(),
                 'last_hash': self.last_hash,
                 'entry_count': len(self.chain_data),
                 'entries': [asdict(entry) for entry in self.chain_data]
-            }
 
-            with open(self.chain_file, 'w') as f:
+with open(self.chain_file, 'w') as f:
                 json.dump(chain_json, f, indent = 2)
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Chain save failed: {safe_format_error(e, 'chain_save')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Chain save failed: {safe_format_error(e, 'chain_save')}")
 
-    def verify_chain_integrity(self) -> bool:
-
-        """Verify hash chain integrity."""
+def verify_chain_integrity(self) -> bool:
+    """Function implementation pending."""
+pass
 """
+"""Verify hash chain integrity.""""""
+""""""
 """
-        try:
+try:
             if not self.chain_data:
                 return True
 
 # Verify each entry
-            for i, entry in enumerate(self.chain_data):
+for i, entry in enumerate(self.chain_data):
 # Recalculate current hash
-                if i == 0:
-                    expected_hash = hashlib.sha256(
+if i == 0:
+                    expected_hash = hashlib.sha256("""
                         f"{self._generate_genesis_hash()}:{entry.entry_id}:{entry.data_hash}".encode()
                     ).hexdigest()
                 else:
@@ -347,59 +364,64 @@ class CryptographicHashChain:
                         f"{self.chain_data[i - 1].current_hash}:{entry.entry_id}:{entry.data_hash}".encode()
                     ).hexdigest()
 
-                if entry.current_hash != expected_hash:
+if entry.current_hash != expected_hash:
                     safe_safe_print(f"\\u274c Chain integrity violation at entry {i}")
                     return False
 
-            safe_safe_print("\\u2705 Hash chain integrity verified")
+safe_safe_print("\\u2705 Hash chain integrity verified")
             return True
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Chain verification failed: {safe_format_error(e, 'chain_verify')}")
             return False
 
-    def get_chain_summary(self) -> Dict[str, Any]:
-
-        """Get chain summary."""
+def get_chain_summary(self) -> Dict[str, Any]:
+    """Function implementation pending."""
+pass
 """
+"""Get chain summary.""""""
+""""""
 """
-        return {
+return {
             'chain_id': self.chain_id,
             'entry_count': len(self.chain_data),
             'last_hash': self.last_hash,
             'integrity_verified': self.verify_chain_integrity(),
             'first_entry': self.chain_data[0].timestamp.isoformat() if self.chain_data else None,
             'last_entry': self.chain_data[-1].timestamp.isoformat() if self.chain_data else None
-        }
 
 
 class DatabaseManager:
+"""
+"""Database manager for persistent storage.""""""
+""""""
+"""
 
-    """Database manager for persistent storage."""
+def __init__(self, storage_type: StorageType = StorageType.SQLITE, config: Optional[Dict[str, Any]] = None):"""
+    """Function implementation pending."""
+pass
 """
+"""Initialize database manager.""""""
+""""""
 """
-
-    def __init__(self, storage_type: StorageType = StorageType.SQLITE, config: Optional[Dict[str, Any]] = None):
-
-        """Initialize database manager."""
-"""
-"""
-        self.storage_type = storage_type
+self.storage_type = storage_type
         self.config = config or {}
         self.connection = None
         self.hash_chain = CryptographicHashChain()
 
 # Initialize database
-        self._initialize_database()
-
-        safe_safe_print(f"\\u1f5c4\\ufe0f Database Manager initialized with {storage_type.value}")
-
-    def _initialize_database(self) -> None:
-
-        """Initialize database connection and tables."""
+self._initialize_database()
 """
+safe_safe_print(f"\\u1f5c4\\ufe0f Database Manager initialized with {storage_type.value}")
+
+def _initialize_database(self) -> None:
+    """Function implementation pending."""
+pass
 """
-        try:
+"""Initialize database connection and tables.""""""
+""""""
+"""
+try:
             if self.storage_type == StorageType.SQLITE:
                 self._init_sqlite()
             elif self.storage_type == StorageType.POSTGRESQL:
@@ -408,57 +430,65 @@ class DatabaseManager:
                 self._init_timescaledb()
 
 # Create tables
-            self._create_tables()
+self._create_tables()
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Database initialization failed: {safe_format_error(e, 'db_init')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Database initialization failed: {safe_format_error(e, 'db_init')}")
 
-    def _init_sqlite(self) -> None:
-
-        """Initialize SQLite database."""
+def _init_sqlite(self) -> None:
+    """Function implementation pending."""
+pass
 """
-"""
-        db_path = Path("data / schwabot_persistent.db")
+"""Initialize SQLite database.""""""
+""""""
+""""""
+db_path = Path("data / schwabot_persistent.db")
         db_path.parent.mkdir(parents = True, exist_ok = True)
 
-        self.connection = sqlite3.connect(str(db_path), check_same_thread = False)
+self.connection = sqlite3.connect(str(db_path), check_same_thread = False)
         self.connection.row_factory = sqlite3.Row
 
-    def _init_postgresql(self) -> None:
-
-        """Initialize PostgreSQL database."""
+def _init_postgresql(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Initialize PostgreSQL database.""""""
+""""""
 """
-        if not POSTGRES_AVAILABLE:
-            raise ImportError("PostgreSQL not available")
+if not POSTGRES_AVAILABLE:"""
+raise ImportError("PostgreSQL not available")
 
 # Use SQLite as fallback
-        self._init_sqlite()
+self._init_sqlite()
 
-    def _init_timescaledb(self) -> None:
-
-        """Initialize TimescaleDB database."""
+def _init_timescaledb(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Initialize TimescaleDB database.""""""
+""""""
 """
-        if not TIMESCALE_AVAILABLE:
-            raise ImportError("TimescaleDB not available")
+if not TIMESCALE_AVAILABLE:"""
+raise ImportError("TimescaleDB not available")
 
 # Use SQLite as fallback
-        self._init_sqlite()
+self._init_sqlite()
 
-    def _create_tables(self) -> None:
-
-        """Create database tables."""
+def _create_tables(self) -> None:
+    """Function implementation pending."""
+pass
 """
+"""Create database tables.""""""
+""""""
 """
-        try:
+try:
             cursor = self.connection.cursor()
 
-# Memory entries table
-            cursor.execute("""
+# Memory entries table"""
+cursor.execute(""""""
+""""""
 """
-"""
-                CREATE TABLE IF NOT EXISTS memory_entries (
+CREATE TABLE IF NOT EXISTS memory_entries (
                     entry_id TEXT PRIMARY KEY,
                     allocation_type TEXT NOT NULL,
                     timestamp TEXT NOT NULL,
@@ -470,14 +500,14 @@ class DatabaseManager:
                     retention_until TEXT NOT NULL,
                     metadata TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
+)"""
+""")"
 
-# Trade ledger table
-            cursor.execute("""
+# Trade ledger table"""
+cursor.execute(""""""
+""""""
 """
-"""
-                CREATE TABLE IF NOT EXISTS trade_ledger (
+CREATE TABLE IF NOT EXISTS trade_ledger (
                     ledger_id TEXT PRIMARY KEY,
                     timestamp TEXT NOT NULL,
                     exchange TEXT NOT NULL,
@@ -492,14 +522,14 @@ class DatabaseManager:
                     trade_hash TEXT NOT NULL,
                     metadata TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
+)"""
+""")"
 
-# Audit trail table
-            cursor.execute("""
+# Audit trail table"""
+cursor.execute(""""""
+""""""
 """
-"""
-                CREATE TABLE IF NOT EXISTS audit_trail (
+CREATE TABLE IF NOT EXISTS audit_trail (
                     entry_id TEXT PRIMARY KEY,
                     timestamp TEXT NOT NULL,
                     operation TEXT NOT NULL,
@@ -510,14 +540,14 @@ class DatabaseManager:
                     metadata TEXT,
                     signature TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
+)"""
+""")"
 
-# Memory allocations table
-            cursor.execute("""
+# Memory allocations table"""
+cursor.execute(""""""
+""""""
 """
-"""
-                CREATE TABLE IF NOT EXISTS memory_allocations (
+CREATE TABLE IF NOT EXISTS memory_allocations (
                     allocation_type TEXT PRIMARY KEY,
                     max_entries INTEGER NOT NULL,
                     retention_days INTEGER NOT NULL,
@@ -526,64 +556,68 @@ class DatabaseManager:
                     auto_cleanup BOOLEAN NOT NULL,
                     priority INTEGER NOT NULL,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
+)"""
+""")"
 
-# Create indexes
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_memory_timestamp ON memory_entries(timestamp)")
+# Create indexes"""
+cursor.execute("CREATE INDEX IF NOT EXISTS idx_memory_timestamp ON memory_entries(timestamp)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_memory_type ON memory_entries(allocation_type)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_trade_timestamp ON trade_ledger(timestamp)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_trade_exchange ON trade_ledger(exchange)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_trail(timestamp)")
 
-            self.connection.commit()
+self.connection.commit()
             safe_safe_print("\\u2705 Database tables created")
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Table creation failed: {safe_format_error(e, 'table_create')}")
 
-    @contextmanager
-    def get_cursor(self) -> Any:
-
-        """Get database cursor with context management."""
+@contextmanager
+def get_cursor(self) -> Any:
+    """Function implementation pending."""
+pass
 """
+"""Get database cursor with context management.""""""
+""""""
 """
-        if self.storage_type == StorageType.SQLITE:
+if self.storage_type == StorageType.SQLITE:
             cursor = self.connection.cursor()
             try:
                 yield cursor
-                self.connection.commit()
+self.connection.commit()
             except Exception:
                 self.connection.rollback()
                 raise
-            finally:
+finally:
                 cursor.close()
         elif self.storage_type in [StorageType.POSTGRESQL, StorageType.TIMESCALEDB]:
             cursor = self.connection.cursor()
             try:
                 yield cursor
-                self.connection.commit()
+self.connection.commit()
             except Exception:
                 self.connection.rollback()
                 raise
-            finally:
+finally:
                 cursor.close()
 
-    def store_memory_entry(self, entry: MemoryEntry) -> bool:
-
-        """Store memory entry."""
+def store_memory_entry(self, entry: MemoryEntry) -> bool:"""
+    """Function implementation pending."""
+pass
 """
+"""Store memory entry.""""""
+""""""
 """
-        try:
-            with self.get_cursor() as cursor:
-                cursor.execute("""
+try:
+            with self.get_cursor() as cursor:"""
+                cursor.execute(""""""
+""""""
 """
-"""
-                    INSERT INTO memory_entries
-                    (entry_id, allocation_type, timestamp, data_type, data_hash,
+INSERT INTO memory_entries
+(entry_id, allocation_type, timestamp, data_type, data_hash,
                         data_size, compressed, encrypted, retention_until, metadata)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+                """, ("
                     entry.entry_id,
                     entry.allocation_type.value,
                     entry.timestamp.isoformat(),
@@ -597,34 +631,36 @@ class DatabaseManager:
                 ))
 
 # Add to audit trail
-            self.hash_chain.add_entry(
+self.hash_chain.add_entry("""
                 operation="memory_store",
                 component="persistent_state",
                 data = asdict(entry)
             )
 
-            safe_safe_print(f"\\u2705 Memory entry stored: {entry.entry_id[:8]}...")
+safe_safe_print(f"\\u2705 Memory entry stored: {entry.entry_id[:8]}...")
             return True
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Memory storage failed: {safe_format_error(e, 'memory_store')}")
             return False
 
-    def store_trade_ledger_entry(self, entry: TradeLedgerEntry) -> bool:
-
-        """Store trade ledger entry."""
+def store_trade_ledger_entry(self, entry: TradeLedgerEntry) -> bool:
+    """Function implementation pending."""
+pass
 """
+"""Store trade ledger entry.""""""
+""""""
 """
-        try:
-            with self.get_cursor() as cursor:
-                cursor.execute("""
+try:
+            with self.get_cursor() as cursor:"""
+                cursor.execute(""""""
+""""""
 """
-"""
-                    INSERT INTO trade_ledger
-                    (ledger_id, timestamp, exchange, symbol, side, order_type,
+INSERT INTO trade_ledger
+(ledger_id, timestamp, exchange, symbol, side, order_type,
                         amount, price, fees, status, order_id, trade_hash, metadata)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+                """, ("
                     entry.ledger_id,
                     entry.timestamp.isoformat(),
                     entry.exchange,
@@ -641,36 +677,38 @@ class DatabaseManager:
                 ))
 
 # Add to audit trail
-            self.hash_chain.add_entry(
+self.hash_chain.add_entry("""
                 operation="trade_ledger",
                 component="persistent_state",
                 data = asdict(entry)
             )
 
-            safe_safe_print(f"\\u2705 Trade ledger entry stored: {entry.ledger_id[:8]}...")
+safe_safe_print(f"\\u2705 Trade ledger entry stored: {entry.ledger_id[:8]}...")
             return True
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Trade ledger storage failed: {safe_format_error(e, 'trade_ledger')}")
             return False
 
-    def get_memory_entries(self, allocation_type: MemoryAllocationType, limit: int = 100) -> List[MemoryEntry]:
-
-        """Get memory entries by type."""
+def get_memory_entries(self, allocation_type: MemoryAllocationType, limit: int = 100) -> List[MemoryEntry]:
+    """Function implementation pending."""
+pass
 """
+"""Get memory entries by type.""""""
+""""""
 """
-        try:
-            with self.get_cursor() as cursor:
-                cursor.execute("""
+try:
+            with self.get_cursor() as cursor:"""
+                cursor.execute(""""""
+""""""
 """
-"""
-                    SELECT * FROM memory_entries
-                    WHERE allocation_type = ?
+SELECT * FROM memory_entries
+WHERE allocation_type = ?
                     ORDER BY timestamp DESC
-                    LIMIT ?
-                """, (allocation_type.value, limit))
+LIMIT ?"""
+""", (allocation_type.value, limit))"
 
-                entries = []
+entries = []
                 for row in cursor.fetchall():
                     entry = MemoryEntry(
                         entry_id = row['entry_id'],
@@ -684,40 +722,42 @@ class DatabaseManager:
                         retention_until = datetime.fromisoformat(row['retention_until']),
                         metadata = json.loads(row['metadata']) if row['metadata'] else {}
                     )
-                    entries.append(entry)
+entries.append(entry)
 
-                return entries
+return entries
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Memory retrieval failed: {safe_format_error(e, 'memory_retrieve')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Memory retrieval failed: {safe_format_error(e, 'memory_retrieve')}")
             return []
 
-    def get_trade_history(self, exchange: Optional[str] = None, limit: int = 100) -> List[TradeLedgerEntry]:
-
-        """Get trade history."""
+def get_trade_history(self, exchange: Optional[str] = None, limit: int = 100) -> List[TradeLedgerEntry]:
+    """Function implementation pending."""
+pass
 """
+"""Get trade history.""""""
+""""""
 """
-        try:
+try:
             with self.get_cursor() as cursor:
-                if exchange:
-                    cursor.execute("""
+                if exchange:"""
+cursor.execute(""""""
+""""""
 """
-"""
-                        SELECT * FROM trade_ledger
-                        WHERE exchange = ?
+SELECT * FROM trade_ledger
+WHERE exchange = ?
                         ORDER BY timestamp DESC
-                        LIMIT ?
-                    """, (exchange, limit))
-                else:
-                    cursor.execute("""
+LIMIT ?"""
+""", (exchange, limit))"
+                else:"""
+cursor.execute(""""""
+""""""
 """
-"""
-                        SELECT * FROM trade_ledger
-                        ORDER BY timestamp DESC
-                        LIMIT ?
-                    """, (limit,))
+SELECT * FROM trade_ledger
+ORDER BY timestamp DESC
+LIMIT ?"""
+""", (limit,))"
 
-                entries = []
+entries = []
                 for row in cursor.fetchall():
                     entry = TradeLedgerEntry(
                         ledger_id = row['ledger_id'],
@@ -734,62 +774,68 @@ class DatabaseManager:
                         trade_hash = row['trade_hash'],
                         metadata = json.loads(row['metadata']) if row['metadata'] else {}
                     )
-                    entries.append(entry)
+entries.append(entry)
 
-                return entries
+return entries
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Trade history retrieval failed: {safe_format_error(e, 'trade_history')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Trade history retrieval failed: {safe_format_error(e, 'trade_history')}")
             return []
 
-    def cleanup_expired_entries(self) -> int:
+def cleanup_expired_entries(self) -> int:
+    """Function implementation pending."""
+pass
+"""
+"""Clean up expired memory entries.""""""
+""""""
+"""
+try:
+            with self.get_cursor() as cursor:"""
+                cursor.execute(""""""
+""""""
+"""
+DELETE FROM memory_entries
+WHERE retention_until < ?"""
+""", (datetime.now().isoformat(),))"
 
-        """Clean up expired memory entries."""
-"""
-"""
-        try:
-            with self.get_cursor() as cursor:
-                cursor.execute("""
-"""
-"""
-                    DELETE FROM memory_entries
-                    WHERE retention_until < ?
-                """, (datetime.now().isoformat(),))
-
-                deleted_count = cursor.rowcount
+deleted_count = cursor.rowcount"""
                 safe_safe_print(f"\\u1f5d1\\ufe0f Cleaned up {deleted_count} expired entries")
                 return deleted_count
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Cleanup failed: {safe_format_error(e, 'cleanup')}")
             return 0
 
 
 class MemoryAllocationManager:
 
-    """Memory allocation manager for different data types."""
-"""
+"""Memory allocation manager for different data types.""""""
+""""""
 """
 
-    def __init__(self, db_manager: DatabaseManager):
-
-        """Initialize memory allocation manager."""
+def __init__(self, db_manager: DatabaseManager):"""
+    """Function implementation pending."""
+pass
 """
+"""Initialize memory allocation manager.""""""
+""""""
 """
-        self.db_manager = db_manager
+self.db_manager = db_manager
         self.allocations: Dict[MemoryAllocationType, MemoryAllocation] = {}
 
 # Initialize default allocations
-        self._initialize_default_allocations()
-
-        safe_safe_print("\\u1f9e0 Memory Allocation Manager initialized")
-
-    def _initialize_default_allocations(self) -> None:
-
-        """Initialize default memory allocations."""
+self._initialize_default_allocations()
 """
+safe_safe_print("\\u1f9e0 Memory Allocation Manager initialized")
+
+def _initialize_default_allocations(self) -> None:
+    """Function implementation pending."""
+pass
 """
-        default_allocations = {
+"""Initialize default memory allocations.""""""
+""""""
+"""
+default_allocations = {
             MemoryAllocationType.SHORT_TERM: MemoryAllocation(
                 allocation_type = MemoryAllocationType.SHORT_TERM,
                 max_entries = 10000,  # 3.75 minute BTC hashing data
@@ -835,25 +881,24 @@ class MemoryAllocationManager:
                 auto_cleanup = False,
                 priority = 4
             )
-        }
 
-        for allocation_type, allocation in default_allocations.items():
+for allocation_type, allocation in default_allocations.items():
             self.allocations[allocation_type] = allocation
 
-    def allocate_memory(self, data: Dict[str, Any], data_type: str,
+def allocate_memory(self, data: Dict[str, Any], data_type: str,)
 
-                        allocation_type: MemoryAllocationType) -> Optional[str]:
-        """Allocate memory for data."""
+allocation_type: MemoryAllocationType) -> Optional[str]:"""
+        """Allocate memory for data.""""""
+""""""
 """
-"""
-        try:
+try:
             allocation = self.allocations.get(allocation_type)
-            if not allocation:
-                safe_safe_print(f"\\u274c No allocation for type: {allocation_type.value}")
+            if not allocation:"""
+safe_safe_print(f"\\u274c No allocation for type: {allocation_type.value}")
                 return None
 
 # Check if we can store more entries
-            current_entries = len(self.db_manager.get_memory_entries(allocation_type, limit = allocation.max_entries + 1))
+current_entries = len(self.db_manager.get_memory_entries(allocation_type, limit = allocation.max_entries + 1))
             if current_entries >= allocation.max_entries:
                 if allocation.auto_cleanup:
                     self.db_manager.cleanup_expired_entries()
@@ -862,16 +907,16 @@ class MemoryAllocationManager:
                     if current_entries >= allocation.max_entries:
                         safe_safe_print(f"\\u26a0\\ufe0f Memory full for {allocation_type.value}")
                         return None
-                else:
+else:
                     safe_safe_print(f"\\u274c Memory full for {allocation_type.value}")
                     return None
 
 # Create memory entry
-            entry_id = str(uuid.uuid4())
+entry_id = str(uuid.uuid4())
             data_json = json.dumps(data, sort_keys = True, default = str)
             data_hash = hashlib.sha256(data_json.encode()).hexdigest()
 
-            entry = MemoryEntry(
+entry = MemoryEntry(
                 entry_id = entry_id,
                 allocation_type = allocation_type,
                 timestamp = datetime.now(),
@@ -885,22 +930,24 @@ class MemoryAllocationManager:
             )
 
 # Store entry
-            if self.db_manager.store_memory_entry(entry):
+if self.db_manager.store_memory_entry(entry):
                 safe_safe_print(f"\\u2705 Memory allocated: {entry_id[:8]}... ({allocation_type.value})")
                 return entry_id
-            else:
+else:
                 return None
 
-        except Exception as e:
+except Exception as e:
             safe_safe_print(f"\\u274c Memory allocation failed: {safe_format_error(e, 'memory_allocate')}")
             return None
 
-    def get_allocation_stats(self) -> Dict[str, Any]:
-
-        """Get allocation statistics."""
+def get_allocation_stats(self) -> Dict[str, Any]:
+    """Function implementation pending."""
+pass
 """
+"""Get allocation statistics.""""""
+""""""
 """
-        try:
+try:
             stats = {}
             for allocation_type, allocation in self.allocations.items():
                 entries = self.db_manager.get_memory_entries(allocation_type, limit = 1000000)
@@ -913,72 +960,76 @@ class MemoryAllocationManager:
                     'auto_cleanup': allocation.auto_cleanup,
                     'priority': allocation.priority,
                     'usage_percent': (len(entries) / allocation.max_entries) * 100
-                }
             return stats
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Stats retrieval failed: {safe_format_error(e, 'allocation_stats')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Stats retrieval failed: {safe_format_error(e, 'allocation_stats')}")
             return {}
 
 
 class PersistentStateManager:
 
-    """
+""""""
+""""""
 """
-"""
-    Persistent State Manager - Comprehensive persistent storage system.
+Persistent State Manager - Comprehensive persistent storage system.
 
-    Provides enterprise - grade persistent state management including:
+Provides enterprise - grade persistent state management including:
     - Durable storage for Demo Memory Core
-    - Append - only trade / quote ledger
-    - Cryptographic hash chain for tamper evidence
-    - Memory allocation management
-    - Integration with all Schwabot core systems
-    """
-"""
+- Append - only trade / quote ledger
+- Cryptographic hash chain for tamper evidence
+- Memory allocation management
+- Integration with all Schwabot core systems"""
+""""""
+""""""
 """
 
-    def __init__(self, storage_type: StorageType = StorageType.SQLITE, config: Optional[Dict[str, Any]] = None):
-
-        """Initialize persistent state manager."""
+def __init__(self, storage_type: StorageType = StorageType.SQLITE, config: Optional[Dict[str, Any]] = None):"""
+    """Function implementation pending."""
+pass
 """
+"""Initialize persistent state manager.""""""
+""""""
 """
-        self.config = config or {}
+self.config = config or {}
         self.storage_type = storage_type
         self.db_manager = DatabaseManager(storage_type, config)
         self.memory_manager = MemoryAllocationManager(self.db_manager)
 
 # Performance tracking
-        self.total_stores = 0
+self.total_stores = 0
         self.successful_stores = 0
         self.failed_stores = 0
-
-        safe_safe_print("\\u1f4be Persistent State Manager initialized")
-
-    def store_btc_hashing_data(self, btc_data: Dict[str, Any]) -> Optional[str]:
-
-        """Store BTC hashing data (3.75 minute intervals)."""
 """
+safe_safe_print("\\u1f4be Persistent State Manager initialized")
+
+def store_btc_hashing_data(self, btc_data: Dict[str, Any]) -> Optional[str]:
+    """Function implementation pending."""
+pass
 """
-        try:
+"""Store BTC hashing data (3.75 minute intervals).""""""
+""""""
+"""
+try:
+    pass  # TODO: Implement try block
 # Add metadata
-            btc_data['data_type'] = 'btc_hashing'
+btc_data['data_type'] = 'btc_hashing'
             btc_data['interval_minutes'] = 3.75
             btc_data['timestamp'] = datetime.now().isoformat()
 
 # Allocate to short - term memory
-            entry_id = self.memory_manager.allocate_memory(
+entry_id = self.memory_manager.allocate_memory(
                 data = btc_data,
                 data_type='btc_hashing',
                 allocation_type = MemoryAllocationType.SHORT_TERM
             )
 
-            if entry_id:
+if entry_id:
                 self.successful_stores += 1
 
 # Log operation
-                if CORE_SYSTEMS_AVAILABLE:
-                    log_operation(
+if CORE_SYSTEMS_AVAILABLE:
+                    log_operation("""
                         operation="btc_hashing_store",
                         component="persistent_state",
                         level = LogLevel.INFO,
@@ -987,27 +1038,30 @@ class PersistentStateManager:
                         allocation_type="short_term"
                     )
 
-            self.total_stores += 1
+self.total_stores += 1
             return entry_id
 
-        except Exception as e:
+except Exception as e:
             self.failed_stores += 1
             safe_safe_print(f"\\u274c BTC data storage failed: {safe_format_error(e, 'btc_store')}")
             return None
 
-    def store_trade_data(self, trade_data: Dict[str, Any]) -> Optional[str]:
-
-        """Store trade data."""
+def store_trade_data(self, trade_data: Dict[str, Any]) -> Optional[str]:
+    """Function implementation pending."""
+pass
 """
+"""Store trade data.""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # Create trade ledger entry
-            ledger_id = str(uuid.uuid4())
+ledger_id = str(uuid.uuid4())
             trade_hash = hashlib.sha256(
                 json.dumps(trade_data, sort_keys = True, default = str).encode()
             ).hexdigest()
 
-            entry = TradeLedgerEntry(
+entry = TradeLedgerEntry(
                 ledger_id = ledger_id,
                 timestamp = datetime.now(),
                 exchange = trade_data.get('exchange', 'unknown'),
@@ -1024,19 +1078,19 @@ class PersistentStateManager:
             )
 
 # Store in trade ledger
-            if self.db_manager.store_trade_ledger_entry(entry):
+if self.db_manager.store_trade_ledger_entry(entry):
 # Also store in mid - term memory
-                memory_id = self.memory_manager.allocate_memory(
+memory_id = self.memory_manager.allocate_memory(
                     data = trade_data,
                     data_type='trade_data',
                     allocation_type = MemoryAllocationType.MID_TERM
                 )
 
-                self.successful_stores += 1
+self.successful_stores += 1
 
 # Log operation
-                if CORE_SYSTEMS_AVAILABLE:
-                    log_operation(
+if CORE_SYSTEMS_AVAILABLE:
+                    log_operation("""
                         operation="trade_data_store",
                         component="persistent_state",
                         level = LogLevel.INFO,
@@ -1045,39 +1099,42 @@ class PersistentStateManager:
                         memory_id = memory_id
                     )
 
-                return ledger_id
+return ledger_id
 
-            self.failed_stores += 1
+self.failed_stores += 1
             return None
 
-        except Exception as e:
+except Exception as e:
             self.failed_stores += 1
             safe_safe_print(f"\\u274c Trade data storage failed: {safe_format_error(e, 'trade_store')}")
             return None
 
-    def store_analysis_data(self, analysis_data: Dict[str, Any]) -> Optional[str]:
-
-        """Store analysis data (long - term)."""
+def store_analysis_data(self, analysis_data: Dict[str, Any]) -> Optional[str]:
+    """Function implementation pending."""
+pass
 """
+"""Store analysis data (long - term).""""""
+""""""
 """
-        try:
+try:
+    pass  # TODO: Implement try block
 # Add metadata
-            analysis_data['data_type'] = 'analysis'
+analysis_data['data_type'] = 'analysis'
             analysis_data['timestamp'] = datetime.now().isoformat()
 
 # Allocate to long - term memory
-            entry_id = self.memory_manager.allocate_memory(
+entry_id = self.memory_manager.allocate_memory(
                 data = analysis_data,
                 data_type='analysis',
                 allocation_type = MemoryAllocationType.LONG_TERM
             )
 
-            if entry_id:
+if entry_id:
                 self.successful_stores += 1
 
 # Log operation
-                if CORE_SYSTEMS_AVAILABLE:
-                    log_operation(
+if CORE_SYSTEMS_AVAILABLE:
+                    log_operation("""
                         operation="analysis_data_store",
                         component="persistent_state",
                         level = LogLevel.INFO,
@@ -1086,62 +1143,68 @@ class PersistentStateManager:
                         allocation_type="long_term"
                     )
 
-            self.total_stores += 1
+self.total_stores += 1
             return entry_id
 
-        except Exception as e:
+except Exception as e:
             self.failed_stores += 1
             safe_safe_print(f"\\u274c Analysis data storage failed: {safe_format_error(e, 'analysis_store')}")
             return None
 
-    def get_btc_hashing_history(self, hours: int = 24) -> List[Dict[str, Any]]:
-
-        """Get BTC hashing history."""
+def get_btc_hashing_history(self, hours: int = 24) -> List[Dict[str, Any]]:
+    """Function implementation pending."""
+pass
 """
+"""Get BTC hashing history.""""""
+""""""
 """
-        try:
+try:
             cutoff_time = datetime.now() - timedelta(hours = hours)
             entries = self.db_manager.get_memory_entries(MemoryAllocationType.SHORT_TERM, limit = 10000)
 
 # Filter by time and type
-            btc_entries = [
+btc_entries = [
                 entry for entry in entries
-                if entry.timestamp >= cutoff_time and entry.data_type == 'btc_hashing'
+if entry.timestamp >= cutoff_time and entry.data_type == 'btc_hashing'
             ]
 
-            return [entry.metadata for entry in btc_entries]
+return [entry.metadata for entry in btc_entries]
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c BTC history retrieval failed: {safe_format_error(e, 'btc_history')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c BTC history retrieval failed: {safe_format_error(e, 'btc_history')}")
             return []
 
-    def get_trade_history(self, exchange: Optional[str] = None, days: int = 7) -> List[Dict[str, Any]]:
-
-        """Get trade history."""
+def get_trade_history(self, exchange: Optional[str] = None, days: int = 7) -> List[Dict[str, Any]]:
+    """Function implementation pending."""
+pass
 """
+"""Get trade history.""""""
+""""""
 """
-        try:
+try:
             entries = self.db_manager.get_trade_history(exchange, limit = 10000)
 
 # Filter by time
-            cutoff_time = datetime.now() - timedelta(days = days)
+cutoff_time = datetime.now() - timedelta(days = days)
             recent_entries = [
                 entry for entry in entries
-                if entry.timestamp >= cutoff_time
+if entry.timestamp >= cutoff_time
             ]
 
-            return [asdict(entry) for entry in recent_entries]
+return [asdict(entry) for entry in recent_entries]
 
-        except Exception as e:
-            safe_safe_print(f"\\u274c Trade history retrieval failed: {safe_format_error(e, 'trade_history')}")
+except Exception as e:"""
+safe_safe_print(f"\\u274c Trade history retrieval failed: {safe_format_error(e, 'trade_history')}")
             return []
 
-    def get_system_status(self) -> Dict[str, Any]:
-
-        """Get system status."""
+def get_system_status(self) -> Dict[str, Any]:
+    """Function implementation pending."""
+pass
 """
+"""Get system status.""""""
+""""""
 """
-        return {
+return {
             'storage_type': self.storage_type.value,
             'total_stores': self.total_stores,
             'successful_stores': self.successful_stores,
@@ -1149,7 +1212,6 @@ class PersistentStateManager:
             'success_rate': self.successful_stores / unified_math.max(self.total_stores, 1),
             'allocation_stats': self.memory_manager.get_allocation_stats(),
             'hash_chain_summary': self.db_manager.hash_chain.get_chain_summary()
-        }
 
 
 # Global persistent state manager instance
@@ -1157,93 +1219,105 @@ persistent_state_manager = PersistentStateManager()
 
 
 # Convenience functions for external access
-def get_persistent_state_manager() -> PersistentStateManager:
-
-    """Get global persistent state manager instance."""
+def get_persistent_state_manager() -> PersistentStateManager:"""
+    """Function implementation pending."""
+pass
 """
+"""Get global persistent state manager instance.""""""
+""""""
 """
-    return persistent_state_manager
+return persistent_state_manager
 
 
-def store_btc_hashing_data(btc_data: Dict[str, Any]) -> Optional[str]:
-
-    """Store BTC hashing data."""
+def store_btc_hashing_data(btc_data: Dict[str, Any]) -> Optional[str]:"""
+    """Function implementation pending."""
+pass
 """
+"""Store BTC hashing data.""""""
+""""""
 """
-    return persistent_state_manager.store_btc_hashing_data(btc_data)
+return persistent_state_manager.store_btc_hashing_data(btc_data)
 
 
-def store_trade_data(trade_data: Dict[str, Any]) -> Optional[str]:
-
-    """Store trade data."""
+def store_trade_data(trade_data: Dict[str, Any]) -> Optional[str]:"""
+    """Function implementation pending."""
+pass
 """
+"""Store trade data.""""""
+""""""
 """
-    return persistent_state_manager.store_trade_data(trade_data)
+return persistent_state_manager.store_trade_data(trade_data)
 
 
-def store_analysis_data(analysis_data: Dict[str, Any]) -> Optional[str]:
-
-    """Store analysis data."""
+def store_analysis_data(analysis_data: Dict[str, Any]) -> Optional[str]:"""
+    """Function implementation pending."""
+pass
 """
+"""Store analysis data.""""""
+""""""
 """
-    return persistent_state_manager.store_analysis_data(analysis_data)
+return persistent_state_manager.store_analysis_data(analysis_data)
 
 
-def get_btc_hashing_history(hours: int = 24) -> List[Dict[str, Any]]:
-
-    """Get BTC hashing history."""
+def get_btc_hashing_history(hours: int = 24) -> List[Dict[str, Any]]:"""
+    """Function implementation pending."""
+pass
 """
+"""Get BTC hashing history.""""""
+""""""
 """
-    return persistent_state_manager.get_btc_hashing_history(hours)
+return persistent_state_manager.get_btc_hashing_history(hours)
 
 
-def get_trade_history(exchange: Optional[str] = None, days: int = 7) -> List[Dict[str, Any]]:
-
-    """Get trade history."""
+def get_trade_history(exchange: Optional[str] = None, days: int = 7) -> List[Dict[str, Any]]:"""
+    """Function implementation pending."""
+pass
 """
+"""Get trade history.""""""
+""""""
 """
-    return persistent_state_manager.get_trade_history(exchange, days)
+return persistent_state_manager.get_trade_history(exchange, days)
 
 
-def get_persistent_state_status() -> Dict[str, Any]:
-
-    """Get persistent state status."""
+def get_persistent_state_status() -> Dict[str, Any]:"""
+    """Function implementation pending."""
+pass
 """
+"""Get persistent state status.""""""
+""""""
 """
-    return persistent_state_manager.get_system_status()
+return persistent_state_manager.get_system_status()
 
 
-# Example usage
+# Example usage"""
 if __name__ == "__main__":
 # Test persistent state manager
-    safe_print("\\u1f9ea Testing Persistent State Manager...")
+safe_print("\\u1f9ea Testing Persistent State Manager...")
 
 # Test BTC hashing data storage
-    btc_data = {
+btc_data = {
         'btc_price': 50000.0,
         'hash_rate': 150.5,
         'difficulty': 25.6,
         'block_height': 800000
-    }
 
-    entry_id = store_btc_hashing_data(btc_data)
+entry_id = store_btc_hashing_data(btc_data)
     safe_print(f"\\u2705 BTC data stored: {entry_id}")
 
 # Test trade data storage
-    trade_data = {
+trade_data = {
         'exchange': 'binance',
         'symbol': 'BTC / USDT',
         'side': 'buy',
         'amount': 0.001,
         'price': 50000.0,
         'status': 'filled'
-    }
 
-    trade_id = store_trade_data(trade_data)
+trade_id = store_trade_data(trade_data)
     safe_print(f"\\u2705 Trade data stored: {trade_id}")
 
 # Get status
-    status = get_persistent_state_status()
+status = get_persistent_state_status()
     safe_print(f"\\u2705 System status: {status}")
 
-    safe_print("\\u2705 Persistent State Manager test completed")
+safe_print("\\u2705 Persistent State Manager test completed")

@@ -1,17 +1,17 @@
 # -*- coding: utf - 8 -*-
-"""Strategy matrix for adaptive vector projection."""
-"""
-"""
-"""
-"""
+"""Strategy matrix for adaptive vector projection.""""""
+""""""
+""""""
+""""""
+""""""
 """Strategy matrix for adaptive vector projection."""
 # -*- coding: utf - 8 -*-
-
 """
-"""
-"""
-"""
-"""Strategy matrix for adaptive vector projection."""
+""""""
+""""""
+""""""
+""""""
+"""Strategy matrix for adaptive vector projection.""""""
 """Strategy matrix for adaptive vector projection."""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
@@ -20,35 +20,36 @@ from __future__ import annotations
 from core.unified_math_system import unified_math
 
 
-def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:
-    """Compute adaptive projection \\u03a0\\u2093 = \\u03a3 w\\u1d62\\u00b7V\\u1d62.
+def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:"""
+    """Compute adaptive projection \\u03a0\\u2093 = \\u03a3 w\\u1d62\\u00b7V\\u1d62."
 
-    Perform vectorized dot product for weighted vector combination
-    supporting both static and dynamic weight updates.
+Perform vectorized dot product for weighted vector combination
+supporting both static and dynamic weight updates.
 
-    Args:
+Args:
         weights: Weight coefficients array
-        vectors: Vector matrix (weights axis should align)
+vectors: Vector matrix (weights axis should align)
 
-    Returns:
+Returns:
         Projected vector result
 
-    Raises:
-        ValueError: If dimension mismatch occurs
-    """
-
+Raises:
+        ValueError: If dimension mismatch occurs"""
+"""
 
 """
+""""""
 """
    if weights.shape[0] != vectors.shape[0]:
-        raise ValueError(
+        raise ValueError("""
             f"Weight dimension {weights.shape[0]} != "
             f"vector dimension {vectors.shape[0]}"
         )
 
-    return np.tensordot(weights, vectors, axes=1)
+return np.tensordot(weights, vectors, axes=1)
 
-"""
-"""
+""""""
+""""""
+""""""
 """
 """

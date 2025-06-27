@@ -1,14 +1,15 @@
-"""Type - inference name patterns for TypeEnforcer helper."""
-"""
-"""
-"""
-"""
+# -*- coding: utf-8 -*-
+"""Type - inference name patterns for TypeEnforcer helper.""""""
+""""""
+""""""
+""""""
+""""""
 """Type - inference name patterns for TypeEnforcer helper."""
 
 
 # core / type_patterns.py
 # SCHWABOT_DYNAMIC_EXPANSION_START
-float_patterns = {
+float_patterns = {"""
     "price": "float",
     "volume": "float",
     "quantity": "float",
@@ -32,7 +33,6 @@ float_patterns = {
     "risk": "float",
     "exposure": "float",
     "leverage": "float",
-}
 
 list_patterns = {
     "waveform": "List[float]",
@@ -44,7 +44,6 @@ list_patterns = {
     "names": "List[str]",
     "symbols": "List[str]",
     "tickers": "List[str]",
-}
 
 dict_patterns = {
     "indicator": "Dict[str, float]",
@@ -66,13 +65,11 @@ dict_patterns = {
     "config": "Dict[str, Any]",
     "params": "Dict[str, Any]",
     "kwargs": "Dict[str, Any]",
-}
 
 datetime_patterns = {
     "timestamp": "datetime",
     "time": "datetime",
     "date": "datetime",
-}
 
 str_patterns = {
     "period": "str",
@@ -88,7 +85,6 @@ str_patterns = {
     "ticker": "str",
     "currency": "str",
     "format": "str",
-}
 
 bool_patterns = {
     "enabled": "bool",
@@ -100,7 +96,6 @@ bool_patterns = {
     "visible": "bool",
     "debug": "bool",
     "verbose": "bool",
-}
 
 int_patterns = {
     "duration": "int",
@@ -115,7 +110,6 @@ int_patterns = {
     "tick": "int",
     "step": "int",
     "level": "int",
-}
 
 # Merge all patterns
 
@@ -129,7 +123,8 @@ type_patterns.update(bool_patterns)
 type_patterns.update(int_patterns)
 # SCHWABOT_DYNAMIC_EXPANSION_END
 
-"""
-"""
+""""""
+""""""
+""""""
 """
 """

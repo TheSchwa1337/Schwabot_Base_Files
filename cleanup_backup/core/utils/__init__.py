@@ -1,22 +1,23 @@
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
-"""
+# -*- coding: utf-8 -*-
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
 """
 
 
 Core Utils Package.
 
-This package contains utility modules for Schwabot core functionality.
-"""
-"""
+This package contains utility modules for Schwabot core functionality."""
+""""""
+""""""
 """
 
 from .windows_cli_compatibility import (
@@ -27,7 +28,7 @@ from .windows_cli_compatibility import (
     cli_handler,
 )
 
-__all__ = [
+__all__ = ["""
     "WindowsCliCompatibilityHandler",
     "safe_print",
     "safe_format_error",

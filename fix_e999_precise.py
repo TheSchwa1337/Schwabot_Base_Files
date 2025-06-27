@@ -7,38 +7,38 @@ import re
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
+""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-"""
-Precise fixer for E999 errors based on actual code patterns found.
-"""
-"""
-"""
-"""
+Precise fixer for E999 errors based on actual code patterns found."""
+""""""
+""""""
+""""""
+""""""
 """
 
 
-def fix_file_precise(filepath: str) -> bool:
+def fix_file_precise(filepath: str) -> bool:"""
     """Fix E999 errors in a single file with precise patterns."""
 
-
 """
-"""
-"""
+""""""
+""""""
+""""""
 """
    try:
         with open(filepath, 'r', encoding='utf - 8') as f:
             content = f.read()
 
-        original_content = content
+original_content = content
         fixes_applied = 0
-
-        print(f"Processing {filepath}...")
+"""
+print(f"Processing {filepath}...")
 
 # Fix specific patterns found in the code
-        if filepath == "core / adaptive_trainer.py":
+if filepath == "core / adaptive_trainer.py":
     # Line 229: data: Optional[Dict[str, Any)) = None] -> str:
             content, count = re.subn(r'Optional\[Dict\[str, Any\)\) = None\]',
                                      r'Optional[Dict[str, Any]] = None', content)
@@ -54,42 +54,42 @@ def fix_file_precise(filepath: str) -> bool:
                                      r'data: Optional[Dict[str, Any]] = None', content)
             fixes_applied += count
 
-        elif filepath == "core / auth_manager.py":
+elif filepath == "core / auth_manager.py":
     # Line 189: metadata={"is_default": True}]
             content, count = re.subn(r'metadata=\{"is_default": True\}\]', r'metadata={"is_default": True})', content)
             fixes_applied += count
 
-        elif filepath == "core / backup_manager.py":
+elif filepath == "core / backup_manager.py":
     # Line 796: metadata={"backup_type": backup_type}]
             content, count = re.subn(r'metadata=\{"backup_type": backup_type\}\]',
                                      r'metadata={"backup_type": backup_type})', content)
             fixes_applied += count
 
-        elif filepath == "core / cache_store.py":
+elif filepath == "core / cache_store.py":
     # Line 202: metadata={"cache_level": level.value}]
             content, count = re.subn(r'metadata=\{"cache_level": level\.value\}\]',
                                      r'metadata={"cache_level": level.value})', content)
             fixes_applied += count
 
-        elif filepath == "core / config_manager.py":
+elif filepath == "core / config_manager.py":
     # Line 306: metadata={"config_type": config_type}]
             content, count = re.subn(r'metadata=\{"config_type": config_type\}\]',
                                      r'metadata={"config_type": config_type})', content)
             fixes_applied += count
 
-        elif filepath == "core / network_manager.py":
+elif filepath == "core / network_manager.py":
     # Line 203: metadata={"network_type": network_type}]
             content, count = re.subn(r'metadata=\{"network_type": network_type\}\]',
                                      r'metadata={"network_type": network_type})', content)
             fixes_applied += count
 
-        elif filepath == "core / orchestrator.py":
+elif filepath == "core / orchestrator.py":
     # Line 128: metadata={"orchestration_type": orchestration_type}]
             content, count = re.subn(r'metadata=\{"orchestration_type": orchestration_type\}\]',
                                      r'metadata={"orchestration_type": orchestration_type})', content)
             fixes_applied += count
 
-        elif filepath == "core / temporal_execution_correction_layer.py":
+elif filepath == "core / temporal_execution_correction_layer.py":
     # Line 397: metadata={"correction_type": correction_type}]
             content, count = re.subn(r'metadata=\{"correction_type": correction_type\}\]',
                                      r'metadata={"correction_type": correction_type})', content)
@@ -121,18 +121,18 @@ def fix_file_precise(filepath: str) -> bool:
         fixes_applied += count
 
 # Fix indentation errors
-        lines = content.split('\n')
+lines = content.split('\n')
         for i, line in enumerate(lines):
             stripped = line.strip()
 # Fix unexpected unindent for function / class definitions
-            if stripped.startswith(('def ', 'class ', 'import ', 'from ')) and line.startswith('    '):
+if stripped.startswith(('def ', 'class ', 'import ', 'from ')) and line.startswith('    '):
                 lines[i] = stripped
                 fixes_applied += 1
 
-        content = '\n'.join(lines)
+content = '\n'.join(lines)
 
 # Fix missing indented blocks after try
-        lines = content.split('\n')
+lines = content.split('\n')
         for i, line in enumerate(lines):
             if line.strip() == 'try:' and i + 1 < len(lines):
                 next_line = lines[i + 1]
@@ -142,16 +142,16 @@ def fix_file_precise(filepath: str) -> bool:
         content = '\n'.join(lines)
 
 # Only write if changes were made
-        if content != original_content:
+if content != original_content:
             with open(filepath, 'w', encoding='utf - 8') as f:
                 f.write(content)
             print(f"  Applied {fixes_applied} fixes to {filepath}")
             return True
-        else:
+else:
             print(f"  No changes needed for {filepath}")
             return False
 
-    except Exception as e:
+except Exception as e:
         print(f"  Error fixing {filepath}: {e}")
         return False
 
@@ -159,15 +159,15 @@ def fix_file_precise(filepath: str) -> bool:
 def main():
     """Main function to fix E999 errors with precise patterns."""
 
-
 """
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
    print("Starting precise E999 error fixing...")
 
 # Files with E999 errors
-    target_files = [
+target_files = [
         'core / adaptive_trainer.py',
         'core / analysis_engine.py',
         'core / auth_manager.py',
@@ -202,17 +202,17 @@ def main():
         'core / utilities.py',
     ]
 
-    fixed_count = 0
+fixed_count = 0
     total_files = len(target_files)
 
-    for filepath in target_files:
+for filepath in target_files:
         if os.path.exists(filepath):
             if fix_file_precise(filepath):
                 fixed_count += 1
         else:
             print(f"  File not found: {filepath}")
 
-    print(f"\\nCompleted precise E999 error fixing:")
+print(f"\\nCompleted precise E999 error fixing:")
     print(f"  Files processed: {total_files}")
     print(f"  Files modified: {fixed_count}")
     print("  Precise fixing complete!")

@@ -1,3 +1,4 @@
+import numpy as np
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
@@ -10,558 +11,265 @@ import logging
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
-""""""
-""""""
-""""""
-Recursive Trade Lock - Blocks recursive feedback when previous cycle profit is unresolved.
+# EMERGENCY: """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+# EMERGENCY: """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Function implementation pending."""  # Original error: invalid syntax (<unknown>, line 15)
+"""
+print("[INFO] {message}")
 
-Mathematical Foundation:
-- Lock state: L(t + 1) = 1 if C(t) = 0 or P(t) < delta, else L(t + 1) = 0
-- Where C(t) = completion state, P(t) = profit, delta = minimum profit threshold
-- Prevents infinite loop re - entry if Ferris stalls
-- Monitors flag triggers and completion states
+def warn(message):
+    """Emergency consolidated docstring."""
+print("[WARN] {message}")
 
-Based on Schwabot's mathematical framework for recursive trade protection.'
-""""""
-""""""
-""""""
+def error(message):
+    """Emergency consolidated docstring."""
+print("[ERROR] {message}")
 
+def success(message):
+    """Emergency consolidated docstring."""
+print("[SUCCESS] {message}")
 
-# Import safe print for Windows compatibility
-try:
-    from core.utils.windows_cli_compatibility import ()
-        safe_print, info, warn, error, success, debug
-
-    CLI_HANDLER_AVAILABLE = True
-except Exception as e:
-    pass
-
-except ImportError:
-    CLI_HANDLER_AVAILABLE = False
-
-    def safe_print(message):
-
-        print(message)
-
-    def info(message):
-
-        print(f"[INFO] {message}")
-
-    def warn(message):
-
-        print(f"[WARN] {message}")
-
-    def error(message):
-
-        print(f"[ERROR] {message}")
-
-    def success(message):
-
-        print(f"[SUCCESS] {message}")
-
-    def debug(message):
-
-        print(f"[DEBUG] {message}")
+def debug(message):
+    """Emergency consolidated docstring."""
+print("[DEBUG] {message}")
 
 # Import core modules
 try:
     from core.unified_math_system import unified_math
-    CORE_MODULES_AVAILABLE = True
+CORE_MODULES_AVAILABLE = True
 except Exception as e:
     pass
 
 except ImportError:
-    CORE_MODULES_AVAILABLE = False
+    CORE_MODULES_AVAILABLE=False
 # Mock unified_math for testing
 
 
 class Placeholder:
+    pass  # Emergency placeholder
 
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-        @staticmethod
-        def max(a, b):
-
-            return max(a, b)
-
-        @staticmethod
-        def min(a, b):
-
-            return min(a, b)
-    unified_math = UnifiedMath()
-
-
-logger = logging.getLogger(__name__)
-
-# Default parameters
-DEFAULT_UNLOCK_THRESHOLD = 0.7  # 0.7%
-DEFAULT_MAX_WAIT_TIME = 300  # 5 minutes
-DEFAULT_MIN_PROFIT_THRESHOLD = 0.1  # 0.1%
-
-
-class LockState(Enum):
-
-    """Lock state enumeration."""
-
-
-""""""
-""""""
-    LOCKED = "locked"
-    UNLOCKED = "unlocked"
-    PENDING = "pending"
+"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Function implementation pending."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""Emergency consolidated docstring."""
+LOCKED = "locked"
+    UNLOCKED="unlocked"
+    PENDING="pending"
 
 
 @dataclass
 class Placeholder:
+    pass  # Emergency placeholder
 
-    """[BRAIN] Placeholder class for recursive profit mapping"""
+"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+logger.info()"""
+        "Recursive Trade Lock initialized with threshold = {unlock_threshold}"
 
+def mark_complete(self, profit: float) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+Profit achieved in the completed cycle"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+        logger.warning("Invalid profit type: {type(profit)}")
+        return
 
-""""""
-""""""
-    pass
-    """Result of lock state check."""
-""""""
-""""""
-    can_continue: bool
-    lock_state: LockState
-    last_profit: float
-    threshold: float
-    wait_time: float
-    completion_flag: bool
-    timestamp: datetime = field(default_factory=datetime.now)
-
-
-class Placeholder:
-
-    """[BRAIN] Placeholder class for recursive profit mapping"""
-
-
-""""""
-""""""
-    pass
-    """"""
-""""""
-""""""
-    Blocks recursive feedback when previous cycle profit is unresolved.
-
-    Mathematical Foundation:
-    - Lock state: L(t + 1) = 1 if C(t) = 0 or P(t) < delta, else L(t + 1) = 0
-    - Where C(t) = completion state, P(t) = profit, delta = minimum profit threshold
-    - Prevents infinite loop re - entry if Ferris stalls
-    - Monitors flag triggers and completion states
-    """"""
-""""""
-""""""
-
-    def __init__():
-
-        self,
-        unlock_threshold: float = DEFAULT_UNLOCK_THRESHOLD,
-        max_wait_time: int = DEFAULT_MAX_WAIT_TIME,
-        min_profit_threshold: float = DEFAULT_MIN_PROFIT_THRESHOLD,
-        adaptive_threshold: bool = True,
-        -> None:
-        """Initialize the recursive trade lock."""
-""""""
-""""""
-        self.unlock_threshold = unlock_threshold
-        self.max_wait_time = max_wait_time
-        self.min_profit_threshold = min_profit_threshold
-        self.adaptive_threshold = adaptive_threshold
-
-# Lock state tracking
-        self.locked = True
-        self.last_profit = 0.0
-        self.complete_flag = False
-        self.lock_start_time = datetime.now()
-        self.last_update_time = datetime.now()
-
-# Performance tracking
-        self.total_checks = 0
-        self.successful_unlocks = 0
-        self.profit_history: list = []
-        self.lock_durations: list = []
-
-        logger.info()
-            f"Recursive Trade Lock initialized with threshold={unlock_threshold}"
-
-    def mark_complete(self, profit: float) -> None:
-
-        """"""
-""""""
-""""""
-        Mark a cycle as complete with associated profit.
-
-        Parameters:
-        -----------
-        profit : float
-            Profit achieved in the completed cycle
-        """"""
-""""""
-""""""
-        try:
-        except Exception as e:
-            pass
-
-# Validate profit value
-            if not isinstance(profit, (int, float)):
-                logger.warning(f"Invalid profit type: {type(profit)}")
-                return
-
-            self.last_profit = float(profit)
-            self.complete_flag = True
-            self.last_update_time = datetime.now()
+self.last_profit = float(profit)
+        self.complete_flag = True
+        self.last_update_time=datetime.now()
 
 # Store profit history
-            self.profit_history.append(profit)
-            if len(self.profit_history) > 100:
-                self.profit_history.pop(0)
+self.profit_history.append(profit)
+        if len(self.profit_history) > 100:
+        self.profit_history.pop(0)
 
-            logger.debug(f"Marked cycle complete with profit: {profit:.4f}")
+logger.debug("Marked cycle complete with profit: {profit:.4f}")
 
-        except Exception as e:
-            logger.error(f"Error marking cycle complete: {e}")
+except Exception as e:
+        logger.error("Error marking cycle complete: {e}")
 
-    def reset_cycle(self) -> None:
+def reset_cycle(self) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+"""
+logger.debug("Reset cycle lock state")
 
-        """Reset the lock for a new cycle."""
-""""""
-""""""
-        try:
-        except Exception as e:
-            pass
+except Exception as e:
+        logger.error("Error resetting cycle: {e}")
 
-# Calculate lock duration if cycle was completed
-            if self.complete_flag:
-                duration = ()
-                    self.last_update_time -
-                    self.lock_start_time.total_seconds()
-                self.lock_durations.append(duration)
-                if len(self.lock_durations) > 50:
-                    self.lock_durations.pop(0)
-
-# Reset state
-            self.locked = True
-            self.complete_flag = False
-            self.lock_start_time = datetime.now()
-            self.last_update_time = datetime.now()
-
-            logger.debug("Reset cycle lock state")
-
-        except Exception as e:
-            logger.error(f"Error resetting cycle: {e}")
-
-    def can_continue(self) -> bool:
-
-        """"""
-""""""
-""""""
-        Check if recursive trading can continue.
-
-        Mathematical Logic:
-        L(t + 1) = 0 if C(t) = 1 and P(t) >= delta, else L(t + 1) = 1
-        Where:
-        - C(t) = completion_flag
-        - P(t) = last_profit
-        - delta = unlock_threshold
-
-        Returns:
-        --------
-        bool
-            True if trading can continue, False if locked
-        """"""
-""""""
-""""""
-        try:
-            result = self.calculate_lock_result()
-#             return result.can_continue
-
-        except Exception as e:
-            logger.error(f"Error checking if can continue: {e}")
+def can_continue(self) -> bool:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+True if trading can continue, False if locked"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+logger.error("Error checking if can continue: {e}")
 #             return False
 
-    def calculate_lock_result(self) -> LockResult:
-
-        """"""
-""""""
-""""""
-        Calculate detailed lock state result.
-
-        Mathematical Process:
-        1. Check completion flag status
-        2. Validate profit against threshold
-        3. Check wait time constraints
-        4. Determine lock state
-        5. Return detailed result with metadata
-
-        Returns:
-        --------
-        LockResult
-            Detailed lock state result
-        """"""
-""""""
-""""""
-        try:
-        except Exception as e:
-            pass
-
-# Calculate wait time
-            wait_time = (datetime.now() - self.lock_start_time).total_seconds()
-
-# Determine lock state based on mathematical logic
-            if self.complete_flag and self.last_profit >= self.unlock_threshold:
-# Unlock condition met: C(t) = 1 and P(t) >= delta
-                self.locked = False
-                lock_state = LockState.UNLOCKED
-                can_continue = True
-            elif wait_time > self.max_wait_time:
-# Force unlock after max wait time
-                self.locked = False
-                lock_state = LockState.UNLOCKED
-                can_continue = True
-                logger.warning()
-                    f"Force unlocked after {"}
-                        wait_time:.1fs wait time""
-            elif self.complete_flag and self.last_profit < self.min_profit_threshold:
+def calculate_lock_result(self) -> LockResult:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+Detailed lock state result"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
+        f"Force unlocked after {"}
+        wait_time:.1fs wait time""
+elif self.complete_flag and self.last_profit < self.min_profit_threshold:
+    pass  # Emergency placeholder
 # Complete but insufficient profit
-                self.locked = True
-                lock_state = LockState.LOCKED
-                can_continue = False
-            else:
+self.locked = True
+        lock_state=LockState.LOCKED
+        can_continue=False
+        else:
+            pass  # Emergency placeholder
 # Still pending or incomplete
-                self.locked = True
-                lock_state = LockState.PENDING
-                can_continue = False
+self.locked=True
+        lock_state=LockState.PENDING
+        can_continue=False
 
 # Update performance tracking
-            self.total_checks += 1
-            if can_continue and not self.locked:
-                self.successful_unlocks += 1
+self.total_checks += 1
+        if can_continue and not self.locked:
+        self.successful_unlocks += 1
 
 # Update adaptive threshold if enabled
-            if self.adaptive_threshold:
-                self._update_adaptive_threshold()
+if self.adaptive_threshold:
+        self._update_adaptive_threshold()
 
-            result = LockResult()
-                can_continue = can_continue,
-                lock_state = lock_state,
-                last_profit = self.last_profit,
-                threshold = self.unlock_threshold,
-                wait_time = wait_time,
-                completion_flag = self.complete_flag
+result = LockResult()
+        can_continue = can_continue,
+        lock_state = lock_state,
+        last_profit = self.last_profit,
+        threshold = self.unlock_threshold,
+        wait_time = wait_time,
+        completion_flag = self.complete_flag
 
 
 #             return result
 
-        except Exception as e:
-            logger.error(f"Error calculating lock result: {e}")
+except Exception as e:
+        logger.error("Error calculating lock result: {e}")
 #             return LockResult()
-                can_continue = False,
-                lock_state = LockState.LOCKED,
-                last_profit = 0.0,
-                threshold = self.unlock_threshold,
-                wait_time = 0.0,
-                completion_flag = False
+        can_continue = False,
+        lock_state = LockState.LOCKED,
+        last_profit = 0.0,
+        threshold = self.unlock_threshold,
+        wait_time = 0.0,
+        completion_flag = False
 
 
-    def _update_adaptive_threshold(self) -> None:
+def _update_adaptive_threshold(self) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+logger.debug()"""
+        f"Adaptive threshold updated to: {"}
+        self.unlock_threshold:.4""
 
-        """Update threshold adaptively based on recent performance."""
-""""""
-""""""
-        try:
-            if len(self.profit_history) < 5:
-                return
+except Exception as e:
+        logger.error("Error updating adaptive threshold: {e}")
 
-        except Exception as e:
-            pass
-
-# Calculate performance - based adjustment
-            recent_avg_profit = sum(self.profit_history[-5:]) / 5
-            recent_success_rate = self.successful_unlocks / \
-                max(1, self.total_checks)
-
-# Adjust threshold based on recent performance
-            if recent_avg_profit > self.unlock_threshold * 1.5:
-# High profits, can be more restrictive
-                self.unlock_threshold = min()
-                    0.2, self.unlock_threshold + 0.1
-            elif recent_avg_profit < self.unlock_threshold * 0.5:
-# Low profits, be more permissive
-                self.unlock_threshold = max()
-                    0.3, self.unlock_threshold - 0.1
-
-# Adjust based on success rate
-            if recent_success_rate < 0.3:
-# Low success rate, be more permissive
-                self.unlock_threshold = max()
-                    0.3, self.unlock_threshold - 0.5
-
-            logger.debug()
-                f"Adaptive threshold updated to: {"}
-                    self.unlock_threshold:.4f""
-
-        except Exception as e:
-            logger.error(f"Error updating adaptive threshold: {e}")
-
-    def get_performance_summary(self) -> Dict[str, Any]:
-
-        """Get performance summary of trade lock."""
-""""""
-""""""
-        try:
-#             return {}
-                "total_checks": self.total_checks,
-                "successful_unlocks": self.successful_unlocks,
-                "unlock_rate": self.successful_unlocks / max(1, self.total_checks),
-                "current_threshold": self.unlock_threshold,
-                "current_lock_state": self.locked,
-                "completion_flag": self.complete_flag,
-                "last_profit": self.last_profit,
-                "average_profit": sum(self.profit_history) / len(self.profit_history) if self.profit_history else 0.0,
-                "max_profit": max(self.profit_history) if self.profit_history else 0.0,
-                "min_profit": min(self.profit_history) if self.profit_history else 0.0,
-                "average_lock_duration": sum(self.lock_durations) / len(self.lock_durations) if self.lock_durations else 0.0,
-                "max_wait_time": self.max_wait_time
+def get_performance_summary(self) -> Dict[str, Any]:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+#             return {}"""
+        "total_checks": self.total_checks,
+        "successful_unlocks": self.successful_unlocks,
+        "unlock_rate": self.successful_unlocks / max(1, self.total_checks),
+        "current_threshold": self.unlock_threshold,
+        "current_lock_state": self.locked,
+        "completion_flag": self.complete_flag,
+        "last_profit": self.last_profit,
+        "average_profit": sum(self.profit_history) / len(self.profit_history) if self.profit_history else 0.0,
+        "max_profit": max(self.profit_history) if self.profit_history else 0.0,
+        "min_profit": min(self.profit_history) if self.profit_history else 0.0,
+        "average_lock_duration": sum(self.lock_durations) / len(self.lock_durations) if self.lock_durations else 0.0,
+        "max_wait_time": self.max_wait_time
 
 
-        except Exception as e:
-            logger.error(f"Error getting performance summary: {e}")
+except Exception as e:
+        logger.error("Error getting performance summary: {e}")
 #             return {"error": str(e)}
 
-    def reset(self) -> None:
-
-        """Reset the trade lock state completely."""
-""""""
-""""""
-        self.locked = True
-        self.last_profit = 0.0
-        self.complete_flag = False
-        self.lock_start_time = datetime.now()
-        self.last_update_time = datetime.now()
-        self.profit_history.clear()
-        self.lock_durations.clear()
-        self.total_checks = 0
-        self.successful_unlocks = 0
+def reset(self) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+        self.successful_unlocks=0"""
         logger.info("Recursive Trade Lock reset")
 
-    def set_threshold(self, new_threshold: float) -> None:
+def set_threshold(self, new_threshold: float) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+        if not (0.1 <= new_threshold <= 0.5):"""
+        logger.warning("Threshold out of bounds: {new_threshold}")
+        return
 
-        """Set a new unlock threshold."""
-""""""
-""""""
-        try:
-            if not (0.1 <= new_threshold <= 0.5):
-                logger.warning(f"Threshold out of bounds: {new_threshold}")
-                return
+self.unlock_threshold = new_threshold
+        logger.info("Unlock threshold updated to: {new_threshold}")
 
-            self.unlock_threshold = new_threshold
-            logger.info(f"Unlock threshold updated to: {new_threshold}")
+except Exception as e:
+        logger.error("Error setting threshold: {e}")
 
-        except Exception as e:
-            logger.error(f"Error setting threshold: {e}")
+def force_unlock(self) -> None:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+        self.last_update_time=datetime.now()"""
+        logger.warning("Trade lock force unlocked")
 
-    def force_unlock(self) -> None:
+except Exception as e:
+        logger.error("Error force unlocking: {e}")
 
-        """Force unlock the trade lock (emergency override)."""
-""""""
-""""""
-        try:
-            self.locked = False
-            self.complete_flag = True
-            self.last_update_time = datetime.now()
-            logger.warning("Trade lock force unlocked")
-
-        except Exception as e:
-            logger.error(f"Error force unlocking: {e}")
-
-    def get_lock_status(self) -> Dict[str, Any]:
-
-        """Get current lock status information."""
-""""""
-""""""
-        try:
-            wait_time = (datetime.now() - self.lock_start_time).total_seconds()
-
-#             return {}
-                "locked": self.locked,
-                "complete_flag": self.complete_flag,
-                "last_profit": self.last_profit,
-                "threshold": self.unlock_threshold,
-                "wait_time": wait_time,
-                "max_wait_time": self.max_wait_time,
-                "lock_start_time": self.lock_start_time.isoformat(),
-                "last_update_time": self.last_update_time.isoformat()
+def get_lock_status(self) -> Dict[str, Any]:
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+#             return {}"""
+        "locked": self.locked,
+        "complete_flag": self.complete_flag,
+        "last_profit": self.last_profit,
+        "threshold": self.unlock_threshold,
+        "wait_time": wait_time,
+        "max_wait_time": self.max_wait_time,
+        "lock_start_time": self.lock_start_time.isoformat(),
+        "last_update_time": self.last_update_time.isoformat()
 
 
-        except Exception as e:
-            logger.error(f"Error getting lock status: {e}")
+except Exception as e:
+        logger.error("Error getting lock status: {e}")
 #             return {"error": str(e)}
 
 
 def main() -> None:
-
-    """Main function for testing the recursive trade lock."""
-""""""
-""""""
-    logging.basicConfig(level = logging.INFO)
-
-# Create trade lock
-    lock = RecursiveTradeLock(unlock_threshold = 0.7, max_wait_time = 60)
-
-    safe_print("\\u1f512 Testing Recursive Trade Lock")
+    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency placeholder docstring."""
+"""
+safe_print("\\u1f512 Testing Recursive Trade Lock")
     safe_print("=" * 40)
 
 # Test scenarios
-    test_scenarios = []
+_test_scenarios = []
         {"profit": 0.5, "description": "Below threshold"},
         {"profit": 0.8, "description": "Above threshold"},
         {"profit": 0.3, "description": "Well below threshold"},
         {"profit": 0.15, "description": "Well above threshold"},
 
 
-    for i, scenario in enumerate(test_scenarios, 1):
-        safe_print(f"\\u1f4ca Scenario {i}: {scenario['description']}")
+for i, scenario in enumerate(test_scenarios, 1):
+        safe_print("\\u1f4ca Scenario {i}: {scenario['description']}")
 
 # Reset cycle
-        lock.reset_cycle()
+lock.reset_cycle()
 
 # Check initial state
-        result = lock.calculate_lock_result()
-        safe_print(f"   Initial State: {result.lock_state.value}")
-        safe_print(f"   Can Continue: {result.can_continue}")
+result = lock.calculate_lock_result()
+        safe_print("   Initial State: {result.lock_state.value}")
+        safe_print("   Can Continue: {result.can_continue}")
 
 # Mark complete with profit
-        lock.mark_complete(scenario["profit"])
+lock.mark_complete(scenario["profit"])
 
 # Check final state
-        result = lock.calculate_lock_result()
-        safe_print(f"   Final State: {result.lock_state.value}")
-        safe_print(f"   Can Continue: {result.can_continue}")
-        safe_print(f"   Profit: {result.last_profit:.4f}")
-        safe_print(f"   Threshold: {result.threshold:.4f}")
+result = lock.calculate_lock_result()
+        safe_print("   Final State: {result.lock_state.value}")
+        safe_print("   Can Continue: {result.can_continue}")
+        safe_print("   Profit: {result.last_profit:.4f}")
+        safe_print("   Threshold: {result.threshold:.4f}")
         print()
 
 # Get performance summary
-    summary = lock.get_performance_summary()
+summary = lock.get_performance_summary()
     safe_print("\\u1f4c8 Performance Summary:")
-    safe_print(f"   Unlock Rate: {summary.get('unlock_rate', 0):.2%}")
-    safe_print(f"   Average Profit: {summary.get('average_profit', 0):.4f}")
+    safe_print("   Unlock Rate: {summary.get('unlock_rate', 0):.2%}")
+    safe_print("   Average Profit: {summary.get('average_profit', 0):.4f}")
     safe_print()
         f"   Current Threshold: {"}
-            summary.get()
-                'current_threshold',
-                0:.4f""
+        summary.get()
+        'current_threshold',
+        0:.4""
 
 # Get lock status
-    status = lock.get_lock_status()
-    safe_print(f"   Current Locked: {status.get('locked', True)}")
-    safe_print(f"   Wait Time: {status.get('wait_time', 0):.1f}s")
+status = lock.get_lock_status()
+    safe_print("   Current Locked: {status.get('locked', True)}")
+    safe_print("   Wait Time: {status.get('wait_time', 0):.1f}s")
 
 
 if __name__ == "__main__":
@@ -569,7 +277,4 @@ if __name__ == "__main__":
 
 
 
-""""""
-""""""
-""""""
-""""""
+"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""

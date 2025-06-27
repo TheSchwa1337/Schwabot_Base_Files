@@ -19,10 +19,10 @@ unicore = DualUnicoreHandler()
 
 This script scans the entire codebase for misplaced 'from __future__ import annotations'
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 """
 Fix Future Annotations Placement - Comprehensive Codebase Scanner
 ================================================================
@@ -39,213 +39,211 @@ This script will:
 2. Identify files with misplaced future imports
 3. Fix the placement by moving them to the top
 4. Preserve all other code and imports
-5. Provide a comprehensive report of changes made
-"""
-"""
-"""
-"""
-"""
-
-
-class FutureAnnotationsFixer:
-    """Comprehensive fixer for misplaced future annotations imports."""
-
-
-"""
-"""
-"""
+5. Provide a comprehensive report of changes made"""
+""""""
+""""""
+""""""
+""""""
 """
 
-    def __init__(self, root_dir: str = "."):
-        """Initialize the fixer with root directory."""
+
+class FutureAnnotationsFixer:"""
+"""Comprehensive fixer for misplaced future annotations imports."""
+
+"""
+""""""
+""""""
+""""""
 """
 """
+def __init__(self, root_dir: str = "."):
+        """Initialize the fixer with root directory.""""""
+""""""
+""""""
+""""""
 """
-"""
-        self.root_dir = Path(root_dir)
+self.root_dir = Path(root_dir)
         self.files_scanned = 0
         self.files_fixed = 0
         self.files_with_issues = []
         self.fix_log = []
 
-    def scan_codebase(self) -> Dict[str, List[str]]:
-        """Scan the entire codebase for Python files with future imports."""
+def scan_codebase(self) -> Dict[str, List[str]]:"""
+        """Scan the entire codebase for Python files with future imports.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        python_files = []
+python_files = []
 
 # Find all Python files
-        for root, dirs, files in os.walk(self.root_dir):
+for root, dirs, files in os.walk(self.root_dir):
 # Skip common directories that shouldn't be modified
-            dirs[:] = [d for d in dirs if not d.startswith('.') and
+dirs[:] = [d for d in dirs if not d.startswith('.') and
                         d not in ['__pycache__', 'node_modules', 'venv', 'env', '.git']]
 
-            for file in files:
+for file in files:
                 if file.endswith('.py'):
                     file_path = Path(root) / file
                     python_files.append(str(file_path))
 
-        self.files_scanned = len(python_files)
+self.files_scanned = len(python_files)
 
 # Analyze each file
-        files_with_future_imports = []
+files_with_future_imports = []
         files_with_issues = []
 
-        for file_path in python_files:
+for file_path in python_files:
             try:
                 with open(file_path, 'r', encoding='utf - 8') as f:
                     content = f.read()
 
 # Check if file has future import
-                if 'from __future__ import annotations' in content:
+if 'from __future__ import annotations' in content:
                     files_with_future_imports.append(file_path)
 
 # Check if it's properly placed
-                    if not self._is_future_import_properly_placed(content):
+if not self._is_future_import_properly_placed(content):
                         files_with_issues.append(file_path)
 
-            except Exception as e:
-                print(f"Error reading {file_path}: {e}")
+except Exception as e:"""
+print(f"Error reading {file_path}: {e}")
 
-        self.files_with_issues = files_with_issues
+self.files_with_issues = files_with_issues
 
-        return {
+return {
             'total_files': python_files,
             'files_with_future_imports': files_with_future_imports,
             'files_with_issues': files_with_issues
-        }
 
-    def _is_future_import_properly_placed(self, content: str) -> bool:
-        """Check if future import is properly placed at the top."""
+def _is_future_import_properly_placed(self, content: str) -> bool:
+        """Check if future import is properly placed at the top.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        lines = content.split('\n')
+lines = content.split('\n')
 
 # Find the line with future import
-        future_import_line = -1
+future_import_line = -1
         for i, line in enumerate(lines):
             if 'from __future__ import annotations' in line.strip():
                 future_import_line = i
                 break
 
-        if future_import_line == -1:
+if future_import_line == -1:
             return True  # No future import found
 
 # Check if there's any non - comment, non - empty code before it
         for i in range(future_import_line):
-            line = lines[i].strip()
-            if line and not line.startswith('  #') and not line.startswith('"""') and not line.startswith("'''"):
+            line = lines[i].strip()"""
+            if line and not line.startswith('  #') and not line.startswith('"""') and not line.startswith("'''"):'"
                 return False
 
-        return True
+return True
 
-    def fix_file(self, file_path: str) -> bool:
-        """Fix a single file by moving future import to the top."""
+def fix_file(self, file_path: str) -> bool:
+        """Fix a single file by moving future import to the top.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        try:
-            with open(file_path, 'r', encoding='utf - 8') as f:
+try:'''
+with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
-# Create backup
-            backup_path = f"{file_path}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+# Create backup"""
+backup_path = f"{file_path}.backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
             shutil.copy2(file_path, backup_path)
 
 # Fix the content
-            fixed_content = self._fix_content(content)
+fixed_content = self._fix_content(content)
 
 # Write back
-            with open(file_path, 'w', encoding='utf - 8') as f:
+with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(fixed_content)
 
-            self.fix_log.append({
+self.fix_log.append({
                 'file': file_path,
                 'backup': backup_path,
                 'timestamp': datetime.now().isoformat()
             })
 
-            return True
+return True
 
-        except Exception as e:
+except Exception as e:
             print(f"Error fixing {file_path}: {e}")
             return False
 
-    def _fix_content(self, content: str) -> str:
-        """Fix the content by moving future import to the top."""
+def _fix_content(self, content: str) -> str:
+        """Fix the content by moving future import to the top.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        lines = content.split('\n')
+lines = content.split('\n')
 
 # Find and remove the future import line
-        future_import_line = None
+future_import_line = None
         future_import_content = None
 
-        for i, line in enumerate(lines):
+for i, line in enumerate(lines):
             if 'from __future__ import annotations' in line.strip():
                 future_import_line = i
                 future_import_content = line
                 break
 
-        if future_import_line is None:
+if future_import_line is None:
             return content  # No future import found
 
 # Remove the future import from its current position
-        lines.pop(future_import_line)
+lines.pop(future_import_line)
 
 # Find the first non - comment, non - empty line
         first_content_line = 0
         for i, line in enumerate(lines):
-            stripped = line.strip()
-            if stripped and not stripped.startswith('  #') and not stripped.startswith('"""') and not stripped.startswith("'''"):
+            stripped = line.strip()"""
+            if stripped and not stripped.startswith('  #') and not stripped.startswith('"""') and not stripped.startswith("'''"):'"
                 first_content_line = i
                 break
 
 # Insert future import at the very top
-        lines.insert(0, future_import_content)
+lines.insert(0, future_import_content)
 
 # Add a blank line after future import if needed
-        if len(lines) > 1 and lines[1].strip():
+if len(lines) > 1 and lines[1].strip():'''
             lines.insert(1, '')
 
-        return '\n'.join(lines)
+return '\n'.join(lines)
 
-    def fix_all_files(self) -> Dict[str, int]:
-        """Fix all files with issues."""
+def fix_all_files(self) -> Dict[str, int]:
+        """Fix all files with issues.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        results = {
+results = {
             'total_scanned': self.files_scanned,
             'total_with_issues': len(self.files_with_issues),
             'total_fixed': 0,
             'total_failed': 0
-        }
 
-        for file_path in self.files_with_issues:
+for file_path in self.files_with_issues:
             if self.fix_file(file_path):
                 results['total_fixed'] += 1
                 self.files_fixed += 1
             else:
                 results['total_failed'] += 1
 
-        return results
+return results
 
-    def generate_report(self) -> str:
-        """Generate a comprehensive report of the fixing process."""
+def generate_report(self) -> str:"""
+        """Generate a comprehensive report of the fixing process.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        report = []
+report = []"""
         report.append("=" * 60)
         report.append("FUTURE ANNOTATIONS PLACEMENT FIX REPORT")
         report.append("=" * 60)
@@ -253,18 +251,18 @@ class FutureAnnotationsFixer:
         report.append(f"Root Directory: {self.root_dir}")
         report.append("")
 
-        report.append(f"Files Scanned: {self.files_scanned}")
+report.append(f"Files Scanned: {self.files_scanned}")
         report.append(f"Files with Issues: {len(self.files_with_issues)}")
         report.append(f"Files Fixed: {self.files_fixed}")
         report.append("")
 
-        if self.files_with_issues:
+if self.files_with_issues:
             report.append("FILES WITH ISSUES:")
             for file_path in self.files_with_issues:
                 report.append(f"  - {file_path}")
             report.append("")
 
-        if self.fix_log:
+if self.fix_log:
             report.append("FIX LOG:")
             for entry in self.fix_log:
                 report.append(f"  - {entry['file']}")
@@ -272,103 +270,102 @@ class FutureAnnotationsFixer:
                 report.append(f"    Time: {entry['timestamp']}")
                 report.append("")
 
-        report.append("=" * 60)
+report.append("=" * 60)
         return '\n'.join(report)
 
-    def validate_fixes(self) -> Dict[str, List[str]]:
-        """Validate that all fixes were applied correctly."""
+def validate_fixes(self) -> Dict[str, List[str]]:
+        """Validate that all fixes were applied correctly.""""""
+""""""
+""""""
+""""""
 """
-"""
-"""
-"""
-        validation_results = {
+validation_results = {
             'validated_files': [],
             'still_problematic': []
-        }
 
-        for file_path in self.files_with_issues:
+for file_path in self.files_with_issues:
             try:
                 with open(file_path, 'r', encoding='utf - 8') as f:
                     content = f.read()
 
-                if self._is_future_import_properly_placed(content):
+if self._is_future_import_properly_placed(content):
                     validation_results['validated_files'].append(file_path)
                 else:
                     validation_results['still_problematic'].append(file_path)
 
-            except Exception as e:
-                print(f"Error validating {file_path}: {e}")
+except Exception as e:"""
+print(f"Error validating {file_path}: {e}")
                 validation_results['still_problematic'].append(file_path)
 
-        return validation_results
+return validation_results
 
 
 def main():
-    """Main function to run the future annotations fixer."""
-"""
-"""
-"""
-"""
-    print("\\u1f527 Future Annotations Placement Fixer")
+    """Main function to run the future annotations fixer.""""""
+""""""
+""""""
+""""""
+""""""
+print("\\u1f527 Future Annotations Placement Fixer")
     print("=" * 50)
 
 # Initialize fixer
-    fixer = FutureAnnotationsFixer()
+fixer = FutureAnnotationsFixer()
 
 # Scan codebase
-    print("\\u1f50d Scanning codebase for files with future imports...")
+print("\\u1f50d Scanning codebase for files with future imports...")
     scan_results = fixer.scan_codebase()
 
-    print(f"\\u1f4ca Scan Results:")
+print(f"\\u1f4ca Scan Results:")
     print(f"  - Total Python files: {len(scan_results['total_files'])}")
     print(f"  - Files with future imports: {len(scan_results['files_with_future_imports'])}")
     print(f"  - Files with placement issues: {len(scan_results['files_with_issues'])}")
 
-    if not scan_results['files_with_issues']:
+if not scan_results['files_with_issues']:
         print("\\u2705 No files with placement issues found!")
         return
 
 # Show files that need fixing
-    print("\\n\\u1f4dd Files that need fixing:")
+print("\\n\\u1f4dd Files that need fixing:")
     for file_path in scan_results['files_with_issues']:
         print(f"  - {file_path}")
 
 # Ask for confirmation
-    response = input("\\n\\u2753 Proceed with fixing these files? (y / N): ").strip().lower()
+response = input("\\n\\u2753 Proceed with fixing these files? (y / N): ").strip().lower()
     if response not in ['y', 'yes']:
         print("\\u274c Operation cancelled.")
         return
 
 # Fix files
-    print("\\n\\u1f527 Fixing files...")
+print("\\n\\u1f527 Fixing files...")
     fix_results = fixer.fix_all_files()
 
-    print(f"\\u1f4ca Fix Results:")
+print(f"\\u1f4ca Fix Results:")
     print(f"  - Files fixed: {fix_results['total_fixed']}")
     print(f"  - Files failed: {fix_results['total_failed']}")
 
 # Validate fixes
-    print("\\n\\u2705 Validating fixes...")
+print("\\n\\u2705 Validating fixes...")
     validation_results = fixer.validate_fixes()
 
-    print(f"\\u1f4ca Validation Results:")
+print(f"\\u1f4ca Validation Results:")
     print(f"  - Successfully validated: {len(validation_results['validated_files'])}")
     print(f"  - Still problematic: {len(validation_results['still_problematic'])}")
 
-    if validation_results['still_problematic']:
+if validation_results['still_problematic']:
         print("\\n\\u26a0\\ufe0f Files still with issues:")
         for file_path in validation_results['still_problematic']:
             print(f"  - {file_path}")
 
 # Generate report
-    report = fixer.generate_report()
+report = fixer.generate_report()
 
 # Save report
-    report_file = f"future_annotations_fix_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+report_file = f"future_annotations_fix_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
     with open(report_file, 'w', encoding='utf - 8') as f:
         f.write(report)
 
-    print(f"\\n\\u1f4c4 Report saved to: {report_file}")
+print(f"\\n\\u1f4c4 Report saved to: {report_file}")
     print("\\n\\u1f389 Future annotations placement fix completed!")
 
 

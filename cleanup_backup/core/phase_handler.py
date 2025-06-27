@@ -11,20 +11,20 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
-"""phase_handler.py"""
+"""phase_handler.py""""""
+""""""
 """
-"""
 
 
-def main() -> None:
-    """Stub main function."""
-    """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-
+def main() -> None:"""
+    """Stub main function.""""""
+"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 """
+""""""
 """
 pass
 
-
+"""
 if __name__ == "__main__":
     main()

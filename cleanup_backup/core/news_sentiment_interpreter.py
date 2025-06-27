@@ -1,11 +1,11 @@
 # -*- coding: utf - 8 -*-
-"""News sentiment interpreter \\u2013 converts news into activation signals.
-"""News sentiment interpreter \\u2013 converts news into activation signals.
+"""News sentiment interpreter \\u2013 converts news into activation signals."""
+"""News sentiment interpreter \\u2013 converts news into activation signals."
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
-
-"""News sentiment interpreter \\u2013 converts news into activation signals.
-"""News sentiment interpreter \\u2013 converts news into activation signals.
+"""
+"""News sentiment interpreter \\u2013 converts news into activation signals."""
+"""News sentiment interpreter \\u2013 converts news into activation signals."
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -21,16 +21,16 @@ Implements the formula:
 
 This module processes financial news streams and converts them into weighted
 sentiment signals that can influence ghost router decisions and strategy
-matrix updates.
-"""
-"""
+matrix updates."""
+""""""
+""""""
 """
 
 
 from typing import Sequence
 
 from core.unified_math_system import unified_math
-
+"""
 __all__: list[str] = ["interpret_news_sentiment", "weight_sentiment_events"]
 
 # ---------------------------------------------------------------------------
@@ -38,55 +38,56 @@ __all__: list[str] = ["interpret_news_sentiment", "weight_sentiment_events"]
 # ---------------------------------------------------------------------------
 
 
-def interpret_news_sentiment(
+def interpret_news_sentiment()
 
-    sentiment_scores: Sequence[float],
+sentiment_scores: Sequence[float],
     drift_biases: Sequence[float],
     event_sigmas: Sequence[float],
 ) -> float:  # noqa: D401
-    """Return \\u03bb_news weighted sentiment activation signal.
+"""Return \\u03bb_news weighted sentiment activation signal."
 
-    Parameters
-    ----------
-    sentiment_scores
-        Raw sentiment values (typically in [-1, 1] range).
+Parameters
+----------
+sentiment_scores
+Raw sentiment values (typically in [-1, 1] range).
     drift_biases
-        Drift correction factors for each news item.
-    event_sigmas
-        Event significance weights (volatility - like measure).
+Drift correction factors for each news item.
+event_sigmas
+Event significance weights (volatility - like measure).
 
-    Returns
-    -------
-    float
-        Combined sentiment signal \\u03bb_news.
-    """
+Returns
+-------
+float
+Combined sentiment signal \\u03bb_news."""
+""""""
+""""""
 """
-"""
-    if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):
+if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):"""
         raise ValueError("input sequences must share length")
 
-    scores = np.asarray(sentiment_scores, dtype = float)
+scores = np.asarray(sentiment_scores, dtype = float)
     biases = np.asarray(drift_biases, dtype = float)
     sigmas = np.asarray(event_sigmas, dtype = float)
 
-    weighted_signals = scores * biases * sigmas
+weighted_signals = scores * biases * sigmas
     return float(np.sum(weighted_signals))
 
 
-def weight_sentiment_events(
+def weight_sentiment_events()
 
-    raw_sentiment: float,
+raw_sentiment: float,
     event_importance: float,
     *,
     decay_factor: float = 0.95,
     base_weight: float = 1.0,
 ) -> float:  # noqa: D401
-    """Apply time - decay and importance weighting to single sentiment.
+"""Apply time - decay and importance weighting to single sentiment."
 
-    Returns weighted sentiment suitable for inclusion in \\u03bb_news calculation.
-    """
+Returns weighted sentiment suitable for inclusion in \\u03bb_news calculation."""
+""""""
+""""""
 """
-"""
-    importance_weight = base_weight * event_importance
+importance_weight = base_weight * event_importance
     decayed_sentiment = raw_sentiment * (decay_factor ** unified_math.abs(raw_sentiment))
     return decayed_sentiment * importance_weight
+"""

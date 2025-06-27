@@ -1,23 +1,24 @@
+# -*- coding: utf-8 -*-
 import pathlib
 
 
 def clean_null_bytes(fix: bool = True) -> list[str]:
-    """Scan repository for ``NUL`` bytes in *.py files.
+    """Scan repository for ``NUL`` bytes in *.py files."
 
-    Parameters
-    ----------
-    fix
-        If ``True`` replace ``\x00`` with an empty byte string in - place.
+Parameters
+----------
+fix
+If ``True`` replace ``\x00`` with an empty byte string in - place.
 
-    Returns
-    -------
-    list[str]
-        Paths that were cleaned (or that contain null bytes if *fix* is False).
+Returns
+-------
+list[str]
+        Paths that were cleaned (or that contain null bytes if *fix* is False)."""
     """
 
-
 """
-"""
+""""""
+""""""
  root = pathlib.Path(".")
   cleaned: list[str] = []
    for py in root.rglob("*.py"):
@@ -25,8 +26,8 @@ def clean_null_bytes(fix: bool = True) -> list[str]:
             content = py.read_bytes()
         except Exception:
             # skip unreadable files
-            continue
-        if b"\x00" in content:
+continue
+if b"\x00" in content:
             cleaned.append(str(py))
             if fix:
                 py.write_bytes(content.replace(b"\x00", b""))
